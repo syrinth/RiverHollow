@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>E:/Programming/Projects/Adventure/Adventure/Content/part2_tileset.png</SourceFile>
-  <SourceTime>2017-08-04T20:40:21.3228603-04:00</SourceTime>
+  <SourceTime>2017-08-07T11:51:26.7530972-04:00</SourceTime>
   <DestFile>E:/Programming/Projects/Adventure/Adventure/Content/bin/Windows/part2_tileset.xnb</DestFile>
-  <DestTime>2017-08-07T10:39:15.3943846-04:00</DestTime>
+  <DestTime>2017-08-07T12:02:04.266064-04:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2017-03-01T10:05:36-05:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

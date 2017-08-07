@@ -11,13 +11,14 @@ namespace Adventure
     /// </summary>
     public class AdventureGame : Game
     {
-        GraphicsDeviceManager _graphicsDeviceManager;
-        SpriteBatch spriteBatch;
-        public SpriteAnimation player;
+        public GraphicsDeviceManager _graphicsDeviceManager;
+        public SpriteBatch spriteBatch;
         public int SCREEN_WIDTH = 1920;
         public int SCREEN_HEIGHT = 1080;
 
         public TileMap myMap = new TileMap();
+        public Player player;
+        public Monster mon;
 
         public AdventureGame()
         {
@@ -38,7 +39,7 @@ namespace Adventure
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-           Camera.SetViewport(GraphicsDevice.Viewport);
+            Camera.SetViewport(GraphicsDevice.Viewport);
 
             base.Initialize();
         }
@@ -51,10 +52,8 @@ namespace Adventure
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            player = new SpriteAnimation(Content.Load<Texture2D>(@"T_Vlad_Sword_Walking_48x48"));
-
-            player.LoadContent();
-            
+            player = new Player(Content);
+            mon = new Monster(Content, new Vector2(500, 600));
 
             Tile.TileSetTexture = Content.Load<Texture2D>(@"part2_tileset");
         }
@@ -85,6 +84,7 @@ namespace Adventure
             Camera.Update(gameTime, this);
 
             player.Update(gameTime, myMap);
+            mon.Update(gameTime, myMap, player);
 
             base.Update(gameTime);
         }
@@ -115,7 +115,8 @@ namespace Adventure
                 }
             }
 
-            player.Draw(spriteBatch, 0, 0);
+            player.Draw(spriteBatch);
+            mon.Draw(spriteBatch);
 
             spriteBatch.End();
 

@@ -16,8 +16,8 @@ namespace Adventure
 
         public static void Update(GameTime gametime, AdventureGame adv)
         {
-            float playerPosX = adv.player.Position.X + (adv.player.Width / 2);
-            float playerPosY = adv.player.Position.Y + (adv.player.Height / 2);
+            float playerPosX = adv.player.Center.X;
+            float playerPosY = adv.player.Center.Y;
 
             if (playerPosX <= (adv.SCREEN_WIDTH / 2))
             {

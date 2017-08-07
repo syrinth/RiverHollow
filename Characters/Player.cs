@@ -2,98 +2,89 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Adventure.SpriteAnimations;
+using Adventure.Tile_Engine;
+using Adventure.Characters;
 
 namespace Adventure
 {
-    class Player : Sprite
+    public class Player : Character
     {
-        const string ASSETNAME = "SmileyWalk";
-        const int SPEED = 160;
-        const int MOVE_UP = -1;
-        const int MOVE_DOWN = 1;
-        const int MOVE_LEFT = -1;
-        const int MOVE_RIGHT = 1;
-
-        enum State
+        public Player(ContentManager theContentManager)
         {
-            Walking
+            LoadContent(theContentManager);
+            Position = new Vector2(200, 200);
+            Speed = 5;
         }
-        State mCurrentState = State.Walking;
-
-        Vector2 mDirection = Vector2.Zero;
-        Vector2 mSpeed = Vector2.Zero;
-
-        KeyboardState _prevKeyboardState;
-
-        public Player(ContentManager content, int rows, int columns, int x, int y) : base(content, rows, columns, x, y)
-        {
-        }
-
         public void LoadContent(ContentManager theContentManager)
         {
-            base.LoadContent(theContentManager, ASSETNAME);
+            base.LoadContent(theContentManager, @"T_Vlad_Sword_Walking_48x48");
         }
 
-        public void Update(GameTime theGameTime)
+        public override void Update(GameTime theGameTime, TileMap currMap)
         {
-            _currentFrame++;
-            if (_currentFrame == _totalFrames)
+            Vector2 moveVector = Vector2.Zero;
+            Vector2 moveDir = Vector2.Zero;
+            string animation = "";
+
+            KeyboardState ks = Keyboard.GetState();
+
+            if (ks.IsKeyDown(Keys.W))
             {
-                _currentFrame = 0;
+                moveDir += new Vector2(0, -_speed);
+                animation = "WalkNorth";
+                moveVector += new Vector2(0, -_speed);
+            }
+            else if (ks.IsKeyDown(Keys.S))
+            {
+                moveDir += new Vector2(0, _speed);
+                animation = "WalkSouth";
+                moveVector += new Vector2(0, _speed);
             }
 
-            KeyboardState currKeyboardState = Keyboard.GetState();
-
-            //UpdateMovement(currKeyboardState);
-
-            _prevKeyboardState = currKeyboardState;
-
-            base.Update(theGameTime, mSpeed, mDirection);
-        }
-
-        private void UpdateMovement(KeyboardState aCurrentKeyboardState)
-        {
-            if (mCurrentState == State.Walking)
+            if (ks.IsKeyDown(Keys.A))
             {
-                mSpeed = Vector2.Zero;
-                mDirection = Vector2.Zero;
+                moveDir += new Vector2(-_speed, 0);
+                animation = "WalkWest";
+                moveVector += new Vector2(-_speed, 0);
+            }
+            else if (ks.IsKeyDown(Keys.D))
+            {
+                moveDir += new Vector2(_speed, 0);
+                animation = "WalkEast";
+                moveVector += new Vector2(_speed, 0);
+            }
 
-                if (aCurrentKeyboardState.IsKeyDown(Keys.Left) == true)
+            if (moveDir.Length() != 0)
+            {
+                Rectangle testRect = new Rectangle((int)Position.X + (int)moveDir.X, (int)Position.Y + (int)moveDir.Y, Width, Height);
+                bool moveX = true;
+                bool moveY = true;
+
+                if (!currMap.CheckXMovement(testRect) || !currMap.CheckRightMovement(testRect))
                 {
-                    mSpeed.X = SPEED;
-                    mDirection.X = MOVE_LEFT;
+                    moveX = false;
                 }
-                else if (aCurrentKeyboardState.IsKeyDown(Keys.Right) == true)
+                if (!currMap.CheckUpMovement(testRect) || !currMap.CheckDownMovement(testRect))
                 {
-                    mSpeed.X = SPEED;
-                    mDirection.X = MOVE_RIGHT;
+                    moveY = false;
                 }
 
-                if (aCurrentKeyboardState.IsKeyDown(Keys.Up) == true)
+                sprite.MoveBy(moveX ? (int)moveDir.X : 0, moveY ? (int)moveDir.Y : 0);
+
+                if (sprite.CurrentAnimation != animation)
                 {
-                    mSpeed.Y = SPEED;
-                    mDirection.Y = MOVE_UP;
-                }
-                else if (aCurrentKeyboardState.IsKeyDown(Keys.Down) == true)
-                {
-                    mSpeed.Y = SPEED;
-                    mDirection.Y = MOVE_DOWN;
+                    sprite.CurrentAnimation = animation;
                 }
             }
-        }
+            else
+            {
+                sprite.CurrentAnimation = "Idle" + sprite.CurrentAnimation.Substring(4);
+            }
 
+            this.Position = new Vector2(sprite.Position.X, sprite.Position.Y);
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            int width = _texture.Width / _columns;
-            int height = _texture.Height / _rows;
-            int row = (int)((float)_currentFrame / (float)_columns);
-            int column = _currentFrame % _columns;
-
-            Rectangle sourceRectangle = new Rectangle(width * column, height * row, width, height);
-            Rectangle destinationRectangle = new Rectangle((int)_position.X, (int)_position.Y, width, height);
-
-            spriteBatch.Draw(_texture, destinationRectangle, sourceRectangle, Color.White);
+            sprite.Update(theGameTime, currMap);
         }
     }
 }

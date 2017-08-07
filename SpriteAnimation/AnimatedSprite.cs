@@ -7,7 +7,7 @@ using Adventure.Tile_Engine;
 
 namespace Adventure.SpriteAnimations
 {
-    public class SpriteAnimation
+    public class AnimatedSprite
     {
         #region properties
         Texture2D _texture;                         // The texture that holds the images for this sprite
@@ -15,7 +15,7 @@ namespace Adventure.SpriteAnimations
         Color colorTint = Color.White;              // If set to anything other than Color.White, will colorize the sprite with that color.
 
         // Screen Position of the Sprite
-        Vector2 _Position = new Vector2(0, 0);
+        private Vector2 _Position = new Vector2(0, 0);
         Vector2 _LastPosition = new Vector2(0, 0);
 
         // Dictionary holding all of the FrameAnimation objects
@@ -32,11 +32,6 @@ namespace Adventure.SpriteAnimations
         // Calculated width and height of the sprite
         int _width;
         int _height;
-
-        int _speed;
-
-        public Vector2 DrawOffset { get; set; }
-        public float DrawDepth { get; set; }
 
         ///
         /// Vector2 representing the position of the sprite's upper left
@@ -167,36 +162,23 @@ namespace Adventure.SpriteAnimations
 
 #endregion
 
-        public SpriteAnimation(Texture2D Texture)
+        public AnimatedSprite(Texture2D Texture)
         {
             _texture = Texture;
-            DrawOffset = Vector2.Zero;
-            DrawDepth = 0.0f;
-            _speed = 10;
         }
 
         public void LoadContent()
         {
             this.AddAnimation("WalkEast", 0, 48 * 0, 48, 48, 8, 0.1f);
             this.AddAnimation("WalkNorth", 0, 48 * 1, 48, 48, 8, 0.1f);
-            this.AddAnimation("WalkNorthEast", 0, 48 * 2, 48, 48, 8, 0.1f);
-            this.AddAnimation("WalkNorthWest", 0, 48 * 3, 48, 48, 8, 0.1f);
             this.AddAnimation("WalkSouth", 0, 48 * 4, 48, 48, 8, 0.1f);
-            this.AddAnimation("WalkSouthEast", 0, 48 * 5, 48, 48, 8, 0.1f);
-            this.AddAnimation("WalkSouthWest", 0, 48 * 6, 48, 48, 8, 0.1f);
             this.AddAnimation("WalkWest", 0, 48 * 7, 48, 48, 8, 0.1f);
 
             this.AddAnimation("IdleEast", 0, 48 * 0, 48, 48, 1, 0.2f);
             this.AddAnimation("IdleNorth", 0, 48 * 1, 48, 48, 1, 0.2f);
-            this.AddAnimation("IdleNorthEast", 0, 48 * 2, 48, 48, 1, 0.2f);
-            this.AddAnimation("IdleNorthWest", 0, 48 * 3, 48, 48, 1, 0.2f);
             this.AddAnimation("IdleSouth", 0, 48 * 4, 48, 48, 1, 0.2f);
-            this.AddAnimation("IdleSouthEast", 0, 48 * 5, 48, 48, 1, 0.2f);
-            this.AddAnimation("IdleSouthWest", 0, 48 * 6, 48, 48, 1, 0.2f);
             this.AddAnimation("IdleWest", 0, 48 * 7, 48, 48, 1, 0.2f);
 
-            this.Position = new Vector2(200, 200);
-            this.DrawOffset = new Vector2(-48, -48);
             this.CurrentAnimation = "WalkEast";
             this.IsAnimating = true;
         }
@@ -236,71 +218,8 @@ namespace Adventure.SpriteAnimations
             _Position.Y += y;
         }
 
-        public void Update(GameTime gameTime, TileMap gameMap)
+        public void Update(GameTime gameTime, TileMap currentMap)
         {
-            Vector2 moveVector = Vector2.Zero;
-            Vector2 moveDir = Vector2.Zero;
-            string animation = "";
-
-            KeyboardState ks = Keyboard.GetState();
-
-            if (ks.IsKeyDown(Keys.W))
-            {
-                moveDir += new Vector2(0, -_speed);
-                animation = "WalkNorth";
-                moveVector += new Vector2(0, -_speed);
-            }
-            else if (ks.IsKeyDown(Keys.S))
-            {
-                moveDir += new Vector2(0, _speed);
-                animation = "WalkSouth";
-                moveVector += new Vector2(0, _speed);
-            }
-
-            if (ks.IsKeyDown(Keys.A))
-            {
-                moveDir += new Vector2(-_speed, 0);
-                animation = "WalkWest";
-                moveVector += new Vector2(-_speed, 0);
-            }
-            else if (ks.IsKeyDown(Keys.D))
-            {
-                moveDir += new Vector2(_speed, 0);
-                animation = "WalkEast";
-                moveVector += new Vector2(_speed, 0);
-            }
-
-            if (moveDir.Length() != 0)
-            {
-                Rectangle testRect = new Rectangle((int)_Position.X + (int)moveDir.X, (int)_Position.Y + (int)moveDir.Y, _width, _height);
-                bool moveX = true;
-                bool moveY = true;
-
-                if (!gameMap.CheckXMovement(testRect) || !gameMap.CheckRightMovement(testRect))
-                {
-                    moveX = false;  
-                }
-                if (!gameMap.CheckUpMovement(testRect) || !gameMap.CheckDownMovement(testRect))
-                {
-                    moveY = false;
-                }
-
-                this.MoveBy(moveX ? (int)moveDir.X : 0,  moveY ? (int)moveDir.Y : 0);
-
-                if (this.CurrentAnimation != animation)
-                {
-                    this.CurrentAnimation = animation;
-                }
-            }
-            else
-            {
-                this.CurrentAnimation = "Idle" + this.CurrentAnimation.Substring(4);
-            }
-
-
-
-            this.Position = new Vector2(this.Position.X, this.Position.Y);
-
             // Don't do anything if the sprite is not animating
             if (_animating)
             {
@@ -339,7 +258,7 @@ namespace Adventure.SpriteAnimations
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, int XOffset, int YOffset)
+        public void Draw(SpriteBatch spriteBatch)
         {
             if (_animating) {
                 spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White, 0, new Vector2(0,0), SpriteEffects.None, 0);

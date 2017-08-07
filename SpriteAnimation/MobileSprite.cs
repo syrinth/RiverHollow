@@ -10,7 +10,7 @@ namespace Adventure.SpriteAnimations
     class MobileSprite
     {
         // The SpriteAnimation object that holds the graphical and animation data for this object
-        SpriteAnimation asSprite;
+        AnimatedSprite asSprite;
 
         // A queue of pathing vectors to allow the sprite to move along a path
         Queue<Vector2> queuePath = new Queue<Vector2>();
@@ -59,7 +59,7 @@ namespace Adventure.SpriteAnimations
         // current animation on the sprite.
         string sEndPathAnimation = null;
 
-        public SpriteAnimation Sprite
+        public AnimatedSprite Sprite
         {
             get { return asSprite; }
         }
@@ -167,7 +167,7 @@ namespace Adventure.SpriteAnimations
 
         public MobileSprite(Texture2D texture)
         {
-            asSprite = new SpriteAnimation(texture);
+            asSprite = new AnimatedSprite(texture);
         }
 
         public void AddPathNode(Vector2 node)
@@ -252,7 +252,7 @@ namespace Adventure.SpriteAnimations
         {
             if (bVisible)
             {
-                asSprite.Draw(spriteBatch, 0, 0);
+                asSprite.Draw(spriteBatch);
             }
         }
     }

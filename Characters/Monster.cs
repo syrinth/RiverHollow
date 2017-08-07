@@ -1,81 +1,96 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Adventure.Characters;
+using Adventure.Tile_Engine;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Adventure
 {
-    class Monster : Sprite
+    public class Monster : Character
     {
-        const string ASSETNAME = "SmileyWalk";
-        const int SPEED = 80;
-        const int MOVE_UP = -1;
-        const int MOVE_DOWN = 1;
-        const int MOVE_LEFT = -1;
-        const int MOVE_RIGHT = 1;
-        const int LEASH = 200;
+        private int LEASH = 200;
+        private string _textureName;
 
-        enum State
+        public Monster(ContentManager theContentManager, Vector2 position)
         {
-            Walking
-        }
-        //State mCurrentState = State.Walking;
-
-        Vector2 _direction = Vector2.Zero;
-        Vector2 _speed = Vector2.Zero;
-
-        public Monster(ContentManager content, int rows, int columns, int x, int y) : base(content, rows, columns, x, y)
-        {
+            _textureName = @"T_Vlad_Sword_Walking_48x48";
+            LoadContent(theContentManager);
+            Position = position;
         }
 
         public void LoadContent(ContentManager theContentManager)
         {
-            base.LoadContent(theContentManager, ASSETNAME);
+            base.LoadContent(theContentManager, _textureName);
         }
 
-        public void Update(GameTime theGameTime, Player player)
+        public void Update(GameTime theGameTime, TileMap currMap, Player player)
         {
-            _currentFrame++;
-            if (_currentFrame == _totalFrames)
+            UpdateMovement(player, currMap);
+
+            base.Update(theGameTime, currMap);
+        }
+
+        private void UpdateMovement(Player player, TileMap currMap)
+        {
+            Vector2 _direction = Vector2.Zero;
+            string animation = "";
+
+            if (System.Math.Abs(player.Position.X - this.Position.X) <= LEASH && System.Math.Abs(player.Position.Y - this.Position.Y) <= LEASH)
             {
-                _currentFrame = 0;
+                float newX = (player.Position.X > this.Position.X) ? 1 : -1;
+                float newY = (player.Position.Y > this.Position.Y) ? 1 : -1;
+
+                float deltaX = Math.Abs(player.Position.X - this.Position.X);
+                float deltaY = Math.Abs(player.Position.Y - this.Position.Y);
+
+                _direction.X = newX *_speed;
+                _direction.Y = newY * _speed;
+
+                Rectangle testRect = new Rectangle((int)Position.X + (int)_direction.X, (int)Position.Y + (int)_direction.Y, Width, Height);
+                bool moveX = true;
+                bool moveY = true;
+
+                if (!currMap.CheckXMovement(testRect) || !currMap.CheckRightMovement(testRect))
+                {
+                    moveX = false;
+                }
+                if (!currMap.CheckUpMovement(testRect) || !currMap.CheckDownMovement(testRect))
+                {
+                    moveY = false;
+                }
+
+                if (deltaX > deltaY)
+                {
+                    if (_direction.X > 0)
+                    {
+                        animation = "WalkEast";
+                    }
+                    else
+                    {
+                        animation = "WalkWest";
+                    }
+                }
+                else
+                {
+                    if (_direction.Y > 0)
+                    {
+                        animation = "WalkSouth";
+                    }
+                    else
+                    {
+                        animation = "WalkNorth";
+                    }
+                }
+
+                sprite.MoveBy(moveX ? (int)_direction.X : 0, moveY ? (int)_direction.Y : 0);
+
+                if (sprite.CurrentAnimation != animation)
+                {
+                    sprite.CurrentAnimation = animation;
+                }
             }
-
-            UpdateMovement(player);
-
-            base.Update(theGameTime, _speed, _direction);
-        }
-
-        private void UpdateMovement(Player player)
-        {
-            _speed = Vector2.Zero;
-            _direction = Vector2.Zero;
-
-            if (System.Math.Abs(player._position.X - this._position.X) <= LEASH && System.Math.Abs(player._position.Y - this._position.Y) <= LEASH)
-            {
-                float newX = (player._position.X > this._position.X) ? 1 : -1;
-                float newY = (player._position.Y > this._position.Y) ? 1 : -1;
-
-                _direction.X = newX;
-                _direction.Y = newY;
-
-                _speed.X = SPEED;
-                _speed.Y = SPEED;
-            }
-        }
-
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            int width = _texture.Width / _columns;
-            int height = _texture.Height / _rows;
-            int row = (int)((float)_currentFrame / (float)_columns);
-            int column = _currentFrame % _columns;
-
-            Rectangle sourceRectangle = new Rectangle(width * column, height * row, width, height);
-            Rectangle destinationRectangle = new Rectangle((int)_position.X, (int)_position.Y, width, height);
-
-            spriteBatch.Draw(_texture, destinationRectangle, sourceRectangle, Color.Black);
         }
     }
 }
