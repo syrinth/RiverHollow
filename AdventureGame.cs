@@ -54,6 +54,7 @@ namespace Adventure
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            GameCalendar.NewCalender(Content, SCREEN_WIDTH, SCREEN_HEIGHT);
             player = new Player(Content);
             mon = new Monster(Content, new Vector2(500, 600));
 
@@ -93,6 +94,7 @@ namespace Adventure
 
             if (!_isPaused)
             {
+                GameCalendar.Update(gameTime);
                 // TODO: Add your update logic here
                 Camera.Update(gameTime, this);
 
@@ -132,6 +134,11 @@ namespace Adventure
             player.Draw(spriteBatch);
             mon.Draw(spriteBatch);
 
+            spriteBatch.End();
+
+            //TODO: Check if this is kosher
+            spriteBatch.Begin();
+            GameCalendar.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
