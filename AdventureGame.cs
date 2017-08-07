@@ -20,6 +20,8 @@ namespace Adventure
         public Player player;
         public Monster mon;
 
+        public bool _isPaused = false;
+
         public AdventureGame()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
@@ -80,11 +82,23 @@ namespace Adventure
                 Exit();
             }
 
-            // TODO: Add your update logic here
-            Camera.Update(gameTime, this);
+            Keys[] pressedKeys = Keyboard.GetState().GetPressedKeys();
+            foreach(Keys k in pressedKeys)
+            {
+                if(k == Keys.P)
+                {
+                    _isPaused = !_isPaused;
+                }
+            }
 
-            player.Update(gameTime, myMap);
-            mon.Update(gameTime, myMap, player);
+            if (!_isPaused)
+            {
+                // TODO: Add your update logic here
+                Camera.Update(gameTime, this);
+
+                player.Update(gameTime, myMap);
+                mon.Update(gameTime, myMap, player);
+            }
 
             base.Update(gameTime);
         }
