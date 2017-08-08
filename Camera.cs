@@ -16,25 +16,25 @@ namespace Adventure
 
         public static void Update(GameTime gametime, AdventureGame adv)
         {
-            float playerPosX = adv.player.Center.X;
-            float playerPosY = adv.player.Center.Y;
+            float playerPosX = adv._player.Center.X;
+            float playerPosY = adv._player.Center.Y;
 
             if (playerPosX <= (adv.SCREEN_WIDTH / 2))
             {
                 playerPosX = adv.SCREEN_WIDTH / 2;
             }
-            else if (playerPosX >= adv.myMap.GetMapWidth() - (adv.SCREEN_WIDTH / 2))
+            else if (playerPosX >= adv._myMap.GetMapWidth() - (adv.SCREEN_WIDTH / 2))
             {
-                playerPosX = adv.myMap.GetMapWidth() - (adv.SCREEN_WIDTH / 2);
+                playerPosX = adv._myMap.GetMapWidth() - (adv.SCREEN_WIDTH / 2);
             }
 
             if (playerPosY <= (adv.SCREEN_HEIGHT / 2))
             {
                 playerPosY = adv.SCREEN_HEIGHT / 2;
             }
-            else if (playerPosY >= adv.myMap.GetMapHeight() - (adv.SCREEN_HEIGHT / 2))
+            else if (playerPosY >= adv._myMap.GetMapHeight() - (adv.SCREEN_HEIGHT / 2))
             {
-                playerPosY = adv.myMap.GetMapHeight() - (adv.SCREEN_HEIGHT / 2);
+                playerPosY = adv._myMap.GetMapHeight() - (adv.SCREEN_HEIGHT / 2);
             }
 
             _center = new Vector2(playerPosX - (adv.SCREEN_WIDTH / 2), playerPosY - (adv.SCREEN_HEIGHT / 2));

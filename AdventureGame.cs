@@ -16,11 +16,13 @@ namespace Adventure
         public int SCREEN_WIDTH = 1920;
         public int SCREEN_HEIGHT = 1080;
 
-        public TileMap myMap = new TileMap();
-        public Player player;
+        public TileMap _myMap = new TileMap();
+        public Player _player;
         public Monster mon;
 
-        public bool _isPaused = false;
+        private bool _paused = false;
+        private bool _pauseKeyDown = false;
+        //private bool _pausedForGuide = false;
 
         public AdventureGame()
         {
@@ -55,7 +57,7 @@ namespace Adventure
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             GameCalendar.NewCalender(Content, SCREEN_WIDTH, SCREEN_HEIGHT);
-            player = new Player(Content);
+            _player = new Player(Content);
             mon = new Monster(Content, new Vector2(500, 600));
 
             Tile.TileSetTexture = Content.Load<Texture2D>(@"part2_tileset");
@@ -83,23 +85,17 @@ namespace Adventure
                 Exit();
             }
 
-            Keys[] pressedKeys = Keyboard.GetState().GetPressedKeys();
-            foreach(Keys k in pressedKeys)
-            {
-                if(k == Keys.P)
-                {
-                    _isPaused = !_isPaused;
-                }
-            }
+            checkPauseKey(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One));
+            //checkPauseGuide();
 
-            if (!_isPaused)
+            if (!_paused)
             {
                 GameCalendar.Update(gameTime);
                 // TODO: Add your update logic here
                 Camera.Update(gameTime, this);
 
-                player.Update(gameTime, myMap);
-                mon.Update(gameTime, myMap, player);
+                _player.Update(gameTime, _myMap);
+                mon.Update(gameTime, _myMap, _player);
             }
 
             base.Update(gameTime);
@@ -114,14 +110,14 @@ namespace Adventure
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null,null,null, Camera._transform);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Camera._transform);
 
-        
-            for (int y = 0; y < myMap.MapHeight; y++)
+
+            for (int y = 0; y < _myMap.MapHeight; y++)
             {
-                for (int x = 0; x < myMap.MapWidth; x++)
+                for (int x = 0; x < _myMap.MapWidth; x++)
                 {
-                    int tileID = myMap.Rows[y].Columns[x].TileID;
+                    int tileID = _myMap.Rows[y].Columns[x].TileID;
 
                     spriteBatch.Draw(
                         Tile.TileSetTexture,
@@ -131,7 +127,7 @@ namespace Adventure
                 }
             }
 
-            player.Draw(spriteBatch);
+            _player.Draw(spriteBatch);
             mon.Draw(spriteBatch);
 
             spriteBatch.End();
@@ -143,5 +139,43 @@ namespace Adventure
 
             base.Draw(gameTime);
         }
+
+        private void BeginPause(bool UserInitiated)
+        {
+            _paused = true;
+            //pausedForGuide = !UserInitiated;
+        }
+
+        private void EndPause()
+        {
+            _paused = false;
+            //pausedForGuide = false;
+        }
+
+        private void checkPauseKey(KeyboardState keyboardState,GamePadState gamePadState)
+        {
+            bool pauseKeyDownThisFrame = (keyboardState.IsKeyDown(Keys.P) || (gamePadState.Buttons.Y == ButtonState.Pressed));
+            // If key was not down before, but is down now, we toggle the
+            // pause setting
+            if (!_pauseKeyDown && pauseKeyDownThisFrame)
+            {
+                if (!_paused)
+                    BeginPause(true);
+                else
+                    EndPause();
+            }
+            _pauseKeyDown = pauseKeyDownThisFrame;
+        }
+
+        /*private void checkPauseGuide()
+        {
+            // Pause if the Guide is up
+            if (!paused && Guide.IsVisible)
+                BeginPause(false);
+            // If we paused for the guide, unpause if the guide
+            // went away
+            else if (paused && pausedForGuide && !Guide.IsVisible)
+                EndPause();
+        }*/
     }
 }

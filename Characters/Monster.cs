@@ -41,6 +41,7 @@ namespace Adventure
 
             if (System.Math.Abs(player.Position.X - this.Position.X) <= LEASH && System.Math.Abs(player.Position.Y - this.Position.Y) <= LEASH)
             {
+                _moveTo = Vector2.Zero;
                 bool moveX = true;
                 bool moveY = true;
                 float deltaX = Math.Abs(player.Position.X - this.Position.X);

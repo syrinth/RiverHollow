@@ -30,13 +30,13 @@ namespace Adventure
             _lastUpdateinSeconds = 0;
 
             _calendarFont = Content.Load<SpriteFont>("Font");
-            _timePosition = new Vector2(width-100, height-100);
+            _timePosition = new Vector2(width-100, 100);
         }
 
         public static void Update(GameTime gameTime)
         {
             _lastUpdateinSeconds += gameTime.ElapsedGameTime.TotalSeconds;
-            if (_lastUpdateinSeconds >= 0.1)
+            if (_lastUpdateinSeconds >= 1)
             {
                 _lastUpdateinSeconds = 0;
                 if (_currMin >= 60)
