@@ -1,26 +1,22 @@
 ﻿using Adventure.Characters;
+using Adventure.Items;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
+using ItemIDs = Adventure.Items.ItemList.ItemIDs;
 namespace Adventure
 {
-    public class Monster : Character
+    public class Monster : CombatCharacter
     {
-        private int LEASH = 200;
-        private string _textureName;
-        private Vector2 _moveTo = Vector2.Zero;
-        private int _idleFor;
-
-        public Monster(ContentManager theContentManager, Vector2 position)
-        {
-            _textureName = @"T_Vlad_Sword_Walking_48x48";
-            LoadContent(theContentManager);
-            Position = position;
-        }
+        protected int _damage;
+        protected int _idleFor;
+        protected int _leash = 200;
+        protected string _textureName;
+        protected Vector2 _moveTo = Vector2.Zero;
+        protected List<KeyValuePair<ItemIDs, double>> _dropTable;
 
         public void LoadContent(ContentManager theContentManager)
         {
@@ -39,7 +35,7 @@ namespace Adventure
             Vector2 direction = Vector2.Zero;
             string animation = "";
 
-            if (System.Math.Abs(player.Position.X - this.Position.X) <= LEASH && System.Math.Abs(player.Position.Y - this.Position.Y) <= LEASH)
+            if (System.Math.Abs(player.Position.X - this.Position.X) <= _leash && System.Math.Abs(player.Position.Y - this.Position.Y) <= _leash)
             {
                 _moveTo = Vector2.Zero;
                 bool moveX = true;

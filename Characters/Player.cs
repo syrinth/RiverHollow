@@ -8,7 +8,7 @@ using Adventure.Characters;
 
 namespace Adventure
 {
-    public class Player : Character
+    public class Player : CombatCharacter
     {
         public Player(ContentManager theContentManager)
         {

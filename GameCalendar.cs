@@ -72,7 +72,6 @@ namespace Adventure
                     mins = "00";
                     hours = (_currHour + 1).ToString();
                     break;
-
             }
             spriteBatch.DrawString(_calendarFont, String.Format("{0}:{1}", hours, mins), _timePosition, Color.Black);
         }

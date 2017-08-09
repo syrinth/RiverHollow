@@ -1,4 +1,4 @@
-﻿using Adventure.SpriteAnimations;
+﻿using Adventure.Characters.Monsters;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,7 +18,7 @@ namespace Adventure
 
         public TileMap _myMap = new TileMap();
         public Player _player;
-        public Monster mon;
+        public Goblin gobbo;
 
         private bool _paused = false;
         private bool _pauseKeyDown = false;
@@ -58,7 +58,7 @@ namespace Adventure
             spriteBatch = new SpriteBatch(GraphicsDevice);
             GameCalendar.NewCalender(Content, SCREEN_WIDTH, SCREEN_HEIGHT);
             _player = new Player(Content);
-            mon = new Monster(Content, new Vector2(500, 600));
+            gobbo = new Goblin(Content, new Vector2(500, 600));
 
             Tile.TileSetTexture = Content.Load<Texture2D>(@"part2_tileset");
         }
@@ -95,7 +95,7 @@ namespace Adventure
                 Camera.Update(gameTime, this);
 
                 _player.Update(gameTime, _myMap);
-                mon.Update(gameTime, _myMap, _player);
+                gobbo.Update(gameTime, _myMap, _player);
             }
 
             base.Update(gameTime);
@@ -128,7 +128,7 @@ namespace Adventure
             }
 
             _player.Draw(spriteBatch);
-            mon.Draw(spriteBatch);
+            gobbo.Draw(spriteBatch);
 
             spriteBatch.End();
 
