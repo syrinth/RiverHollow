@@ -61,14 +61,14 @@ namespace Adventure
                 bool moveX = true;
                 bool moveY = true;
 
-                if (!currMap.CheckXMovement(testRect) || !currMap.CheckRightMovement(testRect))
-                {
-                    moveX = false;
-                }
-                if (!currMap.CheckUpMovement(testRect) || !currMap.CheckDownMovement(testRect))
-                {
-                    moveY = false;
-                }
+                //if (!currMap.CheckXMovement(testRect) || !currMap.CheckRightMovement(testRect))
+                //{
+                //    moveX = false;
+                //}
+                //if (!currMap.CheckUpMovement(testRect) || !currMap.CheckDownMovement(testRect))
+                //{
+                //    moveY = false;
+                //}
 
                 sprite.MoveBy(moveX ? (int)moveDir.X : 0, moveY ? (int)moveDir.Y : 0);
 

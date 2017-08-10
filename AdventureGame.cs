@@ -56,6 +56,7 @@ namespace Adventure
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            _myMap.LoadContent(Content, GraphicsDevice);
             GameCalendar.NewCalender(Content, SCREEN_WIDTH, SCREEN_HEIGHT);
             _player = new Player(Content);
             gobbo = new Goblin(Content, new Vector2(500, 600));
@@ -112,20 +113,20 @@ namespace Adventure
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Camera._transform);
 
+            _myMap.Draw();
+            //for (int y = 0; y < _myMap.MapHeight; y++)
+            //{
+            //    for (int x = 0; x < _myMap.MapWidth; x++)
+            //    {
+            //        int tileID = _myMap.Rows[y].Columns[x].TileID;
 
-            for (int y = 0; y < _myMap.MapHeight; y++)
-            {
-                for (int x = 0; x < _myMap.MapWidth; x++)
-                {
-                    int tileID = _myMap.Rows[y].Columns[x].TileID;
-
-                    spriteBatch.Draw(
-                        Tile.TileSetTexture,
-                        new Rectangle((x * Tile.TILE_WIDTH), (y * Tile.TILE_HEIGHT), Tile.TILE_WIDTH, Tile.TILE_HEIGHT),
-                        Tile.GetSourceRectangle(tileID),
-                        Color.White);
-                }
-            }
+            //        spriteBatch.Draw(
+            //            Tile.TileSetTexture,
+            //            new Rectangle((x * Tile.TILE_WIDTH), (y * Tile.TILE_HEIGHT), Tile.TILE_WIDTH, Tile.TILE_HEIGHT),
+            //            Tile.GetSourceRectangle(tileID),
+            //            Color.White);
+            //    }
+            //}
 
             _player.Draw(spriteBatch);
             gobbo.Draw(spriteBatch);

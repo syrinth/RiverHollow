@@ -7,8 +7,8 @@ namespace Adventure
     static class Tile
     {
         static public Texture2D TileSetTexture;
-        static public int TILE_WIDTH = 48;
-        static public int TILE_HEIGHT = 48;
+        static public int TILE_WIDTH = 32;
+        static public int TILE_HEIGHT = 32;
 
         static public Rectangle GetSourceRectangle(int tileIndex)
         {
