@@ -4,11 +4,11 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/SmileyWalk.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Font.spritefont</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/part2_tileset.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/T_Vlad_Sword_Walking_48x48.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Map1.tmx</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/SpriteSheet.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/SpriteSheet2.png</File>
   </SourceFiles>
 </SourceFileCollection>

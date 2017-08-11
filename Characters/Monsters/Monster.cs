@@ -114,7 +114,7 @@ namespace Adventure
         {
             Rectangle testRect = new Rectangle((int)Position.X + (int)direction.X, (int)Position.Y + (int)direction.Y, Width, Height);
 
-            if (!currMap.CheckXMovement(testRect) || !currMap.CheckRightMovement(testRect))
+            if (!currMap.CheckLeftMovement(testRect) || !currMap.CheckRightMovement(testRect))
             {
                 moveX = false;
             }
