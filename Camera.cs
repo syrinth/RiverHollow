@@ -23,18 +23,18 @@ namespace Adventure
             {
                 playerPosX = adv.SCREEN_WIDTH / 2;
             }
-            else if (playerPosX >= adv._myMap.GetMapWidth() - (adv.SCREEN_WIDTH / 2))
+            else if (playerPosX >= adv._currentMap.GetMapWidth() - (adv.SCREEN_WIDTH / 2))
             {
-                playerPosX = adv._myMap.GetMapWidth() - (adv.SCREEN_WIDTH / 2);
+                playerPosX = adv._currentMap.GetMapWidth() - (adv.SCREEN_WIDTH / 2);
             }
 
             if (playerPosY <= (adv.SCREEN_HEIGHT / 2))
             {
                 playerPosY = adv.SCREEN_HEIGHT / 2;
             }
-            else if (playerPosY >= adv._myMap.GetMapHeight() - (adv.SCREEN_HEIGHT / 2))
+            else if (playerPosY >= adv._currentMap.GetMapHeight() - (adv.SCREEN_HEIGHT / 2))
             {
-                playerPosY = adv._myMap.GetMapHeight() - (adv.SCREEN_HEIGHT / 2);
+                playerPosY = adv._currentMap.GetMapHeight() - (adv.SCREEN_HEIGHT / 2);
             }
 
             _center = new Vector2(playerPosX - (adv.SCREEN_WIDTH / 2), playerPosY - (adv.SCREEN_HEIGHT / 2));

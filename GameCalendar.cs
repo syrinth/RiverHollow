@@ -11,14 +11,19 @@ namespace Adventure
         //Each hour should be one minute
         //Every 10 minutes is 10 seconds real time.
         enum Seasons { Spring, Summer, Winter, Fall};
-        static int _currHour;
-        static int _currMin;
+        private static int _currHour;
+        public static int CurrentHour { get => _currHour; }
+
+        private static int _currMin;
+        public static int CurrentMin { get => _currMin; }
         static int _currDay;
         static Seasons _currSeason;
         static SpriteFont _calendarFont;
         static Vector2 _timePosition;
 
         static double _lastUpdateinSeconds;
+
+        
 
         public static void NewCalender(ContentManager Content, int width, int height)
         {
@@ -30,12 +35,18 @@ namespace Adventure
             _lastUpdateinSeconds = 0;
 
             _calendarFont = Content.Load<SpriteFont>("Font");
-            _timePosition = new Vector2(width-100, 100);
+            _timePosition = new Vector2(width-200, 100);
         }
 
         public static void Update(GameTime gameTime)
         {
             _lastUpdateinSeconds += gameTime.ElapsedGameTime.TotalSeconds;
+            if(_currHour == 26)
+            {
+                _currHour = 6;
+                _currMin = 0;
+                _currDay++;
+            }
             if (_lastUpdateinSeconds >= 1)
             {
                 _lastUpdateinSeconds = 0;
@@ -56,7 +67,7 @@ namespace Adventure
         {
             int minToFifteen = _currMin / 15;
             string mins = "00";
-            string hours = _currHour.ToString();
+            string hours = (_currHour > 12) ? (_currHour-12).ToString() : _currHour.ToString();
             switch (minToFifteen)
             {
                 case 1:
@@ -73,7 +84,7 @@ namespace Adventure
                     hours = (_currHour + 1).ToString();
                     break;
             }
-            spriteBatch.DrawString(_calendarFont, String.Format("{0}:{1}", hours, mins), _timePosition, Color.Black);
+            spriteBatch.DrawString(_calendarFont, String.Format("Day {0}, {1}:{2}", _currDay, hours, mins), _timePosition, Color.Black);
         }
 
     }

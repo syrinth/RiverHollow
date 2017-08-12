@@ -14,23 +14,28 @@ namespace Adventure.Characters
     public class Character
     {
         #region Properties
-        protected AnimatedSprite sprite;
+        protected AnimatedSprite _sprite;
 
-        public Vector2 Center => sprite.Position;
+        public Vector2 Center => _sprite.Position;
         public Vector2 Position
         {
-            get { return new Vector2(sprite.Position.X, sprite.Position.Y + sprite.Height - Tile.TILE_HEIGHT); }
-            set { sprite.Position = value; }
+            get { return new Vector2(_sprite.Position.X, _sprite.Position.Y + _sprite.Height - TileMap._tileHeight); }
+            set { _sprite.Position = value; }
+        }
+
+        public Rectangle GetRectangle()
+        {
+            return new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
         }
 
         public int Width
         {
-            get { return Tile.TILE_WIDTH; }
+            get { return TileMap._tileWidth; }
         }
 
         public int Height
         {
-            get { return Tile.TILE_HEIGHT; }
+            get { return TileMap._tileHeight; }
         }
 
         protected int _speed = 3;
@@ -41,20 +46,20 @@ namespace Adventure.Characters
         }
         #endregion
 
-        public virtual void LoadContent(ContentManager theContentManager, string textureToLoad)
+        public virtual void LoadContent(ContentManager theContentManager, string textureToLoad, int textureWidth, int textureHeight, int numFrames, float frameSpeed)
         {
-            sprite = new AnimatedSprite(theContentManager.Load<Texture2D>(textureToLoad));
-            sprite.LoadContent();
+            _sprite = new AnimatedSprite(theContentManager.Load<Texture2D>(textureToLoad));
+            _sprite.LoadContent(textureWidth, textureHeight, numFrames, frameSpeed);
         }
 
         public virtual void Update(GameTime theGameTime, TileMap curr)
         {
-            sprite.Update(theGameTime, curr);
+            _sprite.Update(theGameTime, curr);
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            sprite.Draw(spriteBatch);
+            _sprite.Draw(spriteBatch);
         }
     }
 }

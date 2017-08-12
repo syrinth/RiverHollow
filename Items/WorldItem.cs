@@ -8,7 +8,7 @@ namespace Adventure.Items
     {
         Vector2 _position;
 
-        public WorldItem(ItemList.ItemIDs ID, string texture, string description, Vector2 position) : base(ID, texture, description)
+        public WorldItem(ItemList.ItemIDs ID, string texture, string name, string description, Vector2 position) : base(ID, texture, name, description)
         {
             _position = position;
         }

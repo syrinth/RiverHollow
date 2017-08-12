@@ -18,9 +18,9 @@ namespace Adventure
         protected Vector2 _moveTo = Vector2.Zero;
         protected List<KeyValuePair<ItemIDs, double>> _dropTable;
 
-        public void LoadContent(ContentManager theContentManager)
+        public void LoadContent(ContentManager theContentManager, int textureWidth, int textureHeight, int numFrames, float frameSpeed)
         {
-            base.LoadContent(theContentManager, _textureName);
+            base.LoadContent(theContentManager, _textureName, textureWidth, textureHeight, numFrames, frameSpeed);
         }
 
         public void Update(GameTime theGameTime, TileMap currMap, Player player)
@@ -38,21 +38,17 @@ namespace Adventure
             if (System.Math.Abs(player.Position.X - this.Position.X) <= _leash && System.Math.Abs(player.Position.Y - this.Position.Y) <= _leash)
             {
                 _moveTo = Vector2.Zero;
-                bool moveX = true;
-                bool moveY = true;
                 float deltaX = Math.Abs(player.Position.X - this.Position.X);
                 float deltaY = Math.Abs(player.Position.Y - this.Position.Y);
 
                 GetMoveSpeed(player.Position, ref direction);
-                CheckMapForCollisions(currMap, direction, ref moveX, ref moveY);
+                CheckMapForCollisions(currMap, direction);
 
                 DetermineAnimation(ref animation, direction, deltaX, deltaY);
 
-                sprite.MoveBy(moveX ? (int)direction.X : 0, moveY ? (int)direction.Y : 0);
-
-                if (sprite.CurrentAnimation != animation)
+                if (_sprite.CurrentAnimation != animation)
                 {
-                    sprite.CurrentAnimation = animation;
+                    _sprite.CurrentAnimation = animation;
                 }
             }
             else
@@ -68,12 +64,12 @@ namespace Adventure
                 int howFar = 2;
                 Random r = new Random();
                 int decision = r.Next(1, 6);
-                if (decision == 1) { _moveTo = new Vector2(Position.X - r.Next(1, howFar) * Tile.TILE_WIDTH, Position.Y); }
-                else if (decision == 2) { _moveTo = new Vector2(Position.X + r.Next(1, howFar) * Tile.TILE_WIDTH, Position.Y); }
-                else if (decision == 3) { _moveTo = new Vector2(Position.X, Position.Y - r.Next(1, howFar) * Tile.TILE_HEIGHT); }
-                else if (decision == 4) { _moveTo = new Vector2(Position.X, Position.Y + r.Next(1, howFar) * Tile.TILE_HEIGHT); }
+                if (decision == 1) { _moveTo = new Vector2(Position.X - r.Next(1, howFar) * TileMap._tileWidth, Position.Y); }
+                else if (decision == 2) { _moveTo = new Vector2(Position.X + r.Next(1, howFar) * TileMap._tileWidth, Position.Y); }
+                else if (decision == 3) { _moveTo = new Vector2(Position.X, Position.Y - r.Next(1, howFar) * TileMap._tileHeight); }
+                else if (decision == 4) { _moveTo = new Vector2(Position.X, Position.Y + r.Next(1, howFar) * TileMap._tileHeight); }
                 else {
-                    sprite.CurrentAnimation = "Idle" + sprite.CurrentAnimation.Substring(4);
+                    _sprite.CurrentAnimation = "Float" + _sprite.CurrentAnimation.Substring(4);
                     _idleFor = 300;
                 }
             }
@@ -81,27 +77,21 @@ namespace Adventure
             {
                 string animation = "";
                 Vector2 direction = Vector2.Zero;
-                bool moveX = true; bool moveY = true;
                 float deltaX = Math.Abs(_moveTo.X - this.Position.X);
                 float deltaY = Math.Abs(_moveTo.Y - this.Position.Y);
 
                 GetMoveSpeed(_moveTo, ref direction);
-                CheckMapForCollisions(currMap, direction, ref moveX, ref moveY);
+                CheckMapForCollisions(currMap, direction);
 
                 DetermineAnimation(ref animation, direction, deltaX, deltaY);
 
-                if (sprite.CurrentAnimation != animation)
+                if (_sprite.CurrentAnimation != animation)
                 {
-                    sprite.CurrentAnimation = animation;
+                    _sprite.CurrentAnimation = animation;
                 }
 
-                if (moveX && moveY)
-                {
-                    if (_moveTo.X != Position.X) { sprite.MoveBy((int)direction.X, 0); }
-                    if (_moveTo.Y != Position.Y) { sprite.MoveBy(0, (int)direction.Y); }
 
-                    if (Position.X == _moveTo.X && Position.Y == _moveTo.Y) { _moveTo = Vector2.Zero; }
-                }
+                if (Position.X == _moveTo.X && Position.Y == _moveTo.Y) { _moveTo = Vector2.Zero; }
                 else { _moveTo = Vector2.Zero; }
             }
             else
@@ -110,17 +100,19 @@ namespace Adventure
             }
         }
 
-        private void CheckMapForCollisions(TileMap currMap, Vector2 direction, ref bool moveX, ref bool moveY)
+        private void CheckMapForCollisions(TileMap currMap, Vector2 direction)
         {
-            Rectangle testRect = new Rectangle((int)Position.X + (int)direction.X, (int)Position.Y + (int)direction.Y, Width, Height);
+            Rectangle testRectX = new Rectangle((int)Position.X + (int)direction.X, (int)Position.Y, Width, Height);
+            Rectangle testRectY = new Rectangle((int)Position.X, (int)Position.Y + (int)direction.Y, Width, Height);
 
-            if (!currMap.CheckLeftMovement(testRect) || !currMap.CheckRightMovement(testRect))
+            if (currMap.CheckLeftMovement(testRectX) && currMap.CheckRightMovement(testRectX))
             {
-                moveX = false;
+                _sprite.MoveBy((int)direction.X, 0);
             }
-            if (!currMap.CheckUpMovement(testRect) || !currMap.CheckDownMovement(testRect))
+
+            if (currMap.CheckUpMovement(testRectY) && currMap.CheckDownMovement(testRectY))
             {
-                moveY = false;
+                _sprite.MoveBy(0, (int)direction.Y);
             }
         }
 
@@ -146,22 +138,22 @@ namespace Adventure
             {
                 if (direction.X > 0)
                 {
-                    animation = "WalkEast";
+                    animation = "Float";
                 }
                 else
                 {
-                    animation = "WalkWest";
+                    animation = "Float";
                 }
             }
             else
             {
                 if (direction.Y > 0)
                 {
-                    animation = "WalkSouth";
+                    animation = "Float";
                 }
                 else
                 {
-                    animation = "WalkNorth";
+                    animation = "Float";
                 }
             }
         }

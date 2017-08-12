@@ -1,8 +1,11 @@
 ﻿using Adventure.Characters.Monsters;
+using Adventure.Characters.NPCs;
+using Adventure.Items;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Adventure
 {
@@ -12,13 +15,14 @@ namespace Adventure
     public class AdventureGame : Game
     {
         public GraphicsDeviceManager _graphicsDeviceManager;
+        public SpriteFont font;
         public SpriteBatch spriteBatch;
         public int SCREEN_WIDTH = 1920;
         public int SCREEN_HEIGHT = 1080;
 
-        public TileMap _myMap = new TileMap();
+        public TileMap _currentMap = new TileMap();
         public Player _player;
-        public Goblin gobbo;
+        public Wizard _wiz;
 
         private bool _paused = false;
         private bool _pauseKeyDown = false;
@@ -28,6 +32,7 @@ namespace Adventure
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             _graphicsDeviceManager.IsFullScreen = true;
+            this.IsMouseVisible = true;
             Content.RootDirectory = "Content";
 
             _graphicsDeviceManager.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
@@ -56,12 +61,12 @@ namespace Adventure
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            _myMap.LoadContent(Content, GraphicsDevice, "Map1");
+            _currentMap.LoadContent(Content, GraphicsDevice, "Map1");
             GameCalendar.NewCalender(Content, SCREEN_WIDTH, SCREEN_HEIGHT);
             _player = new Player(Content);
-            gobbo = new Goblin(Content, new Vector2(500, 600));
-
-            Tile.TileSetTexture = Content.Load<Texture2D>(@"part2_tileset");
+            _wiz = new Wizard(new Vector2(700, 700), Content);
+            _wiz.MakeDailyItem();
+            font = Content.Load<SpriteFont>("Font");
         }
 
         /// <summary>
@@ -89,14 +94,34 @@ namespace Adventure
             checkPauseKey(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One));
             //checkPauseGuide();
 
+            if (Mouse.GetState().RightButton == ButtonState.Pressed)
+            {
+                Point mousePoint = Mouse.GetState().Position;
+                Vector3 translate = Camera._transform.Translation;
+
+                mousePoint.X -= (int)translate.X;
+                mousePoint.Y -= (int)translate.Y;
+                if (_wiz.MouseInside(mousePoint) && _wiz.PlayerInRange(_player.GetRectangle()) &&
+                    _player.HasSpaceInInventory(_wiz.WhatAreYouHolding()))
+                {
+                    _player.AddItemToInventory(_wiz.TakeItem());
+                }
+            }
+
             if (!_paused)
             {
                 GameCalendar.Update(gameTime);
                 // TODO: Add your update logic here
                 Camera.Update(gameTime, this);
+                if(GameCalendar.CurrentHour == 2)
+                {
+                    RollOver();
+                }
 
-                _player.Update(gameTime, _myMap);
-                gobbo.Update(gameTime, _myMap, _player);
+                _currentMap.Update(gameTime, _player);
+                _player.Update(gameTime, _currentMap);
+                _wiz.Update(gameTime, _currentMap);
+
             }
 
             base.Update(gameTime);
@@ -113,15 +138,24 @@ namespace Adventure
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Camera._transform);
 
-            _myMap.Draw();
+            _currentMap.Draw(spriteBatch);
+            _wiz.Draw(spriteBatch);
 
-            _player.Draw(spriteBatch);
-            gobbo.Draw(spriteBatch);
-
+            _player.Draw(gameTime, spriteBatch);
             spriteBatch.End();
 
             //TODO: Check if this is kosher
             spriteBatch.Begin();
+            Vector2 pos = new Vector2(0, SCREEN_HEIGHT-50);
+            string[] inventoryArray = _player.GetInventoryArray();
+            foreach (string s in inventoryArray) {
+                if (s != null)
+                {
+                    spriteBatch.DrawString(font, String.Format(s), pos, Color.Black);
+                    pos.X += 100;
+                }
+            }
+
             GameCalendar.Draw(spriteBatch);
             spriteBatch.End();
 
@@ -153,6 +187,11 @@ namespace Adventure
                     EndPause();
             }
             _pauseKeyDown = pauseKeyDownThisFrame;
+        }
+
+        private void RollOver()
+        {
+            _wiz.MakeDailyItem();
         }
 
         /*private void checkPauseGuide()

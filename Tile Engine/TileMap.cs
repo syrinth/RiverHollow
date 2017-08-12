@@ -7,24 +7,28 @@ using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using System.Xml.Linq;
 using System;
+using Adventure.Characters;
+using Adventure.Characters.Monsters;
 
 namespace Adventure.Tile_Engine
 {
     public class TileMap
     {
-        public List<MapRow> Rows = new List<MapRow>();
         public int MapWidth = 100;
         public int MapHeight = 100;
-        public int _tileWidth = 32;
-        public int _tileHeight = 32;
+        public static int _tileWidth = 32;
+        public static int _tileHeight = 32;
 
         protected TiledMap _map;
         protected TiledMapRenderer renderer;
         protected List<TiledMapTileset> _tileSets;
 
+        protected List<Monster> _monsterList;
+
         public TileMap()
         {
             _tileSets = new List<TiledMapTileset>();
+            _monsterList = new List<Monster>();
         }
 
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, string newMap)
@@ -48,11 +52,26 @@ namespace Adventure.Tile_Engine
                 _tileSets.Add(t);
                 
             }
+
+            //_monsterList.Add(new Goblin(Content, new Vector2(500, 800)));
         }
 
-        public void Draw()
+        public void Update(GameTime theGameTime, Player player)
+        {
+            foreach(Monster m in _monsterList)
+            {
+                m.Update(theGameTime, this, player);
+            }
+
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
         {
             renderer.Draw(_map, Camera._transform);
+            foreach(Monster m in _monsterList)
+            {
+                m.Draw(spriteBatch);
+            }
         }
 
         public bool CheckLeftMovement(Rectangle movingObject)
@@ -86,7 +105,7 @@ namespace Adventure.Tile_Engine
         public bool CheckRightMovement(Rectangle movingObject)
         {
             bool rv = true;
-            int columnTile = movingObject.Right / Tile.TILE_WIDTH;
+            int columnTile = movingObject.Right / _tileWidth;
             foreach (TiledMapTileLayer l in _map.TileLayers)
             {
                 for (int y = GetMinRow(movingObject); y <= GetMaxRow(movingObject); y++)
@@ -169,15 +188,18 @@ namespace Adventure.Tile_Engine
         #region Collision Helpers
         public bool BlocksMovement(TiledMapTile tile)
         {
-            foreach (TiledMapTilesetTile t in _tileSets[0].Tiles)
+            foreach (TiledMapTileset ts in _tileSets)
             {
-                if (tile.GlobalIdentifier - 1 == t.LocalTileIdentifier)
+                foreach (TiledMapTilesetTile t in ts.Tiles)
                 {
-                    foreach (KeyValuePair<string, string> tp in t.Properties)
+                    if (tile.GlobalIdentifier - 1 == t.LocalTileIdentifier)
                     {
-                        if (tp.Key.Equals("Impassable") && tp.Value.Equals("true"))
+                        foreach (KeyValuePair<string, string> tp in t.Properties)
                         {
-                            return true;
+                            if (tp.Key.Equals("Impassable") && tp.Value.Equals("true"))
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
@@ -208,17 +230,12 @@ namespace Adventure.Tile_Engine
 
         public int GetMapWidth()
         {
-            return MapWidth * Tile.TILE_WIDTH;
+            return MapWidth * _tileWidth;
         }
 
         public int GetMapHeight()
         {
-            return MapHeight * Tile.TILE_HEIGHT;
+            return MapHeight *_tileHeight;
         }
-    }
-
-    public class MapRow
-    {
-        public List<MapCell> Columns = new List<MapCell>();
     }
 }
