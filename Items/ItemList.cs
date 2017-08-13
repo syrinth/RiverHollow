@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,22 +16,29 @@ namespace Adventure.Items
         {
             NOTHING, ARCANE_ESSENCE, COPPER_ORE, COPPER_BAR, IRON_ORE, IRON_BAR, LUMBER
         }
+
+        private static Dictionary<ItemIDs, Texture2D> _texturePairings;
         #endregion
 
         public static InventoryItem GetItem(ItemIDs id)
         {
             string name = "";
-            string texturename = "";
             string description = "";
             switch (id)
             {
                 case ItemIDs.ARCANE_ESSENCE:
                     name = "Arcane Essence";
-                    texturename = "arcane_essence";
                     description = "arcane_essence";
-                    return new InventoryItem(id, texturename, name, description, true);
+                    return new InventoryItem(id, _texturePairings[ItemIDs.ARCANE_ESSENCE], name, description, 1, true);
             }
             return null;
+        }
+
+        public static  void LoadContent(ContentManager Content)
+        {
+            _texturePairings = new Dictionary<ItemIDs, Texture2D>();
+            _texturePairings.Add(ItemIDs.ARCANE_ESSENCE, Content.Load<Texture2D>(@"Textures/arcane_essence"));
+
         }
         // new WorldItem(id, texturename, description, position)
         /*public static InventoryItem GetInventoryItem(ItemIDs id, Vector2 position)

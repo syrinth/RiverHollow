@@ -34,7 +34,7 @@ namespace Adventure
 
             _lastUpdateinSeconds = 0;
 
-            _calendarFont = Content.Load<SpriteFont>("Font");
+            _calendarFont = Content.Load<SpriteFont>(@"Fonts\Font");
             _timePosition = new Vector2(width-200, 100);
         }
 

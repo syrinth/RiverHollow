@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Adventure.Items
 {
@@ -10,10 +11,22 @@ namespace Adventure.Items
         protected int _num;
         public int Number { get => _num; set => _num = value; }
 
-        public InventoryItem(ItemList.ItemIDs ID, string texture, string name, string description, bool stacks) : base(ID, name, texture, description)
+        public InventoryItem(ItemList.ItemIDs ID, Texture2D texture, string name, string description, int number, bool stacks) : base(ID, name, texture, description)
         {
             _doesItStack = stacks;
-            _num = 1;
+            _num = number;
+        }
+
+        //Copy Constructor
+        public InventoryItem(InventoryItem item) : base(item.ItemID, item.Name, item.Texture, item._description)
+        {
+            _num = item.Number;
+            _doesItStack = item.DoesItStack;
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Rectangle drawBox)
+        {
+            spriteBatch.Draw(_texture, drawBox, Color.White);
         }
     }
 }

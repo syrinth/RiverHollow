@@ -27,7 +27,7 @@ namespace Adventure.Items
         protected void LoadContent(ContentManager theContentManager, Player player)
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            SpriteTexture = theContentManager.Load<Texture2D>("Sword");
+            SpriteTexture = theContentManager.Load<Texture2D>(@"Textures\Sword");
             origin.X = SpriteTexture.Width / 2;
             origin.Y = SpriteTexture.Height / 2;
             screenpos.X = player.Position.X;

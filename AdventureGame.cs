@@ -1,10 +1,13 @@
 ﻿using Adventure.Characters.Monsters;
 using Adventure.Characters.NPCs;
+using Adventure.GUIObjects;
 using Adventure.Items;
+using Adventure.Screens;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.ViewportAdapters;
 using System;
 
 namespace Adventure
@@ -15,14 +18,20 @@ namespace Adventure
     public class AdventureGame : Game
     {
         public GraphicsDeviceManager _graphicsDeviceManager;
-        public SpriteFont font;
         public SpriteBatch spriteBatch;
         public int SCREEN_WIDTH = 1920;
         public int SCREEN_HEIGHT = 1080;
 
+        public ViewportAdapter ViewportAdapter { get; private set; }
+
         public TileMap _currentMap = new TileMap();
         public Player _player;
         public Wizard _wiz;
+
+        public InventoryDisplay inventoryDisplay;
+        public GraphicCursor graphicCursor;
+
+        private MouseState lastMouseState = new MouseState();
 
         private bool _paused = false;
         private bool _pauseKeyDown = false;
@@ -32,7 +41,6 @@ namespace Adventure
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             _graphicsDeviceManager.IsFullScreen = true;
-            this.IsMouseVisible = true;
             Content.RootDirectory = "Content";
 
             _graphicsDeviceManager.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
@@ -60,13 +68,16 @@ namespace Adventure
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
+            ItemList.LoadContent(Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            _currentMap.LoadContent(Content, GraphicsDevice, "Map1");
+            _currentMap.LoadContent(Content, GraphicsDevice, @"Maps\Map1");
             GameCalendar.NewCalender(Content, SCREEN_WIDTH, SCREEN_HEIGHT);
             _player = new Player(Content);
-            _wiz = new Wizard(new Vector2(700, 700), Content);
+            _wiz = new Wizard(new Vector2(300, 300), Content);
             _wiz.MakeDailyItem();
-            font = Content.Load<SpriteFont>("Font");
+
+            inventoryDisplay = InventoryDisplay.GetInstance(Content, SCREEN_WIDTH);
+            graphicCursor = GraphicCursor.GetInstance(Content);
         }
 
         /// <summary>
@@ -94,7 +105,7 @@ namespace Adventure
             checkPauseKey(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One));
             //checkPauseGuide();
 
-            if (Mouse.GetState().RightButton == ButtonState.Pressed)
+            if (Mouse.GetState().RightButton == ButtonState.Pressed && lastMouseState.RightButton == ButtonState.Released)
             {
                 Point mousePoint = Mouse.GetState().Position;
                 Vector3 translate = Camera._transform.Translation;
@@ -104,9 +115,25 @@ namespace Adventure
                 if (_wiz.MouseInside(mousePoint) && _wiz.PlayerInRange(_player.GetRectangle()) &&
                     _player.HasSpaceInInventory(_wiz.WhatAreYouHolding()))
                 {
-                    _player.AddItemToInventory(_wiz.TakeItem());
+                    _player.AddItemToFirstAvailableInventory(_wiz.TakeItem());
+                    _wiz.MakeDailyItem();
                 }
             }
+
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed && lastMouseState.LeftButton == ButtonState.Released)
+            {
+                //ToDo better processing logic but
+                if (graphicCursor.HeldItem != null && inventoryDisplay.GiveItem(_player, graphicCursor.HeldItem))
+                {
+                    graphicCursor.DropItem();
+                }
+                else
+                {
+                    graphicCursor.GrabItem(inventoryDisplay.TakeItem(_player));
+                }
+            }
+
+            lastMouseState = Mouse.GetState();
 
             if (!_paused)
             {
@@ -121,8 +148,10 @@ namespace Adventure
                 _currentMap.Update(gameTime, _player);
                 _player.Update(gameTime, _currentMap);
                 _wiz.Update(gameTime, _currentMap);
-
             }
+
+            inventoryDisplay.Update(gameTime, _player);
+            graphicCursor.Update();
 
             base.Update(gameTime);
         }
@@ -142,21 +171,16 @@ namespace Adventure
             _wiz.Draw(spriteBatch);
 
             _player.Draw(gameTime, spriteBatch);
+
             spriteBatch.End();
 
             //TODO: Check if this is kosher
             spriteBatch.Begin();
-            Vector2 pos = new Vector2(0, SCREEN_HEIGHT-50);
-            string[] inventoryArray = _player.GetInventoryArray();
-            foreach (string s in inventoryArray) {
-                if (s != null)
-                {
-                    spriteBatch.DrawString(font, String.Format(s), pos, Color.Black);
-                    pos.X += 100;
-                }
-            }
 
+            inventoryDisplay.Draw(spriteBatch);
             GameCalendar.Draw(spriteBatch);
+            graphicCursor.Draw(spriteBatch);
+
             spriteBatch.End();
 
             base.Draw(gameTime);

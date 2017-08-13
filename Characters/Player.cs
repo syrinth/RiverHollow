@@ -13,8 +13,10 @@ namespace Adventure
 {
     public class Player : CombatCharacter
     {
+        public static int maxItemRow = 11;
         private Weapon sword;
         private InventoryItem[] _inventory;
+        public InventoryItem[] Inventory { get => _inventory; }
 
         public Player(ContentManager theContentManager)
         {
@@ -22,11 +24,11 @@ namespace Adventure
             Position = new Vector2(200, 200);
             Speed = 5;
 
-            _inventory = new InventoryItem[12];
+            _inventory = new InventoryItem[maxItemRow];
         }
         public void LoadContent(ContentManager theContentManager)
         {
-            base.LoadContent(theContentManager, @"Eggplant", 32, 64, 4, 0.2f);
+            base.LoadContent(theContentManager, @"Textures\Eggplant", 32, 64, 4, 0.2f);
             sword = new Weapon(theContentManager, this);
         }
 
@@ -133,7 +135,7 @@ namespace Adventure
             return rv;
         }
 
-        public void AddItemToInventory(ItemIDs itemID)
+        public void AddItemToFirstAvailableInventory(ItemIDs itemID)
         {
             if (itemID != ItemIDs.NOTHING)
             {
@@ -152,6 +154,36 @@ namespace Adventure
                             break;
                         }
                     }
+                }
+            }
+        }
+
+        public bool AddItemToInventorySpot(InventoryItem item, int i)
+        {
+            bool rv = false;
+            if (_inventory[i] == null)
+            {
+                _inventory[i] = new InventoryItem(item);
+                rv = true;
+            }
+            else
+            {
+                if (_inventory[i].ItemID == item.ItemID && _inventory[i].DoesItStack && 999 >= (_inventory[i].Number + item.Number))
+                {
+                    _inventory[i].Number += item.Number;
+                    rv = true;
+                }
+            }
+            return rv;
+        }
+
+        public void RemoveItemFromInventory(int index)
+        {
+            for (int i = 0; i < _inventory.Length; i++)
+            {
+                if(i == index)
+                {
+                    _inventory[i] = null;
                 }
             }
         }

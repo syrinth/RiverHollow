@@ -4,13 +4,15 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Font.spritefont</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/part2_tileset.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/T_Vlad_Sword_Walking_48x48.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Map1.tmx</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/SpriteSheet.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Eggplant.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Sword.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/wizard.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Map1.tmx</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Fonts/Font.spritefont</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/Eggplant.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/Sword.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/wizard.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/SpriteSheet.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/MiniInventory.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/arcane_essence.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Fonts/DisplayFont.spritefont</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/cursor.png</File>
   </SourceFiles>
 </SourceFileCollection>
