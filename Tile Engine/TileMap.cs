@@ -18,6 +18,7 @@ namespace Adventure.Tile_Engine
         public int MapHeight = 100;
         public static int _tileWidth = 32;
         public static int _tileHeight = 32;
+        public string _name;
 
         protected TiledMap _map;
         protected TiledMapRenderer renderer;
@@ -53,6 +54,7 @@ namespace Adventure.Tile_Engine
                 
             }
 
+            _name = _map.Name;
             //_monsterList.Add(new Goblin(Content, new Vector2(500, 800)));
         }
 
@@ -74,7 +76,7 @@ namespace Adventure.Tile_Engine
             }
         }
 
-        public bool CheckLeftMovement(Rectangle movingObject)
+        public bool CheckLeftMovement(Rectangle movingObject, ref string warpTo)
         {
             bool rv = true;
             int columnTile = movingObject.Left / _tileWidth;
@@ -95,6 +97,7 @@ namespace Adventure.Tile_Engine
                                 rv = false;
                             }
                         }
+                        warpTo = MapChange((TiledMapTile)tile);
                     }
                 }
             }
@@ -102,7 +105,7 @@ namespace Adventure.Tile_Engine
             return rv;
         }
 
-        public bool CheckRightMovement(Rectangle movingObject)
+        public bool CheckRightMovement(Rectangle movingObject, ref string warpTo)
         {
             bool rv = true;
             int columnTile = movingObject.Right / _tileWidth;
@@ -123,6 +126,7 @@ namespace Adventure.Tile_Engine
                                 rv = false;
                             }
                         }
+                        warpTo = MapChange((TiledMapTile)tile);
                     }
                 }
             }
@@ -130,7 +134,7 @@ namespace Adventure.Tile_Engine
             return rv;
         }
 
-        public bool CheckUpMovement(Rectangle movingObject)
+        public bool CheckUpMovement(Rectangle movingObject, ref string warpTo)
         {
             bool rv = true;
             int rowTile = movingObject.Top / _tileHeight;
@@ -151,13 +155,14 @@ namespace Adventure.Tile_Engine
                                 rv = false;
                             }
                         }
+                        warpTo = MapChange((TiledMapTile)tile);
                     }
                 }
             }
             return rv;
         }
 
-        public bool CheckDownMovement(Rectangle movingObject)
+        public bool CheckDownMovement(Rectangle movingObject, ref string warpTo)
         {
             bool rv = true;
             int rowTile = movingObject.Bottom / _tileHeight;
@@ -178,6 +183,7 @@ namespace Adventure.Tile_Engine
                                 rv = false;
                             }
                         }
+                        warpTo = MapChange((TiledMapTile)tile);
                     }
                 }
             }
@@ -188,6 +194,33 @@ namespace Adventure.Tile_Engine
         #region Collision Helpers
         public bool BlocksMovement(TiledMapTile tile)
         {
+            bool rv = false;
+            foreach (KeyValuePair<string, string> tp in GetProperties(tile))
+            {
+                if (tp.Key.Equals("Impassable") && tp.Value.Equals("true"))
+                {
+                    rv = true;
+                }
+            }
+            return rv;
+        }
+
+        public string MapChange(TiledMapTile tile)
+        {
+            string rv = "";
+            foreach (KeyValuePair<string, string> tp in GetProperties(tile))
+            {
+                if (tp.Key.Equals("GoTo"))
+                {
+                    rv = tp.Value;
+                }
+            }
+            return rv;
+        }
+
+        public List<KeyValuePair<string, string>> GetProperties(TiledMapTile tile)
+        {
+            List<KeyValuePair<string, string>> propList = new List<KeyValuePair<string, string>>();
             foreach (TiledMapTileset ts in _tileSets)
             {
                 foreach (TiledMapTilesetTile t in ts.Tiles)
@@ -196,15 +229,12 @@ namespace Adventure.Tile_Engine
                     {
                         foreach (KeyValuePair<string, string> tp in t.Properties)
                         {
-                            if (tp.Key.Equals("Impassable") && tp.Value.Equals("true"))
-                            {
-                                return true;
-                            }
+                            propList.Add(tp);
                         }
                     }
                 }
             }
-            return false;
+            return propList;
         }
         public int GetMinColumn(Rectangle movingObject)
         {

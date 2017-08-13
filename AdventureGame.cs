@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.ViewportAdapters;
 using System;
+using System.Collections.Generic;
 
 namespace Adventure
 {
@@ -24,7 +25,8 @@ namespace Adventure
 
         public ViewportAdapter ViewportAdapter { get; private set; }
 
-        public TileMap _currentMap = new TileMap();
+        public Dictionary<string, TileMap> _tileMaps;
+        public TileMap _currentMap;
         public Player _player;
         public Wizard _wiz;
 
@@ -70,7 +72,7 @@ namespace Adventure
             // Create a new SpriteBatch, which can be used to draw textures.
             ItemList.LoadContent(Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            _currentMap.LoadContent(Content, GraphicsDevice, @"Maps\Map1");
+            LoadMaps();
             GameCalendar.NewCalender(Content, SCREEN_WIDTH, SCREEN_HEIGHT);
             _player = new Player(Content);
             _wiz = new Wizard(new Vector2(300, 300), Content);
@@ -78,6 +80,20 @@ namespace Adventure
 
             inventoryDisplay = InventoryDisplay.GetInstance(Content, SCREEN_WIDTH);
             graphicCursor = GraphicCursor.GetInstance(Content);
+        }
+
+        public void LoadMaps()
+        {
+            _tileMaps = new Dictionary<string, TileMap>();
+            TileMap newMap = new TileMap();
+            newMap.LoadContent(Content, GraphicsDevice, @"Maps\Map1");
+            _tileMaps.Add(newMap._name, newMap);
+
+            newMap = new TileMap();
+            newMap.LoadContent(Content, GraphicsDevice, @"Maps\Map2");
+            _tileMaps.Add(newMap._name, newMap);
+
+            _currentMap = _tileMaps[@"Maps\Map1"];
         }
 
         /// <summary>
@@ -147,6 +163,11 @@ namespace Adventure
 
                 _currentMap.Update(gameTime, _player);
                 _player.Update(gameTime, _currentMap);
+                if (!string.IsNullOrEmpty(_player.GoToMap))
+                {
+                    _currentMap = _tileMaps[@"Maps\"+_player.GoToMap];
+                    _player.GoToMap = "";
+                }
                 _wiz.Update(gameTime, _currentMap);
             }
 

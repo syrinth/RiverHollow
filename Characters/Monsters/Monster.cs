@@ -104,13 +104,13 @@ namespace Adventure
         {
             Rectangle testRectX = new Rectangle((int)Position.X + (int)direction.X, (int)Position.Y, Width, Height);
             Rectangle testRectY = new Rectangle((int)Position.X, (int)Position.Y + (int)direction.Y, Width, Height);
-
-            if (currMap.CheckLeftMovement(testRectX) && currMap.CheckRightMovement(testRectX))
+            string warpTo = "";
+            if (currMap.CheckLeftMovement(testRectX, ref warpTo) && currMap.CheckRightMovement(testRectX, ref warpTo))
             {
                 _sprite.MoveBy((int)direction.X, 0);
             }
 
-            if (currMap.CheckUpMovement(testRectY) && currMap.CheckDownMovement(testRectY))
+            if (currMap.CheckUpMovement(testRectY, ref warpTo) && currMap.CheckDownMovement(testRectY, ref warpTo))
             {
                 _sprite.MoveBy(0, (int)direction.Y);
             }

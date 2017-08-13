@@ -17,6 +17,8 @@ namespace Adventure
         private Weapon sword;
         private InventoryItem[] _inventory;
         public InventoryItem[] Inventory { get => _inventory; }
+        private string _goToMap;
+        public string GoToMap { get => _goToMap; set => _goToMap = value; }
 
         public Player(ContentManager theContentManager)
         {
@@ -77,12 +79,12 @@ namespace Adventure
                 Rectangle testRectX = new Rectangle((int)Position.X + (int)moveDir.X, (int)Position.Y, Width, Height);
                 Rectangle testRectY = new Rectangle((int)Position.X, (int)Position.Y + (int)moveDir.Y, Width, Height);
 
-                if (currMap.CheckLeftMovement(testRectX) && currMap.CheckRightMovement(testRectX))
+                if (currMap.CheckLeftMovement(testRectX, ref _goToMap) && currMap.CheckRightMovement(testRectX, ref _goToMap))
                 {
                     _sprite.MoveBy((int)moveDir.X, 0);
                 }
 
-                if (currMap.CheckUpMovement(testRectY) &&currMap.CheckDownMovement(testRectY))
+                if (currMap.CheckUpMovement(testRectY, ref _goToMap) &&currMap.CheckDownMovement(testRectY, ref _goToMap))
                 {
                     _sprite.MoveBy(0, (int)moveDir.Y);
                 }

@@ -117,3 +117,8 @@
 /processorParam:TextureFormat=Color
 /build:Textures/cursor.png
 
+#begin Maps/Map2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Map2.tmx
+
