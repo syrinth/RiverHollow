@@ -12,9 +12,9 @@ namespace Adventure.Characters.NPCs
     public class Wizard : Worker
     {
         const string _wizTexture = @"Textures\Wizard";
-        public Wizard(Vector2 position, ContentManager theContentManager)
+        public Wizard(Vector2 position)
         {
-            LoadContent(theContentManager, _wizTexture, 32, 64, 1, 1);
+            LoadContent(_wizTexture, 32, 64, 1, 1);
 
             _currFood = 0;
             _dailyFoodReq = 3;

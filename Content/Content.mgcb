@@ -62,18 +62,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/wizard.png
 
-#begin Maps/SpriteSheet.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Maps/SpriteSheet.png
-
 #begin Textures/MiniInventory.png
 /importer:TextureImporter
 /processor:TextureProcessor

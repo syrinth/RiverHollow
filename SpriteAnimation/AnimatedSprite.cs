@@ -218,7 +218,7 @@ namespace Adventure.SpriteAnimations
             _Position.Y += y;
         }
 
-        public void Update(GameTime gameTime, TileMap currentMap)
+        public void Update(GameTime gameTime)
         {
             // Don't do anything if the sprite is not animating
             if (_animating)
@@ -261,7 +261,7 @@ namespace Adventure.SpriteAnimations
         public void Draw(SpriteBatch spriteBatch)
         {
             if (_animating) {
-                spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White, 0, new Vector2(0,0), SpriteEffects.None, 0);
+                spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White, 0, new Vector2(0,0), SpriteEffects.None, Position.Y/1080);
             }     
         }
     }

@@ -1,4 +1,5 @@
-﻿using Adventure.SpriteAnimations;
+﻿using Adventure.Game_Managers;
+using Adventure.SpriteAnimations;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -13,13 +14,17 @@ namespace Adventure.Characters
 {
     public class Character
     {
+        #region Managers
+        protected MapManager _mapManager = MapManager.GetInstance();
+        protected GameContentManager _gcManager = GameContentManager.GetInstance();
+        #endregion
         #region Properties
-        protected AnimatedSprite _sprite;
 
+        protected AnimatedSprite _sprite;
         public Vector2 Center => _sprite.Position;
         public Vector2 Position
         {
-            get { return new Vector2(_sprite.Position.X, _sprite.Position.Y + _sprite.Height - TileMap._tileHeight); }
+            get { return new Vector2(_sprite.Position.X, _sprite.Position.Y + _sprite.Height - TileMap.TileSize); }
             set { _sprite.Position = value; }
         }
 
@@ -30,12 +35,12 @@ namespace Adventure.Characters
 
         public int Width
         {
-            get { return TileMap._tileWidth; }
+            get { return TileMap.TileSize; }
         }
 
         public int Height
         {
-            get { return TileMap._tileHeight; }
+            get { return TileMap.TileSize; }
         }
 
         protected int _speed = 3;
@@ -46,15 +51,15 @@ namespace Adventure.Characters
         }
         #endregion
 
-        public virtual void LoadContent(ContentManager theContentManager, string textureToLoad, int textureWidth, int textureHeight, int numFrames, float frameSpeed)
+        public virtual void LoadContent(string textureToLoad, int textureWidth, int textureHeight, int numFrames, float frameSpeed)
         {
-            _sprite = new AnimatedSprite(theContentManager.Load<Texture2D>(textureToLoad));
+            _sprite = new AnimatedSprite(_gcManager.GetTexture(textureToLoad));
             _sprite.LoadContent(textureWidth, textureHeight, numFrames, frameSpeed);
         }
 
-        public virtual void Update(GameTime theGameTime, TileMap curr)
+        public virtual void Update(GameTime theGameTime)
         {
-            _sprite.Update(theGameTime, curr);
+            _sprite.Update(theGameTime);
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)

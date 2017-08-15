@@ -9,6 +9,8 @@ using Adventure.Items;
 using System;
 
 using ItemIDs = Adventure.Items.ItemList.ItemIDs;
+using Adventure.Game_Managers;
+
 namespace Adventure
 {
     public class Player : CombatCharacter
@@ -17,24 +19,22 @@ namespace Adventure
         private Weapon sword;
         private InventoryItem[] _inventory;
         public InventoryItem[] Inventory { get => _inventory; }
-        private string _goToMap;
-        public string GoToMap { get => _goToMap; set => _goToMap = value; }
 
-        public Player(ContentManager theContentManager)
+        public Player()
         {
-            LoadContent(theContentManager);
+            LoadContent();
             Position = new Vector2(200, 200);
             Speed = 5;
 
             _inventory = new InventoryItem[maxItemRow];
         }
-        public void LoadContent(ContentManager theContentManager)
+        public void LoadContent()
         {
-            base.LoadContent(theContentManager, @"Textures\Eggplant", 32, 64, 4, 0.2f);
-            sword = new Weapon(theContentManager, this);
+            base.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
+            sword = new Weapon(this);
         }
 
-        public override void Update(GameTime theGameTime, TileMap currMap)
+        public override void Update(GameTime theGameTime)
         {
             Vector2 moveVector = Vector2.Zero;
             Vector2 moveDir = Vector2.Zero;
@@ -79,12 +79,12 @@ namespace Adventure
                 Rectangle testRectX = new Rectangle((int)Position.X + (int)moveDir.X, (int)Position.Y, Width, Height);
                 Rectangle testRectY = new Rectangle((int)Position.X, (int)Position.Y + (int)moveDir.Y, Width, Height);
 
-                if (currMap.CheckLeftMovement(testRectX, ref _goToMap) && currMap.CheckRightMovement(testRectX, ref _goToMap))
+                if (_mapManager.CurrentMap.CheckLeftMovement(testRectX) && _mapManager.CurrentMap.CheckRightMovement(testRectX))
                 {
                     _sprite.MoveBy((int)moveDir.X, 0);
                 }
 
-                if (currMap.CheckUpMovement(testRectY, ref _goToMap) &&currMap.CheckDownMovement(testRectY, ref _goToMap))
+                if (_mapManager.CurrentMap.CheckUpMovement(testRectY) && _mapManager.CurrentMap.CheckDownMovement(testRectY))
                 {
                     _sprite.MoveBy(0, (int)moveDir.Y);
                 }
@@ -101,12 +101,12 @@ namespace Adventure
 
             this.Position = new Vector2(_sprite.Position.X, _sprite.Position.Y);
 
-            _sprite.Update(theGameTime, currMap);
+            _sprite.Update(theGameTime);
         }
 
-        public void Draw(GameTime theGameTime, SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            sword.Draw(theGameTime, spriteBatch);
+            sword.Draw(gameTime, spriteBatch);
             base.Draw(spriteBatch);
         }
 

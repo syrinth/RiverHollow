@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Adventure.Game_Managers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -11,6 +12,7 @@ namespace Adventure.Items
 {
     public static class ItemList
     {
+        private static GameContentManager _gcManager = GameContentManager.GetInstance();
         #region ItemIDs
         public enum ItemIDs
         {
@@ -34,10 +36,10 @@ namespace Adventure.Items
             return null;
         }
 
-        public static  void LoadContent(ContentManager Content)
+        public static void LoadContent()
         {
             _texturePairings = new Dictionary<ItemIDs, Texture2D>();
-            _texturePairings.Add(ItemIDs.ARCANE_ESSENCE, Content.Load<Texture2D>(@"Textures/arcane_essence"));
+            _texturePairings.Add(ItemIDs.ARCANE_ESSENCE, _gcManager.GetTexture(@"Textures\arcane_essence"));
 
         }
         // new WorldItem(id, texturename, description, position)

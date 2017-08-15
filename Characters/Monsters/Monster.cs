@@ -1,4 +1,5 @@
 ﻿using Adventure.Characters;
+using Adventure.Game_Managers;
 using Adventure.Items;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
@@ -11,6 +12,7 @@ namespace Adventure
 {
     public class Monster : CombatCharacter
     {
+        protected PlayerManager _playerManager = PlayerManager.GetInstance();
         protected int _damage;
         protected int _idleFor;
         protected int _leash = 200;
@@ -18,31 +20,31 @@ namespace Adventure
         protected Vector2 _moveTo = Vector2.Zero;
         protected List<KeyValuePair<ItemIDs, double>> _dropTable;
 
-        public void LoadContent(ContentManager theContentManager, int textureWidth, int textureHeight, int numFrames, float frameSpeed)
+        public void LoadContent(int textureWidth, int textureHeight, int numFrames, float frameSpeed)
         {
-            base.LoadContent(theContentManager, _textureName, textureWidth, textureHeight, numFrames, frameSpeed);
+            base.LoadContent(_textureName, textureWidth, textureHeight, numFrames, frameSpeed);
         }
 
-        public void Update(GameTime theGameTime, TileMap currMap, Player player)
+        public override void Update(GameTime theGameTime)
         {
-            UpdateMovement(player, currMap);
+            UpdateMovement();
 
-            base.Update(theGameTime, currMap);
+            base.Update(theGameTime);
         }
 
-        private void UpdateMovement(Player player, TileMap currMap)
+        private void UpdateMovement()
         {
             Vector2 direction = Vector2.Zero;
             string animation = "";
 
-            if (System.Math.Abs(player.Position.X - this.Position.X) <= _leash && System.Math.Abs(player.Position.Y - this.Position.Y) <= _leash)
+            if (System.Math.Abs(_playerManager.Player.Position.X - this.Position.X) <= _leash && System.Math.Abs(_playerManager.Player.Position.Y - this.Position.Y) <= _leash)
             {
                 _moveTo = Vector2.Zero;
-                float deltaX = Math.Abs(player.Position.X - this.Position.X);
-                float deltaY = Math.Abs(player.Position.Y - this.Position.Y);
+                float deltaX = Math.Abs(_playerManager.Player.Position.X - this.Position.X);
+                float deltaY = Math.Abs(_playerManager.Player.Position.Y - this.Position.Y);
 
-                GetMoveSpeed(player.Position, ref direction);
-                CheckMapForCollisions(currMap, direction);
+                GetMoveSpeed(_playerManager.Player.Position, ref direction);
+                CheckMapForCollisions(direction);
 
                 DetermineAnimation(ref animation, direction, deltaX, deltaY);
 
@@ -53,21 +55,21 @@ namespace Adventure
             }
             else
             {
-                IdleMovement(currMap);
+                IdleMovement();
             }
         }
 
-        private void IdleMovement(TileMap currMap)
+        private void IdleMovement()
         {
             if (_moveTo == Vector2.Zero && _idleFor == 0)
             {
                 int howFar = 2;
                 Random r = new Random();
                 int decision = r.Next(1, 6);
-                if (decision == 1) { _moveTo = new Vector2(Position.X - r.Next(1, howFar) * TileMap._tileWidth, Position.Y); }
-                else if (decision == 2) { _moveTo = new Vector2(Position.X + r.Next(1, howFar) * TileMap._tileWidth, Position.Y); }
-                else if (decision == 3) { _moveTo = new Vector2(Position.X, Position.Y - r.Next(1, howFar) * TileMap._tileHeight); }
-                else if (decision == 4) { _moveTo = new Vector2(Position.X, Position.Y + r.Next(1, howFar) * TileMap._tileHeight); }
+                if (decision == 1) { _moveTo = new Vector2(Position.X - r.Next(1, howFar) * TileMap.TileSize, Position.Y); }
+                else if (decision == 2) { _moveTo = new Vector2(Position.X + r.Next(1, howFar) * TileMap.TileSize, Position.Y); }
+                else if (decision == 3) { _moveTo = new Vector2(Position.X, Position.Y - r.Next(1, howFar) * TileMap.TileSize); }
+                else if (decision == 4) { _moveTo = new Vector2(Position.X, Position.Y + r.Next(1, howFar) * TileMap.TileSize); }
                 else {
                     _sprite.CurrentAnimation = "Float" + _sprite.CurrentAnimation.Substring(4);
                     _idleFor = 300;
@@ -81,7 +83,7 @@ namespace Adventure
                 float deltaY = Math.Abs(_moveTo.Y - this.Position.Y);
 
                 GetMoveSpeed(_moveTo, ref direction);
-                CheckMapForCollisions(currMap, direction);
+                CheckMapForCollisions(direction);
 
                 DetermineAnimation(ref animation, direction, deltaX, deltaY);
 
@@ -100,17 +102,17 @@ namespace Adventure
             }
         }
 
-        private void CheckMapForCollisions(TileMap currMap, Vector2 direction)
+        private void CheckMapForCollisions(Vector2 direction)
         {
             Rectangle testRectX = new Rectangle((int)Position.X + (int)direction.X, (int)Position.Y, Width, Height);
             Rectangle testRectY = new Rectangle((int)Position.X, (int)Position.Y + (int)direction.Y, Width, Height);
-            string warpTo = "";
-            if (currMap.CheckLeftMovement(testRectX, ref warpTo) && currMap.CheckRightMovement(testRectX, ref warpTo))
+
+            if (_mapManager.CurrentMap.CheckLeftMovement(testRectX) && _mapManager.CurrentMap.CheckRightMovement(testRectX))
             {
                 _sprite.MoveBy((int)direction.X, 0);
             }
 
-            if (currMap.CheckUpMovement(testRectY, ref warpTo) && currMap.CheckDownMovement(testRectY, ref warpTo))
+            if (_mapManager.CurrentMap.CheckUpMovement(testRectY) && _mapManager.CurrentMap.CheckDownMovement(testRectY))
             {
                 _sprite.MoveBy(0, (int)direction.Y);
             }

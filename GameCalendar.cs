@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Adventure.Game_Managers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -34,7 +35,7 @@ namespace Adventure
 
             _lastUpdateinSeconds = 0;
 
-            _calendarFont = Content.Load<SpriteFont>(@"Fonts\Font");
+            _calendarFont = GameContentManager.GetInstance().GetFont(@"Fonts\Font");
             _timePosition = new Vector2(width-200, 100);
         }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Adventure.Game_Managers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,8 @@ namespace Adventure.GUIObjects
 {
     public abstract class GUIObject
     {
+        protected PlayerManager _playerManager = PlayerManager.GetInstance();
+
         private int _height;
         public int Height { get => _height; set => _height = value; }
         private int _width;

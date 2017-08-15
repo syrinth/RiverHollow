@@ -1,5 +1,6 @@
 ﻿using Adventure.Characters.Monsters;
 using Adventure.Characters.NPCs;
+using Adventure.Game_Managers;
 using Adventure.GUIObjects;
 using Adventure.Items;
 using Adventure.Screens;
@@ -20,20 +21,15 @@ namespace Adventure
     {
         public GraphicsDeviceManager _graphicsDeviceManager;
         public SpriteBatch spriteBatch;
-        public int SCREEN_WIDTH = 1920;
-        public int SCREEN_HEIGHT = 1080;
+        public static int SCREEN_WIDTH = 1920;
+        public static int SCREEN_HEIGHT = 1080;
 
         public ViewportAdapter ViewportAdapter { get; private set; }
 
-        public Dictionary<string, TileMap> _tileMaps;
-        public TileMap _currentMap;
-        public Player _player;
-        public Wizard _wiz;
-
-        public InventoryDisplay inventoryDisplay;
-        public GraphicCursor graphicCursor;
-
-        private MouseState lastMouseState = new MouseState();
+        MapManager _mapManager = MapManager.GetInstance();
+        PlayerManager _playerManager = PlayerManager.GetInstance();
+        GameContentManager _gcManager = GameContentManager.GetInstance();
+        GUIManager _guiManager = GUIManager.GetInstance();
 
         private bool _paused = false;
         private bool _pauseKeyDown = false;
@@ -70,30 +66,13 @@ namespace Adventure
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            ItemList.LoadContent(Content);
+            _gcManager.LoadContent(Content);
+            ItemList.LoadContent();
+            _guiManager.LoadContent();
+            _mapManager.LoadContent(Content, GraphicsDevice);
+            _playerManager.NewPlayer();
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            LoadMaps();
             GameCalendar.NewCalender(Content, SCREEN_WIDTH, SCREEN_HEIGHT);
-            _player = new Player(Content);
-            _wiz = new Wizard(new Vector2(300, 300), Content);
-            _wiz.MakeDailyItem();
-
-            inventoryDisplay = InventoryDisplay.GetInstance(Content, SCREEN_WIDTH);
-            graphicCursor = GraphicCursor.GetInstance(Content);
-        }
-
-        public void LoadMaps()
-        {
-            _tileMaps = new Dictionary<string, TileMap>();
-            TileMap newMap = new TileMap();
-            newMap.LoadContent(Content, GraphicsDevice, @"Maps\Map1");
-            _tileMaps.Add(newMap._name, newMap);
-
-            newMap = new TileMap();
-            newMap.LoadContent(Content, GraphicsDevice, @"Maps\Map2");
-            _tileMaps.Add(newMap._name, newMap);
-
-            _currentMap = _tileMaps[@"Maps\Map1"];
         }
 
         /// <summary>
@@ -121,58 +100,41 @@ namespace Adventure
             checkPauseKey(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One));
             //checkPauseGuide();
 
-            if (Mouse.GetState().RightButton == ButtonState.Pressed && lastMouseState.RightButton == ButtonState.Released)
+            _guiManager.Update(gameTime);
+
+            if (Mouse.GetState().RightButton == ButtonState.Pressed && GraphicCursor.LastMouseState.RightButton == ButtonState.Released)
             {
                 Point mousePoint = Mouse.GetState().Position;
                 Vector3 translate = Camera._transform.Translation;
 
                 mousePoint.X -= (int)translate.X;
                 mousePoint.Y -= (int)translate.Y;
-                if (_wiz.MouseInside(mousePoint) && _wiz.PlayerInRange(_player.GetRectangle()) &&
-                    _player.HasSpaceInInventory(_wiz.WhatAreYouHolding()))
-                {
-                    _player.AddItemToFirstAvailableInventory(_wiz.TakeItem());
-                    _wiz.MakeDailyItem();
-                }
+
+                _mapManager.ProcessMapClick(mousePoint);
             }
 
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed && lastMouseState.LeftButton == ButtonState.Released)
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed && GraphicCursor.LastMouseState.LeftButton == ButtonState.Released)
             {
-                //ToDo better processing logic but
-                if (graphicCursor.HeldItem != null && inventoryDisplay.GiveItem(_player, graphicCursor.HeldItem))
-                {
-                    graphicCursor.DropItem();
-                }
-                else
-                {
-                    graphicCursor.GrabItem(inventoryDisplay.TakeItem(_player));
-                }
+                //ToDo better processing logic button
+                Vector2 mouse = new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y);
+                _guiManager.ProcessLeftButtonClick(mouse);
             }
 
-            lastMouseState = Mouse.GetState();
+            GraphicCursor.LastMouseState = Mouse.GetState();
 
             if (!_paused)
             {
                 GameCalendar.Update(gameTime);
                 // TODO: Add your update logic here
-                Camera.Update(gameTime, this);
+                Camera.Update(gameTime);
                 if(GameCalendar.CurrentHour == 2)
                 {
                     RollOver();
                 }
 
-                _currentMap.Update(gameTime, _player);
-                _player.Update(gameTime, _currentMap);
-                if (!string.IsNullOrEmpty(_player.GoToMap))
-                {
-                    _currentMap = _tileMaps[@"Maps\"+_player.GoToMap];
-                    _player.GoToMap = "";
-                }
-                _wiz.Update(gameTime, _currentMap);
+                _mapManager.Update(gameTime);
+                _playerManager.Update(gameTime);
             }
-
-            inventoryDisplay.Update(gameTime, _player);
-            graphicCursor.Update();
 
             base.Update(gameTime);
         }
@@ -186,21 +148,19 @@ namespace Adventure
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Camera._transform);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, Camera._transform);
 
-            _currentMap.Draw(spriteBatch);
-            _wiz.Draw(spriteBatch);
+            _mapManager.Draw(spriteBatch);
 
-            _player.Draw(gameTime, spriteBatch);
+            _playerManager.Draw(gameTime, spriteBatch);
 
             spriteBatch.End();
 
             //TODO: Check if this is kosher
             spriteBatch.Begin();
 
-            inventoryDisplay.Draw(spriteBatch);
+            _guiManager.Draw(spriteBatch);
             GameCalendar.Draw(spriteBatch);
-            graphicCursor.Draw(spriteBatch);
 
             spriteBatch.End();
 
@@ -236,7 +196,7 @@ namespace Adventure
 
         private void RollOver()
         {
-            _wiz.MakeDailyItem();
+         //   _wiz.MakeDailyItem();
         }
 
         /*private void checkPauseGuide()

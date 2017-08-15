@@ -71,8 +71,8 @@ namespace Adventure.Characters.NPCs
             bool rv = false;
 
             Rectangle rect = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
-            if (Math.Abs(rect.Center.X - playerRect.Center.X) <= TileMap._tileWidth &&
-                Math.Abs(rect.Center.Y - playerRect.Center.Y) <= TileMap._tileWidth)
+            if (Math.Abs(rect.Center.X - playerRect.Center.X) <= TileMap.TileSize &&
+                Math.Abs(rect.Center.Y - playerRect.Center.Y) <= TileMap.TileSize)
             {
                 rv = true;
             }

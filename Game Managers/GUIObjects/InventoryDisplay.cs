@@ -10,21 +10,24 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Adventure.Items;
 using Microsoft.Xna.Framework.Input;
+using Adventure.Game_Managers;
 
 namespace Adventure.Screens
 {
     public class InventoryDisplay : GUIObject
     {
+        private GameContentManager _gcManager = GameContentManager.GetInstance();
         private static InventoryDisplay instance;
         private KeyValuePair<Rectangle, InventoryItem>[] _displayList;
         private SpriteFont _displayFont;
         private Rectangle _rect;
+        public Rectangle Rectangle { get => _rect; }
 
-        private InventoryDisplay(ContentManager Content, int screenWidth)
+        private InventoryDisplay()
         {
-            _texture = Content.Load<Texture2D>(@"Textures\MiniInventory");
-            _displayFont = Content.Load<SpriteFont>(@"Fonts\DisplayFont");
-            Position = new Vector2((screenWidth/2) - (_texture.Width/2), 16);
+            _texture = _gcManager.GetTexture(@"Textures\MiniInventory");
+            _displayFont = _gcManager.GetFont(@"Fonts\DisplayFont");
+            Position = new Vector2((AdventureGame.SCREEN_WIDTH/ 2) - (_texture.Width/2), 16);
 
             _displayList = new KeyValuePair<Rectangle, InventoryItem>[Player.maxItemRow];
             Rectangle displayBox = new Rectangle((int)Position.X + 3, (int)Position.Y + 3, 32, 32);
@@ -37,35 +40,48 @@ namespace Adventure.Screens
             _rect = new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
         }
 
-        public static InventoryDisplay GetInstance(ContentManager Content, int screenWidth)
+        public static InventoryDisplay GetInstance()
         {
             if (instance == null)
             {
-                instance = new InventoryDisplay(Content, screenWidth);
+                instance = new InventoryDisplay();
             }
             return instance;
         }
 
-        public InventoryItem TakeItem(Player p)
+        public bool ProcessLeftButtonClick(Vector2 mouse)
+        {
+            bool rv = false;
+
+            if (GraphicCursor.HeldItem != null && GiveItem(GraphicCursor.HeldItem))
+            {
+                GraphicCursor.DropItem();
+                rv = true;
+            }
+            else
+            {
+               rv =  GraphicCursor.GrabItem(TakeItem(mouse));
+            }
+            return rv;
+        }
+
+        public InventoryItem TakeItem(Vector2 mouse)
         {
             InventoryItem rv = null;
-            Vector2 mouse = new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y);
-            if (_rect.Contains(mouse))
+
+            for (int i = 0; i < Player.maxItemRow; i++)
             {
-                for (int i = 0; i < Player.maxItemRow; i++)
+                if (_displayList[i].Key.Contains(mouse) && _displayList[i].Value != null)
                 {
-                    if (_displayList[i].Key.Contains(mouse) && _displayList[i].Value != null)
-                    {
-                        rv = new InventoryItem(_displayList[i].Value);
-                        p.RemoveItemFromInventory(i);
-                    }
+                    rv = new InventoryItem(_displayList[i].Value);
+                    _playerManager.Player.RemoveItemFromInventory(i);
                 }
             }
 
             return rv;
         }
 
-        public bool GiveItem(Player p, InventoryItem item)
+        public bool GiveItem(InventoryItem item)
         {
             bool rv = false;
             if (item != null)
@@ -77,7 +93,7 @@ namespace Adventure.Screens
                     {
                         if (_displayList[i].Key.Contains(mouse) && _displayList[i].Value == null)
                         {
-                            rv = p.AddItemToInventorySpot(item, i);
+                            rv = _playerManager.Player.AddItemToInventorySpot(item, i);
                         }
                     }
                 }
@@ -86,11 +102,11 @@ namespace Adventure.Screens
             return rv;
         }
 
-        public void Update(GameTime gameTime, Player p)
+        public void Update(GameTime gameTime)
         {
             for (int i = 0; i < Player.maxItemRow; i++)
             {
-                _displayList[i] = new KeyValuePair<Rectangle, InventoryItem>(_displayList[i].Key, p.Inventory[i]);
+                _displayList[i] = new KeyValuePair<Rectangle, InventoryItem>(_displayList[i].Key, _playerManager.Player.Inventory[i]);
             }
         }
 

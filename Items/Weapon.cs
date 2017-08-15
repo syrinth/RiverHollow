@@ -1,4 +1,5 @@
-﻿using Adventure.Tile_Engine;
+﻿using Adventure.Game_Managers;
+using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,21 +14,23 @@ namespace Adventure.Items
 {
     public class Weapon
     {
+        protected GameContentManager _gcManager = GameContentManager.GetInstance();
+
         private Texture2D SpriteTexture;
         private Vector2 origin;
         private Vector2 screenpos;
 
         public bool attack = false;
 
-        public Weapon(ContentManager theContentManager, Player player)
+        public Weapon(Player player)
         {
-            LoadContent(theContentManager, player);
+            LoadContent(player);
         }
 
-        protected void LoadContent(ContentManager theContentManager, Player player)
+        protected void LoadContent(Player player)
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            SpriteTexture = theContentManager.Load<Texture2D>(@"Textures\Sword");
+            SpriteTexture = _gcManager.GetTexture(@"Textures\Sword");
             origin.X = SpriteTexture.Width / 2;
             origin.Y = SpriteTexture.Height / 2;
             screenpos.X = player.Position.X;
@@ -69,7 +72,7 @@ namespace Adventure.Items
         public void Attack(Player player)
         {
             attack = true;
-            screenpos.X = player.Position.X + TileMap._tileWidth;
+            screenpos.X = player.Position.X + TileMap.TileSize;
             screenpos.Y = player.Position.Y;
         }
     }
