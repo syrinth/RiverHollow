@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="1">
+<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="4">
  <tileset firstgid="1" name="TileSetTest" tilewidth="32" tileheight="32" tilecount="12" columns="4">
   <image source="SpriteSheet.png" trans="ffffff" width="128" height="96"/>
   <tile id="4">
@@ -236,4 +236,16 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="Entrance Layer">
+  <object id="1" name="Exit" x="130.667" y="-2.66667" width="58.6667" height="32">
+   <properties>
+    <property name="Exit" value="Map2"/>
+   </properties>
+  </object>
+  <object id="2" name="Entrance" x="144" y="30.6667" width="32" height="32">
+   <properties>
+    <property name="Entrance" value="Map2"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

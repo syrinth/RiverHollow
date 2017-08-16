@@ -11,6 +11,8 @@ using Adventure.Characters;
 using Adventure.Characters.Monsters;
 using Adventure.Characters.NPCs;
 using Adventure.Game_Managers;
+using System.Collections.ObjectModel;
+using Adventure.GUIObjects;
 
 namespace Adventure.Tile_Engine
 {
@@ -20,13 +22,19 @@ namespace Adventure.Tile_Engine
         public int MapHeight = 100;
         public static int _tileSize = 32;
         public static int TileSize { get => _tileSize; }
-        public string _name;
+        private string _name;
+        public string Name { get => _name.Replace(@"Maps\", ""); } //Fuck off with that path bullshit
 
         protected TiledMap _map;
         protected TiledMapRenderer renderer;
         protected List<TiledMapTileset> _tileSets;
 
         protected List<Character> _characterList;
+        protected List<Building> _buildingList;
+
+        private Dictionary<Rectangle, string> _exitDictionary;
+        private Dictionary<string, Rectangle> _entranceDictionary;
+        public Dictionary<string, Rectangle> EntranceDictionary { get => _entranceDictionary; }
 
         private PlayerManager _playerManager = PlayerManager.GetInstance();
 
@@ -34,6 +42,9 @@ namespace Adventure.Tile_Engine
         {
             _tileSets = new List<TiledMapTileset>();
             _characterList = new List<Character>();
+            _buildingList = new List<Building>();
+            _exitDictionary = new Dictionary<Rectangle, string>();
+            _entranceDictionary = new Dictionary<string, Rectangle>();
         }
 
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, string newMap)
@@ -61,8 +72,33 @@ namespace Adventure.Tile_Engine
             if (_name.Contains("Map1"))
             {
                 _characterList.Add(new Goblin(new Vector2(500, 800)));
-                _characterList.Add(new Wizard(new Vector2(300, 300)));
-                ((Wizard)_characterList[1]).MakeDailyItem();
+            }
+            else if (_name.Contains("Map2"))
+            {
+                _characterList.Add(new ShopKeeper(new Vector2(1350, 1420)));
+                //((Wizard)_characterList[0]).MakeDailyItem();
+            }
+
+            LoadEntranceObjects();
+        }
+
+        public void LoadEntranceObjects()
+        {
+            ReadOnlyCollection<TiledMapObjectLayer> entrLayer = _map.ObjectLayers;
+            foreach (TiledMapObjectLayer ol in entrLayer)
+            {
+                foreach (TiledMapObject mapObject in ol.Objects)
+                {
+                    Rectangle r = new Rectangle((int)mapObject.Position.X, (int)mapObject.Position.Y, (int)mapObject.Size.Width, (int)mapObject.Size.Height);
+                    if (mapObject.Properties.ContainsKey("Exit"))
+                    {
+                        _exitDictionary.Add(r, mapObject.Properties["Exit"]);
+                    }
+                    else if (mapObject.Properties.ContainsKey("Entrance"))
+                    {
+                        _entranceDictionary.Add(mapObject.Properties["Entrance"], r);
+                    }
+                }
             }
         }
 
@@ -88,12 +124,22 @@ namespace Adventure.Tile_Engine
             {
                 m.Draw(spriteBatch);
             }
+
+            foreach (Building b in _buildingList)
+            {
+                b.Draw(spriteBatch);
+            }
         }
 
         #region Collision Code
         public bool CheckLeftMovement(Rectangle movingObject)
         {
             bool rv = true;
+            if (CheckForObjectCollision(movingObject))
+            {
+                return false;
+            }
+
             int columnTile = movingObject.Left / _tileSize;
             foreach (TiledMapTileLayer l in _map.TileLayers)
             {
@@ -112,7 +158,10 @@ namespace Adventure.Tile_Engine
                                 rv = false;
                             }
                         }
-                        MapChange((TiledMapTile)tile);
+                        if (MapChange(movingObject))
+                        {
+                            return false;
+                        }
                     }
                 }
             }
@@ -123,6 +172,11 @@ namespace Adventure.Tile_Engine
         public bool CheckRightMovement(Rectangle movingObject)
         {
             bool rv = true;
+            if (CheckForObjectCollision(movingObject))
+            {
+                return false;
+            }
+
             int columnTile = movingObject.Right / _tileSize;
             foreach (TiledMapTileLayer l in _map.TileLayers)
             {
@@ -141,7 +195,9 @@ namespace Adventure.Tile_Engine
                                 rv = false;
                             }
                         }
-                        MapChange((TiledMapTile)tile);
+                        if(MapChange(movingObject)) {
+                            return false;
+                        }
                     }
                 }
             }
@@ -152,6 +208,11 @@ namespace Adventure.Tile_Engine
         public bool CheckUpMovement(Rectangle movingObject)
         {
             bool rv = true;
+            if (CheckForObjectCollision(movingObject))
+            {
+                return false;
+            }
+
             int rowTile = movingObject.Top / _tileSize;
             foreach (TiledMapTileLayer l in _map.TileLayers)
             {
@@ -170,7 +231,10 @@ namespace Adventure.Tile_Engine
                                 rv = false;
                             }
                         }
-                        MapChange((TiledMapTile)tile);
+                        if (MapChange(movingObject))
+                        {
+                            return false;
+                        }
                     }
                 }
             }
@@ -180,6 +244,10 @@ namespace Adventure.Tile_Engine
         public bool CheckDownMovement(Rectangle movingObject)
         {
             bool rv = true;
+            if (CheckForObjectCollision(movingObject))
+            {
+                return false;
+            }
             int rowTile = movingObject.Bottom / _tileSize;
             foreach (TiledMapTileLayer l in _map.TileLayers)
             {
@@ -198,7 +266,9 @@ namespace Adventure.Tile_Engine
                                 rv = false;
                             }
                         }
-                        MapChange((TiledMapTile)tile);
+                        if (MapChange(movingObject)) {
+                            return false;
+                        }
                     }
                 }
             }
@@ -219,16 +289,31 @@ namespace Adventure.Tile_Engine
             return rv;
         }
 
-        public void MapChange(TiledMapTile tile)
+        public bool MapChange(Rectangle movingObject)
         {
-            foreach (KeyValuePair<string, string> tp in GetProperties(tile))
+            foreach(Rectangle r in _exitDictionary.Keys)
             {
-                if (tp.Key.Equals("GoTo"))
+                if (r.Intersects(movingObject))
                 {
-                    MapManager.GetInstance().SetCurrentMap(tp.Value);
-
+                    MapManager.GetInstance().ChangeMaps(_exitDictionary[r]);
+                    return true;
                 }
             }
+            return false;
+        }
+
+        public bool CheckForObjectCollision(Rectangle movingObject)
+        {
+            bool rv = false;
+            foreach (Building b in _buildingList)
+            {
+                if (b.BoundingBox.Intersects(movingObject))
+                {
+                    rv = true;
+                    break;
+                }
+            }
+            return rv;
         }
 
         public List<KeyValuePair<string, string>> GetProperties(TiledMapTile tile)
@@ -274,20 +359,71 @@ namespace Adventure.Tile_Engine
         #endregion
         #endregion
 
-        public bool ProcessMapClick(Point mouseLocation)
+        public bool ProcessRightButtonClick(Point mouseLocation)
         {
             bool rv = false;
 
             foreach(Character c in _characterList)
             {
-                if (c.GetType().Equals(typeof(Wizard)))
+                Type cType = c.GetType();
+                if (cType.IsSubclassOf(typeof(Worker)))
                 {
-                    Worker wiz = (Worker)c;
-                    if (wiz.MouseInside(mouseLocation) && wiz.PlayerInRange(_playerManager.Player.GetRectangle()) &&
-                        _playerManager.Player.HasSpaceInInventory(wiz.WhatAreYouHolding()))
+                    Worker w = (Worker)c;
+                    if (w.MouseInside(mouseLocation) && w.PlayerInRange(_playerManager.Player.GetRectangle()) &&
+                        _playerManager.Player.HasSpaceInInventory(w.WhatAreYouHolding()))
                     {
-                        _playerManager.Player.AddItemToFirstAvailableInventory(wiz.TakeItem());
-                        wiz.MakeDailyItem();
+                        _playerManager.Player.AddItemToFirstAvailableInventory(w.TakeItem());
+                        w.MakeDailyItem();
+                    }
+                }
+                else if (cType.Equals(typeof(ShopKeeper)) || (cType.IsSubclassOf(typeof(ShopKeeper))) && ((ShopKeeper)c).IsOpen)
+                {
+                    GUIManager.GetInstance().OpenShopWindow((ShopKeeper)c);
+                }
+            }
+
+            return rv;
+        }
+
+        public bool ProcessLeftButtonClick(Point mouseLocation)
+        {
+            bool rv = false;
+
+            if (AdventureGame.BuildingMode)
+            {
+                if(GraphicCursor.HeldBuilding != null)
+                {
+                    Building b = GraphicCursor.HeldBuilding;
+                    Vector3 translate = Camera._transform.Translation;
+                    Vector2 newPos = new Vector2(b.Position.X - translate.X, b.Position.Y - translate.Y);
+                    b.SetLocation(newPos);
+                    GraphicCursor.DropBuilding();
+                    _buildingList.Add(b);
+
+                    AdventureGame.BuildingMode = false;
+                    Camera.ResetObserver();
+                    MapManager.GetInstance().BackToPlayer();
+                    GUIManager.GetInstance().RestoreDefault();
+                }
+            }
+            else
+            {
+                foreach (Character c in _characterList)
+                {
+                    Type cType = c.GetType();
+                    if (cType.IsSubclassOf(typeof(Worker)))
+                    {
+                        Worker w = (Worker)c;
+                        if (w.MouseInside(mouseLocation) && w.PlayerInRange(_playerManager.Player.GetRectangle()) &&
+                            _playerManager.Player.HasSpaceInInventory(w.WhatAreYouHolding()))
+                        {
+                            _playerManager.Player.AddItemToFirstAvailableInventory(w.TakeItem());
+                            w.MakeDailyItem();
+                        }
+                    }
+                    else if (cType.Equals(typeof(ShopKeeper)) || (cType.IsSubclassOf(typeof(ShopKeeper))) && ((ShopKeeper)c).IsOpen)
+                    {
+                        GUIManager.GetInstance().OpenShopWindow((ShopKeeper)c);
                     }
                 }
             }

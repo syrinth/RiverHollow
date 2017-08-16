@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Adventure.Tile_Engine;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -13,8 +14,12 @@ namespace Adventure.Game_Managers
     {
         static PlayerManager instance;
 
+        private TileMap _currentMap;
+        public TileMap CurrentMap { get => _currentMap; set => _currentMap = value; }
+
         private Player _player;
         public Player Player { get => _player; }
+
         private PlayerManager()
         {
 

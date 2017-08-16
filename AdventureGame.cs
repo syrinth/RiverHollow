@@ -21,8 +21,9 @@ namespace Adventure
     {
         public GraphicsDeviceManager _graphicsDeviceManager;
         public SpriteBatch spriteBatch;
-        public static int SCREEN_WIDTH = 1920;
-        public static int SCREEN_HEIGHT = 1080;
+        public static int ScreenWidth = 1920;
+        public static int ScreenHeight = 1080;
+        public static bool BuildingMode = false;
 
         public ViewportAdapter ViewportAdapter { get; private set; }
 
@@ -72,7 +73,7 @@ namespace Adventure
             _mapManager.LoadContent(Content, GraphicsDevice);
             _playerManager.NewPlayer();
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            GameCalendar.NewCalender(Content, SCREEN_WIDTH, SCREEN_HEIGHT);
+            GameCalendar.NewCalender(Content, ScreenWidth, ScreenHeight);
         }
 
         /// <summary>
@@ -102,38 +103,47 @@ namespace Adventure
 
             _guiManager.Update(gameTime);
 
+            Point mousePoint = Mouse.GetState().Position;
+            Vector3 translate = Camera._transform.Translation;
             if (Mouse.GetState().RightButton == ButtonState.Pressed && GraphicCursor.LastMouseState.RightButton == ButtonState.Released)
             {
-                Point mousePoint = Mouse.GetState().Position;
-                Vector3 translate = Camera._transform.Translation;
-
-                mousePoint.X -= (int)translate.X;
-                mousePoint.Y -= (int)translate.Y;
-
-                _mapManager.ProcessMapClick(mousePoint);
+                if (!_guiManager.ProcessRightButtonClick(mousePoint))
+                {
+                    //GUI does NOT use Camera translations
+                    mousePoint.X -= (int)translate.X;
+                    mousePoint.Y -= (int)translate.Y;
+                    _mapManager.ProcessRightButtonClick(mousePoint);
+                }
             }
 
             if (Mouse.GetState().LeftButton == ButtonState.Pressed && GraphicCursor.LastMouseState.LeftButton == ButtonState.Released)
             {
-                //ToDo better processing logic button
-                Vector2 mouse = new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y);
-                _guiManager.ProcessLeftButtonClick(mouse);
+                if (!_guiManager.ProcessLeftButtonClick(mousePoint))
+                {
+                    mousePoint.X -= (int)translate.X;
+                    mousePoint.Y -= (int)translate.Y;
+                    _mapManager.ProcessLeftButtonClick(mousePoint);
+                }
             }
 
             GraphicCursor.LastMouseState = Mouse.GetState();
 
             if (!_paused)
             {
-                GameCalendar.Update(gameTime);
+                
                 // TODO: Add your update logic here
                 Camera.Update(gameTime);
-                if(GameCalendar.CurrentHour == 2)
-                {
-                    RollOver();
-                }
+                
+                if (!BuildingMode) {
+                    GameCalendar.Update(gameTime);
+                    if (GameCalendar.CurrentHour == 2)
+                    {
+                        RollOver();
+                    }
 
-                _mapManager.Update(gameTime);
-                _playerManager.Update(gameTime);
+                    _mapManager.Update(gameTime);
+                    _playerManager.Update(gameTime);
+                }
             }
 
             base.Update(gameTime);
@@ -152,7 +162,10 @@ namespace Adventure
 
             _mapManager.Draw(spriteBatch);
 
-            _playerManager.Draw(gameTime, spriteBatch);
+            if (!BuildingMode)
+            {
+                _playerManager.Draw(gameTime, spriteBatch);
+            }
 
             spriteBatch.End();
 

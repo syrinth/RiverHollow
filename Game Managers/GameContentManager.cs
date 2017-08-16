@@ -43,18 +43,22 @@ namespace Adventure.Game_Managers
         {
             AddTexture(Content, @"Textures\Eggplant");
             AddTexture(Content, @"Textures\Wizard");
+            AddTexture(Content, @"Textures\Taylor");
         }
 
         public void LoadGUIs(ContentManager Content)
         {
             AddTexture(Content, @"Textures\cursor");
             AddTexture(Content, @"Textures\MiniInventory");
+            AddTexture(Content, @"Textures\ShopWindow");
         }
 
         public void LoadIcons(ContentManager Content)
         {
             AddTexture(Content, @"Textures\Sword");
             AddTexture(Content, @"Textures\arcane_essence");
+            AddTexture(Content, @"Textures\ValidSquare");
+            AddTexture(Content, @"Textures\ArcaneTower");
         }
 
         public void LoadFont(ContentManager Content)

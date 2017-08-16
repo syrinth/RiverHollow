@@ -14,5 +14,9 @@
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Fonts/DisplayFont.spritefont</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/cursor.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Map2.tmx</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/ValidSquare.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/Taylor.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/ShopWindow.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/ArcaneTower.png</File>
   </SourceFiles>
 </SourceFileCollection>

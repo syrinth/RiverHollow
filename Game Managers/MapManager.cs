@@ -43,19 +43,39 @@ namespace Adventure.Game_Managers
                 {
                     TileMap newMap = new TileMap();
                     newMap.LoadContent(Content, GraphicsDevice, modPath);
-                    _tileMaps.Add(newMap._name, newMap);
+                    _tileMaps.Add(newMap.Name, newMap);
                 }
             }
 
-            _currentMap = _tileMaps[@"Maps\Map1"];
+            _currentMap = _tileMaps[@"Map1"];
         }
 
-        public void SetCurrentMap(string newMap)
+        public void ChangeMaps(string newMap)
         {
-            newMap = newMap.Insert(0, @"Maps\");
+            Rectangle rectEntrance = Rectangle.Empty;
+            foreach (string s in _tileMaps[newMap].EntranceDictionary.Keys)
+            {
+                if (s.Equals(_currentMap.Name))
+                {
+                    rectEntrance = _tileMaps[newMap].EntranceDictionary[s];
+                }
+            }
+            _currentMap = _tileMaps[newMap];
+
+            PlayerManager.GetInstance().CurrentMap = _currentMap;
+            PlayerManager.GetInstance().Player.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
+        }
+
+        public void BackToPlayer()
+        {
+            _currentMap = PlayerManager.GetInstance().CurrentMap;
+        }
+
+        public void ViewMap(string newMap)
+        {
             _currentMap = _tileMaps[newMap];
         }
-        
+
         public void Update(GameTime gametime)
         {
             _currentMap.Update(gametime);
@@ -66,11 +86,20 @@ namespace Adventure.Game_Managers
             _currentMap.Draw(spritebatch);
         }
 
-        public bool ProcessMapClick(Point mouseLocation)
+        public bool ProcessRightButtonClick(Point mouseLocation)
         {
             bool rv = false;
 
-            rv = _currentMap.ProcessMapClick(mouseLocation);
+            rv = _currentMap.ProcessRightButtonClick(mouseLocation);
+
+            return rv;
+        }
+
+        public bool ProcessLeftButtonClick(Point mouseLocation)
+        {
+            bool rv = false;
+
+            rv = _currentMap.ProcessLeftButtonClick(mouseLocation);
 
             return rv;
         }

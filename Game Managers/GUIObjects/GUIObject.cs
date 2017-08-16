@@ -11,6 +11,7 @@ namespace Adventure.GUIObjects
 {
     public abstract class GUIObject
     {
+        protected GameContentManager _gcManager = GameContentManager.GetInstance();
         protected PlayerManager _playerManager = PlayerManager.GetInstance();
 
         private int _height;
@@ -20,6 +21,12 @@ namespace Adventure.GUIObjects
 
         private Vector2 _position;
         public Vector2 Position { get => _position; set => _position = value; }
+
+        protected Rectangle _rect;
+        public Rectangle Rectangle { get => _rect; }
+
+        protected bool _visible;
+        public bool Visible { get => _visible; set => _visible = value; }
 
         protected Texture2D _texture;
 

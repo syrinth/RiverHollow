@@ -16,18 +16,16 @@ namespace Adventure.Screens
 {
     public class InventoryDisplay : GUIObject
     {
-        private GameContentManager _gcManager = GameContentManager.GetInstance();
         private static InventoryDisplay instance;
         private KeyValuePair<Rectangle, InventoryItem>[] _displayList;
         private SpriteFont _displayFont;
-        private Rectangle _rect;
-        public Rectangle Rectangle { get => _rect; }
 
         private InventoryDisplay()
         {
             _texture = _gcManager.GetTexture(@"Textures\MiniInventory");
             _displayFont = _gcManager.GetFont(@"Fonts\DisplayFont");
-            Position = new Vector2((AdventureGame.SCREEN_WIDTH/ 2) - (_texture.Width/2), 16);
+            Position = new Vector2((AdventureGame.ScreenWidth/ 2) - (_texture.Width/2), 16);
+            _rect = new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
 
             _displayList = new KeyValuePair<Rectangle, InventoryItem>[Player.maxItemRow];
             Rectangle displayBox = new Rectangle((int)Position.X + 3, (int)Position.Y + 3, 32, 32);
@@ -37,7 +35,8 @@ namespace Adventure.Screens
                 _displayList[i] = new KeyValuePair<Rectangle, InventoryItem>(displayBox, null);
                 displayBox.X += 34;
             }
-            _rect = new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
+
+            _visible = true;
         }
 
         public static InventoryDisplay GetInstance()
@@ -49,7 +48,7 @@ namespace Adventure.Screens
             return instance;
         }
 
-        public bool ProcessLeftButtonClick(Vector2 mouse)
+        public bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
 
@@ -65,7 +64,7 @@ namespace Adventure.Screens
             return rv;
         }
 
-        public InventoryItem TakeItem(Vector2 mouse)
+        public InventoryItem TakeItem(Point mouse)
         {
             InventoryItem rv = null;
 
@@ -104,25 +103,31 @@ namespace Adventure.Screens
 
         public void Update(GameTime gameTime)
         {
-            for (int i = 0; i < Player.maxItemRow; i++)
+            if (_visible)
             {
-                _displayList[i] = new KeyValuePair<Rectangle, InventoryItem>(_displayList[i].Key, _playerManager.Player.Inventory[i]);
+                for (int i = 0; i < Player.maxItemRow; i++)
+                {
+                    _displayList[i] = new KeyValuePair<Rectangle, InventoryItem>(_displayList[i].Key, _playerManager.Player.Inventory[i]);
+                }
             }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _rect, Color.White);
-
-            Rectangle itemBox = new Rectangle((int)Position.X + 3, (int)Position.Y + 3, 32, 32);
-            for (int i = 0; i < Player.maxItemRow; i++)
+            if (_visible)
             {
-                if (_displayList[i].Value != null)
+                spriteBatch.Draw(_texture, _rect, Color.White);
+
+                Rectangle itemBox = new Rectangle((int)Position.X + 3, (int)Position.Y + 3, 32, 32);
+                for (int i = 0; i < Player.maxItemRow; i++)
                 {
-                    _displayList[i].Value.Draw(spriteBatch, itemBox);
-                    spriteBatch.DrawString(_displayFont, _displayList[i].Value.Number.ToString(), new Vector2(itemBox.X+22, itemBox.Y+22), Color.White);
+                    if (_displayList[i].Value != null)
+                    {
+                        _displayList[i].Value.Draw(spriteBatch, itemBox);
+                        spriteBatch.DrawString(_displayFont, _displayList[i].Value.Number.ToString(), new Vector2(itemBox.X + 22, itemBox.Y + 22), Color.White);
+                    }
+                    itemBox.X += 34;
                 }
-                itemBox.X += 34;
             }
         }
     }

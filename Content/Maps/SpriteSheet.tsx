@@ -23,7 +23,7 @@
  </tile>
  <tile id="11">
   <properties>
-   <property name="GoTo" value="Map2"/>
+   <property name="goTo" value="Map2"/>
   </properties>
  </tile>
 </tileset>

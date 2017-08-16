@@ -93,13 +93,13 @@ namespace Adventure
                 {
                     _sprite.CurrentAnimation = animation;
                 }
+
+                this.Position = new Vector2(_sprite.Position.X, _sprite.Position.Y);
             }
             else
             {
                 _sprite.CurrentAnimation = "Float" + _sprite.CurrentAnimation.Substring(4);
             }
-
-            this.Position = new Vector2(_sprite.Position.X, _sprite.Position.Y);
 
             _sprite.Update(theGameTime);
         }

@@ -1,4 +1,6 @@
-﻿using Adventure.GUIObjects;
+﻿using Adventure.Characters.NPCs;
+using Adventure.Game_Managers.GUIObjects;
+using Adventure.GUIObjects;
 using Adventure.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -16,6 +18,7 @@ namespace Adventure.Game_Managers
     {
         static GUIManager instance;
         private InventoryDisplay _inventoryDisplay;
+        private ShopWindow _shopWindow;
 
         private GUIManager()
         {
@@ -44,17 +47,45 @@ namespace Adventure.Game_Managers
         public void Draw(SpriteBatch spriteBatch)
         {
             _inventoryDisplay.Draw(spriteBatch);
+            if (_shopWindow != null) { _shopWindow.Draw(spriteBatch); }
             GraphicCursor.Draw(spriteBatch);
         }
 
-        public bool ProcessLeftButtonClick(Vector2 mouse)
+        public void RestoreDefault()
+        {
+            _inventoryDisplay.Visible = true;
+        }
+
+        public bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_inventoryDisplay.Rectangle.Contains(mouse)) {
-                _inventoryDisplay.ProcessLeftButtonClick(mouse);
+            if (_inventoryDisplay.Visible && _inventoryDisplay.Rectangle.Contains(mouse)) {
+                rv =_inventoryDisplay.ProcessLeftButtonClick(mouse);
+            }
+            else if(_shopWindow != null && _shopWindow.Visible && _shopWindow.Rectangle.Contains(mouse)) {
+                rv = _shopWindow.ProcessLeftButtonClick(mouse);
             }
 
             return rv;
+        }
+
+        public bool ProcessRightButtonClick(Point mouse)
+        {
+            bool rv = false;
+
+            if (_shopWindow != null && _shopWindow.Visible && !_shopWindow.Rectangle.Contains(mouse)) {
+                _shopWindow.Visible = false;
+                _inventoryDisplay.Visible = true;
+                rv = true;
+            }
+
+            return rv;
+        }
+
+        public void OpenShopWindow(ShopKeeper shop)
+        {
+            _inventoryDisplay.Visible = false;
+            _shopWindow = new ShopWindow(shop);
         }
     }
 }
