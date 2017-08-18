@@ -1,4 +1,5 @@
-﻿using Adventure.Characters.NPCs;
+﻿using Adventure.Buildings;
+using Adventure.Characters.NPCs;
 using Adventure.Game_Managers;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
@@ -8,20 +9,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Adventure
 {
-    public class Building
+    public abstract class Building
     {
-        private const int MaxWorkers = 9;
-        protected Worker[] _workers;
-        public Worker[] Workers { get => _workers; }
+        protected const int MaxWorkers = 9;
+        public abstract string _map { get; }
+
+        public bool _selected = false;
+
+        protected List<Worker> _workers;
+        public List<Worker> Workers { get => _workers; }
 
         protected int _id;
         public int ID { get => _id; }
 
         protected int _baseWidth; //In Tiles
-        public int BaseWidth { get => _baseWidth*TileMap.TileSize; } //In Pixels
+        public int BaseWidth { get => _baseWidth * TileMap.TileSize; } //In Pixels
         protected int _baseHeight; //In Tiles
         public int BaseHeight { get => _baseHeight * TileMap.TileSize; } //In Pixels
 
@@ -36,44 +42,45 @@ namespace Adventure
 
         public Rectangle BoundingBox { get => new Rectangle((int)Position.X, (int)(Position.Y + (_texture.Height - BaseHeight)), BaseWidth, BaseHeight); }
 
-        //returns -1 if there is no room, else returns the first slot that's open
-        public int HasSpace()
-        {
-            int rv = -1;
+        protected Rectangle _boxToExit;
+        public Rectangle BoxToExit { get => _boxToExit; }
 
-            for(int i=0; i<_workers.Length; i++)
-            {
-                if(_workers[i] == null)
-                {
-                    rv = i;
-                }
-            }
+        protected Rectangle _boxToEnter;
+        public Rectangle BoxToEnter { get => _boxToEnter; }
+
+        public Building() {}
+
+        public bool HasSpace()
+        {
+            bool rv = false;
+
+            rv = _workers.Count < 9;
+
             return rv;
         }
 
         //call HasSpace before adding
-        public bool AddWorker(Worker worker, int index)
+        public bool AddWorker(Worker worker)
         {
             bool rv = false;
 
-            if(worker != null && index < _workers.Length && _workers[index] == null)
+            if(worker != null &&  _workers.Count < MaxWorkers)
             {
-                _workers[index] = worker;
+                Random r = new Random();
+                worker.MakeDailyItem();
+                _workers.Add(worker);
+                worker.Position = new Vector2(r.Next(1160, 1860), r.Next(990,1340));
+                rv = true;
             }
 
             return rv;
         }
 
-        public bool SetLocation(Vector2 position)
-        {
-            bool rv = true;
-            _position = position;
-            return rv;
-        }
+        public abstract bool SetCoordinates(Vector2 position);
 
         public void Draw(SpriteBatch spritebatch)
         {
-            spritebatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, _texture.Width, _texture.Height), null, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y+Texture.Height);
+            spritebatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, _texture.Width, _texture.Height), null, _selected ? Color.Green : Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y+Texture.Height);
         }
     }
 }

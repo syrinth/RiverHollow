@@ -1,18 +1,17 @@
-﻿using Microsoft.Xna.Framework;
-using System.Collections.Generic;
-using MonoGame.Extended.Tiled;
-using MonoGame.Extended.Graphics;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using System.IO;
-using System.Xml.Linq;
-using System;
-using Adventure.Characters;
+﻿using Adventure.Characters;
 using Adventure.Characters.Monsters;
 using Adventure.Characters.NPCs;
 using Adventure.Game_Managers;
-using System.Collections.ObjectModel;
 using Adventure.GUIObjects;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Graphics;
+using MonoGame.Extended.Tiled;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Xml.Linq;
 
 namespace Adventure.Tile_Engine
 {
@@ -23,7 +22,7 @@ namespace Adventure.Tile_Engine
         public static int _tileSize = 32;
         public static int TileSize { get => _tileSize; }
         private string _name;
-        public string Name { get => _name.Replace(@"Maps\", ""); } //Fuck off with that path bullshit
+        public string Name { get => _name.Replace(@"Maps\", ""); set => _name = value; } //Fuck off with that path bullshit
 
         protected TiledMap _map;
         protected TiledMapRenderer renderer;
@@ -369,16 +368,23 @@ namespace Adventure.Tile_Engine
                 if (cType.IsSubclassOf(typeof(Worker)))
                 {
                     Worker w = (Worker)c;
-                    if (w.MouseInside(mouseLocation) && w.PlayerInRange(_playerManager.Player.GetRectangle()) &&
+                    if (w.MouseInside(mouseLocation) && PlayerInRange(_playerManager.Player.GetRectangle(), w.Center) &&
                         _playerManager.Player.HasSpaceInInventory(w.WhatAreYouHolding()))
                     {
                         _playerManager.Player.AddItemToFirstAvailableInventory(w.TakeItem());
-                        w.MakeDailyItem();
                     }
                 }
                 else if (cType.Equals(typeof(ShopKeeper)) || (cType.IsSubclassOf(typeof(ShopKeeper))) && ((ShopKeeper)c).IsOpen)
                 {
                     GUIManager.GetInstance().OpenShopWindow((ShopKeeper)c);
+                }
+            }
+            foreach (Building b in _buildingList)
+            {
+                if (b.BoxToEnter.Contains(mouseLocation) && PlayerInRange(_playerManager.Player.GetRectangle(), b.BoxToEnter.Center))
+                {
+                    MapManager.GetInstance().EnterBuilding(b._map, b.ID.ToString(), b.Workers);
+                    break;
                 }
             }
 
@@ -393,17 +399,15 @@ namespace Adventure.Tile_Engine
             {
                 if(GraphicCursor.HeldBuilding != null)
                 {
-                    Building b = GraphicCursor.HeldBuilding;
-                    Vector3 translate = Camera._transform.Translation;
-                    Vector2 newPos = new Vector2(b.Position.X - translate.X, b.Position.Y - translate.Y);
-                    b.SetLocation(newPos);
-                    GraphicCursor.DropBuilding();
-                    _buildingList.Add(b);
-
-                    AdventureGame.BuildingMode = false;
-                    Camera.ResetObserver();
-                    MapManager.GetInstance().BackToPlayer();
-                    GUIManager.GetInstance().RestoreDefault();
+                    AddBuilding();
+                    rv = true;
+                }
+                else if(GraphicCursor.WorkerToPlace != ItemManager.WorkerID.Nothing)
+                {
+                    if (AddWorkerToBuilding())
+                    {
+                        rv = true;
+                    }
                 }
             }
             else
@@ -414,7 +418,7 @@ namespace Adventure.Tile_Engine
                     if (cType.IsSubclassOf(typeof(Worker)))
                     {
                         Worker w = (Worker)c;
-                        if (w.MouseInside(mouseLocation) && w.PlayerInRange(_playerManager.Player.GetRectangle()) &&
+                        if (w.MouseInside(mouseLocation) && PlayerInRange(_playerManager.Player.GetRectangle(), w.Center) &&
                             _playerManager.Player.HasSpaceInInventory(w.WhatAreYouHolding()))
                         {
                             _playerManager.Player.AddItemToFirstAvailableInventory(w.TakeItem());
@@ -429,6 +433,88 @@ namespace Adventure.Tile_Engine
             }
 
             return rv;
+        }
+        public bool ProcessHover(Point mouseLocation)
+        {
+            bool rv = false;
+
+            if (AdventureGame.BuildingMode)
+            {
+                foreach(Building b in _buildingList)
+                {
+                    if (b.BoundingBox.Contains(mouseLocation))
+                    {
+                        b._selected = true;
+                    }
+                    else
+                    {
+                        b._selected = false;
+                    }
+                }
+            }
+
+            return rv;
+        }
+
+        public bool PlayerInRange(Rectangle playerRect, Point centre)
+        {
+            bool rv = false;
+
+            if (Math.Abs(playerRect.Center.X - centre.X) <= TileMap.TileSize*2 &&
+                Math.Abs(playerRect.Center.Y - centre.Y) <= TileMap.TileSize*2)
+            {
+                rv = true;
+            }
+
+            return rv;
+        }
+
+        public void ClearWorkers()
+        {
+            _characterList.Clear();
+        }
+        public void AddWorkersToMap(List<Worker> workers)
+        {
+            _characterList.AddRange(workers);
+        }
+        public void AddBuilding()
+        {
+            Building b = GraphicCursor.HeldBuilding;
+            Vector3 translate = Camera._transform.Translation;
+            Vector2 newPos = new Vector2(b.Position.X - translate.X, b.Position.Y - translate.Y);
+            b.SetCoordinates(newPos);
+            _entranceDictionary.Add(b.ID.ToString(), b.BoxToExit); //TODO: FIX THIS
+            GraphicCursor.DropBuilding();
+            _buildingList.Add(b);
+            _playerManager.AddBuilding(b);
+
+            LeaveBuildingMode();
+        }
+        public bool AddWorkerToBuilding()
+        {
+            bool rv = false;
+            foreach(Building b in _buildingList)
+            {
+                if (b.BoundingBox.Contains(GraphicCursor.Position))
+                {
+                    if (b.HasSpace())
+                    {
+                        b.AddWorker(ItemManager.GetWorker(GraphicCursor.WorkerToPlace));
+                        LeaveBuildingMode();
+                        b._selected = false;
+                        rv = true;
+                    }
+                }
+            }
+            return rv;
+        }
+
+        public void LeaveBuildingMode()
+        {
+            AdventureGame.BuildingMode = false;
+            Camera.ResetObserver();
+            MapManager.GetInstance().BackToPlayer();
+            GUIManager.GetInstance().LoadMainGame();
         }
         public int GetMapWidth()
         {

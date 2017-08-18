@@ -59,6 +59,7 @@ namespace Adventure.Game_Managers
             AddTexture(Content, @"Textures\arcane_essence");
             AddTexture(Content, @"Textures\ValidSquare");
             AddTexture(Content, @"Textures\ArcaneTower");
+            AddTexture(Content, @"Textures\New");
         }
 
         public void LoadFont(ContentManager Content)

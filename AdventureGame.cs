@@ -9,8 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.ViewportAdapters;
-using System;
-using System.Collections.Generic;
+
 
 namespace Adventure
 {
@@ -19,6 +18,8 @@ namespace Adventure
     /// </summary>
     public class AdventureGame : Game
     {
+        public enum GameState { MainMenu, Game, Paused }
+        public static GameState _gameState;
         public GraphicsDeviceManager _graphicsDeviceManager;
         public SpriteBatch spriteBatch;
         public static int ScreenWidth = 1920;
@@ -57,6 +58,8 @@ namespace Adventure
             // TODO: Add your initialization logic here
             Camera.SetViewport(GraphicsDevice.Viewport);
 
+            _playerManager.Load();
+
             base.Initialize();
         }
 
@@ -73,7 +76,8 @@ namespace Adventure
             _mapManager.LoadContent(Content, GraphicsDevice);
             _playerManager.NewPlayer();
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            GameCalendar.NewCalender(Content, ScreenWidth, ScreenHeight);
+
+            ChangeGameState(GameState.MainMenu);
         }
 
         /// <summary>
@@ -96,6 +100,11 @@ namespace Adventure
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 Exit();
+            }
+
+            if (Mouse.GetState().MiddleButton == ButtonState.Pressed)
+            {
+                PlayerManager.GetInstance().Save();
             }
 
             checkPauseKey(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One));
@@ -126,15 +135,23 @@ namespace Adventure
                 }
             }
 
+            if (BuildingMode)
+            {
+                mousePoint.X -= (int)translate.X;
+                mousePoint.Y -= (int)translate.Y;
+                _mapManager.ProcessHover(mousePoint);
+            }
+
             GraphicCursor.LastMouseState = Mouse.GetState();
 
             if (!_paused)
             {
-                
+
                 // TODO: Add your update logic here
                 Camera.Update(gameTime);
-                
-                if (!BuildingMode) {
+
+                if (!BuildingMode)
+                {
                     GameCalendar.Update(gameTime);
                     if (GameCalendar.CurrentHour == 2)
                     {
@@ -147,6 +164,16 @@ namespace Adventure
             }
 
             base.Update(gameTime);
+        }
+
+        public static void ChangeGameState(GameState state)
+        {
+            _gameState = state;
+
+            if(_gameState == GameState.MainMenu)
+            {
+                GUIManager.GetInstance().LoadMainMenu();
+            }
         }
 
         /// <summary>

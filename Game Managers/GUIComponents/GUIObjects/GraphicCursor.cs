@@ -20,9 +20,12 @@ namespace Adventure.GUIObjects
         private static Building _heldBuilding;
         public static Building HeldBuilding { get => _heldBuilding; }
 
+        private static ItemManager.WorkerID _workerID = ItemManager.WorkerID.Nothing;
+        public static ItemManager.WorkerID WorkerToPlace { get => _workerID; }
+
         private static Vector2 _position;
         public static Vector2 Position { get => _position; set => _position = value; }
-        public static SpriteFont _calendarFont;
+        //public static SpriteFont _font;
 
         private static Texture2D _texture;
 
@@ -30,7 +33,7 @@ namespace Adventure.GUIObjects
         {
             _texture = GameContentManager.GetInstance().GetTexture(@"Textures\cursor");
             Position = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-            _calendarFont = GameContentManager.GetInstance().GetFont(@"Fonts\Font");
+        //    _font = GameContentManager.GetInstance().GetFont(@"Fonts\Font");
         }
 
         public static bool GrabItem(InventoryItem item)
@@ -62,6 +65,18 @@ namespace Adventure.GUIObjects
             return rv;
         }
 
+        public static bool PickUpWorker(ItemManager.WorkerID id)
+        {
+            bool rv = false;
+            if (id != ItemManager.WorkerID.Nothing)
+            {
+                _workerID = id;
+                rv = true;
+            }
+
+            return rv;
+        }
+
         public static void DropBuilding()
         {
             _heldBuilding = null;
@@ -86,8 +101,8 @@ namespace Adventure.GUIObjects
                     drawRectangle.Width = drawIt.Width;
                     drawRectangle.Height = drawIt.Height;
 
-                    _heldBuilding.SetLocation(new Vector2(drawRectangle.X, drawRectangle.Y));
-                    spriteBatch.DrawString(_calendarFont, String.Format("{0}, {1}", drawRectangle.X, drawRectangle.Y), Position += new Vector2(300, 300), Color.Black);
+                    _heldBuilding.SetCoordinates(new Vector2(drawRectangle.X, drawRectangle.Y));
+                    //spriteBatch.DrawString(_font, String.Format("{0}, {1}", drawRectangle.X, drawRectangle.Y), Position += new Vector2(300, 300), Color.Black);
                 }
             }
             else

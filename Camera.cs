@@ -25,7 +25,7 @@ namespace Adventure
         {
             if (!AdventureGame.BuildingMode)
             {
-                _observer = _playerManager.Player.Center;
+                _observer = _playerManager.Player.Center.ToVector2();
             }
             else {
                 KeyboardState ks = Keyboard.GetState();
@@ -77,7 +77,7 @@ namespace Adventure
         }
         public static void ResetObserver()
         {
-            _observer = _playerManager.Player.Center;
+            _observer = _playerManager.Player.Center.ToVector2();
         }
     }
 }

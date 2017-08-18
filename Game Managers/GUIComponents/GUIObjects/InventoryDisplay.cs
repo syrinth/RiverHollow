@@ -16,11 +16,10 @@ namespace Adventure.Screens
 {
     public class InventoryDisplay : GUIObject
     {
-        private static InventoryDisplay instance;
         private KeyValuePair<Rectangle, InventoryItem>[] _displayList;
         private SpriteFont _displayFont;
 
-        private InventoryDisplay()
+        public InventoryDisplay()
         {
             _texture = _gcManager.GetTexture(@"Textures\MiniInventory");
             _displayFont = _gcManager.GetFont(@"Fonts\DisplayFont");
@@ -37,15 +36,6 @@ namespace Adventure.Screens
             }
 
             _visible = true;
-        }
-
-        public static InventoryDisplay GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new InventoryDisplay();
-            }
-            return instance;
         }
 
         public bool ProcessLeftButtonClick(Point mouse)
@@ -101,7 +91,7 @@ namespace Adventure.Screens
             return rv;
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             if (_visible)
             {

@@ -12,6 +12,11 @@ namespace Adventure.Characters.NPCs
     public class Wizard : Worker
     {
         const string _wizTexture = @"Textures\Wizard";
+
+        public Wizard()
+        {
+            Position = Vector2.Zero;
+        }
         public Wizard(Vector2 position)
         {
             LoadContent(_wizTexture, 32, 64, 1, 1);

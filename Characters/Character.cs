@@ -21,7 +21,8 @@ namespace Adventure.Characters
         #region Properties
 
         protected AnimatedSprite _sprite;
-        public Vector2 Center => _sprite.Position;
+        public Texture2D Texture { get => _sprite.Texture;  }
+        public Point Center => GetRectangle().Center;
         public Vector2 Position
         {
             get { return new Vector2(_sprite.Position.X, _sprite.Position.Y + _sprite.Height - TileMap.TileSize); }

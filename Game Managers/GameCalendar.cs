@@ -6,8 +6,9 @@ using System;
 
 namespace Adventure
 {
-    public static class GameCalendar
+    public class GameCalendar
     {
+        private static GameCalendar _instance;
         //One day goes from 6 AM - 2 AM => 20 hours
         //Each hour should be one minute
         //Every 10 minutes is 10 seconds real time.
@@ -24,9 +25,7 @@ namespace Adventure
 
         static double _lastUpdateinSeconds;
 
-        
-
-        public static void NewCalender(ContentManager Content, int width, int height)
+        private GameCalendar()
         {
             _currDay = 1;
             _currSeason = Seasons.Spring;
@@ -36,12 +35,21 @@ namespace Adventure
             _lastUpdateinSeconds = 0;
 
             _calendarFont = GameContentManager.GetInstance().GetFont(@"Fonts\Font");
-            _timePosition = new Vector2(width-200, 100);
+            _timePosition = new Vector2(1760, 800);
+        }
+
+        public static GameCalendar GetInstance()
+        {
+            if (_instance == null)
+            {
+                _instance = new GameCalendar();
+            }
+            return _instance;
         }
 
         public static void Update(GameTime gameTime)
         {
-            _lastUpdateinSeconds += gameTime.ElapsedGameTime.TotalSeconds;
+            _lastUpdateinSeconds += 5;// gameTime.ElapsedGameTime.TotalSeconds;
             if(_currHour == 26)
             {
                 _currHour = 6;

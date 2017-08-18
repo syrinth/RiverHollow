@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using BuildingID = Adventure.Game_Managers.ItemManager.BuildingID;
+using WorkerID = Adventure.Game_Managers.ItemManager.WorkerID;
 namespace Adventure.Characters.NPCs
 {
     public class ShopKeeper : NPC
@@ -15,8 +16,8 @@ namespace Adventure.Characters.NPCs
         protected bool _isOpen;
         public bool IsOpen { get => _isOpen; set => _isOpen = value; }
 
-        protected List<BuildingID> _buildings;
-        public List<BuildingID> Buildings { get => _buildings; }
+        protected List<object> _merchandise;
+        public List<object> Buildings { get => _merchandise; }
 
         public ShopKeeper(Vector2 position)
         {
@@ -24,8 +25,9 @@ namespace Adventure.Characters.NPCs
             Position = position;
             _isOpen = true;
 
-            _buildings = new List<BuildingID>();
-            _buildings.Add(BuildingID.ArcaneTower);
+            _merchandise = new List<object>();
+            _merchandise.Add(BuildingID.ArcaneTower);
+            _merchandise.Add(WorkerID.Wizard);
         }
     }
 }

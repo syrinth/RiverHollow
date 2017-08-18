@@ -1,4 +1,5 @@
-﻿using Adventure.Tile_Engine;
+﻿using Adventure.Characters.NPCs;
+using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -35,40 +36,61 @@ namespace Adventure.Game_Managers
 
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice)
         {
-            string[] str = Directory.GetFiles(Content.RootDirectory + @"\Maps", "*", SearchOption.TopDirectoryOnly);
-            foreach (string s in str)
-            {
-                string modPath = s.Replace(@"Content\", "").Replace(".xnb", "");
-                if (modPath.Replace(@"Maps\","").Contains("Map"))
-                {
-                    TileMap newMap = new TileMap();
-                    newMap.LoadContent(Content, GraphicsDevice, modPath);
-                    _tileMaps.Add(newMap.Name, newMap);
-                }
-            }
+            AddMap(@"Maps\Map1", Content, GraphicsDevice);
+            AddMap(@"Maps\Map2", Content, GraphicsDevice);
+            AddMap(@"Maps\ArcaneTower", Content, GraphicsDevice);
 
             _currentMap = _tileMaps[@"Map1"];
         }
 
-        public void ChangeMaps(string newMap)
+        public void AddMap(string mapToAdd, ContentManager Content, GraphicsDevice GraphicsDevice)
+        {
+            TileMap newMap = new TileMap();
+            newMap.LoadContent(Content, GraphicsDevice, mapToAdd);
+            _tileMaps.Add(newMap.Name, newMap);
+        }
+
+        public void ChangeMaps(string newMapStr)
         {
             Rectangle rectEntrance = Rectangle.Empty;
-            foreach (string s in _tileMaps[newMap].EntranceDictionary.Keys)
+            TileMap newMap = _tileMaps[newMapStr];
+            //if (newMap.EntranceDictionary.Keys
+            foreach (string s in _tileMaps[newMapStr].EntranceDictionary.Keys)
             {
                 if (s.Equals(_currentMap.Name))
                 {
-                    rectEntrance = _tileMaps[newMap].EntranceDictionary[s];
+                    rectEntrance = _tileMaps[newMapStr].EntranceDictionary[s];
                 }
             }
-            _currentMap = _tileMaps[newMap];
+            _currentMap = _tileMaps[newMapStr];
 
-            PlayerManager.GetInstance().CurrentMap = _currentMap;
+            PlayerManager.GetInstance().CurrentMap = _currentMap.Name;
+            PlayerManager.GetInstance().Player.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
+        }
+        public void EnterBuilding(string newMapStr, string ID, List<Worker> workers)
+        {
+            Rectangle rectEntrance = Rectangle.Empty;
+            TileMap newMap = _tileMaps[newMapStr];
+            newMap.Name = ID;
+            //if (newMap.EntranceDictionary.Keys
+            foreach (string s in _tileMaps[newMapStr].EntranceDictionary.Keys)
+            {
+                if (s.Equals(_currentMap.Name))
+                {
+                    rectEntrance = _tileMaps[newMapStr].EntranceDictionary[s];
+                }
+            }
+            _currentMap = _tileMaps[newMapStr];
+            _currentMap.ClearWorkers();
+            _currentMap.AddWorkersToMap(workers);
+
+            PlayerManager.GetInstance().CurrentMap = _currentMap.Name;
             PlayerManager.GetInstance().Player.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
         }
 
         public void BackToPlayer()
         {
-            _currentMap = PlayerManager.GetInstance().CurrentMap;
+            _currentMap = _tileMaps[PlayerManager.GetInstance().CurrentMap];
         }
 
         public void ViewMap(string newMap)
@@ -100,6 +122,14 @@ namespace Adventure.Game_Managers
             bool rv = false;
 
             rv = _currentMap.ProcessLeftButtonClick(mouseLocation);
+
+            return rv;
+        }
+        public bool ProcessHover(Point mouseLocation)
+        {
+            bool rv = false;
+
+            rv = _currentMap.ProcessHover(mouseLocation);
 
             return rv;
         }

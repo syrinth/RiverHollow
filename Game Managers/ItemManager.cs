@@ -1,4 +1,6 @@
 ﻿using Adventure.Buildings;
+using Adventure.Characters.NPCs;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +16,29 @@ namespace Adventure.Game_Managers
         {
             NOTHING, ArcaneTower
         }
+        public enum WorkerID
+        {
+            Nothing, Wizard
+        }
 
         #endregion
 
-        public static Building GetBuilding(BuildingID id)
+        public static Building GetMerchandise(BuildingID id)
         {
             switch (id)
             {
                 case BuildingID.ArcaneTower:
                     return new ArcaneTower();
+            }
+            return null;
+        }
+
+        public static Worker GetWorker(WorkerID id)
+        {
+            switch (id)
+            {
+                case WorkerID.Wizard:
+                    return new Wizard(Vector2.Zero);
             }
             return null;
         }

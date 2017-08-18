@@ -44,7 +44,7 @@ namespace Adventure
                 float deltaY = Math.Abs(_playerManager.Player.Position.Y - this.Position.Y);
 
                 GetMoveSpeed(_playerManager.Player.Position, ref direction);
-                CheckMapForCollisions(direction);
+                CheckMapForCollisionsAndMove(direction);
 
                 DetermineAnimation(ref animation, direction, deltaX, deltaY);
 
@@ -83,7 +83,7 @@ namespace Adventure
                 float deltaY = Math.Abs(_moveTo.Y - this.Position.Y);
 
                 GetMoveSpeed(_moveTo, ref direction);
-                CheckMapForCollisions(direction);
+                CheckMapForCollisionsAndMove(direction);
 
                 DetermineAnimation(ref animation, direction, deltaX, deltaY);
 
@@ -102,7 +102,7 @@ namespace Adventure
             }
         }
 
-        private void CheckMapForCollisions(Vector2 direction)
+        private void CheckMapForCollisionsAndMove(Vector2 direction)
         {
             Rectangle testRectX = new Rectangle((int)Position.X + (int)direction.X, (int)Position.Y, Width, Height);
             Rectangle testRectY = new Rectangle((int)Position.X, (int)Position.Y + (int)direction.Y, Width, Height);
@@ -130,8 +130,10 @@ namespace Adventure
                 newY = (position.Y > this.Position.Y) ? 1 : -1;
             }
 
-            direction.X = newX * _speed;
-            direction.Y = newY * _speed;
+            float deltaX = Math.Abs(position.X - Position.X);
+            float deltaY = Math.Abs(position.Y - Position.Y);
+            direction.X = (deltaX < _speed) ? newX * deltaX : newX * _speed;
+            direction.Y = (deltaY < _speed) ? newY * deltaY : newY * _speed;
         }
 
         private void DetermineAnimation(ref string animation, Vector2 direction, float deltaX, float deltaY)

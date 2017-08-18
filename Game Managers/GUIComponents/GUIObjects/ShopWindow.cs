@@ -37,12 +37,12 @@ namespace Adventure.Game_Managers.GUIObjects
                 }
 
                 if ((i + 1) % 3 == 0) {
-                    buyBoxPosition.X = increment;
+                    buyBoxPosition.X += increment;
                     buyBoxPosition.Y += increment*5;
                 }
                 else
                 {
-                    buyBoxPosition.X = increment*5;
+                    buyBoxPosition.X += increment*5;
                 }
             }
         }
@@ -56,8 +56,16 @@ namespace Adventure.Game_Managers.GUIObjects
                 {
                     if (_buyBoxes[r] != null)
                     {
-                        Building b = (ItemManager.GetBuilding((ItemManager.BuildingID)_buyBoxes[r]));
-                        spriteBatch.Draw(b.Texture, r, Color.White);
+                        if (_buyBoxes[r].GetType().Equals(typeof(ItemManager.BuildingID)))
+                        {
+                            Building b = (ItemManager.GetMerchandise((ItemManager.BuildingID)_buyBoxes[r]));
+                            spriteBatch.Draw(b.Texture, r, Color.White);
+                        }
+                        else
+                        {
+                            Worker w = (ItemManager.GetWorker((ItemManager.WorkerID)_buyBoxes[r]));
+                            spriteBatch.Draw(w.Texture, r, Color.White);
+                        }
                     }
                 }
             }
@@ -73,17 +81,37 @@ namespace Adventure.Game_Managers.GUIObjects
                 {
                     if (_buyBoxes[r] != null)
                     {
-                        Building b = ItemManager.GetBuilding((ItemManager.BuildingID)_buyBoxes[r]);
-                        this._visible = false;
-                        GraphicCursor.PickUpBuilding(b);
-                        AdventureGame.BuildingMode = true;
-                        Camera.UnsetObserver();
-                        MapManager.GetInstance().ViewMap("Map1");
-                        rv = true;
+                        if (_buyBoxes[r].GetType().Equals(typeof(ItemManager.BuildingID)))
+                        {
+                            Building b = ItemManager.GetMerchandise((ItemManager.BuildingID)_buyBoxes[r]);
+                            this._visible = false;
+                            GraphicCursor.PickUpBuilding(b);
+                            AdventureGame.BuildingMode = true;
+                            Camera.UnsetObserver();
+                            MapManager.GetInstance().ViewMap("Map1");
+                            rv = true;
+                        }
+                        if (_buyBoxes[r].GetType().Equals(typeof(ItemManager.WorkerID)))
+                        {
+                            if (PlayerManager.GetInstance().Buildings.Count > 0)
+                            {
+                                this._visible = false;
+                                GraphicCursor.PickUpWorker((ItemManager.WorkerID)_buyBoxes[r]);
+                                AdventureGame.BuildingMode = true;
+                                Camera.UnsetObserver();
+                                MapManager.GetInstance().ViewMap("Map1");
+                                rv = true;
+                            }
+                        }
                     }
                 }
             }
             return rv;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            //throw new NotImplementedException();
         }
     }
 }

@@ -17,8 +17,7 @@ namespace Adventure.Game_Managers
     class GUIManager
     {
         static GUIManager instance;
-        private InventoryDisplay _inventoryDisplay;
-        private ShopWindow _shopWindow;
+        private GUIScreen _currentGUIScreen;
 
         private GUIManager()
         {
@@ -35,36 +34,25 @@ namespace Adventure.Game_Managers
 
         public void LoadContent()
         {
-            _inventoryDisplay = InventoryDisplay.GetInstance();
             GraphicCursor.LoadContent();
         }
 
         public void Update(GameTime gameTime) {
-            _inventoryDisplay.Update(gameTime);
+            _currentGUIScreen.Update(gameTime);
             GraphicCursor.Update();
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _inventoryDisplay.Draw(spriteBatch);
-            if (_shopWindow != null) { _shopWindow.Draw(spriteBatch); }
-            GraphicCursor.Draw(spriteBatch);
-        }
+            _currentGUIScreen.Draw(spriteBatch);
 
-        public void RestoreDefault()
-        {
-            _inventoryDisplay.Visible = true;
+            GraphicCursor.Draw(spriteBatch);
         }
 
         public bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_inventoryDisplay.Visible && _inventoryDisplay.Rectangle.Contains(mouse)) {
-                rv =_inventoryDisplay.ProcessLeftButtonClick(mouse);
-            }
-            else if(_shopWindow != null && _shopWindow.Visible && _shopWindow.Rectangle.Contains(mouse)) {
-                rv = _shopWindow.ProcessLeftButtonClick(mouse);
-            }
+            rv = _currentGUIScreen.ProcessLeftButtonClick(mouse);
 
             return rv;
         }
@@ -73,19 +61,24 @@ namespace Adventure.Game_Managers
         {
             bool rv = false;
 
-            if (_shopWindow != null && _shopWindow.Visible && !_shopWindow.Rectangle.Contains(mouse)) {
-                _shopWindow.Visible = false;
-                _inventoryDisplay.Visible = true;
-                rv = true;
-            }
+            rv = _currentGUIScreen.ProcessRightButtonClick(mouse);
 
             return rv;
         }
 
         public void OpenShopWindow(ShopKeeper shop)
         {
-            _inventoryDisplay.Visible = false;
-            _shopWindow = new ShopWindow(shop);
+            _currentGUIScreen = new ShopScreen(shop);
+        }
+
+        public void LoadMainMenu()
+        {
+            _currentGUIScreen = new MainMenuScreen();
+        }
+
+        public void LoadMainGame()
+        {
+            _currentGUIScreen = new HUDScreen();
         }
     }
 }
