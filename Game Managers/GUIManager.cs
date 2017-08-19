@@ -66,6 +66,14 @@ namespace Adventure.Game_Managers
             return rv;
         }
 
+        public bool ProcessHover(Point mouse)
+        {
+            bool rv = false;
+            rv = _currentGUIScreen.ProcessHover(mouse);
+
+            return rv;
+        }
+
         public void OpenShopWindow(ShopKeeper shop)
         {
             _currentGUIScreen = new ShopScreen(shop);

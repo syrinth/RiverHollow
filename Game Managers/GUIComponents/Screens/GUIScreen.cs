@@ -27,6 +27,10 @@ namespace Adventure.Game_Managers.GUIObjects
         {
             return false;
         }
+        public virtual bool ProcessHover(Point mouse)
+        {
+            return false;
+        }
         public virtual void Update(GameTime gameTime)
         {
             foreach (GUIObject g in Controls)
@@ -34,7 +38,6 @@ namespace Adventure.Game_Managers.GUIObjects
                 g.Update(gameTime);
             }
         }
-
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             foreach(GUIObject g in Controls)

@@ -125,7 +125,7 @@ namespace Adventure
                 }
             }
 
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed && GraphicCursor.LastMouseState.LeftButton == ButtonState.Released)
+           else  if (Mouse.GetState().LeftButton == ButtonState.Pressed && GraphicCursor.LastMouseState.LeftButton == ButtonState.Released)
             {
                 if (!_guiManager.ProcessLeftButtonClick(mousePoint))
                 {
@@ -135,11 +135,14 @@ namespace Adventure
                 }
             }
 
-            if (BuildingMode)
+            else
             {
-                mousePoint.X -= (int)translate.X;
-                mousePoint.Y -= (int)translate.Y;
-                _mapManager.ProcessHover(mousePoint);
+                if (!_guiManager.ProcessHover(mousePoint))
+                {
+                    mousePoint.X -= (int)translate.X;
+                    mousePoint.Y -= (int)translate.Y;
+                    _mapManager.ProcessHover(mousePoint);
+                }
             }
 
             GraphicCursor.LastMouseState = Mouse.GetState();

@@ -16,8 +16,8 @@ namespace Adventure.Game_Managers.GUIObjects
 
         public MainMenuScreen()
         {
-            _btnNewGame = new GUIButton(500, 500, 70, 70, GameContentManager.GetInstance().GetTexture(@"Textures\New"));
-            _btnLoadGame = new GUIButton(800, 800, 70, 70, GameContentManager.GetInstance().GetTexture(@"Textures\Load"));
+            _btnNewGame = new GUIButton(AdventureGame.ScreenWidth/2, 500, @"Textures\New", @"Textures\New");
+            _btnLoadGame = new GUIButton(AdventureGame.ScreenWidth / 2, 800, @"Textures\Load", @"Textures\Load");
             Controls.Add(_btnNewGame);
             Controls.Add(_btnLoadGame);
         }
@@ -34,6 +34,14 @@ namespace Adventure.Game_Managers.GUIObjects
                 PlayerManager.GetInstance().Load();
                 AdventureGame.ChangeGameState(AdventureGame.GameState.Game);
             }
+            return rv;
+        }
+
+        public override bool ProcessHover(Point mouse)
+        {
+            bool rv = false;
+            _btnNewGame.IsMouseHovering = _btnNewGame.Rectangle.Contains(mouse);
+            _btnLoadGame.IsMouseHovering = _btnLoadGame.Rectangle.Contains(mouse);
             return rv;
         }
 
