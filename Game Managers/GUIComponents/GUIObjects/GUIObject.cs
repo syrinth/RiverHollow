@@ -30,7 +30,10 @@ namespace Adventure.GUIObjects
 
         protected Texture2D _texture;
 
-        public abstract void Update(GameTime gameTime);
-        public abstract void Draw(SpriteBatch spriteBatch);
+        public virtual void Update(GameTime gameTime) { }
+        public virtual void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(_texture, _rect, Color.White);
+        }
     }
 }

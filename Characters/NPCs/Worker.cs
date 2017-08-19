@@ -1,4 +1,5 @@
-﻿using Adventure.Items;
+﻿using Adventure.Game_Managers;
+using Adventure.Items;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
 using System;
@@ -10,8 +11,9 @@ using System.Threading.Tasks;
 using ItemIDs = Adventure.Items.ItemList.ItemIDs;
 namespace Adventure.Characters.NPCs
 {
-    public class Worker : NPC
+    public abstract class Worker : NPC
     {
+        public abstract ItemManager.WorkerID WorkerID { get; }
         protected int _dailyFoodReq;
         protected int _currFood;
         protected ItemList.ItemIDs _dailyItemID;

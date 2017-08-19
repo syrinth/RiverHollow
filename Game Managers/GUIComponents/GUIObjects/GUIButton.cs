@@ -16,15 +16,5 @@ namespace Adventure.Game_Managers.GUIObjects
             _rect = new Rectangle(x, y, width, height);
             _texture = texture;
         }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(_texture, _rect, Color.White);
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            //throw new NotImplementedException();
-        }
     }
 }

@@ -32,6 +32,7 @@ namespace Adventure
         PlayerManager _playerManager = PlayerManager.GetInstance();
         GameContentManager _gcManager = GameContentManager.GetInstance();
         GUIManager _guiManager = GUIManager.GetInstance();
+        GameCalendar _calendar;
 
         private bool _paused = false;
         private bool _pauseKeyDown = false;
@@ -58,8 +59,6 @@ namespace Adventure
             // TODO: Add your initialization logic here
             Camera.SetViewport(GraphicsDevice.Viewport);
 
-            _playerManager.Load();
-
             base.Initialize();
         }
 
@@ -76,6 +75,7 @@ namespace Adventure
             _mapManager.LoadContent(Content, GraphicsDevice);
             _playerManager.NewPlayer();
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            _calendar = GameCalendar.GetInstance();
 
             ChangeGameState(GameState.MainMenu);
         }
@@ -144,22 +144,25 @@ namespace Adventure
 
             GraphicCursor.LastMouseState = Mouse.GetState();
 
-            if (!_paused)
+            if (_gameState == GameState.Game)
             {
-
-                // TODO: Add your update logic here
-                Camera.Update(gameTime);
-
-                if (!BuildingMode)
+                if (!_paused)
                 {
-                    GameCalendar.Update(gameTime);
-                    if (GameCalendar.CurrentHour == 2)
-                    {
-                        RollOver();
-                    }
 
-                    _mapManager.Update(gameTime);
-                    _playerManager.Update(gameTime);
+                    // TODO: Add your update logic here
+                    Camera.Update(gameTime);
+
+                    if (!BuildingMode)
+                    {
+                        GameCalendar.Update(gameTime);
+                        if (GameCalendar.CurrentHour == 2)
+                        {
+                            RollOver();
+                        }
+
+                        _mapManager.Update(gameTime);
+                        _playerManager.Update(gameTime);
+                    }
                 }
             }
 
@@ -173,6 +176,10 @@ namespace Adventure
             if(_gameState == GameState.MainMenu)
             {
                 GUIManager.GetInstance().LoadMainMenu();
+            }
+            else if (_gameState == GameState.Game)
+            {
+                GUIManager.GetInstance().LoadMainGame();
             }
         }
 

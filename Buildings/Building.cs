@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using static Adventure.Game_Managers.PlayerManager;
 
 namespace Adventure
 {
@@ -17,6 +18,7 @@ namespace Adventure
     {
         protected const int MaxWorkers = 9;
         public abstract string _map { get; }
+        public abstract ItemManager.BuildingID BuildingID { get; }
 
         public bool _selected = false;
 
@@ -81,6 +83,17 @@ namespace Adventure
         public void Draw(SpriteBatch spritebatch)
         {
             spritebatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, _texture.Width, _texture.Height), null, _selected ? Color.Green : Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y+Texture.Height);
+        }
+
+        public void AddBuildingDetails(BuildingData data)
+        {
+            _position = new Vector2(data.positionX, data.positionY);
+            _id = data.id;
+
+            foreach(WorkerData wData in data.Workers)
+            {
+                AddWorker(ItemManager.GetWorker(wData.workerID));
+            }
         }
     }
 }

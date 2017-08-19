@@ -477,9 +477,15 @@ namespace Adventure.Tile_Engine
         {
             _characterList.AddRange(workers);
         }
+
         public void AddBuilding()
         {
             Building b = GraphicCursor.HeldBuilding;
+            AddBuilding(b);
+        }
+
+        public void AddBuilding(Building b)
+        {
             Vector3 translate = Camera._transform.Translation;
             Vector2 newPos = new Vector2(b.Position.X - translate.X, b.Position.Y - translate.Y);
             b.SetCoordinates(newPos);
@@ -490,7 +496,8 @@ namespace Adventure.Tile_Engine
 
             LeaveBuildingMode();
         }
-        public bool AddWorkerToBuilding()
+
+            public bool AddWorkerToBuilding()
         {
             bool rv = false;
             foreach(Building b in _buildingList)

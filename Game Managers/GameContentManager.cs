@@ -60,6 +60,7 @@ namespace Adventure.Game_Managers
             AddTexture(Content, @"Textures\ValidSquare");
             AddTexture(Content, @"Textures\ArcaneTower");
             AddTexture(Content, @"Textures\New");
+            AddTexture(Content, @"Textures\Load");
         }
 
         public void LoadFont(ContentManager Content)

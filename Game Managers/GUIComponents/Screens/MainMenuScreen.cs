@@ -12,11 +12,14 @@ namespace Adventure.Game_Managers.GUIObjects
     public class MainMenuScreen : GUIScreen
     {
         private GUIButton _btnNewGame;
+        private GUIButton _btnLoadGame;
 
         public MainMenuScreen()
         {
             _btnNewGame = new GUIButton(500, 500, 70, 70, GameContentManager.GetInstance().GetTexture(@"Textures\New"));
+            _btnLoadGame = new GUIButton(800, 800, 70, 70, GameContentManager.GetInstance().GetTexture(@"Textures\Load"));
             Controls.Add(_btnNewGame);
+            Controls.Add(_btnLoadGame);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -24,6 +27,11 @@ namespace Adventure.Game_Managers.GUIObjects
             bool rv = false;
             if (_btnNewGame.Rectangle.Contains(mouse))
             {
+                AdventureGame.ChangeGameState(AdventureGame.GameState.Game);
+            }
+            if (_btnLoadGame.Rectangle.Contains(mouse))
+            {
+                PlayerManager.GetInstance().Load();
                 AdventureGame.ChangeGameState(AdventureGame.GameState.Game);
             }
             return rv;

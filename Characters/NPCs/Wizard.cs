@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Adventure.Game_Managers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,8 @@ namespace Adventure.Characters.NPCs
 {
     public class Wizard : Worker
     {
-        const string _wizTexture = @"Textures\Wizard";
+        public override ItemManager.WorkerID WorkerID { get { return ItemManager.WorkerID.Wizard; } }
+        const string _texture = @"Textures\Wizard";
 
         public Wizard()
         {
@@ -19,7 +21,7 @@ namespace Adventure.Characters.NPCs
         }
         public Wizard(Vector2 position)
         {
-            LoadContent(_wizTexture, 32, 64, 1, 1);
+            LoadContent(_texture, 32, 64, 1, 1);
 
             _currFood = 0;
             _dailyFoodReq = 3;

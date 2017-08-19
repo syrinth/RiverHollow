@@ -58,7 +58,7 @@ namespace Adventure.Game_Managers.GUIObjects
                     {
                         if (_buyBoxes[r].GetType().Equals(typeof(ItemManager.BuildingID)))
                         {
-                            Building b = (ItemManager.GetMerchandise((ItemManager.BuildingID)_buyBoxes[r]));
+                            Building b = (ItemManager.GetBuilding((ItemManager.BuildingID)_buyBoxes[r]));
                             spriteBatch.Draw(b.Texture, r, Color.White);
                         }
                         else
@@ -83,7 +83,7 @@ namespace Adventure.Game_Managers.GUIObjects
                     {
                         if (_buyBoxes[r].GetType().Equals(typeof(ItemManager.BuildingID)))
                         {
-                            Building b = ItemManager.GetMerchandise((ItemManager.BuildingID)_buyBoxes[r]);
+                            Building b = ItemManager.GetBuilding((ItemManager.BuildingID)_buyBoxes[r]);
                             this._visible = false;
                             GraphicCursor.PickUpBuilding(b);
                             AdventureGame.BuildingMode = true;
@@ -107,11 +107,6 @@ namespace Adventure.Game_Managers.GUIObjects
                 }
             }
             return rv;
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            //throw new NotImplementedException();
         }
     }
 }

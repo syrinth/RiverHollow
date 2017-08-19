@@ -11,7 +11,7 @@ namespace Adventure.Game_Managers
 {
     public static class ItemManager
     {
-        #region BuildingIDs
+        #region IDs
         public enum BuildingID
         {
             NOTHING, ArcaneTower
@@ -23,7 +23,7 @@ namespace Adventure.Game_Managers
 
         #endregion
 
-        public static Building GetMerchandise(BuildingID id)
+        public static Building GetBuilding(BuildingID id)
         {
             switch (id)
             {
