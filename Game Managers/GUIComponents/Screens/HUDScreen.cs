@@ -22,7 +22,8 @@ namespace Adventure.Game_Managers.GUIObjects
             bool rv = false;
             if (_display.Rectangle.Contains(mouse))
             {
-                rv = _display.ProcessLeftButtonClick(mouse);
+                _display.ProcessLeftButtonClick(mouse);
+                rv = true;
             }
             return rv;
         }

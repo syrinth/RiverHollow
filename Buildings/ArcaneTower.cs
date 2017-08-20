@@ -12,7 +12,7 @@ namespace Adventure.Buildings
 {
     public class ArcaneTower : Building
     {
-        public override ItemManager.BuildingID BuildingID { get { return ItemManager.BuildingID.ArcaneTower; } }
+        public override ObjectManager.BuildingID BuildingID { get { return ObjectManager.BuildingID.ArcaneTower; } }
         public override string _map { get { return "ArcaneTower"; } }
 
         public ArcaneTower()

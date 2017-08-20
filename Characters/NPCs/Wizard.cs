@@ -7,12 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using ItemIDs = Adventure.Items.ItemList.ItemIDs;
+using ItemIDs = Adventure.Game_Managers.ObjectManager.ItemIDs;
 namespace Adventure.Characters.NPCs
 {
     public class Wizard : Worker
     {
-        public override ItemManager.WorkerID WorkerID { get { return ItemManager.WorkerID.Wizard; } }
+        public override ObjectManager.WorkerID WorkerID { get { return ObjectManager.WorkerID.Wizard; } }
         const string _texture = @"Textures\Wizard";
 
         public Wizard()
@@ -25,7 +25,7 @@ namespace Adventure.Characters.NPCs
 
             _currFood = 0;
             _dailyFoodReq = 3;
-            _dailyItemID = ItemIDs.ARCANE_ESSENCE;
+            _dailyItemID = ItemIDs.ArcaneEssence;
             _heldItem = null;
             _mood = 0;
             Position = position;

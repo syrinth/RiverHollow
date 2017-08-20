@@ -70,7 +70,6 @@ namespace Adventure
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             _gcManager.LoadContent(Content);
-            ItemList.LoadContent();
             _guiManager.LoadContent();
             _mapManager.LoadContent(Content, GraphicsDevice);
             _playerManager.NewPlayer();
@@ -131,7 +130,10 @@ namespace Adventure
                 {
                     mousePoint.X -= (int)translate.X;
                     mousePoint.Y -= (int)translate.Y;
-                    _mapManager.ProcessLeftButtonClick(mousePoint);
+                    if (!_mapManager.ProcessLeftButtonClick(mousePoint))
+                    {
+                        _playerManager.ProcessLeftButtonClick(mousePoint);
+                    }
                 }
             }
 
@@ -183,6 +185,7 @@ namespace Adventure
             else if (_gameState == GameState.Game)
             {
                 GUIManager.GetInstance().LoadMainGame();
+                MapManager.GetInstance().PopulateMaps();
             }
         }
 

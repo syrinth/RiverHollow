@@ -3,6 +3,7 @@ using Adventure.Characters.Monsters;
 using Adventure.Characters.NPCs;
 using Adventure.Game_Managers;
 using Adventure.GUIObjects;
+using Adventure.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -30,6 +31,7 @@ namespace Adventure.Tile_Engine
 
         protected List<Character> _characterList;
         protected List<Building> _buildingList;
+        protected List<WorldObject> _worldObjectList;
 
         private Dictionary<Rectangle, string> _exitDictionary;
         private Dictionary<string, Rectangle> _entranceDictionary;
@@ -42,6 +44,7 @@ namespace Adventure.Tile_Engine
             _tileSets = new List<TiledMapTileset>();
             _characterList = new List<Character>();
             _buildingList = new List<Building>();
+            _worldObjectList = new List<WorldObject>();
             _exitDictionary = new Dictionary<Rectangle, string>();
             _entranceDictionary = new Dictionary<string, Rectangle>();
         }
@@ -70,12 +73,7 @@ namespace Adventure.Tile_Engine
             _name = _map.Name;
             if (_name.Contains("Map1"))
             {
-                _characterList.Add(new Goblin(new Vector2(500, 800)));
-            }
-            else if (_name.Contains("Map2"))
-            {
-                _characterList.Add(new ShopKeeper(new Vector2(1350, 1420)));
-                //((Wizard)_characterList[0]).MakeDailyItem();
+                //_characterList.Add(new Goblin(new Vector2(500, 800)));
             }
 
             LoadEntranceObjects();
@@ -127,6 +125,11 @@ namespace Adventure.Tile_Engine
             foreach (Building b in _buildingList)
             {
                 b.Draw(spriteBatch);
+            }
+
+            foreach (WorldObject o in _worldObjectList)
+            {
+                o.Draw(spriteBatch);
             }
         }
 
@@ -306,7 +309,23 @@ namespace Adventure.Tile_Engine
             bool rv = false;
             foreach (Building b in _buildingList)
             {
-                if (b.BoundingBox.Intersects(movingObject))
+                if (b.CollisionBox.Intersects(movingObject))
+                {
+                    rv = true;
+                    break;
+                }
+            }
+            foreach (Character c in _characterList)
+            {
+                if (c.CollisionBox.Intersects(movingObject))
+                {
+                    rv = true;
+                    break;
+                }
+            }
+            foreach (WorldObject o in _worldObjectList)
+            {
+                if (o.CollisionBox.Intersects(movingObject))
                 {
                     rv = true;
                     break;
@@ -358,6 +377,7 @@ namespace Adventure.Tile_Engine
         #endregion
         #endregion
 
+        #region Input Processing
         public bool ProcessRightButtonClick(Point mouseLocation)
         {
             bool rv = false;
@@ -390,7 +410,6 @@ namespace Adventure.Tile_Engine
 
             return rv;
         }
-
         public bool ProcessLeftButtonClick(Point mouseLocation)
         {
             bool rv = false;
@@ -402,7 +421,7 @@ namespace Adventure.Tile_Engine
                     AddBuilding();
                     rv = true;
                 }
-                else if(GraphicCursor.WorkerToPlace != ItemManager.WorkerID.Nothing)
+                else if(GraphicCursor.WorkerToPlace != ObjectManager.WorkerID.Nothing)
                 {
                     if (AddWorkerToBuilding())
                     {
@@ -442,7 +461,7 @@ namespace Adventure.Tile_Engine
             {
                 foreach(Building b in _buildingList)
                 {
-                    if (b.BoundingBox.Contains(mouseLocation))
+                    if (b.CollisionBox.Contains(mouseLocation))
                     {
                         b._selected = true;
                     }
@@ -455,6 +474,7 @@ namespace Adventure.Tile_Engine
 
             return rv;
         }
+        #endregion
 
         public bool PlayerInRange(Rectangle playerRect, Point centre)
         {
@@ -473,6 +493,27 @@ namespace Adventure.Tile_Engine
         {
             _characterList.Clear();
         }
+
+        public WorldObject FindWorldObject(Point mouseLocation)
+        {
+            WorldObject rv = null;
+            foreach(WorldObject o in _worldObjectList)
+            {
+                if (o.CollisionBox.Contains(mouseLocation))
+                {
+                    rv = o;
+                    break;
+                }
+            }
+
+            return rv;
+        }
+        public void RemoveWorldObject(WorldObject o)
+        {
+            _worldObjectList.Remove(o);
+        }
+
+        #region Adders
         public void AddWorkersToMap(List<Worker> workers)
         {
             _characterList.AddRange(workers);
@@ -497,16 +538,17 @@ namespace Adventure.Tile_Engine
             LeaveBuildingMode();
         }
 
-            public bool AddWorkerToBuilding()
+        public bool AddWorkerToBuilding()
         {
             bool rv = false;
             foreach(Building b in _buildingList)
             {
-                if (b.BoundingBox.Contains(GraphicCursor.Position))
+                if (b.CollisionBox.Contains(GraphicCursor.Position))
                 {
                     if (b.HasSpace())
                     {
-                        b.AddWorker(ItemManager.GetWorker(GraphicCursor.WorkerToPlace));
+                        Random r = new Random();
+                        b.AddWorker(ObjectManager.GetWorker(GraphicCursor.WorkerToPlace), r);
                         LeaveBuildingMode();
                         b._selected = false;
                         rv = true;
@@ -515,6 +557,13 @@ namespace Adventure.Tile_Engine
             }
             return rv;
         }
+
+        public void AddWorldObject(WorldObject o)
+        {
+            _worldObjectList.Add(o);
+        }
+
+        #endregion
 
         public void LeaveBuildingMode()
         {

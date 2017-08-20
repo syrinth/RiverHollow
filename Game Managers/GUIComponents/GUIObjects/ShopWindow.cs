@@ -56,14 +56,14 @@ namespace Adventure.Game_Managers.GUIObjects
                 {
                     if (_buyBoxes[r] != null)
                     {
-                        if (_buyBoxes[r].GetType().Equals(typeof(ItemManager.BuildingID)))
+                        if (_buyBoxes[r].GetType().Equals(typeof(ObjectManager.BuildingID)))
                         {
-                            Building b = (ItemManager.GetBuilding((ItemManager.BuildingID)_buyBoxes[r]));
+                            Building b = (ObjectManager.GetBuilding((ObjectManager.BuildingID)_buyBoxes[r]));
                             spriteBatch.Draw(b.Texture, r, Color.White);
                         }
                         else
                         {
-                            Worker w = (ItemManager.GetWorker((ItemManager.WorkerID)_buyBoxes[r]));
+                            Worker w = (ObjectManager.GetWorker((ObjectManager.WorkerID)_buyBoxes[r]));
                             spriteBatch.Draw(w.Texture, r, Color.White);
                         }
                     }
@@ -81,9 +81,9 @@ namespace Adventure.Game_Managers.GUIObjects
                 {
                     if (_buyBoxes[r] != null)
                     {
-                        if (_buyBoxes[r].GetType().Equals(typeof(ItemManager.BuildingID)))
+                        if (_buyBoxes[r].GetType().Equals(typeof(ObjectManager.BuildingID)))
                         {
-                            Building b = ItemManager.GetBuilding((ItemManager.BuildingID)_buyBoxes[r]);
+                            Building b = ObjectManager.GetBuilding((ObjectManager.BuildingID)_buyBoxes[r]);
                             this._visible = false;
                             GraphicCursor.PickUpBuilding(b);
                             AdventureGame.BuildingMode = true;
@@ -91,12 +91,12 @@ namespace Adventure.Game_Managers.GUIObjects
                             MapManager.GetInstance().ViewMap("Map1");
                             rv = true;
                         }
-                        if (_buyBoxes[r].GetType().Equals(typeof(ItemManager.WorkerID)))
+                        if (_buyBoxes[r].GetType().Equals(typeof(ObjectManager.WorkerID)))
                         {
                             if (PlayerManager.GetInstance().Buildings.Count > 0)
                             {
                                 this._visible = false;
-                                GraphicCursor.PickUpWorker((ItemManager.WorkerID)_buyBoxes[r]);
+                                GraphicCursor.PickUpWorker((ObjectManager.WorkerID)_buyBoxes[r]);
                                 AdventureGame.BuildingMode = true;
                                 Camera.UnsetObserver();
                                 MapManager.GetInstance().ViewMap("Map1");

@@ -1,4 +1,5 @@
 ﻿using Adventure.Characters.NPCs;
+using Adventure.Items;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -98,6 +99,18 @@ namespace Adventure.Game_Managers
             _currentMap = _tileMaps[newMap];
         }
 
+        public void PopulateMaps()
+        {
+            int mapWidth = _tileMaps[@"Map1"].MapWidth;
+            int mapHeight = _tileMaps[@"Map1"].MapHeight;
+            Random r = new Random();
+            //LoadMap1
+            for(int i=0; i<99; i++)
+            {
+                _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Rock, new Vector2(r.Next(0, mapWidth)*TileMap.TileSize, r.Next(0, mapHeight) * TileMap.TileSize)));
+            }
+        }
+
         public void Update(GameTime gametime)
         {
             _currentMap.Update(gametime);
@@ -108,20 +121,19 @@ namespace Adventure.Game_Managers
             _currentMap.Draw(spritebatch);
         }
 
-        public bool ProcessRightButtonClick(Point mouseLocation)
-        {
-            bool rv = false;
-
-            rv = _currentMap.ProcessRightButtonClick(mouseLocation);
-
-            return rv;
-        }
-
         public bool ProcessLeftButtonClick(Point mouseLocation)
         {
             bool rv = false;
 
             rv = _currentMap.ProcessLeftButtonClick(mouseLocation);
+
+            return rv;
+        }
+        public bool ProcessRightButtonClick(Point mouseLocation)
+        {
+            bool rv = false;
+
+            rv = _currentMap.ProcessRightButtonClick(mouseLocation);
 
             return rv;
         }
@@ -132,6 +144,14 @@ namespace Adventure.Game_Managers
             rv = _currentMap.ProcessHover(mouseLocation);
 
             return rv;
+        }
+        public WorldObject FindWorldObject(Point mouseLocation)
+        {
+            return _currentMap.FindWorldObject(mouseLocation);
+        }
+        public void RemoveWorldObject(WorldObject o)
+        {
+            _currentMap.RemoveWorldObject(o);
         }
     }
 }

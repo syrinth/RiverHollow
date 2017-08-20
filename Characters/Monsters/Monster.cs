@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using System;
 using System.Collections.Generic;
 
-using ItemIDs = Adventure.Items.ItemList.ItemIDs;
+using ItemIDs = Adventure.Game_Managers.ObjectManager.ItemIDs;
 namespace Adventure
 {
     public class Monster : CombatCharacter

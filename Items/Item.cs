@@ -1,20 +1,21 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Adventure.Game_Managers;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Adventure.Items
 {
     public class Item
     {
-        private ItemList.ItemIDs _itemID;
-        public ItemList.ItemIDs ItemID { get => _itemID; }
+        protected ObjectManager.ItemIDs _itemID;
+        public ObjectManager.ItemIDs ItemID { get => _itemID; }
 
-        private string _name;
+        protected string _name;
         public string Name { get => _name; }
 
         protected Texture2D _texture;
         public Texture2D Texture { get => _texture; }
         protected string _description;
 
-        public Item(ItemList.ItemIDs ID, string name, Texture2D tex, string description)
+        public Item(ObjectManager.ItemIDs ID, string name, Texture2D tex, string description)
         {
             _itemID = ID;
             _name = name;
@@ -22,7 +23,7 @@ namespace Adventure.Items
             _description = description;
         }
 
-        public ItemList.ItemIDs GetItemID()
+        public ObjectManager.ItemIDs GetItemID()
         {
             return _itemID;
         }

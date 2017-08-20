@@ -33,6 +33,7 @@ namespace Adventure.Characters
         {
             return new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
         }
+        public Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, Width, TileMap.TileSize); }
 
         public int Width
         {

@@ -18,7 +18,7 @@ namespace Adventure
     {
         protected const int MaxWorkers = 9;
         public abstract string _map { get; }
-        public abstract ItemManager.BuildingID BuildingID { get; }
+        public abstract ObjectManager.BuildingID BuildingID { get; }
 
         public bool _selected = false;
 
@@ -42,7 +42,7 @@ namespace Adventure
         protected Vector2 _position;
         public Vector2 Position { get => _position; }
 
-        public Rectangle BoundingBox { get => new Rectangle((int)Position.X, (int)(Position.Y + (_texture.Height - BaseHeight)), BaseWidth, BaseHeight); }
+        public Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)(Position.Y + (_texture.Height - BaseHeight)), BaseWidth, BaseHeight); }
 
         protected Rectangle _boxToExit;
         public Rectangle BoxToExit { get => _boxToExit; }
@@ -62,16 +62,17 @@ namespace Adventure
         }
 
         //call HasSpace before adding
-        public bool AddWorker(Worker worker)
+        public bool AddWorker(Worker worker, Random r)
         {
             bool rv = false;
 
             if(worker != null &&  _workers.Count < MaxWorkers)
             {
-                Random r = new Random();
+                
                 worker.MakeDailyItem();
                 _workers.Add(worker);
-                worker.Position = new Vector2(r.Next(1160, 1860), r.Next(990,1340));
+                Vector2 pos = new Vector2(r.Next(1160, 1860), r.Next(990, 1340));
+                worker.Position = pos;
                 rv = true;
             }
 
@@ -92,7 +93,8 @@ namespace Adventure
 
             foreach(WorkerData wData in data.Workers)
             {
-                AddWorker(ItemManager.GetWorker(wData.workerID));
+                Random r = new Random();
+                AddWorker(ObjectManager.GetWorker(wData.workerID), r);
             }
         }
     }

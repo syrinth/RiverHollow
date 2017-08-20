@@ -45,6 +45,7 @@ namespace Adventure.Game_Managers
         public void NewPlayer()
         {
             _player = new Player();
+            _player.AddItemToFirstAvailableInventory(ObjectManager.ItemIDs.PickAxe);
         }
 
         public void Update(GameTime gameTime)
@@ -55,6 +56,15 @@ namespace Adventure.Game_Managers
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             _player.Draw(gameTime, spriteBatch);
+        }
+
+        public bool ProcessLeftButtonClick(Point mouseLocation)
+        {
+            bool rv = false;
+
+            rv = _player.ProcessLeftButtonClick(mouseLocation);
+
+            return rv;
         }
 
         public void AddBuilding(Building b)
@@ -96,7 +106,7 @@ namespace Adventure.Game_Managers
             public int positionY;
 
             [XmlElement(ElementName = "BuildingID")]
-            public ItemManager.BuildingID buildingID;
+            public ObjectManager.BuildingID buildingID;
 
             [XmlElement(ElementName = "ID")]
             public int id;
@@ -107,7 +117,7 @@ namespace Adventure.Game_Managers
             /// The Level data object.
             /// </summary>
             [XmlElement(ElementName = "WorkerID")]
-            public ItemManager.WorkerID workerID;
+            public ObjectManager.WorkerID workerID;
         }
 
         public string Save()
@@ -169,7 +179,7 @@ namespace Adventure.Game_Managers
             CurrentMap = data.currentMap;
             foreach(BuildingData b in data.Buildings)
             {
-                Building newBuilding = ItemManager.GetBuilding(b.buildingID);
+                Building newBuilding = ObjectManager.GetBuilding(b.buildingID);
                 newBuilding.AddBuildingDetails(b);
                 AddBuilding(newBuilding);
                 MapManager.GetInstance().CurrentMap.AddBuilding(newBuilding);

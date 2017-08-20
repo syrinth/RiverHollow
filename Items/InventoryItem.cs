@@ -1,17 +1,18 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Adventure.Game_Managers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Adventure.Items
 {
     public class InventoryItem : Item
     {
-        private bool _doesItStack;
+        protected bool _doesItStack;
         public bool DoesItStack { get => _doesItStack; }
 
         protected int _num;
         public int Number { get => _num; set => _num = value; }
 
-        public InventoryItem(ItemList.ItemIDs ID, Texture2D texture, string name, string description, int number, bool stacks) : base(ID, name, texture, description)
+        public InventoryItem(ObjectManager.ItemIDs ID, Texture2D texture, string name, string description, int number, bool stacks) : base(ID, name, texture, description)
         {
             _doesItStack = stacks;
             _num = number;
@@ -24,7 +25,7 @@ namespace Adventure.Items
             _doesItStack = item.DoesItStack;
         }
 
-        public void Draw(SpriteBatch spriteBatch, Rectangle drawBox)
+        public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox)
         {
             spriteBatch.Draw(_texture, drawBox, Color.White);
         }

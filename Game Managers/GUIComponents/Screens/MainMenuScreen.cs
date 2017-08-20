@@ -28,11 +28,13 @@ namespace Adventure.Game_Managers.GUIObjects
             if (_btnNewGame.Rectangle.Contains(mouse))
             {
                 AdventureGame.ChangeGameState(AdventureGame.GameState.Game);
+                rv = true;
             }
             if (_btnLoadGame.Rectangle.Contains(mouse))
             {
                 PlayerManager.GetInstance().Load();
                 AdventureGame.ChangeGameState(AdventureGame.GameState.Game);
+                rv = true;
             }
             return rv;
         }

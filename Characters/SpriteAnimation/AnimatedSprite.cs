@@ -25,7 +25,6 @@ namespace Adventure.SpriteAnimations
         // Which FrameAnimation from the dictionary above is playing
         string _currAnimation = null;
 
-
         // Calculated center of the sprite
         Vector2 v2Center;
 
@@ -89,7 +88,6 @@ namespace Adventure.SpriteAnimations
             get { return _height; }
         }
 
-
         ///
         /// Screen coordinates of the bounding box surrounding this sprite
         ///
@@ -128,6 +126,7 @@ namespace Adventure.SpriteAnimations
             set { _animating = value; }
         }
 
+        public bool playsOnce = false;
         ///
         /// The FrameAnimation object of the currently playing animation
         ///
@@ -167,17 +166,10 @@ namespace Adventure.SpriteAnimations
             _texture = Texture;
         }
 
+        //TODO: Remove this method, classes should do it manually, not in this level
         public void LoadContent(int textureWidth, int textureHeight, int numFrames, float frameSpeed)
         {
             this.AddAnimation("Float", 0, 0, textureWidth, textureHeight, numFrames, frameSpeed);
-            /*this.AddAnimation("WalkNorth", 0, 48 * 1, 48, 48, 8, 0.1f);
-            this.AddAnimation("WalkSouth", 0, 48 * 4, 48, 48, 8, 0.1f);
-            this.AddAnimation("WalkWest", 0, 48 * 7, 48, 48, 8, 0.1f);
-
-            this.AddAnimation("IdleEast", 0, 48 * 0, 48, 48, 1, 0.2f);
-            this.AddAnimation("IdleNorth", 0, 48 * 1, 48, 48, 1, 0.2f);
-            this.AddAnimation("IdleSouth", 0, 48 * 4, 48, 48, 1, 0.2f);
-            this.AddAnimation("IdleWest", 0, 48 * 7, 48, 48, 1, 0.2f);*/
 
             this.CurrentAnimation = "Float";
             this.IsAnimating = true;
@@ -244,17 +236,23 @@ namespace Adventure.SpriteAnimations
                 // Run the Animation's update method
                 CurrentFrameAnimation.Update(gameTime);
 
-                // Check to see if there is a "followup" animation named for this animation
-                if (!String.IsNullOrEmpty(CurrentFrameAnimation.NextAnimation))
+                if (playsOnce && CurrentFrameAnimation.PlayCount > 0)
                 {
-                    // If there is, see if the currently playing animation has
-                    // completed a full animation loop
-                    if (CurrentFrameAnimation.PlayCount > 0)
-                    {
-                        // If it has, set up the next animation
-                        CurrentAnimation = CurrentFrameAnimation.NextAnimation;
-                    }
+                    IsAnimating = false;
+                    CurrentFrameAnimation.PlayCount = 0;
                 }
+
+                // Check to see if there is a "followup" animation named for this animation
+                //if (!String.IsNullOrEmpty(CurrentFrameAnimation.NextAnimation))
+                //{
+                // If there is, see if the currently playing animation has
+                // completed a full animation loop
+                //if (CurrentFrameAnimation.PlayCount > 0)
+                //{
+                //    // If it has, set up the next animation
+                //    CurrentAnimation = CurrentFrameAnimation.NextAnimation;
+                //}
+                //}
             }
         }
 

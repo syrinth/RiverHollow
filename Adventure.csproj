@@ -70,6 +70,7 @@
     <Compile Include="Characters\NPCs\Worker.cs" />
     <Compile Include="Characters\Player.cs" />
     <Compile Include="AdventureGame.cs" />
+    <Compile Include="Game Managers\DropManager.cs" />
     <Compile Include="Game Managers\GUIManager.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIButton.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\GUIScreen.cs" />
@@ -77,7 +78,7 @@
     <Compile Include="Game Managers\GUIComponents\Screens\MainMenuScreen.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\ShopScreen.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\ShopWindow.cs" />
-    <Compile Include="Game Managers\ItemManager.cs" />
+    <Compile Include="Items\ObjectManager.cs" />
     <Compile Include="Game Managers\MapManager.cs" />
     <Compile Include="Game Managers\PlayerManager.cs" />
     <Compile Include="Game Managers\GameContentManager.cs" />
@@ -86,9 +87,9 @@
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIObject.cs" />
     <Compile Include="Items\InventoryItem.cs" />
     <Compile Include="Items\Item.cs" />
-    <Compile Include="Items\ItemList.cs" />
+    <Compile Include="Items\Tool.cs" />
     <Compile Include="Items\Weapon.cs" />
-    <Compile Include="Items\WorldItem.cs" />
+    <Compile Include="Items\WorldObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\InventoryDisplay.cs" />

@@ -20,8 +20,8 @@ namespace Adventure.GUIObjects
         private static Building _heldBuilding;
         public static Building HeldBuilding { get => _heldBuilding; }
 
-        private static ItemManager.WorkerID _workerID = ItemManager.WorkerID.Nothing;
-        public static ItemManager.WorkerID WorkerToPlace { get => _workerID; }
+        private static ObjectManager.WorkerID _workerID = ObjectManager.WorkerID.Nothing;
+        public static ObjectManager.WorkerID WorkerToPlace { get => _workerID; }
 
         private static Vector2 _position;
         public static Vector2 Position { get => _position; set => _position = value; }
@@ -65,10 +65,10 @@ namespace Adventure.GUIObjects
             return rv;
         }
 
-        public static bool PickUpWorker(ItemManager.WorkerID id)
+        public static bool PickUpWorker(ObjectManager.WorkerID id)
         {
             bool rv = false;
-            if (id != ItemManager.WorkerID.Nothing)
+            if (id != ObjectManager.WorkerID.Nothing)
             {
                 _workerID = id;
                 rv = true;

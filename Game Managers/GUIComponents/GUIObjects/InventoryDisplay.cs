@@ -114,7 +114,10 @@ namespace Adventure.Screens
                     if (_displayList[i].Value != null)
                     {
                         _displayList[i].Value.Draw(spriteBatch, itemBox);
-                        spriteBatch.DrawString(_displayFont, _displayList[i].Value.Number.ToString(), new Vector2(itemBox.X + 22, itemBox.Y + 22), Color.White);
+                        if (_displayList[i].Value.DoesItStack)
+                        {
+                            spriteBatch.DrawString(_displayFont, _displayList[i].Value.Number.ToString(), new Vector2(itemBox.X + 22, itemBox.Y + 22), Color.White);
+                        }
                     }
                     itemBox.X += 34;
                 }

@@ -7,8 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using BuildingID = Adventure.Game_Managers.ItemManager.BuildingID;
-using WorkerID = Adventure.Game_Managers.ItemManager.WorkerID;
+using BuildingID = Adventure.Game_Managers.ObjectManager.BuildingID;
+using WorkerID = Adventure.Game_Managers.ObjectManager.WorkerID;
 namespace Adventure.Characters.NPCs
 {
     public class ShopKeeper : NPC

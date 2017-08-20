@@ -38,7 +38,8 @@ namespace Adventure.Items
         }
 
         private float RotationAngle;
-        public void Update(GameTime gameTime)
+
+        public bool Update(GameTime gameTime)
         {
             if (attack)
             {
@@ -53,6 +54,7 @@ namespace Adventure.Items
                     RotationAngle = 0;
                 }
             }
+            return attack;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

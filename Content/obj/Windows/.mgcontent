@@ -21,5 +21,7 @@
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/ArcaneTower.tmx</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/New.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/load.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/pickAxe.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/rock.png</File>
   </SourceFiles>
 </SourceFileCollection>
