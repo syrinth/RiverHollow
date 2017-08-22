@@ -14,11 +14,15 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
         private int _midHeight;
         private string _text;
 
-        string parsedText;
         string typedText = string.Empty;
         double typedTextLength;
         int delayInMilliseconds;
         private bool isDoneDrawing = false;
+        List<string> _parsedStrings;
+        bool finishedScreen = false;
+
+        int _currentParsedString = 0;
+        public bool _pause = false;
 
         public GUIDialog(string text)
         {
@@ -28,13 +32,14 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
             _text = text;
             _texture = GameContentManager.GetTexture(@"Textures\Dialog");
             _font = GameContentManager.GetFont(@"Fonts\Font");
+            _parsedStrings = new List<string>();
 
             _height = 148;
             _midWidth = _width - 64;
             _midHeight = _height - 64;
             delayInMilliseconds = 50;
 
-            parsedText = parseText(text);
+            parseText(text);
         }
         public GUIDialog(Vector2 position, string text) : this(text)
         {
@@ -43,30 +48,51 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
 
         public override void Update(GameTime gameTime)
         {
-            if (!isDoneDrawing)
+            if (!isDoneDrawing && !_pause)
             {
+                if (finishedScreen)
+                {
+                    finishedScreen = false;
+                    _currentParsedString++;
+                    typedText = string.Empty;
+                    typedTextLength = 0;
+
+                    if (_currentParsedString == _parsedStrings.Count)
+                    {
+                        _currentParsedString--;
+                        typedTextLength = _parsedStrings[_currentParsedString].Length;
+                        isDoneDrawing = true;
+                    }
+                }
                 if (delayInMilliseconds == 0)
                 {
-                    typedText = parsedText;
-                    isDoneDrawing = true;
+                    _currentParsedString++;
+                    typedText = string.Empty;
+                    delayInMilliseconds = 50;
+                    if (_currentParsedString == _parsedStrings.Count)
+                    {
+                        isDoneDrawing = true;
+                    }
                 }
-                else if (typedTextLength < parsedText.Length)
+                else if (typedTextLength < _parsedStrings[_currentParsedString].Length)
                 {
                     typedTextLength = typedTextLength + gameTime.ElapsedGameTime.TotalMilliseconds / delayInMilliseconds;
 
-                    if (typedTextLength >= parsedText.Length)
+                    if (typedTextLength >= _parsedStrings[_currentParsedString].Length)
                     {
-                        typedTextLength = parsedText.Length;
-                        isDoneDrawing = true;
+                        _pause = true;
+                        finishedScreen = true;
                     }
 
-                    typedText = parsedText.Substring(0, (int)typedTextLength);
+                    typedText = _parsedStrings[_currentParsedString].Substring(0, (int)typedTextLength);
                 }
             }
         }
 
-        private string parseText(string text)
+        private void parseText(string text)
         {
+            bool grabLast = true;
+            int numReturns = 0;
             string line = string.Empty;
             string returnString = string.Empty;
             string[] wordArray = text.Split(' ');
@@ -74,16 +100,30 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
             foreach (string word in wordArray)
             {
                 Vector2 measure = _font.MeasureString(line + word);
-                if (measure.Length() > _width-32)
+
+                if (measure.Length() > _midWidth)
                 {
                     returnString = returnString + line + '\n';
                     line = string.Empty;
+                    numReturns++;
                 }
 
+                grabLast = true;
                 line = line + word + ' ';
+
+                if (measure.Y * numReturns > _midHeight)
+                {
+                    grabLast = false;
+                    _parsedStrings.Add(returnString);
+                    numReturns = 0;
+                    returnString = string.Empty;
+                }
             }
 
-            return returnString + line;
+            if (grabLast)
+            {
+                _parsedStrings.Add(returnString + line);
+            }
         }
 
         public override void Draw(SpriteBatch spritebatch)

@@ -39,7 +39,7 @@ namespace Adventure
 
         public static void Update(GameTime gameTime)
         {
-            _lastUpdateinSeconds += 5;// gameTime.ElapsedGameTime.TotalSeconds;
+            _lastUpdateinSeconds += gameTime.ElapsedGameTime.TotalSeconds;
             if(_currHour == 26)
             {
                 _currHour = 6;
