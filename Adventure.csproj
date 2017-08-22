@@ -71,6 +71,9 @@
     <Compile Include="Characters\Player.cs" />
     <Compile Include="AdventureGame.cs" />
     <Compile Include="Game Managers\DropManager.cs" />
+    <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIDialog.cs" />
+    <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIImage.cs" />
+    <Compile Include="Game Managers\GUIComponents\Screens\DayEndScreen.cs" />
     <Compile Include="Game Managers\GUIManager.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIButton.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\GUIScreen.cs" />
@@ -78,7 +81,7 @@
     <Compile Include="Game Managers\GUIComponents\Screens\MainMenuScreen.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\ShopScreen.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\ShopWindow.cs" />
-    <Compile Include="Items\ObjectManager.cs" />
+    <Compile Include="Game Managers\ObjectManager.cs" />
     <Compile Include="Game Managers\MapManager.cs" />
     <Compile Include="Game Managers\PlayerManager.cs" />
     <Compile Include="Game Managers\GameContentManager.cs" />

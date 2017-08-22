@@ -35,10 +35,14 @@ namespace Adventure.Items
         private int _lvltoDmg;
         public int LvlToDmg { get => _lvltoDmg; }
 
+        private ObjectManager.ObjectIDs _id;
+        public ObjectManager.ObjectIDs ID { get => _id; }
+
         public Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, CollisionWidth, CollisionHeight); }
 
-        public WorldObject(float hp, bool breakIt, bool chopIt, Vector2 pos, Texture2D tex, int lvl, int width, int height)
+        public WorldObject(ObjectManager.ObjectIDs id, float hp, bool breakIt, bool chopIt, Vector2 pos, Texture2D tex, int lvl, int width, int height)
         {
+            _id = id;
             _hp = hp;
             _breakable = breakIt;
             _choppable = chopIt;
@@ -61,8 +65,9 @@ namespace Adventure.Items
             rv = _hp <= 0;
             if (rv)
             {
-                MapManager.GetInstance().RemoveWorldObject(this);
-                PlayerManager.GetInstance().Player.AddItemToFirstAvailableInventory(ObjectManager.ItemIDs.Stone);
+                MapManager.RemoveWorldObject(this);
+                MapManager.DropWorldItems(DropManager.DropItemsFromWorldObject(ID), Position);
+                //PlayerManager.Player.AddItemToFirstAvailableInventory(ObjectManager.ItemIDs.Stone);
             }
             return rv;
         }

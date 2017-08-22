@@ -14,12 +14,10 @@ namespace Adventure.Characters
 {
     public class Character
     {
-        #region Managers
-        protected MapManager _mapManager = MapManager.GetInstance();
-        protected GameContentManager _gcManager = GameContentManager.GetInstance();
-        #endregion
         #region Properties
 
+        public enum Facing { North, South, East, West };
+        protected Facing _facing = Facing.North;
         protected AnimatedSprite _sprite;
         public Texture2D Texture { get => _sprite.Texture;  }
         public Point Center => GetRectangle().Center;
@@ -55,7 +53,7 @@ namespace Adventure.Characters
 
         public virtual void LoadContent(string textureToLoad, int textureWidth, int textureHeight, int numFrames, float frameSpeed)
         {
-            _sprite = new AnimatedSprite(_gcManager.GetTexture(textureToLoad));
+            _sprite = new AnimatedSprite(GameContentManager.GetTexture(textureToLoad));
             _sprite.LoadContent(textureWidth, textureHeight, numFrames, frameSpeed);
         }
 

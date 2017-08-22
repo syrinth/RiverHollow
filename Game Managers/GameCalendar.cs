@@ -6,9 +6,8 @@ using System;
 
 namespace Adventure
 {
-    public class GameCalendar
+    public static class GameCalendar
     {
-        private static GameCalendar _instance;
         //One day goes from 6 AM - 2 AM => 20 hours
         //Each hour should be one minute
         //Every 10 minutes is 10 seconds real time.
@@ -19,32 +18,23 @@ namespace Adventure
         private static int _currMin;
         public static int CurrentMin { get => _currMin; }
         static int _currDay;
-        static Seasons _currSeason;
+        //static Seasons _currSeason;
         static SpriteFont _calendarFont;
         static Vector2 _timePosition;
 
         static double _lastUpdateinSeconds;
 
-        private GameCalendar()
+        public static void NewCalendar()
         {
             _currDay = 1;
-            _currSeason = Seasons.Spring;
+            //_currSeason = Seasons.Spring;
             _currHour = 6;
             _currMin = 0;
 
             _lastUpdateinSeconds = 0;
 
-            _calendarFont = GameContentManager.GetInstance().GetFont(@"Fonts\Font");
+            _calendarFont = GameContentManager.GetFont(@"Fonts\Font");
             _timePosition = new Vector2(1760, 800);
-        }
-
-        public static GameCalendar GetInstance()
-        {
-            if (_instance == null)
-            {
-                _instance = new GameCalendar();
-            }
-            return _instance;
         }
 
         public static void Update(GameTime gameTime)
@@ -55,6 +45,8 @@ namespace Adventure
                 _currHour = 6;
                 _currMin = 0;
                 _currDay++;
+
+                AdventureGame.ChangeGameState(AdventureGame.GameState.EndOfDay);
             }
             if (_lastUpdateinSeconds >= 1)
             {
@@ -62,8 +54,7 @@ namespace Adventure
                 if (_currMin >= 60)
                 {
                     _currMin = 0;
-                    if (_currMin == 12) { _currMin = 1; }
-                    else { _currHour++; }
+                    _currHour++;
                 }
                 else
                 {
@@ -76,7 +67,15 @@ namespace Adventure
         {
             int minToFifteen = _currMin / 15;
             string mins = "00";
-            string hours = (_currHour > 12) ? (_currHour-12).ToString() : _currHour.ToString();
+            string hours = _currHour.ToString();
+            if (_currHour > 12 && _currHour < 25)
+            {
+                hours = (_currHour - 12).ToString();
+            }
+            else if (_currHour >= 25)
+            {
+                hours = (_currHour - 24).ToString();
+            }
             switch (minToFifteen)
             {
                 case 1:
@@ -90,7 +89,7 @@ namespace Adventure
                     break;
                 case 4:
                     mins = "00";
-                    hours = (_currHour + 1).ToString();
+                    hours = (int.Parse(hours) + 1).ToString();
                     break;
             }
             spriteBatch.DrawString(_calendarFont, String.Format("Day {0}, {1}:{2}", _currDay, hours, mins), _timePosition, Color.Black);

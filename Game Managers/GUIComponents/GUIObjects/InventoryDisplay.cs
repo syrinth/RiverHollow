@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Content;
 using Adventure.Items;
 using Microsoft.Xna.Framework.Input;
 using Adventure.Game_Managers;
+using Adventure.Game_Managers.GUIObjects;
 
 namespace Adventure.Screens
 {
@@ -18,11 +19,12 @@ namespace Adventure.Screens
     {
         private KeyValuePair<Rectangle, InventoryItem>[] _displayList;
         private SpriteFont _displayFont;
+        private GUIImage _selection;
 
         public InventoryDisplay()
         {
-            _texture = _gcManager.GetTexture(@"Textures\MiniInventory");
-            _displayFont = _gcManager.GetFont(@"Fonts\DisplayFont");
+            _texture = GameContentManager.GetTexture(@"Textures\MiniInventory");
+            _displayFont = GameContentManager.GetFont(@"Fonts\DisplayFont");
             Position = new Vector2((AdventureGame.ScreenWidth/ 2) - (_texture.Width/2), 16);
             _rect = new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
 
@@ -30,26 +32,47 @@ namespace Adventure.Screens
             Rectangle displayBox = new Rectangle((int)Position.X + 3, (int)Position.Y + 3, 32, 32);
             for (int i=0; i< Player.maxItemRow; i++)
             {
-
                 _displayList[i] = new KeyValuePair<Rectangle, InventoryItem>(displayBox, null);
                 displayBox.X += 34;
             }
 
-            _visible = true;
+            _selection = new GUIImage(_displayList[0].Key.Location.ToVector2(), 32, 32, @"Textures\Selection");
         }
 
         public bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
 
-            if (GraphicCursor.HeldItem != null && GiveItem(GraphicCursor.HeldItem))
+            if (GraphicCursor.HeldItem != null)
             {
-                GraphicCursor.DropItem();
-                rv = true;
+                if (IsItemThere(mouse))
+                {
+                    InventoryItem temp = GraphicCursor.HeldItem;
+                    GraphicCursor.GrabItem(TakeItem(mouse));
+                    GiveItem(temp, true);
+                }
+                else if (GiveItem(GraphicCursor.HeldItem)) {
+                    GraphicCursor.DropItem();
+                    rv = true;
+                }
             }
             else
             {
                rv =  GraphicCursor.GrabItem(TakeItem(mouse));
+            }
+            return rv;
+        }
+
+        public bool IsItemThere(Point mouse)
+        {
+            bool rv = false;
+            for (int i = 0; i < Player.maxItemRow; i++)
+            {
+                if (_displayList[i].Key.Contains(mouse) && _displayList[i].Value != null)
+                {
+                    rv = true;
+                    break;
+                }
             }
             return rv;
         }
@@ -62,8 +85,20 @@ namespace Adventure.Screens
             {
                 if (_displayList[i].Key.Contains(mouse) && _displayList[i].Value != null)
                 {
-                    rv = new InventoryItem(_displayList[i].Value);
-                    _playerManager.Player.RemoveItemFromInventory(i);
+                    if (_displayList[i].Value.GetType().Equals(typeof(Weapon)))
+                    {
+                        rv = ((Weapon)(_displayList[i].Value));
+                    }
+                    else if (_displayList[i].Value.GetType().Equals(typeof(Tool)))
+                    {
+                        rv = ((Tool)(_displayList[i].Value));
+                    }
+                    else
+                    {
+                        rv = new InventoryItem(_displayList[i].Value);
+                    }
+                    PlayerManager.Player.RemoveItemFromInventory(i);
+                    break;
                 }
             }
 
@@ -71,6 +106,11 @@ namespace Adventure.Screens
         }
 
         public bool GiveItem(InventoryItem item)
+        {
+            return GiveItem(item, false);
+        }
+
+        public bool GiveItem(InventoryItem item, bool Force)
         {
             bool rv = false;
             if (item != null)
@@ -80,9 +120,9 @@ namespace Adventure.Screens
                 {
                     for (int i = 0; i < Player.maxItemRow; i++)
                     {
-                        if (_displayList[i].Key.Contains(mouse) && _displayList[i].Value == null)
+                        if (_displayList[i].Key.Contains(mouse) && (Force|| _displayList[i].Value == null))
                         {
-                            rv = _playerManager.Player.AddItemToInventorySpot(item, i);
+                            rv = PlayerManager.Player.AddItemToInventorySpot(item, i);
                         }
                     }
                 }
@@ -93,35 +133,32 @@ namespace Adventure.Screens
 
         public override void Update(GameTime gameTime)
         {
-            if (_visible)
+            for (int i = 0; i < Player.maxItemRow; i++)
             {
-                for (int i = 0; i < Player.maxItemRow; i++)
-                {
-                    _displayList[i] = new KeyValuePair<Rectangle, InventoryItem>(_displayList[i].Key, _playerManager.Player.Inventory[i]);
-                }
+                _displayList[i] = new KeyValuePair<Rectangle, InventoryItem>(_displayList[i].Key, PlayerManager.Player.Inventory[i]);
             }
+            _selection.MoveImage(_displayList[PlayerManager.Player.CurrentItemNumber].Key.Location.ToVector2());
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (_visible)
-            {
-                spriteBatch.Draw(_texture, _rect, Color.White);
+            spriteBatch.Draw(_texture, _rect, Color.White);
 
-                Rectangle itemBox = new Rectangle((int)Position.X + 3, (int)Position.Y + 3, 32, 32);
-                for (int i = 0; i < Player.maxItemRow; i++)
+            Rectangle itemBox = new Rectangle((int)Position.X + 3, (int)Position.Y + 3, 32, 32);
+            for (int i = 0; i < Player.maxItemRow; i++)
+            {
+                if (_displayList[i].Value != null)
                 {
-                    if (_displayList[i].Value != null)
+                    _displayList[i].Value.Draw(spriteBatch, itemBox);
+                    if (_displayList[i].Value.DoesItStack)
                     {
-                        _displayList[i].Value.Draw(spriteBatch, itemBox);
-                        if (_displayList[i].Value.DoesItStack)
-                        {
-                            spriteBatch.DrawString(_displayFont, _displayList[i].Value.Number.ToString(), new Vector2(itemBox.X + 22, itemBox.Y + 22), Color.White);
-                        }
+                        spriteBatch.DrawString(_displayFont, _displayList[i].Value.Number.ToString(), new Vector2(itemBox.X + 22, itemBox.Y + 22), Color.White);
                     }
-                    itemBox.X += 34;
                 }
+                itemBox.X += 34;
             }
+
+            _selection.Draw(spriteBatch);
         }
     }
 }

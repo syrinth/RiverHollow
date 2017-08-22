@@ -14,8 +14,6 @@ namespace Adventure.Game_Managers
 {
     public static class ObjectManager
     {
-        private static GameContentManager _gcManager = GameContentManager.GetInstance();
-
         #region IDs
         public enum BuildingID
         {
@@ -27,7 +25,7 @@ namespace Adventure.Game_Managers
         }
         public enum ItemIDs
         {
-            Nothing, PickAxe, ArcaneEssence, CopperOre, CopperBar, IronOre, IronBar, Lumber, Stone
+            Nothing, PickAxe, ArcaneEssence, CopperOre, CopperBar, IronOre, IronBar, Lumber, Stone, Sword
         }
         public enum ObjectIDs
         {
@@ -58,6 +56,11 @@ namespace Adventure.Game_Managers
 
         public static InventoryItem GetItem(ItemIDs id)
         {
+            return GetItem(id, 1);
+        }
+
+        public static InventoryItem GetItem(ItemIDs id, int num)
+        {
             string name = "";
             string description = "";
             switch (id)
@@ -65,15 +68,19 @@ namespace Adventure.Game_Managers
                 case ItemIDs.ArcaneEssence:
                     name = "Arcane Essence";
                     description = "arcane_essence";
-                    return new InventoryItem(id, GetTexture(@"Textures\arcane_essence"), name, description, 1, true);
+                    return new InventoryItem(id, GetTexture(@"Textures\arcane_essence"), name, description, num, true);
                 case ItemIDs.PickAxe:
                     name = "Pick Axe";
                     description = "Pick, break rocks";
-                    return new Tool(id, GetTexture(@"Textures\pickAxe"), name, description, 1, 0.1f);
+                    return new Tool(id, GetTexture(@"Textures\pickAxe"), name, description, 1, 0.1f, 5);
+                case ItemIDs.Sword:
+                    name = "Sword";
+                    description = "SWORD!";
+                    return new Weapon(id, GetTexture(@"Textures\Sword"), name, description, 1, 5, 5);
                 case ItemIDs.Stone:
                     name = "Stone";
                     description = "Used for building things";
-                    return new InventoryItem(id, GetTexture(@"Textures\rock"), name, description, 1, true);
+                    return new InventoryItem(id, GetTexture(@"Textures\stone"), name, description, num, true);
 
             }
             return null;
@@ -84,14 +91,14 @@ namespace Adventure.Game_Managers
             switch (id)
             {
                 case ObjectIDs.Rock:
-                    return new WorldObject(1, true, false, pos, GetTexture(@"Textures\rock"), 1, TileMap.TileSize, TileMap.TileSize);
+                    return new WorldObject(ObjectIDs.Rock, 1, true, false, pos, GetTexture(@"Textures\rock"), 1, TileMap.TileSize, TileMap.TileSize);
             }
             return null;
         }
 
         private static Texture2D GetTexture(string texture)
         {
-            return _gcManager.GetTexture(texture);
+            return GameContentManager.GetTexture(texture);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Adventure.Game_Managers;
+﻿using Adventure.Characters;
+using Adventure.Game_Managers;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -12,70 +13,121 @@ using System.Threading.Tasks;
 
 namespace Adventure.Items
 {
-    public class Weapon
+    public class Weapon : InventoryItem
     {
-        protected GameContentManager _gcManager = GameContentManager.GetInstance();
+        private Vector2 rotationOrigin;
 
-        private Texture2D SpriteTexture;
-        private Vector2 origin;
-        private Vector2 screenpos;
+        private int _minDmg;
+        private int _maxDmg;
+        private int _stam;
+        private int _weaponSpeed = 3;
 
-        public bool attack = false;
+        private Vector2 _boxdir = Vector2.Zero;
+        protected Rectangle _rect;
+        public override Rectangle CollisionBox { get => _rect; }
 
-        public Weapon(Player player)
+        private bool _attack;
+        public bool StillAttacking { get => _attack; }
+
+        private float _angle; //1 radian = 57.29 degrees
+        private float _endAngle; //1 radian = 57.29 degrees
+
+        public Weapon(ObjectManager.ItemIDs ID, Texture2D texture, string name, string description, int minDmg, int maxDmg, int stam) : base(ID, texture, name, description, 1, false)
         {
-            LoadContent(player);
+            _attack = false;
+            _minDmg = minDmg;
+            _maxDmg = maxDmg;
+            _stam = stam;
+            rotationOrigin = new Vector2(_texture.Width, _texture.Height);
+            _rect = Rectangle.Empty;
         }
 
-        protected void LoadContent(Player player)
+        public void Update(GameTime gameTime)
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            SpriteTexture = _gcManager.GetTexture(@"Textures\Sword");
-            origin.X = SpriteTexture.Width / 2;
-            origin.Y = SpriteTexture.Height / 2;
-            screenpos.X = player.Position.X;
-            screenpos.Y = player.Position.Y;
-        }
+            Vector2 loc = _rect.Location.ToVector2();
+            loc += _boxdir;
+            _rect.Location = loc.ToPoint();
 
-        private float RotationAngle;
-
-        public bool Update(GameTime gameTime)
-        {
-            if (attack)
+            if (_attack)
             {
                 // The time since Update was called last.
-                RotationAngle += 0.2f;
-                float circle = MathHelper.Pi * 2;
-                RotationAngle = RotationAngle % circle;
+                _angle += 0.2f;
+                //float circle = MathHelper.Pi * 2;
+                //_angle = _angle % circle;
 
-                if(RotationAngle >= 3)
+                if (_angle >= _endAngle)
                 {
-                    attack = false;
-                    RotationAngle = 0;
+                    _angle = (float)DegreeToRadian(-45);
+                    _attack = false;
                 }
             }
-            return attack;
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            if (attack)
+            if (_attack)
             {
                 // TODO: Add your drawing code here
-                spriteBatch.Draw(SpriteTexture, screenpos, null, Color.White, RotationAngle, origin, 1.0f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(_texture, PlayerManager.Player.CollisionBox.Center.ToVector2(), null, Color.White, _angle, rotationOrigin, 1.0f, SpriteEffects.None, 0f);
+                //spriteBatch.Draw(_texture, _rect, Color.Black); //draws collision box
             }
         }
 
-        public float GetRotationAngle()
+        public int Damage()
         {
-            return RotationAngle;
+            Random r = new Random();
+
+            return r.Next(_minDmg, _maxDmg);
         }
 
-        public void Attack(Player player)
+        private float DegreeToRadian(double angle)
         {
-            attack = true;
-            screenpos.X = player.Position.X + TileMap.TileSize;
-            screenpos.Y = player.Position.Y;
+            return (float)(Math.PI * angle / 180.0);
         }
+
+        public void Attack(Character.Facing direction)
+        {
+            _attack = true;
+            Vector2 rotateOn = PlayerManager.Player.CollisionBox.Center.ToVector2();
+
+            if (direction == Character.Facing.North)
+            {
+                _angle = DegreeToRadian(-45);
+                _endAngle = DegreeToRadian(135);
+                _rect = new Rectangle((int)rotateOn.X - 48, (int)rotateOn.Y - 40, 32, 32);
+                _boxdir = new Vector2(_weaponSpeed, 0);
+            }
+            else if (direction == Character.Facing.West)
+            {
+                _angle = DegreeToRadian(45);
+                _endAngle = DegreeToRadian(225);
+                _rect = new Rectangle((int)rotateOn.X + 16, (int)rotateOn.Y - 32, 32, 32);
+                _boxdir = new Vector2(0, _weaponSpeed);
+            }
+            else if (direction == Character.Facing.South)
+            {
+                _angle = DegreeToRadian(135);
+                _endAngle = DegreeToRadian(315);
+                _rect = new Rectangle((int)rotateOn.X + 8, (int)rotateOn.Y + 8, 32, 32);
+                _boxdir = new Vector2(-_weaponSpeed, 0);
+            }
+            else if (direction == Character.Facing.East)
+            {
+                _angle = DegreeToRadian(225);
+                _endAngle = DegreeToRadian(405);
+                _rect = new Rectangle((int)rotateOn.X - 40, (int)rotateOn.Y + 16, 32, 32);
+                _boxdir = new Vector2(0, -_weaponSpeed);
+            }
+        }
+
+        //public void Update(GameTime gameTime)
+        //{
+        //    screenPos = RotateAboutOrigin(screenPos, PlayerManager.Player.Center.ToVector2(), 0.1f);
+        //}
+
+        //public Vector2 RotateAboutOrigin(Vector2 point, Vector2 origin, float rotation)
+        //{
+        //    return Vector2.Transform(point - origin, Matrix.CreateRotationZ(rotation)) + origin;
+        //}
     }
 }

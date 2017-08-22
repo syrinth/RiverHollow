@@ -11,15 +11,12 @@ namespace Adventure.GUIObjects
 {
     public abstract class GUIObject
     {
-        protected GameContentManager _gcManager = GameContentManager.GetInstance();
-        protected PlayerManager _playerManager = PlayerManager.GetInstance();
-
-        private int _height;
+        protected int _height;
         public int Height { get => _height; set => _height = value; }
-        private int _width;
+        protected int _width;
         public int Width { get => _width; set => _width = value; }
 
-        private Vector2 _position;
+        protected Vector2 _position;
         public Vector2 Position { get => _position; set => _position = value; }
 
         protected Rectangle _rect;

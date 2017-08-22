@@ -16,13 +16,17 @@ namespace Adventure
     public class Player : CombatCharacter
     {
         public static int maxItemRow = 11;
-        private bool usingTool = false;
+        private bool _usingTool = false;
+        public bool UsingTool { get => _usingTool; }
+        private bool _usingWeapon = false;
+        public bool UsingWeapon { get => _usingWeapon; }
         //private Weapon sword;
         private InventoryItem[] _inventory;
         public InventoryItem[] Inventory { get => _inventory; }
 
         private int _currentInventorySlot = 0;
-        private InventoryItem _currentItem;
+        public int CurrentItemNumber { get => _currentInventorySlot; }
+        //private InventoryItem _currentItem;
         public InventoryItem CurrentItem { get => _inventory[_currentInventorySlot]; }
 
         private WorldObject _targettedObject = null;
@@ -34,7 +38,7 @@ namespace Adventure
             Speed = 5;
 
             _inventory = new InventoryItem[maxItemRow];
-            _currentItem = null;
+            //_currentItem = null;
         }
         public void LoadContent()
         {
@@ -48,12 +52,12 @@ namespace Adventure
             Vector2 moveDir = Vector2.Zero;
             string animation = "";
 
-            if (usingTool && _targettedObject != null)
+            if (_usingTool)
             {
                 ((Tool)CurrentItem).ToolAnimation.Position = Position;
                 ((Tool)CurrentItem).Update(gameTime);
-                usingTool = ((Tool)CurrentItem).ToolAnimation.IsAnimating;
-                if (!usingTool)
+                _usingTool = ((Tool)CurrentItem).ToolAnimation.IsAnimating;
+                if (_targettedObject != null && !_usingTool)
                 {
                     bool destroyed = false;
                     if (_targettedObject.Breakable)
@@ -72,17 +76,24 @@ namespace Adventure
                     
                 }
             }
+            else if (_usingWeapon)
+            {
+                ((Weapon)CurrentItem).Update(gameTime);
+                _usingWeapon = ((Weapon)CurrentItem).StillAttacking;
+            }
             else
             {
                 KeyboardState ks = Keyboard.GetState();
                 if (ks.IsKeyDown(Keys.W))
                 {
+                    _facing = Facing.North;
                     moveDir += new Vector2(0, -_speed);
                     animation = "Float";
                     moveVector += new Vector2(0, -_speed);
                 }
                 else if (ks.IsKeyDown(Keys.S))
                 {
+                    _facing = Facing.South;
                     moveDir += new Vector2(0, _speed);
                     animation = "Float";
                     moveVector += new Vector2(0, _speed);
@@ -90,28 +101,32 @@ namespace Adventure
 
                 if (ks.IsKeyDown(Keys.A))
                 {
+                    _facing = Facing.East;
                     moveDir += new Vector2(-_speed, 0);
                     animation = "Float";
                     moveVector += new Vector2(-_speed, 0);
                 }
                 else if (ks.IsKeyDown(Keys.D))
                 {
+                    _facing = Facing.West;
                     moveDir += new Vector2(_speed, 0);
                     animation = "Float";
                     moveVector += new Vector2(_speed, 0);
                 }
+
+                ProcessKeyboardInput(ks);
 
                 if (moveDir.Length() != 0)
                 {
                     Rectangle testRectX = new Rectangle((int)Position.X + (int)moveDir.X, (int)Position.Y, Width, Height);
                     Rectangle testRectY = new Rectangle((int)Position.X, (int)Position.Y + (int)moveDir.Y, Width, Height);
 
-                    if (_mapManager.CurrentMap.CheckLeftMovement(testRectX) && _mapManager.CurrentMap.CheckRightMovement(testRectX))
+                    if (MapManager.CurrentMap.CheckLeftMovement(this, testRectX) && MapManager.CurrentMap.CheckRightMovement(this, testRectX))
                     {
                         _sprite.MoveBy((int)moveDir.X, 0);
                     }
 
-                    if (_mapManager.CurrentMap.CheckUpMovement(testRectY) && _mapManager.CurrentMap.CheckDownMovement(testRectY))
+                    if (MapManager.CurrentMap.CheckUpMovement(this, testRectY) && MapManager.CurrentMap.CheckDownMovement(this, testRectY))
                     {
                         _sprite.MoveBy(0, (int)moveDir.Y);
                     }
@@ -134,9 +149,13 @@ namespace Adventure
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            if (usingTool)
+            if (_usingTool)
             {
                 ((Tool)CurrentItem).ToolAnimation.Draw(spriteBatch);
+            }
+            if (_usingWeapon)
+            {
+                ((Weapon)CurrentItem).Draw(spriteBatch);
             }
         }
 
@@ -144,13 +163,40 @@ namespace Adventure
         {
             bool rv = false;
 
-            if (CurrentItem.GetType().Equals(typeof(Tool)) && MapManager.GetInstance().CurrentMap.PlayerInRange(CollisionBox, mouseLocation))
+            if (CurrentItem != null)
             {
-                usingTool = true;
-                ((Tool)CurrentItem).ToolAnimation.IsAnimating = true;
-                _targettedObject = MapManager.GetInstance().FindWorldObject(mouseLocation);
-                rv = true;
+                if (CurrentItem.GetType().Equals(typeof(Tool)) && MapManager.CurrentMap.PlayerInRange(CollisionBox, mouseLocation))
+                {
+                    _usingTool = true;
+                    ((Tool)CurrentItem).ToolAnimation.IsAnimating = true;
+                    _targettedObject = MapManager.FindWorldObject(mouseLocation);
+                    rv = true;
+                }
+                else if (CurrentItem.GetType().Equals(typeof(Weapon)))
+                {
+                    _usingWeapon = true;
+                    ((Weapon)CurrentItem).Attack(_facing);
+                    rv = true;
+                }
             }
+
+            return rv;
+        }
+
+        public bool ProcessKeyboardInput(KeyboardState ks)
+        {
+            bool rv = false;
+
+            if (ks.IsKeyDown(Keys.D1)) { _currentInventorySlot = 0; }
+            if (ks.IsKeyDown(Keys.D2)) { _currentInventorySlot = 1; }
+            if (ks.IsKeyDown(Keys.D3)) { _currentInventorySlot = 2; }
+            if (ks.IsKeyDown(Keys.D4)) { _currentInventorySlot = 3; }
+            if (ks.IsKeyDown(Keys.D5)) { _currentInventorySlot = 4; }
+            if (ks.IsKeyDown(Keys.D6)) { _currentInventorySlot = 5; }
+            if (ks.IsKeyDown(Keys.D7)) { _currentInventorySlot = 6; }
+            if (ks.IsKeyDown(Keys.D8)) { _currentInventorySlot = 7; }
+            if (ks.IsKeyDown(Keys.D9)) { _currentInventorySlot = 8; }
+            if (ks.IsKeyDown(Keys.D0)) { _currentInventorySlot = 9; }
 
             return rv;
         }
@@ -186,18 +232,14 @@ namespace Adventure
         {
             if (itemID != ItemIDs.Nothing)
             {
-                for (int i = 0; i < _inventory.Length; i++)
+                if (!IncrementExistingItem(itemID))
                 {
-                    if (_inventory[i] == null)
+                    for (int i = 0; i < _inventory.Length; i++)
                     {
-                        _inventory[i] = ObjectManager.GetItem(itemID);
-                        break;
-                    }
-                    else
-                    {
-                        if (_inventory[i].ItemID == itemID && _inventory[i].Number < 999)
+
+                        if (_inventory[i] == null)
                         {
-                            _inventory[i].Number++;
+                            _inventory[i] = ObjectManager.GetItem(itemID);
                             break;
                         }
                     }
@@ -205,20 +247,47 @@ namespace Adventure
             }
         }
 
+        public bool IncrementExistingItem(ObjectManager.ItemIDs itemID)
+        {
+            bool rv = false;
+            for (int i = 0; i < _inventory.Length; i++)
+            {
+                if (_inventory[i] != null && _inventory[i].ItemID == itemID && _inventory[i].Number < 999) { 
+                    _inventory[i].Number++;
+                    return true;
+                }
+            }
+            return rv;
+        }
+
         public bool AddItemToInventorySpot(InventoryItem item, int i)
         {
             bool rv = false;
-            if (_inventory[i] == null)
+            if (item != null)
             {
-                _inventory[i] = new InventoryItem(item);
-                rv = true;
-            }
-            else
-            {
-                if (_inventory[i].ItemID == item.ItemID && _inventory[i].DoesItStack && 999 >= (_inventory[i].Number + item.Number))
+                if (_inventory[i] == null)
                 {
-                    _inventory[i].Number += item.Number;
+                    if (item.GetType().Equals(typeof(Weapon)))
+                    {
+                        _inventory[i] = (Weapon)(item);
+                    }
+                    else if (item.GetType().Equals(typeof(Tool)))
+                    {
+                        _inventory[i] = (Tool)(item);
+                    }
+                    else
+                    {
+                        _inventory[i] = new InventoryItem(item);
+                    }
                     rv = true;
+                }
+                else
+                {
+                    if (_inventory[i].ItemID == item.ItemID && _inventory[i].DoesItStack && 999 >= (_inventory[i].Number + item.Number))
+                    {
+                        _inventory[i].Number += item.Number;
+                        rv = true;
+                    }
                 }
             }
             return rv;
@@ -231,6 +300,7 @@ namespace Adventure
                 if(i == index)
                 {
                     _inventory[i] = null;
+                    break;
                 }
             }
         }

@@ -11,6 +11,7 @@ namespace Adventure.Characters.Monsters
     {
         public Goblin(Vector2 position)
         {
+            _hp = 10;
             _textureName = @"Textures\Eggplant";
 
             LoadContent(_textureName, 32, 64, 4, 0.3f);

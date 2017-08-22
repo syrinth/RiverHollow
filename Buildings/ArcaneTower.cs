@@ -17,13 +17,13 @@ namespace Adventure.Buildings
 
         public ArcaneTower()
         {
-            _id = PlayerManager.GetInstance().GetNewBuildingID();
+            _id = PlayerManager.GetNewBuildingID();
             _workers = new List<Worker>();
             _baseWidth = 3;
             _baseHeight = 3;
 
             _reqGold = 10000;
-            _texture = GameContentManager.GetInstance().GetTexture(@"Textures\ArcaneTower");
+            _texture = GameContentManager.GetTexture(@"Textures\ArcaneTower");
         }
 
         public override bool SetCoordinates(Vector2 position)

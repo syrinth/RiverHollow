@@ -16,8 +16,8 @@ namespace Adventure.Game_Managers.GUIObjects
 
         public MainMenuScreen()
         {
-            _btnNewGame = new GUIButton(AdventureGame.ScreenWidth/2, 500, @"Textures\New", @"Textures\New");
-            _btnLoadGame = new GUIButton(AdventureGame.ScreenWidth / 2, 800, @"Textures\Load", @"Textures\Load");
+            _btnNewGame = new GUIButton(AdventureGame.ScreenWidth/2, 500, @"Textures\New");
+            _btnLoadGame = new GUIButton(AdventureGame.ScreenWidth / 2, 800, @"Textures\Load");
             Controls.Add(_btnNewGame);
             Controls.Add(_btnLoadGame);
         }
@@ -28,11 +28,12 @@ namespace Adventure.Game_Managers.GUIObjects
             if (_btnNewGame.Rectangle.Contains(mouse))
             {
                 AdventureGame.ChangeGameState(AdventureGame.GameState.Game);
+                AdventureGame.NewGame();
                 rv = true;
             }
             if (_btnLoadGame.Rectangle.Contains(mouse))
             {
-                PlayerManager.GetInstance().Load();
+                PlayerManager.Load();
                 AdventureGame.ChangeGameState(AdventureGame.GameState.Game);
                 rv = true;
             }

@@ -31,9 +31,9 @@ namespace Adventure.GUIObjects
 
         public static void LoadContent()
         {
-            _texture = GameContentManager.GetInstance().GetTexture(@"Textures\cursor");
+            _texture = GameContentManager.GetTexture(@"Textures\cursor");
             Position = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-        //    _font = GameContentManager.GetInstance().GetFont(@"Fonts\Font");
+        //    _font = GameContentManager.GetFont(@"Fonts\Font");
         }
 
         public static bool GrabItem(InventoryItem item)

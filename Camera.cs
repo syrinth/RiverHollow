@@ -8,8 +8,6 @@ namespace Adventure
 {
     public static class Camera
     {
-        private static MapManager _mapManager = MapManager.GetInstance();
-        private static PlayerManager _playerManager = PlayerManager.GetInstance();
         public static Matrix _transform;
         public static Viewport _view;
         public static Vector2 _center;
@@ -25,7 +23,7 @@ namespace Adventure
         {
             if (!AdventureGame.BuildingMode)
             {
-                _observer = _playerManager.Player.Center.ToVector2();
+                _observer = PlayerManager.Player.Center.ToVector2();
             }
             else {
                 KeyboardState ks = Keyboard.GetState();
@@ -53,18 +51,18 @@ namespace Adventure
             {
                 _observer.X = (AdventureGame.ScreenWidth / 2) + TileMap.TileSize;
             }
-            else if (_observer.X >= _mapManager.CurrentMap.GetMapWidth() - (AdventureGame.ScreenWidth / 2) - TileMap.TileSize)
+            else if (_observer.X >= MapManager.CurrentMap.GetMapWidth() - (AdventureGame.ScreenWidth / 2) - TileMap.TileSize)
             {
-                _observer.X = _mapManager.CurrentMap.GetMapWidth() - (AdventureGame.ScreenWidth / 2) - TileMap.TileSize;
+                _observer.X = MapManager.CurrentMap.GetMapWidth() - (AdventureGame.ScreenWidth / 2) - TileMap.TileSize;
             }
 
             if (_observer.Y <= (AdventureGame.ScreenHeight / 2) + TileMap.TileSize)
             {
                 _observer.Y = (AdventureGame.ScreenHeight / 2) + TileMap.TileSize;
             }
-            else if (_observer.Y >= _mapManager.CurrentMap.GetMapHeight() - (AdventureGame.ScreenHeight / 2) - TileMap.TileSize)
+            else if (_observer.Y >= MapManager.CurrentMap.GetMapHeight() - (AdventureGame.ScreenHeight / 2) - TileMap.TileSize)
             {
-                _observer.Y = _mapManager.CurrentMap.GetMapHeight() - (AdventureGame.ScreenHeight / 2) - TileMap.TileSize;
+                _observer.Y = MapManager.CurrentMap.GetMapHeight() - (AdventureGame.ScreenHeight / 2) - TileMap.TileSize;
             }
 
             _center = new Vector2(_observer.X - (AdventureGame.ScreenWidth / 2), _observer.Y - (AdventureGame.ScreenHeight / 2));
@@ -73,11 +71,11 @@ namespace Adventure
 
         public static void UnsetObserver()
         {
-            _observer = new Vector2(MapManager.GetInstance().CurrentMap.MapWidth / 2, MapManager.GetInstance().CurrentMap.MapHeight / 2);
+            _observer = new Vector2(MapManager.CurrentMap.MapWidth / 2, MapManager.CurrentMap.MapHeight / 2);
         }
         public static void ResetObserver()
         {
-            _observer = _playerManager.Player.Center.ToVector2();
+            _observer = PlayerManager.Player.Center.ToVector2();
         }
     }
 }

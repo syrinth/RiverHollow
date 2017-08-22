@@ -8,29 +8,16 @@ using System.Threading.Tasks;
 
 namespace Adventure.Game_Managers
 {
-    public class GameContentManager
+    public static class GameContentManager
     {
-        static GameContentManager instance;
-        private Dictionary<string, Texture2D> _textureDictionary;
-        private Dictionary<string, SpriteFont> _fontDictionary;
+        private static Dictionary<string, Texture2D> _textureDictionary;
+        private static Dictionary<string, SpriteFont> _fontDictionary;
 
-        private GameContentManager()
+        public static void LoadContent(ContentManager Content)
         {
             _textureDictionary = new Dictionary<string, Texture2D>();
             _fontDictionary = new Dictionary<string, SpriteFont>();
-        }
 
-        public static GameContentManager GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new GameContentManager();
-            }
-            return instance;
-        }
-
-        public void LoadContent(ContentManager Content)
-        {
             LoadCharacters(Content);
             LoadGUIs(Content);
             LoadIcons(Content);
@@ -39,21 +26,21 @@ namespace Adventure.Game_Managers
         }
 
         #region Load Methods
-        public void LoadCharacters(ContentManager Content)
+        public static void LoadCharacters(ContentManager Content)
         {
             AddTexture(Content, @"Textures\Eggplant");
             AddTexture(Content, @"Textures\Wizard");
             AddTexture(Content, @"Textures\Taylor");
         }
 
-        public void LoadGUIs(ContentManager Content)
+        public static void LoadGUIs(ContentManager Content)
         {
             AddTexture(Content, @"Textures\cursor");
             AddTexture(Content, @"Textures\MiniInventory");
             AddTexture(Content, @"Textures\ShopWindow");
         }
 
-        public void LoadIcons(ContentManager Content)
+        public static void LoadIcons(ContentManager Content)
         {
             AddTexture(Content, @"Textures\Sword");
             AddTexture(Content, @"Textures\arcane_essence");
@@ -63,9 +50,13 @@ namespace Adventure.Game_Managers
             AddTexture(Content, @"Textures\Load");
             AddTexture(Content, @"Textures\pickAxe");
             AddTexture(Content, @"Textures\rock");
+            AddTexture(Content, @"Textures\stone");
+            AddTexture(Content, @"Textures\ok");
+            AddTexture(Content, @"Textures\Selection");
+            AddTexture(Content, @"Textures\Dialog");
         }
 
-        public void LoadFont(ContentManager Content)
+        public static void LoadFont(ContentManager Content)
         {
             AddFont(Content, @"Fonts\DisplayFont");
             AddFont(Content, @"Fonts\Font");
@@ -73,24 +64,24 @@ namespace Adventure.Game_Managers
         #endregion
 
         #region AddMethods
-        private void AddTexture(ContentManager Content, string texture)
+        private static void AddTexture(ContentManager Content, string texture)
         {
             _textureDictionary.Add(texture, Content.Load<Texture2D>(texture));
         }
 
-        private void AddFont(ContentManager Content, string font)
+        private static void AddFont(ContentManager Content, string font)
         {
             _fontDictionary.Add(font, Content.Load<SpriteFont>(font));
         }
         #endregion
 
         #region Get Methods
-        public Texture2D GetTexture(string texture)
+        public static Texture2D GetTexture(string texture)
         {
             return _textureDictionary[texture];
         }
 
-        public SpriteFont GetFont(string font)
+        public static SpriteFont GetFont(string font)
         {
             return _fontDictionary[font];
         }

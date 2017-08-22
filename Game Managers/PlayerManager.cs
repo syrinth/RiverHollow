@@ -1,4 +1,5 @@
 ﻿using Adventure.Characters.NPCs;
+using Adventure.Items;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -15,50 +16,36 @@ using System.Xml.Serialization;
 
 namespace Adventure.Game_Managers
 {
-    public class PlayerManager
+    public static class PlayerManager
     {
-        static PlayerManager instance;
+        private static string _currentMap;
+        public static string CurrentMap { get => _currentMap; set => _currentMap = value; }
 
-        private string _currentMap;
-        public string CurrentMap { get => _currentMap; set => _currentMap = value; }
+        private static Player _player;
+        public static Player Player { get => _player; }
 
-        private Player _player;
-        public Player Player { get => _player; }
+        private static List<Building> _buildings;
+        public static List<Building> Buildings { get => _buildings; }
 
-        private List<Building> _buildings;
-        public List<Building> Buildings { get => _buildings; }
-
-        private PlayerManager()
+        public static void NewPlayer()
         {
             _buildings = new List<Building>();
-        }
-
-        public static PlayerManager GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new PlayerManager();
-            }
-            return instance;
-        }
-
-        public void NewPlayer()
-        {
             _player = new Player();
+            _player.AddItemToFirstAvailableInventory(ObjectManager.ItemIDs.Sword);
             _player.AddItemToFirstAvailableInventory(ObjectManager.ItemIDs.PickAxe);
         }
 
-        public void Update(GameTime gameTime)
+        public static void Update(GameTime gameTime)
         {
             _player.Update(gameTime);
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public static void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             _player.Draw(gameTime, spriteBatch);
         }
 
-        public bool ProcessLeftButtonClick(Point mouseLocation)
+        public static bool ProcessLeftButtonClick(Point mouseLocation)
         {
             bool rv = false;
 
@@ -67,12 +54,12 @@ namespace Adventure.Game_Managers
             return rv;
         }
 
-        public void AddBuilding(Building b)
+        public static void AddBuilding(Building b)
         {
             _buildings.Add(b);
         }
 
-        public int GetNewBuildingID()
+        public static int GetNewBuildingID()
         {
             return _buildings.Count +1;
         }
@@ -89,13 +76,16 @@ namespace Adventure.Game_Managers
 
             [XmlArray(ElementName = "Buildings")]
             public List<BuildingData> Buildings;
+
+            [XmlArray(ElementName = "Items")]
+            public List<ItemData> Items;
+
+            [XmlArray(ElementName = "Maps")]
+            public List<MapData> MapData;
         }
 
         public struct BuildingData
         {
-            /// <summary>
-            /// The Level data object.
-            /// </summary>
              [XmlArray(ElementName = "Workers")]
              public List<WorkerData> Workers;
 
@@ -113,14 +103,38 @@ namespace Adventure.Game_Managers
         }
         public struct WorkerData
         {
-            /// <summary>
-            /// The Level data object.
-            /// </summary>
             [XmlElement(ElementName = "WorkerID")]
             public ObjectManager.WorkerID workerID;
         }
+        public struct ItemData
+        {
+            [XmlElement(ElementName = "ItemID")]
+            public ObjectManager.ItemIDs itemID;
 
-        public string Save()
+            [XmlElement(ElementName = "Numbers")]
+            public int num;
+        }
+        public struct MapData
+        {
+            [XmlElement(ElementName = "MapName")]
+            public string mapName;
+
+            [XmlArray(ElementName = "WorldObjects")]
+            public List<WorldObjectData> worldObjects;
+        }
+        public struct WorldObjectData
+        {
+            [XmlElement(ElementName = "WorldObjectID")]
+            public ObjectManager.ObjectIDs worldObjectID;
+
+            [XmlElement(ElementName = "X")]
+            public int x;
+
+            [XmlElement(ElementName = "Y")]
+            public int y;
+        }
+
+        public static string Save()
         {
             SaveData data = new SaveData();
             // Create a list to store the data already saved.
@@ -128,7 +142,7 @@ namespace Adventure.Game_Managers
             data.Buildings = new List<BuildingData>();
 
             // Initialize the new data values.
-            foreach (Building b in PlayerManager.GetInstance().Buildings)
+            foreach (Building b in Buildings)
             {
                 BuildingData buildingData = new BuildingData();
                 buildingData.buildingID = b.BuildingID;
@@ -147,6 +161,37 @@ namespace Adventure.Game_Managers
                 // Add the level data.
                 data.Buildings.Add(buildingData);
             }
+
+            data.Items = new List<ItemData>();
+            foreach (InventoryItem i  in Player.Inventory)
+            {
+                ItemData itemData = new ItemData();
+                if (i != null)
+                {
+                    itemData.itemID = i.ItemID;
+                    itemData.num = i.Number;
+                }
+                data.Items.Add(itemData);
+            }
+
+            data.MapData = new List<MapData>();
+            foreach (TileMap tileMap in MapManager.Maps.Values)
+            {
+                MapData m = new MapData();
+                m.mapName = tileMap.Name;
+                m.worldObjects = new List<WorldObjectData>();
+
+                foreach (WorldObject w in tileMap.WorldObjects)
+                {
+                    WorldObjectData d = new WorldObjectData();
+                    d.worldObjectID = w.ID;
+                    d.x = (int)w.Position.X;
+                    d.y = (int)w.Position.Y;
+                    m.worldObjects.Add(d);
+                }
+
+                data.MapData.Add(m);
+            }
             
             // Convert the object to XML data and put it in the stream.
             XmlSerializer serializer = new XmlSerializer(typeof(SaveData));
@@ -161,7 +206,7 @@ namespace Adventure.Game_Managers
             return sb.ToString();
         }
 
-        public void Load()
+        public static void Load()
         {
             string xml = "SaveGame.xml";
             string _byteOrderMarkUtf16 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
@@ -182,7 +227,23 @@ namespace Adventure.Game_Managers
                 Building newBuilding = ObjectManager.GetBuilding(b.buildingID);
                 newBuilding.AddBuildingDetails(b);
                 AddBuilding(newBuilding);
-                MapManager.GetInstance().CurrentMap.AddBuilding(newBuilding);
+                MapManager.CurrentMap.AddBuilding(newBuilding);
+            }
+
+            for (int i=0; i < data.Items.Count; i++)
+            {
+                ItemData item = data.Items[i];
+                InventoryItem newItem = ObjectManager.GetItem(item.itemID, item.num);
+                _player.AddItemToInventorySpot(newItem, i);
+            }
+
+            foreach (MapData b in data.MapData)
+            {
+                TileMap tm = MapManager.Maps[b.mapName];
+                foreach(WorldObjectData w in b.worldObjects)
+                { 
+                    tm.AddWorldObject(ObjectManager.GetWorldObject(w.worldObjectID, new Vector2(w.x,w.y)));
+                }
             }
         }
         #endregion

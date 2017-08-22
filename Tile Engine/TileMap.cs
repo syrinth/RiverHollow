@@ -30,21 +30,24 @@ namespace Adventure.Tile_Engine
         protected List<TiledMapTileset> _tileSets;
 
         protected List<Character> _characterList;
+        public List<Character> ToRemove;
         protected List<Building> _buildingList;
         protected List<WorldObject> _worldObjectList;
+        public List<WorldObject> WorldObjects { get => _worldObjectList; }
+        protected List<Item> _itemList;
 
         private Dictionary<Rectangle, string> _exitDictionary;
         private Dictionary<string, Rectangle> _entranceDictionary;
         public Dictionary<string, Rectangle> EntranceDictionary { get => _entranceDictionary; }
 
-        private PlayerManager _playerManager = PlayerManager.GetInstance();
-
         public TileMap()
         {
             _tileSets = new List<TiledMapTileset>();
             _characterList = new List<Character>();
+            ToRemove = new List<Character>();
             _buildingList = new List<Building>();
             _worldObjectList = new List<WorldObject>();
+            _itemList = new List<Item>();
             _exitDictionary = new Dictionary<Rectangle, string>();
             _entranceDictionary = new Dictionary<string, Rectangle>();
         }
@@ -111,7 +114,38 @@ namespace Adventure.Tile_Engine
                     m.Update(theGameTime);
                 }
             }
+            foreach(Character c in ToRemove)
+            {
+                _characterList.Remove(c);
+            }
 
+            ItemPickUpdate();
+        }
+
+        public void ItemPickUpdate()
+        {
+            Player _p = PlayerManager.Player;
+            List<Item> removedList = new List<Item>();
+            foreach (Item i in _itemList)
+            {
+                if (i.CollisionBox.Intersects(PlayerManager.Player.CollisionBox))
+                {
+                    removedList.Add(i);
+                    PlayerManager.Player.AddItemToFirstAvailableInventory(i.ItemID);
+                }
+                else if (PlayerInRange(_p.CollisionBox, i.CollisionBox.Center, 80))
+                {
+                    float speed = 1;
+                    Vector2 direction = new Vector2((_p.Position.X < i.Position.X) ? -speed : speed, (_p.Position.Y < i.Position.Y) ? -speed : speed);
+                    i.Position += direction;
+                }
+            }
+
+            foreach (Item i in removedList)
+            {
+                _itemList.Remove(i);
+            }
+            removedList.Clear();
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -131,13 +165,18 @@ namespace Adventure.Tile_Engine
             {
                 o.Draw(spriteBatch);
             }
+
+            foreach (Item i in _itemList)
+            {
+                i.Draw(spriteBatch);
+            }
         }
 
         #region Collision Code
-        public bool CheckLeftMovement(Rectangle movingObject)
+        public bool CheckLeftMovement(Character c, Rectangle movingObject)
         {
             bool rv = true;
-            if (CheckForObjectCollision(movingObject))
+            if (CheckForObjectCollision(c, movingObject))
             {
                 return false;
             }
@@ -171,10 +210,10 @@ namespace Adventure.Tile_Engine
             return rv;
         }
 
-        public bool CheckRightMovement(Rectangle movingObject)
+        public bool CheckRightMovement(Character c, Rectangle movingObject)
         {
             bool rv = true;
-            if (CheckForObjectCollision(movingObject))
+            if (CheckForObjectCollision(c, movingObject))
             {
                 return false;
             }
@@ -207,10 +246,10 @@ namespace Adventure.Tile_Engine
             return rv;
         }
 
-        public bool CheckUpMovement(Rectangle movingObject)
+        public bool CheckUpMovement(Character c, Rectangle movingObject)
         {
             bool rv = true;
-            if (CheckForObjectCollision(movingObject))
+            if (CheckForObjectCollision(c, movingObject))
             {
                 return false;
             }
@@ -243,10 +282,10 @@ namespace Adventure.Tile_Engine
             return rv;
         }
 
-        public bool CheckDownMovement(Rectangle movingObject)
+        public bool CheckDownMovement(Character c, Rectangle movingObject)
         {
             bool rv = true;
-            if (CheckForObjectCollision(movingObject))
+            if (CheckForObjectCollision(c, movingObject))
             {
                 return false;
             }
@@ -297,14 +336,14 @@ namespace Adventure.Tile_Engine
             {
                 if (r.Intersects(movingObject))
                 {
-                    MapManager.GetInstance().ChangeMaps(_exitDictionary[r]);
+                    MapManager.ChangeMaps(_exitDictionary[r]);
                     return true;
                 }
             }
             return false;
         }
 
-        public bool CheckForObjectCollision(Rectangle movingObject)
+        public bool CheckForObjectCollision(Character mover, Rectangle movingObject)
         {
             bool rv = false;
             foreach (Building b in _buildingList)
@@ -317,7 +356,7 @@ namespace Adventure.Tile_Engine
             }
             foreach (Character c in _characterList)
             {
-                if (c.CollisionBox.Intersects(movingObject))
+                if (mover != c && c.CollisionBox.Intersects(movingObject))
                 {
                     rv = true;
                     break;
@@ -388,22 +427,22 @@ namespace Adventure.Tile_Engine
                 if (cType.IsSubclassOf(typeof(Worker)))
                 {
                     Worker w = (Worker)c;
-                    if (w.MouseInside(mouseLocation) && PlayerInRange(_playerManager.Player.GetRectangle(), w.Center) &&
-                        _playerManager.Player.HasSpaceInInventory(w.WhatAreYouHolding()))
+                    if (w.MouseInside(mouseLocation) && PlayerInRange(PlayerManager.Player.GetRectangle(), w.Center) &&
+                        PlayerManager.Player.HasSpaceInInventory(w.WhatAreYouHolding()))
                     {
-                        _playerManager.Player.AddItemToFirstAvailableInventory(w.TakeItem());
+                        PlayerManager.Player.AddItemToFirstAvailableInventory(w.TakeItem());
                     }
                 }
                 else if (cType.Equals(typeof(ShopKeeper)) || (cType.IsSubclassOf(typeof(ShopKeeper))) && ((ShopKeeper)c).IsOpen)
                 {
-                    GUIManager.GetInstance().OpenShopWindow((ShopKeeper)c);
+                    GUIManager.OpenShopWindow((ShopKeeper)c);
                 }
             }
             foreach (Building b in _buildingList)
             {
-                if (b.BoxToEnter.Contains(mouseLocation) && PlayerInRange(_playerManager.Player.GetRectangle(), b.BoxToEnter.Center))
+                if (b.BoxToEnter.Contains(mouseLocation) && PlayerInRange(PlayerManager.Player.GetRectangle(), b.BoxToEnter.Center))
                 {
-                    MapManager.GetInstance().EnterBuilding(b._map, b.ID.ToString(), b.Workers);
+                    MapManager.EnterBuilding(b._map, b.ID.ToString(), b.Workers);
                     break;
                 }
             }
@@ -437,16 +476,16 @@ namespace Adventure.Tile_Engine
                     if (cType.IsSubclassOf(typeof(Worker)))
                     {
                         Worker w = (Worker)c;
-                        if (w.MouseInside(mouseLocation) && PlayerInRange(_playerManager.Player.GetRectangle(), w.Center) &&
-                            _playerManager.Player.HasSpaceInInventory(w.WhatAreYouHolding()))
+                        if (w.MouseInside(mouseLocation) && PlayerInRange(PlayerManager.Player.GetRectangle(), w.Center) &&
+                            PlayerManager.Player.HasSpaceInInventory(w.WhatAreYouHolding()))
                         {
-                            _playerManager.Player.AddItemToFirstAvailableInventory(w.TakeItem());
+                            PlayerManager.Player.AddItemToFirstAvailableInventory(w.TakeItem());
                             w.MakeDailyItem();
                         }
                     }
                     else if (cType.Equals(typeof(ShopKeeper)) || (cType.IsSubclassOf(typeof(ShopKeeper))) && ((ShopKeeper)c).IsOpen)
                     {
-                        GUIManager.GetInstance().OpenShopWindow((ShopKeeper)c);
+                        GUIManager.OpenShopWindow((ShopKeeper)c);
                     }
                 }
             }
@@ -478,10 +517,14 @@ namespace Adventure.Tile_Engine
 
         public bool PlayerInRange(Rectangle playerRect, Point centre)
         {
+            return PlayerInRange(playerRect, centre, TileMap.TileSize * 2);
+        }
+        public bool PlayerInRange(Rectangle playerRect, Point centre, int range)
+        {
             bool rv = false;
 
-            if (Math.Abs(playerRect.Center.X - centre.X) <= TileMap.TileSize*2 &&
-                Math.Abs(playerRect.Center.Y - centre.Y) <= TileMap.TileSize*2)
+            if (Math.Abs(playerRect.Center.X - centre.X) <= range &&
+                Math.Abs(playerRect.Center.Y - centre.Y) <= range)
             {
                 rv = true;
             }
@@ -512,6 +555,24 @@ namespace Adventure.Tile_Engine
         {
             _worldObjectList.Remove(o);
         }
+        public void RemoveCharacter(Character c)
+        {
+            _characterList.Remove(c);
+        }
+        public void DropWorldItems(List<Item>items, Vector2 position)
+        {
+            Random r = new Random();
+            foreach(Item i in items)
+            {
+                Vector2 pos = position;
+                pos.X += r.Next(-16, 16);
+                pos.Y += r.Next(-16, 16);
+
+                i.OnTheMap = true;
+                i.Position = pos;
+                _itemList.Add(i);
+            }
+        }
 
         #region Adders
         public void AddWorkersToMap(List<Worker> workers)
@@ -533,7 +594,7 @@ namespace Adventure.Tile_Engine
             _entranceDictionary.Add(b.ID.ToString(), b.BoxToExit); //TODO: FIX THIS
             GraphicCursor.DropBuilding();
             _buildingList.Add(b);
-            _playerManager.AddBuilding(b);
+            PlayerManager.AddBuilding(b);
 
             LeaveBuildingMode();
         }
@@ -562,6 +623,18 @@ namespace Adventure.Tile_Engine
         {
             _worldObjectList.Add(o);
         }
+        public void AddCharacter(Character c)
+        {
+            _characterList.Add(c);
+        }
+
+        public void LoadMapData(List<WorldObject> wList)
+        {
+            foreach(WorldObject w in wList)
+            {
+                _worldObjectList.Add(w);
+            }
+        }
 
         #endregion
 
@@ -569,8 +642,8 @@ namespace Adventure.Tile_Engine
         {
             AdventureGame.BuildingMode = false;
             Camera.ResetObserver();
-            MapManager.GetInstance().BackToPlayer();
-            GUIManager.GetInstance().LoadMainGame();
+            MapManager.BackToPlayer();
+            GUIManager.LoadMainGame();
         }
         public int GetMapWidth()
         {

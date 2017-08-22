@@ -18,7 +18,7 @@ namespace Adventure
     /// </summary>
     public class AdventureGame : Game
     {
-        public enum GameState { MainMenu, Game, Paused }
+        public enum GameState { MainMenu, Game, Paused, EndOfDay }
         public static GameState _gameState;
         public GraphicsDeviceManager _graphicsDeviceManager;
         public SpriteBatch spriteBatch;
@@ -27,12 +27,6 @@ namespace Adventure
         public static bool BuildingMode = false;
 
         public ViewportAdapter ViewportAdapter { get; private set; }
-
-        MapManager _mapManager = MapManager.GetInstance();
-        PlayerManager _playerManager = PlayerManager.GetInstance();
-        GameContentManager _gcManager = GameContentManager.GetInstance();
-        GUIManager _guiManager = GUIManager.GetInstance();
-        GameCalendar _calendar;
 
         private bool _paused = false;
         private bool _pauseKeyDown = false;
@@ -69,12 +63,12 @@ namespace Adventure
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            _gcManager.LoadContent(Content);
-            _guiManager.LoadContent();
-            _mapManager.LoadContent(Content, GraphicsDevice);
-            _playerManager.NewPlayer();
+            GameContentManager.LoadContent(Content);
+            GUIManager.LoadContent();
+            MapManager.LoadContent(Content, GraphicsDevice);
+            PlayerManager.NewPlayer();
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            _calendar = GameCalendar.GetInstance();
+            GameCalendar.NewCalendar();
 
             ChangeGameState(GameState.MainMenu);
         }
@@ -103,47 +97,45 @@ namespace Adventure
 
             if (Mouse.GetState().MiddleButton == ButtonState.Pressed)
             {
-                PlayerManager.GetInstance().Save();
+                PlayerManager.Save();
             }
 
             checkPauseKey(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One));
             //checkPauseGuide();
 
-            _guiManager.Update(gameTime);
+            GUIManager.Update(gameTime);
 
             Point mousePoint = Mouse.GetState().Position;
             Vector3 translate = Camera._transform.Translation;
             if (Mouse.GetState().RightButton == ButtonState.Pressed && GraphicCursor.LastMouseState.RightButton == ButtonState.Released)
             {
-                if (!_guiManager.ProcessRightButtonClick(mousePoint))
+                if (!GUIManager.ProcessRightButtonClick(mousePoint))
                 {
                     //GUI does NOT use Camera translations
                     mousePoint.X -= (int)translate.X;
                     mousePoint.Y -= (int)translate.Y;
-                    _mapManager.ProcessRightButtonClick(mousePoint);
+                    MapManager.ProcessRightButtonClick(mousePoint);
                 }
             }
-
-           else  if (Mouse.GetState().LeftButton == ButtonState.Pressed && GraphicCursor.LastMouseState.LeftButton == ButtonState.Released)
+            else  if (Mouse.GetState().LeftButton == ButtonState.Pressed && GraphicCursor.LastMouseState.LeftButton == ButtonState.Released)
             {
-                if (!_guiManager.ProcessLeftButtonClick(mousePoint))
+                if (!GUIManager.ProcessLeftButtonClick(mousePoint))
                 {
                     mousePoint.X -= (int)translate.X;
                     mousePoint.Y -= (int)translate.Y;
-                    if (!_mapManager.ProcessLeftButtonClick(mousePoint))
+                    if (!MapManager.ProcessLeftButtonClick(mousePoint))
                     {
-                        _playerManager.ProcessLeftButtonClick(mousePoint);
+                        PlayerManager.ProcessLeftButtonClick(mousePoint);
                     }
                 }
             }
-
             else
             {
-                if (!_guiManager.ProcessHover(mousePoint))
+                if (!GUIManager.ProcessHover(mousePoint))
                 {
                     mousePoint.X -= (int)translate.X;
                     mousePoint.Y -= (int)translate.Y;
-                    _mapManager.ProcessHover(mousePoint);
+                    MapManager.ProcessHover(mousePoint);
                 }
             }
 
@@ -165,8 +157,8 @@ namespace Adventure
                             RollOver();
                         }
 
-                        _mapManager.Update(gameTime);
-                        _playerManager.Update(gameTime);
+                        MapManager.Update(gameTime);
+                        PlayerManager.Update(gameTime);
                     }
                 }
             }
@@ -180,13 +172,21 @@ namespace Adventure
 
             if(_gameState == GameState.MainMenu)
             {
-                GUIManager.GetInstance().LoadMainMenu();
+                GUIManager.LoadMainMenu();
             }
             else if (_gameState == GameState.Game)
             {
-                GUIManager.GetInstance().LoadMainGame();
-                MapManager.GetInstance().PopulateMaps();
+                GUIManager.LoadMainGame();
             }
+            else if (_gameState == GameState.EndOfDay)
+            {
+                GUIManager.LoadEndOfDay();
+            }
+        }
+
+        public static void NewGame()
+        {
+            MapManager.PopulateMaps();
         }
 
         /// <summary>
@@ -200,11 +200,11 @@ namespace Adventure
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, Camera._transform);
 
-            _mapManager.Draw(spriteBatch);
+            MapManager.Draw(spriteBatch);
 
             if (!BuildingMode)
             {
-                _playerManager.Draw(gameTime, spriteBatch);
+                PlayerManager.Draw(gameTime, spriteBatch);
             }
 
             spriteBatch.End();
@@ -212,8 +212,11 @@ namespace Adventure
             //TODO: Check if this is kosher
             spriteBatch.Begin();
 
-            _guiManager.Draw(spriteBatch);
-            GameCalendar.Draw(spriteBatch);
+            GUIManager.Draw(spriteBatch);
+            if (_gameState == GameState.Game)
+            {
+                GameCalendar.Draw(spriteBatch);
+            }
 
             spriteBatch.End();
 

@@ -1,4 +1,5 @@
 ﻿using Adventure.Characters.NPCs;
+using Adventure.Game_Managers.GUIComponents.Screens;
 using Adventure.Game_Managers.GUIObjects;
 using Adventure.GUIObjects;
 using Adventure.Screens;
@@ -14,42 +15,28 @@ using System.Threading.Tasks;
 
 namespace Adventure.Game_Managers
 {
-    class GUIManager
+    public static class GUIManager
     {
-        static GUIManager instance;
-        private GUIScreen _currentGUIScreen;
+        private static GUIScreen _currentGUIScreen;
 
-        private GUIManager()
-        {
-        }
-
-        public static GUIManager GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new GUIManager();
-            }
-            return instance;
-        }
-
-        public void LoadContent()
+        public static void LoadContent()
         {
             GraphicCursor.LoadContent();
         }
 
-        public void Update(GameTime gameTime) {
+        public static void Update(GameTime gameTime) {
             _currentGUIScreen.Update(gameTime);
             GraphicCursor.Update();
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public static void Draw(SpriteBatch spriteBatch)
         {
             _currentGUIScreen.Draw(spriteBatch);
 
             GraphicCursor.Draw(spriteBatch);
         }
 
-        public bool ProcessLeftButtonClick(Point mouse)
+        public static bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
             rv = _currentGUIScreen.ProcessLeftButtonClick(mouse);
@@ -57,7 +44,7 @@ namespace Adventure.Game_Managers
             return rv;
         }
 
-        public bool ProcessRightButtonClick(Point mouse)
+        public static bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = false;
 
@@ -66,7 +53,7 @@ namespace Adventure.Game_Managers
             return rv;
         }
 
-        public bool ProcessHover(Point mouse)
+        public static bool ProcessHover(Point mouse)
         {
             bool rv = false;
             rv = _currentGUIScreen.ProcessHover(mouse);
@@ -74,19 +61,24 @@ namespace Adventure.Game_Managers
             return rv;
         }
 
-        public void OpenShopWindow(ShopKeeper shop)
+        public static void OpenShopWindow(ShopKeeper shop)
         {
             _currentGUIScreen = new ShopScreen(shop);
         }
 
-        public void LoadMainMenu()
+        public static void LoadMainMenu()
         {
             _currentGUIScreen = new MainMenuScreen();
         }
 
-        public void LoadMainGame()
+        public static void LoadMainGame()
         {
             _currentGUIScreen = new HUDScreen();
+        }
+
+        public static void LoadEndOfDay()
+        {
+            _currentGUIScreen = new DayEndScreen();
         }
     }
 }

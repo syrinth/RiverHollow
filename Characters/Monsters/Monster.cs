@@ -12,7 +12,6 @@ namespace Adventure
 {
     public class Monster : CombatCharacter
     {
-        protected PlayerManager _playerManager = PlayerManager.GetInstance();
         protected int _damage;
         protected int _idleFor;
         protected int _leash = 200;
@@ -27,7 +26,9 @@ namespace Adventure
 
         public override void Update(GameTime theGameTime)
         {
+            _hitOnce = false;
             UpdateMovement();
+            CheckForWeaponHits();
 
             base.Update(theGameTime);
         }
@@ -37,13 +38,13 @@ namespace Adventure
             Vector2 direction = Vector2.Zero;
             string animation = "";
 
-            if (System.Math.Abs(_playerManager.Player.Position.X - this.Position.X) <= _leash && System.Math.Abs(_playerManager.Player.Position.Y - this.Position.Y) <= _leash)
+            if (System.Math.Abs(PlayerManager.Player.Position.X - this.Position.X) <= _leash && System.Math.Abs(PlayerManager.Player.Position.Y - this.Position.Y) <= _leash)
             {
                 _moveTo = Vector2.Zero;
-                float deltaX = Math.Abs(_playerManager.Player.Position.X - this.Position.X);
-                float deltaY = Math.Abs(_playerManager.Player.Position.Y - this.Position.Y);
+                float deltaX = Math.Abs(PlayerManager.Player.Position.X - this.Position.X);
+                float deltaY = Math.Abs(PlayerManager.Player.Position.Y - this.Position.Y);
 
-                GetMoveSpeed(_playerManager.Player.Position, ref direction);
+                GetMoveSpeed(PlayerManager.Player.Position, ref direction);
                 CheckMapForCollisionsAndMove(direction);
 
                 DetermineAnimation(ref animation, direction, deltaX, deltaY);
@@ -107,12 +108,12 @@ namespace Adventure
             Rectangle testRectX = new Rectangle((int)Position.X + (int)direction.X, (int)Position.Y, Width, Height);
             Rectangle testRectY = new Rectangle((int)Position.X, (int)Position.Y + (int)direction.Y, Width, Height);
 
-            if (_mapManager.CurrentMap.CheckLeftMovement(testRectX) && _mapManager.CurrentMap.CheckRightMovement(testRectX))
+            if (MapManager.CurrentMap.CheckLeftMovement(this, testRectX) && MapManager.CurrentMap.CheckRightMovement(this, testRectX))
             {
                 _sprite.MoveBy((int)direction.X, 0);
             }
 
-            if (_mapManager.CurrentMap.CheckUpMovement(testRectY) && _mapManager.CurrentMap.CheckDownMovement(testRectY))
+            if (MapManager.CurrentMap.CheckUpMovement(this, testRectY) && MapManager.CurrentMap.CheckDownMovement(this, testRectY))
             {
                 _sprite.MoveBy(0, (int)direction.Y);
             }
@@ -142,10 +143,12 @@ namespace Adventure
             {
                 if (direction.X > 0)
                 {
+                    _facing = Facing.West;
                     animation = "Float";
                 }
                 else
                 {
+                    _facing = Facing.East;
                     animation = "Float";
                 }
             }
@@ -153,10 +156,12 @@ namespace Adventure
             {
                 if (direction.Y > 0)
                 {
+                    _facing = Facing.South;
                     animation = "Float";
                 }
                 else
                 {
+                    _facing = Facing.North;
                     animation = "Float";
                 }
             }

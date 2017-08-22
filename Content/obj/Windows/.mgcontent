@@ -23,5 +23,9 @@
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/load.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/pickAxe.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/rock.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/ok.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/stone.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/Selection.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/Dialog.png</File>
   </SourceFiles>
 </SourceFileCollection>

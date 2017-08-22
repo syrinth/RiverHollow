@@ -18,7 +18,7 @@ namespace Adventure.Game_Managers.GUIObjects
 
         public ShopWindow(ShopKeeper shop)
         {
-            _texture = _gcManager.GetTexture(@"Textures\ShopWindow");
+            _texture = GameContentManager.GetTexture(@"Textures\ShopWindow");
             _visible = true;
 
             Position = new Vector2((AdventureGame.ScreenWidth / 2) - (_texture.Width / 2), (AdventureGame.ScreenHeight / 2) - (_texture.Height / 2));
@@ -88,18 +88,18 @@ namespace Adventure.Game_Managers.GUIObjects
                             GraphicCursor.PickUpBuilding(b);
                             AdventureGame.BuildingMode = true;
                             Camera.UnsetObserver();
-                            MapManager.GetInstance().ViewMap("Map1");
+                            MapManager.ViewMap("Map1");
                             rv = true;
                         }
                         if (_buyBoxes[r].GetType().Equals(typeof(ObjectManager.WorkerID)))
                         {
-                            if (PlayerManager.GetInstance().Buildings.Count > 0)
+                            if (PlayerManager.Buildings.Count > 0)
                             {
                                 this._visible = false;
                                 GraphicCursor.PickUpWorker((ObjectManager.WorkerID)_buyBoxes[r]);
                                 AdventureGame.BuildingMode = true;
                                 Camera.UnsetObserver();
-                                MapManager.GetInstance().ViewMap("Map1");
+                                MapManager.ViewMap("Map1");
                                 rv = true;
                             }
                         }
