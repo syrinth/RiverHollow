@@ -42,6 +42,7 @@ namespace Adventure.Game_Managers
 
         public static void ChangeMaps(string newMapStr)
         {
+            GUIManager.FadeOut();
             Rectangle rectEntrance = Rectangle.Empty;
             TileMap newMap = _tileMaps[newMapStr];
             //if (newMap.EntranceDictionary.Keys

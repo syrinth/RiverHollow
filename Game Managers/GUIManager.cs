@@ -19,18 +19,32 @@ namespace Adventure.Game_Managers
     {
         private static GUIScreen _currentGUIScreen;
 
+        private static Texture2D _fadeTexture;
+        private static float _fadeVal = 1f;
+        private static bool _fading = false;
+        public static bool Fading { get => _fading; }
+
         public static void LoadContent()
         {
+            _fadeTexture = GameContentManager.GetTexture(@"Textures\ok");
             GraphicCursor.LoadContent();
         }
 
         public static void Update(GameTime gameTime) {
+            if (_fading)
+            {
+                UpdateFade();
+            }
             _currentGUIScreen.Update(gameTime);
             GraphicCursor.Update();
         }
 
         public static void Draw(SpriteBatch spriteBatch)
         {
+            if (_fading)
+            {
+                spriteBatch.Draw(_fadeTexture, new Rectangle(0, 0, AdventureGame.ScreenWidth, AdventureGame.ScreenHeight), Color.Black * _fadeVal);
+            }
             _currentGUIScreen.Draw(spriteBatch);
 
             GraphicCursor.Draw(spriteBatch);
@@ -79,6 +93,21 @@ namespace Adventure.Game_Managers
         public static void LoadEndOfDay()
         {
             _currentGUIScreen = new DayEndScreen();
+        }
+
+        public static void FadeOut()
+        {
+            _fading = true;
+        }
+
+        private static void UpdateFade()
+        {
+            _fadeVal -= 0.05f;
+            if (_fadeVal <= 0)
+            {
+                _fadeVal = 1;
+                _fading = false;
+            }
         }
     }
 }
