@@ -104,8 +104,12 @@ namespace Adventure.Tile_Engine
 
         public void Update(GameTime theGameTime)
         {
-            foreach(Character m in _characterList)
+            foreach (Item i in _itemList)
             {
+                ((InventoryItem)i).Update();
+            }
+            foreach (Character m in _characterList)
+            { 
                 if (m.GetType().Equals(typeof(Monster))){
                     ((Monster)m).Update(theGameTime);
                 }
@@ -124,28 +128,28 @@ namespace Adventure.Tile_Engine
 
         public void ItemPickUpdate()
         {
-            Player _p = PlayerManager.Player;
-            List<Item> removedList = new List<Item>();
-            foreach (Item i in _itemList)
-            {
-                if (i.CollisionBox.Intersects(PlayerManager.Player.CollisionBox))
-                {
-                    removedList.Add(i);
-                    PlayerManager.Player.AddItemToFirstAvailableInventory(i.ItemID);
-                }
-                else if (PlayerInRange(_p.CollisionBox, i.CollisionBox.Center, 80))
-                {
-                    float speed = 1;
-                    Vector2 direction = new Vector2((_p.Position.X < i.Position.X) ? -speed : speed, (_p.Position.Y < i.Position.Y) ? -speed : speed);
-                    i.Position += direction;
-                }
-            }
+            //Player _p = PlayerManager.Player;
+            //List<Item> removedList = new List<Item>();
+            //foreach (Item i in _itemList)
+            //{
+            //    if (i.CollisionBox.Intersects(PlayerManager.Player.CollisionBox))
+            //    {
+            //        removedList.Add(i);
+            //        PlayerManager.Player.AddItemToFirstAvailableInventory(i.ItemID);
+            //    }
+            //    else if (PlayerInRange(_p.CollisionBox, i.CollisionBox.Center, 80))
+            //    {
+            //        float speed = 1;
+            //        Vector2 direction = new Vector2((_p.Position.X < i.Position.X) ? -speed : speed, (_p.Position.Y < i.Position.Y) ? -speed : speed);
+            //        i.Position += direction;
+            //    }
+            //}
 
-            foreach (Item i in removedList)
-            {
-                _itemList.Remove(i);
-            }
-            removedList.Clear();
+            //foreach (Item i in removedList)
+            //{
+            //    _itemList.Remove(i);
+            //}
+            //removedList.Clear();
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -500,7 +504,7 @@ namespace Adventure.Tile_Engine
             {
                 foreach(Building b in _buildingList)
                 {
-                    if (b.CollisionBox.Contains(mouseLocation))
+                    if (b.SelectionBox.Contains(mouseLocation))
                     {
                         b._selected = true;
                     }
@@ -564,12 +568,7 @@ namespace Adventure.Tile_Engine
             Random r = new Random();
             foreach(Item i in items)
             {
-                Vector2 pos = position;
-                pos.X += r.Next(-16, 16);
-                pos.Y += r.Next(-16, 16);
-
-                i.OnTheMap = true;
-                i.Position = pos;
+                ((InventoryItem)i).Pop(position, new Vector2(1, -5), 10);
                 _itemList.Add(i);
             }
         }
@@ -604,7 +603,7 @@ namespace Adventure.Tile_Engine
             bool rv = false;
             foreach(Building b in _buildingList)
             {
-                if (b.CollisionBox.Contains(GraphicCursor.Position))
+                if (b.SelectionBox.Contains(GraphicCursor.Position))
                 {
                     if (b.HasSpace())
                     {

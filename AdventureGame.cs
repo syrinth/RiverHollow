@@ -105,9 +105,10 @@ namespace Adventure
 
             GUIManager.Update(gameTime);
 
+            MouseState ms = Mouse.GetState();
             Point mousePoint = Mouse.GetState().Position;
             Vector3 translate = Camera._transform.Translation;
-            if (Mouse.GetState().RightButton == ButtonState.Pressed && GraphicCursor.LastMouseState.RightButton == ButtonState.Released)
+            if (ms.RightButton == ButtonState.Pressed && GraphicCursor.LastMouseState.RightButton == ButtonState.Released)
             {
                 if (!GUIManager.ProcessRightButtonClick(mousePoint))
                 {
@@ -117,7 +118,7 @@ namespace Adventure
                     MapManager.ProcessRightButtonClick(mousePoint);
                 }
             }
-            else  if (Mouse.GetState().LeftButton == ButtonState.Pressed && GraphicCursor.LastMouseState.LeftButton == ButtonState.Released)
+            else  if (ms.LeftButton == ButtonState.Pressed && GraphicCursor.LastMouseState.LeftButton == ButtonState.Released)
             {
                 if (!GUIManager.ProcessLeftButtonClick(mousePoint))
                 {
@@ -139,7 +140,7 @@ namespace Adventure
                 }
             }
 
-            GraphicCursor.LastMouseState = Mouse.GetState();
+            GraphicCursor.LastMouseState = ms;
 
             if (_gameState == GameState.Game)
             {

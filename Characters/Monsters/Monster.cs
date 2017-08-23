@@ -66,7 +66,7 @@ namespace Adventure
             {
                 int howFar = 2;
                 Random r = new Random();
-                int decision = r.Next(1, 6);
+                int decision = r.Next(1, 5);
                 if (decision == 1) { _moveTo = new Vector2(Position.X - r.Next(1, howFar) * TileMap.TileSize, Position.Y); }
                 else if (decision == 2) { _moveTo = new Vector2(Position.X + r.Next(1, howFar) * TileMap.TileSize, Position.Y); }
                 else if (decision == 3) { _moveTo = new Vector2(Position.X, Position.Y - r.Next(1, howFar) * TileMap.TileSize); }
@@ -95,7 +95,6 @@ namespace Adventure
 
 
                 if (Position.X == _moveTo.X && Position.Y == _moveTo.Y) { _moveTo = Vector2.Zero; }
-                else { _moveTo = Vector2.Zero; }
             }
             else
             {
@@ -126,7 +125,7 @@ namespace Adventure
             {
                 newX = (position.X > this.Position.X) ? 1 : -1;
             }
-            if (position.X != this.Position.Y)
+            if (position.Y != this.Position.Y)
             {
                 newY = (position.Y > this.Position.Y) ? 1 : -1;
             }
