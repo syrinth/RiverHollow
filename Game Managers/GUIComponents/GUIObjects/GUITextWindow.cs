@@ -15,7 +15,9 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
         string typedText = string.Empty;
         double typedTextLength;
         int delayInMilliseconds;
-        private bool isDoneDrawing = false;
+        public bool printAll = false;
+        private bool _doneDrawing = false;
+        public bool Done { get => _doneDrawing; }
         List<string> _parsedStrings;
         bool finishedScreen = false;
 
@@ -34,7 +36,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
             _parsedStrings = new List<string>();
 
             _height = 148;
-            delayInMilliseconds = 50;
+            delayInMilliseconds = 10;
 
             parseText(text);
         }
@@ -45,43 +47,56 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
 
         public override void Update(GameTime gameTime)
         {
-            if (!isDoneDrawing && !_pause)
+            if (!printAll)
             {
-                if (finishedScreen)
+                if (!_doneDrawing && !_pause)
                 {
-                    finishedScreen = false;
-                    _currentParsedString++;
-                    typedText = string.Empty;
-                    typedTextLength = 0;
-
-                    if (_currentParsedString == _parsedStrings.Count)
+                    if (finishedScreen)
                     {
-                        _currentParsedString--;
-                        typedTextLength = _parsedStrings[_currentParsedString].Length;
-                        isDoneDrawing = true;
+                        finishedScreen = false;
+                        _currentParsedString++;
+                        typedText = string.Empty;
+                        typedTextLength = 0;
+
+                        if (_currentParsedString == _parsedStrings.Count)
+                        {
+                            _currentParsedString--;
+                            typedTextLength = _parsedStrings[_currentParsedString].Length;
+                            _doneDrawing = true;
+                        }
+                    }
+                    if (delayInMilliseconds == 0)
+                    {
+                        _currentParsedString++;
+                        typedText = string.Empty;
+                        delayInMilliseconds = 10;
+                        if (_currentParsedString == _parsedStrings.Count)
+                        {
+                            _doneDrawing = true;
+                        }
+                    }
+                    else if (typedTextLength < _parsedStrings[_currentParsedString].Length)
+                    {
+                        typedTextLength = (int)(typedTextLength + gameTime.ElapsedGameTime.TotalMilliseconds / delayInMilliseconds);
+
+                        if (typedTextLength >= _parsedStrings[_currentParsedString].Length)
+                        {
+                            _pause = true;
+                            finishedScreen = true;
+                        }
+
+                        typedText = _parsedStrings[_currentParsedString].Substring(0, (int)typedTextLength);
                     }
                 }
-                if (delayInMilliseconds == 0)
+            }
+            else
+            {
+                typedText = _parsedStrings[_currentParsedString++];
+                printAll = false;
+                _pause = true;
+                if (_currentParsedString == _parsedStrings.Count)
                 {
-                    _currentParsedString++;
-                    typedText = string.Empty;
-                    delayInMilliseconds = 50;
-                    if (_currentParsedString == _parsedStrings.Count)
-                    {
-                        isDoneDrawing = true;
-                    }
-                }
-                else if (typedTextLength < _parsedStrings[_currentParsedString].Length)
-                {
-                    typedTextLength = typedTextLength + gameTime.ElapsedGameTime.TotalMilliseconds / delayInMilliseconds;
-
-                    if (typedTextLength >= _parsedStrings[_currentParsedString].Length)
-                    {
-                        _pause = true;
-                        finishedScreen = true;
-                    }
-
-                    typedText = _parsedStrings[_currentParsedString].Substring(0, (int)typedTextLength);
+                    _doneDrawing = true;
                 }
             }
         }

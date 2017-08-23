@@ -1,4 +1,5 @@
 ﻿using Adventure.Characters.NPCs;
+using Adventure.Game_Managers.GUIComponents.GUIObjects;
 using Adventure.Game_Managers.GUIComponents.Screens;
 using Adventure.Game_Managers.GUIObjects;
 using Adventure.GUIObjects;
@@ -34,6 +35,13 @@ namespace Adventure.Game_Managers
             if (_fading)
             {
                 UpdateFade();
+            }
+            if (_currentGUIScreen.GetType().Equals(typeof(TextScreen)))
+            {
+                if (((TextScreen)_currentGUIScreen).TextFinished()){
+                    AdventureGame.ChangeGameState(AdventureGame.GameState.Game);
+                    LoadMainGame();
+                }
             }
             _currentGUIScreen.Update(gameTime);
             GraphicCursor.Update();
@@ -93,6 +101,12 @@ namespace Adventure.Game_Managers
         public static void LoadEndOfDay()
         {
             _currentGUIScreen = new DayEndScreen();
+        }
+
+        public static void OpenTextWindow(string text)
+        {
+            AdventureGame.ChangeGameState(AdventureGame.GameState.Paused);
+            _currentGUIScreen = new TextScreen(text);
         }
 
         public static void FadeOut()

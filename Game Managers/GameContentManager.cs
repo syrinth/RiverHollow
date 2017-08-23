@@ -31,6 +31,7 @@ namespace Adventure.Game_Managers
             AddTexture(Content, @"Textures\Eggplant");
             AddTexture(Content, @"Textures\Wizard");
             AddTexture(Content, @"Textures\Taylor");
+            AddTexture(Content, @"Textures\NPC");
         }
 
         public static void LoadGUIs(ContentManager Content)

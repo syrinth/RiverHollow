@@ -1,6 +1,7 @@
 ﻿using Adventure.Game_Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Adventure.Items
 {
@@ -43,11 +44,46 @@ namespace Adventure.Items
             spriteBatch.Draw(_texture, drawBox, Color.White);
         }
 
-        public void Pop(Vector2 pos, Vector2 vel, int y)
+        public void Pop(Vector2 pos)
         {
+            
             _position = pos;
             _onTheMap = true;
-            _movement = new Parabola(_position, vel, (int)(_position.Y+y));
+            // new Vector2(1, -5), 10
+            _movement = new Parabola(_position, RandomVelocityVector(), RandNumber(8, 32, 0, 0));
+        }
+
+        public bool Finished()
+        {
+            bool rv = true;
+
+            if(_movement != null && !_movement.Finished)
+            {
+                rv = false;
+            }
+            return rv;
+        }
+
+        public Vector2 RandomVelocityVector()
+        {
+            return new Vector2(RandNumber(-3, 3, -1, 1), RandNumber(-5, -2, 0, 0)); 
+        }
+
+        public int RandNumber(int minValue, int maxValue, int minExclude, int maxExclude)
+        {
+            int rv = 0;
+            Random r = new Random();
+            bool found = false;
+            while (!found)
+            {
+                rv = r.Next(minValue, maxValue);
+                if( rv < minExclude || rv > maxExclude)
+                {
+                    found = true;
+                }
+            }
+
+            return rv;
         }
 
         private class Parabola
@@ -62,7 +98,7 @@ namespace Adventure.Items
             {
                 _pos = pos;
                 _vel = velocity;
-                _finalY = Y;
+                _finalY = (int)_pos.Y + Y;
             }
 
             public void Update()

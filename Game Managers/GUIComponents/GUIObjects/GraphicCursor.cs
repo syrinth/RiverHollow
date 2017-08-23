@@ -102,15 +102,14 @@ namespace Adventure.GUIObjects
                     drawRectangle.Height = drawIt.Height;
 
                     _heldBuilding.SetCoordinates(new Vector2(drawRectangle.X, drawRectangle.Y));
-                    //spriteBatch.DrawString(_font, String.Format("{0}, {1}", drawRectangle.X, drawRectangle.Y), Position += new Vector2(300, 300), Color.Black);
                 }
-            }
-            else
-            {
-                if (HeldItem != null) { drawIt = _heldItem.Texture; }
             }
             
             spriteBatch.Draw(drawIt, drawRectangle, Color.White);
+            if (HeldItem != null)
+            {
+                _heldItem.Draw(spriteBatch, new Rectangle((int)Position.X+16, (int)Position.Y+16, 32, 32));
+            }
         }
     }
 }

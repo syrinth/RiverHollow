@@ -128,28 +128,28 @@ namespace Adventure.Tile_Engine
 
         public void ItemPickUpdate()
         {
-            //Player _p = PlayerManager.Player;
-            //List<Item> removedList = new List<Item>();
-            //foreach (Item i in _itemList)
-            //{
-            //    if (i.CollisionBox.Intersects(PlayerManager.Player.CollisionBox))
-            //    {
-            //        removedList.Add(i);
-            //        PlayerManager.Player.AddItemToFirstAvailableInventory(i.ItemID);
-            //    }
-            //    else if (PlayerInRange(_p.CollisionBox, i.CollisionBox.Center, 80))
-            //    {
-            //        float speed = 1;
-            //        Vector2 direction = new Vector2((_p.Position.X < i.Position.X) ? -speed : speed, (_p.Position.Y < i.Position.Y) ? -speed : speed);
-            //        i.Position += direction;
-            //    }
-            //}
+            Player _p = PlayerManager.Player;
+            List<Item> removedList = new List<Item>();
+            foreach (Item i in _itemList)
+            {
+                if (((InventoryItem)i).Finished() && i.CollisionBox.Intersects(PlayerManager.Player.CollisionBox))
+                {
+                    removedList.Add(i);
+                    PlayerManager.Player.AddItemToFirstAvailableInventory(i.ItemID);
+                }
+                else if (PlayerInRange(_p.CollisionBox, i.CollisionBox.Center, 80))
+                {
+                    float speed = 3;
+                    Vector2 direction = new Vector2((_p.Position.X < i.Position.X) ? -speed : speed, (_p.Position.Y < i.Position.Y) ? -speed : speed);
+                    i.Position += direction;
+                }
+            }
 
-            //foreach (Item i in removedList)
-            //{
-            //    _itemList.Remove(i);
-            //}
-            //removedList.Clear();
+            foreach (Item i in removedList)
+            {
+                _itemList.Remove(i);
+            }
+            removedList.Clear();
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -437,9 +437,13 @@ namespace Adventure.Tile_Engine
                         PlayerManager.Player.AddItemToFirstAvailableInventory(w.TakeItem());
                     }
                 }
-                else if (cType.Equals(typeof(ShopKeeper)) || (cType.IsSubclassOf(typeof(ShopKeeper))) && ((ShopKeeper)c).IsOpen)
+                else if (c.CollisionBox.Contains(mouseLocation) && cType.Equals(typeof(ShopKeeper)) || (cType.IsSubclassOf(typeof(ShopKeeper))) && ((ShopKeeper)c).IsOpen)
                 {
                     GUIManager.OpenShopWindow((ShopKeeper)c);
+                }
+                else if (c.CollisionBox.Contains(mouseLocation) && cType.Equals(typeof(NPC)))
+                {
+                    ((NPC)c).Talk();
                 }
             }
             foreach (Building b in _buildingList)
@@ -487,10 +491,11 @@ namespace Adventure.Tile_Engine
                             w.MakeDailyItem();
                         }
                     }
-                    else if (cType.Equals(typeof(ShopKeeper)) || (cType.IsSubclassOf(typeof(ShopKeeper))) && ((ShopKeeper)c).IsOpen)
+                    else if (c.CollisionBox.Contains(mouseLocation) && cType.Equals(typeof(ShopKeeper)) || (cType.IsSubclassOf(typeof(ShopKeeper))) && ((ShopKeeper)c).IsOpen)
                     {
                         GUIManager.OpenShopWindow((ShopKeeper)c);
                     }
+                    
                 }
             }
 
@@ -568,7 +573,7 @@ namespace Adventure.Tile_Engine
             Random r = new Random();
             foreach(Item i in items)
             {
-                ((InventoryItem)i).Pop(position, new Vector2(1, -5), 10);
+                ((InventoryItem)i).Pop(position);
                 _itemList.Add(i);
             }
         }
