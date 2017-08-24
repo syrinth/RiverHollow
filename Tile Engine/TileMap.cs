@@ -435,7 +435,7 @@ namespace Adventure.Tile_Engine
                 }
                 else if (c.CollisionBox.Contains(mouseLocation) && cType.Equals(typeof(ShopKeeper)) || (cType.IsSubclassOf(typeof(ShopKeeper))) && ((ShopKeeper)c).IsOpen)
                 {
-                    GUIManager.OpenShopWindow((ShopKeeper)c);
+                    GUIManager.LoadScreen(GUIManager.Screens.Shop, (ShopKeeper)c);
                 }
                 else if (c.CollisionBox.Contains(mouseLocation) && cType.Equals(typeof(NPC)))
                 {
@@ -489,9 +489,8 @@ namespace Adventure.Tile_Engine
                     }
                     else if (c.CollisionBox.Contains(mouseLocation) && cType.Equals(typeof(ShopKeeper)) || (cType.IsSubclassOf(typeof(ShopKeeper))) && ((ShopKeeper)c).IsOpen)
                     {
-                        GUIManager.OpenShopWindow((ShopKeeper)c);
+                        GUIManager.LoadScreen(GUIManager.Screens.Shop, (ShopKeeper)c);
                     }
-                    
                 }
             }
 
@@ -519,7 +518,7 @@ namespace Adventure.Tile_Engine
                 bool found = false;
                 foreach(Character c in _characterList)
                 {
-                    if(c.CollisionBox.Contains(mouseLocation)){
+                    if(!c.GetType().IsSubclassOf(typeof(Monster)) && c.CollisionBox.Contains(mouseLocation)){
                         GraphicCursor.talk = true;
                         found = true;
                         break;
@@ -658,7 +657,7 @@ namespace Adventure.Tile_Engine
             AdventureGame.BuildingMode = false;
             Camera.ResetObserver();
             MapManager.BackToPlayer();
-            GUIManager.LoadMainGame();
+            GUIManager.LoadScreen(GUIManager.Screens.HUD);
         }
         public int GetMapWidth()
         {

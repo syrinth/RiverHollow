@@ -1,4 +1,5 @@
-﻿using Adventure.Characters.NPCs;
+﻿using Adventure.Characters;
+using Adventure.Characters.NPCs;
 using Adventure.Game_Managers.GUIComponents.GUIObjects;
 using Adventure.Game_Managers.GUIComponents.Screens;
 using Adventure.Game_Managers.GUIObjects;
@@ -19,7 +20,7 @@ namespace Adventure.Game_Managers
     public static class GUIManager
     {
         private static GUIScreen _currentGUIScreen;
-
+        public  enum Screens {None, MainMenu, HUD, Shop, DayEnd, Text };
         private static Texture2D _fadeTexture;
         private static float _fadeVal = 1f;
         private static bool _fading = false;
@@ -36,14 +37,18 @@ namespace Adventure.Game_Managers
             {
                 UpdateFade();
             }
-            if (_currentGUIScreen.GetType().Equals(typeof(TextScreen)))
+            if (_currentGUIScreen != null)
             {
-                if (((TextScreen)_currentGUIScreen).TextFinished()){
-                    AdventureGame.ChangeGameState(AdventureGame.GameState.Game);
-                    LoadMainGame();
+                if (_currentGUIScreen.GetType().Equals(typeof(TextScreen)))
+                {
+                    if (((TextScreen)_currentGUIScreen).TextFinished())
+                    {
+                        AdventureGame.ChangeGameState(AdventureGame.GameState.Game);
+                        LoadScreen(GUIManager.Screens.HUD);
+                    }
                 }
+                _currentGUIScreen.Update(gameTime);
             }
-            _currentGUIScreen.Update(gameTime);
             GraphicCursor.Update();
         }
 
@@ -53,7 +58,10 @@ namespace Adventure.Game_Managers
             {
                 spriteBatch.Draw(_fadeTexture, new Rectangle(0, 0, AdventureGame.ScreenWidth, AdventureGame.ScreenHeight), Color.Black * _fadeVal);
             }
-            _currentGUIScreen.Draw(spriteBatch);
+            if (_currentGUIScreen != null)
+            {
+                _currentGUIScreen.Draw(spriteBatch);
+            }
 
             GraphicCursor.Draw(spriteBatch);
         }
@@ -61,7 +69,10 @@ namespace Adventure.Game_Managers
         public static bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            rv = _currentGUIScreen.ProcessLeftButtonClick(mouse);
+            if (_currentGUIScreen != null)
+            {
+                rv = _currentGUIScreen.ProcessLeftButtonClick(mouse);
+            }
 
             return rv;
         }
@@ -69,8 +80,10 @@ namespace Adventure.Game_Managers
         public static bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = false;
-
-            rv = _currentGUIScreen.ProcessRightButtonClick(mouse);
+            if (_currentGUIScreen != null)
+            {
+                rv = _currentGUIScreen.ProcessRightButtonClick(mouse);
+            }
 
             return rv;
         }
@@ -78,35 +91,53 @@ namespace Adventure.Game_Managers
         public static bool ProcessHover(Point mouse)
         {
             bool rv = false;
-            rv = _currentGUIScreen.ProcessHover(mouse);
+            if (_currentGUIScreen != null)
+            {
+                rv = _currentGUIScreen.ProcessHover(mouse);
+            }
 
             return rv;
         }
 
-        public static void OpenShopWindow(ShopKeeper shop)
+        public static void LoadScreen(Screens newScreen)
         {
-            _currentGUIScreen = new ShopScreen(shop);
+            LoadScreen(newScreen, null, "");
         }
 
-        public static void LoadMainMenu()
+        public static void LoadScreen(Screens newScreen, Character c)
         {
-            _currentGUIScreen = new MainMenuScreen();
+            LoadScreen(newScreen, c, "");
         }
 
-        public static void LoadMainGame()
+        public static void LoadScreen(Screens newScreen, string text)
         {
-            _currentGUIScreen = new HUDScreen();
+            LoadScreen(newScreen, null, text);
         }
 
-        public static void LoadEndOfDay()
+        public static void LoadScreen(Screens newScreen, Character c, string text)
         {
-            _currentGUIScreen = new DayEndScreen();
-        }
+            switch (newScreen)
+            {
+                case Screens.DayEnd:
+                    _currentGUIScreen = new DayEndScreen();
+                    return;
+                case Screens.HUD:
+                    _currentGUIScreen = new HUDScreen();
+                    return;
+                case Screens.MainMenu:
+                    _currentGUIScreen = new MainMenuScreen();
+                    return;
+                case Screens.Shop:
+                    _currentGUIScreen = new ShopScreen((ShopKeeper)c);
+                    return;
+                case Screens.Text:
+                    _currentGUIScreen = new TextScreen(text);
+                    return;
+                case Screens.None:
+                    _currentGUIScreen = null;
+                    return;
 
-        public static void OpenTextWindow(string text)
-        {
-            AdventureGame.ChangeGameState(AdventureGame.GameState.Paused);
-            _currentGUIScreen = new TextScreen(text);
+            }
         }
 
         public static void FadeOut()

@@ -90,81 +90,84 @@ namespace Adventure
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (this.IsActive)
             {
-                Exit();
-            }
-
-            if (Mouse.GetState().MiddleButton == ButtonState.Pressed)
-            {
-                PlayerManager.Save();
-            }
-
-            checkPauseKey(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One));
-            //checkPauseGuide();
-
-            GUIManager.Update(gameTime);
-
-            MouseState ms = Mouse.GetState();
-            Point mousePoint = Mouse.GetState().Position;
-            Vector3 translate = Camera._transform.Translation;
-            if (ms.RightButton == ButtonState.Pressed && GraphicCursor.LastMouseState.RightButton == ButtonState.Released)
-            {
-                if (!GUIManager.ProcessRightButtonClick(mousePoint))
+                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 {
-                    //GUI does NOT use Camera translations
-                    mousePoint.X -= (int)translate.X;
-                    mousePoint.Y -= (int)translate.Y;
-                    MapManager.ProcessRightButtonClick(mousePoint);
+                    Exit();
                 }
-            }
-            else  if (ms.LeftButton == ButtonState.Pressed && GraphicCursor.LastMouseState.LeftButton == ButtonState.Released)
-            {
-                if (!GUIManager.ProcessLeftButtonClick(mousePoint))
+
+                if (Mouse.GetState().MiddleButton == ButtonState.Pressed)
                 {
-                    mousePoint.X -= (int)translate.X;
-                    mousePoint.Y -= (int)translate.Y;
-                    if (!MapManager.ProcessLeftButtonClick(mousePoint))
+                    PlayerManager.Save();
+                }
+
+                checkPauseKey(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One));
+                //checkPauseGuide();
+
+                GUIManager.Update(gameTime);
+
+                MouseState ms = Mouse.GetState();
+                Point mousePoint = Mouse.GetState().Position;
+                Vector3 translate = Camera._transform.Translation;
+                if (ms.RightButton == ButtonState.Pressed && GraphicCursor.LastMouseState.RightButton == ButtonState.Released)
+                {
+                    if (!GUIManager.ProcessRightButtonClick(mousePoint))
                     {
-                        PlayerManager.ProcessLeftButtonClick(mousePoint);
+                        //GUI does NOT use Camera translations
+                        mousePoint.X -= (int)translate.X;
+                        mousePoint.Y -= (int)translate.Y;
+                        MapManager.ProcessRightButtonClick(mousePoint);
                     }
                 }
-            }
-            else
-            {
-                if (!GUIManager.ProcessHover(mousePoint))
+                else if (ms.LeftButton == ButtonState.Pressed && GraphicCursor.LastMouseState.LeftButton == ButtonState.Released)
                 {
-                    mousePoint.X -= (int)translate.X;
-                    mousePoint.Y -= (int)translate.Y;
-                    MapManager.ProcessHover(mousePoint);
-                }
-            }
-
-            GraphicCursor.LastMouseState = ms;
-
-            if (_gameState == GameState.Game)
-            {
-                if (!_paused)
-                {
-
-                    // TODO: Add your update logic here
-                    Camera.Update(gameTime);
-
-                    if (!BuildingMode)
+                    if (!GUIManager.ProcessLeftButtonClick(mousePoint))
                     {
-                        GameCalendar.Update(gameTime);
-                        if (GameCalendar.CurrentHour == 2)
+                        mousePoint.X -= (int)translate.X;
+                        mousePoint.Y -= (int)translate.Y;
+                        if (!MapManager.ProcessLeftButtonClick(mousePoint))
                         {
-                            RollOver();
+                            PlayerManager.ProcessLeftButtonClick(mousePoint);
                         }
-
-                        MapManager.Update(gameTime);
-                        PlayerManager.Update(gameTime);
                     }
                 }
-            }
+                else
+                {
+                    if (!GUIManager.ProcessHover(mousePoint))
+                    {
+                        mousePoint.X -= (int)translate.X;
+                        mousePoint.Y -= (int)translate.Y;
+                        MapManager.ProcessHover(mousePoint);
+                    }
+                }
 
-            base.Update(gameTime);
+                GraphicCursor.LastMouseState = ms;
+
+                if (_gameState == GameState.Game)
+                {
+                    if (!_paused)
+                    {
+
+                        // TODO: Add your update logic here
+                        Camera.Update(gameTime);
+
+                        if (!BuildingMode)
+                        {
+                            GameCalendar.Update(gameTime);
+                            if (GameCalendar.CurrentHour == 2)
+                            {
+                                RollOver();
+                            }
+
+                            MapManager.Update(gameTime);
+                            PlayerManager.Update(gameTime);
+                        }
+                    }
+                }
+
+                base.Update(gameTime);
+            }
         }
 
         public static void ChangeGameState(GameState state)
@@ -173,15 +176,15 @@ namespace Adventure
 
             if(_gameState == GameState.MainMenu)
             {
-                GUIManager.LoadMainMenu();
+                GUIManager.LoadScreen(GUIManager.Screens.MainMenu);
             }
             else if (_gameState == GameState.Game)
             {
-                GUIManager.LoadMainGame();
+                GUIManager.LoadScreen(GUIManager.Screens.HUD);
             }
             else if (_gameState == GameState.EndOfDay)
             {
-                GUIManager.LoadEndOfDay();
+                GUIManager.LoadScreen(GUIManager.Screens.DayEnd);
             }
         }
 

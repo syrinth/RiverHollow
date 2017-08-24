@@ -11,6 +11,8 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
 
         public TextScreen(string text)
         {
+            AdventureGame.ChangeGameState(AdventureGame.GameState.Paused);
+
             _window = new GUITextWindow(text);
             Controls.Add(_window);
         }

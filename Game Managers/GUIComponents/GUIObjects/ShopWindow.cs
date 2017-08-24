@@ -18,54 +18,54 @@ namespace Adventure.Game_Managers.GUIObjects
 
         public ShopWindow(ShopKeeper shop)
         {
-            _texture = GameContentManager.GetTexture(@"Textures\ShopWindow");
-            _visible = true;
-
-            Position = new Vector2((AdventureGame.ScreenWidth / 2) - (_texture.Width / 2), (AdventureGame.ScreenHeight / 2) - (_texture.Height / 2));
-            _rect = new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
-            _shopkeeper = shop;
-
-            _buyBoxes = new Dictionary<Rectangle, object>();
-
-            int increment = TileMap.TileSize;
-            Vector2 buyBoxPosition = new Vector2(Position.X + increment, Position.Y + increment);
-            for (int i=0; i<9; i++)
+            if (shop != null)
             {
-                if (i < _shopkeeper.Buildings.Count)
-                {
-                    _buyBoxes.Add(new Rectangle(buyBoxPosition.ToPoint(), new Point(increment*3)), _shopkeeper.Buildings[i]);
-                }
+                _texture = GameContentManager.GetTexture(@"Textures\ShopWindow");
 
-                if ((i + 1) % 3 == 0) {
-                    buyBoxPosition.X += increment;
-                    buyBoxPosition.Y += increment*5;
-                }
-                else
+                Position = new Vector2((AdventureGame.ScreenWidth / 2) - (_texture.Width / 2), (AdventureGame.ScreenHeight / 2) - (_texture.Height / 2));
+                _rect = new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
+                _shopkeeper = shop;
+
+                _buyBoxes = new Dictionary<Rectangle, object>();
+
+                int increment = TileMap.TileSize;
+                Vector2 buyBoxPosition = new Vector2(Position.X + increment, Position.Y + increment);
+                for (int i = 0; i < 9; i++)
                 {
-                    buyBoxPosition.X += increment*5;
+                    if (i < _shopkeeper.Buildings.Count)
+                    {
+                        _buyBoxes.Add(new Rectangle(buyBoxPosition.ToPoint(), new Point(increment * 3)), _shopkeeper.Buildings[i]);
+                    }
+
+                    if ((i + 1) % 3 == 0)
+                    {
+                        buyBoxPosition.X += increment;
+                        buyBoxPosition.Y += increment * 5;
+                    }
+                    else
+                    {
+                        buyBoxPosition.X += increment * 5;
+                    }
                 }
             }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (_visible)
+            spriteBatch.Draw(_texture, _rect, Color.White);
+            foreach (Rectangle r in _buyBoxes.Keys)
             {
-                spriteBatch.Draw(_texture, _rect, Color.White);
-                foreach (Rectangle r in _buyBoxes.Keys)
+                if (_buyBoxes[r] != null)
                 {
-                    if (_buyBoxes[r] != null)
+                    if (_buyBoxes[r].GetType().Equals(typeof(ObjectManager.BuildingID)))
                     {
-                        if (_buyBoxes[r].GetType().Equals(typeof(ObjectManager.BuildingID)))
-                        {
-                            Building b = (ObjectManager.GetBuilding((ObjectManager.BuildingID)_buyBoxes[r]));
-                            spriteBatch.Draw(b.Texture, r, Color.White);
-                        }
-                        else
-                        {
-                            Worker w = (ObjectManager.GetWorker((ObjectManager.WorkerID)_buyBoxes[r]));
-                            spriteBatch.Draw(w.Texture, r, Color.White);
-                        }
+                        Building b = (ObjectManager.GetBuilding((ObjectManager.BuildingID)_buyBoxes[r]));
+                        spriteBatch.Draw(b.Texture, r, Color.White);
+                    }
+                    else
+                    {
+                        Worker w = (ObjectManager.GetWorker((ObjectManager.WorkerID)_buyBoxes[r]));
+                        spriteBatch.Draw(w.Texture, r, Color.White);
                     }
                 }
             }
@@ -75,35 +75,32 @@ namespace Adventure.Game_Managers.GUIObjects
         {
             bool rv = false;
 
-            if (_visible)
+            foreach (Rectangle r in _buyBoxes.Keys)
             {
-                foreach (Rectangle r in _buyBoxes.Keys)
+                if (r.Contains(mouse))
                 {
-                    if (r.Contains(mouse))
+                    if (_buyBoxes[r] != null)
                     {
-                        if (_buyBoxes[r] != null)
+                        if (_buyBoxes[r].GetType().Equals(typeof(ObjectManager.BuildingID)))
                         {
-                            if (_buyBoxes[r].GetType().Equals(typeof(ObjectManager.BuildingID)))
+                            GUIManager.LoadScreen(GUIManager.Screens.None);
+                            Building b = ObjectManager.GetBuilding((ObjectManager.BuildingID)_buyBoxes[r]);
+                            GraphicCursor.PickUpBuilding(b);
+                            AdventureGame.BuildingMode = true;
+                            Camera.UnsetObserver();
+                            MapManager.ViewMap("Map1");
+                            rv = true;
+                        }
+                        if (_buyBoxes[r].GetType().Equals(typeof(ObjectManager.WorkerID)))
+                        {
+                            if (PlayerManager.Buildings.Count > 0)
                             {
-                                Building b = ObjectManager.GetBuilding((ObjectManager.BuildingID)_buyBoxes[r]);
-                                this._visible = false;
-                                GraphicCursor.PickUpBuilding(b);
+                                GUIManager.LoadScreen(GUIManager.Screens.None);
+                                GraphicCursor.PickUpWorker((ObjectManager.WorkerID)_buyBoxes[r]);
                                 AdventureGame.BuildingMode = true;
                                 Camera.UnsetObserver();
                                 MapManager.ViewMap("Map1");
                                 rv = true;
-                            }
-                            if (_buyBoxes[r].GetType().Equals(typeof(ObjectManager.WorkerID)))
-                            {
-                                if (PlayerManager.Buildings.Count > 0)
-                                {
-                                    this._visible = false;
-                                    GraphicCursor.PickUpWorker((ObjectManager.WorkerID)_buyBoxes[r]);
-                                    AdventureGame.BuildingMode = true;
-                                    Camera.UnsetObserver();
-                                    MapManager.ViewMap("Map1");
-                                    rv = true;
-                                }
                             }
                         }
                     }

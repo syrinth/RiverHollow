@@ -32,7 +32,6 @@ namespace Adventure.Game_Managers.GUIObjects
             bool rv = false;
             if (!_window.Rectangle.Contains(mouse))
             {
-                _window.Visible = false;
                 rv = true;
             }
 
