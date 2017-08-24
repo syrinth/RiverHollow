@@ -6,9 +6,8 @@ using System.Collections.Generic;
 
 namespace Adventure.Game_Managers.GUIComponents.GUIObjects
 {
-    public class GUITextWindow : GUIObject
+    public class GUITextWindow : GUIWindow
     {
-        private GUIWindow _window;
         private SpriteFont _font;
         private string _text;
 
@@ -24,12 +23,8 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
         int _currentParsedString = 0;
         public bool _pause = false;
 
-        public GUITextWindow(string text)
+        public GUITextWindow(string text): base()
         {
-            _window = new GUIWindow();
-            _position = _window.Position;
-            _width = _window.Width;
-
             _text = text;
             _texture = GameContentManager.GetTexture(@"Textures\Dialog");
             _font = GameContentManager.GetFont(@"Fonts\Font");
@@ -113,7 +108,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
             {
                 Vector2 measure = _font.MeasureString(line + word);
 
-                if (measure.Length() > _window.MiddleWidth)
+                if (measure.Length() > MiddleWidth)
                 {
                     returnString = returnString + line + '\n';
                     line = string.Empty;
@@ -123,7 +118,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
                 grabLast = true;
                 line = line + word + ' ';
 
-                if (measure.Y * numReturns > _window.MiddleHeight)
+                if (measure.Y * numReturns > MiddleHeight)
                 {
                     grabLast = false;
                     _parsedStrings.Add(returnString);
@@ -138,10 +133,10 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
             }
         }
 
-        public override void Draw(SpriteBatch spritebatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            _window.Draw(spritebatch);
-            spritebatch.DrawString(_font, typedText, new Vector2(_position.X+16, _position.Y+16), Color.White);
+            base.Draw(spriteBatch);
+            spriteBatch.DrawString(_font, typedText, new Vector2(_position.X+16, _position.Y+16), Color.White);
         }
     }
 }

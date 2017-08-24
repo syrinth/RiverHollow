@@ -11,6 +11,13 @@ namespace Adventure.Characters
     public class CombatCharacter : Character
     {
         protected bool _hitOnce = false;
+
+        protected int _maxHP = 10;
+        public int MaxHitPoints
+        {
+            get { return _maxHP; }
+            set { _maxHP = value; }
+        }
         protected int _hp = 10;
         public int HitPoints
         {

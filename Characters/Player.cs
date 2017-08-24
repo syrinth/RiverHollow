@@ -20,7 +20,7 @@ namespace Adventure
         public bool UsingTool { get => _usingTool; }
         private bool _usingWeapon = false;
         public bool UsingWeapon { get => _usingWeapon; }
-        //private Weapon sword;
+
         private InventoryItem[] _inventory;
         public InventoryItem[] Inventory { get => _inventory; }
 
@@ -31,11 +31,22 @@ namespace Adventure
 
         private WorldObject _targettedObject = null;
 
+        private int _stamina;
+        public int Stamina { get => _stamina; }
+
+        private int _maxStamina;
+        public int MaxStamina { get => _maxStamina; }
+
+        private int _money;
+        public int Money { get => _money; }
+
         public Player()
         {
             LoadContent();
             Position = new Vector2(200, 200);
             Speed = 5;
+            _stamina = 50;
+            _maxStamina = 50;
 
             _inventory = new InventoryItem[maxItemRow];
             //_currentItem = null;
@@ -167,15 +178,21 @@ namespace Adventure
             {
                 if (CurrentItem.GetType().Equals(typeof(Tool)) && MapManager.CurrentMap.PlayerInRange(CollisionBox, mouseLocation))
                 {
-                    _usingTool = true;
-                    ((Tool)CurrentItem).ToolAnimation.IsAnimating = true;
-                    _targettedObject = MapManager.FindWorldObject(mouseLocation);
+                    if (DecreaseStamina(((Tool)CurrentItem).StaminaCost))
+                    {
+                        _usingTool = true;
+                        ((Tool)CurrentItem).ToolAnimation.IsAnimating = true;
+                        _targettedObject = MapManager.FindWorldObject(mouseLocation);
+                    }
                     rv = true;
                 }
                 else if (CurrentItem.GetType().Equals(typeof(Weapon)))
                 {
-                    _usingWeapon = true;
-                    ((Weapon)CurrentItem).Attack(_facing);
+                    if (DecreaseStamina(((Weapon)CurrentItem).StaminaCost))
+                    {
+                        _usingWeapon = true;
+                        ((Weapon)CurrentItem).Attack(_facing);
+                    }
                     rv = true;
                 }
             }
@@ -317,6 +334,32 @@ namespace Adventure
             }
 
             return stringArray;
+        }
+
+        public bool DecreaseStamina(int x)
+        {
+            bool rv = false;
+            if (_stamina >= x)
+            {
+                _stamina -= x;
+                rv = true;
+            }
+            return rv;
+        }
+
+        public void IncreaseStamina(int x)
+        {
+            _stamina += x;
+        }
+
+        public void TakeMoney(int x)
+        {
+            _money -= x;
+        }
+
+        public void AddMoney(int x)
+        {
+            _money += x;
         }
     }
 }

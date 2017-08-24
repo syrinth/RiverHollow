@@ -110,9 +110,9 @@ namespace Adventure.Game_Managers
             _currentMap.Update(gametime);
         }
 
-        public static void Draw(SpriteBatch spritebatch)
+        public static void Draw(SpriteBatch spriteBatch)
         {
-            _currentMap.Draw(spritebatch);
+            _currentMap.Draw(spriteBatch);
         }
 
         public static bool ProcessLeftButtonClick(Point mouseLocation)

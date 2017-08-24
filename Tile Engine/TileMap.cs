@@ -74,10 +74,6 @@ namespace Adventure.Tile_Engine
             }
 
             _name = _map.Name;
-            if (_name.Contains("Map1"))
-            {
-                //_characterList.Add(new Goblin(new Vector2(500, 800)));
-            }
 
             LoadEntranceObjects();
         }
@@ -517,6 +513,21 @@ namespace Adventure.Tile_Engine
                     {
                         b._selected = false;
                     }
+                }
+            }
+            else{
+                bool found = false;
+                foreach(Character c in _characterList)
+                {
+                    if(c.CollisionBox.Contains(mouseLocation)){
+                        GraphicCursor.talk = true;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    GraphicCursor.talk = false;
                 }
             }
 

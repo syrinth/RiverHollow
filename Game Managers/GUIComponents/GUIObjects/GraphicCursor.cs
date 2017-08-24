@@ -28,10 +28,13 @@ namespace Adventure.GUIObjects
         //public static SpriteFont _font;
 
         private static Texture2D _texture;
+        public static bool talk = false;
+        private static Texture2D _talk;
 
         public static void LoadContent()
         {
             _texture = GameContentManager.GetTexture(@"Textures\cursor");
+            _talk = GameContentManager.GetTexture(@"Textures\Text");
             Position = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
         //    _font = GameContentManager.GetFont(@"Fonts\Font");
         }
@@ -89,7 +92,7 @@ namespace Adventure.GUIObjects
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            Texture2D drawIt = _texture;
+            Texture2D drawIt = talk ? _talk : _texture; 
             Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, drawIt.Width, drawIt.Height);
             if (AdventureGame.BuildingMode)
             {

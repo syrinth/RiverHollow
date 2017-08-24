@@ -27,11 +27,10 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
 
         public override bool ProcessLeftButtonClick(Point mouse)
         {
-            bool rv = false;
+            bool rv = true;
             if (!_window._pause)
             {
                 _window.printAll = true;
-                rv = true;
             }
             else
             {

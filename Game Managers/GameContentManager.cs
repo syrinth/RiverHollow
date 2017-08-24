@@ -55,6 +55,7 @@ namespace Adventure.Game_Managers
             AddTexture(Content, @"Textures\ok");
             AddTexture(Content, @"Textures\Selection");
             AddTexture(Content, @"Textures\Dialog");
+            AddTexture(Content, @"Textures\Text");
         }
 
         public static void LoadFont(ContentManager Content)

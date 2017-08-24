@@ -19,7 +19,8 @@ namespace Adventure.Items
 
         private int _minDmg;
         private int _maxDmg;
-        private int _stam;
+        private int _staminaCost;
+        public int StaminaCost { get => _staminaCost; }
         private int _weaponSpeed = 3;
 
         private Vector2 _boxdir = Vector2.Zero;
@@ -37,7 +38,7 @@ namespace Adventure.Items
             _attack = false;
             _minDmg = minDmg;
             _maxDmg = maxDmg;
-            _stam = stam;
+            _staminaCost = stam;
             rotationOrigin = new Vector2(_texture.Width, _texture.Height);
             _rect = Rectangle.Empty;
         }
