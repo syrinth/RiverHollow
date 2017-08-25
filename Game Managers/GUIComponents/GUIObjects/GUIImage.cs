@@ -6,15 +6,15 @@ namespace Adventure.Game_Managers.GUIObjects
 {
     public class GUIImage : GUIObject
     {
-        int _width;
-        int _height;
-        public GUIImage(Vector2 position, int width, int height, string texture)
+        public Rectangle _sourceRectangle;
+        public GUIImage(Vector2 position, Rectangle sourceRect, int width, int height, string texture)
         {
             _texture = GameContentManager.GetTexture(texture);
             _position = position;
             _width = width;
             _height = height;
             _rect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
+            _sourceRectangle = sourceRect;
         }
 
         public void MoveImage(Vector2 pos)
@@ -25,7 +25,7 @@ namespace Adventure.Game_Managers.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _rect, Color.White);
+            spriteBatch.Draw(_texture, _rect, _sourceRectangle, Color.White);
         }
     }
 }

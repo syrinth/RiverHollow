@@ -71,11 +71,14 @@
     <Compile Include="Characters\Player.cs" />
     <Compile Include="AdventureGame.cs" />
     <Compile Include="Game Managers\DropManager.cs" />
-    <Compile Include="Game Managers\GUIComponents\GUIObjects\GUITextWindow.cs" />
+    <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIItemBox.cs" />
+    <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIWindows\GUITextWindow.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIImage.cs" />
-    <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIWindow.cs" />
+    <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIWindows\GUIWindow.cs" />
+    <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIWindows\ShortInventory.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\DayEndScreen.cs" />
-    <Compile Include="Game Managers\GUIComponents\GUIObjects\StatDisplay.cs" />
+    <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIWindows\StatDisplay.cs" />
+    <Compile Include="Game Managers\GUIComponents\Screens\InventoryScreen.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\TextScreen.cs" />
     <Compile Include="Game Managers\GUIManager.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIButton.cs" />
@@ -98,7 +101,7 @@
     <Compile Include="Items\WorldObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Game Managers\GUIComponents\GUIObjects\InventoryDisplay.cs" />
+    <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIWindows\Inventory.cs" />
     <Compile Include="Characters\SpriteAnimation\FrameAnimation.cs" />
     <Compile Include="Characters\SpriteAnimation\MobileSprite.cs" />
     <Compile Include="Characters\SpriteAnimation\AnimatedSprite.cs" />

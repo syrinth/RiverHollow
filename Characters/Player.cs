@@ -15,19 +15,20 @@ namespace Adventure
 {
     public class Player : CombatCharacter
     {
-        public static int maxItemRow = 11;
+        public static int maxItemColumns = 10;
+        public static int maxItemRows = 4;
         private bool _usingTool = false;
         public bool UsingTool { get => _usingTool; }
         private bool _usingWeapon = false;
         public bool UsingWeapon { get => _usingWeapon; }
 
-        private InventoryItem[] _inventory;
-        public InventoryItem[] Inventory { get => _inventory; }
+        private InventoryItem[,] _inventory;
+        public InventoryItem[,] Inventory { get => _inventory; }
 
         private int _currentInventorySlot = 0;
-        public int CurrentItemNumber { get => _currentInventorySlot; }
+        public int CurrentItemNumber { get => _currentInventorySlot; set => _currentInventorySlot = value; }
         //private InventoryItem _currentItem;
-        public InventoryItem CurrentItem { get => _inventory[_currentInventorySlot]; }
+        public InventoryItem CurrentItem { get => _inventory[0,0]; }
 
         private WorldObject _targettedObject = null;
 
@@ -48,7 +49,7 @@ namespace Adventure
             _stamina = 50;
             _maxStamina = 50;
 
-            _inventory = new InventoryItem[maxItemRow];
+            _inventory = new InventoryItem[maxItemRows, maxItemColumns];
             //_currentItem = null;
         }
         public void LoadContent()
@@ -223,20 +224,23 @@ namespace Adventure
             bool rv = false;
             if (itemID != ItemIDs.Nothing)
             {
-                for (int i = 0; i < _inventory.Length; i++)
+                for (int i = 0; i < maxItemRows; i++)
                 {
-                    InventoryItem testItem = _inventory[i];
-                    if (testItem == null)
+                    for (int j = 0; j < maxItemColumns; j++)
                     {
-                        rv = true;
-                        break;
-                    }
-                    else
-                    {
-                        if (testItem.ItemID == itemID && testItem.Number < 999)
+                        InventoryItem testItem = _inventory[i, j];
+                        if (testItem == null)
                         {
                             rv = true;
                             break;
+                        }
+                        else
+                        {
+                            if (testItem.ItemID == itemID && testItem.Number < 999)
+                            {
+                                rv = true;
+                                break;
+                            }
                         }
                     }
                 }
@@ -251,12 +255,23 @@ namespace Adventure
             {
                 if (!IncrementExistingItem(itemID))
                 {
-                    for (int i = 0; i < _inventory.Length; i++)
+                    bool added = false;
+                    for (int i = 0; i < maxItemRows; i++)
                     {
-
-                        if (_inventory[i] == null)
+                        for (int j = 0; j < maxItemColumns; j++)
                         {
-                            _inventory[i] = ObjectManager.GetItem(itemID);
+                            if (_inventory[i, j] == null)
+                            {
+                                _inventory[i, j] = ObjectManager.GetItem(itemID);
+                                added = true; ;
+                            }
+                            if (added)
+                            {
+                                break;
+                            }
+                        }
+                        if (added)
+                        {
                             break;
                         }
                     }
@@ -267,42 +282,46 @@ namespace Adventure
         public bool IncrementExistingItem(ObjectManager.ItemIDs itemID)
         {
             bool rv = false;
-            for (int i = 0; i < _inventory.Length; i++)
+            for (int i = 0; i < maxItemRows; i++)
             {
-                if (_inventory[i] != null && _inventory[i].ItemID == itemID && _inventory[i].Number < 999) { 
-                    _inventory[i].Number++;
-                    return true;
+                for (int j = 0; j < maxItemColumns; j++)
+                {
+                    if (_inventory[i, j] != null && _inventory[i, j].ItemID == itemID && _inventory[i, j].Number < 999)
+                    {
+                        _inventory[i, j].Number++;
+                        return true;
+                    }
                 }
             }
             return rv;
         }
 
-        public bool AddItemToInventorySpot(InventoryItem item, int i)
+        public bool AddItemToInventorySpot(InventoryItem item, int row, int column)
         {
             bool rv = false;
             if (item != null)
             {
-                if (_inventory[i] == null)
+                if (_inventory[row, column] == null)
                 {
                     if (item.GetType().Equals(typeof(Weapon)))
                     {
-                        _inventory[i] = (Weapon)(item);
+                        _inventory[row, column] = (Weapon)(item);
                     }
                     else if (item.GetType().Equals(typeof(Tool)))
                     {
-                        _inventory[i] = (Tool)(item);
+                        _inventory[row, column] = (Tool)(item);
                     }
                     else
                     {
-                        _inventory[i] = new InventoryItem(item);
+                        _inventory[row, column] = new InventoryItem(item);
                     }
                     rv = true;
                 }
                 else
                 {
-                    if (_inventory[i].ItemID == item.ItemID && _inventory[i].DoesItStack && 999 >= (_inventory[i].Number + item.Number))
+                    if (_inventory[row, column].ItemID == item.ItemID && _inventory[row, column].DoesItStack && 999 >= (_inventory[row, column].Number + item.Number))
                     {
-                        _inventory[i].Number += item.Number;
+                        _inventory[row, column].Number += item.Number;
                         rv = true;
                     }
                 }
@@ -312,12 +331,15 @@ namespace Adventure
 
         public void RemoveItemFromInventory(int index)
         {
-            for (int i = 0; i < _inventory.Length; i++)
+            for (int i = 0; i < maxItemRows; i++)
             {
-                if(i == index)
+                for (int j = 0; j < maxItemColumns; j++)
                 {
-                    _inventory[i] = null;
-                    break;
+                    if ((i*maxItemColumns)+j == index)
+                    {
+                        _inventory[i, j] = null;
+                        break;
+                    }
                 }
             }
         }
@@ -325,11 +347,14 @@ namespace Adventure
         public string[] GetInventoryArray()
         {
             string[] stringArray = new string[_inventory.Length];
-            for(int i = 0; i< _inventory.Length; i++)
+            for (int i = 0; i < maxItemRows; i++)
             {
-                if (_inventory[i] != null)
+                for (int j = 0; j < maxItemColumns; j++)
                 {
-                    stringArray[i] = _inventory[i].Name + ", " + _inventory[i].Number.ToString();
+                    if (_inventory[i, j] != null)
+                    {
+                        stringArray[i] = _inventory[i, j].Name + ", " + _inventory[i, j].Number.ToString();
+                    }
                 }
             }
 

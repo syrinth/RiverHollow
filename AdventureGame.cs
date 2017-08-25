@@ -1,6 +1,7 @@
 ﻿using Adventure.Characters.Monsters;
 using Adventure.Characters.NPCs;
 using Adventure.Game_Managers;
+using Adventure.Game_Managers.GUIObjects;
 using Adventure.GUIObjects;
 using Adventure.Items;
 using Adventure.Screens;
@@ -30,6 +31,7 @@ namespace Adventure
 
         private bool _paused = false;
         private bool _pauseKeyDown = false;
+        private bool _inventoryKeyDown = false;
         //private bool _pausedForGuide = false;
 
         public AdventureGame()
@@ -92,9 +94,13 @@ namespace Adventure
         {
             if (this.IsActive)
             {
-                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                KeyboardState ks = Keyboard.GetState();
+                if (ks.IsKeyDown(Keys.Escape))
                 {
-                    Exit();
+                    if (_gameState == GameState.Game)
+                    {
+                        Exit();
+                    }
                 }
 
                 if (Mouse.GetState().MiddleButton == ButtonState.Pressed)
@@ -102,7 +108,8 @@ namespace Adventure
                     PlayerManager.Save();
                 }
 
-                checkPauseKey(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One));
+                checkKey(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One), Keys.P);
+                checkKey(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One), Keys.I);
                 //checkPauseGuide();
 
                 GUIManager.Update(gameTime);
@@ -239,19 +246,37 @@ namespace Adventure
             //pausedForGuide = false;
         }
 
-        private void checkPauseKey(KeyboardState keyboardState,GamePadState gamePadState)
+        private void checkKey(KeyboardState keyboardState,GamePadState gamePadState, Keys key)
         {
-            bool pauseKeyDownThisFrame = (keyboardState.IsKeyDown(Keys.P) || (gamePadState.Buttons.Y == ButtonState.Pressed));
+            bool keyDownThisFrame = (keyboardState.IsKeyDown(key) || (gamePadState.Buttons.Y == ButtonState.Pressed));
             // If key was not down before, but is down now, we toggle the
             // pause setting
-            if (!_pauseKeyDown && pauseKeyDownThisFrame)
+            if (key == Keys.P)
             {
-                if (!_paused)
-                    BeginPause(true);
-                else
-                    EndPause();
+                if (!_pauseKeyDown && keyDownThisFrame)
+                {
+                    if (!_paused)
+                        BeginPause(true);
+                    else
+                        EndPause();
+                }
+                _pauseKeyDown = keyDownThisFrame;
             }
-            _pauseKeyDown = pauseKeyDownThisFrame;
+            else if(key== Keys.I)
+            {
+                if (!_inventoryKeyDown && keyDownThisFrame)
+                {
+                    if (GUIManager.CurrentGUIScreen.GetType().Equals(typeof(InventoryScreen)))
+                    {
+                        GUIManager.LoadScreen(GUIManager.Screens.HUD);
+                    }
+                    else
+                    {
+                        GUIManager.LoadScreen(GUIManager.Screens.Inventory);
+                    }
+                }
+                _inventoryKeyDown = keyDownThisFrame;
+            }
         }
 
         private void RollOver()

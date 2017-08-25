@@ -20,7 +20,8 @@ namespace Adventure.Game_Managers
     public static class GUIManager
     {
         private static GUIScreen _currentGUIScreen;
-        public  enum Screens {None, MainMenu, HUD, Shop, DayEnd, Text };
+        public static GUIScreen CurrentGUIScreen { get => _currentGUIScreen; }
+        public  enum Screens {None, DayEnd, HUD, Inventory, MainMenu,  Shop,  Text };
         private static Texture2D _fadeTexture;
         private static float _fadeVal = 1f;
         private static bool _fading = false;
@@ -32,7 +33,8 @@ namespace Adventure.Game_Managers
             GraphicCursor.LoadContent();
         }
 
-        public static void Update(GameTime gameTime) {
+        public static void Update(GameTime gameTime)
+        {
             if (_fading)
             {
                 UpdateFade();
@@ -123,6 +125,9 @@ namespace Adventure.Game_Managers
                     return;
                 case Screens.HUD:
                     _currentGUIScreen = new HUDScreen();
+                    return;
+                case Screens.Inventory:
+                    _currentGUIScreen = new InventoryScreen();
                     return;
                 case Screens.MainMenu:
                     _currentGUIScreen = new MainMenuScreen();

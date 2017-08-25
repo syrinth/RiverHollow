@@ -229,12 +229,14 @@ namespace Adventure.Game_Managers
                 AddBuilding(newBuilding);
                 MapManager.CurrentMap.AddBuilding(newBuilding);
             }
-
-            for (int i=0; i < data.Items.Count; i++)
+            for (int i = 0; i < Player.maxItemRows; i++)
             {
-                ItemData item = data.Items[i];
-                InventoryItem newItem = ObjectManager.GetItem(item.itemID, item.num);
-                _player.AddItemToInventorySpot(newItem, i);
+                for (int j = 0; j < Player.maxItemColumns; j++)
+                {
+                    ItemData item = data.Items[i* Player.maxItemRows +j];
+                    InventoryItem newItem = ObjectManager.GetItem(item.itemID, item.num);
+                    _player.AddItemToInventorySpot(newItem, i, j);
+                }
             }
 
             foreach (MapData b in data.MapData)

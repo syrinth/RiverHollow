@@ -11,7 +11,7 @@ namespace Adventure.Game_Managers.GUIObjects
         private Display _toDisplay;
         public float _percentage;
 
-        public StatDisplay(Display what, Vector2 pos, int squareSize) : base(pos, squareSize, 200, 32)
+        public StatDisplay(Display what, Vector2 pos, int squareSize) : base(pos, new Vector2(0, 0), squareSize, 200, 32)
         {
             _toDisplay = what;
             _percentage = 0;
@@ -19,7 +19,7 @@ namespace Adventure.Game_Managers.GUIObjects
 
         public override void Update(GameTime gameTime)
         {
-            float one = (_width - (2 * _squareSize));
+            float one = (_width - (2 * _edgeSize));
             float two = 0;
             if (_toDisplay == Display.Health)
             {
