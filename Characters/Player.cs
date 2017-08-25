@@ -28,7 +28,7 @@ namespace Adventure
         private int _currentInventorySlot = 0;
         public int CurrentItemNumber { get => _currentInventorySlot; set => _currentInventorySlot = value; }
         //private InventoryItem _currentItem;
-        public InventoryItem CurrentItem { get => _inventory[0,0]; }
+        public InventoryItem CurrentItem { get => _inventory[0, _currentInventorySlot]; }
 
         private WorldObject _targettedObject = null;
 
@@ -196,6 +196,11 @@ namespace Adventure
                     }
                     rv = true;
                 }
+                else if (CurrentItem.GetType().Equals(typeof(Container)))
+                {
+                    MapManager.PlaceWorldItem((Container)CurrentItem, mouseLocation.ToVector2());
+                    RemoveItemFromInventory(_currentInventorySlot);
+                }
             }
 
             return rv;
@@ -344,22 +349,22 @@ namespace Adventure
             }
         }
 
-        public string[] GetInventoryArray()
-        {
-            string[] stringArray = new string[_inventory.Length];
-            for (int i = 0; i < maxItemRows; i++)
-            {
-                for (int j = 0; j < maxItemColumns; j++)
-                {
-                    if (_inventory[i, j] != null)
-                    {
-                        stringArray[i] = _inventory[i, j].Name + ", " + _inventory[i, j].Number.ToString();
-                    }
-                }
-            }
+        //public string[] GetInventoryArray()
+        //{
+        //    string[] stringArray = new string[_inventory.Length];
+        //    for (int i = 0; i < maxItemRows; i++)
+        //    {
+        //        for (int j = 0; j < maxItemColumns; j++)
+        //        {
+        //            if (_inventory[i, j] != null)
+        //            {
+        //                stringArray[i] = _inventory[i, j].Name + ", " + _inventory[i, j].Number.ToString();
+        //            }
+        //        }
+        //    }
 
-            return stringArray;
-        }
+        //    return stringArray;
+        //}
 
         public bool DecreaseStamina(int x)
         {

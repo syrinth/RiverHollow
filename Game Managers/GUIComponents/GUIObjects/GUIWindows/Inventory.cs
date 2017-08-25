@@ -21,36 +21,50 @@ namespace Adventure.Screens
         protected GUIItemBox[,] _displayList;
         protected Vector2 source = new Vector2(96, 0);
 
+        private Container _container;
+
         protected const int boxSize = 32;
-        protected const int margin = 3;
+        protected const int _margin = 3;
 
         protected int _columns;
         protected int _rows;
 
-        public Inventory(Vector2 center, int columns, int rows, int edgeSize)
+        public Inventory(Vector2 center, int rows, int columns, int edgeSize)
         {
+            _container = null;
+            _edgeSize = edgeSize;
+            _rows = rows;
+            _columns = columns;
+
             _displayList = new GUIItemBox[rows, columns];
             _texture = GameContentManager.GetTexture(@"Textures\Dialog");
-            _width = (edgeSize * 2) + (columns * boxSize) + (margin * (columns + 1));
-            _height = (edgeSize * 2) + (rows * boxSize) + (margin * (rows + 1));
-
-            _position = new Vector2(center.X - _width / 2, center.Y - _height / 2);
-            _rect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
-            _columns = columns;
-            _rows = rows;
+            _width = (_edgeSize * 2) + (_columns * boxSize) + (_margin * (_columns + 1));
+            _height = (_edgeSize * 2) + (_rows * boxSize) + (_margin * (_rows + 1));
+            SetPosition(new Vector2(center.X - _width / 2, center.Y - _height / 2));
 
             Load(source, edgeSize);
+        }
 
-            Rectangle displayBox = new Rectangle((int)Position.X + edgeSize + margin, (int)Position.Y + edgeSize + margin, boxSize, boxSize);
+        public Inventory(Container c, Vector2 center, int edgeSize): this(center, c.Rows, c.Columns, edgeSize)
+        {
+            _container = c;
+        }
+
+        public void SetPosition(Vector2 position)
+        {
+            _position = position;
+            _rect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
+
+            Rectangle displayBox = new Rectangle((int)Position.X + _edgeSize + _margin, (int)Position.Y + _edgeSize + _margin, boxSize, boxSize);
             for (int i = 0; i < _rows; i++)
             {
                 for (int j = 0; j < _columns; j++)
                 {
                     _displayList[i, j] = new GUIItemBox(displayBox.Location.ToVector2(), new Rectangle(288, 32, 32, 32), displayBox.Width, displayBox.Height, @"Textures\Dialog", null);
-                    displayBox.X += boxSize + margin;
+                    displayBox.X += boxSize + _margin;
                 }
-                displayBox.X = (int)Position.X + edgeSize + margin;
-                displayBox.Y += boxSize + margin;
+                displayBox.X = (int)Position.X + _edgeSize + _margin;
+                displayBox.Y += boxSize + _margin;
             }
         }
 
@@ -78,7 +92,7 @@ namespace Adventure.Screens
             return rv;
         }
 
-        public bool IsItemThere(Point mouse)
+        private bool IsItemThere(Point mouse)
         {
             bool rv = false;
             for (int i = 0; i < _rows; i++)
@@ -117,7 +131,14 @@ namespace Adventure.Screens
                         {
                             rv = new InventoryItem(_displayList[i, j].Item);
                         }
-                        PlayerManager.Player.RemoveItemFromInventory((i*_columns)+j); //Wrong
+                        if (_container == null)
+                        {
+                            PlayerManager.Player.RemoveItemFromInventory((i * _columns) + j);
+                        }
+                        else
+                        {
+                            _container.RemoveItemFromInventory((i * _columns) + j);
+                        }
                         break;
                     }
                 }
@@ -126,12 +147,12 @@ namespace Adventure.Screens
             return rv;
         }
 
-        public bool GiveItem(InventoryItem item)
+        private bool GiveItem(InventoryItem item)
         {
             return GiveItem(item, false);
         }
 
-        public bool GiveItem(InventoryItem item, bool Force)
+        private bool GiveItem(InventoryItem item, bool Force)
         {
             bool rv = false;
             if (item != null)
@@ -145,7 +166,13 @@ namespace Adventure.Screens
                         {
                             if (_displayList[i, j].Rectangle.Contains(mouse) && (Force || _displayList[i, j].Item == null))
                             {
-                                rv = PlayerManager.Player.AddItemToInventorySpot(item, i, j);
+                                if (_container == null)
+                                {
+                                    rv = PlayerManager.Player.AddItemToInventorySpot(item, i, j);
+                                }
+                                else{
+                                    rv = _container.AddItemToInventorySpot(item, i, j);
+                                }
                             }
                         }
                     }
@@ -161,7 +188,14 @@ namespace Adventure.Screens
             {
                 for (int j = 0; j < _columns; j++)
                 {
-                    _displayList[i,j].Item = PlayerManager.Player.Inventory[i, j];
+                    if (_container == null)
+                    {
+                        _displayList[i, j].Item = PlayerManager.Player.Inventory[i, j];
+                    }
+                    else
+                    {
+                        _displayList[i, j].Item = _container.Inventory[i, j];
+                    }
                 }
             }
         }

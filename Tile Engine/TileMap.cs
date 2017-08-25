@@ -35,6 +35,7 @@ namespace Adventure.Tile_Engine
         protected List<WorldObject> _worldObjectList;
         public List<WorldObject> WorldObjects { get => _worldObjectList; }
         protected List<Item> _itemList;
+        protected List<StaticItem> _staticItemList;
 
         private Dictionary<Rectangle, string> _exitDictionary;
         private Dictionary<string, Rectangle> _entranceDictionary;
@@ -48,6 +49,7 @@ namespace Adventure.Tile_Engine
             _buildingList = new List<Building>();
             _worldObjectList = new List<WorldObject>();
             _itemList = new List<Item>();
+            _staticItemList = new List<StaticItem>();
             _exitDictionary = new Dictionary<Rectangle, string>();
             _entranceDictionary = new Dictionary<string, Rectangle>();
         }
@@ -128,16 +130,19 @@ namespace Adventure.Tile_Engine
             List<Item> removedList = new List<Item>();
             foreach (Item i in _itemList)
             {
-                if (((InventoryItem)i).Finished() && i.CollisionBox.Intersects(PlayerManager.Player.CollisionBox))
+                if (i.OnTheMap && i.Pickup)
                 {
-                    removedList.Add(i);
-                    PlayerManager.Player.AddItemToFirstAvailableInventory(i.ItemID);
-                }
-                else if (PlayerInRange(_p.CollisionBox, i.CollisionBox.Center, 80))
-                {
-                    float speed = 3;
-                    Vector2 direction = new Vector2((_p.Position.X < i.Position.X) ? -speed : speed, (_p.Position.Y < i.Position.Y) ? -speed : speed);
-                    i.Position += direction;
+                    if (((InventoryItem)i).Finished() && i.CollisionBox.Intersects(PlayerManager.Player.CollisionBox))
+                    {
+                        removedList.Add(i);
+                        PlayerManager.Player.AddItemToFirstAvailableInventory(i.ItemID);
+                    }
+                    else if (PlayerInRange(_p.CollisionBox, i.CollisionBox.Center, 80))
+                    {
+                        float speed = 3;
+                        Vector2 direction = new Vector2((_p.Position.X < i.Position.X) ? -speed : speed, (_p.Position.Y < i.Position.Y) ? -speed : speed);
+                        i.Position += direction;
+                    }
                 }
             }
 
@@ -169,6 +174,11 @@ namespace Adventure.Tile_Engine
             foreach (Item i in _itemList)
             {
                 i.Draw(spriteBatch);
+            }
+
+            foreach (StaticItem s in _staticItemList)
+            {
+                s.Draw(spriteBatch);
             }
         }
 
@@ -421,7 +431,7 @@ namespace Adventure.Tile_Engine
         {
             bool rv = false;
 
-            foreach(Character c in _characterList)
+            foreach (Character c in _characterList)
             {
                 Type cType = c.GetType();
                 if (cType.IsSubclassOf(typeof(Worker)))
@@ -450,9 +460,17 @@ namespace Adventure.Tile_Engine
                     break;
                 }
             }
+            foreach (StaticItem s in _staticItemList)
+            {
+                if (s.CollisionBox.Contains(mouseLocation))
+                {
+                    GUIManager.LoadScreen(GUIManager.Screens.Inventory, (Container)s);
+                }
+            }
 
             return rv;
         }
+
         public bool ProcessLeftButtonClick(Point mouseLocation)
         {
             bool rv = false;
@@ -586,6 +604,12 @@ namespace Adventure.Tile_Engine
                 ((InventoryItem)i).Pop(position);
                 _itemList.Add(i);
             }
+        }
+        public void PlaceWorldItem(StaticItem container, Vector2 position)
+        {
+            container.OnTheMap = true;
+            container.Position = position;
+            _staticItemList.Add(container);
         }
 
         #region Adders

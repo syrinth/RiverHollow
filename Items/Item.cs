@@ -23,6 +23,9 @@ namespace Adventure.Items
         protected bool _onTheMap;
         public bool OnTheMap { get => _onTheMap; set => _onTheMap = value; }
 
+        protected bool _pickup = true;
+        public bool Pickup { get => _onTheMap; }
+
         protected string _description;
 
         public Item(ObjectManager.ItemIDs ID, string name, Texture2D tex, string description)

@@ -25,7 +25,7 @@ namespace Adventure.Game_Managers
         }
         public enum ItemIDs
         {
-            Nothing, PickAxe, ArcaneEssence, CopperOre, CopperBar, IronOre, IronBar, Lumber, Stone, Sword
+            Nothing, PickAxe, ArcaneEssence, CopperOre, CopperBar, IronOre, IronBar, Lumber, Stone, Sword, SmallChest
         }
         public enum ObjectIDs
         {
@@ -81,6 +81,10 @@ namespace Adventure.Game_Managers
                     name = "Stone";
                     description = "Used for building things";
                     return new InventoryItem(id, GetTexture(@"Textures\stone"), name, description, num, true);
+                case ItemIDs.SmallChest:
+                    name = "Small Chest";
+                    description = "A small chestused to store items for later";
+                    return new Container(id, GetTexture(@"Textures\chest"), name, description, 1, 8);
 
             }
             return null;

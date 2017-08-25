@@ -33,6 +33,7 @@ namespace Adventure.Game_Managers
             _player = new Player();
             _player.AddItemToFirstAvailableInventory(ObjectManager.ItemIDs.Sword);
             _player.AddItemToFirstAvailableInventory(ObjectManager.ItemIDs.PickAxe);
+            _player.AddItemToFirstAvailableInventory(ObjectManager.ItemIDs.SmallChest);
         }
 
         public static void Update(GameTime gameTime)

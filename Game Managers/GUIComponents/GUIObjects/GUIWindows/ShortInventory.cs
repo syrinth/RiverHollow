@@ -9,7 +9,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
     {
         protected GUIImage _selection;
 
-        public ShortInventory(Vector2 center, int columns, int edgeSize) : base( center, columns, 1, edgeSize)
+        public ShortInventory(Vector2 center, int columns, int edgeSize) : base( center, 1, columns, edgeSize)
         {
             _selection = new GUIImage(_displayList[0,0].Position, new Rectangle(0, 0, 32, 32), 32, 32, @"Textures\Selection");
         }

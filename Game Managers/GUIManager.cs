@@ -4,6 +4,7 @@ using Adventure.Game_Managers.GUIComponents.GUIObjects;
 using Adventure.Game_Managers.GUIComponents.Screens;
 using Adventure.Game_Managers.GUIObjects;
 using Adventure.GUIObjects;
+using Adventure.Items;
 using Adventure.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -103,21 +104,6 @@ namespace Adventure.Game_Managers
 
         public static void LoadScreen(Screens newScreen)
         {
-            LoadScreen(newScreen, null, "");
-        }
-
-        public static void LoadScreen(Screens newScreen, Character c)
-        {
-            LoadScreen(newScreen, c, "");
-        }
-
-        public static void LoadScreen(Screens newScreen, string text)
-        {
-            LoadScreen(newScreen, null, text);
-        }
-
-        public static void LoadScreen(Screens newScreen, Character c, string text)
-        {
             switch (newScreen)
             {
                 case Screens.DayEnd:
@@ -132,17 +118,42 @@ namespace Adventure.Game_Managers
                 case Screens.MainMenu:
                     _currentGUIScreen = new MainMenuScreen();
                     return;
+            }
+        }
+
+        public static void LoadScreen(Screens newScreen, Character c)
+        {
+            switch (newScreen)
+            {
                 case Screens.Shop:
                     _currentGUIScreen = new ShopScreen((ShopKeeper)c);
                     return;
+            }
+        }
+
+        public static void LoadScreen(Screens newScreen, Container c)
+        {
+            switch (newScreen)
+            {
+                case Screens.Inventory:
+                    _currentGUIScreen = new InventoryScreen(c);
+                    return;
+            }
+        }
+
+        public static void LoadScreen(Screens newScreen, string text)
+        {
+            switch (newScreen)
+            {
                 case Screens.Text:
                     _currentGUIScreen = new TextScreen(text);
                     return;
-                case Screens.None:
-                    _currentGUIScreen = null;
-                    return;
-
             }
+        }
+
+        public static void LoadScreen(Screens newScreen, Character c, string text)
+        {
+            //
         }
 
         public static void FadeOut()

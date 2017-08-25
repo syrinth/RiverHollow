@@ -94,8 +94,10 @@
     <Compile Include="Game Managers\GameCalendar.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GraphicCursor.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIObject.cs" />
+    <Compile Include="Items\Container.cs" />
     <Compile Include="Items\InventoryItem.cs" />
     <Compile Include="Items\Item.cs" />
+    <Compile Include="Items\StaticItem.cs" />
     <Compile Include="Items\Tool.cs" />
     <Compile Include="Items\Weapon.cs" />
     <Compile Include="Items\WorldObject.cs" />

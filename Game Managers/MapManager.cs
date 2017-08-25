@@ -156,5 +156,9 @@ namespace Adventure.Game_Managers
         {
             _currentMap.DropWorldItems(items, position);
         }
+        public static void PlaceWorldItem(StaticItem staticItem, Vector2 position)
+        {
+            _currentMap.PlaceWorldItem(staticItem, position);
+        }
     }
 }
