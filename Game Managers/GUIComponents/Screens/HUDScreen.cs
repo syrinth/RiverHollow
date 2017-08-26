@@ -15,8 +15,8 @@ namespace Adventure.Game_Managers.GUIObjects
         {
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _shortInventory = new ShortInventory(new Vector2(AdventureGame.ScreenWidth / 2, AdventureGame.ScreenHeight-32), Player.maxItemColumns, 4);
-            _healthDisplay = new StatDisplay(StatDisplay.Display.Health, new Vector2(0,0), 5);
-            _staminaDisplay = new StatDisplay(StatDisplay.Display.Energy, new Vector2(0,32), 5);
+            _healthDisplay = new StatDisplay(StatDisplay.Display.Health, new Vector2(32,32), 5);
+            _staminaDisplay = new StatDisplay(StatDisplay.Display.Energy, new Vector2(32,64), 5);
             Controls.Add(_shortInventory);
             Controls.Add(_healthDisplay);
             Controls.Add(_staminaDisplay);
@@ -36,7 +36,7 @@ namespace Adventure.Game_Managers.GUIObjects
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            spriteBatch.DrawString(_font, PlayerManager.Player.Money.ToString(), new Vector2(0, 64), Color.White);
+            spriteBatch.DrawString(_font, PlayerManager.Player.Money.ToString(), new Vector2(32, 96), Color.White);
         }
     }
 }

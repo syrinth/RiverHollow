@@ -8,8 +8,12 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
 {
     public class GUITextWindow : GUIWindow
     {
+        private GUIImage _next;
         private SpriteFont _font;
         private string _text;
+
+        private const int _maxRows = 3;
+        private float _textSize;
 
         string typedText = string.Empty;
         double typedTextLength;
@@ -25,14 +29,18 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
 
         public GUITextWindow(string text): base()
         {
-            _text = text;
             _texture = GameContentManager.GetTexture(@"Textures\Dialog");
             _font = GameContentManager.GetFont(@"Fonts\Font");
+            _edgeSize = 32;
+
+            _text = text;
+            _textSize = _font.MeasureString("test").Y;
             _parsedStrings = new List<string>();
 
-            _height = 148;
-            delayInMilliseconds = 10;
+            _height = ((int)_textSize * _maxRows) + (2 * _edgeSize); //2 is for top and bottom edges
+            _next = new GUIImage(new Vector2(Position.X+_width - _edgeSize*1.5f, Position.Y + _height - _edgeSize * 1.5f), new Rectangle(288, 64, 32, 32), (int)_textSize, (int)_textSize, @"Textures\Dialog");
 
+            delayInMilliseconds = 10;
             parseText(text);
         }
         public GUITextWindow(Vector2 position, string text) : this(text)
@@ -42,6 +50,11 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
 
         public override void Update(GameTime gameTime)
         {
+            if (_pause)
+            {
+                _next.Update(gameTime);
+            }
+
             if (!printAll)
             {
                 if (!_doneDrawing && !_pause)
@@ -96,6 +109,12 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
             }
         }
 
+        public void Unpause()
+        {
+            _pause = false;
+            typedTextLength = 0;
+        }
+
         private void parseText(string text)
         {
             bool grabLast = true;
@@ -108,7 +127,8 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
             {
                 Vector2 measure = _font.MeasureString(line + word);
 
-                if (measure.Length() > MiddleWidth)
+                if (measure.Length() > MiddleWidth ||
+                    numReturns == _maxRows-1 && measure.Length() > MiddleWidth - _textSize)
                 {
                     returnString = returnString + line + '\n';
                     line = string.Empty;
@@ -137,6 +157,10 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
         {
             base.Draw(spriteBatch);
             spriteBatch.DrawString(_font, typedText, new Vector2(_position.X+16, _position.Y+16), Color.White);
+            if (_pause)
+            {
+                _next.Draw(spriteBatch);
+            }
         }
     }
 }

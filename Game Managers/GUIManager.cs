@@ -118,6 +118,9 @@ namespace Adventure.Game_Managers
                 case Screens.MainMenu:
                     _currentGUIScreen = new MainMenuScreen();
                     return;
+                case Screens.None:
+                    _currentGUIScreen = null;
+                    return;
             }
         }
 

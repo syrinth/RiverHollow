@@ -42,10 +42,6 @@ namespace Adventure
             _lastUpdateinSeconds += gameTime.ElapsedGameTime.TotalSeconds;
             if(_currHour == 26)
             {
-                _currHour = 6;
-                _currMin = 0;
-                _currDay++;
-
                 AdventureGame.ChangeGameState(AdventureGame.GameState.EndOfDay);
             }
             if (_lastUpdateinSeconds >= 1)
@@ -93,6 +89,13 @@ namespace Adventure
                     break;
             }
             spriteBatch.DrawString(_calendarFont, String.Format("Day {0}, {1}:{2}", _currDay, hours, mins), _timePosition, Color.Black);
+        }
+
+        public static void NextDay()
+        {
+            _currHour = 6;
+            _currMin = 0;
+            _currDay++;
         }
 
     }

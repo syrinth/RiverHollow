@@ -36,6 +36,7 @@ namespace Adventure.Tile_Engine
         public List<WorldObject> WorldObjects { get => _worldObjectList; }
         protected List<Item> _itemList;
         protected List<StaticItem> _staticItemList;
+        public List<StaticItem> StaticItems { get => _staticItemList; }
 
         private Dictionary<Rectangle, string> _exitDictionary;
         private Dictionary<string, Rectangle> _entranceDictionary;
@@ -334,6 +335,11 @@ namespace Adventure.Tile_Engine
             {
                 if (tp.Key.Equals("Impassable") && tp.Value.Equals("true"))
                 {
+                    rv = true;
+                }
+                if (tp.Key.Equals("Sleep") && tp.Value.Equals("true"))
+                {
+                    AdventureGame.ChangeGameState(AdventureGame.GameState.EndOfDay);
                     rv = true;
                 }
             }

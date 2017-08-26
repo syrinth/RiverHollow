@@ -122,6 +122,9 @@ namespace Adventure.Game_Managers
 
             [XmlArray(ElementName = "WorldObjects")]
             public List<WorldObjectData> worldObjects;
+
+            [XmlArray(ElementName = "StaticItems")]
+            public List<StaticItemData> staticItems;
         }
         public struct WorldObjectData
         {
@@ -133,6 +136,20 @@ namespace Adventure.Game_Managers
 
             [XmlElement(ElementName = "Y")]
             public int y;
+        }
+        public struct StaticItemData
+        {
+            [XmlElement(ElementName = "StaticItemID")]
+            public ObjectManager.ItemIDs staticItemID;
+
+            [XmlElement(ElementName = "X")]
+            public int x;
+
+            [XmlElement(ElementName = "Y")]
+            public int y;
+
+            [XmlArray(ElementName = "Items")]
+            public List<ItemData> Items;
         }
 
         public static string Save()
@@ -181,6 +198,7 @@ namespace Adventure.Game_Managers
                 MapData m = new MapData();
                 m.mapName = tileMap.Name;
                 m.worldObjects = new List<WorldObjectData>();
+                m.staticItems = new List<StaticItemData>();
 
                 foreach (WorldObject w in tileMap.WorldObjects)
                 {
@@ -189,6 +207,30 @@ namespace Adventure.Game_Managers
                     d.x = (int)w.Position.X;
                     d.y = (int)w.Position.Y;
                     m.worldObjects.Add(d);
+                }
+
+                foreach (StaticItem item in tileMap.StaticItems)
+                {
+                    StaticItemData d = new StaticItemData();
+                    d.staticItemID = item.ItemID;
+                    d.x = (int)item.Position.X;
+                    d.y = (int)item.Position.Y;
+
+                    if (item.GetType().Equals(typeof(Container)))
+                    {
+                        d.Items = new List<ItemData>();
+                        foreach (InventoryItem i in ((Container)item).Inventory)
+                        {
+                            ItemData itemData = new ItemData();
+                            if (i != null)
+                            {
+                                itemData.itemID = i.ItemID;
+                                itemData.num = i.Number;
+                            }
+                            d.Items.Add(itemData);
+                        }
+                    }
+                    m.staticItems.Add(d);
                 }
 
                 data.MapData.Add(m);
@@ -240,12 +282,28 @@ namespace Adventure.Game_Managers
                 }
             }
 
-            foreach (MapData b in data.MapData)
+            foreach (MapData m in data.MapData)
             {
-                TileMap tm = MapManager.Maps[b.mapName];
-                foreach(WorldObjectData w in b.worldObjects)
+                TileMap tm = MapManager.Maps[m.mapName];
+                foreach(WorldObjectData w in m.worldObjects)
                 { 
                     tm.AddWorldObject(ObjectManager.GetWorldObject(w.worldObjectID, new Vector2(w.x,w.y)));
+                }
+                foreach (StaticItemData s in m.staticItems)
+                {
+                    Container c = (Container)ObjectManager.GetItem(s.staticItemID);
+
+                    for (int i = 0; i < Player.maxItemRows; i++)
+                    {
+                        for (int j = 0; j < Player.maxItemColumns; j++)
+                        {
+                            ItemData item = s.Items[i * Player.maxItemRows + j];
+                            InventoryItem newItem = ObjectManager.GetItem(item.itemID, item.num);
+                            c.AddItemToInventorySpot(newItem, i, j);
+                        }
+                    }
+
+                    tm.PlaceWorldItem(c, new Vector2(s.x, s.y));
                 }
             }
         }

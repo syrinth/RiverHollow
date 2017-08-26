@@ -22,6 +22,7 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
             bool rv = false;
             if (_btnOK.Rectangle.Contains(mouse))
             {
+                GameCalendar.NextDay();
                 AdventureGame.ChangeGameState(AdventureGame.GameState.Game);
                 PlayerManager.Save();
                 rv = true;

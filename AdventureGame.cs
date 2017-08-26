@@ -40,6 +40,7 @@ namespace Adventure
             _graphicsDeviceManager.IsFullScreen = true;
             Content.RootDirectory = "Content";
 
+            _graphicsDeviceManager.HardwareModeSwitch = false;
             _graphicsDeviceManager.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             _graphicsDeviceManager.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
         }
@@ -198,6 +199,14 @@ namespace Adventure
         public static void NewGame()
         {
             MapManager.PopulateMaps();
+            ChangeGameState(AdventureGame.GameState.Game);
+        }
+
+        public static void LoadGame()
+        {
+            PlayerManager.Load();
+            MapManager.PopulateMaps();
+            AdventureGame.ChangeGameState(AdventureGame.GameState.Game);
         }
 
         /// <summary>

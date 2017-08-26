@@ -21,7 +21,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
             _position = new Vector2(AdventureGame.ScreenWidth / 4, AdventureGame.ScreenHeight - 180);
             _width = AdventureGame.ScreenWidth / 2;
             _edgeSize = 32;
-            _height = (28 * 3) + (2 * 32); //Default for DialogWindow 28 is line height of text, 3 is threelines
+            _height = 148;
 
             Load(new Vector2(0, 0), 32);
         }

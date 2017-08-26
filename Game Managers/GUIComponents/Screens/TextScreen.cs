@@ -36,7 +36,7 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
             }
             else
             {
-                _window._pause = false;
+                _window.Unpause();
             }
             return rv;
         }
