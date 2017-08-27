@@ -11,34 +11,31 @@ namespace Adventure.Items
 {
     public class WorldObject
     {
-        private float _hp;
+        protected float _hp;
         public float HP { get => _hp; }
 
-        private bool _breakable;
+        protected bool _breakable;
         public bool Breakable { get => _breakable;}
 
-        private bool _choppable;
+        protected bool _choppable;
         public bool Choppable { get => _choppable; }
 
-        private Vector2 _position;
+        protected Vector2 _position;
         public Vector2 Position { get => _position; }
 
-        private int _colWidth;
-        public int CollisionWidth { get => _colWidth; }
+        protected Rectangle _collisionBox;
 
-        private int _colHeight;
-        public int CollisionHeight { get => _colHeight; }
-
-        private Texture2D _texture;
+        protected Texture2D _texture;
         public Texture2D Texture { get => _texture; }
 
-        private int _lvltoDmg;
+        protected int _width;
+        protected int _height;
+
+        protected int _lvltoDmg;
         public int LvlToDmg { get => _lvltoDmg; }
 
-        private ObjectManager.ObjectIDs _id;
+        protected ObjectManager.ObjectIDs _id;
         public ObjectManager.ObjectIDs ID { get => _id; }
-
-        public Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, CollisionWidth, CollisionHeight); }
 
         public WorldObject(ObjectManager.ObjectIDs id, float hp, bool breakIt, bool chopIt, Vector2 pos, Texture2D tex, int lvl, int width, int height)
         {
@@ -47,15 +44,17 @@ namespace Adventure.Items
             _breakable = breakIt;
             _choppable = chopIt;
             _position = pos;
+            _width = width;
+            _height = height;
             _texture = tex;
             _lvltoDmg = lvl;
-            _colWidth = width;
-            _colHeight = height;
+
+            _collisionBox = new Rectangle((int)Position.X, (int)Position.Y, _width, _height);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, CollisionBox, Color.White);
+            spriteBatch.Draw(_texture, new Rectangle((int)Position.X, (int)Position.Y, _width, _height), new Rectangle(0, 0, _width, _height), Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y + Texture.Height);
         }
 
         public bool DealDamage(float dmg)
@@ -70,6 +69,16 @@ namespace Adventure.Items
                 //PlayerManager.Player.AddItemToFirstAvailableInventory(ObjectManager.ItemIDs.Stone);
             }
             return rv;
+        }
+
+        public virtual bool IntersectsWith(Rectangle r)
+        {
+            return _collisionBox.Intersects(r);
+        }
+
+        public virtual bool Contains(Point m)
+        {
+            return _collisionBox.Contains(m);
         }
     }
 }

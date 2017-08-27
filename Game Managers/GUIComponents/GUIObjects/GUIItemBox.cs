@@ -14,7 +14,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
 
         public GUIItemBox(Vector2 position, Rectangle sourceRect, int width, int height, string texture, InventoryItem item) : base(position, sourceRect, width, height, texture)
         {
-
+            _item = item;
         }
 
         public override void Draw(SpriteBatch spriteBatch)

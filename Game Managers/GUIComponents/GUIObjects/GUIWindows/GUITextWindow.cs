@@ -1,4 +1,5 @@
-﻿using Adventure.Game_Managers.GUIObjects;
+﻿using Adventure.Characters;
+using Adventure.Game_Managers.GUIObjects;
 using Adventure.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -27,8 +28,11 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
         int _currentParsedString = 0;
         public bool _pause = false;
 
-        public GUITextWindow(string text): base()
+        NPC _talker;
+
+        public GUITextWindow(NPC c, string text) : base()
         {
+            _talker = c;
             _texture = GameContentManager.GetTexture(@"Textures\Dialog");
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _edgeSize = 32;
@@ -43,7 +47,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
             delayInMilliseconds = 10;
             parseText(text);
         }
-        public GUITextWindow(Vector2 position, string text) : this(text)
+        public GUITextWindow(Vector2 position, NPC c, string text) : this(c, text)
         {
             _position = position;
         }
@@ -160,6 +164,11 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
             if (_pause)
             {
                 _next.Draw(spriteBatch);
+            }
+
+            if(_talker != null)
+            {
+                _talker.DrawPortrait(spriteBatch, new Vector2(_position.X, _position.Y));
             }
         }
     }

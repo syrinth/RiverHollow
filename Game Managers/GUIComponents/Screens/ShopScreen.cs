@@ -20,7 +20,7 @@ namespace Adventure.Game_Managers.GUIObjects
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_window.Rectangle.Contains(mouse))
+            if (_window.Contains(mouse))
             {
                 rv = _window.ProcessLeftButtonClick(mouse);
             }
@@ -30,7 +30,7 @@ namespace Adventure.Game_Managers.GUIObjects
         public override bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = false;
-            if (!_window.Rectangle.Contains(mouse))
+            if (!_window.Contains(mouse))
             {
                 rv = true;
             }

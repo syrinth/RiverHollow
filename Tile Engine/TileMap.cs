@@ -380,7 +380,7 @@ namespace Adventure.Tile_Engine
             }
             foreach (WorldObject o in _worldObjectList)
             {
-                if (o.CollisionBox.Intersects(movingObject))
+                if (o.IntersectsWith(movingObject))
                 {
                     rv = true;
                     break;
@@ -446,6 +446,7 @@ namespace Adventure.Tile_Engine
                     if (w.MouseInside(mouseLocation) && PlayerInRange(PlayerManager.Player.GetRectangle(), w.Center) &&
                         PlayerManager.Player.HasSpaceInInventory(w.WhatAreYouHolding()))
                     {
+                        ((NPC)c).Talk();
                         PlayerManager.Player.AddItemToFirstAvailableInventory(w.TakeItem());
                     }
                 }
@@ -585,7 +586,7 @@ namespace Adventure.Tile_Engine
             WorldObject rv = null;
             foreach(WorldObject o in _worldObjectList)
             {
-                if (o.CollisionBox.Contains(mouseLocation))
+                if (o.Contains(mouseLocation))
                 {
                     rv = o;
                     break;

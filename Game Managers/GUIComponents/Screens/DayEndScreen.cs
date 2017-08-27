@@ -20,7 +20,7 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_btnOK.Rectangle.Contains(mouse))
+            if (_btnOK.Contains(mouse))
             {
                 GameCalendar.NextDay();
                 AdventureGame.ChangeGameState(AdventureGame.GameState.Game);

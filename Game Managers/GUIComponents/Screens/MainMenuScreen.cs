@@ -25,12 +25,12 @@ namespace Adventure.Game_Managers.GUIObjects
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_btnNewGame.Rectangle.Contains(mouse))
+            if (_btnNewGame.Contains(mouse))
             {
                 AdventureGame.NewGame();
                 rv = true;
             }
-            if (_btnLoadGame.Rectangle.Contains(mouse))
+            if (_btnLoadGame.Contains(mouse))
             {
                 AdventureGame.LoadGame();
                 rv = true;
@@ -41,8 +41,8 @@ namespace Adventure.Game_Managers.GUIObjects
         public override bool ProcessHover(Point mouse)
         {
             bool rv = false;
-            _btnNewGame.IsMouseHovering = _btnNewGame.Rectangle.Contains(mouse);
-            _btnLoadGame.IsMouseHovering = _btnLoadGame.Rectangle.Contains(mouse);
+            _btnNewGame.IsMouseHovering = _btnNewGame.Contains(mouse);
+            _btnLoadGame.IsMouseHovering = _btnLoadGame.Contains(mouse);
             return rv;
         }
 

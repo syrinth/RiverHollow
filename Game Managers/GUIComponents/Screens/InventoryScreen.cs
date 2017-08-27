@@ -36,12 +36,12 @@ namespace Adventure.Game_Managers.GUIObjects
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_inventory.Rectangle.Contains(mouse))
+            if (_inventory.Contains(mouse))
             {
                 _inventory.ProcessLeftButtonClick(mouse);
                 rv = true;
             }
-            if (_container.Rectangle.Contains(mouse))
+            if (_container.Contains(mouse))
             {
                 _container.ProcessLeftButtonClick(mouse);
                 rv = true;
@@ -52,7 +52,7 @@ namespace Adventure.Game_Managers.GUIObjects
         public override bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = true;
-            if(!_inventory.Rectangle.Contains(mouse) && _container != null && !_container.Rectangle.Contains(mouse))
+            if(!_inventory.Contains(mouse) && _container != null && !_container.Rectangle.Contains(mouse))
             {
                 GUIManager.LoadScreen(GUIManager.Screens.HUD);
             }

@@ -10,6 +10,7 @@ using System;
 
 using ItemIDs = Adventure.Game_Managers.ObjectManager.ItemIDs;
 using Adventure.Game_Managers;
+using System.Collections.Generic;
 
 namespace Adventure
 {
@@ -254,6 +255,79 @@ namespace Adventure
             return rv;
         }
 
+        public bool HasItemInInventory(ItemIDs itemID, int x)
+        {
+            bool rv = false;
+            int leftToFind = x;
+            if (itemID != ItemIDs.Nothing)
+            {
+                for (int i = 0; i < maxItemRows; i++)
+                {
+                    for (int j = 0; j < maxItemColumns; j++)
+                    {
+                        InventoryItem testItem = _inventory[i, j];
+                        if (testItem != null && testItem.ItemID == itemID)
+                        {
+                            leftToFind -= testItem.Number;
+                            if (leftToFind <= 0)
+                            {
+                                rv = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (rv)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return rv;
+        }
+
+        public void RemoveItemsFromInventory(ItemIDs itemID, int x)
+        {
+            int leftToRemove = x;
+            bool done = false;
+            if (itemID != ItemIDs.Nothing)
+            {
+                List<int> toRemove = new List<int>();
+                for (int i = 0; i < maxItemRows; i++)
+                {
+                    if (done){ break; }
+                    for (int j = 0; j < maxItemColumns; j++)
+                    {
+                        if (done) { break; }
+                        InventoryItem testItem = _inventory[i, j];
+                        if (testItem != null && testItem.ItemID == itemID)
+                        {
+                            int temp = testItem.Number;
+                            if(testItem.Number >= leftToRemove)
+                            {
+                                testItem.Number -= leftToRemove;
+                                if (testItem.Number == 0)
+                                {
+                                    toRemove.Add((i * maxItemColumns) + j);
+                                }
+                            }
+                            else
+                            {
+                                testItem.Number = 0;
+                                toRemove.Add((i * maxItemColumns) + j);
+                                leftToRemove -= temp;
+                            }
+                        }
+                    }
+                }
+
+                foreach(int i in toRemove)
+                {
+                    RemoveItemFromInventory(i);
+                }
+            }
+        }
+
         public void AddItemToFirstAvailableInventory(ItemIDs itemID)
         {
             if (itemID != ItemIDs.Nothing)
@@ -291,7 +365,7 @@ namespace Adventure
             {
                 for (int j = 0; j < maxItemColumns; j++)
                 {
-                    if (_inventory[i, j] != null && _inventory[i, j].ItemID == itemID && _inventory[i, j].Number < 999)
+                    if (_inventory[i, j] != null && _inventory[i, j].DoesItStack && _inventory[i, j].ItemID == itemID && _inventory[i, j].Number < 999)
                     {
                         _inventory[i, j].Number++;
                         return true;

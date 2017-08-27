@@ -22,7 +22,7 @@ namespace Adventure.Game_Managers
     {
         private static GUIScreen _currentGUIScreen;
         public static GUIScreen CurrentGUIScreen { get => _currentGUIScreen; }
-        public  enum Screens {None, DayEnd, HUD, Inventory, MainMenu,  Shop,  Text };
+        public  enum Screens {None, DayEnd, HUD, Inventory, ItemCreation, MainMenu,  Shop,  Text };
         private static Texture2D _fadeTexture;
         private static float _fadeVal = 1f;
         private static bool _fading = false;
@@ -115,6 +115,9 @@ namespace Adventure.Game_Managers
                 case Screens.Inventory:
                     _currentGUIScreen = new InventoryScreen();
                     return;
+                case Screens.ItemCreation:
+                    _currentGUIScreen = new ItemCreationScreen();
+                    return;
                 case Screens.MainMenu:
                     _currentGUIScreen = new MainMenuScreen();
                     return;
@@ -144,12 +147,12 @@ namespace Adventure.Game_Managers
             }
         }
 
-        public static void LoadScreen(Screens newScreen, string text)
+        public static void LoadScreen(Screens newScreen, NPC talker, string text)
         {
             switch (newScreen)
             {
                 case Screens.Text:
-                    _currentGUIScreen = new TextScreen(text);
+                    _currentGUIScreen = new TextScreen(talker, text);
                     return;
             }
         }

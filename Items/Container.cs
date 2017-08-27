@@ -1,5 +1,7 @@
 ﻿using Adventure.Game_Managers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace Adventure.Items
 {
@@ -14,7 +16,7 @@ namespace Adventure.Items
         private int _columns;
         public int Columns { get => _columns; }
 
-        public Container(ObjectManager.ItemIDs ID, Texture2D texture, string name, string description, int rows, int columns) : base(ID, texture, name, description)
+        public Container(ObjectManager.ItemIDs ID, Vector2 sourcePos, Texture2D texture, string name, string description, int rows, int columns, List<KeyValuePair<ObjectManager.ItemIDs, int>> reagents) : base(ID, sourcePos, texture, name, description, reagents)
         {
             _pickup = false;
             _inventory = new InventoryItem[Player.maxItemRows, Player.maxItemColumns];

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 
 namespace Adventure.Items
 {
@@ -14,14 +15,17 @@ namespace Adventure.Items
         protected int _num;
         public int Number { get => _num; set => _num = value; }
 
-        public InventoryItem(ObjectManager.ItemIDs ID, Texture2D texture, string name, string description, int number, bool stacks) : base(ID, name, texture, description)
+        public InventoryItem(ObjectManager.ItemIDs ID, Vector2 sourcePos, Texture2D texture, string name, string description, int number, bool stacks) : this(ID, sourcePos, texture, name, description, number, stacks, null)
+        { }
+
+        public InventoryItem(ObjectManager.ItemIDs ID, Vector2 sourcePos, Texture2D texture, string name, string description, int number, bool stacks, List<KeyValuePair<ObjectManager.ItemIDs, int>> reagents) : base(ID, sourcePos, name, texture, description, reagents)
         {
             _doesItStack = stacks;
             _num = number;
         }
 
         //Copy Constructor
-        public InventoryItem(InventoryItem item) : base(item.ItemID, item.Name, item.Texture, item._description)
+        public InventoryItem(InventoryItem item) : base(item.ItemID, item._sourcePos, item.Name, item.Texture, item._description)
         {
             _num = item.Number;
             _doesItStack = item.DoesItStack;
@@ -41,7 +45,7 @@ namespace Adventure.Items
         }
         public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox)
         {
-            spriteBatch.Draw(_texture, drawBox, Color.White);
+            spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, 32, 32), Color.White);
         }
 
         public void Pop(Vector2 pos)

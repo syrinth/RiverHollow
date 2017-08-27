@@ -33,7 +33,7 @@ namespace Adventure.Items
         private float _angle; //1 radian = 57.29 degrees
         private float _endAngle; //1 radian = 57.29 degrees
 
-        public Weapon(ObjectManager.ItemIDs ID, Texture2D texture, string name, string description, int minDmg, int maxDmg, int stam) : base(ID, texture, name, description, 1, false)
+        public Weapon(ObjectManager.ItemIDs ID, Vector2 sourcePos, Texture2D texture, string name, string description, int minDmg, int maxDmg, int stam) : base(ID, sourcePos, texture, name, description, 1, false)
         {
             _attack = false;
             _minDmg = minDmg;

@@ -20,7 +20,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
             for(int i=0; i<_displayList.Length; i++)
             {
-                if (_displayList[0,i].Rectangle.Contains(mouse))
+                if (_displayList[0,i].Contains(mouse))
                 {
                     PlayerManager.Player.CurrentItemNumber = i;
                     break;

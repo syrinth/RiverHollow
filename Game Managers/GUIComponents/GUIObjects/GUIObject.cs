@@ -17,13 +17,17 @@ namespace Adventure.GUIObjects
         public int Width { get => _width; set => _width = value; }
 
         protected Vector2 _position;
-        public Vector2 Position { get => _position; set => _position = value; }
+        public Vector2 Position { get => _position; set { _position = value; _rect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height); } }
 
         protected Rectangle _rect;
         public Rectangle Rectangle { get => _rect; }
 
         protected Texture2D _texture;
 
+        public virtual bool Contains(Point mouse)
+        {
+            return Rectangle.Contains(mouse);
+        }
         public virtual void Update(GameTime gameTime) { }
         public virtual void Draw(SpriteBatch spriteBatch)
         {

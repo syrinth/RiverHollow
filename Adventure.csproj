@@ -79,6 +79,7 @@
     <Compile Include="Game Managers\GUIComponents\Screens\DayEndScreen.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIWindows\StatDisplay.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\InventoryScreen.cs" />
+    <Compile Include="Game Managers\GUIComponents\Screens\ItemCreationScreen.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\TextScreen.cs" />
     <Compile Include="Game Managers\GUIManager.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIButton.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Items\Item.cs" />
     <Compile Include="Items\StaticItem.cs" />
     <Compile Include="Items\Tool.cs" />
+    <Compile Include="Items\Tree.cs" />
     <Compile Include="Items\Weapon.cs" />
     <Compile Include="Items\WorldObject.cs" />
     <Compile Include="Program.cs" />

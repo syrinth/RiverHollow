@@ -99,7 +99,7 @@ namespace Adventure.Screens
             {
                 for (int j = 0; j < _columns; j++)
                 {
-                    if (_displayList[i, j].Rectangle.Contains(mouse) && _displayList[i, j].Item != null)
+                    if (_displayList[i, j].Contains(mouse) && _displayList[i, j].Item != null)
                     {
                         rv = true;
                         break;
@@ -117,7 +117,7 @@ namespace Adventure.Screens
             {
                 for (int j = 0; j < _columns; j++)
                 {
-                    if (_displayList[i, j].Rectangle.Contains(mouse) && _displayList[i, j].Item != null)
+                    if (_displayList[i, j].Contains(mouse) && _displayList[i, j].Item != null)
                     {
                         if (_displayList[i, j].Item.GetType().Equals(typeof(Weapon)))
                         {
@@ -157,14 +157,14 @@ namespace Adventure.Screens
             bool rv = false;
             if (item != null)
             {
-                Vector2 mouse = new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y);
+                Point mouse = new Point(Mouse.GetState().Position.X, Mouse.GetState().Position.Y);
                 if (_rect.Contains(mouse))
                 {
                     for (int i = 0; i < _rows; i++)
                     {
                         for (int j = 0; j < _columns; j++)
                         {
-                            if (_displayList[i, j].Rectangle.Contains(mouse) && (Force || _displayList[i, j].Item == null))
+                            if (_displayList[i, j].Contains(mouse) && (Force || _displayList[i, j].Item == null))
                             {
                                 if (_container == null)
                                 {

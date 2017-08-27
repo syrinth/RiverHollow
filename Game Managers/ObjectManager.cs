@@ -4,11 +4,7 @@ using Adventure.Items;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Adventure.Game_Managers
 {
@@ -25,11 +21,11 @@ namespace Adventure.Game_Managers
         }
         public enum ItemIDs
         {
-            Nothing, PickAxe, ArcaneEssence, CopperOre, CopperBar, IronOre, IronBar, Lumber, Stone, Sword, SmallChest
+            Nothing, PickAxe, Axe, ArcaneEssence, CopperOre, CopperBar, IronOre, IronBar, Stone, Sword, SmallChest, Wood
         }
         public enum ObjectIDs
         {
-            Nothing, Rock, BigRock
+            Nothing, Rock, BigRock, Tree
         }
 
         #endregion
@@ -68,23 +64,33 @@ namespace Adventure.Game_Managers
                 case ItemIDs.ArcaneEssence:
                     name = "Arcane Essence";
                     description = "arcane_essence";
-                    return new InventoryItem(id, GetTexture(@"Textures\arcane_essence"), name, description, num, true);
+                    return new InventoryItem(id, new Vector2(0, 32), GetTexture(@"Textures\items"), name, description, num, true);
                 case ItemIDs.PickAxe:
                     name = "Pick Axe";
                     description = "Pick, break rocks";
-                    return new Tool(id, GetTexture(@"Textures\pickAxe"), name, description, 1, 0.1f, 5);
+                    return new Tool(id, new Vector2(0, 0), GetTexture(@"Textures\tools"), name, description, 1, 0.1f, 5);
+                case ItemIDs.Axe:
+                    name = "Axe";
+                    description = "Chop chop motherfucker";
+                    return new Tool(id, new Vector2(0, 32), GetTexture(@"Textures\tools"), name, description, 0, 3, 5);
                 case ItemIDs.Sword:
                     name = "Sword";
                     description = "SWORD!";
-                    return new Weapon(id, GetTexture(@"Textures\Sword"), name, description, 1, 5, 5);
+                    return new Weapon(id, new Vector2(0,0), GetTexture(@"Textures\Sword"), name, description, 1, 5, 5);
                 case ItemIDs.Stone:
                     name = "Stone";
                     description = "Used for building things";
-                    return new InventoryItem(id, GetTexture(@"Textures\stone"), name, description, num, true);
+                    return new InventoryItem(id, new Vector2(0, 0), GetTexture(@"Textures\items"), name, description, num, true);
+                case ItemIDs.Wood:
+                    name = "Wood";
+                    description = "Used for building things";
+                    return new InventoryItem(id, new Vector2(32, 0), GetTexture(@"Textures\items"), name, description, num, true);
                 case ItemIDs.SmallChest:
                     name = "Small Chest";
                     description = "A small chestused to store items for later";
-                    return new Container(id, GetTexture(@"Textures\chest"), name, description, 1, 8);
+                    List<KeyValuePair<ItemIDs, int>> reagents = new List<KeyValuePair<ItemIDs, int>>();
+                    reagents.Add(new KeyValuePair<ItemIDs, int>(ItemIDs.Wood, 2));
+                    return new Container(id, new Vector2(0, 0), GetTexture(@"Textures\chest"), name, description, 1, 8, reagents);
 
             }
             return null;
@@ -96,6 +102,8 @@ namespace Adventure.Game_Managers
             {
                 case ObjectIDs.Rock:
                     return new WorldObject(ObjectIDs.Rock, 1, true, false, pos, GetTexture(@"Textures\rock"), 1, TileMap.TileSize, TileMap.TileSize);
+                case ObjectIDs.Tree:
+                    return new Tree(ObjectIDs.Tree, 10, false, true, pos, GetTexture(@"Textures\tree"), 1, TileMap.TileSize*3, TileMap.TileSize*4);
             }
             return null;
         }

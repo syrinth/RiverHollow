@@ -10,7 +10,6 @@
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/Sword.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/wizard.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/MiniInventory.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/arcane_essence.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Fonts/DisplayFont.spritefont</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/cursor.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Map2.tmx</File>
@@ -21,15 +20,17 @@
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/ArcaneTower.tmx</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/New.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/load.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/pickAxe.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/rock.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/ok.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/stone.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/Selection.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/Dialog.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/NPC.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/text.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/chest.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/SpriteSheet.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/portraits.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/tree.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/tools.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/items.png</File>
   </SourceFiles>
 </SourceFileCollection>

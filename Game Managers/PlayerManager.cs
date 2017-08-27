@@ -18,6 +18,8 @@ namespace Adventure.Game_Managers
 {
     public static class PlayerManager
     {
+        private static List<ObjectManager.ItemIDs> _canMake;
+        public static List<ObjectManager.ItemIDs> CanMake { get => _canMake; }
         private static string _currentMap;
         public static string CurrentMap { get => _currentMap; set => _currentMap = value; }
 
@@ -31,9 +33,12 @@ namespace Adventure.Game_Managers
         {
             _buildings = new List<Building>();
             _player = new Player();
+            _canMake = new List<ObjectManager.ItemIDs>();
             _player.AddItemToFirstAvailableInventory(ObjectManager.ItemIDs.Sword);
             _player.AddItemToFirstAvailableInventory(ObjectManager.ItemIDs.PickAxe);
+            _player.AddItemToFirstAvailableInventory(ObjectManager.ItemIDs.Axe);
             _player.AddItemToFirstAvailableInventory(ObjectManager.ItemIDs.SmallChest);
+            _canMake.Add(ObjectManager.ItemIDs.SmallChest);
         }
 
         public static void Update(GameTime gameTime)
@@ -58,6 +63,10 @@ namespace Adventure.Game_Managers
         public static void AddBuilding(Building b)
         {
             _buildings.Add(b);
+        }
+        public static void AddBuilding(ObjectManager.ItemIDs id)
+        {
+            _canMake.Add(id);
         }
 
         public static int GetNewBuildingID()

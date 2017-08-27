@@ -1,4 +1,5 @@
-﻿using Adventure.Game_Managers.GUIComponents.GUIObjects;
+﻿using Adventure.Characters;
+using Adventure.Game_Managers.GUIComponents.GUIObjects;
 using Adventure.Game_Managers.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,11 +10,11 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
     {
         private GUITextWindow _window;
 
-        public TextScreen(string text)
+        public TextScreen(NPC talker, string text)
         {
             AdventureGame.ChangeGameState(AdventureGame.GameState.Paused);
 
-            _window = new GUITextWindow(text);
+            _window = new GUITextWindow(talker, text);
             Controls.Add(_window);
         }
 

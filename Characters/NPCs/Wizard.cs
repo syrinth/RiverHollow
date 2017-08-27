@@ -15,13 +15,13 @@ namespace Adventure.Characters.NPCs
         public override ObjectManager.WorkerID WorkerID { get { return ObjectManager.WorkerID.Wizard; } }
         const string _texture = @"Textures\Wizard";
 
-        public Wizard()
-        {
-            Position = Vector2.Zero;
-        }
         public Wizard(Vector2 position)
         {
             LoadContent(_texture, 32, 64, 1, 1);
+            _portrait = GameContentManager.GetTexture(@"Textures\portraits");
+            _portraitRect = new Rectangle(0, 0, 160, 192);
+
+            _text = "Argh? Bah! Fnafh gragh doodle wop!";
 
             _currFood = 0;
             _dailyFoodReq = 3;

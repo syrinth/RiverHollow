@@ -1,6 +1,7 @@
 ﻿using Adventure.Characters.Monsters;
 using Adventure.Characters.NPCs;
 using Adventure.Game_Managers;
+using Adventure.Game_Managers.GUIComponents.Screens;
 using Adventure.Game_Managers.GUIObjects;
 using Adventure.GUIObjects;
 using Adventure.Items;
@@ -32,6 +33,7 @@ namespace Adventure
         private bool _paused = false;
         private bool _pauseKeyDown = false;
         private bool _inventoryKeyDown = false;
+        private bool _createKeyDown = false;
         //private bool _pausedForGuide = false;
 
         public AdventureGame()
@@ -111,6 +113,7 @@ namespace Adventure
 
                 checkKey(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One), Keys.P);
                 checkKey(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One), Keys.I);
+                checkKey(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One), Keys.C);
                 //checkPauseGuide();
 
                 GUIManager.Update(gameTime);
@@ -285,6 +288,21 @@ namespace Adventure
                     }
                 }
                 _inventoryKeyDown = keyDownThisFrame;
+            }
+            else if (key == Keys.C)
+            {
+                if (!_createKeyDown && keyDownThisFrame)
+                {
+                    if (GUIManager.CurrentGUIScreen.GetType().Equals(typeof(ItemCreationScreen)))
+                    {
+                        GUIManager.LoadScreen(GUIManager.Screens.HUD);
+                    }
+                    else
+                    {
+                        GUIManager.LoadScreen(GUIManager.Screens.ItemCreation);
+                    }
+                }
+                _createKeyDown = keyDownThisFrame;
             }
         }
 

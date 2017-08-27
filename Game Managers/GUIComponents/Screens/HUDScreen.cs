@@ -25,7 +25,7 @@ namespace Adventure.Game_Managers.GUIObjects
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_shortInventory.Rectangle.Contains(mouse))
+            if (_shortInventory.Contains(mouse))
             {
                 _shortInventory.ProcessLeftButtonClick(mouse);
                 rv = true;

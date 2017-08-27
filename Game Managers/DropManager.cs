@@ -18,6 +18,9 @@ namespace Adventure.Game_Managers
                 case ObjectManager.ObjectIDs.Rock:
                     itemList.Add(ObjectManager.GetItem(ObjectManager.ItemIDs.Stone));
                     break;
+                case ObjectManager.ObjectIDs.Tree:
+                    itemList.Add(ObjectManager.GetItem(ObjectManager.ItemIDs.Wood));
+                    break;
             }
 
             return itemList;

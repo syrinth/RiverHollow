@@ -44,19 +44,20 @@ namespace Adventure.Game_Managers
         public static void LoadIcons(ContentManager Content)
         {
             AddTexture(Content, @"Textures\Sword");
-            AddTexture(Content, @"Textures\arcane_essence");
             AddTexture(Content, @"Textures\ValidSquare");
             AddTexture(Content, @"Textures\ArcaneTower");
             AddTexture(Content, @"Textures\New");
             AddTexture(Content, @"Textures\Load");
-            AddTexture(Content, @"Textures\pickAxe");
+            AddTexture(Content, @"Textures\tools");
             AddTexture(Content, @"Textures\rock");
-            AddTexture(Content, @"Textures\stone");
             AddTexture(Content, @"Textures\ok");
             AddTexture(Content, @"Textures\Selection");
             AddTexture(Content, @"Textures\Dialog");
             AddTexture(Content, @"Textures\Text");
             AddTexture(Content, @"Textures\chest");
+            AddTexture(Content, @"Textures\portraits");
+            AddTexture(Content, @"Textures\tree");
+            AddTexture(Content, @"Textures\items");
         }
 
         public static void LoadFont(ContentManager Content)

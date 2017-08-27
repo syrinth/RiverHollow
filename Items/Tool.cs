@@ -21,14 +21,19 @@ namespace Adventure.Items
         protected AnimatedSprite _sprite;
         public AnimatedSprite ToolAnimation { get => _sprite; }
 
-        public Tool(ObjectManager.ItemIDs ID, Texture2D texture, string name, string description, float breakVal, float chopVal, int stam) : base(ID, texture, name, description, 1, false)
+        public Tool(ObjectManager.ItemIDs ID, Vector2 sourcePos, Texture2D texture, string name, string description, float breakVal, float chopVal, int stam) : this(ID, sourcePos, texture, name, description, breakVal, chopVal, 1, null)
         {
+        }
+
+        public Tool(ObjectManager.ItemIDs ID, Vector2 sourcePos, Texture2D texture, string name, string description, float breakVal, float chopVal, int stam, List<KeyValuePair<ObjectManager.ItemIDs, int>> reagents) : base(ID, sourcePos, texture, name, description, 1, false, reagents)
+        {
+            _sourcePos = sourcePos;
             _breakValue = breakVal;
             _chopValue = chopVal;
             _sprite = new AnimatedSprite(texture);
             _staminaCost = stam;
 
-            _sprite.AddAnimation("Left", 32, 0, 32, 32, 3, 0.1f);
+            _sprite.AddAnimation("Left", (int)_sourcePos.X + 32, (int)_sourcePos.Y, 32, 32, 3, 0.1f);
 
             _sprite.CurrentAnimation = "Left";
             _sprite.IsAnimating = true;
@@ -42,7 +47,7 @@ namespace Adventure.Items
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle drawBox)
         {
-            spriteBatch.Draw(_texture, drawBox, new Rectangle(0, 0, 32, 32), Color.White);
+            spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, 32, 32), Color.White);
         }
     }
 }
