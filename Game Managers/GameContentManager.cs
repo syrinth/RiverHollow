@@ -43,7 +43,7 @@ namespace Adventure.Game_Managers
 
         public static void LoadIcons(ContentManager Content)
         {
-            AddTexture(Content, @"Textures\Sword");
+            AddTexture(Content, @"Textures\weapons");
             AddTexture(Content, @"Textures\ValidSquare");
             AddTexture(Content, @"Textures\ArcaneTower");
             AddTexture(Content, @"Textures\New");

@@ -34,10 +34,10 @@ namespace Adventure.Game_Managers
             _buildings = new List<Building>();
             _player = new Player();
             _canMake = new List<ObjectManager.ItemIDs>();
-            _player.AddItemToFirstAvailableInventory(ObjectManager.ItemIDs.Sword);
-            _player.AddItemToFirstAvailableInventory(ObjectManager.ItemIDs.PickAxe);
-            _player.AddItemToFirstAvailableInventory(ObjectManager.ItemIDs.Axe);
-            _player.AddItemToFirstAvailableInventory(ObjectManager.ItemIDs.SmallChest);
+            _player.AddItemToFirstAvailableInventory(6);
+            _player.AddItemToFirstAvailableInventory(4);
+            _player.AddItemToFirstAvailableInventory(5);
+            _player.AddItemToFirstAvailableInventory(7);
             _canMake.Add(ObjectManager.ItemIDs.SmallChest);
         }
 
@@ -119,7 +119,7 @@ namespace Adventure.Game_Managers
         public struct ItemData
         {
             [XmlElement(ElementName = "ItemID")]
-            public ObjectManager.ItemIDs itemID;
+            public int itemID;
 
             [XmlElement(ElementName = "Numbers")]
             public int num;
@@ -149,7 +149,7 @@ namespace Adventure.Game_Managers
         public struct StaticItemData
         {
             [XmlElement(ElementName = "StaticItemID")]
-            public ObjectManager.ItemIDs staticItemID;
+            public int staticItemID;
 
             [XmlElement(ElementName = "X")]
             public int x;

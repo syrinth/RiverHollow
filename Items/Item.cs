@@ -7,17 +7,23 @@ namespace Adventure.Items
 {
     public class Item
     {
-        protected ObjectManager.ItemIDs _itemID;
-        public ObjectManager.ItemIDs ItemID { get => _itemID; }
+        public enum ItemType {Resource, Weapon, Tool, Container };
 
-        protected List<KeyValuePair<ObjectManager.ItemIDs, int>> _reagents;
-        public List<KeyValuePair<ObjectManager.ItemIDs, int>> Reagents { get => _reagents; }
+        protected ItemType _itemType;
+        public ItemType Type { get => _itemType; }
+        protected int _itemID;
+        public int ItemID { get => _itemID; }
+
+        protected List<KeyValuePair<int, int>> _reagents;
+        public List<KeyValuePair<int, int>> Reagents { get => _reagents; }
 
         protected string _name;
         public string Name { get => _name; }
 
         protected Texture2D _texture;
         public Texture2D Texture { get => _texture; }
+
+        protected int _textureIndex;
 
         protected Vector2 _sourcePos;
 
@@ -34,24 +40,18 @@ namespace Adventure.Items
 
         protected string _description;
 
-        public Item(ObjectManager.ItemIDs ID, Vector2 sourcePos, string name, Texture2D tex, string description) : this(ID, sourcePos, name, tex, description, null)
+        public Item()
         {
 
         }
 
-        public Item(ObjectManager.ItemIDs ID, Vector2 sourcePos, string name, Texture2D tex, string description, List<KeyValuePair<ObjectManager.ItemIDs, int>> reagents)
+        public Item(int ID, Vector2 sourcePos, string name, Texture2D tex, string description)
         {
             _itemID = ID;
             _name = name;
             _sourcePos = sourcePos;
             _texture = tex;
             _description = description;
-            _reagents = reagents;
-        }
-
-        public ObjectManager.ItemIDs GetItemID()
-        {
-            return _itemID;
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)

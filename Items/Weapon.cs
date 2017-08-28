@@ -33,7 +33,31 @@ namespace Adventure.Items
         private float _angle; //1 radian = 57.29 degrees
         private float _endAngle; //1 radian = 57.29 degrees
 
-        public Weapon(ObjectManager.ItemIDs ID, Vector2 sourcePos, Texture2D texture, string name, string description, int minDmg, int maxDmg, int stam) : base(ID, sourcePos, texture, name, description, 1, false)
+        public Weapon(int id, string[] itemValue)
+        {
+            if (itemValue.Length == 8)
+            {
+                _num = 1;
+
+                int i = 1;
+                _itemType = ItemType.Resource;
+                _name = itemValue[i++];
+                _description = itemValue[i++];
+                _textureIndex = int.Parse(itemValue[i++]);
+                _itemID = id; //(ObjectManager.ItemIDs)Enum.Parse(typeof(ObjectManager.ItemIDs), itemValue[i++]);
+                i++; //holding out for enum
+                _minDmg = int.Parse(itemValue[i++]);
+                _maxDmg = int.Parse(itemValue[i++]);
+                _staminaCost = int.Parse(itemValue[i++]);
+                _texture = GameContentManager.GetTexture(@"Textures\weapons");
+
+                CalculateSourcePos();
+                rotationOrigin = new Vector2(32, 32);
+                _rect = Rectangle.Empty;
+            }
+        }
+
+        public Weapon(int ID, Vector2 sourcePos, Texture2D texture, string name, string description, int minDmg, int maxDmg, int stam) : base(ID, sourcePos, texture, name, description, 1, false)
         {
             _attack = false;
             _minDmg = minDmg;

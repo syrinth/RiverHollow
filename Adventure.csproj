@@ -115,6 +115,9 @@
     <Reference Include="MonoGame.Extended, Version=0.6.568.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoGame.Extended.0.6.568\lib\portable-net45+win8+wpa81\MonoGame.Extended.dll</HintPath>
     </Reference>
+    <Reference Include="MonoGame.Extended.Content.Pipeline">
+      <HintPath>..\packages\MonoGame.Extended.Content.Pipeline.0.6.568\tools\MonoGame.Extended.Content.Pipeline.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Extended.Graphics, Version=0.6.568.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoGame.Extended.Graphics.0.6.568\lib\portable-net45+win8+wpa81\MonoGame.Extended.Graphics.dll</HintPath>
     </Reference>

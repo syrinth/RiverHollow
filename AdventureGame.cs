@@ -69,6 +69,7 @@ namespace Adventure
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             GameContentManager.LoadContent(Content);
+            ObjectManager.LoadContent(Content);
             GUIManager.LoadContent();
             MapManager.LoadContent(Content, GraphicsDevice);
             PlayerManager.NewPlayer();

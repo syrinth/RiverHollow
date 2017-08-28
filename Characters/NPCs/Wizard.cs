@@ -25,7 +25,7 @@ namespace Adventure.Characters.NPCs
 
             _currFood = 0;
             _dailyFoodReq = 3;
-            _dailyItemID = ItemIDs.ArcaneEssence;
+            _dailyItemID = 2;
             _heldItem = null;
             _mood = 0;
             Position = position;

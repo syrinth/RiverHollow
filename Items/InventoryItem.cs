@@ -15,15 +15,52 @@ namespace Adventure.Items
         protected int _num;
         public int Number { get => _num; set => _num = value; }
 
-        public InventoryItem(ObjectManager.ItemIDs ID, Vector2 sourcePos, Texture2D texture, string name, string description, int number, bool stacks) : this(ID, sourcePos, texture, name, description, number, stacks, null)
+        public InventoryItem()
+        {
+
+        }
+        public InventoryItem(int id, string[] itemValue, int num)
+        {
+            if(itemValue.Length == 5)
+            {
+                _num = num;
+
+                int i = 1;
+                _itemType = ItemType.Resource;
+                _name = itemValue[i++];
+                _description = itemValue[i++];
+                _textureIndex = int.Parse(itemValue[i++]);
+                _itemID = id;//(ObjectManager.ItemIDs)Enum.Parse(typeof(ObjectManager.ItemIDs), itemValue[i++]);
+
+                _doesItStack = true;
+                _texture = GameContentManager.GetTexture(@"Textures\items");
+
+                CalculateSourcePos();
+            }
+        }
+
+        public InventoryItem(int ID, Vector2 sourcePos, Texture2D texture, string name, string description, int number, bool stacks) : this(ID, sourcePos, texture, name, description, number, stacks, null)
         { }
 
-        public InventoryItem(ObjectManager.ItemIDs ID, Vector2 sourcePos, Texture2D texture, string name, string description, int number, bool stacks, List<KeyValuePair<ObjectManager.ItemIDs, int>> reagents) : base(ID, sourcePos, name, texture, description, reagents)
+        public InventoryItem(int ID, Vector2 sourcePos, Texture2D texture, string name, string description, int number, bool stacks, List<KeyValuePair<ObjectManager.ItemIDs, int>> reagents) : base(ID, sourcePos, name, texture, description)
         {
             _doesItStack = stacks;
             _num = number;
         }
 
+        protected void CalculateSourcePos()
+        {
+            int textureRows = (_texture.Height / 32);
+            int textureColumns = (_texture.Width / 32);
+
+            if (textureRows == 0) textureRows = 1;
+            if (textureColumns == 0) textureColumns = 1;
+
+            int targetRow = _textureIndex / textureColumns;
+            int targetCol = _textureIndex % textureColumns;
+
+            _sourcePos = new Vector2(0 + 32 * targetCol, 0 + 32 * targetRow);
+        }
         //Copy Constructor
         public InventoryItem(InventoryItem item) : base(item.ItemID, item._sourcePos, item.Name, item.Texture, item._description)
         {

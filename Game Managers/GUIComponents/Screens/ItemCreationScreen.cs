@@ -36,7 +36,7 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
             _inventory.SetPosition(centerPoint - new Vector2(mainWidthHeight.X / 2, 0));
 
             int i = 0; int j = 0;
-            foreach (ObjectManager.ItemIDs id in PlayerManager.CanMake)
+            foreach (int id in PlayerManager.CanMake)
             {
                 Rectangle displayBox = new Rectangle((int)_creationWindow.Position.X + 32 + 3, (int)_creationWindow.Position.Y + 32 + 3, 32, 32);
                 _displayList[i, j] = new GUIItemBox(displayBox.Location.ToVector2(), new Rectangle(288, 32, 32, 32), displayBox.Width, displayBox.Height, @"Textures\Dialog", ObjectManager.GetItem(id));
@@ -66,7 +66,7 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
                 {
                     if (gIB != null && gIB.Contains(mouse))
                     {
-                        foreach(KeyValuePair<ObjectManager.ItemIDs, int> kvp in gIB.Item.Reagents)
+                        foreach(KeyValuePair<int, int> kvp in gIB.Item.Reagents)
                         {
                             if(PlayerManager.Player.HasItemInInventory(kvp.Key, kvp.Value))
                             {

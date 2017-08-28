@@ -225,10 +225,10 @@ namespace Adventure
             return rv;
         }
 
-        public bool HasSpaceInInventory(ItemIDs itemID)
+        public bool HasSpaceInInventory(int itemID)
         {
             bool rv = false;
-            if (itemID != ItemIDs.Nothing)
+            if (itemID != -1)
             {
                 for (int i = 0; i < maxItemRows; i++)
                 {
@@ -255,11 +255,11 @@ namespace Adventure
             return rv;
         }
 
-        public bool HasItemInInventory(ItemIDs itemID, int x)
+        public bool HasItemInInventory(int itemID, int x)
         {
             bool rv = false;
             int leftToFind = x;
-            if (itemID != ItemIDs.Nothing)
+            if (itemID != -1)
             {
                 for (int i = 0; i < maxItemRows; i++)
                 {
@@ -286,79 +286,73 @@ namespace Adventure
             return rv;
         }
 
-        public void RemoveItemsFromInventory(ItemIDs itemID, int x)
+        public void RemoveItemsFromInventory(int itemID, int x)
         {
             int leftToRemove = x;
             bool done = false;
-            if (itemID != ItemIDs.Nothing)
+            List<int> toRemove = new List<int>();
+            for (int i = 0; i < maxItemRows; i++)
             {
-                List<int> toRemove = new List<int>();
-                for (int i = 0; i < maxItemRows; i++)
+                if (done) { break; }
+                for (int j = 0; j < maxItemColumns; j++)
                 {
-                    if (done){ break; }
-                    for (int j = 0; j < maxItemColumns; j++)
+                    if (done) { break; }
+                    InventoryItem testItem = _inventory[i, j];
+                    if (testItem != null && testItem.ItemID == itemID)
                     {
-                        if (done) { break; }
-                        InventoryItem testItem = _inventory[i, j];
-                        if (testItem != null && testItem.ItemID == itemID)
+                        int temp = testItem.Number;
+                        if (testItem.Number >= leftToRemove)
                         {
-                            int temp = testItem.Number;
-                            if(testItem.Number >= leftToRemove)
+                            testItem.Number -= leftToRemove;
+                            if (testItem.Number == 0)
                             {
-                                testItem.Number -= leftToRemove;
-                                if (testItem.Number == 0)
-                                {
-                                    toRemove.Add((i * maxItemColumns) + j);
-                                }
-                            }
-                            else
-                            {
-                                testItem.Number = 0;
                                 toRemove.Add((i * maxItemColumns) + j);
-                                leftToRemove -= temp;
                             }
+                        }
+                        else
+                        {
+                            testItem.Number = 0;
+                            toRemove.Add((i * maxItemColumns) + j);
+                            leftToRemove -= temp;
                         }
                     }
                 }
+            }
 
-                foreach(int i in toRemove)
-                {
-                    RemoveItemFromInventory(i);
-                }
+            foreach (int i in toRemove)
+            {
+                RemoveItemFromInventory(i);
             }
         }
 
-        public void AddItemToFirstAvailableInventory(ItemIDs itemID)
+        public void AddItemToFirstAvailableInventory(int itemID)
         {
-            if (itemID != ItemIDs.Nothing)
+            if (!IncrementExistingItem(itemID))
             {
-                if (!IncrementExistingItem(itemID))
+                bool added = false;
+                for (int i = 0; i < maxItemRows; i++)
                 {
-                    bool added = false;
-                    for (int i = 0; i < maxItemRows; i++)
+                    for (int j = 0; j < maxItemColumns; j++)
                     {
-                        for (int j = 0; j < maxItemColumns; j++)
+                        if (_inventory[i, j] == null)
                         {
-                            if (_inventory[i, j] == null)
-                            {
-                                _inventory[i, j] = ObjectManager.GetItem(itemID);
-                                added = true; ;
-                            }
-                            if (added)
-                            {
-                                break;
-                            }
+                            _inventory[i, j] = ObjectManager.GetItem(itemID, 1);
+                            added = true; ;
                         }
                         if (added)
                         {
                             break;
                         }
                     }
+                    if (added)
+                    {
+                        break;
+                    }
                 }
             }
         }
 
-        public bool IncrementExistingItem(ObjectManager.ItemIDs itemID)
+        public bool IncrementExistingItem(int itemID)
         {
             bool rv = false;
             for (int i = 0; i < maxItemRows; i++)

@@ -12,20 +12,39 @@ namespace Adventure.Items
 {
     public class Tool : InventoryItem
     {
-        protected int _staminaCost = 0;
+        protected int _staminaCost;
         public int StaminaCost { get => _staminaCost; }
-        protected float _breakValue = 0;
+        protected float _breakValue;
         public float BreakValue { get => _breakValue; }
-        protected float _chopValue = 0;
+        protected float _chopValue;
         public float ChopValue { get => _chopValue; }
         protected AnimatedSprite _sprite;
         public AnimatedSprite ToolAnimation { get => _sprite; }
 
-        public Tool(ObjectManager.ItemIDs ID, Vector2 sourcePos, Texture2D texture, string name, string description, float breakVal, float chopVal, int stam) : this(ID, sourcePos, texture, name, description, breakVal, chopVal, 1, null)
+        public Tool(int id, string[] itemValue)
         {
+            if (itemValue.Length == 8)
+            {
+                _num = 1;
+
+                int i = 1;
+                _itemType = ItemType.Resource;
+                _name = itemValue[i++];
+                _description = itemValue[i++];
+                _textureIndex = int.Parse(itemValue[i++]);
+                _itemID = id; //(ObjectManager.ItemIDs)Enum.Parse(typeof(ObjectManager.ItemIDs), itemValue[i++]);
+                i++; //holding out for enum
+                _breakValue = float.Parse(itemValue[i++]);
+                _chopValue = float.Parse(itemValue[i++]);
+                _staminaCost = int.Parse(itemValue[i++]);
+
+                _texture = GameContentManager.GetTexture(@"Textures\tools");
+
+                CalculateSourcePos();
+            }
         }
 
-        public Tool(ObjectManager.ItemIDs ID, Vector2 sourcePos, Texture2D texture, string name, string description, float breakVal, float chopVal, int stam, List<KeyValuePair<ObjectManager.ItemIDs, int>> reagents) : base(ID, sourcePos, texture, name, description, 1, false, reagents)
+        public Tool(int ID, Vector2 sourcePos, Texture2D texture, string name, string description, float breakVal, float chopVal, int stam, List<KeyValuePair<ObjectManager.ItemIDs, int>> reagents) : base(ID, sourcePos, texture, name, description, 1, false, reagents)
         {
             _sourcePos = sourcePos;
             _breakValue = breakVal;

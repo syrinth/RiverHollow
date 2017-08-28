@@ -38,18 +38,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Eggplant.png
 
-#begin Textures/Sword.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Sword.png
-
 #begin Textures/wizard.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -318,4 +306,21 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/items.png
+
+#begin Data/Data.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Data.xml
+
+#begin Textures/weapons.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/weapons.png
 

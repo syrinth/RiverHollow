@@ -16,10 +16,10 @@ namespace Adventure.Game_Managers
             switch (id)
             {
                 case ObjectManager.ObjectIDs.Rock:
-                    itemList.Add(ObjectManager.GetItem(ObjectManager.ItemIDs.Stone));
+                    itemList.Add(ObjectManager.GetItem(1, 1));
                     break;
                 case ObjectManager.ObjectIDs.Tree:
-                    itemList.Add(ObjectManager.GetItem(ObjectManager.ItemIDs.Wood));
+                    itemList.Add(ObjectManager.GetItem(3, 1));
                     break;
             }
 

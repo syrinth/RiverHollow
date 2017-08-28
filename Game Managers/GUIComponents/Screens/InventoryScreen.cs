@@ -41,7 +41,7 @@ namespace Adventure.Game_Managers.GUIObjects
                 _inventory.ProcessLeftButtonClick(mouse);
                 rv = true;
             }
-            if (_container.Contains(mouse))
+            if (_container != null && _container.Contains(mouse))
             {
                 _container.ProcessLeftButtonClick(mouse);
                 rv = true;

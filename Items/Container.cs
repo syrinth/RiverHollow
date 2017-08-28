@@ -16,15 +16,31 @@ namespace Adventure.Items
         private int _columns;
         public int Columns { get => _columns; }
 
-        public Container(ObjectManager.ItemIDs ID, Vector2 sourcePos, Texture2D texture, string name, string description, int rows, int columns, List<KeyValuePair<ObjectManager.ItemIDs, int>> reagents) : base(ID, sourcePos, texture, name, description, reagents)
+        public Container(int id, string[] itemValue)
         {
-            _pickup = false;
-            _inventory = new InventoryItem[Player.maxItemRows, Player.maxItemColumns];
-            _rows = rows;
-            _columns = columns;
+            if (itemValue.Length == 7)
+            {
+                _num = 1;
+
+                int i = 1;
+                _itemType = ItemType.Resource;
+                _name = itemValue[i++];
+                _description = itemValue[i++];
+                _textureIndex = int.Parse(itemValue[i++]);
+                i++; //Holding out for Enum
+                _rows = int.Parse(itemValue[i++]);
+                _columns = int.Parse(itemValue[i++]);
+                _itemID = id; //(ObjectManager.ItemIDs)Enum.Parse(typeof(ObjectManager.ItemIDs), itemValue[i++]);
+                _texture = GameContentManager.GetTexture(@"Textures\chest");
+
+                _pickup = false;
+                _inventory = new InventoryItem[Player.maxItemRows, Player.maxItemColumns];
+
+                CalculateSourcePos();
+            }
         }
 
-        public bool IncrementExistingItem(ObjectManager.ItemIDs itemID)
+        public bool IncrementExistingItem(int itemID)
         {
             bool rv = false;
             for (int i = 0; i < Player.maxItemRows; i++)
