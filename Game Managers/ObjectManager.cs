@@ -28,13 +28,25 @@ namespace Adventure.Game_Managers
         {
             Nothing, Rock, BigRock, Tree
         }
+        #endregion
 
         private static Dictionary<int, string> _itemDictionary;
-        #endregion
+        private static Dictionary<int, Recipe> _craftingDictionary;
+        public static Dictionary<int, Recipe> CraftingDictionary { get => _craftingDictionary; }
 
         public static void LoadContent(ContentManager Content)
         {
-            _itemDictionary = Content.Load<Dictionary<int, string>>(@"Data\Data");
+            _itemDictionary = Content.Load<Dictionary<int, string>>(@"Data\ItemData");
+            LoadRecipes(Content);
+        }
+
+        private static void LoadRecipes(ContentManager Content)
+        {
+            _craftingDictionary = new Dictionary<int, Recipe>();
+            foreach (KeyValuePair<int, string> kvp in Content.Load<Dictionary<int, string>>(@"Data\CraftingData"))
+            {
+                _craftingDictionary.Add(kvp.Key, new Recipe(kvp.Key, kvp.Value));
+            }
         }
 
         public static Building GetBuilding(BuildingID id)
@@ -64,50 +76,24 @@ namespace Adventure.Game_Managers
 
         public static InventoryItem GetItem(int id, int num)
         {
-            string _itemData = _itemDictionary[id].Replace("\"", "");
-            string[] _itemDataValues = _itemData.Split('/');
-            switch (_itemDataValues[0])
+            if (id != -1)
             {
-                case "Resource":
-                    return new InventoryItem(id, _itemDataValues, num);
-                case "Tool":
-                    return new Tool(id, _itemDataValues);
-                case "Weapon":
-                    return new Weapon(id, _itemDataValues);
-                case "Container":
-                    return new Container(id, _itemDataValues);
+                string _itemData = _itemDictionary[id];
+                string[] _itemDataValues = _itemData.Split('/');
+                switch (_itemDataValues[0])
+                {
+                    case "Resource":
+                        return new InventoryItem(id, _itemDataValues, num);
+                    case "Tool":
+                        return new Tool(id, _itemDataValues);
+                    case "Weapon":
+                        return new Weapon(id, _itemDataValues);
+                    case "Container":
+                        return new Container(id, _itemDataValues);
+                }
             }
             return null;
         }
-
-        //public static InventoryItem GetItem(ItemIDs id, int num)
-        //{
-        //    string name = "";
-        //    string description = "";
-        //    switch (id)
-        //    {
-        //        //case ItemIDs.PickAxe:
-        //        //    name = "Pick Axe";
-        //        //    description = "Pick, break rocks";
-        //        //    return new Tool(id, new Vector2(0, 0), GetTexture(@"Textures\tools"), name, description, 1, 0.1f, 5);
-        //        //case ItemIDs.Axe:
-        //        //    name = "Axe";
-        //        //    description = "Chop chop motherfucker";
-        //        //    return new Tool(id, new Vector2(0, 32), GetTexture(@"Textures\tools"), name, description, 0, 3, 5);
-        //        case ItemIDs.Sword:
-        //            name = "Sword";
-        //            description = "SWORD!";
-        //            return new Weapon(id, new Vector2(0,0), GetTexture(@"Textures\Sword"), name, description, 1, 5, 5);
-        //        case ItemIDs.SmallChest:
-        //            name = "Small Chest";
-        //            description = "A small chestused to store items for later";
-        //            List<KeyValuePair<ItemIDs, int>> reagents = new List<KeyValuePair<ItemIDs, int>>();
-        //            reagents.Add(new KeyValuePair<ItemIDs, int>(ItemIDs.Wood, 2));
-        //            return new Container(id, new Vector2(0, 0), GetTexture(@"Textures\chest"), name, description, 1, 8, reagents);
-
-        //    }
-        //    return null;
-        //}
 
         public static WorldObject GetWorldObject(ObjectIDs id, Vector2 pos)
         {
@@ -116,7 +102,7 @@ namespace Adventure.Game_Managers
                 case ObjectIDs.Rock:
                     return new WorldObject(ObjectIDs.Rock, 1, true, false, pos, GetTexture(@"Textures\rock"), 1, TileMap.TileSize, TileMap.TileSize);
                 case ObjectIDs.Tree:
-                    return new Tree(ObjectIDs.Tree, 10, false, true, pos, GetTexture(@"Textures\tree"), 1, TileMap.TileSize*3, TileMap.TileSize*4);
+                    return new Tree(ObjectIDs.Tree, 10, false, true, pos, GetTexture(@"Textures\tree"), 1, TileMap.TileSize * 3, TileMap.TileSize * 4);
             }
             return null;
         }
@@ -124,6 +110,27 @@ namespace Adventure.Game_Managers
         private static Texture2D GetTexture(string texture)
         {
             return GameContentManager.GetTexture(texture);
+        }
+
+
+        public class Recipe
+        {
+            private int _item;
+            private Dictionary<int, int> _requiredItems;
+            public Dictionary<int, int> RequiredItems { get => _requiredItems; }
+
+            public Recipe(int id, string data)
+            {
+                _item = id;
+                _requiredItems = new Dictionary<int, int>();
+
+                string[] _recipeDataValues = data.Split('/');
+                foreach (string s in _recipeDataValues)
+                {
+                    string[] itemParams = s.Split(' ');
+                    _requiredItems.Add(int.Parse(itemParams[0]), int.Parse(itemParams[1]));
+                }
+            }
         }
     }
 }

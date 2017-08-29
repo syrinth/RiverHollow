@@ -18,8 +18,9 @@ namespace Adventure.Game_Managers
 {
     public static class PlayerManager
     {
-        private static List<ObjectManager.ItemIDs> _canMake;
-        public static List<ObjectManager.ItemIDs> CanMake { get => _canMake; }
+        public static Dictionary<string, bool> _talkedTo;
+        private static List<int> _canMake;
+        public static List<int> CanMake { get => _canMake; }
         private static string _currentMap;
         public static string CurrentMap { get => _currentMap; set => _currentMap = value; }
 
@@ -31,14 +32,16 @@ namespace Adventure.Game_Managers
 
         public static void NewPlayer()
         {
+            _talkedTo = new Dictionary<string, bool>();
+            _talkedTo.Add("Amanda", false);
             _buildings = new List<Building>();
             _player = new Player();
-            _canMake = new List<ObjectManager.ItemIDs>();
-            _player.AddItemToFirstAvailableInventory(6);
-            _player.AddItemToFirstAvailableInventory(4);
+            _canMake = new List<int>();
+            _canMake.Add(6);
             _player.AddItemToFirstAvailableInventory(5);
-            _player.AddItemToFirstAvailableInventory(7);
-            _canMake.Add(ObjectManager.ItemIDs.SmallChest);
+            _player.AddItemToFirstAvailableInventory(3);
+            _player.AddItemToFirstAvailableInventory(4);
+            _player.AddItemToFirstAvailableInventory(6);
         }
 
         public static void Update(GameTime gameTime)
@@ -64,10 +67,6 @@ namespace Adventure.Game_Managers
         {
             _buildings.Add(b);
         }
-        public static void AddBuilding(ObjectManager.ItemIDs id)
-        {
-            _canMake.Add(id);
-        }
 
         public static int GetNewBuildingID()
         {
@@ -92,6 +91,9 @@ namespace Adventure.Game_Managers
 
             [XmlArray(ElementName = "Maps")]
             public List<MapData> MapData;
+
+            //[XmlArray(ElementName = "NPCData")]
+            //public List<NPCData> NPCData;
         }
 
         public struct BuildingData
@@ -135,6 +137,15 @@ namespace Adventure.Game_Managers
             [XmlArray(ElementName = "StaticItems")]
             public List<StaticItemData> staticItems;
         }
+        //public struct NPCData
+        //{
+        //    [XmlElement(ElementName = "Name")]
+        //    public string name;
+
+        //    [XmlElement(ElementName = "Introduced")]
+        //    public bool introduced;
+
+        //}
         public struct WorldObjectData
         {
             [XmlElement(ElementName = "WorldObjectID")]
@@ -198,6 +209,10 @@ namespace Adventure.Game_Managers
                     itemData.itemID = i.ItemID;
                     itemData.num = i.Number;
                 }
+                else
+                {
+                    itemData.itemID = -1;
+                }
                 data.Items.Add(itemData);
             }
 
@@ -235,6 +250,10 @@ namespace Adventure.Game_Managers
                             {
                                 itemData.itemID = i.ItemID;
                                 itemData.num = i.Number;
+                            }
+                            else
+                            {
+                                itemData.itemID = -1;
                             }
                             d.Items.Add(itemData);
                         }
@@ -278,14 +297,14 @@ namespace Adventure.Game_Managers
             {
                 Building newBuilding = ObjectManager.GetBuilding(b.buildingID);
                 newBuilding.AddBuildingDetails(b);
-                AddBuilding(newBuilding);
                 MapManager.CurrentMap.AddBuilding(newBuilding);
             }
             for (int i = 0; i < Player.maxItemRows; i++)
             {
                 for (int j = 0; j < Player.maxItemColumns; j++)
                 {
-                    ItemData item = data.Items[i* Player.maxItemRows +j];
+                    int index = i * Player.maxItemColumns + j;
+                    ItemData item = data.Items[index];
                     InventoryItem newItem = ObjectManager.GetItem(item.itemID, item.num);
                     _player.AddItemToInventorySpot(newItem, i, j);
                 }

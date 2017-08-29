@@ -14,6 +14,7 @@ namespace Adventure.Characters.NPCs
     public abstract class Worker : NPC
     {
         public abstract ObjectManager.WorkerID WorkerID { get; }
+        public abstract string WorkerType { get; }
         protected int _dailyFoodReq;
         protected int _currFood;
         protected int _dailyItemID;
@@ -27,6 +28,14 @@ namespace Adventure.Characters.NPCs
             _dailyItemID = -1;
             _heldItem = null;
             _mood = 0;
+        }
+
+        public override void Talk()
+        {
+            _mood += 1;
+
+            Random r = new Random();
+            GUIManager.LoadScreen(GUIManager.Screens.Text, this, GameContentManager.GetDialogue(WorkerType +r.Next(1,3)));
         }
 
         public int TakeItem()

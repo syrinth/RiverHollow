@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, string]">
+    <!--Key:NPCType#, Value:Text-->
+    <Item>
+      <Key>Wizard1</Key>
+      <Value>The mystic sigils indicate... high moon in the Western Quarter... Goldfish...</Value>
+    </Item>
+    <Item>
+      <Key>Wizard2</Key>
+      <Value>-zra? Ah! I see you've traversed the Widdershins path of the darkestmind! Well done!</Value>
+    </Item>
+    <Item>
+      <Key>Sleep</Key>
+      <Value>Go to bed? [Yes | No]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

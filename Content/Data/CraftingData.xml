@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <!--Key:FinalItemNum, Value:itemNum amount/itemNum amount-->
+    <Item>
+      <Key>6</Key>
+      <Value>2 3</Value>
+    </Item>
+  </Asset>
+</XnaContent>

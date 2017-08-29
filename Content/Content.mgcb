@@ -307,11 +307,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/items.png
 
-#begin Data/Data.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Data.xml
-
 #begin Textures/weapons.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -323,4 +318,24 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/weapons.png
+
+#begin Data/Dialogue/NPCDialogue.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Dialogue/NPCDialogue.xml
+
+#begin Data/Dialogue/Amanda.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Dialogue/Amanda.xml
+
+#begin Data/ItemData.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/ItemData.xml
+
+#begin Data/CraftingData.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/CraftingData.xml
 

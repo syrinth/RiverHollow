@@ -14,9 +14,6 @@ namespace Adventure.Items
         protected int _itemID;
         public int ItemID { get => _itemID; }
 
-        protected List<KeyValuePair<int, int>> _reagents;
-        public List<KeyValuePair<int, int>> Reagents { get => _reagents; }
-
         protected string _name;
         public string Name { get => _name; }
 
@@ -40,19 +37,7 @@ namespace Adventure.Items
 
         protected string _description;
 
-        public Item()
-        {
-
-        }
-
-        public Item(int ID, Vector2 sourcePos, string name, Texture2D tex, string description)
-        {
-            _itemID = ID;
-            _name = name;
-            _sourcePos = sourcePos;
-            _texture = tex;
-            _description = description;
-        }
+        public Item() { }
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {

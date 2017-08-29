@@ -259,7 +259,7 @@ namespace Adventure.SpriteAnimations
         public void Draw(SpriteBatch spriteBatch)
         {
             if (_animating) {
-                spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White, 0, new Vector2(0,0), SpriteEffects.None, Position.Y + Texture.Height);
+                spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White, 0, new Vector2(0,0), SpriteEffects.None, Position.Y + Texture.Height+(Position.X/100));
             }     
         }
     }

@@ -37,26 +37,17 @@ namespace Adventure.Items
                 _breakValue = float.Parse(itemValue[i++]);
                 _chopValue = float.Parse(itemValue[i++]);
                 _staminaCost = int.Parse(itemValue[i++]);
-
                 _texture = GameContentManager.GetTexture(@"Textures\tools");
-
+                
                 CalculateSourcePos();
+
+                _sprite = new AnimatedSprite(_texture);
+                _sprite.AddAnimation("Left", (int)_sourcePos.X + 32, (int)_sourcePos.Y, 32, 32, 3, 0.1f);
+
+                _sprite.CurrentAnimation = "Left";
+                _sprite.IsAnimating = true;
+                _sprite.playsOnce = true;
             }
-        }
-
-        public Tool(int ID, Vector2 sourcePos, Texture2D texture, string name, string description, float breakVal, float chopVal, int stam, List<KeyValuePair<ObjectManager.ItemIDs, int>> reagents) : base(ID, sourcePos, texture, name, description, 1, false, reagents)
-        {
-            _sourcePos = sourcePos;
-            _breakValue = breakVal;
-            _chopValue = chopVal;
-            _sprite = new AnimatedSprite(texture);
-            _staminaCost = stam;
-
-            _sprite.AddAnimation("Left", (int)_sourcePos.X + 32, (int)_sourcePos.Y, 32, 32, 3, 0.1f);
-
-            _sprite.CurrentAnimation = "Left";
-            _sprite.IsAnimating = true;
-            _sprite.playsOnce = true;
         }
 
         public void Update(GameTime gameTime)

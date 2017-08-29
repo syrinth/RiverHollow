@@ -46,7 +46,7 @@ namespace Adventure.Game_Managers
                 {
                     if (((TextScreen)_currentGUIScreen).TextFinished())
                     {
-                        AdventureGame.ChangeGameState(AdventureGame.GameState.Game);
+                        AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
                         LoadScreen(GUIManager.Screens.HUD);
                     }
                 }

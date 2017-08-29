@@ -89,22 +89,25 @@ namespace Adventure.Game_Managers
             _currentMap = _tileMaps[newMap];
         }
 
-        public static void PopulateMaps()
+        public static void PopulateMaps(bool loaded)
         {
             int mapWidth = _tileMaps[@"Map1"].MapWidth;
             int mapHeight = _tileMaps[@"Map1"].MapHeight;
             Random r = new Random();
             //LoadMap1
-            for(int i=0; i<99; i++)
+            if (!loaded)
             {
-                _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Rock, new Vector2(r.Next(0, mapWidth)*TileMap.TileSize, r.Next(0, mapHeight) * TileMap.TileSize)));
-            }
-            for (int i = 0; i < 99; i++)
-            {
-                _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Tree, new Vector2(r.Next(0, mapWidth) * TileMap.TileSize, r.Next(0, mapHeight) * TileMap.TileSize)));
+                for (int i = 0; i < 99; i++)
+                {
+                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Rock, new Vector2(r.Next(0, mapWidth) * TileMap.TileSize, r.Next(0, mapHeight) * TileMap.TileSize)));
+                }
+                for (int i = 0; i < 99; i++)
+                {
+                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Tree, new Vector2(r.Next(0, mapWidth) * TileMap.TileSize, r.Next(0, mapHeight) * TileMap.TileSize)));
+                }
             }
             _tileMaps[@"Map1"].AddCharacter(new Goblin(new Vector2(1340, 1340)));
-            _tileMaps[@"Map1"].AddCharacter(new NPC(new Vector2(200, 300)));
+            _tileMaps[@"Map1"].AddCharacter(new NPC("Amanda", new Vector2(200, 300)));
 
             _tileMaps[@"Map2"].AddCharacter(new ShopKeeper(new Vector2(1340, 1340)));
         }

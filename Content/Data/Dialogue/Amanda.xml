@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, string]">
+    <!--Key:NPCType#, Value:Text-->
+    <Item>
+      <Key>Amanda1</Key>
+      <Value>"Hello. I hope you're well today."</Value>
+    </Item>
+    <Item>
+      <Key>Amanda2</Key>
+      <Value>You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.</Value>
+    </Item>
+    <Item>
+      <Key>Introduction</Key>
+      <Value>Hello, my name is Amanda. I've heard that you're a warrior, is it true? I hope so, I can only do so much here.</Value>
+    </Item>
+  </Asset>
+</XnaContent>

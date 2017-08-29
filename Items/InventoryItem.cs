@@ -15,10 +15,7 @@ namespace Adventure.Items
         protected int _num;
         public int Number { get => _num; set => _num = value; }
 
-        public InventoryItem()
-        {
-
-        }
+        public InventoryItem() {}
         public InventoryItem(int id, string[] itemValue, int num)
         {
             if(itemValue.Length == 5)
@@ -39,15 +36,6 @@ namespace Adventure.Items
             }
         }
 
-        public InventoryItem(int ID, Vector2 sourcePos, Texture2D texture, string name, string description, int number, bool stacks) : this(ID, sourcePos, texture, name, description, number, stacks, null)
-        { }
-
-        public InventoryItem(int ID, Vector2 sourcePos, Texture2D texture, string name, string description, int number, bool stacks, List<KeyValuePair<ObjectManager.ItemIDs, int>> reagents) : base(ID, sourcePos, name, texture, description)
-        {
-            _doesItStack = stacks;
-            _num = number;
-        }
-
         protected void CalculateSourcePos()
         {
             int textureRows = (_texture.Height / 32);
@@ -62,11 +50,17 @@ namespace Adventure.Items
             _sourcePos = new Vector2(0 + 32 * targetCol, 0 + 32 * targetRow);
         }
         //Copy Constructor
-        public InventoryItem(InventoryItem item) : base(item.ItemID, item._sourcePos, item.Name, item.Texture, item._description)
+        public InventoryItem(InventoryItem item)
         {
+            _itemID = item.ItemID;
+            _sourcePos = item._sourcePos;
+            _name = item.Name;
+            _texture = item.Texture;
+            _description = item._description;
             _num = item.Number;
             _doesItStack = item.DoesItStack;
         }
+
         public void Update()
         {
             if (_movement != null) {

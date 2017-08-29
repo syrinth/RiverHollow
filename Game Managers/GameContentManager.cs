@@ -10,19 +10,23 @@ namespace Adventure.Game_Managers
 {
     public static class GameContentManager
     {
+        private static ContentManager _content;
         private static Dictionary<string, Texture2D> _textureDictionary;
         private static Dictionary<string, SpriteFont> _fontDictionary;
+        private static Dictionary<string, string> _npcDialogueDictionary;
 
         public static void LoadContent(ContentManager Content)
         {
+            _content = Content;
             _textureDictionary = new Dictionary<string, Texture2D>();
             _fontDictionary = new Dictionary<string, SpriteFont>();
+            _npcDialogueDictionary = LoadDialogue(@"Data\Dialogue\NPCDialogue");
 
-            LoadCharacters(Content);
-            LoadGUIs(Content);
-            LoadIcons(Content);
+            LoadCharacters(_content);
+            LoadGUIs(_content);
+            LoadIcons(_content);
 
-            LoadFont(Content);
+            LoadFont(_content);
         }
 
         #region Load Methods
@@ -65,10 +69,10 @@ namespace Adventure.Game_Managers
             AddFont(Content, @"Fonts\DisplayFont");
             AddFont(Content, @"Fonts\Font");
         }
-        #endregion
+            #endregion
 
-        #region AddMethods
-        private static void AddTexture(ContentManager Content, string texture)
+            #region AddMethods
+            private static void AddTexture(ContentManager Content, string texture)
         {
             _textureDictionary.Add(texture, Content.Load<Texture2D>(texture));
         }
@@ -88,6 +92,16 @@ namespace Adventure.Game_Managers
         public static SpriteFont GetFont(string font)
         {
             return _fontDictionary[font];
+        }
+
+        public static string GetDialogue(string key)
+        {
+            return _npcDialogueDictionary[key];
+        }
+
+        public static Dictionary<string, string> LoadDialogue(string file)
+        {
+            return _content.Load<Dictionary<string, string>>(file);
         }
         #endregion
     }

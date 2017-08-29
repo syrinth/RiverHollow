@@ -20,7 +20,7 @@ namespace Adventure
     /// </summary>
     public class AdventureGame : Game
     {
-        public enum GameState { MainMenu, Game, Paused, EndOfDay }
+        public enum GameState { MainMenu, Running, Inventory, Paused, EndOfDay }
         public static GameState _gameState;
         public GraphicsDeviceManager _graphicsDeviceManager;
         public SpriteBatch spriteBatch;
@@ -101,7 +101,7 @@ namespace Adventure
                 KeyboardState ks = Keyboard.GetState();
                 if (ks.IsKeyDown(Keys.Escape))
                 {
-                    if (_gameState == GameState.Game)
+                    if (_gameState == GameState.Running)
                     {
                         Exit();
                     }
@@ -156,7 +156,7 @@ namespace Adventure
 
                 GraphicCursor.LastMouseState = ms;
 
-                if (_gameState == GameState.Game)
+                if (_gameState == GameState.Running)
                 {
                     if (!_paused)
                     {
@@ -190,7 +190,7 @@ namespace Adventure
             {
                 GUIManager.LoadScreen(GUIManager.Screens.MainMenu);
             }
-            else if (_gameState == GameState.Game)
+            else if (_gameState == GameState.Running)
             {
                 GUIManager.LoadScreen(GUIManager.Screens.HUD);
             }
@@ -198,19 +198,23 @@ namespace Adventure
             {
                 GUIManager.LoadScreen(GUIManager.Screens.DayEnd);
             }
+            else if (_gameState == GameState.Inventory)
+            {
+                GUIManager.LoadScreen(GUIManager.Screens.Inventory);
+            }
         }
 
         public static void NewGame()
         {
-            MapManager.PopulateMaps();
-            ChangeGameState(AdventureGame.GameState.Game);
+            MapManager.PopulateMaps(false);
+            ChangeGameState(AdventureGame.GameState.Running);
         }
 
         public static void LoadGame()
         {
             PlayerManager.Load();
-            MapManager.PopulateMaps();
-            AdventureGame.ChangeGameState(AdventureGame.GameState.Game);
+            MapManager.PopulateMaps(true);
+            AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
         }
 
         /// <summary>
@@ -237,7 +241,7 @@ namespace Adventure
             spriteBatch.Begin();
 
             GUIManager.Draw(spriteBatch);
-            if (_gameState == GameState.Game)
+            if (_gameState == GameState.Running)
             {
                 GameCalendar.Draw(spriteBatch);
             }
@@ -281,11 +285,11 @@ namespace Adventure
                 {
                     if (GUIManager.CurrentGUIScreen.GetType().Equals(typeof(InventoryScreen)))
                     {
-                        GUIManager.LoadScreen(GUIManager.Screens.HUD);
+                        ChangeGameState(GameState.Running);
                     }
                     else
                     {
-                        GUIManager.LoadScreen(GUIManager.Screens.Inventory);
+                        ChangeGameState(GameState.Inventory);
                     }
                 }
                 _inventoryKeyDown = keyDownThisFrame;

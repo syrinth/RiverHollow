@@ -11,8 +11,8 @@ namespace Adventure.Characters
 {
     public class NPC : Character
     {
-        private List<ObjectManager.ItemIDs> _likedItems;
-        private List<ObjectManager.ItemIDs> _hatedItems;
+        //private List<ObjectManager.ItemIDs> _likedItems;
+        //private List<ObjectManager.ItemIDs> _hatedItems;
 
         private List<Vector2> _schedule;
         private Vector2 _moveTo;
@@ -25,19 +25,18 @@ namespace Adventure.Characters
         private string _name;
         public string Name { get => _name; }
 
-        protected string _text;
+        private static Dictionary<string, string> _dialogueDictionary;
 
         public NPC()
         {
-
         }
 
-        public NPC(Vector2 pos)
+        public NPC(string name, Vector2 pos)
         {
-            _name = "Amanda";
+            _name = name;
+            _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\"+_name);
             _portrait = GameContentManager.GetTexture(@"Textures\portraits");
             _portraitRect = new Rectangle(0, 192, 160, 192);
-            _text = "O Romeo, Romeo, wherefore art thou Romeo? Deny thy father and refuse thy name. Or if thou wilt not, be but sworn my love And I'll no longer be a Capulet. 'Tis but thy name that is my enemy: Thou art thyself, though not a Montague. What's Montague? It is nor hand nor foot Nor arm nor face nor any other part Belonging to a man. O be some other name. What's in a name? That which we call a rose By any other name would smell as sweet; So Romeo would, we -done";
             LoadContent();
             Position = pos;
             _schedule = new List<Vector2>();
@@ -51,14 +50,24 @@ namespace Adventure.Characters
             base.Update(theGameTime);
         }
 
+        public virtual void Talk()
+        {
+            string _text = string.Empty;
+            if (PlayerManager._talkedTo.ContainsKey(_name) && PlayerManager._talkedTo[_name] == false) {
+                _text = _dialogueDictionary["Introduction"];
+                PlayerManager._talkedTo[_name] = true;
+            }
+            else
+            {
+                Random r = new Random();
+                _text = _dialogueDictionary[_name + r.Next(1, 3)];
+            }
+            GUIManager.LoadScreen(GUIManager.Screens.Text, this, _text);
+        }
+
         public void LoadContent()
         {
             base.LoadContent(@"Textures\NPC", 32, 64, 4, 0.2f);
-        }
-
-        public void Talk()
-        {
-            GUIManager.LoadScreen(GUIManager.Screens.Text, this, _text);
         }
 
         public void DrawPortrait(SpriteBatch spriteBatch, Vector2 dest)

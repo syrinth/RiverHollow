@@ -31,7 +31,10 @@
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/tree.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/tools.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/items.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Data.xml</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/weapons.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Dialogue/NPCDialogue.xml</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Dialogue/Amanda.xml</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/ItemData.xml</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/CraftingData.xml</File>
   </SourceFiles>
 </SourceFileCollection>

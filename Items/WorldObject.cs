@@ -54,7 +54,7 @@ namespace Adventure.Items
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, new Rectangle((int)Position.X, (int)Position.Y, _width, _height), new Rectangle(0, 0, _width, _height), Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y + Texture.Height);
+            spriteBatch.Draw(_texture, new Rectangle((int)Position.X, (int)Position.Y, _width, _height), new Rectangle(0, 0, _width, _height), Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y + Texture.Height + (Position.X / 100));
         }
 
         public bool DealDamage(float dmg)

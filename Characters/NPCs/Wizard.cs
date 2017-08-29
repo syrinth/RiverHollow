@@ -13,6 +13,7 @@ namespace Adventure.Characters.NPCs
     public class Wizard : Worker
     {
         public override ObjectManager.WorkerID WorkerID { get { return ObjectManager.WorkerID.Wizard; } }
+        public override string WorkerType { get { return "Wizard"; } }
         const string _texture = @"Textures\Wizard";
 
         public Wizard(Vector2 position)
@@ -21,11 +22,9 @@ namespace Adventure.Characters.NPCs
             _portrait = GameContentManager.GetTexture(@"Textures\portraits");
             _portraitRect = new Rectangle(0, 0, 160, 192);
 
-            _text = "Argh? Bah! Fnafh gragh doodle wop!";
-
             _currFood = 0;
             _dailyFoodReq = 3;
-            _dailyItemID = 2;
+            _dailyItemID = 1;
             _heldItem = null;
             _mood = 0;
             Position = position;

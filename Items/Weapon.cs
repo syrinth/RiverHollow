@@ -57,16 +57,6 @@ namespace Adventure.Items
             }
         }
 
-        public Weapon(int ID, Vector2 sourcePos, Texture2D texture, string name, string description, int minDmg, int maxDmg, int stam) : base(ID, sourcePos, texture, name, description, 1, false)
-        {
-            _attack = false;
-            _minDmg = minDmg;
-            _maxDmg = maxDmg;
-            _staminaCost = stam;
-            rotationOrigin = new Vector2(_texture.Width, _texture.Height);
-            _rect = Rectangle.Empty;
-        }
-
         public void Update(GameTime gameTime)
         {
             Vector2 loc = _rect.Location.ToVector2();
