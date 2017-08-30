@@ -31,9 +31,6 @@ namespace Adventure
         public ViewportAdapter ViewportAdapter { get; private set; }
 
         private bool _paused = false;
-        private bool _pauseKeyDown = false;
-        private bool _inventoryKeyDown = false;
-        private bool _createKeyDown = false;
         //private bool _pausedForGuide = false;
 
         public AdventureGame()
@@ -68,6 +65,7 @@ namespace Adventure
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
+            InputManager.Load();
             GameContentManager.LoadContent(Content);
             ObjectManager.LoadContent(Content);
             GUIManager.LoadContent();
@@ -99,7 +97,7 @@ namespace Adventure
             if (this.IsActive)
             {
                 KeyboardState ks = Keyboard.GetState();
-                if (ks.IsKeyDown(Keys.Escape))
+                if (InputManager.CheckKey(Keys.Escape))
                 {
                     if (_gameState == GameState.Running)
                     {
@@ -112,9 +110,45 @@ namespace Adventure
                     PlayerManager.Save();
                 }
 
-                checkKey(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One), Keys.P);
-                checkKey(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One), Keys.I);
-                checkKey(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One), Keys.C);
+                if (GUIManager.CurrentGUIScreen != GUIManager.Screens.TextInput)
+                {
+                    if (InputManager.CheckKey(Keys.P))
+                    {
+                        if (!_paused)
+                            BeginPause(true);
+                        else
+                            EndPause();
+                    }
+                    if (GUIManager.CurrentGUIScreen != GUIManager.Screens.ItemCreation || GUIManager.CurrentGUIScreen != GUIManager.Screens.HUD)
+                    {
+                        if (InputManager.CheckKey(Keys.C))
+                        {
+                            if (GUIManager.CurrentGUIScreen == GUIManager.Screens.ItemCreation)
+                            {
+                                GUIManager.LoadScreen(GUIManager.Screens.HUD);
+                            }
+                            else
+                            {
+                                GUIManager.LoadScreen(GUIManager.Screens.ItemCreation);
+                            }
+                        }
+                    }
+                    if (GUIManager.CurrentGUIScreen != GUIManager.Screens.Inventory || GUIManager.CurrentGUIScreen != GUIManager.Screens.HUD)
+                    {
+                        if (InputManager.CheckKey(Keys.I))
+                        {
+                            if (GUIManager.CurrentGUIScreen == GUIManager.Screens.Inventory)
+                            {
+                                ChangeGameState(GameState.Running);
+                            }
+                            else
+                            {
+                                ChangeGameState(GameState.Inventory);
+                            }
+                        }
+                    }
+                }
+
                 //checkPauseGuide();
 
                 GUIManager.Update(gameTime);
@@ -156,7 +190,7 @@ namespace Adventure
 
                 GraphicCursor.LastMouseState = ms;
 
-                if (_gameState == GameState.Running)
+                if (_gameState == GameState.Running && GUIManager.CurrentGUIScreen != GUIManager.Screens.TextInput)
                 {
                     if (!_paused)
                     {
@@ -196,12 +230,20 @@ namespace Adventure
             }
             else if (_gameState == GameState.EndOfDay)
             {
+                PlayerManager.Player.Stamina = PlayerManager.Player.MaxStamina;
                 GUIManager.LoadScreen(GUIManager.Screens.DayEnd);
             }
             else if (_gameState == GameState.Inventory)
             {
                 GUIManager.LoadScreen(GUIManager.Screens.Inventory);
             }
+        }
+
+        public static void ResetCamera()
+        {
+            Camera.ResetObserver();
+            MapManager.BackToPlayer();
+            GUIManager.LoadScreen(GUIManager.Screens.HUD);
         }
 
         public static void NewGame()
@@ -261,54 +303,6 @@ namespace Adventure
         {
             _paused = false;
             //pausedForGuide = false;
-        }
-
-        private void checkKey(KeyboardState keyboardState,GamePadState gamePadState, Keys key)
-        {
-            bool keyDownThisFrame = (keyboardState.IsKeyDown(key) || (gamePadState.Buttons.Y == ButtonState.Pressed));
-            // If key was not down before, but is down now, we toggle the
-            // pause setting
-            if (key == Keys.P)
-            {
-                if (!_pauseKeyDown && keyDownThisFrame)
-                {
-                    if (!_paused)
-                        BeginPause(true);
-                    else
-                        EndPause();
-                }
-                _pauseKeyDown = keyDownThisFrame;
-            }
-            else if(key== Keys.I)
-            {
-                if (!_inventoryKeyDown && keyDownThisFrame)
-                {
-                    if (GUIManager.CurrentGUIScreen.GetType().Equals(typeof(InventoryScreen)))
-                    {
-                        ChangeGameState(GameState.Running);
-                    }
-                    else
-                    {
-                        ChangeGameState(GameState.Inventory);
-                    }
-                }
-                _inventoryKeyDown = keyDownThisFrame;
-            }
-            else if (key == Keys.C)
-            {
-                if (!_createKeyDown && keyDownThisFrame)
-                {
-                    if (GUIManager.CurrentGUIScreen.GetType().Equals(typeof(ItemCreationScreen)))
-                    {
-                        GUIManager.LoadScreen(GUIManager.Screens.HUD);
-                    }
-                    else
-                    {
-                        GUIManager.LoadScreen(GUIManager.Screens.ItemCreation);
-                    }
-                }
-                _createKeyDown = keyDownThisFrame;
-            }
         }
 
         private void RollOver()

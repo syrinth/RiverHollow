@@ -33,8 +33,7 @@ namespace Adventure
 
         private WorldObject _targettedObject = null;
 
-        private int _stamina;
-        public int Stamina { get => _stamina; }
+        public int Stamina;
 
         private int _maxStamina;
         public int MaxStamina { get => _maxStamina; }
@@ -47,8 +46,8 @@ namespace Adventure
             LoadContent();
             Position = new Vector2(200, 200);
             Speed = 5;
-            _stamina = 50;
             _maxStamina = 50;
+            Stamina = _maxStamina;
 
             _inventory = new InventoryItem[maxItemRows, maxItemColumns];
             //_currentItem = null;
@@ -437,9 +436,9 @@ namespace Adventure
         public bool DecreaseStamina(int x)
         {
             bool rv = false;
-            if (_stamina >= x)
+            if (Stamina >= x)
             {
-                _stamina -= x;
+                Stamina -= x;
                 rv = true;
             }
             return rv;
@@ -447,7 +446,7 @@ namespace Adventure
 
         public void IncreaseStamina(int x)
         {
-            _stamina += x;
+            Stamina += x;
         }
 
         public void TakeMoney(int x)

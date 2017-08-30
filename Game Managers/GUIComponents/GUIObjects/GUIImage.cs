@@ -17,9 +17,15 @@ namespace Adventure.Game_Managers.GUIObjects
             _sourceRectangle = sourceRect;
         }
 
-        public void MoveImage(Vector2 pos)
+        public void MoveImageTo(Vector2 pos)
         {
             _position = pos;
+            _rect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
+        }
+
+        public void MoveImageBy(Vector2 pos)
+        {
+            _position += pos;
             _rect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
         }
 

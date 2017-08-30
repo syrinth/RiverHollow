@@ -22,7 +22,7 @@ namespace Adventure.Characters
         protected Rectangle _portraitRect;
         public Rectangle PortraitRectangle { get => _portraitRect; }
 
-        private string _name;
+        public string _name;
         public string Name { get => _name; }
 
         private static Dictionary<string, string> _dialogueDictionary;
@@ -76,6 +76,11 @@ namespace Adventure.Characters
             {
                 spriteBatch.Draw(_portrait, new Vector2(dest.X, dest.Y - PortraitRectangle.Height), PortraitRectangle, Color.White);
             }
+        }
+
+        public string GetDialogEntry(string entry)
+        {
+            return _dialogueDictionary[entry];
         }
     }
 }

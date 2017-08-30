@@ -72,6 +72,8 @@
     <Compile Include="AdventureGame.cs" />
     <Compile Include="Game Managers\DropManager.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIItemBox.cs" />
+    <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIWindows\GUITextInputWindow.cs" />
+    <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIWindows\GUITextSelectionWindow.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIWindows\GUITextWindow.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIImage.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIWindows\GUIWindow.cs" />
@@ -80,6 +82,7 @@
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIWindows\StatDisplay.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\InventoryScreen.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\ItemCreationScreen.cs" />
+    <Compile Include="Game Managers\GUIComponents\Screens\TextInputScreen.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\TextScreen.cs" />
     <Compile Include="Game Managers\GUIManager.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIButton.cs" />
@@ -88,6 +91,7 @@
     <Compile Include="Game Managers\GUIComponents\Screens\MainMenuScreen.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\ShopScreen.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\ShopWindow.cs" />
+    <Compile Include="Game Managers\InputManager.cs" />
     <Compile Include="Game Managers\ObjectManager.cs" />
     <Compile Include="Game Managers\MapManager.cs" />
     <Compile Include="Game Managers\PlayerManager.cs" />
@@ -133,6 +137,7 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />

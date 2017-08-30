@@ -33,7 +33,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            _selection.MoveImage(_displayList[0, PlayerManager.Player.CurrentItemNumber].Position);
+            _selection.MoveImageTo(_displayList[0, PlayerManager.Player.CurrentItemNumber].Position);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

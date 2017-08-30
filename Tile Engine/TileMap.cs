@@ -339,7 +339,7 @@ namespace Adventure.Tile_Engine
                 }
                 if (tp.Key.Equals("Sleep") && tp.Value.Equals("true"))
                 {
-                    AdventureGame.ChangeGameState(AdventureGame.GameState.EndOfDay);
+                    GUIManager.LoadScreen(GUIManager.Screens.Text, GameContentManager.GetDialogue("Sleep"));
                     rv = true;
                 }
             }
@@ -640,8 +640,8 @@ namespace Adventure.Tile_Engine
             GraphicCursor.DropBuilding();
             _buildingList.Add(b);
             PlayerManager.AddBuilding(b);
-
-            LeaveBuildingMode();
+            AdventureGame.BuildingMode = false;
+            AdventureGame.ResetCamera();
         }
 
         public bool AddWorkerToBuilding()
@@ -654,9 +654,11 @@ namespace Adventure.Tile_Engine
                     if (b.HasSpace())
                     {
                         Random r = new Random();
-                        b.AddWorker(ObjectManager.GetWorker(GraphicCursor.WorkerToPlace), r);
-                        LeaveBuildingMode();
+                        Worker w = ObjectManager.GetWorker(GraphicCursor.WorkerToPlace);
+                        b.AddWorker(w, r);
                         b._selected = false;
+                        AdventureGame.BuildingMode = false;
+                        GUIManager.LoadScreen(GUIManager.Screens.TextInput, w);
                         rv = true;
                     }
                 }
@@ -683,13 +685,7 @@ namespace Adventure.Tile_Engine
 
         #endregion
 
-        public void LeaveBuildingMode()
-        {
-            AdventureGame.BuildingMode = false;
-            Camera.ResetObserver();
-            MapManager.BackToPlayer();
-            GUIManager.LoadScreen(GUIManager.Screens.HUD);
-        }
+        
         public int GetMapWidth()
         {
             return MapWidth * _tileSize;

@@ -117,6 +117,12 @@ namespace Adventure.Game_Managers
         {
             [XmlElement(ElementName = "WorkerID")]
             public ObjectManager.WorkerID workerID;
+
+            [XmlElement(ElementName = "Name")]
+            public string name;
+
+            [XmlElement(ElementName = "Mood")]
+            public int mood;
         }
         public struct ItemData
         {
@@ -194,6 +200,8 @@ namespace Adventure.Game_Managers
                 {
                     WorkerData workerData = new WorkerData();
                     workerData.workerID = w.WorkerID;
+                    workerData.mood = w.Mood;
+                    workerData.name = w.Name;
                     buildingData.Workers.Add(workerData);
                 }
                 // Add the level data.

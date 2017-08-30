@@ -1,5 +1,7 @@
 ﻿using Adventure.Characters;
+using Adventure.Characters.NPCs;
 using Adventure.Game_Managers.GUIComponents.GUIObjects;
+using Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using Adventure.Game_Managers.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,17 +12,39 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
     {
         private GUITextWindow _window;
 
+        public TextScreen(string text)
+        {
+            AdventureGame.ChangeGameState(AdventureGame.GameState.Paused);
+            _window = new GUITextSelectionWindow(text);
+        }
+
         public TextScreen(NPC talker, string text)
         {
             AdventureGame.ChangeGameState(AdventureGame.GameState.Paused);
 
-            _window = new GUITextWindow(talker, text);
+            if (text.Contains("["))
+            {
+                _window = new GUITextSelectionWindow(talker, text);
+            }
+            else
+            {
+                _window = new GUITextWindow(talker, text);
+            }
             Controls.Add(_window);
         }
 
         public override void Update(GameTime gameTime)
         {
-            _window.Update(gameTime);
+            if (TextFinished())
+            {
+                AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
+                GUIManager.LoadScreen(GUIManager.Screens.HUD);
+            }
+            else
+            {
+                _window.Update(gameTime);
+            }
+
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -31,13 +55,16 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = true;
-            if (!_window._pause)
+            if (_window != null)
             {
-                _window.printAll = true;
-            }
-            else
-            {
-                _window.Unpause();
+                if (!_window._pause)
+                {
+                    _window.printAll = true;
+                }
+                else
+                {
+                    _window.Unpause();
+                }
             }
             return rv;
         }

@@ -21,8 +21,9 @@ namespace Adventure.Game_Managers
     public static class GUIManager
     {
         private static GUIScreen _currentGUIScreen;
-        public static GUIScreen CurrentGUIScreen { get => _currentGUIScreen; }
-        public  enum Screens {None, DayEnd, HUD, Inventory, ItemCreation, MainMenu,  Shop,  Text };
+        private static Screens _currentScreen;
+        public static Screens CurrentGUIScreen { get => _currentScreen; }
+        public  enum Screens {None, DayEnd, HUD, Inventory, ItemCreation, MainMenu,  Shop,  Text, TextInput };
         private static Texture2D _fadeTexture;
         private static float _fadeVal = 1f;
         private static bool _fading = false;
@@ -42,14 +43,6 @@ namespace Adventure.Game_Managers
             }
             if (_currentGUIScreen != null)
             {
-                if (_currentGUIScreen.GetType().Equals(typeof(TextScreen)))
-                {
-                    if (((TextScreen)_currentGUIScreen).TextFinished())
-                    {
-                        AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
-                        LoadScreen(GUIManager.Screens.HUD);
-                    }
-                }
                 _currentGUIScreen.Update(gameTime);
             }
             GraphicCursor.Update();
@@ -104,6 +97,7 @@ namespace Adventure.Game_Managers
 
         public static void LoadScreen(Screens newScreen)
         {
+            _currentScreen = newScreen;
             switch (newScreen)
             {
                 case Screens.DayEnd:
@@ -111,6 +105,7 @@ namespace Adventure.Game_Managers
                     return;
                 case Screens.HUD:
                     _currentGUIScreen = new HUDScreen();
+
                     return;
                 case Screens.Inventory:
                     _currentGUIScreen = new InventoryScreen();
@@ -127,8 +122,20 @@ namespace Adventure.Game_Managers
             }
         }
 
+        public static void LoadScreen(Screens newScreen, Worker w)
+        {
+            _currentScreen = newScreen;
+            switch (newScreen)
+            {
+                case Screens.TextInput:
+                    _currentGUIScreen = new TextInputScreen(w);
+                    return;
+            }
+        }
+
         public static void LoadScreen(Screens newScreen, Character c)
         {
+            _currentScreen = newScreen;
             switch (newScreen)
             {
                 case Screens.Shop:
@@ -139,6 +146,7 @@ namespace Adventure.Game_Managers
 
         public static void LoadScreen(Screens newScreen, Container c)
         {
+            _currentScreen = newScreen;
             switch (newScreen)
             {
                 case Screens.Inventory:
@@ -147,8 +155,20 @@ namespace Adventure.Game_Managers
             }
         }
 
+        public static void LoadScreen(Screens newScreen, string text)
+        {
+            _currentScreen = newScreen;
+            switch (newScreen)
+            {
+                case Screens.Text:
+                    _currentGUIScreen = new TextScreen(text);
+                    return;
+            }
+        }
+
         public static void LoadScreen(Screens newScreen, NPC talker, string text)
         {
+            _currentScreen = newScreen;
             switch (newScreen)
             {
                 case Screens.Text:

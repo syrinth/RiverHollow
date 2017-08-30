@@ -95,7 +95,10 @@ namespace Adventure
             foreach(WorkerData wData in data.Workers)
             {
                 Random r = new Random();
-                AddWorker(ObjectManager.GetWorker(wData.workerID), r);
+                Worker w = ObjectManager.GetWorker(wData.workerID);
+                w.SetName(wData.name);
+                w.SetMood(wData.mood);
+                AddWorker(w, r);
             }
         }
     }

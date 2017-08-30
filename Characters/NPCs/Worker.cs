@@ -20,6 +20,7 @@ namespace Adventure.Characters.NPCs
         protected int _dailyItemID;
         protected InventoryItem _heldItem;
         protected int _mood;
+        public int Mood { get => _mood; }
 
         public Worker()
         {
@@ -35,7 +36,7 @@ namespace Adventure.Characters.NPCs
             _mood += 1;
 
             Random r = new Random();
-            GUIManager.LoadScreen(GUIManager.Screens.Text, this, GameContentManager.GetDialogue(WorkerType +r.Next(1,3)));
+            GUIManager.LoadScreen(GUIManager.Screens.Text, this, Name + ": " + GameContentManager.GetDialogue(WorkerType +r.Next(1,3)));
         }
 
         public int TakeItem()
@@ -57,6 +58,16 @@ namespace Adventure.Characters.NPCs
             return -1;
         }
 
+        public void SetName(string text)
+        {
+            _name = text;
+        }
+
+        public void SetMood(int val)
+        {
+            _mood = val;
+        }
+
         public void MakeDailyItem()
         {
             if (_heldItem == null) {
@@ -75,6 +86,11 @@ namespace Adventure.Characters.NPCs
             }
 
             return rv;
+        }
+
+        public string GetName()
+        {
+            return _name;
         }
     }
 }
