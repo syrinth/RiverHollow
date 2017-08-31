@@ -37,15 +37,8 @@ namespace Adventure.Items
         {
             if (itemValue.Length == 8)
             {
-                _num = 1;
-
-                int i = 1;
-                _itemType = ItemType.Resource;
-                _name = itemValue[i++];
-                _description = itemValue[i++];
-                _textureIndex = int.Parse(itemValue[i++]);
-                _itemID = id; //(ObjectManager.ItemIDs)Enum.Parse(typeof(ObjectManager.ItemIDs), itemValue[i++]);
-                i++; //holding out for enum
+                int i = ImportBasics(itemValue, id, 1);
+               
                 _minDmg = int.Parse(itemValue[i++]);
                 _maxDmg = int.Parse(itemValue[i++]);
                 _staminaCost = int.Parse(itemValue[i++]);

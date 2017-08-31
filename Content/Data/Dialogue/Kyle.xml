@@ -4,27 +4,15 @@
     <!--Key:NPCType#, Value:Text-->
     <Item>
       <Key>Introduction</Key>
-      <Value>Greetings, my name is $0. I've heard that you're a warrior, is it true? I hope so, I can only do so much here.[Yes:IntroYes|No:IntroNo|Maybe:IntroMaybe]</Value>
+      <Value>Hi! I'm $0$, it's good to see a new face around here!</Value>
     </Item>
     <Item>
-      <Key>IntroYes</Key>
-      <Value>Oh. How interesting.</Value>
+      <Key>1</Key>
+      <Value>Hey there, $^$,hope you're feeling well today!</Value>
     </Item>
     <Item>
-      <Key>IntroNo</Key>
-      <Value>Oh, that's a shame</Value>
-    </Item>
-    <Item>
-      <Key>IntroMaybe</Key>
-      <Value>What does that even mean?</Value>
-    </Item>
-    <Item>
-      <Key>Amanda1</Key>
-      <Value>"Hello. I hope you're well today."</Value>
-    </Item>
-    <Item>
-      <Key>Amanda2</Key>
-      <Value>You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.</Value>
+      <Key>2</Key>
+      <Value>Hey, $^$, you don't happen to need any new weapons, do you? I've got a few at the shop that I think could come in handy.</Value>
     </Item>
   </Asset>
 </XnaContent>

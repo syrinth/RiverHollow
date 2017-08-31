@@ -19,11 +19,11 @@
       <Value>What does that even mean?</Value>
     </Item>
     <Item>
-      <Key>Amanda1</Key>
-      <Value>"Hello $^$. I hope you're well today."</Value>
+      <Key>1</Key>
+      <Value>Hello $^$. I hope you're well today.</Value>
     </Item>
     <Item>
-      <Key>Amanda2</Key>
+      <Key>2</Key>
       <Value>You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.</Value>
     </Item>
   </Asset>

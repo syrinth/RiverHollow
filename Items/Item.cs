@@ -7,7 +7,7 @@ namespace Adventure.Items
 {
     public class Item
     {
-        public enum ItemType {Resource, Weapon, Tool, Container };
+        public enum ItemType {Resource, Weapon, Tool, Container, Food };
 
         protected ItemType _itemType;
         public ItemType Type { get => _itemType; }

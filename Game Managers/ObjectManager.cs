@@ -90,6 +90,8 @@ namespace Adventure.Game_Managers
                         return new Weapon(id, _itemDataValues);
                     case "Container":
                         return new Container(id, _itemDataValues);
+                    case "Food":
+                        return new Food(id, _itemDataValues, num);
                 }
             }
             return null;

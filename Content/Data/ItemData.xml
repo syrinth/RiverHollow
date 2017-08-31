@@ -3,6 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <!--Key: ID, Value:Type/Name/Description/Index/EnumID-->
     <!--Tool:Breakval/Chopval/stam Weapon:Min/Max/Stamina Container:Rows/Columns-->
+    <!--Food:Stamina/Health-->
     <Item>
       <Key>0</Key>
       <Value>Resource/Stone/Stone, for building things/0/Stone</Value>
@@ -30,6 +31,10 @@
     <Item>
       <Key>6</Key>
       <Value>Container/Small Chest/Hold shit/0/SmallChest/1/8</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>Food/Apple/Nomnom/3/Apple/10/5</Value>
     </Item>
   </Asset>
 </XnaContent>

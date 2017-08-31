@@ -33,19 +33,32 @@ namespace Adventure.Characters
                 if (wep.CollisionBox != null && wep.CollisionBox.Intersects(CollisionBox))
                 {
                     Random r = new Random();
-                    Damage(wep.Damage());
+                    DecreaseHealth(wep.Damage());
                 }
             }
         }
 
-        public void Damage(int dmg)
+        public void DecreaseHealth(int x)
         {
             _hitOnce = true;
-            _hp -= dmg;
+            _hp -= x;
             if (_hp <= 0)
             {
                 MapManager.CurrentMap.ToRemove.Add(this);
             }
         }
+
+        public void IncreaseHealth(int x)
+        {
+            if (_hp + x <= _maxHP)
+            {
+                _hp += x;
+            }
+            else
+            {
+                _hp = _maxHP;
+            }
+        }
+
     }
 }

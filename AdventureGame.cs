@@ -70,7 +70,6 @@ namespace Adventure
             ObjectManager.LoadContent(Content);
             GUIManager.LoadContent();
             MapManager.LoadContent(Content, GraphicsDevice);
-            PlayerManager.NewPlayer();
             spriteBatch = new SpriteBatch(GraphicsDevice);
             GameCalendar.NewCalendar();
             CharacterManager.LoadContent(Content);
@@ -161,21 +160,28 @@ namespace Adventure
                 {
                     if (!GUIManager.ProcessRightButtonClick(mousePoint))
                     {
-                        //GUI does NOT use Camera translations
-                        mousePoint.X -= (int)translate.X;
-                        mousePoint.Y -= (int)translate.Y;
-                        MapManager.ProcessRightButtonClick(mousePoint);
+                        if (_gameState != GameState.MainMenu)
+                        {
+                            //GUI does NOT use Camera translations
+                            mousePoint.X -= (int)translate.X;
+                            mousePoint.Y -= (int)translate.Y;
+                            MapManager.ProcessRightButtonClick(mousePoint);
+                        }
                     }
                 }
                 else if (ms.LeftButton == ButtonState.Pressed && GraphicCursor.LastMouseState.LeftButton == ButtonState.Released)
                 {
                     if (!GUIManager.ProcessLeftButtonClick(mousePoint))
                     {
-                        mousePoint.X -= (int)translate.X;
-                        mousePoint.Y -= (int)translate.Y;
-                        if (!MapManager.ProcessLeftButtonClick(mousePoint))
+                        if (_gameState != GameState.MainMenu)
                         {
-                            PlayerManager.ProcessLeftButtonClick(mousePoint);
+                            mousePoint.X -= (int)translate.X;
+                            mousePoint.Y -= (int)translate.Y;
+                            if (!MapManager.ProcessLeftButtonClick(mousePoint))
+                            {
+
+                                PlayerManager.ProcessLeftButtonClick(mousePoint);
+                            }
                         }
                     }
                 }
@@ -183,9 +189,12 @@ namespace Adventure
                 {
                     if (!GUIManager.ProcessHover(mousePoint))
                     {
-                        mousePoint.X -= (int)translate.X;
-                        mousePoint.Y -= (int)translate.Y;
-                        MapManager.ProcessHover(mousePoint);
+                        if (_gameState != GameState.MainMenu)
+                        {
+                            mousePoint.X -= (int)translate.X;
+                            mousePoint.Y -= (int)translate.Y;
+                            MapManager.ProcessHover(mousePoint);
+                        }
                     }
                 }
 
@@ -193,22 +202,25 @@ namespace Adventure
 
                 if (_gameState == GameState.Running && GUIManager.CurrentGUIScreen != GUIManager.Screens.TextInput)
                 {
-                    if (!_paused)
+                    if (_gameState != GameState.MainMenu)
                     {
-
-                        // TODO: Add your update logic here
-                        Camera.Update(gameTime);
-
-                        if (!BuildingMode)
+                        if (!_paused)
                         {
-                            GameCalendar.Update(gameTime);
-                            if (GameCalendar.CurrentHour == 2)
-                            {
-                                RollOver();
-                            }
+                            // TODO: Add your update logic here
+                            Camera.Update(gameTime);
 
-                            MapManager.Update(gameTime);
-                            PlayerManager.Update(gameTime);
+                            if (!BuildingMode)
+                            {
+                                GameCalendar.Update(gameTime);
+                                if (GameCalendar.CurrentHour == 2)
+                                {
+                                    RollOver();
+                                }
+
+
+                                MapManager.Update(gameTime);
+                                PlayerManager.Update(gameTime);
+                            }
                         }
                     }
                 }
@@ -249,6 +261,7 @@ namespace Adventure
 
         public static void NewGame()
         {
+            PlayerManager.NewPlayer();
             MapManager.PopulateMaps(false);
             ChangeGameState(AdventureGame.GameState.Running);
         }
@@ -273,7 +286,7 @@ namespace Adventure
 
             MapManager.Draw(spriteBatch);
 
-            if (!BuildingMode)
+            if (_gameState != GameState.MainMenu && !BuildingMode)
             {
                 PlayerManager.Draw(gameTime, spriteBatch);
             }

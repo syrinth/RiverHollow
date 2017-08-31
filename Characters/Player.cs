@@ -180,7 +180,7 @@ namespace Adventure
 
             if (CurrentItem != null)
             {
-                if (CurrentItem.GetType().Equals(typeof(Tool)) && MapManager.CurrentMap.PlayerInRange(CollisionBox, mouseLocation))
+                if (CurrentItem.Type == Item.ItemType.Tool && MapManager.CurrentMap.PlayerInRange(CollisionBox, mouseLocation))
                 {
                     if (DecreaseStamina(((Tool)CurrentItem).StaminaCost))
                     {
@@ -190,7 +190,7 @@ namespace Adventure
                     }
                     rv = true;
                 }
-                else if (CurrentItem.GetType().Equals(typeof(Weapon)))
+                else if (CurrentItem.Type == Item.ItemType.Weapon)
                 {
                     if (DecreaseStamina(((Weapon)CurrentItem).StaminaCost))
                     {
@@ -199,10 +199,24 @@ namespace Adventure
                     }
                     rv = true;
                 }
-                else if (CurrentItem.GetType().Equals(typeof(Container)))
+                else if (CurrentItem.Type == Item.ItemType.Container)
                 {
                     MapManager.PlaceWorldItem((Container)CurrentItem, mouseLocation.ToVector2());
                     RemoveItemFromInventory(_currentInventorySlot);
+                }
+                else if (CurrentItem.Type == Item.ItemType.Food)
+                {
+                    Food f = ((Food)CurrentItem);
+                    if (f.Number > 0)
+                    {
+                        f.Remove(1);
+                        IncreaseStamina(f.Stamina);
+                        IncreaseHealth(f.Health);
+                        if (f.Number == 0)
+                        {
+                            RemoveItemFromInventory(_currentInventorySlot);
+                        }
+                    }
                 }
             }
 
@@ -449,7 +463,14 @@ namespace Adventure
 
         public void IncreaseStamina(int x)
         {
-            Stamina += x;
+            if (Stamina + x <= MaxStamina)
+            {
+                Stamina += x;
+            }
+            else
+            {
+                Stamina = MaxStamina;
+            }
         }
 
         public void TakeMoney(int x)

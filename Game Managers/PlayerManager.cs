@@ -19,7 +19,6 @@ namespace Adventure.Game_Managers
     public static class PlayerManager
     {
         public static string _inBuilding = string.Empty;
-        public static Dictionary<string, bool> _talkedTo;
         private static List<int> _canMake;
         public static List<int> CanMake { get => _canMake; }
         private static string _currentMap;
@@ -31,10 +30,16 @@ namespace Adventure.Game_Managers
         private static List<Building> _buildings;
         public static List<Building> Buildings { get => _buildings; }
 
-        public static void NewPlayer()
+        public static void InitPlayer()
         {
-            _talkedTo = new Dictionary<string, bool>();
-            _talkedTo.Add("Amanda", false);
+            _player = new Player();
+            _buildings = new List<Building>();
+            _player = new Player();
+            _canMake = new List<int>();
+        }
+
+        public static void NewPlayer()
+        {          
             _buildings = new List<Building>();
             _player = new Player();
             _canMake = new List<int>();
@@ -43,6 +48,7 @@ namespace Adventure.Game_Managers
             _player.AddItemToFirstAvailableInventory(3);
             _player.AddItemToFirstAvailableInventory(4);
             _player.AddItemToFirstAvailableInventory(6);
+            _player.AddItemToFirstAvailableInventory(7);
         }
 
         public static void Update(GameTime gameTime)
@@ -301,6 +307,7 @@ namespace Adventure.Game_Managers
                data = (SaveData)serializer.Deserialize(sr);
             }
 
+            InitPlayer();
             CurrentMap = data.currentMap;
             foreach(BuildingData b in data.Buildings)
             {

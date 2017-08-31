@@ -23,7 +23,7 @@ namespace Adventure.Items
                 _num = 1;
 
                 int i = 1;
-                _itemType = ItemType.Resource;
+                _itemType = ItemType.Container;
                 _name = itemValue[i++];
                 _description = itemValue[i++];
                 _textureIndex = int.Parse(itemValue[i++]);

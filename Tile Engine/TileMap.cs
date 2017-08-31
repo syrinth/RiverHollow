@@ -133,7 +133,7 @@ namespace Adventure.Tile_Engine
             {
                 if (i.OnTheMap && i.Pickup)
                 {
-                    if (((InventoryItem)i).Finished() && i.CollisionBox.Intersects(PlayerManager.Player.CollisionBox))
+                    if (((InventoryItem)i).FinishedMoving() && i.CollisionBox.Intersects(PlayerManager.Player.CollisionBox))
                     {
                         removedList.Add(i);
                         PlayerManager.Player.AddItemToFirstAvailableInventory(i.ItemID);
@@ -614,6 +614,8 @@ namespace Adventure.Tile_Engine
         }
         public void PlaceWorldItem(StaticItem container, Vector2 position)
         {
+            position.X = ((int)((position.X) / 32)) * 32;
+            position.Y = ((int)((position.Y) / 32)) * 32;
             container.OnTheMap = true;
             container.Position = position;
             _staticItemList.Add(container);

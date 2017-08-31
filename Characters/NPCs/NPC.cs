@@ -43,18 +43,19 @@ namespace Adventure.Characters
             {
                 int i = 0;
                 _name = data[i++];
-                string[] vectorSplit = data[i++].Split(' ');
-                _portraitRect = new Rectangle(int.Parse(vectorSplit[0]), int.Parse(vectorSplit[1]), PortraitWidth, PortraitHeight);
+                _portraitRect = new Rectangle(0, int.Parse(data[i++])*192, PortraitWidth, PortraitHeight);
                 _currentMap = data[i++];
-                vectorSplit = data[i++].Split(' ');
+                string[] vectorSplit = data[i++].Split(' ');
                 Position = new Vector2(int.Parse(vectorSplit[0]), int.Parse(vectorSplit[1]));
 
                 _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\" + _name);
                 _portrait = GameContentManager.GetTexture(@"Textures\portraits");
 
-                _schedule = new List<Vector2>();
-                _schedule.Add(new Vector2(Position.X - 100, Position.Y + 100));
-                _schedule.Add(Position);
+                _schedule = new List<Vector2>
+                {
+                    new Vector2(Position.X - 100, Position.Y + 100),
+                    Position
+                };
                 _moveTo = _schedule[0];
 
                 MapManager.Maps[_currentMap].AddCharacter(this);
@@ -69,14 +70,14 @@ namespace Adventure.Characters
         public virtual void Talk()
         {
             string text = string.Empty;
-            if (PlayerManager._talkedTo.ContainsKey(_name) && PlayerManager._talkedTo[_name] == false) {
+            if (CharacterManager._talkedTo.ContainsKey(_name) && CharacterManager._talkedTo[_name] == false) {
                 text = _dialogueDictionary["Introduction"];
-                PlayerManager._talkedTo[_name] = true;
+                CharacterManager._talkedTo[_name] = true;
             }
             else
             {
                 Random r = new Random();
-                text = _dialogueDictionary[_name + r.Next(1, 3)];
+                text = _dialogueDictionary[r.Next(1, 3).ToString()];
             }
             text = ProcessText(text);
             GUIManager.LoadScreen(GUIManager.Screens.Text, this, text);
@@ -108,18 +109,11 @@ namespace Adventure.Characters
             {
                 if (int.TryParse(sections[i], out int val))
                 {
-                    if (val == 0)
-                    {
-                        sections[i] = _name;
-                    }
-                    else
-                    {
-                        sections[i] = CharacterManager.GetCharacterNameByIndex(val);
-                    }
+                    if (val == 0) { sections[i] = _name; }
+                    else { sections[i] = CharacterManager.GetCharacterNameByIndex(val); }
                 }
-                else if(sections[i] == "^"){
-                    sections[i] = PlayerManager.Player.Name;
-                }
+                else if (sections[i] == "^") { sections[i] = PlayerManager.Player.Name; }
+
                 rv += sections[i];
             }
 

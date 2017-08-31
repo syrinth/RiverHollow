@@ -25,20 +25,16 @@ namespace Adventure.Items
         {
             if (itemValue.Length == 8)
             {
-                _num = 1;
+                int i = ImportBasics(itemValue, id, 1);
 
-                int i = 1;
-                _itemType = ItemType.Resource;
-                _name = itemValue[i++];
-                _description = itemValue[i++];
-                _textureIndex = int.Parse(itemValue[i++]);
-                _itemID = id; //(ObjectManager.ItemIDs)Enum.Parse(typeof(ObjectManager.ItemIDs), itemValue[i++]);
-                i++; //holding out for enum
                 _breakValue = float.Parse(itemValue[i++]);
                 _chopValue = float.Parse(itemValue[i++]);
                 _staminaCost = int.Parse(itemValue[i++]);
                 _texture = GameContentManager.GetTexture(@"Textures\tools");
-                
+
+                _columnTextureSize = 128;
+                _rowTextureSize = 32;
+
                 CalculateSourcePos();
 
                 _sprite = new AnimatedSprite(_texture);

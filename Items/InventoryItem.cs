@@ -8,6 +8,8 @@ namespace Adventure.Items
 {
     public class InventoryItem : Item
     {
+        protected int _columnTextureSize =  32;
+        protected int _rowTextureSize = 32;
         private Parabola _movement;
         protected bool _doesItStack;
         public bool DoesItStack { get => _doesItStack; }
@@ -20,14 +22,7 @@ namespace Adventure.Items
         {
             if(itemValue.Length == 5)
             {
-                _num = num;
-
-                int i = 1;
-                _itemType = ItemType.Resource;
-                _name = itemValue[i++];
-                _description = itemValue[i++];
-                _textureIndex = int.Parse(itemValue[i++]);
-                _itemID = id;//(ObjectManager.ItemIDs)Enum.Parse(typeof(ObjectManager.ItemIDs), itemValue[i++]);
+                ImportBasics(itemValue, id, num);
 
                 _doesItStack = true;
                 _texture = GameContentManager.GetTexture(@"Textures\items");
@@ -38,8 +33,8 @@ namespace Adventure.Items
 
         protected void CalculateSourcePos()
         {
-            int textureRows = (_texture.Height / 32);
-            int textureColumns = (_texture.Width / 32);
+            int textureRows = (_texture.Height / _rowTextureSize);
+            int textureColumns = (_texture.Width / _columnTextureSize);
 
             if (textureRows == 0) textureRows = 1;
             if (textureColumns == 0) textureColumns = 1;
@@ -48,6 +43,21 @@ namespace Adventure.Items
             int targetCol = _textureIndex % textureColumns;
 
             _sourcePos = new Vector2(0 + 32 * targetCol, 0 + 32 * targetRow);
+        }
+        protected int ImportBasics(string[] itemValue, int id, int num)
+        {
+            _num = num;
+
+            int i = 0;
+            _itemType = (ItemType)Enum.Parse(typeof(ItemType), itemValue[i++]);
+            _name = itemValue[i++];
+            _description = itemValue[i++];
+            _textureIndex = int.Parse(itemValue[i++]);
+            i++; //holding out for an enum
+
+            _itemID = id;//(ObjectManager.ItemIDs)Enum.Parse(typeof(ObjectManager.ItemIDs), itemValue[i++]);
+
+            return i;
         }
         //Copy Constructor
         public InventoryItem(InventoryItem item)
@@ -88,7 +98,7 @@ namespace Adventure.Items
             _movement = new Parabola(_position, RandomVelocityVector(), RandNumber(8, 32, 0, 0));
         }
 
-        public bool Finished()
+        public bool FinishedMoving()
         {
             bool rv = true;
 
@@ -97,6 +107,14 @@ namespace Adventure.Items
                 rv = false;
             }
             return rv;
+        }
+
+        public void Remove(int x)
+        {
+            if (x >= _num)
+            {
+                _num -= x;
+            }
         }
 
         public Vector2 RandomVelocityVector()
