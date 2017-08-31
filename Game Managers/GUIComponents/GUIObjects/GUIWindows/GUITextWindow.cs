@@ -27,6 +27,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
 
         protected int _currentParsedString = 0;
         public bool _pause = false;
+        protected int _numReturns = 0;
 
         protected NPC _talker;
 
@@ -124,7 +125,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
         protected void ParseText(string text)
         {
             bool grabLast = true;
-            int numReturns = 0;
+            _numReturns = 0;
             string line = string.Empty;
             string returnString = string.Empty;
             string[] wordArray = text.Split(' ');
@@ -134,21 +135,21 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
                 Vector2 measure = _font.MeasureString(line + word);
 
                 if (measure.Length() > MiddleWidth ||
-                    numReturns == _maxRows-1 && measure.Length() > MiddleWidth - _characterSize)
+                    _numReturns == _maxRows-1 && measure.Length() > MiddleWidth - _characterSize)
                 {
                     returnString = returnString + line + '\n';
                     line = string.Empty;
-                    numReturns++;
+                    _numReturns++;
                 }
 
                 grabLast = true;
                 line = line + word + ' ';
 
-                if (measure.Y * numReturns > MiddleHeight)
+                if (measure.Y * _numReturns > MiddleHeight)
                 {
                     grabLast = false;
                     _parsedStrings.Add(returnString);
-                    numReturns = 0;
+                    _numReturns = 0;
                     returnString = string.Empty;
                 }
             }

@@ -48,9 +48,17 @@ namespace Adventure.Game_Managers
             //if (newMap.EntranceDictionary.Keys
             foreach (string s in _tileMaps[newMapStr].EntranceDictionary.Keys)
             {
-                if (s.Equals(_currentMap.Name))
+                if (!string.IsNullOrEmpty(PlayerManager._inBuilding))
                 {
-                    rectEntrance = _tileMaps[newMapStr].EntranceDictionary[s];
+                    rectEntrance = _tileMaps[newMapStr].EntranceDictionary[PlayerManager._inBuilding];
+                    PlayerManager._inBuilding = string.Empty;
+                }
+                else
+                {
+                    if (s.Equals(_currentMap.Name))
+                    {
+                        rectEntrance = _tileMaps[newMapStr].EntranceDictionary[s];
+                    }
                 }
             }
             _currentMap = _tileMaps[newMapStr];
@@ -58,12 +66,13 @@ namespace Adventure.Game_Managers
             PlayerManager.CurrentMap = _currentMap.Name;
             PlayerManager.Player.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
         }
+
         public static void EnterBuilding(string newMapStr, string ID, List<Worker> workers)
         {
             Rectangle rectEntrance = Rectangle.Empty;
             TileMap newMap = _tileMaps[newMapStr];
-            newMap.Name = ID;
-            //if (newMap.EntranceDictionary.Keys
+            PlayerManager._inBuilding = ID;
+
             foreach (string s in _tileMaps[newMapStr].EntranceDictionary.Keys)
             {
                 if (s.Equals(_currentMap.Name))
@@ -107,7 +116,7 @@ namespace Adventure.Game_Managers
                 }
             }
             _tileMaps[@"Map1"].AddCharacter(new Goblin(new Vector2(1340, 1340)));
-            _tileMaps[@"Map1"].AddCharacter(new NPC("Amanda", new Vector2(200, 300)));
+            //_tileMaps[@"Map1"].AddCharacter(new NPC("Amanda", new Vector2(200, 300)));
 
             _tileMaps[@"Map2"].AddCharacter(new ShopKeeper(new Vector2(1340, 1340)));
         }

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Adventure.Game_Managers.GUIObjects;
 using Microsoft.Xna.Framework.Input;
 using Adventure.Characters;
+using Adventure.Tile_Engine;
 
 namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
@@ -23,9 +24,14 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         {
             _keySelection = 0;
             SeparateText(selectionText);
+            _width = Math.Min(100, (int)_font.MeasureString(_text).X)+64;
             ParseText(_text);
-            _optionsOffsetY = (int)((_parsedStrings.Count + 1) * _characterSize);
+            _height = (((_numReturns+1) + _options.Count) * (int)_characterSize) + _edgeSize;
+            _optionsOffsetY = Math.Max((int)_characterSize, (int)((_numReturns+1) * _characterSize));
+
+            _position = new Vector2(AdventureGame.ScreenWidth / 2 - _width / 2, AdventureGame.ScreenHeight / 2 - _height / 2);
             _imgSelection = new GUIImage(new Vector2((int)_position.X + 16, (int)_position.Y + 16 + _optionsOffsetY), new Rectangle(288, 96, 32, 32), (int)_characterSize, (int)_characterSize, @"Textures\Dialog");
+
             Load(new Vector2(0, 0), 32);
         }
 
@@ -36,10 +42,20 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             _height = 148;
         }
 
-        public GUITextSelectionWindow(NPC talker, string selectionText): this(selectionText)
+        public GUITextSelectionWindow(NPC talker, string selectionText) : base()
         {
             _talker = talker;
-            _height = ((int)_characterSize * _maxRows) + (2 * _edgeSize); //2 is for top and bottom edges
+
+            _keySelection = 0;
+            SeparateText(selectionText);
+            ParseText(_text);
+            _height = (((_numReturns + 1) + _options.Count) * (int)_characterSize) + _edgeSize;
+            _optionsOffsetY = Math.Max((int)_characterSize, (int)((_numReturns+1) * _characterSize));
+
+            _position.Y = AdventureGame.ScreenHeight - _height - BottomMargin;
+            _imgSelection = new GUIImage(new Vector2((int)_position.X + 16, (int)_position.Y + 16 + _optionsOffsetY), new Rectangle(288, 96, 32, 32), (int)_characterSize, (int)_characterSize, @"Textures\Dialog");
+
+            Load(new Vector2(0, 0), 32);
         }
 
         private void SeparateText(string selectionText)
@@ -91,7 +107,6 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
             base.Draw(spriteBatch);
             int xindex = (int)_position.X + 16;
             int yIndex = (int)_position.Y + 16;

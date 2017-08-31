@@ -23,6 +23,9 @@ namespace Adventure
         private bool _usingWeapon = false;
         public bool UsingWeapon { get => _usingWeapon; }
 
+        private string _name = "Syrinth";
+        public string Name { get => _name; }
+
         private InventoryItem[,] _inventory;
         public InventoryItem[,] Inventory { get => _inventory; }
 

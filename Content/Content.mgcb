@@ -339,3 +339,13 @@
 /processor:PassThroughProcessor
 /build:Data/CraftingData.xml
 
+#begin Data/Characters.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Characters.xml
+
+#begin Data/Dialogue/Kyle.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Dialogue/Kyle.xml
+

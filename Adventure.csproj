@@ -70,6 +70,7 @@
     <Compile Include="Characters\NPCs\Worker.cs" />
     <Compile Include="Characters\Player.cs" />
     <Compile Include="AdventureGame.cs" />
+    <Compile Include="Game Managers\CharacterManager.cs" />
     <Compile Include="Game Managers\DropManager.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIItemBox.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIWindows\GUITextInputWindow.cs" />

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <!--Key: Index>0 Value:Name/PortraitPos/Map/Position-->
+    <Item>
+      <Key>1</Key>
+      <Value>Amanda/0 192/Map1/200 300</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>Kyle/0 192/Map1/400 600</Value>
+    </Item>
+  </Asset>
+</XnaContent>

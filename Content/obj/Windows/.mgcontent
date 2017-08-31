@@ -36,5 +36,7 @@
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Dialogue/Amanda.xml</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/ItemData.xml</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/CraftingData.xml</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Characters.xml</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Dialogue/Kyle.xml</File>
   </SourceFiles>
 </SourceFileCollection>

@@ -73,6 +73,7 @@ namespace Adventure
             PlayerManager.NewPlayer();
             spriteBatch = new SpriteBatch(GraphicsDevice);
             GameCalendar.NewCalendar();
+            CharacterManager.LoadContent(Content);
 
             ChangeGameState(GameState.MainMenu);
         }

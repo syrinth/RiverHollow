@@ -8,6 +8,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
 {
     public class GUIWindow : GUIObject
     {
+        protected const int BottomMargin = 32;
         private Vector2 _sourcePoint;
         protected int _midWidth;
         public int MiddleWidth { get => _midWidth; }
@@ -18,11 +19,12 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
 
         public GUIWindow()
         {
-            _position = new Vector2(AdventureGame.ScreenWidth / 4, AdventureGame.ScreenHeight - 180);
+            _height = 148;
             _width = AdventureGame.ScreenWidth / 2;
             _edgeSize = 32;
-            _height = 148;
 
+            _position = new Vector2(AdventureGame.ScreenWidth / 4, AdventureGame.ScreenHeight - _height - BottomMargin);
+            
             Load(new Vector2(0, 0), 32);
         }
 

@@ -18,6 +18,7 @@ namespace Adventure.Game_Managers
 {
     public static class PlayerManager
     {
+        public static string _inBuilding = string.Empty;
         public static Dictionary<string, bool> _talkedTo;
         private static List<int> _canMake;
         public static List<int> CanMake { get => _canMake; }

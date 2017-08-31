@@ -92,9 +92,9 @@ namespace Adventure
             _position = new Vector2(data.positionX, data.positionY);
             _id = data.id;
 
-            foreach(WorkerData wData in data.Workers)
+            Random r = new Random();
+            foreach (WorkerData wData in data.Workers)
             {
-                Random r = new Random();
                 Worker w = ObjectManager.GetWorker(wData.workerID);
                 w.SetName(wData.name);
                 w.SetMood(wData.mood);
