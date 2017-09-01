@@ -79,10 +79,12 @@
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIImage.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIWindows\GUIWindow.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIWindows\ShortInventory.cs" />
+    <Compile Include="Game Managers\GUIComponents\Screens\PurchaseBuildingsScreen.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\DayEndScreen.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIWindows\StatDisplay.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\InventoryScreen.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\ItemCreationScreen.cs" />
+    <Compile Include="Game Managers\GUIComponents\Screens\PurchaseWorkersScreen.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\TextInputScreen.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\TextScreen.cs" />
     <Compile Include="Game Managers\GUIManager.cs" />
@@ -90,8 +92,6 @@
     <Compile Include="Game Managers\GUIComponents\Screens\GUIScreen.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\HUDScreen.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\MainMenuScreen.cs" />
-    <Compile Include="Game Managers\GUIComponents\Screens\ShopScreen.cs" />
-    <Compile Include="Game Managers\GUIComponents\GUIObjects\ShopWindow.cs" />
     <Compile Include="Game Managers\InputManager.cs" />
     <Compile Include="Game Managers\ObjectManager.cs" />
     <Compile Include="Game Managers\MapManager.cs" />

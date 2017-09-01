@@ -28,6 +28,7 @@ namespace Adventure.Items
         public Vector2 Position { get => _position; set => _position = value; }
 
         public virtual Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height); }
+        public Rectangle SourceRectangle { get => new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, 32, 32); }
 
         protected bool _onTheMap;
         public bool OnTheMap { get => _onTheMap; set => _onTheMap = value; }
@@ -42,7 +43,7 @@ namespace Adventure.Items
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             if (_onTheMap) {
-                spriteBatch.Draw(_texture, new Rectangle((int)_position.X, (int)_position.Y, 32, 32), new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, 32, 32), Color.White);
+                spriteBatch.Draw(_texture, new Rectangle((int)_position.X, (int)_position.Y, 32, 32), SourceRectangle, Color.White);
             }
         }
     }

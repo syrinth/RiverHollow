@@ -16,6 +16,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
         public int MiddleHeight { get => _midHeight; }
 
         protected int _edgeSize;
+        public int EdgeSize { get => _edgeSize; }
 
         public GUIWindow()
         {
@@ -37,6 +38,11 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
 
             Load(sourcePos, edgeSize);
             _rect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
+        }
+
+        public Vector2 GetTopLeftUsable()
+        {
+            return new Vector2(_position.X + 16, _position.Y + 16);
         }
 
         protected void Load(Vector2 sourcePos, int edgeSize)

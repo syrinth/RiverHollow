@@ -14,7 +14,7 @@ namespace Adventure.Game_Managers
         #region IDs
         public enum BuildingID
         {
-            NOTHING, ArcaneTower
+            Nothing, ArcaneTower
         }
         public enum WorkerID
         {

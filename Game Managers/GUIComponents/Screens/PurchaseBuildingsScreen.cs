@@ -1,0 +1,128 @@
+﻿using Adventure.Characters.NPCs;
+using Adventure.Game_Managers.GUIComponents.GUIObjects;
+using Adventure.GUIObjects;
+using Adventure.Items;
+using Adventure.Tile_Engine;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+
+namespace Adventure.Game_Managers.GUIObjects.Screens
+{
+    public class PurchaseBuildingsScreen : GUIScreen
+    {
+        private int margin = 64;
+        private List<Merchandise> _merchandise;
+        private GUIWindow _mainWindow;
+        //private GUIButton _btnNext;
+        //private GUIButton _btnLast;
+        private GUIImage _btnBuy;
+        private SpriteFont _font;
+        private List<KeyValuePair<Rectangle, InventoryItem>> _requirements;
+        private int _currentItemIndex;
+        private GUIImage _imgCurrentBuilding;
+        private Vector2 moneyStrPos;
+
+        public PurchaseBuildingsScreen(List<Merchandise> merch)
+        {
+            try
+            {
+                Vector2 center = new Vector2(AdventureGame.ScreenWidth / 2, AdventureGame.ScreenHeight / 2);
+                _merchandise = merch;
+                _currentItemIndex = 0;
+                Building b = ObjectManager.GetBuilding(_merchandise[_currentItemIndex].BuildingID);
+
+                int minWidth = b.Texture.Width + margin * 2;
+                int minHeight = b.Texture.Height + margin * 2;
+                _font = GameContentManager.GetFont(@"Fonts\Font");
+                _mainWindow = new GUIWindow(GUIObject.PosFromCenter(center, minWidth, minHeight), new Vector2(0, 0), 32, minWidth, minHeight);
+
+                _imgCurrentBuilding = new GUIImage(GUIObject.PosFromCenter(center, b.Texture.Width, b.Texture.Height), b.SourceRectangle, b.Texture.Width, b.Texture.Height, b.Texture);
+                _btnBuy = new GUIImage(new Vector2(center.X - 32, center.Y + (_mainWindow.Height / 2)), new Rectangle(0, 96, 64, 32), 64, 32, @"Textures\Dialog");
+
+                int numDivions = _merchandise.Count+2;
+                float xPos = _mainWindow.Position.X + _mainWindow.Width;
+                float incrementVal = _mainWindow.Position.Y / numDivions; //If we only display one box, it needs to be centered at the halfway point, so divided by 2
+                float yPos = _mainWindow.Position.Y + incrementVal;
+
+                moneyStrPos = new Vector2(xPos-16, yPos-16);
+                yPos += incrementVal;
+                _requirements = new List<KeyValuePair<Rectangle, InventoryItem>>();
+                foreach (KeyValuePair<int, int> kvp in _merchandise[_currentItemIndex].RequiredItems)
+                {
+                    InventoryItem i = ObjectManager.GetItem(kvp.Key, kvp.Value);
+
+                    Rectangle r = new Rectangle((int)xPos - 16, (int)yPos - 16, 32, 32);
+                    _requirements.Add(new KeyValuePair<Rectangle, InventoryItem>(r, i));
+                    yPos += incrementVal;
+                }
+
+                Controls.Add(_mainWindow);
+                Controls.Add(_imgCurrentBuilding);
+                Controls.Add(_btnBuy);
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+            spriteBatch.DrawString(_font, _merchandise[_currentItemIndex].MoneyCost.ToString(), moneyStrPos, Color.White);
+            foreach (KeyValuePair<Rectangle, InventoryItem> kvp in _requirements)
+            {
+                spriteBatch.Draw(kvp.Value.Texture, kvp.Key, kvp.Value.SourceRectangle, Color.White);
+                spriteBatch.DrawString(_font, kvp.Value.Number.ToString(), new Vector2(kvp.Key.Location.X + 32, kvp.Key.Location.Y), Color.White);
+                //string text = kvp.Value.Name.ToString();
+                //Vector2 textSize = _font.MeasureString(text);
+                //spriteBatch.DrawString(_font, _merchandise[_currentItemIndex].ToString(), GUIObject.PosFromCenter(_mainWindow.Width/2, (int)_mainWindow.Position.Y - (int)textSize.Y, (int)textSize.X, (int)textSize.Y), Color.White);
+            }
+        }
+
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+            bool rv = false;
+
+            if (_btnBuy.Contains(mouse)){
+                bool create = true;
+                create = PlayerManager.Player.Money >= _merchandise[_currentItemIndex].MoneyCost;
+                if (create)
+                {
+                    foreach (KeyValuePair<int, int> kvp in _merchandise[_currentItemIndex].RequiredItems)
+                    {
+                        if (!PlayerManager.Player.HasItemInInventory(kvp.Key, kvp.Value))
+                        {
+                            create = false;
+                        }
+                    }
+                }
+                //If all items are found, then remove them.
+                if (create)
+                {
+                    PlayerManager.Player.TakeMoney(_merchandise[_currentItemIndex].MoneyCost);
+                    foreach (KeyValuePair<int, int> kvp in _merchandise[_currentItemIndex].RequiredItems)
+                    {
+                        PlayerManager.Player.RemoveItemsFromInventory(kvp.Key, kvp.Value);
+                    }
+
+                    GUIManager.LoadScreen(GUIManager.Screens.None);
+                    Building b = ObjectManager.GetBuilding(_merchandise[_currentItemIndex].BuildingID);
+                    GraphicCursor.PickUpBuilding(b);
+                    AdventureGame.BuildingMode = true;
+                    Camera.UnsetObserver();
+                    MapManager.ViewMap("Map1");
+                    rv = true;
+                }
+            }
+            return rv;
+        }
+
+        public override bool ProcessHover(Point mouse)
+        {
+            return true;
+        }
+    }
+}

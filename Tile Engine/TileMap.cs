@@ -450,11 +450,7 @@ namespace Adventure.Tile_Engine
                         PlayerManager.Player.AddItemToFirstAvailableInventory(w.TakeItem());
                     }
                 }
-                else if (c.CollisionBox.Contains(mouseLocation) && cType.Equals(typeof(ShopKeeper)) || (cType.IsSubclassOf(typeof(ShopKeeper))) && ((ShopKeeper)c).IsOpen)
-                {
-                    GUIManager.LoadScreen(GUIManager.Screens.Shop, (ShopKeeper)c);
-                }
-                else if (c.CollisionBox.Contains(mouseLocation) && cType.Equals(typeof(NPC)))
+                else if (c.CollisionBox.Contains(mouseLocation) && (cType.Equals(typeof(NPC)) || cType.IsSubclassOf(typeof(NPC))))
                 {
                     ((NPC)c).Talk();
                 }
@@ -511,10 +507,6 @@ namespace Adventure.Tile_Engine
                             PlayerManager.Player.AddItemToFirstAvailableInventory(w.TakeItem());
                             w.MakeDailyItem();
                         }
-                    }
-                    else if (c.CollisionBox.Contains(mouseLocation) && cType.Equals(typeof(ShopKeeper)) || (cType.IsSubclassOf(typeof(ShopKeeper))) && ((ShopKeeper)c).IsOpen)
-                    {
-                        GUIManager.LoadScreen(GUIManager.Screens.Shop, (ShopKeeper)c);
                     }
                 }
             }

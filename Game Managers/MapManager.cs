@@ -116,9 +116,6 @@ namespace Adventure.Game_Managers
                 }
             }
             _tileMaps[@"Map1"].AddCharacter(new Goblin(new Vector2(1340, 1340)));
-            //_tileMaps[@"Map1"].AddCharacter(new NPC("Amanda", new Vector2(200, 300)));
-
-            _tileMaps[@"Map2"].AddCharacter(new ShopKeeper(new Vector2(1340, 1340)));
         }
 
         public static void Update(GameTime gametime)

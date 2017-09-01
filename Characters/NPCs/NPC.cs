@@ -14,8 +14,8 @@ namespace Adventure.Characters
         //private List<ObjectManager.ItemIDs> _likedItems;
         //private List<ObjectManager.ItemIDs> _hatedItems;
 
-        private List<Vector2> _schedule;
-        private Vector2 _moveTo;
+        protected List<Vector2> _schedule;
+        protected Vector2 _moveTo;
 
         private const int PortraitWidth = 160;
         private const int PortraitHeight = 192;
@@ -27,28 +27,23 @@ namespace Adventure.Characters
         public string _name;
         public string Name { get => _name; }
 
-        private string _currentMap;
+        protected string _currentMap;
         public string CurrentMap { get => _currentMap; }
 
-        private Dictionary<string, string> _dialogueDictionary;
+        protected Dictionary<string, string> _dialogueDictionary;
 
         public NPC()
         {
         }
 
-        public NPC(string[] data)
+        public NPC(int index, string[] data)
         {
             LoadContent();
             if (data.Length == 4)
             {
-                int i = 0;
-                _name = data[i++];
-                _portraitRect = new Rectangle(0, int.Parse(data[i++])*192, PortraitWidth, PortraitHeight);
-                _currentMap = data[i++];
-                string[] vectorSplit = data[i++].Split(' ');
-                Position = new Vector2(int.Parse(vectorSplit[0]), int.Parse(vectorSplit[1]));
+                LoadBasic(data);
 
-                _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\" + _name);
+                _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + index);
                 _portrait = GameContentManager.GetTexture(@"Textures\portraits");
 
                 _schedule = new List<Vector2>
@@ -61,6 +56,17 @@ namespace Adventure.Characters
                 MapManager.Maps[_currentMap].AddCharacter(this);
             }
         }
+
+        protected int LoadBasic(string[] data)
+        {
+            int i = 0;
+            _name = data[i++];
+            _portraitRect = new Rectangle(0, int.Parse(data[i++]) * 192, PortraitWidth, PortraitHeight);
+            _currentMap = data[i++];
+            string[] vectorSplit = data[i++].Split(' ');
+            Position = new Vector2(int.Parse(vectorSplit[0]), int.Parse(vectorSplit[1]));
+            return i;
+        } 
 
         public override void Update(GameTime theGameTime)
         {
@@ -76,8 +82,7 @@ namespace Adventure.Characters
             }
             else
             {
-                Random r = new Random();
-                text = _dialogueDictionary[r.Next(1, 3).ToString()];
+                text = GetText();
             }
             text = ProcessText(text);
             GUIManager.LoadScreen(GUIManager.Screens.Text, this, text);
@@ -96,8 +101,18 @@ namespace Adventure.Characters
             }
         }
 
-        public string GetDialogEntry(string entry)
+        public virtual string GetText()
         {
+            Random r = new Random();
+            string text = _dialogueDictionary[r.Next(1, 3).ToString()];
+            return ProcessText(text);
+        }
+        public virtual string GetDialogEntry(string entry)
+        {
+            if (entry.Equals("Talk"))
+            {
+                return GetText();
+            }
             return ProcessText(_dialogueDictionary[entry]);
         }
 

@@ -33,5 +33,15 @@ namespace Adventure.GUIObjects
         {
             spriteBatch.Draw(_texture, _rect, Color.White);
         }
+
+        public static Vector2 PosFromCenter(Vector2 center, int width, int height)
+        {
+            return new Vector2(center.X - width / 2, center.Y - height / 2);
+        }
+
+        public static Vector2 PosFromCenter(int x, int y, int width, int height)
+        {
+            return new Vector2(x - width / 2, y - height / 2);
+        }
     }
 }

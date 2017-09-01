@@ -139,7 +139,12 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         private void ProcessNPCDialogSelection(string action)
         {
-            GUIManager.LoadScreen(GUIManager.Screens.Text, _talker, _talker.GetDialogEntry(action));
+            string nextText = _talker.GetDialogEntry(action);
+
+            if (!string.IsNullOrEmpty(nextText))
+            {
+                GUIManager.LoadScreen(GUIManager.Screens.Text, _talker, nextText);
+            }
         }
     }
 }

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <!--Key: Index Value:Name/Description/Money/RequiredItems item num item num-->
+    <Item>
+      <Key>0</Key>
+      <Value>ArcaneTower/A building used to house practitioners of the magical arts/1000/0 10:2 5</Value>
+    </Item>
+  </Asset>
+</XnaContent>

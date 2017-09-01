@@ -14,17 +14,21 @@ namespace Adventure.Game_Managers
         private static Dictionary<string, Texture2D> _textureDictionary;
         private static Dictionary<string, SpriteFont> _fontDictionary;
         private static Dictionary<string, string> _npcDialogueDictionary;
+        private static Dictionary<string, Dictionary<int, string>> _merchandiseDictionary;
 
         public static void LoadContent(ContentManager Content)
         {
             _content = Content;
             _textureDictionary = new Dictionary<string, Texture2D>();
             _fontDictionary = new Dictionary<string, SpriteFont>();
+            _merchandiseDictionary = new Dictionary<string, Dictionary<int, string>>();
+
             _npcDialogueDictionary = LoadDialogue(@"Data\Dialogue\NPCDialogue");
 
             LoadCharacters(_content);
             LoadGUIs(_content);
             LoadIcons(_content);
+            LoadMerchandise(_content);
 
             LoadFont(_content);
         }
@@ -34,7 +38,6 @@ namespace Adventure.Game_Managers
         {
             AddTexture(Content, @"Textures\Eggplant");
             AddTexture(Content, @"Textures\Wizard");
-            AddTexture(Content, @"Textures\Taylor");
             AddTexture(Content, @"Textures\NPC");
         }
 
@@ -42,7 +45,6 @@ namespace Adventure.Game_Managers
         {
             AddTexture(Content, @"Textures\cursor");
             AddTexture(Content, @"Textures\MiniInventory");
-            AddTexture(Content, @"Textures\ShopWindow");
         }
 
         public static void LoadIcons(ContentManager Content)
@@ -69,10 +71,21 @@ namespace Adventure.Game_Managers
             AddFont(Content, @"Fonts\DisplayFont");
             AddFont(Content, @"Fonts\Font");
         }
-            #endregion
+        #endregion
 
-            #region AddMethods
-            private static void AddTexture(ContentManager Content, string texture)
+        public static void LoadMerchandise(ContentManager Content)
+        {
+            LoadMerchandiseByFile(Content, @"Data\Shops\Buildings");
+            LoadMerchandiseByFile(Content, @"Data\Shops\Arcanists");
+        }
+
+        public static void LoadMerchandiseByFile(ContentManager Content, string file)
+        {
+            _merchandiseDictionary.Add(file.Replace(@"Data\Shops\", ""), Content.Load<Dictionary<int, string>>(file));
+        }
+
+        #region AddMethods
+        private static void AddTexture(ContentManager Content, string texture)
         {
             _textureDictionary.Add(texture, Content.Load<Texture2D>(texture));
         }
@@ -97,6 +110,11 @@ namespace Adventure.Game_Managers
         public static string GetDialogue(string key)
         {
             return _npcDialogueDictionary[key];
+        }
+
+        public static Dictionary<int, string> GetMerchandise(string file)
+        {
+            return _merchandiseDictionary[file];
         }
 
         public static Dictionary<string, string> LoadDialogue(string file)

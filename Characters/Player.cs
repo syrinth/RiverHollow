@@ -41,7 +41,7 @@ namespace Adventure
         private int _maxStamina;
         public int MaxStamina { get => _maxStamina; }
 
-        private int _money;
+        private int _money = 2000;
         public int Money { get => _money; }
 
         public Player()

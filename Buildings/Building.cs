@@ -42,6 +42,9 @@ namespace Adventure
         protected Vector2 _position;
         public Vector2 Position { get => _position; }
 
+        public Rectangle SourceRectangle { get => new Rectangle(0, 0, Texture.Width, Texture.Height); }
+
+
         public Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)(Position.Y + (_texture.Height - BaseHeight)), BaseWidth, BaseHeight); }
         public Rectangle SelectionBox { get => new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height); }
 

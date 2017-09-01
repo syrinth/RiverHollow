@@ -3,6 +3,7 @@ using Adventure.Characters.NPCs;
 using Adventure.Game_Managers.GUIComponents.GUIObjects;
 using Adventure.Game_Managers.GUIComponents.Screens;
 using Adventure.Game_Managers.GUIObjects;
+using Adventure.Game_Managers.GUIObjects.Screens;
 using Adventure.GUIObjects;
 using Adventure.Items;
 using Adventure.Screens;
@@ -23,7 +24,7 @@ namespace Adventure.Game_Managers
         private static GUIScreen _currentGUIScreen;
         private static Screens _currentScreen;
         public static Screens CurrentGUIScreen { get => _currentScreen; }
-        public  enum Screens {None, DayEnd, HUD, Inventory, ItemCreation, MainMenu,  Shop,  Text, TextInput };
+        public  enum Screens {None, WorkerShop, BuildingShop, DayEnd, HUD, Inventory, ItemCreation, MainMenu,  Shop,  Text, TextInput };
         private static Texture2D _fadeTexture;
         private static float _fadeVal = 1f;
         private static bool _fading = false;
@@ -105,7 +106,6 @@ namespace Adventure.Game_Managers
                     return;
                 case Screens.HUD:
                     _currentGUIScreen = new HUDScreen();
-
                     return;
                 case Screens.Inventory:
                     _currentGUIScreen = new InventoryScreen();
@@ -133,13 +133,17 @@ namespace Adventure.Game_Managers
             }
         }
 
-        public static void LoadScreen(Screens newScreen, Character c)
+        public static void LoadScreen(Screens newScreen, List<Merchandise> merch)
         {
+            GraphicCursor.talk = false;
             _currentScreen = newScreen;
             switch (newScreen)
             {
-                case Screens.Shop:
-                    _currentGUIScreen = new ShopScreen((ShopKeeper)c);
+                case Screens.BuildingShop:
+                    _currentGUIScreen = new PurchaseBuildingsScreen(merch);
+                    return;
+                case Screens.WorkerShop:
+                    _currentGUIScreen = new PurchaseWorkersScreen(merch);
                     return;
             }
         }
