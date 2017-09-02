@@ -52,7 +52,7 @@ namespace Adventure.Game_Managers.GUIObjects
         public override bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = true;
-            if(!_inventory.Contains(mouse) && _container != null && !_container.Rectangle.Contains(mouse))
+            if(!_inventory.Contains(mouse) && _container != null && !_container.DrawRectangle.Contains(mouse))
             {
                 GUIManager.SetScreen(GUIManager.Screens.HUD);
             }

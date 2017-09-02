@@ -16,8 +16,8 @@ namespace Adventure.Game_Managers.GUIObjects
 
         public MainMenuScreen()
         {
-            _btnNewGame = new GUIButton(AdventureGame.ScreenWidth/2, 500, @"Textures\New");
-            _btnLoadGame = new GUIButton(AdventureGame.ScreenWidth / 2, 800, @"Textures\Load");
+            _btnNewGame = new GUIButton(new Vector2(AdventureGame.ScreenWidth/2, 500), new Rectangle(128, 96, 64, 32), 128, 64, @"Textures\Dialog");
+            _btnLoadGame = new GUIButton(new Vector2(AdventureGame.ScreenWidth / 2, 800), new Rectangle(64, 96, 64, 32), 128, 64, @"Textures\Dialog");
             Controls.Add(_btnNewGame);
             Controls.Add(_btnLoadGame);
             AdventureGame.ChangeGameState(AdventureGame.GameState.Information);

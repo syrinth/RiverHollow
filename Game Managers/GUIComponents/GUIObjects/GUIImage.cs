@@ -13,7 +13,7 @@ namespace Adventure.Game_Managers.GUIObjects
             _position = position;
             _width = width;
             _height = height;
-            _rect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
+            _drawRect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
             _sourceRectangle = sourceRect;
         }
 
@@ -23,25 +23,25 @@ namespace Adventure.Game_Managers.GUIObjects
             _position = position;
             _width = width;
             _height = height;
-            _rect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
+            _drawRect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
             _sourceRectangle = sourceRect;
         }
 
         public void MoveImageTo(Vector2 pos)
         {
             _position = pos;
-            _rect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
+            _drawRect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
         }
 
         public void MoveImageBy(Vector2 pos)
         {
             _position += pos;
-            _rect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
+            _drawRect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _rect, _sourceRectangle, Color.White);
+            spriteBatch.Draw(_texture, _drawRect, _sourceRectangle, Color.White);
         }
     }
 }

@@ -13,7 +13,8 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
         GUIButton _btnOK;
         public DayEndScreen()
         {
-            _btnOK = new GUIButton(AdventureGame.ScreenWidth / 2, 500, @"Textures\ok");
+            AdventureGame.ChangeGameState(AdventureGame.GameState.Information);
+            _btnOK = new GUIButton(new Vector2(AdventureGame.ScreenWidth / 2, 500), new Rectangle(0, 128, 128, 64), 256, 128, @"Textures\Dialog");
             Controls.Add(_btnOK);
         }
 

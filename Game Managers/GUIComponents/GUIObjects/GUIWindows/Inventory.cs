@@ -53,7 +53,7 @@ namespace Adventure.Screens
         public void SetPosition(Vector2 position)
         {
             _position = position;
-            _rect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
+            _drawRect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
 
             Rectangle displayBox = new Rectangle((int)Position.X + _edgeSize + _margin, (int)Position.Y + _edgeSize + _margin, boxSize, boxSize);
             for (int i = 0; i < _rows; i++)
@@ -158,7 +158,7 @@ namespace Adventure.Screens
             if (item != null)
             {
                 Point mouse = new Point(Mouse.GetState().Position.X, Mouse.GetState().Position.Y);
-                if (_rect.Contains(mouse))
+                if (_drawRect.Contains(mouse))
                 {
                     for (int i = 0; i < _rows; i++)
                     {

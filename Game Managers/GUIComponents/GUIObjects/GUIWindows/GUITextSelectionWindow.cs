@@ -140,7 +140,6 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             if (action.Equals("SleepNow"))
             {
                 GUIManager.SetScreen(GUIManager.Screens.DayEnd);
-                AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
             }
             else if (action.Contains("Eat") && _food != null)
             {

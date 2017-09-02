@@ -37,7 +37,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
             _edgeSize = edgeSize;
 
             Load(sourcePos, edgeSize);
-            _rect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
+            _drawRect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
         }
 
         public Vector2 GetTopLeftUsable()

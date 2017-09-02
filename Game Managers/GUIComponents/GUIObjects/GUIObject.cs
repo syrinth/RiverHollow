@@ -17,28 +17,36 @@ namespace Adventure.GUIObjects
         public int Width { get => _width; set => _width = value; }
 
         protected Vector2 _position;
-        public Vector2 Position { get => _position; set { _position = value; _rect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height); } }
+        public Vector2 Position {
+            get => _position;
+            set {
+                _position = value;
+                _drawRect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
+            }
+        }
 
-        protected Rectangle _rect;
-        public Rectangle Rectangle { get => _rect; }
+        protected Rectangle _drawRect;
+        public Rectangle DrawRectangle { get => _drawRect; }
+
+        protected Rectangle _sourceRect;
+        public Rectangle SourceRectangle { get => _sourceRect; }
 
         protected Texture2D _texture;
 
         public virtual bool Contains(Point mouse)
         {
-            return Rectangle.Contains(mouse);
+            return DrawRectangle.Contains(mouse);
         }
         public virtual void Update(GameTime gameTime) { }
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _rect, Color.White);
+            spriteBatch.Draw(_texture, _drawRect, _sourceRect, Color.White);
         }
 
         public static Vector2 PosFromCenter(Vector2 center, int width, int height)
         {
             return new Vector2(center.X - width / 2, center.Y - height / 2);
         }
-
         public static Vector2 PosFromCenter(int x, int y, int width, int height)
         {
             return new Vector2(x - width / 2, y - height / 2);

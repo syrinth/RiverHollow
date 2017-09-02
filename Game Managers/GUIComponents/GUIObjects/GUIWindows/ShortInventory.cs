@@ -11,7 +11,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public ShortInventory(Vector2 center, int columns, int edgeSize) : base( center, 1, columns, edgeSize)
         {
-            _selection = new GUIImage(_displayList[0,0].Position, new Rectangle(0, 0, 32, 32), 32, 32, @"Textures\Selection");
+            _selection = new GUIImage(_displayList[0,0].Position, new Rectangle(288, 0, 32, 32), 32, 32, @"Textures\Dialog");
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)

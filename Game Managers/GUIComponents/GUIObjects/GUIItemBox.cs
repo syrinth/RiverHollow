@@ -22,10 +22,10 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
             base.Draw(spriteBatch);
             if (_item != null)
             {
-                _item.Draw(spriteBatch, _rect);
+                _item.Draw(spriteBatch, _drawRect);
                 if (_item.DoesItStack)
                 {
-                    spriteBatch.DrawString(_displayFont, _item.Number.ToString(), new Vector2(_rect.X + 22, _rect.Y + 22), Color.White);
+                    spriteBatch.DrawString(_displayFont, _item.Number.ToString(), new Vector2(_drawRect.X + 22, _drawRect.Y + 22), Color.White);
                 }
             }
         }
