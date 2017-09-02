@@ -1,4 +1,5 @@
 ﻿using Adventure.Game_Managers;
+using Adventure.GUIObjects;
 using Adventure.Items;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
@@ -33,6 +34,7 @@ namespace Adventure.Characters.NPCs
 
         public override void Talk()
         {
+            GraphicCursor.talk = false;
             _mood += 1;
 
             Random r = new Random();

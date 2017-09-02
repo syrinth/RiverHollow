@@ -478,7 +478,7 @@ namespace Adventure.Tile_Engine
         {
             bool rv = false;
 
-            if (AdventureGame.BuildingMode)
+            if (AdventureGame.State == AdventureGame.GameState.Build)
             {
                 if(GraphicCursor.HeldBuilding != null)
                 {
@@ -517,7 +517,7 @@ namespace Adventure.Tile_Engine
         {
             bool rv = false;
 
-            if (AdventureGame.BuildingMode)
+            if (AdventureGame.State == AdventureGame.GameState.Build)
             {
                 foreach(Building b in _buildingList)
                 {
@@ -634,7 +634,7 @@ namespace Adventure.Tile_Engine
             GraphicCursor.DropBuilding();
             _buildingList.Add(b);
             PlayerManager.AddBuilding(b);
-            AdventureGame.BuildingMode = false;
+            AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
             AdventureGame.ResetCamera();
         }
 
@@ -651,7 +651,6 @@ namespace Adventure.Tile_Engine
                         Worker w = ObjectManager.GetWorker(GraphicCursor.WorkerToPlace);
                         b.AddWorker(w, r);
                         b._selected = false;
-                        AdventureGame.BuildingMode = false;
                         GUIManager.LoadScreen(GUIManager.Screens.TextInput, w);
                         rv = true;
                     }

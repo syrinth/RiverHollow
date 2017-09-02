@@ -21,7 +21,7 @@ namespace Adventure
 
         public static void Update(GameTime gametime)
         {
-            if (!AdventureGame.BuildingMode)
+            if (AdventureGame.State != AdventureGame.GameState.Build)
             {
                 _observer = PlayerManager.Player.Center.ToVector2();
             }

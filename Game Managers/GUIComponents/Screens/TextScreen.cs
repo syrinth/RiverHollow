@@ -38,13 +38,11 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
             if (TextFinished())
             {
                 AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
-                GUIManager.LoadScreen(GUIManager.Screens.HUD);
             }
             else
             {
                 _window.Update(gameTime);
             }
-
         }
 
         public override void Draw(SpriteBatch spriteBatch)

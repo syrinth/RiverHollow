@@ -14,7 +14,7 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
         private GUITextInputWindow _window;
 
         public TextInputScreen(Worker w)
-        {
+        {             
             _window = new GUITextInputWindow(w);
             Controls.Add(_window);
         }

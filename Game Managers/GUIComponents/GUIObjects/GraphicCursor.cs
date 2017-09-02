@@ -94,7 +94,7 @@ namespace Adventure.GUIObjects
         {
             Texture2D drawIt = talk ? _talk : _texture; 
             Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, drawIt.Width, drawIt.Height);
-            if (AdventureGame.BuildingMode)
+            if (AdventureGame.State == AdventureGame.GameState.Build)
             {
                 if (HeldBuilding != null)
                 {

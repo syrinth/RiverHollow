@@ -129,7 +129,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         {
             if (action.Equals("SleepNow"))
             {
-                AdventureGame.ChangeGameState(AdventureGame.GameState.EndOfDay);
+                GUIManager.SetScreen(GUIManager.Screens.DayEnd);
             }
             else
             {

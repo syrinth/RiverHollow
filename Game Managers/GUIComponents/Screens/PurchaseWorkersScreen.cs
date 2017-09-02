@@ -70,9 +70,9 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
                     {
                         PlayerManager.Player.TakeMoney(wB.Cost);
 
-                        GUIManager.LoadScreen(GUIManager.Screens.None);
+                        GUIManager.SetScreen(GUIManager.Screens.None);
                         GraphicCursor.PickUpWorker(wB._w.WorkerID);
-                        AdventureGame.BuildingMode = true;
+                        AdventureGame.ChangeGameState(AdventureGame.GameState.Build);
                         Camera.UnsetObserver();
                         MapManager.ViewMap("Map1");
                         rv = true;

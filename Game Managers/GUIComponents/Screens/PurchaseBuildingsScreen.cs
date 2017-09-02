@@ -5,6 +5,7 @@ using Adventure.Items;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 
@@ -82,6 +83,15 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
             }
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            if (InputManager.CheckKey(Keys.Escape))
+            {
+                AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
+            }
+        }
+
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
@@ -108,15 +118,27 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
                         PlayerManager.Player.RemoveItemsFromInventory(kvp.Key, kvp.Value);
                     }
 
-                    GUIManager.LoadScreen(GUIManager.Screens.None);
+                    GUIManager.SetScreen(GUIManager.Screens.None);
                     Building b = ObjectManager.GetBuilding(_merchandise[_currentItemIndex].BuildingID);
                     GraphicCursor.PickUpBuilding(b);
-                    AdventureGame.BuildingMode = true;
+                    AdventureGame.ChangeGameState(AdventureGame.GameState.Build);
                     Camera.UnsetObserver();
                     MapManager.ViewMap("Map1");
                     rv = true;
                 }
             }
+            return rv;
+        }
+
+        public override bool ProcessRightButtonClick(Point mouse)
+        {
+            bool rv = true;
+            if (!Contains(mouse))
+            {
+                AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
+                rv = true;
+            }
+
             return rv;
         }
 

@@ -1,4 +1,5 @@
 ﻿using Adventure.Game_Managers;
+using Adventure.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -75,6 +76,7 @@ namespace Adventure.Characters
 
         public virtual void Talk()
         {
+            GraphicCursor.talk = false;
             string text = string.Empty;
             if (CharacterManager._talkedTo.ContainsKey(_name) && CharacterManager._talkedTo[_name] == false) {
                 text = _dialogueDictionary["Introduction"];

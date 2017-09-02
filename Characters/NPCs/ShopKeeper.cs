@@ -1,5 +1,6 @@
 ﻿using Adventure.Buildings;
 using Adventure.Game_Managers;
+using Adventure.GUIObjects;
 using Adventure.Items;
 using Microsoft.Xna.Framework;
 using System;
@@ -53,6 +54,7 @@ namespace Adventure.Characters.NPCs
 
         public override void Talk()
         {
+            GraphicCursor.talk = false;
             string text = string.Empty;
             if (CharacterManager._talkedTo.ContainsKey(_name) && CharacterManager._talkedTo[_name] == false)
             {
@@ -85,7 +87,6 @@ namespace Adventure.Characters.NPCs
                     if (m.BuildingID != ObjectManager.BuildingID.Nothing) { send.Add(m); }
                 }
                 
-                AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
                 GUIManager.LoadScreen(GUIManager.Screens.BuildingShop, send);
             }
             else if (entry.Equals("BuyWorkers"))
@@ -94,9 +95,7 @@ namespace Adventure.Characters.NPCs
                 {
                     if (m.WorkerID != ObjectManager.WorkerID.Nothing) { send.Add(m); }
                 }
-                AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
                 GUIManager.LoadScreen(GUIManager.Screens.WorkerShop, send);
-                //else if (m.ItemID != -1) { send.Add(m); }
             }
             else
             {

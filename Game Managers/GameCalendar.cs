@@ -42,7 +42,7 @@ namespace Adventure
             _lastUpdateinSeconds += gameTime.ElapsedGameTime.TotalSeconds;
             if(_currHour == 26)
             {
-                AdventureGame.ChangeGameState(AdventureGame.GameState.EndOfDay);
+                GUIManager.SetScreen(GUIManager.Screens.DayEnd);
             }
             if (_lastUpdateinSeconds >= 1)
             {
@@ -56,6 +56,11 @@ namespace Adventure
                 {
                     _currMin++;
                 }
+            }
+
+            if (GameCalendar.CurrentHour == 2)
+            {
+                AdventureGame.RollOver();
             }
         }
 

@@ -20,6 +20,7 @@ namespace Adventure.Game_Managers.GUIObjects
             _btnLoadGame = new GUIButton(AdventureGame.ScreenWidth / 2, 800, @"Textures\Load");
             Controls.Add(_btnNewGame);
             Controls.Add(_btnLoadGame);
+            AdventureGame.ChangeGameState(AdventureGame.GameState.Information);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)

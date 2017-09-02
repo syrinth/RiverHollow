@@ -2,6 +2,7 @@
 using Adventure.Screens;
 using Microsoft.Xna.Framework.Graphics;
 using Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
+using Microsoft.Xna.Framework.Input;
 
 namespace Adventure.Game_Managers.GUIObjects
 {

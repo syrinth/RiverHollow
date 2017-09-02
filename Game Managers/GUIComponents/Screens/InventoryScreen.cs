@@ -54,7 +54,7 @@ namespace Adventure.Game_Managers.GUIObjects
             bool rv = true;
             if(!_inventory.Contains(mouse) && _container != null && !_container.Rectangle.Contains(mouse))
             {
-                GUIManager.LoadScreen(GUIManager.Screens.HUD);
+                GUIManager.SetScreen(GUIManager.Screens.HUD);
             }
             return rv;
         }

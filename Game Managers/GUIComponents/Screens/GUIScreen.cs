@@ -1,11 +1,7 @@
 ﻿using Adventure.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Adventure.Game_Managers.GUIObjects
 {
@@ -44,6 +40,21 @@ namespace Adventure.Game_Managers.GUIObjects
             {
                 g.Draw(spriteBatch);
             }
+        }
+
+        public virtual bool Contains(Point mouse)
+        {
+            bool rv = false;
+
+            foreach(GUIObject g in Controls)
+            {
+                if (g.Contains(mouse))
+                {
+                    rv = true;
+                    break;
+                }
+            }
+            return rv;
         }
     }
 }

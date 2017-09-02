@@ -22,6 +22,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public GUITextInputWindow(Worker w) : base()
         {
+            AdventureGame.ChangeGameState(AdventureGame.GameState.Input);
             _statement = "Enter name:";
             _width = 164;
             _height = 92;
@@ -53,6 +54,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                         {
                             AdventureGame.ResetCamera();
                             _w.SetName(_text);
+                            AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
                         }
                     }
                     else

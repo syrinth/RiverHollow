@@ -96,7 +96,7 @@ namespace Adventure.Game_Managers
             return rv;
         }
 
-        public static void LoadScreen(Screens newScreen)
+        public static void SetScreen(Screens newScreen)
         {
             _currentScreen = newScreen;
             switch (newScreen)
