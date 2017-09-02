@@ -122,6 +122,16 @@ namespace Adventure.Game_Managers
             }
         }
 
+        public static void AddTextSelection(Food f, string text)
+        {
+            _currentGUIScreen.AddTextSelection(f, text);
+        }
+
+        public static void RemoveComponent(GUIObject g)
+        {
+            _currentGUIScreen.RemoveComponent(g);
+        }
+
         public static void LoadScreen(Screens newScreen, Worker w)
         {
             _currentScreen = newScreen;

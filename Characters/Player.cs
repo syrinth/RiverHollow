@@ -207,16 +207,8 @@ namespace Adventure
                 else if (CurrentItem.Type == Item.ItemType.Food)
                 {
                     Food f = ((Food)CurrentItem);
-                    if (f.Number > 0)
-                    {
-                        f.Remove(1);
-                        IncreaseStamina(f.Stamina);
-                        IncreaseHealth(f.Health);
-                        if (f.Number == 0)
-                        {
-                            RemoveItemFromInventory(_currentInventorySlot);
-                        }
-                    }
+                    GUIManager.AddTextSelection(f, string.Format("Really eat the {0}? [Yes:Eat|No:DoNothing]", f.Name));
+                    
                 }
             }
 

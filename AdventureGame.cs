@@ -201,9 +201,14 @@ namespace Adventure
 
         public static void ChangeGameState(GameState state)
         {
+            ChangeGameState(state, true);
+        }
+
+        public static void ChangeGameState(GameState state, bool reload)
+        {
             _gameState = state;
 
-            if (_gameState == GameState.Running)
+            if (reload && _gameState == GameState.Running)
             {
                 GUIManager.SetScreen(GUIManager.Screens.HUD);
             }
