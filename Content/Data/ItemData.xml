@@ -1,40 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: ID, Value:Type/Name/Description/Index/EnumID-->
+    <!--Key: ID, Value:Type/Name/Description/Index/EnumID/SellCost-->
     <!--Tool:Breakval/Chopval/stam Weapon:Min/Max/Stamina Container:Rows/Columns-->
     <!--Food:Stamina/Health-->
     <Item>
       <Key>0</Key>
-      <Value>Resource/Stone/Stone, for building things/0/Stone</Value>
+      <Value>Resource/Stone/Stone, for building things/0/Stone/10</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Resource/Arcane Essence/Holds a spark of magic/2/ArcaneEssence</Value>
+      <Value>Resource/Arcane Essence/Holds a spark of magic/2/ArcaneEssence/100</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Resource/Wood/Wood, it builds stuff/1/Wood</Value>
+      <Value>Resource/Wood/Wood, it builds stuff/1/Wood/10</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>Tool/Pick Axe/Breaks things/0/PickAxe/1/0.1/5</Value>
+      <Value>Tool/Pick Axe/Breaks things/0/PickAxe/3000/1/0.1/5</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>Tool/Axe/Chop Chop Motherfucker/1/Axe/0/3/5</Value>
+      <Value>Tool/Axe/Chop Chop Motherfucker/1/Axe/3000/0/3/5</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>Weapon/Basic Sword/Swing/0/Sword/3/10/2</Value>
+      <Value>Weapon/Basic Sword/Swing/0/Sword/3000/3/10/2</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>Container/Small Chest/Hold shit/0/SmallChest/1/8</Value>
+      <Value>Container/Small Chest/Hold shit/0/SmallChest/100/1/8</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>Food/Apple/Nomnom/3/Apple/10/5</Value>
+      <Value>Food/Apple/Nomnom/3/Apple/50/10/5</Value>
     </Item>
   </Asset>
 </XnaContent>

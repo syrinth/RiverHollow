@@ -116,6 +116,9 @@ namespace Adventure.Game_Managers
                 }
             }
             _tileMaps[@"Map1"].AddCharacter(new Goblin(new Vector2(1340, 1340)));
+            MerchantChest m = new MerchantChest();
+            PlayerManager._merchantChest = m;
+            _tileMaps[@"Map1"].AddWorldObject(m);
         }
 
         public static void Update(GameTime gametime)

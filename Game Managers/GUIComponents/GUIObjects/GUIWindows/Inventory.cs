@@ -76,7 +76,7 @@ namespace Adventure.Screens
             {
                 if (IsItemThere(mouse))
                 {
-                    InventoryItem temp = GraphicCursor.HeldItem;
+                    Item temp = GraphicCursor.HeldItem;
                     GraphicCursor.GrabItem(TakeItem(mouse));
                     GiveItem(temp, true);
                 }
@@ -109,9 +109,9 @@ namespace Adventure.Screens
             return rv;
         }
 
-        public InventoryItem TakeItem(Point mouse)
+        public Item TakeItem(Point mouse)
         {
-            InventoryItem rv = null;
+            Item rv = null;
 
             for (int i = 0; i < _rows; i++)
             {
@@ -129,7 +129,7 @@ namespace Adventure.Screens
                         }
                         else
                         {
-                            rv = new InventoryItem(_displayList[i, j].Item);
+                            rv = new Item(_displayList[i, j].Item);
                         }
                         if (_container == null)
                         {
@@ -147,12 +147,12 @@ namespace Adventure.Screens
             return rv;
         }
 
-        private bool GiveItem(InventoryItem item)
+        private bool GiveItem(Item item)
         {
             return GiveItem(item, false);
         }
 
-        private bool GiveItem(InventoryItem item, bool Force)
+        private bool GiveItem(Item item, bool Force)
         {
             bool rv = false;
             if (item != null)

@@ -15,8 +15,8 @@ namespace Adventure.GUIObjects
     public static class GraphicCursor
     {
         public static MouseState LastMouseState = new MouseState();
-        private static InventoryItem _heldItem;
-        public static InventoryItem HeldItem { get => _heldItem; }
+        private static Item _heldItem;
+        public static Item HeldItem { get => _heldItem; }
         private static Building _heldBuilding;
         public static Building HeldBuilding { get => _heldBuilding; }
 
@@ -39,7 +39,7 @@ namespace Adventure.GUIObjects
         //    _font = GameContentManager.GetFont(@"Fonts\Font");
         }
 
-        public static bool GrabItem(InventoryItem item)
+        public static bool GrabItem(Item item)
         {
             bool rv = false;
             if(item != null)

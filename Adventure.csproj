@@ -64,6 +64,7 @@
     <Compile Include="Characters\CombatCharacter.cs" />
     <Compile Include="Characters\Monsters\Goblin.cs" />
     <Compile Include="Characters\Monsters\Monster.cs" />
+    <Compile Include="Items\MerchantChest.cs" />
     <Compile Include="Characters\NPCs\NPC.cs" />
     <Compile Include="Characters\NPCs\ShopKeeper.cs" />
     <Compile Include="Characters\NPCs\Wizard.cs" />
@@ -102,7 +103,6 @@
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIObject.cs" />
     <Compile Include="Items\Container.cs" />
     <Compile Include="Items\Food.cs" />
-    <Compile Include="Items\InventoryItem.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="Items\StaticItem.cs" />
     <Compile Include="Items\Tool.cs" />

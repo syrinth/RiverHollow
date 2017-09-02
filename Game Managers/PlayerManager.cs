@@ -30,6 +30,8 @@ namespace Adventure.Game_Managers
         private static List<Building> _buildings;
         public static List<Building> Buildings { get => _buildings; }
 
+        public static MerchantChest _merchantChest;
+
         public static void InitPlayer()
         {
             _player = new Player();
@@ -216,7 +218,7 @@ namespace Adventure.Game_Managers
             }
 
             data.Items = new List<ItemData>();
-            foreach (InventoryItem i  in Player.Inventory)
+            foreach (Item i  in Player.Inventory)
             {
                 ItemData itemData = new ItemData();
                 if (i != null)
@@ -258,7 +260,7 @@ namespace Adventure.Game_Managers
                     if (item.GetType().Equals(typeof(Container)))
                     {
                         d.Items = new List<ItemData>();
-                        foreach (InventoryItem i in ((Container)item).Inventory)
+                        foreach (Item i in ((Container)item).Inventory)
                         {
                             ItemData itemData = new ItemData();
                             if (i != null)
@@ -321,7 +323,7 @@ namespace Adventure.Game_Managers
                 {
                     int index = i * Player.maxItemColumns + j;
                     ItemData item = data.Items[index];
-                    InventoryItem newItem = ObjectManager.GetItem(item.itemID, item.num);
+                    Item newItem = ObjectManager.GetItem(item.itemID, item.num);
                     _player.AddItemToInventorySpot(newItem, i, j);
                 }
             }
@@ -342,7 +344,7 @@ namespace Adventure.Game_Managers
                         for (int j = 0; j < Player.maxItemColumns; j++)
                         {
                             ItemData item = s.Items[i * Player.maxItemRows + j];
-                            InventoryItem newItem = ObjectManager.GetItem(item.itemID, item.num);
+                            Item newItem = ObjectManager.GetItem(item.itemID, item.num);
                             c.AddItemToInventorySpot(newItem, i, j);
                         }
                     }

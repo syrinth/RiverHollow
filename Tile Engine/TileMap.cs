@@ -105,7 +105,7 @@ namespace Adventure.Tile_Engine
         {
             foreach (Item i in _itemList)
             {
-                ((InventoryItem)i).Update();
+                ((Item)i).Update();
             }
             foreach (Character m in _characterList)
             { 
@@ -133,7 +133,7 @@ namespace Adventure.Tile_Engine
             {
                 if (i.OnTheMap && i.Pickup)
                 {
-                    if (((InventoryItem)i).FinishedMoving() && i.CollisionBox.Intersects(PlayerManager.Player.CollisionBox))
+                    if (((Item)i).FinishedMoving() && i.CollisionBox.Intersects(PlayerManager.Player.CollisionBox))
                     {
                         removedList.Add(i);
                         PlayerManager.Player.AddItemToFirstAvailableInventory(i.ItemID);
@@ -480,12 +480,12 @@ namespace Adventure.Tile_Engine
 
             if (AdventureGame.State == AdventureGame.GameState.Build)
             {
-                if(GraphicCursor.HeldBuilding != null)
+                if (GraphicCursor.HeldBuilding != null)
                 {
                     AddBuilding();
                     rv = true;
                 }
-                else if(GraphicCursor.WorkerToPlace != ObjectManager.WorkerID.Nothing)
+                else if (GraphicCursor.WorkerToPlace != ObjectManager.WorkerID.Nothing)
                 {
                     if (AddWorkerToBuilding())
                     {
@@ -495,6 +495,12 @@ namespace Adventure.Tile_Engine
             }
             else
             {
+                if (PlayerManager._merchantChest.Contains(mouseLocation))
+                {
+                    Item i = PlayerManager.Player.CurrentItem;
+                    PlayerManager._merchantChest.AddItem(i);
+                    PlayerManager.Player.RemoveItemFromInventory(PlayerManager.Player.CurrentItemNumber);
+                }
                 foreach (Character c in _characterList)
                 {
                     Type cType = c.GetType();
@@ -600,7 +606,7 @@ namespace Adventure.Tile_Engine
             Random r = new Random();
             foreach(Item i in items)
             {
-                ((InventoryItem)i).Pop(position);
+                ((Item)i).Pop(position);
                 _itemList.Add(i);
             }
         }

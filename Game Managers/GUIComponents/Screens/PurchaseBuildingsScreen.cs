@@ -20,7 +20,7 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
         //private GUIButton _btnLast;
         private GUIImage _btnBuy;
         private SpriteFont _font;
-        private List<KeyValuePair<Rectangle, InventoryItem>> _requirements;
+        private List<KeyValuePair<Rectangle, Item>> _requirements;
         private int _currentItemIndex;
         private GUIImage _imgCurrentBuilding;
         private Vector2 moneyStrPos;
@@ -49,13 +49,13 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
 
                 moneyStrPos = new Vector2(xPos-16, yPos-16);
                 yPos += incrementVal;
-                _requirements = new List<KeyValuePair<Rectangle, InventoryItem>>();
+                _requirements = new List<KeyValuePair<Rectangle, Item>>();
                 foreach (KeyValuePair<int, int> kvp in _merchandise[_currentItemIndex].RequiredItems)
                 {
-                    InventoryItem i = ObjectManager.GetItem(kvp.Key, kvp.Value);
+                    Item i = ObjectManager.GetItem(kvp.Key, kvp.Value);
 
                     Rectangle r = new Rectangle((int)xPos - 16, (int)yPos - 16, 32, 32);
-                    _requirements.Add(new KeyValuePair<Rectangle, InventoryItem>(r, i));
+                    _requirements.Add(new KeyValuePair<Rectangle, Item>(r, i));
                     yPos += incrementVal;
                 }
 
@@ -73,7 +73,7 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
         {
             base.Draw(spriteBatch);
             spriteBatch.DrawString(_font, _merchandise[_currentItemIndex].MoneyCost.ToString(), moneyStrPos, Color.White);
-            foreach (KeyValuePair<Rectangle, InventoryItem> kvp in _requirements)
+            foreach (KeyValuePair<Rectangle, Item> kvp in _requirements)
             {
                 spriteBatch.Draw(kvp.Value.Texture, kvp.Key, kvp.Value.SourceRectangle, Color.White);
                 spriteBatch.DrawString(_font, kvp.Value.Number.ToString(), new Vector2(kvp.Key.Location.X + 32, kvp.Key.Location.Y), Color.White);

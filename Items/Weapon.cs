@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Adventure.Items
 {
-    public class Weapon : InventoryItem
+    public class Weapon : Item
     {
         private Vector2 rotationOrigin;
 
@@ -35,7 +35,7 @@ namespace Adventure.Items
 
         public Weapon(int id, string[] itemValue)
         {
-            if (itemValue.Length == 8)
+            if (itemValue.Length == 9)
             {
                 int i = ImportBasics(itemValue, id, 1);
                

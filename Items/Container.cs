@@ -7,8 +7,8 @@ namespace Adventure.Items
 {
     public class Container : StaticItem
     {
-        private InventoryItem[,] _inventory;
-        public InventoryItem[,] Inventory { get => _inventory; }
+        private Item[,] _inventory;
+        public Item[,] Inventory { get => _inventory; }
 
         private int _rows;
         public int Rows { get => _rows; }
@@ -18,7 +18,7 @@ namespace Adventure.Items
 
         public Container(int id, string[] itemValue)
         {
-            if (itemValue.Length == 7)
+            if (itemValue.Length == 8)
             {
                 _num = 1;
 
@@ -34,7 +34,7 @@ namespace Adventure.Items
                 _texture = GameContentManager.GetTexture(@"Textures\chest");
 
                 _pickup = false;
-                _inventory = new InventoryItem[Player.maxItemRows, Player.maxItemColumns];
+                _inventory = new Item[Player.maxItemRows, Player.maxItemColumns];
 
                 CalculateSourcePos();
             }
@@ -57,7 +57,7 @@ namespace Adventure.Items
             return rv;
         }
 
-        public bool AddItemToInventorySpot(InventoryItem item, int row, int column)
+        public bool AddItemToInventorySpot(Item item, int row, int column)
         {
             bool rv = false;
             if (item != null)
@@ -74,7 +74,7 @@ namespace Adventure.Items
                     }
                     else
                     {
-                        _inventory[row, column] = new InventoryItem(item);
+                        _inventory[row, column] = new Item(item);
                     }
                     rv = true;
                 }

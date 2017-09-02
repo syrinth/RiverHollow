@@ -25,14 +25,14 @@ namespace Adventure.Game_Managers
         private static Screens _currentScreen;
         public static Screens CurrentGUIScreen { get => _currentScreen; }
         public  enum Screens {None, WorkerShop, BuildingShop, DayEnd, HUD, Inventory, ItemCreation, MainMenu,  Shop,  Text, TextInput };
-        private static Texture2D _fadeTexture;
+        private static GUIImage _fadeImg;
         private static float _fadeVal = 1f;
         private static bool _fading = false;
         public static bool Fading { get => _fading; }
 
         public static void LoadContent()
         {
-            _fadeTexture = GameContentManager.GetTexture(@"Textures\ok");
+            _fadeImg = new GUIImage(new Vector2(0, 0), new Rectangle(160, 128, 32, 32), AdventureGame.ScreenWidth*2, AdventureGame.ScreenHeight*2, @"Textures\Dialog");
             GraphicCursor.LoadContent();
         }
 
@@ -53,7 +53,8 @@ namespace Adventure.Game_Managers
         {
             if (_fading)
             {
-                spriteBatch.Draw(_fadeTexture, new Rectangle(0, 0, AdventureGame.ScreenWidth, AdventureGame.ScreenHeight), Color.Black * _fadeVal);
+                _fadeImg.Draw(spriteBatch, _fadeVal);
+
             }
             if (_currentGUIScreen != null)
             {

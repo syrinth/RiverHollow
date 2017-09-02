@@ -74,18 +74,6 @@
 /processor:TiledMapProcessor
 /build:Maps/Map2.tmx
 
-#begin Textures/ValidSquare.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/ValidSquare.png
-
 #begin Textures/ArcaneTower.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -102,18 +90,6 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/ArcaneTower.tmx
-
-#begin Textures/rock.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/rock.png
 
 #begin Textures/Dialog.png
 /importer:TextureImporter
@@ -279,4 +255,16 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Shops/Arcanists.xml
+
+#begin Textures/worldObjects.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/worldObjects.png
 

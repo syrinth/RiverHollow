@@ -23,6 +23,9 @@ namespace Adventure.Items
         protected Vector2 _position;
         public Vector2 Position { get => _position; }
 
+        protected Rectangle _sourceRectangle;
+        public Rectangle SourceRectangle { get => _sourceRectangle;  }
+
         protected Rectangle _collisionBox;
 
         protected Texture2D _texture;
@@ -37,7 +40,9 @@ namespace Adventure.Items
         protected ObjectManager.ObjectIDs _id;
         public ObjectManager.ObjectIDs ID { get => _id; }
 
-        public WorldObject(ObjectManager.ObjectIDs id, float hp, bool breakIt, bool chopIt, Vector2 pos, Texture2D tex, int lvl, int width, int height)
+        protected WorldObject() { }
+
+        public WorldObject(ObjectManager.ObjectIDs id, float hp, bool breakIt, bool chopIt, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int lvl, int width, int height)
         {
             _id = id;
             _hp = hp;
@@ -49,12 +54,13 @@ namespace Adventure.Items
             _texture = tex;
             _lvltoDmg = lvl;
 
+            _sourceRectangle = sourceRectangle;
             _collisionBox = new Rectangle((int)Position.X, (int)Position.Y, _width, _height);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, new Rectangle((int)Position.X, (int)Position.Y, _width, _height), new Rectangle(0, 0, _width, _height), Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y + Texture.Height + (Position.X / 100));
+            spriteBatch.Draw(_texture, new Rectangle((int)Position.X, (int)Position.Y, _width, _height), _sourceRectangle, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y + _height + (Position.X / 100));
         }
 
         public bool DealDamage(float dmg)

@@ -27,6 +27,8 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
                 GUIManager.FadeOut();
                 AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
                 PlayerManager.Save();
+                PlayerManager.Player.Stamina = PlayerManager.Player.MaxStamina;
+                PlayerManager._merchantChest.SellAll();
                 rv = true;
             }
             return rv;

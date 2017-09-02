@@ -3,7 +3,7 @@ using System;
 
 namespace Adventure.Items
 {
-    public class Food : InventoryItem
+    public class Food : Item
     {
         private int _stam;
         public int Stamina { get => _stam; }
@@ -12,7 +12,7 @@ namespace Adventure.Items
 
         public Food(int id, string[] itemValue, int num)
         {
-            if (itemValue.Length == 7)
+            if (itemValue.Length == 8)
             {
                 int i = ImportBasics(itemValue, id, num);
                 _stam = int.Parse(itemValue[i++]);

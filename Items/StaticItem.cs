@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Adventure.Items
 {
-    public class StaticItem : InventoryItem
+    public class StaticItem : Item
     {
         public StaticItem()
         {

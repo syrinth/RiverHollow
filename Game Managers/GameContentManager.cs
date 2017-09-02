@@ -50,14 +50,9 @@ namespace Adventure.Game_Managers
         public static void LoadIcons(ContentManager Content)
         {
             AddTexture(Content, @"Textures\weapons");
-            AddTexture(Content, @"Textures\ValidSquare");
             AddTexture(Content, @"Textures\ArcaneTower");
-            AddTexture(Content, @"Textures\New");
-            AddTexture(Content, @"Textures\Load");
             AddTexture(Content, @"Textures\tools");
-            AddTexture(Content, @"Textures\rock");
-            AddTexture(Content, @"Textures\ok");
-            AddTexture(Content, @"Textures\Selection");
+            AddTexture(Content, @"Textures\worldObjects");
             AddTexture(Content, @"Textures\Dialog");
             AddTexture(Content, @"Textures\Text");
             AddTexture(Content, @"Textures\chest");

@@ -11,10 +11,8 @@
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Fonts/DisplayFont.spritefont</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/cursor.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Map2.tmx</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/ValidSquare.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/ArcaneTower.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/ArcaneTower.tmx</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/rock.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/Dialog.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/NPC.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/text.png</File>
@@ -34,5 +32,6 @@
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Dialogue/NPC3.xml</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Shops/Buildings.xml</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Shops/Arcanists.xml</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/worldObjects.png</File>
   </SourceFiles>
 </SourceFileCollection>

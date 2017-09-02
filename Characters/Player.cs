@@ -26,13 +26,13 @@ namespace Adventure
         private string _name = "Syrinth";
         public string Name { get => _name; }
 
-        private InventoryItem[,] _inventory;
-        public InventoryItem[,] Inventory { get => _inventory; }
+        private Item[,] _inventory;
+        public Item[,] Inventory { get => _inventory; }
 
         private int _currentInventorySlot = 0;
         public int CurrentItemNumber { get => _currentInventorySlot; set => _currentInventorySlot = value; }
-        //private InventoryItem _currentItem;
-        public InventoryItem CurrentItem { get => _inventory[0, _currentInventorySlot]; }
+        //private Item _currentItem;
+        public Item CurrentItem { get => _inventory[0, _currentInventorySlot]; }
 
         private WorldObject _targettedObject = null;
 
@@ -52,7 +52,7 @@ namespace Adventure
             _maxStamina = 50;
             Stamina = _maxStamina;
 
-            _inventory = new InventoryItem[maxItemRows, maxItemColumns];
+            _inventory = new Item[maxItemRows, maxItemColumns];
             //_currentItem = null;
         }
         public void LoadContent()
@@ -242,7 +242,7 @@ namespace Adventure
                 {
                     for (int j = 0; j < maxItemColumns; j++)
                     {
-                        InventoryItem testItem = _inventory[i, j];
+                        Item testItem = _inventory[i, j];
                         if (testItem == null)
                         {
                             rv = true;
@@ -273,7 +273,7 @@ namespace Adventure
                 {
                     for (int j = 0; j < maxItemColumns; j++)
                     {
-                        InventoryItem testItem = _inventory[i, j];
+                        Item testItem = _inventory[i, j];
                         if (testItem != null && testItem.ItemID == itemID)
                         {
                             leftToFind -= testItem.Number;
@@ -305,7 +305,7 @@ namespace Adventure
                 for (int j = 0; j < maxItemColumns; j++)
                 {
                     if (done) { break; }
-                    InventoryItem testItem = _inventory[i, j];
+                    Item testItem = _inventory[i, j];
                     if (testItem != null && testItem.ItemID == itemID)
                     {
                         int temp = testItem.Number;
@@ -377,7 +377,7 @@ namespace Adventure
             return rv;
         }
 
-        public bool AddItemToInventorySpot(InventoryItem item, int row, int column)
+        public bool AddItemToInventorySpot(Item item, int row, int column)
         {
             bool rv = false;
             if (item != null)
@@ -394,7 +394,7 @@ namespace Adventure
                     }
                     else
                     {
-                        _inventory[row, column] = new InventoryItem(item);
+                        _inventory[row, column] = new Item(item);
                     }
                     rv = true;
                 }

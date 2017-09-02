@@ -19,7 +19,7 @@ namespace Adventure.Characters.NPCs
         protected int _dailyFoodReq;
         protected int _currFood;
         protected int _dailyItemID;
-        protected InventoryItem _heldItem;
+        protected Item _heldItem;
         protected int _mood;
         public int Mood { get => _mood; }
 

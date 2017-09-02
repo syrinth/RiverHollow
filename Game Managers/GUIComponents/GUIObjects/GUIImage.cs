@@ -43,5 +43,10 @@ namespace Adventure.Game_Managers.GUIObjects
         {
             spriteBatch.Draw(_texture, _drawRect, _sourceRectangle, Color.White);
         }
+
+        public void Draw(SpriteBatch spriteBatch, float alpha)
+        {
+            spriteBatch.Draw(_texture, _drawRect, _sourceRectangle, Color.Black * alpha);
+        }
     }
 }

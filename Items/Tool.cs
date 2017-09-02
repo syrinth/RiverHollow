@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Adventure.Items
 {
-    public class Tool : InventoryItem
+    public class Tool : Item
     {
         protected int _staminaCost;
         public int StaminaCost { get => _staminaCost; }
@@ -23,7 +23,7 @@ namespace Adventure.Items
 
         public Tool(int id, string[] itemValue)
         {
-            if (itemValue.Length == 8)
+            if (itemValue.Length == 9)
             {
                 int i = ImportBasics(itemValue, id, 1);
 
