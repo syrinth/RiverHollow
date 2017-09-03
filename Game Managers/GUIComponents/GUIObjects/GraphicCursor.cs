@@ -14,6 +14,8 @@ namespace Adventure.GUIObjects
 {
     public static class GraphicCursor
     {
+        public enum CursorType { Normal, Talk, Gift};
+        public static CursorType _currentType;
         public static MouseState LastMouseState = new MouseState();
         private static Item _heldItem;
         public static Item HeldItem { get => _heldItem; }
@@ -25,18 +27,14 @@ namespace Adventure.GUIObjects
 
         private static Vector2 _position;
         public static Vector2 Position { get => _position; set => _position = value; }
-        //public static SpriteFont _font;
 
         private static Texture2D _texture;
-        public static bool talk = false;
-        private static Texture2D _talk;
 
         public static void LoadContent()
         {
-            _texture = GameContentManager.GetTexture(@"Textures\cursor");
-            _talk = GameContentManager.GetTexture(@"Textures\Text");
+            _texture = GameContentManager.GetTexture(@"Textures\Dialog");
             Position = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-        //    _font = GameContentManager.GetFont(@"Fonts\Font");
+            _currentType = CursorType.Normal;
         }
 
         public static bool GrabItem(Item item)
@@ -92,8 +90,21 @@ namespace Adventure.GUIObjects
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            Texture2D drawIt = talk ? _talk : _texture; 
-            Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, drawIt.Width, drawIt.Height);
+            Rectangle source = Rectangle.Empty;
+            Texture2D drawIt = _texture;
+            switch (_currentType)
+            {
+                case CursorType.Normal:
+                    source = new Rectangle(288, 192, 32, 32);
+                    break;
+                case CursorType.Talk:
+                    source = new Rectangle(288, 160, 32, 32);
+                    break;
+                case CursorType.Gift:
+                    source = new Rectangle(288, 224, 32, 32);
+                    break;
+            }
+            Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, 32, 32);
             if (AdventureGame.State == AdventureGame.GameState.Build)
             {
                 if (HeldBuilding != null)
@@ -108,7 +119,7 @@ namespace Adventure.GUIObjects
                 }
             }
             
-            spriteBatch.Draw(drawIt, drawRectangle, Color.White);
+            spriteBatch.Draw(drawIt, drawRectangle, source, Color.White);
             if (HeldItem != null)
             {
                 _heldItem.Draw(spriteBatch, new Rectangle((int)Position.X+16, (int)Position.Y+16, 32, 32));

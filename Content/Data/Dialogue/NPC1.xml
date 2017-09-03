@@ -26,5 +26,9 @@
       <Key>2</Key>
       <Value>You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.</Value>
     </Item>
+    <Item>
+      <Key>Gift</Key>
+      <Value>Oh, that's surprising. Thank you.</Value>
+    </Item>
   </Asset>
 </XnaContent>

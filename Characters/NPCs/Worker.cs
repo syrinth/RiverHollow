@@ -34,7 +34,7 @@ namespace Adventure.Characters.NPCs
 
         public override void Talk()
         {
-            GraphicCursor.talk = false;
+            GraphicCursor._currentType = GraphicCursor.CursorType.Normal;
             _mood += 1;
 
             Random r = new Random();
@@ -75,19 +75,6 @@ namespace Adventure.Characters.NPCs
             if (_heldItem == null) {
                 _heldItem = ObjectManager.GetItem(_dailyItemID);
             }
-        }
-
-        public bool MouseInside(Point mousePosition)
-        {
-            bool rv = false;
-
-            Rectangle rect = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
-            if (rect.Contains(mousePosition))
-            {
-                rv = true;
-            }
-
-            return rv;
         }
 
         public string GetName()

@@ -443,7 +443,7 @@ namespace Adventure.Tile_Engine
                 if (cType.IsSubclassOf(typeof(Worker)))
                 {
                     Worker w = (Worker)c;
-                    if (w.MouseInside(mouseLocation) && PlayerInRange(PlayerManager.Player.GetRectangle(), w.Center) &&
+                    if (w.Contains(mouseLocation) && PlayerInRange(PlayerManager.Player.GetRectangle(), w.Center) &&
                         PlayerManager.Player.HasSpaceInInventory(w.WhatAreYouHolding()))
                     {
                         ((NPC)c).Talk();
@@ -507,12 +507,32 @@ namespace Adventure.Tile_Engine
                     if (cType.IsSubclassOf(typeof(Worker)))
                     {
                         Worker w = (Worker)c;
-                        if (w.MouseInside(mouseLocation) && PlayerInRange(PlayerManager.Player.GetRectangle(), w.Center) &&
+                        if (w.Contains(mouseLocation) && PlayerInRange(PlayerManager.Player.GetRectangle(), w.Center) &&
                             PlayerManager.Player.HasSpaceInInventory(w.WhatAreYouHolding()))
                         {
                             PlayerManager.Player.AddItemToFirstAvailableInventory(w.TakeItem());
-                            w.MakeDailyItem();
+                            rv = true;
                         }
+                    }
+                    else if (cType.Equals(typeof(NPC)))
+                    {
+                        NPC n = (NPC)c;
+                        if (PlayerManager.Player.CurrentItem != null && 
+                            n.Contains(mouseLocation) && PlayerInRange(PlayerManager.Player.GetRectangle(), n.Center) &&
+                            PlayerManager.Player.CurrentItem.Type != Item.ItemType.Tool &&
+                            PlayerManager.Player.CurrentItem.Type != Item.ItemType.Weapon)
+                        {
+                            Item i = PlayerManager.Player.CurrentItem;
+                            n.Friendship += 10;
+                            i.Remove(1);
+                            string text = n.GetDialogEntry("Gift");
+                            if (!string.IsNullOrEmpty(text))
+                            {
+                                GUIManager.LoadScreen(GUIManager.Screens.Text, n, text);
+                            }
+                            rv = true;
+                        }
+
                     }
                 }
             }
@@ -541,15 +561,24 @@ namespace Adventure.Tile_Engine
                 bool found = false;
                 foreach(Character c in _characterList)
                 {
-                    if(!c.GetType().IsSubclassOf(typeof(Monster)) && c.CollisionBox.Contains(mouseLocation)){
-                        GraphicCursor.talk = true;
+                    if (PlayerManager.Player.CurrentItem != null && 
+                        !c.GetType().IsSubclassOf(typeof(Monster)) && c.CollisionBox.Contains(mouseLocation) &&
+                        PlayerManager.Player.CurrentItem.Type != Item.ItemType.Tool &&
+                        PlayerManager.Player.CurrentItem.Type != Item.ItemType.Weapon)
+                    {
+                        GraphicCursor._currentType = GraphicCursor.CursorType.Gift;
+                        found = true;
+                        break;
+                    }
+                    else if(!c.GetType().IsSubclassOf(typeof(Monster)) && c.CollisionBox.Contains(mouseLocation)){
+                        GraphicCursor._currentType = GraphicCursor.CursorType.Talk;
                         found = true;
                         break;
                     }
                 }
                 if (!found)
                 {
-                    GraphicCursor.talk = false;
+                    GraphicCursor._currentType = GraphicCursor.CursorType.Normal;
                 }
             }
 

@@ -43,7 +43,7 @@ namespace Adventure.Game_Managers
 
         public static void LoadGUIs(ContentManager Content)
         {
-            AddTexture(Content, @"Textures\cursor");
+            AddTexture(Content, @"Textures\Dialog");
             AddTexture(Content, @"Textures\MiniInventory");
         }
 
@@ -53,8 +53,6 @@ namespace Adventure.Game_Managers
             AddTexture(Content, @"Textures\ArcaneTower");
             AddTexture(Content, @"Textures\tools");
             AddTexture(Content, @"Textures\worldObjects");
-            AddTexture(Content, @"Textures\Dialog");
-            AddTexture(Content, @"Textures\Text");
             AddTexture(Content, @"Textures\chest");
             AddTexture(Content, @"Textures\portraits");
             AddTexture(Content, @"Textures\tree");

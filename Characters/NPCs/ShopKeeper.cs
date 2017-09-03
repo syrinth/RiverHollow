@@ -54,7 +54,7 @@ namespace Adventure.Characters.NPCs
 
         public override void Talk()
         {
-            GraphicCursor.talk = false;
+            GraphicCursor._currentType = GraphicCursor.CursorType.Talk;
             string text = string.Empty;
             if (CharacterManager._talkedTo.ContainsKey(_name) && CharacterManager._talkedTo[_name] == false)
             {

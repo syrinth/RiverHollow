@@ -186,7 +186,6 @@ namespace Adventure
                     if (_gameState != GameState.Build && _gameState != GameState.Information)
                     {
                         PlayerManager.Draw(gameTime, spriteBatch);
-                        GameCalendar.Draw(spriteBatch);
                     }
                 }
                 spriteBatch.End();
@@ -194,6 +193,9 @@ namespace Adventure
             {
                 spriteBatch.Begin();
                 GUIManager.Draw(spriteBatch);
+                if (_gameState != GameState.Information) { 
+                    GameCalendar.Draw(spriteBatch);
+                }
                 spriteBatch.End();
             }
             base.Draw(gameTime);

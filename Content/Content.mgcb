@@ -57,18 +57,6 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/DisplayFont.spritefont
 
-#begin Textures/cursor.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/cursor.png
-
 #begin Maps/Map2.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -114,18 +102,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/NPC.png
-
-#begin Textures/text.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/text.png
 
 #begin Textures/chest.png
 /importer:TextureImporter

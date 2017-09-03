@@ -161,6 +161,10 @@ namespace Adventure.Items
             if (x >= _num)
             {
                 _num -= x;
+                if (_num == 0)
+                {
+                    PlayerManager.Player.RemoveItemFromInventory(PlayerManager.Player.CurrentItemNumber);
+                }
             }
         }
 

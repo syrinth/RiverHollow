@@ -148,10 +148,6 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                     _food.Remove(1);
                     PlayerManager.Player.IncreaseStamina(_food.Stamina);
                     PlayerManager.Player.IncreaseHealth(_food.Health);
-                    if (_food.Number == 0)
-                    {
-                        PlayerManager.Player.RemoveItemFromInventory(PlayerManager.Player.CurrentItemNumber);
-                    }
                 }
                 GUIManager.RemoveComponent(this);
                 AdventureGame.ChangeGameState(AdventureGame.GameState.Running, false);

@@ -146,7 +146,7 @@ namespace Adventure.Game_Managers
 
         public static void LoadScreen(Screens newScreen, List<Merchandise> merch)
         {
-            GraphicCursor.talk = false;
+            GraphicCursor._currentType = GraphicCursor.CursorType.Normal;
             _currentScreen = newScreen;
             switch (newScreen)
             {

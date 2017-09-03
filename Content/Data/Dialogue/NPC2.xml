@@ -14,5 +14,9 @@
       <Key>2</Key>
       <Value>Hey, $^$, you don't happen to need any new weapons, do you? I've got a few at the shop that I think could come in handy.</Value>
     </Item>
+    <Item>
+      <Key>Gift</Key>
+      <Value>Oh wow, really? Thanks $^$!</Value>
+    </Item>
   </Asset>
 </XnaContent>
