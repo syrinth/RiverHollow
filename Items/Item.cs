@@ -195,6 +195,7 @@ namespace Adventure.Items
             private Vector2 _pos;
             private Vector2 _vel;
             public Vector2 Velocity { get => _vel; }
+            private Vector2 _initialVelocity;
             private int _finalY;
             private bool _finished = false;
             public bool Finished { get => _finished; }
@@ -202,6 +203,7 @@ namespace Adventure.Items
             {
                 _pos = pos;
                 _vel = velocity;
+                _initialVelocity = _vel;
                 _finalY = (int)_pos.Y + Y;
             }
 
@@ -210,8 +212,11 @@ namespace Adventure.Items
                 _vel.Y += 0.2f;
                 if (_pos.Y >= _finalY)
                 {
-                    _vel.Y = 0;
-                    _finished = true;
+                    _vel.Y = _initialVelocity.Y/1.5f;
+                    _initialVelocity = _vel;
+                    {
+                        _finished = true;
+                    }
                 }
             }
 

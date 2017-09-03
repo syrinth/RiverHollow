@@ -15,6 +15,9 @@ namespace Adventure.Characters
         //private List<ObjectManager.ItemIDs> _likedItems;
         //private List<ObjectManager.ItemIDs> _hatedItems;
 
+        protected int _friendship;
+        public int Friendship { get => _friendship; set => _friendship = value; }
+
         protected List<Vector2> _schedule;
         protected Vector2 _moveTo;
 
@@ -76,7 +79,7 @@ namespace Adventure.Characters
 
         public virtual void Talk()
         {
-            GraphicCursor.talk = false;
+            GraphicCursor._currentType = GraphicCursor.CursorType.Normal;
             string text = string.Empty;
             if (CharacterManager._talkedTo.ContainsKey(_name) && CharacterManager._talkedTo[_name] == false) {
                 text = _dialogueDictionary["Introduction"];
@@ -135,6 +138,11 @@ namespace Adventure.Characters
             }
 
             return rv;
+        }
+
+        public bool Contains(Point mouse)
+        {
+            return CollisionBox.Contains(mouse);
         }
     }
 }
