@@ -57,7 +57,6 @@ namespace Adventure.Tile_Engine
 
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, string newMap)
         {
-            // ContentReader reader = new ContentReader(Content, GraphicsDevice);
             _map = Content.Load<TiledMap>(newMap);
             _tileSize = _map.TileWidth;
             renderer = new TiledMapRenderer(GraphicsDevice);
