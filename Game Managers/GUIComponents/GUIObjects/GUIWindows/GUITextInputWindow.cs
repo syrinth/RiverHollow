@@ -11,35 +11,29 @@ using Adventure.Characters.NPCs;
 
 namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
-    class GUITextInputWindow : GUIWindow
+    class GUITextInputWindow : GUITextWindow
     {
         private int _strLen;
         private string _statement;
-        private string _text;
         private int _maxLength = 10;
-        protected SpriteFont _font;
         private Worker _w;
 
         public GUITextInputWindow(Worker w) : base()
         {
             AdventureGame.ChangeGameState(AdventureGame.GameState.Input);
             _statement = "Enter name:";
-            _width = 164;
-            _height = 92;
+            _width = Math.Max((int)_font.MeasureString(_statement).X, (int)_characterWidth * 10) + _innerBorder * 2;
+            _height = (int)_characterHeight * 2 + _innerBorder * 2;
             _position = new Vector2(AdventureGame.ScreenWidth / 2 - _width / 2, AdventureGame.ScreenHeight / 2 - _height / 2);
             _strLen = 0;
             _w = w;
             _text = string.Empty;
-            _font = GameContentManager.GetFont(@"Fonts\Font");
-
-            Load(new Vector2(0, 0), 32);
         }
 
         public GUITextInputWindow(ref string text): base()
         {
             _strLen = 0;
             _text = text;
-            _font = GameContentManager.GetFont(@"Fonts\Font");
         }
 
         public override void Update(GameTime gameTime)
@@ -79,8 +73,8 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            spriteBatch.DrawString(_font, _statement, new Vector2(_position.X + 16, _position.Y + 16), Color.White);
-            spriteBatch.DrawString(_font, _text, new Vector2(_position.X + 16, _position.Y + 16+28), Color.White);
+            spriteBatch.DrawString(_font, _statement, new Vector2(_position.X + _innerBorder, _position.Y + _innerBorder), Color.White);
+            spriteBatch.DrawString(_font, _text, new Vector2(_position.X + _innerBorder, _position.Y + _innerBorder + 28), Color.White);
         }
     }
 }

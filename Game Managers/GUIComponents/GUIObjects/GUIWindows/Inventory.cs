@@ -19,7 +19,6 @@ namespace Adventure.Screens
     public class Inventory : GUIWindow
     {
         protected GUIItemBox[,] _displayList;
-        protected Vector2 source = new Vector2(96, 0);
 
         private Container _container;
 
@@ -37,12 +36,12 @@ namespace Adventure.Screens
             _columns = columns;
 
             _displayList = new GUIItemBox[rows, columns];
-            _texture = GameContentManager.GetTexture(@"Textures\Dialog");
             _width = (_edgeSize * 2) + (_columns * boxSize) + (_margin * (_columns + 1));
             _height = (_edgeSize * 2) + (_rows * boxSize) + (_margin * (_rows + 1));
             SetPosition(new Vector2(center.X - _width / 2, center.Y - _height / 2));
 
-            Load(source, edgeSize);
+            _sourcePoint = new Vector2(96, 0);
+            _texture = GameContentManager.GetTexture(@"Textures\Dialog");
         }
 
         public Inventory(Container c, Vector2 center, int edgeSize): this(center, c.Rows, c.Columns, edgeSize)

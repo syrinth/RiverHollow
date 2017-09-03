@@ -214,6 +214,7 @@ namespace Adventure.Items
                 {
                     _vel.Y = _initialVelocity.Y/1.5f;
                     _initialVelocity = _vel;
+                    if (_vel.Y >= -1f)
                     {
                         _finished = true;
                     }

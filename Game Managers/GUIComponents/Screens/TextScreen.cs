@@ -16,6 +16,7 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
         {
             AdventureGame.ChangeGameState(AdventureGame.GameState.Paused);
             _window = new GUITextSelectionWindow(text);
+            Controls.Add(_window);
         }
 
         public TextScreen(NPC talker, string text)
@@ -41,7 +42,7 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
             }
             else
             {
-                _window.Update(gameTime);
+                base.Update(gameTime);
             }
         }
 

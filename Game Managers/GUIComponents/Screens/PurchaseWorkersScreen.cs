@@ -40,7 +40,7 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
                     _workers.Add(new WorkerBox(position, w, m.MoneyCost));
                     position.X += 64;
                 }
-                //Controls.Add(_mainWindow);
+                Controls.Add(_mainWindow);
             }
             catch (Exception e)
             {

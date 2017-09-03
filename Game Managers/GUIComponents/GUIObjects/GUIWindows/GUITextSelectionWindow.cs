@@ -24,42 +24,33 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public GUITextSelectionWindow(string selectionText) : base()
         {
-            AdventureGame.ChangeGameState(AdventureGame.GameState.Paused);
-            _keySelection = 0;
-            SeparateText(selectionText);
-            _width = Math.Max(100, (int)_font.MeasureString(_text).X)+64;
-            ParseText(_text);
-            _height = (((_numReturns+1) + _options.Count) * (int)_characterSize) + _edgeSize;
-            _optionsOffsetY = Math.Max((int)_characterSize, (int)((_numReturns+1) * _characterSize));
-
             _position = new Vector2(AdventureGame.ScreenWidth / 2 - _width / 2, AdventureGame.ScreenHeight / 2 - _height / 2);
-            _imgSelection = new GUIImage(new Vector2((int)_position.X + 16, (int)_position.Y + 16 + _optionsOffsetY), new Rectangle(288, 96, 32, 32), (int)_characterSize, (int)_characterSize, @"Textures\Dialog");
-
-            Load(new Vector2(0, 0), 32);
-        }
-
-        public GUITextSelectionWindow(Vector2 pos, string selectionText) : this(selectionText)
-        {
-            _position = new Vector2(AdventureGame.ScreenWidth / 4, AdventureGame.ScreenHeight - 180);
-            _width = AdventureGame.ScreenWidth / 4;
-            _height = 148;
+            Setup(selectionText);
+            _width = (int)_font.MeasureString(_text).X + _innerBorder * 2 + 6; //6 is adding a bit of arbitrary extra space for the parsing. Exactsies are bad
+            PostParse();
         }
 
         public GUITextSelectionWindow(NPC talker, string selectionText) : base()
         {
-            AdventureGame.ChangeGameState(AdventureGame.GameState.Paused);
             _talker = talker;
+            _position.Y = AdventureGame.ScreenHeight - _height - SpaceFromBottom;
 
+            Setup(selectionText);
+            PostParse();
+        }
+
+        public void Setup(string selectionText)
+        {
+            AdventureGame.ChangeGameState(AdventureGame.GameState.Paused);
             _keySelection = 0;
             SeparateText(selectionText);
+        }
+        public void PostParse()
+        {
             ParseText(_text);
-            _height = (((_numReturns + 1) + _options.Count) * (int)_characterSize) + _edgeSize;
-            _optionsOffsetY = Math.Max((int)_characterSize, (int)((_numReturns+1) * _characterSize));
-
-            _position.Y = AdventureGame.ScreenHeight - _height - BottomMargin;
-            _imgSelection = new GUIImage(new Vector2((int)_position.X + 16, (int)_position.Y + 16 + _optionsOffsetY), new Rectangle(288, 96, 32, 32), (int)_characterSize, (int)_characterSize, @"Textures\Dialog");
-
-            Load(new Vector2(0, 0), 32);
+            _height = (((_numReturns + 1) + _options.Count) * (int)_characterHeight + _innerBorder * 2);
+            _optionsOffsetY = Math.Max((int)_characterHeight, (int)((_numReturns + 1) * _characterHeight));
+            _imgSelection = new GUIImage(new Vector2((int)_position.X + _innerBorder, (int)_position.Y + _innerBorder + _optionsOffsetY), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
         }
 
         public GUITextSelectionWindow(Food f, string selectionText) : this(selectionText)
@@ -89,7 +80,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             {
                 if (_keySelection - 1 >= 0)
                 {
-                    _imgSelection.MoveImageBy(new Vector2(0, -_characterSize));
+                    _imgSelection.MoveImageBy(new Vector2(0, -_characterHeight));
                     _keySelection--;
                 }
             }
@@ -97,7 +88,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             {
                 if (_keySelection + 1 < _options.Count)
                 {
-                    _imgSelection.MoveImageBy(new Vector2(0, _characterSize));
+                    _imgSelection.MoveImageBy(new Vector2(0, _characterHeight));
                     _keySelection++;
                 }
             }
@@ -118,8 +109,8 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            int xindex = (int)_position.X + 16;
-            int yIndex = (int)_position.Y + 16;
+            int xindex = (int)_position.X + _innerBorder;
+            int yIndex = (int)_position.Y + _innerBorder;
             foreach (string s in _parsedStrings)
             {
                 spriteBatch.DrawString(_font, s, new Vector2(xindex, yIndex), Color.White);
@@ -131,7 +122,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             foreach (KeyValuePair<int, string> kvp in _options)
             {
                 spriteBatch.DrawString(_font, kvp.Value.Split(':')[0], new Vector2(xindex, yIndex), Color.White);
-                yIndex += (int)_characterSize;
+                yIndex += (int)_characterHeight;
             }
         }
 
@@ -150,12 +141,11 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                     PlayerManager.Player.IncreaseHealth(_food.Health);
                 }
                 GUIManager.RemoveComponent(this);
-                AdventureGame.ChangeGameState(AdventureGame.GameState.Running, false);
+                AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
             }
-            else
-            {
+            else{
                 GUIManager.RemoveComponent(this);
-                AdventureGame.ChangeGameState(AdventureGame.GameState.Running, false);
+                AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
             }
         }
 

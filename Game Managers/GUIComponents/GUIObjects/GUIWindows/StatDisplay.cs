@@ -19,17 +19,14 @@ namespace Adventure.Game_Managers.GUIObjects
 
         public override void Update(GameTime gameTime)
         {
-            float one = (_width - (2 * _edgeSize));
-            float two = 0;
             if (_toDisplay == Display.Health)
             {
-                two = ((float)PlayerManager.Player.HitPoints / (float)PlayerManager.Player.MaxHitPoints);
+                _percentage = ((float)PlayerManager.Player.HitPoints / (float)PlayerManager.Player.MaxHitPoints);
             }
             else if (_toDisplay == Display.Energy)
             {
-                two = (PlayerManager.Player.Stamina / (float)PlayerManager.Player.MaxStamina);
+                _percentage = (PlayerManager.Player.Stamina / (float)PlayerManager.Player.MaxStamina);
             }
-            _percentage = (int)(one * two);
             base.Update(gameTime);
         }
 

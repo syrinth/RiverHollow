@@ -8,111 +8,89 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
 {
     public class GUIWindow : GUIObject
     {
-        protected const int BottomMargin = 32;
-        private Vector2 _sourcePoint;
-        protected int _midWidth;
-        public int MiddleWidth { get => _midWidth; }
-        protected int _midHeight;
-        public int MiddleHeight { get => _midHeight; }
+        protected const int SpaceFromBottom = 32;
+        protected Vector2 _sourcePoint;
 
+        protected int _innerBorder = 8;
+        protected int _borderThickness = 7;
+        protected float _edgeScale = 1;
         protected int _edgeSize;
         public int EdgeSize { get => _edgeSize; }
+
+        protected int _visibleBorder;
 
         public GUIWindow()
         {
             _height = 148;
             _width = AdventureGame.ScreenWidth / 2;
-            _edgeSize = 32;
+            _position = new Vector2(AdventureGame.ScreenWidth / 4, AdventureGame.ScreenHeight - _height - SpaceFromBottom);
 
-            _position = new Vector2(AdventureGame.ScreenWidth / 4, AdventureGame.ScreenHeight - _height - BottomMargin);
-            
-            Load(new Vector2(0, 0), 32);
+            _edgeSize = 32;
+            _sourcePoint = new Vector2(0, 0);
+            _texture = GameContentManager.GetTexture(@"Textures\Dialog");
         }
 
-        public GUIWindow(Vector2 position, Vector2 sourcePos, int edgeSize, int width, int height)
+        public GUIWindow(Vector2 position, Vector2 sourcePos, int edgeSize, int width, int height) : this()
         {
             _position = position;
             _width = width;
             _height = height;
             _edgeSize = edgeSize;
+            _edgeScale = _edgeSize / 32;
 
-            Load(sourcePos, edgeSize);
+            _sourcePoint = sourcePos;
+
             _drawRect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
         }
 
-        public Vector2 GetTopLeftUsable()
+        public Rectangle GetRectangle()
         {
-            return new Vector2(_position.X + 16, _position.Y + 16);
+            int X = (int)(_position.X - _borderThickness * _edgeScale);
+            int Y = (int)(_position.Y - _borderThickness * _edgeScale);
+            int Width = (int)(_width + 2 * _borderThickness * _edgeScale);
+            int Height = (int)(_height + 2 * _borderThickness * _edgeScale);
+            return new Rectangle(X, Y, Width, Height);
         }
 
-        protected void Load(Vector2 sourcePos, int edgeSize)
-        {
-            _sourcePoint = sourcePos;
-
-            if (_width / 3 >= edgeSize && _height / 3 >= edgeSize)
-            {
-                _edgeSize = edgeSize;
-            }
-            else if (_width / 3 < edgeSize)
-            {
-                _edgeSize = _width / 3;
-            }
-            else if (_height / 3 < edgeSize)
-            {
-                _edgeSize = _height / 3;
-            }
-
-            _midWidth = _width - _edgeSize * 2;
-            _midHeight = _height - _edgeSize * 2;
-            _texture = GameContentManager.GetTexture(@"Textures\Dialog");
-        }
-
+        #region Draw
         public override void Draw(SpriteBatch spriteBatch)
         {
             DrawTop(spriteBatch);
             DrawMiddle(spriteBatch);
             DrawBottom(spriteBatch);
         }
-
         public void DrawTop(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, new Rectangle((int)_position.X, (int)_position.Y, _edgeSize, _edgeSize), new Rectangle((int)_sourcePoint.X + 0, (int)_sourcePoint.Y + 0, 32, 32), Color.White);
-            spriteBatch.Draw(_texture, new Rectangle((int)_position.X + _edgeSize, (int)_position.Y, _midWidth, _edgeSize), new Rectangle((int)_sourcePoint.X + 32, (int)_sourcePoint.Y + 0, 32, 32), Color.White);
-            spriteBatch.Draw(_texture, new Rectangle((int)_position.X + _midWidth + _edgeSize, (int)_position.Y, _edgeSize, _edgeSize), new Rectangle((int)_sourcePoint.X + 64, (int)_sourcePoint.Y + 0, 32, 32), Color.White);
+            int topY = (int)_position.Y - _edgeSize;
+            spriteBatch.Draw(_texture, new Rectangle((int)_position.X - _edgeSize, topY, _edgeSize, _edgeSize), new Rectangle((int)_sourcePoint.X, (int)_sourcePoint.Y, 32, 32), Color.White);
+            spriteBatch.Draw(_texture, new Rectangle((int)_position.X, topY, _width, _edgeSize), new Rectangle((int)_sourcePoint.X + 32, (int)_sourcePoint.Y + 0, 32, 32), Color.White);
+            spriteBatch.Draw(_texture, new Rectangle((int)_position.X + _width, topY, _edgeSize, _edgeSize), new Rectangle((int)_sourcePoint.X + 64, (int)_sourcePoint.Y, 32, 32), Color.White);
         }
-
         public void DrawMiddle(SpriteBatch spriteBatch)
-        {
-            DrawMiddle(spriteBatch, true);
-        }
-
-        public void DrawMiddle(SpriteBatch spriteBatch,bool showCenter)
         {
             DrawMiddleEdges(spriteBatch);
             DrawCenter(spriteBatch);
         }
-
         public void DrawMiddleEdges(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, new Rectangle((int)_position.X, (int)_position.Y + _edgeSize, _edgeSize, _midHeight), new Rectangle((int)_sourcePoint.X + 0, (int)_sourcePoint.Y + 32, 32, 32), Color.White);
-            spriteBatch.Draw(_texture, new Rectangle((int)_position.X + _midWidth + _edgeSize, (int)_position.Y + _edgeSize, _edgeSize, _midHeight), new Rectangle((int)_sourcePoint.X + 64, (int)_sourcePoint.Y + 32, 32, 32), Color.White);
+            spriteBatch.Draw(_texture, new Rectangle((int)_position.X - _edgeSize, (int)_position.Y, _edgeSize, _height), new Rectangle((int)_sourcePoint.X + 0, (int)_sourcePoint.Y + 32, 32, 32), Color.White);
+            spriteBatch.Draw(_texture, new Rectangle((int)_position.X + _width, (int)_position.Y, _edgeSize, _height), new Rectangle((int)_sourcePoint.X + 64, (int)_sourcePoint.Y + 32, 32, 32), Color.White);
         }
-
         public void DrawCenter(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, new Rectangle((int)_position.X + _edgeSize, (int)_position.Y + _edgeSize, _midWidth, _midHeight), new Rectangle((int)_sourcePoint.X + 32, (int)_sourcePoint.Y + 32, 32, 32), Color.White);
+            DrawCenter(spriteBatch, 1);
         }
-
-        public void DrawCenter(SpriteBatch spriteBatch, float midwidth)
+        public void DrawCenter(SpriteBatch spriteBatch, float percentage)
         {
-            spriteBatch.Draw(_texture, new Rectangle((int)_position.X + _edgeSize, (int)_position.Y + _edgeSize, (int)midwidth, _midHeight), new Rectangle((int)_sourcePoint.X + 32, (int)_sourcePoint.Y + 32, 32, 32), Color.White);
+            spriteBatch.Draw(_texture, new Rectangle((int)_position.X, (int)_position.Y, (int)(_width*percentage), _height), new Rectangle((int)_sourcePoint.X + 32, (int)_sourcePoint.Y + 32, 32, 32), Color.White);
         }
-
         public void DrawBottom(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, new Rectangle((int)_position.X, (int)_position.Y + _midHeight + _edgeSize, _edgeSize, _edgeSize), new Rectangle((int)_sourcePoint.X + 0, (int)_sourcePoint.Y + 64, 32, 32), Color.White);
-            spriteBatch.Draw(_texture, new Rectangle((int)_position.X + _edgeSize, (int)_position.Y + _midHeight + _edgeSize, _midWidth, _edgeSize), new Rectangle((int)_sourcePoint.X + 32, (int)_sourcePoint.Y + 64, 32, 32), Color.White);
-            spriteBatch.Draw(_texture, new Rectangle((int)_position.X + _midWidth + _edgeSize, (int)_position.Y + _midHeight + _edgeSize, _edgeSize, _edgeSize), new Rectangle((int)_sourcePoint.X + 64, (int)_sourcePoint.Y + 64, 32, 32), Color.White);
+            int topY = (int)_position.Y + _height;
+            spriteBatch.Draw(_texture, new Rectangle((int)_position.X - _edgeSize, topY, _edgeSize, _edgeSize), new Rectangle((int)_sourcePoint.X + 0, (int)_sourcePoint.Y + 64, 32, 32), Color.White);
+            spriteBatch.Draw(_texture, new Rectangle((int)_position.X, topY, _width, _edgeSize), new Rectangle((int)_sourcePoint.X + 32, (int)_sourcePoint.Y + 64, 32, 32), Color.White);
+            spriteBatch.Draw(_texture, new Rectangle((int)_position.X + _width, topY, _edgeSize, _edgeSize), new Rectangle((int)_sourcePoint.X + 64, (int)_sourcePoint.Y + 64, 32, 32), Color.White);
         }
+        #endregion
     }
 }

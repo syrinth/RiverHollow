@@ -41,6 +41,7 @@ namespace Adventure.Game_Managers.GUIObjects
             {
                 Controls.Remove(g);
             }
+            _toRemove.Clear();
         }
         public virtual void Draw(SpriteBatch spriteBatch)
         {

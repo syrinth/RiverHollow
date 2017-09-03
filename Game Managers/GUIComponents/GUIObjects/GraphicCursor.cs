@@ -114,6 +114,7 @@ namespace Adventure.GUIObjects
                     drawIt = _heldBuilding.Texture;
                     drawRectangle.Width = drawIt.Width;
                     drawRectangle.Height = drawIt.Height;
+                    source = new Rectangle(0, 0, drawIt.Width, drawIt.Height);
 
                     _heldBuilding.SetCoordinates(new Vector2(drawRectangle.X, drawRectangle.Y));
                 }

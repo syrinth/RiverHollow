@@ -15,11 +15,12 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
         protected string _text;
 
         protected const int _maxRows = 3;
-        protected float _characterSize;
+        protected float _characterWidth;
+        protected float _characterHeight;
 
         protected string _typedText = string.Empty;
         double typedTextLength;
-        int delayInMilliseconds;
+        int delayInMilliseconds = 10;
         public bool printAll = false;
         private bool _doneDrawing = false;
         public bool Done { get => _doneDrawing; }
@@ -34,10 +35,9 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
 
         protected GUITextWindow() : base()
         {
-            _texture = GameContentManager.GetTexture(@"Textures\Dialog");
             _font = GameContentManager.GetFont(@"Fonts\Font");
-            _edgeSize = 32;
-            _characterSize = _font.MeasureString("test").Y;
+            _characterHeight = _font.MeasureString("Q").Y;
+            _characterWidth = _font.MeasureString("_").X;
             _parsedStrings = new List<string>();
         }
 
@@ -45,29 +45,20 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
         {
             _talker = c;
             _text = text;
-            _height = ((int)_characterSize * _maxRows) + (2 * _edgeSize); //2 is for top and bottom edges
-            _next = new GUIImage(new Vector2(Position.X+_width - _edgeSize*1.5f, Position.Y + _height - _edgeSize * 1.5f), new Rectangle(288, 64, 32, 32), (int)_characterSize, (int)_characterSize, @"Textures\Dialog");
+            _height = Math.Max(_height, ((int)_characterHeight * _maxRows));
+            _next = new GUIImage(new Vector2(Position.X+_width - _edgeSize*1.5f, Position.Y + _height - _edgeSize * 1.5f), new Rectangle(288, 64, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
 
-            delayInMilliseconds = 10;
             ParseText(text);
-        }
-
-        public GUITextWindow(Vector2 position, NPC c, string text) : this(c, text)
-        {
-            _position = position;
         }
 
         public GUITextWindow(Vector2 position, string text) : this()
         {
             _text = text;
-            delayInMilliseconds = 10;
             ParseText(text);
 
-            _height = (int)_parsedStrings.Count * (int)_characterSize + 32; //2 is for top and bottom edges
-            _width = (int)_font.MeasureString(_text).X + 32;
+            _height = (int)_parsedStrings.Count * (int)_characterHeight + _innerBorder*2;
+            _width = (int)_font.MeasureString(_text).X + _innerBorder * 2;
             _position = position -= new Vector2(_width / 2, _height / 2);
-
-            Load(new Vector2(0, 0), 32);
         }
 
         public override void Update(GameTime gameTime)
@@ -149,8 +140,8 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
             {
                 Vector2 measure = _font.MeasureString(line + word);
 
-                if (measure.Length() > MiddleWidth ||
-                    _numReturns == _maxRows-1 && measure.Length() > MiddleWidth - _characterSize)
+                if (measure.Length() >= (_width - _innerBorder * 2) ||
+                    _numReturns == _maxRows-1 && measure.Length() >= (_width - _innerBorder * 2) - _characterHeight)
                 {
                     returnString = returnString + line + '\n';
                     line = string.Empty;
@@ -160,7 +151,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
                 grabLast = true;
                 line = line + word + ' ';
 
-                if (measure.Y * _numReturns > MiddleHeight)
+                if (measure.Y * _numReturns >= (_width - _innerBorder * 2))
                 {
                     grabLast = false;
                     _parsedStrings.Add(returnString);
@@ -178,7 +169,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            spriteBatch.DrawString(_font, _typedText, new Vector2(_position.X+16, _position.Y+16), Color.White);
+            spriteBatch.DrawString(_font, _typedText, new Vector2(_position.X + _innerBorder, _position.Y + _innerBorder), Color.White);
             if (_pause && _next != null)
             {
                 _next.Draw(spriteBatch);
@@ -186,7 +177,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
 
             if(_talker != null)
             {
-                _talker.DrawPortrait(spriteBatch, new Vector2(_position.X, _position.Y));
+                _talker.DrawPortrait(spriteBatch, GetRectangle().Location.ToVector2());
             }
         }
     }

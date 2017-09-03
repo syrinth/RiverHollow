@@ -34,7 +34,10 @@ namespace Adventure.Items
 
         public void AddItem(Item i)
         {
-            _toSell.Add(i);
+            if (i != null)
+            {
+                _toSell.Add(i);
+            }
         }
     }
 }
