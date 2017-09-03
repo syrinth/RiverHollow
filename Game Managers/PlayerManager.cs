@@ -61,6 +61,7 @@ namespace Adventure.Game_Managers
         public static void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             _player.Draw(gameTime, spriteBatch);
+            _merchantChest.Draw(spriteBatch);
         }
 
         public static bool ProcessLeftButtonClick(Point mouseLocation)

@@ -20,13 +20,16 @@ namespace Adventure.Items
             _toSell = new List<Item>();
         }
 
-        public void SellAll()
+        public int SellAll()
         {
+            int val = 0;
             foreach(Item i in _toSell)
             {
+                val += i.SellPrice;
                 PlayerManager.Player.AddMoney(i.SellPrice);
             }
             _toSell.Clear();
+            return val;
         }
 
         public void AddItem(Item i)

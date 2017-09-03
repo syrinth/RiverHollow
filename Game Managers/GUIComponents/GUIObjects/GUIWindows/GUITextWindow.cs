@@ -3,6 +3,7 @@ using Adventure.Game_Managers.GUIObjects;
 using Adventure.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace Adventure.Game_Managers.GUIComponents.GUIObjects
@@ -50,14 +51,28 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
             delayInMilliseconds = 10;
             ParseText(text);
         }
+
         public GUITextWindow(Vector2 position, NPC c, string text) : this(c, text)
         {
             _position = position;
         }
 
+        public GUITextWindow(Vector2 position, string text) : this()
+        {
+            _text = text;
+            delayInMilliseconds = 10;
+            ParseText(text);
+
+            _height = (int)_parsedStrings.Count * (int)_characterSize + 32; //2 is for top and bottom edges
+            _width = (int)_font.MeasureString(_text).X + 32;
+            _position = position -= new Vector2(_width / 2, _height / 2);
+
+            Load(new Vector2(0, 0), 32);
+        }
+
         public override void Update(GameTime gameTime)
         {
-            if (_pause)
+            if (_pause && _next != null)
             {
                 _next.Update(gameTime);
             }
@@ -164,7 +179,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
         {
             base.Draw(spriteBatch);
             spriteBatch.DrawString(_font, _typedText, new Vector2(_position.X+16, _position.Y+16), Color.White);
-            if (_pause)
+            if (_pause && _next != null)
             {
                 _next.Draw(spriteBatch);
             }
