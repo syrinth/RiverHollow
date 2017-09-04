@@ -20,6 +20,7 @@ namespace Adventure
     /// </summary>
     public class AdventureGame : Game
     {
+        public static float Scale = 2;
         public enum GameState { Running, Paused, Build, Information, Input}
         private static GameState _gameState;
         public static GameState State { get => _gameState; }
@@ -125,8 +126,8 @@ namespace Adventure
                     if (!GUIManager.ProcessRightButtonClick(mousePoint) && (_gameState == GameState.Running || _gameState == GameState.Build))
                     {
                         //GUI does NOT use Camera translations
-                        mousePoint.X -= (int)translate.X;
-                        mousePoint.Y -= (int)translate.Y;
+                        mousePoint.X = (int)((mousePoint.X - translate.X)/Scale);
+                        mousePoint.Y = (int)((mousePoint.Y - translate.Y)/Scale);
                         MapManager.ProcessRightButtonClick(mousePoint);
                     }
                 }
@@ -134,8 +135,8 @@ namespace Adventure
                 {
                     if (!GUIManager.ProcessLeftButtonClick(mousePoint) && (_gameState == GameState.Running || _gameState == GameState.Build))
                     {
-                        mousePoint.X -= (int)translate.X;
-                        mousePoint.Y -= (int)translate.Y;
+                        mousePoint.X = (int)((mousePoint.X - translate.X) / Scale);
+                        mousePoint.Y = (int)((mousePoint.Y - translate.Y) / Scale);
                         if (!MapManager.ProcessLeftButtonClick(mousePoint))
                         {
                             PlayerManager.ProcessLeftButtonClick(mousePoint);
@@ -146,8 +147,8 @@ namespace Adventure
                 {
                     if ((_gameState == GameState.Build || _gameState == GameState.Running) && !GUIManager.ProcessHover(mousePoint))
                     {
-                        mousePoint.X -= (int)translate.X;
-                        mousePoint.Y -= (int)translate.Y;
+                        mousePoint.X = (int)((mousePoint.X - translate.X) / Scale);
+                        mousePoint.Y = (int)((mousePoint.Y - translate.Y) / Scale);
                         MapManager.ProcessHover(mousePoint);
                     }
                 }

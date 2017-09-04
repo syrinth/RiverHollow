@@ -48,7 +48,7 @@ namespace Adventure
         {
             LoadContent();
             Position = new Vector2(200, 200);
-            Speed = 5;
+            Speed = 3;
             _maxStamina = 50;
             Stamina = _maxStamina;
 

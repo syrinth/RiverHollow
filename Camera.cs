@@ -8,6 +8,7 @@ namespace Adventure
 {
     public static class Camera
     {
+        private static float Scale = AdventureGame.Scale;
         public static Matrix _transform;
         public static Viewport _view;
         public static Vector2 _center;
@@ -23,7 +24,7 @@ namespace Adventure
         {
             if (AdventureGame.State != AdventureGame.GameState.Build)
             {
-                _observer = PlayerManager.Player.Center.ToVector2();
+                _observer = PlayerManager.Player.Center.ToVector2()*Scale;
             }
             else {
                 KeyboardState ks = Keyboard.GetState();
@@ -47,26 +48,27 @@ namespace Adventure
                 }
             }
 
-            if (_observer.X <= (AdventureGame.ScreenWidth / 2) + TileMap.TileSize)
+            float BorderOffset = TileMap.TileSize * Scale;
+            if (_observer.X <= (AdventureGame.ScreenWidth / 2) + BorderOffset)
             {
-                _observer.X = (AdventureGame.ScreenWidth / 2) + TileMap.TileSize;
+                _observer.X = (AdventureGame.ScreenWidth / 2) + BorderOffset;
             }
-            else if (_observer.X >= MapManager.CurrentMap.GetMapWidth() - (AdventureGame.ScreenWidth / 2) - TileMap.TileSize)
+            else if (_observer.X >= MapManager.CurrentMap.GetMapWidth() * Scale - (AdventureGame.ScreenWidth / 2) - BorderOffset)
             {
-                _observer.X = MapManager.CurrentMap.GetMapWidth() - (AdventureGame.ScreenWidth / 2) - TileMap.TileSize;
+                _observer.X = MapManager.CurrentMap.GetMapWidth() * Scale - (AdventureGame.ScreenWidth / 2) - BorderOffset;
             }
 
-            if (_observer.Y <= (AdventureGame.ScreenHeight / 2) + TileMap.TileSize)
+            if (_observer.Y <= (AdventureGame.ScreenHeight / 2) + BorderOffset)
             {
-                _observer.Y = (AdventureGame.ScreenHeight / 2) + TileMap.TileSize;
+                _observer.Y = (AdventureGame.ScreenHeight / 2) + BorderOffset;
             }
-            else if (_observer.Y >= MapManager.CurrentMap.GetMapHeight() - (AdventureGame.ScreenHeight / 2) - TileMap.TileSize)
+            else if (_observer.Y >= MapManager.CurrentMap.GetMapHeight() * Scale - (AdventureGame.ScreenHeight / 2) - BorderOffset)
             {
-                _observer.Y = MapManager.CurrentMap.GetMapHeight() - (AdventureGame.ScreenHeight / 2) - TileMap.TileSize;
+                _observer.Y = MapManager.CurrentMap.GetMapHeight() * Scale - (AdventureGame.ScreenHeight / 2) - BorderOffset;
             }
 
             _center = new Vector2(_observer.X - (AdventureGame.ScreenWidth / 2), _observer.Y - (AdventureGame.ScreenHeight / 2));
-            _transform = Matrix.CreateScale(new Vector3(1, 1, 0)) * Matrix.CreateTranslation(new Vector3(-_center.X, -_center.Y, 0));
+            _transform = Matrix.CreateScale(new Vector3(Scale, Scale, 0)) * Matrix.CreateTranslation(new Vector3(-_center.X, -_center.Y, 0));
         }
 
         public static void UnsetObserver()
