@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <!--Key: NPC/list of likes and dislikes-->
+    <Item>
+      <Key>1</Key>
+      <Value>6</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>7</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>2</Value>
+    </Item>
+  </Asset>
+</XnaContent>

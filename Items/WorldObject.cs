@@ -71,8 +71,7 @@ namespace Adventure.Items
             if (rv)
             {
                 MapManager.RemoveWorldObject(this);
-                MapManager.DropWorldItems(DropManager.DropItemsFromWorldObject(ID), Position);
-                //PlayerManager.Player.AddItemToFirstAvailableInventory(ObjectManager.ItemIDs.Stone);
+                MapManager.DropWorldItems(DropManager.DropItemsFromWorldObject(ID), _collisionBox.Center.ToVector2());
             }
             return rv;
         }
