@@ -45,7 +45,7 @@ namespace Adventure.Game_Managers
             GUIManager.FadeOut();
             Rectangle rectEntrance = Rectangle.Empty;
             TileMap newMap = _tileMaps[newMapStr];
-            //if (newMap.EntranceDictionary.Keys
+
             foreach (string s in _tileMaps[newMapStr].EntranceDictionary.Keys)
             {
                 if (!string.IsNullOrEmpty(PlayerManager._inBuilding))
@@ -67,22 +67,23 @@ namespace Adventure.Game_Managers
             PlayerManager.Player.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
         }
 
-        public static void EnterBuilding(string newMapStr, string ID, List<Worker> workers)
+        //string newMapStr, string ID, List<Worker> workers
+        public static void EnterBuilding(Building b)
         {
             Rectangle rectEntrance = Rectangle.Empty;
-            TileMap newMap = _tileMaps[newMapStr];
-            PlayerManager._inBuilding = ID;
+            TileMap newMap = _tileMaps[b._map];
+            PlayerManager._inBuilding = b.ID.ToString();
 
-            foreach (string s in _tileMaps[newMapStr].EntranceDictionary.Keys)
+            foreach (string s in _tileMaps[b._map].EntranceDictionary.Keys)
             {
                 if (s.Equals(_currentMap.Name))
                 {
-                    rectEntrance = _tileMaps[newMapStr].EntranceDictionary[s];
+                    rectEntrance = _tileMaps[b._map].EntranceDictionary[s];
                 }
             }
-            _currentMap = _tileMaps[newMapStr];
+            _currentMap = _tileMaps[b._map];
             _currentMap.ClearWorkers();
-            _currentMap.AddWorkersToMap(workers);
+            _currentMap.AddBuildingObjectsToMap(b);
 
             PlayerManager.CurrentMap = _currentMap.Name;
             PlayerManager.Player.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);

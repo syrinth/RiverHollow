@@ -1,5 +1,6 @@
 ﻿using Adventure.Characters.NPCs;
 using Adventure.Game_Managers;
+using Adventure.Items;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
 using System;
@@ -21,6 +22,7 @@ namespace Adventure.Buildings
             _workers = new List<Worker>();
             _baseWidth = 3;
             _baseHeight = 3;
+            _buildingChest = (Container)ObjectManager.GetItem(6);
 
             _reqGold = 10000;
             _texture = GameContentManager.GetTexture(@"Textures\ArcaneTower");

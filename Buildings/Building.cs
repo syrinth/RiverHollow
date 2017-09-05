@@ -1,6 +1,7 @@
 ﻿using Adventure.Buildings;
 using Adventure.Characters.NPCs;
 using Adventure.Game_Managers;
+using Adventure.Items;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,6 +17,8 @@ namespace Adventure
 {
     public abstract class Building
     {
+        protected Container _buildingChest;
+        public Container BuildingChest { get => _buildingChest; }
         protected const int MaxWorkers = 9;
         public abstract string _map { get; }
         public abstract ObjectManager.BuildingID BuildingID { get; }
@@ -43,7 +46,6 @@ namespace Adventure
         public Vector2 Position { get => _position; }
 
         public Rectangle SourceRectangle { get => new Rectangle(0, 0, Texture.Width, Texture.Height); }
-
 
         public Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)(Position.Y + (_texture.Height - BaseHeight)), BaseWidth, BaseHeight); }
         public Rectangle SelectionBox { get => new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height); }

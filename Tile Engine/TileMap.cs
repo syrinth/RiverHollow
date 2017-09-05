@@ -18,6 +18,7 @@ namespace Adventure.Tile_Engine
 {
     public class TileMap
     {
+        private static float Scale = AdventureGame.Scale;
         public int MapWidth = 100;
         public int MapHeight = 100;
         public static int _tileSize = 32;
@@ -77,24 +78,27 @@ namespace Adventure.Tile_Engine
 
             _name = _map.Name;
 
-            LoadEntranceObjects();
+            LoadMapObjects();
         }
 
-        public void LoadEntranceObjects()
+        public void LoadMapObjects()
         {
             ReadOnlyCollection<TiledMapObjectLayer> entrLayer = _map.ObjectLayers;
             foreach (TiledMapObjectLayer ol in entrLayer)
             {
-                foreach (TiledMapObject mapObject in ol.Objects)
+                if (ol.Name == "Entrance Layer")
                 {
-                    Rectangle r = new Rectangle((int)mapObject.Position.X, (int)mapObject.Position.Y, (int)mapObject.Size.Width, (int)mapObject.Size.Height);
-                    if (mapObject.Properties.ContainsKey("Exit"))
+                    foreach (TiledMapObject mapObject in ol.Objects)
                     {
-                        _exitDictionary.Add(r, mapObject.Properties["Exit"]);
-                    }
-                    else if (mapObject.Properties.ContainsKey("Entrance"))
-                    {
-                        _entranceDictionary.Add(mapObject.Properties["Entrance"], r);
+                        Rectangle r = new Rectangle((int)mapObject.Position.X, (int)mapObject.Position.Y, (int)mapObject.Size.Width, (int)mapObject.Size.Height);
+                        if (mapObject.Properties.ContainsKey("Exit"))
+                        {
+                            _exitDictionary.Add(r, mapObject.Properties["Exit"]);
+                        }
+                        else if (mapObject.Properties.ContainsKey("Entrance"))
+                        {
+                            _entranceDictionary.Add(mapObject.Properties["Entrance"], r);
+                        }
                     }
                 }
             }
@@ -458,7 +462,7 @@ namespace Adventure.Tile_Engine
             {
                 if (b.BoxToEnter.Contains(mouseLocation) && PlayerInRange(PlayerManager.Player.GetRectangle(), b.BoxToEnter.Center))
                 {
-                    MapManager.EnterBuilding(b._map, b.ID.ToString(), b.Workers);
+                    MapManager.EnterBuilding(b);
                     break;
                 }
             }
@@ -481,12 +485,12 @@ namespace Adventure.Tile_Engine
             {
                 if (GraphicCursor.HeldBuilding != null)
                 {
-                    AddBuilding();
+                    AddBuilding(mouseLocation);
                     rv = true;
                 }
                 else if (GraphicCursor.WorkerToPlace != ObjectManager.WorkerID.Nothing)
                 {
-                    if (AddWorkerToBuilding())
+                    if (AddWorkerToBuilding(mouseLocation))
                     {
                         rv = true;
                     }
@@ -648,12 +652,35 @@ namespace Adventure.Tile_Engine
         }
 
         #region Adders
-        public void AddWorkersToMap(List<Worker> workers)
+        public void AddBuildingObjectsToMap(Building b)
         {
-            _characterList.AddRange(workers);
+            List<Vector2> spawnPoints = new List<Vector2>();
+            ReadOnlyCollection<TiledMapObjectLayer> entrLayer = _map.ObjectLayers;
+            foreach (TiledMapObjectLayer ol in entrLayer)
+            {
+                if (ol.Name == "Building Layer")
+                {
+                    foreach (TiledMapObject mapObject in ol.Objects)
+                    {
+                        if (mapObject.Name.Contains("Spawn"))
+                        {
+                            spawnPoints.Add(mapObject.Position);
+                        }
+                        else if (mapObject.Name.Contains("BuildingChest"))
+                        {
+                            PlaceWorldItem(b.BuildingChest, mapObject.Position);
+                        }
+                    }
+                }
+            }
+            for( int i =0; i<b.Workers.Count; i++)
+            {
+                b.Workers[i].Position = spawnPoints[i];
+            }
+            _characterList.AddRange(b.Workers);
         }
 
-        public void AddBuilding()
+        public void AddBuilding(Point mouseLocation)
         {
             Building b = GraphicCursor.HeldBuilding;
             AddBuilding(b);
@@ -662,7 +689,7 @@ namespace Adventure.Tile_Engine
         public void AddBuilding(Building b)
         {
             Vector3 translate = Camera._transform.Translation;
-            Vector2 newPos = new Vector2(b.Position.X - translate.X, b.Position.Y - translate.Y);
+            Vector2 newPos = new Vector2((b.Position.X - translate.X)/Scale, (b.Position.Y - translate.Y)/Scale);
             b.SetCoordinates(newPos);
             _entranceDictionary.Add(b.ID.ToString(), b.BoxToExit); //TODO: FIX THIS
             GraphicCursor.DropBuilding();
@@ -672,12 +699,12 @@ namespace Adventure.Tile_Engine
             AdventureGame.ResetCamera();
         }
 
-        public bool AddWorkerToBuilding()
+        public bool AddWorkerToBuilding(Point mouseLocation)
         {
             bool rv = false;
             foreach(Building b in _buildingList)
             {
-                if (b.SelectionBox.Contains(GraphicCursor.Position))
+                if (b.SelectionBox.Contains(mouseLocation))
                 {
                     if (b.HasSpace())
                     {
