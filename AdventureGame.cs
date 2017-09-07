@@ -235,7 +235,10 @@ namespace Adventure
 
         public static void RollOver()
         {
-         //   _wiz.MakeDailyItem();
+            foreach(Building b in PlayerManager.Buildings)
+            {
+                b.MakeDailyItems();
+            }
         }
     }
 }

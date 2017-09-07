@@ -85,7 +85,7 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
                             {
 
                                 PlayerManager.Player.RemoveItemsFromInventory(kvp.Key, kvp.Value);
-                                PlayerManager.Player.AddItemToFirstAvailableInventory(gIB.Item.ItemID);
+                                PlayerManager.Player.AddItemToFirstAvailableInventorySpot(gIB.Item.ItemID);
                             }
                         }
                     }

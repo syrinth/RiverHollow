@@ -71,7 +71,7 @@ namespace Adventure.Game_Managers
         public static void EnterBuilding(Building b)
         {
             Rectangle rectEntrance = Rectangle.Empty;
-            TileMap newMap = _tileMaps[b._map];
+            //TileMap newMap = _tileMaps[b._map];
             PlayerManager._inBuilding = b.ID.ToString();
 
             foreach (string s in _tileMaps[b._map].EntranceDictionary.Keys)
@@ -82,8 +82,7 @@ namespace Adventure.Game_Managers
                 }
             }
             _currentMap = _tileMaps[b._map];
-            _currentMap.ClearWorkers();
-            _currentMap.AddBuildingObjectsToMap(b);
+            _currentMap.LoadBuilding(b);
 
             PlayerManager.CurrentMap = _currentMap.Name;
             PlayerManager.Player.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
@@ -174,7 +173,7 @@ namespace Adventure.Game_Managers
         }
         public static void PlaceWorldItem(StaticItem staticItem, Vector2 position)
         {
-            _currentMap.PlaceWorldItem(staticItem, position);
+            _currentMap.PlaceStaticItem(staticItem, position);
         }
     }
 }

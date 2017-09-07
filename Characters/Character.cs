@@ -66,5 +66,10 @@ namespace Adventure.Characters
         {
             _sprite.Draw(spriteBatch);
         }
+
+        public bool Contains(Point mouse)
+        {
+            return CollisionBox.Contains(mouse);
+        }
     }
 }

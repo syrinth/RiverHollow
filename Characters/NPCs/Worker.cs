@@ -16,6 +16,7 @@ namespace Adventure.Characters.NPCs
     {
         public abstract ObjectManager.WorkerID WorkerID { get; }
         public abstract string WorkerType { get; }
+        private Building _building;
         protected int _dailyFoodReq;
         protected int _currFood;
         protected int _dailyItemID;
@@ -69,12 +70,14 @@ namespace Adventure.Characters.NPCs
         {
             _mood = val;
         }
+        public void SetBuilding(Building b)
+        {
+            _building = b;
+        }
 
         public void MakeDailyItem()
         {
-            if (_heldItem == null) {
-                _heldItem = ObjectManager.GetItem(_dailyItemID);
-            }
+            _building.BuildingChest.AddItemToFirstAvailableInventorySpot(_dailyItemID);
         }
 
         public string GetName()

@@ -29,6 +29,7 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
             bool rv = false;
             if (_btnOK.Contains(mouse))
             {
+                AdventureGame.RollOver();
                 GameCalendar.NextDay();
                 GUIManager.FadeOut();
                 AdventureGame.ChangeGameState(AdventureGame.GameState.Running);

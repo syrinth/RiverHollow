@@ -24,8 +24,8 @@ namespace Adventure.Game_Managers.GUIObjects
             _container = new Inventory(c, centerPoint, 32);
             _inventory = new Inventory(centerPoint, 4, Player.maxItemColumns, 32);
 
-            Vector2 contWidthHeight = new Vector2(_container.Width, _container.Height);
-            Vector2 mainWidthHeight = new Vector2(_inventory.Width, _inventory.Height);
+            Vector2 contWidthHeight = new Vector2(_container.GetRectangle().Width, _container.GetRectangle().Height);
+            Vector2 mainWidthHeight = new Vector2(_inventory.GetRectangle().Width, _inventory.GetRectangle().Height);
             _container.SetPosition(centerPoint - new Vector2((contWidthHeight.X/2), contWidthHeight.Y));
             _inventory.SetPosition(centerPoint - new Vector2(mainWidthHeight.X / 2, 0));
 

@@ -18,7 +18,13 @@ namespace Adventure
     public abstract class Building
     {
         protected Container _buildingChest;
-        public Container BuildingChest { get => _buildingChest; }
+        public Container BuildingChest { get => _buildingChest; set => _buildingChest = value; }
+
+        protected Container _pantry;
+        public Container Pantry { get => _pantry; set => _pantry = value; }
+
+        protected List<StaticItem> _staticItemList;
+        public List<StaticItem> StaticItems { get => _staticItemList; }
         protected const int MaxWorkers = 9;
         public abstract string _map { get; }
         public abstract ObjectManager.BuildingID BuildingID { get; }
@@ -66,16 +72,14 @@ namespace Adventure
 
             return rv;
         }
-
-        //call HasSpace before adding
+        
         public bool AddWorker(Worker worker, Random r)
         {
             bool rv = false;
 
             if(worker != null &&  _workers.Count < MaxWorkers)
             {
-                
-                worker.MakeDailyItem();
+                worker.SetBuilding(this);
                 _workers.Add(worker);
                 Vector2 pos = new Vector2(r.Next(1160, 1860), r.Next(990, 1340));
                 worker.Position = pos;
@@ -83,6 +87,31 @@ namespace Adventure
             }
 
             return rv;
+        }
+        public void MakeDailyItems()
+        {
+            foreach (Worker w in _workers)
+            {
+                bool eaten = false;
+                for (int i = 0; i < Pantry.Rows; i++)
+                {
+                    for (int j = 0; j < Pantry.Rows; j++)
+                    {
+                        Item item = Pantry.Inventory[i, j];
+                        if (item != null && item.Type == Item.ItemType.Food)
+                        {
+                            Pantry.RemoveItemFromInventory((i * Player.maxItemColumns) + j);
+                            w.MakeDailyItem();
+                            eaten = true;
+                            break;
+                        }
+                    }
+                    if (!eaten)
+                    {
+                        break;
+                    }
+                }
+            }
         }
 
         public abstract bool SetCoordinates(Vector2 position);
@@ -94,7 +123,7 @@ namespace Adventure
 
         public void AddBuildingDetails(BuildingData data)
         {
-            _position = new Vector2(data.positionX, data.positionY);
+            SetCoordinates(new Vector2(data.positionX, data.positionY));
             _id = data.id;
 
             Random r = new Random();

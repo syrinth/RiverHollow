@@ -46,11 +46,11 @@ namespace Adventure.Game_Managers
             _player = new Player();
             _canMake = new List<int>();
             _canMake.Add(6);
-            _player.AddItemToFirstAvailableInventory(5);
-            _player.AddItemToFirstAvailableInventory(3);
-            _player.AddItemToFirstAvailableInventory(4);
-            _player.AddItemToFirstAvailableInventory(6);
-            _player.AddItemToFirstAvailableInventory(7);
+            _player.AddItemToFirstAvailableInventorySpot(5);
+            _player.AddItemToFirstAvailableInventorySpot(3);
+            _player.AddItemToFirstAvailableInventorySpot(4);
+            _player.AddItemToFirstAvailableInventorySpot(6);
+            _player.AddItemToFirstAvailableInventorySpot(7);
         }
 
         public static void Update(GameTime gameTime)
@@ -111,6 +111,9 @@ namespace Adventure.Game_Managers
              [XmlArray(ElementName = "Workers")]
              public List<WorkerData> Workers;
 
+            [XmlArray(ElementName = "StaticItems")]
+            public List<StaticItemData> staticItems;
+
             [XmlElement(ElementName = "positionX")]
             public int positionX;
 
@@ -122,6 +125,12 @@ namespace Adventure.Game_Managers
 
             [XmlElement(ElementName = "ID")]
             public int id;
+
+            [XmlElement(ElementName = "BuildingChest")]
+            public StaticItemData buildingChest;
+
+            [XmlElement(ElementName = "Pantry")]
+            public StaticItemData pantry;
         }
         public struct WorkerData
         {
@@ -214,7 +223,91 @@ namespace Adventure.Game_Managers
                     workerData.name = w.Name;
                     buildingData.Workers.Add(workerData);
                 }
-                // Add the level data.
+
+                //Save Pantry
+                {
+                    StaticItemData pantryData = new StaticItemData();
+                    pantryData.staticItemID = b.Pantry.ItemID;
+                    pantryData.x = (int)b.Pantry.Position.X;
+                    pantryData.y = (int)b.Pantry.Position.Y;
+
+                    if (b.Pantry.GetType().Equals(typeof(Container)))
+                    {
+                        pantryData.Items = new List<ItemData>();
+                        foreach (Item i in ((Container)b.Pantry).Inventory)
+                        {
+                            ItemData itemData = new ItemData();
+                            if (i != null)
+                            {
+                                itemData.itemID = i.ItemID;
+                                itemData.num = i.Number;
+                            }
+                            else
+                            {
+                                itemData.itemID = -1;
+                            }
+                            pantryData.Items.Add(itemData);
+                        }
+                    }
+                    buildingData.pantry = pantryData;
+                }
+                //Save BuildingChest
+                {
+                    StaticItemData chestData = new StaticItemData();
+                    chestData.staticItemID = b.BuildingChest.ItemID;
+                    chestData.x = (int)b.BuildingChest.Position.X;
+                    chestData.y = (int)b.BuildingChest.Position.Y;
+
+                    if (b.BuildingChest.GetType().Equals(typeof(Container)))
+                    {
+                        chestData.Items = new List<ItemData>();
+                        foreach (Item i in ((Container)b.BuildingChest).Inventory)
+                        {
+                            ItemData itemData = new ItemData();
+                            if (i != null)
+                            {
+                                itemData.itemID = i.ItemID;
+                                itemData.num = i.Number;
+                            }
+                            else
+                            {
+                                itemData.itemID = -1;
+                            }
+                            chestData.Items.Add(itemData);
+                        }
+                    }
+                    buildingData.buildingChest = chestData;
+                }
+
+                buildingData.staticItems = new List<StaticItemData>();
+                foreach (StaticItem item in b.StaticItems)
+                {
+                    StaticItemData d = new StaticItemData();
+                    d.staticItemID = item.ItemID;
+                    d.x = (int)item.Position.X;
+                    d.y = (int)item.Position.Y;
+
+                    if (item.GetType().Equals(typeof(Container)))
+                    {
+                        d.Items = new List<ItemData>();
+                        foreach (Item i in ((Container)item).Inventory)
+                        {
+                            ItemData itemData = new ItemData();
+                            if (i != null)
+                            {
+                                itemData.itemID = i.ItemID;
+                                itemData.num = i.Number;
+                            }
+                            else
+                            {
+                                itemData.itemID = -1;
+                            }
+                            d.Items.Add(itemData);
+                        }
+                    }
+                    buildingData.staticItems.Add(d);
+                }
+
                 data.Buildings.Add(buildingData);
             }
 
@@ -242,41 +335,43 @@ namespace Adventure.Game_Managers
                 m.worldObjects = new List<WorldObjectData>();
                 m.staticItems = new List<StaticItemData>();
 
-                foreach (WorldObject w in tileMap.WorldObjects)
+                if (!tileMap.IsBuilding)
                 {
-                    WorldObjectData d = new WorldObjectData();
-                    d.worldObjectID = w.ID;
-                    d.x = (int)w.Position.X;
-                    d.y = (int)w.Position.Y;
-                    m.worldObjects.Add(d);
-                }
-
-                foreach (StaticItem item in tileMap.StaticItems)
-                {
-                    StaticItemData d = new StaticItemData();
-                    d.staticItemID = item.ItemID;
-                    d.x = (int)item.Position.X;
-                    d.y = (int)item.Position.Y;
-
-                    if (item.GetType().Equals(typeof(Container)))
+                    foreach (WorldObject w in tileMap.WorldObjects)
                     {
-                        d.Items = new List<ItemData>();
-                        foreach (Item i in ((Container)item).Inventory)
-                        {
-                            ItemData itemData = new ItemData();
-                            if (i != null)
-                            {
-                                itemData.itemID = i.ItemID;
-                                itemData.num = i.Number;
-                            }
-                            else
-                            {
-                                itemData.itemID = -1;
-                            }
-                            d.Items.Add(itemData);
-                        }
+                        WorldObjectData d = new WorldObjectData();
+                        d.worldObjectID = w.ID;
+                        d.x = (int)w.Position.X;
+                        d.y = (int)w.Position.Y;
+                        m.worldObjects.Add(d);
                     }
-                    m.staticItems.Add(d);
+                    foreach (StaticItem item in tileMap.StaticItems)
+                    {
+                        StaticItemData d = new StaticItemData();
+                        d.staticItemID = item.ItemID;
+                        d.x = (int)item.Position.X;
+                        d.y = (int)item.Position.Y;
+
+                        if (item.GetType().Equals(typeof(Container)))
+                        {
+                            d.Items = new List<ItemData>();
+                            foreach (Item i in ((Container)item).Inventory)
+                            {
+                                ItemData itemData = new ItemData();
+                                if (i != null)
+                                {
+                                    itemData.itemID = i.ItemID;
+                                    itemData.num = i.Number;
+                                }
+                                else
+                                {
+                                    itemData.itemID = -1;
+                                }
+                                d.Items.Add(itemData);
+                            }
+                        }
+                        m.staticItems.Add(d);
+                    }
                 }
 
                 data.MapData.Add(m);
@@ -317,6 +412,55 @@ namespace Adventure.Game_Managers
                 Building newBuilding = ObjectManager.GetBuilding(b.buildingID);
                 newBuilding.AddBuildingDetails(b);
                 MapManager.CurrentMap.AddBuilding(newBuilding);
+
+                //Load Pantry
+                {
+                    Container c = (Container)ObjectManager.GetItem(b.pantry.staticItemID);
+                    for (int i = 0; i < Player.maxItemRows; i++)
+                    {
+                        for (int j = 0; j < Player.maxItemColumns; j++)
+                        {
+                            ItemData item = b.pantry.Items[i * Player.maxItemRows + j];
+                            Item newItem = ObjectManager.GetItem(item.itemID, item.num);
+                            c.AddItemToInventorySpot(newItem, i, j);
+                            c.Position = new Vector2(b.pantry.x, b.pantry.y);
+                        }
+                    }
+                    newBuilding.Pantry = c;
+                }
+
+                //Load BuildingChest
+                {
+                    Container c = (Container)ObjectManager.GetItem(b.buildingChest.staticItemID);
+                    for (int i = 0; i < Player.maxItemRows; i++)
+                    {
+                        for (int j = 0; j < Player.maxItemColumns; j++)
+                        {
+                            ItemData item = b.buildingChest.Items[i * Player.maxItemRows + j];
+                            Item newItem = ObjectManager.GetItem(item.itemID, item.num);
+                            c.AddItemToInventorySpot(newItem, i, j);
+                            c.Position = new Vector2(b.buildingChest.x, b.buildingChest.y);
+                        }
+                    }
+                    newBuilding.BuildingChest = c;
+                }
+                foreach (StaticItemData s in b.staticItems)
+                {
+                    Container c = (Container)ObjectManager.GetItem(s.staticItemID);
+
+                    for (int i = 0; i < Player.maxItemRows; i++)
+                    {
+                        for (int j = 0; j < Player.maxItemColumns; j++)
+                        {
+                            ItemData item = s.Items[i * Player.maxItemRows + j];
+                            Item newItem = ObjectManager.GetItem(item.itemID, item.num);
+                            c.AddItemToInventorySpot(newItem, i, j);
+                            c.Position = new Vector2(s.x, s.y);
+                        }
+                    }
+
+                    newBuilding.StaticItems.Add(c);
+                }
             }
             for (int i = 0; i < Player.maxItemRows; i++)
             {
@@ -350,7 +494,7 @@ namespace Adventure.Game_Managers
                         }
                     }
 
-                    tm.PlaceWorldItem(c, new Vector2(s.x, s.y));
+                    tm.PlaceStaticItem(c, new Vector2(s.x, s.y));
                 }
             }
         }

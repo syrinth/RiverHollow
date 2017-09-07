@@ -128,7 +128,7 @@ namespace Adventure.Screens
                         }
                         else
                         {
-                            rv = new Item(_displayList[i, j].Item);
+                            rv = _displayList[i, j].Item;
                         }
                         if (_container == null)
                         {

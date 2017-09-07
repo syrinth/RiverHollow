@@ -60,7 +60,7 @@ namespace Adventure
 
             if (GameCalendar.CurrentHour == 2)
             {
-                AdventureGame.RollOver();
+                GUIManager.SetScreen(GUIManager.Screens.DayEnd);
             }
         }
 

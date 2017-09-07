@@ -20,18 +20,10 @@ namespace Adventure.Items
         {
             if (itemValue.Length == 8)
             {
-                _num = 1;
-
-                int i = 1;
-                _itemType = ItemType.Container;
-                _name = itemValue[i++];
-                _description = itemValue[i++];
-                _textureIndex = int.Parse(itemValue[i++]);
-                i++; //Holding out for Enum
+                int i = ImportBasics(itemValue, id, 1);
                 _rows = int.Parse(itemValue[i++]);
                 _columns = int.Parse(itemValue[i++]);
-                _itemID = id; //(ObjectManager.ItemIDs)Enum.Parse(typeof(ObjectManager.ItemIDs), itemValue[i++]);
-                _texture = GameContentManager.GetTexture(@"Textures\chest");
+                _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
 
                 _pickup = false;
                 _inventory = new Item[Player.maxItemRows, Player.maxItemColumns];
@@ -57,6 +49,33 @@ namespace Adventure.Items
             return rv;
         }
 
+        public void AddItemToFirstAvailableInventorySpot(int itemID)
+        {
+            if (!IncrementExistingItem(itemID))
+            {
+                bool added = false;
+                for (int i = 0; i < _rows; i++)
+                {
+                    for (int j = 0; j < _columns; j++)
+                    {
+                        if (_inventory[i, j] == null)
+                        {
+                            _inventory[i, j] = ObjectManager.GetItem(itemID, 1);
+                            added = true; ;
+                        }
+                        if (added)
+                        {
+                            break;
+                        }
+                    }
+                    if (added)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
         public bool AddItemToInventorySpot(Item item, int row, int column)
         {
             bool rv = false;
@@ -74,7 +93,7 @@ namespace Adventure.Items
                     }
                     else
                     {
-                        _inventory[row, column] = new Item(item);
+                        _inventory[row, column] = item;
                     }
                     rv = true;
                 }
@@ -92,15 +111,22 @@ namespace Adventure.Items
 
         public void RemoveItemFromInventory(int index)
         {
+            bool removed = false;
             for (int i = 0; i < Player.maxItemRows; i++)
             {
                 for (int j = 0; j < Player.maxItemColumns; j++)
                 {
                     if ((i * Player.maxItemColumns) + j == index)
                     {
-                        _inventory[i, j] = null;
+                        if (_inventory[i, j].Number > 1) { _inventory[i, j].Number--; }
+                        else { _inventory[i, j] = null; }
+                        removed = true;
                         break;
                     }
+                }
+                if (removed)
+                {
+                    break;
                 }
             }
         }

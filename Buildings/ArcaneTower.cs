@@ -23,6 +23,9 @@ namespace Adventure.Buildings
             _baseWidth = 3;
             _baseHeight = 3;
             _buildingChest = (Container)ObjectManager.GetItem(6);
+            _pantry = (Container)ObjectManager.GetItem(6);
+
+            _staticItemList = new List<StaticItem>();
 
             _reqGold = 10000;
             _texture = GameContentManager.GetTexture(@"Textures\ArcaneTower");

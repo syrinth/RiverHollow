@@ -139,10 +139,5 @@ namespace Adventure.Characters
 
             return rv;
         }
-
-        public bool Contains(Point mouse)
-        {
-            return CollisionBox.Contains(mouse);
-        }
     }
 }

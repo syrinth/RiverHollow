@@ -180,7 +180,7 @@ namespace Adventure
 
             if (CurrentItem != null)
             {
-                if (CurrentItem.Type == Item.ItemType.Tool && MapManager.CurrentMap.PlayerInRange(CollisionBox, mouseLocation))
+                if (CurrentItem.Type == Item.ItemType.Tool && MapManager.CurrentMap.PlayerInRange(mouseLocation))
                 {
                     if (DecreaseStamina(((Tool)CurrentItem).StaminaCost))
                     {
@@ -333,7 +333,7 @@ namespace Adventure
             }
         }
 
-        public void AddItemToFirstAvailableInventory(int itemID)
+        public void AddItemToFirstAvailableInventorySpot(int itemID)
         {
             if (!IncrementExistingItem(itemID))
             {
@@ -394,7 +394,7 @@ namespace Adventure
                     }
                     else
                     {
-                        _inventory[row, column] = new Item(item);
+                        _inventory[row, column] = item;
                     }
                     rv = true;
                 }

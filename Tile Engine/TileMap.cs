@@ -26,6 +26,11 @@ namespace Adventure.Tile_Engine
         private string _name;
         public string Name { get => _name.Replace(@"Maps\", ""); set => _name = value; } //Fuck off with that path bullshit
 
+        protected Building _mapBuilding;
+        public Building MapBuilding { get => _mapBuilding; }
+
+        public bool _isBuilding;
+        public bool IsBuilding { get => _isBuilding; }
         protected TiledMap _map;
         protected TiledMapRenderer renderer;
         protected List<TiledMapTileset> _tileSets;
@@ -59,6 +64,7 @@ namespace Adventure.Tile_Engine
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, string newMap)
         {
             _map = Content.Load<TiledMap>(newMap);
+            _isBuilding = _map.Properties.ContainsKey("Building");
             _tileSize = _map.TileWidth;
             renderer = new TiledMapRenderer(GraphicsDevice);
             
@@ -139,9 +145,9 @@ namespace Adventure.Tile_Engine
                     if (((Item)i).FinishedMoving() && i.CollisionBox.Intersects(PlayerManager.Player.CollisionBox))
                     {
                         removedList.Add(i);
-                        PlayerManager.Player.AddItemToFirstAvailableInventory(i.ItemID);
+                        PlayerManager.Player.AddItemToFirstAvailableInventorySpot(i.ItemID);
                     }
-                    else if (PlayerInRange(_p.CollisionBox, i.CollisionBox.Center, 80))
+                    else if (PlayerInRange(i.CollisionBox.Center, 80))
                     {
                         float speed = 3;
                         Vector2 direction = new Vector2((_p.Position.X < i.Position.X) ? -speed : speed, (_p.Position.Y < i.Position.Y) ? -speed : speed);
@@ -443,24 +449,25 @@ namespace Adventure.Tile_Engine
             foreach (Character c in _characterList)
             {
                 Type cType = c.GetType();
-                if (cType.IsSubclassOf(typeof(Worker)))
-                {
-                    Worker w = (Worker)c;
-                    if (w.Contains(mouseLocation) && PlayerInRange(PlayerManager.Player.GetRectangle(), w.Center) &&
-                        PlayerManager.Player.HasSpaceInInventory(w.WhatAreYouHolding()))
-                    {
-                        ((NPC)c).Talk();
-                        PlayerManager.Player.AddItemToFirstAvailableInventory(w.TakeItem());
-                    }
-                }
-                else if (c.CollisionBox.Contains(mouseLocation) && (cType.Equals(typeof(NPC)) || cType.IsSubclassOf(typeof(NPC))))
+                //if (cType.IsSubclassOf(typeof(Worker)))
+                //{
+                //    Worker w = (Worker)c;
+                //    if (w.Contains(mouseLocation) && PlayerInRange(w.Center))
+                //    {
+                //        ((NPC)c).Talk();
+                //        break;
+                //    }
+                //}
+                //else
+                if (c.Contains(mouseLocation) && (cType.Equals(typeof(NPC)) || cType.IsSubclassOf(typeof(NPC))))
                 {
                     ((NPC)c).Talk();
+                    break;
                 }
             }
             foreach (Building b in _buildingList)
             {
-                if (b.BoxToEnter.Contains(mouseLocation) && PlayerInRange(PlayerManager.Player.GetRectangle(), b.BoxToEnter.Center))
+                if (b.BoxToEnter.Contains(mouseLocation) && PlayerInRange(b.BoxToEnter.Center))
                 {
                     MapManager.EnterBuilding(b);
                     break;
@@ -471,6 +478,7 @@ namespace Adventure.Tile_Engine
                 if (s.CollisionBox.Contains(mouseLocation))
                 {
                     GUIManager.LoadScreen(GUIManager.Screens.Inventory, (Container)s);
+                    break;
                 }
             }
 
@@ -510,10 +518,10 @@ namespace Adventure.Tile_Engine
                     if (cType.IsSubclassOf(typeof(Worker)))
                     {
                         Worker w = (Worker)c;
-                        if (w.Contains(mouseLocation) && PlayerInRange(PlayerManager.Player.GetRectangle(), w.Center) &&
+                        if (w.Contains(mouseLocation) && PlayerInRange(w.Center) &&
                             PlayerManager.Player.HasSpaceInInventory(w.WhatAreYouHolding()))
                         {
-                            PlayerManager.Player.AddItemToFirstAvailableInventory(w.TakeItem());
+                            PlayerManager.Player.AddItemToFirstAvailableInventorySpot(w.TakeItem());
                             rv = true;
                         }
                     }
@@ -521,7 +529,7 @@ namespace Adventure.Tile_Engine
                     {
                         NPC n = (NPC)c;
                         if (PlayerManager.Player.CurrentItem != null && 
-                            n.Contains(mouseLocation) && PlayerInRange(PlayerManager.Player.GetRectangle(), n.Center) &&
+                            n.Contains(mouseLocation) && PlayerInRange(n.Center) &&
                             PlayerManager.Player.CurrentItem.Type != Item.ItemType.Tool &&
                             PlayerManager.Player.CurrentItem.Type != Item.ItemType.Weapon)
                         {
@@ -589,14 +597,15 @@ namespace Adventure.Tile_Engine
         }
         #endregion
 
-        public bool PlayerInRange(Rectangle playerRect, Point centre)
+        public bool PlayerInRange(Point centre)
         {
-            return PlayerInRange(playerRect, centre, TileMap.TileSize * 2);
+            return PlayerInRange(centre, TileMap.TileSize * 2);
         }
-        public bool PlayerInRange(Rectangle playerRect, Point centre, int range)
+        public bool PlayerInRange(Point centre, int range)
         {
             bool rv = false;
 
+            Rectangle playerRect = PlayerManager.Player.GetRectangle();
             if (Math.Abs(playerRect.Center.X - centre.X) <= range &&
                 Math.Abs(playerRect.Center.Y - centre.Y) <= range)
             {
@@ -642,13 +651,29 @@ namespace Adventure.Tile_Engine
                 _itemList.Add(i);
             }
         }
-        public void PlaceWorldItem(StaticItem container, Vector2 position)
+        public void LoadStaticItem(StaticItem container)
+        {
+            container.OnTheMap = true;
+            _staticItemList.Add(container);
+        }
+        public void PlaceStaticItem(StaticItem container, Vector2 position)
         {
             position.X = ((int)((position.X) / 32)) * 32;
             position.Y = ((int)((position.Y) / 32)) * 32;
             container.OnTheMap = true;
             container.Position = position;
             _staticItemList.Add(container);
+            if(_mapBuilding != null)
+            {
+                _mapBuilding.StaticItems.Add(container);
+            }
+        }
+
+        public void LoadBuilding(Building b)
+        {
+            _mapBuilding = b;
+            ClearWorkers();
+            AddBuildingObjectsToMap(b);
         }
 
         #region Adders
@@ -668,16 +693,26 @@ namespace Adventure.Tile_Engine
                         }
                         else if (mapObject.Name.Contains("BuildingChest"))
                         {
-                            PlaceWorldItem(b.BuildingChest, mapObject.Position);
+                            b.BuildingChest.Position = mapObject.Position;
+                            LoadStaticItem(b.BuildingChest);
+                        }
+                        else if (mapObject.Name.Contains("Pantry"))
+                        {
+                            b.Pantry.Position = mapObject.Position;
+                            LoadStaticItem(b.Pantry);
                         }
                     }
                 }
             }
-            for( int i =0; i<b.Workers.Count; i++)
+            for (int i = 0; i < b.Workers.Count; i++)
             {
                 b.Workers[i].Position = spawnPoints[i];
+                _characterList.Add(b.Workers[i]);
             }
-            _characterList.AddRange(b.Workers);
+            foreach (StaticItem s in b.StaticItems)
+            {
+                LoadStaticItem(s);
+            }
         }
 
         public void AddBuilding(Point mouseLocation)
@@ -690,7 +725,6 @@ namespace Adventure.Tile_Engine
         {
             Vector3 translate = Camera._transform.Translation;
             Vector2 newPos = new Vector2((b.Position.X - translate.X)/Scale, (b.Position.Y - translate.Y)/Scale);
-            b.SetCoordinates(newPos);
             _entranceDictionary.Add(b.ID.ToString(), b.BoxToExit); //TODO: FIX THIS
             GraphicCursor.DropBuilding();
             _buildingList.Add(b);
