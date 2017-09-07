@@ -1,6 +1,7 @@
 ﻿using Adventure.Characters;
 using Adventure.Characters.Monsters;
 using Adventure.Characters.NPCs;
+using Adventure.GUIObjects;
 using Adventure.Items;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
@@ -128,6 +129,19 @@ namespace Adventure.Game_Managers
         public static void Draw(SpriteBatch spriteBatch)
         {
             _currentMap.Draw(spriteBatch);
+
+            if (AdventureGame.State == AdventureGame.GameState.Build)
+            {
+                if (GraphicCursor.HeldBuilding != null)
+                {
+                    Texture2D drawIt = GraphicCursor.HeldBuilding.Texture;
+                    Rectangle drawRectangle = new Rectangle(((int)((GraphicCursor.Position.X) / 32)) * 32, ((int)((GraphicCursor.Position.Y) / 32)) * 32, drawIt.Width, drawIt.Height);
+                    Rectangle source = new Rectangle(0, 0, drawIt.Width, drawIt.Height);
+
+                    GraphicCursor.HeldBuilding.SetCoordinates(new Vector2(drawRectangle.X, drawRectangle.Y));
+                    spriteBatch.Draw(drawIt, drawRectangle, source, Color.White);
+                }
+            }
         }
 
         public static bool ProcessLeftButtonClick(Point mouseLocation)

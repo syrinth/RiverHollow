@@ -105,20 +105,6 @@ namespace Adventure.GUIObjects
                     break;
             }
             Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, 32, 32);
-            if (AdventureGame.State == AdventureGame.GameState.Build)
-            {
-                if (HeldBuilding != null)
-                {
-                    drawRectangle.X = ((int)((Position.X) / 32)) * 32;
-                    drawRectangle.Y = ((int)((Position.Y) / 32)) * 32;
-                    drawIt = _heldBuilding.Texture;
-                    drawRectangle.Width = drawIt.Width;
-                    drawRectangle.Height = drawIt.Height;
-                    source = new Rectangle(0, 0, drawIt.Width, drawIt.Height);
-
-                    _heldBuilding.SetCoordinates(new Vector2(drawRectangle.X, drawRectangle.Y));
-                }
-            }
             
             spriteBatch.Draw(drawIt, drawRectangle, source, Color.White);
             if (HeldItem != null)
