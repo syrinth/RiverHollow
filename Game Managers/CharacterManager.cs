@@ -20,15 +20,17 @@ namespace Adventure.Game_Managers
             _characterDictionary = new Dictionary<int, NPC>();
             foreach (KeyValuePair<int, string> kvp in Content.Load<Dictionary<int, string>>(@"Data\Characters"))
             {
-                NPC n;
+                NPC n = null;
                 string _characterData = kvp.Value;
                 string[] _characterDataValues = _characterData.Split('/');
-                if(_characterDataValues.Length == 4){
-                    n = new NPC(kvp.Key, _characterDataValues);
-                }
-                else
+                switch (_characterDataValues[0])
                 {
-                    n = new ShopKeeper(kvp.Key, _characterDataValues);
+                    case "Shopkeeper":
+                        n = new ShopKeeper(kvp.Key, _characterDataValues);
+                        break;
+                    default:
+                        n = new NPC(kvp.Key, _characterDataValues);
+                        break;
                 }
                 _characterDictionary.Add(kvp.Key, n);
                 _talkedTo.Add(n.Name, false);

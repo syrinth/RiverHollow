@@ -20,7 +20,7 @@ namespace Adventure
     /// </summary>
     public class AdventureGame : Game
     {
-        public static float Scale = 1.5f;
+        public static float Scale = 0.5f;
         public enum GameState { Running, Paused, Build, Information, Input}
         private static GameState _gameState;
         public static GameState State { get => _gameState; }
@@ -176,7 +176,7 @@ namespace Adventure
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
             {
                 spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, Camera._transform);
                 //If we're in an informational state, then only the GUIScreen data should be visible, don't draw anything except for the GUI

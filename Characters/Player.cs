@@ -48,7 +48,7 @@ namespace Adventure
         {
             LoadContent();
             Position = new Vector2(200, 200);
-            Speed = 3;
+            Speed = 10;
             _maxStamina = 50;
             Stamina = _maxStamina;
 
@@ -384,11 +384,11 @@ namespace Adventure
             {
                 if (_inventory[row, column] == null)
                 {
-                    if (item.GetType().Equals(typeof(Weapon)))
+                    if (item.Type == Item.ItemType.Weapon)
                     {
                         _inventory[row, column] = (Weapon)(item);
                     }
-                    else if (item.GetType().Equals(typeof(Tool)))
+                    else if (item.Type == Item.ItemType.Tool)
                     {
                         _inventory[row, column] = (Tool)(item);
                     }

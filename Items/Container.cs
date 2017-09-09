@@ -18,18 +18,15 @@ namespace Adventure.Items
 
         public Container(int id, string[] itemValue)
         {
-            if (itemValue.Length == 8)
-            {
-                int i = ImportBasics(itemValue, id, 1);
-                _rows = int.Parse(itemValue[i++]);
-                _columns = int.Parse(itemValue[i++]);
-                _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
+            int i = ImportBasics(itemValue, id, 1);
+            _rows = int.Parse(itemValue[i++]);
+            _columns = int.Parse(itemValue[i++]);
+            _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
 
-                _pickup = false;
-                _inventory = new Item[Player.maxItemRows, Player.maxItemColumns];
+            _pickup = false;
+            _inventory = new Item[Player.maxItemRows, Player.maxItemColumns];
 
-                CalculateSourcePos();
-            }
+            CalculateSourcePos();
         }
 
         public bool IncrementExistingItem(int itemID)
@@ -83,11 +80,11 @@ namespace Adventure.Items
             {
                 if (_inventory[row, column] == null)
                 {
-                    if (item.GetType().Equals(typeof(Weapon)))
+                    if (item.Type == Item.ItemType.Weapon)
                     {
                         _inventory[row, column] = (Weapon)(item);
                     }
-                    else if (item.GetType().Equals(typeof(Tool)))
+                    else if (item.Type == Item.ItemType.Tool)
                     {
                         _inventory[row, column] = (Tool)(item);
                     }

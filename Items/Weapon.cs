@@ -35,19 +35,16 @@ namespace Adventure.Items
 
         public Weapon(int id, string[] itemValue)
         {
-            if (itemValue.Length == 9)
-            {
-                int i = ImportBasics(itemValue, id, 1);
-               
-                _minDmg = int.Parse(itemValue[i++]);
-                _maxDmg = int.Parse(itemValue[i++]);
-                _staminaCost = int.Parse(itemValue[i++]);
-                _texture = GameContentManager.GetTexture(@"Textures\weapons");
+            int i = ImportBasics(itemValue, id, 1);
 
-                CalculateSourcePos();
-                rotationOrigin = new Vector2(32, 32);
-                _rect = Rectangle.Empty;
-            }
+            _minDmg = int.Parse(itemValue[i++]);
+            _maxDmg = int.Parse(itemValue[i++]);
+            _staminaCost = int.Parse(itemValue[i++]);
+            _texture = GameContentManager.GetTexture(@"Textures\weapons");
+
+            CalculateSourcePos();
+            rotationOrigin = new Vector2(32, 32);
+            _rect = Rectangle.Empty;
         }
 
         public void Update(GameTime gameTime)

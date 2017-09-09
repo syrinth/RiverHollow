@@ -92,6 +92,8 @@ namespace Adventure.Game_Managers
                         return new Container(id, _itemDataValues);
                     case "Food":
                         return new Food(id, _itemDataValues, num);
+                    case "Map":
+                        return new AdventureMap(id, _itemDataValues, num);
                 }
             }
             return null;

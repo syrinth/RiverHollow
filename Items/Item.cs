@@ -8,7 +8,7 @@ namespace Adventure.Items
 {
     public class Item
     {
-        public enum ItemType {Resource, Weapon, Tool, Container, Food };
+        public enum ItemType {Resource, Weapon, Tool, Container, Food, Map };
 
         #region properties
         protected ItemType _itemType;
@@ -55,15 +55,12 @@ namespace Adventure.Items
 
         public Item(int id, string[] itemValue, int num)
         {
-            if (itemValue.Length == 6)
-            {
-                ImportBasics(itemValue, id, num);
+            ImportBasics(itemValue, id, num);
 
-                _doesItStack = true;
-                _texture = GameContentManager.GetTexture(@"Textures\items");
+            _doesItStack = true;
+            _texture = GameContentManager.GetTexture(@"Textures\items");
 
-                CalculateSourcePos();
-            }
+            CalculateSourcePos();
         }
 
         protected void CalculateSourcePos()
@@ -88,7 +85,6 @@ namespace Adventure.Items
             _name = itemValue[i++];
             _description = itemValue[i++];
             _textureIndex = int.Parse(itemValue[i++]);
-            i++; //holding out for an enum
             _sellPrice = int.Parse(itemValue[i++]);
 
             _itemID = id;//(ObjectManager.ItemIDs)Enum.Parse(typeof(ObjectManager.ItemIDs), itemValue[i++]);
@@ -141,7 +137,6 @@ namespace Adventure.Items
 
             _position = pos;
             _onTheMap = true;
-            // new Vector2(1, -5), 10
             _movement = new Parabola(_position, RandomVelocityVector(), RandNumber(8, 32, 0, 0));
         }
 
@@ -170,7 +165,9 @@ namespace Adventure.Items
 
         public Vector2 RandomVelocityVector()
         {
-            return new Vector2(RandNumber(-3, 3, -1, 1), RandNumber(-5, -2, 0, 0));
+            float xVal = RandNumber(-3, 3, -1, 1);
+            float divider = RandNumber(3, 5, 0, 0);
+            return new Vector2(xVal/divider, RandNumber(-5, -2, 0, 0));
         }
 
         public int RandNumber(int minValue, int maxValue, int minExclude, int maxExclude)

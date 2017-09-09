@@ -232,3 +232,45 @@
 /processorParam:TextureFormat=Color
 /build:Textures/worldObjects.png
 
+#begin Maps/Dungeons/DungeonSheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Maps/Dungeons/DungeonSheet.png
+
+#begin Maps/Dungeons/Room1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/Room1.tmx
+
+#begin Maps/Dungeons/Room2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/Room2.tmx
+
+#begin Maps/Dungeons/Room3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/Room3.tmx
+
+#begin Maps/Dungeons/Room4.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/Room4.tmx
+
+#begin Maps/Dungeons/Room5.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/Room5.tmx
+
+#begin Data/Dialogue/NPC4.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Dialogue/NPC4.xml
+

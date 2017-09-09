@@ -37,8 +37,15 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
         public override void Update(GameTime gameTime)
         {
             if (TextFinished())
-            {
-                AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
+            {if (DungeonManager.Maps.Count > 0)
+                {
+                    MapManager.EnterDungeon();
+                    AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
+                }
+                else
+                {
+                    AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
+                }
             }
             else
             {

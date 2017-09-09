@@ -51,6 +51,7 @@ namespace Adventure.Game_Managers
             _player.AddItemToFirstAvailableInventorySpot(4);
             _player.AddItemToFirstAvailableInventorySpot(6);
             _player.AddItemToFirstAvailableInventorySpot(7);
+            _player.AddItemToFirstAvailableInventorySpot(8);
         }
 
         public static void Update(GameTime gameTime)
@@ -340,7 +341,7 @@ namespace Adventure.Game_Managers
             {
                 Building newBuilding = ObjectManager.GetBuilding(b.buildingID);
                 newBuilding.AddBuildingDetails(b);
-                MapManager.CurrentMap.AddBuilding(newBuilding);
+                MapManager.Maps["Map1"].AddBuilding(newBuilding);
 
                 newBuilding.Pantry = LoadStaticItemData(b.pantry);
                 newBuilding.BuildingChest = LoadStaticItemData(b.buildingChest);

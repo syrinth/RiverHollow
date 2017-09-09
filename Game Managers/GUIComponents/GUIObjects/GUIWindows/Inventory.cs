@@ -118,11 +118,11 @@ namespace Adventure.Screens
                 {
                     if (_displayList[i, j].Contains(mouse) && _displayList[i, j].Item != null)
                     {
-                        if (_displayList[i, j].Item.GetType().Equals(typeof(Weapon)))
+                        if (_displayList[i, j].Item.Type == Item.ItemType.Weapon)
                         {
                             rv = ((Weapon)(_displayList[i, j].Item));
                         }
-                        else if (_displayList[i, j].Item.GetType().Equals(typeof(Tool)))
+                        else if (_displayList[i, j].Item.Type == Item.ItemType.Tool)
                         {
                             rv = ((Tool)(_displayList[i, j].Item));
                         }

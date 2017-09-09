@@ -61,10 +61,7 @@ namespace Adventure.Game_Managers
                 _currentGUIScreen.Draw(spriteBatch);
             }
 
-            if (AdventureGame.State != AdventureGame.GameState.Build)
-            {
-                GraphicCursor.Draw(spriteBatch);
-            }
+            GraphicCursor.Draw(spriteBatch);
         }
 
         public static bool ProcessLeftButtonClick(Point mouse)

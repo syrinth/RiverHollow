@@ -30,5 +30,12 @@
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Shops/Buildings.xml</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Shops/Arcanists.xml</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/worldObjects.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Dungeons/DungeonSheet.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Dungeons/Room1.tmx</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Dungeons/Room2.tmx</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Dungeons/Room3.tmx</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Dungeons/Room4.tmx</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Dungeons/Room5.tmx</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Dialogue/NPC4.xml</File>
   </SourceFiles>
 </SourceFileCollection>

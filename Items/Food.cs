@@ -12,18 +12,14 @@ namespace Adventure.Items
 
         public Food(int id, string[] itemValue, int num)
         {
-            if (itemValue.Length == 8)
-            {
-                int i = ImportBasics(itemValue, id, num);
-                _stam = int.Parse(itemValue[i++]);
-                _health = int.Parse(itemValue[i++]);
+            int i = ImportBasics(itemValue, id, num);
+            _stam = int.Parse(itemValue[i++]);
+            _health = int.Parse(itemValue[i++]);
 
-                _doesItStack = true;
-                _texture = GameContentManager.GetTexture(@"Textures\items");
+            _doesItStack = true;
+            _texture = GameContentManager.GetTexture(@"Textures\items");
 
-                CalculateSourcePos();
-            }
+            CalculateSourcePos();
         }
-
     }
 }

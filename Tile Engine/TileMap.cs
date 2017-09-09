@@ -1,5 +1,4 @@
 ﻿using Adventure.Characters;
-using Adventure.Characters.Monsters;
 using Adventure.Characters.NPCs;
 using Adventure.Game_Managers;
 using Adventure.GUIObjects;
@@ -12,7 +11,6 @@ using MonoGame.Extended.Tiled;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Xml.Linq;
 
 namespace Adventure.Tile_Engine
 {
@@ -31,6 +29,8 @@ namespace Adventure.Tile_Engine
 
         public bool _isBuilding;
         public bool IsBuilding { get => _isBuilding; }
+        public bool _isDungeon;
+        public bool IsDungeon { get => _isDungeon; }
         protected TiledMap _map;
         protected TiledMapRenderer renderer;
         protected List<TiledMapTileset> _tileSets;
@@ -63,24 +63,13 @@ namespace Adventure.Tile_Engine
 
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, string newMap)
         {
-            _map = Content.Load<TiledMap>(newMap);
+           _map = Content.Load<TiledMap>(newMap);
+            MapWidth = _map.Width;
+            MapHeight = _map.Height;
             _isBuilding = _map.Properties.ContainsKey("Building");
+            _isDungeon = _map.Properties.ContainsKey("Dungeon");
             _tileSize = _map.TileWidth;
             renderer = new TiledMapRenderer(GraphicsDevice);
-            
-            XDocument xDoc = XDocument.Load("..\\..\\..\\..\\Content\\" + newMap+".tmx");
-            MapWidth = int.Parse(xDoc.Root.Attribute("width").Value);
-            MapHeight = int.Parse(xDoc.Root.Attribute("height").Value);
-            int tileCount = int.Parse(xDoc.Root.Element("tileset").Attribute("tilecount").Value);
-            int columns = int.Parse(xDoc.Root.Element("tileset").Attribute("columns").Value);
-
-            foreach (XElement e in xDoc.Root.Elements("tileset"))
-            {
-                int elem = int.Parse(e.Attribute("firstgid").Value);
-                TiledMapTileset t = _map.GetTilesetByTileGlobalIdentifier(elem);
-                _tileSets.Add(t);
-                
-            }
 
             _name = _map.Name;
 
@@ -204,24 +193,27 @@ namespace Adventure.Tile_Engine
             int columnTile = movingObject.Left / _tileSize;
             foreach (TiledMapTileLayer l in _map.TileLayers)
             {
-                for (int y = GetMinRow(movingObject); y <= GetMaxRow(movingObject); y++)
+                if (l.IsVisible)
                 {
-                    Nullable<TiledMapTile> tile;
-                    l.TryGetTile(columnTile, y, out tile);
-
-                    if(tile != null)
+                    for (int y = GetMinRow(movingObject); y <= GetMaxRow(movingObject); y++)
                     {
-                        Rectangle cellRect = new Rectangle(columnTile* _tileSize, y* _tileSize, _tileSize, _tileSize);
-                        if (BlocksMovement((TiledMapTile)tile) && cellRect.Intersects(movingObject))
+                        Nullable<TiledMapTile> tile;
+                        l.TryGetTile(columnTile, y, out tile);
+
+                        if (tile != null)
                         {
-                            if (cellRect.Right >= movingObject.Left)
+                            Rectangle cellRect = new Rectangle(columnTile * _tileSize, y * _tileSize, _tileSize, _tileSize);
+                            if (BlocksMovement((TiledMapTile)tile) && cellRect.Intersects(movingObject))
                             {
-                                rv = false;
+                                if (cellRect.Right >= movingObject.Left)
+                                {
+                                    rv = false;
+                                }
                             }
-                        }
-                        if (MapChange(movingObject))
-                        {
-                            return false;
+                            if (MapChange(movingObject))
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
@@ -241,23 +233,27 @@ namespace Adventure.Tile_Engine
             int columnTile = movingObject.Right / _tileSize;
             foreach (TiledMapTileLayer l in _map.TileLayers)
             {
-                for (int y = GetMinRow(movingObject); y <= GetMaxRow(movingObject); y++)
+                if (l.IsVisible)
                 {
-                    Nullable<TiledMapTile> tile;
-                    l.TryGetTile(columnTile, y, out tile);
-
-                    if (tile != null)
+                    for (int y = GetMinRow(movingObject); y <= GetMaxRow(movingObject); y++)
                     {
-                        Rectangle cellRect = new Rectangle(columnTile * _tileSize, y * _tileSize, _tileSize, _tileSize);
-                        if (BlocksMovement((TiledMapTile)tile) && cellRect.Intersects(movingObject))
+                        Nullable<TiledMapTile> tile;
+                        l.TryGetTile(columnTile, y, out tile);
+
+                        if (tile != null)
                         {
-                            if (cellRect.Left <= movingObject.Right)
+                            Rectangle cellRect = new Rectangle(columnTile * _tileSize, y * _tileSize, _tileSize, _tileSize);
+                            if (BlocksMovement((TiledMapTile)tile) && cellRect.Intersects(movingObject))
                             {
-                                rv = false;
+                                if (cellRect.Left <= movingObject.Right)
+                                {
+                                    rv = false;
+                                }
                             }
-                        }
-                        if(MapChange(movingObject)) {
-                            return false;
+                            if (MapChange(movingObject))
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
@@ -277,24 +273,27 @@ namespace Adventure.Tile_Engine
             int rowTile = movingObject.Top / _tileSize;
             foreach (TiledMapTileLayer l in _map.TileLayers)
             {
-                for (int x = GetMinColumn(movingObject); x <= GetMaxColumn(movingObject); x++)
+                if (l.IsVisible)
                 {
-                    Nullable<TiledMapTile> tile;
-                    l.TryGetTile(x, rowTile, out tile);
-
-                    if (tile != null)
+                    for (int x = GetMinColumn(movingObject); x <= GetMaxColumn(movingObject); x++)
                     {
-                        Rectangle cellRect = new Rectangle(x * _tileSize, rowTile * _tileSize, _tileSize, _tileSize);
-                        if (BlocksMovement((TiledMapTile)tile) && cellRect.Intersects(movingObject))
+                        Nullable<TiledMapTile> tile;
+                        l.TryGetTile(x, rowTile, out tile);
+
+                        if (tile != null)
                         {
-                            if (cellRect.Bottom >= movingObject.Top)
+                            Rectangle cellRect = new Rectangle(x * _tileSize, rowTile * _tileSize, _tileSize, _tileSize);
+                            if (BlocksMovement((TiledMapTile)tile) && cellRect.Intersects(movingObject))
                             {
-                                rv = false;
+                                if (cellRect.Bottom >= movingObject.Top)
+                                {
+                                    rv = false;
+                                }
                             }
-                        }
-                        if (MapChange(movingObject))
-                        {
-                            return false;
+                            if (MapChange(movingObject))
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
@@ -312,23 +311,27 @@ namespace Adventure.Tile_Engine
             int rowTile = movingObject.Bottom / _tileSize;
             foreach (TiledMapTileLayer l in _map.TileLayers)
             {
-                for (int x = GetMinColumn(movingObject); x <= GetMaxColumn(movingObject); x++)
+                if (l.IsVisible)
                 {
-                    Nullable<TiledMapTile> tile;
-                    l.TryGetTile(x, rowTile, out tile);
-
-                    if (tile != null)
+                    for (int x = GetMinColumn(movingObject); x <= GetMaxColumn(movingObject); x++)
                     {
-                        Rectangle cellRect = new Rectangle(x * _tileSize, rowTile * _tileSize, _tileSize, _tileSize);
-                        if (BlocksMovement((TiledMapTile)tile) && cellRect.Intersects(movingObject))
+                        Nullable<TiledMapTile> tile;
+                        l.TryGetTile(x, rowTile, out tile);
+
+                        if (tile != null)
                         {
-                            if (cellRect.Top <= movingObject.Bottom)
+                            Rectangle cellRect = new Rectangle(x * _tileSize, rowTile * _tileSize, _tileSize, _tileSize);
+                            if (BlocksMovement((TiledMapTile)tile) && cellRect.Intersects(movingObject))
                             {
-                                rv = false;
+                                if (cellRect.Top <= movingObject.Bottom)
+                                {
+                                    rv = false;
+                                }
                             }
-                        }
-                        if (MapChange(movingObject)) {
-                            return false;
+                            if (MapChange(movingObject))
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
@@ -357,11 +360,17 @@ namespace Adventure.Tile_Engine
 
         public bool MapChange(Rectangle movingObject)
         {
-            foreach(Rectangle r in _exitDictionary.Keys)
+            foreach(KeyValuePair<Rectangle, string>  kvp in _exitDictionary)
             {
-                if (r.Intersects(movingObject))
+                if (kvp.Key.Intersects(movingObject))
                 {
-                    MapManager.ChangeMaps(_exitDictionary[r]);
+                    if(IsDungeon)
+                    {
+                        MapManager.ChangeDungeonRoom(kvp.Value);
+                    }
+                    else {
+                        MapManager.ChangeMaps(_exitDictionary[kvp.Key]);
+                    }
                     return true;
                 }
             }
@@ -401,7 +410,7 @@ namespace Adventure.Tile_Engine
         public List<KeyValuePair<string, string>> GetProperties(TiledMapTile tile)
         {
             List<KeyValuePair<string, string>> propList = new List<KeyValuePair<string, string>>();
-            foreach (TiledMapTileset ts in _tileSets)
+            foreach (TiledMapTileset ts in _map.Tilesets)
             {
                 foreach (TiledMapTilesetTile t in ts.Tiles)
                 {
@@ -533,10 +542,20 @@ namespace Adventure.Tile_Engine
                             PlayerManager.Player.CurrentItem.Type != Item.ItemType.Tool &&
                             PlayerManager.Player.CurrentItem.Type != Item.ItemType.Weapon)
                         {
+                            string text = string.Empty;
                             Item i = PlayerManager.Player.CurrentItem;
-                            n.Friendship += 10;
                             i.Remove(1);
-                            string text = n.GetDialogEntry("Gift");
+                            if (i.Type == Item.ItemType.Map && n.Type == NPC.NPCType.Ranger)
+                            {
+                                text = n.GetDialogEntry("Adventure");
+                                DungeonManager.LoadNewDungeon((AdventureMap)i);
+                            }
+                            else
+                            {
+                                text = n.GetDialogEntry("Gift");
+                                n.Friendship += 10;
+                            }
+                            
                             if (!string.IsNullOrEmpty(text))
                             {
                                 GUIManager.LoadScreen(GUIManager.Screens.Text, n, text);
@@ -674,6 +693,15 @@ namespace Adventure.Tile_Engine
             _mapBuilding = b;
             ClearWorkers();
             AddBuildingObjectsToMap(b);
+        }
+
+        public void LayerVisible(string name, bool val) {
+            foreach (TiledMapLayer layer in _map.Layers) {
+                if (layer.Name == name)
+                {
+                    layer.IsVisible = val;
+                }
+            }
         }
 
         #region Adders

@@ -15,6 +15,9 @@ namespace Adventure.Characters
         //private List<ObjectManager.ItemIDs> _likedItems;
         //private List<ObjectManager.ItemIDs> _hatedItems;
 
+        public enum NPCType { Villager, Shopkeeper, Ranger, Worker }
+        protected NPCType _npcType;
+        public NPCType Type { get => _npcType; }
         protected int _friendship;
         public int Friendship { get => _friendship; set => _friendship = value; }
 
@@ -43,27 +46,26 @@ namespace Adventure.Characters
         public NPC(int index, string[] data)
         {
             LoadContent();
-            if (data.Length == 4)
-            {
-                LoadBasic(data);
 
-                _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + index);
-                _portrait = GameContentManager.GetTexture(@"Textures\portraits");
+            LoadBasic(data);
 
-                _schedule = new List<Vector2>
+            _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + index);
+            _portrait = GameContentManager.GetTexture(@"Textures\portraits");
+
+            _schedule = new List<Vector2>
                 {
                     new Vector2(Position.X - 100, Position.Y + 100),
                     Position
                 };
-                _moveTo = _schedule[0];
+            _moveTo = _schedule[0];
 
-                MapManager.Maps[_currentMap].AddCharacter(this);
-            }
+            MapManager.Maps[_currentMap].AddCharacter(this);
         }
 
         protected int LoadBasic(string[] data)
         {
             int i = 0;
+            _npcType = (NPCType)Enum.Parse(typeof(NPCType), data[i++]);
             _name = data[i++];
             _portraitRect = new Rectangle(0, int.Parse(data[i++]) * 192, PortraitWidth, PortraitHeight);
             _currentMap = data[i++];
