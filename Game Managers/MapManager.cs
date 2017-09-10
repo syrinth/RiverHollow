@@ -75,52 +75,18 @@ namespace Adventure.Game_Managers
 
         public static void EnterDungeon()
         {
-            List<string> directions = new List<string> { "North", "South", "East", "West" };
-            Random r = new Random();
-
-            int dir = r.Next(0, 4);
-            int dirFrom = -1;
-
-            //Need to reverse the value since we need to open the "east" door, when you come from the "West"
-            if (dir == 0) dirFrom = 1;
-            else if (dir == 1) dirFrom = 0;
-            else if (dir == 2) dirFrom = 3;
-            else if (dir == 3) dirFrom = 2;
-            int dirTo = -1;
-            do
-            {
-                dirTo = r.Next(0, 4);
-            } while (dirTo == dir);
-
-            TileMap newMap = _tileMaps[DungeonManager.Maps[0]];
-            newMap.LayerVisible(directions[dirFrom], false);
-            newMap.LayerVisible(directions[dirTo], false);
-
-            Rectangle rectEntrance = Rectangle.Empty;
-            foreach (string s in newMap.EntranceDictionary.Keys)
-            {
-                if (s.Equals(directions[dir]))
-                {
-                    rectEntrance = newMap.EntranceDictionary[s];
-                }
-            }
-            _currentMap = newMap;
+            GUIManager.FadeOut();
+            _currentMap = DungeonManager.Maps[0];
 
             PlayerManager.CurrentMap = _currentMap.Name;
-            PlayerManager.Player.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
+            PlayerManager.Player.Position = new Vector2(DungeonManager.Entrance.Left, DungeonManager.Entrance.Top);
         }
         public static void ChangeDungeonRoom(string direction)
         {
-            Random r = new Random();
-            TileMap newMap = _tileMaps[DungeonManager.NextRoom(_currentMap.Name)];
-            Rectangle rectEntrance = Rectangle.Empty;
-            foreach (string s in newMap.EntranceDictionary.Keys)
-            {
-                if (s.Equals(direction))
-                {
-                    rectEntrance = newMap.EntranceDictionary[s];
-                }
-            }
+            GUIManager.FadeOut();
+            TileMap newMap = DungeonManager.RoomChange(direction);
+            Rectangle rectEntrance = newMap.EntranceDictionary[direction];
+            
             _currentMap = newMap;
 
             PlayerManager.CurrentMap = _currentMap.Name;

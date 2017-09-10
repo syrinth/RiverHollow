@@ -14,7 +14,7 @@ namespace Adventure.Items
         public AdventureMap(int id, string[] itemValue, int num)
         {
             int i = ImportBasics(itemValue, id, num);
-            _difficulty = RandNumber(1, 5, 0, 0);
+            _difficulty = RandNumber(4, 5, 0, 0);
 
             _doesItStack = false;
             _texture = GameContentManager.GetTexture(@"Textures\items");

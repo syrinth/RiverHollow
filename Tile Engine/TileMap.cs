@@ -45,6 +45,7 @@ namespace Adventure.Tile_Engine
         public List<StaticItem> StaticItems { get => _staticItemList; }
 
         private Dictionary<Rectangle, string> _exitDictionary;
+        public Dictionary<Rectangle, string> ExitDictionary { get => _exitDictionary; }
         private Dictionary<string, Rectangle> _entranceDictionary;
         public Dictionary<string, Rectangle> EntranceDictionary { get => _entranceDictionary; }
 
@@ -700,6 +701,7 @@ namespace Adventure.Tile_Engine
                 if (layer.Name == name)
                 {
                     layer.IsVisible = val;
+                    break;
                 }
             }
         }
@@ -800,7 +802,6 @@ namespace Adventure.Tile_Engine
         }
 
         #endregion
-
         
         public int GetMapWidth()
         {
