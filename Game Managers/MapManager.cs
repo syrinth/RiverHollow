@@ -85,7 +85,7 @@ namespace Adventure.Game_Managers
         {
             GUIManager.FadeOut();
             TileMap newMap = DungeonManager.RoomChange(direction);
-            Rectangle rectEntrance = newMap.EntranceDictionary[direction];
+            Rectangle rectEntrance = newMap.IsDungeon ? newMap.EntranceDictionary[direction] : newMap.EntranceDictionary["Dungeon"];
             
             _currentMap = newMap;
 

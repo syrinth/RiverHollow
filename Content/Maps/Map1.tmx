@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="4">
+<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="6">
  <tileset firstgid="1" source="TileSet.tsx"/>
  <layer name="BaseLayer" width="100" height="100">
   <data encoding="csv">
@@ -218,6 +218,11 @@
   <object id="2" name="Entrance" x="144" y="30.6667" width="32" height="32">
    <properties>
     <property name="Entrance" value="Map2"/>
+   </properties>
+  </object>
+  <object id="5" x="844" y="586.667" width="17.3333" height="10.6667">
+   <properties>
+    <property name="Entrance" value="Dungeon"/>
    </properties>
   </object>
  </objectgroup>

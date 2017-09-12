@@ -20,7 +20,7 @@ namespace Adventure
     /// </summary>
     public class AdventureGame : Game
     {
-        public static float Scale = 0.5f;
+        public static float Scale = 1.5f;
         public enum GameState { Running, Paused, Build, Information, Input}
         private static GameState _gameState;
         public static GameState State { get => _gameState; }
