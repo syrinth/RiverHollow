@@ -48,7 +48,7 @@ namespace Adventure
                 }
             }
 
-            float BorderOffset = TileMap.TileSize * Scale;
+            float BorderOffset = RHTileMap.TileSize * Scale;
             if (_observer.X <= (AdventureGame.ScreenWidth / 2) + BorderOffset)
             {
                 _observer.X = (AdventureGame.ScreenWidth / 2) + BorderOffset;

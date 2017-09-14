@@ -34,7 +34,7 @@ namespace Adventure
         //private Item _currentItem;
         public Item CurrentItem { get => _inventory[0, _currentInventorySlot]; }
 
-        private WorldObject _targettedObject = null;
+        private RHMapTile _targetTile = null;
 
         public int Stamina;
 
@@ -72,21 +72,21 @@ namespace Adventure
                 ((Tool)CurrentItem).ToolAnimation.Position = Position;
                 ((Tool)CurrentItem).Update(gameTime);
                 _usingTool = ((Tool)CurrentItem).ToolAnimation.IsAnimating;
-                if (_targettedObject != null && !_usingTool)
+                if (_targetTile != null && !_usingTool)
                 {
                     bool destroyed = false;
-                    if (_targettedObject.Breakable)
+                    if (_targetTile.Object != null && _targetTile.Object.Breakable)
                     {
-                        destroyed = _targettedObject.DealDamage(((Tool)CurrentItem).BreakValue);
+                        destroyed = _targetTile.DamageObject(((Tool)CurrentItem).BreakValue);
                     }
-                    else if (_targettedObject.Choppable)
+                    else if (_targetTile.Object != null && _targetTile.Object.Choppable)
                     {
-                        destroyed = _targettedObject.DealDamage(((Tool)CurrentItem).ChopValue);
+                        destroyed = _targetTile.DamageObject(((Tool)CurrentItem).BreakValue);
                     }
 
                     if (destroyed)
                     {
-                        _targettedObject = null;
+                        _targetTile = null;
                     }
                     
                 }
@@ -186,7 +186,7 @@ namespace Adventure
                     {
                         _usingTool = true;
                         ((Tool)CurrentItem).ToolAnimation.IsAnimating = true;
-                        _targettedObject = MapManager.FindWorldObject(mouseLocation);
+                        _targetTile = MapManager.RetrieveTile(mouseLocation);
                     }
                     rv = true;
                 }

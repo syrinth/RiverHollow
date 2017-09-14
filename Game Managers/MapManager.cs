@@ -18,15 +18,15 @@ namespace Adventure.Game_Managers
 {
     public static class MapManager
     {
-        private static Dictionary<string, TileMap> _tileMaps;
-        public static Dictionary<string, TileMap> Maps { get => _tileMaps; }
+        private static Dictionary<string, RHTileMap> _tileMaps;
+        public static Dictionary<string, RHTileMap> Maps { get => _tileMaps; }
 
-        private static TileMap _currentMap;
-        public static TileMap CurrentMap { get => _currentMap; }
+        private static RHTileMap _currentMap;
+        public static RHTileMap CurrentMap { get => _currentMap; }
 
         public static void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice)
         {
-            _tileMaps = new Dictionary<string, TileMap>();
+            _tileMaps = new Dictionary<string, RHTileMap>();
             AddMap(@"Maps\Map1", Content, GraphicsDevice);
             AddMap(@"Maps\Map2", Content, GraphicsDevice);
             AddMap(@"Maps\Dungeons\Room1", Content, GraphicsDevice);
@@ -41,7 +41,7 @@ namespace Adventure.Game_Managers
 
         public static void AddMap(string mapToAdd, ContentManager Content, GraphicsDevice GraphicsDevice)
         {
-            TileMap newMap = new TileMap();
+            RHTileMap newMap = new RHTileMap();
             newMap.LoadContent(Content, GraphicsDevice, mapToAdd);
             _tileMaps.Add(newMap.Name, newMap);
         }
@@ -50,7 +50,7 @@ namespace Adventure.Game_Managers
         {
             GUIManager.FadeOut();
             Rectangle rectEntrance = Rectangle.Empty;
-            TileMap newMap = _tileMaps[newMapStr];
+            RHTileMap newMap = _tileMaps[newMapStr];
 
             foreach (string s in _tileMaps[newMapStr].EntranceDictionary.Keys)
             {
@@ -81,10 +81,12 @@ namespace Adventure.Game_Managers
             PlayerManager.CurrentMap = _currentMap.Name;
             PlayerManager.Player.Position = new Vector2(DungeonManager.Entrance.Left, DungeonManager.Entrance.Top);
         }
-        public static void ChangeDungeonRoom(string direction)
+
+        public static void ChangeDungeonRoom(string direction, bool straightOut = false)
         {
             GUIManager.FadeOut();
-            TileMap newMap = DungeonManager.RoomChange(direction);
+            RHTileMap newMap = DungeonManager.RoomChange(direction, straightOut);
+
             Rectangle rectEntrance = newMap.IsDungeon ? newMap.EntranceDictionary[direction] : newMap.EntranceDictionary["Dungeon"];
             
             _currentMap = newMap;
@@ -134,11 +136,11 @@ namespace Adventure.Game_Managers
             {
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Rock, new Vector2(r.Next(0, mapWidth) * TileMap.TileSize, r.Next(0, mapHeight) * TileMap.TileSize)));
+                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Rock, new Vector2(r.Next(0, mapWidth) * RHTileMap.TileSize, r.Next(0, mapHeight) * RHTileMap.TileSize)));
                 }
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Tree, new Vector2(r.Next(0, mapWidth) * TileMap.TileSize, r.Next(0, mapHeight) * TileMap.TileSize)));
+                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Tree, new Vector2(r.Next(0, mapWidth) * RHTileMap.TileSize, r.Next(0, mapHeight) * RHTileMap.TileSize)));
                 }
             }
             _tileMaps[@"Map1"].AddCharacter(new Goblin(new Vector2(1340, 1340)));
@@ -193,9 +195,9 @@ namespace Adventure.Game_Managers
 
             return rv;
         }
-        public static WorldObject FindWorldObject(Point mouseLocation)
+        public static RHMapTile RetrieveTile(Point mouseLocation)
         {
-            return _currentMap.FindWorldObject(mouseLocation);
+            return _currentMap.RetrieveTile(mouseLocation);
         }
         public static void RemoveWorldObject(WorldObject o)
         {
@@ -212,7 +214,7 @@ namespace Adventure.Game_Managers
         }
         public static void PlaceWorldItem(StaticItem staticItem, Vector2 position)
         {
-            _currentMap.PlaceStaticItem(staticItem, position);
+            _currentMap.PlaceStaticItem(staticItem, position, false);
         }
     }
 }

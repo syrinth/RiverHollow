@@ -10,9 +10,12 @@ namespace Adventure.Game_Managers
     static class DungeonManager
     {
         private static int _numRooms = 5;
+        public enum EndCondition { TreasureChest, KillAll };
+        private static EndCondition _condition = EndCondition.TreasureChest;
+        private static Container _endChest;
 
-        private static List<TileMap> _maps = new List<TileMap>();
-        public static List<TileMap> Maps { get => _maps; }
+        private static List<RHTileMap> _maps = new List<RHTileMap>();
+        public static List<RHTileMap> Maps { get => _maps; }
         //MapName/<Direction, ToMap>
         private static Dictionary<string, KeyValuePair<string,string>> _backwardsMapKey = new Dictionary<string, KeyValuePair<string, string>>();
         private static Dictionary<string, string> _forwardsMapKey = new Dictionary<string, string>();
@@ -22,14 +25,16 @@ namespace Adventure.Game_Managers
 
         public static void LoadNewDungeon(AdventureMap map)
         {
-            _maps = new List<TileMap>();
+            _maps = new List<RHTileMap>();
             _backwardsMapKey = new Dictionary<string, KeyValuePair<string, string>>();
             _forwardsMapKey = new Dictionary<string, string>();
-            int numRooms = map.Difficulty;
+            int maxRooms = map.Difficulty;
             Random r = new Random();
             string dungeonPrefix = @"Dungeons\Room";
             _maps.Add(MapManager.Maps[dungeonPrefix + 1]);// r.Next(1, _numRooms+1);
-            while (numRooms > 0)
+            PopulateRoom(r, _maps[0], false);
+            int numRoom = 0;
+            while (numRoom < maxRooms)
             {
                 int val = -1;
                 do
@@ -37,15 +42,17 @@ namespace Adventure.Game_Managers
                     val = r.Next(1, _numRooms + 1);
                 } while (_maps.Contains(MapManager.Maps[dungeonPrefix + val]));
 
+                RHTileMap newMap = MapManager.Maps[dungeonPrefix + val];
                 _maps.Add(MapManager.Maps[dungeonPrefix + val]);
-                numRooms--;
+                PopulateRoom(r, newMap, numRoom == maxRooms -1);
+                numRoom++;
             }
 
             List<string> directions = new List<string> { "North", "South", "East", "West" };
             int lastDir = r.Next(0, 4);
             for (int i = 0; i < _maps.Count; i++)
             {
-                TileMap m = _maps[i];
+                RHTileMap m = _maps[i];
                 
                 int dirToUnlock = ReverseDirections(lastDir);
 
@@ -83,15 +90,30 @@ namespace Adventure.Game_Managers
                         }
                     }
                 }
-                else if (i < _maps.Count - 1)
-                {
-                ////    _forwardsMapKey.Add(rectBackwards, _maps[i + 1].Name);
-                }
-                else
+                else if (i >= _maps.Count - 1)
                 {
                     m.LayerVisible(directions[dirNextRoom], true);
                 }
                 lastDir = dirNextRoom;
+            }
+        }
+
+        public static void PopulateRoom(Random r, RHTileMap m, bool lastRoom)
+        {
+            int mapWidth = m.MapWidth;
+            int mapHeight = m.MapHeight;
+            for (int i = 0; i < 99; i++)
+            {
+                Vector2 vect = new Vector2(r.Next(0, mapWidth) * RHTileMap.TileSize, r.Next(0, mapHeight) * RHTileMap.TileSize);
+                m.AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Rock, vect));
+            }
+
+            if (lastRoom && _condition == EndCondition.TreasureChest)
+            {
+                Vector2 vect = new Vector2(r.Next(0, mapWidth) * RHTileMap.TileSize, r.Next(0, mapHeight) * RHTileMap.TileSize);
+                Container c = (Container)ObjectManager.GetItem(6);
+                m.PlaceStaticItem(c, vect);
+                _endChest = c;
             }
         }
 
@@ -108,20 +130,32 @@ namespace Adventure.Game_Managers
             _maps.Clear();
         }
 
-        public static TileMap RoomChange(string direction)
+        public static RHTileMap RoomChange(string direction, bool straightOut = false)
         {
-            if (_backwardsMapKey[_maps[_currentIndex].Name].Key.Equals(direction))
+            if (straightOut)
             {
-                if (_currentIndex > 0)
+                return MapManager.Maps[@"Map1"];
+            }
+            else
+            {
+                if (_backwardsMapKey[_maps[_currentIndex].Name].Key.Equals(direction))
                 {
-                    return MapManager.Maps[_backwardsMapKey[_maps[_currentIndex--].Name].Value];
-                }
-                else
-                {
-                    return MapManager.Maps[@"Map1"];
+                    if (_currentIndex > 0)
+                    {
+                        return MapManager.Maps[_backwardsMapKey[_maps[_currentIndex--].Name].Value];
+                    }
+                    else
+                    {
+                        return MapManager.Maps[@"Map1"];
+                    }
                 }
             }
             return _maps[++_currentIndex];
+        }
+
+        public static bool IsEndChest(Container c)
+        {
+            return c == _endChest;
         }
     }
 }

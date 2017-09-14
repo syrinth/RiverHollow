@@ -14,7 +14,7 @@ using System.Collections.ObjectModel;
 
 namespace Adventure.Tile_Engine
 {
-    public class TileMap
+    public class RHTileMap
     {
         private static float Scale = AdventureGame.Scale;
         public int MapWidth = 100;
@@ -31,9 +31,15 @@ namespace Adventure.Tile_Engine
         public bool IsBuilding { get => _isBuilding; }
         public bool _isDungeon;
         public bool IsDungeon { get => _isDungeon; }
+
         protected TiledMap _map;
+        public TiledMap Map { get => _map; }
+
+        protected RHMapTile[,] _tileArray;
         protected TiledMapRenderer renderer;
         protected List<TiledMapTileset> _tileSets;
+        protected Dictionary<string, TiledMapTileLayer> _dictionaryLayers;
+        public Dictionary<string, TiledMapTileLayer> Layers { get => _dictionaryLayers; }
 
         protected List<Character> _characterList;
         public List<Character> ToRemove;
@@ -49,7 +55,9 @@ namespace Adventure.Tile_Engine
         private Dictionary<string, Rectangle> _entranceDictionary;
         public Dictionary<string, Rectangle> EntranceDictionary { get => _entranceDictionary; }
 
-        public TileMap()
+        private TiledMapObject _validArea;
+
+        public RHTileMap()
         {
             _tileSets = new List<TiledMapTileset>();
             _characterList = new List<Character>();
@@ -65,21 +73,36 @@ namespace Adventure.Tile_Engine
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, string newMap)
         {
            _map = Content.Load<TiledMap>(newMap);
+            _name = _map.Name;
+            _tileSize = _map.TileWidth;
             MapWidth = _map.Width;
             MapHeight = _map.Height;
+
+            _dictionaryLayers = new Dictionary<string, TiledMapTileLayer>();
+            foreach (TiledMapTileLayer l in _map.TileLayers)
+            {
+                _dictionaryLayers.Add(l.Name, l);
+            }
+
+            _tileArray = new RHMapTile[MapWidth, MapHeight];
+            for (int i = 0; i < MapHeight; i++) {
+                for (int j = 0; j < MapWidth; j++)
+                {
+                    _tileArray[j, i] = new RHMapTile(j, i);
+                    _tileArray[j, i].SetProperties(this);
+                }
+            }
+
+            
             _isBuilding = _map.Properties.ContainsKey("Building");
             _isDungeon = _map.Properties.ContainsKey("Dungeon");
-            _tileSize = _map.TileWidth;
             renderer = new TiledMapRenderer(GraphicsDevice);
-
-            _name = _map.Name;
 
             LoadMapObjects();
         }
 
         public void LoadMapObjects()
-        {
-            ReadOnlyCollection<TiledMapObjectLayer> entrLayer = _map.ObjectLayers;
+        {            ReadOnlyCollection<TiledMapObjectLayer> entrLayer = _map.ObjectLayers;
             foreach (TiledMapObjectLayer ol in entrLayer)
             {
                 if (ol.Name == "Entrance Layer")
@@ -94,6 +117,10 @@ namespace Adventure.Tile_Engine
                         else if (mapObject.Properties.ContainsKey("Entrance"))
                         {
                             _entranceDictionary.Add(mapObject.Properties["Entrance"], r);
+                        }
+                        else if (mapObject.Properties.ContainsKey("Valid Area"))
+                        {
+                            //_validArea = mapObject.Properties["Valid Area"];
                         }
                     }
                 }
@@ -186,38 +213,23 @@ namespace Adventure.Tile_Engine
         public bool CheckLeftMovement(Character c, Rectangle movingObject)
         {
             bool rv = true;
-            if (CheckForObjectCollision(c, movingObject))
-            {
-                return false;
-            }
+            if (CheckForObjectCollision(c, movingObject)) { return false; }
 
             int columnTile = movingObject.Left / _tileSize;
-            foreach (TiledMapTileLayer l in _map.TileLayers)
+            for (int y = GetMinRow(movingObject); y <= GetMaxRow(movingObject); y++)
             {
-                if (l.IsVisible)
-                {
-                    for (int y = GetMinRow(movingObject); y <= GetMaxRow(movingObject); y++)
-                    {
-                        Nullable<TiledMapTile> tile;
-                        l.TryGetTile(columnTile, y, out tile);
-
-                        if (tile != null)
-                        {
-                            Rectangle cellRect = new Rectangle(columnTile * _tileSize, y * _tileSize, _tileSize, _tileSize);
-                            if (BlocksMovement((TiledMapTile)tile) && cellRect.Intersects(movingObject))
-                            {
-                                if (cellRect.Right >= movingObject.Left)
-                                {
-                                    rv = false;
-                                }
-                            }
-                            if (MapChange(movingObject))
-                            {
-                                return false;
-                            }
-                        }
-                    }
+                RHMapTile mapTile = _tileArray[columnTile, y];
+                Rectangle cellRect = new Rectangle(columnTile * _tileSize, y * _tileSize, _tileSize, _tileSize);
+                if (mapTile.ContainsProperty("Sleep", out string val) && val.Equals("true")){
+                    GUIManager.LoadScreen(GUIManager.Screens.Text, GameContentManager.GetDialogue("Sleep"));
+                    rv = true;
                 }
+                else if (!mapTile.Passable() && cellRect.Intersects(movingObject))
+                {
+                    if (cellRect.Right >= movingObject.Left) { rv = false; }
+                }
+
+                if (MapChange(movingObject)) { return false; }
             }
 
             return rv;
@@ -226,38 +238,24 @@ namespace Adventure.Tile_Engine
         public bool CheckRightMovement(Character c, Rectangle movingObject)
         {
             bool rv = true;
-            if (CheckForObjectCollision(c, movingObject))
-            {
-                return false;
-            }
+            if (CheckForObjectCollision(c, movingObject)) { return false; }
 
             int columnTile = movingObject.Right / _tileSize;
-            foreach (TiledMapTileLayer l in _map.TileLayers)
+            for (int y = GetMinRow(movingObject); y <= GetMaxRow(movingObject); y++)
             {
-                if (l.IsVisible)
+                RHMapTile mapTile = _tileArray[columnTile, y];
+                Rectangle cellRect = new Rectangle(columnTile * _tileSize, y * _tileSize, _tileSize, _tileSize);
+                if (mapTile.ContainsProperty("Sleep", out string val) && val.Equals("true"))
                 {
-                    for (int y = GetMinRow(movingObject); y <= GetMaxRow(movingObject); y++)
-                    {
-                        Nullable<TiledMapTile> tile;
-                        l.TryGetTile(columnTile, y, out tile);
-
-                        if (tile != null)
-                        {
-                            Rectangle cellRect = new Rectangle(columnTile * _tileSize, y * _tileSize, _tileSize, _tileSize);
-                            if (BlocksMovement((TiledMapTile)tile) && cellRect.Intersects(movingObject))
-                            {
-                                if (cellRect.Left <= movingObject.Right)
-                                {
-                                    rv = false;
-                                }
-                            }
-                            if (MapChange(movingObject))
-                            {
-                                return false;
-                            }
-                        }
-                    }
+                    GUIManager.LoadScreen(GUIManager.Screens.Text, GameContentManager.GetDialogue("Sleep"));
+                    rv = true;
                 }
+                else if (!mapTile.Passable() && cellRect.Intersects(movingObject))
+                {
+                    if (cellRect.Left <= movingObject.Right) { rv = false; }
+                }
+
+                if (MapChange(movingObject)) { return false; }
             }
 
             return rv;
@@ -266,96 +264,52 @@ namespace Adventure.Tile_Engine
         public bool CheckUpMovement(Character c, Rectangle movingObject)
         {
             bool rv = true;
-            if (CheckForObjectCollision(c, movingObject))
-            {
-                return false;
-            }
+            if (CheckForObjectCollision(c, movingObject)) { return false; }
 
             int rowTile = movingObject.Top / _tileSize;
-            foreach (TiledMapTileLayer l in _map.TileLayers)
+            for (int x = GetMinColumn(movingObject); x <= GetMaxColumn(movingObject); x++)
             {
-                if (l.IsVisible)
+                RHMapTile mapTile = _tileArray[x, rowTile];
+                Rectangle cellRect = new Rectangle(x * _tileSize, rowTile * _tileSize, _tileSize, _tileSize);
+                if (mapTile.ContainsProperty("Sleep", out string val) && val.Equals("true"))
                 {
-                    for (int x = GetMinColumn(movingObject); x <= GetMaxColumn(movingObject); x++)
-                    {
-                        Nullable<TiledMapTile> tile;
-                        l.TryGetTile(x, rowTile, out tile);
-
-                        if (tile != null)
-                        {
-                            Rectangle cellRect = new Rectangle(x * _tileSize, rowTile * _tileSize, _tileSize, _tileSize);
-                            if (BlocksMovement((TiledMapTile)tile) && cellRect.Intersects(movingObject))
-                            {
-                                if (cellRect.Bottom >= movingObject.Top)
-                                {
-                                    rv = false;
-                                }
-                            }
-                            if (MapChange(movingObject))
-                            {
-                                return false;
-                            }
-                        }
-                    }
+                    GUIManager.LoadScreen(GUIManager.Screens.Text, GameContentManager.GetDialogue("Sleep"));
+                    rv = true;
                 }
+                else if (!mapTile.Passable() && cellRect.Intersects(movingObject))
+                {
+                    if (cellRect.Bottom >= movingObject.Top) { rv = false; }
+                }
+
+                if (MapChange(movingObject)) { return false; }
             }
+
             return rv;
         }
 
         public bool CheckDownMovement(Character c, Rectangle movingObject)
         {
             bool rv = true;
-            if (CheckForObjectCollision(c, movingObject))
-            {
-                return false;
-            }
+            if (CheckForObjectCollision(c, movingObject)) { return false; }
+
             int rowTile = movingObject.Bottom / _tileSize;
-            foreach (TiledMapTileLayer l in _map.TileLayers)
+            for (int x = GetMinColumn(movingObject); x <= GetMaxColumn(movingObject); x++)
             {
-                if (l.IsVisible)
-                {
-                    for (int x = GetMinColumn(movingObject); x <= GetMaxColumn(movingObject); x++)
-                    {
-                        Nullable<TiledMapTile> tile;
-                        l.TryGetTile(x, rowTile, out tile);
-
-                        if (tile != null)
-                        {
-                            Rectangle cellRect = new Rectangle(x * _tileSize, rowTile * _tileSize, _tileSize, _tileSize);
-                            if (BlocksMovement((TiledMapTile)tile) && cellRect.Intersects(movingObject))
-                            {
-                                if (cellRect.Top <= movingObject.Bottom)
-                                {
-                                    rv = false;
-                                }
-                            }
-                            if (MapChange(movingObject))
-                            {
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return rv;
-        }
-
-        public bool BlocksMovement(TiledMapTile tile)
-        {
-            bool rv = false;
-            foreach (KeyValuePair<string, string> tp in GetProperties(tile))
-            {
-                if (tp.Key.Equals("Impassable") && tp.Value.Equals("true"))
-                {
-                    rv = true;
-                }
-                if (tp.Key.Equals("Sleep") && tp.Value.Equals("true"))
+                RHMapTile mapTile = _tileArray[x, rowTile];
+                Rectangle cellRect = new Rectangle(x * _tileSize, rowTile * _tileSize, _tileSize, _tileSize);
+                if (mapTile.ContainsProperty("Sleep", out string val) && val.Equals("true"))
                 {
                     GUIManager.LoadScreen(GUIManager.Screens.Text, GameContentManager.GetDialogue("Sleep"));
                     rv = true;
                 }
+                else if (!mapTile.Passable() && cellRect.Intersects(movingObject))
+                {
+                    if (cellRect.Top <= movingObject.Bottom) { rv = false; }
+                }
+
+                if (MapChange(movingObject)) { return false; }
             }
+
             return rv;
         }
 
@@ -376,6 +330,13 @@ namespace Adventure.Tile_Engine
                 }
             }
             return false;
+        }
+
+        public bool IsLocationValid(Vector2 pos)
+        {
+            bool rv = false;
+            //_map.Layers[_map.Layers.IndexOf("EntranceLayer")].
+            return rv;
         }
 
         public bool CheckForObjectCollision(Character mover, Rectangle movingObject)
@@ -408,9 +369,9 @@ namespace Adventure.Tile_Engine
             return rv;
         }
 
-        public List<KeyValuePair<string, string>> GetProperties(TiledMapTile tile)
+        public Dictionary<string, string> GetProperties(TiledMapTile tile)
         {
-            List<KeyValuePair<string, string>> propList = new List<KeyValuePair<string, string>>();
+            Dictionary<string, string> propList = new Dictionary<string, string>();
             foreach (TiledMapTileset ts in _map.Tilesets)
             {
                 foreach (TiledMapTilesetTile t in ts.Tiles)
@@ -419,7 +380,7 @@ namespace Adventure.Tile_Engine
                     {
                         foreach (KeyValuePair<string, string> tp in t.Properties)
                         {
-                            propList.Add(tp);
+                            propList.Add(tp.Key, tp.Value);
                         }
                     }
                 }
@@ -487,6 +448,10 @@ namespace Adventure.Tile_Engine
             {
                 if (s.CollisionBox.Contains(mouseLocation))
                 {
+                    if (IsDungeon && DungeonManager.IsEndChest((Container)s))
+                    {
+                        MapManager.ChangeDungeonRoom("", true);
+                    }
                     GUIManager.LoadScreen(GUIManager.Screens.Inventory, (Container)s);
                     break;
                 }
@@ -619,7 +584,7 @@ namespace Adventure.Tile_Engine
 
         public bool PlayerInRange(Point centre)
         {
-            return PlayerInRange(centre, TileMap.TileSize * 2);
+            return PlayerInRange(centre, RHTileMap.TileSize * 2);
         }
         public bool PlayerInRange(Point centre, int range)
         {
@@ -640,19 +605,9 @@ namespace Adventure.Tile_Engine
             _characterList.Clear();
         }
 
-        public WorldObject FindWorldObject(Point mouseLocation)
+        public RHMapTile RetrieveTile(Point mouseLocation)
         {
-            WorldObject rv = null;
-            foreach(WorldObject o in _worldObjectList)
-            {
-                if (o.Contains(mouseLocation))
-                {
-                    rv = o;
-                    break;
-                }
-            }
-
-            return rv;
+            return _tileArray[mouseLocation.X / TileSize, mouseLocation.Y / TileSize];
         }
         public void RemoveWorldObject(WorldObject o)
         {
@@ -675,18 +630,6 @@ namespace Adventure.Tile_Engine
         {
             container.OnTheMap = true;
             _staticItemList.Add(container);
-        }
-        public void PlaceStaticItem(StaticItem container, Vector2 position)
-        {
-            position.X = ((int)((position.X) / 32)) * 32;
-            position.Y = ((int)((position.Y) / 32)) * 32;
-            container.OnTheMap = true;
-            container.Position = position;
-            _staticItemList.Add(container);
-            if(_mapBuilding != null)
-            {
-                _mapBuilding.StaticItems.Add(container);
-            }
         }
 
         public void LoadBuilding(Building b)
@@ -784,9 +727,60 @@ namespace Adventure.Tile_Engine
             return rv;
         }
 
-        public void AddWorldObject(WorldObject o)
+        public bool AddWorldObject(WorldObject o, bool bounce = true)
         {
-            _worldObjectList.Add(o);
+            bool rv = false;
+            Random r = new Random();
+            Vector2 position = o.Position;
+            position.X = ((int)(position.X / 32)) * 32;
+            position.Y = ((int)(position.Y / 32)) * 32;
+
+            RHMapTile tile = _tileArray[((int)position.X / 32), ((int)position.Y / 32)];
+            rv = tile.SetWorldObject(o);
+            if (!rv && bounce)
+            {
+                do
+                {
+                    position.X = (int)(r.Next(1, (MapWidth - 1) * TileSize) / 32) * 32;
+                    position.Y = (int)(r.Next(1, (MapHeight - 1) * TileSize) / 32) * 32;
+                    tile = _tileArray[((int)position.X / 32), ((int)position.Y / 32)];
+                    rv = tile.SetWorldObject(o);
+                } while (!rv);
+            }
+            if (rv) {
+                o.SetCoordinates(position);
+                _worldObjectList.Add(o);
+            }
+
+            return rv;
+        }
+        public void PlaceStaticItem(StaticItem container, Vector2 position, bool bounce = true)
+        {
+            bool rv = false;
+            Random r = new Random();
+            position.X = ((int)(position.X/32)) * 32;
+            position.Y = ((int)(position.Y/32)) * 32;
+
+            rv = _tileArray[((int)position.X / 32), ((int)position.Y / 32)].SetStaticItem(container);
+            if (!rv && bounce)
+            {
+                do
+                {
+                    position.X = (int)(r.Next(1, (MapWidth - 1) * TileSize) / 32) * 32;
+                    position.Y = (int)(r.Next(1, (MapHeight - 1) * TileSize) / 32) * 32;
+                    rv = _tileArray[((int)position.X / 32), ((int)position.Y / 32)].SetStaticItem(container);
+                } while (!rv);
+
+            }
+
+            if (rv)
+            {
+                container.OnTheMap = true;
+                container.Position = position;
+
+                if (_mapBuilding != null) { _mapBuilding.StaticItems.Add(container); }
+                else { _staticItemList.Add(container); }
+            }
         }
         public void AddCharacter(Character c)
         {
@@ -811,6 +805,116 @@ namespace Adventure.Tile_Engine
         public int GetMapHeight()
         {
             return MapHeight * _tileSize;
+        }
+    }
+    public class RHMapTile
+    {
+        private bool _tileExists;
+        private int _X;
+        private int _Y;
+        private Dictionary<TiledMapTileLayer, Dictionary<string, string>> _properties;
+        private WorldObject _obj;
+        public WorldObject Object { get => _obj; }
+
+        private StaticItem _staticItem;
+        public StaticItem StaticItem { get => _staticItem; }
+
+        public RHMapTile(int x, int y)
+        {
+            _X = x;
+            _Y = y;
+
+            _properties = new Dictionary<TiledMapTileLayer, Dictionary<string, string>>();
+        }
+
+        public void SetProperties(RHTileMap map)
+        {
+            foreach (TiledMapTileLayer l in map.Layers.Values)
+            {
+                if (l.IsVisible && l.TryGetTile(_X, _Y, out TiledMapTile? tile) && tile != null)
+                {
+                    if (tile.Value.GlobalIdentifier != 0) {
+                        _tileExists = true;
+                    }
+                    _properties.Add(l, map.GetProperties((TiledMapTile)tile));
+                }
+            }
+        }
+
+        public bool SetWorldObject(WorldObject o)
+        {
+            bool rv = false;
+            if (Passable())
+            {
+                _obj = o;
+                rv = true;
+            }
+            return rv;
+        }
+        public bool SetStaticItem(StaticItem i)
+        {
+            bool rv = false;
+            if (Passable())
+            {
+                _staticItem = i;
+                rv = true;
+            }
+            return rv;
+        }
+
+        public bool Passable()
+        {
+            bool rv = _tileExists && _obj == null && _staticItem == null;
+            if (_tileExists)
+            {
+                foreach (TiledMapTileLayer l in _properties.Keys)
+                {
+                    if (l.IsVisible && ContainsProperty(l, "Impassable", out string val) && val.Equals("true"))
+                    {
+                        rv = false;
+                    }
+                }
+            }
+
+            return rv;
+        }
+
+        public bool ContainsProperty(string property, out string value)
+        {
+            bool rv = false;
+            value = string.Empty;
+            foreach (TiledMapTileLayer l in _properties.Keys)
+            {
+                ContainsProperty(l, property, out value);
+            }
+
+            return rv;
+        }
+        public bool ContainsProperty(TiledMapTileLayer l, string property, out string value)
+        {
+            bool rv = false;
+            value = string.Empty;
+            if (_properties.ContainsKey(l) && _properties[l].ContainsKey(property))
+            {
+                value = _properties[l][property];
+                rv = true;
+            }
+
+            return rv;
+        }
+
+        public bool DamageObject(float dmg)
+        {
+            bool rv = false;
+            rv = _obj.DealDamage(dmg);
+            if (rv)
+            {
+                MapManager.RemoveWorldObject(_obj);
+                MapManager.DropWorldItems(DropManager.DropItemsFromWorldObject(_obj.ID), _obj.CollisionBox.Center.ToVector2());
+                _obj = null;
+            }
+
+            return rv;
         }
     }
 }

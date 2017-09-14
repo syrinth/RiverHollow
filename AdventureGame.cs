@@ -1,12 +1,5 @@
-﻿using Adventure.Characters.Monsters;
-using Adventure.Characters.NPCs;
-using Adventure.Game_Managers;
-using Adventure.Game_Managers.GUIComponents.Screens;
-using Adventure.Game_Managers.GUIObjects;
+﻿using Adventure.Game_Managers;
 using Adventure.GUIObjects;
-using Adventure.Items;
-using Adventure.Screens;
-using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;

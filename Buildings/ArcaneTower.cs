@@ -36,8 +36,8 @@ namespace Adventure.Buildings
             bool rv = true;
             _position = position;
 
-            _boxToEnter = new Rectangle((int)_position.X+TileMap.TileSize, (int)(_position.Y + (_texture.Height - BaseHeight) + TileMap.TileSize*2), TileMap.TileSize, TileMap.TileSize);
-            _boxToExit = new Rectangle(_boxToEnter.X, _boxToEnter.Y + TileMap.TileSize, TileMap.TileSize, TileMap.TileSize);
+            _boxToEnter = new Rectangle((int)_position.X+RHTileMap.TileSize, (int)(_position.Y + (_texture.Height - BaseHeight) + RHTileMap.TileSize*2), RHTileMap.TileSize, RHTileMap.TileSize);
+            _boxToExit = new Rectangle(_boxToEnter.X, _boxToEnter.Y + RHTileMap.TileSize, RHTileMap.TileSize, RHTileMap.TileSize);
             return rv;
 
         }

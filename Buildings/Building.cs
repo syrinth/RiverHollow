@@ -38,9 +38,9 @@ namespace Adventure
         public int ID { get => _id; }
 
         protected int _baseWidth; //In Tiles
-        public int BaseWidth { get => _baseWidth * TileMap.TileSize; } //In Pixels
+        public int BaseWidth { get => _baseWidth * RHTileMap.TileSize; } //In Pixels
         protected int _baseHeight; //In Tiles
-        public int BaseHeight { get => _baseHeight * TileMap.TileSize; } //In Pixels
+        public int BaseHeight { get => _baseHeight * RHTileMap.TileSize; } //In Pixels
 
         protected int _reqGold;
         public int ReqGold { get => _reqGold; }

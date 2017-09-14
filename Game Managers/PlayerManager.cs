@@ -254,7 +254,7 @@ namespace Adventure.Game_Managers
             }
 
             data.MapData = new List<MapData>();
-            foreach (TileMap tileMap in MapManager.Maps.Values)
+            foreach (RHTileMap tileMap in MapManager.Maps.Values)
             {
                 MapData m = new MapData();
                 m.mapName = tileMap.Name;
@@ -364,7 +364,7 @@ namespace Adventure.Game_Managers
 
             foreach (MapData m in data.MapData)
             {
-                TileMap tm = MapManager.Maps[m.mapName];
+                RHTileMap tm = MapManager.Maps[m.mapName];
                 foreach(WorldObjectData w in m.worldObjects)
                 { 
                     tm.AddWorldObject(ObjectManager.GetWorldObject(w.worldObjectID, new Vector2(w.x,w.y)));

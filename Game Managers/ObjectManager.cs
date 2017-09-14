@@ -104,9 +104,9 @@ namespace Adventure.Game_Managers
             switch (id)
             {
                 case ObjectIDs.Rock:
-                    return new WorldObject(ObjectIDs.Rock, 1, true, false, pos, new Rectangle(0, 0, 32, 32), GetTexture(@"Textures\worldObjects"), 1, TileMap.TileSize, TileMap.TileSize);
+                    return new WorldObject(ObjectIDs.Rock, 1, true, false, pos, new Rectangle(0, 0, 32, 32), GetTexture(@"Textures\worldObjects"), 1, RHTileMap.TileSize, RHTileMap.TileSize);
                 case ObjectIDs.Tree:
-                    return new Tree(ObjectIDs.Tree, 10, false, true, pos, new Rectangle(0, 0, 96, 128), GetTexture(@"Textures\tree"), 1, TileMap.TileSize * 3, TileMap.TileSize * 4);
+                    return new Tree(ObjectIDs.Tree, 10, false, true, pos, new Rectangle(0, 0, 96, 128), GetTexture(@"Textures\tree"), 1, RHTileMap.TileSize * 3, RHTileMap.TileSize * 4);
             }
             return null;
         }
