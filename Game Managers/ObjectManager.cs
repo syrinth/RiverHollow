@@ -26,7 +26,7 @@ namespace Adventure.Game_Managers
         }
         public enum ObjectIDs
         {
-            Nothing, Rock, BigRock, Tree
+            Nothing, Rock, BigRock, Tree, Staircase
         }
         #endregion
 
@@ -104,9 +104,13 @@ namespace Adventure.Game_Managers
             switch (id)
             {
                 case ObjectIDs.Rock:
-                    return new WorldObject(ObjectIDs.Rock, 1, true, false, pos, new Rectangle(0, 0, 32, 32), GetTexture(@"Textures\worldObjects"), 1, RHTileMap.TileSize, RHTileMap.TileSize);
+                    return new WorldObject(ObjectIDs.Rock, 1, true, true, false, pos, new Rectangle(0, 0, 32, 32), GetTexture(@"Textures\worldObjects"), 1, RHTileMap.TileSize, RHTileMap.TileSize);
+                case ObjectIDs.BigRock:
+                    return new WorldObject(ObjectIDs.BigRock, 5, true, true, false, pos, new Rectangle(64, 64, 64, 64), GetTexture(@"Textures\worldObjects"), 1, RHTileMap.TileSize*2, RHTileMap.TileSize*2);
                 case ObjectIDs.Tree:
                     return new Tree(ObjectIDs.Tree, 10, false, true, pos, new Rectangle(0, 0, 96, 128), GetTexture(@"Textures\tree"), 1, RHTileMap.TileSize * 3, RHTileMap.TileSize * 4);
+                case ObjectIDs.Staircase:
+                    return new Staircase(ObjectIDs.Staircase, pos, new Rectangle(96, 0, 32, 32), GetTexture(@"Textures\worldObjects"), 1, RHTileMap.TileSize, RHTileMap.TileSize);
             }
             return null;
         }

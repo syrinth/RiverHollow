@@ -44,7 +44,7 @@ namespace Adventure.Game_Managers
 
                 RHTileMap newMap = MapManager.Maps[dungeonPrefix + val];
                 _maps.Add(MapManager.Maps[dungeonPrefix + val]);
-                PopulateRoom(r, newMap, numRoom == maxRooms -1);
+                PopulateRoom(r, newMap, numRoom == maxRooms - 1);
                 numRoom++;
             }
 
@@ -102,7 +102,12 @@ namespace Adventure.Game_Managers
         {
             int mapWidth = m.MapWidth;
             int mapHeight = m.MapHeight;
-            for (int i = 0; i < 99; i++)
+            for (int i = 0; i < 5; i++)
+            {
+                Vector2 vect = new Vector2(r.Next(0, mapWidth) * RHTileMap.TileSize, r.Next(0, mapHeight) * RHTileMap.TileSize);
+                m.AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.BigRock, vect));
+            }
+            for (int i = 0; i < 40; i++)
             {
                 Vector2 vect = new Vector2(r.Next(0, mapWidth) * RHTileMap.TileSize, r.Next(0, mapHeight) * RHTileMap.TileSize);
                 m.AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Rock, vect));

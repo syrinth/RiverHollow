@@ -18,6 +18,13 @@ namespace Adventure.Game_Managers
                 case ObjectManager.ObjectIDs.Rock:
                     itemList.Add(ObjectManager.GetItem(0, 1));
                     break;
+                case ObjectManager.ObjectIDs.BigRock:
+                    itemList.Add(ObjectManager.GetItem(0, 1));
+                    itemList.Add(ObjectManager.GetItem(0, 1));
+                    itemList.Add(ObjectManager.GetItem(0, 1));
+                    itemList.Add(ObjectManager.GetItem(0, 1));
+                    itemList.Add(ObjectManager.GetItem(0, 1));
+                    break;
                 case ObjectManager.ObjectIDs.Tree:
                     itemList.Add(ObjectManager.GetItem(2, 1));
                     break;

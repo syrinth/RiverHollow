@@ -358,14 +358,6 @@ namespace Adventure.Tile_Engine
                     break;
                 }
             }
-            foreach (WorldObject o in _worldObjectList)
-            {
-                if (o.IntersectsWith(movingObject))
-                {
-                    rv = true;
-                    break;
-                }
-            }
             return rv;
         }
 
@@ -450,11 +442,19 @@ namespace Adventure.Tile_Engine
                 {
                     if (IsDungeon && DungeonManager.IsEndChest((Container)s))
                     {
-                        MapManager.ChangeDungeonRoom("", true);
+                        Staircase stairs = (Staircase)ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Staircase, new Vector2(0, 0));
+                        stairs.SetExit("Map1");
+                        AddWorldObject(stairs);
                     }
                     GUIManager.LoadScreen(GUIManager.Screens.Inventory, (Container)s);
                     break;
                 }
+            }
+
+            RHMapTile tile = _tileArray[mouseLocation.X / 32, mouseLocation.Y / 32];
+            if(tile.Object != null && tile.Object.ID == ObjectManager.ObjectIDs.Staircase)
+            {
+                MapManager.ChangeMaps(((Staircase)tile.Object).ToMap);
             }
 
             return rv;
@@ -619,7 +619,6 @@ namespace Adventure.Tile_Engine
         }
         public void DropWorldItems(List<Item>items, Vector2 position)
         {
-            Random r = new Random();
             foreach(Item i in items)
             {
                 ((Item)i).Pop(position);
@@ -735,20 +734,56 @@ namespace Adventure.Tile_Engine
             position.X = ((int)(position.X / 32)) * 32;
             position.Y = ((int)(position.Y / 32)) * 32;
 
-            RHMapTile tile = _tileArray[((int)position.X / 32), ((int)position.Y / 32)];
-            rv = tile.SetWorldObject(o);
-            if (!rv && bounce)
+            List<RHMapTile> tiles = new List<RHMapTile>();
+
+            do
             {
-                do
+                int colColumns = o.CollisionBox.Width / 32;
+                int colRows = o.CollisionBox.Height / 32;
+
+                rv = true;
+                for (int i = 0; i < colRows; i++)
+                {
+                    if (!rv) { break; }
+                    for (int j = 0; j < colColumns; j++)
+                    {
+                        int x = (o.CollisionBox.Left + (j * 32)) / 32;
+                        int y = (o.CollisionBox.Top + (i * 32)) / 32;
+                        if(x < 0 || x > 99 || y < 0 || y > 99)
+                        {
+                            rv = false;
+                            break;
+                        }
+                        RHMapTile tempTile = _tileArray[x, y];
+
+                        if ((!o.WallObject && tempTile.Passable()) || (o.WallObject && tempTile.IsValidWall()))
+                        {
+                            tiles.Add(tempTile);
+                        }
+                        else
+                        {
+                            rv = false;
+                            break;
+                        }
+                        
+                    }
+                }
+                if (!rv)
                 {
                     position.X = (int)(r.Next(1, (MapWidth - 1) * TileSize) / 32) * 32;
                     position.Y = (int)(r.Next(1, (MapHeight - 1) * TileSize) / 32) * 32;
-                    tile = _tileArray[((int)position.X / 32), ((int)position.Y / 32)];
-                    rv = tile.SetWorldObject(o);
-                } while (!rv);
+                    o.SetCoordinates(position);
+                }
+
+            } while (!rv);
+            o.Tiles = tiles;
+            foreach (RHMapTile t in tiles)
+            {
+                t.SetWorldObject(o);
             }
-            if (rv) {
-                o.SetCoordinates(position);
+            if (rv)
+            {
+
                 _worldObjectList.Add(o);
             }
 
@@ -807,6 +842,7 @@ namespace Adventure.Tile_Engine
             return MapHeight * _tileSize;
         }
     }
+
     public class RHMapTile
     {
         private bool _tileExists;
@@ -833,7 +869,8 @@ namespace Adventure.Tile_Engine
             {
                 if (l.IsVisible && l.TryGetTile(_X, _Y, out TiledMapTile? tile) && tile != null)
                 {
-                    if (tile.Value.GlobalIdentifier != 0) {
+                    if (tile.Value.GlobalIdentifier != 0)
+                    {
                         _tileExists = true;
                     }
                     _properties.Add(l, map.GetProperties((TiledMapTile)tile));
@@ -841,10 +878,20 @@ namespace Adventure.Tile_Engine
             }
         }
 
+        public bool SetWallWorldObject(WorldObject o)
+        {
+            bool rv = false;
+            if (IsValidWall())
+            {
+                _obj = o;
+                rv = true;
+            }
+            return rv;
+        }
         public bool SetWorldObject(WorldObject o)
         {
             bool rv = false;
-            if (Passable())
+            if ((!o.WallObject && Passable()) || (o.WallObject && IsValidWall()))
             {
                 _obj = o;
                 rv = true;
@@ -879,6 +926,22 @@ namespace Adventure.Tile_Engine
             return rv;
         }
 
+        public bool IsValidWall()
+        {
+            bool rv = false;
+            if (_tileExists && _obj == null && _staticItem == null)
+            {
+                foreach (TiledMapTileLayer l in _properties.Keys)
+                {
+                    if (l.IsVisible && ContainsProperty(l, "Impassable", out string val) && val.Equals("true"))
+                    {
+                        rv = true;
+                    }
+                }
+            }
+            return rv;
+        }
+
         public bool ContainsProperty(string property, out string value)
         {
             bool rv = false;
@@ -909,12 +972,18 @@ namespace Adventure.Tile_Engine
             rv = _obj.DealDamage(dmg);
             if (rv)
             {
-                MapManager.RemoveWorldObject(_obj);
                 MapManager.DropWorldItems(DropManager.DropItemsFromWorldObject(_obj.ID), _obj.CollisionBox.Center.ToVector2());
-                _obj = null;
+                MapManager.RemoveWorldObject(_obj);
+                _obj.ClearTiles();
             }
 
             return rv;
+        }
+
+        public void Clear()
+        {
+            _obj = null;
+            _staticItem = null;
         }
     }
 }

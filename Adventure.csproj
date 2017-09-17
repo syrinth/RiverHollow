@@ -106,6 +106,7 @@
     <Compile Include="Items\Container.cs" />
     <Compile Include="Items\Food.cs" />
     <Compile Include="Items\Item.cs" />
+    <Compile Include="Items\Staircase.cs" />
     <Compile Include="Items\StaticItem.cs" />
     <Compile Include="Items\Tool.cs" />
     <Compile Include="Items\Tree.cs" />

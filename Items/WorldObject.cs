@@ -1,4 +1,5 @@
 ﻿using Adventure.Game_Managers;
+using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -11,8 +12,15 @@ namespace Adventure.Items
 {
     public class WorldObject
     {
+        public List<RHMapTile> Tiles;
         protected float _hp;
         public float HP { get => _hp; }
+
+        protected bool _wallObject;
+        public bool WallObject { get => _wallObject; }
+
+        protected bool _destructible;
+        public bool Destructible { get => _destructible; }
 
         protected bool _breakable;
         public bool Breakable { get => _breakable;}
@@ -42,10 +50,11 @@ namespace Adventure.Items
 
         protected WorldObject() { }
 
-        public WorldObject(ObjectManager.ObjectIDs id, float hp, bool breakIt, bool chopIt, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int lvl, int width, int height)
+        public WorldObject(ObjectManager.ObjectIDs id, float hp, bool destructible, bool breakIt, bool chopIt, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int lvl, int width, int height)
         {
             _id = id;
             _hp = hp;
+            _destructible = destructible;
             _breakable = breakIt;
             _choppable = chopIt;
             _position = pos;
@@ -53,8 +62,10 @@ namespace Adventure.Items
             _height = height;
             _texture = tex;
             _lvltoDmg = lvl;
+            _wallObject = false;
 
             _sourceRectangle = sourceRectangle;
+            Tiles = new List<RHMapTile>();
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -84,6 +95,14 @@ namespace Adventure.Items
         public virtual void SetCoordinates(Vector2 position)
         {
             _position = position;
+        }
+
+        public void ClearTiles()
+        {
+            foreach (RHMapTile t in Tiles)
+            {
+                t.Clear();
+            }
         }
     }
 }

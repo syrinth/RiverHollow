@@ -81,7 +81,7 @@ namespace Adventure
                     }
                     else if (_targetTile.Object != null && _targetTile.Object.Choppable)
                     {
-                        destroyed = _targetTile.DamageObject(((Tool)CurrentItem).BreakValue);
+                        destroyed = _targetTile.DamageObject(((Tool)CurrentItem).ChopValue);
                     }
 
                     if (destroyed)

@@ -52,18 +52,25 @@ namespace Adventure.Game_Managers
             Rectangle rectEntrance = Rectangle.Empty;
             RHTileMap newMap = _tileMaps[newMapStr];
 
-            foreach (string s in _tileMaps[newMapStr].EntranceDictionary.Keys)
+            if (_currentMap.IsDungeon)
             {
-                if (!string.IsNullOrEmpty(PlayerManager._inBuilding))
+                rectEntrance = _tileMaps[newMapStr].EntranceDictionary["Dungeon"];
+            }
+            else
+            {
+                foreach (string s in _tileMaps[newMapStr].EntranceDictionary.Keys)
                 {
-                    rectEntrance = _tileMaps[newMapStr].EntranceDictionary[PlayerManager._inBuilding];
-                    PlayerManager._inBuilding = string.Empty;
-                }
-                else
-                {
-                    if (s.Equals(_currentMap.Name))
+                    if (!string.IsNullOrEmpty(PlayerManager._inBuilding))
                     {
-                        rectEntrance = _tileMaps[newMapStr].EntranceDictionary[s];
+                        rectEntrance = _tileMaps[newMapStr].EntranceDictionary[PlayerManager._inBuilding];
+                        PlayerManager._inBuilding = string.Empty;
+                    }
+                    else
+                    {
+                        if (s.Equals(_currentMap.Name))
+                        {
+                            rectEntrance = _tileMaps[newMapStr].EntranceDictionary[s];
+                        }
                     }
                 }
             }
@@ -136,11 +143,11 @@ namespace Adventure.Game_Managers
             {
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Rock, new Vector2(r.Next(0, mapWidth) * RHTileMap.TileSize, r.Next(0, mapHeight) * RHTileMap.TileSize)));
+                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Rock, new Vector2(r.Next(1, mapWidth-1) * RHTileMap.TileSize, r.Next(1, mapHeight-1) * RHTileMap.TileSize)));
                 }
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Tree, new Vector2(r.Next(0, mapWidth) * RHTileMap.TileSize, r.Next(0, mapHeight) * RHTileMap.TileSize)));
+                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Tree, new Vector2(r.Next(1, mapWidth-1) * RHTileMap.TileSize, r.Next(1, mapHeight-1) * RHTileMap.TileSize)));
                 }
             }
             _tileMaps[@"Map1"].AddCharacter(new Goblin(new Vector2(1340, 1340)));
