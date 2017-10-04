@@ -84,6 +84,45 @@ namespace Adventure.Game_Managers
             return _buildings.Count +1;
         }
 
+        public static bool PlayerInRange(Point centre)
+        {
+            return PlayerInRange(centre, RHTileMap.TileSize * 2);
+        }
+        public static bool PlayerInRange(Vector2 centre, int range)
+        {
+            return PlayerInRange(centre.ToPoint(), range);
+        }
+        public static bool PlayerInRange(Vector2 centre, int minRange, int maxRange)
+        {
+            return PlayerInRange(centre.ToPoint(), minRange, maxRange);
+        }
+        public static bool PlayerInRange(Point centre, int range)
+        {
+            bool rv = false;
+
+            Rectangle playerRect = _player.GetRectangle();
+            int a = Math.Abs(playerRect.Center.X - centre.X);
+            int b = Math.Abs(playerRect.Center.Y - centre.Y);
+            int c = (int)Math.Sqrt(a * a + b * b);
+
+            rv = c <= range;
+
+            return rv;
+        }
+        public static bool PlayerInRange(Point centre, int minRange, int maxRange)
+        {
+            bool rv = false;
+
+            Rectangle playerRect = _player.GetRectangle();
+            int a = Math.Abs(playerRect.Center.X - centre.X);
+            int b = Math.Abs(playerRect.Center.Y - centre.Y);
+            int c = (int)Math.Sqrt(a*a + b*b);
+
+            rv = c > minRange && c <= maxRange;
+
+            return rv;
+        }
+
         #region Save/Load
         public struct SaveData
         {

@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset name="TileSetTest" tilewidth="32" tileheight="32" tilecount="15" columns="5">
  <image source="SpriteSheet.png" trans="ffffff" width="160" height="96"/>
+ <tile id="4">
+  <objectgroup draworder="index">
+   <properties>
+    <property name="Sleep" type="bool" value="true"/>
+   </properties>
+  </objectgroup>
+ </tile>
  <tile id="5">
   <properties>
    <property name="Impassable" type="bool" value="true"/>

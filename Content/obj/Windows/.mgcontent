@@ -37,5 +37,8 @@
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Dungeons/Room4.tmx</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Dungeons/Room5.tmx</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Dialogue/NPC4.xml</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/Monsters/Goblin Scout.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/Monsters/Goblin Soldier.png</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Monsters.xml</File>
   </SourceFiles>
 </SourceFileCollection>

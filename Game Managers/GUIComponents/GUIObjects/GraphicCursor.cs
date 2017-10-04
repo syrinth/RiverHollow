@@ -112,5 +112,14 @@ namespace Adventure.GUIObjects
                 _heldItem.Draw(spriteBatch, new Rectangle((int)Position.X+16, (int)Position.Y+16, 32, 32));
             }
         }
+
+        public static Vector2 GetTranslatedMouseLocation()
+        {
+            Vector2 mousePoint = Position;
+            Vector3 translate = Camera._transform.Translation;
+            mousePoint.X = (int)((mousePoint.X - translate.X) / AdventureGame.Scale);
+            mousePoint.Y = (int)((mousePoint.Y - translate.Y) / AdventureGame.Scale);
+            return mousePoint;
+        }
     }
 }

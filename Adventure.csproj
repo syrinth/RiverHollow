@@ -62,10 +62,8 @@
     <Compile Include="Camera.cs" />
     <Compile Include="Characters\Character.cs" />
     <Compile Include="Characters\CombatCharacter.cs" />
-    <Compile Include="Characters\Monsters\Goblin.cs" />
-    <Compile Include="Characters\Monsters\Monster.cs" />
+    <Compile Include="Characters\Monster.cs" />
     <Compile Include="Game Managers\DungeonManager.cs" />
-    <Compile Include="Items\AdventureMap.cs" />
     <Compile Include="Items\MerchantChest.cs" />
     <Compile Include="Characters\NPCs\NPC.cs" />
     <Compile Include="Characters\NPCs\ShopKeeper.cs" />
@@ -104,12 +102,9 @@
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GraphicCursor.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIObject.cs" />
     <Compile Include="Items\Container.cs" />
-    <Compile Include="Items\Food.cs" />
     <Compile Include="Items\Item.cs" />
-    <Compile Include="Items\Staircase.cs" />
     <Compile Include="Items\StaticItem.cs" />
     <Compile Include="Items\Tool.cs" />
-    <Compile Include="Items\Tree.cs" />
     <Compile Include="Items\Weapon.cs" />
     <Compile Include="Items\WorldObject.cs" />
     <Compile Include="Program.cs" />

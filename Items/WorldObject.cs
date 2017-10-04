@@ -12,6 +12,7 @@ namespace Adventure.Items
 {
     public class WorldObject
     {
+        #region Properties
         public List<RHMapTile> Tiles;
         protected float _hp;
         public float HP { get => _hp; }
@@ -47,6 +48,7 @@ namespace Adventure.Items
 
         protected ObjectManager.ObjectIDs _id;
         public ObjectManager.ObjectIDs ID { get => _id; }
+        #endregion
 
         protected WorldObject() { }
 
@@ -103,6 +105,31 @@ namespace Adventure.Items
             {
                 t.Clear();
             }
+        }
+    }
+
+    public class Tree : WorldObject
+    {
+        public override Rectangle CollisionBox { get => new Rectangle((int)Position.X + RHTileMap.TileSize, (int)Position.Y + RHTileMap.TileSize * 3, RHTileMap.TileSize, RHTileMap.TileSize); }
+
+        public Tree(ObjectManager.ObjectIDs id, float hp, bool breakIt, bool chopIt, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int lvl, int width, int height) : base(id, hp, true, breakIt, chopIt, pos, sourceRectangle, tex, lvl, width, height)
+        {
+        }
+    }
+
+    public class Staircase : WorldObject
+    {
+        protected string _toMap;
+        public string ToMap { get => _toMap; }
+
+        public Staircase(ObjectManager.ObjectIDs id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int lvl, int width, int height) : base(id, 0, false, false, false, pos, sourceRectangle, tex, lvl, width, height)
+        {
+            _wallObject = true;
+        }
+
+        public void SetExit(string map)
+        {
+            _toMap = map;
         }
     }
 }

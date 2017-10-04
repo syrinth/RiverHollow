@@ -1,5 +1,6 @@
 ﻿using Adventure.Characters;
 using Adventure.Characters.NPCs;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,14 @@ namespace Adventure.Game_Managers
 {
     public static class CharacterManager
     {
+        private static Dictionary<int, string> _monsterDictionary;
         private static Dictionary<int, NPC> _characterDictionary;
         public static Dictionary<string, bool> _talkedTo;
 
         public static void LoadContent(ContentManager Content)
         {
+            _monsterDictionary = Content.Load<Dictionary<int, string>>(@"Data\Monsters");
+
             _talkedTo = new Dictionary<string, bool>();
             _characterDictionary = new Dictionary<int, NPC>();
             foreach (KeyValuePair<int, string> kvp in Content.Load<Dictionary<int, string>>(@"Data\Characters"))
@@ -40,6 +44,25 @@ namespace Adventure.Game_Managers
         public static string GetCharacterNameByIndex(int i)
         {
             return _characterDictionary[i].Name;
+        }
+
+        public static Monster GetMonsterByIndex(int id)
+        {
+            Monster m = null;
+            if (id != -1)
+            {
+                string _itemData = _monsterDictionary[id];
+                string[] _itemDataValues = _itemData.Split('/');
+                m =  new Monster(id, _itemDataValues);
+            }
+            return m;
+        }
+
+        public static Monster GetMonsterByIndex(int id, Vector2 pos)
+        {
+            Monster m = GetMonsterByIndex(id);
+            m.Position = pos;
+            return m;
         }
     }
 }

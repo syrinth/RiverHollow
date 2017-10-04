@@ -107,10 +107,20 @@ namespace Adventure.Game_Managers
                 Vector2 vect = new Vector2(r.Next(0, mapWidth) * RHTileMap.TileSize, r.Next(0, mapHeight) * RHTileMap.TileSize);
                 m.AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.BigRock, vect));
             }
-            for (int i = 0; i < 40; i++)
+            for (int i = 0; i < 30; i++)
             {
                 Vector2 vect = new Vector2(r.Next(0, mapWidth) * RHTileMap.TileSize, r.Next(0, mapHeight) * RHTileMap.TileSize);
                 m.AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Rock, vect));
+            }
+            for (int i = 0; i < 5; i++)
+            {
+                Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * RHTileMap.TileSize, r.Next(1, mapHeight-1) * RHTileMap.TileSize);
+                m.AddMonster(CharacterManager.GetMonsterByIndex(1, vect));
+            }
+            for (int i = 0; i < 5; i++)
+            {
+                Vector2 vect = new Vector2(r.Next(1, mapWidth - 1) * RHTileMap.TileSize, r.Next(1, mapHeight - 1) * RHTileMap.TileSize);
+                m.AddMonster(CharacterManager.GetMonsterByIndex(2, vect));
             }
 
             if (lastRoom && _condition == EndCondition.TreasureChest)

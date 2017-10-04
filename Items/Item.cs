@@ -224,4 +224,40 @@ namespace Adventure.Items
             }
         }
     }
+
+    public class Food : Item
+    {
+        private int _stam;
+        public int Stamina { get => _stam; }
+        private int _health;
+        public int Health { get => _health; }
+
+        public Food(int id, string[] itemValue, int num)
+        {
+            int i = ImportBasics(itemValue, id, num);
+            _stam = int.Parse(itemValue[i++]);
+            _health = int.Parse(itemValue[i++]);
+
+            _doesItStack = true;
+            _texture = GameContentManager.GetTexture(@"Textures\items");
+
+            CalculateSourcePos();
+        }
+    }
+
+    public class AdventureMap : Item
+    {
+        private int _difficulty;
+        public int Difficulty { get => _difficulty; }
+        public AdventureMap(int id, string[] itemValue, int num)
+        {
+            int i = ImportBasics(itemValue, id, num);
+            _difficulty = RandNumber(4, 5, 0, 0);
+
+            _doesItStack = false;
+            _texture = GameContentManager.GetTexture(@"Textures\items");
+
+            CalculateSourcePos();
+        }
+    }
 }

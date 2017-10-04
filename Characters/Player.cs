@@ -11,11 +11,13 @@ using System;
 using ItemIDs = Adventure.Game_Managers.ObjectManager.ItemIDs;
 using Adventure.Game_Managers;
 using System.Collections.Generic;
+using Adventure.GUIObjects;
 
 namespace Adventure
 {
     public class Player : CombatCharacter
     {
+        #region Properties
         public static int maxItemColumns = 10;
         public static int maxItemRows = 4;
         private bool _usingTool = false;
@@ -43,12 +45,13 @@ namespace Adventure
 
         private int _money = 2000;
         public int Money { get => _money; }
+        #endregion
 
         public Player()
         {
             LoadContent();
             Position = new Vector2(200, 200);
-            Speed = 10;
+            Speed = 5;
             _maxStamina = 50;
             Stamina = _maxStamina;
 
@@ -158,7 +161,7 @@ namespace Adventure
                     _sprite.CurrentAnimation = "Float" + _sprite.CurrentAnimation.Substring(4);
                 }
             }
-            _sprite.Update(gameTime);
+            base.Update(gameTime);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -180,7 +183,7 @@ namespace Adventure
 
             if (CurrentItem != null)
             {
-                if (CurrentItem.Type == Item.ItemType.Tool && MapManager.CurrentMap.PlayerInRange(mouseLocation))
+                if (CurrentItem.Type == Item.ItemType.Tool && PlayerManager.PlayerInRange(mouseLocation))
                 {
                     if (DecreaseStamina(((Tool)CurrentItem).StaminaCost))
                     {
@@ -195,7 +198,16 @@ namespace Adventure
                     if (DecreaseStamina(((Weapon)CurrentItem).StaminaCost))
                     {
                         _usingWeapon = true;
-                        ((Weapon)CurrentItem).Attack(_facing);
+                        Facing weaponDir;
+                        Vector2 mousePoint = GraphicCursor.GetTranslatedMouseLocation();
+
+                        int deltaX = (int)(mousePoint.X - Position.X);
+                        int deltaY = (int)(mousePoint.Y - Position.Y);
+
+                        if(Math.Abs(deltaX) - Math.Abs(deltaY) > 0){ weaponDir = (deltaX > 0) ? Facing.West : Facing.East; }
+                        else { weaponDir = (deltaY > 0) ? Facing.South : Facing.North; }
+
+                        ((Weapon)CurrentItem).Attack(weaponDir);
                     }
                     rv = true;
                 }

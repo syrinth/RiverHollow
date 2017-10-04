@@ -42,6 +42,7 @@ namespace Adventure.Tile_Engine
         public Dictionary<string, TiledMapTileLayer> Layers { get => _dictionaryLayers; }
 
         protected List<Character> _characterList;
+        protected List<Monster> _monsterList;
         public List<Character> ToRemove;
         protected List<Building> _buildingList;
         protected List<WorldObject> _worldObjectList;
@@ -55,12 +56,11 @@ namespace Adventure.Tile_Engine
         private Dictionary<string, Rectangle> _entranceDictionary;
         public Dictionary<string, Rectangle> EntranceDictionary { get => _entranceDictionary; }
 
-        private TiledMapObject _validArea;
-
         public RHTileMap()
         {
             _tileSets = new List<TiledMapTileset>();
             _characterList = new List<Character>();
+            _monsterList = new List<Monster>();
             ToRemove = new List<Character>();
             _buildingList = new List<Building>();
             _worldObjectList = new List<WorldObject>();
@@ -133,19 +133,17 @@ namespace Adventure.Tile_Engine
             {
                 ((Item)i).Update();
             }
-            foreach (Character m in _characterList)
-            { 
-                if (m.GetType().Equals(typeof(Monster))){
-                    ((Monster)m).Update(theGameTime);
-                }
-                else
-                {
-                    m.Update(theGameTime);
-                }
-            }
-            foreach(Character c in ToRemove)
+            foreach (Character c in _characterList)
             {
-                _characterList.Remove(c);
+                c.Update(theGameTime);
+            }
+            foreach(Monster m in _monsterList)
+            {
+                m.Update(theGameTime);
+            }
+            foreach(Monster m in ToRemove)
+            {
+                _monsterList.Remove(m);
             }
 
             ItemPickUpdate();
@@ -164,7 +162,7 @@ namespace Adventure.Tile_Engine
                         removedList.Add(i);
                         PlayerManager.Player.AddItemToFirstAvailableInventorySpot(i.ItemID);
                     }
-                    else if (PlayerInRange(i.CollisionBox.Center, 80))
+                    else if (PlayerManager.PlayerInRange(i.CollisionBox.Center, 80))
                     {
                         float speed = 3;
                         Vector2 direction = new Vector2((_p.Position.X < i.Position.X) ? -speed : speed, (_p.Position.Y < i.Position.Y) ? -speed : speed);
@@ -183,7 +181,12 @@ namespace Adventure.Tile_Engine
         public void Draw(SpriteBatch spriteBatch)
         {
             renderer.Draw(_map, Camera._transform);
-            foreach(Character m in _characterList)
+            foreach(Character c in _characterList)
+            {
+                c.Draw(spriteBatch);
+            }
+
+            foreach (Monster m in _monsterList)
             {
                 m.Draw(spriteBatch);
             }
@@ -372,7 +375,9 @@ namespace Adventure.Tile_Engine
                     {
                         foreach (KeyValuePair<string, string> tp in t.Properties)
                         {
-                            propList.Add(tp.Key, tp.Value);
+                            if (!propList.ContainsKey(tp.Key)){
+                                propList.Add(tp.Key, tp.Value);
+                            }
                         }
                     }
                 }
@@ -430,7 +435,7 @@ namespace Adventure.Tile_Engine
             }
             foreach (Building b in _buildingList)
             {
-                if (b.BoxToEnter.Contains(mouseLocation) && PlayerInRange(b.BoxToEnter.Center))
+                if (b.BoxToEnter.Contains(mouseLocation) && PlayerManager.PlayerInRange(b.BoxToEnter.Center))
                 {
                     MapManager.EnterBuilding(b);
                     break;
@@ -493,7 +498,7 @@ namespace Adventure.Tile_Engine
                     if (cType.IsSubclassOf(typeof(Worker)))
                     {
                         Worker w = (Worker)c;
-                        if (w.Contains(mouseLocation) && PlayerInRange(w.Center) &&
+                        if (w.Contains(mouseLocation) && PlayerManager.PlayerInRange(w.Center) &&
                             PlayerManager.Player.HasSpaceInInventory(w.WhatAreYouHolding()))
                         {
                             PlayerManager.Player.AddItemToFirstAvailableInventorySpot(w.TakeItem());
@@ -504,7 +509,7 @@ namespace Adventure.Tile_Engine
                     {
                         NPC n = (NPC)c;
                         if (PlayerManager.Player.CurrentItem != null && 
-                            n.Contains(mouseLocation) && PlayerInRange(n.Center) &&
+                            n.Contains(mouseLocation) && PlayerManager.PlayerInRange(n.Center) &&
                             PlayerManager.Player.CurrentItem.Type != Item.ItemType.Tool &&
                             PlayerManager.Player.CurrentItem.Type != Item.ItemType.Weapon)
                         {
@@ -581,24 +586,6 @@ namespace Adventure.Tile_Engine
             return rv;
         }
         #endregion
-
-        public bool PlayerInRange(Point centre)
-        {
-            return PlayerInRange(centre, RHTileMap.TileSize * 2);
-        }
-        public bool PlayerInRange(Point centre, int range)
-        {
-            bool rv = false;
-
-            Rectangle playerRect = PlayerManager.Player.GetRectangle();
-            if (Math.Abs(playerRect.Center.X - centre.X) <= range &&
-                Math.Abs(playerRect.Center.Y - centre.Y) <= range)
-            {
-                rv = true;
-            }
-
-            return rv;
-        }
 
         public void ClearWorkers()
         {
@@ -820,6 +807,32 @@ namespace Adventure.Tile_Engine
         public void AddCharacter(Character c)
         {
             _characterList.Add(c);
+        }
+        public void AddMonster(Monster m)
+        {
+            bool rv = false;
+            Random r = new Random();
+            Vector2 position = m.Position;
+            position.X = ((int)(position.X / 32)) * 32;
+            position.Y = ((int)(position.Y / 32)) * 32;
+
+            rv = _tileArray[((int)position.X / 32), ((int)position.Y / 32)].Passable();
+            if (!rv)
+            {
+                do
+                {
+                    position.X = (int)(r.Next(1, (MapWidth - 1) * TileSize) / 32) * 32;
+                    position.Y = (int)(r.Next(1, (MapHeight - 1) * TileSize) / 32) * 32;
+                    rv = _tileArray[((int)position.X / 32), ((int)position.Y / 32)].Passable();
+                } while (!rv);
+            }
+
+            if (rv)
+            {
+                m.Position = position;
+
+                _monsterList.Add(m);
+            }
         }
 
         public void LoadMapData(List<WorldObject> wList)

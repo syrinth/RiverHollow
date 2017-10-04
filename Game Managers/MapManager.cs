@@ -1,6 +1,4 @@
 ﻿using Adventure.Characters;
-using Adventure.Characters.Monsters;
-using Adventure.Characters.NPCs;
 using Adventure.GUIObjects;
 using Adventure.Items;
 using Adventure.Tile_Engine;
@@ -9,10 +7,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Adventure.Game_Managers
 {
@@ -150,7 +144,7 @@ namespace Adventure.Game_Managers
                     _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Tree, new Vector2(r.Next(1, mapWidth-1) * RHTileMap.TileSize, r.Next(1, mapHeight-1) * RHTileMap.TileSize)));
                 }
             }
-            _tileMaps[@"Map1"].AddCharacter(new Goblin(new Vector2(1340, 1340)));
+            _tileMaps[@"Map1"].AddMonster(CharacterManager.GetMonsterByIndex(2, new Vector2(1340, 1340)));
             MerchantChest m = new MerchantChest();
             PlayerManager._merchantChest = m;
         }

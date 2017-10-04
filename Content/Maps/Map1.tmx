@@ -1,6 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="6">
- <tileset firstgid="1" source="TileSet.tsx"/>
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="7">
+ <tileset firstgid="1" name="TileSetTest" tilewidth="32" tileheight="32" tilecount="15" columns="5">
+  <image source="SpriteSheet.png" trans="ffffff" width="160" height="96"/>
+  <tile id="4">
+   <objectgroup draworder="index">
+    <properties>
+     <property name="Sleep" type="bool" value="true"/>
+    </properties>
+   </objectgroup>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="GoTo" value="Map2"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="16" source="TileSet.tsx"/>
  <layer name="BaseLayer" width="100" height="100">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -220,10 +255,6 @@
     <property name="Entrance" value="Map2"/>
    </properties>
   </object>
-  <object id="5" x="844" y="586.667" width="17.3333" height="10.6667">
-   <properties>
-    <property name="Entrance" value="Dungeon"/>
-   </properties>
-  </object>
+  <object id="6" name="Sleep" x="589.333" y="174.667" width="5.33333" height="5.33333"/>
  </objectgroup>
 </map>

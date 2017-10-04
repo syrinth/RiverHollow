@@ -15,7 +15,6 @@ namespace Adventure.Characters
     public class Character
     {
         #region Properties
-
         public enum Facing { North, South, East, West };
         protected Facing _facing = Facing.North;
         protected AnimatedSprite _sprite;
