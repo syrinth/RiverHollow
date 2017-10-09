@@ -57,7 +57,6 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Buildings\ArcaneTower.cs" />
     <Compile Include="Buildings\Building.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Characters\Character.cs" />
@@ -67,7 +66,6 @@
     <Compile Include="Items\MerchantChest.cs" />
     <Compile Include="Characters\NPCs\NPC.cs" />
     <Compile Include="Characters\NPCs\ShopKeeper.cs" />
-    <Compile Include="Characters\NPCs\Wizard.cs" />
     <Compile Include="Characters\NPCs\Worker.cs" />
     <Compile Include="Characters\Player.cs" />
     <Compile Include="AdventureGame.cs" />

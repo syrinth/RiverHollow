@@ -11,7 +11,6 @@
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Fonts/DisplayFont.spritefont</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Map2.tmx</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/ArcaneTower.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/ArcaneTower.tmx</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/Dialog.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/NPC.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/SpriteSheet.png</File>
@@ -40,5 +39,8 @@
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/Monsters/Goblin Scout.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/Monsters/Goblin Soldier.png</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Monsters.xml</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Buildings.xml</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Workers.xml</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Arcane Tower.tmx</File>
   </SourceFiles>
 </SourceFileCollection>

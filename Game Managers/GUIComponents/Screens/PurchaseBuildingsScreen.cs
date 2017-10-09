@@ -32,7 +32,7 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
                 Vector2 center = new Vector2(AdventureGame.ScreenWidth / 2, AdventureGame.ScreenHeight / 2);
                 _merchandise = merch;
                 _currentItemIndex = 0;
-                Building b = ObjectManager.GetBuilding(_merchandise[_currentItemIndex].BuildingID);
+                Building b = ObjectManager.GetBuilding(_merchandise[_currentItemIndex].MerchID);
 
                 int minWidth = b.Texture.Width + margin * 2;
                 int minHeight = b.Texture.Height + margin * 2;
@@ -119,7 +119,7 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
                     }
 
                     GUIManager.SetScreen(GUIManager.Screens.None);
-                    Building b = ObjectManager.GetBuilding(_merchandise[_currentItemIndex].BuildingID);
+                    Building b = ObjectManager.GetBuilding(_merchandise[_currentItemIndex].MerchID);
                     GraphicCursor.PickUpBuilding(b);
                     AdventureGame.ChangeGameState(AdventureGame.GameState.Build);
                     Camera.UnsetObserver();

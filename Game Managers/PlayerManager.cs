@@ -161,9 +161,9 @@ namespace Adventure.Game_Managers
             public int positionY;
 
             [XmlElement(ElementName = "BuildingID")]
-            public ObjectManager.BuildingID buildingID;
+            public int buildingID;
 
-            [XmlElement(ElementName = "ID")]
+            [XmlElement(ElementName = "PersonalID")]
             public int id;
 
             [XmlElement(ElementName = "BuildingChest")]
@@ -175,7 +175,7 @@ namespace Adventure.Game_Managers
         public struct WorkerData
         {
             [XmlElement(ElementName = "WorkerID")]
-            public ObjectManager.WorkerID workerID;
+            public int workerID;
 
             [XmlElement(ElementName = "Name")]
             public string name;
@@ -214,7 +214,7 @@ namespace Adventure.Game_Managers
         public struct WorldObjectData
         {
             [XmlElement(ElementName = "WorldObjectID")]
-            public ObjectManager.ObjectIDs worldObjectID;
+            public int worldObjectID;
 
             [XmlElement(ElementName = "X")]
             public int x;
@@ -248,17 +248,17 @@ namespace Adventure.Game_Managers
             foreach (Building b in Buildings)
             {
                 BuildingData buildingData = new BuildingData();
-                buildingData.buildingID = b.BuildingID;
+                buildingData.buildingID = b.ID;
                 buildingData.positionX = (int)b.Position.X;
                 buildingData.positionY = (int)b.Position.Y;
-                buildingData.id = b.ID;
+                buildingData.id = b.PersonalID;
 
                 buildingData.Workers = new List<WorkerData>();
 
                 foreach (Worker w in b.Workers)
                 {
                     WorkerData workerData = new WorkerData();
-                    workerData.workerID = w.WorkerID;
+                    workerData.workerID = w.ID;
                     workerData.mood = w.Mood;
                     workerData.name = w.Name;
                     buildingData.Workers.Add(workerData);

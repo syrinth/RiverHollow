@@ -35,7 +35,7 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
                 _workers = new List<WorkerBox>();
                 foreach (Merchandise m in merch)
                 {
-                    Worker w = ObjectManager.GetWorker(m.WorkerID);
+                    Worker w = ObjectManager.GetWorker(m.MerchID);
 
                     _workers.Add(new WorkerBox(position, w, m.MoneyCost));
                     position.X += 64;
@@ -71,7 +71,7 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
                         PlayerManager.Player.TakeMoney(wB.Cost);
 
                         GUIManager.SetScreen(GUIManager.Screens.None);
-                        GraphicCursor.PickUpWorker(wB._w.WorkerID);
+                        GraphicCursor.PickUpWorker(wB._w.ID);
                         AdventureGame.ChangeGameState(AdventureGame.GameState.Build);
                         Camera.UnsetObserver();
                         MapManager.ViewMap("Map1");

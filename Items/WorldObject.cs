@@ -46,13 +46,13 @@ namespace Adventure.Items
         protected int _lvltoDmg;
         public int LvlToDmg { get => _lvltoDmg; }
 
-        protected ObjectManager.ObjectIDs _id;
-        public ObjectManager.ObjectIDs ID { get => _id; }
+        protected int _id;
+        public int ID { get => _id; }
         #endregion
 
         protected WorldObject() { }
 
-        public WorldObject(ObjectManager.ObjectIDs id, float hp, bool destructible, bool breakIt, bool chopIt, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int lvl, int width, int height)
+        public WorldObject(int id, float hp, bool destructible, bool breakIt, bool chopIt, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int lvl, int width, int height)
         {
             _id = id;
             _hp = hp;
@@ -70,7 +70,7 @@ namespace Adventure.Items
             Tiles = new List<RHMapTile>();
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, new Rectangle((int)_position.X, (int)_position.Y, _width, _height), _sourceRectangle, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, _position.Y + _height + (_position.X / 100));
         }
@@ -112,7 +112,7 @@ namespace Adventure.Items
     {
         public override Rectangle CollisionBox { get => new Rectangle((int)Position.X + RHTileMap.TileSize, (int)Position.Y + RHTileMap.TileSize * 3, RHTileMap.TileSize, RHTileMap.TileSize); }
 
-        public Tree(ObjectManager.ObjectIDs id, float hp, bool breakIt, bool chopIt, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int lvl, int width, int height) : base(id, hp, true, breakIt, chopIt, pos, sourceRectangle, tex, lvl, width, height)
+        public Tree(int id, float hp, bool breakIt, bool chopIt, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int lvl, int width, int height) : base(id, hp, true, breakIt, chopIt, pos, sourceRectangle, tex, lvl, width, height)
         {
         }
     }
@@ -122,7 +122,7 @@ namespace Adventure.Items
         protected string _toMap;
         public string ToMap { get => _toMap; }
 
-        public Staircase(ObjectManager.ObjectIDs id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int lvl, int width, int height) : base(id, 0, false, false, false, pos, sourceRectangle, tex, lvl, width, height)
+        public Staircase(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int lvl, int width, int height) : base(id, 0, false, false, false, pos, sourceRectangle, tex, lvl, width, height)
         {
             _wallObject = true;
         }

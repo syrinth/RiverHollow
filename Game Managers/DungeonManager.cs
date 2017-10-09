@@ -105,12 +105,12 @@ namespace Adventure.Game_Managers
             for (int i = 0; i < 5; i++)
             {
                 Vector2 vect = new Vector2(r.Next(0, mapWidth) * RHTileMap.TileSize, r.Next(0, mapHeight) * RHTileMap.TileSize);
-                m.AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.BigRock, vect));
+                m.AddWorldObject(ObjectManager.GetWorldObject(1, vect));
             }
             for (int i = 0; i < 30; i++)
             {
                 Vector2 vect = new Vector2(r.Next(0, mapWidth) * RHTileMap.TileSize, r.Next(0, mapHeight) * RHTileMap.TileSize);
-                m.AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Rock, vect));
+                m.AddWorldObject(ObjectManager.GetWorldObject(0, vect));
             }
             for (int i = 0; i < 5; i++)
             {

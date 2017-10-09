@@ -74,11 +74,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/ArcaneTower.png
 
-#begin Maps/ArcaneTower.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/ArcaneTower.tmx
-
 #begin Textures/Dialog.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -302,4 +297,19 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Monsters.xml
+
+#begin Data/Buildings.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Buildings.xml
+
+#begin Data/Workers.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Workers.xml
+
+#begin Maps/Arcane Tower.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Arcane Tower.tmx
 

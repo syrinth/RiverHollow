@@ -1,5 +1,4 @@
-﻿using Adventure.Buildings;
-using Adventure.Characters.NPCs;
+﻿using Adventure.Characters.NPCs;
 using Adventure.Items;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
@@ -11,60 +10,47 @@ namespace Adventure.Game_Managers
 {
     public static class ObjectManager
     {
-        #region IDs
-        public enum BuildingID
-        {
-            Nothing, ArcaneTower
-        }
-        public enum WorkerID
-        {
-            Nothing, Wizard
-        }
-        public enum ItemIDs
-        {
-            Nothing, PickAxe, Axe, ArcaneEssence, CopperOre, CopperBar, IronOre, IronBar, Sword, SmallChest, Wood, Stone
-        }
-        public enum ObjectIDs
-        {
-            Nothing, Rock, BigRock, Tree, Staircase
-        }
-        #endregion
-
-        private static Dictionary<int, string> _itemDictionary;
-        private static Dictionary<int, Recipe> _craftingDictionary;
-        public static Dictionary<int, Recipe> CraftingDictionary { get => _craftingDictionary; }
+        private static Dictionary<int, string> _dictBuilding;
+        private static Dictionary<int, Recipe> _dictCrafting;
+        private static Dictionary<int, string> _dictItem;
+        private static Dictionary<int, string> _dictWorkers;
+        public static Dictionary<int, Recipe> DictCrafting { get => _dictCrafting; }
 
         public static void LoadContent(ContentManager Content)
         {
-            _itemDictionary = Content.Load<Dictionary<int, string>>(@"Data\ItemData");
+            _dictBuilding = Content.Load<Dictionary<int, string>>(@"Data\Buildings");
+            _dictItem = Content.Load<Dictionary<int, string>>(@"Data\ItemData");
+            _dictWorkers = Content.Load<Dictionary<int, string>>(@"Data\Workers");
             LoadRecipes(Content);
         }
 
         private static void LoadRecipes(ContentManager Content)
         {
-            _craftingDictionary = new Dictionary<int, Recipe>();
+            _dictCrafting = new Dictionary<int, Recipe>();
             foreach (KeyValuePair<int, string> kvp in Content.Load<Dictionary<int, string>>(@"Data\CraftingData"))
             {
-                _craftingDictionary.Add(kvp.Key, new Recipe(kvp.Key, kvp.Value));
+                _dictCrafting.Add(kvp.Key, new Recipe(kvp.Key, kvp.Value));
             }
         }
 
-        public static Building GetBuilding(BuildingID id)
+        public static Building GetBuilding(int id)
         {
-            switch (id)
+            if (_dictBuilding.ContainsKey(id))
             {
-                case BuildingID.ArcaneTower:
-                    return new ArcaneTower();
+                string buildingData = _dictBuilding[id];
+                string[] _buildingDataValues = buildingData.Split('/');
+                return new Building(_buildingDataValues, id);
             }
-            return null;
+            return null;     
         }
 
-        public static Worker GetWorker(WorkerID id)
+        public static Worker GetWorker(int id)
         {
-            switch (id)
+            if (_dictWorkers.ContainsKey(id))
             {
-                case WorkerID.Wizard:
-                    return new Wizard(Vector2.Zero);
+                string stringData = _dictWorkers[id];
+                string[] stringDataValues = stringData.Split('/');
+                return new Worker(stringDataValues, id);
             }
             return null;
         }
@@ -78,7 +64,7 @@ namespace Adventure.Game_Managers
         {
             if (id != -1)
             {
-                string _itemData = _itemDictionary[id];
+                string _itemData = _dictItem[id];
                 string[] _itemDataValues = _itemData.Split('/');
                 switch (_itemDataValues[0])
                 {
@@ -99,18 +85,18 @@ namespace Adventure.Game_Managers
             return null;
         }
 
-        public static WorldObject GetWorldObject(ObjectIDs id, Vector2 pos)
+        public static WorldObject GetWorldObject(int id, Vector2 pos)
         {
             switch (id)
             {
-                case ObjectIDs.Rock:
-                    return new WorldObject(ObjectIDs.Rock, 1, true, true, false, pos, new Rectangle(0, 0, 32, 32), GetTexture(@"Textures\worldObjects"), 1, RHTileMap.TileSize, RHTileMap.TileSize);
-                case ObjectIDs.BigRock:
-                    return new WorldObject(ObjectIDs.BigRock, 5, true, true, false, pos, new Rectangle(64, 64, 64, 64), GetTexture(@"Textures\worldObjects"), 1, RHTileMap.TileSize*2, RHTileMap.TileSize*2);
-                case ObjectIDs.Tree:
-                    return new Tree(ObjectIDs.Tree, 10, false, true, pos, new Rectangle(0, 0, 96, 128), GetTexture(@"Textures\tree"), 1, RHTileMap.TileSize * 3, RHTileMap.TileSize * 4);
-                case ObjectIDs.Staircase:
-                    return new Staircase(ObjectIDs.Staircase, pos, new Rectangle(96, 0, 32, 32), GetTexture(@"Textures\worldObjects"), 1, RHTileMap.TileSize, RHTileMap.TileSize);
+                case 0:
+                    return new WorldObject(id, 1, true, true, false, pos, new Rectangle(0, 0, 32, 32), GetTexture(@"Textures\worldObjects"), 1, RHTileMap.TileSize, RHTileMap.TileSize);
+                case 1:
+                    return new WorldObject(id, 5, true, true, false, pos, new Rectangle(64, 64, 64, 64), GetTexture(@"Textures\worldObjects"), 1, RHTileMap.TileSize*2, RHTileMap.TileSize*2);
+                case 2:
+                    return new Tree(id, 10, false, true, pos, new Rectangle(0, 0, 96, 128), GetTexture(@"Textures\tree"), 1, RHTileMap.TileSize * 3, RHTileMap.TileSize * 4);
+                case 3:
+                    return new Staircase(id, pos, new Rectangle(96, 0, 32, 32), GetTexture(@"Textures\worldObjects"), 1, RHTileMap.TileSize, RHTileMap.TileSize);
             }
             return null;
         }

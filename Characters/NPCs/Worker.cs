@@ -4,18 +4,14 @@ using Adventure.Items;
 using Adventure.Tile_Engine;
 using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using ItemIDs = Adventure.Game_Managers.ObjectManager.ItemIDs;
 namespace Adventure.Characters.NPCs
 {
-    public abstract class Worker : NPC
+    public class Worker : NPC
     {
-        public abstract ObjectManager.WorkerID WorkerID { get; }
-        public abstract string WorkerType { get; }
+        protected int _id;
+        public int ID { get => _id; }
+        protected string _workerType;
         private Building _building;
         protected int _dailyFoodReq;
         protected int _currFood;
@@ -23,14 +19,30 @@ namespace Adventure.Characters.NPCs
         protected Item _heldItem;
         protected int _mood;
         public int Mood { get => _mood; }
+        protected string _texture;
 
-        public Worker()
+        public Worker(string[] stringData, int id)
         {
+            ImportBasics(stringData, id);
+            _texture = @"Textures\" + _workerType;
+            LoadContent(_texture, 32, 64, 1, 1);
             _currFood = 0;
-            _dailyFoodReq = 1;
-            _dailyItemID = -1;
             _heldItem = null;
             _mood = 0;
+        }
+
+        protected int ImportBasics(string[] stringData, int id)
+        {
+            _id = id;
+            int i = 0;
+            _workerType = stringData[i++];
+            _dailyItemID = int.Parse(stringData[i++]);
+            _dailyFoodReq = int.Parse(stringData[i++]);
+            int portraitNum = int.Parse(stringData[i++]);
+            _portraitRect = new Rectangle(0, portraitNum*192, 160, 192);
+            _portrait = GameContentManager.GetTexture(@"Textures\portraits");
+
+            return i;
         }
 
         public override void Talk()
@@ -39,7 +51,7 @@ namespace Adventure.Characters.NPCs
             _mood += 1;
 
             Random r = new Random();
-            GUIManager.LoadScreen(GUIManager.Screens.Text, this, Name + ": " + GameContentManager.GetDialogue(WorkerType +r.Next(1,3)));
+            GUIManager.LoadScreen(GUIManager.Screens.Text, this, Name + ": " + GameContentManager.GetDialogue(_workerType + r.Next(1,3)));
         }
 
         public int TakeItem()

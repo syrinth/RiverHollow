@@ -1,16 +1,10 @@
-﻿using Adventure.Buildings;
-using Adventure.Game_Managers;
+﻿using Adventure.Game_Managers;
 using Adventure.GUIObjects;
 using Adventure.Items;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using BuildingID = Adventure.Game_Managers.ObjectManager.BuildingID;
-using WorkerID = Adventure.Game_Managers.ObjectManager.WorkerID;
 namespace Adventure.Characters.NPCs
 {
     public class ShopKeeper : NPC
@@ -79,23 +73,23 @@ namespace Adventure.Characters.NPCs
         public override string GetDialogEntry(string entry)
         {
             string rv = string.Empty;
-            List<Merchandise> send = new List<Merchandise>();
+            List<Merchandise> dialogueEntries = new List<Merchandise>();
             if (entry.Equals("BuyBuildings"))
             {
                 foreach(Merchandise m in _merchandise)
                 {
-                    if (m.BuildingID != ObjectManager.BuildingID.Nothing) { send.Add(m); }
+                    if (m._type == Merchandise.ItemType.Building) { dialogueEntries.Add(m); }
                 }
                 
-                GUIManager.LoadScreen(GUIManager.Screens.BuildingShop, send);
+                GUIManager.LoadScreen(GUIManager.Screens.BuildingShop, dialogueEntries);
             }
             else if (entry.Equals("BuyWorkers"))
             {
                 foreach (Merchandise m in _merchandise)
                 {
-                    if (m.WorkerID != ObjectManager.WorkerID.Nothing) { send.Add(m); }
+                    if (m._type == Merchandise.ItemType.Worker) { dialogueEntries.Add(m); }
                 }
-                GUIManager.LoadScreen(GUIManager.Screens.WorkerShop, send);
+                GUIManager.LoadScreen(GUIManager.Screens.WorkerShop, dialogueEntries);
             }
             else
             {
@@ -108,12 +102,10 @@ namespace Adventure.Characters.NPCs
 
     public class Merchandise
     {
-        BuildingID _buildingID;
-        public BuildingID BuildingID { get => _buildingID; }
-        WorkerID _workerID;
-        public WorkerID WorkerID { get => _workerID; }
-        int _itemID = -1;
-        public int ItemID { get => _itemID; }
+        public enum ItemType { Building, Worker, Item }
+        public ItemType _type;
+        int _merchID = -1;
+        public int MerchID { get => _merchID; }
         string _description;
         int _moneyCost;
         public int MoneyCost { get => _moneyCost; }
@@ -126,19 +118,11 @@ namespace Adventure.Characters.NPCs
             string[] dataValues = data.Split('/');
 
             int i = 0;
-            if (!Enum.TryParse(dataValues[i], out _buildingID))
+            if (dataValues[0] == "Building")
             {
-                if (!Enum.TryParse(dataValues[i], out _workerID))
-                {
-                    _itemID = int.Parse(dataValues[i]);
-                }
-                i++;
-                _description = dataValues[i++];
-                _moneyCost = int.Parse(dataValues[i++]);
-            }
-            else
-            {
-                i++;
+                _type = ItemType.Building;
+                i = 1;
+                _merchID = int.Parse(dataValues[i++]);
                 _description = dataValues[i++];
                 _moneyCost = int.Parse(dataValues[i++]);
 
@@ -148,6 +132,21 @@ namespace Adventure.Characters.NPCs
                     string[] itemsSplit = str.Split(' ');
                     _items.Add(new KeyValuePair<int, int>(int.Parse(itemsSplit[0]), int.Parse(itemsSplit[1])));
                 }
+            }
+            else if (dataValues[0] == "Worker")
+            {
+                _type = ItemType.Worker;
+                i = 1;
+                _merchID = int.Parse(dataValues[i++]);
+                _description = dataValues[i++];
+                _moneyCost = int.Parse(dataValues[i++]);
+            }
+            else
+            {
+                _merchID = int.Parse(dataValues[i++]);
+                i++;
+                _description = dataValues[i++];
+                _moneyCost = int.Parse(dataValues[i++]);
             }
         }
     }

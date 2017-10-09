@@ -9,23 +9,23 @@ namespace Adventure.Game_Managers
 {
     public static class DropManager
     {
-        public static List<Item> DropItemsFromWorldObject(ObjectManager.ObjectIDs id)
+        public static List<Item> DropItemsFromWorldObject(int id)
         {
             List<Item> itemList = new List<Item>();
 
             switch (id)
             {
-                case ObjectManager.ObjectIDs.Rock:
+                case 0:
                     itemList.Add(ObjectManager.GetItem(0, 1));
                     break;
-                case ObjectManager.ObjectIDs.BigRock:
+                case 1:
                     itemList.Add(ObjectManager.GetItem(0, 1));
                     itemList.Add(ObjectManager.GetItem(0, 1));
                     itemList.Add(ObjectManager.GetItem(0, 1));
                     itemList.Add(ObjectManager.GetItem(0, 1));
                     itemList.Add(ObjectManager.GetItem(0, 1));
                     break;
-                case ObjectManager.ObjectIDs.Tree:
+                case 2:
                     itemList.Add(ObjectManager.GetItem(2, 1));
                     break;
             }

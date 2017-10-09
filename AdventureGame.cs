@@ -80,6 +80,10 @@ namespace Adventure
                         else
                             _gameState = GameState.Running;
                     }
+                    if (InputManager.CheckKey(Keys.X))
+                    {
+                        PlayerManager.Save();
+                    }
                     if (GUIManager.CurrentGUIScreen != GUIManager.Screens.ItemCreation || GUIManager.CurrentGUIScreen != GUIManager.Screens.HUD)
                     {
                         if (InputManager.CheckKey(Keys.C))

@@ -37,7 +37,7 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
             _inventory.SetPosition(centerPoint - new Vector2(mainWidthHeight.X / 2, 0));
 
             int i = 0; int j = 0;
-            foreach (int id in ObjectManager.CraftingDictionary.Keys)
+            foreach (int id in ObjectManager.DictCrafting.Keys)
             {
                 if (PlayerManager.CanMake.Contains(id)){
                     Rectangle displayBox = new Rectangle((int)_creationWindow.Position.X + 32 + 3, (int)_creationWindow.Position.Y + 32 + 3, 32, 32);
@@ -71,7 +71,7 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
                     {
                         //Check that all required items are there first
                         bool create = true;
-                        foreach(KeyValuePair<int, int> kvp in ObjectManager.CraftingDictionary[gIB.Item.ItemID].RequiredItems)
+                        foreach(KeyValuePair<int, int> kvp in ObjectManager.DictCrafting[gIB.Item.ItemID].RequiredItems)
                         {
                             if(!PlayerManager.Player.HasItemInInventory(kvp.Key, kvp.Value))
                             {
@@ -81,7 +81,7 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
                         //If all items are found, then remove them.
                         if (create)
                         {
-                            foreach (KeyValuePair<int, int> kvp in ObjectManager.CraftingDictionary[gIB.Item.ItemID].RequiredItems)
+                            foreach (KeyValuePair<int, int> kvp in ObjectManager.DictCrafting[gIB.Item.ItemID].RequiredItems)
                             {
 
                                 PlayerManager.Player.RemoveItemsFromInventory(kvp.Key, kvp.Value);

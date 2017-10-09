@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Content;
 using System;
 using System.Collections.Generic;
 
-using ItemIDs = Adventure.Game_Managers.ObjectManager.ItemIDs;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Adventure

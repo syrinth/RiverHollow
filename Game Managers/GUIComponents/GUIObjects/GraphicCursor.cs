@@ -22,8 +22,8 @@ namespace Adventure.GUIObjects
         private static Building _heldBuilding;
         public static Building HeldBuilding { get => _heldBuilding; }
 
-        private static ObjectManager.WorkerID _workerID = ObjectManager.WorkerID.Nothing;
-        public static ObjectManager.WorkerID WorkerToPlace { get => _workerID; }
+        private static int _workerID = -1;
+        public static int WorkerToPlace { get => _workerID; }
 
         private static Vector2 _position;
         public static Vector2 Position { get => _position; set => _position = value; }
@@ -35,6 +35,16 @@ namespace Adventure.GUIObjects
             _texture = GameContentManager.GetTexture(@"Textures\Dialog");
             Position = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
             _currentType = CursorType.Normal;
+        }
+
+        public static Vector2 GetTranslatedPosition()
+        {
+            Vector3 translate = Camera._transform.Translation;
+            Vector2 mousePoint = Vector2.Zero;
+            mousePoint.X = (int)((_position.X - translate.X) / AdventureGame.Scale);
+            mousePoint.Y = (int)((_position.Y - translate.Y) / AdventureGame.Scale);
+
+            return mousePoint;
         }
 
         public static bool GrabItem(Item item)
@@ -66,10 +76,10 @@ namespace Adventure.GUIObjects
             return rv;
         }
 
-        public static bool PickUpWorker(ObjectManager.WorkerID id)
+        public static bool PickUpWorker(int id)
         {
             bool rv = false;
-            if (id != ObjectManager.WorkerID.Nothing)
+            if (id > -1)
             {
                 _workerID = id;
                 rv = true;

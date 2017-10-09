@@ -447,7 +447,7 @@ namespace Adventure.Tile_Engine
                 {
                     if (IsDungeon && DungeonManager.IsEndChest((Container)s))
                     {
-                        Staircase stairs = (Staircase)ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Staircase, new Vector2(0, 0));
+                        Staircase stairs = (Staircase)ObjectManager.GetWorldObject(3, new Vector2(0, 0));
                         stairs.SetExit("Map1");
                         AddWorldObject(stairs);
                     }
@@ -457,7 +457,7 @@ namespace Adventure.Tile_Engine
             }
 
             RHMapTile tile = _tileArray[mouseLocation.X / 32, mouseLocation.Y / 32];
-            if(tile.Object != null && tile.Object.ID == ObjectManager.ObjectIDs.Staircase)
+            if(tile.Object != null && tile.Object.ID == 3)
             {
                 MapManager.ChangeMaps(((Staircase)tile.Object).ToMap);
             }
@@ -476,7 +476,7 @@ namespace Adventure.Tile_Engine
                     AddBuilding(mouseLocation);
                     rv = true;
                 }
-                else if (GraphicCursor.WorkerToPlace != ObjectManager.WorkerID.Nothing)
+                else if (GraphicCursor.WorkerToPlace > -1)
                 {
                     if (AddWorkerToBuilding(mouseLocation))
                     {

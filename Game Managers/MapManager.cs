@@ -28,7 +28,7 @@ namespace Adventure.Game_Managers
             AddMap(@"Maps\Dungeons\Room3", Content, GraphicsDevice);
             AddMap(@"Maps\Dungeons\Room4", Content, GraphicsDevice);
             AddMap(@"Maps\Dungeons\Room5", Content, GraphicsDevice);
-            AddMap(@"Maps\ArcaneTower", Content, GraphicsDevice);
+            AddMap(@"Maps\Arcane Tower", Content, GraphicsDevice);
 
             _currentMap = _tileMaps[@"Map1"];
         }
@@ -103,14 +103,14 @@ namespace Adventure.Game_Managers
             //TileMap newMap = _tileMaps[b._map];
             PlayerManager._inBuilding = b.ID.ToString();
 
-            foreach (string s in _tileMaps[b._map].EntranceDictionary.Keys)
+            foreach (string s in _tileMaps[b._name].EntranceDictionary.Keys)
             {
                 if (s.Equals(_currentMap.Name))
                 {
-                    rectEntrance = _tileMaps[b._map].EntranceDictionary[s];
+                    rectEntrance = _tileMaps[b._name].EntranceDictionary[s];
                 }
             }
-            _currentMap = _tileMaps[b._map];
+            _currentMap = _tileMaps[b._name];
             _currentMap.LoadBuilding(b);
 
             PlayerManager.CurrentMap = _currentMap.Name;
@@ -137,11 +137,11 @@ namespace Adventure.Game_Managers
             {
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Rock, new Vector2(r.Next(1, mapWidth-1) * RHTileMap.TileSize, r.Next(1, mapHeight-1) * RHTileMap.TileSize)));
+                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(0, new Vector2(r.Next(1, mapWidth-1) * RHTileMap.TileSize, r.Next(1, mapHeight-1) * RHTileMap.TileSize)));
                 }
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(ObjectManager.ObjectIDs.Tree, new Vector2(r.Next(1, mapWidth-1) * RHTileMap.TileSize, r.Next(1, mapHeight-1) * RHTileMap.TileSize)));
+                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(2, new Vector2(r.Next(1, mapWidth-1) * RHTileMap.TileSize, r.Next(1, mapHeight-1) * RHTileMap.TileSize)));
                 }
             }
             _tileMaps[@"Map1"].AddMonster(CharacterManager.GetMonsterByIndex(2, new Vector2(1340, 1340)));
@@ -162,12 +162,13 @@ namespace Adventure.Game_Managers
             {
                 if (GraphicCursor.HeldBuilding != null)
                 {
+                    Vector2 mousePosition = GraphicCursor.GetTranslatedPosition();
                     Texture2D drawIt = GraphicCursor.HeldBuilding.Texture;
-                    Rectangle drawRectangle = new Rectangle(((int)((GraphicCursor.Position.X) / 32)) * 32, ((int)((GraphicCursor.Position.Y) / 32)) * 32, drawIt.Width, drawIt.Height);
+                    Rectangle drawRectangle = new Rectangle(((int)(mousePosition.X / 32)) * 32, ((int)(mousePosition.Y / 32)) * 32, drawIt.Width, drawIt.Height);
                     Rectangle source = new Rectangle(0, 0, drawIt.Width, drawIt.Height);
 
                     GraphicCursor.HeldBuilding.SetCoordinates(new Vector2(drawRectangle.X, drawRectangle.Y));
-                    spriteBatch.Draw(drawIt, drawRectangle, source, Color.White);
+                    spriteBatch.Draw(drawIt, drawRectangle, null, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, mousePosition.Y + drawIt.Height);
                 }
             }
         }

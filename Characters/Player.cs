@@ -8,7 +8,6 @@ using Adventure.Characters;
 using Adventure.Items;
 using System;
 
-using ItemIDs = Adventure.Game_Managers.ObjectManager.ItemIDs;
 using Adventure.Game_Managers;
 using System.Collections.Generic;
 using Adventure.GUIObjects;
