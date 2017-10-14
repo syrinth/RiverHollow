@@ -156,7 +156,7 @@ namespace Adventure.Game_Managers
         {
             _currentMap.Draw(spriteBatch);
 
-            if (AdventureGame.State == AdventureGame.GameState.Build)
+            if (RiverHollow.State == RiverHollow.GameState.Build)
             {
                 if (GraphicCursor.HeldBuilding != null)
                 {
@@ -204,9 +204,13 @@ namespace Adventure.Game_Managers
             _currentMap.RemoveWorldObject(o);
         }
 
-        public static void RemoveCharacter(Character c)
+        public static void RemoveCharacter(WorldCharacter c)
         {
             _currentMap.RemoveCharacter(c);
+        }
+        public static void RemoveMob(Mob m)
+        {
+            _currentMap.RemoveMob(m);
         }
         public static void DropWorldItems(List<Item> items, Vector2 position)
         {

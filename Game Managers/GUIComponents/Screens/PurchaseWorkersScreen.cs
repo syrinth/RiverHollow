@@ -19,7 +19,7 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
         {
             try
             {
-                Vector2 center = new Vector2(AdventureGame.ScreenWidth / 2, AdventureGame.ScreenHeight / 2);
+                Vector2 center = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
 
                 int minWidth = 64 * merch.Count + 64;
                 int minHeight = 128 + 64;
@@ -71,7 +71,7 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
 
                         GUIManager.SetScreen(GUIManager.Screens.None);
                         GraphicCursor.PickUpWorker(wB._w.ID);
-                        AdventureGame.ChangeGameState(AdventureGame.GameState.Build);
+                        RiverHollow.ChangeGameState(RiverHollow.GameState.Build);
                         Camera.UnsetObserver();
                         MapManager.ViewMap("Map1");
                         rv = true;

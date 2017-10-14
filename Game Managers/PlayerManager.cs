@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using Adventure.Characters;
 
 namespace Adventure.Game_Managers
 {
@@ -24,8 +25,13 @@ namespace Adventure.Game_Managers
         private static string _currentMap;
         public static string CurrentMap { get => _currentMap; set => _currentMap = value; }
 
-        private static Player _player;
-        public static Player Player { get => _player; }
+        private static WorldPlayer _world;
+        public static int Stamina { get => _world.Stamina; }
+        public static int MaxStamina { get => _world.MaxStamina; }
+
+        private static CombatPlayer _combat;
+        public static int HitPoints { get => _combat.HitPoints; }
+        public static int MaxHitPoints { get => _combat.MaxHitPoints; }
 
         private static List<Building> _buildings;
         public static List<Building> Buildings { get => _buildings; }
@@ -34,42 +40,57 @@ namespace Adventure.Game_Managers
 
         public static void InitPlayer()
         {
-            _player = new Player();
+            _world = new WorldPlayer();
+            _combat = new CombatPlayer();
             _buildings = new List<Building>();
-            _player = new Player();
             _canMake = new List<int>();
         }
 
         public static void NewPlayer()
-        {          
+        {
+            _world = new WorldPlayer();
+            _combat = new CombatPlayer();
             _buildings = new List<Building>();
-            _player = new Player();
             _canMake = new List<int>();
             _canMake.Add(6);
-            _player.AddItemToFirstAvailableInventorySpot(5);
-            _player.AddItemToFirstAvailableInventorySpot(3);
-            _player.AddItemToFirstAvailableInventorySpot(4);
-            _player.AddItemToFirstAvailableInventorySpot(6);
-            _player.AddItemToFirstAvailableInventorySpot(7);
-            _player.AddItemToFirstAvailableInventorySpot(8);
+            _world.AddItemToFirstAvailableInventorySpot(5);
+            _world.AddItemToFirstAvailableInventorySpot(3);
+            _world.AddItemToFirstAvailableInventorySpot(4);
+            _world.AddItemToFirstAvailableInventorySpot(6);
+            _world.AddItemToFirstAvailableInventorySpot(7);
+            _world.AddItemToFirstAvailableInventorySpot(8);
+        }
+
+        public static void IncreaseStamina(int x)
+        {
+            _world.IncreaseStamina(x);
+        }
+        public static void IncreaseHealth(int x)
+        {
+            _combat.IncreaseHealth(x);
         }
 
         public static void Update(GameTime gameTime)
         {
-            _player.Update(gameTime);
+            _world.Update(gameTime);
         }
 
         public static void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            _player.Draw(gameTime, spriteBatch);
+            _world.Draw(gameTime, spriteBatch);
             _merchantChest.Draw(spriteBatch);
+        }
+
+        public static List<CombatCharacter> GetParty()
+        {
+            return null;
         }
 
         public static bool ProcessLeftButtonClick(Point mouseLocation)
         {
             bool rv = false;
 
-            rv = _player.ProcessLeftButtonClick(mouseLocation);
+            rv = _world.ProcessLeftButtonClick(mouseLocation);
 
             return rv;
         }
@@ -78,7 +99,6 @@ namespace Adventure.Game_Managers
         {
             _buildings.Add(b);
         }
-
         public static int GetNewBuildingID()
         {
             return _buildings.Count +1;
@@ -100,7 +120,7 @@ namespace Adventure.Game_Managers
         {
             bool rv = false;
 
-            Rectangle playerRect = _player.GetRectangle();
+            Rectangle playerRect = _world.GetRectangle();
             int a = Math.Abs(playerRect.Center.X - centre.X);
             int b = Math.Abs(playerRect.Center.Y - centre.Y);
             int c = (int)Math.Sqrt(a * a + b * b);
@@ -113,7 +133,7 @@ namespace Adventure.Game_Managers
         {
             bool rv = false;
 
-            Rectangle playerRect = _player.GetRectangle();
+            Rectangle playerRect = _world.GetRectangle();
             int a = Math.Abs(playerRect.Center.X - centre.X);
             int b = Math.Abs(playerRect.Center.Y - centre.Y);
             int c = (int)Math.Sqrt(a*a + b*b);
@@ -277,7 +297,7 @@ namespace Adventure.Game_Managers
             }
 
             data.Items = new List<ItemData>();
-            foreach (Item i  in Player.Inventory)
+            foreach (Item i  in _world.Inventory)
             {
                 ItemData itemData = new ItemData();
                 if (i != null)
@@ -390,14 +410,14 @@ namespace Adventure.Game_Managers
                     newBuilding.StaticItems.Add(LoadStaticItemData(s));
                 }
             }
-            for (int i = 0; i < Player.maxItemRows; i++)
+            for (int i = 0; i < WorldPlayer.maxItemRows; i++)
             {
-                for (int j = 0; j < Player.maxItemColumns; j++)
+                for (int j = 0; j < WorldPlayer.maxItemColumns; j++)
                 {
-                    int index = i * Player.maxItemColumns + j;
+                    int index = i * WorldPlayer.maxItemColumns + j;
                     ItemData item = data.Items[index];
                     Item newItem = ObjectManager.GetItem(item.itemID, item.num);
-                    _player.AddItemToInventorySpot(newItem, i, j);
+                    _world.AddItemToInventorySpot(newItem, i, j);
                 }
             }
 
@@ -419,11 +439,11 @@ namespace Adventure.Game_Managers
         {
             Container c = (Container)ObjectManager.GetItem(data.staticItemID);
 
-            for (int i = 0; i < Player.maxItemRows; i++)
+            for (int i = 0; i < WorldPlayer.maxItemRows; i++)
             {
-                for (int j = 0; j < Player.maxItemColumns; j++)
+                for (int j = 0; j < WorldPlayer.maxItemColumns; j++)
                 {
-                    ItemData item = data.Items[i * Player.maxItemRows + j];
+                    ItemData item = data.Items[i * WorldPlayer.maxItemRows + j];
                     Item newItem = ObjectManager.GetItem(item.itemID, item.num);
                     c.AddItemToInventorySpot(newItem, i, j);
                     c.Position = new Vector2(data.x, data.y);

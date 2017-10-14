@@ -41,8 +41,8 @@ namespace Adventure.GUIObjects
         {
             Vector3 translate = Camera._transform.Translation;
             Vector2 mousePoint = Vector2.Zero;
-            mousePoint.X = (int)((_position.X - translate.X) / AdventureGame.Scale);
-            mousePoint.Y = (int)((_position.Y - translate.Y) / AdventureGame.Scale);
+            mousePoint.X = (int)((_position.X - translate.X) / RiverHollow.Scale);
+            mousePoint.Y = (int)((_position.Y - translate.Y) / RiverHollow.Scale);
 
             return mousePoint;
         }
@@ -127,8 +127,8 @@ namespace Adventure.GUIObjects
         {
             Vector2 mousePoint = Position;
             Vector3 translate = Camera._transform.Translation;
-            mousePoint.X = (int)((mousePoint.X - translate.X) / AdventureGame.Scale);
-            mousePoint.Y = (int)((mousePoint.Y - translate.Y) / AdventureGame.Scale);
+            mousePoint.X = (int)((mousePoint.X - translate.X) / RiverHollow.Scale);
+            mousePoint.Y = (int)((mousePoint.Y - translate.Y) / RiverHollow.Scale);
             return mousePoint;
         }
     }

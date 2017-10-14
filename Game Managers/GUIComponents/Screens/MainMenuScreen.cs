@@ -16,11 +16,11 @@ namespace Adventure.Game_Managers.GUIObjects
 
         public MainMenuScreen()
         {
-            _btnNewGame = new GUIButton(new Vector2(AdventureGame.ScreenWidth/2, 500), new Rectangle(128, 96, 64, 32), 128, 64, @"Textures\Dialog");
-            _btnLoadGame = new GUIButton(new Vector2(AdventureGame.ScreenWidth / 2, 800), new Rectangle(64, 96, 64, 32), 128, 64, @"Textures\Dialog");
+            _btnNewGame = new GUIButton(new Vector2(RiverHollow.ScreenWidth/2, 500), new Rectangle(128, 96, 64, 32), 128, 64, @"Textures\Dialog");
+            _btnLoadGame = new GUIButton(new Vector2(RiverHollow.ScreenWidth / 2, 800), new Rectangle(64, 96, 64, 32), 128, 64, @"Textures\Dialog");
             Controls.Add(_btnNewGame);
             Controls.Add(_btnLoadGame);
-            AdventureGame.ChangeGameState(AdventureGame.GameState.Information);
+            RiverHollow.ChangeGameState(RiverHollow.GameState.Information);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -28,12 +28,12 @@ namespace Adventure.Game_Managers.GUIObjects
             bool rv = false;
             if (_btnNewGame.Contains(mouse))
             {
-                AdventureGame.NewGame();
+                RiverHollow.NewGame();
                 rv = true;
             }
             if (_btnLoadGame.Contains(mouse))
             {
-                AdventureGame.LoadGame();
+                RiverHollow.LoadGame();
                 rv = true;
             }
             return rv;

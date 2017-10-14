@@ -11,17 +11,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Adventure
 {
-    public class Mob : Character
+    public class Mob : WorldCharacter
     {
         #region Properties
-
         protected int _idleFor;
         protected int _leash = 400;
 
         protected string _textureName;
         protected Vector2 _moveTo = Vector2.Zero;
         protected List<Monster> _monsters;
-
+        public List<Monster> Monsters { get => _monsters; }
         #endregion
 
         public Mob(int id, string[] stringData)
@@ -81,7 +80,7 @@ namespace Adventure
 
                 if (CollisionBox.Intersects(PlayerManager.Player.CollisionBox))
                 {
-                    AdventureGame.ChangeGameState(AdventureGame.GameState.Combat);
+                    CombatManager.NewBattle(this);
                 }
             }
             else

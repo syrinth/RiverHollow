@@ -8,7 +8,7 @@ namespace Adventure
 {
     public static class Camera
     {
-        private static float Scale = AdventureGame.Scale;
+        private static float Scale = RiverHollow.Scale;
         public static Matrix _transform;
         public static Viewport _view;
         public static Vector2 _center;
@@ -22,7 +22,7 @@ namespace Adventure
 
         public static void Update(GameTime gametime)
         {
-            if (AdventureGame.State != AdventureGame.GameState.Build)
+            if (RiverHollow.State != RiverHollow.GameState.Build)
             {
                 _observer = PlayerManager.Player.Center.ToVector2()*Scale;
             }
@@ -49,25 +49,25 @@ namespace Adventure
             }
 
             float BorderOffset = RHMap.TileSize * Scale;
-            if (_observer.X <= (AdventureGame.ScreenWidth / 2) + BorderOffset)
+            if (_observer.X <= (RiverHollow.ScreenWidth / 2) + BorderOffset)
             {
-                _observer.X = (AdventureGame.ScreenWidth / 2) + BorderOffset;
+                _observer.X = (RiverHollow.ScreenWidth / 2) + BorderOffset;
             }
-            else if (_observer.X >= MapManager.CurrentMap.GetMapWidth() * Scale - (AdventureGame.ScreenWidth / 2) - BorderOffset)
+            else if (_observer.X >= MapManager.CurrentMap.GetMapWidth() * Scale - (RiverHollow.ScreenWidth / 2) - BorderOffset)
             {
-                _observer.X = MapManager.CurrentMap.GetMapWidth() * Scale - (AdventureGame.ScreenWidth / 2) - BorderOffset;
-            }
-
-            if (_observer.Y <= (AdventureGame.ScreenHeight / 2) + BorderOffset)
-            {
-                _observer.Y = (AdventureGame.ScreenHeight / 2) + BorderOffset;
-            }
-            else if (_observer.Y >= MapManager.CurrentMap.GetMapHeight() * Scale - (AdventureGame.ScreenHeight / 2) - BorderOffset)
-            {
-                _observer.Y = MapManager.CurrentMap.GetMapHeight() * Scale - (AdventureGame.ScreenHeight / 2) - BorderOffset;
+                _observer.X = MapManager.CurrentMap.GetMapWidth() * Scale - (RiverHollow.ScreenWidth / 2) - BorderOffset;
             }
 
-            _center = new Vector2(_observer.X - (AdventureGame.ScreenWidth / 2), _observer.Y - (AdventureGame.ScreenHeight / 2));
+            if (_observer.Y <= (RiverHollow.ScreenHeight / 2) + BorderOffset)
+            {
+                _observer.Y = (RiverHollow.ScreenHeight / 2) + BorderOffset;
+            }
+            else if (_observer.Y >= MapManager.CurrentMap.GetMapHeight() * Scale - (RiverHollow.ScreenHeight / 2) - BorderOffset)
+            {
+                _observer.Y = MapManager.CurrentMap.GetMapHeight() * Scale - (RiverHollow.ScreenHeight / 2) - BorderOffset;
+            }
+
+            _center = new Vector2(_observer.X - (RiverHollow.ScreenWidth / 2), _observer.Y - (RiverHollow.ScreenHeight / 2));
             _transform = Matrix.CreateScale(new Vector3(Scale, Scale, 0)) * Matrix.CreateTranslation(new Vector3(-_center.X, -_center.Y, 0));
         }
 

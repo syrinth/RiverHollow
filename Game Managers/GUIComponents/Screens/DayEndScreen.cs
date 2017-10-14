@@ -16,10 +16,10 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
 
         public DayEndScreen()
         {
-            AdventureGame.ChangeGameState(AdventureGame.GameState.Information);
-            _btnOK = new GUIButton(new Vector2(AdventureGame.ScreenWidth / 2, AdventureGame.ScreenHeight - 128), new Rectangle(0, 128, 128, 64), 256, 128, @"Textures\Dialog");
+            RiverHollow.ChangeGameState(RiverHollow.GameState.Information);
+            _btnOK = new GUIButton(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight - 128), new Rectangle(0, 128, 128, 64), 256, 128, @"Textures\Dialog");
             string totalVal = String.Format("Total: {0}", PlayerManager._merchantChest.SellAll());
-            _moneyWindow = new GUITextWindow(new Vector2(AdventureGame.ScreenWidth / 2, 500), totalVal);
+            _moneyWindow = new GUITextWindow(new Vector2(RiverHollow.ScreenWidth / 2, 500), totalVal);
             Controls.Add(_btnOK);
             Controls.Add(_moneyWindow);
         }
@@ -29,10 +29,10 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
             bool rv = false;
             if (_btnOK.Contains(mouse))
             {
-                AdventureGame.RollOver();
+                RiverHollow.RollOver();
                 GameCalendar.NextDay();
                 GUIManager.FadeOut();
-                AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
+                RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
                 PlayerManager.Save();
                 PlayerManager.Player.Stamina = PlayerManager.Player.MaxStamina;
                 

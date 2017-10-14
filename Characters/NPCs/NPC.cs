@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Adventure.Characters
 {
-    public class NPC : Character
+    public class NPC : WorldCharacter
     {
         //private List<ObjectManager.ItemIDs> _likedItems;
         //private List<ObjectManager.ItemIDs> _hatedItems;

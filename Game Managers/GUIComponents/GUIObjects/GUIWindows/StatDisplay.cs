@@ -21,11 +21,11 @@ namespace Adventure.Game_Managers.GUIObjects
         {
             if (_toDisplay == Display.Health)
             {
-                _percentage = ((float)PlayerManager.Player.HitPoints / (float)PlayerManager.Player.MaxHitPoints);
+                _percentage = ((float)PlayerManager.HitPoints / (float)PlayerManager.MaxHitPoints);
             }
             else if (_toDisplay == Display.Energy)
             {
-                _percentage = (PlayerManager.Player.Stamina / (float)PlayerManager.Player.MaxStamina);
+                _percentage = (PlayerManager.Stamina / (float)PlayerManager.MaxStamina);
             }
             base.Update(gameTime);
         }

@@ -24,7 +24,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public GUITextSelectionWindow(string selectionText) : base()
         {
-            _position = new Vector2(AdventureGame.ScreenWidth / 2 - _width / 2, AdventureGame.ScreenHeight / 2 - _height / 2);
+            _position = new Vector2(RiverHollow.ScreenWidth / 2 - _width / 2, RiverHollow.ScreenHeight / 2 - _height / 2);
             Setup(selectionText);
             _width = (int)_font.MeasureString(_text).X + _innerBorder * 2 + 6; //6 is adding a bit of arbitrary extra space for the parsing. Exactsies are bad
             PostParse();
@@ -33,7 +33,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public GUITextSelectionWindow(NPC talker, string selectionText) : base()
         {
             _talker = talker;
-            _position.Y = AdventureGame.ScreenHeight - _height - SpaceFromBottom;
+            _position.Y = RiverHollow.ScreenHeight - _height - SpaceFromBottom;
 
             Setup(selectionText);
             PostParse();
@@ -41,7 +41,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public void Setup(string selectionText)
         {
-            AdventureGame.ChangeGameState(AdventureGame.GameState.Paused);
+            RiverHollow.ChangeGameState(RiverHollow.GameState.Paused);
             _keySelection = 0;
             SeparateText(selectionText);
         }
@@ -55,7 +55,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public GUITextSelectionWindow(Food f, string selectionText) : this(selectionText)
         {
-            AdventureGame.ChangeGameState(AdventureGame.GameState.Paused);
+            RiverHollow.ChangeGameState(RiverHollow.GameState.Paused);
             _food = f;
         }
 
@@ -137,15 +137,15 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                 if (_food.Number > 0)
                 {
                     _food.Remove(1);
-                    PlayerManager.Player.IncreaseStamina(_food.Stamina);
-                    PlayerManager.Player.IncreaseHealth(_food.Health);
+                    PlayerManager.IncreaseStamina(_food.Stamina);
+                    PlayerManager.IncreaseHealth(_food.Health);
                 }
                 GUIManager.RemoveComponent(this);
-                AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
+                RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
             }
             else{
                 GUIManager.RemoveComponent(this);
-                AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
+                RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
             }
         }
 

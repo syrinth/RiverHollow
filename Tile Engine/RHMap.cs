@@ -16,7 +16,7 @@ namespace Adventure.Tile_Engine
 {
     public class RHMap
     {
-        private static float Scale = AdventureGame.Scale;
+        private static float Scale = RiverHollow.Scale;
         public int MapWidth = 100;
         public int MapHeight = 100;
         public static int _tileSize = 32;
@@ -42,9 +42,9 @@ namespace Adventure.Tile_Engine
         public Dictionary<string, TiledMapTileLayer> Layers { get => _dictionaryLayers; }
 
         protected List<RHTile> _buildingTiles;
-        protected List<Character> _characterList;
+        protected List<WorldCharacter> _characterList;
         protected List<Mob> _mobList;
-        public List<Character> ToRemove;
+        public List<WorldCharacter> ToRemove;
         protected List<Building> _buildingList;
         protected List<WorldObject> _worldObjectList;
         public List<WorldObject> WorldObjects { get => _worldObjectList; }
@@ -61,9 +61,9 @@ namespace Adventure.Tile_Engine
         {
             _buildingTiles = new List<RHTile>();
             _tileSets = new List<TiledMapTileset>();
-            _characterList = new List<Character>();
+            _characterList = new List<WorldCharacter>();
             _mobList = new List<Mob>();
-            ToRemove = new List<Character>();
+            ToRemove = new List<WorldCharacter>();
             _buildingList = new List<Building>();
             _worldObjectList = new List<WorldObject>();
             _itemList = new List<Item>();
@@ -135,7 +135,7 @@ namespace Adventure.Tile_Engine
             {
                 ((Item)i).Update();
             }
-            foreach (Character c in _characterList)
+            foreach (WorldCharacter c in _characterList)
             {
                 c.Update(theGameTime);
             }
@@ -153,7 +153,7 @@ namespace Adventure.Tile_Engine
 
         public void ItemPickUpdate()
         {
-            Player _p = PlayerManager.Player;
+            WorldPlayer _p = PlayerManager.Player;
             List<Item> removedList = new List<Item>();
             foreach (Item i in _itemList)
             {
@@ -183,7 +183,7 @@ namespace Adventure.Tile_Engine
         public void Draw(SpriteBatch spriteBatch)
         {
             renderer.Draw(_map, Camera._transform);
-            foreach(Character c in _characterList)
+            foreach(WorldCharacter c in _characterList)
             {
                 c.Draw(spriteBatch);
             }
@@ -221,7 +221,7 @@ namespace Adventure.Tile_Engine
         }
 
         #region Collision Code
-        public bool CheckLeftMovement(Character c, Rectangle movingObject)
+        public bool CheckLeftMovement(WorldCharacter c, Rectangle movingObject)
         {
             bool rv = true;
             if (CheckForCollision(c, movingObject)) { return false; }
@@ -246,7 +246,7 @@ namespace Adventure.Tile_Engine
             return rv;
         }
 
-        public bool CheckRightMovement(Character c, Rectangle movingObject)
+        public bool CheckRightMovement(WorldCharacter c, Rectangle movingObject)
         {
             bool rv = true;
             if (CheckForCollision(c, movingObject)) { return false; }
@@ -272,7 +272,7 @@ namespace Adventure.Tile_Engine
             return rv;
         }
 
-        public bool CheckUpMovement(Character c, Rectangle movingObject)
+        public bool CheckUpMovement(WorldCharacter c, Rectangle movingObject)
         {
             bool rv = true;
             if (CheckForCollision(c, movingObject)) { return false; }
@@ -298,7 +298,7 @@ namespace Adventure.Tile_Engine
             return rv;
         }
 
-        public bool CheckDownMovement(Character c, Rectangle movingObject)
+        public bool CheckDownMovement(WorldCharacter c, Rectangle movingObject)
         {
             bool rv = true;
             if (CheckForCollision(c, movingObject)) { return false; }
@@ -350,10 +350,10 @@ namespace Adventure.Tile_Engine
             return rv;
         }
 
-        public bool CheckForCollision(Character mover, Rectangle movingObject)
+        public bool CheckForCollision(WorldCharacter mover, Rectangle movingObject)
         {
             bool rv = false;
-            foreach (Character c in _characterList)
+            foreach (WorldCharacter c in _characterList)
             {
                 if (mover != c && c.CollisionBox.Intersects(movingObject))
                 {
@@ -415,7 +415,7 @@ namespace Adventure.Tile_Engine
         {
             bool rv = false;
 
-            foreach (Character c in _characterList)
+            foreach (WorldCharacter c in _characterList)
             {
                 Type cType = c.GetType();
                 //if (cType.IsSubclassOf(typeof(Worker)))
@@ -470,7 +470,7 @@ namespace Adventure.Tile_Engine
         {
             bool rv = false;
 
-            if (AdventureGame.State == AdventureGame.GameState.Build)
+            if (RiverHollow.State == RiverHollow.GameState.Build)
             {
                 if (GraphicCursor.HeldBuilding != null)
                 {
@@ -493,7 +493,7 @@ namespace Adventure.Tile_Engine
                     PlayerManager._merchantChest.AddItem(i);
                     PlayerManager.Player.RemoveItemFromInventory(PlayerManager.Player.CurrentItemNumber);
                 }
-                foreach (Character c in _characterList)
+                foreach (WorldCharacter c in _characterList)
                 {
                     Type cType = c.GetType();
                     if (cType.IsSubclassOf(typeof(Worker)))
@@ -548,7 +548,7 @@ namespace Adventure.Tile_Engine
             {
                 if (_buildingTiles.Count > 0) { _buildingTiles.Clear(); }
             }
-            if (AdventureGame.State == AdventureGame.GameState.Build)
+            if (RiverHollow.State == RiverHollow.GameState.Build)
             {
                 Building building = GraphicCursor.HeldBuilding;
                 _buildingTiles = new List<RHTile>();
@@ -571,7 +571,7 @@ namespace Adventure.Tile_Engine
             }
             else{
                 bool found = false;
-                foreach(Character c in _characterList)
+                foreach(WorldCharacter c in _characterList)
                 {
                     if (PlayerManager.Player.CurrentItem != null && 
                         !c.GetType().IsSubclassOf(typeof(Mob)) && c.CollisionBox.Contains(mouseLocation) &&
@@ -611,9 +611,13 @@ namespace Adventure.Tile_Engine
         {
             _worldObjectList.Remove(o);
         }
-        public void RemoveCharacter(Character c)
+        public void RemoveCharacter(WorldCharacter c)
         {
             _characterList.Remove(c);
+        }
+        public void RemoveMob(Mob m)
+        {
+            _mobList.Remove(m);
         }
         public void DropWorldItems(List<Item>items, Vector2 position)
         {
@@ -703,8 +707,8 @@ namespace Adventure.Tile_Engine
                 GraphicCursor.DropBuilding();
                 _buildingList.Add(b);
                 PlayerManager.AddBuilding(b);
-                AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
-                AdventureGame.ResetCamera();
+                RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
+                RiverHollow.ResetCamera();
             }
         }
 
@@ -840,7 +844,7 @@ namespace Adventure.Tile_Engine
                 else { _staticItemList.Add(container); }
             }
         }
-        public void AddCharacter(Character c)
+        public void AddCharacter(WorldCharacter c)
         {
             _characterList.Add(c);
         }

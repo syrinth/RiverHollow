@@ -14,15 +14,13 @@ using Adventure.GUIObjects;
 
 namespace Adventure
 {
-    public class Player : CombatCharacter
+    public class WorldPlayer : WorldCharacter
     {
         #region Properties
         public static int maxItemColumns = 10;
         public static int maxItemRows = 4;
         private bool _usingTool = false;
         public bool UsingTool { get => _usingTool; }
-        private bool _usingWeapon = false;
-        public bool UsingWeapon { get => _usingWeapon; }
 
         private string _name = "Syrinth";
         public string Name { get => _name; }
@@ -46,7 +44,7 @@ namespace Adventure
         public int Money { get => _money; }
         #endregion
 
-        public Player()
+        public WorldPlayer()
         {
             LoadContent();
             Position = new Vector2(200, 200);
@@ -60,7 +58,6 @@ namespace Adventure
         public void LoadContent()
         {
             base.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
-            //sword = new Weapon(this);
         }
 
         public override void Update(GameTime gameTime)
@@ -92,11 +89,6 @@ namespace Adventure
                     }
                     
                 }
-            }
-            else if (_usingWeapon)
-            {
-                ((Weapon)CurrentItem).Update(gameTime);
-                _usingWeapon = ((Weapon)CurrentItem).StillAttacking;
             }
             else
             {
@@ -170,10 +162,6 @@ namespace Adventure
             {
                 ((Tool)CurrentItem).ToolAnimation.Draw(spriteBatch);
             }
-            if (_usingWeapon)
-            {
-                ((Weapon)CurrentItem).Draw(spriteBatch);
-            }
         }
 
         public bool ProcessLeftButtonClick(Point mouseLocation)
@@ -192,24 +180,6 @@ namespace Adventure
                     }
                     rv = true;
                 }
-                else if (CurrentItem.Type == Item.ItemType.Weapon)
-                {
-                    if (DecreaseStamina(((Weapon)CurrentItem).StaminaCost))
-                    {
-                        _usingWeapon = true;
-                        Facing weaponDir;
-                        Vector2 mousePoint = GraphicCursor.GetTranslatedMouseLocation();
-
-                        int deltaX = (int)(mousePoint.X - Position.X);
-                        int deltaY = (int)(mousePoint.Y - Position.Y);
-
-                        if(Math.Abs(deltaX) - Math.Abs(deltaY) > 0){ weaponDir = (deltaX > 0) ? Facing.West : Facing.East; }
-                        else { weaponDir = (deltaY > 0) ? Facing.South : Facing.North; }
-
-                        ((Weapon)CurrentItem).Attack(weaponDir);
-                    }
-                    rv = true;
-                }
                 else if (CurrentItem.Type == Item.ItemType.Container)
                 {
                     MapManager.PlaceWorldItem((Container)CurrentItem, mouseLocation.ToVector2());
@@ -219,7 +189,6 @@ namespace Adventure
                 {
                     Food f = ((Food)CurrentItem);
                     GUIManager.AddTextSelection(f, string.Format("Really eat the {0}? [Yes:Eat|No:DoNothing]", f.Name));
-                    
                 }
             }
 
@@ -436,23 +405,6 @@ namespace Adventure
             }
         }
 
-        //public string[] GetInventoryArray()
-        //{
-        //    string[] stringArray = new string[_inventory.Length];
-        //    for (int i = 0; i < maxItemRows; i++)
-        //    {
-        //        for (int j = 0; j < maxItemColumns; j++)
-        //        {
-        //            if (_inventory[i, j] != null)
-        //            {
-        //                stringArray[i] = _inventory[i, j].Name + ", " + _inventory[i, j].Number.ToString();
-        //            }
-        //        }
-        //    }
-
-        //    return stringArray;
-        //}
-
         public bool DecreaseStamina(int x)
         {
             bool rv = false;
@@ -484,6 +436,34 @@ namespace Adventure
         public void AddMoney(int x)
         {
             _money += x;
+        }
+    }
+    public class CombatPlayer : CombatCharacter
+    {
+        #region Properties
+        private string _name = "Syrinth";
+        public string Name { get => _name; }
+        #endregion
+
+        public CombatPlayer()
+        {
+            LoadContent();
+            Position = new Vector2(200, 200);
+
+        }
+        public void LoadContent()
+        {
+            base.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+        }
+
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
         }
     }
 }

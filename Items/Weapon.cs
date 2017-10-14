@@ -90,33 +90,33 @@ namespace Adventure.Items
             return (float)(Math.PI * angle / 180.0);
         }
 
-        public void Attack(Character.Facing direction)
+        public void Attack(WorldCharacter.Facing direction)
         {
             _attack = true;
             Vector2 rotateOn = PlayerManager.Player.CollisionBox.Center.ToVector2();
 
-            if (direction == Character.Facing.North)
+            if (direction == WorldCharacter.Facing.North)
             {
                 _angle = DegreeToRadian(-45);
                 _endAngle = DegreeToRadian(135);
                 _rect = new Rectangle((int)rotateOn.X - 48, (int)rotateOn.Y - 40, 32, 32);
                 _boxdir = new Vector2(_weaponSpeed, 0);
             }
-            else if (direction == Character.Facing.West)
+            else if (direction == WorldCharacter.Facing.West)
             {
                 _angle = DegreeToRadian(45);
                 _endAngle = DegreeToRadian(225);
                 _rect = new Rectangle((int)rotateOn.X + 16, (int)rotateOn.Y - 32, 32, 32);
                 _boxdir = new Vector2(0, _weaponSpeed);
             }
-            else if (direction == Character.Facing.South)
+            else if (direction == WorldCharacter.Facing.South)
             {
                 _angle = DegreeToRadian(135);
                 _endAngle = DegreeToRadian(315);
                 _rect = new Rectangle((int)rotateOn.X + 8, (int)rotateOn.Y + 8, 32, 32);
                 _boxdir = new Vector2(-_weaponSpeed, 0);
             }
-            else if (direction == Character.Facing.East)
+            else if (direction == WorldCharacter.Facing.East)
             {
                 _angle = DegreeToRadian(225);
                 _endAngle = DegreeToRadian(405);

@@ -21,13 +21,13 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
 
         public ItemCreationScreen()
         {
-            Vector2 centerPoint = new Vector2(AdventureGame.ScreenWidth / 2, AdventureGame.ScreenHeight / 2);
+            Vector2 centerPoint = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
             _columns = 4;
             _rows = (_columns > 0) ? Math.Min(1, PlayerManager.CanMake.Count / _columns) : 1;
             if(_rows == 0) { _rows = 1; }
             _displayList = new GUIItemBox[_rows, _columns];
-            _creationWindow = new GUIWindow(new Vector2(AdventureGame.ScreenWidth / 2, AdventureGame.ScreenHeight / 2), new Vector2(0, 0), 32, 96, 96);
-            _inventory = new Inventory(new Vector2(AdventureGame.ScreenWidth / 2, AdventureGame.ScreenHeight / 2), 4, Player.maxItemColumns, 32);
+            _creationWindow = new GUIWindow(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), new Vector2(0, 0), 32, 96, 96);
+            _inventory = new Inventory(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), 4, WorldPlayer.maxItemColumns, 32);
 
             Vector2 contWidthHeight = new Vector2(_creationWindow.Width, _creationWindow.Height);
             Vector2 mainWidthHeight = new Vector2(_inventory.Width, _inventory.Height);

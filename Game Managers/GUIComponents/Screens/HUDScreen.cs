@@ -15,7 +15,7 @@ namespace Adventure.Game_Managers.GUIObjects
         public HUDScreen()
         {
             _font = GameContentManager.GetFont(@"Fonts\Font");
-            _shortInventory = new ShortInventory(new Vector2(AdventureGame.ScreenWidth / 2, AdventureGame.ScreenHeight-32), Player.maxItemColumns, 4);
+            _shortInventory = new ShortInventory(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight-32), WorldPlayer.maxItemColumns, 4);
             _healthDisplay = new StatDisplay(StatDisplay.Display.Health, new Vector2(32,32), 5);
             _staminaDisplay = new StatDisplay(StatDisplay.Display.Energy, new Vector2(32,64), 5);
             Controls.Add(_shortInventory);

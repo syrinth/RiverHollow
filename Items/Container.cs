@@ -24,7 +24,7 @@ namespace Adventure.Items
             _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
 
             _pickup = false;
-            _inventory = new Item[Player.maxItemRows, Player.maxItemColumns];
+            _inventory = new Item[WorldPlayer.maxItemRows, WorldPlayer.maxItemColumns];
 
             CalculateSourcePos();
         }
@@ -32,9 +32,9 @@ namespace Adventure.Items
         public bool IncrementExistingItem(int itemID)
         {
             bool rv = false;
-            for (int i = 0; i < Player.maxItemRows; i++)
+            for (int i = 0; i < WorldPlayer.maxItemRows; i++)
             {
-                for (int j = 0; j < Player.maxItemColumns; j++)
+                for (int j = 0; j < WorldPlayer.maxItemColumns; j++)
                 {
                     if (_inventory[i, j] != null && _inventory[i, j].ItemID == itemID && _inventory[i, j].Number < 999)
                     {
@@ -109,11 +109,11 @@ namespace Adventure.Items
         public void RemoveItemFromInventory(int index)
         {
             bool removed = false;
-            for (int i = 0; i < Player.maxItemRows; i++)
+            for (int i = 0; i < WorldPlayer.maxItemRows; i++)
             {
-                for (int j = 0; j < Player.maxItemColumns; j++)
+                for (int j = 0; j < WorldPlayer.maxItemColumns; j++)
                 {
-                    if ((i * Player.maxItemColumns) + j == index)
+                    if ((i * WorldPlayer.maxItemColumns) + j == index)
                     {
                         if (_inventory[i, j].Number > 1) { _inventory[i, j].Number--; }
                         else { _inventory[i, j] = null; }

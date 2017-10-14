@@ -11,7 +11,7 @@ namespace Adventure
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class AdventureGame : Game
+    public class RiverHollow : Game
     {
         public static float Scale = 1.5f;
         public enum GameState { WorldMap, Combat, Paused, Build, Information, Input}
@@ -24,7 +24,7 @@ namespace Adventure
 
         public ViewportAdapter ViewportAdapter { get; private set; }
         
-        public AdventureGame()
+        public RiverHollow()
         {
             _graphicsDeviceManager = new GraphicsDeviceManager(this);
             _graphicsDeviceManager.IsFullScreen = true;
@@ -73,6 +73,17 @@ namespace Adventure
 
                 if (_gameState != GameState.Input)
                 {
+                    if (InputManager.CheckKey(Keys.Escape))
+                    {
+                        if (_gameState == GameState.Combat)
+                        {
+                            CombatManager.EndBattle();
+                        }
+                        else if (_gameState == GameState.WorldMap || _gameState == GameState.Build)
+                        {
+                            Exit();
+                        }
+                    }
                     if (InputManager.CheckKey(Keys.P))
                     {
                         if (_gameState == GameState.Paused)
@@ -153,10 +164,6 @@ namespace Adventure
 
                 if (_gameState == GameState.WorldMap || _gameState == GameState.Build)
                 {
-                    if (InputManager.CheckKey(Keys.Escape))
-                    {
-                        Exit();
-                    }
                     Camera.Update(gameTime);
                     MapManager.Update(gameTime);
 
@@ -224,14 +231,14 @@ namespace Adventure
         {
             PlayerManager.NewPlayer();
             MapManager.PopulateMaps(false);
-            ChangeGameState(AdventureGame.GameState.WorldMap);
+            ChangeGameState(RiverHollow.GameState.WorldMap);
         }
 
         public static void LoadGame()
         {
             PlayerManager.Load();
             MapManager.PopulateMaps(true);
-            AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
+            RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
         }
 
         public static void RollOver()

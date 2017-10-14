@@ -32,7 +32,7 @@ namespace Adventure.Game_Managers
 
         public static void LoadContent()
         {
-            _fadeImg = new GUIImage(new Vector2(0, 0), new Rectangle(160, 128, 32, 32), AdventureGame.ScreenWidth*2, AdventureGame.ScreenHeight*2, @"Textures\Dialog");
+            _fadeImg = new GUIImage(new Vector2(0, 0), new Rectangle(160, 128, 32, 32), RiverHollow.ScreenWidth*2, RiverHollow.ScreenHeight*2, @"Textures\Dialog");
             GraphicCursor.LoadContent();
         }
 
@@ -195,7 +195,7 @@ namespace Adventure.Game_Managers
             }
         }
 
-        public static void LoadScreen(Screens newScreen, Character c, string text)
+        public static void LoadScreen(Screens newScreen, WorldCharacter c, string text)
         {
             //
         }

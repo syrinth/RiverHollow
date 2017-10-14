@@ -20,11 +20,11 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public GUITextInputWindow(Worker w) : base()
         {
-            AdventureGame.ChangeGameState(AdventureGame.GameState.Input);
+            RiverHollow.ChangeGameState(RiverHollow.GameState.Input);
             _statement = "Enter name:";
             _width = Math.Max((int)_font.MeasureString(_statement).X, (int)_characterWidth * 10) + _innerBorder * 2;
             _height = (int)_characterHeight * 2 + _innerBorder * 2;
-            _position = new Vector2(AdventureGame.ScreenWidth / 2 - _width / 2, AdventureGame.ScreenHeight / 2 - _height / 2);
+            _position = new Vector2(RiverHollow.ScreenWidth / 2 - _width / 2, RiverHollow.ScreenHeight / 2 - _height / 2);
             _strLen = 0;
             _w = w;
             _text = string.Empty;
@@ -46,9 +46,9 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                     {
                         if (_w != null)
                         {
-                            AdventureGame.ResetCamera();
+                            RiverHollow.ResetCamera();
                             _w.SetName(_text);
-                            AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
+                            RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
                         }
                     }
                     else

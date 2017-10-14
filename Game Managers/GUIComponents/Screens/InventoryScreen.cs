@@ -14,15 +14,15 @@ namespace Adventure.Game_Managers.GUIObjects
         public InventoryScreen()
         {
             _font = GameContentManager.GetFont(@"Fonts\Font");
-            _inventory = new Inventory(new Vector2(AdventureGame.ScreenWidth / 2, AdventureGame.ScreenHeight/2), 4, Player.maxItemColumns, 32);
+            _inventory = new Inventory(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight/2), 4, WorldPlayer.maxItemColumns, 32);
             Controls.Add(_inventory);
         }
         public InventoryScreen(Container c)
         {
-            Vector2 centerPoint = new Vector2(AdventureGame.ScreenWidth / 2, AdventureGame.ScreenHeight / 2);
+            Vector2 centerPoint = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _container = new Inventory(c, centerPoint, 32);
-            _inventory = new Inventory(centerPoint, 4, Player.maxItemColumns, 32);
+            _inventory = new Inventory(centerPoint, 4, WorldPlayer.maxItemColumns, 32);
 
             Vector2 contWidthHeight = new Vector2(_container.GetRectangle().Width, _container.GetRectangle().Height);
             Vector2 mainWidthHeight = new Vector2(_inventory.GetRectangle().Width, _inventory.GetRectangle().Height);

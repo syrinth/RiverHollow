@@ -29,7 +29,7 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
         {
             try
             {
-                Vector2 center = new Vector2(AdventureGame.ScreenWidth / 2, AdventureGame.ScreenHeight / 2);
+                Vector2 center = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
                 _merchandise = merch;
                 _currentItemIndex = 0;
                 Building b = ObjectManager.GetBuilding(_merchandise[_currentItemIndex].MerchID);
@@ -88,7 +88,7 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
             base.Update(gameTime);
             if (InputManager.CheckKey(Keys.Escape))
             {
-                AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
+                RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
             }
         }
 
@@ -121,7 +121,7 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
                     GUIManager.SetScreen(GUIManager.Screens.None);
                     Building b = ObjectManager.GetBuilding(_merchandise[_currentItemIndex].MerchID);
                     GraphicCursor.PickUpBuilding(b);
-                    AdventureGame.ChangeGameState(AdventureGame.GameState.Build);
+                    RiverHollow.ChangeGameState(RiverHollow.GameState.Build);
                     Camera.UnsetObserver();
                     MapManager.ViewMap("Map1");
                     rv = true;
@@ -135,7 +135,7 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
             bool rv = true;
             if (!Contains(mouse))
             {
-                AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
+                RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
                 rv = true;
             }
 

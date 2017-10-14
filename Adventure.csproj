@@ -60,9 +60,11 @@
     <Compile Include="Buildings\Building.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Characters\Character.cs" />
+    <Compile Include="Characters\WorldCharacter.cs" />
     <Compile Include="Characters\CombatCharacter.cs" />
     <Compile Include="Characters\Mob.cs" />
     <Compile Include="Characters\Monster.cs" />
+    <Compile Include="Game Managers\CombatManager.cs" />
     <Compile Include="Game Managers\DungeonManager.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\CombatScreen.cs" />
     <Compile Include="Items\MerchantChest.cs" />
@@ -70,7 +72,7 @@
     <Compile Include="Characters\NPCs\ShopKeeper.cs" />
     <Compile Include="Characters\NPCs\Worker.cs" />
     <Compile Include="Characters\Player.cs" />
-    <Compile Include="AdventureGame.cs" />
+    <Compile Include="RiverHollow.cs" />
     <Compile Include="Game Managers\CharacterManager.cs" />
     <Compile Include="Game Managers\DropManager.cs" />
     <Compile Include="Game Managers\GUIComponents\GUIObjects\GUIItemBox.cs" />

@@ -22,8 +22,8 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects
         public GUIWindow()
         {
             _height = 148;
-            _width = AdventureGame.ScreenWidth / 2;
-            _position = new Vector2(AdventureGame.ScreenWidth / 4, AdventureGame.ScreenHeight - _height - SpaceFromBottom);
+            _width = RiverHollow.ScreenWidth / 2;
+            _position = new Vector2(RiverHollow.ScreenWidth / 4, RiverHollow.ScreenHeight - _height - SpaceFromBottom);
 
             _edgeSize = 32;
             _sourcePoint = new Vector2(0, 0);

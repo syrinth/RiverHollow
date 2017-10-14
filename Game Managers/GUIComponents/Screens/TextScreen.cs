@@ -14,14 +14,14 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
 
         public TextScreen(string text)
         {
-            AdventureGame.ChangeGameState(AdventureGame.GameState.Paused);
+            RiverHollow.ChangeGameState(RiverHollow.GameState.Paused);
             _window = new GUITextSelectionWindow(text);
             Controls.Add(_window);
         }
 
         public TextScreen(NPC talker, string text)
         {
-            AdventureGame.ChangeGameState(AdventureGame.GameState.Paused);
+            RiverHollow.ChangeGameState(RiverHollow.GameState.Paused);
 
             if (text.Contains("["))
             {
@@ -40,11 +40,11 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
             {if (DungeonManager.Maps.Count > 0)
                 {
                     MapManager.EnterDungeon();
-                    AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
+                    RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
                 }
                 else
                 {
-                    AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
+                    RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
                 }
             }
             else
