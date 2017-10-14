@@ -32,7 +32,7 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
                 AdventureGame.RollOver();
                 GameCalendar.NextDay();
                 GUIManager.FadeOut();
-                AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
+                AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
                 PlayerManager.Save();
                 PlayerManager.Player.Stamina = PlayerManager.Player.MaxStamina;
                 

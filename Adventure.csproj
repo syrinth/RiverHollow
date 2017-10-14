@@ -61,8 +61,10 @@
     <Compile Include="Camera.cs" />
     <Compile Include="Characters\Character.cs" />
     <Compile Include="Characters\CombatCharacter.cs" />
+    <Compile Include="Characters\Mob.cs" />
     <Compile Include="Characters\Monster.cs" />
     <Compile Include="Game Managers\DungeonManager.cs" />
+    <Compile Include="Game Managers\GUIComponents\Screens\CombatScreen.cs" />
     <Compile Include="Items\MerchantChest.cs" />
     <Compile Include="Characters\NPCs\NPC.cs" />
     <Compile Include="Characters\NPCs\ShopKeeper.cs" />

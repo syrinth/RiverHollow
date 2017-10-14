@@ -12,6 +12,7 @@ namespace Adventure.Game_Managers
 {
     public static class CharacterManager
     {
+        private static Dictionary<int, string> _mobDictionary;
         private static Dictionary<int, string> _monsterDictionary;
         private static Dictionary<int, NPC> _characterDictionary;
         public static Dictionary<string, bool> _talkedTo;
@@ -19,6 +20,7 @@ namespace Adventure.Game_Managers
         public static void LoadContent(ContentManager Content)
         {
             _monsterDictionary = Content.Load<Dictionary<int, string>>(@"Data\Monsters");
+            _mobDictionary = Content.Load<Dictionary<int, string>>(@"Data\Mobs");
 
             _talkedTo = new Dictionary<string, bool>();
             _characterDictionary = new Dictionary<int, NPC>();
@@ -49,18 +51,30 @@ namespace Adventure.Game_Managers
         public static Monster GetMonsterByIndex(int id)
         {
             Monster m = null;
-            if (id != -1)
+            if (_monsterDictionary.ContainsKey(id))
             {
                 string _itemData = _monsterDictionary[id];
                 string[] _itemDataValues = _itemData.Split('/');
-                m =  new Monster(id, _itemDataValues);
+                m = new Monster(id, _itemDataValues);
             }
             return m;
         }
 
-        public static Monster GetMonsterByIndex(int id, Vector2 pos)
+        public static Mob GetMobByIndex(int id)
         {
-            Monster m = GetMonsterByIndex(id);
+            Mob m = null;
+            if (id != -1)
+            {
+                string _itemData = _mobDictionary[id];
+                string[] _itemDataValues = _itemData.Split('/');
+                m = new Mob(id, _itemDataValues);
+            }
+            return m;
+        }
+
+        public static Mob GetMobByIndex(int id, Vector2 pos)
+        {
+            Mob m = GetMobByIndex(id);
             m.Position = pos;
             return m;
         }

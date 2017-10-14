@@ -317,35 +317,5 @@ namespace Adventure
             direction.X = (deltaX < _speed) ? newX * deltaX : newX * _speed;
             direction.Y = (deltaY < _speed) ? newY * deltaY : newY * _speed;
         }
-
-        private void DetermineAnimation(ref string animation, Vector2 direction, float deltaX, float deltaY)
-        {
-            if (deltaX > deltaY)
-            {
-                if (direction.X > 0)
-                {
-                    _facing = Facing.West;
-                    animation = "Float";
-                }
-                else
-                {
-                    _facing = Facing.East;
-                    animation = "Float";
-                }
-            }
-            else
-            {
-                if (direction.Y > 0)
-                {
-                    _facing = Facing.South;
-                    animation = "Float";
-                }
-                else
-                {
-                    _facing = Facing.North;
-                    animation = "Float";
-                }
-            }
-        }
     }
 }

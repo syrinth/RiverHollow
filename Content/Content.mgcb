@@ -313,3 +313,20 @@
 /processor:TiledMapProcessor
 /build:Maps/Arcane Tower.tmx
 
+#begin Data/Mobs.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Mobs.xml
+
+#begin Textures/battle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/battle.png
+

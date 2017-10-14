@@ -40,11 +40,11 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
             {if (DungeonManager.Maps.Count > 0)
                 {
                     MapManager.EnterDungeon();
-                    AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
+                    AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
                 }
                 else
                 {
-                    AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
+                    AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
                 }
             }
             else

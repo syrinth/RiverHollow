@@ -43,7 +43,7 @@ namespace Adventure.Tile_Engine
 
         protected List<RHTile> _buildingTiles;
         protected List<Character> _characterList;
-        protected List<Monster> _monsterList;
+        protected List<Mob> _mobList;
         public List<Character> ToRemove;
         protected List<Building> _buildingList;
         protected List<WorldObject> _worldObjectList;
@@ -62,7 +62,7 @@ namespace Adventure.Tile_Engine
             _buildingTiles = new List<RHTile>();
             _tileSets = new List<TiledMapTileset>();
             _characterList = new List<Character>();
-            _monsterList = new List<Monster>();
+            _mobList = new List<Mob>();
             ToRemove = new List<Character>();
             _buildingList = new List<Building>();
             _worldObjectList = new List<WorldObject>();
@@ -139,13 +139,13 @@ namespace Adventure.Tile_Engine
             {
                 c.Update(theGameTime);
             }
-            foreach(Monster m in _monsterList)
+            foreach(Mob m in _mobList)
             {
                 m.Update(theGameTime);
             }
-            foreach(Monster m in ToRemove)
+            foreach(Mob m in ToRemove)
             {
-                _monsterList.Remove(m);
+                _mobList.Remove(m);
             }
 
             ItemPickUpdate();
@@ -188,7 +188,7 @@ namespace Adventure.Tile_Engine
                 c.Draw(spriteBatch);
             }
 
-            foreach (Monster m in _monsterList)
+            foreach (Mob m in _mobList)
             {
                 m.Draw(spriteBatch);
             }
@@ -224,7 +224,7 @@ namespace Adventure.Tile_Engine
         public bool CheckLeftMovement(Character c, Rectangle movingObject)
         {
             bool rv = true;
-            if (CheckForObjectCollision(c, movingObject)) { return false; }
+            if (CheckForCollision(c, movingObject)) { return false; }
 
             int columnTile = movingObject.Left / _tileSize;
             for (int y = GetMinRow(movingObject); y <= GetMaxRow(movingObject); y++)
@@ -249,7 +249,7 @@ namespace Adventure.Tile_Engine
         public bool CheckRightMovement(Character c, Rectangle movingObject)
         {
             bool rv = true;
-            if (CheckForObjectCollision(c, movingObject)) { return false; }
+            if (CheckForCollision(c, movingObject)) { return false; }
 
             int columnTile = movingObject.Right / _tileSize;
             for (int y = GetMinRow(movingObject); y <= GetMaxRow(movingObject); y++)
@@ -275,7 +275,7 @@ namespace Adventure.Tile_Engine
         public bool CheckUpMovement(Character c, Rectangle movingObject)
         {
             bool rv = true;
-            if (CheckForObjectCollision(c, movingObject)) { return false; }
+            if (CheckForCollision(c, movingObject)) { return false; }
 
             int rowTile = movingObject.Top / _tileSize;
             for (int x = GetMinColumn(movingObject); x <= GetMaxColumn(movingObject); x++)
@@ -301,7 +301,7 @@ namespace Adventure.Tile_Engine
         public bool CheckDownMovement(Character c, Rectangle movingObject)
         {
             bool rv = true;
-            if (CheckForObjectCollision(c, movingObject)) { return false; }
+            if (CheckForCollision(c, movingObject)) { return false; }
 
             int rowTile = movingObject.Bottom / _tileSize;
             for (int x = GetMinColumn(movingObject); x <= GetMaxColumn(movingObject); x++)
@@ -350,17 +350,9 @@ namespace Adventure.Tile_Engine
             return rv;
         }
 
-        public bool CheckForObjectCollision(Character mover, Rectangle movingObject)
+        public bool CheckForCollision(Character mover, Rectangle movingObject)
         {
             bool rv = false;
-            //foreach (Building b in _buildingList)
-            //{
-            //    if (b.CollisionBox.Intersects(movingObject))
-            //    {
-            //        rv = true;
-            //        break;
-            //    }
-            //}
             foreach (Character c in _characterList)
             {
                 if (mover != c && c.CollisionBox.Intersects(movingObject))
@@ -369,6 +361,7 @@ namespace Adventure.Tile_Engine
                     break;
                 }
             }
+            
             return rv;
         }
 
@@ -379,10 +372,6 @@ namespace Adventure.Tile_Engine
             {
                 foreach (TiledMapTilesetTile t in ts.Tiles)
                 {
-                    if(tile.GlobalIdentifier == 5)
-                    {
-                        int i = 0;
-                    }
                     if (tile.GlobalIdentifier - 1 == t.LocalTileIdentifier)
                     {
                         foreach (KeyValuePair<string, string> tp in t.Properties)
@@ -585,7 +574,7 @@ namespace Adventure.Tile_Engine
                 foreach(Character c in _characterList)
                 {
                     if (PlayerManager.Player.CurrentItem != null && 
-                        !c.GetType().IsSubclassOf(typeof(Monster)) && c.CollisionBox.Contains(mouseLocation) &&
+                        !c.GetType().IsSubclassOf(typeof(Mob)) && c.CollisionBox.Contains(mouseLocation) &&
                         PlayerManager.Player.CurrentItem.Type != Item.ItemType.Tool &&
                         PlayerManager.Player.CurrentItem.Type != Item.ItemType.Weapon)
                     {
@@ -593,7 +582,7 @@ namespace Adventure.Tile_Engine
                         found = true;
                         break;
                     }
-                    else if(!c.GetType().IsSubclassOf(typeof(Monster)) && c.CollisionBox.Contains(mouseLocation)){
+                    else if(!c.GetType().IsSubclassOf(typeof(Mob)) && c.CollisionBox.Contains(mouseLocation)){
                         GraphicCursor._currentType = GraphicCursor.CursorType.Talk;
                         found = true;
                         break;
@@ -714,7 +703,7 @@ namespace Adventure.Tile_Engine
                 GraphicCursor.DropBuilding();
                 _buildingList.Add(b);
                 PlayerManager.AddBuilding(b);
-                AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
+                AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
                 AdventureGame.ResetCamera();
             }
         }
@@ -855,7 +844,7 @@ namespace Adventure.Tile_Engine
         {
             _characterList.Add(c);
         }
-        public void AddMonster(Monster m)
+        public void AddMob(Mob m)
         {
             bool rv = false;
             Random r = new Random();
@@ -878,7 +867,7 @@ namespace Adventure.Tile_Engine
             {
                 m.Position = position;
 
-                _monsterList.Add(m);
+                _mobList.Add(m);
             }
         }
 

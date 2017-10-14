@@ -96,11 +96,9 @@ namespace Adventure.Game_Managers
             PlayerManager.Player.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
         }
 
-        //string newMapStr, string ID, List<Worker> workers
         public static void EnterBuilding(Building b)
         {
             Rectangle rectEntrance = Rectangle.Empty;
-            //TileMap newMap = _tileMaps[b._map];
             PlayerManager._inBuilding = b.ID.ToString();
 
             foreach (string s in _tileMaps[b._name].EntranceDictionary.Keys)
@@ -144,7 +142,7 @@ namespace Adventure.Game_Managers
                     _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(2, new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize)), true);
                 }
             }
-            _tileMaps[@"Map1"].AddMonster(CharacterManager.GetMonsterByIndex(2, new Vector2(1340, 1340)));
+            _tileMaps[@"Map1"].AddMob(CharacterManager.GetMobByIndex(1, new Vector2(1340, 1340)));
             MerchantChest m = new MerchantChest();
             PlayerManager._merchantChest = m;
         }

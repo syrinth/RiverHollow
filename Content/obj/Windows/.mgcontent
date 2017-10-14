@@ -42,5 +42,7 @@
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Buildings.xml</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Workers.xml</File>
     <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Arcane Tower.tmx</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Mobs.xml</File>
+    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/battle.png</File>
   </SourceFiles>
 </SourceFileCollection>

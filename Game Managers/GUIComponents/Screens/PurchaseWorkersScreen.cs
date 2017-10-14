@@ -12,7 +12,6 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
 {
     public class PurchaseWorkersScreen : GUIScreen
     {
-        private int margin = 64;
         private GUIWindow _mainWindow;
         private List<WorkerBox> _workers;
 

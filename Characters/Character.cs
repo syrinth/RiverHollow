@@ -18,7 +18,7 @@ namespace Adventure.Characters
         public enum Facing { North, South, East, West };
         protected Facing _facing = Facing.North;
         protected AnimatedSprite _sprite;
-        public Texture2D Texture { get => _sprite.Texture;  }
+        public Texture2D Texture { get => _sprite.Texture; }
         public Point Center => GetRectangle().Center;
         public Vector2 Position
         {
@@ -69,6 +69,36 @@ namespace Adventure.Characters
         public bool Contains(Point mouse)
         {
             return CollisionBox.Contains(mouse);
+        }
+
+        protected void DetermineAnimation(ref string animation, Vector2 direction, float deltaX, float deltaY)
+        {
+            if (deltaX > deltaY)
+            {
+                if (direction.X > 0)
+                {
+                    _facing = Facing.West;
+                    animation = "Float";
+                }
+                else
+                {
+                    _facing = Facing.East;
+                    animation = "Float";
+                }
+            }
+            else
+            {
+                if (direction.Y > 0)
+                {
+                    _facing = Facing.South;
+                    animation = "Float";
+                }
+                else
+                {
+                    _facing = Facing.North;
+                    animation = "Float";
+                }
+            }
         }
     }
 }

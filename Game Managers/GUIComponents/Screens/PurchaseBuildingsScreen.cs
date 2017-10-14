@@ -88,7 +88,7 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
             base.Update(gameTime);
             if (InputManager.CheckKey(Keys.Escape))
             {
-                AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
+                AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
             }
         }
 
@@ -135,7 +135,7 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
             bool rv = true;
             if (!Contains(mouse))
             {
-                AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
+                AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
                 rv = true;
             }
 

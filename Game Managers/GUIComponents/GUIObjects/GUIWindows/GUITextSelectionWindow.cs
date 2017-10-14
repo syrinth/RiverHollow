@@ -141,11 +141,11 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                     PlayerManager.Player.IncreaseHealth(_food.Health);
                 }
                 GUIManager.RemoveComponent(this);
-                AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
+                AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
             }
             else{
                 GUIManager.RemoveComponent(this);
-                AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
+                AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
             }
         }
 

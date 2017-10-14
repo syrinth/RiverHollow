@@ -48,7 +48,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                         {
                             AdventureGame.ResetCamera();
                             _w.SetName(_text);
-                            AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
+                            AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
                         }
                     }
                     else

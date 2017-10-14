@@ -115,12 +115,12 @@ namespace Adventure.Game_Managers
             for (int i = 0; i < 5; i++)
             {
                 Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize);
-                m.AddMonster(CharacterManager.GetMonsterByIndex(1, vect));
+                m.AddMob(CharacterManager.GetMobByIndex(1, vect));
             }
             for (int i = 0; i < 5; i++)
             {
                 Vector2 vect = new Vector2(r.Next(1, mapWidth - 1) * RHMap.TileSize, r.Next(1, mapHeight - 1) * RHMap.TileSize);
-                m.AddMonster(CharacterManager.GetMonsterByIndex(2, vect));
+                m.AddMob(CharacterManager.GetMobByIndex(2, vect));
             }
 
             if (lastRoom && _condition == EndCondition.TreasureChest)

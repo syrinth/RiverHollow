@@ -14,7 +14,7 @@ namespace Adventure
     public class AdventureGame : Game
     {
         public static float Scale = 1.5f;
-        public enum GameState { Running, Paused, Build, Information, Input}
+        public enum GameState { WorldMap, Combat, Paused, Build, Information, Input}
         private static GameState _gameState;
         public static GameState State { get => _gameState; }
         public GraphicsDeviceManager _graphicsDeviceManager;
@@ -78,7 +78,7 @@ namespace Adventure
                         if (_gameState == GameState.Paused)
                             _gameState = GameState.Paused;
                         else
-                            _gameState = GameState.Running;
+                            _gameState = GameState.WorldMap;
                     }
                     if (InputManager.CheckKey(Keys.X))
                     {
@@ -104,7 +104,7 @@ namespace Adventure
                         {
                             if (GUIManager.CurrentGUIScreen == GUIManager.Screens.Inventory)
                             {
-                                ChangeGameState(GameState.Running);
+                                ChangeGameState(GameState.WorldMap);
                             }
                             else
                             {
@@ -120,7 +120,7 @@ namespace Adventure
                 Vector3 translate = Camera._transform.Translation;
                 if (ms.RightButton == ButtonState.Pressed && GraphicCursor.LastMouseState.RightButton == ButtonState.Released)
                 {
-                    if (!GUIManager.ProcessRightButtonClick(mousePoint) && (_gameState == GameState.Running || _gameState == GameState.Build))
+                    if (!GUIManager.ProcessRightButtonClick(mousePoint) && (_gameState == GameState.WorldMap || _gameState == GameState.Build))
                     {
                         //GUI does NOT use Camera translations
                         mousePoint.X = (int)((mousePoint.X - translate.X)/Scale);
@@ -130,7 +130,7 @@ namespace Adventure
                 }
                 else if (ms.LeftButton == ButtonState.Pressed && GraphicCursor.LastMouseState.LeftButton == ButtonState.Released)
                 {
-                    if (!GUIManager.ProcessLeftButtonClick(mousePoint) && (_gameState == GameState.Running || _gameState == GameState.Build))
+                    if (!GUIManager.ProcessLeftButtonClick(mousePoint) && (_gameState == GameState.WorldMap || _gameState == GameState.Build))
                     {
                         mousePoint.X = (int)((mousePoint.X - translate.X) / Scale);
                         mousePoint.Y = (int)((mousePoint.Y - translate.Y) / Scale);
@@ -142,7 +142,7 @@ namespace Adventure
                 }
                 else
                 {
-                    if ((_gameState == GameState.Build || _gameState == GameState.Running) && !GUIManager.ProcessHover(mousePoint))
+                    if ((_gameState == GameState.Build || _gameState == GameState.WorldMap) && !GUIManager.ProcessHover(mousePoint))
                     {
                         mousePoint.X = (int)((mousePoint.X - translate.X) / Scale);
                         mousePoint.Y = (int)((mousePoint.Y - translate.Y) / Scale);
@@ -151,7 +151,7 @@ namespace Adventure
                 }
                 GraphicCursor.LastMouseState = ms;
 
-                if (_gameState == GameState.Running || _gameState == GameState.Build)
+                if (_gameState == GameState.WorldMap || _gameState == GameState.Build)
                 {
                     if (InputManager.CheckKey(Keys.Escape))
                     {
@@ -160,7 +160,7 @@ namespace Adventure
                     Camera.Update(gameTime);
                     MapManager.Update(gameTime);
 
-                    if(_gameState == GameState.Running)
+                    if(_gameState == GameState.WorldMap)
                     {
                         PlayerManager.Update(gameTime);
                         GameCalendar.Update(gameTime);
@@ -203,7 +203,11 @@ namespace Adventure
         {
             _gameState = state;
 
-            if (GUIManager.CurrentGUIScreen != GUIManager.Screens.HUD && _gameState == GameState.Running)
+            if (_gameState == GameState.Combat)
+            {
+                GUIManager.SetScreen(GUIManager.Screens.Combat);
+            }
+            if (GUIManager.CurrentGUIScreen != GUIManager.Screens.HUD && _gameState == GameState.WorldMap)
             {
                 GUIManager.SetScreen(GUIManager.Screens.HUD);
             }
@@ -220,14 +224,14 @@ namespace Adventure
         {
             PlayerManager.NewPlayer();
             MapManager.PopulateMaps(false);
-            ChangeGameState(AdventureGame.GameState.Running);
+            ChangeGameState(AdventureGame.GameState.WorldMap);
         }
 
         public static void LoadGame()
         {
             PlayerManager.Load();
             MapManager.PopulateMaps(true);
-            AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
+            AdventureGame.ChangeGameState(AdventureGame.GameState.WorldMap);
         }
 
         public static void RollOver()

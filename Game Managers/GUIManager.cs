@@ -24,7 +24,7 @@ namespace Adventure.Game_Managers
         private static GUIScreen _currentGUIScreen;
         private static Screens _currentScreen;
         public static Screens CurrentGUIScreen { get => _currentScreen; }
-        public  enum Screens {None, WorkerShop, BuildingShop, DayEnd, HUD, Inventory, ItemCreation, MainMenu,  Shop,  Text, TextInput };
+        public  enum Screens {None, Combat, WorkerShop, BuildingShop, DayEnd, HUD, Inventory, ItemCreation, MainMenu,  Shop,  Text, TextInput };
         private static GUIImage _fadeImg;
         private static float _fadeVal = 1f;
         private static bool _fading = false;
@@ -107,6 +107,9 @@ namespace Adventure.Game_Managers
                     return;
                 case Screens.HUD:
                     _currentGUIScreen = new HUDScreen();
+                    return;
+                case Screens.Combat:
+                    _currentGUIScreen = new CombatScreen();
                     return;
                 case Screens.Inventory:
                     _currentGUIScreen = new InventoryScreen();
