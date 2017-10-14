@@ -3,11 +3,9 @@
  <tileset firstgid="1" name="TileSetTest" tilewidth="32" tileheight="32" tilecount="15" columns="5">
   <image source="SpriteSheet.png" trans="ffffff" width="160" height="96"/>
   <tile id="4">
-   <objectgroup draworder="index">
-    <properties>
-     <property name="Sleep" type="bool" value="true"/>
-    </properties>
-   </objectgroup>
+   <properties>
+    <property name="Sleep" value="true"/>
+   </properties>
   </tile>
   <tile id="5">
    <properties>

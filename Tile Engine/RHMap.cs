@@ -14,7 +14,7 @@ using System.Collections.ObjectModel;
 
 namespace Adventure.Tile_Engine
 {
-    public class RHTileMap
+    public class RHMap
     {
         private static float Scale = AdventureGame.Scale;
         public int MapWidth = 100;
@@ -35,12 +35,13 @@ namespace Adventure.Tile_Engine
         protected TiledMap _map;
         public TiledMap Map { get => _map; }
 
-        protected RHMapTile[,] _tileArray;
+        protected RHTile[,] _tileArray;
         protected TiledMapRenderer renderer;
         protected List<TiledMapTileset> _tileSets;
         protected Dictionary<string, TiledMapTileLayer> _dictionaryLayers;
         public Dictionary<string, TiledMapTileLayer> Layers { get => _dictionaryLayers; }
 
+        protected List<RHTile> _buildingTiles;
         protected List<Character> _characterList;
         protected List<Monster> _monsterList;
         public List<Character> ToRemove;
@@ -56,8 +57,9 @@ namespace Adventure.Tile_Engine
         private Dictionary<string, Rectangle> _entranceDictionary;
         public Dictionary<string, Rectangle> EntranceDictionary { get => _entranceDictionary; }
 
-        public RHTileMap()
+        public RHMap()
         {
+            _buildingTiles = new List<RHTile>();
             _tileSets = new List<TiledMapTileset>();
             _characterList = new List<Character>();
             _monsterList = new List<Monster>();
@@ -84,11 +86,11 @@ namespace Adventure.Tile_Engine
                 _dictionaryLayers.Add(l.Name, l);
             }
 
-            _tileArray = new RHMapTile[MapWidth, MapHeight];
+            _tileArray = new RHTile[MapWidth, MapHeight];
             for (int i = 0; i < MapHeight; i++) {
                 for (int j = 0; j < MapWidth; j++)
                 {
-                    _tileArray[j, i] = new RHMapTile(j, i);
+                    _tileArray[j, i] = new RHTile(j, i);
                     _tileArray[j, i].SetProperties(this);
                 }
             }
@@ -210,6 +212,12 @@ namespace Adventure.Tile_Engine
             {
                 s.Draw(spriteBatch);
             }
+
+            foreach(RHTile t in _buildingTiles)
+            {
+                bool passable = t.Passable();
+                spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)t.GetPos.X, (int)t.GetPos.Y, 32, 32), new Rectangle(288, 128, 32, 32) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, new Vector2(0, 0), SpriteEffects.None, 99999);
+            }
         }
 
         #region Collision Code
@@ -221,7 +229,7 @@ namespace Adventure.Tile_Engine
             int columnTile = movingObject.Left / _tileSize;
             for (int y = GetMinRow(movingObject); y <= GetMaxRow(movingObject); y++)
             {
-                RHMapTile mapTile = _tileArray[columnTile, y];
+                RHTile mapTile = _tileArray[columnTile, y];
                 Rectangle cellRect = new Rectangle(columnTile * _tileSize, y * _tileSize, _tileSize, _tileSize);
                 if (mapTile.ContainsProperty("Sleep", out string val) && val.Equals("true")){
                     GUIManager.LoadScreen(GUIManager.Screens.Text, GameContentManager.GetDialogue("Sleep"));
@@ -246,7 +254,7 @@ namespace Adventure.Tile_Engine
             int columnTile = movingObject.Right / _tileSize;
             for (int y = GetMinRow(movingObject); y <= GetMaxRow(movingObject); y++)
             {
-                RHMapTile mapTile = _tileArray[columnTile, y];
+                RHTile mapTile = _tileArray[columnTile, y];
                 Rectangle cellRect = new Rectangle(columnTile * _tileSize, y * _tileSize, _tileSize, _tileSize);
                 if (mapTile.ContainsProperty("Sleep", out string val) && val.Equals("true"))
                 {
@@ -272,7 +280,7 @@ namespace Adventure.Tile_Engine
             int rowTile = movingObject.Top / _tileSize;
             for (int x = GetMinColumn(movingObject); x <= GetMaxColumn(movingObject); x++)
             {
-                RHMapTile mapTile = _tileArray[x, rowTile];
+                RHTile mapTile = _tileArray[x, rowTile];
                 Rectangle cellRect = new Rectangle(x * _tileSize, rowTile * _tileSize, _tileSize, _tileSize);
                 if (mapTile.ContainsProperty("Sleep", out string val) && val.Equals("true"))
                 {
@@ -298,7 +306,7 @@ namespace Adventure.Tile_Engine
             int rowTile = movingObject.Bottom / _tileSize;
             for (int x = GetMinColumn(movingObject); x <= GetMaxColumn(movingObject); x++)
             {
-                RHMapTile mapTile = _tileArray[x, rowTile];
+                RHTile mapTile = _tileArray[x, rowTile];
                 Rectangle cellRect = new Rectangle(x * _tileSize, rowTile * _tileSize, _tileSize, _tileSize);
                 if (mapTile.ContainsProperty("Sleep", out string val) && val.Equals("true"))
                 {
@@ -345,14 +353,14 @@ namespace Adventure.Tile_Engine
         public bool CheckForObjectCollision(Character mover, Rectangle movingObject)
         {
             bool rv = false;
-            foreach (Building b in _buildingList)
-            {
-                if (b.CollisionBox.Intersects(movingObject))
-                {
-                    rv = true;
-                    break;
-                }
-            }
+            //foreach (Building b in _buildingList)
+            //{
+            //    if (b.CollisionBox.Intersects(movingObject))
+            //    {
+            //        rv = true;
+            //        break;
+            //    }
+            //}
             foreach (Character c in _characterList)
             {
                 if (mover != c && c.CollisionBox.Intersects(movingObject))
@@ -371,6 +379,10 @@ namespace Adventure.Tile_Engine
             {
                 foreach (TiledMapTilesetTile t in ts.Tiles)
                 {
+                    if(tile.GlobalIdentifier == 5)
+                    {
+                        int i = 0;
+                    }
                     if (tile.GlobalIdentifier - 1 == t.LocalTileIdentifier)
                     {
                         foreach (KeyValuePair<string, string> tp in t.Properties)
@@ -449,14 +461,14 @@ namespace Adventure.Tile_Engine
                     {
                         Staircase stairs = (Staircase)ObjectManager.GetWorldObject(3, new Vector2(0, 0));
                         stairs.SetExit("Map1");
-                        AddWorldObject(stairs);
+                        AddWorldObject(stairs, true);
                     }
                     GUIManager.LoadScreen(GUIManager.Screens.Inventory, (Container)s);
                     break;
                 }
             }
 
-            RHMapTile tile = _tileArray[mouseLocation.X / 32, mouseLocation.Y / 32];
+            RHTile tile = _tileArray[mouseLocation.X / 32, mouseLocation.Y / 32];
             if(tile.Object != null && tile.Object.ID == 3)
             {
                 MapManager.ChangeMaps(((Staircase)tile.Object).ToMap);
@@ -533,7 +545,6 @@ namespace Adventure.Tile_Engine
                             }
                             rv = true;
                         }
-
                     }
                 }
             }
@@ -544,11 +555,22 @@ namespace Adventure.Tile_Engine
         {
             bool rv = false;
 
+            if(GraphicCursor.HeldBuilding == null)
+            {
+                if (_buildingTiles.Count > 0) { _buildingTiles.Clear(); }
+            }
             if (AdventureGame.State == AdventureGame.GameState.Build)
             {
-                foreach(Building b in _buildingList)
+                Building building = GraphicCursor.HeldBuilding;
+                _buildingTiles = new List<RHTile>();
+                if (building != null)
                 {
-                    if (b.SelectionBox.Contains(mouseLocation))
+                    TestMapTiles(building, _buildingTiles);
+                }
+
+                foreach (Building b in _buildingList)
+                {
+                    if (b.SelectionBox.Contains(mouseLocation) && GraphicCursor.HeldBuilding == null)
                     {
                         b._selected = true;
                     }
@@ -592,7 +614,7 @@ namespace Adventure.Tile_Engine
             _characterList.Clear();
         }
 
-        public RHMapTile RetrieveTile(Point mouseLocation)
+        public RHTile RetrieveTile(Point mouseLocation)
         {
             return _tileArray[mouseLocation.X / TileSize, mouseLocation.Y / TileSize];
         }
@@ -682,14 +704,19 @@ namespace Adventure.Tile_Engine
 
         public void AddBuilding(Building b)
         {
-            Vector3 translate = Camera._transform.Translation;
-            Vector2 newPos = new Vector2((b.Position.X - translate.X)/Scale, (b.Position.Y - translate.Y)/Scale);
-            _entranceDictionary.Add(b.ID.ToString(), b.BoxToExit); //TODO: FIX THIS
-            GraphicCursor.DropBuilding();
-            _buildingList.Add(b);
-            PlayerManager.AddBuilding(b);
-            AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
-            AdventureGame.ResetCamera();
+            List<RHTile> tiles = new List<RHTile>();
+            if (TestMapTiles(b, tiles))
+            {
+                AssignMapTiles(b, tiles);
+                Vector3 translate = Camera._transform.Translation;
+                Vector2 newPos = new Vector2((b.Position.X - translate.X) / Scale, (b.Position.Y - translate.Y) / Scale);
+                _entranceDictionary.Add(b.PersonalID.ToString(), b.BoxToExit); //TODO: FIX THIS
+                GraphicCursor.DropBuilding();
+                _buildingList.Add(b);
+                PlayerManager.AddBuilding(b);
+                AdventureGame.ChangeGameState(AdventureGame.GameState.Running);
+                AdventureGame.ResetCamera();
+            }
         }
 
         public bool AddWorkerToBuilding(Point mouseLocation)
@@ -713,68 +740,88 @@ namespace Adventure.Tile_Engine
             return rv;
         }
 
-        public bool AddWorldObject(WorldObject o, bool bounce = true)
+        public bool AddWorldObject(WorldObject o, bool bounce)
         {
             bool rv = false;
-            Random r = new Random();
-            Vector2 position = o.Position;
-            position.X = ((int)(position.X / 32)) * 32;
-            position.Y = ((int)(position.Y / 32)) * 32;
 
-            List<RHMapTile> tiles = new List<RHMapTile>();
-
-            do
+            List<RHTile> tiles = new List<RHTile>();
+            rv = TestMapTiles(o, tiles);
+            if (rv)
             {
-                int colColumns = o.CollisionBox.Width / 32;
-                int colRows = o.CollisionBox.Height / 32;
-
-                rv = true;
-                for (int i = 0; i < colRows; i++)
-                {
-                    if (!rv) { break; }
-                    for (int j = 0; j < colColumns; j++)
-                    {
-                        int x = (o.CollisionBox.Left + (j * 32)) / 32;
-                        int y = (o.CollisionBox.Top + (i * 32)) / 32;
-                        if(x < 0 || x > 99 || y < 0 || y > 99)
-                        {
-                            rv = false;
-                            break;
-                        }
-                        RHMapTile tempTile = _tileArray[x, y];
-
-                        if ((!o.WallObject && tempTile.Passable()) || (o.WallObject && tempTile.IsValidWall()))
-                        {
-                            tiles.Add(tempTile);
-                        }
-                        else
-                        {
-                            rv = false;
-                            break;
-                        }
-                        
-                    }
-                }
-                if (!rv)
+                AssignMapTiles(o, tiles);
+            }
+            else if (bounce)
+            {
+                Random r = new Random();
+                Vector2 position = o.Position;
+                do
                 {
                     position.X = (int)(r.Next(1, (MapWidth - 1) * TileSize) / 32) * 32;
                     position.Y = (int)(r.Next(1, (MapHeight - 1) * TileSize) / 32) * 32;
                     o.SetCoordinates(position);
-                }
 
-            } while (!rv);
-            o.Tiles = tiles;
-            foreach (RHMapTile t in tiles)
-            {
-                t.SetWorldObject(o);
-            }
+                    rv = TestMapTiles(o, tiles);
+                    if (rv)
+                    {
+                        AssignMapTiles(o, tiles);
+                    }
+                } while (!rv);
+            }  
+
             if (rv)
             {
-
                 _worldObjectList.Add(o);
             }
 
             return rv;
+        }
+
+        public bool TestMapTiles(WorldObject o, List<RHTile> tiles)
+        {
+            bool rv = false;
+            Vector2 position = o.Position;
+            position.X = ((int)(position.X / 32)) * 32;
+            position.Y = ((int)(position.Y / 32)) * 32;
+
+            int colColumns = o.CollisionBox.Width / 32;
+            int colRows = o.CollisionBox.Height / 32;
+
+            rv = true;
+            for (int i = 0; i < colRows; i++)
+            {
+                for (int j = 0; j < colColumns; j++)
+                {
+                    int x = (o.CollisionBox.Left + (j * 32)) / 32;
+                    int y = (o.CollisionBox.Top + (i * 32)) / 32;
+                    if (x < 0 || x > 99 || y < 0 || y > 99)
+                    {
+                        rv = false;
+                        break;
+                    }
+                    RHTile tempTile = _tileArray[x, y];
+
+                    if ((!o.WallObject && tempTile.Passable()) || (o.WallObject && tempTile.IsValidWall()))
+                    {
+                        tiles.Add(tempTile);
+                    }
+                    else
+                    {
+                        tiles.Add(tempTile);
+                        rv = false;
+                    }
+                }
+            }
+
+            return rv;
+        }
+
+        public void AssignMapTiles(WorldObject o, List<RHTile> tiles)
+        {
+            o.Tiles = tiles;
+            foreach (RHTile t in tiles)
+            {
+                t.SetWorldObject(o);
+            }
         }
         public void PlaceStaticItem(StaticItem container, Vector2 position, bool bounce = true)
         {
@@ -856,11 +903,14 @@ namespace Adventure.Tile_Engine
         }
     }
 
-    public class RHMapTile
+    public class RHTile
     {
         private bool _tileExists;
         private int _X;
+        public int X { get => _X; }
         private int _Y;
+        public int Y { get => _Y; }
+        public Vector2 GetPos { get => new Vector2(_X * 32, _Y * 32); }
         private Dictionary<TiledMapTileLayer, Dictionary<string, string>> _properties;
         private WorldObject _obj;
         public WorldObject Object { get => _obj; }
@@ -868,7 +918,7 @@ namespace Adventure.Tile_Engine
         private StaticItem _staticItem;
         public StaticItem StaticItem { get => _staticItem; }
 
-        public RHMapTile(int x, int y)
+        public RHTile(int x, int y)
         {
             _X = x;
             _Y = y;
@@ -876,7 +926,7 @@ namespace Adventure.Tile_Engine
             _properties = new Dictionary<TiledMapTileLayer, Dictionary<string, string>>();
         }
 
-        public void SetProperties(RHTileMap map)
+        public void SetProperties(RHMap map)
         {
             foreach (TiledMapTileLayer l in map.Layers.Values)
             {
@@ -886,7 +936,10 @@ namespace Adventure.Tile_Engine
                     {
                         _tileExists = true;
                     }
-                    _properties.Add(l, map.GetProperties((TiledMapTile)tile));
+                    if (((TiledMapTile)tile).GlobalIdentifier != 0)
+                    {
+                        _properties.Add(l, map.GetProperties((TiledMapTile)tile));
+                    }
                 }
             }
         }
@@ -961,7 +1014,7 @@ namespace Adventure.Tile_Engine
             value = string.Empty;
             foreach (TiledMapTileLayer l in _properties.Keys)
             {
-                ContainsProperty(l, property, out value);
+                rv = ContainsProperty(l, property, out value);
             }
 
             return rv;

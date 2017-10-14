@@ -111,7 +111,7 @@
     <Compile Include="Characters\SpriteAnimation\FrameAnimation.cs" />
     <Compile Include="Characters\SpriteAnimation\MobileSprite.cs" />
     <Compile Include="Characters\SpriteAnimation\AnimatedSprite.cs" />
-    <Compile Include="Tile Engine\TileMap.cs" />
+    <Compile Include="Tile Engine\RHMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Extended, Version=0.6.568.0, Culture=neutral, processorArchitecture=MSIL">

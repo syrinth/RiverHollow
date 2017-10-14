@@ -12,15 +12,15 @@ namespace Adventure.Game_Managers
 {
     public static class MapManager
     {
-        private static Dictionary<string, RHTileMap> _tileMaps;
-        public static Dictionary<string, RHTileMap> Maps { get => _tileMaps; }
+        private static Dictionary<string, RHMap> _tileMaps;
+        public static Dictionary<string, RHMap> Maps { get => _tileMaps; }
 
-        private static RHTileMap _currentMap;
-        public static RHTileMap CurrentMap { get => _currentMap; }
+        private static RHMap _currentMap;
+        public static RHMap CurrentMap { get => _currentMap; }
 
         public static void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice)
         {
-            _tileMaps = new Dictionary<string, RHTileMap>();
+            _tileMaps = new Dictionary<string, RHMap>();
             AddMap(@"Maps\Map1", Content, GraphicsDevice);
             AddMap(@"Maps\Map2", Content, GraphicsDevice);
             AddMap(@"Maps\Dungeons\Room1", Content, GraphicsDevice);
@@ -35,7 +35,7 @@ namespace Adventure.Game_Managers
 
         public static void AddMap(string mapToAdd, ContentManager Content, GraphicsDevice GraphicsDevice)
         {
-            RHTileMap newMap = new RHTileMap();
+            RHMap newMap = new RHMap();
             newMap.LoadContent(Content, GraphicsDevice, mapToAdd);
             _tileMaps.Add(newMap.Name, newMap);
         }
@@ -44,7 +44,7 @@ namespace Adventure.Game_Managers
         {
             GUIManager.FadeOut();
             Rectangle rectEntrance = Rectangle.Empty;
-            RHTileMap newMap = _tileMaps[newMapStr];
+            RHMap newMap = _tileMaps[newMapStr];
 
             if (_currentMap.IsDungeon)
             {
@@ -86,7 +86,7 @@ namespace Adventure.Game_Managers
         public static void ChangeDungeonRoom(string direction, bool straightOut = false)
         {
             GUIManager.FadeOut();
-            RHTileMap newMap = DungeonManager.RoomChange(direction, straightOut);
+            RHMap newMap = DungeonManager.RoomChange(direction, straightOut);
 
             Rectangle rectEntrance = newMap.IsDungeon ? newMap.EntranceDictionary[direction] : newMap.EntranceDictionary["Dungeon"];
             
@@ -137,11 +137,11 @@ namespace Adventure.Game_Managers
             {
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(0, new Vector2(r.Next(1, mapWidth-1) * RHTileMap.TileSize, r.Next(1, mapHeight-1) * RHTileMap.TileSize)));
+                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(0, new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize)), true);
                 }
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(2, new Vector2(r.Next(1, mapWidth-1) * RHTileMap.TileSize, r.Next(1, mapHeight-1) * RHTileMap.TileSize)));
+                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(2, new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize)), true);
                 }
             }
             _tileMaps[@"Map1"].AddMonster(CharacterManager.GetMonsterByIndex(2, new Vector2(1340, 1340)));
@@ -197,7 +197,7 @@ namespace Adventure.Game_Managers
 
             return rv;
         }
-        public static RHMapTile RetrieveTile(Point mouseLocation)
+        public static RHTile RetrieveTile(Point mouseLocation)
         {
             return _currentMap.RetrieveTile(mouseLocation);
         }

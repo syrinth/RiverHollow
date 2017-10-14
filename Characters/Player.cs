@@ -35,7 +35,7 @@ namespace Adventure
         //private Item _currentItem;
         public Item CurrentItem { get => _inventory[0, _currentInventorySlot]; }
 
-        private RHMapTile _targetTile = null;
+        private RHTile _targetTile = null;
 
         public int Stamina;
 

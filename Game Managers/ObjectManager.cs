@@ -90,13 +90,13 @@ namespace Adventure.Game_Managers
             switch (id)
             {
                 case 0:
-                    return new WorldObject(id, 1, true, true, false, pos, new Rectangle(0, 0, 32, 32), GetTexture(@"Textures\worldObjects"), 1, RHTileMap.TileSize, RHTileMap.TileSize);
+                    return new WorldObject(id, 1, true, true, false, pos, new Rectangle(0, 0, 32, 32), GetTexture(@"Textures\worldObjects"), 1, RHMap.TileSize, RHMap.TileSize);
                 case 1:
-                    return new WorldObject(id, 5, true, true, false, pos, new Rectangle(64, 64, 64, 64), GetTexture(@"Textures\worldObjects"), 1, RHTileMap.TileSize*2, RHTileMap.TileSize*2);
+                    return new WorldObject(id, 5, true, true, false, pos, new Rectangle(64, 64, 64, 64), GetTexture(@"Textures\worldObjects"), 1, RHMap.TileSize*2, RHMap.TileSize*2);
                 case 2:
-                    return new Tree(id, 10, false, true, pos, new Rectangle(0, 0, 96, 128), GetTexture(@"Textures\tree"), 1, RHTileMap.TileSize * 3, RHTileMap.TileSize * 4);
+                    return new Tree(id, 10, false, true, pos, new Rectangle(0, 0, 96, 128), GetTexture(@"Textures\tree"), 1, RHMap.TileSize * 3, RHMap.TileSize * 4);
                 case 3:
-                    return new Staircase(id, pos, new Rectangle(96, 0, 32, 32), GetTexture(@"Textures\worldObjects"), 1, RHTileMap.TileSize, RHTileMap.TileSize);
+                    return new Staircase(id, pos, new Rectangle(96, 0, 32, 32), GetTexture(@"Textures\worldObjects"), 1, RHMap.TileSize, RHMap.TileSize);
             }
             return null;
         }

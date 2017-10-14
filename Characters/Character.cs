@@ -22,7 +22,7 @@ namespace Adventure.Characters
         public Point Center => GetRectangle().Center;
         public Vector2 Position
         {
-            get { return new Vector2(_sprite.Position.X, _sprite.Position.Y + _sprite.Height - RHTileMap.TileSize); }
+            get { return new Vector2(_sprite.Position.X, _sprite.Position.Y + _sprite.Height - RHMap.TileSize); }
             set { _sprite.Position = value; }
         }
 
@@ -30,16 +30,16 @@ namespace Adventure.Characters
         {
             return new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
         }
-        public Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, Width, RHTileMap.TileSize); }
+        public Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, Width, RHMap.TileSize); }
 
         public int Width
         {
-            get { return RHTileMap.TileSize; }
+            get { return RHMap.TileSize; }
         }
 
         public int Height
         {
-            get { return RHTileMap.TileSize; }
+            get { return RHMap.TileSize; }
         }
 
         protected int _speed = 3;

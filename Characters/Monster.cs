@@ -246,10 +246,10 @@ namespace Adventure
                 int howFar = 2;
                 Random r = new Random();
                 int decision = r.Next(1, 5);
-                if (decision == 1) { _moveTo = new Vector2(Position.X - r.Next(1, howFar) * RHTileMap.TileSize, Position.Y); }
-                else if (decision == 2) { _moveTo = new Vector2(Position.X + r.Next(1, howFar) * RHTileMap.TileSize, Position.Y); }
-                else if (decision == 3) { _moveTo = new Vector2(Position.X, Position.Y - r.Next(1, howFar) * RHTileMap.TileSize); }
-                else if (decision == 4) { _moveTo = new Vector2(Position.X, Position.Y + r.Next(1, howFar) * RHTileMap.TileSize); }
+                if (decision == 1) { _moveTo = new Vector2(Position.X - r.Next(1, howFar) * RHMap.TileSize, Position.Y); }
+                else if (decision == 2) { _moveTo = new Vector2(Position.X + r.Next(1, howFar) * RHMap.TileSize, Position.Y); }
+                else if (decision == 3) { _moveTo = new Vector2(Position.X, Position.Y - r.Next(1, howFar) * RHMap.TileSize); }
+                else if (decision == 4) { _moveTo = new Vector2(Position.X, Position.Y + r.Next(1, howFar) * RHMap.TileSize); }
                 else {
                     _sprite.CurrentAnimation = "Float" + _sprite.CurrentAnimation.Substring(4);
                     _idleFor = 300;

@@ -86,7 +86,7 @@ namespace Adventure.Game_Managers
 
         public static bool PlayerInRange(Point centre)
         {
-            return PlayerInRange(centre, RHTileMap.TileSize * 2);
+            return PlayerInRange(centre, RHMap.TileSize * 2);
         }
         public static bool PlayerInRange(Vector2 centre, int range)
         {
@@ -293,7 +293,7 @@ namespace Adventure.Game_Managers
             }
 
             data.MapData = new List<MapData>();
-            foreach (RHTileMap tileMap in MapManager.Maps.Values)
+            foreach (RHMap tileMap in MapManager.Maps.Values)
             {
                 MapData m = new MapData();
                 m.mapName = tileMap.Name;
@@ -403,10 +403,10 @@ namespace Adventure.Game_Managers
 
             foreach (MapData m in data.MapData)
             {
-                RHTileMap tm = MapManager.Maps[m.mapName];
+                RHMap tm = MapManager.Maps[m.mapName];
                 foreach(WorldObjectData w in m.worldObjects)
                 { 
-                    tm.AddWorldObject(ObjectManager.GetWorldObject(w.worldObjectID, new Vector2(w.x,w.y)));
+                    tm.AddWorldObject(ObjectManager.GetWorldObject(w.worldObjectID, new Vector2(w.x,w.y)), true);
                 }
                 foreach (StaticItemData s in m.staticItems)
                 {

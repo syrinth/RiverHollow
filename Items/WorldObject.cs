@@ -13,7 +13,7 @@ namespace Adventure.Items
     public class WorldObject
     {
         #region Properties
-        public List<RHMapTile> Tiles;
+        public List<RHTile> Tiles;
         protected float _hp;
         public float HP { get => _hp; }
 
@@ -67,7 +67,7 @@ namespace Adventure.Items
             _wallObject = false;
 
             _sourceRectangle = sourceRectangle;
-            Tiles = new List<RHMapTile>();
+            Tiles = new List<RHTile>();
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
@@ -101,7 +101,7 @@ namespace Adventure.Items
 
         public void ClearTiles()
         {
-            foreach (RHMapTile t in Tiles)
+            foreach (RHTile t in Tiles)
             {
                 t.Clear();
             }
@@ -110,7 +110,7 @@ namespace Adventure.Items
 
     public class Tree : WorldObject
     {
-        public override Rectangle CollisionBox { get => new Rectangle((int)Position.X + RHTileMap.TileSize, (int)Position.Y + RHTileMap.TileSize * 3, RHTileMap.TileSize, RHTileMap.TileSize); }
+        public override Rectangle CollisionBox { get => new Rectangle((int)Position.X + RHMap.TileSize, (int)Position.Y + RHMap.TileSize * 3, RHMap.TileSize, RHMap.TileSize); }
 
         public Tree(int id, float hp, bool breakIt, bool chopIt, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int lvl, int width, int height) : base(id, hp, true, breakIt, chopIt, pos, sourceRectangle, tex, lvl, width, height)
         {

@@ -12,7 +12,7 @@ namespace Adventure
 {
     public class Building : WorldObject
     {
-        private static int Size = RHTileMap.TileSize;
+        private static int Size = RHMap.TileSize;
 
         public enum WorkerType { Magic, Craftsmen};
         private WorkerType _buildingWorker;
