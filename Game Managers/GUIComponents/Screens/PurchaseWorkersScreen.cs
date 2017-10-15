@@ -65,9 +65,9 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
                 if (wB.Contains(mouse))
                 {
                     //If all items are found, then remove them.
-                    if (PlayerManager.Buildings.Count > 0 && PlayerManager.Player.Money >= wB.Cost)
+                    if (PlayerManager.Buildings.Count > 0 && PlayerManager.Money >= wB.Cost)
                     {
-                        PlayerManager.Player.TakeMoney(wB.Cost);
+                        PlayerManager.TakeMoney(wB.Cost);
 
                         GUIManager.SetScreen(GUIManager.Screens.None);
                         GraphicCursor.PickUpWorker(wB._w.ID);

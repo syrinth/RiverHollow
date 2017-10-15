@@ -73,7 +73,7 @@ namespace Adventure.Items
             if (_attack)
             {
                 // TODO: Add your drawing code here
-                spriteBatch.Draw(_texture, PlayerManager.Player.CollisionBox.Center.ToVector2(), null, Color.White, _angle, rotationOrigin, 1.0f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(_texture, PlayerManager.World.CollisionBox.Center.ToVector2(), null, Color.White, _angle, rotationOrigin, 1.0f, SpriteEffects.None, 0f);
                 //spriteBatch.Draw(_texture, _rect, Color.Black); //draws collision box
             }
         }
@@ -90,33 +90,33 @@ namespace Adventure.Items
             return (float)(Math.PI * angle / 180.0);
         }
 
-        public void Attack(WorldCharacter.Facing direction)
+        public void Attack(WorldCharacter.Direction direction)
         {
             _attack = true;
-            Vector2 rotateOn = PlayerManager.Player.CollisionBox.Center.ToVector2();
+            Vector2 rotateOn = PlayerManager.World.CollisionBox.Center.ToVector2();
 
-            if (direction == WorldCharacter.Facing.North)
+            if (direction == WorldCharacter.Direction.North)
             {
                 _angle = DegreeToRadian(-45);
                 _endAngle = DegreeToRadian(135);
                 _rect = new Rectangle((int)rotateOn.X - 48, (int)rotateOn.Y - 40, 32, 32);
                 _boxdir = new Vector2(_weaponSpeed, 0);
             }
-            else if (direction == WorldCharacter.Facing.West)
+            else if (direction == WorldCharacter.Direction.West)
             {
                 _angle = DegreeToRadian(45);
                 _endAngle = DegreeToRadian(225);
                 _rect = new Rectangle((int)rotateOn.X + 16, (int)rotateOn.Y - 32, 32, 32);
                 _boxdir = new Vector2(0, _weaponSpeed);
             }
-            else if (direction == WorldCharacter.Facing.South)
+            else if (direction == WorldCharacter.Direction.South)
             {
                 _angle = DegreeToRadian(135);
                 _endAngle = DegreeToRadian(315);
                 _rect = new Rectangle((int)rotateOn.X + 8, (int)rotateOn.Y + 8, 32, 32);
                 _boxdir = new Vector2(-_weaponSpeed, 0);
             }
-            else if (direction == WorldCharacter.Facing.East)
+            else if (direction == WorldCharacter.Direction.East)
             {
                 _angle = DegreeToRadian(225);
                 _endAngle = DegreeToRadian(405);

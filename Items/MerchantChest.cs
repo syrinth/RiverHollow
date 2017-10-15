@@ -27,7 +27,7 @@ namespace Adventure.Items
             foreach(Item i in _toSell)
             {
                 val += i.SellPrice;
-                PlayerManager.Player.AddMoney(i.SellPrice);
+                PlayerManager.AddMoney(i.SellPrice);
             }
             _toSell.Clear();
             return val;

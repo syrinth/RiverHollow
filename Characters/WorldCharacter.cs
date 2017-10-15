@@ -15,8 +15,8 @@ namespace Adventure.Characters
     public class WorldCharacter : Character
     {
         #region Properties
-        public enum Facing { North, South, East, West };
-        protected Facing _facing = Facing.North;
+        public enum Direction { North, South, East, West };
+        public Direction Facing = Direction.North;
         public Texture2D Texture { get => _sprite.Texture; }
         public Point Center => GetRectangle().Center;
         public override Vector2 Position
@@ -41,12 +41,7 @@ namespace Adventure.Characters
             get { return RHMap.TileSize; }
         }
 
-        protected int _speed = 3;
-        public int Speed
-        {
-            get { return _speed; }
-            set { _speed = value; }
-        }
+        public int Speed = 3;
         #endregion
 
         public bool Contains(Point mouse)
@@ -60,12 +55,12 @@ namespace Adventure.Characters
             {
                 if (direction.X > 0)
                 {
-                    _facing = Facing.West;
+                    Facing = Direction.West;
                     animation = "Float";
                 }
                 else
                 {
-                    _facing = Facing.East;
+                    Facing = Direction.East;
                     animation = "Float";
                 }
             }
@@ -73,15 +68,20 @@ namespace Adventure.Characters
             {
                 if (direction.Y > 0)
                 {
-                    _facing = Facing.South;
+                    Facing = Direction.South;
                     animation = "Float";
                 }
                 else
                 {
-                    _facing = Facing.North;
+                    Facing = Direction.North;
                     animation = "Float";
                 }
             }
+        }
+
+        public void MoveBy(int x, int y)
+        {
+            _sprite.MoveBy(x, y);
         }
     }
 }

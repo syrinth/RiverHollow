@@ -153,21 +153,21 @@ namespace Adventure.Tile_Engine
 
         public void ItemPickUpdate()
         {
-            WorldPlayer _p = PlayerManager.Player;
+            WorldCharacter player = PlayerManager.World;
             List<Item> removedList = new List<Item>();
             foreach (Item i in _itemList)
             {
                 if (i.OnTheMap && i.Pickup)
                 {
-                    if (((Item)i).FinishedMoving() && i.CollisionBox.Intersects(PlayerManager.Player.CollisionBox))
+                    if (((Item)i).FinishedMoving() && i.CollisionBox.Intersects(player.CollisionBox))
                     {
                         removedList.Add(i);
-                        PlayerManager.Player.AddItemToFirstAvailableInventorySpot(i.ItemID);
+                        InventoryManager.AddItemToFirstAvailableInventorySpot(i.ItemID);
                     }
                     else if (PlayerManager.PlayerInRange(i.CollisionBox.Center, 80))
                     {
                         float speed = 3;
-                        Vector2 direction = new Vector2((_p.Position.X < i.Position.X) ? -speed : speed, (_p.Position.Y < i.Position.Y) ? -speed : speed);
+                        Vector2 direction = new Vector2((player.Position.X < i.Position.X) ? -speed : speed, (player.Position.Y < i.Position.Y) ? -speed : speed);
                         i.Position += direction;
                     }
                 }
@@ -489,9 +489,9 @@ namespace Adventure.Tile_Engine
             {
                 if (PlayerManager._merchantChest.Contains(mouseLocation))
                 {
-                    Item i = PlayerManager.Player.CurrentItem;
+                    Item i = InventoryManager.CurrentItem;
                     PlayerManager._merchantChest.AddItem(i);
-                    PlayerManager.Player.RemoveItemFromInventory(PlayerManager.Player.CurrentItemNumber);
+                    InventoryManager.RemoveItemFromInventory(InventoryManager.CurrentItemNumber);
                 }
                 foreach (WorldCharacter c in _characterList)
                 {
@@ -500,22 +500,22 @@ namespace Adventure.Tile_Engine
                     {
                         Worker w = (Worker)c;
                         if (w.Contains(mouseLocation) && PlayerManager.PlayerInRange(w.Center) &&
-                            PlayerManager.Player.HasSpaceInInventory(w.WhatAreYouHolding()))
+                            InventoryManager.HasSpaceInInventory(w.WhatAreYouHolding()))
                         {
-                            PlayerManager.Player.AddItemToFirstAvailableInventorySpot(w.TakeItem());
+                            InventoryManager.AddItemToFirstAvailableInventorySpot(w.TakeItem());
                             rv = true;
                         }
                     }
                     else if (cType.Equals(typeof(NPC)))
                     {
                         NPC n = (NPC)c;
-                        if (PlayerManager.Player.CurrentItem != null && 
+                        if (InventoryManager.CurrentItem != null && 
                             n.Contains(mouseLocation) && PlayerManager.PlayerInRange(n.Center) &&
-                            PlayerManager.Player.CurrentItem.Type != Item.ItemType.Tool &&
-                            PlayerManager.Player.CurrentItem.Type != Item.ItemType.Weapon)
+                            InventoryManager.CurrentItem.Type != Item.ItemType.Tool &&
+                            InventoryManager.CurrentItem.Type != Item.ItemType.Weapon)
                         {
                             string text = string.Empty;
-                            Item i = PlayerManager.Player.CurrentItem;
+                            Item i = InventoryManager.CurrentItem;
                             i.Remove(1);
                             if (i.Type == Item.ItemType.Map && n.Type == NPC.NPCType.Ranger)
                             {
@@ -573,10 +573,10 @@ namespace Adventure.Tile_Engine
                 bool found = false;
                 foreach(WorldCharacter c in _characterList)
                 {
-                    if (PlayerManager.Player.CurrentItem != null && 
+                    if (InventoryManager.CurrentItem != null && 
                         !c.GetType().IsSubclassOf(typeof(Mob)) && c.CollisionBox.Contains(mouseLocation) &&
-                        PlayerManager.Player.CurrentItem.Type != Item.ItemType.Tool &&
-                        PlayerManager.Player.CurrentItem.Type != Item.ItemType.Weapon)
+                        InventoryManager.CurrentItem.Type != Item.ItemType.Tool &&
+                        InventoryManager.CurrentItem.Type != Item.ItemType.Weapon)
                     {
                         GraphicCursor._currentType = GraphicCursor.CursorType.Gift;
                         found = true;

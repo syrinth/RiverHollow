@@ -132,7 +132,7 @@ namespace Adventure.Screens
                         }
                         if (_container == null)
                         {
-                            PlayerManager.Player.RemoveItemFromInventory((i * _columns) + j);
+                            InventoryManager.RemoveItemFromInventory((i * _columns) + j);
                         }
                         else
                         {
@@ -167,7 +167,7 @@ namespace Adventure.Screens
                             {
                                 if (_container == null)
                                 {
-                                    rv = PlayerManager.Player.AddItemToInventorySpot(item, i, j);
+                                    rv = InventoryManager.AddItemToInventorySpot(item, i, j);
                                 }
                                 else{
                                     rv = _container.AddItemToInventorySpot(item, i, j);
@@ -189,7 +189,7 @@ namespace Adventure.Screens
                 {
                     if (_container == null)
                     {
-                        _displayList[i, j].Item = PlayerManager.Player.Inventory[i, j];
+                        _displayList[i, j].Item = InventoryManager.Inventory[i, j];
                     }
                     else
                     {

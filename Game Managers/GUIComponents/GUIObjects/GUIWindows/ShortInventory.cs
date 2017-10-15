@@ -22,7 +22,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             {
                 if (_displayList[0,i].Contains(mouse))
                 {
-                    PlayerManager.Player.CurrentItemNumber = i;
+                    InventoryManager.CurrentItemNumber = i;
                     break;
                 }
             }
@@ -33,7 +33,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            _selection.MoveImageTo(_displayList[0, PlayerManager.Player.CurrentItemNumber].Position);
+            _selection.MoveImageTo(_displayList[0, InventoryManager.CurrentItemNumber].Position);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

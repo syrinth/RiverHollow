@@ -134,7 +134,7 @@ namespace Adventure.Characters
                     if (val == 0) { sections[i] = _name; }
                     else { sections[i] = CharacterManager.GetCharacterNameByIndex(val); }
                 }
-                else if (sections[i] == "^") { sections[i] = PlayerManager.Player.Name; }
+                else if (sections[i] == "^") { sections[i] = PlayerManager.Name; }
 
                 rv += sections[i];
             }

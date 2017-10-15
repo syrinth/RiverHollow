@@ -24,7 +24,7 @@ namespace Adventure
         {
             if (RiverHollow.State != RiverHollow.GameState.Build)
             {
-                _observer = PlayerManager.Player.Center.ToVector2()*Scale;
+                _observer = PlayerManager.World.Center.ToVector2()*Scale;
             }
             else {
                 KeyboardState ks = Keyboard.GetState();
@@ -77,7 +77,7 @@ namespace Adventure
         }
         public static void ResetObserver()
         {
-            _observer = PlayerManager.Player.Center.ToVector2();
+            _observer = PlayerManager.World.Center.ToVector2();
         }
     }
 }

@@ -71,7 +71,7 @@ namespace Adventure.Game_Managers
             _currentMap = _tileMaps[newMapStr];
 
             PlayerManager.CurrentMap = _currentMap.Name;
-            PlayerManager.Player.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
+            PlayerManager.World.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
         }
 
         public static void EnterDungeon()
@@ -80,7 +80,7 @@ namespace Adventure.Game_Managers
             _currentMap = DungeonManager.Maps[0];
 
             PlayerManager.CurrentMap = _currentMap.Name;
-            PlayerManager.Player.Position = new Vector2(DungeonManager.Entrance.Left, DungeonManager.Entrance.Top);
+            PlayerManager.World.Position = new Vector2(DungeonManager.Entrance.Left, DungeonManager.Entrance.Top);
         }
 
         public static void ChangeDungeonRoom(string direction, bool straightOut = false)
@@ -93,7 +93,7 @@ namespace Adventure.Game_Managers
             _currentMap = newMap;
 
             PlayerManager.CurrentMap = _currentMap.Name;
-            PlayerManager.Player.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
+            PlayerManager.World.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
         }
 
         public static void EnterBuilding(Building b)
@@ -112,7 +112,7 @@ namespace Adventure.Game_Managers
             _currentMap.LoadBuilding(b);
 
             PlayerManager.CurrentMap = _currentMap.Name;
-            PlayerManager.Player.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
+            PlayerManager.World.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
         }
 
         public static void BackToPlayer()

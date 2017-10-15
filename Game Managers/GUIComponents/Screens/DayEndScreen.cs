@@ -34,7 +34,7 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
                 GUIManager.FadeOut();
                 RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
                 PlayerManager.Save();
-                PlayerManager.Player.Stamina = PlayerManager.Player.MaxStamina;
+                PlayerManager.Stamina = PlayerManager.MaxStamina;
                 
                 rv = true;
             }

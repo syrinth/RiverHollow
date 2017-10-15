@@ -98,12 +98,12 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
 
             if (_btnBuy.Contains(mouse)){
                 bool create = true;
-                create = PlayerManager.Player.Money >= _merchandise[_currentItemIndex].MoneyCost;
+                create = PlayerManager.Money >= _merchandise[_currentItemIndex].MoneyCost;
                 if (create)
                 {
                     foreach (KeyValuePair<int, int> kvp in _merchandise[_currentItemIndex].RequiredItems)
                     {
-                        if (!PlayerManager.Player.HasItemInInventory(kvp.Key, kvp.Value))
+                        if (!InventoryManager.HasItemInInventory(kvp.Key, kvp.Value))
                         {
                             create = false;
                         }
@@ -112,10 +112,10 @@ namespace Adventure.Game_Managers.GUIObjects.Screens
                 //If all items are found, then remove them.
                 if (create)
                 {
-                    PlayerManager.Player.TakeMoney(_merchandise[_currentItemIndex].MoneyCost);
+                    PlayerManager.TakeMoney(_merchandise[_currentItemIndex].MoneyCost);
                     foreach (KeyValuePair<int, int> kvp in _merchandise[_currentItemIndex].RequiredItems)
                     {
-                        PlayerManager.Player.RemoveItemsFromInventory(kvp.Key, kvp.Value);
+                        InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
                     }
 
                     GUIManager.SetScreen(GUIManager.Screens.None);

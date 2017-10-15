@@ -63,7 +63,7 @@ namespace Adventure
             if (PlayerManager.PlayerInRange(Position, _leash))
             {
                 _moveTo = Vector2.Zero;
-                Vector2 targetPos = PlayerManager.Player.Position;
+                Vector2 targetPos = PlayerManager.World.Position;
 
                 float deltaX = Math.Abs(targetPos.X - this.Position.X);
                 float deltaY = Math.Abs(targetPos.Y - this.Position.Y);
@@ -78,7 +78,7 @@ namespace Adventure
                     _sprite.CurrentAnimation = animation;
                 }
 
-                if (CollisionBox.Intersects(PlayerManager.Player.CollisionBox))
+                if (CollisionBox.Intersects(PlayerManager.World.CollisionBox))
                 {
                     CombatManager.NewBattle(this);
                 }
@@ -163,8 +163,8 @@ namespace Adventure
 
             float deltaX = Math.Abs(position.X - Position.X);
             float deltaY = Math.Abs(position.Y - Position.Y);
-            direction.X = (deltaX < _speed) ? newX * deltaX : newX * _speed;
-            direction.Y = (deltaY < _speed) ? newY * deltaY : newY * _speed;
+            direction.X = (deltaX < Speed) ? newX * deltaX : newX * Speed;
+            direction.Y = (deltaY < Speed) ? newY * deltaY : newY * Speed;
         }        
     }
 }

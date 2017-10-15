@@ -9,6 +9,7 @@ namespace Adventure.Characters
     public class Character
     {
         protected AnimatedSprite _sprite;
+        public AnimatedSprite Sprite { get => _sprite; }
         public virtual Vector2 Position
         {
             get { return new Vector2(_sprite.Position.X, _sprite.Position.Y); }

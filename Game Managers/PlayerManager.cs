@@ -14,71 +14,192 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using Adventure.Characters;
+using Microsoft.Xna.Framework.Input;
 
 namespace Adventure.Game_Managers
 {
     public static class PlayerManager
     {
+        #region Properties
+        private static bool _usingTool = false;
+        public static bool UsingTool { get => _usingTool; set => _usingTool = value; }
+        private static RHTile _targetTile = null;
+
+        public static int Stamina;
+        public static int MaxStamina;
         public static string _inBuilding = string.Empty;
         private static List<int> _canMake;
         public static List<int> CanMake { get => _canMake; }
         private static string _currentMap;
         public static string CurrentMap { get => _currentMap; set => _currentMap = value; }
 
-        private static WorldPlayer _world;
-        public static int Stamina { get => _world.Stamina; }
-        public static int MaxStamina { get => _world.MaxStamina; }
+        public static WorldCharacter World;
 
-        private static CombatPlayer _combat;
-        public static int HitPoints { get => _combat.HitPoints; }
-        public static int MaxHitPoints { get => _combat.MaxHitPoints; }
+        public static CombatCharacter Combat;
+        public static int HitPoints { get => Combat.HitPoints; }
+        public static int MaxHitPoints { get => Combat.MaxHitPoints; }
 
         private static List<Building> _buildings;
         public static List<Building> Buildings { get => _buildings; }
 
         public static MerchantChest _merchantChest;
+        private static string _name = "Syrinth";
+        public static string Name { get => _name; }
+
+        private static int _money = 2000;
+        public static int Money { get => _money; }
+        #endregion
 
         public static void InitPlayer()
         {
-            _world = new WorldPlayer();
-            _combat = new CombatPlayer();
+            World = new WorldCharacter();
+            Combat = new CombatCharacter();
             _buildings = new List<Building>();
             _canMake = new List<int>();
-        }
 
+            World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
+            World.Position = new Vector2(200, 200);
+
+            MaxStamina = 50;
+        }
         public static void NewPlayer()
         {
-            _world = new WorldPlayer();
-            _combat = new CombatPlayer();
+            MaxStamina = 50;
+            World = new WorldCharacter();
+            World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
+            World.Position = new Vector2(200, 200);
+            Combat = new CombatCharacter();
             _buildings = new List<Building>();
             _canMake = new List<int>();
             _canMake.Add(6);
-            _world.AddItemToFirstAvailableInventorySpot(5);
-            _world.AddItemToFirstAvailableInventorySpot(3);
-            _world.AddItemToFirstAvailableInventorySpot(4);
-            _world.AddItemToFirstAvailableInventorySpot(6);
-            _world.AddItemToFirstAvailableInventorySpot(7);
-            _world.AddItemToFirstAvailableInventorySpot(8);
-        }
-
-        public static void IncreaseStamina(int x)
-        {
-            _world.IncreaseStamina(x);
-        }
-        public static void IncreaseHealth(int x)
-        {
-            _combat.IncreaseHealth(x);
+            InventoryManager.AddItemToFirstAvailableInventorySpot(5);
+            InventoryManager.AddItemToFirstAvailableInventorySpot(3);
+            InventoryManager.AddItemToFirstAvailableInventorySpot(4);
+            InventoryManager.AddItemToFirstAvailableInventorySpot(6);
+            InventoryManager.AddItemToFirstAvailableInventorySpot(7);
+            InventoryManager.AddItemToFirstAvailableInventorySpot(8);
         }
 
         public static void Update(GameTime gameTime)
         {
-            _world.Update(gameTime);
+            if (RiverHollow.State == RiverHollow.GameState.Combat) { UpdateCombat(gameTime); }
+            else { UpdateWorld(gameTime); }
+        }
+        public static void UpdateWorld(GameTime gameTime)
+        {
+            Vector2 moveVector = Vector2.Zero;
+            Vector2 moveDir = Vector2.Zero;
+            string animation = "";
+
+            if (_usingTool)
+            {
+                ((Tool)InventoryManager.CurrentItem).ToolAnimation.Position = World.Position;
+                ((Tool)InventoryManager.CurrentItem).Update(gameTime);
+                _usingTool = ((Tool)InventoryManager.CurrentItem).ToolAnimation.IsAnimating;
+                if (_targetTile != null && !_usingTool)
+                {
+                    bool destroyed = false;
+                    if (_targetTile.Object != null && _targetTile.Object.Breakable)
+                    {
+                        destroyed = _targetTile.DamageObject(((Tool)InventoryManager.CurrentItem).BreakValue);
+                    }
+                    else if (_targetTile.Object != null && _targetTile.Object.Choppable)
+                    {
+                        destroyed = _targetTile.DamageObject(((Tool)InventoryManager.CurrentItem).ChopValue);
+                    }
+
+                    if (destroyed)
+                    {
+                        _targetTile = null;
+                    }
+
+                }
+            }
+            else
+            {
+                KeyboardState ks = Keyboard.GetState();
+                if (ks.IsKeyDown(Keys.W))
+                {
+                    World.Facing = WorldCharacter.Direction.North;
+                    moveDir += new Vector2(0, -World.Speed);
+                    animation = "Float";
+                    moveVector += new Vector2(0, -World.Speed);
+                }
+                else if (ks.IsKeyDown(Keys.S))
+                {
+                    World.Facing = WorldCharacter.Direction.South;
+                    moveDir += new Vector2(0, World.Speed);
+                    animation = "Float";
+                    moveVector += new Vector2(0, World.Speed);
+                }
+
+                if (ks.IsKeyDown(Keys.A))
+                {
+                    World.Facing = WorldCharacter.Direction.East;
+                    moveDir += new Vector2(-World.Speed, 0);
+                    animation = "Float";
+                    moveVector += new Vector2(-World.Speed, 0);
+                }
+                else if (ks.IsKeyDown(Keys.D))
+                {
+                    World.Facing = WorldCharacter.Direction.West;
+                    moveDir += new Vector2(World.Speed, 0);
+                    animation = "Float";
+                    moveVector += new Vector2(World.Speed, 0);
+                }
+
+                ProcessKeyboardInput(ks);
+
+                if (moveDir.Length() != 0)
+                {
+                    Rectangle testRectX = new Rectangle((int)World.Position.X + (int)moveDir.X, (int)World.Position.Y, World.Width, World.Height);
+                    Rectangle testRectY = new Rectangle((int)World.Position.X, (int)World.Position.Y + (int)moveDir.Y, World.Width, World.Height);
+
+                    if (MapManager.CurrentMap.CheckLeftMovement(World, testRectX) && MapManager.CurrentMap.CheckRightMovement(World, testRectX))
+                    {
+                        World.MoveBy((int)moveDir.X, 0);
+                    }
+
+                    if (MapManager.CurrentMap.CheckUpMovement(World, testRectY) && MapManager.CurrentMap.CheckDownMovement(World, testRectY))
+                    {
+                        World.MoveBy(0, (int)moveDir.Y);
+                    }
+
+                    if (World.Sprite.CurrentAnimation != animation)
+                    {
+                        World.Sprite.CurrentAnimation = animation;
+                    }
+
+                    World.Position = new Vector2(World.Sprite.Position.X, World.Sprite.Position.Y);
+                }
+                else
+                {
+                    World.Sprite.CurrentAnimation = "Float" + World.Sprite.CurrentAnimation.Substring(4);
+                }
+            }
+            World.Update(gameTime);
+        }
+        public static void UpdateCombat(GameTime gameTime)
+        {
+            
         }
 
         public static void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            _world.Draw(gameTime, spriteBatch);
+            if (RiverHollow.State == RiverHollow.GameState.Combat) { DrawCombat(gameTime, spriteBatch); }
+            else { DrawWorld(gameTime, spriteBatch); }
             _merchantChest.Draw(spriteBatch);
+        }
+        public static void DrawWorld(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            World.Draw(spriteBatch);
+            if (_usingTool)
+            {
+                ((Tool)InventoryManager.CurrentItem).ToolAnimation.Draw(spriteBatch);
+            }
+        }
+        public static void DrawCombat(GameTime gameTime, SpriteBatch spriteBatch)
+        {
         }
 
         public static List<CombatCharacter> GetParty()
@@ -90,7 +211,46 @@ namespace Adventure.Game_Managers
         {
             bool rv = false;
 
-            rv = _world.ProcessLeftButtonClick(mouseLocation);
+            if (InventoryManager.CurrentItem != null)
+            {
+                if (InventoryManager.CurrentItem.Type == Item.ItemType.Tool && PlayerManager.PlayerInRange(mouseLocation))
+                {
+                    if (DecreaseStamina(((Tool)InventoryManager.CurrentItem).StaminaCost))
+                    {
+                        _usingTool = true;
+                        ((Tool)InventoryManager.CurrentItem).ToolAnimation.IsAnimating = true;
+                        _targetTile = MapManager.RetrieveTile(mouseLocation);
+                    }
+                    rv = true;
+                }
+                else if (InventoryManager.CurrentItem.Type == Item.ItemType.Container)
+                {
+                    MapManager.PlaceWorldItem((Container)InventoryManager.CurrentItem, mouseLocation.ToVector2());
+                    InventoryManager.RemoveItemFromInventory(InventoryManager.CurrentItemNumber);
+                }
+                else if (InventoryManager.CurrentItem.Type == Item.ItemType.Food)
+                {
+                    Food f = ((Food)InventoryManager.CurrentItem);
+                    GUIManager.AddTextSelection(f, string.Format("Really eat the {0}? [Yes:Eat|No:DoNothing]", f.Name));
+                }
+            }
+
+            return rv;
+        }
+        public static bool ProcessKeyboardInput(KeyboardState ks)
+        {
+            bool rv = false;
+
+            if (ks.IsKeyDown(Keys.D1)) { InventoryManager.CurrentItemNumber = 0; }
+            if (ks.IsKeyDown(Keys.D2)) { InventoryManager.CurrentItemNumber = 1; }
+            if (ks.IsKeyDown(Keys.D3)) { InventoryManager.CurrentItemNumber = 2; }
+            if (ks.IsKeyDown(Keys.D4)) { InventoryManager.CurrentItemNumber = 3; }
+            if (ks.IsKeyDown(Keys.D5)) { InventoryManager.CurrentItemNumber = 4; }
+            if (ks.IsKeyDown(Keys.D6)) { InventoryManager.CurrentItemNumber = 5; }
+            if (ks.IsKeyDown(Keys.D7)) { InventoryManager.CurrentItemNumber = 6; }
+            if (ks.IsKeyDown(Keys.D8)) { InventoryManager.CurrentItemNumber = 7; }
+            if (ks.IsKeyDown(Keys.D9)) { InventoryManager.CurrentItemNumber = 8; }
+            if (ks.IsKeyDown(Keys.D0)) { InventoryManager.CurrentItemNumber = 9; }
 
             return rv;
         }
@@ -120,7 +280,7 @@ namespace Adventure.Game_Managers
         {
             bool rv = false;
 
-            Rectangle playerRect = _world.GetRectangle();
+            Rectangle playerRect = World.GetRectangle();
             int a = Math.Abs(playerRect.Center.X - centre.X);
             int b = Math.Abs(playerRect.Center.Y - centre.Y);
             int c = (int)Math.Sqrt(a * a + b * b);
@@ -133,7 +293,7 @@ namespace Adventure.Game_Managers
         {
             bool rv = false;
 
-            Rectangle playerRect = _world.GetRectangle();
+            Rectangle playerRect = World.GetRectangle();
             int a = Math.Abs(playerRect.Center.X - centre.X);
             int b = Math.Abs(playerRect.Center.Y - centre.Y);
             int c = (int)Math.Sqrt(a*a + b*b);
@@ -141,6 +301,39 @@ namespace Adventure.Game_Managers
             rv = c > minRange && c <= maxRange;
 
             return rv;
+        }
+
+        
+        public static void TakeMoney(int x)
+        {
+            _money -= x;
+        }
+        public static void AddMoney(int x)
+        {
+            _money += x;
+        }
+
+        public static bool DecreaseStamina(int x)
+        {
+            bool rv = false;
+            if (Stamina >= x)
+            {
+                Stamina -= x;
+                rv = true;
+            }
+            return rv;
+        }
+
+        public static void IncreaseStamina(int x)
+        {
+            if (Stamina + x <= MaxStamina)
+            {
+                Stamina += x;
+            }
+            else
+            {
+                Stamina = MaxStamina;
+            }
         }
 
         #region Save/Load
@@ -297,7 +490,7 @@ namespace Adventure.Game_Managers
             }
 
             data.Items = new List<ItemData>();
-            foreach (Item i  in _world.Inventory)
+            foreach (Item i  in InventoryManager.Inventory)
             {
                 ItemData itemData = new ItemData();
                 if (i != null)
@@ -410,14 +603,14 @@ namespace Adventure.Game_Managers
                     newBuilding.StaticItems.Add(LoadStaticItemData(s));
                 }
             }
-            for (int i = 0; i < WorldPlayer.maxItemRows; i++)
+            for (int i = 0; i < InventoryManager.maxItemRows; i++)
             {
-                for (int j = 0; j < WorldPlayer.maxItemColumns; j++)
+                for (int j = 0; j < InventoryManager.maxItemColumns; j++)
                 {
-                    int index = i * WorldPlayer.maxItemColumns + j;
+                    int index = i * InventoryManager.maxItemColumns + j;
                     ItemData item = data.Items[index];
                     Item newItem = ObjectManager.GetItem(item.itemID, item.num);
-                    _world.AddItemToInventorySpot(newItem, i, j);
+                    InventoryManager.AddItemToInventorySpot(newItem, i, j);
                 }
             }
 
@@ -439,11 +632,11 @@ namespace Adventure.Game_Managers
         {
             Container c = (Container)ObjectManager.GetItem(data.staticItemID);
 
-            for (int i = 0; i < WorldPlayer.maxItemRows; i++)
+            for (int i = 0; i < InventoryManager.maxItemRows; i++)
             {
-                for (int j = 0; j < WorldPlayer.maxItemColumns; j++)
+                for (int j = 0; j < InventoryManager.maxItemColumns; j++)
                 {
-                    ItemData item = data.Items[i * WorldPlayer.maxItemRows + j];
+                    ItemData item = data.Items[i * InventoryManager.maxItemRows + j];
                     Item newItem = ObjectManager.GetItem(item.itemID, item.num);
                     c.AddItemToInventorySpot(newItem, i, j);
                     c.Position = new Vector2(data.x, data.y);

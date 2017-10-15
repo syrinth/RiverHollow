@@ -138,7 +138,7 @@ namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                 {
                     _food.Remove(1);
                     PlayerManager.IncreaseStamina(_food.Stamina);
-                    PlayerManager.IncreaseHealth(_food.Health);
+                    PlayerManager.Combat.IncreaseHealth(_food.Health);
                 }
                 GUIManager.RemoveComponent(this);
                 RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);

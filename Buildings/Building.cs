@@ -105,7 +105,7 @@ namespace Adventure
                         Item item = Pantry.Inventory[i, j];
                         if (item != null && item.Type == Item.ItemType.Food)
                         {
-                            Pantry.RemoveItemFromInventory((i * WorldPlayer.maxItemColumns) + j);
+                            Pantry.RemoveItemFromInventory((i * InventoryManager.maxItemColumns) + j);
                             w.MakeDailyItem();
                             eaten = true;
                             break;

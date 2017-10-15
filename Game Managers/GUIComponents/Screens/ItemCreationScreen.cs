@@ -27,7 +27,7 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
             if(_rows == 0) { _rows = 1; }
             _displayList = new GUIItemBox[_rows, _columns];
             _creationWindow = new GUIWindow(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), new Vector2(0, 0), 32, 96, 96);
-            _inventory = new Inventory(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), 4, WorldPlayer.maxItemColumns, 32);
+            _inventory = new Inventory(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), 4, InventoryManager.maxItemColumns, 32);
 
             Vector2 contWidthHeight = new Vector2(_creationWindow.Width, _creationWindow.Height);
             Vector2 mainWidthHeight = new Vector2(_inventory.Width, _inventory.Height);
@@ -73,7 +73,7 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
                         bool create = true;
                         foreach(KeyValuePair<int, int> kvp in ObjectManager.DictCrafting[gIB.Item.ItemID].RequiredItems)
                         {
-                            if(!PlayerManager.Player.HasItemInInventory(kvp.Key, kvp.Value))
+                            if(!InventoryManager.HasItemInInventory(kvp.Key, kvp.Value))
                             {
                                 create = false;
                             }
@@ -84,8 +84,8 @@ namespace Adventure.Game_Managers.GUIComponents.Screens
                             foreach (KeyValuePair<int, int> kvp in ObjectManager.DictCrafting[gIB.Item.ItemID].RequiredItems)
                             {
 
-                                PlayerManager.Player.RemoveItemsFromInventory(kvp.Key, kvp.Value);
-                                PlayerManager.Player.AddItemToFirstAvailableInventorySpot(gIB.Item.ItemID);
+                                InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
+                                InventoryManager.AddItemToFirstAvailableInventorySpot(gIB.Item.ItemID);
                             }
                         }
                     }

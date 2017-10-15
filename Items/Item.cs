@@ -158,7 +158,7 @@ namespace Adventure.Items
                 _num -= x;
                 if (_num == 0)
                 {
-                    PlayerManager.Player.RemoveItemFromInventory(PlayerManager.Player.CurrentItemNumber);
+                    InventoryManager.RemoveItemFromInventory(InventoryManager.CurrentItemNumber);
                 }
             }
         }

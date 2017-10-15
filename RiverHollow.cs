@@ -39,6 +39,7 @@ namespace Adventure
         {
             // TODO: Add your initialization logic here
             Camera.SetViewport(GraphicsDevice.Viewport);
+            InventoryManager.Init();
 
             base.Initialize();
         }
@@ -54,7 +55,7 @@ namespace Adventure
             spriteBatch = new SpriteBatch(GraphicsDevice);
             GameCalendar.NewCalendar();
             CharacterManager.LoadContent(Content);
-
+            
             GUIManager.SetScreen(GUIManager.Screens.MainMenu);
         }
 
