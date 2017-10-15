@@ -1,10 +1,10 @@
-﻿using Adventure.Game_Managers;
+﻿using RiverHollow.Game_Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace Adventure
+namespace RiverHollow
 {
     public static class GameCalendar
     {

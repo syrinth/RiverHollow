@@ -1,12 +1,12 @@
-﻿using Adventure.Characters;
-using Adventure.Game_Managers.GUIObjects;
-using Adventure.GUIObjects;
+﻿using RiverHollow.Characters;
+using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace Adventure.Game_Managers.GUIComponents.GUIObjects
+namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
     public class GUITextWindow : GUIWindow
     {

@@ -1,12 +1,12 @@
-﻿using Adventure.Characters;
-using Adventure.Characters.NPCs;
-using Adventure.Game_Managers.GUIComponents.GUIObjects;
-using Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
-using Adventure.Game_Managers.GUIObjects;
+﻿using RiverHollow.Characters;
+using RiverHollow.Characters.NPCs;
+using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Game_Managers.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Adventure.Game_Managers.GUIComponents.Screens
+namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
     class TextScreen : GUIScreen
     {

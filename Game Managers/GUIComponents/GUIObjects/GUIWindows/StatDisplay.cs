@@ -1,8 +1,8 @@
-﻿using Adventure.Game_Managers.GUIComponents.GUIObjects;
+﻿using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Adventure.Game_Managers.GUIObjects
+namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class StatDisplay : GUIWindow
     {

@@ -1,5 +1,5 @@
-﻿using Adventure.Game_Managers;
-using Adventure.SpriteAnimations;
+﻿using RiverHollow.Game_Managers;
+using RiverHollow.SpriteAnimations;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Adventure.Items
+namespace RiverHollow.Items
 {
     public class Tool : Item
     {

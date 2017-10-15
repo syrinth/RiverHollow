@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Adventure
+namespace RiverHollow
 {
 #if WINDOWS || LINUX
     /// <summary>

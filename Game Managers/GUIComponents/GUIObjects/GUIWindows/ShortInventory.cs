@@ -1,9 +1,9 @@
-﻿using Adventure.Game_Managers.GUIObjects;
-using Adventure.Screens;
+﻿using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
+namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
     public class ShortInventory : Inventory
     {

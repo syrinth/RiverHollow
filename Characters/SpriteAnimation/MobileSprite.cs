@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Adventure.SpriteAnimations
+namespace RiverHollow.SpriteAnimations
 {
     class MobileSprite
     {

@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
-using Adventure.Game_Managers.GUIObjects;
+using RiverHollow.Game_Managers.GUIObjects;
 using Microsoft.Xna.Framework.Input;
-using Adventure.Characters;
-using Adventure.Tile_Engine;
-using Adventure.Items;
+using RiverHollow.Characters;
+using RiverHollow.Tile_Engine;
+using RiverHollow.Items;
 
-namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
+namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUITextSelectionWindow : GUITextWindow
     {

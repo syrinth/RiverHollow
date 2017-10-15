@@ -1,14 +1,14 @@
-﻿using Adventure.Characters;
-using Adventure.GUIObjects;
-using Adventure.Items;
-using Adventure.Tile_Engine;
+﻿using RiverHollow.Characters;
+using RiverHollow.GUIObjects;
+using RiverHollow.Items;
+using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace Adventure.Game_Managers
+namespace RiverHollow.Game_Managers
 {
     public static class MapManager
     {

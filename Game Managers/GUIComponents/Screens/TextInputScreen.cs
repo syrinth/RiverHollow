@@ -1,13 +1,13 @@
-﻿using Adventure.Characters.NPCs;
-using Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
-using Adventure.Game_Managers.GUIObjects;
+﻿using RiverHollow.Characters.NPCs;
+using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Game_Managers.GUIObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Adventure.Game_Managers.GUIComponents.Screens
+namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
     public class TextInputScreen : GUIScreen
     {

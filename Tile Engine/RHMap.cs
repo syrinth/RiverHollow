@@ -1,8 +1,8 @@
-﻿using Adventure.Characters;
-using Adventure.Characters.NPCs;
-using Adventure.Game_Managers;
-using Adventure.GUIObjects;
-using Adventure.Items;
+﻿using RiverHollow.Characters;
+using RiverHollow.Characters.NPCs;
+using RiverHollow.Game_Managers;
+using RiverHollow.GUIObjects;
+using RiverHollow.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Adventure.Tile_Engine
+namespace RiverHollow.Tile_Engine
 {
     public class RHMap
     {

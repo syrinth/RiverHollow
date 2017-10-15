@@ -1,14 +1,14 @@
 ﻿
-using Adventure.Game_Managers.GUIComponents.GUIObjects;
-using Adventure.Game_Managers.GUIObjects;
-using Adventure.Screens;
+using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using static Adventure.Game_Managers.ObjectManager;
+using static RiverHollow.Game_Managers.ObjectManager;
 
-namespace Adventure.Game_Managers.GUIComponents.Screens
+namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
     class ItemCreationScreen : GUIScreen
     {

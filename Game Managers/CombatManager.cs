@@ -1,11 +1,12 @@
-﻿using Adventure.Characters;
+﻿using RiverHollow.Characters;
 using System.Collections.Generic;
 
-namespace Adventure.Game_Managers
+namespace RiverHollow.Game_Managers
 {
     public static class CombatManager
     {
-        private static Mob _m;
+        private static Mob _mob;
+        public static Mob CurrentMob { get => _mob; }
         private static List<Monster> _listMonsters;
         public static List<Monster> Monsters { get => _listMonsters; }
         private static List<CombatCharacter> _listParty;
@@ -13,8 +14,8 @@ namespace Adventure.Game_Managers
 
         public static void NewBattle(Mob m)
         {
-            _m = m;
-            _listMonsters = _m.Monsters;
+            _mob = m;
+            _listMonsters = _mob.Monsters;
             _listParty = PlayerManager.GetParty();
 
             RiverHollow.ChangeGameState(RiverHollow.GameState.Combat);
@@ -22,8 +23,8 @@ namespace Adventure.Game_Managers
 
         public static void EndBattle()
         {
-            MapManager.RemoveMob(_m);
-            _m = null;
+            MapManager.RemoveMob(_mob);
+            _mob = null;
             RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
         }
 

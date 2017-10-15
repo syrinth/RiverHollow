@@ -1,14 +1,15 @@
-﻿using Adventure.Game_Managers;
-using Adventure.Items;
-using Adventure.SpriteAnimations;
+﻿using RiverHollow.Game_Managers;
+using RiverHollow.Items;
+using RiverHollow.SpriteAnimations;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace Adventure.Characters
+namespace RiverHollow.Characters
 {
     public class CombatCharacter : Character
     {
@@ -25,14 +26,14 @@ namespace Adventure.Characters
             set { _hp = value; }
         }
 
-        public void Draw(Rectangle _rectangle)
+        public void Draw(SpriteBatch spriteBatch, Rectangle r)
         {
-
+            _sprite.Draw(spriteBatch, r);
         }
 
         public override void Update(GameTime theGameTime)
         {
-            //base.Update(theGameTime);
+            base.Update(theGameTime);
         }
 
         public void DecreaseHealth(int x)

@@ -1,11 +1,11 @@
-﻿using Adventure.Game_Managers;
-using Adventure.GUIObjects;
-using Adventure.Items;
-using Adventure.Tile_Engine;
+﻿using RiverHollow.Game_Managers;
+using RiverHollow.GUIObjects;
+using RiverHollow.Items;
+using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using System;
 
-namespace Adventure.Characters.NPCs
+namespace RiverHollow.Characters.NPCs
 {
     public class Worker : NPC
     {

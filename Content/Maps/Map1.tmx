@@ -243,16 +243,15 @@
 </data>
  </layer>
  <objectgroup name="Entrance Layer">
-  <object id="1" name="Exit" x="130.667" y="-2.66667" width="58.6667" height="32">
+  <object id="1" name="Exit" x="131.667" y="32.3333" width="58.6667" height="32">
    <properties>
     <property name="Exit" value="Map2"/>
    </properties>
   </object>
-  <object id="2" name="Entrance" x="144" y="30.6667" width="32" height="32">
+  <object id="2" name="Entrance" x="145" y="67.6667" width="32" height="32">
    <properties>
     <property name="Entrance" value="Map2"/>
    </properties>
   </object>
-  <object id="6" name="Sleep" x="589.333" y="174.667" width="5.33333" height="5.33333"/>
  </objectgroup>
 </map>

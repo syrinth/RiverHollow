@@ -1,4 +1,4 @@
-﻿using Adventure.GUIObjects;
+﻿using RiverHollow.GUIObjects;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using System;
@@ -8,13 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
-using Adventure.Items;
+using RiverHollow.Items;
 using Microsoft.Xna.Framework.Input;
-using Adventure.Game_Managers;
-using Adventure.Game_Managers.GUIObjects;
-using Adventure.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.Game_Managers;
+using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 
-namespace Adventure.Screens
+namespace RiverHollow.Screens
 {
     public class Inventory : GUIWindow
     {

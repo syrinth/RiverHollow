@@ -1,12 +1,12 @@
-﻿using Adventure.Game_Managers;
-using Adventure.GUIObjects;
+﻿using RiverHollow.Game_Managers;
+using RiverHollow.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.ViewportAdapters;
 
 
-namespace Adventure
+namespace RiverHollow
 {
     /// <summary>
     /// This is the main type for your game.

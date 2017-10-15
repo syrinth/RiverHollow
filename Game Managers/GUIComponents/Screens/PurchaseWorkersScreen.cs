@@ -1,14 +1,14 @@
-﻿using Adventure.Characters.NPCs;
-using Adventure.Game_Managers.GUIComponents.GUIObjects;
-using Adventure.GUIObjects;
-using Adventure.Items;
-using Adventure.Tile_Engine;
+﻿using RiverHollow.Characters.NPCs;
+using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.GUIObjects;
+using RiverHollow.Items;
+using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace Adventure.Game_Managers.GUIObjects.Screens
+namespace RiverHollow.Game_Managers.GUIObjects.Screens
 {
     public class PurchaseWorkersScreen : GUIScreen
     {

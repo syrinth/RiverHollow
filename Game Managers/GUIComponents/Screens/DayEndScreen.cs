@@ -1,5 +1,5 @@
-﻿using Adventure.Game_Managers.GUIComponents.GUIObjects;
-using Adventure.Game_Managers.GUIObjects;
+﻿using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.Game_Managers.GUIObjects;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Adventure.Game_Managers.GUIComponents.Screens
+namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
     public class DayEndScreen : GUIScreen
     {

@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System.Windows.Input;
 using Microsoft.Xna.Framework.Graphics;
-using Adventure.Characters.NPCs;
+using RiverHollow.Characters.NPCs;
 
-namespace Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows
+namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
     class GUITextInputWindow : GUITextWindow
     {

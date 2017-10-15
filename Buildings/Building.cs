@@ -1,14 +1,14 @@
-﻿using Adventure.Characters.NPCs;
-using Adventure.Game_Managers;
-using Adventure.Items;
-using Adventure.Tile_Engine;
+﻿using RiverHollow.Characters.NPCs;
+using RiverHollow.Game_Managers;
+using RiverHollow.Items;
+using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using static Adventure.Game_Managers.PlayerManager;
+using static RiverHollow.Game_Managers.PlayerManager;
 
-namespace Adventure
+namespace RiverHollow
 {
     public class Building : WorldObject
     {

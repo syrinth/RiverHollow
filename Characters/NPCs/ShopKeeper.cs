@@ -1,11 +1,11 @@
-﻿using Adventure.Game_Managers;
-using Adventure.GUIObjects;
-using Adventure.Items;
+﻿using RiverHollow.Game_Managers;
+using RiverHollow.GUIObjects;
+using RiverHollow.Items;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace Adventure.Characters.NPCs
+namespace RiverHollow.Characters.NPCs
 {
     public class ShopKeeper : NPC
     {

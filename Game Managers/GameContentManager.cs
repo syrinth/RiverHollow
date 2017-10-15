@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Adventure.Game_Managers
+namespace RiverHollow.Game_Managers
 {
     public static class GameContentManager
     {
@@ -41,6 +41,8 @@ namespace Adventure.Game_Managers
             AddTexture(Content, @"Textures\NPC");
             AddTexture(Content, @"Textures\Monsters\Goblin Scout");
             AddTexture(Content, @"Textures\Monsters\Goblin Soldier");
+            AddTexture(Content, @"Textures\GoblinCombat");
+            AddTexture(Content, @"Textures\WizardCombat");
         }
 
         public static void LoadGUIs(ContentManager Content)

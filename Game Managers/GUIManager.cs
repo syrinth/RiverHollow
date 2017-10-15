@@ -1,12 +1,12 @@
-﻿using Adventure.Characters;
-using Adventure.Characters.NPCs;
-using Adventure.Game_Managers.GUIComponents.GUIObjects;
-using Adventure.Game_Managers.GUIComponents.Screens;
-using Adventure.Game_Managers.GUIObjects;
-using Adventure.Game_Managers.GUIObjects.Screens;
-using Adventure.GUIObjects;
-using Adventure.Items;
-using Adventure.Screens;
+﻿using RiverHollow.Characters;
+using RiverHollow.Characters.NPCs;
+using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.Game_Managers.GUIComponents.Screens;
+using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.Game_Managers.GUIObjects.Screens;
+using RiverHollow.GUIObjects;
+using RiverHollow.Items;
+using RiverHollow.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,7 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Adventure.Game_Managers
+namespace RiverHollow.Game_Managers
 {
     public static class GUIManager
     {

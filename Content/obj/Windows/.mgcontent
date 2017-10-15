@@ -4,45 +4,47 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Map1.tmx</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Fonts/Font.spritefont</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/Eggplant.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/wizard.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Fonts/DisplayFont.spritefont</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Map2.tmx</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/ArcaneTower.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/Dialog.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/NPC.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/SpriteSheet.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/portraits.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/tree.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/tools.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/items.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/weapons.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Dialogue/NPCDialogue.xml</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/ItemData.xml</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/CraftingData.xml</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Characters.xml</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Dialogue/NPC1.xml</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Dialogue/NPC2.xml</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Dialogue/NPC3.xml</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Shops/Buildings.xml</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Shops/Arcanists.xml</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/worldObjects.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Dungeons/DungeonSheet.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Dungeons/Room1.tmx</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Dungeons/Room2.tmx</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Dungeons/Room3.tmx</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Dungeons/Room4.tmx</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Dungeons/Room5.tmx</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Dialogue/NPC4.xml</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/Monsters/Goblin Scout.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/Monsters/Goblin Soldier.png</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Monsters.xml</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Buildings.xml</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Workers.xml</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Maps/Arcane Tower.tmx</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Data/Mobs.xml</File>
-    <File>E:/Programming/Projects/Adventure/Adventure/Content/Textures/battle.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Map1.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/Font.spritefont</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Eggplant.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/wizard.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/DisplayFont.spritefont</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Map2.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/ArcaneTower.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Dialog.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/NPC.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/SpriteSheet.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/portraits.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/tree.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/tools.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/items.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/weapons.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPCDialogue.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/ItemData.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CraftingData.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Characters.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC1.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC2.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC3.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/Buildings.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/Arcanists.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/worldObjects.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/DungeonSheet.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/Room1.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/Room2.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/Room3.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/Room4.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/Room5.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC4.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Monsters/Goblin Scout.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Monsters/Goblin Soldier.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Monsters.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Buildings.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Workers.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Arcane Tower.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Mobs.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/battle.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/GoblinCombat.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/WizardCombat.png</File>
   </SourceFiles>
 </SourceFileCollection>

@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using Adventure.Screens;
-using Adventure.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.Screens;
+using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using Microsoft.Xna.Framework.Graphics;
-using Adventure.Items;
+using RiverHollow.Items;
 
-namespace Adventure.Game_Managers.GUIObjects
+namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class InventoryScreen : GUIScreen
     {

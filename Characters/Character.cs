@@ -1,10 +1,10 @@
-﻿using Adventure.Game_Managers;
-using Adventure.SpriteAnimations;
-using Adventure.Tile_Engine;
+﻿using RiverHollow.Game_Managers;
+using RiverHollow.SpriteAnimations;
+using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Adventure.Characters
+namespace RiverHollow.Characters
 {
     public class Character
     {

@@ -1,5 +1,5 @@
-﻿using Adventure.Game_Managers;
-using Adventure.GUIObjects;
+﻿using RiverHollow.Game_Managers;
+using RiverHollow.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Adventure.Characters
+namespace RiverHollow.Characters
 {
     public class NPC : WorldCharacter
     {

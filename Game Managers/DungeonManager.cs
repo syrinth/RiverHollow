@@ -1,11 +1,11 @@
 ﻿
-using Adventure.Items;
-using Adventure.Tile_Engine;
+using RiverHollow.Items;
+using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace Adventure.Game_Managers
+namespace RiverHollow.Game_Managers
 {
     static class DungeonManager
     {

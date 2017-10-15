@@ -1,5 +1,5 @@
-﻿using Adventure.Characters;
-using Adventure.Characters.NPCs;
+﻿using RiverHollow.Characters;
+using RiverHollow.Characters.NPCs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Adventure.Game_Managers
+namespace RiverHollow.Game_Managers
 {
     public static class CharacterManager
     {

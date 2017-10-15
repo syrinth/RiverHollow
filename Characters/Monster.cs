@@ -1,7 +1,7 @@
-﻿using Adventure.Characters;
-using Adventure.Game_Managers;
-using Adventure.Items;
-using Adventure.Tile_Engine;
+﻿using RiverHollow.Characters;
+using RiverHollow.Game_Managers;
+using RiverHollow.Items;
+using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Adventure
+namespace RiverHollow
 {
     public class Monster : CombatCharacter
     {
@@ -33,7 +33,6 @@ namespace Adventure
         public enum ActionType { Idle, Attack, Charge, Jump, Smash}
         public ActionType _currentAction = ActionType.Idle;
         protected string _name;
-        protected string _monsterType;
         protected int _minDmg;
         protected int _maxDmg;
         protected int _idleFor;
@@ -47,7 +46,6 @@ namespace Adventure
         public Monster(int id, string[] monsterData)
         {
             ImportBasics(monsterData, id);
-            _textureName = @"Textures\Monsters\" + _name;
             LoadContent(_textureName, 32, 64, 4, 0.3f);
         }
 
@@ -55,7 +53,7 @@ namespace Adventure
         {
             int i = 0;
             _name = monsterData[i++];
-            _monsterType = monsterData[i++];
+            _textureName = @"Textures\" + monsterData[i++];
             _maxHP = int.Parse(monsterData[i++]);
             string[] dmg = monsterData[i++].Split(' ');
             _minDmg = int.Parse(dmg[0]);

@@ -1,10 +1,10 @@
-﻿using Adventure.Game_Managers;
-using Adventure.Tile_Engine;
+﻿using RiverHollow.Game_Managers;
+using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Adventure
+namespace RiverHollow
 {
     public static class Camera
     {

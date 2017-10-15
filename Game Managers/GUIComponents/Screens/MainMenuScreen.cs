@@ -1,4 +1,4 @@
-﻿using Adventure.GUIObjects;
+﻿using RiverHollow.GUIObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
-namespace Adventure.Game_Managers.GUIObjects
+namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class MainMenuScreen : GUIScreen
     {

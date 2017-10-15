@@ -1,6 +1,6 @@
-﻿using Adventure.Characters.NPCs;
-using Adventure.Items;
-using Adventure.Tile_Engine;
+﻿using RiverHollow.Characters.NPCs;
+using RiverHollow.Items;
+using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,10 +13,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
-using Adventure.Characters;
+using RiverHollow.Characters;
 using Microsoft.Xna.Framework.Input;
 
-namespace Adventure.Game_Managers
+namespace RiverHollow.Game_Managers
 {
     public static class PlayerManager
     {
@@ -57,18 +57,23 @@ namespace Adventure.Game_Managers
             _buildings = new List<Building>();
             _canMake = new List<int>();
 
+            Combat.LoadContent(@"Textures\WizardCombat", 100, 700, 1, 1); //ToDo: position doesn't matter here
+
             World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
             World.Position = new Vector2(200, 200);
 
             MaxStamina = 50;
+            Stamina = MaxStamina;
         }
         public static void NewPlayer()
         {
             MaxStamina = 50;
+            Stamina = MaxStamina;
             World = new WorldCharacter();
             World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
             World.Position = new Vector2(200, 200);
             Combat = new CombatCharacter();
+            Combat.LoadContent(@"Textures\WizardCombat", 100, 700, 1, 1); //ToDo: position doesn't matter here
             _buildings = new List<Building>();
             _canMake = new List<int>();
             _canMake.Add(6);
@@ -204,7 +209,9 @@ namespace Adventure.Game_Managers
 
         public static List<CombatCharacter> GetParty()
         {
-            return null;
+            List<CombatCharacter> party = new List<CombatCharacter>();
+            party.Add(Combat);
+            return party;
         }
 
         public static bool ProcessLeftButtonClick(Point mouseLocation)

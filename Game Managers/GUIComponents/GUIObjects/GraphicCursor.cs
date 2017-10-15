@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
-using Adventure.Items;
+using RiverHollow.Items;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Adventure.Game_Managers;
+using RiverHollow.Game_Managers;
 
-namespace Adventure.GUIObjects
+namespace RiverHollow.GUIObjects
 {
     public static class GraphicCursor
     {

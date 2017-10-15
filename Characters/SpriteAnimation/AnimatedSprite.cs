@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Adventure.Tile_Engine;
+using RiverHollow.Tile_Engine;
 
-namespace Adventure.SpriteAnimations
+namespace RiverHollow.SpriteAnimations
 {
     public class AnimatedSprite
     {
@@ -261,6 +261,14 @@ namespace Adventure.SpriteAnimations
             if (_animating) {
                 spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White, 0, new Vector2(0,0), SpriteEffects.None, Position.Y + Texture.Height+(Position.X/100));
             }     
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Rectangle r)
+        {
+            if (_animating)
+            {
+                spriteBatch.Draw(_texture, r, Color.White);//, CurrentFrameAnimation.FrameRectangle, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y + Texture.Height + (Position.X / 100));
+            }
         }
     }
 }

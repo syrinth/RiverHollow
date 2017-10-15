@@ -1,7 +1,7 @@
-﻿using Adventure.Characters;
-using Adventure.Game_Managers;
-using Adventure.Items;
-using Adventure.Tile_Engine;
+﻿using RiverHollow.Characters;
+using RiverHollow.Game_Managers;
+using RiverHollow.Items;
+using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Adventure
+namespace RiverHollow
 {
     public class Mob : WorldCharacter
     {
@@ -85,7 +85,7 @@ namespace Adventure
             }
             else
             {
-                IdleMovement();
+                //IdleMovement();
             }
         }
 

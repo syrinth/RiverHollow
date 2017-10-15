@@ -1,6 +1,6 @@
-﻿using Adventure.Game_Managers;
-using Adventure.SpriteAnimations;
-using Adventure.Tile_Engine;
+﻿using RiverHollow.Game_Managers;
+using RiverHollow.SpriteAnimations;
+using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Adventure.Characters
+namespace RiverHollow.Characters
 {
     public class WorldCharacter : Character
     {

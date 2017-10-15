@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using Adventure.Screens;
+using RiverHollow.Screens;
 using Microsoft.Xna.Framework.Graphics;
-using Adventure.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using Microsoft.Xna.Framework.Input;
 
-namespace Adventure.Game_Managers.GUIObjects
+namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class HUDScreen : GUIScreen
     {

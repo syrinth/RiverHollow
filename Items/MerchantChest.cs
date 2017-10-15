@@ -1,9 +1,9 @@
 ﻿
-using Adventure.Game_Managers;
+using RiverHollow.Game_Managers;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
-namespace Adventure.Items
+namespace RiverHollow.Items
 {
     public class MerchantChest : WorldObject
     {

@@ -1,9 +1,9 @@
-﻿using Adventure.Game_Managers.GUIObjects;
-using Adventure.Items;
+﻿using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Adventure.Game_Managers.GUIComponents.GUIObjects
+namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
     public class GUIItemBox : GUIImage
     {

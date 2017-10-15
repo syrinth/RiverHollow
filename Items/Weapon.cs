@@ -1,6 +1,6 @@
-﻿using Adventure.Characters;
-using Adventure.Game_Managers;
-using Adventure.Tile_Engine;
+﻿using RiverHollow.Characters;
+using RiverHollow.Game_Managers;
+using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Adventure.Items
+namespace RiverHollow.Items
 {
     public class Weapon : Item
     {

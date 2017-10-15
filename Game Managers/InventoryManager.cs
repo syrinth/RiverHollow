@@ -1,11 +1,11 @@
-﻿using Adventure.Items;
+﻿using RiverHollow.Items;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Adventure.Game_Managers
+namespace RiverHollow.Game_Managers
 {
     static class InventoryManager
     {
