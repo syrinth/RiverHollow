@@ -10,10 +10,25 @@ namespace RiverHollow.Characters
     {
         protected AnimatedSprite _sprite;
         public AnimatedSprite Sprite { get => _sprite; }
+
         public virtual Vector2 Position
         {
             get { return new Vector2(_sprite.Position.X, _sprite.Position.Y); }
             set { _sprite.Position = value; }
+        }
+        public Rectangle GetRectangle()
+        {
+            return new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
+        }
+
+        protected int _width;
+        public int Width { get => _width; }
+        protected int _height;
+        public int Height { get => _height; }
+
+        public Character()
+        {
+
         }
 
         public virtual void LoadContent(string textureToLoad, int textureWidth, int textureHeight, int numFrames, float frameSpeed)

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RiverHollow.Characters.CombatStuff;
 
 namespace RiverHollow.Game_Managers
 {
@@ -16,11 +17,16 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<int, string> _monsterDictionary;
         private static Dictionary<int, NPC> _characterDictionary;
         public static Dictionary<string, bool> _talkedTo;
+        private static Dictionary<int, string> _abilityDictionary;
+        private static Dictionary<int, string> _classDictionary;
 
         public static void LoadContent(ContentManager Content)
         {
             _monsterDictionary = Content.Load<Dictionary<int, string>>(@"Data\Monsters");
             _mobDictionary = Content.Load<Dictionary<int, string>>(@"Data\Mobs");
+            _abilityDictionary = Content.Load<Dictionary<int, string>>(@"Data\Abilities");
+            _classDictionary = Content.Load<Dictionary<int, string>>(@"Data\Classes");
+
 
             _talkedTo = new Dictionary<string, bool>();
             _characterDictionary = new Dictionary<int, NPC>();
@@ -77,6 +83,30 @@ namespace RiverHollow.Game_Managers
             Mob m = GetMobByIndex(id);
             m.Position = pos;
             return m;
+        }
+
+        public static Ability GetAbilityByIndex(int id)
+        {
+            Ability a = null;
+            if (id != -1)
+            {
+                string _stringData = _abilityDictionary[id];
+                string[] _stringDataValues = _stringData.Split('/');
+                a = new Ability(id, _stringDataValues);
+            }
+            return a;
+        }
+
+        public static CharacterClass GetClassByIndex(int id)
+        {
+            CharacterClass c = null;
+            if (id != -1)
+            {
+                string _stringData = _classDictionary[id];
+                string[] _stringDataValues = _stringData.Split('/');
+                c = new CharacterClass(id, _stringDataValues);
+            }
+            return c;
         }
     }
 }

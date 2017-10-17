@@ -780,12 +780,13 @@ namespace RiverHollow.Tile_Engine
             int colRows = o.CollisionBox.Height / 32;
 
             rv = true;
+            //BUG: Went out of bounds?
             for (int i = 0; i < colRows; i++)
             {
                 for (int j = 0; j < colColumns; j++)
                 {
-                    int x = (o.CollisionBox.Left + (j * 32)) / 32;
-                    int y = (o.CollisionBox.Top + (i * 32)) / 32;
+                    int x = Math.Min((o.CollisionBox.Left + (j * 32)) / 32, MapWidth-1);
+                    int y = Math.Min((o.CollisionBox.Top + (i * 32)) / 32, MapHeight-1);
                     if (x < 0 || x > 99 || y < 0 || y > 99)
                     {
                         rv = false;

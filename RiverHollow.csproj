@@ -60,6 +60,8 @@
     <Compile Include="Buildings\Building.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Characters\Character.cs" />
+    <Compile Include="Characters\CombatStuff\Ability.cs" />
+    <Compile Include="Characters\CombatStuff\CharacterClass.cs" />
     <Compile Include="Characters\WorldCharacter.cs" />
     <Compile Include="Characters\CombatCharacter.cs" />
     <Compile Include="Characters\Mob.cs" />

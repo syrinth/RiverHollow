@@ -354,3 +354,42 @@
 /processorParam:TextureFormat=Color
 /build:Textures/WizardCombat.png
 
+#begin Textures/Abilities.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Abilities.png
+
+#begin Data/Classes.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Classes.xml
+
+#begin Data/Abilities.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Abilities.xml
+
+#begin Data/MobDrops.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/MobDrops.xml
+
+#begin Textures/GoblinSoldier.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/GoblinSoldier.png
+

@@ -62,13 +62,10 @@ namespace RiverHollow.Game_Managers
             World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
             World.Position = new Vector2(200, 200);
 
-            MaxStamina = 50;
-            Stamina = MaxStamina;
+            SetPlayerDefaults();
         }
         public static void NewPlayer()
         {
-            MaxStamina = 50;
-            Stamina = MaxStamina;
             World = new WorldCharacter();
             World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
             World.Position = new Vector2(200, 200);
@@ -83,6 +80,16 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddItemToFirstAvailableInventorySpot(6);
             InventoryManager.AddItemToFirstAvailableInventorySpot(7);
             InventoryManager.AddItemToFirstAvailableInventorySpot(8);
+
+            SetPlayerDefaults();
+        }
+
+        public static void SetPlayerDefaults()
+        {
+            MaxStamina = 50;
+            Stamina = MaxStamina;
+            Combat.SetClass(CharacterManager.GetClassByIndex(1));
+            Combat.SetMaxHp(10);
         }
 
         public static void Update(GameTime gameTime)

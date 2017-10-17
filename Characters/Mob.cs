@@ -14,18 +14,20 @@ namespace RiverHollow
     public class Mob : WorldCharacter
     {
         #region Properties
+        protected int _id;
+        public int ID { get => _id; }
         protected int _idleFor;
         protected int _leash = 400;
 
         protected string _textureName;
         protected Vector2 _moveTo = Vector2.Zero;
-        protected List<Monster> _monsters;
-        public List<Monster> Monsters { get => _monsters; }
+        protected List<CombatCharacter> _monsters;
+        public List<CombatCharacter> Monsters { get => _monsters; }
         #endregion
 
         public Mob(int id, string[] stringData)
         {
-            _monsters = new List<Monster>();
+            _monsters = new List<CombatCharacter>();
             ImportBasics(stringData, id);
             _textureName = @"Textures\Monsters\Goblin Scout";
             LoadContent(_textureName, 32, 64, 4, 0.3f);
@@ -35,8 +37,12 @@ namespace RiverHollow
         {
             for(int i=0; i < stringData.Length; i++)
             {
-                _monsters.Add(CharacterManager.GetMonsterByIndex(int.Parse(stringData[i])));
+                int mID = int.Parse(stringData[i]);
+                if (mID > 0){
+                    _monsters.Add(CharacterManager.GetMonsterByIndex(mID));
+                }
             }
+            _id = id;
             return 0;
         }
 

@@ -55,6 +55,7 @@ namespace RiverHollow
             spriteBatch = new SpriteBatch(GraphicsDevice);
             GameCalendar.NewCalendar();
             CharacterManager.LoadContent(Content);
+            DropManager.LoadContent(Content);
             
             GUIManager.SetScreen(GUIManager.Screens.MainMenu);
         }
@@ -154,7 +155,7 @@ namespace RiverHollow
                 }
                 else
                 {
-                    if ((_gameState == GameState.Build || _gameState == GameState.WorldMap) && !GUIManager.ProcessHover(mousePoint))
+                    if ((_gameState == GameState.Build || _gameState == GameState.WorldMap || _gameState == GameState.Combat) && !GUIManager.ProcessHover(mousePoint))
                     {
                         mousePoint.X = (int)((mousePoint.X - translate.X) / Scale);
                         mousePoint.Y = (int)((mousePoint.Y - translate.Y) / Scale);

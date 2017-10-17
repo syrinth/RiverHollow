@@ -55,6 +55,7 @@ namespace RiverHollow
             _name = monsterData[i++];
             _textureName = @"Textures\" + monsterData[i++];
             _maxHP = int.Parse(monsterData[i++]);
+            _hp = _maxHP;
             string[] dmg = monsterData[i++].Split(' ');
             _minDmg = int.Parse(dmg[0]);
             _minDmg = int.Parse(dmg[1]);

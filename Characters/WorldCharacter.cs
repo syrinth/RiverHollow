@@ -25,25 +25,17 @@ namespace RiverHollow.Characters
             set { _sprite.Position = value; }
         }
 
-        public Rectangle GetRectangle()
-        {
-            return new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
-        }
         public Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, Width, RHMap.TileSize); }
 
-        public int Width
-        {
-            get { return RHMap.TileSize; }
-        }
-
-        public int Height
-        {
-            get { return RHMap.TileSize; }
-        }
 
         public int Speed = 3;
         #endregion
 
+        public WorldCharacter() : base()
+        {
+            _width = RHMap.TileSize;
+            _height = RHMap.TileSize;
+        }
         public bool Contains(Point mouse)
         {
             return CollisionBox.Contains(mouse);

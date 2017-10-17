@@ -1,10 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RiverHollow.Game_Managers
 {
@@ -42,6 +38,7 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\Monsters\Goblin Scout");
             AddTexture(Content, @"Textures\Monsters\Goblin Soldier");
             AddTexture(Content, @"Textures\GoblinCombat");
+            AddTexture(Content, @"Textures\GoblinSoldier");
             AddTexture(Content, @"Textures\WizardCombat");
         }
 
@@ -53,6 +50,7 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadIcons(ContentManager Content)
         {
+            AddTexture(Content, @"Textures\Abilities");
             AddTexture(Content, @"Textures\battle");
             AddTexture(Content, @"Textures\weapons");
             AddTexture(Content, @"Textures\ArcaneTower");
