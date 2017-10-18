@@ -4,9 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.Characters
 {
@@ -110,8 +108,8 @@ namespace RiverHollow.Characters
 
         public virtual string GetText()
         {
-            Random r = new Random();
-            string text = _dialogueDictionary[r.Next(1, 3).ToString()];
+            RHRandom r = new RHRandom();
+            string text = _dialogueDictionary[r.Next(1, 2).ToString()];
             return ProcessText(text);
         }
         public virtual string GetDialogEntry(string entry)

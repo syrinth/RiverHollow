@@ -11,6 +11,7 @@ using MonoGame.Extended.Tiled;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.Tile_Engine
 {
@@ -721,7 +722,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     if (b.HasSpace())
                     {
-                        Random r = new Random();
+                        RHRandom r = new RHRandom();
                         Worker w = ObjectManager.GetWorker(GraphicCursor.WorkerToPlace);
                         b.AddWorker(w, r);
                         b._selected = false;
@@ -745,7 +746,7 @@ namespace RiverHollow.Tile_Engine
             }
             else if (bounce)
             {
-                Random r = new Random();
+                RHRandom r = new RHRandom();
                 Vector2 position = o.Position;
                 do
                 {
@@ -820,7 +821,7 @@ namespace RiverHollow.Tile_Engine
         public void PlaceStaticItem(StaticItem container, Vector2 position, bool bounce = true)
         {
             bool rv = false;
-            Random r = new Random();
+            RHRandom r = new RHRandom();
             position.X = ((int)(position.X/32)) * 32;
             position.Y = ((int)(position.Y/32)) * 32;
 
@@ -852,7 +853,7 @@ namespace RiverHollow.Tile_Engine
         public void AddMob(Mob m)
         {
             bool rv = false;
-            Random r = new Random();
+            RHRandom r = new RHRandom();
             Vector2 position = m.Position;
             position.X = ((int)(position.X / 32)) * 32;
             position.Y = ((int)(position.Y / 32)) * 32;

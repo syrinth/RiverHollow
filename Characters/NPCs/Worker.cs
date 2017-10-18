@@ -1,9 +1,8 @@
 ﻿using RiverHollow.Game_Managers;
 using RiverHollow.GUIObjects;
 using RiverHollow.Items;
-using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
-using System;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.Characters.NPCs
 {
@@ -50,8 +49,8 @@ namespace RiverHollow.Characters.NPCs
             GraphicCursor._currentType = GraphicCursor.CursorType.Normal;
             _mood += 1;
 
-            Random r = new Random();
-            GUIManager.LoadScreen(GUIManager.Screens.Text, this, Name + ": " + GameContentManager.GetDialogue(_workerType + r.Next(1,3)));
+            RHRandom r = new RHRandom();
+            GUIManager.LoadScreen(GUIManager.Screens.Text, this, Name + ": " + GameContentManager.GetDialogue(_workerType + r.Next(1,2)));
         }
 
         public int TakeItem()

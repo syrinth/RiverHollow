@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.PlayerManager;
+using RiverHollow.Utilities;
 
 namespace RiverHollow
 {
@@ -78,7 +79,7 @@ namespace RiverHollow
             return rv;
         }
         
-        public bool AddWorker(Worker worker, Random r)
+        public bool AddWorker(Worker worker, RHRandom r)
         {
             bool rv = false;
 
@@ -170,7 +171,7 @@ namespace RiverHollow
             SetCoordinates(new Vector2(data.positionX, data.positionY));
             _personalId = data.id;
 
-            Random r = new Random();
+            RHRandom r = new RHRandom();
             foreach (WorkerData wData in data.Workers)
             {
                 Worker w = ObjectManager.GetWorker(wData.workerID);

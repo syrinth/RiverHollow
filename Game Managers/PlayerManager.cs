@@ -2,15 +2,11 @@
 using RiverHollow.Items;
 using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.IsolatedStorage;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using RiverHollow.Characters;
@@ -89,7 +85,7 @@ namespace RiverHollow.Game_Managers
             MaxStamina = 50;
             Stamina = MaxStamina;
             Combat.SetClass(CharacterManager.GetClassByIndex(1));
-            Combat.SetMaxHp(10);
+            Combat.SetMaxHp(50);
         }
 
         public static void Update(GameTime gameTime)

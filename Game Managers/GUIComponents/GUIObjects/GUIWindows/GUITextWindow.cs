@@ -61,6 +61,17 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _position = position -= new Vector2(_width / 2, _height / 2);
         }
 
+        public GUITextWindow(string text) : this()
+        {
+            _text = text;
+            ParseText(text);
+
+            _height = (int)_parsedStrings.Count * (int)_characterHeight + _innerBorder * 2;
+            _width = (int)_font.MeasureString(_text).X + _innerBorder * 2;
+            Vector2 pos = new Vector2(RiverHollow.ScreenWidth/2, RiverHollow.ScreenHeight/2);
+            _position = pos -= new Vector2(_width / 2, _height / 2);
+        }
+
         public override void Update(GameTime gameTime)
         {
             if (_pause && _next != null)

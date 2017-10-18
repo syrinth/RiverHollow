@@ -5,8 +5,8 @@ using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.Game_Managers
 {
@@ -129,7 +129,7 @@ namespace RiverHollow.Game_Managers
         {
             int mapWidth = _tileMaps[@"Map1"].MapWidth;
             int mapHeight = _tileMaps[@"Map1"].MapHeight;
-            Random r = new Random();
+            RHRandom r = new RHRandom();
             //LoadMap1
             if (!loaded)
             {

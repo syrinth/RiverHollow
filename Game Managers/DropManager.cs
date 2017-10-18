@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using RiverHollow.Items;
-using System;
+using RiverHollow.Utilities;
 using System.Collections.Generic;
 
 namespace RiverHollow.Game_Managers
@@ -39,12 +39,12 @@ namespace RiverHollow.Game_Managers
         public static List<Item> DropItemsFromMob(int id)
         {
             List<Item> itemList = new List<Item>();
-            Random r = new Random();
+            RHRandom r = new RHRandom();
             string[] drops = _dictionaryMobDrops[id].Split('/');
             foreach(string s in drops)
             {
                 string[] split = s.Split(' ');
-                //int chance = r.Next(1, 101);
+                //int chance = r.Next(1, 100);
                 //if(chance <= int.Parse(split[0]))
                 //{
                     itemList.Add(ObjectManager.GetItem(int.Parse(split[1])));

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.Characters.CombatStuff;
+using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using System.Collections.Generic;
 
 namespace RiverHollow.Game_Managers.GUIObjects
@@ -13,6 +14,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         private Position[] _arrayParty;
         private Position[] _arrayEnemies;
         private List<AbilityButton> _abilityButtonList;
+        private GUITextWindow _textWindow;
 
         public CombatScreen()
         {
@@ -44,7 +46,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (CombatManager.CurrentPhase == CombatManager.Phase.Skill)
+            if (CombatManager.CurrentPhase == CombatManager.Phase.SelectSkill)
             {
                 foreach (AbilityButton a in _abilityButtonList)
                 {
@@ -54,13 +56,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     }
                 }
             }
-            else if (CombatManager.CurrentPhase == CombatManager.Phase.Target)
+            else if (CombatManager.CurrentPhase == CombatManager.Phase.Targetting)
             {
                 foreach (Position p in _arrayEnemies)
                 {
                     if (p != null && p.Occupied() && p.Contains(mouse))
                     {
-                        CombatManager.UseSkillOnTarget(p.Character);
+                        int dmg = 0;
+                        CombatManager.UseSkillOnTarget(p.Character, out dmg);
+                        p.AssignDamage(dmg);
                     }
                 }
             }
@@ -79,14 +83,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
             base.Draw(spriteBatch);
             foreach(Position p in _arrayParty)
             {
-                if (p != null && p.Occupied())
+                if (p != null)
                 {
                     p.Draw(spriteBatch);
                 }
             }
             foreach (Position p in _arrayEnemies)
             {
-                if (p != null && p.Occupied())
+                if (p != null)
                 {
                     p.Draw(spriteBatch);
                 }
@@ -95,11 +99,26 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 a.Draw(spriteBatch);
             }
+
+            if (_textWindow != null) { _textWindow.Draw(spriteBatch); }
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            CombatManager.Update();
+            if (CombatManager.Delay > 0)
+            {
+                if (!string.IsNullOrEmpty(CombatManager.Text))
+                {
+                    if(_textWindow == null) { _textWindow = new GUITextWindow(CombatManager.Text); }
+                    else { _textWindow.Update(gameTime); }
+                }
+            }
+            else
+            {
+                if(_textWindow != null) { _textWindow = null; }
+            }
 
             foreach (Position p in _arrayParty)
             {
@@ -122,11 +141,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     }
                 }
             }
-            if (CombatManager.CurrentPhase == CombatManager.Phase.Enemy)
+
+            if (CombatManager.CurrentPhase == CombatManager.Phase.EnemyTurn)
             {
-                CombatManager.TakeTurn();
+                CombatManager.TakeTurn(out int dmg);
+                _arrayParty[0].AssignDamage(dmg);
             }
-            else if (CombatManager.CurrentPhase != CombatManager.Phase.End)
+            else if (CombatManager.CurrentPhase == CombatManager.Phase.SelectSkill)
             {
                 _abilityButtonList.Clear();
                 int i = 0;
@@ -138,30 +159,48 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
     }
 
-    class Position
+    public class Position
     {
         private StatDisplay _healthBar;
         private Rectangle _rect;
         private CombatCharacter _character;
         public CombatCharacter Character { get => _character; }
-       
+
+        private SpriteFont _dmgFont;
+        private int _dmg;
+        private int _dmgTimer = 40;
+
         public Position(Rectangle r, CombatCharacter c)
         {
             _rect = r;
             _character = c;
             _healthBar = new StatDisplay(StatDisplay.Display.Health, _character, _rect.Location.ToVector2() + new Vector2(0, 150), 100, 5);
+            _dmgFont = GameContentManager.GetFont(@"Fonts\Font");
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _character.Draw(spriteBatch, _rect);
-            _healthBar.Draw(spriteBatch);
+            if (Occupied())
+            {
+                _character.Draw(spriteBatch, _rect);
+                _healthBar.Draw(spriteBatch);
+            }
+            if (_dmgTimer < 40)
+            {
+                spriteBatch.DrawString(_dmgFont, _dmg.ToString(), new Vector2(_rect.Center.X, _rect.Center.Y - (_dmgTimer++)/2), Color.White);
+            }
         }
 
         public void Update(GameTime gameTime)
         {
             _character.Update(gameTime);
             _healthBar.Update(gameTime);
+        }
+
+        public void AssignDamage(int x)
+        {
+            _dmg = x;
+            _dmgTimer = 0;
         }
 
         public bool Occupied()

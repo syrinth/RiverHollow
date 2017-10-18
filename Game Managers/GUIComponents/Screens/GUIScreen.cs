@@ -74,5 +74,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             _toRemove.Add(g);
         }
+
+        public virtual void ShowTextWindow(string text)
+        {
+            //
+        }
     }
 }

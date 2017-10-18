@@ -1,15 +1,9 @@
 ﻿using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
-using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.Items
 {
@@ -80,7 +74,7 @@ namespace RiverHollow.Items
 
         public int Damage()
         {
-            Random r = new Random();
+            RHRandom r = new RHRandom();
 
             return r.Next(_minDmg, _maxDmg);
         }

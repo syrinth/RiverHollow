@@ -1,5 +1,6 @@
 ﻿using RiverHollow.Characters;
 using RiverHollow.Characters.CombatStuff;
+using RiverHollow.Game_Managers.GUIObjects;
 using System.Collections.Generic;
 
 namespace RiverHollow.Game_Managers
@@ -14,15 +15,19 @@ namespace RiverHollow.Game_Managers
         public static List<CombatCharacter> Party { get => _listParty; }
         public static List<CombatCharacter> _turnOrder;
 
-        public enum Phase { Enemy, Skill, Target, End }
+        public enum Phase { EnemyTurn, SelectSkill, Targetting, Waiting, EndCombat }
         public static Phase CurrentPhase;
 
         public static int _currentTurnIndex;
 
         public static Ability _skill;
 
+        public static int Delay;
+        public static string Text;
+
         public static void NewBattle(Mob m)
         {
+            Delay = 0;
             _mob = m;
             _listMonsters = _mob.Monsters;
             _listParty = PlayerManager.GetParty();
@@ -37,7 +42,7 @@ namespace RiverHollow.Game_Managers
 
         public static void NextTurn()
         {
-            if (CurrentPhase != Phase.End)
+            if (CurrentPhase != Phase.EndCombat)
             {
                 if (_currentTurnIndex < _turnOrder.Count-1)
                 {
@@ -55,35 +60,55 @@ namespace RiverHollow.Game_Managers
         {
             if (_listMonsters.Contains(_turnOrder[_currentTurnIndex]))
             {
-                CurrentPhase = Phase.Enemy;
+                CurrentPhase = Phase.EnemyTurn;
             }
-            else
+            else if (_listParty.Contains(_turnOrder[_currentTurnIndex]))
             {
-                CurrentPhase = Phase.Skill;
+                CurrentPhase = Phase.SelectSkill;
+            }
+            else if (Delay > 0)
+            {
+                CurrentPhase = Phase.Waiting;
             }
         }
 
-        public static void TakeTurn()
+        public static void TakeTurn(out int dmg)
         {
             CombatCharacter c = _turnOrder[_currentTurnIndex];
             UsingSkill(CharacterManager.GetAbilityByIndex(1));
-            UseSkillOnTarget(_listParty[0]);
+            UseSkillOnTarget(_listParty[0], out dmg);
         }
+
         public static void UsingSkill(Ability a)
         {
             _skill = a;
-            CurrentPhase = Phase.Target;
+            CurrentPhase = Phase.Targetting;
         }
-        public static void UseSkillOnTarget(CombatCharacter target)
-        {
-            target.DecreaseHealth(_skill.Dmg);
-            NextTurn();
 
+        public static void UseSkillOnTarget(CombatCharacter target, out int dmg)
+        {
+            dmg = _skill.Dmg;
+            target.DecreaseHealth(dmg);
+            Text = _skill.Name;
+            Delay = 40;
+            CurrentPhase = Phase.Waiting;
+        }
+
+        public static void Update()
+        {
+            if(Delay > 0) {
+                Delay--;
+                if(Delay == 0)
+                {
+                    if(string.IsNullOrEmpty(Text)) { Text = string.Empty; }
+                    NextTurn();
+                }
+            }
         }
 
         public static void EndBattle()
         {
-            CurrentPhase = Phase.End;
+            CurrentPhase = Phase.EndCombat;
             MapManager.RemoveMob(_mob);
             MapManager.DropWorldItems(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
             _mob = null;

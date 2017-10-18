@@ -1,9 +1,8 @@
-﻿
-using RiverHollow.Items;
+﻿using RiverHollow.Items;
 using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.Game_Managers
 {
@@ -29,7 +28,7 @@ namespace RiverHollow.Game_Managers
             _backwardsMapKey = new Dictionary<string, KeyValuePair<string, string>>();
             _forwardsMapKey = new Dictionary<string, string>();
             int maxRooms = map.Difficulty;
-            Random r = new Random();
+            RHRandom r = new RHRandom();
             string dungeonPrefix = @"Dungeons\Room";
             _maps.Add(MapManager.Maps[dungeonPrefix + 1]);// r.Next(1, _numRooms+1);
             PopulateRoom(r, _maps[0], false);
@@ -39,7 +38,7 @@ namespace RiverHollow.Game_Managers
                 int val = -1;
                 do
                 {
-                    val = r.Next(1, _numRooms + 1);
+                    val = r.Next(1, _numRooms);
                 } while (_maps.Contains(MapManager.Maps[dungeonPrefix + val]));
 
                 RHMap newMap = MapManager.Maps[dungeonPrefix + val];
@@ -49,7 +48,7 @@ namespace RiverHollow.Game_Managers
             }
 
             List<string> directions = new List<string> { "North", "South", "East", "West" };
-            int lastDir = r.Next(0, 4);
+            int lastDir = r.Next(0, 3);
             for (int i = 0; i < _maps.Count; i++)
             {
                 RHMap m = _maps[i];
@@ -61,7 +60,7 @@ namespace RiverHollow.Game_Managers
                 int dirNextRoom = -1;
                 do
                 {
-                    dirNextRoom = r.Next(0, 4);
+                    dirNextRoom = r.Next(0, 3);
                 } while (dirNextRoom == dirToUnlock);
 
                 m.LayerVisible(directions[dirToUnlock], false);
@@ -98,34 +97,34 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void PopulateRoom(Random r, RHMap m, bool lastRoom)
+        public static void PopulateRoom(RHRandom r, RHMap m, bool lastRoom)
         {
             int mapWidth = m.MapWidth;
             int mapHeight = m.MapHeight;
             for (int i = 0; i < 5; i++)
             {
-                Vector2 vect = new Vector2(r.Next(0, mapWidth) * RHMap.TileSize, r.Next(0, mapHeight) * RHMap.TileSize);
+                Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize);
                 m.AddWorldObject(ObjectManager.GetWorldObject(1, vect), true);
             }
             for (int i = 0; i < 30; i++)
             {
-                Vector2 vect = new Vector2(r.Next(0, mapWidth) * RHMap.TileSize, r.Next(0, mapHeight) * RHMap.TileSize);
+                Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize);
                 m.AddWorldObject(ObjectManager.GetWorldObject(0, vect), true);
             }
             for (int i = 0; i < 5; i++)
             {
-                Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize);
+                Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-2) * RHMap.TileSize);
                 m.AddMob(CharacterManager.GetMobByIndex(1, vect));
             }
             for (int i = 0; i < 5; i++)
             {
-                Vector2 vect = new Vector2(r.Next(1, mapWidth - 1) * RHMap.TileSize, r.Next(1, mapHeight - 1) * RHMap.TileSize);
+                Vector2 vect = new Vector2(r.Next(1, mapWidth - 1) * RHMap.TileSize, r.Next(1, mapHeight - 2) * RHMap.TileSize);
                 m.AddMob(CharacterManager.GetMobByIndex(2, vect));
             }
 
             if (lastRoom && _condition == EndCondition.TreasureChest)
             {
-                Vector2 vect = new Vector2(r.Next(0, mapWidth) * RHMap.TileSize, r.Next(0, mapHeight) * RHMap.TileSize);
+                Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize);
                 Container c = (Container)ObjectManager.GetItem(6);
                 m.PlaceStaticItem(c, vect);
                 _endChest = c;

@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
+using System.Threading;
 
 namespace RiverHollow.Items
 {
@@ -172,8 +172,10 @@ namespace RiverHollow.Items
 
         public int RandNumber(int minValue, int maxValue, int minExclude, int maxExclude)
         {
+            Thread.Sleep(1);
             int rv = 0;
-            Random r = new Random();
+            int seed = (int)DateTime.Now.Ticks & 0x0000FFFF;
+            Random r = new Random(seed);
             bool found = false;
             while (!found)
             {

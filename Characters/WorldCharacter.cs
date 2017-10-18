@@ -1,14 +1,6 @@
-﻿using RiverHollow.Game_Managers;
-using RiverHollow.SpriteAnimations;
-using RiverHollow.Tile_Engine;
+﻿using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RiverHollow.Characters
 {
@@ -21,7 +13,7 @@ namespace RiverHollow.Characters
         public Point Center => GetRectangle().Center;
         public override Vector2 Position
         {
-            get { return new Vector2(_sprite.Position.X, _sprite.Position.Y + _sprite.Height - RHMap.TileSize); }
+            get { return new Vector2(_sprite.Position.X, _sprite.Position.Y + _sprite.Height - RHMap.TileSize); } //MAR this is fucked up
             set { _sprite.Position = value; }
         }
 

@@ -1,13 +1,12 @@
 ﻿using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
-using RiverHollow.Items;
 using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using System;
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Utilities;
 
 namespace RiverHollow
 {
@@ -100,7 +99,7 @@ namespace RiverHollow
             if (_moveTo == Vector2.Zero && _idleFor == 0)
             {
                 int howFar = 2;
-                Random r = new Random();
+                RHRandom r = new RHRandom();
                 int decision = r.Next(1, 5);
                 if (decision == 1) { _moveTo = new Vector2(Position.X - r.Next(1, howFar) * RHMap.TileSize, Position.Y); }
                 else if (decision == 2) { _moveTo = new Vector2(Position.X + r.Next(1, howFar) * RHMap.TileSize, Position.Y); }
