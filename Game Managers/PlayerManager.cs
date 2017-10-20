@@ -32,8 +32,8 @@ namespace RiverHollow.Game_Managers
         public static WorldCharacter World;
 
         public static CombatCharacter Combat;
-        public static int HitPoints { get => Combat.HitPoints; }
-        public static int MaxHitPoints { get => Combat.MaxHitPoints; }
+        public static int HitPoints { get => Combat.CurrentHP; }
+        public static int MaxHitPoints { get => Combat.HP; }
 
         private static List<Building> _buildings;
         public static List<Building> Buildings { get => _buildings; }

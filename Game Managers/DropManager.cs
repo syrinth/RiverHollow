@@ -44,11 +44,11 @@ namespace RiverHollow.Game_Managers
             foreach(string s in drops)
             {
                 string[] split = s.Split(' ');
-                //int chance = r.Next(1, 100);
-                //if(chance <= int.Parse(split[0]))
-                //{
+                int chance = r.Next(1, 100);
+                if(chance <= int.Parse(split[0]))
+                {
                     itemList.Add(ObjectManager.GetItem(int.Parse(split[1])));
-                //}
+                }
             }
 
             return itemList;

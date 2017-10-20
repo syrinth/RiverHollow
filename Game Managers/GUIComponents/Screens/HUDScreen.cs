@@ -34,6 +34,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
 
+        public override bool ProcessHover(Point mouse)
+        {
+            bool rv = false;
+            if (_healthDisplay.ProcessHover(mouse)) { rv = true; }
+            else if (_staminaDisplay.ProcessHover(mouse)) { rv = true; }
+            return rv;
+        }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);

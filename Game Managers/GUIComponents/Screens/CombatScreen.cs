@@ -74,7 +74,34 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool ProcessHover(Point mouse)
         {
             bool rv = false;
-            //_btnAttack.IsMouseHovering = _btnAttack.Contains(mouse);
+            foreach (AbilityButton a in _abilityButtonList)
+            {
+                if (a.Contains(mouse))
+                {
+                    a.Hover = true;
+                    _textWindow = new GUITextWindow(mouse.ToVector2(), a.btnAbility.Description);
+                    _textWindow.MoveTo(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y+32));
+                }
+                else if (a.Hover)
+                {
+                    _textWindow = null;
+                    a.Hover = false;
+                }
+            }
+            foreach(Position p in _arrayParty)
+            {
+                if (p != null)
+                {
+                    rv = p.ProcessHover(mouse);
+                }
+            }
+            foreach (Position p in _arrayEnemies)
+            {
+                if (p != null)
+                {
+                    rv = p.ProcessHover(mouse);
+                }
+            }
             return rv;
         }
 
@@ -100,7 +127,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 a.Draw(spriteBatch);
             }
 
-            if (_textWindow != null) { _textWindow.Draw(spriteBatch); }
+            if (_textWindow != null) { _textWindow.Draw(spriteBatch, true); }
         }
 
         public override void Update(GameTime gameTime)
@@ -217,6 +244,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             _character = null;
         }
+
+        public bool ProcessHover(Point mouse)
+        {
+            bool rv = false;
+            if (_healthBar.ProcessHover(mouse))
+            {
+                rv = true;
+            }
+            return rv;
+        }
     }
 
     class AbilityButton
@@ -224,6 +261,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         private Ability _ability;
         public Ability btnAbility { get => _ability; }
         private GUIButton _btn;
+        public bool Hover;
 
         public AbilityButton(Ability a, int X, int Y)
         {

@@ -40,7 +40,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                 _mainWindow = new GUIWindow(GUIObject.PosFromCenter(center, minWidth, minHeight), new Vector2(0, 0), 32, minWidth, minHeight);
 
                 _imgCurrentBuilding = new GUIImage(GUIObject.PosFromCenter(center, b.Texture.Width, b.Texture.Height), b.SourceRectangle, b.Texture.Width, b.Texture.Height, b.Texture);
-                _btnBuy = new GUIImage(new Vector2(center.X - 32, center.Y + (_mainWindow.GetRectangle().Height / 2)), new Rectangle(0, 96, 64, 32), 64, 32, @"Textures\Dialog");
+                _btnBuy = new GUIImage(new Vector2(center.X - 32, center.Y + (_mainWindow.Rectangle().Height / 2)), new Rectangle(0, 96, 64, 32), 64, 32, @"Textures\Dialog");
 
                 int numDivions = _merchandise.Count+2;
                 float xPos = _mainWindow.Position.X + _mainWindow.Width;

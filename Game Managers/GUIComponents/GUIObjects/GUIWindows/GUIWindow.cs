@@ -43,7 +43,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _drawRect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
         }
 
-        public Rectangle GetRectangle()
+        public Rectangle Rectangle()
         {
             int X = (int)(_position.X - _borderThickness * _edgeScale);
             int Y = (int)(_position.Y - _borderThickness * _edgeScale);

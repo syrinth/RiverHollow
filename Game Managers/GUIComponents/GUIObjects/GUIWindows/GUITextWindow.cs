@@ -179,17 +179,27 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            Draw(spriteBatch, false);
+        }
+
+        public void Draw(SpriteBatch spriteBatch, bool force)
+        {
             base.Draw(spriteBatch);
-            spriteBatch.DrawString(_font, _typedText, new Vector2(_position.X + _innerBorder, _position.Y + _innerBorder), Color.White);
+            spriteBatch.DrawString(_font, force ? _text : _typedText, new Vector2(_position.X + _innerBorder, _position.Y + _innerBorder), Color.White);
             if (_pause && _next != null)
             {
                 _next.Draw(spriteBatch);
             }
 
-            if(_talker != null)
+            if (_talker != null)
             {
-                _talker.DrawPortrait(spriteBatch, GetRectangle().Location.ToVector2());
+                _talker.DrawPortrait(spriteBatch, Rectangle().Location.ToVector2());
             }
+        }
+
+        public void MoveTo(Vector2 pos)
+        {
+            _position = pos;
         }
     }
 }

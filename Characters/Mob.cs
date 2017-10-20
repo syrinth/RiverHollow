@@ -62,36 +62,35 @@ namespace RiverHollow
         private void UpdateMovement()
         {
             Vector2 direction = Vector2.Zero;
-            string animation = "";
+            //string animation = "";
 
 
-            if (PlayerManager.PlayerInRange(Position, _leash))
+            //if (PlayerManager.PlayerInRange(Position, _leash))
+            //{
+            //    _moveTo = Vector2.Zero;
+            //    Vector2 targetPos = PlayerManager.World.Position;
+
+            //    float deltaX = Math.Abs(targetPos.X - this.Position.X);
+            //    float deltaY = Math.Abs(targetPos.Y - this.Position.Y);
+
+            //    GetMoveSpeed(targetPos, ref direction);
+            //    CheckMapForCollisionsAndMove(direction);
+
+            //    DetermineAnimation(ref animation, direction, deltaX, deltaY);
+
+            //    if (_sprite.CurrentAnimation != animation)
+            //    {
+            //        _sprite.CurrentAnimation = animation;
+            //    }
+            //}
+            //else
+            //{
+            if (CollisionBox.Intersects(PlayerManager.World.CollisionBox))
             {
-                _moveTo = Vector2.Zero;
-                Vector2 targetPos = PlayerManager.World.Position;
-
-                float deltaX = Math.Abs(targetPos.X - this.Position.X);
-                float deltaY = Math.Abs(targetPos.Y - this.Position.Y);
-
-                GetMoveSpeed(targetPos, ref direction);
-                CheckMapForCollisionsAndMove(direction);
-
-                DetermineAnimation(ref animation, direction, deltaX, deltaY);
-
-                if (_sprite.CurrentAnimation != animation)
-                {
-                    _sprite.CurrentAnimation = animation;
-                }
-
-                if (CollisionBox.Intersects(PlayerManager.World.CollisionBox))
-                {
-                    CombatManager.NewBattle(this);
-                }
+                CombatManager.NewBattle(this);
             }
-            else
-            {
-                //IdleMovement();
-            }
+            IdleMovement();
+            //}
         }
 
         private void IdleMovement()

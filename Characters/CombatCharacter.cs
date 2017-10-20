@@ -14,18 +14,21 @@ namespace RiverHollow.Characters
 {
     public class CombatCharacter : Character
     {
-        protected int _maxHP;
-        public int MaxHitPoints
-        {
-            get { return _maxHP; }
-            set { _maxHP = value; }
-        }
         protected int _hp;
-        public int HitPoints
+        public int HP
         {
             get { return _hp; }
             set { _hp = value; }
         }
+        protected int _currentHP;
+        public int CurrentHP
+        {
+            get { return _currentHP; }
+            set { _currentHP = value; }
+        }
+
+        protected int _dmg;
+        protected int Dmg { get => _dmg; }
 
         protected CharacterClass _class;
         public CharacterClass CharacterClass { get => _class; }
@@ -40,8 +43,8 @@ namespace RiverHollow.Characters
 
         public void SetMaxHp(int x)
         {
-            _maxHP = x;
             _hp = x;
+            _currentHP = x;
         }
         public void SetClass(CharacterClass x)
         {
@@ -64,8 +67,8 @@ namespace RiverHollow.Characters
 
         public void DecreaseHealth(int x)
         {
-            _hp -= x;
-            if (_hp <= 0)
+            _currentHP -= x;
+            if (_currentHP <= 0)
             {
                 CombatManager.Kill(this);
             }
@@ -73,13 +76,13 @@ namespace RiverHollow.Characters
 
         public void IncreaseHealth(int x)
         {
-            if (_hp + x <= _maxHP)
+            if (_currentHP + x <= _hp)
             {
-                _hp += x;
+                _currentHP += x;
             }
             else
             {
-                _hp = _maxHP;
+                _currentHP = _hp;
             }
         }
     }
