@@ -106,7 +106,7 @@ namespace RiverHollow
                 else if (decision == 4) { _moveTo = new Vector2(Position.X, Position.Y + r.Next(1, howFar) * RHMap.TileSize); }
                 else
                 {
-                    _sprite.CurrentAnimation = "Float" + _sprite.CurrentAnimation.Substring(4);
+                    //_sprite.CurrentAnimation = "Float" + _sprite.CurrentAnimation.Substring(4);
                     _idleFor = 300;
                 }
             }

@@ -51,5 +51,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Abilities.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/MobDrops.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/GoblinSoldier.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Thunder.png</File>
   </SourceFiles>
 </SourceFileCollection>

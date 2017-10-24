@@ -34,7 +34,8 @@ namespace RiverHollow.Characters
         public virtual void LoadContent(string textureToLoad, int textureWidth, int textureHeight, int numFrames, float frameSpeed)
         {
             _sprite = new AnimatedSprite(GameContentManager.GetTexture(textureToLoad));
-            _sprite.LoadContent(textureWidth, textureHeight, numFrames, frameSpeed);
+            _sprite.LoadContent(textureToLoad, textureWidth, textureHeight, numFrames, frameSpeed);
+            _sprite.SetCurrentAnimation(textureToLoad);
         }
 
         public virtual void Update(GameTime theGameTime)

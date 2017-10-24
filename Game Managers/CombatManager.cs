@@ -1,4 +1,5 @@
-﻿using RiverHollow.Characters;
+﻿using Microsoft.Xna.Framework;
+using RiverHollow.Characters;
 using RiverHollow.Characters.CombatStuff;
 using RiverHollow.Game_Managers.GUIObjects;
 using System.Collections.Generic;
@@ -15,14 +16,16 @@ namespace RiverHollow.Game_Managers
         public static List<CombatCharacter> Party { get => _listParty; }
         public static List<CombatCharacter> _turnOrder;
 
-        public enum Phase { EnemyTurn, SelectSkill, Targetting, Waiting, EndCombat }
+        public enum Phase { EnemyTurn, SelectSkill, Targetting, DisplayAttack, Animation, EndCombat }
         public static Phase CurrentPhase;
 
         public static int _currentTurnIndex;
 
         public static Ability _skill;
+        private static Position _target;
+        public static int PlayerTarget;
 
-        public static int Delay;
+        public static double Delay;
         public static string Text;
 
         public static void NewBattle(Mob m)
@@ -68,47 +71,61 @@ namespace RiverHollow.Game_Managers
             }
             else if (Delay > 0)
             {
-                CurrentPhase = Phase.Waiting;
+                CurrentPhase = Phase.DisplayAttack;
             }
         }
 
-        public static void TakeTurn(out int dmg)
+        public static void TakeTurn()
         {
             CombatCharacter c = _turnOrder[_currentTurnIndex];
             UsingSkill(CharacterManager.GetAbilityByIndex(1));
-            UseSkillOnTarget(_listParty[0], out dmg);
+            PlayerTarget = 0;
         }
 
         public static void UsingSkill(Ability a)
         {
             _skill = a;
+            _skill.Sprite.IsAnimating = true;
             CurrentPhase = Phase.Targetting;
         }
 
-        public static void UseSkillOnTarget(CombatCharacter target, out int dmg)
+        public static void UseSkillOnTarget(Position target)
         {
-            dmg = _skill.Dmg;
-            target.DecreaseHealth(dmg);
+            _target = target;
+            _skill.PreEffect(target);
             Text = _skill.Name;
-            Delay = 40;
-            CurrentPhase = Phase.Waiting;
+            Delay = 1;
+            CurrentPhase = Phase.DisplayAttack;
         }
 
-        public static void Update()
+        public static void Update(GameTime gameTime)
         {
             if(Delay > 0) {
-                Delay--;
-                if(Delay == 0)
+                Delay -= gameTime.ElapsedGameTime.TotalSeconds;
+                if (Delay <= 0)
                 {
-                    if(string.IsNullOrEmpty(Text)) { Text = string.Empty; }
-                    NextTurn();
+                    if (CurrentPhase == Phase.DisplayAttack)
+                    {
+                        if (!string.IsNullOrEmpty(Text)) { Text = string.Empty; }
+                        CurrentPhase = Phase.Animation;
+                        Delay = _skill.Sprite.CurrentFrameAnimation.FrameCount * _skill.Sprite.CurrentFrameAnimation.FrameLength;
+                    }
+                    else if (CurrentPhase == CombatManager.Phase.EndCombat)
+                    {
+                        EndBattle();
+                    }
+                    else
+                    {
+                        _skill.ApplyEffect(_target);
+                        _skill = null;
+                        NextTurn();
+                    }
                 }
             }
         }
 
         public static void EndBattle()
         {
-            CurrentPhase = Phase.EndCombat;
             MapManager.RemoveMob(_mob);
             MapManager.DropWorldItems(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
             _mob = null;
@@ -124,7 +141,8 @@ namespace RiverHollow.Game_Managers
             _turnOrder.Remove(c);
             if(_listMonsters.Count == 0)
             {
-                EndBattle();
+                Delay = 4;
+                CurrentPhase = Phase.EndCombat;
             }
         }
     }

@@ -1,22 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: Index>0 Value:Name/Description/Dmg/IconXIconY-->
+    <!--Key: Index>0 Value:Name/Description/IconXIconY/Tags-->
     <Item>
       <Key>1</Key>
-      <Value>Attack/Basic Attack/1/0 0</Value>
+      <Value>Attack/Basic Attack/0 0/Harm:1 Collide</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Thunder/Call down thunder on your foes/5/1 0</Value>
+      <Value>Thunder/Call down thunder on your foes/1 0/Harm:5 Direct</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>Fireball/Flames!/7/2 0</Value>
+      <Value>Fireball/Flames!/2 0/Harm:7 Projectile</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>Rock/Summon a rock/4/3 0</Value>
+      <Value>Rock/Summon a rock/3 0/Harm:2 Projectile</Value>
     </Item>
   </Asset>
 </XnaContent>

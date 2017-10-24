@@ -40,7 +40,7 @@ namespace RiverHollow.Items
 
             _sprite.CurrentAnimation = "Left";
             _sprite.IsAnimating = true;
-            _sprite.playsOnce = true;
+            _sprite.PlaysOnce = true;
         }
 
         public void Update(GameTime gameTime)

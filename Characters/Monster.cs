@@ -46,7 +46,7 @@ namespace RiverHollow
         public Monster(int id, string[] monsterData)
         {
             ImportBasics(monsterData, id);
-            LoadContent(_textureName, 32, 64, 4, 0.3f);
+            LoadContent(_textureName, 100, 100, 2, 0.7f);
         }
 
         protected int ImportBasics(string[] monsterData, int id)

@@ -53,7 +53,7 @@ namespace RiverHollow.Game_Managers
             _buildings = new List<Building>();
             _canMake = new List<int>();
 
-            Combat.LoadContent(@"Textures\WizardCombat", 100, 700, 1, 1); //ToDo: position doesn't matter here
+            Combat.LoadContent(@"Textures\WizardCombat", 100, 100, 2, 0.7f); //ToDo: position doesn't matter here
 
             World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
             World.Position = new Vector2(200, 200);
@@ -66,7 +66,7 @@ namespace RiverHollow.Game_Managers
             World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
             World.Position = new Vector2(200, 200);
             Combat = new CombatCharacter();
-            Combat.LoadContent(@"Textures\WizardCombat", 100, 700, 1, 1); //ToDo: position doesn't matter here
+            Combat.LoadContent(@"Textures\WizardCombat", 100, 100, 2, 0.7f); //ToDo: position doesn't matter here
             _buildings = new List<Building>();
             _canMake = new List<int>();
             _canMake.Add(6);
@@ -130,14 +130,14 @@ namespace RiverHollow.Game_Managers
                 {
                     World.Facing = WorldCharacter.Direction.North;
                     moveDir += new Vector2(0, -World.Speed);
-                    animation = "Float";
+                    //animation = "Float";
                     moveVector += new Vector2(0, -World.Speed);
                 }
                 else if (ks.IsKeyDown(Keys.S))
                 {
                     World.Facing = WorldCharacter.Direction.South;
                     moveDir += new Vector2(0, World.Speed);
-                    animation = "Float";
+                    //animation = "Float";
                     moveVector += new Vector2(0, World.Speed);
                 }
 
@@ -145,14 +145,14 @@ namespace RiverHollow.Game_Managers
                 {
                     World.Facing = WorldCharacter.Direction.East;
                     moveDir += new Vector2(-World.Speed, 0);
-                    animation = "Float";
+                    //animation = "Float";
                     moveVector += new Vector2(-World.Speed, 0);
                 }
                 else if (ks.IsKeyDown(Keys.D))
                 {
                     World.Facing = WorldCharacter.Direction.West;
                     moveDir += new Vector2(World.Speed, 0);
-                    animation = "Float";
+                    //animation = "Float";
                     moveVector += new Vector2(World.Speed, 0);
                 }
 
@@ -182,7 +182,7 @@ namespace RiverHollow.Game_Managers
                 }
                 else
                 {
-                    World.Sprite.CurrentAnimation = "Float" + World.Sprite.CurrentAnimation.Substring(4);
+                    //World.Sprite.CurrentAnimation = "Float" + World.Sprite.CurrentAnimation.Substring(4);
                 }
             }
             World.Update(gameTime);
@@ -192,13 +192,13 @@ namespace RiverHollow.Game_Managers
             
         }
 
-        public static void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public static void Draw(SpriteBatch spriteBatch)
         {
-            if (RiverHollow.State == RiverHollow.GameState.Combat) { DrawCombat(gameTime, spriteBatch); }
-            else { DrawWorld(gameTime, spriteBatch); }
+            if (RiverHollow.State == RiverHollow.GameState.Combat) { DrawCombat(spriteBatch); }
+            else { DrawWorld(spriteBatch); }
             _merchantChest.Draw(spriteBatch);
         }
-        public static void DrawWorld(GameTime gameTime, SpriteBatch spriteBatch)
+        public static void DrawWorld(SpriteBatch spriteBatch)
         {
             World.Draw(spriteBatch);
             if (_usingTool)
@@ -206,7 +206,7 @@ namespace RiverHollow.Game_Managers
                 ((Tool)InventoryManager.CurrentItem).ToolAnimation.Draw(spriteBatch);
             }
         }
-        public static void DrawCombat(GameTime gameTime, SpriteBatch spriteBatch)
+        public static void DrawCombat(SpriteBatch spriteBatch)
         {
         }
 

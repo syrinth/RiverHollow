@@ -55,9 +55,9 @@ namespace RiverHollow.Characters
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Rectangle r)
+        public void Draw(SpriteBatch spriteBatch, bool useLayerDepth = true)
         {
-            _sprite.Draw(spriteBatch, r);
+            _sprite.Draw(spriteBatch, useLayerDepth);
         }
 
         public override void Update(GameTime theGameTime)

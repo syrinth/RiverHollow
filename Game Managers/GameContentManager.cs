@@ -60,6 +60,8 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\portraits");
             AddTexture(Content, @"Textures\tree");
             AddTexture(Content, @"Textures\items");
+            AddTexture(Content, @"Textures\Thunder");
+            
         }
 
         public static void LoadFont(ContentManager Content)

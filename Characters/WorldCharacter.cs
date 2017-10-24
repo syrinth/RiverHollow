@@ -40,12 +40,12 @@ namespace RiverHollow.Characters
                 if (direction.X > 0)
                 {
                     Facing = Direction.West;
-                    animation = "Float";
+                    //animation = "Float";
                 }
                 else
                 {
                     Facing = Direction.East;
-                    animation = "Float";
+                    //animation = "Float";
                 }
             }
             else
@@ -53,12 +53,12 @@ namespace RiverHollow.Characters
                 if (direction.Y > 0)
                 {
                     Facing = Direction.South;
-                    animation = "Float";
+                    //animation = "Float";
                 }
                 else
                 {
                     Facing = Direction.North;
-                    animation = "Float";
+                    //animation = "Float";
                 }
             }
         }

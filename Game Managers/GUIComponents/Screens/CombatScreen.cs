@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.Characters.CombatStuff;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.SpriteAnimations;
 using System.Collections.Generic;
 
 namespace RiverHollow.Game_Managers.GUIObjects
@@ -15,24 +16,25 @@ namespace RiverHollow.Game_Managers.GUIObjects
         private Position[] _arrayEnemies;
         private List<AbilityButton> _abilityButtonList;
         private GUITextWindow _textWindow;
+        private AnimatedSprite _attack;
 
         public CombatScreen()
         {
             Mob m = CombatManager.CurrentMob;
-            _background = new GUIImage(new Vector2(0, 0), new Rectangle(0, 0, 800, 480), RiverHollow.ScreenWidth, RiverHollow.ScreenHeight,GameContentManager.GetTexture(@"Textures\battle"));
+            _background = new GUIImage(new Vector2(0, 0), new Rectangle(0, 0, 800, 480), RiverHollow.ScreenWidth, RiverHollow.ScreenHeight, GameContentManager.GetTexture(@"Textures\battle"));
             _arrayParty = new Position[_positions];
             _arrayEnemies = new Position[_positions];
             _abilityButtonList = new List<AbilityButton>();
             Controls.Add(_background);
-            
+
             List<CombatCharacter> party = CombatManager.Party;
-            for(int i = 0; i < party.Count; i++)
+            for (int i = 0; i < party.Count; i++)
             {
                 if (party[i] != null)
                 {
-                    _arrayParty[i] = new Position(new Rectangle(100, 700, 100, 100), party[i]);                    
+                    _arrayParty[i] = new Position(new Rectangle(100, 700, 100, 100), party[i]);
                 }
-                
+
             }
             for (int i = 0; i < m.Monsters.Count; i++)
             {
@@ -52,7 +54,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     if (a.Contains(mouse))
                     {
-                        CombatManager.UsingSkill(a.btnAbility);
+                        CombatManager.UsingSkill(a.BtnAbility);
                     }
                 }
             }
@@ -62,9 +64,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     if (p != null && p.Occupied() && p.Contains(mouse))
                     {
-                        int dmg = 0;
-                        CombatManager.UseSkillOnTarget(p.Character, out dmg);
-                        p.AssignDamage(dmg);
+                        CombatManager.UseSkillOnTarget(p);
                     }
                 }
             }
@@ -79,8 +79,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 if (a.Contains(mouse))
                 {
                     a.Hover = true;
-                    _textWindow = new GUITextWindow(mouse.ToVector2(), a.btnAbility.Description);
-                    _textWindow.MoveTo(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y+32));
+                    _textWindow = new GUITextWindow(mouse.ToVector2(), a.BtnAbility.Description);
+                    _textWindow.MoveTo(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32));
                 }
                 else if (a.Hover)
                 {
@@ -88,7 +88,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     a.Hover = false;
                 }
             }
-            foreach(Position p in _arrayParty)
+            foreach (Position p in _arrayParty)
             {
                 if (p != null)
                 {
@@ -105,46 +105,30 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-            foreach(Position p in _arrayParty)
-            {
-                if (p != null)
-                {
-                    p.Draw(spriteBatch);
-                }
-            }
-            foreach (Position p in _arrayEnemies)
-            {
-                if (p != null)
-                {
-                    p.Draw(spriteBatch);
-                }
-            }
-            foreach (AbilityButton a in _abilityButtonList)
-            {
-                a.Draw(spriteBatch);
-            }
-
-            if (_textWindow != null) { _textWindow.Draw(spriteBatch, true); }
-        }
-
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            CombatManager.Update();
+            CombatManager.Update(gameTime);
+            if (CombatManager._skill == null) { _attack = null; }
             if (CombatManager.Delay > 0)
             {
-                if (!string.IsNullOrEmpty(CombatManager.Text))
+                if (CombatManager.CurrentPhase == CombatManager.Phase.DisplayAttack && !string.IsNullOrEmpty(CombatManager.Text))
                 {
-                    if(_textWindow == null) { _textWindow = new GUITextWindow(CombatManager.Text); }
+                    if (_textWindow == null) { _textWindow = new GUITextWindow(CombatManager.Text); }
                     else { _textWindow.Update(gameTime); }
                 }
-            }
-            else
-            {
-                if(_textWindow != null) { _textWindow = null; }
+                else if (CombatManager.CurrentPhase == CombatManager.Phase.Animation)
+                {
+                    if (_textWindow != null) { _textWindow = null; }
+                    if (_attack != null)
+                    {
+                        _attack.Update(gameTime);
+                    }
+                    else
+                    {
+                        _attack = CombatManager._skill.Sprite;
+                    }
+                }
             }
 
             foreach (Position p in _arrayParty)
@@ -171,8 +155,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             if (CombatManager.CurrentPhase == CombatManager.Phase.EnemyTurn)
             {
-                CombatManager.TakeTurn(out int dmg);
-                _arrayParty[0].AssignDamage(dmg);
+                CombatManager.TakeTurn();
+                CombatManager.UseSkillOnTarget(_arrayParty[CombatManager.PlayerTarget]);
+
             }
             else if (CombatManager.CurrentPhase == CombatManager.Phase.SelectSkill)
             {
@@ -184,6 +169,37 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
             }
         }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+            foreach (Position p in _arrayParty)
+            {
+                if (p != null)
+                {
+                    p.Draw(spriteBatch);
+                }
+            }
+            foreach (Position p in _arrayEnemies)
+            {
+                if (p != null)
+                {
+                    p.Draw(spriteBatch);
+                }
+            }
+            foreach (AbilityButton a in _abilityButtonList)
+            {
+                a.Draw(spriteBatch);
+            }
+
+            if (_textWindow != null) { _textWindow.Draw(spriteBatch, true); }
+            if (_attack != null)
+            {
+                _attack.Draw(spriteBatch, false);
+            }
+        }
+
+        
     }
 
     public class Position
@@ -201,6 +217,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             _rect = r;
             _character = c;
+            _character.Position = _rect.Location.ToVector2();
             _healthBar = new StatDisplay(StatDisplay.Display.Health, _character, _rect.Location.ToVector2() + new Vector2(0, 150), 100, 5);
             _dmgFont = GameContentManager.GetFont(@"Fonts\Font");
         }
@@ -209,12 +226,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             if (Occupied())
             {
-                _character.Draw(spriteBatch, _rect);
+                _character.Draw(spriteBatch, false);
                 _healthBar.Draw(spriteBatch);
             }
             if (_dmgTimer < 40)
             {
-                spriteBatch.DrawString(_dmgFont, _dmg.ToString(), new Vector2(_rect.Center.X, _rect.Center.Y - (_dmgTimer++)/2), Color.White);
+                spriteBatch.DrawString(_dmgFont, _dmg.ToString(), new Vector2(_rect.Center.X, _rect.Center.Y - (_dmgTimer++) / 2), Color.White);
             }
         }
 
@@ -259,7 +276,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
     class AbilityButton
     {
         private Ability _ability;
-        public Ability btnAbility { get => _ability; }
+        public Ability BtnAbility { get => _ability; }
         private GUIButton _btn;
         public bool Hover;
 

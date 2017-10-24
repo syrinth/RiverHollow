@@ -126,7 +126,7 @@ namespace RiverHollow.SpriteAnimations
             set { _animating = value; }
         }
 
-        public bool playsOnce = false;
+        public bool PlaysOnce = false;
         ///
         /// The FrameAnimation object of the currently playing animation
         ///
@@ -159,7 +159,7 @@ namespace RiverHollow.SpriteAnimations
             }
         }
 
-#endregion
+        #endregion
 
         public AnimatedSprite(Texture2D Texture)
         {
@@ -167,12 +167,15 @@ namespace RiverHollow.SpriteAnimations
         }
 
         //TODO: Remove this method, classes should do it manually, not in this level
-        public void LoadContent(int textureWidth, int textureHeight, int numFrames, float frameSpeed)
+        public void LoadContent(string name, int textureWidth, int textureHeight, int numFrames, float frameSpeed)
         {
-            this.AddAnimation("Float", 0, 0, textureWidth, textureHeight, numFrames, frameSpeed);
-
-            this.CurrentAnimation = "Float";
+            this.AddAnimation(name, 0, 0, textureWidth, textureHeight, numFrames, frameSpeed);
             this.IsAnimating = true;
+        }
+
+        public void SetCurrentAnimation(string animate)
+        {
+            this.CurrentAnimation = animate;
         }
 
         public void AddAnimation(string Name, int X, int Y, int Width, int Height, int Frames, float FrameLength)
@@ -236,7 +239,7 @@ namespace RiverHollow.SpriteAnimations
                 // Run the Animation's update method
                 CurrentFrameAnimation.Update(gameTime);
 
-                if (playsOnce && CurrentFrameAnimation.PlayCount > 0)
+                if (PlaysOnce && CurrentFrameAnimation.PlayCount > 0)
                 {
                     IsAnimating = false;
                     CurrentFrameAnimation.PlayCount = 0;
@@ -256,18 +259,12 @@ namespace RiverHollow.SpriteAnimations
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            if (_animating) {
-                spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White, 0, new Vector2(0,0), SpriteEffects.None, Position.Y + Texture.Height+(Position.X/100));
-            }     
-        }
-
-        public void Draw(SpriteBatch spriteBatch, Rectangle r)
+        public void Draw(SpriteBatch spriteBatch, bool useLayerDepth = true)
         {
             if (_animating)
             {
-                spriteBatch.Draw(_texture, r, Color.White);//, CurrentFrameAnimation.FrameRectangle, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y + Texture.Height + (Position.X / 100));
+                if (useLayerDepth) { spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y + Texture.Height + (Position.X / 100)); }
+                else { spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White); }
             }
         }
     }
