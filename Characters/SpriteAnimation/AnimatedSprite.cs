@@ -167,9 +167,9 @@ namespace RiverHollow.SpriteAnimations
         }
 
         //TODO: Remove this method, classes should do it manually, not in this level
-        public void LoadContent(string name, int textureWidth, int textureHeight, int numFrames, float frameSpeed)
+        public void LoadContent(string name, int frameWidth, int frameHeight, int numFrames, float frameSpeed, int startX = 0, int startY = 0)
         {
-            this.AddAnimation(name, 0, 0, textureWidth, textureHeight, numFrames, frameSpeed);
+            this.AddAnimation(name, startX, startY, frameWidth, frameHeight, numFrames, frameSpeed);
             this.IsAnimating = true;
         }
 

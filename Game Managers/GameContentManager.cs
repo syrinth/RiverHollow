@@ -50,7 +50,7 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadIcons(ContentManager Content)
         {
-            AddTexture(Content, @"Textures\Abilities");
+            AddTexture(Content, @"Textures\AbilityIcons");
             AddTexture(Content, @"Textures\battle");
             AddTexture(Content, @"Textures\weapons");
             AddTexture(Content, @"Textures\ArcaneTower");
@@ -60,7 +60,7 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\portraits");
             AddTexture(Content, @"Textures\tree");
             AddTexture(Content, @"Textures\items");
-            AddTexture(Content, @"Textures\Thunder");
+            AddTexture(Content, @"Textures\AbilityAnimations");
             
         }
 

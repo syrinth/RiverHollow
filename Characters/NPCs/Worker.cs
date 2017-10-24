@@ -2,7 +2,7 @@
 using RiverHollow.GUIObjects;
 using RiverHollow.Items;
 using Microsoft.Xna.Framework;
-using RiverHollow.Utilities;
+using RiverHollow.Misc;
 
 namespace RiverHollow.Characters.NPCs
 {

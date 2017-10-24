@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using RiverHollow.Items;
-using RiverHollow.Utilities;
+using RiverHollow.Misc;
 using System.Collections.Generic;
 
 namespace RiverHollow.Game_Managers

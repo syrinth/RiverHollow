@@ -354,18 +354,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/WizardCombat.png
 
-#begin Textures/Abilities.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Abilities.png
-
 #begin Data/Classes.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -393,7 +381,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/GoblinSoldier.png
 
-#begin Textures/Thunder.png
+#begin Textures/AbilityAnimations.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -403,5 +391,17 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Thunder.png
+/build:Textures/AbilityAnimations.png
+
+#begin Textures/AbilityIcons.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/AbilityIcons.png
 

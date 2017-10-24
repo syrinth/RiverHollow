@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Utilities;
+using RiverHollow.Misc;
 
 namespace RiverHollow
 {
@@ -117,7 +117,7 @@ namespace RiverHollow
                 float deltaX = Math.Abs(_moveTo.X - this.Position.X);
                 float deltaY = Math.Abs(_moveTo.Y - this.Position.Y);
 
-                GetMoveSpeed(_moveTo, ref direction);
+                Utilities.GetMoveSpeed(Position, _moveTo, Speed, ref direction);
                 CheckMapForCollisionsAndMove(direction);
 
                 DetermineAnimation(ref animation, direction, deltaX, deltaY);
@@ -151,24 +151,6 @@ namespace RiverHollow
             {
                 _sprite.MoveBy(0, (int)direction.Y);
             }
-        }
-
-        private void GetMoveSpeed(Vector2 position, ref Vector2 direction)
-        {
-            float newX = 0; float newY = 0;
-            if (position.X != this.Position.X)
-            {
-                newX = (position.X > this.Position.X) ? 1 : -1;
-            }
-            if (position.Y != this.Position.Y)
-            {
-                newY = (position.Y > this.Position.Y) ? 1 : -1;
-            }
-
-            float deltaX = Math.Abs(position.X - Position.X);
-            float deltaY = Math.Abs(position.Y - Position.Y);
-            direction.X = (deltaX < Speed) ? newX * deltaX : newX * Speed;
-            direction.Y = (deltaY < Speed) ? newY * deltaY : newY * Speed;
-        }        
+        }       
     }
 }

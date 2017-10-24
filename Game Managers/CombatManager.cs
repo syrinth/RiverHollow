@@ -2,6 +2,8 @@
 using RiverHollow.Characters;
 using RiverHollow.Characters.CombatStuff;
 using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.Misc;
+using RiverHollow.SpriteAnimations;
 using System.Collections.Generic;
 
 namespace RiverHollow.Game_Managers
@@ -92,9 +94,10 @@ namespace RiverHollow.Game_Managers
         public static void UseSkillOnTarget(Position target)
         {
             _target = target;
+            _skill.SkillUser = _turnOrder[_currentTurnIndex];
             _skill.PreEffect(target);
             Text = _skill.Name;
-            Delay = 1;
+            Delay = 0.5;
             CurrentPhase = Phase.DisplayAttack;
         }
 
@@ -104,11 +107,12 @@ namespace RiverHollow.Game_Managers
                 Delay -= gameTime.ElapsedGameTime.TotalSeconds;
                 if (Delay <= 0)
                 {
+                    Delay = 0;
                     if (CurrentPhase == Phase.DisplayAttack)
                     {
                         if (!string.IsNullOrEmpty(Text)) { Text = string.Empty; }
                         CurrentPhase = Phase.Animation;
-                        Delay = _skill.Sprite.CurrentFrameAnimation.FrameCount * _skill.Sprite.CurrentFrameAnimation.FrameLength;
+                        Delay = _skill.GetDelay();
                     }
                     else if (CurrentPhase == CombatManager.Phase.EndCombat)
                     {
@@ -116,9 +120,26 @@ namespace RiverHollow.Game_Managers
                     }
                     else
                     {
-                        _skill.ApplyEffect(_target);
-                        _skill = null;
-                        NextTurn();
+                        if (_skill.IsFinished())
+                        {
+                            _skill.ApplyEffect(_target);
+                            _skill = null;
+                            NextTurn();
+                        }
+                    }
+                }
+                else
+                {
+                    if (CurrentPhase == CombatManager.Phase.Animation)
+                    {
+                        if (!_skill.IsFinished() && _skill.TargetPosition != Vector2.Zero)
+                        {
+                            AnimatedSprite s = _skill.Sprite;
+                            Vector2 direction = Vector2.Zero;
+                            Utilities.GetMoveSpeed(s.Position, _skill.TargetPosition, 10, ref direction);
+                            s.Position += direction;
+                            Delay += gameTime.ElapsedGameTime.TotalSeconds;
+                        }
                     }
                 }
             }
@@ -141,7 +162,7 @@ namespace RiverHollow.Game_Managers
             _turnOrder.Remove(c);
             if(_listMonsters.Count == 0)
             {
-                Delay = 4;
+                Delay = 1;
                 CurrentPhase = Phase.EndCombat;
             }
         }

@@ -2,7 +2,7 @@
 using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using RiverHollow.Utilities;
+using RiverHollow.Misc;
 
 namespace RiverHollow.Game_Managers
 {

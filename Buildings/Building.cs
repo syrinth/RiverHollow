@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.PlayerManager;
-using RiverHollow.Utilities;
+using RiverHollow.Misc;
 
 namespace RiverHollow
 {

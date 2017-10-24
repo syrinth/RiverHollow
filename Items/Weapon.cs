@@ -3,7 +3,7 @@ using RiverHollow.Game_Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using RiverHollow.Utilities;
+using RiverHollow.Misc;
 
 namespace RiverHollow.Items
 {

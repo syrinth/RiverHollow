@@ -22,6 +22,11 @@ namespace RiverHollow.Characters.CombatStuff
         private List<String> _abiltyTags;
 
         private Texture2D _texture;
+        private int _textureRow;
+
+        public CombatCharacter SkillUser;
+        public Vector2 TargetPosition;
+        public bool _used;
 
         public AnimatedSprite Sprite;
         public Ability(int id, string[] stringData)
@@ -29,11 +34,14 @@ namespace RiverHollow.Characters.CombatStuff
             _abiltyTags = new List<string>();
             ImportBasics(id, stringData);
 
-            _texture = GameContentManager.GetTexture(@"Textures\Abilities");
-            Sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\Thunder"));
-            Sprite.LoadContent("thunder", 100, 100, 4, 0.04f);
-            Sprite.SetCurrentAnimation("thunder");
-            Sprite.PlaysOnce = true;
+            _texture = GameContentManager.GetTexture(@"Textures\AbilityIcons");
+            Sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\AbilityAnimations"));
+            Sprite.LoadContent("Play", 100, 100, 4, 0.03f, 0, _textureRow * 100);
+            Sprite.SetCurrentAnimation("Play");
+            if (_abiltyTags.Contains("Direct"))
+            {
+                Sprite.PlaysOnce = true;
+            }
         }
 
         protected int ImportBasics(int id, string[] stringData)
@@ -45,6 +53,7 @@ namespace RiverHollow.Characters.CombatStuff
             int x = int.Parse(split[0]);
             int y = int.Parse(split[1]);
             _sourceRect = new Rectangle(x * 100, y * 100, 100, 100);
+            _textureRow = int.Parse(stringData[i++]);
             split = stringData[i++].Split(' ');
             foreach (string s in split)
             {
@@ -72,27 +81,65 @@ namespace RiverHollow.Characters.CombatStuff
 
         public void PreEffect(Position target)
         {
+            _used = true;
             if (_abiltyTags.Contains("Direct"))
             {
                 Sprite.Position = target.Character.Position;
             }
-            else
+            else if (_abiltyTags.Contains("Projectile"))
             {
+                Sprite.Position = SkillUser.Position;
+                TargetPosition = target.Character.Position;
+            }
+            else {
                 Sprite.Position = new Vector2(-100, -100);
             }
         }
+
         public void ApplyEffect(Position target)
         {
-            if (_abiltyTags.Contains("Harm"))
+            if (_used)
             {
-                target.Character.DecreaseHealth(_effect);
-                target.AssignDamage(_effect);
+                if (_abiltyTags.Contains("Harm"))
+                {
+                    target.Character.DecreaseHealth(_effect);
+                    target.AssignDamage(_effect);
+                }
+                else if (_abiltyTags.Contains("Heal"))
+                {
+                    target.Character.IncreaseHealth(_effect);
+                    target.AssignDamage(_effect);
+                }
             }
-            else if (_abiltyTags.Contains("Heal"))
+        }
+
+        public bool IsFinished()
+        {
+            bool rv = false;
+            if(_abiltyTags.Contains("Projectile") && Sprite.Position == TargetPosition)
             {
-                target.Character.IncreaseHealth(_effect);
-                target.AssignDamage(_effect);
+                rv = true;
             }
+            else if (_abiltyTags.Contains("Direct"))
+            {
+                rv = true;
+            }
+            return rv;
+        }
+
+        public double GetDelay()
+        {
+            double rv = 0;
+            if (_abiltyTags.Contains("Projectile"))
+            {
+                rv = 0.2;
+            }
+            else if (_abiltyTags.Contains("Direct"))
+            {
+                rv = Sprite.CurrentFrameAnimation.FrameCount * Sprite.CurrentFrameAnimation.FrameLength;
+            }
+
+            return rv;
         }
     }
 }

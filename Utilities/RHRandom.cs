@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
 
-namespace RiverHollow.Utilities
-{
+namespace RiverHollow.Misc
+{    
     public class RHRandom : Random
     {
         public RHRandom() : base()
