@@ -10,6 +10,8 @@ namespace RiverHollow.Characters.CombatStuff
         public string Name { get => _name; }
         private string _description;
         public string Description { get => _description; }
+        private int _hp;
+        public int HP { get => _hp; }
         public List<Ability> AbilityList;
         public CharacterClass(int id, string[] stringData)
         {
@@ -22,6 +24,7 @@ namespace RiverHollow.Characters.CombatStuff
             int i = 0;
             _name = stringData[i++];
             _description = stringData[i++];
+            _hp = int.Parse(stringData[i++]);
             string[] split = stringData[i++].Split(' ');
             foreach(string s in split)
             {

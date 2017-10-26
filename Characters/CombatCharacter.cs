@@ -49,6 +49,9 @@ namespace RiverHollow.Characters
         public void SetClass(CharacterClass x)
         {
             _class = x;
+            _hp = x.HP;
+            _currentHP = _hp;
+
             foreach(Ability a in _class.AbilityList)
             {
                 _abilityList.Add(a);

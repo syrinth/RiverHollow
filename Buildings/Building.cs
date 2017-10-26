@@ -45,8 +45,8 @@ namespace RiverHollow
 
         #region Data Lists
         protected const int MaxWorkers = 9;
-        protected List<Worker> _workers;
-        public List<Worker> Workers { get => _workers; }
+        protected List<Adventurer> _workers;
+        public List<Adventurer> Workers { get => _workers; }
 
         protected Container _buildingChest;
         public Container BuildingChest { get => _buildingChest; set => _buildingChest = value; }
@@ -61,7 +61,7 @@ namespace RiverHollow
         public Building(string[] buildingData, int id) {
             ImportBasics(buildingData, id);
             _personalId = PlayerManager.GetNewBuildingID();
-            _workers = new List<Worker>();
+            _workers = new List<Adventurer>();
             _staticItemList = new List<StaticItem>();
 
             _buildingChest = (Container)ObjectManager.GetItem(6);
@@ -79,7 +79,7 @@ namespace RiverHollow
             return rv;
         }
         
-        public bool AddWorker(Worker worker, RHRandom r)
+        public bool AddWorker(Adventurer worker, RHRandom r)
         {
             bool rv = false;
 
@@ -94,27 +94,31 @@ namespace RiverHollow
 
             return rv;
         }
-        public void MakeDailyItems()
+
+        public void Rollover()
         {
-            foreach (Worker w in _workers)
+            foreach (Adventurer w in _workers)
             {
-                bool eaten = false;
-                for (int i = 0; i < Pantry.Rows; i++)
+                if (w.Rollover())
                 {
-                    for (int j = 0; j < Pantry.Rows; j++)
+                    bool eaten = false;
+                    for (int i = 0; i < Pantry.Rows; i++)
                     {
-                        Item item = Pantry.Inventory[i, j];
-                        if (item != null && item.Type == Item.ItemType.Food)
+                        for (int j = 0; j < Pantry.Rows; j++)
                         {
-                            Pantry.RemoveItemFromInventory((i * InventoryManager.maxItemColumns) + j);
-                            w.MakeDailyItem();
-                            eaten = true;
+                            Item item = Pantry.Inventory[i, j];
+                            if (item != null && item.Type == Item.ItemType.Food)
+                            {
+                                Pantry.RemoveItemFromInventory((i * InventoryManager.maxItemColumns) + j);
+                                w.MakeDailyItem();
+                                eaten = true;
+                                break;
+                            }
+                        }
+                        if (!eaten)
+                        {
                             break;
                         }
-                    }
-                    if (!eaten)
-                    {
-                        break;
                     }
                 }
             }
@@ -174,7 +178,7 @@ namespace RiverHollow
             RHRandom r = new RHRandom();
             foreach (WorkerData wData in data.Workers)
             {
-                Worker w = ObjectManager.GetWorker(wData.workerID);
+                Adventurer w = ObjectManager.GetWorker(wData.workerID);
                 w.SetName(wData.name);
                 w.SetMood(wData.mood);
                 AddWorker(w, r);

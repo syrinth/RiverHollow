@@ -73,7 +73,7 @@
     <Compile Include="Items\MerchantChest.cs" />
     <Compile Include="Characters\NPCs\NPC.cs" />
     <Compile Include="Characters\NPCs\ShopKeeper.cs" />
-    <Compile Include="Characters\NPCs\Worker.cs" />
+    <Compile Include="Characters\NPCs\Adventurer.cs" />
     <Compile Include="RiverHollow.cs" />
     <Compile Include="Game Managers\CharacterManager.cs" />
     <Compile Include="Game Managers\DropManager.cs" />

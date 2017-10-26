@@ -24,7 +24,7 @@ namespace RiverHollow.Game_Managers
         public static int _currentTurnIndex;
 
         public static Ability _skill;
-        private static Position _target;
+        private static BattleLocation _target;
         public static int PlayerTarget;
 
         public static double Delay;
@@ -37,7 +37,7 @@ namespace RiverHollow.Game_Managers
             _listMonsters = _mob.Monsters;
             _listParty = PlayerManager.GetParty();
             _turnOrder = new List<CombatCharacter>();
-            _turnOrder.Add(_listParty[0]);
+            _turnOrder.AddRange(_listParty);
             _turnOrder.AddRange(_listMonsters);
 
             _currentTurnIndex = 0;
@@ -77,11 +77,12 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void TakeTurn()
+        public static void EnemyTakeTurn()
         {
             CombatCharacter c = _turnOrder[_currentTurnIndex];
             UsingSkill(CharacterManager.GetAbilityByIndex(1));
-            PlayerTarget = 0;
+            RHRandom r = new RHRandom();
+            PlayerTarget = r.Next(0, _listParty.Count-1);
         }
 
         public static void UsingSkill(Ability a)
@@ -91,7 +92,7 @@ namespace RiverHollow.Game_Managers
             CurrentPhase = Phase.Targetting;
         }
 
-        public static void UseSkillOnTarget(Position target)
+        public static void UseSkillOnTarget(BattleLocation target)
         {
             _target = target;
             _skill.SkillUser = _turnOrder[_currentTurnIndex];
@@ -136,7 +137,7 @@ namespace RiverHollow.Game_Managers
                         {
                             AnimatedSprite s = _skill.Sprite;
                             Vector2 direction = Vector2.Zero;
-                            Utilities.GetMoveSpeed(s.Position, _skill.TargetPosition, 10, ref direction);
+                            Utilities.GetMoveSpeed(s.Position, _skill.TargetPosition, 20, ref direction);
                             s.Position += direction;
                             Delay += gameTime.ElapsedGameTime.TotalSeconds;
                         }

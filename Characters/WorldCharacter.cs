@@ -28,7 +28,7 @@ namespace RiverHollow.Characters
             _width = RHMap.TileSize;
             _height = RHMap.TileSize;
         }
-        public bool Contains(Point mouse)
+        public virtual bool Contains(Point mouse)
         {
             return CollisionBox.Contains(mouse);
         }

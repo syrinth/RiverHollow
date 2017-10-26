@@ -23,6 +23,7 @@ namespace RiverHollow.Characters.CombatStuff
 
         private Texture2D _texture;
         private int _textureRow;
+        private float _frameSpeed;
 
         public CombatCharacter SkillUser;
         public Vector2 TargetPosition;
@@ -36,7 +37,7 @@ namespace RiverHollow.Characters.CombatStuff
 
             _texture = GameContentManager.GetTexture(@"Textures\AbilityIcons");
             Sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\AbilityAnimations"));
-            Sprite.LoadContent("Play", 100, 100, 4, 0.03f, 0, _textureRow * 100);
+            Sprite.LoadContent("Play", 100, 100, 4, _frameSpeed, 0, _textureRow * 100);
             Sprite.SetCurrentAnimation("Play");
             if (_abiltyTags.Contains("Direct"))
             {
@@ -54,6 +55,7 @@ namespace RiverHollow.Characters.CombatStuff
             int y = int.Parse(split[1]);
             _sourceRect = new Rectangle(x * 100, y * 100, 100, 100);
             _textureRow = int.Parse(stringData[i++]);
+            _frameSpeed = float.Parse(stringData[i++]);
             split = stringData[i++].Split(' ');
             foreach (string s in split)
             {
@@ -79,7 +81,7 @@ namespace RiverHollow.Characters.CombatStuff
             return i;
         }
 
-        public void PreEffect(Position target)
+        public void PreEffect(BattleLocation target)
         {
             _used = true;
             if (_abiltyTags.Contains("Direct"))
@@ -96,7 +98,7 @@ namespace RiverHollow.Characters.CombatStuff
             }
         }
 
-        public void ApplyEffect(Position target)
+        public void ApplyEffect(BattleLocation target)
         {
             if (_used)
             {

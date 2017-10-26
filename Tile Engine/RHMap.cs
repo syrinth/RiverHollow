@@ -497,9 +497,9 @@ namespace RiverHollow.Tile_Engine
                 foreach (WorldCharacter c in _characterList)
                 {
                     Type cType = c.GetType();
-                    if (cType.IsSubclassOf(typeof(Worker)))
+                    if (cType.IsSubclassOf(typeof(Adventurer)))
                     {
-                        Worker w = (Worker)c;
+                        Adventurer w = (Adventurer)c;
                         if (w.Contains(mouseLocation) && PlayerManager.PlayerInRange(w.Center) &&
                             InventoryManager.HasSpaceInInventory(w.WhatAreYouHolding()))
                         {
@@ -583,7 +583,7 @@ namespace RiverHollow.Tile_Engine
                         found = true;
                         break;
                     }
-                    else if(!c.GetType().IsSubclassOf(typeof(Mob)) && c.CollisionBox.Contains(mouseLocation)){
+                    else if(!c.GetType().IsSubclassOf(typeof(Mob)) && c.Contains(mouseLocation)){
                         GraphicCursor._currentType = GraphicCursor.CursorType.Talk;
                         found = true;
                         break;
@@ -723,7 +723,7 @@ namespace RiverHollow.Tile_Engine
                     if (b.HasSpace())
                     {
                         RHRandom r = new RHRandom();
-                        Worker w = ObjectManager.GetWorker(GraphicCursor.WorkerToPlace);
+                        Adventurer w = ObjectManager.GetWorker(GraphicCursor.WorkerToPlace);
                         b.AddWorker(w, r);
                         b._selected = false;
                         GUIManager.LoadScreen(GUIManager.Screens.TextInput, w);

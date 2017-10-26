@@ -112,6 +112,7 @@ namespace RiverHollow.Characters
             string text = _dialogueDictionary[r.Next(1, 2).ToString()];
             return ProcessText(text);
         }
+
         public virtual string GetDialogEntry(string entry)
         {
             if (entry.Equals("Talk"))

@@ -38,6 +38,8 @@ namespace RiverHollow.Game_Managers
         private static List<Building> _buildings;
         public static List<Building> Buildings { get => _buildings; }
 
+        private static List<CombatCharacter> _party;
+
         public static MerchantChest _merchantChest;
         private static string _name = "Syrinth";
         public static string Name { get => _name; }
@@ -48,8 +50,10 @@ namespace RiverHollow.Game_Managers
 
         public static void InitPlayer()
         {
+            _party = new List<CombatCharacter>();
             World = new WorldCharacter();
             Combat = new CombatCharacter();
+            _party.Add(Combat);
             _buildings = new List<Building>();
             _canMake = new List<int>();
 
@@ -62,11 +66,13 @@ namespace RiverHollow.Game_Managers
         }
         public static void NewPlayer()
         {
+            _party = new List<CombatCharacter>();
             World = new WorldCharacter();
             World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
             World.Position = new Vector2(200, 200);
             Combat = new CombatCharacter();
             Combat.LoadContent(@"Textures\WizardCombat", 100, 100, 2, 0.7f); //ToDo: position doesn't matter here
+            _party.Add(Combat);
             _buildings = new List<Building>();
             _canMake = new List<int>();
             _canMake.Add(6);
@@ -85,7 +91,6 @@ namespace RiverHollow.Game_Managers
             MaxStamina = 50;
             Stamina = MaxStamina;
             Combat.SetClass(CharacterManager.GetClassByIndex(1));
-            Combat.SetMaxHp(50);
         }
 
         public static void Update(GameTime gameTime)
@@ -212,9 +217,12 @@ namespace RiverHollow.Game_Managers
 
         public static List<CombatCharacter> GetParty()
         {
-            List<CombatCharacter> party = new List<CombatCharacter>();
-            party.Add(Combat);
-            return party;
+            return _party;
+        }
+
+        public static void AddToParty(CombatCharacter c)
+        {
+            _party.Add(c);
         }
 
         public static bool ProcessLeftButtonClick(Point mouseLocation)
@@ -344,6 +352,12 @@ namespace RiverHollow.Game_Managers
             {
                 Stamina = MaxStamina;
             }
+        }
+
+        public static void Rollover()
+        {
+            _party.Clear();
+            _party.Add(Combat);
         }
 
         #region Save/Load
@@ -478,7 +492,7 @@ namespace RiverHollow.Game_Managers
 
                 buildingData.Workers = new List<WorkerData>();
 
-                foreach (Worker w in b.Workers)
+                foreach (Adventurer w in b.Workers)
                 {
                     WorkerData workerData = new WorkerData();
                     workerData.workerID = w.ID;

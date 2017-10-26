@@ -12,8 +12,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
     {
         private const int _positions = 4;
         private GUIImage _background;
-        private Position[] _arrayParty;
-        private Position[] _arrayEnemies;
+        private BattleLocation[] _arrayParty;
+        private BattleLocation[] _arrayEnemies;
         private List<AbilityButton> _abilityButtonList;
         private GUITextWindow _textWindow;
         private AnimatedSprite _attack;
@@ -22,8 +22,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             Mob m = CombatManager.CurrentMob;
             _background = new GUIImage(new Vector2(0, 0), new Rectangle(0, 0, 800, 480), RiverHollow.ScreenWidth, RiverHollow.ScreenHeight, GameContentManager.GetTexture(@"Textures\battle"));
-            _arrayParty = new Position[_positions];
-            _arrayEnemies = new Position[_positions];
+            _arrayParty = new BattleLocation[_positions];
+            _arrayEnemies = new BattleLocation[_positions];
             _abilityButtonList = new List<AbilityButton>();
             Controls.Add(_background);
 
@@ -32,7 +32,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 if (party[i] != null)
                 {
-                    _arrayParty[i] = new Position(new Rectangle(100, 700, 100, 100), party[i]);
+                    bool even = (i % 2 == 0);
+                    _arrayParty[i] = new BattleLocation(new Rectangle(100 + i * 200, even ? 700 : 600, 100, 100), party[i]);
                 }
 
             }
@@ -40,7 +41,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 if (m.Monsters[i] != null)
                 {
-                    _arrayEnemies[i] = new Position(new Rectangle(1000 + i * 200, 700, 100, 100), m.Monsters[i]);
+                    bool even = (i % 2 == 0);
+                    _arrayEnemies[i] = new BattleLocation(new Rectangle(1000 + i * 200, even ? 700 : 600, 100, 100), m.Monsters[i]);
                 }
             }
         }
@@ -60,7 +62,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             else if (CombatManager.CurrentPhase == CombatManager.Phase.Targetting)
             {
-                foreach (Position p in _arrayEnemies)
+                foreach (BattleLocation p in _arrayEnemies)
                 {
                     if (p != null && p.Occupied() && p.Contains(mouse))
                     {
@@ -88,14 +90,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     a.Hover = false;
                 }
             }
-            foreach (Position p in _arrayParty)
+            foreach (BattleLocation p in _arrayParty)
             {
                 if (p != null)
                 {
                     rv = p.ProcessHover(mouse);
                 }
             }
-            foreach (Position p in _arrayEnemies)
+            foreach (BattleLocation p in _arrayEnemies)
             {
                 if (p != null)
                 {
@@ -131,14 +133,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
             }
 
-            foreach (Position p in _arrayParty)
+            foreach (BattleLocation p in _arrayParty)
             {
                 if (p != null && p.Occupied())
                 {
                     p.Update(gameTime);
                 }
             }
-            foreach (Position p in _arrayEnemies)
+            foreach (BattleLocation p in _arrayEnemies)
             {
                 if (p != null && p.Occupied())
                 {
@@ -155,7 +157,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             if (CombatManager.CurrentPhase == CombatManager.Phase.EnemyTurn)
             {
-                CombatManager.TakeTurn();
+                CombatManager.EnemyTakeTurn();
                 CombatManager.UseSkillOnTarget(_arrayParty[CombatManager.PlayerTarget]);
 
             }
@@ -173,14 +175,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            foreach (Position p in _arrayParty)
+            foreach (BattleLocation p in _arrayParty)
             {
                 if (p != null)
                 {
                     p.Draw(spriteBatch);
                 }
             }
-            foreach (Position p in _arrayEnemies)
+            foreach (BattleLocation p in _arrayEnemies)
             {
                 if (p != null)
                 {
@@ -202,7 +204,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         
     }
 
-    public class Position
+    public class BattleLocation
     {
         private StatDisplay _healthBar;
         private Rectangle _rect;
@@ -213,12 +215,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
         private int _dmg;
         private int _dmgTimer = 40;
 
-        public Position(Rectangle r, CombatCharacter c)
+        public BattleLocation(Rectangle r, CombatCharacter c)
         {
             _rect = r;
             _character = c;
             _character.Position = _rect.Location.ToVector2();
-            _healthBar = new StatDisplay(StatDisplay.Display.Health, _character, _rect.Location.ToVector2() + new Vector2(0, 150), 100, 5);
+            _healthBar = new StatDisplay(StatDisplay.Display.Health, _character, _rect.Location.ToVector2() + new Vector2(0, 100), 100, 5);
             _dmgFont = GameContentManager.GetFont(@"Fonts\Font");
         }
 

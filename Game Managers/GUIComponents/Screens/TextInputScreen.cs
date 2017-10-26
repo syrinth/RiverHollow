@@ -13,7 +13,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
     {
         private GUITextInputWindow _window;
 
-        public TextInputScreen(Worker w)
+        public TextInputScreen(Adventurer w)
         {             
             _window = new GUITextInputWindow(w);
             Controls.Add(_window);

@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: Index>0 Value:Name/Description/Ability1 Ability2 Ability3 Ability4-->
+    <!--Key: Index>0 Value:Name/Description/HP/Ability1 Ability2 Ability3 Ability4-->
     <Item>
       <Key>1</Key>
-      <Value>Mage/Uses magic!/1 2 3 4</Value>
+      <Value>Mage/Uses magic!/20/1 2 3 4</Value>
     </Item>
   </Asset>
 </XnaContent>

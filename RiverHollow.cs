@@ -246,9 +246,10 @@ namespace RiverHollow
 
         public static void RollOver()
         {
+            PlayerManager.Rollover();
             foreach(Building b in PlayerManager.Buildings)
             {
-                b.MakeDailyItems();
+                b.Rollover();
             }
         }
     }

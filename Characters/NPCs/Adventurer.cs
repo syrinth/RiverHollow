@@ -3,54 +3,103 @@ using RiverHollow.GUIObjects;
 using RiverHollow.Items;
 using Microsoft.Xna.Framework;
 using RiverHollow.Misc;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace RiverHollow.Characters.NPCs
 {
-    public class Worker : NPC
+    public class Adventurer : NPC
     {
+        #region Properties
         protected int _id;
         public int ID { get => _id; }
-        protected string _workerType;
+        protected string _adventurerType;
         private Building _building;
         protected int _dailyFoodReq;
         protected int _currFood;
         protected int _dailyItemID;
         protected Item _heldItem;
         protected int _mood;
+        private bool _adventuring;
         public int Mood { get => _mood; }
         protected string _texture;
 
-        public Worker(string[] stringData, int id)
+        private CombatCharacter _c;
+        #endregion
+
+        public Adventurer(string[] stringData, int id)
         {
             ImportBasics(stringData, id);
-            _texture = @"Textures\" + _workerType;
+            _texture = @"Textures\" + _adventurerType;
             LoadContent(_texture, 32, 64, 1, 1);
             _currFood = 0;
             _heldItem = null;
             _mood = 0;
+            _adventuring = false;
         }
 
         protected int ImportBasics(string[] stringData, int id)
         {
             _id = id;
             int i = 0;
-            _workerType = stringData[i++];
+            _adventurerType = stringData[i++];
             _dailyItemID = int.Parse(stringData[i++]);
             _dailyFoodReq = int.Parse(stringData[i++]);
             int portraitNum = int.Parse(stringData[i++]);
             _portraitRect = new Rectangle(0, portraitNum*192, 160, 192);
             _portrait = GameContentManager.GetTexture(@"Textures\portraits");
+            _c = new CombatCharacter();
+            _c.SetClass(CharacterManager.GetClassByIndex(1));
+            _c.LoadContent(@"Textures\WizardCombat", 100, 100, 2, 0.7f);
 
             return i;
         }
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (!_adventuring)
+            {
+                base.Draw(spriteBatch);
+            }
+        }
+
+        public override bool Contains(Point mouse)
+        {
+            bool rv = false;
+            if (!_adventuring) {
+                rv = base.Contains(mouse);
+            }
+            return rv;
+        }
         public override void Talk()
         {
-            GraphicCursor._currentType = GraphicCursor.CursorType.Normal;
-            _mood += 1;
+            GUIManager.LoadScreen(GUIManager.Screens.Text, this, Name + ": " + GameContentManager.GetDialogue("AdventurerTree"));
+        }
 
+        public override string GetText()
+        {
             RHRandom r = new RHRandom();
-            GUIManager.LoadScreen(GUIManager.Screens.Text, this, Name + ": " + GameContentManager.GetDialogue(_workerType + r.Next(1,2)));
+            string text = _dialogueDictionary[r.Next(1, 2).ToString()];
+            return ProcessText(text);
+        }
+
+        public override string GetDialogEntry(string entry)
+        {
+            string rv = string.Empty;
+            if (entry.Equals("Talk"))
+            {
+                GraphicCursor._currentType = GraphicCursor.CursorType.Normal;
+                _mood += 1;
+
+                RHRandom r = new RHRandom();
+                rv = GameContentManager.GetDialogue(_adventurerType + r.Next(1, 2));
+            }
+            else if (entry.Equals("PartyAdd"))
+            {
+                _adventuring = true;
+                PlayerManager.AddToParty(_c);
+                rv = "Of course!";
+            }
+            return rv;
         }
 
         public int TakeItem()
@@ -84,6 +133,18 @@ namespace RiverHollow.Characters.NPCs
         public void SetBuilding(Building b)
         {
             _building = b;
+        }
+
+        public bool Rollover()
+        {
+            bool rv = true;
+            if (_adventuring)
+            {
+                _adventuring = false;
+                _c.CurrentHP = _c.HP;
+                rv = false;
+            }
+            return rv;
         }
 
         public void MakeDailyItem()
