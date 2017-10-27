@@ -11,6 +11,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using RiverHollow.Characters;
 using Microsoft.Xna.Framework.Input;
+using RiverHollow.Characters.CombatStuff;
 
 namespace RiverHollow.Game_Managers
 {
@@ -31,14 +32,14 @@ namespace RiverHollow.Game_Managers
 
         public static WorldCharacter World;
 
-        public static CombatCharacter Combat;
+        public static CombatAdventurer Combat;
         public static int HitPoints { get => Combat.CurrentHP; }
-        public static int MaxHitPoints { get => Combat.HP; }
+        public static int MaxHitPoints { get => Combat.MaxHP; }
 
         private static List<Building> _buildings;
         public static List<Building> Buildings { get => _buildings; }
 
-        private static List<CombatCharacter> _party;
+        private static List<CombatAdventurer> _party;
 
         public static MerchantChest _merchantChest;
         private static string _name = "Syrinth";
@@ -50,9 +51,9 @@ namespace RiverHollow.Game_Managers
 
         public static void InitPlayer()
         {
-            _party = new List<CombatCharacter>();
+            _party = new List<CombatAdventurer>();
             World = new WorldCharacter();
-            Combat = new CombatCharacter();
+            Combat = new CombatAdventurer();
             _party.Add(Combat);
             _buildings = new List<Building>();
             _canMake = new List<int>();
@@ -66,11 +67,11 @@ namespace RiverHollow.Game_Managers
         }
         public static void NewPlayer()
         {
-            _party = new List<CombatCharacter>();
+            _party = new List<CombatAdventurer>();
             World = new WorldCharacter();
             World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
             World.Position = new Vector2(200, 200);
-            Combat = new CombatCharacter();
+            Combat = new CombatAdventurer();
             Combat.LoadContent(@"Textures\WizardCombat", 100, 100, 2, 0.7f); //ToDo: position doesn't matter here
             _party.Add(Combat);
             _buildings = new List<Building>();
@@ -88,6 +89,7 @@ namespace RiverHollow.Game_Managers
 
         public static void SetPlayerDefaults()
         {
+            PlayerManager.CurrentMap = MapManager.CurrentMap.Name;
             MaxStamina = 50;
             Stamina = MaxStamina;
             Combat.SetClass(CharacterManager.GetClassByIndex(1));
@@ -205,22 +207,24 @@ namespace RiverHollow.Game_Managers
         }
         public static void DrawWorld(SpriteBatch spriteBatch)
         {
-            World.Draw(spriteBatch);
-            if (_usingTool)
-            {
-                ((Tool)InventoryManager.CurrentItem).ToolAnimation.Draw(spriteBatch);
+            if (_currentMap == MapManager.CurrentMap.Name) {
+                World.Draw(spriteBatch);
+                if (_usingTool)
+                {
+                    ((Tool)InventoryManager.CurrentItem).ToolAnimation.Draw(spriteBatch);
+                }
             }
         }
         public static void DrawCombat(SpriteBatch spriteBatch)
         {
         }
 
-        public static List<CombatCharacter> GetParty()
+        public static List<CombatAdventurer> GetParty()
         {
             return _party;
         }
 
-        public static void AddToParty(CombatCharacter c)
+        public static void AddToParty(CombatAdventurer c)
         {
             _party.Add(c);
         }
@@ -492,7 +496,7 @@ namespace RiverHollow.Game_Managers
 
                 buildingData.Workers = new List<WorkerData>();
 
-                foreach (Adventurer w in b.Workers)
+                foreach (WorldAdventurer w in b.Workers)
                 {
                     WorkerData workerData = new WorkerData();
                     workerData.workerID = w.ID;

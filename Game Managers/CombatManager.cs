@@ -35,13 +35,26 @@ namespace RiverHollow.Game_Managers
             Delay = 0;
             _mob = m;
             _listMonsters = _mob.Monsters;
-            _listParty = PlayerManager.GetParty();
+
+            _listParty = new List<CombatCharacter>();
+            foreach (CombatAdventurer c in PlayerManager.GetParty()) {
+                _listParty.Add(c);
+            }
+
             _turnOrder = new List<CombatCharacter>();
             _turnOrder.AddRange(_listParty);
             _turnOrder.AddRange(_listMonsters);
 
+            RHRandom r = new RHRandom();
+            foreach (CombatCharacter c in _turnOrder)
+            {
+                c.Initiative =  r.Next(1, 20) + (c.StatSpd/2);
+            }
+            _turnOrder.Sort((x, y) => x.Initiative.CompareTo(y.Initiative));
+
             _currentTurnIndex = 0;
             SetPhaseForTurn();
+            PlayerManager.DecreaseStamina(1);
             RiverHollow.ChangeGameState(RiverHollow.GameState.Combat);
         }
 
@@ -56,6 +69,7 @@ namespace RiverHollow.Game_Managers
                 else
                 {
                     _currentTurnIndex = 0;
+                    PlayerManager.DecreaseStamina(1);
                 }
                 SetPhaseForTurn();
             }

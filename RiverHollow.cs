@@ -189,12 +189,7 @@ namespace RiverHollow
                 if (_gameState != GameState.Information)
                 {
                     MapManager.Draw(spriteBatch);
-
-                    if (_gameState != GameState.Build && _gameState != GameState.Information)
-                    {
-                        PlayerManager.Draw(spriteBatch);
-                    }
-                    
+                    PlayerManager.Draw(spriteBatch);
                 }
                 spriteBatch.End();
             }

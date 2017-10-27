@@ -62,10 +62,11 @@
     <Compile Include="Characters\Character.cs" />
     <Compile Include="Characters\CombatStuff\Ability.cs" />
     <Compile Include="Characters\CombatStuff\CharacterClass.cs" />
+    <Compile Include="Characters\CombatStuff\CombatAdventurer.cs" />
     <Compile Include="Characters\WorldCharacter.cs" />
-    <Compile Include="Characters\CombatCharacter.cs" />
+    <Compile Include="Characters\CombatStuff\CombatCharacter.cs" />
     <Compile Include="Characters\Mob.cs" />
-    <Compile Include="Characters\Monster.cs" />
+    <Compile Include="Characters\CombatStuff\Monster.cs" />
     <Compile Include="Game Managers\CombatManager.cs" />
     <Compile Include="Game Managers\DungeonManager.cs" />
     <Compile Include="Game Managers\GUIComponents\Screens\CombatScreen.cs" />

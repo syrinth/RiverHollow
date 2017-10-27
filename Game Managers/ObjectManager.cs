@@ -44,13 +44,13 @@ namespace RiverHollow.Game_Managers
             return null;     
         }
 
-        public static Adventurer GetWorker(int id)
+        public static WorldAdventurer GetWorker(int id)
         {
             if (_dictWorkers.ContainsKey(id))
             {
                 string stringData = _dictWorkers[id];
                 string[] stringDataValues = stringData.Split('/');
-                return new Adventurer(stringDataValues, id);
+                return new WorldAdventurer(stringDataValues, id);
             }
             return null;
         }

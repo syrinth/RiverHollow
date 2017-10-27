@@ -34,7 +34,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                 _workers = new List<WorkerBox>();
                 foreach (Merchandise m in merch)
                 {
-                    Adventurer w = ObjectManager.GetWorker(m.MerchID);
+                    WorldAdventurer w = ObjectManager.GetWorker(m.MerchID);
 
                     _workers.Add(new WorkerBox(position, w, m.MoneyCost));
                     position.X += 64;
@@ -88,10 +88,10 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
         private SpriteFont _font;
         private GUIWindow _workerWindow;
         private GUIWindow _costWindow;
-        public Adventurer _w;
+        public WorldAdventurer _w;
         public int Cost;
 
-        public WorkerBox(Vector2 p, Adventurer w, int cost)
+        public WorkerBox(Vector2 p, WorldAdventurer w, int cost)
         {
             _font = GameContentManager.GetFont(@"Fonts\Font");
             Cost = cost;

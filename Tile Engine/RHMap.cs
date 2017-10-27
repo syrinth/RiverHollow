@@ -497,9 +497,9 @@ namespace RiverHollow.Tile_Engine
                 foreach (WorldCharacter c in _characterList)
                 {
                     Type cType = c.GetType();
-                    if (cType.IsSubclassOf(typeof(Adventurer)))
+                    if (cType.IsSubclassOf(typeof(WorldAdventurer)))
                     {
-                        Adventurer w = (Adventurer)c;
+                        WorldAdventurer w = (WorldAdventurer)c;
                         if (w.Contains(mouseLocation) && PlayerManager.PlayerInRange(w.Center) &&
                             InventoryManager.HasSpaceInInventory(w.WhatAreYouHolding()))
                         {
@@ -723,7 +723,7 @@ namespace RiverHollow.Tile_Engine
                     if (b.HasSpace())
                     {
                         RHRandom r = new RHRandom();
-                        Adventurer w = ObjectManager.GetWorker(GraphicCursor.WorkerToPlace);
+                        WorldAdventurer w = ObjectManager.GetWorker(GraphicCursor.WorkerToPlace);
                         b.AddWorker(w, r);
                         b._selected = false;
                         GUIManager.LoadScreen(GUIManager.Screens.TextInput, w);

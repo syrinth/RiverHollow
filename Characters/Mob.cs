@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Misc;
+using RiverHollow.Characters.CombatStuff;
 
 namespace RiverHollow
 {

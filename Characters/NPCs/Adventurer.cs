@@ -4,10 +4,11 @@ using RiverHollow.Items;
 using Microsoft.Xna.Framework;
 using RiverHollow.Misc;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Characters.CombatStuff;
 
 namespace RiverHollow.Characters.NPCs
 {
-    public class Adventurer : NPC
+    public class WorldAdventurer : NPC
     {
         #region Properties
         protected int _id;
@@ -23,10 +24,10 @@ namespace RiverHollow.Characters.NPCs
         public int Mood { get => _mood; }
         protected string _texture;
 
-        private CombatCharacter _c;
+        private CombatAdventurer _c;
         #endregion
 
-        public Adventurer(string[] stringData, int id)
+        public WorldAdventurer(string[] stringData, int id)
         {
             ImportBasics(stringData, id);
             _texture = @"Textures\" + _adventurerType;
@@ -47,7 +48,7 @@ namespace RiverHollow.Characters.NPCs
             int portraitNum = int.Parse(stringData[i++]);
             _portraitRect = new Rectangle(0, portraitNum*192, 160, 192);
             _portrait = GameContentManager.GetTexture(@"Textures\portraits");
-            _c = new CombatCharacter();
+            _c = new CombatAdventurer();
             _c.SetClass(CharacterManager.GetClassByIndex(1));
             _c.LoadContent(@"Textures\WizardCombat", 100, 100, 2, 0.7f);
 
@@ -141,7 +142,6 @@ namespace RiverHollow.Characters.NPCs
             if (_adventuring)
             {
                 _adventuring = false;
-                _c.CurrentHP = _c.HP;
                 rv = false;
             }
             return rv;

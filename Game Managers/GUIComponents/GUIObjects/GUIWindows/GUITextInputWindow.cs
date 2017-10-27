@@ -16,9 +16,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         private int _strLen;
         private string _statement;
         private int _maxLength = 10;
-        private Adventurer _w;
+        private WorldAdventurer _w;
 
-        public GUITextInputWindow(Adventurer w) : base()
+        public GUITextInputWindow(WorldAdventurer w) : base()
         {
             RiverHollow.ChangeGameState(RiverHollow.GameState.Input);
             _statement = "Enter name:";

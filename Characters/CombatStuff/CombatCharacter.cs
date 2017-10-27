@@ -10,62 +10,49 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters.CombatStuff;
 
-namespace RiverHollow.Characters
+namespace RiverHollow.Characters.CombatStuff
 {
     public class CombatCharacter : Character
     {
-        protected int _hp;
-        public int HP
-        {
-            get { return _hp; }
-            set { _hp = value; }
-        }
+        #region Properties
         protected int _currentHP;
         public int CurrentHP
         {
             get { return _currentHP; }
             set { _currentHP = value; }
         }
+        public int MaxHP {  get => StatHP * 3; }
 
-        protected int _dmg;
-        protected int Dmg { get => _dmg; }
+        public int Initiative;
 
-        protected CharacterClass _class;
-        public CharacterClass CharacterClass { get => _class; }
+        protected int _statDmg;
+        public virtual int StatDmg { get => _statDmg; }
+        protected int _statDef;
+        public virtual int StatDef { get => _statDef; }
+        protected int _statHP;
+        public virtual int StatHP { get => _statHP; }
+        protected int _statMagic;
+        public virtual int StatMagic { get => _statMagic; }
+        protected int _statSpd;
+        public virtual int StatSpd { get => _statSpd; }
 
         protected List<Ability> _abilityList;
         public List<Ability> AbilityList { get => _abilityList; }
+        #endregion
 
         public CombatCharacter() : base()
         {
             _abilityList = new List<Ability>();
         }
 
-        public void SetMaxHp(int x)
+        public override void Update(GameTime theGameTime)
         {
-            _hp = x;
-            _currentHP = x;
-        }
-        public void SetClass(CharacterClass x)
-        {
-            _class = x;
-            _hp = x.HP;
-            _currentHP = _hp;
-
-            foreach(Ability a in _class.AbilityList)
-            {
-                _abilityList.Add(a);
-            }
+            base.Update(theGameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch, bool useLayerDepth = true)
         {
             _sprite.Draw(spriteBatch, useLayerDepth);
-        }
-
-        public override void Update(GameTime theGameTime)
-        {
-            base.Update(theGameTime);
         }
 
         public void DecreaseHealth(int x)
@@ -79,13 +66,13 @@ namespace RiverHollow.Characters
 
         public void IncreaseHealth(int x)
         {
-            if (_currentHP + x <= _hp)
+            if (_currentHP + x <= MaxHP)
             {
                 _currentHP += x;
             }
             else
             {
-                _currentHP = _hp;
+                _currentHP = _statHP;
             }
         }
     }

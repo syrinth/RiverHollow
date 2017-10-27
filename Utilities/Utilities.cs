@@ -19,8 +19,12 @@ namespace RiverHollow.Misc
 
             float deltaX = Math.Abs(targetPos.X - currentPos.X);
             float deltaY = Math.Abs(targetPos.Y - currentPos.Y);
-            direction.X = (deltaX < speed) ? newX * deltaX : newX * speed;
-            direction.Y = (deltaY < speed) ? newY * deltaY : newY * speed;
+            Vector2 dir = new Vector2(deltaX, deltaY);
+            dir.Normalize();
+            dir = dir * speed;
+            
+            direction.X = (deltaX < speed) ? newX * deltaX : newX * dir.X;
+            direction.Y = (deltaY < speed) ? newY * deltaY : newY * dir.Y;
         }
     }
 }

@@ -136,7 +136,7 @@ namespace RiverHollow.Game_Managers
             _currentGUIScreen.RemoveComponent(g);
         }
 
-        public static void LoadScreen(Screens newScreen, Adventurer w)
+        public static void LoadScreen(Screens newScreen, WorldAdventurer w)
         {
             _currentScreen = newScreen;
             switch (newScreen)

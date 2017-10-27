@@ -229,7 +229,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (Occupied())
             {
                 _character.Draw(spriteBatch, false);
-                _healthBar.Draw(spriteBatch);
+                if (_character != null && CombatManager._turnOrder[CombatManager._currentTurnIndex] != _character)
+                {
+                    _healthBar.Draw(spriteBatch);
+                }
             }
             if (_dmgTimer < 40)
             {

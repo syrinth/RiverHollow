@@ -45,8 +45,8 @@ namespace RiverHollow
 
         #region Data Lists
         protected const int MaxWorkers = 9;
-        protected List<Adventurer> _workers;
-        public List<Adventurer> Workers { get => _workers; }
+        protected List<WorldAdventurer> _workers;
+        public List<WorldAdventurer> Workers { get => _workers; }
 
         protected Container _buildingChest;
         public Container BuildingChest { get => _buildingChest; set => _buildingChest = value; }
@@ -61,7 +61,7 @@ namespace RiverHollow
         public Building(string[] buildingData, int id) {
             ImportBasics(buildingData, id);
             _personalId = PlayerManager.GetNewBuildingID();
-            _workers = new List<Adventurer>();
+            _workers = new List<WorldAdventurer>();
             _staticItemList = new List<StaticItem>();
 
             _buildingChest = (Container)ObjectManager.GetItem(6);
@@ -79,7 +79,7 @@ namespace RiverHollow
             return rv;
         }
         
-        public bool AddWorker(Adventurer worker, RHRandom r)
+        public bool AddWorker(WorldAdventurer worker, RHRandom r)
         {
             bool rv = false;
 
@@ -97,7 +97,7 @@ namespace RiverHollow
 
         public void Rollover()
         {
-            foreach (Adventurer w in _workers)
+            foreach (WorldAdventurer w in _workers)
             {
                 if (w.Rollover())
                 {
@@ -178,7 +178,7 @@ namespace RiverHollow
             RHRandom r = new RHRandom();
             foreach (WorkerData wData in data.Workers)
             {
-                Adventurer w = ObjectManager.GetWorker(wData.workerID);
+                WorldAdventurer w = ObjectManager.GetWorker(wData.workerID);
                 w.SetName(wData.name);
                 w.SetMood(wData.mood);
                 AddWorker(w, r);

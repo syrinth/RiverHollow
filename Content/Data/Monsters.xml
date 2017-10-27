@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: Index>0 Value:Name/CombatTexture/HP/Speed/Dmg/Acton x y z|Action x y z-->
+    <!--Key: Index>0 Value:Name/CombatTexture/Dmg/Def/HP/Magic/Speed-->
     <Item>
       <Key>1</Key>
-      <Value>Goblin Scout/GoblinCombat/5/1 5/</Value>
+      <Value>Goblin Scout/GoblinCombat/3/0/5/0/2</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Goblin Soldier/GoblinSoldier/10/2 8/Charge 32 96 3</Value>
+      <Value>Goblin Soldier/GoblinSoldier/5/2/10/0/1</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -1,7 +1,7 @@
 ﻿using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Characters;
+using RiverHollow.Characters.CombatStuff;
 using RiverHollow.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIObjects
@@ -48,7 +48,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             else
             {
-                _percentage = ((float)_character.CurrentHP / (float)_character.HP);
             }
             base.Update(gameTime);
         }
@@ -70,7 +69,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
                 else
                 {
-                    stat = string.Format("{0}/{1}", _character.CurrentHP, _character.HP);
                 }
                 spriteBatch.DrawString(_font, stat, new Vector2(GraphicCursor.Position.X, GraphicCursor.Position.Y-32), Color.White);
             }
