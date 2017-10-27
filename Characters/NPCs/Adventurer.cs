@@ -142,6 +142,7 @@ namespace RiverHollow.Characters.NPCs
             if (_adventuring)
             {
                 _adventuring = false;
+                _c.CurrentHP = _c.MaxHP;
                 rv = false;
             }
             return rv;
