@@ -165,7 +165,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 _abilityButtonList.Clear();
                 int i = 0;
-                foreach (Ability a in CombatManager._turnOrder[CombatManager._currentTurnIndex].AbilityList)
+                foreach (Ability a in CombatManager.TurnOrder[CombatManager.TurnIndex].AbilityList)
                 {
                     _abilityButtonList.Add(new AbilityButton(a, i++, 0));
                 }
@@ -229,7 +229,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (Occupied())
             {
                 _character.Draw(spriteBatch, false);
-                if (_character != null && CombatManager._turnOrder[CombatManager._currentTurnIndex] != _character)
+                if (CombatManager.TurnIndex <= CombatManager.TurnOrder.Count && _character != null && CombatManager.TurnOrder[CombatManager.TurnIndex] != _character)
                 {
                     _healthBar.Draw(spriteBatch);
                 }

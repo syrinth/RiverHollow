@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Screens;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Items;
 
@@ -52,10 +51,22 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = true;
-            if(!_inventory.Contains(mouse) && _container != null && !_container.DrawRectangle.Contains(mouse))
+            if (_inventory.Contains(mouse))
+            {
+                _inventory.ProcessRightButtonClick(mouse);
+                rv = true;
+            }
+            else if (!_inventory.Contains(mouse) && _container != null && !_container.DrawRectangle.Contains(mouse))
             {
                 GUIManager.SetScreen(GUIManager.Screens.HUD);
             }
+            return rv;
+        }
+
+        public override bool ProcessHover(Point mouse)
+        {
+            bool rv = true;
+            rv = _inventory.ProcessHover(mouse);
             return rv;
         }
 

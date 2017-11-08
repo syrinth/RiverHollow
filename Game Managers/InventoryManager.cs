@@ -178,9 +178,9 @@ namespace RiverHollow.Game_Managers
             {
                 if (_inventory[row, column] == null)
                 {
-                    if (item.Type == Item.ItemType.Weapon)
+                    if (item.Type == Item.ItemType.Equipment)
                     {
-                        _inventory[row, column] = (Weapon)(item);
+                        _inventory[row, column] = (Equipment)(item);
                     }
                     else if (item.Type == Item.ItemType.Tool)
                     {

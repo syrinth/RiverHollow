@@ -3,12 +3,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Threading;
+using RiverHollow.SpriteAnimations;
 
 namespace RiverHollow.Items
 {
     public class Item
     {
-        public enum ItemType {Resource, Weapon, Tool, Container, Food, Map };
+        public enum ItemType {Resource, Equipment, Tool, Container, Food, Map };
 
         #region properties
         protected ItemType _itemType;
@@ -76,16 +77,16 @@ namespace RiverHollow.Items
 
             _sourcePos = new Vector2(0 + 32 * targetCol, 0 + 32 * targetRow);
         }
-        protected int ImportBasics(string[] itemValue, int id, int num)
+        protected int ImportBasics(string[] stringData, int id, int num)
         {
             _num = num;
 
             int i = 0;
-            _itemType = (ItemType)Enum.Parse(typeof(ItemType), itemValue[i++]);
-            _name = itemValue[i++];
-            _description = itemValue[i++];
-            _textureIndex = int.Parse(itemValue[i++]);
-            _sellPrice = int.Parse(itemValue[i++]);
+            _itemType = (ItemType)Enum.Parse(typeof(ItemType), stringData[i++]);
+            _name = stringData[i++];
+            _description = stringData[i++];
+            _textureIndex = int.Parse(stringData[i++]);
+            _sellPrice = int.Parse(stringData[i++]);
 
             _itemID = id;//(ObjectManager.ItemIDs)Enum.Parse(typeof(ObjectManager.ItemIDs), itemValue[i++]);
 
@@ -130,6 +131,11 @@ namespace RiverHollow.Items
         public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox)
         {
             spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, 32, 32), Color.White);
+        }
+
+        public virtual string GetDescription()
+        {
+            return _description;
         }
 
         public void Pop(Vector2 pos)
@@ -227,6 +233,91 @@ namespace RiverHollow.Items
         }
     }
 
+    public class Equipment : Item
+    {
+        private int _dmg;
+        public int Dmg { get => _dmg; }
+        private int _def;
+        public int Def { get => _def; }
+        private int _spd;
+        public int Spd { get => _spd; }
+        private int _mag;
+        public int Mag { get => _mag; }
+        private int _hp;
+        public int HP { get => _hp; }
+
+        public Equipment(int id, string[] stringData)
+        {
+            int i = ImportBasics(stringData, id, 1);
+            _dmg = int.Parse(stringData[i++]);
+            _def = int.Parse(stringData[i++]);
+            _spd = int.Parse(stringData[i++]);
+            _mag = int.Parse(stringData[i++]);
+            _hp = int.Parse(stringData[i++]);
+            _texture = GameContentManager.GetTexture(@"Textures\weapons");
+
+            CalculateSourcePos();
+        }
+
+        public override string GetDescription()
+        {
+            string rv = base.GetDescription();
+            rv += System.Environment.NewLine;
+            if (Dmg > 0) { rv += "Dmg: +" + _dmg + " "; }
+            if (Def > 0) { rv += "Def: +" + _def + " "; }
+            if (Spd > 0) { rv += "Spd: +" + _spd + " "; }
+            if (Mag > 0) { rv += "Mag: +" + _mag + " "; }
+            if (HP > 0) { rv += "HP: +" + _hp + " "; }
+            rv = rv.Trim();
+
+            return rv;
+        }
+    }
+
+    public class Tool : Item
+    {
+        protected int _staminaCost;
+        public int StaminaCost { get => _staminaCost; }
+        protected float _breakValue;
+        public float BreakValue { get => _breakValue; }
+        protected float _chopValue;
+        public float ChopValue { get => _chopValue; }
+        protected AnimatedSprite _sprite;
+        public AnimatedSprite ToolAnimation { get => _sprite; }
+
+        public Tool(int id, string[] itemValue)
+        {
+            int i = ImportBasics(itemValue, id, 1);
+
+            _breakValue = float.Parse(itemValue[i++]);
+            _chopValue = float.Parse(itemValue[i++]);
+            _staminaCost = int.Parse(itemValue[i++]);
+            _texture = GameContentManager.GetTexture(@"Textures\tools");
+
+            _columnTextureSize = 128;
+            _rowTextureSize = 32;
+
+            CalculateSourcePos();
+
+            _sprite = new AnimatedSprite(_texture);
+            _sprite.AddAnimation("Left", (int)_sourcePos.X + 32, (int)_sourcePos.Y, 32, 32, 3, 0.1f);
+
+            _sprite.CurrentAnimation = "Left";
+            _sprite.IsAnimating = true;
+            _sprite.PlaysOnce = true;
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            _sprite.Update(gameTime);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch, Rectangle drawBox)
+        {
+            spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, 32, 32), Color.White);
+        }
+    }
+
     public class Food : Item
     {
         private int _stam;
@@ -245,6 +336,17 @@ namespace RiverHollow.Items
 
             CalculateSourcePos();
         }
+
+        public override string GetDescription()
+        {
+            string rv = base.GetDescription();
+            rv += System.Environment.NewLine;
+            if (Health > 0) { rv += "Health: +" + _health + " "; }
+            if (Stamina > 0) { rv += "Stamina: +" + _stam + " "; }
+            rv = rv.Trim();
+
+            return rv;
+        }
     }
 
     public class AdventureMap : Item
@@ -260,6 +362,15 @@ namespace RiverHollow.Items
             _texture = GameContentManager.GetTexture(@"Textures\items");
 
             CalculateSourcePos();
+        }
+
+        public override string GetDescription()
+        {
+            string rv = base.GetDescription();
+            rv += System.Environment.NewLine;
+            rv += "Difficulty: " + _difficulty;
+
+            return rv;
         }
     }
 }

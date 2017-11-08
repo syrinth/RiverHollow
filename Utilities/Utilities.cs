@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using System.Threading;
 
 namespace RiverHollow.Misc
 {
@@ -25,6 +26,21 @@ namespace RiverHollow.Misc
             
             direction.X = (deltaX < speed) ? newX * deltaX : newX * dir.X;
             direction.Y = (deltaY < speed) ? newY * deltaY : newY * dir.Y;
+        }
+    }
+    public class RHRandom : Random
+    {
+        public RHRandom() : base()
+        {
+            Thread.Sleep(1);
+        }
+
+        public override int Next(int min, int max)
+        {
+            //Thread.Sleep(1);
+            int rv = 0;
+            rv = base.Next(min, max + 1);
+            return rv;
         }
     }
 }

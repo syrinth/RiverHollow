@@ -178,9 +178,7 @@ namespace RiverHollow
             RHRandom r = new RHRandom();
             foreach (WorkerData wData in data.Workers)
             {
-                WorldAdventurer w = ObjectManager.GetWorker(wData.workerID);
-                w.SetName(wData.name);
-                w.SetMood(wData.mood);
+                WorldAdventurer w = ObjectManager.GetWorker(wData.workerID, wData.name, wData.mood);
                 AddWorker(w, r);
             }
         }

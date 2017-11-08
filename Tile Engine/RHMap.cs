@@ -513,7 +513,7 @@ namespace RiverHollow.Tile_Engine
                         if (InventoryManager.CurrentItem != null && 
                             n.Contains(mouseLocation) && PlayerManager.PlayerInRange(n.Center) &&
                             InventoryManager.CurrentItem.Type != Item.ItemType.Tool &&
-                            InventoryManager.CurrentItem.Type != Item.ItemType.Weapon)
+                            InventoryManager.CurrentItem.Type != Item.ItemType.Equipment)
                         {
                             string text = string.Empty;
                             Item i = InventoryManager.CurrentItem;
@@ -577,7 +577,7 @@ namespace RiverHollow.Tile_Engine
                     if (InventoryManager.CurrentItem != null && 
                         !c.GetType().IsSubclassOf(typeof(Mob)) && c.CollisionBox.Contains(mouseLocation) &&
                         InventoryManager.CurrentItem.Type != Item.ItemType.Tool &&
-                        InventoryManager.CurrentItem.Type != Item.ItemType.Weapon)
+                        InventoryManager.CurrentItem.Type != Item.ItemType.Equipment)
                     {
                         GraphicCursor._currentType = GraphicCursor.CursorType.Gift;
                         found = true;

@@ -106,6 +106,16 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                     gIB.Draw(spriteBatch);
                 }
             }
+            foreach (GUIItemBox gIB in _displayList)
+            {
+                if (gIB != null)
+                {
+                    if (gIB.DrawDescription(spriteBatch))
+                    {
+                        break;
+                    }
+                }
+            }
         }
     }
 }

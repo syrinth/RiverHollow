@@ -24,7 +24,7 @@ namespace RiverHollow.Game_Managers
         private static GUIScreen _currentGUIScreen;
         private static Screens _currentScreen;
         public static Screens CurrentGUIScreen { get => _currentScreen; }
-        public  enum Screens {None, Combat, WorkerShop, BuildingShop, DayEnd, HUD, Inventory, ItemCreation, MainMenu,  Shop,  Text, TextInput };
+        public  enum Screens {None, Combat, WorkerShop, BuildingShop, DayEnd, HUD, Inventory, ItemCreation, MainMenu,  Shop,  Text, TextInput, GameMenu};
         private static GUIImage _fadeImg;
         private static float _fadeVal = 1f;
         private static bool _fading = false;
@@ -119,6 +119,9 @@ namespace RiverHollow.Game_Managers
                     return;
                 case Screens.MainMenu:
                     _currentGUIScreen = new MainMenuScreen();
+                    return;
+                case Screens.GameMenu:
+                    _currentGUIScreen = new GameMenuScreen();
                     return;
                 case Screens.None:
                     _currentGUIScreen = null;

@@ -20,7 +20,8 @@ namespace RiverHollow.Characters.NPCs
         protected int _dailyItemID;
         protected Item _heldItem;
         protected int _mood;
-        private bool _adventuring;
+        public bool DrawIt;
+        public bool Busy;
         public int Mood { get => _mood; }
         protected string _texture;
 
@@ -35,7 +36,17 @@ namespace RiverHollow.Characters.NPCs
             _currFood = 0;
             _heldItem = null;
             _mood = 0;
-            _adventuring = false;
+            DrawIt = true;
+            Busy = false;
+
+            SetCombat();
+        }
+
+        public WorldAdventurer(string[] stringData, int id, string name, int mood) : this(stringData, id)
+        {
+            _name = name;
+            _mood = mood;
+            SetCombat();
         }
 
         protected int ImportBasics(string[] stringData, int id)
@@ -48,16 +59,20 @@ namespace RiverHollow.Characters.NPCs
             int portraitNum = int.Parse(stringData[i++]);
             _portraitRect = new Rectangle(0, portraitNum*192, 160, 192);
             _portrait = GameContentManager.GetTexture(@"Textures\portraits");
-            _c = new CombatAdventurer();
-            _c.SetClass(CharacterManager.GetClassByIndex(1));
-            _c.LoadContent(@"Textures\WizardCombat", 100, 100, 2, 0.7f);
 
             return i;
         }
 
+        protected void SetCombat()
+        {
+            _c = new CombatAdventurer(this);
+            _c.SetClass(CharacterManager.GetClassByIndex(1));
+            _c.LoadContent(@"Textures\WizardCombat", 100, 100, 2, 0.7f);
+        }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (!_adventuring)
+            if (DrawIt)
             {
                 base.Draw(spriteBatch);
             }
@@ -66,7 +81,7 @@ namespace RiverHollow.Characters.NPCs
         public override bool Contains(Point mouse)
         {
             bool rv = false;
-            if (!_adventuring) {
+            if (DrawIt) {
                 rv = base.Contains(mouse);
             }
             return rv;
@@ -96,7 +111,8 @@ namespace RiverHollow.Characters.NPCs
             }
             else if (entry.Equals("PartyAdd"))
             {
-                _adventuring = true;
+                DrawIt = false;
+                Busy = true;
                 PlayerManager.AddToParty(_c);
                 rv = "Of course!";
             }
@@ -138,13 +154,10 @@ namespace RiverHollow.Characters.NPCs
 
         public bool Rollover()
         {
-            bool rv = true;
-            if (_adventuring)
-            {
-                _adventuring = false;
-                _c.CurrentHP = _c.MaxHP;
-                rv = false;
-            }
+            bool rv = Busy;
+            DrawIt = true;
+            Busy = false;
+            _c.CurrentHP = _c.MaxHP;
             return rv;
         }
 

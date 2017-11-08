@@ -29,9 +29,6 @@ namespace RiverHollow.Characters
         protected Rectangle _portraitRect;
         public Rectangle PortraitRectangle { get => _portraitRect; }
 
-        protected string _name;
-        public string Name { get => _name; }
-
         protected string _currentMap;
         public string CurrentMap { get => _currentMap; }
 

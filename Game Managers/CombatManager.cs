@@ -10,18 +10,19 @@ namespace RiverHollow.Game_Managers
 {
     public static class CombatManager
     {
+        private static int _xpValue;
         private static Mob _mob;
         public static Mob CurrentMob { get => _mob; }
         private static List<CombatCharacter> _listMonsters;
         public static List<CombatCharacter> Monsters { get => _listMonsters; }
         private static List<CombatCharacter> _listParty;
         public static List<CombatCharacter> Party { get => _listParty; }
-        public static List<CombatCharacter> _turnOrder;
+        public static List<CombatCharacter> TurnOrder;
 
         public enum Phase { EnemyTurn, SelectSkill, Targetting, DisplayAttack, Animation, EndCombat }
         public static Phase CurrentPhase;
 
-        public static int _currentTurnIndex;
+        public static int TurnIndex;
 
         public static Ability _skill;
         private static BattleLocation _target;
@@ -35,24 +36,29 @@ namespace RiverHollow.Game_Managers
             Delay = 0;
             _mob = m;
             _listMonsters = _mob.Monsters;
+            _xpValue = 0;
+            foreach (Monster mon in _listMonsters)
+            {
+                _xpValue += mon.XP;
+            }
 
             _listParty = new List<CombatCharacter>();
             foreach (CombatAdventurer c in PlayerManager.GetParty()) {
                 _listParty.Add(c);
             }
 
-            _turnOrder = new List<CombatCharacter>();
-            _turnOrder.AddRange(_listParty);
-            _turnOrder.AddRange(_listMonsters);
+            TurnOrder = new List<CombatCharacter>();
+            TurnOrder.AddRange(_listParty);
+            TurnOrder.AddRange(_listMonsters);
 
             RHRandom r = new RHRandom();
-            foreach (CombatCharacter c in _turnOrder)
+            foreach (CombatCharacter c in TurnOrder)
             {
                 c.Initiative =  r.Next(1, 20) + (c.StatSpd/2);
             }
-            _turnOrder.Sort((x, y) => x.Initiative.CompareTo(y.Initiative));
+            TurnOrder.Sort((x, y) => x.Initiative.CompareTo(y.Initiative));
 
-            _currentTurnIndex = 0;
+            TurnIndex = 0;
             SetPhaseForTurn();
             PlayerManager.DecreaseStamina(1);
             RiverHollow.ChangeGameState(RiverHollow.GameState.Combat);
@@ -62,13 +68,13 @@ namespace RiverHollow.Game_Managers
         {
             if (CurrentPhase != Phase.EndCombat)
             {
-                if (_currentTurnIndex < _turnOrder.Count-1)
+                if (TurnIndex < TurnOrder.Count-1)
                 {
-                    _currentTurnIndex++;
+                    TurnIndex++;
                 }
                 else
                 {
-                    _currentTurnIndex = 0;
+                    TurnIndex = 0;
                     PlayerManager.DecreaseStamina(1);
                 }
                 SetPhaseForTurn();
@@ -77,11 +83,11 @@ namespace RiverHollow.Game_Managers
 
         private static void SetPhaseForTurn()
         {
-            if (_listMonsters.Contains(_turnOrder[_currentTurnIndex]))
+            if (_listMonsters.Contains(TurnOrder[TurnIndex]))
             {
                 CurrentPhase = Phase.EnemyTurn;
             }
-            else if (_listParty.Contains(_turnOrder[_currentTurnIndex]))
+            else if (_listParty.Contains(TurnOrder[TurnIndex]))
             {
                 CurrentPhase = Phase.SelectSkill;
             }
@@ -93,7 +99,7 @@ namespace RiverHollow.Game_Managers
 
         public static void EnemyTakeTurn()
         {
-            CombatCharacter c = _turnOrder[_currentTurnIndex];
+            CombatCharacter c = TurnOrder[TurnIndex];
             UsingSkill(CharacterManager.GetAbilityByIndex(1));
             RHRandom r = new RHRandom();
             PlayerTarget = r.Next(0, _listParty.Count-1);
@@ -109,7 +115,7 @@ namespace RiverHollow.Game_Managers
         public static void UseSkillOnTarget(BattleLocation target)
         {
             _target = target;
-            _skill.SkillUser = _turnOrder[_currentTurnIndex];
+            _skill.SkillUser = TurnOrder[TurnIndex];
             _skill.PreEffect(target);
             Text = _skill.Name;
             Delay = 0.5;
@@ -162,6 +168,10 @@ namespace RiverHollow.Game_Managers
 
         public static void EndBattle()
         {
+            foreach(CombatAdventurer a in _listParty)
+            {
+                a.AddXP(_xpValue);
+            }
             MapManager.RemoveMob(_mob);
             MapManager.DropWorldItems(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
             _mob = null;
@@ -174,7 +184,7 @@ namespace RiverHollow.Game_Managers
             {
                 _listMonsters.Remove(c);
             }
-            _turnOrder.Remove(c);
+            TurnOrder.Remove(c);
             if(_listMonsters.Count == 0)
             {
                 Delay = 1;

@@ -7,9 +7,8 @@ namespace RiverHollow
     {
         #region Properties
         protected string _name;
-        protected int _idleFor;
-        protected int _leash = 400;
-        
+        private int _xp;
+        public int XP { get => _xp; }
         protected string _textureName;
         protected Vector2 _moveTo = Vector2.Zero;
 
@@ -26,6 +25,7 @@ namespace RiverHollow
             int i = 0;
             _name = stringData[i++];
             _textureName = @"Textures\" + stringData[i++];
+            _xp = int.Parse(stringData[i++]);
             _statDmg = int.Parse(stringData[i++]);
             _statDef = int.Parse(stringData[i++]);
             _statHP = int.Parse(stringData[i++]);

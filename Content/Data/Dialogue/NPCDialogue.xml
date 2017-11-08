@@ -18,5 +18,9 @@
       <Key>Wizard2</Key>
       <Value>-zra? Ah! I see you've traversed the Widdershins path of the darkest mind! Well done!</Value>
     </Item>
+    <Item>
+      <Key>ReallyExit</Key>
+      <Value>Are you sure?[Exit:Exit|Cancel:Cancel]</Value>
+    </Item>
   </Asset>
 </XnaContent>

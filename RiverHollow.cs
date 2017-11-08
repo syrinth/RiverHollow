@@ -13,6 +13,7 @@ namespace RiverHollow
     /// </summary>
     public class RiverHollow : Game
     {
+        private static bool _exit = false;
         public static float Scale = 1.5f;
         public enum GameState { WorldMap, Combat, Paused, Build, Information, Input}
         private static GameState _gameState;
@@ -70,6 +71,10 @@ namespace RiverHollow
         {
             if (this.IsActive)
             {
+                if (_exit)
+                {
+                    Exit();
+                }
                 MouseState ms = Mouse.GetState();
                 KeyboardState ks = Keyboard.GetState();
 
@@ -81,9 +86,9 @@ namespace RiverHollow
                         {
                             CombatManager.EndBattle();
                         }
-                        else if (_gameState == GameState.WorldMap || _gameState == GameState.Build)
+                        else if (_gameState == GameState.WorldMap)
                         {
-                            Exit();
+                            GUIManager.SetScreen(GUIManager.Screens.GameMenu);
                         }
                     }
                     if (InputManager.CheckKey(Keys.P))
@@ -111,20 +116,20 @@ namespace RiverHollow
                             }
                         }
                     }
-                    if (GUIManager.CurrentGUIScreen != GUIManager.Screens.Inventory || GUIManager.CurrentGUIScreen != GUIManager.Screens.HUD)
-                    {
-                        if (InputManager.CheckKey(Keys.I))
-                        {
-                            if (GUIManager.CurrentGUIScreen == GUIManager.Screens.Inventory)
-                            {
-                                ChangeGameState(GameState.WorldMap);
-                            }
-                            else
-                            {
-                                GUIManager.SetScreen(GUIManager.Screens.Inventory);
-                            }
-                        }
-                    }
+                    //if (GUIManager.CurrentGUIScreen != GUIManager.Screens.Inventory || GUIManager.CurrentGUIScreen != GUIManager.Screens.HUD)
+                    //{
+                    //    if (InputManager.CheckKey(Keys.I))
+                    //    {
+                    //        if (GUIManager.CurrentGUIScreen == GUIManager.Screens.Inventory)
+                    //        {
+                    //            ChangeGameState(GameState.WorldMap);
+                    //        }
+                    //        else
+                    //        {
+                    //            GUIManager.SetScreen(GUIManager.Screens.Inventory);
+                    //        }
+                    //    }
+                    //}
                 }
 
                 GUIManager.Update(gameTime);
@@ -155,7 +160,8 @@ namespace RiverHollow
                 }
                 else
                 {
-                    if ((_gameState == GameState.Build || _gameState == GameState.WorldMap || _gameState == GameState.Combat) && !GUIManager.ProcessHover(mousePoint))
+                    //(_gameState == GameState.Build || _gameState == GameState.WorldMap || _gameState == GameState.Combat) && 
+                    if (!GUIManager.ProcessHover(mousePoint))
                     {
                         mousePoint.X = (int)((mousePoint.X - translate.X) / Scale);
                         mousePoint.Y = (int)((mousePoint.Y - translate.Y) / Scale);
@@ -246,6 +252,11 @@ namespace RiverHollow
             {
                 b.Rollover();
             }
+        }
+
+        public static void PrepExit()
+        {
+            _exit = true;
         }
     }
 }

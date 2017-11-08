@@ -229,6 +229,11 @@ namespace RiverHollow.Game_Managers
             _party.Add(c);
         }
 
+        public static void RemoveFromParty(CombatAdventurer c)
+        {
+            _party.Remove(c);
+        }
+
         public static bool ProcessLeftButtonClick(Point mouseLocation)
         {
             bool rv = false;

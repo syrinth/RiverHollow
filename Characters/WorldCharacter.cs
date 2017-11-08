@@ -7,6 +7,9 @@ namespace RiverHollow.Characters
     public class WorldCharacter : Character
     {
         #region Properties
+        protected string _name;
+        public string Name { get => _name; }
+
         public enum Direction { North, South, East, West };
         public Direction Facing = Direction.North;
         public Texture2D Texture { get => _sprite.Texture; }
@@ -28,6 +31,7 @@ namespace RiverHollow.Characters
             _width = RHMap.TileSize;
             _height = RHMap.TileSize;
         }
+
         public virtual bool Contains(Point mouse)
         {
             return CollisionBox.Contains(mouse);

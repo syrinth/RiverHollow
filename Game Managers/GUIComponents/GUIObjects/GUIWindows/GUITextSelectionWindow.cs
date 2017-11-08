@@ -144,6 +144,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                 RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
             }
             else{
+                //Equip here
                 GUIManager.RemoveComponent(this);
                 RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
             }

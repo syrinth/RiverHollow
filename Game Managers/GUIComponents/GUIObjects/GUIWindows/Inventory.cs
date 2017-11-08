@@ -13,11 +13,14 @@ using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Characters.CombatStuff;
 
 namespace RiverHollow.Screens
 {
     public class Inventory : GUIWindow
     {
+        GUITextSelectionWindow _equipWhoWindow;
         protected GUIItemBox[,] _displayList;
 
         private Container _container;
@@ -91,6 +94,43 @@ namespace RiverHollow.Screens
             return rv;
         }
 
+        public virtual bool ProcessRightButtonClick(Point mouse)
+        {
+            bool rv = false;
+
+            if (GraphicCursor.HeldItem == null)
+            {
+                if (IsItemThere(mouse))
+                {
+                    string partyNames = "Equip Who? [";
+                    foreach(CombatAdventurer c in PlayerManager.GetParty())
+                    {
+                        partyNames += c.Name + ":" + c.Name + "|";
+                    }
+                    partyNames = partyNames.Remove(partyNames.Length - 1);
+                    partyNames += "]";
+                    _equipWhoWindow = new GUITextSelectionWindow(partyNames);
+                }
+            }
+
+            return rv;
+        }
+
+        public virtual bool ProcessHover(Point mouse)
+        {
+            bool rv = false;
+
+            foreach(GUIItemBox i in _displayList)
+            {
+                if (i.ProcessHover(mouse))
+                {
+                    rv = true;
+                    break;
+                }
+            }
+            return rv;
+        }
+
         private bool IsItemThere(Point mouse)
         {
             bool rv = false;
@@ -118,9 +158,9 @@ namespace RiverHollow.Screens
                 {
                     if (_displayList[i, j].Contains(mouse) && _displayList[i, j].Item != null)
                     {
-                        if (_displayList[i, j].Item.Type == Item.ItemType.Weapon)
+                        if (_displayList[i, j].Item.Type == Item.ItemType.Equipment)
                         {
-                            rv = ((Weapon)(_displayList[i, j].Item));
+                            rv = ((Equipment)(_displayList[i, j].Item));
                         }
                         else if (_displayList[i, j].Item.Type == Item.ItemType.Tool)
                         {
@@ -197,6 +237,11 @@ namespace RiverHollow.Screens
                     }
                 }
             }
+
+            if (_equipWhoWindow != null)
+            {
+                _equipWhoWindow.Update(gameTime);
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -206,6 +251,22 @@ namespace RiverHollow.Screens
             foreach (GUIItemBox gIB in _displayList)
             {
                 gIB.Draw(spriteBatch);
+            }
+
+            foreach (GUIItemBox gIB in _displayList)
+            {
+                if (gIB != null)
+                {
+                    if (gIB.DrawDescription(spriteBatch))
+                    {
+                        break;
+                    }
+                }
+   
+                if(_equipWhoWindow != null)
+                {
+                    _equipWhoWindow.Draw(spriteBatch);
+                }
             }
         }
     }
