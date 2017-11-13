@@ -2,6 +2,7 @@
 using RiverHollow.Screens;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Items;
+using RiverHollow.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -9,13 +10,29 @@ namespace RiverHollow.Game_Managers.GUIObjects
     {
         private Inventory _inventory;
         private Inventory _container;
+        private CharacterBox _character;
         private SpriteFont _font;
+        private int _characterIndex;
+
         public InventoryScreen()
         {
+            _characterIndex = 0;
+            _character = new CharacterBox(PlayerManager.GetParty()[_characterIndex], new Vector2(128, 32));
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _inventory = new Inventory(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight/2), 4, InventoryManager.maxItemColumns, 32);
             Controls.Add(_inventory);
+            Controls.Add(_character);
         }
+
+        public InventoryScreen(CharacterBox c)
+        {
+            _character = c;
+            _font = GameContentManager.GetFont(@"Fonts\Font");
+            _inventory = new Inventory(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), 4, InventoryManager.maxItemColumns, 32);
+            Controls.Add(_inventory);
+            Controls.Add(_character);
+        }
+
         public InventoryScreen(Container c)
         {
             Vector2 centerPoint = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
@@ -40,10 +57,21 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _inventory.ProcessLeftButtonClick(mouse);
                 rv = true;
             }
-            if (_container != null && _container.Contains(mouse))
+            else if (_container != null && _container.Contains(mouse))
             {
                 _container.ProcessLeftButtonClick(mouse);
                 rv = true;
+            }
+            else if (_character != null && _character.Contains(mouse))
+            {
+                rv = _character.ProcessLeftButtonClick(mouse);
+                if (!rv)
+                {
+                    if (_characterIndex < PlayerManager.GetParty().Count - 1) { _characterIndex++; }
+                    else { _characterIndex = 0; }
+                    _character.AssignNewCharacter(PlayerManager.GetParty()[_characterIndex]);
+                    rv = true;
+                }
             }
             return rv;
         }
@@ -53,12 +81,27 @@ namespace RiverHollow.Game_Managers.GUIObjects
             bool rv = true;
             if (_inventory.Contains(mouse))
             {
-                _inventory.ProcessRightButtonClick(mouse);
-                rv = true;
+                rv = _inventory.ProcessRightButtonClick(mouse);
+                if (rv)
+                {
+                    _character.EquipItem(GraphicCursor.HeldItem);
+                    if (GraphicCursor.HeldItem != null)
+                    {
+                        InventoryManager.AddItemToFirstAvailableInventorySpot(GraphicCursor.HeldItem.ItemID);
+                        GraphicCursor.DropItem();
+                    }
+                }
             }
-            else if (!_inventory.Contains(mouse) && _container != null && !_container.DrawRectangle.Contains(mouse))
+            else if (_container != null && !_container.DrawRectangle.Contains(mouse))
             {
                 GUIManager.SetScreen(GUIManager.Screens.HUD);
+            }
+            else if (_character != null && _character.Contains(mouse))
+            {
+                if (_characterIndex > 0) { _characterIndex--; }
+                else { _characterIndex = PlayerManager.GetParty().Count - 1; }
+                _character.AssignNewCharacter(PlayerManager.GetParty()[_characterIndex]);
+                rv = true;
             }
             return rv;
         }
@@ -66,7 +109,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool ProcessHover(Point mouse)
         {
             bool rv = true;
-            rv = _inventory.ProcessHover(mouse);
+            if (!_inventory.ProcessHover(mouse))
+            {
+                if (_character != null && !_character.ProcessHover(mouse))
+                {
+                    if (_container != null && !_container.ProcessHover(mouse))
+                    {
+                        rv = false;
+                    }
+                }
+            }
             return rv;
         }
 
