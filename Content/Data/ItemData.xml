@@ -2,7 +2,7 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
     <!--Key: ID, Value:Type/Name/Description/ImgIndex/SellCost-->
-    <!--Tool:Breakval/Chopval/stam Equipment: dmg/def/spd/mag/hp Container:Rows/Columns-->
+    <!--Tool:Type/Dmg/Stam Equipment: dmg/def/spd/mag/hp Container:Rows/Columns-->
     <!--Food:Stamina/Health-->
     <Item>
       <Key>0</Key>
@@ -18,11 +18,11 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>Tool/Pick Axe/Breaks things/0/3000/1/0.1/1</Value>
+      <Value>Tool/Pick Axe/Breaks things/0/3000/Pick/1/1</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>Tool/Axe/Chop Chop Motherfucker/1/3000/0/3/5</Value>
+      <Value>Tool/Wooden Axe/Chop Chop Motherfucker/1/3000/Axe/1/1</Value>
     </Item>
     <Item>
       <Key>5</Key>

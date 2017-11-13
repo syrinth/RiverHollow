@@ -279,22 +279,22 @@ namespace RiverHollow.Items
 
     public class Tool : Item
     {
+        public enum TypeOfTool { Pick, Axe };
+        public TypeOfTool ToolType;
         protected int _staminaCost;
         public int StaminaCost { get => _staminaCost; }
-        protected float _breakValue;
-        public float BreakValue { get => _breakValue; }
-        protected float _chopValue;
-        public float ChopValue { get => _chopValue; }
+        protected float _dmgValue;
+        public float DmgValue { get => _dmgValue; }
+
         protected AnimatedSprite _sprite;
         public AnimatedSprite ToolAnimation { get => _sprite; }
 
-        public Tool(int id, string[] itemValue)
+        public Tool(int id, string[] stringData)
         {
-            int i = ImportBasics(itemValue, id, 1);
-
-            _breakValue = float.Parse(itemValue[i++]);
-            _chopValue = float.Parse(itemValue[i++]);
-            _staminaCost = int.Parse(itemValue[i++]);
+            int i = ImportBasics(stringData, id, 1);
+            ToolType = (TypeOfTool)Enum.Parse(typeof(TypeOfTool), stringData[i++]);
+            _dmgValue = float.Parse(stringData[i++]);
+            _staminaCost = int.Parse(stringData[i++]);
             _texture = GameContentManager.GetTexture(@"Textures\tools");
 
             _columnTextureSize = 128;

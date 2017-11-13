@@ -12,7 +12,6 @@ namespace RiverHollow.Screens
 {
     public class Inventory : GUIWindow
     {
-        GUITextSelectionWindow _equipWhoWindow;
         protected GUIItemBox[,] _displayList;
 
         private Container _container;
@@ -224,11 +223,6 @@ namespace RiverHollow.Screens
                     }
                 }
             }
-
-            if (_equipWhoWindow != null)
-            {
-                _equipWhoWindow.Update(gameTime);
-            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -248,11 +242,6 @@ namespace RiverHollow.Screens
                     {
                         break;
                     }
-                }
-   
-                if(_equipWhoWindow != null)
-                {
-                    _equipWhoWindow.Draw(spriteBatch);
                 }
             }
         }

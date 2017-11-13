@@ -18,8 +18,7 @@ namespace RiverHollow.Game_Managers
     public static class PlayerManager
     {
         #region Properties
-        private static bool _usingTool = false;
-        public static bool UsingTool { get => _usingTool; set => _usingTool = value; }
+        public static Tool UseTool;
         private static RHTile _targetTile = null;
 
         public static int Stamina;
@@ -31,6 +30,8 @@ namespace RiverHollow.Game_Managers
         public static string CurrentMap { get => _currentMap; set => _currentMap = value; }
 
         public static WorldCharacter World;
+        private static Tool _pick;
+        private static Tool _axe;
 
         public static CombatAdventurer Combat;
         public static int HitPoints { get => Combat.CurrentHP; }
@@ -106,28 +107,17 @@ namespace RiverHollow.Game_Managers
             Vector2 moveDir = Vector2.Zero;
             string animation = "";
 
-            if (_usingTool)
+            if (UseTool != null)
             {
-                ((Tool)InventoryManager.CurrentItem).ToolAnimation.Position = World.Position;
-                ((Tool)InventoryManager.CurrentItem).Update(gameTime);
-                _usingTool = ((Tool)InventoryManager.CurrentItem).ToolAnimation.IsAnimating;
-                if (_targetTile != null && !_usingTool)
+                UseTool.ToolAnimation.Position = World.Position;
+                UseTool.Update(gameTime);
+                bool finished = !UseTool.ToolAnimation.IsAnimating;
+
+                if (_targetTile != null && _targetTile.Object != null && finished) 
                 {
-                    bool destroyed = false;
-                    if (_targetTile.Object != null && _targetTile.Object.Breakable)
-                    {
-                        destroyed = _targetTile.DamageObject(((Tool)InventoryManager.CurrentItem).BreakValue);
-                    }
-                    else if (_targetTile.Object != null && _targetTile.Object.Choppable)
-                    {
-                        destroyed = _targetTile.DamageObject(((Tool)InventoryManager.CurrentItem).ChopValue);
-                    }
-
-                    if (destroyed)
-                    {
-                        _targetTile = null;
-                    }
-
+                    _targetTile.DamageObject(UseTool.DmgValue);
+                    _targetTile = null;
+                    UseTool = null;
                 }
             }
             else
@@ -209,10 +199,7 @@ namespace RiverHollow.Game_Managers
         {
             if (_currentMap == MapManager.CurrentMap.Name) {
                 World.Draw(spriteBatch);
-                if (_usingTool)
-                {
-                    ((Tool)InventoryManager.CurrentItem).ToolAnimation.Draw(spriteBatch);
-                }
+                if (UseTool != null) { UseTool.ToolAnimation.Draw(spriteBatch); }
             }
         }
         public static void DrawCombat(SpriteBatch spriteBatch)
@@ -238,19 +225,30 @@ namespace RiverHollow.Game_Managers
         {
             bool rv = false;
 
-            if (InventoryManager.CurrentItem != null)
+            if (PlayerManager.PlayerInRange(mouseLocation))
             {
-                if (InventoryManager.CurrentItem.Type == Item.ItemType.Tool && PlayerManager.PlayerInRange(mouseLocation))
+                _targetTile = MapManager.RetrieveTile(mouseLocation);
+
+                if (_targetTile.Object != null)
                 {
-                    if (DecreaseStamina(((Tool)InventoryManager.CurrentItem).StaminaCost))
+                    if (_targetTile.Object.Breakable) { UseTool = _pick; }
+                    else if (_targetTile.Object.Choppable) { UseTool = _axe; }
+                    else { UseTool = null; }
+
+                    if (UseTool != null)
                     {
-                        _usingTool = true;
-                        ((Tool)InventoryManager.CurrentItem).ToolAnimation.IsAnimating = true;
-                        _targetTile = MapManager.RetrieveTile(mouseLocation);
+                        if (DecreaseStamina(UseTool.StaminaCost))
+                        {
+                            UseTool.ToolAnimation.IsAnimating = true;
+                        }
                     }
                     rv = true;
                 }
-                else if (InventoryManager.CurrentItem.Type == Item.ItemType.Container)
+            }
+
+            if (InventoryManager.CurrentItem != null)
+            {
+                if (InventoryManager.CurrentItem.Type == Item.ItemType.Container)
                 {
                     MapManager.PlaceWorldItem((Container)InventoryManager.CurrentItem, mouseLocation.ToVector2());
                     InventoryManager.RemoveItemFromInventory(InventoryManager.CurrentItemNumber);
@@ -367,6 +365,31 @@ namespace RiverHollow.Game_Managers
         {
             _party.Clear();
             _party.Add(Combat);
+        }
+
+        public static void CompareTools(Tool t)
+        {
+            if (t != null)
+            {
+                if (t.ToolType == Tool.TypeOfTool.Axe)
+                {
+                    if (t == _axe) { _axe = InventoryManager.FindTool(Tool.TypeOfTool.Axe); }
+                    else
+                    {
+                        if (_axe == null) { _axe = t; }
+                        if (_axe.DmgValue < t.DmgValue) { _axe = t; }
+                    }
+                }
+                else if (t.ToolType == Tool.TypeOfTool.Pick)
+                {
+                    if (t == _pick) { _pick = InventoryManager.FindTool(Tool.TypeOfTool.Axe); }
+                    else
+                    {
+                        if(_pick == null) { _pick = t; }
+                        else if (_pick.DmgValue < t.DmgValue) { _pick = t; }
+                    }
+                }
+            }
         }
 
         #region Save/Load

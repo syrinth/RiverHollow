@@ -139,7 +139,11 @@ namespace RiverHollow.Game_Managers
                         if (_inventory[i, j] == null)
                         {
                             _inventory[i, j] = ObjectManager.GetItem(itemID, 1);
-                            added = true; ;
+                            if (_inventory[i, j].Type == Item.ItemType.Tool)
+                            {
+                                PlayerManager.CompareTools((Tool)_inventory[i, j]);
+                            }
+                            added = true;
                         }
                         if (added)
                         {
@@ -185,6 +189,7 @@ namespace RiverHollow.Game_Managers
                     else if (item.Type == Item.ItemType.Tool)
                     {
                         _inventory[row, column] = (Tool)(item);
+                        PlayerManager.CompareTools((Tool)_inventory[row, column]);
                     }
                     else
                     {
@@ -212,11 +217,39 @@ namespace RiverHollow.Game_Managers
                 {
                     if ((i * maxItemColumns) + j == index)
                     {
+                        if (_inventory[i, j].Type == Item.ItemType.Tool)
+                        {
+                            PlayerManager.CompareTools((Tool)_inventory[i, j]);
+                        }
                         _inventory[i, j] = null;
                         break;
                     }
                 }
             }
+        }
+
+        public static Tool FindTool(Tool.TypeOfTool tool)
+        {
+            Tool rv = null;
+            for (int i = 0; i < maxItemRows; i++)
+            {
+                for (int j = 0; j < maxItemColumns; j++)
+                {
+                    if (_inventory[i, j] != null)
+                    {
+                        if(_inventory[i, j].Type == Item.ItemType.Tool)
+                        {
+                            Tool t = (Tool)_inventory[i, j];
+                            if(t.ToolType == tool)
+                            {
+                                if(rv != null && t.DmgValue > rv.DmgValue) { rv = t; }
+                                else { rv = t; }
+                            }
+                        }
+                    }
+                }
+            }
+            return rv;
         }
     }
 }
