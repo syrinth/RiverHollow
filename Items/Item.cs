@@ -235,6 +235,8 @@ namespace RiverHollow.Items
 
     public class Equipment : Item
     {
+        public enum EquipmentType { Armor, Weapon };
+        public EquipmentType EquipType;
         private int _dmg;
         public int Dmg { get => _dmg; }
         private int _def;
@@ -249,6 +251,7 @@ namespace RiverHollow.Items
         public Equipment(int id, string[] stringData)
         {
             int i = ImportBasics(stringData, id, 1);
+            EquipType = (EquipmentType)Enum.Parse(typeof(EquipmentType), stringData[i++]);
             _dmg = int.Parse(stringData[i++]);
             _def = int.Parse(stringData[i++]);
             _spd = int.Parse(stringData[i++]);

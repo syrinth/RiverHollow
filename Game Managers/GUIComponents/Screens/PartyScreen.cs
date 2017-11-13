@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using RiverHollow.Screens;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Characters.CombatStuff;
 using System.Collections.Generic;
 using RiverHollow.GUIObjects;
+using RiverHollow.Items;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -67,7 +67,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
     }
 
-    class CharacterBox : GUIObject
+    public class CharacterBox : GUIObject
     {
         GUIWindow _window;
         CombatAdventurer _character;
@@ -151,13 +151,27 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_character != null && _remove != null && _remove.Contains(mouse)){
-                PlayerManager.RemoveFromParty(_character);
-                _character.World.DrawIt = true;
-                _character = null;
+            if (_character != null)
+            {
+                if (_remove != null && _remove.Contains(mouse))
+                {
+                    PlayerManager.RemoveFromParty(_character);
+                    _character.World.DrawIt = true;
+                    _character = null;
+                    rv = true;
+                }
+                else if (_weapon.Contains(mouse))
+                {
+                    rv = ItemSwap(_weapon, Equipment.EquipmentType.Weapon);
+                }
+                else if (_armor.Contains(mouse))
+                {
+                    rv = ItemSwap(_armor, Equipment.EquipmentType.Armor);
+                }
             }
             return rv;
         }
+
         public bool ProcessHover(Point mouse)
         {
             bool rv = false;
@@ -174,6 +188,65 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool Contains(Point mouse)
         {
             return _window.Contains(mouse);
+        }
+
+        private bool ItemSwap(GUIItemBox box, Equipment.EquipmentType match)
+        {
+            bool rv = false;
+            if (GraphicCursor.HeldItem != null)
+            {
+                if (GraphicCursor.HeldItem.Type == Item.ItemType.Equipment && ((Equipment)GraphicCursor.HeldItem).EquipType == match)
+                {
+                    if (box.Item != null)
+                    {
+                        Equipment temp = (Equipment)GraphicCursor.HeldItem;
+                        GraphicCursor.GrabItem(box.Item);
+                        box.Item = temp;
+                        _character.Weapon = temp;
+                    }
+                    else
+                    {
+                        box.Item = GraphicCursor.HeldItem;
+                        _character.Weapon = (Equipment)GraphicCursor.HeldItem;
+                        GraphicCursor.DropItem();
+                        rv = true;
+                    }
+                }
+            }
+            else
+            {
+                rv = GraphicCursor.GrabItem(box.Item);
+                box.Item = null;
+                _character.Weapon = null;
+            }
+
+            return rv;
+        }
+
+        public bool EquipItem(Item i)
+        {
+            bool rv = false;
+
+            if (i.Type == Item.ItemType.Equipment)
+            {
+                if (((Equipment)i).EquipType == Equipment.EquipmentType.Armor)
+                {
+                    rv = ItemSwap(_armor, Equipment.EquipmentType.Armor);
+                }
+                else
+                {
+                    rv = ItemSwap(_weapon, Equipment.EquipmentType.Weapon);
+                }
+            }
+
+            return rv;
+        }
+
+        public void AssignNewCharacter(CombatAdventurer c)
+        {
+            _character = c;
+            _weapon.Item = _character.Weapon;
+            _armor.Item = _character.Armor;
         }
     }
 }

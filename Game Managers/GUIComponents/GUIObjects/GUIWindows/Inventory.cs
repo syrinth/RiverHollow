@@ -1,17 +1,9 @@
 ﻿using RiverHollow.GUIObjects;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
 using RiverHollow.Items;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
-using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Characters.CombatStuff;
@@ -76,7 +68,7 @@ namespace RiverHollow.Screens
 
             if (GraphicCursor.HeldItem != null)
             {
-                if (IsItemThere(mouse))
+                if (IsItemThere(mouse) != null)
                 {
                     Item temp = GraphicCursor.HeldItem;
                     GraphicCursor.GrabItem(TakeItem(mouse));
@@ -100,16 +92,11 @@ namespace RiverHollow.Screens
 
             if (GraphicCursor.HeldItem == null)
             {
-                if (IsItemThere(mouse))
+                Item i = IsItemThere(mouse);
+                if (i != null)
                 {
-                    string partyNames = "Equip Who? [";
-                    foreach(CombatAdventurer c in PlayerManager.GetParty())
-                    {
-                        partyNames += c.Name + ":" + c.Name + "|";
-                    }
-                    partyNames = partyNames.Remove(partyNames.Length - 1);
-                    partyNames += "]";
-                    _equipWhoWindow = new GUITextSelectionWindow(partyNames);
+                    GraphicCursor.GrabItem(TakeItem(mouse));
+                    rv = true;
                 }
             }
 
@@ -131,16 +118,16 @@ namespace RiverHollow.Screens
             return rv;
         }
 
-        private bool IsItemThere(Point mouse)
+        private Item IsItemThere(Point mouse)
         {
-            bool rv = false;
+            Item rv = null;
             for (int i = 0; i < _rows; i++)
             {
                 for (int j = 0; j < _columns; j++)
                 {
                     if (_displayList[i, j].Contains(mouse) && _displayList[i, j].Item != null)
                     {
-                        rv = true;
+                        rv = _displayList[i, j].Item;
                         break;
                     }
                 }
@@ -186,7 +173,7 @@ namespace RiverHollow.Screens
             return rv;
         }
 
-        private bool GiveItem(Item item)
+        public bool GiveItem(Item item)
         {
             return GiveItem(item, false);
         }

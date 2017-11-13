@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: ID, Value:Type/Name/Description/Index/EnumID/SellCost-->
+    <!--Key: ID, Value:Type/Name/Description/ImgIndex/SellCost-->
     <!--Tool:Breakval/Chopval/stam Equipment: dmg/def/spd/mag/hp Container:Rows/Columns-->
     <!--Food:Stamina/Health-->
     <Item>
@@ -26,7 +26,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>Equipment/Basic Sword/Swing this fucker/0/500/1/0/0/0/0</Value>
+      <Value>Equipment/Basic Sword/Swing this fucker/0/500/Weapon/1/0/0/0/0</Value>
     </Item>
     <Item>
       <Key>6</Key>
@@ -42,11 +42,11 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>Equipment/Ultima Weapon/Swing this fucker/2/1000/20/20/20/20/20</Value>
+      <Value>Equipment/Ultima Weapon/Swing this fucker/2/1000/Weapon/20/20/20/20/20</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>Equipment/Armor/Best armor ever/1/1000/0/20/0/0/0</Value>
+      <Value>Equipment/Armor/Best armor ever/1/1000/Armor/0/20/0/0/0</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -21,30 +21,28 @@ namespace RiverHollow.Characters.CombatStuff
 
         public string Name { get => (_world == null) ? PlayerManager.Name : _world.Name; }
 
-        private Equipment _weapon;
-        public Equipment Weapon { get => _weapon; }
-        private Equipment _armor;
-        public Equipment Armor { get => _armor; }
+        public Equipment Weapon;
+        public Equipment Armor;
 
-        public override int StatDmg { get =>  10 + (_classLevel * _class.StatDmg) + (_weapon == null ? 0 : _weapon.Dmg) + (_armor == null ? 0 : _armor.Dmg); }
-        public override int StatDef { get => 10 + (_classLevel * _class.StatDef) + (_weapon == null ? 0 : _weapon.Def) + (_armor == null ? 0 : _armor.Def); }
-        public override int StatHP { get => 10 + (_classLevel * _class.StatHP) + (_weapon == null ? 0 : _weapon.HP) + (_armor == null ? 0 : _armor.HP); }
-        public override int StatMagic { get => 10 + (_classLevel * _class.StatMagic) + (_weapon == null ? 0 : _weapon.Mag) + (_armor == null ? 0 : _armor.Mag); }
-        public override int StatSpd { get => 10 + (_classLevel * _class.StatSpd) + (_weapon == null ? 0 : _weapon.Spd) + (_armor == null ? 0 : _armor.Spd); }
+        public override int StatDmg { get =>  10 + (_classLevel * _class.StatDmg) + (Weapon == null ? 0 : Weapon.Dmg) + (Armor == null ? 0 : Armor.Dmg); }
+        public override int StatDef { get => 10 + (_classLevel * _class.StatDef) + (Weapon == null ? 0 : Weapon.Def) + (Armor == null ? 0 : Armor.Def); }
+        public override int StatHP { get => 10 + (_classLevel * _class.StatHP) + (Weapon == null ? 0 : Weapon.HP) + (Armor == null ? 0 : Armor.HP); }
+        public override int StatMagic { get => 10 + (_classLevel * _class.StatMagic) + (Weapon == null ? 0 : Weapon.Mag) + (Armor == null ? 0 : Armor.Mag); }
+        public override int StatSpd { get => 10 + (_classLevel * _class.StatSpd) + (Weapon == null ? 0 : Weapon.Spd) + (Armor == null ? 0 : Armor.Spd); }
 
         #endregion
         public CombatAdventurer(WorldAdventurer w) : base()
         {
             _world = w;
-            _weapon = (Equipment)ObjectManager.GetItem(9);
-            _armor = (Equipment)ObjectManager.GetItem(10);
+            Weapon = (Equipment)ObjectManager.GetItem(9);
+            Armor = (Equipment)ObjectManager.GetItem(10);
             _classLevel = 1;
         }
 
         public CombatAdventurer() : base()
         {
-            _weapon = (Equipment)ObjectManager.GetItem(9);
-            _armor = (Equipment)ObjectManager.GetItem(10);
+            Weapon = (Equipment)ObjectManager.GetItem(9);
+            Armor = (Equipment)ObjectManager.GetItem(10);
             _classLevel = 1;
         }
 
