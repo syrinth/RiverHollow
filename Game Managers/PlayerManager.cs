@@ -229,17 +229,20 @@ namespace RiverHollow.Game_Managers
             {
                 _targetTile = MapManager.RetrieveTile(mouseLocation);
 
-                if (_targetTile.Object != null)
+                if (_targetTile.Object != null && UseTool == null)
                 {
                     if (_targetTile.Object.Breakable) { UseTool = _pick; }
                     else if (_targetTile.Object.Choppable) { UseTool = _axe; }
-                    else { UseTool = null; }
 
-                    if (UseTool != null)
+                    if (UseTool != null && !UseTool.ToolAnimation.IsAnimating)
                     {
                         if (DecreaseStamina(UseTool.StaminaCost))
                         {
                             UseTool.ToolAnimation.IsAnimating = true;
+                        }
+                        else
+                        {
+                            UseTool = null;
                         }
                     }
                     rv = true;

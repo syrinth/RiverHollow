@@ -67,7 +67,7 @@ namespace RiverHollow.Game_Managers
                 m.LayerVisible(directions[dirNextRoom], false);
 
                 string directionKey = string.Empty;
-                foreach (var kvp in m.ExitDictionary)
+                foreach (var kvp in m.DictionaryExit)
                 {
                     if (kvp.Value.Equals(directions[dirToUnlock]))
                     {
@@ -80,7 +80,7 @@ namespace RiverHollow.Game_Managers
 
                 if (i == 0)
                 {
-                    foreach (var kvp in m.EntranceDictionary)
+                    foreach (var kvp in m.DictionaryEntrance)
                     {
                         if (kvp.Key.Equals(directions[lastDir]))
                         {

@@ -185,11 +185,6 @@
 /processor:PassThroughProcessor
 /build:Data/CraftingData.xml
 
-#begin Data/Characters.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Characters.xml
-
 #begin Data/Dialogue/NPC1.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -404,4 +399,14 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/AbilityIcons.png
+
+#begin Data/NPCData/Characters.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/NPCData/Characters.xml
+
+#begin Data/NPCData/Schedules/NPC1.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/NPCData/Schedules/NPC1.xml
 

@@ -48,22 +48,22 @@ namespace RiverHollow.Game_Managers
 
             if (_currentMap.IsDungeon)
             {
-                rectEntrance = _tileMaps[newMapStr].EntranceDictionary["Dungeon"];
+                rectEntrance = _tileMaps[newMapStr].DictionaryEntrance["Dungeon"];
             }
             else
             {
-                foreach (string s in _tileMaps[newMapStr].EntranceDictionary.Keys)
+                foreach (string s in _tileMaps[newMapStr].DictionaryEntrance.Keys)
                 {
                     if (!string.IsNullOrEmpty(PlayerManager._inBuilding))
                     {
-                        rectEntrance = _tileMaps[newMapStr].EntranceDictionary[PlayerManager._inBuilding];
+                        rectEntrance = _tileMaps[newMapStr].DictionaryEntrance[PlayerManager._inBuilding];
                         PlayerManager._inBuilding = string.Empty;
                     }
                     else
                     {
                         if (s.Equals(_currentMap.Name))
                         {
-                            rectEntrance = _tileMaps[newMapStr].EntranceDictionary[s];
+                            rectEntrance = _tileMaps[newMapStr].DictionaryEntrance[s];
                         }
                     }
                 }
@@ -88,7 +88,7 @@ namespace RiverHollow.Game_Managers
             GUIManager.FadeOut();
             RHMap newMap = DungeonManager.RoomChange(direction, straightOut);
 
-            Rectangle rectEntrance = newMap.IsDungeon ? newMap.EntranceDictionary[direction] : newMap.EntranceDictionary["Dungeon"];
+            Rectangle rectEntrance = newMap.IsDungeon ? newMap.DictionaryEntrance[direction] : newMap.DictionaryEntrance["Dungeon"];
             
             _currentMap = newMap;
 
@@ -101,11 +101,11 @@ namespace RiverHollow.Game_Managers
             Rectangle rectEntrance = Rectangle.Empty;
             PlayerManager._inBuilding = b.ID.ToString();
 
-            foreach (string s in _tileMaps[b._name].EntranceDictionary.Keys)
+            foreach (string s in _tileMaps[b._name].DictionaryEntrance.Keys)
             {
                 if (s.Equals(_currentMap.Name))
                 {
-                    rectEntrance = _tileMaps[b._name].EntranceDictionary[s];
+                    rectEntrance = _tileMaps[b._name].DictionaryEntrance[s];
                 }
             }
             _currentMap = _tileMaps[b._name];

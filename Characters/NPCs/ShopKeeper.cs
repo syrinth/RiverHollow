@@ -20,7 +20,7 @@ namespace RiverHollow.Characters.NPCs
             LoadContent();
             if (data.Length >= 5)
             {
-                int i = LoadBasic(data);
+                int i = ImportBasics(data, index);
 
                 _merchandise = new List<Merchandise>();
                 while (i < data.Length)
@@ -34,12 +34,6 @@ namespace RiverHollow.Characters.NPCs
                 _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + index);
                 _portrait = GameContentManager.GetTexture(@"Textures\portraits");
 
-                _schedule = new List<Vector2>
-                {
-                    new Vector2(Position.X - 100, Position.Y + 100),
-                    Position
-                };
-                _moveTo = _schedule[0];
                 IsOpen = true;
 
                 MapManager.Maps[_currentMap].AddCharacter(this);

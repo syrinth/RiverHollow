@@ -206,7 +206,7 @@ namespace RiverHollow.SpriteAnimations
             }
         }
 
-        public void MoveBy(int x, int y)
+        public void MoveBy(float x, float y)
         {
             _LastPosition = _Position;
             _Position.X += x;

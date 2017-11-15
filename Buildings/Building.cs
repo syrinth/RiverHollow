@@ -148,22 +148,22 @@ namespace RiverHollow
             spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, _texture.Width, _texture.Height), null, _selected ? Color.Green : Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y+Texture.Height);
         }
 
-        protected int ImportBasics(string[] buildingData, int id)
+        protected int ImportBasics(string[] stringData, int id)
         {
             _id = id;
             int i = 0;
-            _name = buildingData[i++];
-            _buildingWorker = (WorkerType)Enum.Parse(typeof(WorkerType), buildingData[i++]);
-            _texture = GameContentManager.GetTexture(@"Textures\"+ buildingData[i++]);
-            string[] split = buildingData[i++].Split(' ');
+            _name = stringData[i++];
+            _buildingWorker = (WorkerType)Enum.Parse(typeof(WorkerType), stringData[i++]);
+            _texture = GameContentManager.GetTexture(@"Textures\"+ stringData[i++]);
+            string[] split = stringData[i++].Split(' ');
             _width = int.Parse(split[0]);
             _height = int.Parse(split[1]);
-            split = buildingData[i++].Split(' ');
+            split = stringData[i++].Split(' ');
             _baseStartX = int.Parse(split[0]);
             _baseStartY = int.Parse(split[1]);
             _baseWidth = int.Parse(split[2]);
             _baseHeight = int.Parse(split[3]);
-            split = buildingData[i++].Split(' ');
+            split = stringData[i++].Split(' ');
             _entranceX = int.Parse(split[0]);
             _entranceY = int.Parse(split[1]);
 

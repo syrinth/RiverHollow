@@ -53,10 +53,12 @@ namespace RiverHollow.Tile_Engine
         protected List<StaticItem> _staticItemList;
         public List<StaticItem> StaticItems { get => _staticItemList; }
 
-        private Dictionary<Rectangle, string> _exitDictionary;
-        public Dictionary<Rectangle, string> ExitDictionary { get => _exitDictionary; }
-        private Dictionary<string, Rectangle> _entranceDictionary;
-        public Dictionary<string, Rectangle> EntranceDictionary { get => _entranceDictionary; }
+        private Dictionary<Rectangle, string> _dictExit;
+        public Dictionary<Rectangle, string> DictionaryExit { get => _dictExit; }
+        private Dictionary<string, Rectangle> _dictEntrance;
+        public Dictionary<string, Rectangle> DictionaryEntrance { get => _dictEntrance; }
+        private Dictionary<string, Vector2> _dictPathing;
+        public Dictionary<string, Vector2> DictionaryPathing { get => _dictPathing; }
 
         public RHMap()
         {
@@ -69,8 +71,9 @@ namespace RiverHollow.Tile_Engine
             _worldObjectList = new List<WorldObject>();
             _itemList = new List<Item>();
             _staticItemList = new List<StaticItem>();
-            _exitDictionary = new Dictionary<Rectangle, string>();
-            _entranceDictionary = new Dictionary<string, Rectangle>();
+            _dictExit = new Dictionary<Rectangle, string>();
+            _dictEntrance = new Dictionary<string, Rectangle>();
+            _dictPathing = new Dictionary<string, Vector2>();
         }
 
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, string newMap)
@@ -105,8 +108,9 @@ namespace RiverHollow.Tile_Engine
         }
 
         public void LoadMapObjects()
-        {            ReadOnlyCollection<TiledMapObjectLayer> entrLayer = _map.ObjectLayers;
-            foreach (TiledMapObjectLayer ol in entrLayer)
+        {
+            ReadOnlyCollection<TiledMapObjectLayer> objectLayers = _map.ObjectLayers;
+            foreach (TiledMapObjectLayer ol in objectLayers)
             {
                 if (ol.Name == "Entrance Layer")
                 {
@@ -115,16 +119,23 @@ namespace RiverHollow.Tile_Engine
                         Rectangle r = new Rectangle((int)mapObject.Position.X, (int)mapObject.Position.Y, (int)mapObject.Size.Width, (int)mapObject.Size.Height);
                         if (mapObject.Properties.ContainsKey("Exit"))
                         {
-                            _exitDictionary.Add(r, mapObject.Properties["Exit"]);
+                            _dictExit.Add(r, mapObject.Properties["Exit"]);
                         }
                         else if (mapObject.Properties.ContainsKey("Entrance"))
                         {
-                            _entranceDictionary.Add(mapObject.Properties["Entrance"], r);
+                            _dictEntrance.Add(mapObject.Properties["Entrance"], r);
                         }
                         else if (mapObject.Properties.ContainsKey("Valid Area"))
                         {
                             //_validArea = mapObject.Properties["Valid Area"];
                         }
+                    }
+                }
+                if (ol.Name == "NPC Layer")
+                {
+                    foreach (TiledMapObject mapObject in ol.Objects)
+                    {
+                        _dictPathing.Add(mapObject.Name, mapObject.Position);
                     }
                 }
             }
@@ -222,13 +233,13 @@ namespace RiverHollow.Tile_Engine
         }
 
         #region Collision Code
-        public bool CheckLeftMovement(WorldCharacter c, Rectangle movingObject)
+        public bool CheckLeftMovement(WorldCharacter c, Rectangle movingChar)
         {
             bool rv = true;
-            if (CheckForCollision(c, movingObject)) { return false; }
+            if (CheckForCollision(c, movingChar)) { return false; }
 
-            int columnTile = movingObject.Left / _tileSize;
-            for (int y = GetMinRow(movingObject); y <= GetMaxRow(movingObject); y++)
+            int columnTile = movingChar.Left / _tileSize;
+            for (int y = GetMinRow(movingChar); y <= GetMaxRow(movingChar); y++)
             {
                 RHTile mapTile = _tileArray[columnTile, y];
                 Rectangle cellRect = new Rectangle(columnTile * _tileSize, y * _tileSize, _tileSize, _tileSize);
@@ -236,24 +247,24 @@ namespace RiverHollow.Tile_Engine
                     GUIManager.LoadScreen(GUIManager.Screens.Text, GameContentManager.GetDialogue("Sleep"));
                     rv = true;
                 }
-                else if (!mapTile.Passable() && cellRect.Intersects(movingObject))
+                else if (!mapTile.Passable() && cellRect.Intersects(movingChar))
                 {
-                    if (cellRect.Right >= movingObject.Left) { rv = false; }
+                    if (cellRect.Right >= movingChar.Left) { rv = false; }
                 }
 
-                if (MapChange(movingObject)) { return false; }
+                if (MapChange(movingChar)) { return false; }
             }
 
             return rv;
         }
 
-        public bool CheckRightMovement(WorldCharacter c, Rectangle movingObject)
+        public bool CheckRightMovement(WorldCharacter c, Rectangle movingChar)
         {
             bool rv = true;
-            if (CheckForCollision(c, movingObject)) { return false; }
+            if (CheckForCollision(c, movingChar)) { return false; }
 
-            int columnTile = movingObject.Right / _tileSize;
-            for (int y = GetMinRow(movingObject); y <= GetMaxRow(movingObject); y++)
+            int columnTile = movingChar.Right / _tileSize;
+            for (int y = GetMinRow(movingChar); y <= GetMaxRow(movingChar); y++)
             {
                 RHTile mapTile = _tileArray[columnTile, y];
                 Rectangle cellRect = new Rectangle(columnTile * _tileSize, y * _tileSize, _tileSize, _tileSize);
@@ -262,24 +273,24 @@ namespace RiverHollow.Tile_Engine
                     GUIManager.LoadScreen(GUIManager.Screens.Text, GameContentManager.GetDialogue("Sleep"));
                     rv = true;
                 }
-                else if (!mapTile.Passable() && cellRect.Intersects(movingObject))
+                else if (!mapTile.Passable() && cellRect.Intersects(movingChar))
                 {
-                    if (cellRect.Left <= movingObject.Right) { rv = false; }
+                    if (cellRect.Left <= movingChar.Right) { rv = false; }
                 }
 
-                if (MapChange(movingObject)) { return false; }
+                if (MapChange(movingChar)) { return false; }
             }
 
             return rv;
         }
 
-        public bool CheckUpMovement(WorldCharacter c, Rectangle movingObject)
+        public bool CheckUpMovement(WorldCharacter c, Rectangle movingChar)
         {
             bool rv = true;
-            if (CheckForCollision(c, movingObject)) { return false; }
+            if (CheckForCollision(c, movingChar)) { return false; }
 
-            int rowTile = movingObject.Top / _tileSize;
-            for (int x = GetMinColumn(movingObject); x <= GetMaxColumn(movingObject); x++)
+            int rowTile = movingChar.Top / _tileSize;
+            for (int x = GetMinColumn(movingChar); x <= GetMaxColumn(movingChar); x++)
             {
                 RHTile mapTile = _tileArray[x, rowTile];
                 Rectangle cellRect = new Rectangle(x * _tileSize, rowTile * _tileSize, _tileSize, _tileSize);
@@ -288,24 +299,24 @@ namespace RiverHollow.Tile_Engine
                     GUIManager.LoadScreen(GUIManager.Screens.Text, GameContentManager.GetDialogue("Sleep"));
                     rv = true;
                 }
-                else if (!mapTile.Passable() && cellRect.Intersects(movingObject))
+                else if (!mapTile.Passable() && cellRect.Intersects(movingChar))
                 {
-                    if (cellRect.Bottom >= movingObject.Top) { rv = false; }
+                    if (cellRect.Bottom >= movingChar.Top) { rv = false; }
                 }
 
-                if (MapChange(movingObject)) { return false; }
+                if (MapChange(movingChar)) { return false; }
             }
 
             return rv;
         }
 
-        public bool CheckDownMovement(WorldCharacter c, Rectangle movingObject)
+        public bool CheckDownMovement(WorldCharacter c, Rectangle movingChar)
         {
             bool rv = true;
-            if (CheckForCollision(c, movingObject)) { return false; }
+            if (CheckForCollision(c, movingChar)) { return false; }
 
-            int rowTile = movingObject.Bottom / _tileSize;
-            for (int x = GetMinColumn(movingObject); x <= GetMaxColumn(movingObject); x++)
+            int rowTile = movingChar.Bottom / _tileSize;
+            for (int x = GetMinColumn(movingChar); x <= GetMaxColumn(movingChar); x++)
             {
                 RHTile mapTile = _tileArray[x, rowTile];
                 Rectangle cellRect = new Rectangle(x * _tileSize, rowTile * _tileSize, _tileSize, _tileSize);
@@ -314,29 +325,29 @@ namespace RiverHollow.Tile_Engine
                     GUIManager.LoadScreen(GUIManager.Screens.Text, GameContentManager.GetDialogue("Sleep"));
                     rv = true;
                 }
-                else if (!mapTile.Passable() && cellRect.Intersects(movingObject))
+                else if (!mapTile.Passable() && cellRect.Intersects(movingChar))
                 {
-                    if (cellRect.Top <= movingObject.Bottom) { rv = false; }
+                    if (cellRect.Top <= movingChar.Bottom) { rv = false; }
                 }
 
-                if (MapChange(movingObject)) { return false; }
+                if (MapChange(movingChar)) { return false; }
             }
 
             return rv;
         }
 
-        public bool MapChange(Rectangle movingObject)
+        public bool MapChange(Rectangle movingChar)
         {
-            foreach(KeyValuePair<Rectangle, string>  kvp in _exitDictionary)
+            foreach(KeyValuePair<Rectangle, string>  kvp in _dictExit)
             {
-                if (kvp.Key.Intersects(movingObject))
+                if (kvp.Key.Intersects(movingChar))
                 {
                     if(IsDungeon)
                     {
                         MapManager.ChangeDungeonRoom(kvp.Value);
                     }
                     else {
-                        MapManager.ChangeMaps(_exitDictionary[kvp.Key]);
+                        MapManager.ChangeMaps(_dictExit[kvp.Key]);
                     }
                     return true;
                 }
@@ -351,12 +362,12 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public bool CheckForCollision(WorldCharacter mover, Rectangle movingObject)
+        public bool CheckForCollision(WorldCharacter mover, Rectangle movingChar)
         {
             bool rv = false;
             foreach (WorldCharacter c in _characterList)
             {
-                if (mover != c && c.CollisionBox.Intersects(movingObject))
+                if (mover != c && c.CollisionBox.Intersects(movingChar))
                 {
                     rv = true;
                     break;
@@ -387,26 +398,36 @@ namespace RiverHollow.Tile_Engine
             return propList;
         }
 
-        #region Collision Helpers
-        public int GetMinColumn(Rectangle movingObject)
+        public Vector2 GetNPCSpawn(string val)
         {
-            return (movingObject.Left / _tileSize);
+            Vector2 rv = new Vector2(0, 0);
+            if (_dictPathing.ContainsKey(val))
+            {
+                rv = _dictPathing[val];
+            }
+            return rv;
         }
 
-        public int GetMaxColumn(Rectangle movingObject)
+        #region Collision Helpers
+        public int GetMinColumn(Rectangle movingChar)
         {
-            int i = (movingObject.Right / _tileSize);
+            return (movingChar.Left / _tileSize);
+        }
+
+        public int GetMaxColumn(Rectangle movingChar)
+        {
+            int i = (movingChar.Right / _tileSize);
             return i;
         }
 
-        public int GetMinRow(Rectangle movingObject)
+        public int GetMinRow(Rectangle movingChar)
         {
-            return (movingObject.Top / _tileSize);
+            return (movingChar.Top / _tileSize);
         }
 
-        public int GetMaxRow(Rectangle movingObject)
+        public int GetMaxRow(Rectangle movingChar)
         {
-            return (movingObject.Bottom / _tileSize);
+            return (movingChar.Bottom / _tileSize);
         }
         #endregion
         #endregion
@@ -704,7 +725,7 @@ namespace RiverHollow.Tile_Engine
                 AssignMapTiles(b, tiles);
                 Vector3 translate = Camera._transform.Translation;
                 Vector2 newPos = new Vector2((b.Position.X - translate.X) / Scale, (b.Position.Y - translate.Y) / Scale);
-                _entranceDictionary.Add(b.PersonalID.ToString(), b.BoxToExit); //TODO: FIX THIS
+                _dictEntrance.Add(b.PersonalID.ToString(), b.BoxToExit); //TODO: FIX THIS
                 GraphicCursor.DropBuilding();
                 _buildingList.Add(b);
                 PlayerManager.AddBuilding(b);

@@ -19,8 +19,8 @@ namespace RiverHollow.Characters
         protected int _friendship;
         public int Friendship { get => _friendship; set => _friendship = value; }
 
-        protected List<Vector2> _schedule;
-        protected Vector2 _moveTo;
+        protected Dictionary<string,Dictionary<string,string>> _schedule;
+        protected string _moveTo;
 
         private const int PortraitWidth = 160;
         private const int PortraitHeight = 192;
@@ -40,38 +40,83 @@ namespace RiverHollow.Characters
 
         public NPC(int index, string[] data)
         {
-            LoadContent();
-
-            LoadBasic(data);
-
+            _schedule = new Dictionary<string, Dictionary<string, string>>();
             _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + index);
             _portrait = GameContentManager.GetTexture(@"Textures\portraits");
 
-            _schedule = new List<Vector2>
-                {
-                    new Vector2(Position.X - 100, Position.Y + 100),
-                    Position
-                };
-            _moveTo = _schedule[0];
+            LoadContent();
+            ImportBasics(data, index);
 
             MapManager.Maps[_currentMap].AddCharacter(this);
         }
 
-        protected int LoadBasic(string[] data)
+        protected int ImportBasics(string[] stringData, int index)
         {
             int i = 0;
-            _npcType = (NPCType)Enum.Parse(typeof(NPCType), data[i++]);
-            _name = data[i++];
-            _portraitRect = new Rectangle(0, int.Parse(data[i++]) * 192, PortraitWidth, PortraitHeight);
-            _currentMap = data[i++];
-            string[] vectorSplit = data[i++].Split(' ');
-            Position = new Vector2(int.Parse(vectorSplit[0]), int.Parse(vectorSplit[1]));
+            _npcType = (NPCType)Enum.Parse(typeof(NPCType), stringData[i++]);
+            _name = stringData[i++];
+            _portraitRect = new Rectangle(0, int.Parse(stringData[i++]) * 192, PortraitWidth, PortraitHeight);
+            _currentMap = stringData[i++];
+            if (i < stringData.Length) {
+                string[] vectorSplit = stringData[i++].Split(' ');
+                Position = new Vector2(int.Parse(vectorSplit[0]), int.Parse(vectorSplit[1]));
+            }
+            else
+            {
+                Position = MapManager.Maps[_currentMap].GetNPCSpawn("NPC" + index);
+            }
+
+            Dictionary<string, string> schedule = CharacterManager.GetSchedule("NPC" + index);
+            if (schedule != null)
+            {
+                foreach (KeyValuePair<string, string> kvp in schedule)
+                {
+                    Dictionary<string, string> temp = new Dictionary<string, string>();
+                    string[] group = kvp.Value.Split('/');
+                    foreach (string s in group)
+                    {
+                        string[] data = s.Split('|');
+                        temp.Add(data[0], data[1]);
+                    }
+                    _schedule.Add(kvp.Key, temp);
+                }
+            }
             return i;
         } 
 
         public override void Update(GameTime theGameTime)
         {
             base.Update(theGameTime);
+            string currDay = GameCalendar.GetDayAndMods();
+            string currTime = GameCalendar.GetTime();
+            if (_schedule.Count > 0 && _schedule.ContainsKey(currDay) && _schedule[currDay].ContainsKey(currTime))
+            {
+                _moveTo = _schedule[currDay][currTime];
+            }
+
+            if(!string.IsNullOrEmpty(_moveTo))
+            {
+                Vector2 pos = MapManager.Maps[_currentMap].DictionaryPathing[_moveTo];
+                if (pos == Position) {
+                    if (_schedule[currDay].ContainsKey(_moveTo))
+                    {
+                        _moveTo = _schedule[currDay][_moveTo];
+                    }
+                    else
+                    {
+                        _moveTo = string.Empty;
+                    }
+                }
+                else {
+
+                    Vector2 direction = Vector2.Zero;
+                    float deltaX = Math.Abs(pos.X - this.Position.X);
+                    float deltaY = Math.Abs(pos.Y - this.Position.Y);
+
+                    Utilities.GetMoveSpeed(Position, pos, Speed, ref direction);
+                    CheckMapForCollisionsAndMove(direction);
+                }
+            }
         }
 
         public virtual void Talk()

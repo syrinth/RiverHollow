@@ -135,23 +135,6 @@ namespace RiverHollow
             {
                 _idleFor--;
             }
-        }
-
-        private void CheckMapForCollisionsAndMove(Vector2 direction)
-        {
-            Rectangle testRectX = new Rectangle((int)Position.X + (int)direction.X, (int)Position.Y, Width, Height);
-            Rectangle testRectY = new Rectangle((int)Position.X, (int)Position.Y + (int)direction.Y, Width, Height);
-
-            if (MapManager.CurrentMap.CheckLeftMovement(this, testRectX) && MapManager.CurrentMap.CheckRightMovement(this, testRectX))
-            {
-
-                _sprite.MoveBy((int)direction.X, 0);
-            }
-
-            if (MapManager.CurrentMap.CheckUpMovement(this, testRectY) && MapManager.CurrentMap.CheckDownMovement(this, testRectY))
-            {
-                _sprite.MoveBy(0, (int)direction.Y);
-            }
-        }       
+        }   
     }
 }

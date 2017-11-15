@@ -22,7 +22,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPCDialogue.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/ItemData.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CraftingData.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Characters.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC1.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC2.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC3.xml</File>
@@ -52,5 +51,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/GoblinSoldier.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/AbilityAnimations.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/AbilityIcons.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Characters.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC1.xml</File>
   </SourceFiles>
 </SourceFileCollection>

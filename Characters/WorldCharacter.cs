@@ -1,6 +1,7 @@
 ﻿using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Game_Managers;
 
 namespace RiverHollow.Characters
 {
@@ -64,6 +65,23 @@ namespace RiverHollow.Characters
                     Facing = Direction.North;
                     //animation = "Float";
                 }
+            }
+        }
+
+        protected void CheckMapForCollisionsAndMove(Vector2 direction)
+        {
+            Rectangle testRectX = new Rectangle((int)(Position.X + direction.X), (int)Position.Y, Width, Height);
+            Rectangle testRectY = new Rectangle((int)Position.X, (int)(Position.Y + direction.Y), Width, Height);
+
+            if (MapManager.CurrentMap.CheckLeftMovement(this, testRectX) && MapManager.CurrentMap.CheckRightMovement(this, testRectX))
+            {
+
+                _sprite.MoveBy(direction.X, 0);
+            }
+
+            if (MapManager.CurrentMap.CheckUpMovement(this, testRectY) && MapManager.CurrentMap.CheckDownMovement(this, testRectY))
+            {
+                _sprite.MoveBy(0, direction.Y);
             }
         }
 

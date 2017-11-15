@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 
 namespace RiverHollow
 {
@@ -12,6 +13,8 @@ namespace RiverHollow
         //Each hour should be one minute
         //Every 10 minutes is 10 seconds real time.
         enum Seasons { Spring, Summer, Winter, Fall};
+        private static List<string> ListDays = new List<string>() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+        private static int _dayOfWeek;
         private static int _currHour;
         public static int CurrentHour { get => _currHour; }
 
@@ -26,6 +29,7 @@ namespace RiverHollow
 
         public static void NewCalendar()
         {
+            _dayOfWeek = 0;
             _currDay = 1;
             //_currSeason = Seasons.Spring;
             _currHour = 6;
@@ -101,7 +105,19 @@ namespace RiverHollow
             _currHour = 6;
             _currMin = 0;
             _currDay++;
+            if(_dayOfWeek < ListDays.Count - 1) { _dayOfWeek++; }
+            else { _dayOfWeek = 0; }
+
         }
 
+        public static string GetTime()
+        {
+            return string.Format("{0}:{1}", _currHour, _currMin);
+        }
+
+        public static string GetDayAndMods()
+        {
+            return ListDays[_dayOfWeek];
+        }
     }
 }

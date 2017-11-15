@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RiverHollow.Characters.CombatStuff;
+using System.IO;
 
 namespace RiverHollow.Game_Managers
 {
@@ -19,18 +20,26 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<string, bool> _talkedTo;
         private static Dictionary<int, string> _abilityDictionary;
         private static Dictionary<int, string> _classDictionary;
+        private static Dictionary<string, Dictionary<string, string>> _dictSchedule;
 
         public static void LoadContent(ContentManager Content)
         {
+            _dictSchedule = new Dictionary<string, Dictionary<string, string>>();
             _monsterDictionary = Content.Load<Dictionary<int, string>>(@"Data\Monsters");
             _mobDictionary = Content.Load<Dictionary<int, string>>(@"Data\Mobs");
             _abilityDictionary = Content.Load<Dictionary<int, string>>(@"Data\Abilities");
             _classDictionary = Content.Load<Dictionary<int, string>>(@"Data\Classes");
+            
+            foreach (string s in Directory.GetFiles(@"Content\Data\NPCData\Schedules"))
+            {
+                string temp = Path.GetFileNameWithoutExtension(s);
+                _dictSchedule.Add(temp, Content.Load<Dictionary<string, string>>(@"Data\NPCData\Schedules\" + temp));
+            }
 
 
             _talkedTo = new Dictionary<string, bool>();
             _characterDictionary = new Dictionary<int, NPC>();
-            foreach (KeyValuePair<int, string> kvp in Content.Load<Dictionary<int, string>>(@"Data\Characters"))
+            foreach (KeyValuePair<int, string> kvp in Content.Load<Dictionary<int, string>>(@"Data\NPCData\Characters"))
             {
                 NPC n = null;
                 string _characterData = kvp.Value;
@@ -107,6 +116,17 @@ namespace RiverHollow.Game_Managers
                 c = new CharacterClass(id, _stringDataValues);
             }
             return c;
+        }
+
+        public static Dictionary<string, string> GetSchedule(string npc)
+        {
+            Dictionary<string, string> rv = null;
+            if (_dictSchedule.ContainsKey(npc))
+            {
+                rv = _dictSchedule[npc];
+            }
+
+            return rv;
         }
     }
 }
