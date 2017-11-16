@@ -174,8 +174,6 @@ namespace RiverHollow.Game_Managers
                     {
                         World.Sprite.CurrentAnimation = animation;
                     }
-
-                    World.Position = new Vector2(World.Sprite.Position.X, World.Sprite.Position.Y);
                 }
                 else
                 {

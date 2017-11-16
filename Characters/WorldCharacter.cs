@@ -18,7 +18,7 @@ namespace RiverHollow.Characters
         public override Vector2 Position
         {
             get { return new Vector2(_sprite.Position.X, _sprite.Position.Y + _sprite.Height - RHMap.TileSize); } //MAR this is fucked up
-            set { _sprite.Position = value; }
+            set { _sprite.Position = new Vector2(value.X, value.Y - _sprite.Height + RHMap.TileSize); }
         }
 
         public Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, Width, RHMap.TileSize); }

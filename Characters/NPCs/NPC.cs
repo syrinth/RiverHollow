@@ -91,7 +91,7 @@ namespace RiverHollow.Characters
             string currSeason = GameCalendar.GetSeason();
             string currWeather = GameCalendar.GetWeather();
             string currTime = GameCalendar.GetTime();
-            if (_schedule.Count > 0)
+            if (_schedule != null && _schedule.Count > 0)
             {
                 string searchVal = currSeason + currDay + currWeather;
                 Dictionary<string, string> dict = null;
