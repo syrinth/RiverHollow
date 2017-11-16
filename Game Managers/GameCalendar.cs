@@ -12,9 +12,12 @@ namespace RiverHollow
         //One day goes from 6 AM - 2 AM => 20 hours
         //Each hour should be one minute
         //Every 10 minutes is 10 seconds real time.
-        enum Seasons { Spring, Summer, Winter, Fall};
-        private static List<string> ListDays = new List<string>() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+        private static string[] ListSeasons = { "Spring", "Summer", "Fall", "Winter" };
+        private static string[] ListDays = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+        private static string[] ListWeather = { "Sunny", "Raining" };
+        private static int _currSeason;
         private static int _dayOfWeek;
+        private static int _currWeather;
         private static int _currHour;
         public static int CurrentHour { get => _currHour; }
 
@@ -105,7 +108,7 @@ namespace RiverHollow
             _currHour = 6;
             _currMin = 0;
             _currDay++;
-            if(_dayOfWeek < ListDays.Count - 1) { _dayOfWeek++; }
+            if(_dayOfWeek < ListDays.Length - 1) { _dayOfWeek++; }
             else { _dayOfWeek = 0; }
 
         }
@@ -115,9 +118,19 @@ namespace RiverHollow
             return string.Format("{0}:{1}", _currHour, _currMin);
         }
 
-        public static string GetDayAndMods()
+        public static string GetDay()
         {
             return ListDays[_dayOfWeek];
+        }
+
+        public static string GetSeason()
+        {
+            return ListSeasons[_currSeason];
+        }
+
+        public static string GetWeather()
+        {
+            return ListWeather[_currWeather];
         }
     }
 }

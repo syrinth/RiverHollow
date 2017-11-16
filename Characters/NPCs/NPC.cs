@@ -87,11 +87,23 @@ namespace RiverHollow.Characters
         public override void Update(GameTime theGameTime)
         {
             base.Update(theGameTime);
-            string currDay = GameCalendar.GetDayAndMods();
+            string currDay = GameCalendar.GetDay();
+            string currSeason = GameCalendar.GetSeason();
+            string currWeather = GameCalendar.GetWeather();
             string currTime = GameCalendar.GetTime();
-            if (_schedule.Count > 0 && _schedule.ContainsKey(currDay) && _schedule[currDay].ContainsKey(currTime))
+            if (_schedule.Count > 0)
             {
-                _moveTo = _schedule[currDay][currTime];
+                string searchVal = currSeason + currDay + currWeather;
+                Dictionary<string, string> dict = null;
+
+                if (_schedule.ContainsKey(currSeason + currDay + currWeather)) { dict = _schedule[currSeason + currDay + currWeather]; }
+                else if (_schedule.ContainsKey(currSeason + currDay)) { dict = _schedule[currSeason + currDay]; }
+                else if (_schedule.ContainsKey(currDay)) { dict = _schedule[currDay]; }
+
+                if (dict.ContainsKey(currTime))
+                {
+                    _moveTo = dict[currTime];
+                }
             }
 
             if(!string.IsNullOrEmpty(_moveTo))
