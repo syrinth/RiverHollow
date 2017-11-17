@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="17">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="19">
  <tileset firstgid="1" name="TileSetTest" tilewidth="32" tileheight="32" tilecount="15" columns="5">
   <image source="SpriteSheet.png" trans="ffffff" width="160" height="96"/>
   <tile id="4">
@@ -262,5 +262,7 @@
   <object id="14" name="Route4" x="775.333" y="871" width="13.3333" height="11.3333"/>
   <object id="15" name="Route5" x="1258.67" y="875" width="13.3333" height="11.3333"/>
   <object id="16" name="Route6" x="1254.67" y="489" width="13.3333" height="11.3333"/>
+  <object id="17" name="NPC2" x="458.667" y="429.333" width="5.33333" height="4"/>
+  <object id="18" name="NPC4" x="1000" y="650.667" width="10.6667" height="8"/>
  </objectgroup>
 </map>

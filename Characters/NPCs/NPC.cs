@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using RiverHollow.Misc;
+using RiverHollow.Items;
 
 namespace RiverHollow.Characters
 {
@@ -18,6 +19,8 @@ namespace RiverHollow.Characters
         public NPCType Type { get => _npcType; }
         protected int _friendship;
         public int Friendship { get => _friendship; set => _friendship = value; }
+
+        protected Dictionary<int, bool> _collection;
 
         protected Dictionary<string,Dictionary<string,string>> _schedule;
         protected string _moveTo;
@@ -40,6 +43,7 @@ namespace RiverHollow.Characters
 
         public NPC(int index, string[] data)
         {
+            _collection = new Dictionary<int, bool>();
             _schedule = new Dictionary<string, Dictionary<string, string>>();
             _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + index);
             _portrait = GameContentManager.GetTexture(@"Textures\portraits");
@@ -57,13 +61,10 @@ namespace RiverHollow.Characters
             _name = stringData[i++];
             _portraitRect = new Rectangle(0, int.Parse(stringData[i++]) * 192, PortraitWidth, PortraitHeight);
             _currentMap = stringData[i++];
-            if (i < stringData.Length) {
-                string[] vectorSplit = stringData[i++].Split(' ');
-                Position = new Vector2(int.Parse(vectorSplit[0]), int.Parse(vectorSplit[1]));
-            }
-            else
-            {
-                Position = MapManager.Maps[_currentMap].GetNPCSpawn("NPC" + index);
+            Position = MapManager.Maps[_currentMap].GetNPCSpawn("NPC" + index);
+            string[] vectorSplit = stringData[i++].Split(' ');
+            foreach (string s in vectorSplit) {
+                _collection.Add(int.Parse(s), false);
             }
 
             Dictionary<string, string> schedule = CharacterManager.GetSchedule("NPC" + index);
@@ -193,6 +194,36 @@ namespace RiverHollow.Characters
             }
 
             return rv;
+        }
+
+        public void Gift(Item item)
+        {
+            string text = string.Empty;
+            item.Remove(1);
+            if (item.Type == Item.ItemType.Map && Type == NPC.NPCType.Ranger)
+            {
+                text = GetDialogEntry("Adventure");
+                DungeonManager.LoadNewDungeon((AdventureMap)item);
+            }
+            else
+            {
+                if (_collection.ContainsKey(item.ItemID))
+                {
+                    Friendship += _collection[item.ItemID] ? 50 : 20;
+                    text = GetDialogEntry("Collection");
+                    _collection[item.ItemID] = true;
+                }
+                else
+                {
+                    text = GetDialogEntry("Gift");
+                    Friendship += 10;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                GUIManager.LoadScreen(GUIManager.Screens.Text, this, text);
+            }
         }
     }
 }

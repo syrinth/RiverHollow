@@ -1,22 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: Index>0 Value:Name/PortraitsRow/Map/Position/[Shopkeeper]-->
+    <!--Key: Index>0 Value:Type/Name/PortraitsRow/Map/Collection/[Merchandise]-->
     <Item>
       <Key>1</Key>
-      <Value>Villager/Amanda/1/Map1</Value>
+      <Value>Villager/Amanda/1/Map1/0 1 2</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Villager/Kyle/2/Map1/400 600</Value>
+      <Value>Villager/Kyle/2/Map1/3 4</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>Shopkeeper/Taylor/3/Map2/224 64/Buildings/Arcanists</Value>
+      <Value>Shopkeeper/Taylor/3/Map2/5 6/Buildings/Arcanists</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>Ranger/Mara/1/Map1/900 900</Value>
+      <Value>Ranger/Mara/1/Map1/7 8</Value>
     </Item>
   </Asset>
 </XnaContent>

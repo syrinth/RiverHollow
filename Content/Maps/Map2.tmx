@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="15" height="10" tilewidth="32" tileheight="32" nextobjectid="4">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="15" height="10" tilewidth="32" tileheight="32" nextobjectid="5">
  <tileset firstgid="1" name="SpriteSheet" tilewidth="32" tileheight="32" tilecount="15" columns="5">
   <image source="SpriteSheet.png" width="160" height="96"/>
   <tile id="3">
@@ -55,6 +55,9 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="NPC Layer">
+  <object id="4" name="NPC3" x="229" y="77" width="12" height="8"/>
+ </objectgroup>
  <objectgroup name="Entrance Layer">
   <object id="1" x="224" y="223" width="33" height="32">
    <properties>

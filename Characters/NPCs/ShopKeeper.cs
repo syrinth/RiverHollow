@@ -17,6 +17,7 @@ namespace RiverHollow.Characters.NPCs
 
         public ShopKeeper(int index, string[] data)
         {
+            _collection = new Dictionary<int, bool>();
             LoadContent();
             if (data.Length >= 5)
             {

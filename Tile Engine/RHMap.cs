@@ -440,16 +440,6 @@ namespace RiverHollow.Tile_Engine
             foreach (WorldCharacter c in _characterList)
             {
                 Type cType = c.GetType();
-                //if (cType.IsSubclassOf(typeof(Worker)))
-                //{
-                //    Worker w = (Worker)c;
-                //    if (w.Contains(mouseLocation) && PlayerInRange(w.Center))
-                //    {
-                //        ((NPC)c).Talk();
-                //        break;
-                //    }
-                //}
-                //else
                 if (c.Contains(mouseLocation) && (cType.Equals(typeof(NPC)) || cType.IsSubclassOf(typeof(NPC))))
                 {
                     ((NPC)c).Talk();
@@ -536,24 +526,7 @@ namespace RiverHollow.Tile_Engine
                             InventoryManager.CurrentItem.Type != Item.ItemType.Tool &&
                             InventoryManager.CurrentItem.Type != Item.ItemType.Equipment)
                         {
-                            string text = string.Empty;
-                            Item i = InventoryManager.CurrentItem;
-                            i.Remove(1);
-                            if (i.Type == Item.ItemType.Map && n.Type == NPC.NPCType.Ranger)
-                            {
-                                text = n.GetDialogEntry("Adventure");
-                                DungeonManager.LoadNewDungeon((AdventureMap)i);
-                            }
-                            else
-                            {
-                                text = n.GetDialogEntry("Gift");
-                                n.Friendship += 10;
-                            }
-                            
-                            if (!string.IsNullOrEmpty(text))
-                            {
-                                GUIManager.LoadScreen(GUIManager.Screens.Text, n, text);
-                            }
+                            n.Gift(InventoryManager.CurrentItem);
                             rv = true;
                         }
                     }
