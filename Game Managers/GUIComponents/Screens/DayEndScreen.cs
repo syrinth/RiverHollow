@@ -17,7 +17,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
         public DayEndScreen()
         {
             RiverHollow.ChangeGameState(RiverHollow.GameState.Information);
-            _btnOK = new GUIButton(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight - 128), new Rectangle(0, 128, 128, 64), 256, 128, @"Textures\Dialog");
+            _btnOK = new GUIButton(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight - 128), new Rectangle(0, 128, 128, 64), 256, 128, "OK", @"Textures\Dialog");
             string totalVal = String.Format("Total: {0}", PlayerManager._merchantChest.SellAll());
             _moneyWindow = new GUITextWindow(new Vector2(RiverHollow.ScreenWidth / 2, 500), totalVal);
             Controls.Add(_btnOK);

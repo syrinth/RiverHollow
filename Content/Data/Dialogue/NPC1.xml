@@ -34,5 +34,9 @@
       <Key>Collection</Key>
       <Value>Is that for me? Oh! Thank you! It's just what I've been looking for! How did you know?</Value>
     </Item>
+    <Item>
+      <Key>Selection</Key>
+      <Value>Hello, what can I do for you?.[Talk:Talk|Gift:GiveGift|%50%Join Party:Party|Never Mind:Nothing]</Value>
+    </Item>
   </Asset>
 </XnaContent>

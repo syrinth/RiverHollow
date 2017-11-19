@@ -18,9 +18,13 @@
       <Key>Gift</Key>
       <Value>Really? For me? You shouldn't have! Well, I'll keep this in mind next time we go out and exploring.</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>Adventure</Key>
       <Value>Oh yeah? Hmm interesting. OK! Onward! To! Adventure!</Value>
+    </Item>
+    <Item>
+      <Key>Selection</Key>
+      <Value>Hello lad! [Talk:Talk|Gift:GiveGift|%50%Join Party:Party|Never Mind:Nothing]</Value>
     </Item>
   </Asset>
 </XnaContent>

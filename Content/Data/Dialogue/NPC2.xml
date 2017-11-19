@@ -18,5 +18,9 @@
       <Key>Gift</Key>
       <Value>Oh wow, really? Thanks $^$!</Value>
     </Item>
+    <Item>
+      <Key>Selection</Key>
+      <Value>Hey, what's up?.[Talk:Talk|Gift:GiveGift|%50%Join Party:Party|Never Mind:Nothing]</Value>
+    </Item>
   </Asset>
 </XnaContent>

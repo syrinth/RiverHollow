@@ -16,8 +16,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public MainMenuScreen()
         {
-            _btnNewGame = new GUIButton(new Vector2(RiverHollow.ScreenWidth/2, 500), new Rectangle(128, 96, 64, 32), 128, 64, @"Textures\Dialog");
-            _btnLoadGame = new GUIButton(new Vector2(RiverHollow.ScreenWidth / 2, 800), new Rectangle(64, 96, 64, 32), 128, 64, @"Textures\Dialog");
+            _btnNewGame = new GUIButton(new Vector2(RiverHollow.ScreenWidth/2, 500), new Rectangle(0, 128, 64, 32), 128, 64, "New Game", @"Textures\Dialog");
+            _btnLoadGame = new GUIButton(new Vector2(RiverHollow.ScreenWidth / 2, 800), new Rectangle(0, 128, 64, 32), 128, 64, "Load Game", @"Textures\Dialog");
             Controls.Add(_btnNewGame);
             Controls.Add(_btnLoadGame);
             RiverHollow.ChangeGameState(RiverHollow.GameState.Information);

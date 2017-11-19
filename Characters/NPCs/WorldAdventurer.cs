@@ -91,7 +91,7 @@ namespace RiverHollow.Characters.NPCs
             GUIManager.LoadScreen(GUIManager.Screens.Text, this, Name + ": " + GameContentManager.GetDialogue("AdventurerTree"));
         }
 
-        public override string GetText()
+        public override string GetSelectionText()
         {
             RHRandom r = new RHRandom();
             string text = _dialogueDictionary[r.Next(1, 2).ToString()];
@@ -109,7 +109,7 @@ namespace RiverHollow.Characters.NPCs
                 RHRandom r = new RHRandom();
                 rv = GameContentManager.GetDialogue(_adventurerType + r.Next(1, 2));
             }
-            else if (entry.Equals("PartyAdd"))
+            else if (entry.Equals("Party"))
             {
                 DrawIt = false;
                 Busy = true;

@@ -17,7 +17,6 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<int, string> _mobDictionary;
         private static Dictionary<int, string> _monsterDictionary;
         private static Dictionary<int, NPC> _characterDictionary;
-        public static Dictionary<string, bool> _talkedTo;
         private static Dictionary<int, string> _abilityDictionary;
         private static Dictionary<int, string> _classDictionary;
         private static Dictionary<string, Dictionary<string, string>> _dictSchedule;
@@ -36,8 +35,6 @@ namespace RiverHollow.Game_Managers
                 _dictSchedule.Add(temp, Content.Load<Dictionary<string, string>>(@"Data\NPCData\Schedules\" + temp));
             }
 
-
-            _talkedTo = new Dictionary<string, bool>();
             _characterDictionary = new Dictionary<int, NPC>();
             foreach (KeyValuePair<int, string> kvp in Content.Load<Dictionary<int, string>>(@"Data\NPCData\Characters"))
             {
@@ -54,7 +51,6 @@ namespace RiverHollow.Game_Managers
                         break;
                 }
                 _characterDictionary.Add(kvp.Key, n);
-                _talkedTo.Add(n.Name, false);
             }
         }
 

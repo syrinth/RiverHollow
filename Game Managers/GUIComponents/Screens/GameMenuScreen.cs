@@ -15,9 +15,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public GameMenuScreen()
         {
-            _btnInventory = new GUIButton(new Vector2(0, 100), new Rectangle(64, 192, 64, 32), 128, 64, @"Textures\Dialog", true);
-            _btnParty = new GUIButton(new Vector2(0, 400), new Rectangle(128, 192, 64, 32), 128, 64, @"Textures\Dialog", true);
-            _btnExitGame = new GUIButton(new Vector2(0, 700), new Rectangle(0, 192, 64, 32), 128, 64, @"Textures\Dialog", true);
+            _btnInventory = new GUIButton(new Vector2(0, 100), new Rectangle(0, 128, 64, 32), 128, 64, "Inventory", @"Textures\Dialog", true);
+            _btnParty = new GUIButton(new Vector2(0, 400), new Rectangle(0, 128, 64, 32), 128, 64, "Party", @"Textures\Dialog", true);
+            _btnExitGame = new GUIButton(new Vector2(0, 700), new Rectangle(0, 128, 64, 32), 128, 64, "Exit", @"Textures\Dialog", true);
             Controls.Add(_btnExitGame);
             Controls.Add(_btnInventory);
             Controls.Add(_btnParty);

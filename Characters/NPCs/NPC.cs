@@ -11,16 +11,13 @@ namespace RiverHollow.Characters
 {
     public class NPC : WorldCharacter
     {
-        //private List<ObjectManager.ItemIDs> _likedItems;
-        //private List<ObjectManager.ItemIDs> _hatedItems;
-
         public enum NPCType { Villager, Shopkeeper, Ranger, Worker }
         protected NPCType _npcType;
         public NPCType Type { get => _npcType; }
-        protected int _friendship;
-        public int Friendship { get => _friendship; set => _friendship = value; }
+        public int Friendship;
 
         protected Dictionary<int, bool> _collection;
+        protected bool _introduced;
 
         protected Dictionary<string,Dictionary<string,string>> _schedule;
         protected string _moveTo;
@@ -136,13 +133,13 @@ namespace RiverHollow.Characters
         {
             GraphicCursor._currentType = GraphicCursor.CursorType.Normal;
             string text = string.Empty;
-            if (CharacterManager._talkedTo.ContainsKey(_name) && CharacterManager._talkedTo[_name] == false) {
+            if (!_introduced) {
                 text = _dialogueDictionary["Introduction"];
-                CharacterManager._talkedTo[_name] = true;
+                _introduced = true;
             }
             else
             {
-                text = GetText();
+                text = GetSelectionText();
             }
             text = ProcessText(text);
             GUIManager.LoadScreen(GUIManager.Screens.Text, this, text);
@@ -161,6 +158,13 @@ namespace RiverHollow.Characters
             }
         }
 
+        public virtual string GetSelectionText()
+        {
+            RHRandom r = new RHRandom();
+            string text = _dialogueDictionary["Selection"];
+            return ProcessText(text);
+        }
+
         public virtual string GetText()
         {
             RHRandom r = new RHRandom();
@@ -174,7 +178,26 @@ namespace RiverHollow.Characters
             {
                 return GetText();
             }
-            return ProcessText(_dialogueDictionary[entry]);
+            else if (entry.Equals("GiveGift"))
+            {
+                return "Gift me baby one more time.";
+            }
+            else if (entry.Equals("Party"))
+            {
+                //DrawIt = false;
+                //Busy = true;
+                //PlayerManager.AddToParty(_c);
+                //rv = "Of course!";
+                return "I'd love to, but I can't";
+            }
+            else if (entry.Equals("Nothing"))
+            {
+                return string.Empty;
+            }
+            else
+            {
+                return _dialogueDictionary.ContainsKey(entry) ? ProcessText(_dialogueDictionary[entry]) : string.Empty;
+            }
         }
 
         public string ProcessText(string text)

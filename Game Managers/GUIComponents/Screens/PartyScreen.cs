@@ -90,7 +90,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _armor = new GUIItemBox(start + new Vector2(450, 0), new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Armor);
             if (_character != PlayerManager.Combat)
             {
-                _remove = new GUIButton(start + new Vector2(800, 64), new Rectangle(64, 192, 64, 32), 128, 64, @"Textures\Dialog", true);
+                _remove = new GUIButton(start + new Vector2(800, 64), new Rectangle(0, 128, 64, 32), 128, 64, "Remove", @"Textures\Dialog", true);
             }
 
             ClearThis = false;

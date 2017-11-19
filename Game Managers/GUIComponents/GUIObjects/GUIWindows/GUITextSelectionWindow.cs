@@ -70,7 +70,21 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                 int key = 0;
                 foreach(string s in secondPass)
                 {
-                    _options.Add(key++, s);
+                    if (s.Contains("%"))
+                    {
+                        string[] friendshipPass = s.Split(new[] { '%' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (int.TryParse(friendshipPass[0], out int val))
+                        {
+                            if(_talker.Friendship >= val)
+                            {
+                                _options.Add(key++, friendshipPass[1]);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        _options.Add(key++, s);
+                    }
                 }
             }
         }
@@ -157,6 +171,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             if (!string.IsNullOrEmpty(nextText))
             {
                 GUIManager.LoadScreen(GUIManager.Screens.Text, _talker, nextText);
+            }
+            else
+            {
+                RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
             }
         }
     }

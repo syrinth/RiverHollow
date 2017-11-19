@@ -288,7 +288,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public AbilityButton(Ability a, int X, int Y)
         {
             _ability = a;
-            _btn = new GUIButton(new Vector2(300 + X * 100, 1000 + Y * 100), _ability.SourceRect, 100, 100, @"Textures\AbilityIcons");
+            _btn = new GUIButton(new Vector2(300 + X * 100, 1000 + Y * 100), _ability.SourceRect, 100, 100, "", @"Textures\AbilityIcons");
         }
 
         public void Draw(SpriteBatch spriteBatch)
