@@ -1,11 +1,6 @@
-﻿using RiverHollow.Characters.NPCs;
+﻿using RiverHollow.Characters;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Game_Managers.GUIObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
@@ -13,7 +8,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
     {
         private GUITextInputWindow _window;
 
-        public TextInputScreen(WorldAdventurer w)
+        public TextInputScreen(NPC w)
         {             
             _window = new GUITextInputWindow(w);
             Controls.Add(_window);

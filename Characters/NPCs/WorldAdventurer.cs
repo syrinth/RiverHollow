@@ -138,11 +138,6 @@ namespace RiverHollow.Characters.NPCs
             return -1;
         }
 
-        public void SetName(string text)
-        {
-            _name = text;
-        }
-
         public void SetMood(int val)
         {
             _mood = val;

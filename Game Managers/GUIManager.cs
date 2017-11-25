@@ -139,17 +139,6 @@ namespace RiverHollow.Game_Managers
             _currentGUIScreen.RemoveComponent(g);
         }
 
-        public static void LoadScreen(Screens newScreen, WorldAdventurer w)
-        {
-            _currentScreen = newScreen;
-            switch (newScreen)
-            {
-                case Screens.TextInput:
-                    _currentGUIScreen = new TextInputScreen(w);
-                    return;
-            }
-        }
-
         public static void LoadScreen(Screens newScreen, List<Merchandise> merch)
         {
             GraphicCursor._currentType = GraphicCursor.CursorType.Normal;
@@ -172,6 +161,20 @@ namespace RiverHollow.Game_Managers
             {
                 case Screens.Inventory:
                     _currentGUIScreen = new InventoryScreen(c);
+                    return;
+            }
+        }
+
+        public static void LoadScreen(Screens newScreen, NPC n)
+        {
+            _currentScreen = newScreen;
+            switch (newScreen)
+            {
+                case Screens.Inventory:
+                    _currentGUIScreen = new InventoryScreen(n);
+                    return;
+                case Screens.TextInput:
+                    _currentGUIScreen = new TextInputScreen(n);
                     return;
             }
         }

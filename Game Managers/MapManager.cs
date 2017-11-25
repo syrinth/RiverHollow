@@ -40,13 +40,12 @@ namespace RiverHollow.Game_Managers
             _tileMaps.Add(newMap.Name, newMap);
         }
 
-        public static void ChangeMaps(string newMapStr)
+        public static void ChangeMaps(WorldCharacter c, string currMap, string newMapStr)
         {
-            GUIManager.FadeOut();
             Rectangle rectEntrance = Rectangle.Empty;
             RHMap newMap = _tileMaps[newMapStr];
 
-            if (_currentMap.IsDungeon)
+            if (_tileMaps[currMap].IsDungeon)
             {
                 rectEntrance = _tileMaps[newMapStr].DictionaryEntrance["Dungeon"];
             }
@@ -61,17 +60,28 @@ namespace RiverHollow.Game_Managers
                     }
                     else
                     {
-                        if (s.Equals(_currentMap.Name))
+                        if (s.Equals(_tileMaps[currMap].Name))
                         {
                             rectEntrance = _tileMaps[newMapStr].DictionaryEntrance[s];
                         }
                     }
                 }
             }
-            _currentMap = _tileMaps[newMapStr];
 
-            PlayerManager.CurrentMap = _currentMap.Name;
-            PlayerManager.World.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
+            if (c == PlayerManager.World)
+            {
+                GUIManager.FadeOut();
+                _currentMap = _tileMaps[newMapStr];
+
+                PlayerManager.CurrentMap = _currentMap.Name;
+                PlayerManager.World.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
+            }
+            else
+            {
+                _tileMaps[currMap].RemoveCharacter(c);
+                _tileMaps[newMapStr].AddCharacter(c);
+                c.NewMapPosition = new Vector2(rectEntrance.Left, rectEntrance.Top); //This needs to get updated when officially added to the new map
+            }
         }
 
         public static void EnterDungeon()
@@ -142,14 +152,21 @@ namespace RiverHollow.Game_Managers
                     _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(2, new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize)), true);
                 }
             }
-            _tileMaps[@"Map1"].AddMob(CharacterManager.GetMobByIndex(1, new Vector2(1340, 1340)));
+
+            Mob mob = CharacterManager.GetMobByIndex(1, new Vector2(1340, 1340));
+            mob.CurrentMapName = "Map1";
+            _tileMaps[@"Map1"].AddMob(mob);
+
             MerchantChest m = new MerchantChest();
             PlayerManager._merchantChest = m;
         }
 
         public static void Update(GameTime gametime)
         {
-            _currentMap.Update(gametime);
+            foreach(RHMap map in _tileMaps.Values)
+            {
+                map.Update(gametime);
+            }
         }
 
         public static void Draw(SpriteBatch spriteBatch)

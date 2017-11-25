@@ -172,7 +172,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             {
                 GUIManager.LoadScreen(GUIManager.Screens.Text, _talker, nextText);
             }
-            else
+            else if(GUIManager.CurrentGUIScreen == GUIManager.Screens.Text || GUIManager.CurrentGUIScreen == GUIManager.Screens.TextInput)
             {
                 RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
             }

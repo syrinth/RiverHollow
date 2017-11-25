@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System.Windows.Input;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Characters.NPCs;
+using RiverHollow.Characters;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
@@ -16,9 +12,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         private int _strLen;
         private string _statement;
         private int _maxLength = 10;
-        private WorldAdventurer _w;
+        private NPC _w;
 
-        public GUITextInputWindow(WorldAdventurer w) : base()
+        public GUITextInputWindow(NPC w) : base()
         {
             RiverHollow.ChangeGameState(RiverHollow.GameState.Input);
             _statement = "Enter name:";

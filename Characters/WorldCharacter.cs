@@ -11,6 +11,8 @@ namespace RiverHollow.Characters
         protected string _name;
         public string Name { get => _name; }
 
+        public string CurrentMapName;
+        public Vector2 NewMapPosition;
         public enum Direction { North, South, East, West };
         public Direction Facing = Direction.North;
         public Texture2D Texture { get => _sprite.Texture; }
@@ -73,13 +75,13 @@ namespace RiverHollow.Characters
             Rectangle testRectX = new Rectangle((int)(Position.X + direction.X), (int)Position.Y, Width, Height);
             Rectangle testRectY = new Rectangle((int)Position.X, (int)(Position.Y + direction.Y), Width, Height);
 
-            if (MapManager.CurrentMap.CheckLeftMovement(this, testRectX) && MapManager.CurrentMap.CheckRightMovement(this, testRectX))
+            if (MapManager.Maps[CurrentMapName].CheckLeftMovement(this, testRectX) && MapManager.Maps[CurrentMapName].CheckRightMovement(this, testRectX))
             {
 
                 _sprite.MoveBy(direction.X, 0);
             }
 
-            if (MapManager.CurrentMap.CheckUpMovement(this, testRectY) && MapManager.CurrentMap.CheckDownMovement(this, testRectY))
+            if (MapManager.Maps[CurrentMapName].CheckUpMovement(this, testRectY) && MapManager.Maps[CurrentMapName].CheckDownMovement(this, testRectY))
             {
                 _sprite.MoveBy(0, direction.Y);
             }

@@ -92,7 +92,7 @@ namespace RiverHollow.Game_Managers
         {
             int leftToRemove = x;
             bool done = false;
-            List<int> toRemove = new List<int>();
+            List<Item> toRemove = new List<Item>();
             for (int i = 0; i < maxItemRows; i++)
             {
                 if (done) { break; }
@@ -108,20 +108,20 @@ namespace RiverHollow.Game_Managers
                             testItem.Number -= leftToRemove;
                             if (testItem.Number == 0)
                             {
-                                toRemove.Add((i * maxItemColumns) + j);
+                                toRemove.Add(_inventory[i, j]);
                             }
                         }
                         else
                         {
                             testItem.Number = 0;
-                            toRemove.Add((i * maxItemColumns) + j);
+                            toRemove.Add(_inventory[i, j]);
                             leftToRemove -= temp;
                         }
                     }
                 }
             }
 
-            foreach (int i in toRemove)
+            foreach (Item i in toRemove)
             {
                 RemoveItemFromInventory(i);
             }
@@ -209,23 +209,25 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static void RemoveItemFromInventory(int index)
+        public static void RemoveItemFromInventory(Item it)
         {
             for (int i = 0; i < maxItemRows; i++)
             {
                 for (int j = 0; j < maxItemColumns; j++)
                 {
-                    if ((i * maxItemColumns) + j == index)
+                    if (_inventory[i, j] == it)
                     {
                         if (_inventory[i, j].Type == Item.ItemType.Tool)
                         {
                             PlayerManager.CompareTools((Tool)_inventory[i, j]);
                         }
                         _inventory[i, j] = null;
-                        break;
+                        goto Exit;
                     }
                 }
             }
+        Exit:
+            return;
         }
 
         public static Tool FindTool(Tool.TypeOfTool tool)

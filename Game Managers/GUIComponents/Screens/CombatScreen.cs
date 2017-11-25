@@ -229,7 +229,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (Occupied())
             {
                 _character.Draw(spriteBatch, false);
-                if (CombatManager.TurnIndex <= CombatManager.TurnOrder.Count && _character != null && CombatManager.TurnOrder[CombatManager.TurnIndex] != _character)
+                if (CombatManager.TurnIndex <= CombatManager.TurnOrder.Count && _character != null && CombatManager.TurnIndex < CombatManager.TurnOrder.Count && CombatManager.TurnOrder[CombatManager.TurnIndex] != _character)
                 {
                     _healthBar.Draw(spriteBatch);
                 }

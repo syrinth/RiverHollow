@@ -114,12 +114,16 @@ namespace RiverHollow.Game_Managers
             for (int i = 0; i < 5; i++)
             {
                 Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-2) * RHMap.TileSize);
-                m.AddMob(CharacterManager.GetMobByIndex(1, vect));
+                Mob mob = CharacterManager.GetMobByIndex(1, vect);
+                mob.CurrentMapName = m.Name.Replace(@"Maps\", "");
+                m.AddMob(mob);
             }
             for (int i = 0; i < 5; i++)
             {
                 Vector2 vect = new Vector2(r.Next(1, mapWidth - 1) * RHMap.TileSize, r.Next(1, mapHeight - 2) * RHMap.TileSize);
-                m.AddMob(CharacterManager.GetMobByIndex(2, vect));
+                Mob mob = CharacterManager.GetMobByIndex(2, vect);
+                mob.CurrentMapName = m.Name.Replace(@"Maps\", "");
+                m.AddMob(mob);
             }
 
             if (lastRoom && _condition == EndCondition.TreasureChest)

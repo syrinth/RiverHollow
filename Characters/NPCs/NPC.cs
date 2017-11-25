@@ -19,8 +19,9 @@ namespace RiverHollow.Characters
         protected Dictionary<int, bool> _collection;
         protected bool _introduced;
 
-        protected Dictionary<string,Dictionary<string,string>> _schedule;
+        protected Dictionary<string, List<KeyValuePair<string, string>>> _schedule;
         protected string _moveTo;
+        protected int _scheduleIndex;
 
         private const int PortraitWidth = 160;
         private const int PortraitHeight = 192;
@@ -28,9 +29,6 @@ namespace RiverHollow.Characters
         public Texture2D Portrait { get => _portrait; }
         protected Rectangle _portraitRect;
         public Rectangle PortraitRectangle { get => _portraitRect; }
-
-        protected string _currentMap;
-        public string CurrentMap { get => _currentMap; }
 
         protected Dictionary<string, string> _dialogueDictionary;
 
@@ -41,14 +39,15 @@ namespace RiverHollow.Characters
         public NPC(int index, string[] data)
         {
             _collection = new Dictionary<int, bool>();
-            _schedule = new Dictionary<string, Dictionary<string, string>>();
+            _schedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
             _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + index);
             _portrait = GameContentManager.GetTexture(@"Textures\portraits");
+            _scheduleIndex = 0;
 
             LoadContent();
             ImportBasics(data, index);
 
-            MapManager.Maps[_currentMap].AddCharacter(this);
+            MapManager.Maps[CurrentMapName].AddCharacter(this);
         }
 
         protected int ImportBasics(string[] stringData, int index)
@@ -57,8 +56,8 @@ namespace RiverHollow.Characters
             _npcType = (NPCType)Enum.Parse(typeof(NPCType), stringData[i++]);
             _name = stringData[i++];
             _portraitRect = new Rectangle(0, int.Parse(stringData[i++]) * 192, PortraitWidth, PortraitHeight);
-            _currentMap = stringData[i++];
-            Position = MapManager.Maps[_currentMap].GetNPCSpawn("NPC" + index);
+            CurrentMapName = stringData[i++];
+            Position = MapManager.Maps[CurrentMapName].GetNPCSpawn("NPC" + index);
             string[] vectorSplit = stringData[i++].Split(' ');
             foreach (string s in vectorSplit) {
                 _collection.Add(int.Parse(s), false);
@@ -69,12 +68,12 @@ namespace RiverHollow.Characters
             {
                 foreach (KeyValuePair<string, string> kvp in schedule)
                 {
-                    Dictionary<string, string> temp = new Dictionary<string, string>();
+                    List<KeyValuePair<string, string>> temp = new List<KeyValuePair<string, string>>();
                     string[] group = kvp.Value.Split('/');
                     foreach (string s in group)
                     {
                         string[] data = s.Split('|');
-                        temp.Add(data[0], data[1]);
+                        temp.Add(new KeyValuePair<string, string>(data[0], data[1]));
                     }
                     _schedule.Add(kvp.Key, temp);
                 }
@@ -92,25 +91,45 @@ namespace RiverHollow.Characters
             if (_schedule != null && _schedule.Count > 0)
             {
                 string searchVal = currSeason + currDay + currWeather;
-                Dictionary<string, string> dict = null;
+                List<KeyValuePair<string, string>> movementList = null;
 
-                if (_schedule.ContainsKey(currSeason + currDay + currWeather)) { dict = _schedule[currSeason + currDay + currWeather]; }
-                else if (_schedule.ContainsKey(currSeason + currDay)) { dict = _schedule[currSeason + currDay]; }
-                else if (_schedule.ContainsKey(currDay)) { dict = _schedule[currDay]; }
+                if (_schedule.ContainsKey(currSeason + currDay + currWeather)) {
+                    movementList = _schedule[currSeason + currDay + currWeather];
+                }
+                else if (_schedule.ContainsKey(currSeason + currDay)) {
+                    movementList = _schedule[currSeason + currDay];
+                }
+                else if (_schedule.ContainsKey(currDay)) {
+                    movementList = _schedule[currDay];
+                }
 
-                if (dict.ContainsKey(currTime))
+                if (_scheduleIndex < movementList.Count && ((movementList[_scheduleIndex].Key == currTime) || RunningLate(movementList[_scheduleIndex].Key, currTime)))
                 {
-                    _moveTo = dict[currTime];
+                    _moveTo = movementList[_scheduleIndex++].Value;
+                }
+                else if (_scheduleIndex < movementList.Count && movementList[_scheduleIndex].Key == CurrentMapName)
+                {
+                    _moveTo = movementList[_scheduleIndex++].Value;
                 }
             }
 
             if(!string.IsNullOrEmpty(_moveTo))
             {
-                Vector2 pos = MapManager.Maps[_currentMap].DictionaryPathing[_moveTo];
+                Vector2 pos = Vector2.Zero;
+                if (MapManager.Maps[CurrentMapName].DictionaryPathing.ContainsKey(_moveTo)) { pos = MapManager.Maps[CurrentMapName].DictionaryPathing[_moveTo]; }
+                else if (MapManager.Maps[CurrentMapName].DictionaryExit.ContainsValue(_moveTo)) {
+                    foreach (KeyValuePair<Rectangle, string> kvp in MapManager.Maps[CurrentMapName].DictionaryExit) {
+                        if (kvp.Value == _moveTo)
+                        {
+                            pos = kvp.Key.Center.ToVector2();
+                        }
+                    }
+                }
+
                 if (pos == Position) {
-                    if (_schedule[currDay].ContainsKey(_moveTo))
+                    if (_scheduleIndex < _schedule[currDay].Count && _schedule[currDay][_scheduleIndex].Key == _moveTo)
                     {
-                        _moveTo = _schedule[currDay][_moveTo];
+                        _moveTo = _schedule[currDay][_scheduleIndex++].Key;
                     }
                     else
                     {
@@ -127,6 +146,29 @@ namespace RiverHollow.Characters
                     CheckMapForCollisionsAndMove(direction);
                 }
             }
+        }
+
+        public bool RunningLate(string timeToGo, string currTime)
+        {
+            bool rv = false;
+            string[] toGoSplit = timeToGo.Split(':');
+            string[] curSplit = currTime.Split(':');
+
+            int intTime = 0;
+            int intCurrent = 0;
+            if (toGoSplit.Length > 1 && curSplit.Length > 1)
+            {
+                if (int.TryParse(toGoSplit[0], out intTime) && int.TryParse(curSplit[0], out intCurrent) && intTime < intCurrent)
+                {
+                    rv = true;
+                }
+                else if (intTime == intCurrent && int.TryParse(toGoSplit[1], out intTime) && int.TryParse(curSplit[1], out intCurrent) && intTime < intCurrent)
+                {
+                    rv = true;
+                }
+            }
+
+            return rv;
         }
 
         public virtual void Talk()
@@ -180,7 +222,8 @@ namespace RiverHollow.Characters
             }
             else if (entry.Equals("GiveGift"))
             {
-                return "Gift me baby one more time.";
+                GUIManager.LoadScreen(GUIManager.Screens.Inventory, this);
+                return "";
             }
             else if (entry.Equals("Party"))
             {
@@ -247,6 +290,11 @@ namespace RiverHollow.Characters
             {
                 GUIManager.LoadScreen(GUIManager.Screens.Text, this, text);
             }
+        }
+
+        public void SetName(string text)
+        {
+            _name = text;
         }
     }
 }

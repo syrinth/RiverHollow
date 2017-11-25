@@ -164,7 +164,7 @@ namespace RiverHollow.Items
                 _num -= x;
                 if (_num == 0)
                 {
-                    InventoryManager.RemoveItemFromInventory(InventoryManager.CurrentItemNumber);
+                    InventoryManager.RemoveItemFromInventory(this);
                 }
             }
         }

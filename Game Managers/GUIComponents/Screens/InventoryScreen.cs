@@ -3,6 +3,7 @@ using RiverHollow.Screens;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Items;
 using RiverHollow.GUIObjects;
+using RiverHollow.Characters;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -47,6 +48,18 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             Controls.Add(_inventory);
             Controls.Add(_container);
+        }
+
+        public InventoryScreen(NPC n)
+        {
+            Vector2 centerPoint = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
+            _font = GameContentManager.GetFont(@"Fonts\Font");
+            _inventory = new Inventory(n, centerPoint, 4, InventoryManager.maxItemColumns, 32);
+
+            Vector2 mainWidthHeight = new Vector2(_inventory.Rectangle().Width, _inventory.Rectangle().Height);
+            _inventory.SetPosition(centerPoint - new Vector2(mainWidthHeight.X / 2, 0));
+
+            Controls.Add(_inventory);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)

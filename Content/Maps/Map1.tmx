@@ -242,7 +242,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="Entrance Layer" visible="0">
+ <objectgroup name="Entrance Layer">
   <object id="1" name="Exit" x="131.667" y="32.3333" width="58.6667" height="32">
    <properties>
     <property name="Exit" value="Map2"/>

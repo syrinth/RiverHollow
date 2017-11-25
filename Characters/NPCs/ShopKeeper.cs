@@ -37,7 +37,7 @@ namespace RiverHollow.Characters.NPCs
 
                 IsOpen = true;
 
-                MapManager.Maps[_currentMap].AddCharacter(this);
+                MapManager.Maps[CurrentMapName].AddCharacter(this);
             }
         }
 

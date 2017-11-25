@@ -252,7 +252,7 @@ namespace RiverHollow.Game_Managers
                 if (InventoryManager.CurrentItem.Type == Item.ItemType.Container)
                 {
                     MapManager.PlaceWorldItem((Container)InventoryManager.CurrentItem, mouseLocation.ToVector2());
-                    InventoryManager.RemoveItemFromInventory(InventoryManager.CurrentItemNumber);
+                    InventoryManager.RemoveItemFromInventory(InventoryManager.CurrentItem);
                 }
                 else if (InventoryManager.CurrentItem.Type == Item.ItemType.Food)
                 {
