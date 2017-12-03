@@ -155,12 +155,12 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                     PlayerManager.Combat.IncreaseHealth(_food.Health);
                 }
                 GUIManager.RemoveComponent(this);
-                RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
+                RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
             }
             else{
                 //Equip here
                 GUIManager.RemoveComponent(this);
-                RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
+                RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
             }
         }
 
@@ -170,11 +170,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
             if (!string.IsNullOrEmpty(nextText))
             {
-                GUIManager.LoadScreen(GUIManager.Screens.Text, _talker, nextText);
+                GUIManager.LoadTextScreen(_talker, nextText);
             }
             else if(GUIManager.CurrentGUIScreen == GUIManager.Screens.Text || GUIManager.CurrentGUIScreen == GUIManager.Screens.TextInput)
             {
-                RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
+                RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
             }
         }
     }

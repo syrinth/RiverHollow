@@ -106,25 +106,13 @@ namespace RiverHollow.Items
             return rv;
         }
 
-        public void RemoveItemFromInventory(int index)
+        public void RemoveItemFromInventory(int i, int j)
         {
-            bool removed = false;
-            for (int i = 0; i < InventoryManager.maxItemRows; i++)
-            {
-                for (int j = 0; j < InventoryManager.maxItemColumns; j++)
-                {
-                    if ((i * InventoryManager.maxItemColumns) + j == index)
-                    {
-                        if (_inventory[i, j].Number > 1) { _inventory[i, j].Number--; }
-                        else { _inventory[i, j] = null; }
-                        removed = true;
-                        break;
-                    }
-                }
-                if (removed)
-                {
-                    break;
-                }
+            if (_inventory[i, j].Number > 1) {
+                _inventory[i, j].Number--;
+            }
+            else {
+                _inventory[i, j] = null;
             }
         }
 

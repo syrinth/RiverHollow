@@ -44,7 +44,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                         {
                             RiverHollow.ResetCamera();
                             _w.SetName(_text);
-                            RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
+                            RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
                         }
                     }
                     else

@@ -88,7 +88,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             base.Update(gameTime);
             if (InputManager.CheckKey(Keys.Escape))
             {
-                RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
+                RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
             }
         }
 
@@ -135,7 +135,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             bool rv = true;
             if (!Contains(mouse))
             {
-                RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
+                RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
                 rv = true;
             }
 

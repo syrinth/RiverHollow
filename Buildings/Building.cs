@@ -109,7 +109,7 @@ namespace RiverHollow
                             Item item = Pantry.Inventory[i, j];
                             if (item != null && item.Type == Item.ItemType.Food)
                             {
-                                Pantry.RemoveItemFromInventory((i * InventoryManager.maxItemColumns) + j);
+                                Pantry.RemoveItemFromInventory(i, j);
                                 w.MakeDailyItem();
                                 eaten = true;
                                 break;

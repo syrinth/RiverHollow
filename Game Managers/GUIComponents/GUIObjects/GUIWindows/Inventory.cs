@@ -174,11 +174,11 @@ namespace RiverHollow.Screens
                         }
                         if (_container == null)
                         {
-                            InventoryManager.RemoveItemFromInventory(_displayList[i, j].Item);
+                            InventoryManager.RemoveItemFromInventory(i, j);
                         }
                         else
                         {
-                            _container.RemoveItemFromInventory((i * _columns) + j);
+                            _container.RemoveItemFromInventory(i,j);
                         }
                         break;
                     }

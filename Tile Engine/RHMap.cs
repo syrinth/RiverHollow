@@ -270,7 +270,7 @@ namespace RiverHollow.Tile_Engine
                 RHTile mapTile = _tileArray[columnTile, y];
                 Rectangle cellRect = new Rectangle(columnTile * _tileSize, y * _tileSize, _tileSize, _tileSize);
                 if (mapTile.ContainsProperty("Sleep", out string val) && val.Equals("true")){
-                    GUIManager.LoadScreen(GUIManager.Screens.Text, GameContentManager.GetDialogue("Sleep"));
+                    GUIManager.LoadTextScreen(GameContentManager.GetDialogue("Sleep"));
                     rv = true;
                 }
                 else if (!mapTile.Passable() && cellRect.Intersects(movingChar))
@@ -296,7 +296,7 @@ namespace RiverHollow.Tile_Engine
                 Rectangle cellRect = new Rectangle(columnTile * _tileSize, y * _tileSize, _tileSize, _tileSize);
                 if (mapTile.ContainsProperty("Sleep", out string val) && val.Equals("true"))
                 {
-                    GUIManager.LoadScreen(GUIManager.Screens.Text, GameContentManager.GetDialogue("Sleep"));
+                    GUIManager.LoadTextScreen(GameContentManager.GetDialogue("Sleep"));
                     rv = true;
                 }
                 else if (!mapTile.Passable() && cellRect.Intersects(movingChar))
@@ -324,7 +324,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     if (c == PlayerManager.World)
                     {
-                        GUIManager.LoadScreen(GUIManager.Screens.Text, GameContentManager.GetDialogue("Sleep"));
+                        GUIManager.LoadTextScreen(GameContentManager.GetDialogue("Sleep"));
                         rv = true;
                     }
                 }
@@ -351,7 +351,7 @@ namespace RiverHollow.Tile_Engine
                 Rectangle cellRect = new Rectangle(x * _tileSize, rowTile * _tileSize, _tileSize, _tileSize);
                 if (mapTile.ContainsProperty("Sleep", out string val) && val.Equals("true"))
                 {
-                    GUIManager.LoadScreen(GUIManager.Screens.Text, GameContentManager.GetDialogue("Sleep"));
+                    GUIManager.LoadTextScreen(GameContentManager.GetDialogue("Sleep"));
                     rv = true;
                 }
                 else if (!mapTile.Passable() && cellRect.Intersects(movingChar))
@@ -498,7 +498,7 @@ namespace RiverHollow.Tile_Engine
                         stairs.SetExit("Map1");
                         AddWorldObject(stairs, true);
                     }
-                    GUIManager.LoadScreen(GUIManager.Screens.Inventory, (Container)s);
+                    GUIManager.LoadContainerScreen((Container)s);
                     break;
                 }
             }
@@ -736,7 +736,7 @@ namespace RiverHollow.Tile_Engine
                 GraphicCursor.DropBuilding();
                 _buildingList.Add(b);
                 PlayerManager.AddBuilding(b);
-                RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
+                RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
                 RiverHollow.ResetCamera();
             }
         }

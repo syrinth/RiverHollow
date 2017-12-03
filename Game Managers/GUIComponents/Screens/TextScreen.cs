@@ -40,11 +40,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             {if (DungeonManager.Maps.Count > 0)
                 {
                     MapManager.EnterDungeon();
-                    RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
+                    RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
                 }
                 else
                 {
-                    RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
+                    RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
                 }
             }
             else

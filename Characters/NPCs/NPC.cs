@@ -184,7 +184,7 @@ namespace RiverHollow.Characters
                 text = GetSelectionText();
             }
             text = ProcessText(text);
-            GUIManager.LoadScreen(GUIManager.Screens.Text, this, text);
+            GUIManager.LoadTextScreen(this, text);
         }
 
         public void LoadContent()
@@ -288,7 +288,7 @@ namespace RiverHollow.Characters
 
             if (!string.IsNullOrEmpty(text))
             {
-                GUIManager.LoadScreen(GUIManager.Screens.Text, this, text);
+                GUIManager.LoadTextScreen(this, text);
             }
         }
 

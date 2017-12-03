@@ -209,6 +209,16 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
+        public static void RemoveItemFromInventory(int i, int j)
+        {
+            if (_inventory[i, j].Type == Item.ItemType.Tool)
+            {
+                PlayerManager.CompareTools((Tool)_inventory[i, j]);
+            }
+
+            _inventory[i, j] = null;
+        }
+
         public static void RemoveItemFromInventory(Item it)
         {
             for (int i = 0; i < maxItemRows; i++)
@@ -227,6 +237,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
         Exit:
+
             return;
         }
 

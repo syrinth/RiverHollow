@@ -62,7 +62,7 @@ namespace RiverHollow.Characters.NPCs
                 }
             }
             text = ProcessText(text);
-            GUIManager.LoadScreen(GUIManager.Screens.Text, this, text);
+            GUIManager.LoadTextScreen(this, text);
         }
 
         public override string GetDialogEntry(string entry)

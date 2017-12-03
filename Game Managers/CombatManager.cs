@@ -61,7 +61,7 @@ namespace RiverHollow.Game_Managers
             TurnIndex = 0;
             SetPhaseForTurn();
             PlayerManager.DecreaseStamina(1);
-            RiverHollow.ChangeGameState(RiverHollow.GameState.Combat);
+            RiverHollow.ChangeMapState(RiverHollow.MapState.Combat);
         }
 
         public static void NextTurn()
@@ -175,7 +175,7 @@ namespace RiverHollow.Game_Managers
             MapManager.RemoveMob(_mob);
             MapManager.DropWorldItems(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
             _mob = null;
-            RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
+            RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
         }
 
         public static void Kill(CombatCharacter c)

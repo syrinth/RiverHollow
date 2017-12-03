@@ -88,7 +88,7 @@ namespace RiverHollow.Characters.NPCs
         }
         public override void Talk()
         {
-            GUIManager.LoadScreen(GUIManager.Screens.Text, this, Name + ": " + GameContentManager.GetDialogue("AdventurerTree"));
+            GUIManager.LoadTextScreen(this, Name + ": " + GameContentManager.GetDialogue("AdventurerTree"));
         }
 
         public override string GetSelectionText()

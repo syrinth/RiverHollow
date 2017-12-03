@@ -154,17 +154,6 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void LoadScreen(Screens newScreen, Container c)
-        {
-            _currentScreen = newScreen;
-            switch (newScreen)
-            {
-                case Screens.Inventory:
-                    _currentGUIScreen = new InventoryScreen(c);
-                    return;
-            }
-        }
-
         public static void LoadScreen(Screens newScreen, NPC n)
         {
             _currentScreen = newScreen;
@@ -179,31 +168,22 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void LoadScreen(Screens newScreen, string text)
+        public static void LoadContainerScreen(Container c)
         {
-            _currentScreen = newScreen;
-            switch (newScreen)
-            {
-                case Screens.Text:
-                    _currentGUIScreen = new TextScreen(text);
-                    return;
-            }
+            _currentScreen = GUIManager.Screens.Inventory;
+            _currentGUIScreen = new InventoryScreen(c);
         }
 
-        public static void LoadScreen(Screens newScreen, NPC talker, string text)
+        public static void LoadTextScreen(string text)
         {
-            _currentScreen = newScreen;
-            switch (newScreen)
-            {
-                case Screens.Text:
-                    _currentGUIScreen = new TextScreen(talker, text);
-                    return;
-            }
+            _currentScreen = GUIManager.Screens.Text;
+            _currentGUIScreen = new TextScreen(text);
         }
 
-        public static void LoadScreen(Screens newScreen, WorldCharacter c, string text)
+        public static void LoadTextScreen(NPC talker, string text)
         {
-            //
+            _currentScreen = GUIManager.Screens.Text;
+            _currentGUIScreen = new TextScreen(talker, text);
         }
 
         public static void FadeOut()

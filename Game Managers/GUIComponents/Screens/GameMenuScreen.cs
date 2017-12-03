@@ -79,7 +79,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (_infoScreen != null && !_infoScreen.Contains(mouse))
             {
                 GUIManager.SetScreen(GUIManager.Screens.HUD);
-                RiverHollow.ChangeGameState(RiverHollow.GameState.WorldMap);
+                RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
             }
             else if (_infoScreen != null && _infoScreen.Contains(mouse))
             {
