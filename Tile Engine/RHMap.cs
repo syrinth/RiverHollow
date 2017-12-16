@@ -164,17 +164,29 @@ namespace RiverHollow.Tile_Engine
                 else if (_characterList.Contains(c)) { _characterList.Remove(c); }
             }
             ToRemove.Clear();
-            foreach (WorldCharacter c in ToAdd)
+
+            if (ToAdd.Count > 0)
             {
-                if (!MapManager.Maps[c.CurrentMapName].Contains(c)) {
-                    if (c.GetType().Equals(typeof(Mob)) && !_mobList.Contains((Mob)c)) { _mobList.Add((Mob)c); }
-                    else if (!_characterList.Contains(c)) { _characterList.Add(c); }
-                    c.CurrentMapName = _name.Replace(@"Maps\", "");
-                    c.Position = c.NewMapPosition == Vector2.Zero ? c.Position : c.NewMapPosition;
-                    c.NewMapPosition = Vector2.Zero;
+                List<WorldCharacter> moved = new List<WorldCharacter>();
+                foreach (WorldCharacter c in ToAdd)
+                {
+                    if (!MapManager.Maps[c.CurrentMapName].Contains(c))
+                    {
+                        if (c.GetType().Equals(typeof(Mob)) && !_mobList.Contains((Mob)c)) { _mobList.Add((Mob)c); }
+                        else if (!_characterList.Contains(c)) { _characterList.Add(c); }
+                        c.CurrentMapName = _name.Replace(@"Maps\", "");
+                        c.Position = c.NewMapPosition == Vector2.Zero ? c.Position : c.NewMapPosition;
+                        c.NewMapPosition = Vector2.Zero;
+                        moved.Add(c);
+                    }
                 }
+                foreach (WorldCharacter c in moved)
+                {
+                    ToAdd.Remove(c);
+                }
+                moved.Clear();
             }
-            ToAdd.Clear();
+
             foreach (WorldCharacter c in _characterList)
             {
                 c.Update(theGameTime);

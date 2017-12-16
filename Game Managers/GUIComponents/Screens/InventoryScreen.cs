@@ -107,7 +107,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             else if (_container != null && !_container.DrawRectangle.Contains(mouse))
             {
-                GUIManager.SetScreen(GUIManager.Screens.HUD);
+                RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
             }
             else if (_character != null && _character.Contains(mouse))
             {

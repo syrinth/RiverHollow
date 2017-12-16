@@ -84,62 +84,10 @@ namespace RiverHollow
                 MouseState ms = Mouse.GetState();
                 KeyboardState ks = Keyboard.GetState();
 
-                //If we're not in the inputstate, do not accept input
-                if (_gameState != GameState.Input)
-                {
-                    if (InputManager.CheckKey(Keys.Escape))
-                    {
-                        if (_mapState == MapState.Combat)
-                        {
-                            CombatManager.EndBattle();
-                        }
-                        else if (_mapState == MapState.WorldMap)
-                        {
-                            GUIManager.SetScreen(GUIManager.Screens.GameMenu);
-                        }
-                    }
-                    if (InputManager.CheckKey(Keys.P))
-                    {
-                        if (_gameState == GameState.Paused)
-                            _gameState = GameState.Paused;
-                        else
-                            _gameState = GameState.Running;
-                    }
-                    if (InputManager.CheckKey(Keys.X))
-                    {
-                        PlayerManager.Save();
-                    }
-                    if (GUIManager.CurrentGUIScreen != GUIManager.Screens.ItemCreation || GUIManager.CurrentGUIScreen != GUIManager.Screens.HUD)
-                    {
-                        if (InputManager.CheckKey(Keys.C))
-                        {
-                            if (GUIManager.CurrentGUIScreen == GUIManager.Screens.ItemCreation)
-                            {
-                                GUIManager.SetScreen(GUIManager.Screens.HUD);
-                            }
-                            else
-                            {
-                                GUIManager.SetScreen(GUIManager.Screens.ItemCreation);
-                            }
-                        }
-                    }
-                    //if (GUIManager.CurrentGUIScreen != GUIManager.Screens.Inventory || GUIManager.CurrentGUIScreen != GUIManager.Screens.HUD)
-                    //{
-                    //    if (InputManager.CheckKey(Keys.I))
-                    //    {
-                    //        if (GUIManager.CurrentGUIScreen == GUIManager.Screens.Inventory)
-                    //        {
-                    //            ChangeGameState(GameState.WorldMap);
-                    //        }
-                    //        else
-                    //        {
-                    //            GUIManager.SetScreen(GUIManager.Screens.Inventory);
-                    //        }
-                    //    }
-                    //}
-                }
+                //If we're not in the game and we're not on an input screen, handle input
+                HandleImportantInput();
 
-                //GUIManager alwaysneeds to update, regardless of game state
+                //GUIManager always needs to update, regardless of game state
                 GUIManager.Update(gameTime);
 
                 Point mousePoint = Mouse.GetState().Position;
@@ -218,6 +166,49 @@ namespace RiverHollow
                 spriteBatch.End();
             }
             base.Draw(gameTime);
+        }
+
+        public void HandleImportantInput()
+        {
+            if (_mapState != MapState.None && _gameState != GameState.Input)
+            {
+                if (InputManager.CheckKey(Keys.Escape))
+                {
+                    if (_mapState == MapState.Combat)
+                    {
+                        CombatManager.EndBattle();
+                    }
+                    else if (_mapState == MapState.WorldMap)
+                    {
+                        GUIManager.SetScreen(GUIManager.Screens.GameMenu);
+                    }
+                }
+                if (InputManager.CheckKey(Keys.P))
+                {
+                    if (_gameState == GameState.Paused)
+                        _gameState = GameState.Paused;
+                    else
+                        _gameState = GameState.Running;
+                }
+                if (InputManager.CheckKey(Keys.X))
+                {
+                    PlayerManager.Save();
+                }
+                if (GUIManager.CurrentGUIScreen != GUIManager.Screens.ItemCreation || GUIManager.CurrentGUIScreen != GUIManager.Screens.HUD)
+                {
+                    if (InputManager.CheckKey(Keys.C))
+                    {
+                        if (GUIManager.CurrentGUIScreen == GUIManager.Screens.ItemCreation)
+                        {
+                            GUIManager.SetScreen(GUIManager.Screens.HUD);
+                        }
+                        else
+                        {
+                            GUIManager.SetScreen(GUIManager.Screens.ItemCreation);
+                        }
+                    }
+                }
+            }
         }
 
         public static void ChangeGameState(GameState state)

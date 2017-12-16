@@ -24,9 +24,10 @@ namespace RiverHollow
         {
             if (RiverHollow.State != RiverHollow.GameState.Build)
             {
-                _observer = PlayerManager.World.Center.ToVector2()*Scale;
+                _observer = PlayerManager.World.Center.ToVector2() * Scale;
             }
-            else {
+            else
+            {
                 KeyboardState ks = Keyboard.GetState();
                 int speed = 10;
                 if (ks.IsKeyDown(Keys.W))
@@ -40,7 +41,7 @@ namespace RiverHollow
 
                 if (ks.IsKeyDown(Keys.A))
                 {
-                    _observer += new Vector2(-speed,0);
+                    _observer += new Vector2(-speed, 0);
                 }
                 else if (ks.IsKeyDown(Keys.D))
                 {
@@ -49,22 +50,42 @@ namespace RiverHollow
             }
 
             float BorderOffset = RHMap.TileSize * Scale;
-            if (_observer.X <= (RiverHollow.ScreenWidth / 2) + BorderOffset)
+            bool xLocked = false;
+            bool yLocked = false;
+            if (MapManager.CurrentMap.GetMapWidth() < RiverHollow.ScreenWidth)
             {
-                _observer.X = (RiverHollow.ScreenWidth / 2) + BorderOffset;
-            }
-            else if (_observer.X >= MapManager.CurrentMap.GetMapWidth() * Scale - (RiverHollow.ScreenWidth / 2) - BorderOffset)
-            {
-                _observer.X = MapManager.CurrentMap.GetMapWidth() * Scale - (RiverHollow.ScreenWidth / 2) - BorderOffset;
+                xLocked = true;
+                _observer.X = (MapManager.CurrentMap.GetMapWidth() / 2) + BorderOffset;
             }
 
-            if (_observer.Y <= (RiverHollow.ScreenHeight / 2) + BorderOffset)
+            if (MapManager.CurrentMap.GetMapHeight() < RiverHollow.ScreenHeight)
             {
-                _observer.Y = (RiverHollow.ScreenHeight / 2) + BorderOffset;
+                yLocked = true;
+                _observer.Y = (MapManager.CurrentMap.GetMapHeight() / 2) + BorderOffset;
             }
-            else if (_observer.Y >= MapManager.CurrentMap.GetMapHeight() * Scale - (RiverHollow.ScreenHeight / 2) - BorderOffset)
+
+            if (!xLocked)
             {
-                _observer.Y = MapManager.CurrentMap.GetMapHeight() * Scale - (RiverHollow.ScreenHeight / 2) - BorderOffset;
+                if (_observer.X <= (RiverHollow.ScreenWidth / 2) + BorderOffset)
+                {
+                    _observer.X = (RiverHollow.ScreenWidth / 2) + BorderOffset;
+                }
+                else if (_observer.X >= MapManager.CurrentMap.GetMapWidth() * Scale - (RiverHollow.ScreenWidth / 2) - BorderOffset)
+                {
+                    _observer.X = MapManager.CurrentMap.GetMapWidth() * Scale - (RiverHollow.ScreenWidth / 2) - BorderOffset;
+                }
+            }
+
+            if (!yLocked)
+            {
+                if (_observer.Y <= (RiverHollow.ScreenHeight / 2) + BorderOffset)
+                {
+                    _observer.Y = (RiverHollow.ScreenHeight / 2) + BorderOffset;
+                }
+                else if (_observer.Y >= MapManager.CurrentMap.GetMapHeight() * Scale - (RiverHollow.ScreenHeight / 2) - BorderOffset)
+                {
+                    _observer.Y = MapManager.CurrentMap.GetMapHeight() * Scale - (RiverHollow.ScreenHeight / 2) - BorderOffset;
+                }
             }
 
             _center = new Vector2(_observer.X - (RiverHollow.ScreenWidth / 2), _observer.Y - (RiverHollow.ScreenHeight / 2));

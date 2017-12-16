@@ -76,16 +76,26 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = true;
-            if (_infoScreen != null && !_infoScreen.Contains(mouse))
+            if(_infoScreen == null)
             {
-                GUIManager.SetScreen(GUIManager.Screens.HUD);
-                RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
+                BackToMain();
             }
-            else if (_infoScreen != null && _infoScreen.Contains(mouse))
+            else if (!_infoScreen.Contains(mouse))
+            {
+                BackToMain();
+            }
+            else if (_infoScreen.Contains(mouse))
             {
                 _infoScreen.ProcessRightButtonClick(mouse);
             }
             return rv;
+        }
+
+        public void BackToMain()
+        {
+            GUIManager.SetScreen(GUIManager.Screens.HUD);
+            RiverHollow.ChangeGameState(RiverHollow.GameState.Running);
+            RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
         }
 
         public override bool ProcessHover(Point mouse)
