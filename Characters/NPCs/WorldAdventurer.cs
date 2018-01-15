@@ -14,7 +14,7 @@ namespace RiverHollow.Characters.NPCs
         protected int _id;
         public int ID { get => _id; }
         protected string _adventurerType;
-        private Building _building;
+        private WorkerBuilding _building;
         protected int _dailyFoodReq;
         protected int _currFood;
         protected int _dailyItemID;
@@ -142,7 +142,7 @@ namespace RiverHollow.Characters.NPCs
         {
             _mood = val;
         }
-        public void SetBuilding(Building b)
+        public void SetBuilding(WorkerBuilding b)
         {
             _building = b;
         }

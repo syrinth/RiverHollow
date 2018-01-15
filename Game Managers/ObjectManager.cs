@@ -33,13 +33,13 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static Building GetBuilding(int id)
+        public static WorkerBuilding GetBuilding(int id)
         {
             if (_dictBuilding.ContainsKey(id))
             {
                 string buildingData = _dictBuilding[id];
                 string[] _buildingDataValues = buildingData.Split('/');
-                return new Building(_buildingDataValues, id);
+                return new WorkerBuilding(_buildingDataValues, id);
             }
             return null;     
         }

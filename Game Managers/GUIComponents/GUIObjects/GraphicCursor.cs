@@ -19,8 +19,8 @@ namespace RiverHollow.GUIObjects
         public static MouseState LastMouseState = new MouseState();
         private static Item _heldItem;
         public static Item HeldItem { get => _heldItem; }
-        private static Building _heldBuilding;
-        public static Building HeldBuilding { get => _heldBuilding; }
+        private static WorkerBuilding _heldBuilding;
+        public static WorkerBuilding HeldBuilding { get => _heldBuilding; }
 
         private static int _workerID = -1;
         public static int WorkerToPlace { get => _workerID; }
@@ -64,7 +64,7 @@ namespace RiverHollow.GUIObjects
             _heldItem = null;
         }
 
-        public static bool PickUpBuilding(Building bldg)
+        public static bool PickUpBuilding(WorkerBuilding bldg)
         {
             bool rv = false;
             if (bldg != null)

@@ -38,7 +38,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
             if (_healthDisplay.ProcessHover(mouse)) { rv = true; }
-            else if (_staminaDisplay.ProcessHover(mouse)) { rv = true; }
+            if (_staminaDisplay.ProcessHover(mouse)) { rv = true; }
             return rv;
         }
 

@@ -27,6 +27,15 @@ namespace RiverHollow.Misc
             direction.X = (deltaX < speed) ? newX * deltaX : newX * dir.X;
             direction.Y = (deltaY < speed) ? newY * deltaY : newY * dir.Y;
         }
+
+        public static Vector2 Normalize(Vector2 p)
+        {
+            Vector2 newVec = Vector2.Zero;
+            newVec.X = ((int)(p.X / 32)) * 32;
+            newVec.Y = ((int)(p.Y / 32)) * 32;
+
+            return newVec;
+        }
     }
     public class RHRandom : Random
     {

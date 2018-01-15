@@ -152,8 +152,9 @@ namespace RiverHollow
                 //If we're in an informational state, then only the GUIScreen data should be visible, don't draw anything except for the GUI
                 if (_gameState != GameState.Information)
                 {
-                    MapManager.Draw(spriteBatch);
+                    MapManager.DrawBase(spriteBatch);
                     PlayerManager.Draw(spriteBatch);
+                    MapManager.DrawUpper(spriteBatch);
                 }
                 spriteBatch.End();
             }
@@ -254,7 +255,7 @@ namespace RiverHollow
         public static void RollOver()
         {
             PlayerManager.Rollover();
-            foreach(Building b in PlayerManager.Buildings)
+            foreach(WorkerBuilding b in PlayerManager.Buildings)
             {
                 b.Rollover();
             }

@@ -23,6 +23,8 @@ namespace RiverHollow.Game_Managers
             _tileMaps = new Dictionary<string, RHMap>();
             AddMap(@"Maps\Map1", Content, GraphicsDevice);
             AddMap(@"Maps\Map2", Content, GraphicsDevice);
+            AddMap(@"Maps\NearWilds", Content, GraphicsDevice);
+            AddMap(@"Maps\RiverHollowTown", Content, GraphicsDevice);
             AddMap(@"Maps\Dungeons\Room1", Content, GraphicsDevice);
             AddMap(@"Maps\Dungeons\Room2", Content, GraphicsDevice);
             AddMap(@"Maps\Dungeons\Room3", Content, GraphicsDevice);
@@ -30,7 +32,7 @@ namespace RiverHollow.Game_Managers
             AddMap(@"Maps\Dungeons\Room5", Content, GraphicsDevice);
             AddMap(@"Maps\Arcane Tower", Content, GraphicsDevice);
 
-            _currentMap = _tileMaps[@"Map1"];
+            _currentMap = _tileMaps[@"NearWilds"];
         }
 
         public static void AddMap(string mapToAdd, ContentManager Content, GraphicsDevice GraphicsDevice)
@@ -106,7 +108,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager.World.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
         }
 
-        public static void EnterBuilding(Building b)
+        public static void EnterBuilding(WorkerBuilding b)
         {
             Rectangle rectEntrance = Rectangle.Empty;
             PlayerManager._inBuilding = b.ID.ToString();
@@ -137,25 +139,25 @@ namespace RiverHollow.Game_Managers
 
         public static void PopulateMaps(bool loaded)
         {
-            int mapWidth = _tileMaps[@"Map1"].MapWidth;
-            int mapHeight = _tileMaps[@"Map1"].MapHeight;
+            int mapWidth = _tileMaps[@"NearWilds"].MapWidth;
+            int mapHeight = _tileMaps[@"NearWilds"].MapHeight;
             RHRandom r = new RHRandom();
             //LoadMap1
             if (!loaded)
             {
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(0, new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize)), true);
+                    _tileMaps[@"NearWilds"].AddWorldObject(ObjectManager.GetWorldObject(0, new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize)), true);
                 }
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[@"Map1"].AddWorldObject(ObjectManager.GetWorldObject(2, new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize)), true);
+                    _tileMaps[@"NearWilds"].AddWorldObject(ObjectManager.GetWorldObject(2, new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize)), true);
                 }
             }
 
             Mob mob = CharacterManager.GetMobByIndex(1, new Vector2(1340, 1340));
-            mob.CurrentMapName = "Map1";
-            _tileMaps[@"Map1"].AddMob(mob);
+            mob.CurrentMapName = "NearWilds";
+            _tileMaps[@"NearWilds"].AddMob(mob);
 
             MerchantChest m = new MerchantChest();
             PlayerManager._merchantChest = m;
@@ -169,9 +171,9 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void Draw(SpriteBatch spriteBatch)
+        public static void DrawBase(SpriteBatch spriteBatch)
         {
-            _currentMap.Draw(spriteBatch);
+            _currentMap.DrawBase(spriteBatch);
 
             if (RiverHollow.State == RiverHollow.GameState.Build)
             {
@@ -186,6 +188,11 @@ namespace RiverHollow.Game_Managers
                     spriteBatch.Draw(drawIt, drawRectangle, null, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, mousePosition.Y + drawIt.Height);
                 }
             }
+        }
+
+        public static void DrawUpper(SpriteBatch spriteBatch)
+        {
+            _currentMap.DrawUpper(spriteBatch);
         }
 
         public static bool ProcessLeftButtonClick(Point mouseLocation)

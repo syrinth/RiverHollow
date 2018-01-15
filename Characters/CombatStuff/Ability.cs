@@ -37,7 +37,7 @@ namespace RiverHollow.Characters.CombatStuff
 
             _texture = GameContentManager.GetTexture(@"Textures\AbilityIcons");
             Sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\AbilityAnimations"));
-            Sprite.LoadContent("Play", 100, 100, 4, _frameSpeed, 0, _textureRow * 100);
+            Sprite.AddAnimation("Play", 100, 100, 4, _frameSpeed, 0, _textureRow * 100);
             Sprite.SetCurrentAnimation("Play");
             if (_abiltyTags.Contains("Direct"))
             {

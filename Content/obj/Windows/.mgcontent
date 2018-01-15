@@ -53,5 +53,9 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/AbilityIcons.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Characters.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC1.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/NPC1.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Spring.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/NearWilds.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/RiverHollowTown.tmx</File>
   </SourceFiles>
 </SourceFileCollection>

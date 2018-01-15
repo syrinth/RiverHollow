@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using RiverHollow.Misc;
 using RiverHollow.Items;
+using RiverHollow.SpriteAnimations;
 
 namespace RiverHollow.Characters
 {
@@ -57,7 +58,8 @@ namespace RiverHollow.Characters
             _name = stringData[i++];
             _portraitRect = new Rectangle(0, int.Parse(stringData[i++]) * 192, PortraitWidth, PortraitHeight);
             CurrentMapName = stringData[i++];
-            Position = MapManager.Maps[CurrentMapName].GetNPCSpawn("NPC" + index);
+            Position = Utilities.Normalize(MapManager.Maps[CurrentMapName].GetCharacterSpawn("NPC" + index));
+
             string[] vectorSplit = stringData[i++].Split(' ');
             foreach (string s in vectorSplit) {
                 _collection.Add(int.Parse(s), false);
@@ -121,7 +123,7 @@ namespace RiverHollow.Characters
                     foreach (KeyValuePair<Rectangle, string> kvp in MapManager.Maps[CurrentMapName].DictionaryExit) {
                         if (kvp.Value == _moveTo)
                         {
-                            pos = kvp.Key.Center.ToVector2();
+                            pos = Utilities.Normalize(kvp.Key.Center.ToVector2());
                         }
                     }
                 }
@@ -129,7 +131,7 @@ namespace RiverHollow.Characters
                 if (pos == Position) {
                     if (_scheduleIndex < _schedule[currDay].Count && _schedule[currDay][_scheduleIndex].Key == _moveTo)
                     {
-                        _moveTo = _schedule[currDay][_scheduleIndex++].Key;
+                        _moveTo = _schedule[currDay][++_scheduleIndex].Key;
                     }
                     else
                     {
@@ -189,7 +191,14 @@ namespace RiverHollow.Characters
 
         public void LoadContent()
         {
-            base.LoadContent(@"Textures\NPC", 32, 64, 4, 0.2f);
+            _sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\NPC1"));
+            _sprite.AddAnimation("Stand South", 0, 0, 32, 64, 1, 0.3f);
+            _sprite.AddAnimation("Walk South", 0, 0, 32, 64, 4, 0.3f);
+            _sprite.AddAnimation("Walk North", 0, 64, 32, 64, 4, 0.3f);
+            _sprite.AddAnimation("Walk East", 0, 128, 32, 64, 4, 0.3f);
+            _sprite.AddAnimation("Walk West", 0, 192, 32, 64, 4, 0.3f);
+            _sprite.SetCurrentAnimation("Stand South");
+            _sprite.IsAnimating = true;
         }
 
         public void DrawPortrait(SpriteBatch spriteBatch, Vector2 dest)

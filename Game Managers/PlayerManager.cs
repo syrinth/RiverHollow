@@ -12,12 +12,14 @@ using System.Xml.Serialization;
 using RiverHollow.Characters;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters.CombatStuff;
+using RiverHollow.Misc;
 
 namespace RiverHollow.Game_Managers
 {
     public static class PlayerManager
     {
         #region Properties
+        private static bool _busy;
         public static Tool UseTool;
         private static RHTile _targetTile = null;
 
@@ -37,8 +39,8 @@ namespace RiverHollow.Game_Managers
         public static int HitPoints { get => Combat.CurrentHP; }
         public static int MaxHitPoints { get => Combat.MaxHP; }
 
-        private static List<Building> _buildings;
-        public static List<Building> Buildings { get => _buildings; }
+        private static List<WorkerBuilding> _buildings;
+        public static List<WorkerBuilding> Buildings { get => _buildings; }
 
         private static List<CombatAdventurer> _party;
 
@@ -56,13 +58,13 @@ namespace RiverHollow.Game_Managers
             World = new WorldCharacter();
             Combat = new CombatAdventurer();
             _party.Add(Combat);
-            _buildings = new List<Building>();
+            _buildings = new List<WorkerBuilding>();
             _canMake = new List<int>();
 
             Combat.LoadContent(@"Textures\WizardCombat", 100, 100, 2, 0.7f); //ToDo: position doesn't matter here
 
             World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
-            World.Position = new Vector2(200, 200);
+            
 
             SetPlayerDefaults();
         }
@@ -75,7 +77,7 @@ namespace RiverHollow.Game_Managers
             Combat = new CombatAdventurer();
             Combat.LoadContent(@"Textures\WizardCombat", 100, 100, 2, 0.7f); //ToDo: position doesn't matter here
             _party.Add(Combat);
-            _buildings = new List<Building>();
+            _buildings = new List<WorkerBuilding>();
             _canMake = new List<int>();
             _canMake.Add(6);
             InventoryManager.AddItemToFirstAvailableInventorySpot(5);
@@ -90,7 +92,8 @@ namespace RiverHollow.Game_Managers
 
         public static void SetPlayerDefaults()
         {
-            PlayerManager.CurrentMap = MapManager.CurrentMap.Name;
+            CurrentMap = MapManager.CurrentMap.Name;
+            World.Position = Utilities.Normalize(MapManager.Maps[CurrentMap].GetCharacterSpawn("PlayerSpawn"));
             MaxStamina = 50;
             Stamina = MaxStamina;
             Combat.SetClass(CharacterManager.GetClassByIndex(1));
@@ -118,6 +121,7 @@ namespace RiverHollow.Game_Managers
                     _targetTile.DamageObject(UseTool.DmgValue);
                     _targetTile = null;
                     UseTool = null;
+                    _busy = false;
                 }
             }
             else
@@ -157,8 +161,8 @@ namespace RiverHollow.Game_Managers
 
                 if (moveDir.Length() != 0)
                 {
-                    Rectangle testRectX = new Rectangle((int)World.Position.X + (int)moveDir.X, (int)World.Position.Y, World.Width, World.Height);
-                    Rectangle testRectY = new Rectangle((int)World.Position.X, (int)World.Position.Y + (int)moveDir.Y, World.Width, World.Height);
+                    Rectangle testRectX = new Rectangle((int)World.CollisionBox.X + (int)moveDir.X, (int)World.CollisionBox.Y, World.CollisionBox.Width, World.CollisionBox.Height);
+                    Rectangle testRectY = new Rectangle((int)World.CollisionBox.X, (int)World.CollisionBox.Y + (int)moveDir.Y, World.CollisionBox.Width, World.CollisionBox.Height);
 
                     if (MapManager.CurrentMap.CheckLeftMovement(World, testRectX) && MapManager.CurrentMap.CheckRightMovement(World, testRectX))
                     {
@@ -232,8 +236,9 @@ namespace RiverHollow.Game_Managers
                     if (_targetTile.Object.Breakable) { UseTool = _pick; }
                     else if (_targetTile.Object.Choppable) { UseTool = _axe; }
 
-                    if (UseTool != null && !UseTool.ToolAnimation.IsAnimating)
+                    if (UseTool != null && !_busy)
                     {
+                        _busy = true;
                         if (DecreaseStamina(UseTool.StaminaCost))
                         {
                             UseTool.ToolAnimation.IsAnimating = true;
@@ -281,7 +286,7 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static void AddBuilding(Building b)
+        public static void AddBuilding(WorkerBuilding b)
         {
             _buildings.Add(b);
         }
@@ -515,7 +520,7 @@ namespace RiverHollow.Game_Managers
             data.Buildings = new List<BuildingData>();
 
             // Initialize the new data values.
-            foreach (Building b in Buildings)
+            foreach (WorkerBuilding b in Buildings)
             {
                 BuildingData buildingData = new BuildingData();
                 buildingData.buildingID = b.ID;
@@ -648,7 +653,7 @@ namespace RiverHollow.Game_Managers
             CurrentMap = data.currentMap;
             foreach (BuildingData b in data.Buildings)
             {
-                Building newBuilding = ObjectManager.GetBuilding(b.buildingID);
+                WorkerBuilding newBuilding = ObjectManager.GetBuilding(b.buildingID);
                 newBuilding.AddBuildingDetails(b);
                 MapManager.Maps["Map1"].AddBuilding(newBuilding);
 

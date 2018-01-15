@@ -90,7 +90,7 @@ namespace RiverHollow
             {
                 CombatManager.NewBattle(this);
             }
-            IdleMovement();
+            //IdleMovement();
             //}
         }
 
@@ -120,14 +120,6 @@ namespace RiverHollow
 
                 Utilities.GetMoveSpeed(Position, _moveTo, Speed, ref direction);
                 CheckMapForCollisionsAndMove(direction);
-
-                DetermineAnimation(ref animation, direction, deltaX, deltaY);
-
-                if (_sprite.CurrentAnimation != animation)
-                {
-                    _sprite.CurrentAnimation = animation;
-                }
-
 
                 if (Position.X == _moveTo.X && Position.Y == _moveTo.Y) { _moveTo = Vector2.Zero; }
             }

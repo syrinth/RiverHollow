@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: Index>0 Value:Name/workerType/texture/width height/firstBaseSquare baseWidth baseHeight/EntranceSquareXY-->
+    <!--Key: Index>0 Value:Name/texture/width height/firstBaseSquare baseWidth baseHeight/EntranceSquareXY/workerType-->
     <Item>
       <Key>1</Key>
-      <Value>Arcane Tower/Magic/ArcaneTower/3 10/0 7 3 3/1 9</Value>
+      <Value>Arcane Tower/ArcaneTower/3 10/0 7 3 3/1 9/Magic</Value>
     </Item>
   </Asset>
 </XnaContent>

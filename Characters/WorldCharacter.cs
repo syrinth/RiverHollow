@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
+using System;
 
 namespace RiverHollow.Characters
 {
@@ -23,7 +24,7 @@ namespace RiverHollow.Characters
             set { _sprite.Position = new Vector2(value.X, value.Y - _sprite.Height + RHMap.TileSize); }
         }
 
-        public Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, Width, RHMap.TileSize); }
+        public Rectangle CollisionBox { get => new Rectangle((int)Position.X + (Width/8), (int)Position.Y, Width/2, RHMap.TileSize); }
 
 
         public int Speed = 3;
@@ -42,17 +43,17 @@ namespace RiverHollow.Characters
 
         protected void DetermineAnimation(ref string animation, Vector2 direction, float deltaX, float deltaY)
         {
-            if (deltaX > deltaY)
+            if (Math.Abs(deltaX) > Math.Abs(deltaY))
             {
                 if (direction.X > 0)
                 {
-                    Facing = Direction.West;
-                    //animation = "Float";
+                    Facing = Direction.East;
+                    animation = "Walk East";
                 }
                 else
                 {
-                    Facing = Direction.East;
-                    //animation = "Float";
+                    Facing = Direction.West;
+                    animation = "Walk West";
                 }
             }
             else
@@ -60,12 +61,12 @@ namespace RiverHollow.Characters
                 if (direction.Y > 0)
                 {
                     Facing = Direction.South;
-                    //animation = "Float";
+                    animation = "Walk South";
                 }
                 else
                 {
                     Facing = Direction.North;
-                    //animation = "Float";
+                    animation = "Walk North";
                 }
             }
         }
@@ -77,13 +78,20 @@ namespace RiverHollow.Characters
 
             if (MapManager.Maps[CurrentMapName].CheckLeftMovement(this, testRectX) && MapManager.Maps[CurrentMapName].CheckRightMovement(this, testRectX))
             {
-
                 _sprite.MoveBy(direction.X, 0);
             }
 
             if (MapManager.Maps[CurrentMapName].CheckUpMovement(this, testRectY) && MapManager.Maps[CurrentMapName].CheckDownMovement(this, testRectY))
             {
                 _sprite.MoveBy(0, direction.Y);
+            }
+
+            string animation = string.Empty;
+            DetermineAnimation(ref animation, direction, direction.X, direction.Y);
+
+            if (_sprite.CurrentAnimation != animation)
+            {
+                _sprite.CurrentAnimation = animation;
             }
         }
 

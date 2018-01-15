@@ -410,3 +410,37 @@
 /processor:PassThroughProcessor
 /build:Data/NPCData/Schedules/NPC1.xml
 
+#begin Textures/NPC1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/NPC1.png
+
+#begin Maps/Spring.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Maps/Spring.png
+
+#begin Maps/NearWilds.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/NearWilds.tmx
+
+#begin Maps/RiverHollowTown.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/RiverHollowTown.tmx
+

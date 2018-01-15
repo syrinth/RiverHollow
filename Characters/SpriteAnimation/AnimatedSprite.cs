@@ -167,7 +167,7 @@ namespace RiverHollow.SpriteAnimations
         }
 
         //TODO: Remove this method, classes should do it manually, not in this level
-        public void LoadContent(string name, int frameWidth, int frameHeight, int numFrames, float frameSpeed, int startX = 0, int startY = 0)
+        public void AddAnimation(string name, int frameWidth, int frameHeight, int numFrames, float frameSpeed, int startX = 0, int startY = 0)
         {
             this.AddAnimation(name, startX, startY, frameWidth, frameHeight, numFrames, frameSpeed);
             this.IsAnimating = true;
@@ -263,8 +263,10 @@ namespace RiverHollow.SpriteAnimations
         {
             if (_animating)
             {
-                if (useLayerDepth) { spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y + Texture.Height + (Position.X / 100)); }
-                else { spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White); }
+                if (useLayerDepth) {
+                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100)); }
+                else {
+                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White); }
             }
         }
     }

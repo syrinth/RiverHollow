@@ -25,8 +25,8 @@ namespace RiverHollow.Tile_Engine
         private string _name;
         public string Name { get => _name.Replace(@"Maps\", ""); set => _name = value; } //Fuck off with that path bullshit
 
-        protected Building _mapBuilding;
-        public Building MapBuilding { get => _mapBuilding; }
+        protected WorkerBuilding _mapBuilding;
+        public WorkerBuilding MapBuilding { get => _mapBuilding; }
 
         public bool _isBuilding;
         public bool IsBuilding { get => _isBuilding; }
@@ -47,7 +47,7 @@ namespace RiverHollow.Tile_Engine
         protected List<Mob> _mobList;
         public List<WorldCharacter> ToRemove;
         public List<WorldCharacter> ToAdd;
-        protected List<Building> _buildingList;
+        protected List<WorkerBuilding> _buildingList;
         protected List<WorldObject> _worldObjectList;
         public List<WorldObject> WorldObjects { get => _worldObjectList; }
         protected List<Item> _itemList;
@@ -69,7 +69,7 @@ namespace RiverHollow.Tile_Engine
             _mobList = new List<Mob>();
             ToRemove = new List<WorldCharacter>();
             ToAdd = new List<WorldCharacter>();
-            _buildingList = new List<Building>();
+            _buildingList = new List<WorkerBuilding>();
             _worldObjectList = new List<WorldObject>();
             _itemList = new List<Item>();
             _staticItemList = new List<StaticItem>();
@@ -114,7 +114,7 @@ namespace RiverHollow.Tile_Engine
             ReadOnlyCollection<TiledMapObjectLayer> objectLayers = _map.ObjectLayers;
             foreach (TiledMapObjectLayer ol in objectLayers)
             {
-                if (ol.Name == "Entrance Layer")
+                if (ol.Name == "Travel Layer")
                 {
                     foreach (TiledMapObject mapObject in ol.Objects)
                     {
@@ -145,8 +145,9 @@ namespace RiverHollow.Tile_Engine
 
         public void Update(GameTime theGameTime)
         {
-            if(this == MapManager.CurrentMap)
+            if (this == MapManager.CurrentMap)
             {
+                renderer.Update(_map, theGameTime);
                 foreach (Mob m in _mobList)
                 {
                     m.Update(theGameTime);
@@ -230,8 +231,14 @@ namespace RiverHollow.Tile_Engine
             removedList.Clear();
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void DrawBase(SpriteBatch spriteBatch)
         {
+            foreach (TiledMapLayer l in _map.Layers)
+            {
+                if (l.Name == "UpperLayer") { l.IsVisible = false; }
+                else { l.IsVisible = true; }
+            }
+
             renderer.Draw(_map, Camera._transform);
             foreach(WorldCharacter c in _characterList)
             {
@@ -243,7 +250,7 @@ namespace RiverHollow.Tile_Engine
                 m.Draw(spriteBatch);
             }
 
-            foreach (Building b in _buildingList)
+            foreach (WorkerBuilding b in _buildingList)
             {
                 b.Draw(spriteBatch);
             }
@@ -268,6 +275,15 @@ namespace RiverHollow.Tile_Engine
                 bool passable = t.Passable();
                 spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)t.GetPos.X, (int)t.GetPos.Y, 32, 32), new Rectangle(288, 128, 32, 32) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, new Vector2(0, 0), SpriteEffects.None, 99999);
             }
+        }
+        public void DrawUpper(SpriteBatch spriteBatch)
+        {
+            foreach (TiledMapLayer l in _map.Layers)
+            {
+                if(l.Name == "UpperLayer") { l.IsVisible = true; }
+                else { l.IsVisible = false; }
+            }
+            renderer.Draw(_map, Camera._transform);
         }
 
         #region Collision Code
@@ -430,7 +446,7 @@ namespace RiverHollow.Tile_Engine
             {
                 foreach (TiledMapTilesetTile t in ts.Tiles)
                 {
-                    if (tile.GlobalIdentifier - 1 == t.LocalTileIdentifier)
+                    if (tile.GlobalIdentifier - ts.FirstGlobalIdentifier == t.LocalTileIdentifier)
                     {
                         foreach (KeyValuePair<string, string> tp in t.Properties)
                         {
@@ -444,7 +460,7 @@ namespace RiverHollow.Tile_Engine
             return propList;
         }
 
-        public Vector2 GetNPCSpawn(string val)
+        public Vector2 GetCharacterSpawn(string val)
         {
             Vector2 rv = new Vector2(0, 0);
             if (_dictPathing.ContainsKey(val))
@@ -492,7 +508,7 @@ namespace RiverHollow.Tile_Engine
                     break;
                 }
             }
-            foreach (Building b in _buildingList)
+            foreach (WorkerBuilding b in _buildingList)
             {
                 if (b.BoxToEnter.Contains(mouseLocation) && PlayerManager.PlayerInRange(b.BoxToEnter.Center))
                 {
@@ -591,14 +607,14 @@ namespace RiverHollow.Tile_Engine
             }
             if (RiverHollow.State == RiverHollow.GameState.Build)
             {
-                Building building = GraphicCursor.HeldBuilding;
+                WorkerBuilding building = GraphicCursor.HeldBuilding;
                 _buildingTiles = new List<RHTile>();
                 if (building != null)
                 {
                     TestMapTiles(building, _buildingTiles);
                 }
 
-                foreach (Building b in _buildingList)
+                foreach (WorkerBuilding b in _buildingList)
                 {
                     if (b.SelectionBox.Contains(mouseLocation) && GraphicCursor.HeldBuilding == null)
                     {
@@ -674,7 +690,7 @@ namespace RiverHollow.Tile_Engine
             _staticItemList.Add(container);
         }
 
-        public void LoadBuilding(Building b)
+        public void LoadBuilding(WorkerBuilding b)
         {
             _mapBuilding = b;
             ClearWorkers();
@@ -692,7 +708,7 @@ namespace RiverHollow.Tile_Engine
         }
 
         #region Adders
-        public void AddBuildingObjectsToMap(Building b)
+        public void AddBuildingObjectsToMap(WorkerBuilding b)
         {
             List<Vector2> spawnPoints = new List<Vector2>();
             ReadOnlyCollection<TiledMapObjectLayer> entrLayer = _map.ObjectLayers;
@@ -732,11 +748,11 @@ namespace RiverHollow.Tile_Engine
 
         public void AddBuilding(Point mouseLocation)
         {
-            Building b = GraphicCursor.HeldBuilding;
+            WorkerBuilding b = GraphicCursor.HeldBuilding;
             AddBuilding(b);
         }
 
-        public void AddBuilding(Building b)
+        public void AddBuilding(WorkerBuilding b)
         {
             List<RHTile> tiles = new List<RHTile>();
             if (TestMapTiles(b, tiles))
@@ -756,7 +772,7 @@ namespace RiverHollow.Tile_Engine
         public bool AddWorkerToBuilding(Point mouseLocation)
         {
             bool rv = false;
-            foreach(Building b in _buildingList)
+            foreach(WorkerBuilding b in _buildingList)
             {
                 if (b.SelectionBox.Contains(mouseLocation))
                 {
@@ -862,8 +878,7 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
             RHRandom r = new RHRandom();
-            position.X = ((int)(position.X/32)) * 32;
-            position.Y = ((int)(position.Y/32)) * 32;
+            position = Utilities.Normalize(position);
 
             rv = _tileArray[((int)position.X / 32), ((int)position.Y / 32)].SetStaticItem(container);
             if (!rv && bounce)
@@ -967,8 +982,14 @@ namespace RiverHollow.Tile_Engine
         {
             foreach (TiledMapTileLayer l in map.Layers.Values)
             {
+                
                 if (l.IsVisible && l.TryGetTile(_X, _Y, out TiledMapTile? tile) && tile != null)
                 {
+                    if (tile.Value.GlobalIdentifier == 46)
+                    {
+                        int i = 0;
+                    }
+
                     if (tile.Value.GlobalIdentifier != 0)
                     {
                         _tileExists = true;
