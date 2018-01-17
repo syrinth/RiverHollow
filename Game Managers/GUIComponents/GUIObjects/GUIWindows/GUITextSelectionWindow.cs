@@ -155,12 +155,14 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                     PlayerManager.Combat.IncreaseHealth(_food.Health);
                 }
                 GUIManager.RemoveComponent(this);
-                RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
+                GUIManager.SetScreen(GUIManager.Screens.HUD);
             }
-            else{
+            else
+            {
                 //Equip here
                 GUIManager.RemoveComponent(this);
-                RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
+                GUIManager.SetScreen(GUIManager.Screens.HUD);
+                RiverHollow.ChangeGameState(RiverHollow.GameState.Running);
             }
         }
 

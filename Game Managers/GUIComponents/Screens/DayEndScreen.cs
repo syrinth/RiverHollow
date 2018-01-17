@@ -33,6 +33,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                 GameCalendar.NextDay();
                 GUIManager.FadeOut();
                 RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
+                RiverHollow.ChangeGameState(RiverHollow.GameState.Running);
                 PlayerManager.Save();
                 PlayerManager.Stamina = PlayerManager.MaxStamina;
                 

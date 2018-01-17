@@ -40,11 +40,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             {if (DungeonManager.Maps.Count > 0)
                 {
                     MapManager.EnterDungeon();
-                    RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
+                    ResetScreen();
                 }
                 else
                 {
-                    RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
+                    ResetScreen();
                 }
             }
             else
@@ -78,6 +78,12 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
         public bool TextFinished()
         {
             return _window.Done && !_window._pause;
+        }
+
+        public void ResetScreen()
+        {
+            GUIManager.SetScreen(GUIManager.Screens.HUD);
+            RiverHollow.ChangeGameState(RiverHollow.GameState.Running);
         }
     }
 }

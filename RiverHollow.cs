@@ -120,7 +120,7 @@ namespace RiverHollow
                     {
                         mousePoint.X = (int)((mousePoint.X - translate.X) / Scale);
                         mousePoint.Y = (int)((mousePoint.Y - translate.Y) / Scale);
-                        if (_gameState == GameState.Running)
+                        if (_gameState == GameState.Running || _gameState == GameState.Build)
                         {
                             MapManager.ProcessHover(mousePoint);
                         }
@@ -133,7 +133,7 @@ namespace RiverHollow
                     Camera.Update(gameTime);
                     MapManager.Update(gameTime);
 
-                    if(_mapState == MapState.WorldMap)
+                    if(_mapState == MapState.WorldMap && _gameState == GameState.Running)
                     {
                         PlayerManager.Update(gameTime);
                         GameCalendar.Update(gameTime);
@@ -154,12 +154,16 @@ namespace RiverHollow
                 {
                     MapManager.DrawBase(spriteBatch);
                     PlayerManager.Draw(spriteBatch);
-                    MapManager.DrawUpper(spriteBatch);
+                    
                 }
                 spriteBatch.End();
             }
             {
                 spriteBatch.Begin();
+                if (_gameState != GameState.Information)
+                {
+                    MapManager.DrawUpper(spriteBatch);
+                }
                 GUIManager.Draw(spriteBatch);
                 if (_gameState != GameState.Information) { 
                     GameCalendar.Draw(spriteBatch);

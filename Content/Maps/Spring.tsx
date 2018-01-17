@@ -107,6 +107,11 @@
  <tile id="47" terrain="3,1,1,1"/>
  <tile id="48" terrain="2,1,2,2"/>
  <tile id="49" terrain="1,2,2,2"/>
+ <tile id="54">
+  <properties>
+   <property name="Sleep" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="57" terrain="3,3,3,1"/>
  <tile id="58" terrain="3,3,1,3"/>
  <tile id="66" terrain="3,1,3,3"/>

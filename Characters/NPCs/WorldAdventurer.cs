@@ -8,6 +8,7 @@ using RiverHollow.Characters.CombatStuff;
 
 namespace RiverHollow.Characters.NPCs
 {
+    //Representation of an Adventurer in the world. WorldAdventurers also produce items at rollover
     public class WorldAdventurer : NPC
     {
         #region Properties
@@ -49,7 +50,7 @@ namespace RiverHollow.Characters.NPCs
             SetCombat();
         }
 
-        protected int ImportBasics(string[] stringData, int id)
+        protected new int ImportBasics(string[] stringData, int id)
         {
             _id = id;
             int i = 0;
@@ -149,7 +150,7 @@ namespace RiverHollow.Characters.NPCs
 
         public bool Rollover()
         {
-            bool rv = Busy;
+            bool rv = !Busy;
             DrawIt = true;
             Busy = false;
             _c.CurrentHP = _c.MaxHP;
@@ -158,7 +159,7 @@ namespace RiverHollow.Characters.NPCs
 
         public void MakeDailyItem()
         {
-            _building.BuildingChest.AddItemToFirstAvailableInventorySpot(_dailyItemID);
+            InventoryManager.AddNewItemToInventory(_dailyItemID, _building.BuildingChest);
         }
 
         public string GetName()

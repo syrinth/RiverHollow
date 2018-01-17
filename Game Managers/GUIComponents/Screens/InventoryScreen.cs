@@ -32,6 +32,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _inventory = new Inventory(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), 4, InventoryManager.maxItemColumns, 32);
             Controls.Add(_inventory);
             Controls.Add(_character);
+            InventoryManager.PublicContainer = null;
         }
 
         public InventoryScreen(Container c)
@@ -48,6 +49,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             Controls.Add(_inventory);
             Controls.Add(_container);
+            InventoryManager.PublicContainer = _container.Container;
         }
 
         public InventoryScreen(NPC n)
@@ -60,6 +62,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _inventory.SetPosition(centerPoint - new Vector2(mainWidthHeight.X / 2, 0));
 
             Controls.Add(_inventory);
+            InventoryManager.PublicContainer = null;
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -97,13 +100,21 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 rv = _inventory.ProcessRightButtonClick(mouse);
                 if (rv)
                 {
-                    _character.EquipItem(GraphicCursor.HeldItem);
-                    if (GraphicCursor.HeldItem != null)
+                    if (_character != null)
                     {
-                        InventoryManager.AddItemToFirstAvailableInventorySpot(GraphicCursor.HeldItem.ItemID);
-                        GraphicCursor.DropItem();
+                        _character.EquipItem(GraphicCursor.HeldItem);
+                    }
+
+                    if (GraphicCursor.HeldItem != null && _container != null)
+                    {
+                        //InventoryManager.AddNewItemToFirstAvailableInventorySpot(GraphicCursor.HeldItem.ItemID);
+                       // GraphicCursor.DropItem();
                     }
                 }
+            }
+            else if (_container != null && _container.DrawRectangle.Contains(mouse))
+            {
+               rv = _container.ProcessRightButtonClick(mouse);
             }
             else if (_container != null && !_container.DrawRectangle.Contains(mouse))
             {

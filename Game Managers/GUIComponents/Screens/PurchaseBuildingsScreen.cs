@@ -135,7 +135,8 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             bool rv = true;
             if (!Contains(mouse))
             {
-                RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
+                GUIManager.SetScreen(GUIManager.Screens.HUD);
+                RiverHollow.ChangeGameState(RiverHollow.GameState.Running);
                 rv = true;
             }
 

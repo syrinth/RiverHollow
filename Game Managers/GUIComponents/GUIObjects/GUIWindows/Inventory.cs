@@ -15,6 +15,7 @@ namespace RiverHollow.Screens
     {
         protected GUIItemBox[,] _displayList;
         private Container _container;
+        public Container Container { get => _container; }
         private NPC _giveTo;
 
         protected const int boxSize = 32;
@@ -73,12 +74,20 @@ namespace RiverHollow.Screens
 
             if (GraphicCursor.HeldItem != null)
             {
-                if (IsItemThere(mouse) != null)
+                Item toSwitch = IsItemThere(mouse);
+                if (toSwitch != null)
                 {
-
-                    Item temp = GraphicCursor.HeldItem;
-                    GraphicCursor.GrabItem(TakeItem(mouse));
-                    GiveItem(temp, true);
+                    if (GraphicCursor.HeldItem.ItemID == toSwitch.ItemID)
+                    {
+                        toSwitch.Number++;
+                        GraphicCursor.DropItem();
+                    }
+                    else
+                    {
+                        Item temp = GraphicCursor.HeldItem;
+                        GraphicCursor.GrabItem(TakeItem(mouse));
+                        GiveItem(temp, true);
+                    }
                 }
                 else if (GiveItem(GraphicCursor.HeldItem))
                 {
@@ -104,12 +113,14 @@ namespace RiverHollow.Screens
         {
             bool rv = false;
 
-            if (GraphicCursor.HeldItem == null)
+            if (InventoryManager.PublicContainer != null && GraphicCursor.HeldItem == null)
             {
                 Item i = IsItemThere(mouse);
                 if (i != null)
                 {
-                    GraphicCursor.GrabItem(TakeItem(mouse));
+                    i = TakeItem(mouse);
+                    if (_container != null) { InventoryManager.AddItemToInventory(i); }
+                    else { InventoryManager.AddItemToInventory(i, InventoryManager.PublicContainer); }
                     rv = true;
                 }
             }
@@ -172,19 +183,21 @@ namespace RiverHollow.Screens
                         {
                             rv = _displayList[i, j].Item;
                         }
+
                         if (_container == null)
                         {
                             InventoryManager.RemoveItemFromInventory(i, j);
                         }
                         else
                         {
-                            _container.RemoveItemFromInventory(i,j);
+                            InventoryManager.RemoveItemFromInventory(i,j, _container);
                         }
-                        break;
+                        goto Exit;
                     }
                 }
             }
 
+Exit:
             return rv;
         }
 
@@ -212,13 +225,15 @@ namespace RiverHollow.Screens
                                     rv = InventoryManager.AddItemToInventorySpot(item, i, j);
                                 }
                                 else{
-                                    rv = _container.AddItemToInventorySpot(item, i, j);
+                                    rv = InventoryManager.AddItemToInventorySpot(item, i, j, _container);
                                 }
+                                goto Exit;
                             }
                         }
                     }
                 }
             }
+Exit:
 
             return rv;
         }
@@ -231,7 +246,7 @@ namespace RiverHollow.Screens
                 {
                     if (_container == null)
                     {
-                        _displayList[i, j].Item = InventoryManager.Inventory[i, j];
+                        _displayList[i, j].Item = InventoryManager.PlayerInventory[i, j];
                     }
                     else
                     {

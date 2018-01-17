@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="14">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="14">
  <properties>
   <property name="Building" type="bool" value="true"/>
  </properties>
@@ -131,15 +131,15 @@
 14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14
 </data>
  </layer>
- <objectgroup name="Entrance Layer">
+ <objectgroup name="Travel Layer">
   <object id="1" name="Exit" x="1504" y="1408" width="96" height="32">
    <properties>
-    <property name="Exit" value="Map1"/>
+    <property name="Exit" value="NearWilds"/>
    </properties>
   </object>
   <object id="2" name="Entrance" x="1536.33" y="1344.67" width="32" height="32">
    <properties>
-    <property name="Entrance" value="Map1"/>
+    <property name="Entrance" value="NearWilds"/>
    </properties>
   </object>
  </objectgroup>

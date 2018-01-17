@@ -80,12 +80,12 @@ namespace RiverHollow.Game_Managers
             _buildings = new List<WorkerBuilding>();
             _canMake = new List<int>();
             _canMake.Add(6);
-            InventoryManager.AddItemToFirstAvailableInventorySpot(5);
-            InventoryManager.AddItemToFirstAvailableInventorySpot(3);
-            InventoryManager.AddItemToFirstAvailableInventorySpot(4);
-            InventoryManager.AddItemToFirstAvailableInventorySpot(6);
-            InventoryManager.AddItemToFirstAvailableInventorySpot(7);
-            InventoryManager.AddItemToFirstAvailableInventorySpot(8);
+            InventoryManager.AddNewItemToInventory(5);
+            InventoryManager.AddNewItemToInventory(3);
+            InventoryManager.AddNewItemToInventory(4);
+            InventoryManager.AddNewItemToInventory(6);
+            InventoryManager.AddNewItemToInventory(7);
+            InventoryManager.AddNewItemToInventory(8);
 
             SetPlayerDefaults();
         }
@@ -552,7 +552,7 @@ namespace RiverHollow.Game_Managers
             }
 
             data.Items = new List<ItemData>();
-            foreach (Item i  in InventoryManager.Inventory)
+            foreach (Item i  in InventoryManager.PlayerInventory)
             {
                 ItemData itemData = new ItemData();
                 if (i != null)
@@ -655,7 +655,7 @@ namespace RiverHollow.Game_Managers
             {
                 WorkerBuilding newBuilding = ObjectManager.GetBuilding(b.buildingID);
                 newBuilding.AddBuildingDetails(b);
-                MapManager.Maps["Map1"].AddBuilding(newBuilding);
+                MapManager.Maps["NearWilds"].AddBuilding(newBuilding);
 
                 newBuilding.Pantry = LoadStaticItemData(b.pantry);
                 newBuilding.BuildingChest = LoadStaticItemData(b.buildingChest);
@@ -700,7 +700,7 @@ namespace RiverHollow.Game_Managers
                 {
                     ItemData item = data.Items[i * InventoryManager.maxItemRows + j];
                     Item newItem = ObjectManager.GetItem(item.itemID, item.num);
-                    c.AddItemToInventorySpot(newItem, i, j);
+                    InventoryManager.AddItemToInventorySpot(newItem, i, j, c);
                     c.Position = new Vector2(data.x, data.y);
                 }
             }

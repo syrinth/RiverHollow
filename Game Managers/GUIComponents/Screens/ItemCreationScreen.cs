@@ -85,7 +85,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                             {
 
                                 InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
-                                InventoryManager.AddItemToFirstAvailableInventorySpot(gIB.Item.ItemID);
+                                InventoryManager.AddNewItemToInventory(gIB.Item.ItemID);
                             }
                         }
                     }

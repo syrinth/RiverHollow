@@ -95,23 +95,29 @@ namespace RiverHollow.Characters
                 string searchVal = currSeason + currDay + currWeather;
                 List<KeyValuePair<string, string>> movementList = null;
 
-                if (_schedule.ContainsKey(currSeason + currDay + currWeather)) {
+                if (_schedule.ContainsKey(currSeason + currDay + currWeather))
+                {
                     movementList = _schedule[currSeason + currDay + currWeather];
                 }
-                else if (_schedule.ContainsKey(currSeason + currDay)) {
+                else if (_schedule.ContainsKey(currSeason + currDay))
+                {
                     movementList = _schedule[currSeason + currDay];
                 }
-                else if (_schedule.ContainsKey(currDay)) {
+                else if (_schedule.ContainsKey(currDay))
+                {
                     movementList = _schedule[currDay];
                 }
 
-                if (_scheduleIndex < movementList.Count && ((movementList[_scheduleIndex].Key == currTime) || RunningLate(movementList[_scheduleIndex].Key, currTime)))
+                if (movementList != null)
                 {
-                    _moveTo = movementList[_scheduleIndex++].Value;
-                }
-                else if (_scheduleIndex < movementList.Count && movementList[_scheduleIndex].Key == CurrentMapName)
-                {
-                    _moveTo = movementList[_scheduleIndex++].Value;
+                    if (_scheduleIndex < movementList.Count && ((movementList[_scheduleIndex].Key == currTime) || RunningLate(movementList[_scheduleIndex].Key, currTime)))
+                    {
+                        _moveTo = movementList[_scheduleIndex++].Value;
+                    }
+                    else if (_scheduleIndex < movementList.Count && movementList[_scheduleIndex].Key == CurrentMapName)
+                    {
+                        _moveTo = movementList[_scheduleIndex++].Value;
+                    }
                 }
             }
 
@@ -129,7 +135,7 @@ namespace RiverHollow.Characters
                 }
 
                 if (pos == Position) {
-                    if (_scheduleIndex < _schedule[currDay].Count && _schedule[currDay][_scheduleIndex].Key == _moveTo)
+                    if (_scheduleIndex < _schedule[currDay].Count-1 && _schedule[currDay][_scheduleIndex].Key == _moveTo)
                     {
                         _moveTo = _schedule[currDay][++_scheduleIndex].Key;
                     }
@@ -145,7 +151,7 @@ namespace RiverHollow.Characters
                     float deltaY = Math.Abs(pos.Y - this.Position.Y);
 
                     Utilities.GetMoveSpeed(Position, pos, Speed, ref direction);
-                    CheckMapForCollisionsAndMove(direction);
+                    //CheckMapForCollisionsAndMove(direction); MAR
                 }
             }
         }

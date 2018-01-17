@@ -133,7 +133,7 @@ namespace RiverHollow.Tile_Engine
                         }
                     }
                 }
-                if (ol.Name == "NPC Layer")
+                if (ol.Name == "Character Layer")
                 {
                     foreach (TiledMapObject mapObject in ol.Objects)
                     {
@@ -213,7 +213,7 @@ namespace RiverHollow.Tile_Engine
                     if (((Item)i).FinishedMoving() && i.CollisionBox.Intersects(player.CollisionBox))
                     {
                         removedList.Add(i);
-                        InventoryManager.AddItemToFirstAvailableInventorySpot(i.ItemID);
+                        InventoryManager.AddNewItemToInventory(i.ItemID);
                     }
                     else if (PlayerManager.PlayerInRange(i.CollisionBox.Center, 80))
                     {
@@ -233,11 +233,7 @@ namespace RiverHollow.Tile_Engine
 
         public void DrawBase(SpriteBatch spriteBatch)
         {
-            foreach (TiledMapLayer l in _map.Layers)
-            {
-                if (l.Name == "UpperLayer") { l.IsVisible = false; }
-                else { l.IsVisible = true; }
-            }
+            SetLayerVisibility(false);
 
             renderer.Draw(_map, Camera._transform);
             foreach(WorldCharacter c in _characterList)
@@ -278,12 +274,18 @@ namespace RiverHollow.Tile_Engine
         }
         public void DrawUpper(SpriteBatch spriteBatch)
         {
-            foreach (TiledMapLayer l in _map.Layers)
-            {
-                if(l.Name == "UpperLayer") { l.IsVisible = true; }
-                else { l.IsVisible = false; }
-            }
+            SetLayerVisibility(true);
             renderer.Draw(_map, Camera._transform);
+            SetLayerVisibility(false);
+        }
+
+        public void SetLayerVisibility(bool revealUpper)
+        {
+            foreach (TiledMapTileLayer l in _map.TileLayers)
+            {
+                if (revealUpper) { l.IsVisible = (l.Name == "Upper Layer"); }
+                else { l.IsVisible = (l.Name != "Upper Layer"); }
+            }
         }
 
         #region Collision Code
@@ -523,7 +525,7 @@ namespace RiverHollow.Tile_Engine
                     if (IsDungeon && DungeonManager.IsEndChest((Container)s))
                     {
                         Staircase stairs = (Staircase)ObjectManager.GetWorldObject(3, new Vector2(0, 0));
-                        stairs.SetExit("Map1");
+                        stairs.SetExit("NearWilds");
                         AddWorldObject(stairs, true);
                     }
                     GUIManager.LoadContainerScreen((Container)s);
@@ -576,7 +578,7 @@ namespace RiverHollow.Tile_Engine
                         if (w.Contains(mouseLocation) && PlayerManager.PlayerInRange(w.Center) &&
                             InventoryManager.HasSpaceInInventory(w.WhatAreYouHolding()))
                         {
-                            InventoryManager.AddItemToFirstAvailableInventorySpot(w.TakeItem());
+                            InventoryManager.AddNewItemToInventory(w.TakeItem());
                             rv = true;
                         }
                     }
@@ -764,7 +766,7 @@ namespace RiverHollow.Tile_Engine
                 GraphicCursor.DropBuilding();
                 _buildingList.Add(b);
                 PlayerManager.AddBuilding(b);
-                RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
+                RiverHollow.ChangeGameState(RiverHollow.GameState.Running);
                 RiverHollow.ResetCamera();
             }
         }

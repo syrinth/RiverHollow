@@ -13,30 +13,61 @@ namespace RiverHollow.Game_Managers
         public static int maxItemColumns = 10;
         public static int maxItemRows = 4;
 
-        private static Item[,] _inventory;
-        public static Item[,] Inventory { get => _inventory; }
+        private static Container _container;
+        public static Container PublicContainer { get => _container; set => _container = value; }
+        private static Item[,] _playerInventory;
+        public static Item[,] PlayerInventory { get => _playerInventory; }
 
         private static int _currentInventorySlot = 0;
         public static int CurrentItemNumber { get => _currentInventorySlot; set => _currentInventorySlot = value; }
         //private Item _currentItem;
-        public static Item CurrentItem { get => _inventory[0, _currentInventorySlot]; }
+        public static Item CurrentItem { get => _playerInventory[0, _currentInventorySlot]; }
         #endregion
 
         public static void Init()
         {
-            _inventory = new Item[maxItemRows, maxItemColumns];
+            _playerInventory = new Item[maxItemRows, maxItemColumns];
+        }
+        public static void CheckOperation(Container c, ref Item[,] inventory)
+        {
+            if (c == null) { inventory = _playerInventory; }
+            else { inventory = c.Inventory; }
+        }
+        public static void CheckOperation(Container c, ref int rows, ref int columns, ref Item[,] inventory)
+        {
+            if (c == null)
+            {
+                rows = maxItemRows;
+                columns = maxItemColumns;
+
+            }
+            else
+            {
+                rows = c.Rows;
+                columns = c.Columns;
+            }
+            CheckOperation(c, ref inventory);
         }
 
         public static bool HasSpaceInInventory(int itemID)
         {
+            return HasSpaceInInventory(itemID, null);
+        }
+        public static bool HasSpaceInInventory(int itemID, Container c)
+        {
+            int maxRows = 0;
+            int maxColumns = 0;
+            Item[,] inventory = null;
+            CheckOperation(c, ref maxRows, ref maxColumns, ref inventory);
+
             bool rv = false;
             if (itemID != -1)
             {
-                for (int i = 0; i < maxItemRows; i++)
+                for (int i = 0; i < maxRows; i++)
                 {
-                    for (int j = 0; j < maxItemColumns; j++)
+                    for (int j = 0; j < maxColumns; j++)
                     {
-                        Item testItem = _inventory[i, j];
+                        Item testItem = inventory[i, j];
                         if (testItem == null)
                         {
                             rv = true;
@@ -59,47 +90,61 @@ namespace RiverHollow.Game_Managers
 
         public static bool HasItemInInventory(int itemID, int x)
         {
+            return HasItemInInventory(itemID, x, null);
+        }
+        public static bool HasItemInInventory(int itemID, int x, Container c)
+        {
             bool rv = false;
+            int maxRows = 0;
+            int maxColumns = 0;
+            Item[,] inventory = null;
+            CheckOperation(c, ref maxRows, ref maxColumns, ref inventory);
+
             int leftToFind = x;
             if (itemID != -1)
             {
-                for (int i = 0; i < maxItemRows; i++)
+                for (int i = 0; i < maxRows; i++)
                 {
-                    for (int j = 0; j < maxItemColumns; j++)
+                    for (int j = 0; j < maxColumns; j++)
                     {
-                        Item testItem = _inventory[i, j];
+                        Item testItem = inventory[i, j];
                         if (testItem != null && testItem.ItemID == itemID)
                         {
                             leftToFind -= testItem.Number;
                             if (leftToFind <= 0)
                             {
                                 rv = true;
-                                break;
+                                goto Exit;
                             }
                         }
                     }
-                    if (rv)
-                    {
-                        break;
-                    }
                 }
             }
-
+Exit:
             return rv;
         }
 
         public static void RemoveItemsFromInventory(int itemID, int x)
         {
+            RemoveItemsFromInventory(itemID, x, null);
+        }
+        public static void RemoveItemsFromInventory(int itemID, int x, Container c)
+        {
             int leftToRemove = x;
             bool done = false;
+            int maxRows = 0;
+            int maxColumns = 0;
+            Item[,] inventory = null;
+            CheckOperation(c, ref maxRows, ref maxColumns, ref inventory);
+
             List<Item> toRemove = new List<Item>();
-            for (int i = 0; i < maxItemRows; i++)
+            for (int i = 0; i < maxRows; i++)
             {
                 if (done) { break; }
-                for (int j = 0; j < maxItemColumns; j++)
+                for (int j = 0; j < maxColumns; j++)
                 {
                     if (done) { break; }
-                    Item testItem = _inventory[i, j];
+                    Item testItem = inventory[i, j];
                     if (testItem != null && testItem.ItemID == itemID)
                     {
                         int temp = testItem.Number;
@@ -108,13 +153,13 @@ namespace RiverHollow.Game_Managers
                             testItem.Number -= leftToRemove;
                             if (testItem.Number == 0)
                             {
-                                toRemove.Add(_inventory[i, j]);
+                                toRemove.Add(inventory[i, j]);
                             }
                         }
                         else
                         {
                             testItem.Number = 0;
-                            toRemove.Add(_inventory[i, j]);
+                            toRemove.Add(inventory[i, j]);
                             leftToRemove -= temp;
                         }
                     }
@@ -127,81 +172,107 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void AddItemToFirstAvailableInventorySpot(int itemID)
+        public static void AddNewItemToInventory(int itemToAdd)
         {
-            if (!IncrementExistingItem(itemID))
+            AddItemToInventory(ObjectManager.GetItem(itemToAdd), null);
+        }
+        public static void AddNewItemToInventory(int itemToAdd, Container c)
+        {
+            AddItemToInventory(ObjectManager.GetItem(itemToAdd), c);
+        }
+        public static void AddItemToInventory(Item itemToAdd)
+        {
+            AddItemToInventory(itemToAdd, null);
+        }
+        public static void AddItemToInventory(Item itemToAdd, Container c)
+        {
+            int maxRows = 0;
+            int maxColumns = 0;
+            Item[,] inventory = null;
+            CheckOperation(c, ref maxRows, ref maxColumns, ref inventory);
+
+            if (!IncrementExistingItem(itemToAdd, c))
             {
-                bool added = false;
-                for (int i = 0; i < maxItemRows; i++)
+                for (int i = 0; i < maxRows; i++)
                 {
-                    for (int j = 0; j < maxItemColumns; j++)
+                    for (int j = 0; j < maxColumns; j++)
                     {
-                        if (_inventory[i, j] == null)
+                        if (inventory[i, j] == null)
                         {
-                            _inventory[i, j] = ObjectManager.GetItem(itemID, 1);
-                            if (_inventory[i, j].Type == Item.ItemType.Tool)
+                            inventory[i, j] = itemToAdd;
+                            //Only perform this check if we are adding to the playerInventory
+                            if (inventory == _playerInventory && _playerInventory[i, j].Type == Item.ItemType.Tool)
                             {
-                                PlayerManager.CompareTools((Tool)_inventory[i, j]);
+                                PlayerManager.CompareTools((Tool)_playerInventory[i, j]);
                             }
-                            added = true;
+                            goto Exit;
                         }
-                        if (added)
-                        {
-                            break;
-                        }
-                    }
-                    if (added)
-                    {
-                        break;
                     }
                 }
             }
+Exit:
+            return;
         }
 
-        public static bool IncrementExistingItem(int itemID)
+        public static bool IncrementExistingItem(Item itemToAdd, Container c)
         {
             bool rv = false;
-            for (int i = 0; i < maxItemRows; i++)
+            int maxRows = 0;
+            int maxColumns = 0;
+            Item[,] inventory = null;
+            CheckOperation(c, ref maxRows, ref maxColumns, ref inventory);
+
+            for (int i = 0; i < maxRows; i++)
             {
-                for (int j = 0; j < maxItemColumns; j++)
+                for (int j = 0; j < maxColumns; j++)
                 {
-                    if (_inventory[i, j] != null && _inventory[i, j].DoesItStack && _inventory[i, j].ItemID == itemID && _inventory[i, j].Number < 999)
+                    if (inventory[i, j] != null && inventory[i, j].DoesItStack && inventory[i, j].ItemID == itemToAdd.ItemID && inventory[i, j].Number < 999)
                     {
-                        _inventory[i, j].Number++;
-                        return true;
+                        inventory[i, j].Number += itemToAdd.Number;
+                        rv = true;
+
+                        goto Exit;
                     }
                 }
             }
+Exit:
             return rv;
         }
 
         public static bool AddItemToInventorySpot(Item item, int row, int column)
         {
+            return AddItemToInventorySpot(item, row, column, null);
+        }
+        public static bool AddItemToInventorySpot(Item item, int row, int column, Container c)
+        {
             bool rv = false;
+            Item[,] inventory = null;
+            CheckOperation(c, ref inventory);
+
             if (item != null)
             {
-                if (_inventory[row, column] == null)
+                if (inventory[row, column] == null)
                 {
                     if (item.Type == Item.ItemType.Equipment)
                     {
-                        _inventory[row, column] = (Equipment)(item);
+                        inventory[row, column] = (Equipment)(item);
                     }
                     else if (item.Type == Item.ItemType.Tool)
                     {
-                        _inventory[row, column] = (Tool)(item);
-                        PlayerManager.CompareTools((Tool)_inventory[row, column]);
+                        _playerInventory[row, column] = (Tool)(item);
+                        if (inventory == _playerInventory) { PlayerManager.CompareTools((Tool)_playerInventory[row, column]); }
                     }
                     else
                     {
-                        _inventory[row, column] = item;
+                        inventory[row, column] = item;
                     }
                     rv = true;
                 }
                 else
                 {
-                    if (_inventory[row, column].ItemID == item.ItemID && _inventory[row, column].DoesItStack && 999 >= (_inventory[row, column].Number + item.Number))
+                    if (inventory[row, column].ItemID == item.ItemID && inventory[row, column].DoesItStack && 999 >= (inventory[row, column].Number + item.Number))
                     {
-                        _inventory[row, column].Number += item.Number;
+                        inventory[row, column].Number += item.Number;
                         rv = true;
                     }
                 }
@@ -211,27 +282,41 @@ namespace RiverHollow.Game_Managers
 
         public static void RemoveItemFromInventory(int i, int j)
         {
-            if (_inventory[i, j].Type == Item.ItemType.Tool)
+            RemoveItemFromInventory(i, j, null);
+        }
+        public static void RemoveItemFromInventory(int i, int j, Container c)
+        {
+            Item[,] inventory = null;
+            CheckOperation(c, ref inventory);
+            if (inventory == _playerInventory && inventory[i, j].Type == Item.ItemType.Tool)
             {
-                PlayerManager.CompareTools((Tool)_inventory[i, j]);
+                PlayerManager.CompareTools((Tool)_playerInventory[i, j]);
             }
 
-            _inventory[i, j] = null;
+            inventory[i, j] = null;
         }
 
         public static void RemoveItemFromInventory(Item it)
         {
-            for (int i = 0; i < maxItemRows; i++)
+            RemoveItemFromInventory(it, null);
+        }
+        public static void RemoveItemFromInventory(Item it, Container c)
+        {
+            int maxRows = 0;
+            int maxColumns = 0;
+            Item[,] inventory = null;
+            CheckOperation(c, ref maxRows, ref maxColumns, ref inventory);
+            for (int i = 0; i < maxRows; i++)
             {
-                for (int j = 0; j < maxItemColumns; j++)
+                for (int j = 0; j < maxColumns; j++)
                 {
-                    if (_inventory[i, j] == it)
+                    if (inventory[i, j] == it)
                     {
-                        if (_inventory[i, j].Type == Item.ItemType.Tool)
+                        if (inventory == _playerInventory && _playerInventory[i, j].Type == Item.ItemType.Tool)
                         {
-                            PlayerManager.CompareTools((Tool)_inventory[i, j]);
+                            PlayerManager.CompareTools((Tool)_playerInventory[i, j]);
                         }
-                        _inventory[i, j] = null;
+                        inventory[i, j] = null;
                         goto Exit;
                     }
                 }
@@ -248,11 +333,11 @@ namespace RiverHollow.Game_Managers
             {
                 for (int j = 0; j < maxItemColumns; j++)
                 {
-                    if (_inventory[i, j] != null)
+                    if (_playerInventory[i, j] != null)
                     {
-                        if(_inventory[i, j].Type == Item.ItemType.Tool)
+                        if(_playerInventory[i, j].Type == Item.ItemType.Tool)
                         {
-                            Tool t = (Tool)_inventory[i, j];
+                            Tool t = (Tool)_playerInventory[i, j];
                             if(t.ToolType == tool)
                             {
                                 if(rv != null && t.DmgValue > rv.DmgValue) { rv = t; }
