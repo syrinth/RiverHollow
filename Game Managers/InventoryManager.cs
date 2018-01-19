@@ -201,9 +201,10 @@ Exit:
                         {
                             inventory[i, j] = itemToAdd;
                             //Only perform this check if we are adding to the playerInventory
-                            if (inventory == _playerInventory && _playerInventory[i, j].Type == Item.ItemType.Tool)
+                            if (inventory == _playerInventory)
                             {
-                                PlayerManager.CompareTools((Tool)_playerInventory[i, j]);
+                                PlayerManager.AdvanceQuestProgress(itemToAdd);
+                                if(_playerInventory[i, j].Type == Item.ItemType.Tool)PlayerManager.CompareTools((Tool)_playerInventory[i, j]);
                             }
                             goto Exit;
                         }
@@ -259,12 +260,16 @@ Exit:
                     }
                     else if (item.Type == Item.ItemType.Tool)
                     {
-                        _playerInventory[row, column] = (Tool)(item);
+                        inventory[row, column] = (Tool)(item);
                         if (inventory == _playerInventory) { PlayerManager.CompareTools((Tool)_playerInventory[row, column]); }
                     }
                     else
                     {
                         inventory[row, column] = item;
+                    }
+                    if (inventory == _playerInventory)
+                    {
+                        PlayerManager.AdvanceQuestProgress(item);
                     }
                     rv = true;
                 }
@@ -280,17 +285,18 @@ Exit:
             return rv;
         }
 
-        public static void RemoveItemFromInventory(int i, int j)
+        public static void RemoveItemFromInventoryLocation(int i, int j)
         {
-            RemoveItemFromInventory(i, j, null);
+            RemoveItemFromInventoryLocation(i, j, null);
         }
-        public static void RemoveItemFromInventory(int i, int j, Container c)
+        public static void RemoveItemFromInventoryLocation(int i, int j, Container c)
         {
             Item[,] inventory = null;
             CheckOperation(c, ref inventory);
-            if (inventory == _playerInventory && inventory[i, j].Type == Item.ItemType.Tool)
+            if (inventory == _playerInventory)
             {
-                PlayerManager.CompareTools((Tool)_playerInventory[i, j]);
+                PlayerManager.RemoveQuestProgress(inventory[i, j]);
+                if (_playerInventory[i, j].Type == Item.ItemType.Tool) { PlayerManager.CompareTools((Tool)_playerInventory[i, j]); }
             }
 
             inventory[i, j] = null;
@@ -312,9 +318,10 @@ Exit:
                 {
                     if (inventory[i, j] == it)
                     {
-                        if (inventory == _playerInventory && _playerInventory[i, j].Type == Item.ItemType.Tool)
+                        if (inventory == _playerInventory)
                         {
-                            PlayerManager.CompareTools((Tool)_playerInventory[i, j]);
+                            PlayerManager.RemoveQuestProgress(inventory[i, j]);
+                            if (_playerInventory[i, j].Type == Item.ItemType.Tool) { PlayerManager.CompareTools((Tool)_playerInventory[i, j]); }
                         }
                         inventory[i, j] = null;
                         goto Exit;

@@ -109,7 +109,8 @@
  <tile id="49" terrain="1,2,2,2"/>
  <tile id="54">
   <properties>
-   <property name="Sleep" type="bool" value="true"/>
+   <property name="Impassable" type="bool" value="true"/>
+   <property name="Journal" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="57" terrain="3,3,3,1"/>

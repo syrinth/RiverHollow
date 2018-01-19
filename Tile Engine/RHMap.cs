@@ -299,11 +299,7 @@ namespace RiverHollow.Tile_Engine
             {
                 RHTile mapTile = _tileArray[columnTile, y];
                 Rectangle cellRect = new Rectangle(columnTile * _tileSize, y * _tileSize, _tileSize, _tileSize);
-                if (mapTile.ContainsProperty("Sleep", out string val) && val.Equals("true")){
-                    GUIManager.LoadTextScreen(GameContentManager.GetDialogue("Sleep"));
-                    rv = true;
-                }
-                else if (!mapTile.Passable() && cellRect.Intersects(movingChar))
+                if (!mapTile.Passable() && cellRect.Intersects(movingChar))
                 {
                     if (cellRect.Right >= movingChar.Left) { rv = false; }
                 }
@@ -324,12 +320,7 @@ namespace RiverHollow.Tile_Engine
             {
                 RHTile mapTile = _tileArray[columnTile, y];
                 Rectangle cellRect = new Rectangle(columnTile * _tileSize, y * _tileSize, _tileSize, _tileSize);
-                if (mapTile.ContainsProperty("Sleep", out string val) && val.Equals("true"))
-                {
-                    GUIManager.LoadTextScreen(GameContentManager.GetDialogue("Sleep"));
-                    rv = true;
-                }
-                else if (!mapTile.Passable() && cellRect.Intersects(movingChar))
+                if (!mapTile.Passable() && cellRect.Intersects(movingChar))
                 {
                     if (cellRect.Left <= movingChar.Right) { rv = false; }
                 }
@@ -350,15 +341,7 @@ namespace RiverHollow.Tile_Engine
             {
                 RHTile mapTile = _tileArray[x, rowTile];
                 Rectangle cellRect = new Rectangle(x * _tileSize, rowTile * _tileSize, _tileSize, _tileSize);
-                if (mapTile.ContainsProperty("Sleep", out string val) && val.Equals("true"))
-                {
-                    if (c == PlayerManager.World)
-                    {
-                        GUIManager.LoadTextScreen(GameContentManager.GetDialogue("Sleep"));
-                        rv = true;
-                    }
-                }
-                else if (!mapTile.Passable() && cellRect.Intersects(movingChar))
+                if (!mapTile.Passable() && cellRect.Intersects(movingChar))
                 {
                     if (cellRect.Bottom >= movingChar.Top) { rv = false; }
                 }
@@ -379,12 +362,7 @@ namespace RiverHollow.Tile_Engine
             {
                 RHTile mapTile = _tileArray[x, rowTile];
                 Rectangle cellRect = new Rectangle(x * _tileSize, rowTile * _tileSize, _tileSize, _tileSize);
-                if (mapTile.ContainsProperty("Sleep", out string val) && val.Equals("true"))
-                {
-                    GUIManager.LoadTextScreen(GameContentManager.GetDialogue("Sleep"));
-                    rv = true;
-                }
-                else if (!mapTile.Passable() && cellRect.Intersects(movingChar))
+                if (!mapTile.Passable() && cellRect.Intersects(movingChar))
                 {
                     if (cellRect.Top <= movingChar.Bottom) { rv = false; }
                 }
@@ -534,9 +512,17 @@ namespace RiverHollow.Tile_Engine
             }
 
             RHTile tile = _tileArray[mouseLocation.X / 32, mouseLocation.Y / 32];
-            if(tile.Object != null && tile.Object.ID == 3)
+            if(tile != null)
             {
-                MapManager.ChangeMaps(PlayerManager.World, this.Name, ((Staircase)tile.Object).ToMap);
+                if (tile.ContainsProperty("Journal", out string val) && val.Equals("true"))
+                {
+                    GUIManager.LoadTextScreen(GameContentManager.GetDialogue("Journal"));
+                }
+                if (tile.Object != null && tile.Object.ID == 3) //Checks to see if the tile contains a staircase object
+                {
+                    MapManager.ChangeMaps(PlayerManager.World, this.Name, ((Staircase)tile.Object).ToMap);
+                }
+
             }
 
             return rv;

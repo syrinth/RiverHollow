@@ -23,6 +23,9 @@ namespace RiverHollow.Game_Managers
         public static Tool UseTool;
         private static RHTile _targetTile = null;
 
+        private static List<Quest> _questLog;
+        public static List<Quest> QuestLog { get => _questLog; }
+        
         public static int Stamina;
         public static int MaxStamina;
         public static string _inBuilding = string.Empty;
@@ -55,6 +58,7 @@ namespace RiverHollow.Game_Managers
         public static void InitPlayer()
         {
             _party = new List<CombatAdventurer>();
+            _questLog = new List<Quest>();
             World = new WorldCharacter();
             Combat = new CombatAdventurer();
             _party.Add(Combat);
@@ -71,6 +75,7 @@ namespace RiverHollow.Game_Managers
         public static void NewPlayer()
         {
             _party = new List<CombatAdventurer>();
+            _questLog = new List<Quest>();
             World = new WorldCharacter();
             World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
             World.Position = new Vector2(200, 200);
@@ -92,6 +97,8 @@ namespace RiverHollow.Game_Managers
 
         public static void SetPlayerDefaults()
         {
+            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 5, null, ObjectManager.GetItem(2)));
+
             CurrentMap = MapManager.CurrentMap.Name;
             World.Position = Utilities.Normalize(MapManager.Maps[CurrentMap].GetCharacterSpawn("PlayerSpawn"));
             MaxStamina = 50;
@@ -212,15 +219,43 @@ namespace RiverHollow.Game_Managers
         {
             return _party;
         }
-
         public static void AddToParty(CombatAdventurer c)
         {
             _party.Add(c);
         }
-
         public static void RemoveFromParty(CombatAdventurer c)
         {
             _party.Remove(c);
+        }
+
+        //Random quests should not generate a quest with the same goal as a pre-existing quest
+        public static void AddToQuestLog(Quest q)
+        {
+            foreach(Item i in InventoryManager.PlayerInventory)
+            {
+                if (i != null) { q.AttemptProgress(i); }
+            }
+            _questLog.Add(q);
+        }
+        public static void AdvanceQuestProgress(Object o)
+        {
+            foreach(Quest q in _questLog)
+            {
+                if (q.AttemptProgress(o))
+                {
+                    break;
+                }
+            }
+        }
+        public static void RemoveQuestProgress(Item i)
+        {
+            foreach (Quest q in _questLog)
+            {
+                if (q.RemoveProgress(i))
+                {
+                    break;
+                }
+            }
         }
 
         public static bool ProcessLeftButtonClick(Point mouseLocation)
@@ -334,7 +369,6 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        
         public static void TakeMoney(int x)
         {
             _money -= x;

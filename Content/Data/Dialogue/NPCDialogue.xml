@@ -7,8 +7,8 @@
       <Value>...[Talk:Talk|Join Party:Party]</Value>
     </Item>
     <Item>
-      <Key>Sleep</Key>
-      <Value>Go to bed?[Yes:SleepNow|No:Nothing]</Value>
+      <Key>Journal</Key>
+      <Value>Write in your journal and go to bed?[Yes:SleepNow|No:Nothing]</Value>
     </Item>
     <Item>
       <Key>Wizard1</Key>

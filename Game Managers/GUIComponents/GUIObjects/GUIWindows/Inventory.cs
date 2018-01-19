@@ -186,11 +186,11 @@ namespace RiverHollow.Screens
 
                         if (_container == null)
                         {
-                            InventoryManager.RemoveItemFromInventory(i, j);
+                            InventoryManager.RemoveItemFromInventoryLocation(i, j);
                         }
                         else
                         {
-                            InventoryManager.RemoveItemFromInventory(i,j, _container);
+                            InventoryManager.RemoveItemFromInventoryLocation(i,j, _container);
                         }
                         goto Exit;
                     }
