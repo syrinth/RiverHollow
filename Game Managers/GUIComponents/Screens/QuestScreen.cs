@@ -1,25 +1,29 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using RiverHollow.Characters.CombatStuff;
 using System.Collections.Generic;
 using RiverHollow.GUIObjects;
-using RiverHollow.Items;
 using RiverHollow.Misc;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class QuestScreen : GUIScreen
     {
+        public static int WIDTH = RiverHollow.ScreenWidth / 3;
+        public static int HEIGHT = RiverHollow.ScreenHeight / 3;
         List<QuestBox> _questList;
+        GUIWindow _questWindow;
         public QuestScreen()
         {
             _questList = new List<QuestBox>();
+            _questWindow = new GUIWindow(new Vector2(WIDTH, HEIGHT), GUIWindow.RedDialog, GUIWindow.RedDialogEdge, WIDTH, HEIGHT);
             int i = 0;
             foreach (Quest q in PlayerManager.QuestLog)
             {
-                _questList.Add(new QuestBox(q, new Vector2(128, 32 + (i++ * 100))));
+                _questList.Add(new QuestBox(q, _questWindow, ref i));// new Vector2(_questWindow.UsableRectangle().Left, _questWindow.UsableRectangle().Top + (i++ * 100))));
             }
+
+            Controls.Add(_questWindow);
             foreach (QuestBox q in _questList)
             {
                 Controls.Add(q);
@@ -73,13 +77,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIWindow _window;
         Quest _quest;
         SpriteFont _font;
-        Vector2 _size;
         public bool ClearThis;
 
-        public QuestBox(Quest q, Vector2 position)
+        public QuestBox(Quest q, GUIWindow win, ref int i)
         {
-            _window = new GUIWindow(position, new Vector2(0, 0), 32, RiverHollow.ScreenWidth - 100, 100);
-            Vector2 start = _window.Rectangle().Location.ToVector2();
+            int boxHeight = (QuestScreen.HEIGHT / 4) - (win.EdgeSize * 2);
+            int boxWidth = (QuestScreen.WIDTH) - (win.EdgeSize * 2) -32;
+            Vector2 boxPoint = new Vector2(win.Corner().X + win.EdgeSize, win.Corner().Y + win.EdgeSize + (i++ * (boxHeight + (win.EdgeSize *2))));
+            _window = new GUIWindow(boxPoint, GUIWindow.RedDialog, GUIWindow.RedDialogEdge, boxWidth, boxHeight);
+
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _quest = q;
         }
@@ -87,8 +93,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override void Draw(SpriteBatch spriteBatch)
         {
             _window.Draw(spriteBatch);
-            spriteBatch.DrawString(_font, _quest.Name, _window.Rectangle().Location.ToVector2(), Color.White);
-            spriteBatch.DrawString(_font, _quest.Accomplished + @"/" + _quest.TargetGoal, _window.Rectangle().Location.ToVector2() + new Vector2(200, 0), Color.White);
+            spriteBatch.DrawString(_font, _quest.Name, _window.UsableRectangle().Location.ToVector2(), Color.White);
+            spriteBatch.DrawString(_font, _quest.Accomplished + @"/" + _quest.TargetGoal, _window.UsableRectangle().Location.ToVector2() + new Vector2(200, 0), Color.White);
         }
 
         public bool ProcessLeftButtonClick(Point mouse)

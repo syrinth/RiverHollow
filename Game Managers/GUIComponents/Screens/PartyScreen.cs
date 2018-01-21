@@ -81,8 +81,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public CharacterBox(CombatAdventurer c, Vector2 position)
         {
-            _window = new GUIWindow(position, new Vector2(0, 0), 32, RiverHollow.ScreenWidth - 100, 100);
-            Vector2 start = _window.Rectangle().Location.ToVector2();
+            _window = new GUIWindow(position, GUIWindow.RedDialog, GUIWindow.RedDialogEdge, RiverHollow.ScreenWidth - 100, 100);
+            Vector2 start = _window.UsableRectangle().Location.ToVector2();
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _character = c;
             _size = _font.MeasureString("XXXXXXXX");
@@ -102,9 +102,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 _window.Draw(spriteBatch);
                 _drawnStat = 0;
-                spriteBatch.DrawString(_font, _character.Name, _window.Rectangle().Location.ToVector2(), Color.White);
-                spriteBatch.DrawString(_font, _character.CharacterClass.Name, _window.Rectangle().Location.ToVector2() + new Vector2(200, 0), Color.White);
-                spriteBatch.DrawString(_font, _character.XP + "/" + CombatAdventurer.LevelRange[_character.ClassLevel], _window.Rectangle().Location.ToVector2() + new Vector2(800, 0), Color.White);
+                spriteBatch.DrawString(_font, _character.Name, _window.UsableRectangle().Location.ToVector2(), Color.White);
+                spriteBatch.DrawString(_font, _character.CharacterClass.Name, _window.UsableRectangle().Location.ToVector2() + new Vector2(200, 0), Color.White);
+                spriteBatch.DrawString(_font, _character.XP + "/" + CombatAdventurer.LevelRange[_character.ClassLevel], _window.UsableRectangle().Location.ToVector2() + new Vector2(800, 0), Color.White);
                 DrawStat(spriteBatch, "Mag");
                 DrawStat(spriteBatch, "Def");
                 DrawStat(spriteBatch, "Dmg");
@@ -124,7 +124,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         private void DrawStat(SpriteBatch spriteBatch, string text)
         {
             // Template IE: MAG: 999
-            Vector2 boxSpace = new Vector2(_window.Rectangle().Bottom, _window.Rectangle().Left - _size.Y);
+            Vector2 boxSpace = new Vector2(_window.UsableRectangle().Bottom, _window.UsableRectangle().Left - _size.Y);
             string statLine = string.Empty;
             switch (text)
             {

@@ -193,7 +193,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
             if (_talker != null)
             {
-                _talker.DrawPortrait(spriteBatch, Rectangle().Location.ToVector2());
+                _talker.DrawPortrait(spriteBatch, UsableRectangle().Location.ToVector2());
             }
         }
 

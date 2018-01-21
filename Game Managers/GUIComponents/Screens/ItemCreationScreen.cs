@@ -26,7 +26,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             _rows = (_columns > 0) ? Math.Min(1, PlayerManager.CanMake.Count / _columns) : 1;
             if(_rows == 0) { _rows = 1; }
             _displayList = new GUIItemBox[_rows, _columns];
-            _creationWindow = new GUIWindow(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), new Vector2(0, 0), 32, 96, 96);
+            _creationWindow = new GUIWindow(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), GUIWindow.RedDialog, GUIWindow.RedDialogEdge, 96, 96);
             _inventory = new Inventory(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), 4, InventoryManager.maxItemColumns, 32);
 
             Vector2 contWidthHeight = new Vector2(_creationWindow.Width, _creationWindow.Height);

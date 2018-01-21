@@ -98,6 +98,9 @@ namespace RiverHollow.Game_Managers
         public static void SetPlayerDefaults()
         {
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 5, null, ObjectManager.GetItem(2)));
+            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 5, null, ObjectManager.GetItem(2)));
+            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 5, null, ObjectManager.GetItem(2)));
+            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 5, null, ObjectManager.GetItem(2)));
 
             CurrentMap = MapManager.CurrentMap.Name;
             World.Position = Utilities.Normalize(MapManager.Maps[CurrentMap].GetCharacterSpawn("PlayerSpawn"));
@@ -163,9 +166,7 @@ namespace RiverHollow.Game_Managers
                     //animation = "Float";
                     moveVector += new Vector2(World.Speed, 0);
                 }
-
-                ProcessKeyboardInput(ks);
-
+                
                 if (moveDir.Length() != 0)
                 {
                     Rectangle testRectX = new Rectangle((int)World.CollisionBox.X + (int)moveDir.X, (int)World.CollisionBox.Y, World.CollisionBox.Width, World.CollisionBox.Height);
@@ -300,23 +301,6 @@ namespace RiverHollow.Game_Managers
                     GUIManager.AddTextSelection(f, string.Format("Really eat the {0}? [Yes:Eat|No:DoNothing]", f.Name));
                 }
             }
-
-            return rv;
-        }
-        public static bool ProcessKeyboardInput(KeyboardState ks)
-        {
-            bool rv = false;
-
-            if (ks.IsKeyDown(Keys.D1)) { InventoryManager.CurrentItemNumber = 0; }
-            if (ks.IsKeyDown(Keys.D2)) { InventoryManager.CurrentItemNumber = 1; }
-            if (ks.IsKeyDown(Keys.D3)) { InventoryManager.CurrentItemNumber = 2; }
-            if (ks.IsKeyDown(Keys.D4)) { InventoryManager.CurrentItemNumber = 3; }
-            if (ks.IsKeyDown(Keys.D5)) { InventoryManager.CurrentItemNumber = 4; }
-            if (ks.IsKeyDown(Keys.D6)) { InventoryManager.CurrentItemNumber = 5; }
-            if (ks.IsKeyDown(Keys.D7)) { InventoryManager.CurrentItemNumber = 6; }
-            if (ks.IsKeyDown(Keys.D8)) { InventoryManager.CurrentItemNumber = 7; }
-            if (ks.IsKeyDown(Keys.D9)) { InventoryManager.CurrentItemNumber = 8; }
-            if (ks.IsKeyDown(Keys.D0)) { InventoryManager.CurrentItemNumber = 9; }
 
             return rv;
         }
