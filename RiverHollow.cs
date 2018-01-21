@@ -185,7 +185,7 @@ namespace RiverHollow
                     {
                         CombatManager.EndBattle();
                     }
-                    else if (_mapState == MapState.WorldMap)
+                    else if (_mapState == MapState.WorldMap && GUIManager.CurrentGUIScreen != GUIManager.Screens.GameMenu)
                     {
                         GUIManager.SetScreen(GUIManager.Screens.GameMenu);
                     }

@@ -4,11 +4,11 @@
     <!--Key: Index>0 Value:Type/Name/PortraitsRow/Map/Collection/[Merchandise]-->
     <Item>
       <Key>1</Key>
-      <Value>Villager/Amanda/1/Map1/0 1 2</Value>
+      <Value>Villager/Amanda/1/RiverHollowTown/0 1 2</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Villager/Kyle/2/Map1/3 4</Value>
+      <Value>Villager/Kyle/2/RiverHollowTown/3 4</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -16,7 +16,7 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>Ranger/Mara/1/Map1/7 8</Value>
+      <Value>Ranger/Mara/1/RiverHollowTown/7 8</Value>
     </Item>
   </Asset>
 </XnaContent>

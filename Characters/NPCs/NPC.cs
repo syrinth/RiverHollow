@@ -112,11 +112,11 @@ namespace RiverHollow.Characters
                 {
                     if (_scheduleIndex < movementList.Count && ((movementList[_scheduleIndex].Key == currTime) || RunningLate(movementList[_scheduleIndex].Key, currTime)))
                     {
-                        _moveTo = movementList[_scheduleIndex++].Value;
+                        _moveTo = movementList[_scheduleIndex].Value;
                     }
                     else if (_scheduleIndex < movementList.Count && movementList[_scheduleIndex].Key == CurrentMapName)
                     {
-                        _moveTo = movementList[_scheduleIndex++].Value;
+                        _moveTo = movementList[_scheduleIndex].Value;
                     }
                 }
             }
@@ -135,12 +135,13 @@ namespace RiverHollow.Characters
                 }
 
                 if (pos == Position) {
-                    if (_scheduleIndex < _schedule[currDay].Count-1 && _schedule[currDay][_scheduleIndex].Key == _moveTo)
+                    if (_scheduleIndex < _schedule[currDay].Count - 1 && _schedule[currDay][_scheduleIndex + 1].Key == _moveTo)
                     {
-                        _moveTo = _schedule[currDay][++_scheduleIndex].Key;
+                        _moveTo = _schedule[currDay][++_scheduleIndex].Value;
                     }
                     else
                     {
+                        _scheduleIndex++;
                         _moveTo = string.Empty;
                     }
                 }
@@ -151,7 +152,7 @@ namespace RiverHollow.Characters
                     float deltaY = Math.Abs(pos.Y - this.Position.Y);
 
                     Utilities.GetMoveSpeed(Position, pos, Speed, ref direction);
-                    //CheckMapForCollisionsAndMove(direction); MAR
+                    CheckMapForCollisionsAndMove(direction);
                 }
             }
         }

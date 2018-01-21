@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="5">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="13">
  <tileset firstgid="1" source="Spring.tsx"/>
  <tileset firstgid="82" source="Houses.tsx"/>
  <layer name="Base Layer" width="100" height="100">
@@ -314,7 +314,15 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="Character Layer"/>
+ <objectgroup name="Character Layer">
+  <object id="5" name="NPC1" x="710" y="460" width="12" height="12"/>
+  <object id="6" name="NPC2" x="901.333" y="581.333" width="12" height="12"/>
+  <object id="7" name="NPC4" x="870.667" y="806.667" width="12" height="12"/>
+  <object id="8" name="Route1" x="718.485" y="687.818"/>
+  <object id="9" name="Route2" x="1136.3" y="687.788"/>
+  <object id="10" name="Route3" x="1129" y="652" width="15" height="9"/>
+  <object id="12" name="Route4" x="1515" y="653" width="8" height="7"/>
+ </objectgroup>
  <objectgroup name="Travel Layer">
   <object id="1" name="Exit" x="19.1666" y="651.167" width="13.8333" height="77.3333">
    <properties>
