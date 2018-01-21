@@ -113,15 +113,29 @@ namespace RiverHollow.Screens
         {
             bool rv = false;
 
-            if (InventoryManager.PublicContainer != null && GraphicCursor.HeldItem == null)
+            if (GraphicCursor.HeldItem == null)
             {
                 Item i = IsItemThere(mouse);
                 if (i != null)
                 {
-                    i = TakeItem(mouse);
-                    if (_container != null) { InventoryManager.AddItemToInventory(i); }
-                    else { InventoryManager.AddItemToInventory(i, InventoryManager.PublicContainer); }
-                    rv = true;
+                    if (InventoryManager.PublicContainer == null)
+                    {
+                        if (i.Type == Item.ItemType.Food)
+                        {
+                            Food f = ((Food)i);
+                            GUIManager.AddTextSelection(f, string.Format("Really eat the {0}? [Yes:Eat|No:DoNothing]", f.Name));
+                        }
+                    }
+                    else
+                    {
+                        if (i != null)
+                        {
+                            i = TakeItem(mouse);
+                            if (_container != null) { InventoryManager.AddItemToInventory(i); }
+                            else { InventoryManager.AddItemToInventory(i, InventoryManager.PublicContainer); }
+                            rv = true;
+                        }
+                    }
                 }
             }
 

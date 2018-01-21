@@ -218,6 +218,13 @@ namespace RiverHollow
             }
         }
 
+        public static void BackToMain()
+        {
+            GUIManager.SetScreen(GUIManager.Screens.HUD);
+            RiverHollow.ChangeGameState(RiverHollow.GameState.Running);
+            RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
+        }
+
         public static void ChangeGameState(GameState state)
         {
             _gameState = state;

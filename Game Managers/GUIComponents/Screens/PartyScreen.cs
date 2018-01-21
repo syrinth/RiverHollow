@@ -10,16 +10,21 @@ namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class PartyScreen : GUIScreen
     {
+        public static int WIDTH = RiverHollow.ScreenWidth / 3;
+        public static int HEIGHT = RiverHollow.ScreenHeight / 3;
         List<CharacterBox> _partyList;
+        GUIWindow _partyWindow;
         public PartyScreen()
         {
             _partyList = new List<CharacterBox>();
+            _partyWindow = new GUIWindow(new Vector2(WIDTH, HEIGHT), GUIWindow.RedDialog, GUIWindow.RedDialogEdge, WIDTH, HEIGHT);
             int i = 0;
             foreach(CombatAdventurer c in PlayerManager.GetParty())
             {
-                _partyList.Add(new CharacterBox(c, new Vector2(128, 32+(i++*100))));
+                _partyList.Add(new CharacterBox(c, _partyWindow, ref i));
             }
-            foreach(CharacterBox c in _partyList)
+            Controls.Add(_partyWindow);
+            foreach (CharacterBox c in _partyList)
             {
                 Controls.Add(c);
             }
@@ -96,15 +101,43 @@ namespace RiverHollow.Game_Managers.GUIObjects
             ClearThis = false;
         }
 
+        public CharacterBox(CombatAdventurer c, GUIWindow win, ref int i)
+        {
+            int boxHeight = (QuestScreen.HEIGHT / 4) - (win.EdgeSize * 2);
+            int boxWidth = (QuestScreen.WIDTH) - (win.EdgeSize * 2);
+
+            Vector2 boxPoint = new Vector2(win.Corner().X + win.EdgeSize, win.Corner().Y + win.EdgeSize + (i++ * (boxHeight + (win.EdgeSize * 2))));
+            _window = new GUIWindow(boxPoint, GUIWindow.RedDialog, GUIWindow.RedDialogEdge, boxWidth, boxHeight);
+
+            _font = GameContentManager.GetFont(@"Fonts\Font");
+
+            Rectangle rect = _window.UsableRectangle();
+            _font = GameContentManager.GetFont(@"Fonts\Font");
+            _character = c;
+            _size = _font.MeasureString("XXXXXXXX");
+            Vector2 start = new Vector2(rect.Right, rect.Top);
+            start.X -= 32;
+            _armor = new GUIItemBox(start, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Armor);
+            start.X -= 34;
+            _weapon = new GUIItemBox(start, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Weapon);
+           // if (_character != PlayerManager.Combat)
+            {
+                _remove = new GUIButton(start + new Vector2(800, 64), new Rectangle(0, 128, 64, 32), 128, 64, "Remove", @"Textures\Dialog", true);
+            }
+
+            ClearThis = false;
+        }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (_character != null)
             {
+                Vector2 start = _window.Corner();
                 _window.Draw(spriteBatch);
                 _drawnStat = 0;
-                spriteBatch.DrawString(_font, _character.Name, _window.UsableRectangle().Location.ToVector2(), Color.White);
-                spriteBatch.DrawString(_font, _character.CharacterClass.Name, _window.UsableRectangle().Location.ToVector2() + new Vector2(200, 0), Color.White);
-                spriteBatch.DrawString(_font, _character.XP + "/" + CombatAdventurer.LevelRange[_character.ClassLevel], _window.UsableRectangle().Location.ToVector2() + new Vector2(800, 0), Color.White);
+                spriteBatch.DrawString(_font, _character.Name, start, Color.White);
+                spriteBatch.DrawString(_font, _character.CharacterClass.Name, start += new Vector2(_font.MeasureString(_character.Name).X+10, 0), Color.White);
+                spriteBatch.DrawString(_font, _character.XP + "/" + CombatAdventurer.LevelRange[_character.ClassLevel], start += new Vector2(_font.MeasureString(_character.CharacterClass.Name).X + 10, 0), Color.White);
                 DrawStat(spriteBatch, "Mag");
                 DrawStat(spriteBatch, "Def");
                 DrawStat(spriteBatch, "Dmg");
@@ -124,7 +157,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
         private void DrawStat(SpriteBatch spriteBatch, string text)
         {
             // Template IE: MAG: 999
-            Vector2 boxSpace = new Vector2(_window.UsableRectangle().Bottom, _window.UsableRectangle().Left - _size.Y);
+            Rectangle rect = _window.UsableRectangle();
+            Vector2 start = new Vector2(rect.Left, rect.Bottom);// + new Vector2(0, _font.MeasureString("X").Y);
+            start -= new Vector2(0, _font.MeasureString("X").Y);
             string statLine = string.Empty;
             switch (text)
             {
@@ -144,7 +179,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     statLine = "Spd: " + _character.StatSpd.ToString();
                     break;
             }
-            Vector2 position = boxSpace + (new Vector2(_size.X, 0) * _drawnStat++);
+            Vector2 position = start + (new Vector2(_size.X, 0) * _drawnStat++);
             spriteBatch.DrawString(_font, statLine, position, Color.White);
         }
 
@@ -179,7 +214,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 rv = true;
             }
-            else if (_armor.ProcessHover(mouse))
+            if (_armor.ProcessHover(mouse))
             {
                 rv = true;
             }

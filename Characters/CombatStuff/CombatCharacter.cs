@@ -72,7 +72,7 @@ namespace RiverHollow.Characters.CombatStuff
             }
             else
             {
-                _currentHP = _statHP;
+                _currentHP = MaxHP;
             }
         }
     }

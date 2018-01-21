@@ -13,6 +13,7 @@ using RiverHollow.Characters;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters.CombatStuff;
 using RiverHollow.Misc;
+using RiverHollow.GUIObjects;
 
 namespace RiverHollow.Game_Managers
 {
@@ -288,19 +289,28 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            if (InventoryManager.CurrentItem != null)
+            if(GraphicCursor.HeldItem != null)
             {
-                if (InventoryManager.CurrentItem.Type == Item.ItemType.Container)
+                if (GraphicCursor.HeldItem.Type == Item.ItemType.Container)
                 {
-                    MapManager.PlaceWorldItem((Container)InventoryManager.CurrentItem, mouseLocation.ToVector2());
-                    InventoryManager.RemoveItemFromInventory(InventoryManager.CurrentItem);
-                }
-                else if (InventoryManager.CurrentItem.Type == Item.ItemType.Food)
-                {
-                    Food f = ((Food)InventoryManager.CurrentItem);
-                    GUIManager.AddTextSelection(f, string.Format("Really eat the {0}? [Yes:Eat|No:DoNothing]", f.Name));
+                    MapManager.PlaceWorldItem((Container)GraphicCursor.HeldItem, mouseLocation.ToVector2());
+                    GraphicCursor.DropItem();
                 }
             }
+
+            //if (InventoryManager.CurrentItem != null)
+            //{
+            //    if (InventoryManager.CurrentItem.Type == Item.ItemType.Container)
+            //    {
+            //        MapManager.PlaceWorldItem((Container)InventoryManager.CurrentItem, mouseLocation.ToVector2());
+            //        InventoryManager.RemoveItemFromInventory(InventoryManager.CurrentItem);
+            //    }
+            //    else if (InventoryManager.CurrentItem.Type == Item.ItemType.Food)
+            //    {
+            //        Food f = ((Food)InventoryManager.CurrentItem);
+            //        GUIManager.AddTextSelection(f, string.Format("Really eat the {0}? [Yes:Eat|No:DoNothing]", f.Name));
+            //    }
+            //}
 
             return rv;
         }

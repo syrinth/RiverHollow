@@ -62,7 +62,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 temp.X += val;
                 o.Position = temp;
                 if (_open && o.Position.X == 0) { _openingFinished++; }
-                if (_close && o.Position.X == -BTN_WIDTH) { BackToMain(); }
+                if (_close && o.Position.X == -BTN_WIDTH) { RiverHollow.BackToMain(); }
             }
             if(_openingFinished == BTN_NUM) { _open = false; }
             if(_infoScreen != null)
@@ -133,12 +133,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
 
-        public void BackToMain()
-        {
-            GUIManager.SetScreen(GUIManager.Screens.HUD);
-            RiverHollow.ChangeGameState(RiverHollow.GameState.Running);
-            RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
-        }
+        
 
         public override bool ProcessHover(Point mouse)
         {
