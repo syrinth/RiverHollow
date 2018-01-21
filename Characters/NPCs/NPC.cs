@@ -280,31 +280,34 @@ namespace RiverHollow.Characters
 
         public void Gift(Item item)
         {
-            string text = string.Empty;
-            item.Remove(1);
-            if (item.Type == Item.ItemType.Map && Type == NPC.NPCType.Ranger)
+            if (item != null)
             {
-                text = GetDialogEntry("Adventure");
-                DungeonManager.LoadNewDungeon((AdventureMap)item);
-            }
-            else
-            {
-                if (_collection.ContainsKey(item.ItemID))
+                string text = string.Empty;
+                item.Remove(1);
+                if (item.Type == Item.ItemType.Map && Type == NPC.NPCType.Ranger)
                 {
-                    Friendship += _collection[item.ItemID] ? 50 : 20;
-                    text = GetDialogEntry("Collection");
-                    _collection[item.ItemID] = true;
+                    text = GetDialogEntry("Adventure");
+                    DungeonManager.LoadNewDungeon((AdventureMap)item);
                 }
                 else
                 {
-                    text = GetDialogEntry("Gift");
-                    Friendship += 10;
+                    if (_collection.ContainsKey(item.ItemID))
+                    {
+                        Friendship += _collection[item.ItemID] ? 50 : 20;
+                        text = GetDialogEntry("Collection");
+                        _collection[item.ItemID] = true;
+                    }
+                    else
+                    {
+                        text = GetDialogEntry("Gift");
+                        Friendship += 10;
+                    }
                 }
-            }
 
-            if (!string.IsNullOrEmpty(text))
-            {
-                GUIManager.LoadTextScreen(this, text);
+                if (!string.IsNullOrEmpty(text))
+                {
+                    GUIManager.LoadTextScreen(this, text);
+                }
             }
         }
 

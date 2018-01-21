@@ -14,7 +14,7 @@ namespace RiverHollow
     public class RiverHollow : Game
     {
         private static bool _exit = false;
-        public static float Scale = 1.5f;
+        public static float Scale = 2f;
         public enum GameState { Paused, Running, Build, Information, Input}
         private static GameState _gameState;
         public static GameState State { get => _gameState; }
@@ -149,7 +149,7 @@ namespace RiverHollow
             GraphicsDevice.Clear(Color.Black);
             this.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
             {
-                spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, Camera._transform);
+                spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
                 //If we're in an informational state, then only the GUIScreen data should be visible, don't draw anything except for the GUI
                 if (_gameState != GameState.Information)
                 {

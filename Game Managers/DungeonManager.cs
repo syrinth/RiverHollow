@@ -33,13 +33,13 @@ namespace RiverHollow.Game_Managers
             _maps.Add(MapManager.Maps[dungeonPrefix + 1]);// r.Next(1, _numRooms+1);
             PopulateRoom(r, _maps[0], false);
             int numRoom = 0;
-            while (numRoom < maxRooms)
+            while (numRoom < maxRooms) //Add a new room for eachroom we're supposed to have
             {
                 int val = -1;
                 do
                 {
                     val = r.Next(1, _numRooms);
-                } while (_maps.Contains(MapManager.Maps[dungeonPrefix + val]));
+                } while (_maps.Contains(MapManager.Maps[dungeonPrefix + val])); //Loop if map already contains that room
 
                 RHMap newMap = MapManager.Maps[dungeonPrefix + val];
                 _maps.Add(MapManager.Maps[dungeonPrefix + val]);

@@ -283,8 +283,10 @@ namespace RiverHollow.Tile_Engine
         {
             foreach (TiledMapTileLayer l in _map.TileLayers)
             {
-                if (revealUpper) { l.IsVisible = (l.Name == "Upper Layer"); }
-                else { l.IsVisible = (l.Name != "Upper Layer"); }
+                if (l.Name != "North" && l.Name != "South" && l.Name != "East" && l.Name != "West") {
+                    if (revealUpper) { l.IsVisible = (l.Name == "Upper Layer"); }
+                    else { l.IsVisible = (l.Name != "Upper Layer"); }
+                }
             }
         }
 
@@ -686,7 +688,7 @@ namespace RiverHollow.Tile_Engine
         }
 
         public void LayerVisible(string name, bool val) {
-            foreach (TiledMapLayer layer in _map.Layers) {
+            foreach (TiledMapTileLayer layer in _map.TileLayers) {
                 if (layer.Name == name)
                 {
                     layer.IsVisible = val;
