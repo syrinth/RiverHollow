@@ -147,6 +147,7 @@ namespace RiverHollow
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
+            this.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
             {
                 spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, Camera._transform);
                 //If we're in an informational state, then only the GUIScreen data should be visible, don't draw anything except for the GUI
@@ -160,6 +161,7 @@ namespace RiverHollow
             }
             {
                 spriteBatch.Begin();
+                this.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
                 if (_gameState != GameState.Information)
                 {
                     MapManager.DrawUpper(spriteBatch);

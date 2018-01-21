@@ -31,6 +31,7 @@ namespace RiverHollow.Game_Managers
             AddMap(@"Maps\Dungeons\Room4", Content, GraphicsDevice);
             AddMap(@"Maps\Dungeons\Room5", Content, GraphicsDevice);
             AddMap(@"Maps\Arcane Tower", Content, GraphicsDevice);
+            AddMap(@"Maps\Tent", Content, GraphicsDevice);
 
             _currentMap = _tileMaps[@"NearWilds"];
         }

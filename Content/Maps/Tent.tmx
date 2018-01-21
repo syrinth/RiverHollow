@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="11" height="11" tilewidth="32" tileheight="32" nextobjectid="3">
+ <tileset firstgid="1" source="PlayerHouse.tsx"/>
+ <layer name="Base Layer" width="11" height="11">
+  <data encoding="csv">
+5,5,5,5,5,5,5,5,5,5,5,
+5,34,35,35,35,35,35,35,35,36,5,
+34,27,46,46,46,46,46,46,46,26,36,
+56,46,57,57,57,57,57,57,57,46,58,
+56,57,57,57,57,57,57,57,57,57,58,
+56,57,57,57,57,57,57,57,57,57,58,
+56,57,57,57,57,57,57,57,57,57,58,
+56,57,57,57,57,57,57,57,57,57,58,
+5,57,57,57,57,57,57,57,57,57,5,
+5,5,57,57,57,57,57,57,57,5,5,
+5,5,5,5,5,57,5,5,5,5,5
+</data>
+ </layer>
+ <layer name="Ground Layer" width="11" height="11">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,4,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="Upper Layer" width="11" height="11">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+67,16,0,0,0,0,0,0,0,15,69,
+0,67,68,68,16,0,15,68,68,69,0,
+0,0,0,0,67,68,69,0,0,0,0
+</data>
+ </layer>
+ <objectgroup name="Travel Layer">
+  <object id="1" name="Entrance" x="168.833" y="265.667" width="11.8333" height="11.3333">
+   <properties>
+    <property name="Entrance" value="NearWilds"/>
+   </properties>
+  </object>
+  <object id="2" name="Exit" x="166.167" y="331.834" width="19" height="2.5">
+   <properties>
+    <property name="Exit" value="NearWilds"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

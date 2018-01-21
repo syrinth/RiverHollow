@@ -58,5 +58,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/NearWilds.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/RiverHollowTown.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Houses.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/PlayerHouse.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Tent.tmx</File>
   </SourceFiles>
 </SourceFileCollection>
