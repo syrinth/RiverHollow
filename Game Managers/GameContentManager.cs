@@ -34,7 +34,6 @@ namespace RiverHollow.Game_Managers
         {
             AddTexture(Content, @"Textures\Eggplant");
             AddTexture(Content, @"Textures\Wizard");
-            AddTexture(Content, @"Textures\NPC");
             AddTexture(Content, @"Textures\NPC1");
             AddTexture(Content, @"Textures\Monsters\Goblin Scout");
             AddTexture(Content, @"Textures\Monsters\Goblin Soldier");
