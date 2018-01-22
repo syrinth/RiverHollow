@@ -9,9 +9,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
     public class GUIWindow : GUIObject
     {
-        public static Vector2 RedDialog = new Vector2(25, 25);
+        public static Vector2 RedDialog = new Vector2(0, 0);
         public static int RedDialogEdge = 7;
-        protected int Size = RHMap.TileSize;
+        public static Vector2 BrownDialog = new Vector2(32, 0);
+        public static int BrownDialogEdge = 7;
+        protected int Size = 18;
         protected const int SpaceFromBottom = 32;
         protected Vector2 _sourcePoint;
 
@@ -27,8 +29,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _width = RiverHollow.ScreenWidth / 2;
             _position = new Vector2(RiverHollow.ScreenWidth / 4, RiverHollow.ScreenHeight - _height - SpaceFromBottom);
 
-            _edgeSize = 7;
-            _sourcePoint = new Vector2(25, 25);
+            _edgeSize = RedDialogEdge;
+            _sourcePoint = RedDialog;
             _texture = GameContentManager.GetTexture(@"Textures\Dialog");
         }
 
@@ -37,7 +39,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _position = position;
             _width = width;
             _height = height;
-            _edgeSize = 7;
+            _edgeSize = RedDialogEdge;
 
             _sourcePoint = sourcePos;
 

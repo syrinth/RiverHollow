@@ -11,19 +11,34 @@ namespace RiverHollow.Game_Managers.GUIObjects
     {
         public static int WIDTH = RiverHollow.ScreenWidth / 3;
         public static int HEIGHT = RiverHollow.ScreenHeight / 3;
+        public static int BTNSIZE = 32;
+        public static int MAX_SHOWN_QUESTS = 4;
         List<QuestBox> _questList;
         GUIWindow _questWindow;
+        GUIButton _btnUp;
+        GUIButton _btnDown;
+
+        int _topQuest;
         public QuestScreen()
         {
             _questList = new List<QuestBox>();
             _questWindow = new GUIWindow(new Vector2(WIDTH, HEIGHT), GUIWindow.RedDialog, GUIWindow.RedDialogEdge, WIDTH, HEIGHT);
-            int i = 0;
-            foreach (Quest q in PlayerManager.QuestLog)
+            _btnUp = new GUIButton(new Vector2(_questWindow.Corner().X +_questWindow.Width - BTNSIZE, _questWindow.Corner().Y), new Rectangle(256, 64, 32, 32), BTNSIZE, BTNSIZE, "", @"Textures\Dialog", true);
+            _btnDown = new GUIButton(new Vector2(_questWindow.Corner().X + _questWindow.Width - BTNSIZE, _questWindow.Corner().Y + _questWindow.Height - BTNSIZE), new Rectangle(256, 96, 32, 32), BTNSIZE, BTNSIZE, "", @"Textures\Dialog", true);
+            _topQuest = 0;
+
+            for(int i = 0; i < MAX_SHOWN_QUESTS; i++)
             {
-                _questList.Add(new QuestBox(q, _questWindow, ref i));// new Vector2(_questWindow.UsableRectangle().Left, _questWindow.UsableRectangle().Top + (i++ * 100))));
+                QuestBox q = new QuestBox(_questWindow, i);
+                q.SetQuest(PlayerManager.QuestLog[_topQuest + i]);
+                _questList.Add(q);
             }
 
+
             Controls.Add(_questWindow);
+            Controls.Add(_btnUp);
+            Controls.Add(_btnDown
+                );
             foreach (QuestBox q in _questList)
             {
                 Controls.Add(q);
@@ -33,6 +48,23 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
+            bool moved = false;
+            if (_btnUp.Contains(mouse))
+            {
+                if (_topQuest - 1 >= 0) { _topQuest--; moved = true; }
+            }
+            else if (_btnDown.Contains(mouse))
+            {
+                if (_topQuest + MAX_SHOWN_QUESTS < PlayerManager.QuestLog.Count) { _topQuest++; moved = true; }
+            }
+            if (moved)
+            {
+                for(int i = 0; i< _questList.Count; i++)
+                {
+                    _questList[i].SetQuest(PlayerManager.QuestLog[_topQuest + i]);
+                }
+            }
+
             foreach (QuestBox c in _questList)
             {
                 rv = c.ProcessLeftButtonClick(mouse);
@@ -77,24 +109,37 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIWindow _window;
         Quest _quest;
         SpriteFont _font;
+        private int _index;
+        public int Index { get => _index; }
         public bool ClearThis;
 
-        public QuestBox(Quest q, GUIWindow win, ref int i)
+
+        public QuestBox(GUIWindow win, int i)
         {
-            int boxHeight = (QuestScreen.HEIGHT / 4) - (win.EdgeSize * 2);
-            int boxWidth = (QuestScreen.WIDTH) - (win.EdgeSize * 2) -32;
-            Vector2 boxPoint = new Vector2(win.Corner().X + win.EdgeSize, win.Corner().Y + win.EdgeSize + (i++ * (boxHeight + (win.EdgeSize *2))));
+            _index = i;
+
+            int boxHeight = (QuestScreen.HEIGHT / QuestScreen.MAX_SHOWN_QUESTS) - (win.EdgeSize * 2);
+            int boxWidth = (QuestScreen.WIDTH) - (win.EdgeSize * 2) - QuestScreen.BTNSIZE;
+            Vector2 boxPoint = new Vector2(win.Corner().X + win.EdgeSize, win.Corner().Y + win.EdgeSize + (i * (boxHeight + (win.EdgeSize *2))));
             _window = new GUIWindow(boxPoint, GUIWindow.RedDialog, GUIWindow.RedDialogEdge, boxWidth, boxHeight);
 
             _font = GameContentManager.GetFont(@"Fonts\Font");
-            _quest = q;
+            _quest = null;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _window.Draw(spriteBatch);
-            spriteBatch.DrawString(_font, _quest.Name, _window.UsableRectangle().Location.ToVector2(), Color.White);
-            spriteBatch.DrawString(_font, _quest.Accomplished + @"/" + _quest.TargetGoal, _window.UsableRectangle().Location.ToVector2() + new Vector2(200, 0), Color.White);
+            if (_quest != null)
+            {
+                _window.Draw(spriteBatch);
+                spriteBatch.DrawString(_font, _quest.Name, _window.UsableRectangle().Location.ToVector2(), Color.White);
+                spriteBatch.DrawString(_font, _quest.Accomplished + @"/" + _quest.TargetGoal, _window.UsableRectangle().Location.ToVector2() + new Vector2(200, 0), Color.White);
+            }
+        }
+
+        public void SetQuest(Quest q)
+        {
+            _quest = q;
         }
 
         public bool ProcessLeftButtonClick(Point mouse)

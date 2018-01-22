@@ -98,10 +98,12 @@ namespace RiverHollow.Game_Managers
 
         public static void SetPlayerDefaults()
         {
+            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 1, null, ObjectManager.GetItem(2)));
+            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 2, null, ObjectManager.GetItem(2)));
+            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 3, null, ObjectManager.GetItem(2)));
+            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 4, null, ObjectManager.GetItem(2)));
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 5, null, ObjectManager.GetItem(2)));
-            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 5, null, ObjectManager.GetItem(2)));
-            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 5, null, ObjectManager.GetItem(2)));
-            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 5, null, ObjectManager.GetItem(2)));
+            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 6, null, ObjectManager.GetItem(2)));
 
             CurrentMap = MapManager.CurrentMap.Name;
             World.Position = Utilities.Normalize(MapManager.Maps[CurrentMap].GetCharacterSpawn("PlayerSpawn"));

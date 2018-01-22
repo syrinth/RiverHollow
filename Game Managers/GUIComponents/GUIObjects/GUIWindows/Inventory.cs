@@ -27,7 +27,7 @@ namespace RiverHollow.Screens
         public Inventory(Vector2 center, int rows, int columns, int edgeSize)
         {
             _container = null;
-            _edgeSize = edgeSize;
+            _edgeSize = GUIWindow.BrownDialogEdge;
             _rows = rows;
             _columns = columns;
 
@@ -36,7 +36,7 @@ namespace RiverHollow.Screens
             _height = (_edgeSize * 2) + (_rows * boxSize) + (_margin * (_rows + 1));
             SetPosition(new Vector2(center.X - _width / 2, center.Y - _height / 2));
 
-            _sourcePoint = new Vector2(96, 0);
+            _sourcePoint = GUIWindow.BrownDialog;
             _texture = GameContentManager.GetTexture(@"Textures\Dialog");
         }
 

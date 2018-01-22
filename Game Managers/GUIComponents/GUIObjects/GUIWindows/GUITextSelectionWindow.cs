@@ -1,15 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers.GUIObjects;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters;
-using RiverHollow.Tile_Engine;
 using RiverHollow.Items;
+using RiverHollow.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
@@ -90,7 +87,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         }
         public override void Update(GameTime gameTime)
         {
-            if (InputManager.CheckKey(Keys.W))
+            if (InputManager.CheckKey(Keys.W) || InputManager.CheckKey(Keys.Up))
             {
                 if (_keySelection - 1 >= 0)
                 {
@@ -98,7 +95,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                     _keySelection--;
                 }
             }
-            if (InputManager.CheckKey(Keys.S))
+            else if (InputManager.CheckKey(Keys.S) || InputManager.CheckKey(Keys.Down))
             {
                 if (_keySelection + 1 < _options.Count)
                 {
@@ -106,17 +103,35 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                     _keySelection++;
                 }
             }
+            else
+            {
+                if (_keySelection - 1 >= 0 && GraphicCursor.Position.Y < _imgSelection.Position.Y)
+                {
+                    _imgSelection.MoveImageBy(new Vector2(0, -_characterHeight));
+                    _keySelection--;
+                }
+                else if (_keySelection + 1 < _options.Count && GraphicCursor.Position.Y > _imgSelection.Position.Y + _imgSelection.Height)
+                {
+                    _imgSelection.MoveImageBy(new Vector2(0, _characterHeight));
+                    _keySelection++;
+                }
+            }
             if (InputManager.CheckKey(Keys.Enter))
             {
-                string action = _options[_keySelection].Split(':')[1];
-                if (_talker == null)
-                {
-                    ProcessGameTextSelection(action);
-                }
-                else
-                {
-                    ProcessNPCDialogSelection(action);
-                }
+                SelectAction();
+            }
+        }
+
+        public void SelectAction()
+        {
+            string action = _options[_keySelection].Split(':')[1];
+            if (_talker == null)
+            {
+                ProcessGameTextSelection(action);
+            }
+            else
+            {
+                ProcessNPCDialogSelection(action);
             }
         }
 
