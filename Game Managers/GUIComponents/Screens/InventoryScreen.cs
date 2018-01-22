@@ -89,10 +89,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     rv = true;
                 }
             }
-            if (rv)
-            {
-                RiverHollow.BackToMain();
-            }
+
             return rv;
         }
 

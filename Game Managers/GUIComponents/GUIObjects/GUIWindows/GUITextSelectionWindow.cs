@@ -159,9 +159,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             }
             else
             {
-                //Equip here
                 GUIManager.RemoveComponent(this);
-                RiverHollow.BackToMain();
             }
         }
 
