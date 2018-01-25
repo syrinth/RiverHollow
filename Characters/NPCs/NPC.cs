@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using RiverHollow.Misc;
 using RiverHollow.Items;
 using RiverHollow.SpriteAnimations;
+using RiverHollow.Tile_Engine;
 
 namespace RiverHollow.Characters
 {
@@ -83,11 +84,13 @@ namespace RiverHollow.Characters
                 }
             }
             return i;
-        } 
-
+        }
+        bool pathingRun = false;
+        List<RHTile> moveToTile;
         public override void Update(GameTime theGameTime)
         {
             base.Update(theGameTime);
+
             string currDay = GameCalendar.GetDay();
             string currSeason = GameCalendar.GetSeason();
             string currWeather = GameCalendar.GetWeather();
@@ -126,36 +129,68 @@ namespace RiverHollow.Characters
             if(!string.IsNullOrEmpty(_moveTo))
             {
                 Vector2 pos = Vector2.Zero;
-                if (MapManager.Maps[CurrentMapName].DictionaryCharacterLayer.ContainsKey(_moveTo)) { pos = MapManager.Maps[CurrentMapName].DictionaryCharacterLayer[_moveTo]; }
+                if (MapManager.Maps[CurrentMapName].DictionaryCharacterLayer.ContainsKey(_moveTo)) {
+                    pos = MapManager.Maps[CurrentMapName].DictionaryCharacterLayer[_moveTo];
+
+                    if (!pathingRun)
+                    {
+                        pathingRun = true;
+                        moveToTile = RunPathing(Position, pos);
+                    }
+                }
                 else if (MapManager.Maps[CurrentMapName].DictionaryExit.ContainsValue(_moveTo)) {
                     foreach (KeyValuePair<Rectangle, string> kvp in MapManager.Maps[CurrentMapName].DictionaryExit) {
                         if (kvp.Value == _moveTo)
                         {
                             pos = Utilities.Normalize(kvp.Key.Center.ToVector2());
+
+                            if (!pathingRun)
+                            {
+                                pathingRun = true;
+                                moveToTile = RunPathing(Position, pos);
+                            }
                         }
                     }
                 }
 
-                if (pos == Position) {
-                    if (_scheduleIndex < _schedule[currDay].Count - 1 && _schedule[currDay][_scheduleIndex + 1].Key == _moveTo)
+                if (moveToTile.Count > 0)
+                {
+                    pos = moveToTile[0].Position;
+                    if (Position == pos)
                     {
-                        _moveTo = _schedule[currDay][++_scheduleIndex].Value;
+                        moveToTile.RemoveAt(0);
                     }
                     else
                     {
-                        _scheduleIndex++;
-                        _moveTo = string.Empty;
+                        Vector2 direction = Vector2.Zero;
+                        float deltaX = Math.Abs(pos.X - this.Position.X);
+                        float deltaY = Math.Abs(pos.Y - this.Position.Y);
+
+                        Utilities.GetMoveSpeed(Position, pos, Speed, ref direction);
+                        CheckMapForCollisionsAndMove(direction);
                     }
                 }
-                else {
 
-                    Vector2 direction = Vector2.Zero;
-                    float deltaX = Math.Abs(pos.X - this.Position.X);
-                    float deltaY = Math.Abs(pos.Y - this.Position.Y);
+                //if (pos == Position) {
+                //    if (_scheduleIndex < _schedule[currDay].Count - 1 && _schedule[currDay][_scheduleIndex + 1].Key == _moveTo)
+                //    {
+                //        _moveTo = _schedule[currDay][++_scheduleIndex].Value;
+                //    }
+                //    else
+                //    {
+                //        _scheduleIndex++;
+                //        _moveTo = string.Empty;
+                //    }
+                //}
+                //else {
 
-                    Utilities.GetMoveSpeed(Position, pos, Speed, ref direction);
-                    CheckMapForCollisionsAndMove(direction);
-                }
+                //    Vector2 direction = Vector2.Zero;
+                //    float deltaX = Math.Abs(pos.X - this.Position.X);
+                //    float deltaY = Math.Abs(pos.Y - this.Position.Y);
+
+                //    Utilities.GetMoveSpeed(Position, pos, Speed, ref direction);
+                //    CheckMapForCollisionsAndMove(direction);
+                //}
             }
         }
 
@@ -326,6 +361,119 @@ namespace RiverHollow.Characters
         public void SetName(string text)
         {
             _name = text;
+        }
+
+        public class PriorityQueue<T>
+        {
+            // I'm using an unsorted array for this example, but ideally this
+            // would be a binary heap. There's an open issue for adding a binary
+            // heap to the standard C# library: https://github.com/dotnet/corefx/issues/574
+            //
+            // Until then, find a binary heap class:
+            // * https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp
+            // * http://visualstudiomagazine.com/articles/2012/11/01/priority-queues-with-c.aspx
+            // * http://xfleury.github.io/graphsearch.html
+            // * http://stackoverflow.com/questions/102398/priority-queue-in-net
+
+            private List<Tuple<T, double>> elements = new List<Tuple<T, double>>();
+
+            public int Count
+            {
+                get { return elements.Count; }
+            }
+
+            public void Enqueue(T item, double priority)
+            {
+                elements.Add(Tuple.Create(item, priority));
+            }
+
+            public T Dequeue()
+            {
+                int bestIndex = 0;
+
+                for (int i = 0; i < elements.Count; i++)
+                {
+                    if (elements[i].Item2 < elements[bestIndex].Item2)
+                    {
+                        bestIndex = i;
+                    }
+                }
+
+                T bestItem = elements[bestIndex].Item1;
+                elements.RemoveAt(bestIndex);
+                return bestItem;
+            }
+        }
+
+        //private class MapNode
+        //{
+        //    private RHTile _tile;
+        //    public Vector2 Pos { get => _tile.Position; }
+        //}
+
+        Dictionary<RHTile, RHTile> cameFrom = new Dictionary<RHTile, RHTile>();
+        Dictionary<RHTile, double> costSoFar = new Dictionary<RHTile, double>();
+
+        private double Heuristic(RHTile a, RHTile b)
+        {
+            return (Math.Abs(a.Position.X - b.Position.X) + Math.Abs(b.Position.Y - b.Position.Y))*0.5;
+        }
+
+        private List<RHTile> RunPathing(Vector2 start, Vector2 target)
+        {
+            List<RHTile> returnList = null;
+            RHMap map = MapManager.Maps[CurrentMapName];
+            RHTile startTile = map.RetrieveTile(start.ToPoint());
+            RHTile goalNode = map.RetrieveTile(target.ToPoint());
+            var frontier = new PriorityQueue<RHTile>();
+            frontier.Enqueue(startTile, 0);
+
+            cameFrom[startTile] = startTile;
+            costSoFar[startTile] = 0;
+
+            while(frontier.Count > 0)
+            {
+                var current = frontier.Dequeue();
+                if (current.Equals(goalNode))
+                {
+                    returnList = BackTrack(current);
+                    break;
+                }
+
+                foreach (var next in current.GetWalkableNeighbours())
+                {
+                    double newCost = costSoFar[current] + GetMovementCost(next);
+
+                    if(!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
+                    {
+                        costSoFar[next] = newCost;
+                        double priority = newCost + Heuristic(next, goalNode);
+                        frontier.Enqueue(next, priority);
+                        cameFrom[next] = current;
+                    }
+                }
+            }
+            return returnList;
+        }
+
+        //Returns how much it costs to enter the next square
+        private int GetMovementCost(RHTile target)
+        {
+            return target.ContainsProperty("Road", out string val) && val.Equals("true") ? 1 : 20;
+        }
+
+        private List<RHTile> BackTrack(RHTile current)
+        {
+            List<RHTile> list = new List<RHTile>();
+            while (current != cameFrom[current])
+            {
+                list.Add(current);
+                current = cameFrom[current];
+            }
+
+            list.Reverse();
+
+            return list;
         }
     }
 }

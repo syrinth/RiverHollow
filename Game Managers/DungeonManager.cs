@@ -99,8 +99,8 @@ namespace RiverHollow.Game_Managers
 
         public static void PopulateRoom(RHRandom r, RHMap m, bool lastRoom)
         {
-            int mapWidth = m.MapWidth;
-            int mapHeight = m.MapHeight;
+            int mapWidth = m.MapWidthTiles;
+            int mapHeight = m.MapHeightTiles;
             for (int i = 0; i < 5; i++)
             {
                 Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize);

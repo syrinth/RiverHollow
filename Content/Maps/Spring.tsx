@@ -98,7 +98,11 @@
   </animation>
  </tile>
  <tile id="36" terrain="1,3,1,3"/>
- <tile id="37" terrain="3,3,3,3"/>
+ <tile id="37" terrain="3,3,3,3">
+  <properties>
+   <property name="Road" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="38" terrain="3,1,3,1"/>
  <tile id="39" terrain="2,2,2,1"/>
  <tile id="40" terrain="2,2,1,2"/>

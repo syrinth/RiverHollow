@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using RiverHollow.Tile_Engine;
 using System;
 using System.Threading;
 
@@ -31,8 +32,8 @@ namespace RiverHollow.Misc
         public static Vector2 Normalize(Vector2 p)
         {
             Vector2 newVec = Vector2.Zero;
-            newVec.X = ((int)(p.X / 32)) * 32;
-            newVec.Y = ((int)(p.Y / 32)) * 32;
+            newVec.X = ((int)(p.X / RHMap.TileSize)) * RHMap.TileSize;
+            newVec.Y = ((int)(p.Y / RHMap.TileSize)) * RHMap.TileSize;
 
             return newVec;
         }

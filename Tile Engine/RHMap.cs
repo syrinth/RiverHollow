@@ -18,8 +18,8 @@ namespace RiverHollow.Tile_Engine
     public class RHMap
     {
         private static float Scale = RiverHollow.Scale;
-        public int MapWidth = 100;
-        public int MapHeight = 100;
+        public int MapWidthTiles = 100;
+        public int MapHeightTiles = 100;
         public static int _tileSize = 32;
         public static int TileSize { get => _tileSize; }
         private string _name;
@@ -80,11 +80,11 @@ namespace RiverHollow.Tile_Engine
 
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, string newMap)
         {
-          _map = Content.Load<TiledMap>(newMap);
-            _name = _map.Name;
+            _map = Content.Load<TiledMap>(newMap);
+            _name = _map.Name.Replace(@"Maps\", "");
             _tileSize = _map.TileWidth;
-            MapWidth = _map.Width;
-            MapHeight = _map.Height;
+            MapWidthTiles = _map.Width;
+            MapHeightTiles = _map.Height;
 
             _dictionaryLayers = new Dictionary<string, TiledMapTileLayer>();
             foreach (TiledMapTileLayer l in _map.TileLayers)
@@ -92,11 +92,11 @@ namespace RiverHollow.Tile_Engine
                 _dictionaryLayers.Add(l.Name, l);
             }
 
-            _tileArray = new RHTile[MapWidth, MapHeight];
-            for (int i = 0; i < MapHeight; i++) {
-                for (int j = 0; j < MapWidth; j++)
+            _tileArray = new RHTile[MapWidthTiles, MapHeightTiles];
+            for (int i = 0; i < MapHeightTiles; i++) {
+                for (int j = 0; j < MapWidthTiles; j++)
                 {
-                    _tileArray[j, i] = new RHTile(j, i);
+                    _tileArray[j, i] = new RHTile(j, i, _name);
                     _tileArray[j, i].SetProperties(this);
                 }
             }
@@ -175,7 +175,7 @@ namespace RiverHollow.Tile_Engine
                     {
                         if (c.GetType().Equals(typeof(Mob)) && !_mobList.Contains((Mob)c)) { _mobList.Add((Mob)c); }
                         else if (!_characterList.Contains(c)) { _characterList.Add(c); }
-                        c.CurrentMapName = _name.Replace(@"Maps\", "");
+                        c.CurrentMapName = _name;
                         c.Position = c.NewMapPosition == Vector2.Zero ? c.Position : c.NewMapPosition;
                         c.NewMapPosition = Vector2.Zero;
                         moved.Add(c);
@@ -269,7 +269,7 @@ namespace RiverHollow.Tile_Engine
             foreach(RHTile t in _buildingTiles)
             {
                 bool passable = t.Passable();
-                spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)t.GetPos.X, (int)t.GetPos.Y, 32, 32), new Rectangle(288, 128, 32, 32) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, new Vector2(0, 0), SpriteEffects.None, 99999);
+                spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)t.Position.X, (int)t.Position.Y, 32, 32), new Rectangle(288, 128, 32, 32) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, new Vector2(0, 0), SpriteEffects.None, 99999);
             }
         }
         public void DrawUpper(SpriteBatch spriteBatch)
@@ -659,9 +659,19 @@ namespace RiverHollow.Tile_Engine
             _characterList.Clear();
         }
 
-        public RHTile RetrieveTile(Point mouseLocation)
+        public RHTile RetrieveTile(Point targetLoc)
         {
-            return _tileArray[mouseLocation.X / TileSize, mouseLocation.Y / TileSize];
+            if(targetLoc.X >= GetMapWidth() || targetLoc.X < 0) { return null;  }
+            if (targetLoc.Y >= GetMapHeight() || targetLoc.Y < 0) { return null; }
+
+            return _tileArray[targetLoc.X / TileSize, targetLoc.Y / TileSize];
+        }
+        public RHTile RetrieveTileFromPosition(Point targetLoc)
+        {
+            if (targetLoc.X >= MapWidthTiles || targetLoc.X < 0) { return null; }
+            if (targetLoc.Y >= MapHeightTiles || targetLoc.Y < 0) { return null; }
+
+            return _tileArray[targetLoc.X, targetLoc.Y];
         }
         public void RemoveWorldObject(WorldObject o)
         {
@@ -805,8 +815,8 @@ namespace RiverHollow.Tile_Engine
                 Vector2 position = o.Position;
                 do
                 {
-                    position.X = (int)(r.Next(1, (MapWidth - 1) * TileSize) / 32) * 32;
-                    position.Y = (int)(r.Next(1, (MapHeight - 1) * TileSize) / 32) * 32;
+                    position.X = (int)(r.Next(1, (MapWidthTiles - 1) * TileSize) / 32) * 32;
+                    position.Y = (int)(r.Next(1, (MapHeightTiles - 1) * TileSize) / 32) * 32;
                     o.SetCoordinates(position);
 
                     rv = TestMapTiles(o, tiles);
@@ -841,8 +851,8 @@ namespace RiverHollow.Tile_Engine
             {
                 for (int j = 0; j < colColumns; j++)
                 {
-                    int x = Math.Min((o.CollisionBox.Left + (j * 32)) / 32, MapWidth-1);
-                    int y = Math.Min((o.CollisionBox.Top + (i * 32)) / 32, MapHeight-1);
+                    int x = Math.Min((o.CollisionBox.Left + (j * 32)) / 32, MapWidthTiles-1);
+                    int y = Math.Min((o.CollisionBox.Top + (i * 32)) / 32, MapHeightTiles-1);
                     if (x < 0 || x > 99 || y < 0 || y > 99)
                     {
                         rv = false;
@@ -884,8 +894,8 @@ namespace RiverHollow.Tile_Engine
             {
                 do
                 {
-                    position.X = (int)(r.Next(1, (MapWidth - 1) * TileSize) / 32) * 32;
-                    position.Y = (int)(r.Next(1, (MapHeight - 1) * TileSize) / 32) * 32;
+                    position.X = (int)(r.Next(1, (MapWidthTiles - 1) * TileSize) / 32) * 32;
+                    position.Y = (int)(r.Next(1, (MapHeightTiles - 1) * TileSize) / 32) * 32;
                     rv = _tileArray[((int)position.X / 32), ((int)position.Y / 32)].SetStaticItem(container);
                 } while (!rv);
 
@@ -919,8 +929,8 @@ namespace RiverHollow.Tile_Engine
             {
                 do
                 {
-                    position.X = (int)(r.Next(1, (MapWidth - 1) * TileSize) / 32) * 32;
-                    position.Y = (int)(r.Next(1, (MapHeight - 1) * TileSize) / 32) * 32;
+                    position.X = (int)(r.Next(1, (MapWidthTiles - 1) * TileSize) / 32) * 32;
+                    position.Y = (int)(r.Next(1, (MapHeightTiles - 1) * TileSize) / 32) * 32;
                     rv = _tileArray[((int)position.X / 32), ((int)position.Y / 32)].Passable();
                 } while (!rv);
             }
@@ -945,23 +955,24 @@ namespace RiverHollow.Tile_Engine
         
         public int GetMapWidth()
         {
-            return MapWidth * _tileSize * (int)Scale;
+            return MapWidthTiles * _tileSize * (int)Scale;
         }
 
         public int GetMapHeight()
         {
-            return MapHeight * _tileSize * (int)Scale;
+            return MapHeightTiles * _tileSize * (int)Scale;
         }
     }
 
     public class RHTile
     {
+        private string MapName;
         private bool _tileExists;
         private int _X;
         public int X { get => _X; }
         private int _Y;
         public int Y { get => _Y; }
-        public Vector2 GetPos { get => new Vector2(_X * 32, _Y * 32); }
+        public Vector2 Position { get => new Vector2(_X * RHMap.TileSize, _Y * RHMap.TileSize); }
         private Dictionary<TiledMapTileLayer, Dictionary<string, string>> _properties;
         private WorldObject _obj;
         public WorldObject Object { get => _obj; }
@@ -969,12 +980,27 @@ namespace RiverHollow.Tile_Engine
         private StaticItem _staticItem;
         public StaticItem StaticItem { get => _staticItem; }
 
-        public RHTile(int x, int y)
+        public RHTile(int x, int y,string mapName)
         {
             _X = x;
             _Y = y;
 
+            MapName = mapName;
             _properties = new Dictionary<TiledMapTileLayer, Dictionary<string, string>>();
+        }
+        public List<RHTile> GetWalkableNeighbours()
+        {
+            Vector2[] DIRS = new[] { new Vector2(1, 0), new Vector2(0, -1), new Vector2(-1, 0), new Vector2(0, 1) };
+            List<RHTile> neighbours = new List<RHTile>();
+            foreach(Vector2 d in DIRS)
+            {
+                RHTile tile = MapManager.Maps[MapName].RetrieveTileFromPosition(new Point((int)(_X + d.X), (int)(_Y + d.Y)));
+                if (tile != null && tile.Passable()){
+                    neighbours.Add(tile);
+                }
+            }
+
+            return neighbours;
         }
 
         public void SetProperties(RHMap map)

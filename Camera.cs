@@ -94,7 +94,7 @@ namespace RiverHollow
 
         public static void UnsetObserver()
         {
-            _observer = new Vector2(MapManager.CurrentMap.MapWidth / 2, MapManager.CurrentMap.MapHeight / 2);
+            _observer = new Vector2(MapManager.CurrentMap.MapWidthTiles / 2, MapManager.CurrentMap.MapHeightTiles / 2);
         }
         public static void ResetObserver()
         {

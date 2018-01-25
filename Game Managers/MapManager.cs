@@ -141,8 +141,8 @@ namespace RiverHollow.Game_Managers
 
         public static void PopulateMaps(bool loaded)
         {
-            int mapWidth = _tileMaps[@"NearWilds"].MapWidth;
-            int mapHeight = _tileMaps[@"NearWilds"].MapHeight;
+            int mapWidth = _tileMaps[@"NearWilds"].MapWidthTiles;
+            int mapHeight = _tileMaps[@"NearWilds"].MapHeightTiles;
             RHRandom r = new RHRandom();
             //LoadMap1
             if (!loaded)
