@@ -328,12 +328,12 @@
     <property name="Entrance" value="RiverHollowTown"/>
    </properties>
   </object>
-  <object id="6" name="Entrance" x="2376.25" y="51.4163" width="14.6667" height="14.6667">
+  <object id="6" name="Entrance" x="2372.92" y="71.4163" width="14.6667" height="14.6667">
    <properties>
     <property name="Entrance" value="Map2"/>
    </properties>
   </object>
-  <object id="7" name="Exit" x="2343.25" y="15.3333" width="81.5" height="21.3333">
+  <object id="7" name="Exit" x="2342.58" y="12.6666" width="81.5" height="21.3333">
    <properties>
     <property name="Exit" value="Map2"/>
    </properties>

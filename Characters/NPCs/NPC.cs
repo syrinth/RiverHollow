@@ -12,6 +12,7 @@ namespace RiverHollow.Characters
 {
     public class NPC : WorldCharacter
     {
+        protected int _index;
         public enum NPCType { Villager, Shopkeeper, Ranger, Worker }
         protected NPCType _npcType;
         public NPCType Type { get => _npcType; }
@@ -39,33 +40,34 @@ namespace RiverHollow.Characters
 
         public NPC(int index, string[] data)
         {
+            _index = index;
             _collection = new Dictionary<int, bool>();
             _schedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
-            _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + index);
+            _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + _index);
             _portrait = GameContentManager.GetTexture(@"Textures\portraits");
             _scheduleIndex = 0;
 
             LoadContent();
-            ImportBasics(data, index);
+            ImportBasics(data);
 
             MapManager.Maps[CurrentMapName].AddCharacter(this);
         }
 
-        protected int ImportBasics(string[] stringData, int index)
+        protected int ImportBasics(string[] stringData)
         {
             int i = 0;
             _npcType = (NPCType)Enum.Parse(typeof(NPCType), stringData[i++]);
             _name = stringData[i++];
             _portraitRect = new Rectangle(0, int.Parse(stringData[i++]) * 192, PortraitWidth, PortraitHeight);
             CurrentMapName = stringData[i++];
-            Position = Utilities.Normalize(MapManager.Maps[CurrentMapName].GetCharacterSpawn("NPC" + index));
+            Position = Utilities.Normalize(MapManager.Maps[CurrentMapName].GetCharacterSpawn("NPC" + _index));
 
             string[] vectorSplit = stringData[i++].Split(' ');
             foreach (string s in vectorSplit) {
                 _collection.Add(int.Parse(s), false);
             }
 
-            Dictionary<string, string> schedule = CharacterManager.GetSchedule("NPC" + index);
+            Dictionary<string, string> schedule = CharacterManager.GetSchedule("NPC" + _index);
             if (schedule != null)
             {
                 foreach (KeyValuePair<string, string> kvp in schedule)
@@ -124,7 +126,7 @@ namespace RiverHollow.Characters
             if(!string.IsNullOrEmpty(_moveTo))
             {
                 Vector2 pos = Vector2.Zero;
-                if (MapManager.Maps[CurrentMapName].DictionaryPathing.ContainsKey(_moveTo)) { pos = MapManager.Maps[CurrentMapName].DictionaryPathing[_moveTo]; }
+                if (MapManager.Maps[CurrentMapName].DictionaryCharacterLayer.ContainsKey(_moveTo)) { pos = MapManager.Maps[CurrentMapName].DictionaryCharacterLayer[_moveTo]; }
                 else if (MapManager.Maps[CurrentMapName].DictionaryExit.ContainsValue(_moveTo)) {
                     foreach (KeyValuePair<Rectangle, string> kvp in MapManager.Maps[CurrentMapName].DictionaryExit) {
                         if (kvp.Value == _moveTo)
@@ -295,7 +297,17 @@ namespace RiverHollow.Characters
                     {
                         Friendship += _collection[item.ItemID] ? 50 : 20;
                         text = GetDialogEntry("Collection");
+                        int index = 1;
+                        foreach (int items in _collection.Keys)
+                        {
+                            if (_collection[items])
+                            {
+                                index++;
+                            }
+                        }
+
                         _collection[item.ItemID] = true;
+                        MapManager.Maps["HouseNPC" + _index].AddCollectionItem(item.ItemID, index);
                     }
                     else
                     {

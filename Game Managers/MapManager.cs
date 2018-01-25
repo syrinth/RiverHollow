@@ -16,7 +16,7 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<string, RHMap> Maps { get => _tileMaps; }
 
         private static RHMap _currentMap;
-        public static RHMap CurrentMap { get => _currentMap; }
+        public static RHMap CurrentMap { get => _currentMap; set => _currentMap = value; }
 
         public static void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice)
         {
@@ -32,6 +32,7 @@ namespace RiverHollow.Game_Managers
             AddMap(@"Maps\Dungeons\Room5", Content, GraphicsDevice);
             AddMap(@"Maps\Arcane Tower", Content, GraphicsDevice);
             AddMap(@"Maps\Tent", Content, GraphicsDevice);
+            AddMap(@"Maps\HouseNPC1", Content, GraphicsDevice);
 
             _currentMap = _tileMaps[@"NearWilds"];
         }
@@ -77,7 +78,7 @@ namespace RiverHollow.Game_Managers
                 _currentMap = _tileMaps[newMapStr];
 
                 PlayerManager.CurrentMap = _currentMap.Name;
-                PlayerManager.World.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
+                PlayerManager.World.Position = Utilities.Normalize(new Vector2(rectEntrance.Left, rectEntrance.Top));
             }
             else
             {

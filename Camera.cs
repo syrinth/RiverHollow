@@ -55,13 +55,13 @@ namespace RiverHollow
             if (MapManager.CurrentMap.GetMapWidth() < RiverHollow.ScreenWidth)
             {
                 xLocked = true;
-                _observer.X = (MapManager.CurrentMap.GetMapWidth() / 2) + BorderOffset;
+                _observer.X = (MapManager.CurrentMap.GetMapWidth() / 2);
             }
 
             if (MapManager.CurrentMap.GetMapHeight() < RiverHollow.ScreenHeight)
             {
                 yLocked = true;
-                _observer.Y = (MapManager.CurrentMap.GetMapHeight() / 2) + BorderOffset;
+                _observer.Y = (MapManager.CurrentMap.GetMapHeight() / 2);
             }
 
             if (!xLocked)
@@ -70,9 +70,9 @@ namespace RiverHollow
                 {
                     _observer.X = (RiverHollow.ScreenWidth / 2) + BorderOffset;
                 }
-                else if (_observer.X >= MapManager.CurrentMap.GetMapWidth() * Scale - (RiverHollow.ScreenWidth / 2) - BorderOffset)
+                else if (_observer.X >= MapManager.CurrentMap.GetMapWidth() - (RiverHollow.ScreenWidth / 2) - BorderOffset)
                 {
-                    _observer.X = MapManager.CurrentMap.GetMapWidth() * Scale - (RiverHollow.ScreenWidth / 2) - BorderOffset;
+                    _observer.X = MapManager.CurrentMap.GetMapWidth() - (RiverHollow.ScreenWidth / 2) - BorderOffset;
                 }
             }
 
@@ -82,9 +82,9 @@ namespace RiverHollow
                 {
                     _observer.Y = (RiverHollow.ScreenHeight / 2) + BorderOffset;
                 }
-                else if (_observer.Y >= MapManager.CurrentMap.GetMapHeight() * Scale - (RiverHollow.ScreenHeight / 2) - BorderOffset)
+                else if (_observer.Y >= MapManager.CurrentMap.GetMapHeight() - (RiverHollow.ScreenHeight / 2) - BorderOffset)
                 {
-                    _observer.Y = MapManager.CurrentMap.GetMapHeight() * Scale - (RiverHollow.ScreenHeight / 2) - BorderOffset;
+                    _observer.Y = MapManager.CurrentMap.GetMapHeight() - (RiverHollow.ScreenHeight / 2) - BorderOffset;
                 }
             }
 

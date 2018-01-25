@@ -432,18 +432,6 @@
 /processor:TiledMapProcessor
 /build:Maps/RiverHollowTown.tmx
 
-#begin Maps/Houses.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Maps/Houses.png
-
 #begin Maps/PlayerHouse.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -460,4 +448,21 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Tent.tmx
+
+#begin Maps/HouseNPC1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/HouseNPC1.tmx
+
+#begin Maps/Houses.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Maps/Houses.png
 

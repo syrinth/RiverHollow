@@ -678,9 +678,8 @@ namespace RiverHollow.Game_Managers
             {
                data = (SaveData)serializer.Deserialize(sr);
             }
-
+            MapManager.CurrentMap = MapManager.Maps[data.currentMap];
             InitPlayer();
-            CurrentMap = data.currentMap;
             foreach (BuildingData b in data.Buildings)
             {
                 WorkerBuilding newBuilding = ObjectManager.GetBuilding(b.buildingID);

@@ -58,8 +58,8 @@ namespace RiverHollow.Tile_Engine
         public Dictionary<Rectangle, string> DictionaryExit { get => _dictExit; }
         private Dictionary<string, Rectangle> _dictEntrance;
         public Dictionary<string, Rectangle> DictionaryEntrance { get => _dictEntrance; }
-        private Dictionary<string, Vector2> _dictPathing;
-        public Dictionary<string, Vector2> DictionaryPathing { get => _dictPathing; }
+        private Dictionary<string, Vector2> _dictCharacterLayer;
+        public Dictionary<string, Vector2> DictionaryCharacterLayer { get => _dictCharacterLayer; }
 
         public RHMap()
         {
@@ -75,12 +75,12 @@ namespace RiverHollow.Tile_Engine
             _staticItemList = new List<StaticItem>();
             _dictExit = new Dictionary<Rectangle, string>();
             _dictEntrance = new Dictionary<string, Rectangle>();
-            _dictPathing = new Dictionary<string, Vector2>();
+            _dictCharacterLayer = new Dictionary<string, Vector2>();
         }
 
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, string newMap)
         {
-           _map = Content.Load<TiledMap>(newMap);
+          _map = Content.Load<TiledMap>(newMap);
             _name = _map.Name;
             _tileSize = _map.TileWidth;
             MapWidth = _map.Width;
@@ -137,7 +137,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     foreach (TiledMapObject mapObject in ol.Objects)
                     {
-                        _dictPathing.Add(mapObject.Name, mapObject.Position);
+                        _dictCharacterLayer.Add(mapObject.Name, mapObject.Position);
                     }
                 }
             }
@@ -312,6 +312,15 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
+        public void AddCollectionItem(int itemID, int index)
+        {
+            Item displayItem = ObjectManager.GetItem(itemID);
+            displayItem.Pickup = false;
+            displayItem.OnTheMap = true;
+            displayItem.Position = _dictCharacterLayer["Col" + index];
+            _itemList.Add(displayItem);
+        }
+
         public bool CheckRightMovement(WorldCharacter c, Rectangle movingChar)
         {
             bool rv = true;
@@ -445,9 +454,9 @@ namespace RiverHollow.Tile_Engine
         public Vector2 GetCharacterSpawn(string val)
         {
             Vector2 rv = new Vector2(0, 0);
-            if (_dictPathing.ContainsKey(val))
+            if (_dictCharacterLayer.ContainsKey(val))
             {
-                rv = _dictPathing[val];
+                rv = _dictCharacterLayer[val];
             }
             return rv;
         }
@@ -936,12 +945,12 @@ namespace RiverHollow.Tile_Engine
         
         public int GetMapWidth()
         {
-            return MapWidth * _tileSize;
+            return MapWidth * _tileSize * (int)Scale;
         }
 
         public int GetMapHeight()
         {
-            return MapHeight * _tileSize;
+            return MapHeight * _tileSize * (int)Scale;
         }
     }
 

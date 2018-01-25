@@ -37,8 +37,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             Controls.Add(_questWindow);
             Controls.Add(_btnUp);
-            Controls.Add(_btnDown
-                );
+            Controls.Add(_btnDown);
             foreach (QuestBox q in _questList)
             {
                 Controls.Add(q);

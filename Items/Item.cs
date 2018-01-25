@@ -36,7 +36,7 @@ namespace RiverHollow.Items
         public bool OnTheMap { get => _onTheMap; set => _onTheMap = value; }
 
         protected bool _pickup = true;
-        public bool Pickup { get => _onTheMap; }
+        public bool Pickup { get => _pickup; set => _pickup = value; }
 
         protected string _description;
 

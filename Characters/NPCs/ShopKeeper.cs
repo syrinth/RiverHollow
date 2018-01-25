@@ -21,8 +21,8 @@ namespace RiverHollow.Characters.NPCs
             LoadContent();
             if (data.Length >= 5)
             {
-                int i = ImportBasics(data, index);
-
+                _index = index;
+                int i = ImportBasics(data);
                 _merchandise = new List<Merchandise>();
                 while (i < data.Length)
                 {

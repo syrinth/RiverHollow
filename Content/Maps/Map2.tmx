@@ -60,12 +60,12 @@
   <object id="5" name="Wait" x="331" y="141.667" width="4" height="4"/>
  </objectgroup>
  <objectgroup name="Travel Layer">
-  <object id="1" x="224" y="223" width="33" height="32">
+  <object id="1" x="228.667" y="230.333" width="21.6667" height="21.3333">
    <properties>
     <property name="Entrance" value="NearWilds"/>
    </properties>
   </object>
-  <object id="2" x="193" y="288" width="95" height="31">
+  <object id="2" x="206.333" y="284.667" width="66.3333" height="21">
    <properties>
     <property name="Exit" value="NearWilds"/>
    </properties>

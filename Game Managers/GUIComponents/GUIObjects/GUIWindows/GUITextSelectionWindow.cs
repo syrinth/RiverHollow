@@ -12,6 +12,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUITextSelectionWindow : GUITextWindow
     {
+        private Point _mousePos = Point.Zero;
         private Food _food;
         private Dictionary<int,string> _options;
         private GUIImage _imgSelection;
@@ -21,7 +22,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public GUITextSelectionWindow(string selectionText) : base()
         {
-            _position = new Vector2(RiverHollow.ScreenWidth / 2 - _width / 2, RiverHollow.ScreenHeight / 2 - _height / 2);
+            Position = new Vector2(RiverHollow.ScreenWidth / 2 - _width / 2, RiverHollow.ScreenHeight / 2 - _height / 2);
             Setup(selectionText);
             _width = (int)_font.MeasureString(_text).X + _innerBorder * 2 + 6; //6 is adding a bit of arbitrary extra space for the parsing. Exactsies are bad
             PostParse();
@@ -31,6 +32,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         {
             _talker = talker;
             _position.Y = RiverHollow.ScreenHeight - _height - SpaceFromBottom;
+            Position = _position;   //don to set _drawRect
 
             Setup(selectionText);
             PostParse();
@@ -105,17 +107,23 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             }
             else
             {
-                if (_keySelection - 1 >= 0 && GraphicCursor.Position.Y < _imgSelection.Position.Y)
+                //Until fixed for specific motion
+                if (_mousePos != GraphicCursor.Position.ToPoint() && Contains(GraphicCursor.Position.ToPoint()))
                 {
-                    _imgSelection.MoveImageBy(new Vector2(0, -_characterHeight));
-                    _keySelection--;
-                }
-                else if (_keySelection + 1 < _options.Count && GraphicCursor.Position.Y > _imgSelection.Position.Y + _imgSelection.Height)
-                {
-                    _imgSelection.MoveImageBy(new Vector2(0, _characterHeight));
-                    _keySelection++;
+                    _mousePos = GraphicCursor.Position.ToPoint();
+                    if (_keySelection - 1 >= 0 && GraphicCursor.Position.Y < _imgSelection.Position.Y)
+                    {
+                        _imgSelection.MoveImageBy(new Vector2(0, -_characterHeight));
+                        _keySelection--;
+                    }
+                    else if (_keySelection + 1 < _options.Count && GraphicCursor.Position.Y > _imgSelection.Position.Y + _imgSelection.Height)
+                    {
+                        _imgSelection.MoveImageBy(new Vector2(0, _characterHeight));
+                        _keySelection++;
+                    }
                 }
             }
+
             if (InputManager.CheckKey(Keys.Enter))
             {
                 SelectAction();

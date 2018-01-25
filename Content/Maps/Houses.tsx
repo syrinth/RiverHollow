@@ -51,11 +51,6 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="31">
-  <properties>
-   <property name="Impassable" type="bool" value="true"/>
-  </properties>
- </tile>
  <tile id="32">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
