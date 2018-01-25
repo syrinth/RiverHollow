@@ -977,6 +977,9 @@ namespace RiverHollow.Tile_Engine
         private WorldObject _obj;
         public WorldObject Object { get => _obj; }
 
+        private bool _isRoad;
+        public bool IsRoad { get => _isRoad; }
+
         private StaticItem _staticItem;
         public StaticItem StaticItem { get => _staticItem; }
 
@@ -1010,11 +1013,6 @@ namespace RiverHollow.Tile_Engine
                 
                 if (l.IsVisible && l.TryGetTile(_X, _Y, out TiledMapTile? tile) && tile != null)
                 {
-                    if (tile.Value.GlobalIdentifier == 46)
-                    {
-                        int i = 0;
-                    }
-
                     if (tile.Value.GlobalIdentifier != 0)
                     {
                         _tileExists = true;
@@ -1025,6 +1023,7 @@ namespace RiverHollow.Tile_Engine
                     }
                 }
             }
+            _isRoad = ContainsProperty("Road", out string value) && value.Equals("true");
         }
 
         public bool SetWallWorldObject(WorldObject o)

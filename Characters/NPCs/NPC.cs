@@ -363,6 +363,7 @@ namespace RiverHollow.Characters
             _name = text;
         }
 
+        #region Pathfinding
         public class PriorityQueue<T>
         {
             // I'm using an unsorted array for this example, but ideally this
@@ -405,18 +406,13 @@ namespace RiverHollow.Characters
             }
         }
 
-        //private class MapNode
-        //{
-        //    private RHTile _tile;
-        //    public Vector2 Pos { get => _tile.Position; }
-        //}
-
+        const int slowCost = 12;
         Dictionary<RHTile, RHTile> cameFrom = new Dictionary<RHTile, RHTile>();
         Dictionary<RHTile, double> costSoFar = new Dictionary<RHTile, double>();
 
         private double Heuristic(RHTile a, RHTile b)
         {
-            return (Math.Abs(a.Position.X - b.Position.X) + Math.Abs(b.Position.Y - b.Position.Y))*0.5;
+            return (Math.Abs(a.Position.X - b.Position.X) + Math.Abs(b.Position.Y - b.Position.Y)) * (a.IsRoad ? 1 : slowCost);
         }
 
         private List<RHTile> RunPathing(Vector2 start, Vector2 target)
@@ -459,7 +455,7 @@ namespace RiverHollow.Characters
         //Returns how much it costs to enter the next square
         private int GetMovementCost(RHTile target)
         {
-            return target.ContainsProperty("Road", out string val) && val.Equals("true") ? 1 : 20;
+            return target.IsRoad ? 1 : slowCost;
         }
 
         private List<RHTile> BackTrack(RHTile current)
@@ -476,4 +472,5 @@ namespace RiverHollow.Characters
             return list;
         }
     }
+    #endregion
 }
