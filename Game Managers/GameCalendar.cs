@@ -132,5 +132,10 @@ namespace RiverHollow
         {
             return ListWeather[_currWeather];
         }
+
+        public static void RollOver()
+        {
+            _dayOfWeek++;
+        }
     }
 }

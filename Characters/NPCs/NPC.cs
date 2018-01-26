@@ -22,8 +22,10 @@ namespace RiverHollow.Characters
         protected Dictionary<int, bool> _collection;
         protected bool _introduced;
 
-        protected Dictionary<string, List<KeyValuePair<string, string>>> _schedule;
-        protected string _moveTo;
+        protected Dictionary<string, List<KeyValuePair<string, string>>> _completeSchedule;         //Every day with a list of KVP Time/GoToLocations
+        protected Dictionary<string, List<KeyValuePair<string, List<RHTile>>>> _schedulePathing;    //Key = Day Val = List of time/TilePaths
+        List<KeyValuePair<string, List<RHTile>>> _todaysPathing = null;                             //List of Times with the associated pathing
+        protected List<RHTile> _currentPath;                                                        //List of Tiles to currently be traversing
         protected int _scheduleIndex;
 
         private const int PortraitWidth = 160;
@@ -43,7 +45,7 @@ namespace RiverHollow.Characters
         {
             _index = index;
             _collection = new Dictionary<int, bool>();
-            _schedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
+            _completeSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
             _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + _index);
             _portrait = GameContentManager.GetTexture(@"Textures\portraits");
             _scheduleIndex = 0;
@@ -80,117 +82,122 @@ namespace RiverHollow.Characters
                         string[] data = s.Split('|');
                         temp.Add(new KeyValuePair<string, string>(data[0], data[1]));
                     }
-                    _schedule.Add(kvp.Key, temp);
+                    _completeSchedule.Add(kvp.Key, temp);
                 }
             }
+
+            _schedulePathing = new Dictionary<string, List<KeyValuePair<string, List<RHTile>>>>();
+            _currentPath = new List<RHTile>();
+
+            RollOver();
             return i;
         }
-        bool pathingRun = false;
-        List<RHTile> moveToTile;
         public override void Update(GameTime theGameTime)
         {
             base.Update(theGameTime);
 
+            if (_todaysPathing != null)
+            {
+                string currTime = GameCalendar.GetTime();
+                //_scheduleIndex keeps track of which pathing route we're currently following.
+                //Running late code to be implemented later
+                if (_scheduleIndex < _todaysPathing.Count && ((_todaysPathing[_scheduleIndex].Key == currTime)))// || RunningLate(movementList[_scheduleIndex].Key, currTime)))
+                {
+                    _currentPath = _todaysPathing[_scheduleIndex++].Value;
+                }
+            }
+
+            if (_currentPath.Count > 0)
+            {
+                Vector2 targetPos = _currentPath[0].Position;
+                if (Position == targetPos)
+                {
+                    _currentPath.RemoveAt(0);
+                }
+                else
+                {
+                    Vector2 direction = Vector2.Zero;
+                    float deltaX = Math.Abs(targetPos.X - this.Position.X);
+                    float deltaY = Math.Abs(targetPos.Y - this.Position.Y);
+
+                    Utilities.GetMoveSpeed(Position, targetPos, Speed, ref direction);
+                    CheckMapForCollisionsAndMove(direction);
+                }
+            }
+        }
+        
+        public void RollOver()
+        {
+            Position = Utilities.Normalize(MapManager.Maps[CurrentMapName].GetCharacterSpawn("NPC" + _index));
+            CalculatePathing();
+            //Gets the pathing for the day from the previously mapped out paths.
             string currDay = GameCalendar.GetDay();
             string currSeason = GameCalendar.GetSeason();
             string currWeather = GameCalendar.GetWeather();
             string currTime = GameCalendar.GetTime();
-            if (_schedule != null && _schedule.Count > 0)
+            if (_schedulePathing != null && _schedulePathing.Count > 0)
             {
                 string searchVal = currSeason + currDay + currWeather;
-                List<KeyValuePair<string, string>> movementList = null;
-
-                if (_schedule.ContainsKey(currSeason + currDay + currWeather))
+                
+                if (_schedulePathing.ContainsKey(currSeason + currDay + currWeather))
                 {
-                    movementList = _schedule[currSeason + currDay + currWeather];
+                    _todaysPathing = _schedulePathing[currSeason + currDay + currWeather];
                 }
-                else if (_schedule.ContainsKey(currSeason + currDay))
+                else if (_schedulePathing.ContainsKey(currSeason + currDay))
                 {
-                    movementList = _schedule[currSeason + currDay];
+                    _todaysPathing = _schedulePathing[currSeason + currDay];
                 }
-                else if (_schedule.ContainsKey(currDay))
+                else if (_schedulePathing.ContainsKey(currDay))
                 {
-                    movementList = _schedule[currDay];
-                }
-
-                if (movementList != null)
-                {
-                    if (_scheduleIndex < movementList.Count && ((movementList[_scheduleIndex].Key == currTime) || RunningLate(movementList[_scheduleIndex].Key, currTime)))
-                    {
-                        _moveTo = movementList[_scheduleIndex].Value;
-                    }
-                    else if (_scheduleIndex < movementList.Count && movementList[_scheduleIndex].Key == CurrentMapName)
-                    {
-                        _moveTo = movementList[_scheduleIndex].Value;
-                    }
+                    _todaysPathing = _schedulePathing[currDay];
                 }
             }
+        }
 
-            if(!string.IsNullOrEmpty(_moveTo))
+        public void CalculatePathing()
+        {
+            string currDay = GameCalendar.GetDay();
+            string currSeason = GameCalendar.GetSeason();
+            string currWeather = GameCalendar.GetWeather();
+            if (_completeSchedule != null && _completeSchedule.Count > 0)
             {
-                Vector2 pos = Vector2.Zero;
-                if (MapManager.Maps[CurrentMapName].DictionaryCharacterLayer.ContainsKey(_moveTo)) {
-                    pos = MapManager.Maps[CurrentMapName].DictionaryCharacterLayer[_moveTo];
+                string searchVal = currSeason + currDay + currWeather;
+                List<KeyValuePair<string, string>> listPathingForDay = null;
 
-                    if (!pathingRun)
-                    {
-                        pathingRun = true;
-                        moveToTile = RunPathing(Position, pos);
-                    }
-                }
-                else if (MapManager.Maps[CurrentMapName].DictionaryExit.ContainsValue(_moveTo)) {
-                    foreach (KeyValuePair<Rectangle, string> kvp in MapManager.Maps[CurrentMapName].DictionaryExit) {
-                        if (kvp.Value == _moveTo)
-                        {
-                            pos = Utilities.Normalize(kvp.Key.Center.ToVector2());
-
-                            if (!pathingRun)
-                            {
-                                pathingRun = true;
-                                moveToTile = RunPathing(Position, pos);
-                            }
-                        }
-                    }
-                }
-
-                if (moveToTile.Count > 0)
+                //Search to see if there exists any pathing instructions for the day.
+                //If so, set the value of listPathingForDay to the list of times/locations
+                if (_completeSchedule.ContainsKey(currSeason + currDay + currWeather))
                 {
-                    pos = moveToTile[0].Position;
-                    if (Position == pos)
-                    {
-                        moveToTile.RemoveAt(0);
-                    }
-                    else
-                    {
-                        Vector2 direction = Vector2.Zero;
-                        float deltaX = Math.Abs(pos.X - this.Position.X);
-                        float deltaY = Math.Abs(pos.Y - this.Position.Y);
-
-                        Utilities.GetMoveSpeed(Position, pos, Speed, ref direction);
-                        CheckMapForCollisionsAndMove(direction);
-                    }
+                    listPathingForDay = _completeSchedule[currSeason + currDay + currWeather];
+                }
+                else if (_completeSchedule.ContainsKey(currSeason + currDay))
+                {
+                    listPathingForDay = _completeSchedule[currSeason + currDay];
+                }
+                else if (_completeSchedule.ContainsKey(currDay))
+                {
+                    listPathingForDay = _completeSchedule[currDay];
                 }
 
-                //if (pos == Position) {
-                //    if (_scheduleIndex < _schedule[currDay].Count - 1 && _schedule[currDay][_scheduleIndex + 1].Key == _moveTo)
-                //    {
-                //        _moveTo = _schedule[currDay][++_scheduleIndex].Value;
-                //    }
-                //    else
-                //    {
-                //        _scheduleIndex++;
-                //        _moveTo = string.Empty;
-                //    }
-                //}
-                //else {
+                //If there is pathing instructions for the day, proceed
+                //Key = Time, Value = goto Location
+                if (listPathingForDay != null)
+                {
+                    List<KeyValuePair<string, List<RHTile>>> lTimetoTilePath = new List<KeyValuePair<string, List<RHTile>>>();
+                    Vector2 start = Position;
+                    foreach(KeyValuePair<string, string> kvp in listPathingForDay)
+                    {
+                        List<RHTile> timePath = RunPathing(start, MapManager.Maps[CurrentMapName].DictionaryCharacterLayer[kvp.Value]);
+                        start = MapManager.Maps[CurrentMapName].DictionaryCharacterLayer[kvp.Value];
+                        lTimetoTilePath.Add(new KeyValuePair<string, List<RHTile>>(kvp.Key, timePath));
+                        ClearPathingTracks();
 
-                //    Vector2 direction = Vector2.Zero;
-                //    float deltaX = Math.Abs(pos.X - this.Position.X);
-                //    float deltaY = Math.Abs(pos.Y - this.Position.Y);
-
-                //    Utilities.GetMoveSpeed(Position, pos, Speed, ref direction);
-                //    CheckMapForCollisionsAndMove(direction);
-                //}
+                    }
+                    if (!_schedulePathing.ContainsKey(currDay))
+                    {
+                        _schedulePathing.Add(currDay, lTimetoTilePath);
+                    }
+                }
             }
         }
 
@@ -406,7 +413,7 @@ namespace RiverHollow.Characters
             }
         }
 
-        const int slowCost = 12;
+        const int slowCost = 100;
         Dictionary<RHTile, RHTile> cameFrom = new Dictionary<RHTile, RHTile>();
         Dictionary<RHTile, double> costSoFar = new Dictionary<RHTile, double>();
 
@@ -450,6 +457,12 @@ namespace RiverHollow.Characters
                 }
             }
             return returnList;
+        }
+
+        private void ClearPathingTracks()
+        {
+            cameFrom.Clear();
+            costSoFar.Clear();
         }
 
         //Returns how much it costs to enter the next square

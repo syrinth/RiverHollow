@@ -4,7 +4,11 @@
     <!--Key: Index>0 Value: Time|Location/Time/Location All time in 24 hr. 00:00-->
     <Item>
       <Key>Monday</Key>
-      <Value>6:15|Route1/Route1|Route2/Route2|Route3/Route3|Route4/7:0|Route5/8:30|Route6/9:00|Route1</Value>
+      <Value>6:15|Route1/6:45|Route2/7:30|Route3/8:30|Route4</Value>
+    </Item>
+    <Item>
+      <Key>Tuesday</Key>
+      <Value>6:30|Route4/7:00|Route2/7:30|Route3/8:30|Route1/9:0|Route4</Value>
     </Item>
   </Asset>
 </XnaContent>

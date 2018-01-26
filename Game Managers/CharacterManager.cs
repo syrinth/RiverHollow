@@ -16,7 +16,7 @@ namespace RiverHollow.Game_Managers
     {
         private static Dictionary<int, string> _mobDictionary;
         private static Dictionary<int, string> _monsterDictionary;
-        private static Dictionary<int, NPC> _characterDictionary;
+        private static Dictionary<int, NPC> _npcDictionary;
         private static Dictionary<int, string> _abilityDictionary;
         private static Dictionary<int, string> _classDictionary;
         private static Dictionary<string, Dictionary<string, string>> _dictSchedule;
@@ -35,7 +35,7 @@ namespace RiverHollow.Game_Managers
                 _dictSchedule.Add(temp, Content.Load<Dictionary<string, string>>(@"Data\NPCData\Schedules\" + temp));
             }
 
-            _characterDictionary = new Dictionary<int, NPC>();
+            _npcDictionary = new Dictionary<int, NPC>();
             foreach (KeyValuePair<int, string> kvp in Content.Load<Dictionary<int, string>>(@"Data\NPCData\Characters"))
             {
                 NPC n = null;
@@ -50,13 +50,13 @@ namespace RiverHollow.Game_Managers
                         n = new NPC(kvp.Key, _characterDataValues);
                         break;
                 }
-                _characterDictionary.Add(kvp.Key, n);
+                _npcDictionary.Add(kvp.Key, n);
             }
         }
 
         public static string GetCharacterNameByIndex(int i)
         {
-            return _characterDictionary[i].Name;
+            return _npcDictionary[i].Name;
         }
 
         public static Monster GetMonsterByIndex(int id)
@@ -123,6 +123,14 @@ namespace RiverHollow.Game_Managers
             }
 
             return rv;
+        }
+
+        public static void RollOver()
+        {
+            foreach(NPC n in _npcDictionary.Values)
+            {
+                n.RollOver();
+            }
         }
     }
 }

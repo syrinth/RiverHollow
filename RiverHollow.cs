@@ -14,7 +14,7 @@ namespace RiverHollow
     public class RiverHollow : Game
     {
         private static bool _exit = false;
-        public static float Scale = 2f;
+        public static float Scale = 1f;
         public enum GameState { Paused, Running, Build, Information, Input}
         private static GameState _gameState;
         public static GameState State { get => _gameState; }
@@ -267,11 +267,13 @@ namespace RiverHollow
 
         public static void RollOver()
         {
+            GameCalendar.RollOver();
             PlayerManager.Rollover();
             foreach(WorkerBuilding b in PlayerManager.Buildings)
             {
                 b.Rollover();
             }
+            CharacterManager.RollOver();
         }
 
         public static void PrepExit()
