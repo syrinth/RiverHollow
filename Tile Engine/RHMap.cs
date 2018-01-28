@@ -666,7 +666,7 @@ namespace RiverHollow.Tile_Engine
 
             return _tileArray[targetLoc.X / TileSize, targetLoc.Y / TileSize];
         }
-        public RHTile RetrieveTileFromPosition(Point targetLoc)
+        public RHTile RetrieveTileFromGridPosition(Point targetLoc)
         {
             if (targetLoc.X >= MapWidthTiles || targetLoc.X < 0) { return null; }
             if (targetLoc.Y >= MapHeightTiles || targetLoc.Y < 0) { return null; }
@@ -966,7 +966,8 @@ namespace RiverHollow.Tile_Engine
 
     public class RHTile
     {
-        private string MapName;
+        private string _mapName;
+        public string MapName { get => _mapName; }
         private bool _tileExists;
         private int _X;
         public int X { get => _X; }
@@ -988,7 +989,7 @@ namespace RiverHollow.Tile_Engine
             _X = x;
             _Y = y;
 
-            MapName = mapName;
+            _mapName = mapName;
             _properties = new Dictionary<TiledMapTileLayer, Dictionary<string, string>>();
         }
         public List<RHTile> GetWalkableNeighbours()
@@ -997,8 +998,8 @@ namespace RiverHollow.Tile_Engine
             List<RHTile> neighbours = new List<RHTile>();
             foreach(Vector2 d in DIRS)
             {
-                RHTile tile = MapManager.Maps[MapName].RetrieveTileFromPosition(new Point((int)(_X + d.X), (int)(_Y + d.Y)));
-                if (tile != null && tile.Passable()){
+                RHTile tile = MapManager.Maps[MapName].RetrieveTileFromGridPosition(new Point((int)(_X + d.X), (int)(_Y + d.Y)));
+                if (tile != null && tile.Passable() && tile.Object == null){
                     neighbours.Add(tile);
                 }
             }

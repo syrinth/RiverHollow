@@ -82,6 +82,9 @@ namespace RiverHollow.Game_Managers
             }
             else
             {
+                if (c.GetType().Equals(typeof(NPC))){
+                    ((NPC)c).ClearTileForMapChange();
+                }
                 _tileMaps[currMap].RemoveCharacter(c);
                 _tileMaps[newMapStr].AddCharacter(c);
                 c.NewMapPosition = new Vector2(rectEntrance.Left, rectEntrance.Top); //This needs to get updated when officially added to the new map

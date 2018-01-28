@@ -125,6 +125,14 @@ namespace RiverHollow.Characters
                 }
             }
         }
+
+        public void ClearTileForMapChange()
+        {
+            while (_currentPath[0].MapName == CurrentMapName)
+            {
+                _currentPath.RemoveAt(0);
+            }
+        }
         
         public void RollOver()
         {
@@ -185,13 +193,21 @@ namespace RiverHollow.Characters
                 {
                     List<KeyValuePair<string, List<RHTile>>> lTimetoTilePath = new List<KeyValuePair<string, List<RHTile>>>();
                     Vector2 start = Position;
-                    foreach(KeyValuePair<string, string> kvp in listPathingForDay)
+                    string mapName = CurrentMapName;
+                    foreach (KeyValuePair<string, string> kvp in listPathingForDay)
                     {
-                        List<RHTile> timePath = RunPathing(start, MapManager.Maps[CurrentMapName].DictionaryCharacterLayer[kvp.Value]);
-                        start = MapManager.Maps[CurrentMapName].DictionaryCharacterLayer[kvp.Value];
+                        List<RHTile> timePath;
+                        
+                        if (MapManager.Maps[CurrentMapName].DictionaryCharacterLayer.ContainsKey(kvp.Value))
+                        {
+                            timePath = RunPathing(start, MapManager.Maps[CurrentMapName].DictionaryCharacterLayer[kvp.Value], CurrentMapName);
+                        }
+                        else
+                        {
+                            timePath = MapPathing(kvp.Value, ref mapName, ref start);
+                        }
                         lTimetoTilePath.Add(new KeyValuePair<string, List<RHTile>>(kvp.Key, timePath));
                         ClearPathingTracks();
-
                     }
                     if (!_schedulePathing.ContainsKey(currDay))
                     {
@@ -422,10 +438,10 @@ namespace RiverHollow.Characters
             return (Math.Abs(a.Position.X - b.Position.X) + Math.Abs(b.Position.Y - b.Position.Y)) * (a.IsRoad ? 1 : slowCost);
         }
 
-        private List<RHTile> RunPathing(Vector2 start, Vector2 target)
+        private List<RHTile> RunPathing(Vector2 start, Vector2 target, string mapName)
         {
             List<RHTile> returnList = null;
-            RHMap map = MapManager.Maps[CurrentMapName];
+            RHMap map = MapManager.Maps[mapName];
             RHTile startTile = map.RetrieveTile(start.ToPoint());
             RHTile goalNode = map.RetrieveTile(target.ToPoint());
             var frontier = new PriorityQueue<RHTile>();
@@ -483,6 +499,69 @@ namespace RiverHollow.Characters
             list.Reverse();
 
             return list;
+        }
+
+        Dictionary<string, List<RHTile>> _dictMapPathing;
+        private List<RHTile> MapPathing(string findKey, ref string mapName, ref Vector2 newStart)
+        {
+            List<RHTile> _completeTilePath = new List<RHTile>();
+            _dictMapPathing = new Dictionary<string, List<RHTile>>();
+            Vector2 start = newStart;
+            Dictionary<string, string> mapCameFrom = new Dictionary<string, string>();
+            Dictionary<string, double> mapCostSoFar = new Dictionary<string, double>();
+
+            var frontier = new PriorityQueue<string>();
+            frontier.Enqueue(mapName, 0);
+
+            mapCameFrom[mapName] = mapName;
+            mapCostSoFar[mapName] = 0;
+            while (frontier.Count > 0)
+            {
+                var testMap = frontier.Dequeue();
+                string fromMap = mapCameFrom[testMap];
+                if (fromMap != testMap) {
+                    start = MapManager.Maps[testMap].DictionaryEntrance[fromMap].Location.ToVector2();
+                }
+                if (MapManager.Maps[testMap].DictionaryCharacterLayer.ContainsKey(findKey))
+                {
+                    mapName = testMap;
+                    newStart = MapManager.Maps[testMap].DictionaryCharacterLayer[findKey];
+                    List<RHTile> pathToExit = RunPathing(start, MapManager.Maps[testMap].DictionaryCharacterLayer[findKey], testMap);
+                    fromMap = mapCameFrom[testMap];
+                    List<List<RHTile>> _totalPath = new List<List<RHTile>>();
+                    _totalPath.Add(pathToExit);
+                    while (fromMap != testMap)
+                    {
+                        _totalPath.Add(_dictMapPathing[fromMap + ":" + testMap]);
+                        testMap = fromMap;
+                        fromMap = mapCameFrom[testMap];
+                    }
+                    _totalPath.Reverse();
+                    
+                    foreach (List<RHTile> l in _totalPath)
+                    {
+                        _completeTilePath.AddRange(l);
+                    }
+                    
+                    break;
+                }
+
+                foreach (KeyValuePair<Rectangle, string> exit in MapManager.Maps[testMap].DictionaryExit)
+                {
+                    List<RHTile> pathToExit = RunPathing(start, exit.Key.Location.ToVector2(), testMap);
+                    double newCost = mapCostSoFar[testMap] + pathToExit.Count;
+                    if (!mapCostSoFar.ContainsKey(exit.Value))
+                    {
+                        mapCostSoFar[exit.Value] = newCost + pathToExit.Count;
+                        frontier.Enqueue(exit.Value, newCost);
+                        mapCameFrom[exit.Value] = testMap;
+                        _dictMapPathing[testMap + ":" + exit.Value] = pathToExit; // This needd another key for the appropriate exit
+                        ClearPathingTracks();
+                    }
+                }
+            }
+
+            return _completeTilePath;
         }
     }
     #endregion
