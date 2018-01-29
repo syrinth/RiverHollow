@@ -242,6 +242,11 @@ namespace RiverHollow
             }
         }
 
+        public static bool IsRunning()
+        {
+            return _gameState == GameState.Running;
+        }
+
         public static void ResetCamera()
         {
             Camera.ResetObserver();

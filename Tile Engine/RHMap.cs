@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using RiverHollow.Misc;
+using static RiverHollow.RiverHollow;
 
 namespace RiverHollow.Tile_Engine
 {
@@ -148,9 +149,12 @@ namespace RiverHollow.Tile_Engine
             if (this == MapManager.CurrentMap)
             {
                 renderer.Update(_map, theGameTime);
-                foreach (Mob m in _mobList)
+                if (RiverHollow.IsRunning())
                 {
-                    m.Update(theGameTime);
+                    foreach (Mob m in _mobList)
+                    {
+                        m.Update(theGameTime);
+                    }
                 }
                 
                 foreach (Item i in _itemList)
@@ -188,9 +192,12 @@ namespace RiverHollow.Tile_Engine
                 moved.Clear();
             }
 
-            foreach (WorldCharacter c in _characterList)
+            if (RiverHollow.IsRunning())
             {
-                c.Update(theGameTime);
+                foreach (WorldCharacter c in _characterList)
+                {
+                    c.Update(theGameTime);
+                }
             }
             
 
