@@ -60,5 +60,11 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Tent.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/HouseNPC1.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Houses.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC5.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/Meleers.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Armory.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Guildhouse.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/knight.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/weapons master.png</File>
   </SourceFiles>
 </SourceFileCollection>

@@ -466,3 +466,54 @@
 /processorParam:TextureFormat=Color
 /build:Maps/Houses.png
 
+#begin Data/Dialogue/NPC5.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Dialogue/NPC5.xml
+
+#begin Data/Shops/Meleers.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Shops/Meleers.xml
+
+#begin Textures/Armory.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Armory.png
+
+#begin Maps/Guildhouse.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Guildhouse.tmx
+
+#begin Textures/knight.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/knight.png
+
+#begin Textures/weapons master.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/weapons master.png
+

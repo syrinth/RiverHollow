@@ -556,8 +556,8 @@ namespace RiverHollow.Characters
                         frontier.Enqueue(exit.Value, newCost);
                         mapCameFrom[exit.Value] = testMap;
                         _dictMapPathing[testMap + ":" + exit.Value] = pathToExit; // This needd another key for the appropriate exit
-                        ClearPathingTracks();
                     }
+                    ClearPathingTracks();
                 }
             }
 

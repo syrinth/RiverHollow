@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, string]">
+    <!--Key:NPCType#, Value:Text-->
+    <Item>
+      <Key>Introduction</Key>
+      <Value>Oh, you're $^$ right? I'm $0$. You're here for adventure, right? Good! I'm a ranger in these parts, I know the landscape like the back of my hand. Bring me any adventure maps you find, and I'll make sure you get there.</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>Hello, $^$, Care for a drink? You'll have to bring your own I'm afraid!</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>Do you have any adventure maps? It's been a while since I've gone exploring.</Value>
+    </Item>
+    <Item>
+      <Key>Gift</Key>
+      <Value>Really? For me? You shouldn't have! Well, I'll keep this in mind next time we go out and exploring.</Value>
+    </Item>
+    <Item>
+      <Key>Selection</Key>
+      <Value>Hello lad! [Talk:Talk|Gift:GiveGift|%50%Join Party:Party|Never Mind:Nothing]</Value>
+    </Item>
+    <Item>
+      <Key>ShopOpen</Key>
+      <Value>Greetings! What can I do for you today, &amp;^&amp;? [Talk:Talk|Hire Adventurers:BuyWorkers]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

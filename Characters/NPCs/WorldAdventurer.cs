@@ -50,7 +50,7 @@ namespace RiverHollow.Characters.NPCs
             SetCombat();
         }
 
-        protected new int ImportBasics(string[] stringData, int id)
+        protected int ImportBasics(string[] stringData, int id)
         {
             _id = id;
             int i = 0;
@@ -159,7 +159,10 @@ namespace RiverHollow.Characters.NPCs
 
         public void MakeDailyItem()
         {
-            InventoryManager.AddNewItemToInventory(_dailyItemID, _building.BuildingChest);
+            if (_dailyItemID != -1)
+            {
+                InventoryManager.AddNewItemToInventory(_dailyItemID, _building.BuildingChest);
+            }
         }
 
         public string GetName()

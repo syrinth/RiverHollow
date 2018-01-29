@@ -34,6 +34,8 @@ namespace RiverHollow.Game_Managers
         {
             AddTexture(Content, @"Textures\Eggplant");
             AddTexture(Content, @"Textures\Wizard");
+            AddTexture(Content, @"Textures\Knight");
+            AddTexture(Content, @"Textures\Weapons Master");
             AddTexture(Content, @"Textures\NPC1");
             AddTexture(Content, @"Textures\Monsters\Goblin Scout");
             AddTexture(Content, @"Textures\Monsters\Goblin Soldier");
@@ -54,6 +56,7 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\battle");
             AddTexture(Content, @"Textures\weapons");
             AddTexture(Content, @"Textures\ArcaneTower");
+            AddTexture(Content, @"Textures\Armory");
             AddTexture(Content, @"Textures\tools");
             AddTexture(Content, @"Textures\worldObjects");
             AddTexture(Content, @"Textures\chest");
@@ -75,6 +78,7 @@ namespace RiverHollow.Game_Managers
         {
             LoadMerchandiseByFile(Content, @"Data\Shops\Buildings");
             LoadMerchandiseByFile(Content, @"Data\Shops\Arcanists");
+            LoadMerchandiseByFile(Content, @"Data\Shops\Meleers");
         }
 
         public static void LoadMerchandiseByFile(ContentManager Content, string file)

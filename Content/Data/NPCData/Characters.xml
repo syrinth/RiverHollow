@@ -18,5 +18,9 @@
       <Key>4</Key>
       <Value>Ranger/Mara/1/RiverHollowTown/7 8</Value>
     </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>Shopkeeper/Eldra/1/Guildhouse/7 8/Meleers</Value>
+    </Item>
   </Asset>
 </XnaContent>
