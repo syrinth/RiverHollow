@@ -152,7 +152,7 @@ namespace RiverHollow.Game_Managers
         {
             if (straightOut)
             {
-                return MapManager.Maps[@"NearWilds"];
+                return MapManager.Maps[@"RiverHollowTown"];
             }
             else
             {
@@ -164,7 +164,7 @@ namespace RiverHollow.Game_Managers
                     }
                     else
                     {
-                        return MapManager.Maps[@"Map1"];
+                        return MapManager.Maps[@"RiverHollowTown"];
                     }
                 }
             }

@@ -517,3 +517,13 @@
 /processorParam:TextureFormat=Color
 /build:Textures/weapons master.png
 
+#begin Maps/Crossroads.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Crossroads.tmx
+
+#begin Maps/Mountains.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Mountains.tmx
+

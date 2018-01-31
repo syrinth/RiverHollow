@@ -76,14 +76,9 @@ namespace RiverHollow.Characters
             Rectangle testRectX = new Rectangle((int)(Position.X + direction.X), (int)Position.Y, Width, Height);
             Rectangle testRectY = new Rectangle((int)Position.X, (int)(Position.Y + direction.Y), Width, Height);
 
-            if (MapManager.Maps[CurrentMapName].CheckLeftMovement(this, testRectX) && MapManager.Maps[CurrentMapName].CheckRightMovement(this, testRectX))
+            if (MapManager.CurrentMap.CheckMovement(this, testRectX, testRectY, ref direction))
             {
-                _sprite.MoveBy(direction.X, 0);
-            }
-
-            if (MapManager.Maps[CurrentMapName].CheckUpMovement(this, testRectY) && MapManager.Maps[CurrentMapName].CheckDownMovement(this, testRectY))
-            {
-                _sprite.MoveBy(0, direction.Y);
+                _sprite.MoveBy((int)direction.X, (int)direction.Y);
             }
 
             string animation = string.Empty;

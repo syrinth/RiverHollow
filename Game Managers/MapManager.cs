@@ -25,6 +25,8 @@ namespace RiverHollow.Game_Managers
             AddMap(@"Maps\Map2", Content, GraphicsDevice);
             AddMap(@"Maps\NearWilds", Content, GraphicsDevice);
             AddMap(@"Maps\RiverHollowTown", Content, GraphicsDevice);
+            AddMap(@"Maps\Crossroads", Content, GraphicsDevice);
+            AddMap(@"Maps\Mountains", Content, GraphicsDevice);
             AddMap(@"Maps\Dungeons\Room1", Content, GraphicsDevice);
             AddMap(@"Maps\Dungeons\Room2", Content, GraphicsDevice);
             AddMap(@"Maps\Dungeons\Room3", Content, GraphicsDevice);

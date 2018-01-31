@@ -298,94 +298,31 @@ namespace RiverHollow.Tile_Engine
         }
 
         #region Collision Code
-        public bool CheckLeftMovement(WorldCharacter c, Rectangle movingChar)
+        public bool CheckMovement(WorldCharacter c, Rectangle testX, Rectangle testY, ref Vector2 dir)
         {
             bool rv = true;
-            if (CheckForCollision(c, movingChar)) { return false; }
+            if (CheckForCollision(c, testX) || CheckForCollision(c, testY)) { return false; }
+            if (MapChange(c, testX) || MapChange(c, testY)) { return false; }
 
-            int columnTile = movingChar.Left / _tileSize;
-            for (int y = GetMinRow(movingChar); y <= GetMaxRow(movingChar); y++)
-            {
-                RHTile mapTile = _tileArray[columnTile, y];
-                Rectangle cellRect = new Rectangle(columnTile * _tileSize, y * _tileSize, _tileSize, _tileSize);
-                if (!mapTile.Passable() && cellRect.Intersects(movingChar))
-                {
-                    if (cellRect.Right >= movingChar.Left) { rv = false; }
-                }
+            int column = ((dir.X < 0) ? testX.Left : testX.Right) / _tileSize;
+            int row = ((dir.Y < 0) ? testY.Top : testY.Bottom) / _tileSize;
 
-                if (MapChange(c, movingChar)) { return false; }
-            }
+            CollisionDetectionHelper(testX, ref dir, column, -1, GetMinRow(testX), GetMaxRow(testX));      //Do X-Axis comparison
+            CollisionDetectionHelper(testY, ref dir, -1, row, GetMinColumn(testY), GetMaxColumn(testY));      //Do Y-Axis comparison
 
             return rv;
         }
 
-        public void AddCollectionItem(int itemID, int index)
+        public bool CheckForCollision(WorldCharacter mover, Rectangle movingChar)
         {
-            Item displayItem = ObjectManager.GetItem(itemID);
-            displayItem.Pickup = false;
-            displayItem.OnTheMap = true;
-            displayItem.Position = _dictCharacterLayer["Col" + index];
-            _itemList.Add(displayItem);
-        }
-
-        public bool CheckRightMovement(WorldCharacter c, Rectangle movingChar)
-        {
-            bool rv = true;
-            if (CheckForCollision(c, movingChar)) { return false; }
-
-            int columnTile = movingChar.Right / _tileSize;
-            for (int y = GetMinRow(movingChar); y <= GetMaxRow(movingChar); y++)
+            bool rv = false;
+            foreach (WorldCharacter c in _characterList)
             {
-                RHTile mapTile = _tileArray[columnTile, y];
-                Rectangle cellRect = new Rectangle(columnTile * _tileSize, y * _tileSize, _tileSize, _tileSize);
-                if (!mapTile.Passable() && cellRect.Intersects(movingChar))
+                if (mover != c && c.CollisionBox.Intersects(movingChar))
                 {
-                    if (cellRect.Left <= movingChar.Right) { rv = false; }
+                    rv = true;
+                    break;
                 }
-
-                if (MapChange(c, movingChar)) { return false; }
-            }
-
-            return rv;
-        }
-
-        public bool CheckUpMovement(WorldCharacter c, Rectangle movingChar)
-        {
-            bool rv = true;
-            if (CheckForCollision(c, movingChar)) { return false; }
-
-            int rowTile = movingChar.Top / _tileSize;
-            for (int x = GetMinColumn(movingChar); x <= GetMaxColumn(movingChar); x++)
-            {
-                RHTile mapTile = _tileArray[x, rowTile];
-                Rectangle cellRect = new Rectangle(x * _tileSize, rowTile * _tileSize, _tileSize, _tileSize);
-                if (!mapTile.Passable() && cellRect.Intersects(movingChar))
-                {
-                    if (cellRect.Bottom >= movingChar.Top) { rv = false; }
-                }
-
-                if (MapChange(c, movingChar)) { return false; }
-            }
-
-            return rv;
-        }
-
-        public bool CheckDownMovement(WorldCharacter c, Rectangle movingChar)
-        {
-            bool rv = true;
-            if (CheckForCollision(c, movingChar)) { return false; }
-
-            int rowTile = movingChar.Bottom / _tileSize;
-            for (int x = GetMinColumn(movingChar); x <= GetMaxColumn(movingChar); x++)
-            {
-                RHTile mapTile = _tileArray[x, rowTile];
-                Rectangle cellRect = new Rectangle(x * _tileSize, rowTile * _tileSize, _tileSize, _tileSize);
-                if (!mapTile.Passable() && cellRect.Intersects(movingChar))
-                {
-                    if (cellRect.Top <= movingChar.Bottom) { rv = false; }
-                }
-
-                if (MapChange(c, movingChar)) { return false; }
             }
 
             return rv;
@@ -415,6 +352,47 @@ namespace RiverHollow.Tile_Engine
             return false;
         }
 
+        #region Collision Helpers
+        private void CollisionDetectionHelper(Rectangle movingChar, ref Vector2 dir, int column, int row, int min, int max)
+        {
+            for (int var = min; var <= max; var++)
+            {
+                int varCol = (column != -1) ? column : var;
+                int varRow = (row != -1) ? row : var;
+
+                RHTile mapTile = _tileArray[varCol, varRow];
+                Rectangle cellRect = new Rectangle(varCol * _tileSize, varRow * _tileSize, _tileSize, _tileSize);
+                if (!mapTile.Passable() && cellRect.Intersects(movingChar))
+                {
+                    if (row == -1 && (cellRect.Right >= movingChar.Left || cellRect.Left <= movingChar.Right)) { dir.X = 0; }
+                    if (column == -1 && (cellRect.Bottom >= movingChar.Top || cellRect.Top <= movingChar.Bottom)) { dir.Y = 0; }
+                }
+            }
+        }
+
+        public int GetMinColumn(Rectangle movingChar)
+        {
+            return (movingChar.Left / _tileSize);
+        }
+
+        public int GetMaxColumn(Rectangle movingChar)
+        {
+            int i = (movingChar.Right / _tileSize);
+            return i;
+        }
+
+        public int GetMinRow(Rectangle movingChar)
+        {
+            return (movingChar.Top / _tileSize);
+        }
+
+        public int GetMaxRow(Rectangle movingChar)
+        {
+            return (movingChar.Bottom / _tileSize);
+        }
+        #endregion
+        #endregion
+
         public bool IsLocationValid(Vector2 pos)
         {
             bool rv = false;
@@ -422,19 +400,13 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public bool CheckForCollision(WorldCharacter mover, Rectangle movingChar)
+        public void AddCollectionItem(int itemID, int index)
         {
-            bool rv = false;
-            foreach (WorldCharacter c in _characterList)
-            {
-                if (mover != c && c.CollisionBox.Intersects(movingChar))
-                {
-                    rv = true;
-                    break;
-                }
-            }
-            
-            return rv;
+            Item displayItem = ObjectManager.GetItem(itemID);
+            displayItem.Pickup = false;
+            displayItem.OnTheMap = true;
+            displayItem.Position = _dictCharacterLayer["Col" + index];
+            _itemList.Add(displayItem);
         }
 
         public Dictionary<string, string> GetProperties(TiledMapTile tile)
@@ -467,30 +439,6 @@ namespace RiverHollow.Tile_Engine
             }
             return rv;
         }
-
-        #region Collision Helpers
-        public int GetMinColumn(Rectangle movingChar)
-        {
-            return (movingChar.Left / _tileSize);
-        }
-
-        public int GetMaxColumn(Rectangle movingChar)
-        {
-            int i = (movingChar.Right / _tileSize);
-            return i;
-        }
-
-        public int GetMinRow(Rectangle movingChar)
-        {
-            return (movingChar.Top / _tileSize);
-        }
-
-        public int GetMaxRow(Rectangle movingChar)
-        {
-            return (movingChar.Bottom / _tileSize);
-        }
-        #endregion
-        #endregion
 
         #region Input Processing
         public bool ProcessRightButtonClick(Point mouseLocation)

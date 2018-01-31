@@ -321,12 +321,12 @@
  <objectgroup name="Travel Layer">
   <object id="1" name="Exit" x="3166.83" y="658.25" width="20.5" height="65.3333">
    <properties>
-    <property name="Exit" value="RiverHollowTown"/>
+    <property name="Exit" value="Crossroads"/>
    </properties>
   </object>
   <object id="2" name="Entrance" x="3111.08" y="679.583" width="14.6667" height="14.6667">
    <properties>
-    <property name="Entrance" value="RiverHollowTown"/>
+    <property name="Entrance" value="Crossroads"/>
    </properties>
   </object>
   <object id="6" name="Entrance" x="2372.92" y="71.4163" width="14.6667" height="14.6667">

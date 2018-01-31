@@ -175,14 +175,9 @@ namespace RiverHollow.Game_Managers
                     Rectangle testRectX = new Rectangle((int)World.CollisionBox.X + (int)moveDir.X, (int)World.CollisionBox.Y, World.CollisionBox.Width, World.CollisionBox.Height);
                     Rectangle testRectY = new Rectangle((int)World.CollisionBox.X, (int)World.CollisionBox.Y + (int)moveDir.Y, World.CollisionBox.Width, World.CollisionBox.Height);
 
-                    if (MapManager.CurrentMap.CheckLeftMovement(World, testRectX) && MapManager.CurrentMap.CheckRightMovement(World, testRectX))
+                    if(MapManager.CurrentMap.CheckMovement(World, testRectX, testRectY, ref moveDir))
                     {
-                        World.MoveBy((int)moveDir.X, 0);
-                    }
-
-                    if (MapManager.CurrentMap.CheckUpMovement(World, testRectY) && MapManager.CurrentMap.CheckDownMovement(World, testRectY))
-                    {
-                        World.MoveBy(0, (int)moveDir.Y);
+                        World.MoveBy((int)moveDir.X, (int)moveDir.Y);
                     }
 
                     if (World.Sprite.CurrentAnimation != animation)
