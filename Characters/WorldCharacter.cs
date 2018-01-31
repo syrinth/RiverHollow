@@ -76,7 +76,7 @@ namespace RiverHollow.Characters
             Rectangle testRectX = new Rectangle((int)(Position.X + direction.X), (int)Position.Y, Width, Height);
             Rectangle testRectY = new Rectangle((int)Position.X, (int)(Position.Y + direction.Y), Width, Height);
 
-            if (MapManager.CurrentMap.CheckMovement(this, testRectX, testRectY, ref direction))
+            if (MapManager.CurrentMap.CheckForCollisions(this, testRectX, testRectY, ref direction))
             {
                 _sprite.MoveBy((int)direction.X, (int)direction.Y);
             }

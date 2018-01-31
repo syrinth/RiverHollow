@@ -57,6 +57,7 @@ namespace RiverHollow
             InputManager.Load();
             GameContentManager.LoadContent(Content);
             ObjectManager.LoadContent(Content);
+            PlayerManager.Initialize();
             GUIManager.LoadContent();
             MapManager.LoadContent(Content, GraphicsDevice);
             spriteBatch = new SpriteBatch(GraphicsDevice);

@@ -33,6 +33,8 @@ namespace RiverHollow.Tile_Engine
         public bool IsBuilding { get => _isBuilding; }
         public bool _isDungeon;
         public bool IsDungeon { get => _isDungeon; }
+        public bool _isTown;
+        public bool IsTown { get => _isTown; }
 
         protected TiledMap _map;
         public TiledMap Map { get => _map; }
@@ -105,6 +107,15 @@ namespace RiverHollow.Tile_Engine
             
             _isBuilding = _map.Properties.ContainsKey("Building");
             _isDungeon = _map.Properties.ContainsKey("Dungeon");
+            _isTown = _map.Properties.ContainsKey("Town");
+
+            if (_isTown)
+            {
+                foreach (KeyValuePair<string, bool> kvp in PlayerManager.DictUpgrades)
+                {
+                    if (kvp.Value) { EnableUpgradeVisibility(kvp.Key); }
+                }
+            }
             renderer = new TiledMapRenderer(GraphicsDevice);
 
             LoadMapObjects();
@@ -288,17 +299,48 @@ namespace RiverHollow.Tile_Engine
 
         public void SetLayerVisibility(bool revealUpper)
         {
-            foreach (TiledMapTileLayer l in _map.TileLayers)
+            foreach (TiledMapTileLayer l in _map.TileLayers)                            //Iterate over each TileLayer in the map
             {
-                if (l.Name != "North" && l.Name != "South" && l.Name != "East" && l.Name != "West") {
-                    if (revealUpper) { l.IsVisible = (l.Name == "Upper Layer"); }
-                    else { l.IsVisible = (l.Name != "Upper Layer"); }
+                if (l.Name.StartsWith("ent"))                                           //The layer is a dungeon entrancel layer. Don't touch.
+                {
+                    continue;
+                }
+
+                bool upgrade = false;
+                if (_isTown)
+                {
+                    foreach (KeyValuePair<string, bool> s in PlayerManager.DictUpgrades)    //Check each upgrade to see if it's enabled
+                    {
+                        if(l.Name.Contains(s.Key)) { upgrade = true; }
+                        if (s.Value)
+                        {                           
+                            bool determinant = l.Name.Contains("Upper");
+                            if (revealUpper) { l.IsVisible = determinant; }
+                            else { l.IsVisible = !determinant; }
+                        }
+                    }
+                }
+
+                if (!upgrade)
+                {
+                    bool determinant = (l.Name == "Upper Layer");
+
+                    if (revealUpper) { l.IsVisible = determinant; }
+                    else { l.IsVisible = !determinant; }
                 }
             }
         }
 
+        public void EnableUpgradeVisibility(string upgrade)
+        {
+            foreach (TiledMapTileLayer l in _map.TileLayers)
+            {
+                if (l.Name.Contains(upgrade)) { l.IsVisible = true; }
+            }
+        }
+
         #region Collision Code
-        public bool CheckMovement(WorldCharacter c, Rectangle testX, Rectangle testY, ref Vector2 dir)
+        public bool CheckForCollisions(WorldCharacter c, Rectangle testX, Rectangle testY, ref Vector2 dir)
         {
             bool rv = true;
             if (CheckForCollision(c, testX) || CheckForCollision(c, testY)) { return false; }
@@ -966,8 +1008,7 @@ namespace RiverHollow.Tile_Engine
         {
             foreach (TiledMapTileLayer l in map.Layers.Values)
             {
-                
-                if (l.IsVisible && l.TryGetTile(_X, _Y, out TiledMapTile? tile) && tile != null)
+                if (l.TryGetTile(_X, _Y, out TiledMapTile? tile) && tile != null)
                 {
                     if (tile.Value.GlobalIdentifier != 0)
                     {

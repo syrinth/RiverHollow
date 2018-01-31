@@ -20,6 +20,9 @@ namespace RiverHollow.Game_Managers
     public static class PlayerManager
     {
         #region Properties
+        private static Dictionary<string, bool> _dictUpgrades;
+        public static Dictionary<string, bool> DictUpgrades { get => _dictUpgrades; }
+
         private static bool _busy;
         public static Tool UseTool;
         private static RHTile _targetTile = null;
@@ -56,7 +59,7 @@ namespace RiverHollow.Game_Managers
         public static int Money { get => _money; }
         #endregion
 
-        public static void InitPlayer()
+        public static void Initialize()
         {
             _party = new List<CombatAdventurer>();
             _questLog = new List<Quest>();
@@ -65,26 +68,26 @@ namespace RiverHollow.Game_Managers
             _party.Add(Combat);
             _buildings = new List<WorkerBuilding>();
             _canMake = new List<int>();
-
+            _dictUpgrades = new Dictionary<string, bool>
+            {
+                { "Tavern", false }
+            };
+        }
+        public static void InitPlayer()
+        {
+            Initialize();
             Combat.LoadContent(@"Textures\WizardCombat", 100, 100, 2, 0.7f); //ToDo: position doesn't matter here
-
             World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
-            
 
             SetPlayerDefaults();
         }
         public static void NewPlayer()
         {
-            _party = new List<CombatAdventurer>();
-            _questLog = new List<Quest>();
-            World = new WorldCharacter();
+            Initialize();
             World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
             World.Position = new Vector2(200, 200);
-            Combat = new CombatAdventurer();
             Combat.LoadContent(@"Textures\WizardCombat", 100, 100, 2, 0.7f); //ToDo: position doesn't matter here
             _party.Add(Combat);
-            _buildings = new List<WorkerBuilding>();
-            _canMake = new List<int>();
             _canMake.Add(6);
             InventoryManager.AddNewItemToInventory(5);
             InventoryManager.AddNewItemToInventory(3);
@@ -175,7 +178,7 @@ namespace RiverHollow.Game_Managers
                     Rectangle testRectX = new Rectangle((int)World.CollisionBox.X + (int)moveDir.X, (int)World.CollisionBox.Y, World.CollisionBox.Width, World.CollisionBox.Height);
                     Rectangle testRectY = new Rectangle((int)World.CollisionBox.X, (int)World.CollisionBox.Y + (int)moveDir.Y, World.CollisionBox.Width, World.CollisionBox.Height);
 
-                    if(MapManager.CurrentMap.CheckMovement(World, testRectX, testRectY, ref moveDir))
+                    if(MapManager.CurrentMap.CheckForCollisions(World, testRectX, testRectY, ref moveDir))
                     {
                         World.MoveBy((int)moveDir.X, (int)moveDir.Y);
                     }
