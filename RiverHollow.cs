@@ -202,7 +202,7 @@ namespace RiverHollow
                 }
                 if (InputManager.CheckKey(Keys.X))
                 {
-                    PlayerManager.Save();
+                    GameManager.Save();
                 }
                 if (GUIManager.CurrentGUIScreen != GUIManager.Screens.ItemCreation || GUIManager.CurrentGUIScreen != GUIManager.Screens.HUD)
                 {
@@ -237,7 +237,7 @@ namespace RiverHollow
 
         public static void LoadGame()
         {
-            PlayerManager.Load();
+            GameManager.Load();
             MapManager.PopulateMaps(true);
             GameManager.BackToMain();
         }

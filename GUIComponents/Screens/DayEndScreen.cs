@@ -32,7 +32,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                 RiverHollow.RollOver();
                 GameCalendar.NextDay();
                 GUIManager.FadeOut();
-                PlayerManager.Save();
+                GameManager.Save();
                 PlayerManager.Stamina = PlayerManager.MaxStamina;
 
                 GameManager.BackToMain();

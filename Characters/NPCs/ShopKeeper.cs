@@ -45,10 +45,10 @@ namespace RiverHollow.Characters.NPCs
         {
             GraphicCursor._currentType = GraphicCursor.CursorType.Talk;
             string text = string.Empty;
-            if (!_introduced)
+            if (!Introduced)
             {
                 text = _dialogueDictionary["Introduction"];
-                _introduced = true;
+                Introduced = true;
             }
             else
             {

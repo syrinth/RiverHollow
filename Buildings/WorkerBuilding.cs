@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using RiverHollow.Misc;
 using RiverHollow.Buildings;
 using static RiverHollow.Game_Managers.PlayerManager;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow
 {

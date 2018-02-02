@@ -21,13 +21,15 @@ namespace RiverHollow.Characters
         #endregion
 
         protected int _index;
+        public int ID { get => _index; }
         public enum NPCType { Villager, Shopkeeper, Ranger, Worker }
         protected NPCType _npcType;
         public NPCType Type { get => _npcType; }
         public int Friendship;
 
         protected Dictionary<int, bool> _collection;
-        protected bool _introduced;
+        public Dictionary<int, bool> Collection { get => _collection; }
+        public bool Introduced;
 
         protected Dictionary<string, List<KeyValuePair<string, string>>> _completeSchedule;         //Every day with a list of KVP Time/GoToLocations
         List<KeyValuePair<string, List<RHTile>>> _todaysPathing = null;                             //List of Times with the associated pathing
@@ -221,9 +223,9 @@ namespace RiverHollow.Characters
         public virtual void Talk()
         {
             string text = string.Empty;
-            if (!_introduced) {
+            if (!Introduced) {
                 text = _dialogueDictionary["Introduction"];
-                _introduced = true;
+                Introduced = true;
             }
             else
             {

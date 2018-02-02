@@ -17,6 +17,7 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<int, string> _mobDictionary;
         private static Dictionary<int, string> _monsterDictionary;
         private static Dictionary<int, NPC> _npcDictionary;
+        public static Dictionary<int, NPC> DiNPC { get => _npcDictionary; }
         private static Dictionary<int, string> _abilityDictionary;
         private static Dictionary<int, string> _classDictionary;
         private static Dictionary<string, Dictionary<string, string>> _dictSchedule;
