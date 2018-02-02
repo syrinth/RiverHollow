@@ -20,7 +20,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _btnLoadGame = new GUIButton(new Vector2(RiverHollow.ScreenWidth / 2, 800), new Rectangle(0, 128, 64, 32), 128, 64, "Load Game", @"Textures\Dialog");
             Controls.Add(_btnNewGame);
             Controls.Add(_btnLoadGame);
-            RiverHollow.ChangeGameState(RiverHollow.GameState.Information);
+            GameManager.GoToInformation();
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)

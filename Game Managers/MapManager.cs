@@ -183,7 +183,7 @@ namespace RiverHollow.Game_Managers
         {
             _currentMap.DrawBase(spriteBatch);
 
-            if (RiverHollow.State == RiverHollow.GameState.Build)
+            if (GameManager.Scrying())
             {
                 if (GraphicCursor.HeldBuilding != null)
                 {

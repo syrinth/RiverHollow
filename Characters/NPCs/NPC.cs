@@ -220,7 +220,6 @@ namespace RiverHollow.Characters
 
         public virtual void Talk()
         {
-            GraphicCursor._currentType = GraphicCursor.CursorType.Normal;
             string text = string.Empty;
             if (!_introduced) {
                 text = _dialogueDictionary["Introduction"];

@@ -16,7 +16,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public GUITextInputWindow(NPC w) : base()
         {
-            RiverHollow.ChangeGameState(RiverHollow.GameState.Input);
+            GameManager.Pause();
             _statement = "Enter name:";
             _width = Math.Max((int)_font.MeasureString(_statement).X, (int)_characterWidth * 10) + _innerBorder * 2;
             _height = (int)_characterHeight * 2 + _innerBorder * 2;
@@ -44,7 +44,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                         {
                             RiverHollow.ResetCamera();
                             _w.SetName(_text);
-                            RiverHollow.ChangeGameState(RiverHollow.GameState.Running);
+                            GameManager.Unpause();
                         }
                     }
                     else

@@ -119,7 +119,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             else if (_container != null && !_container.DrawRectangle.Contains(mouse))
             {
-                RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
+                GameManager.GoToWorldMap();
             }
             else if (_character != null && _character.Contains(mouse))
             {

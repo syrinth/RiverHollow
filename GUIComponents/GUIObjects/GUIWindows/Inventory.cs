@@ -104,7 +104,7 @@ namespace RiverHollow.Screens
                 else
                 {
                     rv = GraphicCursor.GrabItem(TakeItem(mouse));
-                    RiverHollow.BackToMain();
+                    GameManager.BackToMain();
                 }
             }
             return rv;

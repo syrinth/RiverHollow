@@ -38,7 +38,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Controls.Add(_btnQuestLog);
             Controls.Add(_btnParty);
 
-            RiverHollow.ChangeGameState(RiverHollow.GameState.Paused);
+            GameManager.Pause();
             _open = true;
         }
 
@@ -62,7 +62,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 temp.X += val;
                 o.Position = temp;
                 if (_open && o.Position.X == 0) { _openingFinished++; }
-                if (_close && o.Position.X == -BTN_WIDTH) { RiverHollow.BackToMain(); }
+                if (_close && o.Position.X == -BTN_WIDTH) { GameManager.BackToMain(); }
             }
             if(_openingFinished == BTN_NUM) { _open = false; }
             if(_infoScreen != null)

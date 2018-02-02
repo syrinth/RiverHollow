@@ -88,7 +88,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             base.Update(gameTime);
             if (InputManager.CheckKey(Keys.Escape))
             {
-                RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
+                GameManager.GoToWorldMap();
             }
         }
 
@@ -121,7 +121,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                     GUIManager.SetScreen(GUIManager.Screens.None);
                     WorkerBuilding b = ObjectManager.GetBuilding(_merchandise[_currentItemIndex].MerchID);
                     GraphicCursor.PickUpBuilding(b);
-                    RiverHollow.ChangeGameState(RiverHollow.GameState.Build);
+                    GameManager.Scry(true);
                     Camera.UnsetObserver();
                     MapManager.ViewMap("NearWilds");
                     rv = true;
@@ -136,7 +136,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             if (!Contains(mouse))
             {
                 GUIManager.SetScreen(GUIManager.Screens.HUD);
-                RiverHollow.ChangeGameState(RiverHollow.GameState.Running);
+                GameManager.Unpause();
                 rv = true;
             }
 

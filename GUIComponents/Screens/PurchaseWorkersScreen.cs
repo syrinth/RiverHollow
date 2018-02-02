@@ -71,7 +71,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
 
                         GUIManager.SetScreen(GUIManager.Screens.None);
                         GraphicCursor.PickUpWorker(wB._w.ID);
-                        RiverHollow.ChangeGameState(RiverHollow.GameState.Build);
+                        GameManager.Scry(true);
                         Camera.UnsetObserver();
                         MapManager.ViewMap("NearWilds");
                         rv = true;

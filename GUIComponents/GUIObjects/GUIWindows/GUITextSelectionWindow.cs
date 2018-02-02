@@ -40,7 +40,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public void Setup(string selectionText)
         {
-            RiverHollow.ChangeGameState(RiverHollow.GameState.Paused);
+            GameManager.Pause();
             _keySelection = 0;
             SeparateText(selectionText);
         }
@@ -54,7 +54,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public GUITextSelectionWindow(Food f, string selectionText) : this(selectionText)
         {
-            RiverHollow.ChangeGameState(RiverHollow.GameState.Paused);
+            GameManager.Pause();
             _food = f;
         }
 
@@ -178,7 +178,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                     PlayerManager.Combat.IncreaseHealth(_food.Health);
                 }
                 GUIManager.RemoveComponent(this);
-                RiverHollow.BackToMain();
+                GameManager.BackToMain();
             }
             else
             {
@@ -196,7 +196,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             }
             else if(GUIManager.CurrentGUIScreen == GUIManager.Screens.Text || GUIManager.CurrentGUIScreen == GUIManager.Screens.TextInput)
             {
-                RiverHollow.BackToMain();
+                GameManager.BackToMain();
             }
         }
     }

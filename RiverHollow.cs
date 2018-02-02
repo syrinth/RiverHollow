@@ -15,12 +15,6 @@ namespace RiverHollow
     {
         private static float Scale = GameManager.Scale;
         private static bool _exit = false;
-        public enum GameState { Paused, Running, Build, Information, Input}
-        private static GameState _gameState;
-        public static GameState State { get => _gameState; }
-        public enum MapState { None, WorldMap, Combat}
-        private static MapState _mapState;
-        public static MapState WhichMapState { get => _mapState; }
 
         public GraphicsDeviceManager _graphicsDeviceManager;
         public SpriteBatch spriteBatch;
@@ -45,9 +39,8 @@ namespace RiverHollow
             // TODO: Add your initialization logic here
             Camera.SetViewport(GraphicsDevice.Viewport);
             InventoryManager.Init();
-            _gameState = GameState.Paused;
-            _mapState = MapState.None;
-
+            GameManager.GoToInformation();
+            
             base.Initialize();
         }
 
@@ -94,25 +87,32 @@ namespace RiverHollow
 
                 Point mousePoint = Mouse.GetState().Position;
                 Vector3 translate = Camera._transform.Translation;
+
                 if (ms.RightButton == ButtonState.Pressed && GraphicCursor.LastMouseState.RightButton == ButtonState.Released)
                 {
-                    if (!GUIManager.ProcessRightButtonClick(mousePoint) && (_mapState == MapState.WorldMap || _gameState == GameState.Build))
+                    if (!GUIManager.ProcessRightButtonClick(mousePoint) && GameManager.OnMap())
                     {
                         //GUI does NOT use Camera translations
-                        mousePoint.X = (int)((mousePoint.X - translate.X)/Scale);
-                        mousePoint.Y = (int)((mousePoint.Y - translate.Y)/Scale);
-                        MapManager.ProcessRightButtonClick(mousePoint);
+                        mousePoint.X = (int)((mousePoint.X - translate.X) / Scale);
+                        mousePoint.Y = (int)((mousePoint.Y - translate.Y) / Scale);
+                        if (GameManager.IsRunning())
+                        {
+                            MapManager.ProcessRightButtonClick(mousePoint);
+                        }
                     }
                 }
                 else if (ms.LeftButton == ButtonState.Pressed && GraphicCursor.LastMouseState.LeftButton == ButtonState.Released)
                 {
-                    if (!GUIManager.ProcessLeftButtonClick(mousePoint) && (_mapState == MapState.WorldMap || _gameState == GameState.Build))
+                    if (!GUIManager.ProcessLeftButtonClick(mousePoint) && GameManager.OnMap())
                     {
                         mousePoint.X = (int)((mousePoint.X - translate.X) / Scale);
                         mousePoint.Y = (int)((mousePoint.Y - translate.Y) / Scale);
-                        if (!MapManager.ProcessLeftButtonClick(mousePoint))
+                        if (GameManager.IsRunning())
                         {
-                            PlayerManager.ProcessLeftButtonClick(mousePoint);
+                            if (!MapManager.ProcessLeftButtonClick(mousePoint))
+                            {
+                                PlayerManager.ProcessLeftButtonClick(mousePoint);
+                            }
                         }
                     }
                 }
@@ -122,23 +122,24 @@ namespace RiverHollow
                     {
                         mousePoint.X = (int)((mousePoint.X - translate.X) / Scale);
                         mousePoint.Y = (int)((mousePoint.Y - translate.Y) / Scale);
-                        if (_gameState == GameState.Running || _gameState == GameState.Build)
+                        if (GameManager.IsRunning())
                         {
                             MapManager.ProcessHover(mousePoint);
                         }
                     }
                 }
+
                 GraphicCursor.LastMouseState = ms;
 
-                if (_mapState == MapState.WorldMap || _gameState == GameState.Build)
+                if (GameManager.OnMap())
                 {
                     Camera.Update(gameTime);
                     MapManager.Update(gameTime);
 
-                    if(_mapState == MapState.WorldMap && _gameState == GameState.Running)
+                    if(GameManager.IsRunning())
                     {
-                        PlayerManager.Update(gameTime);
                         GameCalendar.Update(gameTime);
+                        if (!GameManager.Scrying()) { PlayerManager.Update(gameTime); }
                     }
                 }
 
@@ -153,7 +154,7 @@ namespace RiverHollow
             {
                 spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
                 //If we're in an informational state, then only the GUIScreen data should be visible, don't draw anything except for the GUI
-                if (_gameState != GameState.Information)
+                if (!GameManager.Informational())
                 {
                     MapManager.DrawBase(spriteBatch);
                     PlayerManager.Draw(spriteBatch);
@@ -164,12 +165,14 @@ namespace RiverHollow
             {
                 spriteBatch.Begin();
                 this.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
-                if (_gameState != GameState.Information)
+                if (!GameManager.Informational())
                 {
                     MapManager.DrawUpper(spriteBatch);
                 }
+
                 GUIManager.Draw(spriteBatch);
-                if (_gameState != GameState.Information) { 
+
+                if (!GameManager.Informational()) { 
                     GameCalendar.Draw(spriteBatch);
                 }
                 spriteBatch.End();
@@ -179,25 +182,23 @@ namespace RiverHollow
 
         public void HandleImportantInput()
         {
-            if (_mapState != MapState.None && _gameState != GameState.Input)
+            if (!GameManager.Informational() && !GameManager.TakingInput())
             {
                 if (InputManager.CheckKey(Keys.Escape))
                 {
-                    if (_mapState == MapState.Combat)
+                    if (GameManager.InCombat())
                     {
                         CombatManager.EndBattle();
                     }
-                    else if (_mapState == MapState.WorldMap && GUIManager.CurrentGUIScreen != GUIManager.Screens.GameMenu)
+                    else if (GameManager.OnMap() && GUIManager.CurrentGUIScreen != GUIManager.Screens.GameMenu)
                     {
                         GUIManager.SetScreen(GUIManager.Screens.GameMenu);
                     }
                 }
                 if (InputManager.CheckKey(Keys.P))
                 {
-                    if (_gameState == GameState.Paused)
-                        _gameState = GameState.Paused;
-                    else
-                        _gameState = GameState.Running;
+                    if (GameManager.IsPaused()) { GameManager.Pause(); }
+                    else { GameManager.Unpause(); }
                 }
                 if (InputManager.CheckKey(Keys.X))
                 {
@@ -220,35 +221,6 @@ namespace RiverHollow
             }
         }
 
-        public static void BackToMain()
-        {
-            GUIManager.SetScreen(GUIManager.Screens.HUD);
-            RiverHollow.ChangeGameState(RiverHollow.GameState.Running);
-            RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
-        }
-
-        public static void ChangeGameState(GameState state)
-        {
-            _gameState = state;
-        }
-
-        public static void ChangeMapState(MapState state)
-        {
-            _mapState = state;
-
-            if (_mapState == MapState.Combat) { GUIManager.SetScreen(GUIManager.Screens.Combat); }
-
-            if (GUIManager.CurrentGUIScreen != GUIManager.Screens.HUD && _mapState == MapState.WorldMap)
-            {
-                GUIManager.SetScreen(GUIManager.Screens.HUD);
-            }
-        }
-
-        public static bool IsRunning()
-        {
-            return _gameState == GameState.Running;
-        }
-
         public static void ResetCamera()
         {
             Camera.ResetObserver();
@@ -260,16 +232,14 @@ namespace RiverHollow
         {
             PlayerManager.NewPlayer();
             MapManager.PopulateMaps(false);
-            RiverHollow.ChangeGameState(GameState.Running);
-            RiverHollow.ChangeMapState(MapState.WorldMap);
+            GameManager.BackToMain();
         }
 
         public static void LoadGame()
         {
             PlayerManager.Load();
             MapManager.PopulateMaps(true);
-            RiverHollow.ChangeGameState(GameState.Running);
-            RiverHollow.ChangeMapState(MapState.WorldMap);
+            GameManager.BackToMain();
         }
 
         public static void RollOver()

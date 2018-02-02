@@ -110,7 +110,7 @@ namespace RiverHollow.Game_Managers
 
         public static void Update(GameTime gameTime)
         {
-            if (RiverHollow.WhichMapState == RiverHollow.MapState.Combat) { UpdateCombat(gameTime); }
+            if (GameManager.InCombat()) { UpdateCombat(gameTime); }
             else { UpdateWorld(gameTime); }
         }
         public static void UpdateWorld(GameTime gameTime)
@@ -195,7 +195,7 @@ namespace RiverHollow.Game_Managers
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            if (RiverHollow.WhichMapState == RiverHollow.MapState.Combat) { DrawCombat(spriteBatch); }
+            if (GameManager.InCombat()) { DrawCombat(spriteBatch); }
             else { DrawWorld(spriteBatch); }
             _merchantChest.Draw(spriteBatch);
         }

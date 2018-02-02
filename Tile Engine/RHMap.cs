@@ -160,7 +160,7 @@ namespace RiverHollow.Tile_Engine
             if (this == MapManager.CurrentMap)
             {
                 renderer.Update(_map, theGameTime);
-                if (RiverHollow.IsRunning())
+                if (GameManager.IsRunning())
                 {
                     foreach (Mob m in _mobList)
                     {
@@ -203,7 +203,7 @@ namespace RiverHollow.Tile_Engine
                 moved.Clear();
             }
 
-            if (RiverHollow.IsRunning())
+            if (GameManager.IsRunning())
             {
                 foreach (WorldCharacter c in _characterList)
                 {
@@ -549,7 +549,7 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
-            if (RiverHollow.State == RiverHollow.GameState.Build)
+            if (GameManager.Scrying())
             {
                 if (GraphicCursor.HeldBuilding != null)
                 {
@@ -610,7 +610,8 @@ namespace RiverHollow.Tile_Engine
             {
                 if (_buildingTiles.Count > 0) { _buildingTiles.Clear(); }
             }
-            if (RiverHollow.State == RiverHollow.GameState.Build)
+
+            if (GameManager.Scrying())
             {
                 WorkerBuilding building = GraphicCursor.HeldBuilding;
                 _buildingTiles = new List<RHTile>();
@@ -779,8 +780,9 @@ namespace RiverHollow.Tile_Engine
                 GraphicCursor.DropBuilding();
                 _buildingList.Add(b);
                 PlayerManager.AddBuilding(b);
-                RiverHollow.ChangeGameState(RiverHollow.GameState.Running);
-                RiverHollow.ResetCamera();
+                GameManager.Unpause();
+                GameManager.Scry(false);
+                ResetCamera();
             }
         }
 
@@ -798,6 +800,7 @@ namespace RiverHollow.Tile_Engine
                         b.AddWorker(w, r);
                         b._selected = false;
                         GUIManager.LoadScreen(GUIManager.Screens.TextInput, w);
+                        GameManager.Scry(false);
                         rv = true;
                     }
                 }

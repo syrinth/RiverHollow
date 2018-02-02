@@ -22,7 +22,7 @@ namespace RiverHollow
 
         public static void Update(GameTime gametime)
         {
-            if (RiverHollow.State != RiverHollow.GameState.Build)
+            if (!GameManager.Scrying())
             {
                 _observer = PlayerManager.World.Center.ToVector2() * Scale;
             }

@@ -16,6 +16,47 @@ namespace RiverHollow.Game_Managers
                 DiUpgrades.Add(kvp.Key, new Upgrade(kvp.Key, kvp.Value));
             }
         }
+
+        #region States
+        private static bool _scrying;
+        private enum State { Paused, Running, Information, Input }
+        private static State _gameState;
+
+        private enum Map { None, WorldMap, Combat }
+        private static Map _mapState;
+
+        public static void ReadInput() { _gameState = State.Input; }
+        public static bool TakingInput() { return _gameState == State.Input; }
+
+        public static void Pause() { _gameState = State.Paused; }
+        public static bool IsPaused() { return _gameState == State.Paused; }
+
+        public static void Unpause() { _gameState = State.Running; }
+        public static bool IsRunning() { return _gameState == State.Running; }
+
+        public static void Scry(bool val) {
+            _gameState = State.Running;
+            _scrying = val;
+        }
+        public static bool Scrying() { return _scrying; }
+
+        public static bool InCombat() { return _mapState == Map.Combat; }
+        public static void GoToCombat() { _mapState = Map.Combat; }
+        public static bool OnMap() { return _mapState == Map.WorldMap; }
+        public static void GoToWorldMap() { _mapState = Map.WorldMap; }
+        public static bool Informational() { return _mapState == Map.None; }
+        public static void GoToInformation() {
+            _mapState = Map.None;
+            _gameState = State.Paused;
+        }
+
+        public static void BackToMain()
+        {
+            GUIManager.SetScreen(GUIManager.Screens.HUD);
+            _gameState = State.Running;
+            _mapState = Map.WorldMap;
+        }
+        #endregion
     }
 
     public class Upgrade
@@ -50,3 +91,5 @@ namespace RiverHollow.Game_Managers
         }
     }
 }
+
+//internal static class GameStateManager {    }

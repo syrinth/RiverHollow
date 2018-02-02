@@ -112,7 +112,7 @@ namespace RiverHollow.Characters.NPCs
                         InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
                     }
                     theUpgrade.Enabled = true;
-                    RiverHollow.BackToMain();
+                    GameManager.BackToMain();
                 }
             }
             else

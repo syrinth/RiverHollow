@@ -16,7 +16,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
 
         public DayEndScreen()
         {
-            RiverHollow.ChangeGameState(RiverHollow.GameState.Information);
+            GameManager.GoToInformation();
             _btnOK = new GUIButton(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight - 128), new Rectangle(0, 128, 128, 64), 256, 128, "OK", @"Textures\Dialog");
             string totalVal = String.Format("Total: {0}", PlayerManager._merchantChest.SellAll());
             _moneyWindow = new GUITextWindow(new Vector2(RiverHollow.ScreenWidth / 2, 500), totalVal);
@@ -32,11 +32,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                 RiverHollow.RollOver();
                 GameCalendar.NextDay();
                 GUIManager.FadeOut();
-                RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
-                RiverHollow.ChangeGameState(RiverHollow.GameState.Running);
                 PlayerManager.Save();
                 PlayerManager.Stamina = PlayerManager.MaxStamina;
-                
+
+                GameManager.BackToMain();
                 rv = true;
             }
             return rv;
