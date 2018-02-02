@@ -349,8 +349,10 @@ namespace RiverHollow.Tile_Engine
             int column = ((dir.X < 0) ? testX.Left : testX.Right) / _tileSize;
             int row = ((dir.Y < 0) ? testY.Top : testY.Bottom) / _tileSize;
 
-            CollisionDetectionHelper(testX, ref dir, column, -1, GetMinRow(testX), GetMaxRow(testX));      //Do X-Axis comparison
-            CollisionDetectionHelper(testY, ref dir, -1, row, GetMinColumn(testY), GetMaxColumn(testY));      //Do Y-Axis comparison
+            //Do X-Axis comparison
+            if (dir.X != 0) { CollisionDetectionHelper(testX, ref dir, column, -1, GetMinRow(testX), GetMaxRow(testX)); }
+            //Do Y-Axis comparison
+            if (dir.Y != 0) { CollisionDetectionHelper(testY, ref dir, -1, row, GetMinColumn(testY), GetMaxColumn(testY)); }    
 
             return rv;
         }
@@ -397,18 +399,25 @@ namespace RiverHollow.Tile_Engine
         #region Collision Helpers
         private void CollisionDetectionHelper(Rectangle movingChar, ref Vector2 dir, int column, int row, int min, int max)
         {
-            for (int var = min; var <= max; var++)
+            try
             {
-                int varCol = (column != -1) ? column : var;
-                int varRow = (row != -1) ? row : var;
-
-                RHTile mapTile = _tileArray[varCol, varRow];
-                Rectangle cellRect = new Rectangle(varCol * _tileSize, varRow * _tileSize, _tileSize, _tileSize);
-                if (!mapTile.Passable() && cellRect.Intersects(movingChar))
+                for (int var = min; var <= max; var++)
                 {
-                    if (row == -1 && (cellRect.Right >= movingChar.Left || cellRect.Left <= movingChar.Right)) { dir.X = 0; }
-                    if (column == -1 && (cellRect.Bottom >= movingChar.Top || cellRect.Top <= movingChar.Bottom)) { dir.Y = 0; }
+                    int varCol = (column != -1) ? column : var;
+                    int varRow = (row != -1) ? row : var;
+
+                    RHTile mapTile = _tileArray[varCol, varRow];
+                    Rectangle cellRect = new Rectangle(varCol * _tileSize, varRow * _tileSize, _tileSize, _tileSize);
+                    if (!mapTile.Passable() && cellRect.Intersects(movingChar))
+                    {
+                        if (row == -1 && (cellRect.Right >= movingChar.Left || cellRect.Left <= movingChar.Right)) { dir.X = 0; }
+                        if (column == -1 && (cellRect.Bottom >= movingChar.Top || cellRect.Top <= movingChar.Bottom)) { dir.Y = 0; }
+                    }
                 }
+            }
+            catch(IndexOutOfRangeException ex)
+            {
+
             }
         }
 
