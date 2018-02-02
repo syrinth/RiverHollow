@@ -177,12 +177,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                     PlayerManager.IncreaseStamina(_food.Stamina);
                     PlayerManager.Combat.IncreaseHealth(_food.Health);
                 }
-                GUIManager.RemoveComponent(this);
                 GameManager.BackToMain();
             }
             else
             {
-                GUIManager.RemoveComponent(this);
+                GameManager.BackToMain();
             }
         }
 

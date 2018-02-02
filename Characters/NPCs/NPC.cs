@@ -22,6 +22,7 @@ namespace RiverHollow.Characters
 
         protected int _index;
         public int ID { get => _index; }
+        protected string _homeMap;
         public enum NPCType { Villager, Shopkeeper, Ranger, Worker }
         protected NPCType _npcType;
         public NPCType Type { get => _npcType; }
@@ -71,6 +72,7 @@ namespace RiverHollow.Characters
             _name = stringData[i++];
             _portraitRect = new Rectangle(0, int.Parse(stringData[i++]) * 192, PortraitWidth, PortraitHeight);
             CurrentMapName = stringData[i++];
+            _homeMap = CurrentMapName;
             Position = Utilities.Normalize(MapManager.Maps[CurrentMapName].GetCharacterSpawn("NPC" + _index));
 
             string[] vectorSplit = stringData[i++].Split(' ');
@@ -134,7 +136,7 @@ namespace RiverHollow.Characters
         
         public void RollOver()
         {
-            Position = Utilities.Normalize(MapManager.Maps[CurrentMapName].GetCharacterSpawn("NPC" + _index));
+            Position = Utilities.Normalize(MapManager.Maps[_homeMap].GetCharacterSpawn("NPC" + _index));
             CalculatePathing();
         }
         public void CalculatePathing()

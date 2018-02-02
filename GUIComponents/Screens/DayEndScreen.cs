@@ -29,10 +29,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             bool rv = false;
             if (_btnOK.Contains(mouse))
             {
+                GameManager.Save();
                 RiverHollow.RollOver();
                 GameCalendar.NextDay();
                 GUIManager.FadeOut();
-                GameManager.Save();
                 PlayerManager.Stamina = PlayerManager.MaxStamina;
 
                 GameManager.BackToMain();
