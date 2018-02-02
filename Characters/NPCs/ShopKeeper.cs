@@ -86,6 +86,35 @@ namespace RiverHollow.Characters.NPCs
                 }
                 GUIManager.LoadScreen(GUIManager.Screens.WorkerShop, dialogueEntries);
             }
+            else if (entry.Contains("Upgrade"))
+            {
+                string upgradeWhat = entry.Remove(0, string.Format("Upgrade").Length);  //Removes Upgrade fromt he string to get what we're upgrading
+                Upgrade theUpgrade = GameManager.DiUpgrades[upgradeWhat];
+                bool create = true;
+                create = PlayerManager.Money >= theUpgrade.MoneyCost;
+                if (create)
+                {
+                    foreach(KeyValuePair<int, int> kvp in theUpgrade.LiRquiredItems)
+                    {
+                        if (!InventoryManager.HasItemInInventory(kvp.Key, kvp.Value))
+                        {
+                            create = false;
+                        }
+                    }
+                }
+                //If all items are found, then remove them.
+                if (create)
+                {
+                    PlayerManager.TakeMoney(theUpgrade.MoneyCost);
+
+                    foreach (KeyValuePair<int, int> kvp in theUpgrade.LiRquiredItems)
+                    {
+                        InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
+                    }
+                    theUpgrade.Enabled = true;
+                    RiverHollow.BackToMain();
+                }
+            }
             else
             {
                 rv =  base.GetDialogEntry(entry);

@@ -7,19 +7,22 @@ namespace RiverHollow.Game_Managers
     public static class GameContentManager
     {
         private static ContentManager _content;
-        private static Dictionary<string, Texture2D> _textureDictionary;
-        private static Dictionary<string, SpriteFont> _fontDictionary;
-        private static Dictionary<string, string> _npcDialogueDictionary;
-        private static Dictionary<string, Dictionary<int, string>> _merchandiseDictionary;
+        private static Dictionary<string, Texture2D> _diTextures;
+        private static Dictionary<string, SpriteFont> _diFonts;
+        private static Dictionary<string, string> _diNPCDialogue;
+        private static Dictionary<string, Dictionary<int, string>> _diMerchandise;
+        private static Dictionary<string, string> _diUpgrades;
+        public static Dictionary<string, string> DiUpgrades { get => _diUpgrades; }
 
         public static void LoadContent(ContentManager Content)
         {
             _content = Content;
-            _textureDictionary = new Dictionary<string, Texture2D>();
-            _fontDictionary = new Dictionary<string, SpriteFont>();
-            _merchandiseDictionary = new Dictionary<string, Dictionary<int, string>>();
+            _diTextures = new Dictionary<string, Texture2D>();
+            _diFonts = new Dictionary<string, SpriteFont>();
+            _diMerchandise = new Dictionary<string, Dictionary<int, string>>();
+            _diUpgrades = _content.Load<Dictionary<string, string>>(@"Data\TownUpgrades");
 
-            _npcDialogueDictionary = LoadDialogue(@"Data\Dialogue\NPCDialogue");
+            _diNPCDialogue = LoadDialogue(@"Data\Dialogue\NPCDialogue");
 
             LoadCharacters(_content);
             LoadGUIs(_content);
@@ -83,40 +86,40 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadMerchandiseByFile(ContentManager Content, string file)
         {
-            _merchandiseDictionary.Add(file.Replace(@"Data\Shops\", ""), Content.Load<Dictionary<int, string>>(file));
+            _diMerchandise.Add(file.Replace(@"Data\Shops\", ""), Content.Load<Dictionary<int, string>>(file));
         }
 
         #region AddMethods
         private static void AddTexture(ContentManager Content, string texture)
         {
-            _textureDictionary.Add(texture, Content.Load<Texture2D>(texture));
+            _diTextures.Add(texture, Content.Load<Texture2D>(texture));
         }
 
         private static void AddFont(ContentManager Content, string font)
         {
-            _fontDictionary.Add(font, Content.Load<SpriteFont>(font));
+            _diFonts.Add(font, Content.Load<SpriteFont>(font));
         }
         #endregion
 
         #region Get Methods
         public static Texture2D GetTexture(string texture)
         {
-            return _textureDictionary[texture];
+            return _diTextures[texture];
         }
 
         public static SpriteFont GetFont(string font)
         {
-            return _fontDictionary[font];
+            return _diFonts[font];
         }
 
         public static string GetDialogue(string key)
         {
-            return _npcDialogueDictionary[key];
+            return _diNPCDialogue[key];
         }
 
         public static Dictionary<int, string> GetMerchandise(string file)
         {
-            return _merchandiseDictionary[file];
+            return _diMerchandise[file];
         }
 
         public static Dictionary<string, string> LoadDialogue(string file)

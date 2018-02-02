@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, string]">
+    <!--Key: Upgrade Name, Value:Name/Description/Money/Id#:NumNeeded-->
+    <Item>
+      <Key>Tavern</Key>
+      <Value>Tavern/A place where people can gather/1000/0:1</Value>
+    </Item>
+  </Asset>
+</XnaContent>

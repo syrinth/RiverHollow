@@ -13,8 +13,8 @@ namespace RiverHollow
     /// </summary>
     public class RiverHollow : Game
     {
+        private static float Scale = GameManager.Scale;
         private static bool _exit = false;
-        public static float Scale = 1f;
         public enum GameState { Paused, Running, Build, Information, Input}
         private static GameState _gameState;
         public static GameState State { get => _gameState; }
@@ -56,6 +56,7 @@ namespace RiverHollow
             // Create a new SpriteBatch, which can be used to draw textures.
             InputManager.Load();
             GameContentManager.LoadContent(Content);
+            GameManager.LoadContent(Content);
             ObjectManager.LoadContent(Content);
             PlayerManager.Initialize();
             GUIManager.LoadContent();

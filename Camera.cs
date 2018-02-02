@@ -8,7 +8,7 @@ namespace RiverHollow
 {
     public static class Camera
     {
-        private static float Scale = RiverHollow.Scale;
+        private static float Scale = GameManager.Scale;
         public static Matrix _transform;
         public static Viewport _view;
         public static Vector2 _center;

@@ -196,7 +196,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             }
             else if(GUIManager.CurrentGUIScreen == GUIManager.Screens.Text || GUIManager.CurrentGUIScreen == GUIManager.Screens.TextInput)
             {
-                RiverHollow.ChangeMapState(RiverHollow.MapState.WorldMap);
+                RiverHollow.BackToMain();
             }
         }
     }

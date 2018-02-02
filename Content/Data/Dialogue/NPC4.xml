@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<XnaContent xmlns:Generic="System.Collections.Generic">
+<XnaContent>
   <Asset Type="Dictionary[string, string]">
     <!--Key:NPCType#, Value:Text-->
     <Item>

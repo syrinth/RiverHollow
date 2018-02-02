@@ -527,3 +527,8 @@
 /processor:TiledMapProcessor
 /build:Maps/Mountains.tmx
 
+#begin Data/TownUpgrades.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/TownUpgrades.xml
+

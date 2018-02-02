@@ -1,14 +1,13 @@
 ﻿using RiverHollow.Characters.NPCs;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
-using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.PlayerManager;
 using RiverHollow.Misc;
 using RiverHollow.Buildings;
+using static RiverHollow.Game_Managers.PlayerManager;
 
 namespace RiverHollow
 {
@@ -40,7 +39,7 @@ namespace RiverHollow
         public WorkerBuilding(string[] stringData, int id){
             int i = ImportBasics(stringData, id);
             _buildingWorker = (WorkerType)Enum.Parse(typeof(WorkerType), stringData[i++]);
-            _personalId = PlayerManager.GetNewBuildingID();
+            _personalId = GetNewBuildingID();
             _workers = new List<WorldAdventurer>();
             _staticItemList = new List<StaticItem>();
 

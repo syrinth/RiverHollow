@@ -20,9 +20,6 @@ namespace RiverHollow.Game_Managers
     public static class PlayerManager
     {
         #region Properties
-        private static Dictionary<string, bool> _dictUpgrades;
-        public static Dictionary<string, bool> DictUpgrades { get => _dictUpgrades; }
-
         private static bool _busy;
         public static Tool UseTool;
         private static RHTile _targetTile = null;
@@ -68,10 +65,6 @@ namespace RiverHollow.Game_Managers
             _party.Add(Combat);
             _buildings = new List<WorkerBuilding>();
             _canMake = new List<int>();
-            _dictUpgrades = new Dictionary<string, bool>
-            {
-                { "Tavern", false }
-            };
         }
         public static void InitPlayer()
         {

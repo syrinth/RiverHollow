@@ -18,7 +18,7 @@ namespace RiverHollow.Tile_Engine
 {
     public class RHMap
     {
-        private static float Scale = RiverHollow.Scale;
+        private static float Scale = GameManager.Scale;
         public int MapWidthTiles = 100;
         public int MapHeightTiles = 100;
         public static int _tileSize = 32;
@@ -111,9 +111,9 @@ namespace RiverHollow.Tile_Engine
 
             if (_isTown)
             {
-                foreach (KeyValuePair<string, bool> kvp in PlayerManager.DictUpgrades)
+                foreach (KeyValuePair<string, Upgrade> kvp in GameManager.DiUpgrades)
                 {
-                    if (kvp.Value) { EnableUpgradeVisibility(kvp.Key); }
+                    if (kvp.Value.Enabled) { EnableUpgradeVisibility(kvp.Key); }
                 }
             }
             renderer = new TiledMapRenderer(GraphicsDevice);
@@ -309,10 +309,10 @@ namespace RiverHollow.Tile_Engine
                 bool upgrade = false;
                 if (_isTown)
                 {
-                    foreach (KeyValuePair<string, bool> s in PlayerManager.DictUpgrades)    //Check each upgrade to see if it's enabled
+                    foreach (KeyValuePair<string, Upgrade> s in GameManager.DiUpgrades)    //Check each upgrade to see if it's enabled
                     {
                         if(l.Name.Contains(s.Key)) { upgrade = true; }
-                        if (s.Value)
+                        if (s.Value.Enabled)
                         {                           
                             bool determinant = l.Name.Contains("Upper");
                             if (revealUpper) { l.IsVisible = determinant; }

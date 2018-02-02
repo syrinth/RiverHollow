@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Items;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
@@ -14,6 +8,7 @@ namespace RiverHollow.GUIObjects
 {
     public static class GraphicCursor
     {
+        private static float Scale = GameManager.Scale;
         public enum CursorType { Normal, Talk, Gift};
         public static CursorType _currentType;
         public static MouseState LastMouseState = new MouseState();
@@ -41,8 +36,8 @@ namespace RiverHollow.GUIObjects
         {
             Vector3 translate = Camera._transform.Translation;
             Vector2 mousePoint = Vector2.Zero;
-            mousePoint.X = (int)((_position.X - translate.X) / RiverHollow.Scale);
-            mousePoint.Y = (int)((_position.Y - translate.Y) / RiverHollow.Scale);
+            mousePoint.X = (int)((_position.X - translate.X) / Scale);
+            mousePoint.Y = (int)((_position.Y - translate.Y) / Scale);
 
             return mousePoint;
         }
@@ -127,8 +122,8 @@ namespace RiverHollow.GUIObjects
         {
             Vector2 mousePoint = Position;
             Vector3 translate = Camera._transform.Translation;
-            mousePoint.X = (int)((mousePoint.X - translate.X) / RiverHollow.Scale);
-            mousePoint.Y = (int)((mousePoint.Y - translate.Y) / RiverHollow.Scale);
+            mousePoint.X = (int)((mousePoint.X - translate.X) / Scale);
+            mousePoint.Y = (int)((mousePoint.Y - translate.Y) / Scale);
             return mousePoint;
         }
     }
