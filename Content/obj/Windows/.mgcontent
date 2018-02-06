@@ -69,5 +69,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Crossroads.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Mountains.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/TownUpgrades.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Buffs.xml</File>
   </SourceFiles>
 </SourceFileCollection>

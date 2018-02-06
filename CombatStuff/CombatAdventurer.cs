@@ -24,25 +24,21 @@ namespace RiverHollow.Characters.CombatStuff
         public Equipment Weapon;
         public Equipment Armor;
 
-        public override int StatDmg { get =>  10 + (_classLevel * _class.StatDmg) + (Weapon == null ? 0 : Weapon.Dmg) + (Armor == null ? 0 : Armor.Dmg); }
-        public override int StatDef { get => 10 + (_classLevel * _class.StatDef) + (Weapon == null ? 0 : Weapon.Def) + (Armor == null ? 0 : Armor.Def); }
+        public override int StatDmg { get =>  10 + (_classLevel * _class.StatDmg) + _buffDmg + (Weapon == null ? 0 : Weapon.Dmg) + (Armor == null ? 0 : Armor.Dmg); }
+        public override int StatDef { get => 10 + (_classLevel * _class.StatDef) + _buffDef + (Weapon == null ? 0 : Weapon.Def) + (Armor == null ? 0 : Armor.Def); }
         public override int StatHP { get => 10 + (_classLevel * _class.StatHP) + (Weapon == null ? 0 : Weapon.HP) + (Armor == null ? 0 : Armor.HP); }
-        public override int StatMagic { get => 10 + (_classLevel * _class.StatMagic) + (Weapon == null ? 0 : Weapon.Mag) + (Armor == null ? 0 : Armor.Mag); }
-        public override int StatSpd { get => 10 + (_classLevel * _class.StatSpd) + (Weapon == null ? 0 : Weapon.Spd) + (Armor == null ? 0 : Armor.Spd); }
+        public override int StatMagic { get => 10 + (_classLevel * _class.StatMagic) + _buffMagic + (Weapon == null ? 0 : Weapon.Mag) + (Armor == null ? 0 : Armor.Mag); }
+        public override int StatSpd { get => 10 + (_classLevel * _class.StatSpd) + +_buffSpd + (Weapon == null ? 0 : Weapon.Spd) + (Armor == null ? 0 : Armor.Spd); }
 
         #endregion
         public CombatAdventurer(WorldAdventurer w) : base()
         {
             _world = w;
-            Weapon = (Equipment)ObjectManager.GetItem(9);
-            Armor = (Equipment)ObjectManager.GetItem(10);
             _classLevel = 1;
         }
 
         public CombatAdventurer() : base()
         {
-            Weapon = (Equipment)ObjectManager.GetItem(9);
-            Armor = (Equipment)ObjectManager.GetItem(10);
             _classLevel = 1;
         }
 

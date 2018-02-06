@@ -19,6 +19,7 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<int, NPC> _npcDictionary;
         public static Dictionary<int, NPC> DiNPC { get => _npcDictionary; }
         private static Dictionary<int, string> _abilityDictionary;
+        private static Dictionary<int, string> _buffDictionary;
         private static Dictionary<int, string> _classDictionary;
         private static Dictionary<string, Dictionary<string, string>> _dictSchedule;
 
@@ -28,6 +29,7 @@ namespace RiverHollow.Game_Managers
             _monsterDictionary = Content.Load<Dictionary<int, string>>(@"Data\Monsters");
             _mobDictionary = Content.Load<Dictionary<int, string>>(@"Data\Mobs");
             _abilityDictionary = Content.Load<Dictionary<int, string>>(@"Data\Abilities");
+            _buffDictionary = Content.Load<Dictionary<int, string>>(@"Data\Buffs");
             _classDictionary = Content.Load<Dictionary<int, string>>(@"Data\Classes");
             
             foreach (string s in Directory.GetFiles(@"Content\Data\NPCData\Schedules"))
@@ -101,6 +103,17 @@ namespace RiverHollow.Game_Managers
                 a = new Ability(id, _stringDataValues);
             }
             return a;
+        }
+        public static Buff GetBuffByIndex(int id)
+        {
+            Buff b = null;
+            if (id != -1)
+            {
+                string _stringData = _buffDictionary[id];
+                string[] _stringDataValues = _stringData.Split('/');
+                b = new Buff(id, _stringDataValues);
+            }
+            return b;
         }
 
         public static CharacterClass GetClassByIndex(int id)

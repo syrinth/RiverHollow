@@ -85,10 +85,12 @@ namespace RiverHollow.Game_Managers
         {
             if (_listMonsters.Contains(TurnOrder[TurnIndex]))
             {
+                TurnOrder[TurnIndex].TickBuffs();
                 CurrentPhase = Phase.EnemyTurn;
             }
             else if (_listParty.Contains(TurnOrder[TurnIndex]))
             {
+                TurnOrder[TurnIndex].TickBuffs();
                 CurrentPhase = Phase.SelectSkill;
             }
             else if (Delay > 0)
@@ -108,8 +110,17 @@ namespace RiverHollow.Game_Managers
         public static void UsingSkill(Ability a)
         {
             _skill = a;
-            _skill.Sprite.IsAnimating = true;
-            CurrentPhase = Phase.Targetting;
+            if (!_skill.Target.Equals("Self"))
+            {
+                _skill.Sprite.IsAnimating = true;
+                CurrentPhase = Phase.Targetting;
+            }
+            else
+            {
+                _skill.ApplyEffectToSelf(TurnOrder[TurnIndex]);
+                _skill = null;
+                NextTurn();
+            }
         }
 
         public static void UseSkillOnTarget(BattleLocation target)
@@ -126,6 +137,7 @@ namespace RiverHollow.Game_Managers
         {
             if(Delay > 0) {
                 Delay -= gameTime.ElapsedGameTime.TotalSeconds;
+
                 if (Delay <= 0)
                 {
                     Delay = 0;
@@ -143,7 +155,7 @@ namespace RiverHollow.Game_Managers
                     {
                         if (_skill.IsFinished())
                         {
-                            _skill.ApplyEffect(_target);
+                            _skill.ApplyEffect(_target, TurnOrder[TurnIndex]);
                             _skill = null;
                             NextTurn();
                         }

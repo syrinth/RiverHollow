@@ -199,9 +199,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 _attack.Draw(spriteBatch, false);
             }
-        }
-
-        
+        }  
     }
 
     public class BattleLocation

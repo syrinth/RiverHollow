@@ -49,9 +49,15 @@ namespace RiverHollow.Game_Managers
         public static bool Scrying() { return _scrying; }
 
         public static bool InCombat() { return _mapState == Map.Combat; }
-        public static void GoToCombat() { _mapState = Map.Combat; }
+        public static void GoToCombat() {
+            _mapState = Map.Combat;
+            GUIManager.SetScreen(GUIManager.Screens.Combat);
+        }
         public static bool OnMap() { return _mapState == Map.WorldMap; }
-        public static void GoToWorldMap() { _mapState = Map.WorldMap; }
+        public static void GoToWorldMap() {
+            _mapState = Map.WorldMap;
+            GUIManager.SetScreen(GUIManager.Screens.HUD);
+        }
         public static bool Informational() { return _mapState == Map.None; }
         public static void GoToInformation() {
             _mapState = Map.None;

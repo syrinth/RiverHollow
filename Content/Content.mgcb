@@ -532,3 +532,8 @@
 /processor:PassThroughProcessor
 /build:Data/TownUpgrades.xml
 
+#begin Data/Buffs.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Buffs.xml
+

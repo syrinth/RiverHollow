@@ -1,54 +1,57 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: Index>0 Value:Name/Description/IconXIconY/AnimationRow/FrameSpeed/Tags-->
+    <!--Key: Index>0 Value:Name/Description/IconXIconY/AnimationRow/FrameSpeed/[Effect:][Buff:][UserAction:]-->
+    <!--Effect Tags: Projectile, Direct, Harm, Heal-->
+    <!--Buff Format: [Buff:BuffId|Duration|<Tags>]-->
+    <!--Buff Tags: Allies, Enemies, Target, Self-->
     <Item>
       <Key>1</Key>
-      <Value>Attack/Basic Attack/0 0/0/0.03/Harm:1 Direct</Value>
+      <Value>Attack/Basic Attack/0 0/0/0.03/[Target:Enemy][Effect:Harm-1 Direct]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Thunder/Call down thunder on your foes/1 0/0/0.03/Harm:5 Direct</Value>
+      <Value>Thunder/Call down thunder on your foes/1 0/0/0.03/[Target:Enemy][Effect:Harm-5 Direct]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>Fireball/Flames!/2 0/1/0.03/Harm:50 Projectile</Value>
+      <Value>Fireball/Flames!/2 0/1/0.03/[Target:Enemy][Effect:Harm-50 Projectile]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>Rock/Summon a rock/3 0/0/0.03/Harm:2 Projectile</Value>
+      <Value>Shield/Summon a rock/3 0/0/0.03/[Target:Self][Effect:][Buff:1|2|Self]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>Strike/Strike with your weapon/3 0/0/0.03/Harm:2 Projectile</Value>
+      <Value>Strike/Strike with your weapon/3 0/0/0.03/[Effect:Harm-2 Projectile]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>Riposte/Defend against an incoming attack, then counter/3 0/0/0.03/Harm:2 Projectile</Value>
+      <Value>Riposte/Defend against an incoming attack, then counter/3 0/0/0.03/[Effect:Harm-2 Projectile]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>Focus/Increase your accuracy and damage/3 0/0/0.03/Harm:2 Projectile</Value>
+      <Value>Focus/Increase your accuracy and damage/3 0/0/0.03/[Effect:Harm-2 Projectile][Buff:1|Duration|Self]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>Distract/Distract your foe with amazing weaponplay, decreasing their accuracy/3 0/0/0.03/Harm:2 Projectile</Value>
+      <Value>Distract/Distract your foe with amazing weaponplay, decreasing their accuracy/3 0/0/0.03/[Effect:Harm-2 Projectile]</Value>
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>Warding Blow/Strike with your weapon/3 0/0/0.03/Harm:2 Projectile</Value>
+      <Value>Warding Blow/Strike with your weapon/3 0/0/0.03/[Effect:Harm-2 Projectile]</Value>
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>Shield Bash/Strike with your weapon/3 0/0/0.03/Harm:2 Projectile</Value>
+      <Value>Shield Bash/Strike with your weapon/3 0/0/0.03/[Effect:Harm-2 Projectile]</Value>
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>Challenge/Strike with your weapon/3 0/0/0.03/Harm:2 Projectile</Value>
+      <Value>Challenge/Strike with your weapon/3 0/0/0.03/[Effect:Harm-2 Projectile]</Value>
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>Guard Other/Strike with your weapon/3 0/0/0.03/Harm:2 Projectile</Value>
+      <Value>Guard Other/Strike with your weapon/3 0/0/0.03/[Effect:Harm-2 Projectile]</Value>
     </Item>
   </Asset>
 </XnaContent>

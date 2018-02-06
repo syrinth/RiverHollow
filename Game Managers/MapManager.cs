@@ -163,7 +163,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            Mob mob = CharacterManager.GetMobByIndex(1, new Vector2(1340, 1340));
+            Mob mob = CharacterManager.GetMobByIndex(2, new Vector2(1340, 1340));
             mob.CurrentMapName = "NearWilds";
             _tileMaps[@"NearWilds"].AddMob(mob);
 
