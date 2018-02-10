@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using RiverHollow.SpriteAnimations;
 
 namespace RiverHollow.Characters.CombatStuff
 {
@@ -48,30 +49,64 @@ namespace RiverHollow.Characters.CombatStuff
             _liBuffs = new List<Buff>();
         }
 
+        public void LoadContent(string texture)
+        {
+            _sprite = new AnimatedSprite(GameContentManager.GetTexture(texture));
+            int xCrawl = 0;
+            int frameWidth = 24;
+            int frameHeight = 32;
+            _sprite.AddAnimation("Walk", frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 32);
+            xCrawl += 2;
+            _sprite.AddAnimation("Cast", frameWidth, frameHeight, 2, 0.2f, (xCrawl * frameWidth), 32);
+            xCrawl += 2;
+            _sprite.AddAnimation("Hurt", frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 32, "Walk");
+            xCrawl += 1;
+            _sprite.AddAnimation("Attack", frameWidth, frameHeight, 1, 0.3f, (xCrawl * frameWidth), 32);
+            xCrawl += 1;
+            _sprite.AddAnimation("Critical", frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 32);
+            xCrawl += 2;
+            _sprite.AddAnimation("KO", frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 32);
+
+            _sprite.SetCurrentAnimation("Walk");
+            _sprite.SetScale(5);
+        }
+
         public override void Update(GameTime theGameTime)
         {
             base.Update(theGameTime);
+            if (CurrentHP > 0)
+            {
+                if ((float)CurrentHP / (float)MaxHP <= 0.25 && IsCurrentAnimation("Walk"))
+                {
+                    PlayAnimation("Critical");
+                }
+                else if ((float)CurrentHP / (float)MaxHP > 0.25 && IsCurrentAnimation("Critical"))
+                {
+                    PlayAnimation("Walk");
+                }
+            }
         }
 
-        public void Draw(SpriteBatch spriteBatch, bool useLayerDepth = true)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            _sprite.Draw(spriteBatch, useLayerDepth);
+            _sprite.Draw(spriteBatch, false);
         }
 
-        public void DecreaseHealth(int offensiveStat, int dmgMod)
+        public int DecreaseHealth(int offensiveStat, int dmgMod)
         {
             int dmg = 1;
             int delta = StatDef - offensiveStat;
-            if (delta > 0)
-            {
-                dmg = delta * dmgMod;
-            }
+            if (delta <= 0) { dmg = Math.Abs(delta) * dmgMod; }
             else { dmg = Math.Max(1, (int)(delta * dmgMod * 0.5)); }
             _currentHP -= dmg;
+            PlayAnimation("Hurt");
             if (_currentHP <= 0)
             {
+                PlayAnimation("KO");
                 CombatManager.Kill(this);
             }
+
+            return dmg;
         }
 
         public void IncreaseHealth(int x)

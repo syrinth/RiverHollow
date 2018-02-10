@@ -13,7 +13,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class GameManager
     {
-        public static float Scale = 1f;
+        public static float Scale = 2f;
         public static Dictionary<string, Upgrade> DiUpgrades;
 
         public static void LoadContent(ContentManager Content)

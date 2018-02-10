@@ -113,23 +113,24 @@ namespace RiverHollow.Characters
                 {
                     _currentPath = _todaysPathing[_scheduleIndex++].Value;
                 }
-            }
 
-            if (_currentPath.Count > 0)
-            {
-                Vector2 targetPos = _currentPath[0].Position;
-                if (Position == targetPos)
-                {
-                    _currentPath.RemoveAt(0);
-                }
-                else
-                {
-                    Vector2 direction = Vector2.Zero;
-                    float deltaX = Math.Abs(targetPos.X - this.Position.X);
-                    float deltaY = Math.Abs(targetPos.Y - this.Position.Y);
 
-                    Utilities.GetMoveSpeed(Position, targetPos, Speed, ref direction);
-                    CheckMapForCollisionsAndMove(direction);
+                if (_currentPath.Count > 0)
+                {
+                    Vector2 targetPos = _currentPath[0].Position;
+                    if (Position == targetPos)
+                    {
+                        _currentPath.RemoveAt(0);
+                    }
+                    else
+                    {
+                        Vector2 direction = Vector2.Zero;
+                        float deltaX = Math.Abs(targetPos.X - this.Position.X);
+                        float deltaY = Math.Abs(targetPos.Y - this.Position.Y);
+
+                        Utilities.GetMoveSpeed(Position, targetPos, Speed, ref direction);
+                        CheckMapForCollisionsAndMove(direction);
+                    }
                 }
             }
         }

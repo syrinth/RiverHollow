@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.Characters.CombatStuff;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using System.Collections.Generic;
 
@@ -16,7 +17,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
         private BattleLocation[] _arrayEnemies;
         private List<AbilityButton> _abilityButtonList;
         private GUITextWindow _textWindow;
-        private AnimatedSprite _attack;
 
         public CombatScreen()
         {
@@ -27,6 +27,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _abilityButtonList = new List<AbilityButton>();
             Controls.Add(_background);
 
+            //Get the Players' party and assign each of them a battle position
             List<CombatCharacter> party = CombatManager.Party;
             for (int i = 0; i < party.Count; i++)
             {
@@ -37,6 +38,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
 
             }
+            //Get the Enemies and assign each of them a battle position
             for (int i = 0; i < m.Monsters.Count; i++)
             {
                 if (m.Monsters[i] != null)
@@ -50,26 +52,45 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (CombatManager.CurrentPhase == CombatManager.Phase.SelectSkill)
+
+            //If the current Phase is skill selection, allow the user to pick a skill for the currentCharacter
+            switch (CombatManager.CurrentPhase)
             {
-                foreach (AbilityButton a in _abilityButtonList)
-                {
-                    if (a.Contains(mouse))
+                case CombatManager.Phase.SelectSkill:
                     {
-                        CombatManager.UsingSkill(a.BtnAbility);
+                        foreach (AbilityButton a in _abilityButtonList)
+                        {
+                            if (a.Contains(mouse)) { CombatManager.ProcessChosenSkill(a.BtnAbility); }
+                        }
+
+                        break;
                     }
-                }
+                case CombatManager.Phase.ChooseSkillTarget:
+                    {
+                        foreach (BattleLocation p in _arrayEnemies)
+                        {
+                            if (p != null && p.Occupied() && p.Contains(mouse)) { CombatManager.SetSkillTarget(p); }
+                        }
+
+                        break;
+                    }
             }
-            else if (CombatManager.CurrentPhase == CombatManager.Phase.Targetting)
+            
+            return rv;
+        }
+
+        //Right clicking will deselectthe chosen skill
+        public override bool ProcessRightButtonClick(Point mouse)
+        {
+            bool rv = false;
+
+            //If the current Phase is skill selection, allow the user to pick a skill for the currentCharacter
+            if (CombatManager.CurrentPhase == CombatManager.Phase.ChooseSkillTarget)
             {
-                foreach (BattleLocation p in _arrayEnemies)
-                {
-                    if (p != null && p.Occupied() && p.Contains(mouse))
-                    {
-                        CombatManager.UseSkillOnTarget(p);
-                    }
-                }
+                CombatManager.ChosenSkill = null;
+                CombatManager.CurrentPhase = CombatManager.Phase.SelectSkill;
             }
+
             return rv;
         }
 
@@ -92,83 +113,73 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             foreach (BattleLocation p in _arrayParty)
             {
-                if (p != null)
-                {
-                    rv = p.ProcessHover(mouse);
-                }
+                if (p != null) { rv = p.ProcessHover(mouse); }
             }
             foreach (BattleLocation p in _arrayEnemies)
             {
-                if (p != null)
-                {
-                    rv = p.ProcessHover(mouse);
-                }
+                if (p != null) { rv = p.ProcessHover(mouse); }
             }
+
             return rv;
         }
 
+        //First, call the update for the CombatManager
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
             CombatManager.Update(gameTime);
-            if (CombatManager._skill == null) { _attack = null; }
-            if (CombatManager.Delay > 0)
+
+            switch (CombatManager.CurrentPhase)
             {
-                if (CombatManager.CurrentPhase == CombatManager.Phase.DisplayAttack && !string.IsNullOrEmpty(CombatManager.Text))
-                {
-                    if (_textWindow == null) { _textWindow = new GUITextWindow(CombatManager.Text); }
-                    else { _textWindow.Update(gameTime); }
-                }
-                else if (CombatManager.CurrentPhase == CombatManager.Phase.Animation)
-                {
-                    if (_textWindow != null) { _textWindow = null; }
-                    if (_attack != null)
+                case CombatManager.Phase.DisplayAttack:
+                    if (!string.IsNullOrEmpty(CombatManager.Text))
                     {
-                        _attack.Update(gameTime);
+                        if (_textWindow == null) {
+                            _textWindow = new GUITextWindow(CombatManager.Text, 0.5);
+                        }
+                        else {
+                            _textWindow.Update(gameTime);
+                            if(_textWindow.Duration <= 0)
+                            {
+                                _textWindow = null;
+                                CombatManager.CurrentPhase = CombatManager.Phase.UseSkill;
+                            }
+                        }
                     }
-                    else
-                    {
-                        _attack = CombatManager._skill.Sprite;
-                    }
-                }
+
+                    break;
+                case CombatManager.Phase.UseSkill:
+                    CombatManager.ChosenSkill.HandlePhase(gameTime);
+
+                    break;
             }
 
+            //Update everyone in the party's battleLocation
             foreach (BattleLocation p in _arrayParty)
             {
-                if (p != null && p.Occupied())
-                {
-                    p.Update(gameTime);
-                }
+                if (p != null && p.Occupied()) { p.Update(gameTime); }
             }
+
+            //Update everyone in the enemys's battleLocation
             foreach (BattleLocation p in _arrayEnemies)
             {
                 if (p != null && p.Occupied())
                 {
-                    if (!CombatManager.Monsters.Contains(p.Character))
-                    {
-                        p.Kill();
-                    }
-                    else
-                    {
-                        p.Update(gameTime);
-                    }
+                    if (!CombatManager.Monsters.Contains(p.Character)) { p.Kill(); }
+                    else { p.Update(gameTime); }
                 }
             }
 
-            if (CombatManager.CurrentPhase == CombatManager.Phase.EnemyTurn)
-            {
-                CombatManager.EnemyTakeTurn();
-                CombatManager.UseSkillOnTarget(_arrayParty[CombatManager.PlayerTarget]);
-
+            //If it's the enemy's turn, set the skill target to the player target
+            if (CombatManager.CurrentPhase == CombatManager.Phase.EnemyTurn) {
+                CombatManager.SetSkillTarget(_arrayParty[CombatManager.PlayerTarget]);
             }
             else if (CombatManager.CurrentPhase == CombatManager.Phase.SelectSkill)
             {
-                _abilityButtonList.Clear();
+                //Refresh the ability buttons for the new character
                 int i = 0;
-                foreach (Ability a in CombatManager.TurnOrder[CombatManager.TurnIndex].AbilityList)
-                {
-                    _abilityButtonList.Add(new AbilityButton(a, i++, 0));
-                }
+                _abilityButtonList.Clear();
+                foreach (Ability a in CombatManager.ActiveCharacter.AbilityList) { _abilityButtonList.Add(new AbilityButton(a, i++, 0)); }
             }
         }
 
@@ -177,28 +188,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
             base.Draw(spriteBatch);
             foreach (BattleLocation p in _arrayParty)
             {
-                if (p != null)
-                {
-                    p.Draw(spriteBatch);
-                }
+                if (p != null) { p.Draw(spriteBatch); }
             }
             foreach (BattleLocation p in _arrayEnemies)
             {
-                if (p != null)
-                {
-                    p.Draw(spriteBatch);
-                }
-            }
-            foreach (AbilityButton a in _abilityButtonList)
-            {
-                a.Draw(spriteBatch);
+                if (p != null) { p.Draw(spriteBatch); }
             }
 
+            foreach (AbilityButton a in _abilityButtonList) { a.Draw(spriteBatch); }
+
             if (_textWindow != null) { _textWindow.Draw(spriteBatch, true); }
-            if (_attack != null)
-            {
-                _attack.Draw(spriteBatch, false);
-            }
+            if (CombatManager.ChosenSkill != null && CombatManager.ChosenSkill.Sprite.IsAnimating) { CombatManager.ChosenSkill.Sprite.Draw(spriteBatch, false); }
         }  
     }
 
@@ -218,7 +218,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _rect = r;
             _character = c;
             _character.Position = _rect.Location.ToVector2();
-            _healthBar = new StatDisplay(StatDisplay.Display.Health, _character, _rect.Location.ToVector2() + new Vector2(0, 100), 100, 5);
+            _healthBar = new StatDisplay(StatDisplay.Display.Health, _character, _character.Position + new Vector2(0, _character.SpriteHeight), 100, 5);
             _dmgFont = GameContentManager.GetFont(@"Fonts\Font");
         }
 
@@ -272,6 +272,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 rv = true;
             }
+            return rv;
+        }
+
+        public Vector2 GetAttackVec(Vector2 from)
+        {
+            Vector2 rv = Character.Position;
+            rv.X += _rect.Center.X < from.X ? 100 : -100;
+
             return rv;
         }
     }

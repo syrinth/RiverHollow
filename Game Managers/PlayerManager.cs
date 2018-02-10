@@ -64,7 +64,7 @@ namespace RiverHollow.Game_Managers
         public static void InitPlayer()
         {
             Initialize();
-            Combat.LoadContent(@"Textures\WizardCombat", 100, 100, 2, 0.7f); //ToDo: position doesn't matter here
+            Combat.LoadContent(@"Textures\Wizard"); //ToDo: position doesn't matter here
             World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
 
             SetPlayerDefaults();
@@ -74,7 +74,7 @@ namespace RiverHollow.Game_Managers
             Initialize();
             World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
             World.Position = new Vector2(200, 200);
-            Combat.LoadContent(@"Textures\WizardCombat", 100, 100, 2, 0.7f); //ToDo: position doesn't matter here
+            Combat.LoadContent(@"Textures\Wizard"); //ToDo: position doesn't matter here
             _canMake.Add(6);
             InventoryManager.AddNewItemToInventory(5);
             InventoryManager.AddNewItemToInventory(3);

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace RiverHollow.Characters.CombatStuff
 {
     public class Ability
     {
+        const int moveSpeed = 60;
         private int _id;
         private string _name;
         public string Name { get => _name; }
@@ -23,29 +25,35 @@ namespace RiverHollow.Characters.CombatStuff
         public Rectangle SourceRect { get => _sourceRect; }
         private string _target;
         public string Target { get => _target; }
+        private List<String> _actionTags;
+        private int _currentActionTag = 0;
         private List<String> _effectTags;
-        private List<KeyValuePair<int, string>> _buffs;         //Key = Buff ID, string = Duration/<Tag> <Tag>
+        private List<BuffData> _buffs;         //Key = Buff ID, string = Duration/<Tag> <Tag>
 
         private Texture2D _texture;
         private int _textureRow;
         private float _frameSpeed;
+        public float Delay { get => _frameSpeed * 4; }
 
         public CombatCharacter SkillUser;
-        public Vector2 TargetPosition;
+        public BattleLocation TargetLocation;
+        public Vector2 UserStartPosition;
         public bool _used;
 
         public AnimatedSprite Sprite;
         public Ability(int id, string[] stringData)
         {
             _effectTags = new List<string>();
-            _buffs = new List<KeyValuePair<int, string>>();
+            _buffs = new List<BuffData>();
+            _actionTags = new List<string>();
             ImportBasics(id, stringData);
 
             _texture = GameContentManager.GetTexture(@"Textures\AbilityIcons");
             Sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\AbilityAnimations"));
             Sprite.AddAnimation("Play", 100, 100, 4, _frameSpeed, 0, _textureRow * 100);
             Sprite.SetCurrentAnimation("Play");
-            if (_effectTags.Contains("Direct"))
+            Sprite.IsAnimating = false;
+            if (_actionTags.Contains("Direct"))
             {
                 Sprite.PlaysOnce = true;
             }
@@ -100,7 +108,12 @@ namespace RiverHollow.Characters.CombatStuff
                 else if (tagType[0].Equals("Buff"))
                 {
                     string[] details = tagType[1].Split('|');
-                    _buffs.Add(new KeyValuePair<int, string>(int.Parse(details[0]), string.Format(@"{0}/{1}", details[1], details[2])));
+                    _buffs.Add(new BuffData() { BuffID = int.Parse(details[0]), Duration = int.Parse(details[1]), Tags = details[2] });
+                }
+                else if (tagType[0].Equals("Action"))
+                {
+                    _actionTags.AddRange(tagType[1].Split(' '));
+                    _actionTags.Add("End");
                 }
             }
 
@@ -109,72 +122,58 @@ namespace RiverHollow.Characters.CombatStuff
             return i;
         }
 
-        public void PreEffect(BattleLocation target)
+        //Sets the _used tag to be true so that it's known that we've started using it
+        public void AnimationSetup(BattleLocation target)
         {
             _used = true;
-            if (_effectTags.Contains("Direct"))
-            {
-                Sprite.Position = target.Character.Position;
-            }
-            else if (_effectTags.Contains("Projectile"))
-            {
-                Sprite.Position = SkillUser.Position;
-                TargetPosition = target.Character.Position;
-            }
-            else {
-                Sprite.Position = new Vector2(-100, -100);
-            }
+            TargetLocation = target;
         }
-        public void ApplyEffectToSelf(CombatCharacter user)
+
+        public void ApplyEffectToSelf()
         {
             if (_buffs.Count > 0)
             {
                 Buff b = null;
-                foreach (KeyValuePair<int, string> kvp in _buffs)
+                foreach (BuffData data in _buffs)
                 {
-                    b = CharacterManager.GetBuffByIndex(kvp.Key);
-                    string[] split = kvp.Value.Split('/');
-                    b.Duration = int.Parse(split[0]);
-                    string[] tags = split[1].Split(' ');
+                    b = CharacterManager.GetBuffByIndex(data.BuffID);
+                    b.Duration = data.Duration;
+                    string[] tags = data.Tags.Split(' ');
                     foreach (string s in tags)
                     {
-                        if (s.Equals("Self"))
-                        {
-                            user.AddBuff(b);
-                        }
+                        if (s.Equals("Self")) {SkillUser.AddBuff(b); }
                     }
                 }
             }
         }
 
-        public void ApplyEffect(BattleLocation target, CombatCharacter user)
+        public void ApplyEffect()
         {
             if (_used)
             {
                 if (_effectTags.Contains("Harm"))
                 {
-                    target.Character.DecreaseHealth(user.StatDmg, _effectHarm);
-                    target.AssignDamage(_effectHarm);
+                    int x = TargetLocation.Character.DecreaseHealth(SkillUser.StatDmg, _effectHarm);
+                    TargetLocation.AssignDamage(x);
                 }
                 else if (_effectTags.Contains("Heal"))
                 {
-                    target.Character.IncreaseHealth(_effectHarm);
-                    target.AssignDamage(_effectHarm);
+                    TargetLocation.Character.IncreaseHealth(_effectHarm);
+                    TargetLocation.AssignDamage(_effectHarm);
                 }
 
                 if(_buffs.Count > 0)
                 {
                     Buff b = null;
-                    foreach (KeyValuePair<int, string> kvp in _buffs) {
-                        b = CharacterManager.GetBuffByIndex(kvp.Key);
-                        string[] split = kvp.Value.Split('/');
-                        b.Duration = int.Parse(split[0]);
-                        string[] tags = split[1].Split(' ');
+                    foreach (BuffData data in _buffs) {
+                        b = CharacterManager.GetBuffByIndex(data.BuffID);
+                        b.Duration = data.Duration;
+                        string[] tags = data.Tags.Split(' ');
                         foreach (string s in tags)
                         {
                             if (s.Equals("Self"))
                             {
-                                user.AddBuff(b);
+                                SkillUser.AddBuff(b);
                             }
                         }
                     }
@@ -182,33 +181,118 @@ namespace RiverHollow.Characters.CombatStuff
             }
         }
 
-        public bool IsFinished()
-        {
-            bool rv = false;
-            if(_effectTags.Contains("Projectile") && Sprite.Position == TargetPosition)
-            {
-                rv = true;
-            }
-            else if (_effectTags.Contains("Direct"))
-            {
-                rv = true;
-            }
-            return rv;
-        }
+        //public double GetDelay()
+        //{
+        //    double rv = 0;
+        //    if (_effectTags.Contains("Projectile"))
+        //    {
+        //        rv = 0.2;
+        //    }
+        //    else if (_effectTags.Contains("Direct"))
+        //    {
+        //        rv = Sprite.CurrentFrameAnimation.FrameCount * Sprite.CurrentFrameAnimation.FrameLength;
+        //    }
 
-        public double GetDelay()
-        {
-            double rv = 0;
-            if (_effectTags.Contains("Projectile"))
-            {
-                rv = 0.2;
-            }
-            else if (_effectTags.Contains("Direct"))
-            {
-                rv = Sprite.CurrentFrameAnimation.FrameCount * Sprite.CurrentFrameAnimation.FrameLength;
-            }
+        //    return rv;
+        //}
 
-            return rv;
+        public void HandlePhase(GameTime gameTime)
+        {
+            switch (_actionTags[_currentActionTag])
+            {
+                case "UserMove":
+                    {
+                        if (SkillUser.Position != TargetLocation.GetAttackVec(UserStartPosition))
+                        {
+                            Vector2 direction = Vector2.Zero;
+                            Utilities.GetMoveSpeed(SkillUser.Position, TargetLocation.GetAttackVec(UserStartPosition), moveSpeed, ref direction);
+                            SkillUser.Sprite.Position += direction;
+                        }
+                        else
+                        {
+                            _currentActionTag++;
+                        }
+                        break;
+                    }
+                case "UserAttack":
+                    if (!SkillUser.IsCurrentAnimation("Attack"))
+                    {
+                        SkillUser.PlayAnimation("Attack");
+                    }
+                    else if (SkillUser.AnimationPlayedXTimes(1))
+                    {
+                        SkillUser.PlayAnimation("Walk");
+                        _currentActionTag++;
+                    }
+                    break;
+                case "UserCast":
+                    if (!SkillUser.IsCurrentAnimation("Cast"))
+                    {
+                        SkillUser.PlayAnimation("Cast");
+                    }
+                    else if (SkillUser.AnimationPlayedXTimes(2))
+                    {
+                        SkillUser.PlayAnimation("Walk");
+                        _currentActionTag++;
+                    }
+                    break;
+                case "Direct":
+                    if (!Sprite.PlayedOnce && !Sprite.IsAnimating)
+                    {
+                        Sprite.IsAnimating = true;
+                        Sprite.Position = TargetLocation.Character.Position;
+                    }
+                    else if (Sprite.IsAnimating) { Sprite.Update(gameTime); }
+                    else if (Sprite.PlayedOnce) {
+                        _currentActionTag++;
+                    }
+                    break;
+                case "Apply":
+
+                    ApplyEffect();
+                    _currentActionTag++;
+                    break;
+                case "Projectile":
+                    if (!Sprite.IsAnimating)
+                    {
+                        Sprite.IsAnimating = true;
+                        Sprite.Position = SkillUser.Position;
+                    }
+                    if(Sprite.Position != TargetLocation.Character.Position)
+                    {
+                        Vector2 direction = Vector2.Zero;
+                        Utilities.GetMoveSpeed(Sprite.Position, TargetLocation.Character.Position, 80, ref direction);
+                        Sprite.Position += direction;
+                    }
+                    else
+                    {
+                        _currentActionTag++;
+                    }
+                    break;
+                case "End":
+                    if (SkillUser.Position != UserStartPosition)
+                    {
+                        Vector2 direction = Vector2.Zero;
+                        Utilities.GetMoveSpeed(SkillUser.Position, UserStartPosition, moveSpeed, ref direction);
+                        SkillUser.Sprite.Position += direction;
+                    }
+                    else
+                    {
+                        _currentActionTag = 0;
+                        Sprite.IsAnimating = false;
+                        Sprite.PlayedOnce = false;
+                        CombatManager.NextTurn();
+                    }
+
+                    break;
+            }
         }
+    }
+
+    internal struct BuffData
+    {
+        public int BuffID;
+        public int Duration;
+        public string Tags;
     }
 }

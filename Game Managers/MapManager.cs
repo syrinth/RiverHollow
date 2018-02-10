@@ -60,7 +60,7 @@ namespace RiverHollow.Game_Managers
             {
                 foreach (string s in _tileMaps[newMapStr].DictionaryEntrance.Keys)
                 {
-                    if (!string.IsNullOrEmpty(PlayerManager._inBuilding))
+                    if (c == PlayerManager.World && !string.IsNullOrEmpty(PlayerManager._inBuilding))
                     {
                         rectEntrance = _tileMaps[newMapStr].DictionaryEntrance[PlayerManager._inBuilding];
                         PlayerManager._inBuilding = string.Empty;
@@ -163,9 +163,9 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            Mob mob = CharacterManager.GetMobByIndex(2, new Vector2(1340, 1340));
-            mob.CurrentMapName = "NearWilds";
-            _tileMaps[@"NearWilds"].AddMob(mob);
+            Mob mob = CharacterManager.GetMobByIndex(2, new Vector2(110, 178));
+            mob.CurrentMapName = "Tent";
+            _tileMaps[@"Tent"].AddMob(mob);
 
             MerchantChest m = new MerchantChest();
             PlayerManager._merchantChest = m;

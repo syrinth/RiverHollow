@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using RiverHollow.Misc;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters.CombatStuff;
+using RiverHollow.SpriteAnimations;
 
 namespace RiverHollow.Characters.NPCs
 {
@@ -33,7 +34,7 @@ namespace RiverHollow.Characters.NPCs
         {
             ImportBasics(stringData, id);
             _texture = @"Textures\" + _adventurerType;
-            LoadContent(_texture, 32, 64, 1, 1);
+            LoadContent(_texture);
             _currFood = 0;
             _heldItem = null;
             _mood = 0;
@@ -48,6 +49,15 @@ namespace RiverHollow.Characters.NPCs
             _name = name;
             _mood = mood;
             SetCombat();
+        }
+
+        public void LoadContent(string texture)
+        {
+            _sprite = new AnimatedSprite(GameContentManager.GetTexture(texture));
+           // int xCrawl = 0;
+            _sprite.AddAnimation("Idle", 16, 32, 1, 0.5f, 1 /*+ (xCrawl * 16)*/, 0);
+            _sprite.SetCurrentAnimation("Idle");
+            _sprite.SetScale(2);
         }
 
         protected int ImportBasics(string[] stringData, int id)
@@ -68,14 +78,14 @@ namespace RiverHollow.Characters.NPCs
         {
             _c = new CombatAdventurer(this);
             _c.SetClass(CharacterManager.GetClassByIndex(1));
-            _c.LoadContent(@"Textures\WizardCombat", 100, 100, 2, 0.7f);
+            _c.LoadContent(@"Textures\Wizard");
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
             if (DrawIt)
             {
-                base.Draw(spriteBatch);
+                base.Draw(spriteBatch, useLayerDepth);
             }
         }
 

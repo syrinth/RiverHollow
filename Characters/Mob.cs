@@ -56,9 +56,10 @@ namespace RiverHollow
             UpdateMovement();
             base.Update(theGameTime);
         }
-        public override void Draw(SpriteBatch spriteBatch)
+
+        public override void Draw(SpriteBatch spriteBatch, bool userLayerDepth = false)
         {
-            base.Draw(spriteBatch);
+            base.Draw(spriteBatch, userLayerDepth);
         }
         private void UpdateMovement()
         {

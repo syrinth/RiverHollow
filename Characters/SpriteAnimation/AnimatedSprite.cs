@@ -12,6 +12,7 @@ namespace RiverHollow.SpriteAnimations
         #region properties
         Texture2D _texture;                         // The texture that holds the images for this sprite
         bool _animating = true;                     // True if animations are being played
+        public bool PlayedOnce = false;
         Color colorTint = Color.White;              // If set to anything other than Color.White, will colorize the sprite with that color.
 
         // Screen Position of the Sprite
@@ -19,7 +20,6 @@ namespace RiverHollow.SpriteAnimations
         Vector2 _LastPosition = new Vector2(0, 0);
 
         // Dictionary holding all of the FrameAnimation objects
-        // associated with this sprite.
         Dictionary<string, FrameAnimation> _frameanimations = new Dictionary<string, FrameAnimation>();
 
         // Which FrameAnimation from the dictionary above is playing
@@ -30,7 +30,9 @@ namespace RiverHollow.SpriteAnimations
 
         // Calculated width and height of the sprite
         int _width;
+        public int Width {  get => _width; }
         int _height;
+        public int Height { get => _height; }
 
         ///
         /// Vector2 representing the position of the sprite's upper left
@@ -70,22 +72,6 @@ namespace RiverHollow.SpriteAnimations
                 _LastPosition.Y = _Position.Y;
                 _Position.Y = value;
             }
-        }
-
-        ///
-        /// Width (in pixels) of the sprite animation frames
-        ///
-        public int Width
-        {
-            get { return _width; }
-        }
-
-        ///
-        /// Height (in pixels) of the sprite animation frames
-        ///
-        public int Height
-        {
-            get { return _height; }
         }
 
         ///
@@ -167,9 +153,9 @@ namespace RiverHollow.SpriteAnimations
         }
 
         //TODO: Remove this method, classes should do it manually, not in this level
-        public void AddAnimation(string name, int frameWidth, int frameHeight, int numFrames, float frameSpeed, int startX = 0, int startY = 0)
+        public void AddAnimation(string name, int frameWidth, int frameHeight, int numFrames, float frameSpeed, int startX = 0, int startY = 0, string nextAnimation = "")
         {
-            this.AddAnimation(name, startX, startY, frameWidth, frameHeight, numFrames, frameSpeed);
+            this.AddAnimation(name, startX, startY, frameWidth, frameHeight, numFrames, frameSpeed, nextAnimation);
             this.IsAnimating = true;
         }
 
@@ -184,6 +170,12 @@ namespace RiverHollow.SpriteAnimations
             _width = Width;
             _height = Height;
             v2Center = new Vector2(_width / 2, _height / 2);
+        }
+
+        public void SetScale(int x)
+        {
+            _width = _width * x;
+            _height = _height * x;
         }
 
         public void AddAnimation(string Name, int X, int Y, int Width, int Height, int Frames, float FrameLength, string NextAnimation)
@@ -241,21 +233,22 @@ namespace RiverHollow.SpriteAnimations
 
                 if (PlaysOnce && CurrentFrameAnimation.PlayCount > 0)
                 {
+                    PlayedOnce = true;
                     IsAnimating = false;
                     CurrentFrameAnimation.PlayCount = 0;
                 }
 
                 // Check to see if there is a "followup" animation named for this animation
-                //if (!String.IsNullOrEmpty(CurrentFrameAnimation.NextAnimation))
-                //{
+                if (!String.IsNullOrEmpty(CurrentFrameAnimation.NextAnimation))
+                {
                 // If there is, see if the currently playing animation has
                 // completed a full animation loop
-                //if (CurrentFrameAnimation.PlayCount > 0)
-                //{
-                //    // If it has, set up the next animation
-                //    CurrentAnimation = CurrentFrameAnimation.NextAnimation;
-                //}
-                //}
+                if (CurrentFrameAnimation.PlayCount > 0)
+                {
+                    // If it has, set up the next animation
+                    CurrentAnimation = CurrentFrameAnimation.NextAnimation;
+                }
+                }
             }
         }
 
@@ -263,11 +256,20 @@ namespace RiverHollow.SpriteAnimations
         {
             if (_animating)
             {
-                if (useLayerDepth) {
-                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100)); }
-                else {
-                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White); }
+                if (useLayerDepth)
+                {
+                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100));
+                }
+                else
+                {
+                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White);
+                }
             }
+        }
+
+        public int GetPlayCount()
+        {
+            return CurrentFrameAnimation.PlayCount;
         }
     }
 }

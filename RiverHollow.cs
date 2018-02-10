@@ -163,8 +163,8 @@ namespace RiverHollow
                 spriteBatch.End();
             }
             {
-                spriteBatch.Begin();
                 this.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
                 if (!GameManager.Informational())
                 {
                     MapManager.DrawUpper(spriteBatch);
