@@ -196,7 +196,7 @@ namespace RiverHollow.Game_Managers
         public static void DrawWorld(SpriteBatch spriteBatch)
         {
             if (_currentMap == MapManager.CurrentMap.Name) {
-                World.Draw(spriteBatch);
+                World.Draw(spriteBatch, true);
                 if (UseTool != null) { UseTool.ToolAnimation.Draw(spriteBatch); }
             }
         }

@@ -85,6 +85,13 @@ namespace RiverHollow.Characters.CombatStuff
                     PlayAnimation("Walk");
                 }
             }
+            else
+            {
+                if (IsCurrentAnimation("Walk"))
+                {
+                    PlayAnimation("KO");
+                }
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -98,11 +105,10 @@ namespace RiverHollow.Characters.CombatStuff
             int delta = StatDef - offensiveStat;
             if (delta <= 0) { dmg = Math.Abs(delta) * dmgMod; }
             else { dmg = Math.Max(1, (int)(delta * dmgMod * 0.5)); }
-            _currentHP -= dmg;
+            _currentHP -= (_currentHP - dmg >= 0) ? dmg : _currentHP;
             PlayAnimation("Hurt");
-            if (_currentHP <= 0)
+            if (_currentHP == 0)
             {
-                PlayAnimation("KO");
                 CombatManager.Kill(this);
             }
 

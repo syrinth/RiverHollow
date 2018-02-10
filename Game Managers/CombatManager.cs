@@ -103,7 +103,10 @@ namespace RiverHollow.Game_Managers
             ProcessChosenSkill(CharacterManager.GetAbilityByIndex(1), false);//ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)]);
             if (!ChosenSkill.Target.Equals("Self"))
             {
-                PlayerTarget = r.Next(0, _listParty.Count - 1);
+                do
+                {
+                    PlayerTarget = r.Next(0, _listParty.Count - 1);
+                } while (_listParty[PlayerTarget].CurrentHP == 0);
             }
         }
 

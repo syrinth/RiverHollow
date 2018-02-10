@@ -256,7 +256,7 @@ namespace RiverHollow.Tile_Engine
             renderer.Draw(_map, Camera._transform);
             foreach(WorldCharacter c in _characterList)
             {
-                c.Draw(spriteBatch);
+                c.Draw(spriteBatch, true);
             }
 
             foreach (Mob m in _mobList)
