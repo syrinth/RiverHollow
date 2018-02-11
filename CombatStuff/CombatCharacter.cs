@@ -103,8 +103,10 @@ namespace RiverHollow.Characters.CombatStuff
         {
             int dmg = 1;
             int delta = StatDef - offensiveStat;
+
             if (delta <= 0) { dmg = Math.Abs(delta) * dmgMod; }
-            else { dmg = Math.Max(1, (int)(delta * dmgMod * 0.5)); }
+            else { dmg = Math.Max(1, (int)(delta/dmgMod)); }
+
             _currentHP -= (_currentHP - dmg >= 0) ? dmg : _currentHP;
             PlayAnimation("Hurt");
             if (_currentHP == 0)

@@ -25,6 +25,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _arrayParty = new BattleLocation[_positions];
             _arrayEnemies = new BattleLocation[_positions];
             _abilityButtonList = new List<AbilityButton>();
+            for(int i = 0; i< 4; i++) { _abilityButtonList.Add(new AbilityButton(i, 0)); }
             Controls.Add(_background);
 
             //Get the Players' party and assign each of them a battle position
@@ -176,10 +177,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             else if (CombatManager.CurrentPhase == CombatManager.Phase.SelectSkill)
             {
+                //MAR this is ugly and should probably be fixed... Refreshes every update call...
                 //Refresh the ability buttons for the new character
                 int i = 0;
-                _abilityButtonList.Clear();
-                foreach (Ability a in CombatManager.ActiveCharacter.AbilityList) { _abilityButtonList.Add(new AbilityButton(a, i++, 0)); }
+                foreach (Ability a in CombatManager.ActiveCharacter.AbilityList) {
+                    _abilityButtonList[i++].SetAbility(a);
+                }
             }
         }
 
@@ -286,30 +289,42 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
     class AbilityButton
     {
-        private Ability _ability;
+        Ability _ability;
         public Ability BtnAbility { get => _ability; }
-        private GUIButton _btn;
+        GUIButton _btn;
         public bool Hover;
+        Vector2 _position;
 
-        public AbilityButton(Ability a, int X, int Y)
+        public AbilityButton(int X, int Y)
         {
-            _ability = a;
-            _btn = new GUIButton(new Vector2(300 + X * 100, 1000 + Y * 100), _ability.SourceRect, 100, 100, "", @"Textures\AbilityIcons");
+            _position = new Vector2(300 + X * 100, 1000 + Y * 100);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _btn.Draw(spriteBatch);
+            if (_ability != null)
+            {
+                _btn.Draw(spriteBatch);
+            }
         }
 
         public void Update(GameTime gameTime)
         {
-            _btn.Update(gameTime);
+            if (_ability != null)
+            {
+                _btn.Update(gameTime);
+            }
         }
 
         public bool Contains(Point mouse)
         {
-            return _btn.Contains(mouse);
+            return (_btn == null) ? false : _btn.Contains(mouse);
+        }
+
+        public void SetAbility(Ability a)
+        {
+            _ability = a;
+            _btn = new GUIButton(_position, _ability.SourceRect, 100, 100, "", @"Textures\AbilityIcons");
         }
     }
 }
