@@ -85,6 +85,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Money")]
             public int money;
 
+            [XmlElement(ElementName = "Calendar")]
+            public CalendarData Calendar;
+
             [XmlArray(ElementName = "Items")]
             public List<ItemData> Items;
 
@@ -101,6 +104,20 @@ namespace RiverHollow.Game_Managers
             public List<NPCData> NPCData;
         }
 
+        public struct CalendarData
+        {
+            [XmlElement(ElementName = "dayOfMonth")]
+            public int dayOfMonth;
+
+            [XmlElement(ElementName = "dayOfWeek")]
+            public int dayOfWeek;
+
+            [XmlElement(ElementName = "currSeason")]
+            public int currSeason;
+
+            [XmlElement(ElementName = "currWeather")]
+            public int currWeather;
+        }
         public struct BuildingData
         {
             [XmlArray(ElementName = "Workers")]
@@ -220,6 +237,13 @@ namespace RiverHollow.Game_Managers
                 // Create a list to store the data already saved.
                 currentMap = PlayerManager.CurrentMap,
                 money = PlayerManager.Money,
+                Calendar = new CalendarData
+                {
+                    dayOfWeek = GameCalendar.DayOfWeek,
+                    dayOfMonth = GameCalendar.CurrentDay,
+                    currSeason = GameCalendar.CurrentSeason,
+                    currWeather = GameCalendar.CurrentWeather
+                },
                 Items = new List<ItemData>(),
                 Buildings = new List<BuildingData>(),
                 MapData = new List<MapData>(),
@@ -385,6 +409,7 @@ namespace RiverHollow.Game_Managers
             MapManager.CurrentMap = MapManager.Maps[data.currentMap];
             PlayerManager.InitPlayer();
             PlayerManager.SetMoney(data.money);
+            GameCalendar.LoadCalendar(data.Calendar); 
             foreach (BuildingData b in data.Buildings)
             {
                 WorkerBuilding newBuilding = ObjectManager.GetBuilding(b.buildingID);

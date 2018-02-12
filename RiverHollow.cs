@@ -150,7 +150,6 @@ namespace RiverHollow
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            this.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
             {
                 spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
                 //If we're in an informational state, then only the GUIScreen data should be visible, don't draw anything except for the GUI
@@ -163,7 +162,6 @@ namespace RiverHollow
                 spriteBatch.End();
             }
             {
-                this.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
                 if (!GameManager.Informational())
                 {
@@ -199,10 +197,6 @@ namespace RiverHollow
                 {
                     if (GameManager.IsPaused()) { GameManager.Pause(); }
                     else { GameManager.Unpause(); }
-                }
-                if (InputManager.CheckKey(Keys.X))
-                {
-                    GameManager.Save();
                 }
                 if (GUIManager.CurrentGUIScreen != GUIManager.Screens.ItemCreation || GUIManager.CurrentGUIScreen != GUIManager.Screens.HUD)
                 {

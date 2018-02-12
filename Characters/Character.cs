@@ -16,6 +16,8 @@ namespace RiverHollow.Characters
             get { return new Vector2(_sprite.Position.X, _sprite.Position.Y); }
             set { _sprite.Position = value; }
         }
+        public virtual Vector2 Center { get => _sprite.Center; }
+
         public Rectangle GetRectangle()
         {
             return new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
@@ -39,6 +41,9 @@ namespace RiverHollow.Characters
             _sprite.AddAnimation("Walk", frameWidth, frameHeight, numFrames, frameSpeed, startX, startY);
             _sprite.AddAnimation("Attack", frameWidth, frameHeight, numFrames, frameSpeed, startX, startY);
             _sprite.SetCurrentAnimation("Walk");
+
+            _width = _sprite.Width;
+            _height = _sprite.Height;
         }
 
         public virtual void Update(GameTime theGameTime)
@@ -56,6 +61,7 @@ namespace RiverHollow.Characters
             _sprite.CurrentAnimation = animation;
         }
 
+        public bool Contains(Point x) { return _sprite.BoundingBox.Contains(x); }
         public bool AnimationFinished() { return _sprite.PlayedOnce && _sprite.IsAnimating; }
         public bool IsCurrentAnimation(string val) { return _sprite.CurrentAnimation.Equals(val); }
         public bool IsAnimating() { return _sprite.IsAnimating; }

@@ -12,18 +12,22 @@ namespace RiverHollow
         //One day goes from 6 AM - 2 AM => 20 hours
         //Each hour should be one minute
         //Every 10 minutes is 10 seconds real time.
-        private static string[] ListSeasons = { "Spring", "Summer", "Fall", "Winter" };
-        private static string[] ListDays = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
-        private static string[] ListWeather = { "Sunny", "Raining" };
-        private static int _currSeason;
-        private static int _dayOfWeek;
-        private static int _currWeather;
-        private static int _currHour;
+        static string[] ListSeasons = { "Spring", "Summer", "Fall", "Winter" };
+        static string[] ListDays = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+        static string[] ListWeather = { "Sunny", "Raining" };
+        static int _currSeason;
+        public static int CurrentSeason { get => _currSeason; }
+        static int _dayOfWeek;
+        public static int DayOfWeek { get => _dayOfWeek; }
+        static int _currWeather;
+        public static int CurrentWeather { get => _currWeather; }
+        static int _currHour;
         public static int CurrentHour { get => _currHour; }
 
         private static int _currMin;
         public static int CurrentMin { get => _currMin; }
         static int _currDay;
+        public static int CurrentDay { get => _currDay; }
         //static Seasons _currSeason;
         static SpriteFont _calendarFont;
         static Vector2 _timePosition;
@@ -54,20 +58,25 @@ namespace RiverHollow
             if (_lastUpdateinSeconds >= 1)
             {
                 _lastUpdateinSeconds = 0;
-                if (_currMin >= 60)
-                {
-                    _currMin = 0;
-                    _currHour++;
-                }
-                else
-                {
-                    _currMin++;
-                }
+                IncrementMinutes();
             }
 
             if (GameCalendar.CurrentHour == 2)
             {
                 GUIManager.SetScreen(GUIManager.Screens.DayEnd);
+            }
+        }
+
+        public static void IncrementMinutes()
+        {
+            if (_currMin >= 60)
+            {
+                _currMin = 0;
+                _currHour++;
+            }
+            else
+            {
+                _currMin++;
             }
         }
 
@@ -136,6 +145,14 @@ namespace RiverHollow
         public static void RollOver()
         {
             _dayOfWeek++;
+        }
+
+        public static void LoadCalendar(GameManager.CalendarData d)
+        {
+            _currDay = d.dayOfMonth;
+            _dayOfWeek = d.dayOfWeek;
+            _currSeason = d.currSeason;
+            _currWeather = d.currWeather;
         }
     }
 }

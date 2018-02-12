@@ -69,6 +69,8 @@ namespace RiverHollow.Characters.CombatStuff
 
             _sprite.SetCurrentAnimation("Walk");
             _sprite.SetScale(5);
+            _width = _sprite.Width;
+            _height = _sprite.Height;
         }
 
         public override void Update(GameTime theGameTime)

@@ -74,6 +74,7 @@ namespace RiverHollow.Game_Managers
                 {
                     TurnIndex = 0;
                     PlayerManager.DecreaseStamina(stamDrain);
+                    GameCalendar.IncrementMinutes();
                 }
 
                 ActiveCharacter = TurnOrder[TurnIndex];

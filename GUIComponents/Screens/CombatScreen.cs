@@ -35,7 +35,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 if (party[i] != null)
                 {
                     bool even = (i % 2 == 0);
-                    _arrayParty[i] = new BattleLocation(new Rectangle(100 + i * 200, even ? 700 : 600, 100, 100), party[i]);
+                    _arrayParty[i] = new BattleLocation(new Vector2(100 + i * 200, even ? 700 : 600), party[i]);
                 }
 
             }
@@ -45,7 +45,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 if (m.Monsters[i] != null)
                 {
                     bool even = (i % 2 == 0);
-                    _arrayEnemies[i] = new BattleLocation(new Rectangle(1000 + i * 200, even ? 700 : 600, 100, 100), m.Monsters[i]);
+                    _arrayEnemies[i] = new BattleLocation(new Vector2(1000 + i * 200, even ? 700 : 600), m.Monsters[i]);
                 }
             }
         }
@@ -208,19 +208,19 @@ namespace RiverHollow.Game_Managers.GUIObjects
     public class BattleLocation
     {
         private StatDisplay _healthBar;
-        private Rectangle _rect;
         private CombatCharacter _character;
         public CombatCharacter Character { get => _character; }
 
         private SpriteFont _dmgFont;
         private int _dmg;
         private int _dmgTimer = 40;
+        private Vector2 _center;
 
-        public BattleLocation(Rectangle r, CombatCharacter c)
+        public BattleLocation(Vector2 vec, CombatCharacter c)
         {
-            _rect = r;
             _character = c;
-            _character.Position = _rect.Location.ToVector2();
+            _character.Position = vec;
+            _center = _character.Center;
             _healthBar = new StatDisplay(StatDisplay.Display.Health, _character, _character.Position + new Vector2(0, _character.SpriteHeight), 100, 5);
             _dmgFont = GameContentManager.GetFont(@"Fonts\Font");
         }
@@ -237,7 +237,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             if (_dmgTimer < 40)
             {
-                spriteBatch.DrawString(_dmgFont, _dmg.ToString(), new Vector2(_rect.Center.X, _rect.Center.Y - (_dmgTimer++) / 2), Color.White);
+                spriteBatch.DrawString(_dmgFont, _dmg.ToString(), new Vector2(_center.X, _center.Y - (_dmgTimer++) / 2), Color.White);
             }
         }
 
@@ -258,15 +258,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return _character != null;
         }
 
-        public bool Contains(Point mouse)
-        {
-            return _rect.Contains(mouse);
-        }
+        public bool Contains(Point mouse) { return _character.Contains(mouse); }
 
-        public void Kill()
-        {
-            _character = null;
-        }
+        public void Kill() { _character = null; }
 
         public bool ProcessHover(Point mouse)
         {
@@ -278,10 +272,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
 
-        public Vector2 GetAttackVec(Vector2 from)
+        public Vector2 GetAttackVec(Vector2 from, Vector2 widthHeight)
         {
-            Vector2 rv = Character.Position;
-            rv.X += _rect.Center.X < from.X ? 100 : -100;
+            Vector2 rv = _character.Position;
+            int xOffset = _character.Width + 1;
+            rv.X += _character.Center.X < from.X ? xOffset : -xOffset;
+            rv.Y += _character.Height - widthHeight.Y;
 
             return rv;
         }

@@ -27,6 +27,7 @@ namespace RiverHollow.SpriteAnimations
 
         // Calculated center of the sprite
         Vector2 v2Center;
+        public Vector2 Center { get => new Vector2(_Position.X + _width/2, Position.Y + _height / 2); }
 
         // Calculated width and height of the sprite
         int _width;

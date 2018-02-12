@@ -202,10 +202,10 @@ namespace RiverHollow.Characters.CombatStuff
             {
                 case "UserMove":
                     {
-                        if (SkillUser.Position != TargetLocation.GetAttackVec(UserStartPosition))
+                        if (SkillUser.Position != TargetLocation.GetAttackVec(UserStartPosition, new Vector2(SkillUser.Width, SkillUser.Height)))
                         {
                             Vector2 direction = Vector2.Zero;
-                            Utilities.GetMoveSpeed(SkillUser.Position, TargetLocation.GetAttackVec(UserStartPosition), moveSpeed, ref direction);
+                            Utilities.GetMoveSpeed(SkillUser.Position, TargetLocation.GetAttackVec(UserStartPosition, new Vector2(SkillUser.Width, SkillUser.Height)), moveSpeed, ref direction);
                             SkillUser.Sprite.Position += direction;
                         }
                         else
