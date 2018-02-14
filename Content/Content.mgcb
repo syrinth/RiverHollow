@@ -57,11 +57,6 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/DisplayFont.spritefont
 
-#begin Maps/Map2.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Map2.tmx
-
 #begin Textures/ArcaneTower.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -192,11 +187,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Shops/Buildings.xml
-
-#begin Data/Shops/Arcanists.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Shops/Arcanists.xml
 
 #begin Textures/worldObjects.png
 /importer:TextureImporter
@@ -459,11 +449,6 @@
 /processor:PassThroughProcessor
 /build:Data/Dialogue/NPC5.xml
 
-#begin Data/Shops/Meleers.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Shops/Meleers.xml
-
 #begin Textures/Armory.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -524,4 +509,14 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Buffs.xml
+
+#begin Maps/HouseNPC3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/HouseNPC3.tmx
+
+#begin Data/Shops/Adventurers.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Shops/Adventurers.xml
 

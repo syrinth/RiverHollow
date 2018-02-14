@@ -12,7 +12,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>Shopkeeper/Taylor/3/Map2/5 6/Buildings/Arcanists</Value>
+      <Value>Shopkeeper/Taylor/3/HouseNPC3/5 6/Buildings</Value>
     </Item>
     <Item>
       <Key>4</Key>
@@ -20,7 +20,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>Shopkeeper/Eldra/1/Guildhouse/7 8/Meleers</Value>
+      <Value>Shopkeeper/Eldra/1/Guildhouse/7 8/Adventurers</Value>
     </Item>
   </Asset>
 </XnaContent>

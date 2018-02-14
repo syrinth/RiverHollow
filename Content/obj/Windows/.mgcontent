@@ -9,7 +9,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Eggplant.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/wizard.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/DisplayFont.spritefont</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Map2.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/ArcaneTower.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Dialog.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/SpriteSheet.png</File>
@@ -25,7 +24,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC2.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC3.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/Buildings.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/Arcanists.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/worldObjects.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/DungeonSheet.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/Room1.tmx</File>
@@ -60,7 +58,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/HouseNPC1.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Houses.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC5.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/Meleers.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Armory.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Guildhouse.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/knight.png</File>
@@ -69,5 +66,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Mountains.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/TownUpgrades.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Buffs.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/HouseNPC3.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/Adventurers.xml</File>
   </SourceFiles>
 </SourceFileCollection>

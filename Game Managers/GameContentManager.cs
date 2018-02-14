@@ -79,8 +79,7 @@ namespace RiverHollow.Game_Managers
         public static void LoadMerchandise(ContentManager Content)
         {
             LoadMerchandiseByFile(Content, @"Data\Shops\Buildings");
-            LoadMerchandiseByFile(Content, @"Data\Shops\Arcanists");
-            LoadMerchandiseByFile(Content, @"Data\Shops\Meleers");
+            LoadMerchandiseByFile(Content, @"Data\Shops\Adventurers");
         }
 
         public static void LoadMerchandiseByFile(ContentManager Content, string file)

@@ -52,7 +52,7 @@
     <property name="Entrance" value="NearWilds"/>
    </properties>
   </object>
-  <object id="2" name="Exit" x="169.167" y="331.334" width="12.5" height="9">
+  <object id="2" name="Exit" x="169.167" y="341.834" width="12.5" height="9">
    <properties>
     <property name="Exit" value="NearWilds"/>
    </properties>

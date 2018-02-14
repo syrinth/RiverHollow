@@ -4,10 +4,14 @@
     <!--Key: Index Value:Type/ID/Description/Money-->
     <Item>
       <Key>1</Key>
-      <Value>Worker/2/Weapons Master/500</Value>
+      <Value>Worker/1/Practitioner of the arcane arts/500</Value>
     </Item>
     <Item>
       <Key>2</Key>
+      <Value>Worker/2/Weapons Master/500</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
       <Value>Worker/3/Knights!/500</Value>
     </Item>
   </Asset>

@@ -22,7 +22,6 @@ namespace RiverHollow.Game_Managers
         {
             _tileMaps = new Dictionary<string, RHMap>();
             AddMap(@"Maps\Map1", Content, GraphicsDevice);
-            AddMap(@"Maps\Map2", Content, GraphicsDevice);
             AddMap(@"Maps\NearWilds", Content, GraphicsDevice);
             AddMap(@"Maps\RiverHollowTown", Content, GraphicsDevice);
             AddMap(@"Maps\Crossroads", Content, GraphicsDevice);
@@ -35,6 +34,7 @@ namespace RiverHollow.Game_Managers
             AddMap(@"Maps\Arcane Tower", Content, GraphicsDevice);
             AddMap(@"Maps\Tent", Content, GraphicsDevice);
             AddMap(@"Maps\HouseNPC1", Content, GraphicsDevice);
+            AddMap(@"Maps\HouseNPC3", Content, GraphicsDevice);
             AddMap(@"Maps\Guildhouse", Content, GraphicsDevice);
 
             _currentMap = _tileMaps[@"NearWilds"];
