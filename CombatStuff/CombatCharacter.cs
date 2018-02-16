@@ -103,11 +103,9 @@ namespace RiverHollow.Characters.CombatStuff
 
         public int DecreaseHealth(int offensiveStat, int dmgMod)
         {
-            int dmg = 1;
-            int delta = StatDef - offensiveStat;
-
-            if (delta <= 0) { dmg = Math.Abs(delta) * dmgMod; }
-            else { dmg = Math.Max(1, (int)(delta/dmgMod)); }
+            int iATK = offensiveStat* dmgMod;
+            double dMult = Math.Min(2, Math.Max(0.01, Math.Pow((iATK / StatDef), 2)));
+            int dmg = (int)Math.Max(1, iATK * dMult);
 
             _currentHP -= (_currentHP - dmg >= 0) ? dmg : _currentHP;
             PlayAnimation("Hurt");

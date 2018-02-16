@@ -1,6 +1,5 @@
 ﻿using RiverHollow.Characters;
 using RiverHollow.Game_Managers.GUIObjects;
-using RiverHollow.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

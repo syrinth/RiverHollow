@@ -8,7 +8,6 @@ namespace RiverHollow
         #region Properties
         private int _id;
         public int ID { get => _id; }
-        protected string _name;
         private int _xp;
         public int XP { get => _xp; }
         protected string _textureName;

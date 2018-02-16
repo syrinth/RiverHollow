@@ -131,8 +131,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (_quest != null)
             {
                 _window.Draw(spriteBatch);
-                spriteBatch.DrawString(_font, _quest.Name, _window.UsableRectangle().Location.ToVector2(), Color.White);
-                spriteBatch.DrawString(_font, _quest.Accomplished + @"/" + _quest.TargetGoal, _window.UsableRectangle().Location.ToVector2() + new Vector2(200, 0), Color.White);
+                spriteBatch.DrawString(_font, _quest.Name, _window.GetUsableRectangleVec(), Color.White);
+                spriteBatch.DrawString(_font, _quest.Accomplished + @"/" + _quest.TargetGoal, _window.GetUsableRectangleVec() + new Vector2(200, 0), Color.White);
             }
         }
 

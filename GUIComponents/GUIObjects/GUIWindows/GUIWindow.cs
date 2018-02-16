@@ -12,6 +12,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         public static Vector2 RedDialog = new Vector2(0, 0);
         public static int RedDialogEdge = 7;
         public static Vector2 BrownDialog = new Vector2(32, 0);
+        public static int GreyDialogEdge = 7;
+        public static Vector2 GreyDialog = new Vector2(64, 0);
         public static int BrownDialogEdge = 7;
         protected int Size = 18;
         protected const int SpaceFromBottom = 32;
@@ -53,6 +55,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         public Rectangle UsableRectangle()
         {
             return new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
+        }
+
+        public Vector2 GetUsableRectangleVec()
+        {
+            return UsableRectangle().Location.ToVector2();
         }
 
         #region Draw

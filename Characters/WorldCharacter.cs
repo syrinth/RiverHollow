@@ -9,9 +9,6 @@ namespace RiverHollow.Characters
     public class WorldCharacter : Character
     {
         #region Properties
-        protected string _name;
-        public string Name { get => _name; }
-
         public string CurrentMapName;
         public Vector2 NewMapPosition;
         public enum Direction { North, South, East, West };

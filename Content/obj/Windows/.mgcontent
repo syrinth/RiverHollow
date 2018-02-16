@@ -68,5 +68,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Buffs.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/HouseNPC3.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/Adventurers.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/MenuFont.spritefont</File>
   </SourceFiles>
 </SourceFileCollection>

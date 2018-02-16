@@ -162,13 +162,23 @@ namespace RiverHollow.Game_Managers
                 case Screens.Inventory:
                     _currentGUIScreen = new InventoryScreen(n);
                     return;
+            }
+        }
+
+        public static void LoadScreen(Screens newScreen, WorldAdventurer n)
+        {
+            _currentScreen = newScreen;
+            switch (newScreen)
+            {
                 case Screens.TextInput:
                     _currentGUIScreen = new TextInputScreen(n);
                     return;
             }
         }
 
-        public static void LoadContainerScreen(Container c)
+        
+
+    public static void LoadContainerScreen(Container c)
         {
             _currentScreen = GUIManager.Screens.Inventory;
             _currentGUIScreen = new InventoryScreen(c);

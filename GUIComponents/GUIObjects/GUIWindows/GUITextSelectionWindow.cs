@@ -12,19 +12,21 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUITextSelectionWindow : GUITextWindow
     {
-        private Point _mousePos = Point.Zero;
-        private Food _food;
-        private Dictionary<int,string> _options;
-        private GUIImage _imgSelection;
-        private int _keySelection;
+        Food _food;
 
-        private int _optionsOffsetY;
+        protected Point _poiMouse = Point.Zero;
+        protected Dictionary<int,string> _diOptions;
+        protected GUIImage _giSelection;
+        protected int _iKeySelection;
 
+        protected int _iOptionsOffsetY;
+
+        protected GUITextSelectionWindow() : base() { }
         public GUITextSelectionWindow(string selectionText) : base()
         {
-            Position = new Vector2(RiverHollow.ScreenWidth / 2 - _width / 2, RiverHollow.ScreenHeight / 2 - _height / 2);
             Setup(selectionText);
             _width = (int)_font.MeasureString(_text).X + _innerBorder * 2 + 6; //6 is adding a bit of arbitrary extra space for the parsing. Exactsies are bad
+            Position = new Vector2(RiverHollow.ScreenWidth / 2 - _width / 2, RiverHollow.ScreenHeight / 2 - _height / 2);
             PostParse();
         }
 
@@ -41,15 +43,15 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public void Setup(string selectionText)
         {
             GameManager.Pause();
-            _keySelection = 0;
+            _iKeySelection = 0;
             SeparateText(selectionText);
         }
         public void PostParse()
         {
             ParseText(_text);
-            _height = (((_numReturns + 1) + _options.Count) * (int)_characterHeight + _innerBorder * 2);
-            _optionsOffsetY = Math.Max((int)_characterHeight, (int)((_numReturns + 1) * _characterHeight));
-            _imgSelection = new GUIImage(new Vector2((int)_position.X + _innerBorder, (int)_position.Y + _innerBorder + _optionsOffsetY), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+            _height = (((_numReturns + 1) + _diOptions.Count) * (int)_characterHeight + _innerBorder * 2);
+            _iOptionsOffsetY = Math.Max((int)_characterHeight, (int)((_numReturns + 1) * _characterHeight));
+            _giSelection = new GUIImage(new Vector2((int)_position.X + _innerBorder, (int)_position.Y + _innerBorder + _iOptionsOffsetY), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
         }
 
         public GUITextSelectionWindow(Food f, string selectionText) : this(selectionText)
@@ -60,7 +62,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         private void SeparateText(string selectionText)
         {
-            _options = new Dictionary<int, string>();
+            _diOptions = new Dictionary<int, string>();
             string[] firstPass = selectionText.Split(new[] { '[', ']'}, StringSplitOptions.RemoveEmptyEntries);
             if (firstPass.Length > 0)
             {
@@ -76,50 +78,51 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                         {
                             if(_talker.Friendship >= val)
                             {
-                                _options.Add(key++, friendshipPass[1]);
+                                _diOptions.Add(key++, friendshipPass[1]);
                             }
                         }
                     }
                     else
                     {
-                        _options.Add(key++, s);
+                        _diOptions.Add(key++, s);
                     }
                 }
             }
         }
+
         public override void Update(GameTime gameTime)
         {
             if (InputManager.CheckKey(Keys.W) || InputManager.CheckKey(Keys.Up))
             {
-                if (_keySelection - 1 >= 0)
+                if (_iKeySelection - 1 >= 0)
                 {
-                    _imgSelection.MoveImageBy(new Vector2(0, -_characterHeight));
-                    _keySelection--;
+                    _giSelection.MoveImageBy(new Vector2(0, -_characterHeight));
+                    _iKeySelection--;
                 }
             }
             else if (InputManager.CheckKey(Keys.S) || InputManager.CheckKey(Keys.Down))
             {
-                if (_keySelection + 1 < _options.Count)
+                if (_iKeySelection + 1 < _diOptions.Count)
                 {
-                    _imgSelection.MoveImageBy(new Vector2(0, _characterHeight));
-                    _keySelection++;
+                    _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
+                    _iKeySelection++;
                 }
             }
             else
             {
                 //Until fixed for specific motion
-                if (_mousePos != GraphicCursor.Position.ToPoint() && Contains(GraphicCursor.Position.ToPoint()))
+                if (_poiMouse != GraphicCursor.Position.ToPoint() && Contains(GraphicCursor.Position.ToPoint()))
                 {
-                    _mousePos = GraphicCursor.Position.ToPoint();
-                    if (_keySelection - 1 >= 0 && GraphicCursor.Position.Y < _imgSelection.Position.Y)
+                    _poiMouse = GraphicCursor.Position.ToPoint();
+                    if (_iKeySelection - 1 >= 0 && GraphicCursor.Position.Y < _giSelection.Position.Y)
                     {
-                        _imgSelection.MoveImageBy(new Vector2(0, -_characterHeight));
-                        _keySelection--;
+                        _giSelection.MoveImageBy(new Vector2(0, -_characterHeight));
+                        _iKeySelection--;
                     }
-                    else if (_keySelection + 1 < _options.Count && GraphicCursor.Position.Y > _imgSelection.Position.Y + _imgSelection.Height)
+                    else if (_iKeySelection + 1 < _diOptions.Count && GraphicCursor.Position.Y > _giSelection.Position.Y + _giSelection.Height)
                     {
-                        _imgSelection.MoveImageBy(new Vector2(0, _characterHeight));
-                        _keySelection++;
+                        _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
+                        _iKeySelection++;
                     }
                 }
             }
@@ -130,9 +133,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             }
         }
 
-        public void SelectAction()
+        protected virtual void SelectAction()
         {
-            string action = _options[_keySelection].Split(':')[1];
+            string action = _diOptions[_iKeySelection].Split(':')[1];
             if (_talker == null)
             {
                 ProcessGameTextSelection(action);
@@ -152,18 +155,34 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             {
                 spriteBatch.DrawString(_font, s, new Vector2(xindex, yIndex), Color.White);
             }
-            _imgSelection.Draw(spriteBatch);
+            _giSelection.Draw(spriteBatch);
 
             xindex += 32;
-            yIndex += _optionsOffsetY;
-            foreach (KeyValuePair<int, string> kvp in _options)
+            yIndex += _iOptionsOffsetY;
+            foreach (KeyValuePair<int, string> kvp in _diOptions)
             {
                 spriteBatch.DrawString(_font, kvp.Value.Split(':')[0], new Vector2(xindex, yIndex), Color.White);
                 yIndex += (int)_characterHeight;
             }
         }
 
-        private void ProcessGameTextSelection(string action)
+        protected void DrawWindow(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+        }
+
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+            bool rv = false;
+            if (Contains(mouse))
+            {
+                SelectAction();
+                rv = true;
+            }
+            return rv;
+        }
+
+        protected virtual void ProcessGameTextSelection(string action)
         {
             if (action.Equals("SleepNow"))
             {

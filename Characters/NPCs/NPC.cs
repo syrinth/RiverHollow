@@ -363,11 +363,6 @@ namespace RiverHollow.Characters
             }
         }
 
-        public void SetName(string text)
-        {
-            _name = text;
-        }
-
         #region Pathfinding
         public class PriorityQueue<T>
         {

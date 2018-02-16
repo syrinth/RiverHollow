@@ -179,5 +179,11 @@ namespace RiverHollow.Characters.NPCs
         {
             return _name;
         }
+
+        public override void SetName(string name)
+        {
+            _name = name;
+            _c.SetName(name);
+        }
     }
 }

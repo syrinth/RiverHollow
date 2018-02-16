@@ -66,13 +66,13 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\tree");
             AddTexture(Content, @"Textures\items");
             AddTexture(Content, @"Textures\AbilityAnimations");
-            
         }
 
         public static void LoadFont(ContentManager Content)
         {
             AddFont(Content, @"Fonts\DisplayFont");
             AddFont(Content, @"Fonts\Font");
+            AddFont(Content, @"Fonts\MenuFont");
         }
         #endregion
 

@@ -19,8 +19,6 @@ namespace RiverHollow.Characters.CombatStuff
         private int _xp;
         public int XP { get => _xp; }
 
-        public string Name { get => (_world == null) ? PlayerManager.Name : _world.Name; }
-
         public Equipment Weapon;
         public Equipment Armor;
 
@@ -31,10 +29,15 @@ namespace RiverHollow.Characters.CombatStuff
         public override int StatSpd { get => 10 + (_classLevel * _class.StatSpd) + +_buffSpd + (Weapon == null ? 0 : Weapon.Spd) + (Armor == null ? 0 : Armor.Spd); }
 
         #endregion
-        public CombatAdventurer(WorldAdventurer w) : base()
+        public CombatAdventurer(WorldAdventurer w) : this()
         {
+            _name = w.Name;
             _world = w;
-            _classLevel = 1;
+        }
+
+        public CombatAdventurer(string name) : this()
+        {
+            _name = name;
         }
 
         public CombatAdventurer() : base()

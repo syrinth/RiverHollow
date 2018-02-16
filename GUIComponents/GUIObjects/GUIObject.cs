@@ -1,11 +1,5 @@
-﻿using RiverHollow.Game_Managers;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RiverHollow.GUIObjects
 {
@@ -14,7 +8,7 @@ namespace RiverHollow.GUIObjects
         protected int _height;
         public int Height { get => _height; set => _height = value; }
         protected int _width;
-        public int Width { get => _width; set => _width = value; }
+        public int Width { get => _width; }
 
         protected Vector2 _position;
         public Vector2 Position {
@@ -50,6 +44,10 @@ namespace RiverHollow.GUIObjects
         public static Vector2 PosFromCenter(int x, int y, int width, int height)
         {
             return new Vector2(x - width / 2, y - height / 2);
+        }
+        public virtual bool ProcessLeftButtonClick(Point mouse)
+        {
+            return false;
         }
     }
 }

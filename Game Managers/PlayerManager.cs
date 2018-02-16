@@ -56,7 +56,7 @@ namespace RiverHollow.Game_Managers
             _party = new List<CombatAdventurer>();
             _questLog = new List<Quest>();
             World = new WorldCharacter();
-            Combat = new CombatAdventurer();
+            Combat = new CombatAdventurer(_name);
             _party.Add(Combat);
             _buildings = new List<WorkerBuilding>();
             _canMake = new List<int>();

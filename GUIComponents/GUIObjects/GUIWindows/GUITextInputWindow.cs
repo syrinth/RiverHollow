@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
+using RiverHollow.Characters.NPCs;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
@@ -12,9 +13,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         private int _strLen;
         private string _statement;
         private int _maxLength = 10;
-        private NPC _w;
+        private WorldAdventurer _w;
 
-        public GUITextInputWindow(NPC w) : base()
+        public GUITextInputWindow(WorldAdventurer w) : base()
         {
             GameManager.Pause();
             _statement = "Enter name:";

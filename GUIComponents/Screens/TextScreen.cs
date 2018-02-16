@@ -61,6 +61,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = true;
+
+            _window.ProcessLeftButtonClick(mouse);
+
             if (_window != null)
             {
                 if (!_window._pause)
