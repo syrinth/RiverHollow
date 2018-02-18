@@ -28,7 +28,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             _edgeSize = GreyDialogEdge;
             _sourcePoint = GreyDialog;
 
-            Position = new Vector2(startX, RiverHollow.ScreenHeight - GreyDialogEdge - (_vecMenuSize.Y * _iMaxMenuActions));
+            Position = new Vector2(startX, RiverHollow.ScreenHeight - GreyDialogEdge - (_vecMenuSize.Y * _iMaxMenuActions) - RiverHollow.ScreenHeight/100);
 
             _giSelection = new GUIImage(new Vector2((int)_position.X + _innerBorder, (int)_position.Y + _innerBorder), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
         }
@@ -82,7 +82,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             foreach (KeyValuePair<int, string> kvp in _diOptions)
             {
                 if (kvp.Key >= i) {
-                    spriteBatch.DrawString(_fFont, kvp.Value, new Vector2(xindex, yIndex), Color.White);
+                    Color c = (_chosenAbility != null && kvp.Value == _chosenAbility.Name) ? Color.Green : Color.White;
+                    spriteBatch.DrawString(_fFont, kvp.Value, new Vector2(xindex, yIndex), c);
                     yIndex += (int)_characterHeight;
                 }
             }

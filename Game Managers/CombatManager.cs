@@ -21,7 +21,7 @@ namespace RiverHollow.Game_Managers
         public static List<CombatCharacter> Party { get => _listParty; }
         public static List<CombatCharacter> TurnOrder;
 
-        public enum Phase { EnemyTurn, SelectSkill, ChooseSkillTarget, DisplayAttack, UseSkill, EndCombat }
+        public enum Phase { NewTurn, EnemyTurn, SelectSkill, ChooseSkillTarget, DisplayAttack, UseSkill, EndCombat }
         public static Phase CurrentPhase;
 
         public static int TurnIndex;
@@ -93,7 +93,7 @@ namespace RiverHollow.Game_Managers
                 CurrentPhase = Phase.EnemyTurn;
                 EnemyTakeTurn();
             }
-            else if (_listParty.Contains(ActiveCharacter)) { CurrentPhase = Phase.SelectSkill; }
+            else if (_listParty.Contains(ActiveCharacter)) { CurrentPhase = Phase.NewTurn; }
         }
 
         //For now, when the enemy takes their turn, have them select a random party member
