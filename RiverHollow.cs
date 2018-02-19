@@ -182,13 +182,9 @@ namespace RiverHollow
         {
             if (!GameManager.Informational() && !GameManager.TakingInput())
             {
-                if (InputManager.CheckKey(Keys.Escape))
+                if (GameManager.OnMap() && InputManager.CheckKey(Keys.Escape))
                 {
-                    if (GameManager.InCombat())
-                    {
-                        CombatManager.EndBattle();
-                    }
-                    else if (GameManager.OnMap() && GUIManager.CurrentGUIScreen != GUIManager.Screens.GameMenu)
+                    if (GUIManager.CurrentGUIScreen != GUIManager.Screens.GameMenu)
                     {
                         GUIManager.SetScreen(GUIManager.Screens.GameMenu);
                     }

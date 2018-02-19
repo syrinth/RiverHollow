@@ -12,6 +12,7 @@ namespace RiverHollow.Characters.CombatStuff
     public class MenuAction
     {
         protected int _id;
+        public int ActionID { get => _id; }
 
         public enum ActionType { Action, Menu, Spell };
         protected ActionType _actionType;
@@ -30,6 +31,7 @@ namespace RiverHollow.Characters.CombatStuff
 
         protected int ImportBasics(string[] stringData, int id)
         {
+            _id = id;
             int i = 0;
             _actionType = (ActionType)Enum.Parse(typeof(ActionType), stringData[i++]);
             _name = stringData[i++];

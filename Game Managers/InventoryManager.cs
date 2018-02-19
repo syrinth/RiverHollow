@@ -289,6 +289,7 @@ Exit:
         {
             RemoveItemFromInventoryLocation(i, j, null);
         }
+
         public static void RemoveItemFromInventoryLocation(int i, int j, Container c)
         {
             Item[,] inventory = null;
@@ -357,16 +358,16 @@ Exit:
             return rv;
         }
 
-        internal static List<Item> GetPlayerInventoryArray()
+        internal static List<CombatItem> GetPlayerCombatItems()
         {
-            List<Item> items = new List<Item>();
+            List<CombatItem> items = new List<CombatItem>();
             for (int i = 0; i < maxItemRows; i++)
             {
                 for (int j = 0; j < maxItemColumns; j++)
                 {
-                    if (_playerInventory[i, j] != null)
+                    if (_playerInventory[i, j] != null && _playerInventory[i, j].Type == Item.ItemType.Combat)
                     {
-                        items.Add(_playerInventory[i, j]);
+                        items.Add((CombatItem)_playerInventory[i, j]);
                     }
                 }
             }

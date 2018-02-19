@@ -26,6 +26,7 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        //Note: This only grabs one button press due to trying to control up/down issues.
         public static bool CheckKey(Keys key)
         {
             bool rv = false;

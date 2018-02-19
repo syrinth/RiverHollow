@@ -1,11 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using RiverHollow.Characters;
 using RiverHollow.Characters.CombatStuff;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Items;
 using RiverHollow.Misc;
-using RiverHollow.SpriteAnimations;
-using System;
 using System.Collections.Generic;
 
 namespace RiverHollow.Game_Managers
@@ -29,7 +26,7 @@ namespace RiverHollow.Game_Managers
         public static int TurnIndex;
 
         public static CombatAction ChosenSkill;
-        public static Item ChosenItem;
+        public static CombatItem ChosenItem;
         private static BattleLocation _target;
         public static int PlayerTarget;
 
@@ -132,7 +129,7 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void ProcessItemChoice(Item it)
+        public static void ProcessItemChoice(CombatItem it)
         {
             CurrentPhase = Phase.ChooseItemTarget;
             ChosenItem = it;
@@ -204,28 +201,11 @@ namespace RiverHollow.Game_Managers
 
         internal static void UseItem()
         {
-            bool finished = false;
-            if (!ActiveCharacter.IsCurrentAnimation("Cast"))
-            {
-                ActiveCharacter.PlayAnimation("Cast");
-            }
-            else if (ActiveCharacter.AnimationPlayedXTimes(2))
-            {
-                ActiveCharacter.PlayAnimation("Walk");
-                finished = true;
-            }
+            int val = _target.Character.IncreaseHealth(CombatManager.ChosenItem.Health);
+            _target.Heal(val);
+            InventoryManager.RemoveItemFromInventory(ChosenItem);
 
-            if (finished)
-            {
-                if (ChosenItem.Type == Item.ItemType.Food)
-                {
-                    int heal = ((Food)CombatManager.ChosenItem).Health;
-                    _target.Character.IncreaseHealth(heal);
-                    _target.Heal(heal);
-                    InventoryManager.RemoveItemFromInventory(ChosenItem);
-                }
-                NextTurn();
-            }
+            NextTurn();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace RiverHollow.Items
 {
     public class Item
     {
-        public enum ItemType {Resource, Equipment, Tool, Container, Food, Map };
+        public enum ItemType { Resource, Equipment, Tool, Container, Food, Map, Combat };
 
         #region properties
         protected ItemType _itemType;
@@ -372,6 +372,41 @@ namespace RiverHollow.Items
             string rv = base.GetDescription();
             rv += System.Environment.NewLine;
             rv += "Difficulty: " + _difficulty;
+
+            return rv;
+        }
+    }
+
+    public class CombatItem : Item
+    {
+        private int _stam;
+        public int Stamina { get => _stam; }
+        private int _health;
+        public int Health { get => _health; }
+        private int _mana;
+        public int Mana { get => _mana; }
+
+        public CombatItem(int id, string[] itemValue, int num)
+        {
+            int i = ImportBasics(itemValue, id, num);
+            _stam = int.Parse(itemValue[i++]);
+            _health = int.Parse(itemValue[i++]);
+            _mana = int.Parse(itemValue[i++]);
+
+            _doesItStack = true;
+            _texture = GameContentManager.GetTexture(@"Textures\items");
+
+            CalculateSourcePos();
+        }
+
+        public override string GetDescription()
+        {
+            string rv = base.GetDescription();
+            rv += System.Environment.NewLine;
+            if (_health > 0) { rv += "Health: +" + _health + " "; }
+            if (_stam > 0) { rv += "Stamina: +" + _stam + " "; }
+            if (_mana > 0) { rv += "Mana: +" + _mana + " "; }
+            rv = rv.Trim();
 
             return rv;
         }

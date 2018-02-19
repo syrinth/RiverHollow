@@ -48,5 +48,10 @@
       <Key>10</Key>
       <Value>Equipment/Armor/Best armor ever/1/1000/Armor/0/20/0/0/0</Value>
     </Item>
+    <!--Combat:Stamina/Health/Mana-->
+    <Item>
+      <Key>101</Key>
+      <Value>Combat/Health Potion/RecoversHealth/5/3000/0/20/0</Value>
+    </Item>
   </Asset>
 </XnaContent>

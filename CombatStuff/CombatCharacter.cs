@@ -130,16 +130,20 @@ namespace RiverHollow.Characters.CombatStuff
             return dmg;
         }
 
-        public void IncreaseHealth(int x)
+        public int IncreaseHealth(int x)
         {
+            int amountHealed = x;
             if (_currentHP + x <= MaxHP)
             {
                 _currentHP += x;
             }
             else
             {
+                amountHealed = MaxHP - _currentHP;
                 _currentHP = MaxHP;
             }
+
+            return amountHealed;
         }
 
         public void IncreaseMana(int x)
