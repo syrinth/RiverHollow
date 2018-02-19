@@ -89,6 +89,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
 
+            foreach(BattleLocation bl in _arrEnemies)
+            {
+                if (bl != null) { bl.Selected = false; }
+            }
             rv = _cmbtMenu.ProcessRightButtonClick(mouse);
 
             return rv;

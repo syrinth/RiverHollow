@@ -157,7 +157,7 @@ namespace RiverHollow.Characters.CombatStuff
         public void TickBuffs()
         {
             List<Buff> toRemove = new List<Buff>();
-            foreach(Buff b in LiBuffs)
+            foreach(Buff b in _liBuffs)
             {
                 if(--b.Duration == 0)
                 {
@@ -185,13 +185,17 @@ namespace RiverHollow.Characters.CombatStuff
 
             foreach (Buff b in toRemove)
             {
-                LiBuffs.Remove(b);
+                _liBuffs.Remove(b);
             }
             toRemove.Clear();
         }
 
         public void AddBuff(Buff b)
         {
+            Buff find = _liBuffs.Find(buff => buff.Name == b.Name);
+            if (find == null) { _liBuffs.Add(b); }
+            else { find.Duration += b.Duration; }
+            
             foreach(KeyValuePair<string, int> kvp in b.StatMods)
             {
                 switch (kvp.Key)
