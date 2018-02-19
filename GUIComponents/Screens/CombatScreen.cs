@@ -89,13 +89,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
 
-            //If the current Phase is skill selection, allow the user to pick a skill for the currentCharacter
-            if (CombatManager.CurrentPhase == CombatManager.Phase.ChooseSkillTarget)
-            {
-                _cmbtMenu.ClearChosenAbility();
-                CombatManager.ChosenSkill = null;
-                CombatManager.CurrentPhase = CombatManager.Phase.SelectSkill;
-            }
+            rv = _cmbtMenu.ProcessRightButtonClick(mouse);
 
             return rv;
         }
@@ -143,6 +137,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             switch (CombatManager.CurrentPhase)
             {
                 case CombatManager.Phase.EnemyTurn:
+                    _cmbtMenu.NewTurn();
                     CombatManager.SetSkillTarget(_arrParty[CombatManager.PlayerTarget]);
                     break;
 
@@ -354,7 +349,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
     {
         CmbtMenuWindow _gwMenu;
         CmbtStatusWin _statusWindow;
-        CmbtUseMenuWindow _seMenuWindow;
+        CmbtUseMenuWindow _useMenuWindow;
 
         public bool UseMenu = false;
 
@@ -365,12 +360,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             _gwMenu = new CmbtMenuWindow(totalMenuWidth, menuSec);
             _statusWindow = new CmbtStatusWin(_gwMenu.Position + new Vector2(_gwMenu.Width + GUIWindow.GreyDialogEdge * 2, 0), menuSec * 2, _gwMenu.Height);
-            _seMenuWindow = new CmbtUseMenuWindow(totalMenuWidth, _gwMenu.Width + _statusWindow.Width + GUIWindow.GreyDialogEdge * 2);
+            _useMenuWindow = new CmbtUseMenuWindow(totalMenuWidth, _gwMenu.Width + _statusWindow.Width + GUIWindow.GreyDialogEdge * 2);
         }
 
         public void Update(GameTime gameTime)
         {
-            if (CombatManager.CurrentPhase == CombatManager.Phase.SelectSkill) { _gwMenu.Update(gameTime); }
+            if (CombatManager.CurrentPhase == CombatManager.Phase.SelectSkill) {
+                if (UseMenu) { _useMenuWindow.Update(gameTime); }
+                else { _gwMenu.Update(gameTime); }
+            }
             _statusWindow.Update(gameTime);
         }
 
@@ -378,11 +376,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             _statusWindow.Draw(spriteBatch, locations);
             _gwMenu.Draw(spriteBatch);
-            //_seMenuWindow.Draw(spriteBatch);
+            if (UseMenu)
+            {
+                _useMenuWindow.Draw(spriteBatch);
+            }
         }
 
         internal void NewTurn()
         {
+            UseMenu = false;
+            _useMenuWindow.ClearChosenAbility();
             _gwMenu.ClearChosenAbility();
             _gwMenu.Assign(CombatManager.ActiveCharacter.AbilityList);
         }
@@ -403,24 +406,56 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
 
+        internal bool ProcessRightButtonClick(Point mouse)
+        {
+            bool rv = false;
+            //If the current Phase is skill selection, allow the user to pick a skill for the currentCharacter
+            if (CombatManager.CurrentPhase == CombatManager.Phase.ChooseSkillTarget || UseMenu)
+            {
+                rv = true;
+
+                ClearState();
+                CombatManager.ChosenSkill = null;
+                CombatManager.CurrentPhase = CombatManager.Phase.SelectSkill;
+
+                UseMenu = false;
+            }
+            return rv;
+        }
+
         internal void ProcessActionChoice()
         {
-            if (_gwMenu.ChosenAction != null)
+            if (UseMenu)
             {
-                if (!_gwMenu.ChosenAction.IsMenu())
+                CombatAction a = _useMenuWindow.ChosenAction;
+                if (a != null)
                 {
-                    CombatManager.ProcessActionChoice(_gwMenu.ChosenAction);
+                    CombatManager.ProcessActionChoice(a);
                 }
-                else
+            }
+            else
+            {
+                MenuAction a = _gwMenu.ChosenAction;
+                if (a != null)
                 {
-
+                    if (!a.IsMenu())
+                    {
+                        CombatManager.ProcessActionChoice((CombatAction)a);
+                    }
+                    else
+                    {
+                        UseMenu = true;
+                        _useMenuWindow.AssignSpells(CombatManager.ActiveCharacter.SpellList);
+                    }
                 }
             }
         }
 
-        internal void ClearChosenAbility()
+        internal void ClearState()
         {
+            UseMenu = false;
             _gwMenu.ClearChosenAbility();
+            _useMenuWindow.ClearChosenAbility();
         }
     }
 
@@ -558,10 +593,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
     internal class CmbtUseMenuWindow : GUITextSelectionWindow
     {
-        const int _iMaxMenuActions = 4;
-        List<CombatAction> _liAbilities;
-        CombatAction _chosenAbility;
-        public CombatAction ChosenAbility { get => _chosenAbility; }
+        const int _iMaxMenuActions = 8;
+        int _textColOne;
+        int _textColTwo;
+        int _selectWidth;
+        List<CombatAction> _liActions;
+        CombatAction _chosenAction;
+        public CombatAction ChosenAction { get => _chosenAction; }
         Vector2 _vecMenuSize;
         SpriteFont _fFont;
 
@@ -573,13 +611,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _vecMenuSize = _fFont.MeasureString("XXXXXXXX");
 
             _width = width;
-            _height = (int)(_vecMenuSize.Y * _iMaxMenuActions);
+            _height = (int)(_vecMenuSize.Y * (_iMaxMenuActions/2));   //Two columns
             _edgeSize = GreyDialogEdge;
             _sourcePoint = GreyDialog;
 
-            Position = new Vector2(startX, RiverHollow.ScreenHeight - GreyDialogEdge - (_vecMenuSize.Y * _iMaxMenuActions) - RiverHollow.ScreenHeight / 100);
+            Position = new Vector2(startX, RiverHollow.ScreenHeight - GreyDialogEdge - (_height) - RiverHollow.ScreenHeight / 100);
 
             _giSelection = new GUIImage(new Vector2((int)_position.X + _innerBorder, (int)_position.Y + _innerBorder), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+
+            _selectWidth = _giSelection.Width;
+            _textColOne = (int)_position.X + _innerBorder + _selectWidth;
+            _textColTwo = (int)_position.X + _innerBorder + (Width / 2) + _selectWidth;
         }
 
         public override void Update(GameTime gameTime)
@@ -592,14 +634,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _iKeySelection -= 2;
                 }
             }
-            else if (InputManager.CheckKey(Keys.D) || InputManager.CheckKey(Keys.Right))
-            {
-                if (_iKeySelection + 1 < _diOptions.Count)
-                {
-                    _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
-                    _iKeySelection += 1;
-                }
-            }
             else if (InputManager.CheckKey(Keys.S) || InputManager.CheckKey(Keys.Down))
             {
                 if (_iKeySelection + 2 < _diOptions.Count)
@@ -608,11 +642,39 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _iKeySelection += 2;
                 }
             }
+            else if (InputManager.CheckKey(Keys.D) || InputManager.CheckKey(Keys.Right))
+            {
+                int test = _iKeySelection + 1;
+                if (test < _diOptions.Count)
+                {
+                    if(test % 2 == 0)   //moving to an even number, needs to move to firstCol
+                    {
+                        _giSelection.MoveImageTo(new Vector2(_textColOne - _selectWidth, _giSelection.Position.Y));
+                        _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
+                    }
+                    else
+                    {
+                        _giSelection.MoveImageTo(new Vector2(_textColTwo - _selectWidth, _giSelection.Position.Y));
+                    }
+                    
+                    _iKeySelection += 1;
+                }
+            }
             else if (InputManager.CheckKey(Keys.A) || InputManager.CheckKey(Keys.Left))
             {
-                if (_iKeySelection - 1 < _diOptions.Count)
+                int test = _iKeySelection - 1;
+                if (test >= 0)
                 {
-                    _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
+                    if (test % 2 == 0)   //moving to an even number, needs to move to firstCol
+                    {
+                        _giSelection.MoveImageTo(new Vector2(_textColOne - _selectWidth, _giSelection.Position.Y));
+                    }
+                    else
+                    {
+                        _giSelection.MoveImageTo(new Vector2(_textColTwo - _selectWidth, _giSelection.Position.Y));
+                        _giSelection.MoveImageBy(new Vector2(0, -_characterHeight));
+                    }
+
                     _iKeySelection -= 1;
                 }
             }
@@ -641,12 +703,40 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-        public void Assign(List<CombatAction> abilities)
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.DrawWindow(spriteBatch);
+            int xindex = _textColOne;
+            int yIndex = (int)_position.Y + _innerBorder;
+
+            if (_diOptions.Count > 0) { _giSelection.Draw(spriteBatch); }
+
+            yIndex += _iOptionsOffsetY;
+            int i = Math.Max(0, _iKeySelection - _iMaxMenuActions);
+            foreach (KeyValuePair<int, string> kvp in _diOptions)
+            {
+                Color c = (_chosenAction != null && kvp.Value == _chosenAction.Name) ? Color.Green : Color.White;
+                if (kvp.Key >= i)
+                {
+                    spriteBatch.DrawString(_fFont, kvp.Value, new Vector2(xindex, yIndex), c);
+                    //Even numbered spell
+                    if (kvp.Key % 2 == 0) { xindex = _textColTwo; }
+                    else
+                    {
+                        xindex = _textColOne;
+                        yIndex += (int)_characterHeight;
+                    }
+                }
+
+            }
+        }
+
+        public void AssignSpells(List<CombatAction> abilities)
         {
             int key = 0;
             if (_diOptions.Count == 0)
             {
-                _liAbilities = abilities;
+                _liActions = abilities;
                 _iKeySelection = 0;
                 foreach (CombatAction s in abilities)
                 {
@@ -673,34 +763,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         protected override void SelectAction()
         {
-            _chosenAbility = _liAbilities[_iKeySelection];
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.DrawWindow(spriteBatch);
-            int xindex = (int)_position.X + _innerBorder;
-            int yIndex = (int)_position.Y + _innerBorder;
-
-            if (_diOptions.Count > 0) { _giSelection.Draw(spriteBatch); }
-
-            xindex += 32;
-            yIndex += _iOptionsOffsetY;
-            int i = Math.Max(0, _iKeySelection - _iMaxMenuActions);
-            foreach (KeyValuePair<int, string> kvp in _diOptions)
-            {
-                if (kvp.Key >= i)
-                {
-                    Color c = (_chosenAbility != null && kvp.Value == _chosenAbility.Name) ? Color.Green : Color.White;
-                    spriteBatch.DrawString(_fFont, kvp.Value, new Vector2(xindex, yIndex), c);
-                    yIndex += (int)_characterHeight;
-                }
-            }
+            _chosenAction = _liActions[_iKeySelection];
         }
 
         public void ClearChosenAbility()
         {
-            _chosenAbility = null;
+            _chosenAction = null;
         }
     }
 

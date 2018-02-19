@@ -101,7 +101,7 @@ namespace RiverHollow.Game_Managers
         public static void EnemyTakeTurn()
         {
             RHRandom r = new RHRandom();
-            ProcessActionChoice(CharacterManager.GetActionByIndex(1), false);//ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)]);
+            ProcessActionChoice((CombatAction)CharacterManager.GetActionByIndex(1), false);//ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)]);
             if (!ChosenSkill.Target.Equals("Self"))
             {
                 do
@@ -111,22 +111,19 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void ProcessActionChoice(MenuAction a, bool chooseTarget = true)
+        public static void ProcessActionChoice(CombatAction a, bool chooseTarget = true)
         {
-            if (!a.IsMenu())
+            ChosenSkill = a;
+            ChosenSkill.SkillUser = ActiveCharacter;
+            if (!ChosenSkill.Target.Equals("Self"))
             {
-                ChosenSkill = (CombatAction)a;
-                ChosenSkill.SkillUser = ActiveCharacter;
-                if (!ChosenSkill.Target.Equals("Self"))
-                {
-                    if (chooseTarget) { CurrentPhase = Phase.ChooseSkillTarget; }  //Skips this phase for enemies. They don't "choose" targets
-                }
-                else
-                {
-                    ChosenSkill.ApplyEffectToSelf();
-                    ChosenSkill = null;
-                    NextTurn();
-                }
+                if (chooseTarget) { CurrentPhase = Phase.ChooseSkillTarget; }  //Skips this phase for enemies. They don't "choose" targets
+            }
+            else
+            {
+                ChosenSkill.ApplyEffectToSelf();
+                ChosenSkill = null;
+                NextTurn();
             }
         }
 

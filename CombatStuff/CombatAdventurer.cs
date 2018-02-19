@@ -28,6 +28,9 @@ namespace RiverHollow.Characters.CombatStuff
         public override int StatMagic { get => 10 + (_classLevel * _class.StatMagic) + _buffMagic + (Weapon == null ? 0 : Weapon.Mag) + (Armor == null ? 0 : Armor.Mag); }
         public override int StatSpd { get => 10 + (_classLevel * _class.StatSpd) + +_buffSpd + (Weapon == null ? 0 : Weapon.Spd) + (Armor == null ? 0 : Armor.Spd); }
 
+        public override List<MenuAction> AbilityList { get => _class.AbilityList; }
+        public override List<CombatAction> SpellList { get => _class.SpellList; }
+
         #endregion
         public CombatAdventurer(WorldAdventurer w) : this()
         {
@@ -49,11 +52,6 @@ namespace RiverHollow.Characters.CombatStuff
         {
             _class = x;
             _currentHP = MaxHP;
-
-            foreach (MenuAction a in _class.AbilityList)
-            {
-                _abilityList.Add(a);
-            }
         }
 
         public void AddXP(int x)

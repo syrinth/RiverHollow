@@ -20,14 +20,19 @@
     </Item>
     <Item>
       <Key>4</Key>
+      <Value>Action/Meditate/Increases your dmg/0/0.03/[Target:Self][Buff:3|2|Self]</Value>
+    </Item>
+    <!--Wizard Spells-->
+    <Item>
+      <Key>101</Key>
       <Value>Spell/Thunder/Call down thunder on your foes/0/0.03/[Target:Enemy][Effect:Harm-5 Direct][Action:UserCast Direct Apply]</Value>
     </Item>
     <Item>
-      <Key>5</Key>
+      <Key>102</Key>
       <Value>Spell/Fireball/Flames!/1/0.03/[Target:Enemy][Effect:Harm-50][Action:UserCast Projectile Apply]</Value>
     </Item>
     <Item>
-      <Key>6</Key>
+      <Key>103</Key>
       <Value>Spell/Shield/Summon a rock/0/0.03/[Target:Self][Effect:][Buff:1|2|Self]</Value>
     </Item>
   </Asset>

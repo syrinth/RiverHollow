@@ -10,5 +10,9 @@
       <Key>2</Key>
       <Value>CounterStance/Ready to strike back//Counter</Value>
     </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>Meditate/Character has focused their magical powers./Dmg:10/</Value>
+    </Item>
   </Asset>
 </XnaContent>
