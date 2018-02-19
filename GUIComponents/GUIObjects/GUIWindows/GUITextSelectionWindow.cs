@@ -217,5 +217,12 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                 GameManager.BackToMain();
             }
         }
+
+        internal void Clear()
+        {
+            _iKeySelection = 0;
+            _diOptions.Clear();
+            _giSelection = new GUIImage(new Vector2((int)_position.X + _innerBorder, (int)_position.Y + _innerBorder), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+        }
     }
 }

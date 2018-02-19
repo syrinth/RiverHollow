@@ -276,7 +276,6 @@ namespace RiverHollow.Characters.CombatStuff
                     }
                     break;
                 case "Apply":
-
                     ApplyEffect();
                     _currentActionTag++;
                     break;

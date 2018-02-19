@@ -1,13 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using RiverHollow.Characters;
 using RiverHollow.Characters.CombatStuff;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIObjects;
-using RiverHollow.Misc;
-using RiverHollow.SpriteAnimations;
+using RiverHollow.Items;
 using System;
 using System.Collections.Generic;
 
@@ -64,6 +62,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
+            BattleLocation loc = null;
 
             //If the current Phase is skill selection, allow the user to pick a skill for the currentCharacter
             switch (CombatManager.CurrentPhase)
@@ -73,9 +72,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                     break;
                 case CombatManager.Phase.ChooseSkillTarget:
-                    BattleLocation loc = _arrEnemies[_iTarget];
+                    loc = _arrEnemies[_iTarget];
                     loc.Selected = false;
                     CombatManager.SetSkillTarget(loc);
+                    _iTarget = -1;
+
+                    break;
+                case CombatManager.Phase.ChooseItemTarget:
+                    loc = _arrParty[_iTarget];
+                    loc.Selected = false;
+                    CombatManager.SetItemTarget(loc);
+                    _cmbtMenu.ClearState();
                     _iTarget = -1;
 
                     break;
@@ -102,14 +109,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
             rv = _sdStamina.ProcessHover(mouse);
-            if(CombatManager.CurrentPhase == CombatManager.Phase.ChooseSkillTarget){
-                foreach (BattleLocation p in _arrParty)
-                {
-                    if (rv) { break; }
-                    if (p != null) {
-                        //rv = p.ProcessHover(GraphicCursor.Position.ToPoint());
-                    }
-                }
+            if(CombatManager.PhaseChooseSkillTarget()){
                 foreach (BattleLocation p in _arrEnemies)
                 {
                     if (rv) { break; }
@@ -127,7 +127,27 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     }
                 }
             }
-
+            if (CombatManager.PhaseChooseItemTarget())
+            {
+                foreach (BattleLocation p in _arrParty)
+                {
+                    if (rv) { break; }
+                    if (p != null && p.Occupied())
+                    {
+                        rv = p.ProcessHover(GraphicCursor.Position.ToPoint());
+                        if (rv)
+                        {
+                            int newTarget = Array.FindIndex<BattleLocation>(_arrParty, loc => loc == p);
+                            if (newTarget != _iTarget)
+                            {
+                                _arrParty[_iTarget].Selected = false;
+                                _iTarget = newTarget;
+                            }
+                        }
+                    }
+                }
+            }
+            
             return rv;
         }
 
@@ -147,6 +167,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 case CombatManager.Phase.NewTurn:
                     _cmbtMenu.NewTurn();
+                    CombatManager.ChosenItem = null;
+                    CombatManager.ChosenSkill = null;
                     CombatManager.CurrentPhase = CombatManager.Phase.SelectSkill;
                     break;
 
@@ -156,7 +178,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 case CombatManager.Phase.ChooseSkillTarget:
                     if (_iTarget == -1) {
-                        _iTarget = SkipToNextTarget(0, true);
+                        _iTarget = SkipToNextTarget(_arrEnemies, 0, true);
                     }
 
                     if (InputManager.CheckKey(Keys.A) || InputManager.CheckKey(Keys.S))
@@ -164,7 +186,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         int test = _iTarget - 1;
                         if (test >= 0)
                         {
-                            test = SkipToNextTarget(test, false);
+                            test = SkipToNextTarget(_arrEnemies, test, false);
                             if (test >= 0 && test < _arrEnemies.Length)
                             {
                                 _arrEnemies[_iTarget].Selected = false;
@@ -177,7 +199,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         int test = _iTarget + 1;
                         if (test < _arrEnemies.Length)
                         {
-                            test = SkipToNextTarget(test, true);
+                            test = SkipToNextTarget(_arrEnemies, test, true);
                             if (test >= 0 && test < _arrEnemies.Length)
                             {
                                 _arrEnemies[_iTarget].Selected = false;
@@ -197,6 +219,51 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                     break;
 
+                case CombatManager.Phase.ChooseItemTarget:
+                    if (_iTarget == -1)
+                    {
+                        _iTarget = SkipToNextTarget(_arrParty, 0, true);
+                    }
+
+                    if (InputManager.CheckKey(Keys.A) || InputManager.CheckKey(Keys.S))
+                    {
+                        int test = _iTarget - 1;
+                        if (test >= 0)
+                        {
+                            test = SkipToNextTarget(_arrParty, test, false);
+                            if (test >= 0 && test < _arrParty.Length)
+                            {
+                                _arrParty[_iTarget].Selected = false;
+                                _iTarget = test;
+                            }
+                        }
+                    }
+                    else if (InputManager.CheckKey(Keys.D) || InputManager.CheckKey(Keys.W))
+                    {
+                        int test = _iTarget + 1;
+                        if (test < _arrParty.Length)
+                        {
+                            test = SkipToNextTarget(_arrParty, test, true);
+                            if (test >= 0 && test < _arrParty.Length)
+                            {
+                                _arrParty[_iTarget].Selected = false;
+                                _iTarget = test;
+                            }
+                        }
+                    }
+                    _arrParty[_iTarget].Selected = true;
+
+                    if (InputManager.CheckKey(Keys.Enter))
+                    {
+                        BattleLocation loc = _arrParty[_iTarget];
+                        loc.Selected = false;
+                        CombatManager.SetItemTarget(loc);
+                        _cmbtMenu.ClearState();
+                        _iTarget = -1;
+                    }
+
+                    break;
+
                 case CombatManager.Phase.DisplayAttack:
                     if (!string.IsNullOrEmpty(CombatManager.Text))
                     {
@@ -210,15 +277,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             if (_gtwTextWindow.Duration <= 0)
                             {
                                 _gtwTextWindow = null;
-                                CombatManager.CurrentPhase = CombatManager.Phase.UseSkill;
+                                CombatManager.CurrentPhase = CombatManager.Phase.PerformAction;
                             }
                         }
                     }
 
                     break;
 
-                case CombatManager.Phase.UseSkill:
-                    CombatManager.ChosenSkill.HandlePhase(gameTime);
+                case CombatManager.Phase.PerformAction:
+                    if (CombatManager.ChosenSkill != null) { CombatManager.ChosenSkill.HandlePhase(gameTime); }
+                    else if (CombatManager.ChosenItem != null) { CombatManager.UseItem(); }
                     break;
             }
 
@@ -239,17 +307,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-        public int SkipToNextTarget(int i, bool add)
+        public int SkipToNextTarget(BattleLocation[] arr, int i, bool add)
         {
             int rv = -1;
             do
             {
                 rv = add ? i++ : i--;
-                if(rv < 0 || rv == _arrEnemies.Length) {
+                if(rv < 0 || rv == arr.Length) {
                     rv = -1;
                     break;
                 }
-            } while (_arrEnemies[rv] == null || !_arrEnemies[rv].Occupied());
+            } while (arr[rv] == null || !arr[rv].Occupied());
 
             return rv;
         }
@@ -302,7 +370,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             if (_iDmgTimer < 40)
             {
-                spriteBatch.DrawString(_fDmg, _iDmg.ToString(), new Vector2(_vCenter.X, _vCenter.Y - (_iDmgTimer++) / 2), Color.White);
+                Color c = Color.White;
+                int tmp = _iDmg;
+                if(_iDmg < 0) {
+                    tmp *= -1;
+                    c = Color.LightGreen;
+                }
+                spriteBatch.DrawString(_fDmg, tmp.ToString(), new Vector2(_vCenter.X, _vCenter.Y - (_iDmgTimer++) / 2), c);
             }
         }
 
@@ -314,6 +388,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public void AssignDamage(int x)
         {
             _iDmg = x;
+            _iDmgTimer = 0;
+        }
+
+        public void Heal(int x)
+        {
+            _iDmg = -x;
             _iDmgTimer = 0;
         }
 
@@ -351,11 +431,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
     internal class CmbtMenu
     {
+        public enum Display { None, Items, Spells }
+        public Display DisplayType = Display.None;
+
         CmbtMenuWindow _gwMenu;
         CmbtStatusWin _statusWindow;
         CmbtUseMenuWindow _useMenuWindow;
-
-        public bool UseMenu = false;
 
         public CmbtMenu()
         {
@@ -370,7 +451,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public void Update(GameTime gameTime)
         {
             if (CombatManager.CurrentPhase == CombatManager.Phase.SelectSkill) {
-                if (UseMenu) { _useMenuWindow.Update(gameTime); }
+                if (DisplayType != Display.None) { _useMenuWindow.Update(gameTime); }
                 else { _gwMenu.Update(gameTime); }
             }
             _statusWindow.Update(gameTime);
@@ -380,7 +461,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             _statusWindow.Draw(spriteBatch, locations);
             _gwMenu.Draw(spriteBatch);
-            if (UseMenu)
+            if (DisplayType != Display.None)
             {
                 _useMenuWindow.Draw(spriteBatch);
             }
@@ -388,10 +469,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         internal void NewTurn()
         {
-            UseMenu = false;
-            _useMenuWindow.ClearChosenAbility();
-            _gwMenu.ClearChosenAbility();
+            DisplayType = Display.None;
+            Clear();
+            ClearState();
             _gwMenu.Assign(CombatManager.ActiveCharacter.AbilityList);
+            
         }
 
         internal void SelectSkill()
@@ -414,29 +496,41 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
             //If the current Phase is skill selection, allow the user to pick a skill for the currentCharacter
-            if (CombatManager.CurrentPhase == CombatManager.Phase.ChooseSkillTarget || UseMenu)
+            if (CombatManager.PhaseChooseSkillTarget() || CombatManager.PhaseChooseItemTarget() || DisplayType != Display.None)
             {
                 rv = true;
 
+                _useMenuWindow.Clear();
                 ClearState();
                 CombatManager.ChosenSkill = null;
                 CombatManager.CurrentPhase = CombatManager.Phase.SelectSkill;
 
-                UseMenu = false;
+                DisplayType = Display.None;
             }
             return rv;
         }
 
         internal void ProcessActionChoice()
         {
-            if (UseMenu)
+            if (DisplayType != Display.None)
             {
-                CombatAction a = _useMenuWindow.ChosenAction;
-                if (a != null)
+                if (DisplayType == Display.Spells)
                 {
-                    if (CombatManager.ActiveCharacter.CanCast(a.MPCost))
+                    CombatAction a = _useMenuWindow.ChosenAction;
+                    if (a != null)
                     {
-                        CombatManager.ProcessActionChoice(a);
+                        if (CombatManager.ActiveCharacter.CanCast(a.MPCost))
+                        {
+                            CombatManager.ProcessActionChoice(a);
+                        }
+                    }
+                }
+                else if (DisplayType == Display.Items)
+                {
+                    Item it = _useMenuWindow.ChosenItem;
+                    if(it != null)
+                    {
+                        CombatManager.ProcessItemChoice(it);
                     }
                 }
             }
@@ -454,8 +548,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     }
                     else
                     {
-                        UseMenu = true;
-                        _useMenuWindow.AssignSpells(CombatManager.ActiveCharacter.SpellList);
+                        if (a.Name == "Cast Spell")
+                        {
+                            DisplayType = Display.Spells;
+                            _useMenuWindow.AssignSpells(CombatManager.ActiveCharacter.SpellList);
+                        }
+                        else if (a.Name == "Use Item")
+                        {
+                            DisplayType = Display.Items;
+                            _useMenuWindow.AssignItems(InventoryManager.GetPlayerInventoryArray());
+                        }
                     }
                 }
             }
@@ -463,9 +565,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         internal void ClearState()
         {
-            UseMenu = false;
+            DisplayType = Display.None;
             _gwMenu.ClearChosenAbility();
-            _useMenuWindow.ClearChosenAbility();
+            _useMenuWindow.ClearChoices();
+        }
+
+        internal void Clear()
+        {
+            _gwMenu.Clear();
+            _useMenuWindow.Clear();
         }
     }
 
@@ -556,11 +664,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-        public void Clear()
-        {
-            _diOptions.Clear();
-        }
-
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
@@ -610,6 +713,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
     internal class CmbtUseMenuWindow : GUITextSelectionWindow
     {
+        public enum Display { Items, Spells }
+        Display _displayType;
         const int _iMaxMenuActions = 8;
         int _textColOne;
         int _textColTwo;
@@ -617,6 +722,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
         List<CombatAction> _liActions;
         CombatAction _chosenAction;
         public CombatAction ChosenAction { get => _chosenAction; }
+        List<Item> _liItems;
+        Item _chosenItem;
+        public Item ChosenItem { get => _chosenItem; }
         Vector2 _vecMenuSize;
         SpriteFont _fFont;
 
@@ -734,33 +842,43 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 if (kvp.Key >= i)
                 {
-                    int iMPCost = _liActions[kvp.Key].MPCost;
-                    string mpCost = string.Format("{0}", iMPCost);
+                    string display = string.Empty;
+                    Color c = Color.White;
 
-                    Color c = (_chosenAction != null && kvp.Value == _chosenAction.Name) ? Color.Green : CombatManager.ActiveCharacter.CanCast(iMPCost) ? Color.White : Color.Gray;
+                    if (_displayType == Display.Spells) {
+                        int iMPCost = _liActions[kvp.Key].MPCost;
+                        display = string.Format("{0}", iMPCost);
+                        c = (_chosenAction != null && kvp.Value == _chosenAction.Name) ? Color.Green : CombatManager.ActiveCharacter.CanCast(iMPCost) ? Color.White : Color.Gray;
+                    }
+                    else
+                    {
+                        int num = _liItems[kvp.Key].Number;
+                        display = string.Format("{0}", num);
+                        c = (_chosenAction != null && kvp.Value == _chosenAction.Name) ? Color.Green : Color.White;
+                    }
 
                     spriteBatch.DrawString(_fFont, kvp.Value, new Vector2(xindex, yIndex), c);
                     //Even numbered spell
                     if (kvp.Key % 2 == 0)
                     {
                         xindex = _textColTwo;
-                        spriteBatch.DrawString(_fFont, mpCost, new Vector2(xindex - _fFont.MeasureString(mpCost).X - _selectWidth, yIndex), c);
+                        spriteBatch.DrawString(_fFont, display, new Vector2(xindex - _fFont.MeasureString(display).X - _selectWidth, yIndex), c);
                     }
                     else
                     {
-                        spriteBatch.DrawString(_fFont, mpCost, new Vector2(_position.X + Width - _fFont.MeasureString(mpCost).X - _selectWidth, yIndex), c);
+                        spriteBatch.DrawString(_fFont, display, new Vector2(_position.X + Width - _fFont.MeasureString(display).X - _selectWidth, yIndex), c);
 
                         xindex = _textColOne;
                         yIndex += (int)_characterHeight;
                     }
                 }
-
             }
         }
 
         public void AssignSpells(List<CombatAction> abilities)
         {
             int key = 0;
+            _displayType = Display.Spells;
             if (_diOptions.Count == 0)
             {
                 _liActions = abilities;
@@ -771,10 +889,19 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
             }
         }
-
-        public void Clear()
+        public void AssignItems(List<Item> items)
         {
-            _diOptions.Clear();
+            int key = 0;
+            _displayType = Display.Items;
+            if (_diOptions.Count == 0)
+            {
+                _liItems = items;
+                _iKeySelection = 0;
+                foreach (Item i in items)
+                {
+                    _diOptions.Add(key++, i.Name);
+                }
+            }
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -790,14 +917,23 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         protected override void SelectAction()
         {
-            if (CombatManager.ActiveCharacter.CanCast(_liActions[_iKeySelection].MPCost)) { 
-                _chosenAction = _liActions[_iKeySelection];
+            if (_displayType == Display.Spells)
+            {
+                if (CombatManager.ActiveCharacter.CanCast(_liActions[_iKeySelection].MPCost))
+                {
+                    _chosenAction = _liActions[_iKeySelection];
+                }
+            }
+            else if (_displayType == Display.Items)
+            {
+                _chosenItem = _liItems[_iKeySelection];
             }
         }
 
-        public void ClearChosenAbility()
+        public void ClearChoices()
         {
             _chosenAction = null;
+            _chosenItem = null;
         }
     }
 

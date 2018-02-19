@@ -2,8 +2,10 @@
 using RiverHollow.Characters;
 using RiverHollow.Characters.CombatStuff;
 using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.Items;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
+using System;
 using System.Collections.Generic;
 
 namespace RiverHollow.Game_Managers
@@ -21,12 +23,13 @@ namespace RiverHollow.Game_Managers
         public static List<CombatCharacter> Party { get => _listParty; }
         public static List<CombatCharacter> TurnOrder;
 
-        public enum Phase { NewTurn, EnemyTurn, SelectSkill, ChooseSkillTarget, DisplayAttack, UseSkill, EndCombat }
+        public enum Phase { NewTurn, EnemyTurn, SelectSkill, ChooseSkillTarget, ChooseItemTarget, DisplayAttack, PerformAction, EndCombat }
         public static Phase CurrentPhase;
 
         public static int TurnIndex;
 
         public static CombatAction ChosenSkill;
+        public static Item ChosenItem;
         private static BattleLocation _target;
         public static int PlayerTarget;
 
@@ -129,6 +132,12 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        public static void ProcessItemChoice(Item it)
+        {
+            CurrentPhase = Phase.ChooseItemTarget;
+            ChosenItem = it;
+        }
+
         //Assign target to the skill as well as the skill user
         public static void SetSkillTarget(BattleLocation target)
         {
@@ -136,6 +145,13 @@ namespace RiverHollow.Game_Managers
             ChosenSkill.UserStartPosition = ActiveCharacter.Position;
             ChosenSkill.AnimationSetup(target);
             Text = ChosenSkill.Name;
+            CurrentPhase = Phase.DisplayAttack;
+        }
+
+        public static void SetItemTarget(BattleLocation target)
+        {
+            _target = target;
+            Text = ChosenItem.Name;
             CurrentPhase = Phase.DisplayAttack;
         }
 
@@ -180,6 +196,36 @@ namespace RiverHollow.Game_Managers
             }
 
             return stillOne;
+        }
+
+        public static bool PhaseSelectSkill() { return CurrentPhase == Phase.SelectSkill; }
+        public static bool PhaseChooseSkillTarget() { return CurrentPhase == Phase.ChooseSkillTarget; }
+        public static bool PhaseChooseItemTarget() { return CurrentPhase == Phase.ChooseItemTarget; }
+
+        internal static void UseItem()
+        {
+            bool finished = false;
+            if (!ActiveCharacter.IsCurrentAnimation("Cast"))
+            {
+                ActiveCharacter.PlayAnimation("Cast");
+            }
+            else if (ActiveCharacter.AnimationPlayedXTimes(2))
+            {
+                ActiveCharacter.PlayAnimation("Walk");
+                finished = true;
+            }
+
+            if (finished)
+            {
+                if (ChosenItem.Type == Item.ItemType.Food)
+                {
+                    int heal = ((Food)CombatManager.ChosenItem).Health;
+                    _target.Character.IncreaseHealth(heal);
+                    _target.Heal(heal);
+                    InventoryManager.RemoveItemFromInventory(ChosenItem);
+                }
+                NextTurn();
+            }
         }
     }
 }

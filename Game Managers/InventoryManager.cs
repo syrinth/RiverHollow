@@ -356,5 +356,21 @@ Exit:
             }
             return rv;
         }
+
+        internal static List<Item> GetPlayerInventoryArray()
+        {
+            List<Item> items = new List<Item>();
+            for (int i = 0; i < maxItemRows; i++)
+            {
+                for (int j = 0; j < maxItemColumns; j++)
+                {
+                    if (_playerInventory[i, j] != null)
+                    {
+                        items.Add(_playerInventory[i, j]);
+                    }
+                }
+            }
+            return items;
+        }
     }
 }
