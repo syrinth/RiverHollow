@@ -114,7 +114,6 @@ namespace RiverHollow
             }
             else if (_moveTo != Vector2.Zero)
             {
-                string animation = "";
                 Vector2 direction = Vector2.Zero;
                 float deltaX = Math.Abs(_moveTo.X - this.Position.X);
                 float deltaY = Math.Abs(_moveTo.Y - this.Position.Y);

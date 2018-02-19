@@ -26,7 +26,7 @@ namespace RiverHollow.Game_Managers
 
         public static int TurnIndex;
 
-        public static Ability ChosenSkill;
+        public static CombatAction ChosenSkill;
         private static BattleLocation _target;
         public static int PlayerTarget;
 
@@ -101,7 +101,7 @@ namespace RiverHollow.Game_Managers
         public static void EnemyTakeTurn()
         {
             RHRandom r = new RHRandom();
-            ProcessChosenSkill(CharacterManager.GetAbilityByIndex(1), false);//ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)]);
+            ProcessActionChoice(CharacterManager.GetActionByIndex(1), false);//ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)]);
             if (!ChosenSkill.Target.Equals("Self"))
             {
                 do
@@ -111,19 +111,22 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void ProcessChosenSkill(Ability a, bool chooseTarget = true)
+        public static void ProcessActionChoice(MenuAction a, bool chooseTarget = true)
         {
-            ChosenSkill = a;
-            ChosenSkill.SkillUser = ActiveCharacter;
-            if (!ChosenSkill.Target.Equals("Self"))
+            if (!a.IsMenu())
             {
-                if (chooseTarget) { CurrentPhase = Phase.ChooseSkillTarget; }  //Skips this phase for enemies. They don't "choose" targets
-            }
-            else
-            {
-                ChosenSkill.ApplyEffectToSelf();
-                ChosenSkill = null;
-                NextTurn();
+                ChosenSkill = (CombatAction)a;
+                ChosenSkill.SkillUser = ActiveCharacter;
+                if (!ChosenSkill.Target.Equals("Self"))
+                {
+                    if (chooseTarget) { CurrentPhase = Phase.ChooseSkillTarget; }  //Skips this phase for enemies. They don't "choose" targets
+                }
+                else
+                {
+                    ChosenSkill.ApplyEffectToSelf();
+                    ChosenSkill = null;
+                    NextTurn();
+                }
             }
         }
 

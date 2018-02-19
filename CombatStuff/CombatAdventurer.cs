@@ -50,7 +50,7 @@ namespace RiverHollow.Characters.CombatStuff
             _class = x;
             _currentHP = MaxHP;
 
-            foreach (Ability a in _class.AbilityList)
+            foreach (MenuAction a in _class.AbilityList)
             {
                 _abilityList.Add(a);
             }

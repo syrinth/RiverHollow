@@ -280,7 +280,7 @@ namespace RiverHollow.Game_Managers
                 foreach (WorldAdventurer w in b.Workers)
                 {
                     WorkerData workerData = new WorkerData();
-                    workerData.workerID = w.ID;
+                    workerData.workerID = w.AdventurerID;
                     workerData.mood = w.Mood;
                     workerData.name = w.Name;
                     buildingData.Workers.Add(workerData);

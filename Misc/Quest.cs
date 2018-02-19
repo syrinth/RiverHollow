@@ -30,9 +30,9 @@ namespace RiverHollow.Misc
         private bool _finished;
         public bool Finished { get => _finished; }
 
-        private int _rewardMoney;
-        public int RewardMoney { get => _rewardMoney; }
-        private List<int> _rewardItems;
+        //private int _rewardMoney;
+        //public int RewardMoney { get => _rewardMoney; }
+        //private List<int> _rewardItems;
 
         public Quest(string name, QuestGoalType type, string desc, NPC giver, int target, Monster m, Item i)
         {

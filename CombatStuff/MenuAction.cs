@@ -9,20 +9,48 @@ using System.Collections.Generic;
 
 namespace RiverHollow.Characters.CombatStuff
 {
-    public class Ability
+    public class MenuAction
+    {
+        protected int _id;
+
+        public enum ActionType { Action, Menu, Spell };
+        protected ActionType _actionType;
+        protected string _name;
+        public string Name { get => _name; }
+        protected string _description;
+        public string Description { get => _description; }
+
+        public CombatCharacter SkillUser;
+
+        public MenuAction() { }
+        public MenuAction(int id, string[] stringData)
+        {
+            ImportBasics(stringData,id);
+        }
+
+        protected int ImportBasics(string[] stringData, int id)
+        {
+            int i = 0;
+            _actionType = (ActionType)Enum.Parse(typeof(ActionType), stringData[i++]);
+            _name = stringData[i++];
+            _description = stringData[i++];
+
+            return i;
+        }
+
+        public bool IsMenu() { return _actionType == ActionType.Menu; }
+        public bool IsAction() { return _actionType == ActionType.Action; }
+        public bool IsSpell() { return _actionType == ActionType.Spell; }
+    }
+
+    public class CombatAction : MenuAction
     {
         const int moveSpeed = 60;
-        private int _id;
-        private string _name;
-        public string Name { get => _name; }
-        private string _description;
-        public string Description { get => _description; }
+        
         private int _effectHarm;
         public int EffectHarm { get => _effectHarm; }
         private int _effectHeal;
         public int EffectHeal { get => _effectHeal; }
-        private Rectangle _sourceRect;
-        public Rectangle SourceRect { get => _sourceRect; }
         private string _target;
         public string Target { get => _target; }
         private List<String> _actionTags;
@@ -30,25 +58,22 @@ namespace RiverHollow.Characters.CombatStuff
         private List<String> _effectTags;
         private List<BuffData> _buffs;         //Key = Buff ID, string = Duration/<Tag> <Tag>
 
-        private Texture2D _texture;
         private int _textureRow;
         private float _frameSpeed;
-        public float Delay { get => _frameSpeed * 4; }
 
-        public CombatCharacter SkillUser;
+       
         public BattleLocation TargetLocation;
         public Vector2 UserStartPosition;
         public bool _used;
 
         public AnimatedSprite Sprite;
-        public Ability(int id, string[] stringData)
+        public CombatAction(int id, string[] stringData)
         {
             _effectTags = new List<string>();
             _buffs = new List<BuffData>();
             _actionTags = new List<string>();
             ImportBasics(id, stringData);
 
-            _texture = GameContentManager.GetTexture(@"Textures\AbilityIcons");
             Sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\AbilityAnimations"));
             Sprite.AddAnimation("Play", 100, 100, 4, _frameSpeed, 0, _textureRow * 100);
             Sprite.SetCurrentAnimation("Play");
@@ -62,17 +87,14 @@ namespace RiverHollow.Characters.CombatStuff
         protected int ImportBasics(int id, string[] stringData)
         {
             int i = 0;
+            _actionType = (ActionType)Enum.Parse(typeof(ActionType), stringData[i++]);
             _name = stringData[i++];
             _description = stringData[i++];
-            string[] split = stringData[i++].Split(' ');
-            int x = int.Parse(split[0]);
-            int y = int.Parse(split[1]);
-            _sourceRect = new Rectangle(x * 100, y * 100, 100, 100);
             _textureRow = int.Parse(stringData[i++]);
             _frameSpeed = float.Parse(stringData[i++]);
             //This is where we parse for tags
 
-            split = stringData[i++].Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] split = stringData[i++].Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in split)
             {
                 string[] tagType = s.Split(':');

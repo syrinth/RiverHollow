@@ -21,11 +21,11 @@ namespace RiverHollow.Characters.CombatStuff
         public string Name { get => _name; }
         private string _description;
         public string Description { get => _description; }
-        public List<Ability> AbilityList;
+        public List<MenuAction> AbilityList;
 
         public CharacterClass(int id, string[] stringData)
         {
-            AbilityList = new List<Ability>();
+            AbilityList = new List<MenuAction>();
             ImportBasics(id, stringData);
         }
 
@@ -42,7 +42,7 @@ namespace RiverHollow.Characters.CombatStuff
             string[] split = stringData[i++].Split(' ');
             foreach(string s in split)
             {
-                AbilityList.Add(CharacterManager.GetAbilityByIndex(int.Parse(s)));
+                AbilityList.Add(CharacterManager.GetActionByIndex(int.Parse(s)));
             }
 
             return i;

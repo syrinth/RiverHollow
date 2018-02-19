@@ -61,7 +61,7 @@
     <Compile Include="Buildings\WorkerBuilding.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Characters\Character.cs" />
-    <Compile Include="CombatStuff\Ability.cs" />
+    <Compile Include="CombatStuff\MenuAction.cs" />
     <Compile Include="CombatStuff\Buff.cs" />
     <Compile Include="CombatStuff\CharacterClass.cs" />
     <Compile Include="CombatStuff\CombatAdventurer.cs" />
@@ -72,7 +72,6 @@
     <Compile Include="Game Managers\CombatManager.cs" />
     <Compile Include="Game Managers\DungeonManager.cs" />
     <Compile Include="Game Managers\GameManager.cs" />
-    <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUITextCombatMenuWindow.cs" />
     <Compile Include="GUIComponents\Screens\CombatScreen.cs" />
     <Compile Include="GUIComponents\Screens\GameMenuScreen.cs" />
     <Compile Include="GUIComponents\Screens\PartyScreen.cs" />

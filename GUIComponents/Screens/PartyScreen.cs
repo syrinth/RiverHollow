@@ -183,7 +183,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             spriteBatch.DrawString(_font, statLine, position, Color.White);
         }
 
-        public bool ProcessLeftButtonClick(Point mouse)
+        public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
             if (_character != null)

@@ -36,8 +36,8 @@ namespace RiverHollow.Characters.CombatStuff
         protected int _buffMagic;
         protected int _buffSpd;
 
-        protected List<Ability> _abilityList;
-        public List<Ability> AbilityList { get => _abilityList; }
+        protected List<MenuAction> _abilityList;
+        public List<MenuAction> AbilityList { get => _abilityList; }
 
         protected List<Buff> _liBuffs;
         public List<Buff> LiBuffs { get => _liBuffs; }
@@ -45,7 +45,7 @@ namespace RiverHollow.Characters.CombatStuff
 
         public CombatCharacter() : base()
         {
-            _abilityList = new List<Ability>();
+            _abilityList = new List<MenuAction>();
             _liBuffs = new List<Buff>();
         }
 

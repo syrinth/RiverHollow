@@ -18,7 +18,7 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<int, string> _monsterDictionary;
         private static Dictionary<int, NPC> _npcDictionary;
         public static Dictionary<int, NPC> DiNPC { get => _npcDictionary; }
-        private static Dictionary<int, string> _abilityDictionary;
+        private static Dictionary<int, string> _actionDictionary;
         private static Dictionary<int, string> _buffDictionary;
         private static Dictionary<int, string> _classDictionary;
         private static Dictionary<string, Dictionary<string, string>> _dictSchedule;
@@ -28,7 +28,7 @@ namespace RiverHollow.Game_Managers
             _dictSchedule = new Dictionary<string, Dictionary<string, string>>();
             _monsterDictionary = Content.Load<Dictionary<int, string>>(@"Data\Monsters");
             _mobDictionary = Content.Load<Dictionary<int, string>>(@"Data\Mobs");
-            _abilityDictionary = Content.Load<Dictionary<int, string>>(@"Data\Abilities");
+            _actionDictionary = Content.Load<Dictionary<int, string>>(@"Data\CombatActions");
             _buffDictionary = Content.Load<Dictionary<int, string>>(@"Data\Buffs");
             _classDictionary = Content.Load<Dictionary<int, string>>(@"Data\Classes");
             
@@ -93,16 +93,24 @@ namespace RiverHollow.Game_Managers
             return m;
         }
 
-        public static Ability GetAbilityByIndex(int id)
+        public static MenuAction GetActionByIndex(int id)
         {
-            Ability a = null;
             if (id != -1)
             {
-                string _stringData = _abilityDictionary[id];
-                string[] _stringDataValues = _stringData.Split('/');
-                a = new Ability(id, _stringDataValues);
+                string strData = _actionDictionary[id];
+                string[] strdataValues = strData.Split('/');
+                switch (strdataValues[0])
+                {
+                    case "Menu":
+                        return new MenuAction(id, strdataValues);
+                    case "Spell":
+                        return new CombatAction(id, strdataValues);
+                    case "Action":
+                        return new CombatAction(id, strdataValues);
+                }
             }
-            return a;
+
+            return null;
         }
         public static Buff GetBuffByIndex(int id)
         {

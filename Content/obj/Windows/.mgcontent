@@ -42,11 +42,9 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/battle.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/GoblinCombat.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Classes.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Abilities.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/MobDrops.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/GoblinSoldier.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/AbilityAnimations.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/AbilityIcons.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Characters.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC1.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/NPC1.png</File>
@@ -69,5 +67,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/HouseNPC3.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/Adventurers.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/MenuFont.spritefont</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CombatActions.xml</File>
   </SourceFiles>
 </SourceFileCollection>

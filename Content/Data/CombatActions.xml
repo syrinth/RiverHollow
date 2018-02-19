@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <!--Key: Index>0 Value:Type/Name/Description/IconXIconY/AnimationRow/FrameSpeed/[Effect:][Buff:][Action:]-->
+    <!--Type: Action, Menu, Spell-->
+    <!--Effect Tags: Projectile, Direct, Harm, Heal-->
+    <!--Buff Format: [Buff:BuffId|Duration|<Tags>]-->
+    <!--Buff Tags: Allies, Enemies, Target, Self-->
+    <Item>
+      <Key>1</Key>
+      <Value>Action/Attack/Basic Attack/0/0.03/[Target:Enemy][Effect:Harm-1][Action:UserMove UserAttack Apply]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>Menu/Cast Spell/Casts Spell</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>Menu/Use Item/Basic Attack</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>Spell/Thunder/Call down thunder on your foes/0/0.03/[Target:Enemy][Effect:Harm-5 Direct][Action:UserCast Direct Apply]</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>Spell/Fireball/Flames!/1/0.03/[Target:Enemy][Effect:Harm-50][Action:UserCast Projectile Apply]</Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>Spell/Shield/Summon a rock/0/0.03/[Target:Self][Effect:][Buff:1|2|Self]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

@@ -14,7 +14,7 @@ namespace RiverHollow.Characters
         public enum Direction { North, South, East, West };
         public Direction Facing = Direction.North;
         public Texture2D Texture { get => _sprite.Texture; }
-        public Point Center => GetRectangle().Center;
+        public Point CharCenter => GetRectangle().Center;
         public override Vector2 Position
         {
             get { return new Vector2(_sprite.Position.X, _sprite.Position.Y + _sprite.Height - RHMap.TileSize); } //MAR this is fucked up
@@ -33,7 +33,7 @@ namespace RiverHollow.Characters
             _height = RHMap.TileSize;
         }
 
-        public virtual bool Contains(Point mouse)
+        public virtual bool CollisionContains(Point mouse)
         {
             return CollisionBox.Contains(mouse);
         }

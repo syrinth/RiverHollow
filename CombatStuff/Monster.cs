@@ -23,6 +23,8 @@ namespace RiverHollow
 
         protected int ImportBasics(string[] stringData, int id)
         {
+            _id = id;
+
             int i = 0;
             _name = stringData[i++];
             _textureName = @"Textures\" + stringData[i++];

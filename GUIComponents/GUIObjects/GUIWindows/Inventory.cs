@@ -5,8 +5,6 @@ using RiverHollow.Items;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Characters.CombatStuff;
 using RiverHollow.Characters;
 
 namespace RiverHollow.Screens
@@ -68,7 +66,7 @@ namespace RiverHollow.Screens
             }
         }
 
-        public virtual bool ProcessLeftButtonClick(Point mouse)
+        public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
 

@@ -499,7 +499,7 @@ namespace RiverHollow.Tile_Engine
             foreach (WorldCharacter c in _characterList)
             {
                 Type cType = c.GetType();
-                if (c.Contains(mouseLocation) && (cType.Equals(typeof(NPC)) || cType.IsSubclassOf(typeof(NPC))))
+                if (c.CollisionContains(mouseLocation) && (cType.Equals(typeof(NPC)) || cType.IsSubclassOf(typeof(NPC))))
                 {
                     ((NPC)c).Talk();
                     break;
@@ -578,7 +578,7 @@ namespace RiverHollow.Tile_Engine
                     if (cType.IsSubclassOf(typeof(WorldAdventurer)))
                     {
                         WorldAdventurer w = (WorldAdventurer)c;
-                        if (w.Contains(mouseLocation) && PlayerManager.PlayerInRange(w.Center) &&
+                        if (w.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(w.CharCenter) &&
                             InventoryManager.HasSpaceInInventory(w.WhatAreYouHolding()))
                         {
                             InventoryManager.AddNewItemToInventory(w.TakeItem());
@@ -589,7 +589,7 @@ namespace RiverHollow.Tile_Engine
                     {
                         NPC n = (NPC)c;
                         if (InventoryManager.CurrentItem != null && 
-                            n.Contains(mouseLocation) && PlayerManager.PlayerInRange(n.Center) &&
+                            n.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(n.CharCenter) &&
                             InventoryManager.CurrentItem.Type != Item.ItemType.Tool &&
                             InventoryManager.CurrentItem.Type != Item.ItemType.Equipment)
                         {
@@ -645,7 +645,7 @@ namespace RiverHollow.Tile_Engine
                         found = true;
                         break;
                     }
-                    else if(!c.GetType().IsSubclassOf(typeof(Mob)) && c.Contains(mouseLocation)){
+                    else if(!c.GetType().IsSubclassOf(typeof(Mob)) && c.CollisionContains(mouseLocation)){
                         GraphicCursor._currentType = GraphicCursor.CursorType.Talk;
                         found = true;
                         break;

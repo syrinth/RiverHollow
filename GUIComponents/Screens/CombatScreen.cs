@@ -21,8 +21,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         BattleLocation[] _arrParty;
         BattleLocation[] _arrEnemies;
         GUITextWindow _gtwTextWindow;
-        GUITextCombatMenuWindow _gwMenu;
-        CmbtStatusWin _statusWindow;
+        CmbtMenu _cmbtMenu;
         StatDisplay _sdStamina;
 
         int _iTarget = -1;
@@ -36,14 +35,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _sdStamina = new StatDisplay(StatDisplay.Display.Energy, new Vector2(30, 30), 5);
             Controls.Add(_sdStamina);
 
+            _cmbtMenu = new CmbtMenu();
             _arrParty = new BattleLocation[_iPositions];
             _arrEnemies = new BattleLocation[_iPositions];
-
-            int totalMenuWidth = RiverHollow.ScreenWidth / 3;
-            int menuSec = totalMenuWidth / 3;
-            _gwMenu = new GUITextCombatMenuWindow(totalMenuWidth, menuSec);
-            _statusWindow = new CmbtStatusWin(_gwMenu.Position + new Vector2(_gwMenu.Width + GUIWindow.GreyDialogEdge*2, 0), menuSec*2, _gwMenu.Height);
-            Controls.Add(_statusWindow);
+            
             //Get the Players' party and assign each of them a battle position
             List<CombatCharacter> party = CombatManager.Party;
             for (int i = 0; i < party.Count; i++)
@@ -74,24 +69,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
             switch (CombatManager.CurrentPhase)
             {
                 case CombatManager.Phase.SelectSkill:
-                    {
-                        rv = _gwMenu.ProcessLeftButtonClick(mouse);
+                    rv = _cmbtMenu.ProcessLeftButtonClick(mouse);
 
-                        if (_gwMenu.ChosenAbility != null) {
-                            CombatManager.ProcessChosenSkill(_gwMenu.ChosenAbility);
-                        }
-
-                        break;
-                    }
+                    break;
                 case CombatManager.Phase.ChooseSkillTarget:
-                    {
-                        BattleLocation loc = _arrEnemies[_iTarget];
-                        loc.Selected = false;
-                        CombatManager.SetSkillTarget(loc);
-                        _iTarget = -1;
+                    BattleLocation loc = _arrEnemies[_iTarget];
+                    loc.Selected = false;
+                    CombatManager.SetSkillTarget(loc);
+                    _iTarget = -1;
 
-                        break;
-                    }
+                    break;
             }
             
             return rv;
@@ -105,7 +92,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             //If the current Phase is skill selection, allow the user to pick a skill for the currentCharacter
             if (CombatManager.CurrentPhase == CombatManager.Phase.ChooseSkillTarget)
             {
-                _gwMenu.ClearChosenAbility();
+                _cmbtMenu.ClearChosenAbility();
                 CombatManager.ChosenSkill = null;
                 CombatManager.CurrentPhase = CombatManager.Phase.SelectSkill;
             }
@@ -151,6 +138,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             base.Update(gameTime);
             CombatManager.Update(gameTime);
+            _cmbtMenu.Update(gameTime);
 
             switch (CombatManager.CurrentPhase)
             {
@@ -159,47 +147,42 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     break;
 
                 case CombatManager.Phase.NewTurn:
-                    _gwMenu.ClearChosenAbility();
-                    _gwMenu.Assign(CombatManager.ActiveCharacter.AbilityList);
+                    _cmbtMenu.NewTurn();
                     CombatManager.CurrentPhase = CombatManager.Phase.SelectSkill;
                     break;
 
                 case CombatManager.Phase.SelectSkill:
-                    _gwMenu.Update(gameTime);
-
-                    if (_gwMenu.ChosenAbility != null) {
-                        CombatManager.ProcessChosenSkill(_gwMenu.ChosenAbility);
-                    }
+                    _cmbtMenu.SelectSkill();
                     break;
 
                 case CombatManager.Phase.ChooseSkillTarget:
                     if (_iTarget == -1) {
-                        int i = 0;
-                        do
-                        {
-                            _iTarget = i++;
-                        } while (_arrEnemies[_iTarget] == null || !_arrEnemies[_iTarget].Occupied());
+                        _iTarget = SkipToNextTarget(0, true);
                     }
 
                     if (InputManager.CheckKey(Keys.A) || InputManager.CheckKey(Keys.S))
                     {
-                        if (_iTarget - 1 >= 0)
+                        int test = _iTarget - 1;
+                        if (test >= 0)
                         {
-                            if (_arrEnemies[_iTarget - 1] != null && _arrEnemies[_iTarget - 1].Occupied())
+                            test = SkipToNextTarget(test, false);
+                            if (test >= 0 && test < _arrEnemies.Length)
                             {
                                 _arrEnemies[_iTarget].Selected = false;
-                                _iTarget--;
+                                _iTarget = test;
                             }
                         }
                     }
                     else if (InputManager.CheckKey(Keys.D) || InputManager.CheckKey(Keys.W))
                     {
-                        if (_iTarget + 1 < _arrEnemies.Length)
+                        int test = _iTarget + 1;
+                        if (test < _arrEnemies.Length)
                         {
-                            if (_arrEnemies[_iTarget + 1] != null && _arrEnemies[_iTarget + 1].Occupied())
+                            test = SkipToNextTarget(test, true);
+                            if (test >= 0 && test < _arrEnemies.Length)
                             {
                                 _arrEnemies[_iTarget].Selected = false;
-                                _iTarget++;
+                                _iTarget = test;
                             }
                         }
                     }
@@ -257,14 +240,25 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
+        public int SkipToNextTarget(int i, bool add)
+        {
+            int rv = -1;
+            do
+            {
+                rv = add ? i++ : i--;
+                if(rv < 0 || rv == _arrEnemies.Length) {
+                    rv = -1;
+                    break;
+                }
+            } while (_arrEnemies[rv] == null || !_arrEnemies[rv].Occupied());
+
+            return rv;
+        }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            if (CombatManager.ActiveCharacter.GetType().Equals(typeof(CombatAdventurer)))
-            {
-                _gwMenu.Draw(spriteBatch);
-            }
-            _statusWindow.Draw(spriteBatch, _arrParty);
+            _cmbtMenu.Draw(spriteBatch, _arrParty);
             foreach (BattleLocation p in _arrParty)
             {
                 if (p != null) { p.Draw(spriteBatch); }
@@ -356,7 +350,81 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
     }
 
-    public class CmbtStatusWin : GUIWindow
+    internal class CmbtMenu
+    {
+        CmbtMenuWindow _gwMenu;
+        CmbtStatusWin _statusWindow;
+        CmbtUseMenuWindow _seMenuWindow;
+
+        public bool UseMenu = false;
+
+        public CmbtMenu()
+        {
+            int totalMenuWidth = RiverHollow.ScreenWidth / 3;
+            int menuSec = totalMenuWidth / 3;
+
+            _gwMenu = new CmbtMenuWindow(totalMenuWidth, menuSec);
+            _statusWindow = new CmbtStatusWin(_gwMenu.Position + new Vector2(_gwMenu.Width + GUIWindow.GreyDialogEdge * 2, 0), menuSec * 2, _gwMenu.Height);
+            _seMenuWindow = new CmbtUseMenuWindow(totalMenuWidth, _gwMenu.Width + _statusWindow.Width + GUIWindow.GreyDialogEdge * 2);
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            if (CombatManager.CurrentPhase == CombatManager.Phase.SelectSkill) { _gwMenu.Update(gameTime); }
+            _statusWindow.Update(gameTime);
+        }
+
+        public void Draw(SpriteBatch spriteBatch, BattleLocation[] locations)
+        {
+            _statusWindow.Draw(spriteBatch, locations);
+            _gwMenu.Draw(spriteBatch);
+            //_seMenuWindow.Draw(spriteBatch);
+        }
+
+        internal void NewTurn()
+        {
+            _gwMenu.ClearChosenAbility();
+            _gwMenu.Assign(CombatManager.ActiveCharacter.AbilityList);
+        }
+
+        internal void SelectSkill()
+        {
+            ProcessActionChoice();
+        }
+
+        internal bool ProcessLeftButtonClick(Point mouse)
+        {
+            bool rv = false;
+
+            rv = _gwMenu.ProcessLeftButtonClick(mouse);
+
+            ProcessActionChoice();
+
+            return rv;
+        }
+
+        internal void ProcessActionChoice()
+        {
+            if (_gwMenu.ChosenAction != null)
+            {
+                if (!_gwMenu.ChosenAction.IsMenu())
+                {
+                    CombatManager.ProcessActionChoice(_gwMenu.ChosenAction);
+                }
+                else
+                {
+
+                }
+            }
+        }
+
+        internal void ClearChosenAbility()
+        {
+            _gwMenu.ClearChosenAbility();
+        }
+    }
+
+    internal class CmbtStatusWin : GUIWindow
     {
         GUIImage _giCurrentTurn;
         SpriteFont _fFont;
@@ -378,6 +446,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public void Draw(SpriteBatch spriteBatch, BattleLocation[] locations)
         {
+            base.Draw(spriteBatch);
             int xindex = (int)_position.X + _innerBorder;
             int yIndex = (int)_position.Y + _innerBorder;
 
@@ -394,4 +463,245 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
     }
+
+    internal class CmbtMenuWindow : GUITextSelectionWindow
+    {
+        const int _iMaxMenuActions = 4;
+        List<MenuAction> _liAbilities;
+        MenuAction _chosenAction;
+        public MenuAction ChosenAction { get => _chosenAction; }
+        Vector2 _vecMenuSize;
+        SpriteFont _fFont;
+
+        public CmbtMenuWindow(int startX, int width)
+        {
+            _iOptionsOffsetY = 0;
+            _diOptions = new Dictionary<int, string>();
+            _fFont = GameContentManager.GetFont(@"Fonts\MenuFont");
+            _vecMenuSize = _fFont.MeasureString("XXXXXXXX");
+
+            _width = width;
+            _height = (int)(_vecMenuSize.Y * _iMaxMenuActions);
+            _edgeSize = GreyDialogEdge;
+            _sourcePoint = GreyDialog;
+
+            Position = new Vector2(startX, RiverHollow.ScreenHeight - GreyDialogEdge - (_vecMenuSize.Y * _iMaxMenuActions) - RiverHollow.ScreenHeight / 100);
+
+            _giSelection = new GUIImage(new Vector2((int)_position.X + _innerBorder, (int)_position.Y + _innerBorder), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+        }
+
+        public void Assign(List<MenuAction> abilities)
+        {
+            int key = 0;
+            if (_diOptions.Count == 0)
+            {
+                _liAbilities = abilities;
+                _iKeySelection = 0;
+                foreach (MenuAction a in abilities)
+                {
+                    _diOptions.Add(key++, a.Name);
+                }
+            }
+        }
+
+        public void Clear()
+        {
+            _diOptions.Clear();
+        }
+
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+            bool rv = false;
+            if (Contains(mouse))
+            {
+                SelectAction();
+                rv = true;
+            }
+            return rv;
+        }
+
+        protected override void SelectAction()
+        {
+            _chosenAction = _liAbilities[_iKeySelection];
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.DrawWindow(spriteBatch);
+            if (CombatManager.ActiveCharacter.GetType().Equals(typeof(CombatAdventurer)))
+            {
+                int xindex = (int)_position.X + _innerBorder;
+                int yIndex = (int)_position.Y + _innerBorder;
+
+                if (_diOptions.Count > 0) { _giSelection.Draw(spriteBatch); }
+
+                xindex += 32;
+                yIndex += _iOptionsOffsetY;
+                int i = Math.Max(0, _iKeySelection - _iMaxMenuActions);
+                foreach (KeyValuePair<int, string> kvp in _diOptions)
+                {
+                    if (kvp.Key >= i)
+                    {
+                        Color c = (_chosenAction != null && kvp.Value == _chosenAction.Name) ? Color.Green : Color.White;
+                        spriteBatch.DrawString(_fFont, kvp.Value, new Vector2(xindex, yIndex), c);
+                        yIndex += (int)_characterHeight;
+                    }
+                }
+            }
+        }
+
+        public void ClearChosenAbility()
+        {
+            _chosenAction = null;
+        }
+    }
+
+    internal class CmbtUseMenuWindow : GUITextSelectionWindow
+    {
+        const int _iMaxMenuActions = 4;
+        List<CombatAction> _liAbilities;
+        CombatAction _chosenAbility;
+        public CombatAction ChosenAbility { get => _chosenAbility; }
+        Vector2 _vecMenuSize;
+        SpriteFont _fFont;
+
+        public CmbtUseMenuWindow(int startX, int width)
+        {
+            _iOptionsOffsetY = 0;
+            _diOptions = new Dictionary<int, string>();
+            _fFont = GameContentManager.GetFont(@"Fonts\MenuFont");
+            _vecMenuSize = _fFont.MeasureString("XXXXXXXX");
+
+            _width = width;
+            _height = (int)(_vecMenuSize.Y * _iMaxMenuActions);
+            _edgeSize = GreyDialogEdge;
+            _sourcePoint = GreyDialog;
+
+            Position = new Vector2(startX, RiverHollow.ScreenHeight - GreyDialogEdge - (_vecMenuSize.Y * _iMaxMenuActions) - RiverHollow.ScreenHeight / 100);
+
+            _giSelection = new GUIImage(new Vector2((int)_position.X + _innerBorder, (int)_position.Y + _innerBorder), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            if (InputManager.CheckKey(Keys.W) || InputManager.CheckKey(Keys.Up))
+            {
+                if (_iKeySelection - 2 >= 0)
+                {
+                    _giSelection.MoveImageBy(new Vector2(0, -_characterHeight));
+                    _iKeySelection -= 2;
+                }
+            }
+            else if (InputManager.CheckKey(Keys.D) || InputManager.CheckKey(Keys.Right))
+            {
+                if (_iKeySelection + 1 < _diOptions.Count)
+                {
+                    _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
+                    _iKeySelection += 1;
+                }
+            }
+            else if (InputManager.CheckKey(Keys.S) || InputManager.CheckKey(Keys.Down))
+            {
+                if (_iKeySelection + 2 < _diOptions.Count)
+                {
+                    _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
+                    _iKeySelection += 2;
+                }
+            }
+            else if (InputManager.CheckKey(Keys.A) || InputManager.CheckKey(Keys.Left))
+            {
+                if (_iKeySelection - 1 < _diOptions.Count)
+                {
+                    _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
+                    _iKeySelection -= 1;
+                }
+            }
+            else
+            {
+                //Until fixed for specific motion
+                if (_poiMouse != GraphicCursor.Position.ToPoint() && Contains(GraphicCursor.Position.ToPoint()))
+                {
+                    _poiMouse = GraphicCursor.Position.ToPoint();
+                    if (_iKeySelection - 1 >= 0 && GraphicCursor.Position.Y < _giSelection.Position.Y)
+                    {
+                        _giSelection.MoveImageBy(new Vector2(0, -_characterHeight));
+                        _iKeySelection--;
+                    }
+                    else if (_iKeySelection + 1 < _diOptions.Count && GraphicCursor.Position.Y > _giSelection.Position.Y + _giSelection.Height)
+                    {
+                        _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
+                        _iKeySelection++;
+                    }
+                }
+            }
+
+            if (InputManager.CheckKey(Keys.Enter))
+            {
+                SelectAction();
+            }
+        }
+
+        public void Assign(List<CombatAction> abilities)
+        {
+            int key = 0;
+            if (_diOptions.Count == 0)
+            {
+                _liAbilities = abilities;
+                _iKeySelection = 0;
+                foreach (CombatAction s in abilities)
+                {
+                    _diOptions.Add(key++, s.Name);
+                }
+            }
+        }
+
+        public void Clear()
+        {
+            _diOptions.Clear();
+        }
+
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+            bool rv = false;
+            if (Contains(mouse))
+            {
+                SelectAction();
+                rv = true;
+            }
+            return rv;
+        }
+
+        protected override void SelectAction()
+        {
+            _chosenAbility = _liAbilities[_iKeySelection];
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.DrawWindow(spriteBatch);
+            int xindex = (int)_position.X + _innerBorder;
+            int yIndex = (int)_position.Y + _innerBorder;
+
+            if (_diOptions.Count > 0) { _giSelection.Draw(spriteBatch); }
+
+            xindex += 32;
+            yIndex += _iOptionsOffsetY;
+            int i = Math.Max(0, _iKeySelection - _iMaxMenuActions);
+            foreach (KeyValuePair<int, string> kvp in _diOptions)
+            {
+                if (kvp.Key >= i)
+                {
+                    Color c = (_chosenAbility != null && kvp.Value == _chosenAbility.Name) ? Color.Green : Color.White;
+                    spriteBatch.DrawString(_fFont, kvp.Value, new Vector2(xindex, yIndex), c);
+                    yIndex += (int)_characterHeight;
+                }
+            }
+        }
+
+        public void ClearChosenAbility()
+        {
+            _chosenAbility = null;
+        }
+    }
+
 }

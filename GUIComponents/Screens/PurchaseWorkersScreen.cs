@@ -70,7 +70,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                         PlayerManager.TakeMoney(wB.Cost);
 
                         GUIManager.SetScreen(GUIManager.Screens.None);
-                        GraphicCursor.PickUpWorker(wB._w.ID);
+                        GraphicCursor.PickUpWorker(wB._w.AdventurerID);
                         GameManager.Scry(true);
                         Camera.UnsetObserver();
                         MapManager.ViewMap("NearWilds");

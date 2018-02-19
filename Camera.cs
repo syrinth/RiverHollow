@@ -24,7 +24,7 @@ namespace RiverHollow
         {
             if (!GameManager.Scrying())
             {
-                _observer = PlayerManager.World.Center.ToVector2() * Scale;
+                _observer = PlayerManager.World.CharCenter.ToVector2() * Scale;
             }
             else
             {
@@ -98,7 +98,7 @@ namespace RiverHollow
         }
         public static void ResetObserver()
         {
-            _observer = PlayerManager.World.Center.ToVector2();
+            _observer = PlayerManager.World.CharCenter.ToVector2();
         }
     }
 }

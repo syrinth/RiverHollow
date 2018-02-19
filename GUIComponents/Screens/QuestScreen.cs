@@ -141,11 +141,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _quest = q;
         }
 
-        public bool ProcessLeftButtonClick(Point mouse)
-        {
-            bool rv = false;
-            return rv;
-        }
         public bool ProcessHover(Point mouse)
         {
             bool rv = false;

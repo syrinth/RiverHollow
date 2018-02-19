@@ -14,7 +14,7 @@ namespace RiverHollow.Characters.NPCs
     {
         #region Properties
         protected int _id;
-        public int ID { get => _id; }
+        public int AdventurerID { get => _id; }
         protected string _adventurerType;
         private WorkerBuilding _building;
         protected int _dailyFoodReq;
@@ -89,11 +89,11 @@ namespace RiverHollow.Characters.NPCs
             }
         }
 
-        public override bool Contains(Point mouse)
+        public override bool CollisionContains(Point mouse)
         {
             bool rv = false;
             if (DrawIt) {
-                rv = base.Contains(mouse);
+                rv = base.CollisionContains(mouse);
             }
             return rv;
         }
