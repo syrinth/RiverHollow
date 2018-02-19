@@ -36,6 +36,7 @@ namespace RiverHollow
             _statSpd = int.Parse(stringData[i++]);
 
             _currentHP = MaxHP;
+            _currentMP = MaxMP;
 
             return i;
         }

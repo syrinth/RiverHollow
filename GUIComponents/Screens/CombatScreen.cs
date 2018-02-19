@@ -430,7 +430,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 CombatAction a = _useMenuWindow.ChosenAction;
                 if (a != null)
                 {
-                    CombatManager.ProcessActionChoice(a);
+                    if (CombatManager.ActiveCharacter.CanCast(a.MPCost))
+                    {
+                        CombatManager.ProcessActionChoice(a);
+                    }
                 }
             }
             else
@@ -440,7 +443,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     if (!a.IsMenu())
                     {
-                        CombatManager.ProcessActionChoice((CombatAction)a);
+                        if (CombatManager.ActiveCharacter.CanCast(((CombatAction)a).MPCost))
+                        {
+                            CombatManager.ProcessActionChoice((CombatAction)a);
+                        }
                     }
                     else
                     {
@@ -484,15 +490,22 @@ namespace RiverHollow.Game_Managers.GUIObjects
             base.Draw(spriteBatch);
             int xindex = (int)_position.X + _innerBorder;
             int yIndex = (int)_position.Y + _innerBorder;
-
+            int lastHP = (int)Position.X + _width - _innerBorder;
+            int lastMP = (int)(Position.X + _width - _innerBorder - _fFont.MeasureString("XXXX/XXXX").X);
             foreach (BattleLocation bl in locations)
             {
                 if (bl != null)
                 {
                     Color c = (CombatManager.ActiveCharacter == bl.Character) ? Color.Green : Color.White;
                     spriteBatch.DrawString(_fFont, bl.Character.Name, new Vector2(xindex, yIndex), c);
+
                     string strHp = string.Format("{0}/{1}", bl.Character.CurrentHP, bl.Character.MaxHP);
-                    spriteBatch.DrawString(_fFont, strHp, new Vector2(Position.X + _width - _fFont.MeasureString(strHp).X - _innerBorder, yIndex), c);
+                    int hpStart = lastHP - (int)_fFont.MeasureString(strHp).X;
+                    spriteBatch.DrawString(_fFont, strHp, new Vector2(hpStart, yIndex), c);
+
+                    string strMp = string.Format("{0}/{1}", bl.Character.CurrentMP, bl.Character.MaxMP);
+                    int mpStart = lastMP - (int)_fFont.MeasureString(strMp).X;
+                    spriteBatch.DrawString(_fFont, strMp, new Vector2(mpStart, yIndex), c);
                 }
                 yIndex += (int)_fCharacterHeight;
             }
@@ -715,14 +728,24 @@ namespace RiverHollow.Game_Managers.GUIObjects
             int i = Math.Max(0, _iKeySelection - _iMaxMenuActions);
             foreach (KeyValuePair<int, string> kvp in _diOptions)
             {
-                Color c = (_chosenAction != null && kvp.Value == _chosenAction.Name) ? Color.Green : Color.White;
                 if (kvp.Key >= i)
                 {
+                    int iMPCost = _liActions[kvp.Key].MPCost;
+                    string mpCost = string.Format("{0}", iMPCost);
+
+                    Color c = (_chosenAction != null && kvp.Value == _chosenAction.Name) ? Color.Green : CombatManager.ActiveCharacter.CanCast(iMPCost) ? Color.White : Color.Gray;
+
                     spriteBatch.DrawString(_fFont, kvp.Value, new Vector2(xindex, yIndex), c);
                     //Even numbered spell
-                    if (kvp.Key % 2 == 0) { xindex = _textColTwo; }
+                    if (kvp.Key % 2 == 0)
+                    {
+                        xindex = _textColTwo;
+                        spriteBatch.DrawString(_fFont, mpCost, new Vector2(xindex - _fFont.MeasureString(mpCost).X - _selectWidth, yIndex), c);
+                    }
                     else
                     {
+                        spriteBatch.DrawString(_fFont, mpCost, new Vector2(_position.X + Width - _fFont.MeasureString(mpCost).X - _selectWidth, yIndex), c);
+
                         xindex = _textColOne;
                         yIndex += (int)_characterHeight;
                     }
@@ -763,7 +786,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         protected override void SelectAction()
         {
-            _chosenAction = _liActions[_iKeySelection];
+            if (CombatManager.ActiveCharacter.CanCast(_liActions[_iKeySelection].MPCost)) { 
+                _chosenAction = _liActions[_iKeySelection];
+            }
         }
 
         public void ClearChosenAbility()

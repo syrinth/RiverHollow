@@ -52,6 +52,7 @@ namespace RiverHollow.Characters.CombatStuff
         {
             _class = x;
             _currentHP = MaxHP;
+            _currentMP = MaxMP;
         }
 
         public void AddXP(int x)

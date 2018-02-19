@@ -46,7 +46,9 @@ namespace RiverHollow.Characters.CombatStuff
     public class CombatAction : MenuAction
     {
         const int moveSpeed = 60;
-        
+
+        private int _mpCost;
+        public int MPCost { get => _mpCost; }
         private int _effectHarm;
         public int EffectHarm { get => _effectHarm; }
         private int _effectHeal;
@@ -118,6 +120,10 @@ namespace RiverHollow.Characters.CombatStuff
                             else if (parse[0] == "Heal")
                             {
                                 _effectHeal = int.Parse(parse[1]);
+                            }
+                            else if (parse[0] == "Cost")
+                            {
+                                _mpCost = int.Parse(parse[1]);
                             }
                             _effectTags.Add(parse[0]);
                         }

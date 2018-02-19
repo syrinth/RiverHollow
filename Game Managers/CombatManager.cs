@@ -115,6 +115,8 @@ namespace RiverHollow.Game_Managers
         {
             ChosenSkill = a;
             ChosenSkill.SkillUser = ActiveCharacter;
+
+            ActiveCharacter.CurrentMP -= a.MPCost;          //Checked before Processing
             if (!ChosenSkill.Target.Equals("Self"))
             {
                 if (chooseTarget) { CurrentPhase = Phase.ChooseSkillTarget; }  //Skips this phase for enemies. They don't "choose" targets

@@ -18,6 +18,14 @@ namespace RiverHollow.Characters.CombatStuff
         }
         public int MaxHP {  get => StatHP * 3; }
 
+        protected int _currentMP;
+        public int CurrentMP
+        {
+            get { return _currentMP; }
+            set { _currentMP = value; }
+        }
+        public int MaxMP {  get => StatMagic * 3; }
+
         public int Initiative;
 
         protected int _statDmg;
@@ -134,6 +142,18 @@ namespace RiverHollow.Characters.CombatStuff
             }
         }
 
+        public void IncreaseMana(int x)
+        {
+            if (_currentMP + x <= MaxMP)
+            {
+                _currentMP += x;
+            }
+            else
+            {
+                _currentMP = MaxMP;
+            }
+        }
+
         public void TickBuffs()
         {
             List<Buff> toRemove = new List<Buff>();
@@ -190,6 +210,11 @@ namespace RiverHollow.Characters.CombatStuff
                         break;
                 }
             }
+        }
+
+        public bool CanCast(int x)
+        {
+            return x <= CurrentMP;
         }
     }
 }
