@@ -278,7 +278,9 @@ namespace RiverHollow.Characters.CombatStuff
                     }
                     break;
                 case "Apply":
-                    ApplyEffect();
+                    if (!CombatManager.ChosenSkill.Target.Equals("Self")) { ApplyEffect(); }
+                    else { ApplyEffectToSelf(); }
+                    
                     _currentActionTag++;
                     break;
                 case "Projectile":

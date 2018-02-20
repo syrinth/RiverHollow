@@ -13,11 +13,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class CombatScreen : GUIScreen
     {
-        const int _iPositions = 4;
+        const int _iPositions = 8;
 
         GUIImage _giBackground;
-        BattleLocation[] _arrParty;
-        BattleLocation[] _arrEnemies;
+        BattleLocation[] _arrCombatants;
         GUITextWindow _gtwTextWindow;
         CmbtMenu _cmbtMenu;
         StatDisplay _sdStamina;
@@ -35,8 +34,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Controls.Add(_sdStamina);
 
             _cmbtMenu = new CmbtMenu();
-            _arrParty = new BattleLocation[_iPositions];
-            _arrEnemies = new BattleLocation[_iPositions];
+            _arrCombatants = new BattleLocation[_iPositions];
             
             //Get the Players' party and assign each of them a battle position
             List<CombatCharacter> party = CombatManager.Party;
@@ -45,7 +43,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 if (party[i] != null)
                 {
                     bool even = (i % 2 == 0);
-                    _arrParty[i] = new BattleLocation(new Vector2(100 + i * 200, even ? 700 : 600), party[i]);
+                    _arrCombatants[i] = new BattleLocation(new Vector2(100 + i * 200, even ? 700 : 600), party[i]);
                 }
 
             }
@@ -55,7 +53,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 if (m.Monsters[i] != null)
                 {
                     bool even = (i % 2 == 0);
-                    _arrEnemies[i] = new BattleLocation(new Vector2(1000 + i * 200, even ? 700 : 600), m.Monsters[i]);
+                    _arrCombatants[(_iPositions / 2) + i] = new BattleLocation(new Vector2(1000 + i * 200, even ? 700 : 600), m.Monsters[i]);
                 }
             }
         }
@@ -72,20 +70,20 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     break;
 
                 case CombatManager.Phase.ChooseSkillTarget:
-                    HandleLeftClickTargeting(_arrEnemies, true);
+                    HandleLeftClickTargeting(true);
                     break;
 
                 case CombatManager.Phase.ChooseItemTarget:
-                    HandleLeftClickTargeting(_arrParty, true);
+                    HandleLeftClickTargeting(false);
                     break;
             }
             
             return rv;
         }
 
-        internal void HandleLeftClickTargeting(BattleLocation[] arr, bool useSkill)
+        internal void HandleLeftClickTargeting(bool useSkill)
         {
-            BattleLocation loc = arr[_iTarget];
+            BattleLocation loc = _arrCombatants[_iTarget];
             loc.Selected = false;
             if (useSkill) { CombatManager.SetSkillTarget(loc); }
             else { CombatManager.SetItemTarget(loc); }
@@ -102,23 +100,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         internal void CancelAction()
         {
-            foreach (BattleLocation bl in _arrEnemies)
+            foreach (BattleLocation bl in _arrCombatants)
             {
-                if (bl != null)
-                {
-                    bl.Selected = false;
-                    break;
-                }
-            }
-            foreach (BattleLocation bl in _arrParty)
-            {
-                if (bl != null)
-                {
-                    bl.Selected = false;
-                    break;
-                }
+                if (bl != null) { bl.Selected = false; }
             }
 
+            _iTarget = -1;
             _cmbtMenu.ProcessRightButtonClick();
         }
 
@@ -127,20 +114,20 @@ namespace RiverHollow.Game_Managers.GUIObjects
             bool rv = false;
             rv = _sdStamina.ProcessHover(mouse);
             if(CombatManager.PhaseChooseSkillTarget()){
-                rv = HandleHoverTargeting(_arrEnemies);
+                rv = HandleHoverTargeting();
             }
             if (CombatManager.PhaseChooseItemTarget())
             {
-                rv = HandleHoverTargeting(_arrParty);
+                rv = HandleHoverTargeting();
             }
             
             return rv;
         }
 
-        internal bool HandleHoverTargeting(BattleLocation[] arr)
+        internal bool HandleHoverTargeting()
         {
             bool rv = false;
-            foreach (BattleLocation p in arr)
+            foreach (BattleLocation p in _arrCombatants)
             {
                 if (rv) { break; }
                 if (p != null && p.Occupied())
@@ -148,10 +135,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     rv = p.ProcessHover(GraphicCursor.Position.ToPoint());
                     if (rv)
                     {
-                        int newTarget = Array.FindIndex<BattleLocation>(arr, loc => loc == p);
+                        int newTarget = Array.FindIndex<BattleLocation>(_arrCombatants, loc => loc == p);
                         if (newTarget != _iTarget)
                         {
-                            arr[_iTarget].Selected = false;
+                            _arrCombatants[_iTarget].Selected = false;
                             _iTarget = newTarget;
                         }
                     }
@@ -172,7 +159,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 case CombatManager.Phase.EnemyTurn:
                     _cmbtMenu.NewTurn();
-                    CombatManager.SetSkillTarget(_arrParty[CombatManager.PlayerTarget]);
+                    CombatManager.SetSkillTarget(_arrCombatants[CombatManager.PlayerTarget]);
                     break;
 
                 case CombatManager.Phase.NewTurn:
@@ -187,11 +174,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     break;
 
                 case CombatManager.Phase.ChooseSkillTarget:
-                    HandleUpdateTargeting(_arrEnemies, true);
+                    HandleUpdateTargeting(true);
                     break;
 
                 case CombatManager.Phase.ChooseItemTarget:
-                    HandleUpdateTargeting(_arrParty, false);
+                    HandleUpdateTargeting(false);
                     break;
 
                 case CombatManager.Phase.DisplayAttack:
@@ -233,17 +220,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
 
             //Update everyone in the party's battleLocation
-            foreach (BattleLocation p in _arrParty)
+            foreach (BattleLocation p in _arrCombatants)
             {
                 if (p != null && p.Occupied()) { p.Update(gameTime); }
             }
 
             //Update everyone in the enemys's battleLocation
-            foreach (BattleLocation p in _arrEnemies)
+            foreach (BattleLocation p in _arrCombatants)
             {
                 if (p != null && p.Occupied())
                 {
-                    if (!CombatManager.Monsters.Contains(p.Character)) { p.Kill(); }
+                    if (!CombatManager.Party.Contains(p.Character) && !CombatManager.Monsters.Contains(p.Character)) { p.Kill(); }
                     else { p.Update(gameTime); }
                 }
             }
@@ -255,11 +242,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-        public void HandleUpdateTargeting(BattleLocation[] arr, bool useSkill)
+        public void HandleUpdateTargeting(bool useSkill)
         {
             if (_iTarget == -1)
             {
-                _iTarget = SkipToNextTarget(arr, 0, true);
+                _iTarget = SkipToNextTarget(useSkill ? _iPositions / 2 : 0, true);
             }
 
             if (InputManager.CheckKey(Keys.A) || InputManager.CheckKey(Keys.S))
@@ -267,22 +254,22 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 int test = _iTarget - 1;
                 if (test >= 0)
                 {
-                    MoveTarget(test, arr);
+                    MoveTarget(test, false);
                 }
             }
             else if (InputManager.CheckKey(Keys.D) || InputManager.CheckKey(Keys.W))
             {
                 int test = _iTarget + 1;
-                if (test < arr.Length)
+                if (test < _arrCombatants.Length)
                 {
-                    MoveTarget(test, arr);
+                    MoveTarget(test, true);
                 }
             }
-            arr[_iTarget].Selected = true;
+            _arrCombatants[_iTarget].Selected = true;
 
             if (InputManager.CheckKey(Keys.Enter))
             {
-                BattleLocation loc = arr[_iTarget];
+                BattleLocation loc = _arrCombatants[_iTarget];
                 loc.Selected = false;
                 if (useSkill) { CombatManager.SetSkillTarget(loc); }
                 else { CombatManager.SetItemTarget(loc); }
@@ -290,27 +277,27 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-        internal void MoveTarget(int test, BattleLocation[] arr)
+        internal void MoveTarget(int test, bool add)
         {
-            test = SkipToNextTarget(arr, test, false);
-            if (test >= 0 && test < arr.Length)
+            test = SkipToNextTarget(test, add);
+            if (test >= 0 && test < _arrCombatants.Length)
             {
-                arr[_iTarget].Selected = false;
+                _arrCombatants[_iTarget].Selected = false;
                 _iTarget = test;
             }
         }
 
-        internal int SkipToNextTarget(BattleLocation[] arr, int i, bool add)
+        internal int SkipToNextTarget(int i, bool add)
         {
             int rv = -1;
             do
             {
                 rv = add ? i++ : i--;
-                if(rv < 0 || rv == arr.Length) {
+                if(rv < 0 || rv == _arrCombatants.Length) {
                     rv = -1;
                     break;
                 }
-            } while (arr[rv] == null || !arr[rv].Occupied());
+            } while (_arrCombatants[rv] == null || !_arrCombatants[rv].Occupied());
 
             return rv;
         }
@@ -318,12 +305,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            _cmbtMenu.Draw(spriteBatch, _arrParty);
-            foreach (BattleLocation p in _arrParty)
-            {
-                if (p != null) { p.Draw(spriteBatch); }
-            }
-            foreach (BattleLocation p in _arrEnemies)
+            _cmbtMenu.Draw(spriteBatch, _arrCombatants);
+            foreach (BattleLocation p in _arrCombatants)
             {
                 if (p != null) { p.Draw(spriteBatch); }
             }
@@ -604,21 +587,19 @@ namespace RiverHollow.Game_Managers.GUIObjects
             int yIndex = (int)_position.Y + _innerBorder;
             int lastHP = (int)Position.X + _width - _innerBorder;
             int lastMP = (int)(Position.X + _width - _innerBorder - _fFont.MeasureString("XXXX/XXXX").X);
-            foreach (BattleLocation bl in locations)
+            foreach (CombatCharacter p in PlayerManager.GetParty())
             {
-                if (bl != null)
-                {
-                    Color c = (CombatManager.ActiveCharacter == bl.Character) ? Color.Green : Color.White;
-                    spriteBatch.DrawString(_fFont, bl.Character.Name, new Vector2(xindex, yIndex), c);
+                Color c = (CombatManager.ActiveCharacter == p) ? Color.Green : Color.White;
+                spriteBatch.DrawString(_fFont, p.Name, new Vector2(xindex, yIndex), c);
 
-                    string strHp = string.Format("{0}/{1}", bl.Character.CurrentHP, bl.Character.MaxHP);
-                    int hpStart = lastHP - (int)_fFont.MeasureString(strHp).X;
-                    spriteBatch.DrawString(_fFont, strHp, new Vector2(hpStart, yIndex), c);
+                string strHp = string.Format("{0}/{1}", p.CurrentHP, p.MaxHP);
+                int hpStart = lastHP - (int)_fFont.MeasureString(strHp).X;
+                spriteBatch.DrawString(_fFont, strHp, new Vector2(hpStart, yIndex), c);
 
-                    string strMp = string.Format("{0}/{1}", bl.Character.CurrentMP, bl.Character.MaxMP);
-                    int mpStart = lastMP - (int)_fFont.MeasureString(strMp).X;
-                    spriteBatch.DrawString(_fFont, strMp, new Vector2(mpStart, yIndex), c);
-                }
+                string strMp = string.Format("{0}/{1}", p.CurrentMP, p.MaxMP);
+                int mpStart = lastMP - (int)_fFont.MeasureString(strMp).X;
+                spriteBatch.DrawString(_fFont, strMp, new Vector2(mpStart, yIndex), c);
+
                 yIndex += (int)_fCharacterHeight;
             }
         }

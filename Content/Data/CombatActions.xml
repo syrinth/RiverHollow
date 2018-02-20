@@ -20,7 +20,7 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>Action/Meditate/Increases your dmg/0/0.03/[Target:Self][Buff:3|2|Self]</Value>
+      <Value>Action/Meditate/Increases your dmg/0/0.03/[Target:Self][Action:UserCast][Buff:3|2|Self]</Value>
     </Item>
     <!--Wizard Spells-->
     <Item>

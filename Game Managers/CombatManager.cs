@@ -54,9 +54,10 @@ namespace RiverHollow.Game_Managers
 
             TurnIndex = 0;
             ActiveCharacter = TurnOrder[TurnIndex];
+
+            GameManager.GoToCombat();
             SetPhaseForTurn();
             PlayerManager.DecreaseStamina(1);
-            GameManager.GoToCombat();
         }
 
         public static void Update(GameTime gameTime)
@@ -69,6 +70,8 @@ namespace RiverHollow.Game_Managers
         {
             if (CurrentPhase != Phase.EndCombat)
             {
+                ChosenSkill = null;
+                ChosenItem = null;
                 if (TurnIndex < TurnOrder.Count-1) { TurnIndex++; }
                 else
                 {
@@ -115,6 +118,7 @@ namespace RiverHollow.Game_Managers
         {
             ChosenSkill = a;
             ChosenSkill.SkillUser = ActiveCharacter;
+            ChosenSkill.UserStartPosition = ActiveCharacter.Position;
 
             ActiveCharacter.CurrentMP -= a.MPCost;          //Checked before Processing
             if (!ChosenSkill.Target.Equals("Self"))
@@ -123,9 +127,8 @@ namespace RiverHollow.Game_Managers
             }
             else
             {
-                ChosenSkill.ApplyEffectToSelf();
-                ChosenSkill = null;
-                NextTurn();
+                CurrentPhase = Phase.DisplayAttack;
+                Text = ChosenSkill.Name;
             }
         }
 
@@ -139,7 +142,6 @@ namespace RiverHollow.Game_Managers
         public static void SetSkillTarget(BattleLocation target)
         {
             _target = target;
-            ChosenSkill.UserStartPosition = ActiveCharacter.Position;
             ChosenSkill.AnimationSetup(target);
             Text = ChosenSkill.Name;
             CurrentPhase = Phase.DisplayAttack;
