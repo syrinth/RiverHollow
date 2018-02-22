@@ -48,6 +48,7 @@ namespace RiverHollow
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             InputManager.Load();
+            SoundManager.LoadContent(Content);
             GameContentManager.LoadContent(Content);
             GameManager.LoadContent(Content);
             ObjectManager.LoadContent(Content);
@@ -60,6 +61,7 @@ namespace RiverHollow
             DropManager.LoadContent(Content);
             
             GUIManager.SetScreen(GUIManager.Screens.MainMenu);
+            SoundManager.PlaySong("GA03-In Mothers Arms-Huckabay-96");
         }
 
         protected override void UnloadContent()

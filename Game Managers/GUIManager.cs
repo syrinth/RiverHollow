@@ -1,21 +1,13 @@
 ﻿using RiverHollow.Characters;
 using RiverHollow.Characters.NPCs;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Game_Managers.GUIObjects.Screens;
 using RiverHollow.GUIObjects;
 using RiverHollow.Items;
-using RiverHollow.Screens;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RiverHollow.Game_Managers
 {

@@ -515,3 +515,15 @@
 /processor:PassThroughProcessor
 /build:Data/CombatActions.xml
 
+#begin Sound/Stock/Songs/GA03-In Mothers Arms-Huckabay-96.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Songs/GA03-In Mothers Arms-Huckabay-96.mp3
+
+#begin Sound/Stock/Effects/126426__cabeeno-rossley__timer-ends-time-up.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Effects/126426__cabeeno-rossley__timer-ends-time-up.wav
+

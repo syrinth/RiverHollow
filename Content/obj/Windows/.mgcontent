@@ -68,5 +68,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/Adventurers.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/MenuFont.spritefont</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CombatActions.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Songs/GA03-In Mothers Arms-Huckabay-96.mp3</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Effects/126426__cabeeno-rossley__timer-ends-time-up.wav</File>
   </SourceFiles>
 </SourceFileCollection>

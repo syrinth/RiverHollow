@@ -72,6 +72,7 @@
     <Compile Include="Game Managers\CombatManager.cs" />
     <Compile Include="Game Managers\DungeonManager.cs" />
     <Compile Include="Game Managers\GameManager.cs" />
+    <Compile Include="Game Managers\SoundManager.cs" />
     <Compile Include="GUIComponents\Screens\CombatScreen.cs" />
     <Compile Include="GUIComponents\Screens\GameMenuScreen.cs" />
     <Compile Include="GUIComponents\Screens\PartyScreen.cs" />
