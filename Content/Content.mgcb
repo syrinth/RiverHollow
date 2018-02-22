@@ -14,11 +14,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Maps/Map1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Map1.tmx
-
 #begin Fonts/Font.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -212,31 +207,6 @@
 /processorParam:TextureFormat=Color
 /build:Maps/Dungeons/DungeonSheet.png
 
-#begin Maps/Dungeons/Room1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeons/Room1.tmx
-
-#begin Maps/Dungeons/Room2.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeons/Room2.tmx
-
-#begin Maps/Dungeons/Room3.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeons/Room3.tmx
-
-#begin Maps/Dungeons/Room4.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeons/Room4.tmx
-
-#begin Maps/Dungeons/Room5.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeons/Room5.tmx
-
 #begin Data/Dialogue/NPC4.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -280,11 +250,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Workers.xml
-
-#begin Maps/Arcane Tower.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Arcane Tower.tmx
 
 #begin Data/Mobs.xml
 /importer:XmlImporter
@@ -383,16 +348,6 @@
 /processorParam:TextureFormat=Color
 /build:Maps/Spring.png
 
-#begin Maps/NearWilds.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/NearWilds.tmx
-
-#begin Maps/RiverHollowTown.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/RiverHollowTown.tmx
-
 #begin Maps/PlayerHouse.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -404,16 +359,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Maps/PlayerHouse.png
-
-#begin Maps/Tent.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Tent.tmx
-
-#begin Maps/HouseNPC1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/HouseNPC1.tmx
 
 #begin Maps/Houses.png
 /importer:TextureImporter
@@ -444,11 +389,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Armory.png
 
-#begin Maps/Guildhouse.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Guildhouse.tmx
-
 #begin Textures/knight.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -473,16 +413,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/weapons master.png
 
-#begin Maps/Crossroads.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Crossroads.tmx
-
-#begin Maps/Mountains.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Mountains.tmx
-
 #begin Data/TownUpgrades.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -492,11 +422,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Buffs.xml
-
-#begin Maps/HouseNPC3.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/HouseNPC3.tmx
 
 #begin Data/Shops/Adventurers.xml
 /importer:XmlImporter
@@ -526,4 +451,74 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sound/Stock/Effects/126426__cabeeno-rossley__timer-ends-time-up.wav
+
+#begin Maps/mapArcaneTower.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapArcaneTower.tmx
+
+#begin Maps/mapCrossroads.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapCrossroads.tmx
+
+#begin Maps/mapGuildhouse.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapGuildhouse.tmx
+
+#begin Maps/mapHouseNPC1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapHouseNPC1.tmx
+
+#begin Maps/mapHouseNPC3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapHouseNPC3.tmx
+
+#begin Maps/mapMountains.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapMountains.tmx
+
+#begin Maps/mapRiverHollowTown.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapRiverHollowTown.tmx
+
+#begin Maps/mapTent.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapTent.tmx
+
+#begin Maps/mapNearWilds.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapNearWilds.tmx
+
+#begin Maps/Dungeons/mapRoom1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapRoom1.tmx
+
+#begin Maps/Dungeons/mapRoom2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapRoom2.tmx
+
+#begin Maps/Dungeons/mapRoom3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapRoom3.tmx
+
+#begin Maps/Dungeons/mapRoom4.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapRoom4.tmx
+
+#begin Maps/Dungeons/mapRoom5.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapRoom5.tmx
 

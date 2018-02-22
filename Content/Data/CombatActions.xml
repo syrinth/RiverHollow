@@ -34,7 +34,7 @@
     </Item>
     <Item>
       <Key>103</Key>
-      <Value>Spell/Shield/Summon a rock/0/0.03/[Target:Self][Effect:Cost-10][Buff:1|2|Self]</Value>
+      <Value>Spell/Shield/Summon a rock/0/0.03/[Target:Self][Effect:Cost-10][Action:UserCast][Buff:1|2|Self]</Value>
     </Item>
   </Asset>
 </XnaContent>

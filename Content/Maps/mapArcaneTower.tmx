@@ -134,12 +134,12 @@
  <objectgroup name="Travel Layer">
   <object id="1" name="Exit" x="1504" y="1408" width="96" height="32">
    <properties>
-    <property name="Exit" value="NearWilds"/>
+    <property name="Exit" value="mapNearWilds"/>
    </properties>
   </object>
   <object id="2" name="Entrance" x="1536.33" y="1344.67" width="32" height="32">
    <properties>
-    <property name="Entrance" value="NearWilds"/>
+    <property name="Entrance" value="mapNearWilds"/>
    </properties>
   </object>
  </objectgroup>

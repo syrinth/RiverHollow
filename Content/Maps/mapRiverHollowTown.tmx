@@ -535,53 +535,53 @@
  <objectgroup name="Travel Layer">
   <object id="1" name="Exit" x="4.49993" y="649.834" width="13.8333" height="77.3333">
    <properties>
-    <property name="Exit" value="Crossroads"/>
+    <property name="Exit" value="mapCrossroads"/>
    </properties>
   </object>
   <object id="2" name="Entrance" x="38" y="678.833" width="17.3333" height="18.3333">
    <properties>
-    <property name="Entrance" value="Crossroads"/>
+    <property name="Entrance" value="mapCrossroads"/>
    </properties>
   </object>
   <object id="13" name="Exit" x="1029.17" y="1419.08" width="12.5" height="9">
    <properties>
-    <property name="Exit" value="HouseNPC1"/>
+    <property name="Exit" value="mapHouseNPC1"/>
    </properties>
   </object>
   <object id="14" name="Entrance" x="1029.33" y="1451.92" width="11.8333" height="11.3333">
    <properties>
-    <property name="Entrance" value="HouseNPC1"/>
+    <property name="Entrance" value="mapHouseNPC1"/>
    </properties>
   </object>
   <object id="15" name="Entrance" x="1192.58" y="586.92" width="11.8333" height="11.3333">
    <properties>
-    <property name="Entrance" value="HouseNPC3"/>
+    <property name="Entrance" value="mapHouseNPC3"/>
    </properties>
   </object>
   <object id="16" name="Exit" x="1191.42" y="557.08" width="12.5" height="9">
    <properties>
-    <property name="Exit" value="HouseNPC3"/>
+    <property name="Exit" value="mapHouseNPC3"/>
    </properties>
   </object>
   <object id="17" name="Dungeon" x="870" y="842" width="19" height="8"/>
   <object id="19" name="Exit" x="1287.75" y="8.08003" width="69.8333" height="9">
    <properties>
-    <property name="Exit" value="Mountains"/>
+    <property name="Exit" value="mapMountains"/>
    </properties>
   </object>
   <object id="20" name="Entrance" x="1320.58" y="69.92" width="11.8333" height="11.3333">
    <properties>
-    <property name="Entrance" value="Mountains"/>
+    <property name="Entrance" value="mapMountains"/>
    </properties>
   </object>
   <object id="23" name="Exit" x="1154.58" y="1098.79" width="18.8334" height="3.99993">
    <properties>
-    <property name="Exit" value="Guildhouse"/>
+    <property name="Exit" value="mapGuildhouse"/>
    </properties>
   </object>
   <object id="24" name="Entrance" x="1155.93" y="1126.54" width="14.6667" height="14.6667">
    <properties>
-    <property name="Entrance" value="Guildhouse"/>
+    <property name="Entrance" value="mapGuildhouse"/>
    </properties>
   </object>
  </objectgroup>

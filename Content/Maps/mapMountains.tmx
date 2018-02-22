@@ -159,22 +159,22 @@
  <objectgroup name="Travel Layer">
   <object id="1" name="Entrance" x="231.916" y="4744.33" width="17.3333" height="18.3333">
    <properties>
-    <property name="Entrance" value="Crossroads"/>
+    <property name="Entrance" value="mapCrossroads"/>
    </properties>
   </object>
   <object id="2" name="Exit" x="209.083" y="4782" width="65.8333" height="14.6666">
    <properties>
-    <property name="Exit" value="Crossroads"/>
+    <property name="Exit" value="mapCrossroads"/>
    </properties>
   </object>
   <object id="3" name="Exit" x="1968.42" y="4781.5" width="65.8333" height="14.6666">
    <properties>
-    <property name="Exit" value="RiverHollowTown"/>
+    <property name="Exit" value="mapRiverHollowTown"/>
    </properties>
   </object>
   <object id="4" name="Entrance" x="1991.25" y="4743.83" width="17.3333" height="18.3333">
    <properties>
-    <property name="Entrance" value="RiverHollowTown"/>
+    <property name="Entrance" value="mapRiverHollowTown"/>
    </properties>
   </object>
  </objectgroup>

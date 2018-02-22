@@ -4,23 +4,23 @@
     <!--Key: Index>0 Value:Type/Name/PortraitsRow/Map/Collection/[Merchandise]-->
     <Item>
       <Key>1</Key>
-      <Value>Villager/Amanda/1/HouseNPC1/0 1 2</Value>
+      <Value>Villager/Amanda/1/mapHouseNPC1/0 1 2</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Villager/Kyle/2/RiverHollowTown/3 4</Value>
+      <Value>Villager/Kyle/2/mapRiverHollowTown/3 4</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>Shopkeeper/Taylor/3/HouseNPC3/5 6/Buildings</Value>
+      <Value>Shopkeeper/Taylor/3/mapHouseNPC3/5 6/Buildings</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>Ranger/Mara/1/RiverHollowTown/7 8</Value>
+      <Value>Ranger/Mara/1/mapRiverHollowTown/7 8</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>Shopkeeper/Eldra/1/Guildhouse/7 8/Adventurers</Value>
+      <Value>Shopkeeper/Eldra/1/mapGuildhouse/7 8/Adventurers</Value>
     </Item>
   </Asset>
 </XnaContent>

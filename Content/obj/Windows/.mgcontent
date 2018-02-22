@@ -4,7 +4,6 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Map1.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/Font.spritefont</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Eggplant.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/wizard.png</File>
@@ -26,18 +25,12 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/Buildings.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/worldObjects.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/DungeonSheet.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/Room1.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/Room2.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/Room3.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/Room4.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/Room5.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC4.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Monsters/Goblin Scout.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Monsters/Goblin Soldier.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Monsters.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Buildings.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Workers.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Arcane Tower.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Mobs.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/battle.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/GoblinCombat.png</File>
@@ -49,26 +42,32 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC1.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/NPC1.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Spring.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/NearWilds.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/RiverHollowTown.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/PlayerHouse.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Tent.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/HouseNPC1.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Houses.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC5.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Armory.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Guildhouse.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/knight.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/weapons master.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Crossroads.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Mountains.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/TownUpgrades.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Buffs.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/HouseNPC3.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/Adventurers.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/MenuFont.spritefont</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CombatActions.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Songs/GA03-In Mothers Arms-Huckabay-96.mp3</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Effects/126426__cabeeno-rossley__timer-ends-time-up.wav</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapArcaneTower.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapCrossroads.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapGuildhouse.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapHouseNPC1.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapHouseNPC3.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapMountains.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapRiverHollowTown.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapTent.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapNearWilds.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapRoom1.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapRoom2.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapRoom3.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapRoom4.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapRoom5.tmx</File>
   </SourceFiles>
 </SourceFileCollection>

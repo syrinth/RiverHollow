@@ -321,22 +321,22 @@
  <objectgroup name="Travel Layer">
   <object id="1" name="Exit" x="3172.16" y="660.25" width="18.5" height="63.3333">
    <properties>
-    <property name="Exit" value="Crossroads"/>
+    <property name="Exit" value="mapCrossroads"/>
    </properties>
   </object>
   <object id="2" name="Entrance" x="3111.08" y="679.583" width="14.6667" height="14.6667">
    <properties>
-    <property name="Entrance" value="Crossroads"/>
+    <property name="Entrance" value="mapCrossroads"/>
    </properties>
   </object>
   <object id="8" name="Exit" x="2731.58" y="492.667" width="7.16667" height="8.66663">
    <properties>
-    <property name="Exit" value="Tent"/>
+    <property name="Exit" value="mapTent"/>
    </properties>
   </object>
   <object id="9" name="Entrance" x="2729.58" y="528.083" width="8.6667" height="11.3334">
    <properties>
-    <property name="Entrance" value="Tent"/>
+    <property name="Entrance" value="mapTent"/>
    </properties>
   </object>
  </objectgroup>

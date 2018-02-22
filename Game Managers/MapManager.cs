@@ -7,44 +7,45 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using RiverHollow.Misc;
+using System.IO;
 
 namespace RiverHollow.Game_Managers
 {
     public static class MapManager
     {
-        private static Dictionary<string, RHMap> _tileMaps;
+        const string _sMapFolder = @"Content\Maps";
+        const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
+
+        static Dictionary<string, RHMap> _tileMaps;
         public static Dictionary<string, RHMap> Maps { get => _tileMaps; }
 
-        private static RHMap _currentMap;
+        static RHMap _currentMap;
         public static RHMap CurrentMap { get => _currentMap; set => _currentMap = value; }
 
         public static void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice)
         {
             _tileMaps = new Dictionary<string, RHMap>();
-            AddMap(@"Maps\Map1", Content, GraphicsDevice);
-            AddMap(@"Maps\NearWilds", Content, GraphicsDevice);
-            AddMap(@"Maps\RiverHollowTown", Content, GraphicsDevice);
-            AddMap(@"Maps\Crossroads", Content, GraphicsDevice);
-            AddMap(@"Maps\Mountains", Content, GraphicsDevice);
-            AddMap(@"Maps\Dungeons\Room1", Content, GraphicsDevice);
-            AddMap(@"Maps\Dungeons\Room2", Content, GraphicsDevice);
-            AddMap(@"Maps\Dungeons\Room3", Content, GraphicsDevice);
-            AddMap(@"Maps\Dungeons\Room4", Content, GraphicsDevice);
-            AddMap(@"Maps\Dungeons\Room5", Content, GraphicsDevice);
-            AddMap(@"Maps\Arcane Tower", Content, GraphicsDevice);
-            AddMap(@"Maps\Tent", Content, GraphicsDevice);
-            AddMap(@"Maps\HouseNPC1", Content, GraphicsDevice);
-            AddMap(@"Maps\HouseNPC3", Content, GraphicsDevice);
-            AddMap(@"Maps\Guildhouse", Content, GraphicsDevice);
 
-            _currentMap = _tileMaps[@"NearWilds"];
+            foreach (string s in Directory.GetFiles(_sMapFolder)) { AddMap(s, Content, GraphicsDevice); }
+            foreach (string s in Directory.GetFiles(_sDungeonMapFolder)) { AddMap(s, Content, GraphicsDevice); }
+
+            _currentMap = _tileMaps[@"mapNearWilds"];
         }
 
         public static void AddMap(string mapToAdd, ContentManager Content, GraphicsDevice GraphicsDevice)
         {
             RHMap newMap = new RHMap();
-            newMap.LoadContent(Content, GraphicsDevice, mapToAdd);
-            _tileMaps.Add(newMap.Name, newMap);
+
+            string name = string.Empty;
+            Utilities.ParseContentFile(ref mapToAdd, ref name);
+            if (name.IndexOf("map") == 0)                       //Ensures that we're loading a map
+            {
+                if (!_tileMaps.ContainsKey(name))
+                {
+                    newMap.LoadContent(Content, GraphicsDevice, mapToAdd);
+                    _tileMaps.Add(newMap.Name, newMap);
+                }
+            }
         }
 
         public static void ChangeMaps(WorldCharacter c, string currMap, string newMapStr)
@@ -148,25 +149,25 @@ namespace RiverHollow.Game_Managers
 
         public static void PopulateMaps(bool loaded)
         {
-            int mapWidth = _tileMaps[@"NearWilds"].MapWidthTiles;
-            int mapHeight = _tileMaps[@"NearWilds"].MapHeightTiles;
+            int mapWidth = _tileMaps[@"mapNearWilds"].MapWidthTiles;
+            int mapHeight = _tileMaps[@"mapNearWilds"].MapHeightTiles;
             RHRandom r = new RHRandom();
             //LoadMap1
             if (!loaded)
             {
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[@"NearWilds"].AddWorldObject(ObjectManager.GetWorldObject(0, new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize)), true);
+                    _tileMaps[@"mapNearWilds"].AddWorldObject(ObjectManager.GetWorldObject(0, new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize)), true);
                 }
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[@"NearWilds"].AddWorldObject(ObjectManager.GetWorldObject(2, new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize)), true);
+                    _tileMaps[@"mapNearWilds"].AddWorldObject(ObjectManager.GetWorldObject(2, new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize)), true);
                 }
             }
 
             Mob mob = CharacterManager.GetMobByIndex(2, new Vector2(110, 178));
-            mob.CurrentMapName = "Tent";
-            _tileMaps[@"Tent"].AddMob(mob);
+            mob.CurrentMapName = "mapTent";
+            _tileMaps[@"mapTent"].AddMob(mob);
 
             MerchantChest m = new MerchantChest();
             PlayerManager._merchantChest = m;

@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
+using RiverHollow.Misc;
 using System.Collections.Generic;
 using System.IO;
-using System.Media;
 
 namespace RiverHollow.Game_Managers
 {
@@ -22,21 +22,14 @@ namespace RiverHollow.Game_Managers
             _diEffects = new Dictionary<string, SoundEffect>();
 
             MediaPlayer.Volume = _iMusicVol;
-            foreach(string s in Directory.GetFiles(_sSongFolder))
-            {
-                AddSong(Content, s);
-            }
-            foreach (string s in Directory.GetFiles(_sEffectFolder))
-            {
-                AddEffect(Content, s);
-            }
+            foreach(string s in Directory.GetFiles(_sSongFolder)) { AddSong(Content, s); }
+            foreach (string s in Directory.GetFiles(_sEffectFolder)) { AddEffect(Content, s); }
         }
 
         static void AddSong(ContentManager Content, string song)
         {
-            song = song.Replace(@"Content\", "");
-            song = song.Remove(song.Length - 4, 4);
-            string name = song.Split('\\')[3];
+            string name = string.Empty;
+            Utilities.ParseContentFile(ref song, ref name);
             if (!_diSongs.ContainsKey(name))
             {
                 _diSongs.Add(song.Split('\\')[3], Content.Load<Song>(song));
@@ -45,9 +38,8 @@ namespace RiverHollow.Game_Managers
 
         static void AddEffect(ContentManager Content, string effect)
         {
-            effect = effect.Replace(@"Content\", "");
-            effect = effect.Remove(effect.Length - 4, 4);
-            string name = effect.Split('\\')[3];
+            string name = string.Empty;
+            Utilities.ParseContentFile(ref effect, ref name);
             if (!_diEffects.ContainsKey(name))
             {
                 _diEffects.Add(name, Content.Load<SoundEffect>(effect));

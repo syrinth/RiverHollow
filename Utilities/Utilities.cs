@@ -37,7 +37,17 @@ namespace RiverHollow.Misc
 
             return newVec;
         }
+
+        public static void ParseContentFile(ref string filePath, ref string name)
+        {
+            filePath = filePath.Replace(@"Content\", "");
+            filePath = filePath.Remove(filePath.Length - 4, 4);
+
+            string[] split = filePath.Split('\\');
+            name = split[split.Length - 1];
+        }
     }
+
     public class RHRandom : Random
     {
         public RHRandom() : base()
