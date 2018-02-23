@@ -70,6 +70,7 @@
     <Compile Include="Characters\Mob.cs" />
     <Compile Include="CombatStuff\Monster.cs" />
     <Compile Include="Game Managers\CombatManager.cs" />
+    <Compile Include="Game Managers\CutSceneManager.cs" />
     <Compile Include="Game Managers\DungeonManager.cs" />
     <Compile Include="Game Managers\GameManager.cs" />
     <Compile Include="Game Managers\SoundManager.cs" />

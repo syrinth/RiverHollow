@@ -40,7 +40,7 @@ namespace RiverHollow.Tile_Engine
         public TiledMap Map { get => _map; }
 
         protected RHTile[,] _tileArray;
-        protected TiledMapRenderer renderer;
+        protected TiledMapRenderer _renderer;
         protected List<TiledMapTileset> _tileSets;
         protected Dictionary<string, TiledMapTileLayer> _dictionaryLayers;
         public Dictionary<string, TiledMapTileLayer> Layers { get => _dictionaryLayers; }
@@ -64,8 +64,7 @@ namespace RiverHollow.Tile_Engine
         private Dictionary<string, Vector2> _dictCharacterLayer;
         public Dictionary<string, Vector2> DictionaryCharacterLayer { get => _dictCharacterLayer; }
 
-        public RHMap()
-        {
+        public RHMap() {
             _buildingTiles = new List<RHTile>();
             _tileSets = new List<TiledMapTileset>();
             _characterList = new List<WorldCharacter>();
@@ -79,6 +78,16 @@ namespace RiverHollow.Tile_Engine
             _dictExit = new Dictionary<Rectangle, string>();
             _dictEntrance = new Dictionary<string, Rectangle>();
             _dictCharacterLayer = new Dictionary<string, Vector2>();
+        }
+
+        public RHMap(RHMap map) : this()
+        {
+            _map = map.Map;
+            _name = map.Name;
+            _renderer = map._renderer;
+            _tileArray = map._tileArray;
+
+            LoadMapObjects();
         }
 
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, string newMap)
@@ -116,7 +125,7 @@ namespace RiverHollow.Tile_Engine
                     if (kvp.Value.Enabled) { EnableUpgradeVisibility(kvp.Key); }
                 }
             }
-            renderer = new TiledMapRenderer(GraphicsDevice);
+            _renderer = new TiledMapRenderer(GraphicsDevice);
 
             LoadMapObjects();
         }
@@ -159,7 +168,7 @@ namespace RiverHollow.Tile_Engine
         {
             if (this == MapManager.CurrentMap)
             {
-                renderer.Update(_map, theGameTime);
+                _renderer.Update(_map, theGameTime);
                 if (GameManager.IsRunning())
                 {
                     foreach (Mob m in _mobList)
@@ -253,7 +262,7 @@ namespace RiverHollow.Tile_Engine
         {
             SetLayerVisibility(false);
 
-            renderer.Draw(_map, Camera._transform);
+            _renderer.Draw(_map, Camera._transform);
             foreach(WorldCharacter c in _characterList)
             {
                 c.Draw(spriteBatch, true);
@@ -293,7 +302,7 @@ namespace RiverHollow.Tile_Engine
         public void DrawUpper(SpriteBatch spriteBatch)
         {
             SetLayerVisibility(true);
-            renderer.Draw(_map, Camera._transform);
+            _renderer.Draw(_map, Camera._transform);
             SetLayerVisibility(false);
         }
 

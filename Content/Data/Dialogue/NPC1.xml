@@ -38,5 +38,9 @@
       <Key>Selection</Key>
       <Value>Hello, what can I do for you?.[Talk:Talk|Gift:GiveGift|%50%Join Party:Party|Never Mind:Nothing]</Value>
     </Item>
+    <Item>
+      <Key>Test</Key>
+      <Value>Heya, Testing test test mar</Value>
+    </Item>
   </Asset>
 </XnaContent>

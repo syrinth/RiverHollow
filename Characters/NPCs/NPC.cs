@@ -1,5 +1,4 @@
 ﻿using RiverHollow.Game_Managers;
-using RiverHollow.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -26,7 +25,7 @@ namespace RiverHollow.Characters
         public enum NPCType { Villager, Shopkeeper, Ranger, Worker }
         protected NPCType _npcType;
         public NPCType Type { get => _npcType; }
-        public int Friendship;
+        public int Friendship = 60;
 
         protected Dictionary<int, bool> _collection;
         public Dictionary<int, bool> Collection { get => _collection; }
@@ -46,8 +45,14 @@ namespace RiverHollow.Characters
 
         protected Dictionary<string, string> _dialogueDictionary;
 
-        public NPC()
+        public NPC() { }
+        public NPC(NPC n)
         {
+            _index = n.ID;
+            _name = n.Name;
+            _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + _index);
+
+            LoadContent();
         }
 
         public NPC(int index, string[] data)
@@ -192,13 +197,15 @@ namespace RiverHollow.Characters
                 }
             }
         }
+
+        //When we change maps, we need to empty out all tiles we're moving to on the map we left
         public void ClearTileForMapChange()
         {
             while (_currentPath[0].MapName == CurrentMapName)
             {
                 _currentPath.RemoveAt(0);
             }
-        }       //When we change maps, we need to empty out all tiles we're moving to on the map we left
+        }       
 
         public bool RunningLate(string timeToGo, string currTime)
         {
@@ -233,6 +240,17 @@ namespace RiverHollow.Characters
             else
             {
                 text = GetSelectionText();
+            }
+            text = ProcessText(text);
+            GUIManager.LoadTextScreen(this, text);
+        }
+
+        public virtual void Talk(string dialogTag)
+        {
+            string text = string.Empty;
+            if (_dialogueDictionary.ContainsKey(dialogTag))
+            {
+                text = _dialogueDictionary[dialogTag];
             }
             text = ProcessText(text);
             GUIManager.LoadTextScreen(this, text);

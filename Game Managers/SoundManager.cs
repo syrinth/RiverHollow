@@ -11,8 +11,8 @@ namespace RiverHollow.Game_Managers
     {
         const string _sSongFolder = @"Content\Sound\Stock\Songs";
         const string _sEffectFolder = @"Content\Sound\Stock\Effects";
-        static float _iMusicVol = 0.05f;
-        static float _iEffectVol = 0.3f;
+        static float _iMusicVol = 0.03f;
+        static float _iEffectVol = 0.03f;
         public static Dictionary<string, Song> _diSongs;
         public static Dictionary<string, SoundEffect> _diEffects;
 

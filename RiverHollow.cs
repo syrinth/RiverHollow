@@ -59,6 +59,7 @@ namespace RiverHollow
             GameCalendar.NewCalendar();
             CharacterManager.LoadContent(Content);
             DropManager.LoadContent(Content);
+            CutSceneManager.LoadContent(Content);
             
             GUIManager.SetScreen(GUIManager.Screens.MainMenu);
             SoundManager.PlaySong("GA03-In Mothers Arms-Huckabay-96");
@@ -136,12 +137,16 @@ namespace RiverHollow
                 if (GameManager.OnMap())
                 {
                     Camera.Update(gameTime);
-                    MapManager.Update(gameTime);
-
-                    if(GameManager.IsRunning())
+                    if (CutSceneManager.Playing) { CutSceneManager.Update(gameTime); }
+                    else
                     {
-                        GameCalendar.Update(gameTime);
-                        if (!GameManager.Scrying()) { PlayerManager.Update(gameTime); }
+                        MapManager.Update(gameTime);
+
+                        if (GameManager.IsRunning())
+                        {
+                            GameCalendar.Update(gameTime);
+                            if (!GameManager.Scrying()) { PlayerManager.Update(gameTime); }
+                        }
                     }
                 }
 

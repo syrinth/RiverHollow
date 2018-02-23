@@ -9,6 +9,8 @@ namespace RiverHollow.Characters
     public class WorldCharacter : Character
     {
         #region Properties
+        protected Vector2 _vMoveToObj;
+        public Vector2 MoveToObj { get => _vMoveToObj; }
         public string CurrentMapName;
         public Vector2 NewMapPosition;
         public enum Direction { North, South, East, West };
@@ -91,5 +93,6 @@ namespace RiverHollow.Characters
         {
             _sprite.MoveBy(x, y);
         }
+        public void SetMoveObj(string str) { _vMoveToObj = MapManager.Maps[CurrentMapName].DictionaryCharacterLayer[str]; }
     }
 }

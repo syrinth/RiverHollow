@@ -50,7 +50,6 @@ namespace RiverHollow.Game_Managers
 
         public static void ChangeMaps(WorldCharacter c, string currMap, string newMapStr)
         {
-            SoundManager.PlayEffect("126426__cabeeno-rossley__timer-ends-time-up");
             Rectangle rectEntrance = Rectangle.Empty;
             RHMap newMap = _tileMaps[newMapStr];
 
@@ -80,10 +79,12 @@ namespace RiverHollow.Game_Managers
             if (c == PlayerManager.World)
             {
                 GUIManager.FadeOut();
+                SoundManager.PlayEffect("126426__cabeeno-rossley__timer-ends-time-up");
                 _currentMap = _tileMaps[newMapStr];
 
                 PlayerManager.CurrentMap = _currentMap.Name;
                 PlayerManager.World.Position = Utilities.Normalize(new Vector2(rectEntrance.Left, rectEntrance.Top));
+                CutSceneManager.CheckForTriggedCutscene();
             }
             else
             {

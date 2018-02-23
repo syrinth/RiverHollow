@@ -522,3 +522,8 @@
 /processor:TiledMapProcessor
 /build:Maps/Dungeons/mapRoom5.tmx
 
+#begin Data/CutScenes.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/CutScenes.xml
+

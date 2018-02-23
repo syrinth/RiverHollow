@@ -1,8 +1,6 @@
 ﻿using RiverHollow.Game_Managers;
 using RiverHollow.GUIObjects;
-using RiverHollow.Items;
-using Microsoft.Xna.Framework;
-using System;
+
 using System.Collections.Generic;
 
 namespace RiverHollow.Characters.NPCs

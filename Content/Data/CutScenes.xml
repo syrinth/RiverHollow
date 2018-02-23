@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, List[string]]">
+    <!--Key: ID, ScheduleData-->
+    <Item>
+      <Key>0</Key>
+      <Value>
+        <!--Triggers for the cut scene [trigger:mapName][time:x y][friends:name1-x name2-y ...]-->
+        <Item>[trigger:mapRiverHollowTown][time:6 16][friends:1-50]</Item>
+        <!--Setup Details [map:mapName][actors:ID-spawn name2-spawn ...][playerSpawn:Player1]-->
+        <Item>[map:mapRiverHollowTown][player:Player1][actors:1-Route2]</Item>
+        <!--CutScene Sequencing MoveTo-<char>-objName Speak-<id>-<dialogKey>-->
+        <Item>Speak-1-Introduction Speak-1-Test</Item>
+      </Value>
+    </Item>
+  </Asset>
+</XnaContent>

@@ -31,6 +31,7 @@ namespace RiverHollow.Game_Managers
         private static State _gameState;
 
         private enum Map { None, WorldMap, Combat }
+
         private static Map _mapState;
 
         public static void ReadInput() { _gameState = State.Input; }
