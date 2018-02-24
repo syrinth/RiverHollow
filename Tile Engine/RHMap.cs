@@ -86,6 +86,14 @@ namespace RiverHollow.Tile_Engine
             _name = map.Name;
             _renderer = map._renderer;
             _tileArray = map._tileArray;
+            _tileSize = _map.TileWidth;
+
+            _isBuilding = _map.Properties.ContainsKey("Building");
+            _isDungeon = _map.Properties.ContainsKey("Dungeon");
+            _isTown = _map.Properties.ContainsKey("Town");
+
+            MapWidthTiles = _map.Width;
+            MapHeightTiles = _map.Height;
 
             LoadMapObjects();
         }
@@ -460,12 +468,12 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public void AddCollectionItem(int itemID, int index)
+        public void AddCollectionItem(int itemID, int npcIndex, int index)
         {
             Item displayItem = ObjectManager.GetItem(itemID);
             displayItem.Pickup = false;
             displayItem.OnTheMap = true;
-            displayItem.Position = _dictCharacterLayer["Col" + index];
+            displayItem.Position = _dictCharacterLayer[npcIndex + "Col" + index];
             _itemList.Add(displayItem);
         }
 

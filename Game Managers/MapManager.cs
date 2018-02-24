@@ -84,7 +84,7 @@ namespace RiverHollow.Game_Managers
 
                 PlayerManager.CurrentMap = _currentMap.Name;
                 PlayerManager.World.Position = Utilities.Normalize(new Vector2(rectEntrance.Left, rectEntrance.Top));
-                CutSceneManager.CheckForTriggedCutscene();
+                CutsceneManager.CheckForTriggedCutscene();
             }
             else
             {

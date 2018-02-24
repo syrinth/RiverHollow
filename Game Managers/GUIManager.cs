@@ -20,6 +20,7 @@ namespace RiverHollow.Game_Managers
         private static GUIImage _fadeImg;
         private static float _fadeVal = 1f;
         private static bool _fading = false;
+        private static bool _slowFade = false;
         public static bool Fading { get => _fading; }
 
         public static void LoadContent()
@@ -56,6 +57,12 @@ namespace RiverHollow.Game_Managers
             GraphicCursor.Draw(spriteBatch);
         }
 
+        public static void ClearScreen()
+        {
+            _currentGUIScreen = null;
+            _currentScreen = Screens.None;
+            GameManager.Unpause();
+        }
         public static bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
@@ -193,9 +200,15 @@ namespace RiverHollow.Game_Managers
             _fading = true;
         }
 
+        public static void SlowFadeOut()
+        {
+            _fading = true;
+            _slowFade = true;
+        }
+
         private static void UpdateFade()
         {
-            _fadeVal -= 0.05f;
+            _fadeVal -= _slowFade ? 0.01f : 0.05f;
             if (_fadeVal <= 0)
             {
                 _fadeVal = 1;

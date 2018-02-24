@@ -40,6 +40,7 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\Knight");
             AddTexture(Content, @"Textures\Weapons Master");
             AddTexture(Content, @"Textures\NPC1");
+            AddTexture(Content, @"Textures\NPC8");
             AddTexture(Content, @"Textures\Monsters\Goblin Scout");
             AddTexture(Content, @"Textures\Monsters\Goblin Soldier");
             AddTexture(Content, @"Textures\GoblinCombat");

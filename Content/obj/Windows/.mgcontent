@@ -70,5 +70,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapRoom4.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapRoom5.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CutScenes.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC8.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/NPC8.png</File>
   </SourceFiles>
 </SourceFileCollection>

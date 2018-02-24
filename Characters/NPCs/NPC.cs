@@ -50,7 +50,9 @@ namespace RiverHollow.Characters
         {
             _index = n.ID;
             _name = n.Name;
-            _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + _index);
+            _dialogueDictionary = n._dialogueDictionary;
+            _portrait = n.Portrait;
+            _portraitRect = n._portraitRect;
 
             LoadContent();
         }
@@ -109,7 +111,11 @@ namespace RiverHollow.Characters
         {
             base.Update(theGameTime);
 
-            if (_todaysPathing != null)
+            if(_vMoveTo != Vector2.Zero)
+            {
+                HandleMove(_vMoveTo);
+            }
+            else if (_todaysPathing != null)
             {
                 string currTime = GameCalendar.GetTime();
                 //_scheduleIndex keeps track of which pathing route we're currently following.
@@ -118,7 +124,6 @@ namespace RiverHollow.Characters
                 {
                     _currentPath = _todaysPathing[_scheduleIndex++].Value;
                 }
-
 
                 if (_currentPath.Count > 0)
                 {
@@ -129,15 +134,20 @@ namespace RiverHollow.Characters
                     }
                     else
                     {
-                        Vector2 direction = Vector2.Zero;
-                        float deltaX = Math.Abs(targetPos.X - this.Position.X);
-                        float deltaY = Math.Abs(targetPos.Y - this.Position.Y);
-
-                        Utilities.GetMoveSpeed(Position, targetPos, Speed, ref direction);
-                        CheckMapForCollisionsAndMove(direction);
+                        HandleMove(targetPos);
                     }
                 }
             }
+        }
+
+        private void HandleMove(Vector2 target)
+        {
+            Vector2 direction = Vector2.Zero;
+            float deltaX = Math.Abs(target.X - this.Position.X);
+            float deltaY = Math.Abs(target.Y - this.Position.Y);
+
+            Utilities.GetMoveSpeed(Position, target, Speed, ref direction);
+            CheckMapForCollisionsAndMove(direction);
         }
         
         public void RollOver()
@@ -258,7 +268,14 @@ namespace RiverHollow.Characters
 
         public void LoadContent()
         {
-            _sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\NPC1"));
+            if (_index != 8)
+            {
+                _sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\NPC1"));
+            }
+            else
+            {
+                _sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\NPC8"));
+            }
             _sprite.AddAnimation("Stand South", 0, 0, 32, 64, 1, 0.3f);
             _sprite.AddAnimation("Walk South", 0, 0, 32, 64, 4, 0.3f);
             _sprite.AddAnimation("Walk North", 0, 64, 32, 64, 4, 0.3f);
@@ -322,6 +339,7 @@ namespace RiverHollow.Characters
         public string ProcessText(string text)
         {
             string rv = string.Empty;
+            text = text.Replace(@"\n", System.Environment.NewLine);
             string[] sections = text.Split(new[] { '$' }, StringSplitOptions.RemoveEmptyEntries);
             for(int i=0; i< sections.Length; i++)
             {
@@ -365,7 +383,7 @@ namespace RiverHollow.Characters
                         }
 
                         _collection[item.ItemID] = true;
-                        MapManager.Maps["HouseNPC" + _index].AddCollectionItem(item.ItemID, index);
+                        MapManager.Maps["HouseNPC" + _index].AddCollectionItem(item.ItemID, _index, index);
                     }
                     else
                     {

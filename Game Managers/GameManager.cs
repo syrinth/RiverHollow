@@ -462,7 +462,7 @@ namespace RiverHollow.Game_Managers
                     if (c.given)
                     {
                         target.Collection[c.itemID] = c.given;
-                        MapManager.Maps["HouseNPC" + n.npcID].AddCollectionItem(c.itemID, index++);
+                        MapManager.Maps["HouseNPC" + n.npcID].AddCollectionItem(c.itemID, n.npcID, index++);
                     }
                 }
             }

@@ -9,8 +9,8 @@ namespace RiverHollow.Characters
     public class WorldCharacter : Character
     {
         #region Properties
-        protected Vector2 _vMoveToObj;
-        public Vector2 MoveToObj { get => _vMoveToObj; }
+        protected Vector2 _vMoveTo;
+        public Vector2 MoveToLocation { get => _vMoveTo; }
         public string CurrentMapName;
         public Vector2 NewMapPosition;
         public enum Direction { North, South, East, West };
@@ -38,6 +38,15 @@ namespace RiverHollow.Characters
         public virtual bool CollisionContains(Point mouse)
         {
             return CollisionBox.Contains(mouse);
+        }
+
+        public void SetDirection(Direction d)
+        {
+            Facing = d;
+            if(d == Direction.North) { _sprite.CurrentAnimation = "Walk North"; }
+            else if (d == Direction.South) { _sprite.CurrentAnimation = "Walk South"; }
+            else if (d == Direction.East) { _sprite.CurrentAnimation = "Walk East"; }
+            else if (d == Direction.West) { _sprite.CurrentAnimation = "Walk West"; }
         }
 
         protected void DetermineAnimation(ref string animation, Vector2 direction, float deltaX, float deltaY)
@@ -93,6 +102,6 @@ namespace RiverHollow.Characters
         {
             _sprite.MoveBy(x, y);
         }
-        public void SetMoveObj(string str) { _vMoveToObj = MapManager.Maps[CurrentMapName].DictionaryCharacterLayer[str]; }
+        public void SetMoveObj(Vector2 vec) { _vMoveTo = vec; }
     }
 }

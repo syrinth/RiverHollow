@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace RiverHollow.Game_Managers
 {
-    static class CutSceneManager
+    static class CutsceneManager
     {
         static Cutscene _currentCutscene;
         static Dictionary<int, Cutscene> _diCutscenes;
@@ -113,35 +113,82 @@ namespace RiverHollow.Game_Managers
             if (GUIManager.CurrentGUIScreen != GUIManager.Screens.Text)                 //If someone is currently talking, do NOT process additional tags
             {
                 string[] stringTest = _liCommands[_iCurrentCommand].Split('-');
-                switch (stringTest[0])
+                if (stringTest[0].Equals("Speak"))
                 {
-                    case "Speak":
-                        if (stringTest.Length == 3)
-                        {
-                            NPC n = _liUsedNPCs.Find(test => test.ID == int.Parse(stringTest[1]));
-                            n.Talk(stringTest[2]);
-                            _iCurrentCommand++;
-                        }
-                        break;
-                    case "MoveTo":
-                        if (stringTest.Length == 3)
-                        {
-                            WorldCharacter c = stringTest[1].Equals("Player") ? PlayerManager.World : _liUsedNPCs.Find(test => test.ID == int.Parse(stringTest[1]));
-                            if (c.MoveToObj == Vector2.Zero)
-                            {
-                                c.SetMoveObj(stringTest[2]);
-                            }
-                            else if (c.Position == c.MoveToObj) { _iCurrentCommand++; }
-                        }
-                        break;
-                    case "End":
-                        _bTriggered = true;
-                        CutSceneManager.Playing = false;
-                        MapManager.CurrentMap = MapManager.Maps[_cutsceneMap.Name];
-                        break;
+                    if (stringTest.Length == 3)
+                    {
+                        NPC n = _liUsedNPCs.Find(test => test.ID == int.Parse(stringTest[1]));
+                        n.Talk(stringTest[2]);
+                        _iCurrentCommand++;
+                    }
                 }
+                else if (stringTest[0].StartsWith("Move"))
+                {
+                    if (stringTest.Length == 3)
+                    {
+                        HandleMove(stringTest, HandleDir(stringTest[0]));
+                    }
+                }
+                else if (stringTest[0].StartsWith("Face"))
+                {
+                    if (stringTest.Length == 2)
+                    {
+                        WorldCharacter n = stringTest[1].Equals("player") ? PlayerManager.World : _liUsedNPCs.Find(test => test.ID == int.Parse(stringTest[1]));
+                        n.SetDirection((WorldCharacter.Direction)HandleDir(stringTest[0]));
+                        //n.Sprite.IsAnimating = false;
+                        _iCurrentCommand++;
+                    }
+                }
+                else if (stringTest[0].StartsWith("End")){
+                    _bTriggered = true;
+                    CutsceneManager.Playing = false;
+                    MapManager.CurrentMap = MapManager.Maps[_cutsceneMap.Name];
+                    GUIManager.SlowFadeOut();
+                } 
             }
             _cutsceneMap.Update(gameTime);
+        }
+
+        private int HandleDir(string str)
+        {
+            int rv = -1;
+            if (str.Contains("Up")) { rv = 0; }
+            else if (str.Contains("Down")) { rv = 1; }
+            else if (str.Contains("Right")) { rv = 2; }
+            else if (str.Contains("Left")) { rv = 3; }
+
+            return rv;
+        }
+
+        //0-Up 1-Down 2-Right 3-Left
+        private void HandleMove(string[] stringTest, int dir)
+        {
+            WorldCharacter c = stringTest[1].Equals("Player") ? PlayerManager.World : _liUsedNPCs.Find(test => test.ID == int.Parse(stringTest[1]));
+            if (c.MoveToLocation == Vector2.Zero)
+            {
+                Vector2 vec = Vector2.Zero;
+                switch (dir)
+                {
+                    case 0:
+                        vec = new Vector2(0, -int.Parse(stringTest[2])* RHMap.TileSize);
+                        break;
+                    case 1:
+                        vec = new Vector2(0, int.Parse(stringTest[2]) * RHMap.TileSize);
+                        break;
+                    case 2:
+                        vec = new Vector2(int.Parse(stringTest[2]) * RHMap.TileSize, 0);
+                        break;
+                    case 3:
+                        vec = new Vector2(-int.Parse(stringTest[2]) * RHMap.TileSize, 0);
+                        break;
+
+                }
+                c.SetMoveObj(c.Position + vec);
+            }
+            else if (c.Position == c.MoveToLocation) {
+                c.SetMoveObj(Vector2.Zero);
+                _iCurrentCommand++;
+            }
         }
 
         public void Setup()

@@ -45,7 +45,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                 {
                     MapManager.EnterDungeon();
                 }
-                GameManager.BackToMain();
+                if (CutsceneManager.Playing) { GUIManager.ClearScreen(); }
+                else { GameManager.BackToMain(); }
             }
             else
             {

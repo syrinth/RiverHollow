@@ -39,8 +39,16 @@
       <Value>Hello, what can I do for you?.[Talk:Talk|Gift:GiveGift|%50%Join Party:Party|Never Mind:Nothing]</Value>
     </Item>
     <Item>
-      <Key>Test</Key>
-      <Value>Heya, Testing test test mar</Value>
+      <Key>Cs0a</Key>
+      <Value>No. No I don't. I've told you before, I need to train. I need to be as ready as I can.</Value>
+    </Item>
+    <Item>
+      <Key>Cs0b</Key>
+      <Value>So what? You'd rather I just cower in fear the next time monsters raid the town? No, I won't do that.</Value>
+    </Item>
+    <Item>
+      <Key>Cs0c</Key>
+      <Value>...\nWe'll talk about this later, we have a guest. Is that you $^$? I'm sorry you had to see that. What can I help you with?</Value>
     </Item>
   </Asset>
 </XnaContent>
