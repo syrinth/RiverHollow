@@ -16,11 +16,11 @@ namespace RiverHollow.Items
         private int _columns;
         public int Columns { get => _columns; }
 
-        public Container(int id, string[] itemValue)
+        public Container(int id, string[] strData)
         {
-            int i = ImportBasics(itemValue, id, 1);
-            _rows = int.Parse(itemValue[i++]);
-            _columns = int.Parse(itemValue[i++]);
+            int i = ImportBasics(strData, id, 1);
+            _rows = int.Parse(strData[i++]);
+            _columns = int.Parse(strData[i++]);
             _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
 
             _pickup = false;

@@ -103,13 +103,13 @@ namespace RiverHollow.Game_Managers
             switch (id)
             {
                 case 0:
-                    return new WorldObject(id, 1, true, true, false, pos, new Rectangle(0, 0, 32, 32), GetTexture(@"Textures\worldObjects"), 1, RHMap.TileSize, RHMap.TileSize);
+                    return new Destructible(id, pos, new Rectangle(0, 0, 32, 32), GetTexture(@"Textures\worldObjects"), RHMap.TileSize, RHMap.TileSize, true, false, 1, 1);
                 case 1:
-                    return new WorldObject(id, 5, true, true, false, pos, new Rectangle(64, 64, 64, 64), GetTexture(@"Textures\worldObjects"), 1, RHMap.TileSize*2, RHMap.TileSize*2);
+                    return new Destructible(id, pos, new Rectangle(64, 64, 64, 64), GetTexture(@"Textures\worldObjects"), RHMap.TileSize*2, RHMap.TileSize*2, true, false, 1, 5);
                 case 2:
-                    return new Tree(id, 10, false, true, pos, new Rectangle(0, 0, 96, 128), GetTexture(@"Textures\tree"), 1, RHMap.TileSize * 3, RHMap.TileSize * 4);
+                    return new Tree(id, pos, new Rectangle(0, 0, 96, 128), GetTexture(@"Textures\tree"), RHMap.TileSize * 3, RHMap.TileSize * 4, false, true, 1, 10);
                 case 3:
-                    return new Staircase(id, pos, new Rectangle(96, 0, 32, 32), GetTexture(@"Textures\worldObjects"), 1, RHMap.TileSize, RHMap.TileSize);
+                    return new Staircase(id, pos, new Rectangle(96, 0, 32, 32), GetTexture(@"Textures\worldObjects"), RHMap.TileSize, RHMap.TileSize);
             }
             return null;
         }

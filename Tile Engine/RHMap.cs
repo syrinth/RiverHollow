@@ -1140,10 +1140,10 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public bool DamageObject(float dmg)
+        public bool DamageObject(int dmg)
         {
             bool rv = false;
-            rv = _obj.DealDamage(dmg);
+            rv = ((Destructible)_obj).DealDamage(dmg);
             if (rv)
             {
                 MapManager.DropWorldItems(DropManager.DropItemsFromWorldObject(_obj.ID), _obj.CollisionBox.Center.ToVector2());

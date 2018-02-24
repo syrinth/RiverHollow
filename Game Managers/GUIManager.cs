@@ -175,8 +175,6 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        
-
     public static void LoadContainerScreen(Container c)
         {
             _currentScreen = GUIManager.Screens.Inventory;

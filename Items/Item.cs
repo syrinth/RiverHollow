@@ -283,8 +283,8 @@ namespace RiverHollow.Items
         public TypeOfTool ToolType;
         protected int _staminaCost;
         public int StaminaCost { get => _staminaCost; }
-        protected float _dmgValue;
-        public float DmgValue { get => _dmgValue; }
+        protected int _dmgValue;
+        public int DmgValue { get => _dmgValue; }
 
         protected AnimatedSprite _sprite;
         public AnimatedSprite ToolAnimation { get => _sprite; }
@@ -293,7 +293,7 @@ namespace RiverHollow.Items
         {
             int i = ImportBasics(stringData, id, 1);
             ToolType = (TypeOfTool)Enum.Parse(typeof(TypeOfTool), stringData[i++]);
-            _dmgValue = float.Parse(stringData[i++]);
+            _dmgValue = int.Parse(stringData[i++]);
             _staminaCost = int.Parse(stringData[i++]);
             _texture = GameContentManager.GetTexture(@"Textures\tools");
 

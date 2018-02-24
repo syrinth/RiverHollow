@@ -14,20 +14,9 @@ namespace RiverHollow.Items
     {
         #region Properties
         public List<RHTile> Tiles;
-        protected float _hp;
-        public float HP { get => _hp; }
 
         protected bool _wallObject;
         public bool WallObject { get => _wallObject; }
-
-        protected bool _destructible;
-        public bool Destructible { get => _destructible; }
-
-        protected bool _breakable;
-        public bool Breakable { get => _breakable;}
-
-        protected bool _choppable;
-        public bool Choppable { get => _choppable; }
 
         protected Vector2 _position;
         public Vector2 Position { get => _position; }
@@ -43,27 +32,19 @@ namespace RiverHollow.Items
         protected int _width;
         protected int _height;
 
-        protected int _lvltoDmg;
-        public int LvlToDmg { get => _lvltoDmg; }
-
         protected int _id;
         public int ID { get => _id; }
         #endregion
 
         protected WorldObject() { }
 
-        public WorldObject(int id, float hp, bool destructible, bool breakIt, bool chopIt, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int lvl, int width, int height)
+        public WorldObject(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height)
         {
             _id = id;
-            _hp = hp;
-            _destructible = destructible;
-            _breakable = breakIt;
-            _choppable = chopIt;
             _position = pos;
             _width = width;
             _height = height;
             _texture = tex;
-            _lvltoDmg = lvl;
             _wallObject = false;
 
             _sourceRectangle = sourceRectangle;
@@ -73,15 +54,6 @@ namespace RiverHollow.Items
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, new Rectangle((int)_position.X, (int)_position.Y, _width, _height), _sourceRectangle, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, _position.Y + _height + (_position.X / 100));
-        }
-
-        public bool DealDamage(float dmg)
-        {
-            bool rv = false;
-            _hp -= dmg;
-            rv = _hp <= 0;
-
-            return rv;
         }
 
         public virtual bool IntersectsWith(Rectangle r)
@@ -108,11 +80,50 @@ namespace RiverHollow.Items
         }
     }
 
-    public class Tree : WorldObject
+    public class Destructible : WorldObject
+    {
+        protected int _hp;
+        public int HP { get => _hp; }
+
+        protected bool _breakable;
+        public bool Breakable { get => _breakable; }
+
+        protected bool _choppable;
+        public bool Choppable { get => _choppable; }
+
+        protected int _lvltoDmg;
+        public int LvlToDmg { get => _lvltoDmg; }
+
+        public Destructible(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height, bool breakIt, bool chopIt, int lvl, int hp) : base(id, pos, sourceRectangle, tex, width, height)
+        {
+            _hp = hp;
+            _breakable = breakIt;
+            _choppable = chopIt;
+            _lvltoDmg = lvl;
+        }
+
+        public bool DealDamage(int dmg)
+        {
+            bool rv = false;
+            _hp -= dmg;
+            rv = _hp <= 0;
+
+            return rv;
+        }
+    }
+
+    public class Machine : WorldObject
+    {
+        public Machine()
+        {
+        }
+    }
+
+    public class Tree : Destructible
     {
         public override Rectangle CollisionBox { get => new Rectangle((int)Position.X + RHMap.TileSize, (int)Position.Y + RHMap.TileSize * 3, RHMap.TileSize, RHMap.TileSize); }
 
-        public Tree(int id, float hp, bool breakIt, bool chopIt, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int lvl, int width, int height) : base(id, hp, true, breakIt, chopIt, pos, sourceRectangle, tex, lvl, width, height)
+        public Tree(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height, bool breakIt, bool chopIt, int lvl, int hp) : base(id, pos, sourceRectangle, tex, width, height, breakIt, chopIt, lvl, hp)
         {
         }
     }
@@ -122,7 +133,7 @@ namespace RiverHollow.Items
         protected string _toMap;
         public string ToMap { get => _toMap; }
 
-        public Staircase(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int lvl, int width, int height) : base(id, 0, false, false, false, pos, sourceRectangle, tex, lvl, width, height)
+        public Staircase(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height) : base(id, pos, sourceRectangle, tex, width, height)
         {
             _wallObject = true;
         }

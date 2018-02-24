@@ -255,25 +255,32 @@ namespace RiverHollow.Game_Managers
             if (PlayerManager.PlayerInRange(mouseLocation))
             {
                 _targetTile = MapManager.RetrieveTile(mouseLocation);
-
-                if (_targetTile.Object != null && UseTool == null)
+                if (_targetTile.Object != null)
                 {
-                    if (_targetTile.Object.Breakable) { UseTool = _pick; }
-                    else if (_targetTile.Object.Choppable) { UseTool = _axe; }
-
-                    if (UseTool != null && !_busy)
+                    if ((_targetTile.Object.GetType().Equals(typeof(Destructible))) || _targetTile.Object.GetType().IsSubclassOf(typeof(Destructible)))
                     {
-                        _busy = true;
-                        if (DecreaseStamina(UseTool.StaminaCost))
+                        Destructible d = (Destructible)_targetTile.Object;
+
+                        if (d != null && UseTool == null)
                         {
-                            UseTool.ToolAnimation.IsAnimating = true;
-                        }
-                        else
-                        {
-                            UseTool = null;
+                            if (d.Breakable) { UseTool = _pick; }
+                            else if (d.Choppable) { UseTool = _axe; }
+
+                            if (UseTool != null && !_busy)
+                            {
+                                _busy = true;
+                                if (DecreaseStamina(UseTool.StaminaCost))
+                                {
+                                    UseTool.ToolAnimation.IsAnimating = true;
+                                }
+                                else
+                                {
+                                    UseTool = null;
+                                }
+                            }
+                            rv = true;
                         }
                     }
-                    rv = true;
                 }
             }
 
