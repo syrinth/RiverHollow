@@ -531,7 +531,6 @@
   <object id="9" name="Route2" x="556.633" y="814.12"/>
   <object id="10" name="Route3" x="1576" y="1580.67" width="15" height="9"/>
   <object id="12" name="Route4" x="2337" y="679" width="8" height="7"/>
-  <object id="25" name="Player1" x="620" y="816"/>
  </objectgroup>
  <objectgroup name="Travel Layer">
   <object id="1" name="Exit" x="4.49993" y="649.834" width="13.8333" height="77.3333">

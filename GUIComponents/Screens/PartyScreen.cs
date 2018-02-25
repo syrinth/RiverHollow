@@ -230,7 +230,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             bool rv = false;
             if (GraphicCursor.HeldItem != null)
             {
-                if (GraphicCursor.HeldItem.Type == Item.ItemType.Equipment && ((Equipment)GraphicCursor.HeldItem).EquipType == match)
+                if (GraphicCursor.HeldItem.IsEquipment() && ((Equipment)GraphicCursor.HeldItem).EquipType == match)
                 {
                     if (box.Item != null)
                     {
@@ -262,7 +262,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
 
-            if (i.Type == Item.ItemType.Equipment)
+            if (i.IsEquipment())
             {
                 if (((Equipment)i).EquipType == Equipment.EquipmentType.Armor)
                 {

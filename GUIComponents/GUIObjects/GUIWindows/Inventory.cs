@@ -119,7 +119,7 @@ namespace RiverHollow.Screens
                 {
                     if (InventoryManager.PublicContainer == null)
                     {
-                        if (i.Type == Item.ItemType.Food)
+                        if (i.IsFood())
                         {
                             Food f = ((Food)i);
                             GUIManager.AddTextSelection(f, string.Format("Really eat the {0}? [Yes:Eat|No:DoNothing]", f.Name));
@@ -184,11 +184,11 @@ namespace RiverHollow.Screens
                 {
                     if (_displayList[i, j].Contains(mouse) && _displayList[i, j].Item != null)
                     {
-                        if (_displayList[i, j].Item.Type == Item.ItemType.Equipment)
+                        if (_displayList[i, j].Item.IsEquipment())
                         {
                             rv = ((Equipment)(_displayList[i, j].Item));
                         }
-                        else if (_displayList[i, j].Item.Type == Item.ItemType.Tool)
+                        else if (_displayList[i, j].Item.IsTool())
                         {
                             rv = ((Tool)(_displayList[i, j].Item));
                         }

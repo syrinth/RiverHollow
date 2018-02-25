@@ -1,18 +1,16 @@
-﻿using RiverHollow.Game_Managers;
-using RiverHollow.Tile_Engine;
+﻿using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RiverHollow.Items
 {
     public class WorldObject
     {
         #region Properties
+        public enum ObjectType { Container, WorldObject, Destructible };
+        public ObjectType Type;
+
         public List<RHTile> Tiles;
 
         protected bool _wallObject;
@@ -40,6 +38,7 @@ namespace RiverHollow.Items
 
         public WorldObject(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height)
         {
+            Type = ObjectType.WorldObject;
             _id = id;
             _position = pos;
             _width = width;
@@ -78,6 +77,9 @@ namespace RiverHollow.Items
                 t.Clear();
             }
         }
+
+        public bool IsDestructible() { return Type == ObjectType.Destructible; }
+        public bool IsWorldObject() { return Type == ObjectType.WorldObject; }
     }
 
     public class Destructible : WorldObject
@@ -96,6 +98,8 @@ namespace RiverHollow.Items
 
         public Destructible(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height, bool breakIt, bool chopIt, int lvl, int hp) : base(id, pos, sourceRectangle, tex, width, height)
         {
+            Type = ObjectType.Destructible;
+
             _hp = hp;
             _breakable = breakIt;
             _choppable = chopIt;
@@ -112,19 +116,13 @@ namespace RiverHollow.Items
         }
     }
 
-    public class Machine : WorldObject
-    {
-        public Machine()
-        {
-        }
-    }
-
     public class Tree : Destructible
     {
         public override Rectangle CollisionBox { get => new Rectangle((int)Position.X + RHMap.TileSize, (int)Position.Y + RHMap.TileSize * 3, RHMap.TileSize, RHMap.TileSize); }
 
         public Tree(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height, bool breakIt, bool chopIt, int lvl, int hp) : base(id, pos, sourceRectangle, tex, width, height, breakIt, chopIt, lvl, hp)
         {
+            Type = ObjectType.Destructible;
         }
     }
 
@@ -135,6 +133,7 @@ namespace RiverHollow.Items
 
         public Staircase(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height) : base(id, pos, sourceRectangle, tex, width, height)
         {
+            Type = ObjectType.WorldObject;
             _wallObject = true;
         }
 

@@ -172,22 +172,31 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
-        public void Update(GameTime theGameTime)
+        public void Update(GameTime gameTime)
         {
             if (this == MapManager.CurrentMap)
             {
-                _renderer.Update(_map, theGameTime);
+                _renderer.Update(_map, gameTime);
                 if (GameManager.IsRunning())
                 {
                     foreach (Mob m in _mobList)
                     {
-                        m.Update(theGameTime);
+                        m.Update(gameTime);
                     }
                 }
                 
                 foreach (Item i in _itemList)
                 {
                     ((Item)i).Update();
+                }
+            }
+
+            foreach (StaticItem s in _staticItemList)
+            {
+                if (s.IsProcessor())
+                {
+                    Processor p = (Processor)s;
+                    p.Update(gameTime);
                 }
             }
 
@@ -224,7 +233,7 @@ namespace RiverHollow.Tile_Engine
             {
                 foreach (WorldCharacter c in _characterList)
                 {
-                    c.Update(theGameTime);
+                    c.Update(gameTime);
                 }
             }
             
@@ -534,13 +543,22 @@ namespace RiverHollow.Tile_Engine
             {
                 if (s.CollisionBox.Contains(mouseLocation))
                 {
-                    if (IsDungeon && DungeonManager.IsEndChest((Container)s))
+                    if (s.IsContainer())
                     {
-                        Staircase stairs = (Staircase)ObjectManager.GetWorldObject(3, new Vector2(0, 0));
-                        stairs.SetExit("NearWilds");
-                        AddWorldObject(stairs, true);
+                        if (IsDungeon && DungeonManager.IsEndChest((Container)s))
+                        {
+                            Staircase stairs = (Staircase)ObjectManager.GetWorldObject(3, new Vector2(0, 0));
+                            stairs.SetExit("NearWilds");
+                            AddWorldObject(stairs, true);
+                        }
+                        GUIManager.LoadContainerScreen((Container)s);
                     }
-                    GUIManager.LoadContainerScreen((Container)s);
+                    else if (s.IsProcessor())
+                    {
+                        Processor p = (Processor)s;
+                        if (p.ProcessingFinished()) { p.TakeFinishedItem(); }
+                        else if(GraphicCursor.HeldItem != null && !p.Processing()) { p.ProcessHeldItem(GraphicCursor.HeldItem); }
+                    }
                     break;
                 }
             }
@@ -1143,12 +1161,15 @@ namespace RiverHollow.Tile_Engine
         public bool DamageObject(int dmg)
         {
             bool rv = false;
-            rv = ((Destructible)_obj).DealDamage(dmg);
-            if (rv)
+            if (_obj.IsDestructible())
             {
-                MapManager.DropWorldItems(DropManager.DropItemsFromWorldObject(_obj.ID), _obj.CollisionBox.Center.ToVector2());
-                MapManager.RemoveWorldObject(_obj);
-                _obj.ClearTiles();
+                rv = ((Destructible)_obj).DealDamage(dmg);
+                if (rv)
+                {
+                    MapManager.DropWorldItems(DropManager.DropItemsFromWorldObject(_obj.ID), _obj.CollisionBox.Center.ToVector2());
+                    MapManager.RemoveWorldObject(_obj);
+                    _obj.ClearTiles();
+                }
             }
 
             return rv;

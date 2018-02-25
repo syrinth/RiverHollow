@@ -172,6 +172,10 @@ Exit:
             }
         }
 
+        public static void AddNewItemToInventory(int itemToAdd, int num)
+        {
+            AddItemToInventory(ObjectManager.GetItem(itemToAdd, num), null);
+        }
         public static void AddNewItemToInventory(int itemToAdd)
         {
             AddItemToInventory(ObjectManager.GetItem(itemToAdd), null);
@@ -254,11 +258,11 @@ Exit:
             {
                 if (inventory[row, column] == null)
                 {
-                    if (item.Type == Item.ItemType.Equipment)
+                    if (item.IsEquipment())
                     {
                         inventory[row, column] = (Equipment)(item);
                     }
-                    else if (item.Type == Item.ItemType.Tool)
+                    else if (item.IsTool())
                     {
                         inventory[row, column] = (Tool)(item);
                         if (inventory == _playerInventory) { PlayerManager.CompareTools((Tool)_playerInventory[row, column]); }
@@ -297,7 +301,7 @@ Exit:
             if (inventory == _playerInventory)
             {
                 PlayerManager.RemoveQuestProgress(inventory[i, j]);
-                if (_playerInventory[i, j].Type == Item.ItemType.Tool) { PlayerManager.CompareTools((Tool)_playerInventory[i, j]); }
+                if (_playerInventory[i, j].IsTool()) { PlayerManager.CompareTools((Tool)_playerInventory[i, j]); }
             }
 
             inventory[i, j] = null;
@@ -322,7 +326,7 @@ Exit:
                         if (inventory == _playerInventory)
                         {
                             PlayerManager.RemoveQuestProgress(inventory[i, j]);
-                            if (_playerInventory[i, j].Type == Item.ItemType.Tool) { PlayerManager.CompareTools((Tool)_playerInventory[i, j]); }
+                            if (_playerInventory[i, j].IsTool()) { PlayerManager.CompareTools((Tool)_playerInventory[i, j]); }
                         }
                         inventory[i, j] = null;
                         goto Exit;
@@ -343,7 +347,7 @@ Exit:
                 {
                     if (_playerInventory[i, j] != null)
                     {
-                        if(_playerInventory[i, j].Type == Item.ItemType.Tool)
+                        if(_playerInventory[i, j].IsTool())
                         {
                             Tool t = (Tool)_playerInventory[i, j];
                             if(t.ToolType == tool)
@@ -365,7 +369,7 @@ Exit:
             {
                 for (int j = 0; j < maxItemColumns; j++)
                 {
-                    if (_playerInventory[i, j] != null && _playerInventory[i, j].Type == Item.ItemType.Combat)
+                    if (_playerInventory[i, j] != null && _playerInventory[i, j].IsCombatItem())
                     {
                         items.Add((CombatItem)_playerInventory[i, j]);
                     }

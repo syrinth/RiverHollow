@@ -6,5 +6,9 @@
       <Key>6</Key>
       <Value>2 3</Value>
     </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>85 2</Value>
+    </Item>
   </Asset>
 </XnaContent>

@@ -4,12 +4,13 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Threading;
 using RiverHollow.SpriteAnimations;
+using RiverHollow.GUIObjects;
 
 namespace RiverHollow.Items
 {
     public class Item
     {
-        public enum ItemType { Resource, Equipment, Tool, Container, Food, Map, Combat };
+        public enum ItemType { Resource, Equipment, Tool, Container, Food, Map, Combat, Processor, Crafter };
 
         #region properties
         protected ItemType _itemType;
@@ -20,7 +21,6 @@ namespace RiverHollow.Items
         protected string _name;
         public string Name { get => _name; }
 
-        protected int _textureIndex;
         protected Texture2D _texture;
         public Texture2D Texture { get => _texture; }
 
@@ -60,23 +60,8 @@ namespace RiverHollow.Items
 
             _doesItStack = true;
             _texture = GameContentManager.GetTexture(@"Textures\items");
-
-            CalculateSourcePos();
         }
 
-        protected void CalculateSourcePos()
-        {
-            int textureRows = (_texture.Height / _rowTextureSize);
-            int textureColumns = (_texture.Width / _columnTextureSize);
-
-            if (textureRows == 0) textureRows = 1;
-            if (textureColumns == 0) textureColumns = 1;
-
-            int targetRow = _textureIndex / textureColumns;
-            int targetCol = _textureIndex % textureColumns;
-
-            _sourcePos = new Vector2(0 + 32 * targetCol, 0 + 32 * targetRow);
-        }
         protected int ImportBasics(string[] stringData, int id, int num)
         {
             _num = num;
@@ -85,7 +70,8 @@ namespace RiverHollow.Items
             _itemType = (ItemType)Enum.Parse(typeof(ItemType), stringData[i++]);
             _name = stringData[i++];
             _description = stringData[i++];
-            _textureIndex = int.Parse(stringData[i++]);
+            string[] texIndices = stringData[i++].Split(' ');
+            _sourcePos = new Vector2(0 + 32 * int.Parse(texIndices[0]), 0 + 32 * int.Parse(texIndices[1]));
             _sellPrice = int.Parse(stringData[i++]);
 
             _itemID = id;//(ObjectManager.ItemIDs)Enum.Parse(typeof(ObjectManager.ItemIDs), itemValue[i++]);
@@ -157,16 +143,20 @@ namespace RiverHollow.Items
             return rv;
         }
 
-        public void Remove(int x)
+        public bool Remove(int x)
         {
-            if (x >= _num)
+            bool rv = false;
+            if (x <= _num)
             {
+                rv = true;
                 _num -= x;
                 if (_num == 0)
                 {
+                    if(GraphicCursor.HeldItem == this) { GraphicCursor.DropItem(); }
                     InventoryManager.RemoveItemFromInventory(this);
                 }
             }
+            return rv;
         }
 
         public Vector2 RandomVelocityVector()
@@ -194,6 +184,13 @@ namespace RiverHollow.Items
 
             return rv;
         }
+
+        public bool IsTool() { return _itemType == ItemType.Tool; }
+        public bool IsCombatItem() { return _itemType == ItemType.Combat; }
+        public bool IsEquipment() { return _itemType == ItemType.Equipment; }
+        public bool IsFood() { return _itemType == ItemType.Food; }
+        public bool IsContainer() { return _itemType == ItemType.Container; }
+        public bool IsProcessor() { return _itemType == ItemType.Processor; }
 
         private class Parabola
         {
@@ -258,8 +255,6 @@ namespace RiverHollow.Items
             _mag = int.Parse(stringData[i++]);
             _hp = int.Parse(stringData[i++]);
             _texture = GameContentManager.GetTexture(@"Textures\weapons");
-
-            CalculateSourcePos();
         }
 
         public override string GetDescription()
@@ -300,8 +295,6 @@ namespace RiverHollow.Items
             _columnTextureSize = 128;
             _rowTextureSize = 32;
 
-            CalculateSourcePos();
-
             _sprite = new AnimatedSprite(_texture);
             _sprite.AddAnimation("Left", (int)_sourcePos.X + 32, (int)_sourcePos.Y, 32, 32, 3, 0.1f);
 
@@ -336,8 +329,6 @@ namespace RiverHollow.Items
 
             _doesItStack = true;
             _texture = GameContentManager.GetTexture(@"Textures\items");
-
-            CalculateSourcePos();
         }
 
         public override string GetDescription()
@@ -363,8 +354,6 @@ namespace RiverHollow.Items
 
             _doesItStack = false;
             _texture = GameContentManager.GetTexture(@"Textures\items");
-
-            CalculateSourcePos();
         }
 
         public override string GetDescription()
@@ -395,8 +384,6 @@ namespace RiverHollow.Items
 
             _doesItStack = true;
             _texture = GameContentManager.GetTexture(@"Textures\items");
-
-            CalculateSourcePos();
         }
 
         public override string GetDescription()

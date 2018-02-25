@@ -1,57 +1,109 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: ID, Value:Type/Name/Description/ImgIndex/SellCost-->
-    <!--Tool:Type/Dmg/Stam Equipment: dmg/def/spd/mag/hp Container:Rows/Columns-->
+    <!--Key: ID, Value:Type/Name/Description/ImgColX ImgColY/SellCost-->
+    <!--Tool: Type/Dmg/Stam Equipment: dmg/def/spd/mag/hp Container:Rows/Columns-->
     <!--Food:Stamina/Health-->
+    <!--Machine: Processor/Name/[input # output timeinSeconds] [input # output timeinSeconds]-->
+    <!--Machine: Crafter/Name/<recipe1> <recipe2> ...-->
     <Item>
       <Key>0</Key>
-      <Value>Resource/Stone/Stone, for building things/0/10</Value>
+      <Value>Resource/Stone/Stone, for building things/0 0/10</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Resource/Arcane Essence/Holds a spark of magic/2/100</Value>
+      <Value>Resource/Arcane Essence/Holds a spark of magic/0 1/100</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Resource/Wood/Wood, it builds stuff/1/10</Value>
+      <Value>Resource/Wood/Wood, it builds stuff/1 0/10</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>Tool/Pick Axe/Breaks things/0/3000/Pick/1/1</Value>
+      <Value>Tool/Pick Axe/Breaks things/0 0/3000/Pick/1/1</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>Tool/Wooden Axe/Chop Chop Motherfucker/1/3000/Axe/1/1</Value>
+      <Value>Tool/Wooden Axe/Chop Chop Motherfucker/0 1/3000/Axe/1/1</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>Equipment/Basic Sword/Swing this fucker/0/500/Weapon/1/0/0/0/0</Value>
+      <Value>Equipment/Basic Sword/Swing this fucker/0 0/500/Weapon/1/0/0/0/0</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>Container/Small Chest/Hold shit/4/100/1/8</Value>
+      <Value>Container/Small Chest/Hold shit/0 1/100/1/8</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>Food/Apple/Nomnom/3/50/10/5</Value>
+      <Value>Food/Apple/Nomnom/1 1/50/10/5</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>Map/Adventure Map/Off to find adventures!/4/0</Value>
+      <Value>Map/Adventure Map/Off to find adventures!/0 2/0</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>Equipment/Ultima Weapon/Swing this fucker/2/1000/Weapon/20/20/20/20/20</Value>
+      <Value>Equipment/Ultima Weapon/Swing this fucker/0 3/1000/Weapon/20/20/20/20/20</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>Equipment/Armor/Best armor ever/1/1000/Armor/0/20/0/0/0</Value>
+      <Value>Equipment/Armor/Best armor ever/0 2/1000/Armor/0/20/0/0/0</Value>
     </Item>
-    <!--Combat:Stamina/Health/Mana-->
+    <!--<80-89> Ores and Bars-->
+    <Item>
+      <Key>80</Key>
+      <Value>Resource/Copper Ore/Basic ore/2 0/5</Value>
+    </Item>
+    <Item>
+      <Key>81</Key>
+      <Value>Resource/Iron Ore/Alright ore/0/10</Value>
+    </Item>
+    <Item>
+      <Key>82</Key>
+      <Value>Resource/Gold Ore/Shiny ore/0/15</Value>
+    </Item>
+    <Item>
+      <Key>83</Key>
+      <Value>Resource/Mithril Ore/Pretty ore/0/20</Value>
+    </Item>
+    <Item>
+      <Key>84</Key>
+      <Value>Resource/Adamantine Ore/Fancy ore!/0/25</Value>
+    </Item>
+    <Item>
+      <Key>85</Key>
+      <Value>Resource/Copper Bar/Basic Bar/2 1/25</Value>
+    </Item>
+    <Item>
+      <Key>86</Key>
+      <Value>Resource/Iron Bar/Alright Bar/0/10</Value>
+    </Item>
+    <Item>
+      <Key>87</Key>
+      <Value>Resource/Gold Bar/Alright Bar/0/10</Value>
+    </Item>
+    <Item>
+      <Key>88</Key>
+      <Value>Resource/Mithril Bar/Alright Bar/0/10</Value>
+    </Item>
+    <Item>
+      <Key>89</Key>
+      <Value>Resource/Adamantine Ore/Alright ore/0/10</Value>
+    </Item>
+    <!--<100> Combat:Stamina/Health/Mana-->
     <Item>
       <Key>101</Key>
-      <Value>Combat/Health Potion/RecoversHealth/5/3000/0/20/0</Value>
+      <Value>Combat/Health Potion/RecoversHealth/1 2/3000/0/20/0</Value>
+    </Item>
+    <!--<200> Machines-->
+    <Item>
+      <Key>200</Key>
+      <Value>Processor/Smelter/Smelts Ore/3 1/3000/[80 5 85 10][81 5 86 20][82 5 87 40][83 5 88 80][84 5 89 90]</Value>
+    </Item>
+    <Item>
+      <Key>201</Key>
+      <Value>Crafter/Anvil/Makes Shit/4 0/3000/9</Value>
     </Item>
   </Asset>
 </XnaContent>

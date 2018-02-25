@@ -56,12 +56,17 @@ namespace RiverHollow.Game_Managers
 
         public static void PlayEffect(string effect)
         {
+            PlayEffect(effect, _iEffectVol);
+        }
+
+        public static void PlayEffect(string effect, float vol)
+        {
             if (_diEffects.ContainsKey(effect))
             {
                 SoundEffectInstance soundInstance;
                 soundInstance = _diEffects[effect].CreateInstance();
 
-                soundInstance.Volume = _iEffectVol;
+                soundInstance.Volume = vol;
                 soundInstance.Play();
             }
         }

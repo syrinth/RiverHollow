@@ -83,6 +83,9 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddNewItemToInventory(7);
             InventoryManager.AddNewItemToInventory(8);
             InventoryManager.AddNewItemToInventory(101);
+            InventoryManager.AddNewItemToInventory(200);
+            InventoryManager.AddNewItemToInventory(80, 10);
+            InventoryManager.AddNewItemToInventory(201);
 
             SetPlayerDefaults();
         }
@@ -255,40 +258,44 @@ namespace RiverHollow.Game_Managers
             if (PlayerManager.PlayerInRange(mouseLocation))
             {
                 _targetTile = MapManager.RetrieveTile(mouseLocation);
-                if (_targetTile.Object != null)
+                if (_targetTile.Object != null && _targetTile.Object.IsDestructible())
                 {
-                    if ((_targetTile.Object.GetType().Equals(typeof(Destructible))) || _targetTile.Object.GetType().IsSubclassOf(typeof(Destructible)))
+
+                    Destructible d = (Destructible)_targetTile.Object;
+
+                    if (d != null && UseTool == null)
                     {
-                        Destructible d = (Destructible)_targetTile.Object;
+                        if (d.Breakable) { UseTool = _pick; }
+                        else if (d.Choppable) { UseTool = _axe; }
 
-                        if (d != null && UseTool == null)
+                        if (UseTool != null && !_busy)
                         {
-                            if (d.Breakable) { UseTool = _pick; }
-                            else if (d.Choppable) { UseTool = _axe; }
-
-                            if (UseTool != null && !_busy)
+                            _busy = true;
+                            if (DecreaseStamina(UseTool.StaminaCost))
                             {
-                                _busy = true;
-                                if (DecreaseStamina(UseTool.StaminaCost))
-                                {
-                                    UseTool.ToolAnimation.IsAnimating = true;
-                                }
-                                else
-                                {
-                                    UseTool = null;
-                                }
+                                UseTool.ToolAnimation.IsAnimating = true;
                             }
-                            rv = true;
+                            else
+                            {
+                                UseTool = null;
+                            }
                         }
+                        rv = true;
                     }
                 }
             }
 
             if(GraphicCursor.HeldItem != null)
             {
-                if (GraphicCursor.HeldItem.Type == Item.ItemType.Container)
+                if (GraphicCursor.HeldItem.IsContainer())
                 {
                     MapManager.PlaceWorldItem((Container)GraphicCursor.HeldItem, mouseLocation.ToVector2());
+                    GraphicCursor.DropItem();
+                }
+
+                if (GraphicCursor.HeldItem.IsProcessor())
+                {
+                    MapManager.PlaceWorldItem((Processor)GraphicCursor.HeldItem, mouseLocation.ToVector2());
                     GraphicCursor.DropItem();
                 }
             }

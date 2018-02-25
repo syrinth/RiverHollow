@@ -372,7 +372,7 @@ namespace RiverHollow.Game_Managers
             d.x = (int)item.Position.X;
             d.y = (int)item.Position.Y;
 
-            if (item.GetType().Equals(typeof(Container)))
+            if (item.IsContainer())
             {
                 d.Items = new List<ItemData>();
                 foreach (Item i in ((Container)item).Inventory)

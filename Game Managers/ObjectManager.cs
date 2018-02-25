@@ -87,6 +87,10 @@ namespace RiverHollow.Game_Managers
                         return new Equipment(id, _itemDataValues);
                     case "Container":
                         return new Container(id, _itemDataValues);
+                    case "Processor":
+                        return new Processor(id, _itemDataValues);
+                    case "Crafter":
+                        return new Crafter(id, _itemDataValues);
                     case "Food":
                         return new Food(id, _itemDataValues, num);
                     case "Map":
@@ -122,13 +126,13 @@ namespace RiverHollow.Game_Managers
 
         public class Recipe
         {
-            private int _item;
+            private int _output;
             private Dictionary<int, int> _requiredItems;
             public Dictionary<int, int> RequiredItems { get => _requiredItems; }
 
             public Recipe(int id, string data)
             {
-                _item = id;
+                _output = id;
                 _requiredItems = new Dictionary<int, int>();
 
                 string[] _recipeDataValues = data.Split('/');
