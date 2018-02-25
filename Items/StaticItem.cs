@@ -146,7 +146,8 @@ namespace RiverHollow.Items
     public class Crafter : Machine
     {
         Dictionary<int, Recipe> _diCrafting;
-        ProcessRecipe _currentlyProcessing;
+        public Dictionary<int, Recipe> CraftList => _diCrafting;
+        Recipe _currentlyMaking;
 
         public Crafter(int id, string[] stringData)
         {
@@ -168,33 +169,25 @@ namespace RiverHollow.Items
 
         public override void Update(GameTime gameTime)
         {
-            if (_currentlyProcessing != null)
+            if (_currentlyMaking != null)
             {
                 _processedTime += gameTime.ElapsedGameTime.TotalSeconds;
-                if (_processedTime >= _currentlyProcessing.ProcessingTime)
+                if (_processedTime >= _currentlyMaking.ProcessingTime)
                 {
                     SoundManager.PlayEffect("126426__cabeeno-rossley__timer-ends-time-up", 0.9f);
-                    _heldItem = ObjectManager.GetItem(_currentlyProcessing.Output);
+                    _heldItem = ObjectManager.GetItem(_currentlyMaking.Output);
                     _processedTime = -1;
-                    _currentlyProcessing = null;
+                    _currentlyMaking = null;
                 }
             }
         }
 
-        public void ProcessHeldItem(Item heldItem)
+        public void ProcessChosenItem(int itemID)
         {
-            //if (_diProcessing.ContainsKey(heldItem.ItemID))
-            //{
-            //    ProcessRecipe p = _diProcessing[heldItem.ItemID];
-            //    if (heldItem.Number >= p.InputNum)
-            //    {
-            //        heldItem.Remove(p.InputNum);
-            //        _currentlyProcessing = p;
-            //    }
-            //}
+            _currentlyMaking = _diCrafting[itemID];
         }
 
-        public bool Processing() { return _currentlyProcessing != null; }
+        public bool Processing() { return _currentlyMaking != null; }
 
         private class ProcessRecipe
         {

@@ -126,19 +126,23 @@ namespace RiverHollow.Game_Managers
 
         public class Recipe
         {
-            private int _output;
+            private int _iProcessingTime;
+            public int ProcessingTime => _iProcessingTime;
+            private int _iOutput;
+            public int Output => _iOutput;
             private Dictionary<int, int> _requiredItems;
             public Dictionary<int, int> RequiredItems { get => _requiredItems; }
 
             public Recipe(int id, string data)
             {
-                _output = id;
+                _iOutput = id;
                 _requiredItems = new Dictionary<int, int>();
 
                 string[] _recipeDataValues = data.Split('/');
-                foreach (string s in _recipeDataValues)
+                _iProcessingTime = int.Parse(_recipeDataValues[0]);
+                for(int i=1; i< _recipeDataValues.Length; i++)
                 {
-                    string[] itemParams = s.Split(' ');
+                    string[] itemParams = _recipeDataValues[i].Split(' ');
                     _requiredItems.Add(int.Parse(itemParams[0]), int.Parse(itemParams[1]));
                 }
             }

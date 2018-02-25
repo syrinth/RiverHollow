@@ -81,10 +81,9 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddNewItemToInventory(4);
             InventoryManager.AddNewItemToInventory(6);
             InventoryManager.AddNewItemToInventory(7);
-            InventoryManager.AddNewItemToInventory(8);
             InventoryManager.AddNewItemToInventory(101);
             InventoryManager.AddNewItemToInventory(200);
-            InventoryManager.AddNewItemToInventory(80, 10);
+            InventoryManager.AddNewItemToInventory(85, 10);
             InventoryManager.AddNewItemToInventory(201);
 
             SetPlayerDefaults();
@@ -283,20 +282,24 @@ namespace RiverHollow.Game_Managers
                         rv = true;
                     }
                 }
-            }
 
-            if(GraphicCursor.HeldItem != null)
-            {
-                if (GraphicCursor.HeldItem.IsContainer())
+                if (GraphicCursor.HeldItem != null)
                 {
-                    MapManager.PlaceWorldItem((Container)GraphicCursor.HeldItem, mouseLocation.ToVector2());
-                    GraphicCursor.DropItem();
-                }
-
-                if (GraphicCursor.HeldItem.IsProcessor())
-                {
-                    MapManager.PlaceWorldItem((Processor)GraphicCursor.HeldItem, mouseLocation.ToVector2());
-                    GraphicCursor.DropItem();
+                    if (GraphicCursor.HeldItem.IsContainer())
+                    {
+                        MapManager.PlaceWorldItem((Container)GraphicCursor.HeldItem, mouseLocation.ToVector2());
+                        GraphicCursor.DropItem();
+                    }
+                    else if (GraphicCursor.HeldItem.IsProcessor())
+                    {
+                        MapManager.PlaceWorldItem((Processor)GraphicCursor.HeldItem, mouseLocation.ToVector2());
+                        GraphicCursor.DropItem();
+                    }
+                    else if (GraphicCursor.HeldItem.IsCrafter())
+                    {
+                        MapManager.PlaceWorldItem((Crafter)GraphicCursor.HeldItem, mouseLocation.ToVector2());
+                        GraphicCursor.DropItem();
+                    }
                 }
             }
 

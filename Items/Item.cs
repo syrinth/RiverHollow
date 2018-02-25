@@ -29,7 +29,7 @@ namespace RiverHollow.Items
         protected Vector2 _position;
         public Vector2 Position { get => _position; set => _position = value; }
 
-        public virtual Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height); }
+        public virtual Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, 32, 32); }
         public Rectangle SourceRectangle { get => new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, 32, 32); }
 
         protected bool _onTheMap;
@@ -191,6 +191,7 @@ namespace RiverHollow.Items
         public bool IsFood() { return _itemType == ItemType.Food; }
         public bool IsContainer() { return _itemType == ItemType.Container; }
         public bool IsProcessor() { return _itemType == ItemType.Processor; }
+        public bool IsCrafter() { return _itemType == ItemType.Crafter; }
 
         private class Parabola
         {

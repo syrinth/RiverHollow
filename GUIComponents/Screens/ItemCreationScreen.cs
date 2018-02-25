@@ -7,11 +7,13 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.ObjectManager;
+using RiverHollow.Items;
 
 namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
     class ItemCreationScreen : GUIScreen
     {
+        Crafter _craftMachine;
         private Inventory _inventory;
         private GUIWindow _creationWindow;
         protected GUIItemBox[,] _displayList;
@@ -21,11 +23,28 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
 
         public ItemCreationScreen()
         {
+            Setup(ObjectManager.DictCrafting);
+
+            Controls.Add(_creationWindow);
+            Controls.Add(_inventory);
+        }
+
+        public ItemCreationScreen(Crafter crafter)
+        {
+            _craftMachine = crafter;
+            Setup(crafter.CraftList);
+
+            Controls.Add(_creationWindow);
+            Controls.Add(_inventory);
+        }
+
+        public void Setup(Dictionary<int, Recipe> recipes)
+        {
             Vector2 centerPoint = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
             _columns = 4;
-            _rows = (_columns > 0) ? Math.Min(1, PlayerManager.CanMake.Count / _columns) : 1;
-            if(_rows == 0) { _rows = 1; }
-            _displayList = new GUIItemBox[_rows, _columns];
+            _rows = (_columns > 0) ? Math.Max(1, recipes.Count / _columns) : 1;
+            if (_rows == 0) { _rows = 1; }
+            _displayList = new GUIItemBox[_columns, _rows];
             _creationWindow = new GUIWindow(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), GUIWindow.RedDialog, GUIWindow.RedDialogEdge, 96, 96);
             _inventory = new Inventory(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), 4, InventoryManager.maxItemColumns, 32);
 
@@ -37,10 +56,13 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             _inventory.SetPosition(centerPoint - new Vector2(mainWidthHeight.X / 2, 0));
 
             int i = 0; int j = 0;
-            foreach (int id in ObjectManager.DictCrafting.Keys)
+            foreach (int id in recipes.Keys)
             {
-                if (PlayerManager.CanMake.Contains(id)){
-                    Rectangle displayBox = new Rectangle((int)_creationWindow.Position.X + 32 + 3, (int)_creationWindow.Position.Y + 32 + 3, 32, 32);
+                //Ensure that either the creation of the item is enabled by a crafter or that the player knows the recipe themselves
+                if (_craftMachine != null || PlayerManager.CanMake.Contains(id))
+                {
+                    //MAR
+                    Rectangle displayBox = new Rectangle((int)_creationWindow.Position.X + (35 * (i+1)), (int)_creationWindow.Position.Y + (35 * (j + 1)), 32, 32);
                     _displayList[i, j] = new GUIItemBox(displayBox.Location.ToVector2(), new Rectangle(288, 32, 32, 32), displayBox.Width, displayBox.Height, @"Textures\Dialog", ObjectManager.GetItem(id));
                     i++;
                     if (i == _columns)
@@ -50,14 +72,12 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                         displayBox.X = (int)_creationWindow.Position.X + 32 + 3;
                         displayBox.Y += 32 + 3;
                     }
-                    else {
+                    else
+                    {
                         displayBox.X += 32 + 3;
                     }
                 }
             }
-
-            Controls.Add(_creationWindow);
-            Controls.Add(_inventory);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -83,9 +103,13 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                         {
                             foreach (KeyValuePair<int, int> kvp in ObjectManager.DictCrafting[gIB.Item.ItemID].RequiredItems)
                             {
-
                                 InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
-                                InventoryManager.AddNewItemToInventory(gIB.Item.ItemID);
+                                if (_craftMachine == null) {
+                                    InventoryManager.AddNewItemToInventory(gIB.Item.ItemID); }
+                                else {
+                                    _craftMachine.ProcessChosenItem(gIB.Item.ItemID);
+                                    GameManager.BackToMain();
+                                }
                             }
                         }
                     }

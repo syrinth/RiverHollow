@@ -198,6 +198,11 @@ namespace RiverHollow.Tile_Engine
                     Processor p = (Processor)s;
                     p.Update(gameTime);
                 }
+                else if (s.IsCrafter())
+                {
+                    Crafter c = (Crafter)s;
+                    c.Update(gameTime);
+                }
             }
 
             foreach (WorldCharacter c in ToRemove)
@@ -559,6 +564,12 @@ namespace RiverHollow.Tile_Engine
                         if (p.ProcessingFinished()) { p.TakeFinishedItem(); }
                         else if(GraphicCursor.HeldItem != null && !p.Processing()) { p.ProcessHeldItem(GraphicCursor.HeldItem); }
                     }
+                    else if (s.IsCrafter())
+                    {
+                        Crafter c = (Crafter)s;
+                        if (c.ProcessingFinished()) { c.TakeFinishedItem(); }
+                        else if (!c.Processing()) { GUIManager.LoadCrafterScreen(GUIManager.Screens.ItemCreation, c); }
+                    }
                     break;
                 }
             }
@@ -623,7 +634,7 @@ namespace RiverHollow.Tile_Engine
                     else if (cType.Equals(typeof(NPC)))
                     {
                         NPC n = (NPC)c;
-                        if (InventoryManager.CurrentItem != null && 
+                        if (InventoryManager.CurrentItem != null &&
                             n.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(n.CharCenter) &&
                             InventoryManager.CurrentItem.Type != Item.ItemType.Tool &&
                             InventoryManager.CurrentItem.Type != Item.ItemType.Equipment)
@@ -633,10 +644,30 @@ namespace RiverHollow.Tile_Engine
                         }
                     }
                 }
+                foreach (StaticItem s in _staticItemList)
+                {
+                    if (s.CollisionBox.Contains(mouseLocation))
+                    {
+                        if (s.IsProcessor())
+                        {
+                            Processor p = (Processor)s;
+                            if (p.ProcessingFinished()) { p.TakeFinishedItem(); }
+                            else if (GraphicCursor.HeldItem != null && !p.Processing()) { p.ProcessHeldItem(GraphicCursor.HeldItem); }
+                        }
+                        else if (s.IsCrafter())
+                        {
+                            Crafter c = (Crafter)s;
+                            if (c.ProcessingFinished()) { c.TakeFinishedItem(); }
+                            else if (!c.Processing()) { GUIManager.LoadCrafterScreen(GUIManager.Screens.ItemCreation, c); }
+                        }
+                        break;
+                    }
+                }
             }
 
             return rv;
         }
+
         public bool ProcessHover(Point mouseLocation)
         {
             bool rv = false;

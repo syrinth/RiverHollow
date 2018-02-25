@@ -1,14 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key:FinalItemNum, Value:itemNum amount/itemNum amount-->
+    <!--Key:FinalItemNum, Value:processingTime/itemID amount/itemNum amount-->
+    <Item>
+      <Key>5</Key>
+      <Value>0/85 1</Value>
+    </Item>
     <Item>
       <Key>6</Key>
-      <Value>2 3</Value>
+      <Value>20/2 3</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>85 2</Value>
+      <Value>40/85 2</Value>
     </Item>
   </Asset>
 </XnaContent>

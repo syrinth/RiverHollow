@@ -44,11 +44,11 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>Equipment/Ultima Weapon/Swing this fucker/0 3/1000/Weapon/20/20/20/20/20</Value>
+      <Value>Equipment/Ultima Weapon/Swing this fucker/2 0/1000/Weapon/20/20/20/20/20</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>Equipment/Armor/Best armor ever/0 2/1000/Armor/0/20/0/0/0</Value>
+      <Value>Equipment/Armor/Best armor ever/1 0/1000/Armor/0/20/0/0/0</Value>
     </Item>
     <!--<80-89> Ores and Bars-->
     <Item>
@@ -103,7 +103,7 @@
     </Item>
     <Item>
       <Key>201</Key>
-      <Value>Crafter/Anvil/Makes Shit/4 0/3000/9</Value>
+      <Value>Crafter/Anvil/Makes Shit/4 0/3000/9 5</Value>
     </Item>
   </Asset>
 </XnaContent>

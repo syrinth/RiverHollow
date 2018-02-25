@@ -8,6 +8,7 @@ using RiverHollow.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using static RiverHollow.Game_Managers.ObjectManager;
 
 namespace RiverHollow.Game_Managers
 {
@@ -126,6 +127,12 @@ namespace RiverHollow.Game_Managers
                     _currentGUIScreen = null;
                     return;
             }
+        }
+
+        public static void LoadCrafterScreen(Screens newScreen, Crafter crafter)
+        {
+            _currentScreen = newScreen;
+            _currentGUIScreen = new ItemCreationScreen(crafter);
         }
 
         public static void AddTextSelection(Food f, string text)
