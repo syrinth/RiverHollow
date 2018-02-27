@@ -34,13 +34,13 @@ namespace RiverHollow.Characters.CombatStuff
         #endregion
         public CombatAdventurer(WorldAdventurer w) : this()
         {
-            _name = w.Name;
+            _sName = w.Name;
             _world = w;
         }
 
         public CombatAdventurer(string name) : this()
         {
-            _name = name;
+            _sName = name;
         }
 
         public CombatAdventurer() : base()

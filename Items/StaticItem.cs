@@ -62,6 +62,34 @@ namespace RiverHollow.Items
 
             return rv;
         }
+
+        internal ContainerData SaveData()
+        {
+            ContainerData containerData = new ContainerData
+            {
+                staticItemID = this.ItemID,
+                x = (int)this.Position.X,
+                y = (int)this.Position.Y
+            };
+
+
+            containerData.Items = new List<ItemData>();
+            foreach (Item i in (this.Inventory))
+            {
+                ItemData itemData = new ItemData();
+                if (i != null)
+                {
+                    itemData.itemID = i.ItemID;
+                    itemData.num = i.Number;
+                }
+                else
+                {
+                    itemData.itemID = -1;
+                }
+                containerData.Items.Add(itemData);
+            }
+            return containerData;
+        }
     }
 
     public class Machine : StaticItem
@@ -69,8 +97,8 @@ namespace RiverHollow.Items
         protected string _sMapName;
         
         protected Item _heldItem;
-        protected double _processedTime;
-        public double ProcessedTime => _processedTime;
+        protected double _dProcessedTime;
+        public double ProcessedTime => _dProcessedTime;
 
         public void LoadContent()
         {
@@ -111,7 +139,7 @@ namespace RiverHollow.Items
         public Processor(int id, string[] stringData)
         {
             _diProcessing = new Dictionary<int, ProcessRecipe>();
-            _processedTime = -1;
+            _dProcessedTime = -1;
             _heldItem = null;
             int i = ImportBasics(stringData, id, 1);
 
@@ -132,12 +160,12 @@ namespace RiverHollow.Items
             if (_currentlyProcessing != null)
             {
                 _sprite.Update(gameTime);
-                _processedTime += gameTime.ElapsedGameTime.TotalSeconds;
-                if (_processedTime >= _currentlyProcessing.ProcessingTime)
+                _dProcessedTime += gameTime.ElapsedGameTime.TotalSeconds;
+                if (_dProcessedTime >= _currentlyProcessing.ProcessingTime)
                 {
                     SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition);
                     _heldItem = ObjectManager.GetItem(_currentlyProcessing.Output);
-                    _processedTime = -1;
+                    _dProcessedTime = -1;
                     _currentlyProcessing = null;
                     _sprite.SetCurrentAnimation("Idle");
                 }
@@ -177,7 +205,7 @@ namespace RiverHollow.Items
         {
             _itemID = mac.staticItemID;
             MapPosition = new Vector2(mac.x, mac.y);
-            _processedTime = mac.processedTime;
+            _dProcessedTime = mac.processedTime;
             _currentlyProcessing = (mac.currentItemID == -1) ? null : _diProcessing[mac.currentItemID];
             _heldItem = ObjectManager.GetItem(mac.heldItemID);
 
@@ -225,7 +253,7 @@ namespace RiverHollow.Items
         public Crafter(int id, string[] stringData) : base()
         {
             _diCrafting = new Dictionary<int, Recipe>();
-            _processedTime = -1;
+            _dProcessedTime = -1;
             _heldItem = null;
 
             int i = ImportBasics(stringData, id, 1);
@@ -246,12 +274,12 @@ namespace RiverHollow.Items
             if (_currentlyMaking != null)
             {
                 _sprite.Update(gameTime);
-                _processedTime += gameTime.ElapsedGameTime.TotalSeconds;
-                if (_processedTime >= _currentlyMaking.ProcessingTime)
+                _dProcessedTime += gameTime.ElapsedGameTime.TotalSeconds;
+                if (_dProcessedTime >= _currentlyMaking.ProcessingTime)
                 {
                     SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition);
                     _heldItem = ObjectManager.GetItem(_currentlyMaking.Output);
-                    _processedTime = -1;
+                    _dProcessedTime = -1;
                     _currentlyMaking = null;
                     _sprite.SetCurrentAnimation("Idle");
                 }
@@ -280,11 +308,11 @@ namespace RiverHollow.Items
 
             return m;
         }
-        public override void LoadData(GameManager.MachineData mac)
+        public override void LoadData(MachineData mac)
         {
             _itemID = mac.staticItemID;
             MapPosition = new Vector2(mac.x, mac.y);
-            _processedTime = mac.processedTime;
+            _dProcessedTime = mac.processedTime;
             _currentlyMaking = (mac.currentItemID == -1) ? null : _diCrafting[mac.currentItemID];
             _heldItem = ObjectManager.GetItem(mac.heldItemID);
 

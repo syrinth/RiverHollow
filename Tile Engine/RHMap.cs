@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using RiverHollow.Misc;
 using static RiverHollow.RiverHollow;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Tile_Engine
 {
@@ -321,6 +322,7 @@ namespace RiverHollow.Tile_Engine
                 spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)t.Position.X, (int)t.Position.Y, 32, 32), new Rectangle(288, 128, 32, 32) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, new Vector2(0, 0), SpriteEffects.None, 99999);
             }
         }
+
         public void DrawUpper(SpriteBatch spriteBatch)
         {
             SetLayerVisibility(true);
@@ -556,7 +558,7 @@ namespace RiverHollow.Tile_Engine
                         if (IsDungeon && DungeonManager.IsEndChest((Container)s))
                         {
                             Staircase stairs = (Staircase)ObjectManager.GetWorldObject(3, new Vector2(0, 0));
-                            stairs.SetExit("NearWilds");
+                            stairs.SetExit(MapManager.HomeMap);
                             AddWorldObject(stairs, true);
                         }
                         GUIManager.LoadContainerScreen((Container)s);
@@ -571,7 +573,7 @@ namespace RiverHollow.Tile_Engine
                     {
                         Crafter c = (Crafter)s;
                         if (c.ProcessingFinished()) { c.TakeFinishedItem(); }
-                        else if (!c.Processing()) { GUIManager.LoadCrafterScreen(GUIManager.Screens.ItemCreation, c); }
+                        else if (!c.Processing()) { GUIManager.LoadCrafterScreen( c); }
                     }
                 }
 
@@ -657,7 +659,7 @@ namespace RiverHollow.Tile_Engine
                         {
                             Crafter c = (Crafter)s;
                             if (c.ProcessingFinished()) { c.TakeFinishedItem(); }
-                            else if (!c.Processing()) { GUIManager.LoadCrafterScreen(GUIManager.Screens.ItemCreation, c); }
+                            else if (!c.Processing()) { GUIManager.LoadCrafterScreen(c); }
                         }
                         break;
                     }
@@ -1017,14 +1019,6 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
-        public void LoadMapData(List<WorldObject> wList)
-        {
-            foreach(WorldObject w in wList)
-            {
-                _worldObjectList.Add(w);
-            }
-        }
-
         #endregion
         
         public int GetMapWidth()
@@ -1035,6 +1029,63 @@ namespace RiverHollow.Tile_Engine
         public int GetMapHeight()
         {
             return MapHeightTiles * _tileSize * (int)Scale;
+        }
+
+        internal MapData SaveData()
+        {
+            MapData mapData = new MapData
+            {
+                mapName = this.Name,
+                worldObjects = new List<WorldObjectData>(),
+                containers = new List<ContainerData>(),
+                machines = new List<MachineData>()
+            };
+
+            if (!this.IsBuilding)
+            {
+                foreach (WorldObject w in this.WorldObjects)
+                {
+                    WorldObjectData d = new WorldObjectData
+                    {
+                        worldObjectID = w.ID,
+                        x = (int)w.Position.X,
+                        y = (int)w.Position.Y
+                    };
+                    mapData.worldObjects.Add(d);
+                }
+                foreach (StaticItem item in this.StaticItems)
+                {
+                    if (item.IsContainer())
+                    {
+                        mapData.containers.Add(((Container)item).SaveData());
+                    }
+
+                    if (item.IsCrafter() || item.IsProcessor())
+                    {
+                        mapData.machines.Add(((Machine)item).SaveData());
+                    }
+                }
+            }
+
+            return mapData;
+        }
+        internal void LoadData(MapData data)
+        {
+            foreach (WorldObjectData w in data.worldObjects)
+            {
+                this.AddWorldObject(ObjectManager.GetWorldObject(w.worldObjectID, new Vector2(w.x, w.y)), true);
+            }
+            foreach (ContainerData c in data.containers)
+            {
+                this.PlaceStaticItem(LoadStaticItemData(c), new Vector2(c.x, c.y));
+            }
+
+            foreach (MachineData mac in data.machines)
+            {
+                Machine it = (Machine)ObjectManager.GetItem(mac.staticItemID);
+                it.LoadData(mac);
+                this.PlaceStaticItem(it, it.MapPosition);
+            }
         }
     }
 
@@ -1210,5 +1261,6 @@ namespace RiverHollow.Tile_Engine
             _obj = null;
             _staticItem = null;
         }
+
     }
 }

@@ -76,7 +76,7 @@ namespace RiverHollow.Game_Managers
                     }
                 }
 
-                _backwardsMapKey.Add(m.Name, new KeyValuePair<string, string>(directionKey, (i == 0) ? "NearWilds" : _maps[i-1].Name));
+                _backwardsMapKey.Add(m.Name, new KeyValuePair<string, string>(directionKey, (i == 0) ? MapManager.HomeMap : _maps[i-1].Name));
 
                 if (i == 0)
                 {

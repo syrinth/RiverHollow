@@ -73,7 +73,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                         GraphicCursor.PickUpWorker(wB._w.AdventurerID);
                         GameManager.Scry(true);
                         Camera.UnsetObserver();
-                        MapManager.ViewMap("NearWilds");
+                        MapManager.ViewMap(MapManager.HomeMap);
                         rv = true;
                     }
                 }

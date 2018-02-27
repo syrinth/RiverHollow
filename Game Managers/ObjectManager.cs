@@ -44,17 +44,6 @@ namespace RiverHollow.Game_Managers
             return null;     
         }
 
-        public static WorldAdventurer GetWorker(int id, string name, int mood)
-        {
-            if (_dictWorkers.ContainsKey(id))
-            {
-                string stringData = _dictWorkers[id];
-                string[] stringDataValues = stringData.Split('/');
-                return new WorldAdventurer(stringDataValues, id, name, mood);
-            }
-            return null;
-        }
-
         public static WorldAdventurer GetWorker(int id)
         {
             if (_dictWorkers.ContainsKey(id))

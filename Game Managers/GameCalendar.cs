@@ -154,6 +154,10 @@ namespace RiverHollow
         public static void RollOver()
         {
             _dayOfWeek++;
+            if(_dayOfWeek == 7)
+            {
+                _dayOfWeek = 0;
+            }
         }
 
         public static void LoadCalendar(GameManager.CalendarData d)

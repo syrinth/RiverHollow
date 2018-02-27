@@ -26,7 +26,7 @@ namespace RiverHollow
             _id = id;
 
             int i = 0;
-            _name = stringData[i++];
+            _sName = stringData[i++];
             _textureName = @"Textures\" + stringData[i++];
             _xp = int.Parse(stringData[i++]);
             _statDmg = int.Parse(stringData[i++]);

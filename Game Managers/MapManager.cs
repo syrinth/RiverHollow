@@ -13,6 +13,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class MapManager
     {
+        public const string HomeMap = "mapNearWilds";
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
 
@@ -29,7 +30,7 @@ namespace RiverHollow.Game_Managers
             foreach (string s in Directory.GetFiles(_sMapFolder)) { AddMap(s, Content, GraphicsDevice); }
             foreach (string s in Directory.GetFiles(_sDungeonMapFolder)) { AddMap(s, Content, GraphicsDevice); }
 
-            _currentMap = _tileMaps[@"mapNearWilds"];
+            _currentMap = _tileMaps[MapManager.HomeMap];
         }
 
         public static void AddMap(string mapToAdd, ContentManager Content, GraphicsDevice GraphicsDevice)
@@ -124,14 +125,14 @@ namespace RiverHollow.Game_Managers
             Rectangle rectEntrance = Rectangle.Empty;
             PlayerManager._inBuilding = b.ID.ToString();
 
-            foreach (string s in _tileMaps[b._name].DictionaryEntrance.Keys)
+            foreach (string s in _tileMaps[b.MapName].DictionaryEntrance.Keys)
             {
                 if (s.Equals(_currentMap.Name))
                 {
-                    rectEntrance = _tileMaps[b._name].DictionaryEntrance[s];
+                    rectEntrance = _tileMaps[b.MapName].DictionaryEntrance[s];
                 }
             }
-            _currentMap = _tileMaps[b._name];
+            _currentMap = _tileMaps[b.MapName];
             _currentMap.LoadBuilding(b);
 
             PlayerManager.CurrentMap = _currentMap.Name;
@@ -150,19 +151,19 @@ namespace RiverHollow.Game_Managers
 
         public static void PopulateMaps(bool loaded)
         {
-            int mapWidth = _tileMaps[@"mapNearWilds"].MapWidthTiles;
-            int mapHeight = _tileMaps[@"mapNearWilds"].MapHeightTiles;
+            int mapWidth = _tileMaps[MapManager.HomeMap].MapWidthTiles;
+            int mapHeight = _tileMaps[MapManager.HomeMap].MapHeightTiles;
             RHRandom r = new RHRandom();
             //LoadMap1
             if (!loaded)
             {
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[@"mapNearWilds"].AddWorldObject(ObjectManager.GetWorldObject(0, new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize)), true);
+                    _tileMaps[MapManager.HomeMap].AddWorldObject(ObjectManager.GetWorldObject(0, new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize)), true);
                 }
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[@"mapNearWilds"].AddWorldObject(ObjectManager.GetWorldObject(2, new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize)), true);
+                    _tileMaps[MapManager.HomeMap].AddWorldObject(ObjectManager.GetWorldObject(2, new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize)), true);
                 }
             }
 

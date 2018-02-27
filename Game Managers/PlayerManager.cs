@@ -68,6 +68,7 @@ namespace RiverHollow.Game_Managers
             World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
 
             SetPlayerDefaults();
+            InventoryManager.AddNewItemToInventory(85, 10);
         }
         public static void NewPlayer()
         {
@@ -110,6 +111,7 @@ namespace RiverHollow.Game_Managers
             if (GameManager.InCombat()) { UpdateCombat(gameTime); }
             else { UpdateWorld(gameTime); }
         }
+
         public static void UpdateWorld(GameTime gameTime)
         {
             Vector2 moveVector = Vector2.Zero;

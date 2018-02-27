@@ -6,6 +6,10 @@ using RiverHollow.Misc;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters.CombatStuff;
 using RiverHollow.SpriteAnimations;
+using System.Collections.Generic;
+using static RiverHollow.Game_Managers.ObjectManager;
+using System;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters.NPCs
 {
@@ -13,19 +17,26 @@ namespace RiverHollow.Characters.NPCs
     public class WorldAdventurer : NPC
     {
         #region Properties
-        protected int _id;
-        public int AdventurerID { get => _id; }
-        protected string _adventurerType;
+        protected int _iAdventurerID;
+        public int AdventurerID { get => _iAdventurerID; }
+        protected string _sAdventurerType;
         private WorkerBuilding _building;
-        protected int _dailyFoodReq;
-        protected int _currFood;
-        protected int _dailyItemID;
+        protected int _iDailyFoodReq;
+        protected int _iCurrFood;
+        protected int _iDailyItemID;
         protected Item _heldItem;
-        protected int _mood;
+        protected int _iMood;
         public bool DrawIt;
         public bool Busy;
-        public int Mood { get => _mood; }
-        protected string _texture;
+        public int Mood { get => _iMood; }
+        protected string _sTexture;
+
+        protected double _dProcessedTime;
+        public double ProcessedTime => _dProcessedTime;
+
+        Dictionary<int, Recipe> _diCrafting;
+        public Dictionary<int, Recipe> CraftList => _diCrafting;
+        Recipe _currentlyMaking;
 
         private CombatAdventurer _c;
         #endregion
@@ -33,28 +44,20 @@ namespace RiverHollow.Characters.NPCs
         public WorldAdventurer(string[] stringData, int id)
         {
             ImportBasics(stringData, id);
-            _texture = @"Textures\" + _adventurerType;
-            LoadContent(_texture);
-            _currFood = 0;
+            _sTexture = @"Textures\" + _sAdventurerType;
+            LoadContent(_sTexture);
+            _iCurrFood = 0;
             _heldItem = null;
-            _mood = 0;
+            _iMood = 0;
             DrawIt = true;
             Busy = false;
 
             SetCombat();
         }
 
-        public WorldAdventurer(string[] stringData, int id, string name, int mood) : this(stringData, id)
-        {
-            _name = name;
-            _mood = mood;
-            SetCombat();
-        }
-
         public void LoadContent(string texture)
         {
             _sprite = new AnimatedSprite(GameContentManager.GetTexture(texture));
-           // int xCrawl = 0;
             _sprite.AddAnimation("Idle", 16, 32, 1, 0.5f, 1 /*+ (xCrawl * 16)*/, 0);
             _sprite.SetCurrentAnimation("Idle");
             _sprite.SetScale(2);
@@ -62,14 +65,24 @@ namespace RiverHollow.Characters.NPCs
 
         protected int ImportBasics(string[] stringData, int id)
         {
-            _id = id;
+            _diCrafting = new Dictionary<int, Recipe>();
+
+            _iAdventurerID = id;
             int i = 0;
-            _adventurerType = stringData[i++];
-            _dailyItemID = int.Parse(stringData[i++]);
-            _dailyFoodReq = int.Parse(stringData[i++]);
+            _sAdventurerType = stringData[i++];
+            _iDailyItemID = int.Parse(stringData[i++]);
+            _iDailyFoodReq = int.Parse(stringData[i++]);
             int portraitNum = int.Parse(stringData[i++]);
             _portraitRect = new Rectangle(0, portraitNum*192, 160, 192);
             _portrait = GameContentManager.GetTexture(@"Textures\portraits");
+            if (stringData.Length >= i)
+            {
+                string[] crafting = stringData[i++].Split(' ');
+                foreach (string s in crafting)
+                {
+                    _diCrafting.Add(int.Parse(s), ObjectManager.DictCrafting[int.Parse(s)]);
+                }
+            }
 
             return i;
         }
@@ -79,6 +92,25 @@ namespace RiverHollow.Characters.NPCs
             _c = new CombatAdventurer(this);
             _c.SetClass(CharacterManager.GetClassByIndex(1));
             _c.LoadContent(@"Textures\Wizard");
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            if (_currentlyMaking != null)
+            {
+                _sprite.Update(gameTime);
+                _dProcessedTime += gameTime.ElapsedGameTime.TotalSeconds;
+                int modifiedTime = (int)(_currentlyMaking.ProcessingTime * (0.5 + 0.5*((100 - Mood) / 100)));   //Workers work faster the happier they are.
+                if (_dProcessedTime >= modifiedTime)        //NPCs
+                {
+                    //SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition);
+                    _heldItem = ObjectManager.GetItem(_currentlyMaking.Output);
+                    _dProcessedTime = -1;
+                    _currentlyMaking = null;
+                    _sprite.SetCurrentAnimation("Idle");
+                }
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
@@ -115,10 +147,14 @@ namespace RiverHollow.Characters.NPCs
             if (entry.Equals("Talk"))
             {
                 GraphicCursor._currentType = GraphicCursor.CursorType.Normal;
-                _mood += 1;
+                _iMood += 1;
 
                 RHRandom r = new RHRandom();
-                rv = GameContentManager.GetDialogue(_adventurerType + r.Next(1, 2));
+                rv = GameContentManager.GetDialogue(_sAdventurerType + r.Next(1, 2));
+            }
+            else if (entry.Equals("Craft"))
+            {
+                GUIManager.LoadCrafterScreen(null, this);
             }
             else if (entry.Equals("Party"))
             {
@@ -128,6 +164,12 @@ namespace RiverHollow.Characters.NPCs
                 rv = "Of course!";
             }
             return rv;
+        }
+
+        public void ProcessChosenItem(int itemID)
+        {
+            _currentlyMaking = _diCrafting[itemID];
+            _sprite.SetCurrentAnimation("Working");
         }
 
         public int TakeItem()
@@ -149,10 +191,6 @@ namespace RiverHollow.Characters.NPCs
             return -1;
         }
 
-        public void SetMood(int val)
-        {
-            _mood = val;
-        }
         public void SetBuilding(WorkerBuilding b)
         {
             _building = b;
@@ -169,21 +207,47 @@ namespace RiverHollow.Characters.NPCs
 
         public void MakeDailyItem()
         {
-            if (_dailyItemID != -1)
+            if (_iDailyItemID != -1)
             {
-                InventoryManager.AddNewItemToInventory(_dailyItemID, _building.BuildingChest);
+                InventoryManager.AddNewItemToInventory(_iDailyItemID, _building.BuildingChest);
             }
         }
 
         public string GetName()
         {
-            return _name;
+            return _sName;
         }
 
         public override void SetName(string name)
         {
-            _name = name;
+            _sName = name;
             _c.SetName(name);
+        }
+
+        public WorkerData SaveData()
+        {
+            WorkerData workerData = new WorkerData
+            {
+                workerID = this.AdventurerID,
+                mood = this.Mood,
+                name = this.Name,
+                processedTime = this.ProcessedTime,
+                currentItemID = (this._currentlyMaking == null) ? -1 : this._currentlyMaking.Output,
+                heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID
+            };
+
+            return workerData;
+        }
+        public void LoadData(WorkerData data)
+        {
+            _iAdventurerID = data.workerID;
+            _iMood = data.mood;
+            _sName = data.name;
+            _dProcessedTime = data.processedTime;
+            _currentlyMaking = (data.currentItemID == -1) ? null : _diCrafting[data.currentItemID];
+            _heldItem = ObjectManager.GetItem(data.heldItemID);
+
+            if (_currentlyMaking != null) { _sprite.SetCurrentAnimation("Working"); }
         }
     }
 }

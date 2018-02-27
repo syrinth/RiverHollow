@@ -8,8 +8,8 @@ namespace RiverHollow.Characters
 {
     public class Character
     {
-        protected string _name;
-        public string Name { get => _name; }
+        protected string _sName;
+        public string Name { get => _sName; }
 
         protected AnimatedSprite _sprite;
         public AnimatedSprite Sprite { get => _sprite; }
@@ -61,7 +61,7 @@ namespace RiverHollow.Characters
 
         public virtual void SetName(string text)
         {
-            _name = text;
+            _sName = text;
         }
 
         public void PlayAnimation(string animation)

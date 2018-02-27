@@ -25,6 +25,7 @@ namespace RiverHollow.Buildings
         public int BaseHeight { get => _baseHeight * Size; } //In Pixels
         public string _name;
         public string Name { get => _name; }
+        public string MapName { get => "map"+_name.Replace(" ", ""); }
 
         public override Rectangle CollisionBox { get => GenerateCollisionBox(); }
         public Rectangle SelectionBox { get => new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height); }

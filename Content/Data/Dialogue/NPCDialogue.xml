@@ -4,7 +4,7 @@
     <!--Key:NPCType#, Value:Text-->
     <Item>
       <Key>AdventurerTree</Key>
-      <Value>...[Talk:Talk|Join Party:Party]</Value>
+      <Value>...[Talk:Talk|Craft Items:Craft|Join Party:Party]</Value>
     </Item>
     <Item>
       <Key>Journal</Key>

@@ -129,10 +129,11 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void LoadCrafterScreen(Screens newScreen, Crafter crafter)
+        public static void LoadCrafterScreen(Crafter crafter = null, WorldAdventurer adventurer = null)
         {
-            _currentScreen = newScreen;
-            _currentGUIScreen = new ItemCreationScreen(crafter);
+            _currentScreen = Screens.ItemCreation;
+            if (crafter != null ) { _currentGUIScreen = new ItemCreationScreen(crafter); }
+            else if (adventurer != null) { _currentGUIScreen = new ItemCreationScreen(adventurer); }
         }
 
         public static void AddTextSelection(Food f, string text)

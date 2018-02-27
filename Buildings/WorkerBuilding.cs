@@ -19,8 +19,8 @@ namespace RiverHollow
 
         public bool _selected = false;
 
-        protected int _personalId;
-        public int PersonalID { get => _personalId; }
+        protected int _iPersonalID;
+        public int PersonalID { get => _iPersonalID; }
 
         #region Data Lists
         protected const int MaxWorkers = 9;
@@ -40,7 +40,7 @@ namespace RiverHollow
         public WorkerBuilding(string[] stringData, int id){
             int i = ImportBasics(stringData, id);
             _buildingWorker = (WorkerType)Enum.Parse(typeof(WorkerType), stringData[i++]);
-            _personalId = GetNewBuildingID();
+            _iPersonalID = GetNewBuildingID();
             _workers = new List<WorldAdventurer>();
             _staticItemList = new List<StaticItem>();
 
@@ -121,16 +121,56 @@ namespace RiverHollow
             spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, _texture.Width, _texture.Height), null, _selected ? Color.Green : Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y+Texture.Height);
         }
 
-        public void AddBuildingDetails(BuildingData data)
+        public BuildingData SaveData()
+        {
+            BuildingData buildingData = new BuildingData
+            {
+                buildingID = this.ID,
+                positionX = (int)this.Position.X,
+                positionY = (int)this.Position.Y,
+                id = this.PersonalID,
+
+                Workers = new List<WorkerData>()
+            };
+
+            foreach (WorldAdventurer w in this.Workers)
+            {
+                buildingData.Workers.Add(w.SaveData());
+            }
+
+            buildingData.pantry = this.Pantry.SaveData();
+            buildingData.buildingChest = this.BuildingChest.SaveData();
+
+            buildingData.staticItems = new List<ContainerData>();
+            foreach (StaticItem item in this.StaticItems)
+            {
+                if (item.IsContainer())
+                {
+                    buildingData.staticItems.Add(((Container)item).SaveData());
+                }
+            }
+
+            return buildingData;
+        }
+        public void LoadData(BuildingData data)
         {
             SetCoordinates(new Vector2(data.positionX, data.positionY));
-            _personalId = data.id;
+            _iPersonalID = data.id;
 
             RHRandom r = new RHRandom();
             foreach (WorkerData wData in data.Workers)
             {
-                WorldAdventurer w = ObjectManager.GetWorker(wData.workerID, wData.name, wData.mood);
+                WorldAdventurer w = ObjectManager.GetWorker(wData.workerID);
+                w.LoadData(wData);
                 AddWorker(w, r);
+            }
+
+            this.Pantry = (Container)LoadStaticItemData(data.pantry);
+            this.BuildingChest = (Container)LoadStaticItemData(data.buildingChest);
+
+            foreach (ContainerData s in data.staticItems)
+            {
+                this.StaticItems.Add(LoadStaticItemData(s));
             }
         }
     }

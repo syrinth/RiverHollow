@@ -49,7 +49,7 @@ namespace RiverHollow.Characters
         public NPC(NPC n)
         {
             _index = n.ID;
-            _name = n.Name;
+            _sName = n.Name;
             _dialogueDictionary = n._dialogueDictionary;
             _portrait = n.Portrait;
             _portraitRect = n._portraitRect;
@@ -76,7 +76,7 @@ namespace RiverHollow.Characters
         {
             int i = 0;
             _npcType = (NPCType)Enum.Parse(typeof(NPCType), stringData[i++]);
-            _name = stringData[i++];
+            _sName = stringData[i++];
             _portraitRect = new Rectangle(0, int.Parse(stringData[i++]) * 192, PortraitWidth, PortraitHeight);
             CurrentMapName = stringData[i++];
             _homeMap = CurrentMapName;
@@ -345,7 +345,7 @@ namespace RiverHollow.Characters
             {
                 if (int.TryParse(sections[i], out int val))
                 {
-                    if (val == 0) { sections[i] = _name; }
+                    if (val == 0) { sections[i] = _sName; }
                     else { sections[i] = CharacterManager.GetCharacterNameByIndex(val); }
                 }
                 else if (sections[i] == "^") { sections[i] = PlayerManager.Name; }
