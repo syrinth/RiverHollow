@@ -63,7 +63,7 @@ namespace RiverHollow.Misc
         {
             bool rv = false;
 
-            if (_questItem != null && _questItem.ItemID == ((Item)o).ItemID)
+            if (_questItem != null && _questItem.ItemID == i.ItemID)
             {
                 rv = true;
                 IncrementProgress(i.Number);

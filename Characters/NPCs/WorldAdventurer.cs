@@ -44,7 +44,6 @@ namespace RiverHollow.Characters.NPCs
         {
             _characterType = CharacterEnum.WorldAdventurer;
             ImportBasics(stringData, id);
-            _sTexture = @"Textures\" + _sAdventurerType;
             LoadContent(_sTexture);
             _iCurrFood = 0;
             _heldItem = null;
@@ -70,11 +69,12 @@ namespace RiverHollow.Characters.NPCs
             _iAdventurerID = id;
             int i = 0;
             _sAdventurerType = stringData[i++];
+            _sTexture = @"Textures\" + _sAdventurerType;
             _iDailyItemID = int.Parse(stringData[i++]);
             _iDailyFoodReq = int.Parse(stringData[i++]);
             int portraitNum = int.Parse(stringData[i++]);
-            _portraitRect = new Rectangle(0, portraitNum*192, 160, 192);
-            _portrait = GameContentManager.GetTexture(@"Textures\portraits");
+            _portraitRect = new Rectangle(0, 105, 80, 96);
+            _portrait = GameContentManager.GetTexture(_sTexture);
             if (stringData.Length >= i)
             {
                 string[] crafting = stringData[i++].Split(' ');

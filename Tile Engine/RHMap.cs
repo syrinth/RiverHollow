@@ -562,17 +562,11 @@ namespace RiverHollow.Tile_Engine
                         }
                         GUIManager.LoadContainerScreen((Container)s);
                     }
-                    else if (s.IsProcessor())
+                    else if (s.IsMachine())
                     {
-                        Processor p = (Processor)s;
+                        Machine p = (Machine)s;
                         if (p.ProcessingFinished()) { p.TakeFinishedItem(); }
-                        else if (GraphicCursor.HeldItem != null && !p.Processing()) { p.ProcessHeldItem(GraphicCursor.HeldItem); }
-                    }
-                    else if (s.IsCrafter())
-                    {
-                        Crafter c = (Crafter)s;
-                        if (c.ProcessingFinished()) { c.TakeFinishedItem(); }
-                        else if (!c.Processing()) { GUIManager.LoadCrafterScreen( c); }
+                        else if (GraphicCursor.HeldItem != null && !p.Processing()) { p.ProcessClick(); }
                     }
                 }
 
@@ -647,18 +641,13 @@ namespace RiverHollow.Tile_Engine
                 {
                     if (s.CollisionBox.Contains(mouseLocation))
                     {
-                        if (s.IsProcessor())
+                        if (s.IsMachine())
                         {
-                            Processor p = (Processor)s;
+                            Machine p = (Machine)s;
                             if (p.ProcessingFinished()) { p.TakeFinishedItem(); }
-                            else if (GraphicCursor.HeldItem != null && !p.Processing()) { p.ProcessHeldItem(GraphicCursor.HeldItem); }
+                            else if (!p.Processing()) { p.ProcessClick(); }
                         }
-                        else if (s.IsCrafter())
-                        {
-                            Crafter c = (Crafter)s;
-                            if (c.ProcessingFinished()) { c.TakeFinishedItem(); }
-                            else if (!c.Processing()) { GUIManager.LoadCrafterScreen(c); }
-                        }
+
                         break;
                     }
                 }

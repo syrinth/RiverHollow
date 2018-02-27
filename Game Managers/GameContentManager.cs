@@ -35,7 +35,7 @@ namespace RiverHollow.Game_Managers
         #region Load Methods
         public static void LoadCharacters(ContentManager Content)
         {
-            AddTexture(Content, @"Textures\Eggplant");
+            AddTexture(Content, @"Textures\texPlayer");
             AddTexture(Content, @"Textures\Wizard");
             AddTexture(Content, @"Textures\Knight");
             AddTexture(Content, @"Textures\Weapons Master");

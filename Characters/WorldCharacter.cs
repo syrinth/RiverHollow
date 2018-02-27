@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using System;
+using RiverHollow.SpriteAnimations;
 
 namespace RiverHollow.Characters
 {
@@ -13,8 +14,8 @@ namespace RiverHollow.Characters
         public Vector2 MoveToLocation { get => _vMoveTo; }
         public string CurrentMapName;
         public Vector2 NewMapPosition;
-        public enum DirectionEnum { North, South, East, West };
-        public DirectionEnum Facing = DirectionEnum.North;
+        public enum DirectionEnum { Up, Down, Right, Left };
+        public DirectionEnum Facing = DirectionEnum.Up;
         public Texture2D Texture { get => _sprite.Texture; }
         public Point CharCenter => GetRectangle().Center;
         public override Vector2 Position
@@ -36,6 +37,22 @@ namespace RiverHollow.Characters
             _height = RHMap.TileSize;
         }
 
+        public void LoadContent(string textureToLoad)
+        {
+            _sprite = new AnimatedSprite(GameContentManager.GetTexture(textureToLoad));
+            _sprite.AddAnimation("WalkDown", 32, 32, 2, 0.2f, 0, 0);
+            _sprite.AddAnimation("IdleDown", 32, 32, 1, 0.2f, 0, 0);
+            _sprite.AddAnimation("WalkUp", 32, 32, 2, 0.2f, 0, 32);
+            _sprite.AddAnimation("IdleUp", 32, 32, 1, 0.2f, 0, 32);
+            _sprite.AddAnimation("WalkRight", 32, 32, 2, 0.2f, 64, 0);
+            _sprite.AddAnimation("IdleRight", 32, 32, 1, 0.2f, 64, 0);
+            _sprite.AddAnimation("WalkLeft", 32, 32, 2, 0.2f, 64, 32);
+            _sprite.AddAnimation("IdleLeft", 32, 32, 1, 0.2f, 64, 32);
+            _sprite.SetCurrentAnimation("WalkUp");
+
+            _width = _sprite.Width;
+            _height = _sprite.Height;
+        }
         public virtual bool CollisionContains(Point mouse)
         {
             return CollisionBox.Contains(mouse);
@@ -44,10 +61,10 @@ namespace RiverHollow.Characters
         public void SetDirection(DirectionEnum d)
         {
             Facing = d;
-            if(d == DirectionEnum.North) { _sprite.CurrentAnimation = "Walk North"; }
-            else if (d == DirectionEnum.South) { _sprite.CurrentAnimation = "Walk South"; }
-            else if (d == DirectionEnum.East) { _sprite.CurrentAnimation = "Walk East"; }
-            else if (d == DirectionEnum.West) { _sprite.CurrentAnimation = "Walk West"; }
+            if(d == DirectionEnum.Up) { _sprite.CurrentAnimation = "Walk North"; }
+            else if (d == DirectionEnum.Down) { _sprite.CurrentAnimation = "Walk South"; }
+            else if (d == DirectionEnum.Right) { _sprite.CurrentAnimation = "Walk East"; }
+            else if (d == DirectionEnum.Left) { _sprite.CurrentAnimation = "Walk West"; }
         }
 
         protected void DetermineAnimation(ref string animation, Vector2 direction, float deltaX, float deltaY)
@@ -56,26 +73,26 @@ namespace RiverHollow.Characters
             {
                 if (direction.X > 0)
                 {
-                    Facing = DirectionEnum.East;
-                    animation = "Walk East";
+                    Facing = DirectionEnum.Right;
+                    animation = "WalkRight";
                 }
                 else
                 {
-                    Facing = DirectionEnum.West;
-                    animation = "Walk West";
+                    Facing = DirectionEnum.Left;
+                    animation = "WalkLeft";
                 }
             }
             else
             {
                 if (direction.Y > 0)
                 {
-                    Facing = DirectionEnum.South;
-                    animation = "Walk South";
+                    Facing = DirectionEnum.Down;
+                    animation = "WalkDown";
                 }
                 else
                 {
-                    Facing = DirectionEnum.North;
-                    animation = "Walk North";
+                    Facing = DirectionEnum.Up;
+                    animation = "WalkUp";
                 }
             }
         }

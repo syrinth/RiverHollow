@@ -18,8 +18,8 @@ namespace RiverHollow.Items
         protected int _itemID;
         public int ItemID { get => _itemID; }
 
-        protected int _iWidth = 32;
-        protected int _iHeight = 32;
+        protected double _dWidth = 32;
+        protected double _dHeight = 32;
         protected string _name;
         public string Name { get => _name; }
 
@@ -32,7 +32,7 @@ namespace RiverHollow.Items
         public Vector2 Position { get => _position; set => _position = value; }
 
         public virtual Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, 32, 32); }
-        public Rectangle SourceRectangle { get => new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, _iWidth, _iHeight); }
+        public Rectangle SourceRectangle { get => new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, (int)_dWidth, (int)_dHeight); }
 
         protected bool _onTheMap;
         public bool OnTheMap { get => _onTheMap; set => _onTheMap = value; }
@@ -112,13 +112,27 @@ namespace RiverHollow.Items
         {
             if (_onTheMap)
             {
-                spriteBatch.Draw(_texture, new Rectangle((int)_position.X, (int)_position.Y, _iWidth, _iHeight), SourceRectangle, Color.White);
+                spriteBatch.Draw(_texture, new Rectangle((int)_position.X, (int)_position.Y, (int)_dWidth, (int)_dHeight), SourceRectangle, Color.White);
             }
         }
 
         public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox)
         {
-            spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, _iWidth, _iHeight), Color.White);
+            double drawHeight = _dHeight;
+            int tempX = drawBox.X;
+            int tempWidth = drawBox.Width;
+
+            if (_dHeight != _dWidth)
+            {
+                int drawX = (_dHeight != _dWidth) ? (int)drawWidth / 2 : drawBox.X;
+                drawBox.X += drawX;
+                drawBox.Width = (int)drawWidth;
+            }
+            
+            spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, (int)_dWidth, (int)_dHeight), Color.White);
+
+            drawBox.X = tempX;
+            drawBox.Width = tempWidth;
         }
 
         public virtual string GetDescription()
@@ -192,8 +206,10 @@ namespace RiverHollow.Items
         public bool IsEquipment() { return _itemType == ItemEnum.Equipment; }
         public bool IsFood() { return _itemType == ItemEnum.Food; }
         public bool IsContainer() { return _itemType == ItemEnum.Container; }
-        public bool IsProcessor() { return _itemType == ItemEnum.Processor; }
+
         public bool IsCrafter() { return _itemType == ItemEnum.Crafter; }
+        public bool IsProcessor() { return _itemType == ItemEnum.Processor; }
+        public bool IsMachine() { return IsProcessor() || IsCrafter(); }
 
         private class Parabola
         {

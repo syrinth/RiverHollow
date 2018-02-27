@@ -116,7 +116,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                             {
                                 InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
                                 if (_craftMachine != null) {
-                                    _craftMachine.ProcessChosenItem(gIB.Item.ItemID);
+                                    _craftMachine.MakeChosenItem(gIB.Item.ItemID);
                                     GameManager.BackToMain();
                                 }
                                 else if (_craftAdventurer != null)

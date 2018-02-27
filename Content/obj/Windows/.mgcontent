@@ -5,7 +5,6 @@
   <Config />
   <SourceFiles>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/Font.spritefont</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Eggplant.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/wizard.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/DisplayFont.spritefont</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/ArcaneTower.png</File>
@@ -73,5 +72,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC8.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/NPC8.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texMachines.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texPlayer.png</File>
   </SourceFiles>
 </SourceFileCollection>

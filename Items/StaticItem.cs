@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
+using RiverHollow.GUIObjects;
 using RiverHollow.SpriteAnimations;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.ObjectManager;
@@ -102,8 +103,8 @@ namespace RiverHollow.Items
 
         public void LoadContent()
         {
-            _iWidth = 32;
-            _iHeight = 64;
+            _dWidth = 32;
+            _dHeight = 64;
             _texture = GameContentManager.GetTexture(@"Textures\texMachines");
             _sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\texMachines"));
             _sprite.AddAnimation("Idle", (int)_sourcePos.X, (int)_sourcePos.Y, 32, 64, 1, 0.3f);
@@ -121,6 +122,8 @@ namespace RiverHollow.Items
             }
         }
 
+        public virtual bool Processing() { return false; }
+        public virtual void ProcessClick() { }
         public bool ProcessingFinished() { return _heldItem != null; }
         public void TakeFinishedItem()
         {
@@ -176,20 +179,24 @@ namespace RiverHollow.Items
             }
         }
 
-        public void ProcessHeldItem(Item heldItem)
+        public override bool Processing() { return _currentlyProcessing != null; }
+        public override void ProcessClick()
         {
-            if (_diProcessing.ContainsKey(heldItem.ItemID))
+            Item heldItem = GraphicCursor.HeldItem;
+            if (heldItem != null)
             {
-                ProcessRecipe p = _diProcessing[heldItem.ItemID];
-                if (heldItem.Number >= p.InputNum) {
-                    heldItem.Remove(p.InputNum);
-                    _currentlyProcessing = p;
-                    _sprite.SetCurrentAnimation("Working");
+                if (_diProcessing.ContainsKey(heldItem.ItemID))
+                {
+                    ProcessRecipe p = _diProcessing[heldItem.ItemID];
+                    if (heldItem.Number >= p.InputNum)
+                    {
+                        heldItem.Remove(p.InputNum);
+                        _currentlyProcessing = p;
+                        _sprite.SetCurrentAnimation("Working");
+                    }
                 }
             }
         }
-        
-        public bool Processing() { return _currentlyProcessing != null; }
 
         public override MachineData SaveData()
         {
@@ -290,13 +297,17 @@ namespace RiverHollow.Items
             }
         }
 
-        public void ProcessChosenItem(int itemID)
+        public override bool Processing() { return _currentlyMaking != null; }
+        public override void ProcessClick()
+        {
+            GUIManager.LoadCrafterScreen(this);
+        }
+
+        public void MakeChosenItem(int itemID)
         {
             _currentlyMaking = _diCrafting[itemID];
             _sprite.SetCurrentAnimation("Working");
         }
-
-        public bool Processing() { return _currentlyMaking != null; }
 
         public override MachineData SaveData()
         {

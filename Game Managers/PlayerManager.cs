@@ -65,7 +65,7 @@ namespace RiverHollow.Game_Managers
         {
             Initialize();
             Combat.LoadContent(@"Textures\Wizard"); //ToDo: position doesn't matter here
-            World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
+            World.LoadContent(@"Textures\texPlayer");
 
             SetPlayerDefaults();
             InventoryManager.AddNewItemToInventory(85, 10);
@@ -73,7 +73,7 @@ namespace RiverHollow.Game_Managers
         public static void NewPlayer()
         {
             Initialize();
-            World.LoadContent(@"Textures\Eggplant", 32, 64, 4, 0.2f);
+            World.LoadContent(@"Textures\texPlayer");
             World.Position = new Vector2(200, 200);
             Combat.LoadContent(@"Textures\Wizard"); //ToDo: position doesn't matter here
             _canMake.Add(6);
@@ -137,31 +137,31 @@ namespace RiverHollow.Game_Managers
                 KeyboardState ks = Keyboard.GetState();
                 if (ks.IsKeyDown(Keys.W))
                 {
-                    World.Facing = WorldCharacter.DirectionEnum.North;
+                    World.Facing = WorldCharacter.DirectionEnum.Up;
                     moveDir += new Vector2(0, -World.Speed);
-                    //animation = "Float";
+                    animation = "WalkUp";
                     moveVector += new Vector2(0, -World.Speed);
                 }
                 else if (ks.IsKeyDown(Keys.S))
                 {
-                    World.Facing = WorldCharacter.DirectionEnum.South;
+                    World.Facing = WorldCharacter.DirectionEnum.Down;
                     moveDir += new Vector2(0, World.Speed);
-                    //animation = "Float";
+                    animation = "WalkDown";
                     moveVector += new Vector2(0, World.Speed);
                 }
 
                 if (ks.IsKeyDown(Keys.A))
                 {
-                    World.Facing = WorldCharacter.DirectionEnum.East;
+                    World.Facing = WorldCharacter.DirectionEnum.Left;
                     moveDir += new Vector2(-World.Speed, 0);
-                    //animation = "Float";
+                    animation = "WalkLeft";
                     moveVector += new Vector2(-World.Speed, 0);
                 }
                 else if (ks.IsKeyDown(Keys.D))
                 {
-                    World.Facing = WorldCharacter.DirectionEnum.West;
+                    World.Facing = WorldCharacter.DirectionEnum.Right;
                     moveDir += new Vector2(World.Speed, 0);
-                    //animation = "Float";
+                    animation = "WalkRight";
                     moveVector += new Vector2(World.Speed, 0);
                 }
                 
@@ -174,15 +174,29 @@ namespace RiverHollow.Game_Managers
                     {
                         World.MoveBy((int)moveDir.X, (int)moveDir.Y);
                     }
-
-                    if (World.Sprite.CurrentAnimation != animation)
-                    {
-                        World.Sprite.CurrentAnimation = animation;
-                    }
                 }
                 else
                 {
-                    //World.Sprite.CurrentAnimation = "Float" + World.Sprite.CurrentAnimation.Substring(4);
+                    switch (World.Facing)
+                    {
+                        case WorldCharacter.DirectionEnum.Down:
+                            animation = "IdleDown";
+                            break;
+                        case WorldCharacter.DirectionEnum.Up:
+                            animation = "IdleUp";
+                            break;
+                        case WorldCharacter.DirectionEnum.Left:
+                            animation = "IdleLeft";
+                            break;
+                        case WorldCharacter.DirectionEnum.Right:
+                            animation = "IdleRight";
+                            break;
+                    }
+                }
+
+                if (World.Sprite.CurrentAnimation != animation)
+                {
+                    World.Sprite.CurrentAnimation = animation;
                 }
             }
             World.Update(gameTime);
@@ -231,11 +245,21 @@ namespace RiverHollow.Game_Managers
             }
             _questLog.Add(q);
         }
-        public static void AdvanceQuestProgress(Object o)
+        public static void AdvanceQuestProgress(Monster m)
+        {
+            foreach (Quest q in _questLog)
+            {
+                if (q.AttemptProgress(m))
+                {
+                    break;
+                }
+            }
+        }
+        public static void AdvanceQuestProgress(Item i)
         {
             foreach(Quest q in _questLog)
             {
-                if (q.AttemptProgress(o))
+                if (q.AttemptProgress(i))
                 {
                     break;
                 }
