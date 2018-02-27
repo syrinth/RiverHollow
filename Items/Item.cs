@@ -124,6 +124,7 @@ namespace RiverHollow.Items
 
             if (_dHeight != _dWidth)
             {
+                double drawWidth = (_dHeight != _dWidth) ? drawBox.Width * (_dWidth / _dHeight) : drawBox.Width;
                 int drawX = (_dHeight != _dWidth) ? (int)drawWidth / 2 : drawBox.X;
                 drawBox.X += drawX;
                 drawBox.Width = (int)drawWidth;
