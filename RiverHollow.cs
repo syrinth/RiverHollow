@@ -140,10 +140,9 @@ namespace RiverHollow
                     if (CutsceneManager.Playing) { CutsceneManager.Update(gameTime); }
                     else
                     {
-                        MapManager.Update(gameTime);
-
                         if (GameManager.IsRunning())
                         {
+                            MapManager.Update(gameTime);
                             GameCalendar.Update(gameTime);
                             if (!GameManager.Scrying()) { PlayerManager.Update(gameTime); }
                         }

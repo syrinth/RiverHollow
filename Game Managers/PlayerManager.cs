@@ -83,7 +83,7 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddNewItemToInventory(7);
             InventoryManager.AddNewItemToInventory(101);
             InventoryManager.AddNewItemToInventory(200);
-            InventoryManager.AddNewItemToInventory(85, 10);
+            InventoryManager.AddNewItemToInventory(80, 10);
             InventoryManager.AddNewItemToInventory(201);
 
             SetPlayerDefaults();
@@ -292,12 +292,18 @@ namespace RiverHollow.Game_Managers
                     }
                     else if (GraphicCursor.HeldItem.IsProcessor())
                     {
-                        MapManager.PlaceWorldItem((Processor)GraphicCursor.HeldItem, mouseLocation.ToVector2());
+                        Processor p = ((Processor)GraphicCursor.HeldItem);
+                        p.SetMapName(CurrentMap);
+                        p.DrawPosition = Utilities.Normalize(mouseLocation.ToVector2());
+                        MapManager.PlaceWorldItem(p, mouseLocation.ToVector2());
                         GraphicCursor.DropItem();
                     }
                     else if (GraphicCursor.HeldItem.IsCrafter())
                     {
-                        MapManager.PlaceWorldItem((Crafter)GraphicCursor.HeldItem, mouseLocation.ToVector2());
+                        Crafter c = ((Crafter)GraphicCursor.HeldItem);
+                        c.SetMapName(CurrentMap);
+                        c.DrawPosition = Utilities.Normalize(mouseLocation.ToVector2());
+                        MapManager.PlaceWorldItem(c, mouseLocation.ToVector2());
                         GraphicCursor.DropItem();
                     }
                 }
@@ -354,6 +360,21 @@ namespace RiverHollow.Game_Managers
 
             return rv;
         }
+
+        public static bool PlayerInRangeGetDist(Point centre, int range, ref int distance)
+        {
+            bool rv = false;
+
+            Rectangle playerRect = World.GetRectangle();
+            int a = Math.Abs(playerRect.Center.X - centre.X);
+            int b = Math.Abs(playerRect.Center.Y - centre.Y);
+            distance = (int)Math.Sqrt(a * a + b * b);
+
+            rv = distance <= range;
+
+            return rv;
+        }
+
         public static bool PlayerInRange(Point centre, int minRange, int maxRange)
         {
             bool rv = false;

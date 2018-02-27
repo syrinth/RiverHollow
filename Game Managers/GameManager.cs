@@ -125,7 +125,7 @@ namespace RiverHollow.Game_Managers
             public List<WorkerData> Workers;
 
             [XmlArray(ElementName = "StaticItems")]
-            public List<StaticItemData> staticItems;
+            public List<ContainerData> staticItems;
 
             [XmlElement(ElementName = "positionX")]
             public int positionX;
@@ -140,10 +140,10 @@ namespace RiverHollow.Game_Managers
             public int id;
 
             [XmlElement(ElementName = "BuildingChest")]
-            public StaticItemData buildingChest;
+            public ContainerData buildingChest;
 
             [XmlElement(ElementName = "Pantry")]
-            public StaticItemData pantry;
+            public ContainerData pantry;
         }
         public struct WorkerData
         {
@@ -172,8 +172,11 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "WorldObjects")]
             public List<WorldObjectData> worldObjects;
 
-            [XmlArray(ElementName = "StaticItems")]
-            public List<StaticItemData> staticItems;
+            [XmlArray(ElementName = "Containers")]
+            public List<ContainerData> containers;
+
+            [XmlArray(ElementName = "Machines")]
+            public List<MachineData> machines;
         }
         public struct UpgradeData
         {
@@ -216,9 +219,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Y")]
             public int y;
         }
-        public struct StaticItemData
+        public struct ContainerData
         {
-            [XmlElement(ElementName = "StaticItemID")]
+            [XmlElement(ElementName = "ContainerID")]
             public int staticItemID;
 
             [XmlElement(ElementName = "X")]
@@ -229,6 +232,26 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "Items")]
             public List<ItemData> Items;
+        }
+        public struct MachineData
+        {
+            [XmlElement(ElementName = "MachineID")]
+            public int staticItemID;
+
+            [XmlElement(ElementName = "X")]
+            public int x;
+
+            [XmlElement(ElementName = "Y")]
+            public int y;
+
+            [XmlElement(ElementName = "ProcessedTime")]
+            public double processedTime;
+
+            [XmlElement(ElementName = "ProcessingItemID")]
+            public int currentItemID;
+
+            [XmlElement(ElementName = "HeldItemID")]
+            public int heldItemID;
         }
 
         public static string Save()
@@ -270,30 +293,37 @@ namespace RiverHollow.Game_Managers
 
             foreach (WorkerBuilding b in PlayerManager.Buildings)
             {
-                BuildingData buildingData = new BuildingData();
-                buildingData.buildingID = b.ID;
-                buildingData.positionX = (int)b.Position.X;
-                buildingData.positionY = (int)b.Position.Y;
-                buildingData.id = b.PersonalID;
+                BuildingData buildingData = new BuildingData
+                {
+                    buildingID = b.ID,
+                    positionX = (int)b.Position.X,
+                    positionY = (int)b.Position.Y,
+                    id = b.PersonalID,
 
-                buildingData.Workers = new List<WorkerData>();
+                    Workers = new List<WorkerData>()
+                };
 
                 foreach (WorldAdventurer w in b.Workers)
                 {
-                    WorkerData workerData = new WorkerData();
-                    workerData.workerID = w.AdventurerID;
-                    workerData.mood = w.Mood;
-                    workerData.name = w.Name;
+                    WorkerData workerData = new WorkerData
+                    {
+                        workerID = w.AdventurerID,
+                        mood = w.Mood,
+                        name = w.Name
+                    };
                     buildingData.Workers.Add(workerData);
                 }
 
-                buildingData.pantry = SaveStaticItemData(b.Pantry);
-                buildingData.buildingChest = SaveStaticItemData(b.BuildingChest);
+                buildingData.pantry = SaveContainerData(b.Pantry);
+                buildingData.buildingChest = SaveContainerData(b.BuildingChest);
 
-                buildingData.staticItems = new List<StaticItemData>();
+                buildingData.staticItems = new List<ContainerData>();
                 foreach (StaticItem item in b.StaticItems)
                 {
-                    buildingData.staticItems.Add(SaveStaticItemData(item));
+                    if (item.IsContainer())
+                    {
+                        buildingData.staticItems.Add(SaveContainerData((Container)item));
+                    }
                 }
 
                 data.Buildings.Add(buildingData);
@@ -301,24 +331,37 @@ namespace RiverHollow.Game_Managers
 
             foreach (RHMap tileMap in MapManager.Maps.Values)
             {
-                MapData m = new MapData();
-                m.mapName = tileMap.Name;
-                m.worldObjects = new List<WorldObjectData>();
-                m.staticItems = new List<StaticItemData>();
+                MapData m = new MapData
+                {
+                    mapName = tileMap.Name,
+                    worldObjects = new List<WorldObjectData>(),
+                    containers = new List<ContainerData>(),
+                    machines = new List<MachineData>()
+                };
 
                 if (!tileMap.IsBuilding)
                 {
                     foreach (WorldObject w in tileMap.WorldObjects)
                     {
-                        WorldObjectData d = new WorldObjectData();
-                        d.worldObjectID = w.ID;
-                        d.x = (int)w.Position.X;
-                        d.y = (int)w.Position.Y;
+                        WorldObjectData d = new WorldObjectData
+                        {
+                            worldObjectID = w.ID,
+                            x = (int)w.Position.X,
+                            y = (int)w.Position.Y
+                        };
                         m.worldObjects.Add(d);
                     }
                     foreach (StaticItem item in tileMap.StaticItems)
                     {
-                        m.staticItems.Add(SaveStaticItemData(item));
+                        if (item.IsContainer())
+                        {
+                            m.containers.Add(SaveContainerData((Container)item));
+                        }
+
+                        if(item.IsCrafter() || item.IsProcessor())
+                        {
+                            m.machines.Add(((Machine)item).SaveData());
+                        }
                     }
                 }
 
@@ -327,9 +370,11 @@ namespace RiverHollow.Game_Managers
 
             foreach (Upgrade u in GameManager.DiUpgrades.Values)
             {
-                UpgradeData upgData = new UpgradeData();
-                upgData.upgradeID = u.ID;
-                upgData.enabled = u.Enabled;
+                UpgradeData upgData = new UpgradeData
+                {
+                    upgradeID = u.ID,
+                    enabled = u.Enabled
+                };
                 data.UpgradeData.Add(upgData);
             }
 
@@ -365,17 +410,20 @@ namespace RiverHollow.Game_Managers
             File.WriteAllText("SaveGame.xml", sb.ToString());
             return sb.ToString();
         }
-        public static StaticItemData SaveStaticItemData(StaticItem item)
-        {
-            StaticItemData d = new StaticItemData();
-            d.staticItemID = item.ItemID;
-            d.x = (int)item.Position.X;
-            d.y = (int)item.Position.Y;
 
-            if (item.IsContainer())
+        public static ContainerData SaveContainerData(Container c)
+        {
+            ContainerData d = new ContainerData
+            {
+                staticItemID = c.ItemID,
+                x = (int)c.Position.X,
+                y = (int)c.Position.Y
+            };
+
+            if (c.IsContainer())
             {
                 d.Items = new List<ItemData>();
-                foreach (Item i in ((Container)item).Inventory)
+                foreach (Item i in ((Container)c).Inventory)
                 {
                     ItemData itemData = new ItemData();
                     if (i != null)
@@ -417,10 +465,10 @@ namespace RiverHollow.Game_Managers
                 newBuilding.AddBuildingDetails(b);
                 MapManager.Maps["NearWilds"].AddBuilding(newBuilding);
 
-                newBuilding.Pantry = LoadStaticItemData(b.pantry);
-                newBuilding.BuildingChest = LoadStaticItemData(b.buildingChest);
+                newBuilding.Pantry = (Container)LoadStaticItemData(b.pantry);
+                newBuilding.BuildingChest = (Container)LoadStaticItemData(b.buildingChest);
 
-                foreach (StaticItemData s in b.staticItems)
+                foreach (ContainerData s in b.staticItems)
                 {
                     newBuilding.StaticItems.Add(LoadStaticItemData(s));
                 }
@@ -442,9 +490,16 @@ namespace RiverHollow.Game_Managers
                 {
                     tm.AddWorldObject(ObjectManager.GetWorldObject(w.worldObjectID, new Vector2(w.x, w.y)), true);
                 }
-                foreach (StaticItemData s in m.staticItems)
+                foreach (ContainerData c in m.containers)
                 {
-                    tm.PlaceStaticItem(LoadStaticItemData(s), new Vector2(s.x, s.y));
+                    tm.PlaceStaticItem(LoadStaticItemData(c), new Vector2(c.x, c.y));
+                }
+
+                foreach (MachineData mac in m.machines)
+                {
+                    Machine it = (Machine)ObjectManager.GetItem(mac.staticItemID);
+                    it.LoadData(mac);
+                    tm.PlaceStaticItem(it, it.DrawPosition);
                 }
             }
             foreach (UpgradeData u in data.UpgradeData)
@@ -468,21 +523,38 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static Container LoadStaticItemData(StaticItemData data)
+        public static StaticItem LoadStaticItemData(ContainerData data)
         {
-            Container c = (Container)ObjectManager.GetItem(data.staticItemID);
-
-            for (int i = 0; i < InventoryManager.maxItemRows; i++)
+            Item it = ObjectManager.GetItem(data.staticItemID);
+            if (it.IsContainer())
             {
-                for (int j = 0; j < InventoryManager.maxItemColumns; j++)
+                Container c = (Container)it;
+                for (int i = 0; i < InventoryManager.maxItemRows; i++)
                 {
-                    ItemData item = data.Items[i * InventoryManager.maxItemRows + j];
-                    Item newItem = ObjectManager.GetItem(item.itemID, item.num);
-                    InventoryManager.AddItemToInventorySpot(newItem, i, j, c);
-                    c.Position = new Vector2(data.x, data.y);
+                    for (int j = 0; j < InventoryManager.maxItemColumns; j++)
+                    {
+                        ItemData item = data.Items[i * InventoryManager.maxItemRows + j];
+                        Item newItem = ObjectManager.GetItem(item.itemID, item.num);
+                        InventoryManager.AddItemToInventorySpot(newItem, i, j, c);
+                        c.Position = new Vector2(data.x, data.y);
+                    }
                 }
+                return c;
             }
-            return c;
+            else if (it.IsProcessor())
+            {
+                Processor p = (Processor)it;
+                p.DrawPosition = new Vector2(data.x, data.y);
+                return p;
+            }
+            else if (it.IsCrafter())
+            {
+                Crafter c = (Crafter)it;
+                c.DrawPosition = new Vector2(data.x, data.y);
+                return c;
+            }
+
+            return null;
         }
         #endregion
     }

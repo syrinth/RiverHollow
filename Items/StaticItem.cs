@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
+using RiverHollow.SpriteAnimations;
+using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.ObjectManager;
 
 namespace RiverHollow.Items
@@ -47,16 +50,47 @@ namespace RiverHollow.Items
 
     public class Machine : StaticItem
     {
+        protected string _sMapName;
+        public Vector2 DrawPosition
+        {
+            get { return _sprite.Position; }
+            set { _sprite.Position = new Vector2(value.X, value.Y - (_iHeight - 32)); }
+        }
+
+        protected AnimatedSprite _sprite;
         protected Item _heldItem;
         protected double _processedTime;
+        public double ProcessedTime => _processedTime;
 
+        public void LoadContent()
+        {
+            _iWidth = 32;
+            _iHeight = 64;
+            _texture = GameContentManager.GetTexture(@"Textures\texMachines");
+            _sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\texMachines"));
+            _sprite.AddAnimation("Idle", (int)_sourcePos.X, (int)_sourcePos.Y, 32, 64, 1, 0.3f);
+            _sprite.AddAnimation("Working", (int)_sourcePos.X + 32, (int)_sourcePos.Y, 32, 64, 2, 0.3f);
+            _sprite.SetCurrentAnimation("Idle");
+            _sprite.IsAnimating = true;
+        }
         public virtual void Update(GameTime gameTime) { }
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            _sprite.Draw(spriteBatch, true);
+        }
+
         public bool ProcessingFinished() { return _heldItem != null; }
         public void TakeFinishedItem()
         {
             InventoryManager.AddItemToInventory(_heldItem);
             _heldItem = null;
         }
+        public void SetMapName(string val) { _sMapName = val; }
+
+        public virtual int GetProcessingItemId() { return -1; }
+
+        public virtual MachineData SaveData() { return new MachineData(); }
+        public virtual void LoadData(GameManager.MachineData mac) {  }
     }
 
     public class Processor : Machine
@@ -78,21 +112,24 @@ namespace RiverHollow.Items
                 _diProcessing.Add(int.Parse(pieces[0]), new ProcessRecipe(pieces));
             }
 
+            LoadContent();
+
             _pickup = false;
-            _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
         }
 
         public override void Update(GameTime gameTime)
         {
             if (_currentlyProcessing != null)
             {
+                _sprite.Update(gameTime);
                 _processedTime += gameTime.ElapsedGameTime.TotalSeconds;
                 if (_processedTime >= _currentlyProcessing.ProcessingTime)
                 {
-                    SoundManager.PlayEffect("126426__cabeeno-rossley__timer-ends-time-up", 0.9f);
+                    SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, DrawPosition);
                     _heldItem = ObjectManager.GetItem(_currentlyProcessing.Output);
                     _processedTime = -1;
                     _currentlyProcessing = null;
+                    _sprite.SetCurrentAnimation("Idle");
                 }
             }
         }
@@ -105,11 +142,37 @@ namespace RiverHollow.Items
                 if (heldItem.Number >= p.InputNum) {
                     heldItem.Remove(p.InputNum);
                     _currentlyProcessing = p;
+                    _sprite.SetCurrentAnimation("Working");
                 }
             }
         }
         
         public bool Processing() { return _currentlyProcessing != null; }
+
+        public override MachineData SaveData()
+        {
+            MachineData m = new MachineData
+            {
+                staticItemID = this.ItemID,
+                x = (int)this.DrawPosition.X,
+                y = (int)this.DrawPosition.Y,
+                processedTime = this.ProcessedTime,
+                currentItemID = (this._currentlyProcessing == null) ? -1 : this._currentlyProcessing.Input,
+                heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID
+            };
+
+            return m;
+        }
+        public override void LoadData(GameManager.MachineData mac)
+        {
+            _itemID = mac.staticItemID;
+            DrawPosition = new Vector2(mac.x, mac.y);
+            _processedTime = mac.processedTime;
+            _currentlyProcessing = (mac.currentItemID == -1) ? null : _diProcessing[mac.currentItemID];
+            _heldItem = ObjectManager.GetItem(mac.heldItemID);
+
+            if (_currentlyProcessing != null) { _sprite.SetCurrentAnimation("Working"); }
+        }
 
         private class ProcessRecipe
         {
@@ -149,7 +212,7 @@ namespace RiverHollow.Items
         public Dictionary<int, Recipe> CraftList => _diCrafting;
         Recipe _currentlyMaking;
 
-        public Crafter(int id, string[] stringData)
+        public Crafter(int id, string[] stringData) : base()
         {
             _diCrafting = new Dictionary<int, Recipe>();
             _processedTime = -1;
@@ -163,21 +226,24 @@ namespace RiverHollow.Items
                 _diCrafting.Add(int.Parse(s), ObjectManager.DictCrafting[int.Parse(s)]);
             }
 
+            LoadContent();
+
             _pickup = false;
-            _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
         }
 
         public override void Update(GameTime gameTime)
         {
             if (_currentlyMaking != null)
             {
+                _sprite.Update(gameTime);
                 _processedTime += gameTime.ElapsedGameTime.TotalSeconds;
                 if (_processedTime >= _currentlyMaking.ProcessingTime)
                 {
-                    SoundManager.PlayEffect("126426__cabeeno-rossley__timer-ends-time-up", 0.9f);
+                    SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, DrawPosition);
                     _heldItem = ObjectManager.GetItem(_currentlyMaking.Output);
                     _processedTime = -1;
                     _currentlyMaking = null;
+                    _sprite.SetCurrentAnimation("Idle");
                 }
             }
         }
@@ -185,9 +251,35 @@ namespace RiverHollow.Items
         public void ProcessChosenItem(int itemID)
         {
             _currentlyMaking = _diCrafting[itemID];
+            _sprite.SetCurrentAnimation("Working");
         }
 
         public bool Processing() { return _currentlyMaking != null; }
+
+        public override MachineData SaveData()
+        {
+            MachineData m = new MachineData
+            {
+                staticItemID = this.ItemID,
+                x = (int)this.DrawPosition.X,
+                y = (int)this.DrawPosition.Y,
+                processedTime = this.ProcessedTime,
+                currentItemID = (this._currentlyMaking == null) ? -1 : this._currentlyMaking.Output,
+                heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID
+            };
+
+            return m;
+        }
+        public override void LoadData(GameManager.MachineData mac)
+        {
+            _itemID = mac.staticItemID;
+            DrawPosition = new Vector2(mac.x, mac.y);
+            _processedTime = mac.processedTime;
+            _currentlyMaking = (mac.currentItemID == -1) ? null : _diCrafting[mac.currentItemID];
+            _heldItem = ObjectManager.GetItem(mac.heldItemID);
+
+            if (_currentlyMaking != null) { _sprite.SetCurrentAnimation("Working"); }
+        }
 
         private class ProcessRecipe
         {

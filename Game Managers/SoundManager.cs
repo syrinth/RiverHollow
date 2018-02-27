@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Audio;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
 using RiverHollow.Misc;
@@ -68,6 +69,24 @@ namespace RiverHollow.Game_Managers
 
                 soundInstance.Volume = vol;
                 soundInstance.Play();
+            }
+        }
+
+        public static void PlayEffectAtLoc(string effect, string mapName, Vector2 loc)
+        {
+            if (_diEffects.ContainsKey(effect) && MapManager.CurrentMap.Name.Equals(mapName))
+            {
+                int range = 640;
+                int distance = -1;
+                if (PlayerManager.PlayerInRangeGetDist(loc.ToPoint(), range, ref distance)) //arbitrary, 20 squares
+                {
+                    float delta = (float)(range - distance) / (float)range;
+                    SoundEffectInstance soundInstance;
+                    soundInstance = _diEffects[effect].CreateInstance();
+
+                    soundInstance.Volume = (float)(delta*0.1);
+                    soundInstance.Play();
+                }
             }
         }
     }

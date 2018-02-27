@@ -105,7 +105,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             _workerWindow.Draw(spriteBatch);
             _costWindow.Draw(spriteBatch);
             _w.Position = new Vector2(_workerWindow.Position.X + _workerWindow.EdgeSize, (int)_workerWindow.Position.Y + _workerWindow.EdgeSize);
-            _w.Draw(spriteBatch, false);
+            _w.Draw(spriteBatch);
             spriteBatch.DrawString(_font, Cost.ToString(), _costWindow.Position + new Vector2(_costWindow.EdgeSize/2, _costWindow.EdgeSize/2), Color.White);
         }
 

@@ -18,6 +18,8 @@ namespace RiverHollow.Items
         protected int _itemID;
         public int ItemID { get => _itemID; }
 
+        protected int _iWidth = 32;
+        protected int _iHeight = 32;
         protected string _name;
         public string Name { get => _name; }
 
@@ -30,7 +32,7 @@ namespace RiverHollow.Items
         public Vector2 Position { get => _position; set => _position = value; }
 
         public virtual Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, 32, 32); }
-        public Rectangle SourceRectangle { get => new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, 32, 32); }
+        public Rectangle SourceRectangle { get => new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, _iWidth, _iHeight); }
 
         protected bool _onTheMap;
         public bool OnTheMap { get => _onTheMap; set => _onTheMap = value; }
@@ -116,7 +118,7 @@ namespace RiverHollow.Items
 
         public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox)
         {
-            spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, 32, 32), Color.White);
+            spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, _iWidth, _iHeight), Color.White);
         }
 
         public virtual string GetDescription()
