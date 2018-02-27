@@ -115,6 +115,10 @@ namespace RiverHollow.Items
         public override void Draw(SpriteBatch spriteBatch)
         {
             _sprite.Draw(spriteBatch, true);
+            if (_heldItem != null)
+            {
+                _heldItem.Draw(spriteBatch, new Rectangle(DrawPosition.ToPoint(), new Point(32, 32)));
+            }
         }
 
         public bool ProcessingFinished() { return _heldItem != null; }

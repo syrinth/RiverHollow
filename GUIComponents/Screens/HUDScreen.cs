@@ -14,8 +14,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public HUDScreen()
         {
             _font = GameContentManager.GetFont(@"Fonts\Font");
-            _healthDisplay = new StatDisplay(StatDisplay.Display.Health, new Vector2(32,32), 5);
-            _staminaDisplay = new StatDisplay(StatDisplay.Display.Energy, new Vector2(32,64), 5);
+            _healthDisplay = new StatDisplay(StatDisplay.DisplayEnum.Health, new Vector2(32,32), 5);
+            _staminaDisplay = new StatDisplay(StatDisplay.DisplayEnum.Energy, new Vector2(32,64), 5);
             Controls.Add(_healthDisplay);
             Controls.Add(_staminaDisplay);
         }

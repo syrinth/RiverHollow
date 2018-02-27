@@ -74,7 +74,7 @@ namespace RiverHollow.Characters.NPCs
                     if (m._type == Merchandise.ItemType.Building) { dialogueEntries.Add(m); }
                 }
                 
-                GUIManager.LoadScreen(GUIManager.Screens.BuildingShop, dialogueEntries);
+                GUIManager.LoadScreen(GUIManager.ScreenEnum.BuildingShop, dialogueEntries);
             }
             else if (entry.Equals("BuyWorkers"))
             {
@@ -82,7 +82,7 @@ namespace RiverHollow.Characters.NPCs
                 {
                     if (m._type == Merchandise.ItemType.Worker) { dialogueEntries.Add(m); }
                 }
-                GUIManager.LoadScreen(GUIManager.Screens.WorkerShop, dialogueEntries);
+                GUIManager.LoadScreen(GUIManager.ScreenEnum.WorkerShop, dialogueEntries);
             }
             else if (entry.Contains("Upgrade"))
             {

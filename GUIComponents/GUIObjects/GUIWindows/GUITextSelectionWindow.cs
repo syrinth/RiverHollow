@@ -186,7 +186,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         {
             if (action.Equals("SleepNow"))
             {
-                GUIManager.SetScreen(GUIManager.Screens.DayEnd);
+                GUIManager.SetScreen(GUIManager.ScreenEnum.DayEnd);
             }
             else if (action.Contains("Eat") && _food != null)
             {
@@ -212,7 +212,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             {
                 GUIManager.LoadTextScreen(_talker, nextText);
             }
-            else if(GUIManager.CurrentGUIScreen == GUIManager.Screens.Text || GUIManager.CurrentGUIScreen == GUIManager.Screens.TextInput)
+            else if(GUIManager.CurrentGUIScreen == GUIManager.ScreenEnum.Text || GUIManager.CurrentGUIScreen == GUIManager.ScreenEnum.TextInput)
             {
                 GameManager.BackToMain();
             }

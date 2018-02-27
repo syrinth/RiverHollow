@@ -22,9 +22,9 @@ namespace RiverHollow.Characters
         protected int _index;
         public int ID { get => _index; }
         protected string _homeMap;
-        public enum NPCType { Villager, Shopkeeper, Ranger, Worker }
-        protected NPCType _npcType;
-        public NPCType Type { get => _npcType; }
+        public enum NPCTypeEnum { Villager, Shopkeeper, Ranger, Worker }
+        protected NPCTypeEnum _npcType;
+        public NPCTypeEnum NPCType { get => _npcType; }
         public int Friendship = 60;
 
         protected Dictionary<int, bool> _collection;
@@ -48,6 +48,7 @@ namespace RiverHollow.Characters
         public NPC() { }
         public NPC(NPC n)
         {
+            _characterType = CharacterEnum.NPC;
             _index = n.ID;
             _sName = n.Name;
             _dialogueDictionary = n._dialogueDictionary;
@@ -75,7 +76,7 @@ namespace RiverHollow.Characters
         protected int ImportBasics(string[] stringData)
         {
             int i = 0;
-            _npcType = (NPCType)Enum.Parse(typeof(NPCType), stringData[i++]);
+            _npcType = (NPCTypeEnum)Enum.Parse(typeof(NPCTypeEnum), stringData[i++]);
             _sName = stringData[i++];
             _portraitRect = new Rectangle(0, int.Parse(stringData[i++]) * 192, PortraitWidth, PortraitHeight);
             CurrentMapName = stringData[i++];
@@ -315,7 +316,7 @@ namespace RiverHollow.Characters
             }
             else if (entry.Equals("GiveGift"))
             {
-                GUIManager.LoadScreen(GUIManager.Screens.Inventory, this);
+                GUIManager.LoadScreen(GUIManager.ScreenEnum.Inventory, this);
                 return "";
             }
             else if (entry.Equals("Party"))
@@ -362,7 +363,7 @@ namespace RiverHollow.Characters
             {
                 string text = string.Empty;
                 item.Remove(1);
-                if (item.Type == Item.ItemType.Map && Type == NPC.NPCType.Ranger)
+                if (item.ItemType == Item.ItemEnum.Map && NPCType == NPC.NPCTypeEnum.Ranger)
                 {
                     text = GetDialogEntry("Adventure");
                     DungeonManager.LoadNewDungeon((AdventureMap)item);

@@ -17,6 +17,7 @@ namespace RiverHollow
 
         public Monster(int id, string[] stringData)
         {
+            _characterType = CharacterEnum.Monster;
             ImportBasics(stringData, id);
             LoadContent(_textureName, 100, 100, 2, 0.2f);
         }

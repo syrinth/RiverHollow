@@ -27,49 +27,48 @@ namespace RiverHollow.Game_Managers
 
         #region States
         private static bool _scrying;
-        private enum State { Paused, Running, Information, Input }
-        private static State _gameState;
+        private enum StateEnum { Paused, Running, Information, Input }
+        private static StateEnum _state;
 
-        private enum Map { None, WorldMap, Combat }
+        private enum MapEnum { None, WorldMap, Combat }
+        private static MapEnum _mapState;
 
-        private static Map _mapState;
+        public static void ReadInput() { _state = StateEnum.Input; }
+        public static bool TakingInput() { return _state == StateEnum.Input; }
 
-        public static void ReadInput() { _gameState = State.Input; }
-        public static bool TakingInput() { return _gameState == State.Input; }
+        public static void Pause() { _state = StateEnum.Paused; }
+        public static bool IsPaused() { return _state == StateEnum.Paused; }
 
-        public static void Pause() { _gameState = State.Paused; }
-        public static bool IsPaused() { return _gameState == State.Paused; }
-
-        public static void Unpause() { _gameState = State.Running; }
-        public static bool IsRunning() { return _gameState == State.Running; }
+        public static void Unpause() { _state = StateEnum.Running; }
+        public static bool IsRunning() { return _state == StateEnum.Running; }
 
         public static void Scry(bool val) {
-            _gameState = State.Running;
+            _state = StateEnum.Running;
             _scrying = val;
         }
         public static bool Scrying() { return _scrying; }
 
-        public static bool InCombat() { return _mapState == Map.Combat; }
+        public static bool InCombat() { return _mapState == MapEnum.Combat; }
         public static void GoToCombat() {
-            _mapState = Map.Combat;
-            GUIManager.SetScreen(GUIManager.Screens.Combat);
+            _mapState = MapEnum.Combat;
+            GUIManager.SetScreen(GUIManager.ScreenEnum.Combat);
         }
-        public static bool OnMap() { return _mapState == Map.WorldMap; }
+        public static bool OnMap() { return _mapState == MapEnum.WorldMap; }
         public static void GoToWorldMap() {
-            _mapState = Map.WorldMap;
-            GUIManager.SetScreen(GUIManager.Screens.HUD);
+            _mapState = MapEnum.WorldMap;
+            GUIManager.SetScreen(GUIManager.ScreenEnum.HUD);
         }
-        public static bool Informational() { return _mapState == Map.None; }
+        public static bool Informational() { return _mapState == MapEnum.None; }
         public static void GoToInformation() {
-            _mapState = Map.None;
-            _gameState = State.Paused;
+            _mapState = MapEnum.None;
+            _state = StateEnum.Paused;
         }
 
         public static void BackToMain()
         {
-            GUIManager.SetScreen(GUIManager.Screens.HUD);
-            _gameState = State.Running;
-            _mapState = Map.WorldMap;
+            GUIManager.SetScreen(GUIManager.ScreenEnum.HUD);
+            _state = StateEnum.Running;
+            _mapState = MapEnum.WorldMap;
         }
         #endregion
 

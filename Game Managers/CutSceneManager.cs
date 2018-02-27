@@ -110,7 +110,7 @@ namespace RiverHollow.Game_Managers
 
         public void Update(GameTime gameTime)
         {
-            if (GUIManager.CurrentGUIScreen != GUIManager.Screens.Text)                 //If someone is currently talking, do NOT process additional tags
+            if (GUIManager.CurrentGUIScreen != GUIManager.ScreenEnum.Text)                 //If someone is currently talking, do NOT process additional tags
             {
                 string[] stringTest = _liCommands[_iCurrentCommand].Split('-');
                 if (stringTest[0].Equals("Speak"))
@@ -134,7 +134,7 @@ namespace RiverHollow.Game_Managers
                     if (stringTest.Length == 2)
                     {
                         WorldCharacter n = stringTest[1].Equals("player") ? PlayerManager.World : _liUsedNPCs.Find(test => test.ID == int.Parse(stringTest[1]));
-                        n.SetDirection((WorldCharacter.Direction)HandleDir(stringTest[0]));
+                        n.SetDirection((WorldCharacter.DirectionEnum)HandleDir(stringTest[0]));
                         //n.Sprite.IsAnimating = false;
                         _iCurrentCommand++;
                     }

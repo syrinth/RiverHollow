@@ -197,11 +197,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
                 else if (_weapon.Contains(mouse))
                 {
-                    rv = ItemSwap(_weapon, Equipment.EquipmentType.Weapon);
+                    rv = ItemSwap(_weapon, Equipment.EquipmentEnum.Weapon);
                 }
                 else if (_armor.Contains(mouse))
                 {
-                    rv = ItemSwap(_armor, Equipment.EquipmentType.Armor);
+                    rv = ItemSwap(_armor, Equipment.EquipmentEnum.Armor);
                 }
             }
             return rv;
@@ -225,7 +225,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return _window.Contains(mouse);
         }
 
-        private bool ItemSwap(GUIItemBox box, Equipment.EquipmentType match)
+        private bool ItemSwap(GUIItemBox box, Equipment.EquipmentEnum match)
         {
             bool rv = false;
             if (GraphicCursor.HeldItem != null)
@@ -264,13 +264,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             if (i.IsEquipment())
             {
-                if (((Equipment)i).EquipType == Equipment.EquipmentType.Armor)
+                if (((Equipment)i).EquipType == Equipment.EquipmentEnum.Armor)
                 {
-                    rv = ItemSwap(_armor, Equipment.EquipmentType.Armor);
+                    rv = ItemSwap(_armor, Equipment.EquipmentEnum.Armor);
                 }
                 else
                 {
-                    rv = ItemSwap(_weapon, Equipment.EquipmentType.Weapon);
+                    rv = ItemSwap(_weapon, Equipment.EquipmentEnum.Weapon);
                 }
             }
 

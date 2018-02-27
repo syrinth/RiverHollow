@@ -45,6 +45,7 @@ namespace RiverHollow.Characters.CombatStuff
 
         public CombatAdventurer() : base()
         {
+            _characterType = CharacterEnum.CombatAdventurer;
             _classLevel = 1;
         }
 

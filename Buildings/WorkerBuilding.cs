@@ -14,8 +14,8 @@ namespace RiverHollow
 {
     public class WorkerBuilding : Building
     {
-        public enum WorkerType { Magic, Craftsmen};
-        private WorkerType _buildingWorker;
+        public enum WorkerTypeEnum { Magic, Craftsmen};
+        private WorkerTypeEnum _buildingWorker;
 
         public bool _selected = false;
 
@@ -39,7 +39,7 @@ namespace RiverHollow
 
         public WorkerBuilding(string[] stringData, int id){
             int i = ImportBasics(stringData, id);
-            _buildingWorker = (WorkerType)Enum.Parse(typeof(WorkerType), stringData[i++]);
+            _buildingWorker = (WorkerTypeEnum)Enum.Parse(typeof(WorkerTypeEnum), stringData[i++]);
             _iPersonalID = GetNewBuildingID();
             _workers = new List<WorldAdventurer>();
             _staticItemList = new List<StaticItem>();

@@ -13,8 +13,8 @@ namespace RiverHollow.Characters
         public Vector2 MoveToLocation { get => _vMoveTo; }
         public string CurrentMapName;
         public Vector2 NewMapPosition;
-        public enum Direction { North, South, East, West };
-        public Direction Facing = Direction.North;
+        public enum DirectionEnum { North, South, East, West };
+        public DirectionEnum Facing = DirectionEnum.North;
         public Texture2D Texture { get => _sprite.Texture; }
         public Point CharCenter => GetRectangle().Center;
         public override Vector2 Position
@@ -31,6 +31,7 @@ namespace RiverHollow.Characters
 
         public WorldCharacter() : base()
         {
+            _characterType = CharacterEnum.WorldCharacter;
             _width = RHMap.TileSize;
             _height = RHMap.TileSize;
         }
@@ -40,13 +41,13 @@ namespace RiverHollow.Characters
             return CollisionBox.Contains(mouse);
         }
 
-        public void SetDirection(Direction d)
+        public void SetDirection(DirectionEnum d)
         {
             Facing = d;
-            if(d == Direction.North) { _sprite.CurrentAnimation = "Walk North"; }
-            else if (d == Direction.South) { _sprite.CurrentAnimation = "Walk South"; }
-            else if (d == Direction.East) { _sprite.CurrentAnimation = "Walk East"; }
-            else if (d == Direction.West) { _sprite.CurrentAnimation = "Walk West"; }
+            if(d == DirectionEnum.North) { _sprite.CurrentAnimation = "Walk North"; }
+            else if (d == DirectionEnum.South) { _sprite.CurrentAnimation = "Walk South"; }
+            else if (d == DirectionEnum.East) { _sprite.CurrentAnimation = "Walk East"; }
+            else if (d == DirectionEnum.West) { _sprite.CurrentAnimation = "Walk West"; }
         }
 
         protected void DetermineAnimation(ref string animation, Vector2 direction, float deltaX, float deltaY)
@@ -55,12 +56,12 @@ namespace RiverHollow.Characters
             {
                 if (direction.X > 0)
                 {
-                    Facing = Direction.East;
+                    Facing = DirectionEnum.East;
                     animation = "Walk East";
                 }
                 else
                 {
-                    Facing = Direction.West;
+                    Facing = DirectionEnum.West;
                     animation = "Walk West";
                 }
             }
@@ -68,12 +69,12 @@ namespace RiverHollow.Characters
             {
                 if (direction.Y > 0)
                 {
-                    Facing = Direction.South;
+                    Facing = DirectionEnum.South;
                     animation = "Walk South";
                 }
                 else
                 {
-                    Facing = Direction.North;
+                    Facing = DirectionEnum.North;
                     animation = "Walk North";
                 }
             }

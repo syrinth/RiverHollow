@@ -56,6 +56,7 @@ namespace RiverHollow.Characters.CombatStuff
 
         public CombatCharacter() : base()
         {
+            _characterType = CharacterEnum.CombatCharacter;
             _liSpells = new List<CombatAction>();
             _liActions = new List<MenuAction>();
             _liBuffs = new List<Buff>();

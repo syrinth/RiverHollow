@@ -10,11 +10,11 @@ namespace RiverHollow.Items
 {
     public class Item
     {
-        public enum ItemType { Resource, Equipment, Tool, Container, Food, Map, Combat, Processor, Crafter };
+        public enum ItemEnum { Resource, Equipment, Tool, Container, Food, Map, Combat, Processor, Crafter };
 
         #region properties
-        protected ItemType _itemType;
-        public ItemType Type { get => _itemType; }
+        protected ItemEnum _itemType;
+        public ItemEnum ItemType { get => _itemType; }
         protected int _itemID;
         public int ItemID { get => _itemID; }
 
@@ -69,7 +69,7 @@ namespace RiverHollow.Items
             _num = num;
 
             int i = 0;
-            _itemType = (ItemType)Enum.Parse(typeof(ItemType), stringData[i++]);
+            _itemType = (ItemEnum)Enum.Parse(typeof(ItemEnum), stringData[i++]);
             _name = stringData[i++];
             _description = stringData[i++];
             string[] texIndices = stringData[i++].Split(' ');
@@ -112,7 +112,7 @@ namespace RiverHollow.Items
         {
             if (_onTheMap)
             {
-                spriteBatch.Draw(_texture, new Rectangle((int)_position.X, (int)_position.Y, 32, 32), SourceRectangle, Color.White);
+                spriteBatch.Draw(_texture, new Rectangle((int)_position.X, (int)_position.Y, _iWidth, _iHeight), SourceRectangle, Color.White);
             }
         }
 
@@ -187,13 +187,13 @@ namespace RiverHollow.Items
             return rv;
         }
 
-        public bool IsTool() { return _itemType == ItemType.Tool; }
-        public bool IsCombatItem() { return _itemType == ItemType.Combat; }
-        public bool IsEquipment() { return _itemType == ItemType.Equipment; }
-        public bool IsFood() { return _itemType == ItemType.Food; }
-        public bool IsContainer() { return _itemType == ItemType.Container; }
-        public bool IsProcessor() { return _itemType == ItemType.Processor; }
-        public bool IsCrafter() { return _itemType == ItemType.Crafter; }
+        public bool IsTool() { return _itemType == ItemEnum.Tool; }
+        public bool IsCombatItem() { return _itemType == ItemEnum.Combat; }
+        public bool IsEquipment() { return _itemType == ItemEnum.Equipment; }
+        public bool IsFood() { return _itemType == ItemEnum.Food; }
+        public bool IsContainer() { return _itemType == ItemEnum.Container; }
+        public bool IsProcessor() { return _itemType == ItemEnum.Processor; }
+        public bool IsCrafter() { return _itemType == ItemEnum.Crafter; }
 
         private class Parabola
         {
@@ -235,8 +235,8 @@ namespace RiverHollow.Items
 
     public class Equipment : Item
     {
-        public enum EquipmentType { Armor, Weapon };
-        public EquipmentType EquipType;
+        public enum EquipmentEnum { Armor, Weapon };
+        public EquipmentEnum EquipType;
         private int _dmg;
         public int Dmg { get => _dmg; }
         private int _def;
@@ -251,7 +251,7 @@ namespace RiverHollow.Items
         public Equipment(int id, string[] stringData)
         {
             int i = ImportBasics(stringData, id, 1);
-            EquipType = (EquipmentType)Enum.Parse(typeof(EquipmentType), stringData[i++]);
+            EquipType = (EquipmentEnum)Enum.Parse(typeof(EquipmentEnum), stringData[i++]);
             _dmg = int.Parse(stringData[i++]);
             _def = int.Parse(stringData[i++]);
             _spd = int.Parse(stringData[i++]);
@@ -277,8 +277,8 @@ namespace RiverHollow.Items
 
     public class Tool : Item
     {
-        public enum TypeOfTool { Pick, Axe };
-        public TypeOfTool ToolType;
+        public enum ToolEnum { Pick, Axe };
+        public ToolEnum ToolType;
         protected int _staminaCost;
         public int StaminaCost { get => _staminaCost; }
         protected int _dmgValue;
@@ -290,7 +290,7 @@ namespace RiverHollow.Items
         public Tool(int id, string[] stringData)
         {
             int i = ImportBasics(stringData, id, 1);
-            ToolType = (TypeOfTool)Enum.Parse(typeof(TypeOfTool), stringData[i++]);
+            ToolType = (ToolEnum)Enum.Parse(typeof(ToolEnum), stringData[i++]);
             _dmgValue = int.Parse(stringData[i++]);
             _staminaCost = int.Parse(stringData[i++]);
             _texture = GameContentManager.GetTexture(@"Textures\tools");

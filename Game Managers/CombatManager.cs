@@ -20,8 +20,8 @@ namespace RiverHollow.Game_Managers
         public static List<CombatCharacter> Party { get => _listParty; }
         public static List<CombatCharacter> TurnOrder;
 
-        public enum Phase { NewTurn, EnemyTurn, SelectSkill, ChooseSkillTarget, ChooseItemTarget, DisplayAttack, PerformAction, EndCombat }
-        public static Phase CurrentPhase;
+        public enum PhaseEnum { NewTurn, EnemyTurn, SelectSkill, ChooseSkillTarget, ChooseItemTarget, DisplayAttack, PerformAction, EndCombat }
+        public static PhaseEnum CurrentPhase;
 
         public static int TurnIndex;
 
@@ -68,7 +68,7 @@ namespace RiverHollow.Game_Managers
         //If we loop back to 0, reduce stamina by the desired amount.
         public static void NextTurn()
         {
-            if (CurrentPhase != Phase.EndCombat)
+            if (CurrentPhase != PhaseEnum.EndCombat)
             {
                 ChosenSkill = null;
                 ChosenItem = null;
@@ -93,10 +93,10 @@ namespace RiverHollow.Game_Managers
         private static void SetPhaseForTurn()
         {
             if (_listMonsters.Contains(ActiveCharacter)) {
-                CurrentPhase = Phase.EnemyTurn;
+                CurrentPhase = PhaseEnum.EnemyTurn;
                 EnemyTakeTurn();
             }
-            else if (_listParty.Contains(ActiveCharacter)) { CurrentPhase = Phase.NewTurn; }
+            else if (_listParty.Contains(ActiveCharacter)) { CurrentPhase = PhaseEnum.NewTurn; }
         }
 
         //For now, when the enemy takes their turn, have them select a random party member
@@ -123,18 +123,18 @@ namespace RiverHollow.Game_Managers
             ActiveCharacter.CurrentMP -= a.MPCost;          //Checked before Processing
             if (!ChosenSkill.Target.Equals("Self"))
             {
-                if (chooseTarget) { CurrentPhase = Phase.ChooseSkillTarget; }  //Skips this phase for enemies. They don't "choose" targets
+                if (chooseTarget) { CurrentPhase = PhaseEnum.ChooseSkillTarget; }  //Skips this phase for enemies. They don't "choose" targets
             }
             else
             {
-                CurrentPhase = Phase.DisplayAttack;
+                CurrentPhase = PhaseEnum.DisplayAttack;
                 Text = ChosenSkill.Name;
             }
         }
 
         public static void ProcessItemChoice(CombatItem it)
         {
-            CurrentPhase = Phase.ChooseItemTarget;
+            CurrentPhase = PhaseEnum.ChooseItemTarget;
             ChosenItem = it;
         }
 
@@ -144,14 +144,14 @@ namespace RiverHollow.Game_Managers
             _target = target;
             ChosenSkill.AnimationSetup(target);
             Text = ChosenSkill.Name;
-            CurrentPhase = Phase.DisplayAttack;
+            CurrentPhase = PhaseEnum.DisplayAttack;
         }
 
         public static void SetItemTarget(BattleLocation target)
         {
             _target = target;
             Text = ChosenItem.Name;
-            CurrentPhase = Phase.DisplayAttack;
+            CurrentPhase = PhaseEnum.DisplayAttack;
         }
 
         //Gives the total battle XP to every member of the party, remove the mob from the gameand drop items
@@ -197,9 +197,9 @@ namespace RiverHollow.Game_Managers
             return stillOne;
         }
 
-        public static bool PhaseSelectSkill() { return CurrentPhase == Phase.SelectSkill; }
-        public static bool PhaseChooseSkillTarget() { return CurrentPhase == Phase.ChooseSkillTarget; }
-        public static bool PhaseChooseItemTarget() { return CurrentPhase == Phase.ChooseItemTarget; }
+        public static bool PhaseSelectSkill() { return CurrentPhase == PhaseEnum.SelectSkill; }
+        public static bool PhaseChooseSkillTarget() { return CurrentPhase == PhaseEnum.ChooseSkillTarget; }
+        public static bool PhaseChooseItemTarget() { return CurrentPhase == PhaseEnum.ChooseItemTarget; }
 
         internal static void UseItem()
         {

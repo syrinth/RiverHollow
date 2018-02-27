@@ -92,12 +92,12 @@ namespace RiverHollow.Game_Managers
 
         public static void SetPlayerDefaults()
         {
-            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 1, null, ObjectManager.GetItem(2)));
-            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 2, null, ObjectManager.GetItem(2)));
-            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 3, null, ObjectManager.GetItem(2)));
-            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 4, null, ObjectManager.GetItem(2)));
-            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 5, null, ObjectManager.GetItem(2)));
-            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", new NPC(), 6, null, ObjectManager.GetItem(2)));
+            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", 1, null, ObjectManager.GetItem(2)));
+            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", 2, null, ObjectManager.GetItem(2)));
+            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", 3, null, ObjectManager.GetItem(2)));
+            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", 4, null, ObjectManager.GetItem(2)));
+            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", 5, null, ObjectManager.GetItem(2)));
+            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", 6, null, ObjectManager.GetItem(2)));
 
             CurrentMap = MapManager.CurrentMap.Name;
             World.Position = Utilities.Normalize(MapManager.Maps[CurrentMap].GetCharacterSpawn("PlayerSpawn"));
@@ -137,14 +137,14 @@ namespace RiverHollow.Game_Managers
                 KeyboardState ks = Keyboard.GetState();
                 if (ks.IsKeyDown(Keys.W))
                 {
-                    World.Facing = WorldCharacter.Direction.North;
+                    World.Facing = WorldCharacter.DirectionEnum.North;
                     moveDir += new Vector2(0, -World.Speed);
                     //animation = "Float";
                     moveVector += new Vector2(0, -World.Speed);
                 }
                 else if (ks.IsKeyDown(Keys.S))
                 {
-                    World.Facing = WorldCharacter.Direction.South;
+                    World.Facing = WorldCharacter.DirectionEnum.South;
                     moveDir += new Vector2(0, World.Speed);
                     //animation = "Float";
                     moveVector += new Vector2(0, World.Speed);
@@ -152,14 +152,14 @@ namespace RiverHollow.Game_Managers
 
                 if (ks.IsKeyDown(Keys.A))
                 {
-                    World.Facing = WorldCharacter.Direction.East;
+                    World.Facing = WorldCharacter.DirectionEnum.East;
                     moveDir += new Vector2(-World.Speed, 0);
                     //animation = "Float";
                     moveVector += new Vector2(-World.Speed, 0);
                 }
                 else if (ks.IsKeyDown(Keys.D))
                 {
-                    World.Facing = WorldCharacter.Direction.West;
+                    World.Facing = WorldCharacter.DirectionEnum.West;
                     moveDir += new Vector2(World.Speed, 0);
                     //animation = "Float";
                     moveVector += new Vector2(World.Speed, 0);
@@ -429,18 +429,18 @@ namespace RiverHollow.Game_Managers
         {
             if (t != null)
             {
-                if (t.ToolType == Tool.TypeOfTool.Axe)
+                if (t.ToolType == Tool.ToolEnum.Axe)
                 {
-                    if (t == _axe) { _axe = InventoryManager.FindTool(Tool.TypeOfTool.Axe); }
+                    if (t == _axe) { _axe = InventoryManager.FindTool(Tool.ToolEnum.Axe); }
                     else
                     {
                         if (_axe == null) { _axe = t; }
                         if (_axe.DmgValue < t.DmgValue) { _axe = t; }
                     }
                 }
-                else if (t.ToolType == Tool.TypeOfTool.Pick)
+                else if (t.ToolType == Tool.ToolEnum.Pick)
                 {
-                    if (t == _pick) { _pick = InventoryManager.FindTool(Tool.TypeOfTool.Axe); }
+                    if (t == _pick) { _pick = InventoryManager.FindTool(Tool.ToolEnum.Axe); }
                     else
                     {
                         if(_pick == null) { _pick = t; }

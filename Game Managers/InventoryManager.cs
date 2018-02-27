@@ -208,7 +208,7 @@ Exit:
                             if (inventory == _playerInventory)
                             {
                                 PlayerManager.AdvanceQuestProgress(itemToAdd);
-                                if(_playerInventory[i, j].Type == Item.ItemType.Tool)PlayerManager.CompareTools((Tool)_playerInventory[i, j]);
+                                if(_playerInventory[i, j].ItemType == Item.ItemEnum.Tool)PlayerManager.CompareTools((Tool)_playerInventory[i, j]);
                             }
                             goto Exit;
                         }
@@ -338,7 +338,7 @@ Exit:
             return;
         }
 
-        public static Tool FindTool(Tool.TypeOfTool tool)
+        public static Tool FindTool(Tool.ToolEnum tool)
         {
             Tool rv = null;
             for (int i = 0; i < maxItemRows; i++)

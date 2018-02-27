@@ -30,7 +30,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _giBackground = new GUIImage(new Vector2(0, 0), new Rectangle(0, 0, 800, 480), RiverHollow.ScreenWidth, RiverHollow.ScreenHeight, GameContentManager.GetTexture(@"Textures\battle"));
             Controls.Add(_giBackground);
 
-            _sdStamina = new StatDisplay(StatDisplay.Display.Energy, new Vector2(30, 30), 5);
+            _sdStamina = new StatDisplay(StatDisplay.DisplayEnum.Energy, new Vector2(30, 30), 5);
             Controls.Add(_sdStamina);
 
             _cmbtMenu = new CmbtMenu();
@@ -65,15 +65,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
             //If the current Phase is skill selection, allow the user to pick a skill for the currentCharacter
             switch (CombatManager.CurrentPhase)
             {
-                case CombatManager.Phase.SelectSkill:
+                case CombatManager.PhaseEnum.SelectSkill:
                     rv = _cmbtMenu.ProcessLeftButtonClick(mouse);
                     break;
 
-                case CombatManager.Phase.ChooseSkillTarget:
+                case CombatManager.PhaseEnum.ChooseSkillTarget:
                     HandleLeftClickTargeting(true);
                     break;
 
-                case CombatManager.Phase.ChooseItemTarget:
+                case CombatManager.PhaseEnum.ChooseItemTarget:
                     HandleLeftClickTargeting(false);
                     break;
             }
@@ -157,31 +157,31 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             switch (CombatManager.CurrentPhase)
             {
-                case CombatManager.Phase.EnemyTurn:
+                case CombatManager.PhaseEnum.EnemyTurn:
                     _cmbtMenu.NewTurn();
                     CombatManager.SetSkillTarget(_arrCombatants[CombatManager.PlayerTarget]);
                     break;
 
-                case CombatManager.Phase.NewTurn:
+                case CombatManager.PhaseEnum.NewTurn:
                     _cmbtMenu.NewTurn();
                     CombatManager.ChosenItem = null;
                     CombatManager.ChosenSkill = null;
-                    CombatManager.CurrentPhase = CombatManager.Phase.SelectSkill;
+                    CombatManager.CurrentPhase = CombatManager.PhaseEnum.SelectSkill;
                     break;
 
-                case CombatManager.Phase.SelectSkill:
+                case CombatManager.PhaseEnum.SelectSkill:
                     _cmbtMenu.SelectSkill();
                     break;
 
-                case CombatManager.Phase.ChooseSkillTarget:
+                case CombatManager.PhaseEnum.ChooseSkillTarget:
                     HandleUpdateTargeting(true);
                     break;
 
-                case CombatManager.Phase.ChooseItemTarget:
+                case CombatManager.PhaseEnum.ChooseItemTarget:
                     HandleUpdateTargeting(false);
                     break;
 
-                case CombatManager.Phase.DisplayAttack:
+                case CombatManager.PhaseEnum.DisplayAttack:
                     if (!string.IsNullOrEmpty(CombatManager.Text))
                     {
                         if (_gtwTextWindow == null) { _gtwTextWindow = new GUITextWindow(CombatManager.Text, 0.5); }
@@ -191,13 +191,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             if (_gtwTextWindow.Duration <= 0)
                             {
                                 _gtwTextWindow = null;
-                                CombatManager.CurrentPhase = CombatManager.Phase.PerformAction;
+                                CombatManager.CurrentPhase = CombatManager.PhaseEnum.PerformAction;
                             }
                         }
                     }
                     break;
 
-                case CombatManager.Phase.PerformAction:
+                case CombatManager.PhaseEnum.PerformAction:
                     if (CombatManager.ChosenSkill != null) { CombatManager.ChosenSkill.HandlePhase(gameTime); }
                     else if (CombatManager.ChosenItem != null) {
                         bool finished = false;
@@ -486,7 +486,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _useMenuWindow.Clear();
                 ClearState();
                 CombatManager.ChosenSkill = null;
-                CombatManager.CurrentPhase = CombatManager.Phase.SelectSkill;
+                CombatManager.CurrentPhase = CombatManager.PhaseEnum.SelectSkill;
 
                 DisplayType = Display.None;
             }
@@ -664,7 +664,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.DrawWindow(spriteBatch);
-            if (CombatManager.ActiveCharacter.GetType().Equals(typeof(CombatAdventurer)))
+            if (CombatManager.ActiveCharacter.IsCombatAdventurer())
             {
                 int xindex = (int)_position.X + _innerBorder;
                 int yIndex = (int)_position.Y + _innerBorder;

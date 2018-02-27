@@ -15,9 +15,9 @@ namespace RiverHollow.Game_Managers
     public static class GUIManager
     {
         private static GUIScreen _currentGUIScreen;
-        private static Screens _currentScreen;
-        public static Screens CurrentGUIScreen { get => _currentScreen; }
-        public  enum Screens {None, Combat, WorkerShop, BuildingShop, DayEnd, HUD, Inventory, ItemCreation, MainMenu,  Shop,  Text, TextInput, GameMenu};
+        public enum ScreenEnum { None, Combat, WorkerShop, BuildingShop, DayEnd, HUD, Inventory, ItemCreation, MainMenu, Shop, Text, TextInput, GameMenu };
+        private static ScreenEnum _currentScreen;
+        public static ScreenEnum CurrentGUIScreen { get => _currentScreen; }
         private static GUIImage _fadeImg;
         private static float _fadeVal = 1f;
         private static bool _fading = false;
@@ -61,7 +61,7 @@ namespace RiverHollow.Game_Managers
         public static void ClearScreen()
         {
             _currentGUIScreen = null;
-            _currentScreen = Screens.None;
+            _currentScreen = ScreenEnum.None;
             GameManager.Unpause();
         }
         public static bool ProcessLeftButtonClick(Point mouse)
@@ -97,33 +97,33 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static void SetScreen(Screens newScreen)
+        public static void SetScreen(ScreenEnum newScreen)
         {
             _currentScreen = newScreen;
             switch (newScreen)
             {
-                case Screens.DayEnd:
+                case ScreenEnum.DayEnd:
                     _currentGUIScreen = new DayEndScreen();
                     return;
-                case Screens.HUD:
+                case ScreenEnum.HUD:
                     _currentGUIScreen = new HUDScreen();
                     return;
-                case Screens.Combat:
+                case ScreenEnum.Combat:
                     _currentGUIScreen = new CombatScreen();
                     return;
-                case Screens.Inventory:
+                case ScreenEnum.Inventory:
                     _currentGUIScreen = new InventoryScreen();
                     return;
-                case Screens.ItemCreation:
+                case ScreenEnum.ItemCreation:
                     _currentGUIScreen = new ItemCreationScreen();
                     return;
-                case Screens.MainMenu:
+                case ScreenEnum.MainMenu:
                     _currentGUIScreen = new MainMenuScreen();
                     return;
-                case Screens.GameMenu:
+                case ScreenEnum.GameMenu:
                     _currentGUIScreen = new GameMenuScreen();
                     return;
-                case Screens.None:
+                case ScreenEnum.None:
                     _currentGUIScreen = null;
                     return;
             }
@@ -131,7 +131,7 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadCrafterScreen(Crafter crafter = null, WorldAdventurer adventurer = null)
         {
-            _currentScreen = Screens.ItemCreation;
+            _currentScreen = ScreenEnum.ItemCreation;
             if (crafter != null ) { _currentGUIScreen = new ItemCreationScreen(crafter); }
             else if (adventurer != null) { _currentGUIScreen = new ItemCreationScreen(adventurer); }
         }
@@ -146,38 +146,38 @@ namespace RiverHollow.Game_Managers
             _currentGUIScreen.RemoveComponent(g);
         }
 
-        public static void LoadScreen(Screens newScreen, List<Merchandise> merch)
+        public static void LoadScreen(ScreenEnum newScreen, List<Merchandise> merch)
         {
             GraphicCursor._currentType = GraphicCursor.CursorType.Normal;
             _currentScreen = newScreen;
             switch (newScreen)
             {
-                case Screens.BuildingShop:
+                case ScreenEnum.BuildingShop:
                     _currentGUIScreen = new PurchaseBuildingsScreen(merch);
                     return;
-                case Screens.WorkerShop:
+                case ScreenEnum.WorkerShop:
                     _currentGUIScreen = new PurchaseWorkersScreen(merch);
                     return;
             }
         }
 
-        public static void LoadScreen(Screens newScreen, NPC n)
+        public static void LoadScreen(ScreenEnum newScreen, NPC n)
         {
             _currentScreen = newScreen;
             switch (newScreen)
             {
-                case Screens.Inventory:
+                case ScreenEnum.Inventory:
                     _currentGUIScreen = new InventoryScreen(n);
                     return;
             }
         }
 
-        public static void LoadScreen(Screens newScreen, WorldAdventurer n)
+        public static void LoadScreen(ScreenEnum newScreen, WorldAdventurer n)
         {
             _currentScreen = newScreen;
             switch (newScreen)
             {
-                case Screens.TextInput:
+                case ScreenEnum.TextInput:
                     _currentGUIScreen = new TextInputScreen(n);
                     return;
             }
@@ -185,19 +185,19 @@ namespace RiverHollow.Game_Managers
 
     public static void LoadContainerScreen(Container c)
         {
-            _currentScreen = GUIManager.Screens.Inventory;
+            _currentScreen = GUIManager.ScreenEnum.Inventory;
             _currentGUIScreen = new InventoryScreen(c);
         }
 
         public static void LoadTextScreen(string text)
         {
-            _currentScreen = GUIManager.Screens.Text;
+            _currentScreen = GUIManager.ScreenEnum.Text;
             _currentGUIScreen = new TextScreen(text);
         }
 
         public static void LoadTextScreen(NPC talker, string text)
         {
-            _currentScreen = GUIManager.Screens.Text;
+            _currentScreen = GUIManager.ScreenEnum.Text;
             _currentGUIScreen = new TextScreen(talker, text);
         }
 

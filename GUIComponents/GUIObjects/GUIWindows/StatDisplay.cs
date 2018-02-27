@@ -8,22 +8,22 @@ namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class StatDisplay : GUIWindow
     {
-        public enum Display { Energy, Health};
+        public enum DisplayEnum { Energy, Health};
 
-        private Display _toDisplay;
+        private DisplayEnum _toDisplay;
         CombatCharacter _character;
         private float _percentage;
         private bool _hover;
         private SpriteFont _font;
 
-        public StatDisplay(Display what, Vector2 pos, int squareSize) : base(pos, GUIWindow.RedDialog, squareSize, 200, 32)
+        public StatDisplay(DisplayEnum what, Vector2 pos, int squareSize) : base(pos, GUIWindow.RedDialog, squareSize, 200, 32)
         {
             _toDisplay = what;
             _percentage = 0;
             _font = GameContentManager.GetFont(@"Fonts\Font");
         }
 
-        public StatDisplay(Display what, CombatCharacter c, Vector2 pos, int squareSize) : base(pos, GUIWindow.RedDialog, squareSize, 200, 32)
+        public StatDisplay(DisplayEnum what, CombatCharacter c, Vector2 pos, int squareSize) : base(pos, GUIWindow.RedDialog, squareSize, 200, 32)
         {
             _character = c;
             _toDisplay = what;
@@ -31,7 +31,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _font = GameContentManager.GetFont(@"Fonts\Font");
         }
 
-        public StatDisplay(Display what, CombatCharacter c, Vector2 pos, int width, int squareSize) : base(pos, GUIWindow.RedDialog, squareSize, width, 32)
+        public StatDisplay(DisplayEnum what, CombatCharacter c, Vector2 pos, int width, int squareSize) : base(pos, GUIWindow.RedDialog, squareSize, width, 32)
         {
             _character = c;
             _toDisplay = what;
@@ -43,8 +43,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             if (_character == null)
             {
-                if (_toDisplay == Display.Health) { _percentage = ((float)PlayerManager.HitPoints / (float)PlayerManager.MaxHitPoints); }
-                else if (_toDisplay == Display.Energy) { _percentage = (PlayerManager.Stamina / (float)PlayerManager.MaxStamina); }
+                if (_toDisplay == DisplayEnum.Health) { _percentage = ((float)PlayerManager.HitPoints / (float)PlayerManager.MaxHitPoints); }
+                else if (_toDisplay == DisplayEnum.Energy) { _percentage = (PlayerManager.Stamina / (float)PlayerManager.MaxStamina); }
             }
             else
             {
@@ -65,8 +65,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 string stat = string.Empty;
                 if (_character == null)
                 {
-                    if (_toDisplay == Display.Health) { stat = string.Format("{0}/{1}", PlayerManager.HitPoints, PlayerManager.MaxHitPoints); }
-                    else if (_toDisplay == Display.Energy) { stat = string.Format("{0}/{1}", PlayerManager.Stamina, PlayerManager.MaxStamina); }
+                    if (_toDisplay == DisplayEnum.Health) { stat = string.Format("{0}/{1}", PlayerManager.HitPoints, PlayerManager.MaxHitPoints); }
+                    else if (_toDisplay == DisplayEnum.Energy) { stat = string.Format("{0}/{1}", PlayerManager.Stamina, PlayerManager.MaxStamina); }
                 }
                 else
                 {

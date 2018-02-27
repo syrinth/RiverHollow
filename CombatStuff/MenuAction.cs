@@ -14,8 +14,8 @@ namespace RiverHollow.Characters.CombatStuff
         protected int _id;
         public int ActionID { get => _id; }
 
-        public enum ActionType { Action, Menu, Spell };
-        protected ActionType _actionType;
+        public enum ActionEnum { Action, Menu, Spell };
+        protected ActionEnum _actionType;
         protected string _name;
         public string Name { get => _name; }
         protected string _description;
@@ -33,16 +33,16 @@ namespace RiverHollow.Characters.CombatStuff
         {
             _id = id;
             int i = 0;
-            _actionType = (ActionType)Enum.Parse(typeof(ActionType), stringData[i++]);
+            _actionType = (ActionEnum)Enum.Parse(typeof(ActionEnum), stringData[i++]);
             _name = stringData[i++];
             _description = stringData[i++];
 
             return i;
         }
 
-        public bool IsMenu() { return _actionType == ActionType.Menu; }
-        public bool IsAction() { return _actionType == ActionType.Action; }
-        public bool IsSpell() { return _actionType == ActionType.Spell; }
+        public bool IsMenu() { return _actionType == ActionEnum.Menu; }
+        public bool IsAction() { return _actionType == ActionEnum.Action; }
+        public bool IsSpell() { return _actionType == ActionEnum.Spell; }
     }
 
     public class CombatAction : MenuAction
@@ -91,7 +91,7 @@ namespace RiverHollow.Characters.CombatStuff
         protected int ImportBasics(int id, string[] stringData)
         {
             int i = 0;
-            _actionType = (ActionType)Enum.Parse(typeof(ActionType), stringData[i++]);
+            _actionType = (ActionEnum)Enum.Parse(typeof(ActionEnum), stringData[i++]);
             _name = stringData[i++];
             _description = stringData[i++];
             _textureRow = int.Parse(stringData[i++]);

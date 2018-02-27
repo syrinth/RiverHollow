@@ -61,7 +61,7 @@ namespace RiverHollow
             _lastUpdateinSeconds += gameTime.ElapsedGameTime.TotalSeconds;
             if(_currHour == 26)
             {
-                GUIManager.SetScreen(GUIManager.Screens.DayEnd);
+                GUIManager.SetScreen(GUIManager.ScreenEnum.DayEnd);
             }
             if (_lastUpdateinSeconds >= 1)
             {
@@ -71,7 +71,7 @@ namespace RiverHollow
 
             if (GameCalendar.CurrentHour == 2)
             {
-                GUIManager.SetScreen(GUIManager.Screens.DayEnd);
+                GUIManager.SetScreen(GUIManager.ScreenEnum.DayEnd);
             }
         }
 

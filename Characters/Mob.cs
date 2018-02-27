@@ -27,6 +27,7 @@ namespace RiverHollow
 
         public Mob(int id, string[] stringData)
         {
+            _characterType = CharacterEnum.Mob;
             _monsters = new List<CombatCharacter>();
             ImportBasics(stringData, id);
             _textureName = @"Textures\Monsters\Goblin Scout";

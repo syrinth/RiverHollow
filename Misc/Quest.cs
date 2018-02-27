@@ -34,7 +34,7 @@ namespace RiverHollow.Misc
         //public int RewardMoney { get => _rewardMoney; }
         //private List<int> _rewardItems;
 
-        public Quest(string name, QuestGoalType type, string desc, NPC giver, int target, Monster m, Item i)
+        public Quest(string name, QuestGoalType type, string desc, int target, Monster m, Item i, NPC giver = null)
         {
             _name = name;
             _goalType = type;
@@ -47,40 +47,41 @@ namespace RiverHollow.Misc
             _finished = false;
         }
 
-        public bool AttemptProgress(Object o)
+        public bool AttemptProgress(Monster m)
         {
-            bool progress = false;
-            int num = 0;
-            if (o.GetType().Equals(typeof(Monster)))
+            bool rv = false;
+
+            if (_questMob != null && _questMob.ID == m.ID)
             {
-                if (_questMob != null && _questMob.ID == ((Monster)o).ID)
-                {
-                    num = 1;
-                    progress = true;
-                }
-            }
-            else if (o.GetType().Equals(typeof(Item)))
-            {
-                if (_questItem != null && _questItem.ItemID == ((Item)o).ItemID)
-                {
-                    num = ((Item)o).Number;
-                    progress = true;
-                }
-            }
-            if (progress)
-            {
-                if (_accomplished < _targetGoal)
-                {
-                    _accomplished += num;
-                    if (_accomplished >= _targetGoal)
-                    {
-                        _accomplished = _targetGoal;
-                        _finished = true;
-                    }
-                }
+                rv = true;
+                IncrementProgress(1);
             }
 
-            return progress;
+            return rv;
+        }
+        public bool AttemptProgress(Item i)
+        {
+            bool rv = false;
+
+            if (_questItem != null && _questItem.ItemID == ((Item)o).ItemID)
+            {
+                rv = true;
+                IncrementProgress(i.Number);
+            }
+
+            return rv;
+        }
+        public void IncrementProgress(int num)
+        {
+            if (_accomplished < _targetGoal)
+            {
+                _accomplished += num;
+                if (_accomplished >= _targetGoal)
+                {
+                    _accomplished = _targetGoal;
+                    _finished = true;
+                }
+            }
         }
         public bool RemoveProgress(Item i)
         {

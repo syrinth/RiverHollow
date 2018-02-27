@@ -61,7 +61,7 @@ namespace RiverHollow
             DropManager.LoadContent(Content);
             CutsceneManager.LoadContent(Content);
             
-            GUIManager.SetScreen(GUIManager.Screens.MainMenu);
+            GUIManager.SetScreen(GUIManager.ScreenEnum.MainMenu);
             SoundManager.PlaySong("GA03-In Mothers Arms-Huckabay-96");
         }
 
@@ -190,9 +190,9 @@ namespace RiverHollow
             {
                 if (GameManager.OnMap() && InputManager.CheckKey(Keys.Escape))
                 {
-                    if (GUIManager.CurrentGUIScreen != GUIManager.Screens.GameMenu)
+                    if (GUIManager.CurrentGUIScreen != GUIManager.ScreenEnum.GameMenu)
                     {
-                        GUIManager.SetScreen(GUIManager.Screens.GameMenu);
+                        GUIManager.SetScreen(GUIManager.ScreenEnum.GameMenu);
                     }
                 }
                 if (InputManager.CheckKey(Keys.P))
@@ -200,17 +200,17 @@ namespace RiverHollow
                     if (GameManager.IsPaused()) { GameManager.Pause(); }
                     else { GameManager.Unpause(); }
                 }
-                if (GUIManager.CurrentGUIScreen != GUIManager.Screens.ItemCreation || GUIManager.CurrentGUIScreen != GUIManager.Screens.HUD)
+                if (GUIManager.CurrentGUIScreen != GUIManager.ScreenEnum.ItemCreation || GUIManager.CurrentGUIScreen != GUIManager.ScreenEnum.HUD)
                 {
                     if (InputManager.CheckKey(Keys.C))
                     {
-                        if (GUIManager.CurrentGUIScreen == GUIManager.Screens.ItemCreation)
+                        if (GUIManager.CurrentGUIScreen == GUIManager.ScreenEnum.ItemCreation)
                         {
-                            GUIManager.SetScreen(GUIManager.Screens.HUD);
+                            GUIManager.SetScreen(GUIManager.ScreenEnum.HUD);
                         }
                         else
                         {
-                            GUIManager.SetScreen(GUIManager.Screens.ItemCreation);
+                            GUIManager.SetScreen(GUIManager.ScreenEnum.ItemCreation);
                         }
                     }
                 }
@@ -221,7 +221,7 @@ namespace RiverHollow
         {
             Camera.ResetObserver();
             MapManager.BackToPlayer();
-            GUIManager.SetScreen(GUIManager.Screens.HUD);
+            GUIManager.SetScreen(GUIManager.ScreenEnum.HUD);
         }
 
         public static void NewGame()

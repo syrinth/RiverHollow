@@ -8,7 +8,6 @@ using RiverHollow.Characters.CombatStuff;
 using RiverHollow.SpriteAnimations;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.ObjectManager;
-using System;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters.NPCs
@@ -43,6 +42,7 @@ namespace RiverHollow.Characters.NPCs
 
         public WorldAdventurer(string[] stringData, int id)
         {
+            _characterType = CharacterEnum.WorldAdventurer;
             ImportBasics(stringData, id);
             _sTexture = @"Textures\" + _sAdventurerType;
             LoadContent(_sTexture);
@@ -118,6 +118,10 @@ namespace RiverHollow.Characters.NPCs
             if (DrawIt)
             {
                 base.Draw(spriteBatch, useLayerDepth);
+                if (_heldItem != null)
+                {
+                    _heldItem.Draw(spriteBatch, new Rectangle(Position.ToPoint(), new Point(32, 32)));
+                }
             }
         }
 

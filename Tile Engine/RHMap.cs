@@ -208,7 +208,7 @@ namespace RiverHollow.Tile_Engine
 
             foreach (WorldCharacter c in ToRemove)
             {
-                if (c.GetType().Equals(typeof(Mob)) && _mobList.Contains((Mob)c)) { _mobList.Remove((Mob)c); }
+                if (c.IsMob() && _mobList.Contains((Mob)c)) { _mobList.Remove((Mob)c); }
                 else if (_characterList.Contains(c)) { _characterList.Remove(c); }
             }
             ToRemove.Clear();
@@ -220,7 +220,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     if (!MapManager.Maps[c.CurrentMapName].Contains(c))
                     {
-                        if (c.GetType().Equals(typeof(Mob)) && !_mobList.Contains((Mob)c)) { _mobList.Add((Mob)c); }
+                        if (c.IsMob() && !_mobList.Contains((Mob)c)) { _mobList.Add((Mob)c); }
                         else if (!_characterList.Contains(c)) { _characterList.Add(c); }
                         c.CurrentMapName = _name;
                         c.Position = c.NewMapPosition == Vector2.Zero ? c.Position : c.NewMapPosition;
@@ -531,8 +531,7 @@ namespace RiverHollow.Tile_Engine
 
             foreach (WorldCharacter c in _characterList)
             {
-                Type cType = c.GetType();
-                if (c.CollisionContains(mouseLocation) && (cType.Equals(typeof(NPC)) || cType.IsSubclassOf(typeof(NPC))))
+                if (c.CollisionContains(mouseLocation) && c.CanTalk())
                 {
                     ((NPC)c).Talk();
                     break;
@@ -621,8 +620,7 @@ namespace RiverHollow.Tile_Engine
                 }
                 foreach (WorldCharacter c in _characterList)
                 {
-                    Type cType = c.GetType();
-                    if (cType.IsSubclassOf(typeof(WorldAdventurer)))
+                    if (c.IsWorldAdventurer())
                     {
                         WorldAdventurer w = (WorldAdventurer)c;
                         if (w.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(w.CharCenter) &&
@@ -632,13 +630,13 @@ namespace RiverHollow.Tile_Engine
                             rv = true;
                         }
                     }
-                    else if (cType.Equals(typeof(NPC)))
+                    else if (c.IsNPC())
                     {
                         NPC n = (NPC)c;
                         if (InventoryManager.CurrentItem != null &&
                             n.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(n.CharCenter) &&
-                            InventoryManager.CurrentItem.Type != Item.ItemType.Tool &&
-                            InventoryManager.CurrentItem.Type != Item.ItemType.Equipment)
+                            InventoryManager.CurrentItem.ItemType != Item.ItemEnum.Tool &&
+                            InventoryManager.CurrentItem.ItemType != Item.ItemEnum.Equipment)
                         {
                             n.Gift(InventoryManager.CurrentItem);
                             rv = true;
@@ -704,15 +702,15 @@ namespace RiverHollow.Tile_Engine
                 foreach(WorldCharacter c in _characterList)
                 {
                     if (InventoryManager.CurrentItem != null && 
-                        !c.GetType().IsSubclassOf(typeof(Mob)) && c.CollisionBox.Contains(mouseLocation) &&
-                        InventoryManager.CurrentItem.Type != Item.ItemType.Tool &&
-                        InventoryManager.CurrentItem.Type != Item.ItemType.Equipment)
+                        !c.IsMob() && c.CollisionBox.Contains(mouseLocation) &&
+                        InventoryManager.CurrentItem.ItemType != Item.ItemEnum.Tool &&
+                        InventoryManager.CurrentItem.ItemType != Item.ItemEnum.Equipment)
                     {
                         GraphicCursor._currentType = GraphicCursor.CursorType.Gift;
                         found = true;
                         break;
                     }
-                    else if(!c.GetType().IsSubclassOf(typeof(Mob)) && c.CollisionContains(mouseLocation)){
+                    else if(!c.IsMob() && c.CollisionContains(mouseLocation)){
                         GraphicCursor._currentType = GraphicCursor.CursorType.Talk;
                         found = true;
                         break;
@@ -866,7 +864,7 @@ namespace RiverHollow.Tile_Engine
                         WorldAdventurer w = ObjectManager.GetWorker(GraphicCursor.WorkerToPlace);
                         b.AddWorker(w, r);
                         b._selected = false;
-                        GUIManager.LoadScreen(GUIManager.Screens.TextInput, w);
+                        GUIManager.LoadScreen(GUIManager.ScreenEnum.TextInput, w);
                         GameManager.Scry(false);
                         rv = true;
                     }

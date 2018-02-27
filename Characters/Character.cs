@@ -8,6 +8,10 @@ namespace RiverHollow.Characters
 {
     public class Character
     {
+        public enum CharacterEnum { Character, CombatAdventurer, CombatCharacter, Mob, Monster, NPC, WorldAdventurer, WorldCharacter };
+        protected CharacterEnum _characterType = CharacterEnum.Character;
+        public CharacterEnum CharacterType => _characterType;
+
         protected string _sName;
         public string Name { get => _sName; }
 
@@ -33,10 +37,7 @@ namespace RiverHollow.Characters
         public int SpriteWidth { get => _sprite.Width; }
         public int SpriteHeight { get => _sprite.Height; }
 
-        public Character()
-        {
-
-        }
+        public Character() { }
 
         public virtual void LoadContent(string textureToLoad, int frameWidth, int frameHeight, int numFrames, float frameSpeed,int startX = 0, int startY = 0)
         {
@@ -74,5 +75,12 @@ namespace RiverHollow.Characters
         public bool IsCurrentAnimation(string val) { return _sprite.CurrentAnimation.Equals(val); }
         public bool IsAnimating() { return _sprite.IsAnimating; }
         public bool AnimationPlayedXTimes(int x) { return _sprite.GetPlayCount() == x; }
+
+        public bool IsCombatAdventurer() { return _characterType == CharacterEnum.CombatAdventurer; }
+        public bool IsMob() { return _characterType == CharacterEnum.Mob; }
+        public bool IsMonster() { return _characterType == CharacterEnum.Monster; }
+        public bool IsNPC() { return _characterType == CharacterEnum.NPC; }
+        public bool IsWorldAdventurer() { return _characterType == CharacterEnum.WorldAdventurer; }
+        public bool CanTalk() { return IsWorldAdventurer() || IsNPC(); }
     }
 }
