@@ -290,20 +290,12 @@ namespace RiverHollow.Game_Managers
                         MapManager.PlaceWorldItem((Container)GraphicCursor.HeldItem, mouseLocation.ToVector2());
                         GraphicCursor.DropItem();
                     }
-                    else if (GraphicCursor.HeldItem.IsProcessor())
+                    else if (GraphicCursor.HeldItem.IsProcessor() || GraphicCursor.HeldItem.IsCrafter())
                     {
-                        Processor p = ((Processor)GraphicCursor.HeldItem);
+                        Machine p = ((Machine)GraphicCursor.HeldItem);
                         p.SetMapName(CurrentMap);
-                        p.DrawPosition = Utilities.Normalize(mouseLocation.ToVector2());
+                        p.MapPosition = Utilities.Normalize(mouseLocation.ToVector2());
                         MapManager.PlaceWorldItem(p, mouseLocation.ToVector2());
-                        GraphicCursor.DropItem();
-                    }
-                    else if (GraphicCursor.HeldItem.IsCrafter())
-                    {
-                        Crafter c = ((Crafter)GraphicCursor.HeldItem);
-                        c.SetMapName(CurrentMap);
-                        c.DrawPosition = Utilities.Normalize(mouseLocation.ToVector2());
-                        MapManager.PlaceWorldItem(c, mouseLocation.ToVector2());
                         GraphicCursor.DropItem();
                     }
                 }

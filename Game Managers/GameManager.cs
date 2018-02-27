@@ -499,7 +499,7 @@ namespace RiverHollow.Game_Managers
                 {
                     Machine it = (Machine)ObjectManager.GetItem(mac.staticItemID);
                     it.LoadData(mac);
-                    tm.PlaceStaticItem(it, it.DrawPosition);
+                    tm.PlaceStaticItem(it, it.MapPosition);
                 }
             }
             foreach (UpgradeData u in data.UpgradeData)
@@ -541,17 +541,11 @@ namespace RiverHollow.Game_Managers
                 }
                 return c;
             }
-            else if (it.IsProcessor())
+            else if (it.IsProcessor() || it.IsCrafter())
             {
-                Processor p = (Processor)it;
-                p.DrawPosition = new Vector2(data.x, data.y);
-                return p;
-            }
-            else if (it.IsCrafter())
-            {
-                Crafter c = (Crafter)it;
-                c.DrawPosition = new Vector2(data.x, data.y);
-                return c;
+                Machine m = (Machine)it;
+                m.MapPosition = new Vector2(data.x, data.y);
+                return m;
             }
 
             return null;

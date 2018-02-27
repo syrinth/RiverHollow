@@ -11,6 +11,22 @@ namespace RiverHollow.Items
 {
     public class StaticItem : Item
     {
+        protected AnimatedSprite _sprite;
+        protected Vector2 _vMapPosition;
+        public Vector2 MapPosition
+        {
+            get { return _vMapPosition; }
+            set {
+                _vMapPosition = value;
+                DrawPosition = value;
+            }
+        }
+        public Vector2 DrawPosition
+        {
+            get { return _sprite.Position; }
+            set { _sprite.Position = new Vector2(_sprite.Width > 32 ? value.X - (_sprite.Width-32)/2 : value.X, (_sprite.Height > 32) ? value.Y - (_sprite.Height - 32) : value.Y); }
+        }
+
         public StaticItem()
         {
         }
@@ -51,13 +67,7 @@ namespace RiverHollow.Items
     public class Machine : StaticItem
     {
         protected string _sMapName;
-        public Vector2 DrawPosition
-        {
-            get { return _sprite.Position; }
-            set { _sprite.Position = new Vector2(value.X, value.Y - (_iHeight - 32)); }
-        }
-
-        protected AnimatedSprite _sprite;
+        
         protected Item _heldItem;
         protected double _processedTime;
         public double ProcessedTime => _processedTime;
@@ -125,7 +135,7 @@ namespace RiverHollow.Items
                 _processedTime += gameTime.ElapsedGameTime.TotalSeconds;
                 if (_processedTime >= _currentlyProcessing.ProcessingTime)
                 {
-                    SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, DrawPosition);
+                    SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition);
                     _heldItem = ObjectManager.GetItem(_currentlyProcessing.Output);
                     _processedTime = -1;
                     _currentlyProcessing = null;
@@ -154,8 +164,8 @@ namespace RiverHollow.Items
             MachineData m = new MachineData
             {
                 staticItemID = this.ItemID,
-                x = (int)this.DrawPosition.X,
-                y = (int)this.DrawPosition.Y,
+                x = (int)this.MapPosition.X,
+                y = (int)this.MapPosition.Y,
                 processedTime = this.ProcessedTime,
                 currentItemID = (this._currentlyProcessing == null) ? -1 : this._currentlyProcessing.Input,
                 heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID
@@ -166,7 +176,7 @@ namespace RiverHollow.Items
         public override void LoadData(GameManager.MachineData mac)
         {
             _itemID = mac.staticItemID;
-            DrawPosition = new Vector2(mac.x, mac.y);
+            MapPosition = new Vector2(mac.x, mac.y);
             _processedTime = mac.processedTime;
             _currentlyProcessing = (mac.currentItemID == -1) ? null : _diProcessing[mac.currentItemID];
             _heldItem = ObjectManager.GetItem(mac.heldItemID);
@@ -239,7 +249,7 @@ namespace RiverHollow.Items
                 _processedTime += gameTime.ElapsedGameTime.TotalSeconds;
                 if (_processedTime >= _currentlyMaking.ProcessingTime)
                 {
-                    SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, DrawPosition);
+                    SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition);
                     _heldItem = ObjectManager.GetItem(_currentlyMaking.Output);
                     _processedTime = -1;
                     _currentlyMaking = null;
@@ -261,8 +271,8 @@ namespace RiverHollow.Items
             MachineData m = new MachineData
             {
                 staticItemID = this.ItemID,
-                x = (int)this.DrawPosition.X,
-                y = (int)this.DrawPosition.Y,
+                x = (int)this.MapPosition.X,
+                y = (int)this.MapPosition.Y,
                 processedTime = this.ProcessedTime,
                 currentItemID = (this._currentlyMaking == null) ? -1 : this._currentlyMaking.Output,
                 heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID
@@ -273,7 +283,7 @@ namespace RiverHollow.Items
         public override void LoadData(GameManager.MachineData mac)
         {
             _itemID = mac.staticItemID;
-            DrawPosition = new Vector2(mac.x, mac.y);
+            MapPosition = new Vector2(mac.x, mac.y);
             _processedTime = mac.processedTime;
             _currentlyMaking = (mac.currentItemID == -1) ? null : _diCrafting[mac.currentItemID];
             _heldItem = ObjectManager.GetItem(mac.heldItemID);

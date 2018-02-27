@@ -544,10 +544,13 @@ namespace RiverHollow.Tile_Engine
                     break;
                 }
             }
-            foreach (StaticItem s in _staticItemList)
+
+            RHTile tile = _tileArray[mouseLocation.X / 32, mouseLocation.Y / 32];
+            if(tile != null)
             {
-                if (s.CollisionBox.Contains(mouseLocation))
+                if(tile.StaticItem != null)
                 {
+                    StaticItem s = tile.StaticItem;
                     if (s.IsContainer())
                     {
                         if (IsDungeon && DungeonManager.IsEndChest((Container)s))
@@ -562,7 +565,7 @@ namespace RiverHollow.Tile_Engine
                     {
                         Processor p = (Processor)s;
                         if (p.ProcessingFinished()) { p.TakeFinishedItem(); }
-                        else if(GraphicCursor.HeldItem != null && !p.Processing()) { p.ProcessHeldItem(GraphicCursor.HeldItem); }
+                        else if (GraphicCursor.HeldItem != null && !p.Processing()) { p.ProcessHeldItem(GraphicCursor.HeldItem); }
                     }
                     else if (s.IsCrafter())
                     {
@@ -570,17 +573,13 @@ namespace RiverHollow.Tile_Engine
                         if (c.ProcessingFinished()) { c.TakeFinishedItem(); }
                         else if (!c.Processing()) { GUIManager.LoadCrafterScreen(GUIManager.Screens.ItemCreation, c); }
                     }
-                    break;
                 }
-            }
 
-            RHTile tile = _tileArray[mouseLocation.X / 32, mouseLocation.Y / 32];
-            if(tile != null)
-            {
                 if (tile.ContainsProperty("Journal", out string val) && val.Equals("true"))
                 {
                     GUIManager.LoadTextScreen(GameContentManager.GetDialogue("Journal"));
                 }
+
                 if (tile.Object != null && tile.Object.ID == 3) //Checks to see if the tile contains a staircase object
                 {
                     MapManager.ChangeMaps(PlayerManager.World, this.Name, ((Staircase)tile.Object).ToMap);
