@@ -72,7 +72,7 @@ namespace RiverHollow.Game_Managers
             {
                 ChosenSkill = null;
                 ChosenItem = null;
-                if (TurnIndex < TurnOrder.Count-1) { TurnIndex++; }
+                if (TurnIndex <= TurnOrder.Count -1) { TurnIndex++; }
                 else
                 {
                     TurnIndex = 0;

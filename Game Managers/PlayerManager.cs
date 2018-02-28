@@ -137,34 +137,28 @@ namespace RiverHollow.Game_Managers
                 KeyboardState ks = Keyboard.GetState();
                 if (ks.IsKeyDown(Keys.W))
                 {
-                    World.Facing = WorldCharacter.DirectionEnum.Up;
                     moveDir += new Vector2(0, -World.Speed);
-                    animation = "WalkUp";
                     moveVector += new Vector2(0, -World.Speed);
                 }
                 else if (ks.IsKeyDown(Keys.S))
                 {
-                    World.Facing = WorldCharacter.DirectionEnum.Down;
                     moveDir += new Vector2(0, World.Speed);
-                    animation = "WalkDown";
                     moveVector += new Vector2(0, World.Speed);
                 }
 
                 if (ks.IsKeyDown(Keys.A))
                 {
-                    World.Facing = WorldCharacter.DirectionEnum.Left;
                     moveDir += new Vector2(-World.Speed, 0);
-                    animation = "WalkLeft";
                     moveVector += new Vector2(-World.Speed, 0);
                 }
                 else if (ks.IsKeyDown(Keys.D))
                 {
-                    World.Facing = WorldCharacter.DirectionEnum.Right;
                     moveDir += new Vector2(World.Speed, 0);
-                    animation = "WalkRight";
                     moveVector += new Vector2(World.Speed, 0);
                 }
-                
+
+                World.DetermineFacing(moveDir);
+
                 if (moveDir.Length() != 0)
                 {
                     Rectangle testRectX = new Rectangle((int)World.CollisionBox.X + (int)moveDir.X, (int)World.CollisionBox.Y, World.CollisionBox.Width, World.CollisionBox.Height);
@@ -174,30 +168,7 @@ namespace RiverHollow.Game_Managers
                     {
                         World.MoveBy((int)moveDir.X, (int)moveDir.Y);
                     }
-                }
-                else
-                {
-                    switch (World.Facing)
-                    {
-                        case WorldCharacter.DirectionEnum.Down:
-                            animation = "IdleDown";
-                            break;
-                        case WorldCharacter.DirectionEnum.Up:
-                            animation = "IdleUp";
-                            break;
-                        case WorldCharacter.DirectionEnum.Left:
-                            animation = "IdleLeft";
-                            break;
-                        case WorldCharacter.DirectionEnum.Right:
-                            animation = "IdleRight";
-                            break;
-                    }
-                }
-
-                if (World.Sprite.CurrentAnimation != animation)
-                {
-                    World.Sprite.CurrentAnimation = animation;
-                }
+                }                
             }
             World.Update(gameTime);
         }

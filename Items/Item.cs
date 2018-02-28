@@ -116,7 +116,7 @@ namespace RiverHollow.Items
             }
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox)
+        public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox, bool LayerDepth = false)
         {
             double drawHeight = _dHeight;
             int tempX = drawBox.X;
@@ -129,8 +129,15 @@ namespace RiverHollow.Items
                 drawBox.X += drawX;
                 drawBox.Width = (int)drawWidth;
             }
-            
-            spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, (int)_dWidth, (int)_dHeight), Color.White);
+
+            if (LayerDepth)
+            {
+                spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, (int)_dWidth, (int)_dHeight), Color.White, 0, new Vector2(0, 0), SpriteEffects.None, 99999);
+            }
+            else
+            {
+                spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, (int)_dWidth, (int)_dHeight), Color.White);
+            }
 
             drawBox.X = tempX;
             drawBox.Width = tempWidth;
@@ -328,7 +335,7 @@ namespace RiverHollow.Items
             _sprite.Update(gameTime);
         }
 
-        public override void Draw(SpriteBatch spriteBatch, Rectangle drawBox)
+        public void Draw(SpriteBatch spriteBatch, Rectangle drawBox)
         {
             spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, 32, 32), Color.White);
         }

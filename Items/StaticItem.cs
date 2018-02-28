@@ -118,7 +118,7 @@ namespace RiverHollow.Items
             _sprite.Draw(spriteBatch, true);
             if (_heldItem != null)
             {
-                _heldItem.Draw(spriteBatch, new Rectangle(DrawPosition.ToPoint(), new Point(32, 32)));
+                _heldItem.Draw(spriteBatch, new Rectangle(DrawPosition.ToPoint(), new Point(32, 32)), true);
             }
         }
 

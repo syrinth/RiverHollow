@@ -470,6 +470,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             bool rv = false;
 
             rv = _gwMenu.ProcessLeftButtonClick(mouse);
+            if (!rv) { rv = _useMenuWindow.ProcessLeftButtonClick(mouse); }
             ProcessActionChoice();
 
             return rv;
@@ -790,26 +791,32 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 if (_poiMouse != GraphicCursor.Position.ToPoint() && Contains(GraphicCursor.Position.ToPoint()))
                 {
                     _poiMouse = GraphicCursor.Position.ToPoint();
-                    //if (_iKeySelection - 2 >= 0 && GraphicCursor.Position.Y < _giSelection.Position.Y)
-                    //{
-                    //    _giSelection.MoveImageBy(new Vector2(0, -_characterHeight));
-                    //    _iKeySelection -= 2;
-                    //}
-                    //else if (_iKeySelection + 2 < _diOptions.Count && GraphicCursor.Position.Y > _giSelection.Position.Y + _giSelection.Height)
-                    //{
-                    //    _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
-                    //    _iKeySelection += 2;
-                    //}
-                    //else if (_iKeySelection + 1 < _diOptions.Count && GraphicCursor.Position.Y >= _giSelection.Position.Y && GraphicCursor.Position.Y <= _giSelection.Position.Y + _giSelection.Height && GraphicCursor.Position.X > _textColTwo)
-                    //{
-                    //    _giSelection.MoveImageTo(new Vector2(_textColTwo - _selectWidth, _giSelection.Position.Y));
-                    //    _iKeySelection++;
-                    //}
-                    //else if (_iKeySelection - 1 >= 0 && GraphicCursor.Position.Y >= _giSelection.Position.Y && GraphicCursor.Position.Y <= _giSelection.Position.Y + _giSelection.Height && GraphicCursor.Position.X < _textColTwo)
-                    //{
-                    //    _giSelection.MoveImageTo(new Vector2(_textColOne - _selectWidth, _giSelection.Position.Y));
-                    //    _iKeySelection--;
-                    //}
+                    if (_iKeySelection - 2 >= 0 && GraphicCursor.Position.Y < _giSelection.Position.Y)
+                    {
+                        _giSelection.MoveImageBy(new Vector2(0, -_characterHeight));
+                        _iKeySelection -= 2;
+                    }
+                    else if (_iKeySelection + 2 < _diOptions.Count && GraphicCursor.Position.Y > _giSelection.Position.Y + _giSelection.Height)
+                    {
+                        _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
+                        _iKeySelection += 2;
+                    }
+                    else if (_iKeySelection + 1 < _diOptions.Count && GraphicCursor.Position.Y >= _giSelection.Position.Y && GraphicCursor.Position.Y <= _giSelection.Position.Y + _giSelection.Height && GraphicCursor.Position.X > _textColTwo)
+                    {
+                        if (_iKeySelection % 2 == 0)
+                        {
+                            _giSelection.MoveImageTo(new Vector2(_textColTwo - _selectWidth, _giSelection.Position.Y));
+                            _iKeySelection++;
+                        }
+                    }
+                    else if (_iKeySelection - 1 >= 0 && GraphicCursor.Position.Y >= _giSelection.Position.Y && GraphicCursor.Position.Y <= _giSelection.Position.Y + _giSelection.Height && GraphicCursor.Position.X < _textColTwo)
+                    {
+                        if (_iKeySelection % 2 != 0)
+                        {
+                            _giSelection.MoveImageTo(new Vector2(_textColOne - _selectWidth, _giSelection.Position.Y));
+                            _iKeySelection--;
+                        }
+                    }
                 }
             }
 

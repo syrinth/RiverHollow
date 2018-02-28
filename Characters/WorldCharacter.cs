@@ -67,33 +67,53 @@ namespace RiverHollow.Characters
             else if (d == DirectionEnum.Left) { _sprite.CurrentAnimation = "Walk West"; }
         }
 
-        protected void DetermineAnimation(ref string animation, Vector2 direction, float deltaX, float deltaY)
+        public void DetermineFacing(Vector2 direction)
         {
-            if (Math.Abs(deltaX) > Math.Abs(deltaY))
+            string animation = string.Empty;
+
+            if (direction.X > 0)
             {
-                if (direction.X > 0)
+                Facing = DirectionEnum.Right;
+                animation = "WalkRight";
+            }
+            else if (direction.X < 0)
+            {
+                Facing = DirectionEnum.Left;
+                animation = "WalkLeft";
+            }
+
+            if (direction.Y > 0)
+            {
+                Facing = DirectionEnum.Down;
+                animation = "WalkDown";
+            }
+            else if (direction.Y < 0)
+            {
+                Facing = DirectionEnum.Up;
+                animation = "WalkUp";
+            }
+            if (direction.Length() == 0)
+            {
+                switch (Facing)
                 {
-                    Facing = DirectionEnum.Right;
-                    animation = "WalkRight";
-                }
-                else
-                {
-                    Facing = DirectionEnum.Left;
-                    animation = "WalkLeft";
+                    case WorldCharacter.DirectionEnum.Down:
+                        animation = "IdleDown";
+                        break;
+                    case WorldCharacter.DirectionEnum.Up:
+                        animation = "IdleUp";
+                        break;
+                    case WorldCharacter.DirectionEnum.Left:
+                        animation = "IdleLeft";
+                        break;
+                    case WorldCharacter.DirectionEnum.Right:
+                        animation = "IdleRight";
+                        break;
                 }
             }
-            else
+
+            if (_sprite.CurrentAnimation != animation)
             {
-                if (direction.Y > 0)
-                {
-                    Facing = DirectionEnum.Down;
-                    animation = "WalkDown";
-                }
-                else
-                {
-                    Facing = DirectionEnum.Up;
-                    animation = "WalkUp";
-                }
+                _sprite.SetCurrentAnimation(animation);
             }
         }
 
@@ -108,7 +128,7 @@ namespace RiverHollow.Characters
             }
 
             string animation = string.Empty;
-            DetermineAnimation(ref animation, direction, direction.X, direction.Y);
+            DetermineFacing(direction);
 
             if (_sprite.CurrentAnimation != animation)
             {

@@ -120,7 +120,7 @@ namespace RiverHollow.Characters.NPCs
                 base.Draw(spriteBatch, useLayerDepth);
                 if (_heldItem != null)
                 {
-                    _heldItem.Draw(spriteBatch, new Rectangle(Position.ToPoint(), new Point(32, 32)));
+                    _heldItem.Draw(spriteBatch, new Rectangle(Position.ToPoint(), new Point(32, 32)), true);
                 }
             }
         }
@@ -250,6 +250,9 @@ namespace RiverHollow.Characters.NPCs
             _dProcessedTime = data.processedTime;
             _currentlyMaking = (data.currentItemID == -1) ? null : _diCrafting[data.currentItemID];
             _heldItem = ObjectManager.GetItem(data.heldItemID);
+
+            SetCombat();
+            _c.SetName(_sName);
 
             if (_currentlyMaking != null) { _sprite.SetCurrentAnimation("Working"); }
         }

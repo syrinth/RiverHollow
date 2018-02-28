@@ -13,12 +13,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
         private Inventory _container;
         private CharacterBox _character;
         private SpriteFont _font;
-        private int _characterIndex;
+        private int _iCharacterIndex;
 
         public InventoryScreen()
         {
-            _characterIndex = 0;
-            _character = new CharacterBox(PlayerManager.GetParty()[_characterIndex], new Vector2(128, 32));
+            _iCharacterIndex = 0;
+            _character = new CharacterBox(PlayerManager.GetParty()[_iCharacterIndex], new Vector2(128, 32));
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _inventory = new Inventory(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight/2), 4, InventoryManager.maxItemColumns, 32);
             Controls.Add(_inventory);
@@ -44,8 +44,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             Vector2 contWidthHeight = new Vector2(_container.UsableRectangle().Width, _container.UsableRectangle().Height);
             Vector2 mainWidthHeight = new Vector2(_inventory.UsableRectangle().Width, _inventory.UsableRectangle().Height);
-            _container.SetPosition(centerPoint - new Vector2((contWidthHeight.X/2), contWidthHeight.Y));
-            _inventory.SetPosition(centerPoint - new Vector2(mainWidthHeight.X / 2, 0));
+            _container.Setup(centerPoint - new Vector2((contWidthHeight.X/2), contWidthHeight.Y));
+            _inventory.Setup(centerPoint - new Vector2(mainWidthHeight.X / 2, 0));
 
             Controls.Add(_inventory);
             Controls.Add(_container);
@@ -59,7 +59,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _inventory = new Inventory(n, centerPoint, 4, InventoryManager.maxItemColumns, 32);
 
             Vector2 mainWidthHeight = new Vector2(_inventory.UsableRectangle().Width, _inventory.UsableRectangle().Height);
-            _inventory.SetPosition(centerPoint - new Vector2(mainWidthHeight.X / 2, 0));
+            _inventory.Setup(centerPoint - new Vector2(mainWidthHeight.X / 2, 0));
 
             Controls.Add(_inventory);
             InventoryManager.PublicContainer = null;
@@ -83,9 +83,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 rv = _character.ProcessLeftButtonClick(mouse);
                 if (!rv)
                 {
-                    if (_characterIndex < PlayerManager.GetParty().Count - 1) { _characterIndex++; }
-                    else { _characterIndex = 0; }
-                    _character.AssignNewCharacter(PlayerManager.GetParty()[_characterIndex]);
+                    if (_iCharacterIndex < PlayerManager.GetParty().Count - 1) { _iCharacterIndex++; }
+                    else { _iCharacterIndex = 0; }
+                    _character.AssignNewCharacter(PlayerManager.GetParty()[_iCharacterIndex]);
                     rv = true;
                 }
             }
@@ -123,9 +123,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             else if (_character != null && _character.Contains(mouse))
             {
-                if (_characterIndex > 0) { _characterIndex--; }
-                else { _characterIndex = PlayerManager.GetParty().Count - 1; }
-                _character.AssignNewCharacter(PlayerManager.GetParty()[_characterIndex]);
+                if (_iCharacterIndex > 0) { _iCharacterIndex--; }
+                else { _iCharacterIndex = PlayerManager.GetParty().Count - 1; }
+                _character.AssignNewCharacter(PlayerManager.GetParty()[_iCharacterIndex]);
                 rv = true;
             }
             return rv;

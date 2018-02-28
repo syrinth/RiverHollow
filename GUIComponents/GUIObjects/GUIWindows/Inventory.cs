@@ -16,8 +16,8 @@ namespace RiverHollow.Screens
         public Container Container { get => _container; }
         private NPC _giveTo;
 
-        protected const int boxSize = 32;
-        protected const int _margin = 3;
+        protected const int _iBoxSize = 64;
+        protected const int _iMargin = 3;
 
         protected int _columns;
         protected int _rows;
@@ -30,9 +30,9 @@ namespace RiverHollow.Screens
             _columns = columns;
 
             _displayList = new GUIItemBox[rows, columns];
-            _width = (_edgeSize * 2) + (_columns * boxSize) + (_margin * (_columns + 1));
-            _height = (_edgeSize * 2) + (_rows * boxSize) + (_margin * (_rows + 1));
-            SetPosition(new Vector2(center.X - _width / 2, center.Y - _height / 2));
+            _width = (_edgeSize * 2) + (_columns * _iBoxSize) + (_iMargin * (_columns + 1));
+            _height = (_edgeSize * 2) + (_rows * _iBoxSize) + (_iMargin * (_rows + 1));
+            Setup(new Vector2(center.X - _width / 2, center.Y - _height / 2));
 
             _sourcePoint = GUIWindow.BrownDialog;
             _texture = GameContentManager.GetTexture(@"Textures\Dialog");
@@ -48,21 +48,21 @@ namespace RiverHollow.Screens
             _giveTo = n;
         }
 
-        public void SetPosition(Vector2 position)
+        public void Setup(Vector2 position)
         {
             _position = position;
             _drawRect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
 
-            Rectangle displayBox = new Rectangle((int)Position.X + _edgeSize + _margin, (int)Position.Y + _edgeSize + _margin, boxSize, boxSize);
+            Rectangle displayBox = new Rectangle((int)Position.X + _edgeSize + _iMargin, (int)Position.Y + _edgeSize + _iMargin, _iBoxSize, _iBoxSize);
             for (int i = 0; i < _rows; i++)
             {
                 for (int j = 0; j < _columns; j++)
                 {
                     _displayList[i, j] = new GUIItemBox(displayBox.Location.ToVector2(), new Rectangle(288, 32, 32, 32), displayBox.Width, displayBox.Height, @"Textures\Dialog", null);
-                    displayBox.X += boxSize + _margin;
+                    displayBox.X += _iBoxSize + _iMargin;
                 }
-                displayBox.X = (int)Position.X + _edgeSize + _margin;
-                displayBox.Y += boxSize + _margin;
+                displayBox.X = (int)Position.X + _edgeSize + _iMargin;
+                displayBox.Y += _iBoxSize + _iMargin;
             }
         }
 

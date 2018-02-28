@@ -14,6 +14,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
     class ItemCreationScreen : GUIScreen
     {
+        const int _iBoxSize = 64;
+        const int _iMargin = 3;
+        const int _iMaxColumns = 4;
+
         Crafter _craftMachine;
         WorldAdventurer _craftAdventurer;
         private Inventory _inventory;
@@ -51,41 +55,60 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
 
         public void Setup(Dictionary<int, Recipe> recipes)
         {
+            GameManager.Pause();
             Vector2 centerPoint = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
-            _columns = 4;
-            _rows = (_columns > 0) ? Math.Max(1, recipes.Count / _columns) : 1;
-            if (_rows == 0) { _rows = 1; }
-            _displayList = new GUIItemBox[_columns, _rows];
-            _creationWindow = new GUIWindow(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), GUIWindow.RedDialog, GUIWindow.RedDialogEdge, 96, 96);
-            _inventory = new Inventory(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), 4, InventoryManager.maxItemColumns, 32);
 
-            Vector2 contWidthHeight = new Vector2(_creationWindow.Width, _creationWindow.Height);
-            Vector2 mainWidthHeight = new Vector2(_inventory.Width, _inventory.Height);
-            Vector2 newPos = centerPoint - new Vector2((contWidthHeight.X / 2), contWidthHeight.Y);
-            _creationWindow.Position = newPos;
-
-            _inventory.SetPosition(centerPoint - new Vector2(mainWidthHeight.X / 2, 0));
-
-            int i = 0; int j = 0;
+            List<int> canMake = new List<int>();
             foreach (int id in recipes.Keys)
             {
                 //Ensure that either the creation of the item is enabled by a crafter or that the player knows the recipe themselves
                 if (_craftAdventurer != null || _craftMachine != null || PlayerManager.CanMake.Contains(id))
                 {
-                    //MAR
-                    Rectangle displayBox = new Rectangle((int)_creationWindow.Position.X + (35 * (i+1)), (int)_creationWindow.Position.Y + (35 * (j + 1)), 32, 32);
+                    canMake.Add(id);
+                }
+            }
+
+            _columns = (canMake.Count < _iMaxColumns) ? canMake.Count : _iMaxColumns;
+            _rows = (canMake.Count < _iMaxColumns) ? 1 : Math.Max(1, canMake.Count / _columns);
+
+            _displayList = new GUIItemBox[_columns, _rows];
+            _inventory = new Inventory(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), 4, InventoryManager.maxItemColumns, 32);
+
+            int creationWidth = (GUIWindow.RedDialogEdge * 2) + (_columns * _iBoxSize) + (_iMargin * (_columns + 1));
+            int creationHeight = (GUIWindow.RedDialogEdge * 2) + (_rows * _iBoxSize) + (_iMargin * (_rows + 1));
+
+            _creationWindow = new GUIWindow(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), GUIWindow.RedDialog, GUIWindow.RedDialogEdge, creationWidth, creationHeight);            
+
+            //Move the windows so that they are synched up appropriately
+            Vector2 contWidthHeight = new Vector2(_creationWindow.Width, _creationWindow.Height);
+            Vector2 mainWidthHeight = new Vector2(_inventory.Width, _inventory.Height);
+            Vector2 newPos = centerPoint - new Vector2((contWidthHeight.X / 2), contWidthHeight.Y + GUIWindow.BrownDialogEdge + GUIWindow.RedDialogEdge);
+            _creationWindow.Position = newPos;
+
+            _inventory.Setup(centerPoint - new Vector2(mainWidthHeight.X / 2, 0));
+
+            int i = 0; int j = 0;
+            foreach (int id in canMake)
+            {
+                //Ensure that either the creation of the item is enabled by a crafter or that the player knows the recipe themselves
+                if (_craftAdventurer != null || _craftMachine != null || PlayerManager.CanMake.Contains(id))
+                {
+                    int xMod = _creationWindow.EdgeSize + _iMargin * (i + 1) + (_iBoxSize * i);
+                    int yMod = _creationWindow.EdgeSize + _iMargin * (j + 1) + (_iBoxSize * j);
+                    Rectangle displayBox = new Rectangle((int)_creationWindow.Position.X + xMod, (int)_creationWindow.Position.Y + yMod, _iBoxSize, _iBoxSize);
                     _displayList[i, j] = new GUIItemBox(displayBox.Location.ToVector2(), new Rectangle(288, 32, 32, 32), displayBox.Width, displayBox.Height, @"Textures\Dialog", ObjectManager.GetItem(id));
+
                     i++;
                     if (i == _columns)
                     {
                         i = 0;
                         j++;
-                        displayBox.X = (int)_creationWindow.Position.X + 32 + 3;
-                        displayBox.Y += 32 + 3;
+                        displayBox.X = (int)_creationWindow.Position.X + _iBoxSize + _iMargin;
+                        displayBox.Y += _iBoxSize + _iMargin;
                     }
                     else
                     {
-                        displayBox.X += 32 + 3;
+                        displayBox.X += _iBoxSize + _iMargin;
                     }
                 }
             }
@@ -131,6 +154,16 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                         }
                     }
                 }
+                rv = true;
+            }
+            return rv;
+        }
+        public override bool ProcessRightButtonClick(Point mouse)
+        {
+            bool rv = false;
+            if (!_creationWindow.Contains(mouse))
+            {
+                GameManager.BackToMain();
                 rv = true;
             }
             return rv;
