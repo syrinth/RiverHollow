@@ -4,16 +4,28 @@ namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class MainMenuScreen : GUIScreen
     {
+        const int BTN_NUM = 3;
+        const int BTN_HEIGHT = 64;
+        const int BTN_WIDTH = 128;
         private GUIButton _btnNewGame;
         private GUIButton _btnLoadGame;
+        private GUIButton _btnExit;
 
         public MainMenuScreen()
         {
-            SoundManager.PlaySong("GA03-In Mothers Arms-Huckabay-96");
-            _btnNewGame = new GUIButton(new Vector2(RiverHollow.ScreenWidth/2, 500), new Rectangle(0, 128, 64, 32), 128, 64, "New Game", @"Textures\Dialog");
-            _btnLoadGame = new GUIButton(new Vector2(RiverHollow.ScreenWidth / 2, 800), new Rectangle(0, 128, 64, 32), 128, 64, "Load Game", @"Textures\Dialog");
+            int btnPadding = 4;
+            int btnStart = ((RiverHollow.ScreenHeight - (BTN_NUM * BTN_HEIGHT) - (btnPadding * BTN_NUM-1))/2) + BTN_HEIGHT/2;
+            int yPos = btnStart;
+
+            _btnNewGame = new GUIButton(new Vector2(RiverHollow.ScreenWidth/2, yPos), new Rectangle(0, 128, 64, 32), BTN_WIDTH, BTN_HEIGHT, "New Game", @"Textures\Dialog");
+            yPos += BTN_HEIGHT + btnPadding;
+            _btnLoadGame = new GUIButton(new Vector2(RiverHollow.ScreenWidth / 2, yPos), new Rectangle(0, 128, 64, 32), BTN_WIDTH, BTN_HEIGHT, "Load Game", @"Textures\Dialog");
+            yPos += BTN_HEIGHT + btnPadding;
+            _btnExit = new GUIButton(new Vector2(RiverHollow.ScreenWidth / 2, yPos), new Rectangle(0, 128, 64, 32), BTN_WIDTH, BTN_HEIGHT, "Exit Game", @"Textures\Dialog");
             Controls.Add(_btnNewGame);
             Controls.Add(_btnLoadGame);
+            Controls.Add(_btnExit);
+
             GameManager.GoToInformation();
         }
 
@@ -28,6 +40,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (_btnLoadGame.Contains(mouse))
             {
                 RiverHollow.LoadGame();
+                rv = true;
+            }
+            if (_btnExit.Contains(mouse))
+            {
+                RiverHollow.PrepExit();
                 rv = true;
             }
             return rv;

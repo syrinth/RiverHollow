@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Screens;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIObjects
