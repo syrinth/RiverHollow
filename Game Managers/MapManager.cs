@@ -89,7 +89,7 @@ namespace RiverHollow.Game_Managers
             }
             else
             {
-                if (c.IsNPC()){
+                if (c.IsNPC() || c.IsWorldCharacter()){
                     ((NPC)c).ClearTileForMapChange();
                 }
                 _tileMaps[currMap].RemoveCharacter(c);

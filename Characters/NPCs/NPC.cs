@@ -132,6 +132,7 @@ namespace RiverHollow.Characters
                     if (Position == targetPos)
                     {
                         _currentPath.RemoveAt(0);
+                        DetermineFacing(Vector2.Zero);
                     }
                     else
                     {
@@ -277,12 +278,12 @@ namespace RiverHollow.Characters
             {
                 _sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\NPC8"));
             }
-            _sprite.AddAnimation("Stand South", 0, 0, 32, 64, 1, 0.3f);
-            _sprite.AddAnimation("Walk South", 0, 0, 32, 64, 4, 0.3f);
-            _sprite.AddAnimation("Walk North", 0, 64, 32, 64, 4, 0.3f);
-            _sprite.AddAnimation("Walk East", 0, 128, 32, 64, 4, 0.3f);
-            _sprite.AddAnimation("Walk West", 0, 192, 32, 64, 4, 0.3f);
-            _sprite.SetCurrentAnimation("Stand South");
+            _sprite.AddAnimation("IdleDown", 0, 0, 32, 64, 1, 0.2f);
+            _sprite.AddAnimation("WalkDown", 0, 0, 32, 64, 4, 0.2f);
+            _sprite.AddAnimation("WalkUp", 0, 64, 32, 64, 4, 0.2f);
+            _sprite.AddAnimation("WalkRight", 0, 128, 32, 64, 4, 0.2f);
+            _sprite.AddAnimation("WalkLeft", 0, 192, 32, 64, 4, 0.2f);
+            _sprite.SetCurrentAnimation("IdleDown");
             _sprite.IsAnimating = true;
         }
 

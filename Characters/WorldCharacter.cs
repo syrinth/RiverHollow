@@ -129,11 +129,6 @@ namespace RiverHollow.Characters
 
             string animation = string.Empty;
             DetermineFacing(direction);
-
-            if (_sprite.CurrentAnimation != animation)
-            {
-                _sprite.CurrentAnimation = animation;
-            }
         }
 
         public void MoveBy(int x, int y)
