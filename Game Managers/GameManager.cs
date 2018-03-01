@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using RiverHollow.Characters;
 using RiverHollow.Characters.NPCs;
+using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Items;
 using RiverHollow.Tile_Engine;
 using System.Collections.Generic;
@@ -51,12 +52,12 @@ namespace RiverHollow.Game_Managers
         public static bool InCombat() { return _mapState == MapEnum.Combat; }
         public static void GoToCombat() {
             _mapState = MapEnum.Combat;
-            GUIManager.SetScreen(GUIManager.ScreenEnum.Combat);
+            GUIManager.SetScreen(new CombatScreen());
         }
         public static bool OnMap() { return _mapState == MapEnum.WorldMap; }
         public static void GoToWorldMap() {
             _mapState = MapEnum.WorldMap;
-            GUIManager.SetScreen(GUIManager.ScreenEnum.HUD);
+            GUIManager.SetScreen(new HUDScreen());
         }
         public static bool Informational() { return _mapState == MapEnum.None; }
         public static void GoToInformation() {
@@ -66,7 +67,7 @@ namespace RiverHollow.Game_Managers
 
         public static void BackToMain()
         {
-            GUIManager.SetScreen(GUIManager.ScreenEnum.HUD);
+            GUIManager.SetScreen(new HUDScreen());
             _state = StateEnum.Running;
             _mapState = MapEnum.WorldMap;
         }

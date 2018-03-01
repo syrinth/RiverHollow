@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters;
 using RiverHollow.Items;
 using RiverHollow.GUIObjects;
+using RiverHollow.Game_Managers.GUIComponents.Screens;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
@@ -186,7 +187,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         {
             if (action.Equals("SleepNow"))
             {
-                GUIManager.SetScreen(GUIManager.ScreenEnum.DayEnd);
+                GUIManager.SetScreen(new DayEndScreen());
             }
             else if (action.Contains("Eat") && _food != null)
             {
@@ -210,9 +211,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
             if (!string.IsNullOrEmpty(nextText))
             {
-                GUIManager.LoadTextScreen(_talker, nextText);
+                GUIManager.SetScreen(new TextScreen(_talker, nextText));
             }
-            else if(GUIManager.CurrentGUIScreen == GUIManager.ScreenEnum.Text || GUIManager.CurrentGUIScreen == GUIManager.ScreenEnum.TextInput)
+            else if(GUIManager.IsTextScreen())
             {
                 GameManager.BackToMain();
             }

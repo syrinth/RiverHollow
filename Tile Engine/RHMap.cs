@@ -14,6 +14,8 @@ using System.Collections.ObjectModel;
 using RiverHollow.Misc;
 using static RiverHollow.RiverHollow;
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.Game_Managers.GUIComponents.Screens;
 
 namespace RiverHollow.Tile_Engine
 {
@@ -560,7 +562,7 @@ namespace RiverHollow.Tile_Engine
                             stairs.SetExit(MapManager.HomeMap);
                             AddWorldObject(stairs, true);
                         }
-                        GUIManager.LoadContainerScreen((Container)s);
+                        GUIManager.SetScreen(new InventoryScreen((Container)s));
                     }
                     else if (s.IsMachine())
                     {
@@ -572,7 +574,7 @@ namespace RiverHollow.Tile_Engine
 
                 if (tile.ContainsProperty("Journal", out string val) && val.Equals("true"))
                 {
-                    GUIManager.LoadTextScreen(GameContentManager.GetDialogue("Journal"));
+                    GUIManager.SetScreen(new TextScreen(GameContentManager.GetDialogue("Journal")));
                 }
 
                 if (tile.Object != null && tile.Object.ID == 3) //Checks to see if the tile contains a staircase object
@@ -853,7 +855,7 @@ namespace RiverHollow.Tile_Engine
                         WorldAdventurer w = ObjectManager.GetWorker(GraphicCursor.WorkerToPlace);
                         b.AddWorker(w, r);
                         b._selected = false;
-                        GUIManager.LoadScreen(GUIManager.ScreenEnum.TextInput, w);
+                        GUIManager.SetScreen(new TextInputScreen(w));
                         GameManager.Scry(false);
                         rv = true;
                     }

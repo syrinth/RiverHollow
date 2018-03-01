@@ -118,7 +118,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                         InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
                     }
 
-                    GUIManager.SetScreen(GUIManager.ScreenEnum.None);
+                    GUIManager.SetScreen(null);
                     WorkerBuilding b = ObjectManager.GetBuilding(_merchandise[_currentItemIndex].MerchID);
                     GraphicCursor.PickUpBuilding(b);
                     GameManager.Scry(true);
@@ -135,7 +135,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             bool rv = true;
             if (!Contains(mouse))
             {
-                GUIManager.SetScreen(GUIManager.ScreenEnum.HUD);
+                GUIManager.SetScreen(new HUDScreen());
                 GameManager.Unpause();
                 rv = true;
             }

@@ -116,7 +116,6 @@ namespace RiverHollow.Game_Managers
         {
             Vector2 moveVector = Vector2.Zero;
             Vector2 moveDir = Vector2.Zero;
-            string animation = "";
 
             if (UseTool != null)
             {

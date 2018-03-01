@@ -79,5 +79,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             //
         }
+
+        public virtual bool IsTextScreen() { return false; }
+        public virtual bool IsGameMenuScreen() { return false; }
+        public virtual bool IsItemCreationScreen() { return false; }
+        public virtual bool IsHUD() { return false; }
     }
 }

@@ -4,7 +4,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.ViewportAdapters;
-
+using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.Game_Managers.GUIComponents.Screens;
 
 namespace RiverHollow
 {
@@ -47,22 +48,25 @@ namespace RiverHollow
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+
             InputManager.Load();
             SoundManager.LoadContent(Content);
             GameContentManager.LoadContent(Content);
             GameManager.LoadContent(Content);
             ObjectManager.LoadContent(Content);
-            PlayerManager.Initialize();
             GUIManager.LoadContent();
             MapManager.LoadContent(Content, GraphicsDevice);
-            spriteBatch = new SpriteBatch(GraphicsDevice);
             GameCalendar.NewCalendar();
             CharacterManager.LoadContent(Content);
             DropManager.LoadContent(Content);
             CutsceneManager.LoadContent(Content);
-            
-            GUIManager.SetScreen(GUIManager.ScreenEnum.MainMenu);
-            SoundManager.PlaySong("GA03-In Mothers Arms-Huckabay-96");
+
+            //MAR
+            PlayerManager.Initialize();
+
+            //Set the Main Menu Screen
+            GUIManager.SetScreen(new MainMenuScreen());
         }
 
         protected override void UnloadContent()
@@ -190,9 +194,9 @@ namespace RiverHollow
             {
                 if (GameManager.OnMap() && InputManager.CheckKey(Keys.Escape))
                 {
-                    if (GUIManager.CurrentGUIScreen != GUIManager.ScreenEnum.GameMenu)
+                    if (!GUIManager.IsGameMenuScreen())
                     {
-                        GUIManager.SetScreen(GUIManager.ScreenEnum.GameMenu);
+                        GUIManager.SetScreen(new GameMenuScreen());
                     }
                 }
                 if (InputManager.CheckKey(Keys.P))
@@ -200,17 +204,17 @@ namespace RiverHollow
                     if (GameManager.IsPaused()) { GameManager.Pause(); }
                     else { GameManager.Unpause(); }
                 }
-                if (GUIManager.CurrentGUIScreen != GUIManager.ScreenEnum.ItemCreation || GUIManager.CurrentGUIScreen != GUIManager.ScreenEnum.HUD)
+                if (!GUIManager.IsItemCreationScreen() || !GUIManager.IsHUD())
                 {
                     if (InputManager.CheckKey(Keys.C))
                     {
-                        if (GUIManager.CurrentGUIScreen == GUIManager.ScreenEnum.ItemCreation)
+                        if (GUIManager.IsItemCreationScreen())
                         {
-                            GUIManager.SetScreen(GUIManager.ScreenEnum.HUD);
+                            GUIManager.SetScreen(new HUDScreen());
                         }
                         else
                         {
-                            GUIManager.SetScreen(GUIManager.ScreenEnum.ItemCreation);
+                            GUIManager.SetScreen(new ItemCreationScreen());
                         }
                     }
                 }
@@ -221,7 +225,7 @@ namespace RiverHollow
         {
             Camera.ResetObserver();
             MapManager.BackToPlayer();
-            GUIManager.SetScreen(GUIManager.ScreenEnum.HUD);
+            GUIManager.SetScreen(new HUDScreen());
         }
 
         public static void NewGame()

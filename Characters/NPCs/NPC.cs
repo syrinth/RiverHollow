@@ -7,6 +7,8 @@ using RiverHollow.Misc;
 using RiverHollow.Items;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
+using RiverHollow.Game_Managers.GUIComponents.Screens;
+using RiverHollow.Game_Managers.GUIObjects;
 
 namespace RiverHollow.Characters
 {
@@ -254,7 +256,7 @@ namespace RiverHollow.Characters
                 text = GetSelectionText();
             }
             text = ProcessText(text);
-            GUIManager.LoadTextScreen(this, text);
+            GUIManager.SetScreen(new TextScreen(this, text));
         }
 
         public virtual void Talk(string dialogTag)
@@ -265,7 +267,7 @@ namespace RiverHollow.Characters
                 text = _dialogueDictionary[dialogTag];
             }
             text = ProcessText(text);
-            GUIManager.LoadTextScreen(this, text);
+            GUIManager.SetScreen(new TextScreen(this, text));
         }
 
         public void LoadContent()
@@ -317,7 +319,7 @@ namespace RiverHollow.Characters
             }
             else if (entry.Equals("GiveGift"))
             {
-                GUIManager.LoadScreen(GUIManager.ScreenEnum.Inventory, this);
+                GUIManager.SetScreen(new InventoryScreen(this));
                 return "";
             }
             else if (entry.Equals("Party"))
@@ -396,7 +398,7 @@ namespace RiverHollow.Characters
 
                 if (!string.IsNullOrEmpty(text))
                 {
-                    GUIManager.LoadTextScreen(this, text);
+                    GUIManager.SetScreen(new TextScreen(this, text));
                 }
             }
         }

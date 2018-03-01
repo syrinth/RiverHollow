@@ -191,5 +191,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                 }
             }
         }
+
+        public override bool IsItemCreationScreen() { return true; }
     }
 }

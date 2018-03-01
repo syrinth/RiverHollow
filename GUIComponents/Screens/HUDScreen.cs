@@ -39,5 +39,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             base.Draw(spriteBatch);
             spriteBatch.DrawString(_font, PlayerManager.Money.ToString(), new Vector2(32, 96), Color.White);
         }
+
+        public override bool IsHUD() { return true; }
     }
 }

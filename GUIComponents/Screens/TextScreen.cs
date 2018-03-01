@@ -83,5 +83,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
         {
             return _window.Done && !_window._pause;
         }
+
+        public override bool IsTextScreen() { return true; }
     }
 }

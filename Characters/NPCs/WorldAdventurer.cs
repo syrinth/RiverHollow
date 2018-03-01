@@ -9,6 +9,7 @@ using RiverHollow.SpriteAnimations;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.ObjectManager;
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.Game_Managers.GUIComponents.Screens;
 
 namespace RiverHollow.Characters.NPCs
 {
@@ -135,7 +136,7 @@ namespace RiverHollow.Characters.NPCs
         }
         public override void Talk()
         {
-            GUIManager.LoadTextScreen(this, Name + ": " + GameContentManager.GetDialogue("AdventurerTree"));
+            GUIManager.SetScreen(new TextScreen(this, Name + ": " + GameContentManager.GetDialogue("AdventurerTree")));
         }
 
         public override string GetSelectionText()
@@ -158,7 +159,7 @@ namespace RiverHollow.Characters.NPCs
             }
             else if (entry.Equals("Craft"))
             {
-                GUIManager.LoadCrafterScreen(null, this);
+                GUIManager.SetScreen(new ItemCreationScreen(this));
             }
             else if (entry.Equals("Party"))
             {

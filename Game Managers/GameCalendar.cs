@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.Game_Managers.GUIComponents.Screens;
 
 namespace RiverHollow
 {
@@ -61,7 +62,7 @@ namespace RiverHollow
             _lastUpdateinSeconds += gameTime.ElapsedGameTime.TotalSeconds;
             if(_currHour == 26)
             {
-                GUIManager.SetScreen(GUIManager.ScreenEnum.DayEnd);
+                GUIManager.SetScreen(new DayEndScreen());
             }
             if (_lastUpdateinSeconds >= 1)
             {
@@ -71,7 +72,7 @@ namespace RiverHollow
 
             if (GameCalendar.CurrentHour == 2)
             {
-                GUIManager.SetScreen(GUIManager.ScreenEnum.DayEnd);
+                GUIManager.SetScreen(new DayEndScreen());
             }
         }
 

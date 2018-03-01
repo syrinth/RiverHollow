@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
+using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.GUIObjects;
 using RiverHollow.SpriteAnimations;
 using static RiverHollow.Game_Managers.GameManager;
@@ -300,7 +301,7 @@ namespace RiverHollow.Items
         public override bool Processing() { return _currentlyMaking != null; }
         public override void ProcessClick()
         {
-            GUIManager.LoadCrafterScreen(this);
+            GUIManager.SetScreen(new ItemCreationScreen(this));
         }
 
         public void MakeChosenItem(int itemID)

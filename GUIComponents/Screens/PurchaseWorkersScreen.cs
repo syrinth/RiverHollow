@@ -69,7 +69,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                     {
                         PlayerManager.TakeMoney(wB.Cost);
 
-                        GUIManager.SetScreen(GUIManager.ScreenEnum.None);
+                        GUIManager.SetScreen(null);
                         GraphicCursor.PickUpWorker(wB._w.AdventurerID);
                         GameManager.Scry(true);
                         Camera.UnsetObserver();

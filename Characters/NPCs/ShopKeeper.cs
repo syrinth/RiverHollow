@@ -1,4 +1,6 @@
 ﻿using RiverHollow.Game_Managers;
+using RiverHollow.Game_Managers.GUIComponents.Screens;
+using RiverHollow.Game_Managers.GUIObjects.Screens;
 using RiverHollow.GUIObjects;
 
 using System.Collections.Generic;
@@ -60,7 +62,7 @@ namespace RiverHollow.Characters.NPCs
                 }
             }
             text = ProcessText(text);
-            GUIManager.LoadTextScreen(this, text);
+            GUIManager.SetScreen(new TextScreen(this, text));
         }
 
         public override string GetDialogEntry(string entry)
@@ -74,7 +76,7 @@ namespace RiverHollow.Characters.NPCs
                     if (m._type == Merchandise.ItemType.Building) { dialogueEntries.Add(m); }
                 }
                 
-                GUIManager.LoadScreen(GUIManager.ScreenEnum.BuildingShop, dialogueEntries);
+                GUIManager.SetScreen(new PurchaseBuildingsScreen(dialogueEntries));
             }
             else if (entry.Equals("BuyWorkers"))
             {
@@ -82,7 +84,7 @@ namespace RiverHollow.Characters.NPCs
                 {
                     if (m._type == Merchandise.ItemType.Worker) { dialogueEntries.Add(m); }
                 }
-                GUIManager.LoadScreen(GUIManager.ScreenEnum.WorkerShop, dialogueEntries);
+                GUIManager.SetScreen(new PurchaseWorkersScreen(dialogueEntries));
             }
             else if (entry.Contains("Upgrade"))
             {

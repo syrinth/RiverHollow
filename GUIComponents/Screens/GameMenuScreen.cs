@@ -147,5 +147,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             return rv;
         }
+
+        public override bool IsGameMenuScreen() { return true; }
     }
 }

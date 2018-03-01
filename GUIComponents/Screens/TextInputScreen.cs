@@ -13,5 +13,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             _window = new GUITextInputWindow(w);
             Controls.Add(_window);
         }
+
+        public override bool IsTextScreen() { return true; }
     }
 }

@@ -1,11 +1,4 @@
-﻿using RiverHollow.GUIObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -16,6 +9,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public MainMenuScreen()
         {
+            SoundManager.PlaySong("GA03-In Mothers Arms-Huckabay-96");
             _btnNewGame = new GUIButton(new Vector2(RiverHollow.ScreenWidth/2, 500), new Rectangle(0, 128, 64, 32), 128, 64, "New Game", @"Textures\Dialog");
             _btnLoadGame = new GUIButton(new Vector2(RiverHollow.ScreenWidth / 2, 800), new Rectangle(0, 128, 64, 32), 128, 64, "Load Game", @"Textures\Dialog");
             Controls.Add(_btnNewGame);
