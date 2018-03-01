@@ -25,7 +25,7 @@ namespace RiverHollow.Characters
         public enum NPCTypeEnum { Villager, Shopkeeper, Ranger, Worker }
         protected NPCTypeEnum _npcType;
         public NPCTypeEnum NPCType { get => _npcType; }
-        public int Friendship = 60;
+        public int Friendship = 0;
 
         protected Dictionary<int, bool> _collection;
         public Dictionary<int, bool> Collection { get => _collection; }

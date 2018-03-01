@@ -72,7 +72,7 @@ namespace RiverHollow.Game_Managers
             {
                 ChosenSkill = null;
                 ChosenItem = null;
-                if (TurnIndex <= TurnOrder.Count -1) { TurnIndex++; }
+                if (TurnIndex +1 < TurnOrder.Count) { TurnIndex++; }
                 else
                 {
                     TurnIndex = 0;
@@ -120,7 +120,6 @@ namespace RiverHollow.Game_Managers
             ChosenSkill.SkillUser = ActiveCharacter;
             ChosenSkill.UserStartPosition = ActiveCharacter.Position;
 
-            ActiveCharacter.CurrentMP -= a.MPCost;          //Checked before Processing
             if (!ChosenSkill.Target.Equals("Self"))
             {
                 if (chooseTarget) { CurrentPhase = PhaseEnum.ChooseSkillTarget; }  //Skips this phase for enemies. They don't "choose" targets
@@ -141,6 +140,7 @@ namespace RiverHollow.Game_Managers
         //Assign target to the skill as well as the skill user
         public static void SetSkillTarget(BattleLocation target)
         {
+            ActiveCharacter.CurrentMP -= ChosenSkill.MPCost;          //Checked before Processing
             _target = target;
             ChosenSkill.AnimationSetup(target);
             Text = ChosenSkill.Name;

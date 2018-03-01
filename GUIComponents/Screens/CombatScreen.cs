@@ -469,8 +469,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
 
-            rv = _gwMenu.ProcessLeftButtonClick(mouse);
-            if (!rv) { rv = _useMenuWindow.ProcessLeftButtonClick(mouse); }
+            if (DisplayType != Display.None)
+            {
+                rv = _useMenuWindow.ProcessLeftButtonClick(mouse);
+            }
+            else
+            {
+                rv = _gwMenu.ProcessLeftButtonClick(mouse);
+            }
             ProcessActionChoice();
 
             return rv;
@@ -480,15 +486,19 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
             //If the current Phase is skill selection, allow the user to pick a skill for the currentCharacter
-            if (CombatManager.PhaseChooseSkillTarget() || CombatManager.PhaseChooseItemTarget() || DisplayType != Display.None)
+            if (CombatManager.PhaseChooseSkillTarget() || CombatManager.PhaseChooseItemTarget())
             {
                 rv = true;
 
-                _useMenuWindow.Clear();
-                ClearState();
+                _gwMenu.ClearChosenAbility();
+                _useMenuWindow.ClearChoices();
                 CombatManager.ChosenSkill = null;
                 CombatManager.CurrentPhase = CombatManager.PhaseEnum.SelectSkill;
-
+            }
+            else if (DisplayType != Display.None)
+            {
+                ClearState();
+                _useMenuWindow.Clear();
                 DisplayType = Display.None;
             }
             return rv;
