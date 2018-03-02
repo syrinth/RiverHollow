@@ -581,23 +581,23 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             _fFont = GameContentManager.GetFont(@"Fonts\MenuFont");
             _fCharacterHeight = _fFont.MeasureString("Q").Y;
-            _width = width;
-            _height = height;
+            Width = width;
+            Height = height;
             _edgeSize = GreyDialogEdge;
             _sourcePoint = GreyDialog;
 
             Position = position;
 
-            _giCurrentTurn = new GUIImage(new Vector2((int)_position.X + _innerBorder, (int)_position.Y + _innerBorder), new Rectangle(288, 96, 32, 32), (int)_fCharacterHeight, (int)_fCharacterHeight, @"Textures\Dialog");
+            _giCurrentTurn = new GUIImage(new Vector2((int)Position.X + _innerBorder, (int)Position.Y + _innerBorder), new Rectangle(288, 96, 32, 32), (int)_fCharacterHeight, (int)_fCharacterHeight, @"Textures\Dialog");
         }
 
         public void Draw(SpriteBatch spriteBatch, BattleLocation[] locations)
         {
             base.Draw(spriteBatch);
-            int xindex = (int)_position.X + _innerBorder;
-            int yIndex = (int)_position.Y + _innerBorder;
-            int lastHP = (int)Position.X + _width - _innerBorder;
-            int lastMP = (int)(Position.X + _width - _innerBorder - _fFont.MeasureString("XXXX/XXXX").X);
+            int xindex = (int)Position.X + _innerBorder;
+            int yIndex = (int)Position.Y + _innerBorder;
+            int lastHP = (int)Position.X + Width - _innerBorder;
+            int lastMP = (int)(Position.X + Width - _innerBorder - _fFont.MeasureString("XXXX/XXXX").X);
             foreach (CombatCharacter p in PlayerManager.GetParty())
             {
                 Color c = (CombatManager.ActiveCharacter == p) ? Color.Green : Color.White;
@@ -632,14 +632,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _fFont = GameContentManager.GetFont(@"Fonts\MenuFont");
             _vecMenuSize = _fFont.MeasureString("XXXXXXXX");
 
-            _width = width;
-            _height = (int)(_vecMenuSize.Y * _iMaxMenuActions);
+            Width = width;
+            Height = (int)(_vecMenuSize.Y * _iMaxMenuActions);
             _edgeSize = GreyDialogEdge;
             _sourcePoint = GreyDialog;
 
             Position = new Vector2(startX, RiverHollow.ScreenHeight - GreyDialogEdge - (_vecMenuSize.Y * _iMaxMenuActions) - RiverHollow.ScreenHeight / 100);
 
-            _giSelection = new GUIImage(new Vector2((int)_position.X + _innerBorder, (int)_position.Y + _innerBorder), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+            _giSelection = new GUIImage(new Vector2((int)Position.X + _innerBorder, (int)Position.Y + _innerBorder), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
         }
 
         public void Assign(List<MenuAction> abilities)
@@ -677,8 +677,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             base.DrawWindow(spriteBatch);
             if (CombatManager.ActiveCharacter.IsCombatAdventurer())
             {
-                int xindex = (int)_position.X + _innerBorder;
-                int yIndex = (int)_position.Y + _innerBorder;
+                int xindex = (int)Position.X + _innerBorder;
+                int yIndex = (int)Position.Y + _innerBorder;
 
                 if (_diOptions.Count > 0) { _giSelection.Draw(spriteBatch); }
 
@@ -727,18 +727,18 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _fFont = GameContentManager.GetFont(@"Fonts\MenuFont");
             _vecMenuSize = _fFont.MeasureString("XXXXXXXX");
 
-            _width = width;
-            _height = (int)(_vecMenuSize.Y * (_iMaxMenuActions/2));   //Two columns
+            Width = width;
+            Height = (int)(_vecMenuSize.Y * (_iMaxMenuActions/2));   //Two columns
             _edgeSize = GreyDialogEdge;
             _sourcePoint = GreyDialog;
 
-            Position = new Vector2(startX, RiverHollow.ScreenHeight - GreyDialogEdge - (_height) - RiverHollow.ScreenHeight / 100);
+            Position = new Vector2(startX, RiverHollow.ScreenHeight - GreyDialogEdge - (Height) - RiverHollow.ScreenHeight / 100);
 
-            _giSelection = new GUIImage(new Vector2((int)_position.X + _innerBorder, (int)_position.Y + _innerBorder), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+            _giSelection = new GUIImage(new Vector2((int)Position.X + _innerBorder, (int)Position.Y + _innerBorder), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
 
             _selectWidth = _giSelection.Width;
-            _textColOne = (int)_position.X + _innerBorder + _selectWidth;
-            _textColTwo = (int)_position.X + _innerBorder + (Width / 2) + _selectWidth;
+            _textColOne = (int)Position.X + _innerBorder + _selectWidth;
+            _textColTwo = (int)Position.X + _innerBorder + (Width / 2) + _selectWidth;
         }
 
         public override void Update(GameTime gameTime)
@@ -840,7 +840,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             base.DrawWindow(spriteBatch);
             int xindex = _textColOne;
-            int yIndex = (int)_position.Y + _innerBorder;
+            int yIndex = (int)Position.Y + _innerBorder;
 
             if (_diOptions.Count > 0) { _giSelection.Draw(spriteBatch); }
 
@@ -874,7 +874,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     }
                     else
                     {
-                        spriteBatch.DrawString(_fFont, display, new Vector2(_position.X + Width - _fFont.MeasureString(display).X - _selectWidth, yIndex), c);
+                        spriteBatch.DrawString(_fFont, display, new Vector2(Position.X + Width - _fFont.MeasureString(display).X - _selectWidth, yIndex), c);
 
                         xindex = _textColOne;
                         yIndex += (int)_characterHeight;

@@ -19,9 +19,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         {
             GameManager.Pause();
             _statement = statement;
-            _width = Math.Max((int)_font.MeasureString(_statement).X, (int)_characterWidth * 10) + _innerBorder * 2;
-            _height = (int)_characterHeight * 2 + _innerBorder * 2;
-            Position = new Vector2(RiverHollow.ScreenWidth / 2 - _width / 2, RiverHollow.ScreenHeight / 2 - _height / 2);
+            Width = Math.Max((int)_font.MeasureString(_statement).X, (int)_characterWidth * 10) + _innerBorder * 2;
+            Height = (int)_characterHeight * 2 + _innerBorder * 2;
+            Position = new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2);
             _strLen = 0;
             _text = string.Empty;
         }
@@ -30,9 +30,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         {
             GameManager.Pause();
             _statement = "Enter name:";
-            _width = Math.Max((int)_font.MeasureString(_statement).X, (int)_characterWidth * 10) + _innerBorder * 2;
-            _height = (int)_characterHeight * 2 + _innerBorder * 2;
-            Position = new Vector2(RiverHollow.ScreenWidth / 2 - _width / 2, RiverHollow.ScreenHeight / 2 - _height / 2);
+            Width = Math.Max((int)_font.MeasureString(_statement).X, (int)_characterWidth * 10) + _innerBorder * 2;
+            Height = (int)_characterHeight * 2 + _innerBorder * 2;
+            Position = new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2);
             _strLen = 0;
             _w = w;
             _text = string.Empty;
@@ -81,8 +81,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            spriteBatch.DrawString(_font, _statement, new Vector2(_position.X + _innerBorder, _position.Y + _innerBorder), Color.White);
-            spriteBatch.DrawString(_font, _text, new Vector2(_position.X + _innerBorder, _position.Y + _innerBorder + 28), Color.White);
+            spriteBatch.DrawString(_font, _statement, new Vector2(Position.X + _innerBorder, Position.Y + _innerBorder), Color.White);
+            spriteBatch.DrawString(_font, _text, new Vector2(Position.X + _innerBorder, Position.Y + _innerBorder + 28), Color.White);
         }
 
         public string GetText()

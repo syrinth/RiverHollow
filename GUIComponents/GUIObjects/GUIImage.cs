@@ -10,33 +10,33 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public GUIImage(Vector2 position, Rectangle sourceRect, int width, int height, Texture2D texture)
         {
             _texture = texture;
-            _position = position;
-            _width = width;
-            _height = height;
-            _drawRect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
+            Position = position;
+            Width = width;
+            Height = height;
+            _drawRect = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
             _sourceRectangle = sourceRect;
         }
 
         public GUIImage(Vector2 position, Rectangle sourceRect, int width, int height, string texture)
         {
             _texture = GameContentManager.GetTexture(texture);
-            _position = position;
-            _width = width;
-            _height = height;
-            _drawRect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
+            Position = position;
+            Width = width;
+            Height = height;
+            _drawRect = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
             _sourceRectangle = sourceRect;
         }
 
         public void MoveImageTo(Vector2 pos)
         {
-            _position = pos;
-            _drawRect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
+            Position = pos;
+            _drawRect = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
         }
 
         public void MoveImageBy(Vector2 pos)
         {
-            _position += pos;
-            _drawRect = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
+            Position += pos;
+            _drawRect = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

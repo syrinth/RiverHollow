@@ -3,6 +3,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Game_Managers.GUIObjects;
+using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -11,6 +12,7 @@ namespace RiverHollow.GUIComponents.Screens
         enum SelectionEnum { None, Name, Manor };
         SelectionEnum _selection;
         const int BTN_HEIGHT = 32;
+        const int BTN_WIDTH= 128;
         GUIWindow _window;
         GUIButton _btnOK;
         GUIButton _btnCancel;
@@ -26,10 +28,11 @@ namespace RiverHollow.GUIComponents.Screens
             _window = new GUIWindow(new Vector2(startX, GUIWindow.BrownDialogEdge), GUIWindow.BrownDialog, GUIWindow.BrownDialogEdge, width, height);
             Controls.Add(_window);
 
-            _btnCancel = new GUIButton(new Vector2(_window.GetUsableRectangleVec().X+_window.Width-128, _window.GetUsableRectangleVec().Y + _window.Height- BTN_HEIGHT), new Rectangle(0, 128, 64, 32), 128, BTN_HEIGHT, "Cancel", @"Textures\Dialog", true);
+            _btnCancel = new GUIButton(new Vector2(_window.GetUsableRectangleVec().X+_window.Width-128, _window.GetUsableRectangleVec().Y + _window.Height- BTN_HEIGHT), new Rectangle(0, 128, 64, 32), BTN_WIDTH, BTN_HEIGHT, "Cancel", @"Textures\Dialog", true);
             Controls.Add(_btnCancel);
 
-            _btnOK = new GUIButton(new Vector2(_window.GetUsableRectangleVec().X + _window.Width - 128 - 128, _window.GetUsableRectangleVec().Y + _window.Height - BTN_HEIGHT), new Rectangle(0, 128, 64, 32), 128, BTN_HEIGHT, "OK", @"Textures\Dialog", true);
+            _btnOK = new GUIButton("OK", BTN_WIDTH, BTN_HEIGHT);
+            _btnOK.PlaceAndAlignObject(_btnCancel, SideEnum.Left, SideEnum.Top, 0);
             Controls.Add(_btnOK);
 
             _nameWindow = new GUITextInputWindow("Name");
@@ -57,7 +60,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
             if (_btnCancel.Contains(mouse))
             {
-                GUIManager.SetScreen(new GameMenuScreen());
+                GUIManager.SetScreen(new MainMenuScreen());
                 rv = true;
             }
 

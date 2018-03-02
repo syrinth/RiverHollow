@@ -45,8 +45,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         {
             _talker = c;
             _text = text;
-            _height = Math.Max(_height, ((int)_characterHeight * _maxRows));
-            _next = new GUIImage(new Vector2(Position.X+_width - _edgeSize*1.5f, Position.Y + _height - _edgeSize * 1.5f), new Rectangle(288, 64, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+            Height = Math.Max(Height, ((int)_characterHeight * _maxRows));
+            _next = new GUIImage(new Vector2(Position.X+Width - _edgeSize*1.5f, Position.Y + Height - _edgeSize * 1.5f), new Rectangle(288, 64, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
 
             ParseText(text);
         }
@@ -56,9 +56,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _text = text;
             ParseText(text);
 
-            _height = (int)_parsedStrings.Count * (int)_characterHeight + _innerBorder*2;
-            _width = (int)_font.MeasureString(_text).X + _innerBorder * 2;
-            _position = position -= new Vector2(_width / 2, _height / 2);
+            Height = (int)_parsedStrings.Count * (int)_characterHeight + _innerBorder*2;
+            Width = (int)_font.MeasureString(_text).X + _innerBorder * 2;
+            Position = position -= new Vector2(Width / 2, Height / 2);
         }
 
         public GUITextWindow(string text) : this()
@@ -66,10 +66,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _text = text;
             ParseText(text);
 
-            _height = (int)_parsedStrings.Count * (int)_characterHeight + _innerBorder * 2;
-            _width = (int)_font.MeasureString(_text).X + _innerBorder * 2;
+            Height = (int)_parsedStrings.Count * (int)_characterHeight + _innerBorder * 2;
+            Width = (int)_font.MeasureString(_text).X + _innerBorder * 2;
             Vector2 pos = new Vector2(RiverHollow.ScreenWidth/2, RiverHollow.ScreenHeight/2);
-            _position = pos -= new Vector2(_width / 2, _height / 2);
+            Position = pos -= new Vector2(Width / 2, Height / 2);
         }
 
         public GUITextWindow(string text, double duration) : this()
@@ -78,10 +78,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             Duration = duration;
             ParseText(text);
 
-            _height = (int)_parsedStrings.Count * (int)_characterHeight + _innerBorder * 2;
-            _width = (int)_font.MeasureString(_text).X + _innerBorder * 2;
+            Height = (int)_parsedStrings.Count * (int)_characterHeight + _innerBorder * 2;
+            Width = (int)_font.MeasureString(_text).X + _innerBorder * 2;
             Vector2 pos = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
-            _position = pos -= new Vector2(_width / 2, _height / 2);
+            Position = pos -= new Vector2(Width / 2, Height / 2);
         }
 
         public override void Update(GameTime gameTime)
@@ -164,8 +164,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             {
                 Vector2 measure = _font.MeasureString(line + word);
 
-                if (measure.Length() >= (_width - _innerBorder * 2) ||
-                    _numReturns == _maxRows-1 && measure.Length() >= (_width - _innerBorder * 2) - _characterHeight)
+                if (measure.Length() >= (Width - _innerBorder * 2) ||
+                    _numReturns == _maxRows-1 && measure.Length() >= (Width - _innerBorder * 2) - _characterHeight)
                 {
                     returnString = returnString + line + '\n';
                     line = string.Empty;
@@ -175,7 +175,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 grabLast = true;
                 line = line + word + ' ';
 
-                if (measure.Y * _numReturns >= (_width - _innerBorder * 2))
+                if (measure.Y * _numReturns >= (Width - _innerBorder * 2))
                 {
                     grabLast = false;
                     _parsedStrings.Add(returnString);
@@ -198,7 +198,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         public void Draw(SpriteBatch spriteBatch, bool force)
         {
             base.Draw(spriteBatch);
-            spriteBatch.DrawString(_font, force ? _text : _typedText, new Vector2(_position.X + _innerBorder, _position.Y + _innerBorder), Color.White);
+            spriteBatch.DrawString(_font, force ? _text : _typedText, new Vector2(Position.X + _innerBorder, Position.Y + _innerBorder), Color.White);
             if (_pause && _next != null)
             {
                 _next.Draw(spriteBatch);
@@ -212,7 +212,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         public void MoveTo(Vector2 pos)
         {
-            _position = pos;
+            Position = pos;
         }
     }
 }
