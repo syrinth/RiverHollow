@@ -76,6 +76,7 @@
     <Compile Include="Game Managers\SoundManager.cs" />
     <Compile Include="GUIComponents\Screens\CombatScreen.cs" />
     <Compile Include="GUIComponents\Screens\GameMenuScreen.cs" />
+    <Compile Include="GUIComponents\Screens\NewGameScreen.cs" />
     <Compile Include="GUIComponents\Screens\PartyScreen.cs" />
     <Compile Include="GUIComponents\Screens\QuestScreen.cs" />
     <Compile Include="Game Managers\InventoryManager.cs" />

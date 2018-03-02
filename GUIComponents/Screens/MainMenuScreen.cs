@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using RiverHollow.GUIComponents.Screens;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -34,7 +35,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             bool rv = false;
             if (_btnNewGame.Contains(mouse))
             {
-                RiverHollow.NewGame();
+                GUIManager.SetScreen(new NewGameScreen());
+                //RiverHollow.NewGame();
                 rv = true;
             }
             if (_btnLoadGame.Contains(mouse))

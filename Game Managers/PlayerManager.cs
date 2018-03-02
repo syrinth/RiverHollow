@@ -44,8 +44,7 @@ namespace RiverHollow.Game_Managers
         private static List<CombatAdventurer> _party;
 
         public static MerchantChest _merchantChest;
-        private static string _name = "Syrinth";
-        public static string Name { get => _name; }
+        public static string Name;
 
         private static int _money = 2000;
         public static int Money { get => _money; }
@@ -56,7 +55,7 @@ namespace RiverHollow.Game_Managers
             _party = new List<CombatAdventurer>();
             _questLog = new List<Quest>();
             World = new WorldCharacter();
-            Combat = new CombatAdventurer(_name);
+            Combat = new CombatAdventurer(Name);
             _party.Add(Combat);
             _buildings = new List<WorkerBuilding>();
             _canMake = new List<int>();
