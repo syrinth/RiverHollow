@@ -388,6 +388,11 @@ namespace RiverHollow.Game_Managers
         {
             _money = x;
         }
+        public static void SetName(string x)
+        {
+            Name = x;
+            Combat.SetName(x);
+        }
 
         public static bool DecreaseStamina(int x)
         {

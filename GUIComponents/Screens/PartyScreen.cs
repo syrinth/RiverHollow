@@ -17,7 +17,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public PartyScreen()
         {
             _partyList = new List<CharacterBox>();
-            _partyWindow = new GUIWindow(new Vector2(WIDTH, HEIGHT), GUIWindow.RedDialog, GUIWindow.RedDialogEdge, WIDTH, HEIGHT);
+            _partyWindow = new GUIWindow(new Vector2(WIDTH, HEIGHT), GUIWindow.RedWin, WIDTH, HEIGHT);
             int i = 0;
             foreach(CombatAdventurer c in PlayerManager.GetParty())
             {
@@ -86,8 +86,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public CharacterBox(CombatAdventurer c, Vector2 position)
         {
-            _window = new GUIWindow(position, GUIWindow.RedDialog, GUIWindow.RedDialogEdge, RiverHollow.ScreenWidth - 100, 100);
-            Vector2 start = _window.UsableRectangle().Location.ToVector2();
+            _window = new GUIWindow(position, GUIWindow.RedWin, RiverHollow.ScreenWidth - 100, 100);
+            Vector2 start = _window.InnerRectangle().Location.ToVector2();
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _character = c;
             _size = _font.MeasureString("XXXXXXXX");
@@ -106,12 +106,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
             int boxHeight = (QuestScreen.HEIGHT / 4) - (win.EdgeSize * 2);
             int boxWidth = (QuestScreen.WIDTH) - (win.EdgeSize * 2);
 
-            Vector2 boxPoint = new Vector2(win.Corner().X + win.EdgeSize, win.Corner().Y + win.EdgeSize + (i++ * (boxHeight + (win.EdgeSize * 2))));
-            _window = new GUIWindow(boxPoint, GUIWindow.RedDialog, GUIWindow.RedDialogEdge, boxWidth, boxHeight);
+            Vector2 boxPoint = new Vector2(win.InnerTopLeft().X, win.InnerTopLeft().Y + (i++ * (boxHeight + (win.EdgeSize * 2))));
+            _window = new GUIWindow(boxPoint, GUIWindow.RedWin, boxWidth, boxHeight);
 
             _font = GameContentManager.GetFont(@"Fonts\Font");
 
-            Rectangle rect = _window.UsableRectangle();
+            Rectangle rect = _window.InnerRectangle();
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _character = c;
             _size = _font.MeasureString("XXXXXXXX");
@@ -132,11 +132,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             if (_character != null)
             {
-                Vector2 start = _window.Corner();
+                Vector2 start = _window.InnerTopLeft();
                 _window.Draw(spriteBatch);
                 _drawnStat = 0;
                 spriteBatch.DrawString(_font, _character.Name, start, Color.White);
-                spriteBatch.DrawString(_font, _character.CharacterClass.Name, start += new Vector2(_font.MeasureString(_character.Name).X+10, 0), Color.White);
+                spriteBatch.DrawString(_font, _character.CharacterClass.Name, start += new Vector2(_font.MeasureString(_character.Name).X + 10, 0), Color.White);
                 spriteBatch.DrawString(_font, _character.XP + "/" + CombatAdventurer.LevelRange[_character.ClassLevel], start += new Vector2(_font.MeasureString(_character.CharacterClass.Name).X + 10, 0), Color.White);
                 DrawStat(spriteBatch, "Mag");
                 DrawStat(spriteBatch, "Def");
@@ -157,7 +157,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         private void DrawStat(SpriteBatch spriteBatch, string text)
         {
             // Template IE: MAG: 999
-            Rectangle rect = _window.UsableRectangle();
+            Rectangle rect = _window.InnerRectangle();
             Vector2 start = new Vector2(rect.Left, rect.Bottom);// + new Vector2(0, _font.MeasureString("X").Y);
             start -= new Vector2(0, _font.MeasureString("X").Y);
             string statLine = string.Empty;

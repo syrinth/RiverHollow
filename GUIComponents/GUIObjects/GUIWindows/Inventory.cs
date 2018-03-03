@@ -25,16 +25,15 @@ namespace RiverHollow.Screens
         public Inventory(Vector2 center, int rows, int columns, int edgeSize)
         {
             _container = null;
-            _edgeSize = GUIWindow.BrownDialogEdge;
+            _winData = GUIWindow.BrownWin;
             _rows = rows;
             _columns = columns;
 
             _displayList = new GUIItemBox[rows, columns];
-            Width = (_edgeSize * 2) + (_columns * _iBoxSize) + (_iMargin * (_columns + 1));
-            Height = (_edgeSize * 2) + (_rows * _iBoxSize) + (_iMargin * (_rows + 1));
+            Width = (_winData.Edge * 2) + (_columns * _iBoxSize) + (_iMargin * (_columns + 1));
+            Height = (_winData.Edge * 2) + (_rows * _iBoxSize) + (_iMargin * (_rows + 1));
             Setup(new Vector2(center.X - Width / 2, center.Y - Height / 2));
 
-            _sourcePoint = GUIWindow.BrownDialog;
             _texture = GameContentManager.GetTexture(@"Textures\Dialog");
         }
 
@@ -53,7 +52,7 @@ namespace RiverHollow.Screens
             Position = position;
             _drawRect = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
 
-            Rectangle displayBox = new Rectangle((int)Position.X + _edgeSize + _iMargin, (int)Position.Y + _edgeSize + _iMargin, _iBoxSize, _iBoxSize);
+            Rectangle displayBox = new Rectangle((int)Position.X + _winData.Edge + _iMargin, (int)Position.Y + _winData.Edge + _iMargin, _iBoxSize, _iBoxSize);
             for (int i = 0; i < _rows; i++)
             {
                 for (int j = 0; j < _columns; j++)
@@ -61,7 +60,7 @@ namespace RiverHollow.Screens
                     _displayList[i, j] = new GUIItemBox(displayBox.Location.ToVector2(), new Rectangle(288, 32, 32, 32), displayBox.Width, displayBox.Height, @"Textures\Dialog", null);
                     displayBox.X += _iBoxSize + _iMargin;
                 }
-                displayBox.X = (int)Position.X + _edgeSize + _iMargin;
+                displayBox.X = (int)Position.X + _winData.Edge + _iMargin;
                 displayBox.Y += _iBoxSize + _iMargin;
             }
         }

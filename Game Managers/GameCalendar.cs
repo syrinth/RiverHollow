@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
+using RiverHollow.GUIObjects;
 
 namespace RiverHollow
 {
@@ -50,11 +51,10 @@ namespace RiverHollow
             _calendarFont = GameContentManager.GetFont(@"Fonts\Font");
 
             _calendarFont = GameContentManager.GetFont(@"Fonts\Font");
-            Vector2 boxSize = _calendarFont.MeasureString("Day XX, XX:XX");
-            int width = RiverHollow.ScreenWidth;
-            int height = RiverHollow.ScreenHeight;
+            Vector2 boxSize = _calendarFont.MeasureString("Day XX, XX:XX") + new Vector2(GUIWindow.BrownWin.Edge*2, GUIWindow.BrownWin.Edge*2);
 
-            _displayWindow = new GUIWindow(new Vector2(width - boxSize.X - GUIWindow.BrownDialogEdge, GUIWindow.BrownDialogEdge), GUIWindow.BrownDialog, GUIWindow.BrownDialogEdge, (int)boxSize.X, (int)boxSize.Y);
+            _displayWindow = new GUIWindow(GUIWindow.BrownWin, (int)boxSize.X, (int)boxSize.Y);
+            _displayWindow.AnchorToScreen(GUIObject.SideEnum.TopRight, 10);
         }
 
         public static void Update(GameTime gameTime)
@@ -119,7 +119,7 @@ namespace RiverHollow
                     break;
             }
             _displayWindow.Draw(spriteBatch);
-            spriteBatch.DrawString(_calendarFont, String.Format("Day {0}, {1}:{2}", _currDay, hours, mins), _displayWindow.Position, Color.Black);
+            spriteBatch.DrawString(_calendarFont, String.Format("Day {0}, {1}:{2}", _currDay, hours, mins), _displayWindow.InnerTopLeft(), Color.Black);
         }
 
         public static void NextDay()

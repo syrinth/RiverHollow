@@ -74,15 +74,15 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             _displayList = new GUIItemBox[_columns, _rows];
             _inventory = new Inventory(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), 4, InventoryManager.maxItemColumns, 32);
 
-            int creationWidth = (GUIWindow.RedDialogEdge * 2) + (_columns * _iBoxSize) + (_iMargin * (_columns + 1));
-            int creationHeight = (GUIWindow.RedDialogEdge * 2) + (_rows * _iBoxSize) + (_iMargin * (_rows + 1));
+            int creationWidth = (GUIWindow.RedWin.Edge * 2) + (_columns * _iBoxSize) + (_iMargin * (_columns + 1));
+            int creationHeight = (GUIWindow.RedWin.Edge * 2) + (_rows * _iBoxSize) + (_iMargin * (_rows + 1));
 
-            _creationWindow = new GUIWindow(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), GUIWindow.RedDialog, GUIWindow.RedDialogEdge, creationWidth, creationHeight);            
+            _creationWindow = new GUIWindow(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), GUIWindow.RedWin, creationWidth, creationHeight);            
 
             //Move the windows so that they are synched up appropriately
             Vector2 contWidthHeight = new Vector2(_creationWindow.Width, _creationWindow.Height);
             Vector2 mainWidthHeight = new Vector2(_inventory.Width, _inventory.Height);
-            Vector2 newPos = centerPoint - new Vector2((contWidthHeight.X / 2), contWidthHeight.Y + GUIWindow.BrownDialogEdge + GUIWindow.RedDialogEdge);
+            Vector2 newPos = centerPoint - new Vector2((contWidthHeight.X / 2), contWidthHeight.Y + GUIWindow.BrownWin.Edge + GUIWindow.RedWin.Edge);
             _creationWindow.Position = newPos;
 
             _inventory.Setup(centerPoint - new Vector2(mainWidthHeight.X / 2, 0));

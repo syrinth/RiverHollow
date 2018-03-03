@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
+using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using System.Collections.Generic;
 
 namespace RiverHollow.GUIObjects
@@ -76,12 +77,12 @@ namespace RiverHollow.GUIObjects
             }
         }
         
-        internal void PlaceAndAlignObject(GUIObject focus, SideEnum sidePlacement, SideEnum sideToAlign, int spacing)
+        internal void AnchorAndAlignToObject(GUIObject focus, SideEnum sidePlacement, SideEnum sideToAlign, int spacing = 0)
         {
-            PlaceByObject(focus, sidePlacement, spacing);
+            AnchorToObject(focus, sidePlacement, spacing);
             AlignToObject(focus, sideToAlign);
         }
-        internal void PlaceByObject(GUIObject focus, SideEnum sidePlacement, int spacing)
+        internal void AnchorToObject(GUIObject focus, SideEnum sidePlacement, int spacing = 0)
         {
             Vector2 position = focus.Position;
             switch (sidePlacement)
@@ -101,26 +102,104 @@ namespace RiverHollow.GUIObjects
             }
             this.Position = position;
         }
+        internal void AnchorToInnerSide(GUIWindow window, SideEnum sidePlacement, int spacing = 0)
+        {
+            switch (sidePlacement)
+            {
+                case SideEnum.Bottom:
+                    this.SetY(window.InnerBottom() - this.Height- spacing);
+                    break;
+                case SideEnum.Left:
+                    this.SetX(window.InnerLeft() + spacing);
+                    break;
+                case SideEnum.Right:
+                    this.SetX(window.InnerRight() - this.Width - spacing);
+                    break;
+                case SideEnum.Top:
+                    this.SetY(window.InnerTop() + spacing);
+                    break;
+                case SideEnum.BottomLeft:
+                    this.SetY(window.InnerBottom() - this.Height - spacing);
+                    this.SetX(window.InnerLeft() + spacing);
+                    break;
+                case SideEnum.BottomRight:
+                    this.SetY(window.InnerBottom() - this.Height - spacing);
+                    this.SetX(window.InnerRight() - this.Width - spacing);
+                    break;
+                case SideEnum.TopLeft:
+                    this.SetY(window.InnerTop() + spacing);
+                    this.SetX(window.InnerLeft() + spacing);
+                    break;
+                case SideEnum.TopRight:
+                    this.SetY(window.InnerTop()+ spacing);
+                    this.SetX(window.InnerRight() - this.Width - spacing);
+                    break;
+                default:
+                    break;
+            }
+        }
+        internal void AnchorToScreen(SideEnum sidePlacement, int spacing = 0)
+        {
+            int screenHeight = RiverHollow.ScreenHeight;
+            int screenWidth = RiverHollow.ScreenWidth;
+
+            switch (sidePlacement)
+            {
+                case SideEnum.Bottom:
+                    this.SetY(screenHeight - this.Height - spacing);
+                    break;
+                case SideEnum.Left:
+                    this.SetX(0 + spacing);
+                    break;
+                case SideEnum.Right:
+                    this.SetX(screenWidth - this.Width - spacing);
+                    break;
+                case SideEnum.Top:
+                    this.SetY(0 + spacing);
+                    break;
+                case SideEnum.BottomLeft:
+                    this.SetY(screenHeight - this.Height - spacing);
+                    this.SetX(0 + spacing);
+                    break;
+                case SideEnum.BottomRight:
+                    this.SetY(screenHeight - this.Height - spacing);
+                    this.SetX(screenWidth - this.Width - spacing);
+                    break;
+                case SideEnum.TopLeft:
+                    this.SetY(0 + spacing);
+                    this.SetX(0 + spacing);
+                    break;
+                case SideEnum.TopRight:
+                    this.SetY(0 + spacing);
+                    this.SetX(screenWidth - this.Width - spacing);
+                    break;
+                default:
+                    break;
+            }
+        }
         internal void AlignToObject(GUIObject focus, SideEnum sideToAlign)
         {
             Vector2 position = focus.Position;
             switch (sideToAlign)
             {
                 case SideEnum.Bottom:
-                    this.SetY(focus.Position.Y + Height);
+                    this.SetY(focus.Position.Y + focus.Height - this.Height);
                     break;
                 case SideEnum.Left:
                     this.SetX(focus.Position.X);
                     break;
                 case SideEnum.Right:
-                    this.SetX(focus.Position.X + Width);
+                    this.SetX(focus.Position.X + focus.Width - this.Width);
                     break;
                 case SideEnum.Top:
                     this.SetY(focus.Position.Y);
                     break;
+                default:
+                    break;
             }
         }
 
+        
         #endregion
     }
 }

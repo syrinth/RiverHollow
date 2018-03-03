@@ -5,16 +5,16 @@ using System.Collections.Generic;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
-    public class MainMenuScreen : GUIScreen
+    public class IntroMenuScreen : GUIScreen
     {
         const int BTN_PADDING = 50;
-        const int BTN_HEIGHT = 64;
         const int BTN_WIDTH = 128;
+        const int BTN_HEIGHT = 64;
         private GUIButton _btnNewGame;
         private GUIButton _btnLoadGame;
         private GUIButton _btnExit;
 
-        public MainMenuScreen()
+        public IntroMenuScreen()
         {
             _btnNewGame = new GUIButton("New Game");
             _btnLoadGame = new GUIButton("Load Game");
@@ -35,7 +35,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (_btnNewGame.Contains(mouse))
             {
                 GUIManager.SetScreen(new NewGameScreen());
-                //RiverHollow.NewGame();
                 rv = true;
             }
             if (_btnLoadGame.Contains(mouse))

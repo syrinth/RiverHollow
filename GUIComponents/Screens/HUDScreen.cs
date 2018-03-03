@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using RiverHollow.Screens;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
-using Microsoft.Xna.Framework.Input;
+using RiverHollow.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -14,8 +12,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public HUDScreen()
         {
             _font = GameContentManager.GetFont(@"Fonts\Font");
-            _healthDisplay = new StatDisplay(StatDisplay.DisplayEnum.Health, new Vector2(32,32), 5);
-            _staminaDisplay = new StatDisplay(StatDisplay.DisplayEnum.Energy, new Vector2(32,64), 5);
+            _healthDisplay = new StatDisplay(StatDisplay.DisplayEnum.Health);
+            _healthDisplay.AnchorToScreen(GUIObject.SideEnum.TopLeft, 10);
+            _staminaDisplay = new StatDisplay(StatDisplay.DisplayEnum.Energy);
+            _staminaDisplay.AnchorAndAlignToObject(_healthDisplay, GUIObject.SideEnum.Bottom, GUIObject.SideEnum.Left);
             Controls.Add(_healthDisplay);
             Controls.Add(_staminaDisplay);
         }
@@ -37,7 +37,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            spriteBatch.DrawString(_font, PlayerManager.Money.ToString(), new Vector2(32, 96), Color.White);
+            spriteBatch.DrawString(_font, PlayerManager.Money.ToString(), _staminaDisplay.OuterBottomLeft(), Color.White);
         }
 
         public override bool IsHUD() { return true; }

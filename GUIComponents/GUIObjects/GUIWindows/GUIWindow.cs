@@ -1,29 +1,35 @@
-﻿using RiverHollow.Game_Managers.GUIObjects;
-using RiverHollow.GUIObjects;
+﻿using RiverHollow.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using RiverHollow.Tile_Engine;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
     public class GUIWindow : GUIObject
     {
-        public static Vector2 RedDialog = new Vector2(0, 0);
-        public static int RedDialogEdge = 7;
-        public static Vector2 BrownDialog = new Vector2(32, 0);
-        public static int GreyDialogEdge = 7;
-        public static Vector2 GreyDialog = new Vector2(64, 0);
-        public static int BrownDialogEdge = 7;
+        public struct WindowData
+        {
+            Vector2 _vSource;
+            public Vector2 Src => _vSource;
+            int _iEdge;
+            public int Edge => _iEdge;
+
+            public WindowData(int x, int y, int edge)
+            {
+                _vSource = new Vector2(x, y);
+                _iEdge = edge;
+            }
+        };
+        public static WindowData RedWin = new WindowData(0, 0, 7);
+        public static WindowData BrownWin = new WindowData(32, 0, 7);
+        public static WindowData GreyWin = new WindowData(64, 0, 7);
+
         protected int Size = 18;
         protected const int SpaceFromBottom = 32;
-        protected Vector2 _sourcePoint;
 
-        protected int _innerBorder = 8;
-        protected int _edgeSize;
-        public int EdgeSize { get => _edgeSize; }
+        protected int _iInnerBorder = 8;
 
-        protected int _visibleBorder;
+        protected WindowData _winData;
+        public int EdgeSize { get => _winData.Edge; }
 
         public GUIWindow()
         {
@@ -31,41 +37,29 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             Width = RiverHollow.ScreenWidth / 2;
             Position = new Vector2(RiverHollow.ScreenWidth / 4, RiverHollow.ScreenHeight - Height - SpaceFromBottom);
 
-            _edgeSize = RedDialogEdge;
-            _sourcePoint = RedDialog;
-            _texture = GameContentManager.GetTexture(@"Textures\Dialog");
+            _winData = RedWin;
         }
 
-        public GUIWindow(Vector2 position, Vector2 sourcePos, int edgeSize, int width, int height) : this()
+        public GUIWindow(WindowData winData, int width, int height)
+        {
+            Width = width;
+            Height = height;
+
+            _winData = winData;
+        }
+
+        public GUIWindow(Vector2 position, WindowData winData, int width, int height) : this()
         {
             Position = position;
             Width = width;
             Height = height;
-            _edgeSize = RedDialogEdge;
-
-            _sourcePoint = sourcePos;
-
-            _drawRect = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
-        }
-
-        public Vector2 Corner()
-        {
-            return UsableRectangle().Location.ToVector2();
-        }
-        public Rectangle UsableRectangle()
-        {
-            return new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
-        }
-
-        public Vector2 GetUsableRectangleVec()
-        {
-            return UsableRectangle().Location.ToVector2();
+            _winData = winData;
         }
 
         #region Draw
         public int Skip()
         {
-            return Size + _edgeSize;
+            return Size + _winData.Edge;
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
@@ -73,14 +67,16 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             DrawMiddle(spriteBatch);
             DrawBottom(spriteBatch);
         }
+
+        //Draw the edging
         public void DrawTop(SpriteBatch spriteBatch)
         {
-            int BorderTop = (int)Position.Y - _edgeSize;
-            int BorderLeft = (int)Position.X - _edgeSize;
+            int BorderTop = (int)Position.Y;
+            int BorderLeft = (int)Position.X;
 
-            spriteBatch.Draw(_texture, new Rectangle((int)BorderLeft, BorderTop, _edgeSize, _edgeSize), new Rectangle((int)_sourcePoint.X, (int)_sourcePoint.Y, _edgeSize, _edgeSize), Color.White);
-            spriteBatch.Draw(_texture, new Rectangle((int)Position.X, BorderTop, Width, _edgeSize), new Rectangle((int)_sourcePoint.X + _edgeSize, (int)_sourcePoint.Y, Size, _edgeSize), Color.White);
-            spriteBatch.Draw(_texture, new Rectangle((int)Position.X + Width, BorderTop, _edgeSize, _edgeSize), new Rectangle((int)_sourcePoint.X + Skip(), (int)_sourcePoint.Y, _edgeSize, _edgeSize), Color.White);
+            spriteBatch.Draw(_texture, new Rectangle(BorderLeft, BorderTop, _winData.Edge, _winData.Edge), new Rectangle((int)_winData.Src.X, (int)_winData.Src.Y, _winData.Edge, _winData.Edge), Color.White);
+            spriteBatch.Draw(_texture, new Rectangle(MidStartX(), BorderTop, MidWidth(), _winData.Edge), new Rectangle((int)_winData.Src.X + _winData.Edge, (int)_winData.Src.Y, Size, _winData.Edge), Color.White);
+            spriteBatch.Draw(_texture, new Rectangle(EndStartX(), BorderTop, _winData.Edge, _winData.Edge), new Rectangle((int)_winData.Src.X + Skip(), (int)_winData.Src.Y, _winData.Edge, _winData.Edge), Color.White);
         }
         public void DrawMiddle(SpriteBatch spriteBatch)
         {
@@ -89,8 +85,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         }
         public void DrawMiddleEdges(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, new Rectangle((int)Position.X - _edgeSize, (int)Position.Y, _edgeSize, Height), new Rectangle((int)_sourcePoint.X, (int)_sourcePoint.Y + _edgeSize, _edgeSize, Size), Color.White);
-            spriteBatch.Draw(_texture, new Rectangle((int)Position.X + Width, (int)Position.Y, _edgeSize, Height), new Rectangle((int)_sourcePoint.X + Skip(), (int)_sourcePoint.Y + _edgeSize, _edgeSize, Size), Color.White);
+            int BorderLeft = (int)Position.X;
+
+            spriteBatch.Draw(_texture, new Rectangle(BorderLeft, MidStartY(), _winData.Edge, MidHeight()), new Rectangle((int)_winData.Src.X, (int)_winData.Src.Y + _winData.Edge, _winData.Edge, Size), Color.White);
+            spriteBatch.Draw(_texture, new Rectangle(EndStartX(), MidStartY(), _winData.Edge, MidHeight()), new Rectangle((int)_winData.Src.X + Skip(), (int)_winData.Src.Y + _winData.Edge, _winData.Edge, Size), Color.White);
         }
         public void DrawCenter(SpriteBatch spriteBatch)
         {
@@ -98,15 +96,57 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         }
         public void DrawCenter(SpriteBatch spriteBatch, float percentage)
         {
-            spriteBatch.Draw(_texture, new Rectangle((int)Position.X, (int)Position.Y, (int)(Width*percentage), Height), new Rectangle((int)_sourcePoint.X + _edgeSize, (int)_sourcePoint.Y + _edgeSize, Size, Size), Color.White);
+            spriteBatch.Draw(_texture, new Rectangle(MidStartX(), MidStartY(), (int)(MidWidth() * percentage), MidHeight()), new Rectangle((int)_winData.Src.X + _winData.Edge, (int)_winData.Src.Y + _winData.Edge, Size, Size), Color.White);
         }
         public void DrawBottom(SpriteBatch spriteBatch)
         {
-            int topY = (int)Position.Y + Height;
-            spriteBatch.Draw(_texture, new Rectangle((int)Position.X - _edgeSize, topY, _edgeSize, _edgeSize), new Rectangle((int)_sourcePoint.X, (int)_sourcePoint.Y + Skip(), _edgeSize, _edgeSize), Color.White);
-            spriteBatch.Draw(_texture, new Rectangle((int)Position.X, topY, Width, _edgeSize), new Rectangle((int)_sourcePoint.X + _edgeSize, (int)_sourcePoint.Y + Skip(), Size, _edgeSize), Color.White);
-            spriteBatch.Draw(_texture, new Rectangle((int)Position.X + Width, topY, _edgeSize, _edgeSize), new Rectangle((int)_sourcePoint.X + Skip(), (int)_sourcePoint.Y + Skip(), _edgeSize, _edgeSize), Color.White);
+            int BorderLeft = (int)Position.X;
+
+            spriteBatch.Draw(_texture, new Rectangle(BorderLeft, EndStartY(), _winData.Edge, _winData.Edge), new Rectangle((int)_winData.Src.X, (int)_winData.Src.Y + Skip(), _winData.Edge, _winData.Edge), Color.White);
+            spriteBatch.Draw(_texture, new Rectangle(MidStartX(), EndStartY(), MidWidth(), _winData.Edge), new Rectangle((int)_winData.Src.X + _winData.Edge, (int)_winData.Src.Y + Skip(), Size, _winData.Edge), Color.White);
+            spriteBatch.Draw(_texture, new Rectangle(EndStartX(), EndStartY(), _winData.Edge, _winData.Edge), new Rectangle((int)_winData.Src.X + Skip(), (int)_winData.Src.Y + Skip(), _winData.Edge, _winData.Edge), Color.White);
         }
+
+        public int MidStartX() { return (int)Position.X + _winData.Edge; }
+        public int MidStartY() { return (int)Position.Y + _winData.Edge; }
+        public int EndStartX() { return (int)Position.X + MidWidth() + _winData.Edge; }
+        public int EndStartY() { return (int)Position.Y + MidHeight() + _winData.Edge; }
+        public int MidHeight() { return Height - DblEdge(); }
+        public int MidWidth() { return Width - DblEdge(); }
+        #endregion
+        #region Location Retrival
+        //Usable space needs to ignore the edges of the rectangle
+        public Rectangle InnerRectangle()
+        {
+            return new Rectangle((int)Position.X + _winData.Edge, (int)Position.Y + _winData.Edge, MidWidth(), MidHeight());
+        }
+        public Vector2 InnerRecVec()
+        {
+            return InnerRectangle().Location.ToVector2();
+        }
+        public Vector2 InnerTopLeft()
+        {
+            return InnerRectangle().Location.ToVector2();
+        }
+        public Vector2 InnerBottomLeft()
+        {
+            return InnerRectangle().Location.ToVector2() + new Vector2(0, MidWidth());
+        }
+        public int DblEdge()
+        {
+            return _winData.Edge * 2;
+        }
+
+        public int InnerLeft() { return MidStartX() + _iInnerBorder; }
+        public int InnerTop() { return MidStartY() + _iInnerBorder; }
+        public int InnerRight() { return EndStartX() - _iInnerBorder; }
+        public int InnerBottom() { return EndStartY() - _iInnerBorder; }
+
+        public Vector2 OuterTopLeft() { return Position; }
+        public Vector2 OuterTopRight() { return Position + new Vector2(Width, 0); }
+        public Vector2 OuterBottomLeft() { return Position + new Vector2(0, Height); }
+        public Vector2 OuterBottomRight() { return Position + new Vector2(Width, Height); }
+
         #endregion
     }
 }

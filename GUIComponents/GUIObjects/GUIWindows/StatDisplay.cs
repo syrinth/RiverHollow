@@ -16,14 +16,21 @@ namespace RiverHollow.Game_Managers.GUIObjects
         private bool _hover;
         private SpriteFont _font;
 
-        public StatDisplay(DisplayEnum what, Vector2 pos, int squareSize) : base(pos, GUIWindow.RedDialog, squareSize, 200, 32)
+        public StatDisplay(DisplayEnum what) : base(Vector2.Zero, GUIWindow.RedWin, 200, 32)
         {
             _toDisplay = what;
             _percentage = 0;
             _font = GameContentManager.GetFont(@"Fonts\Font");
         }
 
-        public StatDisplay(DisplayEnum what, CombatCharacter c, Vector2 pos, int squareSize) : base(pos, GUIWindow.RedDialog, squareSize, 200, 32)
+        public StatDisplay(DisplayEnum what, Vector2 pos) : base(pos, GUIWindow.RedWin, 200, 32)
+        {
+            _toDisplay = what;
+            _percentage = 0;
+            _font = GameContentManager.GetFont(@"Fonts\Font");
+        }
+
+        public StatDisplay(DisplayEnum what, CombatCharacter c, Vector2 pos, int squareSize) : base(pos, GUIWindow.RedWin, 200, 32)
         {
             _character = c;
             _toDisplay = what;
@@ -31,7 +38,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _font = GameContentManager.GetFont(@"Fonts\Font");
         }
 
-        public StatDisplay(DisplayEnum what, CombatCharacter c, Vector2 pos, int width, int squareSize) : base(pos, GUIWindow.RedDialog, squareSize, width, 32)
+        public StatDisplay(DisplayEnum what, CombatCharacter c, Vector2 pos, int width, int squareSize) : base(pos, GUIWindow.RedWin, width, 32)
         {
             _character = c;
             _toDisplay = what;
@@ -78,7 +85,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public bool ProcessHover(Point mouse)
         {
-            _hover = UsableRectangle().Contains(mouse);
+            _hover = InnerRectangle().Contains(mouse);
             return _hover;
         }
     }

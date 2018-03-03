@@ -22,9 +22,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public QuestScreen()
         {
             _questList = new List<QuestBox>();
-            _questWindow = new GUIWindow(new Vector2(WIDTH, HEIGHT), GUIWindow.RedDialog, GUIWindow.RedDialogEdge, WIDTH, HEIGHT);
-            _btnUp = new GUIButton(new Vector2(_questWindow.Corner().X +_questWindow.Width - BTNSIZE, _questWindow.Corner().Y), new Rectangle(256, 64, 32, 32), BTNSIZE, BTNSIZE, "", @"Textures\Dialog", true);
-            _btnDown = new GUIButton(new Vector2(_questWindow.Corner().X + _questWindow.Width - BTNSIZE, _questWindow.Corner().Y + _questWindow.Height - BTNSIZE), new Rectangle(256, 96, 32, 32), BTNSIZE, BTNSIZE, "", @"Textures\Dialog", true);
+            _questWindow = new GUIWindow(new Vector2(WIDTH, HEIGHT), GUIWindow.RedWin, WIDTH, HEIGHT);
+            _btnUp = new GUIButton(new Vector2(_questWindow.InnerTopLeft().X +_questWindow.Width - BTNSIZE, _questWindow.InnerTopLeft().Y), new Rectangle(256, 64, 32, 32), BTNSIZE, BTNSIZE, "", @"Textures\Dialog", true);
+            _btnDown = new GUIButton(new Vector2(_questWindow.InnerTopLeft().X + _questWindow.Width - BTNSIZE, _questWindow.InnerTopLeft().Y + _questWindow.Height - BTNSIZE), new Rectangle(256, 96, 32, 32), BTNSIZE, BTNSIZE, "", @"Textures\Dialog", true);
             _topQuest = 0;
 
             for(int i = 0; i < MAX_SHOWN_QUESTS; i++)
@@ -119,8 +119,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             int boxHeight = (QuestScreen.HEIGHT / QuestScreen.MAX_SHOWN_QUESTS) - (win.EdgeSize * 2);
             int boxWidth = (QuestScreen.WIDTH) - (win.EdgeSize * 2) - QuestScreen.BTNSIZE;
-            Vector2 boxPoint = new Vector2(win.Corner().X + win.EdgeSize, win.Corner().Y + win.EdgeSize + (i * (boxHeight + (win.EdgeSize *2))));
-            _window = new GUIWindow(boxPoint, GUIWindow.RedDialog, GUIWindow.RedDialogEdge, boxWidth, boxHeight);
+            Vector2 boxPoint = new Vector2(win.InnerTopLeft().X + win.EdgeSize, win.InnerTopLeft().Y + win.EdgeSize + (i * (boxHeight + (win.EdgeSize *2))));
+            _window = new GUIWindow(boxPoint, GUIWindow.RedWin, boxWidth, boxHeight);
 
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _quest = null;
@@ -131,8 +131,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (_quest != null)
             {
                 _window.Draw(spriteBatch);
-                spriteBatch.DrawString(_font, _quest.Name, _window.GetUsableRectangleVec(), Color.White);
-                spriteBatch.DrawString(_font, _quest.Accomplished + @"/" + _quest.TargetGoal, _window.GetUsableRectangleVec() + new Vector2(200, 0), Color.White);
+                spriteBatch.DrawString(_font, _quest.Name, _window.InnerRecVec(), Color.White);
+                spriteBatch.DrawString(_font, _quest.Accomplished + @"/" + _quest.TargetGoal, _window.InnerRecVec() + new Vector2(200, 0), Color.White);
             }
         }
 

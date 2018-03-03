@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using RiverHollow.Characters;
-using RiverHollow.Characters.NPCs;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Items;
 using RiverHollow.Tile_Engine;
@@ -80,6 +79,9 @@ namespace RiverHollow.Game_Managers
             /// The Level data object.
             /// </summary>
             /// 
+            [XmlElement(ElementName = "Name")]
+            public string name;
+
             [XmlElement(ElementName = "CurrentMap")]
             public string currentMap;
 
@@ -268,6 +270,7 @@ namespace RiverHollow.Game_Managers
             SaveData data = new SaveData()
             {
                 // Create a list to store the data already saved.
+                name = PlayerManager.Name,
                 currentMap = PlayerManager.CurrentMap,
                 money = PlayerManager.Money,
                 Calendar = new CalendarData
@@ -369,6 +372,7 @@ namespace RiverHollow.Game_Managers
             }
             MapManager.CurrentMap = MapManager.Maps[data.currentMap];
             PlayerManager.InitPlayer();
+            PlayerManager.SetName(data.name);
             PlayerManager.SetMoney(data.money);
             GameCalendar.LoadCalendar(data.Calendar); 
             foreach (BuildingData b in data.Buildings)

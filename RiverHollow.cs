@@ -66,7 +66,7 @@ namespace RiverHollow
             PlayerManager.Initialize();
 
             //Set the Main Menu Screen
-            GUIManager.SetScreen(new MainMenuScreen());
+            GUIManager.SetScreen(new IntroMenuScreen());
         }
 
         protected override void UnloadContent()

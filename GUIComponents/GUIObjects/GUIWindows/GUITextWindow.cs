@@ -46,7 +46,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _talker = c;
             _text = text;
             Height = Math.Max(Height, ((int)_characterHeight * _maxRows));
-            _next = new GUIImage(new Vector2(Position.X+Width - _edgeSize*1.5f, Position.Y + Height - _edgeSize * 1.5f), new Rectangle(288, 64, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+            _next = new GUIImage(new Vector2(Position.X+Width - _winData.Edge*1.5f, Position.Y + Height - _winData.Edge * 1.5f), new Rectangle(288, 64, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
 
             ParseText(text);
         }
@@ -56,8 +56,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _text = text;
             ParseText(text);
 
-            Height = (int)_parsedStrings.Count * (int)_characterHeight + _innerBorder*2;
-            Width = (int)_font.MeasureString(_text).X + _innerBorder * 2;
+            Height = (int)_parsedStrings.Count * (int)_characterHeight + _iInnerBorder*2;
+            Width = (int)_font.MeasureString(_text).X + _iInnerBorder * 2;
             Position = position -= new Vector2(Width / 2, Height / 2);
         }
 
@@ -66,8 +66,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _text = text;
             ParseText(text);
 
-            Height = (int)_parsedStrings.Count * (int)_characterHeight + _innerBorder * 2;
-            Width = (int)_font.MeasureString(_text).X + _innerBorder * 2;
+            Height = (int)_parsedStrings.Count * (int)_characterHeight + _iInnerBorder * 2;
+            Width = (int)_font.MeasureString(_text).X + _iInnerBorder * 2;
             Vector2 pos = new Vector2(RiverHollow.ScreenWidth/2, RiverHollow.ScreenHeight/2);
             Position = pos -= new Vector2(Width / 2, Height / 2);
         }
@@ -78,8 +78,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             Duration = duration;
             ParseText(text);
 
-            Height = (int)_parsedStrings.Count * (int)_characterHeight + _innerBorder * 2;
-            Width = (int)_font.MeasureString(_text).X + _innerBorder * 2;
+            Height = (int)_parsedStrings.Count * (int)_characterHeight + _iInnerBorder * 2;
+            Width = (int)_font.MeasureString(_text).X + _iInnerBorder * 2;
             Vector2 pos = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
             Position = pos -= new Vector2(Width / 2, Height / 2);
         }
@@ -164,8 +164,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             {
                 Vector2 measure = _font.MeasureString(line + word);
 
-                if (measure.Length() >= (Width - _innerBorder * 2) ||
-                    _numReturns == _maxRows-1 && measure.Length() >= (Width - _innerBorder * 2) - _characterHeight)
+                if (measure.Length() >= (Width - _iInnerBorder * 2) ||
+                    _numReturns == _maxRows-1 && measure.Length() >= (Width - _iInnerBorder * 2) - _characterHeight)
                 {
                     returnString = returnString + line + '\n';
                     line = string.Empty;
@@ -175,7 +175,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 grabLast = true;
                 line = line + word + ' ';
 
-                if (measure.Y * _numReturns >= (Width - _innerBorder * 2))
+                if (measure.Y * _numReturns >= (Width - _iInnerBorder * 2))
                 {
                     grabLast = false;
                     _parsedStrings.Add(returnString);
@@ -198,7 +198,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         public void Draw(SpriteBatch spriteBatch, bool force)
         {
             base.Draw(spriteBatch);
-            spriteBatch.DrawString(_font, force ? _text : _typedText, new Vector2(Position.X + _innerBorder, Position.Y + _innerBorder), Color.White);
+            spriteBatch.DrawString(_font, force ? _text : _typedText, new Vector2(Position.X + _iInnerBorder, Position.Y + _iInnerBorder), Color.White);
             if (_pause && _next != null)
             {
                 _next.Draw(spriteBatch);
@@ -206,7 +206,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
             if (_talker != null)
             {
-                _talker.DrawPortrait(spriteBatch, new Vector2(Corner().X, Corner().Y-EdgeSize));
+                _talker.DrawPortrait(spriteBatch, new Vector2(InnerTopLeft().X, InnerTopLeft().Y-EdgeSize));
             }
         }
 

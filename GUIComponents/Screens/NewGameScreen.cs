@@ -17,25 +17,31 @@ namespace RiverHollow.GUIComponents.Screens
         GUIButton _btnOK;
         GUIButton _btnCancel;
         GUITextInputWindow _nameWindow;
-
+        GUITextInputWindow _manorWindow;
 
         public NewGameScreen()
         {
-            int height = RiverHollow.ScreenHeight - (2 * GUIWindow.BrownDialogEdge);
-            int width = height;
-            int startX = ((RiverHollow.ScreenWidth - width) / 2) - GUIWindow.BrownDialogEdge;
+            int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIWindow.BrownWin.Edge;
 
-            _window = new GUIWindow(new Vector2(startX, GUIWindow.BrownDialogEdge), GUIWindow.BrownDialog, GUIWindow.BrownDialogEdge, width, height);
+            _window = new GUIWindow(new Vector2(startX, 0), GUIWindow.BrownWin, RiverHollow.ScreenHeight, RiverHollow.ScreenHeight);
             Controls.Add(_window);
 
-            _btnCancel = new GUIButton(new Vector2(_window.GetUsableRectangleVec().X+_window.Width-128, _window.GetUsableRectangleVec().Y + _window.Height- BTN_HEIGHT), new Rectangle(0, 128, 64, 32), BTN_WIDTH, BTN_HEIGHT, "Cancel", @"Textures\Dialog", true);
-            Controls.Add(_btnCancel);
-
+            _btnCancel = new GUIButton("Cancel", BTN_WIDTH, BTN_HEIGHT);
+            _btnCancel.AnchorToInnerSide(_window, SideEnum.BottomRight, 0);
+            
             _btnOK = new GUIButton("OK", BTN_WIDTH, BTN_HEIGHT);
-            _btnOK.PlaceAndAlignObject(_btnCancel, SideEnum.Left, SideEnum.Top, 0);
-            Controls.Add(_btnOK);
+            _btnOK.AnchorAndAlignToObject(_btnCancel, SideEnum.Left, SideEnum.Top, 0);
+            
+            _manorWindow = new GUITextInputWindow("Manor Name:", SideEnum.Left);
+            _manorWindow.AnchorToInnerSide(_window, SideEnum.TopRight);
+            
+            _nameWindow = new GUITextInputWindow("Character Name:", SideEnum.Left);
+            _nameWindow.AnchorAndAlignToObject(_manorWindow, SideEnum.Bottom, SideEnum.Right );
 
-            _nameWindow = new GUITextInputWindow("Name");
+            Controls.Add(_window);
+            Controls.Add(_btnCancel);
+            Controls.Add(_btnOK);
+            Controls.Add(_manorWindow);
             Controls.Add(_nameWindow);
 
             _selection = SelectionEnum.None;
@@ -43,10 +49,8 @@ namespace RiverHollow.GUIComponents.Screens
 
         public override void Update(GameTime gameTime)
         {
-            if(_selection == SelectionEnum.Name)
-            {
-                _nameWindow.Update(gameTime);
-            }
+            if(_selection == SelectionEnum.Name) { _nameWindow.Update(gameTime); }
+            else if (_selection == SelectionEnum.Manor) { _manorWindow.Update(gameTime); }
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -60,18 +64,13 @@ namespace RiverHollow.GUIComponents.Screens
             }
             if (_btnCancel.Contains(mouse))
             {
-                GUIManager.SetScreen(new MainMenuScreen());
+                GUIManager.SetScreen(new IntroMenuScreen());
                 rv = true;
             }
 
-            if (_nameWindow.Contains(mouse))
-            {
-                _selection = SelectionEnum.Name;
-            }
-            else
-            {
-                _selection = SelectionEnum.None;
-            }
+            if (_nameWindow.Contains(mouse)) { _selection = SelectionEnum.Name; }
+            else if (_manorWindow.Contains(mouse)) { _selection = SelectionEnum.Manor; }
+            else { _selection = SelectionEnum.None;}
 
             return rv;
         }

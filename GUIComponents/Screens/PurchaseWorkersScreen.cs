@@ -23,7 +23,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
 
                 int minWidth = 64 * merch.Count + 64;
                 int minHeight = 128 + 64;
-                _mainWindow = new GUIWindow(GUIObject.PosFromCenter(center, minWidth, minHeight), GUIWindow.RedDialog, GUIWindow.RedDialogEdge, minWidth, minHeight);
+                _mainWindow = new GUIWindow(GUIObject.PosFromCenter(center, minWidth, minHeight), GUIWindow.RedWin, minWidth, minHeight);
 
                 int numDivions = merch.Count + 2;
                 float xPos = _mainWindow.Position.X + _mainWindow.Width;
@@ -96,8 +96,8 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             _font = GameContentManager.GetFont(@"Fonts\Font");
             Cost = cost;
             _w = w;
-            _workerWindow = new GUIWindow(p, GUIWindow.RedDialog, GUIWindow.RedDialogEdge, 64, 96);
-            _costWindow = new GUIWindow(new Vector2(p.X, p.Y + 96), GUIWindow.RedDialog, GUIWindow.RedDialogEdge, 64, 32);
+            _workerWindow = new GUIWindow(p, GUIWindow.RedWin, 64, 96);
+            _costWindow = new GUIWindow(new Vector2(p.X, p.Y + 96), GUIWindow.RedWin, 64, 32);
         }
 
         public void Draw(SpriteBatch spriteBatch)
