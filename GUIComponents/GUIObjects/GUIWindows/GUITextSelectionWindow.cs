@@ -27,14 +27,14 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         {
             Setup(selectionText);
             Width = (int)_font.MeasureString(_text).X + _iInnerBorder * 2 + 6; //6 is adding a bit of arbitrary extra space for the parsing. Exactsies are bad
-            Position = new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2);
+            Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
             PostParse();
         }
 
         public GUITextSelectionWindow(NPC talker, string selectionText) : base()
         {
             _talker = talker;
-            Position = new Vector2(Position.X, RiverHollow.ScreenHeight - Height - SpaceFromBottom);
+            Position(new Vector2(Position().X, RiverHollow.ScreenHeight - Height - SpaceFromBottom));
 
             Setup(selectionText);
             PostParse();
@@ -51,7 +51,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             ParseText(_text);
             Height = (((_numReturns + 1) + _diOptions.Count) * (int)_characterHeight + _iInnerBorder * 2);
             _iOptionsOffsetY = Math.Max((int)_characterHeight, (int)((_numReturns + 1) * _characterHeight));
-            _giSelection = new GUIImage(new Vector2((int)Position.X + _iInnerBorder, (int)Position.Y + _iInnerBorder + _iOptionsOffsetY), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+            _giSelection = new GUIImage(new Vector2((int)Position().X + _iInnerBorder, (int)Position().Y + _iInnerBorder + _iOptionsOffsetY), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
         }
 
         public GUITextSelectionWindow(Food f, string selectionText) : this(selectionText)
@@ -114,12 +114,12 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                 if (_poiMouse != GraphicCursor.Position.ToPoint() && Contains(GraphicCursor.Position.ToPoint()))
                 {
                     _poiMouse = GraphicCursor.Position.ToPoint();
-                    if (_iKeySelection - 1 >= 0 && GraphicCursor.Position.Y < _giSelection.Position.Y)
+                    if (_iKeySelection - 1 >= 0 && GraphicCursor.Position.Y < _giSelection.Position().Y)
                     {
                         _giSelection.MoveImageBy(new Vector2(0, -_characterHeight));
                         _iKeySelection--;
                     }
-                    else if (_iKeySelection + 1 < _diOptions.Count && GraphicCursor.Position.Y > _giSelection.Position.Y + _giSelection.Height)
+                    else if (_iKeySelection + 1 < _diOptions.Count && GraphicCursor.Position.Y > _giSelection.Position().Y + _giSelection.Height)
                     {
                         _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
                         _iKeySelection++;
@@ -149,8 +149,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            int xindex = (int)Position.X + _iInnerBorder;
-            int yIndex = (int)Position.Y + _iInnerBorder;
+            int xindex = (int)Position().X + _iInnerBorder;
+            int yIndex = (int)Position().Y + _iInnerBorder;
             foreach (string s in _parsedStrings)
             {
                 spriteBatch.DrawString(_font, s, new Vector2(xindex, yIndex), Color.White);
@@ -222,7 +222,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         {
             _iKeySelection = 0;
             _diOptions.Clear();
-            _giSelection = new GUIImage(new Vector2((int)Position.X + _iInnerBorder, (int)Position.Y + _iInnerBorder), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+            _giSelection = new GUIImage(new Vector2((int)Position().X + _iInnerBorder, (int)Position().Y + _iInnerBorder), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
         }
     }
 }

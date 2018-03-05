@@ -26,11 +26,12 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                 _mainWindow = new GUIWindow(GUIObject.PosFromCenter(center, minWidth, minHeight), GUIWindow.RedWin, minWidth, minHeight);
 
                 int numDivions = merch.Count + 2;
-                float xPos = _mainWindow.Position.X + _mainWindow.Width;
-                float incrementVal = _mainWindow.Position.Y / numDivions; //If we only display one box, it needs to be centered at the halfway point, so divided by 2
-                float yPos = _mainWindow.Position.Y + incrementVal;
+                float xPos = _mainWindow.Position().X + _mainWindow.Width;
+                float incrementVal = _mainWindow.Position().Y / numDivions; //If we only display one box, it needs to be centered at the halfway point, so divided by 2
+                float yPos = _mainWindow.Position().Y + incrementVal;
 
-                Vector2 position = _mainWindow.Position += new Vector2(32, 32);
+                _mainWindow.PositionAdd(new Vector2(32, 32));
+                Vector2 position = _mainWindow.Position();
                 _workers = new List<WorkerBox>();
                 foreach (Merchandise m in merch)
                 {
@@ -104,9 +105,9 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
         {
             _workerWindow.Draw(spriteBatch);
             _costWindow.Draw(spriteBatch);
-            _w.Position = new Vector2(_workerWindow.Position.X + _workerWindow.EdgeSize, (int)_workerWindow.Position.Y + _workerWindow.EdgeSize);
+            _w.Position = new Vector2(_workerWindow.Position().X + _workerWindow.EdgeSize, (int)_workerWindow.Position().Y + _workerWindow.EdgeSize);
             _w.Draw(spriteBatch);
-            spriteBatch.DrawString(_font, Cost.ToString(), _costWindow.Position + new Vector2(_costWindow.EdgeSize/2, _costWindow.EdgeSize/2), Color.White);
+            spriteBatch.DrawString(_font, Cost.ToString(), _costWindow.Position() + new Vector2(_costWindow.EdgeSize/2, _costWindow.EdgeSize/2), Color.White);
         }
 
         public bool Contains(Point mouse)

@@ -21,7 +21,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             _statement = statement;
             Width = Math.Max((int)_font.MeasureString(_statement).X, (int)_characterWidth * 10) + _iInnerBorder * 2;
             Height = (int)_characterHeight * 2 + _iInnerBorder * 2;
-            Position = new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2);
+            Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
             _strLen = 0;
             _text = string.Empty;
         }
@@ -41,7 +41,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                 Width = (int)_font.MeasureString(_statement).X + (int)_characterWidth * 10 + _iInnerBorder * 2;
                 Height = (int)_characterHeight + _iInnerBorder * 2;
             }
-            Position = new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2);
+            Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
             _strLen = 0;
             _text = string.Empty;
         }
@@ -52,7 +52,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             _statement = "Enter name:";
             Width = Math.Max((int)_font.MeasureString(_statement).X, (int)_characterWidth * 10) + _iInnerBorder * 2;
             Height = (int)_characterHeight * 2 + _iInnerBorder * 2;
-            Position = new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2);
+            Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
             _strLen = 0;
             _w = w;
             _text = string.Empty;
@@ -101,13 +101,13 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            int posX = (int)Position.X;
+            int posX = (int)Position().X;
             Vector2 stringLen = _font.MeasureString(_statement+"X");
-            spriteBatch.DrawString(_font, _statement, new Vector2(posX + _iInnerBorder, Position.Y + _iInnerBorder), Color.White);
+            spriteBatch.DrawString(_font, _statement, new Vector2(posX + _iInnerBorder, Position().Y + _iInnerBorder), Color.White);
 
             int startX = (_textLoc == SideEnum.Top) ? (posX + _iInnerBorder) : posX + (int)stringLen.X;
             int addition = (_textLoc == SideEnum.Top) ? 28 : 0;
-            spriteBatch.DrawString(_font, _text, new Vector2(startX, Position.Y + _iInnerBorder + addition), Color.White);
+            spriteBatch.DrawString(_font, _text, new Vector2(startX, Position().Y + _iInnerBorder + addition), Color.White);
         }
 
         public string GetText()

@@ -43,9 +43,9 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                 _btnBuy = new GUIImage(new Vector2(center.X - 32, center.Y + (_mainWindow.InnerRectangle().Height / 2)), new Rectangle(0, 96, 64, 32), 64, 32, @"Textures\Dialog");
 
                 int numDivions = _merchandise.Count+2;
-                float xPos = _mainWindow.Position.X + _mainWindow.Width;
-                float incrementVal = _mainWindow.Position.Y / numDivions; //If we only display one box, it needs to be centered at the halfway point, so divided by 2
-                float yPos = _mainWindow.Position.Y + incrementVal;
+                float xPos = _mainWindow.Position().X + _mainWindow.Width;
+                float incrementVal = _mainWindow.Position().Y / numDivions; //If we only display one box, it needs to be centered at the halfway point, so divided by 2
+                float yPos = _mainWindow.Position().Y + incrementVal;
 
                 moneyStrPos = new Vector2(xPos-16, yPos-16);
                 yPos += incrementVal;
