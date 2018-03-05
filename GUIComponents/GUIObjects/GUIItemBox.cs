@@ -2,6 +2,8 @@
 using RiverHollow.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.GUIObjects;
+using RiverHollow.Characters.NPCs;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
@@ -54,7 +56,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 if (_item != null)
                 {
                     _textWindow = new GUITextWindow(mouse.ToVector2(), _item.GetDescription());
-                    _textWindow.MoveTo(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32));
+                    _textWindow.Position(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32));
                 }
                 rv = true;
             }
@@ -64,6 +66,38 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 _textWindow = null;
             }
             return rv;
+        }
+    }
+
+    public class WorkerBox : GUIObject
+    {
+        private SpriteFont _font;
+        private GUIWindow _workerWindow;
+        private GUIWindow _costWindow;
+        public WorldAdventurer _w;
+        public int Cost;
+
+        public WorkerBox(Vector2 p, WorldAdventurer w, int cost)
+        {
+            _font = GameContentManager.GetFont(@"Fonts\Font");
+            Cost = cost;
+            _w = w;
+            _workerWindow = new GUIWindow(p, GUIWindow.RedWin, 64, 96);
+            _costWindow = new GUIWindow(new Vector2(p.X, p.Y + 96), GUIWindow.RedWin, 64, 32);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            _workerWindow.Draw(spriteBatch);
+            _costWindow.Draw(spriteBatch);
+            _w.Position = new Vector2(_workerWindow.Position().X + _workerWindow.EdgeSize, (int)_workerWindow.Position().Y + _workerWindow.EdgeSize);
+            _w.Draw(spriteBatch);
+            spriteBatch.DrawString(_font, Cost.ToString(), _costWindow.Position() + new Vector2(_costWindow.EdgeSize/2, _costWindow.EdgeSize/2), Color.White);
+        }
+
+        public override bool Contains(Point mouse)
+        {
+            return _workerWindow.Contains(mouse);
         }
     }
 }

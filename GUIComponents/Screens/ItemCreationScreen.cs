@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using static RiverHollow.Game_Managers.ObjectManager;
 using RiverHollow.Items;
 using RiverHollow.Characters.NPCs;
+using RiverHollow.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
@@ -72,20 +73,17 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             _rows = (canMake.Count < _iMaxColumns) ? 1 : Math.Max(1, canMake.Count / _columns);
 
             _displayList = new GUIItemBox[_columns, _rows];
-            _inventory = new Inventory(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), 4, InventoryManager.maxItemColumns, 32);
+            _inventory = new Inventory(4, InventoryManager.maxItemColumns, 32);
+            _inventory.Setup();
 
             int creationWidth = (GUIWindow.RedWin.Edge * 2) + (_columns * _iBoxSize) + (_iMargin * (_columns + 1));
             int creationHeight = (GUIWindow.RedWin.Edge * 2) + (_rows * _iBoxSize) + (_iMargin * (_rows + 1));
 
-            _creationWindow = new GUIWindow(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), GUIWindow.RedWin, creationWidth, creationHeight);            
+            _creationWindow = new GUIWindow(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), GUIWindow.RedWin, creationWidth, creationHeight);
+            _creationWindow.AnchorAndAlignToObject(_inventory, GUIObject.SideEnum.Top, GUIObject.SideEnum.CenterX);
 
-            //Move the windows so that they are synched up appropriately
-            Vector2 contWidthHeight = new Vector2(_creationWindow.Width, _creationWindow.Height);
-            Vector2 mainWidthHeight = new Vector2(_inventory.Width, _inventory.Height);
-            Vector2 newPos = centerPoint - new Vector2((contWidthHeight.X / 2), contWidthHeight.Y + GUIWindow.BrownWin.Edge + GUIWindow.RedWin.Edge);
-            _creationWindow.Position = newPos;
-
-            _inventory.Setup(centerPoint - new Vector2(mainWidthHeight.X / 2, 0));
+            List<GUIObject> liWins = new List<GUIObject>() { _creationWindow, _inventory };
+            GUIObject.CenterAndAlignToScreen(ref liWins);
 
             int i = 0; int j = 0;
             foreach (int id in canMake)
@@ -95,15 +93,16 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                 {
                     int xMod = _creationWindow.EdgeSize + _iMargin * (i + 1) + (_iBoxSize * i);
                     int yMod = _creationWindow.EdgeSize + _iMargin * (j + 1) + (_iBoxSize * j);
-                    Rectangle displayBox = new Rectangle((int)_creationWindow.Position.X + xMod, (int)_creationWindow.Position.Y + yMod, _iBoxSize, _iBoxSize);
+                    Rectangle displayBox = new Rectangle((int)_creationWindow.Position().X + xMod, (int)_creationWindow.Position().Y + yMod, _iBoxSize, _iBoxSize);
                     _displayList[i, j] = new GUIItemBox(displayBox.Location.ToVector2(), new Rectangle(288, 32, 32, 32), displayBox.Width, displayBox.Height, @"Textures\Dialog", ObjectManager.GetItem(id));
+                    _creationWindow.Controls.Add(_displayList[i, j]);
 
                     i++;
                     if (i == _columns)
                     {
                         i = 0;
                         j++;
-                        displayBox.X = (int)_creationWindow.Position.X + _iBoxSize + _iMargin;
+                        displayBox.X = (int)_creationWindow.Position().X + _iBoxSize + _iMargin;
                         displayBox.Y += _iBoxSize + _iMargin;
                     }
                     else

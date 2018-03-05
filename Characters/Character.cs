@@ -82,6 +82,6 @@ namespace RiverHollow.Characters
         public bool IsNPC() { return _characterType == CharacterEnum.NPC; }
         public bool IsWorldAdventurer() { return _characterType == CharacterEnum.WorldAdventurer; }
         public bool IsWorldCharacter() { return _characterType == CharacterEnum.WorldCharacter; }
-        public bool CanTalk() { return IsWorldCharacter() || IsNPC(); }
+        public bool CanTalk() { return IsWorldCharacter() || IsNPC() || IsWorldAdventurer(); }
     }
 }

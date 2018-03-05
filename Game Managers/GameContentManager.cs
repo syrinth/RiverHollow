@@ -37,6 +37,7 @@ namespace RiverHollow.Game_Managers
         {
             AddTexture(Content, @"Textures\texPlayer");
             AddTexture(Content, @"Textures\Wizard");
+            AddTexture(Content, @"Textures\Alchemist");
             AddTexture(Content, @"Textures\Knight");
             AddTexture(Content, @"Textures\Weapons Master");
             AddTexture(Content, @"Textures\NPC1");

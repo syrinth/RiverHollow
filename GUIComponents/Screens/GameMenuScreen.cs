@@ -8,8 +8,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
     public class GameMenuScreen : GUIScreen
     {
         const int BTN_PADDING = 120;
-        const int BTN_WIDTH = 128;
-        const int BTN_HEIGHT = 64;
         private GUIButton _btnExitGame;
         private GUIButton _btnQuestLog;
         private GUIButton _btnInventory;
@@ -28,7 +26,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _btnExitGame = new GUIButton("Exit Game");
 
             _liButtons = new List<GUIObject>() { _btnInventory, _btnParty, _btnQuestLog, _btnExitGame };
-            GUIObject.CreateSpacedColumn(ref _liButtons, -BTN_WIDTH, RiverHollow.ScreenHeight, BTN_PADDING, BTN_WIDTH, BTN_HEIGHT);
+            GUIObject.CreateSpacedColumn(ref _liButtons, -GUIButton.BTN_WIDTH, RiverHollow.ScreenHeight, BTN_PADDING);
             foreach(GUIObject o in _liButtons) { Controls.Add(o); }
 
             GameManager.Pause();
@@ -44,18 +42,18 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 int val = 0;
                 if (_open)
                 {
-                    if (o.Position.X < 0) { val = 16; }
+                    if (o.Position().X < 0) { val = 16; }
                 }
                 if (_close)
                 {
-                    if (o.Position.X > -BTN_WIDTH) { val = -16; }
+                    if (o.Position().X > -GUIButton.BTN_WIDTH) { val = -16; }
                 }
 
-                Vector2 temp = o.Position;
+                Vector2 temp = o.Position();
                 temp.X += val;
-                o.Position = temp;
-                if (_open && o.Position.X == 0) { _openingFinished++; }
-                if (_close && o.Position.X == -BTN_WIDTH) { GameManager.BackToMain(); }
+                o.Position(temp);
+                if (_open && o.Position().X == 0) { _openingFinished++; }
+                if (_close && o.Position().X == -GUIButton.BTN_WIDTH) { GameManager.BackToMain(); }
             }
             if(_openingFinished == _liButtons.Count) { _open = false; }
             if(_infoScreen != null)

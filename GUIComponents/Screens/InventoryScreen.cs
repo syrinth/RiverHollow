@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Items;
 using RiverHollow.GUIObjects;
 using RiverHollow.Characters;
+using System.Collections.Generic;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -20,7 +21,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _iCharacterIndex = 0;
             _character = new CharacterBox(PlayerManager.GetParty()[_iCharacterIndex], new Vector2(128, 32));
             _font = GameContentManager.GetFont(@"Fonts\Font");
-            _inventory = new Inventory(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight/2), 4, InventoryManager.maxItemColumns, 32);
+            _inventory = new Inventory(4, InventoryManager.maxItemColumns, 32);
             Controls.Add(_inventory);
             Controls.Add(_character);
         }
@@ -29,7 +30,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             _character = c;
             _font = GameContentManager.GetFont(@"Fonts\Font");
-            _inventory = new Inventory(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), 4, InventoryManager.maxItemColumns, 32);
+            _inventory = new Inventory(4, InventoryManager.maxItemColumns, 32);
             Controls.Add(_inventory);
             Controls.Add(_character);
             InventoryManager.PublicContainer = null;
@@ -39,13 +40,18 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             Vector2 centerPoint = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
             _font = GameContentManager.GetFont(@"Fonts\Font");
-            _container = new Inventory(c, centerPoint, 32);
-            _inventory = new Inventory(centerPoint, 4, InventoryManager.maxItemColumns, 32);
+            _container = new Inventory(c, 32);
+            _inventory = new Inventory(4, InventoryManager.maxItemColumns, 32);
 
-            Vector2 contWidthHeight = new Vector2(_container.InnerRectangle().Width, _container.InnerRectangle().Height);
-            Vector2 mainWidthHeight = new Vector2(_inventory.InnerRectangle().Width, _inventory.InnerRectangle().Height);
-            _container.Setup(centerPoint - new Vector2((contWidthHeight.X/2), contWidthHeight.Y));
-            _inventory.Setup(centerPoint - new Vector2(mainWidthHeight.X / 2, 0));
+            Vector2 contWidthHeight = new Vector2(_container.MidWidth(), _container.InnerRectangle().Height);
+            Vector2 mainWidthHeight = new Vector2(_inventory.MidWidth(), _inventory.InnerRectangle().Height);
+
+            _inventory.Setup();
+            _container.Setup();
+            _container.AnchorAndAlignToObject(_inventory, GUIObject.SideEnum.Top, GUIObject.SideEnum.CenterX);           
+
+            List<GUIObject> liWins = new List<GUIObject>() { _container, _inventory };
+            GUIObject.CenterAndAlignToScreen(ref liWins);
 
             Controls.Add(_inventory);
             Controls.Add(_container);
@@ -54,12 +60,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public InventoryScreen(NPC n)
         {
-            Vector2 centerPoint = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
             _font = GameContentManager.GetFont(@"Fonts\Font");
-            _inventory = new Inventory(n, centerPoint, 4, InventoryManager.maxItemColumns, 32);
+            _inventory = new Inventory(n, 4, InventoryManager.maxItemColumns, 32);
 
             Vector2 mainWidthHeight = new Vector2(_inventory.InnerRectangle().Width, _inventory.InnerRectangle().Height);
-            _inventory.Setup(centerPoint - new Vector2(mainWidthHeight.X / 2, 0));
+            _inventory.Setup();
 
             Controls.Add(_inventory);
             InventoryManager.PublicContainer = null;

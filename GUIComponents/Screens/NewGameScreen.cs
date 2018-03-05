@@ -1,8 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Characters.NPCs;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.GUIObjects;
+using System.Collections.Generic;
+
 using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow.GUIComponents.Screens
@@ -19,6 +24,8 @@ namespace RiverHollow.GUIComponents.Screens
         GUITextInputWindow _nameWindow;
         GUITextInputWindow _manorWindow;
 
+        List<GUIObject> _liClasses;
+
         public NewGameScreen()
         {
             int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIWindow.BrownWin.Edge;
@@ -30,6 +37,7 @@ namespace RiverHollow.GUIComponents.Screens
             _btnCancel.AnchorToInnerSide(_window, SideEnum.BottomRight, 0);
             
             _btnOK = new GUIButton("OK", BTN_WIDTH, BTN_HEIGHT);
+            _window.Controls.Add(_btnOK);
             _btnOK.AnchorAndAlignToObject(_btnCancel, SideEnum.Left, SideEnum.Top, 0);
             
             _manorWindow = new GUITextInputWindow("Manor Name:", SideEnum.Left);
@@ -38,7 +46,16 @@ namespace RiverHollow.GUIComponents.Screens
             _nameWindow = new GUITextInputWindow("Character Name:", SideEnum.Left);
             _nameWindow.AnchorAndAlignToObject(_manorWindow, SideEnum.Bottom, SideEnum.Right );
 
-            Controls.Add(_window);
+            _liClasses = new List<GUIObject>();
+            for (int i = 1; i <= 4; i++) {
+                ClassSelectionBox w = new ClassSelectionBox(Vector2.Zero, ObjectManager.GetWorker(i), 0);
+                _liClasses.Add(w);
+                _window.Controls.Add(w);
+                Controls.Add(w);
+            }
+
+            GUIObject.CreateSpacedRow(ref _liClasses, _window.Height / 2, _window.Width, 20);
+
             Controls.Add(_btnCancel);
             Controls.Add(_btnOK);
             Controls.Add(_manorWindow);
@@ -81,6 +98,27 @@ namespace RiverHollow.GUIComponents.Screens
             _btnOK.IsMouseHovering = _btnOK.Contains(mouse);
             _btnCancel.IsMouseHovering = _btnCancel.Contains(mouse);
             return rv;
+        }
+
+        public class ClassSelectionBox : GUIWindow
+        {
+            public WorldAdventurer _w;
+
+            public ClassSelectionBox(Vector2 p, WorldAdventurer w)
+            {
+                _w = w;
+                Position(p);
+                _winData = GUIWindow.RedWin;
+                Width = 64;
+                Height = 96;
+            }
+
+            public override void Draw(SpriteBatch spriteBatch)
+            {
+                base.Draw(spriteBatch);
+                _w.Position = new Vector2(Position().X + _winData.Edge, (int)Position().Y + _winData.Edge);
+                _w.Draw(spriteBatch);
+            }
         }
     }
 }

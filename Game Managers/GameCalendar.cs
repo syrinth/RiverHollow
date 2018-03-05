@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.GUIObjects;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow
 {
@@ -32,9 +33,10 @@ namespace RiverHollow
         static int _currDay;
         public static int CurrentDay { get => _currDay; }
         //static Seasons _currSeason;
-        static SpriteFont _calendarFont;
 
-        private static GUIWindow _displayWindow;
+        static GUIWindow _displayWindow;
+        static GUIText _text;
+
 
         static double _lastUpdateinSeconds;
 
@@ -48,13 +50,13 @@ namespace RiverHollow
 
             _lastUpdateinSeconds = 0;
 
-            _calendarFont = GameContentManager.GetFont(@"Fonts\Font");
-
-            _calendarFont = GameContentManager.GetFont(@"Fonts\Font");
-            Vector2 boxSize = _calendarFont.MeasureString("Day XX, XX:XX") + new Vector2(GUIWindow.BrownWin.Edge*2, GUIWindow.BrownWin.Edge*2);
+            _text = new GUIText("Day XX, XX:XX", GameContentManager.GetFont(@"Fonts\Font"));
+            Vector2 boxSize = _text.MeasureString() + new Vector2(GUIWindow.BrownWin.Edge*2, GUIWindow.BrownWin.Edge*2);
 
             _displayWindow = new GUIWindow(GUIWindow.BrownWin, (int)boxSize.X, (int)boxSize.Y);
             _displayWindow.AnchorToScreen(GUIObject.SideEnum.TopRight, 10);
+            
+            _text.CenterOnWindow(_displayWindow);
         }
 
         public static void Update(GameTime gameTime)
@@ -119,7 +121,8 @@ namespace RiverHollow
                     break;
             }
             _displayWindow.Draw(spriteBatch);
-            spriteBatch.DrawString(_calendarFont, String.Format("Day {0}, {1}:{2}", _currDay, hours, mins), _displayWindow.InnerTopLeft(), Color.Black);
+            _text.Draw(spriteBatch, String.Format("Day {0}, {1}:{2}", _currDay, hours, mins));
+            //spriteBatch.DrawString(_calendarFont, String.Format("Day {0}, {1}:{2}", _currDay, hours, mins), _displayWindow.InnerTopLeft(), Color.Black);
         }
 
         public static void NextDay()

@@ -22,7 +22,7 @@ namespace RiverHollow.Screens
         protected int _columns;
         protected int _rows;
 
-        public Inventory(Vector2 center, int rows, int columns, int edgeSize)
+        public Inventory(int rows, int columns, int edgeSize)
         {
             _container = null;
             _winData = GUIWindow.BrownWin;
@@ -32,35 +32,36 @@ namespace RiverHollow.Screens
             _displayList = new GUIItemBox[rows, columns];
             Width = (_winData.Edge * 2) + (_columns * _iBoxSize) + (_iMargin * (_columns + 1));
             Height = (_winData.Edge * 2) + (_rows * _iBoxSize) + (_iMargin * (_rows + 1));
-            Setup(new Vector2(center.X - Width / 2, center.Y - Height / 2));
+            Setup();
 
             _texture = GameContentManager.GetTexture(@"Textures\Dialog");
         }
 
-        public Inventory(Container c, Vector2 center, int edgeSize): this(center, c.Rows, c.Columns, edgeSize)
+        public Inventory(Container c, int edgeSize): this(c.Rows, c.Columns, edgeSize)
         {
             _container = c;
         }
 
-        public Inventory(NPC n, Vector2 center, int rows, int columns, int edgeSize) : this(center, rows, columns, edgeSize)
+        public Inventory(NPC n, int rows, int columns, int edgeSize) : this(rows, columns, edgeSize)
         {
             _giveTo = n;
         }
 
-        public void Setup(Vector2 position)
+        public void Setup()
         {
-            Position = position;
-            _drawRect = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
+            CenterOnScreen();
+            _drawRect = new Rectangle((int)Position().X, (int)Position().Y, Width, Height);
 
-            Rectangle displayBox = new Rectangle((int)Position.X + _winData.Edge + _iMargin, (int)Position.Y + _winData.Edge + _iMargin, _iBoxSize, _iBoxSize);
+            Rectangle displayBox = new Rectangle((int)Position().X + _winData.Edge + _iMargin, (int)Position().Y + _winData.Edge + _iMargin, _iBoxSize, _iBoxSize);
             for (int i = 0; i < _rows; i++)
             {
                 for (int j = 0; j < _columns; j++)
                 {
                     _displayList[i, j] = new GUIItemBox(displayBox.Location.ToVector2(), new Rectangle(288, 32, 32, 32), displayBox.Width, displayBox.Height, @"Textures\Dialog", null);
+                    Controls.Add(_displayList[i, j]);
                     displayBox.X += _iBoxSize + _iMargin;
                 }
-                displayBox.X = (int)Position.X + _winData.Edge + _iMargin;
+                displayBox.X = (int)Position().X + _winData.Edge + _iMargin;
                 displayBox.Y += _iBoxSize + _iMargin;
             }
         }

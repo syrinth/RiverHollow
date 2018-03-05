@@ -55,7 +55,7 @@ namespace RiverHollow.Characters.NPCs
             SetCombat();
         }
 
-        public void LoadContent(string texture)
+        public  new void LoadContent(string texture)
         {
             _sprite = new AnimatedSprite(GameContentManager.GetTexture(texture));
             _sprite.AddAnimation("Idle", 16, 32, 1, 0.5f, 1 /*+ (xCrawl * 16)*/, 0);

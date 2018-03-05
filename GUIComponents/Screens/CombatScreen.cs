@@ -429,7 +429,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             int menuSec = totalMenuWidth / 3;
 
             _gwMenu = new CmbtMenuWindow(totalMenuWidth, menuSec);
-            _statusWindow = new CmbtStatusWin(_gwMenu.Position + new Vector2(_gwMenu.Width + GUIWindow.GreyWin.Edge * 2, 0), menuSec * 2, _gwMenu.Height);
+            _statusWindow = new CmbtStatusWin(menuSec * 2, _gwMenu.Height);
+            _statusWindow.AnchorAndAlignToObject(_gwMenu, GUIObject.SideEnum.Right, GUIObject.SideEnum.Bottom);
+
             _useMenuWindow = new CmbtUseMenuWindow(totalMenuWidth, _gwMenu.Width + _statusWindow.Width + GUIWindow.GreyWin.Edge * 2);
         }
 
@@ -577,7 +579,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         SpriteFont _fFont;
         float _fCharacterHeight;
 
-        public CmbtStatusWin(Vector2 position, int width, int height)
+        public CmbtStatusWin(int width, int height)
         {
             _fFont = GameContentManager.GetFont(@"Fonts\MenuFont");
             _fCharacterHeight = _fFont.MeasureString("Q").Y;
@@ -585,18 +587,18 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Height = height;
             _winData = GreyWin;
 
-            Position = position;
-
-            _giCurrentTurn = new GUIImage(new Vector2((int)Position.X + _iInnerBorder, (int)Position.Y + _iInnerBorder), new Rectangle(288, 96, 32, 32), (int)_fCharacterHeight, (int)_fCharacterHeight, @"Textures\Dialog");
+            _giCurrentTurn = new GUIImage(new Vector2((int)Position().X + _iInnerBorder, (int)Position().Y + _iInnerBorder), new Rectangle(288, 96, 32, 32), (int)_fCharacterHeight, (int)_fCharacterHeight, @"Textures\Dialog");
         }
 
         public void Draw(SpriteBatch spriteBatch, BattleLocation[] locations)
         {
             base.Draw(spriteBatch);
-            int xindex = (int)Position.X + _iInnerBorder;
-            int yIndex = (int)Position.Y + _iInnerBorder;
-            int lastHP = (int)Position.X + Width - _iInnerBorder;
-            int lastMP = (int)(Position.X + Width - _iInnerBorder - _fFont.MeasureString("XXXX/XXXX").X);
+
+            //MAR
+            int xindex = (int)Position().X + _iInnerBorder;
+            int yIndex = (int)Position().Y + _iInnerBorder;
+            int lastHP = (int)Position().X + Width - _iInnerBorder;
+            int lastMP = (int)(Position().X + Width - _iInnerBorder - _fFont.MeasureString("XXXX/XXXX").X);
             foreach (CombatCharacter p in PlayerManager.GetParty())
             {
                 Color c = (CombatManager.ActiveCharacter == p) ? Color.Green : Color.White;
@@ -635,9 +637,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Height = (int)(_vecMenuSize.Y * _iMaxMenuActions);
             _winData = GreyWin;
 
-            Position = new Vector2(startX, RiverHollow.ScreenHeight - GreyWin.Edge - (_vecMenuSize.Y * _iMaxMenuActions) - RiverHollow.ScreenHeight / 100);
+            //MAR
+            Position(new Vector2(startX, RiverHollow.ScreenHeight - GreyWin.Edge - (_vecMenuSize.Y * _iMaxMenuActions) - RiverHollow.ScreenHeight / 100));
 
-            _giSelection = new GUIImage(new Vector2((int)Position.X + _iInnerBorder, (int)Position.Y + _iInnerBorder), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+            _giSelection = new GUIImage(InnerTopLeft(), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
         }
 
         public void Assign(List<MenuAction> abilities)
@@ -675,8 +678,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             base.DrawWindow(spriteBatch);
             if (CombatManager.ActiveCharacter.IsCombatAdventurer())
             {
-                int xindex = (int)Position.X + _iInnerBorder;
-                int yIndex = (int)Position.Y + _iInnerBorder;
+                int xindex = (int)Position().X + _iInnerBorder;
+                int yIndex = (int)Position().Y + _iInnerBorder;
 
                 if (_diOptions.Count > 0) { _giSelection.Draw(spriteBatch); }
 
@@ -729,13 +732,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Height = (int)(_vecMenuSize.Y * (_iMaxMenuActions/2));   //Two columns
             _winData = GreyWin;
 
-            Position = new Vector2(startX, RiverHollow.ScreenHeight - GreyWin.Edge - (Height) - RiverHollow.ScreenHeight / 100);
+            Position(new Vector2(startX, RiverHollow.ScreenHeight - GreyWin.Edge - (Height) - RiverHollow.ScreenHeight / 100));
 
-            _giSelection = new GUIImage(new Vector2((int)Position.X + _iInnerBorder, (int)Position.Y + _iInnerBorder), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+            _giSelection = new GUIImage(InnerTopLeft(), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
 
             _selectWidth = _giSelection.Width;
-            _textColOne = (int)Position.X + _iInnerBorder + _selectWidth;
-            _textColTwo = (int)Position.X + _iInnerBorder + (Width / 2) + _selectWidth;
+            _textColOne = (int)Position().X + _iInnerBorder + _selectWidth;
+            _textColTwo = (int)Position().X + _iInnerBorder + (Width / 2) + _selectWidth;
         }
 
         public override void Update(GameTime gameTime)
@@ -763,12 +766,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     if(test % 2 == 0)   //moving to an even number, needs to move to firstCol
                     {
-                        _giSelection.MoveImageTo(new Vector2(_textColOne - _selectWidth, _giSelection.Position.Y));
+                        _giSelection.MoveImageTo(new Vector2(_textColOne - _selectWidth, _giSelection.Position().Y));
                         _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
                     }
                     else
                     {
-                        _giSelection.MoveImageTo(new Vector2(_textColTwo - _selectWidth, _giSelection.Position.Y));
+                        _giSelection.MoveImageTo(new Vector2(_textColTwo - _selectWidth, _giSelection.Position().Y));
                     }
                     
                     _iKeySelection += 1;
@@ -781,11 +784,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     if (test % 2 == 0)   //moving to an even number, needs to move to firstCol
                     {
-                        _giSelection.MoveImageTo(new Vector2(_textColOne - _selectWidth, _giSelection.Position.Y));
+                        _giSelection.MoveImageTo(new Vector2(_textColOne - _selectWidth, _giSelection.Position().Y));
                     }
                     else
                     {
-                        _giSelection.MoveImageTo(new Vector2(_textColTwo - _selectWidth, _giSelection.Position.Y));
+                        _giSelection.MoveImageTo(new Vector2(_textColTwo - _selectWidth, _giSelection.Position().Y));
                         _giSelection.MoveImageBy(new Vector2(0, -_characterHeight));
                     }
 
@@ -798,29 +801,29 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 if (_poiMouse != GraphicCursor.Position.ToPoint() && Contains(GraphicCursor.Position.ToPoint()))
                 {
                     _poiMouse = GraphicCursor.Position.ToPoint();
-                    if (_iKeySelection - 2 >= 0 && GraphicCursor.Position.Y < _giSelection.Position.Y)
+                    if (_iKeySelection - 2 >= 0 && GraphicCursor.Position.Y < _giSelection.Position().Y)
                     {
                         _giSelection.MoveImageBy(new Vector2(0, -_characterHeight));
                         _iKeySelection -= 2;
                     }
-                    else if (_iKeySelection + 2 < _diOptions.Count && GraphicCursor.Position.Y > _giSelection.Position.Y + _giSelection.Height)
+                    else if (_iKeySelection + 2 < _diOptions.Count && GraphicCursor.Position.Y > _giSelection.Position().Y + _giSelection.Height)
                     {
                         _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
                         _iKeySelection += 2;
                     }
-                    else if (_iKeySelection + 1 < _diOptions.Count && GraphicCursor.Position.Y >= _giSelection.Position.Y && GraphicCursor.Position.Y <= _giSelection.Position.Y + _giSelection.Height && GraphicCursor.Position.X > _textColTwo)
+                    else if (_iKeySelection + 1 < _diOptions.Count && GraphicCursor.Position.Y >= _giSelection.Position().Y && GraphicCursor.Position.Y <= _giSelection.Position().Y + _giSelection.Height && GraphicCursor.Position.X > _textColTwo)
                     {
                         if (_iKeySelection % 2 == 0)
                         {
-                            _giSelection.MoveImageTo(new Vector2(_textColTwo - _selectWidth, _giSelection.Position.Y));
+                            _giSelection.MoveImageTo(new Vector2(_textColTwo - _selectWidth, _giSelection.Position().Y));
                             _iKeySelection++;
                         }
                     }
-                    else if (_iKeySelection - 1 >= 0 && GraphicCursor.Position.Y >= _giSelection.Position.Y && GraphicCursor.Position.Y <= _giSelection.Position.Y + _giSelection.Height && GraphicCursor.Position.X < _textColTwo)
+                    else if (_iKeySelection - 1 >= 0 && GraphicCursor.Position.Y >= _giSelection.Position().Y && GraphicCursor.Position.Y <= _giSelection.Position().Y + _giSelection.Height && GraphicCursor.Position.X < _textColTwo)
                     {
                         if (_iKeySelection % 2 != 0)
                         {
-                            _giSelection.MoveImageTo(new Vector2(_textColOne - _selectWidth, _giSelection.Position.Y));
+                            _giSelection.MoveImageTo(new Vector2(_textColOne - _selectWidth, _giSelection.Position().Y));
                             _iKeySelection--;
                         }
                     }
@@ -837,7 +840,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             base.DrawWindow(spriteBatch);
             int xindex = _textColOne;
-            int yIndex = (int)Position.Y + _iInnerBorder;
+            int yIndex = (int)Position().Y + _iInnerBorder;
 
             if (_diOptions.Count > 0) { _giSelection.Draw(spriteBatch); }
 
@@ -871,7 +874,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     }
                     else
                     {
-                        spriteBatch.DrawString(_fFont, display, new Vector2(Position.X + Width - _fFont.MeasureString(display).X - _selectWidth, yIndex), c);
+                        spriteBatch.DrawString(_fFont, display, new Vector2(Position().X + Width - _fFont.MeasureString(display).X - _selectWidth, yIndex), c);
 
                         xindex = _textColOne;
                         yIndex += (int)_characterHeight;

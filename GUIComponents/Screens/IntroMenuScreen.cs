@@ -8,8 +8,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
     public class IntroMenuScreen : GUIScreen
     {
         const int BTN_PADDING = 50;
-        const int BTN_WIDTH = 128;
-        const int BTN_HEIGHT = 64;
         private GUIButton _btnNewGame;
         private GUIButton _btnLoadGame;
         private GUIButton _btnExit;
@@ -20,7 +18,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _btnLoadGame = new GUIButton("Load Game");
             _btnExit = new GUIButton("Exit Game");
             List <GUIObject> listButtons = new List<GUIObject>() { _btnNewGame, _btnLoadGame, _btnExit };
-            GUIObject.CreateSpacedColumn(ref listButtons, RiverHollow.ScreenWidth/2, RiverHollow.ScreenHeight, BTN_PADDING, BTN_WIDTH, BTN_HEIGHT);
+            GUIObject.CreateSpacedColumn(ref listButtons, RiverHollow.ScreenWidth/2, RiverHollow.ScreenHeight, BTN_PADDING);
 
             Controls.Add(_btnNewGame);
             Controls.Add(_btnLoadGame);

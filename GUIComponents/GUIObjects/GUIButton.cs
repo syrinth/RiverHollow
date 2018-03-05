@@ -1,48 +1,52 @@
-﻿using RiverHollow.GUIObjects;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.GUIObjects;
+using System.Collections.Generic;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
-    public class GUIButton : GUIObject
+    public class GUIButton : GUIWindow
     {
-        protected Rectangle _rDefaultButton = new Rectangle(0, 128, 64, 32);
-        public Rectangle DefaultButton { get => _rDefaultButton; }
+        public static int BTN_WIDTH = 128;
+        public static int BTN_HEIGHT = 64;
         protected SpriteFont _font;
         public bool IsMouseHovering = false;
         public bool _bEnabled;
-        private string _sText;
-        private Vector2 _textSize;
+        private GUIText _text;
+
+        internal static WindowData BaseBtn = new WindowData(96, 0, 2);
 
         public GUIButton(string text)
         {
-            _font = GameContentManager.GetFont(@"Fonts\Font");
-
-            _sText = text;
-            _textSize = _font.MeasureString(_sText);
+            Controls = new List<GUIObject>();
+            _winData = BaseBtn;
+            Position(Vector2.Zero);
+            Width = BTN_WIDTH;
+            Height = BTN_HEIGHT;
+            _text = new GUIText(text);
+            _text.CenterOnWindow(this);
 
             _bEnabled = true;
-            _sourceRect = DefaultButton;
         }
 
         public GUIButton(string text, int width, int height) : this(text)
         {
             Width = width;
             Height = height;
+            _text.CenterOnWindow(this);
         }
 
-        public GUIButton(Vector2 position, Rectangle sourceRect, int width, int height, string text, string texture, bool usePosition = false) : this (text)
+        public GUIButton(Vector2 position, Rectangle sourceRect, int width, int height, string text, string texture, bool usePosition = false) : this (text, width, height)
         {
-            Width = width;
-            Height = height;
-            Position = usePosition ? position : position - new Vector2(width / 2, height / 2);
-            _sText = text;
+            Position(usePosition ? position : position - new Vector2(width / 2, height / 2));
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _drawRect, _sourceRect, (IsMouseHovering) ? Color.LightGray : Color.White);
-            spriteBatch.DrawString(_font, _sText, new Vector2(Position.X+(Width/2) - (_textSize.X/2), Position.Y+(Height/2) - (_textSize.Y / 2)), Color.Black);
+            base.Draw(spriteBatch);
+            _text.Draw(spriteBatch);
         }
     }
 }
