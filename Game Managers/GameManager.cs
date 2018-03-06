@@ -3,7 +3,9 @@ using Microsoft.Xna.Framework.Content;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Items;
+using RiverHollow.Misc;
 using RiverHollow.Tile_Engine;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -15,6 +17,8 @@ namespace RiverHollow.Game_Managers
     {
         public static float Scale = 2f;
         public static Dictionary<string, Upgrade> DiUpgrades;
+
+        static int _iSaveID = -1;
 
         public static void LoadContent(ContentManager Content)
         {
@@ -79,6 +83,9 @@ namespace RiverHollow.Game_Managers
             /// The Level data object.
             /// </summary>
             /// 
+            [XmlElement(ElementName = "SaveID")]
+            public int saveID;
+
             [XmlElement(ElementName = "Name")]
             public string name;
 
@@ -87,6 +94,9 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "Money")]
             public int money;
+
+            [XmlElement(ElementName = "CurrentClass")]
+            public int currentClass;
 
             [XmlElement(ElementName = "Calendar")]
             public CalendarData Calendar;
@@ -265,14 +275,25 @@ namespace RiverHollow.Game_Managers
             public int heldItemID;
         }
 
+        public static int GetSaveID()
+        {
+            if (_iSaveID == 0)
+            {
+                _iSaveID = int.Parse(string.Format("{0}{1}{2}{3}", DateTime.Now.Year, DateTime.Now.Day, DateTime.Now.Second, DateTime.Now.Millisecond));
+            }
+
+            return _iSaveID;
+        }
+
         public static string Save()
         {
             SaveData data = new SaveData()
             {
-                // Create a list to store the data already saved.
+                saveID = GetSaveID(),
                 name = PlayerManager.Name,
                 currentMap = PlayerManager.CurrentMap,
                 money = PlayerManager.Money,
+                currentClass = PlayerManager.Combat.CharacterClass.ID,
                 Calendar = new CalendarData
                 {
                     dayOfWeek = GameCalendar.DayOfWeek,
@@ -352,28 +373,52 @@ namespace RiverHollow.Game_Managers
                 serializer.Serialize(sr, data);
             }
 
-            File.WriteAllText("SaveGame.xml", sb.ToString());
+            File.WriteAllText(PlayerManager.Name+_iSaveID+".rh", sb.ToString());
             return sb.ToString();
         }
 
-        public static void Load()
+        public static List<SaveData> LoadFiles()
         {
-            string xml = "SaveGame.xml";
+            List<SaveData> games = new List<SaveData>();
+
+            foreach (string s in Directory.GetFiles(System.Environment.CurrentDirectory, "*.rh"))
+            {
+                games.Add(LoadData(s));
+            }
+
+            return games;
+        }
+
+        public static SaveData LoadData(string fileName)
+        {
+            SaveData data;
+            string xml = fileName;
             string _byteOrderMarkUtf16 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
             if (xml.StartsWith(_byteOrderMarkUtf16))
             {
                 xml = xml.Remove(0, _byteOrderMarkUtf16.Length);
             }
             XmlSerializer serializer = new XmlSerializer(typeof(SaveData));
-            SaveData data;
+            
             using (var sr = new StreamReader(xml))
             {
                 data = (SaveData)serializer.Deserialize(sr);
             }
+
+            return data;
+        }
+
+        public static void Load(SaveData data)
+        {
+            _iSaveID = data.saveID;
             MapManager.CurrentMap = MapManager.Maps[data.currentMap];
-            PlayerManager.InitPlayer();
+            PlayerManager.Initialize();
+            PlayerManager.CurrentMap = MapManager.Maps[data.currentMap].Name;
             PlayerManager.SetName(data.name);
             PlayerManager.SetMoney(data.money);
+            PlayerManager.SetClass(data.currentClass);
+            PlayerManager.World.Position = Utilities.Normalize(MapManager.Maps[PlayerManager.CurrentMap].GetCharacterSpawn("PlayerSpawn"));
+            PlayerManager.World.DetermineFacing(new Vector2(0, 1));
             GameCalendar.LoadCalendar(data.Calendar); 
             foreach (BuildingData b in data.Buildings)
             {
