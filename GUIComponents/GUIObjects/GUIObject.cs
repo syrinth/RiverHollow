@@ -74,9 +74,9 @@ namespace RiverHollow.GUIObjects
         {
             Position(new Vector2(_vPos.X, y));
         }
-        internal static void CreateSpacedColumn(ref List<GUIObject> components, int columnLine, int totalHeight, int spacing, bool alignToColumnLine = false)
+        internal static void CreateSpacedColumn(ref List<GUIObject> components, int columnLine, float start, int totalHeight, int spacing, bool alignToColumnLine = false)
         {
-            int startY = ((totalHeight - (components.Count * components[0].Height) - (spacing * components.Count - 1)) / 2) + components[0].Height / 2;
+            float startY = start + ((totalHeight - (components.Count * components[0].Height) - (spacing * components.Count - 1)) / 2) + components[0].Height / 2;
             Vector2 position = new Vector2(alignToColumnLine ? columnLine : columnLine - components[0].Width / 2, startY);
 
             foreach(GUIObject o in components)
@@ -85,9 +85,9 @@ namespace RiverHollow.GUIObjects
                 position.Y += o.Height + spacing;
             }
         }
-        internal static void CreateSpacedRow(ref List<GUIObject> components, int rowLine, int totalWidth, int spacing, bool alignToRowLine = false)
+        internal static void CreateSpacedRow(ref List<GUIObject> components, int rowLine, float start, int totalWidth, int spacing, bool alignToRowLine = false)
         {
-            int startX = ((totalWidth - (components.Count * components[0].Width) - (spacing * components.Count - 1)) / 2) + components[0].Width / 2;
+            float startX = start + ((totalWidth - (components.Count * components[0].Width) - (spacing * components.Count - 1)) / 2) + components[0].Width / 2;
             Vector2 position = new Vector2(startX, alignToRowLine ? rowLine : rowLine - components[0].Height / 2);
 
             foreach (GUIObject o in components)

@@ -22,8 +22,8 @@ namespace RiverHollow.Game_Managers
         private static List<Quest> _questLog;
         public static List<Quest> QuestLog { get => _questLog; }
         
-        public static int Stamina;
-        public static int MaxStamina;
+        public static int Stamina = 50;
+        public static int MaxStamina = 50;
         public static string _inBuilding = string.Empty;
         private static List<int> _canMake;
         public static List<int> CanMake { get => _canMake; }
@@ -59,23 +59,27 @@ namespace RiverHollow.Game_Managers
             _party.Add(Combat);
             _buildings = new List<WorkerBuilding>();
             _canMake = new List<int>();
-        }
-        public static void InitPlayer()
-        {
-            Initialize();
-            Combat.LoadContent(@"Textures\Wizard"); //ToDo: position doesn't matter here
-            World.LoadContent(@"Textures\texPlayer");
 
-            SetPlayerDefaults();
-            InventoryManager.AddNewItemToInventory(85, 10);
+            World.LoadContent(@"Textures\texPlayer");
         }
+
         public static void NewPlayer()
         {
             Initialize();
+            
             World.LoadContent(@"Textures\texPlayer");
             World.Position = new Vector2(200, 200);
-            Combat.LoadContent(@"Textures\Wizard"); //ToDo: position doesn't matter here
             _canMake.Add(6);
+
+            CurrentMap = MapManager.CurrentMap.Name;
+            World.Position = Utilities.Normalize(MapManager.Maps[CurrentMap].GetCharacterSpawn("PlayerSpawn"));
+
+            AddTesting();
+        }
+
+        public static void AddTesting()
+        {
+            InventoryManager.AddNewItemToInventory(85, 10);
             InventoryManager.AddNewItemToInventory(5);
             InventoryManager.AddNewItemToInventory(3);
             InventoryManager.AddNewItemToInventory(4);
@@ -86,23 +90,12 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddNewItemToInventory(80, 10);
             InventoryManager.AddNewItemToInventory(201);
 
-            SetPlayerDefaults();
-        }
-
-        public static void SetPlayerDefaults()
-        {
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", 1, null, ObjectManager.GetItem(2)));
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", 2, null, ObjectManager.GetItem(2)));
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", 3, null, ObjectManager.GetItem(2)));
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", 4, null, ObjectManager.GetItem(2)));
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", 5, null, ObjectManager.GetItem(2)));
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", 6, null, ObjectManager.GetItem(2)));
-
-            CurrentMap = MapManager.CurrentMap.Name;
-            World.Position = Utilities.Normalize(MapManager.Maps[CurrentMap].GetCharacterSpawn("PlayerSpawn"));
-            MaxStamina = 50;
-            Stamina = MaxStamina;
-            Combat.SetClass(CharacterManager.GetClassByIndex(1));
         }
 
         public static void Update(GameTime gameTime)
@@ -392,6 +385,12 @@ namespace RiverHollow.Game_Managers
         {
             Name = x;
             Combat.SetName(x);
+        }
+        public static void SetClass(int x)
+        {
+            CharacterClass combatClass = CharacterManager.GetClassByIndex(x);
+            Combat.SetClass(combatClass);
+            Combat.LoadContent(@"Textures\"+ combatClass.Name);
         }
 
         public static bool DecreaseStamina(int x)

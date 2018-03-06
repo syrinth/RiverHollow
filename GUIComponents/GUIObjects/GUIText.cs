@@ -50,5 +50,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             return _font.MeasureString(_sText);
         }
+        public Vector2 MeasureString(string s)
+        {
+            return _font.MeasureString(s);
+        }
     }
 }

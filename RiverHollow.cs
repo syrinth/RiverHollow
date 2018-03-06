@@ -235,13 +235,6 @@ namespace RiverHollow
             GameManager.BackToMain();
         }
 
-        public static void LoadGame()
-        {
-            GameManager.Load();
-            MapManager.PopulateMaps(true);
-            GameManager.BackToMain();
-        }
-
         public static void RollOver()
         {
             GameCalendar.RollOver();

@@ -5,6 +5,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIObjects;
 using System.Collections.Generic;
 
@@ -25,6 +26,7 @@ namespace RiverHollow.GUIComponents.Screens
         GUITextInputWindow _manorWindow;
 
         List<GUIObject> _liClasses;
+        ClassSelectionBox _selectedClass;
 
         public NewGameScreen()
         {
@@ -48,13 +50,14 @@ namespace RiverHollow.GUIComponents.Screens
 
             _liClasses = new List<GUIObject>();
             for (int i = 1; i <= 4; i++) {
-                ClassSelectionBox w = new ClassSelectionBox(Vector2.Zero, ObjectManager.GetWorker(i), 0);
+                ClassSelectionBox w = new ClassSelectionBox(Vector2.Zero, ObjectManager.GetWorker(i));
                 _liClasses.Add(w);
                 _window.Controls.Add(w);
                 Controls.Add(w);
             }
+            _selectedClass = (ClassSelectionBox)_liClasses[0];
 
-            GUIObject.CreateSpacedRow(ref _liClasses, _window.Height / 2, _window.Width, 20);
+            GUIObject.CreateSpacedRow(ref _liClasses, _window.Height / 2, _window.Position().X, _window.Width, 20);
 
             Controls.Add(_btnCancel);
             Controls.Add(_btnOK);
@@ -68,6 +71,11 @@ namespace RiverHollow.GUIComponents.Screens
         {
             if(_selection == SelectionEnum.Name) { _nameWindow.Update(gameTime); }
             else if (_selection == SelectionEnum.Manor) { _manorWindow.Update(gameTime); }
+
+            foreach (GUIObject o in _liClasses)
+            {
+                ((ClassSelectionBox)o).Update(gameTime);
+            }
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -75,8 +83,9 @@ namespace RiverHollow.GUIComponents.Screens
             bool rv = false;
             if (_btnOK.Contains(mouse))
             {
-                PlayerManager.Name = _nameWindow.GetText();
                 RiverHollow.NewGame();
+                PlayerManager.SetClass(_selectedClass.ClassID);
+                PlayerManager.SetName(_nameWindow.GetText());
                 rv = true;
             }
             if (_btnCancel.Contains(mouse))
@@ -88,6 +97,20 @@ namespace RiverHollow.GUIComponents.Screens
             if (_nameWindow.Contains(mouse)) { _selection = SelectionEnum.Name; }
             else if (_manorWindow.Contains(mouse)) { _selection = SelectionEnum.Manor; }
             else { _selection = SelectionEnum.None;}
+
+            foreach(GUIObject o in _liClasses)
+            {
+                if (o.Contains(mouse))
+                {
+                    ClassSelectionBox csb = ((ClassSelectionBox)o);
+                    if (_selectedClass != csb)
+                    {
+                        csb.PlayAnimation("WalkDown");
+                        _selectedClass.PlayAnimation("Idle");
+                        _selectedClass = csb;
+                    }
+                }
+            }
 
             return rv;
         }
@@ -102,22 +125,42 @@ namespace RiverHollow.GUIComponents.Screens
 
         public class ClassSelectionBox : GUIWindow
         {
-            public WorldAdventurer _w;
+            GUISprite _sprite;
+            public GUISprite Sprite => _sprite;
+
+            int _iClassID;
+            public int ClassID => _iClassID;
 
             public ClassSelectionBox(Vector2 p, WorldAdventurer w)
             {
-                _w = w;
+                _sprite = new GUISprite(w.Sprite);
+                _iClassID = w.AdventurerID;
                 Position(p);
                 _winData = GUIWindow.RedWin;
                 Width = 64;
                 Height = 96;
             }
 
+            public override void Update(GameTime gameTime)
+            {
+                _sprite.Update(gameTime);
+            }
+
             public override void Draw(SpriteBatch spriteBatch)
             {
                 base.Draw(spriteBatch);
-                _w.Position = new Vector2(Position().X + _winData.Edge, (int)Position().Y + _winData.Edge);
-                _w.Draw(spriteBatch);
+                _sprite.Draw(spriteBatch);
+            }
+
+            public override void Position(Vector2 value)
+            {
+                base.Position(value);
+                if (_sprite != null) { _sprite.CenterOnWindow(this); }
+            }
+
+            public void PlayAnimation(string animation)
+            {
+                _sprite.PlayAnimation(animation);
             }
         }
     }

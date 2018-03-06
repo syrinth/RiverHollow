@@ -26,7 +26,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _btnExitGame = new GUIButton("Exit Game");
 
             _liButtons = new List<GUIObject>() { _btnInventory, _btnParty, _btnQuestLog, _btnExitGame };
-            GUIObject.CreateSpacedColumn(ref _liButtons, -GUIButton.BTN_WIDTH, RiverHollow.ScreenHeight, BTN_PADDING);
+            GUIObject.CreateSpacedColumn(ref _liButtons, -GUIButton.BTN_WIDTH, 0, RiverHollow.ScreenHeight, BTN_PADDING);
             foreach(GUIObject o in _liButtons) { Controls.Add(o); }
 
             GameManager.Pause();

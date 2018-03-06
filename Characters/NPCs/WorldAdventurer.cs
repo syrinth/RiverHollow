@@ -43,6 +43,7 @@ namespace RiverHollow.Characters.NPCs
 
         public WorldAdventurer(string[] stringData, int id)
         {
+            _iAdventurerID = id;
             _characterType = CharacterEnum.WorldAdventurer;
             ImportBasics(stringData, id);
             LoadContent(_sTexture);
@@ -58,7 +59,8 @@ namespace RiverHollow.Characters.NPCs
         public  new void LoadContent(string texture)
         {
             _sprite = new AnimatedSprite(GameContentManager.GetTexture(texture));
-            _sprite.AddAnimation("Idle", 16, 32, 1, 0.5f, 1 /*+ (xCrawl * 16)*/, 0);
+            _sprite.AddAnimation("Idle", 0, 0, 16, 32, 1, 0.3f);
+            _sprite.AddAnimation("WalkDown", 16, 0, 16, 32, 2, 0.3f);
             _sprite.SetCurrentAnimation("Idle");
             _sprite.SetScale(2);
         }

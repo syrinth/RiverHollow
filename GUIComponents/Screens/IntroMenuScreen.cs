@@ -18,7 +18,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _btnLoadGame = new GUIButton("Load Game");
             _btnExit = new GUIButton("Exit Game");
             List <GUIObject> listButtons = new List<GUIObject>() { _btnNewGame, _btnLoadGame, _btnExit };
-            GUIObject.CreateSpacedColumn(ref listButtons, RiverHollow.ScreenWidth/2, RiverHollow.ScreenHeight, BTN_PADDING);
+            GUIObject.CreateSpacedColumn(ref listButtons, RiverHollow.ScreenWidth/2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
 
             Controls.Add(_btnNewGame);
             Controls.Add(_btnLoadGame);
@@ -37,7 +37,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             if (_btnLoadGame.Contains(mouse))
             {
-                RiverHollow.LoadGame();
+                GUIManager.SetScreen(new LoadScreen());
                 rv = true;
             }
             if (_btnExit.Contains(mouse))

@@ -184,7 +184,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 case CombatManager.PhaseEnum.DisplayAttack:
                     if (!string.IsNullOrEmpty(CombatManager.Text))
                     {
-                        if (_gtwTextWindow == null) { _gtwTextWindow = new GUITextWindow(CombatManager.Text, 0.5); }
+                        if (_gtwTextWindow == null) {
+                            _gtwTextWindow = new GUITextWindow(CombatManager.Text, 0.5);
+                            _gtwTextWindow.CenterOnScreen();
+                        }
                         else
                         {
                             _gtwTextWindow.Update(gameTime);

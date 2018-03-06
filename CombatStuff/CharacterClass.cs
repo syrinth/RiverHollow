@@ -6,6 +6,8 @@ namespace RiverHollow.Characters.CombatStuff
 {
     public class CharacterClass
     {
+        int _iID;
+        public int ID => _iID;
         private int _statDmg;
         public int StatDmg { get => _statDmg; }
         private int _statDef;
@@ -33,6 +35,8 @@ namespace RiverHollow.Characters.CombatStuff
 
         protected int ImportBasics(int id, string[] stringData)
         {
+            _iID = id;
+
             int i = 0;
             _name = stringData[i++];
             _description = stringData[i++];
