@@ -11,7 +11,7 @@ namespace RiverHollow.Game_Managers
         private static int _numRooms = 5;
         public enum EndCondition { TreasureChest, KillAll };
         private static EndCondition _condition = EndCondition.TreasureChest;
-        private static Container _endChest;
+        private static ContainerItem _endChest;
 
         private static List<RHMap> _maps = new List<RHMap>();
         public static List<RHMap> Maps { get => _maps; }
@@ -129,7 +129,7 @@ namespace RiverHollow.Game_Managers
             if (lastRoom && _condition == EndCondition.TreasureChest)
             {
                 Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize);
-                Container c = (Container)ObjectManager.GetItem(6);
+                ContainerItem c = (ContainerItem)ObjectManager.GetItem(6);
                 m.PlaceStaticItem(c, vect);
                 _endChest = c;
             }
@@ -171,7 +171,7 @@ namespace RiverHollow.Game_Managers
             return _maps[++_currentIndex];
         }
 
-        public static bool IsEndChest(Container c)
+        public static bool IsEndChest(ContainerItem c)
         {
             return c == _endChest;
         }

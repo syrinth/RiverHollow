@@ -10,7 +10,7 @@ namespace RiverHollow.Items
 {
     public class Item
     {
-        public enum ItemEnum { Resource, Equipment, Tool, Container, Food, Map, Combat, Processor, Crafter };
+        public enum ItemEnum { Resource, Equipment, Tool, Container, Food, Map, Combat, StaticItem  };
 
         #region properties
         protected ItemEnum _itemType;
@@ -214,10 +214,7 @@ namespace RiverHollow.Items
         public bool IsEquipment() { return _itemType == ItemEnum.Equipment; }
         public bool IsFood() { return _itemType == ItemEnum.Food; }
         public bool IsContainer() { return _itemType == ItemEnum.Container; }
-
-        public bool IsCrafter() { return _itemType == ItemEnum.Crafter; }
-        public bool IsProcessor() { return _itemType == ItemEnum.Processor; }
-        public bool IsMachine() { return IsProcessor() || IsCrafter(); }
+        public bool IsStaticItem() { return _itemType == ItemEnum.StaticItem; }
 
         private class Parabola
         {

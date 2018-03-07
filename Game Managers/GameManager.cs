@@ -257,7 +257,7 @@ namespace RiverHollow.Game_Managers
         public struct MachineData
         {
             [XmlElement(ElementName = "MachineID")]
-            public int staticItemID;
+            public int ID;
 
             [XmlElement(ElementName = "X")]
             public int x;
@@ -467,7 +467,7 @@ namespace RiverHollow.Game_Managers
             Item it = ObjectManager.GetItem(data.staticItemID);
             if (it.IsContainer())
             {
-                Container c = (Container)it;
+                ContainerItem c = (ContainerItem)it;
                 for (int i = 0; i < InventoryManager.maxItemRows; i++)
                 {
                     for (int j = 0; j < InventoryManager.maxItemColumns; j++)
@@ -479,12 +479,6 @@ namespace RiverHollow.Game_Managers
                     }
                 }
                 return c;
-            }
-            else if (it.IsProcessor() || it.IsCrafter())
-            {
-                Machine m = (Machine)it;
-                m.MapPosition = new Vector2(data.x, data.y);
-                return m;
             }
 
             return null;

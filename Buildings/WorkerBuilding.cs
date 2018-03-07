@@ -27,11 +27,11 @@ namespace RiverHollow
         protected List<WorldAdventurer> _workers;
         public List<WorldAdventurer> Workers { get => _workers; }
 
-        protected Container _buildingChest;
-        public Container BuildingChest { get => _buildingChest; set => _buildingChest = value; }
+        protected ContainerItem _buildingChest;
+        public ContainerItem BuildingChest { get => _buildingChest; set => _buildingChest = value; }
 
-        protected Container _pantry;
-        public Container Pantry { get => _pantry; set => _pantry = value; }
+        protected ContainerItem _pantry;
+        public ContainerItem Pantry { get => _pantry; set => _pantry = value; }
 
         protected List<StaticItem> _staticItemList;
         public List<StaticItem> StaticItems { get => _staticItemList; }
@@ -44,8 +44,8 @@ namespace RiverHollow
             _workers = new List<WorldAdventurer>();
             _staticItemList = new List<StaticItem>();
 
-            _buildingChest = (Container)ObjectManager.GetItem(6);
-            _pantry = (Container)ObjectManager.GetItem(6);
+            _buildingChest = (ContainerItem)ObjectManager.GetItem(6);
+            _pantry = (ContainerItem)ObjectManager.GetItem(6);
 
             _sourceRectangle = new Rectangle(0, 0, Texture.Width, Texture.Height);
         }
@@ -146,7 +146,7 @@ namespace RiverHollow
             {
                 if (item.IsContainer())
                 {
-                    buildingData.staticItems.Add(((Container)item).SaveData());
+                    buildingData.staticItems.Add(((ContainerItem)item).SaveData());
                 }
             }
 
@@ -165,8 +165,8 @@ namespace RiverHollow
                 AddWorker(w, r);
             }
 
-            this.Pantry = (Container)LoadStaticItemData(data.pantry);
-            this.BuildingChest = (Container)LoadStaticItemData(data.buildingChest);
+            this.Pantry = (ContainerItem)LoadStaticItemData(data.pantry);
+            this.BuildingChest = (ContainerItem)LoadStaticItemData(data.buildingChest);
 
             foreach (ContainerData s in data.staticItems)
             {

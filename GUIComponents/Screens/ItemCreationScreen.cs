@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.ObjectManager;
-using RiverHollow.Items;
 using RiverHollow.Characters.NPCs;
 using RiverHollow.GUIObjects;
+using static RiverHollow.Items.WorldItem;
 
 namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {

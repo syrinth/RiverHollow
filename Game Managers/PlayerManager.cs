@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters.CombatStuff;
 using RiverHollow.Misc;
 using RiverHollow.GUIObjects;
+using static RiverHollow.Items.WorldItem;
 
 namespace RiverHollow.Game_Managers
 {
@@ -275,15 +276,15 @@ namespace RiverHollow.Game_Managers
                 {
                     if (GraphicCursor.HeldItem.IsContainer())
                     {
-                        MapManager.PlaceWorldItem((Container)GraphicCursor.HeldItem, mouseLocation.ToVector2());
+                        MapManager.PlaceWorldItem((ContainerItem)GraphicCursor.HeldItem, mouseLocation.ToVector2());
                         GraphicCursor.DropItem();
                     }
-                    else if (GraphicCursor.HeldItem.IsProcessor() || GraphicCursor.HeldItem.IsCrafter())
+                    else if (GraphicCursor.HeldItem.IsStaticItem())
                     {
-                        Machine p = ((Machine)GraphicCursor.HeldItem);
+                        Machine p = (Machine)ObjectManager.GetWorldObject(GraphicCursor.HeldItem.ItemID);
                         p.SetMapName(CurrentMap);
                         p.MapPosition = Utilities.Normalize(mouseLocation.ToVector2());
-                        MapManager.PlaceWorldItem(p, mouseLocation.ToVector2());
+                        MapManager.PlaceWorldObject(p, mouseLocation.ToVector2());
                         GraphicCursor.DropItem();
                     }
                 }

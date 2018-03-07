@@ -12,8 +12,8 @@ namespace RiverHollow.Screens
     public class Inventory : GUIWindow
     {
         protected GUIItemBox[,] _displayList;
-        private Container _container;
-        public Container Container { get => _container; }
+        private ContainerItem _container;
+        public ContainerItem Container { get => _container; }
         private NPC _giveTo;
 
         protected const int _iBoxSize = 64;
@@ -37,7 +37,7 @@ namespace RiverHollow.Screens
             _texture = GameContentManager.GetTexture(@"Textures\Dialog");
         }
 
-        public Inventory(Container c, int edgeSize): this(c.Rows, c.Columns, edgeSize)
+        public Inventory(ContainerItem c, int edgeSize): this(c.Rows, c.Columns, edgeSize)
         {
             _container = c;
         }

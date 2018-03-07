@@ -256,5 +256,9 @@ namespace RiverHollow.Game_Managers
         {
             _currentMap.PlaceStaticItem(staticItem, position, false);
         }
+        public static void PlaceWorldObject(WorldObject worldObject, Vector2 position)
+        {
+            _currentMap.PlaceWorldObject(worldObject, position);
+        }
     }
 }

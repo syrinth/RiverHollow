@@ -16,6 +16,7 @@ using static RiverHollow.RiverHollow;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
+using static RiverHollow.Items.WorldItem;
 
 namespace RiverHollow.Tile_Engine
 {
@@ -56,6 +57,8 @@ namespace RiverHollow.Tile_Engine
         protected List<WorkerBuilding> _buildingList;
         protected List<WorldObject> _worldObjectList;
         public List<WorldObject> WorldObjects { get => _worldObjectList; }
+        protected List<WorldObject> _liPlacedObjects;
+        public List<WorldObject> PlacedObjects { get => _liPlacedObjects; }
         protected List<Item> _itemList;
         protected List<StaticItem> _staticItemList;
         public List<StaticItem> StaticItems { get => _staticItemList; }
@@ -81,6 +84,7 @@ namespace RiverHollow.Tile_Engine
             _dictExit = new Dictionary<Rectangle, string>();
             _dictEntrance = new Dictionary<string, Rectangle>();
             _dictCharacterLayer = new Dictionary<string, Vector2>();
+            _liPlacedObjects = new List<WorldObject>();
         }
 
         public RHMap(RHMap map) : this()
@@ -194,7 +198,7 @@ namespace RiverHollow.Tile_Engine
                 }
             }
 
-            foreach (StaticItem s in _staticItemList)
+            foreach (WorldObject s in _liPlacedObjects)
             {
                 if (s.IsProcessor())
                 {
@@ -304,6 +308,11 @@ namespace RiverHollow.Tile_Engine
             }
 
             foreach (WorldObject o in _worldObjectList)
+            {
+                o.Draw(spriteBatch);
+            }
+
+            foreach (WorldObject o in _liPlacedObjects)
             {
                 o.Draw(spriteBatch);
             }
@@ -549,22 +558,27 @@ namespace RiverHollow.Tile_Engine
             }
 
             RHTile tile = _tileArray[mouseLocation.X / 32, mouseLocation.Y / 32];
-            if(tile != null)
+            if (tile != null)
             {
-                if(tile.StaticItem != null)
+                //if(tile.StaticItem != null)
+                //{
+                //    StaticItem s = tile.StaticItem;
+                //    if (s.IsContainer())
+                //    {
+                //        if (IsDungeon && DungeonManager.IsEndChest((ContainerItem)s))
+                //        {
+                //            Staircase stairs = (Staircase)ObjectManager.GetWorldObject(3, new Vector2(0, 0));
+                //            stairs.SetExit(MapManager.HomeMap);
+                //            AddWorldObject(stairs, true);
+                //        }
+                //        GUIManager.SetScreen(new InventoryScreen((ContainerItem)s));
+                //    }
+                //}
+
+                if (tile.Object != null)
                 {
-                    StaticItem s = tile.StaticItem;
-                    if (s.IsContainer())
-                    {
-                        if (IsDungeon && DungeonManager.IsEndChest((Container)s))
-                        {
-                            Staircase stairs = (Staircase)ObjectManager.GetWorldObject(3, new Vector2(0, 0));
-                            stairs.SetExit(MapManager.HomeMap);
-                            AddWorldObject(stairs, true);
-                        }
-                        GUIManager.SetScreen(new InventoryScreen((Container)s));
-                    }
-                    else if (s.IsMachine())
+                    WorldObject s = tile.Object;
+                    if (s.IsMachine())
                     {
                         Machine p = (Machine)s;
                         if (p.ProcessingFinished()) { p.TakeFinishedItem(); }
@@ -639,7 +653,7 @@ namespace RiverHollow.Tile_Engine
                         }
                     }
                 }
-                foreach (StaticItem s in _staticItemList)
+                foreach (WorldObject s in _liPlacedObjects)
                 {
                     if (s.CollisionBox.Contains(mouseLocation))
                     {
@@ -976,6 +990,14 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
+        public void PlaceWorldObject(WorldObject theMachine, Vector2 position)
+        {
+            theMachine.SetCoordinates(position);
+
+            _tileArray[(int)theMachine.Position.X / 32, (int)theMachine.Position.Y / 32].SetWorldObject(theMachine);
+            _liPlacedObjects.Add(theMachine);
+        }
+
         public void AddCharacter(WorldCharacter c)
         {
             ToAdd.Add(c);
@@ -1046,12 +1068,14 @@ namespace RiverHollow.Tile_Engine
                 {
                     if (item.IsContainer())
                     {
-                        mapData.containers.Add(((Container)item).SaveData());
+                        mapData.containers.Add(((ContainerItem)item).SaveData());
                     }
-
-                    if (item.IsCrafter() || item.IsProcessor())
+                }
+                foreach(WorldObject w in _liPlacedObjects)
+                {
+                    if (w.IsMachine())
                     {
-                        mapData.machines.Add(((Machine)item).SaveData());
+                        mapData.machines.Add(((Machine)w).SaveData());
                     }
                 }
             }
@@ -1071,9 +1095,9 @@ namespace RiverHollow.Tile_Engine
 
             foreach (MachineData mac in data.machines)
             {
-                Machine it = (Machine)ObjectManager.GetItem(mac.staticItemID);
-                it.LoadData(mac);
-                this.PlaceStaticItem(it, it.MapPosition);
+                Machine theMachine = (Machine)ObjectManager.GetWorldObject(mac.ID);
+                theMachine.LoadData(mac);
+                PlaceWorldObject(theMachine, theMachine.MapPosition);
             }
         }
     }

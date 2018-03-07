@@ -568,3 +568,8 @@
 /processorParam:TextureFormat=Color
 /build:Textures/alchemist.png
 
+#begin Data/WorldObjects.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/WorldObjects.xml
+

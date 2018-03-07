@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using static RiverHollow.Items.WorldItem;
 
 namespace RiverHollow.Game_Managers
 {
@@ -14,6 +15,7 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<int, Recipe> _dictCrafting;
         private static Dictionary<int, string> _dictItem;
         private static Dictionary<int, string> _dictWorkers;
+        private static Dictionary<int, string> _dictWorldObjects;
         public static Dictionary<int, Recipe> DictCrafting { get => _dictCrafting; }
 
         public static void LoadContent(ContentManager Content)
@@ -21,6 +23,7 @@ namespace RiverHollow.Game_Managers
             _dictBuilding = Content.Load<Dictionary<int, string>>(@"Data\Buildings");
             _dictItem = Content.Load<Dictionary<int, string>>(@"Data\ItemData");
             _dictWorkers = Content.Load<Dictionary<int, string>>(@"Data\Workers");
+            _dictWorldObjects = Content.Load<Dictionary<int, string>>(@"Data\WorldObjects");
             LoadRecipes(Content);
         }
 
@@ -75,11 +78,13 @@ namespace RiverHollow.Game_Managers
                     case "Equipment":
                         return new Equipment(id, _itemDataValues);
                     case "Container":
-                        return new Container(id, _itemDataValues);
-                    case "Processor":
-                        return new Processor(id, _itemDataValues);
-                    case "Crafter":
-                        return new Crafter(id, _itemDataValues);
+                        return new ContainerItem(id, _itemDataValues);
+                    case "StaticItem":
+                        return new StaticItem(id, _itemDataValues);
+                    //case "Processor":
+                    //    return new Processor(id, _itemDataValues);
+                    //case "Crafter":
+                    //    return new Crafter(id, _itemDataValues);
                     case "Food":
                         return new Food(id, _itemDataValues, num);
                     case "Map":
@@ -91,19 +96,33 @@ namespace RiverHollow.Game_Managers
             return null;
         }
 
+        public static WorldObject GetWorldObject(int id)
+        {
+            return GetWorldObject(id, Vector2.Zero);
+        }
         public static WorldObject GetWorldObject(int id, Vector2 pos)
         {
-            switch (id)
+            if (id != -1)
             {
-                case 0:
-                    return new Destructible(id, pos, new Rectangle(0, 0, 32, 32), GetTexture(@"Textures\worldObjects"), RHMap.TileSize, RHMap.TileSize, true, false, 1, 1);
-                case 1:
-                    return new Destructible(id, pos, new Rectangle(64, 64, 64, 64), GetTexture(@"Textures\worldObjects"), RHMap.TileSize*2, RHMap.TileSize*2, true, false, 1, 5);
-                case 2:
-                    return new Tree(id, pos, new Rectangle(0, 0, 96, 128), GetTexture(@"Textures\tree"), RHMap.TileSize * 3, RHMap.TileSize * 4, false, true, 1, 10);
-                case 3:
-                    return new Staircase(id, pos, new Rectangle(96, 0, 32, 32), GetTexture(@"Textures\worldObjects"), RHMap.TileSize, RHMap.TileSize);
+                string _stringData = _dictWorldObjects[id];
+                string[] _stringDataValues = _stringData.Split('/');
+                switch (_stringDataValues[0])
+                {
+                    case "Destructible":
+                        return new Destructible(id, _stringDataValues, pos);
+                    case "Tree":
+                        return new Tree(id, pos, new Rectangle(0, 0, 96, 128), GetTexture(@"Textures\tree"), RHMap.TileSize * 3, RHMap.TileSize * 4, false, true, 1, 10);
+                    case "Staircase":
+                        return new Staircase(id, pos, new Rectangle(96, 0, 32, 32), GetTexture(@"Textures\worldObjects"), RHMap.TileSize, RHMap.TileSize);
+                    //case "Container":
+                    //    return new ContainerItem(id, _stringDataValues);
+                    case "Processor":
+                        return new Processor(id, _stringDataValues);
+                    case "Crafter":
+                        return new Crafter(id, _stringDataValues);
+                }
             }
+
             return null;
         }
 

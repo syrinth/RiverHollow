@@ -36,7 +36,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             InventoryManager.PublicContainer = null;
         }
 
-        public InventoryScreen(Container c)
+        public InventoryScreen(ContainerItem c)
         {
             Vector2 centerPoint = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
             _font = GameContentManager.GetFont(@"Fonts\Font");
