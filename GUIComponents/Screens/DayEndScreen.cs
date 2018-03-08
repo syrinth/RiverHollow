@@ -30,8 +30,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             if (_btnOK.Contains(mouse))
             {
                 GameCalendar.NextDay();
-                GameManager.Save();
                 RiverHollow.RollOver();
+                GameManager.Save();
                 GUIManager.FadeOut();
                 PlayerManager.Stamina = PlayerManager.MaxStamina;
 

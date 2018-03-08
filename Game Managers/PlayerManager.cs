@@ -90,6 +90,7 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddNewItemToInventory(200);
             InventoryManager.AddNewItemToInventory(80, 10);
             InventoryManager.AddNewItemToInventory(201);
+            InventoryManager.AddNewItemToInventory(60);
 
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", 1, null, ObjectManager.GetItem(2)));
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestGoalType.Fetch, "Getwood, dumbass", 2, null, ObjectManager.GetItem(2)));
@@ -116,7 +117,7 @@ namespace RiverHollow.Game_Managers
                 UseTool.Update(gameTime);
                 bool finished = !UseTool.ToolAnimation.IsAnimating;
 
-                if (_targetTile != null && _targetTile.Object != null && finished) 
+                if (_targetTile != null && _targetTile.WldObject != null && finished) 
                 {
                     _targetTile.DamageObject(UseTool.DmgValue);
                     _targetTile = null;
@@ -246,10 +247,10 @@ namespace RiverHollow.Game_Managers
             if (PlayerManager.PlayerInRange(mouseLocation))
             {
                 _targetTile = MapManager.RetrieveTile(mouseLocation);
-                if (_targetTile.Object != null && _targetTile.Object.IsDestructible())
+                if (_targetTile.WldObject != null && _targetTile.WldObject.IsDestructible())
                 {
 
-                    Destructible d = (Destructible)_targetTile.Object;
+                    Destructible d = (Destructible)_targetTile.WldObject;
 
                     if (d != null && UseTool == null)
                     {
@@ -288,6 +289,13 @@ namespace RiverHollow.Game_Managers
                         c.SetMapName(CurrentMap);
                         c.MapPosition = Utilities.Normalize(mouseLocation.ToVector2());
                         MapManager.PlacePlayerObject(c);
+                    }
+                    else if (obj.IsPlant())
+                    {
+                        Plant p = (Plant)obj;
+                        p.SetMapName(CurrentMap);
+                        p.MapPosition = Utilities.Normalize(mouseLocation.ToVector2());
+                        MapManager.PlacePlayerObject(p);
                     }
 
                     GraphicCursor.DropItem();

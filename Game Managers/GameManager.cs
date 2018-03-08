@@ -201,6 +201,9 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "Machines")]
             public List<MachineData> machines;
+
+            [XmlArray(ElementName = "Plants")]
+            public List<PlantData> plants;
         }
         public struct UpgradeData
         {
@@ -243,6 +246,23 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Y")]
             public int y;
         }
+        public struct PlantData
+        {
+            [XmlElement(ElementName = "PlantID")]
+            public int ID;
+
+            [XmlElement(ElementName = "X")]
+            public int x;
+
+            [XmlElement(ElementName = "Y")]
+            public int y;
+
+            [XmlElement(ElementName = "currentState")]
+            public int currentState;
+
+            [XmlElement(ElementName = "daysLeft")]
+            public int daysLeft;
+        }
         public struct ContainerData
         {
             [XmlElement(ElementName = "ContainerID")]
@@ -280,7 +300,7 @@ namespace RiverHollow.Game_Managers
 
         public static int GetSaveID()
         {
-            if (_iSaveID == 0)
+            if (_iSaveID == -1)
             {
                 _iSaveID = int.Parse(string.Format("{0}{1}{2}{3}", DateTime.Now.Year, DateTime.Now.Day, DateTime.Now.Second, DateTime.Now.Millisecond));
             }

@@ -46,6 +46,16 @@
       <Key>10</Key>
       <Value>Equipment/Armor/Best armor ever/1 0/1000/Armor/0/20/0/0/0</Value>
     </Item>
+    <!--<40-59> Plant Resources-->
+    <Item>
+      <Key>40</Key>
+      <Value>Resource/Silver Leaf/Used in potions/3 3/8</Value>
+    </Item>
+    <!--<60-79> Seeds-->
+    <Item>
+      <Key>60</Key>
+      <Value>StaticItem/Silver Seeds/Used to grow a Silver Herb bush/3 1/3</Value>
+    </Item>
     <!--<80-89> Ores and Bars-->
     <Item>
       <Key>80</Key>

@@ -113,6 +113,8 @@ namespace RiverHollow.Game_Managers
                         return new Container(id, _stringDataValues);
                     case "Processor":
                         return new Processor(id, _stringDataValues);
+                    case "Plant":
+                        return new Plant(id, _stringDataValues);
                     case "Crafter":
                         return new Crafter(id, _stringDataValues);
                 }

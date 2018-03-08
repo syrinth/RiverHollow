@@ -18,11 +18,13 @@ namespace RiverHollow.WorldObjects
         public static int Rock = 0;
         public static int BigRock = 1;
         public static int Tree = 2;
-        public enum ObjectType { Building, Crafter, Container, WorldObject, Destructible, Processor};
+        public enum ObjectType { Building, Crafter, Container, WorldObject, Destructible, Processor, Plant};
         public ObjectType Type;
 
         public List<RHTile> Tiles;
 
+        protected bool _blocking = true;
+        public bool Blocking => _blocking;
         protected bool _wallObject;
         public bool WallObject { get => _wallObject; }
 
@@ -97,6 +99,7 @@ namespace RiverHollow.WorldObjects
         public bool IsDestructible() { return Type == ObjectType.Destructible; }
         public bool IsMachine() { return IsProcessor() || IsCrafter(); }
         public bool IsProcessor() { return Type == ObjectType.Processor; }
+        public bool IsPlant() { return Type == ObjectType.Plant; }
         public bool IsWorldObject() { return Type == ObjectType.WorldObject; }
     }
 
@@ -563,6 +566,98 @@ namespace RiverHollow.WorldObjects
                         InventoryManager.AddItemToInventorySpot(newItem, i, j, this);
                     }
                 }
+            }
+        }
+
+        public class Plant : WorldItem
+        {
+            int _iCurrentState;
+            int _iMaxStates;
+            int _iResourceID;
+            int _iDaysLeft;
+            Dictionary<int, int> _diTransitionTimes;
+
+            public Plant(int id, string[] stringData)
+            {
+                _id = id;
+                Type = ObjectType.Plant;
+                _blocking = false;
+                _diTransitionTimes = new Dictionary<int, int>();
+
+                _width = 32;
+                _height = 32;
+
+                int i = 1;
+                ReadSourcePos(stringData[i++]);
+
+                _iCurrentState = 0;
+                //Plant/0 4/40/4/2 3 4
+                _iResourceID = int.Parse(stringData[i++]);
+                _iMaxStates = int.Parse(stringData[i++]);
+                string[] dayStr = stringData[i++].Split(' ');
+                for(int j = 0; j < _iMaxStates - 1; j++)
+                {
+                    _diTransitionTimes.Add(j, int.Parse(dayStr[j]));
+                }
+                _iDaysLeft = _diTransitionTimes[0];
+
+                LoadContent();
+            }
+
+            public void LoadContent()
+            {
+                _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
+                _sourceRectangle = new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, _width, _height);
+            }
+
+            public void Rollover()
+            {
+                if(_iDaysLeft > 0)
+                {
+                    _iDaysLeft--;
+                }
+                else
+                {
+                    _iCurrentState++;
+                    _sourceRectangle.X += _width;
+                    if (_diTransitionTimes.ContainsKey(_iCurrentState))
+                    {
+                        _iDaysLeft = _diTransitionTimes[_iCurrentState];
+                    }
+                }
+            }
+            public bool FinishedGrowing() { return _iCurrentState == _iMaxStates-1; }
+            public Item Harvest()
+            {
+                Item it = null;
+                if (FinishedGrowing())
+                {
+                    it = ObjectManager.GetItem(_iResourceID);
+                    it.Pop(MapPosition);
+                }
+                return it;
+            }
+
+            internal PlantData SaveData()
+            {
+                PlantData plantData = new PlantData
+                {
+                    ID = _id,
+                    x = (int)MapPosition.X,
+                    y = (int)this.MapPosition.Y,
+                    currentState = _iCurrentState,
+                    daysLeft = _iDaysLeft
+                };
+
+                return plantData;
+            }
+            internal void LoadData(PlantData data)
+            {
+                MapPosition = new Vector2(data.x, data.y);
+                _iCurrentState = data.currentState;
+                _iDaysLeft = data.daysLeft;
+
+                _sourceRectangle.X += _width * _iCurrentState;
             }
         }
     }
