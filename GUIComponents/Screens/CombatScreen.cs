@@ -5,7 +5,7 @@ using RiverHollow.Characters.CombatStuff;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIObjects;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 

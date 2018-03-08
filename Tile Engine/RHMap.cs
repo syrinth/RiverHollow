@@ -1,22 +1,23 @@
-﻿using RiverHollow.Characters;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using RiverHollow.Misc;
+using RiverHollow.Characters;
 using RiverHollow.Characters.NPCs;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIObjects;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Tiled;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using RiverHollow.Misc;
 using static RiverHollow.RiverHollow;
 using static RiverHollow.Game_Managers.GameManager;
-using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
-using static RiverHollow.Items.WorldItem;
+using static RiverHollow.WorldObjects.WorldItem.Machine;
+using static RiverHollow.WorldObjects.WorldItem;
+using RiverHollow.Game_Managers.GUIObjects;
 
 namespace RiverHollow.Tile_Engine
 {
@@ -45,23 +46,21 @@ namespace RiverHollow.Tile_Engine
 
         protected RHTile[,] _tileArray;
         protected TiledMapRenderer _renderer;
-        protected List<TiledMapTileset> _tileSets;
-        protected Dictionary<string, TiledMapTileLayer> _dictionaryLayers;
-        public Dictionary<string, TiledMapTileLayer> Layers { get => _dictionaryLayers; }
+        protected List<TiledMapTileset> _liTilesets;
+        protected Dictionary<string, TiledMapTileLayer> _diLayers;
+        public Dictionary<string, TiledMapTileLayer> Layers { get => _diLayers; }
 
-        protected List<RHTile> _buildingTiles;
-        protected List<WorldCharacter> _characterList;
-        protected List<Mob> _mobList;
+        protected List<RHTile> _liBuildingTiles;
+        protected List<WorldCharacter> _liCharacters;
+        protected List<Mob> _liMobs;
         public List<WorldCharacter> ToRemove;
         public List<WorldCharacter> ToAdd;
-        protected List<WorkerBuilding> _buildingList;
-        protected List<WorldObject> _worldObjectList;
-        public List<WorldObject> WorldObjects { get => _worldObjectList; }
+        protected List<WorkerBuilding> _liBuildings;
+        protected List<WorldObject> _liWorldObjects;
+        public List<WorldObject> WorldObjects { get => _liWorldObjects; }
         protected List<WorldObject> _liPlacedObjects;
         public List<WorldObject> PlacedObjects { get => _liPlacedObjects; }
-        protected List<Item> _itemList;
-        protected List<StaticItem> _staticItemList;
-        public List<StaticItem> StaticItems { get => _staticItemList; }
+        protected List<Item> _liItems;
 
         private Dictionary<Rectangle, string> _dictExit;
         public Dictionary<Rectangle, string> DictionaryExit { get => _dictExit; }
@@ -71,20 +70,20 @@ namespace RiverHollow.Tile_Engine
         public Dictionary<string, Vector2> DictionaryCharacterLayer { get => _dictCharacterLayer; }
 
         public RHMap() {
-            _buildingTiles = new List<RHTile>();
-            _tileSets = new List<TiledMapTileset>();
-            _characterList = new List<WorldCharacter>();
-            _mobList = new List<Mob>();
-            ToRemove = new List<WorldCharacter>();
-            ToAdd = new List<WorldCharacter>();
-            _buildingList = new List<WorkerBuilding>();
-            _worldObjectList = new List<WorldObject>();
-            _itemList = new List<Item>();
-            _staticItemList = new List<StaticItem>();
+            _liBuildingTiles = new List<RHTile>();
+            _liTilesets = new List<TiledMapTileset>();
+            _liCharacters = new List<WorldCharacter>();
+            _liMobs = new List<Mob>();
+            _liBuildings = new List<WorkerBuilding>();
+            _liWorldObjects = new List<WorldObject>();
+            _liItems = new List<Item>();
             _dictExit = new Dictionary<Rectangle, string>();
             _dictEntrance = new Dictionary<string, Rectangle>();
             _dictCharacterLayer = new Dictionary<string, Vector2>();
             _liPlacedObjects = new List<WorldObject>();
+
+            ToRemove = new List<WorldCharacter>();
+            ToAdd = new List<WorldCharacter>();
         }
 
         public RHMap(RHMap map) : this()
@@ -113,10 +112,10 @@ namespace RiverHollow.Tile_Engine
             MapWidthTiles = _map.Width;
             MapHeightTiles = _map.Height;
 
-            _dictionaryLayers = new Dictionary<string, TiledMapTileLayer>();
+            _diLayers = new Dictionary<string, TiledMapTileLayer>();
             foreach (TiledMapTileLayer l in _map.TileLayers)
             {
-                _dictionaryLayers.Add(l.Name, l);
+                _diLayers.Add(l.Name, l);
             }
 
             _tileArray = new RHTile[MapWidthTiles, MapHeightTiles];
@@ -186,13 +185,13 @@ namespace RiverHollow.Tile_Engine
                 _renderer.Update(_map, gameTime);
                 if (GameManager.IsRunning())
                 {
-                    foreach (Mob m in _mobList)
+                    foreach (Mob m in _liMobs)
                     {
                         m.Update(gameTime);
                     }
                 }
                 
-                foreach (Item i in _itemList)
+                foreach (Item i in _liItems)
                 {
                     ((Item)i).Update();
                 }
@@ -214,8 +213,8 @@ namespace RiverHollow.Tile_Engine
 
             foreach (WorldCharacter c in ToRemove)
             {
-                if (c.IsMob() && _mobList.Contains((Mob)c)) { _mobList.Remove((Mob)c); }
-                else if (_characterList.Contains(c)) { _characterList.Remove(c); }
+                if (c.IsMob() && _liMobs.Contains((Mob)c)) { _liMobs.Remove((Mob)c); }
+                else if (_liCharacters.Contains(c)) { _liCharacters.Remove(c); }
             }
             ToRemove.Clear();
 
@@ -226,8 +225,8 @@ namespace RiverHollow.Tile_Engine
                 {
                     if (!MapManager.Maps[c.CurrentMapName].Contains(c))
                     {
-                        if (c.IsMob() && !_mobList.Contains((Mob)c)) { _mobList.Add((Mob)c); }
-                        else if (!_characterList.Contains(c)) { _characterList.Add(c); }
+                        if (c.IsMob() && !_liMobs.Contains((Mob)c)) { _liMobs.Add((Mob)c); }
+                        else if (!_liCharacters.Contains(c)) { _liCharacters.Add(c); }
                         c.CurrentMapName = _name;
                         c.Position = c.NewMapPosition == Vector2.Zero ? c.Position : c.NewMapPosition;
                         c.NewMapPosition = Vector2.Zero;
@@ -243,7 +242,7 @@ namespace RiverHollow.Tile_Engine
 
             if (GameManager.IsRunning())
             {
-                foreach (WorldCharacter c in _characterList)
+                foreach (WorldCharacter c in _liCharacters)
                 {
                     c.Update(gameTime);
                 }
@@ -255,14 +254,14 @@ namespace RiverHollow.Tile_Engine
 
         public bool Contains(WorldCharacter c)
         {
-            return _characterList.Contains(c);
+            return _liCharacters.Contains(c);
         }
 
         public void ItemPickUpdate()
         {
             WorldCharacter player = PlayerManager.World;
             List<Item> removedList = new List<Item>();
-            foreach (Item i in _itemList)
+            foreach (Item i in _liItems)
             {
                 if (i.OnTheMap && i.Pickup)
                 {
@@ -282,7 +281,7 @@ namespace RiverHollow.Tile_Engine
 
             foreach (Item i in removedList)
             {
-                _itemList.Remove(i);
+                _liItems.Remove(i);
             }
             removedList.Clear();
         }
@@ -292,22 +291,22 @@ namespace RiverHollow.Tile_Engine
             SetLayerVisibility(false);
 
             _renderer.Draw(_map, Camera._transform);
-            foreach(WorldCharacter c in _characterList)
+            foreach(WorldCharacter c in _liCharacters)
             {
                 c.Draw(spriteBatch, true);
             }
 
-            foreach (Mob m in _mobList)
+            foreach (Mob m in _liMobs)
             {
                 m.Draw(spriteBatch);
             }
 
-            foreach (WorkerBuilding b in _buildingList)
+            foreach (WorkerBuilding b in _liBuildings)
             {
                 b.Draw(spriteBatch);
             }
 
-            foreach (WorldObject o in _worldObjectList)
+            foreach (WorldObject o in _liWorldObjects)
             {
                 o.Draw(spriteBatch);
             }
@@ -317,17 +316,12 @@ namespace RiverHollow.Tile_Engine
                 o.Draw(spriteBatch);
             }
 
-            foreach (Item i in _itemList)
+            foreach (Item i in _liItems)
             {
                 i.Draw(spriteBatch);
             }
 
-            foreach (StaticItem s in _staticItemList)
-            {
-                s.Draw(spriteBatch);
-            }
-
-            foreach(RHTile t in _buildingTiles)
+            foreach(RHTile t in _liBuildingTiles)
             {
                 bool passable = t.Passable();
                 spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)t.Position.X, (int)t.Position.Y, 32, 32), new Rectangle(288, 128, 32, 32) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, new Vector2(0, 0), SpriteEffects.None, 99999);
@@ -404,7 +398,7 @@ namespace RiverHollow.Tile_Engine
         public bool CheckForCollision(WorldCharacter mover, Rectangle movingChar)
         {
             bool rv = false;
-            foreach (WorldCharacter c in _characterList)
+            foreach (WorldCharacter c in _liCharacters)
             {
                 if (mover != c && c.CollisionBox.Intersects(movingChar))
                 {
@@ -501,7 +495,7 @@ namespace RiverHollow.Tile_Engine
             displayItem.Pickup = false;
             displayItem.OnTheMap = true;
             displayItem.Position = _dictCharacterLayer[npcIndex + "Col" + index];
-            _itemList.Add(displayItem);
+            _liItems.Add(displayItem);
         }
 
         public Dictionary<string, string> GetProperties(TiledMapTile tile)
@@ -540,7 +534,7 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
-            foreach (WorldCharacter c in _characterList)
+            foreach (WorldCharacter c in _liCharacters)
             {
                 if (c.CollisionContains(mouseLocation) && c.CanTalk())
                 {
@@ -548,7 +542,7 @@ namespace RiverHollow.Tile_Engine
                     break;
                 }
             }
-            foreach (WorkerBuilding b in _buildingList)
+            foreach (WorkerBuilding b in _liBuildings)
             {
                 if (b.BoxToEnter.Contains(mouseLocation) && PlayerManager.PlayerInRange(b.BoxToEnter.Center))
                 {
@@ -560,21 +554,6 @@ namespace RiverHollow.Tile_Engine
             RHTile tile = _tileArray[mouseLocation.X / 32, mouseLocation.Y / 32];
             if (tile != null)
             {
-                //if(tile.StaticItem != null)
-                //{
-                //    StaticItem s = tile.StaticItem;
-                //    if (s.IsContainer())
-                //    {
-                //        if (IsDungeon && DungeonManager.IsEndChest((ContainerItem)s))
-                //        {
-                //            Staircase stairs = (Staircase)ObjectManager.GetWorldObject(3, new Vector2(0, 0));
-                //            stairs.SetExit(MapManager.HomeMap);
-                //            AddWorldObject(stairs, true);
-                //        }
-                //        GUIManager.SetScreen(new InventoryScreen((ContainerItem)s));
-                //    }
-                //}
-
                 if (tile.Object != null)
                 {
                     WorldObject s = tile.Object;
@@ -583,6 +562,16 @@ namespace RiverHollow.Tile_Engine
                         Machine p = (Machine)s;
                         if (p.ProcessingFinished()) { p.TakeFinishedItem(); }
                         else if (GraphicCursor.HeldItem != null && !p.Processing()) { p.ProcessClick(); }
+                    }
+                    else if (s.IsContainer())
+                    {
+                        if (IsDungeon && DungeonManager.IsEndChest((Container)s))
+                        {
+                            Staircase stairs = (Staircase)ObjectManager.GetWorldObject(3, new Vector2(0, 0));
+                            stairs.SetExit(MapManager.HomeMap);
+                            PlaceWorldObject(stairs, true);
+                        }
+                        GUIManager.SetScreen(new InventoryScreen((Container)s));
                     }
                 }
 
@@ -628,7 +617,7 @@ namespace RiverHollow.Tile_Engine
                     PlayerManager._merchantChest.AddItem(i);
                     InventoryManager.RemoveItemFromInventory(InventoryManager.CurrentItem);
                 }
-                foreach (WorldCharacter c in _characterList)
+                foreach (WorldCharacter c in _liCharacters)
                 {
                     if (c.IsWorldAdventurer())
                     {
@@ -678,19 +667,19 @@ namespace RiverHollow.Tile_Engine
 
             if(GraphicCursor.HeldBuilding == null)
             {
-                if (_buildingTiles.Count > 0) { _buildingTiles.Clear(); }
+                if (_liBuildingTiles.Count > 0) { _liBuildingTiles.Clear(); }
             }
 
             if (GameManager.Scrying())
             {
                 WorkerBuilding building = GraphicCursor.HeldBuilding;
-                _buildingTiles = new List<RHTile>();
+                _liBuildingTiles = new List<RHTile>();
                 if (building != null)
                 {
-                    TestMapTiles(building, _buildingTiles);
+                    TestMapTiles(building, _liBuildingTiles);
                 }
 
-                foreach (WorkerBuilding b in _buildingList)
+                foreach (WorkerBuilding b in _liBuildings)
                 {
                     if (b.SelectionBox.Contains(mouseLocation) && GraphicCursor.HeldBuilding == null)
                     {
@@ -704,7 +693,7 @@ namespace RiverHollow.Tile_Engine
             }
             else{
                 bool found = false;
-                foreach(WorldCharacter c in _characterList)
+                foreach(WorldCharacter c in _liCharacters)
                 {
                     if (InventoryManager.CurrentItem != null && 
                         !c.IsMob() && c.CollisionBox.Contains(mouseLocation) &&
@@ -733,7 +722,7 @@ namespace RiverHollow.Tile_Engine
 
         public void ClearWorkers()
         {
-            _characterList.Clear();
+            _liCharacters.Clear();
         }
 
         public RHTile RetrieveTile(Point targetLoc)
@@ -752,7 +741,7 @@ namespace RiverHollow.Tile_Engine
         }
         public void RemoveWorldObject(WorldObject o)
         {
-            _worldObjectList.Remove(o);
+            _liWorldObjects.Remove(o);
         }
         public void RemoveCharacter(WorldCharacter c)
         {
@@ -760,20 +749,15 @@ namespace RiverHollow.Tile_Engine
         }
         public void RemoveMob(Mob m)
         {
-            _mobList.Remove(m);
+            _liMobs.Remove(m);
         }
         public void DropWorldItems(List<Item>items, Vector2 position)
         {
             foreach(Item i in items)
             {
                 ((Item)i).Pop(position);
-                _itemList.Add(i);
+                _liItems.Add(i);
             }
-        }
-        public void LoadStaticItem(StaticItem container)
-        {
-            container.OnTheMap = true;
-            _staticItemList.Add(container);
         }
 
         public void LoadBuilding(WorkerBuilding b)
@@ -810,13 +794,13 @@ namespace RiverHollow.Tile_Engine
                         }
                         else if (mapObject.Name.Contains("BuildingChest"))
                         {
-                            b.BuildingChest.Position = mapObject.Position;
-                            LoadStaticItem(b.BuildingChest);
+                            b.BuildingChest.MapPosition = Utilities.Normalize(mapObject.Position);
+                            PlacePlayerObject(b.BuildingChest);
                         }
                         else if (mapObject.Name.Contains("Pantry"))
                         {
-                            b.Pantry.Position = mapObject.Position;
-                            LoadStaticItem(b.Pantry);
+                            b.Pantry.MapPosition = Utilities.Normalize(mapObject.Position);
+                            PlacePlayerObject(b.Pantry);
                         }
                     }
                 }
@@ -824,11 +808,11 @@ namespace RiverHollow.Tile_Engine
             for (int i = 0; i < b.Workers.Count; i++)
             {
                 b.Workers[i].Position = spawnPoints[i];
-                _characterList.Add(b.Workers[i]);
+                _liCharacters.Add(b.Workers[i]);
             }
-            foreach (StaticItem s in b.StaticItems)
+            foreach (WorldObject w in b.PlacedObjects)
             {
-                LoadStaticItem(s);
+                PlacePlayerObject(w);
             }
         }
 
@@ -845,10 +829,10 @@ namespace RiverHollow.Tile_Engine
             {
                 AssignMapTiles(b, tiles);
                 Vector3 translate = Camera._transform.Translation;
-                Vector2 newPos = new Vector2((b.Position.X - translate.X) / Scale, (b.Position.Y - translate.Y) / Scale);
+                Vector2 newPos = new Vector2((b.MapPosition.X - translate.X) / Scale, (b.MapPosition.Y - translate.Y) / Scale);
                 _dictEntrance.Add(b.PersonalID.ToString(), b.BoxToExit); //TODO: FIX THIS
                 GraphicCursor.DropBuilding();
-                _buildingList.Add(b);
+                _liBuildings.Add(b);
                 PlayerManager.AddBuilding(b);
                 GameManager.Unpause();
                 GameManager.Scry(false);
@@ -859,7 +843,7 @@ namespace RiverHollow.Tile_Engine
         public bool AddWorkerToBuilding(Point mouseLocation)
         {
             bool rv = false;
-            foreach(WorkerBuilding b in _buildingList)
+            foreach(WorkerBuilding b in _liBuildings)
             {
                 if (b.SelectionBox.Contains(mouseLocation))
                 {
@@ -878,7 +862,7 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public bool AddWorldObject(WorldObject o, bool bounce)
+        public bool PlaceWorldObject(WorldObject o, bool bounce = false)
         {
             bool rv = false;
 
@@ -891,7 +875,7 @@ namespace RiverHollow.Tile_Engine
             else if (bounce)
             {
                 RHRandom r = new RHRandom();
-                Vector2 position = o.Position;
+                Vector2 position = o.MapPosition;
                 do
                 {
                     position.X = (int)(r.Next(1, (MapWidthTiles - 1) * TileSize) / 32) * 32;
@@ -908,7 +892,7 @@ namespace RiverHollow.Tile_Engine
 
             if (rv)
             {
-                _worldObjectList.Add(o);
+                _liWorldObjects.Add(o);
             }
 
             return rv;
@@ -917,7 +901,7 @@ namespace RiverHollow.Tile_Engine
         public bool TestMapTiles(WorldObject o, List<RHTile> tiles)
         {
             bool rv = false;
-            Vector2 position = o.Position;
+            Vector2 position = o.MapPosition;
             position.X = ((int)(position.X / 32)) * 32;
             position.Y = ((int)(position.Y / 32)) * 32;
 
@@ -962,40 +946,11 @@ namespace RiverHollow.Tile_Engine
                 t.SetWorldObject(o);
             }
         }
-        public void PlaceStaticItem(StaticItem container, Vector2 position, bool bounce = true)
+
+        public void PlacePlayerObject(WorldObject obj)
         {
-            bool rv = false;
-            RHRandom r = new RHRandom();
-            position = Utilities.Normalize(position);
-
-            rv = _tileArray[((int)position.X / 32), ((int)position.Y / 32)].SetStaticItem(container);
-            if (!rv && bounce)
-            {
-                do
-                {
-                    position.X = (int)(r.Next(1, (MapWidthTiles - 1) * TileSize) / 32) * 32;
-                    position.Y = (int)(r.Next(1, (MapHeightTiles - 1) * TileSize) / 32) * 32;
-                    rv = _tileArray[((int)position.X / 32), ((int)position.Y / 32)].SetStaticItem(container);
-                } while (!rv);
-
-            }
-
-            if (rv)
-            {
-                container.OnTheMap = true;
-                container.Position = position;
-
-                if (_mapBuilding != null) { _mapBuilding.StaticItems.Add(container); }
-                else { _staticItemList.Add(container); }
-            }
-        }
-
-        public void PlaceWorldObject(WorldObject theMachine, Vector2 position)
-        {
-            theMachine.SetCoordinates(position);
-
-            _tileArray[(int)theMachine.Position.X / 32, (int)theMachine.Position.Y / 32].SetWorldObject(theMachine);
-            _liPlacedObjects.Add(theMachine);
+            _tileArray[(int)obj.MapPosition.X / 32, (int)obj.MapPosition.Y / 32].SetWorldObject(obj);
+            _liPlacedObjects.Add(obj);
         }
 
         public void AddCharacter(WorldCharacter c)
@@ -1026,7 +981,7 @@ namespace RiverHollow.Tile_Engine
             {
                 m.Position = position;
 
-                _mobList.Add(m);
+                _liMobs.Add(m);
             }
         }
 
@@ -1059,23 +1014,21 @@ namespace RiverHollow.Tile_Engine
                     WorldObjectData d = new WorldObjectData
                     {
                         worldObjectID = w.ID,
-                        x = (int)w.Position.X,
-                        y = (int)w.Position.Y
+                        x = (int)w.MapPosition.X,
+                        y = (int)w.MapPosition.Y
                     };
                     mapData.worldObjects.Add(d);
                 }
-                foreach (StaticItem item in this.StaticItems)
-                {
-                    if (item.IsContainer())
-                    {
-                        mapData.containers.Add(((ContainerItem)item).SaveData());
-                    }
-                }
+
                 foreach(WorldObject w in _liPlacedObjects)
                 {
                     if (w.IsMachine())
                     {
                         mapData.machines.Add(((Machine)w).SaveData());
+                    }
+                    if (w.IsContainer())
+                    {
+                        mapData.containers.Add(((Container)w).SaveData());
                     }
                 }
             }
@@ -1086,18 +1039,20 @@ namespace RiverHollow.Tile_Engine
         {
             foreach (WorldObjectData w in data.worldObjects)
             {
-                this.AddWorldObject(ObjectManager.GetWorldObject(w.worldObjectID, new Vector2(w.x, w.y)), true);
+                PlaceWorldObject(ObjectManager.GetWorldObject(w.worldObjectID, new Vector2(w.x, w.y)), true);
             }
             foreach (ContainerData c in data.containers)
             {
-                this.PlaceStaticItem(LoadStaticItemData(c), new Vector2(c.x, c.y));
+                Container con = (Container)ObjectManager.GetWorldObject(c.containerID);
+                con.LoadData(c);
+                PlacePlayerObject(con);
             }
 
             foreach (MachineData mac in data.machines)
             {
                 Machine theMachine = (Machine)ObjectManager.GetWorldObject(mac.ID);
                 theMachine.LoadData(mac);
-                PlaceWorldObject(theMachine, theMachine.MapPosition);
+                PlacePlayerObject(theMachine);
             }
         }
     }

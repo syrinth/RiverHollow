@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using static RiverHollow.Game_Managers.ObjectManager;
 using RiverHollow.Characters.NPCs;
 using RiverHollow.GUIObjects;
-using static RiverHollow.Items.WorldItem;
+using static RiverHollow.WorldObjects.WorldItem.Machine;
 
 namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {

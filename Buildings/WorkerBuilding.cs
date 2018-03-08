@@ -1,6 +1,6 @@
 ﻿using RiverHollow.Characters.NPCs;
 using RiverHollow.Game_Managers;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -9,6 +9,7 @@ using RiverHollow.Misc;
 using RiverHollow.Buildings;
 using static RiverHollow.Game_Managers.PlayerManager;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.WorldObjects.WorldItem;
 
 namespace RiverHollow
 {
@@ -27,25 +28,26 @@ namespace RiverHollow
         protected List<WorldAdventurer> _workers;
         public List<WorldAdventurer> Workers { get => _workers; }
 
-        protected ContainerItem _buildingChest;
-        public ContainerItem BuildingChest { get => _buildingChest; set => _buildingChest = value; }
+        protected Container _buildingChest;
+        public Container BuildingChest { get => _buildingChest; set => _buildingChest = value; }
 
-        protected ContainerItem _pantry;
-        public ContainerItem Pantry { get => _pantry; set => _pantry = value; }
+        protected Container _pantry;
+        public Container Pantry { get => _pantry; set => _pantry = value; }
 
-        protected List<StaticItem> _staticItemList;
-        public List<StaticItem> StaticItems { get => _staticItemList; }
+        protected List<WorldObject> _liPlacedObjects;
+        public List<WorldObject> PlacedObjects { get => _liPlacedObjects; }
         #endregion
 
         public WorkerBuilding(string[] stringData, int id){
+            Type = ObjectType.Building;
             int i = ImportBasics(stringData, id);
             _buildingWorker = (WorkerTypeEnum)Enum.Parse(typeof(WorkerTypeEnum), stringData[i++]);
             _iPersonalID = GetNewBuildingID();
             _workers = new List<WorldAdventurer>();
-            _staticItemList = new List<StaticItem>();
+            _liPlacedObjects = new List<WorldObject>();
 
-            _buildingChest = (ContainerItem)ObjectManager.GetItem(6);
-            _pantry = (ContainerItem)ObjectManager.GetItem(6);
+            _buildingChest = (Container)ObjectManager.GetWorldObject(190);
+            _pantry = (Container)ObjectManager.GetWorldObject(190);
 
             _sourceRectangle = new Rectangle(0, 0, Texture.Width, Texture.Height);
         }
@@ -107,10 +109,10 @@ namespace RiverHollow
 
         public override void SetCoordinates(Vector2 position)
         {
-            _position = position;
+            _vMapPosition = position;
 
-            int startX = (int)_position.X + (_entranceX * Size);
-            int startY = (int)_position.Y + (_entranceY * Size);
+            int startX = (int)_vMapPosition.X + (_entranceX * Size);
+            int startY = (int)_vMapPosition.Y + (_entranceY * Size);
 
             _boxToEnter = new Rectangle(startX, startY, Size, Size);
             _leaveLocation = new Rectangle(_boxToEnter.X, _boxToEnter.Y + Size, Size, Size);
@@ -118,7 +120,7 @@ namespace RiverHollow
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, _texture.Width, _texture.Height), null, _selected ? Color.Green : Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y+Texture.Height);
+            spriteBatch.Draw(_texture, new Rectangle((int)this.MapPosition.X, (int)this.MapPosition.Y, _texture.Width, _texture.Height), null, _selected ? Color.Green : Color.White, 0, new Vector2(0, 0), SpriteEffects.None, MapPosition.Y+Texture.Height);
         }
 
         public BuildingData SaveData()
@@ -126,8 +128,8 @@ namespace RiverHollow
             BuildingData buildingData = new BuildingData
             {
                 buildingID = this.ID,
-                positionX = (int)this.Position.X,
-                positionY = (int)this.Position.Y,
+                positionX = (int)this.MapPosition.X,
+                positionY = (int)this.MapPosition.Y,
                 id = this.PersonalID,
 
                 Workers = new List<WorkerData>()
@@ -141,12 +143,17 @@ namespace RiverHollow
             buildingData.pantry = this.Pantry.SaveData();
             buildingData.buildingChest = this.BuildingChest.SaveData();
 
-            buildingData.staticItems = new List<ContainerData>();
-            foreach (StaticItem item in this.StaticItems)
+            buildingData.containers = new List<ContainerData>();
+            buildingData.machines = new List<MachineData>();
+            foreach (WorldObject w in _liPlacedObjects)
             {
-                if (item.IsContainer())
+                if (w.IsMachine())
                 {
-                    buildingData.staticItems.Add(((ContainerItem)item).SaveData());
+                    buildingData.machines.Add(((Machine)w).SaveData());
+                }
+                if (w.IsContainer())
+                {
+                    buildingData.containers.Add(((Container)w).SaveData());
                 }
             }
 
@@ -165,12 +172,23 @@ namespace RiverHollow
                 AddWorker(w, r);
             }
 
-            this.Pantry = (ContainerItem)LoadStaticItemData(data.pantry);
-            this.BuildingChest = (ContainerItem)LoadStaticItemData(data.buildingChest);
+            this.Pantry = (Container)ObjectManager.GetWorldObject(data.pantry.containerID);
+            Pantry.LoadData(data.pantry);
+            this.BuildingChest = (Container)ObjectManager.GetWorldObject(data.pantry.containerID);
+            BuildingChest.LoadData(data.buildingChest);
 
-            foreach (ContainerData s in data.staticItems)
+            foreach (ContainerData c in data.containers)
             {
-                this.StaticItems.Add(LoadStaticItemData(s));
+                Container con = (Container)ObjectManager.GetWorldObject(c.containerID);
+                con.LoadData(c);
+                _liPlacedObjects.Add(con);
+            }
+
+            foreach (MachineData mac in data.machines)
+            {
+                Machine theMachine = (Machine)ObjectManager.GetWorldObject(mac.ID);
+                theMachine.LoadData(mac);
+                _liPlacedObjects.Add(theMachine);
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿using RiverHollow.Characters;
 using RiverHollow.GUIObjects;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -159,11 +159,11 @@ namespace RiverHollow.Game_Managers
             {
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[MapManager.HomeMap].AddWorldObject(ObjectManager.GetWorldObject(0, new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize)), true);
+                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, new Vector2(r.Next(1, mapWidth - 1) * RHMap.TileSize, r.Next(1, mapHeight - 1) * RHMap.TileSize)), true);
                 }
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[MapManager.HomeMap].AddWorldObject(ObjectManager.GetWorldObject(2, new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize)), true);
+                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, new Vector2(r.Next(1, mapWidth - 1) * RHMap.TileSize, r.Next(1, mapHeight - 1) * RHMap.TileSize)), true);
                 }
             }
 
@@ -252,13 +252,13 @@ namespace RiverHollow.Game_Managers
         {
             _currentMap.DropWorldItems(items, position);
         }
-        public static void PlaceWorldItem(StaticItem staticItem, Vector2 position)
+        public static void PlaceWorldObject(WorldObject worldObject)
         {
-            _currentMap.PlaceStaticItem(staticItem, position, false);
+            _currentMap.PlaceWorldObject(worldObject);
         }
-        public static void PlaceWorldObject(WorldObject worldObject, Vector2 position)
+        public static void PlacePlayerObject(WorldObject worldObject)
         {
-            _currentMap.PlaceWorldObject(worldObject, position);
+            _currentMap.PlacePlayerObject(worldObject);
         }
     }
 }

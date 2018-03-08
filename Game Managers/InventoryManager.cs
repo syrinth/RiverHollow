@@ -1,9 +1,10 @@
-﻿using RiverHollow.Items;
+﻿using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static RiverHollow.WorldObjects.WorldItem;
 
 namespace RiverHollow.Game_Managers
 {
@@ -13,8 +14,8 @@ namespace RiverHollow.Game_Managers
         public static int maxItemColumns = 10;
         public static int maxItemRows = 4;
 
-        private static ContainerItem _container;
-        public static ContainerItem PublicContainer { get => _container; set => _container = value; }
+        private static Container _container;
+        public static Container PublicContainer { get => _container; set => _container = value; }
         private static Item[,] _playerInventory;
         public static Item[,] PlayerInventory { get => _playerInventory; }
 
@@ -28,12 +29,12 @@ namespace RiverHollow.Game_Managers
         {
             _playerInventory = new Item[maxItemRows, maxItemColumns];
         }
-        public static void CheckOperation(ContainerItem c, ref Item[,] inventory)
+        public static void CheckOperation(Container c, ref Item[,] inventory)
         {
             if (c == null) { inventory = _playerInventory; }
             else { inventory = c.Inventory; }
         }
-        public static void CheckOperation(ContainerItem c, ref int rows, ref int columns, ref Item[,] inventory)
+        public static void CheckOperation(Container c, ref int rows, ref int columns, ref Item[,] inventory)
         {
             if (c == null)
             {
@@ -53,7 +54,7 @@ namespace RiverHollow.Game_Managers
         {
             return HasSpaceInInventory(itemID, null);
         }
-        public static bool HasSpaceInInventory(int itemID, ContainerItem c)
+        public static bool HasSpaceInInventory(int itemID, Container c)
         {
             int maxRows = 0;
             int maxColumns = 0;
@@ -92,7 +93,7 @@ namespace RiverHollow.Game_Managers
         {
             return HasItemInInventory(itemID, x, null);
         }
-        public static bool HasItemInInventory(int itemID, int x, ContainerItem c)
+        public static bool HasItemInInventory(int itemID, int x, Container c)
         {
             bool rv = false;
             int maxRows = 0;
@@ -128,7 +129,7 @@ Exit:
         {
             RemoveItemsFromInventory(itemID, x, null);
         }
-        public static void RemoveItemsFromInventory(int itemID, int x, ContainerItem c)
+        public static void RemoveItemsFromInventory(int itemID, int x, Container c)
         {
             int leftToRemove = x;
             bool done = false;
@@ -180,7 +181,7 @@ Exit:
         {
             AddItemToInventory(ObjectManager.GetItem(itemToAdd), null);
         }
-        public static void AddNewItemToInventory(int itemToAdd, ContainerItem c)
+        public static void AddNewItemToInventory(int itemToAdd, Container c)
         {
             AddItemToInventory(ObjectManager.GetItem(itemToAdd), c);
         }
@@ -188,7 +189,7 @@ Exit:
         {
             AddItemToInventory(itemToAdd, null);
         }
-        public static void AddItemToInventory(Item itemToAdd, ContainerItem c)
+        public static void AddItemToInventory(Item itemToAdd, Container c)
         {
             int maxRows = 0;
             int maxColumns = 0;
@@ -219,7 +220,7 @@ Exit:
             return;
         }
 
-        public static bool IncrementExistingItem(Item itemToAdd, ContainerItem c)
+        public static bool IncrementExistingItem(Item itemToAdd, Container c)
         {
             bool rv = false;
             int maxRows = 0;
@@ -248,7 +249,7 @@ Exit:
         {
             return AddItemToInventorySpot(item, row, column, null);
         }
-        public static bool AddItemToInventorySpot(Item item, int row, int column, ContainerItem c)
+        public static bool AddItemToInventorySpot(Item item, int row, int column, Container c)
         {
             bool rv = false;
             Item[,] inventory = null;
@@ -294,7 +295,7 @@ Exit:
             RemoveItemFromInventoryLocation(i, j, null);
         }
 
-        public static void RemoveItemFromInventoryLocation(int i, int j, ContainerItem c)
+        public static void RemoveItemFromInventoryLocation(int i, int j, Container c)
         {
             Item[,] inventory = null;
             CheckOperation(c, ref inventory);
@@ -311,7 +312,7 @@ Exit:
         {
             RemoveItemFromInventory(it, null);
         }
-        public static void RemoveItemFromInventory(Item it, ContainerItem c)
+        public static void RemoveItemFromInventory(Item it, Container c)
         {
             int maxRows = 0;
             int maxColumns = 0;

@@ -3,16 +3,16 @@ using RiverHollow.Game_Managers;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
-namespace RiverHollow.Items
+namespace RiverHollow.WorldObjects
 {
     public class MerchantChest : WorldObject
     {
-        public override Rectangle CollisionBox { get => new Rectangle((int) _position.X, (int) _position.Y+32, 64, 32);
+        public override Rectangle CollisionBox { get => new Rectangle((int) _vMapPosition.X, (int) _vMapPosition.Y+32, 64, 32);
     }
         private List<Item> _toSell;
         public MerchantChest()
         {
-            _position = new Vector2(800, 800);
+            _vMapPosition = new Vector2(800, 800);
             _width = 64;
             _height = 64;
             _sourceRectangle = new Rectangle(32, 0, 64, 64);

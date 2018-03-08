@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Content;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 using System.Collections.Generic;
 

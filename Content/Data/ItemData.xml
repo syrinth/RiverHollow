@@ -31,10 +31,6 @@
       <Value>Equipment/Basic Sword/Swing this fucker/0 0/500/Weapon/1/0/0/0/0</Value>
     </Item>
     <Item>
-      <Key>6</Key>
-      <Value>Container/Small Chest/Hold shit/0 1/100/1/8</Value>
-    </Item>
-    <Item>
       <Key>7</Key>
       <Value>Food/Apple/Nomnom/1 1/50/10/5</Value>
     </Item>
@@ -95,6 +91,11 @@
     <Item>
       <Key>101</Key>
       <Value>Combat/Health Potion/RecoversHealth/1 2/3000/0/20/0</Value>
+    </Item>
+    <!--<190> Combat:Stamina/Health/Mana-->
+    <Item>
+      <Key>190</Key>
+      <Value>StaticItem/Small Chest/Holds eight items/3 0/100</Value>
     </Item>
     <!--<200> Machines-->
     <Item>

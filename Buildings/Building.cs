@@ -1,13 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Tile_Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace RiverHollow.Buildings
 {
@@ -28,7 +22,7 @@ namespace RiverHollow.Buildings
         public string MapName { get => "map"+_name.Replace(" ", ""); }
 
         public override Rectangle CollisionBox { get => GenerateCollisionBox(); }
-        public Rectangle SelectionBox { get => new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height); }
+        public Rectangle SelectionBox { get => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _texture.Width, _texture.Height); }
 
         protected Rectangle _leaveLocation;
         public Rectangle BoxToExit { get => _leaveLocation; }
@@ -66,8 +60,8 @@ namespace RiverHollow.Buildings
 
         public Rectangle GenerateCollisionBox()
         {
-            int startX = (int)_position.X + (_baseStartX * Size);
-            int startY = (int)_position.Y + (_baseStartY * Size);
+            int startX = (int)_vMapPosition.X + (_baseStartX * Size);
+            int startY = (int)_vMapPosition.Y + (_baseStartY * Size);
 
             return new Rectangle(startX, startY, _baseWidth * Size, _baseHeight * Size);
         }

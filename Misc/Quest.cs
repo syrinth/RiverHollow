@@ -1,5 +1,5 @@
 ﻿using RiverHollow.Characters;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;

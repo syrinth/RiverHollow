@@ -2,7 +2,7 @@
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIObjects;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -125,9 +125,9 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static bool IsTextScreen() { return _currentGUIScreen.IsTextScreen(); }
-        public static bool IsGameMenuScreen() { return _currentGUIScreen.IsGameMenuScreen(); }
-        public static bool IsItemCreationScreen() { return _currentGUIScreen.IsItemCreationScreen(); }
-        public static bool IsHUD() { return _currentGUIScreen.IsHUD(); }
+        public static bool IsTextScreen() { return _currentGUIScreen != null && _currentGUIScreen.IsTextScreen(); }
+        public static bool IsGameMenuScreen() { return _currentGUIScreen != null && _currentGUIScreen.IsGameMenuScreen(); }
+        public static bool IsItemCreationScreen() { return _currentGUIScreen != null && _currentGUIScreen.IsItemCreationScreen(); }
+        public static bool IsHUD() { return _currentGUIScreen != null && _currentGUIScreen.IsHUD(); }
     }
 }

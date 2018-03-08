@@ -1,19 +1,20 @@
 ﻿using RiverHollow.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Characters;
+using static RiverHollow.WorldObjects.WorldItem;
 
 namespace RiverHollow.Screens
 {
     public class Inventory : GUIWindow
     {
         protected GUIItemBox[,] _displayList;
-        private ContainerItem _container;
-        public ContainerItem Container { get => _container; }
+        private Container _container;
+        public Container Container { get => _container; }
         private NPC _giveTo;
 
         protected const int _iBoxSize = 64;
@@ -37,7 +38,7 @@ namespace RiverHollow.Screens
             _texture = GameContentManager.GetTexture(@"Textures\Dialog");
         }
 
-        public Inventory(ContainerItem c, int edgeSize): this(c.Rows, c.Columns, edgeSize)
+        public Inventory(Container c, int edgeSize): this(c.Rows, c.Columns, edgeSize)
         {
             _container = c;
         }
@@ -66,7 +67,7 @@ namespace RiverHollow.Screens
             }
         }
 
-        public override bool ProcessLeftButtonClick(Point mouse)
+        public bool ProcessLeftButtonClick(Point mouse, bool onlyInv)
         {
             bool rv = false;
 
@@ -102,7 +103,10 @@ namespace RiverHollow.Screens
                 else
                 {
                     rv = GraphicCursor.GrabItem(TakeItem(mouse));
-                    GameManager.BackToMain();
+                    if (onlyInv)
+                    {
+                        GameManager.BackToMain();
+                    }
                 }
             }
             return rv;

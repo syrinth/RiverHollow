@@ -1,11 +1,12 @@
 ﻿using RiverHollow.Characters.NPCs;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using static RiverHollow.Items.WorldItem;
+using static RiverHollow.WorldObjects.WorldItem;
+using static RiverHollow.WorldObjects.WorldItem.Machine;
 
 namespace RiverHollow.Game_Managers
 {
@@ -77,14 +78,8 @@ namespace RiverHollow.Game_Managers
                         return new Tool(id, _itemDataValues);
                     case "Equipment":
                         return new Equipment(id, _itemDataValues);
-                    case "Container":
-                        return new ContainerItem(id, _itemDataValues);
                     case "StaticItem":
                         return new StaticItem(id, _itemDataValues);
-                    //case "Processor":
-                    //    return new Processor(id, _itemDataValues);
-                    //case "Crafter":
-                    //    return new Crafter(id, _itemDataValues);
                     case "Food":
                         return new Food(id, _itemDataValues, num);
                     case "Map":
@@ -114,8 +109,8 @@ namespace RiverHollow.Game_Managers
                         return new Tree(id, pos, new Rectangle(0, 0, 96, 128), GetTexture(@"Textures\tree"), RHMap.TileSize * 3, RHMap.TileSize * 4, false, true, 1, 10);
                     case "Staircase":
                         return new Staircase(id, pos, new Rectangle(96, 0, 32, 32), GetTexture(@"Textures\worldObjects"), RHMap.TileSize, RHMap.TileSize);
-                    //case "Container":
-                    //    return new ContainerItem(id, _stringDataValues);
+                    case "Container":
+                        return new Container(id, _stringDataValues);
                     case "Processor":
                         return new Processor(id, _stringDataValues);
                     case "Crafter":

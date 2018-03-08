@@ -1,5 +1,5 @@
 ﻿using RiverHollow.Game_Managers.GUIObjects;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIObjects;

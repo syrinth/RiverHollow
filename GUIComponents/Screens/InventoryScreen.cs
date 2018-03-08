@@ -1,10 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Screens;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.GUIObjects;
 using RiverHollow.Characters;
 using System.Collections.Generic;
+using static RiverHollow.WorldObjects.WorldItem;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -36,7 +37,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             InventoryManager.PublicContainer = null;
         }
 
-        public InventoryScreen(ContainerItem c)
+        public InventoryScreen(Container c)
         {
             Vector2 centerPoint = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
             _font = GameContentManager.GetFont(@"Fonts\Font");
@@ -75,12 +76,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
             bool rv = false;
             if (_inventory.Contains(mouse))
             {
-                _inventory.ProcessLeftButtonClick(mouse);
+                _inventory.ProcessLeftButtonClick(mouse, _container == null);
                 rv = true;
             }
             else if (_container != null && _container.Contains(mouse))
             {
-                _container.ProcessLeftButtonClick(mouse);
+                _container.ProcessLeftButtonClick(mouse, _container == null);
                 rv = true;
             }
             else if (_character != null && _character.Contains(mouse))

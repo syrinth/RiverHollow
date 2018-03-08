@@ -3,6 +3,9 @@
   <Asset Type="Dictionary[int, string]">
     <!--Key: Index>0-->
     <!--Value: Destructible/Name/X Y Width Height/chopIt/breakIt/hp/LvlToHurt-->
+    <!--Value: Container/srcRow srcColumn/rows columns-->
+    <!--Value: Processor/srcRow srcColumn/[Input reqInputNum Output Time] ...-->
+    <!--Value: Crafter/srcRow srcColumn/Recipe1 Recipe2 ...-->
     <Item>
       <Key>0</Key>
       <Value>Destructible/Rock/0 0 32 32/false/true/1/1</Value>
@@ -20,6 +23,11 @@
       <Value>Staircase/Stairs/3 0/32 32</Value>
     </Item>
     <!--<200> Machines-->
+    <Item>
+      <Key>190</Key>
+      <Value>Container/0 1/1 8</Value>
+    </Item>
+    <!--<190> Containers-->
     <Item>
       <Key>200</Key>
       <Value>Processor/0 0/[80 5 85 10][81 5 86 20][82 5 87 40][83 5 88 80][84 5 89 90]</Value>

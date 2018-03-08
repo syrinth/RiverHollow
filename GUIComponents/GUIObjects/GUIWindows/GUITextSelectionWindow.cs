@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers.GUIObjects;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 

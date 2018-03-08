@@ -1,8 +1,9 @@
-﻿using RiverHollow.Items;
+﻿using RiverHollow.WorldObjects;
 using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using RiverHollow.Misc;
+using static RiverHollow.WorldObjects.WorldItem;
 
 namespace RiverHollow.Game_Managers
 {
@@ -11,7 +12,7 @@ namespace RiverHollow.Game_Managers
         private static int _numRooms = 5;
         public enum EndCondition { TreasureChest, KillAll };
         private static EndCondition _condition = EndCondition.TreasureChest;
-        private static ContainerItem _endChest;
+        private static Container _endChest;
 
         private static List<RHMap> _maps = new List<RHMap>();
         public static List<RHMap> Maps { get => _maps; }
@@ -104,12 +105,12 @@ namespace RiverHollow.Game_Managers
             for (int i = 0; i < 5; i++)
             {
                 Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize);
-                m.AddWorldObject(ObjectManager.GetWorldObject(1, vect), true);
+                m.PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, vect), true);
             }
             for (int i = 0; i < 30; i++)
             {
                 Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize);
-                m.AddWorldObject(ObjectManager.GetWorldObject(0, vect), true);
+                m.PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, vect), true);
             }
             for (int i = 0; i < 5; i++)
             {
@@ -129,8 +130,9 @@ namespace RiverHollow.Game_Managers
             if (lastRoom && _condition == EndCondition.TreasureChest)
             {
                 Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize);
-                ContainerItem c = (ContainerItem)ObjectManager.GetItem(6);
-                m.PlaceStaticItem(c, vect);
+                Container c = (Container)ObjectManager.GetWorldObject(190);
+                c.MapPosition = vect;
+                m.PlacePlayerObject(c);
                 _endChest = c;
             }
         }
@@ -171,7 +173,7 @@ namespace RiverHollow.Game_Managers
             return _maps[++_currentIndex];
         }
 
-        public static bool IsEndChest(ContainerItem c)
+        public static bool IsEndChest(Container c)
         {
             return c == _endChest;
         }

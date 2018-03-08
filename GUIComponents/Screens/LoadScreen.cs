@@ -27,7 +27,10 @@ namespace RiverHollow.GUIComponents.Screens
                 _liDataWindows.Add(s);
             }
 
-            GUIObject.CreateSpacedColumn(ref _liDataWindows, RiverHollow.ScreenWidth/2, 0, RiverHollow.ScreenHeight, 20);
+            if (_liDataWindows.Count > 0)
+            {
+                GUIObject.CreateSpacedColumn(ref _liDataWindows, RiverHollow.ScreenWidth / 2, 0, RiverHollow.ScreenHeight, 20);
+            }
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)

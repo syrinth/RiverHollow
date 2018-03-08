@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers.GUIObjects;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 using RiverHollow.Tile_Engine;
 using System;
@@ -136,8 +136,11 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Workers")]
             public List<WorkerData> Workers;
 
-            [XmlArray(ElementName = "StaticItems")]
-            public List<ContainerData> staticItems;
+            [XmlArray(ElementName = "Containers")]
+            public List<ContainerData> containers;
+
+            [XmlArray(ElementName = "Machines")]
+            public List<MachineData> machines;
 
             [XmlElement(ElementName = "positionX")]
             public int positionX;
@@ -243,7 +246,7 @@ namespace RiverHollow.Game_Managers
         public struct ContainerData
         {
             [XmlElement(ElementName = "ContainerID")]
-            public int staticItemID;
+            public int containerID;
 
             [XmlElement(ElementName = "X")]
             public int x;
@@ -460,28 +463,6 @@ namespace RiverHollow.Game_Managers
                     }
                 }
             }
-        }
-
-        public static StaticItem LoadStaticItemData(ContainerData data)
-        {
-            Item it = ObjectManager.GetItem(data.staticItemID);
-            if (it.IsContainer())
-            {
-                ContainerItem c = (ContainerItem)it;
-                for (int i = 0; i < InventoryManager.maxItemRows; i++)
-                {
-                    for (int j = 0; j < InventoryManager.maxItemColumns; j++)
-                    {
-                        ItemData item = data.Items[i * InventoryManager.maxItemRows + j];
-                        Item newItem = ObjectManager.GetItem(item.itemID, item.num);
-                        InventoryManager.AddItemToInventorySpot(newItem, i, j, c);
-                        c.Position = new Vector2(data.x, data.y);
-                    }
-                }
-                return c;
-            }
-
-            return null;
         }
         #endregion
     }

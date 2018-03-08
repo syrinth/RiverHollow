@@ -1,4 +1,4 @@
-﻿using RiverHollow.Items;
+﻿using RiverHollow.WorldObjects;
 using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters.CombatStuff;
 using RiverHollow.Misc;
 using RiverHollow.GUIObjects;
-using static RiverHollow.Items.WorldItem;
+using static RiverHollow.WorldObjects.WorldItem;
 
 namespace RiverHollow.Game_Managers
 {
@@ -84,7 +84,7 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddNewItemToInventory(5);
             InventoryManager.AddNewItemToInventory(3);
             InventoryManager.AddNewItemToInventory(4);
-            InventoryManager.AddNewItemToInventory(6);
+            InventoryManager.AddNewItemToInventory(190);
             InventoryManager.AddNewItemToInventory(7);
             InventoryManager.AddNewItemToInventory(101);
             InventoryManager.AddNewItemToInventory(200);
@@ -173,7 +173,7 @@ namespace RiverHollow.Game_Managers
         {
             if (GameManager.InCombat()) { DrawCombat(spriteBatch); }
             else { DrawWorld(spriteBatch); }
-            _merchantChest.Draw(spriteBatch);
+           // _merchantChest.Draw(spriteBatch);
         }
         public static void DrawWorld(SpriteBatch spriteBatch)
         {
@@ -272,21 +272,25 @@ namespace RiverHollow.Game_Managers
                     }
                 }
 
-                if (GraphicCursor.HeldItem != null)
+                if (GraphicCursor.HeldItem != null && GraphicCursor.HeldItem.IsStaticItem())
                 {
-                    if (GraphicCursor.HeldItem.IsContainer())
+                    WorldObject obj = ObjectManager.GetWorldObject(GraphicCursor.HeldItem.ItemID);
+                    if (obj.IsMachine())
                     {
-                        MapManager.PlaceWorldItem((ContainerItem)GraphicCursor.HeldItem, mouseLocation.ToVector2());
-                        GraphicCursor.DropItem();
-                    }
-                    else if (GraphicCursor.HeldItem.IsStaticItem())
-                    {
-                        Machine p = (Machine)ObjectManager.GetWorldObject(GraphicCursor.HeldItem.ItemID);
+                        Machine p = (Machine)obj;
                         p.SetMapName(CurrentMap);
                         p.MapPosition = Utilities.Normalize(mouseLocation.ToVector2());
-                        MapManager.PlaceWorldObject(p, mouseLocation.ToVector2());
-                        GraphicCursor.DropItem();
+                        MapManager.PlacePlayerObject(p);
                     }
+                    else if (obj.IsContainer())
+                    {
+                        Container c = (Container)obj;
+                        c.SetMapName(CurrentMap);
+                        c.MapPosition = Utilities.Normalize(mouseLocation.ToVector2());
+                        MapManager.PlacePlayerObject(c);
+                    }
+
+                    GraphicCursor.DropItem();
                 }
             }
 

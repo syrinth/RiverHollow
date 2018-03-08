@@ -1,7 +1,7 @@
 ﻿using RiverHollow.Characters.NPCs;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.GUIObjects;
-using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

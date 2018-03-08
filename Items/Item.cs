@@ -6,7 +6,7 @@ using System.Threading;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.GUIObjects;
 
-namespace RiverHollow.Items
+namespace RiverHollow.WorldObjects
 {
     public class Item
     {
