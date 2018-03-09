@@ -56,6 +56,7 @@ namespace RiverHollow.GUIComponents.Screens
                 Controls.Add(w);
             }
             _selectedClass = (ClassSelectionBox)_liClasses[0];
+            _selectedClass.PlayAnimation("WalkDown");
 
             GUIObject.CreateSpacedRow(ref _liClasses, _window.Height / 2, _window.Position().X, _window.Width, 20);
 

@@ -244,7 +244,7 @@ namespace RiverHollow
                 b.Rollover();
             }
             CharacterManager.RollOver();
-            MapManager.Maps[MapManager.HomeMap].RollOver();
+            MapManager.Maps[MapManager.HomeMap].Rollover();
         }
 
         public static void PrepExit()

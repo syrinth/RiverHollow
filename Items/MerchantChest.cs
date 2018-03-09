@@ -15,7 +15,7 @@ namespace RiverHollow.WorldObjects
             _vMapPosition = new Vector2(800, 800);
             _width = 64;
             _height = 64;
-            _sourceRectangle = new Rectangle(32, 0, 64, 64);
+            _rSource = new Rectangle(32, 0, 64, 64);
             _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
 
             _toSell = new List<Item>();

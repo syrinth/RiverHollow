@@ -49,7 +49,7 @@ namespace RiverHollow
             _buildingChest = (Container)ObjectManager.GetWorldObject(190);
             _pantry = (Container)ObjectManager.GetWorldObject(190);
 
-            _sourceRectangle = new Rectangle(0, 0, Texture.Width, Texture.Height);
+            _rSource = new Rectangle(0, 0, Texture.Width, Texture.Height);
         }
 
         public bool HasSpace()

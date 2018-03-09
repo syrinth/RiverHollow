@@ -204,6 +204,12 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "Plants")]
             public List<PlantData> plants;
+
+            [XmlArray(ElementName = "Floors")]
+            public List<FloorData> floors;
+
+            [XmlArray(ElementName = "Earth")]
+            public List<FloorData> earth;
         }
         public struct UpgradeData
         {
@@ -224,7 +230,7 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Friendship")]
             public int friendship;
 
-            [XmlElement(ElementName = "Collection")]
+            [XmlArray(ElementName = "Collection")]
             public List<CollectionData> collection;
         }
         public struct CollectionData
@@ -245,6 +251,17 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "Y")]
             public int y;
+        }
+        public struct RHTileData
+        {
+            [XmlElement(ElementName = "X")]
+            public int x;
+
+            [XmlElement(ElementName = "Y")]
+            public int y;
+
+            [XmlElement(ElementName = "WorldObject")]
+            public WorldObjectData worldObject;
         }
         public struct PlantData
         {
@@ -296,6 +313,28 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "HeldItemID")]
             public int heldItemID;
+        }
+        public struct FloorData
+        {
+            [XmlElement(ElementName = "FloorID")]
+            public int ID;
+
+            [XmlElement(ElementName = "X")]
+            public int x;
+
+            [XmlElement(ElementName = "Y")]
+            public int y;
+        }
+        public struct EarthData
+        {
+            [XmlElement(ElementName = "Watered")]
+            public bool watered;
+
+            [XmlElement(ElementName = "X")]
+            public int x;
+
+            [XmlElement(ElementName = "Y")]
+            public int y;
         }
 
         public static int GetSaveID()

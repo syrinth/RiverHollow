@@ -117,7 +117,7 @@ namespace RiverHollow.Game_Managers
                 UseTool.Update(gameTime);
                 bool finished = !UseTool.ToolAnimation.IsAnimating;
 
-                if (_targetTile != null && _targetTile.WldObject != null && finished) 
+                if (_targetTile != null && _targetTile.WorldObject != null && finished) 
                 {
                     _targetTile.DamageObject(UseTool.DmgValue);
                     _targetTile = null;
@@ -247,10 +247,37 @@ namespace RiverHollow.Game_Managers
             if (PlayerManager.PlayerInRange(mouseLocation))
             {
                 _targetTile = MapManager.RetrieveTile(mouseLocation);
-                if (_targetTile.WldObject != null && _targetTile.WldObject.IsDestructible())
+                if (GraphicCursor.HeldItem != null && GraphicCursor.HeldItem.IsStaticItem())
                 {
-
-                    Destructible d = (Destructible)_targetTile.WldObject;
+                    WorldObject obj = ObjectManager.GetWorldObject(GraphicCursor.HeldItem.ItemID);
+                    if (obj.IsMachine())
+                    {
+                        Machine p = (Machine)obj;
+                        p.SetMapName(CurrentMap);
+                        p.MapPosition = mouseLocation.ToVector2();
+                        MapManager.PlacePlayerObject(p);
+                        GraphicCursor.DropItem();
+                    }
+                    else if (obj.IsContainer())
+                    {
+                        Container c = (Container)obj;
+                        c.SetMapName(CurrentMap);
+                        c.MapPosition = mouseLocation.ToVector2();
+                        MapManager.PlacePlayerObject(c);
+                        GraphicCursor.DropItem();
+                    }
+                    else if (_targetTile.HasBeenDug() && obj.IsPlant())
+                    {
+                        Plant p = (Plant)obj;
+                        p.SetMapName(CurrentMap);
+                        p.MapPosition = mouseLocation.ToVector2();
+                        MapManager.PlacePlayerObject(p);
+                        GraphicCursor.DropItem();
+                    }
+                }
+                else if (_targetTile.WorldObject != null && _targetTile.WorldObject.IsDestructible())
+                {
+                    Destructible d = (Destructible)_targetTile.WorldObject;
 
                     if (d != null && UseTool == null)
                     {
@@ -272,33 +299,14 @@ namespace RiverHollow.Game_Managers
                         rv = true;
                     }
                 }
-
-                if (GraphicCursor.HeldItem != null && GraphicCursor.HeldItem.IsStaticItem())
+                else if(_targetTile.WorldObject == null)
                 {
-                    WorldObject obj = ObjectManager.GetWorldObject(GraphicCursor.HeldItem.ItemID);
-                    if (obj.IsMachine())
-                    {
-                        Machine p = (Machine)obj;
-                        p.SetMapName(CurrentMap);
-                        p.MapPosition = Utilities.Normalize(mouseLocation.ToVector2());
-                        MapManager.PlacePlayerObject(p);
-                    }
-                    else if (obj.IsContainer())
-                    {
-                        Container c = (Container)obj;
-                        c.SetMapName(CurrentMap);
-                        c.MapPosition = Utilities.Normalize(mouseLocation.ToVector2());
-                        MapManager.PlacePlayerObject(c);
-                    }
-                    else if (obj.IsPlant())
-                    {
-                        Plant p = (Plant)obj;
-                        p.SetMapName(CurrentMap);
-                        p.MapPosition = Utilities.Normalize(mouseLocation.ToVector2());
-                        MapManager.PlacePlayerObject(p);
-                    }
-
-                    GraphicCursor.DropItem();
+                    _targetTile.Dig();
+                    MapManager.CurrentMap.ModTiles.Add(_targetTile);
+                }
+                else
+                {
+                    _targetTile.Water(true);
                 }
             }
 

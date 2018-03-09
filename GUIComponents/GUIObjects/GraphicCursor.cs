@@ -105,9 +105,6 @@ namespace RiverHollow.GUIObjects
                 case CursorType.Talk:
                     source = new Rectangle(288, 160, 32, 32);
                     break;
-                case CursorType.Gift:
-                    source = new Rectangle(288, 224, 32, 32);
-                    break;
             }
             Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, 32, 32);
             
