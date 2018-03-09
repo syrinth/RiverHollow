@@ -1100,20 +1100,23 @@ namespace RiverHollow.Tile_Engine
 
     public class RHTile
     {
-        private string _mapName;
+        string _mapName;
         public string MapName { get => _mapName; }
-        private bool _tileExists;
-        private int _X;
-        public int X { get => _X; }
-        private int _Y;
-        public int Y { get => _Y; }
+        bool _tileExists;
+        int _X;
+        public int X => _X; 
+        int _Y;
+        public int Y => _Y; 
         public Vector2 Position { get => new Vector2(_X * RHMap.TileSize, _Y * RHMap.TileSize); }
-        private Dictionary<TiledMapTileLayer, Dictionary<string, string>> _properties;
-        private WorldObject _obj;
+        Dictionary<TiledMapTileLayer, Dictionary<string, string>> _diProps;
+        WorldObject _obj;
         public WorldObject WldObject { get => _obj; }
 
-        private bool _isRoad;
+        bool _isRoad;
         public bool IsRoad { get => _isRoad; }
+
+        bool _dugUp;
+        public bool DugUp => _dugUp;
 
         public RHTile(int x, int y,string mapName)
         {
@@ -1121,7 +1124,7 @@ namespace RiverHollow.Tile_Engine
             _Y = y;
 
             _mapName = mapName;
-            _properties = new Dictionary<TiledMapTileLayer, Dictionary<string, string>>();
+            _diProps = new Dictionary<TiledMapTileLayer, Dictionary<string, string>>();
         }
         public List<RHTile> GetWalkableNeighbours()
         {
@@ -1150,7 +1153,7 @@ namespace RiverHollow.Tile_Engine
                     }
                     if (((TiledMapTile)tile).GlobalIdentifier != 0)
                     {
-                        _properties.Add(l, map.GetProperties((TiledMapTile)tile));
+                        _diProps.Add(l, map.GetProperties((TiledMapTile)tile));
                     }
                 }
             }
@@ -1183,7 +1186,7 @@ namespace RiverHollow.Tile_Engine
             bool rv = _tileExists && (_obj == null || !_obj.Blocking);
             if (_tileExists)
             {
-                foreach (TiledMapTileLayer l in _properties.Keys)
+                foreach (TiledMapTileLayer l in _diProps.Keys)
                 {
                     if (l.IsVisible && ContainsProperty(l, "Impassable", out string val) && val.Equals("true"))
                     {
@@ -1200,7 +1203,7 @@ namespace RiverHollow.Tile_Engine
             bool rv = false;
             if (_tileExists && _obj == null)
             {
-                foreach (TiledMapTileLayer l in _properties.Keys)
+                foreach (TiledMapTileLayer l in _diProps.Keys)
                 {
                     if (l.IsVisible && ContainsProperty(l, "Impassable", out string val) && val.Equals("true"))
                     {
@@ -1215,7 +1218,7 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
             value = string.Empty;
-            foreach (TiledMapTileLayer l in _properties.Keys)
+            foreach (TiledMapTileLayer l in _diProps.Keys)
             {
                 rv = ContainsProperty(l, property, out value);
             }
@@ -1226,9 +1229,9 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
             value = string.Empty;
-            if (_properties.ContainsKey(l) && _properties[l].ContainsKey(property))
+            if (_diProps.ContainsKey(l) && _diProps[l].ContainsKey(property))
             {
-                value = _properties[l][property];
+                value = _diProps[l][property];
                 rv = true;
             }
 

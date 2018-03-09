@@ -195,15 +195,19 @@ namespace RiverHollow.GUIObjects
             {
                 case SideEnum.Bottom:
                     this.SetY(screenHeight - this.Height - spacing);
+                    this.SetX(screenWidth/2 - this.Width/2);
                     break;
                 case SideEnum.Left:
+                    this.SetY(screenHeight / 2 - this.Height / 2);
                     this.SetX(0 + spacing);
                     break;
                 case SideEnum.Right:
+                    this.SetY(screenHeight / 2 - this.Height / 2);
                     this.SetX(screenWidth - this.Width - spacing);
                     break;
                 case SideEnum.Top:
                     this.SetY(0 + spacing);
+                    this.SetX(screenWidth / 2 - this.Width / 2);
                     break;
                 case SideEnum.BottomLeft:
                     this.SetY(screenHeight - this.Height - spacing);
