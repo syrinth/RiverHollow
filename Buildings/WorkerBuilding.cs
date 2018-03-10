@@ -120,7 +120,7 @@ namespace RiverHollow
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, new Rectangle((int)this.MapPosition.X, (int)this.MapPosition.Y, _texture.Width, _texture.Height), null, _selected ? Color.Green : Color.White, 0, new Vector2(0, 0), SpriteEffects.None, MapPosition.Y+Texture.Height);
+            spriteBatch.Draw(_texture, new Rectangle((int)this.MapPosition.X, (int)this.MapPosition.Y, _texture.Width, _texture.Height), null, _selected ? Color.Green : Color.White, 0, Vector2.Zero, SpriteEffects.None, MapPosition.Y+Texture.Height);
         }
 
         public BuildingData SaveData()

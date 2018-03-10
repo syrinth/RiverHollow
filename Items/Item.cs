@@ -29,7 +29,7 @@ namespace RiverHollow.WorldObjects
         protected Vector2 _sourcePos;
 
         protected Vector2 _position;
-        public Vector2 Position { get => _position; set => _position = value; }
+        public virtual Vector2 Position { get => _position; set => _position = value; }
 
         public virtual Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, 32, 32); }
         public Rectangle SourceRectangle { get => new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, (int)_dWidth, (int)_dHeight); }
@@ -132,7 +132,7 @@ namespace RiverHollow.WorldObjects
 
             if (LayerDepth)
             {
-                spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, (int)_dWidth, (int)_dHeight), Color.White, 0, new Vector2(0, 0), SpriteEffects.None, 99999);
+                spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, (int)_dWidth, (int)_dHeight), Color.White, 0, Vector2.Zero, SpriteEffects.None, 99999);
             }
             else
             {
@@ -298,7 +298,7 @@ namespace RiverHollow.WorldObjects
 
     public class Tool : Item
     {
-        public enum ToolEnum { Pick, Axe };
+        public enum ToolEnum { Pick, Axe, Shovel, WateringCan };
         public ToolEnum ToolType;
         protected int _staminaCost;
         public int StaminaCost { get => _staminaCost; }
@@ -307,6 +307,14 @@ namespace RiverHollow.WorldObjects
 
         protected AnimatedSprite _sprite;
         public AnimatedSprite ToolAnimation { get => _sprite; }
+
+        public override Vector2 Position {
+            set
+            {
+                _position = value;
+                _sprite.Position = _position;
+            }
+        }
 
         public Tool(int id, string[] stringData)
         {
@@ -320,7 +328,7 @@ namespace RiverHollow.WorldObjects
             _rowTextureSize = 32;
 
             _sprite = new AnimatedSprite(_texture);
-            _sprite.AddAnimation("Left", (int)_sourcePos.X + 32, (int)_sourcePos.Y, 32, 32, 3, 0.1f);
+            _sprite.AddAnimation("Left", (int)_sourcePos.X + 32, (int)_sourcePos.Y, 32, 32, 2, 0.3f);
 
             _sprite.CurrentAnimation = "Left";
             _sprite.IsAnimating = true;
@@ -332,9 +340,9 @@ namespace RiverHollow.WorldObjects
             _sprite.Update(gameTime);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Rectangle drawBox)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, 32, 32), Color.White);
+            _sprite.Draw(spriteBatch);
         }
     }
 

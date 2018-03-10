@@ -16,8 +16,8 @@ namespace RiverHollow.SpriteAnimations
         Color colorTint = Color.White;              // If set to anything other than Color.White, will colorize the sprite with that color.
 
         // Screen Position of the Sprite
-        private Vector2 _Position = new Vector2(0, 0);
-        Vector2 _LastPosition = new Vector2(0, 0);
+        private Vector2 _Position = Vector2.Zero;
+        Vector2 _LastPosition = Vector2.Zero;
 
         // Dictionary holding all of the FrameAnimation objects
         Dictionary<string, FrameAnimation> _frameanimations = new Dictionary<string, FrameAnimation>();
@@ -259,7 +259,7 @@ namespace RiverHollow.SpriteAnimations
             {
                 if (useLayerDepth)
                 {
-                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100));
+                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White, 0, Vector2.Zero, SpriteEffects.None, Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100));
                 }
                 else
                 {

@@ -2,7 +2,8 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
     <!--Key: ID, Value:Type/Name/Description/ImgColX ImgColY/SellCost-->
-    <!--Tool: Type/Dmg/Stam Equipment: dmg/def/spd/mag/hp Container:Rows/Columns-->
+    <!--Equipment: dmg/def/spd/mag/hp Container:Rows/Columns-->
+    <!--Tool:Type/Dmg/Stam-->
     <!--Food:Stamina/Health-->
     <!--Machine: Processor/Name/[input # output timeinSeconds] [input # output timeinSeconds]-->
     <!--Machine: Crafter/Name/<recipe1> <recipe2> ...-->
@@ -17,14 +18,6 @@
     <Item>
       <Key>2</Key>
       <Value>Resource/Wood/Wood, it builds stuff/1 0/10</Value>
-    </Item>
-    <Item>
-      <Key>3</Key>
-      <Value>Tool/Pick Axe/Breaks things/0 0/3000/Pick/1/1</Value>
-    </Item>
-    <Item>
-      <Key>4</Key>
-      <Value>Tool/Wooden Axe/Chop Chop Motherfucker/0 1/3000/Axe/1/1</Value>
     </Item>
     <Item>
       <Key>5</Key>
@@ -45,6 +38,23 @@
     <Item>
       <Key>10</Key>
       <Value>Equipment/Armor/Best armor ever/1 0/1000/Armor/0/20/0/0/0</Value>
+    </Item>
+    <!--<20-24> Tools-->
+    <Item>
+      <Key>20</Key>
+      <Value>Tool/Pick Axe/Breaks things/0 0/3000/Pick/1/1</Value>
+    </Item>
+    <Item>
+      <Key>21</Key>
+      <Value>Tool/Wooden Axe/Chop Chop Motherfucker/0 1/3000/Axe/1/1</Value>
+    </Item>
+    <Item>
+      <Key>22</Key>
+      <Value>Tool/Shovel/Dig the thing/0 2/3000/Shovel/0/1</Value>
+    </Item>
+    <Item>
+      <Key>23</Key>
+      <Value>Tool/Watering Can/Watering the thing/0 3/3000/WateringCan/0/1</Value>
     </Item>
     <!--<40-59> Plant Resources-->
     <Item>

@@ -329,7 +329,7 @@ namespace RiverHollow.Tile_Engine
             foreach(RHTile t in _liBuildingTiles)
             {
                 bool passable = t.Passable();
-                spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)t.Position.X, (int)t.Position.Y, 32, 32), new Rectangle(288, 128, 32, 32) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, new Vector2(0, 0), SpriteEffects.None, 99999);
+                spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)t.Position.X, (int)t.Position.Y, 32, 32), new Rectangle(288, 128, 32, 32) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
             }
         }
 
@@ -526,7 +526,7 @@ namespace RiverHollow.Tile_Engine
 
         public Vector2 GetCharacterSpawn(string val)
         {
-            Vector2 rv = new Vector2(0, 0);
+            Vector2 rv = Vector2.Zero;
             if (_dictCharacterLayer.ContainsKey(val))
             {
                 rv = _dictCharacterLayer[val];
@@ -572,7 +572,7 @@ namespace RiverHollow.Tile_Engine
                     {
                         if (IsDungeon && DungeonManager.IsEndChest((Container)s))
                         {
-                            Staircase stairs = (Staircase)ObjectManager.GetWorldObject(3, new Vector2(0, 0));
+                            Staircase stairs = (Staircase)ObjectManager.GetWorldObject(3, Vector2.Zero);
                             stairs.SetExit(MapManager.HomeMap);
                             PlaceWorldObject(stairs, true);
                         }
@@ -756,7 +756,7 @@ namespace RiverHollow.Tile_Engine
             {
                 if (tile.WorldObject == o)
                 {
-                    tile.SetWorldObject(null);
+                    tile.RemoveWorldObject();
                     if (tile.WorldObject == null)
                     {
                         toRemove.Add(tile);
@@ -1243,6 +1243,10 @@ namespace RiverHollow.Tile_Engine
             }
             return rv;
         }
+        public void RemoveWorldObject()
+        {
+            _obj = null;
+        }
         public bool SetWorldObject(WorldObject o)
         {
             bool rv = false;
@@ -1330,8 +1334,8 @@ namespace RiverHollow.Tile_Engine
                 if (rv)
                 {
                     MapManager.DropWorldItems(DropManager.DropItemsFromWorldObject(_obj.ID), _obj.CollisionBox.Center.ToVector2());
-                    MapManager.RemoveWorldObject(_obj);
                     _obj.RemoveSelfFromTiles();
+                    MapManager.RemoveWorldObject(_obj);
                 }
             }
 

@@ -69,7 +69,7 @@ namespace RiverHollow.WorldObjects
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, new Rectangle((int)_vMapPosition.X, (int)_vMapPosition.Y, _width, _height), _rSource, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, _vMapPosition.Y + _height + (_vMapPosition.X / 100));
+            spriteBatch.Draw(_texture, new Rectangle((int)_vMapPosition.X, (int)_vMapPosition.Y, _width, _height), _rSource, Color.White, 0, Vector2.Zero, SpriteEffects.None, _vMapPosition.Y + _height + (_vMapPosition.X / 100));
         }
 
         public virtual bool IntersectsWith(Rectangle r)
@@ -91,7 +91,7 @@ namespace RiverHollow.WorldObjects
         {
             foreach (RHTile t in Tiles)
             {
-                t.SetWorldObject(null);
+                t.RemoveWorldObject();
             }
         }
 
@@ -212,7 +212,7 @@ namespace RiverHollow.WorldObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, new Rectangle((int)_vMapPosition.X, (int)_vMapPosition.Y, _width, _height), _rSource, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, 0);
+            spriteBatch.Draw(_texture, new Rectangle((int)_vMapPosition.X, (int)_vMapPosition.Y, _width, _height), _rSource, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
         }
 
         internal FloorData SaveData()
@@ -669,7 +669,7 @@ namespace RiverHollow.WorldObjects
             public override void Draw(SpriteBatch spriteBatch)
             {
                 float layerDepth = (_iCurrentState == 0) ? 1 : _vMapPosition.Y + (_vMapPosition.X / 100);
-                spriteBatch.Draw(_texture, new Rectangle((int)_vMapPosition.X, (int)_vMapPosition.Y, _width, _height), _rSource, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, layerDepth);
+                spriteBatch.Draw(_texture, new Rectangle((int)_vMapPosition.X, (int)_vMapPosition.Y, _width, _height), _rSource, Color.White, 0, Vector2.Zero, SpriteEffects.None, layerDepth);
             }
             public void LoadContent()
             {

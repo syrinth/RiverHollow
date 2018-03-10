@@ -197,7 +197,7 @@ namespace RiverHollow.Game_Managers
                     Rectangle source = new Rectangle(0, 0, drawIt.Width, drawIt.Height);
 
                     GraphicCursor.HeldBuilding.SetCoordinates(new Vector2(drawRectangle.X, drawRectangle.Y));
-                    spriteBatch.Draw(drawIt, drawRectangle, null, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, mousePosition.Y + drawIt.Height);
+                    spriteBatch.Draw(drawIt, drawRectangle, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, mousePosition.Y + drawIt.Height);
                 }
             }
         }

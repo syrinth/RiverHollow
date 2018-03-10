@@ -27,7 +27,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public CombatScreen()
         {
             Mob m = CombatManager.CurrentMob;
-            _giBackground = new GUIImage(new Vector2(0, 0), new Rectangle(0, 0, 800, 480), RiverHollow.ScreenWidth, RiverHollow.ScreenHeight, GameContentManager.GetTexture(@"Textures\battle"));
+            _giBackground = new GUIImage(Vector2.Zero, new Rectangle(0, 0, 800, 480), RiverHollow.ScreenWidth, RiverHollow.ScreenHeight, GameContentManager.GetTexture(@"Textures\battle"));
             Controls.Add(_giBackground);
 
             _sdStamina = new StatDisplay(StatDisplay.DisplayEnum.Energy);
