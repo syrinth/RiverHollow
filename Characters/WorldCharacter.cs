@@ -24,6 +24,7 @@ namespace RiverHollow.Characters
             set { _sprite.Position = new Vector2(value.X, value.Y - _sprite.Height + TileSize); }
         }
 
+        public Rectangle CollisionBox { get => new Rectangle((int)Position.X + (Width/8), (int)Position.Y, Width/2, TileSize); }
 
 
         public int Speed = 3;

@@ -158,14 +158,14 @@ namespace RiverHollow.Game_Managers
             //LoadMap1
             if (!loaded)
             {
-                //for (int i = 0; i < 99; i++)
-                //{
-                //    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
-                //}
-                //for (int i = 0; i < 99; i++)
-                //{
-                //    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
-                //}
+                for (int i = 0; i < 99; i++)
+                {
+                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
+                }
+                for (int i = 0; i < 99; i++)
+                {
+                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
+                }
             }
 
             Mob mob = CharacterManager.GetMobByIndex(1, new Vector2(647, 539));

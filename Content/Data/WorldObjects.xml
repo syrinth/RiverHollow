@@ -9,11 +9,11 @@
     <!--Value: Crafter/srcRow srcColumn/Recipe1 Recipe2 ...-->
     <Item>
       <Key>0</Key>
-      <Value>Destructible/Rock/0 0 32 32/false/true/1/1</Value>
+      <Value>Destructible/Rock/0 0 16 16/false/true/1/1</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Destructible/Large Rock/2 2 64 64/false/true/5/1</Value>
+      <Value>Destructible/Large Rock/2 2 32 32/false/true/5/1</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -21,7 +21,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>Staircase/Stairs/3 0/32 32</Value>
+      <Value>Staircase/Stairs/3 0/16 16</Value>
     </Item>
     <!--<60-79> Plants-->
     <Item>
