@@ -1,14 +1,14 @@
 ﻿using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
-using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Misc;
 using RiverHollow.Characters.CombatStuff;
+using RiverHollow.SpriteAnimations;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow
 {
     public class Mob : WorldCharacter
@@ -16,8 +16,8 @@ namespace RiverHollow
         #region Properties
         protected int _id;
         public int ID { get => _id; }
-        protected int _idleFor;
-        protected int _leash = 400;
+        protected double _dIdleFor;
+        protected int _iLeash = 7;
 
         protected string _textureName;
         protected Vector2 _moveTo = Vector2.Zero;
@@ -31,7 +31,24 @@ namespace RiverHollow
             _monsters = new List<CombatCharacter>();
             ImportBasics(stringData, id);
             _textureName = @"Textures\Monsters\Goblin Scout";
-            LoadContent(_textureName, 32, 64, 4, 0.3f);
+            LoadContent();
+        }
+
+        public void LoadContent()
+        {
+            _sprite = new AnimatedSprite(GameContentManager.GetTexture(_textureName));
+            _sprite.AddAnimation("IdleDown", TileSize, TileSize, 1, 0.3f, 0, 0);
+            _sprite.AddAnimation("WalkDown", TileSize, TileSize, 2, 0.3f, 116, 0);
+            _sprite.AddAnimation("IdleUp", TileSize, TileSize, 1, 0.3f, 48, 0);
+            _sprite.AddAnimation("WalkUp", TileSize, TileSize, 2, 0.3f, 64, 0);
+            _sprite.AddAnimation("IdleLeft", TileSize, TileSize, 1, 0.3f, 96, 0);
+            _sprite.AddAnimation("WalkLeft", TileSize, TileSize, 2, 0.3f, 112, 0);
+            _sprite.AddAnimation("IdleRight", TileSize, TileSize, 1, 0.3f, 144, 0);
+            _sprite.AddAnimation("WalkRight", TileSize, TileSize, 2, 0.3f, 160, 0);
+            _sprite.SetCurrentAnimation("WalkLeft");
+
+            _width = _sprite.Width;
+            _height = _sprite.Height;
         }
 
         protected int ImportBasics(string[] stringData, int id)
@@ -54,7 +71,7 @@ namespace RiverHollow
 
         public override void Update(GameTime theGameTime)
         {
-            UpdateMovement();
+            UpdateMovement(theGameTime);
             base.Update(theGameTime);
         }
 
@@ -62,55 +79,50 @@ namespace RiverHollow
         {
             base.Draw(spriteBatch, userLayerDepth);
         }
-        private void UpdateMovement()
+
+        private void UpdateMovement(GameTime theGameTime)
         {
             Vector2 direction = Vector2.Zero;
-            //string animation = "";
 
 
-            //if (PlayerManager.PlayerInRange(Position, _leash))
-            //{
-            //    _moveTo = Vector2.Zero;
-            //    Vector2 targetPos = PlayerManager.World.Position;
-
-            //    float deltaX = Math.Abs(targetPos.X - this.Position.X);
-            //    float deltaY = Math.Abs(targetPos.Y - this.Position.Y);
-
-            //    GetMoveSpeed(targetPos, ref direction);
-            //    CheckMapForCollisionsAndMove(direction);
-
-            //    DetermineAnimation(ref animation, direction, deltaX, deltaY);
-
-            //    if (_sprite.CurrentAnimation != animation)
-            //    {
-            //        _sprite.CurrentAnimation = animation;
-            //    }
-            //}
-            //else
-            //{
-            if (CollisionBox.Intersects(PlayerManager.World.CollisionBox))
+            if (SpottedPlayer())
             {
-                CombatManager.NewBattle(this);
+                _moveTo = Vector2.Zero;
+                Vector2 targetPos = PlayerManager.World.Position;
+
+                float deltaX = Math.Abs(targetPos.X - this.Position.X);
+                float deltaY = Math.Abs(targetPos.Y - this.Position.Y);
+
+                Utilities.GetMoveSpeed(Position, targetPos, Speed, ref direction);
+                CheckMapForCollisionsAndMove(direction);
+
+                DetermineFacing(direction);
             }
-            //IdleMovement();
-            //}
+            else
+            {
+                if (CollisionBox.Intersects(PlayerManager.World.CollisionBox))
+                {
+                    CombatManager.NewBattle(this);
+                }
+                IdleMovement(theGameTime);
+            }
         }
 
-        private void IdleMovement()
+        private void IdleMovement(GameTime theGameTime)
         {
-            if (_moveTo == Vector2.Zero && _idleFor == 0)
+            if (_moveTo == Vector2.Zero && _dIdleFor <= 0)
             {
                 int howFar = 2;
                 RHRandom r = new RHRandom();
                 int decision = r.Next(1, 5);
-                if (decision == 1) { _moveTo = new Vector2(Position.X - r.Next(1, howFar) * RHMap.TileSize, Position.Y); }
-                else if (decision == 2) { _moveTo = new Vector2(Position.X + r.Next(1, howFar) * RHMap.TileSize, Position.Y); }
-                else if (decision == 3) { _moveTo = new Vector2(Position.X, Position.Y - r.Next(1, howFar) * RHMap.TileSize); }
-                else if (decision == 4) { _moveTo = new Vector2(Position.X, Position.Y + r.Next(1, howFar) * RHMap.TileSize); }
+                if (decision == 1) { _moveTo = new Vector2(Position.X - r.Next(1, howFar) * TileSize, Position.Y); }
+                else if (decision == 2) { _moveTo = new Vector2(Position.X + r.Next(1, howFar) * TileSize, Position.Y); }
+                else if (decision == 3) { _moveTo = new Vector2(Position.X, Position.Y - r.Next(1, howFar) * TileSize); }
+                else if (decision == 4) { _moveTo = new Vector2(Position.X, Position.Y + r.Next(1, howFar) * TileSize); }
                 else
                 {
-                    //_sprite.CurrentAnimation = "Float" + _sprite.CurrentAnimation.Substring(4);
-                    _idleFor = 300;
+                    DetermineFacing(Vector2.Zero);
+                    _dIdleFor = 10;
                 }
             }
             else if (_moveTo != Vector2.Zero)
@@ -122,12 +134,42 @@ namespace RiverHollow
                 Utilities.GetMoveSpeed(Position, _moveTo, Speed, ref direction);
                 CheckMapForCollisionsAndMove(direction);
 
-                if (Position.X == _moveTo.X && Position.Y == _moveTo.Y) { _moveTo = Vector2.Zero; }
+                if (Position.X == _moveTo.X && Position.Y == _moveTo.Y) {
+                    _moveTo = Vector2.Zero;
+                    DetermineFacing(_moveTo);
+                }
             }
             else
             {
-                _idleFor--;
+                _dIdleFor -= theGameTime.ElapsedGameTime.TotalSeconds;
             }
-        }   
+        }
+
+        private bool SpottedPlayer()
+        {
+            bool rv = false;
+
+            if(PlayerManager.PlayerInRange(Position, _iLeash * TileSize))
+            {
+                Vector2 playerPos = PlayerManager.World.Position;
+                switch (Facing)
+                {
+                    case DirectionEnum.Up:
+                        rv = playerPos.Y < Position.Y;
+                        break;
+                    case DirectionEnum.Down:
+                        rv = playerPos.Y > Position.Y;
+                        break;
+                    case DirectionEnum.Left:
+                        rv = playerPos.X < Position.X;
+                        break;
+                    case DirectionEnum.Right:
+                        rv = playerPos.X > Position.X;
+                        break;
+                }
+            }
+
+            return rv;
+        }
     }
 }

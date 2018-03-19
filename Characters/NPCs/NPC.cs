@@ -10,6 +10,7 @@ using RiverHollow.Tile_Engine;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.Game_Managers.GUIObjects;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.Characters
 {
     public class NPC : WorldCharacter
@@ -280,11 +281,11 @@ namespace RiverHollow.Characters
             {
                 _sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\NPC8"));
             }
-            _sprite.AddAnimation("IdleDown", 0, 0, 32, 64, 1, 0.2f);
-            _sprite.AddAnimation("WalkDown", 0, 0, 32, 64, 4, 0.2f);
-            _sprite.AddAnimation("WalkUp", 0, 64, 32, 64, 4, 0.2f);
-            _sprite.AddAnimation("WalkRight", 0, 128, 32, 64, 4, 0.2f);
-            _sprite.AddAnimation("WalkLeft", 0, 192, 32, 64, 4, 0.2f);
+            _sprite.AddAnimation("IdleDown", 0, 0, TileSize, TileSize*2, 1, 0.2f);
+            _sprite.AddAnimation("WalkDown", 0, 0, TileSize, TileSize * 2, 4, 0.2f);
+            _sprite.AddAnimation("WalkUp", 0, 32, TileSize, TileSize * 2, 4, 0.2f);
+            _sprite.AddAnimation("WalkRight", 0, 64, TileSize, TileSize * 2, 4, 0.2f);
+            _sprite.AddAnimation("WalkLeft", 0, 96, TileSize, TileSize * 2, 4, 0.2f);
             _sprite.SetCurrentAnimation("IdleDown");
             _sprite.IsAnimating = true;
         }

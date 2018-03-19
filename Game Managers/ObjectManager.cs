@@ -1,6 +1,5 @@
 ﻿using RiverHollow.Characters.NPCs;
 using RiverHollow.WorldObjects;
-using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,6 +7,7 @@ using System.Collections.Generic;
 using static RiverHollow.WorldObjects.WorldItem;
 using static RiverHollow.WorldObjects.WorldItem.Machine;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.Game_Managers
 {
     public static class ObjectManager
@@ -106,9 +106,9 @@ namespace RiverHollow.Game_Managers
                     case "Destructible":
                         return new Destructible(id, _stringDataValues, pos);
                     case "Tree":
-                        return new Tree(id, pos, new Rectangle(0, 0, 96, 128), GetTexture(@"Textures\tree"), RHMap.TileSize * 3, RHMap.TileSize * 4, false, true, 1, 10);
+                        return new Tree(id, pos, new Rectangle(0, 0, 96, 128), GetTexture(@"Textures\tree"), TileSize * 3, TileSize * 4, false, true, 1, 10);
                     case "Staircase":
-                        return new Staircase(id, pos, new Rectangle(96, 0, 32, 32), GetTexture(@"Textures\worldObjects"), RHMap.TileSize, RHMap.TileSize);
+                        return new Staircase(id, pos, new Rectangle(96, 0, 16, 16), GetTexture(@"Textures\worldObjects"), TileSize, TileSize);
                     case "Container":
                         return new Container(id, _stringDataValues);
                     case "Processor":

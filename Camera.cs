@@ -1,14 +1,13 @@
 ﻿using RiverHollow.Game_Managers;
-using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow
 {
     public static class Camera
     {
-        private static float Scale = GameManager.Scale;
         public static Matrix _transform;
         public static Viewport _view;
         public static Vector2 _center;
@@ -49,7 +48,7 @@ namespace RiverHollow
                 }
             }
 
-            float BorderOffset = RHMap.TileSize * Scale;
+            float BorderOffset = TileSize * Scale;
             bool xLocked = false;
             bool yLocked = false;
             if (MapManager.CurrentMap.GetMapWidth() < RiverHollow.ScreenWidth)

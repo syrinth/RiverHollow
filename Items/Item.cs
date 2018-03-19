@@ -6,6 +6,7 @@ using System.Threading;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.GUIObjects;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.WorldObjects
 {
     public class Item
@@ -18,8 +19,8 @@ namespace RiverHollow.WorldObjects
         protected int _itemID;
         public int ItemID { get => _itemID; }
 
-        protected double _dWidth = 32;
-        protected double _dHeight = 32;
+        protected double _dWidth = 16;
+        protected double _dHeight = 16;
         protected string _name;
         public string Name { get => _name; }
 
@@ -31,7 +32,7 @@ namespace RiverHollow.WorldObjects
         protected Vector2 _position;
         public virtual Vector2 Position { get => _position; set => _position = value; }
 
-        public virtual Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, 32, 32); }
+        public virtual Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, TileSize, TileSize); }
         public Rectangle SourceRectangle { get => new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, (int)_dWidth, (int)_dHeight); }
 
         protected bool _onTheMap;
@@ -42,8 +43,8 @@ namespace RiverHollow.WorldObjects
 
         protected string _description;
 
-        protected int _columnTextureSize = 32;
-        protected int _rowTextureSize = 32;
+        protected int _columnTextureSize = TileSize;
+        protected int _rowTextureSize = TileSize;
         private Parabola _movement;
         protected bool _doesItStack;
         public bool DoesItStack { get => _doesItStack; }
@@ -73,7 +74,7 @@ namespace RiverHollow.WorldObjects
             _name = stringData[i++];
             _description = stringData[i++];
             string[] texIndices = stringData[i++].Split(' ');
-            _sourcePos = new Vector2(0 + 32 * int.Parse(texIndices[0]), 0 + 32 * int.Parse(texIndices[1]));
+            _sourcePos = new Vector2(0 + TileSize * int.Parse(texIndices[0]), 0 + TileSize * int.Parse(texIndices[1]));
             _sellPrice = int.Parse(stringData[i++]);
 
             _itemID = id;//(ObjectManager.ItemIDs)Enum.Parse(typeof(ObjectManager.ItemIDs), itemValue[i++]);
@@ -153,7 +154,7 @@ namespace RiverHollow.WorldObjects
 
             _position = pos;
             _onTheMap = true;
-            _movement = new Parabola(_position, RandomVelocityVector(), RandNumber(8, 32, 0, 0));
+            _movement = new Parabola(_position, RandomVelocityVector(), RandNumber(8, TileSize, 0, 0));
         }
 
         public bool FinishedMoving()
@@ -325,10 +326,10 @@ namespace RiverHollow.WorldObjects
             _texture = GameContentManager.GetTexture(@"Textures\tools");
 
             _columnTextureSize = 128;
-            _rowTextureSize = 32;
+            _rowTextureSize = TileSize;
 
             _sprite = new AnimatedSprite(_texture);
-            _sprite.AddAnimation("Left", (int)_sourcePos.X + 32, (int)_sourcePos.Y, 32, 32, 2, 0.3f);
+            _sprite.AddAnimation("Left", (int)_sourcePos.X + TileSize, (int)_sourcePos.Y, TileSize, TileSize, 2, 0.3f);
 
             _sprite.CurrentAnimation = "Left";
             _sprite.IsAnimating = true;
@@ -342,7 +343,7 @@ namespace RiverHollow.WorldObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _sprite.Draw(spriteBatch);
+            _sprite.Draw(spriteBatch, 99999);
         }
     }
 

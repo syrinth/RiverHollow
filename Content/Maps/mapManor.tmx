@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.1.3" orientation="orthogonal" renderorder="right-down" width="11" height="11" tilewidth="16" tileheight="16" infinite="0" nextobjectid="5">
+ <tileset firstgid="1" source="tilesetManorGrounds.tsx"/>
+ <tileset firstgid="626" source="tilesetManor.tsx"/>
+ <layer name="Base Layer" width="11" height="11">
+  <data encoding="csv">
+27,27,27,27,27,27,27,27,27,27,27,
+27,27,76,27,27,27,27,27,27,27,27,
+27,27,27,27,27,27,27,27,27,27,27,
+27,27,27,27,27,27,27,27,76,27,27,
+27,27,27,27,27,27,27,27,27,27,27,
+27,27,27,27,76,27,27,27,27,76,27,
+76,27,76,27,27,27,27,27,27,27,27,
+27,27,27,27,27,27,27,27,27,27,76,
+27,27,27,27,27,27,27,27,27,27,27,
+27,27,27,36,36,27,27,36,27,27,27,
+27,27,27,27,27,27,27,27,27,27,27
+</data>
+ </layer>
+ <layer name="Ground Layer" width="11" height="11">
+  <data encoding="csv">
+7,8,8,8,8,8,8,8,8,8,9,
+32,33,33,33,33,33,33,33,33,33,34,
+57,58,58,58,58,58,58,58,58,58,59,
+82,83,83,83,83,83,83,83,83,83,84,
+32,0,0,0,0,0,0,0,0,0,34,
+57,0,0,0,0,626,0,0,0,0,59,
+82,0,0,0,0,0,0,0,0,0,84,
+32,0,0,0,0,0,0,0,0,0,34,
+57,0,0,0,0,0,0,0,0,0,59,
+82,0,0,0,0,0,0,0,0,0,84,
+107,108,108,12,0,0,0,10,108,108,109
+</data>
+ </layer>
+ <layer name="Upper Layer" width="11" height="11">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup name="Travel Layer">
+  <object id="1" name="Entrance" x="82.083" y="145.667" width="11.8333" height="11.3333">
+   <properties>
+    <property name="Entrance" value="mapManorGrounds"/>
+   </properties>
+  </object>
+  <object id="2" name="Exit" x="81.667" y="164.834" width="12.5" height="9">
+   <properties>
+    <property name="Exit" value="mapManorGrounds"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Character Layer">
+  <object id="4" name="PlayerSpawn" x="100" y="85.833" width="8" height="5.33333"/>
+ </objectgroup>
+</map>

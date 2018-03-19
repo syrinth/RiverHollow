@@ -1,72 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="15" height="10" tilewidth="32" tileheight="32" nextobjectid="7">
- <tileset firstgid="1" name="SpriteSheet" tilewidth="32" tileheight="32" tilecount="15" columns="5">
-  <image source="SpriteSheet.png" width="160" height="96"/>
-  <tile id="3">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="7">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="8">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="10">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="13">
-   <properties>
-    <property name="goTo" value="Map2"/>
-   </properties>
-  </tile>
- </tileset>
- <tileset firstgid="16" name="Tileset" tilewidth="32" tileheight="32" tilecount="15" columns="5">
-  <image source="SpriteSheet.png" trans="ffffff" width="160" height="96"/>
-  <tile id="4">
-   <properties>
-    <property name="Sleep" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="8">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
- </tileset>
- <tileset firstgid="31" source="Spring.tsx"/>
+<map version="1.0" tiledversion="1.1.3" orientation="orthogonal" renderorder="right-down" width="15" height="10" tilewidth="16" tileheight="16" infinite="0" nextobjectid="7">
+ <tileset firstgid="1" source="tilesetManorGrounds.tsx"/>
  <layer name="BaseLayer" width="15" height="10">
   <data encoding="csv">
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,11,11,11,11,11,11,11,11,11,11,11,11,11,0,
-0,11,2,3,3,3,3,3,3,3,3,3,4,11,0,
-0,11,2,3,3,3,3,3,3,3,3,3,4,11,0,
-0,11,2,3,3,3,3,3,3,3,3,3,4,11,0,
-0,11,2,3,3,3,3,3,3,3,3,3,4,11,0,
-0,11,2,3,3,3,3,3,3,3,3,3,4,11,0,
-0,11,2,3,3,3,3,3,3,3,3,3,4,11,0,
-0,11,11,11,11,11,3,7,3,11,11,11,11,11,0,
-0,0,0,0,0,0,39,39,39,0,0,0,0,0,0
+27,27,27,27,36,27,27,27,27,27,27,27,27,27,27,
+27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,
+27,27,76,27,27,27,27,27,27,76,27,27,76,27,27,
+27,76,27,27,27,76,27,27,27,27,27,27,27,27,27,
+27,27,27,27,27,27,27,27,36,27,27,27,27,27,27,
+27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,
+36,27,27,27,27,27,27,27,36,27,27,27,27,76,27,
+27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,
+27,27,27,27,27,27,27,36,27,27,27,27,27,27,27,
+27,27,27,27,27,27,27,27,36,27,27,27,36,27,27
+</data>
+ </layer>
+ <layer name="Ground Layer" width="15" height="10">
+  <data encoding="csv">
+7,8,8,8,8,8,8,8,8,8,8,8,8,8,9,
+32,33,33,33,33,33,33,33,33,33,33,33,33,33,34,
+57,58,58,58,58,58,58,58,58,58,58,58,58,58,59,
+82,83,83,83,83,83,83,83,83,83,83,83,83,83,84,
+32,0,0,0,0,0,0,0,0,0,0,0,0,0,34,
+57,0,0,0,0,0,0,0,0,0,0,0,0,0,59,
+32,0,0,0,0,0,0,0,0,0,0,0,0,0,34,
+57,0,0,0,0,0,0,0,0,0,0,0,0,0,59,
+82,0,0,0,0,0,0,0,0,0,0,0,0,0,84,
+107,108,108,108,108,108,12,0,0,0,10,108,108,108,109
 </data>
  </layer>
  <objectgroup name="Character Layer">
-  <object id="4" name="NPC3" x="229" y="77" width="12" height="8"/>
-  <object id="5" name="Wait" x="331" y="141.667" width="4" height="4"/>
+  <object id="4" name="NPC3" x="50" y="67.8333" width="9" height="8"/>
+  <object id="5" name="Wait" x="180" y="102.167" width="4" height="4"/>
  </objectgroup>
  <objectgroup name="Travel Layer">
-  <object id="1" x="230.667" y="264.833" width="13.6667" height="14.8333">
+  <object id="1" x="131.167" y="131.333" width="8.6667" height="8.3333">
    <properties>
     <property name="Entrance" value="mapRiverHollowTown"/>
    </properties>
   </object>
-  <object id="2" x="206.333" y="292.667" width="66.3333" height="21">
+  <object id="2" x="118.333" y="147.667" width="32.3333" height="12">
    <properties>
     <property name="Exit" value="mapRiverHollowTown"/>
    </properties>

@@ -135,7 +135,7 @@ namespace RiverHollow.WorldObjects
             int y = int.Parse(texIndices[1]);
             _width = int.Parse(texIndices[2]);
             _height = int.Parse(texIndices[3]);
-            _rSource = new Rectangle(0 + 32 * x, 0 + 32 * y, _width, _height);
+            _rSource = new Rectangle(0 + TileSize * x, 0 + TileSize * y, _width, _height);
             _choppable = bool.Parse(stringData[i++]);
             _breakable = bool.Parse(stringData[i++]);
             _hp = int.Parse(stringData[i++]);
@@ -167,7 +167,7 @@ namespace RiverHollow.WorldObjects
 
     public class Tree : Destructible
     {
-        public override Rectangle CollisionBox { get => new Rectangle((int)MapPosition.X + RHMap.TileSize, (int)MapPosition.Y + RHMap.TileSize * 3, RHMap.TileSize, RHMap.TileSize); }
+        public override Rectangle CollisionBox { get => new Rectangle((int)MapPosition.X + TileSize, (int)MapPosition.Y + TileSize * 3, TileSize, TileSize); }
 
         public Tree(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height, bool breakIt, bool chopIt, int lvl, int hp) : base(id, pos, sourceRectangle, tex, width, height, breakIt, chopIt, lvl, hp)
         {
@@ -201,8 +201,8 @@ namespace RiverHollow.WorldObjects
             Type = ObjectType.Floor;
             _texture = GameContentManager.GetTexture(@"Textures\texFlooring");
 
-            _width = 32;
-            _height = 32;
+            _width = TileSize; ;
+            _height = TileSize;
         }
 
         public Floor(int id)
@@ -238,7 +238,7 @@ namespace RiverHollow.WorldObjects
 
             public void Watered(bool value) {
                 _bWatered = value;
-                _rSource = _bWatered ? new Rectangle(32, 0, 32, 32): new Rectangle(0, 0, 32, 32);
+                _rSource = _bWatered ? new Rectangle(TileSize, 0, TileSize, TileSize): new Rectangle(0, 0, TileSize, TileSize);
             }
             public bool Watered() { return _bWatered; }
             public Earth()
@@ -272,7 +272,7 @@ namespace RiverHollow.WorldObjects
                 _vMapPosition = value;
                 if (_sprite != null)
                 {
-                    _sprite.Position = new Vector2(_sprite.Width > 32 ? value.X - (_sprite.Width - 32) / 2 : value.X, (_sprite.Height > 32) ? value.Y - (_sprite.Height - 32) : value.Y);
+                    _sprite.Position = new Vector2(_sprite.Width > TileSize ? value.X - (_sprite.Width - TileSize) / 2 : value.X, (_sprite.Height > TileSize) ? value.Y - (_sprite.Height - TileSize) : value.Y);
                 }
             }
         }
@@ -280,7 +280,7 @@ namespace RiverHollow.WorldObjects
         protected void ReadSourcePos(string str)
         {
             string[] strPos = str.Split(' ');
-            _vSourcePos = new Vector2(0 + 32 * int.Parse(strPos[0]), 0 + 32 * int.Parse(strPos[1]));
+            _vSourcePos = new Vector2(0 + TileSize * int.Parse(strPos[0]), 0 + TileSize * int.Parse(strPos[1]));
         }
         public void SetMapName(string val) { _sMapName = val; }
 
@@ -292,14 +292,14 @@ namespace RiverHollow.WorldObjects
 
             public Machine()
             {
-                _width = 32;
-                _height = 64;
+                _width = TileSize;
+                _height = TileSize*2;
             }
             public void LoadContent()
             {
                 _sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\texMachines"));
-                _sprite.AddAnimation("Idle", (int)_vSourcePos.X, (int)_vSourcePos.Y, 32, 64, 1, 0.3f);
-                _sprite.AddAnimation("Working", (int)_vSourcePos.X + 32, (int)_vSourcePos.Y, 32, 64, 2, 0.3f);
+                _sprite.AddAnimation("Idle", (int)_vSourcePos.X, (int)_vSourcePos.Y, TileSize, TileSize * 2, 1, 0.3f);
+                _sprite.AddAnimation("Working", (int)_vSourcePos.X + TileSize, (int)_vSourcePos.Y, TileSize, TileSize * 2, 2, 0.3f);
                 _sprite.SetCurrentAnimation("Idle");
                 _sprite.IsAnimating = true;
             }
@@ -309,7 +309,7 @@ namespace RiverHollow.WorldObjects
                 _sprite.Draw(spriteBatch, true);
                 if (_heldItem != null)
                 {
-                    _heldItem.Draw(spriteBatch, new Rectangle(HeldItemPos.ToPoint(), new Point(32, 32)), true);
+                    _heldItem.Draw(spriteBatch, new Rectangle(HeldItemPos.ToPoint(), new Point(TileSize, TileSize)), true);
                 }
             }
 
@@ -572,8 +572,8 @@ namespace RiverHollow.WorldObjects
                 _id = id;
                 Type = ObjectType.Container;
 
-                _width = 32;
-                _height = 32;
+                _width = TileSize; ;
+                _height = TileSize; ;
 
                 ReadSourcePos(stringData[1]);
 
@@ -646,8 +646,8 @@ namespace RiverHollow.WorldObjects
                 _blocking = false;
                 _diTransitionTimes = new Dictionary<int, int>();
 
-                _width = 32;
-                _height = 32;
+                _width = TileSize;
+                _height = TileSize;
 
                 int i = 1;
                 ReadSourcePos(stringData[i++]);

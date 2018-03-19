@@ -7,6 +7,7 @@ using MonoGame.Extended.ViewportAdapters;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow
 {
     /// <summary>
@@ -14,7 +15,6 @@ namespace RiverHollow
     /// </summary>
     public class RiverHollow : Game
     {
-        private static float Scale = GameManager.Scale;
         private static bool _exit = false;
 
         public GraphicsDeviceManager _graphicsDeviceManager;

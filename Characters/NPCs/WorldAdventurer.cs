@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using static RiverHollow.Game_Managers.ObjectManager;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
+using RiverHollow.Tile_Engine;
 
 namespace RiverHollow.Characters.NPCs
 {
@@ -59,10 +60,9 @@ namespace RiverHollow.Characters.NPCs
         public  new void LoadContent(string texture)
         {
             _sprite = new AnimatedSprite(GameContentManager.GetTexture(texture));
-            _sprite.AddAnimation("Idle", 0, 0, 16, 32, 1, 0.3f);
-            _sprite.AddAnimation("WalkDown", 16, 0, 16, 32, 2, 0.3f);
+            _sprite.AddAnimation("Idle", 0, 0, TileSize, TileSize * 2, 1, 0.3f);
+            _sprite.AddAnimation("WalkDown", TileSize, 0, TileSize, TileSize * 2, 2, 0.3f);
             _sprite.SetCurrentAnimation("Idle");
-            _sprite.SetScale(2);
         }
 
         protected int ImportBasics(string[] stringData, int id)

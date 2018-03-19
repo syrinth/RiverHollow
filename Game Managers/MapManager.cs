@@ -9,11 +9,12 @@ using System.Collections.Generic;
 using RiverHollow.Misc;
 using System.IO;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.Game_Managers
 {
     public static class MapManager
     {
-        public const string HomeMap = "mapNearWilds";
+        public const string HomeMap = "mapManorGrounds";
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
 
@@ -157,19 +158,19 @@ namespace RiverHollow.Game_Managers
             //LoadMap1
             if (!loaded)
             {
-                for (int i = 0; i < 99; i++)
-                {
-                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, new Vector2(r.Next(1, mapWidth - 1) * RHMap.TileSize, r.Next(1, mapHeight - 1) * RHMap.TileSize)), true);
-                }
-                for (int i = 0; i < 99; i++)
-                {
-                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, new Vector2(r.Next(1, mapWidth - 1) * RHMap.TileSize, r.Next(1, mapHeight - 1) * RHMap.TileSize)), true);
-                }
+                //for (int i = 0; i < 99; i++)
+                //{
+                //    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
+                //}
+                //for (int i = 0; i < 99; i++)
+                //{
+                //    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
+                //}
             }
 
-            Mob mob = CharacterManager.GetMobByIndex(2, new Vector2(110, 178));
-            mob.CurrentMapName = "mapTent";
-            _tileMaps[@"mapTent"].AddMob(mob);
+            Mob mob = CharacterManager.GetMobByIndex(1, new Vector2(647, 539));
+            mob.CurrentMapName = "mapManorGrounds";
+            _tileMaps[@"mapManorGrounds"].AddMob(mob);
 
             MerchantChest m = new MerchantChest();
             PlayerManager._merchantChest = m;
@@ -193,7 +194,7 @@ namespace RiverHollow.Game_Managers
                 {
                     Vector2 mousePosition = GraphicCursor.GetTranslatedPosition();
                     Texture2D drawIt = GraphicCursor.HeldBuilding.Texture;
-                    Rectangle drawRectangle = new Rectangle(((int)(mousePosition.X / 32)) * 32, ((int)(mousePosition.Y / 32)) * 32, drawIt.Width, drawIt.Height);
+                    Rectangle drawRectangle = new Rectangle(((int)(mousePosition.X / TileSize)) * TileSize, ((int)(mousePosition.Y / TileSize)) * TileSize, drawIt.Width, drawIt.Height);
                     Rectangle source = new Rectangle(0, 0, drawIt.Width, drawIt.Height);
 
                     GraphicCursor.HeldBuilding.SetCoordinates(new Vector2(drawRectangle.X, drawRectangle.Y));

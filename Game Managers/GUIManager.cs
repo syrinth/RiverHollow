@@ -1,11 +1,10 @@
-﻿using RiverHollow.Characters.NPCs;
-using RiverHollow.Game_Managers.GUIComponents.Screens;
-using RiverHollow.Game_Managers.GUIObjects;
+﻿using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIObjects;
 using RiverHollow.WorldObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.Game_Managers
 {
     public static class GUIManager
@@ -19,7 +18,7 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadContent()
         {
-            _fadeImg = new GUIImage(Vector2.Zero, new Rectangle(160, 128, 32, 32), RiverHollow.ScreenWidth*2, RiverHollow.ScreenHeight*2, @"Textures\Dialog");
+            _fadeImg = new GUIImage(Vector2.Zero, new Rectangle(160, 128, TileSize, TileSize), RiverHollow.ScreenWidth*2, RiverHollow.ScreenHeight*2, @"Textures\Dialog");
             GraphicCursor.LoadContent();
         }
 

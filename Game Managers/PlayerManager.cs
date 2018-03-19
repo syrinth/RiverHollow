@@ -11,6 +11,7 @@ using RiverHollow.Misc;
 using RiverHollow.GUIObjects;
 using static RiverHollow.WorldObjects.WorldItem;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.Game_Managers
 {
     public static class PlayerManager
@@ -262,7 +263,10 @@ namespace RiverHollow.Game_Managers
         {
             bool rv = false;
 
-            if (PlayerManager.PlayerInRange(mouseLocation))
+            Point point = Utilities.Normalize(mouseLocation);
+            RHTile t = MapManager.RetrieveTile(point);
+            Vector2 center = t.Center;
+            if (PlayerManager.PlayerInRange(center.ToPoint()))
             {
                 _targetTile = MapManager.RetrieveTile(mouseLocation);
                 if (GraphicCursor.HeldItem != null && GraphicCursor.HeldItem.IsStaticItem())
@@ -366,7 +370,7 @@ namespace RiverHollow.Game_Managers
 
         public static bool PlayerInRange(Point centre)
         {
-            return PlayerInRange(centre, RHMap.TileSize + (int)(RHMap.TileSize * 0.3));
+            return PlayerInRange(centre, TileSize);
         }
         public static bool PlayerInRange(Vector2 centre, int range)
         {

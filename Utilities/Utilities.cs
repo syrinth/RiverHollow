@@ -3,6 +3,7 @@ using RiverHollow.Tile_Engine;
 using System;
 using System.Threading;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.Misc
 {
     public class Utilities
@@ -32,8 +33,17 @@ namespace RiverHollow.Misc
         public static Vector2 Normalize(Vector2 p)
         {
             Vector2 newVec = Vector2.Zero;
-            newVec.X = ((int)(p.X / RHMap.TileSize)) * RHMap.TileSize;
-            newVec.Y = ((int)(p.Y / RHMap.TileSize)) * RHMap.TileSize;
+            newVec.X = ((int)(p.X / TileSize)) * TileSize;
+            newVec.Y = ((int)(p.Y / TileSize)) * TileSize;
+
+            return newVec;
+        }
+
+        public static Point Normalize(Point p)
+        {
+            Point newVec = Point.Zero;
+            newVec.X = ((int)(p.X / TileSize)) * TileSize;
+            newVec.Y = ((int)(p.Y / TileSize)) * TileSize;
 
             return newVec;
         }

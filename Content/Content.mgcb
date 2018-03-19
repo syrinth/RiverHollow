@@ -64,18 +64,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Dialog.png
 
-#begin Maps/SpriteSheet.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Maps/SpriteSheet.png
-
 #begin Textures/portraits.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -324,42 +312,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/NPC1.png
 
-#begin Maps/Spring.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Maps/Spring.png
-
-#begin Maps/PlayerHouse.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Maps/PlayerHouse.png
-
-#begin Maps/Houses.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Maps/Houses.png
-
 #begin Data/Dialogue/NPC5.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -445,11 +397,6 @@
 /processor:TiledMapProcessor
 /build:Maps/mapArcaneTower.tmx
 
-#begin Maps/mapCrossroads.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapCrossroads.tmx
-
 #begin Maps/mapGuildhouse.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -474,16 +421,6 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/mapRiverHollowTown.tmx
-
-#begin Maps/mapTent.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapTent.tmx
-
-#begin Maps/mapNearWilds.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapNearWilds.tmx
 
 #begin Maps/Dungeons/mapRoom1.tmx
 /importer:TiledMapImporter
@@ -584,4 +521,38 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/texFlooring.png
+
+#begin Maps/tilesetManorGrounds.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Maps/tilesetManorGrounds.png
+
+#begin Maps/tilesetManor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Maps/tilesetManor.png
+
+#begin Maps/mapManor.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapManor.tmx
+
+#begin Maps/mapManorGrounds.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapManorGrounds.tmx
 

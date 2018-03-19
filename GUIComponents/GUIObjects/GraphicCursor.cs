@@ -4,11 +4,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.GUIObjects
 {
     public static class GraphicCursor
     {
-        private static float Scale = GameManager.Scale;
         public enum CursorType { Normal, Talk, Gift};
         public static CursorType _currentType;
         public static MouseState LastMouseState = new MouseState();

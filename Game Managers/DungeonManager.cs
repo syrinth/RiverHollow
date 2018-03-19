@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using RiverHollow.Misc;
 using static RiverHollow.WorldObjects.WorldItem;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.Game_Managers
 {
     static class DungeonManager
@@ -104,24 +105,24 @@ namespace RiverHollow.Game_Managers
             int mapHeight = m.MapHeightTiles;
             for (int i = 0; i < 5; i++)
             {
-                Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize);
+                Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * TileSize, r.Next(1, mapHeight-1) * TileSize);
                 m.PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, vect), true);
             }
             for (int i = 0; i < 30; i++)
             {
-                Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize);
+                Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * TileSize, r.Next(1, mapHeight-1) * TileSize);
                 m.PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, vect), true);
             }
             for (int i = 0; i < 5; i++)
             {
-                Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-2) * RHMap.TileSize);
+                Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * TileSize, r.Next(1, mapHeight-2) * TileSize);
                 Mob mob = CharacterManager.GetMobByIndex(1, vect);
                 mob.CurrentMapName = m.Name.Replace(@"Maps\", "");
                 m.AddMob(mob);
             }
             for (int i = 0; i < 5; i++)
             {
-                Vector2 vect = new Vector2(r.Next(1, mapWidth - 1) * RHMap.TileSize, r.Next(1, mapHeight - 2) * RHMap.TileSize);
+                Vector2 vect = new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 2) * TileSize);
                 Mob mob = CharacterManager.GetMobByIndex(2, vect);
                 mob.CurrentMapName = m.Name.Replace(@"Maps\", "");
                 m.AddMob(mob);
@@ -129,7 +130,7 @@ namespace RiverHollow.Game_Managers
 
             if (lastRoom && _condition == EndCondition.TreasureChest)
             {
-                Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * RHMap.TileSize, r.Next(1, mapHeight-1) * RHMap.TileSize);
+                Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * TileSize, r.Next(1, mapHeight-1) * TileSize);
                 Container c = (Container)ObjectManager.GetWorldObject(190);
                 c.MapPosition = vect;
                 m.PlacePlayerObject(c);

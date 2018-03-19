@@ -7,10 +7,10 @@ using System;
 using System.Collections.Generic;
 using RiverHollow.Misc;
 using RiverHollow.Buildings;
-using static RiverHollow.Game_Managers.PlayerManager;
-using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.WorldObjects.WorldItem;
 
+using static RiverHollow.WorldObjects.WorldItem;
+using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Game_Managers.PlayerManager;
 namespace RiverHollow
 {
     public class WorkerBuilding : Building
@@ -111,11 +111,11 @@ namespace RiverHollow
         {
             _vMapPosition = position;
 
-            int startX = (int)_vMapPosition.X + (_entranceX * Size);
-            int startY = (int)_vMapPosition.Y + (_entranceY * Size);
+            int startX = (int)_vMapPosition.X + (_entranceX * TileSize);
+            int startY = (int)_vMapPosition.Y + (_entranceY * TileSize);
 
-            _boxToEnter = new Rectangle(startX, startY, Size, Size);
-            _leaveLocation = new Rectangle(_boxToEnter.X, _boxToEnter.Y + Size, Size, Size);
+            _boxToEnter = new Rectangle(startX, startY, TileSize, TileSize);
+            _leaveLocation = new Rectangle(_boxToEnter.X, _boxToEnter.Y + TileSize, TileSize, TileSize);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

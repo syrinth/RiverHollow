@@ -259,12 +259,20 @@ namespace RiverHollow.SpriteAnimations
             {
                 if (useLayerDepth)
                 {
-                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White, 0, Vector2.Zero, SpriteEffects.None, Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100));
+                    Draw(spriteBatch, Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100));
                 }
                 else
                 {
                     spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White);
                 }
+            }
+        }
+
+        public void Draw(SpriteBatch spriteBatch, float layerDepth)
+        {
+            if (_animating)
+            {
+                spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White, 0, Vector2.Zero, SpriteEffects.None, layerDepth);
             }
         }
 

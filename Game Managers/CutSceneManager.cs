@@ -6,6 +6,7 @@ using RiverHollow.Tile_Engine;
 using System;
 using System.Collections.Generic;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.Game_Managers
 {
     static class CutsceneManager
@@ -170,16 +171,16 @@ namespace RiverHollow.Game_Managers
                 switch (dir)
                 {
                     case 0:
-                        vec = new Vector2(0, -int.Parse(stringTest[2])* RHMap.TileSize);
+                        vec = new Vector2(0, -int.Parse(stringTest[2])* TileSize);
                         break;
                     case 1:
-                        vec = new Vector2(0, int.Parse(stringTest[2]) * RHMap.TileSize);
+                        vec = new Vector2(0, int.Parse(stringTest[2]) * TileSize);
                         break;
                     case 2:
-                        vec = new Vector2(int.Parse(stringTest[2]) * RHMap.TileSize, 0);
+                        vec = new Vector2(int.Parse(stringTest[2]) * TileSize, 0);
                         break;
                     case 3:
-                        vec = new Vector2(-int.Parse(stringTest[2]) * RHMap.TileSize, 0);
+                        vec = new Vector2(-int.Parse(stringTest[2]) * TileSize, 0);
                         break;
 
                 }

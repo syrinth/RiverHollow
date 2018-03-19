@@ -1,22 +1,20 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 using RiverHollow.WorldObjects;
-using RiverHollow.Tile_Engine;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.Buildings
 {
     public class Building : WorldObject
     {
-        protected static int Size = RHMap.TileSize;
-
         protected int _entranceX;
         protected int _entranceY;
         protected int _baseStartX;
         protected int _baseStartY;
         protected int _baseWidth; //In Tiles
-        public int BaseWidth { get => _baseWidth * Size; } //In Pixels
+        public int BaseWidth { get => _baseWidth * TileSize; } //In Pixels
         protected int _baseHeight; //In Tiles
-        public int BaseHeight { get => _baseHeight * Size; } //In Pixels
+        public int BaseHeight { get => _baseHeight * TileSize; } //In Pixels
         public string _name;
         public string Name { get => _name; }
         public string MapName { get => "map"+_name.Replace(" ", ""); }
@@ -60,10 +58,10 @@ namespace RiverHollow.Buildings
 
         public Rectangle GenerateCollisionBox()
         {
-            int startX = (int)_vMapPosition.X + (_baseStartX * Size);
-            int startY = (int)_vMapPosition.Y + (_baseStartY * Size);
+            int startX = (int)_vMapPosition.X + (_baseStartX * TileSize);
+            int startY = (int)_vMapPosition.Y + (_baseStartY * TileSize);
 
-            return new Rectangle(startX, startY, _baseWidth * Size, _baseHeight * Size);
+            return new Rectangle(startX, startY, _baseWidth * TileSize, _baseHeight * TileSize);
         }
     }
 }

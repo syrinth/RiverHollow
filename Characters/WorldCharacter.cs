@@ -1,10 +1,10 @@
-﻿using RiverHollow.Tile_Engine;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using System;
 using RiverHollow.SpriteAnimations;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.Characters
 {
     public class WorldCharacter : Character
@@ -20,11 +20,10 @@ namespace RiverHollow.Characters
         public Point CharCenter => GetRectangle().Center;
         public override Vector2 Position
         {
-            get { return new Vector2(_sprite.Position.X, _sprite.Position.Y + _sprite.Height - RHMap.TileSize); } //MAR this is fucked up
-            set { _sprite.Position = new Vector2(value.X, value.Y - _sprite.Height + RHMap.TileSize); }
+            get { return new Vector2(_sprite.Position.X, _sprite.Position.Y + _sprite.Height - TileSize); } //MAR this is fucked up
+            set { _sprite.Position = new Vector2(value.X, value.Y - _sprite.Height + TileSize); }
         }
 
-        public Rectangle CollisionBox { get => new Rectangle((int)Position.X + (Width/8), (int)Position.Y, Width/2, RHMap.TileSize); }
 
 
         public int Speed = 3;
@@ -33,21 +32,21 @@ namespace RiverHollow.Characters
         public WorldCharacter() : base()
         {
             _characterType = CharacterEnum.WorldCharacter;
-            _width = RHMap.TileSize;
-            _height = RHMap.TileSize;
+            _width = TileSize;
+            _height = TileSize;
         }
 
         public void LoadContent(string textureToLoad)
         {
             _sprite = new AnimatedSprite(GameContentManager.GetTexture(textureToLoad));
-            _sprite.AddAnimation("WalkDown", 32, 32, 2, 0.2f, 0, 0);
-            _sprite.AddAnimation("IdleDown", 32, 32, 1, 0.2f, 0, 0);
-            _sprite.AddAnimation("WalkUp", 32, 32, 2, 0.2f, 0, 32);
-            _sprite.AddAnimation("IdleUp", 32, 32, 1, 0.2f, 0, 32);
-            _sprite.AddAnimation("WalkRight", 32, 32, 2, 0.2f, 64, 0);
-            _sprite.AddAnimation("IdleRight", 32, 32, 1, 0.2f, 64, 0);
-            _sprite.AddAnimation("WalkLeft", 32, 32, 2, 0.2f, 64, 32);
-            _sprite.AddAnimation("IdleLeft", 32, 32, 1, 0.2f, 64, 32);
+            _sprite.AddAnimation("WalkDown", TileSize, TileSize, 2, 0.2f, 0, 0);
+            _sprite.AddAnimation("IdleDown", TileSize, TileSize, 1, 0.2f, 0, 0);
+            _sprite.AddAnimation("WalkUp", TileSize, TileSize, 2, 0.2f, 0, TileSize);
+            _sprite.AddAnimation("IdleUp", TileSize, TileSize, 1, 0.2f, 0, TileSize);
+            _sprite.AddAnimation("WalkRight", TileSize, TileSize, 2, 0.2f, TileSize*2, 0);
+            _sprite.AddAnimation("IdleRight", TileSize, TileSize, 1, 0.2f, TileSize * 2, 0);
+            _sprite.AddAnimation("WalkLeft", TileSize, TileSize, 2, 0.2f, TileSize * 2, TileSize);
+            _sprite.AddAnimation("IdleLeft", TileSize, TileSize, 1, 0.2f, TileSize * 2, TileSize);
             _sprite.SetCurrentAnimation("WalkUp");
 
             _width = _sprite.Width;
@@ -71,27 +70,33 @@ namespace RiverHollow.Characters
         {
             string animation = string.Empty;
 
-            if (direction.X > 0)
+            if (Math.Abs((int)direction.X) > Math.Abs((int)direction.Y))
             {
-                Facing = DirectionEnum.Right;
-                animation = "WalkRight";
+                if (direction.X > 0)
+                {
+                    Facing = DirectionEnum.Right;
+                    animation = "WalkRight";
+                }
+                else if (direction.X < 0)
+                {
+                    Facing = DirectionEnum.Left;
+                    animation = "WalkLeft";
+                }
             }
-            else if (direction.X < 0)
+            else
             {
-                Facing = DirectionEnum.Left;
-                animation = "WalkLeft";
+                if (direction.Y > 0)
+                {
+                    Facing = DirectionEnum.Down;
+                    animation = "WalkDown";
+                }
+                else if (direction.Y < 0)
+                {
+                    Facing = DirectionEnum.Up;
+                    animation = "WalkUp";
+                }
             }
 
-            if (direction.Y > 0)
-            {
-                Facing = DirectionEnum.Down;
-                animation = "WalkDown";
-            }
-            else if (direction.Y < 0)
-            {
-                Facing = DirectionEnum.Up;
-                animation = "WalkUp";
-            }
             if (direction.Length() == 0)
             {
                 switch (Facing)
