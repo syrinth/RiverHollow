@@ -26,13 +26,15 @@ namespace RiverHollow
         
         public RiverHollow()
         {
-            _graphicsDeviceManager = new GraphicsDeviceManager(this);
-            _graphicsDeviceManager.IsFullScreen = true;
-            Content.RootDirectory = "Content";
+            _graphicsDeviceManager = new GraphicsDeviceManager(this)
+            {
+                IsFullScreen = true,
+                HardwareModeSwitch = false,
+                PreferredBackBufferWidth = ScreenWidth,
+                PreferredBackBufferHeight = ScreenHeight
+            };
 
-            _graphicsDeviceManager.HardwareModeSwitch = false;
-            _graphicsDeviceManager.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            _graphicsDeviceManager.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            Content.RootDirectory = "Content";
         }
 
         protected override void Initialize()
