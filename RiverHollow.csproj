@@ -131,17 +131,17 @@
     <Compile Include="Utilities\Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Extended, Version=0.6.568.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Extended.0.6.568\lib\portable-net45+win8+wpa81\MonoGame.Extended.dll</HintPath>
+    <Reference Include="MonoGame.Extended, Version=1.0.617.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Extended.1.0.617\lib\portable-net45+win8+wpa81\MonoGame.Extended.dll</HintPath>
     </Reference>
     <Reference Include="MonoGame.Extended.Content.Pipeline">
       <HintPath>..\packages\MonoGame.Extended.Content.Pipeline.0.6.568\tools\MonoGame.Extended.Content.Pipeline.dll</HintPath>
     </Reference>
-    <Reference Include="MonoGame.Extended.Graphics, Version=0.6.568.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Extended.Graphics.0.6.568\lib\portable-net45+win8+wpa81\MonoGame.Extended.Graphics.dll</HintPath>
+    <Reference Include="MonoGame.Extended.Graphics, Version=1.0.617.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Extended.Graphics.1.0.617\lib\portable-net45+win8+wpa81\MonoGame.Extended.Graphics.dll</HintPath>
     </Reference>
-    <Reference Include="MonoGame.Extended.Tiled, Version=0.6.568.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Extended.Tiled.0.6.568\lib\portable-net45+win8+wpa81\MonoGame.Extended.Tiled.dll</HintPath>
+    <Reference Include="MonoGame.Extended.Tiled, Version=1.0.617.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Extended.Tiled.1.0.617\lib\portable-net45+win8+wpa81\MonoGame.Extended.Tiled.dll</HintPath>
     </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>

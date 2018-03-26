@@ -73,5 +73,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetManor.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapManor.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapManorGrounds.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetHouses.png</File>
   </SourceFiles>
 </SourceFileCollection>

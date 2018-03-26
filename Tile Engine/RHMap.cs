@@ -19,6 +19,7 @@ using static RiverHollow.WorldObjects.WorldItem.Machine;
 using static RiverHollow.WorldObjects.WorldItem;
 using RiverHollow.Game_Managers.GUIObjects;
 using static RiverHollow.WorldObjects.Floor;
+using MonoGame.Extended.Tiled.Graphics;
 
 namespace RiverHollow.Tile_Engine
 {
@@ -296,7 +297,12 @@ namespace RiverHollow.Tile_Engine
         {
             SetLayerVisibility(false);
 
+            //_renderer.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+            //_renderer.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+            //_renderer.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
             _renderer.Draw(_map, Camera._transform);
+
+
             foreach(WorldCharacter c in _liCharacters)
             {
                 c.Draw(spriteBatch, true);

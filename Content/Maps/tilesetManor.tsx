@@ -3,7 +3,6 @@
  <image source="tilesetManor.png" trans="ffffff" width="160" height="160"/>
  <tile id="0">
   <properties>
-   <property name="Impassable" type="bool" value="true"/>
    <property name="Journal" type="bool" value="true"/>
   </properties>
  </tile>
@@ -35,6 +34,12 @@
  <tile id="7">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="10">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+   <property name="Journal" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="11">

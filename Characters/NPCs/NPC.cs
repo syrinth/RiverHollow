@@ -388,7 +388,7 @@ namespace RiverHollow.Characters
                         }
 
                         _collection[item.ItemID] = true;
-                        MapManager.Maps["HouseNPC" + _index].AddCollectionItem(item.ItemID, _index, index);
+                        MapManager.Maps["mapHouseNPC" + _index].AddCollectionItem(item.ItemID, _index, index);
                     }
                     else
                     {

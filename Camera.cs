@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using static RiverHollow.Game_Managers.GameManager;
+
 namespace RiverHollow
 {
     public static class Camera
@@ -16,7 +17,8 @@ namespace RiverHollow
 
         public static void SetViewport(Viewport view)
         {
-            _view = view;
+            //MAR
+            //_view = view;
         }
 
         public static void Update(GameTime gametime)

@@ -15,7 +15,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class GameManager
     {
-        public static float Scale = 16f;
+        public static float Scale = 4f;
         public static int TileSize = 16;
         public static Dictionary<string, Upgrade> DiUpgrades;
 
