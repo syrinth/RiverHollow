@@ -253,26 +253,26 @@ namespace RiverHollow.SpriteAnimations
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, bool useLayerDepth = true)
+        public void Draw(SpriteBatch spriteBatch, bool useLayerDepth = true, float visibility = 1.0f)
         {
             if (_animating)
             {
                 if (useLayerDepth)
                 {
-                    Draw(spriteBatch, Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100));
+                    Draw(spriteBatch, Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100), visibility);
                 }
                 else
                 {
-                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White);
+                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White * visibility);
                 }
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, float layerDepth)
+        public void Draw(SpriteBatch spriteBatch, float layerDepth, float visibility = 1.0f)
         {
             if (_animating)
             {
-                spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White, 0, Vector2.Zero, SpriteEffects.None, layerDepth);
+                spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White*visibility, 0, Vector2.Zero, SpriteEffects.None, layerDepth);
             }
         }
 

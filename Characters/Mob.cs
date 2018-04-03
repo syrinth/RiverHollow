@@ -104,7 +104,7 @@ namespace RiverHollow
                 {
                     CombatManager.NewBattle(this);
                 }
-                IdleMovement(theGameTime);
+                //IdleMovement(theGameTime);
             }
         }
 

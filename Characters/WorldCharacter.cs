@@ -24,10 +24,10 @@ namespace RiverHollow.Characters
             set { _sprite.Position = new Vector2(value.X, value.Y - _sprite.Height + TileSize); }
         }
 
-        public Rectangle CollisionBox { get => new Rectangle((int)Position.X + (Width/8), (int)Position.Y, Width/2, TileSize); }
+        public Rectangle CollisionBox { get => new Rectangle((int)Position.X + (Width/4), (int)Position.Y, Width/2, TileSize); }
 
 
-        public int Speed = 3;
+        public int Speed = 2;
         #endregion
 
         public WorldCharacter() : base()
@@ -37,7 +37,7 @@ namespace RiverHollow.Characters
             _height = TileSize;
         }
 
-        public void LoadContent(string textureToLoad)
+        public virtual void LoadContent(string textureToLoad)
         {
             _sprite = new AnimatedSprite(GameContentManager.GetTexture(textureToLoad));
             _sprite.AddAnimation("WalkDown", TileSize, TileSize, 2, 0.2f, 0, 0);

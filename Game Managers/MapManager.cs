@@ -10,6 +10,8 @@ using RiverHollow.Misc;
 using System.IO;
 
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.Characters.NPCs;
+
 namespace RiverHollow.Game_Managers
 {
     public static class MapManager
@@ -172,6 +174,11 @@ namespace RiverHollow.Game_Managers
             mob.CurrentMapName = "mapManorGrounds";
             _tileMaps[@"mapManorGrounds"].AddMob(mob);
 
+            Spirit s = new Spirit();
+            s.Position = new Vector2(360, 380);
+            s.CurrentMapName = "mapForest";
+            _tileMaps[@"mapForest"].AddCharacter(s);
+
             MerchantChest m = new MerchantChest();
             PlayerManager._merchantChest = m;
         }
@@ -231,6 +238,10 @@ namespace RiverHollow.Game_Managers
             rv = _currentMap.ProcessHover(mouseLocation);
 
             return rv;
+        }
+        public static RHTile RetrieveTile(int x, int y)
+        {
+            return _currentMap.RetrieveTile(x, y);
         }
         public static RHTile RetrieveTile(Point mouseLocation)
         {

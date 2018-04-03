@@ -3,7 +3,6 @@ using RiverHollow.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.ViewportAdapters;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 
@@ -21,8 +20,6 @@ namespace RiverHollow
         public SpriteBatch spriteBatch;
         public static int ScreenWidth = 1920;
         public static int ScreenHeight = 1080;
-
-        public ViewportAdapter ViewportAdapter { get; private set; }
         
         public RiverHollow()
         {

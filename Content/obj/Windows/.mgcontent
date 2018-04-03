@@ -74,5 +74,8 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapManor.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapManorGrounds.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetHouses.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/NPCs/Spirit_Forest_1.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/NPCs/Spirit_Water_1.png</File>
   </SourceFiles>
 </SourceFileCollection>

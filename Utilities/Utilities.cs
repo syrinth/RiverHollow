@@ -56,6 +56,15 @@ namespace RiverHollow.Misc
             string[] split = filePath.Split('\\');
             name = split[split.Length - 1];
         }
+
+        public static Rectangle FloatRectangle(Vector2 pos, float width, float height)
+        {
+            return FloatRectangle(pos.X, pos.Y, width, height);
+        }
+        public static Rectangle FloatRectangle(float x, float y, float width, float height)
+        {
+            return new Rectangle((int)x, (int)y, (int)width, (int)height);
+        }
     }
 
     public class RHRandom : Random

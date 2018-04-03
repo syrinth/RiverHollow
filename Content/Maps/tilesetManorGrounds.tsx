@@ -4,6 +4,8 @@
  <terraintypes>
   <terrain name="Grass" tile="26"/>
   <terrain name="Dirt" tile="29"/>
+  <terrain name="Leaves" tile="38"/>
+  <terrain name="Blank" tile="18"/>
  </terraintypes>
  <tile id="0" terrain="1,1,1,0"/>
  <tile id="1" terrain="1,1,0,0"/>
@@ -41,6 +43,12 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="12" terrain="3,3,3,2"/>
+ <tile id="13" terrain="3,3,2,2"/>
+ <tile id="14" terrain="3,3,2,3"/>
+ <tile id="15" terrain="2,2,2,3"/>
+ <tile id="16" terrain="2,2,3,3"/>
+ <tile id="17" terrain="2,2,3,2"/>
  <tile id="25" terrain="1,0,1,0"/>
  <tile id="26" terrain="0,0,0,0"/>
  <tile id="27" terrain="0,1,0,1"/>
@@ -71,12 +79,18 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="35" terrain="0,0,0,0" probability="0.05"/>
+ <tile id="35" terrain="0,0,0,0" probability="0.01"/>
  <tile id="36">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="37" terrain="3,2,3,2"/>
+ <tile id="38" terrain="2,2,2,2"/>
+ <tile id="39" terrain="2,3,2,3"/>
+ <tile id="40" terrain="2,3,2,3"/>
+ <tile id="41" terrain="3,3,3,3"/>
+ <tile id="42" terrain="3,2,3,2"/>
  <tile id="50" terrain="1,0,1,1"/>
  <tile id="51" terrain="0,0,1,1"/>
  <tile id="52" terrain="0,1,1,1"/>
@@ -113,7 +127,13 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="75" terrain="0,0,0,0" probability="0.05"/>
+ <tile id="62" terrain="3,2,3,3"/>
+ <tile id="63" terrain="2,2,3,3"/>
+ <tile id="64" terrain="2,3,3,3"/>
+ <tile id="65" terrain="2,3,2,2"/>
+ <tile id="66" terrain="3,3,2,2"/>
+ <tile id="67" terrain="3,2,2,2"/>
+ <tile id="75" terrain="0,0,0,0" probability="0.01"/>
  <tile id="81">
   <properties>
    <property name="Impassable" type="bool" value="true"/>

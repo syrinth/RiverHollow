@@ -9,9 +9,6 @@ namespace RiverHollow.Characters.NPCs
 {
     public class ShopKeeper : NPC
     {
-        protected bool _isOpen;
-        public bool IsOpen { get => _isOpen; set => _isOpen = value; }
-
         protected List<Merchandise> _merchandise;
         public List<Merchandise> Buildings { get => _merchandise; }
 
@@ -35,13 +32,11 @@ namespace RiverHollow.Characters.NPCs
                 _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + index);
                 _portrait = GameContentManager.GetTexture(@"Textures\portraits");
 
-                IsOpen = true;
-
                 MapManager.Maps[CurrentMapName].AddCharacter(this);
             }
         }
 
-        public override void Talk()
+        public void Talk(bool IsOpen = false)
         {
             GraphicCursor._currentType = GraphicCursor.CursorType.Talk;
             string text = string.Empty;
