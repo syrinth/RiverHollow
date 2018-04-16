@@ -19,6 +19,7 @@ using static RiverHollow.WorldObjects.WorldItem;
 using RiverHollow.Game_Managers.GUIObjects;
 using static RiverHollow.WorldObjects.Floor;
 using MonoGame.Extended.Tiled.Graphics;
+using static RiverHollow.WorldObjects.Door;
 
 namespace RiverHollow.Tile_Engine
 {
@@ -52,11 +53,13 @@ namespace RiverHollow.Tile_Engine
         protected List<RHTile> _liBuildingTiles;
         protected List<WorldCharacter> _liCharacters;
         protected List<Mob> _liMobs;
+        protected List<Door> _liDoors;
         public List<WorldCharacter> ToRemove;
         public List<WorldCharacter> ToAdd;
         protected List<WorkerBuilding> _liBuildings;
         protected List<RHTile> _liModifiedTiles;
-        public List<RHTile> ModTiles => _liModifiedTiles; 
+        public List<RHTile> ModTiles => _liModifiedTiles;
+
         protected List<Item> _liItems;
         protected List<ShopData> _liShopData;
 
@@ -66,6 +69,7 @@ namespace RiverHollow.Tile_Engine
         public Dictionary<string, Rectangle> DictionaryEntrance { get => _dictEntrance; }
         private Dictionary<string, Vector2> _dictCharacterLayer;
         public Dictionary<string, Vector2> DictionaryCharacterLayer { get => _dictCharacterLayer; }
+        private List<TiledMapObject> _liMapObjects;
 
         public RHMap() {
             _liBuildingTiles = new List<RHTile>();
@@ -75,10 +79,12 @@ namespace RiverHollow.Tile_Engine
             _liBuildings = new List<WorkerBuilding>();
             _liModifiedTiles = new List<RHTile>();
             _liItems = new List<Item>();
+            _liMapObjects = new List<TiledMapObject>();
             _dictExit = new Dictionary<Rectangle, string>();
             _dictEntrance = new Dictionary<string, Rectangle>();
             _dictCharacterLayer = new Dictionary<string, Vector2>();
             _liShopData = new List<ShopData>();
+            _liDoors = new List<Door>();
 
             ToRemove = new List<WorldCharacter>();
             ToAdd = new List<WorldCharacter>();
@@ -101,10 +107,10 @@ namespace RiverHollow.Tile_Engine
             LoadMapObjects();
         }
 
-        public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, string newMap)
+        public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, string newMap, string mapName)
         {
             _map = Content.Load<TiledMap>(newMap);
-            _name = _map.Name.Replace(@"Maps\", "");
+            _name = mapName;
             MapWidthTiles = _map.Width;
             MapHeightTiles = _map.Height;
 
@@ -122,7 +128,6 @@ namespace RiverHollow.Tile_Engine
                     _tileArray[j, i].SetProperties(this);
                 }
             }
-
             
             _isBuilding = _map.Properties.ContainsKey("Building");
             _isDungeon = _map.Properties.ContainsKey("Dungeon");
@@ -149,22 +154,20 @@ namespace RiverHollow.Tile_Engine
                 {
                     foreach (TiledMapObject mapObject in ol.Objects)
                     {
+                        string ID = (mapObject.Properties.ContainsKey("ID")) ? (":" + mapObject.Properties["ID"]) : "";
                         Rectangle r = new Rectangle((int)mapObject.Position.X, (int)mapObject.Position.Y, (int)mapObject.Size.Width, (int)mapObject.Size.Height);
+
                         if (mapObject.Properties.ContainsKey("Exit"))
                         {
-                            _dictExit.Add(r, mapObject.Properties["Exit"]);
+                            _dictExit.Add(r, mapObject.Properties["Exit"] + ID);
                         }
                         else if (mapObject.Properties.ContainsKey("Entrance"))
                         {
-                            _dictEntrance.Add(mapObject.Properties["Entrance"], r);
-                        }
-                        else if (mapObject.Properties.ContainsKey("Valid Area"))
-                        {
-                            //_validArea = mapObject.Properties["Valid Area"];
+                            _dictEntrance.Add(mapObject.Properties["Entrance"] + ID, r);
                         }
                     }
                 }
-                if (ol.Name == "Character Layer")
+                else if (ol.Name == "Character Layer")
                 {
                     foreach (TiledMapObject mapObject in ol.Objects)
                     {
@@ -177,6 +180,127 @@ namespace RiverHollow.Tile_Engine
                             _dictCharacterLayer.Add(mapObject.Name, mapObject.Position);
                         }
                     }
+                }
+                else if (ol.Name == "MapObject Layer")
+                {
+                    foreach (TiledMapObject mapObject in ol.Objects)
+                    {
+                        _liMapObjects.Add(mapObject);
+                    }
+                }
+            }
+        }
+
+        public void PopulateMap()
+        {
+            TiledMapProperties props = _map.Properties;
+            List<int> liMobs = new List<int>();
+            int minMobs = 0;
+            int maxMobs = 0;
+            List<int> resources = new List<int>();
+            int minRes = 0;
+            int maxRes = 0;
+
+            foreach (TiledMapObject obj in _liMapObjects)
+            {
+                if (obj.Name.Contains("Door"))
+                {
+                    Door d = null;
+                    if (obj.Name.Equals("MobDoor")) { d = ObjectManager.GetDoor(obj.Name, obj.Position); }
+                    else if (obj.Name.Equals("SeasonDoor")) {
+                        d = ObjectManager.GetDoor(obj.Name, obj.Position);
+                        ((SeasonDoor)d).SetSeason(obj.Properties["Season"]);
+                    }
+                    else if (obj.Name.Equals("KeyDoor"))
+                    {
+                        d = ObjectManager.GetDoor(obj.Name, obj.Position);
+                        ((KeyDoor)d).SetKey(int.Parse(obj.Properties["Open"]));
+                    }
+
+                    _liDoors.Add(d);
+                    PlaceWorldObject(d);
+                }
+                else if (obj.Name.Equals("Rock"))
+                {
+                    PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, Utilities.Normalize(obj.Position)));
+                }
+                else if (obj.Name.Equals("Tree"))
+                {
+                    PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, Utilities.Normalize(obj.Position)));
+                }
+                else if (obj.Name.Equals("Mob"))
+                {
+                    Vector2 vect = obj.Position;
+                    Mob mob = CharacterManager.GetMobByIndex(int.Parse(obj.Properties["ID"]), vect);
+                    mob.CurrentMapName = _name;
+                    AddMob(mob);
+                }
+                else if (obj.Name.Equals("Chest"))
+                {
+                    Container c = (Container)ObjectManager.GetWorldObject(190);
+                    c.MapPosition = obj.Position;
+                    PlacePlayerObject(c);
+                    string[] holdSplit = obj.Properties["Holding"].Split('/');
+                    foreach (string s in holdSplit)
+                    {
+                        InventoryManager.AddNewItemToInventory(int.Parse(s), c);
+                    }
+                }
+            }
+
+            string[] split;
+            foreach (KeyValuePair<string, string> prop in props)
+            {
+                if (prop.Key.Equals("Mobs"))
+                {
+                    split = prop.Value.Split('/');
+                    foreach (string s in split)
+                    {
+                        liMobs.Add(int.Parse(s));
+                    }
+                }
+                else if (prop.Key.Equals("MobsMax")) { maxMobs = int.Parse(prop.Value); }
+                else if (prop.Key.Equals("MobsMin")) { minMobs = int.Parse(prop.Value); }
+                if (prop.Key.Equals("Resources"))
+                {
+                    split = prop.Value.Split('/');
+                    foreach (string s in split)
+                    {
+                        resources.Add(int.Parse(s));
+                    }
+                }
+                else if (prop.Key.Equals("ResourcesMax")) { maxRes = int.Parse(prop.Value); }
+                else if (prop.Key.Equals("ResourcesMin")) { minRes = int.Parse(prop.Value); }
+            }
+
+            if(resources.Count > 0)
+            {
+                RHRandom r = new RHRandom();
+                int numResources = r.Next(minRes, maxRes);
+                while(numResources != 0)
+                {
+                    int chosenResource = r.Next(0, resources.Count - 1);
+
+                    PlaceWorldObject(ObjectManager.GetWorldObject(resources[chosenResource], new Vector2(r.Next(1, _map.Width - 1) * TileSize, r.Next(1, _map.Height - 1) * TileSize)), true);
+
+                    numResources--;
+                }
+            }
+
+            if (liMobs.Count > 0)
+            {
+                RHRandom r = new RHRandom();
+                int numMobs = r.Next(minMobs, maxMobs);
+                while (numMobs != 0)
+                {
+                    int chosenMob = r.Next(0, liMobs.Count - 1);
+
+                    Vector2 vect = new Vector2(r.Next(1, _map.Width - 1) * TileSize, r.Next(1, _map.Height - 2) * TileSize);
+                    Mob mob = CharacterManager.GetMobByIndex(liMobs[chosenMob], vect);
+                    mob.CurrentMapName = _name;
+                    AddMob(mob);
+
+                    numMobs--;
                 }
             }
         }
@@ -415,7 +539,7 @@ namespace RiverHollow.Tile_Engine
             bool rv = false;
             foreach (WorldCharacter c in _liCharacters)
             {
-                if (mover != c && c.CollisionBox.Intersects(movingChar))
+                if (mover != c && !c.IsSpirit() && c.CollisionBox.Intersects(movingChar))
                 {
                     rv = true;
                     break;
@@ -580,7 +704,14 @@ namespace RiverHollow.Tile_Engine
                     if (c.CollisionContains(mouseLocation) && c.CanTalk())
                     {
                         rv = true;
-                        ((NPC)c).Talk();
+                        if (c.IsSpirit())
+                        {
+                            ((Spirit)c).Talk();
+                        }
+                        else
+                        {
+                            ((NPC)c).Talk();
+                        }
                         break;
                     }
                 }
@@ -637,11 +768,15 @@ namespace RiverHollow.Tile_Engine
                                 p.RemoveSelfFromTiles();
                             }
                         }
+                        else if (s.IsDoor())
+                        {
+                            ((Door)s).ReadInscription();
+                        }
                     }
 
                     if (tile.ContainsProperty("Journal", out string val) && val.Equals("true"))
                     {
-                        GUIManager.SetScreen(new TextScreen(GameContentManager.GetDialogue("Journal")));
+                        GUIManager.SetScreen(new TextScreen(GameContentManager.GetDialogue("Journal"), true));
                     }
 
                     if (tile.WorldObject != null && tile.WorldObject.ID == 3) //Checks to see if the tile contains a staircase object
@@ -793,7 +928,14 @@ namespace RiverHollow.Tile_Engine
             if(targetLoc.X >= GetMapWidth() || targetLoc.X < 0) { return null;  }
             if (targetLoc.Y >= GetMapHeight() || targetLoc.Y < 0) { return null; }
 
-            return _tileArray[targetLoc.X / TileSize, targetLoc.Y / TileSize];
+            try
+            {
+                return _tileArray[targetLoc.X / TileSize, targetLoc.Y / TileSize];
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
         public RHTile RetrieveTileFromGridPosition(Point targetLoc)
         {
@@ -834,6 +976,10 @@ namespace RiverHollow.Tile_Engine
         public void RemoveMob(Mob m)
         {
             _liMobs.Remove(m);
+            foreach (Door d in _liDoors)
+            {
+                if (d.IsMobDoor()) { ((MobDoor)d).Check(_liMobs.Count); }
+            }
         }
         public void DropWorldItems(List<Item>items, Vector2 position)
         {
@@ -952,11 +1098,8 @@ namespace RiverHollow.Tile_Engine
 
             List<RHTile> tiles = new List<RHTile>();
             rv = TestMapTiles(o, tiles);
-            if (rv)
-            {
-                AssignMapTiles(o, tiles);
-            }
-            else if (bounce)
+            
+            if (!rv && bounce)
             {
                 RHRandom r = new RHRandom();
                 Vector2 position = o.MapPosition;
@@ -967,12 +1110,13 @@ namespace RiverHollow.Tile_Engine
                     o.SetCoordinates(position);
 
                     rv = TestMapTiles(o, tiles);
-                    if (rv)
-                    {
-                        AssignMapTiles(o, tiles);
-                    }
                 } while (!rv);
-            }  
+            }
+
+            if (rv)
+            {
+                AssignMapTiles(o, tiles);
+            }
 
             return rv;
         }
@@ -980,6 +1124,7 @@ namespace RiverHollow.Tile_Engine
         public bool TestMapTiles(WorldObject o, List<RHTile> tiles)
         {
             bool rv = false;
+            tiles.Clear();
             Vector2 position = o.MapPosition;
             position.X = ((int)(position.X / TileSize)) * TileSize;
             position.Y = ((int)(position.Y / TileSize)) * TileSize;
@@ -1147,7 +1292,7 @@ namespace RiverHollow.Tile_Engine
         {
             foreach (WorldObjectData w in data.worldObjects)
             {
-                PlaceWorldObject(ObjectManager.GetWorldObject(w.worldObjectID, new Vector2(w.x, w.y)), true);
+                PlaceWorldObject(ObjectManager.GetWorldObject(w.worldObjectID, new Vector2(w.x, w.y)));
             }
             foreach (ContainerData c in data.containers)
             {
@@ -1180,6 +1325,17 @@ namespace RiverHollow.Tile_Engine
                 RHTile tile = _tileArray[(int)e.MapPosition.X / TileSize, (int)e.MapPosition.Y / TileSize];
                 tile.SetFloorObject(e);
                 _liModifiedTiles.Add(tile);
+            }
+        }
+
+        public void CheckSeasonDoor()
+        {
+            foreach (Door d in _liDoors)
+            {
+                if (d.IsSeasonDoor())
+                {
+                    ((SeasonDoor)d).Check();
+                }
             }
         }
     }
@@ -1329,6 +1485,20 @@ namespace RiverHollow.Tile_Engine
                 _floorObj = f;
                 rv = true;
             }
+            return rv;
+        }
+
+        public bool CanDig()
+        {
+            bool rv = false;
+            foreach (TiledMapTileLayer l in _diProps.Keys)
+            {
+                if (l.IsVisible && ContainsProperty(l, "CanDig", out string val) && val.Equals("true"))
+                {
+                    rv = true;
+                }
+            }
+
             return rv;
         }
 

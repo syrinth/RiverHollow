@@ -7,6 +7,8 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Characters;
 using static RiverHollow.WorldObjects.WorldItem;
+using static RiverHollow.WorldObjects.Door;
+using RiverHollow.Game_Managers.GUIComponents.Screens;
 
 namespace RiverHollow.Screens
 {
@@ -16,6 +18,7 @@ namespace RiverHollow.Screens
         private Container _container;
         public Container Container { get => _container; }
         private NPC _giveTo;
+        private KeyDoor _doorToOpen;
 
         protected const int _iBoxSize = 64;
         protected const int _iMargin = 3;
@@ -46,6 +49,11 @@ namespace RiverHollow.Screens
         public Inventory(NPC n, int rows, int columns, int edgeSize) : this(rows, columns, edgeSize)
         {
             _giveTo = n;
+        }
+
+        public Inventory(KeyDoor door, int rows, int columns, int edgeSize) : this(rows, columns, edgeSize)
+        {
+            _doorToOpen = door;
         }
 
         public void Setup()
@@ -99,6 +107,14 @@ namespace RiverHollow.Screens
                 if (_giveTo != null)
                 {
                     _giveTo.Gift(IsItemThere(mouse));
+                }
+                else if (_doorToOpen != null)
+                {
+                    string text = string.Empty;
+                    if (_doorToOpen.Check(IsItemThere(mouse))) { text = GameContentManager.GetDialogue("KeyDoorOpen"); }
+                    else { text = GameContentManager.GetDialogue("KeyDoorClose"); }
+
+                    GUIManager.SetScreen(new TextScreen(text, false));
                 }
                 else
                 {

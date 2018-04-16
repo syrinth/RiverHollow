@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using static RiverHollow.WorldObjects.Door;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
@@ -32,6 +33,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         protected int _numReturns = 0;
 
         protected NPC _talker;
+        protected KeyDoor _door;
 
         protected GUITextWindow() : base()
         {

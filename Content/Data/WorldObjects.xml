@@ -23,6 +23,14 @@
       <Key>3</Key>
       <Value>Staircase/Stairs/3 0/16 16</Value>
     </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>Door/Door/4 0/16 32</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>Destructible/Copper Ore/0 2 16 16/false/true/2/1</Value>
+    </Item>
     <!--<60-79> Plants-->
     <Item>
       <Key>60</Key>

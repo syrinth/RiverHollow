@@ -126,5 +126,10 @@
       <Key>201</Key>
       <Value>StaticItem/Anvil/Makes Shit/3 2/3000</Value>
     </Item>
+    <!--<300> Misc-->
+    <Item>
+      <Key>300</Key>
+      <Value>Resource/Key/Unlocks/0 3/0</Value>
+    </Item>
   </Asset>
 </XnaContent>

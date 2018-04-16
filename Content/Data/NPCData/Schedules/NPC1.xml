@@ -4,7 +4,7 @@
     <!--Key: Index>0 Value: Time|Location/Time/Location All time in 24 hr. 00:00-->
     <Item>
       <Key>Monday</Key>
-      <Value>6:15|Route1/7:0|Route2</Value>
+      <Value>6:15|Route1/10:0|Route2</Value>
     </Item>
     <Item>
       <Key>Tuesday</Key>

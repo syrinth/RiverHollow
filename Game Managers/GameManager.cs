@@ -19,7 +19,7 @@ namespace RiverHollow.Game_Managers
         public static int TileSize = 16;
         public static Dictionary<string, Upgrade> DiUpgrades;
 
-        static int _iSaveID = -1;
+        static long _iSaveID = -1;
 
         public static void LoadContent(ContentManager Content)
         {
@@ -85,7 +85,7 @@ namespace RiverHollow.Game_Managers
             /// </summary>
             /// 
             [XmlElement(ElementName = "SaveID")]
-            public int saveID;
+            public long saveID;
 
             [XmlElement(ElementName = "Name")]
             public string name;
@@ -338,11 +338,11 @@ namespace RiverHollow.Game_Managers
             public int y;
         }
 
-        public static int GetSaveID()
+        public static long GetSaveID()
         {
             if (_iSaveID == -1)
             {
-                _iSaveID = int.Parse(string.Format("{0}{1}{2}{3}", DateTime.Now.Year, DateTime.Now.Day, DateTime.Now.Second, DateTime.Now.Millisecond));
+                _iSaveID = long.Parse(string.Format("{0}{1}{2}{3}", DateTime.Now.Year, DateTime.Now.Day, DateTime.Now.Second, DateTime.Now.Millisecond));
             }
 
             return _iSaveID;

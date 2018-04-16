@@ -6,6 +6,7 @@ using RiverHollow.GUIObjects;
 using RiverHollow.Characters;
 using System.Collections.Generic;
 using static RiverHollow.WorldObjects.WorldItem;
+using static RiverHollow.WorldObjects.Door;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -63,6 +64,18 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _inventory = new Inventory(n, 4, InventoryManager.maxItemColumns, 32);
+
+            Vector2 mainWidthHeight = new Vector2(_inventory.InnerRectangle().Width, _inventory.InnerRectangle().Height);
+            _inventory.Setup();
+
+            Controls.Add(_inventory);
+            InventoryManager.PublicContainer = null;
+        }
+
+        public InventoryScreen(KeyDoor door)
+        {
+            _font = GameContentManager.GetFont(@"Fonts\Font");
+            _inventory = new Inventory(door, 4, InventoryManager.maxItemColumns, 32);
 
             Vector2 mainWidthHeight = new Vector2(_inventory.InnerRectangle().Width, _inventory.InnerRectangle().Height);
             _inventory.Setup();

@@ -5,6 +5,7 @@ using RiverHollow.Game_Managers.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIObjects;
+using static RiverHollow.WorldObjects.Door;
 
 namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
@@ -18,9 +19,21 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             GameManager.Pause();
         }
 
-        public TextScreen(string text) : this()
+        public TextScreen(string text, bool selection) : this()
         {
-            _window = new GUITextSelectionWindow(text);
+            if (selection)
+            {
+                _window = new GUITextSelectionWindow(text);
+            }
+            else
+            {
+                _window = new GUITextWindow(text);
+            }
+            Controls.Add(_window);
+        }
+        public TextScreen(KeyDoor door, string text) : this()
+        {
+            _window = new GUITextSelectionWindow(door, text);
             Controls.Add(_window);
         }
 

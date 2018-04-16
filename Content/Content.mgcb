@@ -597,3 +597,45 @@
 /processorParam:TextureFormat=Color
 /build:Textures/NPCs/Spirit_Water_1.png
 
+#begin Maps/mapForestDungeonZone.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapForestDungeonZone.tmx
+
+#begin Maps/mapLesserForest.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapLesserForest.tmx
+
+#begin Maps/mapHighlands.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapHighlands.tmx
+
+#begin Maps/Dungeons/mapSpringDungeonEntrance.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapSpringDungeonEntrance.tmx
+
+#begin Maps/Dungeons/tilesetDungeon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Maps/Dungeons/tilesetDungeon.png
+
+#begin Maps/Dungeons/mapSpringDungeonA.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapSpringDungeonA.tmx
+
+#begin Maps/Dungeons/mapSpringDungeonB.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapSpringDungeonB.tmx
+

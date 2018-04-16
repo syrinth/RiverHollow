@@ -265,71 +265,74 @@ namespace RiverHollow.Game_Managers
 
             Point point = Utilities.Normalize(mouseLocation);
             RHTile t = MapManager.RetrieveTile(point);
-            Vector2 center = t.Center;
-            if (PlayerManager.PlayerInRange(center.ToPoint()))
+            if (t != null)
             {
-                _targetTile = MapManager.RetrieveTile(mouseLocation);
-                if (GraphicCursor.HeldItem != null && GraphicCursor.HeldItem.IsStaticItem())
+                Vector2 center = t.Center;
+                if (PlayerManager.PlayerInRange(center.ToPoint()))
                 {
-                    WorldObject obj = ObjectManager.GetWorldObject(GraphicCursor.HeldItem.ItemID);
-                    if (obj.IsMachine())
+                    _targetTile = MapManager.RetrieveTile(mouseLocation);
+                    if (GraphicCursor.HeldItem != null && GraphicCursor.HeldItem.IsStaticItem())
                     {
-                        Machine p = (Machine)obj;
-                        p.SetMapName(CurrentMap);
-                        p.MapPosition = mouseLocation.ToVector2();
-                        MapManager.PlacePlayerObject(p);
-                        GraphicCursor.DropItem();
+                        WorldObject obj = ObjectManager.GetWorldObject(GraphicCursor.HeldItem.ItemID);
+                        if (obj.IsMachine())
+                        {
+                            Machine p = (Machine)obj;
+                            p.SetMapName(CurrentMap);
+                            p.MapPosition = mouseLocation.ToVector2();
+                            MapManager.PlacePlayerObject(p);
+                            GraphicCursor.DropItem();
+                        }
+                        else if (obj.IsContainer())
+                        {
+                            Container c = (Container)obj;
+                            c.SetMapName(CurrentMap);
+                            c.MapPosition = mouseLocation.ToVector2();
+                            MapManager.PlacePlayerObject(c);
+                            GraphicCursor.DropItem();
+                        }
+                        else if (_targetTile.HasBeenDug() && obj.IsPlant())
+                        {
+                            Plant p = (Plant)obj;
+                            p.SetMapName(CurrentMap);
+                            p.MapPosition = mouseLocation.ToVector2();
+                            MapManager.PlacePlayerObject(p);
+                            GraphicCursor.DropItem();
+                        }
                     }
-                    else if (obj.IsContainer())
+                    else if (_targetTile.WorldObject != null && _targetTile.WorldObject.IsDestructible())
                     {
-                        Container c = (Container)obj;
-                        c.SetMapName(CurrentMap);
-                        c.MapPosition = mouseLocation.ToVector2();
-                        MapManager.PlacePlayerObject(c);
-                        GraphicCursor.DropItem();
-                    }
-                    else if (_targetTile.HasBeenDug() && obj.IsPlant())
-                    {
-                        Plant p = (Plant)obj;
-                        p.SetMapName(CurrentMap);
-                        p.MapPosition = mouseLocation.ToVector2();
-                        MapManager.PlacePlayerObject(p);
-                        GraphicCursor.DropItem();
-                    }
-                }
-                else if (_targetTile.WorldObject != null && _targetTile.WorldObject.IsDestructible())
-                {
-                    Destructible d = (Destructible)_targetTile.WorldObject;
+                        Destructible d = (Destructible)_targetTile.WorldObject;
 
-                    if (d != null)
+                        if (d != null)
+                        {
+                            if (d.Breakable) { rv = SetTool(_pick, mouseLocation); }
+                            else if (d.Choppable) { rv = SetTool(_axe, mouseLocation); }
+                        }
+                    }
+                    else if (_targetTile.WorldObject == null && _targetTile.CanDig())
                     {
-                        if (d.Breakable) { rv = SetTool(_pick, mouseLocation); }
-                        else if (d.Choppable) { rv = SetTool(_axe, mouseLocation); }
+                        rv = SetTool(_shovel, mouseLocation);
+                    }
+                    else if (_targetTile.Flooring != null && _targetTile.Flooring.IsEarth())
+                    {
+                        rv = SetTool(_wateringCan, mouseLocation);
                     }
                 }
-                else if (_targetTile.WorldObject == null)
-                {
-                    rv = SetTool(_shovel, mouseLocation);
-                }
-                else if (_targetTile.Flooring != null && _targetTile.Flooring.IsEarth())
-                {
-                    rv = SetTool(_wateringCan, mouseLocation);
-                }
+
+                //if (InventoryManager.CurrentItem != null)
+                //{
+                //    if (InventoryManager.CurrentItem.Type == Item.ItemType.Container)
+                //    {
+                //        MapManager.PlaceWorldItem((Container)InventoryManager.CurrentItem, mouseLocation.ToVector2());
+                //        InventoryManager.RemoveItemFromInventory(InventoryManager.CurrentItem);
+                //    }
+                //    else if (InventoryManager.CurrentItem.Type == Item.ItemType.Food)
+                //    {
+                //        Food f = ((Food)InventoryManager.CurrentItem);
+                //        GUIManager.AddTextSelection(f, string.Format("Really eat the {0}? [Yes:Eat|No:DoNothing]", f.Name));
+                //    }
+                //}
             }
-
-            //if (InventoryManager.CurrentItem != null)
-            //{
-            //    if (InventoryManager.CurrentItem.Type == Item.ItemType.Container)
-            //    {
-            //        MapManager.PlaceWorldItem((Container)InventoryManager.CurrentItem, mouseLocation.ToVector2());
-            //        InventoryManager.RemoveItemFromInventory(InventoryManager.CurrentItem);
-            //    }
-            //    else if (InventoryManager.CurrentItem.Type == Item.ItemType.Food)
-            //    {
-            //        Food f = ((Food)InventoryManager.CurrentItem);
-            //        GUIManager.AddTextSelection(f, string.Format("Really eat the {0}? [Yes:Eat|No:DoNothing]", f.Name));
-            //    }
-            //}
 
             return rv;
         }
@@ -337,6 +340,7 @@ namespace RiverHollow.Game_Managers
         internal static bool SetTool(Tool t, Point mouse)
         {
             bool rv = false;
+            PlayerManager.World.Idle();
             if (UseTool == null)
             {
                 rv = true;

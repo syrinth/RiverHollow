@@ -56,7 +56,6 @@ namespace RiverHollow
             ObjectManager.LoadContent(Content);
             GUIManager.LoadContent();
             MapManager.LoadContent(Content, GraphicsDevice);
-            GameCalendar.NewCalendar();
             CharacterManager.LoadContent(Content);
             DropManager.LoadContent(Content);
             CutsceneManager.LoadContent(Content);
@@ -231,6 +230,7 @@ namespace RiverHollow
         {
             PlayerManager.NewPlayer();
             MapManager.PopulateMaps(false);
+            GameCalendar.NewCalendar();
             GameManager.BackToMain();
         }
 

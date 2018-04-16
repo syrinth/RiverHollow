@@ -33,7 +33,7 @@ namespace RiverHollow.Game_Managers
             Utilities.ParseContentFile(ref song, ref name);
             if (!_diSongs.ContainsKey(name))
             {
-                _diSongs.Add(song.Split('\\')[3], Content.Load<Song>(song));
+                _diSongs.Add(name, Content.Load<Song>(song));
             }
         }
 

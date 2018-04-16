@@ -32,6 +32,9 @@ namespace RiverHollow.Game_Managers
                 case 2:
                     itemList.Add(ObjectManager.GetItem(2, 1));
                     break;
+                case 5:
+                    itemList.Add(ObjectManager.GetItem(80, 2));
+                    break;
             }
 
             return itemList;

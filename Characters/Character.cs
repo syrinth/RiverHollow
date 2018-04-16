@@ -8,7 +8,7 @@ namespace RiverHollow.Characters
 {
     public class Character
     {
-        public enum CharacterEnum { Character, CombatAdventurer, CombatCharacter, Mob, Monster, NPC, WorldAdventurer, WorldCharacter };
+        public enum CharacterEnum { Character, CombatAdventurer, CombatCharacter, Mob, Monster, NPC, Spirit, WorldAdventurer, WorldCharacter};
         protected CharacterEnum _characterType = CharacterEnum.Character;
         public CharacterEnum CharacterType => _characterType;
 
@@ -82,6 +82,7 @@ namespace RiverHollow.Characters
         public bool IsNPC() { return _characterType == CharacterEnum.NPC; }
         public bool IsWorldAdventurer() { return _characterType == CharacterEnum.WorldAdventurer; }
         public bool IsWorldCharacter() { return _characterType == CharacterEnum.WorldCharacter; }
-        public bool CanTalk() { return IsWorldCharacter() || IsNPC() || IsWorldAdventurer(); }
+        public bool CanTalk() { return IsWorldCharacter() || IsNPC() || IsWorldAdventurer() || IsSpirit(); }
+        public bool IsSpirit() { return _characterType == CharacterEnum.Spirit; }
     }
 }

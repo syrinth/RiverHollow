@@ -19,7 +19,7 @@ namespace RiverHollow.WorldObjects
         public static int Rock = 0;
         public static int BigRock = 1;
         public static int Tree = 2;
-        public enum ObjectType { Building, Crafter, Container, Earth,Floor, WorldObject, Destructible, Processor, Plant};
+        public enum ObjectType { Building, Crafter, Container, Door, Earth, Floor, WorldObject, Destructible, Processor, Plant};
         public ObjectType Type;
 
         public List<RHTile> Tiles;
@@ -104,6 +104,7 @@ namespace RiverHollow.WorldObjects
         public bool IsWorldObject() { return Type == ObjectType.WorldObject; }
         public bool IsGround() { return Type == ObjectType.Floor; }
         public bool IsEarth() { return Type == ObjectType.Earth; }
+        public bool IsDoor() { return Type == ObjectType.Door; }
     }
 
     public class Destructible : WorldObject
@@ -172,6 +173,116 @@ namespace RiverHollow.WorldObjects
         public Tree(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height, bool breakIt, bool chopIt, int lvl, int hp) : base(id, pos, sourceRectangle, tex, width, height, breakIt, chopIt, lvl, hp)
         {
             Type = ObjectType.Destructible;
+        }
+    }
+
+    public class Door : WorldObject
+    {
+        public enum EnumDoorType { Mob, Key, Season};
+        public EnumDoorType DoorType;
+        bool _bVisible;
+
+        private Door(Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height) : base(-1, pos, sourceRectangle, tex, width, height)
+        {
+            Type = ObjectType.Door;
+            _bVisible = true;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (_bVisible)
+            {
+                base.Draw(spriteBatch);
+            }
+        }
+
+        public virtual void ReadInscription() { }
+
+        public bool IsMobDoor() { return DoorType == EnumDoorType.Mob; }
+        public bool IsKeyDoor() { return DoorType == EnumDoorType.Key; }
+        public bool IsSeasonDoor() { return DoorType == EnumDoorType.Season; }
+
+        public class MobDoor : Door
+        {
+            public MobDoor(Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height) : base(pos, sourceRectangle, tex, width, height)
+            {
+                DoorType = EnumDoorType.Mob;
+            }
+
+            public override void ReadInscription() {
+                GUIManager.SetScreen(new TextScreen(GameContentManager.GetDialogue("MobDoor"), false));
+            }
+
+            public void Check(int mobCount)
+            {
+                if (mobCount == 0)
+                {
+                    _blocking = false;
+                    _bVisible = false;
+                }
+            }
+        }
+        public class KeyDoor : Door
+        {
+            private int _iKeyID = 0;
+            public KeyDoor(Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height) : base(pos, sourceRectangle, tex, width, height)
+            {
+                DoorType = EnumDoorType.Key;
+            }
+
+            public void SetKey(int value)
+            {
+                _iKeyID = value;
+            }
+
+            public override void ReadInscription()
+            {
+                GUIManager.SetScreen(new TextScreen(this, GameContentManager.GetDialogue("KeyDoor")));
+            }
+
+            public bool Check(Item item)
+            {
+                bool rv = false;
+                if (_iKeyID == item.ItemID)
+                {
+                    rv = true;
+                    item.Remove(1);
+                    _blocking = false;
+                    _bVisible = false;
+                }
+
+                return rv;
+            }
+        }
+        public class SeasonDoor : Door
+        {
+            private string _sSeason = "";
+            public SeasonDoor(Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height) : base(pos, sourceRectangle, tex, width, height)
+            {
+                DoorType = EnumDoorType.Season;
+            }
+
+            public void SetSeason(string value)
+            {
+                _sSeason = value;
+            }
+
+            public override void ReadInscription()
+            {
+                GUIManager.SetScreen(new TextScreen(GameContentManager.GetDialogue("SpringDoor"), false));
+            }
+
+            public bool Check()
+            {
+                bool rv = false;
+                bool unlocked = _sSeason == GameCalendar.GetSeason();
+
+                rv = unlocked;
+                _blocking = !unlocked;
+                _bVisible = !unlocked;
+
+                return rv;
+            }
         }
     }
 

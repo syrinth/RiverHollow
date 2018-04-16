@@ -8,6 +8,7 @@ using RiverHollow.Characters;
 using RiverHollow.WorldObjects;
 using RiverHollow.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
+using static RiverHollow.WorldObjects.Door;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
@@ -34,6 +35,15 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public GUITextSelectionWindow(NPC talker, string selectionText) : base()
         {
             _talker = talker;
+            Position(new Vector2(Position().X, RiverHollow.ScreenHeight - Height - SpaceFromBottom));
+
+            Setup(selectionText);
+            PostParse();
+        }
+
+        public GUITextSelectionWindow(KeyDoor door, string selectionText) : base()
+        {
+            _door = door;
             Position(new Vector2(Position().X, RiverHollow.ScreenHeight - Height - SpaceFromBottom));
 
             Setup(selectionText);
@@ -187,6 +197,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             if (action.Equals("SleepNow"))
             {
                 GUIManager.SetScreen(new DayEndScreen());
+            }
+            else if (action.Equals("OpenDoor"))
+            {
+                GUIManager.SetScreen(new InventoryScreen(_door));
             }
             else if (action.Contains("Eat") && _food != null)
             {

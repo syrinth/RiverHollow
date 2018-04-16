@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Tile_Engine;
 using System;
+using System.IO;
 using System.Threading;
 
 using static RiverHollow.Game_Managers.GameManager;
@@ -50,11 +51,11 @@ namespace RiverHollow.Misc
 
         public static void ParseContentFile(ref string filePath, ref string name)
         {
+            FileInfo f = new FileInfo(filePath);
             filePath = filePath.Replace(@"Content\", "");
             filePath = filePath.Remove(filePath.Length - 4, 4);
 
-            string[] split = filePath.Split('\\');
-            name = split[split.Length - 1];
+            name = f.Name.Remove(f.Name.Length-4);
         }
 
         public static Rectangle FloatRectangle(Vector2 pos, float width, float height)

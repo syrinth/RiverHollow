@@ -16,7 +16,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class MapManager
     {
-        public const string HomeMap = "mapManorGrounds";
+        public const string HomeMap = "mapForestDungeonZone";
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
 
@@ -46,8 +46,8 @@ namespace RiverHollow.Game_Managers
             {
                 if (!_tileMaps.ContainsKey(name))
                 {
-                    newMap.LoadContent(Content, GraphicsDevice, mapToAdd);
-                    _tileMaps.Add(newMap.Name, newMap);
+                    newMap.LoadContent(Content, GraphicsDevice, mapToAdd, name);
+                    _tileMaps.Add(name, newMap);
                 }
             }
         }
@@ -55,26 +55,33 @@ namespace RiverHollow.Game_Managers
         public static void ChangeMaps(WorldCharacter c, string currMap, string newMapStr)
         {
             Rectangle rectEntrance = Rectangle.Empty;
-            RHMap newMap = _tileMaps[newMapStr];
+            string[] splitString = newMapStr.Split(':');
+            string newMapName = splitString[0];
+            string ID = (splitString.Length == 2) ? splitString[1] : "";
+            RHMap newMap = _tileMaps[newMapName];
 
             if (_tileMaps[currMap].IsDungeon)
             {
-                rectEntrance = _tileMaps[newMapStr].DictionaryEntrance["Dungeon"];
+                rectEntrance = _tileMaps[newMapName].DictionaryEntrance["Dungeon"];
             }
             else
             {
-                foreach (string s in _tileMaps[newMapStr].DictionaryEntrance.Keys)
+                foreach (string s in _tileMaps[newMapName].DictionaryEntrance.Keys)
                 {
+                    string[] testString = s.Split(':');
+                    string testName = testString[0];
+                    string testID = (testString.Length == 2) ? testString[1] : "";
+
                     if (c == PlayerManager.World && !string.IsNullOrEmpty(PlayerManager._inBuilding))
                     {
-                        rectEntrance = _tileMaps[newMapStr].DictionaryEntrance[PlayerManager._inBuilding];
+                        rectEntrance = _tileMaps[newMapName].DictionaryEntrance[PlayerManager._inBuilding];
                         PlayerManager._inBuilding = string.Empty;
                     }
                     else
                     {
-                        if (s.Equals(_tileMaps[currMap].Name))
+                        if (testName.Equals(_tileMaps[currMap].Name) && testID == ID)
                         {
-                            rectEntrance = _tileMaps[newMapStr].DictionaryEntrance[s];
+                            rectEntrance = _tileMaps[newMapName].DictionaryEntrance[s];
                         }
                     }
                 }
@@ -84,7 +91,7 @@ namespace RiverHollow.Game_Managers
             {
                 GUIManager.FadeOut();
                 SoundManager.PlayEffect("126426__cabeeno-rossley__timer-ends-time-up");
-                _currentMap = _tileMaps[newMapStr];
+                _currentMap = _tileMaps[newMapName];
 
                 PlayerManager.CurrentMap = _currentMap.Name;
                 PlayerManager.World.Position = Utilities.Normalize(new Vector2(rectEntrance.Left, rectEntrance.Top));
@@ -96,7 +103,7 @@ namespace RiverHollow.Game_Managers
                     ((NPC)c).ClearTileForMapChange();
                 }
                 _tileMaps[currMap].RemoveCharacter(c);
-                _tileMaps[newMapStr].AddCharacter(c);
+                _tileMaps[newMapName].AddCharacter(c);
                 c.NewMapPosition = new Vector2(rectEntrance.Left, rectEntrance.Top); //This needs to get updated when officially added to the new map
             }
         }
@@ -154,21 +161,25 @@ namespace RiverHollow.Game_Managers
 
         public static void PopulateMaps(bool loaded)
         {
+            foreach(RHMap map in _tileMaps.Values)
+            {
+                map.PopulateMap();
+            }
             int mapWidth = _tileMaps[MapManager.HomeMap].MapWidthTiles;
             int mapHeight = _tileMaps[MapManager.HomeMap].MapHeightTiles;
             RHRandom r = new RHRandom();
             //LoadMap1
-            if (!loaded)
-            {
-                for (int i = 0; i < 99; i++)
-                {
-                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
-                }
-                for (int i = 0; i < 99; i++)
-                {
-                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
-                }
-            }
+            //if (!loaded)
+            //{
+            //    for (int i = 0; i < 99; i++)
+            //    {
+            //        _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
+            //    }
+            //    for (int i = 0; i < 99; i++)
+            //    {
+            //        _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
+            //    }
+            //}
 
             Mob mob = CharacterManager.GetMobByIndex(1, new Vector2(647, 539));
             mob.CurrentMapName = "mapManorGrounds";

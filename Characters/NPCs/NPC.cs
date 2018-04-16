@@ -115,7 +115,7 @@ namespace RiverHollow.Characters
         {
             base.Update(theGameTime);
 
-            if(_vMoveTo != Vector2.Zero)
+            if (_vMoveTo != Vector2.Zero)
             {
                 HandleMove(_vMoveTo);
             }

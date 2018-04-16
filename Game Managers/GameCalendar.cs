@@ -44,7 +44,7 @@ namespace RiverHollow
         {
             _dayOfWeek = 0;
             _currDay = 1;
-            //_currSeason = Seasons.Spring;
+            _currSeason = 0;
             _currHour = 6;
             _currMin = 0;
 
@@ -57,6 +57,8 @@ namespace RiverHollow
             _displayWindow.AnchorToScreen(GUIObject.SideEnum.TopRight, 10);
             
             _text.CenterOnWindow(_displayWindow);
+
+            CheckDungeonLocks();
         }
 
         public static void Update(GameTime gameTime)
@@ -129,10 +131,18 @@ namespace RiverHollow
         {
             _currHour = 6;
             _currMin = 0;
-            _currDay++;
             if(_dayOfWeek < ListDays.Length - 1) { _dayOfWeek++; }
             else { _dayOfWeek = 0; }
 
+            if(_currDay == 28)
+            {
+                _currDay = 1;
+                if (_currSeason == 3) { _currSeason = 0; }
+                else { _currSeason++; }
+
+                CheckDungeonLocks();
+            }
+            else { _currDay++; }
         }
 
         public static string GetTime()
@@ -170,6 +180,13 @@ namespace RiverHollow
             _dayOfWeek = d.dayOfWeek;
             _currSeason = d.currSeason;
             _currWeather = d.currWeather;
+
+            CheckDungeonLocks();
+        }
+
+        public static void CheckDungeonLocks()
+        {
+            MapManager.Maps["mapForestDungeonZone"].CheckSeasonDoor();
         }
     }
 }

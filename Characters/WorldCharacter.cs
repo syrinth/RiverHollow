@@ -27,7 +27,7 @@ namespace RiverHollow.Characters
         public Rectangle CollisionBox { get => new Rectangle((int)Position.X + (Width/4), (int)Position.Y, Width/2, TileSize); }
 
 
-        public int Speed = 2;
+        public int Speed = 5;
         #endregion
 
         public WorldCharacter() : base()
@@ -100,26 +100,31 @@ namespace RiverHollow.Characters
 
             if (direction.Length() == 0)
             {
-                switch (Facing)
-                {
-                    case WorldCharacter.DirectionEnum.Down:
-                        animation = "IdleDown";
-                        break;
-                    case WorldCharacter.DirectionEnum.Up:
-                        animation = "IdleUp";
-                        break;
-                    case WorldCharacter.DirectionEnum.Left:
-                        animation = "IdleLeft";
-                        break;
-                    case WorldCharacter.DirectionEnum.Right:
-                        animation = "IdleRight";
-                        break;
-                }
+                Idle();
             }
 
             if (_sprite.CurrentAnimation != animation)
             {
                 _sprite.SetCurrentAnimation(animation);
+            }
+        }
+
+        public void Idle()
+        {
+            switch (Facing)
+            {
+                case WorldCharacter.DirectionEnum.Down:
+                    _sprite.CurrentAnimation = "IdleDown";
+                    break;
+                case WorldCharacter.DirectionEnum.Up:
+                    _sprite.CurrentAnimation = "IdleUp";
+                    break;
+                case WorldCharacter.DirectionEnum.Left:
+                    _sprite.CurrentAnimation = "IdleLeft";
+                    break;
+                case WorldCharacter.DirectionEnum.Right:
+                    _sprite.CurrentAnimation = "IdleRight";
+                    break;
             }
         }
 

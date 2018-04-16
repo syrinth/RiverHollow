@@ -8,6 +8,9 @@ using static RiverHollow.WorldObjects.WorldItem;
 using static RiverHollow.WorldObjects.WorldItem.Machine;
 
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.Misc;
+using static RiverHollow.WorldObjects.Door;
+
 namespace RiverHollow.Game_Managers
 {
     public static class ObjectManager
@@ -120,6 +123,23 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
+            return null;
+        }
+
+        public static Door GetDoor(string doorType, Vector2 pos)
+        {
+            if (doorType.Equals("MobDoor"))
+            {
+                return new MobDoor(Utilities.Normalize(pos), new Rectangle(64, 0, 16, 32), GetTexture(@"Textures\worldObjects"), TileSize, TileSize * 2);
+            }
+            else if (doorType.Equals("KeyDoor"))
+            {
+                return new KeyDoor(Utilities.Normalize(pos), new Rectangle(64, 0, 16, 32), GetTexture(@"Textures\worldObjects"), TileSize, TileSize * 2);
+            }
+            else if (doorType.Equals("SeasonDoor"))
+            {
+                return new SeasonDoor(Utilities.Normalize(pos), new Rectangle(64, 0, 16, 32), GetTexture(@"Textures\worldObjects"), TileSize, TileSize * 2);
+            }
             return null;
         }
 
