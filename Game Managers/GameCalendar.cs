@@ -8,6 +8,7 @@ using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.Misc;
 
 namespace RiverHollow
 {
@@ -18,15 +19,16 @@ namespace RiverHollow
         //Every 10 minutes is 10 seconds real time.
         static string[] ListSeasons = { "Spring", "Summer", "Fall", "Winter" };
         static string[] ListDays = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
-        static string[] ListWeather = { "Sunny", "Raining" };
+        static string[] ListWeather = { "Sunny", "Raining", "Snowing" };
+
         static int _currSeason;
         public static int CurrentSeason { get => _currSeason; }
         static int _dayOfWeek;
         public static int DayOfWeek { get => _dayOfWeek; }
-        static int _currWeather;
-        public static int CurrentWeather { get => _currWeather; }
         static int _currHour;
         public static int CurrentHour { get => _currHour; }
+        static int _currWeather;
+        public static int CurrentWeather { get => _currWeather; }
 
         private static int _currMin;
         public static int CurrentMin { get => _currMin; }
@@ -59,6 +61,8 @@ namespace RiverHollow
             _text.CenterOnWindow(_displayWindow);
 
             CheckDungeonLocks();
+            _currWeather = 0;
+            RollForWeatherEffects();
         }
 
         public static void Update(GameTime gameTime)
@@ -143,6 +147,36 @@ namespace RiverHollow
                 CheckDungeonLocks();
             }
             else { _currDay++; }
+
+            RollForWeatherEffects();
+        }
+
+        private static void RollForWeatherEffects()
+        {
+            RHRandom random = new RHRandom();
+            int roll = random.Next(1, 5);
+            if(roll > 2)
+            {
+                if (_currSeason == 0)
+                {
+                    MapManager.Raining();
+                    _currWeather = 1;
+                }
+                else if(_currSeason == 3)
+                {
+                    MapManager.SetWeather("Snow");
+                    _currWeather = 2;
+                }
+            }
+            else
+            {
+                _currWeather = 0;
+            }
+        }
+
+        public static bool IsRaining()
+        {
+            return _currWeather == 1;
         }
 
         public static string GetTime()

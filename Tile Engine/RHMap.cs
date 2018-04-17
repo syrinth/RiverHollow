@@ -34,12 +34,14 @@ namespace RiverHollow.Tile_Engine
         protected WorkerBuilding _mapBuilding;
         public WorkerBuilding MapBuilding { get => _mapBuilding; }
 
-        public bool _isBuilding;
-        public bool IsBuilding { get => _isBuilding; }
-        public bool _isDungeon;
-        public bool IsDungeon { get => _isDungeon; }
-        public bool _isTown;
-        public bool IsTown { get => _isTown; }
+        public bool _bBuilding;
+        public bool IsBuilding { get => _bBuilding; }
+        public bool _bDungeon;
+        public bool IsDungeon { get => _bDungeon; }
+        public bool _bTown;
+        public bool IsTown { get => _bTown; }
+        public bool _bOutside;
+        public bool IsOutside { get => _bOutside; }
 
         protected TiledMap _map;
         public TiledMap Map { get => _map; }
@@ -97,9 +99,10 @@ namespace RiverHollow.Tile_Engine
             _renderer = map._renderer;
             _tileArray = map._tileArray;
 
-            _isBuilding = _map.Properties.ContainsKey("Building");
-            _isDungeon = _map.Properties.ContainsKey("Dungeon");
-            _isTown = _map.Properties.ContainsKey("Town");
+            _bBuilding = _map.Properties.ContainsKey("Building");
+            _bDungeon = _map.Properties.ContainsKey("Dungeon");
+            _bTown = _map.Properties.ContainsKey("Town");
+            bool.TryParse(_map.Properties["Outside"], out _bOutside);
 
             MapWidthTiles = _map.Width;
             MapHeightTiles = _map.Height;
@@ -129,11 +132,15 @@ namespace RiverHollow.Tile_Engine
                 }
             }
             
-            _isBuilding = _map.Properties.ContainsKey("Building");
-            _isDungeon = _map.Properties.ContainsKey("Dungeon");
-            _isTown = _map.Properties.ContainsKey("Town");
+            _bBuilding = _map.Properties.ContainsKey("Building");
+            _bDungeon = _map.Properties.ContainsKey("Dungeon");
+            _bTown = _map.Properties.ContainsKey("Town");
+            if (_map.Properties.ContainsKey("Outside"))
+            {
+                bool.TryParse(_map.Properties["Outside"], out _bOutside);
+            }
 
-            if (_isTown)
+            if (_bTown)
             {
                 foreach (KeyValuePair<string, Upgrade> kvp in GameManager.DiUpgrades)
                 {
@@ -143,6 +150,17 @@ namespace RiverHollow.Tile_Engine
             _renderer = new TiledMapRenderer(GraphicsDevice);
 
             LoadMapObjects();
+        }
+
+        public void WaterTiles()
+        {
+            foreach(RHTile t in _liModifiedTiles)
+            {
+                if (t.HasBeenDug())
+                {
+                    t.Water(true);
+                }
+            }
         }
 
         public void LoadMapObjects()
@@ -484,7 +502,7 @@ namespace RiverHollow.Tile_Engine
                 }
 
                 bool upgrade = false;
-                if (_isTown)
+                if (_bTown)
                 {
                     foreach (KeyValuePair<string, Upgrade> s in GameManager.DiUpgrades)    //Check each upgrade to see if it's enabled
                     {
@@ -500,10 +518,14 @@ namespace RiverHollow.Tile_Engine
 
                 if (!upgrade)
                 {
-                    bool determinant = (l.Name == "Upper Layer");
+                    bool determinant = l.Name.Contains("Upper");
 
                     if (revealUpper) { l.IsVisible = determinant; }
                     else { l.IsVisible = !determinant; }
+                }
+
+                if (l.IsVisible && _bOutside) {
+                    l.IsVisible = l.Name.Contains(GameCalendar.GetSeason());
                 }
             }
         }
@@ -1386,6 +1408,10 @@ namespace RiverHollow.Tile_Engine
                 {
                     MapPosition = Position
                 };
+                if (GameCalendar.IsRaining())
+                {
+                    Water(true);
+                }
             }
             else
             {

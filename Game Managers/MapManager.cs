@@ -11,6 +11,7 @@ using System.IO;
 
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Characters.NPCs;
+using RiverHollow.SpriteAnimations;
 
 namespace RiverHollow.Game_Managers
 {
@@ -26,9 +27,13 @@ namespace RiverHollow.Game_Managers
         static RHMap _currentMap;
         public static RHMap CurrentMap { get => _currentMap; set => _currentMap = value; }
 
+        static List<Weather> _liWeather;
+
         public static void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice)
         {
             _tileMaps = new Dictionary<string, RHMap>();
+            _liWeather = new List<Weather>();
+            InitWeather();
 
             foreach (string s in Directory.GetFiles(_sMapFolder)) { AddMap(s, Content, GraphicsDevice); }
             foreach (string s in Directory.GetFiles(_sDungeonMapFolder)) { AddMap(s, Content, GraphicsDevice); }
@@ -130,6 +135,15 @@ namespace RiverHollow.Game_Managers
             PlayerManager.World.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
         }
 
+        internal static void Raining()
+        {
+            foreach(RHMap map in _tileMaps.Values)
+            {
+                map.WaterTiles();
+            }
+            MapManager.SetWeather("Rain");
+        }
+
         public static void EnterBuilding(WorkerBuilding b)
         {
             Rectangle rectEntrance = Rectangle.Empty;
@@ -200,6 +214,13 @@ namespace RiverHollow.Game_Managers
             {
                 map.Update(gametime);
             }
+            if (_currentMap.IsOutside)
+            {
+                foreach (Weather s in _liWeather)
+                {
+                    s.Update(gametime);
+                }
+            }
         }
 
         public static void DrawBase(SpriteBatch spriteBatch)
@@ -224,6 +245,13 @@ namespace RiverHollow.Game_Managers
         public static void DrawUpper(SpriteBatch spriteBatch)
         {
             _currentMap.DrawUpper(spriteBatch);
+            if (_currentMap.IsOutside)
+            {
+                foreach (Weather s in _liWeather)
+                {
+                    s.Draw(spriteBatch);
+                }
+            }
         }
 
         public static bool ProcessLeftButtonClick(Point mouseLocation)
@@ -282,6 +310,68 @@ namespace RiverHollow.Game_Managers
         public static void PlacePlayerObject(WorldObject worldObject)
         {
             _currentMap.PlacePlayerObject(worldObject);
+        }
+
+        public static void InitWeather()
+        {
+            int cols = 1 + RiverHollow.ScreenWidth / 160;
+            int rows = 1 + RiverHollow.ScreenHeight / 160;
+
+            int x = 0;
+            int y = 0;
+            for(int i = 0; i< cols; i++)
+            {
+                for (int j = 0; j < rows; j++)
+                {
+                    Weather w = new Weather(x, y);
+                    _liWeather.Add(w);
+                    y += 160;
+                }
+                x += 160;
+                y = 0;
+            }
+        }
+
+        public static void SetWeather(string weather)
+        {
+            foreach(Weather w in _liWeather)
+            {
+                w.SetWeather(weather);
+            }
+        }
+
+        private class Weather
+        {
+            AnimatedSprite _sprite;
+            public Weather(int x, int y)
+            {
+                _sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\texWeather"));
+                _sprite.Position = new Vector2(x, y);
+                _sprite.AddAnimation("Rain", 0, 0, 160, 160, 2, 0.2f);
+                _sprite.AddAnimation("Snow", 0, 160, 160, 160, 3, 0.2f);
+                _sprite.IsAnimating = false;
+            }
+
+            public void SetWeather(string weather)
+            {
+                _sprite.CurrentAnimation = weather;
+                _sprite.IsAnimating = true;
+            }
+
+            public void StopWeather()
+            {
+                _sprite.IsAnimating = false;
+            }
+
+            internal void Draw(SpriteBatch spriteBatch)
+            {
+                _sprite.Draw(spriteBatch, false);
+            }
+
+            internal void Update(GameTime gametime)
+            {
+                _sprite.Update(gametime);
+            }
         }
     }
 }

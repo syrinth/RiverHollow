@@ -47,8 +47,9 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\GoblinCombat");
             AddTexture(Content, @"Textures\GoblinSoldier");
             AddTexture(Content, @"Textures\texFlooring");
-            AddTexture(Content, @"Textures\NPCs\Spirit_Forest_1");
+            AddTexture(Content, @"Textures\NPCs\Spirit_Forest_2");
             AddTexture(Content, @"Textures\NPCs\Spirit_Water_1");
+            AddTexture(Content, @"Textures\texWeather");
         }
 
         public static void LoadGUIs(ContentManager Content)

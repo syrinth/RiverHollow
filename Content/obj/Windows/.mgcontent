@@ -84,5 +84,8 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/tilesetDungeon.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapSpringDungeonA.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapSpringDungeonB.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/NPCs/Spirit_Forest_2.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetOutsideWinter.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texWeather.png</File>
   </SourceFiles>
 </SourceFileCollection>

@@ -16,13 +16,13 @@ namespace RiverHollow.Characters.NPCs
         {
             _characterType = CharacterEnum.Spirit;
             _fVisibility = MIN_VISIBILITY;
-            LoadContent(@"Textures\NPCs\Spirit_Forest_1");
+            LoadContent(@"Textures\NPCs\Spirit_Forest_2");
         }
 
         public override void LoadContent(string textureToLoad)
         {
             _sprite = new AnimatedSprite(GameContentManager.GetTexture(textureToLoad));
-            _sprite.AddAnimation("Idle", TileSize, TileSize, 2, 0.6f, 0, 0);
+            _sprite.AddAnimation("Idle", 16, 18, 2, 0.6f, 0, 0);
             _sprite.SetCurrentAnimation("Idle");
 
             _width = _sprite.Width;

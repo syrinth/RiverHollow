@@ -4,6 +4,7 @@
   <property name="Mobs" value="1"/>
   <property name="MobsMax" type="int" value="3"/>
   <property name="MobsMin" type="int" value="1"/>
+  <property name="Outside" type="bool" value="false"/>
   <property name="Resources" value="0"/>
   <property name="ResourcesMax" type="int" value="60"/>
   <property name="ResourcesMin" type="int" value="20"/>

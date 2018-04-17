@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="22" height="22" tilewidth="16" tileheight="16" infinite="0" nextobjectid="36">
+ <properties>
+  <property name="Outside" type="bool" value="false"/>
+ </properties>
  <tileset firstgid="1" source="tilesetDungeon.tsx"/>
  <layer name="Base Layer" width="22" height="22">
   <data encoding="csv">
