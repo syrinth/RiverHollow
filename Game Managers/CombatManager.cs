@@ -68,26 +68,41 @@ namespace RiverHollow.Game_Managers
         //If we loop back to 0, reduce stamina by the desired amount.
         public static void NextTurn()
         {
-            if (CurrentPhase != PhaseEnum.EndCombat)
+            if(!EndCombatCheck())
             {
-                ChosenSkill = null;
-                ChosenItem = null;
-                if (TurnIndex +1 < TurnOrder.Count) { TurnIndex++; }
-                else
+                if (CurrentPhase != PhaseEnum.EndCombat)
                 {
-                    TurnIndex = 0;
-                    PlayerManager.DecreaseStamina(stamDrain);
-                    GameCalendar.IncrementMinutes();
-                }
+                    ChosenSkill = null;
+                    ChosenItem = null;
+                    if (TurnIndex + 1 < TurnOrder.Count) { TurnIndex++; }
+                    else
+                    {
+                        TurnIndex = 0;
+                        PlayerManager.DecreaseStamina(stamDrain);
+                        GameCalendar.IncrementMinutes();
+                    }
 
-                ActiveCharacter = TurnOrder[TurnIndex];
-                if (ActiveCharacter.CurrentHP == 0) { NextTurn(); }
-                else
-                {
-                    ActiveCharacter.TickBuffs();
-                    SetPhaseForTurn();
+                    ActiveCharacter = TurnOrder[TurnIndex];
+                    if (ActiveCharacter.CurrentHP == 0) { NextTurn(); }
+                    else
+                    {
+                        ActiveCharacter.TickBuffs();
+                        SetPhaseForTurn();
+                    }
                 }
             }
+        }
+
+        private static bool EndCombatCheck()
+        {
+            bool rv = false;
+            if(!PartyUp() || _listMonsters.Count == 0)
+            {
+                EndBattle();
+                rv = true;
+            }
+
+            return rv;
         }
 
         private static void SetPhaseForTurn()
@@ -172,17 +187,7 @@ namespace RiverHollow.Game_Managers
             if (_listMonsters.Contains((c)))
             {
                 _listMonsters.Remove(c);
-                TurnOrder.Remove(c);                                            //Remove the killed member from the turn order
-
-                if (_listMonsters.Count == 0)
-                {
-                    Delay = 1;
-                    EndBattle();
-                }
-            }
-            else
-            {
-                if (!PartyUp()) { EndBattle(); }
+                TurnOrder.Remove(c);                                            //Remove the killed member from the turn order 
             }
         }
 

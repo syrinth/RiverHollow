@@ -83,11 +83,6 @@ namespace RiverHollow.Characters.NPCs
                 {
                     active = s.Equals(GameCalendar.GetDayOfWeek());
                 }
-                else if (s.Contains("Season"))
-                {
-                    string[] seasonsplit = s.Split(':');
-                    active = seasonsplit[1].Equals(GameCalendar.GetSeason());
-                }
                 else if (s.Equals("Night"))
                 {
                     active = GameCalendar.IsNight();

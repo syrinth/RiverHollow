@@ -65,8 +65,11 @@ namespace RiverHollow
             _text.CenterOnWindow(_displayWindow);
 
             CheckDungeonLocks();
+            
             _iCurrWeather = 0;
             RollForWeatherEffects();
+
+            MapManager.CheckSpirits();
         }
 
         public static void Update(GameTime gameTime)

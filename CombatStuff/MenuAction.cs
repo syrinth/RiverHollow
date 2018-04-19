@@ -65,7 +65,6 @@ namespace RiverHollow.Characters.CombatStuff
         private int _textureRow;
         private float _frameSpeed;
 
-       
         public BattleLocation TargetLocation;
         public Vector2 UserStartPosition;
         public bool _used;

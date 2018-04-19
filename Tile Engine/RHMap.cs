@@ -272,7 +272,6 @@ namespace RiverHollow.Tile_Engine
                         Position = Utilities.Normalize(obj.Position),
                         CurrentMapName = "mapForest",
                     };
-                    s.CheckCondition();
                     AddCharacter(s);
                 }
             }
