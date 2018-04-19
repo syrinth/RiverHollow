@@ -162,7 +162,7 @@ namespace RiverHollow.Characters
         }
         public void CalculatePathing()
         {
-            string currDay = GameCalendar.GetDay();
+            string currDay = GameCalendar.GetDayOfWeek();
             string currSeason = GameCalendar.GetSeason();
             string currWeather = GameCalendar.GetWeather();
             if (_completeSchedule != null && _completeSchedule.Count > 0)
@@ -495,13 +495,20 @@ namespace RiverHollow.Characters
                 foreach (KeyValuePair<Rectangle, string> exit in MapManager.Maps[testMap].DictionaryExit)
                 {
                     List<RHTile> pathToExit = FindPathToLocation(start, exit.Key.Location.ToVector2(), testMap);
-                    double newCost = mapCostSoFar[testMap] + pathToExit.Count;
-                    if (!mapCostSoFar.ContainsKey(exit.Value))
+                    if (pathToExit != null)
                     {
-                        mapCostSoFar[exit.Value] = newCost + pathToExit.Count;
-                        frontier.Enqueue(exit.Value, newCost);
-                        mapCameFrom[exit.Value] = testMap;
-                        _dictMapPathing[testMap + ":" + exit.Value] = pathToExit; // This needd another key for the appropriate exit
+                        double newCost = mapCostSoFar[testMap] + pathToExit.Count;
+                        if (!mapCostSoFar.ContainsKey(exit.Value))
+                        {
+                            mapCostSoFar[exit.Value] = newCost + pathToExit.Count;
+                            frontier.Enqueue(exit.Value, newCost);
+                            mapCameFrom[exit.Value] = testMap;
+                            _dictMapPathing[testMap + ":" + exit.Value] = pathToExit; // This needd another key for the appropriate exit
+                        }
+                    }
+                    else
+                    {
+                        int i = 0;
                     }
                     ClearPathingTracks();
                 }

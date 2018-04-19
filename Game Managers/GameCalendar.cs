@@ -1,56 +1,60 @@
 ﻿using RiverHollow.Game_Managers;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Misc;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow
 {
     public static class GameCalendar
     {
+        static int DAYS_IN_MONTH = 28;
+        static int MIN_PRECIPITATION_DAYS = 6;
+
         //One day goes from 6 AM - 2 AM => 20 hours
         //Each hour should be one minute
         //Every 10 minutes is 10 seconds real time.
         static string[] ListSeasons = { "Spring", "Summer", "Fall", "Winter" };
         static string[] ListDays = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
-        static string[] ListWeather = { "Sunny", "Raining", "Snowing" };
+        static string[] ListWeather = { "Sunny", "Raining", "Snowing" }; //Thunderstorm?
 
-        static int _currSeason;
-        public static int CurrentSeason { get => _currSeason; }
-        static int _dayOfWeek;
-        public static int DayOfWeek { get => _dayOfWeek; }
-        static int _currHour;
-        public static int CurrentHour { get => _currHour; }
-        static int _currWeather;
-        public static int CurrentWeather { get => _currWeather; }
+        static int _iCurrSeason;
+        public static int CurrentSeason { get => _iCurrSeason; }
+        static int _iDayOfWeek;
+        public static int DayOfWeek { get => _iDayOfWeek; }
+        static int _iCurrHour;
+        public static int CurrentHour { get => _iCurrHour; }
+        static int _iCurrWeather;
+        public static int CurrentWeather { get => _iCurrWeather; }
 
-        private static int _currMin;
-        public static int CurrentMin { get => _currMin; }
-        static int _currDay;
-        public static int CurrentDay { get => _currDay; }
-        //static Seasons _currSeason;
+        private static int _iCurrMin;
+        public static int CurrentMin { get => _iCurrMin; }
+        static int _iCurrDay;
+        public static int CurrentDay { get => _iCurrDay; }
 
         static GUIWindow _displayWindow;
         static GUIText _text;
 
+        static double _dLastUpdateinSeconds;
+        static int _iSeasonPrecipDays = 0;
 
-        static double _lastUpdateinSeconds;
+        static bool _bNightfall;
 
         public static void NewCalendar()
         {
-            _dayOfWeek = 0;
-            _currDay = 1;
-            _currSeason = 0;
-            _currHour = 6;
-            _currMin = 0;
+            _iDayOfWeek = 0;
+            _iCurrDay = 1;
+            _iCurrSeason = 0;
+            _iCurrHour = 17;
+            _iCurrMin = 50;
+            _bNightfall = false;
 
-            _lastUpdateinSeconds = 0;
+            _dLastUpdateinSeconds = 0;
 
             _text = new GUIText("Day XX, XX:XX", GameContentManager.GetFont(@"Fonts\Font"));
             Vector2 boxSize = _text.MeasureString() + new Vector2(GUIWindow.BrownWin.Edge*2, GUIWindow.BrownWin.Edge*2);
@@ -61,20 +65,20 @@ namespace RiverHollow
             _text.CenterOnWindow(_displayWindow);
 
             CheckDungeonLocks();
-            _currWeather = 0;
+            _iCurrWeather = 0;
             RollForWeatherEffects();
         }
 
         public static void Update(GameTime gameTime)
         {
-            _lastUpdateinSeconds += gameTime.ElapsedGameTime.TotalSeconds;
-            if(_currHour == 26)
+            _dLastUpdateinSeconds += gameTime.ElapsedGameTime.TotalSeconds;
+            if(_iCurrHour == 26)
             {
                 GUIManager.SetScreen(new DayEndScreen());
             }
-            if (_lastUpdateinSeconds >= 1)
+            if (_dLastUpdateinSeconds >= 1)
             {
-                _lastUpdateinSeconds = 0;
+                _dLastUpdateinSeconds = 0;
                 IncrementMinutes();
             }
 
@@ -86,29 +90,35 @@ namespace RiverHollow
 
         public static void IncrementMinutes()
         {
-            if (_currMin >= 60)
+            if (_iCurrMin >= 60)
             {
-                _currMin = 0;
-                _currHour++;
+                _iCurrMin = 0;
+                _iCurrHour++;
+
+                if (!_bNightfall && IsNight())
+                {
+                    _bNightfall = true;
+                    MapManager.CheckSpirits();
+                }
             }
             else
             {
-                _currMin++;
+                _iCurrMin++;
             }
         }
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            int minToFifteen = _currMin / 15;
+            int minToFifteen = _iCurrMin / 15;
             string mins = "00";
-            string hours = _currHour.ToString();
-            if (_currHour > 12 && _currHour < 25)
+            string hours = _iCurrHour.ToString();
+            if (_iCurrHour > 12 && _iCurrHour < 25)
             {
-                hours = (_currHour - 12).ToString();
+                hours = (_iCurrHour - 12).ToString();
             }
-            else if (_currHour >= 25)
+            else if (_iCurrHour >= 25)
             {
-                hours = (_currHour - 24).ToString();
+                hours = (_iCurrHour - 24).ToString();
             }
             switch (minToFifteen)
             {
@@ -127,26 +137,27 @@ namespace RiverHollow
                     break;
             }
             _displayWindow.Draw(spriteBatch);
-            _text.Draw(spriteBatch, String.Format("Day {0}, {1}:{2}", _currDay, hours, mins));
+            _text.Draw(spriteBatch, String.Format("Day {0}, {1}:{2}", _iCurrDay, hours, mins));
             //spriteBatch.DrawString(_calendarFont, String.Format("Day {0}, {1}:{2}", _currDay, hours, mins), _displayWindow.InnerTopLeft(), Color.Black);
         }
 
         public static void NextDay()
         {
-            _currHour = 6;
-            _currMin = 0;
-            if(_dayOfWeek < ListDays.Length - 1) { _dayOfWeek++; }
-            else { _dayOfWeek = 0; }
+            _bNightfall = false;
+            _iCurrHour = 6;
+            _iCurrMin = 0;
+            if(_iDayOfWeek < ListDays.Length - 1) { _iDayOfWeek++; }
+            else { _iDayOfWeek = 0; }
 
-            if(_currDay == 28)
+            if(_iCurrDay == DAYS_IN_MONTH)
             {
-                _currDay = 1;
-                if (_currSeason == 3) { _currSeason = 0; }
-                else { _currSeason++; }
+                _iCurrDay = 1;
+                if (_iCurrSeason == 3) { _iCurrSeason = 0; }
+                else { _iCurrSeason++; }
 
                 CheckDungeonLocks();
             }
-            else { _currDay++; }
+            else { _iCurrDay++; }
 
             RollForWeatherEffects();
         }
@@ -155,67 +166,84 @@ namespace RiverHollow
         {
             RHRandom random = new RHRandom();
             int roll = random.Next(1, 5);
-            if(roll > 2)
+            if(roll > 2 || (_iSeasonPrecipDays < MIN_PRECIPITATION_DAYS && _iCurrDay + _iSeasonPrecipDays - 1 == DAYS_IN_MONTH))
             {
-                if (_currSeason == 0)
-                {
-                    MapManager.Raining();
-                    _currWeather = 1;
-                }
-                else if(_currSeason == 3)
-                {
-                    MapManager.SetWeather("Snow");
-                    _currWeather = 2;
-                }
+                _iSeasonPrecipDays++;
+                if (_iCurrSeason == 0) { _iCurrWeather = 1; }
+                else if(_iCurrSeason == 3) { _iCurrWeather = 2; }
+
+                MapManager.SetWeather(ListWeather[_iCurrWeather]);
             }
-            else
-            {
-                _currWeather = 0;
-            }
+            else { _iCurrWeather = 0; }
         }
 
         public static bool IsRaining()
         {
-            return _currWeather == 1;
+            return _iCurrWeather == 1;
+        }
+        public static bool IsSunny()
+        {
+            return _iCurrWeather == 0;
+        }
+        public static bool IsNight()
+        {
+            return _iCurrHour >= 18;
         }
 
         public static string GetTime()
         {
-            return string.Format("{0}:{1}", _currHour, _currMin);
+            return string.Format("{0}:{1}", _iCurrHour, _iCurrMin);
         }
 
-        public static string GetDay()
+        public static string GetDayOfWeek()
         {
-            return ListDays[_dayOfWeek];
+            return ListDays[_iDayOfWeek];
         }
 
         public static string GetSeason()
         {
-            return ListSeasons[_currSeason];
+            return ListSeasons[_iCurrSeason];
         }
 
         public static string GetWeather()
         {
-            return ListWeather[_currWeather];
-        }
-
-        public static void RollOver()
-        {
-            _dayOfWeek++;
-            if(_dayOfWeek == 7)
-            {
-                _dayOfWeek = 0;
-            }
+            return ListWeather[_iCurrWeather];
         }
 
         public static void LoadCalendar(GameManager.CalendarData d)
         {
-            _currDay = d.dayOfMonth;
-            _dayOfWeek = d.dayOfWeek;
-            _currSeason = d.currSeason;
-            _currWeather = d.currWeather;
+            _iCurrDay = d.dayOfMonth;
+            _iDayOfWeek = d.dayOfWeek;
+            _iCurrSeason = d.currSeason;
+            _iCurrWeather = d.currWeather;
+            _iSeasonPrecipDays = d.currSeasonPrecipDays;
+            _bNightfall = false;
 
             CheckDungeonLocks();
+        }
+
+        internal static float GetAmbientLight()
+        {
+            float rv = 0;
+
+            if (_iCurrHour >= 18)
+            {
+                rv = ((float)_iCurrHour - 17f) / 8f * 0.5f;
+            }
+
+            return rv;
+        }
+
+        public static CalendarData SaveCalendar()
+        {
+            return new CalendarData
+            {
+                dayOfWeek = _iDayOfWeek,
+                dayOfMonth = _iCurrDay,
+                currSeason = _iCurrSeason,
+                currWeather = _iCurrWeather,
+                currSeasonPrecipDays = _iSeasonPrecipDays
+            };
         }
 
         public static void CheckDungeonLocks()

@@ -38,7 +38,7 @@ namespace RiverHollow.Characters.NPCs
 
         public void Talk(bool IsOpen = false)
         {
-            GraphicCursor._currentType = GraphicCursor.CursorType.Talk;
+            GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Talk;
             string text = string.Empty;
             if (!Introduced)
             {

@@ -131,6 +131,9 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "currWeather")]
             public int currWeather;
+
+            [XmlElement(ElementName = "currSeasonPrecipDays")]
+            public int currSeasonPrecipDays;
         }
         public struct BuildingData
         {
@@ -357,13 +360,7 @@ namespace RiverHollow.Game_Managers
                 currentMap = PlayerManager.CurrentMap,
                 money = PlayerManager.Money,
                 currentClass = PlayerManager.Combat.CharacterClass.ID,
-                Calendar = new CalendarData
-                {
-                    dayOfWeek = GameCalendar.DayOfWeek,
-                    dayOfMonth = GameCalendar.CurrentDay,
-                    currSeason = GameCalendar.CurrentSeason,
-                    currWeather = GameCalendar.CurrentWeather
-                },
+                Calendar = GameCalendar.SaveCalendar(),
                 Items = new List<ItemData>(),
                 Buildings = new List<BuildingData>(),
                 MapData = new List<MapData>(),

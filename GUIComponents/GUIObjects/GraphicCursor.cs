@@ -9,8 +9,8 @@ namespace RiverHollow.GUIObjects
 {
     public static class GraphicCursor
     {
-        public enum CursorType { Normal, Talk, Gift};
-        public static CursorType _currentType;
+        public enum EnumCursorType { Normal, Talk, Gift};
+        public static EnumCursorType _CursorType;
         public static MouseState LastMouseState = new MouseState();
         private static Item _heldItem;
         public static Item HeldItem { get => _heldItem; }
@@ -29,7 +29,7 @@ namespace RiverHollow.GUIObjects
         {
             _texture = GameContentManager.GetTexture(@"Textures\Dialog");
             Position = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-            _currentType = CursorType.Normal;
+            _CursorType = EnumCursorType.Normal;
         }
 
         public static Vector2 GetTranslatedPosition()
@@ -97,18 +97,20 @@ namespace RiverHollow.GUIObjects
         {
             Rectangle source = Rectangle.Empty;
             Texture2D drawIt = _texture;
-            switch (_currentType)
+            float alpha = 1f;
+            switch (_CursorType)
             {
-                case CursorType.Normal:
+                case EnumCursorType.Normal:
                     source = new Rectangle(288, 192, 32, 32);
                     break;
-                case CursorType.Talk:
+                case EnumCursorType.Talk:
                     source = new Rectangle(288, 160, 32, 32);
+                    alpha = (PlayerManager.PlayerInRange(GetTranslatedMouseLocation().ToPoint(), (int)(TileSize * 1.5)))? 1 : 0.5f;
                     break;
             }
             Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, 32, 32);
             
-            spriteBatch.Draw(drawIt, drawRectangle, source, Color.White);
+            spriteBatch.Draw(drawIt, drawRectangle, source, Color.White * alpha);
             if (HeldItem != null)
             {
                 _heldItem.Draw(spriteBatch, new Rectangle((int)Position.X+16, (int)Position.Y+16, 32, 32));

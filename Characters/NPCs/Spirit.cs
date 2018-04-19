@@ -8,15 +8,26 @@ namespace RiverHollow.Characters.NPCs
 {
     public class Spirit : WorldCharacter
     {
-        private const float MIN_VISIBILITY = 0.05f;
-        private float _fVisibility;
-        public bool _bTriggered;
+        const float MIN_VISIBILITY = 0.05f;
+        float _fVisibility;
+        string _sType;
+        string _sCondition;
 
-        public Spirit() : base()
+        bool _bActive;
+        public bool Active => _bActive;
+        public bool Triggered;
+
+        public Spirit(string name, string type, string condition) : base()
         {
             _characterType = CharacterEnum.Spirit;
             _fVisibility = MIN_VISIBILITY;
-            LoadContent(@"Textures\NPCs\Spirit_Forest_2");
+
+            _sName = name;
+            _sType = type;
+            _sCondition = condition;
+            _bActive = false;
+
+            LoadContent(@"Textures\NPCs\Spirit_" + _sType);
         }
 
         public override void LoadContent(string textureToLoad)
@@ -31,31 +42,70 @@ namespace RiverHollow.Characters.NPCs
 
         public override void Update(GameTime theGameTime)
         {
-            base.Update(theGameTime);
-            if (!_bTriggered)
+            if (_bActive)
             {
-                int max = TileSize * 13;
-                int dist = 0;
-                if (PlayerManager.CurrentMap == CurrentMapName && PlayerManager.PlayerInRangeGetDist(_sprite.Center.ToPoint(), max, ref dist))
+                base.Update(theGameTime);
+                if (!Triggered)
                 {
-                    float fMax = max;
-                    float fDist = dist;
-                    float percentage = (Math.Abs(dist - fMax)) / fMax;
-                    percentage = Math.Max(percentage, MIN_VISIBILITY);
-                    _fVisibility = 0.4f * percentage;
+                    int max = TileSize * 13;
+                    int dist = 0;
+                    if (PlayerManager.CurrentMap == CurrentMapName && PlayerManager.PlayerInRangeGetDist(_sprite.Center.ToPoint(), max, ref dist))
+                    {
+                        float fMax = max;
+                        float fDist = dist;
+                        float percentage = (Math.Abs(dist - fMax)) / fMax;
+                        percentage = Math.Max(percentage, MIN_VISIBILITY);
+                        _fVisibility = 0.4f * percentage;
+                    }
                 }
             }
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
-            _sprite.Draw(spriteBatch, useLayerDepth, _fVisibility);
+            if (_bActive)
+            {
+                _sprite.Draw(spriteBatch, useLayerDepth, _fVisibility);
+            }
         }
 
+        public void CheckCondition()
+        {
+            bool active = false;
+            string[] splitCondition = _sCondition.Split('/');
+            foreach (string s in splitCondition)
+            {
+                if (s.Equals("Raining"))
+                {
+                    active = GameCalendar.IsRaining();
+                }
+                else if (s.Contains("day"))
+                {
+                    active = s.Equals(GameCalendar.GetDayOfWeek());
+                }
+                else if (s.Contains("Season"))
+                {
+                    string[] seasonsplit = s.Split(':');
+                    active = seasonsplit[1].Equals(GameCalendar.GetSeason());
+                }
+                else if (s.Equals("Night"))
+                {
+                    active = GameCalendar.IsNight();
+                }
+
+                if (!active) { break; }
+            }
+
+            _bActive = active;
+            Triggered = false;
+        }
         public void Talk()
         {
-            _bTriggered = true;
-            _fVisibility = 1.0f;
+            if (_bActive)
+            {
+                Triggered = true;
+                _fVisibility = 1.0f;
+            }
         }
     }
 }

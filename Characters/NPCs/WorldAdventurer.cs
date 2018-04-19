@@ -153,7 +153,7 @@ namespace RiverHollow.Characters.NPCs
             string rv = string.Empty;
             if (entry.Equals("Talk"))
             {
-                GraphicCursor._currentType = GraphicCursor.CursorType.Normal;
+                GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Normal;
                 _iMood += 1;
 
                 RHRandom r = new RHRandom();

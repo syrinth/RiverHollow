@@ -10,14 +10,14 @@ using RiverHollow.Misc;
 using System.IO;
 
 using static RiverHollow.Game_Managers.GameManager;
-using RiverHollow.Characters.NPCs;
 using RiverHollow.SpriteAnimations;
+using RiverHollow.Game_Managers.GUIObjects;
 
 namespace RiverHollow.Game_Managers
 {
     public static class MapManager
     {
-        public const string HomeMap = "mapForestDungeonZone";
+        public const string HomeMap = "mapManorGrounds"; //"mapForestDungeonZone"; 
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
 
@@ -28,6 +28,7 @@ namespace RiverHollow.Game_Managers
         public static RHMap CurrentMap { get => _currentMap; set => _currentMap = value; }
 
         static List<Weather> _liWeather;
+        static GUIImage _ambientLight;
 
         public static void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice)
         {
@@ -39,6 +40,7 @@ namespace RiverHollow.Game_Managers
             foreach (string s in Directory.GetFiles(_sDungeonMapFolder)) { AddMap(s, Content, GraphicsDevice); }
 
             _currentMap = _tileMaps[MapManager.HomeMap];
+            _ambientLight = new GUIImage(Vector2.Zero, new Rectangle(160, 128, TileSize, TileSize), RiverHollow.ScreenWidth, RiverHollow.ScreenHeight, @"Textures\Dialog");
         }
 
         public static void AddMap(string mapToAdd, ContentManager Content, GraphicsDevice GraphicsDevice)
@@ -135,15 +137,6 @@ namespace RiverHollow.Game_Managers
             PlayerManager.World.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
         }
 
-        internal static void Raining()
-        {
-            foreach(RHMap map in _tileMaps.Values)
-            {
-                map.WaterTiles();
-            }
-            MapManager.SetWeather("Rain");
-        }
-
         public static void EnterBuilding(WorkerBuilding b)
         {
             Rectangle rectEntrance = Rectangle.Empty;
@@ -199,11 +192,6 @@ namespace RiverHollow.Game_Managers
             mob.CurrentMapName = "mapManorGrounds";
             _tileMaps[@"mapManorGrounds"].AddMob(mob);
 
-            Spirit s = new Spirit();
-            s.Position = new Vector2(360, 380);
-            s.CurrentMapName = "mapForest";
-            _tileMaps[@"mapForest"].AddCharacter(s);
-
             MerchantChest m = new MerchantChest();
             PlayerManager._merchantChest = m;
         }
@@ -247,9 +235,13 @@ namespace RiverHollow.Game_Managers
             _currentMap.DrawUpper(spriteBatch);
             if (_currentMap.IsOutside)
             {
-                foreach (Weather s in _liWeather)
+                _ambientLight.Draw(spriteBatch, GameCalendar.GetAmbientLight());
+                if (!GameCalendar.IsSunny())
                 {
-                    s.Draw(spriteBatch);
+                    foreach (Weather s in _liWeather)
+                    {
+                        s.Draw(spriteBatch);
+                    }
                 }
             }
         }
@@ -337,6 +329,30 @@ namespace RiverHollow.Game_Managers
             foreach(Weather w in _liWeather)
             {
                 w.SetWeather(weather);
+            }
+
+            if (GameCalendar.IsRaining())
+            {
+                foreach (RHMap map in _tileMaps.Values)
+                {
+                    map.WaterTiles();
+                }
+            }
+        }
+
+        public static void Rollover()
+        {
+            foreach(RHMap map in _tileMaps.Values)
+            {
+                map.Rollover();
+            }
+        }
+
+        public static void CheckSpirits()
+        {
+            foreach (RHMap map in _tileMaps.Values)
+            {
+                map.CheckSpirits();
             }
         }
 

@@ -225,7 +225,8 @@ namespace RiverHollow.Tile_Engine
                 {
                     Door d = null;
                     if (obj.Name.Equals("MobDoor")) { d = ObjectManager.GetDoor(obj.Name, obj.Position); }
-                    else if (obj.Name.Equals("SeasonDoor")) {
+                    else if (obj.Name.Equals("SeasonDoor"))
+                    {
                         d = ObjectManager.GetDoor(obj.Name, obj.Position);
                         ((SeasonDoor)d).SetSeason(obj.Properties["Season"]);
                     }
@@ -263,6 +264,16 @@ namespace RiverHollow.Tile_Engine
                     {
                         InventoryManager.AddNewItemToInventory(int.Parse(s), c);
                     }
+                }
+                else if (obj.Name.Equals("Spirit"))
+                {
+                    Spirit s = new Spirit(obj.Properties["Name"], obj.Properties["Type"], obj.Properties["Condition"])
+                    {
+                        Position = Utilities.Normalize(obj.Position),
+                        CurrentMapName = "mapForest",
+                    };
+                    s.CheckCondition();
+                    AddCharacter(s);
                 }
             }
 
@@ -389,7 +400,7 @@ namespace RiverHollow.Tile_Engine
                 moved.Clear();
             }
 
-            if (GameManager.IsRunning())
+            if (IsRunning())
             {
                 foreach (WorldCharacter c in _liCharacters)
                 {
@@ -406,6 +417,19 @@ namespace RiverHollow.Tile_Engine
             foreach(RHTile tile in _liModifiedTiles)
             {
                 tile.Rollover();
+            }
+
+            CheckSpirits();
+        }
+
+        public void CheckSpirits()
+        {
+            foreach (WorldCharacter c in _liCharacters)
+            {
+                if (c.IsSpirit())
+                {
+                    ((Spirit)c).CheckCondition();
+                }
             }
         }
 
@@ -447,11 +471,7 @@ namespace RiverHollow.Tile_Engine
         {
             SetLayerVisibility(false);
 
-            //_renderer.GraphicsDevice.BlendState = BlendState.AlphaBlend;
-            //_renderer.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
-            //_renderer.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
             _renderer.Draw(_map, Camera._transform);
-
 
             foreach(WorldCharacter c in _liCharacters)
             {
@@ -723,7 +743,7 @@ namespace RiverHollow.Tile_Engine
             {
                 foreach (WorldCharacter c in _liCharacters)
                 {
-                    if (c.CollisionContains(mouseLocation) && c.CanTalk())
+                    if (PlayerManager.PlayerInRange(c.CollisionBox.Center, (int)(TileSize * 1.5)) && c.CollisionContains(mouseLocation) && c.CanTalk())
                     {
                         rv = true;
                         if (c.IsSpirit())
@@ -918,14 +938,17 @@ namespace RiverHollow.Tile_Engine
                 foreach(WorldCharacter c in _liCharacters)
                 {
                     if(!c.IsMob() && c.CollisionContains(mouseLocation)){
-                        GraphicCursor._currentType = GraphicCursor.CursorType.Talk;
-                        found = true;
-                        break;
+                        if (!c.IsSpirit() || ((Spirit)c).Active)
+                        {
+                            GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Talk;
+                            found = true;
+                            break;
+                        }
                     }
                 }
                 if (!found)
                 {
-                    GraphicCursor._currentType = GraphicCursor.CursorType.Normal;
+                    GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Normal;
                 }
             }
 

@@ -15,7 +15,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
 
         private TextScreen()
         {
-            GraphicCursor._currentType = GraphicCursor.CursorType.Normal;
+            GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Normal;
             GameManager.Pause();
         }
 
