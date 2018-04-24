@@ -12,6 +12,8 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<string, string> _diNPCDialogue;
         private static Dictionary<string, Dictionary<int, string>> _diMerchandise;
         private static Dictionary<string, string> _diUpgrades;
+        private static Dictionary<string, string> _diSpiritLoot;
+        public static Dictionary<string, string> DiSpiritLoot { get => _diSpiritLoot; }
         public static Dictionary<string, string> DiUpgrades { get => _diUpgrades; }
 
         public static void LoadContent(ContentManager Content)
@@ -20,6 +22,7 @@ namespace RiverHollow.Game_Managers
             _diTextures = new Dictionary<string, Texture2D>();
             _diFonts = new Dictionary<string, SpriteFont>();
             _diMerchandise = new Dictionary<string, Dictionary<int, string>>();
+            _diSpiritLoot = _content.Load<Dictionary<string, string>>(@"Data\SpiritLoot");
             _diUpgrades = _content.Load<Dictionary<string, string>>(@"Data\TownUpgrades");
 
             _diNPCDialogue = LoadDialogue(@"Data\Dialogue\NPCDialogue");
@@ -50,6 +53,7 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\NPCs\Spirit_Forest_2");
             AddTexture(Content, @"Textures\NPCs\Spirit_Water_1");
             AddTexture(Content, @"Textures\texWeather");
+            AddTexture(Content, @"Textures\lightmask");
         }
 
         public static void LoadGUIs(ContentManager Content)

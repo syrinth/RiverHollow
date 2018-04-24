@@ -33,6 +33,7 @@ namespace RiverHollow.Characters
         protected Dictionary<int, bool> _collection;
         public Dictionary<int, bool> Collection { get => _collection; }
         public bool Introduced;
+        public bool GiftGiven;
 
         protected Dictionary<string, List<KeyValuePair<string, string>>> _completeSchedule;         //Every day with a list of KVP Time/GoToLocations
         List<KeyValuePair<string, List<RHTile>>> _todaysPathing = null;                             //List of Times with the associated pathing
@@ -157,6 +158,7 @@ namespace RiverHollow.Characters
         
         public void RollOver()
         {
+            GiftGiven = false;
             Position = Utilities.Normalize(MapManager.Maps[_homeMap].GetCharacterSpawn("NPC" + _index));
             CalculatePathing();
         }
@@ -198,7 +200,7 @@ namespace RiverHollow.Characters
 
                         if (MapManager.Maps[CurrentMapName].DictionaryCharacterLayer.ContainsKey(kvp.Value))
                         {
-                            timePath = FindPathToLocation(start, MapManager.Maps[CurrentMapName].DictionaryCharacterLayer[kvp.Value], CurrentMapName);
+                            timePath = FindPathToLocation(ref start, MapManager.Maps[CurrentMapName].DictionaryCharacterLayer[kvp.Value], CurrentMapName);
                         }
                         else
                         {
@@ -256,7 +258,7 @@ namespace RiverHollow.Characters
             {
                 text = GetSelectionText();
             }
-            text = ProcessText(text);
+            text = Utilities.ProcessText(text, _sName);
             GUIManager.SetScreen(new TextScreen(this, text));
         }
 
@@ -267,7 +269,7 @@ namespace RiverHollow.Characters
             {
                 text = _dialogueDictionary[dialogTag];
             }
-            text = ProcessText(text);
+            text = Utilities.ProcessText(text, _sName);
             GUIManager.SetScreen(new TextScreen(this, text));
         }
 
@@ -302,14 +304,14 @@ namespace RiverHollow.Characters
         {
             RHRandom r = new RHRandom();
             string text = _dialogueDictionary["Selection"];
-            return ProcessText(text);
+            return Utilities.ProcessText(text, _sName);
         }
 
         public virtual string GetText()
         {
             RHRandom r = new RHRandom();
             string text = _dialogueDictionary[r.Next(1, 2).ToString()];
-            return ProcessText(text);
+            return Utilities.ProcessText(text, _sName);
         }
 
         public virtual string GetDialogEntry(string entry)
@@ -337,28 +339,8 @@ namespace RiverHollow.Characters
             }
             else
             {
-                return _dialogueDictionary.ContainsKey(entry) ? ProcessText(_dialogueDictionary[entry]) : string.Empty;
+                return _dialogueDictionary.ContainsKey(entry) ? Utilities.ProcessText(_dialogueDictionary[entry], _sName) : string.Empty;
             }
-        }
-
-        public string ProcessText(string text)
-        {
-            string rv = string.Empty;
-            text = text.Replace(@"\n", System.Environment.NewLine);
-            string[] sections = text.Split(new[] { '$' }, StringSplitOptions.RemoveEmptyEntries);
-            for(int i=0; i< sections.Length; i++)
-            {
-                if (int.TryParse(sections[i], out int val))
-                {
-                    if (val == 0) { sections[i] = _sName; }
-                    else { sections[i] = CharacterManager.GetCharacterNameByIndex(val); }
-                }
-                else if (sections[i] == "^") { sections[i] = PlayerManager.Name; }
-
-                rv += sections[i];
-            }
-
-            return rv;
         }
 
         public void Gift(Item item)
@@ -374,6 +356,7 @@ namespace RiverHollow.Characters
                 }
                 else
                 {
+                    GiftGiven = true;
                     if (_collection.ContainsKey(item.ItemID))
                     {
                         Friendship += _collection[item.ItemID] ? 50 : 20;
@@ -463,16 +446,17 @@ namespace RiverHollow.Characters
             while (frontier.Count > 0)
             {
                 var testMap = frontier.Dequeue();
+                string mapSplit = testMap.Split(':')[0];
                 string fromMap = mapCameFrom[testMap];
                 if (fromMap != testMap)
                 {
-                    start = MapManager.Maps[testMap].DictionaryEntrance[fromMap].Location.ToVector2();
+                    start = MapManager.Maps[mapSplit].DictionaryEntrance[fromMap].Location.ToVector2();
                 }
-                if (MapManager.Maps[testMap].DictionaryCharacterLayer.ContainsKey(findKey))
+                if (MapManager.Maps[mapSplit].DictionaryCharacterLayer.ContainsKey(findKey))
                 {
                     mapName = testMap;
-                    newStart = MapManager.Maps[testMap].DictionaryCharacterLayer[findKey];
-                    List<RHTile> pathToExit = FindPathToLocation(start, MapManager.Maps[testMap].DictionaryCharacterLayer[findKey], testMap);
+                    newStart = MapManager.Maps[mapSplit].DictionaryCharacterLayer[findKey];
+                    List<RHTile> pathToExit = FindPathToLocation(ref start, MapManager.Maps[mapSplit].DictionaryCharacterLayer[findKey], testMap);
                     fromMap = mapCameFrom[testMap];
                     List<List<RHTile>> _totalPath = new List<List<RHTile>>();
                     _totalPath.Add(pathToExit);
@@ -492,9 +476,9 @@ namespace RiverHollow.Characters
                     break;
                 }
 
-                foreach (KeyValuePair<Rectangle, string> exit in MapManager.Maps[testMap].DictionaryExit)
+                foreach (KeyValuePair<Rectangle, string> exit in MapManager.Maps[mapSplit].DictionaryExit)
                 {
-                    List<RHTile> pathToExit = FindPathToLocation(start, exit.Key.Location.ToVector2(), testMap);
+                    List<RHTile> pathToExit = FindPathToLocation(ref start, exit.Key.Location.ToVector2(), testMap);
                     if (pathToExit != null)
                     {
                         double newCost = mapCostSoFar[testMap] + pathToExit.Count;
@@ -502,7 +486,11 @@ namespace RiverHollow.Characters
                         {
                             mapCostSoFar[exit.Value] = newCost + pathToExit.Count;
                             frontier.Enqueue(exit.Value, newCost);
-                            mapCameFrom[exit.Value] = testMap;
+                            string[] split = null;
+                            if (exit.Value.Contains(":")) {
+                                split = exit.Value.Split(':');
+                            }
+                            mapCameFrom[exit.Value] = (split == null) ? mapSplit : mapSplit + ":" + split[1];
                             _dictMapPathing[testMap + ":" + exit.Value] = pathToExit; // This needd another key for the appropriate exit
                         }
                     }
@@ -516,10 +504,10 @@ namespace RiverHollow.Characters
 
             return _completeTilePath;
         }
-        private List<RHTile> FindPathToLocation(Vector2 start, Vector2 target, string mapName)
+        private List<RHTile> FindPathToLocation(ref Vector2 start, Vector2 target, string mapName)
         {
             List<RHTile> returnList = null;
-            RHMap map = MapManager.Maps[mapName];
+            RHMap map = MapManager.Maps[mapName.Split(':')[0]];
             RHTile startTile = map.RetrieveTile(start.ToPoint());
             RHTile goalNode = map.RetrieveTile(target.ToPoint());
             var frontier = new PriorityQueue<RHTile>();
@@ -534,6 +522,7 @@ namespace RiverHollow.Characters
                 if (current.Equals(goalNode))
                 {
                     returnList = BackTrack(current);
+                    start = current.Position;
                     break;
                 }
 
@@ -567,7 +556,7 @@ namespace RiverHollow.Characters
         }
         private double Heuristic(RHTile a, RHTile b)
         {
-            return (Math.Abs(a.Position.X - b.Position.X) + Math.Abs(b.Position.Y - b.Position.Y)) * (a.IsRoad ? 1 : slowCost);
+            return (Math.Abs(a.Position.X - b.Position.X) + Math.Abs(a.Position.Y - b.Position.Y)) * (a.IsRoad ? 1 : slowCost);
         }
        
         //Returns how much it costs to enter the next square

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextobjectid="28">
+<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextobjectid="29">
  <properties>
   <property name="Outside" type="bool" value="true"/>
   <property name="Town" type="bool" value="true"/>
@@ -531,6 +531,7 @@
   <object id="9" name="Route2" x="216.633" y="857.12"/>
   <object id="10" name="Route3" x="1093" y="1174.67" width="15" height="9"/>
   <object id="12" name="Route4" x="1221.85" y="691.121" width="8" height="7"/>
+  <object id="28" name="PlayerSpawn" x="693.848" y="500.697" width="5.63636" height="5.27273"/>
  </objectgroup>
  <objectgroup name="Travel Layer">
   <object id="1" name="Exit" x="1.49993" y="644.501" width="13.8333" height="82.3333">

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
+using RiverHollow.Game_Managers.GUIComponents.Screens;
+using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using System;
 using static RiverHollow.Game_Managers.GameManager;
@@ -8,22 +10,25 @@ namespace RiverHollow.Characters.NPCs
 {
     public class Spirit : WorldCharacter
     {
+        
         const float MIN_VISIBILITY = 0.05f;
         float _fVisibility;
         string _sType;
         string _sCondition;
+        string _sText;
 
         bool _bActive;
         public bool Active => _bActive;
         public bool Triggered;
 
-        public Spirit(string name, string type, string condition) : base()
+        public Spirit(string name, string type, string condition, string text) : base()
         {
             _characterType = CharacterEnum.Spirit;
             _fVisibility = MIN_VISIBILITY;
 
             _sName = name;
             _sType = type;
+            _sText = text;
             _sCondition = condition;
             _bActive = false;
 
@@ -100,6 +105,14 @@ namespace RiverHollow.Characters.NPCs
             {
                 Triggered = true;
                 _fVisibility = 1.0f;
+
+                string[] loot = GameContentManager.DiSpiritLoot[_sType].Split('/');
+                RHRandom r = new RHRandom();
+                int arrayID = r.Next(0, loot.Length - 1);
+                InventoryManager.AddNewItemToInventory(int.Parse(loot[arrayID]));
+
+                _sText = Utilities.ProcessText(_sText.Replace("*", "*"+ loot[arrayID]+"*"));
+                GUIManager.SetScreen(new TextScreen(this, _sText));
             }
         }
     }

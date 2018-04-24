@@ -12,6 +12,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         private GUIButton _btnQuestLog;
         private GUIButton _btnInventory;
         private GUIButton _btnParty;
+        private GUIButton _btnOptions;
         private GUIScreen _infoScreen;
         List<GUIObject> _liButtons;
 
@@ -24,8 +25,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _btnParty = new GUIButton("Party");
             _btnQuestLog = new GUIButton("Quest Log");
             _btnExitGame = new GUIButton("Exit Game");
+            _btnOptions = new GUIButton("Options");
 
-            _liButtons = new List<GUIObject>() { _btnInventory, _btnParty, _btnQuestLog, _btnExitGame };
+            _liButtons = new List<GUIObject>() { _btnInventory, _btnParty, _btnQuestLog, _btnOptions, _btnExitGame };
             GUIObject.CreateSpacedColumn(ref _liButtons, -GUIButton.BTN_WIDTH, 0, RiverHollow.ScreenHeight, BTN_PADDING);
             foreach(GUIObject o in _liButtons) { Controls.Add(o); }
 
@@ -92,6 +94,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (_btnParty.Contains(mouse))
             {
                 _infoScreen = new PartyScreen();
+                rv = true;
+            }
+            if (_btnOptions.Contains(mouse))
+            {
+                _infoScreen = new OptionScreen();
                 rv = true;
             }
 

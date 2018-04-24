@@ -212,7 +212,7 @@ namespace RiverHollow.Tile_Engine
         public void PopulateMap()
         {
             TiledMapProperties props = _map.Properties;
-            List<int> liMobs = new List<int>();
+            List<int> _liMobs = new List<int>();
             int minMobs = 0;
             int maxMobs = 0;
             List<int> resources = new List<int>();
@@ -267,12 +267,12 @@ namespace RiverHollow.Tile_Engine
                 }
                 else if (obj.Name.Equals("Spirit"))
                 {
-                    Spirit s = new Spirit(obj.Properties["Name"], obj.Properties["Type"], obj.Properties["Condition"])
+                    Spirit s = new Spirit(obj.Properties["Name"], obj.Properties["Type"], obj.Properties["Condition"], obj.Properties["Text"])
                     {
                         Position = Utilities.Normalize(obj.Position),
-                        CurrentMapName = "mapForest",
+                        CurrentMapName = _name
                     };
-                    AddCharacter(s);
+                    _liCharacters.Add(s);
                 }
             }
 
@@ -284,7 +284,7 @@ namespace RiverHollow.Tile_Engine
                     split = prop.Value.Split('/');
                     foreach (string s in split)
                     {
-                        liMobs.Add(int.Parse(s));
+                        _liMobs.Add(int.Parse(s));
                     }
                 }
                 else if (prop.Key.Equals("MobsMax")) { maxMobs = int.Parse(prop.Value); }
@@ -315,16 +315,16 @@ namespace RiverHollow.Tile_Engine
                 }
             }
 
-            if (liMobs.Count > 0)
+            if (_liMobs.Count > 0)
             {
                 RHRandom r = new RHRandom();
                 int numMobs = r.Next(minMobs, maxMobs);
                 while (numMobs != 0)
                 {
-                    int chosenMob = r.Next(0, liMobs.Count - 1);
+                    int chosenMob = r.Next(0, _liMobs.Count - 1);
 
                     Vector2 vect = new Vector2(r.Next(1, _map.Width - 1) * TileSize, r.Next(1, _map.Height - 2) * TileSize);
-                    Mob mob = CharacterManager.GetMobByIndex(liMobs[chosenMob], vect);
+                    Mob mob = CharacterManager.GetMobByIndex(_liMobs[chosenMob], vect);
                     mob.CurrentMapName = _name;
                     AddMob(mob);
 

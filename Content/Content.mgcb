@@ -295,11 +295,6 @@
 /processor:PassThroughProcessor
 /build:Data/NPCData/Characters.xml
 
-#begin Data/NPCData/Schedules/NPC1.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/NPCData/Schedules/NPC1.xml
-
 #begin Textures/NPC1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -692,4 +687,19 @@
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:lighteffect.fx
+
+#begin Data/SpiritLoot.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/SpiritLoot.xml
+
+#begin Data/NPCData/Schedules/NPC3.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/NPCData/Schedules/NPC3.xml
+
+#begin Data/NPCData/Schedules/NPC1.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/NPCData/Schedules/NPC1.xml
 

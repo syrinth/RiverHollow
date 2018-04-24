@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using RiverHollow.Game_Managers;
 using RiverHollow.Tile_Engine;
 using System;
 using System.IO;
@@ -65,6 +66,51 @@ namespace RiverHollow.Misc
         public static Rectangle FloatRectangle(float x, float y, float width, float height)
         {
             return new Rectangle((int)x, (int)y, (int)width, (int)height);
+        }
+
+        public static string ProcessText(string text, string name = "")
+        {
+            string rv = string.Empty;
+            text = text.Replace(@"\n", System.Environment.NewLine);
+            string[] nameSections = text.Split(new[] { '$' }, StringSplitOptions.RemoveEmptyEntries);
+            if (nameSections.Length > 1)
+            {
+                for (int i = 0; i < nameSections.Length; i++)
+                {
+                    if (int.TryParse(nameSections[i], out int val))
+                    {
+                        if (val == 0) { nameSections[i] = name; }
+                        else { nameSections[i] = CharacterManager.GetCharacterNameByIndex(val); }
+                    }
+                    else if (nameSections[i] == "^") { nameSections[i] = PlayerManager.Name; }
+
+                    rv += nameSections[i];
+                }
+            }
+            string[] itemSections = text.Split(new[] { '*' }, StringSplitOptions.RemoveEmptyEntries);
+            if (itemSections.Length > 1)
+            {
+                for (int i = 0; i < itemSections.Length; i++)
+                {
+                    if (int.TryParse(itemSections[i], out int val))
+                    {
+                        itemSections[i] = ObjectManager.GetItem(val).Name;
+
+                        if(itemSections[i].StartsWith("a", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("e", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("i", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("o", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("u", StringComparison.OrdinalIgnoreCase))
+                        {
+                            itemSections[i] = itemSections[i].Insert(0, "an ");
+                        }
+                        else {
+                            itemSections[i] = itemSections[i].Insert(0, "a ");
+                        }
+                    }
+
+                    rv += itemSections[i];
+                }
+            }
+
+            if (string.IsNullOrEmpty(rv)) { rv = text; }
+            return rv;
         }
     }
 

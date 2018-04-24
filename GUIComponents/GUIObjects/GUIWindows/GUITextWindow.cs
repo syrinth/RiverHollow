@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.WorldObjects.Door;
+using RiverHollow.Characters.NPCs;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
@@ -48,7 +49,18 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _talker = c;
             _text = text;
             Height = Math.Max(Height, ((int)_characterHeight * _maxRows));
-            _next = new GUIImage(new Vector2(Position().X+Width - _winData.Edge*1.5f, Position().Y + Height - _winData.Edge * 1.5f), new Rectangle(288, 64, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+            _next = new GUIImage(Vector2.Zero, new Rectangle(288, 64, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+            _next.AnchorToInnerSide(this, SideEnum.BottomRight);
+
+            ParseText(text);
+        }
+
+        public GUITextWindow(Spirit c, string text) : this()
+        {
+            _text = text;
+            Height = Math.Max(Height, ((int)_characterHeight * _maxRows));
+            _next = new GUIImage(Vector2.Zero, new Rectangle(288, 64, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+            _next.AnchorToInnerSide(this, SideEnum.BottomRight);
 
             ParseText(text);
         }

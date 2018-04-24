@@ -353,6 +353,7 @@
    <properties>
     <property name="Condition" value="Monday"/>
     <property name="Name" value="Palmo"/>
+    <property name="Text" value="Hey, how did you find me here? Keep it a secret will you? I'll give you * if you do."/>
     <property name="Type" value="Forest_2"/>
    </properties>
   </object>
@@ -360,6 +361,7 @@
    <properties>
     <property name="Condition" value="Raining"/>
     <property name="Name" value="Rehn"/>
+    <property name="Text" value="Splish splash, splish splash. I liked that song you played. Here, maybe you'll find * useful"/>
     <property name="Type" value="Water_1"/>
    </properties>
   </object>

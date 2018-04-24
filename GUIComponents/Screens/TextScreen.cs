@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIObjects;
 using static RiverHollow.WorldObjects.Door;
+using RiverHollow.Characters.NPCs;
 
 namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
@@ -31,6 +32,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             }
             Controls.Add(_window);
         }
+
         public TextScreen(KeyDoor door, string text) : this()
         {
             _window = new GUITextSelectionWindow(door, text);
@@ -47,6 +49,13 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             {
                 _window = new GUITextWindow(talker, text);
             }
+            Controls.Add(_window);
+        }
+
+        public TextScreen(Spirit talker, string text) : this()
+        {
+            _window = new GUITextWindow(talker, text);
+
             Controls.Add(_window);
         }
 

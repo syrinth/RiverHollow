@@ -2,7 +2,8 @@
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.Game_Managers.GUIObjects.Screens;
 using RiverHollow.GUIObjects;
-
+using RiverHollow.Misc;
+using RiverHollow.Tile_Engine;
 using System.Collections.Generic;
 
 namespace RiverHollow.Characters.NPCs
@@ -15,6 +16,8 @@ namespace RiverHollow.Characters.NPCs
         public ShopKeeper(int index, string[] data)
         {
             _collection = new Dictionary<int, bool>();
+            _completeSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
+            _currentPath = new List<RHTile>();
             LoadContent();
             if (data.Length >= 5)
             {
@@ -56,7 +59,7 @@ namespace RiverHollow.Characters.NPCs
                     text = GetText();
                 }
             }
-            text = ProcessText(text);
+            text = Utilities.ProcessText(text, _sName);
             GUIManager.SetScreen(new TextScreen(this, text));
         }
 

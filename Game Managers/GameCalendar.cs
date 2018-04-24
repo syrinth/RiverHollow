@@ -50,8 +50,8 @@ namespace RiverHollow
             _iDayOfWeek = 0;
             _iCurrDay = 1;
             _iCurrSeason = 0;
-            _iCurrHour = 17;
-            _iCurrMin = 50;
+            _iCurrHour = 6;
+            _iCurrMin = 0;
             _bNightfall = false;
 
             _dLastUpdateinSeconds = 0;
@@ -195,7 +195,7 @@ namespace RiverHollow
 
         public static string GetTime()
         {
-            return string.Format("{0}:{1}", _iCurrHour, _iCurrMin);
+            return _iCurrHour + ":" + _iCurrMin.ToString("00");
         }
 
         public static string GetDayOfWeek()

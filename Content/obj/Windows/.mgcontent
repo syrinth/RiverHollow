@@ -37,7 +37,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/GoblinSoldier.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/AbilityAnimations.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Characters.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC1.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/NPC1.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC5.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Armory.png</File>
@@ -87,5 +86,10 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/NPCs/Spirit_Forest_2.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetOutsideWinter.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texWeather.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/lightmask.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/lighteffect.fx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/SpiritLoot.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC3.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC1.xml</File>
   </SourceFiles>
 </SourceFileCollection>

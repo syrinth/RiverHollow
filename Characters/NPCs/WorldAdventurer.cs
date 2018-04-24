@@ -145,7 +145,7 @@ namespace RiverHollow.Characters.NPCs
         {
             RHRandom r = new RHRandom();
             string text = _dialogueDictionary[r.Next(1, 2).ToString()];
-            return ProcessText(text);
+            return Utilities.ProcessText(text, _sName);
         }
 
         public override string GetDialogEntry(string entry)

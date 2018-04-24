@@ -321,6 +321,7 @@
    <properties>
     <property name="Condition" value="Night"/>
     <property name="Name" value="Palmo"/>
+    <property name="Text" value="I really like the stars, don't you? ... Here, take this *"/>
     <property name="Type" value="Forest_2"/>
    </properties>
   </object>
