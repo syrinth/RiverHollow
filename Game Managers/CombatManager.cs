@@ -83,10 +83,13 @@ namespace RiverHollow.Game_Managers
                     }
 
                     ActiveCharacter = TurnOrder[TurnIndex];
-                    if (ActiveCharacter.CurrentHP == 0) { NextTurn(); }
+                    if (ActiveCharacter.KnockedOut()) { NextTurn(); }
                     else
                     {
                         ActiveCharacter.TickBuffs();
+                        if (ActiveCharacter.Poisoned()) {
+                            ActiveCharacter.Location.AssignDamage(ActiveCharacter.DecreaseHealth((int)(ActiveCharacter.MaxHP/20)));
+                        }
                         SetPhaseForTurn();
                     }
                 }
@@ -118,6 +121,10 @@ namespace RiverHollow.Game_Managers
         //When enemies get healing/defensive skills, they'll have their own logic to process
         public static void EnemyTakeTurn()
         {
+            if (ActiveCharacter.Poisoned())
+            {
+                ActiveCharacter.Location.AssignDamage(ActiveCharacter.DecreaseHealth((int)(ActiveCharacter.MaxHP / 20)));
+            }
             RHRandom r = new RHRandom();
             ProcessActionChoice((CombatAction)CharacterManager.GetActionByIndex(1), false);//ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)]);
             if (!ChosenSkill.Target.Equals("Self"))
@@ -125,7 +132,7 @@ namespace RiverHollow.Game_Managers
                 do
                 {
                     PlayerTarget = r.Next(0, _listParty.Count - 1);
-                } while (_listParty[PlayerTarget].CurrentHP == 0);
+                } while (_listParty[PlayerTarget].CurrentHP == 0);      //Equivalent to being KO
             }
         }
 
@@ -208,8 +215,15 @@ namespace RiverHollow.Game_Managers
 
         internal static void UseItem()
         {
-            int val = _target.Character.IncreaseHealth(CombatManager.ChosenItem.Health);
-            _target.Heal(val);
+            if(ChosenItem.FixesCondition != CombatStuff.ConditionEnum.None)
+            {
+                _target.Character.RemoveCondition(ChosenItem.FixesCondition);
+            }
+            int val = _target.Character.IncreaseHealth(ChosenItem.Health);
+            if (val > 0)
+            {
+                _target.Heal(val);
+            }
             InventoryManager.RemoveItemFromInventory(ChosenItem);
 
             NextTurn();

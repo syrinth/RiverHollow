@@ -188,7 +188,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            Mob mob = CharacterManager.GetMobByIndex(1, new Vector2(647, 539));
+            Mob mob = CharacterManager.GetMobByIndex(3, new Vector2(647, 539));
             mob.CurrentMapName = "mapManorGrounds";
             _tileMaps[@"mapManorGrounds"].AddMob(mob);
 

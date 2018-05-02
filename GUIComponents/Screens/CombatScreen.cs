@@ -344,6 +344,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             Selected = false;
             _character = c;
+            _character.Location = this;
             _character.Position = vec;
             _vCenter = _character.Center;
             _fDmg = GameContentManager.GetFont(@"Fonts\Font");
@@ -547,7 +548,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     }
                     else
                     {
-                        if (a.ActionID == 2)
+                        if (a.ActionID == 2 && !CombatManager.ActiveCharacter.Silenced())
                         {
                             DisplayType = Display.Spells;
                             _useMenuWindow.AssignSpells(CombatManager.ActiveCharacter.SpellList);
@@ -604,7 +605,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             int lastMP = (int)(Position().X + Width - _iInnerBorder - _fFont.MeasureString("XXXX/XXXX").X);
             foreach (CombatCharacter p in PlayerManager.GetParty())
             {
-                Color c = (CombatManager.ActiveCharacter == p) ? Color.Green : Color.White;
+                Color c = Color.White;
+                if (p.Poisoned()) { c = Color.Violet; }
+                c = (CombatManager.ActiveCharacter == p) ? Color.Green : c;
+                
                 spriteBatch.DrawString(_fFont, p.Name, new Vector2(xindex, yIndex), c);
 
                 string strHp = string.Format("{0}/{1}", p.CurrentHP, p.MaxHP);
@@ -694,6 +698,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     if (kvp.Key >= i)
                     {
                         Color c = (_chosenAction != null && kvp.Value == _chosenAction.Name) ? Color.Green : Color.White;
+
+                        if (kvp.Value.Equals("Cast Spell") && CombatManager.ActiveCharacter.Silenced())
+                        {
+                            c = Color.Gray;
+                        }
+
                         spriteBatch.DrawString(_fFont, kvp.Value, new Vector2(xindex, yIndex), c);
                         yIndex += (int)_characterHeight;
                     }

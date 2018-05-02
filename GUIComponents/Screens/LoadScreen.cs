@@ -45,6 +45,7 @@ namespace RiverHollow.GUIComponents.Screens
                     Load(win.Data);
                     MapManager.PopulateMaps(true);
                     BackToMain();
+                    InventoryManager.AddNewItemToInventory(103, 10);
                 }
             }
 

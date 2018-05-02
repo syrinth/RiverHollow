@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using RiverHollow.SpriteAnimations;
+using RiverHollow.CombatStuff;
+using RiverHollow.Game_Managers.GUIObjects;
 
 namespace RiverHollow.Characters.CombatStuff
 {
@@ -52,6 +54,11 @@ namespace RiverHollow.Characters.CombatStuff
 
         protected List<Buff> _liBuffs;
         public List<Buff> LiBuffs { get => _liBuffs; }
+
+        protected Dictionary<ConditionEnum, bool> _diConditions;
+        public Dictionary<ConditionEnum, bool> DiConditions => _diConditions;
+
+        public BattleLocation Location;
         #endregion
 
         public CombatCharacter() : base()
@@ -60,6 +67,12 @@ namespace RiverHollow.Characters.CombatStuff
             _liSpells = new List<CombatAction>();
             _liActions = new List<MenuAction>();
             _liBuffs = new List<Buff>();
+            _diConditions = new Dictionary<ConditionEnum, bool>
+            {
+                [ConditionEnum.KO] = false,
+                [ConditionEnum.Poisoned] = false,
+                [ConditionEnum.Silenced] = true
+            };
         }
 
         public void LoadContent(string texture)
@@ -91,7 +104,7 @@ namespace RiverHollow.Characters.CombatStuff
             base.Update(theGameTime);
             if (CurrentHP > 0)
             {
-                if ((float)CurrentHP / (float)MaxHP <= 0.25 && IsCurrentAnimation("Walk"))
+                if ((float)CurrentHP / (float)MaxHP <= 0.25 && (IsCurrentAnimation("Walk") || IsCurrentAnimation("KO")))
                 {
                     PlayAnimation("Critical");
                 }
@@ -121,27 +134,37 @@ namespace RiverHollow.Characters.CombatStuff
             double dMult = Math.Min(2, Math.Max(0.01, power));
             int dmg = (int)Math.Max(1, iATK * dMult);
 
-            _currentHP -= (_currentHP - dmg >= 0) ? dmg : _currentHP;
+            return DecreaseHealth(dmg);
+        }
+
+        public int DecreaseHealth(int value)
+        {
+            _currentHP -= (_currentHP - value >= 0) ? value : _currentHP;
             PlayAnimation("Hurt");
             if (_currentHP == 0)
             {
+                _diConditions[ConditionEnum.KO] = true;
                 CombatManager.Kill(this);
             }
 
-            return dmg;
+            return value;
         }
 
         public int IncreaseHealth(int x)
         {
-            int amountHealed = x;
-            if (_currentHP + x <= MaxHP)
+            int amountHealed = 0;
+            if (!KnockedOut())
             {
-                _currentHP += x;
-            }
-            else
-            {
-                amountHealed = MaxHP - _currentHP;
-                _currentHP = MaxHP;
+                amountHealed = x;
+                if (_currentHP + x <= MaxHP)
+                {
+                    _currentHP += x;
+                }
+                else
+                {
+                    amountHealed = MaxHP - _currentHP;
+                    _currentHP = MaxHP;
+                }
             }
 
             return amountHealed;
@@ -224,6 +247,26 @@ namespace RiverHollow.Characters.CombatStuff
         public bool CanCast(int x)
         {
             return x <= CurrentMP;
+        }
+
+        public bool KnockedOut()
+        {
+            return _diConditions[ConditionEnum.KO];
+        }
+
+        public bool Poisoned()
+        {
+            return _diConditions[ConditionEnum.Poisoned];
+        }
+
+        public bool Silenced()
+        {
+            return _diConditions[ConditionEnum.Silenced];
+        }
+
+        public void RemoveCondition(ConditionEnum c)
+        {
+            _diConditions[c] = false;
         }
     }
 }

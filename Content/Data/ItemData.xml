@@ -107,12 +107,20 @@
       <Key>89</Key>
       <Value>Resource/Adamantine Ore/Alright ore/0/10</Value>
     </Item>
-    <!--<100> Combat:Stamina/Health/Mana-->
+    <!--<100> Combat:Status/Stamina/Health/Mana-->
     <Item>
       <Key>101</Key>
-      <Value>Combat/Health Potion/RecoversHealth/1 2/3000/0/20/0</Value>
+      <Value>Combat/Health Potion/Recovers Health/1 2/3000/None/0/20/0</Value>
     </Item>
-    <!--<190> Combat:Stamina/Health/Mana-->
+    <Item>
+      <Key>102</Key>
+      <Value>Combat/Smelling Salts/Wake Up/1 2/3000/KO/0/1/0</Value>
+    </Item>
+    <Item>
+      <Key>103</Key>
+      <Value>Combat/Antidote/Wake Up/1 2/3000/Poisoned/0/0/0</Value>
+    </Item>
+    <!--<190> Container:Stamina/Health/Mana-->
     <Item>
       <Key>190</Key>
       <Value>StaticItem/Small Chest/Holds eight items/3 0/100</Value>

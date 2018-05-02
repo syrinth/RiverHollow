@@ -62,6 +62,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="Characters\Character.cs" />
     <Compile Include="Characters\NPCs\Spirit.cs" />
+    <Compile Include="CombatStuff\Condition.cs" />
     <Compile Include="CombatStuff\MenuAction.cs" />
     <Compile Include="CombatStuff\Buff.cs" />
     <Compile Include="CombatStuff\CharacterClass.cs" />

@@ -187,8 +187,12 @@ namespace RiverHollow.Characters.CombatStuff
                 }
                 else if (_effectTags.Contains("Heal"))
                 {
-                    TargetLocation.Character.IncreaseHealth(_effectHarm);
-                    TargetLocation.AssignDamage(_effectHarm);
+                    int val = _effectHarm;
+                    TargetLocation.Character.IncreaseHealth(val);
+                    if (val > 0)
+                    {
+                        TargetLocation.AssignDamage(_effectHarm);
+                    }
                 }
 
                 if(_buffs.Count > 0)

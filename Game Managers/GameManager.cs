@@ -513,6 +513,7 @@ namespace RiverHollow.Game_Managers
                     InventoryManager.AddItemToInventorySpot(newItem, i, j);
                 }
             }
+            
             foreach (MapData mapData in data.MapData)
             {
                 RHMap map = MapManager.Maps[mapData.mapName];
