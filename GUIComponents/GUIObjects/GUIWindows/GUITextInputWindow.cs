@@ -85,7 +85,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         {
             foreach (Keys k in InputManager.KeyDownDictionary.Keys.ToList())
             {
-                if (InputManager.CheckKey(k))
+                if (InputManager.CheckPressedKey(k))
                 {
                     if (k == Keys.Enter)
                     {

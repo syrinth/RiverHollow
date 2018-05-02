@@ -22,29 +22,12 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             SetItem(item);
         }
 
-        //public override void Draw(SpriteBatch spriteBatch)
-        //{
-        //    base.Draw(spriteBatch);
-        //    if (_item != null)
-        //    {
-        //        _item.Draw(spriteBatch, _drawRect);
-        //        if (_textNum != null)
-        //        {
-        //            _textNum.Draw(spriteBatch);
-        //        }
-        //    }
-        //    if (_hover)
-        //    {
-        //        if (_textWindow != null) { _textWindow.Draw(spriteBatch, true); }
-        //    }
-        //}
-
-        public override void Draw(SpriteBatch spriteBatch, float alpha)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
             if (_item != null)
             {
-                _item.Draw(spriteBatch, _drawRect, false, alpha);
+                _item.Draw(spriteBatch, _drawRect, false);
                 if (_textNum != null) { _textNum.Draw(spriteBatch); }
             }
             if (_hover)

@@ -239,7 +239,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
 
             //Cancel out of selections made if escape is hit
-            if (InputManager.CheckKey(Keys.Escape))
+            if (InputManager.CheckPressedKey(Keys.Escape))
             {
                 CancelAction();
             }
@@ -252,7 +252,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _iTarget = SkipToNextTarget(useSkill ? _iPositions / 2 : 0, true);
             }
 
-            if (InputManager.CheckKey(Keys.A) || InputManager.CheckKey(Keys.S))
+            if (InputManager.CheckPressedKey(Keys.A) || InputManager.CheckPressedKey(Keys.S))
             {
                 int test = _iTarget - 1;
                 if (test >= 0)
@@ -260,7 +260,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     MoveTarget(test, false);
                 }
             }
-            else if (InputManager.CheckKey(Keys.D) || InputManager.CheckKey(Keys.W))
+            else if (InputManager.CheckPressedKey(Keys.D) || InputManager.CheckPressedKey(Keys.W))
             {
                 int test = _iTarget + 1;
                 if (test < _arrCombatants.Length)
@@ -270,7 +270,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             _arrCombatants[_iTarget].Selected = true;
 
-            if (InputManager.CheckKey(Keys.Enter))
+            if (InputManager.CheckPressedKey(Keys.Enter))
             {
                 BattleLocation loc = _arrCombatants[_iTarget];
                 loc.Selected = false;
@@ -746,7 +746,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override void Update(GameTime gameTime)
         {
-            if (InputManager.CheckKey(Keys.W) || InputManager.CheckKey(Keys.Up))
+            if (InputManager.CheckPressedKey(Keys.W) || InputManager.CheckPressedKey(Keys.Up))
             {
                 if (_iKeySelection - 2 >= 0)
                 {
@@ -754,7 +754,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _iKeySelection -= 2;
                 }
             }
-            else if (InputManager.CheckKey(Keys.S) || InputManager.CheckKey(Keys.Down))
+            else if (InputManager.CheckPressedKey(Keys.S) || InputManager.CheckPressedKey(Keys.Down))
             {
                 if (_iKeySelection + 2 < _diOptions.Count)
                 {
@@ -762,7 +762,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _iKeySelection += 2;
                 }
             }
-            else if (InputManager.CheckKey(Keys.D) || InputManager.CheckKey(Keys.Right))
+            else if (InputManager.CheckPressedKey(Keys.D) || InputManager.CheckPressedKey(Keys.Right))
             {
                 int test = _iKeySelection + 1;
                 if (test < _diOptions.Count)
@@ -780,7 +780,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _iKeySelection += 1;
                 }
             }
-            else if (InputManager.CheckKey(Keys.A) || InputManager.CheckKey(Keys.Left))
+            else if (InputManager.CheckPressedKey(Keys.A) || InputManager.CheckPressedKey(Keys.Left))
             {
                 int test = _iKeySelection - 1;
                 if (test >= 0)
@@ -833,7 +833,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
             }
 
-            if (InputManager.CheckKey(Keys.Enter))
+            if (InputManager.CheckPressedKey(Keys.Enter))
             {
                 SelectAction();
             }

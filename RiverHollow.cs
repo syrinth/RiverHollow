@@ -97,7 +97,6 @@ namespace RiverHollow
                 }
                 MouseState ms = Mouse.GetState();
                 KeyboardState ks = Keyboard.GetState();
-
                 //If we're not in the game and we're not on an input screen, handle input
                 HandleImportantInput();
 
@@ -228,21 +227,21 @@ namespace RiverHollow
         {
             if (!Informational() && !TakingInput())
             {
-                if (OnMap() && InputManager.CheckKey(Keys.Escape))
+                if (OnMap() && InputManager.CheckPressedKey(Keys.Escape))
                 {
                     if (!GUIManager.IsGameMenuScreen())
                     {
                         GUIManager.SetScreen(new GameMenuScreen());
                     }
                 }
-                if (InputManager.CheckKey(Keys.P))
+                if (InputManager.CheckPressedKey(Keys.P))
                 {
                     if (IsPaused()) { Pause(); }
                     else { Unpause(); }
                 }
                 if (!GUIManager.IsItemCreationScreen() || !GUIManager.IsHUD())
                 {
-                    if (InputManager.CheckKey(Keys.C))
+                    if (InputManager.CheckPressedKey(Keys.C))
                     {
                         if (GUIManager.IsItemCreationScreen())
                         {

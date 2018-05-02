@@ -103,7 +103,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public override void Update(GameTime gameTime)
         {
-            if (InputManager.CheckKey(Keys.W) || InputManager.CheckKey(Keys.Up))
+            if (InputManager.CheckPressedKey(Keys.W) || InputManager.CheckPressedKey(Keys.Up))
             {
                 if (_iKeySelection - 1 >= 0)
                 {
@@ -111,7 +111,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                     _iKeySelection--;
                 }
             }
-            else if (InputManager.CheckKey(Keys.S) || InputManager.CheckKey(Keys.Down))
+            else if (InputManager.CheckPressedKey(Keys.S) || InputManager.CheckPressedKey(Keys.Down))
             {
                 if (_iKeySelection + 1 < _diOptions.Count)
                 {
@@ -138,7 +138,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                 }
             }
 
-            if (InputManager.CheckKey(Keys.Enter))
+            if (InputManager.CheckPressedKey(Keys.Enter))
             {
                 SelectAction();
             }

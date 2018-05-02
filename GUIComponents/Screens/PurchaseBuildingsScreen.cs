@@ -86,7 +86,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (InputManager.CheckKey(Keys.Escape))
+            if (InputManager.CheckPressedKey(Keys.Escape))
             {
                 GameManager.GoToWorldMap();
             }

@@ -118,17 +118,20 @@ namespace RiverHollow.Screens
                 }
                 else
                 {
-                    rv = GraphicCursor.GrabItem(TakeItem(mouse));
+                    rv = true;
+                    bool takeHalf = InputManager.IsKeyHeld(Keys.LeftShift) || InputManager.IsKeyHeld(Keys.RightShift);
+                    rv = GraphicCursor.GrabItem(TakeItem(mouse, takeHalf));
+                    
                     if (onlyInv)
                     {
-                        GameManager.BackToMain();
+                        //GameManager.BackToMain();
                     }
                 }
             }
             return rv;
         }
 
-        public virtual bool ProcessRightButtonClick(Point mouse)
+        public override bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = false;
 
@@ -176,6 +179,24 @@ namespace RiverHollow.Screens
             return rv;
         }
 
+        private Vector2 GetItemVector(Point mouse)
+        {
+            Vector2 rv = new Vector2(-1, -1);
+            for (int i = 0; i < _rows; i++)
+            {
+                for (int j = 0; j < _columns; j++)
+                {
+                    if (_displayList[i, j].Contains(mouse) && _displayList[i, j].Item != null)
+                    {
+                        rv = new Vector2(i, j);
+                        goto Exit;
+                    }
+                }
+            }
+        Exit:
+            return rv;
+        }
+
         private Item IsItemThere(Point mouse)
         {
             Item rv = null;
@@ -194,7 +215,7 @@ namespace RiverHollow.Screens
             return rv;
         }
 
-        public Item TakeItem(Point mouse)
+        public Item TakeItem(Point mouse, bool takeHalf = false)
         {
             Item rv = null;
 
@@ -214,16 +235,30 @@ namespace RiverHollow.Screens
                         }
                         else
                         {
-                            rv = _displayList[i, j].Item;
+                            Item chosenItem = _displayList[i, j].Item;
+                            if (takeHalf && chosenItem.DoesItStack)
+                            {
+                                int num = chosenItem.Number;
+                                num = num / 2;
+                                chosenItem.Number = chosenItem.Number - num;
+                                rv = ObjectManager.GetItem(chosenItem.ItemID, num);
+                            }
+                            else
+                            {
+                                rv = chosenItem;
+                            }
                         }
 
-                        if (_container == null)
+                        if (!takeHalf)
                         {
-                            InventoryManager.RemoveItemFromInventoryLocation(i, j);
-                        }
-                        else
-                        {
-                            InventoryManager.RemoveItemFromInventoryLocation(i,j, _container);
+                            if (_container == null)
+                            {
+                                InventoryManager.RemoveItemFromInventoryLocation(i, j);
+                            }
+                            else
+                            {
+                                InventoryManager.RemoveItemFromInventoryLocation(i, j, _container);
+                            }
                         }
                         goto Exit;
                     }
@@ -279,11 +314,11 @@ Exit:
                 {
                     if (_container == null)
                     {
-                        _displayList[i, j].Item = InventoryManager.PlayerInventory[i, j];
+                        _displayList[i, j].SetItem(InventoryManager.PlayerInventory[i, j]);
                     }
                     else
                     {
-                        _displayList[i, j].Item = _container.Inventory[i, j];
+                        _displayList[i, j].SetItem(_container.Inventory[i, j]);
                     }
                 }
             }
@@ -293,9 +328,13 @@ Exit:
         {
             base.Draw(spriteBatch);
 
-            foreach (GUIItemBox gIB in _displayList)
+            for (int i = 0; i < _rows; i++)
             {
-                gIB.Draw(spriteBatch);
+                for (int j = 0; j < _columns; j++)
+                {
+                    //float alpha = 1.0f;// _vSelectedItem == new Vector2(i, j) ? 0.5f : 1;
+                    _displayList[i, j].Draw(spriteBatch);//, alpha);
+                }
             }
 
             foreach (GUIItemBox gIB in _displayList)

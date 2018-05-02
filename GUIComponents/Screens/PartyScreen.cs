@@ -236,12 +236,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     {
                         Equipment temp = (Equipment)GraphicCursor.HeldItem;
                         GraphicCursor.GrabItem(box.Item);
-                        box.Item = temp;
+                        box.SetItem(temp);
                         _character.Weapon = temp;
                     }
                     else
                     {
-                        box.Item = GraphicCursor.HeldItem;
+                        box.SetItem(GraphicCursor.HeldItem);
                         _character.Weapon = (Equipment)GraphicCursor.HeldItem;
                         GraphicCursor.DropItem();
                         rv = true;
@@ -251,7 +251,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             else
             {
                 rv = GraphicCursor.GrabItem(box.Item);
-                box.Item = null;
+                box.SetItem(null);
                 _character.Weapon = null;
             }
 
@@ -280,8 +280,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public void AssignNewCharacter(CombatAdventurer c)
         {
             _character = c;
-            _weapon.Item = _character.Weapon;
-            _armor.Item = _character.Armor;
+            _weapon.SetItem(_character.Weapon);
+            _armor.SetItem(_character.Armor);
         }
     }
 }
