@@ -36,6 +36,8 @@ namespace RiverHollow.Characters.CombatStuff
         {
             _sName = w.Name;
             _world = w;
+
+            Weapon = (Equipment)ObjectManager.GetItem(9);
         }
 
         public CombatAdventurer(string name) : this()

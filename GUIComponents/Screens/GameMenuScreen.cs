@@ -8,12 +8,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
     public class GameMenuScreen : GUIScreen
     {
         const int BTN_PADDING = 120;
-        private GUIButton _btnExitGame;
-        private GUIButton _btnQuestLog;
-        private GUIButton _btnInventory;
-        private GUIButton _btnParty;
-        private GUIButton _btnOptions;
-        private GUIScreen _infoScreen;
+        GUIButton _btnExitGame;
+        GUIButton _btnQuestLog;
+        GUIButton _btnInventory;
+        GUIButton _btnParty;
+        GUIButton _btnManagement;
+        GUIButton _btnOptions;
+        GUIScreen _infoScreen;
         List<GUIObject> _liButtons;
 
         bool _open = false;
@@ -26,8 +27,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _btnQuestLog = new GUIButton("Quest Log");
             _btnExitGame = new GUIButton("Exit Game");
             _btnOptions = new GUIButton("Options");
+            _btnManagement = new GUIButton("Buildings");
 
-            _liButtons = new List<GUIObject>() { _btnInventory, _btnParty, _btnQuestLog, _btnOptions, _btnExitGame };
+            _liButtons = new List<GUIObject>() { _btnInventory, _btnParty, _btnManagement, _btnQuestLog, _btnOptions, _btnExitGame };
             GUIObject.CreateSpacedColumn(ref _liButtons, -GUIButton.BTN_WIDTH, 0, RiverHollow.ScreenHeight, BTN_PADDING);
             foreach(GUIObject o in _liButtons) { Controls.Add(o); }
 
@@ -102,6 +104,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 rv = true;
             }
 
+            if (_btnManagement.Contains(mouse))
+            {
+                _infoScreen = new ManagementScreen();
+                rv = true;
+            }
+
             if (_infoScreen != null && _infoScreen.Contains(mouse))
             {
                 _infoScreen.ProcessLeftButtonClick(mouse);
@@ -128,8 +136,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             return rv;
         }
-
-        
 
         public override bool ProcessHover(Point mouse)
         {

@@ -58,6 +58,11 @@ namespace RiverHollow.Characters
             return CollisionBox.Contains(mouse);
         }
 
+        public virtual bool CollisionIntersects(Rectangle rect)
+        {
+            return CollisionBox.Intersects(rect);
+        }
+
         public void SetDirection(DirectionEnum d)
         {
             Facing = d;

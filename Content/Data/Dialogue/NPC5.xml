@@ -24,7 +24,7 @@
     </Item>
     <Item>
       <Key>ShopOpen</Key>
-      <Value>Greetings! What can I do for you today, &amp;^&amp;? [Talk:Talk|Hire Adventurers:BuyWorkers]</Value>
+      <Value>Greetings! What can I do for you today, &amp;^&amp;? [Talk:Talk|Hire Adventurers:BuyWorkers|Sell Contract:SellWorkers]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -87,11 +87,13 @@ namespace RiverHollow.GUIComponents.Screens
                 RiverHollow.NewGame();
                 PlayerManager.SetClass(_selectedClass.ClassID);
                 PlayerManager.SetName(_nameWindow.GetText());
+                GameManager.DontReadInput();
                 rv = true;
             }
             if (_btnCancel.Contains(mouse))
             {
                 GUIManager.SetScreen(new IntroMenuScreen());
+                GameManager.DontReadInput();
                 rv = true;
             }
 
@@ -135,11 +137,14 @@ namespace RiverHollow.GUIComponents.Screens
             public ClassSelectionBox(Vector2 p, WorldAdventurer w)
             {
                 _sprite = new GUISprite(w.Sprite);
+                _sprite.SetScale((int)GameManager.Scale);
                 _iClassID = w.AdventurerID;
                 Position(p);
                 _winData = GUIWindow.RedWin;
-                Width = 64;
-                Height = 96;
+                Width = _sprite.Width + _sprite.Width / 3;
+                Height = _sprite.Height + 2 * _sprite.Height / 4;
+                _sprite.CenterOnWindow(this);
+                _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
             }
 
             public override void Update(GameTime gameTime)
@@ -156,7 +161,10 @@ namespace RiverHollow.GUIComponents.Screens
             public override void Position(Vector2 value)
             {
                 base.Position(value);
-                if (_sprite != null) { _sprite.CenterOnWindow(this); }
+                if (_sprite != null) {
+                    _sprite.CenterOnWindow(this);
+                    _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
+                }
             }
 
             public void PlayAnimation(string animation)

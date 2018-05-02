@@ -44,6 +44,10 @@ namespace RiverHollow.GUIObjects
         {
             return false;
         }
+        public virtual bool ProcessRightButtonClick(Point mouse)
+        {
+            return false;
+        }
 
         public Vector2 Position()
         {
@@ -94,6 +98,32 @@ namespace RiverHollow.GUIObjects
             {
                 o.Position(position);
                 position.X += o.Width + spacing;
+            }
+        }
+        internal static void CreateSpacedGrid(ref List<GUIObject> components, Vector2 start, int totalWidth, int columns, int spacing = 0)
+        {
+            if (components.Count == 0) { return; }
+            if(spacing == 0){ spacing = (totalWidth - (components[0].Width * columns))/(columns-1); }
+
+            int i = 0; int j = 0;
+            for (int index = 0; index <components.Count; index++)
+            {
+                GUIObject g = components[index];
+                if(index == 0) { g.Position(start); }
+                else
+                {
+                    i++;
+                    if (i == columns)
+                    {
+                        i = 0;
+                        j++;
+                        g.AnchorAndAlignToObject(components[index - columns], SideEnum.Bottom, SideEnum.Left, spacing);
+                    }
+                    else
+                    {
+                        g.AnchorAndAlignToObject(components[index - 1], SideEnum.Right, SideEnum.Top, spacing);
+                    }
+                }
             }
         }
         internal static void CenterAndAlignToScreen(ref List<GUIObject> components)

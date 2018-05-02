@@ -4,6 +4,7 @@ using RiverHollow.WorldObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using RiverHollow.Characters.NPCs;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -68,6 +69,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public void AddTextSelection(Food f, string text)
         {
             Controls.Add(new GUITextSelectionWindow(f, text));
+        }
+
+        public void AddTextSelection(WorldAdventurer w, string text)
+        {
+            Controls.Add(new GUITextSelectionWindow(w, text));
         }
 
         public void RemoveComponent(GUIObject g)

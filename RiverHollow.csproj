@@ -81,6 +81,7 @@
     <Compile Include="GUIComponents\Screens\GameMenuScreen.cs" />
     <Compile Include="GUIComponents\Screens\LoadScreen.cs" />
     <Compile Include="GUIComponents\Screens\NewGameScreen.cs" />
+    <Compile Include="GUIComponents\Screens\ManagementScreen.cs" />
     <Compile Include="GUIComponents\Screens\OptionScreen.cs" />
     <Compile Include="GUIComponents\Screens\PartyScreen.cs" />
     <Compile Include="GUIComponents\Screens\QuestScreen.cs" />

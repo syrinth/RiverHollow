@@ -33,7 +33,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         public bool _pause = false;
         protected int _numReturns = 0;
 
-        protected NPC _talker;
+        protected NPC _targetNPC;
         protected KeyDoor _door;
 
         protected GUITextWindow() : base()
@@ -46,7 +46,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         public GUITextWindow(NPC c, string text) : this()
         {
-            _talker = c;
+            _targetNPC = c;
             _text = text;
             Height = Math.Max(Height, ((int)_characterHeight * _maxRows));
             _next = new GUIImage(Vector2.Zero, new Rectangle(288, 64, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
@@ -68,10 +68,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         public GUITextWindow(Vector2 position, string text) : this()
         {
             _text = text;
-            ParseText(text);
+            ParseText(_text);
+            Vector2 vMeasure = _font.MeasureString(_text);
 
-            Height = (int)_parsedStrings.Count * (int)_characterHeight + _iInnerBorder*2;
-            Width = (int)_font.MeasureString(_text).X + _iInnerBorder * 2;
+            Height = (int)vMeasure.Y + _iInnerBorder*2;
+            Width = (int)vMeasure.X + _iInnerBorder * 2;
             Position(PositionSub(new Vector2(Width / 2, Height / 2)));
         }
 
@@ -189,7 +190,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 grabLast = true;
                 line = line + word + ' ';
 
-                if (measure.Y * _numReturns >= (Width - _iInnerBorder * 2))
+                //Spillover to another screen
+                if (measure.Y * _numReturns >= (Height - _iInnerBorder * 2))
                 {
                     grabLast = false;
                     _parsedStrings.Add(returnString);
@@ -218,9 +220,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 _next.Draw(spriteBatch);
             }
 
-            if (_talker != null)
+            if (_targetNPC != null)
             {
-                _talker.DrawPortrait(spriteBatch, new Vector2(InnerTopLeft().X, InnerTopLeft().Y-EdgeSize));
+                _targetNPC.DrawPortrait(spriteBatch, new Vector2(InnerTopLeft().X, InnerTopLeft().Y-EdgeSize));
             }
         }
     }

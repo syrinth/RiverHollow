@@ -76,6 +76,10 @@ namespace RiverHollow
 
             return rv;
         }
+        public void RemoveWorker(WorldAdventurer worker)
+        {
+            _workers.Remove(worker);
+        }
 
         public void Rollover()
         {
@@ -131,6 +135,7 @@ namespace RiverHollow
                 positionX = (int)this.MapPosition.X,
                 positionY = (int)this.MapPosition.Y,
                 id = this.PersonalID,
+                name = this._sGivenName,
 
                 Workers = new List<WorkerData>()
             };
@@ -171,7 +176,7 @@ namespace RiverHollow
                 w.LoadData(wData);
                 AddWorker(w, r);
             }
-
+            this._sGivenName = data.name;
             this.Pantry = (Container)ObjectManager.GetWorldObject(data.pantry.containerID);
             Pantry.LoadData(data.pantry);
             this.BuildingChest = (Container)ObjectManager.GetWorldObject(data.pantry.containerID);

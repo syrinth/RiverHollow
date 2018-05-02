@@ -1,6 +1,5 @@
 ﻿using RiverHollow.Game_Managers;
 using RiverHollow.SpriteAnimations;
-using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 

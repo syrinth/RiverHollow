@@ -23,11 +23,11 @@ namespace RiverHollow
 
         public static void Update(GameTime gametime)
         {
-            if (!GameManager.Scrying())
+            if (!Scrying() && !TakingInput())
             {
                 _observer = PlayerManager.World.CharCenter.ToVector2() * Scale;
             }
-            else
+            else if(!TakingInput())
             {
                 KeyboardState ks = Keyboard.GetState();
                 int speed = 10;

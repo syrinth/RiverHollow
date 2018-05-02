@@ -83,6 +83,8 @@ namespace RiverHollow.Game_Managers
 
         public static void AddTesting()
         {
+            InventoryManager.AddNewItemToInventory(0, 10);
+            InventoryManager.AddNewItemToInventory(2, 10);
             InventoryManager.AddNewItemToInventory(85, 10);
             InventoryManager.AddNewItemToInventory(5);
             InventoryManager.AddNewItemToInventory(20);
@@ -366,6 +368,10 @@ namespace RiverHollow.Game_Managers
         public static void AddBuilding(WorkerBuilding b)
         {
             _buildings.Add(b);
+        }
+        public static void RemoveBuilding(WorkerBuilding b)
+        {
+            _buildings.Remove(b);
         }
         public static int GetNewBuildingID()
         {

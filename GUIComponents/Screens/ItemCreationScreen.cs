@@ -86,29 +86,22 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             GUIObject.CenterAndAlignToScreen(ref liWins);
 
             int i = 0; int j = 0;
+            List<GUIObject> boxes = new List<GUIObject>();
             foreach (int id in canMake)
             {
-                //Ensure that either the creation of the item is enabled by a crafter or that the player knows the recipe themselves
-                if (_craftAdventurer != null || _craftMachine != null || PlayerManager.CanMake.Contains(id))
-                {
-                    int xMod = _creationWindow.EdgeSize + _iMargin * (i + 1) + (_iBoxSize * i);
-                    int yMod = _creationWindow.EdgeSize + _iMargin * (j + 1) + (_iBoxSize * j);
-                    Rectangle displayBox = new Rectangle((int)_creationWindow.Position().X + xMod, (int)_creationWindow.Position().Y + yMod, _iBoxSize, _iBoxSize);
-                    _displayList[i, j] = new GUIItemBox(displayBox.Location.ToVector2(), new Rectangle(288, 32, 32, 32), displayBox.Width, displayBox.Height, @"Textures\Dialog", ObjectManager.GetItem(id));
-                    _creationWindow.Controls.Add(_displayList[i, j]);
+                boxes.Add(new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), _iBoxSize, _iBoxSize, @"Textures\Dialog", ObjectManager.GetItem(id)));
+            }
 
-                    i++;
-                    if (i == _columns)
-                    {
-                        i = 0;
-                        j++;
-                        displayBox.X = (int)_creationWindow.Position().X + _iBoxSize + _iMargin;
-                        displayBox.Y += _iBoxSize + _iMargin;
-                    }
-                    else
-                    {
-                        displayBox.X += _iBoxSize + _iMargin;
-                    }
+            GUIObject.CreateSpacedGrid(ref boxes, _creationWindow.InnerTopLeft() + new Vector2(_iMargin, _iMargin), _creationWindow.MidWidth()-2*_iMargin, _columns);
+
+            foreach (GUIObject g in boxes)
+            {
+                _displayList[i, j] = (GUIItemBox)g;
+                i++;
+                if (i == _columns)
+                {
+                    i = 0;
+                    j++;
                 }
             }
         }

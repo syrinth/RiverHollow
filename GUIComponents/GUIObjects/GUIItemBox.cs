@@ -57,6 +57,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 {
                     _textWindow = new GUITextWindow(mouse.ToVector2(), _item.GetDescription());
                     _textWindow.Position(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32));
+                    _textWindow.Resize();
                 }
                 rv = true;
             }

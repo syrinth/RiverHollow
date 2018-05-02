@@ -32,14 +32,20 @@ namespace RiverHollow.Game_Managers
 
         #region States
         private static bool _scrying;
-        private enum StateEnum { Paused, Running, Information, Input }
+        private enum StateEnum { Paused, Running, Information }
         private static StateEnum _state;
+        private enum InputEnum { None, Input }
+        private static InputEnum _inputState;
 
         private enum MapEnum { None, WorldMap, Combat }
         private static MapEnum _mapState;
 
-        public static void ReadInput() { _state = StateEnum.Input; }
-        public static bool TakingInput() { return _state == StateEnum.Input; }
+        private enum EnumBuildType { None, Construct, Destroy, Move }
+        private static EnumBuildType _buildType;
+
+        public static void ReadInput() { _inputState = InputEnum.Input; }
+        public static void DontReadInput() { _inputState = InputEnum.None; }
+        public static bool TakingInput() { return _inputState == InputEnum.Input; }
 
         public static void Pause() { _state = StateEnum.Paused; }
         public static bool IsPaused() { return _state == StateEnum.Paused; }
@@ -68,6 +74,14 @@ namespace RiverHollow.Game_Managers
             _mapState = MapEnum.None;
             _state = StateEnum.Paused;
         }
+
+        public static bool Constructing() { return _buildType == EnumBuildType.Construct; }
+        public static void ConstructBuilding() { _buildType = EnumBuildType.Construct; }
+        public static bool MovingBuildings() { return _buildType == EnumBuildType.Move; }
+        public static void MoveBuilding() { _buildType = EnumBuildType.Move; }
+        public static bool DestroyingBuildings() { return _buildType == EnumBuildType.Destroy; }
+        public static void DestroyBuilding() { _buildType = EnumBuildType.Destroy; }
+        public static void FinishedBuilding() { _buildType = EnumBuildType.None; }
 
         public static void BackToMain()
         {
@@ -145,6 +159,9 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "Machines")]
             public List<MachineData> machines;
+
+            [XmlElement(ElementName = "name")]
+            public string name;
 
             [XmlElement(ElementName = "positionX")]
             public int positionX;
@@ -484,7 +501,7 @@ namespace RiverHollow.Game_Managers
             {
                 WorkerBuilding newBuilding = ObjectManager.GetBuilding(b.buildingID);
                 newBuilding.LoadData(b);
-                MapManager.Maps[MapManager.HomeMap].AddBuilding(newBuilding);
+                MapManager.Maps[MapManager.HomeMap].AddBuilding(newBuilding, false);
             }
             for (int i = 0; i < InventoryManager.maxItemRows; i++)
             {

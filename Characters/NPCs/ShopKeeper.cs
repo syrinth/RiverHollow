@@ -1,5 +1,6 @@
 ﻿using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
+using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Game_Managers.GUIObjects.Screens;
 using RiverHollow.GUIObjects;
 using RiverHollow.Misc;
@@ -83,6 +84,28 @@ namespace RiverHollow.Characters.NPCs
                     if (m._type == Merchandise.ItemType.Worker) { dialogueEntries.Add(m); }
                 }
                 GUIManager.SetScreen(new PurchaseWorkersScreen(dialogueEntries));
+            }
+            else if (entry.Equals("SellWorkers"))
+            {
+                ManagementScreen s = new ManagementScreen();
+                s.Sell();
+                GUIManager.SetScreen(s);
+            }
+            else if (entry.Equals("Move"))
+            {
+                GUIManager.SetScreen(null);
+                GameManager.Scry(true);
+                GameManager.MoveBuilding();
+                Camera.UnsetObserver();
+                MapManager.ViewMap(MapManager.HomeMap);
+            }
+            else if (entry.Equals("Destroy"))
+            {
+                GUIManager.SetScreen(null);
+                GameManager.Scry(true);
+                GameManager.DestroyBuilding();
+                Camera.UnsetObserver();
+                MapManager.ViewMap(MapManager.HomeMap);
             }
             else if (entry.Contains("Upgrade"))
             {

@@ -122,6 +122,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                     WorkerBuilding b = ObjectManager.GetBuilding(_merchandise[_currentItemIndex].MerchID);
                     GraphicCursor.PickUpBuilding(b);
                     GameManager.Scry(true);
+                    GameManager.ConstructBuilding();
                     Camera.UnsetObserver();
                     MapManager.ViewMap(MapManager.HomeMap);
                     rv = true;

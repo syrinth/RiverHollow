@@ -38,5 +38,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             _sprite.SetCurrentAnimation(animation);
         }
+
+        public void SetScale(int scale)
+        {
+            _sprite.SetScale(scale);
+            Width = _sprite.Width;
+            Height = _sprite.Height;
+        }
     }
 }

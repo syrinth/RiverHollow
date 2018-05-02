@@ -58,10 +58,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         public GUIWindow(Vector2 position, WindowData winData, int width, int height) : this()
         {
-            Position(position);
             Width = width;
             Height = height;
             _winData = winData;
+            Position(position);
         }
 
         public override void Position(Vector2 value)
@@ -73,6 +73,21 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             }
             base.Position(value);
         }
+
+        public virtual void Resize()
+        {
+            foreach(GUIObject g in Controls)
+            {
+                if (g.DrawRectangle.Right > InnerRectangle().Right)
+                {
+                    Width += g.DrawRectangle.Right - InnerRectangle().Right;
+                }
+                if (g.DrawRectangle.Bottom > InnerRectangle().Bottom)
+                {
+                    Height += g.DrawRectangle.Bottom - InnerRectangle().Bottom;
+                }
+            }
+        }
         #region Draw
         public int SkipSize() { return _winData.Size + _winData.Edge; }
         public override void Draw(SpriteBatch spriteBatch)
@@ -80,6 +95,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             DrawTop(spriteBatch);
             DrawMiddle(spriteBatch);
             DrawBottom(spriteBatch);
+
+            foreach(GUIObject g in Controls)
+            {
+                g.Draw(spriteBatch);
+            }
         }
 
         //Draw the edging

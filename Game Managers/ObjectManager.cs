@@ -151,6 +151,8 @@ namespace RiverHollow.Game_Managers
 
         public class Recipe
         {
+            private int _iXP;
+            public int XP => _iXP;
             private int _iProcessingTime;
             public int ProcessingTime => _iProcessingTime;
             private int _iOutput;
@@ -165,11 +167,17 @@ namespace RiverHollow.Game_Managers
 
                 string[] _recipeDataValues = data.Split('/');
                 _iProcessingTime = int.Parse(_recipeDataValues[0]);
-                for(int i=1; i< _recipeDataValues.Length; i++)
+                _iXP = int.Parse(_recipeDataValues[1]);
+                for (int i=2; i< _recipeDataValues.Length; i++)
                 {
                     string[] itemParams = _recipeDataValues[i].Split(' ');
                     _requiredItems.Add(int.Parse(itemParams[0]), int.Parse(itemParams[1]));
                 }
+            }
+
+            public override string ToString()
+            {
+                return ObjectManager.GetItem(_iOutput).Name;
             }
         }
     }

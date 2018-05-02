@@ -56,13 +56,7 @@ namespace RiverHollow
 
             _dLastUpdateinSeconds = 0;
 
-            _text = new GUIText("Day XX, XX:XX", GameContentManager.GetFont(@"Fonts\Font"));
-            Vector2 boxSize = _text.MeasureString() + new Vector2(GUIWindow.BrownWin.Edge*2, GUIWindow.BrownWin.Edge*2);
-
-            _displayWindow = new GUIWindow(GUIWindow.BrownWin, (int)boxSize.X, (int)boxSize.Y);
-            _displayWindow.AnchorToScreen(GUIObject.SideEnum.TopRight, 10);
-            
-            _text.CenterOnWindow(_displayWindow);
+            SetDisplayWindow();
 
             CheckDungeonLocks();
             
@@ -70,6 +64,17 @@ namespace RiverHollow
             RollForWeatherEffects();
 
             MapManager.CheckSpirits();
+        }
+
+        private static void SetDisplayWindow()
+        {
+            _text = new GUIText("Day XX, XX:XX", GameContentManager.GetFont(@"Fonts\Font"));
+
+            Vector2 boxSize = _text.MeasureString() + new Vector2(GUIWindow.BrownWin.Edge * 2, GUIWindow.BrownWin.Edge * 2);
+            _displayWindow = new GUIWindow(GUIWindow.BrownWin, (int)boxSize.X, (int)boxSize.Y);
+            _displayWindow.AnchorToScreen(GUIObject.SideEnum.TopRight, 10);
+
+            _text.CenterOnWindow(_displayWindow);
         }
 
         public static void Update(GameTime gameTime)
@@ -215,6 +220,7 @@ namespace RiverHollow
 
         public static void LoadCalendar(GameManager.CalendarData d)
         {
+            SetDisplayWindow();
             _iCurrDay = d.dayOfMonth;
             _iDayOfWeek = d.dayOfWeek;
             _iCurrSeason = d.currSeason;

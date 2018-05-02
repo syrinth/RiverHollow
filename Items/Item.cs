@@ -286,11 +286,11 @@ namespace RiverHollow.WorldObjects
         {
             string rv = base.GetDescription();
             rv += System.Environment.NewLine;
-            if (Dmg > 0) { rv += "Dmg: +" + _dmg + " "; }
-            if (Def > 0) { rv += "Def: +" + _def + " "; }
-            if (Spd > 0) { rv += "Spd: +" + _spd + " "; }
-            if (Mag > 0) { rv += "Mag: +" + _mag + " "; }
-            if (HP > 0) { rv += "HP: +" + _hp + " "; }
+            if (Dmg > 0) { rv += " Dmg: +" + _dmg + " "; }
+            if (Def > 0) { rv += " Def: +" + _def + " "; }
+            if (Spd > 0) { rv += " Spd: +" + _spd + " "; }
+            if (Mag > 0) { rv += " Mag: +" + _mag + " "; }
+            if (HP > 0) { rv += " HP: +" + _hp + " "; }
             rv = rv.Trim();
 
             return rv;

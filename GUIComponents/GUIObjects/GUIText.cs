@@ -54,5 +54,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             return _font.MeasureString(s);
         }
+
+        public void SetText(string text, bool changePos = false)
+        {
+            _sText = text;
+        }
     }
 }

@@ -15,9 +15,12 @@ namespace RiverHollow.Buildings
         public int BaseWidth { get => _baseWidth * TileSize; } //In Pixels
         protected int _baseHeight; //In Tiles
         public int BaseHeight { get => _baseHeight * TileSize; } //In Pixels
-        public string _name;
-        public string Name { get => _name; }
-        public string MapName { get => "map"+_name.Replace(" ", ""); }
+        protected string _sName;
+        public string Name => _sName;
+        public string MapName => "map"+_sName.Replace(" ", "");
+
+        protected string _sGivenName;
+        public string GivenName=> _sGivenName;
 
         public override Rectangle CollisionBox { get => GenerateCollisionBox(); }
         public Rectangle SelectionBox { get => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _texture.Width, _texture.Height); }
@@ -39,7 +42,7 @@ namespace RiverHollow.Buildings
         {
             _id = id;
             int i = 0;
-            _name = stringData[i++];
+            _sName = stringData[i++];
             _texture = GameContentManager.GetTexture(@"Textures\" + stringData[i++]);
             string[] split = stringData[i++].Split(' ');
             _width = int.Parse(split[0]);
@@ -62,6 +65,11 @@ namespace RiverHollow.Buildings
             int startY = (int)_vMapPosition.Y + (_baseStartY * TileSize);
 
             return new Rectangle(startX, startY, _baseWidth * TileSize, _baseHeight * TileSize);
+        }
+
+        public void SetName(string val)
+        {
+            _sGivenName = val;
         }
     }
 }

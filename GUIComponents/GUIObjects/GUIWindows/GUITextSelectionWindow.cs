@@ -9,6 +9,7 @@ using RiverHollow.WorldObjects;
 using RiverHollow.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 using static RiverHollow.WorldObjects.Door;
+using RiverHollow.Characters.NPCs;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
@@ -34,7 +35,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public GUITextSelectionWindow(NPC talker, string selectionText) : base()
         {
-            _talker = talker;
+            _targetNPC = talker;
             Position(new Vector2(Position().X, RiverHollow.ScreenHeight - Height - SpaceFromBottom));
 
             Setup(selectionText);
@@ -86,7 +87,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                         string[] friendshipPass = s.Split(new[] { '%' }, StringSplitOptions.RemoveEmptyEntries);
                         if (int.TryParse(friendshipPass[0], out int val))
                         {
-                            if(_talker.Friendship >= val)
+                            if(_targetNPC.Friendship >= val)
                             {
                                 _diOptions.Add(key++, friendshipPass[1]);
                             }
@@ -146,7 +147,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         protected virtual void SelectAction()
         {
             string action = _diOptions[_iKeySelection].Split(':')[1];
-            if (_talker == null)
+            if (_targetNPC == null || action.Equals("SellContract"))
             {
                 ProcessGameTextSelection(action);
             }
@@ -212,6 +213,15 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                 }
                 GameManager.BackToMain();
             }
+            else if (action.Contains("SellContract") && _targetNPC != null)
+            {
+                if (_targetNPC.IsWorldAdventurer())
+                {
+                    ((WorldAdventurer)_targetNPC).Building.RemoveWorker((WorldAdventurer)_targetNPC);
+                    PlayerManager.AddMoney(1000);
+                    GameManager.BackToMain();
+                }
+            }
             else
             {
                 GameManager.BackToMain();
@@ -220,11 +230,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         private void ProcessNPCDialogSelection(string action)
         {
-            string nextText = _talker.GetDialogEntry(action);
+            string nextText = _targetNPC.GetDialogEntry(action);
 
             if (!string.IsNullOrEmpty(nextText))
             {
-                GUIManager.SetScreen(new TextScreen(_talker, nextText));
+                GUIManager.SetScreen(new TextScreen(_targetNPC, nextText));
             }
             else if(GUIManager.IsTextScreen())
             {

@@ -1,19 +1,18 @@
 ﻿using RiverHollow.Characters.NPCs;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.GUIObjects;
-using RiverHollow.WorldObjects;
-using RiverHollow.Tile_Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
 namespace RiverHollow.Game_Managers.GUIObjects.Screens
 {
     public class PurchaseWorkersScreen : GUIScreen
     {
         private GUIWindow _mainWindow;
-        private List<WorkerBox> _workers;
+        private List<GUIObject> _liWorkers;
 
         public PurchaseWorkersScreen(List<Merchandise> merch)
         {
@@ -32,14 +31,18 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
 
                 _mainWindow.PositionAdd(new Vector2(32, 32));
                 Vector2 position = _mainWindow.Position();
-                _workers = new List<WorkerBox>();
+                _liWorkers = new List<GUIObject>();
+
+
                 foreach (Merchandise m in merch)
                 {
                     WorldAdventurer w = ObjectManager.GetWorker(m.MerchID);
 
-                    _workers.Add(new WorkerBox(position, w, m.MoneyCost));
-                    position.X += 64;
+                    _liWorkers.Add(new WorkerBox(position, w, m.MoneyCost));
                 }
+                
+
+                GUIObject.CreateSpacedRow(ref _liWorkers, RiverHollow.ScreenHeight / 2, _mainWindow.Position().X, RiverHollow.ScreenWidth/10, 20);
                 Controls.Add(_mainWindow);
             }
             catch (Exception e)
@@ -51,7 +54,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            foreach (WorkerBox wB in _workers)
+            foreach (WorkerBox wB in _liWorkers)
             {
                 wB.Draw(spriteBatch);
             }
@@ -61,7 +64,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
         {
             bool rv = false;
 
-            foreach (WorkerBox wB in _workers)
+            foreach (WorkerBox wB in _liWorkers)
             {
                 if (wB.Contains(mouse))
                 {
@@ -84,11 +87,12 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
         }
     }
 
-    public class WorkerBox
+    public class WorkerBox : GUIObject
     {
         private SpriteFont _font;
         private GUIWindow _workerWindow;
         private GUIWindow _costWindow;
+        private GUISprite _sprite;
         public WorldAdventurer _w;
         public int Cost;
 
@@ -97,22 +101,37 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             _font = GameContentManager.GetFont(@"Fonts\Font");
             Cost = cost;
             _w = w;
-            _workerWindow = new GUIWindow(p, GUIWindow.RedWin, 64, 96);
-            _costWindow = new GUIWindow(new Vector2(p.X, p.Y + 96), GUIWindow.RedWin, 64, 32);
+            _sprite = new GUISprite(w.Sprite);
+            _sprite.SetScale((int)GameManager.Scale);
+            _workerWindow = new GUIWindow(p, GUIWindow.RedWin, _sprite.Width + _sprite.Width / 3, _sprite.Height + 2 * _sprite.Height / 4);
+            _costWindow = new GUIWindow(new Vector2(p.X, p.Y + 96), GUIWindow.RedWin, _sprite.Width + _sprite.Width / 3, 32);
+
+            Position(_workerWindow.Position());
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             _workerWindow.Draw(spriteBatch);
             _costWindow.Draw(spriteBatch);
-            _w.Position = new Vector2(_workerWindow.Position().X + _workerWindow.EdgeSize, (int)_workerWindow.Position().Y + _workerWindow.EdgeSize);
-            _w.Draw(spriteBatch);
+            _sprite.Draw(spriteBatch);
             spriteBatch.DrawString(_font, Cost.ToString(), _costWindow.Position() + new Vector2(_costWindow.EdgeSize/2, _costWindow.EdgeSize/2), Color.White);
         }
 
-        public bool Contains(Point mouse)
+        public override bool Contains(Point mouse)
         {
             return _workerWindow.Contains(mouse);
+        }
+
+        public override void Position(Vector2 value)
+        {
+            base.Position(value);
+            _workerWindow.Position(value);
+            _costWindow.AnchorToObject(_workerWindow, SideEnum.Bottom);
+            _sprite.CenterOnWindow(_workerWindow);
+            _sprite.AnchorToInnerSide(_workerWindow, SideEnum.Bottom);
+
+            Width = _workerWindow.Width;
+            Height = _workerWindow.Height;
         }
     }
 }

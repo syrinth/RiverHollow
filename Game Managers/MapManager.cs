@@ -17,7 +17,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class MapManager
     {
-        public const string HomeMap = "mapRiverHollowTown"; //"mapManorGrounds"; //"mapForestDungeonZone"; //
+        public const string HomeMap = "mapManorGrounds"; //"mapForestDungeonZone"; //"mapRiverHollowTown"; //
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
 
@@ -176,17 +176,17 @@ namespace RiverHollow.Game_Managers
             int mapHeight = _tileMaps[MapManager.HomeMap].MapHeightTiles;
             RHRandom r = new RHRandom();
             //LoadMap1
-            //if (!loaded)
-            //{
-            //    for (int i = 0; i < 99; i++)
-            //    {
-            //        _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
-            //    }
-            //    for (int i = 0; i < 99; i++)
-            //    {
-            //        _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
-            //    }
-            //}
+            if (!loaded)
+            {
+                for (int i = 0; i < 99; i++)
+                {
+                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
+                }
+                for (int i = 0; i < 99; i++)
+                {
+                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
+                }
+            }
 
             Mob mob = CharacterManager.GetMobByIndex(1, new Vector2(647, 539));
             mob.CurrentMapName = "mapManorGrounds";
