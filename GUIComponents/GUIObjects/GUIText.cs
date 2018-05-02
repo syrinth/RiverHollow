@@ -10,13 +10,13 @@ namespace RiverHollow.GUIComponents.GUIObjects
         string _sText;
         public string Text => _sText;
         SpriteFont _font;
-        Color Color;
+        Color _cTextColor;
 
         Vector2 _vTextSize;
-        public GUIText(string text)
+        public GUIText(string text, string f = @"Fonts\Font")
         {
-            Color = Color.Red;
-            _font = GameContentManager.GetFont(@"Fonts\Font");
+            _cTextColor = Color.Red;
+            _font = GameContentManager.GetFont(f);
             _sText = text;
 
             _vTextSize = _font.MeasureString(_sText);
@@ -32,7 +32,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(_font, _sText, Position(), Color);
+            spriteBatch.DrawString(_font, _sText, Position(), _cTextColor);
         }
 
         public void Draw(SpriteBatch spriteBatch, string newText)
@@ -58,6 +58,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public void SetText(string text, bool changePos = false)
         {
             _sText = text;
+        }
+
+        public void SetColor(Color c)
+        {
+            _cTextColor = c;
         }
     }
 }

@@ -4,33 +4,48 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIObjects;
 using RiverHollow.Characters.NPCs;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
     public class GUIItemBox : GUIImage
     {
-        private static SpriteFont _displayFont = GameContentManager.GetFont(@"Fonts\DisplayFont");
         private Item _item;
-        public Item Item { get => _item; set => _item = value; }
+        public Item Item => _item;
         public bool Open = true;
         private bool _hover;
         private GUITextWindow _textWindow;
+        private GUIText _textNum;
 
         public GUIItemBox(Vector2 position, Rectangle sourceRect, int width, int height, string texture, Item item) : base(position, sourceRect, width, height, texture)
         {
-            _item = item;
+            SetItem(item);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        //public override void Draw(SpriteBatch spriteBatch)
+        //{
+        //    base.Draw(spriteBatch);
+        //    if (_item != null)
+        //    {
+        //        _item.Draw(spriteBatch, _drawRect);
+        //        if (_textNum != null)
+        //        {
+        //            _textNum.Draw(spriteBatch);
+        //        }
+        //    }
+        //    if (_hover)
+        //    {
+        //        if (_textWindow != null) { _textWindow.Draw(spriteBatch, true); }
+        //    }
+        //}
+
+        public override void Draw(SpriteBatch spriteBatch, float alpha)
         {
             base.Draw(spriteBatch);
             if (_item != null)
             {
-                _item.Draw(spriteBatch, _drawRect);
-                if (_item.DoesItStack)
-                {
-                    spriteBatch.DrawString(_displayFont, _item.Number.ToString(), new Vector2(_drawRect.X + 22, _drawRect.Y + 22), Color.White);
-                }
+                _item.Draw(spriteBatch, _drawRect, false, alpha);
+                if (_textNum != null) { _textNum.Draw(spriteBatch); }
             }
             if (_hover)
             {
@@ -67,6 +82,17 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 _textWindow = null;
             }
             return rv;
+        }
+
+        public void SetItem(Item it)
+        {
+            _item = it;
+            if (_item != null && _item.DoesItStack)
+            {
+                _textNum = new GUIText(_item.Number.ToString(), @"Fonts\DisplayFont");
+                _textNum.SetColor(Color.White);
+                _textNum.AnchorToInnerSide(this, SideEnum.BottomRight, 10);
+            }
         }
     }
 

@@ -216,6 +216,42 @@ namespace RiverHollow.GUIObjects
                     break;
             }
         }
+        internal void AnchorToInnerSide(GUIObject obj, SideEnum sidePlacement, int spacing = 0)
+        {
+            switch (sidePlacement)
+            {
+                case SideEnum.Bottom:
+                    this.SetY(obj.DrawRectangle.Bottom - this.Height - spacing);
+                    break;
+                case SideEnum.Left:
+                    this.SetX(obj.DrawRectangle.Left + spacing);
+                    break;
+                case SideEnum.Right:
+                    this.SetX(obj.DrawRectangle.Right - this.Width - spacing);
+                    break;
+                case SideEnum.Top:
+                    this.SetY(obj.DrawRectangle.Top + spacing);
+                    break;
+                case SideEnum.BottomLeft:
+                    this.SetY(obj.DrawRectangle.Bottom - this.Height - spacing);
+                    this.SetX(obj.DrawRectangle.Left + spacing);
+                    break;
+                case SideEnum.BottomRight:
+                    this.SetY(obj.DrawRectangle.Bottom - this.Height - spacing);
+                    this.SetX(obj.DrawRectangle.Right - this.Width - spacing);
+                    break;
+                case SideEnum.TopLeft:
+                    this.SetY(obj.DrawRectangle.Top + spacing);
+                    this.SetX(obj.DrawRectangle.Left + spacing);
+                    break;
+                case SideEnum.TopRight:
+                    this.SetY(obj.DrawRectangle.Top + spacing);
+                    this.SetX(obj.DrawRectangle.Right - this.Width - spacing);
+                    break;
+                default:
+                    break;
+            }
+        }
         internal void AnchorToScreen(SideEnum sidePlacement, int spacing = 0)
         {
             int screenHeight = RiverHollow.ScreenHeight;
