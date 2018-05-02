@@ -338,7 +338,7 @@ namespace RiverHollow.Tile_Engine
             if (this == MapManager.CurrentMap)
             {
                 _renderer.Update(_map, gameTime);
-                if (GameManager.IsRunning())
+                if (IsRunning())
                 {
                     foreach (Mob m in _liMobs)
                     {
@@ -580,7 +580,7 @@ namespace RiverHollow.Tile_Engine
             bool rv = false;
             foreach (WorldCharacter c in _liCharacters)
             {
-                if (mover != c && !c.IsSpirit() && c.CollisionBox.Intersects(movingChar))
+                if (mover != c && !c.IsSpirit() && c.CollisionIntersects(movingChar))
                 {
                     rv = true;
                     break;
@@ -827,6 +827,17 @@ namespace RiverHollow.Tile_Engine
                 }
             }
 
+            if (!rv)
+            {
+                if (Scrying())
+                {
+                    FinishedBuilding();
+                    Unpause();
+                    Scry(false);
+                    ResetCamera();
+                }
+            }
+
             return rv;
         }
 
@@ -834,18 +845,36 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
-            if (GameManager.Scrying())
-            {
-                if (GraphicCursor.HeldBuilding != null)
+            if (Scrying()) {
+
+                if (Constructing() || MovingBuildings())
                 {
-                    AddBuilding(mouseLocation);
-                    rv = true;
-                }
-                else if (GraphicCursor.WorkerToPlace > -1)
-                {
-                    if (AddWorkerToBuilding(mouseLocation))
+                    if (GraphicCursor.HeldBuilding != null)
                     {
+                        if (AddBuilding(GraphicCursor.HeldBuilding))
+                        {
+                            FinishedBuilding();
+                            rv = true;
+                        }
+                    }
+                    else if (GraphicCursor.HeldBuilding == null)
+                    {
+                        PickUpBuilding(mouseLocation);
                         rv = true;
+                    }
+                }
+                else if (DestroyingBuildings())
+                {
+                    rv = RemoveBuilding(mouseLocation);
+                }
+                else
+                {
+                    if (GraphicCursor.WorkerToPlace > -1)
+                    {
+                        if (AddWorkerToBuilding(mouseLocation))
+                        {
+                            rv = true;
+                        }
                     }
                 }
             }
@@ -911,7 +940,7 @@ namespace RiverHollow.Tile_Engine
                 if (_liBuildingTiles.Count > 0) { _liBuildingTiles.Clear(); }
             }
 
-            if (GameManager.Scrying())
+            if (Scrying())
             {
                 WorkerBuilding building = GraphicCursor.HeldBuilding;
                 _liBuildingTiles = new List<RHTile>();
@@ -1090,28 +1119,77 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
-        public void AddBuilding(Point mouseLocation)
+        public void PickUpBuilding(Point mouseLocation)
         {
-            WorkerBuilding b = GraphicCursor.HeldBuilding;
-            AddBuilding(b);
+            foreach(WorkerBuilding b in _liBuildings)
+            {
+                if (b.Contains(mouseLocation))
+                {
+                    GraphicCursor.PickUpBuilding(b);
+                    b.RemoveSelfFromTiles();
+                    _dictEntrance.Remove(b.PersonalID.ToString());
+                    break;
+                }
+            }
         }
 
-        public void AddBuilding(WorkerBuilding b)
+        public bool RemoveBuilding(Point mouseLocation)
         {
+            bool rv = false;
+            WorkerBuilding bldg = null;
+            foreach (WorkerBuilding b in _liBuildings)
+            {
+                if (b.Contains(mouseLocation))
+                {
+                    if (b.Workers.Count == 0)
+                    {
+                        bldg = b;
+                        b.RemoveSelfFromTiles();
+                        _dictEntrance.Remove(b.PersonalID.ToString());
+                        PlayerManager.RemoveBuilding(b);
+                        FinishedBuilding();
+                        Unpause();
+                        Scry(false);
+                        ResetCamera();
+                    }
+                    else
+                    {
+                        GUIManager.SetScreen(new TextScreen("Cannot Destroy occupied buildings.",false));
+                    }
+                }
+            }
+            if(bldg != null) {
+                rv = true;
+                _liBuildings.Remove(bldg);
+            }
+
+            return rv;
+        }
+
+        public bool AddBuilding(WorkerBuilding b, bool openNameInput = true)
+        {
+            bool rv = false;
             List<RHTile> tiles = new List<RHTile>();
             if (TestMapTiles(b, tiles))
             {
+                _liBuildingTiles.Clear();
                 AssignMapTiles(b, tiles);
                 Vector3 translate = Camera._transform.Translation;
                 Vector2 newPos = new Vector2((b.MapPosition.X - translate.X) / Scale, (b.MapPosition.Y - translate.Y) / Scale);
                 _dictEntrance.Add(b.PersonalID.ToString(), b.BoxToExit); //TODO: FIX THIS
                 GraphicCursor.DropBuilding();
-                _liBuildings.Add(b);
+                if (!_liBuildings.Contains(b)) {
+                    _liBuildings.Add(b);
+                } //For the use case of moving buildings
                 PlayerManager.AddBuilding(b);
-                GameManager.Unpause();
-                GameManager.Scry(false);
-                ResetCamera();
+                if (openNameInput)
+                {
+                    GUIManager.SetScreen(new TextInputScreen(b));
+                }
+                rv = true;
             }
+
+            return rv;
         }
 
         public bool AddWorkerToBuilding(Point mouseLocation)
@@ -1128,7 +1206,7 @@ namespace RiverHollow.Tile_Engine
                         b.AddWorker(w, r);
                         b._selected = false;
                         GUIManager.SetScreen(new TextInputScreen(w));
-                        GameManager.Scry(false);
+                        //Scry(false);
                         rv = true;
                     }
                 }
@@ -1336,7 +1414,14 @@ namespace RiverHollow.Tile_Engine
         {
             foreach (WorldObjectData w in data.worldObjects)
             {
-                PlaceWorldObject(ObjectManager.GetWorldObject(w.worldObjectID, new Vector2(w.x, w.y)));
+                if (w.worldObjectID != -1)
+                {
+                    PlaceWorldObject(ObjectManager.GetWorldObject(w.worldObjectID, new Vector2(w.x, w.y)));
+                }
+                else
+                {
+                    int i = 0;
+                }
             }
             foreach (ContainerData c in data.containers)
             {

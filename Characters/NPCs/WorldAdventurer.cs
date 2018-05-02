@@ -22,13 +22,14 @@ namespace RiverHollow.Characters.NPCs
         public int AdventurerID { get => _iAdventurerID; }
         protected string _sAdventurerType;
         private WorkerBuilding _building;
+        public WorkerBuilding Building => _building;
         protected int _iDailyFoodReq;
         protected int _iCurrFood;
         protected int _iDailyItemID;
         protected Item _heldItem;
         protected int _iMood;
         public bool DrawIt;
-        public bool Busy;
+        public bool Adventuring;
         public int Mood { get => _iMood; }
         protected string _sTexture;
 
@@ -38,8 +39,10 @@ namespace RiverHollow.Characters.NPCs
         Dictionary<int, Recipe> _diCrafting;
         public Dictionary<int, Recipe> CraftList => _diCrafting;
         Recipe _currentlyMaking;
+        public Recipe CurrentlyMaking => _currentlyMaking;
 
         private CombatAdventurer _c;
+        public CombatAdventurer Combat => _c;
         #endregion
 
         public WorldAdventurer(string[] stringData, int id)
@@ -52,7 +55,7 @@ namespace RiverHollow.Characters.NPCs
             _heldItem = null;
             _iMood = 0;
             DrawIt = true;
-            Busy = false;
+            Adventuring = false;
 
             SetCombat();
         }
@@ -109,6 +112,7 @@ namespace RiverHollow.Characters.NPCs
                 {
                     //SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition);
                     _heldItem = ObjectManager.GetItem(_currentlyMaking.Output);
+                    _c.AddXP(_currentlyMaking.XP);
                     _dProcessedTime = -1;
                     _currentlyMaking = null;
                     _sprite.SetCurrentAnimation("Idle");
@@ -136,6 +140,16 @@ namespace RiverHollow.Characters.NPCs
             }
             return rv;
         }
+        public override bool CollisionIntersects(Rectangle rect)
+        {
+            bool rv = false;
+            if (DrawIt)
+            {
+                rv = base.CollisionIntersects(rect);
+            }
+            return rv;
+        }
+
         public override void Talk()
         {
             GUIManager.SetScreen(new TextScreen(this, Name + ": " + GameContentManager.GetDialogue("AdventurerTree")));
@@ -166,7 +180,7 @@ namespace RiverHollow.Characters.NPCs
             else if (entry.Equals("Party"))
             {
                 DrawIt = false;
-                Busy = true;
+                Adventuring = true;
                 PlayerManager.AddToParty(_c);
                 rv = "Of course!";
             }
@@ -205,9 +219,9 @@ namespace RiverHollow.Characters.NPCs
 
         public bool Rollover()
         {
-            bool rv = !Busy;
+            bool rv = !Adventuring;
             DrawIt = true;
-            Busy = false;
+            Adventuring = false;
             _c.CurrentHP = _c.MaxHP;
             return rv;
         }
