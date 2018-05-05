@@ -241,11 +241,11 @@ namespace RiverHollow.Tile_Engine
                 }
                 else if (obj.Name.Equals("Rock"))
                 {
-                    PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, Utilities.Normalize(obj.Position)));
+                    PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, Util.Normalize(obj.Position)));
                 }
                 else if (obj.Name.Equals("Tree"))
                 {
-                    PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, Utilities.Normalize(obj.Position)));
+                    PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, Util.Normalize(obj.Position)));
                 }
                 else if (obj.Name.Equals("Mob"))
                 {
@@ -269,7 +269,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     Spirit s = new Spirit(obj.Properties["Name"], obj.Properties["Type"], obj.Properties["Condition"], obj.Properties["Text"])
                     {
-                        Position = Utilities.Normalize(obj.Position),
+                        Position = Util.Normalize(obj.Position),
                         CurrentMapName = _name
                     };
                     _liCharacters.Add(s);
@@ -1097,12 +1097,12 @@ namespace RiverHollow.Tile_Engine
                         }
                         else if (mapObject.Name.Contains("BuildingChest"))
                         {
-                            b.BuildingChest.MapPosition = Utilities.Normalize(mapObject.Position);
+                            b.BuildingChest.MapPosition = Util.Normalize(mapObject.Position);
                             PlacePlayerObject(b.BuildingChest);
                         }
                         else if (mapObject.Name.Contains("Pantry"))
                         {
-                            b.Pantry.MapPosition = Utilities.Normalize(mapObject.Position);
+                            b.Pantry.MapPosition = Util.Normalize(mapObject.Position);
                             PlacePlayerObject(b.Pantry);
                         }
                     }
@@ -1480,7 +1480,7 @@ namespace RiverHollow.Tile_Engine
         public int Y => _Y;
         public Vector2 Position => new Vector2(_X * TileSize, _Y * TileSize);
         public Vector2 Center => new Vector2(Position.X + TileSize/2, Position.Y + TileSize/2);
-        public Rectangle Rect => Utilities.FloatRectangle(Position, TileSize, TileSize);
+        public Rectangle Rect => Util.FloatRectangle(Position, TileSize, TileSize);
 
         Dictionary<TiledMapTileLayer, Dictionary<string, string>> _diProps;
         WorldObject _obj;
@@ -1746,7 +1746,7 @@ namespace RiverHollow.Tile_Engine
         public ShopData(string map, TiledMapObject shopObj)
         {
             _sMap = map;
-            _rCLick = Utilities.FloatRectangle(shopObj.Position, shopObj.Size.Width, shopObj.Size.Height);
+            _rCLick = Util.FloatRectangle(shopObj.Position, shopObj.Size.Width, shopObj.Size.Height);
             _iShopID = int.Parse(shopObj.Properties["Owner"]);
             _iShopX = int.Parse(shopObj.Properties["ShopKeepX"]);
             _iShopY = int.Parse(shopObj.Properties["ShopKeepY"]);

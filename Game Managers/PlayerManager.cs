@@ -76,7 +76,7 @@ namespace RiverHollow.Game_Managers
             _canMake.Add(6);
 
             CurrentMap = MapManager.CurrentMap.Name;
-            World.Position = Utilities.Normalize(MapManager.Maps[CurrentMap].GetCharacterSpawn("PlayerSpawn"));
+            World.Position = Util.Normalize(MapManager.Maps[CurrentMap].GetCharacterSpawn("PlayerSpawn"));
 
             AddTesting();
         }
@@ -93,6 +93,8 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddNewItemToInventory(23);
             InventoryManager.AddNewItemToInventory(190);
             InventoryManager.AddNewItemToInventory(7);
+            InventoryManager.AddNewItemToInventory(9);
+            InventoryManager.AddNewItemToInventory(10);
             InventoryManager.AddNewItemToInventory(101);
             InventoryManager.AddNewItemToInventory(200);
             InventoryManager.AddNewItemToInventory(80, 10);
@@ -267,7 +269,7 @@ namespace RiverHollow.Game_Managers
         {
             bool rv = false;
 
-            Point point = Utilities.Normalize(mouseLocation);
+            Point point = Util.Normalize(mouseLocation);
             RHTile t = MapManager.RetrieveTile(point);
             if (t != null)
             {
@@ -349,7 +351,7 @@ namespace RiverHollow.Game_Managers
             {
                 rv = true;
                 UseTool = t;
-                UseTool.Position = Utilities.Normalize(mouse.ToVector2());
+                UseTool.Position = Util.Normalize(mouse.ToVector2());
                 if (UseTool != null && !_busy)
                 {
                     _busy = true;

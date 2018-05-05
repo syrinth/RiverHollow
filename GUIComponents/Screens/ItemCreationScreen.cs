@@ -10,6 +10,7 @@ using static RiverHollow.Game_Managers.ObjectManager;
 using RiverHollow.Characters.NPCs;
 using RiverHollow.GUIObjects;
 using static RiverHollow.WorldObjects.WorldItem.Machine;
+using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
@@ -80,7 +81,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             int creationHeight = (GUIWindow.RedWin.Edge * 2) + (_rows * _iBoxSize) + (_iMargin * (_rows + 1));
 
             _creationWindow = new GUIWindow(new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2), GUIWindow.RedWin, creationWidth, creationHeight);
-            _creationWindow.AnchorAndAlignToObject(_inventory, GUIObject.SideEnum.Top, GUIObject.SideEnum.CenterX);
+            _creationWindow.AnchorAndAlignToObject(_inventory, SideEnum.Top, SideEnum.CenterX);
 
             List<GUIObject> liWins = new List<GUIObject>() { _creationWindow, _inventory };
             GUIObject.CenterAndAlignToScreen(ref liWins);

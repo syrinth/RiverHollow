@@ -78,7 +78,7 @@ namespace RiverHollow.Characters.NPCs
             int i = 0;
             _sAdventurerType = stringData[i++];
             _sTexture = @"Textures\" + _sAdventurerType;
-            _workerType = (WorkerTypeEnum)Enum.Parse(typeof(WorkerTypeEnum), stringData[i++]);
+            _workerType = Util.ParseEnum<WorkerTypeEnum>(stringData[i++]);
             _iDailyItemID = int.Parse(stringData[i++]);
             _iDailyFoodReq = int.Parse(stringData[i++]);
             int portraitNum = int.Parse(stringData[i++]);
@@ -162,7 +162,7 @@ namespace RiverHollow.Characters.NPCs
         {
             RHRandom r = new RHRandom();
             string text = _dialogueDictionary[r.Next(1, 2).ToString()];
-            return Utilities.ProcessText(text, _sName);
+            return Util.ProcessText(text, _sName);
         }
 
         public override string GetDialogEntry(string entry)

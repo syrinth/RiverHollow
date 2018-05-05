@@ -7,6 +7,8 @@ using RiverHollow.SpriteAnimations;
 using RiverHollow.GUIObjects;
 
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.Misc;
+
 namespace RiverHollow.WorldObjects
 {
     public class Item
@@ -57,9 +59,9 @@ namespace RiverHollow.WorldObjects
         #endregion
         public Item() { }
 
-        public Item(int id, string[] itemValue, int num)
+        public Item(int id, string[] stringData, int num)
         {
-            ImportBasics(itemValue, id, num);
+            ImportBasics(stringData, id, num);
 
             _doesItStack = true;
             _texture = GameContentManager.GetTexture(@"Textures\items");
@@ -70,7 +72,7 @@ namespace RiverHollow.WorldObjects
             _num = num;
 
             int i = 0;
-            _itemType = (ItemEnum)Enum.Parse(typeof(ItemEnum), stringData[i++]);
+            _itemType = Util.ParseEnum<ItemEnum>(stringData[i++]);
             _name = stringData[i++];
             _description = stringData[i++];
             string[] texIndices = stringData[i++].Split(' ');
@@ -257,8 +259,12 @@ namespace RiverHollow.WorldObjects
 
     public class Equipment : Item
     {
-        public enum EquipmentEnum { Armor, Weapon };
+        public enum EquipmentEnum { None, Armor, Weapon };
         public EquipmentEnum EquipType;
+        private WeaponEnum _weaponType;
+        public WeaponEnum WeaponType => _weaponType;
+        private ArmorEnum _armorType;
+        public ArmorEnum ArmorType => _armorType;
         private int _dmg;
         public int Dmg { get => _dmg; }
         private int _def;
@@ -273,7 +279,9 @@ namespace RiverHollow.WorldObjects
         public Equipment(int id, string[] stringData)
         {
             int i = ImportBasics(stringData, id, 1);
-            EquipType = (EquipmentEnum)Enum.Parse(typeof(EquipmentEnum), stringData[i++]);
+            EquipType = Util.ParseEnum<EquipmentEnum>(stringData[i++]);
+            if(EquipType == EquipmentEnum.Armor) { _armorType = Util.ParseEnum<ArmorEnum>(stringData[i++]); }
+            else if (EquipType == EquipmentEnum.Weapon) { _weaponType = Util.ParseEnum<WeaponEnum>(stringData[i++]); }
             _dmg = int.Parse(stringData[i++]);
             _def = int.Parse(stringData[i++]);
             _spd = int.Parse(stringData[i++]);
@@ -320,7 +328,7 @@ namespace RiverHollow.WorldObjects
         public Tool(int id, string[] stringData)
         {
             int i = ImportBasics(stringData, id, 1);
-            ToolType = (ToolEnum)Enum.Parse(typeof(ToolEnum), stringData[i++]);
+            ToolType = Util.ParseEnum<ToolEnum>(stringData[i++]);
             _dmgValue = int.Parse(stringData[i++]);
             _staminaCost = int.Parse(stringData[i++]);
             _texture = GameContentManager.GetTexture(@"Textures\tools");
@@ -354,11 +362,11 @@ namespace RiverHollow.WorldObjects
         private int _health;
         public int Health { get => _health; }
 
-        public Food(int id, string[] itemValue, int num)
+        public Food(int id, string[] stringData, int num)
         {
-            int i = ImportBasics(itemValue, id, num);
-            _stam = int.Parse(itemValue[i++]);
-            _health = int.Parse(itemValue[i++]);
+            int i = ImportBasics(stringData, id, num);
+            _stam = int.Parse(stringData[i++]);
+            _health = int.Parse(stringData[i++]);
 
             _doesItStack = true;
             _texture = GameContentManager.GetTexture(@"Textures\items");
@@ -380,9 +388,9 @@ namespace RiverHollow.WorldObjects
     {
         private int _difficulty;
         public int Difficulty { get => _difficulty; }
-        public AdventureMap(int id, string[] itemValue, int num)
+        public AdventureMap(int id, string[] stringData, int num)
         {
-            int i = ImportBasics(itemValue, id, num);
+            int i = ImportBasics(stringData, id, num);
             _difficulty = RandNumber(4, 5, 0, 0);
 
             _doesItStack = false;
@@ -412,14 +420,14 @@ namespace RiverHollow.WorldObjects
 
         public bool Helpful;
 
-        public CombatItem(int id, string[] itemValue, int num)
+        public CombatItem(int id, string[] stringData, int num)
         {
-            int i = ImportBasics(itemValue, id, num);
-            Helpful = itemValue[i++].Equals("Helpful");
-            _fixesCondition = (ConditionEnum)Enum.Parse(typeof(ConditionEnum), itemValue[i++]);
-            _iStam = int.Parse(itemValue[i++]);
-            _iHealth = int.Parse(itemValue[i++]);
-            _iMana = int.Parse(itemValue[i++]);
+            int i = ImportBasics(stringData, id, num);
+            Helpful = stringData[i++].Equals("Helpful");
+            _fixesCondition = Util.ParseEnum<ConditionEnum>(stringData[i++]);
+            _iStam = int.Parse(stringData[i++]);
+            _iHealth = int.Parse(stringData[i++]);
+            _iMana = int.Parse(stringData[i++]);
 
             _doesItStack = true;
             _texture = GameContentManager.GetTexture(@"Textures\items");

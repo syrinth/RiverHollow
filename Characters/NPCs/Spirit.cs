@@ -111,7 +111,7 @@ namespace RiverHollow.Characters.NPCs
                 int arrayID = r.Next(0, loot.Length - 1);
                 InventoryManager.AddNewItemToInventory(int.Parse(loot[arrayID]));
 
-                _sText = Utilities.ProcessText(_sText.Replace("*", "*"+ loot[arrayID]+"*"));
+                _sText = Util.ProcessText(_sText.Replace("*", "*"+ loot[arrayID]+"*"));
                 GUIManager.SetScreen(new TextScreen(this, _sText));
             }
         }

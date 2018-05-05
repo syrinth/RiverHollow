@@ -7,6 +7,7 @@ using RiverHollow.Characters;
 using System.Collections.Generic;
 using static RiverHollow.WorldObjects.WorldItem;
 using static RiverHollow.WorldObjects.Door;
+using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -50,7 +51,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             _inventory.Setup();
             _container.Setup();
-            _container.AnchorAndAlignToObject(_inventory, GUIObject.SideEnum.Top, GUIObject.SideEnum.CenterX);           
+            _container.AnchorAndAlignToObject(_inventory, SideEnum.Top, SideEnum.CenterX);           
 
             List<GUIObject> liWins = new List<GUIObject>() { _container, _inventory };
             GUIObject.CenterAndAlignToScreen(ref liWins);

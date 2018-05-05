@@ -30,7 +30,7 @@ namespace RiverHollow.Game_Managers
         static void AddSong(ContentManager Content, string song)
         {
             string name = string.Empty;
-            Utilities.ParseContentFile(ref song, ref name);
+            Util.ParseContentFile(ref song, ref name);
             if (!_diSongs.ContainsKey(name))
             {
                 _diSongs.Add(name, Content.Load<Song>(song));
@@ -40,7 +40,7 @@ namespace RiverHollow.Game_Managers
         static void AddEffect(ContentManager Content, string effect)
         {
             string name = string.Empty;
-            Utilities.ParseContentFile(ref effect, ref name);
+            Util.ParseContentFile(ref effect, ref name);
             if (!_diEffects.ContainsKey(name))
             {
                 _diEffects.Add(name, Content.Load<SoundEffect>(effect));

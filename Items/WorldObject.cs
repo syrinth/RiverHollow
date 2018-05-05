@@ -370,7 +370,7 @@ namespace RiverHollow.WorldObjects
         {
             set
             {
-                Vector2 norm = Utilities.Normalize(value);
+                Vector2 norm = Util.Normalize(value);
                 _vMapPosition = norm;
                 HeldItemPos = norm;
             }

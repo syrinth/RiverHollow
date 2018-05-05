@@ -14,6 +14,7 @@ namespace RiverHollow.GUIObjects
         public int Width;
 
         private Vector2 _vPos;
+        protected float _fAlpha = 1.0f;
 
         protected Rectangle _drawRect;
         public Rectangle DrawRectangle { get => _drawRect; }
@@ -42,11 +43,11 @@ namespace RiverHollow.GUIObjects
         }
         public virtual bool ProcessLeftButtonClick(Point mouse)
         {
-            return false;
+            return Contains(mouse);
         }
         public virtual bool ProcessRightButtonClick(Point mouse)
         {
-            return false;
+            return Contains(mouse);
         }
 
         public Vector2 Position()

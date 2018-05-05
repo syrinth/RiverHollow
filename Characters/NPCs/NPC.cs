@@ -80,12 +80,12 @@ namespace RiverHollow.Characters
         protected int ImportBasics(string[] stringData)
         {
             int i = 0;
-            _npcType = (NPCTypeEnum)Enum.Parse(typeof(NPCTypeEnum), stringData[i++]);
+            _npcType = Util.ParseEnum<NPCTypeEnum>(stringData[i++]);
             _sName = stringData[i++];
             _portraitRect = new Rectangle(0, int.Parse(stringData[i++]) * 192, PortraitWidth, PortraitHeight);
             CurrentMapName = stringData[i++];
             _homeMap = CurrentMapName;
-            Position = Utilities.Normalize(MapManager.Maps[CurrentMapName].GetCharacterSpawn("NPC" + _index));
+            Position = Util.Normalize(MapManager.Maps[CurrentMapName].GetCharacterSpawn("NPC" + _index));
 
             string[] vectorSplit = stringData[i++].Split(' ');
             foreach (string s in vectorSplit) {
@@ -152,14 +152,14 @@ namespace RiverHollow.Characters
             float deltaX = Math.Abs(target.X - this.Position.X);
             float deltaY = Math.Abs(target.Y - this.Position.Y);
 
-            Utilities.GetMoveSpeed(Position, target, Speed, ref direction);
+            Util.GetMoveSpeed(Position, target, Speed, ref direction);
             CheckMapForCollisionsAndMove(direction);
         }
         
         public void RollOver()
         {
             GiftGiven = false;
-            Position = Utilities.Normalize(MapManager.Maps[_homeMap].GetCharacterSpawn("NPC" + _index));
+            Position = Util.Normalize(MapManager.Maps[_homeMap].GetCharacterSpawn("NPC" + _index));
             CalculatePathing();
         }
         public void CalculatePathing()
@@ -258,7 +258,7 @@ namespace RiverHollow.Characters
             {
                 text = GetSelectionText();
             }
-            text = Utilities.ProcessText(text, _sName);
+            text = Util.ProcessText(text, _sName);
             GUIManager.SetScreen(new TextScreen(this, text));
         }
 
@@ -269,7 +269,7 @@ namespace RiverHollow.Characters
             {
                 text = _dialogueDictionary[dialogTag];
             }
-            text = Utilities.ProcessText(text, _sName);
+            text = Util.ProcessText(text, _sName);
             GUIManager.SetScreen(new TextScreen(this, text));
         }
 
@@ -304,14 +304,14 @@ namespace RiverHollow.Characters
         {
             RHRandom r = new RHRandom();
             string text = _dialogueDictionary["Selection"];
-            return Utilities.ProcessText(text, _sName);
+            return Util.ProcessText(text, _sName);
         }
 
         public virtual string GetText()
         {
             RHRandom r = new RHRandom();
             string text = _dialogueDictionary[r.Next(1, 2).ToString()];
-            return Utilities.ProcessText(text, _sName);
+            return Util.ProcessText(text, _sName);
         }
 
         public virtual string GetDialogEntry(string entry)
@@ -339,7 +339,7 @@ namespace RiverHollow.Characters
             }
             else
             {
-                return _dialogueDictionary.ContainsKey(entry) ? Utilities.ProcessText(_dialogueDictionary[entry], _sName) : string.Empty;
+                return _dialogueDictionary.ContainsKey(entry) ? Util.ProcessText(_dialogueDictionary[entry], _sName) : string.Empty;
             }
         }
 

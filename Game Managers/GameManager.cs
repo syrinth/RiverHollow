@@ -16,7 +16,9 @@ namespace RiverHollow.Game_Managers
     public static class GameManager
     {
         public enum ConditionEnum { None, KO, Poisoned, Silenced };
-        public enum WorkerTypeEnum { Magic, Martial };
+        public enum WorkerTypeEnum { None, Magic, Martial };
+        public enum WeaponEnum { None, Staff, Sword };
+        public enum ArmorEnum { None, Cloth, Heavy };
         public static float Scale = 4f;
         public static int TileSize = 16;
         public static Dictionary<string, Upgrade> DiUpgrades;
@@ -499,7 +501,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager.SetName(data.name);
             PlayerManager.SetMoney(data.money);
             PlayerManager.SetClass(data.currentClass);
-            PlayerManager.World.Position = Utilities.Normalize(MapManager.Maps[PlayerManager.CurrentMap].GetCharacterSpawn("PlayerSpawn"));
+            PlayerManager.World.Position = Util.Normalize(MapManager.Maps[PlayerManager.CurrentMap].GetCharacterSpawn("PlayerSpawn"));
             PlayerManager.World.DetermineFacing(new Vector2(0, 1));
             GameCalendar.LoadCalendar(data.Calendar); 
             foreach (BuildingData b in data.Buildings)

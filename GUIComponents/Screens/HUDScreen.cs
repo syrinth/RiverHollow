@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIObjects;
+using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -13,9 +14,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _healthDisplay = new StatDisplay(StatDisplay.DisplayEnum.Health);
-            _healthDisplay.AnchorToScreen(GUIObject.SideEnum.TopLeft, 10);
+            _healthDisplay.AnchorToScreen(SideEnum.TopLeft, 10);
             _staminaDisplay = new StatDisplay(StatDisplay.DisplayEnum.Energy);
-            _staminaDisplay.AnchorAndAlignToObject(_healthDisplay, GUIObject.SideEnum.Bottom, GUIObject.SideEnum.Left);
+            _staminaDisplay.AnchorAndAlignToObject(_healthDisplay, SideEnum.Bottom, SideEnum.Left);
             Controls.Add(_healthDisplay);
             Controls.Add(_staminaDisplay);
         }

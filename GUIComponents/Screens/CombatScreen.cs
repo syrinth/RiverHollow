@@ -8,6 +8,7 @@ using RiverHollow.GUIObjects;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
+using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -434,7 +435,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             _gwMenu = new CmbtMenuWindow(totalMenuWidth, menuSec);
             _statusWindow = new CmbtStatusWin(menuSec * 2, _gwMenu.Height);
-            _statusWindow.AnchorAndAlignToObject(_gwMenu, GUIObject.SideEnum.Right, GUIObject.SideEnum.Bottom);
+            _statusWindow.AnchorAndAlignToObject(_gwMenu, SideEnum.Right, SideEnum.Bottom);
 
             _useMenuWindow = new CmbtUseMenuWindow(totalMenuWidth, _gwMenu.Width + _statusWindow.Width + GUIWindow.GreyWin.Edge * 2);
         }

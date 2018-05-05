@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIObjects;
 using RiverHollow.Characters.NPCs;
 using RiverHollow.GUIComponents.GUIObjects;
+using static RiverHollow.WorldObjects.Equipment;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
@@ -17,9 +18,12 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         private GUITextWindow _textWindow;
         private GUIText _textNum;
 
-        public GUIItemBox(Vector2 position, Rectangle sourceRect, int width, int height, string texture, Item item) : base(position, sourceRect, width, height, texture)
+        public EquipmentEnum ItemType;
+
+        public GUIItemBox(Vector2 position, Rectangle sourceRect, int width, int height, string texture, Item item, EquipmentEnum e = EquipmentEnum.None) : base(position, sourceRect, width, height, texture)
         {
             SetItem(item);
+            ItemType = e;
         }
 
         public override void Draw(SpriteBatch spriteBatch)

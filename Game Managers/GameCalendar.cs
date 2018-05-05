@@ -8,6 +8,7 @@ using RiverHollow.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Misc;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow
 {
@@ -72,7 +73,7 @@ namespace RiverHollow
 
             Vector2 boxSize = _text.MeasureString() + new Vector2(GUIWindow.BrownWin.Edge * 2, GUIWindow.BrownWin.Edge * 2);
             _displayWindow = new GUIWindow(GUIWindow.BrownWin, (int)boxSize.X, (int)boxSize.Y);
-            _displayWindow.AnchorToScreen(GUIObject.SideEnum.TopRight, 10);
+            _displayWindow.AnchorToScreen(SideEnum.TopRight, 10);
 
             _text.CenterOnWindow(_displayWindow);
         }

@@ -60,7 +60,7 @@ namespace RiverHollow.Characters.NPCs
                     text = GetText();
                 }
             }
-            text = Utilities.ProcessText(text, _sName);
+            text = Util.ProcessText(text, _sName);
             GUIManager.SetScreen(new TextScreen(this, text));
         }
 

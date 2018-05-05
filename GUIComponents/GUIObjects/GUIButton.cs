@@ -13,7 +13,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public static int BTN_HEIGHT = 64;
         protected SpriteFont _font;
         public bool IsMouseHovering = false;
-        public bool _bEnabled;
+        public bool Enabled;
         private GUIText _text;
 
         internal static WindowData BaseBtn = new WindowData(96, 0, 2);
@@ -28,7 +28,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _text = new GUIText(text);
             _text.CenterOnWindow(this);
 
-            _bEnabled = true;
+            Enabled = true;
         }
 
         public GUIButton(string text, int width, int height) : this(text)
@@ -45,8 +45,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            _fAlpha = Enabled ? 1.0f : 0.5f;
+
             base.Draw(spriteBatch);
             _text.Draw(spriteBatch);
+        }
+
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+            return base.ProcessLeftButtonClick(mouse) && Enabled;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class MapManager
     {
-        public const string HomeMap = "mapManorGrounds"; //"mapForestDungeonZone"; //"mapRiverHollowTown"; //
+        public const string HomeMap = "mapRiverHollowTown"; //"mapManorGrounds"; //"mapForestDungeonZone"; //
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
 
@@ -48,7 +48,7 @@ namespace RiverHollow.Game_Managers
             RHMap newMap = new RHMap();
 
             string name = string.Empty;
-            Utilities.ParseContentFile(ref mapToAdd, ref name);
+            Util.ParseContentFile(ref mapToAdd, ref name);
             if (name.IndexOf("map") == 0)                       //Ensures that we're loading a map
             {
                 if (!_tileMaps.ContainsKey(name))
@@ -101,7 +101,7 @@ namespace RiverHollow.Game_Managers
                 _currentMap = _tileMaps[newMapName];
 
                 PlayerManager.CurrentMap = _currentMap.Name;
-                PlayerManager.World.Position = Utilities.Normalize(new Vector2(rectEntrance.Left, rectEntrance.Top));
+                PlayerManager.World.Position = Util.Normalize(new Vector2(rectEntrance.Left, rectEntrance.Top));
                 CutsceneManager.CheckForTriggedCutscene();
             }
             else

@@ -2,7 +2,7 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
     <!--Key: ID, Value:Type/Name/Description/ImgColX ImgColY/SellCost-->
-    <!--Equipment: dmg/def/spd/mag/hp Container:Rows/Columns-->
+    <!--Equipment: SuperType/Subtype/dmg/def/spd/mag/hp Container:Rows/Columns-->
     <!--Tool:Type/Dmg/Stam-->
     <!--Food:Stamina/Health-->
     <!--Machine: Processor/Name/[input # output timeinSeconds] [input # output timeinSeconds]-->
@@ -21,7 +21,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>Equipment/Basic Sword/Swing this fucker/0 0/500/Weapon/1/0/0/0/0</Value>
+      <Value>Equipment/Basic Sword/Swing this fucker/0 0/500/Weapon/Sword/1/0/0/0/0</Value>
     </Item>
     <Item>
       <Key>7</Key>
@@ -33,11 +33,11 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>Equipment/Ultima Weapon/Swing this fucker/2 0/1000/Weapon/20/20/20/20/20</Value>
+      <Value>Equipment/Ultima Weapon/Swing this fucker/2 0/1000/Weapon/Staff/20/20/20/20/20</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>Equipment/Armor/Best armor ever/1 0/1000/Armor/0/20/0/0/0</Value>
+      <Value>Equipment/Magic Robes/Robes of a powerful mage/1 0/1000/Armor/Cloth/0/20/0/0/0</Value>
     </Item>
     <!--<20-24> Tools-->
     <Item>

@@ -8,7 +8,7 @@ using System.Threading;
 using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.Misc
 {
-    public class Utilities
+    public class Util
     {
         public static void GetMoveSpeed(Vector2 currentPos, Vector2 targetPos, int speed, ref Vector2 direction)
         {
@@ -27,7 +27,7 @@ namespace RiverHollow.Misc
             Vector2 dir = new Vector2(deltaX, deltaY);
             dir.Normalize();
             dir = dir * speed;
-            
+
             direction.X = (deltaX < speed) ? newX * deltaX : newX * dir.X;
             direction.Y = (deltaY < speed) ? newY * deltaY : newY * dir.Y;
         }
@@ -56,7 +56,7 @@ namespace RiverHollow.Misc
             filePath = filePath.Replace(@"Content\", "");
             filePath = filePath.Remove(filePath.Length - 4, 4);
 
-            name = f.Name.Remove(f.Name.Length-4);
+            name = f.Name.Remove(f.Name.Length - 4);
         }
 
         public static Rectangle FloatRectangle(Vector2 pos, float width, float height)
@@ -96,7 +96,7 @@ namespace RiverHollow.Misc
                     {
                         itemSections[i] = ObjectManager.GetItem(val).Name;
 
-                        if(itemSections[i].StartsWith("a", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("e", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("i", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("o", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("u", StringComparison.OrdinalIgnoreCase))
+                        if (itemSections[i].StartsWith("a", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("e", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("i", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("o", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("u", StringComparison.OrdinalIgnoreCase))
                         {
                             itemSections[i] = itemSections[i].Insert(0, "an ");
                         }
@@ -110,6 +110,14 @@ namespace RiverHollow.Misc
             }
 
             if (string.IsNullOrEmpty(rv)) { rv = text; }
+            return rv;
+        }
+
+        public static TEnum ParseEnum<TEnum>(string convertThis) where TEnum : struct
+        {
+            TEnum rv = default(TEnum);
+
+            rv = Enum.TryParse<TEnum>(convertThis, true, out rv) ? rv : default(TEnum);
             return rv;
         }
     }

@@ -93,7 +93,7 @@ namespace RiverHollow
                 float deltaX = Math.Abs(targetPos.X - this.Position.X);
                 float deltaY = Math.Abs(targetPos.Y - this.Position.Y);
 
-                Utilities.GetMoveSpeed(Position, targetPos, Speed, ref direction);
+                Util.GetMoveSpeed(Position, targetPos, Speed, ref direction);
                 CheckMapForCollisionsAndMove(direction);
 
                 DetermineFacing(direction);
@@ -131,7 +131,7 @@ namespace RiverHollow
                 float deltaX = Math.Abs(_moveTo.X - this.Position.X);
                 float deltaY = Math.Abs(_moveTo.Y - this.Position.Y);
 
-                Utilities.GetMoveSpeed(Position, _moveTo, Speed, ref direction);
+                Util.GetMoveSpeed(Position, _moveTo, Speed, ref direction);
                 CheckMapForCollisionsAndMove(direction);
 
                 if (Position.X == _moveTo.X && Position.Y == _moveTo.Y) {

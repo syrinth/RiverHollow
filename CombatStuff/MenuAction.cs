@@ -34,7 +34,7 @@ namespace RiverHollow.Characters.CombatStuff
         {
             _id = id;
             int i = 0;
-            _actionType = (ActionEnum)Enum.Parse(typeof(ActionEnum), stringData[i++]);
+            _actionType = Util.ParseEnum<ActionEnum>(stringData[i++]);
             _name = stringData[i++];
             _description = stringData[i++];
 
@@ -94,7 +94,7 @@ namespace RiverHollow.Characters.CombatStuff
         protected int ImportBasics(int id, string[] stringData)
         {
             int i = 0;
-            _actionType = (ActionEnum)Enum.Parse(typeof(ActionEnum), stringData[i++]);
+            _actionType = Util.ParseEnum<ActionEnum>(stringData[i++]);
             _name = stringData[i++];
             _description = stringData[i++];
             _textureRow = int.Parse(stringData[i++]);
@@ -134,7 +134,7 @@ namespace RiverHollow.Characters.CombatStuff
                             {
                                 for (int j = 1; j < parse.Length; j++)
                                 {
-                                    _liCondition.Add((ConditionEnum)Enum.Parse(typeof(ConditionEnum), parse[j]));
+                                    _liCondition.Add(Util.ParseEnum<ConditionEnum>(parse[j]));
                                 }
                             }
                             _effectTags.Add(parse[0]);
@@ -256,7 +256,7 @@ namespace RiverHollow.Characters.CombatStuff
                         if (SkillUser.Position != TargetLocation.GetAttackVec(UserStartPosition, new Vector2(SkillUser.Width, SkillUser.Height)))
                         {
                             Vector2 direction = Vector2.Zero;
-                            Utilities.GetMoveSpeed(SkillUser.Position, TargetLocation.GetAttackVec(UserStartPosition, new Vector2(SkillUser.Width, SkillUser.Height)), moveSpeed, ref direction);
+                            Util.GetMoveSpeed(SkillUser.Position, TargetLocation.GetAttackVec(UserStartPosition, new Vector2(SkillUser.Width, SkillUser.Height)), moveSpeed, ref direction);
                             SkillUser.Sprite.Position += direction;
                         }
                         else
@@ -313,7 +313,7 @@ namespace RiverHollow.Characters.CombatStuff
                     if(Sprite.Position != TargetLocation.Character.Position)
                     {
                         Vector2 direction = Vector2.Zero;
-                        Utilities.GetMoveSpeed(Sprite.Position, TargetLocation.Character.Position, 80, ref direction);
+                        Util.GetMoveSpeed(Sprite.Position, TargetLocation.Character.Position, 80, ref direction);
                         Sprite.Position += direction;
                     }
                     else
@@ -325,7 +325,7 @@ namespace RiverHollow.Characters.CombatStuff
                     if (SkillUser.Position != UserStartPosition)
                     {
                         Vector2 direction = Vector2.Zero;
-                        Utilities.GetMoveSpeed(SkillUser.Position, UserStartPosition, moveSpeed, ref direction);
+                        Util.GetMoveSpeed(SkillUser.Position, UserStartPosition, moveSpeed, ref direction);
                         SkillUser.Sprite.Position += direction;
                     }
                     else

@@ -44,7 +44,7 @@ namespace RiverHollow
         public WorkerBuilding(string[] stringData, int id){
             Type = ObjectType.Building;
             int i = ImportBasics(stringData, id);
-            _buildingWorker = (WorkerTypeEnum)Enum.Parse(typeof(WorkerTypeEnum), stringData[i++]);
+            _buildingWorker = Util.ParseEnum<WorkerTypeEnum>(stringData[i++]);
             _iPersonalID = GetNewBuildingID();
             _workers = new List<WorldAdventurer>();
             _liPlacedObjects = new List<WorldObject>();

@@ -5,6 +5,7 @@ using RiverHollow.Characters.CombatStuff;
 using System.Collections.Generic;
 using RiverHollow.GUIObjects;
 using RiverHollow.WorldObjects;
+using static RiverHollow.WorldObjects.Equipment;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -79,8 +80,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         SpriteFont _font;
         int _drawnStat;
         Vector2 _size;
-        GUIItemBox _weapon;
-        GUIItemBox _armor;
+        GUIItemBox _weaponBox;
+        GUIItemBox _armorBox;
         GUIButton _remove;
         public bool ClearThis;
 
@@ -91,8 +92,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _character = c;
             _size = _font.MeasureString("XXXXXXXX");
-            _weapon = new GUIItemBox(start + new Vector2(400, 0), new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Weapon);
-            _armor = new GUIItemBox(start + new Vector2(450, 0), new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Armor);
+            _weaponBox = new GUIItemBox(start + new Vector2(400, 0), new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Weapon, EquipmentEnum.Weapon);
+            _armorBox = new GUIItemBox(start + new Vector2(450, 0), new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Armor, EquipmentEnum.Armor);
             if (_character != PlayerManager.Combat)
             {
                 _remove = new GUIButton(start + new Vector2(800, 64), new Rectangle(0, 128, 64, 32), 128, 64, "Remove", @"Textures\Dialog", true);
@@ -117,9 +118,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _size = _font.MeasureString("XXXXXXXX");
             Vector2 start = new Vector2(rect.Right, rect.Top);
             start.X -= 32;
-            _armor = new GUIItemBox(start, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Armor);
+            _armorBox = new GUIItemBox(start, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Armor);
             start.X -= 34;
-            _weapon = new GUIItemBox(start, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Weapon);
+            _weaponBox = new GUIItemBox(start, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Weapon);
            // if (_character != PlayerManager.Combat)
             {
                 _remove = new GUIButton(start + new Vector2(800, 64), new Rectangle(0, 128, 64, 32), 128, 64, "Remove", @"Textures\Dialog", true);
@@ -144,11 +145,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 DrawStat(spriteBatch, "HP");
                 DrawStat(spriteBatch, "Spd");
 
-                _weapon.Draw(spriteBatch);
-                _armor.Draw(spriteBatch);
+                _weaponBox.Draw(spriteBatch);
+                _armorBox.Draw(spriteBatch);
 
-                _weapon.DrawDescription(spriteBatch);
-                _armor.DrawDescription(spriteBatch);
+                _weaponBox.DrawDescription(spriteBatch);
+                _armorBox.DrawDescription(spriteBatch);
 
                 if (_remove != null) { _remove.Draw(spriteBatch); }
             }
@@ -195,13 +196,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _character = null;
                     rv = true;
                 }
-                else if (_weapon.Contains(mouse))
+                else if (_weaponBox.Contains(mouse))
                 {
-                    rv = ItemSwap(_weapon, Equipment.EquipmentEnum.Weapon);
+                    rv = ItemSwap(_weaponBox);
                 }
-                else if (_armor.Contains(mouse))
+                else if (_armorBox.Contains(mouse))
                 {
-                    rv = ItemSwap(_armor, Equipment.EquipmentEnum.Armor);
+                    rv = ItemSwap(_armorBox);
                 }
             }
             return rv;
@@ -210,11 +211,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public bool ProcessHover(Point mouse)
         {
             bool rv = false;
-            if (_weapon.ProcessHover(mouse))
+            if (_weaponBox.ProcessHover(mouse))
             {
                 rv = true;
             }
-            if (_armor.ProcessHover(mouse))
+            if (_armorBox.ProcessHover(mouse))
             {
                 rv = true;
             }
@@ -225,26 +226,28 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return _window.Contains(mouse);
         }
 
-        private bool ItemSwap(GUIItemBox box, Equipment.EquipmentEnum match)
+        private bool ItemSwap(GUIItemBox box)
         {
             bool rv = false;
             if (GraphicCursor.HeldItem != null)
             {
-                if (GraphicCursor.HeldItem.IsEquipment() && ((Equipment)GraphicCursor.HeldItem).EquipType == match)
-                {
-                    if (box.Item != null)
-                    {
-                        Equipment temp = (Equipment)GraphicCursor.HeldItem;
-                        GraphicCursor.GrabItem(box.Item);
-                        box.SetItem(temp);
-                        _character.Weapon = temp;
-                    }
-                    else
-                    {
-                        box.SetItem(GraphicCursor.HeldItem);
-                        _character.Weapon = (Equipment)GraphicCursor.HeldItem;
-                        GraphicCursor.DropItem();
-                        rv = true;
+                if (GraphicCursor.HeldItem.IsEquipment()) {
+                    Equipment equip = (Equipment)GraphicCursor.HeldItem;
+                    if (CheckValid(equip, box)) {
+                        if (box.Item != null)
+                        {
+                            Equipment temp = (Equipment)GraphicCursor.HeldItem;
+                            GraphicCursor.GrabItem(box.Item);
+                            box.SetItem(temp);
+                            _character.Weapon = temp;
+                        }
+                        else
+                        {
+                            box.SetItem(GraphicCursor.HeldItem);
+                            _character.Weapon = (Equipment)GraphicCursor.HeldItem;
+                            GraphicCursor.DropItem();
+                            rv = true;
+                        }
                     }
                 }
             }
@@ -258,19 +261,37 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
 
+        private bool CheckValid(Equipment equip, GUIItemBox box)
+        {
+            bool rv = false;
+            if (equip.EquipType == box.ItemType)
+            {
+                if (box.ItemType == EquipmentEnum.Armor)
+                {
+                    rv = equip.ArmorType == _character.CharacterClass.ArmorType;
+                }
+                else if (box.ItemType == EquipmentEnum.Weapon)
+                {
+                    rv = equip.WeaponType == _character.CharacterClass.WeaponType;
+                }
+            }
+
+            return rv;
+        }
+
         public bool EquipItem(Item i)
         {
             bool rv = false;
 
             if (i.IsEquipment())
             {
-                if (((Equipment)i).EquipType == Equipment.EquipmentEnum.Armor)
+                if (((Equipment)i).EquipType == EquipmentEnum.Armor)
                 {
-                    rv = ItemSwap(_armor, Equipment.EquipmentEnum.Armor);
+                    rv = ItemSwap(_armorBox);
                 }
                 else
                 {
-                    rv = ItemSwap(_weapon, Equipment.EquipmentEnum.Weapon);
+                    rv = ItemSwap(_weaponBox);
                 }
             }
 
@@ -280,8 +301,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public void AssignNewCharacter(CombatAdventurer c)
         {
             _character = c;
-            _weapon.SetItem(_character.Weapon);
-            _armor.SetItem(_character.Armor);
+            _weaponBox.SetItem(_character.Weapon);
+            _armorBox.SetItem(_character.Armor);
         }
     }
 }
