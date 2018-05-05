@@ -21,6 +21,7 @@ namespace RiverHollow.Game_Managers
         public enum ArmorEnum { None, Cloth, Heavy };
         public static float Scale = 4f;
         public static int TileSize = 16;
+        public static int MaxBldgLevel = 3;
         public static Dictionary<string, Upgrade> DiUpgrades;
 
         static long _iSaveID = -1;

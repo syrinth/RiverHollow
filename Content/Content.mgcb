@@ -387,11 +387,6 @@
 /processorParam:Quality=Best
 /build:Sound/Stock/Effects/126426__cabeeno-rossley__timer-ends-time-up.wav
 
-#begin Maps/mapArcaneTower.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapArcaneTower.tmx
-
 #begin Maps/mapGuildhouse.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -702,4 +697,19 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/healer.png
+
+#begin Maps/mapArcaneTower1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapArcaneTower1.tmx
+
+#begin Maps/mapArcaneTower2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapArcaneTower2.tmx
+
+#begin Maps/mapArcaneTower3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapArcaneTower3.tmx
 

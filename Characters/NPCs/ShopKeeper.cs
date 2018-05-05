@@ -6,6 +6,7 @@ using RiverHollow.GUIObjects;
 using RiverHollow.Misc;
 using RiverHollow.Tile_Engine;
 using System.Collections.Generic;
+using static RiverHollow.Game_Managers.GUIObjects.ManagementScreen;
 
 namespace RiverHollow.Characters.NPCs
 {
@@ -98,6 +99,11 @@ namespace RiverHollow.Characters.NPCs
                 GameManager.MoveBuilding();
                 Camera.UnsetObserver();
                 MapManager.ViewMap(MapManager.HomeMap);
+            }
+            else if (entry.Equals("UpgradeBuilding"))
+            {
+                ManagementScreen m = new ManagementScreen(ActionTypeEnum.Upgrade);
+                GUIManager.SetScreen(m);
             }
             else if (entry.Equals("Destroy"))
             {

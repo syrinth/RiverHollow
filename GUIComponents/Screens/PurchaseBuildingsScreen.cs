@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.GUIObjects.GUIObject;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIObjects.Screens
 {
@@ -157,53 +158,79 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
         {
             WorkerBuilding _bldg;
             public WorkerBuilding Building => _bldg;
-            GUIImage _imgBuilding;
+            GUIImage _giBuilding;
             SpriteFont _font;
-            List<KeyValuePair<Rectangle, Item>> _liReqs;
-            Vector2 _vCostPos;
+            List<GUIObject> _liReqs;
             Merchandise _merch;
-            PurchaseBuildingsScreen _parent;
+            PurchaseBuildingsScreen _sParent;
+            GUIText _gText;
 
             public BuildingInfoDisplay(PurchaseBuildingsScreen parent, Merchandise merch)
             {
-                _parent = parent;
+                _liReqs = new List<GUIObject>();
+
+                _sParent = parent;
                 _merch = merch;
                 _bldg = ObjectManager.GetBuilding(_merch.MerchID);
                 _font = GameContentManager.GetFont(@"Fonts\Font");
 
                 Vector2 center = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
-                _imgBuilding = new GUIImage(GUIObject.PosFromCenter(center, _bldg.Texture.Width, _bldg.Texture.Height), _bldg.SourceRectangle, _bldg.Texture.Width, _bldg.Texture.Height, _bldg.Texture);
+                _giBuilding = new GUIImage(GUIObject.PosFromCenter(center, _bldg.Texture.Width, _bldg.Texture.Height), _bldg.SourceRectangle, _bldg.Texture.Width, _bldg.Texture.Height, _bldg.Texture);
             }
 
             public void Load()
             {
-                GUIWindow win = _parent._mainWindow;
-                int numDivions = _parent._liMerchandise.Count + 2;
-                float xPos = win.Position().X + win.Width;
-                float incrementVal = win.Position().Y / numDivions; //If we only display one box, it needs to be centered at the halfway point, so divided by 2
-                float yPos = win.Position().Y + incrementVal;
+                GUIWindow win = _sParent._mainWindow;
+                _gText = new GUIText(_merch.MoneyCost.ToString());
 
-                _vCostPos = new Vector2(xPos - 16, yPos - 16);
-                yPos += incrementVal;
-                _liReqs = new List<KeyValuePair<Rectangle, Item>>();
-                foreach (KeyValuePair<int, int> kvp in _parent._liMerchandise[_parent._iCurrIndex].RequiredItems)
+                for(int i=0; i< _merch.RequiredItems.Count; i++)
                 {
-                    Item i = ObjectManager.GetItem(kvp.Key, kvp.Value);
-
-                    Rectangle r = new Rectangle((int)xPos - 16, (int)yPos - 16, 32, 32);
-                    _liReqs.Add(new KeyValuePair<Rectangle, Item>(r, i));
-                    yPos += incrementVal;
+                    KeyValuePair<int, int> kvp = _merch.RequiredItems[i];
+                    ItemCost it = new ItemCost(kvp.Key, kvp.Value);
+                    _liReqs.Add(it);
                 }
+
+                CreateSpacedColumn(ref _liReqs, win.DrawRectangle.Right, win.DrawRectangle.Top, win.Height, 10, true);
+                _gText.AnchorAndAlignToObject(_liReqs[_liReqs.Count-1], SideEnum.Bottom, SideEnum.Left, 10);
             }
 
             public override void Draw(SpriteBatch spriteBatch)
             {
-                _imgBuilding.Draw(spriteBatch);
-                spriteBatch.DrawString(_font, _merch.MoneyCost.ToString(), _vCostPos, Color.White);
-                foreach (KeyValuePair<Rectangle, Item> kvp in _liReqs)
+                _giBuilding.Draw(spriteBatch);
+                _gText.Draw(spriteBatch);
+                foreach (ItemCost c in _liReqs)
                 {
-                    spriteBatch.Draw(kvp.Value.Texture, kvp.Key, kvp.Value.SourceRectangle, Color.White);
-                    spriteBatch.DrawString(_font, kvp.Value.Number.ToString(), new Vector2(kvp.Key.Location.X + 32, kvp.Key.Location.Y), Color.White);
+                    c.Draw(spriteBatch);
+                }
+            }
+
+            public class ItemCost : GUIObject
+            {
+                GUIImage _gImg;
+                GUIText _gText;
+
+                public ItemCost(int id, int number)
+                {
+                    Item it = ObjectManager.GetItem(id);
+                    _gImg = new GUIImage(Vector2.Zero, it.SourceRectangle, it.SourceRectangle.Width, it.SourceRectangle.Height, it.Texture);
+                    _gImg.SetScale(GameManager.Scale);
+                    _gText = new GUIText(number.ToString());
+                    Width = _gImg.Width + _gText.Width;
+                    Height = _gImg.Height;
+                    Position(Vector2.Zero);
+                }
+
+                public override void Draw(SpriteBatch spriteBatch)
+                {
+                    _gImg.Draw(spriteBatch);
+                    _gText.Draw(spriteBatch);
+                }
+
+                public override void Position(Vector2 value)
+                {
+                    base.Position(value);
+                    _gImg.Position(value);
+                    _gText.AnchorAndAlignToObject(_gImg, SideEnum.Right, SideEnum.Bottom);
                 }
             }
         }

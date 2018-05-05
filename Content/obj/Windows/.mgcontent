@@ -49,7 +49,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CombatActions.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Songs/GA03-In Mothers Arms-Huckabay-96.mp3</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Effects/126426__cabeeno-rossley__timer-ends-time-up.wav</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapArcaneTower.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapGuildhouse.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapHouseNPC1.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapHouseNPC3.tmx</File>
@@ -91,5 +90,8 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC3.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC1.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/healer.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapArcaneTower1.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapArcaneTower2.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapArcaneTower3.tmx</File>
   </SourceFiles>
 </SourceFileCollection>

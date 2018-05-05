@@ -24,8 +24,7 @@ namespace RiverHollow
 
         #region Data Lists
         protected const int WORK_PER_LVL = 3;
-        protected const int MAX_WORKERS = 9;
-        protected int _iBldgLvl = 1;
+        protected const int MAX_LEVEL = 9;
         protected int _iCurrWorkerMax => WORK_PER_LVL * _iBldgLvl;
 
         protected List<WorldAdventurer> _workers;
@@ -42,6 +41,7 @@ namespace RiverHollow
         #endregion
 
         public WorkerBuilding(string[] stringData, int id){
+            _iBldgLvl = 1;
             Type = ObjectType.Building;
             int i = ImportBasics(stringData, id);
             _buildingWorker = Util.ParseEnum<WorkerTypeEnum>(stringData[i++]);
@@ -112,6 +112,11 @@ namespace RiverHollow
                     //}
                 }
             }
+        }
+
+        internal void Upgrade()
+        {
+            _iBldgLvl++;
         }
 
         public override void SetCoordinates(Vector2 position)

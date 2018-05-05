@@ -14,9 +14,11 @@ namespace RiverHollow.GUIComponents.Screens
     {
         List<SaveData> _liData;
         List<GUIObject> _liDataWindows;
+        GUIButton _btnBack;
 
         public LoadScreen()
         {
+            _btnBack = new GUIButton("Back");
             _liDataWindows = new List<GUIObject>();
             _liData = GameManager.LoadFiles();
 
@@ -31,6 +33,10 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 GUIObject.CreateSpacedColumn(ref _liDataWindows, RiverHollow.ScreenWidth / 2, 0, RiverHollow.ScreenHeight, 20);
             }
+
+            _btnBack.AnchorToScreen(GUIObject.SideEnum.BottomRight, 50);
+
+            Controls.Add(_btnBack);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -47,6 +53,22 @@ namespace RiverHollow.GUIComponents.Screens
                     BackToMain();
                 }
             }
+
+            if (_btnBack.ProcessLeftButtonClick(mouse))
+            {
+                GUIManager.SetScreen(new IntroMenuScreen());
+                rv = true;
+            }
+
+            return rv;
+        }
+
+        public override bool ProcessRightButtonClick(Point mouse)
+        {
+            bool rv = false;
+
+            GUIManager.SetScreen(new IntroMenuScreen());
+            rv = true;
 
             return rv;
         }

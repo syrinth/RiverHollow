@@ -6,6 +6,7 @@ using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIObjects;
 using RiverHollow.Misc;
+using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GUIObjects.ManagementScreen.MgmtWindow;
 
@@ -13,9 +14,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class ManagementScreen : GUIScreen
     {
-        public enum EnumActionType { View, Sell, Buy };
-        private EnumActionType _eAction;
-        public EnumActionType Action => _eAction;
+        public enum ActionTypeEnum { View, Sell, Buy, Upgrade };
+        private ActionTypeEnum _eAction;
+        public ActionTypeEnum Action => _eAction;
         public static int BTN_PADDING = 20;
         public static int WIDTH = RiverHollow.ScreenWidth / 3;
         public static int HEIGHT = RiverHollow.ScreenHeight / 3;
@@ -27,9 +28,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
         WorldAdventurer _worker;
         int _iCost;
 
-        public ManagementScreen()
+        public ManagementScreen(ActionTypeEnum action = ActionTypeEnum.View)
         {
-            _eAction = EnumActionType.View;
+            _eAction = action;
             _liWorkers = new List<GUIObject>();
 
             _mgmtWindow = new MainBuildingsWin(this);
@@ -96,13 +97,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 selectedBuilding.AddWorker(_worker, r);
                 
-                if (_eAction == EnumActionType.Buy)
+                if (_eAction == ActionTypeEnum.Buy)
                 {
                     PlayerManager.TakeMoney(_iCost);
                     GameManager.BackToMain();
                     GUIManager.SetScreen(new TextInputScreen(_worker));
                 }
-
+                
                 _worker = null;
             }
         }
@@ -127,12 +128,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public void Sell()
         {
-            _eAction = EnumActionType.Sell;
+            _eAction = ActionTypeEnum.Sell;
         }
 
         public bool Selling()
         {
-            return _eAction == EnumActionType.Sell;
+            return _eAction == ActionTypeEnum.Sell;
         }
 
         public void PurchaseWorker(WorldAdventurer w, int cost)
@@ -141,7 +142,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 _iCost = cost;
                 _worker = w;
-                _eAction = EnumActionType.Buy;
+                _eAction = ActionTypeEnum.Buy;
                 SetMgmtWindow(new MainBuildingsWin(this, w));
             }
         }
@@ -207,9 +208,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     foreach (WorkerBuilding b in PlayerManager.Buildings)
                     {
-                        if (w == null || b.CanHold(w))
-                        {
+                        bool good = false;
 
+                        if(_parent.Action == ActionTypeEnum.Upgrade) { good = b.Level < GameManager.MaxBldgLevel; }
+                        else if (w == null || b.CanHold(w)) { good = true; }
+
+                        if (good)
+                        {
                             BuildingBox box = new BuildingBox(b);
                             _liButtons.Add(box);
                             Controls.Add(box);
@@ -226,7 +231,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     {
                         if (b.Contains(mouse))
                         {
-                            _parent.HandleBuildingSelection(b.Building);
+                            if (_parent._eAction == ActionTypeEnum.Upgrade) {
+                                b.Building.Upgrade();
+                                GameManager.BackToMain();
+                            }
+                            else{ _parent.HandleBuildingSelection(b.Building); }
                             rv = true;
                             break;
                         }

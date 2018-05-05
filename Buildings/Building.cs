@@ -15,9 +15,13 @@ namespace RiverHollow.Buildings
         public int BaseWidth { get => _baseWidth * TileSize; } //In Pixels
         protected int _baseHeight; //In Tiles
         public int BaseHeight { get => _baseHeight * TileSize; } //In Pixels
+
+        protected int _iBldgLvl = 0;
+        public int Level => _iBldgLvl;
+
         protected string _sName;
         public string Name => _sName;
-        public string MapName => "map"+_sName.Replace(" ", "");
+        public string MapName => "map"+_sName.Replace(" ", "") + (_iBldgLvl == 0 ? "" : _iBldgLvl.ToString());
 
         protected string _sGivenName;
         public string GivenName=> _sGivenName;
