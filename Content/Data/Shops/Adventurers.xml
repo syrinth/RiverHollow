@@ -14,5 +14,9 @@
       <Key>3</Key>
       <Value>Worker/3/Knights!/500</Value>
     </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>Worker/4/Healer/500</Value>
+    </Item>
   </Asset>
 </XnaContent>

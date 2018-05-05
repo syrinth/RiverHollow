@@ -488,18 +488,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/texPlayer.png
 
-#begin Textures/alchemist.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/alchemist.png
-
 #begin Data/WorldObjects.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -702,4 +690,16 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/NPCData/Schedules/NPC1.xml
+
+#begin Textures/healer.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/healer.png
 

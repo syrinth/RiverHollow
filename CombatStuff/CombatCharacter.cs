@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using RiverHollow.SpriteAnimations;
-using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers.GUIObjects;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters.CombatStuff
 {
@@ -71,7 +71,7 @@ namespace RiverHollow.Characters.CombatStuff
             {
                 [ConditionEnum.KO] = false,
                 [ConditionEnum.Poisoned] = false,
-                [ConditionEnum.Silenced] = true
+                [ConditionEnum.Silenced] = false
             };
         }
 
@@ -264,9 +264,9 @@ namespace RiverHollow.Characters.CombatStuff
             return _diConditions[ConditionEnum.Silenced];
         }
 
-        public void RemoveCondition(ConditionEnum c)
+        public void ChangeConditionStatus(ConditionEnum c, bool setTo)
         {
-            _diConditions[c] = false;
+            _diConditions[c] = setTo;
         }
     }
 }

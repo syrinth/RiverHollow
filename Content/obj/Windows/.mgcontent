@@ -65,7 +65,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/NPC8.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texMachines.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texPlayer.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/alchemist.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/WorldObjects.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texFlooring.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetManorGrounds.png</File>
@@ -91,5 +90,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/SpiritLoot.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC3.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC1.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/healer.png</File>
   </SourceFiles>
 </SourceFileCollection>

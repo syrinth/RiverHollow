@@ -110,15 +110,19 @@
     <!--<100> Combat:Status/Stamina/Health/Mana-->
     <Item>
       <Key>101</Key>
-      <Value>Combat/Health Potion/Recovers Health/1 2/3000/None/0/20/0</Value>
+      <Value>Combat/Health Potion/Recovers Health/1 2/3000/Helpful/None/0/20/0</Value>
     </Item>
     <Item>
       <Key>102</Key>
-      <Value>Combat/Smelling Salts/Wake Up/1 2/3000/KO/0/1/0</Value>
+      <Value>Combat/Smelling Salts/Wake Up/1 2/3000/Helpful/KO/0/1/0</Value>
     </Item>
     <Item>
       <Key>103</Key>
-      <Value>Combat/Antidote/Wake Up/1 2/3000/Poisoned/0/0/0</Value>
+      <Value>Combat/Antidote/Cures Poisons/1 2/3000/Helpful/Poisoned/0/0/0</Value>
+    </Item>
+    <Item>
+      <Key>104</Key>
+      <Value>Combat/Poisoned Knife/Inflicts Poison/1 2/3000/Harmful/Poisoned/0/0/0</Value>
     </Item>
     <!--<190> Container:Stamina/Health/Mana-->
     <Item>

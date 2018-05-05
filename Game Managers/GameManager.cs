@@ -15,6 +15,8 @@ namespace RiverHollow.Game_Managers
 {
     public static class GameManager
     {
+        public enum ConditionEnum { None, KO, Poisoned, Silenced };
+        public enum WorkerTypeEnum { Magic, Martial };
         public static float Scale = 4f;
         public static int TileSize = 16;
         public static Dictionary<string, Upgrade> DiUpgrades;
@@ -174,6 +176,9 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "PersonalID")]
             public int id;
+
+            [XmlElement(ElementName = "BldgLvl")]
+            public int bldgLvl;
 
             [XmlElement(ElementName = "BuildingChest")]
             public ContainerData buildingChest;

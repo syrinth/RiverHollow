@@ -23,7 +23,7 @@
       <Value>Action/Meditate/Increases your dmg/0/0.03/[Target:Self][Action:UserCast][Buff:3|2|Self]</Value>
     </Item>
     <!---->
-    <!--Wizard Spells-->
+    <!--<100> Wizard Spells-->
     <Item>
       <Key>101</Key>
       <Value>Spell/Thunder/Call down thunder on your foes/0/0.03/[Target:Enemy][Effect:Cost-5 Harm-5 Direct][Action:UserCast Direct Apply]</Value>
@@ -35,6 +35,19 @@
     <Item>
       <Key>103</Key>
       <Value>Spell/Shield/Summon a rock/0/0.03/[Target:Self][Effect:Cost-10][Action:UserCast][Buff:1|2|Self]</Value>
+    </Item>
+    <Item>
+      <Key>104</Key>
+      <Value>Spell/Poison/Poison them!/0/0.03/[Target:Enemy][Effect:Cost-5 Status-Poisoned][Action:UserCast Direct Apply]</Value>
+    </Item>
+    <!--<150> Healer Spells-->
+    <Item>
+      <Key>150</Key>
+      <Value>Spell/Minor Healing/A weak healing spell/0/0.03/[Target:Ally][Effect:Cost-5 Heal-10 Direct][Action:UserCast Direct Apply]</Value>
+    </Item>
+    <Item>
+      <Key>151</Key>
+      <Value>Spell/Esuna/Purges Poisons/0/0.03/[Target:Ally][Effect:Cost-5 Status-Poisoned-Silenced][Action:UserCast Direct Apply]</Value>
     </Item>
   </Asset>
 </XnaContent>

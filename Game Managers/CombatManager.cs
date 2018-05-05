@@ -4,6 +4,7 @@ using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 using System.Collections.Generic;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Game_Managers
 {
@@ -215,9 +216,9 @@ namespace RiverHollow.Game_Managers
 
         internal static void UseItem()
         {
-            if(ChosenItem.FixesCondition != CombatStuff.ConditionEnum.None)
+            if(ChosenItem.Condition != ConditionEnum.None)
             {
-                _target.Character.RemoveCondition(ChosenItem.FixesCondition);
+                _target.Character.ChangeConditionStatus(ChosenItem.Condition, !ChosenItem.Helpful);
             }
             int val = _target.Character.IncreaseHealth(ChosenItem.Health);
             if (val > 0)

@@ -174,11 +174,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     break;
 
                 case CombatManager.PhaseEnum.ChooseSkillTarget:
-                    HandleUpdateTargeting(true);
+                    HandleUpdateTargeting(CombatManager.ChosenSkill.Target.Equals("Enemy"));
                     break;
 
                 case CombatManager.PhaseEnum.ChooseItemTarget:
-                    HandleUpdateTargeting(false);
+                    HandleUpdateTargeting(!CombatManager.ChosenItem.Helpful);
                     break;
 
                 case CombatManager.PhaseEnum.DisplayAttack:
@@ -245,11 +245,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-        public void HandleUpdateTargeting(bool useSkill)
+        public void HandleUpdateTargeting(bool targetEnemies)
         {
             if (_iTarget == -1)
             {
-                _iTarget = SkipToNextTarget(useSkill ? _iPositions / 2 : 0, true);
+                _iTarget = SkipToNextTarget(targetEnemies ? _iPositions / 2 : 0, true);
             }
 
             if (InputManager.CheckPressedKey(Keys.A) || InputManager.CheckPressedKey(Keys.S))
@@ -274,7 +274,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 BattleLocation loc = _arrCombatants[_iTarget];
                 loc.Selected = false;
-                if (useSkill) { CombatManager.SetSkillTarget(loc); }
+                if (targetEnemies) { CombatManager.SetSkillTarget(loc); }
                 else { CombatManager.SetItemTarget(loc); }
                 _iTarget = -1;
             }

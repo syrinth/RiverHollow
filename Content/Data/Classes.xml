@@ -4,7 +4,7 @@
     <!--Key: Index>0 Value:Name/Description/Dmg/Def/HP/Magic/Speed/Ability1 Ability2 Ability3 Ability4-->
     <Item>
       <Key>1</Key>
-      <Value>Wizard/Uses magic!/5/1/3/5/1/1 2 3 4/101 103</Value>
+      <Value>Wizard/Uses magic!/5/1/3/5/1/1 2 3 4/101 103 104</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -16,7 +16,7 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>Alchemist/Potions Master/1/5/10/1/1/1 2 3 4/101 103</Value>
+      <Value>Healer/Master of Healing and potions/1/5/10/1/1/1 2 3 4/150 151</Value>
     </Item>
   </Asset>
 </XnaContent>

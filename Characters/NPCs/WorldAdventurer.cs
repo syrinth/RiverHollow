@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using static RiverHollow.Game_Managers.ObjectManager;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
-using RiverHollow.Tile_Engine;
+using System;
 
 namespace RiverHollow.Characters.NPCs
 {
@@ -18,6 +18,8 @@ namespace RiverHollow.Characters.NPCs
     public class WorldAdventurer : NPC
     {
         #region Properties
+        private WorkerTypeEnum _workerType;
+        public WorkerTypeEnum WorkerType => _workerType;
         protected int _iAdventurerID;
         public int AdventurerID { get => _iAdventurerID; }
         protected string _sAdventurerType;
@@ -76,6 +78,7 @@ namespace RiverHollow.Characters.NPCs
             int i = 0;
             _sAdventurerType = stringData[i++];
             _sTexture = @"Textures\" + _sAdventurerType;
+            _workerType = (WorkerTypeEnum)Enum.Parse(typeof(WorkerTypeEnum), stringData[i++]);
             _iDailyItemID = int.Parse(stringData[i++]);
             _iDailyFoodReq = int.Parse(stringData[i++]);
             int portraitNum = int.Parse(stringData[i++]);
@@ -96,8 +99,8 @@ namespace RiverHollow.Characters.NPCs
         protected void SetCombat()
         {
             _c = new CombatAdventurer(this);
-            _c.SetClass(CharacterManager.GetClassByIndex(1));
-            _c.LoadContent(@"Textures\Wizard");
+            _c.SetClass(CharacterManager.GetClassByIndex(_iAdventurerID));
+            _c.LoadContent(@"Textures\" + _c.CharacterClass.Name);
         }
 
         public override void Update(GameTime gameTime)

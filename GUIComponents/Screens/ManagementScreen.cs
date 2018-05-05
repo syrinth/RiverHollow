@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters.NPCs;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIObjects;
 using RiverHollow.Misc;
@@ -12,8 +13,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class ManagementScreen : GUIScreen
     {
-        public enum EnumActionType { View, Sell };
-        private EnumActionType _action;
+        public enum EnumActionType { View, Sell, Buy };
+        private EnumActionType _eAction;
+        public EnumActionType Action => _eAction;
         public static int BTN_PADDING = 20;
         public static int WIDTH = RiverHollow.ScreenWidth / 3;
         public static int HEIGHT = RiverHollow.ScreenHeight / 3;
@@ -22,11 +24,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         List<GUIObject> _liWorkers;
 
-        WorldAdventurer _moving;
+        WorldAdventurer _worker;
+        int _iCost;
 
         public ManagementScreen()
         {
-            _action = EnumActionType.View;
+            _eAction = EnumActionType.View;
             _liWorkers = new List<GUIObject>();
 
             _mgmtWindow = new MainBuildingsWin(this);
@@ -75,7 +78,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public void HandleBuildingSelection(WorkerBuilding selectedBuilding)
         {
-            if (_moving == null)
+            if (_worker == null)
             {
                 if (selectedBuilding != null)
                 {
@@ -87,9 +90,20 @@ namespace RiverHollow.Game_Managers.GUIObjects
             else
             {
                 RHRandom r = new RHRandom();
-                _moving.Building.RemoveWorker(_moving);
-                selectedBuilding.AddWorker(_moving, r);
-                _moving = null;
+                if (_worker.Building != null) {
+                    _worker.Building.RemoveWorker(_worker);
+                }
+
+                selectedBuilding.AddWorker(_worker, r);
+                
+                if (_eAction == EnumActionType.Buy)
+                {
+                    PlayerManager.TakeMoney(_iCost);
+                    GameManager.BackToMain();
+                    GUIManager.SetScreen(new TextInputScreen(_worker));
+                }
+
+                _worker = null;
             }
         }
 
@@ -99,7 +113,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 Controls.Remove(_mgmtWindow);
                 _mgmtWindow = new MainBuildingsWin(this);
-                _moving = worldAdventurer;
+                _worker = worldAdventurer;
                 Controls.Add(_mgmtWindow);
             }
         }
@@ -113,13 +127,25 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public void Sell()
         {
-            _action = EnumActionType.Sell;
+            _eAction = EnumActionType.Sell;
         }
 
         public bool Selling()
         {
-            return _action == EnumActionType.Sell;
+            return _eAction == EnumActionType.Sell;
         }
+
+        public void PurchaseWorker(WorldAdventurer w, int cost)
+        {
+            if (w != null)
+            {
+                _iCost = cost;
+                _worker = w;
+                _eAction = EnumActionType.Buy;
+                SetMgmtWindow(new MainBuildingsWin(this, w));
+            }
+        }
+
         public override bool Contains(Point mouse)
         {
             bool rv = false;
@@ -177,13 +203,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             public class MainBuildingsWin : MgmtWindow
             {
-                public MainBuildingsWin(ManagementScreen s) : base(s)
+                public MainBuildingsWin(ManagementScreen s, WorldAdventurer w = null) : base(s)
                 {
                     foreach (WorkerBuilding b in PlayerManager.Buildings)
                     {
-                        BuildingBox box = new BuildingBox(b);
-                        _liButtons.Add(box);
-                        Controls.Add(box);
+                        if (w == null || b.CanHold(w))
+                        {
+
+                            BuildingBox box = new BuildingBox(b);
+                            _liButtons.Add(box);
+                            Controls.Add(box);
+                        }
                     }
 
                     CreateSpacedGrid(ref _liButtons, _window.InnerTopLeft(), _window.MidWidth(), 3);
@@ -207,7 +237,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 public override bool ProcessRightButtonClick(Point mouse)
                 {
-                    //_parent.SetMgmtWindow(new BuildingDetailsWin(_parent, _w.Building));
+                    GameManager.BackToMain();
                     return false;
                 }
 

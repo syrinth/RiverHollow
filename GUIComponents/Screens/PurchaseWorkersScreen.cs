@@ -71,13 +71,10 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                     //If all items are found, then remove them.
                     if (PlayerManager.Buildings.Count > 0 && PlayerManager.Money >= wB.Cost)
                     {
-                        PlayerManager.TakeMoney(wB.Cost);
+                        ManagementScreen m = new ManagementScreen();
+                        m.PurchaseWorker(ObjectManager.GetWorker(wB._w.AdventurerID), wB.Cost);
+                        GUIManager.SetScreen(m);
 
-                        GUIManager.SetScreen(null);
-                        GraphicCursor.PickUpWorker(wB._w.AdventurerID);
-                        GameManager.Scry(true);
-                        Camera.UnsetObserver();
-                        MapManager.ViewMap(MapManager.HomeMap);
                         rv = true;
                     }
                 }

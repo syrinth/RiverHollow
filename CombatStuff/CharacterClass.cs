@@ -51,11 +51,9 @@ namespace RiverHollow.Characters.CombatStuff
                 AbilityList.Add(CharacterManager.GetActionByIndex(int.Parse(s)));
             }
             split = stringData[i++].Split(' ');
-            int first = (int.Parse(split[0]));
-            int last = (int.Parse(split[1]));
-            for(int j = first; j <= last; j++)
+            foreach(string s in split)
             {
-                SpellList.Add((CombatAction)CharacterManager.GetActionByIndex(j));
+                SpellList.Add((CombatAction)CharacterManager.GetActionByIndex(int.Parse(s)));
             }
 
             return i;

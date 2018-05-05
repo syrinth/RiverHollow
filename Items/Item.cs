@@ -7,8 +7,6 @@ using RiverHollow.SpriteAnimations;
 using RiverHollow.GUIObjects;
 
 using static RiverHollow.Game_Managers.GameManager;
-using RiverHollow.CombatStuff;
-
 namespace RiverHollow.WorldObjects
 {
     public class Item
@@ -404,17 +402,20 @@ namespace RiverHollow.WorldObjects
     public class CombatItem : Item
     {
         private ConditionEnum _fixesCondition;
-        public ConditionEnum FixesCondition => _fixesCondition; 
+        public ConditionEnum Condition => _fixesCondition;
         private int _iStam;
-        public int Stamina  => _iStam; 
+        public int Stamina => _iStam;
         private int _iHealth;
-        public int Health => _iHealth; 
+        public int Health => _iHealth;
         private int _iMana;
-        public int Mana => _iMana; 
+        public int Mana => _iMana;
+
+        public bool Helpful;
 
         public CombatItem(int id, string[] itemValue, int num)
         {
             int i = ImportBasics(itemValue, id, num);
+            Helpful = itemValue[i++].Equals("Helpful");
             _fixesCondition = (ConditionEnum)Enum.Parse(typeof(ConditionEnum), itemValue[i++]);
             _iStam = int.Parse(itemValue[i++]);
             _iHealth = int.Parse(itemValue[i++]);

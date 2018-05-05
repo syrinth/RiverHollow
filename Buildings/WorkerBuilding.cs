@@ -15,7 +15,6 @@ namespace RiverHollow
 {
     public class WorkerBuilding : Building
     {
-        public enum WorkerTypeEnum { Magic, Craftsmen};
         private WorkerTypeEnum _buildingWorker;
 
         public bool _selected = false;
@@ -24,7 +23,11 @@ namespace RiverHollow
         public int PersonalID { get => _iPersonalID; }
 
         #region Data Lists
-        protected const int MaxWorkers = 9;
+        protected const int WORK_PER_LVL = 3;
+        protected const int MAX_WORKERS = 9;
+        protected int _iBldgLvl = 1;
+        protected int _iCurrWorkerMax => WORK_PER_LVL * _iBldgLvl;
+
         protected List<WorldAdventurer> _workers;
         public List<WorldAdventurer> Workers { get => _workers; }
 
@@ -65,7 +68,7 @@ namespace RiverHollow
         {
             bool rv = false;
 
-            if(worker != null &&  _workers.Count < MaxWorkers)
+            if(worker != null &&  _workers.Count < _iCurrWorkerMax)
             {
                 worker.SetBuilding(this);
                 _workers.Add(worker);
@@ -131,6 +134,7 @@ namespace RiverHollow
         {
             BuildingData buildingData = new BuildingData
             {
+                bldgLvl = this._iBldgLvl,
                 buildingID = this.ID,
                 positionX = (int)this.MapPosition.X,
                 positionY = (int)this.MapPosition.Y,
@@ -168,6 +172,7 @@ namespace RiverHollow
         {
             SetCoordinates(new Vector2(data.positionX, data.positionY));
             _iPersonalID = data.id;
+            _iBldgLvl = data.bldgLvl == 0 ? 1 : data.bldgLvl;
 
             RHRandom r = new RHRandom();
             foreach (WorkerData wData in data.Workers)
@@ -195,6 +200,11 @@ namespace RiverHollow
                 theMachine.LoadData(mac);
                 _liPlacedObjects.Add(theMachine);
             }
+        }
+
+        internal bool CanHold(WorldAdventurer w)
+        {
+            return w.WorkerType == _buildingWorker && _workers.Count < _iCurrWorkerMax;
         }
     }
 }

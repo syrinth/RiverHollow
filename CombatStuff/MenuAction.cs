@@ -6,6 +6,7 @@ using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using System;
 using System.Collections.Generic;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters.CombatStuff
 {
@@ -49,6 +50,8 @@ namespace RiverHollow.Characters.CombatStuff
     {
         const int moveSpeed = 60;
 
+        private List<ConditionEnum> _liCondition;
+        public List<ConditionEnum> LiCondition { get => _liCondition; }
         private int _mpCost;
         public int MPCost { get => _mpCost; }
         private int _effectHarm;
@@ -72,6 +75,7 @@ namespace RiverHollow.Characters.CombatStuff
         public AnimatedSprite Sprite;
         public CombatAction(int id, string[] stringData)
         {
+            _liCondition = new List<ConditionEnum>();
             _effectTags = new List<string>();
             _buffs = new List<BuffData>();
             _actionTags = new List<string>();
@@ -125,6 +129,13 @@ namespace RiverHollow.Characters.CombatStuff
                             else if (parse[0] == "Cost")
                             {
                                 _mpCost = int.Parse(parse[1]);
+                            }
+                            else if (parse[0] == "Status")
+                            {
+                                for (int j = 1; j < parse.Length; j++)
+                                {
+                                    _liCondition.Add((ConditionEnum)Enum.Parse(typeof(ConditionEnum), parse[j]));
+                                }
                             }
                             _effectTags.Add(parse[0]);
                         }
@@ -187,15 +198,22 @@ namespace RiverHollow.Characters.CombatStuff
                 }
                 else if (_effectTags.Contains("Heal"))
                 {
-                    int val = _effectHarm;
+                    int val = _effectHeal;
                     TargetLocation.Character.IncreaseHealth(val);
                     if (val > 0)
                     {
                         TargetLocation.AssignDamage(_effectHarm);
                     }
                 }
+                if (_effectTags.Contains("Status"))
+                {
+                    foreach(ConditionEnum e in _liCondition)
+                    {
+                        TargetLocation.Character.ChangeConditionStatus(e, Target.Equals("Enemy"));
+                    }
+                }
 
-                if(_buffs.Count > 0)
+                if (_buffs.Count > 0)
                 {
                     Buff b = null;
                     foreach (BuffData data in _buffs) {
