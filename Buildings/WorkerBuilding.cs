@@ -26,6 +26,7 @@ namespace RiverHollow
         protected const int WORK_PER_LVL = 3;
         protected const int MAX_LEVEL = 9;
         protected int _iCurrWorkerMax => WORK_PER_LVL * _iBldgLvl;
+        public int MaxWorkers => _iCurrWorkerMax;
 
         protected List<WorldAdventurer> _workers;
         public List<WorldAdventurer> Workers { get => _workers; }

@@ -215,7 +215,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                         if (good)
                         {
-                            BuildingBox box = new BuildingBox(b);
+                            BuildingBox box = new BuildingBox(b, w != null);
                             _liButtons.Add(box);
                             Controls.Add(box);
                         }
@@ -252,15 +252,22 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 private class BuildingBox : GUIObject
                 {
+                    bool _bShowWorkers;
                     GUIButton _btn;
+                    GUIText _gText;
                     WorkerBuilding _b;
                     public WorkerBuilding Building => _b;
-                    public BuildingBox(WorkerBuilding b)
+
+                    public BuildingBox(WorkerBuilding b, bool showWorkerNum)
                     {
                         _b = b;
                         _btn = new GUIButton(b.GivenName);
-                        Width = _btn.Width;
-                        Height = _btn.Height;
+                        _bShowWorkers = showWorkerNum;
+
+                        _gText = new GUIText(b.Workers.Count + @"/" + b.MaxWorkers);
+                        _gText.AnchorAndAlignToObject(_btn, SideEnum.Bottom, SideEnum.Left);
+                        Width = _btn.Width > _gText.Width ? _btn.Width : _gText.Width;
+                        Height = _btn.Height + _gText.Height;
                     }
 
                     public override void Update(GameTime gameTime)
@@ -271,6 +278,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     public override void Draw(SpriteBatch spriteBatch)
                     {
                         _btn.Draw(spriteBatch);
+                        if (_bShowWorkers)
+                        {
+                            _gText.Draw(spriteBatch);
+                        }
                     }
 
                     public override bool Contains(Point mouse)
@@ -282,6 +293,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     {
                         base.Position(value);
                         _btn.Position(value);
+                        _gText.AnchorAndAlignToObject(_btn, SideEnum.Bottom, SideEnum.CenterX);
                     }
                 }
             }

@@ -95,7 +95,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = true;
-            CancelAction();
+            if (CombatManager.CanCancel())
+            {
+                CancelAction();
+            }
             return rv;
         }
 

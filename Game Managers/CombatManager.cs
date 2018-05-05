@@ -5,6 +5,7 @@ using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
+using System;
 
 namespace RiverHollow.Game_Managers
 {
@@ -95,6 +96,11 @@ namespace RiverHollow.Game_Managers
                     }
                 }
             }
+        }
+
+        internal static bool CanCancel()
+        {
+            return CurrentPhase == PhaseEnum.ChooseItemTarget || CurrentPhase == PhaseEnum.ChooseSkillTarget || CurrentPhase == PhaseEnum.SelectSkill;
         }
 
         private static bool EndCombatCheck()
