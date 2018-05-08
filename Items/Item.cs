@@ -8,6 +8,7 @@ using RiverHollow.GUIObjects;
 
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Misc;
+using RiverHollow.Characters.CombatStuff;
 
 namespace RiverHollow.WorldObjects
 {
@@ -213,6 +214,9 @@ namespace RiverHollow.WorldObjects
         }
 
         public virtual void UseItem() { }
+
+        public virtual void ApplySaveData(string str) { }
+        public virtual string GetSaveData() { return string.Empty; }
 
         public bool IsTool() { return _itemType == ItemEnum.Tool; }
         public bool IsCombatItem() { return _itemType == ItemEnum.Combat; }
@@ -468,10 +472,18 @@ namespace RiverHollow.WorldObjects
         public ClassItem(int id, string[] stringData, int num)
         {
             int i = ImportBasics(stringData, id, num);
-            _iClassID = int.Parse(stringData[i++]);
 
             _doesItStack = false;
             _texture = GameContentManager.GetTexture(@"Textures\items");
+        }
+
+        public void SetClassChange(int i)
+        {
+            _iClassID = i;
+
+            string n = CharacterManager.GetClassByIndex(_iClassID).Name;
+            _name += n;
+            _description += n;
         }
 
         public override void UseItem()
@@ -482,6 +494,16 @@ namespace RiverHollow.WorldObjects
                 PlayerManager.SetClass(_iClassID);
             }
             BackToMain();
+        }
+
+        public override void ApplySaveData(string str)
+        {
+            SetClassChange(int.Parse(str));
+        }
+
+        public override string GetSaveData()
+        {
+            return _iClassID.ToString();
         }
     }
 }

@@ -238,6 +238,9 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "Numbers")]
             public int num;
+
+            [XmlElement(ElementName = "Data")]
+            public string strData;
         }
         public struct MapData
         {
@@ -423,6 +426,7 @@ namespace RiverHollow.Game_Managers
                 {
                     itemData.itemID = i.ItemID;
                     itemData.num = i.Number;
+                    itemData.strData = i.GetSaveData();
                 }
                 else
                 {
@@ -540,6 +544,11 @@ namespace RiverHollow.Game_Managers
                     int index = i * InventoryManager.maxItemColumns + j;
                     ItemData item = data.Items[index];
                     Item newItem = ObjectManager.GetItem(item.itemID, item.num);
+                    if (!string.IsNullOrEmpty(item.strData))
+                    {
+                        int x = 0;
+                    }
+                    if (newItem != null) { newItem.ApplySaveData(item.strData); }
                     InventoryManager.AddItemToInventorySpot(newItem, i, j);
                 }
             }
