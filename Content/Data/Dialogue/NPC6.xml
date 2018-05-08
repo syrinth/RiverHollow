@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, string]">
+    <!--Key:NPCType#, Value:Text-->
+    <Item>
+      <Key>Introduction</Key>
+      <Value>Ah, you must be the new one in town. Greetings to you, young one, I'm $0$, a purveyor of magical items. If you have the time to hear me out, I have some business for you.</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>You seem to be in a rush, don't let me keep you. I hope you have a good day.</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>Hello, $^$. Could you talk to $1$ for me by any chance? I worry about her, always pushing herself so hard.</Value>
+    </Item>
+    <Item>
+      <Key>Gift</Key>
+      <Value>For me? Oh, $^$, you shouldn't have.</Value>
+    </Item>
+    <Item>
+      <Key>Selection</Key>
+      <Value>Greeeeeeeetings... [Talk:Talk|Gift:GiveGift|%Quest:1%Business:Quest1|Never Mind:Nothing]</Value>
+    </Item>
+    <Item>
+      <Key>Cs0a</Key>
+      <Value>$1$... I wish you'd listen to me. You push yourself too hard.</Value>
+    </Item>
+    <Item>
+      <Key>Cs0b</Key>
+      <Value>Ready for what? I know you're skilled with that sword of yours, but every time you leave the house with it, I'm so afraid.</Value>
+    </Item>
+  </Asset>
+</XnaContent>

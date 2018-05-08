@@ -27,7 +27,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _btnDown = new GUIButton(new Vector2(_questWindow.InnerTopLeft().X + _questWindow.Width - BTNSIZE, _questWindow.InnerTopLeft().Y + _questWindow.Height - BTNSIZE), new Rectangle(256, 96, 32, 32), BTNSIZE, BTNSIZE, "", @"Textures\Dialog", true);
             _topQuest = 0;
 
-            for(int i = 0; i < MAX_SHOWN_QUESTS; i++)
+            for(int i = 0; i < MAX_SHOWN_QUESTS && i< PlayerManager.QuestLog.Count; i++)
             {
                 QuestBox q = new QuestBox(_questWindow, i);
                 q.SetQuest(PlayerManager.QuestLog[_topQuest + i]);

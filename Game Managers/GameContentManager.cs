@@ -15,6 +15,8 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<string, string> _diSpiritLoot;
         public static Dictionary<string, string> DiSpiritLoot { get => _diSpiritLoot; }
         public static Dictionary<string, string> DiUpgrades { get => _diUpgrades; }
+        private static Dictionary<int, string> _diQuests;
+        public static Dictionary<int, string> DiQuests { get => _diQuests; }
 
         public static void LoadContent(ContentManager Content)
         {
@@ -24,6 +26,7 @@ namespace RiverHollow.Game_Managers
             _diMerchandise = new Dictionary<string, Dictionary<int, string>>();
             _diSpiritLoot = _content.Load<Dictionary<string, string>>(@"Data\SpiritLoot");
             _diUpgrades = _content.Load<Dictionary<string, string>>(@"Data\TownUpgrades");
+            _diQuests = _content.Load<Dictionary<int, string>>(@"Data\Quests");
 
             _diNPCDialogue = LoadDialogue(@"Data\Dialogue\NPCDialogue");
 

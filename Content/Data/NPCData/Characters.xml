@@ -23,6 +23,10 @@
       <Value>Shopkeeper/Eldra/1/mapGuildhouse/7 8/Adventurers</Value>
     </Item>
     <Item>
+      <Key>6</Key>
+      <Value>Villager/Griselda/3/mapRiverHollowTown/7 8/Buildings</Value>
+    </Item>
+    <Item>
       <Key>8</Key>
       <Value>Villager/Gail/3/mapHouseNPC1/7 8</Value>
     </Item>

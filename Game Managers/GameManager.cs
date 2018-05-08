@@ -25,6 +25,7 @@ namespace RiverHollow.Game_Managers
         public static int TileSize = 16;
         public static int MaxBldgLevel = 3;
         public static Dictionary<string, Upgrade> DiUpgrades;
+        public static Dictionary<int, Quest> DIQuests;
 
         public static Item gmActiveItem;
         public static NPC gmNPC;
@@ -39,6 +40,15 @@ namespace RiverHollow.Game_Managers
             foreach (KeyValuePair<string, string> kvp in GameContentManager.DiUpgrades)
             {
                 DiUpgrades.Add(kvp.Key, new Upgrade(kvp.Key, kvp.Value));
+            }
+        }
+
+        public static void LoadQuests(ContentManager Content)
+        {
+            DIQuests = new Dictionary<int, Quest>();
+            foreach (KeyValuePair<int, string> kvp in GameContentManager.DiQuests)
+            {
+                DIQuests.Add(kvp.Key, new Quest(kvp.Value));
             }
         }
 

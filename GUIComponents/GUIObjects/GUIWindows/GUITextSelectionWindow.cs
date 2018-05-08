@@ -8,6 +8,7 @@ using RiverHollow.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.Characters.NPCs;
 using RiverHollow.Characters;
+using RiverHollow.Misc;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
@@ -69,23 +70,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                 _text = firstPass[0];
                 string[] secondPass = firstPass[1].Split('|');
                 int key = 0;
-                foreach(string s in secondPass)
+                foreach (string s in secondPass)
                 {
-                    if (s.Contains("%"))
-                    {
-                        string[] friendshipPass = s.Split(new[] { '%' }, StringSplitOptions.RemoveEmptyEntries);
-                        if (int.TryParse(friendshipPass[0], out int val))
-                        {
-                            if(GameManager.gmNPC != null && GameManager.gmNPC.Friendship >= val)
-                            {
-                                _diOptions.Add(key++, friendshipPass[1]);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        _diOptions.Add(key++, s);
-                    }
+                    _diOptions.Add(key++, s);
                 }
             }
         }
@@ -217,7 +204,13 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             {
                 string nextText = GameManager.gmNPC.GetDialogEntry(action);
 
-                if (!string.IsNullOrEmpty(nextText))
+                if (action.StartsWith("Quest"))
+                {
+                    Quest q = GameManager.DIQuests[int.Parse(action.Remove(0, "Quest".Length))];
+                    PlayerManager.AddToQuestLog(q);
+                    GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, q.Description));
+                }
+                else if (!string.IsNullOrEmpty(nextText))
                 {
                     GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, nextText));
                 }

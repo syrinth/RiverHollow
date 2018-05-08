@@ -93,5 +93,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapArcaneTower1.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapArcaneTower2.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapArcaneTower3.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC6.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Quests.xml</File>
   </SourceFiles>
 </SourceFileCollection>

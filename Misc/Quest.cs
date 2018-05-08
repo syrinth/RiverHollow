@@ -1,21 +1,20 @@
 ﻿using RiverHollow.Characters;
+using RiverHollow.Game_Managers;
 using RiverHollow.WorldObjects;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RiverHollow.Misc
 {
     public class Quest
     {
-        public enum QuestGoalType { GroupSlay, Slay, Fetch }
-        private QuestGoalType _goalType;
+        public enum QuestType { GroupSlay, Slay, Fetch }
+        private QuestType _goalType;
         private string _name;
         public string Name { get => _name; }
         private string _description;
         public string Description { get => _description; }
+        private string _sRewardText;
+        public string RewardText => _sRewardText;
         private NPC _questGiver;
         public NPC QuestGiver { get => _questGiver; }
 
@@ -32,9 +31,10 @@ namespace RiverHollow.Misc
 
         //private int _rewardMoney;
         //public int RewardMoney { get => _rewardMoney; }
-        //private List<int> _rewardItems;
+        private List<Item> _liRewardItems;
+        public List<Item> LiRewardItems => _liRewardItems;
 
-        public Quest(string name, QuestGoalType type, string desc, int target, Monster m, Item i, NPC giver = null)
+        public Quest(string name, QuestType type, string desc, int target, Monster m, Item i, NPC giver = null)
         {
             _name = name;
             _goalType = type;
@@ -45,6 +45,38 @@ namespace RiverHollow.Misc
             _questItem = i;
             _accomplished = 0;
             _finished = false;
+        }
+
+        public Quest(string stringData)
+        {
+            _liRewardItems = new List<Item>();
+            string[] splitParams = stringData.Split('/');
+            int i = 0;
+            _name = splitParams[i++];
+            _description = splitParams[i++];
+            i++;   //reqtoProc
+            _questGiver = CharacterManager.DiNPC[int.Parse(splitParams[i++])];
+            _goalType = Util.ParseEnum<QuestType>(splitParams[i++]);
+            string[] req = splitParams[i++].Split('|');
+            if (_goalType == QuestType.Fetch)
+            {
+                foreach (string s in req)
+                {
+                    string[] info = s.Split(' ');
+                    _questItem = ObjectManager.GetItem(int.Parse(info[0]));
+                    _targetGoal = int.Parse(info[1]);
+                }
+            }
+            string[] rewards = splitParams[i++].Split('|');
+            foreach(string s in rewards)
+            {
+                string[] info = s.Split(' ');
+                Item it = ObjectManager.GetItem(int.Parse(info[0]), int.Parse(info[1]));
+                if(info.Length == 3) { it.ApplySaveData(info[2]); }
+                _liRewardItems.Add(it);
+            }
+            _sRewardText = splitParams[i++];
+            
         }
 
         public bool AttemptProgress(Monster m)

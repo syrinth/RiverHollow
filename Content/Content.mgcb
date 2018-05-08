@@ -713,3 +713,13 @@
 /processor:TiledMapProcessor
 /build:Maps/mapArcaneTower3.tmx
 
+#begin Data/Dialogue/NPC6.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Dialogue/NPC6.xml
+
+#begin Data/Quests.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Quests.xml
+

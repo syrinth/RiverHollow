@@ -256,10 +256,36 @@ namespace RiverHollow.Characters
             }
             else
             {
-                text = GetSelectionText();
+                if (!CheckQuestLogs(ref text))
+                {
+                    text = GetSelectionText();
+                }
             }
             text = Util.ProcessText(text, _sName);
             GUIManager.SetScreen(new TextScreen(this, text));
+        }
+
+        private bool CheckQuestLogs(ref string text)
+        {
+            bool rv = false;
+
+            foreach (Quest q in PlayerManager.QuestLog)
+            {
+                if(q.Finished && q.QuestGiver == this)
+                {
+                    text = q.RewardText;
+                    foreach (Item i in q.LiRewardItems)
+                    {
+                        InventoryManager.AddItemToInventory(i);
+                    }
+                    PlayerManager.QuestLog.Remove(q);
+                    
+                    rv = true;
+                    break;
+                }
+            }
+
+            return rv;
         }
 
         public virtual void Talk(string dialogTag)
@@ -304,7 +330,66 @@ namespace RiverHollow.Characters
         {
             RHRandom r = new RHRandom();
             string text = _dialogueDictionary["Selection"];
-            return Util.ProcessText(text, _sName);
+            Util.ProcessText(text, _sName);
+
+            string[] textFromData = text.Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] options = textFromData[1].Split('|');
+            List<string> liCommands = new List<string>();
+            for(int i = 0; i < options.Length; i++) { 
+                bool removeIt = false;
+                string s = options[i];
+
+                if (s.Contains("%"))
+                {
+                    //Special checks are in the format %type:val% so, |%Friend:50%Join Party:Party| or |%Quest:1%Business:Quest1|
+                    string[] specialParse = s.Split(new[] { '%' }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] specialVal = specialParse[0].Split(':');
+
+                    int.TryParse(specialVal[1], out int val);
+
+                    if (specialVal[0].Equals("Friend"))
+                    {
+                        removeIt = Friendship < val;
+                    }
+                    else if (specialVal[0].Equals("Quest"))
+                    {
+                        removeIt = PlayerManager.QuestLog.Contains(GameManager.DIQuests[val]) || GameManager.DIQuests[val].Finished;
+                    }
+
+                    s = s.Remove(s.IndexOf(specialParse[0]) - 1, specialParse[0].Length + 2);
+                }
+                else
+                {
+                    if (GiftGiven && s.Contains("GiveGift"))
+                    {
+                        removeIt = true;
+                    }
+                }
+
+                if (!removeIt)
+                {
+                    liCommands.Add(s);
+                }
+            }
+
+            //If there's only two entires left, Talk and Never Mind, then go straight to Talk
+            string rv = string.Empty;
+            if (liCommands.Count == 2)
+            {
+                rv = GetDialogEntry("Talk");
+            }
+            else
+            {
+                rv = textFromData[0] + "[";   //Puts back the pre selection text
+                foreach (string s in liCommands)
+                {
+                    rv += s + "|";
+                }
+                rv = rv.Remove(rv.Length - 1);
+                rv += "]";
+            }
+
+            return rv;
         }
 
         public virtual string GetText()

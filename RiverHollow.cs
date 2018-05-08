@@ -65,6 +65,7 @@ namespace RiverHollow
             CharacterManager.LoadContent(Content);
             DropManager.LoadContent(Content);
             CutsceneManager.LoadContent(Content);
+            GameManager.LoadQuests(Content);
 
             
             var pp = GraphicsDevice.PresentationParameters;
