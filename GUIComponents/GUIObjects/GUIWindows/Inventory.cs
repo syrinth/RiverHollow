@@ -142,11 +142,17 @@ namespace RiverHollow.Screens
                 {
                     if (InventoryManager.PublicContainer == null)
                     {
+                        string text = string.Empty;
+                        GameManager.gmActiveItem = i;
                         if (i.IsFood())
                         {
-                            Food f = ((Food)i);
-                            GUIManager.AddTextSelection(f, string.Format("Really eat the {0}? [Yes:Eat|No:DoNothing]", f.Name));
+                            text = GameContentManager.GetDialogue("FoodConfirm");
                         }
+                        else if (i.IsClassItem())
+                        {
+                            text = GameContentManager.GetDialogue("ClassItemConfirm");
+                        }
+                        GUIManager.AddTextSelection(string.Format(text, i.Name));
                     }
                     else
                     {
@@ -173,7 +179,6 @@ namespace RiverHollow.Screens
                 if (i.ProcessHover(mouse))
                 {
                     rv = true;
-                    break;
                 }
             }
             return rv;

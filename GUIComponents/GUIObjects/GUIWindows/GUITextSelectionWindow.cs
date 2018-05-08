@@ -4,19 +4,15 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers.GUIObjects;
 using Microsoft.Xna.Framework.Input;
-using RiverHollow.Characters;
-using RiverHollow.WorldObjects;
 using RiverHollow.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
-using static RiverHollow.WorldObjects.Door;
 using RiverHollow.Characters.NPCs;
+using RiverHollow.Characters;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUITextSelectionWindow : GUITextWindow
     {
-        Food _food;
-
         protected Point _poiMouse = Point.Zero;
         protected Dictionary<int,string> _diOptions;
         protected GUIImage _giSelection;
@@ -35,16 +31,15 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public GUITextSelectionWindow(NPC talker, string selectionText) : base()
         {
-            _targetNPC = talker;
+            GameManager.gmNPC = talker;
             Position(new Vector2(Position().X, RiverHollow.ScreenHeight - Height - SpaceFromBottom));
 
             Setup(selectionText);
             PostParse();
         }
 
-        public GUITextSelectionWindow(KeyDoor door, string selectionText) : base()
+        public GUITextSelectionWindow(string selectionText, int door = -1) : base()
         {
-            _door = door;
             Position(new Vector2(Position().X, RiverHollow.ScreenHeight - Height - SpaceFromBottom));
 
             Setup(selectionText);
@@ -65,12 +60,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             _giSelection = new GUIImage(new Vector2((int)Position().X + _iInnerBorder, (int)Position().Y + _iInnerBorder + _iOptionsOffsetY), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
         }
 
-        public GUITextSelectionWindow(Food f, string selectionText) : this(selectionText)
-        {
-            GameManager.Pause();
-            _food = f;
-        }
-
         private void SeparateText(string selectionText)
         {
             _diOptions = new Dictionary<int, string>();
@@ -87,7 +76,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                         string[] friendshipPass = s.Split(new[] { '%' }, StringSplitOptions.RemoveEmptyEntries);
                         if (int.TryParse(friendshipPass[0], out int val))
                         {
-                            if(_targetNPC.Friendship >= val)
+                            if(GameManager.gmNPC != null && GameManager.gmNPC.Friendship >= val)
                             {
                                 _diOptions.Add(key++, friendshipPass[1]);
                             }
@@ -147,7 +136,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         protected virtual void SelectAction()
         {
             string action = _diOptions[_iKeySelection].Split(':')[1];
-            if (_targetNPC == null || action.Equals("SellContract"))
+            if (GameManager.gmNPC == null || action.Equals("SellContract"))
             {
                 ProcessGameTextSelection(action);
             }
@@ -201,23 +190,17 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             }
             else if (action.Equals("OpenDoor"))
             {
-                GUIManager.SetScreen(new InventoryScreen(_door));
+                GUIManager.SetScreen(new InventoryScreen(GameManager.gmDoor));
             }
-            else if (action.Contains("Eat") && _food != null)
+            else if (action.Contains("UseItem"))
             {
-                if (_food.Number > 0)
-                {
-                    _food.Remove(1);
-                    PlayerManager.IncreaseStamina(_food.Stamina);
-                    PlayerManager.Combat.IncreaseHealth(_food.Health);
-                }
-                GameManager.BackToMain();
+                GameManager.UseItem();
             }
-            else if (action.Contains("SellContract") && _targetNPC != null)
+            else if (action.Contains("SellContract") && GameManager.gmNPC != null)
             {
-                if (_targetNPC.IsWorldAdventurer())
+                if (GameManager.gmNPC.IsWorldAdventurer())
                 {
-                    ((WorldAdventurer)_targetNPC).Building.RemoveWorker((WorldAdventurer)_targetNPC);
+                    ((WorldAdventurer)GameManager.gmNPC).Building.RemoveWorker((WorldAdventurer)GameManager.gmNPC);
                     PlayerManager.AddMoney(1000);
                     GameManager.BackToMain();
                 }
@@ -230,15 +213,18 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         private void ProcessNPCDialogSelection(string action)
         {
-            string nextText = _targetNPC.GetDialogEntry(action);
+            if (GameManager.gmNPC != null)
+            {
+                string nextText = GameManager.gmNPC.GetDialogEntry(action);
 
-            if (!string.IsNullOrEmpty(nextText))
-            {
-                GUIManager.SetScreen(new TextScreen(_targetNPC, nextText));
-            }
-            else if(GUIManager.IsTextScreen())
-            {
-                GameManager.BackToMain();
+                if (!string.IsNullOrEmpty(nextText))
+                {
+                    GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, nextText));
+                }
+                else if (GUIManager.IsTextScreen())
+                {
+                    GameManager.BackToMain();
+                }
             }
         }
 

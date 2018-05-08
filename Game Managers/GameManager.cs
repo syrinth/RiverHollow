@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
+using static RiverHollow.WorldObjects.Door;
+using RiverHollow.Characters.NPCs;
 
 namespace RiverHollow.Game_Managers
 {
@@ -24,6 +26,11 @@ namespace RiverHollow.Game_Managers
         public static int MaxBldgLevel = 3;
         public static Dictionary<string, Upgrade> DiUpgrades;
 
+        public static Item gmActiveItem;
+        public static NPC gmNPC;
+        public static Spirit gmSpirit;
+        public static KeyDoor gmDoor;
+
         static long _iSaveID = -1;
 
         public static void LoadContent(ContentManager Content)
@@ -33,6 +40,20 @@ namespace RiverHollow.Game_Managers
             {
                 DiUpgrades.Add(kvp.Key, new Upgrade(kvp.Key, kvp.Value));
             }
+        }
+
+        public static void UseItem()
+        {
+            gmActiveItem.UseItem();
+            gmActiveItem = null;
+        }
+
+        public static void ClearGMObjects()
+        {
+            gmNPC = null;
+            gmActiveItem = null;
+            gmDoor = null;
+            gmSpirit = null;
         }
 
         #region States
@@ -93,6 +114,7 @@ namespace RiverHollow.Game_Managers
             GUIManager.SetScreen(new HUDScreen());
             _state = StateEnum.Running;
             _mapState = MapEnum.WorldMap;
+            ClearGMObjects();
         }
         #endregion
 

@@ -88,14 +88,9 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static void AddTextSelection(Food f, string text)
+        public static void AddTextSelection(string text)
         {
-            _currentGUIScreen.AddTextSelection(f, text);
-        }
-
-        public static void RemoveComponent(GUIObject g)
-        {
-            _currentGUIScreen.RemoveComponent(g);
+            _currentGUIScreen.AddTextSelection(text);
         }
 
         public static void SetScreen(GUIScreen newScreen)

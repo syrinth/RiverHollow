@@ -3,6 +3,14 @@
   <Asset Type="Dictionary[string, string]">
     <!--Key:NPCType#, Value:Text-->
     <Item>
+      <Key>FoodConfirm</Key>
+      <Value>Really eat the {0}? [Yes:UseItem|No:DoNothing]</Value>
+    </Item>
+    <Item>
+      <Key>ClassItemConfirm</Key>
+      <Value>Really use the {0}? [Yes:UseItem|No:DoNothing]</Value>
+    </Item>
+    <Item>
       <Key>AdventurerTree</Key>
       <Value>...[Talk:Talk|Craft Items:Craft|Join Party:Party]</Value>
     </Item>

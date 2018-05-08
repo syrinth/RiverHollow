@@ -1054,7 +1054,7 @@ namespace RiverHollow.Tile_Engine
                 if (d.IsMobDoor()) { ((MobDoor)d).Check(_liMobs.Count); }
             }
         }
-        public void DropWorldItems(List<Item>items, Vector2 position)
+        public void DropItemsOnMap(List<Item>items, Vector2 position)
         {
             foreach(Item i in items)
             {
@@ -1708,7 +1708,7 @@ namespace RiverHollow.Tile_Engine
                 rv = ((Destructible)_obj).DealDamage(dmg);
                 if (rv)
                 {
-                    MapManager.DropWorldItems(DropManager.DropItemsFromWorldObject(_obj.ID), _obj.CollisionBox.Center.ToVector2());
+                    MapManager.DropItemsOnMap(DropManager.DropItemsFromWorldObject(_obj.ID), _obj.CollisionBox.Center.ToVector2());
                     _obj.RemoveSelfFromTiles();
                     MapManager.RemoveWorldObject(_obj);
                 }

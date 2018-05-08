@@ -4,8 +4,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using static RiverHollow.WorldObjects.Door;
-using RiverHollow.Characters.NPCs;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
@@ -33,9 +31,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         public bool _pause = false;
         protected int _numReturns = 0;
 
-        protected NPC _targetNPC;
-        protected KeyDoor _door;
-
         protected GUITextWindow() : base()
         {
             _font = GameContentManager.GetFont(@"Fonts\Font");
@@ -44,18 +39,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _parsedStrings = new List<string>();
         }
 
-        public GUITextWindow(NPC c, string text) : this()
-        {
-            _targetNPC = c;
-            _text = text;
-            Height = Math.Max(Height, ((int)_characterHeight * _maxRows));
-            _next = new GUIImage(Vector2.Zero, new Rectangle(288, 64, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
-            _next.AnchorToInnerSide(this, SideEnum.BottomRight);
-
-            ParseText(text);
-        }
-
-        public GUITextWindow(Spirit c, string text) : this()
+        public GUITextWindow(NPC npc, string text) : this()
         {
             _text = text;
             Height = Math.Max(Height, ((int)_characterHeight * _maxRows));
@@ -63,6 +47,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _next.AnchorToInnerSide(this, SideEnum.BottomRight);
 
             ParseText(text);
+            GameManager.gmNPC = npc;
         }
 
         public GUITextWindow(Vector2 position, string text) : this()
@@ -220,9 +205,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 _next.Draw(spriteBatch);
             }
 
-            if (_targetNPC != null)
+            if (GameManager.gmNPC != null)
             {
-                _targetNPC.DrawPortrait(spriteBatch, new Vector2(InnerTopLeft().X, InnerTopLeft().Y-EdgeSize));
+                GameManager.gmNPC.DrawPortrait(spriteBatch, new Vector2(InnerTopLeft().X, InnerTopLeft().Y - EdgeSize));
             }
         }
     }

@@ -188,9 +188,19 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            Mob mob = CharacterManager.GetMobByIndex(1, new Vector2(647, 539));
-            mob.CurrentMapName = "mapManorGrounds";
-            _tileMaps[@"mapManorGrounds"].AddMob(mob);
+            //Mob mob = CharacterManager.GetMobByIndex(1, new Vector2(647, 539));
+            //mob.CurrentMapName = "mapManorGrounds";
+            //_tileMaps[@"mapManorGrounds"].AddMob(mob);
+
+            for (int i = 0; i < 20; i++)
+            {
+                Vector2 vect = new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 2) * TileSize);
+                Mob mob = CharacterManager.GetMobByIndex(1, vect);
+                mob.CurrentMapName = _tileMaps[@"mapManorGrounds"].Name.Replace(@"Maps\", "");
+                _tileMaps[@"mapManorGrounds"].AddMob(mob);
+            }
+
+
 
             MerchantChest m = new MerchantChest();
             PlayerManager._merchantChest = m;
@@ -291,9 +301,9 @@ namespace RiverHollow.Game_Managers
         {
             _currentMap.RemoveMob(m);
         }
-        public static void DropWorldItems(List<Item> items, Vector2 position)
+        public static void DropItemsOnMap(List<Item> items, Vector2 position)
         {
-            _currentMap.DropWorldItems(items, position);
+            _currentMap.DropItemsOnMap(items, position);
         }
         public static void PlaceWorldObject(WorldObject worldObject)
         {

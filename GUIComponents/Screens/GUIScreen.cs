@@ -11,6 +11,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
     //Represents a complete collection of associated GUIs to be displayed on the screen
     public abstract class GUIScreen
     {
+        protected GUITextSelectionWindow _gSelectionWindow;
         private List<GUIObject> _toRemove;
         protected List<GUIObject> Controls;
         public bool IsVisible;
@@ -22,15 +23,21 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
         public virtual bool ProcessLeftButtonClick(Point mouse)
         {
-            return false;
+            bool rv = false;
+            if (_gSelectionWindow != null) { rv = _gSelectionWindow.ProcessLeftButtonClick(mouse); }
+            return rv;
         }
         public virtual bool ProcessRightButtonClick(Point mouse)
         {
-            return false;
+            bool rv = false;
+            if (_gSelectionWindow != null) { _gSelectionWindow.ProcessRightButtonClick(mouse); }
+            return rv;
         }
         public virtual bool ProcessHover(Point mouse)
         {
-            return false;
+            bool rv = false;
+            rv = _gSelectionWindow != null;
+            return rv;
         }
         public virtual void Update(GameTime gameTime)
         {
@@ -66,24 +73,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
 
-        public void AddTextSelection(Food f, string text)
+        public void AddTextSelection(string text)
         {
-            Controls.Add(new GUITextSelectionWindow(f, text));
-        }
-
-        public void AddTextSelection(WorldAdventurer w, string text)
-        {
-            Controls.Add(new GUITextSelectionWindow(w, text));
-        }
-
-        public void RemoveComponent(GUIObject g)
-        {
-            _toRemove.Add(g);
-        }
-
-        public virtual void ShowTextWindow(string text)
-        {
-            //
+            if (Controls.Contains(_gSelectionWindow)) { Controls.Remove(_gSelectionWindow); }
+            _gSelectionWindow = new GUITextSelectionWindow(text);
+            Controls.Add(_gSelectionWindow);
         }
 
         public virtual bool IsTextScreen() { return false; }

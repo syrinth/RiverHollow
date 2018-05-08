@@ -68,52 +68,59 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
             if (_infoScreen != null)
             {
                 _infoScreen.Draw(spriteBatch);
             }
+            base.Draw(spriteBatch);
         }        
 
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_btnExitGame.Contains(mouse))
+            if (base.ProcessLeftButtonClick(mouse))
             {
-                RiverHollow.PrepExit();
                 rv = true;
             }
-            if (_btnInventory.Contains(mouse))
+            else
             {
-                _infoScreen = new InventoryScreen();
-                rv = true;
-            }
-            if (_btnQuestLog.Contains(mouse))
-            {
-                _infoScreen = new QuestScreen();
-                rv = true;
-            }
-            if (_btnParty.Contains(mouse))
-            {
-                _infoScreen = new PartyScreen();
-                rv = true;
-            }
-            if (_btnOptions.Contains(mouse))
-            {
-                _infoScreen = new OptionScreen();
-                rv = true;
-            }
+                if (_btnExitGame.Contains(mouse))
+                {
+                    RiverHollow.PrepExit();
+                    rv = true;
+                }
+                if (_btnInventory.Contains(mouse))
+                {
+                    _infoScreen = new InventoryScreen();
+                    rv = true;
+                }
+                if (_btnQuestLog.Contains(mouse))
+                {
+                    _infoScreen = new QuestScreen();
+                    rv = true;
+                }
+                if (_btnParty.Contains(mouse))
+                {
+                    _infoScreen = new PartyScreen();
+                    rv = true;
+                }
+                if (_btnOptions.Contains(mouse))
+                {
+                    _infoScreen = new OptionScreen();
+                    rv = true;
+                }
 
-            if (_btnManagement.Contains(mouse))
-            {
-                _infoScreen = new ManagementScreen();
-                rv = true;
-            }
+                if (_btnManagement.Contains(mouse))
+                {
+                    _infoScreen = new ManagementScreen();
+                    rv = true;
+                }
 
-            if (_infoScreen != null && _infoScreen.Contains(mouse))
-            {
-                _infoScreen.ProcessLeftButtonClick(mouse);
-                rv = true;
+                if (_infoScreen != null && _infoScreen.Contains(mouse))
+                {
+                    _infoScreen.ProcessLeftButtonClick(mouse);
+                    rv = true;
+                }
             }
 
             return rv;
@@ -140,12 +147,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool ProcessHover(Point mouse)
         {
             bool rv = false;
-            _btnExitGame.IsMouseHovering = _btnExitGame.Contains(mouse);
-            _btnInventory.IsMouseHovering = _btnInventory.Contains(mouse);
-            _btnParty.IsMouseHovering = _btnParty.Contains(mouse);
-            if (_infoScreen != null)
+            if (!base.ProcessHover(mouse))
             {
-                _infoScreen.ProcessHover(mouse);
+                _btnExitGame.IsMouseHovering = _btnExitGame.Contains(mouse);
+                _btnInventory.IsMouseHovering = _btnInventory.Contains(mouse);
+                _btnParty.IsMouseHovering = _btnParty.Contains(mouse);
+                if (_infoScreen != null)
+                {
+                    _infoScreen.ProcessHover(mouse);
+                }
             }
             return rv;
         }

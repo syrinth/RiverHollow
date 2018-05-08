@@ -20,25 +20,30 @@ namespace RiverHollow.Game_Managers
             switch (id)
             {
                 case 0:
-                    itemList.Add(ObjectManager.GetItem(0, 1));
+                    AddItems(ref itemList, 0, 1);
                     break;
                 case 1:
-                    itemList.Add(ObjectManager.GetItem(0, 1));
-                    itemList.Add(ObjectManager.GetItem(0, 1));
-                    itemList.Add(ObjectManager.GetItem(0, 1));
-                    itemList.Add(ObjectManager.GetItem(0, 1));
-                    itemList.Add(ObjectManager.GetItem(0, 1));
+                    AddItems(ref itemList, 0, 5);
                     break;
                 case 2:
-                    itemList.Add(ObjectManager.GetItem(2, 1));
+                    AddItems(ref itemList, 2, 7);
                     break;
                 case 5:
-                    itemList.Add(ObjectManager.GetItem(80, 2));
+                    AddItems(ref itemList, 80, 2);
                     break;
             }
 
             return itemList;
         }
+
+        private static void AddItems(ref List<Item> itemList, int id, int num)
+        {
+            for (int i = 0; i < num; i++)
+            {
+                itemList.Add(ObjectManager.GetItem(id, 1));
+            }
+        }
+
         public static List<Item> DropItemsFromMob(int id)
         {
             List<Item> itemList = new List<Item>();

@@ -89,6 +89,8 @@ namespace RiverHollow.Game_Managers
                         return new AdventureMap(id, _itemDataValues, num);
                     case "Combat":
                         return new CombatItem(id, _itemDataValues, num);
+                    case "Class":
+                        return new ClassItem(id, _itemDataValues, num);
                 }
             }
             return null;

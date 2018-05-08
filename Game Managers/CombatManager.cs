@@ -5,7 +5,6 @@ using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
-using System;
 
 namespace RiverHollow.Game_Managers
 {
@@ -57,7 +56,7 @@ namespace RiverHollow.Game_Managers
             TurnIndex = 0;
             ActiveCharacter = TurnOrder[TurnIndex];
 
-            GameManager.GoToCombat();
+            GoToCombat();
             SetPhaseForTurn();
             PlayerManager.DecreaseStamina(1);
         }
@@ -189,7 +188,7 @@ namespace RiverHollow.Game_Managers
             if (PartyUp())
             {
                 foreach (CombatAdventurer a in _listParty) { a.AddXP(_xpValue); }
-                MapManager.DropWorldItems(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
+                MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
             }
             MapManager.RemoveMob(_mob);
             _mob = null;

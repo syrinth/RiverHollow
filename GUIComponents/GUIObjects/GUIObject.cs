@@ -317,7 +317,7 @@ namespace RiverHollow.GUIObjects
                     this.SetX(focus.DrawRectangle.Center.X - this.Width/2);
                     break;
                 case SideEnum.CenterY:
-                    this.SetX(focus.DrawRectangle.Center.Y - this.Height/2);
+                    this.SetY(focus.DrawRectangle.Center.Y - this.Height/2);
                     break;
                 default:
                     break;

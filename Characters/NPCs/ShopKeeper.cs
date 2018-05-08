@@ -77,6 +77,7 @@ namespace RiverHollow.Characters.NPCs
                 }
                 
                 GUIManager.SetScreen(new PurchaseBuildingsScreen(dialogueEntries));
+                GameManager.ClearGMObjects();
             }
             else if (entry.Equals("BuyWorkers"))
             {
@@ -85,12 +86,14 @@ namespace RiverHollow.Characters.NPCs
                     if (m._type == Merchandise.ItemType.Worker) { dialogueEntries.Add(m); }
                 }
                 GUIManager.SetScreen(new PurchaseWorkersScreen(dialogueEntries));
+                GameManager.ClearGMObjects();
             }
             else if (entry.Equals("SellWorkers"))
             {
                 ManagementScreen s = new ManagementScreen();
                 s.Sell();
                 GUIManager.SetScreen(s);
+                GameManager.ClearGMObjects();
             }
             else if (entry.Equals("Move"))
             {
@@ -99,11 +102,13 @@ namespace RiverHollow.Characters.NPCs
                 GameManager.MoveBuilding();
                 Camera.UnsetObserver();
                 MapManager.ViewMap(MapManager.HomeMap);
+                GameManager.ClearGMObjects();
             }
             else if (entry.Equals("UpgradeBuilding"))
             {
                 ManagementScreen m = new ManagementScreen(ActionTypeEnum.Upgrade);
                 GUIManager.SetScreen(m);
+                GameManager.ClearGMObjects();
             }
             else if (entry.Equals("Destroy"))
             {
@@ -112,6 +117,7 @@ namespace RiverHollow.Characters.NPCs
                 GameManager.DestroyBuilding();
                 Camera.UnsetObserver();
                 MapManager.ViewMap(MapManager.HomeMap);
+                GameManager.ClearGMObjects();
             }
             else if (entry.Contains("Upgrade"))
             {
@@ -140,6 +146,7 @@ namespace RiverHollow.Characters.NPCs
                     }
                     theUpgrade.Enabled = true;
                     GameManager.BackToMain();
+                    GameManager.ClearGMObjects();
                 }
             }
             else

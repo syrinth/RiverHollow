@@ -13,7 +13,7 @@ namespace RiverHollow.WorldObjects
 {
     public class Item
     {
-        public enum ItemEnum { Resource, Equipment, Tool, Container, Food, Map, Combat, StaticItem  };
+        public enum ItemEnum { Resource, Class, Equipment, Tool, Container, Food, Map, Combat, StaticItem  };
 
         #region properties
         protected ItemEnum _itemType;
@@ -212,10 +212,13 @@ namespace RiverHollow.WorldObjects
             return rv;
         }
 
+        public virtual void UseItem() { }
+
         public bool IsTool() { return _itemType == ItemEnum.Tool; }
         public bool IsCombatItem() { return _itemType == ItemEnum.Combat; }
         public bool IsEquipment() { return _itemType == ItemEnum.Equipment; }
         public bool IsFood() { return _itemType == ItemEnum.Food; }
+        public bool IsClassItem() { return _itemType == ItemEnum.Class; }
         public bool IsContainer() { return _itemType == ItemEnum.Container; }
         public bool IsStaticItem() { return _itemType == ItemEnum.StaticItem; }
 
@@ -382,6 +385,17 @@ namespace RiverHollow.WorldObjects
 
             return rv;
         }
+
+        public override void UseItem()
+        {
+            if (Number > 0)
+            {
+                Remove(1);
+                PlayerManager.IncreaseStamina(Stamina);
+                PlayerManager.Combat.IncreaseHealth(Health);
+            }
+            BackToMain();
+        }
     }
 
     public class AdventureMap : Item
@@ -444,6 +458,30 @@ namespace RiverHollow.WorldObjects
             rv = rv.Trim();
 
             return rv;
+        }
+    }
+
+    public class ClassItem : Item
+    {
+        private int _iClassID; 
+
+        public ClassItem(int id, string[] stringData, int num)
+        {
+            int i = ImportBasics(stringData, id, num);
+            _iClassID = int.Parse(stringData[i++]);
+
+            _doesItStack = false;
+            _texture = GameContentManager.GetTexture(@"Textures\items");
+        }
+
+        public override void UseItem()
+        {
+            if (Number > 0)
+            {
+                Remove(1);
+                PlayerManager.SetClass(_iClassID);
+            }
+            BackToMain();
         }
     }
 }

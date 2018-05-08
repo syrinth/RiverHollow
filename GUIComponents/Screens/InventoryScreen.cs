@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Screens;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.WorldObjects;
 using RiverHollow.GUIObjects;
 using RiverHollow.Characters;
 using System.Collections.Generic;

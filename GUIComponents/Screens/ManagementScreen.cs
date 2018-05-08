@@ -319,7 +319,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         {
                             if (_parent.Selling())
                             {
-                                _parent.AddTextSelection(w.Worker, "Really sell contract? [Yes:SellContract|No:DoNothing]");
+                                GameManager.gmNPC = w.Worker;
+                                _parent.AddTextSelection("Really sell contract? [Yes:SellContract|No:DoNothing]");
                             }
                             else
                             {

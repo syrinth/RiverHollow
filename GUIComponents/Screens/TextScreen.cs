@@ -35,7 +35,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
 
         public TextScreen(KeyDoor door, string text) : this()
         {
-            _window = new GUITextSelectionWindow(door, text);
+            GameManager.gmDoor = door;
+            _window = new GUITextSelectionWindow(text);
             Controls.Add(_window);
         }
 
@@ -43,6 +44,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
         {
             if (text.Contains("["))
             {
+                
                 _window = new GUITextSelectionWindow(talker, text);
             }
             else
@@ -54,7 +56,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
 
         public TextScreen(Spirit talker, string text) : this()
         {
-            _window = new GUITextWindow(talker, text);
+            GameManager.gmSpirit = talker;
+            _window = new GUITextWindow(text);
 
             Controls.Add(_window);
         }
