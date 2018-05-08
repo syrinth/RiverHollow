@@ -178,7 +178,7 @@ namespace RiverHollow.Characters.NPCs
             }
             else if (entry.Equals("Craft"))
             {
-                GUIManager.SetScreen(new ItemCreationScreen(this));
+                GUIManager.SetScreen(new CraftingScreen(this));
             }
             else if (entry.Equals("Party"))
             {

@@ -601,7 +601,7 @@ namespace RiverHollow.WorldObjects
                 public override bool Processing() { return _currentlyMaking != null; }
                 public override void ProcessClick()
                 {
-                    GUIManager.SetScreen(new ItemCreationScreen(this));
+                    GUIManager.SetScreen(new CraftingScreen(this));
                 }
 
                 public void MakeChosenItem(int itemID)

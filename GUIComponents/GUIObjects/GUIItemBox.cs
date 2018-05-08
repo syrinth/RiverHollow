@@ -6,6 +6,8 @@ using RiverHollow.GUIObjects;
 using RiverHollow.Characters.NPCs;
 using RiverHollow.GUIComponents.GUIObjects;
 using static RiverHollow.WorldObjects.Equipment;
+using static RiverHollow.Game_Managers.ObjectManager;
+using System.Collections.Generic;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
@@ -13,15 +15,20 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
     {
         private Item _item;
         public Item Item => _item;
-        public bool Open = true;
-        private bool _hover;
+        protected bool _hover;
         private GUITextWindow _textWindow;
+        private GUIWindow _reqWindow;
         private GUIText _textNum;
+        Recipe _recipe;
+        List<GUIObject> _liItemReqs;
+
+        bool _bCrafting;
 
         public EquipmentEnum ItemType;
 
-        public GUIItemBox(Vector2 position, Rectangle sourceRect, int width, int height, string texture, Item item, EquipmentEnum e = EquipmentEnum.None) : base(position, sourceRect, width, height, texture)
+        public GUIItemBox(Vector2 position, Rectangle sourceRect, int width, int height, string texture, Item item, EquipmentEnum e = EquipmentEnum.None, bool crafting = false) : base(position, sourceRect, width, height, texture)
         {
+            _bCrafting = crafting;
             SetItem(item);
             ItemType = e;
         }
@@ -45,6 +52,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             if (_textWindow != null) {
                 _textWindow.Draw(spriteBatch, true);
             }
+            if (_reqWindow != null)
+            {
+                _reqWindow.Draw(spriteBatch);
+            }
 
             return _hover;
         }
@@ -60,6 +71,23 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                     _textWindow = new GUITextWindow(mouse.ToVector2(), _item.GetDescription());
                     _textWindow.Position(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32));
                     _textWindow.Resize();
+
+                    if (_bCrafting)
+                    {
+                        _reqWindow = new GUIWindow(GUIWindow.RedWin, _liItemReqs[0].Width, _liItemReqs[0].Height * _liItemReqs.Count);
+                        _reqWindow.Position(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32));
+                        _reqWindow.AnchorAndAlignToObject(_textWindow, SideEnum.Bottom, SideEnum.Left);
+                        for (int i=0; i < _liItemReqs.Count; i++)
+                        {
+                            GUIObject r = _liItemReqs[i];
+                            if (i == 0) { r.AnchorToInnerSide(_reqWindow, SideEnum.TopLeft); }
+                            else
+                            {
+                                r.AnchorAndAlignToObject(_liItemReqs[i - 1], SideEnum.Bottom, SideEnum.Left);
+                            }
+                        }
+                        _reqWindow.Resize();
+                    }
                 }
                 rv = true;
             }
@@ -67,6 +95,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             {
                 _hover = false;
                 _textWindow = null;
+                _reqWindow = null;
             }
             return rv;
         }
@@ -79,6 +108,15 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 _textNum = new GUIText(_item.Number.ToString(), @"Fonts\DisplayFont");
                 _textNum.SetColor(Color.White);
                 _textNum.AnchorToInnerSide(this, SideEnum.BottomRight, 10);
+            }
+            if (_item != null && _bCrafting)
+            {
+                _liItemReqs = new List<GUIObject>();
+                _recipe = DictCrafting[_item.ItemID];
+                foreach (KeyValuePair<int, int> kvp in _recipe.RequiredItems)
+                {
+                    _liItemReqs.Add(new GUIItemReq(kvp.Key, kvp.Value));
+                }
             }
         }
     }
@@ -112,6 +150,36 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         public override bool Contains(Point mouse)
         {
             return _workerWindow.Contains(mouse);
+        }
+    }
+
+    public class GUIItemReq : GUIObject
+    {
+        GUIImage _gImg;
+        GUIText _gText;
+
+        public GUIItemReq(int id, int number)
+        {
+            Item it = ObjectManager.GetItem(id);
+            _gImg = new GUIImage(Vector2.Zero, it.SourceRectangle, it.SourceRectangle.Width, it.SourceRectangle.Height, it.Texture);
+            _gImg.SetScale(GameManager.Scale);
+            _gText = new GUIText(number.ToString());
+            Width = _gImg.Width + _gText.Width;
+            Height = _gImg.Height;
+            Position(Vector2.Zero);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            _gImg.Draw(spriteBatch);
+            _gText.Draw(spriteBatch);
+        }
+
+        public override void Position(Vector2 value)
+        {
+            base.Position(value);
+            _gImg.Position(value);
+            _gText.AnchorAndAlignToObject(_gImg, SideEnum.Right, SideEnum.Bottom);
         }
     }
 }

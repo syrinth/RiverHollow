@@ -249,7 +249,7 @@ namespace RiverHollow
                         }
                         else
                         {
-                            GUIManager.SetScreen(new ItemCreationScreen());
+                            GUIManager.SetScreen(new CraftingScreen());
                         }
                     }
                 }

@@ -1,7 +1,6 @@
 ﻿using RiverHollow.Characters.NPCs;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.GUIObjects;
-using RiverHollow.WorldObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -184,7 +183,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                 for(int i=0; i< _merch.RequiredItems.Count; i++)
                 {
                     KeyValuePair<int, int> kvp = _merch.RequiredItems[i];
-                    ItemCost it = new ItemCost(kvp.Key, kvp.Value);
+                    GUIItemReq it = new GUIItemReq(kvp.Key, kvp.Value);
                     _liReqs.Add(it);
                 }
 
@@ -197,39 +196,9 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                 _mainWindow.Draw(spriteBatch);
                 _giBuilding.Draw(spriteBatch);
                 _gText.Draw(spriteBatch);
-                foreach (ItemCost c in _liReqs)
+                foreach (GUIItemReq c in _liReqs)
                 {
                     c.Draw(spriteBatch);
-                }
-            }
-
-            public class ItemCost : GUIObject
-            {
-                GUIImage _gImg;
-                GUIText _gText;
-
-                public ItemCost(int id, int number)
-                {
-                    Item it = ObjectManager.GetItem(id);
-                    _gImg = new GUIImage(Vector2.Zero, it.SourceRectangle, it.SourceRectangle.Width, it.SourceRectangle.Height, it.Texture);
-                    _gImg.SetScale(GameManager.Scale);
-                    _gText = new GUIText(number.ToString());
-                    Width = _gImg.Width + _gText.Width;
-                    Height = _gImg.Height;
-                    Position(Vector2.Zero);
-                }
-
-                public override void Draw(SpriteBatch spriteBatch)
-                {
-                    _gImg.Draw(spriteBatch);
-                    _gText.Draw(spriteBatch);
-                }
-
-                public override void Position(Vector2 value)
-                {
-                    base.Position(value);
-                    _gImg.Position(value);
-                    _gText.AnchorAndAlignToObject(_gImg, SideEnum.Right, SideEnum.Bottom);
                 }
             }
         }

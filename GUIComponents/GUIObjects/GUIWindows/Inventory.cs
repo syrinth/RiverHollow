@@ -142,17 +142,20 @@ namespace RiverHollow.Screens
                 {
                     if (InventoryManager.PublicContainer == null)
                     {
-                        string text = string.Empty;
-                        GameManager.gmActiveItem = i;
-                        if (i.IsFood())
+                        if (i.IsFood() || i.IsClassItem())
                         {
-                            text = GameContentManager.GetDialogue("FoodConfirm");
+                            string text = string.Empty;
+                            GameManager.gmActiveItem = i;
+                            if (i.IsFood())
+                            {
+                                text = GameContentManager.GetDialogue("FoodConfirm");
+                            }
+                            else if (i.IsClassItem())
+                            {
+                                text = GameContentManager.GetDialogue("ClassItemConfirm");
+                            }
+                            GUIManager.AddTextSelection(string.Format(text, i.Name));
                         }
-                        else if (i.IsClassItem())
-                        {
-                            text = GameContentManager.GetDialogue("ClassItemConfirm");
-                        }
-                        GUIManager.AddTextSelection(string.Format(text, i.Name));
                     }
                     else
                     {

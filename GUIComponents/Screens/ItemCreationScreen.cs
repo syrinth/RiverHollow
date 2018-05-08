@@ -14,7 +14,7 @@ using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
-    class ItemCreationScreen : GUIScreen
+    class CraftingScreen : GUIScreen
     {
         const int _iBoxSize = 64;
         const int _iMargin = 3;
@@ -29,7 +29,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
         private int _rows;
         private int _columns;
 
-        public ItemCreationScreen()
+        public CraftingScreen()
         {
             Setup(ObjectManager.DictCrafting);
 
@@ -37,7 +37,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             Controls.Add(_inventory);
         }
 
-        public ItemCreationScreen(Crafter crafter)
+        public CraftingScreen(Crafter crafter)
         {
             _craftMachine = crafter;
             Setup(crafter.CraftList);
@@ -46,7 +46,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             Controls.Add(_inventory);
         }
 
-        public ItemCreationScreen(WorldAdventurer crafter)
+        public CraftingScreen(WorldAdventurer crafter)
         {
             _craftAdventurer = crafter;
             Setup(crafter.CraftList);
@@ -84,16 +84,16 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             _creationWindow.AnchorAndAlignToObject(_inventory, SideEnum.Top, SideEnum.CenterX);
 
             List<GUIObject> liWins = new List<GUIObject>() { _creationWindow, _inventory };
-            GUIObject.CenterAndAlignToScreen(ref liWins);
+            CenterAndAlignToScreen(ref liWins);
 
             int i = 0; int j = 0;
             List<GUIObject> boxes = new List<GUIObject>();
             foreach (int id in canMake)
             {
-                boxes.Add(new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), _iBoxSize, _iBoxSize, @"Textures\Dialog", ObjectManager.GetItem(id)));
+                boxes.Add(new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), _iBoxSize, _iBoxSize, @"Textures\Dialog", GetItem(id), WorldObjects.Equipment.EquipmentEnum.None, true));
             }
 
-            GUIObject.CreateSpacedGrid(ref boxes, _creationWindow.InnerTopLeft() + new Vector2(_iMargin, _iMargin), _creationWindow.MidWidth()-2*_iMargin, _columns);
+            CreateSpacedGrid(ref boxes, _creationWindow.InnerTopLeft() + new Vector2(_iMargin, _iMargin), _creationWindow.MidWidth()-2*_iMargin, _columns);
 
             foreach (GUIObject g in boxes)
             {
@@ -118,7 +118,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                     {
                         //Check that all required items are there first
                         bool create = true;
-                        foreach(KeyValuePair<int, int> kvp in ObjectManager.DictCrafting[gIB.Item.ItemID].RequiredItems)
+                        foreach(KeyValuePair<int, int> kvp in DictCrafting[gIB.Item.ItemID].RequiredItems)
                         {
                             if(!InventoryManager.HasItemInInventory(kvp.Key, kvp.Value))
                             {
@@ -158,6 +158,19 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             {
                 GameManager.BackToMain();
                 rv = true;
+            }
+            return rv;
+        }
+
+        public override bool ProcessHover(Point mouse)
+        {
+            bool rv = false;
+            if (_creationWindow.Contains(mouse))
+            {
+                foreach (GUIItemBox gIB in _displayList)
+                {
+                    rv = gIB.ProcessHover(mouse);
+                }
             }
             return rv;
         }
