@@ -32,8 +32,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         protected const int SpaceFromBottom = 32;
 
-        protected int _iInnerBorder = 8;
-
         protected WindowData _winData;
         public int EdgeSize { get => _winData.Edge; }
 
@@ -171,10 +169,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             return _winData.Edge * 2;
         }
 
-        public int InnerLeft() { return MidStartX() + _iInnerBorder; }
-        public int InnerTop() { return MidStartY() + _iInnerBorder; }
-        public int InnerRight() { return EndStartX() - _iInnerBorder; }
-        public int InnerBottom() { return EndStartY() - _iInnerBorder; }
+        public int InnerLeft() { return MidStartX(); }
+        public int InnerTop() { return MidStartY(); }
+        public int InnerRight() { return EndStartX(); }
+        public int InnerBottom() { return EndStartY(); }
 
         public Vector2 OuterTopLeft() { return Position(); }
         public Vector2 OuterTopRight() { return Position() + new Vector2(Width, 0); }

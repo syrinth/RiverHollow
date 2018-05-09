@@ -4,17 +4,19 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters.NPCs;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
     class GUITextInputWindow : GUITextWindow
     {
         int _strLen;
-        string _statement;
         int _maxLength = 10;
         WorldAdventurer _w;
         WorkerBuilding _b;
         SideEnum _textLoc;
+        GUIText _gStatement;
+        GUIText _gText;
 
         public GUITextInputWindow() : base()
         {
@@ -22,30 +24,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             GameManager.Pause();
         }
 
-        public GUITextInputWindow(string statement) : this()
-        {
-            _statement = statement;
-            Width = Math.Max((int)_font.MeasureString(_statement).X, (int)_characterWidth * 10) + _iInnerBorder * 2;
-            Height = (int)_characterHeight * 2 + _iInnerBorder * 2;
-            Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
-            _strLen = 0;
-            _text = string.Empty;
-        }
-
         public GUITextInputWindow(string statement, SideEnum textLoc) : this()
         {
-            _statement = statement;
+            StatementSetup(statement, textLoc);
             _textLoc = textLoc;
-            if (_textLoc == SideEnum.Top)
-            {
-                Width = Math.Max((int)_font.MeasureString(_statement).X, (int)_characterWidth * 10) + _iInnerBorder * 2;
-                Height = (int)_characterHeight * 2 + _iInnerBorder * 2;
-            }
-            else if (_textLoc == SideEnum.Left)
-            {
-                Width = (int)_font.MeasureString(_statement).X + (int)_characterWidth * 10 + _iInnerBorder * 2;
-                Height = (int)_characterHeight + _iInnerBorder * 2;
-            }
             Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
             _strLen = 0;
             _text = string.Empty;
@@ -54,9 +36,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public GUITextInputWindow(WorldAdventurer w) : this()
         {
             _textLoc = SideEnum.Top;
-            _statement = "Enter name:";
-            Width = Math.Max((int)_font.MeasureString(_statement).X, (int)_characterWidth * 10) + _iInnerBorder * 2;
-            Height = (int)_characterHeight * 2 + _iInnerBorder * 2;
+            StatementSetup("Enter name:");
+            Width = Math.Max(_gStatement.Width, (int)_characterWidth * 10);
+            Height = (int)_characterHeight * 2;
             Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
             _strLen = 0;
             _w = w;
@@ -66,9 +48,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public GUITextInputWindow(WorkerBuilding b) : this()
         {
             _textLoc = SideEnum.Top;
-            _statement = "Name Building:";
-            Width = Math.Max((int)_font.MeasureString(_statement).X, (int)_characterWidth * 10) + _iInnerBorder * 2;
-            Height = (int)_characterHeight * 2 + _iInnerBorder * 2;
+            StatementSetup("Name Building:");
+            Width = Math.Max(_gStatement.Width, (int)_characterWidth * 10);
+            Height = (int)_characterHeight * 2;
             Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
             _strLen = 0;
             _b = b;
@@ -79,6 +61,40 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         {
             _strLen = 0;
             _text = text;
+        }
+
+        private void StatementSetup(string text, SideEnum textLoc = SideEnum.Top)
+        {
+            _gStatement = new GUIText(text);
+
+            if (textLoc == SideEnum.Top)
+            {
+                Width = Math.Max(_gStatement.Width, (int)_characterWidth * 10);
+                Height = _gStatement.Height*2;
+            }
+            else if (textLoc == SideEnum.Left)
+            {
+                Width = _gStatement.Width + (int)_characterWidth * 10;
+                Height = _gStatement.Height;
+            }
+
+            _gStatement.AnchorToInnerSide(this, SideEnum.TopLeft);
+            _gStatement.SetColor(Color.White);
+
+            _gText = new GUIText();
+            _gStatement.SetColor(Color.White);
+
+            if (textLoc == SideEnum.Top)
+            {
+                _gText.AnchorAndAlignToObject(_gStatement, SideEnum.Bottom, SideEnum.Left);
+            }
+            else if (textLoc == SideEnum.Left)
+            {
+                _gText.AnchorAndAlignToObject(_gStatement, SideEnum.Right, SideEnum.Bottom, 10);
+            }
+            Controls.Add(_gText);
+            
+            Resize();
         }
 
         public override void Update(GameTime gameTime)
@@ -111,32 +127,20 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                     else
                     {
                         string input = InputManager.GetCharFromKey(k);
-                        if (input != "--" && _strLen < _maxLength)
+                        if (input != "--" && _gText.Length < _maxLength)
                         {
-                            _text = _text.Insert(_strLen++, input);
+                            _gText.Insert(input);
                         }
                         else if (input == "--")
                         {
-                            if (_text.Length > 0)
+                            if (_gText.Length > 0)
                             {
-                                _text = _text.Remove(--_strLen);
+                                _gText.RemoveLast();
                             }
                         }
                     }
                 }
             }
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-            int posX = (int)Position().X;
-            Vector2 stringLen = _font.MeasureString(_statement+"X");
-            spriteBatch.DrawString(_font, _statement, new Vector2(posX + _iInnerBorder, Position().Y + _iInnerBorder), Color.White);
-
-            int startX = (_textLoc == SideEnum.Top) ? (posX + _iInnerBorder) : posX + (int)stringLen.X;
-            int addition = (_textLoc == SideEnum.Top) ? 28 : 0;
-            spriteBatch.DrawString(_font, _text, new Vector2(startX, Position().Y + _iInnerBorder + addition), Color.White);
         }
 
         public string GetText()

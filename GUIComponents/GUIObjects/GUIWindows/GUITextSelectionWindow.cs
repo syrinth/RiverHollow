@@ -25,7 +25,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public GUITextSelectionWindow(string selectionText) : base()
         {
             Setup(selectionText);
-            Width = (int)_font.MeasureString(_text).X + _iInnerBorder * 2 + 6; //6 is adding a bit of arbitrary extra space for the parsing. Exactsies are bad
+            Width = (int)_font.MeasureString(_text).X  + 6; //6 is adding a bit of arbitrary extra space for the parsing. Exactsies are bad
             Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
             PostParse();
         }
@@ -56,9 +56,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public void PostParse()
         {
             ParseText(_text);
-            Height = (((_numReturns + 1) + _diOptions.Count) * (int)_characterHeight + _iInnerBorder * 2);
+            Height = (((_numReturns + 1) + _diOptions.Count) * (int)_characterHeight);
             _iOptionsOffsetY = Math.Max((int)_characterHeight, (int)((_numReturns + 1) * _characterHeight));
-            _giSelection = new GUIImage(new Vector2((int)Position().X + _iInnerBorder, (int)Position().Y + _iInnerBorder + _iOptionsOffsetY), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+            _giSelection = new GUIImage(new Vector2((int)Position().X, (int)Position().Y + _iOptionsOffsetY), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
         }
 
         private void SeparateText(string selectionText)
@@ -136,8 +136,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            int xindex = (int)Position().X + _iInnerBorder;
-            int yIndex = (int)Position().Y + _iInnerBorder;
+            int xindex = (int)Position().X;
+            int yIndex = (int)Position().Y;
             foreach (string s in _parsedStrings)
             {
                 spriteBatch.DrawString(_font, s, new Vector2(xindex, yIndex), Color.White);
@@ -225,7 +225,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         {
             _iKeySelection = 0;
             _diOptions.Clear();
-            _giSelection = new GUIImage(new Vector2((int)Position().X + _iInnerBorder, (int)Position().Y + _iInnerBorder), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+            _giSelection = new GUIImage(new Vector2((int)Position().X, (int)Position().Y), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
         }
     }
 }
