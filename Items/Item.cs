@@ -21,6 +21,7 @@ namespace RiverHollow.WorldObjects
         public ItemEnum ItemType { get => _itemType; }
         protected int _itemID;
         public int ItemID { get => _itemID; }
+        protected Color _c = Color.White;
 
         protected double _dWidth = 16;
         protected double _dHeight = 16;
@@ -136,11 +137,11 @@ namespace RiverHollow.WorldObjects
 
             if (LayerDepth)
             {
-                spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, (int)_dWidth, (int)_dHeight), Color.White, 0, Vector2.Zero, SpriteEffects.None, 99999);
+                spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, (int)_dWidth, (int)_dHeight), _c, 0, Vector2.Zero, SpriteEffects.None, 99999);
             }
             else
             {
-                spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, (int)_dWidth, (int)_dHeight), Color.White);
+                spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, (int)_dWidth, (int)_dHeight), _c);
             }
 
             drawBox.X = tempX;
@@ -467,7 +468,7 @@ namespace RiverHollow.WorldObjects
 
     public class ClassItem : Item
     {
-        private int _iClassID; 
+        private int _iClassID;
 
         public ClassItem(int id, string[] stringData, int num)
         {
@@ -484,6 +485,22 @@ namespace RiverHollow.WorldObjects
             string n = CharacterManager.GetClassByIndex(_iClassID).Name;
             _name += n;
             _description += n;
+
+            switch (_iClassID)
+            {
+                case 1:
+                    _c = Color.Cyan;
+                    break;
+                case 2:
+                    _c = Color.LightGray;
+                    break;
+                case 3:
+                    _c = Color.Blue;
+                    break;
+                case 4:
+                    _c = Color.Yellow;
+                    break;
+            }
         }
 
         public override void UseItem()
