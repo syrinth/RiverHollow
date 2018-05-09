@@ -2,157 +2,121 @@
 using RiverHollow.Game_Managers.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using RiverHollow.GUIComponents.GUIObjects;
 using System.Collections.Generic;
+using System;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
     public class GUITextWindow : GUIWindow
     {
-        private GUIImage _next;
-        protected SpriteFont _font;
-        protected string _text;
+        GUIImage _next;
+        string _sFontName = @"Fonts\Font";
+
         public double Duration;
 
         protected const int _maxRows = 3;
-        protected float _characterWidth;
-        protected float _characterHeight;
 
-        protected string _typedText = string.Empty;
-        double typedTextLength;
-        int delayInMilliseconds = 10;
-        public bool printAll = false;
-        private bool _doneDrawing = false;
-        public bool Done { get => _doneDrawing; }
-        protected List<string> _parsedStrings;
-        bool finishedScreen = false;
+        #region Parsing
+        protected List<GUIText> _liText;
 
-        protected int _currentParsedString = 0;
-        public bool _pause = false;
+        protected int _iCurrText = 0;
+
         protected int _numReturns = 0;
 
-        protected GUITextWindow() : base()
-        {
-            _font = GameContentManager.GetFont(@"Fonts\Font");
-            _characterHeight = _font.MeasureString("Q").Y;
-            _characterWidth = _font.MeasureString("_").X;
-            _parsedStrings = new List<string>();
+        protected int _iCharHeight;
+        protected int _iCharWidth;
+        #endregion
+
+        #region Display
+        public bool Paused = false;
+        #endregion
+
+        public GUITextWindow() : base() {
+            _liText = new List<GUIText> { new GUIText() };
+            _iCharWidth = _liText[0].CharWidth;
+            _iCharHeight = _liText[0].CharHeight;
         }
 
         public GUITextWindow(NPC npc, string text) : this()
         {
-            _text = text;
-            Height = Math.Max(Height, ((int)_characterHeight * _maxRows));
-            _next = new GUIImage(Vector2.Zero, new Rectangle(288, 64, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+            ParseText(text, true);
+            Height = Math.Max(Height, (_iCharHeight * _maxRows));
+
+            _next = new GUIImage(Vector2.Zero, new Rectangle(288, 64, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");     //???
             _next.AnchorToInnerSide(this, SideEnum.BottomRight);
-
-            ParseText(text);
             GameManager.gmNPC = npc;
-        }
-
-        public GUITextWindow(Vector2 position, string text) : this()
-        {
-            _text = text;
-            ParseText(_text);
-            Vector2 vMeasure = _font.MeasureString(_text);
-
-            Height = (int)vMeasure.Y;
-            Width = (int)vMeasure.X;
-            Position(PositionSub(new Vector2(Width / 2, Height / 2)));
         }
 
         public GUITextWindow(string text) : this()
         {
-            _text = text;
             ParseText(text);
 
-            Height = (int)_parsedStrings.Count * (int)_characterHeight;
-            Width = (int)_font.MeasureString(_text).X;
-            Vector2 pos = new Vector2(RiverHollow.ScreenWidth/2, RiverHollow.ScreenHeight/2);
-            Position(PositionSub(new Vector2(Width / 2, Height / 2)));
+            Height = (int)_liText[0].TextSize.Y;
+            Width = (int)_liText[0].TextSize.X;
+            _liText[0].AnchorToInnerSide(this, SideEnum.TopLeft);
+        }
+
+        public GUITextWindow(Vector2 position, string text) : this()
+        {
+            ParseText(text);
+
+            Height = (int)_liText[0].TextSize.Y;
+            Width = (int)_liText[0].TextSize.X;
+            Position(position);
+            _liText[0].AnchorToInnerSide(this, SideEnum.TopLeft);
+            Resize();
         }
 
         public GUITextWindow(string text, double duration) : this()
         {
-            _text = text;
-            Duration = duration;
             ParseText(text);
+            Duration = duration;
 
-            Height = (int)_parsedStrings.Count * (int)_characterHeight;
-            Width = (int)_font.MeasureString(_text).X;
-            Vector2 pos = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
+            Height = _liText.Count * _iCharHeight;
+            Width = (int)_liText[0].TextSize.X;
             Position(PositionSub(new Vector2(Width / 2, Height / 2)));
         }
 
         public override void Update(GameTime gameTime)
         {
-            if (_pause && _next != null)
+            if (_iCurrText < _liText.Count)
             {
-                _next.Update(gameTime);
-            }
-
-            if(Duration > 0) { Duration -= gameTime.ElapsedGameTime.TotalSeconds; }
-            if (!printAll)
-            {
-                if (!_doneDrawing && !_pause)
+                if (ShowNextButton())
                 {
-                    if (finishedScreen)
-                    {
-                        finishedScreen = false;
-                        _currentParsedString++;
-                        _typedText = string.Empty;
-                        typedTextLength = 0;
-
-                        if (_currentParsedString == _parsedStrings.Count)
-                        {
-                            _currentParsedString--;
-                            typedTextLength = _parsedStrings[_currentParsedString].Length;
-                            _doneDrawing = true;
-                        }
-                    }
-                    if (delayInMilliseconds == 0)
-                    {
-                        _currentParsedString++;
-                        _typedText = string.Empty;
-                        delayInMilliseconds = 10;
-                        if (_currentParsedString == _parsedStrings.Count)
-                        {
-                            _doneDrawing = true;
-                        }
-                    }
-                    else if (typedTextLength < _parsedStrings[_currentParsedString].Length)
-                    {
-                        typedTextLength = (int)(typedTextLength + gameTime.ElapsedGameTime.TotalMilliseconds / delayInMilliseconds);
-
-                        if (typedTextLength >= _parsedStrings[_currentParsedString].Length)
-                        {
-                            _pause = true;
-                            finishedScreen = true;
-                        }
-
-                        _typedText = _parsedStrings[_currentParsedString].Substring(0, (int)typedTextLength);
-                    }
+                    _next.Update(gameTime);
                 }
-            }
-            else
-            {
-                _typedText = _parsedStrings[_currentParsedString++];
-                printAll = false;
-                _pause = true;
-                if (_currentParsedString == _parsedStrings.Count)
+
+                if (Duration > 0) { Duration -= gameTime.ElapsedGameTime.TotalSeconds; }
+                _liText[_iCurrText].Update(gameTime);
+
+                if (_liText[_iCurrText].Done)
                 {
-                    _doneDrawing = true;
+                    Paused = true;
                 }
             }
         }
 
-        public void Unpause()
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            _pause = false;
-            typedTextLength = 0;
+            if (_iCurrText < _liText.Count)
+            {
+                base.Draw(spriteBatch);
+            
+                _liText[_iCurrText].Draw(spriteBatch);
+                if (ShowNextButton())
+                {
+                    _next.Draw(spriteBatch);
+                }
+
+                if (GameManager.gmNPC != null)
+                {
+                    GameManager.gmNPC.DrawPortrait(spriteBatch, new Vector2(InnerTopLeft().X, InnerTopLeft().Y - EdgeSize));
+                }
+            }
         }
 
-        protected void ParseText(string text)
+        protected void ParseText(string text, bool printAll = false)
         {
             bool grabLast = true;
             _numReturns = 0;
@@ -162,10 +126,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
             foreach (string word in wordArray)
             {
-                Vector2 measure = _font.MeasureString(line + word);
+                Vector2 measure = _liText[0].MeasureString(line + word);
 
                 if (measure.Length() >= (Width) ||
-                    _numReturns == _maxRows-1 && measure.Length() >= (Width) - _characterHeight)
+                    _numReturns == _maxRows - 1 && measure.Length() >= (Width) - _liText[0].CharHeight)
                 {
                     returnString = returnString + line + '\n';
                     line = string.Empty;
@@ -179,7 +143,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 if (measure.Y * _numReturns >= (Height))
                 {
                     grabLast = false;
-                    _parsedStrings.Add(returnString);
+                    GUIText t = new GUIText(returnString, printAll);
+                    t.AnchorToInnerSide(this, SideEnum.TopLeft);
+                    _liText.Add(t);
                     _numReturns = 0;
                     returnString = string.Empty;
                 }
@@ -187,28 +153,36 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
             if (grabLast)
             {
-                _parsedStrings.Add(returnString + line);
+                GUIText t = new GUIText(returnString + line, printAll);
+                t.AnchorToInnerSide(this, SideEnum.TopLeft);
+                _liText.Add(t);
+            }
+
+            if (string.IsNullOrEmpty(_liText[0].GetText()))
+            {
+                _liText.RemoveAt(0);
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        private bool ShowNextButton()
         {
-            Draw(spriteBatch, false);
+            return Paused && _next != null;
         }
 
-        public void Draw(SpriteBatch spriteBatch, bool force)
+        public void NextText()
         {
-            base.Draw(spriteBatch);
-            spriteBatch.DrawString(_font, force ? _text : _typedText, new Vector2(Position().X, Position().Y), Color.White);
-            if (_pause && _next != null)
-            {
-                _next.Draw(spriteBatch);
-            }
+            Paused = false;
+            _iCurrText++;
+        }
 
-            if (GameManager.gmNPC != null)
-            {
-                GameManager.gmNPC.DrawPortrait(spriteBatch, new Vector2(InnerTopLeft().X, InnerTopLeft().Y - EdgeSize));
-            }
+        public void PrintAll()
+        {
+            _liText[_iCurrText].PrintAll = true;
+        }
+
+        public bool Done()
+        {
+            return _iCurrText == _liText.Count && _liText[_iCurrText-1].Done;
         }
     }
 }

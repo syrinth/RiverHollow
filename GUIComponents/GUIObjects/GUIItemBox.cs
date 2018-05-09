@@ -43,14 +43,14 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             }
             if (_hover)
             {
-                if (_textWindow != null) { _textWindow.Draw(spriteBatch, true); }
+                if (_textWindow != null) { _textWindow.Draw(spriteBatch); }
             }
         }
 
         public bool DrawDescription(SpriteBatch spriteBatch)
         {
             if (_textWindow != null) {
-                _textWindow.Draw(spriteBatch, true);
+                _textWindow.Draw(spriteBatch);
             }
             if (_reqWindow != null)
             {
@@ -68,9 +68,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 _hover = true;
                 if (_item != null)
                 {
-                    _textWindow = new GUITextWindow(mouse.ToVector2(), _item.GetDescription());
-                    _textWindow.Position(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32));
-                    _textWindow.Resize();
+                    _textWindow = new GUITextWindow(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32), _item.GetDescription());
 
                     if (_bCrafting)
                     {
@@ -105,7 +103,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _item = it;
             if (_item != null && _item.DoesItStack)
             {
-                _textNum = new GUIText(_item.Number.ToString(), @"Fonts\DisplayFont");
+                _textNum = new GUIText(_item.Number.ToString(), false, @"Fonts\DisplayFont");
                 _textNum.SetColor(Color.White);
                 _textNum.AnchorToInnerSide(this, SideEnum.BottomRight, 10);
             }

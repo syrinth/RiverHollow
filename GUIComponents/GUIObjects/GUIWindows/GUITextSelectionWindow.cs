@@ -9,23 +9,24 @@ using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.Characters.NPCs;
 using RiverHollow.Characters;
 using RiverHollow.Misc;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUITextSelectionWindow : GUITextWindow
     {
+        string _sStatement;
         protected Point _poiMouse = Point.Zero;
-        protected Dictionary<int,string> _diOptions;
         protected GUIImage _giSelection;
         protected int _iKeySelection;
 
         protected int _iOptionsOffsetY;
+        List<GUIText> _liOptions;
 
-        protected GUITextSelectionWindow() : base() { }
         public GUITextSelectionWindow(string selectionText) : base()
         {
             Setup(selectionText);
-            Width = (int)_font.MeasureString(_text).X  + 6; //6 is adding a bit of arbitrary extra space for the parsing. Exactsies are bad
+            Width = (int)_liText[0].TextSize.X + 6; //6 is adding a bit of arbitrary extra space for the parsing. Exactsies are bad
             Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
             PostParse();
         }
@@ -55,24 +56,34 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         }
         public void PostParse()
         {
-            ParseText(_text);
-            Height = (((_numReturns + 1) + _diOptions.Count) * (int)_characterHeight);
-            _iOptionsOffsetY = Math.Max((int)_characterHeight, (int)((_numReturns + 1) * _characterHeight));
-            _giSelection = new GUIImage(new Vector2((int)Position().X, (int)Position().Y + _iOptionsOffsetY), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+            ParseText(_sStatement);
+            Height = (((_numReturns + 1) + _liOptions.Count) * _iCharHeight);
+            _iOptionsOffsetY = Math.Max(_iCharHeight, (int)((_numReturns + 1) * _iCharHeight));
+            _giSelection = new GUIImage(new Vector2((int)Position().X, (int)Position().Y + _iOptionsOffsetY), new Rectangle(288, 96, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");
+            _giSelection.AnchorAndAlignToObject(_liText[0], SideEnum.Bottom, SideEnum.Left);
+
+            foreach (GUIText t in _liOptions)
+            {
+                if (_liOptions[0] == t) { t.AnchorAndAlignToObject(_giSelection, SideEnum.Right, SideEnum.Bottom, 16); }
+                else { t.AnchorAndAlignToObject(_liOptions[_liOptions.Count - 1], SideEnum.Bottom, SideEnum.Left, 16); }
+            }
+            
         }
 
         private void SeparateText(string selectionText)
         {
-            _diOptions = new Dictionary<int, string>();
+            _liOptions = new List<GUIText>();
             string[] firstPass = selectionText.Split(new[] { '[', ']'}, StringSplitOptions.RemoveEmptyEntries);
             if (firstPass.Length > 0)
             {
-                _text = firstPass[0];
+                _sStatement = firstPass[0];
+
                 string[] secondPass = firstPass[1].Split('|');
-                int key = 0;
+                //int key = 0;
                 foreach (string s in secondPass)
                 {
-                    _diOptions.Add(key++, s);
+                    GUIText t = new GUIText(s);
+                    _liOptions.Add(t);
                 }
             }
         }
@@ -83,15 +94,15 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             {
                 if (_iKeySelection - 1 >= 0)
                 {
-                    _giSelection.MoveImageBy(new Vector2(0, -_characterHeight));
+                    _giSelection.MoveImageBy(new Vector2(0, -_iCharHeight));
                     _iKeySelection--;
                 }
             }
             else if (InputManager.CheckPressedKey(Keys.S) || InputManager.CheckPressedKey(Keys.Down))
             {
-                if (_iKeySelection + 1 < _diOptions.Count)
+                if (_iKeySelection + 1 < _liOptions.Count)
                 {
-                    _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
+                    _giSelection.MoveImageBy(new Vector2(0, _iCharHeight));
                     _iKeySelection++;
                 }
             }
@@ -103,12 +114,12 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                     _poiMouse = GraphicCursor.Position.ToPoint();
                     if (_iKeySelection - 1 >= 0 && GraphicCursor.Position.Y < _giSelection.Position().Y)
                     {
-                        _giSelection.MoveImageBy(new Vector2(0, -_characterHeight));
+                        _giSelection.MoveImageBy(new Vector2(0, -_iCharHeight));
                         _iKeySelection--;
                     }
-                    else if (_iKeySelection + 1 < _diOptions.Count && GraphicCursor.Position.Y > _giSelection.Position().Y + _giSelection.Height)
+                    else if (_iKeySelection + 1 < _liOptions.Count && GraphicCursor.Position.Y > _giSelection.Position().Y + _giSelection.Height)
                     {
-                        _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
+                        _giSelection.MoveImageBy(new Vector2(0, _iCharHeight));
                         _iKeySelection++;
                     }
                 }
@@ -122,7 +133,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         protected virtual void SelectAction()
         {
-            string action = _diOptions[_iKeySelection].Split(':')[1];
+            string action = _liOptions[_iKeySelection].GetText().Split(':')[1];
             if (GameManager.gmNPC == null || action.Equals("SellContract"))
             {
                 ProcessGameTextSelection(action);
@@ -138,19 +149,21 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             base.Draw(spriteBatch);
             int xindex = (int)Position().X;
             int yIndex = (int)Position().Y;
-            foreach (string s in _parsedStrings)
-            {
-                spriteBatch.DrawString(_font, s, new Vector2(xindex, yIndex), Color.White);
-            }
+
             _giSelection.Draw(spriteBatch);
 
-            xindex += 32;
-            yIndex += _iOptionsOffsetY;
-            foreach (KeyValuePair<int, string> kvp in _diOptions)
+            foreach(GUIText t in _liOptions)
             {
-                spriteBatch.DrawString(_font, kvp.Value.Split(':')[0], new Vector2(xindex, yIndex), Color.White);
-                yIndex += (int)_characterHeight;
+                t.Draw(spriteBatch);
             }
+
+            ////xindex += 32;
+            //yIndex += _iOptionsOffsetY;
+            //foreach (KeyValuePair<int, string> kvp in _diOptions)
+            //{
+            //    spriteBatch.DrawString(_font, kvp.Value.Split(':')[0], new Vector2(xindex, yIndex), Color.White);
+            //    yIndex += _iCharHeight;
+            //}
         }
 
         protected void DrawWindow(SpriteBatch spriteBatch)
@@ -224,8 +237,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         internal void Clear()
         {
             _iKeySelection = 0;
-            _diOptions.Clear();
-            _giSelection = new GUIImage(new Vector2((int)Position().X, (int)Position().Y), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+            _liOptions.Clear();
+            _giSelection = new GUIImage(new Vector2((int)Position().X, (int)Position().Y), new Rectangle(288, 96, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");
         }
     }
 }

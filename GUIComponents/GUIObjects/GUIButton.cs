@@ -26,6 +26,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Width = BTN_WIDTH;
             Height = BTN_HEIGHT;
             _text = new GUIText(text);
+            _text.SetColor(Color.Red);
             _text.CenterOnWindow(this);
 
             Enabled = true;

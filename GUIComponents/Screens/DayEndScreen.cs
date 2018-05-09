@@ -22,7 +22,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             _btnOK = new GUIButton( "OK", 128, 64);
             _btnOK.AnchorToScreen(SideEnum.Bottom);
             string totalVal = String.Format("Total: {0}", PlayerManager._merchantChest.SellAll());
-            _moneyWindow = new GUITextWindow(new Vector2(RiverHollow.ScreenWidth / 2, 500), totalVal);
+            _moneyWindow = new GUITextWindow(totalVal);
             _moneyWindow.CenterOnScreen();
             Controls.Add(_btnOK);
             Controls.Add(_moneyWindow);

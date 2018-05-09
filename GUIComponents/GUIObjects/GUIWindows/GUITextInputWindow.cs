@@ -2,7 +2,6 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters.NPCs;
 using RiverHollow.GUIComponents.GUIObjects;
 
@@ -10,7 +9,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
     class GUITextInputWindow : GUITextWindow
     {
-        int _strLen;
         int _maxLength = 10;
         WorldAdventurer _w;
         WorkerBuilding _b;
@@ -29,38 +27,27 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             StatementSetup(statement, textLoc);
             _textLoc = textLoc;
             Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
-            _strLen = 0;
-            _text = string.Empty;
+
         }
 
         public GUITextInputWindow(WorldAdventurer w) : this()
         {
             _textLoc = SideEnum.Top;
             StatementSetup("Enter name:");
-            Width = Math.Max(_gStatement.Width, (int)_characterWidth * 10);
-            Height = (int)_characterHeight * 2;
+            Width = Math.Max(_gStatement.Width, _gStatement.CharWidth * 10);
+            Height = _gStatement.CharHeight * 2;
             Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
-            _strLen = 0;
             _w = w;
-            _text = string.Empty;
         }
 
         public GUITextInputWindow(WorkerBuilding b) : this()
         {
             _textLoc = SideEnum.Top;
             StatementSetup("Name Building:");
-            Width = Math.Max(_gStatement.Width, (int)_characterWidth * 10);
-            Height = (int)_characterHeight * 2;
+            Width = Math.Max(_gStatement.Width, _gStatement.CharWidth * 10);
+            Height = _gStatement.CharHeight * 2;
             Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
-            _strLen = 0;
             _b = b;
-            _text = string.Empty;
-        }
-
-        public GUITextInputWindow(ref string text): this()
-        {
-            _strLen = 0;
-            _text = text;
         }
 
         private void StatementSetup(string text, SideEnum textLoc = SideEnum.Top)
@@ -69,12 +56,12 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
             if (textLoc == SideEnum.Top)
             {
-                Width = Math.Max(_gStatement.Width, (int)_characterWidth * 10);
+                Width = Math.Max(_gStatement.Width, _gStatement.CharWidth * 10);
                 Height = _gStatement.Height*2;
             }
             else if (textLoc == SideEnum.Left)
             {
-                Width = _gStatement.Width + (int)_characterWidth * 10;
+                Width = _gStatement.Width + _gStatement.CharWidth * 10;
                 Height = _gStatement.Height;
             }
 
@@ -109,12 +96,12 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                         if (_w != null)
                         {
                             finished = true;
-                            _w.SetName(_text);
+                            _w.SetName(_gText.GetText());
                         }
                         if (_b != null)
                         {
                             finished = true;
-                            _b.SetName(_text);  
+                            _b.SetName(_gText.GetText());  
                         }
 
                         if(finished){
@@ -145,7 +132,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public string GetText()
         {
-            return _text;
+            return _gText.GetText();
         }
     }
 }

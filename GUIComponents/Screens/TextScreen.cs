@@ -7,12 +7,16 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIObjects;
 using static RiverHollow.WorldObjects.Door;
 using RiverHollow.Characters.NPCs;
+using RiverHollow.GUIComponents.GUIObjects;
+using System.Collections.Generic;
 
 namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
     class TextScreen : GUIScreen
     {
         private GUITextWindow _window;
+
+
 
         private TextScreen()
         {
@@ -44,7 +48,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
         {
             if (text.Contains("["))
             {
-                
+
                 _window = new GUITextSelectionWindow(talker, text);
             }
             else
@@ -92,13 +96,13 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
 
             if (_window != null)
             {
-                if (!_window._pause)
+                if (!_window.Paused)
                 {
-                    _window.printAll = true;
+                    _window.PrintAll();
                 }
                 else
                 {
-                    _window.Unpause();
+                    _window.NextText();
                 }
             }
             return rv;
@@ -106,7 +110,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
 
         public bool TextFinished()
         {
-            return _window.Done && !_window._pause;
+            return _window.Done() && !_window.Paused;
         }
 
         public override bool IsTextScreen() { return true; }

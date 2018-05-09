@@ -60,7 +60,7 @@ namespace RiverHollow.GUIObjects
             return _vPos;
         }
         public Vector2 PositionSub(Vector2 value)
-        {
+        { 
             _vPos -= value;
             return _vPos;
         }
