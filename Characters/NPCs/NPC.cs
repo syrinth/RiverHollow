@@ -579,10 +579,7 @@ namespace RiverHollow.Characters
                             _dictMapPathing[testMap + ":" + exit.Value] = pathToExit; // This needd another key for the appropriate exit
                         }
                     }
-                    else
-                    {
-                        int i = 0;
-                    }
+
                     ClearPathingTracks();
                 }
             }

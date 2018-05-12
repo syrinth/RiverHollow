@@ -75,7 +75,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         private class SaveWindow : GUIWindow
         {
-            GUIText _sText;
+            GUIText _gText;
             SaveData _data;
             public SaveData Data => _data;
 
@@ -85,31 +85,30 @@ namespace RiverHollow.GUIComponents.Screens
             public SaveWindow(SaveData data, int id)
             {
                 _data = data;
-                _sText = new GUIText(data.name + ", " + CharacterManager.GetClassByIndex(data.currentClass).Name);
+                _gText = new GUIText(data.name + ", " + CharacterManager.GetClassByIndex(data.currentClass).Name);
                 _iId = id;
                 Position(Vector2.Zero);
                 _winData = GUIWindow.RedWin;
 
-                Vector2 stringsize = _sText.MeasureString("XXXXXXXXXXX XXXXXXXXXXXXXX");
+                Vector2 stringsize = _gText.MeasureString("XXXXXXXXXXX XXXXXXXXXXXXXX");
                 Width = (int)stringsize.X;
                 Height = (int)stringsize.Y;
             }
 
             public override void Update(GameTime gameTime)
             {
-                _sText.Update(gameTime);
+                _gText.Update(gameTime);
             }
 
             public override void Draw(SpriteBatch spriteBatch)
             {
                 base.Draw(spriteBatch);
-                _sText.Draw(spriteBatch);
             }
 
             public override void Position(Vector2 value)
             {
                 base.Position(value);
-                if (_sText != null) { _sText.CenterOnWindow(this); }
+                if (_gText != null) { _gText.CenterOnWindow(this); }
             }
         }
     }

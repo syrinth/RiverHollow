@@ -20,7 +20,7 @@
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Hello lad! [Talk:Talk|Gift:GiveGift|%50%Join Party:Party|Never Mind:Nothing]</Value>
+      <Value>Hello lad! [Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Nothing]</Value>
     </Item>
     <Item>
       <Key>ShopOpen</Key>

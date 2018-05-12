@@ -5,6 +5,7 @@ using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
+using System;
 
 namespace RiverHollow.Game_Managers
 {
@@ -89,7 +90,7 @@ namespace RiverHollow.Game_Managers
                     {
                         ActiveCharacter.TickBuffs();
                         if (ActiveCharacter.Poisoned()) {
-                            ActiveCharacter.Location.AssignDamage(ActiveCharacter.DecreaseHealth((int)(ActiveCharacter.MaxHP/20)));
+                            ActiveCharacter.Location.AssignDamage(ActiveCharacter.DecreaseHealth(Math.Max(1, (int)(ActiveCharacter.MaxHP/20))));
                         }
                         SetPhaseForTurn();
                     }
@@ -127,10 +128,6 @@ namespace RiverHollow.Game_Managers
         //When enemies get healing/defensive skills, they'll have their own logic to process
         public static void EnemyTakeTurn()
         {
-            if (ActiveCharacter.Poisoned())
-            {
-                ActiveCharacter.Location.AssignDamage(ActiveCharacter.DecreaseHealth((int)(ActiveCharacter.MaxHP / 20)));
-            }
             RHRandom r = new RHRandom();
             ProcessActionChoice((CombatAction)CharacterManager.GetActionByIndex(1), false);//ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)]);
             if (!ChosenSkill.Target.Equals("Self"))
@@ -192,7 +189,7 @@ namespace RiverHollow.Game_Managers
             }
             MapManager.RemoveMob(_mob);
             _mob = null;
-            GameManager.GoToWorldMap();
+            GoToWorldMap();
         }
 
         public static void Kill(CombatCharacter c)
@@ -200,7 +197,7 @@ namespace RiverHollow.Game_Managers
             if (_listMonsters.Contains((c)))
             {
                 _listMonsters.Remove(c);
-                TurnOrder.Remove(c);                                            //Remove the killed member from the turn order 
+                TurnOrder.Remove(c);                        //Remove the killed member from the turn order 
             }
         }
 

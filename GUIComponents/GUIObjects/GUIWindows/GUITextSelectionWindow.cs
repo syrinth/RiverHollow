@@ -21,17 +21,21 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         protected int _iKeySelection;
 
         protected int _iOptionsOffsetY;
-        List<GUIText> _liOptions;
+        protected Dictionary<int, SelectionData> _diOptions;
 
-        public GUITextSelectionWindow(string selectionText) : base()
+        public GUITextSelectionWindow() : base()
+        {
+            _diOptions = new Dictionary<int, SelectionData>();
+        }
+        public GUITextSelectionWindow(string selectionText) : this()
         {
             Setup(selectionText);
-            Width = (int)_liText[0].TextSize.X + 6; //6 is adding a bit of arbitrary extra space for the parsing. Exactsies are bad
+            Width = (int)_giText.TextSize.X + 6; //6 is adding a bit of arbitrary extra space for the parsing. Exactsies are bad
             Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
             PostParse();
         }
 
-        public GUITextSelectionWindow(NPC talker, string selectionText) : base()
+        public GUITextSelectionWindow(NPC talker, string selectionText) : this()
         {
             GameManager.gmNPC = talker;
             Position(new Vector2(Position().X, RiverHollow.ScreenHeight - Height - SpaceFromBottom));
@@ -40,7 +44,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             PostParse();
         }
 
-        public GUITextSelectionWindow(string selectionText, int door = -1) : base()
+        public GUITextSelectionWindow(string selectionText, int door = -1) : this()
         {
             Position(new Vector2(Position().X, RiverHollow.ScreenHeight - Height - SpaceFromBottom));
 
@@ -57,33 +61,31 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public void PostParse()
         {
             ParseText(_sStatement);
-            Height = (((_numReturns + 1) + _liOptions.Count) * _iCharHeight);
+            Height = (((_numReturns + 1) + _diOptions.Count) * _iCharHeight);
+            _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
             _iOptionsOffsetY = Math.Max(_iCharHeight, (int)((_numReturns + 1) * _iCharHeight));
             _giSelection = new GUIImage(new Vector2((int)Position().X, (int)Position().Y + _iOptionsOffsetY), new Rectangle(288, 96, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");
-            _giSelection.AnchorAndAlignToObject(_liText[0], SideEnum.Bottom, SideEnum.Left);
+            _giSelection.AnchorAndAlignToObject(_giText, SideEnum.Bottom, SideEnum.Left);
+            AddControl(_giSelection);
 
-            foreach (GUIText t in _liOptions)
-            {
-                if (_liOptions[0] == t) { t.AnchorAndAlignToObject(_giSelection, SideEnum.Right, SideEnum.Bottom, 16); }
-                else { t.AnchorAndAlignToObject(_liOptions[_liOptions.Count - 1], SideEnum.Bottom, SideEnum.Left, 16); }
-            }
-            
+            AssignToColumn();
+            Resize();
         }
 
         private void SeparateText(string selectionText)
         {
-            _liOptions = new List<GUIText>();
             string[] firstPass = selectionText.Split(new[] { '[', ']'}, StringSplitOptions.RemoveEmptyEntries);
             if (firstPass.Length > 0)
             {
                 _sStatement = firstPass[0];
 
                 string[] secondPass = firstPass[1].Split('|');
-                //int key = 0;
+                int key = 0;
                 foreach (string s in secondPass)
                 {
-                    GUIText t = new GUIText(s);
-                    _liOptions.Add(t);
+                    string[] actionType = s.Split(':');
+                    SelectionData t = new SelectionData(actionType[0], actionType[1]);
+                    _diOptions.Add(key++, t);
                 }
             }
         }
@@ -94,15 +96,15 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             {
                 if (_iKeySelection - 1 >= 0)
                 {
-                    _giSelection.MoveImageBy(new Vector2(0, -_iCharHeight));
+                    _giSelection.AlignToObject(_diOptions[_iKeySelection-1].GText, SideEnum.Bottom);
                     _iKeySelection--;
                 }
             }
             else if (InputManager.CheckPressedKey(Keys.S) || InputManager.CheckPressedKey(Keys.Down))
             {
-                if (_iKeySelection + 1 < _liOptions.Count)
+                if (_iKeySelection + 1 < _diOptions.Count)
                 {
-                    _giSelection.MoveImageBy(new Vector2(0, _iCharHeight));
+                    _giSelection.AlignToObject(_diOptions[_iKeySelection+1].GText, SideEnum.Bottom);
                     _iKeySelection++;
                 }
             }
@@ -114,12 +116,12 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                     _poiMouse = GraphicCursor.Position.ToPoint();
                     if (_iKeySelection - 1 >= 0 && GraphicCursor.Position.Y < _giSelection.Position().Y)
                     {
-                        _giSelection.MoveImageBy(new Vector2(0, -_iCharHeight));
+                        _giSelection.AlignToObject(_diOptions[_iKeySelection - 1].GText, SideEnum.Bottom);
                         _iKeySelection--;
                     }
-                    else if (_iKeySelection + 1 < _liOptions.Count && GraphicCursor.Position.Y > _giSelection.Position().Y + _giSelection.Height)
+                    else if (_iKeySelection + 1 < _diOptions.Count && GraphicCursor.Position.Y > _giSelection.Position().Y + _giSelection.Height)
                     {
-                        _giSelection.MoveImageBy(new Vector2(0, _iCharHeight));
+                        _giSelection.AlignToObject(_diOptions[_iKeySelection + 1].GText, SideEnum.Bottom);
                         _iKeySelection++;
                     }
                 }
@@ -133,7 +135,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         protected virtual void SelectAction()
         {
-            string action = _liOptions[_iKeySelection].GetText().Split(':')[1];
+            string action = _diOptions[_iKeySelection].Action;
             if (GameManager.gmNPC == null || action.Equals("SellContract"))
             {
                 ProcessGameTextSelection(action);
@@ -142,33 +144,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             {
                 ProcessNPCDialogSelection(action);
             }
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-            int xindex = (int)Position().X;
-            int yIndex = (int)Position().Y;
-
-            _giSelection.Draw(spriteBatch);
-
-            foreach(GUIText t in _liOptions)
-            {
-                t.Draw(spriteBatch);
-            }
-
-            ////xindex += 32;
-            //yIndex += _iOptionsOffsetY;
-            //foreach (KeyValuePair<int, string> kvp in _diOptions)
-            //{
-            //    spriteBatch.DrawString(_font, kvp.Value.Split(':')[0], new Vector2(xindex, yIndex), Color.White);
-            //    yIndex += _iCharHeight;
-            //}
-        }
-
-        protected void DrawWindow(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -237,8 +212,43 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         internal void Clear()
         {
             _iKeySelection = 0;
-            _liOptions.Clear();
-            _giSelection = new GUIImage(new Vector2((int)Position().X, (int)Position().Y), new Rectangle(288, 96, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");
+            
+            foreach (SelectionData g in _diOptions.Values)
+            {
+                if (Controls.Contains(g.GText))
+                {
+                    Controls.Remove(g.GText);
+                }
+            }
+
+            _diOptions.Clear();
+        }
+
+        protected void AssignToColumn()
+        {
+            for (int i = 0; i < _diOptions.Count; i++)
+            {
+                GUIText gText = _diOptions[i].GText;
+                if (i == 0) { gText.AnchorAndAlignToObject(_giSelection, SideEnum.Right, SideEnum.Bottom); }
+                else { gText.AnchorAndAlignToObject(_diOptions[i - 1].GText, SideEnum.Bottom, SideEnum.Left); }
+                AddControl(gText);
+            }
+        }
+
+        protected class SelectionData
+        {
+            GUIText _gText;
+            public GUIText GText => _gText;
+            string _sAction;
+            public string Action => _sAction;
+
+            public string Text => _gText.Text;
+
+            public SelectionData(string text, string action = "", string fontName = @"Fonts\Font")
+            {
+                _gText = new GUIText(text, true, fontName);
+                _sAction = action;
+            }
         }
     }
 }

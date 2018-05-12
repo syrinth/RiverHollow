@@ -180,9 +180,28 @@ namespace RiverHollow.GUIObjects
             }
             this.Position(position);
         }
+        ////case SideEnum.CenterX:
+        //            this.SetX(window.DrawRectangle.Center.X);
+        //            break;
+        internal void AffixToCenter(GUIWindow window, SideEnum whichCenter, bool onMain, int spacing = 0)
+        {
+            window.AddControl(this);
+            switch (whichCenter)
+            {
+                case SideEnum.CenterX:
+                    this.SetX(window.DrawRectangle.Center.X - (!onMain ?  this.Width: 0));
+                    break;
+                case SideEnum.CenterY:
+                    this.SetY(window.DrawRectangle.Center.Y - (!onMain ? this.Height : 0));
+                    break;
+                default:
+                    break;
+            }
+            
+        }
         internal void AnchorToInnerSide(GUIWindow window, SideEnum sidePlacement, int spacing = 0)
         {
-            window.Controls.Add(this);
+            window.AddControl(this);
             switch (sidePlacement)
             {
                 case SideEnum.Bottom:

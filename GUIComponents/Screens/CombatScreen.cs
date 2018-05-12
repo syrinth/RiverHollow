@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters.CombatStuff;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIObjects;
 using RiverHollow.WorldObjects;
 using System;
@@ -427,47 +428,48 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public enum Display { None, Items, Spells }
         public Display DisplayType = Display.None;
 
-        //CmbtMenuWindow _gwMenu;
-        //CmbtStatusWin _statusWindow;
-        //CmbtUseMenuWindow _useMenuWindow;
+        CmbtMenuWindow _gwMenu;
+        CmbtStatusWin _statusWindow;
+        CmbtUseMenuWindow _useMenuWindow;
 
         public CmbtMenu()
         {
             int totalMenuWidth = RiverHollow.ScreenWidth / 3;
             int menuSec = totalMenuWidth / 3;
 
-            //_gwMenu = new CmbtMenuWindow(totalMenuWidth, menuSec);
-            //_statusWindow = new CmbtStatusWin(menuSec * 2, _gwMenu.Height);
-           // _statusWindow.AnchorAndAlignToObject(_gwMenu, SideEnum.Right, SideEnum.Bottom);
+            _gwMenu = new CmbtMenuWindow(totalMenuWidth, menuSec);
+            _statusWindow = new CmbtStatusWin(menuSec * 2, _gwMenu.Height);
+            _statusWindow.AnchorAndAlignToObject(_gwMenu, SideEnum.Right, SideEnum.Bottom);
 
-            //_useMenuWindow = new CmbtUseMenuWindow(totalMenuWidth, _gwMenu.Width + _statusWindow.Width + GUIWindow.GreyWin.Edge * 2);
+            _useMenuWindow = new CmbtUseMenuWindow(totalMenuWidth, _gwMenu.Width + _statusWindow.Width + GUIWindow.GreyWin.Edge * 2);
         }
 
         public void Update(GameTime gameTime)
         {
-            //if (CombatManager.PhaseSelectSkill()) {
-            //    if (DisplayType != Display.None) { _useMenuWindow.Update(gameTime); }
-            //    else { _gwMenu.Update(gameTime); }
-            //}
-            //_statusWindow.Update(gameTime);
+            if (CombatManager.PhaseSelectSkill())
+            {
+                if (DisplayType != Display.None) { _useMenuWindow.Update(gameTime); }
+                else { _gwMenu.Update(gameTime); }
+            }
+            _statusWindow.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch, BattleLocation[] locations)
         {
-            //_statusWindow.Draw(spriteBatch, locations);
-            //_gwMenu.Draw(spriteBatch);
-            //if (DisplayType != Display.None)
-            //{
-            //    _useMenuWindow.Draw(spriteBatch);
-            //}
+            _statusWindow.Draw(spriteBatch);
+            _gwMenu.Draw(spriteBatch);
+            if (DisplayType != Display.None)
+            {
+                _useMenuWindow.Draw(spriteBatch);
+            }
         }
 
         internal void NewTurn()
         {
-            //DisplayType = Display.None;
-            //Clear();
-            //ClearState();
-            //_gwMenu.Assign(CombatManager.ActiveCharacter.AbilityList);
+            DisplayType = Display.None;
+            Clear();
+            ClearState();
+            _gwMenu.Assign(CombatManager.ActiveCharacter.AbilityList);
         }
 
         internal void SelectSkill()
@@ -481,11 +483,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             if (DisplayType != Display.None)
             {
-              //  rv = _useMenuWindow.ProcessLeftButtonClick(mouse);
+                rv = _useMenuWindow.ProcessLeftButtonClick(mouse);
             }
             else
             {
-             //   rv = _gwMenu.ProcessLeftButtonClick(mouse);
+                rv = _gwMenu.ProcessLeftButtonClick(mouse);
             }
             ProcessActionChoice();
 
@@ -500,15 +502,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 rv = true;
 
-            //    _gwMenu.ClearChosenAbility();
-            //    _useMenuWindow.ClearChoices();
+                _gwMenu.ClearChosenAbility();
+                _useMenuWindow.ClearChoices();
                 CombatManager.ChosenSkill = null;
                 CombatManager.CurrentPhase = CombatManager.PhaseEnum.SelectSkill;
             }
             else if (DisplayType != Display.None)
             {
                 ClearState();
-           //     _useMenuWindow.Clear();
+                _useMenuWindow.Clear();
                 DisplayType = Display.None;
             }
             return rv;
@@ -520,445 +522,451 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 if (DisplayType == Display.Spells)
                 {
-                //    CombatAction a = _useMenuWindow.ChosenAction;
-                //    if (a != null)
-                //    {
-                //        if (CombatManager.ActiveCharacter.CanCast(a.MPCost))
-                //        {
-                //            CombatManager.ProcessActionChoice(a);
-                //        }
-                //    }
-                //}
-                //else if (DisplayType == Display.Items)
-                //{
-                //    CombatItem it = _useMenuWindow.ChosenItem;
-                //    if(it != null)
-                //    {
-                //        CombatManager.ProcessItemChoice(it);
-                //    }
+                    CombatAction a = _useMenuWindow.ChosenAction;
+                    if (a != null)
+                    {
+                        if (CombatManager.ActiveCharacter.CanCast(a.MPCost))
+                        {
+                            CombatManager.ProcessActionChoice(a);
+                        }
+                    }
+                }
+                else if (DisplayType == Display.Items)
+                {
+                    CombatItem it = _useMenuWindow.ChosenItem;
+                    if (it != null)
+                    {
+                        CombatManager.ProcessItemChoice(it);
+                    }
                 }
             }
             else
             {
-                //MenuAction a = _gwMenu.ChosenAction;
-                //if (a != null)
-                //{
-                //    if (!a.IsMenu())
-                //    {
-                //        if (CombatManager.ActiveCharacter.CanCast(((CombatAction)a).MPCost))
-                //        {
-                //            CombatManager.ProcessActionChoice((CombatAction)a);
-                //        }
-                //    }
-                //    else
-                //    {
-                //        if (a.ActionID == 2 && !CombatManager.ActiveCharacter.Silenced())
-                //        {
-                //            DisplayType = Display.Spells;
-                //            _useMenuWindow.AssignSpells(CombatManager.ActiveCharacter.SpellList);
-                //        }
-                //        else if (a.ActionID == 3)
-                //        {
-                //            DisplayType = Display.Items;
-                //            _useMenuWindow.AssignItems(InventoryManager.GetPlayerCombatItems());
-                //        }
-                //    }
-                //}
+                MenuAction a = _gwMenu.ChosenAction;
+                if (a != null)
+                {
+                    if (!a.IsMenu())
+                    {
+                        if (CombatManager.ActiveCharacter.CanCast(((CombatAction)a).MPCost))
+                        {
+                            CombatManager.ProcessActionChoice((CombatAction)a);
+                        }
+                    }
+                    else
+                    {
+                        if (a.ActionID == 2 && !CombatManager.ActiveCharacter.Silenced())
+                        {
+                            DisplayType = Display.Spells;
+                            _useMenuWindow.AssignSpells(CombatManager.ActiveCharacter.SpellList);
+                        }
+                        else if (a.ActionID == 3)
+                        {
+                            DisplayType = Display.Items;
+                            _useMenuWindow.AssignItems(InventoryManager.GetPlayerCombatItems());
+                        }
+                    }
+                }
             }
         }
 
         internal void ClearState()
         {
             DisplayType = Display.None;
-           // _gwMenu.ClearChosenAbility();
-           // _useMenuWindow.ClearChoices();
+            _gwMenu.ClearChosenAbility();
+            _useMenuWindow.ClearChoices();
         }
 
         internal void Clear()
         {
-           // _gwMenu.Clear();
-           // _useMenuWindow.Clear();
+            _gwMenu.Clear();
+            _useMenuWindow.Clear();
         }
     }
 
-    //internal class CmbtStatusWin : GUIWindow
-    //{
-    //    GUIImage _giCurrentTurn;
-    //    SpriteFont _fFont;
-    //    float _fCharacterHeight;
+    internal class CmbtStatusWin : GUIWindow
+    {
+        GUIImage _giCurrentTurn;
+        SpriteFont _fFont;
+        float _fCharacterHeight;
+        GUIText[] _arNames;
+        GUIText[] _arMana;
+        GUIText[] _arHp;
 
-    //    public CmbtStatusWin(int width, int height)
-    //    {
-    //        _fFont = GameContentManager.GetFont(@"Fonts\MenuFont");
-    //        _fCharacterHeight = _fFont.MeasureString("Q").Y;
-    //        Width = width;
-    //        Height = height;
-    //        _winData = GreyWin;
 
-    //        _giCurrentTurn = new GUIImage(new Vector2((int)Position().X, (int)Position().Y), new Rectangle(288, 96, 32, 32), (int)_fCharacterHeight, (int)_fCharacterHeight, @"Textures\Dialog");
-    //    }
+        public CmbtStatusWin(int width, int height)
+        {
+            _fFont = GameContentManager.GetFont(@"Fonts\MenuFont");
+            _fCharacterHeight = _fFont.MeasureString("Q").Y;
+            Width = width;
+            Height = height;
+            _winData = GreyWin;
 
-    //    public void Draw(SpriteBatch spriteBatch, BattleLocation[] locations)
-    //    {
-    //        base.Draw(spriteBatch);
+            _giCurrentTurn = new GUIImage(new Vector2((int)Position().X, (int)Position().Y), new Rectangle(288, 96, 32, 32), (int)_fCharacterHeight, (int)_fCharacterHeight, @"Textures\Dialog");
 
-    //        //MAR
-    //        int xindex = (int)Position().X;
-    //        int yIndex = (int)Position().Y;
-    //        int lastHP = (int)Position().X + Width;
-    //        int lastMP = (int)(Position().X + Width - _fFont.MeasureString("XXXX/XXXX").X);
-    //        foreach (CombatCharacter p in PlayerManager.GetParty())
-    //        {
-    //            Color c = Color.White;
-    //            if (p.Poisoned()) { c = Color.Violet; }
-    //            c = (CombatManager.ActiveCharacter == p) ? Color.Green : c;
-                
-    //            spriteBatch.DrawString(_fFont, p.Name, new Vector2(xindex, yIndex), c);
+            _arNames = new GUIText[4];
+            _arMana = new GUIText[4];
+            _arHp = new GUIText[4];
 
-    //            string strHp = string.Format("{0}/{1}", p.CurrentHP, p.MaxHP);
-    //            int hpStart = lastHP - (int)_fFont.MeasureString(strHp).X;
-    //            spriteBatch.DrawString(_fFont, strHp, new Vector2(hpStart, yIndex), c);
+            List<CombatAdventurer> party = PlayerManager.GetParty();
+            for (int i = 0; i < party.Count; i++)
+            {
+                _arNames[i] = new GUIText(party[i].Name, true, @"Fonts\MenuFont");
 
-    //            string strMp = string.Format("{0}/{1}", p.CurrentMP, p.MaxMP);
-    //            int mpStart = lastMP - (int)_fFont.MeasureString(strMp).X;
-    //            spriteBatch.DrawString(_fFont, strMp, new Vector2(mpStart, yIndex), c);
+                string strHp = string.Format("{0}/{1}", party[i].CurrentHP, party[i].MaxHP);
+                _arHp[i] = new GUIText(strHp, true, @"Fonts\MenuFont");
 
-    //            yIndex += (int)_fCharacterHeight;
-    //        }
-    //    }
-    //}
+                string strMp = string.Format("{0}/{1}", party[i].CurrentMP, party[i].MaxMP);
+                _arMana[i] = new GUIText(strMp, true, @"Fonts\MenuFont");
 
-    //internal class CmbtMenuWindow : GUITextSelectionWindow
-    //{
-    //    const int _iMaxMenuActions = 4;
-    //    List<MenuAction> _liAbilities;
-    //    MenuAction _chosenAction;
-    //    public MenuAction ChosenAction { get => _chosenAction; }
-    //    Vector2 _vecMenuSize;
-    //    SpriteFont _fFont;
+                if (i == 0) {
+                    _arNames[i].AnchorToInnerSide(this, SideEnum.TopLeft);
+                    _arMana[i].CenterOnWindow(this);
+                    _arMana[i].AnchorToInnerSide(this, SideEnum.Top);
+                    _arHp[i].AnchorToInnerSide(this, SideEnum.TopRight);
+                }
+                else
+                {
+                    _arNames[i].AnchorAndAlignToObject(_arNames[i - 1], SideEnum.Bottom, SideEnum.Left);
+                    _arMana[i].AnchorAndAlignToObject(_arMana[i-1], SideEnum.Bottom, SideEnum.Right);
+                    _arHp[i].AnchorAndAlignToObject(_arHp[i - 1], SideEnum.Bottom, SideEnum.Right);
+                    AddControl(_arNames[i]);
+                    AddControl(_arMana[i]);
+                    AddControl(_arHp[i]);
+                }
+            }
+        }
 
-    //    public CmbtMenuWindow(int startX, int width)
-    //    {
-    //        _iOptionsOffsetY = 0;
-    //        _diOptions = new Dictionary<int, string>();
-    //        _fFont = GameContentManager.GetFont(@"Fonts\MenuFont");
-    //        _vecMenuSize = _fFont.MeasureString("XXXXXXXX");
+        public override void Update(GameTime gametime)
+        {
+            List<CombatAdventurer> party = PlayerManager.GetParty();
+            for (int i = 0; i < party.Count; i++)
+            {
+                CombatAdventurer p = party[i];
+                Color c = Color.White;
+                if (p.Poisoned()) { c = Color.Violet; }
+                c = (CombatManager.ActiveCharacter == p) ? Color.Green : c;
 
-    //        Width = width;
-    //        Height = (int)(_vecMenuSize.Y * _iMaxMenuActions);
-    //        _winData = GreyWin;
+                _arNames[i].SetColor(c);
+                _arMana[i].SetColor(c);
+                _arHp[i].SetColor(c);
 
-    //        //MAR
-    //        Position(new Vector2(startX, RiverHollow.ScreenHeight - GreyWin.Edge - (_vecMenuSize.Y * _iMaxMenuActions) - RiverHollow.ScreenHeight / 100));
+                string strMp = string.Format("{0}/{1}", party[i].CurrentMP, party[i].MaxMP);
+                _arMana[i].SetText(strMp, true);
 
-    //        _giSelection = new GUIImage(InnerTopLeft(), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
-    //    }
+                string strHp = string.Format("{0}/{1}", party[i].CurrentHP, party[i].MaxHP);
+                _arHp[i].SetText(strHp, true);
+            }
+        }
+    }
 
-    //    public void Assign(List<MenuAction> abilities)
-    //    {
-    //        int key = 0;
-    //        if (_diOptions.Count == 0)
-    //        {
-    //            _liAbilities = abilities;
-    //            _iKeySelection = 0;
-    //            foreach (MenuAction a in abilities)
-    //            {
-    //                _diOptions.Add(key++, a.Name);
-    //            }
-    //        }
-    //    }
+    internal class CmbtMenuWindow : GUITextSelectionWindow
+    {
+        const int _iMaxMenuActions = 4;
+        List<MenuAction> _liAbilities;
+        MenuAction _chosenAction;
+        public MenuAction ChosenAction { get => _chosenAction; }
+        Vector2 _vecMenuSize;
+        string _sMenuFont = @"Fonts\MenuFont";
 
-    //    public override bool ProcessLeftButtonClick(Point mouse)
-    //    {
-    //        bool rv = false;
-    //        if (Contains(mouse))
-    //        {
-    //            SelectAction();
-    //            rv = true;
-    //        }
-    //        return rv;
-    //    }
+        public CmbtMenuWindow(int startX, int width)
+        {
+            _iOptionsOffsetY = 0;
+            _vecMenuSize = GameContentManager.GetFont(_sMenuFont).MeasureString("XXXXXXXX");
+            _iCharHeight = (int)_vecMenuSize.Y;
 
-    //    protected override void SelectAction()
-    //    {
-    //        _chosenAction = _liAbilities[_iKeySelection];
-    //    }
+            Width = width;
+            Height = (int)(_vecMenuSize.Y * _iMaxMenuActions) + 2 * _winData.Edge;
+            _winData = GreyWin;
 
-    //    public override void Draw(SpriteBatch spriteBatch)
-    //    {
-    //        base.DrawWindow(spriteBatch);
-    //        if (CombatManager.ActiveCharacter.IsCombatAdventurer())
-    //        {
-    //            int xindex = (int)Position().X;
-    //            int yIndex = (int)Position().Y;
+            Position(new Vector2(startX, RiverHollow.ScreenHeight - GreyWin.Edge - (_vecMenuSize.Y * _iMaxMenuActions) - RiverHollow.ScreenHeight / 100));
 
-    //            if (_diOptions.Count > 0) { _giSelection.Draw(spriteBatch); }
+            _giSelection = new GUIImage(Vector2.Zero, new Rectangle(288, 96, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");
+        }
 
-    //            xindex += 32;
-    //            yIndex += _iOptionsOffsetY;
-    //            int i = Math.Max(0, _iKeySelection - _iMaxMenuActions);
-    //            foreach (KeyValuePair<int, string> kvp in _diOptions)
-    //            {
-    //                if (kvp.Key >= i)
-    //                {
-    //                    Color c = (_chosenAction != null && kvp.Value == _chosenAction.Name) ? Color.Green : Color.White;
+        public void Assign(List<MenuAction> abilities)
+        {
+            int key = 0;
+            if (_diOptions.Count == 0)
+            {
+                _liAbilities = abilities;
+                _iKeySelection = 0;
+                foreach (MenuAction a in abilities)
+                {
+                    _diOptions.Add(key++, new SelectionData(a.Name, "", _sMenuFont));
+                }
+                _giSelection.AnchorToInnerSide(this, SideEnum.TopLeft);
+                AssignToColumn();
+                Resize();
+            }
+        }
 
-    //                    if (kvp.Value.Equals("Cast Spell") && CombatManager.ActiveCharacter.Silenced())
-    //                    {
-    //                        c = Color.Gray;
-    //                    }
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+            bool rv = false;
+            if (Contains(mouse))
+            {
+                SelectAction();
+                rv = true;
+            }
+            return rv;
+        }
 
-    //                    spriteBatch.DrawString(_fFont, kvp.Value, new Vector2(xindex, yIndex), c);
-    //                    yIndex += (int)_characterHeight;
-    //                }
-    //            }
-    //        }
-    //    }
+        protected override void SelectAction()
+        {
+            _chosenAction = _liAbilities[_iKeySelection];
+        }
 
-    //    public void ClearChosenAbility()
-    //    {
-    //        _chosenAction = null;
-    //    }
-    //}
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            DrawWindow(spriteBatch);
+            if (CombatManager.ActiveCharacter.IsCombatAdventurer())
+            {
+                _giSelection.Draw(spriteBatch);
+                int index = Math.Max(0, _iKeySelection - _iMaxMenuActions);
+                for (int i = 0; i < _diOptions.Count; i++)
+                {
+                    if (i >= index)
+                    {
+                        GUIText text = _diOptions[i].GText;
 
-    //internal class CmbtUseMenuWindow : GUITextSelectionWindow
-    //{
-    //    public enum Display { Items, Spells }
-    //    Display _displayType;
-    //    const int _iMaxMenuActions = 8;
-    //    int _textColOne;
-    //    int _textColTwo;
-    //    int _selectWidth;
-    //    List<CombatAction> _liActions;
-    //    CombatAction _chosenAction;
-    //    public CombatAction ChosenAction { get => _chosenAction; }
-    //    List<CombatItem> _liItems;
-    //    CombatItem _chosenItem;
-    //    public CombatItem ChosenItem { get => _chosenItem; }
-    //    Vector2 _vecMenuSize;
-    //    SpriteFont _fFont;
+                        Color c = (_chosenAction != null && text.Text.Equals(_chosenAction.Name)) ? Color.Green : Color.White;
 
-    //    public CmbtUseMenuWindow(int startX, int width)
-    //    {
-    //        _iOptionsOffsetY = 0;
-    //        _diOptions = new Dictionary<int, string>();
-    //        _fFont = GameContentManager.GetFont(@"Fonts\MenuFont");
-    //        _vecMenuSize = _fFont.MeasureString("XXXXXXXX");
+                        if (text.Text.Equals("Cast Spell") && CombatManager.ActiveCharacter.Silenced())
+                        {
+                            c = Color.Gray;
+                        }
 
-    //        Width = width;
-    //        Height = (int)(_vecMenuSize.Y * (_iMaxMenuActions/2));   //Two columns
-    //        _winData = GreyWin;
+                        text.Draw(spriteBatch);
+                    }
+                }
+            }
+        }
 
-    //        Position(new Vector2(startX, RiverHollow.ScreenHeight - GreyWin.Edge - (Height) - RiverHollow.ScreenHeight / 100));
+        public void ClearChosenAbility()
+        {
+            _chosenAction = null;
+        }
+    }
 
-    //        _giSelection = new GUIImage(InnerTopLeft(), new Rectangle(288, 96, 32, 32), (int)_characterHeight, (int)_characterHeight, @"Textures\Dialog");
+    internal class CmbtUseMenuWindow : GUITextSelectionWindow
+    {
+        public enum Display { Items, Spells }
+        Display _displayType;
+        const int _iMaxMenuActions = 8;
+        int _textColOne;
+        int _textColTwo;
+        int _selectWidth;
+        List<CombatAction> _liActions;
+        CombatAction _chosenAction;
+        public CombatAction ChosenAction { get => _chosenAction; }
+        List<CombatItem> _liItems;
+        CombatItem _chosenItem;
+        public CombatItem ChosenItem { get => _chosenItem; }
+        Vector2 _vecMenuSize;
+        SpriteFont _fFont;
 
-    //        _selectWidth = _giSelection.Width;
-    //        _textColOne = (int)Position().X + _selectWidth;
-    //        _textColTwo = (int)Position().X + (Width / 2) + _selectWidth;
-    //    }
+        GUIText[] _arTextAction;
+        GUIText[] _arTextNum;
 
-    //    public override void Update(GameTime gameTime)
-    //    {
-    //        if (InputManager.CheckPressedKey(Keys.W) || InputManager.CheckPressedKey(Keys.Up))
-    //        {
-    //            if (_iKeySelection - 2 >= 0)
-    //            {
-    //                _giSelection.MoveImageBy(new Vector2(0, -_characterHeight));
-    //                _iKeySelection -= 2;
-    //            }
-    //        }
-    //        else if (InputManager.CheckPressedKey(Keys.S) || InputManager.CheckPressedKey(Keys.Down))
-    //        {
-    //            if (_iKeySelection + 2 < _diOptions.Count)
-    //            {
-    //                _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
-    //                _iKeySelection += 2;
-    //            }
-    //        }
-    //        else if (InputManager.CheckPressedKey(Keys.D) || InputManager.CheckPressedKey(Keys.Right))
-    //        {
-    //            int test = _iKeySelection + 1;
-    //            if (test < _diOptions.Count)
-    //            {
-    //                if(test % 2 == 0)   //moving to an even number, needs to move to firstCol
-    //                {
-    //                    _giSelection.MoveImageTo(new Vector2(_textColOne - _selectWidth, _giSelection.Position().Y));
-    //                    _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
-    //                }
-    //                else
-    //                {
-    //                    _giSelection.MoveImageTo(new Vector2(_textColTwo - _selectWidth, _giSelection.Position().Y));
-    //                }
-                    
-    //                _iKeySelection += 1;
-    //            }
-    //        }
-    //        else if (InputManager.CheckPressedKey(Keys.A) || InputManager.CheckPressedKey(Keys.Left))
-    //        {
-    //            int test = _iKeySelection - 1;
-    //            if (test >= 0)
-    //            {
-    //                if (test % 2 == 0)   //moving to an even number, needs to move to firstCol
-    //                {
-    //                    _giSelection.MoveImageTo(new Vector2(_textColOne - _selectWidth, _giSelection.Position().Y));
-    //                }
-    //                else
-    //                {
-    //                    _giSelection.MoveImageTo(new Vector2(_textColTwo - _selectWidth, _giSelection.Position().Y));
-    //                    _giSelection.MoveImageBy(new Vector2(0, -_characterHeight));
-    //                }
+        public CmbtUseMenuWindow(int startX, int width)
+        {
+            _iOptionsOffsetY = 0;
+            _fFont = GameContentManager.GetFont(@"Fonts\MenuFont");
+            _vecMenuSize = _fFont.MeasureString("XXXXXXXX");
+            _iCharHeight = (int)_vecMenuSize.Y;
 
-    //                _iKeySelection -= 1;
-    //            }
-    //        }
-    //        else
-    //        {
-    //            //Until fixed for specific motion
-    //            if (_poiMouse != GraphicCursor.Position.ToPoint() && Contains(GraphicCursor.Position.ToPoint()))
-    //            {
-    //                _poiMouse = GraphicCursor.Position.ToPoint();
-    //                if (_iKeySelection - 2 >= 0 && GraphicCursor.Position.Y < _giSelection.Position().Y)
-    //                {
-    //                    _giSelection.MoveImageBy(new Vector2(0, -_characterHeight));
-    //                    _iKeySelection -= 2;
-    //                }
-    //                else if (_iKeySelection + 2 < _diOptions.Count && GraphicCursor.Position.Y > _giSelection.Position().Y + _giSelection.Height)
-    //                {
-    //                    _giSelection.MoveImageBy(new Vector2(0, _characterHeight));
-    //                    _iKeySelection += 2;
-    //                }
-    //                else if (_iKeySelection + 1 < _diOptions.Count && GraphicCursor.Position.Y >= _giSelection.Position().Y && GraphicCursor.Position.Y <= _giSelection.Position().Y + _giSelection.Height && GraphicCursor.Position.X > _textColTwo)
-    //                {
-    //                    if (_iKeySelection % 2 == 0)
-    //                    {
-    //                        _giSelection.MoveImageTo(new Vector2(_textColTwo - _selectWidth, _giSelection.Position().Y));
-    //                        _iKeySelection++;
-    //                    }
-    //                }
-    //                else if (_iKeySelection - 1 >= 0 && GraphicCursor.Position.Y >= _giSelection.Position().Y && GraphicCursor.Position.Y <= _giSelection.Position().Y + _giSelection.Height && GraphicCursor.Position.X < _textColTwo)
-    //                {
-    //                    if (_iKeySelection % 2 != 0)
-    //                    {
-    //                        _giSelection.MoveImageTo(new Vector2(_textColOne - _selectWidth, _giSelection.Position().Y));
-    //                        _iKeySelection--;
-    //                    }
-    //                }
-    //            }
-    //        }
+            _winData = GreyWin;
+            Width = width;
+            Height = (int)(_vecMenuSize.Y * (_iMaxMenuActions / 2)) + (2*_winData.Edge);   //Two columns
 
-    //        if (InputManager.CheckPressedKey(Keys.Enter))
-    //        {
-    //            SelectAction();
-    //        }
-    //    }
+            Position(new Vector2(startX, RiverHollow.ScreenHeight - GreyWin.Edge - (Height) - RiverHollow.ScreenHeight / 100));
 
-    //    public override void Draw(SpriteBatch spriteBatch)
-    //    {
-    //        base.DrawWindow(spriteBatch);
-    //        int xindex = _textColOne;
-    //        int yIndex = (int)Position().Y;
+            _giSelection = new GUIImage(InnerTopLeft(), new Rectangle(288, 96, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");
 
-    //        if (_diOptions.Count > 0) { _giSelection.Draw(spriteBatch); }
+            _selectWidth = _giSelection.Width;
+            _textColOne = (int)Position().X + _selectWidth;
+            _textColTwo = (int)Position().X + (Width / 2) + _selectWidth;
+            _arTextAction = new GUIText[_iMaxMenuActions];
+            _arTextNum = new GUIText[_iMaxMenuActions];
 
-    //        yIndex += _iOptionsOffsetY;
-    //        int i = Math.Max(0, _iKeySelection - _iMaxMenuActions);
-    //        foreach (KeyValuePair<int, string> kvp in _diOptions)
-    //        {
-    //            if (kvp.Key >= i)
-    //            {
-    //                string display = string.Empty;
-    //                Color c = Color.White;
+            for(int i=0; i < _iMaxMenuActions; i++)
+            {
+                _arTextAction[i] = new GUIText(string.Empty, true, @"Fonts\MenuFont");
+                _arTextNum[i] = new GUIText(string.Empty, true, @"Fonts\MenuFont");
+            }
+        }
 
-    //                if (_displayType == Display.Spells) {
-    //                    int iMPCost = _liActions[kvp.Key].MPCost;
-    //                    display = string.Format("{0}", iMPCost);
-    //                    c = (_chosenAction != null && kvp.Value == _chosenAction.Name) ? Color.Green : CombatManager.ActiveCharacter.CanCast(iMPCost) ? Color.White : Color.Gray;
-    //                }
-    //                else
-    //                {
-    //                    int num = _liItems[kvp.Key].Number;
-    //                    display = string.Format("{0}", num);
-    //                    c = (_chosenAction != null && kvp.Value == _chosenAction.Name) ? Color.Green : Color.White;
-    //                }
+        public override void Update(GameTime gameTime)
+        {
+            if (InputManager.CheckPressedKey(Keys.W) || InputManager.CheckPressedKey(Keys.Up))
+            {
+                if (_iKeySelection - 2 >= 0)
+                {
+                    _iKeySelection -= 2;
+                }
+            }
+            else if (InputManager.CheckPressedKey(Keys.S) || InputManager.CheckPressedKey(Keys.Down))
+            {
+                if (_iKeySelection + 2 < _diOptions.Count)
+                {
+                    _iKeySelection += 2;
+                }
+            }
+            else if (InputManager.CheckPressedKey(Keys.D) || InputManager.CheckPressedKey(Keys.Right))
+            {
+                int test = _iKeySelection + 1;
+                if (test < _diOptions.Count)
+                {
+                    _iKeySelection += 1;
+                }
+            }
+            else if (InputManager.CheckPressedKey(Keys.A) || InputManager.CheckPressedKey(Keys.Left))
+            {
+                int test = _iKeySelection - 1;
+                if (test >= 0)
+                {
+                    _iKeySelection -= 1;
+                }
+            }
+            else
+            {
+                //Until fixed for specific motion
+                if (_poiMouse != GraphicCursor.Position.ToPoint() && Contains(GraphicCursor.Position.ToPoint()))
+                {
+                    _poiMouse = GraphicCursor.Position.ToPoint();
+                    if (_iKeySelection - 2 >= 0 && GraphicCursor.Position.Y < _giSelection.Position().Y)
+                    {
+                        _giSelection.AnchorAndAlignToObject(_diOptions[_iKeySelection - 2].GText, SideEnum.Left, SideEnum.Bottom);
+                        _iKeySelection -= 2;
+                    }
+                    else if (_iKeySelection + 2 < _diOptions.Count && GraphicCursor.Position.Y > _giSelection.Position().Y + _giSelection.Height)
+                    {
+                        _giSelection.AnchorAndAlignToObject(_diOptions[_iKeySelection + 2].GText, SideEnum.Left, SideEnum.Bottom);
+                        _iKeySelection += 2;
+                    }
+                    else if (_iKeySelection + 1 < _diOptions.Count && GraphicCursor.Position.Y >= _giSelection.Position().Y && GraphicCursor.Position.Y <= _giSelection.Position().Y + _giSelection.Height && GraphicCursor.Position.X > _textColTwo)
+                    {
+                        if (_iKeySelection % 2 == 0)
+                        {
+                            _iKeySelection++;
+                        }
+                    }
+                    else if (_iKeySelection - 1 >= 0 && GraphicCursor.Position.Y >= _giSelection.Position().Y && GraphicCursor.Position.Y <= _giSelection.Position().Y + _giSelection.Height && GraphicCursor.Position.X < _textColTwo)
+                    {
+                        if (_iKeySelection % 2 != 0)
+                        {
+                            _iKeySelection--;
+                        }
+                    }
+                }
+            }
+            _giSelection.AnchorAndAlignToObject(_arTextAction[_iKeySelection], SideEnum.Left, SideEnum.Bottom);
 
-    //                spriteBatch.DrawString(_fFont, kvp.Value, new Vector2(xindex, yIndex), c);
-    //                //Even numbered spell
-    //                if (kvp.Key % 2 == 0)
-    //                {
-    //                    xindex = _textColTwo;
-    //                    spriteBatch.DrawString(_fFont, display, new Vector2(xindex - _fFont.MeasureString(display).X - _selectWidth, yIndex), c);
-    //                }
-    //                else
-    //                {
-    //                    spriteBatch.DrawString(_fFont, display, new Vector2(Position().X + Width - _fFont.MeasureString(display).X - _selectWidth, yIndex), c);
+            if (InputManager.CheckPressedKey(Keys.Enter))
+            {
+                SelectAction();
+            }
+        }
 
-    //                    xindex = _textColOne;
-    //                    yIndex += (int)_characterHeight;
-    //                }
-    //            }
-    //        }
-    //    }
+        public void AssignSpells(List<CombatAction> abilities)
+        {
+            int key = 0;
+            _displayType = Display.Spells;
+            if (_diOptions.Count == 0)
+            {
+                _liActions = abilities;
+                _iKeySelection = 0;
+                foreach (CombatAction s in abilities)
+                {
+                    _diOptions.Add(key++, new SelectionData(s.Name + ":" + s.MPCost, "", @"Fonts\MenuFont"));
+                }
+                AssignData();
+            }
+        }
+        public void AssignItems(List<CombatItem> items)
+        {
+            int key = 0;
+            _displayType = Display.Items;
+            if (_diOptions.Count == 0)
+            {
+                _liItems = items;
+                _iKeySelection = 0;
+                foreach (Item i in items)
+                {
+                    _diOptions.Add(key++, new SelectionData(i.Name + ":" + i.Number, "", @"Fonts\MenuFont"));
+                }
+                AssignData();
+            }
+        }
 
-    //    public void AssignSpells(List<CombatAction> abilities)
-    //    {
-    //        int key = 0;
-    //        _displayType = Display.Spells;
-    //        if (_diOptions.Count == 0)
-    //        {
-    //            _liActions = abilities;
-    //            _iKeySelection = 0;
-    //            foreach (CombatAction s in abilities)
-    //            {
-    //                _diOptions.Add(key++, s.Name);
-    //            }
-    //        }
-    //    }
-    //    public void AssignItems(List<CombatItem> items)
-    //    {
-    //        int key = 0;
-    //        _displayType = Display.Items;
-    //        if (_diOptions.Count == 0)
-    //        {
-    //            _liItems = items;
-    //            _iKeySelection = 0;
-    //            foreach (Item i in items)
-    //            {
-    //                _diOptions.Add(key++, i.Name);
-    //            }
-    //        }
-    //    }
+        public void AssignData()
+        {
+            for (int i = 0; i < _diOptions.Count && i < _iMaxMenuActions; i++)
+            {
+                //AddControl
+                string[] split = _diOptions[i].Text.Split(':');
+                GUIText gText = _arTextAction[i];
+                GUIText gNum = _arTextNum[i];
 
-    //    public override bool ProcessLeftButtonClick(Point mouse)
-    //    {
-    //        bool rv = false;
-    //        if (Contains(mouse))
-    //        {
-    //            SelectAction();
-    //            rv = true;
-    //        }
-    //        return rv;
-    //    }
+                gText.SetText(split[0]);
+                gNum.SetText(split[1]);
+                if (i == 0) {
+                    _giSelection.AnchorToInnerSide(this, SideEnum.TopLeft);
+                    gText.AnchorAndAlignToObject(_giSelection, SideEnum.Right, SideEnum.Bottom);
+                    gNum.AnchorAndAlignToObject(gText, SideEnum.Right, SideEnum.Bottom);
+                    gNum.AffixToCenter(this, SideEnum.CenterX, false);
+                }
+                else if (i == 1)
+                {
+                    _giSelection.AffixToCenter(this, SideEnum.CenterX, true);
+                    gText.AnchorAndAlignToObject(_giSelection, SideEnum.Right, SideEnum.Bottom);
+                    gNum.AnchorAndAlignToObject(gText, SideEnum.Right, SideEnum.Bottom);
+                    gNum.AnchorToInnerSide(this, SideEnum.TopRight);
+                }
+                else if (i % 2 == 0) {
+                    gText.AnchorAndAlignToObject(_arTextAction[i - 2], SideEnum.Bottom, SideEnum.Left);
+                    gNum.AnchorAndAlignToObject(_arTextNum[i-2], SideEnum.Bottom, SideEnum.Right);
+                }
+                else {
+                    gText.AnchorAndAlignToObject(_arTextAction[i - 1], SideEnum.Right, SideEnum.Bottom);
+                    gNum.AnchorAndAlignToObject(_arTextNum[i - 1], SideEnum.Bottom, SideEnum.Right);
+                }
+                AddControl(gText);
+                AddControl(gNum);
+            }
+            _giSelection.AnchorToInnerSide(this, SideEnum.TopLeft);
+        }
 
-    //    protected override void SelectAction()
-    //    {
-    //        if (_displayType == Display.Spells)
-    //        {
-    //            if (CombatManager.ActiveCharacter.CanCast(_liActions[_iKeySelection].MPCost))
-    //            {
-    //                _chosenAction = _liActions[_iKeySelection];
-    //            }
-    //        }
-    //        else if (_displayType == Display.Items)
-    //        {
-    //            _chosenItem = _liItems[_iKeySelection];
-    //        }
-    //    }
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+            bool rv = false;
+            if (Contains(mouse))
+            {
+                SelectAction();
+                rv = true;
+            }
+            return rv;
+        }
 
-    //    public void ClearChoices()
-    //    {
-    //        _chosenAction = null;
-    //        _chosenItem = null;
-    //    }
-    //}
+        protected override void SelectAction()
+        {
+            if (_displayType == Display.Spells)
+            {
+                if (CombatManager.ActiveCharacter.CanCast(_liActions[_iKeySelection].MPCost))
+                {
+                    _chosenAction = _liActions[_iKeySelection];
+                }
+            }
+            else if (_displayType == Display.Items)
+            {
+                _chosenItem = _liItems[_iKeySelection];
+            }
+        }
+
+        public void ClearChoices()
+        {
+            _chosenAction = null;
+            _chosenItem = null;
+        }
+    }
 }

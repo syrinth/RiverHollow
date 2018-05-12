@@ -27,7 +27,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             StatementSetup(statement, textLoc);
             _textLoc = textLoc;
             Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
-
         }
 
         public GUITextInputWindow(WorldAdventurer w) : this()
@@ -79,7 +78,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             {
                 _gText.AnchorAndAlignToObject(_gStatement, SideEnum.Right, SideEnum.Bottom, 10);
             }
-            Controls.Add(_gText);
+            AddControl(_gText);
             
             Resize();
         }

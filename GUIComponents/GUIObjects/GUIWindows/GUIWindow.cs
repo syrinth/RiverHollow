@@ -84,10 +84,22 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 {
                     Height += g.DrawRectangle.Bottom - InnerRectangle().Bottom;
                 }
+                Position(Position());
             }
+        }
+
+        public void AddControl(GUIObject g)
+        {
+            if (!Controls.Contains(g)) { Controls.Add(g); }
         }
         #region Draw
         public int SkipSize() { return _winData.Size + _winData.Edge; }
+        public void DrawWindow(SpriteBatch spriteBatch)
+        {
+            DrawTop(spriteBatch);
+            DrawMiddle(spriteBatch);
+            DrawBottom(spriteBatch);
+        }
         public override void Draw(SpriteBatch spriteBatch)
         {
             DrawTop(spriteBatch);

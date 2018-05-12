@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIObjects;
-using System.Collections.Generic;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
@@ -28,7 +27,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         int _iDelayMS = 10;
         protected int _iMaxRows = 3;
 
-        public bool PrintAll = false;
+        public bool PrintAll = true;
         bool _bDone = false;
         public bool Done => _bDone;
         #endregion
@@ -41,12 +40,16 @@ namespace RiverHollow.GUIComponents.GUIObjects
             SetDimensions("X");
         }
 
-        public GUIText(string text, bool typeIt = false, string f = @"Fonts\Font") : this()
+        public GUIText(string text, bool printAll = true, string f = @"Fonts\Font") : this()
         {
             _font = GameContentManager.GetFont(f);
-            PrintAll = !typeIt;
-            if (typeIt) { _sFullText = text; }
-            else { _sText = text; }
+            PrintAll = printAll;
+
+            if (!printAll) { _sFullText = text; }
+            else {
+                _sText = text;
+                _sFullText = _sText;
+            }
 
             SetDimensions(text);
         }
@@ -94,6 +97,15 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public void SetText(string text, bool changePos = false)
         {
             _sText = text;
+            SetDimensions(text);
+        }
+        public void ResetText(string text)
+        {
+            _sFullText = text;
+            _sText = string.Empty;
+            _bDone = false;
+            _dTypedTextLen = 0;
+            SetDimensions(text);
         }
         public string GetText()
         {
@@ -134,6 +146,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
                         if (_dTypedTextLen >= _sFullText.Length)
                         {
+                            _dTypedTextLen = _sFullText.Length; //Required because of the imprecise way we calculate
                             _bDone = true;
                         }
 
@@ -143,7 +156,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
             else
             {
-                _sText = _sFullText;
+                if (!string.IsNullOrEmpty(_sFullText) && _sText != _sFullText)
+                {
+                    _sText = _sFullText;
+                }
                 PrintAll = false;
                 _bDone = true;
             }
