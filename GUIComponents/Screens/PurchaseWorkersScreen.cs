@@ -98,7 +98,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             _font = GameContentManager.GetFont(@"Fonts\Font");
             Cost = cost;
             _w = w;
-            _sprite = new GUISprite(w.Sprite);
+            _sprite = new GUISprite(w.BodySprite);
             _sprite.SetScale((int)GameManager.Scale);
             _workerWindow = new GUIWindow(p, GUIWindow.RedWin, _sprite.Width + _sprite.Width / 3, _sprite.Height + 2 * _sprite.Height / 4);
             _costWindow = new GUIWindow(new Vector2(p.X, p.Y + 96), GUIWindow.RedWin, _sprite.Width + _sprite.Width / 3, 32);

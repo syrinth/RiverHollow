@@ -37,12 +37,12 @@ namespace RiverHollow.Characters.NPCs
 
         public override void LoadContent(string textureToLoad)
         {
-            _sprite = new AnimatedSprite(GameContentManager.GetTexture(textureToLoad));
-            _sprite.AddAnimation("Idle", 16, 18, 2, 0.6f, 0, 0);
-            _sprite.SetCurrentAnimation("Idle");
+            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(textureToLoad));
+            _bodySprite.AddAnimation("Idle", 16, 18, 2, 0.6f, 0, 0);
+            _bodySprite.SetCurrentAnimation("Idle");
 
-            _width = _sprite.Width;
-            _height = _sprite.Height;
+            _width = _bodySprite.Width;
+            _height = _bodySprite.Height;
         }
 
         public override void Update(GameTime theGameTime)
@@ -54,7 +54,7 @@ namespace RiverHollow.Characters.NPCs
                 {
                     int max = TileSize * 13;
                     int dist = 0;
-                    if (PlayerManager.CurrentMap == CurrentMapName && PlayerManager.PlayerInRangeGetDist(_sprite.Center.ToPoint(), max, ref dist))
+                    if (PlayerManager.CurrentMap == CurrentMapName && PlayerManager.PlayerInRangeGetDist(_bodySprite.Center.ToPoint(), max, ref dist))
                     {
                         float fMax = max;
                         float fDist = dist;
@@ -70,7 +70,7 @@ namespace RiverHollow.Characters.NPCs
         {
             if (_bActive)
             {
-                _sprite.Draw(spriteBatch, useLayerDepth, _fVisibility);
+                _bodySprite.Draw(spriteBatch, useLayerDepth, _fVisibility);
             }
         }
 

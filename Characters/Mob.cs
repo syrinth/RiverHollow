@@ -36,19 +36,19 @@ namespace RiverHollow
 
         public void LoadContent()
         {
-            _sprite = new AnimatedSprite(GameContentManager.GetTexture(_textureName));
-            _sprite.AddAnimation("IdleDown", TileSize, TileSize, 1, 0.3f, 0, 0);
-            _sprite.AddAnimation("WalkDown", TileSize, TileSize, 2, 0.3f, 116, 0);
-            _sprite.AddAnimation("IdleUp", TileSize, TileSize, 1, 0.3f, 48, 0);
-            _sprite.AddAnimation("WalkUp", TileSize, TileSize, 2, 0.3f, 64, 0);
-            _sprite.AddAnimation("IdleLeft", TileSize, TileSize, 1, 0.3f, 96, 0);
-            _sprite.AddAnimation("WalkLeft", TileSize, TileSize, 2, 0.3f, 112, 0);
-            _sprite.AddAnimation("IdleRight", TileSize, TileSize, 1, 0.3f, 144, 0);
-            _sprite.AddAnimation("WalkRight", TileSize, TileSize, 2, 0.3f, 160, 0);
-            _sprite.SetCurrentAnimation("WalkLeft");
+            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(_textureName));
+            _bodySprite.AddAnimation("IdleDown", TileSize, TileSize, 1, 0.3f, 0, 0);
+            _bodySprite.AddAnimation("WalkDown", TileSize, TileSize, 2, 0.3f, 116, 0);
+            _bodySprite.AddAnimation("IdleUp", TileSize, TileSize, 1, 0.3f, 48, 0);
+            _bodySprite.AddAnimation("WalkUp", TileSize, TileSize, 2, 0.3f, 64, 0);
+            _bodySprite.AddAnimation("IdleLeft", TileSize, TileSize, 1, 0.3f, 96, 0);
+            _bodySprite.AddAnimation("WalkLeft", TileSize, TileSize, 2, 0.3f, 112, 0);
+            _bodySprite.AddAnimation("IdleRight", TileSize, TileSize, 1, 0.3f, 144, 0);
+            _bodySprite.AddAnimation("WalkRight", TileSize, TileSize, 2, 0.3f, 160, 0);
+            _bodySprite.SetCurrentAnimation("WalkLeft");
 
-            _width = _sprite.Width;
-            _height = _sprite.Height;
+            _width = _bodySprite.Width;
+            _height = _bodySprite.Height;
         }
 
         protected int ImportBasics(string[] stringData, int id)

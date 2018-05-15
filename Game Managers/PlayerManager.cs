@@ -32,7 +32,7 @@ namespace RiverHollow.Game_Managers
         private static string _currentMap;
         public static string CurrentMap { get => _currentMap; set => _currentMap = value; }
 
-        public static WorldCharacter World;
+        public static PlayerCharacter World;
         private static Tool _pick;
         private static Tool _axe;
         private static Tool _shovel;
@@ -58,7 +58,7 @@ namespace RiverHollow.Game_Managers
         {
             _party = new List<CombatAdventurer>();
             _questLog = new List<Quest>();
-            World = new WorldCharacter();
+            World = new PlayerCharacter();
             Combat = new CombatAdventurer(Name);
             _party.Add(Combat);
             _buildings = new List<WorkerBuilding>();

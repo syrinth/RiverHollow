@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using RiverHollow.Tile_Engine;
 
 namespace RiverHollow.SpriteAnimations
 {
@@ -13,7 +11,7 @@ namespace RiverHollow.SpriteAnimations
         Texture2D _texture;                         // The texture that holds the images for this sprite
         bool _animating = true;                     // True if animations are being played
         public bool PlayedOnce = false;
-        Color colorTint = Color.White;              // If set to anything other than Color.White, will colorize the sprite with that color.
+        Color _color = Color.White;              // If set to anything other than Color.White, will colorize the sprite with that color.
 
         // Screen Position of the Sprite
         private Vector2 _Position = Vector2.Zero;
@@ -34,6 +32,8 @@ namespace RiverHollow.SpriteAnimations
         public int Width {  get => _width; }
         int _height;
         public int Height { get => _height; }
+
+        bool _bPingPong;
 
         ///
         /// Vector2 representing the position of the sprite's upper left
@@ -98,8 +98,8 @@ namespace RiverHollow.SpriteAnimations
         ///
         public Color Tint
         {
-            get { return colorTint; }
-            set { colorTint = value; }
+            get { return _color; }
+            set { _color = value; }
         }
 
         ///
@@ -111,6 +111,18 @@ namespace RiverHollow.SpriteAnimations
         {
             get { return _animating; }
             set { _animating = value; }
+        }
+
+        float _fLayerDepthMod;
+
+        public void SetColor(Color c)
+        {
+            _color = c;
+        }
+
+        public void SetDepthMod(float val)
+        {
+            _fLayerDepthMod = val;
         }
 
         public bool PlaysOnce = false;
@@ -148,9 +160,10 @@ namespace RiverHollow.SpriteAnimations
 
         #endregion
 
-        public AnimatedSprite(Texture2D Texture)
+        public AnimatedSprite(Texture2D Texture, bool pingPong = false)
         {
             _texture = Texture;
+            _bPingPong = pingPong;
         }
 
         //TODO: Remove this method, classes should do it manually, not in this level
@@ -181,7 +194,7 @@ namespace RiverHollow.SpriteAnimations
 
         public void AddAnimation(string Name, int X, int Y, int Width, int Height, int Frames, float FrameLength, string NextAnimation)
         {
-            _frameanimations.Add(Name, new FrameAnimation(X, Y, Width, Height, Frames, FrameLength, NextAnimation));
+            _frameanimations.Add(Name, new FrameAnimation(X, Y, Width, Height, Frames, FrameLength, _bPingPong, NextAnimation));
             _width = Width;
             _height = Height;
             v2Center = new Vector2(_width / 2, _height / 2);
@@ -263,7 +276,7 @@ namespace RiverHollow.SpriteAnimations
                 }
                 else
                 {
-                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White * visibility);
+                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, _color * visibility);
                 }
             }
         }
@@ -272,7 +285,7 @@ namespace RiverHollow.SpriteAnimations
         {
             if (_animating)
             {
-                spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, Color.White*visibility, 0, Vector2.Zero, SpriteEffects.None, layerDepth);
+                spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, _color * visibility, 0, Vector2.Zero, SpriteEffects.None, layerDepth + _fLayerDepthMod);
             }
         }
 

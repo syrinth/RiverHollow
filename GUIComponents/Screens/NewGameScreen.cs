@@ -136,7 +136,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             public ClassSelectionBox(Vector2 p, WorldAdventurer w)
             {
-                _sprite = new GUISprite(w.Sprite);
+                _sprite = new GUISprite(w.BodySprite);
                 _sprite.SetScale((int)GameManager.Scale);
                 _iClassID = w.AdventurerID;
                 Position(p);

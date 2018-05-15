@@ -134,8 +134,8 @@ namespace RiverHollow.Game_Managers
                 {
                     if (stringTest.Length == 2)
                     {
-                        WorldCharacter n = stringTest[1].Equals("player") ? PlayerManager.World : _liUsedNPCs.Find(test => test.ID == int.Parse(stringTest[1]));
-                        n.SetDirection((WorldCharacter.DirectionEnum)HandleDir(stringTest[0]));
+                        WorldCharacter n = stringTest[1].Equals("player") ? (WorldCharacter)PlayerManager.World : _liUsedNPCs.Find(test => test.ID == int.Parse(stringTest[1]));
+                        n.SetWalkingDir((WorldCharacter.DirectionEnum)HandleDir(stringTest[0]));
                         //n.Sprite.IsAnimating = false;
                         _iCurrentCommand++;
                     }
@@ -164,7 +164,7 @@ namespace RiverHollow.Game_Managers
         //0-Up 1-Down 2-Right 3-Left
         private void HandleMove(string[] stringTest, int dir)
         {
-            WorldCharacter c = stringTest[1].Equals("Player") ? PlayerManager.World : _liUsedNPCs.Find(test => test.ID == int.Parse(stringTest[1]));
+            WorldCharacter c = stringTest[1].Equals("Player") ? (WorldCharacter)PlayerManager.World : _liUsedNPCs.Find(test => test.ID == int.Parse(stringTest[1]));
             if (c.MoveToLocation == Vector2.Zero)
             {
                 Vector2 vec = Vector2.Zero;

@@ -257,7 +257,7 @@ namespace RiverHollow.Characters.CombatStuff
                         {
                             Vector2 direction = Vector2.Zero;
                             Util.GetMoveSpeed(SkillUser.Position, TargetLocation.GetAttackVec(UserStartPosition, new Vector2(SkillUser.Width, SkillUser.Height)), moveSpeed, ref direction);
-                            SkillUser.Sprite.Position += direction;
+                            SkillUser.BodySprite.Position += direction;
                         }
                         else
                         {
@@ -326,7 +326,7 @@ namespace RiverHollow.Characters.CombatStuff
                     {
                         Vector2 direction = Vector2.Zero;
                         Util.GetMoveSpeed(SkillUser.Position, UserStartPosition, moveSpeed, ref direction);
-                        SkillUser.Sprite.Position += direction;
+                        SkillUser.BodySprite.Position += direction;
                     }
                     else
                     {

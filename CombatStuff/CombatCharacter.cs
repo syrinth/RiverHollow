@@ -77,26 +77,26 @@ namespace RiverHollow.Characters.CombatStuff
 
         public void LoadContent(string texture)
         {
-            _sprite = new AnimatedSprite(GameContentManager.GetTexture(texture));
+            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(texture));
             int xCrawl = 0;
             int frameWidth = 24;
             int frameHeight = 32;
-            _sprite.AddAnimation("Walk", frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 32);
+            _bodySprite.AddAnimation("Walk", frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 32);
             xCrawl += 2;
-            _sprite.AddAnimation("Cast", frameWidth, frameHeight, 2, 0.2f, (xCrawl * frameWidth), 32);
+            _bodySprite.AddAnimation("Cast", frameWidth, frameHeight, 2, 0.2f, (xCrawl * frameWidth), 32);
             xCrawl += 2;
-            _sprite.AddAnimation("Hurt", frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 32, "Walk");
+            _bodySprite.AddAnimation("Hurt", frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 32, "Walk");
             xCrawl += 1;
-            _sprite.AddAnimation("Attack", frameWidth, frameHeight, 1, 0.3f, (xCrawl * frameWidth), 32);
+            _bodySprite.AddAnimation("Attack", frameWidth, frameHeight, 1, 0.3f, (xCrawl * frameWidth), 32);
             xCrawl += 1;
-            _sprite.AddAnimation("Critical", frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 32);
+            _bodySprite.AddAnimation("Critical", frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 32);
             xCrawl += 2;
-            _sprite.AddAnimation("KO", frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 32);
+            _bodySprite.AddAnimation("KO", frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 32);
 
-            _sprite.SetCurrentAnimation("Walk");
-            _sprite.SetScale(5);
-            _width = _sprite.Width;
-            _height = _sprite.Height;
+            _bodySprite.SetCurrentAnimation("Walk");
+            _bodySprite.SetScale(5);
+            _width = _bodySprite.Width;
+            _height = _bodySprite.Height;
         }
 
         public override void Update(GameTime theGameTime)
@@ -124,7 +124,7 @@ namespace RiverHollow.Characters.CombatStuff
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _sprite.Draw(spriteBatch, false);
+            _bodySprite.Draw(spriteBatch, false);
         }
 
         public int DecreaseHealth(int offensiveStat, int dmgMod)

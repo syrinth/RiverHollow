@@ -14,15 +14,15 @@ namespace RiverHollow.Characters
         protected string _sName;
         public string Name { get => _sName; }
 
-        protected AnimatedSprite _sprite;
-        public AnimatedSprite Sprite { get => _sprite; }
+        protected AnimatedSprite _bodySprite;
+        public AnimatedSprite BodySprite { get => _bodySprite; }
 
         public virtual Vector2 Position
         {
-            get { return new Vector2(_sprite.Position.X, _sprite.Position.Y); }
-            set { _sprite.Position = value; }
+            get { return new Vector2(_bodySprite.Position.X, _bodySprite.Position.Y); }
+            set { _bodySprite.Position = value; }
         }
-        public virtual Vector2 Center { get => _sprite.Center; }
+        public virtual Vector2 Center { get => _bodySprite.Center; }
 
         public Rectangle GetRectangle()
         {
@@ -33,30 +33,30 @@ namespace RiverHollow.Characters
         public int Width { get => _width; }
         protected int _height;
         public int Height { get => _height; }
-        public int SpriteWidth { get => _sprite.Width; }
-        public int SpriteHeight { get => _sprite.Height; }
+        public int SpriteWidth { get => _bodySprite.Width; }
+        public int SpriteHeight { get => _bodySprite.Height; }
 
         public Character() { }
 
         public virtual void LoadContent(string textureToLoad, int frameWidth, int frameHeight, int numFrames, float frameSpeed,int startX = 0, int startY = 0)
         {
-            _sprite = new AnimatedSprite(GameContentManager.GetTexture(textureToLoad));
-            _sprite.AddAnimation("Walk", frameWidth, frameHeight, numFrames, frameSpeed, startX, startY);
-            _sprite.AddAnimation("Attack", frameWidth, frameHeight, numFrames, frameSpeed, startX, startY);
-            _sprite.SetCurrentAnimation("Walk");
+            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(textureToLoad));
+            _bodySprite.AddAnimation("Walk", frameWidth, frameHeight, numFrames, frameSpeed, startX, startY);
+            _bodySprite.AddAnimation("Attack", frameWidth, frameHeight, numFrames, frameSpeed, startX, startY);
+            _bodySprite.SetCurrentAnimation("Walk");
 
-            _width = _sprite.Width;
-            _height = _sprite.Height;
+            _width = _bodySprite.Width;
+            _height = _bodySprite.Height;
         }
 
         public virtual void Update(GameTime theGameTime)
         {
-            _sprite.Update(theGameTime);
+            _bodySprite.Update(theGameTime);
         }
 
         public virtual void Draw(SpriteBatch spriteBatch,bool useLayerDepth = false)
         {
-            _sprite.Draw(spriteBatch, useLayerDepth);
+            _bodySprite.Draw(spriteBatch, useLayerDepth);
         }
 
         public virtual void SetName(string text)
@@ -64,16 +64,16 @@ namespace RiverHollow.Characters
             _sName = text;
         }
 
-        public void PlayAnimation(string animation)
+        public virtual void PlayAnimation(string animation)
         {
-            _sprite.CurrentAnimation = animation;
+            _bodySprite.SetCurrentAnimation(animation);
         }
 
-        public bool Contains(Point x) { return _sprite.BoundingBox.Contains(x); }
-        public bool AnimationFinished() { return _sprite.PlayedOnce && _sprite.IsAnimating; }
-        public bool IsCurrentAnimation(string val) { return _sprite.CurrentAnimation.Equals(val); }
-        public bool IsAnimating() { return _sprite.IsAnimating; }
-        public bool AnimationPlayedXTimes(int x) { return _sprite.GetPlayCount() == x; }
+        public bool Contains(Point x) { return _bodySprite.BoundingBox.Contains(x); }
+        public bool AnimationFinished() { return _bodySprite.PlayedOnce && _bodySprite.IsAnimating; }
+        public bool IsCurrentAnimation(string val) { return _bodySprite.CurrentAnimation.Equals(val); }
+        public bool IsAnimating() { return _bodySprite.IsAnimating; }
+        public bool AnimationPlayedXTimes(int x) { return _bodySprite.GetPlayCount() == x; }
 
         public bool IsCombatAdventurer() { return _characterType == CharacterEnum.CombatAdventurer; }
         public bool IsMob() { return _characterType == CharacterEnum.Mob; }

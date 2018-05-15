@@ -303,19 +303,19 @@ namespace RiverHollow.Characters
         {
             if (_index != 8)
             {
-                _sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\NPC1"));
+                _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\NPC1"));
             }
             else
             {
-                _sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\NPC8"));
+                _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\NPC8"));
             }
-            _sprite.AddAnimation("IdleDown", 0, 0, TileSize, TileSize*2, 1, 0.2f);
-            _sprite.AddAnimation("WalkDown", 0, 0, TileSize, TileSize * 2, 4, 0.2f);
-            _sprite.AddAnimation("WalkUp", 0, 32, TileSize, TileSize * 2, 4, 0.2f);
-            _sprite.AddAnimation("WalkRight", 0, 64, TileSize, TileSize * 2, 4, 0.2f);
-            _sprite.AddAnimation("WalkLeft", 0, 96, TileSize, TileSize * 2, 4, 0.2f);
-            _sprite.SetCurrentAnimation("IdleDown");
-            _sprite.IsAnimating = true;
+            _bodySprite.AddAnimation("IdleDown", 0, 0, TileSize, TileSize*2, 1, 0.2f);
+            _bodySprite.AddAnimation("WalkDown", 0, 0, TileSize, TileSize * 2, 4, 0.2f);
+            _bodySprite.AddAnimation("WalkUp", 0, 32, TileSize, TileSize * 2, 4, 0.2f);
+            _bodySprite.AddAnimation("WalkRight", 0, 64, TileSize, TileSize * 2, 4, 0.2f);
+            _bodySprite.AddAnimation("WalkLeft", 0, 96, TileSize, TileSize * 2, 4, 0.2f);
+            _bodySprite.SetCurrentAnimation("IdleDown");
+            _bodySprite.IsAnimating = true;
         }
 
         public void DrawPortrait(SpriteBatch spriteBatch, Vector2 dest)

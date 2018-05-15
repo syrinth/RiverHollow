@@ -64,10 +64,10 @@ namespace RiverHollow.Characters.NPCs
 
         public  new void LoadContent(string texture)
         {
-            _sprite = new AnimatedSprite(GameContentManager.GetTexture(texture));
-            _sprite.AddAnimation("Idle", 0, 0, TileSize, TileSize * 2, 1, 0.3f);
-            _sprite.AddAnimation("WalkDown", TileSize, 0, TileSize, TileSize * 2, 2, 0.3f);
-            _sprite.SetCurrentAnimation("Idle");
+            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(texture));
+            _bodySprite.AddAnimation("Idle", 0, 0, TileSize, TileSize * 2, 1, 0.3f);
+            _bodySprite.AddAnimation("WalkDown", TileSize, 0, TileSize, TileSize * 2, 2, 0.3f);
+            _bodySprite.SetCurrentAnimation("Idle");
         }
 
         protected int ImportBasics(string[] stringData, int id)
@@ -108,7 +108,7 @@ namespace RiverHollow.Characters.NPCs
             base.Update(gameTime);
             if (_currentlyMaking != null)
             {
-                _sprite.Update(gameTime);
+                _bodySprite.Update(gameTime);
                 _dProcessedTime += gameTime.ElapsedGameTime.TotalSeconds;
                 int modifiedTime = (int)(_currentlyMaking.ProcessingTime * (0.5 + 0.5*((100 - Mood) / 100)));   //Workers work faster the happier they are.
                 if (_dProcessedTime >= modifiedTime)        //NPCs
@@ -118,7 +118,7 @@ namespace RiverHollow.Characters.NPCs
                     _c.AddXP(_currentlyMaking.XP);
                     _dProcessedTime = -1;
                     _currentlyMaking = null;
-                    _sprite.SetCurrentAnimation("Idle");
+                    _bodySprite.SetCurrentAnimation("Idle");
                 }
             }
         }
@@ -193,7 +193,7 @@ namespace RiverHollow.Characters.NPCs
         public void ProcessChosenItem(int itemID)
         {
             _currentlyMaking = _diCrafting[itemID];
-            _sprite.SetCurrentAnimation("Working");
+            _bodySprite.SetCurrentAnimation("Working");
         }
 
         public int TakeItem()
@@ -274,7 +274,7 @@ namespace RiverHollow.Characters.NPCs
             SetCombat();
             _c.SetName(_sName);
 
-            if (_currentlyMaking != null) { _sprite.SetCurrentAnimation("Working"); }
+            if (_currentlyMaking != null) { _bodySprite.SetCurrentAnimation("Working"); }
         }
     }
 }

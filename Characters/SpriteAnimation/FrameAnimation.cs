@@ -14,32 +14,34 @@ namespace RiverHollow.SpriteAnimations
         private Rectangle rectInitialFrame;
 
         // Number of frames in the Animation
-        private int iFrameCount = 1;
+        private int _iFrameCount = 1;
 
         // The frame currently being displayed. 
         // This value ranges from 0 to iFrameCount-1
-        private int iCurrentFrame = 0;
+        private int _iCurrFrame = 0;
 
         // Amount of time (in seconds) to display each frame
-        private float fFrameLength = 0.2f;
+        private float _fFrameLength = 0.2f;
 
         // Amount of time that has passed since we last animated
-        private float fFrameTimer = 0.0f;
+        private float _fFrameTimer = 0.0f;
 
         // The number of times this animation has been played
-        private int iPlayCount = 0;
+        private int _iPlayCount = 0;
 
         // The animation that should be played after this animation
         private string sNextAnimation = null;
 
+        bool _bBackTracking;
+        bool _bPingPong = true;
 
         /// 
         /// The number of frames the animation contains
         /// 
         public int FrameCount
         {
-            get { return iFrameCount; }
-            set { iFrameCount = value; }
+            get { return _iFrameCount; }
+            set { _iFrameCount = value; }
         }
 
         /// 
@@ -47,8 +49,8 @@ namespace RiverHollow.SpriteAnimations
         /// 
         public float FrameLength
         {
-            get { return fFrameLength; }
-            set { fFrameLength = value; }
+            get { return _fFrameLength; }
+            set { _fFrameLength = value; }
         }
 
         /// 
@@ -56,8 +58,8 @@ namespace RiverHollow.SpriteAnimations
         /// 
         public int CurrentFrame
         {
-            get { return iCurrentFrame; }
-            set { iCurrentFrame = (int)MathHelper.Clamp(value, 0, iFrameCount - 1); }
+            get { return _iCurrFrame; }
+            set { _iCurrFrame = (int)MathHelper.Clamp(value, 0, _iFrameCount - 1); }
         }
 
         public int FrameWidth
@@ -79,15 +81,15 @@ namespace RiverHollow.SpriteAnimations
             get
             {
                 return new Rectangle(
-                    rectInitialFrame.X + (rectInitialFrame.Width * iCurrentFrame),
+                    rectInitialFrame.X + (rectInitialFrame.Width * _iCurrFrame),
                     rectInitialFrame.Y, rectInitialFrame.Width, rectInitialFrame.Height);
             }
         }
 
         public int PlayCount
         {
-            get { return iPlayCount; }
-            set { iPlayCount = value; }
+            get { return _iPlayCount; }
+            set { _iPlayCount = value; }
         }
 
         public string NextAnimation
@@ -99,42 +101,71 @@ namespace RiverHollow.SpriteAnimations
         public FrameAnimation(Rectangle FirstFrame, int Frames)
         {
             rectInitialFrame = FirstFrame;
-            iFrameCount = Frames;
+            _iFrameCount = Frames;
         }
 
         public FrameAnimation(int X, int Y, int Width, int Height, int Frames)
         {
             rectInitialFrame = new Rectangle(X, Y, Width, Height);
-            iFrameCount = Frames;
+            _iFrameCount = Frames;
         }
 
         public FrameAnimation(int X, int Y, int Width, int Height, int Frames, float FrameLength)
         {
             rectInitialFrame = new Rectangle(X, Y, Width, Height);
-            iFrameCount = Frames;
-            fFrameLength = FrameLength;
+            _iFrameCount = Frames;
+            _fFrameLength = FrameLength;
         }
 
         public FrameAnimation(int X, int Y,
             int Width, int Height, int Frames,
-            float FrameLength, string strNextAnimation)
+            float FrameLength, bool pingPong, string strNextAnimation)
         {
             rectInitialFrame = new Rectangle(X, Y, Width, Height);
-            iFrameCount = Frames;
-            fFrameLength = FrameLength;
+            _iFrameCount = Frames;
+            _fFrameLength = FrameLength;
             sNextAnimation = strNextAnimation;
+            _bPingPong = pingPong;
         }
 
         public void Update(GameTime gameTime)
         {
-            fFrameTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if(_iFrameCount > 1) { 
+            _fFrameTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (fFrameTimer > fFrameLength)
-            {
-                fFrameTimer = 0.0f;
-                iCurrentFrame = (iCurrentFrame + 1) % iFrameCount;
-                if (iCurrentFrame == 0)
-                    iPlayCount = (int)MathHelper.Min(iPlayCount + 1, int.MaxValue);
+                if (_fFrameTimer > _fFrameLength)
+                {
+                    _fFrameTimer = 0.0f;
+
+                    if (_bPingPong)
+                    {
+                        if (!_bBackTracking && _iCurrFrame + 1 <= _iFrameCount)
+                        {
+                            _iCurrFrame++;
+                        }
+                        else if (_bBackTracking && _iCurrFrame - 1 >= 0)
+                        {
+                            _iCurrFrame--;
+                        }
+
+                        if (_iCurrFrame == 0) {
+                            _bBackTracking = false;
+                            _iPlayCount = (int)MathHelper.Min(_iPlayCount + 1, int.MaxValue);
+                        }
+                        else if (_iCurrFrame == (_iFrameCount - 1)) {
+                            _bBackTracking = true;
+                        }
+                    }
+                    else
+                    {
+                        if (_iCurrFrame + 1 < _iFrameCount) { _iCurrFrame++; }
+                        else
+                        {
+                            _iPlayCount = (int)MathHelper.Min(_iPlayCount + 1, int.MaxValue);
+                            _iCurrFrame = 0;
+                        }
+                    }
+                }
             }
         }
 
@@ -142,7 +173,7 @@ namespace RiverHollow.SpriteAnimations
         {
                 return new FrameAnimation(this.rectInitialFrame.X, this.rectInitialFrame.Y,
                                           this.rectInitialFrame.Width, this.rectInitialFrame.Height,
-                                          this.iFrameCount, this.fFrameLength, sNextAnimation);
+                                          this._iFrameCount, this._fFrameLength, this._bPingPong, sNextAnimation);
         }
     }
 }
