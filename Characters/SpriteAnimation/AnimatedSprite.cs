@@ -34,6 +34,7 @@ namespace RiverHollow.SpriteAnimations
         public int Height { get => _height; }
 
         bool _bPingPong;
+        int _iScale = 1;
 
         ///
         /// Vector2 representing the position of the sprite's upper left
@@ -188,8 +189,14 @@ namespace RiverHollow.SpriteAnimations
 
         public void SetScale(int x)
         {
+
+            _width = _width / _iScale;
+            _height = _height / _iScale;
+
             _width = _width * x;
             _height = _height * x;
+
+            _iScale = x;
         }
 
         public void AddAnimation(string Name, int X, int Y, int Width, int Height, int Frames, float FrameLength, string NextAnimation)

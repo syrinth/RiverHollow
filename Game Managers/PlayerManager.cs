@@ -69,9 +69,6 @@ namespace RiverHollow.Game_Managers
 
         public static void NewPlayer()
         {
-            Initialize();
-            
-            World.LoadContent(@"Textures\texPlayer");
             World.Position = new Vector2(200, 200);
             _canMake.Add(6);
 

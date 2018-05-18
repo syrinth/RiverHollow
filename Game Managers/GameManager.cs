@@ -150,6 +150,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "CurrentClass")]
             public int currentClass;
 
+            [XmlElement(ElementName = "HairColor")]
+            public Color hairColor;
+
             [XmlElement(ElementName = "Calendar")]
             public CalendarData Calendar;
 
@@ -419,6 +422,7 @@ namespace RiverHollow.Game_Managers
                 name = PlayerManager.Name,
                 currentMap = PlayerManager.CurrentMap,
                 money = PlayerManager.Money,
+                hairColor = PlayerManager.World.HairColor,
                 currentClass = PlayerManager.Combat.CharacterClass.ID,
                 Calendar = GameCalendar.SaveCalendar(),
                 Items = new List<ItemData>(),
@@ -537,6 +541,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager.CurrentMap = MapManager.Maps[data.currentMap].Name;
             PlayerManager.SetName(data.name);
             PlayerManager.SetMoney(data.money);
+            PlayerManager.World.SetHairColor(data.hairColor);
             PlayerManager.SetClass(data.currentClass);
             PlayerManager.World.Position = Util.Normalize(MapManager.Maps[PlayerManager.CurrentMap].GetCharacterSpawn("PlayerSpawn"));
             PlayerManager.World.DetermineFacing(new Vector2(0, 1));

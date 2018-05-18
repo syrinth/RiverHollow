@@ -5,6 +5,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIObjects;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ namespace RiverHollow.GUIComponents.Screens
 {
     class NewGameScreen : GUIScreen
     {
+        List<Color> _liColors = new List<Color>() { Color.Red, Color.Blue, Color.Violet };
+        int _iColorIndex;
         enum SelectionEnum { None, Name, Manor };
         SelectionEnum _selection;
         const int BTN_HEIGHT = 32;
@@ -27,9 +30,14 @@ namespace RiverHollow.GUIComponents.Screens
 
         List<GUIObject> _liClasses;
         ClassSelectionBox _selectedClass;
+        PlayerDisplayBox _playerDisplayBox;
+
+        GUIText _gTextHairColor;
+        GUIImage _giNextHairColor;
 
         public NewGameScreen()
         {
+            _iColorIndex = 0;
             int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIWindow.BrownWin.Edge;
 
             _window = new GUIWindow(new Vector2(startX, 0), GUIWindow.BrownWin, RiverHollow.ScreenHeight, RiverHollow.ScreenHeight);
@@ -58,12 +66,23 @@ namespace RiverHollow.GUIComponents.Screens
             _selectedClass = (ClassSelectionBox)_liClasses[0];
             _selectedClass.PlayAnimation("WalkDown");
 
+            _playerDisplayBox = new PlayerDisplayBox();
+            _playerDisplayBox.AnchorToInnerSide(_window, SideEnum.TopLeft);
+
+            _gTextHairColor = new GUIText("Hair Color");
+            _gTextHairColor.AnchorAndAlignToObject(_playerDisplayBox, SideEnum.Bottom, SideEnum.Left);
+
+            _giNextHairColor = new GUIImage(Vector2.Zero, new Rectangle(288, 96, 32, 32), 32, 32, GameContentManager.GetTexture(@"Textures\Dialog"));
+            _giNextHairColor.AnchorAndAlignToObject(_gTextHairColor, SideEnum.Right, SideEnum.Bottom, 10);
+
             GUIObject.CreateSpacedRow(ref _liClasses, _window.Height / 2, _window.Position().X, _window.Width, 20);
 
             Controls.Add(_btnCancel);
             Controls.Add(_btnOK);
             Controls.Add(_manorWindow);
             Controls.Add(_nameWindow);
+            Controls.Add(_gTextHairColor);
+            Controls.Add(_giNextHairColor);
 
             _selection = SelectionEnum.None;
         }
@@ -85,6 +104,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (_btnOK.Contains(mouse))
             {
                 RiverHollow.NewGame();
+                PlayerManager.World.SetScale();
                 PlayerManager.SetClass(_selectedClass.ClassID);
                 PlayerManager.SetName(_nameWindow.GetText());
                 GameManager.DontReadInput();
@@ -95,6 +115,12 @@ namespace RiverHollow.GUIComponents.Screens
                 GUIManager.SetScreen(new IntroMenuScreen());
                 GameManager.DontReadInput();
                 rv = true;
+            }
+            if (_giNextHairColor.Contains(mouse))
+            {
+                if (_iColorIndex < _liColors.Count - 1) { _iColorIndex++; }
+                else { _iColorIndex = 0; }
+                PlayerManager.World.SetHairColor(_liColors[_iColorIndex]);
             }
 
             if (_nameWindow.Contains(mouse)) { _selection = SelectionEnum.Name; }
@@ -124,6 +150,94 @@ namespace RiverHollow.GUIComponents.Screens
             _btnOK.IsMouseHovering = _btnOK.Contains(mouse);
             _btnCancel.IsMouseHovering = _btnCancel.Contains(mouse);
             return rv;
+        }
+
+        public class PlayerDisplayBox : GUIWindow
+        {
+            GUISprite _bodySprite;
+            public GUISprite BodySprite => _bodySprite;
+            GUISprite _eyeSprite;
+            public GUISprite EyeSprite => _eyeSprite;
+            GUISprite _hairSprite;
+            public GUISprite HairSprite => _hairSprite;
+            GUISprite _armSprite;
+            public GUISprite ArmSprite => _armSprite;
+
+            public PlayerDisplayBox()
+            {
+                _bodySprite = new GUISprite(PlayerManager.World.BodySprite);
+                _eyeSprite = new GUISprite(PlayerManager.World.EyeSprite);
+                _hairSprite = new GUISprite(PlayerManager.World.HairSprite);
+                _armSprite = new GUISprite(PlayerManager.World.ArmSprite);
+
+                _bodySprite.SetScale((int)GameManager.Scale);
+                _eyeSprite.SetScale((int)GameManager.Scale);
+                _hairSprite.SetScale((int)GameManager.Scale);
+                _armSprite.SetScale((int)GameManager.Scale);
+
+                _winData = GUIWindow.RedWin;
+                
+                PositionSprites();
+            }
+
+            public override void Update(GameTime gameTime)
+            {
+                _bodySprite.Update(gameTime);
+                _eyeSprite.Update(gameTime);
+                _hairSprite.Update(gameTime);
+                _armSprite.Update(gameTime);
+            }
+
+            public override void Draw(SpriteBatch spriteBatch)
+            {
+                base.Draw(spriteBatch);
+                _bodySprite.Draw(spriteBatch);
+                _eyeSprite.Draw(spriteBatch);
+                _hairSprite.Draw(spriteBatch);
+                _armSprite.Draw(spriteBatch);
+            }
+
+            public override void Position(Vector2 value)
+            {
+                base.Position(value);
+                PositionSprites();
+            }
+
+            public void PlayAnimation(string animation)
+            {
+                _bodySprite.PlayAnimation(animation);
+                _eyeSprite.PlayAnimation(animation);
+                _hairSprite.PlayAnimation(animation);
+                _armSprite.PlayAnimation(animation);
+            }
+
+            public void PositionSprites()
+            {
+                if (_bodySprite != null)
+                {
+                    _bodySprite.CenterOnWindow(this);
+                    _bodySprite.AnchorToInnerSide(this, SideEnum.Bottom);
+
+                    Width = _bodySprite.Width + _bodySprite.Width / 3;
+                    Height = _bodySprite.Height + 2 * _bodySprite.Height / 4;
+
+                }
+                if (_eyeSprite != null)
+                {
+                    _eyeSprite.CenterOnWindow(this);
+                    _eyeSprite.AnchorToInnerSide(this, SideEnum.Bottom);
+                }
+                if (_hairSprite != null)
+                {
+                    _hairSprite.CenterOnWindow(this);
+                    _hairSprite.AnchorToInnerSide(this, SideEnum.Bottom);
+                }
+                if (_armSprite != null)
+                {
+                    _armSprite.CenterOnWindow(this);
+                    _armSprite.AnchorToInnerSide(this, SideEnum.Bottom);
+                }
+            }
         }
 
         public class ClassSelectionBox : GUIWindow

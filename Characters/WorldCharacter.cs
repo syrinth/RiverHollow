@@ -24,7 +24,7 @@ namespace RiverHollow.Characters
             set { _bodySprite.Position = new Vector2(value.X, value.Y - _bodySprite.Height + TileSize); }
         }
 
-        public Rectangle CollisionBox { get => new Rectangle((int)Position.X + (Width/4), (int)Position.Y+TileSize, Width/2, TileSize); }
+        public Rectangle CollisionBox { get => new Rectangle((int)Position.X + (Width/4), (int)Position.Y, Width/2, TileSize); }
 
 
         public int Speed = 2;
@@ -159,15 +159,24 @@ namespace RiverHollow.Characters
     public class PlayerCharacter : WorldCharacter
     {
         AnimatedSprite _spriteEyes;
+        public AnimatedSprite EyeSprite => _spriteEyes;
         AnimatedSprite _spriteArms;
+        public AnimatedSprite ArmSprite => _spriteArms;
+        AnimatedSprite _spriteHair;
+        public AnimatedSprite HairSprite => _spriteHair;
+
+        Color _cHairColor;
+        public Color HairColor => _cHairColor;
 
         public override Vector2 Position
         {
-            get { return new Vector2(_bodySprite.Position.X, _bodySprite.Position.Y); }
-            set {
-                _bodySprite.Position = value;
-                _spriteEyes.Position = value;
-                _spriteArms.Position = value;
+            get { return new Vector2(_bodySprite.Position.X, _bodySprite.Position.Y + _bodySprite.Height - TileSize); }
+            set
+            {
+                _bodySprite.Position = new Vector2(value.X, value.Y - _bodySprite.Height + TileSize);
+                _spriteEyes.Position = new Vector2(value.X, value.Y - _spriteEyes.Height + TileSize);
+                _spriteArms.Position = new Vector2(value.X, value.Y - _spriteArms.Height + TileSize);
+                _spriteHair.Position = new Vector2(value.X, value.Y - _spriteHair.Height + TileSize);
             }
         }
 
@@ -175,6 +184,8 @@ namespace RiverHollow.Characters
         {
             _width = TileSize;
             _height = TileSize;
+
+            _cHairColor = Color.Red;
         }
 
         public override void Update(GameTime theGameTime)
@@ -182,6 +193,7 @@ namespace RiverHollow.Characters
             _bodySprite.Update(theGameTime);
             _spriteEyes.Update(theGameTime);
             _spriteArms.Update(theGameTime);
+            _spriteHair.Update(theGameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
@@ -189,32 +201,35 @@ namespace RiverHollow.Characters
             _bodySprite.Draw(spriteBatch, useLayerDepth);
             _spriteEyes.Draw(spriteBatch, useLayerDepth);
             _spriteArms.Draw(spriteBatch, useLayerDepth);
+            _spriteHair.Draw(spriteBatch, useLayerDepth);
         }
 
         public override void LoadContent(string textureToLoad)
         {
-            int startX = 0;
-            int startY = 0;
-
             Color bodyColor = Color.White;
 
-            AddDefaultAnimations(ref _bodySprite, textureToLoad, startX, startY, true);
+            AddDefaultAnimations(ref _bodySprite, textureToLoad, 0, 0, true);
             _bodySprite.SetColor(bodyColor);
 
-            startX = 0;
-            startY = TileSize * 2;
-            AddDefaultAnimations(ref _spriteEyes, textureToLoad, startX, startY, true);
+            AddDefaultAnimations(ref _spriteEyes, textureToLoad, 0, TileSize * 2, true);
             _spriteEyes.SetDepthMod(0.001f);
             
-
-            startX = 0;
-            startY = TileSize * 4;
-            AddDefaultAnimations(ref _spriteArms, textureToLoad, startX, startY, true);
+            AddDefaultAnimations(ref _spriteArms, textureToLoad, 0, TileSize * 4, true);
             _spriteArms.SetDepthMod(0.002f);
             _spriteArms.SetColor(bodyColor);
 
+            AddDefaultAnimations(ref _spriteHair, textureToLoad, 0, TileSize * 6, true);
+            _spriteHair.SetColor(_cHairColor);
+            _spriteHair.SetDepthMod(0.003f);
+
             _width = _bodySprite.Width;
             _height = _bodySprite.Height;
+        }
+
+        public void SetHairColor(Color c)
+        {
+            _cHairColor = c;
+            SetColor(_spriteHair, c);
         }
 
         public void SetColor(AnimatedSprite sprite, Color c)
@@ -249,6 +264,7 @@ namespace RiverHollow.Characters
             _bodySprite.MoveBy(x, y);
             _spriteEyes.MoveBy(x, y);
             _spriteArms.MoveBy(x, y);
+            _spriteHair.MoveBy(x, y);
         }
 
         public override void PlayAnimation(string anim)
@@ -256,6 +272,15 @@ namespace RiverHollow.Characters
             _bodySprite.SetCurrentAnimation(anim);
             _spriteEyes.SetCurrentAnimation(anim);
             _spriteArms.SetCurrentAnimation(anim);
+            _spriteHair.SetCurrentAnimation(anim);
+        }
+
+        public void SetScale(int scale = 1)
+        {
+            _bodySprite.SetScale(scale);
+            _spriteEyes.SetScale(scale);
+            _spriteArms.SetScale(scale);
+            _spriteHair.SetScale(scale);
         }
     }
 }
