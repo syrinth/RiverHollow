@@ -22,7 +22,7 @@ namespace RiverHollow
         //Every 10 minutes is 10 seconds real time.
         static string[] ListSeasons = { "Spring", "Summer", "Fall", "Winter" };
         static string[] ListDays = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
-        static string[] ListWeather = { "Sunny", "Raining", "Snowing" }; //Thunderstorm?
+        static string[] ListWeather = { "Sunny", "Rain", "Snow" }; //Thunderstorm?
 
         static int _iCurrSeason;
         public static int CurrentSeason { get => _iCurrSeason; }

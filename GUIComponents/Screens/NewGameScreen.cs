@@ -103,8 +103,8 @@ namespace RiverHollow.GUIComponents.Screens
             bool rv = false;
             if (_btnOK.Contains(mouse))
             {
-                RiverHollow.NewGame();
                 PlayerManager.World.SetScale();
+                RiverHollow.NewGame();
                 PlayerManager.SetClass(_selectedClass.ClassID);
                 PlayerManager.SetName(_nameWindow.GetText());
                 GameManager.DontReadInput();

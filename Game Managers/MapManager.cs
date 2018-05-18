@@ -101,7 +101,7 @@ namespace RiverHollow.Game_Managers
                 _currentMap = _tileMaps[newMapName];
 
                 PlayerManager.CurrentMap = _currentMap.Name;
-                PlayerManager.World.Position = Util.Normalize(new Vector2(rectEntrance.Left, rectEntrance.Top-TileSize));
+                PlayerManager.World.Position = Util.Normalize(new Vector2(rectEntrance.Left, rectEntrance.Top));
                 CutsceneManager.CheckForTriggedCutscene();
             }
             else
@@ -371,8 +371,10 @@ namespace RiverHollow.Game_Managers
             AnimatedSprite _sprite;
             public Weather(int x, int y)
             {
-                _sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\texWeather"));
-                _sprite.Position = new Vector2(x, y);
+                _sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\texWeather"))
+                {
+                    Position = new Vector2(x, y)
+                };
                 _sprite.AddAnimation("Rain", 0, 0, 160, 160, 2, 0.2f);
                 _sprite.AddAnimation("Snow", 0, 160, 160, 160, 3, 0.2f);
                 _sprite.IsAnimating = false;
