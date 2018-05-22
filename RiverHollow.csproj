@@ -84,6 +84,7 @@
     <Compile Include="GUIComponents\Screens\ManagementScreen.cs" />
     <Compile Include="GUIComponents\Screens\OptionScreen.cs" />
     <Compile Include="GUIComponents\Screens\PartyScreen.cs" />
+    <Compile Include="GUIComponents\Screens\PurchaseItemsScreen.cs" />
     <Compile Include="GUIComponents\Screens\QuestScreen.cs" />
     <Compile Include="Game Managers\InventoryManager.cs" />
     <Compile Include="Items\MerchantChest.cs" />

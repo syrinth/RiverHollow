@@ -718,7 +718,7 @@ namespace RiverHollow.WorldObjects
                     {
                         itemData.itemID = i.ItemID;
                         itemData.num = i.Number;
-                        itemData.strData = i.GetSaveData();
+                        itemData.strData = i.GetUniqueData();
                     }
                     else
                     {
@@ -737,7 +737,7 @@ namespace RiverHollow.WorldObjects
                     {
                         ItemData item = data.Items[i * InventoryManager.maxItemRows + j];
                         Item newItem = GetItem(item.itemID, item.num);
-                        if (newItem != null) { newItem.ApplySaveData(item.strData); }
+                        if (newItem != null) { newItem.ApplyUniqueData(item.strData); }
                         InventoryManager.AddItemToInventorySpot(newItem, i, j, this);
                     }
                 }

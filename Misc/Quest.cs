@@ -72,7 +72,7 @@ namespace RiverHollow.Misc
             {
                 string[] info = s.Split(' ');
                 Item it = ObjectManager.GetItem(int.Parse(info[0]), int.Parse(info[1]));
-                if(info.Length == 3) { it.ApplySaveData(info[2]); }
+                if(info.Length == 3) { it.ApplyUniqueData(info[2]); }
                 _liRewardItems.Add(it);
             }
             _sRewardText = splitParams[i++];

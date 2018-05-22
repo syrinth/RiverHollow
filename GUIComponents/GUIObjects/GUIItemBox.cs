@@ -103,7 +103,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _item = it;
             if (_item != null && _item.DoesItStack)
             {
-                _textNum = new GUIText(_item.Number.ToString(), false, @"Fonts\DisplayFont");
+                _textNum = new GUIText(_item.Number.ToString(), true, @"Fonts\DisplayFont");
                 _textNum.SetColor(Color.White);
                 _textNum.AnchorToInnerSide(this, SideEnum.BottomRight, 10);
             }

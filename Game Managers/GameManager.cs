@@ -153,6 +153,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "HairColor")]
             public Color hairColor;
 
+            [XmlElement(ElementName = "HairIndex")]
+            public int hairIndex;
+
             [XmlElement(ElementName = "Calendar")]
             public CalendarData Calendar;
 
@@ -423,6 +426,7 @@ namespace RiverHollow.Game_Managers
                 currentMap = PlayerManager.CurrentMap,
                 money = PlayerManager.Money,
                 hairColor = PlayerManager.World.HairColor,
+                hairIndex = PlayerManager.World.HairIndex,
                 currentClass = PlayerManager.Combat.CharacterClass.ID,
                 Calendar = GameCalendar.SaveCalendar(),
                 Items = new List<ItemData>(),
@@ -440,7 +444,7 @@ namespace RiverHollow.Game_Managers
                 {
                     itemData.itemID = i.ItemID;
                     itemData.num = i.Number;
-                    itemData.strData = i.GetSaveData();
+                    itemData.strData = i.GetUniqueData();
                 }
                 else
                 {
@@ -542,6 +546,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager.SetName(data.name);
             PlayerManager.SetMoney(data.money);
             PlayerManager.World.SetHairColor(data.hairColor);
+            PlayerManager.World.SetHairType(data.hairIndex);
             PlayerManager.SetClass(data.currentClass);
             PlayerManager.World.Position = Util.Normalize(MapManager.Maps[PlayerManager.CurrentMap].GetCharacterSpawn("PlayerSpawn"));
             PlayerManager.World.DetermineFacing(new Vector2(0, 1));
@@ -563,7 +568,7 @@ namespace RiverHollow.Game_Managers
                     {
                         int x = 0;
                     }
-                    if (newItem != null) { newItem.ApplySaveData(item.strData); }
+                    if (newItem != null) { newItem.ApplyUniqueData(item.strData); }
                     InventoryManager.AddItemToInventorySpot(newItem, i, j);
                 }
             }

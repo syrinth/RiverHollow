@@ -95,5 +95,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapArcaneTower3.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC6.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Quests.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texPlayerHair.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/MagicShop.xml</File>
   </SourceFiles>
 </SourceFileCollection>

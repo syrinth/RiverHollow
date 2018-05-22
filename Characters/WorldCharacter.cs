@@ -165,8 +165,11 @@ namespace RiverHollow.Characters
         AnimatedSprite _spriteHair;
         public AnimatedSprite HairSprite => _spriteHair;
 
-        Color _cHairColor;
+        Color _cHairColor = Color.White;
         public Color HairColor => _cHairColor;
+
+        int _iHairIndex = 0;
+        public int HairIndex => _iHairIndex;
 
         public override Vector2 Position
         {
@@ -218,7 +221,7 @@ namespace RiverHollow.Characters
             _spriteArms.SetDepthMod(0.002f);
             _spriteArms.SetColor(bodyColor);
 
-            AddDefaultAnimations(ref _spriteHair, textureToLoad, 0, TileSize * 6, true);
+            AddDefaultAnimations(ref _spriteHair, @"Textures\texPlayerHair", 0, _iHairIndex * TileSize * 2, true);
             _spriteHair.SetColor(_cHairColor);
             _spriteHair.SetDepthMod(0.003f);
 
@@ -235,6 +238,14 @@ namespace RiverHollow.Characters
         public void SetColor(AnimatedSprite sprite, Color c)
         {
             sprite.SetColor(c);
+        }
+
+        public void SetHairType(int index)
+        {
+            _iHairIndex = index;
+            AddDefaultAnimations(ref _spriteHair, @"Textures\texPlayerHair", 0, _iHairIndex * TileSize * 2, true);
+            _spriteHair.SetColor(_cHairColor);
+            _spriteHair.SetDepthMod(0.003f);
         }
 
         public override void Idle()

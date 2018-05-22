@@ -8,7 +8,6 @@ using RiverHollow.GUIObjects;
 
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Misc;
-using RiverHollow.Characters.CombatStuff;
 
 namespace RiverHollow.WorldObjects
 {
@@ -22,6 +21,7 @@ namespace RiverHollow.WorldObjects
         protected int _itemID;
         public int ItemID { get => _itemID; }
         protected Color _c = Color.White;
+        public Color ItemColor => _c;
 
         protected double _dWidth = 16;
         protected double _dHeight = 16;
@@ -117,7 +117,7 @@ namespace RiverHollow.WorldObjects
         {
             if (_onTheMap)
             {
-                spriteBatch.Draw(_texture, new Rectangle((int)_position.X, (int)_position.Y, (int)_dWidth, (int)_dHeight), SourceRectangle, Color.White);
+                spriteBatch.Draw(_texture, new Rectangle((int)_position.X, (int)_position.Y, (int)_dWidth, (int)_dHeight), SourceRectangle, _c);
             }
         }
 
@@ -216,8 +216,8 @@ namespace RiverHollow.WorldObjects
 
         public virtual void UseItem() { }
 
-        public virtual void ApplySaveData(string str) { }
-        public virtual string GetSaveData() { return string.Empty; }
+        public virtual void ApplyUniqueData(string str) { }
+        public virtual string GetUniqueData() { return string.Empty; }
 
         public bool IsTool() { return _itemType == ItemEnum.Tool; }
         public bool IsCombatItem() { return _itemType == ItemEnum.Combat; }
@@ -513,12 +513,12 @@ namespace RiverHollow.WorldObjects
             BackToMain();
         }
 
-        public override void ApplySaveData(string str)
+        public override void ApplyUniqueData(string str)
         {
             SetClassChange(int.Parse(str));
         }
 
-        public override string GetSaveData()
+        public override string GetUniqueData()
         {
             return _iClassID.ToString();
         }

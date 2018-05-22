@@ -223,7 +223,7 @@ namespace RiverHollow.SpriteAnimations
         {
             _LastPosition = _Position;
             _Position.X += x;
-            _Position.Y += y;
+            _Position.Y += y; 
         }
 
         public void Update(GameTime gameTime)
@@ -262,13 +262,13 @@ namespace RiverHollow.SpriteAnimations
                 // Check to see if there is a "followup" animation named for this animation
                 if (!String.IsNullOrEmpty(CurrentFrameAnimation.NextAnimation))
                 {
-                // If there is, see if the currently playing animation has
-                // completed a full animation loop
-                if (CurrentFrameAnimation.PlayCount > 0)
-                {
-                    // If it has, set up the next animation
-                    CurrentAnimation = CurrentFrameAnimation.NextAnimation;
-                }
+                    // If there is, see if the currently playing animation has
+                    // completed a full animation loop
+                    if (CurrentFrameAnimation.PlayCount > 0)
+                    {
+                        // If it has, set up the next animation
+                        CurrentAnimation = CurrentFrameAnimation.NextAnimation;
+                    }
                 }
             }
         }

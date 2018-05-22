@@ -8,6 +8,7 @@ using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIObjects;
+using RiverHollow.SpriteAnimations;
 using System.Collections.Generic;
 
 using static RiverHollow.GUIObjects.GUIObject;
@@ -17,7 +18,9 @@ namespace RiverHollow.GUIComponents.Screens
     class NewGameScreen : GUIScreen
     {
         List<Color> _liColors = new List<Color>() { Color.Red, Color.Blue, Color.Violet };
-        int _iColorIndex;
+        int _iHairColorIndex;
+        int _iHairTypeIndex;
+        int _iHairTypeMax = GameContentManager.GetTexture(@"Textures\texPlayerHair").Height / 32;
         enum SelectionEnum { None, Name, Manor };
         SelectionEnum _selection;
         const int BTN_HEIGHT = 32;
@@ -32,12 +35,12 @@ namespace RiverHollow.GUIComponents.Screens
         ClassSelectionBox _selectedClass;
         PlayerDisplayBox _playerDisplayBox;
 
-        GUIText _gTextHairColor;
-        GUIImage _giNextHairColor;
+        GUIText _gTextHairColor, _gTextHairType;
+        GUIImage _giNextHairColor, _giNextHairType;
 
         public NewGameScreen()
         {
-            _iColorIndex = 0;
+            _iHairColorIndex = 0;
             int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIWindow.BrownWin.Edge;
 
             _window = new GUIWindow(new Vector2(startX, 0), GUIWindow.BrownWin, RiverHollow.ScreenHeight, RiverHollow.ScreenHeight);
@@ -75,6 +78,12 @@ namespace RiverHollow.GUIComponents.Screens
             _giNextHairColor = new GUIImage(Vector2.Zero, new Rectangle(288, 96, 32, 32), 32, 32, GameContentManager.GetTexture(@"Textures\Dialog"));
             _giNextHairColor.AnchorAndAlignToObject(_gTextHairColor, SideEnum.Right, SideEnum.Bottom, 10);
 
+            _gTextHairType = new GUIText("Hair Type");
+            _gTextHairType.AnchorAndAlignToObject(_gTextHairColor, SideEnum.Bottom, SideEnum.Left);
+
+            _giNextHairType = new GUIImage(Vector2.Zero, new Rectangle(288, 96, 32, 32), 32, 32, GameContentManager.GetTexture(@"Textures\Dialog"));
+            _giNextHairType.AnchorAndAlignToObject(_gTextHairType, SideEnum.Right, SideEnum.Bottom, 10);
+
             GUIObject.CreateSpacedRow(ref _liClasses, _window.Height / 2, _window.Position().X, _window.Width, 20);
 
             Controls.Add(_btnCancel);
@@ -83,6 +92,8 @@ namespace RiverHollow.GUIComponents.Screens
             Controls.Add(_nameWindow);
             Controls.Add(_gTextHairColor);
             Controls.Add(_giNextHairColor);
+            Controls.Add(_gTextHairType);
+            Controls.Add(_giNextHairType);
 
             _selection = SelectionEnum.None;
         }
@@ -118,10 +129,19 @@ namespace RiverHollow.GUIComponents.Screens
             }
             if (_giNextHairColor.Contains(mouse))
             {
-                if (_iColorIndex < _liColors.Count - 1) { _iColorIndex++; }
-                else { _iColorIndex = 0; }
-                PlayerManager.World.SetHairColor(_liColors[_iColorIndex]);
+                if (_iHairColorIndex < _liColors.Count - 1) { _iHairColorIndex++; }
+                else { _iHairColorIndex = 0; }
+                PlayerManager.World.SetHairColor(_liColors[_iHairColorIndex]);
             }
+            if (_giNextHairType.Contains(mouse))
+            {
+                if (_iHairTypeIndex < _iHairTypeMax - 1) { _iHairTypeIndex++; }
+                else { _iHairTypeIndex = 0; }
+
+                _playerDisplayBox.SyncHair(_iHairTypeIndex);
+            }
+
+            
 
             if (_nameWindow.Contains(mouse)) { _selection = SelectionEnum.Name; }
             else if (_manorWindow.Contains(mouse)) { _selection = SelectionEnum.Manor; }
@@ -237,6 +257,15 @@ namespace RiverHollow.GUIComponents.Screens
                     _armSprite.CenterOnWindow(this);
                     _armSprite.AnchorToInnerSide(this, SideEnum.Bottom);
                 }
+            }
+
+            public void SyncHair(int index)
+            {
+                PlayerManager.World.SetHairType(index);
+
+                _hairSprite.SetSprite(PlayerManager.World.HairSprite);
+                _hairSprite.SetScale((int)GameManager.Scale);
+                PositionSprites();
             }
         }
 

@@ -76,7 +76,7 @@ namespace RiverHollow.Game_Managers
                         }
                         else
                         {
-                            if (testItem.ItemID == itemID && testItem.Number < 999)
+                            if (testItem.ItemID == itemID && testItem.DoesItStack && testItem.Number < 999)
                             {
                                 rv = true;
                                 break;

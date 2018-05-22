@@ -57,6 +57,7 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\NPCs\Spirit_Water_1");
             AddTexture(Content, @"Textures\texWeather");
             AddTexture(Content, @"Textures\lightmask");
+            AddTexture(Content, @"Textures\texPlayerHair");
         }
 
         public static void LoadGUIs(ContentManager Content)
@@ -93,6 +94,7 @@ namespace RiverHollow.Game_Managers
         {
             LoadMerchandiseByFile(Content, @"Data\Shops\Buildings");
             LoadMerchandiseByFile(Content, @"Data\Shops\Adventurers");
+            LoadMerchandiseByFile(Content, @"Data\Shops\MagicShop");
         }
 
         public static void LoadMerchandiseByFile(ContentManager Content, string file)

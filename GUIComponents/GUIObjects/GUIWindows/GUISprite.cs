@@ -45,5 +45,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             Width = _sprite.Width;
             Height = _sprite.Height;
         }
+
+        public void SetSprite(AnimatedSprite sprite)
+        {
+            _sprite = sprite;
+            Width = sprite.Width;
+            Height = sprite.Height;
+        }
     }
 }
