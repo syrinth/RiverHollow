@@ -31,6 +31,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
             if (_gSelectionWindow != null) { _gSelectionWindow.ProcessRightButtonClick(mouse); }
+            else { GameManager.BackToMain(); }
             return rv;
         }
         public virtual bool ProcessHover(Point mouse)

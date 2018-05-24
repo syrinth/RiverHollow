@@ -22,6 +22,7 @@ namespace RiverHollow.GUIObjects
         protected Rectangle _sourceRect;
 
         protected Texture2D _texture = GameContentManager.GetTexture(@"Textures\Dialog");
+        protected Color _cEnabled = Color.White;
 
         public virtual bool Contains(Point mouse)
         {
@@ -30,7 +31,12 @@ namespace RiverHollow.GUIObjects
         public virtual void Update(GameTime gameTime) { }
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _drawRect, _sourceRect, Color.White);
+            spriteBatch.Draw(_texture, _drawRect, _sourceRect, _cEnabled);
+        }
+
+        public virtual void Enable(bool value)
+        {
+            _cEnabled = value ? Color.White : Color.Gray;
         }
 
         public static Vector2 PosFromCenter(Vector2 center, int width, int height)
@@ -180,9 +186,7 @@ namespace RiverHollow.GUIObjects
             }
             this.Position(position);
         }
-        ////case SideEnum.CenterX:
-        //            this.SetX(window.DrawRectangle.Center.X);
-        //            break;
+
         internal void AffixToCenter(GUIWindow window, SideEnum whichCenter, bool onMain, int spacing = 0)
         {
             window.AddControl(this);

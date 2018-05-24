@@ -6,11 +6,13 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIObjects.Screens
 {
     public class PurchaseWorkersScreen : GUIScreen
     {
+        GUIMoneyDisplay _gMoney;
         private GUIWindow _mainWindow;
         private List<GUIObject> _liWorkers;
 
@@ -24,26 +26,36 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                 int minHeight = 128 + 64;
                 _mainWindow = new GUIWindow(GUIObject.PosFromCenter(center, minWidth, minHeight), GUIWindow.RedWin, minWidth, minHeight);
 
-                int numDivions = merch.Count + 2;
-                float xPos = _mainWindow.Position().X + _mainWindow.Width;
-                float incrementVal = _mainWindow.Position().Y / numDivions; //If we only display one box, it needs to be centered at the halfway point, so divided by 2
-                float yPos = _mainWindow.Position().Y + incrementVal;
-
                 _mainWindow.PositionAdd(new Vector2(32, 32));
                 Vector2 position = _mainWindow.Position();
                 _liWorkers = new List<GUIObject>();
 
-
+                int i = 0;
                 foreach (Merchandise m in merch)
                 {
-                    WorldAdventurer w = ObjectManager.GetWorker(m.MerchID);
+                    if (m.MerchType == Merchandise.ItemType.Worker)
+                    {
+                        WorldAdventurer w = ObjectManager.GetWorker(m.MerchID);
+                        WorkerBox wb = new WorkerBox(position, w, m.MoneyCost);
+                        _liWorkers.Add(wb);
 
-                    _liWorkers.Add(new WorkerBox(position, w, m.MoneyCost));
+                        if (i == 0) { wb.AnchorToInnerSide(_mainWindow, GUIObject.SideEnum.TopLeft); }
+                        else {
+                            wb.AnchorAndAlignToObject(_liWorkers[i - 1], GUIObject.SideEnum.Right, GUIObject.SideEnum.Top, 20);
+                            _mainWindow.AddControl(wb);
+                        }
+                        i++;
+                    }
                 }
-                
 
-                GUIObject.CreateSpacedRow(ref _liWorkers, RiverHollow.ScreenHeight / 2, _mainWindow.Position().X, RiverHollow.ScreenWidth/10, 20);
+                _mainWindow.Resize();
+
+                _gMoney = new GUIMoneyDisplay();
+                _gMoney.AnchorAndAlignToObject(_mainWindow, GUIObject.SideEnum.Top, GUIObject.SideEnum.Left);
+
                 Controls.Add(_mainWindow);
+                Controls.Add(_gMoney);
+                Controls.Add(_gMoney);
             }
             catch (Exception e)
             {
@@ -82,26 +94,43 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
 
             return rv;
         }
+
+        public override bool ProcessHover(Point mouse)
+        {
+            bool rv = false;
+
+            foreach (WorkerBox wB in _liWorkers)
+            {
+                wB.Enable(wB.Contains(mouse));
+            }
+
+            return rv;
+        }
     }
 
     public class WorkerBox : GUIObject
     {
-        private SpriteFont _font;
-        private GUIWindow _workerWindow;
-        private GUIWindow _costWindow;
-        private GUISprite _sprite;
+        GUIWindow _workerWindow;
+        GUIWindow _costWindow;
+        GUISprite _sprite;
+        GUIMoneyDisplay _gMoney;
         public WorldAdventurer _w;
         public int Cost;
 
         public WorkerBox(Vector2 p, WorldAdventurer w, int cost)
         {
-            _font = GameContentManager.GetFont(@"Fonts\Font");
             Cost = cost;
             _w = w;
             _sprite = new GUISprite(w.BodySprite);
             _sprite.SetScale((int)GameManager.Scale);
             _workerWindow = new GUIWindow(p, GUIWindow.RedWin, _sprite.Width + _sprite.Width / 3, _sprite.Height + 2 * _sprite.Height / 4);
-            _costWindow = new GUIWindow(new Vector2(p.X, p.Y + 96), GUIWindow.RedWin, _sprite.Width + _sprite.Width / 3, 32);
+            _costWindow = new GUIWindow(Vector2.Zero, GUIWindow.RedWin, _sprite.Width + _sprite.Width / 3, 16);
+
+            _gMoney = new GUIMoneyDisplay(Cost);
+            _gMoney.AnchorToInnerSide(_costWindow, SideEnum.TopRight);
+
+            _costWindow.AddControl(_gMoney);
+            _costWindow.Resize();
 
             Position(_workerWindow.Position());
         }
@@ -111,24 +140,30 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             _workerWindow.Draw(spriteBatch);
             _costWindow.Draw(spriteBatch);
             _sprite.Draw(spriteBatch);
-            spriteBatch.DrawString(_font, Cost.ToString(), _costWindow.Position() + new Vector2(_costWindow.EdgeSize/2, _costWindow.EdgeSize/2), Color.White);
+            _gMoney.Draw(spriteBatch);
         }
 
         public override bool Contains(Point mouse)
         {
-            return _workerWindow.Contains(mouse);
+            return _workerWindow.Contains(mouse) || _costWindow.Contains(mouse);
         }
 
         public override void Position(Vector2 value)
         {
             base.Position(value);
             _workerWindow.Position(value);
-            _costWindow.AnchorToObject(_workerWindow, SideEnum.Bottom);
+            _costWindow.AnchorAndAlignToObject(_workerWindow, SideEnum.Bottom, SideEnum.Left);
             _sprite.CenterOnWindow(_workerWindow);
             _sprite.AnchorToInnerSide(_workerWindow, SideEnum.Bottom);
 
             Width = _workerWindow.Width;
-            Height = _workerWindow.Height;
+            Height = _workerWindow.Height + _costWindow.Height;
+        }
+
+        public override void Enable(bool val)
+        {
+            _workerWindow.Enable(val);
+            _costWindow.Enable(val);
         }
     }
 }

@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using static RiverHollow.Game_Managers.GameManager;
+
 namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class GUIImage : GUIObject

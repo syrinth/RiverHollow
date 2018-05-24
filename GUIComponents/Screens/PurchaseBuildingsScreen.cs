@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using static RiverHollow.GUIObjects.GUIObject;
 using RiverHollow.GUIComponents.GUIObjects;
 
+using static RiverHollow.Game_Managers.GameManager;
+
 namespace RiverHollow.Game_Managers.GUIObjects.Screens
 {
     public class PurchaseBuildingsScreen : GUIScreen
@@ -152,8 +154,8 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             SpriteFont _font;
             List<GUIObject> _liReqs;
             Merchandise _merch;
-            GUIText _gText;
             GUIWindow _mainWindow;
+            GUIMoneyDisplay _gMoney;
 
             public BuildingInfoDisplay(Merchandise merch)
             {
@@ -178,9 +180,9 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
 
             public void Load()
             {
-                _gText = new GUIText(_merch.MoneyCost.ToString());
+                _gMoney = new GUIMoneyDisplay(_merch.MoneyCost);
 
-                for(int i=0; i< _merch.RequiredItems.Count; i++)
+                for (int i=0; i< _merch.RequiredItems.Count; i++)
                 {
                     KeyValuePair<int, int> kvp = _merch.RequiredItems[i];
                     GUIItemReq it = new GUIItemReq(kvp.Key, kvp.Value);
@@ -188,14 +190,16 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                 }
 
                 CreateSpacedColumn(ref _liReqs, _mainWindow.DrawRectangle.Right, _mainWindow.DrawRectangle.Top, _mainWindow.Height, 10, true);
-                _gText.AnchorAndAlignToObject(_liReqs[_liReqs.Count-1], SideEnum.Bottom, SideEnum.Left, 10);
+                _gMoney.AnchorAndAlignToObject(_liReqs[_liReqs.Count-1], SideEnum.Bottom, SideEnum.Left, 10);
+
+                _mainWindow.AddControl(_gMoney);
             }
 
             public override void Draw(SpriteBatch spriteBatch)
             {
                 _mainWindow.Draw(spriteBatch);
                 _giBuilding.Draw(spriteBatch);
-                _gText.Draw(spriteBatch);
+                _gMoney.Draw(spriteBatch);
                 foreach (GUIItemReq c in _liReqs)
                 {
                     c.Draw(spriteBatch);

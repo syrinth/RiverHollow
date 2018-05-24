@@ -14,8 +14,9 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
 {
     public class PurchaseItemsScreen : GUIScreen
     {
-        private GUIWindow _mainWindow;
-        private List<GUIObject> _liItems;
+        GUIMoneyDisplay _gMoney;
+        GUIWindow _mainWindow;
+        List<GUIObject> _liItems;
 
         public PurchaseItemsScreen(List<Merchandise> merch)
         {
@@ -50,7 +51,12 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                 }
 
                 _mainWindow.Resize();
+
+                _gMoney = new GUIMoneyDisplay();
+                _gMoney.AnchorAndAlignToObject(_mainWindow, GUIObject.SideEnum.Top, GUIObject.SideEnum.Left);
+
                 Controls.Add(_mainWindow);
+                Controls.Add(_gMoney);
             }
             catch (Exception e)
             {
@@ -65,7 +71,8 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
 
         public override void Update(GameTime gameTime)
         {
-            foreach(ItemBox wB in _liItems)
+            _gMoney.Update(gameTime);
+            foreach (ItemBox wB in _liItems)
             {
                 wB.Update(gameTime);
             }
@@ -80,7 +87,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                 if (wB.Contains(mouse) && PlayerManager.Money >= wB.Cost)
                 {
                     PlayerManager.TakeMoney(wB.Cost);
-                    InventoryManager.AddItemToInventory(wB.itemForSale);
+                    InventoryManager.AddItemToInventory(new Item(wB.itemForSale));
 
                     rv = true;
                 }
@@ -89,11 +96,14 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             return rv;
         }
 
-        public override bool ProcessRightButtonClick(Point mouse)
+        public override bool ProcessHover(Point mouse)
         {
-            bool rv = true;
+            bool rv = false;
 
-            BackToMain();
+            foreach (ItemBox wB in _liItems)
+            {
+                wB.Enable(wB.Contains(mouse));
+            }
 
             return rv;
         }
@@ -104,8 +114,8 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
         private SpriteFont _font;
         GUIImage _giItem;
         GUIText _gTextName;
-        GUIText _gTextCost;
         GUIWindow _gWin;
+        GUIMoneyDisplay _gMoney;
         public Item itemForSale;
         public int Cost;
 
@@ -117,19 +127,19 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             _giItem = new GUIImage(Vector2.Zero, itemForSale.SourceRectangle, TileSize, TileSize, itemForSale.Texture);
             _giItem.SetColor(i.ItemColor);
             _gTextName = new GUIText(itemForSale.Name);
-            _gTextCost = new GUIText(cost.ToString());
             _gWin = new GUIWindow(GUIWindow.BrownWin, mainWidth, 16);
 
             _giItem.AnchorToInnerSide(_gWin, SideEnum.TopLeft);
             _gTextName.AnchorToObject(_giItem, SideEnum.Right);
             _gTextName.AnchorToInnerSide(_gWin, SideEnum.Top);
 
-            _gTextCost.AnchorToInnerSide(_gWin, SideEnum.Right);
-            _gTextCost.AlignToObject(_gTextName, SideEnum.Top);
+            _gMoney = new GUIMoneyDisplay(Cost);
+            _gMoney.AnchorToInnerSide(_gWin, SideEnum.TopRight);
 
             _giItem.AlignToObject(_gTextName, SideEnum.CenterY);
 
-            _gWin.AddControl(_gTextCost);
+
+            _gWin.AddControl(_gMoney);
             _gWin.AddControl(_gTextName);
 
             _gWin.Resize();
@@ -137,6 +147,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+
             _gWin.Draw(spriteBatch);
         }
 
@@ -144,11 +155,11 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
         {
             if(!InventoryManager.HasSpaceInInventory(itemForSale.ItemID) || PlayerManager.Money < Cost)
             {
-                _gTextCost.SetColor(Color.Red);
+                _gMoney.SetColor(Color.Red);
             }
             else
             {
-                _gTextCost.SetColor(Color.White);
+                _gMoney.SetColor(Color.White);
             }
         }
 
@@ -164,6 +175,11 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
 
             Width = _gWin.Width;
             Height = _gWin.Height;
+        }
+
+        public override void Enable(bool val)
+        {
+            _gWin.Enable(val);
         }
     }
 }

@@ -73,7 +73,7 @@ namespace RiverHollow.Characters.NPCs
             {
                 foreach(Merchandise m in _merchandise)
                 {
-                    if (m._type == Merchandise.ItemType.Building) { _liMerchandiese.Add(m); }
+                    if (m.MerchType == Merchandise.ItemType.Building) { _liMerchandiese.Add(m); }
                 }
                 
                 GUIManager.SetScreen(new PurchaseBuildingsScreen(_liMerchandiese));
@@ -83,7 +83,7 @@ namespace RiverHollow.Characters.NPCs
             {
                 foreach (Merchandise m in _merchandise)
                 {
-                    if (m._type == Merchandise.ItemType.Worker) { _liMerchandiese.Add(m); }
+                    if (m.MerchType == Merchandise.ItemType.Worker) { _liMerchandiese.Add(m); }
                 }
                 GUIManager.SetScreen(new PurchaseWorkersScreen(_liMerchandiese));
                 GameManager.ClearGMObjects();
@@ -92,7 +92,7 @@ namespace RiverHollow.Characters.NPCs
             {
                 foreach (Merchandise m in _merchandise)
                 {
-                    if (m._type == Merchandise.ItemType.Item) { _liMerchandiese.Add(m); }
+                    if (m.MerchType == Merchandise.ItemType.Item) { _liMerchandiese.Add(m); }
                 }
                 GUIManager.SetScreen(new PurchaseItemsScreen(_liMerchandiese));
                 GameManager.ClearGMObjects();
@@ -172,7 +172,7 @@ namespace RiverHollow.Characters.NPCs
         string _sUniqueData;
         public string UniqueData => _sUniqueData;
         public enum ItemType { Building, Worker, Item }
-        public ItemType _type;
+        public ItemType MerchType;
         int _merchID = -1;
         public int MerchID { get => _merchID; }
         string _description;
@@ -189,7 +189,7 @@ namespace RiverHollow.Characters.NPCs
             int i = 0;
             if (dataValues[0] == "Building")
             {
-                _type = ItemType.Building;
+                MerchType = ItemType.Building;
                 i = 1;
                 _merchID = int.Parse(dataValues[i++]);
                 _description = dataValues[i++];
@@ -204,7 +204,7 @@ namespace RiverHollow.Characters.NPCs
             }
             else if (dataValues[0] == "Worker")
             {
-                _type = ItemType.Worker;
+                MerchType = ItemType.Worker;
                 i = 1;
                 _merchID = int.Parse(dataValues[i++]);
                 _description = dataValues[i++];
@@ -212,7 +212,7 @@ namespace RiverHollow.Characters.NPCs
             }
             else
             {
-                _type = ItemType.Item;
+                MerchType = ItemType.Item;
                 string[] itemData = dataValues[i++].Split('-');
                 _merchID = int.Parse(itemData[0]);
                 if(itemData.Length > 1) { _sUniqueData = itemData[1]; }
