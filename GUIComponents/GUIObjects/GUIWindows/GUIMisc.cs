@@ -27,6 +27,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _bIsPlayerMoney = true;
             _bCoinOnRight = false;
 
+            _gTextMoney = new GUIText(PlayerManager.Money.ToString("N0"));
             Setup();
         }
 
@@ -35,6 +36,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _bIsPlayerMoney = false;
             _bCoinOnRight = coinOnRight;
 
+            _gTextMoney = new GUIText(cost.ToString("N0"));
             Setup();
         }
 
@@ -58,6 +60,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (_bIsPlayerMoney)
             {
+                _gTextMoney.SetText(PlayerManager.Money.ToString("N0"));
             }
         }
 

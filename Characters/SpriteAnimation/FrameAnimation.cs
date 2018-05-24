@@ -167,6 +167,16 @@ namespace RiverHollow.SpriteAnimations
                     }
                 }
             }
+            else if (_iFrameCount == 1)
+            {
+                _fFrameTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (_fFrameTimer > _fFrameLength)
+                {
+                    _fFrameTimer = 0.0f;
+                    _iPlayCount = (int)MathHelper.Min(_iPlayCount + 1, int.MaxValue);
+                }
+            }
         }
 
         object ICloneable.Clone()
