@@ -186,14 +186,19 @@ namespace RiverHollow
             else { _iCurrWeather = 0; }
         }
 
-        public static bool IsRaining()
-        {
-            return _iCurrWeather == 1;
-        }
         public static bool IsSunny()
         {
             return _iCurrWeather == 0;
         }
+        public static bool IsRaining()
+        {
+            return _iCurrWeather == 1;
+        }
+        public static bool IsSnowing()
+        {
+            return _iCurrWeather == 2;
+        }
+
         public static bool IsNight()
         {
             return _iCurrHour >= 18;
