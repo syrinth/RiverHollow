@@ -1,12 +1,17 @@
 ﻿using RiverHollow.Characters;
+using RiverHollow.Characters.NPCs;
 using RiverHollow.Game_Managers;
 using RiverHollow.WorldObjects;
+using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
+using static RiverHollow.Characters.NPCs.Merchandise;
 
 namespace RiverHollow.Misc
 {
     public class Quest
     {
+        int _iQuestID;
         public enum QuestType { GroupSlay, Slay, Fetch }
         private QuestType _goalType;
         private string _name;
@@ -15,6 +20,7 @@ namespace RiverHollow.Misc
         public string Description { get => _description; }
         private string _sRewardText;
         public string RewardText => _sRewardText;
+
         private NPC _questGiver;
         public NPC QuestGiver { get => _questGiver; }
 
@@ -26,8 +32,11 @@ namespace RiverHollow.Misc
         private Monster _questMob;
         private Item _questItem;
 
-        private bool _finished;
-        public bool Finished { get => _finished; }
+        bool _bReadyForHandIn;
+        public bool ReadyForHandIn => _bReadyForHandIn;
+
+        bool _bFinished;
+        public bool Finished => _bFinished;
 
         //private int _rewardMoney;
         //public int RewardMoney { get => _rewardMoney; }
@@ -44,11 +53,12 @@ namespace RiverHollow.Misc
             _questMob = m;
             _questItem = i;
             _accomplished = 0;
-            _finished = false;
+            _bReadyForHandIn = false;
         }
 
-        public Quest(string stringData)
+        public Quest(string stringData, int id)
         {
+            _iQuestID = id;
             _liRewardItems = new List<Item>();
             string[] splitParams = stringData.Split('/');
             int i = 0;
@@ -76,7 +86,6 @@ namespace RiverHollow.Misc
                 _liRewardItems.Add(it);
             }
             _sRewardText = splitParams[i++];
-            
         }
 
         public bool AttemptProgress(Monster m)
@@ -111,7 +120,7 @@ namespace RiverHollow.Misc
                 if (_accomplished >= _targetGoal)
                 {
                     _accomplished = _targetGoal;
-                    _finished = true;
+                    _bReadyForHandIn = true;
                 }
             }
         }
@@ -129,19 +138,39 @@ namespace RiverHollow.Misc
             return rv;
         }
 
-        //protected int ImportBasics(string[] stringData)
-        //{
-        //    int i = 0;
-        //    _name = stringData[i++];
-        //    _goalType = (QuestGoalType)Enum.Parse(typeof(QuestGoalType), stringData[i++]);
-        //    _name = stringData[i++];
-        //    _description = stringData[i++];
-        //    _textureIndex = int.Parse(stringData[i++]);
-        //    _sellPrice = int.Parse(stringData[i++]);
+        public void FinishQuest(ref string text)
+        {
+            _bFinished = true;
 
-        //    _itemID = id;//(ObjectManager.ItemIDs)Enum.Parse(typeof(ObjectManager.ItemIDs), itemValue[i++]);
+            text = QuestGiver.GetDialogEntry(RewardText);
+            foreach (Item i in LiRewardItems)
+            {
+                InventoryManager.AddItemToInventory(i);
+            }
+            PlayerManager.QuestLog.Remove(this);
+        }
 
-        //    return i;
-        //}
+        public struct QuestData
+        {
+            [XmlElement(ElementName = "QuestID")]
+            public int questID;
+
+            [XmlElement(ElementName = "Finished")]
+            public bool finished;
+        }
+        public QuestData SaveData()
+        {
+            QuestData qData = new QuestData
+            {
+                questID = _iQuestID,
+                finished =Finished
+            };
+
+            return qData;
+        }
+        public void LoadData(QuestData qData)
+        {
+            _bFinished = qData.finished;
+        }
     }
 }

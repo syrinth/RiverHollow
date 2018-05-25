@@ -271,14 +271,8 @@ namespace RiverHollow.Characters
 
             foreach (Quest q in PlayerManager.QuestLog)
             {
-                if(q.Finished && q.QuestGiver == this)
+                if(q.ReadyForHandIn && q.QuestGiver == this)
                 {
-                    text = q.RewardText;
-                    foreach (Item i in q.LiRewardItems)
-                    {
-                        InventoryManager.AddItemToInventory(i);
-                    }
-                    PlayerManager.QuestLog.Remove(q);
                     
                     rv = true;
                     break;
@@ -353,7 +347,6 @@ namespace RiverHollow.Characters
                     }
                     else if (specialVal[0].Equals("Quest"))
                     {
-                        removeIt = PlayerManager.QuestLog.Contains(GameManager.DIQuests[val]) || GameManager.DIQuests[val].Finished;
                     }
 
                     s = s.Remove(s.IndexOf(specialParse[0]) - 1, specialParse[0].Length + 2);

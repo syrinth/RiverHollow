@@ -12,6 +12,7 @@ using System.Text;
 using System.Xml.Serialization;
 using static RiverHollow.WorldObjects.Door;
 using RiverHollow.Characters.NPCs;
+using static RiverHollow.Misc.Quest;
 
 namespace RiverHollow.Game_Managers
 {
@@ -51,7 +52,7 @@ namespace RiverHollow.Game_Managers
             DIQuests = new Dictionary<int, Quest>();
             foreach (KeyValuePair<int, string> kvp in GameContentManager.DiQuests)
             {
-                DIQuests.Add(kvp.Key, new Quest(kvp.Value));
+                DIQuests.Add(kvp.Key, new Quest(kvp.Value, kvp.Key));
             }
         }
 
@@ -174,6 +175,9 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Upgrades")]
             public List<UpgradeData> UpgradeData;
 
+            [XmlArray(ElementName = "Quests")]
+            public List<QuestData> QuestData;
+
             [XmlArray(ElementName = "NPCData")]
             public List<NPCData> NPCData;
         }
@@ -292,6 +296,7 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Enabled")]
             public bool enabled;
         }
+        
         public struct NPCData
         {
             [XmlElement(ElementName = "NPCID")]
@@ -436,6 +441,7 @@ namespace RiverHollow.Game_Managers
                 Buildings = new List<BuildingData>(),
                 MapData = new List<MapData>(),
                 UpgradeData = new List<UpgradeData>(),
+                QuestData = new List<QuestData>(),
                 NPCData = new List<NPCData>()
             };
 
@@ -466,7 +472,7 @@ namespace RiverHollow.Game_Managers
                 data.MapData.Add(tileMap.SaveData());
             }
 
-            foreach (Upgrade u in GameManager.DiUpgrades.Values)
+            foreach (Upgrade u in DiUpgrades.Values)
             {
                 UpgradeData upgData = new UpgradeData
                 {
@@ -474,6 +480,11 @@ namespace RiverHollow.Game_Managers
                     enabled = u.Enabled
                 };
                 data.UpgradeData.Add(upgData);
+            }
+
+            foreach (Quest q in DIQuests.Values)
+            {
+                data.QuestData.Add(q.SaveData());
             }
 
             foreach (NPC n in CharacterManager.DiNPC.Values)
@@ -583,7 +594,11 @@ namespace RiverHollow.Game_Managers
             }
             foreach (UpgradeData u in data.UpgradeData)
             {
-                GameManager.DiUpgrades[u.upgradeID].Enabled = u.enabled;
+                DiUpgrades[u.upgradeID].Enabled = u.enabled;
+            }
+            foreach (QuestData q in data.QuestData)
+            {
+                DIQuests[q.questID].LoadData(q);
             }
             foreach (NPCData n in data.NPCData)
             {

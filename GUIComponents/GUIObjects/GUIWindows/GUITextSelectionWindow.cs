@@ -196,7 +196,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                 {
                     Quest q = GameManager.DIQuests[int.Parse(action.Remove(0, "Quest".Length))];
                     PlayerManager.AddToQuestLog(q);
-                    GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, q.Description));
+                    GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, GameManager.gmNPC.GetDialogEntry(q.Description)));
                 }
                 else if (!string.IsNullOrEmpty(nextText))
                 {

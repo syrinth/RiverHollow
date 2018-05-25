@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: ID Value:Name/Description/ReqToProc/Giver/Type/goal num|goal num/Reward/EndSpeech-->
+    <!--Key: ID Value:Name/QuestTextKey/ReqToProc/Giver/Type/goal num|goal num/Reward/EndSpeech-->
     <Item>
       <Key>1</Key>
-      <Value>Griselda's Orb/I hope you can help me. Some upstart goblins snuck into my house last night and stole my orb. It's very precious to me, and I want it back. If you get it for me, I'll make it worth your while.//6/Fetch/0 6/1000 1 1/Oh thank you! Here, take this!</Value>
+      <Value>Griselda's Orb/Quest1//6/Fetch/0 6/1000 1 1/Quest1End</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -1,18 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: Index Value:Item#-UniqueData/Money-->
+    <!--Key: Index Value:Item#-UniqueData/Money/QuestReq-->
     <Item>
       <Key>0</Key>
-      <Value>1000-1/100</Value>
+      <Value>1000-1/100/1</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>1000-2/100</Value>
+      <Value>1000-2/100/1</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>1000-3/100</Value>
+      <Value>1000-3/100/1</Value>
     </Item>
     <Item>
       <Key>3</Key>

@@ -189,6 +189,8 @@ namespace RiverHollow.Characters
             _height = TileSize;
 
             _cHairColor = Color.Red;
+
+            Speed = 5;
         }
 
         public override void Update(GameTime theGameTime)

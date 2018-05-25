@@ -12,8 +12,8 @@ namespace RiverHollow.Characters.NPCs
 {
     public class ShopKeeper : NPC
     {
-        protected List<Merchandise> _merchandise;
-        public List<Merchandise> Buildings { get => _merchandise; }
+        protected List<Merchandise> _liMerchandise;
+        public List<Merchandise> Buildings { get => _liMerchandise; }
 
         public ShopKeeper(int index, string[] data)
         {
@@ -25,12 +25,12 @@ namespace RiverHollow.Characters.NPCs
             {
                 _index = index;
                 int i = ImportBasics(data);
-                _merchandise = new List<Merchandise>();
+                _liMerchandise = new List<Merchandise>();
                 while (i < data.Length)
                 {
                     foreach (KeyValuePair<int, string> kvp in GameContentManager.GetMerchandise(data[i++]))
                     {
-                        _merchandise.Add(new Merchandise(kvp.Value));
+                        _liMerchandise.Add(new Merchandise(kvp.Value));
                     }
                 }
 
@@ -68,33 +68,33 @@ namespace RiverHollow.Characters.NPCs
         public override string GetDialogEntry(string entry)
         {
             string rv = string.Empty;
-            List<Merchandise> _liMerchandiese = new List<Merchandise>();
+            List<Merchandise> _liMerchandise = new List<Merchandise>();
             if (entry.Equals("BuyBuildings"))
             {
-                foreach(Merchandise m in _merchandise)
+                foreach(Merchandise m in this._liMerchandise)
                 {
-                    if (m.MerchType == Merchandise.ItemType.Building) { _liMerchandiese.Add(m); }
+                    if (m.MerchType == Merchandise.ItemType.Building && m.Activated()) { _liMerchandise.Add(m); }
                 }
                 
-                GUIManager.SetScreen(new PurchaseBuildingsScreen(_liMerchandiese));
+                GUIManager.SetScreen(new PurchaseBuildingsScreen(_liMerchandise));
                 GameManager.ClearGMObjects();
             }
             else if (entry.Equals("BuyWorkers"))
             {
-                foreach (Merchandise m in _merchandise)
+                foreach (Merchandise m in this._liMerchandise)
                 {
-                    if (m.MerchType == Merchandise.ItemType.Worker) { _liMerchandiese.Add(m); }
+                    if (m.MerchType == Merchandise.ItemType.Worker && m.Activated()) { _liMerchandise.Add(m); }
                 }
-                GUIManager.SetScreen(new PurchaseWorkersScreen(_liMerchandiese));
+                GUIManager.SetScreen(new PurchaseWorkersScreen(_liMerchandise));
                 GameManager.ClearGMObjects();
             }
             else if (entry.Equals("BuyItems"))
             {
-                foreach (Merchandise m in _merchandise)
+                foreach (Merchandise m in this._liMerchandise)
                 {
-                    if (m.MerchType == Merchandise.ItemType.Item) { _liMerchandiese.Add(m); }
+                    if (m.MerchType == Merchandise.ItemType.Item && m.Activated()) { _liMerchandise.Add(m); }
                 }
-                GUIManager.SetScreen(new PurchaseItemsScreen(_liMerchandiese));
+                GUIManager.SetScreen(new PurchaseItemsScreen(_liMerchandise));
                 GameManager.ClearGMObjects();
             }
             else if (entry.Equals("SellWorkers"))
@@ -178,6 +178,8 @@ namespace RiverHollow.Characters.NPCs
         string _description;
         int _moneyCost;
         public int MoneyCost { get => _moneyCost; }
+        int _iQuestReq = -1;
+
         List<KeyValuePair<int, int>> _items; //item, then num required
         public List<KeyValuePair<int, int>> RequiredItems { get => _items; }
 
@@ -217,7 +219,18 @@ namespace RiverHollow.Characters.NPCs
                 _merchID = int.Parse(itemData[0]);
                 if(itemData.Length > 1) { _sUniqueData = itemData[1]; }
                 _moneyCost = int.Parse(dataValues[i++]);
+                if (dataValues.Length >= i + 1)
+                {
+                    _iQuestReq = int.Parse(dataValues[i++]);
+                }
             }
+        }
+
+        public bool Activated()
+        {
+            bool rv = false;
+            rv = _iQuestReq == -1 || GameManager.DIQuests[_iQuestReq].Finished;
+            return rv;
         }
     }
 }
