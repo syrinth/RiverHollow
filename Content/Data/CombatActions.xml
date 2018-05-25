@@ -26,7 +26,7 @@
     <!--<100> Wizard Spells-->
     <Item>
       <Key>101</Key>
-      <Value>Spell/Thunder/Call down thunder on your foes/0/0.03/[Target:Enemy][Effect:Cost-5 Harm-5 Direct][Action:UserCast Direct Apply]</Value>
+      <Value>Spell/Thunder/Call down thunder on your foes/0/0.03/[Target:Enemy][Effect:Cost-5 Harm-5 Direct][Action:UserCast Direct Apply][Element:Lightning][Type:Magical]</Value>
     </Item>
     <Item>
       <Key>102</Key>

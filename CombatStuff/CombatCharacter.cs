@@ -58,6 +58,9 @@ namespace RiverHollow.Characters.CombatStuff
         protected Dictionary<ConditionEnum, bool> _diConditions;
         public Dictionary<ConditionEnum, bool> DiConditions => _diConditions;
 
+        protected Dictionary<ElementEnum, ElementAlignment> _diElementalAlignment;
+        public Dictionary<ElementEnum, ElementAlignment> DiElementalAlignment => _diElementalAlignment;
+
         public BattleLocation Location;
         #endregion
 
@@ -72,6 +75,13 @@ namespace RiverHollow.Characters.CombatStuff
                 [ConditionEnum.KO] = false,
                 [ConditionEnum.Poisoned] = false,
                 [ConditionEnum.Silenced] = false
+            };
+
+            _diElementalAlignment = new Dictionary<ElementEnum, ElementAlignment>
+            {
+                [ElementEnum.Fire] = ElementAlignment.Neutral,
+                [ElementEnum.Ice] = ElementAlignment.Neutral,
+                [ElementEnum.Lightning] = ElementAlignment.Neutral
             };
         }
 
@@ -127,12 +137,38 @@ namespace RiverHollow.Characters.CombatStuff
             _bodySprite.Draw(spriteBatch, false);
         }
 
-        public int DecreaseHealth(int offensiveStat, int dmgMod)
+        public int ProcessAttack(int offensiveStat, int dmgMod, ElementEnum element = ElementEnum.None)
         {
             int iATK = offensiveStat* dmgMod;
             double power = Math.Pow(((double)iATK / (double)StatDef), 2);
             double dMult = Math.Min(2, Math.Max(0.01, power));
             int dmg = (int)Math.Max(1, iATK * dMult);
+            int modifiedDmg = 0;
+
+
+            if(element != ElementEnum.None)
+            {
+                if(MapManager.CurrentMap.IsOutside && GameCalendar.IsRaining()) {
+                    if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (int)(dmg * 1.2) - dmg; }
+                    else if (element.Equals(ElementEnum.Fire)) { modifiedDmg += (int)(dmg * 0.8) - dmg; }
+                }
+                else if (MapManager.CurrentMap.IsOutside && GameCalendar.IsSnowing())
+                {
+                    if (element.Equals(ElementEnum.Ice)) { modifiedDmg += (int)(dmg * 1.2) - dmg; }
+                    else if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (int)(dmg * 0.8) - dmg; }
+                }
+
+                if (_diElementalAlignment[element].Equals(ElementAlignment.Resists))
+                {
+                    modifiedDmg += (int)(dmg * 0.8) - dmg;
+                }
+                else if (_diElementalAlignment[element].Equals(ElementAlignment.Vulnerable))
+                {
+                    modifiedDmg += (int)(dmg * 1.2) - dmg;
+                }
+            }
+
+            dmg += modifiedDmg;
 
             return DecreaseHealth(dmg);
         }

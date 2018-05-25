@@ -50,6 +50,8 @@ namespace RiverHollow.Characters.CombatStuff
     {
         const int moveSpeed = 60;
 
+        private ElementEnum _element = ElementEnum.None;
+        private AttackTypeEnum _attackType = AttackTypeEnum.Physical;
         private List<ConditionEnum> _liCondition;
         public List<ConditionEnum> LiCondition { get => _liCondition; }
         private int _mpCost;
@@ -106,7 +108,15 @@ namespace RiverHollow.Characters.CombatStuff
             {
                 string[] tagType = s.Split(':');
                 //Parsing for important data
-                if (tagType[0].Equals("Target"))
+                if (tagType[0].Equals("Element"))
+                {
+                    _element = Util.ParseEnum<ElementEnum>(tagType[1]);
+                }
+                else if (tagType[0].Equals("Type"))
+                {
+                    _attackType = Util.ParseEnum<AttackTypeEnum>(tagType[1]);
+                }
+                else if (tagType[0].Equals("Target"))
                 {
                     _target = tagType[1];
                 }
@@ -193,7 +203,7 @@ namespace RiverHollow.Characters.CombatStuff
             {
                 if (_effectTags.Contains("Harm"))
                 {
-                    int x = TargetLocation.Character.DecreaseHealth(SkillUser.StatDmg, _effectHarm);
+                    int x = TargetLocation.Character.ProcessAttack(SkillUser.StatDmg, _effectHarm, _element);
                     TargetLocation.AssignDamage(x);
                 }
                 else if (_effectTags.Contains("Heal"))

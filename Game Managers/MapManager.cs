@@ -195,7 +195,7 @@ namespace RiverHollow.Game_Managers
             for (int i = 0; i < 20; i++)
             {
                 Vector2 vect = new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 2) * TileSize);
-                Mob mob = CharacterManager.GetMobByIndex(1, vect);
+                Mob mob = CharacterManager.GetMobByIndex(2, vect);
                 mob.CurrentMapName = _tileMaps[@"mapManorGrounds"].Name.Replace(@"Maps\", "");
                 _tileMaps[@"mapManorGrounds"].AddMob(mob);
             }

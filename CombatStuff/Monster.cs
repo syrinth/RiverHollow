@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Characters.CombatStuff;
+using RiverHollow.Misc;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow
 {
@@ -35,6 +37,18 @@ namespace RiverHollow
             _statHP = int.Parse(stringData[i++]);
             _statMagic = int.Parse(stringData[i++]);
             _statSpd = int.Parse(stringData[i++]);
+
+            string[] elemSplit = stringData[i++].Split(' ');
+            foreach(string s in elemSplit)
+            {
+                _diElementalAlignment[Util.ParseEnum<ElementEnum>(s)] = ElementAlignment.Resists;
+            }
+
+            elemSplit = stringData[i++].Split(' ');
+            foreach (string s in elemSplit)
+            {
+                _diElementalAlignment[Util.ParseEnum<ElementEnum>(s)] = ElementAlignment.Vulnerable;
+            }
 
             _currentHP = MaxHP;
             _currentMP = MaxMP;
