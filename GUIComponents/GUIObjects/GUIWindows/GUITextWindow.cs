@@ -110,7 +110,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 _next.Draw(spriteBatch);
             }
 
-            if (GameManager.gmNPC != null)
+            if (GameManager.gmNPC != null && GUIManager.IsTextScreen())
             {
                 GameManager.gmNPC.DrawPortrait(spriteBatch, new Vector2(InnerTopLeft().X, InnerTopLeft().Y - EdgeSize));
             }

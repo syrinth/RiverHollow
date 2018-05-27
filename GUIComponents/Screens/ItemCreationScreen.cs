@@ -172,6 +172,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                     rv = gIB.ProcessHover(mouse);
                 }
             }
+            rv = rv || _inventory.ProcessHover(mouse);
+
             return rv;
         }
 

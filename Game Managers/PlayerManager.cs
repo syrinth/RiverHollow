@@ -376,7 +376,7 @@ namespace RiverHollow.Game_Managers
 
         public static bool PlayerInRange(Point centre)
         {
-            return PlayerInRange(centre, TileSize);
+            return PlayerInRange(centre, TileSize*2);
         }
         public static bool PlayerInRange(Vector2 centre, int range)
         {

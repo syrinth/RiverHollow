@@ -8,6 +8,7 @@ using RiverHollow.GUIComponents.GUIObjects;
 using static RiverHollow.WorldObjects.Equipment;
 using static RiverHollow.Game_Managers.ObjectManager;
 using System.Collections.Generic;
+using System;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
@@ -160,10 +161,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         {
             Item it = ObjectManager.GetItem(id);
             _gImg = new GUIImage(Vector2.Zero, it.SourceRectangle, it.SourceRectangle.Width, it.SourceRectangle.Height, it.Texture);
-            _gImg.SetScale(GameManager.Scale);
-            _gText = new GUIText(number.ToString());
+            _gText = new GUIText(number.ToString(), true, @"Fonts\DisplayFont");
             Width = _gImg.Width + _gText.Width;
-            Height = _gImg.Height;
+            Height = Math.Max(_gImg.Height, _gText.Height);
             Position(Vector2.Zero);
         }
 

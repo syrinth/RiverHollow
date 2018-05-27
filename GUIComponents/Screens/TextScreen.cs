@@ -7,8 +7,6 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIObjects;
 using static RiverHollow.WorldObjects.Door;
 using RiverHollow.Characters.NPCs;
-using RiverHollow.GUIComponents.GUIObjects;
-using System.Collections.Generic;
 
 namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
