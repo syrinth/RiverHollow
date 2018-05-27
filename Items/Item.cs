@@ -227,6 +227,18 @@ namespace RiverHollow.WorldObjects
         public bool IsContainer() { return _itemType == ItemEnum.Container; }
         public bool IsStaticItem() { return _itemType == ItemEnum.StaticItem; }
 
+        public ItemData SaveData()
+        {
+            ItemData itemData = new ItemData
+            {
+                itemID = ItemID,
+                num = Number,
+                strData = GetUniqueData()
+            };
+
+            return itemData;
+        }
+
         private class Parabola
         {
             private Vector2 _pos;

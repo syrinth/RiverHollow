@@ -713,17 +713,7 @@ namespace RiverHollow.WorldObjects
                 containerData.Items = new List<ItemData>();
                 foreach (Item i in (this.Inventory))
                 {
-                    ItemData itemData = new ItemData();
-                    if (i != null)
-                    {
-                        itemData.itemID = i.ItemID;
-                        itemData.num = i.Number;
-                        itemData.strData = i.GetUniqueData();
-                    }
-                    else
-                    {
-                        itemData.itemID = -1;
-                    }
+                    ItemData itemData = (i != null) ? i.SaveData() : new ItemData() { itemID = -1 };
                     containerData.Items.Add(itemData);
                 }
                 return containerData;

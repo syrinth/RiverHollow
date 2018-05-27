@@ -175,8 +175,11 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Upgrades")]
             public List<UpgradeData> UpgradeData;
 
-            [XmlArray(ElementName = "Quests")]
-            public List<QuestData> QuestData;
+            [XmlArray(ElementName = "PlotQuests")]
+            public List<QuestData> PlotQuestData;
+
+            [XmlArray(ElementName = "QuestLog")]
+            public List<QuestData> QuestLogData;
 
             [XmlArray(ElementName = "NPCData")]
             public List<NPCData> NPCData;
@@ -441,24 +444,15 @@ namespace RiverHollow.Game_Managers
                 Buildings = new List<BuildingData>(),
                 MapData = new List<MapData>(),
                 UpgradeData = new List<UpgradeData>(),
-                QuestData = new List<QuestData>(),
+                PlotQuestData = new List<QuestData>(),
+                QuestLogData = new List<QuestData>(),
                 NPCData = new List<NPCData>()
             };
 
             // Initialize the new data values.
             foreach (Item i in InventoryManager.PlayerInventory)
             {
-                ItemData itemData = new ItemData();
-                if (i != null)
-                {
-                    itemData.itemID = i.ItemID;
-                    itemData.num = i.Number;
-                    itemData.strData = i.GetUniqueData();
-                }
-                else
-                {
-                    itemData.itemID = -1;
-                }
+                ItemData itemData = (i != null) ? i.SaveData() : new ItemData() { itemID = -1 };
                 data.Items.Add(itemData);
             }
 
@@ -484,7 +478,12 @@ namespace RiverHollow.Game_Managers
 
             foreach (Quest q in DIQuests.Values)
             {
-                data.QuestData.Add(q.SaveData());
+                data.PlotQuestData.Add(q.SaveData());
+            }
+
+            foreach (Quest q in PlayerManager.QuestLog)
+            {
+                data.QuestLogData.Add(q.SaveData());
             }
 
             foreach (NPC n in CharacterManager.DiNPC.Values)
@@ -578,10 +577,7 @@ namespace RiverHollow.Game_Managers
                     int index = i * InventoryManager.maxItemColumns + j;
                     ItemData item = data.Items[index];
                     Item newItem = ObjectManager.GetItem(item.itemID, item.num);
-                    if (!string.IsNullOrEmpty(item.strData))
-                    {
-                        int x = 0;
-                    }
+ 
                     if (newItem != null) { newItem.ApplyUniqueData(item.strData); }
                     InventoryManager.AddItemToInventorySpot(newItem, i, j);
                 }
@@ -596,9 +592,16 @@ namespace RiverHollow.Game_Managers
             {
                 DiUpgrades[u.upgradeID].Enabled = u.enabled;
             }
-            foreach (QuestData q in data.QuestData)
+            foreach (QuestData q in data.PlotQuestData)
             {
-                DIQuests[q.questID].LoadData(q);
+                Quest plotQuest = DIQuests[q.questID];
+                plotQuest.LoadData(q);
+            }
+            foreach (QuestData q in data.QuestLogData)
+            {
+                Quest newQuest = new Quest();
+                newQuest.LoadData(q);
+                PlayerManager.AddToQuestLog(newQuest);
             }
             foreach (NPCData n in data.NPCData)
             {
