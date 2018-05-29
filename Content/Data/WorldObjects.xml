@@ -50,5 +50,9 @@
       <Key>201</Key>
       <Value>Crafter/0 2/9 5</Value>
     </Item>
+    <Item>
+      <Key>299</Key>
+      <Value>ClassChanger/0 2/9 5</Value>
+    </Item>
   </Asset>
 </XnaContent>

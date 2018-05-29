@@ -288,6 +288,14 @@ namespace RiverHollow.Game_Managers
                             MapManager.PlacePlayerObject(c);
                             GraphicCursor.DropItem();
                         }
+                        else if (obj.IsClassChanger())
+                        {
+                            ClassChanger c = (ClassChanger)obj;
+                            c.SetMapName(CurrentMap);
+                            c.MapPosition = mouseLocation.ToVector2();
+                            MapManager.PlacePlayerObject(c);
+                            GraphicCursor.DropItem();
+                        }
                         else if (_targetTile.HasBeenDug() && obj.IsPlant())
                         {
                             Plant p = (Plant)obj;

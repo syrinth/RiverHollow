@@ -138,6 +138,10 @@
       <Key>201</Key>
       <Value>StaticItem/Anvil/Makes Shit/3 2/3000</Value>
     </Item>
+    <Item>
+      <Key>299</Key>
+      <Value>StaticItem/Essense Extractor/Changes your class/2 2/3000</Value>
+    </Item>
     <!--<300> Misc-->
     <Item>
       <Key>300</Key>

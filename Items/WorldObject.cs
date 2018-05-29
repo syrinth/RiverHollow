@@ -19,7 +19,7 @@ namespace RiverHollow.WorldObjects
         public static int Rock = 0;
         public static int BigRock = 1;
         public static int Tree = 2;
-        public enum ObjectType { Building, Crafter, Container, Door, Earth, Floor, WorldObject, Destructible, Processor, Plant};
+        public enum ObjectType { Building, ClassChanger, Crafter, Container, Door, Earth, Floor, WorldObject, Destructible, Processor, Plant};
         public ObjectType Type;
 
         public List<RHTile> Tiles;
@@ -105,6 +105,7 @@ namespace RiverHollow.WorldObjects
         public bool IsGround() { return Type == ObjectType.Floor; }
         public bool IsEarth() { return Type == ObjectType.Earth; }
         public bool IsDoor() { return Type == ObjectType.Door; }
+        public bool IsClassChanger() { return Type == ObjectType.ClassChanger; }
     }
 
     public class Destructible : WorldObject
@@ -394,6 +395,41 @@ namespace RiverHollow.WorldObjects
             _vSourcePos = new Vector2(0 + TileSize * int.Parse(strPos[0]), 0 + TileSize * int.Parse(strPos[1]));
         }
         public void SetMapName(string val) { _sMapName = val; }
+
+        public class ClassChanger : WorldItem
+        {
+            public ClassChanger(int id)
+            {
+                _id = id;
+                Type = ObjectType.ClassChanger;
+                LoadContent();
+
+                _width = TileSize;
+                _height = TileSize * 2;
+            }
+            public void LoadContent()
+            {
+                _sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\texMachines"));
+                _sprite.AddAnimation("Idle", (int)_vSourcePos.X, (int)_vSourcePos.Y, TileSize, TileSize * 2, 1, 0.3f);
+                _sprite.SetCurrentAnimation("Idle");
+                _sprite.IsAnimating = true;
+            }
+            public virtual void Update(GameTime gameTime) { }
+            public override void Draw(SpriteBatch spriteBatch)
+            {
+                _sprite.Draw(spriteBatch, true);
+            }
+
+            public void ProcessClick()
+            {
+                int currID = PlayerManager.Combat.CharacterClass.ID;
+                int toSet = (currID < CharacterManager.GetClassCount() - 1) ? (PlayerManager.Combat.CharacterClass.ID + 1) : 1;
+                PlayerManager.SetClass(toSet);
+            }
+
+            //public MachineData SaveData() { return new MachineData(); }
+            //public virtual void LoadData(GameManager.MachineData mac) { }
+        }
 
         public class Machine : WorldItem
         {

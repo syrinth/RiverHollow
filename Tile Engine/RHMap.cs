@@ -928,6 +928,10 @@ namespace RiverHollow.Tile_Engine
                             if (p.ProcessingFinished()) { p.TakeFinishedItem(); }
                             else if (!p.Processing()) { p.ProcessClick(); }
                         }
+                        else if (obj.IsClassChanger())
+                        {
+                            ((ClassChanger)obj).ProcessClick();
+                        }
 
                         break;
                     }

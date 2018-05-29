@@ -124,6 +124,10 @@ namespace RiverHollow.Game_Managers
             return b;
         }
 
+        public static int GetClassCount()
+        {
+            return _classDictionary.Count;
+        }
         public static CharacterClass GetClassByIndex(int id)
         {
             CharacterClass c = null;

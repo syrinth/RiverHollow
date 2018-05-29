@@ -89,6 +89,7 @@ namespace RiverHollow.WorldObjects
         public Item(Item item)
         {
             _itemID = item.ItemID;
+            _itemType = item.ItemType;
             _sourcePos = item._sourcePos;
             _name = item.Name;
             _texture = item.Texture;
