@@ -11,10 +11,10 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<string, SpriteFont> _diFonts;
         private static Dictionary<string, string> _diNPCDialogue;
         private static Dictionary<string, Dictionary<int, string>> _diMerchandise;
-        private static Dictionary<string, string> _diUpgrades;
+        private static Dictionary<int, string> _diUpgrades;
         private static Dictionary<string, string> _diSpiritLoot;
         public static Dictionary<string, string> DiSpiritLoot { get => _diSpiritLoot; }
-        public static Dictionary<string, string> DiUpgrades { get => _diUpgrades; }
+        public static Dictionary<int, string> DiUpgrades { get => _diUpgrades; }
         private static Dictionary<int, string> _diQuests;
         public static Dictionary<int, string> DiQuests { get => _diQuests; }
 
@@ -25,7 +25,7 @@ namespace RiverHollow.Game_Managers
             _diFonts = new Dictionary<string, SpriteFont>();
             _diMerchandise = new Dictionary<string, Dictionary<int, string>>();
             _diSpiritLoot = _content.Load<Dictionary<string, string>>(@"Data\SpiritLoot");
-            _diUpgrades = _content.Load<Dictionary<string, string>>(@"Data\TownUpgrades");
+            _diUpgrades = _content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
             _diQuests = _content.Load<Dictionary<int, string>>(@"Data\Quests");
 
             _diNPCDialogue = LoadDialogue(@"Data\Dialogue\NPCDialogue");

@@ -10,5 +10,9 @@
       <Key>1</Key>
       <Value>Building/2/A building used to house meleers/500/0 2:2 3</Value>
     </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>Upgrade/1/A building used to house meleers/500/0 2:2 3</Value>
+    </Item>
   </Asset>
 </XnaContent>

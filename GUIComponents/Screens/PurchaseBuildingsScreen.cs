@@ -107,19 +107,28 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                 //If all items are found, then remove them.
                 if (create)
                 {
-                    PlayerManager.TakeMoney(_liMerchandise[_iCurrIndex].MoneyCost);
+                    Merchandise merch = _liMerchandise[_iCurrIndex];
+                    PlayerManager.TakeMoney(merch.MoneyCost);
                     foreach (KeyValuePair<int, int> kvp in _liMerchandise[_iCurrIndex].RequiredItems)
                     {
                         InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
                     }
 
-                    GUIManager.SetScreen(null);
-                    WorkerBuilding b = ObjectManager.GetBuilding(_liMerchandise[_iCurrIndex].MerchID);
-                    GraphicCursor.PickUpBuilding(b);
-                    GameManager.Scry(true);
-                    GameManager.ConstructBuilding();
-                    Camera.UnsetObserver();
-                    MapManager.ViewMap(MapManager.HomeMap);
+                    if (merch.MerchType == Merchandise.ItemType.Building)
+                    {
+                        GUIManager.SetScreen(null);
+                        WorkerBuilding b = ObjectManager.GetBuilding(merch.MerchID);
+                        GraphicCursor.PickUpBuilding(b);
+                        Scry(true);
+                        ConstructBuilding();
+                        Camera.UnsetObserver();
+                        MapManager.ViewMap(MapManager.HomeMap);
+                    }
+                    else
+                    {
+                        DiUpgrades[merch.MerchID].Enabled = true;
+                        BackToMain();
+                    }
                     rv = true;
                 }
             }
@@ -156,22 +165,41 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             Merchandise _merch;
             GUIWindow _mainWindow;
             GUIMoneyDisplay _gMoney;
+            GUIText _gTextName;
 
             public BuildingInfoDisplay(Merchandise merch)
             {
                 _liReqs = new List<GUIObject>();
 
                 _merch = merch;
-                _bldg = ObjectManager.GetBuilding(_merch.MerchID);
-                _font = GameContentManager.GetFont(@"Fonts\Font");
 
-                int minWidth = _bldg.Texture.Width + margin * 2;
-                int minHeight = _bldg.Texture.Height + margin * 2;
-                _mainWindow = new GUIWindow(Vector2.Zero, GUIWindow.RedWin, minWidth, minHeight);
-                _mainWindow.CenterOnScreen();
+                if (_merch.MerchType == Merchandise.ItemType.Building)
+                {
+                    _bldg = ObjectManager.GetBuilding(_merch.MerchID);
+                    _gTextName = new GUIText(_bldg.Name);
+                    _font = GameContentManager.GetFont(@"Fonts\Font");
 
-                Vector2 center = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
-                _giBuilding = new GUIImage(PosFromCenter(center, _bldg.Texture.Width, _bldg.Texture.Height), _bldg.SourceRectangle, _bldg.Texture.Width, _bldg.Texture.Height, _bldg.Texture);
+                    int minWidth = _bldg.Texture.Width + margin * 2;
+                    int minHeight = _bldg.Texture.Height + margin * 2;
+                    _mainWindow = new GUIWindow(Vector2.Zero, GUIWindow.RedWin, minWidth, minHeight);
+                    _mainWindow.CenterOnScreen();
+
+                    Vector2 center = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
+                    _giBuilding = new GUIImage(PosFromCenter(center, _bldg.Texture.Width, _bldg.Texture.Height), _bldg.SourceRectangle, _bldg.Texture.Width, _bldg.Texture.Height, _bldg.Texture);
+                }
+                else
+                {
+                    _gTextName = new GUIText(DiUpgrades[merch.MerchID].Name);
+                    int width = 100;
+                    int height = 100;
+                    int minWidth = width + margin * 2;
+                    int minHeight = height + margin * 2;
+                    _mainWindow = new GUIWindow(Vector2.Zero, GUIWindow.RedWin, minWidth, minHeight);
+                    _mainWindow.CenterOnScreen();
+
+                    Vector2 center = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
+                    _giBuilding = new GUICoin();// GUIImage()PosFromCenter(center, width, height), _bldg.SourceRectangle, width, height, _bldg.Texture);
+                }
 
                 Width = _mainWindow.Width;
                 Height = _mainWindow.Height;

@@ -4,39 +4,39 @@
     <!--Key: Index Value:Item#-UniqueData/Money/QuestReq-->
     <Item>
       <Key>0</Key>
-      <Value>1000-1/100/1</Value>
+      <Value>Item/1000-1/100/1</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>1000-2/100/1</Value>
+      <Value>Item/1000-2/100/1</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>1000-3/100/1</Value>
+      <Value>Item/1000-3/100/1</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>1/100</Value>
+      <Value>Item/1/100</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>0/100</Value>
+      <Value>Item/0/100</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>40/50</Value>
+      <Value>Item/40/50</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>60/50</Value>
+      <Value>Item/60/50</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>7/100</Value>
+      <Value>Item/7/100</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>21/3000</Value>
+      <Value>Item/21/3000</Value>
     </Item>
   </Asset>
 </XnaContent>

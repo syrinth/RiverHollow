@@ -142,7 +142,7 @@ namespace RiverHollow.Tile_Engine
 
             if (_bTown)
             {
-                foreach (KeyValuePair<string, Upgrade> kvp in GameManager.DiUpgrades)
+                foreach (KeyValuePair<int, Upgrade> kvp in GameManager.DiUpgrades)
                 {
                     if (kvp.Value.Enabled) { EnableUpgradeVisibility(kvp.Key); }
                 }
@@ -523,13 +523,17 @@ namespace RiverHollow.Tile_Engine
                 bool upgrade = false;
                 if (_bTown)
                 {
-                    foreach (KeyValuePair<string, Upgrade> s in GameManager.DiUpgrades)    //Check each upgrade to see if it's enabled
+                    foreach (KeyValuePair<int, Upgrade> s in GameManager.DiUpgrades)    //Check each upgrade to see if it's enabled
                     {
-                        if(l.Name.Contains(s.Key)) { upgrade = true; }
+                        if(l.Name.Contains(s.Key.ToString())) {
+                            upgrade = true;
+                        }
                         if (s.Value.Enabled)
                         {                           
                             bool determinant = l.Name.Contains("Upper");
-                            if (revealUpper) { l.IsVisible = determinant; }
+                            if (revealUpper) {
+                                l.IsVisible = determinant;
+                            }
                             else { l.IsVisible = !determinant; }
                         }
                     }
@@ -539,7 +543,9 @@ namespace RiverHollow.Tile_Engine
                 {
                     bool determinant = l.Name.Contains("Upper");
 
-                    if (revealUpper) { l.IsVisible = determinant; }
+                    if (revealUpper) {
+                        l.IsVisible = determinant;
+                    }
                     else { l.IsVisible = !determinant; }
                 }
 
@@ -549,11 +555,11 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
-        public void EnableUpgradeVisibility(string upgrade)
+        public void EnableUpgradeVisibility(int upgradeID)
         {
             foreach (TiledMapTileLayer l in _map.TileLayers)
             {
-                if (l.Name.Contains(upgrade)) { l.IsVisible = true; }
+                if (l.Name.Contains(upgradeID.ToString())) { l.IsVisible = true; }
             }
         }
 

@@ -73,7 +73,7 @@ namespace RiverHollow.Characters.NPCs
             {
                 foreach(Merchandise m in this._liMerchandise)
                 {
-                    if (m.MerchType == Merchandise.ItemType.Building && m.Activated()) { _liMerchandise.Add(m); }
+                    if ((m.MerchType == Merchandise.ItemType.Building || m.MerchType == Merchandise.ItemType.Upgrade) && m.Activated()) { _liMerchandise.Add(m); }
                 }
                 
                 GUIManager.SetScreen(new PurchaseBuildingsScreen(_liMerchandise));
@@ -128,36 +128,6 @@ namespace RiverHollow.Characters.NPCs
                 MapManager.ViewMap(MapManager.HomeMap);
                 GameManager.ClearGMObjects();
             }
-            else if (entry.Contains("Upgrade"))
-            {
-                string upgradeWhat = entry.Remove(0, string.Format("Upgrade").Length);  //Removes Upgrade fromt he string to get what we're upgrading
-                Upgrade theUpgrade = GameManager.DiUpgrades[upgradeWhat];
-                bool create = true;
-                create = PlayerManager.Money >= theUpgrade.MoneyCost;
-                if (create)
-                {
-                    foreach(KeyValuePair<int, int> kvp in theUpgrade.LiRquiredItems)
-                    {
-                        if (!InventoryManager.HasItemInInventory(kvp.Key, kvp.Value))
-                        {
-                            create = false;
-                        }
-                    }
-                }
-                //If all items are found, then remove them.
-                if (create)
-                {
-                    PlayerManager.TakeMoney(theUpgrade.MoneyCost);
-
-                    foreach (KeyValuePair<int, int> kvp in theUpgrade.LiRquiredItems)
-                    {
-                        InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
-                    }
-                    theUpgrade.Enabled = true;
-                    GameManager.BackToMain();
-                    GameManager.ClearGMObjects();
-                }
-            }
             else
             {
                 rv =  base.GetDialogEntry(entry);
@@ -171,7 +141,7 @@ namespace RiverHollow.Characters.NPCs
     {
         string _sUniqueData;
         public string UniqueData => _sUniqueData;
-        public enum ItemType { Building, Worker, Item }
+        public enum ItemType { Building, Worker, Item, Upgrade }
         public ItemType MerchType;
         int _merchID = -1;
         public int MerchID { get => _merchID; }
@@ -212,9 +182,10 @@ namespace RiverHollow.Characters.NPCs
                 _description = dataValues[i++];
                 _moneyCost = int.Parse(dataValues[i++]);
             }
-            else
+            else if (dataValues[0] == "Item")
             {
                 MerchType = ItemType.Item;
+                i = 1;
                 string[] itemData = dataValues[i++].Split('-');
                 _merchID = int.Parse(itemData[0]);
                 if(itemData.Length > 1) { _sUniqueData = itemData[1]; }
@@ -223,6 +194,25 @@ namespace RiverHollow.Characters.NPCs
                 {
                     _iQuestReq = int.Parse(dataValues[i++]);
                 }
+            }
+            else if (dataValues[0] == "Upgrade")
+            {
+                MerchType = ItemType.Upgrade;
+                i = 1;
+                _merchID = int.Parse(dataValues[i++]);
+                _description = dataValues[i++];
+                _moneyCost = int.Parse(dataValues[i++]);
+
+                string[] reqItems = dataValues[i++].Split(':');
+                foreach (string str in reqItems)
+                {
+                    string[] itemsSplit = str.Split(' ');
+                    _items.Add(new KeyValuePair<int, int>(int.Parse(itemsSplit[0]), int.Parse(itemsSplit[1])));
+                }
+            }
+            else
+            {
+                int huff = 0;
             }
         }
 

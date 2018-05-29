@@ -28,7 +28,7 @@ namespace RiverHollow.Game_Managers
         public static float Scale = 4f;
         public static int TileSize = 16;
         public static int MaxBldgLevel = 3;
-        public static Dictionary<string, Upgrade> DiUpgrades;
+        public static Dictionary<int, Upgrade> DiUpgrades;
         public static Dictionary<int, Quest> DIQuests;
 
         public static Item gmActiveItem;
@@ -40,8 +40,8 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadContent(ContentManager Content)
         {
-            DiUpgrades = new Dictionary<string, Upgrade>();
-            foreach (KeyValuePair<string, string> kvp in GameContentManager.DiUpgrades)
+            DiUpgrades = new Dictionary<int, Upgrade>();
+            foreach (KeyValuePair<int, string> kvp in GameContentManager.DiUpgrades)
             {
                 DiUpgrades.Add(kvp.Key, new Upgrade(kvp.Key, kvp.Value));
             }
@@ -294,7 +294,7 @@ namespace RiverHollow.Game_Managers
         public struct UpgradeData
         {
             [XmlElement(ElementName = "UpgradeID")]
-            public string upgradeID;
+            public int upgradeID;
 
             [XmlElement(ElementName = "Enabled")]
             public bool enabled;
@@ -624,8 +624,10 @@ namespace RiverHollow.Game_Managers
 
     public class Upgrade
     {
-        string _id;
-        public string ID { get => _id; }
+        enum UpgradeTypeEnum { Building }
+        UpgradeTypeEnum _type;
+        int _id;
+        public int ID { get => _id; }
         string _name;
         public string Name { get => _name; }
         string _description;
@@ -636,14 +638,17 @@ namespace RiverHollow.Game_Managers
         public List<KeyValuePair<int, int>> LiRquiredItems { get => _liRequiredItems; }
         public bool Enabled;
 
-        public Upgrade(string id, string strData)
+        public Upgrade(int id, string strData)
         {
             _id = id;
+
+            int index = 0;
             string[] split = strData.Split('/');
-            _name = split[0];
-            _description = split[1];
-            _moneyCost = int.Parse(split[2]);
-            string[] itemSplit = split[3].Split(' ');
+            _name = split[index++];
+            _description = split[index++];
+            _type = Util.ParseEnum<UpgradeTypeEnum>(split[index++]);
+            _moneyCost = int.Parse(split[index++]);
+            string[] itemSplit = split[index++].Split(' ');
 
             _liRequiredItems = new List<KeyValuePair<int, int>>();
             for (int i = 0; i < itemSplit.Length; i++)
