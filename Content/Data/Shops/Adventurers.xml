@@ -18,5 +18,21 @@
       <Key>4</Key>
       <Value>Worker/4/Healer/500</Value>
     </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>Worker/5/Healer/500</Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>Worker/6/Healer/500</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>Worker/7/Healer/500</Value>
+    </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>Worker/8/Healer/500</Value>
+    </Item>
   </Asset>
 </XnaContent>

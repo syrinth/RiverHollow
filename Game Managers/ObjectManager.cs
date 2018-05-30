@@ -152,6 +152,11 @@ namespace RiverHollow.Game_Managers
             return GameContentManager.GetTexture(texture);
         }
 
+        public static int GetWorkerNum()
+        {
+            return _dictWorkers.Count;
+        }
+
 
         public class Recipe
         {

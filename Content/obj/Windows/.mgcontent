@@ -97,5 +97,9 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Quests.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texPlayerHair.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/MagicShop.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/witch.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/bard.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/rogue.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/summoner.png</File>
   </SourceFiles>
 </SourceFileCollection>

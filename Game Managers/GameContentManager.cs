@@ -46,6 +46,10 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\Healer");
             AddTexture(Content, @"Textures\Knight");
             AddTexture(Content, @"Textures\Weapons Master");
+            AddTexture(Content, @"Textures\Summoner");
+            AddTexture(Content, @"Textures\Rogue");
+            AddTexture(Content, @"Textures\Bard");
+            AddTexture(Content, @"Textures\Witch");
             AddTexture(Content, @"Textures\NPC1");
             AddTexture(Content, @"Textures\NPC8");
             AddTexture(Content, @"Textures\Monsters\Goblin Scout");

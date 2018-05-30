@@ -22,8 +22,8 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             {
                 Vector2 center = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
 
-                int minWidth = 64 * merch.Count + 64;
-                int minHeight = 128 + 64;
+                int minWidth = 64;
+                int minHeight = 64;
                 _mainWindow = new GUIWindow(GUIObject.PosFromCenter(center, minWidth, minHeight), GUIWindow.RedWin, minWidth, minHeight);
 
                 _mainWindow.PositionAdd(new Vector2(32, 32));
@@ -41,14 +41,22 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
 
                         if (i == 0) { wb.AnchorToInnerSide(_mainWindow, GUIObject.SideEnum.TopLeft); }
                         else {
-                            wb.AnchorAndAlignToObject(_liWorkers[i - 1], GUIObject.SideEnum.Right, GUIObject.SideEnum.Top, 20);
-                            _mainWindow.AddControl(wb);
+                            if (i == merch.Count / 2)
+                            {
+                                wb.AnchorAndAlignToObject(_liWorkers[0], GUIObject.SideEnum.Bottom, GUIObject.SideEnum.Left, 20);
+                                _mainWindow.AddControl(wb);
+                            }
+                            else{
+                                wb.AnchorAndAlignToObject(_liWorkers[i - 1], GUIObject.SideEnum.Right, GUIObject.SideEnum.Top, 20);
+                                _mainWindow.AddControl(wb);
+                            }
                         }
                         i++;
                     }
                 }
 
                 _mainWindow.Resize();
+                _mainWindow.CenterOnScreen();
 
                 _gMoney = new GUIMoneyDisplay();
                 _gMoney.AnchorAndAlignToObject(_mainWindow, GUIObject.SideEnum.Top, GUIObject.SideEnum.Left);

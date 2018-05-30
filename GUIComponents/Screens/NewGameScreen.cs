@@ -8,7 +8,6 @@ using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIObjects;
-using RiverHollow.SpriteAnimations;
 using System.Collections.Generic;
 
 using static RiverHollow.GUIObjects.GUIObject;
@@ -60,7 +59,7 @@ namespace RiverHollow.GUIComponents.Screens
             _nameWindow.AnchorAndAlignToObject(_manorWindow, SideEnum.Bottom, SideEnum.Right );
 
             _liClasses = new List<GUIObject>();
-            for (int i = 1; i <= 4; i++) {
+            for (int i = 1; i <= ObjectManager.GetWorkerNum(); i++) {
                 ClassSelectionBox w = new ClassSelectionBox(Vector2.Zero, ObjectManager.GetWorker(i));
                 _liClasses.Add(w);
                 _window.Controls.Add(w);
