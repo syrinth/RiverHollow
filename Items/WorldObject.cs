@@ -398,11 +398,13 @@ namespace RiverHollow.WorldObjects
 
         public class ClassChanger : WorldItem
         {
-            public ClassChanger(int id)
+            public ClassChanger(int id, Vector2 position)
             {
                 _id = id;
                 Type = ObjectType.ClassChanger;
                 LoadContent();
+
+                MapPosition = position;
 
                 _width = TileSize;
                 _height = TileSize * 2;
@@ -427,8 +429,8 @@ namespace RiverHollow.WorldObjects
                 PlayerManager.SetClass(toSet);
             }
 
-            //public MachineData SaveData() { return new MachineData(); }
-            //public virtual void LoadData(GameManager.MachineData mac) { }
+            public MachineData SaveData() { return new MachineData(); }
+            public virtual void LoadData(GameManager.MachineData mac) { }
         }
 
         public class Machine : WorldItem

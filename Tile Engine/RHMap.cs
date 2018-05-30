@@ -1390,6 +1390,16 @@ namespace RiverHollow.Tile_Engine
                         {
                             mapData.plants.Add(((Plant)w).SaveData());
                         }
+                        else if (w.IsClassChanger())
+                        {
+                            WorldObjectData d = new WorldObjectData
+                            {
+                                worldObjectID = tile.WorldObject.ID,
+                                x = (int)((ClassChanger)tile.WorldObject).MapPosition.X,
+                                y = (int)((ClassChanger)tile.WorldObject).MapPosition.Y
+                            };
+                            mapData.worldObjects.Add(d);
+                        }
                         else
                         {
                             WorldObjectData d = new WorldObjectData
@@ -1426,7 +1436,16 @@ namespace RiverHollow.Tile_Engine
             {
                 if (w.worldObjectID != -1)
                 {
-                    PlaceWorldObject(ObjectManager.GetWorldObject(w.worldObjectID, new Vector2(w.x, w.y)));
+                    WorldObject obj = ObjectManager.GetWorldObject(w.worldObjectID, new Vector2(w.x, w.y));
+                    if (obj.IsClassChanger())
+                    {
+                        PlacePlayerObject(obj);
+                    }
+                    else
+                    {
+                        PlaceWorldObject(obj);
+                    }
+                    
                 }
                 else
                 {

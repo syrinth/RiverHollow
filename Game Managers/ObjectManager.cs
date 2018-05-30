@@ -119,7 +119,7 @@ namespace RiverHollow.Game_Managers
                     case "Processor":
                         return new Processor(id, _stringDataValues);
                     case "ClassChanger":
-                        return new ClassChanger(id);
+                        return new ClassChanger(id, pos);
                     case "Plant":
                         return new Plant(id, _stringDataValues);
                     case "Crafter":
