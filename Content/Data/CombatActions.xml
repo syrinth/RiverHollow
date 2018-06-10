@@ -8,7 +8,7 @@
     <!--Buff Tags: Allies, Enemies, Target, Self-->
     <Item>
       <Key>1</Key>
-      <Value>Action/Attack/Basic Attack/0/0.03/[Target:Enemy][Effect:Harm-1][Action:UserMove UserAttack Apply]</Value>
+      <Value>Action/Attack/Basic Attack/[Target:Enemy][Effect:Harm-1][Action:UserMove UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -20,34 +20,39 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>Action/Meditate/Increases your dmg/0/0.03/[Target:Self][Action:UserCast][Buff:3|2|Self]</Value>
+      <Value>Action/Meditate/Increases your dmg/[Target:Self][Action:UserCast][Buff:3|2|Self]</Value>
     </Item>
     <!---->
     <!--<100> Wizard Spells-->
     <Item>
       <Key>101</Key>
-      <Value>Spell/Thunder/Call down thunder on your foes/0/0.03/[Target:Enemy][Effect:Cost-5 Harm-5 Direct][Action:UserCast Direct Apply][Element:Lightning][Type:Magical]</Value>
+      <Value>Spell/Thunder/Call down thunder on your foes/[SpellAnimation:0-0.03][Target:Enemy][Effect:Cost-5 Harm-5 Direct][Action:UserCast Direct Apply][Element:Lightning][Type:Magical]</Value>
     </Item>
     <Item>
       <Key>102</Key>
-      <Value>Spell/Fireball/Flames!/1/0.03/[Target:Enemy][Effect:Cost-20 Harm-50][Action:UserCast Projectile Apply]</Value>
+      <Value>Spell/Fireball/Flames!/[SpellAnimation:1-0.03][Target:Enemy][Effect:Cost-20 Harm-50][Action:UserCast Projectile Apply]</Value>
     </Item>
     <Item>
       <Key>103</Key>
-      <Value>Spell/Shield/Summon a rock/0/0.03/[Target:Self][Effect:Cost-10][Action:UserCast][Buff:1|2|Self]</Value>
+      <Value>Spell/Shield/Summon a rock/[SpellAnimation:0-0.03][Target:Self][Effect:Cost-10][Action:UserCast][Buff:1|2|Self]</Value>
     </Item>
     <Item>
       <Key>104</Key>
-      <Value>Spell/Poison/Poison them!/0/0.03/[Target:Enemy][Effect:Cost-5 Status-Poisoned][Action:UserCast Direct Apply]</Value>
+      <Value>Spell/Poison/Poison them!/[SpellAnimation:0-0.03][Target:Enemy][Effect:Cost-5 Status-Poisoned][Action:UserCast Direct Apply]</Value>
     </Item>
     <!--<150> Healer Spells-->
     <Item>
       <Key>150</Key>
-      <Value>Spell/Minor Healing/A weak healing spell/0/0.03/[Target:Ally][Effect:Cost-5 Heal-10 Direct][Action:UserCast Direct Apply]</Value>
+      <Value>Spell/Minor Healing/A weak healing spell/[SpellAnimation:0-0.03][Target:Ally][Effect:Cost-5 Heal-10 Direct][Action:UserCast Direct Apply]</Value>
     </Item>
     <Item>
       <Key>151</Key>
-      <Value>Spell/Esuna/Purges Poisons/0/0.03/[Target:Ally][Effect:Cost-5 Status-Poisoned-Silenced][Action:UserCast Direct Apply]</Value>
+      <Value>Spell/Esuna/Purges Poisons/[SpellAnimation:0-0.03][Target:Ally][Effect:Cost-5 Status-Poisoned-Silenced][Action:UserCast Direct Apply]</Value>
+    </Item>
+    <!--<200> Summoner Spells-->
+    <Item>
+      <Key>200</Key>
+      <Value>Spell/Summon Eye/Summons a Magical Eye to attack your foe/[Target:Ally][Effect:Cost-5 Summon][Action:UserCast Apply]</Value>
     </Item>
   </Asset>
 </XnaContent>

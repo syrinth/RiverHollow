@@ -62,6 +62,7 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\texWeather");
             AddTexture(Content, @"Textures\lightmask");
             AddTexture(Content, @"Textures\texPlayerHair");
+            AddTexture(Content, @"Textures\Eye");
         }
 
         public static void LoadGUIs(ContentManager Content)

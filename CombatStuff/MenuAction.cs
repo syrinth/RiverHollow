@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Misc;
@@ -50,25 +51,29 @@ namespace RiverHollow.Characters.CombatStuff
     {
         const int moveSpeed = 60;
 
-        private ElementEnum _element = ElementEnum.None;
-        private AttackTypeEnum _attackType = AttackTypeEnum.Physical;
-        private List<ConditionEnum> _liCondition;
+        ElementEnum _element = ElementEnum.None;
+        AttackTypeEnum _attackType = AttackTypeEnum.Physical;
+        List<ConditionEnum> _liCondition;
         public List<ConditionEnum> LiCondition { get => _liCondition; }
-        private int _mpCost;
+        int _mpCost;
         public int MPCost { get => _mpCost; }
-        private int _effectHarm;
+        int _effectHarm;
         public int EffectHarm { get => _effectHarm; }
-        private int _effectHeal;
+        int _effectHeal;
         public int EffectHeal { get => _effectHeal; }
-        private string _target;
+        string _target;
         public string Target { get => _target; }
-        private List<String> _actionTags;
-        private int _currentActionTag = 0;
-        private List<String> _effectTags;
-        private List<BuffData> _buffs;         //Key = Buff ID, string = Duration/<Tag> <Tag>
+        List<String> _actionTags;
+        int _currentActionTag = 0;
+        List<String> _effectTags;
+        List<BuffData> _buffs;         //Key = Buff ID, string = Duration/<Tag> <Tag>
 
-        private int _textureRow;
-        private float _frameSpeed;
+        Summon _summon;
+        bool _bSummoned = false;
+        bool _alreadyApplied = false;
+
+        int _textureRow;
+        float _frameSpeed;
 
         public BattleLocation TargetLocation;
         public Vector2 UserStartPosition;
@@ -99,8 +104,6 @@ namespace RiverHollow.Characters.CombatStuff
             _actionType = Util.ParseEnum<ActionEnum>(stringData[i++]);
             _name = stringData[i++];
             _description = stringData[i++];
-            _textureRow = int.Parse(stringData[i++]);
-            _frameSpeed = float.Parse(stringData[i++]);
             //This is where we parse for tags
 
             string[] split = stringData[i++].Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
@@ -151,6 +154,11 @@ namespace RiverHollow.Characters.CombatStuff
                         }
                         else
                         {
+                            if (parse[0] == "Summon")
+                            {
+                                _summon = new Summon();
+                            }
+
                             _effectTags.Add(tag);
                         }
                     }
@@ -165,6 +173,15 @@ namespace RiverHollow.Characters.CombatStuff
                     _actionTags.AddRange(tagType[1].Split(' '));
                     _actionTags.Add("End");
                 }
+                else if (tagType[0].Equals("SpellAnimation"))
+                {
+                    string[] parse = tagType[1].Split('-');
+                    if (parse.Length > 1)
+                    {
+                        _textureRow = int.Parse(parse[0]);
+                        _frameSpeed = float.Parse(parse[1]);
+                    }
+                }               
             }
 
             _id = id;
@@ -217,10 +234,15 @@ namespace RiverHollow.Characters.CombatStuff
                 }
                 if (_effectTags.Contains("Status"))
                 {
-                    foreach(ConditionEnum e in _liCondition)
+                    foreach (ConditionEnum e in _liCondition)
                     {
                         TargetLocation.Character.ChangeConditionStatus(e, Target.Equals("Enemy"));
                     }
+                }
+                else if (_effectTags.Contains("Summon") && !_bSummoned)
+                {
+                    _bSummoned = true;
+                    TargetLocation.Character.LinkSummon(_summon);
                 }
 
                 if (_buffs.Count > 0)
@@ -309,10 +331,36 @@ namespace RiverHollow.Characters.CombatStuff
                     }
                     break;
                 case "Apply":
-                    if (!CombatManager.ChosenSkill.Target.Equals("Self")) { ApplyEffect(); }
-                    else { ApplyEffectToSelf(); }
-                    
-                    _currentActionTag++;
+                    if (!_alreadyApplied)
+                    {
+                        if (!CombatManager.ChosenSkill.Target.Equals("Self")) { ApplyEffect(); }
+                        else { ApplyEffectToSelf(); }
+
+                        _alreadyApplied = true;
+                    }
+
+                    Summon s = CombatManager.ActiveCharacter.LinkedSummon;
+                    if (s != null && _actionTags.Contains("UserAttack") && TargetLocation.Character != null && TargetLocation.Character.CurrentHP > 0)
+                    {
+                        if (!s.IsCurrentAnimation("Attack"))
+                        {
+                            s.PlayAnimation("Attack");
+                        }
+                        else if (s.AnimationPlayedXTimes(1))
+                        {
+                            int x = TargetLocation.Character.ProcessAttack(s.Dmg, 1, s.Element);
+                            TargetLocation.AssignDamage(x);
+
+                            s.PlayAnimation("Idle");
+                            _alreadyApplied = false;
+                            _currentActionTag++;
+                        }
+                    }
+                    else
+                    {
+                        _alreadyApplied = false;
+                        _currentActionTag++;
+                    }
                     break;
                 case "Projectile":
                     if (!Sprite.IsAnimating)

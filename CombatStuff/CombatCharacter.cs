@@ -6,6 +6,7 @@ using System;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Game_Managers.GUIObjects;
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.CombatStuff;
 
 namespace RiverHollow.Characters.CombatStuff
 {
@@ -62,6 +63,9 @@ namespace RiverHollow.Characters.CombatStuff
         public Dictionary<ElementEnum, ElementAlignment> DiElementalAlignment => _diElementalAlignment;
 
         public BattleLocation Location;
+
+        private Summon _linkedSummon;
+        public Summon LinkedSummon =>  _linkedSummon;
         #endregion
 
         public CombatCharacter() : base()
@@ -130,11 +134,20 @@ namespace RiverHollow.Characters.CombatStuff
                     PlayAnimation("KO");
                 }
             }
+
+            if (_linkedSummon != null)
+            {
+                _linkedSummon.Update(theGameTime);
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             _bodySprite.Draw(spriteBatch, false);
+            if(_linkedSummon != null)
+            {
+                _linkedSummon.Draw(spriteBatch);
+            }
         }
 
         public int ProcessAttack(int offensiveStat, int dmgMod, ElementEnum element = ElementEnum.None)
@@ -278,6 +291,17 @@ namespace RiverHollow.Characters.CombatStuff
                         break;
                 }
             }
+        }
+
+        public void LinkSummon(Summon s)
+        {
+            _linkedSummon = s;
+            _linkedSummon.Position = Position - new Vector2(100, 100);
+        }
+
+        public void UnlinkSummon()
+        {
+            _linkedSummon = null;
         }
 
         public bool CanCast(int x)

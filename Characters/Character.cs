@@ -54,7 +54,7 @@ namespace RiverHollow.Characters
             _bodySprite.Update(theGameTime);
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch,bool useLayerDepth = false)
+        public virtual void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
             _bodySprite.Draw(spriteBatch, useLayerDepth);
         }

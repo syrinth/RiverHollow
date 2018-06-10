@@ -358,7 +358,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (Occupied()) { _character.Draw(spriteBatch, false); }
+            if (Occupied()) { _character.Draw(spriteBatch); }
 
             if (Selected) { _giTarget.Draw(spriteBatch); }
 
