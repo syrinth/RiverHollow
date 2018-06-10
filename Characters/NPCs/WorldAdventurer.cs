@@ -64,9 +64,9 @@ namespace RiverHollow.Characters.NPCs
 
         public  new void LoadContent(string texture)
         {
-            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(texture));
-            _bodySprite.AddAnimation("Idle", 0, 0, TileSize, TileSize * 2, 1, 0.3f);
-            _bodySprite.AddAnimation("WalkDown", TileSize, 0, TileSize, TileSize * 2, 2, 0.3f);
+            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(texture), true);
+            _bodySprite.AddAnimation("Idle", TileSize, 0, TileSize, TileSize * 2, 1, 0.3f);
+            _bodySprite.AddAnimation("WalkDown", 0, 0, TileSize, TileSize * 2, 3, 0.3f);
             _bodySprite.SetCurrentAnimation("Idle");
         }
 

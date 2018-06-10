@@ -131,8 +131,8 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             _w = w;
             _sprite = new GUISprite(w.BodySprite);
             _sprite.SetScale((int)GameManager.Scale);
-            _workerWindow = new GUIWindow(p, GUIWindow.RedWin, _sprite.Width + _sprite.Width / 3, _sprite.Height + 2 * _sprite.Height / 4);
-            _costWindow = new GUIWindow(Vector2.Zero, GUIWindow.RedWin, _sprite.Width + _sprite.Width / 3, 16);
+            _workerWindow = new GUIWindow(p, GUIWindow.RedWin, _sprite.Width + _sprite.Width / 4, _sprite.Height + (2 * GUIWindow.RedWin.Edge));
+            _costWindow = new GUIWindow(Vector2.Zero, GUIWindow.RedWin, _sprite.Width + _sprite.Width / 4, 16);
 
             _gMoney = new GUIMoneyDisplay(Cost);
             _gMoney.AnchorToInnerSide(_costWindow, SideEnum.TopRight);

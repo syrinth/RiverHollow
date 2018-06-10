@@ -282,9 +282,9 @@ namespace RiverHollow.GUIComponents.Screens
                 _sprite.SetScale((int)GameManager.Scale);
                 _iClassID = w.AdventurerID;
                 Position(p);
-                _winData = GUIWindow.RedWin;
-                Width = _sprite.Width + _sprite.Width / 3;
-                Height = _sprite.Height + 2 * _sprite.Height / 4;
+                _winData = GUIWindow.GreyWin;
+                Width = _sprite.Width + _sprite.Width / 4;
+                Height = _sprite.Height + (_winData.Edge * 2);
                 _sprite.CenterOnWindow(this);
                 _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
             }
