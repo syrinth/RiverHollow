@@ -4,6 +4,7 @@ using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using System.Collections.Generic;
 using RiverHollow.GUIObjects;
 using RiverHollow.Misc;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -15,6 +16,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public static int MAX_SHOWN_QUESTS = 4;
         List<QuestBox> _questList;
         GUIWindow _questWindow;
+        DetailBox _detailWindow;
         GUIButton _btnUp;
         GUIButton _btnDown;
 
@@ -23,8 +25,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             _questList = new List<QuestBox>();
             _questWindow = new GUIWindow(new Vector2(WIDTH, HEIGHT), GUIWindow.RedWin, WIDTH, HEIGHT);
-            _btnUp = new GUIButton(new Vector2(_questWindow.InnerTopLeft().X +_questWindow.Width - BTNSIZE, _questWindow.InnerTopLeft().Y), new Rectangle(256, 64, 32, 32), BTNSIZE, BTNSIZE, "", @"Textures\Dialog", true);
-            _btnDown = new GUIButton(new Vector2(_questWindow.InnerTopLeft().X + _questWindow.Width - BTNSIZE, _questWindow.InnerTopLeft().Y + _questWindow.Height - BTNSIZE), new Rectangle(256, 96, 32, 32), BTNSIZE, BTNSIZE, "", @"Textures\Dialog", true);
+            _detailWindow = new DetailBox(new Vector2(WIDTH, HEIGHT), GUIWindow.RedWin, WIDTH, HEIGHT);
+            _btnUp = new GUIButton(Vector2.Zero, new Rectangle(256, 64, 32, 32), BTNSIZE, BTNSIZE, "", @"Textures\Dialog", true);
+            _btnDown = new GUIButton(Vector2.Zero, new Rectangle(256, 96, 32, 32), BTNSIZE, BTNSIZE, "", @"Textures\Dialog", true);
+
+            _btnUp.AnchorAndAlignToObject(_questWindow, GUIObject.SideEnum.Right, GUIObject.SideEnum.Top);
+            _btnDown.AnchorAndAlignToObject(_questWindow, GUIObject.SideEnum.Right, GUIObject.SideEnum.Bottom);
             _topQuest = 0;
 
             for(int i = 0; i < MAX_SHOWN_QUESTS && i< PlayerManager.QuestLog.Count; i++)
@@ -66,7 +72,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             foreach (QuestBox c in _questList)
             {
-                rv = c.ProcessLeftButtonClick(mouse);
+                if (c.Contains(mouse))
+                {
+                    _detailWindow.SetData(c.TheQuest);
+                    Controls.Add(_detailWindow);
+                    Controls.Remove(_btnUp);
+                    Controls.Remove(_btnDown);
+
+
+                    rv = true;
+                }
                 if (rv) { break; }
             }
             return rv;
@@ -75,6 +90,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = true;
+            if (Controls.Contains(_detailWindow))
+            {
+                Controls.Remove(_detailWindow);
+                Controls.Add(_btnUp);
+                Controls.Add(_btnDown);
+            }
             return rv;
         }
 
@@ -107,6 +128,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
     {
         GUIWindow _window;
         Quest _quest;
+        public Quest TheQuest => _quest;
         SpriteFont _font;
         private int _index;
         public int Index { get => _index; }
@@ -149,6 +171,30 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool Contains(Point mouse)
         {
             return _window.Contains(mouse);
+        }
+    }
+
+    public class DetailBox : GUIWindow
+    {
+        GUIText _name;
+        GUIText _desc;
+        GUIText _progress;
+        public DetailBox(Vector2 position, WindowData winData, int width, int height) : base(position, winData, width, height)
+        {
+        }
+
+        public void SetData(Quest q)
+        {
+            Controls.Clear();
+            _name = new GUIText(q.Name);
+            _name.AnchorToInnerSide(this, SideEnum.TopLeft);
+
+            _desc = new GUIText(q.Description);
+            _desc.AnchorAndAlignToObject(_name, SideEnum.Bottom, SideEnum.Left, _name.CharHeight);
+            this.AddControl(_desc);
+
+            _progress = new GUIText(q.GetProgressString());
+            _progress.AnchorToInnerSide(this, SideEnum.BottomRight);
         }
     }
 }

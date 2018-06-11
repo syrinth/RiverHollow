@@ -243,22 +243,33 @@ namespace RiverHollow.Misc
         }
 
         public bool CanBeGiven() {
-            bool rv = false;
+            bool rv = true;
 
             if (_iSeason > -1)
             {
-                if (_iSeason == GameCalendar.CurrentSeason)
+                if (_iSeason != GameCalendar.CurrentSeason)
                 {
-                    rv = true;
+                    rv = false;
                 }
             }
             if (_iDay > -1)
             {
                 if (_iDay == GameCalendar.CurrentDay)
                 {
-                    rv = true;
+                    rv = false;
                 }
             }
+
+            return rv;
+        }
+
+        public string GetProgressString()
+        {
+            string rv = string.Empty;
+            if(_questMob != null) { rv += _questMob.Name + " Defeated: "; }
+            else if (_questItem != null) { rv += _questItem.Name + " Found: "; }
+
+            rv += _iAccomplished + "/" + _iTargetGoal;
 
             return rv;
         }
