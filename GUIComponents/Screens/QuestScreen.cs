@@ -54,35 +54,38 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
             bool moved = false;
-            if (_btnUp.Contains(mouse))
+            if (!Controls.Contains(_detailWindow))
             {
-                if (_topQuest - 1 >= 0) { _topQuest--; moved = true; }
-            }
-            else if (_btnDown.Contains(mouse))
-            {
-                if (_topQuest + MAX_SHOWN_QUESTS < PlayerManager.QuestLog.Count) { _topQuest++; moved = true; }
-            }
-            if (moved)
-            {
-                for(int i = 0; i< _questList.Count; i++)
+                if (_btnUp.Contains(mouse))
                 {
-                    _questList[i].SetQuest(PlayerManager.QuestLog[_topQuest + i]);
+                    if (_topQuest - 1 >= 0) { _topQuest--; moved = true; }
                 }
-            }
-
-            foreach (QuestBox c in _questList)
-            {
-                if (c.Contains(mouse))
+                else if (_btnDown.Contains(mouse))
                 {
-                    _detailWindow.SetData(c.TheQuest);
-                    Controls.Add(_detailWindow);
-                    Controls.Remove(_btnUp);
-                    Controls.Remove(_btnDown);
-
-
-                    rv = true;
+                    if (_topQuest + MAX_SHOWN_QUESTS < PlayerManager.QuestLog.Count) { _topQuest++; moved = true; }
                 }
-                if (rv) { break; }
+                if (moved)
+                {
+                    for (int i = 0; i < _questList.Count; i++)
+                    {
+                        _questList[i].SetQuest(PlayerManager.QuestLog[_topQuest + i]);
+                    }
+                }
+
+                foreach (QuestBox c in _questList)
+                {
+                    if (c.Contains(mouse))
+                    {
+                        _detailWindow.SetData(c.TheQuest);
+                        Controls.Add(_detailWindow);
+                        Controls.Remove(_btnUp);
+                        Controls.Remove(_btnDown);
+
+
+                        rv = true;
+                    }
+                    if (rv) { break; }
+                }
             }
             return rv;
         }
@@ -190,6 +193,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _name.AnchorToInnerSide(this, SideEnum.TopLeft);
 
             _desc = new GUIText(q.Description);
+            _desc.ParseText(3, this.MidWidth(), true);
             _desc.AnchorAndAlignToObject(_name, SideEnum.Bottom, SideEnum.Left, _name.CharHeight);
             this.AddControl(_desc);
 

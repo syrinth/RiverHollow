@@ -17,19 +17,21 @@ namespace RiverHollow.Misc
         public enum QuestType { GroupSlay, Slay, Fetch }
         private QuestType _goalType;
         private string _name;
-        public string Name { get => _name; }
+        public string Name => _name;
         private string _description;
-        public string Description { get => _description; }
+        public string Description => _description;
+        string _sGiveText;
+        public string GiveText => _sGiveText;
         private string _sRewardText;
         public string RewardText => _sRewardText;
 
         private NPC _questGiver;
-        public NPC QuestGiver { get => _questGiver; }
+        public NPC QuestGiver => _questGiver;
 
         private int _iTargetGoal;
-        public int TargetGoal { get => _iTargetGoal; }
+        public int TargetGoal => _iTargetGoal;
         private int _iAccomplished;
-        public int Accomplished { get => _iAccomplished; }
+        public int Accomplished => _iAccomplished;
 
         private Monster _questMob;
         private Item _questItem;
@@ -100,8 +102,8 @@ namespace RiverHollow.Misc
             string[] splitParams = stringData.Split('/');
             int i = 0;
             _name = splitParams[i++];
+            _sGiveText = splitParams[i++];
             _description = splitParams[i++];
-            i++;   //reqtoProc
             _questGiver = CharacterManager.DiNPC[int.Parse(splitParams[i++])];
             _goalType = Util.ParseEnum<QuestType>(splitParams[i++]);
             string[] req = splitParams[i++].Split('|');

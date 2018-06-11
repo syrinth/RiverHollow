@@ -166,5 +166,32 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 _bDone = true;
             }
         }
+
+        public void ParseText(int maxRows, int width, bool printAll = true)
+        {
+            int numReturns = 0;
+            string totalText = string.Empty;
+            string line = string.Empty;
+            string returnString = string.Empty;
+            string[] wordArray = _sFullText.Split(' ');
+
+            foreach (string word in wordArray)
+            {
+                Vector2 measure = MeasureString(line + word);
+
+                if (measure.Length() >= (width) ||
+                    numReturns == maxRows - 1 && measure.Length() >= (width) - CharHeight)
+                {
+                    returnString = returnString + line + '\n';
+                    totalText += returnString;
+                    line = string.Empty;
+                    numReturns++;
+                }
+
+                line = line + word + ' ';
+            }
+
+            SetText(returnString + line);
+        }
     }
 }
