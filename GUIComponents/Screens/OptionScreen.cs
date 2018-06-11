@@ -11,6 +11,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public static int HEIGHT = RiverHollow.ScreenHeight / 3;
         List<CharacterBox> _partyList;
         GUIWindow _partyWindow;
+
         public OptionScreen()
         {
             

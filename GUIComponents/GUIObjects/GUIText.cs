@@ -40,6 +40,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
             SetDimensions("X");
         }
 
+        public GUIText(int val, bool printAll = true, string f = @"Fonts\Font") : this(val.ToString(), printAll, f){}
+
         public GUIText(string text, bool printAll = true, string f = @"Fonts\Font") : this()
         {
             _font = GameContentManager.GetFont(f);

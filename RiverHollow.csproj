@@ -80,6 +80,7 @@
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUIMisc.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUISprite.cs" />
     <Compile Include="GUIComponents\Screens\CombatScreen.cs" />
+    <Compile Include="GUIComponents\Screens\FriendshipScreen.cs" />
     <Compile Include="GUIComponents\Screens\GameMenuScreen.cs" />
     <Compile Include="GUIComponents\Screens\LoadScreen.cs" />
     <Compile Include="GUIComponents\Screens\NewGameScreen.cs" />

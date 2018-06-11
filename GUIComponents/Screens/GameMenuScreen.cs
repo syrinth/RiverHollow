@@ -7,13 +7,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class GameMenuScreen : GUIScreen
     {
-        const int BTN_PADDING = 120;
+        const int BTN_PADDING = 10;
         GUIButton _btnExitGame;
         GUIButton _btnQuestLog;
         GUIButton _btnInventory;
         GUIButton _btnParty;
         GUIButton _btnManagement;
         GUIButton _btnOptions;
+        GUIButton _btnFriendship;
         GUIScreen _infoScreen;
         List<GUIObject> _liButtons;
 
@@ -28,8 +29,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _btnExitGame = new GUIButton("Exit Game");
             _btnOptions = new GUIButton("Options");
             _btnManagement = new GUIButton("Buildings");
+            _btnFriendship = new GUIButton("Friends");
 
-            _liButtons = new List<GUIObject>() { _btnInventory, _btnParty, _btnManagement, _btnQuestLog, _btnOptions, _btnExitGame };
+            _liButtons = new List<GUIObject>() { _btnInventory, _btnParty, _btnManagement, _btnQuestLog, _btnOptions, _btnFriendship, _btnExitGame  };
             GUIObject.CreateSpacedColumn(ref _liButtons, -GUIButton.BTN_WIDTH, 0, RiverHollow.ScreenHeight, BTN_PADDING);
             foreach(GUIObject o in _liButtons) { Controls.Add(o); }
 
@@ -113,6 +115,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 if (_btnManagement.Contains(mouse))
                 {
                     _infoScreen = new ManagementScreen();
+                    rv = true;
+                }
+
+                if (_btnFriendship.Contains(mouse))
+                {
+                    _infoScreen = new FriendshipScreen();
                     rv = true;
                 }
 
