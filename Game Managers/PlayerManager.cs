@@ -224,6 +224,7 @@ namespace RiverHollow.Game_Managers
             {
                 if (i != null) { q.AttemptProgress(i); }
             }
+            q.SpawnMobs();
             _questLog.Add(q);
         }
         public static void AdvanceQuestProgress(Monster m)

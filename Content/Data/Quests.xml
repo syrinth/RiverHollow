@@ -1,10 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: ID Value:Name/QuestTextKey/ReqToProc/Giver/Type/goal num|goal num/Reward/EndSpeech-->
+    <!--Key: ID Value:Name/QuestTextKey/ReqToProc/Giver/Type/goal num|goal num/EndSpeech/QuestTags-->
+    <!--[Item:ID-Num-UniqueData]-->
+    <!--[Money:Amount]-->
+    <!--[Friendship:Target-Amount]-->
+    <!--[SpawnMob:ID-Map-Location]-->
     <Item>
       <Key>1</Key>
-      <Value>Griselda's Orb/Quest1//6/Fetch/0 6/1000 1 1/Quest1End</Value>
+      <Value>Griselda's Orb/Quest1//6/Fetch/301 1/Quest1End/[Item:1000-1-1][Money:500][Friendship:Giver-200][SpawnMob:3-mapForest-Quest1]</Value>
     </Item>
   </Asset>
 </XnaContent>

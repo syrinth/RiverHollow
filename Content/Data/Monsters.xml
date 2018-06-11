@@ -10,5 +10,9 @@
       <Key>2</Key>
       <Value>Goblin Soldier/GoblinSoldier/10/9/2/10/0/1/Lightning/Fire</Value>
     </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>Goblin Sneak Thief/GoblinSoldier/10/9/2/10/0/1/Lightning/Fire</Value>
+    </Item>
   </Asset>
 </XnaContent>

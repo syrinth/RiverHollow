@@ -10,5 +10,9 @@
       <Key>2</Key>
       <Value>90 0/30 7/50 8/100 1</Value>
     </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>100 301</Value>
+    </Item>
   </Asset>
 </XnaContent>

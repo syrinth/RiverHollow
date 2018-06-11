@@ -1,6 +1,7 @@
 ﻿using RiverHollow.Characters;
 using RiverHollow.Characters.NPCs;
 using RiverHollow.Game_Managers;
+using RiverHollow.Tile_Engine;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
@@ -39,10 +40,22 @@ namespace RiverHollow.Misc
         bool _bFinished;
         public bool Finished => _bFinished;
 
-        //private int _rewardMoney;
-        //public int RewardMoney { get => _rewardMoney; }
-        private List<Item> _liRewardItems;
+
+        #region Rewards
+        int _iFriendship;
+        public int Friendship => _iFriendship;
+        string _sFriendTarget;
+        public string FriendTarget => _sFriendTarget;
+        int _iRewardMoney;
+        public int RewardMoney { get => _iRewardMoney; }
+        List<Item> _liRewardItems;
         public List<Item> LiRewardItems => _liRewardItems;
+        #endregion
+        #region Spawn Mobs
+        Mob _spawnMob;
+        string _sSpawnMap;
+        string _sLocName;
+        #endregion
 
         public Quest()
         {
@@ -76,6 +89,7 @@ namespace RiverHollow.Misc
         public Quest(string stringData, int id) : this()
         {
             _iQuestID = id;
+            _iAccomplished = 0;
             _liRewardItems = new List<Item>();
             string[] splitParams = stringData.Split('/');
             int i = 0;
@@ -94,15 +108,47 @@ namespace RiverHollow.Misc
                     _iTargetGoal = int.Parse(info[1]);
                 }
             }
-            string[] rewards = splitParams[i++].Split('|');
-            foreach(string s in rewards)
-            {
-                string[] info = s.Split(' ');
-                Item it = ObjectManager.GetItem(int.Parse(info[0]), int.Parse(info[1]));
-                if(info.Length == 3) { it.ApplyUniqueData(info[2]); }
-                _liRewardItems.Add(it);
-            }
+
             _sRewardText = splitParams[i++];
+
+            string[] split = splitParams[i++].Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in split)
+            {
+                string[] tagType = s.Split(':');
+                if (tagType[0].Equals("Item"))
+                {
+                    string[] parse = tagType[1].Split('-');
+                    if (parse.Length > 1)
+                    {
+                        Item it = ObjectManager.GetItem(int.Parse(parse[0]), int.Parse(parse[1]));
+                        if (parse.Length == 3) { it.ApplyUniqueData(parse[2]); }
+                        _liRewardItems.Add(it);
+                    }
+                }
+                else if (tagType[0].Equals("Friendship"))
+                {
+                    string[] parse = tagType[1].Split('-');
+                    if (parse.Length > 1)
+                    {
+                        _sFriendTarget = parse[0];
+                        _iFriendship = int.Parse(parse[1]);
+                    }
+                }
+                else if (tagType[0].Equals("SpawnMob"))
+                {
+                    string[] parse = tagType[1].Split('-');
+                    if (parse.Length > 1)
+                    {
+                        _spawnMob = CharacterManager.GetMobByIndex(int.Parse(parse[0]));
+                        _sSpawnMap = parse[1];
+                        _sLocName = parse[2];
+                    }
+                }
+                else if (tagType[0].Equals("Money"))
+                {
+                    _iRewardMoney = int.Parse(tagType[1]);
+                }
+            }           
         }
 
         public bool AttemptProgress(Monster m)
@@ -155,6 +201,14 @@ namespace RiverHollow.Misc
             return rv;
         }
 
+        public void SpawnMobs()
+        {
+            if (_spawnMob != null)
+            {
+                RHMap map = MapManager.Maps[_sSpawnMap];
+                map.AddMob(_spawnMob, map.DictionaryCharacterLayer[_sLocName]);
+            }
+        }
         public void FinishQuest(ref string text)
         {
             _bFinished = true;
@@ -164,10 +218,15 @@ namespace RiverHollow.Misc
             {
                 InventoryManager.AddItemToInventory(i);
             }
+            PlayerManager.AddMoney(_iRewardMoney);
+
+            if (_sFriendTarget.Equals("Giver"))
+            {
+                _questGiver.Friendship += _iFriendship;
+            }
+
             PlayerManager.QuestLog.Remove(this);
         }
-
-        
 
         public struct QuestData
         {

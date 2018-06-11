@@ -251,7 +251,6 @@ namespace RiverHollow.Tile_Engine
                 {
                     Vector2 vect = obj.Position;
                     Mob mob = CharacterManager.GetMobByIndex(int.Parse(obj.Properties["ID"]), vect);
-                    mob.CurrentMapName = _name;
                     AddMob(mob);
                 }
                 else if (obj.Name.Equals("Chest"))
@@ -1340,12 +1339,16 @@ namespace RiverHollow.Tile_Engine
 
             if (rv)
             {
-                m.Position = position;
-
-                _liMobs.Add(m);
+                AddMob(m, position);
             }
         }
 
+        public void AddMob(Mob m, Vector2 position)
+        {
+            m.CurrentMapName = _name;
+            m.Position = position;
+            _liMobs.Add(m);
+        }
         #endregion
         
         public int GetMapWidth()
