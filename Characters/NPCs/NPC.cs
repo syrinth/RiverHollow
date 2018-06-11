@@ -348,7 +348,8 @@ namespace RiverHollow.Characters
                     }
                     else if (specialVal[0].Equals("Quest"))
                     {
-                        removeIt = PlayerManager.QuestLog.Contains(GameManager.DIQuests[val]) || GameManager.DIQuests[val].ReadyForHandIn || GameManager.DIQuests[val].Finished;
+                        Quest newQuest = GameManager.DIQuests[val];
+                        removeIt = PlayerManager.QuestLog.Contains(newQuest) || newQuest.ReadyForHandIn || newQuest.Finished || !newQuest.CanBeGiven();
                     }
 
                     s = s.Remove(s.IndexOf(specialParse[0]) - 1, specialParse[0].Length + 2);

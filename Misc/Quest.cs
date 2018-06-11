@@ -56,10 +56,16 @@ namespace RiverHollow.Misc
         string _sSpawnMap;
         string _sLocName;
         #endregion
+        #region Reqs
+        int _iDay;
+        int _iSeason;
+        #endregion
 
         public Quest()
         {
             _iQuestID = -1;
+            _iSeason = -1;
+            _iDay = -1;
             _name = string.Empty;
             _description = string.Empty;
             _sRewardText = string.Empty;
@@ -148,6 +154,14 @@ namespace RiverHollow.Misc
                 {
                     _iRewardMoney = int.Parse(tagType[1]);
                 }
+                else if (tagType[0].Equals("Day"))
+                {
+                    _iDay = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Season"))
+                {
+                    _iSeason = int.Parse(tagType[1]);
+                }
             }           
         }
 
@@ -226,6 +240,27 @@ namespace RiverHollow.Misc
             }
 
             PlayerManager.QuestLog.Remove(this);
+        }
+
+        public bool CanBeGiven() {
+            bool rv = false;
+
+            if (_iSeason > -1)
+            {
+                if (_iSeason == GameCalendar.CurrentSeason)
+                {
+                    rv = true;
+                }
+            }
+            if (_iDay > -1)
+            {
+                if (_iDay == GameCalendar.CurrentDay)
+                {
+                    rv = true;
+                }
+            }
+
+            return rv;
         }
 
         public struct QuestData
