@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <!--Key: Index>0 Value:Name/Description-->
+    <Item>
+      <Key>1</Key>
+      <Value>Wizard/Uses magic!</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>Healer/Master of Healing and potions</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>Summoner/Summons magical beings to aid you</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>Witch/Expert in curses and hexing your opponents</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>Weapons Master/Master of Melee</Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>Knight/Defensible warrior</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>Rogue/Fast and agile, uses a bow</Value>
+    </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>Bard/Music</Value>
+    </Item>
+  </Asset>
+</XnaContent>

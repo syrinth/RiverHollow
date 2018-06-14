@@ -327,7 +327,7 @@ namespace RiverHollow.Characters
             string text = _dialogueDictionary["Selection"];
             Util.ProcessText(text, _sName);
 
-            string[] textFromData = text.Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] textFromData = Util.FindTags(text);
             string[] options = textFromData[1].Split('|');
             List<string> liCommands = new List<string>();
             for(int i = 0; i < options.Length; i++) { 

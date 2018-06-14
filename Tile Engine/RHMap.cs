@@ -822,7 +822,7 @@ namespace RiverHollow.Tile_Engine
 
                     if (tile.ContainsProperty("Journal", out string val) && val.Equals("true"))
                     {
-                        GUIManager.SetScreen(new TextScreen(GameContentManager.GetDialogue("Journal"), true));
+                        GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameDialog("Journal"), true));
                     }
 
                     if (tile.WorldObject != null && tile.WorldObject.ID == 3) //Checks to see if the tile contains a staircase object

@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <!--Key: ID, Value:Name/Description-->
+    <Item>
+      <Key>0</Key>
+      <Value>Stone/Stone, for building things</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>Arcane Essence/Holds a spark of magic</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>Wood/Wood, it builds stuff</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>Basic Sword/Swing this fucker</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>Apple/Nomnom</Value>
+    </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>Adventure Map/Off to find adventures!</Value>
+    </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>Ultima Weapon/Swing this fucker</Value>
+    </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>Magic Robes/Robes of a powerful mage</Value>
+    </Item>
+    <!--<20-24> Tools-->
+    <Item>
+      <Key>20</Key>
+      <Value>Pick Axe/Breaks things</Value>
+    </Item>
+    <Item>
+      <Key>21</Key>
+      <Value>Wooden Axe/Chop Chop Motherfucker</Value>
+    </Item>
+    <Item>
+      <Key>22</Key>
+      <Value>Shovel/Dig the thing</Value>
+    </Item>
+    <Item>
+      <Key>23</Key>
+      <Value>Watering Can/Watering the thing</Value>
+    </Item>
+    <!--<40-59> Plant Resources-->
+    <Item>
+      <Key>40</Key>
+      <Value>Silver Leaf/Used in potions</Value>
+    </Item>
+    <!--<60-79> Seeds-->
+    <Item>
+      <Key>60</Key>
+      <Value>Silver Seeds/Used to grow a Silver Herb bush</Value>
+    </Item>
+    <!--<80-89> Ores and Bars-->
+    <Item>
+      <Key>80</Key>
+      <Value>Copper Ore/Basic ore</Value>
+    </Item>
+    <Item>
+      <Key>81</Key>
+      <Value>Iron Ore/Alright ore</Value>
+    </Item>
+    <Item>
+      <Key>82</Key>
+      <Value>Gold Ore/Shiny ore</Value>
+    </Item>
+    <Item>
+      <Key>83</Key>
+      <Value>Mithril Ore/Pretty ore</Value>
+    </Item>
+    <Item>
+      <Key>84</Key>
+      <Value>Adamantine Ore/Fancy ore!</Value>
+    </Item>
+    <Item>
+      <Key>85</Key>
+      <Value>Copper Bar/Basic Bar</Value>
+    </Item>
+    <Item>
+      <Key>86</Key>
+      <Value>Iron Bar/Alright Bar</Value>
+    </Item>
+    <Item>
+      <Key>87</Key>
+      <Value>Gold Bar/Alright Bar</Value>
+    </Item>
+    <Item>
+      <Key>88</Key>
+      <Value>Mithril Bar/Alright Bar</Value>
+    </Item>
+    <Item>
+      <Key>89</Key>
+      <Value>Adamantine Ore/Alright ore</Value>
+    </Item>
+    <!--<100> Combat:Status/Stamina/Health/Mana-->
+    <Item>
+      <Key>101</Key>
+      <Value>Health Potion/Recovers Health</Value>
+    </Item>
+    <Item>
+      <Key>102</Key>
+      <Value>Smelling Salts/Wake Up</Value>
+    </Item>
+    <Item>
+      <Key>103</Key>
+      <Value>Antidote/Cures Poisons</Value>
+    </Item>
+    <Item>
+      <Key>104</Key>
+      <Value>Poisoned Knife/Inflicts Poison</Value>
+    </Item>
+    <!--<190> Container:Stamina/Health/Mana-->
+    <Item>
+      <Key>190</Key>
+      <Value>Small Chest/Holds eight items</Value>
+    </Item>
+    <!--<200> Machines-->
+    <Item>
+      <Key>200</Key>
+      <Value>Smelter/Smelts Ore</Value>
+    </Item>
+    <Item>
+      <Key>201</Key>
+      <Value>Anvil/Makes Shit</Value>
+    </Item>
+    <Item>
+      <Key>299</Key>
+      <Value>Essense Extractor/Changes your class</Value>
+    </Item>
+    <!--<300> Misc-->
+    <Item>
+      <Key>300</Key>
+      <Value>Key/Unlocks</Value>
+    </Item>
+    <Item>
+      <Key>301</Key>
+      <Value>Griselda's Orb/General Use</Value>
+    </Item>
+    <!--<1000> Class Change-->
+    <Item>
+      <Key>1000</Key>
+      <Value>Essence of /Become a </Value>
+    </Item>
+  </Asset>
+</XnaContent>

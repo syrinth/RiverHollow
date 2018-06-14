@@ -52,6 +52,13 @@ namespace RiverHollow.Characters.NPCs
             _iAdventurerID = id;
             _characterType = CharacterEnum.WorldAdventurer;
             ImportBasics(stringData, id);
+            SetCombat();
+
+            _sAdventurerType = Combat.CharacterClass.Name;
+            _sTexture = @"Textures\" + _sAdventurerType;
+            _portraitRect = new Rectangle(0, 105, 80, 96);
+            _portrait = GameContentManager.GetTexture(_sTexture);
+
             LoadContent(_sTexture);
             _iCurrFood = 0;
             _heldItem = null;
@@ -59,7 +66,7 @@ namespace RiverHollow.Characters.NPCs
             DrawIt = true;
             Adventuring = false;
 
-            SetCombat();
+            
         }
 
         public  new void LoadContent(string texture)
@@ -70,30 +77,36 @@ namespace RiverHollow.Characters.NPCs
             _bodySprite.SetCurrentAnimation("Idle");
         }
 
-        protected int ImportBasics(string[] stringData, int id)
+        protected void ImportBasics(string[] stringData, int id)
         {
             _diCrafting = new Dictionary<int, Recipe>();
 
             _iAdventurerID = id;
-            int i = 0;
-            _sAdventurerType = stringData[i++];
-            _sTexture = @"Textures\" + _sAdventurerType;
-            _workerType = Util.ParseEnum<WorkerTypeEnum>(stringData[i++]);
-            _iDailyItemID = int.Parse(stringData[i++]);
-            _iDailyFoodReq = int.Parse(stringData[i++]);
-            int portraitNum = int.Parse(stringData[i++]);
-            _portraitRect = new Rectangle(0, 105, 80, 96);
-            _portrait = GameContentManager.GetTexture(_sTexture);
-            if (stringData.Length >= i)
+
+            foreach (string s in stringData)
             {
-                string[] crafting = stringData[i++].Split(' ');
-                foreach (string s in crafting)
+                string[] tagType = s.Split(':');
+                if (tagType[0].Equals("Type"))
                 {
-                    _diCrafting.Add(int.Parse(s), ObjectManager.DictCrafting[int.Parse(s)]);
+                    _workerType = Util.ParseEnum<WorkerTypeEnum>(tagType[1]);
+                }
+                else if (tagType[0].Equals("Item"))
+                {
+                    _iDailyItemID = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Food"))
+                {
+                    _iDailyFoodReq = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Crafts"))
+                {
+                    string[] crafting = tagType[1].Split(' ');
+                    foreach (string recipe in crafting)
+                    {
+                        _diCrafting.Add(int.Parse(recipe), ObjectManager.DictCrafting[int.Parse(recipe)]);
+                    }
                 }
             }
-
-            return i;
         }
 
         protected void SetCombat()
@@ -155,7 +168,7 @@ namespace RiverHollow.Characters.NPCs
 
         public override void Talk()
         {
-            GUIManager.SetScreen(new TextScreen(this, Name + ": " + GameContentManager.GetDialogue("AdventurerTree")));
+            GUIManager.SetScreen(new TextScreen(this, Name + ": " + GameContentManager.GetGameDialog("AdventurerTree")));
         }
 
         public override string GetSelectionText()
@@ -174,7 +187,7 @@ namespace RiverHollow.Characters.NPCs
                 _iMood += 1;
 
                 RHRandom r = new RHRandom();
-                rv = GameContentManager.GetDialogue(_sAdventurerType + r.Next(1, 2));
+                rv = GameContentManager.GetGameDialog(_sAdventurerType + r.Next(1, 2));
             }
             else if (entry.Equals("Craft"))
             {

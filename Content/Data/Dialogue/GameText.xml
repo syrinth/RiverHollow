@@ -50,5 +50,10 @@
       <Key>SpringDoor</Key>
       <Value>Nope</Value>
     </Item>
+    <!--Quest Descriptions-->
+    <Item>
+      <Key>Description Quest 1</Key>
+      <Value>Griselda wants you to get her orb back from the goblins who stole it. Apparently, they ran off to the East and are hiding inside of the Forest.</Value>
+    </Item>
   </Asset>
 </XnaContent>

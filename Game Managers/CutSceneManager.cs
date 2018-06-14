@@ -75,7 +75,7 @@ namespace RiverHollow.Game_Managers
             _liSetupCommands = new List<string>();
 
             //Get the cutscene triggers
-            string[] triggers = strData[0].Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] triggers = Util.FindTags(strData[0]);
             foreach(string s in triggers)
             {
                 string[] tags = s.Split(':');
@@ -102,7 +102,7 @@ namespace RiverHollow.Game_Managers
             }
 
             //Get the cutscene setup tags
-            _liSetupCommands.AddRange(strData[1].Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries));
+            _liSetupCommands.AddRange(Util.FindTags(strData[1]));
 
             //Get the sequence of commands to run during the cutscene
             _liCommands.AddRange(strData[2].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));

@@ -17,19 +17,19 @@ namespace RiverHollow.WorldObjects
 
         #region properties
         protected ItemEnum _itemType;
-        public ItemEnum ItemType { get => _itemType; }
+        public ItemEnum ItemType => _itemType;
         protected int _itemID;
-        public int ItemID { get => _itemID; }
+        public int ItemID => _itemID;
         protected Color _c = Color.White;
         public Color ItemColor => _c;
 
         protected double _dWidth = 16;
         protected double _dHeight = 16;
         protected string _name;
-        public string Name { get => _name; }
+        public string Name => _name;
 
         protected Texture2D _texture;
-        public Texture2D Texture { get => _texture; }
+        public Texture2D Texture => _texture;
 
         protected Vector2 _sourcePos;
 
@@ -51,13 +51,13 @@ namespace RiverHollow.WorldObjects
         protected int _rowTextureSize = TileSize;
         private Parabola _movement;
         protected bool _doesItStack;
-        public bool DoesItStack { get => _doesItStack; }
+        public bool DoesItStack => _doesItStack;
 
         protected int _num;
         public int Number { get => _num; set => _num = value; }
 
         protected int _sellPrice;
-        public int SellPrice { get => _sellPrice; }
+        public int SellPrice => _sellPrice;
         #endregion
         public Item() { }
 
@@ -71,17 +71,38 @@ namespace RiverHollow.WorldObjects
 
         protected int ImportBasics(string[] stringData, int id, int num)
         {
+            int i = 0;
             _num = num;
 
-            int i = 0;
-            _itemType = Util.ParseEnum<ItemEnum>(stringData[i++]);
-            _name = stringData[i++];
-            _description = stringData[i++];
-            string[] texIndices = stringData[i++].Split(' ');
-            _sourcePos = new Vector2(0 + TileSize * int.Parse(texIndices[0]), 0 + TileSize * int.Parse(texIndices[1]));
-            _sellPrice = int.Parse(stringData[i++]);
+            _itemID = id;
+            GameContentManager.GetIemText(_itemID, ref _name, ref _description);
 
-            _itemID = id;//(ObjectManager.ItemIDs)Enum.Parse(typeof(ObjectManager.ItemIDs), itemValue[i++]);
+            int totalCount = 0;
+            for(; i< stringData.Length; i++)
+            {
+                string[] tagType = stringData[i].Split(':');
+                if (tagType[0].Equals("Type"))
+                {
+                    _itemType = Util.ParseEnum<ItemEnum>(tagType[1]);
+                    totalCount++;
+                }
+                else if (tagType[0].Equals("Image"))
+                {
+                    string[] texIndices = tagType[1].Split('-');
+                    _sourcePos = new Vector2(0 + TileSize * int.Parse(texIndices[0]), 0 + TileSize * int.Parse(texIndices[1]));
+                    totalCount++;
+                }
+                else if (tagType[0].Equals("Sell"))
+                {
+                    _sellPrice = int.Parse(tagType[1]);
+                    totalCount++;
+                }
+
+                if(totalCount == 3)
+                {
+                    break;
+                }
+            }
 
             return i;
         }
@@ -300,14 +321,41 @@ namespace RiverHollow.WorldObjects
         public Equipment(int id, string[] stringData)
         {
             int i = ImportBasics(stringData, id, 1);
-            EquipType = Util.ParseEnum<EquipmentEnum>(stringData[i++]);
-            if(EquipType == EquipmentEnum.Armor) { _armorType = Util.ParseEnum<ArmorEnum>(stringData[i++]); }
-            else if (EquipType == EquipmentEnum.Weapon) { _weaponType = Util.ParseEnum<WeaponEnum>(stringData[i++]); }
-            _dmg = int.Parse(stringData[i++]);
-            _def = int.Parse(stringData[i++]);
-            _spd = int.Parse(stringData[i++]);
-            _mag = int.Parse(stringData[i++]);
-            _hp = int.Parse(stringData[i++]);
+
+            for (; i < stringData.Length; i++)
+            {
+                string[] tagType = stringData[i].Split(':');
+                if (tagType[0].Equals("EType"))
+                {
+                    EquipType = Util.ParseEnum<EquipmentEnum>(tagType[1]);
+                }
+                else if (tagType[0].Equals("ESub"))
+                {
+                    if (EquipType == EquipmentEnum.Armor) { _armorType = Util.ParseEnum<ArmorEnum>(tagType[1]); }
+                    else if (EquipType == EquipmentEnum.Weapon) { _weaponType = Util.ParseEnum<WeaponEnum>(tagType[1]); }
+                }
+                else if (tagType[0].Equals("Dmg"))
+                {
+                    _dmg = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Def"))
+                {
+                    _def = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Spd"))
+                {
+                    _spd = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Mag"))
+                {
+                    _mag = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Hp"))
+                {
+                    _hp = int.Parse(tagType[1]);
+                }
+            }
+
             _texture = GameContentManager.GetTexture(@"Textures\weapons");
         }
 
@@ -349,9 +397,23 @@ namespace RiverHollow.WorldObjects
         public Tool(int id, string[] stringData)
         {
             int i = ImportBasics(stringData, id, 1);
-            ToolType = Util.ParseEnum<ToolEnum>(stringData[i++]);
-            _dmgValue = int.Parse(stringData[i++]);
-            _staminaCost = int.Parse(stringData[i++]);
+
+            for (; i < stringData.Length; i++)
+            {
+                string[] tagType = stringData[i].Split(':');
+                if (tagType[0].Equals("ToolType"))
+                {
+                    ToolType = Util.ParseEnum<ToolEnum>(tagType[1]);
+                }
+                else if (tagType[0].Equals("Dmg"))
+                {
+                    _dmgValue = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Stam"))
+                {
+                    _staminaCost = int.Parse(tagType[1]);
+                }         
+            }
             _texture = GameContentManager.GetTexture(@"Textures\tools");
 
             _columnTextureSize = 128;
@@ -386,8 +448,19 @@ namespace RiverHollow.WorldObjects
         public Food(int id, string[] stringData, int num)
         {
             int i = ImportBasics(stringData, id, num);
-            _stam = int.Parse(stringData[i++]);
-            _health = int.Parse(stringData[i++]);
+
+            for (; i < stringData.Length; i++)
+            {
+                string[] tagType = stringData[i].Split(':');
+                if (tagType[0].Equals("Stam"))
+                {
+                    _stam = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Hp"))
+                {
+                    _health = int.Parse(tagType[1]);
+                }
+            }
 
             _doesItStack = true;
             _texture = GameContentManager.GetTexture(@"Textures\items");
@@ -441,8 +514,8 @@ namespace RiverHollow.WorldObjects
 
     public class CombatItem : Item
     {
-        private ConditionEnum _fixesCondition;
-        public ConditionEnum Condition => _fixesCondition;
+        private ConditionEnum _targetsCondition;
+        public ConditionEnum Condition => _targetsCondition;
         private int _iStam;
         public int Stamina => _iStam;
         private int _iHealth;
@@ -455,11 +528,31 @@ namespace RiverHollow.WorldObjects
         public CombatItem(int id, string[] stringData, int num)
         {
             int i = ImportBasics(stringData, id, num);
-            Helpful = stringData[i++].Equals("Helpful");
-            _fixesCondition = Util.ParseEnum<ConditionEnum>(stringData[i++]);
-            _iStam = int.Parse(stringData[i++]);
-            _iHealth = int.Parse(stringData[i++]);
-            _iMana = int.Parse(stringData[i++]);
+
+            for (; i < stringData.Length; i++)
+            {
+                string[] tagType = stringData[i].Split(':');
+                if (tagType[0].Equals("CombatType"))
+                {
+                    Helpful = tagType[1].Equals("Helpful");
+                }
+                else if (tagType[0].Equals("Status"))
+                {
+                    _targetsCondition = Util.ParseEnum<ConditionEnum>(tagType[1]);
+                }
+                else if (tagType[0].Equals("Stam"))
+                {
+                    _iStam = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Hp"))
+                {
+                    _iHealth = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Mana"))
+                {
+                    _iMana = int.Parse(tagType[1]);
+                }
+            }
 
             _doesItStack = true;
             _texture = GameContentManager.GetTexture(@"Textures\items");
@@ -469,7 +562,7 @@ namespace RiverHollow.WorldObjects
         {
             string rv = base.GetDescription();
             rv += System.Environment.NewLine;
-            if (_fixesCondition > 0) { rv += "Fixes: " + _fixesCondition.ToString() + " "; }
+            if (_targetsCondition > 0) { rv += "Fixes: " + _targetsCondition.ToString() + " "; }
             if (_iHealth > 0) { rv += "Health: +" + _iHealth + " "; }
             if (_iStam > 0) { rv += "Stamina: +" + _iStam + " "; }
             if (_iMana > 0) { rv += "Mana: +" + _iMana + " "; }

@@ -2,6 +2,7 @@
 using RiverHollow.Game_Managers;
 using RiverHollow.Tile_Engine;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
@@ -119,6 +120,11 @@ namespace RiverHollow.Misc
 
             rv = Enum.TryParse<TEnum>(convertThis, true, out rv) ? rv : default(TEnum);
             return rv;
+        }
+
+        public static string[] FindTags(string data)
+        {
+            return data.Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
         }
     }
 

@@ -1,160 +1,160 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: ID, Value:Type/Name/Description/ImgColX ImgColY/SellCost-->
-    <!--Equipment: SuperType/Subtype/dmg/def/spd/mag/hp Container:Rows/Columns-->
-    <!--Tool:Type/Dmg/Stam-->
-    <!--Food:Stamina/Health-->
-    <!--Machine: Processor/Name/[input # output timeinSeconds] [input # output timeinSeconds]-->
-    <!--Machine: Crafter/Name/<recipe1> <recipe2> ...-->
+    <!--Key: ID-->
+    <!--Valid Types: Resource, Food, Map, Equipment, Tool, Food, Combat, StaticItem, Class-->
+    <!--All:[Type:ItemType][Image:X-Y][Sell:SellPrice]-->
+    <!--Equipment: [EType:Weapon or Armor][ESub:Equip Subtype][Dmg:X][Def:X][Spd:X][Mag:X][Hp:X]]-->
+    <!--Tool: [ToolType:Type][Dmg:Tooldmg][Stam:StamCost]-->
+    <!--Food: [Stam:X][Hp:X]-->
     <Item>
       <Key>0</Key>
-      <Value>Resource/Stone/Stone, for building things/0 0/10</Value>
+      <Value>[Type:Resource][Image:0-0][Sell:10]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Resource/Arcane Essence/Holds a spark of magic/0 1/100</Value>
+      <Value>[Type:Resource][Image:0-1][Sell:100]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Resource/Wood/Wood, it builds stuff/1 0/10</Value>
+      <Value>[Type:Resource][Image:1-0][Sell:10]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>Equipment/Basic Sword/Swing this fucker/0 0/500/Weapon/Sword/1/0/0/0/0</Value>
+      <Value>[Type:Equipment][Image:0-0][Sell:500][EType:Weapon][ESub:Sword][Dmg:1]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>Food/Apple/Nomnom/1 1/50/10/5</Value>
+      <Value>[Type:Food][Image:1-1][Sell:50][Stam:10][Hp:5]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>Map/Adventure Map/Off to find adventures!/0 2/0</Value>
+      <Value>[Type:Map][Image:0-2]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>Equipment/Ultima Weapon/Swing this fucker/2 0/1000/Weapon/Staff/20/20/20/20/20</Value>
+      <Value>[Type:Equipment][Image:2-0][Sell:1000][EType:Weapon][ESub:Staff][Dmg:20][Def:20][Spd:20][Mag:20][Hp:20]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>Equipment/Magic Robes/Robes of a powerful mage/1 0/1000/Armor/Cloth/0/20/0/0/0</Value>
+      <Value>[Type:Equipment][Image:1-0][Sell:1000][EType:Armor][ESub:Cloth][Def:20]</Value>
     </Item>
     <!--<20-24> Tools-->
     <Item>
       <Key>20</Key>
-      <Value>Tool/Pick Axe/Breaks things/0 0/3000/Pick/1/1</Value>
+      <Value>[Type:Tool][Image:0-0][Sell:3000][ToolType:Pick][Dmg:1][Stam:1]</Value>
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>Tool/Wooden Axe/Chop Chop Motherfucker/0 1/3000/Axe/1/1</Value>
+      <Value>[Type:Tool][Image:0-1][Sell:3000][ToolType:Axe][Dmg:1][Stam:1]</Value>
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>Tool/Shovel/Dig the thing/0 2/3000/Shovel/0/1</Value>
+      <Value>[Type:Tool][Image:0-2][Sell:3000][ToolType:Shovel][Stam:1]</Value>
     </Item>
     <Item>
       <Key>23</Key>
-      <Value>Tool/Watering Can/Watering the thing/0 3/3000/WateringCan/0/1</Value>
+      <Value>[Type:Tool][Image:0-3][Sell:3000][ToolType:WateringCan][Stam:1]</Value>
     </Item>
     <!--<40-59> Plant Resources-->
     <Item>
       <Key>40</Key>
-      <Value>Resource/Silver Leaf/Used in potions/3 3/8</Value>
+      <Value>[Type:Resource][Image:3-3][Sell:8]</Value>
     </Item>
     <!--<60-79> Seeds-->
     <Item>
       <Key>60</Key>
-      <Value>StaticItem/Silver Seeds/Used to grow a Silver Herb bush/3 1/3</Value>
+      <Value>[Type:StaticItem][Image:3-1][Sell:3]</Value>
     </Item>
     <!--<80-89> Ores and Bars-->
     <Item>
       <Key>80</Key>
-      <Value>Resource/Copper Ore/Basic ore/2 0/5</Value>
+      <Value>[Type:Resource][Image:2-0][Sell:5]</Value>
     </Item>
     <Item>
       <Key>81</Key>
-      <Value>Resource/Iron Ore/Alright ore/0/10</Value>
+      <Value>[Type:Resource][Image:0-0][Sell:10]</Value>
     </Item>
     <Item>
       <Key>82</Key>
-      <Value>Resource/Gold Ore/Shiny ore/0/15</Value>
+      <Value>[Type:Resource][Image:0-0][Sell:15]</Value>
     </Item>
     <Item>
       <Key>83</Key>
-      <Value>Resource/Mithril Ore/Pretty ore/0/20</Value>
+      <Value>[Type:Resource][Image:0-0][Sell:20]</Value>
     </Item>
     <Item>
       <Key>84</Key>
-      <Value>Resource/Adamantine Ore/Fancy ore!/0/25</Value>
+      <Value>[Type:Resource][Image:0-0][Sell:25]</Value>
     </Item>
     <Item>
       <Key>85</Key>
-      <Value>Resource/Copper Bar/Basic Bar/2 1/25</Value>
+      <Value>[Type:Resource][Image:2-1][Sell:25]</Value>
     </Item>
     <Item>
       <Key>86</Key>
-      <Value>Resource/Iron Bar/Alright Bar/0/10</Value>
+      <Value>[Type:Resource][Image:0-0][Sell:10]</Value>
     </Item>
     <Item>
       <Key>87</Key>
-      <Value>Resource/Gold Bar/Alright Bar/0/10</Value>
+      <Value>[Type:Resource][Image:0-0][Sell:10]</Value>
     </Item>
     <Item>
       <Key>88</Key>
-      <Value>Resource/Mithril Bar/Alright Bar/0/10</Value>
+      <Value>[Type:Resource][Image:0-0][Sell:10]</Value>
     </Item>
     <Item>
       <Key>89</Key>
-      <Value>Resource/Adamantine Ore/Alright ore/0/10</Value>
+      <Value>[Type:Resource][Image:0-0][Sell:10]</Value>
     </Item>
     <!--<100> Combat:Status/Stamina/Health/Mana-->
     <Item>
       <Key>101</Key>
-      <Value>Combat/Health Potion/Recovers Health/1 2/3000/Helpful/None/0/20/0</Value>
+      <Value>[Type:Combat][Image:1-2][Sell:3000][CombatType:Helpful][Hp:20]</Value>
     </Item>
     <Item>
       <Key>102</Key>
-      <Value>Combat/Smelling Salts/Wake Up/1 2/3000/Helpful/KO/0/1/0</Value>
+      <Value>[Type:Combat][Image:1-2][Sell:3000][CombatType:Helpful][Status:KO][Hp:1]</Value>
     </Item>
     <Item>
       <Key>103</Key>
-      <Value>Combat/Antidote/Cures Poisons/1 2/3000/Helpful/Poisoned/0/0/0</Value>
+      <Value>[Type:Combat][Image:1-2][Sell:3000][CombatType:Helpful][Status:Poisoned]</Value>
     </Item>
     <Item>
       <Key>104</Key>
-      <Value>Combat/Poisoned Knife/Inflicts Poison/1 2/3000/Harmful/Poisoned/0/0/0</Value>
+      <Value>[Type:Combat][Image:1-2][Sell:3000][CombatType:Harmful][Status:Poisoned]</Value>
     </Item>
     <!--<190> Container:Stamina/Health/Mana-->
     <Item>
       <Key>190</Key>
-      <Value>StaticItem/Small Chest/Holds eight items/3 0/100</Value>
+      <Value>[Type:StaticItem][Image:3-0][Sell:100]</Value>
     </Item>
     <!--<200> Machines-->
     <Item>
       <Key>200</Key>
-      <Value>StaticItem/Smelter/Smelts Ore/2 2/3000</Value>
+      <Value>[Type:StaticItem][Image:2-2][Sell:3000]</Value>
     </Item>
     <Item>
       <Key>201</Key>
-      <Value>StaticItem/Anvil/Makes Shit/3 2/3000</Value>
+      <Value>[Type:StaticItem][Image:3-2][Sell:3000]</Value>
     </Item>
     <Item>
       <Key>299</Key>
-      <Value>StaticItem/Essense Extractor/Changes your class/2 2/3000</Value>
+      <Value>[Type:StaticItem][Image:2-2][Sell:3000]</Value>
     </Item>
     <!--<300> Misc-->
     <Item>
       <Key>300</Key>
-      <Value>Resource/Key/Unlocks/0 3/0</Value>
+      <Value>[Type:Resource][Image:0-3][Sell:0]</Value>
     </Item>
     <Item>
       <Key>301</Key>
-      <Value>Resource/Griselda's Orb/General Use/1 3/0</Value>
+      <Value>[Type:Resource][Image:1-3][Sell:0]</Value>
     </Item>
     <!--<1000> Class Change-->
     <Item>
       <Key>1000</Key>
-      <Value>Class/Essence of /Become a /1 3/2000</Value>
+      <Value>[Type:Class][Image:1-3][Sell:2000]</Value>
     </Item>
   </Asset>
 </XnaContent>

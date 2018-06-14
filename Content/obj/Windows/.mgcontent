@@ -14,7 +14,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/tools.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/items.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/weapons.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPCDialogue.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/ItemData.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CraftingData.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC1.xml</File>
@@ -102,5 +101,8 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/rogue.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/summoner.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Eye.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/ItemText.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/ClassesText.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/GameText.xml</File>
   </SourceFiles>
 </SourceFileCollection>

@@ -14,16 +14,13 @@ namespace RiverHollow.Misc
     public class Quest
     {
         int _iQuestID;
+        public int QuestID => _iQuestID;
         public enum QuestType { GroupSlay, Slay, Fetch }
         private QuestType _goalType;
         private string _name;
         public string Name => _name;
         private string _description;
         public string Description => _description;
-        string _sGiveText;
-        public string GiveText => _sGiveText;
-        private string _sRewardText;
-        public string RewardText => _sRewardText;
 
         private NPC _questGiver;
         public NPC QuestGiver => _questGiver;
@@ -70,7 +67,6 @@ namespace RiverHollow.Misc
             _iDay = -1;
             _name = string.Empty;
             _description = string.Empty;
-            _sRewardText = string.Empty;
             _questGiver = null;
             _questItem = null;
             _questMob = null;
@@ -102,8 +98,7 @@ namespace RiverHollow.Misc
             string[] splitParams = stringData.Split('/');
             int i = 0;
             _name = splitParams[i++];
-            _sGiveText = splitParams[i++];
-            _description = splitParams[i++];
+            _description = GameContentManager.GetGameDialog("Description Quest " + _iQuestID);
             _questGiver = CharacterManager.DiNPC[int.Parse(splitParams[i++])];
             _goalType = Util.ParseEnum<QuestType>(splitParams[i++]);
             string[] req = splitParams[i++].Split('|');
@@ -117,9 +112,7 @@ namespace RiverHollow.Misc
                 }
             }
 
-            _sRewardText = splitParams[i++];
-
-            string[] split = splitParams[i++].Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] split = Util.FindTags(splitParams[i++]);
             foreach (string s in split)
             {
                 string[] tagType = s.Split(':');
@@ -229,7 +222,7 @@ namespace RiverHollow.Misc
         {
             _bFinished = true;
 
-            text = QuestGiver.GetDialogEntry(RewardText);
+            text = QuestGiver.GetDialogEntry("Quest"+_iQuestID+"End");
             foreach (Item i in LiRewardItems)
             {
                 InventoryManager.AddItemToInventory(i);
@@ -325,7 +318,6 @@ namespace RiverHollow.Misc
                 questID = _iQuestID,
                 name = _name,
                 description = _description,
-                rewardText = _sRewardText,
                 questGiver = _questGiver != null ? _questGiver.ID : -1,
                 itemID = _questItem != null  ? _questItem.ItemID : -1,
                 mobID = _questMob != null ? _questMob.ID : -1,
@@ -355,7 +347,6 @@ namespace RiverHollow.Misc
                 _iQuestID = qData.questID;
                 _name = qData.name;
                 _description = qData.description;
-                _sRewardText = qData.rewardText;
                 _questGiver = qData.questGiver != -1 ? CharacterManager.DiNPC[qData.questGiver] : null;
                 _questItem = qData.itemID != -1 ? ObjectManager.GetItem(qData.itemID) : null;
                 _questMob = qData.mobID != -1 ? CharacterManager.GetMonsterByIndex(qData.mobID) : null;

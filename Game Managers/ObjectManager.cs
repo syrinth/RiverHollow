@@ -56,7 +56,7 @@ namespace RiverHollow.Game_Managers
             if (_dictWorkers.ContainsKey(id))
             {
                 string stringData = _dictWorkers[id];
-                string[] stringDataValues = stringData.Split('/');
+                string[] stringDataValues = Util.FindTags(stringData);
                 return new WorldAdventurer(stringDataValues, id);
             }
             return null;
@@ -72,25 +72,25 @@ namespace RiverHollow.Game_Managers
             if (id != -1)
             {
                 string _itemData = _dictItem[id];
-                string[] _itemDataValues = _itemData.Split('/');
-                switch (_itemDataValues[0])
+                string[] _itemTags = Util.FindTags(_itemData);
+                switch (_itemTags[0].Split(':')[1])
                 {
                     case "Resource":
-                        return new Item(id, _itemDataValues, num);
+                        return new Item(id, _itemTags, num);
                     case "Tool":
-                        return new Tool(id, _itemDataValues);
+                        return new Tool(id, _itemTags);
                     case "Equipment":
-                        return new Equipment(id, _itemDataValues);
+                        return new Equipment(id, _itemTags);
                     case "StaticItem":
-                        return new StaticItem(id, _itemDataValues);
+                        return new StaticItem(id, _itemTags);
                     case "Food":
-                        return new Food(id, _itemDataValues, num);
+                        return new Food(id, _itemTags, num);
                     case "Map":
-                        return new AdventureMap(id, _itemDataValues, num);
+                        return new AdventureMap(id, _itemTags, num);
                     case "Combat":
-                        return new CombatItem(id, _itemDataValues, num);
+                        return new CombatItem(id, _itemTags, num);
                     case "Class":
-                        return new ClassItem(id, _itemDataValues, num);
+                        return new ClassItem(id, _itemTags, num);
                 }
             }
             return null;

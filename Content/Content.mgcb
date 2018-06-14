@@ -124,11 +124,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/weapons.png
 
-#begin Data/Dialogue/NPCDialogue.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Dialogue/NPCDialogue.xml
-
 #begin Data/ItemData.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -799,4 +794,19 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Eye.png
+
+#begin Data/ItemText.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/ItemText.xml
+
+#begin Data/ClassesText.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/ClassesText.xml
+
+#begin Data/Dialogue/GameText.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Dialogue/GameText.xml
 

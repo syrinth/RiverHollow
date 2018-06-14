@@ -39,32 +39,60 @@ namespace RiverHollow.Characters.CombatStuff
             ImportBasics(id, stringData);
         }
 
-        protected int ImportBasics(int id, string[] stringData)
+        protected void ImportBasics(int id, string[] stringData)
         {
             _iID = id;
 
-            int i = 0;
-            _name = stringData[i++];
-            _description = stringData[i++];
-            _weaponType = Util.ParseEnum<WeaponEnum>(stringData[i++]);
-            _armorType = Util.ParseEnum<ArmorEnum>(stringData[i++]);
-            _statDmg = int.Parse(stringData[i++]);
-            _statDef = int.Parse(stringData[i++]);
-            _statHP = int.Parse(stringData[i++]);
-            _statMagic = int.Parse(stringData[i++]);
-            _statSpd = int.Parse(stringData[i++]);
-            string[] split = stringData[i++].Split(' ');
-            foreach(string s in split)
-            {
-                AbilityList.Add(CharacterManager.GetActionByIndex(int.Parse(s)));
-            }
-            split = stringData[i++].Split(' ');
-            foreach(string s in split)
-            {
-                SpellList.Add((CombatAction)CharacterManager.GetActionByIndex(int.Parse(s)));
-            }
+            GameContentManager.GetClassText(_iID, ref  _name, ref _description);
 
-            return i;
+            foreach (string s in stringData)
+            {
+                string[] tagType = s.Split(':');
+                if (tagType[0].Equals("Weapon"))
+                {
+                    _weaponType = Util.ParseEnum<WeaponEnum>(tagType[1]);
+                }
+                else if (tagType[0].Equals("Armor"))
+                {
+                    _armorType = Util.ParseEnum<ArmorEnum>(tagType[1]);
+                }
+                else if (tagType[0].Equals("Dmg"))
+                {
+                    _statDmg = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Def"))
+                {
+                    _statDef = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Hp"))
+                {
+                    _statHP = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Mag"))
+                {
+                    _statMagic = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Spd"))
+                {
+                    _statSpd = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Ability"))
+                {
+                    string[] abilitySplit = tagType[1].Split('-');
+                    foreach (string ability in abilitySplit)
+                    {
+                        AbilityList.Add(CharacterManager.GetActionByIndex(int.Parse(ability)));
+                    }
+                }
+                else if (tagType[0].Equals("Spell"))
+                {
+                    string[] spellSplit = tagType[1].Split('-');
+                    foreach (string spell in spellSplit)
+                    {
+                        SpellList.Add((CombatAction)CharacterManager.GetActionByIndex(int.Parse(spell)));
+                    }
+                }
+            }
         }
     }
 }

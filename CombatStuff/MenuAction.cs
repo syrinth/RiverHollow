@@ -106,7 +106,7 @@ namespace RiverHollow.Characters.CombatStuff
             _description = stringData[i++];
             //This is where we parse for tags
 
-            string[] split = stringData[i++].Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] split = Util.FindTags(stringData[i++]);
             foreach (string s in split)
             {
                 string[] tagType = s.Split(':');

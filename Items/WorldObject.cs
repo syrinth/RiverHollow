@@ -211,7 +211,7 @@ namespace RiverHollow.WorldObjects
             }
 
             public override void ReadInscription() {
-                GUIManager.SetScreen(new TextScreen(GameContentManager.GetDialogue("MobDoor"), false));
+                GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameDialog("MobDoor"), false));
             }
 
             public void Check(int mobCount)
@@ -238,7 +238,7 @@ namespace RiverHollow.WorldObjects
 
             public override void ReadInscription()
             {
-                GUIManager.SetScreen(new TextScreen(this, GameContentManager.GetDialogue("KeyDoor")));
+                GUIManager.SetScreen(new TextScreen(this, GameContentManager.GetGameDialog("KeyDoor")));
             }
 
             public bool Check(Item item)
@@ -270,7 +270,7 @@ namespace RiverHollow.WorldObjects
 
             public override void ReadInscription()
             {
-                GUIManager.SetScreen(new TextScreen(GameContentManager.GetDialogue("SpringDoor"), false));
+                GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameDialog("SpringDoor"), false));
             }
 
             public bool Check()
@@ -491,7 +491,7 @@ namespace RiverHollow.WorldObjects
 
                     ReadSourcePos(stringData[1]);
 
-                    string[] processStr = stringData[2].Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] processStr = Util.FindTags(stringData[2]);
                     foreach (string s in processStr)
                     {
                         string[] pieces = s.Split(' ');

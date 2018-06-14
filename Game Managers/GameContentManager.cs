@@ -9,7 +9,7 @@ namespace RiverHollow.Game_Managers
         private static ContentManager _content;
         private static Dictionary<string, Texture2D> _diTextures;
         private static Dictionary<string, SpriteFont> _diFonts;
-        private static Dictionary<string, string> _diNPCDialogue;
+        private static Dictionary<string, string> _diGameDialog;
         private static Dictionary<string, Dictionary<int, string>> _diMerchandise;
         private static Dictionary<int, string> _diUpgrades;
         private static Dictionary<string, string> _diSpiritLoot;
@@ -17,6 +17,8 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<int, string> DiUpgrades { get => _diUpgrades; }
         private static Dictionary<int, string> _diQuests;
         public static Dictionary<int, string> DiQuests { get => _diQuests; }
+        private static Dictionary<int, string> _diItemText;
+        private static Dictionary<int, string> _diClassText;
 
         public static void LoadContent(ContentManager Content)
         {
@@ -27,8 +29,10 @@ namespace RiverHollow.Game_Managers
             _diSpiritLoot = _content.Load<Dictionary<string, string>>(@"Data\SpiritLoot");
             _diUpgrades = _content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
             _diQuests = _content.Load<Dictionary<int, string>>(@"Data\Quests");
+            _diItemText = _content.Load<Dictionary<int, string>>(@"Data\ItemText");
+            _diClassText = _content.Load<Dictionary<int, string>>(@"Data\ClassesText");
 
-            _diNPCDialogue = LoadDialogue(@"Data\Dialogue\NPCDialogue");
+            _diGameDialog = LoadDialogue(@"Data\Dialogue\GameText");
 
             LoadCharacters(_content);
             LoadGUIs(_content);
@@ -130,14 +134,25 @@ namespace RiverHollow.Game_Managers
             return _diFonts[font];
         }
 
-        public static string GetDialogue(string key)
+        public static string GetGameDialog(string key)
         {
-            return _diNPCDialogue[key];
+            return _diGameDialog[key];
         }
 
         public static Dictionary<int, string> GetMerchandise(string file)
         {
             return _diMerchandise[file];
+        }
+
+        public static void GetIemText(int id, ref string name, ref string desc)
+        {
+            name = _diItemText[id].Split('/')[0];
+            desc = _diItemText[id].Split('/')[1];
+        }
+
+        public static void GetClassText(int id, ref string name, ref string desc) {
+            name = _diClassText[id].Split('/')[0];
+            desc = _diClassText[id].Split('/')[1];
         }
 
         public static Dictionary<string, string> LoadDialogue(string file)

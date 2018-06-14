@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RiverHollow.Characters.CombatStuff;
 using System.IO;
+using RiverHollow.Misc;
 
 namespace RiverHollow.Game_Managers
 {
@@ -133,9 +134,9 @@ namespace RiverHollow.Game_Managers
             CharacterClass c = null;
             if (id != -1)
             {
-                string _stringData = _classDictionary[id];
-                string[] _stringDataValues = _stringData.Split('/');
-                c = new CharacterClass(id, _stringDataValues);
+                string strData = _classDictionary[id];
+                string[] strDataValues = Util.FindTags(strData);
+                c = new CharacterClass(id, strDataValues);
             }
             return c;
         }

@@ -111,8 +111,8 @@ namespace RiverHollow.Screens
                 else if (_doorToOpen != null)
                 {
                     string text = string.Empty;
-                    if (_doorToOpen.Check(IsItemThere(mouse))) { text = GameContentManager.GetDialogue("KeyDoorOpen"); }
-                    else { text = GameContentManager.GetDialogue("KeyDoorClose"); }
+                    if (_doorToOpen.Check(IsItemThere(mouse))) { text = GameContentManager.GetGameDialog("KeyDoorOpen"); }
+                    else { text = GameContentManager.GetGameDialog("KeyDoorClose"); }
 
                     GUIManager.SetScreen(new TextScreen(text, false));
                 }
@@ -148,11 +148,11 @@ namespace RiverHollow.Screens
                             GameManager.gmActiveItem = i;
                             if (i.IsFood())
                             {
-                                text = GameContentManager.GetDialogue("FoodConfirm");
+                                text = GameContentManager.GetGameDialog("FoodConfirm");
                             }
                             else if (i.IsClassItem())
                             {
-                                text = GameContentManager.GetDialogue("ClassItemConfirm");
+                                text = GameContentManager.GetGameDialog("ClassItemConfirm");
                             }
                             GUIManager.AddTextSelection(string.Format(text, i.Name));
                         }

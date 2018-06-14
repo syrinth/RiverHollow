@@ -1,38 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: Index>0 Value:Name/Description/WeaponType/ArmorType/Dmg/Def/HP/Magic/Speed/Ability1 Ability2 Ability3 Ability4-->
+    <!--Key: Index>0 Value:WeaponType/ArmorType/Dmg/Def/HP/Magic/Speed/Ability1 Ability2 Ability3 Ability4-->
     <Item>
       <Key>1</Key>
-      <Value>Wizard/Uses magic!/Staff/Cloth/5/1/3/5/1/1 2 3 4/101 103 104</Value>
+      <Value>[Weapon:Staff][Armor:Cloth][Dmg:5][Def:1][Hp:3][Magic:5][Spd:1][Ability:1-2-3-4][Spell:101-103-104]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Healer/Master of Healing and potions/Staff/Cloth/1/5/10/1/1/1 2 3 4/150 151</Value>
+      <Value>[Weapon:Staff][Armor:Cloth][Dmg:1][Def:5][Def:10][Magic:1][Spd:1][Ability:1-2-3-4][Spell:150-151]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>Summoner/Summons magical beings to aid you/Staff/Cloth/1/5/10/1/1/1 2 3 4/200</Value>
+      <Value>[Weapon:Staff][Armor:Cloth][Dmg:1][Def:5][Def:10][Magic:1][Spd:1][Ability:1-2-3-4][Spell:150-151]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>Witch/Expert in curses and hexing your opponents/Staff/Cloth/1/5/10/1/1/1 2 3 4/150 151</Value>
+      <Value>[Weapon:Staff][Armor:Cloth][Dmg:1][Def:5][Def:10][Magic:1][Spd:1][Ability:1-2-3-4][Spell:150-151]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>Weapons Master/Master of Melee/Sword/Heavy/5/1/3/5/1/1 2 3 4/101 103</Value>
+      <Value>[Weapon:Sword][Armor:Heavy][Dmg:1][Def:5][Def:10][Magic:1][Spd:1][Ability:1-2-3-4]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>Knight/Defensible warrior/Sword/Heavy/1/5/10/1/1/1 2 3 4/101 103</Value>
+      <Value>[Weapon:Sword][Armor:Heavy][Dmg:1][Def:5][Def:10][Magic:1][Spd:1][Ability:1-2-3-4]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>Rogue/Fast and agile, uses a bow/Sword/Heavy/1/5/10/1/1/1 2 3 4/101 103</Value>
+      <Value>[Weapon:Sword][Armor:Heavy][Dmg:1][Def:5][Def:10][Magic:1][Spd:1][Ability:1-2-3-4]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>Bard/Music/Sword/Heavy/1/5/10/1/1/1 2 3 4/101 103</Value>
+      <Value>[Weapon:Sword][Armor:Heavy][Dmg:1][Def:5][Def:10][Magic:1][Spd:1][Ability:1-2-3-4]</Value>
     </Item>
   </Asset>
 </XnaContent>
