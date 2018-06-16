@@ -19,6 +19,7 @@ namespace RiverHollow.Game_Managers
             {
                 Keys key = (Keys)k;
                 if ((key >= Keys.A && key <= Keys.Z) ||
+                    key == Keys.Escape || key == Keys.Enter || key == Keys.Space || key == Keys.Back || key >= Keys.Left && key <= Keys.Down || key == Keys.Delete)
                 {
                     _keyDownDictionary.Add((Keys)k, false);
                 }
