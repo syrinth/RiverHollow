@@ -18,7 +18,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public LoadScreen()
         {
-            _btnBack = new GUIButton("Back");
+            _btnBack = new GUIButton("Back", BtnBack);
             _liDataWindows = new List<GUIObject>();
             _liData = GameManager.LoadFiles();
 
@@ -43,21 +43,10 @@ namespace RiverHollow.GUIComponents.Screens
         {
             bool rv = false;
 
-            foreach (GUIObject o in _liDataWindows)
+            foreach (GUIObject c in Controls)
             {
-                if (o.Contains(mouse))
-                {
-                    SaveWindow win = ((SaveWindow)o);
-                    Load(win.Data);
-                    MapManager.PopulateMaps(true);
-                    BackToMain();
-                }
-            }
-
-            if (_btnBack.ProcessLeftButtonClick(mouse))
-            {
-                GUIManager.SetScreen(new IntroMenuScreen());
-                rv = true;
+                rv = c.ProcessLeftButtonClick(mouse);
+                if (rv) { break; }
             }
 
             return rv;
@@ -71,6 +60,11 @@ namespace RiverHollow.GUIComponents.Screens
             rv = true;
 
             return rv;
+        }
+
+        public void BtnBack()
+        {
+            GUIManager.SetScreen(new IntroMenuScreen());
         }
 
         private class SaveWindow : GUIWindow
@@ -109,6 +103,20 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 base.Position(value);
                 if (_gText != null) { _gText.CenterOnWindow(this); }
+            }
+
+            public override bool ProcessLeftButtonClick(Point mouse)
+            {
+                bool rv = false;
+                if (Contains(mouse))
+                {
+                    Load(Data);
+                    MapManager.PopulateMaps(true);
+                    BackToMain();
+                    rv = true;
+                }
+
+                return rv;
             }
         }
     }

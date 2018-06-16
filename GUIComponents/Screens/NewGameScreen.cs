@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters.NPCs;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
@@ -114,13 +115,22 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 ((ClassSelectionBox)o).Update(gameTime);
             }
+
+            if (InputManager.CheckPressedKey(Keys.Enter) && _nameWindow.Enter() && _nameWindow.GetText().Length > 0)
+            {
+                BtnNewGame();
+            }
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            _btnOK.ProcessLeftButtonClick(mouse);
-            _btnCancel.ProcessLeftButtonClick(mouse);
+            foreach(GUIObject c in Controls)
+            {
+                rv = c.ProcessLeftButtonClick(mouse);
+                if(rv) { break; }
+            }
+
             if (_giNextHairColor.Contains(mouse))
             {
                 if (_iHairColorIndex < _liColors.Count - 1) { _iHairColorIndex++; }
@@ -137,8 +147,14 @@ namespace RiverHollow.GUIComponents.Screens
 
             _gCheck.ProcessLeftButtonClick(mouse);
 
-            if (_nameWindow.Contains(mouse)) { _selection = SelectionEnum.Name; }
-            else if (_manorWindow.Contains(mouse)) { _selection = SelectionEnum.Manor; }
+            if (_nameWindow.Contains(mouse)) {
+                _selection = SelectionEnum.Name;
+                _manorWindow.HideCursor();
+            }
+            else if (_manorWindow.Contains(mouse)) {
+                _selection = SelectionEnum.Manor;
+                _nameWindow.HideCursor();
+            }
             else { _selection = SelectionEnum.None;}
 
             foreach(GUIObject o in _liClasses)

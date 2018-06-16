@@ -14,9 +14,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public IntroMenuScreen()
         {
-            _btnNewGame = new GUIButton("New Game");
-            _btnLoadGame = new GUIButton("Load Game");
-            _btnExit = new GUIButton("Exit Game");
+            _btnNewGame = new GUIButton("New Game", BtnNewGame);
+            _btnLoadGame = new GUIButton("Load Game", BtnLoadGame);
+            _btnExit = new GUIButton("Exit Game", BtnExit);
             List <GUIObject> listButtons = new List<GUIObject>() { _btnNewGame, _btnLoadGame, _btnExit };
             GUIObject.CreateSpacedColumn(ref listButtons, RiverHollow.ScreenWidth/2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
 
@@ -30,23 +30,32 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_btnNewGame.Contains(mouse))
+
+            foreach (GUIObject c in Controls)
             {
-                GUIManager.SetScreen(new NewGameScreen());
-                rv = true;
+                rv = c.ProcessLeftButtonClick(mouse);
+                if (rv) { break; }
             }
-            if (_btnLoadGame.Contains(mouse))
-            {
-                GUIManager.SetScreen(new LoadScreen());
-                rv = true;
-            }
-            if (_btnExit.Contains(mouse))
-            {
-                RiverHollow.PrepExit();
-                rv = true;
-            }
+
             return rv;
         }
+
+        #region Button Actions
+        public void BtnNewGame()
+        {
+            GUIManager.SetScreen(new NewGameScreen());
+        }
+
+        public void BtnLoadGame()
+        {
+            GUIManager.SetScreen(new LoadScreen());
+        }
+
+        public void BtnExit()
+        {
+            RiverHollow.PrepExit();
+        }
+        #endregion
 
         public override bool ProcessHover(Point mouse)
         {

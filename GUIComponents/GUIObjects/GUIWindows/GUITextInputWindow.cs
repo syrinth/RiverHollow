@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters.NPCs;
 using RiverHollow.GUIComponents.GUIObjects;
@@ -9,17 +10,27 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
     class GUITextInputWindow : GUITextWindow
     {
-        int _maxLength = 10;
+        
+        int _iMaxLength = 10;
         WorldAdventurer _w;
         WorkerBuilding _b;
         SideEnum _textLoc;
         GUIText _gStatement;
         GUIText _gText;
+        GUIMarker _gMarker;
+
+        bool _bIsDone;
+        int _iCurr;
+
 
         public GUITextInputWindow() : base()
         {
             GameManager.ReadInput();
             GameManager.Pause();
+
+            _bIsDone = false;
+            _gMarker = new GUIMarker();
+            _iCurr = 0;
         }
 
         public GUITextInputWindow(string statement, SideEnum textLoc) : this()
@@ -78,13 +89,17 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             {
                 _gText.AnchorAndAlignToObject(_gStatement, SideEnum.Right, SideEnum.Bottom, 10);
             }
-            AddControl(_gText);
+            _gMarker.Position(_gText.Position());
             
+            AddControl(_gText);
+            AddControl(_gMarker);
+
             Resize();
         }
 
         public override void Update(GameTime gameTime)
         {
+            _gMarker.Update(gameTime);
             foreach (Keys k in InputManager.KeyDownDictionary.Keys.ToList())
             {
                 if (InputManager.CheckPressedKey(k))
@@ -109,29 +124,126 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                             GameManager.Scry(false);
                             GameManager.DontReadInput();
                         }
+
+                        _bIsDone = true;
                     }
-                    else
+                    else if(k >= Keys.A && k <= Keys.Z || k == Keys.Delete || k == Keys.Back || k == Keys.Left || k == Keys.Right || k == Keys.Delete)
                     {
-                        string input = InputManager.GetCharFromKey(k);
-                        if (input != "--" && _gText.Length < _maxLength)
+                        if (k == Keys.Left)
                         {
-                            _gText.Insert(input);
+                            DecrementMarker();
                         }
-                        else if (input == "--")
+                        else if(k == Keys.Right)
                         {
-                            if (_gText.Length > 0)
+                            IncrementMarker();
+                        }
+                        else
+                        {
+                            string input = InputManager.GetCharFromKey(k);
+                            if (input == "--")
                             {
-                                _gText.RemoveLast();
+                                if (_gText.Length > 0)
+                                {
+                                    _gText.Remove(_iCurr);
+                                    DecrementMarker();
+                                }
                             }
+                            else if (input == "-+")
+                            {
+                                if (_gText.Length > 0)
+                                {
+                                    _gText.Remove(_iCurr+1);
+                                }
+                            }
+                            else if (_gText.Length < _iMaxLength)
+                            {
+                                _gText.Insert(input, _iCurr);
+                                IncrementMarker();
+                            }
+                        }
+
+                        _gMarker.Position(_gText.Position());
+                        if (_gText.Text.Length > 0)
+                        {
+                            _gMarker.PositionAdd(new Vector2(_gText.MeasureString(_iCurr).X, 0));
                         }
                     }
                 }
             }
         }
 
+        public void IncrementMarker()
+        {
+            if (_iCurr < _iMaxLength)
+            {
+                _iCurr++;
+            }
+        }
+
+        public void DecrementMarker()
+        {
+            if (_iCurr > 0)
+            {
+                _iCurr--;
+            }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+        }
+
         public string GetText()
         {
             return _gText.GetText();
+        }
+
+        public bool Enter()
+        {
+            return _bIsDone;
+        }
+
+        public void HideCursor()
+        {
+            _gMarker.Hide();
+        }
+
+        private class GUIMarker : GUIText
+        {
+            readonly double DBL_FLASH_RATE = 0.5;
+
+            bool _bShow;
+            double _dRefresh;
+
+            public GUIMarker()
+            {
+                _sText = "|";
+                SetDimensions(_sText);
+                _dRefresh = DBL_FLASH_RATE;
+            }
+
+            public override void Update(GameTime gameTime)
+            {
+                _dRefresh -= gameTime.ElapsedGameTime.TotalSeconds;
+                if (_dRefresh <= 0)
+                {
+                    _dRefresh = DBL_FLASH_RATE;
+                    _bShow = !_bShow;
+                }
+            }
+
+            public override void Draw(SpriteBatch spriteBatch)
+            {
+                if (_bShow)
+                {
+                    base.Draw(spriteBatch);
+                }
+            }
+
+            public void Hide()
+            {
+                _bShow = false;
+            }
         }
     }
 }

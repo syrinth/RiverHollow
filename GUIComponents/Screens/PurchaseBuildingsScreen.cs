@@ -32,13 +32,13 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
 
                 _bldgWindow = new BuildingInfoDisplay(_liMerchandise[_iCurrIndex]);
 
-                _btnBuy = new GUIButton("Buy");
+                _btnBuy = new GUIButton("Buy", BtnBuy);
                 _btnBuy.AnchorAndAlignToObject(_bldgWindow, SideEnum.Bottom, SideEnum.CenterX, 50);
                 _bldgWindow.Load();
 
-                _btnLast = new GUIButton("Last");
+                _btnLast = new GUIButton("Last", BtnLast);
                 _btnLast.AnchorAndAlignToObject(_btnBuy, SideEnum.Left, SideEnum.Bottom, 100);
-                _btnNext = new GUIButton("Next");
+                _btnNext = new GUIButton("Next", BtnNext);
                 _btnNext.AnchorAndAlignToObject(_btnBuy, SideEnum.Right, SideEnum.CenterY, 100);
 
                 Controls.Add(_btnBuy);
@@ -73,65 +73,12 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
         {
             bool rv = false;
 
-            if (_btnLast.ProcessLeftButtonClick(mouse))
+            foreach (GUIObject c in Controls)
             {
-                _iCurrIndex--;
-                Controls.Remove(_bldgWindow);
-                _bldgWindow = new BuildingInfoDisplay(_liMerchandise[_iCurrIndex]);
-                Controls.Add(_bldgWindow);
-                _bldgWindow.Load();
+                rv = c.ProcessLeftButtonClick(mouse);
+                if (rv) { break; }
             }
-            else if (_btnNext.ProcessLeftButtonClick(mouse))
-            {
-                _iCurrIndex++;
-                Controls.Remove(_bldgWindow);
-                _bldgWindow = new BuildingInfoDisplay(_liMerchandise[_iCurrIndex]);
-                Controls.Add(_bldgWindow);
-                _bldgWindow.Load();
-            }
-
-            if (_btnBuy.Contains(mouse))
-            {
-                bool create = true;
-                create = PlayerManager.Money >= _liMerchandise[_iCurrIndex].MoneyCost;
-                if (create)
-                {
-                    foreach (KeyValuePair<int, int> kvp in _liMerchandise[_iCurrIndex].RequiredItems)
-                    {
-                        if (!InventoryManager.HasItemInInventory(kvp.Key, kvp.Value))
-                        {
-                            create = false;
-                        }
-                    }
-                }
-                //If all items are found, then remove them.
-                if (create)
-                {
-                    Merchandise merch = _liMerchandise[_iCurrIndex];
-                    PlayerManager.TakeMoney(merch.MoneyCost);
-                    foreach (KeyValuePair<int, int> kvp in _liMerchandise[_iCurrIndex].RequiredItems)
-                    {
-                        InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
-                    }
-
-                    if (merch.MerchType == Merchandise.ItemType.Building)
-                    {
-                        GUIManager.SetScreen(null);
-                        WorkerBuilding b = ObjectManager.GetBuilding(merch.MerchID);
-                        GraphicCursor.PickUpBuilding(b);
-                        Scry(true);
-                        ConstructBuilding();
-                        Camera.UnsetObserver();
-                        MapManager.ViewMap(MapManager.HomeMap);
-                    }
-                    else
-                    {
-                        DiUpgrades[merch.MerchID].Enabled = true;
-                        BackToMain();
-                    }
-                    rv = true;
-                }
-            }
+            
             return rv;
         }
 
@@ -152,6 +99,66 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
         {
             return true;
         }
+
+        #region Buttons
+        public void BtnBuy()
+        {
+            bool create = true;
+            create = PlayerManager.Money >= _liMerchandise[_iCurrIndex].MoneyCost;
+            if (create)
+            {
+                foreach (KeyValuePair<int, int> kvp in _liMerchandise[_iCurrIndex].RequiredItems)
+                {
+                    if (!InventoryManager.HasItemInInventory(kvp.Key, kvp.Value))
+                    {
+                        create = false;
+                    }
+                }
+            }
+            //If all items are found, then remove them.
+            if (create)
+            {
+                Merchandise merch = _liMerchandise[_iCurrIndex];
+                PlayerManager.TakeMoney(merch.MoneyCost);
+                foreach (KeyValuePair<int, int> kvp in _liMerchandise[_iCurrIndex].RequiredItems)
+                {
+                    InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
+                }
+
+                if (merch.MerchType == Merchandise.ItemType.Building)
+                {
+                    GUIManager.SetScreen(null);
+                    WorkerBuilding b = ObjectManager.GetBuilding(merch.MerchID);
+                    GraphicCursor.PickUpBuilding(b);
+                    Scry(true);
+                    ConstructBuilding();
+                    Camera.UnsetObserver();
+                    MapManager.ViewMap(MapManager.HomeMap);
+                }
+                else
+                {
+                    DiUpgrades[merch.MerchID].Enabled = true;
+                    BackToMain();
+                }
+            }
+        }
+        public void BtnLast()
+        {
+            _iCurrIndex--;
+            Controls.Remove(_bldgWindow);
+            _bldgWindow = new BuildingInfoDisplay(_liMerchandise[_iCurrIndex]);
+            Controls.Add(_bldgWindow);
+            _bldgWindow.Load();
+        }
+        public void BtnNext()
+        {
+            _iCurrIndex++;
+            Controls.Remove(_bldgWindow);
+            _bldgWindow = new BuildingInfoDisplay(_liMerchandise[_iCurrIndex]);
+            Controls.Add(_bldgWindow);
+            _bldgWindow.Load();
+        }
+        #endregion
 
         public class BuildingInfoDisplay : GUIObject
         {

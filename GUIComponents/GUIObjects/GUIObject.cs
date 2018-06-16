@@ -358,8 +358,12 @@ namespace RiverHollow.GUIObjects
         internal void CenterOnWindow(GUIWindow win)
         {
             if (!win.Controls.Contains(this)) { win.Controls.Add(this); }
-            float centerX = win.Position().X + (win.Width / 2);
-            float centerY = win.Position().Y + (win.Height / 2);
+            this.CenterOnObject(win);
+        }
+        internal void CenterOnObject(GUIObject obj)
+        {
+            float centerX = obj.Position().X + (obj.Width / 2);
+            float centerY = obj.Position().Y + (obj.Height / 2);
 
             this.SetX(centerX - Width / 2);
             this.SetY(centerY - Height / 2);

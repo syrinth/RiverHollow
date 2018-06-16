@@ -7,15 +7,15 @@ namespace RiverHollow.GUIComponents.GUIObjects
 {
     public class GUIText : GUIObject
     {
-        string _sText;
-        string _sFullText;
+        protected string _sText;
+        protected string _sFullText;
         public string Text => _sText;
-        SpriteFont _font;
-        Color _cTextColor;
+        protected SpriteFont _font;
+        protected Color _cTextColor;
 
-        Vector2 _vTextSize;
+        protected Vector2 _vTextSize;
         public Vector2 TextSize => _vTextSize;
-        Vector2 _vCharSize;
+        protected Vector2 _vCharSize;
         public Vector2 CharacterSize => _vCharSize;
         public int CharWidth => (int)_vCharSize.X;
         public int CharHeight => (int)_vCharSize.Y;
@@ -91,6 +91,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             return _font.MeasureString(_sText);
         }
+        public Vector2 MeasureString(int toLoc)
+        {
+            return _font.MeasureString(_sText.Substring(0, toLoc));
+        }
         public Vector2 MeasureString(string s)
         {
             return _font.MeasureString(s);
@@ -119,20 +123,22 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _cTextColor = c;
         }
 
-        public void Insert(string s)
+        public void Insert(string s, int loc)
         {
             if (_sText.Length > 0)
             {
-                _sText = _sText.Insert(_sText.Length, s);
+                _sText = _sText.Insert(loc, s);
             }
             else { _sText = s; }
+            SetDimensions(_sText);
         }
 
-        public void RemoveLast()
+        public void Remove(int loc)
         {
             if (_sText.Length > 0)
             {
-                _sText = _sText.Remove(_sText.Length - 1);
+                _sText = _sText.Remove(loc - 1, 1);
+                SetDimensions(_sText);
             }
         }
 

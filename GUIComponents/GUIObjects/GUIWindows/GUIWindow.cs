@@ -62,6 +62,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             Position(position);
         }
 
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+            return false;
+        }
+
         public override void Position(Vector2 value)
         {
             Vector2 delta = Position() - value;

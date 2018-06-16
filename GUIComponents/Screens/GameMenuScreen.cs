@@ -23,13 +23,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public GameMenuScreen()
         {
-            _btnInventory = new GUIButton("Inventory");
-            _btnParty = new GUIButton("Party");
-            _btnQuestLog = new GUIButton("Quest Log");
-            _btnExitGame = new GUIButton("Exit Game");
-            _btnOptions = new GUIButton("Options");
-            _btnManagement = new GUIButton("Buildings");
-            _btnFriendship = new GUIButton("Friends");
+            _btnInventory = new GUIButton("Inventory", BtnInventory);
+            _btnParty = new GUIButton("Party", BtnParty);
+            _btnQuestLog = new GUIButton("Quest Log", BtnQuestLog);
+            _btnExitGame = new GUIButton("Exit Game", BtnExitGame);
+            _btnOptions = new GUIButton("Options", BtnOptions);
+            _btnManagement = new GUIButton("Buildings", BtnManagement);
+            _btnFriendship = new GUIButton("Friends", BtnFriendship);
 
             _liButtons = new List<GUIObject>() { _btnInventory, _btnParty, _btnManagement, _btnQuestLog, _btnOptions, _btnFriendship, _btnExitGame  };
             GUIObject.CreateSpacedColumn(ref _liButtons, -GUIButton.BTN_WIDTH, 0, RiverHollow.ScreenHeight, BTN_PADDING);
@@ -86,45 +86,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             else
             {
-                if (_btnExitGame.Contains(mouse))
+                foreach (GUIObject c in Controls)
                 {
-                    RiverHollow.PrepExit();
-                    rv = true;
-                }
-                if (_btnInventory.Contains(mouse))
-                {
-                    _infoScreen = new InventoryScreen();
-                    rv = true;
-                }
-                if (_btnQuestLog.Contains(mouse))
-                {
-                    _infoScreen = new QuestScreen();
-                    rv = true;
-                }
-                if (_btnParty.Contains(mouse))
-                {
-                    _infoScreen = new PartyScreen();
-                    rv = true;
-                }
-                if (_btnOptions.Contains(mouse))
-                {
-                    _infoScreen = new OptionScreen();
-                    rv = true;
+                    rv = c.ProcessLeftButtonClick(mouse);
+                    if (rv) { break; }
                 }
 
-                if (_btnManagement.Contains(mouse))
-                {
-                    _infoScreen = new ManagementScreen();
-                    rv = true;
-                }
-
-                if (_btnFriendship.Contains(mouse))
-                {
-                    _infoScreen = new FriendshipScreen();
-                    rv = true;
-                }
-
-                if (_infoScreen != null && _infoScreen.Contains(mouse))
+                if (!rv && _infoScreen != null && _infoScreen.Contains(mouse))
                 {
                     _infoScreen.ProcessLeftButtonClick(mouse);
                     rv = true;
@@ -167,6 +135,37 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             return rv;
         }
+
+        #region Buttons
+        public void BtnExitGame()
+        {
+            RiverHollow.PrepExit();
+        }
+        public void BtnInventory()
+        {
+            _infoScreen = new InventoryScreen();
+        }
+        public void BtnQuestLog()
+        {
+            _infoScreen = new QuestScreen();
+        }
+        public void BtnParty()
+        {
+            _infoScreen = new PartyScreen();
+        }
+        public void BtnOptions()
+        {
+            _infoScreen = new OptionScreen();
+        }
+        public void BtnManagement()
+        {
+            _infoScreen = new ManagementScreen();
+        }
+        public void BtnFriendship()
+        {
+            _infoScreen = new FriendshipScreen();
+        }  
+        #endregion
 
         public override bool IsGameMenuScreen() { return true; }
     }
