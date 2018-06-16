@@ -30,6 +30,8 @@ namespace RiverHollow.GUIComponents.Screens
         GUITextInputWindow _nameWindow;
         GUITextInputWindow _manorWindow;
 
+        GUICheck _gCheck;
+
         List<GUIObject> _liClasses;
         ClassSelectionBox _selectedClass;
         PlayerDisplayBox _playerDisplayBox;
@@ -45,10 +47,10 @@ namespace RiverHollow.GUIComponents.Screens
             _window = new GUIWindow(new Vector2(startX, 0), GUIWindow.BrownWin, RiverHollow.ScreenHeight, RiverHollow.ScreenHeight);
             Controls.Add(_window);
 
-            _btnCancel = new GUIButton("Cancel", BTN_WIDTH, BTN_HEIGHT);
+            _btnCancel = new GUIButton("Cancel", BTN_WIDTH, BTN_HEIGHT, BtnCancel);
             _btnCancel.AnchorToInnerSide(_window, SideEnum.BottomRight, 0);
             
-            _btnOK = new GUIButton("OK", BTN_WIDTH, BTN_HEIGHT);
+            _btnOK = new GUIButton("OK", BTN_WIDTH, BTN_HEIGHT, BtnNewGame);
             _window.Controls.Add(_btnOK);
             _btnOK.AnchorAndAlignToObject(_btnCancel, SideEnum.Left, SideEnum.Top, 0);
             
@@ -85,6 +87,9 @@ namespace RiverHollow.GUIComponents.Screens
 
             GUIObject.CreateSpacedRow(ref _liClasses, _window.Height / 2, _window.Position().X, _window.Width, 20);
 
+            _gCheck = new GUICheck("Skip Intro");
+            _gCheck.AnchorToInnerSide(_window, SideEnum.BottomLeft);
+
             Controls.Add(_btnCancel);
             Controls.Add(_btnOK);
             Controls.Add(_manorWindow);
@@ -93,6 +98,7 @@ namespace RiverHollow.GUIComponents.Screens
             Controls.Add(_giNextHairColor);
             Controls.Add(_gTextHairType);
             Controls.Add(_giNextHairType);
+            Controls.Add(_gCheck);
 
             _selection = SelectionEnum.None;
         }
@@ -101,6 +107,8 @@ namespace RiverHollow.GUIComponents.Screens
         {
             if(_selection == SelectionEnum.Name) { _nameWindow.Update(gameTime); }
             else if (_selection == SelectionEnum.Manor) { _manorWindow.Update(gameTime); }
+
+            _btnOK.Enable(_nameWindow.GetText().Length > 0);
 
             foreach (GUIObject o in _liClasses)
             {
@@ -111,21 +119,8 @@ namespace RiverHollow.GUIComponents.Screens
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_btnOK.Contains(mouse))
-            {
-                PlayerManager.World.SetScale();
-                RiverHollow.NewGame();
-                PlayerManager.SetClass(_selectedClass.ClassID);
-                PlayerManager.SetName(_nameWindow.GetText());
-                GameManager.DontReadInput();
-                rv = true;
-            }
-            if (_btnCancel.Contains(mouse))
-            {
-                GUIManager.SetScreen(new IntroMenuScreen());
-                GameManager.DontReadInput();
-                rv = true;
-            }
+            _btnOK.ProcessLeftButtonClick(mouse);
+            _btnCancel.ProcessLeftButtonClick(mouse);
             if (_giNextHairColor.Contains(mouse))
             {
                 if (_iHairColorIndex < _liColors.Count - 1) { _iHairColorIndex++; }
@@ -140,7 +135,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _playerDisplayBox.SyncHair(_iHairTypeIndex);
             }
 
-            
+            _gCheck.ProcessLeftButtonClick(mouse);
 
             if (_nameWindow.Contains(mouse)) { _selection = SelectionEnum.Name; }
             else if (_manorWindow.Contains(mouse)) { _selection = SelectionEnum.Manor; }
@@ -161,6 +156,21 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             return rv;
+        }
+
+        public void BtnNewGame()
+        {
+            PlayerManager.World.SetScale();
+            RiverHollow.NewGame();
+            PlayerManager.SetClass(_selectedClass.ClassID);
+            PlayerManager.SetName(_nameWindow.GetText());
+            GameManager.DontReadInput();
+        }
+
+        public void BtnCancel()
+        {
+            GUIManager.SetScreen(new IntroMenuScreen());
+            GameManager.DontReadInput();
         }
 
         public override bool ProcessHover(Point mouse)

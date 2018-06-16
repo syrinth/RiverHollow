@@ -87,4 +87,59 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _gTextMoney.SetColor(c);
         }
     }
+
+    public class GUICheck : GUIObject
+    {
+        bool _isChecked;
+        GUIImage _gUnchecked;
+        GUIImage _gChecked;
+        GUIText _gText;
+        public GUICheck(string text = "", bool isChecked = false)
+        {
+            Width = TileSize*2;
+            Height = TileSize*2;
+            _isChecked = isChecked;
+            _gUnchecked = new GUIImage(Vector2.Zero, new Rectangle(16, 32, TileSize, TileSize), Width, Height, @"Textures\Dialog");
+            _gChecked = new GUIImage(Vector2.Zero, new Rectangle(32, 32, TileSize, TileSize), Width, Height, @"Textures\Dialog");
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                _gText = new GUIText(text);
+            }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (_isChecked) { _gChecked.Draw(spriteBatch); }
+            else { _gUnchecked.Draw(spriteBatch); }
+
+            if (_gText != null)
+            {
+                _gText.Draw(spriteBatch);
+            }
+        }
+
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+            bool rv = false;
+            if (Contains(mouse))
+            {
+                _isChecked = !_isChecked;
+            }
+
+            return rv;
+        }
+
+        public override void Position(Vector2 value)
+        {
+            base.Position(value);
+
+            _gChecked.Position(value);
+            _gUnchecked.Position(value);
+            if (_gText != null)
+            {
+                _gText.AnchorAndAlignToObject(_gChecked, SideEnum.Right, SideEnum.Bottom);
+            }
+        }
+    }
 }

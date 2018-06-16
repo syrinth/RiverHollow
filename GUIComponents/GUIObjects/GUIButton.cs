@@ -16,6 +16,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public bool Enabled;
         private GUIText _text;
 
+        public delegate void BtnClickDelegate ();
+        private BtnClickDelegate _delAction;
+
         internal static WindowData BaseBtn = new WindowData(96, 0, 2);
 
         public GUIButton(string text)
@@ -32,11 +35,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Enabled = true;
         }
 
-        public GUIButton(string text, int width, int height) : this(text)
+        public GUIButton(string text, int width, int height, BtnClickDelegate del = null) : this(text)
         {
             Width = width;
             Height = height;
             _text.CenterOnWindow(this);
+
+            if(del != null) { _delAction = del; }
+        }
+
+        public GUIButton(Rectangle sourceRect, int width, int height, BtnClickDelegate del = null) : this("", width, height, del)
+        {
         }
 
         public GUIButton(Vector2 position, Rectangle sourceRect, int width, int height, string text, string texture, bool usePosition = false) : this (text, width, height)
@@ -52,9 +61,20 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _text.Draw(spriteBatch);
         }
 
+        public void SetDelegate(BtnClickDelegate del)
+        {
+            _delAction = del;
+        }
+
         public override bool ProcessLeftButtonClick(Point mouse)
         {
-            return base.ProcessLeftButtonClick(mouse) && Enabled;
+            bool rv = false;
+            if (Contains(mouse) && Enabled)
+            {
+                _delAction();
+            }
+
+            return rv;
         }
     }
 }
