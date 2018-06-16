@@ -69,7 +69,7 @@ namespace RiverHollow.Game_Managers
             if (_monsterDictionary.ContainsKey(id))
             {
                 string _itemData = _monsterDictionary[id];
-                string[] _itemDataValues = _itemData.Split('/');
+                string[] _itemDataValues = Util.FindTags(_itemData);
                 m = new Monster(id, _itemDataValues);
             }
             return m;
@@ -99,8 +99,8 @@ namespace RiverHollow.Game_Managers
             if (id != -1)
             {
                 string strData = _actionDictionary[id];
-                string[] strdataValues = strData.Split('/');
-                switch (strdataValues[0])
+                string[] strdataValues = Util.FindTags(strData);
+                switch (strdataValues[0].Split(':')[1])
                 {
                     case "Menu":
                         return new MenuAction(id, strdataValues);

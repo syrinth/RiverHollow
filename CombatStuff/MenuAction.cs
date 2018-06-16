@@ -31,15 +31,20 @@ namespace RiverHollow.Characters.CombatStuff
             ImportBasics(stringData,id);
         }
 
-        protected int ImportBasics(string[] stringData, int id)
+        protected void ImportBasics(string[] stringData, int id)
         {
             _id = id;
-            int i = 0;
-            _actionType = Util.ParseEnum<ActionEnum>(stringData[i++]);
-            _name = stringData[i++];
-            _description = stringData[i++];
 
-            return i;
+            GameContentManager.GetActionText(_id, ref _name, ref _description);
+
+            foreach (string s in stringData)
+            {
+                string[] tagType = s.Split(':');
+                if (tagType[0].Equals("Type"))
+                {
+                    _actionType = Util.ParseEnum<ActionEnum>(tagType[1]);
+                }
+            }
         }
 
         public bool IsMenu() { return _actionType == ActionEnum.Menu; }
@@ -98,20 +103,21 @@ namespace RiverHollow.Characters.CombatStuff
             }
         }
 
-        protected int ImportBasics(int id, string[] stringData)
+        protected void ImportBasics(int id, string[] stringData)
         {
-            int i = 0;
-            _actionType = Util.ParseEnum<ActionEnum>(stringData[i++]);
-            _name = stringData[i++];
-            _description = stringData[i++];
-            //This is where we parse for tags
+            _id = id;
+            GameContentManager.GetActionText(_id, ref _name, ref _description);
 
-            string[] split = Util.FindTags(stringData[i++]);
-            foreach (string s in split)
+            //This is where we parse for tags
+            foreach (string s in stringData)
             {
                 string[] tagType = s.Split(':');
                 //Parsing for important data
-                if (tagType[0].Equals("Element"))
+                if (tagType[0].Equals("Type"))
+                {
+                    _actionType = Util.ParseEnum<ActionEnum>(tagType[1]);
+                }
+                else if (tagType[0].Equals("Element"))
                 {
                     _element = Util.ParseEnum<ElementEnum>(tagType[1]);
                 }
@@ -183,10 +189,6 @@ namespace RiverHollow.Characters.CombatStuff
                     }
                 }               
             }
-
-            _id = id;
-
-            return i;
         }
 
         //Sets the _used tag to be true so that it's known that we've started using it

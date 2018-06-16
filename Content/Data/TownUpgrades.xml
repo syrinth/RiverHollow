@@ -4,7 +4,7 @@
     <!--Key: Upgrade Name, Value:Name/Description/UpgradeType/Money/Id#:NumNeeded-->
     <Item>
       <Key>1</Key>
-      <Value>Tavern/A place where people can gather/Building/1000/0:1</Value>
+      <Value>[Type:Building][Cost:1000][ItemReq:0-1]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -8,7 +8,7 @@
     <!--[SpawnMob:ID-Map-Location]-->
     <Item>
       <Key>1</Key>
-      <Value>Griselda's Orb/Quest1/Griselda wants you to get her orb back from the goblins who stole it. Apparently, they ran off to the East and are hiding inside of the Forest./6/Fetch/301 1/Quest1End/[Item:1000-1-1][Money:500][Friendship:Giver-200][SpawnMob:3-mapForest-Quest1]</Value>
+      <Value>[QuestGiver:6][Type:Fetch][GoalItem:301-1][Item:1000-1-1][Money:500][Friendship:Giver-200][SpawnMob:3-mapForest-Quest1]</Value>
     </Item>
   </Asset>
 </XnaContent>

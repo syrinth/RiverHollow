@@ -50,10 +50,116 @@
       <Key>SpringDoor</Key>
       <Value>Nope</Value>
     </Item>
-    <!--Quest Descriptions-->
+    <!--Monster Text -->
     <Item>
-      <Key>Description Quest 1</Key>
-      <Value>Griselda wants you to get her orb back from the goblins who stole it. Apparently, they ran off to the East and are hiding inside of the Forest.</Value>
+      <Key>Monster 1</Key>
+      <Value>Goblin Scout</Value>
+    </Item>
+    <Item>
+      <Key>Monster 2</Key>
+      <Value>Goblin Soldier</Value>
+    </Item>
+    <Item>
+      <Key>Monster 3</Key>
+      <Value>Goblin Sneak Thief</Value>
+    </Item>
+    <!--Quest Text-->
+    <Item>
+      <Key>Quest 1</Key>
+      <Value>Griselda's Orb/Griselda wants you to get her orb back from the goblins who stole it. Apparently, they ran off to the East and are hiding inside of the Forest.</Value>
+    </Item>
+    <!--Upgrade Text -->
+    <Item>
+      <Key>Upgrade 1</Key>
+      <Value>Tavern/A place where people can gather</Value>
+    </Item>
+    <!--Action Text -->
+    <Item>
+      <Key>Action 1</Key>
+      <Value>Attack/Basic Attack</Value>
+    </Item>
+    <Item>
+      <Key>Action 2</Key>
+      <Value>Cast Spell/Casts Spell</Value>
+    </Item>
+    <Item>
+      <Key>Action 3</Key>
+      <Value>Use Item/Basic Attack</Value>
+    </Item>
+    <Item>
+      <Key>Action 4</Key>
+      <Value>Meditate/Increases your dmg</Value>
+    </Item>
+    <!--Action Spell Text -->
+    <Item>
+      <Key>Action 101</Key>
+      <Value>Thunder/Call down thunder on your foes</Value>
+    </Item>
+    <Item>
+      <Key>Action 102</Key>
+      <Value>Fireball/Flames!</Value>
+    </Item>
+    <Item>
+      <Key>Action 103</Key>
+      <Value>Shield/Summon a rock</Value>
+    </Item>
+    <Item>
+      <Key>Action 104</Key>
+      <Value>Poison/Poison them!</Value>
+    </Item>
+    <Item>
+      <Key>Action 150</Key>
+      <Value>Minor Healing/A weak healing spell</Value>
+    </Item>
+    <Item>
+      <Key>Action 151</Key>
+      <Value>Esuna/Purges Poisons</Value>
+    </Item>
+    <Item>
+      <Key>Action 200</Key>
+      <Value>Summon Eye/Summons a Magical Eye to attack your foe</Value>
+    </Item>
+    <!--Building Text -->
+    <Item>
+      <Key>Building 1</Key>
+      <Value>Arcane Tower</Value>
+    </Item>
+    <Item>
+      <Key>Building 2</Key>
+      <Value>Armory</Value>
+    </Item>
+    <!--Classes Text -->
+    <Item>
+      <Key>Class 1</Key>
+      <Value>Wizard/Uses magic!</Value>
+    </Item>
+    <Item>
+      <Key>Class 2</Key>
+      <Value>Healer/Master of Healing and potions</Value>
+    </Item>
+    <Item>
+      <Key>Class 3</Key>
+      <Value>Summoner/Summons magical beings to aid you</Value>
+    </Item>
+    <Item>
+      <Key>Class 4</Key>
+      <Value>Witch/Expert in curses and hexing your opponents</Value>
+    </Item>
+    <Item>
+      <Key>Class 5</Key>
+      <Value>Weapons Master/Master of Melee</Value>
+    </Item>
+    <Item>
+      <Key>Class 6</Key>
+      <Value>Knight/Defensible warrior</Value>
+    </Item>
+    <Item>
+      <Key>Class 7</Key>
+      <Value>Rogue/Fast and agile, uses a bow</Value>
+    </Item>
+    <Item>
+      <Key>Class 8</Key>
+      <Value>Bard/Music</Value>
     </Item>
   </Asset>
 </XnaContent>

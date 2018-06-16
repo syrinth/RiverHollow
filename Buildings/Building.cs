@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
+using RiverHollow.Misc;
 using RiverHollow.WorldObjects;
 
 using static RiverHollow.Game_Managers.GameManager;
@@ -45,20 +46,55 @@ namespace RiverHollow.Buildings
         protected int ImportBasics(string[] stringData, int id)
         {
             _id = id;
+            _sName = GameContentManager.GetGameText("Building " + _id);
+
             int i = 0;
-            _sName = stringData[i++];
-            _texture = GameContentManager.GetTexture(@"Textures\" + stringData[i++]);
-            string[] split = stringData[i++].Split(' ');
-            _width = int.Parse(split[0]);
-            _height = int.Parse(split[1]);
-            split = stringData[i++].Split(' ');
-            _baseStartX = int.Parse(split[0]);
-            _baseStartY = int.Parse(split[1]);
-            _baseWidth = int.Parse(split[2]);
-            _baseHeight = int.Parse(split[3]);
-            split = stringData[i++].Split(' ');
-            _entranceX = int.Parse(split[0]);
-            _entranceY = int.Parse(split[1]);
+            int totalCount = 0;
+            for (; i < stringData.Length; i++)
+            {
+                string[] tagType = stringData[i].Split(':');
+                if (tagType[0].Equals("Texture"))
+                {
+                    _texture = GameContentManager.GetTexture(@"Textures\" + tagType[1]);
+                    totalCount++;
+                }
+                else if (tagType[0].Equals("Dimensions"))
+                {
+                    string[] dimensions = tagType[1].Split('-');
+                    _width = int.Parse(dimensions[0]);
+                    _height = int.Parse(dimensions[1]);
+                    totalCount++;
+                }
+                else if (tagType[0].Equals("FirstBase"))
+                {
+                    string[] baseSq = tagType[1].Split('-');
+                    _baseStartX = int.Parse(baseSq[0]);
+                    _baseStartY = int.Parse(baseSq[1]);
+                    totalCount++;
+                }
+                else if (tagType[0].Equals("Width"))
+                {
+                    _baseWidth = int.Parse(tagType[1]);
+                    totalCount++;
+                }
+                else if (tagType[0].Equals("Height"))
+                {
+                    _baseHeight = int.Parse(tagType[1]);
+                    totalCount++;
+                }
+                else if (tagType[0].Equals("Entrance"))
+                {
+                    string[] ent = tagType[1].Split('-');
+                    _entranceX = int.Parse(ent[0]);
+                    _entranceY = int.Parse(ent[1]);
+                    totalCount++;
+                }
+
+                if (totalCount == 6)
+                {
+                    break;
+                }
+            }
 
             return i;
         }

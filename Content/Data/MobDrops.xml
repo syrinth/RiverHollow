@@ -4,15 +4,15 @@
     <!--Key: Index>0, corresponding mob Value:% item/% item/ etc-->
     <Item>
       <Key>1</Key>
-      <Value>90 0/30 7/50 8</Value>
+      <Value>[Item:90-0][Item:30- 7][Item:50-8]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>90 0/30 7/50 8/100 1</Value>
+      <Value>[Item:90-0][Item:30- 7][Item:50-8][Item:100-1]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>100 301</Value>
+      <Value>[Item:100-301]</Value>
     </Item>
   </Asset>
 </XnaContent>

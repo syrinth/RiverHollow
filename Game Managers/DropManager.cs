@@ -7,11 +7,11 @@ namespace RiverHollow.Game_Managers
 {
     public static class DropManager
     {
-        private static Dictionary<int, string> _dictionaryMobDrops;
+        private static Dictionary<int, string> _diMobDrops;
 
         public static void LoadContent(ContentManager Content)
         {
-            _dictionaryMobDrops = Content.Load<Dictionary<int, string>>(@"Data\MobDrops");
+            _diMobDrops = Content.Load<Dictionary<int, string>>(@"Data\MobDrops");
         }
         public static List<Item> DropItemsFromWorldObject(int id)
         {
@@ -48,14 +48,18 @@ namespace RiverHollow.Game_Managers
         {
             List<Item> itemList = new List<Item>();
             RHRandom r = new RHRandom();
-            string[] drops = _dictionaryMobDrops[id].Split('/');
+            string[] drops = Util.FindTags(_diMobDrops[id]);
             foreach(string s in drops)
             {
-                string[] split = s.Split(' ');
-                int chance = r.Next(1, 100);
-                if(chance <= int.Parse(split[0]))
+                string[] tagType = s.Split(':');
+                if (tagType[0].Equals("Item"))
                 {
-                    itemList.Add(ObjectManager.GetItem(int.Parse(split[1])));
+                    string[] info = tagType[1].Split('-');
+                    int chance = r.Next(1, 100);
+                    if (chance <= int.Parse(info[0]))
+                    {
+                        itemList.Add(ObjectManager.GetItem(int.Parse(info[1])));
+                    }
                 }
             }
 

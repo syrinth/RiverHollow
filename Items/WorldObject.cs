@@ -27,7 +27,7 @@ namespace RiverHollow.WorldObjects
         protected bool _blocking = true;
         public bool Blocking => _blocking;
         protected bool _wallObject;
-        public bool WallObject { get => _wallObject; }
+        public bool WallObject => _wallObject;
 
         protected Vector2 _vMapPosition;
         public virtual Vector2 MapPosition
@@ -111,16 +111,16 @@ namespace RiverHollow.WorldObjects
     public class Destructible : WorldObject
     {
         protected int _hp;
-        public int HP { get => _hp; }
+        public int HP => _hp;
 
         protected bool _breakable;
-        public bool Breakable { get => _breakable; }
+        public bool Breakable => _breakable;
 
         protected bool _choppable;
-        public bool Choppable { get => _choppable; }
+        public bool Choppable => _choppable;
 
         protected int _lvltoDmg;
-        public int LvlToDmg { get => _lvltoDmg; }
+        public int LvlToDmg => _lvltoDmg;
 
         public Destructible(int id, string[] stringData, Vector2 pos)
         {
@@ -130,18 +130,41 @@ namespace RiverHollow.WorldObjects
 
             _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
 
-            int i = 2;
-            //_name = stringData[i++];
-            string[] texIndices = stringData[i++].Split(' ');
-            int x = int.Parse(texIndices[0]);
-            int y = int.Parse(texIndices[1]);
-            _width = int.Parse(texIndices[2]);
-            _height = int.Parse(texIndices[3]);
-            _rSource = new Rectangle(0 + TileSize * x, 0 + TileSize * y, _width, _height);
-            _choppable = bool.Parse(stringData[i++]);
-            _breakable = bool.Parse(stringData[i++]);
-            _hp = int.Parse(stringData[i++]);
-            _lvltoDmg = int.Parse(stringData[i++]);
+            foreach (string s in stringData)
+            {
+                string[] tagType = s.Split(':');
+                if (tagType[0].Equals("Image"))
+                {
+                    string[] texIndices = tagType[1].Split('-');
+                    int x = int.Parse(texIndices[0]);
+                    int y = int.Parse(texIndices[1]);
+                    _rSource = new Rectangle(0 + TileSize * x, 0 + TileSize * y, _width, _height);
+                }
+                else if (tagType[0].Equals("Width"))
+                {
+                    _width = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Height"))
+                {
+                    _height = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Chop"))
+                {
+                    _choppable = true;
+                }
+                else if (tagType[0].Equals("Break"))
+                {
+                    _breakable = true;
+                }
+                else if (tagType[0].Equals("Hp"))
+                {
+                    _hp = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("ReqLvl"))
+                {
+                    _lvltoDmg = int.Parse(tagType[1]);
+                }
+            }
 
             _wallObject = false;
             Tiles = new List<RHTile>();
@@ -211,7 +234,7 @@ namespace RiverHollow.WorldObjects
             }
 
             public override void ReadInscription() {
-                GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameDialog("MobDoor"), false));
+                GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameText("MobDoor"), false));
             }
 
             public void Check(int mobCount)
@@ -238,7 +261,7 @@ namespace RiverHollow.WorldObjects
 
             public override void ReadInscription()
             {
-                GUIManager.SetScreen(new TextScreen(this, GameContentManager.GetGameDialog("KeyDoor")));
+                GUIManager.SetScreen(new TextScreen(this, GameContentManager.GetGameText("KeyDoor")));
             }
 
             public bool Check(Item item)
@@ -270,7 +293,7 @@ namespace RiverHollow.WorldObjects
 
             public override void ReadInscription()
             {
-                GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameDialog("SpringDoor"), false));
+                GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameText("SpringDoor"), false));
             }
 
             public bool Check()
@@ -391,7 +414,7 @@ namespace RiverHollow.WorldObjects
 
         protected void ReadSourcePos(string str)
         {
-            string[] strPos = str.Split(' ');
+            string[] strPos = str.Split('-');
             _vSourcePos = new Vector2(0 + TileSize * int.Parse(strPos[0]), 0 + TileSize * int.Parse(strPos[1]));
         }
         public void SetMapName(string val) { _sMapName = val; }
@@ -489,13 +512,22 @@ namespace RiverHollow.WorldObjects
                     _dProcessedTime = -1;
                     _heldItem = null;
 
-                    ReadSourcePos(stringData[1]);
-
-                    string[] processStr = Util.FindTags(stringData[2]);
-                    foreach (string s in processStr)
+                    foreach (string s in stringData)
                     {
-                        string[] pieces = s.Split(' ');
-                        _diProcessing.Add(int.Parse(pieces[0]), new ProcessRecipe(pieces));
+                        string[] tagType = s.Split(':');
+                        if (tagType[0].Equals("Image"))
+                        {
+                            ReadSourcePos(tagType[1]);
+                        }
+                        else if (tagType[0].Equals("Process"))
+                        {
+                            string[] recipeStr = Util.FindTags(tagType[1]);
+                            foreach (string recipe in recipeStr)
+                            {
+                                string[] pieces = recipe.Split('-');
+                                _diProcessing.Add(int.Parse(pieces[0]), new ProcessRecipe(pieces));
+                            }
+                        }
                     }
 
                     LoadContent();
@@ -608,13 +640,22 @@ namespace RiverHollow.WorldObjects
                     _dProcessedTime = -1;
                     _heldItem = null;
 
-                    ReadSourcePos(stringData[1]);
-
-                    string[] processStr = stringData[2].Split(' ');
-                    foreach (string s in processStr)
+                    foreach (string s in stringData)
                     {
-                        _diCrafting.Add(int.Parse(s), ObjectManager.DictCrafting[int.Parse(s)]);
-                    }
+                        string[] tagType = s.Split(':');
+                        if (tagType[0].Equals("Image"))
+                        {
+                            ReadSourcePos(tagType[1]);
+                        }
+                        else if (tagType[0].Equals("Recipes"))
+                        {
+                            string[] processStr = tagType[1].Split('-');
+                            foreach (string str in processStr)
+                            {
+                                _diCrafting.Add(int.Parse(str), ObjectManager.DictCrafting[int.Parse(str)]);
+                            }
+                        }
+                    }         
 
                     LoadContent();
                 }
@@ -672,37 +713,6 @@ namespace RiverHollow.WorldObjects
 
                     if (_currentlyMaking != null) { _sprite.SetCurrentAnimation("Working"); }
                 }
-
-                private class ProcessRecipe
-                {
-                    int _iInput;
-                    public int Input => _iInput;
-                    int _iReqInput;
-                    public int InputNum => _iReqInput;
-                    int _iOutput;
-                    public int Output => _iOutput;
-                    int _iProcessingTime;
-                    public int ProcessingTime => _iProcessingTime;
-
-                    public ProcessRecipe(string[] data)
-                    {
-                        _iInput = int.Parse(data[0]);
-
-                        //[x y z] means 1 x => y in z seconds
-                        if (data.Length == 3)
-                        {
-                            _iReqInput = 1;
-                            _iOutput = int.Parse(data[1]);
-                            _iProcessingTime = int.Parse(data[2]);
-                        }
-                        else if (data.Length == 4)            //[w x y z] means x w => y in z seconds
-                        {
-                            _iReqInput = int.Parse(data[1]);
-                            _iOutput = int.Parse(data[2]);
-                            _iProcessingTime = int.Parse(data[3]);
-                        }
-                    }
-                }
             }
         }
 
@@ -721,14 +731,26 @@ namespace RiverHollow.WorldObjects
                 _id = id;
                 Type = ObjectType.Container;
 
-                _width = TileSize; ;
-                _height = TileSize; ;
+                _width = TileSize;
+                _height = TileSize;
 
-                ReadSourcePos(stringData[1]);
+                foreach (string s in stringData)
+                {
+                    string[] tagType = s.Split(':');
+                    if (tagType[0].Equals("Image"))
+                    {
+                        ReadSourcePos(tagType[1]);
+                    }
+                    else if (tagType[0].Equals("Rows"))
+                    {
+                        _iRows = int.Parse(tagType[1]);
+                    }
+                    else if (tagType[0].Equals("Cols"))
+                    {
+                        _iColumns = int.Parse(tagType[1]);
+                    }
+                }
 
-                string[] invStr = stringData[2].Split(' ');
-                _iRows = int.Parse(invStr[0]);
-                _iColumns = int.Parse(invStr[1]);
                 LoadContent();
 
                 _inventory = new Item[InventoryManager.maxItemRows, InventoryManager.maxItemColumns];
@@ -785,24 +807,39 @@ namespace RiverHollow.WorldObjects
                 _id = id;
                 Type = ObjectType.Plant;
                 _blocking = false;
+
+                _iCurrentState = 0;
                 _diTransitionTimes = new Dictionary<int, int>();
 
                 _width = TileSize;
                 _height = TileSize;
 
-                int i = 1;
-                ReadSourcePos(stringData[i++]);
-
-                _iCurrentState = 0;
-                //Plant/0 4/40/4/2 3 4
-                _iResourceID = int.Parse(stringData[i++]);
-                _iMaxStates = int.Parse(stringData[i++]);
-                string[] dayStr = stringData[i++].Split(' ');
-                for(int j = 0; j < _iMaxStates - 1; j++)
+                foreach (string s in stringData)
                 {
-                    _diTransitionTimes.Add(j, int.Parse(dayStr[j]));
+                    string[] tagType = s.Split(':');
+                    if (tagType[0].Equals("Image"))
+                    {
+                        ReadSourcePos(tagType[1]);
+                    }
+                    else if (tagType[0].Equals("Item"))
+                    {
+                        _iResourceID = int.Parse(tagType[1]);
+                    }
+                    else if (tagType[0].Equals("TrNum"))
+                    {
+                        _iMaxStates = int.Parse(tagType[1]);
+                    }
+                    else if (tagType[0].Equals("TrTime"))
+                    {
+                        string[] dayStr = tagType[1].Split('-');
+                        for (int j = 0; j < _iMaxStates - 1; j++)
+                        {
+                            _diTransitionTimes.Add(j, int.Parse(dayStr[j]));
+                        }
+
+                        _iDaysLeft = _diTransitionTimes[0];
+                    }
                 }
-                _iDaysLeft = _diTransitionTimes[0];
 
                 LoadContent();
             }

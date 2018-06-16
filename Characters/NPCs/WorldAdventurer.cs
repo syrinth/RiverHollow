@@ -168,7 +168,7 @@ namespace RiverHollow.Characters.NPCs
 
         public override void Talk()
         {
-            GUIManager.SetScreen(new TextScreen(this, Name + ": " + GameContentManager.GetGameDialog("AdventurerTree")));
+            GUIManager.SetScreen(new TextScreen(this, Name + ": " + GameContentManager.GetGameText("AdventurerTree")));
         }
 
         public override string GetSelectionText()
@@ -187,7 +187,7 @@ namespace RiverHollow.Characters.NPCs
                 _iMood += 1;
 
                 RHRandom r = new RHRandom();
-                rv = GameContentManager.GetGameDialog(_sAdventurerType + r.Next(1, 2));
+                rv = GameContentManager.GetGameText(_sAdventurerType + r.Next(1, 2));
             }
             else if (entry.Equals("Craft"))
             {

@@ -4,15 +4,15 @@
     <!--Key:FinalItemNum, Value:processingTime/exp/itemID amount/itemNum amount-->
     <Item>
       <Key>5</Key>
-      <Value>0/1/85 1</Value>
+      <Value>[Time:0][XP:1][ReqItem:85-1]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>20/4/2 3</Value>
+      <Value>[Time:20][XP:4][ReqItem:2-3]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>40/7/85 2</Value>
+      <Value>[Time:40][XP:7][ReqItem:85-2]</Value>
     </Item>
   </Asset>
 </XnaContent>

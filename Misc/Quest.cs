@@ -97,26 +97,27 @@ namespace RiverHollow.Misc
             _liRewardItems = new List<Item>();
             string[] splitParams = stringData.Split('/');
             int i = 0;
-            _name = splitParams[i++];
-            _description = GameContentManager.GetGameDialog("Description Quest " + _iQuestID);
-            _questGiver = CharacterManager.DiNPC[int.Parse(splitParams[i++])];
-            _goalType = Util.ParseEnum<QuestType>(splitParams[i++]);
-            string[] req = splitParams[i++].Split('|');
-            if (_goalType == QuestType.Fetch)
-            {
-                foreach (string s in req)
-                {
-                    string[] info = s.Split(' ');
-                    _questItem = ObjectManager.GetItem(int.Parse(info[0]));
-                    _iTargetGoal = int.Parse(info[1]);
-                }
-            }
+            GameContentManager.GetQuestText(_iQuestID, ref _name, ref _description);
 
             string[] split = Util.FindTags(splitParams[i++]);
             foreach (string s in split)
             {
                 string[] tagType = s.Split(':');
-                if (tagType[0].Equals("Item"))
+                if (tagType[0].Equals("QuestGiver"))
+                {
+                    _questGiver = CharacterManager.DiNPC[int.Parse(tagType[1])];
+                }
+                else if (tagType[0].Equals("Type"))
+                {
+                    _goalType = Util.ParseEnum<QuestType>(tagType[1]);
+                }
+                else if (tagType[0].Equals("GoalItem"))
+                {
+                    string[] info = tagType[1].Split('-');
+                    _questItem = ObjectManager.GetItem(int.Parse(info[0]));
+                    _iTargetGoal = int.Parse(info[1]);
+                }
+                else if (tagType[0].Equals("Item"))
                 {
                     string[] parse = tagType[1].Split('-');
                     if (parse.Length > 1)
@@ -157,7 +158,7 @@ namespace RiverHollow.Misc
                 {
                     _iSeason = int.Parse(tagType[1]);
                 }
-            }           
+            }        
         }
 
         public bool AttemptProgress(Monster m)

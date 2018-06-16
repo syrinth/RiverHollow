@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: Index>0 Value:Name/texture/width height/firstBaseSquare baseWidth baseHeight/EntranceSquareXY/workerType-->
+    <!--Key: Index>0 Value:texture/width height/firstBaseSquare baseWidth baseHeight/EntranceSquareXY/workerType-->
     <Item>
       <Key>1</Key>
-      <Value>Arcane Tower/ArcaneTower/3 10/0 7 3 3/1 9/Magic</Value>
+      <Value>[Texture:ArcaneTower][Dimensions:3-10][FirstBase:0-7][Width:3][Height:3][Entrance:1-9][Type:Magic]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Armory/Armory/5 4/0 2 7 3/3 4/Martial</Value>
+      <Value>[Texture:Armory][Dimensions:5-4][FirstBase:0-2][Width:7][Height:3][Entrance:3-4][Type:Martial]</Value>
     </Item>
   </Asset>
 </XnaContent>

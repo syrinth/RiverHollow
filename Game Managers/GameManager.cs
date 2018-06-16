@@ -632,8 +632,8 @@ namespace RiverHollow.Game_Managers
         public string Name { get => _name; }
         string _description;
         public string Description { get => _description; }
-        int _moneyCost;
-        public int MoneyCost { get => _moneyCost; }
+        int _iCost;
+        public int MoneyCost { get => _iCost; }
         List<KeyValuePair<int, int>> _liRequiredItems;
         public List<KeyValuePair<int, int>> LiRquiredItems { get => _liRequiredItems; }
         public bool Enabled;
@@ -641,21 +641,32 @@ namespace RiverHollow.Game_Managers
         public Upgrade(int id, string strData)
         {
             _id = id;
-
-            int index = 0;
-            string[] split = strData.Split('/');
-            _name = split[index++];
-            _description = split[index++];
-            _type = Util.ParseEnum<UpgradeTypeEnum>(split[index++]);
-            _moneyCost = int.Parse(split[index++]);
-            string[] itemSplit = split[index++].Split(' ');
-
             _liRequiredItems = new List<KeyValuePair<int, int>>();
-            for (int i = 0; i < itemSplit.Length; i++)
+
+            GameContentManager.GetUpgradeText(_id, ref _name, ref _description);
+
+            string[] strSplit = Util.FindTags(strData);
+            foreach (string s in strSplit)
             {
-                string[] entrySplit = itemSplit[i].Split(':');
-                _liRequiredItems.Add(new KeyValuePair<int, int>(int.Parse(entrySplit[0]), int.Parse(entrySplit[1])));
-            }
+                string[] tagType = s.Split(':');
+                if (tagType[0].Equals("Type"))
+                {
+                    _type = Util.ParseEnum<UpgradeTypeEnum>(tagType[1]);
+                }
+                else if (tagType[0].Equals("Cost"))
+                {
+                    _iCost = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("ItemReq"))
+                {
+                    string[] itemSplit = tagType[1].Split(':');
+                    for (int i = 0; i < itemSplit.Length; i++)
+                    {
+                        string[] entrySplit = itemSplit[i].Split('-');
+                        _liRequiredItems.Add(new KeyValuePair<int, int>(int.Parse(entrySplit[0]), int.Parse(entrySplit[1])));
+                    }
+                }
+            } 
         }
     }
 }

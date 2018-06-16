@@ -4,15 +4,15 @@
     <!--Key: Index>0 Value:Name/CombatTexture/XP/Dmg/Def/HP/Magic/Speed/Resist/Vulnerability-->
     <Item>
       <Key>1</Key>
-      <Value>Goblin Scout/GoblinCombat/1/3/1/6/0/2/Fire/Lightning</Value>
+      <Value>[Texture:GoblinCombat][XP:1][Dmg:3][Def:1][Hp:6][Magic:0][Spd:2][Resist:Fire][Vuln:Lightning]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Goblin Soldier/GoblinSoldier/10/9/2/10/0/1/Lightning/Fire</Value>
+      <Value>[Texture:GoblinSoldier][XP:10][Dmg:9][Def:2][Hp:10][Magic:0][Spd:1][Resist:Lightning][Vuln:Fire]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>Goblin Sneak Thief/GoblinSoldier/10/9/2/10/0/1/Lightning/Fire</Value>
+      <Value>[Texture:GoblinSoldier][XP:10][Dmg:9][Def:2][Hp:10][Magic:0][Spd:1][Resist:Lightning][Vuln:Fire]</Value>
     </Item>
   </Asset>
 </XnaContent>

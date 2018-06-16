@@ -9,7 +9,7 @@ namespace RiverHollow.Game_Managers
         private static ContentManager _content;
         private static Dictionary<string, Texture2D> _diTextures;
         private static Dictionary<string, SpriteFont> _diFonts;
-        private static Dictionary<string, string> _diGameDialog;
+        private static Dictionary<string, string> _diGameText;
         private static Dictionary<string, Dictionary<int, string>> _diMerchandise;
         private static Dictionary<int, string> _diUpgrades;
         private static Dictionary<string, string> _diSpiritLoot;
@@ -32,7 +32,7 @@ namespace RiverHollow.Game_Managers
             _diItemText = _content.Load<Dictionary<int, string>>(@"Data\ItemText");
             _diClassText = _content.Load<Dictionary<int, string>>(@"Data\ClassesText");
 
-            _diGameDialog = LoadDialogue(@"Data\Dialogue\GameText");
+            _diGameText = LoadDialogue(@"Data\Dialogue\GameText");
 
             LoadCharacters(_content);
             LoadGUIs(_content);
@@ -134,9 +134,9 @@ namespace RiverHollow.Game_Managers
             return _diFonts[font];
         }
 
-        public static string GetGameDialog(string key)
+        public static string GetGameText(string key)
         {
-            return _diGameDialog[key];
+            return _diGameText[key];
         }
 
         public static Dictionary<int, string> GetMerchandise(string file)
@@ -151,8 +151,29 @@ namespace RiverHollow.Game_Managers
         }
 
         public static void GetClassText(int id, ref string name, ref string desc) {
-            name = _diClassText[id].Split('/')[0];
-            desc = _diClassText[id].Split('/')[1];
+            string val = "Class " + id;
+            name = _diGameText[val].Split('/')[0];
+            desc = _diGameText[val].Split('/')[1];
+        }
+        public static void GetQuestText(int id, ref string name, ref string desc)
+        {
+            string val = "Quest " + id;
+            name = _diGameText[val].Split('/')[0];
+            desc = _diGameText[val].Split('/')[1];
+        }
+        public static void GetUpgradeText(int id, ref string name, ref string desc)
+        {
+            string val = "Upgrade " + id;
+            name = _diGameText[val].Split('/')[0];
+            desc = _diGameText[val].Split('/')[1];
+        }
+
+
+        public static void GetActionText(int id, ref string name, ref string desc)
+        {
+            string val = "Action " + id;
+            name = _diGameText[val].Split('/')[0];
+            desc = _diGameText[val].Split('/')[1];
         }
 
         public static Dictionary<string, string> LoadDialogue(string file)

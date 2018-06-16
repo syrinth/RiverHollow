@@ -45,7 +45,7 @@ namespace RiverHollow.Game_Managers
             if (_dictBuilding.ContainsKey(id))
             {
                 string buildingData = _dictBuilding[id];
-                string[] _buildingDataValues = buildingData.Split('/');
+                string[] _buildingDataValues = Util.FindTags(buildingData);
                 return new WorkerBuilding(_buildingDataValues, id);
             }
             return null;     
@@ -105,8 +105,8 @@ namespace RiverHollow.Game_Managers
             if (id != -1)
             {
                 string _stringData = _dictWorldObjects[id];
-                string[] _stringDataValues = _stringData.Split('/');
-                switch (_stringDataValues[0])
+                string[] _stringDataValues = Util.FindTags(_stringData);
+                switch (_stringDataValues[0].Split(':')[1])
                 {
                     case "Destructible":
                         return new Destructible(id, _stringDataValues, pos);
@@ -169,18 +169,28 @@ namespace RiverHollow.Game_Managers
             private Dictionary<int, int> _requiredItems;
             public Dictionary<int, int> RequiredItems { get => _requiredItems; }
 
-            public Recipe(int id, string data)
+            public Recipe(int id, string stringData)
             {
                 _iOutput = id;
                 _requiredItems = new Dictionary<int, int>();
 
-                string[] _recipeDataValues = data.Split('/');
-                _iProcessingTime = int.Parse(_recipeDataValues[0]);
-                _iXP = int.Parse(_recipeDataValues[1]);
-                for (int i=2; i< _recipeDataValues.Length; i++)
+                string[] splitData = Util.FindTags(stringData);
+                foreach (string s in splitData)
                 {
-                    string[] itemParams = _recipeDataValues[i].Split(' ');
-                    _requiredItems.Add(int.Parse(itemParams[0]), int.Parse(itemParams[1]));
+                    string[] tagType = s.Split(':');
+                    if (tagType[0].Equals("Time"))
+                    {
+                        _iProcessingTime = int.Parse(tagType[1]);
+                    }
+                    else if (tagType[0].Equals("XP"))
+                    {
+                        _iXP = int.Parse(tagType[1]);
+                    }
+                    else if (tagType[0].Equals("ReqItem"))
+                    {
+                        string[] itemParams = tagType[1].Split('-');
+                        _requiredItems.Add(int.Parse(itemParams[0]), int.Parse(itemParams[1]));
+                    }
                 }
             }
 

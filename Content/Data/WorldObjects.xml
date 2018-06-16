@@ -2,57 +2,57 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
     <!--Key: Index>0-->
-    <!--Value: Destructible/Name/X Y Width Height/chopIt/breakIt/hp/LvlToHurt-->
+    <!--Value: [Type:Destructible]Name/X Y Width Height/chopIt/breakIt/hp/LvlToHurt-->
     <!--Value: Plant/srcRow srcColumn/resource/numTransitions/days1 days2 daysn-1-->
     <!--Value: Container/srcRow srcColumn/rows columns-->
     <!--Value: Processor/srcRow srcColumn/[Input reqInputNum Output Time] ...-->
     <!--Value: Crafter/srcRow srcColumn/Recipe1 Recipe2 ...-->
     <Item>
       <Key>0</Key>
-      <Value>Destructible/Rock/0 0 16 16/false/true/1/1</Value>
+      <Value>[Type:Destructible][Image:0-0][Width:16][Height:16][Break][Hp:1][ReqLvl:1]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Destructible/Large Rock/2 2 32 32/false/true/5/1</Value>
+      <Value>[Type:Destructible][Image:2-2][Width:32][Height:32][Break][Hp:5][ReqLvl:1]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Tree/Tree/tree</Value>
+      <Value>[Type:Tree][Texture:tree]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>Staircase/Stairs/3 0/16 16</Value>
+      <Value>[Type:Staircase][Image:3-0][Width:16][Height:16]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>Door/Door/4 0/16 32</Value>
+      <Value>[Type:Door][Image:4-0][Width:16][Height:32]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>Destructible/Copper Ore/0 2 16 16/false/true/2/1</Value>
+      <Value>[Type:Destructible][Image:0-2][Width:16][Height:16][Hp:2][ReqLvl:1]</Value>
     </Item>
     <!--<60-79> Plants-->
     <Item>
       <Key>60</Key>
-      <Value>Plant/0 4/40/4/2 3 4</Value>
-    </Item>
-    <!--<200> Machines-->
-    <Item>
-      <Key>190</Key>
-      <Value>Container/0 1/1 8</Value>
+      <Value>[Type:Plant][Image:0-4][Item:40][TrNum:4][TrTime:2-3-4]</Value>
     </Item>
     <!--<190> Containers-->
     <Item>
+      <Key>190</Key>
+      <Value>[Type:Container][Image:0-1][Rows:1][Cols:8]</Value>
+    </Item>
+    <!--<200> Machines-->
+    <Item>
       <Key>200</Key>
-      <Value>Processor/0 0/[80 5 85 10][81 5 86 20][82 5 87 40][83 5 88 80][84 5 89 90]</Value>
+      <Value>[Type:Processor][Image:0-0][Process:80-5-85-10][Process:81-5-86-20][Process:82-5-87-40][Process:83-5-88-80][Process:84-5-89-90]</Value>
     </Item>
     <Item>
       <Key>201</Key>
-      <Value>Crafter/0 2/9 5</Value>
+      <Value>[Type:Crafter][Image:0-2][Recipes:9-5]</Value>
     </Item>
     <Item>
       <Key>299</Key>
-      <Value>ClassChanger/0 2/9 5</Value>
+      <Value>[Type:ClassChanger][Image:0-2]</Value>
     </Item>
   </Asset>
 </XnaContent>

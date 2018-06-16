@@ -71,12 +71,12 @@ namespace RiverHollow.WorldObjects
 
         protected int ImportBasics(string[] stringData, int id, int num)
         {
-            int i = 0;
             _num = num;
 
             _itemID = id;
             GameContentManager.GetIemText(_itemID, ref _name, ref _description);
 
+            int i = 0;
             int totalCount = 0;
             for(; i< stringData.Length; i++)
             {
