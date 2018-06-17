@@ -33,6 +33,7 @@ namespace RiverHollow.Characters
         protected Dictionary<int, bool> _collection;
         public Dictionary<int, bool> Collection { get => _collection; }
         public bool Introduced;
+        public bool Married;
         public bool GiftGiven;
 
         protected Dictionary<string, List<KeyValuePair<string, string>>> _completeSchedule;         //Every day with a list of KVP Time/GoToLocations
@@ -159,7 +160,13 @@ namespace RiverHollow.Characters
         public void RollOver()
         {
             GiftGiven = false;
-            Position = Util.SnapToGrid(MapManager.Maps[_homeMap].GetCharacterSpawn("NPC" + _index));
+            MapManager.Maps[CurrentMapName].RemoveCharacter(this);
+            RHMap map = MapManager.Maps[Married ? "mapManor" : _homeMap];
+            string Spawn = Married ? "Spouse" : "NPC" + _index;
+
+            Position = Util.SnapToGrid(map.GetCharacterSpawn(Spawn));
+            map.AddCharacter(this);
+
             CalculatePathing();
         }
         public void CalculatePathing()
@@ -250,6 +257,7 @@ namespace RiverHollow.Characters
         public virtual void Talk()
         {
             string text = string.Empty;
+            Married = true;
             if (!Introduced) {
                 text = _dialogueDictionary["Introduction"];
                 Introduced = true;
@@ -465,6 +473,51 @@ namespace RiverHollow.Characters
                 {
                     GUIManager.SetScreen(new TextScreen(this, text));
                 }
+            }
+        }
+
+        public NPCData SaveData()
+        {
+            NPCData npcData = new NPCData()
+            {
+                npcID = ID,
+                introduced = Introduced,
+                married = Married,
+                friendship = Friendship,
+                collection = new List<CollectionData>()
+            };
+            foreach (KeyValuePair<int, bool> kvp in Collection)
+            {
+                CollectionData c = new CollectionData
+                {
+                    itemID = kvp.Key,
+                    given = kvp.Value
+                };
+                npcData.collection.Add(c);
+            }
+
+            return npcData;
+        }
+        public void LoadData(NPCData data)
+        {
+            Introduced = data.introduced;
+            Friendship = data.friendship;
+            Married = data.married;
+            int index = 1;
+            foreach (CollectionData c in data.collection)
+            {
+                if (c.given)
+                {
+                    Collection[c.itemID] = c.given;
+                    MapManager.Maps["HouseNPC" + data.npcID].AddCollectionItem(c.itemID, data.npcID, index++);
+                }
+            }
+
+            if (Married)
+            {
+                MapManager.Maps[_homeMap].RemoveCharacter(this);
+                MapManager.Maps["mapManor"].AddCharacter(this);
+                Position = MapManager.Maps["mapManor"].GetCharacterSpawn("Spouse");
             }
         }
 

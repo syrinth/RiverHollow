@@ -52,6 +52,8 @@ namespace RiverHollow.Game_Managers
 
         private static int _money = 2000;
         public static int Money { get => _money; }
+
+        private static WorldCharacter _marriedTo;
         #endregion
 
         public static void Initialize()

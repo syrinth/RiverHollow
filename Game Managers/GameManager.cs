@@ -308,6 +308,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Introduced")]
             public bool introduced;
 
+            [XmlElement(ElementName = "Married")]
+            public bool married;
+
             [XmlElement(ElementName = "Friendship")]
             public int friendship;
 
@@ -488,22 +491,7 @@ namespace RiverHollow.Game_Managers
 
             foreach (NPC n in CharacterManager.DiNPC.Values)
             {
-                NPCData npcData = new NPCData()
-                {
-                    npcID = n.ID,
-                    introduced = n.Introduced,
-                    friendship = n.Friendship,
-                    collection = new List<CollectionData> ()
-                };
-                foreach (KeyValuePair<int, bool> kvp in n.Collection){
-                    CollectionData c = new CollectionData
-                    {
-                        itemID = kvp.Key,
-                        given = kvp.Value
-                    };
-                    npcData.collection.Add(c);
-                }
-                data.NPCData.Add(npcData);
+                data.NPCData.Add(n.SaveData());
             }
 
             // Convert the object to XML data and put it in the stream.
@@ -606,17 +594,7 @@ namespace RiverHollow.Game_Managers
             foreach (NPCData n in data.NPCData)
             {
                 NPC target = CharacterManager.DiNPC[n.npcID];
-                target.Introduced = n.introduced;
-                target.Friendship = n.friendship;
-                int index = 1;
-                foreach(CollectionData c in n.collection)
-                {
-                    if (c.given)
-                    {
-                        target.Collection[c.itemID] = c.given;
-                        MapManager.Maps["HouseNPC" + n.npcID].AddCollectionItem(c.itemID, n.npcID, index++);
-                    }
-                }
+                target.LoadData(n);
             }
         }
         #endregion

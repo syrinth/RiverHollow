@@ -26,7 +26,6 @@ namespace RiverHollow.Characters
 
         public Rectangle CollisionBox { get => new Rectangle((int)Position.X + (Width/4), (int)Position.Y, Width/2, TileSize); }
 
-
         public int Speed = 2;
         #endregion
 
@@ -190,7 +189,7 @@ namespace RiverHollow.Characters
 
             _cHairColor = Color.Red;
 
-            Speed = 2;
+            Speed = 10;
         }
 
         public override void Update(GameTime theGameTime)
