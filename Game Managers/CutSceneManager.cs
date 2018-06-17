@@ -204,7 +204,7 @@ namespace RiverHollow.Game_Managers
                 }
                 if (tags[0].Equals("player"))
                 {
-                    PlayerManager.World.Position = Util.Normalize(_cutsceneMap.GetCharacterSpawn(tags[1]));
+                    PlayerManager.World.Position = Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(tags[1]));
                 }
                 else if (tags[0].Equals("actors"))
                 {
@@ -215,7 +215,7 @@ namespace RiverHollow.Game_Managers
                         NPC n = new NPC(CharacterManager.DiNPC[int.Parse(friendData[0])])
                         {
                             CurrentMapName = _cutsceneMap.Name,
-                            Position = Util.Normalize(_cutsceneMap.GetCharacterSpawn(friendData[1]))
+                            Position = Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(friendData[1]))
                         };
                         _cutsceneMap.AddCharacter(n);
                         _liUsedNPCs.Add(n);

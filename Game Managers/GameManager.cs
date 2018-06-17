@@ -561,7 +561,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager.World.SetHairColor(data.hairColor);
             PlayerManager.World.SetHairType(data.hairIndex);
             PlayerManager.SetClass(data.currentClass);
-            PlayerManager.World.Position = Util.Normalize(MapManager.Maps[PlayerManager.CurrentMap].GetCharacterSpawn("PlayerSpawn"));
+            PlayerManager.World.Position = Util.SnapToGrid(MapManager.Maps[PlayerManager.CurrentMap].GetCharacterSpawn("PlayerSpawn"));
             PlayerManager.World.DetermineFacing(new Vector2(0, 1));
             GameCalendar.LoadCalendar(data.Calendar); 
             foreach (BuildingData b in data.Buildings)

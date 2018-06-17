@@ -101,7 +101,7 @@ namespace RiverHollow.Game_Managers
                 _currentMap = _tileMaps[newMapName];
 
                 PlayerManager.CurrentMap = _currentMap.Name;
-                PlayerManager.World.Position = Util.Normalize(new Vector2(rectEntrance.Left, rectEntrance.Top));
+                PlayerManager.World.Position = Util.SnapToGrid(new Vector2(rectEntrance.Left, rectEntrance.Top));
                 CutsceneManager.CheckForTriggedCutscene();
             }
             else
@@ -180,11 +180,11 @@ namespace RiverHollow.Game_Managers
             {
                 for (int i = 0; i < 99; i++)
                 {
-                    //_tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
+                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
                 }
                 for (int i = 0; i < 99; i++)
                 {
-                    //_tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
+                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
                 }
             }
 
@@ -192,13 +192,13 @@ namespace RiverHollow.Game_Managers
             //mob.CurrentMapName = "mapManorGrounds";
             //_tileMaps[@"mapManorGrounds"].AddMob(mob);
 
-            for (int i = 0; i < 20; i++)
-            {
-                Vector2 vect = new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 2) * TileSize);
-                Mob mob = CharacterManager.GetMobByIndex(2, vect);
-                mob.CurrentMapName = _tileMaps[@"mapManorGrounds"].Name.Replace(@"Maps\", "");
-                _tileMaps[@"mapManorGrounds"].AddMob(mob);
-            }
+            //for (int i = 0; i < 20; i++)
+            //{
+            //    Vector2 vect = new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 2) * TileSize);
+            //    Mob mob = CharacterManager.GetMobByIndex(2, vect);
+            //    mob.CurrentMapName = _tileMaps[@"mapManorGrounds"].Name.Replace(@"Maps\", "");
+            //    _tileMaps[@"mapManorGrounds"].AddMob(mob);
+            //}
 
 
 

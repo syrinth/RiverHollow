@@ -394,7 +394,7 @@ namespace RiverHollow.WorldObjects
         {
             set
             {
-                Vector2 norm = Util.Normalize(value);
+                Vector2 norm = Util.SnapToGrid(value);
                 _vMapPosition = norm;
                 HeldItemPos = norm;
             }

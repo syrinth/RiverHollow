@@ -33,7 +33,7 @@ namespace RiverHollow.Misc
             direction.Y = (deltaY < speed) ? newY * deltaY : newY * dir.Y;
         }
 
-        public static Vector2 Normalize(Vector2 p)
+        public static Vector2 SnapToGrid(Vector2 p)
         {
             Vector2 newVec = Vector2.Zero;
             newVec.X = ((int)(p.X / TileSize)) * TileSize;
@@ -41,14 +41,39 @@ namespace RiverHollow.Misc
 
             return newVec;
         }
-
-        public static Point Normalize(Point p)
+        public static Point SnapToGrid(Point p)
         {
             Point newVec = Point.Zero;
             newVec.X = ((int)(p.X / TileSize)) * TileSize;
             newVec.Y = ((int)(p.Y / TileSize)) * TileSize;
 
             return newVec;
+        }
+        public static Vector2 MoveUpTo(Vector2 currPos, Vector2 moveTo, float speed)
+        {
+            Vector2 rv = Vector2.Zero;
+
+            rv.X = EvalAxisChange(currPos.X, moveTo.X, speed);
+            rv.Y = EvalAxisChange(currPos.Y, moveTo.Y, speed);
+
+            return rv;
+        }
+
+        private static float EvalAxisChange(float currAxis, float moveToAxis, float speed)
+        {
+            float rv = 0;
+            if (currAxis > moveToAxis)
+            {
+                if (currAxis - speed <= moveToAxis) { rv = -(currAxis - moveToAxis); }
+                else { rv = -speed; }
+            }
+            else if (currAxis < moveToAxis)
+            {
+                if (currAxis + speed >= moveToAxis) { rv = moveToAxis - currAxis; }
+                else { rv = speed; }
+            }
+
+            return rv;
         }
 
         public static void ParseContentFile(ref string filePath, ref string name)

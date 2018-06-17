@@ -241,11 +241,11 @@ namespace RiverHollow.Tile_Engine
                 }
                 else if (obj.Name.Equals("Rock"))
                 {
-                    PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, Util.Normalize(obj.Position)));
+                    PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, Util.SnapToGrid(obj.Position)));
                 }
                 else if (obj.Name.Equals("Tree"))
                 {
-                    PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, Util.Normalize(obj.Position)));
+                    PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, Util.SnapToGrid(obj.Position)));
                 }
                 else if (obj.Name.Equals("Mob"))
                 {
@@ -268,7 +268,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     Spirit s = new Spirit(obj.Properties["Name"], obj.Properties["Type"], obj.Properties["Condition"], obj.Properties["Text"])
                     {
-                        Position = Util.Normalize(obj.Position),
+                        Position = Util.SnapToGrid(obj.Position),
                         CurrentMapName = _name
                     };
                     _liCharacters.Add(s);
@@ -452,8 +452,9 @@ namespace RiverHollow.Tile_Engine
                     else if (PlayerManager.PlayerInRange(i.CollisionBox.Center, 80))
                     {
                         float speed = 3;
-                        Vector2 direction = new Vector2((player.Position.X < i.Position.X) ? -speed : speed, (player.Position.Y < i.Position.Y) ? -speed : speed);
-                        i.Position += direction;
+                        Vector2 direction = Util.MoveUpTo(i.Position, player.CollisionBox.Location.ToVector2(), speed);
+                        direction.Normalize();
+                        i.Position += (direction * speed);
                     }
                 }
             }
@@ -1106,12 +1107,12 @@ namespace RiverHollow.Tile_Engine
                         }
                         else if (mapObject.Name.Contains("BuildingChest"))
                         {
-                            b.BuildingChest.MapPosition = Util.Normalize(mapObject.Position);
+                            b.BuildingChest.MapPosition = Util.SnapToGrid(mapObject.Position);
                             PlacePlayerObject(b.BuildingChest);
                         }
                         else if (mapObject.Name.Contains("Pantry"))
                         {
-                            b.Pantry.MapPosition = Util.Normalize(mapObject.Position);
+                            b.Pantry.MapPosition = Util.SnapToGrid(mapObject.Position);
                             PlacePlayerObject(b.Pantry);
                         }
                     }

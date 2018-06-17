@@ -85,7 +85,7 @@ namespace RiverHollow.Characters
             _portraitRect = new Rectangle(0, int.Parse(stringData[i++]) * 192, PortraitWidth, PortraitHeight);
             CurrentMapName = stringData[i++];
             _homeMap = CurrentMapName;
-            Position = Util.Normalize(MapManager.Maps[CurrentMapName].GetCharacterSpawn("NPC" + _index));
+            Position = Util.SnapToGrid(MapManager.Maps[CurrentMapName].GetCharacterSpawn("NPC" + _index));
 
             string[] vectorSplit = stringData[i++].Split(' ');
             foreach (string s in vectorSplit) {
@@ -159,7 +159,7 @@ namespace RiverHollow.Characters
         public void RollOver()
         {
             GiftGiven = false;
-            Position = Util.Normalize(MapManager.Maps[_homeMap].GetCharacterSpawn("NPC" + _index));
+            Position = Util.SnapToGrid(MapManager.Maps[_homeMap].GetCharacterSpawn("NPC" + _index));
             CalculatePathing();
         }
         public void CalculatePathing()
