@@ -128,6 +128,11 @@ namespace RiverHollow.WorldObjects
             _id = id;
             _vMapPosition = pos;
 
+            _wallObject = false;
+            Tiles = new List<RHTile>();
+
+            int x = 0;
+            int y = 0;
             _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
 
             foreach (string s in stringData)
@@ -136,9 +141,8 @@ namespace RiverHollow.WorldObjects
                 if (tagType[0].Equals("Image"))
                 {
                     string[] texIndices = tagType[1].Split('-');
-                    int x = int.Parse(texIndices[0]);
-                    int y = int.Parse(texIndices[1]);
-                    _rSource = new Rectangle(0 + TileSize * x, 0 + TileSize * y, _width, _height);
+                    x = int.Parse(texIndices[0]);
+                    y = int.Parse(texIndices[1]);
                 }
                 else if (tagType[0].Equals("Width"))
                 {
@@ -166,8 +170,7 @@ namespace RiverHollow.WorldObjects
                 }
             }
 
-            _wallObject = false;
-            Tiles = new List<RHTile>();
+            _rSource = new Rectangle(0 + TileSize * x, 0 + TileSize * y, _width, _height);
         }
 
         public Destructible(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height, bool breakIt, bool chopIt, int lvl, int hp) : base(id, pos, sourceRectangle, tex, width, height)

@@ -567,7 +567,9 @@ namespace RiverHollow.Tile_Engine
         public bool CheckForCollisions(WorldCharacter c, Rectangle testX, Rectangle testY, ref Vector2 dir)
         {
             bool rv = true;
-            if (CheckForCollision(c, testX) || CheckForCollision(c, testY)) { return false; }
+            if (CheckForCollision(c, testX) || CheckForCollision(c, testY)) {
+                return false;
+            }
             if (MapChange(c, testX) || MapChange(c, testY)) { return false; }
 
             int column = ((dir.X < 0) ? testX.Left : testX.Right) / TileSize;
@@ -641,6 +643,9 @@ namespace RiverHollow.Tile_Engine
 
                             dir.X = dir.X < 0 ? (cellRect.Right - r.Left) : (cellRect.Left - r.Right);
                             movingChar = r;
+
+                            //Logic to nudge player towards an edge
+                            dir.Y += CheckToNudge(movingChar.Center.Y, cellRect.Center.Y, varCol, varRow, "Row");
                         }
                         if (column == -1)
                         {
@@ -649,6 +654,9 @@ namespace RiverHollow.Tile_Engine
 
                             dir.Y = dir.Y < 0 ? (cellRect.Bottom - r.Top) : (cellRect.Top - r.Bottom);
                             movingChar = r;
+
+                            //Logic to nudge player towards an edge
+                            dir.X += CheckToNudge(movingChar.Center.X, cellRect.Center.X, varCol, varRow, "Col");
                         }
                     }
                 }
@@ -657,6 +665,28 @@ namespace RiverHollow.Tile_Engine
             {
 
             }
+        }
+
+        public float CheckToNudge(float movingCenter, float objCenter, int varCol, int varRow, string v)
+        {
+            float rv = 0;
+            float centerDelta = movingCenter - objCenter;
+            if (varCol == -1 && varRow == -1) {
+                if (centerDelta > 0) { rv = 1; }
+                else if (centerDelta < 0) { rv = -1; }
+            }
+            else if (centerDelta > 0)
+            {
+                RHTile testTile = _tileArray[varCol + (v.Equals("Col") ? 1 : 0), varRow + (v.Equals("Row") ? 1 : 0)];
+                if (testTile != null && testTile.Passable()) { rv = 1; }
+            }
+            else if (centerDelta < 0)
+            {
+                RHTile testTile = _tileArray[varCol - (v.Equals("Col") ? 1 : 0), varRow + (v.Equals("Row") ? 1 : 0)];
+                if (testTile != null && testTile.Passable()) { rv = -1; }
+            }
+
+            return rv;
         }
 
         public int GetMinColumn(Rectangle movingChar)

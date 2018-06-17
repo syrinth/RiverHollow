@@ -111,7 +111,6 @@ namespace RiverHollow.Game_Managers
 
         public static void UpdateWorld(GameTime gameTime)
         {
-            Vector2 moveVector = Vector2.Zero;
             Vector2 moveDir = Vector2.Zero;
 
             if (UseTool != null)
@@ -146,23 +145,19 @@ namespace RiverHollow.Game_Managers
                 if (ks.IsKeyDown(Keys.W))
                 {
                     moveDir += new Vector2(0, -World.Speed);
-                    moveVector += new Vector2(0, -World.Speed);
                 }
                 else if (ks.IsKeyDown(Keys.S))
                 {
                     moveDir += new Vector2(0, World.Speed);
-                    moveVector += new Vector2(0, World.Speed);
                 }
 
                 if (ks.IsKeyDown(Keys.A))
                 {
                     moveDir += new Vector2(-World.Speed, 0);
-                    moveVector += new Vector2(-World.Speed, 0);
                 }
                 else if (ks.IsKeyDown(Keys.D))
                 {
                     moveDir += new Vector2(World.Speed, 0);
-                    moveVector += new Vector2(World.Speed, 0);
                 }
 
                 World.DetermineFacing(moveDir);
@@ -174,6 +169,9 @@ namespace RiverHollow.Game_Managers
 
                     if(MapManager.CurrentMap.CheckForCollisions(World, testRectX, testRectY, ref moveDir))
                     {
+                        //Might be technically correct but FEELS wrong
+                        //moveDir.Normalize();
+                        //moveDir *= World.Speed;
                         World.MoveBy((int)moveDir.X, (int)moveDir.Y);
                     }
                 }                
