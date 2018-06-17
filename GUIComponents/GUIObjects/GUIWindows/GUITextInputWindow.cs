@@ -19,7 +19,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         GUIText _gText;
         GUIMarker _gMarker;
 
-        bool _bIsDone;
         int _iCurr;
 
 
@@ -28,7 +27,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             GameManager.ReadInput();
             GameManager.Pause();
 
-            _bIsDone = false;
             _gMarker = new GUIMarker();
             _iCurr = 0;
         }
@@ -125,7 +123,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                             GameManager.DontReadInput();
                         }
 
-                        _bIsDone = true;
                     }
                     else if(k >= Keys.A && k <= Keys.Z || k == Keys.Delete || k == Keys.Back || k == Keys.Left || k == Keys.Right || k == Keys.Delete)
                     {
@@ -196,11 +193,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public string GetText()
         {
             return _gText.GetText();
-        }
-
-        public bool Enter()
-        {
-            return _bIsDone;
         }
 
         public void HideCursor()

@@ -42,6 +42,8 @@ namespace RiverHollow.GUIComponents.Screens
 
         public NewGameScreen()
         {
+            _selection = SelectionEnum.Name;
+
             _iHairColorIndex = 0;
             int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIWindow.BrownWin.Edge;
 
@@ -100,8 +102,6 @@ namespace RiverHollow.GUIComponents.Screens
             Controls.Add(_gTextHairType);
             Controls.Add(_giNextHairType);
             Controls.Add(_gCheck);
-
-            _selection = SelectionEnum.None;
         }
 
         public override void Update(GameTime gameTime)
@@ -114,11 +114,6 @@ namespace RiverHollow.GUIComponents.Screens
             foreach (GUIObject o in _liClasses)
             {
                 ((ClassSelectionBox)o).Update(gameTime);
-            }
-
-            if (InputManager.CheckPressedKey(Keys.Enter) && _nameWindow.Enter() && _nameWindow.GetText().Length > 0)
-            {
-                BtnNewGame();
             }
         }
 
@@ -145,8 +140,6 @@ namespace RiverHollow.GUIComponents.Screens
                 _playerDisplayBox.SyncHair(_iHairTypeIndex);
             }
 
-            _gCheck.ProcessLeftButtonClick(mouse);
-
             if (_nameWindow.Contains(mouse)) {
                 _selection = SelectionEnum.Name;
                 _manorWindow.HideCursor();
@@ -155,7 +148,11 @@ namespace RiverHollow.GUIComponents.Screens
                 _selection = SelectionEnum.Manor;
                 _nameWindow.HideCursor();
             }
-            else { _selection = SelectionEnum.None;}
+            else {
+                _selection = SelectionEnum.None;
+                _nameWindow.HideCursor();
+                _manorWindow.HideCursor();
+            }
 
             foreach(GUIObject o in _liClasses)
             {
