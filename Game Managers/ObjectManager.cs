@@ -91,6 +91,8 @@ namespace RiverHollow.Game_Managers
                         return new CombatItem(id, _itemTags, num);
                     case "Class":
                         return new ClassItem(id, _itemTags, num);
+                    case "Marriage":
+                        return new MarriageItem(id, _itemTags);
                 }
             }
             return null;

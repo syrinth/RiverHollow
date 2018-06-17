@@ -13,7 +13,7 @@ namespace RiverHollow.WorldObjects
 {
     public class Item
     {
-        public enum ItemEnum { Resource, Class, Equipment, Tool, Container, Food, Map, Combat, StaticItem  };
+        public enum ItemEnum { Resource, Class, Equipment, Tool, Container, Food, Map, Combat, StaticItem, Marriage  };
 
         #region properties
         protected ItemEnum _itemType;
@@ -50,11 +50,11 @@ namespace RiverHollow.WorldObjects
         protected int _columnTextureSize = TileSize;
         protected int _rowTextureSize = TileSize;
         private Parabola _movement;
-        protected bool _doesItStack;
-        public bool DoesItStack => _doesItStack;
+        protected bool _bStacks;
+        public bool DoesItStack => _bStacks;
 
-        protected int _num;
-        public int Number { get => _num; set => _num = value; }
+        protected int _iNum;
+        public int Number { get => _iNum; set => _iNum = value; }
 
         protected int _sellPrice;
         public int SellPrice => _sellPrice;
@@ -65,13 +65,13 @@ namespace RiverHollow.WorldObjects
         {
             ImportBasics(stringData, id, num);
 
-            _doesItStack = true;
+            _bStacks = true;
             _texture = GameContentManager.GetTexture(@"Textures\items");
         }
 
         protected int ImportBasics(string[] stringData, int id, int num)
         {
-            _num = num;
+            _iNum = num;
 
             _itemID = id;
             GameContentManager.GetIemText(_itemID, ref _name, ref _description);
@@ -115,8 +115,8 @@ namespace RiverHollow.WorldObjects
             _name = item.Name;
             _texture = item.Texture;
             _description = item._description;
-            _num = item.Number;
-            _doesItStack = item.DoesItStack;
+            _iNum = item.Number;
+            _bStacks = item.DoesItStack;
         }
 
         public void Update()
@@ -197,11 +197,11 @@ namespace RiverHollow.WorldObjects
         public bool Remove(int x)
         {
             bool rv = false;
-            if (x <= _num)
+            if (x <= _iNum)
             {
                 rv = true;
-                _num -= x;
-                if (_num == 0)
+                _iNum -= x;
+                if (_iNum == 0)
                 {
                     if(GraphicCursor.HeldItem == this) { GraphicCursor.DropItem(); }
                     InventoryManager.RemoveItemFromInventory(this);
@@ -248,6 +248,8 @@ namespace RiverHollow.WorldObjects
         public bool IsClassItem() { return _itemType == ItemEnum.Class; }
         public bool IsContainer() { return _itemType == ItemEnum.Container; }
         public bool IsStaticItem() { return _itemType == ItemEnum.StaticItem; }
+        public bool IsMarriage() { return _itemType == ItemEnum.Marriage; }
+        public bool IsMap() { return _itemType == ItemEnum.Map; }
 
         public ItemData SaveData()
         {
@@ -462,7 +464,7 @@ namespace RiverHollow.WorldObjects
                 }
             }
 
-            _doesItStack = true;
+            _bStacks = true;
             _texture = GameContentManager.GetTexture(@"Textures\items");
         }
 
@@ -498,7 +500,7 @@ namespace RiverHollow.WorldObjects
             int i = ImportBasics(stringData, id, num);
             _difficulty = RandNumber(4, 5, 0, 0);
 
-            _doesItStack = false;
+            _bStacks = false;
             _texture = GameContentManager.GetTexture(@"Textures\items");
         }
 
@@ -509,6 +511,18 @@ namespace RiverHollow.WorldObjects
             rv += "Difficulty: " + _difficulty;
 
             return rv;
+        }
+    }
+
+    public class MarriageItem : Item
+    {
+        public MarriageItem(int id, string[] stringData)
+        {
+            ImportBasics(stringData, id, 1);
+            _itemType = ItemEnum.Marriage;
+            _iNum = 1;
+            _bStacks = false;
+            _texture = GameContentManager.GetTexture(@"Textures\items");
         }
     }
 
@@ -554,7 +568,7 @@ namespace RiverHollow.WorldObjects
                 }
             }
 
-            _doesItStack = true;
+            _bStacks = true;
             _texture = GameContentManager.GetTexture(@"Textures\items");
         }
 
@@ -580,7 +594,7 @@ namespace RiverHollow.WorldObjects
         {
             int i = ImportBasics(stringData, id, num);
 
-            _doesItStack = false;
+            _bStacks = false;
             _texture = GameContentManager.GetTexture(@"Textures\items");
         }
 

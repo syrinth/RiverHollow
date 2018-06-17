@@ -39,6 +39,15 @@
       <Value>Hello, what can I do for you?.[Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Nothing]</Value>
     </Item>
     <Item>
+      <Key>MarriageYes</Key>
+      <Value>Yes I will marry you!</Value>
+    </Item>
+    <Item>
+      <Key>MarriageNo</Key>
+      <Value>Oh... I'm sorry but. No.</Value>
+    </Item>
+    <!--CutScenes-->
+    <Item>
       <Key>Cs0a</Key>
       <Value>No. No I don't. I've told you before, I need to train. I need to be as ready as I can.</Value>
     </Item>

@@ -117,31 +117,34 @@ namespace RiverHollow.Characters
         {
             base.Update(theGameTime);
 
-            if (_vMoveTo != Vector2.Zero)
+            if (!Married)   //Just for now
             {
-                HandleMove(_vMoveTo);
-            }
-            else if (_todaysPathing != null)
-            {
-                string currTime = GameCalendar.GetTime();
-                //_scheduleIndex keeps track of which pathing route we're currently following.
-                //Running late code to be implemented later
-                if (_scheduleIndex < _todaysPathing.Count && ((_todaysPathing[_scheduleIndex].Key == currTime)))// || RunningLate(movementList[_scheduleIndex].Key, currTime)))
+                if (_vMoveTo != Vector2.Zero)
                 {
-                    _currentPath = _todaysPathing[_scheduleIndex++].Value;
+                    HandleMove(_vMoveTo);
                 }
-
-                if (_currentPath.Count > 0)
+                else if (_todaysPathing != null)
                 {
-                    Vector2 targetPos = _currentPath[0].Position;
-                    if (Position == targetPos)
+                    string currTime = GameCalendar.GetTime();
+                    //_scheduleIndex keeps track of which pathing route we're currently following.
+                    //Running late code to be implemented later
+                    if (_scheduleIndex < _todaysPathing.Count && ((_todaysPathing[_scheduleIndex].Key == currTime)))// || RunningLate(movementList[_scheduleIndex].Key, currTime)))
                     {
-                        _currentPath.RemoveAt(0);
-                        DetermineFacing(Vector2.Zero);
+                        _currentPath = _todaysPathing[_scheduleIndex++].Value;
                     }
-                    else
+
+                    if (_currentPath.Count > 0)
                     {
-                        HandleMove(targetPos);
+                        Vector2 targetPos = _currentPath[0].Position;
+                        if (Position == targetPos)
+                        {
+                            _currentPath.RemoveAt(0);
+                            DetermineFacing(Vector2.Zero);
+                        }
+                        else
+                        {
+                            HandleMove(targetPos);
+                        }
                     }
                 }
             }
@@ -257,7 +260,6 @@ namespace RiverHollow.Characters
         public virtual void Talk()
         {
             string text = string.Empty;
-            Married = true;
             if (!Introduced) {
                 text = _dialogueDictionary["Introduction"];
                 Introduced = true;
@@ -438,10 +440,24 @@ namespace RiverHollow.Characters
             {
                 string text = string.Empty;
                 item.Remove(1);
-                if (item.ItemType == Item.ItemEnum.Map && NPCType == NPC.NPCTypeEnum.Ranger)
+                if (item.IsMap() && NPCType == NPC.NPCTypeEnum.Ranger)
                 {
                     text = GetDialogEntry("Adventure");
                     DungeonManager.LoadNewDungeon((AdventureMap)item);
+                }
+                else if (item.IsMarriage())
+                {
+                    if (Friendship > 200)
+                    {
+                        Married = true;
+                        text = GetDialogEntry("MarriageYes");
+                    }
+                    else
+                    {
+                        item.Number++;
+                        InventoryManager.AddItemToInventory(item);
+                        text = GetDialogEntry("MarriageNo");
+                    }
                 }
                 else
                 {
