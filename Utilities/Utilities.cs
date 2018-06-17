@@ -49,6 +49,13 @@ namespace RiverHollow.Misc
 
             return newVec;
         }
+
+        public static Vector2 GetGridCoords(Point p)
+        {
+            Vector2 rv = Vector2.Zero;
+            rv = new Vector2(p.X / TileSize, p.Y / TileSize);
+            return rv;
+        }
         public static Vector2 MoveUpTo(Vector2 currPos, Vector2 moveTo, float speed)
         {
             Vector2 rv = Vector2.Zero;

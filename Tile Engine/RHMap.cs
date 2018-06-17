@@ -567,31 +567,65 @@ namespace RiverHollow.Tile_Engine
         public bool CheckForCollisions(WorldCharacter c, Rectangle testX, Rectangle testY, ref Vector2 dir)
         {
             bool rv = true;
-            if (CheckForCollision(c, testX) || CheckForCollision(c, testY)) {
-                return false;
-            }
             if (MapChange(c, testX) || MapChange(c, testY)) { return false; }
+            else if(!CheckNPCForCollisionsAndNudges(c, testX, testY, ref dir))
+            {
+                int column = ((dir.X < 0) ? testX.Left : testX.Right) / TileSize;
+                int row = ((dir.Y < 0) ? testY.Top : testY.Bottom) / TileSize;
 
-            int column = ((dir.X < 0) ? testX.Left : testX.Right) / TileSize;
-            int row = ((dir.Y < 0) ? testY.Top : testY.Bottom) / TileSize;
-
-            //Do X-Axis comparison
-            if (dir.X != 0) { CollisionDetectionHelper(testX, ref dir, column, -1, GetMinRow(testX), GetMaxRow(testX)); }
-            //Do Y-Axis comparison
-            if (dir.Y != 0) { CollisionDetectionHelper(testY, ref dir, -1, row, GetMinColumn(testY), GetMaxColumn(testY)); }    
+                //Do X-Axis comparison
+                if (dir.X != 0) { CollisionDetectionHelper(testX, ref dir, column, -1, GetMinRow(testX), GetMaxRow(testX)); }
+                //Do Y-Axis comparison
+                if (dir.Y != 0) { CollisionDetectionHelper(testY, ref dir, -1, row, GetMinColumn(testY), GetMaxColumn(testY)); }
+            }
 
             return rv;
         }
 
-        public bool CheckForCollision(WorldCharacter mover, Rectangle movingChar)
+        public bool CheckNPCForCollisionsAndNudges(WorldCharacter c, Rectangle testX, Rectangle testY, ref Vector2 dir)
         {
-            bool rv = false;
+            bool xCol = false;
+            bool yCol = false;
+            Vector2 mod = Vector2.Zero;
+
+            mod.Y += CheckNPCCollHelper(c, testX, dir, ref yCol);
+            mod.X += CheckNPCCollHelper(c, testY, dir, ref xCol);
+
+            if (xCol) {
+                dir.X = mod.X;
+            }
+
+            if (yCol) {
+                dir.Y = mod.Y;
+            }
+
+            return xCol || yCol;
+        }
+        private float CheckNPCCollHelper(WorldCharacter mover, Rectangle movingChar, Vector2 dir, ref bool collision) {
+            float rv = 0;
             foreach (WorldCharacter c in _liCharacters)
             {
                 if (mover != c && !c.IsSpirit() && c.CollisionIntersects(movingChar))
                 {
-                    rv = true;
-                    break;
+                    collision = true;
+                    Vector2 collisionTileCoords = Util.GetGridCoords(c.CollisionBox.Location);
+                    if (dir.X != 0)
+                    {
+                        //rv = CheckToNudge(movingChar.Center.Y, c.CollisionBox.Center.Y, -1, -1, "Row");
+                        rv = CheckToNudge(movingChar.Center.Y, c.CollisionBox.Center.Y, collisionTileCoords.X, collisionTileCoords.Y, "Row");
+                        rv = CheckToNudge(movingChar.Center.Y, c.CollisionBox.Center.Y, collisionTileCoords.X, collisionTileCoords.Y, "Row");
+                    }
+                    if (dir.Y != 0)
+                    {
+                        rv = CheckToNudge(movingChar.Center.X, c.CollisionBox.Center.X, collisionTileCoords.X, collisionTileCoords.Y, "Col");
+                        rv = CheckToNudge(movingChar.Center.X, c.CollisionBox.Center.X, collisionTileCoords.X, collisionTileCoords.Y, "Col");
+                       // rv = CheckToNudge(movingChar.Center.X, c.CollisionBox.Center.X, -1, -1, "Col");
+                    }
+
+                    if (rv != 0)
+                    {
+                        break;
+                    }
                 }
             }
 
@@ -638,9 +672,11 @@ namespace RiverHollow.Tile_Engine
                     {
                         if (row == -1)
                         {
+                            //Walk the Rectangle back to get the actual
                             Rectangle r = movingChar;
                             r.X -= (int)dir.X;
 
+                            //Cancels out the X movement
                             dir.X = dir.X < 0 ? (cellRect.Right - r.Left) : (cellRect.Left - r.Right);
                             movingChar = r;
 
@@ -652,6 +688,7 @@ namespace RiverHollow.Tile_Engine
                             Rectangle r = movingChar;
                             r.Y -= (int)dir.Y;
 
+                            //Cancels out the Y movement
                             dir.Y = dir.Y < 0 ? (cellRect.Bottom - r.Top) : (cellRect.Top - r.Bottom);
                             movingChar = r;
 
@@ -665,6 +702,11 @@ namespace RiverHollow.Tile_Engine
             {
 
             }
+        }
+
+        public float CheckToNudge(float movingCenter, float objCenter, float varCol, float varRow, string v)
+        {
+            return CheckToNudge(movingCenter, objCenter, (int)varCol, (int)varRow, v);
         }
 
         public float CheckToNudge(float movingCenter, float objCenter, int varCol, int varRow, string v)
