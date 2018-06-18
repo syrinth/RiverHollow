@@ -26,7 +26,7 @@ namespace RiverHollow.Characters
 
         public Rectangle CollisionBox { get => new Rectangle((int)Position.X + (Width/4), (int)Position.Y, Width/2, TileSize); }
 
-        public int Speed = 2;
+        public int Speed = 5;
         #endregion
 
         public WorldCharacter() : base()

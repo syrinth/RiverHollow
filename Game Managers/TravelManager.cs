@@ -231,27 +231,15 @@ namespace RiverHollow.Game_Managers
                 {
                     double newCost = costSoFar[current] + GetMovementCost(next);
 
-                    if (!costSoFar.ContainsKey(next))
+                    if (!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
                     {
                         costSoFar[next] = newCost;
                         double priority = newCost + Heuristic(next, goalNode);
+
                         frontier.Enqueue(next, priority);
                         cameFrom[next] = current;
-
-
-                    }
-                    else if (newCost < costSoFar[next])
-                    {
-                        double old = costSoFar[next];
-                        costSoFar[next] = newCost;
-                        double priority = newCost + Heuristic(next, goalNode);
-                        frontier.Enqueue(next, priority);
-                        cameFrom[next] = current;
-
-
                     }
                 }
-
             }
             return returnList;
         }
@@ -281,7 +269,21 @@ namespace RiverHollow.Game_Managers
         }
         private static double Heuristic(RHTile a, RHTile b)
         {
-            return (Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y)) * (a.IsRoad ? 1 : slowCost);
+            int total = 0;
+            int distance = (Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y));
+
+            List<RHTile> futureTiles = a.GetWalkableNeighbours();
+            int wallBuffer = (futureTiles.Count < 4) ? 10 : 0;
+
+            if(wallBuffer != 0)
+            {
+                int j = 0;
+            }
+
+            int multiplier = (a.IsRoad ? 1 : slowCost);
+
+            total = (distance + wallBuffer) * multiplier;
+            return total;
         }
 
         //Returns how much it costs to enter the next square
