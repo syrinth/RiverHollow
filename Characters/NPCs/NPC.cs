@@ -11,17 +11,12 @@ using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.Game_Managers.GUIObjects;
 
 using static RiverHollow.Game_Managers.GameManager;
+using System.IO;
+
 namespace RiverHollow.Characters
 {
     public class NPC : WorldCharacter
     {
-        #region Pathfinding
-        const int slowCost = 100;
-        Dictionary<string, List<RHTile>> _dictMapPathing;
-        Dictionary<RHTile, RHTile> cameFrom = new Dictionary<RHTile, RHTile>();
-        Dictionary<RHTile, double> costSoFar = new Dictionary<RHTile, double>();
-        #endregion
-
         protected int _index;
         public int ID { get => _index; }
         protected string _homeMap;
@@ -89,7 +84,8 @@ namespace RiverHollow.Characters
             Position = Util.SnapToGrid(MapManager.Maps[CurrentMapName].GetCharacterSpawn("NPC" + _index));
 
             string[] vectorSplit = stringData[i++].Split(' ');
-            foreach (string s in vectorSplit) {
+            foreach (string s in vectorSplit)
+            {
                 _collection.Add(int.Parse(s), false);
             }
 
@@ -159,7 +155,7 @@ namespace RiverHollow.Characters
             Util.GetMoveSpeed(Position, target, Speed, ref direction);
             CheckMapForCollisionsAndMove(direction);
         }
-        
+
         public void RollOver()
         {
             GiftGiven = false;
@@ -208,16 +204,18 @@ namespace RiverHollow.Characters
                     {
                         List<RHTile> timePath;
 
+                        //If the map we're currently on has the target location, pathfind to it.
+                        //Otherwise,we need to pathfind to the map that does first.
                         if (MapManager.Maps[CurrentMapName].DictionaryCharacterLayer.ContainsKey(kvp.Value))
                         {
-                            timePath = FindPathToLocation(ref start, MapManager.Maps[CurrentMapName].DictionaryCharacterLayer[kvp.Value], CurrentMapName);
+                            timePath = TravelManager.FindPathToLocation(ref start, MapManager.Maps[CurrentMapName].DictionaryCharacterLayer[kvp.Value], CurrentMapName);
                         }
                         else
                         {
-                            timePath = FindPathToOtherMap(kvp.Value, ref mapName, ref start);
+                            timePath = TravelManager.FindPathToOtherMap(kvp.Value, ref mapName, ref start);
                         }
                         lTimetoTilePath.Add(new KeyValuePair<string, List<RHTile>>(kvp.Key, timePath));
-                        ClearPathingTracks();
+                        TravelManager.ClearPathingTracks();
                     }
 
                     _todaysPathing = lTimetoTilePath;
@@ -232,7 +230,7 @@ namespace RiverHollow.Characters
             {
                 _currentPath.RemoveAt(0);
             }
-        }       
+        }
 
         public bool RunningLate(string timeToGo, string currTime)
         {
@@ -260,7 +258,8 @@ namespace RiverHollow.Characters
         public virtual void Talk()
         {
             string text = string.Empty;
-            if (!Introduced) {
+            if (!Introduced)
+            {
                 text = _dialogueDictionary["Introduction"];
                 Introduced = true;
             }
@@ -281,7 +280,7 @@ namespace RiverHollow.Characters
 
             foreach (Quest q in PlayerManager.QuestLog)
             {
-                if(q.ReadyForHandIn && q.QuestGiver == this)
+                if (q.ReadyForHandIn && q.QuestGiver == this)
                 {
                     q.FinishQuest(ref text);
 
@@ -314,7 +313,7 @@ namespace RiverHollow.Characters
             {
                 _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\NPC8"));
             }
-            _bodySprite.AddAnimation("IdleDown", 0, 0, TileSize, TileSize*2, 1, 0.2f);
+            _bodySprite.AddAnimation("IdleDown", 0, 0, TileSize, TileSize * 2, 1, 0.2f);
             _bodySprite.AddAnimation("WalkDown", 0, 0, TileSize, TileSize * 2, 4, 0.2f);
             _bodySprite.AddAnimation("WalkUp", 0, 32, TileSize, TileSize * 2, 4, 0.2f);
             _bodySprite.AddAnimation("WalkRight", 0, 64, TileSize, TileSize * 2, 4, 0.2f);
@@ -340,7 +339,8 @@ namespace RiverHollow.Characters
             string[] textFromData = Util.FindTags(text);
             string[] options = textFromData[1].Split('|');
             List<string> liCommands = new List<string>();
-            for(int i = 0; i < options.Length; i++) { 
+            for (int i = 0; i < options.Length; i++)
+            {
                 bool removeIt = false;
                 string s = options[i];
 
@@ -536,186 +536,5 @@ namespace RiverHollow.Characters
                 Position = MapManager.Maps["mapManor"].GetCharacterSpawn("Spouse");
             }
         }
-
-        #region Pathfinding
-        public class PriorityQueue<T>
-        {
-            // I'm using an unsorted array for this example, but ideally this
-            // would be a binary heap. There's an open issue for adding a binary
-            // heap to the standard C# library: https://github.com/dotnet/corefx/issues/574
-            //
-            // Until then, find a binary heap class:
-            // * https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp
-            // * http://visualstudiomagazine.com/articles/2012/11/01/priority-queues-with-c.aspx
-            // * http://xfleury.github.io/graphsearch.html
-            // * http://stackoverflow.com/questions/102398/priority-queue-in-net
-
-            private List<Tuple<T, double>> elements = new List<Tuple<T, double>>();
-
-            public int Count
-            {
-                get { return elements.Count; }
-            }
-
-            public void Enqueue(T item, double priority)
-            {
-                elements.Add(Tuple.Create(item, priority));
-            }
-
-            public T Dequeue()
-            {
-                int bestIndex = 0;
-
-                for (int i = 0; i < elements.Count; i++)
-                {
-                    if (elements[i].Item2 < elements[bestIndex].Item2)
-                    {
-                        bestIndex = i;
-                    }
-                }
-
-                T bestItem = elements[bestIndex].Item1;
-                elements.RemoveAt(bestIndex);
-                return bestItem;
-            }
-        }
-
-        private List<RHTile> FindPathToOtherMap(string findKey, ref string mapName, ref Vector2 newStart)
-        {
-            List<RHTile> _completeTilePath = new List<RHTile>();
-            _dictMapPathing = new Dictionary<string, List<RHTile>>();
-            Vector2 start = newStart;
-            Dictionary<string, string> mapCameFrom = new Dictionary<string, string>();
-            Dictionary<string, double> mapCostSoFar = new Dictionary<string, double>();
-
-            var frontier = new PriorityQueue<string>();
-            frontier.Enqueue(mapName, 0);
-
-            mapCameFrom[mapName] = mapName;
-            mapCostSoFar[mapName] = 0;
-            while (frontier.Count > 0)
-            {
-                var testMap = frontier.Dequeue();
-                string mapSplit = testMap.Split(':')[0];
-                string fromMap = mapCameFrom[testMap];
-                if (fromMap != testMap)
-                {
-                    start = MapManager.Maps[mapSplit].DictionaryEntrance[fromMap].Location.ToVector2();
-                }
-                if (MapManager.Maps[mapSplit].DictionaryCharacterLayer.ContainsKey(findKey))
-                {
-                    mapName = testMap;
-                    newStart = MapManager.Maps[mapSplit].DictionaryCharacterLayer[findKey];
-                    List<RHTile> pathToExit = FindPathToLocation(ref start, MapManager.Maps[mapSplit].DictionaryCharacterLayer[findKey], testMap);
-                    fromMap = mapCameFrom[testMap];
-                    List<List<RHTile>> _totalPath = new List<List<RHTile>>();
-                    _totalPath.Add(pathToExit);
-                    while (fromMap != testMap)
-                    {
-                        _totalPath.Add(_dictMapPathing[fromMap + ":" + testMap]);
-                        testMap = fromMap;
-                        fromMap = mapCameFrom[testMap];
-                    }
-                    _totalPath.Reverse();
-
-                    foreach (List<RHTile> l in _totalPath)
-                    {
-                        _completeTilePath.AddRange(l);
-                    }
-
-                    break;
-                }
-
-                foreach (KeyValuePair<Rectangle, string> exit in MapManager.Maps[mapSplit].DictionaryExit)
-                {
-                    List<RHTile> pathToExit = FindPathToLocation(ref start, exit.Key.Location.ToVector2(), testMap);
-                    if (pathToExit != null)
-                    {
-                        double newCost = mapCostSoFar[testMap] + pathToExit.Count;
-                        if (!mapCostSoFar.ContainsKey(exit.Value))
-                        {
-                            mapCostSoFar[exit.Value] = newCost + pathToExit.Count;
-                            frontier.Enqueue(exit.Value, newCost);
-                            string[] split = null;
-                            if (exit.Value.Contains(":")) {
-                                split = exit.Value.Split(':');
-                            }
-                            mapCameFrom[exit.Value] = (split == null) ? mapSplit : mapSplit + ":" + split[1];
-                            _dictMapPathing[testMap + ":" + exit.Value] = pathToExit; // This needd another key for the appropriate exit
-                        }
-                    }
-
-                    ClearPathingTracks();
-                }
-            }
-
-            return _completeTilePath;
-        }
-        private List<RHTile> FindPathToLocation(ref Vector2 start, Vector2 target, string mapName)
-        {
-            List<RHTile> returnList = null;
-            RHMap map = MapManager.Maps[mapName.Split(':')[0]];
-            RHTile startTile = map.RetrieveTile(start.ToPoint());
-            RHTile goalNode = map.RetrieveTile(target.ToPoint());
-            var frontier = new PriorityQueue<RHTile>();
-            frontier.Enqueue(startTile, 0);
-
-            cameFrom[startTile] = startTile;
-            costSoFar[startTile] = 0;
-
-            while(frontier.Count > 0)
-            {
-                var current = frontier.Dequeue();
-                if (current.Equals(goalNode))
-                {
-                    returnList = BackTrack(current);
-                    start = current.Position;
-                    break;
-                }
-
-                foreach (var next in current.GetWalkableNeighbours())
-                {
-                    double newCost = costSoFar[current] + GetMovementCost(next);
-
-                    if(!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
-                    {
-                        costSoFar[next] = newCost;
-                        double priority = newCost + Heuristic(next, goalNode);
-                        frontier.Enqueue(next, priority);
-                        cameFrom[next] = current;
-                    }
-                }
-            }
-            return returnList;
-        }
-        private List<RHTile> BackTrack(RHTile current)
-        {
-            List<RHTile> list = new List<RHTile>();
-            while (current != cameFrom[current])
-            {
-                list.Add(current);
-                current = cameFrom[current];
-            }
-
-            list.Reverse();
-
-            return list;
-        }
-        private double Heuristic(RHTile a, RHTile b)
-        {
-            return (Math.Abs(a.Position.X - b.Position.X) + Math.Abs(a.Position.Y - b.Position.Y)) * (a.IsRoad ? 1 : slowCost);
-        }
-       
-        //Returns how much it costs to enter the next square
-        private int GetMovementCost(RHTile target)
-        {
-            return target.IsRoad ? 1 : slowCost;
-        }
-        private void ClearPathingTracks()
-        {
-            cameFrom.Clear();
-            costSoFar.Clear();
-        }
     }
-    #endregion
 }

@@ -62,11 +62,13 @@ namespace RiverHollow
             ObjectManager.LoadContent(Content);
             GUIManager.LoadContent();
             MapManager.LoadContent(Content, GraphicsDevice);
+            TravelManager.Calculate();
             CharacterManager.LoadContent(Content);
             DropManager.LoadContent(Content);
             CutsceneManager.LoadContent(Content);
             GameManager.LoadQuests(Content);
 
+            
             
             var pp = GraphicsDevice.PresentationParameters;
             lightsTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);

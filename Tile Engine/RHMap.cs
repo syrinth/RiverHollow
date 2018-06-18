@@ -34,6 +34,8 @@ namespace RiverHollow.Tile_Engine
         protected WorkerBuilding _mapBuilding;
         public WorkerBuilding MapBuilding { get => _mapBuilding; }
 
+        public bool _bWorkerBuilding;
+        public bool WorkerBuilding => _bWorkerBuilding;
         public bool _bBuilding;
         public bool IsBuilding { get => _bBuilding; }
         public bool _bDungeon;
@@ -100,6 +102,7 @@ namespace RiverHollow.Tile_Engine
             _tileArray = map._tileArray;
 
             _bBuilding = _map.Properties.ContainsKey("Building");
+            _bWorkerBuilding = _map.Properties.ContainsKey("WorkerBuilding");
             _bDungeon = _map.Properties.ContainsKey("Dungeon");
             _bTown = _map.Properties.ContainsKey("Town");
             bool.TryParse(_map.Properties["Outside"], out _bOutside);
@@ -133,6 +136,7 @@ namespace RiverHollow.Tile_Engine
             }
             
             _bBuilding = _map.Properties.ContainsKey("Building");
+            _bWorkerBuilding = _map.Properties.ContainsKey("WorkerBuilding");
             _bDungeon = _map.Properties.ContainsKey("Dungeon");
             _bTown = _map.Properties.ContainsKey("Town");
             if (_map.Properties.ContainsKey("Outside"))
@@ -1788,6 +1792,7 @@ namespace RiverHollow.Tile_Engine
             foreach (TiledMapTileLayer l in _diProps.Keys)
             {
                 rv = ContainsProperty(l, property, out value);
+                if (rv) { break; }
             }
 
             return rv;

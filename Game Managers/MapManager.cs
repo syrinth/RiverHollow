@@ -111,7 +111,7 @@ namespace RiverHollow.Game_Managers
                 }
                 _tileMaps[currMap].RemoveCharacter(c);
                 _tileMaps[newMapName].AddCharacter(c);
-                c.NewMapPosition = new Vector2(rectEntrance.Left, rectEntrance.Top); //This needs to get updated when officially added to the new map
+                c.NewMapPosition = Util.SnapToGrid(new Vector2(rectEntrance.Left, rectEntrance.Top)); //This needs to get updated when officially added to the new map
             }
         }
 
