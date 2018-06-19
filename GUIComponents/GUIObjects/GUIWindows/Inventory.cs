@@ -157,16 +157,15 @@ namespace RiverHollow.Screens
                             GUIManager.AddTextSelection(string.Format(text, i.Name));
                         }
                     }
-                    else
+
+                    if (i != null)
                     {
-                        if (i != null)
-                        {
-                            i = TakeItem(mouse);
-                            if (_container != null) { InventoryManager.AddItemToInventory(i); }
-                            else { InventoryManager.AddItemToInventory(i, InventoryManager.PublicContainer); }
-                            rv = true;
-                        }
+                        GraphicCursor.GrabItem(TakeItem(mouse));
+                        /*if (_container != null) { InventoryManager.AddItemToInventory(i); }
+                        else {InventoryManager.AddItemToInventory(i, InventoryManager.PublicContainer); }*/
+                        rv = true;
                     }
+
                 }
             }
 

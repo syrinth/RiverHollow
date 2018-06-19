@@ -210,10 +210,6 @@ namespace RiverHollow.Game_Managers
             var frontier = new PriorityQueue<RHTile>();
             frontier.Enqueue(startTile, 0);
 
-            if (mapName.Equals("mapForest"))
-            {
-                int k = 9;
-            }
             cameFrom[startTile] = startTile;
             costSoFar[startTile] = 0;
             while (frontier.Count > 0)
@@ -274,11 +270,6 @@ namespace RiverHollow.Game_Managers
 
             List<RHTile> futureTiles = a.GetWalkableNeighbours();
             int wallBuffer = (futureTiles.Count < 4) ? 10 : 0;
-
-            if(wallBuffer != 0)
-            {
-                int j = 0;
-            }
 
             int multiplier = (a.IsRoad ? 1 : slowCost);
 

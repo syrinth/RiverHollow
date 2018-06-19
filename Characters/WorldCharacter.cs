@@ -5,6 +5,8 @@ using System;
 using RiverHollow.SpriteAnimations;
 
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.WorldObjects;
+
 namespace RiverHollow.Characters
 {
     public class WorldCharacter : Character
@@ -176,11 +178,17 @@ namespace RiverHollow.Characters
             set
             {
                 _bodySprite.Position = new Vector2(value.X, value.Y - _bodySprite.Height + TileSize);
-                _spriteEyes.Position = new Vector2(value.X, value.Y - _spriteEyes.Height + TileSize);
-                _spriteArms.Position = new Vector2(value.X, value.Y - _spriteArms.Height + TileSize);
-                _spriteHair.Position = new Vector2(value.X, value.Y - _spriteHair.Height + TileSize);
+                _spriteEyes.Position = _bodySprite.Position;
+                _spriteArms.Position = _bodySprite.Position;
+                _spriteHair.Position = _bodySprite.Position;
+
+                if (Shirt != null) { Shirt.Position = _bodySprite.Position; }
+                if (Hat != null) { Hat.Position = _bodySprite.Position; }
             }
         }
+
+        public Clothes Shirt;
+        public Clothes Hat;
 
         public PlayerCharacter() :base()
         {
@@ -189,7 +197,7 @@ namespace RiverHollow.Characters
 
             _cHairColor = Color.Red;
 
-            Speed = 10;
+            Speed = 2;
         }
 
         public override void Update(GameTime theGameTime)
@@ -198,6 +206,9 @@ namespace RiverHollow.Characters
             _spriteEyes.Update(theGameTime);
             _spriteArms.Update(theGameTime);
             _spriteHair.Update(theGameTime);
+
+            if(Shirt != null) { Shirt.Sprite.Update(theGameTime); }
+            if (Hat != null) { Hat.Sprite.Update(theGameTime); }
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
@@ -206,6 +217,9 @@ namespace RiverHollow.Characters
             _spriteEyes.Draw(spriteBatch, useLayerDepth);
             _spriteArms.Draw(spriteBatch, useLayerDepth);
             _spriteHair.Draw(spriteBatch, useLayerDepth);
+
+            if (Shirt != null) { Shirt.Sprite.Draw(spriteBatch, useLayerDepth); }
+            if (Hat != null) { Hat.Sprite.Draw(spriteBatch, useLayerDepth); }
         }
 
         public override void LoadContent(string textureToLoad)
@@ -277,6 +291,8 @@ namespace RiverHollow.Characters
             _spriteEyes.MoveBy(x, y);
             _spriteArms.MoveBy(x, y);
             _spriteHair.MoveBy(x, y);
+            if (Shirt != null) { Shirt.Sprite.MoveBy(x, y); }
+            if (Hat != null) { Hat.Sprite.MoveBy(x, y); }
         }
 
         public override void PlayAnimation(string anim)
@@ -285,6 +301,9 @@ namespace RiverHollow.Characters
             _spriteEyes.SetCurrentAnimation(anim);
             _spriteArms.SetCurrentAnimation(anim);
             _spriteHair.SetCurrentAnimation(anim);
+
+            if (Shirt != null) { Shirt.Sprite.SetCurrentAnimation(anim); }
+            if (Hat != null) { Hat.Sprite.SetCurrentAnimation(anim); }
         }
 
         public void SetScale(int scale = 1)
@@ -293,6 +312,19 @@ namespace RiverHollow.Characters
             _spriteEyes.SetScale(scale);
             _spriteArms.SetScale(scale);
             _spriteHair.SetScale(scale);
+
+            if (Shirt != null) { Shirt.Sprite.SetScale(scale); }
+            if (Hat != null) { Hat.Sprite.SetScale(scale); }
+        }
+
+        public void SetClothes(Clothes c)
+        {
+            if (c.IsShirt()) { Shirt = c; }
+            else if(c.IsHat()) { Hat = c; }
+
+            c.Sprite.Position = _bodySprite.Position;
+            c.Sprite.CurrentAnimation = _bodySprite.CurrentAnimation;
+            c.Sprite.SetDepthMod(0.004f);
         }
     }
 }

@@ -25,6 +25,11 @@ namespace RiverHollow.SpriteAnimations
 
         // Amount of time that has passed since we last animated
         private float _fFrameTimer = 0.0f;
+        public float FrameTimer
+        {
+            get { return _fFrameTimer; }
+            set { _fFrameTimer = value; }
+        }
 
         // The number of times this animation has been played
         private int _iPlayCount = 0;

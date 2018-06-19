@@ -15,10 +15,9 @@ namespace RiverHollow.SpriteAnimations
 
         // Screen Position of the Sprite
         private Vector2 _Position = Vector2.Zero;
-        Vector2 _LastPosition = Vector2.Zero;
 
         // Dictionary holding all of the FrameAnimation objects
-        Dictionary<string, FrameAnimation> _frameanimations = new Dictionary<string, FrameAnimation>();
+        Dictionary<string, FrameAnimation> _frameAnimations = new Dictionary<string, FrameAnimation>();
 
         // Which FrameAnimation from the dictionary above is playing
         string _currAnimation = null;
@@ -43,11 +42,7 @@ namespace RiverHollow.SpriteAnimations
         public Vector2 Position
         {
             get { return _Position; }
-            set
-            {
-                _LastPosition = _Position;
-                _Position = value;
-            }
+            set {_Position = value; }
         }
 
         ///
@@ -56,11 +51,7 @@ namespace RiverHollow.SpriteAnimations
         public int X
         {
             get { return (int)_Position.X; }
-            set
-            {
-                _LastPosition.X = _Position.X;
-                _Position.X = value;
-            }
+            set { _Position.X = value; }
         }
 
         ///
@@ -69,11 +60,7 @@ namespace RiverHollow.SpriteAnimations
         public int Y
         {
             get { return (int)_Position.Y; }
-            set
-            {
-                _LastPosition.Y = _Position.Y;
-                _Position.Y = value;
-            }
+            set { _Position.Y = value; }
         }
 
         ///
@@ -135,7 +122,7 @@ namespace RiverHollow.SpriteAnimations
             get
             {
                 if (!string.IsNullOrEmpty(_currAnimation))
-                    return _frameanimations[_currAnimation];
+                    return _frameAnimations[_currAnimation];
                 else
                     return null;
             }
@@ -150,11 +137,12 @@ namespace RiverHollow.SpriteAnimations
             get { return _currAnimation; }
             set
             {
-                if (_frameanimations.ContainsKey(value))
+                if (_frameAnimations.ContainsKey(value))
                 {
                     _currAnimation = value;
-                    _frameanimations[_currAnimation].CurrentFrame = 0;
-                    _frameanimations[_currAnimation].PlayCount = 0;
+                    _frameAnimations[_currAnimation].FrameTimer = 0;
+                    _frameAnimations[_currAnimation].CurrentFrame = 0;
+                    _frameAnimations[_currAnimation].PlayCount = 0;
                 }
             }
         }
@@ -176,12 +164,12 @@ namespace RiverHollow.SpriteAnimations
 
         public void SetCurrentAnimation(string animate)
         {
-            this.CurrentAnimation = animate;
+            CurrentAnimation = animate;
         }
 
         public void AddAnimation(string Name, int X, int Y, int Width, int Height, int Frames, float FrameLength)
         {
-            _frameanimations.Add(Name, new FrameAnimation(X, Y, Width, Height, Frames, FrameLength));
+            _frameAnimations.Add(Name, new FrameAnimation(X, Y, Width, Height, Frames, FrameLength));
             _width = Width;
             _height = Height;
             v2Center = new Vector2(_width / 2, _height / 2);
@@ -201,7 +189,7 @@ namespace RiverHollow.SpriteAnimations
 
         public void AddAnimation(string Name, int X, int Y, int Width, int Height, int Frames, float FrameLength, string NextAnimation)
         {
-            _frameanimations.Add(Name, new FrameAnimation(X, Y, Width, Height, Frames, FrameLength, _bPingPong, NextAnimation));
+            _frameAnimations.Add(Name, new FrameAnimation(X, Y, Width, Height, Frames, FrameLength, _bPingPong, NextAnimation));
             _width = Width;
             _height = Height;
             v2Center = new Vector2(_width / 2, _height / 2);
@@ -209,9 +197,9 @@ namespace RiverHollow.SpriteAnimations
 
         public FrameAnimation GetAnimationByName(string Name)
         {
-            if (_frameanimations.ContainsKey(Name))
+            if (_frameAnimations.ContainsKey(Name))
             {
-                return _frameanimations[Name];
+                return _frameAnimations[Name];
             }
             else
             {
@@ -221,7 +209,6 @@ namespace RiverHollow.SpriteAnimations
 
         public void MoveBy(float x, float y)
         {
-            _LastPosition = _Position;
             _Position.X += x;
             _Position.Y += y; 
         }
@@ -235,12 +222,12 @@ namespace RiverHollow.SpriteAnimations
                 if (CurrentFrameAnimation == null)
                 {
                     // Make sure we have an animation associated with this sprite
-                    if (_frameanimations.Count > 0)
+                    if (_frameAnimations.Count > 0)
                     {
                         // Set the active animation to the first animation
                         // associated with this sprite
-                        string[] sKeys = new string[_frameanimations.Count];
-                        _frameanimations.Keys.CopyTo(sKeys, 0);
+                        string[] sKeys = new string[_frameAnimations.Count];
+                        _frameAnimations.Keys.CopyTo(sKeys, 0);
                         CurrentAnimation = sKeys[0];
                     }
                     else

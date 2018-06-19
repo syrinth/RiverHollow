@@ -294,6 +294,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     rv = ItemSwap(_weaponBox);
                 }
             }
+            else if (i.IsClothes())
+            {
+                PlayerManager.World.SetClothes((Clothes)i);
+            }
 
             return rv;
         }

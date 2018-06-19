@@ -13,7 +13,7 @@ namespace RiverHollow.WorldObjects
 {
     public class Item
     {
-        public enum ItemEnum { Resource, Class, Equipment, Tool, Container, Food, Map, Combat, StaticItem, Marriage  };
+        public enum ItemEnum { Resource, Class, Equipment, Tool, Container, Food, Map, Combat, StaticItem, Marriage, Clothes  };
 
         #region properties
         protected ItemEnum _itemType;
@@ -250,6 +250,7 @@ namespace RiverHollow.WorldObjects
         public bool IsStaticItem() { return _itemType == ItemEnum.StaticItem; }
         public bool IsMarriage() { return _itemType == ItemEnum.Marriage; }
         public bool IsMap() { return _itemType == ItemEnum.Map; }
+        public bool IsClothes() { return _itemType == ItemEnum.Clothes; }
 
         public ItemData SaveData()
         {
@@ -374,6 +375,54 @@ namespace RiverHollow.WorldObjects
 
             return rv;
         }
+    }
+
+    public class Clothes : Item
+    {
+        public enum ClothesEnum { None, Shirt, Pants, Hat};
+        ClothesEnum _clothesType;
+
+        private AnimatedSprite _mainSprite;
+        public AnimatedSprite Sprite => _mainSprite;
+
+        public Clothes(int id, string[] stringData)
+        {
+            int i = ImportBasics(stringData, id, 1);
+
+            _texture = GameContentManager.GetTexture(@"Textures\items");
+
+            _bStacks = false;
+            int row = 0;
+
+            for (; i < stringData.Length; i++)
+            {
+                string[] tagType = stringData[i].Split(':');
+                if (tagType[0].Equals("CType"))
+                {
+                    _clothesType = Util.ParseEnum<ClothesEnum>(tagType[1]);
+                }
+                else if (tagType[0].Equals("Row"))
+                {
+                    row = int.Parse(tagType[1]);
+                }
+            }
+
+            int startX = 0;
+            int startY = TileSize * row * 2;
+            _mainSprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\texClothes"), true);
+            _mainSprite.AddAnimation("WalkDown", TileSize, TileSize * 2, 3, 0.2f, startX, startY);
+            _mainSprite.AddAnimation("IdleDown", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize, startY);
+            _mainSprite.AddAnimation("WalkUp", TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 3, startY);
+            _mainSprite.AddAnimation("IdleUp", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 4, startY);
+            _mainSprite.AddAnimation("WalkLeft", TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 6, startY);
+            _mainSprite.AddAnimation("IdleLeft", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 7, startY);
+            _mainSprite.AddAnimation("WalkRight", TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 9, startY);
+            _mainSprite.AddAnimation("IdleRight", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 10, startY);
+        }
+
+        public bool IsShirt() { return _clothesType == ClothesEnum.Shirt; }
+        public bool IsPants() { return _clothesType == ClothesEnum.Pants; }
+        public bool IsHat() { return _clothesType == ClothesEnum.Hat; }
     }
 
     public class Tool : Item

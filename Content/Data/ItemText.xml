@@ -150,6 +150,19 @@
       <Key>302</Key>
       <Value>Mask of Marriage/A mask used by the people of River hollow to proess their love to one another.</Value>
     </Item>
+    <!--<400> Clothes-->
+    <Item>
+      <Key>400</Key>
+      <Value>Red Shirt/A Red Shirt</Value>
+    </Item>
+    <Item>
+      <Key>401</Key>
+      <Value>Blue Shirt/A Blue Shirt</Value>
+    </Item>
+    <Item>
+      <Key>402</Key>
+      <Value>Witch's Hat/A fashionable hat</Value>
+    </Item>
     <!--<1000> Class Change-->
     <Item>
       <Key>1000</Key>
