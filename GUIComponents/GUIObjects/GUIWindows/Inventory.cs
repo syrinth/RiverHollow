@@ -66,7 +66,7 @@ namespace RiverHollow.Screens
             {
                 for (int j = 0; j < _columns; j++)
                 {
-                    _displayList[i, j] = new GUIItemBox(displayBox.Location.ToVector2(), new Rectangle(288, 32, 32, 32), displayBox.Width, displayBox.Height, @"Textures\Dialog", null);
+                    _displayList[i, j] = new GUIItemBox(displayBox.Location.ToVector2(), new Rectangle(288, 32, 32, 32), displayBox.Width, displayBox.Height, i, j, @"Textures\Dialog", null);
                     Controls.Add(_displayList[i, j]);
                     displayBox.X += _iBoxSize + _iMargin;
                 }
@@ -161,8 +161,14 @@ namespace RiverHollow.Screens
                     if (i != null)
                     {
                         GraphicCursor.GrabItem(TakeItem(mouse));
-                        /*if (_container != null) { InventoryManager.AddItemToInventory(i); }
-                        else {InventoryManager.AddItemToInventory(i, InventoryManager.PublicContainer); }*/
+
+                        if (InventoryManager.PublicContainer != null)
+                        {
+                            if (_container != null) { InventoryManager.AddItemToInventory(i); }
+                            else { InventoryManager.AddItemToInventory(i, InventoryManager.PublicContainer); }
+
+                            GraphicCursor.DropItem();
+                        }
                         rv = true;
                     }
 
@@ -207,18 +213,16 @@ namespace RiverHollow.Screens
         private Item IsItemThere(Point mouse)
         {
             Item rv = null;
-            for (int i = 0; i < _rows; i++)
+
+            foreach(GUIItemBox box in _displayList)
             {
-                for (int j = 0; j < _columns; j++)
+                if(box.Contains(mouse) && box.Item != null)
                 {
-                    if (_displayList[i, j].Contains(mouse) && _displayList[i, j].Item != null)
-                    {
-                        rv = _displayList[i, j].Item;
-                        goto Exit;
-                    }
+                    rv = box.Item;
+                    break;
                 }
             }
-        Exit:
+
             return rv;
         }
 
@@ -226,53 +230,39 @@ namespace RiverHollow.Screens
         {
             Item rv = null;
 
-            for (int i = 0; i < _rows; i++)
+            foreach (GUIItemBox box in _displayList)
             {
-                for (int j = 0; j < _columns; j++)
+                if (box.Contains(mouse) && box.Item != null)
                 {
-                    if (_displayList[i, j].Contains(mouse) && _displayList[i, j].Item != null)
+                    Item chosenItem = box.Item;
+                    if (takeHalf && chosenItem.DoesItStack)
                     {
-                        if (_displayList[i, j].Item.IsEquipment())
+                        int num = chosenItem.Number;
+                        num = num / 2;
+                        chosenItem.Number = chosenItem.Number - num;
+                        rv = ObjectManager.GetItem(chosenItem.ItemID, num);
+                    }
+                    else
+                    {
+                        rv = chosenItem;
+                    }
+
+                    if (!takeHalf)
+                    {
+                        if (_container == null)
                         {
-                            rv = ((Equipment)(_displayList[i, j].Item));
-                        }
-                        else if (_displayList[i, j].Item.IsTool())
-                        {
-                            rv = ((Tool)(_displayList[i, j].Item));
+                            InventoryManager.RemoveItemFromInventoryLocation(box);
                         }
                         else
                         {
-                            Item chosenItem = _displayList[i, j].Item;
-                            if (takeHalf && chosenItem.DoesItStack)
-                            {
-                                int num = chosenItem.Number;
-                                num = num / 2;
-                                chosenItem.Number = chosenItem.Number - num;
-                                rv = ObjectManager.GetItem(chosenItem.ItemID, num);
-                            }
-                            else
-                            {
-                                rv = chosenItem;
-                            }
+                            InventoryManager.RemoveItemFromInventoryLocation(box, _container);
                         }
-
-                        if (!takeHalf)
-                        {
-                            if (_container == null)
-                            {
-                                InventoryManager.RemoveItemFromInventoryLocation(i, j);
-                            }
-                            else
-                            {
-                                InventoryManager.RemoveItemFromInventoryLocation(i, j, _container);
-                            }
-                        }
-                        goto Exit;
                     }
+
+                    break;
                 }
             }
 
-Exit:
             return rv;
         }
 

@@ -9,6 +9,7 @@ using static RiverHollow.WorldObjects.Equipment;
 using static RiverHollow.Game_Managers.ObjectManager;
 using System.Collections.Generic;
 using System;
+using static RiverHollow.WorldObjects.Clothes;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
@@ -25,13 +26,27 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         bool _bCrafting;
 
-        public EquipmentEnum ItemType;
+        int _iCol;
+        public int Col => _iCol;
+        int _iRow;
+        public int Row => _iRow;
 
-        public GUIItemBox(Vector2 position, Rectangle sourceRect, int width, int height, string texture, Item item, EquipmentEnum e = EquipmentEnum.None, bool crafting = false) : base(position, sourceRect, width, height, texture)
+        public EquipmentEnum EquipType;
+        public ClothesEnum ClothesType;
+
+        public GUIItemBox(Vector2 position, Rectangle sourceRect, int width, int height, int row, int col, string texture, Item item, EquipmentEnum e = EquipmentEnum.None, ClothesEnum c = ClothesEnum.None, bool crafting = false) : base(position, sourceRect, width, height, texture)
         {
             _bCrafting = crafting;
             SetItem(item);
-            ItemType = e;
+            EquipType = e;
+            ClothesType = c;
+
+            _iCol = col;
+            _iRow = row;
+        }
+
+        public GUIItemBox(Vector2 position, Rectangle sourceRect, int width, int height, string texture, Item item, EquipmentEnum e = EquipmentEnum.None, ClothesEnum c = ClothesEnum.None, bool crafting = false) : this(position, sourceRect, width, height, 0, 0, texture, item, e, c, crafting)
+        {
         }
 
         public override void Draw(SpriteBatch spriteBatch)

@@ -379,8 +379,9 @@ namespace RiverHollow.WorldObjects
 
     public class Clothes : Item
     {
-        public enum ClothesEnum { None, Shirt, Pants, Hat};
+        public enum ClothesEnum { None, Chest, Pants, Hat};
         ClothesEnum _clothesType;
+        public ClothesEnum ClothesType => _clothesType;
 
         private AnimatedSprite _mainSprite;
         public AnimatedSprite Sprite => _mainSprite;
@@ -420,7 +421,12 @@ namespace RiverHollow.WorldObjects
             _mainSprite.AddAnimation("IdleRight", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 10, startY);
         }
 
-        public bool IsShirt() { return _clothesType == ClothesEnum.Shirt; }
+        public void SetSpritePosition(Vector2 Position)
+        {
+            _mainSprite.Position = Position;
+        }
+
+        public bool IsShirt() { return _clothesType == ClothesEnum.Chest; }
         public bool IsPants() { return _clothesType == ClothesEnum.Pants; }
         public bool IsHat() { return _clothesType == ClothesEnum.Hat; }
     }

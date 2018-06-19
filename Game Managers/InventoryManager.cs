@@ -1,4 +1,5 @@
-﻿using RiverHollow.WorldObjects;
+﻿using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -193,8 +194,8 @@ Exit:
         {
             int maxRows = 0;
             int maxColumns = 0;
-            Item[,] inventory = null;
-            CheckOperation(c, ref maxRows, ref maxColumns, ref inventory);
+            Item[,] _inventory = null;
+            CheckOperation(c, ref maxRows, ref maxColumns, ref _inventory);
 
             if (!IncrementExistingItem(itemToAdd, c))
             {
@@ -202,11 +203,11 @@ Exit:
                 {
                     for (int j = 0; j < maxColumns; j++)
                     {
-                        if (inventory[i, j] == null)
+                        if (_inventory[i, j] == null)
                         {
-                            inventory[i, j] = itemToAdd;
+                            _inventory[i, j] = itemToAdd;
                             //Only perform this check if we are adding to the playerInventory
-                            if (inventory == _playerInventory)
+                            if (_inventory == _playerInventory)
                             {
                                 PlayerManager.AdvanceQuestProgress(itemToAdd);
                                 if(_playerInventory[i, j].ItemType == Item.ItemEnum.Tool)PlayerManager.CompareTools((Tool)_playerInventory[i, j]);
@@ -290,14 +291,16 @@ Exit:
             return rv;
         }
 
-        public static void RemoveItemFromInventoryLocation(int i, int j)
+        public static void RemoveItemFromInventoryLocation(GUIItemBox box)
         {
-            RemoveItemFromInventoryLocation(i, j, null);
+            RemoveItemFromInventoryLocation(box, null);
         }
 
-        public static void RemoveItemFromInventoryLocation(int i, int j, Container c)
+        public static void RemoveItemFromInventoryLocation(GUIItemBox box, Container c)
         {
             Item[,] inventory = null;
+            int i = box.Row;
+            int j = box.Col;
             CheckOperation(c, ref inventory);
             if (inventory == _playerInventory)
             {

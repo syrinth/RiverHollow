@@ -24,16 +24,22 @@ namespace RiverHollow.SpriteAnimations
 
         // Calculated center of the sprite
         Vector2 v2Center;
-        public Vector2 Center { get => new Vector2(_Position.X + _width/2, Position.Y + _height / 2); }
+        public Vector2 Center { get => new Vector2(_Position.X + _width / 2, Position.Y + _height / 2); }
 
         // Calculated width and height of the sprite
         int _width;
-        public int Width {  get => _width; }
+        public int Width { get => _width; }
         int _height;
         public int Height { get => _height; }
 
         bool _bPingPong;
         int _iScale = 1;
+
+        int _iFrameCutoff;          //Used for cutting off the top of hair
+        public int FrameCutoff {
+            get { return _iFrameCutoff; }
+            set { _iFrameCutoff = value; }
+        }
 
         ///
         /// Vector2 representing the position of the sprite's upper left
@@ -279,7 +285,16 @@ namespace RiverHollow.SpriteAnimations
         {
             if (_animating)
             {
-                spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, _color * visibility, 0, Vector2.Zero, SpriteEffects.None, layerDepth + _fLayerDepthMod);
+                int drawAtY = (int)this.Position.Y;
+                Rectangle drawThis = CurrentFrameAnimation.FrameRectangle;
+
+                //This is used for lopping off the top part of a sprite,specifically for hair for hats
+                if (FrameCutoff != 0)
+                {
+                    drawAtY += FrameCutoff;
+                    drawThis = new Rectangle(drawThis.X, FrameCutoff, drawThis.Width, drawThis.Height-FrameCutoff);
+                }
+                spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, drawAtY, this.Width, this.Height - FrameCutoff), drawThis, _color * visibility, 0, Vector2.Zero, SpriteEffects.None, layerDepth + _fLayerDepthMod);
             }
         }
 

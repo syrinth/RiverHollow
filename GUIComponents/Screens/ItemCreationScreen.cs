@@ -90,7 +90,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             List<GUIObject> boxes = new List<GUIObject>();
             foreach (int id in canMake)
             {
-                boxes.Add(new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), _iBoxSize, _iBoxSize, @"Textures\Dialog", GetItem(id), WorldObjects.Equipment.EquipmentEnum.None, true));
+                boxes.Add(new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), _iBoxSize, _iBoxSize, @"Textures\Dialog", GetItem(id), WorldObjects.Equipment.EquipmentEnum.None, WorldObjects.Clothes.ClothesEnum.None, true));
             }
 
             CreateSpacedGrid(ref boxes, _creationWindow.InnerTopLeft() + new Vector2(_iMargin, _iMargin), _creationWindow.MidWidth()-2*_iMargin, _columns);

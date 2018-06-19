@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using RiverHollow.GUIObjects;
 using RiverHollow.WorldObjects;
 using static RiverHollow.WorldObjects.Equipment;
+using static RiverHollow.WorldObjects.Clothes;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -82,6 +83,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
         Vector2 _size;
         GUIItemBox _weaponBox;
         GUIItemBox _armorBox;
+
+        GUIItemBox _chestBox;
+        GUIItemBox _hatBox;
+
         GUIButton _remove;
         public bool ClearThis;
 
@@ -94,6 +99,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _size = _font.MeasureString("XXXXXXXX");
             _weaponBox = new GUIItemBox(start + new Vector2(400, 0), new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Weapon, EquipmentEnum.Weapon);
             _armorBox = new GUIItemBox(start + new Vector2(450, 0), new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Armor, EquipmentEnum.Armor);
+
+            if (c == PlayerManager.Combat)
+            {
+                _hatBox = new GUIItemBox(start + new Vector2(400, 32), new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", PlayerManager.World.Hat, EquipmentEnum.None, ClothesEnum.Hat);
+                _chestBox = new GUIItemBox(start + new Vector2(450, 32), new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", PlayerManager.World.Chest, EquipmentEnum.None, ClothesEnum.Chest);
+            }
+
             if (_character != PlayerManager.Combat)
             {
                 _remove = new GUIButton(start + new Vector2(800, 64), new Rectangle(0, 128, 64, 32), 128, 64, "Remove", @"Textures\Dialog", true);
@@ -148,6 +160,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _weaponBox.Draw(spriteBatch);
                 _armorBox.Draw(spriteBatch);
 
+                _hatBox.Draw(spriteBatch);
+                _chestBox.Draw(spriteBatch);
+
                 _weaponBox.DrawDescription(spriteBatch);
                 _armorBox.DrawDescription(spriteBatch);
 
@@ -198,11 +213,19 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
                 else if (_weaponBox.Contains(mouse))
                 {
-                    rv = ItemSwap(_weaponBox);
+                    rv = EquipmentSwap(_weaponBox);
                 }
                 else if (_armorBox.Contains(mouse))
                 {
-                    rv = ItemSwap(_armorBox);
+                    rv = EquipmentSwap(_armorBox);
+                }
+                else if (_chestBox.Contains(mouse))
+                {
+                    rv = ClothesSwap(_chestBox);
+                }
+                else if (_hatBox.Contains(mouse))
+                {
+                    rv = ClothesSwap(_hatBox);
                 }
             }
             return rv;
@@ -226,7 +249,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return _window.Contains(mouse);
         }
 
-        private bool ItemSwap(GUIItemBox box)
+        private bool EquipmentSwap(GUIItemBox box)
         {
             bool rv = false;
             if (GraphicCursor.HeldItem != null)
@@ -239,12 +262,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             Equipment temp = (Equipment)GraphicCursor.HeldItem;
                             GraphicCursor.GrabItem(box.Item);
                             box.SetItem(temp);
-                            _character.Weapon = temp;
+                            AssignEquipment(box, temp);
+                            rv = true;
                         }
                         else
                         {
                             box.SetItem(GraphicCursor.HeldItem);
-                            _character.Weapon = (Equipment)GraphicCursor.HeldItem;
+                            AssignEquipment(box, (Equipment)GraphicCursor.HeldItem);
                             GraphicCursor.DropItem();
                             rv = true;
                         }
@@ -255,7 +279,50 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 rv = GraphicCursor.GrabItem(box.Item);
                 box.SetItem(null);
-                _character.Weapon = null;
+                AssignEquipment(box, null);
+            }
+
+            return rv;
+        }
+        private void AssignEquipment(GUIItemBox box, Equipment item)
+        {
+            if (box.EquipType == EquipmentEnum.Weapon) { _character.Weapon = item; }
+            else if (box.EquipType == EquipmentEnum.Armor) { _character.Armor = item; }
+        }
+
+        private bool ClothesSwap(GUIItemBox box)
+        {
+            bool rv = false;
+            if (GraphicCursor.HeldItem != null)
+            {
+                if (GraphicCursor.HeldItem.IsClothes())
+                {
+                    Clothes theClothes = (Clothes)GraphicCursor.HeldItem;
+                    if (theClothes.ClothesType == box.ClothesType)
+                    {
+                        if (box.Item != null)
+                        {
+                            Clothes temp = (Clothes)GraphicCursor.HeldItem;
+                            GraphicCursor.GrabItem(box.Item);
+                            box.SetItem(temp);
+                            PlayerManager.World.SetClothes(temp);
+                            rv = true;
+                        }
+                        else
+                        {
+                            box.SetItem(GraphicCursor.HeldItem);
+                            PlayerManager.World.SetClothes((Clothes)GraphicCursor.HeldItem);
+                            GraphicCursor.DropItem();
+                            rv = true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                rv = GraphicCursor.GrabItem(box.Item);
+                box.SetItem(null);
+                PlayerManager.World.RemoveClothes((Clothes)GraphicCursor.HeldItem);
             }
 
             return rv;
@@ -264,13 +331,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
         private bool CheckValid(Equipment equip, GUIItemBox box)
         {
             bool rv = false;
-            if (equip.EquipType == box.ItemType)
+            if (equip.EquipType == box.EquipType)
             {
-                if (box.ItemType == EquipmentEnum.Armor)
+                if (box.EquipType == EquipmentEnum.Armor)
                 {
                     rv = equip.ArmorType == _character.CharacterClass.ArmorType;
                 }
-                else if (box.ItemType == EquipmentEnum.Weapon)
+                else if (box.EquipType == EquipmentEnum.Weapon)
                 {
                     rv = equip.WeaponType == _character.CharacterClass.WeaponType;
                 }
@@ -287,16 +354,23 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 if (((Equipment)i).EquipType == EquipmentEnum.Armor)
                 {
-                    rv = ItemSwap(_armorBox);
+                    rv = EquipmentSwap(_armorBox);
                 }
                 else
                 {
-                    rv = ItemSwap(_weaponBox);
+                    rv = EquipmentSwap(_weaponBox);
                 }
             }
             else if (i.IsClothes())
             {
-                PlayerManager.World.SetClothes((Clothes)i);
+                if (((Clothes)i).ClothesType == ClothesEnum.Hat)
+                {
+                    rv = ClothesSwap(_hatBox);
+                }
+                else if (((Clothes)i).ClothesType == ClothesEnum.Chest)
+                {
+                    rv = ClothesSwap(_chestBox);
+                }
             }
 
             return rv;

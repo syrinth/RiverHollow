@@ -200,7 +200,7 @@ namespace RiverHollow.Misc
         public bool RemoveProgress(Item i)
         {
             bool rv = false;
-            if (_questItem != null && _questItem.ItemID == ((Item)i).ItemID)
+            if (i != null && _questItem != null && _questItem.ItemID == ((Item)i).ItemID)
             {
                 if (_iAccomplished > 0)
                 {
