@@ -10,8 +10,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
     class GUITextInputWindow : GUITextWindow
     {
-        
-        int _iMaxLength = 10;
         WorldAdventurer _w;
         WorkerBuilding _b;
         SideEnum _textLoc;
@@ -152,7 +150,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                                     _gText.Remove(_iCurr+1);
                                 }
                             }
-                            else if (_gText.Length < _iMaxLength)
+                            else if (_gText.Length < GameManager.MAX_NAME_LEN)
                             {
                                 _gText.Insert(input, _iCurr);
                                 IncrementMarker();
@@ -171,7 +169,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public void IncrementMarker()
         {
-            if (_iCurr < _iMaxLength)
+            if (_iCurr < GameManager.MAX_NAME_LEN)
             {
                 _iCurr++;
             }

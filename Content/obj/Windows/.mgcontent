@@ -40,7 +40,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC5.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Armory.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/knight.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/weapons master.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/TownUpgrades.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Buffs.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/Adventurers.xml</File>
@@ -104,5 +103,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/ItemText.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/GameText.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texClothes.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/champion.png</File>
   </SourceFiles>
 </SourceFileCollection>

@@ -195,7 +195,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _desc = new GUIText(q.Description);
             _desc.ParseText(3, this.MidWidth(), true);
             _desc.AnchorAndAlignToObject(_name, SideEnum.Bottom, SideEnum.Left, _name.CharHeight);
-            this.AddControl(_desc);
 
             _progress = new GUIText(q.GetProgressString());
             _progress.AnchorToInnerSide(this, SideEnum.BottomRight);

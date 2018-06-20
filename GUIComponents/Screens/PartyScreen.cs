@@ -7,6 +7,8 @@ using RiverHollow.GUIObjects;
 using RiverHollow.WorldObjects;
 using static RiverHollow.WorldObjects.Equipment;
 using static RiverHollow.WorldObjects.Clothes;
+using RiverHollow.GUIComponents.GUIObjects;
+using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -20,15 +22,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             _partyList = new List<CharacterBox>();
             _partyWindow = new GUIWindow(new Vector2(WIDTH, HEIGHT), GUIWindow.RedWin, WIDTH, HEIGHT);
-            int i = 0;
-            foreach(CombatAdventurer c in PlayerManager.GetParty())
+            AddControl(_partyWindow);
+            for(int i =0; i < PlayerManager.GetParty().Count; i++)
             {
-                _partyList.Add(new CharacterBox(c, _partyWindow, ref i));
-            }
-            Controls.Add(_partyWindow);
-            foreach (CharacterBox c in _partyList)
-            {
-                Controls.Add(c);
+                CharacterBox cb = new CharacterBox(PlayerManager.GetParty()[i], _partyWindow);
+                
+                if (i == 0) { cb.AnchorToInnerSide(_partyWindow, SideEnum.TopLeft); }
+                else { cb.AnchorAndAlignToObject(_partyList[i-1], SideEnum.Bottom, SideEnum.Left); }
+
+                _partyList.Add(cb);
             }
         }
 
@@ -79,89 +81,102 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIWindow _window;
         CombatAdventurer _character;
         SpriteFont _font;
-        int _drawnStat;
         Vector2 _size;
-        GUIItemBox _weaponBox;
-        GUIItemBox _armorBox;
 
         GUIItemBox _chestBox;
         GUIItemBox _hatBox;
+        GUIItemBox _weaponBox;
+        GUIItemBox _armorBox;
+
+        GUIText _gName, _gClass, _gXP, _gMagic, _gDef, _gDmg, _gHP, _gSpd;
 
         GUIButton _remove;
-        public bool ClearThis;
 
         public CharacterBox(CombatAdventurer c, Vector2 position)
         {
-            _window = new GUIWindow(position, GUIWindow.RedWin, RiverHollow.ScreenWidth - 100, 100);
-            Vector2 start = _window.InnerRectangle().Location.ToVector2();
-            _font = GameContentManager.GetFont(@"Fonts\Font");
             _character = c;
-            _size = _font.MeasureString("XXXXXXXX");
-            _weaponBox = new GUIItemBox(start + new Vector2(400, 0), new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Weapon, EquipmentEnum.Weapon);
-            _armorBox = new GUIItemBox(start + new Vector2(450, 0), new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Armor, EquipmentEnum.Armor);
+            _font = GameContentManager.GetFont(@"Fonts\Font");
+            _window = new GUIWindow(position, GUIWindow.RedWin, RiverHollow.ScreenWidth - 100, 100);
 
-            if (c == PlayerManager.Combat)
-            {
-                _hatBox = new GUIItemBox(start + new Vector2(400, 32), new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", PlayerManager.World.Hat, EquipmentEnum.None, ClothesEnum.Hat);
-                _chestBox = new GUIItemBox(start + new Vector2(450, 32), new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", PlayerManager.World.Chest, EquipmentEnum.None, ClothesEnum.Chest);
-            }
-
-            if (_character != PlayerManager.Combat)
-            {
-                _remove = new GUIButton(start + new Vector2(800, 64), new Rectangle(0, 128, 64, 32), 128, 64, "Remove", @"Textures\Dialog", true);
-            }
-
-            ClearThis = false;
+            Load();
         }
 
-        public CharacterBox(CombatAdventurer c, GUIWindow win, ref int i)
+        public CharacterBox(CombatAdventurer c, GUIWindow win)
         {
+            _character = c;
+            _font = GameContentManager.GetFont(@"Fonts\Font");
+
             int boxHeight = (QuestScreen.HEIGHT / 4) - (win.EdgeSize * 2);
             int boxWidth = (QuestScreen.WIDTH) - (win.EdgeSize * 2);
+            _window = new GUIWindow(Vector2.Zero, GUIWindow.RedWin, boxWidth, boxHeight);
 
-            Vector2 boxPoint = new Vector2(win.InnerTopLeft().X, win.InnerTopLeft().Y + (i++ * (boxHeight + (win.EdgeSize * 2))));
-            _window = new GUIWindow(boxPoint, GUIWindow.RedWin, boxWidth, boxHeight);
+            Load();
+            
+            //if (_character != PlayerManager.Combat)
+            //{
+            //    _remove = new GUIButton(start + new Vector2(800, 64), new Rectangle(0, 128, 64, 32), 128, 64, "Remove", @"Textures\Dialog", true);
+            //}
+        }
 
-            _font = GameContentManager.GetFont(@"Fonts\Font");
+        private void Load()
+        {
+            Width = _window.Width;
+            Height = _window.Height;
 
-            Rectangle rect = _window.InnerRectangle();
-            _font = GameContentManager.GetFont(@"Fonts\Font");
-            _character = c;
-            _size = _font.MeasureString("XXXXXXXX");
-            Vector2 start = new Vector2(rect.Right, rect.Top);
-            start.X -= 32;
-            _armorBox = new GUIItemBox(start, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Armor);
-            start.X -= 34;
-            _weaponBox = new GUIItemBox(start, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Weapon);
-           // if (_character != PlayerManager.Combat)
+            string nameLen = "";
+            for (int i = 0; i < GameManager.MAX_NAME_LEN; i++) { nameLen += "X"; }
+
+            _gName = new GUIText(nameLen);
+            _gName.AnchorToInnerSide(_window, SideEnum.TopLeft);
+            _gClass = new GUIText("XXXXXXXX");
+            _gClass.AnchorAndAlignToObject(_gName, SideEnum.Right, SideEnum.Bottom, 10);
+
+            _gXP = new GUIText(@"9999/9999");//new GUIText(_character.XP + @"/" + CombatAdventurer.LevelRange[_character.ClassLevel]);
+            _gXP.AnchorAndAlignToObject(_gClass, SideEnum.Right, SideEnum.Top, 10);
+
+            _weaponBox = new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Weapon, EquipmentEnum.Weapon);
+            _armorBox = new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Armor, EquipmentEnum.Armor);
+
+            _weaponBox.AnchorAndAlignToObject(_gXP, SideEnum.Right, SideEnum.Top, 10);
+            _armorBox.AnchorAndAlignToObject(_weaponBox, SideEnum.Right, SideEnum.Bottom, 10);
+
+            if (_character == PlayerManager.Combat)
             {
-                _remove = new GUIButton(start + new Vector2(800, 64), new Rectangle(0, 128, 64, 32), 128, 64, "Remove", @"Textures\Dialog", true);
+                _hatBox = new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", PlayerManager.World.Hat, EquipmentEnum.None, ClothesEnum.Hat);
+                _chestBox = new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", PlayerManager.World.Chest, EquipmentEnum.None, ClothesEnum.Chest);
+
+                _hatBox.AnchorAndAlignToObject(_armorBox, SideEnum.Right, SideEnum.Bottom, 30);
+                _chestBox.AnchorAndAlignToObject(_hatBox, SideEnum.Right, SideEnum.Bottom, 10);
             }
 
-            ClearThis = false;
+            int statSpacing = 10;
+            _gMagic = new GUIText("Mag: 999");
+            _gDef = new GUIText("Def: 999");
+            _gDmg = new GUIText("Dmg: 999");
+            _gHP = new GUIText("HP: 999");
+            _gSpd = new GUIText("Spd: 999");
+            _gMagic.AnchorToInnerSide(_window, SideEnum.BottomLeft);
+            _gDef.AnchorAndAlignToObject(_gMagic, SideEnum.Right, SideEnum.Bottom, statSpacing);
+            _gDmg.AnchorAndAlignToObject(_gDef, SideEnum.Right, SideEnum.Bottom, statSpacing);
+            _gHP.AnchorAndAlignToObject(_gDmg, SideEnum.Right, SideEnum.Bottom, statSpacing);
+            _gSpd.AnchorAndAlignToObject(_gHP, SideEnum.Right, SideEnum.Bottom, statSpacing);
+
+            _gName.SetText(_character.Name);
+            _gClass.SetText(_character.CharacterClass.Name);
+            _gXP.SetText(_character.XP + @"/" + CombatAdventurer.LevelRange[_character.ClassLevel]);
+
+            _gMagic.SetText("Mag: " + _character.StatMagic);
+            _gDef.SetText("Def: " + _character.StatDef);
+            _gDmg.SetText("Dmg: " + _character.StatDmg);
+            _gHP.SetText("HP: " + _character.StatHP);
+            _gSpd.SetText("Spd: " + _character.StatSpd);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (_character != null)
             {
-                Vector2 start = _window.InnerTopLeft();
                 _window.Draw(spriteBatch);
-                _drawnStat = 0;
-                spriteBatch.DrawString(_font, _character.Name, start, Color.White);
-                spriteBatch.DrawString(_font, _character.CharacterClass.Name, start += new Vector2(_font.MeasureString(_character.Name).X + 10, 0), Color.White);
-                spriteBatch.DrawString(_font, _character.XP + "/" + CombatAdventurer.LevelRange[_character.ClassLevel], start += new Vector2(_font.MeasureString(_character.CharacterClass.Name).X + 10, 0), Color.White);
-                DrawStat(spriteBatch, "Mag");
-                DrawStat(spriteBatch, "Def");
-                DrawStat(spriteBatch, "Dmg");
-                DrawStat(spriteBatch, "HP");
-                DrawStat(spriteBatch, "Spd");
-
-                _weaponBox.Draw(spriteBatch);
-                _armorBox.Draw(spriteBatch);
-
-                _hatBox.Draw(spriteBatch);
-                _chestBox.Draw(spriteBatch);
 
                 _weaponBox.DrawDescription(spriteBatch);
                 _armorBox.DrawDescription(spriteBatch);
@@ -170,33 +185,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-        private void DrawStat(SpriteBatch spriteBatch, string text)
+        public override void Position(Vector2 value)
         {
-            // Template IE: MAG: 999
-            Rectangle rect = _window.InnerRectangle();
-            Vector2 start = new Vector2(rect.Left, rect.Bottom);// + new Vector2(0, _font.MeasureString("X").Y);
-            start -= new Vector2(0, _font.MeasureString("X").Y);
-            string statLine = string.Empty;
-            switch (text)
-            {
-                case "Mag":
-                    statLine = "Mag: " + _character.StatMagic.ToString(); ;
-                    break;
-                case "Def":
-                    statLine = "Def: " + _character.StatDef.ToString();
-                    break;
-                case "Dmg":
-                    statLine = "Dmg: " + _character.StatDmg.ToString();
-                    break;
-                case "HP":
-                    statLine = "HP: " + _character.StatHP.ToString();
-                    break;
-                case "Spd":
-                    statLine = "Spd: " + _character.StatSpd.ToString();
-                    break;
-            }
-            Vector2 position = start + (new Vector2(_size.X, 0) * _drawnStat++);
-            spriteBatch.DrawString(_font, statLine, position, Color.White);
+            base.Position(value);
+            _window.Position(value);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -219,11 +211,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     rv = EquipmentSwap(_armorBox);
                 }
-                else if (_chestBox.Contains(mouse))
+                else if (_chestBox != null && _chestBox.Contains(mouse))
                 {
                     rv = ClothesSwap(_chestBox);
                 }
-                else if (_hatBox.Contains(mouse))
+                else if (_hatBox != null && _hatBox.Contains(mouse))
                 {
                     rv = ClothesSwap(_hatBox);
                 }

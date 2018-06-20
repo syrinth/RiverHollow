@@ -95,7 +95,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         public void AddControl(GUIObject g)
         {
-            if (!Controls.Contains(g)) { Controls.Add(g); }
+            if (!Controls.Contains(g)) {
+                Controls.Add(g);
+                g.ParentWindow = this;
+            }
         }
         #region Draw
         public int SkipSize() { return _winData.Size + _winData.Edge; }

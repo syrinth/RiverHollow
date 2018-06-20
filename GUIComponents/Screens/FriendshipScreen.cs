@@ -27,7 +27,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 if (_villagerList.Count == 0) { f.AnchorToInnerSide(_friendshipWindow, GUIObject.SideEnum.TopLeft); }
                 else {
                     f.AnchorAndAlignToObject(_villagerList[_villagerList.Count - 1], GUIObject.SideEnum.Bottom, GUIObject.SideEnum.Left);   //-2 because we start at i=1
-                    _friendshipWindow.AddControl(f);
                 }
 
                 _villagerList.Add(f);
@@ -84,9 +83,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             _gTextName.AnchorToInnerSide(_gWin, SideEnum.TopLeft);
             _gTextPoints.AnchorAndAlignToObject(_gTextName, SideEnum.Right, SideEnum.Bottom);
-
-            _gWin.AddControl(_gTextName);
-            _gWin.AddControl(_gTextPoints);
 
             _gWin.Resize();
         }

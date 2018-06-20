@@ -45,7 +45,6 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                     }
                     else {
                         _liItems[i].AnchorAndAlignToObject(_liItems[i - 1], GUIObject.SideEnum.Bottom, GUIObject.SideEnum.Left);
-                        _mainWindow.AddControl(_liItems[i]);
                     }
                     i++;
                 }
@@ -137,10 +136,6 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             _gMoney.AnchorToInnerSide(_gWin, SideEnum.TopRight);
 
             _giItem.AlignToObject(_gTextName, SideEnum.CenterY);
-
-
-            _gWin.AddControl(_gMoney);
-            _gWin.AddControl(_gTextName);
 
             _gWin.Resize();
         }

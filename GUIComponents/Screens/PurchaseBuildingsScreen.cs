@@ -31,6 +31,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                 _iCurrIndex = 0;
 
                 _bldgWindow = new BuildingInfoDisplay(_liMerchandise[_iCurrIndex]);
+                AddControl(_bldgWindow);
 
                 _btnBuy = new GUIButton("Buy", BtnBuy);
                 _btnBuy.AnchorAndAlignToObject(_bldgWindow, SideEnum.Bottom, SideEnum.CenterX, 50);
@@ -40,11 +41,6 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                 _btnLast.AnchorAndAlignToObject(_btnBuy, SideEnum.Left, SideEnum.Bottom, 100);
                 _btnNext = new GUIButton("Next", BtnNext);
                 _btnNext.AnchorAndAlignToObject(_btnBuy, SideEnum.Right, SideEnum.CenterY, 100);
-
-                Controls.Add(_btnBuy);
-                Controls.Add(_btnLast);
-                Controls.Add(_btnNext);
-                Controls.Add(_bldgWindow);
             }
             catch (Exception e)
             {

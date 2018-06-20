@@ -34,9 +34,7 @@ namespace RiverHollow.GUIComponents.Screens
                 GUIObject.CreateSpacedColumn(ref _liDataWindows, RiverHollow.ScreenWidth / 2, 0, RiverHollow.ScreenHeight, 20);
             }
 
-            _btnBack.AnchorToScreen(GUIObject.SideEnum.BottomRight, 50);
-
-            Controls.Add(_btnBack);
+            _btnBack.AnchorToScreen(this, GUIObject.SideEnum.BottomRight, 50);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)

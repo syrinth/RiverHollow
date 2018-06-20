@@ -81,6 +81,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Controls.Add(_gSelectionWindow);
         }
 
+        public void AddControl(GUIObject control)
+        {
+            if (!Controls.Contains(control))
+            {
+                Controls.Add(control);
+                control.ParentScreen = this;
+            }
+        }
+
         public virtual bool IsTextScreen() { return false; }
         public virtual bool IsGameMenuScreen() { return false; }
         public virtual bool IsItemCreationScreen() { return false; }

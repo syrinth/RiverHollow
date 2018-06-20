@@ -44,11 +44,9 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                             if (i == merch.Count / 2)
                             {
                                 wb.AnchorAndAlignToObject(_liWorkers[0], GUIObject.SideEnum.Bottom, GUIObject.SideEnum.Left, 20);
-                                _mainWindow.AddControl(wb);
                             }
                             else{
                                 wb.AnchorAndAlignToObject(_liWorkers[i - 1], GUIObject.SideEnum.Right, GUIObject.SideEnum.Top, 20);
-                                _mainWindow.AddControl(wb);
                             }
                         }
                         i++;
@@ -137,7 +135,6 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             _gMoney = new GUIMoneyDisplay(Cost);
             _gMoney.AnchorToInnerSide(_costWindow, SideEnum.TopRight);
 
-            _costWindow.AddControl(_gMoney);
             _costWindow.Resize();
 
             Position(_workerWindow.Position());

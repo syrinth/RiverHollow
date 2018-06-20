@@ -49,7 +49,7 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\Wizard");
             AddTexture(Content, @"Textures\Healer");
             AddTexture(Content, @"Textures\Knight");
-            AddTexture(Content, @"Textures\Weapons Master");
+            AddTexture(Content, @"Textures\Champion");
             AddTexture(Content, @"Textures\Summoner");
             AddTexture(Content, @"Textures\Rogue");
             AddTexture(Content, @"Textures\Bard");

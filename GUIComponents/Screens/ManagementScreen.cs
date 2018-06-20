@@ -383,7 +383,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     _w = selectedAdventurer;
                     _btnMove = new GUIButton("Move");
-                    Controls.Add(_btnMove);
                     _btnMove.AnchorToInnerSide(_window, SideEnum.BottomRight);
 
                     //Data
@@ -392,18 +391,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                     _classInfo = new GUIText(_w.Combat.CharacterClass.Name + "    " + _w.Combat.ClassLevel);
                     _classInfo.AnchorAndAlignToObject(_name, SideEnum.Bottom, SideEnum.Left);
-                    Controls.Add(_classInfo);
 
                     _xp = new GUIText("Exp:" + _w.Combat.XP);
                     _xp.AnchorAndAlignToObject(_classInfo, SideEnum.Right, SideEnum.Bottom, 10);
-                    Controls.Add(_xp);
 
                     _weapon = new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _w.Combat.Weapon);
                     _weapon.AnchorToInnerSide(_window, SideEnum.TopRight);
 
                     _armor = new GUIItemBox(Vector2.Zero + new Vector2(400, 0), new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _w.Combat.Armor);
                     _armor.AnchorAndAlignToObject(_weapon, SideEnum.Left, SideEnum.Bottom);
-                    Controls.Add(_armor);
 
                     AddStat(ref _dmg, null, "Dmg", _w.Combat.StatDmg.ToString());
                     AddStat(ref _def, _dmg, "Def", _w.Combat.StatDmg.ToString());

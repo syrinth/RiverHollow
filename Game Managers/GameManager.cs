@@ -37,6 +37,7 @@ namespace RiverHollow.Game_Managers
         public static KeyDoor gmDoor;
 
         static long _iSaveID = -1;
+        public static int MAX_NAME_LEN = 10;
 
         public static void LoadContent(ContentManager Content)
         {

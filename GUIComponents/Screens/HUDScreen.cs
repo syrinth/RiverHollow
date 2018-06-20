@@ -18,15 +18,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public HUDScreen()
         {
             _healthDisplay = new StatDisplay(StatDisplay.DisplayEnum.Health);
-            _healthDisplay.AnchorToScreen(SideEnum.TopLeft, 10);
+            _healthDisplay.AnchorToScreen(this, SideEnum.TopLeft, 10);
             _staminaDisplay = new StatDisplay(StatDisplay.DisplayEnum.Energy);
             _staminaDisplay.AnchorAndAlignToObject(_healthDisplay, SideEnum.Bottom, SideEnum.Left);
             _gMoney = new GUIMoneyDisplay();
             _gMoney.AnchorAndAlignToObject(_staminaDisplay, SideEnum.Bottom, SideEnum.Left);
-
-            Controls.Add(_healthDisplay);
-            Controls.Add(_staminaDisplay);
-            Controls.Add(_gMoney);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)

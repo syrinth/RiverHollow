@@ -30,14 +30,14 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             {
                 _window = new GUITextWindow(text);
             }
-            Controls.Add(_window);
+            AddControl(_window);
         }
 
         public TextScreen(KeyDoor door, string text) : this()
         {
             GameManager.gmDoor = door;
             _window = new GUITextSelectionWindow(text);
-            Controls.Add(_window);
+            AddControl(_window);
         }
 
         public TextScreen(NPC talker, string text) : this()
@@ -51,7 +51,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             {
                 _window = new GUITextWindow(talker, text);
             }
-            Controls.Add(_window);
+            AddControl(_window);
         }
 
         public TextScreen(Spirit talker, string text) : this()
@@ -59,7 +59,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             GameManager.gmSpirit = talker;
             _window = new GUITextWindow(text);
 
-            Controls.Add(_window);
+            AddControl(_window);
         }
 
         public override void Update(GameTime gameTime)

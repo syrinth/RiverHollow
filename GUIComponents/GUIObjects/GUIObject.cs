@@ -2,12 +2,26 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.Game_Managers.GUIObjects;
 using System.Collections.Generic;
 
 namespace RiverHollow.GUIObjects
 {
     public abstract class GUIObject
     {
+        GUIWindow _parentControl;
+        public GUIWindow ParentWindow
+        {
+            get { return _parentControl; }
+            set { _parentControl = value; }
+        }
+
+        GUIScreen _parentScreen;
+        public GUIScreen ParentScreen
+        {
+            get { return _parentScreen; }
+            set { _parentScreen = value; }
+        }
         internal static Vector2 CenterScreen = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
 
         public int Height;
@@ -164,6 +178,9 @@ namespace RiverHollow.GUIObjects
         }
         internal void AnchorToObject(GUIObject focus, SideEnum sidePlacement, int spacing = 0)
         {
+            if (focus.ParentWindow != null) { focus.ParentWindow.AddControl(this); }
+            if (focus.ParentScreen != null) { focus.ParentScreen.AddControl(this); }
+
             Vector2 position = focus.Position();
             switch (sidePlacement)
             {
@@ -276,8 +293,14 @@ namespace RiverHollow.GUIObjects
                     break;
             }
         }
-        internal void AnchorToScreen(SideEnum sidePlacement, int spacing = 0)
+        internal void AnchorToScreen(GUIScreen screen, SideEnum sidePlacement, int spacing = 0)
         {
+            screen.AddControl(this);
+            AnchorToScreen(sidePlacement, spacing);
+        }
+        internal void AnchorToScreen(SideEnum sidePlacement, int spacing = 0)
+        { 
+            
             int screenHeight = RiverHollow.ScreenHeight;
             int screenWidth = RiverHollow.ScreenWidth;
 
@@ -321,6 +344,9 @@ namespace RiverHollow.GUIObjects
         }
         internal void AlignToObject(GUIObject focus, SideEnum sideToAlign)
         {
+            if(focus.ParentWindow != null) { focus.ParentWindow.AddControl(this); }
+            if (focus.ParentScreen != null) { focus.ParentScreen.AddControl(this); }
+
             Vector2 position = focus.Position();
             switch (sideToAlign)
             {
@@ -347,8 +373,14 @@ namespace RiverHollow.GUIObjects
             }
         }
 
-        internal void CenterOnScreen()
+        internal void CenterOnScreen(GUIScreen screen)
         {
+            screen.AddControl(this);
+            CenterOnScreen();
+        }
+
+        internal void CenterOnScreen()
+        { 
             int centerX = RiverHollow.ScreenWidth / 2;
             int centerY = RiverHollow.ScreenHeight / 2;
 
