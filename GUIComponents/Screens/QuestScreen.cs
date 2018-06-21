@@ -20,14 +20,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIButton _btnUp;
         GUIButton _btnDown;
 
+        bool _bMoved;
         int _topQuest;
         public QuestScreen()
         {
             _questList = new List<QuestBox>();
             _questWindow = new GUIWindow(new Vector2(WIDTH, HEIGHT), GUIWindow.RedWin, WIDTH, HEIGHT);
             _detailWindow = new DetailBox(new Vector2(WIDTH, HEIGHT), GUIWindow.RedWin, WIDTH, HEIGHT);
-            _btnUp = new GUIButton(Vector2.Zero, new Rectangle(256, 64, 32, 32), BTNSIZE, BTNSIZE, "", @"Textures\Dialog", true);
-            _btnDown = new GUIButton(Vector2.Zero, new Rectangle(256, 96, 32, 32), BTNSIZE, BTNSIZE, "", @"Textures\Dialog", true);
+
+            _btnUp = new GUIButton(new Rectangle(256, 64, 32, 32), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnUpClick);
+            _btnDown = new GUIButton(new Rectangle(256, 96, 32, 32), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnDownClick);
 
             _btnUp.AnchorAndAlignToObject(_questWindow, GUIObject.SideEnum.Right, GUIObject.SideEnum.Top);
             _btnDown.AnchorAndAlignToObject(_questWindow, GUIObject.SideEnum.Right, GUIObject.SideEnum.Bottom);
@@ -53,18 +55,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            bool moved = false;
+             _bMoved = false;
             if (!Controls.Contains(_detailWindow))
             {
-                if (_btnUp.Contains(mouse))
+                foreach(GUIObject c in Controls)
                 {
-                    if (_topQuest - 1 >= 0) { _topQuest--; moved = true; }
+                    rv = c.ProcessLeftButtonClick(mouse);
+
+                    if (rv) { break; }
                 }
-                else if (_btnDown.Contains(mouse))
-                {
-                    if (_topQuest + MAX_SHOWN_QUESTS < PlayerManager.QuestLog.Count) { _topQuest++; moved = true; }
-                }
-                if (moved)
+
+                if (_bMoved)
                 {
                     for (int i = 0; i < _questList.Count; i++)
                     {
@@ -80,7 +81,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         Controls.Add(_detailWindow);
                         Controls.Remove(_btnUp);
                         Controls.Remove(_btnDown);
-
 
                         rv = true;
                     }
@@ -100,6 +100,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 Controls.Add(_btnDown);
             }
             return rv;
+        }
+
+        public void BtnUpClick()
+        {
+            if (_topQuest - 1 >= 0) { _topQuest--; _bMoved = true; }
+        }
+        public void BtnDownClick()
+        {
+            if (_topQuest + MAX_SHOWN_QUESTS < PlayerManager.QuestLog.Count) { _topQuest++; _bMoved = true; }
         }
 
         public override bool ProcessHover(Point mouse)

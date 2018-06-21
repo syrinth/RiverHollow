@@ -38,7 +38,7 @@ namespace RiverHollow.GUIComponents.Screens
         PlayerDisplayBox _playerDisplayBox;
 
         GUIText _gTextHairColor, _gTextHairType;
-        GUIImage _giNextHairColor, _giNextHairType;
+        GUIButton _btnNextHairColor, _btnNextHairType;
 
         public NewGameScreen()
         {
@@ -79,29 +79,19 @@ namespace RiverHollow.GUIComponents.Screens
             _gTextHairColor = new GUIText("Hair Color");
             _gTextHairColor.AnchorAndAlignToObject(_playerDisplayBox, SideEnum.Bottom, SideEnum.Left);
 
-            _giNextHairColor = new GUIImage(Vector2.Zero, new Rectangle(288, 96, 32, 32), 32, 32, GameContentManager.GetTexture(@"Textures\Dialog"));
-            _giNextHairColor.AnchorAndAlignToObject(_gTextHairColor, SideEnum.Right, SideEnum.Bottom, 10);
+            _btnNextHairColor = new GUIButton(new Rectangle(288, 96, 32, 32), 32, 32, @"Textures\Dialog", BtnNextHairColor);
+            _btnNextHairColor.AnchorAndAlignToObject(_gTextHairColor, SideEnum.Right, SideEnum.Bottom, 10);
 
             _gTextHairType = new GUIText("Hair Type");
             _gTextHairType.AnchorAndAlignToObject(_gTextHairColor, SideEnum.Bottom, SideEnum.Left);
 
-            _giNextHairType = new GUIImage(Vector2.Zero, new Rectangle(288, 96, 32, 32), 32, 32, GameContentManager.GetTexture(@"Textures\Dialog"));
-            _giNextHairType.AnchorAndAlignToObject(_gTextHairType, SideEnum.Right, SideEnum.Bottom, 10);
+            _btnNextHairType = new GUIButton(new Rectangle(288, 96, 32, 32), 32, 32, @"Textures\Dialog", BtnNextHairType);
+            _btnNextHairType.AnchorAndAlignToObject(_gTextHairType, SideEnum.Right, SideEnum.Bottom, 10);
 
             GUIObject.CreateSpacedRow(ref _liClasses, _window.Height / 2, _window.Position().X, _window.Width, 20);
 
             _gCheck = new GUICheck("Skip Intro");
             _gCheck.AnchorToInnerSide(_window, SideEnum.BottomLeft);
-
-            Controls.Add(_btnCancel);
-            Controls.Add(_btnOK);
-            Controls.Add(_manorWindow);
-            Controls.Add(_nameWindow);
-            Controls.Add(_gTextHairColor);
-            Controls.Add(_giNextHairColor);
-            Controls.Add(_gTextHairType);
-            Controls.Add(_giNextHairType);
-            Controls.Add(_gCheck);
         }
 
         public override void Update(GameTime gameTime)
@@ -124,20 +114,6 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 rv = c.ProcessLeftButtonClick(mouse);
                 if(rv) { break; }
-            }
-
-            if (_giNextHairColor.Contains(mouse))
-            {
-                if (_iHairColorIndex < _liColors.Count - 1) { _iHairColorIndex++; }
-                else { _iHairColorIndex = 0; }
-                PlayerManager.World.SetHairColor(_liColors[_iHairColorIndex]);
-            }
-            if (_giNextHairType.Contains(mouse))
-            {
-                if (_iHairTypeIndex < _iHairTypeMax - 1) { _iHairTypeIndex++; }
-                else { _iHairTypeIndex = 0; }
-
-                _playerDisplayBox.SyncHair(_iHairTypeIndex);
             }
 
             if (_nameWindow.Contains(mouse)) {
@@ -171,6 +147,7 @@ namespace RiverHollow.GUIComponents.Screens
             return rv;
         }
 
+        #region Button Logic
         public void BtnNewGame()
         {
             PlayerManager.World.SetScale();
@@ -179,12 +156,25 @@ namespace RiverHollow.GUIComponents.Screens
             PlayerManager.SetName(_nameWindow.GetText());
             GameManager.DontReadInput();
         }
-
         public void BtnCancel()
         {
             GUIManager.SetScreen(new IntroMenuScreen());
             GameManager.DontReadInput();
         }
+        public void BtnNextHairColor()
+        {
+            if (_iHairColorIndex < _liColors.Count - 1) { _iHairColorIndex++; }
+            else { _iHairColorIndex = 0; }
+            PlayerManager.World.SetHairColor(_liColors[_iHairColorIndex]);
+        }
+        public void BtnNextHairType()
+        {
+            if (_iHairTypeIndex < _iHairTypeMax - 1) { _iHairTypeIndex++; }
+            else { _iHairTypeIndex = 0; }
+
+            _playerDisplayBox.SyncHair(_iHairTypeIndex);
+        }
+        #endregion
 
         public override bool ProcessHover(Point mouse)
         {

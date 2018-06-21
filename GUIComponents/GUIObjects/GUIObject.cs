@@ -45,7 +45,7 @@ namespace RiverHollow.GUIObjects
         public virtual void Update(GameTime gameTime) { }
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _drawRect, _sourceRect, _cEnabled);
+            spriteBatch.Draw(_texture, _drawRect, _sourceRect, _cEnabled * _fAlpha);
         }
 
         public virtual void Enable(bool value)

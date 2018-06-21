@@ -54,17 +54,21 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _winData = winData;
         }
 
-        public GUIWindow(Vector2 position, WindowData winData, int width, int height) : this()
+        public GUIWindow(Vector2 position, WindowData winData, int width, int height) : this(winData, width, height)
         {
-            Width = width;
-            Height = height;
-            _winData = winData;
             Position(position);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
         {
-            return false;
+            bool rv = false;
+
+            foreach(GUIObject c in Controls)
+            {
+                rv = c.ProcessLeftButtonClick(mouse);
+            }
+
+            return rv;
         }
 
         public override void Position(Vector2 value)

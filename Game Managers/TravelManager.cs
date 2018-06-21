@@ -242,10 +242,7 @@ namespace RiverHollow.Game_Managers
         private static List<RHTile> BackTrack(RHTile current)
         {
             List<RHTile> list = new List<RHTile>();
-            if (current.MapName.Equals("mapForest"))
-            {
-                int kj = 2;
-            }
+
             while (current != cameFrom[current])
             {
                 list.Add(current);
