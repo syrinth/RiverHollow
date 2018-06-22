@@ -34,19 +34,32 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         public EquipmentEnum EquipType;
         public ClothesEnum ClothesType;
 
-        public GUIItemBox(Vector2 position, Rectangle sourceRect, int width, int height, int row, int col, string texture, Item item, EquipmentEnum e = EquipmentEnum.None, ClothesEnum c = ClothesEnum.None, bool crafting = false) : base(position, sourceRect, width, height, texture)
+        public delegate bool ItemSwap(GUIItemBox b);
+        private ItemSwap _delItemSwap;
+
+        public GUIItemBox(Vector2 position, Rectangle sourceRect, int width, int height, int row, int col, string texture, Item item, bool crafting = false) : base(position, sourceRect, width, height, texture)
         {
             _bCrafting = crafting;
             SetItem(item);
-            EquipType = e;
-            ClothesType = c;
-
+            
             _iCol = col;
             _iRow = row;
         }
 
-        public GUIItemBox(Vector2 position, Rectangle sourceRect, int width, int height, string texture, Item item, EquipmentEnum e = EquipmentEnum.None, ClothesEnum c = ClothesEnum.None, bool crafting = false) : this(position, sourceRect, width, height, 0, 0, texture, item, e, c, crafting)
+        public GUIItemBox(Vector2 position, Rectangle sourceRect, int width, int height, string texture, Item item, bool crafting = false) : this(position, sourceRect, width, height, 0, 0, texture, item)
         {
+        }
+
+        public GUIItemBox(Rectangle sourceRect, int width, int height, string texture, Item item, ItemSwap itemSwap, EquipmentEnum e) : this(Vector2.Zero, sourceRect, width, height, 0, 0, texture, item)
+        {
+            EquipType = e;
+            _delItemSwap = itemSwap;
+        }
+
+        public GUIItemBox(Rectangle sourceRect, int width, int height, string texture, Item item, ItemSwap itemSwap, ClothesEnum c) : this(Vector2.Zero, sourceRect, width, height, 0, 0, texture, item)
+        {
+            ClothesType = c;
+            _delItemSwap = itemSwap;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -74,6 +87,17 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             }
 
             return _hover;
+        }
+
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+            bool rv = false;
+            if (Contains(mouse))
+            {
+                rv = _delItemSwap(this);
+            }
+
+            return rv;
         }
 
         public bool ProcessHover(Point mouse)

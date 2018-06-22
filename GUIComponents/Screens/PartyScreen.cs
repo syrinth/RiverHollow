@@ -134,16 +134,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gXP = new GUIText(@"9999/9999");//new GUIText(_character.XP + @"/" + CombatAdventurer.LevelRange[_character.ClassLevel]);
             _gXP.AnchorAndAlignToObject(_gClass, SideEnum.Right, SideEnum.Top, 10);
 
-            _weaponBox = new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Weapon, EquipmentEnum.Weapon);
-            _armorBox = new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Armor, EquipmentEnum.Armor);
+            _weaponBox = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Weapon, EquipmentSwap, EquipmentEnum.Weapon);
+            _armorBox = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Armor, EquipmentSwap, EquipmentEnum.Armor);
 
             _weaponBox.AnchorAndAlignToObject(_gXP, SideEnum.Right, SideEnum.Top, 10);
             _armorBox.AnchorAndAlignToObject(_weaponBox, SideEnum.Right, SideEnum.Bottom, 10);
 
             if (_character == PlayerManager.Combat)
             {
-                _hatBox = new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", PlayerManager.World.Hat, EquipmentEnum.None, ClothesEnum.Hat);
-                _chestBox = new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", PlayerManager.World.Chest, EquipmentEnum.None, ClothesEnum.Chest);
+                _hatBox = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", PlayerManager.World.Hat, ClothesSwap, ClothesEnum.Hat);
+                _chestBox = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", PlayerManager.World.Chest, ClothesSwap, ClothesEnum.Chest);
 
                 _hatBox.AnchorAndAlignToObject(_armorBox, SideEnum.Right, SideEnum.Bottom, 30);
                 _chestBox.AnchorAndAlignToObject(_hatBox, SideEnum.Right, SideEnum.Bottom, 10);
@@ -196,29 +196,19 @@ namespace RiverHollow.Game_Managers.GUIObjects
             bool rv = false;
             if (_character != null)
             {
-                if (_remove != null && _remove.Contains(mouse))
+                foreach(GUIObject c in _window.Controls)
                 {
-                    PlayerManager.RemoveFromParty(_character);
-                    _character.World.DrawIt = true;
-                    _character = null;
-                    rv = true;
+                    rv = c.ProcessLeftButtonClick(mouse);
+                    if (rv) { break; }
                 }
-                else if (_weaponBox.Contains(mouse))
-                {
-                    rv = EquipmentSwap(_weaponBox);
-                }
-                else if (_armorBox.Contains(mouse))
-                {
-                    rv = EquipmentSwap(_armorBox);
-                }
-                else if (_chestBox != null && _chestBox.Contains(mouse))
-                {
-                    rv = ClothesSwap(_chestBox);
-                }
-                else if (_hatBox != null && _hatBox.Contains(mouse))
-                {
-                    rv = ClothesSwap(_hatBox);
-                }
+
+                //if (_remove != null && _remove.Contains(mouse))
+                //{
+                //    PlayerManager.RemoveFromParty(_character);
+                //    _character.World.DrawIt = true;
+                //    _character = null;
+                //    rv = true;
+                //}
             }
             return rv;
         }
@@ -277,12 +267,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             return rv;
         }
-        private void AssignEquipment(GUIItemBox box, Equipment item)
-        {
-            if (box.EquipType == EquipmentEnum.Weapon) { _character.Weapon = item; }
-            else if (box.EquipType == EquipmentEnum.Armor) { _character.Armor = item; }
-        }
-
         private bool ClothesSwap(GUIItemBox box)
         {
             bool rv = false;
@@ -299,15 +283,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             GraphicCursor.GrabItem(box.Item);
                             box.SetItem(temp);
                             PlayerManager.World.SetClothes(temp);
-                            rv = true;
                         }
                         else
                         {
                             box.SetItem(GraphicCursor.HeldItem);
                             PlayerManager.World.SetClothes((Clothes)GraphicCursor.HeldItem);
                             GraphicCursor.DropItem();
-                            rv = true;
                         }
+                        rv = true;
                     }
                 }
             }
@@ -319,6 +302,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
 
             return rv;
+        }
+
+
+        private void AssignEquipment(GUIItemBox box, Equipment item)
+        {
+            if (box.EquipType == EquipmentEnum.Weapon) { _character.Weapon = item; }
+            else if (box.EquipType == EquipmentEnum.Armor) { _character.Armor = item; }
         }
 
         private bool CheckValid(Equipment equip, GUIItemBox box)
@@ -342,28 +332,43 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public bool EquipItem(Item i)
         {
             bool rv = false;
+            GUIItemBox gBox = null;
 
             if (i.IsEquipment())
             {
-                if (((Equipment)i).EquipType == EquipmentEnum.Armor)
-                {
-                    rv = EquipmentSwap(_armorBox);
+                Equipment equip = (Equipment)i;
+                switch (equip.EquipType) {
+                    case EquipmentEnum.Armor:
+                        gBox = _armorBox;
+                        break;
+
+                    case EquipmentEnum.Weapon:
+                        gBox = _weaponBox;
+                        break;
                 }
-                else
-                {
-                    rv = EquipmentSwap(_weaponBox);
+
+                if (gBox != null) {
+                    rv = EquipmentSwap(gBox);
                 }
             }
             else if (i.IsClothes())
             {
-                if (((Clothes)i).ClothesType == ClothesEnum.Hat)
+                Clothes equip = (Clothes)i;
+                switch (equip.ClothesType)
                 {
-                    rv = ClothesSwap(_hatBox);
+                    case ClothesEnum.Hat:
+                        gBox = _hatBox;
+                        break;
+
+                    case ClothesEnum.Chest:
+                        gBox = _chestBox;
+                        break;
                 }
-                else if (((Clothes)i).ClothesType == ClothesEnum.Chest)
-                {
-                    rv = ClothesSwap(_chestBox);
+
+                if (gBox != null) {
+                    rv = ClothesSwap(gBox);
                 }
+
             }
 
             return rv;
