@@ -376,43 +376,59 @@ namespace RiverHollow.Game_Managers.GUIObjects
             public class WorkerDetailsWin : MgmtWindow
             {
                 GUIButton _btnMove;
-                WorldAdventurer _w;
-                GUIText _name, _actionText, _classInfo, _xp, _dmg, _def, _hp, _mag, _spd;
+                WorldAdventurer _character;
+                GUIText _gName, _actionText, _gClass, _gXP, _gDmg, _gDef, _gHP, _gMagic, _gSpd;
                 GUIItemBox _weapon, _armor;
                 public WorkerDetailsWin(ManagementScreen s, WorldAdventurer selectedAdventurer) : base(s)
                 {
-                    _w = selectedAdventurer;
-                    _btnMove = new GUIButton("Move");
+                    int statSpacing = 10;
+                    _character = selectedAdventurer;
+                    _btnMove = new GUIButton("Move", 128, 32);
                     _btnMove.AnchorToInnerSide(_window, SideEnum.BottomRight);
 
-                    //Data
-                    _name = new GUIText(_w.Name);
-                    _name.AnchorToInnerSide(_window, SideEnum.TopLeft);
+                    string nameLen = "";
+                    for (int i = 0; i < GameManager.MAX_NAME_LEN; i++) { nameLen += "X"; }
 
-                    _classInfo = new GUIText(_w.Combat.CharacterClass.Name + "    " + _w.Combat.ClassLevel);
-                    _classInfo.AnchorAndAlignToObject(_name, SideEnum.Bottom, SideEnum.Left);
+                    _gName = new GUIText(nameLen);
+                    _gName.AnchorToInnerSide(_window, SideEnum.TopLeft);
+                    _gClass = new GUIText("XXXXXXXX 99");
+                    _gClass.AnchorAndAlignToObject(_gName, SideEnum.Bottom, SideEnum.Left);
 
-                    _xp = new GUIText("Exp:" + _w.Combat.XP);
-                    _xp.AnchorAndAlignToObject(_classInfo, SideEnum.Right, SideEnum.Bottom, 10);
+                    _gXP = new GUIText(@"9999/9999");//new GUIText(_character.XP + @"/" + CombatAdventurer.LevelRange[_character.ClassLevel]);
+                    _gXP.AnchorAndAlignToObject(_gClass, SideEnum.Right, SideEnum.Top, 10);
 
-                    _weapon = new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _w.Combat.Weapon);
+                    _gName.SetText(_character.Name);
+                    _gClass.SetText(_character.Combat.CharacterClass.Name + " " + _character.Combat.ClassLevel);
+                    _gXP.SetText("Exp:" + _character.Combat.XP);
+
+                    _weapon = new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Combat.Weapon);
                     _weapon.AnchorToInnerSide(_window, SideEnum.TopRight);
 
-                    _armor = new GUIItemBox(Vector2.Zero + new Vector2(400, 0), new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _w.Combat.Armor);
+                    _armor = new GUIItemBox(Vector2.Zero + new Vector2(400, 0), new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Combat.Armor);
                     _armor.AnchorAndAlignToObject(_weapon, SideEnum.Left, SideEnum.Bottom);
 
-                    AddStat(ref _dmg, null, "Dmg", _w.Combat.StatDmg.ToString());
-                    AddStat(ref _def, _dmg, "Def", _w.Combat.StatDmg.ToString());
-                    AddStat(ref _hp, _def, "HP", _w.Combat.StatHP.ToString());
-                    AddStat(ref _mag, _hp, "Mag", _w.Combat.StatMagic.ToString());
-                    AddStat(ref _spd, _mag, "Spd", _w.Combat.StatSpd.ToString());
+                    _gMagic = new GUIText("Mag: 999");
+                    _gDef = new GUIText("Def: 999");
+                    _gDmg = new GUIText("Dmg: 999");
+                    _gHP = new GUIText("HP: 999");
+                    _gSpd = new GUIText("Spd: 999");
+                    _gMagic.AnchorAndAlignToObject(_gClass, SideEnum.Bottom, SideEnum.Left);
+                    _gDef.AnchorAndAlignToObject(_gMagic, SideEnum.Right, SideEnum.Bottom, statSpacing);
+                    _gDmg.AnchorAndAlignToObject(_gDef, SideEnum.Right, SideEnum.Bottom, statSpacing);
+                    _gHP.AnchorAndAlignToObject(_gDmg, SideEnum.Right, SideEnum.Bottom, statSpacing);
+                    _gSpd.AnchorAndAlignToObject(_gHP, SideEnum.Right, SideEnum.Bottom, statSpacing);
+                    _gMagic.SetText("Mag: " + _character.Combat.StatMagic);
+                    _gDef.SetText("Def: " + _character.Combat.StatDef);
+                    _gDmg.SetText("Dmg: " + _character.Combat.StatDmg);
+                    _gHP.SetText("HP: " + _character.Combat.StatHP);
+                    _gSpd.SetText("Spd: " + _character.Combat.StatSpd);
 
                     string strAction = "Idle";
-                    if (_w.CurrentlyMaking != null)
+                    if (_character.CurrentlyMaking != null)
                     {
-                        strAction = "Making " + _w.CurrentlyMaking.ToString() + ", done in " + (int)(_w.CurrentlyMaking.ProcessingTime-_w.ProcessedTime) + " minutes";
+                        strAction = "Making " + _character.CurrentlyMaking.ToString() + ", done in " + (int)(_character.CurrentlyMaking.ProcessingTime-_character.ProcessedTime) + " minutes";
                     }
-                    else if (_w.Adventuring)
+                    else if (_character.Adventuring)
                     {
                         strAction = "Adventuring";
                     }
@@ -421,24 +437,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _actionText.AnchorToInnerSide(_window, SideEnum.BottomLeft);
                 }
 
-                private void AddStat(ref GUIText curr, GUIText prev, string statName, string stat)
-                {
-                    string statTemplate = "XXX:XXX";
-                    curr = new GUIText(statTemplate);
-
-                    if (prev == null) { curr.AnchorAndAlignToObject(_classInfo, SideEnum.Bottom, SideEnum.Left, 5); }
-                    else { curr.AnchorAndAlignToObject(prev, SideEnum.Right, SideEnum.Bottom, 5); }
-
-                    curr.SetText(statName + ":" +stat);
-                    Controls.Add(curr);
-                }
-
                 public override bool ProcessLeftButtonClick(Point mouse)
                 {
                     bool rv = false;
                     if (_btnMove.Contains(mouse))
                     {
-                        _parent.HandleMoveWorker(_w);
+                        _parent.HandleMoveWorker(_character);
                         rv = true;
                     }
                    
@@ -446,7 +450,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
                 public override bool ProcessRightButtonClick(Point mouse)
                 {
-                    _parent.SetMgmtWindow(new BuildingDetailsWin(_parent, _w.Building));
+                    _parent.SetMgmtWindow(new BuildingDetailsWin(_parent, _character.Building));
                     return true;
                 }
 

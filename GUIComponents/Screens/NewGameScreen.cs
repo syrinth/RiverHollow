@@ -65,7 +65,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             _liClasses = new List<GUIObject>();
             for (int i = 1; i <= ObjectManager.GetWorkerNum(); i++) {
-                ClassSelectionBox w = new ClassSelectionBox(Vector2.Zero, ObjectManager.GetWorker(i));
+                ClassSelectionBox w = new ClassSelectionBox(Vector2.Zero, ObjectManager.GetWorker(i), BtnAssignClass);
                 _liClasses.Add(w);
                 _window.Controls.Add(w);
                 Controls.Add(w);
@@ -130,21 +130,14 @@ namespace RiverHollow.GUIComponents.Screens
                 _manorWindow.HideCursor();
             }
 
-            foreach(GUIObject o in _liClasses)
-            {
-                if (o.Contains(mouse))
-                {
-                    ClassSelectionBox csb = ((ClassSelectionBox)o);
-                    if (_selectedClass != csb)
-                    {
-                        csb.PlayAnimation("WalkDown");
-                        _selectedClass.PlayAnimation("Idle");
-                        _selectedClass = csb;
-                    }
-                }
-            }
-
             return rv;
+        }
+        public override bool ProcessRightButtonClick(Point mouse)
+        {
+            GUIManager.SetScreen(new IntroMenuScreen());
+            GameManager.DontReadInput();
+
+            return true;
         }
 
         #region Button Logic
@@ -173,6 +166,16 @@ namespace RiverHollow.GUIComponents.Screens
             else { _iHairTypeIndex = 0; }
 
             _playerDisplayBox.SyncHair(_iHairTypeIndex);
+        }
+        public void BtnAssignClass(ClassSelectionBox o)
+        {
+                ClassSelectionBox csb = ((ClassSelectionBox)o);
+                if (_selectedClass != csb)
+                {
+                    csb.PlayAnimation("WalkDown");
+                    _selectedClass.PlayAnimation("Idle");
+                    _selectedClass = csb;
+                }
         }
         #endregion
 
@@ -289,7 +292,10 @@ namespace RiverHollow.GUIComponents.Screens
             int _iClassID;
             public int ClassID => _iClassID;
 
-            public ClassSelectionBox(Vector2 p, WorldAdventurer w)
+            public delegate void ClickDelegate(ClassSelectionBox o);
+            private ClickDelegate _delAction;
+
+            public ClassSelectionBox(Vector2 p, WorldAdventurer w, ClickDelegate del)
             {
                 _sprite = new GUISprite(w.BodySprite);
                 _sprite.SetScale((int)GameManager.Scale);
@@ -300,6 +306,8 @@ namespace RiverHollow.GUIComponents.Screens
                 Height = _sprite.Height + (_winData.Edge * 2);
                 _sprite.CenterOnWindow(this);
                 _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
+
+                _delAction = del;
             }
 
             public override void Update(GameTime gameTime)
@@ -325,6 +333,17 @@ namespace RiverHollow.GUIComponents.Screens
             public void PlayAnimation(string animation)
             {
                 _sprite.PlayAnimation(animation);
+            }
+
+            public override bool ProcessLeftButtonClick(Point mouse)
+            {
+                bool rv = false;
+                if (Contains(mouse) && _delAction != null)
+                {
+                    _delAction(this);
+                    rv = true;
+                }
+                return rv;
             }
         }
     }

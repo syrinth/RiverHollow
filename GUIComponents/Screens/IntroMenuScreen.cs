@@ -40,6 +40,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
 
+        public override bool ProcessRightButtonClick(Point mouse)
+        {
+            return false;
+        }
+
         #region Button Actions
         public void BtnNewGame()
         {

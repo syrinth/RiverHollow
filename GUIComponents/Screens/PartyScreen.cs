@@ -241,6 +241,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return _window.Contains(mouse);
         }
 
+        //MAR
         private bool EquipmentSwap(GUIItemBox box)
         {
             bool rv = false;
