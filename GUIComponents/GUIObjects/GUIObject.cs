@@ -28,7 +28,7 @@ namespace RiverHollow.GUIObjects
         public int Width;
 
         private Vector2 _vPos;
-        protected float _fAlpha = 1.0f;
+        public float Alpha = 1.0f;
 
         protected Rectangle _drawRect;
         public Rectangle DrawRectangle { get => _drawRect; }
@@ -45,7 +45,7 @@ namespace RiverHollow.GUIObjects
         public virtual void Update(GameTime gameTime) { }
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _drawRect, _sourceRect, _cEnabled * _fAlpha);
+            spriteBatch.Draw(_texture, _drawRect, _sourceRect, _cEnabled * Alpha);
         }
 
         public virtual void Enable(bool value)

@@ -15,30 +15,29 @@ namespace RiverHollow.Characters.NPCs
         protected List<Merchandise> _liMerchandise;
         public List<Merchandise> Buildings { get => _liMerchandise; }
 
-        public ShopKeeper(int index, string[] data)
+        public ShopKeeper(int index, string[] stringData)
         {
+            _currentPath = new List<RHTile>();
+            _liMerchandise = new List<Merchandise>();
             _collection = new Dictionary<int, bool>();
             _completeSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
-            _currentPath = new List<RHTile>();
+
             LoadContent();
-            if (data.Length >= 5)
+
+            _index = index;
+            int i = ImportBasics(index, stringData);
+            for (; i < stringData.Length; i++)
             {
-                _index = index;
-                int i = ImportBasics(data);
-                _liMerchandise = new List<Merchandise>();
-                while (i < data.Length)
+                string[] tagType = stringData[i].Split(':');
+                if (tagType[0].Equals("ShopData"))
                 {
-                    foreach (KeyValuePair<int, string> kvp in GameContentManager.GetMerchandise(data[i++]))
-                    {
+                    foreach (KeyValuePair<int, string> kvp in GameContentManager.GetMerchandise(tagType[1])) { 
                         _liMerchandise.Add(new Merchandise(kvp.Value));
                     }
                 }
-
-                _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + index);
-                _portrait = GameContentManager.GetTexture(@"Textures\portraits");
-
-                MapManager.Maps[CurrentMapName].AddCharacter(this);
             }
+
+            MapManager.Maps[CurrentMapName].AddCharacter(this);
         }
 
         public void Talk(bool IsOpen = false)

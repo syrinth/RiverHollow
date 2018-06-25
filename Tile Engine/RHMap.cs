@@ -105,7 +105,7 @@ namespace RiverHollow.Tile_Engine
             _bWorkerBuilding = _map.Properties.ContainsKey("WorkerBuilding");
             _bDungeon = _map.Properties.ContainsKey("Dungeon");
             _bTown = _map.Properties.ContainsKey("Town");
-            bool.TryParse(_map.Properties["Outside"], out _bOutside);
+            _bOutside = _map.Properties.ContainsKey("Outside");
 
             MapWidthTiles = _map.Width;
             MapHeightTiles = _map.Height;
@@ -609,26 +609,29 @@ namespace RiverHollow.Tile_Engine
             float rv = 0;
             foreach (WorldCharacter c in _liCharacters)
             {
-                if (mover != c && !c.IsSpirit() && c.CollisionIntersects(movingChar))
+                if (c.Active)
                 {
-                    collision = true;
-                    Vector2 collisionTileCoords = Util.GetGridCoords(c.CollisionBox.Location);
-                    if (dir.X != 0)
+                    if (mover != c && !c.IsSpirit() && c.CollisionIntersects(movingChar))
                     {
-                        //rv = CheckToNudge(movingChar.Center.Y, c.CollisionBox.Center.Y, -1, -1, "Row");
-                        rv = CheckToNudge(movingChar.Center.Y, c.CollisionBox.Center.Y, collisionTileCoords.X, collisionTileCoords.Y, "Row");
-                        rv = CheckToNudge(movingChar.Center.Y, c.CollisionBox.Center.Y, collisionTileCoords.X, collisionTileCoords.Y, "Row");
-                    }
-                    if (dir.Y != 0)
-                    {
-                        rv = CheckToNudge(movingChar.Center.X, c.CollisionBox.Center.X, collisionTileCoords.X, collisionTileCoords.Y, "Col");
-                        rv = CheckToNudge(movingChar.Center.X, c.CollisionBox.Center.X, collisionTileCoords.X, collisionTileCoords.Y, "Col");
-                       // rv = CheckToNudge(movingChar.Center.X, c.CollisionBox.Center.X, -1, -1, "Col");
-                    }
+                        collision = true;
+                        Vector2 collisionTileCoords = Util.GetGridCoords(c.CollisionBox.Location);
+                        if (dir.X != 0)
+                        {
+                            //rv = CheckToNudge(movingChar.Center.Y, c.CollisionBox.Center.Y, -1, -1, "Row");
+                            rv = CheckToNudge(movingChar.Center.Y, c.CollisionBox.Center.Y, collisionTileCoords.X, collisionTileCoords.Y, "Row");
+                            rv = CheckToNudge(movingChar.Center.Y, c.CollisionBox.Center.Y, collisionTileCoords.X, collisionTileCoords.Y, "Row");
+                        }
+                        if (dir.Y != 0)
+                        {
+                            rv = CheckToNudge(movingChar.Center.X, c.CollisionBox.Center.X, collisionTileCoords.X, collisionTileCoords.Y, "Col");
+                            rv = CheckToNudge(movingChar.Center.X, c.CollisionBox.Center.X, collisionTileCoords.X, collisionTileCoords.Y, "Col");
+                            // rv = CheckToNudge(movingChar.Center.X, c.CollisionBox.Center.X, -1, -1, "Col");
+                        }
 
-                    if (rv != 0)
-                    {
-                        break;
+                        if (rv != 0)
+                        {
+                            break;
+                        }
                     }
                 }
             }
@@ -824,7 +827,7 @@ namespace RiverHollow.Tile_Engine
             {
                 foreach (WorldCharacter c in _liCharacters)
                 {
-                    if (PlayerManager.PlayerInRange(c.CollisionBox.Center, (int)(TileSize * 1.5)) && c.CollisionContains(mouseLocation) && c.CanTalk())
+                    if (PlayerManager.PlayerInRange(c.CollisionBox.Center, (int)(TileSize * 1.5)) && c.CollisionContains(mouseLocation) && c.CanTalk() && c.Active)
                     {
                         rv = true;
                         if (c.IsSpirit())
@@ -1052,7 +1055,7 @@ namespace RiverHollow.Tile_Engine
                 foreach(WorldCharacter c in _liCharacters)
                 {
                     if(!c.IsMob() && c.CollisionContains(mouseLocation)){
-                        if (!c.IsSpirit() || ((Spirit)c).Active)
+                        if (c.Active)
                         {
                             GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Talk;
                             found = true;

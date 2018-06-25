@@ -65,8 +65,6 @@ namespace RiverHollow.Characters.NPCs
             _iMood = 0;
             DrawIt = true;
             Adventuring = false;
-
-            
         }
 
         public  new void LoadContent(string texture)
@@ -261,11 +259,12 @@ namespace RiverHollow.Characters.NPCs
             _c.SetName(name);
         }
 
-        public WorkerData SaveData()
+        public new WorkerData SaveData()
         {
             WorkerData workerData = new WorkerData
             {
                 workerID = this.AdventurerID,
+                advData = Combat.SaveData(),
                 mood = this.Mood,
                 name = this.Name,
                 processedTime = this.ProcessedTime,
@@ -285,7 +284,7 @@ namespace RiverHollow.Characters.NPCs
             _heldItem = ObjectManager.GetItem(data.heldItemID);
 
             SetCombat();
-            _c.SetName(_sName);
+            Combat.LoadData(data.advData);
 
             if (_currentlyMaking != null) { _bodySprite.SetCurrentAnimation("Working"); }
         }

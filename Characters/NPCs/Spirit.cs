@@ -17,8 +17,6 @@ namespace RiverHollow.Characters.NPCs
         string _sCondition;
         string _sText;
 
-        bool _bActive;
-        public bool Active => _bActive;
         public bool Triggered;
 
         public Spirit(string name, string type, string condition, string text) : base()

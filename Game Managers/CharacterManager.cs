@@ -44,11 +44,14 @@ namespace RiverHollow.Game_Managers
             {
                 NPC n = null;
                 string _characterData = kvp.Value;
-                string[] _characterDataValues = _characterData.Split('/');
-                switch (_characterDataValues[0])
+                string[] _characterDataValues = Util.FindTags(_characterData);
+                switch (_characterDataValues[0].Split(':')[1])
                 {
-                    case "Shopkeeper":
+                    case "ShopKeeper":
                         n = new ShopKeeper(kvp.Key, _characterDataValues);
+                        break;
+                    case "Eligible":
+                        n = new EligibleNPC(kvp.Key, _characterDataValues);
                         break;
                     default:
                         n = new NPC(kvp.Key, _characterDataValues);

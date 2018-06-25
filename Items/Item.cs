@@ -252,6 +252,19 @@ namespace RiverHollow.WorldObjects
         public bool IsMap() { return _itemType == ItemEnum.Map; }
         public bool IsClothes() { return _itemType == ItemEnum.Clothes; }
 
+        public static ItemData SaveData(Item i)
+        {
+            if (i == null)
+            {
+                return new ItemData
+                {
+                    itemID = -1,
+                    num = 0,
+                    strData = ""
+                }; 
+            }
+            else { return i.SaveData(); }
+        }
         public ItemData SaveData()
         {
             ItemData itemData = new ItemData

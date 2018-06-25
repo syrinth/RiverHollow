@@ -12,6 +12,7 @@ using RiverHollow.Game_Managers.GUIObjects;
 
 using static RiverHollow.Game_Managers.GameManager;
 using System.IO;
+using RiverHollow.Characters.CombatStuff;
 
 namespace RiverHollow.Characters
 {
@@ -20,16 +21,15 @@ namespace RiverHollow.Characters
         protected int _index;
         public int ID { get => _index; }
         protected string _homeMap;
-        public enum NPCTypeEnum { Villager, Shopkeeper, Ranger, Worker }
+        public enum NPCTypeEnum { Eligible, Villager, Shopkeeper, Ranger, Worker }
         protected NPCTypeEnum _npcType;
         public NPCTypeEnum NPCType { get => _npcType; }
-        public int Friendship = 0;
+        public int Friendship = 500;
 
         protected Dictionary<int, bool> _collection;
         public Dictionary<int, bool> Collection { get => _collection; }
         public bool Introduced;
-        public bool Married;
-        public bool GiftGiven;
+        public bool CanGiveGift;
 
         protected Dictionary<string, List<KeyValuePair<string, string>>> _completeSchedule;         //Every day with a list of KVP Time/GoToLocations
         List<KeyValuePair<string, List<RHTile>>> _todaysPathing = null;                             //List of Times with the associated pathing
@@ -60,33 +60,60 @@ namespace RiverHollow.Characters
 
         public NPC(int index, string[] data)
         {
-            _index = index;
             _collection = new Dictionary<int, bool>();
             _completeSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
-            _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + _index);
-            _portrait = GameContentManager.GetTexture(@"Textures\portraits");
             _scheduleIndex = 0;
 
             LoadContent();
-            ImportBasics(data);
+            ImportBasics(index, data);
 
             MapManager.Maps[CurrentMapName].AddCharacter(this);
         }
 
-        protected int ImportBasics(string[] stringData)
+        protected int ImportBasics(int id, string[] stringData)
         {
-            int i = 0;
-            _npcType = Util.ParseEnum<NPCTypeEnum>(stringData[i++]);
-            _sName = stringData[i++];
-            _portraitRect = new Rectangle(0, int.Parse(stringData[i++]) * 192, PortraitWidth, PortraitHeight);
-            CurrentMapName = stringData[i++];
-            _homeMap = CurrentMapName;
-            Position = Util.SnapToGrid(MapManager.Maps[CurrentMapName].GetCharacterSpawn("NPC" + _index));
+            _index = id;
+            _sName = GameContentManager.GetGameText("NPC" + _index);
+            _portrait = GameContentManager.GetTexture(@"Textures\portraits");
+            _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + _index);
 
-            string[] vectorSplit = stringData[i++].Split(' ');
-            foreach (string s in vectorSplit)
+            int i = 0;
+            int totalCount = 0;
+            for (; i < stringData.Length; i++)
             {
-                _collection.Add(int.Parse(s), false);
+                string[] tagType = stringData[i].Split(':');
+                if (tagType[0].Equals("Type"))
+                {
+                    _npcType = Util.ParseEnum<NPCTypeEnum>(tagType[1]);
+                    totalCount++;
+                }
+                else if (tagType[0].Equals("PortRow"))
+                {
+                    _portraitRect = new Rectangle(0, int.Parse(tagType[1]) * 192, PortraitWidth, PortraitHeight);
+                    totalCount++;
+                }
+                else if (tagType[0].Equals("HomeMap"))
+                {
+                    CurrentMapName = tagType[1];
+                    _homeMap = CurrentMapName;
+                    Position = Util.SnapToGrid(MapManager.Maps[CurrentMapName].GetCharacterSpawn("NPC" + _index));
+
+                    totalCount++;
+                }
+                else if (tagType[0].Equals("Collection"))
+                {
+                    string[] vectorSplit = tagType[1].Split('-');
+                    foreach (string s in vectorSplit)
+                    {
+                        _collection.Add(int.Parse(s), false);
+                    }
+                    totalCount++;
+                }
+
+                if (totalCount == 4)
+                {
+                    break;
+                }
             }
 
             Dictionary<string, string> schedule = CharacterManager.GetSchedule("NPC" + _index);
@@ -113,34 +140,31 @@ namespace RiverHollow.Characters
         {
             base.Update(theGameTime);
 
-            if (!Married)   //Just for now
+            if (_vMoveTo != Vector2.Zero)
             {
-                if (_vMoveTo != Vector2.Zero)
+                HandleMove(_vMoveTo);
+            }
+            else if (_todaysPathing != null)
+            {
+                string currTime = GameCalendar.GetTime();
+                //_scheduleIndex keeps track of which pathing route we're currently following.
+                //Running late code to be implemented later
+                if (_scheduleIndex < _todaysPathing.Count && ((_todaysPathing[_scheduleIndex].Key == currTime)))// || RunningLate(movementList[_scheduleIndex].Key, currTime)))
                 {
-                    HandleMove(_vMoveTo);
+                    _currentPath = _todaysPathing[_scheduleIndex++].Value;
                 }
-                else if (_todaysPathing != null)
-                {
-                    string currTime = GameCalendar.GetTime();
-                    //_scheduleIndex keeps track of which pathing route we're currently following.
-                    //Running late code to be implemented later
-                    if (_scheduleIndex < _todaysPathing.Count && ((_todaysPathing[_scheduleIndex].Key == currTime)))// || RunningLate(movementList[_scheduleIndex].Key, currTime)))
-                    {
-                        _currentPath = _todaysPathing[_scheduleIndex++].Value;
-                    }
 
-                    if (_currentPath.Count > 0)
+                if (_currentPath.Count > 0)
+                {
+                    Vector2 targetPos = _currentPath[0].Position;
+                    if (Position == targetPos)
                     {
-                        Vector2 targetPos = _currentPath[0].Position;
-                        if (Position == targetPos)
-                        {
-                            _currentPath.RemoveAt(0);
-                            DetermineFacing(Vector2.Zero);
-                        }
-                        else
-                        {
-                            HandleMove(targetPos);
-                        }
+                        _currentPath.RemoveAt(0);
+                        DetermineFacing(Vector2.Zero);
+                    }
+                    else
+                    {
+                        HandleMove(targetPos);
                     }
                 }
             }
@@ -156,12 +180,11 @@ namespace RiverHollow.Characters
             CheckMapForCollisionsAndMove(direction);
         }
 
-        public void RollOver()
+        public virtual void RollOver()
         {
-            GiftGiven = false;
             MapManager.Maps[CurrentMapName].RemoveCharacter(this);
-            RHMap map = MapManager.Maps[Married ? "mapManor" : _homeMap];
-            string Spawn = Married ? "Spouse" : "NPC" + _index;
+            RHMap map = MapManager.Maps[_homeMap];
+            string Spawn = "NPC" + _index;
 
             Position = Util.SnapToGrid(map.GetCharacterSpawn(Spawn));
             map.AddCharacter(this);
@@ -366,7 +389,7 @@ namespace RiverHollow.Characters
                 }
                 else
                 {
-                    if (GiftGiven && s.Contains("GiveGift"))
+                    if (!CanGiveGift && s.Contains("GiveGift"))
                     {
                         removeIt = true;
                     }
@@ -418,23 +441,29 @@ namespace RiverHollow.Characters
             }
             else if (entry.Equals("Party"))
             {
-                //DrawIt = false;
-                //Busy = true;
-                //PlayerManager.AddToParty(_c);
-                //rv = "Of course!";
-                return "I'd love to, but I can't";
+                if (IsEligible())
+                {
+                    EligibleNPC e = (EligibleNPC)this;
+                    if (e.Married || e.CanJoinParty)
+                    {
+                        e.JoinParty();
+                        return _dialogueDictionary["JoinPartyYes"];
+                    }
+                    else
+                    {
+                        return _dialogueDictionary["JoinPartyNo"];
+                    }
+                }
             }
             else if (entry.Equals("Nothing"))
             {
                 return string.Empty;
             }
-            else
-            {
-                return _dialogueDictionary.ContainsKey(entry) ? Util.ProcessText(_dialogueDictionary[entry], _sName) : string.Empty;
-            }
+
+            return _dialogueDictionary.ContainsKey(entry) ? Util.ProcessText(_dialogueDictionary[entry], _sName) : string.Empty;
         }
 
-        public void Gift(Item item)
+        public virtual void Gift(Item item)
         {
             if (item != null)
             {
@@ -445,23 +474,9 @@ namespace RiverHollow.Characters
                     text = GetDialogEntry("Adventure");
                     DungeonManager.LoadNewDungeon((AdventureMap)item);
                 }
-                else if (item.IsMarriage())
-                {
-                    if (Friendship > 200)
-                    {
-                        Married = true;
-                        text = GetDialogEntry("MarriageYes");
-                    }
-                    else
-                    {
-                        item.Number++;
-                        InventoryManager.AddItemToInventory(item);
-                        text = GetDialogEntry("MarriageNo");
-                    }
-                }
                 else
                 {
-                    GiftGiven = true;
+                    CanGiveGift = false;
                     if (_collection.ContainsKey(item.ItemID))
                     {
                         Friendship += _collection[item.ItemID] ? 50 : 20;
@@ -492,13 +507,14 @@ namespace RiverHollow.Characters
             }
         }
 
+        public bool IsEligible() { return _npcType == NPCTypeEnum.Eligible; }
+
         public NPCData SaveData()
         {
             NPCData npcData = new NPCData()
             {
                 npcID = ID,
                 introduced = Introduced,
-                married = Married,
                 friendship = Friendship,
                 collection = new List<CollectionData>()
             };
@@ -518,7 +534,6 @@ namespace RiverHollow.Characters
         {
             Introduced = data.introduced;
             Friendship = data.friendship;
-            Married = data.married;
             int index = 1;
             foreach (CollectionData c in data.collection)
             {
@@ -526,6 +541,174 @@ namespace RiverHollow.Characters
                 {
                     Collection[c.itemID] = c.given;
                     MapManager.Maps["HouseNPC" + data.npcID].AddCollectionItem(c.itemID, data.npcID, index++);
+                }
+            }
+        }
+    }
+
+    public class EligibleNPC : NPC
+    {
+        public bool Married;
+        bool _bCanJoinParty = true;
+        public bool CanJoinParty => _bCanJoinParty;
+        private CombatAdventurer _combat;
+        public CombatAdventurer Combat => _combat;
+
+        public EligibleNPC(int index, string[] stringData)
+        {
+            _currentPath = new List<RHTile>();
+            _collection = new Dictionary<int, bool>();
+            _completeSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
+
+            LoadContent();
+
+            _index = index;
+            int i = ImportBasics(index, stringData);
+            for (; i < stringData.Length; i++)
+            {
+                string[] tagType = stringData[i].Split(':');
+                if (tagType[0].Equals("Class"))
+                {
+                    _combat = new CombatAdventurer(_sName);
+                    _combat.SetClass(CharacterManager.GetClassByIndex(int.Parse(tagType[1])));
+                    _combat.LoadContent(@"Textures\" + _combat.CharacterClass.Name);
+                }
+            }
+
+            MapManager.Maps[CurrentMapName].AddCharacter(this);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
+        {
+            if (_bActive)
+            {
+                base.Draw(spriteBatch, useLayerDepth);
+            }
+        }
+        public override void Update(GameTime theGameTime)
+        {
+            if (_bActive && !Married)   //Just for now
+            {
+                base.Update(theGameTime);
+            }
+        }
+
+        public override void RollOver()
+        {
+            MapManager.Maps[CurrentMapName].RemoveCharacter(this);
+            RHMap map = MapManager.Maps[Married ? "mapManor" : _homeMap];
+            string Spawn = Married ? "Spouse" : "NPC" + _index;
+
+            Position = Util.SnapToGrid(map.GetCharacterSpawn(Spawn));
+            map.AddCharacter(this);
+
+            _bActive = false;
+            PlayerManager.RemoveFromParty(_combat);
+
+            //Reset on Monday
+            if (GameCalendar.DayOfWeek == 0)
+            {
+                _bCanJoinParty = true;
+                CanGiveGift = true;
+            }
+
+            CalculatePathing();
+        }
+
+        public override void Gift(Item item)
+        {
+            if (item != null)
+            {
+                string text = string.Empty;
+                item.Remove(1);
+                if (item.IsMap() && NPCType == NPC.NPCTypeEnum.Ranger)
+                {
+                    text = GetDialogEntry("Adventure");
+                    DungeonManager.LoadNewDungeon((AdventureMap)item);
+                }
+                else if (item.IsMarriage())
+                {
+                    if (Friendship > 200)
+                    {
+                        Married = true;
+                        text = GetDialogEntry("MarriageYes");
+                    }
+                    else
+                    {
+                        item.Number++;
+                        InventoryManager.AddItemToInventory(item);
+                        text = GetDialogEntry("MarriageNo");
+                    }
+                }
+                else
+                {
+                    CanGiveGift = false;
+                    if (_collection.ContainsKey(item.ItemID))
+                    {
+                        Friendship += _collection[item.ItemID] ? 50 : 20;
+                        text = GetDialogEntry("Collection");
+                        int index = 1;
+                        foreach (int items in _collection.Keys)
+                        {
+                            if (_collection[items])
+                            {
+                                index++;
+                            }
+                        }
+
+                        _collection[item.ItemID] = true;
+                        MapManager.Maps["mapHouseNPC" + _index].AddCollectionItem(item.ItemID, _index, index);
+                    }
+                    else
+                    {
+                        text = GetDialogEntry("Gift");
+                        Friendship += 10;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(text))
+                {
+                    GUIManager.SetScreen(new TextScreen(this, text));
+                }
+            }
+        }
+
+        public void JoinParty()
+        {
+            _bActive = false;
+            _bCanJoinParty = false;
+            PlayerManager.AddToParty(((EligibleNPC)this).Combat);
+        }
+
+        public new EligibleNPCData SaveData()
+        {
+            EligibleNPCData npcData = new EligibleNPCData()
+            {
+                npcData = base.SaveData(),
+                married = Married,
+                canJoinParty = _bCanJoinParty,
+                canGiveGift = CanGiveGift,
+                adventurerData = Combat.SaveData()
+            };
+
+            return npcData;
+        }
+        public void LoadData(EligibleNPCData data)
+        {
+            Introduced = data.npcData.introduced;
+            Friendship = data.npcData.friendship;
+            Married = data.married;
+            _bCanJoinParty = data.canJoinParty;
+            CanGiveGift = data.canGiveGift;
+            Combat.LoadData(data.adventurerData);
+
+            int index = 1;
+            foreach (CollectionData c in data.npcData.collection)
+            {
+                if (c.given)
+                {
+                    Collection[c.itemID] = c.given;
+                    MapManager.Maps["HouseNPC" + data.npcData.npcID].AddCollectionItem(c.itemID, data.npcData.npcID, index++);
                 }
             }
 

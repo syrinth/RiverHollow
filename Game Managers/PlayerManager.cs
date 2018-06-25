@@ -53,7 +53,7 @@ namespace RiverHollow.Game_Managers
         private static int _money = 2000;
         public static int Money { get => _money; }
 
-        private static WorldCharacter _marriedTo;
+        private static EligibleNPC _marriedTo;
         #endregion
 
         public static void Initialize()
@@ -213,11 +213,17 @@ namespace RiverHollow.Game_Managers
         }
         public static void AddToParty(CombatAdventurer c)
         {
-            _party.Add(c);
+            if (!_party.Contains(c))
+            {
+                _party.Add(c);
+            }
         }
         public static void RemoveFromParty(CombatAdventurer c)
         {
-            _party.Remove(c);
+            if (_party.Contains(c))
+            {
+                _party.Remove(c);
+            }
         }
 
         //Random quests should not generate a quest with the same goal as a pre-existing quest
@@ -532,6 +538,51 @@ namespace RiverHollow.Game_Managers
                         if (_wateringCan == null) { _wateringCan = t; }
                         //else if (_pick.DmgValue < t.DmgValue) { _pick = t; }
                     }
+                }
+            }
+        }
+
+        public static PlayerData SaveData()
+        {
+            PlayerData d = new PlayerData()
+            {
+                name = PlayerManager.Name,
+                money = PlayerManager.Money,
+                hairColor = PlayerManager.World.HairColor,
+                hairIndex = PlayerManager.World.HairIndex,
+                hat = Item.SaveData(World.Hat),
+                chest = Item.SaveData(World.Chest),
+                adventurerData = Combat.SaveData(),
+                currentClass = PlayerManager.Combat.CharacterClass.ID,
+                Items = new List<ItemData>()
+            };
+
+            return d;
+        }
+
+        public static void LoadData(PlayerData data)
+        {
+            SetName(data.name);
+            SetMoney(data.money);
+            World.SetHairColor(data.hairColor);
+            World.SetHairType(data.hairIndex);
+
+            SetClass(data.currentClass);
+            Combat.LoadData(data.adventurerData);
+
+            World.SetClothes((Clothes)ObjectManager.GetItem(data.hat.itemID));
+            World.SetClothes((Clothes)ObjectManager.GetItem(data.chest.itemID));
+
+            for (int i = 0; i < InventoryManager.maxItemRows; i++)
+            {
+                for (int j = 0; j < InventoryManager.maxItemColumns; j++)
+                {
+                    int index = i * InventoryManager.maxItemColumns + j;
+                    ItemData item = data.Items[index];
+                    Item newItem = ObjectManager.GetItem(item.itemID, item.num);
+ 
+                    if (newItem != null) { newItem.ApplyUniqueData(item.strData); }
+                    InventoryManager.AddItemToInventorySpot(newItem, i, j);
                 }
             }
         }

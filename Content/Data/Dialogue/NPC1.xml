@@ -39,6 +39,14 @@
       <Value>Hello, what can I do for you?.[Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Nothing]</Value>
     </Item>
     <Item>
+      <Key>JoinPartyYes</Key>
+      <Value>Certainly, I'd like to see what we can accomplish together.</Value>
+    </Item>
+    <Item>
+      <Key>JoinPartyNo</Key>
+      <Value>Sorry,I'm very busy today. Maybe in a few days I can go with you again.</Value>
+    </Item>
+    <Item>
       <Key>MarriageYes</Key>
       <Value>Yes I will marry you!</Value>
     </Item>

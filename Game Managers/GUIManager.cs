@@ -100,6 +100,7 @@ namespace RiverHollow.Game_Managers
 
         public static void FadeOut()
         {
+            _slowFade = false;
             _fading = true;
         }
 

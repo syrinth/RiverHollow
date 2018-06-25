@@ -332,7 +332,7 @@ namespace RiverHollow.Misc
             qData.Items = new List<ItemData>();
             foreach(Item i in _liRewardItems)
             {
-                qData.Items.Add(i.SaveData());
+                qData.Items.Add(Item.SaveData(i));
             }
 
             return qData;

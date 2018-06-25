@@ -143,29 +143,14 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "SaveID")]
             public long saveID;
 
-            [XmlElement(ElementName = "Name")]
-            public string name;
+            [XmlElement(ElementName = "Player")]
+            public PlayerData playerData;
 
             [XmlElement(ElementName = "CurrentMap")]
             public string currentMap;
 
-            [XmlElement(ElementName = "Money")]
-            public int money;
-
-            [XmlElement(ElementName = "CurrentClass")]
-            public int currentClass;
-
-            [XmlElement(ElementName = "HairColor")]
-            public Color hairColor;
-
-            [XmlElement(ElementName = "HairIndex")]
-            public int hairIndex;
-
             [XmlElement(ElementName = "Calendar")]
             public CalendarData Calendar;
-
-            [XmlArray(ElementName = "Items")]
-            public List<ItemData> Items;
 
             [XmlArray(ElementName = "Buildings")]
             public List<BuildingData> Buildings;
@@ -184,8 +169,40 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "NPCData")]
             public List<NPCData> NPCData;
+
+            [XmlArray(ElementName = "EligibleData")]
+            public List<EligibleNPCData> EligibleData;
         }
 
+        public struct PlayerData
+        {
+            [XmlElement(ElementName = "Name")]
+            public string name;
+
+            [XmlElement(ElementName = "Money")]
+            public int money;
+
+            [XmlElement(ElementName = "CurrentClass")]
+            public int currentClass;
+
+            [XmlElement(ElementName = "HairColor")]
+            public Color hairColor;
+
+            [XmlElement(ElementName = "HairIndex")]
+            public int hairIndex;
+
+            [XmlElement(ElementName = "Hat")]
+            public ItemData hat;
+
+            [XmlElement(ElementName = "Chest")]
+            public ItemData chest;
+
+            [XmlArray(ElementName = "Items")]
+            public List<ItemData> Items;
+
+            [XmlElement(ElementName = "AdventurerData")]
+            public AdventurerData adventurerData;
+        }
         public struct CalendarData
         {
             [XmlElement(ElementName = "dayOfMonth")]
@@ -246,6 +263,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Name")]
             public string name;
 
+            [XmlElement(ElementName = "AdventurerData")]
+            public AdventurerData advData;
+
             [XmlElement(ElementName = "Mood")]
             public int mood;
 
@@ -257,6 +277,20 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "HeldItemID")]
             public int heldItemID;
+        }
+        public struct AdventurerData
+        {
+            [XmlElement(ElementName = "XP")]
+            public int xp;
+
+            [XmlElement(ElementName = "Level")]
+            public int level;
+
+            [XmlElement(ElementName = "Armor")]
+            public ItemData armor;
+
+            [XmlElement(ElementName = "Weapon")]
+            public ItemData weapon;
         }
         public struct ItemData
         {
@@ -309,15 +343,31 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Introduced")]
             public bool introduced;
 
-            [XmlElement(ElementName = "Married")]
-            public bool married;
-
             [XmlElement(ElementName = "Friendship")]
             public int friendship;
 
             [XmlArray(ElementName = "Collection")]
             public List<CollectionData> collection;
         }
+
+        public struct EligibleNPCData
+        {
+            [XmlElement(ElementName = "NPCData")]
+            public NPCData npcData;
+
+            [XmlElement(ElementName = "Married")]
+            public bool married;
+
+            [XmlElement(ElementName = "CanJoin")]
+            public bool canJoinParty;
+
+            [XmlElement(ElementName = "CanGiveGift")]
+            public bool canGiveGift;
+
+            [XmlElement(ElementName = "AdventurerData")]
+            public AdventurerData adventurerData;
+        }
+
         public struct CollectionData
         {
             [XmlElement(ElementName = "ItemID")]
@@ -437,28 +487,27 @@ namespace RiverHollow.Game_Managers
             SaveData data = new SaveData()
             {
                 saveID = GetSaveID(),
-                name = PlayerManager.Name,
                 currentMap = PlayerManager.CurrentMap,
-                money = PlayerManager.Money,
-                hairColor = PlayerManager.World.HairColor,
-                hairIndex = PlayerManager.World.HairIndex,
-                currentClass = PlayerManager.Combat.CharacterClass.ID,
                 Calendar = GameCalendar.SaveCalendar(),
-                Items = new List<ItemData>(),
                 Buildings = new List<BuildingData>(),
                 MapData = new List<MapData>(),
                 UpgradeData = new List<UpgradeData>(),
                 PlotQuestData = new List<QuestData>(),
                 QuestLogData = new List<QuestData>(),
-                NPCData = new List<NPCData>()
+                NPCData = new List<NPCData>(),
+                EligibleData = new List<EligibleNPCData>()
             };
+
+            PlayerData playerData = PlayerManager.SaveData();
 
             // Initialize the new data values.
             foreach (Item i in InventoryManager.PlayerInventory)
             {
-                ItemData itemData = (i != null) ? i.SaveData() : new ItemData() { itemID = -1 };
-                data.Items.Add(itemData);
+                ItemData itemData = Item.SaveData(i);
+                playerData.Items.Add(itemData);
             }
+
+            data.playerData = playerData;
 
             foreach (WorkerBuilding b in PlayerManager.Buildings)
             {
@@ -492,7 +541,8 @@ namespace RiverHollow.Game_Managers
 
             foreach (NPC n in CharacterManager.DiNPC.Values)
             {
-                data.NPCData.Add(n.SaveData());
+                if (n.IsEligible()) { data.EligibleData.Add(((EligibleNPC)n).SaveData()); }
+                else { data.NPCData.Add(n.SaveData()); }
             }
 
             // Convert the object to XML data and put it in the stream.
@@ -544,12 +594,8 @@ namespace RiverHollow.Game_Managers
             _iSaveID = data.saveID;
             MapManager.CurrentMap = MapManager.Maps[data.currentMap];
             PlayerManager.Initialize();
+            PlayerManager.LoadData(data.playerData);
             PlayerManager.CurrentMap = MapManager.Maps[data.currentMap].Name;
-            PlayerManager.SetName(data.name);
-            PlayerManager.SetMoney(data.money);
-            PlayerManager.World.SetHairColor(data.hairColor);
-            PlayerManager.World.SetHairType(data.hairIndex);
-            PlayerManager.SetClass(data.currentClass);
             PlayerManager.World.Position = Util.SnapToGrid(MapManager.Maps[PlayerManager.CurrentMap].GetCharacterSpawn("PlayerSpawn"));
             PlayerManager.World.DetermineFacing(new Vector2(0, 1));
             GameCalendar.LoadCalendar(data.Calendar); 
@@ -559,19 +605,7 @@ namespace RiverHollow.Game_Managers
                 newBuilding.LoadData(b);
                 MapManager.Maps[MapManager.HomeMap].AddBuilding(newBuilding, false);
             }
-            for (int i = 0; i < InventoryManager.maxItemRows; i++)
-            {
-                for (int j = 0; j < InventoryManager.maxItemColumns; j++)
-                {
-                    int index = i * InventoryManager.maxItemColumns + j;
-                    ItemData item = data.Items[index];
-                    Item newItem = ObjectManager.GetItem(item.itemID, item.num);
- 
-                    if (newItem != null) { newItem.ApplyUniqueData(item.strData); }
-                    InventoryManager.AddItemToInventorySpot(newItem, i, j);
-                }
-            }
-            
+
             foreach (MapData mapData in data.MapData)
             {
                 RHMap map = MapManager.Maps[mapData.mapName];
@@ -595,6 +629,12 @@ namespace RiverHollow.Game_Managers
             foreach (NPCData n in data.NPCData)
             {
                 NPC target = CharacterManager.DiNPC[n.npcID];
+                target.LoadData(n);
+            }
+
+            foreach (EligibleNPCData n in data.EligibleData)
+            {
+                EligibleNPC target = (EligibleNPC)CharacterManager.DiNPC[n.npcData.npcID];
                 target.LoadData(n);
             }
         }

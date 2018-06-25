@@ -2,6 +2,7 @@
 using RiverHollow.Game_Managers;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters.CombatStuff
 {
@@ -63,6 +64,26 @@ namespace RiverHollow.Characters.CombatStuff
             {
                 _classLevel++;
             }
+        }
+
+        public AdventurerData SaveData()
+        {
+            AdventurerData advData = new AdventurerData
+            {
+                armor = Item.SaveData(Armor),
+                weapon = Item.SaveData(Weapon),
+                level = _classLevel,
+                xp = _xp
+            };
+
+            return advData;
+        }
+        public void LoadData(AdventurerData data)
+        {
+            Armor = (Equipment)ObjectManager.GetItem(data.armor.itemID, data.armor.num);
+            Weapon = (Equipment)ObjectManager.GetItem(data.weapon.itemID, data.weapon.num);
+            _classLevel = data.level;
+            _xp = data.xp;
         }
     }
 }

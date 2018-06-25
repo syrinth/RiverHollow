@@ -66,8 +66,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _fAlpha = Enabled ? 1.0f : 0.5f;
-
+            _btnObject.Alpha = Enabled ? 1.0f : 0.5f;
             _btnObject.Draw(spriteBatch);
         }
 

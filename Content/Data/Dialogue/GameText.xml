@@ -1,7 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[string, string]">
-    <!--Key:NPCType#, Value:Text-->
+    <!--NPC Text-->
+    <Item>
+      <Key>NPC1</Key>
+      <Value>Amanda</Value>
+    </Item>
+    <Item>
+      <Key>NPC2</Key>
+      <Value>Kyle</Value>
+    </Item>
+    <Item>
+      <Key>NPC3</Key>
+      <Value>Taylor</Value>
+    </Item>
+    <Item>
+      <Key>NPC4</Key>
+      <Value>Mara</Value>
+    </Item>
+    <Item>
+      <Key>NPC5</Key>
+      <Value>Eldra</Value>
+    </Item>
+    <Item>
+      <Key>NPC6</Key>
+      <Value>Griselda</Value>
+    </Item>
+    <Item>
+      <Key>NPC8</Key>
+      <Value>Gail</Value>
+    </Item>
     <Item>
       <Key>FoodConfirm</Key>
       <Value>Really eat the {0}? [Yes:UseItem|No:DoNothing]</Value>

@@ -120,6 +120,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         private void Load()
         {
+            _window.Controls.Clear();
             Width = _window.Width;
             Height = _window.Height;
 
@@ -368,7 +369,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 if (gBox != null) {
                     rv = ClothesSwap(gBox);
                 }
-
             }
 
             return rv;
@@ -377,8 +377,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public void AssignNewCharacter(CombatAdventurer c)
         {
             _character = c;
-            _weaponBox.SetItem(_character.Weapon);
-            _armorBox.SetItem(_character.Armor);
+            Load();
         }
     }
 }

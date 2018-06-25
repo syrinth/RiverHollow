@@ -234,6 +234,9 @@ namespace RiverHollow
             _iSeasonPrecipDays = d.currSeasonPrecipDays;
             _bNightfall = false;
 
+            _iCurrHour = 6;
+            _iCurrMin = 0;
+
             CheckDungeonLocks();
         }
 

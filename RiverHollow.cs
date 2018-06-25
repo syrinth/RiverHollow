@@ -269,7 +269,7 @@ namespace RiverHollow
         public static void NewGame()
         {
             PlayerManager.NewPlayer();
-            MapManager.PopulateMaps(false);
+            MapManager.PopulateHomeMap(false);
             GameCalendar.NewCalendar();
             BackToMain();
         }

@@ -4,31 +4,31 @@
     <!--Key: Index>0 Value:Type/Name/PortraitsRow/Map/Collection/[Merchandise]-->
     <Item>
       <Key>1</Key>
-      <Value>Villager/Amanda/1/mapHouseNPC1/0 1 2</Value>
+      <Value>[Type:Eligible][PortRow:1][HomeMap:mapHouseNPC1][Collection:0-1-2][Class:5]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Villager/Kyle/2/mapRiverHollowTown/3 4</Value>
+      <Value>[Type:Villager][PortRow:2][HomeMap:mapRiverHollowTown][Collection:3-4]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>Shopkeeper/Taylor/3/mapHouseNPC3/5 6/Buildings</Value>
+      <Value>[Type:ShopKeeper][PortRow:3][HomeMap:mapHouseNPC3][Collection:5-6][ShopData:Buildings]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>Ranger/Mara/1/mapRiverHollowTown/7 8</Value>
+      <Value>[Type:Ranger][PortRow:1][HomeMap:mapRiverHollowTown][Collection:7-8]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>Shopkeeper/Eldra/1/mapGuildhouse/7 8/Adventurers</Value>
+      <Value>[Type:ShopKeeper][PortRow:1][HomeMap:mapGuildhouse][Collection:7-8][ShopData:Adventurers]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>Shopkeeper/Griselda/3/mapRiverHollowTown/7 8/MagicShop</Value>
+      <Value>[Type:ShopKeeper][PortRow:3][HomeMap:mapRiverHollowTown][Collection:7-8][ShopData:MagicShop]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>Villager/Gail/3/mapHouseNPC1/7 8</Value>
+      <Value>[Type:Villager][PortRow:3][HomeMap:mapHouseNPC1][Collection:7-8]</Value>
     </Item>
   </Asset>
 </XnaContent>

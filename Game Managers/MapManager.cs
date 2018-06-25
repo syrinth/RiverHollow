@@ -166,7 +166,7 @@ namespace RiverHollow.Game_Managers
             _currentMap = _tileMaps[newMap];
         }
 
-        public static void PopulateMaps(bool loaded)
+        public static void PopulateHomeMap(bool loaded)
         {
             foreach(RHMap map in _tileMaps.Values)
             {
@@ -188,17 +188,17 @@ namespace RiverHollow.Game_Managers
                 //}
             }
 
-            //Mob mob = CharacterManager.GetMobByIndex(1, new Vector2(647, 539));
-            //mob.CurrentMapName = "mapManorGrounds";
-            //_tileMaps[@"mapManorGrounds"].AddMob(mob);
+            Mob mob = CharacterManager.GetMobByIndex(1, new Vector2(647, 539));
+            mob.CurrentMapName = "mapManorGrounds";
+            _tileMaps[MapManager.HomeMap].AddMob(mob);
 
-            //for (int i = 0; i < 20; i++)
-            //{
-            //    Vector2 vect = new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 2) * TileSize);
-            //    Mob mob = CharacterManager.GetMobByIndex(2, vect);
-            //    mob.CurrentMapName = _tileMaps[@"mapManorGrounds"].Name.Replace(@"Maps\", "");
-            //    _tileMaps[@"mapManorGrounds"].AddMob(mob);
-            //}
+            for (int i = 0; i < 20; i++)
+            {
+                Vector2 vect = new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 2) * TileSize);
+                mob = CharacterManager.GetMobByIndex(2, vect);
+                mob.CurrentMapName = _tileMaps[MapManager.HomeMap].Name.Replace(@"Maps\", "");
+                _tileMaps[MapManager.HomeMap].AddMob(mob);
+            }
 
 
 

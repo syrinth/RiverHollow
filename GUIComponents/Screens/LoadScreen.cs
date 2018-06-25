@@ -77,7 +77,7 @@ namespace RiverHollow.GUIComponents.Screens
             public SaveWindow(SaveData data, int id)
             {
                 _data = data;
-                _gText = new GUIText(data.name + ", " + CharacterManager.GetClassByIndex(data.currentClass).Name);
+                _gText = new GUIText(data.playerData.name + ", " + CharacterManager.GetClassByIndex(data.playerData.currentClass).Name);
                 _iId = id;
                 Position(Vector2.Zero);
                 _winData = GUIWindow.RedWin;
@@ -109,7 +109,7 @@ namespace RiverHollow.GUIComponents.Screens
                 if (Contains(mouse))
                 {
                     Load(Data);
-                    MapManager.PopulateMaps(true);
+                    MapManager.PopulateHomeMap(true);
                     BackToMain();
                     rv = true;
                 }

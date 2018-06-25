@@ -28,6 +28,9 @@ namespace RiverHollow.Characters
 
         public Rectangle CollisionBox { get => new Rectangle((int)Position.X + (Width/4), (int)Position.Y, Width/2, TileSize); }
 
+        protected bool _bActive = true;
+        public bool Active => _bActive;
+
         public int Speed = 5;
         #endregion
 
