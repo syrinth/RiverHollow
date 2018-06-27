@@ -602,7 +602,7 @@ namespace RiverHollow.Characters
             Position = Util.SnapToGrid(map.GetCharacterSpawn(Spawn));
             map.AddCharacter(this);
 
-            _bActive = false;
+            _bActive = true;
             PlayerManager.RemoveFromParty(_combat);
 
             //Reset on Monday
