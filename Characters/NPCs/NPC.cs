@@ -45,6 +45,9 @@ namespace RiverHollow.Characters
 
         protected Dictionary<string, string> _dialogueDictionary;
 
+        protected double _dEtherealCD;
+        protected bool _bIgnoreCollisions;
+
         public NPC() { }
         public NPC(NPC n)
         {
@@ -140,6 +143,23 @@ namespace RiverHollow.Characters
         {
             base.Update(theGameTime);
 
+            if(_dEtherealCD != 0)
+            {
+                _dEtherealCD -= theGameTime.ElapsedGameTime.TotalSeconds;
+                if(_dEtherealCD <= 0)
+                {
+                    if (!_bIgnoreCollisions)
+                    {
+                        _dEtherealCD = 5;
+                        _bIgnoreCollisions = true;
+                    }
+                    else
+                    {
+                        _dEtherealCD = 0;
+                        _bIgnoreCollisions = false;
+                    }
+                }
+            }
             if (_vMoveTo != Vector2.Zero)
             {
                 HandleMove(_vMoveTo);
@@ -177,7 +197,10 @@ namespace RiverHollow.Characters
             float deltaY = Math.Abs(target.Y - this.Position.Y);
 
             Util.GetMoveSpeed(Position, target, Speed, ref direction);
-            CheckMapForCollisionsAndMove(direction);
+            if (!CheckMapForCollisionsAndMove(direction, _bIgnoreCollisions))
+            {
+                if(_dEtherealCD == 0) { _dEtherealCD = 5; }
+            }
         }
 
         public virtual void RollOver()

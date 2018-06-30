@@ -143,18 +143,24 @@ namespace RiverHollow.Characters
             }
         }
 
-        protected void CheckMapForCollisionsAndMove(Vector2 direction)
+        protected bool CheckMapForCollisionsAndMove(Vector2 direction, bool ignoreCollisions = false)
         {
+            bool rv = false;
+            //Create the X and Y rectangles to test for collisions
             Rectangle testRectX = new Rectangle((int)(Position.X + direction.X), (int)Position.Y, Width, Height);
             Rectangle testRectY = new Rectangle((int)Position.X, (int)(Position.Y + direction.Y), Width, Height);
 
-            if (MapManager.Maps[CurrentMapName].CheckForCollisions(this, testRectX, testRectY, ref direction))
+            //If the CheckForCollisions gave the all clear, move the sprite.
+            if (MapManager.Maps[CurrentMapName].CheckForCollisions(this, testRectX, testRectY, ref direction, ignoreCollisions) && direction != Vector2.Zero)
             {
                 _bodySprite.MoveBy((int)direction.X, (int)direction.Y);
+                rv = true;
             }
 
             string animation = string.Empty;
             DetermineFacing(direction);
+
+            return rv;
         }
         
         public void SetMoveObj(Vector2 vec) { _vMoveTo = vec; }

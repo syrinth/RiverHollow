@@ -568,19 +568,22 @@ namespace RiverHollow.Tile_Engine
         }
 
         #region Collision Code
-        public bool CheckForCollisions(WorldCharacter c, Rectangle testX, Rectangle testY, ref Vector2 dir)
+        public bool CheckForCollisions(WorldCharacter c, Rectangle testX, Rectangle testY, ref Vector2 dir, bool ignoreCollisions = false)
         {
             bool rv = true;
             if (MapChange(c, testX) || MapChange(c, testY)) { return false; }
             else if(!CheckNPCForCollisionsAndNudges(c, testX, testY, ref dir))
             {
-                int column = ((dir.X < 0) ? testX.Left : testX.Right) / TileSize;
-                int row = ((dir.Y < 0) ? testY.Top : testY.Bottom) / TileSize;
+                if (!ignoreCollisions)
+                {
+                    int column = ((dir.X < 0) ? testX.Left : testX.Right) / TileSize;
+                    int row = ((dir.Y < 0) ? testY.Top : testY.Bottom) / TileSize;
 
-                //Do X-Axis comparison
-                if (dir.X != 0) { CollisionDetectionHelper(testX, ref dir, column, -1, GetMinRow(testX), GetMaxRow(testX)); }
-                //Do Y-Axis comparison
-                if (dir.Y != 0) { CollisionDetectionHelper(testY, ref dir, -1, row, GetMinColumn(testY), GetMaxColumn(testY)); }
+                    //Do X-Axis comparison
+                    if (dir.X != 0) { CollisionDetectionHelper(testX, ref dir, column, -1, GetMinRow(testX), GetMaxRow(testX)); }
+                    //Do Y-Axis comparison
+                    if (dir.Y != 0) { CollisionDetectionHelper(testY, ref dir, -1, row, GetMinColumn(testY), GetMaxColumn(testY)); }
+                }
             }
 
             return rv;
