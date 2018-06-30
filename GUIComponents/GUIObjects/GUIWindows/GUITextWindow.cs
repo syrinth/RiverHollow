@@ -31,7 +31,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         public bool Paused = false;
         #endregion
 
-        public GUITextWindow() : base() {
+        public GUITextWindow() : base()
+        {
             _giText = new GUIText();
             _liText = new List<string>();
             _iCharWidth = _giText.CharWidth;
@@ -56,18 +57,26 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             ParseText(text);
 
             Height = (int)_giText.TextSize.Y;
-            Width = (int)_giText.TextSize.X;
+            SetWidthMax((int)_giText.TextSize.X);
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
             Resize();
         }
 
         public GUITextWindow(Vector2 position, string text) : this()
         {
+            Height = (int)_giText.MeasureString(text).Y + (_winData.Edge * 2);
+            SetWidthMax((int)_giText.MeasureString(text).X, (int)(RiverHollow.ScreenWidth - position.X));
+
             ParseText(text);
 
-            Height = (int)_giText.TextSize.Y;
-            Width = (int)_giText.TextSize.X;
+            string totalVal = string.Empty;
+            foreach(string s in _liText)
+            {
+                totalVal += s;
+            }
+            _giText.SetText(totalVal);
             Position(position);
+
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
             Resize();
         }
@@ -181,6 +190,17 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         public bool Done()
         {
             return _iCurrText == _liText.Count && _giText.Done;
+        }
+
+        protected void SetWidthMax(int val)
+        {
+            SetWidthMax(val, RiverHollow.ScreenWidth / 3);   
+        }
+
+        protected void SetWidthMax(int val, int maxWidth)
+        {
+            val += (_winData.Edge * 2);
+            Width = val > maxWidth ? maxWidth : val;
         }
     }
 }

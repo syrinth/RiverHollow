@@ -30,7 +30,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public GUITextSelectionWindow(string selectionText) : this()
         {
             Setup(selectionText);
-            Width = (int)_giText.TextSize.X + 6; //6 is adding a bit of arbitrary extra space for the parsing. Exactsies are bad
+
+            SetWidthMax(((int)new GUIText(selectionText.Split('[')[0]).TextSize.X));
+
             Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
             PostParse();
         }
