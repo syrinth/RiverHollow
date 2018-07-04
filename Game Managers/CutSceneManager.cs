@@ -255,7 +255,7 @@ namespace RiverHollow.Game_Managers
             bool rv = false;
             foreach (KeyValuePair<int, int> kvp in _liReqFriendship)
             {
-                if(CharacterManager.DiNPC[kvp.Key].Friendship < kvp.Value) { goto friendshipExit; }
+                if(CharacterManager.DiNPC[kvp.Key].FriendshipPoints < kvp.Value) { goto friendshipExit; }
             }
 
             rv = true;

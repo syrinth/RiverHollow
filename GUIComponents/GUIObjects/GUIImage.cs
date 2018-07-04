@@ -44,7 +44,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _drawRect, _sourceRectangle, _color);
+            spriteBatch.Draw(_texture, _drawRect, _sourceRectangle, _color * Alpha);
         }
 
         public void Draw(SpriteBatch spriteBatch, float alpha)

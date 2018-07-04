@@ -105,6 +105,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _sText = text;
             SetDimensions(text);
         }
+
+        public void SetText(int num){
+            SetText(num.ToString());
+        }
         public void ResetText(string text)
         {
             _sFullText = text;

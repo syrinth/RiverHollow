@@ -82,6 +82,7 @@ namespace RiverHollow.Screens
             if (GraphicCursor.HeldItem != null)
             {
                 Item toSwitch = IsItemThere(mouse);
+                GameManager.gmActiveItem = toSwitch;
                 if (toSwitch != null)
                 {
                     if (GraphicCursor.HeldItem.ItemID == toSwitch.ItemID)

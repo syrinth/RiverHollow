@@ -342,6 +342,21 @@ Exit:
             return;
         }
 
+        public static Item PlayerItemAtLocation()
+        {
+            return PlayerItemAtLocation((int)GameManager.gmCurrentItem.X, (int)GameManager.gmCurrentItem.Y);
+        }
+        public static Item PlayerItemAtLocation(int row, int col)
+        {
+            Item i = null;
+            if(_playerInventory[row, col] != null)
+            {
+                i = _playerInventory[row, col];
+            }
+
+            return i;
+        }
+
         public static Tool FindTool(Tool.ToolEnum tool)
         {
             Tool rv = null;

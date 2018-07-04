@@ -24,8 +24,25 @@ namespace RiverHollow.GUIObjects
         }
         internal static Vector2 CenterScreen = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
 
-        public int Height;
-        public int Width;
+        int _iHeight;
+        public int Height
+        {
+            get { return _iHeight; }
+            set
+            {
+                _iHeight = value;
+                _drawRect = new Rectangle(_drawRect.X, _drawRect.Y, Width, Height);
+            }
+        }
+        int _iWidth;
+        public int Width
+        {
+            get { return _iWidth; }
+            set {
+                _iWidth = value;
+                _drawRect = new Rectangle(_drawRect.X, _drawRect.Y, Width, Height);
+            }
+        }
 
         private Vector2 _vPos;
         public float Alpha = 1.0f;
@@ -91,7 +108,12 @@ namespace RiverHollow.GUIObjects
         }
 
         #region Positioning Code
-        internal enum SideEnum { Bottom, BottomLeft, BottomRight, CenterX, CenterY, Left, Right, Top, TopLeft, TopRight, };
+        internal enum SideEnum { Bottom, BottomLeft, BottomRight, Center, CenterX, CenterY, Left, Right, Top, TopLeft, TopRight, };
+        public void MoveBy(float x, float y)
+        {
+            Vector2 pos = Position();
+            Position(new Vector2(pos.X + x, pos.Y+y));
+        }
         public void SetX(float x) {
             Position(new Vector2(x, _vPos.Y));
         }
@@ -367,6 +389,10 @@ namespace RiverHollow.GUIObjects
                     break;
                 case SideEnum.CenterY:
                     this.SetY(focus.DrawRectangle.Center.Y - this.Height/2);
+                    break;
+                case SideEnum.Center:
+                    this.SetX(focus.DrawRectangle.Center.X - this.Width / 2);
+                    this.SetY(focus.DrawRectangle.Center.Y - this.Height / 2);
                     break;
                 default:
                     break;

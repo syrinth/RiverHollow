@@ -6,6 +6,7 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIObjects;
 using System.Collections.Generic;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class FriendshipScreen : GUIScreen
@@ -14,13 +15,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public static int HEIGHT = RiverHollow.ScreenHeight / 3;
         List<FriendshipBox> _villagerList;
         GUIWindow _friendshipWindow;
+        
 
         public FriendshipScreen()
         {
             _villagerList = new List<FriendshipBox>();
             _friendshipWindow = new GUIWindow(new Vector2(WIDTH, HEIGHT), GUIWindow.RedWin, WIDTH, HEIGHT);
 
-            foreach(NPC n in CharacterManager.DiNPC.Values)
+            foreach (NPC n in CharacterManager.DiNPC.Values)
             {
                 FriendshipBox f = new FriendshipBox(n, _friendshipWindow.MidWidth());
 
@@ -70,19 +72,61 @@ namespace RiverHollow.Game_Managers.GUIObjects
     {
         private SpriteFont _font;
         GUIText _gTextName;
-        //GUIText _gTextLevel;
         GUIText _gTextPoints;
         GUIWindow _gWin;
-
+        GUIImage _gAdventure;
+        GUIImage _gGift;
+        List<GUIImage> _liFriendship;
+        
         public FriendshipBox(NPC c, int mainWidth)
         {
+            _liFriendship = new List<GUIImage>();
             _font = GameContentManager.GetFont(@"Fonts\Font");
-            _gTextName = new GUIText(c.Name + " - ");
-            _gTextPoints = new GUIText(c.Friendship);
+            _gTextName = new GUIText("XXXXXXXXXX");
+            if(c.GetFriendshipLevel() == 0)
+            {
+                _liFriendship.Add(new GUIImage(Vector2.Zero, new Rectangle(0, 64, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog"));
+            }
+            else
+            {
+                int notches = c.GetFriendshipLevel() - 1;
+                int x = 0;
+                if(notches <= 3) { x = 16; }
+                else if(notches <= 6) { x = 32; }
+                else { x = 48; }
+
+                while (notches > 0)
+                {
+                    _liFriendship.Add(new GUIImage(Vector2.Zero, new Rectangle(x, 64, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog"));
+                    notches--;
+                }
+            }
+
             _gWin = new GUIWindow(GUIWindow.BrownWin, mainWidth, 16);
 
             _gTextName.AnchorToInnerSide(_gWin, SideEnum.TopLeft);
-            _gTextPoints.AnchorAndAlignToObject(_gTextName, SideEnum.Right, SideEnum.Bottom);
+            for (int j = 0; j < _liFriendship.Count; j++)
+            {
+                if (j == 0) { _liFriendship[j].AnchorAndAlignToObject(_gTextName, SideEnum.Right, SideEnum.CenterY); }
+                else { _liFriendship[j].AnchorAndAlignToObject(_liFriendship[j - 1], SideEnum.Right, SideEnum.CenterY); }
+            }
+            _gTextName.SetText(c.Name);
+
+            _gGift = new GUIImage(Vector2.Zero, new Rectangle(16, 48, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog");
+            _gGift.AnchorToInnerSide(_gWin, SideEnum.Right);
+            _gGift.AlignToObject(_gTextName, SideEnum.CenterY);
+            _gGift.Alpha = (c.CanGiveGift) ? 1 : 0.3f;
+
+            if (c.IsEligible()) {
+                EligibleNPC e = (EligibleNPC)c;
+                _gAdventure = new GUIImage(Vector2.Zero, new Rectangle(0, 48, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog");
+                _gAdventure.AnchorAndAlignToObject(_gGift, SideEnum.Left, SideEnum.CenterY);
+                if (PlayerManager.GetParty().Contains(e.Combat))
+                {
+                    _gAdventure.SetColor(Color.Gold);
+                }
+                else { _gAdventure.Alpha = (e.CanJoinParty) ? 1 : 0.3f; }
+            }
 
             _gWin.Resize();
         }

@@ -2,27 +2,30 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIComponents.GUIObjects;
 using static RiverHollow.GUIObjects.GUIObject;
-
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.WorldObjects;
+using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class HUDScreen : GUIScreen
     {
-        StatDisplay _healthDisplay;
-        StatDisplay _staminaDisplay;
+        GUIStatDisplay _healthDisplay;
+        GUIStatDisplay _staminaDisplay;
         GUIMoneyDisplay _gMoney;
-//        GUIText _gTextMoney;
-  //      GUIImage _giCoin;
+        GUIItemBox _gCurrentItem;
 
         public HUDScreen()
         {
-            _healthDisplay = new StatDisplay(StatDisplay.DisplayEnum.Health);
+            _healthDisplay = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Health);
             _healthDisplay.AnchorToScreen(this, SideEnum.TopLeft, 10);
-            _staminaDisplay = new StatDisplay(StatDisplay.DisplayEnum.Energy);
+            _staminaDisplay = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Energy);
             _staminaDisplay.AnchorAndAlignToObject(_healthDisplay, SideEnum.Bottom, SideEnum.Left);
             _gMoney = new GUIMoneyDisplay();
             _gMoney.AnchorAndAlignToObject(_staminaDisplay, SideEnum.Bottom, SideEnum.Left);
+
+            _gCurrentItem = new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), 64, 64, 0, 0, @"Textures\Dialog", null);
+            _gCurrentItem.AnchorToScreen(SideEnum.BottomRight, 20);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -49,11 +52,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             base.Update(gameTime);
             _gMoney.Update(gameTime);
+            _gCurrentItem.SetItem(InventoryManager.PlayerItemAtLocation());
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
+            _gCurrentItem.Draw(spriteBatch);
         }
 
         public override bool IsHUD() { return true; }

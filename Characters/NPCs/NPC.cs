@@ -24,12 +24,13 @@ namespace RiverHollow.Characters
         public enum NPCTypeEnum { Eligible, Villager, Shopkeeper, Ranger, Worker }
         protected NPCTypeEnum _npcType;
         public NPCTypeEnum NPCType { get => _npcType; }
-        public int Friendship = 500;
+        public static List<int> FriendRange = new List<int> { 0, 10, 40, 100, 200, 600, 800, 1200, 1600, 2000 };
+        public int FriendshipPoints = 1900;
 
         protected Dictionary<int, bool> _collection;
         public Dictionary<int, bool> Collection { get => _collection; }
         public bool Introduced;
-        public bool CanGiveGift;
+        public bool CanGiveGift = true;
 
         protected Dictionary<string, List<KeyValuePair<string, string>>> _completeSchedule;         //Every day with a list of KVP Time/GoToLocations
         List<KeyValuePair<string, List<RHTile>>> _todaysPathing = null;                             //List of Times with the associated pathing
@@ -400,7 +401,7 @@ namespace RiverHollow.Characters
 
                     if (specialVal[0].Equals("Friend"))
                     {
-                        removeIt = Friendship < val;
+                        removeIt = FriendshipPoints < val;
                     }
                     else if (specialVal[0].Equals("Quest"))
                     {
@@ -502,7 +503,7 @@ namespace RiverHollow.Characters
                     CanGiveGift = false;
                     if (_collection.ContainsKey(item.ItemID))
                     {
-                        Friendship += _collection[item.ItemID] ? 50 : 20;
+                        FriendshipPoints += _collection[item.ItemID] ? 50 : 20;
                         text = GetDialogEntry("Collection");
                         int index = 1;
                         foreach (int items in _collection.Keys)
@@ -519,7 +520,7 @@ namespace RiverHollow.Characters
                     else
                     {
                         text = GetDialogEntry("Gift");
-                        Friendship += 10;
+                        FriendshipPoints += 1000;
                     }
                 }
 
@@ -530,6 +531,20 @@ namespace RiverHollow.Characters
             }
         }
 
+        public int GetFriendshipLevel()
+        {
+            int rv = 0;
+            for( int i=0; i < FriendRange.Count; i++)
+            {
+                if(FriendshipPoints >= FriendRange[i])
+                {
+                    rv = i;
+                }
+            }
+
+            return rv;
+        }
+
         public bool IsEligible() { return _npcType == NPCTypeEnum.Eligible; }
 
         public NPCData SaveData()
@@ -538,7 +553,7 @@ namespace RiverHollow.Characters
             {
                 npcID = ID,
                 introduced = Introduced,
-                friendship = Friendship,
+                friendship = FriendshipPoints,
                 collection = new List<CollectionData>()
             };
             foreach (KeyValuePair<int, bool> kvp in Collection)
@@ -556,7 +571,7 @@ namespace RiverHollow.Characters
         public void LoadData(NPCData data)
         {
             Introduced = data.introduced;
-            Friendship = data.friendship;
+            FriendshipPoints = data.friendship;
             int index = 1;
             foreach (CollectionData c in data.collection)
             {
@@ -651,7 +666,7 @@ namespace RiverHollow.Characters
                 }
                 else if (item.IsMarriage())
                 {
-                    if (Friendship > 200)
+                    if (FriendshipPoints > 200)
                     {
                         Married = true;
                         text = GetDialogEntry("MarriageYes");
@@ -668,7 +683,7 @@ namespace RiverHollow.Characters
                     CanGiveGift = false;
                     if (_collection.ContainsKey(item.ItemID))
                     {
-                        Friendship += _collection[item.ItemID] ? 50 : 20;
+                        FriendshipPoints += _collection[item.ItemID] ? 50 : 20;
                         text = GetDialogEntry("Collection");
                         int index = 1;
                         foreach (int items in _collection.Keys)
@@ -685,7 +700,7 @@ namespace RiverHollow.Characters
                     else
                     {
                         text = GetDialogEntry("Gift");
-                        Friendship += 10;
+                        FriendshipPoints += 10;
                     }
                 }
 
@@ -719,7 +734,7 @@ namespace RiverHollow.Characters
         public void LoadData(EligibleNPCData data)
         {
             Introduced = data.npcData.introduced;
-            Friendship = data.npcData.friendship;
+            FriendshipPoints = data.npcData.friendship;
             Married = data.married;
             _bCanJoinParty = data.canJoinParty;
             CanGiveGift = data.canGiveGift;

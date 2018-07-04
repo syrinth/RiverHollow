@@ -3,55 +3,89 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters.CombatStuff;
 using RiverHollow.GUIObjects;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
-    public class StatDisplay : GUIWindow
+    public class GUIStatDisplay : GUIObject
     {
-        public enum DisplayEnum { Energy, Health};
+        public enum DisplayEnum { Energy, Health, Mana};
 
-        private DisplayEnum _toDisplay;
+        DisplayEnum _toDisplay;
         CombatCharacter _character;
-        private float _percentage;
-        private bool _hover;
-        private SpriteFont _font;
+        float _percentage;
+        bool _bHover;
+        SpriteFont _font;
 
-        public StatDisplay(DisplayEnum what) : base(Vector2.Zero, GUIWindow.RedWin, 200, 32)
+        GUIImage _gLeft;
+        GUIImage _gMid;
+        GUIImage _gRight;
+        GUIImage _gFillLeft;
+        GUIImage _gFillMid;
+        GUIImage _gFillRight;
+        GUIText _gText;
+
+        int _iMidWidth;
+        const int EDGE = 4;
+
+        public GUIStatDisplay(DisplayEnum what)
         {
+            _character = PlayerManager.Combat;
             _toDisplay = what;
             _percentage = 0;
             _font = GameContentManager.GetFont(@"Fonts\Font");
+            _iMidWidth = 192;
+
+            _gLeft = new GUIImage(Vector2.Zero, new Rectangle(48, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
+            _gMid = new GUIImage(Vector2.Zero, new Rectangle(52, 32, 8, 16), _iMidWidth, 16, @"Textures\Dialog");
+            _gRight = new GUIImage(Vector2.Zero, new Rectangle(60, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
+            
+            _gFillLeft = new GUIImage(Vector2.Zero, new Rectangle(64, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
+            _gFillMid = new GUIImage(Vector2.Zero, new Rectangle(68, 32, 8, 16), _iMidWidth, 16, @"Textures\Dialog");
+            _gFillRight = new GUIImage(Vector2.Zero, new Rectangle(76, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
+            _gText = new GUIText();
+
+            PositionBars();
+
+            Height = 16;
+            Width = 200;
         }
 
-        public StatDisplay(DisplayEnum what, Vector2 pos) : base(pos, GUIWindow.RedWin, 200, 32)
-        {
-            _toDisplay = what;
-            _percentage = 0;
-            _font = GameContentManager.GetFont(@"Fonts\Font");
-        }
-
-        public StatDisplay(DisplayEnum what, CombatCharacter c, Vector2 pos, int squareSize) : base(pos, GUIWindow.RedWin, 200, 32)
+        public GUIStatDisplay(DisplayEnum what, CombatCharacter c, int width)
         {
             _character = c;
             _toDisplay = what;
             _percentage = 0;
             _font = GameContentManager.GetFont(@"Fonts\Font");
+            _iMidWidth = width - (EDGE * 2);
+
+            _gLeft = new GUIImage(Vector2.Zero, new Rectangle(48, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
+            _gMid = new GUIImage(Vector2.Zero, new Rectangle(52, 32, 8, 16), _iMidWidth, 16, @"Textures\Dialog");
+            _gRight = new GUIImage(Vector2.Zero, new Rectangle(60, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
+
+            _gFillLeft = new GUIImage(Vector2.Zero, new Rectangle(64, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
+            _gFillMid = new GUIImage(Vector2.Zero, new Rectangle(68, 32, 8, 16), _iMidWidth, 16, @"Textures\Dialog");
+            _gFillRight = new GUIImage(Vector2.Zero, new Rectangle(76, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
+
+            PositionBars();
+
+            Height = 16;
+            Width = width;
         }
 
-        public StatDisplay(DisplayEnum what, CombatCharacter c, Vector2 pos, int width, int squareSize) : base(pos, GUIWindow.RedWin, width, 32)
+        public void PositionBars()
         {
-            _character = c;
-            _toDisplay = what;
-            _percentage = 0;
-            _font = GameContentManager.GetFont(@"Fonts\Font");
+            _gMid.AnchorAndAlignToObject(_gLeft, SideEnum.Right, SideEnum.CenterY);
+            _gRight.AnchorAndAlignToObject(_gMid, SideEnum.Right, SideEnum.CenterY);
+            _gFillMid.AnchorAndAlignToObject(_gFillLeft, SideEnum.Right, SideEnum.CenterY);
+            _gFillRight.AnchorAndAlignToObject(_gFillMid, SideEnum.Right, SideEnum.CenterY);
         }
 
         public override void Update(GameTime gameTime)
         {
-            if (_character == null)
+            if (_toDisplay == DisplayEnum.Energy)
             {
-                if (_toDisplay == DisplayEnum.Health) { _percentage = ((float)PlayerManager.HitPoints / (float)PlayerManager.MaxHitPoints); }
-                else if (_toDisplay == DisplayEnum.Energy) { _percentage = (PlayerManager.Stamina / (float)PlayerManager.MaxStamina); }
+                _percentage = (PlayerManager.Stamina / (float)PlayerManager.MaxStamina);
             }
             else
             {
@@ -62,31 +96,39 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            DrawTop(spriteBatch);
-            DrawMiddleEdges(spriteBatch);
-            DrawCenter(spriteBatch, _percentage);
-            DrawBottom(spriteBatch);
+            _gFillLeft.Draw(spriteBatch);
+            _gFillMid.Width = (int)(_iMidWidth * _percentage);
+            _gFillMid.Draw(spriteBatch);
+            _gFillRight.Draw(spriteBatch);
+            _gLeft.Draw(spriteBatch);
+            _gMid.Draw(spriteBatch);
+            _gRight.Draw(spriteBatch);
 
-            if (_hover)
+            if (_bHover)
             {
-                string stat = string.Empty;
-                if (_character == null)
-                {
-                    if (_toDisplay == DisplayEnum.Health) { stat = string.Format("{0}/{1}", PlayerManager.HitPoints, PlayerManager.MaxHitPoints); }
-                    else if (_toDisplay == DisplayEnum.Energy) { stat = string.Format("{0}/{1}", PlayerManager.Stamina, PlayerManager.MaxStamina); }
-                }
-                else
-                {
-                    stat = string.Format("{0}/{1}", _character.CurrentHP, _character.MaxHP);
-                }
-                spriteBatch.DrawString(_font, stat, new Vector2(GraphicCursor.Position.X, GraphicCursor.Position.Y-32), Color.White);
+                string text = string.Empty;
+
+                if (_toDisplay == DisplayEnum.Energy) { text = string.Format("{0}/{1}", PlayerManager.Stamina, PlayerManager.MaxStamina); }
+                else { text = string.Format("{0}/{1}", _character.CurrentHP, _character.MaxHP); }
+
+                _gText.SetText(text);
+                _gText.AlignToObject(_gFillMid, SideEnum.Center);
+                _gText.Draw(spriteBatch);
             }
         }
 
         public bool ProcessHover(Point mouse)
         {
-            _hover = InnerRectangle().Contains(mouse);
-            return _hover;
+            _bHover = _gLeft.Contains(mouse) || _gMid.Contains(mouse) || _gRight.Contains(mouse);
+            return _bHover;
+        }
+
+        public override void Position(Vector2 value)
+        {
+            base.Position(value);
+            _gLeft.Position(value);
+            _gFillLeft.Position(value);
+            PositionBars();
         }
     }
 }

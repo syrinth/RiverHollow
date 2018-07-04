@@ -212,7 +212,7 @@ namespace RiverHollow.Characters
 
             _cHairColor = Color.Red;
 
-            Speed = 5;
+            Speed = 2;
         }
 
         public override void Update(GameTime theGameTime)

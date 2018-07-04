@@ -232,7 +232,7 @@ namespace RiverHollow.Misc
 
             if (_sFriendTarget.Equals("Giver"))
             {
-                _questGiver.Friendship += _iFriendship;
+                _questGiver.FriendshipPoints += _iFriendship;
             }
 
             PlayerManager.QuestLog.Remove(this);

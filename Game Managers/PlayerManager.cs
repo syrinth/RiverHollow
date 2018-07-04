@@ -91,6 +91,7 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddNewItemToInventory(22);
             InventoryManager.AddNewItemToInventory(23);
             InventoryManager.AddNewItemToInventory(190);
+            InventoryManager.AddNewItemToInventory(190);
             InventoryManager.AddNewItemToInventory(7);
             InventoryManager.AddNewItemToInventory(9);
             InventoryManager.AddNewItemToInventory(10);

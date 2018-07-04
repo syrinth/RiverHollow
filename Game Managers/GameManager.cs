@@ -35,6 +35,7 @@ namespace RiverHollow.Game_Managers
         public static NPC gmNPC;
         public static Spirit gmSpirit;
         public static KeyDoor gmDoor;
+        public static Vector2 gmCurrentItem;
 
         static long _iSaveID = -1;
         public static int MAX_NAME_LEN = 10;

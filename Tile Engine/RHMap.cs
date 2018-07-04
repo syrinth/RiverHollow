@@ -861,7 +861,7 @@ namespace RiverHollow.Tile_Engine
 
             if (!rv)
             {
-                RHTile tile = _tileArray[mouseLocation.X / TileSize, mouseLocation.Y / TileSize];
+                RHTile tile = GetTile(mouseLocation.X / TileSize, mouseLocation.Y / TileSize);
                 if (tile != null)
                 {
                     if (tile.WorldObject != null)
@@ -1444,6 +1444,29 @@ namespace RiverHollow.Tile_Engine
             return MapHeightTiles * TileSize * (int)Scale;
         }
 
+        public void CheckSeasonDoor()
+        {
+            foreach (Door d in _liDoors)
+            {
+                if (d.IsSeasonDoor())
+                {
+                    ((SeasonDoor)d).Check();
+                }
+            }
+        }
+
+        public RHTile GetTile(int x, int y)
+        {
+            RHTile tile = null;
+
+            if(x >= 0 && x < MapWidthTiles && y >= 0 && y < MapHeightTiles)
+            {
+                tile = _tileArray[x, y];
+            }
+
+            return tile;
+        }
+
         internal MapData SaveData()
         {
             MapData mapData = new MapData
@@ -1570,18 +1593,7 @@ namespace RiverHollow.Tile_Engine
                 tile.SetFloorObject(e);
                 _liModifiedTiles.Add(tile);
             }
-        }
-
-        public void CheckSeasonDoor()
-        {
-            foreach (Door d in _liDoors)
-            {
-                if (d.IsSeasonDoor())
-                {
-                    ((SeasonDoor)d).Check();
-                }
-            }
-        }
+        } 
     }
 
     public class RHTile
