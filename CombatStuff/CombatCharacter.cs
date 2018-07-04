@@ -108,7 +108,7 @@ namespace RiverHollow.Characters.CombatStuff
             _bodySprite.AddAnimation("KO", frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 32);
 
             _bodySprite.SetCurrentAnimation("Walk");
-            _bodySprite.SetScale(5);
+            _bodySprite.SetScale(CombatManager.CombatScale);
             _width = _bodySprite.Width;
             _height = _bodySprite.Height;
         }

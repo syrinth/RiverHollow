@@ -11,6 +11,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class CombatManager
     {
+        public static int CombatScale = 5;
         private static int _xpValue;
         private static Mob _mob;
         private static int stamDrain = 1;
@@ -30,7 +31,7 @@ namespace RiverHollow.Game_Managers
         public static CombatAction ChosenSkill;
         public static CombatItem ChosenItem;
         private static BattleLocation _target;
-        public static int PlayerTarget;
+        public static Vector2 PlayerTarget;
 
         public static double Delay;
         public static string Text;
@@ -56,6 +57,7 @@ namespace RiverHollow.Game_Managers
 
             TurnIndex = 0;
             ActiveCharacter = TurnOrder[TurnIndex];
+            if (_listMonsters.Contains(ActiveCharacter)) { NextTurn(); }
 
             GoToCombat();
             SetPhaseForTurn();
@@ -84,8 +86,10 @@ namespace RiverHollow.Game_Managers
                         GameCalendar.IncrementMinutes();
                     }
 
+                    
                     ActiveCharacter = TurnOrder[TurnIndex];
                     if (ActiveCharacter.KnockedOut()) { NextTurn(); }
+                    else if (_listMonsters.Contains(ActiveCharacter)) { NextTurn(); }
                     else
                     {
                         ActiveCharacter.TickBuffs();
@@ -128,15 +132,16 @@ namespace RiverHollow.Game_Managers
         //When enemies get healing/defensive skills, they'll have their own logic to process
         public static void EnemyTakeTurn()
         {
-            RHRandom r = new RHRandom();
-            ProcessActionChoice((CombatAction)CharacterManager.GetActionByIndex(1), false);//ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)]);
-            if (!ChosenSkill.Target.Equals("Self"))
-            {
-                do
-                {
-                    PlayerTarget = r.Next(0, _listParty.Count - 1);
-                } while (_listParty[PlayerTarget].CurrentHP == 0);      //Equivalent to being KO
-            }
+            //MAR
+            //RHRandom r = new RHRandom();
+            //ProcessActionChoice((CombatAction)CharacterManager.GetActionByIndex(1), false);//ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)]);
+            //if (!ChosenSkill.Target.Equals("Self"))
+            //{
+            //    do
+            //    {
+            //        PlayerTarget = r.Next(0, _listParty.Count - 1);
+            //    } while (_listParty[PlayerTarget].CurrentHP == 0);      //Equivalent to being KO
+            //}
         }
 
         public static void ProcessActionChoice(CombatAction a, bool chooseTarget = true)
