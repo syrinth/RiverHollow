@@ -393,7 +393,7 @@ namespace RiverHollow.Characters.CombatStuff
                         _currentActionTag = 0;
                         Sprite.IsAnimating = false;
                         Sprite.PlayedOnce = false;
-                        CombatManager.NextTurn();
+                        CombatManager.EndTurn();
                     }
 
                     break;

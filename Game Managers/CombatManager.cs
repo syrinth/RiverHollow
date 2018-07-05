@@ -23,12 +23,9 @@ namespace RiverHollow.Game_Managers
         public static List<CombatCharacter> Monsters { get => _listMonsters; }
         private static List<CombatCharacter> _listParty;
         public static List<CombatCharacter> Party { get => _listParty; }
-        public static List<CombatCharacter> TurnOrder;
 
-        public enum PhaseEnum { NewTurn, EnemyTurn, SelectSkill, ChooseSkillTarget, ChooseItemTarget, DisplayAttack, PerformAction, EndCombat }
+        public enum PhaseEnum { Charging, NewTurn, EnemyTurn, SelectSkill, ChooseSkillTarget, ChooseItemTarget, DisplayAttack, PerformAction, EndCombat }
         public static PhaseEnum CurrentPhase;
-
-        public static int TurnIndex;
 
         public static CombatAction ChosenSkill;
         public static CombatItem ChosenItem;
@@ -36,6 +33,11 @@ namespace RiverHollow.Game_Managers
 
         public static double Delay;
         public static string Text;
+
+        #region Turn Sequence
+        static List<CombatCharacter> _liQueuedCharacters;
+        static List<CombatCharacter> _liChargingCharacters;
+        #endregion
 
         #region CombatGrid
         public enum TargetEnum { None, Ally, Enemy };
@@ -53,6 +55,11 @@ namespace RiverHollow.Game_Managers
 
         public static void NewBattle(Mob m)
         {
+            ActiveCharacter = null;
+            ChosenItem = null;
+            ChosenSkill = null;
+            SelectedTile = null;
+
             _combatMap = new CombatTile[MAX_ROW, MAX_COL];
             for(int row = 0; row < MAX_ROW; row++)
             {
@@ -71,19 +78,21 @@ namespace RiverHollow.Game_Managers
             _listParty = new List<CombatCharacter>();
             _listParty.AddRange(PlayerManager.GetParty());
 
-            TurnOrder = new List<CombatCharacter>();
-            TurnOrder.AddRange(_listParty);
-            TurnOrder.AddRange(_listMonsters);
+            _liQueuedCharacters = new List<CombatCharacter>();
+            _liChargingCharacters = new List<CombatCharacter>();
+            _liChargingCharacters.AddRange(_listParty);
+            _liChargingCharacters.AddRange(_listMonsters);
 
-            RHRandom r = new RHRandom();
-            foreach (CombatCharacter c in TurnOrder) { c.Initiative =  r.Next(1, 20) + (c.StatSpd/2); }         //Roll initiative for everyone
-            TurnOrder.Sort((x, y) => x.Initiative.CompareTo(y.Initiative));
+            //Characters with higher Spd go first
+            _liChargingCharacters.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));
 
-            TurnIndex = 0;
-            ActiveCharacter = TurnOrder[TurnIndex];
+            RHRandom random = new RHRandom();
+            foreach(CombatCharacter c in _liChargingCharacters)
+            {
+                c.CurrentCharge += random.Next(0, 50);
+            }
 
             GoToCombat();
-            SetPhaseForTurn();
             PlayerManager.DecreaseStamina(1);
         }
 
@@ -153,6 +162,18 @@ namespace RiverHollow.Game_Managers
 
         public static void Update(GameTime gameTime)
         {
+            if (ActiveCharacter == null)
+            {
+                if (_liQueuedCharacters.Count == 0)
+                {
+                    CombatTick();
+                }
+                else
+                {
+                    GetActiveCharacter();
+                }
+            }
+
             foreach(CombatTile ct in _combatMap)
             {
                 if(ct.TargetType == TargetEnum.Enemy && !_listMonsters.Contains(ct.Character))
@@ -164,36 +185,6 @@ namespace RiverHollow.Game_Managers
 
         //If we have not gone to the EndTurn phase, increment the turn loop as appropriate
         //If we loop back to 0, reduce stamina by the desired amount.
-        public static void NextTurn()
-        {
-            if(!EndCombatCheck())
-            {
-                if (CurrentPhase != PhaseEnum.EndCombat)
-                {
-                    ChosenSkill = null;
-                    ChosenItem = null;
-                    if (TurnIndex + 1 < TurnOrder.Count) { TurnIndex++; }
-                    else
-                    {
-                        TurnIndex = 0;
-                        PlayerManager.DecreaseStamina(stamDrain);
-                        GameCalendar.IncrementMinutes();
-                    }
-
-                    
-                    ActiveCharacter = TurnOrder[TurnIndex];
-                    if (ActiveCharacter.KnockedOut()) { NextTurn(); }
-                    else
-                    {
-                        ActiveCharacter.TickBuffs();
-                        if (ActiveCharacter.Poisoned()) {
-                            ActiveCharacter.Location.AssignDamage(ActiveCharacter.DecreaseHealth(Math.Max(1, (int)(ActiveCharacter.MaxHP/20))));
-                        }
-                        SetPhaseForTurn();
-                    }
-                }
-            }
-        }
 
         internal static bool CanCancel()
         {
@@ -304,7 +295,7 @@ namespace RiverHollow.Game_Managers
             }
             InventoryManager.RemoveItemFromInventory(ChosenItem);
 
-            NextTurn();
+            EndTurn();
         }
 
         //Gives the total battle XP to every member of the party, remove the mob from the gameand drop items
@@ -312,7 +303,10 @@ namespace RiverHollow.Game_Managers
         {
             if (PartyUp())
             {
-                foreach (CombatAdventurer a in _listParty) { a.AddXP(_xpValue); }
+                foreach (CombatAdventurer a in _listParty) {
+                    a.CurrentCharge = 0;
+                    a.AddXP(_xpValue);
+                }
                 MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
             }
             MapManager.RemoveMob(_mob);
@@ -325,7 +319,7 @@ namespace RiverHollow.Game_Managers
             if (_listMonsters.Contains((c)))
             {
                 _listMonsters.Remove(c);
-                TurnOrder.Remove(c);                        //Remove the killed member from the turn order 
+                _liChargingCharacters.Remove(c);                    //Remove the killed member from the turn order 
             }
         }
 
@@ -528,6 +522,57 @@ namespace RiverHollow.Game_Managers
 
         #endregion
 
+        #region Turn Handling
+        private static void CombatTick()
+        {
+            List<CombatCharacter> toQueue = new List<CombatCharacter>();
+            foreach(CombatCharacter c in _liChargingCharacters)
+            {
+                if (!c.KnockedOut())
+                {
+                    c.CurrentCharge += c.StatSpd;
+                    if (c.CurrentCharge >= 100)
+                    {
+                        c.CurrentCharge = 100;
+                        toQueue.Add(c);
+                    }
+                }
+            }
+
+            foreach(CombatCharacter c in toQueue)
+            {
+                _liQueuedCharacters.Add(c);
+                _liChargingCharacters.Remove(c);
+            }
+        }
+        private static void GetActiveCharacter()
+        {
+            ActiveCharacter = _liQueuedCharacters[0];
+            _liQueuedCharacters.RemoveAt(0);
+            _liChargingCharacters.Add(ActiveCharacter);
+            _liChargingCharacters.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));
+
+            ActiveCharacter.CurrentCharge = 0;
+            ActiveCharacter.TickBuffs();
+            if (ActiveCharacter.Poisoned())
+            {
+                ActiveCharacter.Location.AssignDamage(ActiveCharacter.DecreaseHealth(Math.Max(1, (int)(ActiveCharacter.MaxHP / 20))));
+            }
+            SetPhaseForTurn();
+        }
+        public static void EndTurn()
+        {
+            if (!EndCombatCheck())
+            {
+                if (CurrentPhase != PhaseEnum.EndCombat)
+                {
+                    ChosenSkill = null;
+                    ChosenItem = null;
+                    ActiveCharacter = null;
+                }
+            }
+        }
+        #endregion
         public static bool PhaseSelectSkill() { return CurrentPhase == PhaseEnum.SelectSkill; }
         public static bool PhaseChooseSkillTarget() { return CurrentPhase == PhaseEnum.ChooseSkillTarget; }
         public static bool PhaseChooseItemTarget() { return CurrentPhase == PhaseEnum.ChooseItemTarget; }

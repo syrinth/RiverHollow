@@ -701,7 +701,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override void Draw(SpriteBatch spriteBatch)
         {
             DrawWindow(spriteBatch);
-            if (CombatManager.ActiveCharacter.IsCombatAdventurer())
+            if (CombatManager.ActiveCharacter != null && CombatManager.ActiveCharacter.IsCombatAdventurer())
             {
                 _giSelection.Draw(spriteBatch);
                 int index = Math.Max(0, _iKeySelection - _iMaxMenuActions);

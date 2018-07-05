@@ -29,7 +29,7 @@ namespace RiverHollow.Characters.CombatStuff
         }
         public int MaxMP {  get => StatMagic * 3; }
 
-        public int Initiative;
+        public int CurrentCharge;
 
         protected int _statDmg;
         public virtual int StatDmg { get => _statDmg + _buffDmg; }
