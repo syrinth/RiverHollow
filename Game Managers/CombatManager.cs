@@ -33,7 +33,6 @@ namespace RiverHollow.Game_Managers
         public static CombatAction ChosenSkill;
         public static CombatItem ChosenItem;
         private static CombatTile _targetTile;
-        public static Vector2 PlayerTarget;
 
         public static double Delay;
         public static string Text;
@@ -49,10 +48,7 @@ namespace RiverHollow.Game_Managers
         static readonly int ALLY_FRONT = 3;
         static readonly int ENEMY_FRONT = 4;
 
-        static List<int> _allyLines;
-        static List<int> _enemyLines;
         static CombatTile[,] _combatMap;
-
         #endregion
 
         public static void NewBattle(Mob m)
@@ -85,7 +81,6 @@ namespace RiverHollow.Game_Managers
 
             TurnIndex = 0;
             ActiveCharacter = TurnOrder[TurnIndex];
-            if (_listMonsters.Contains(ActiveCharacter)) { NextTurn(); }
 
             GoToCombat();
             SetPhaseForTurn();
@@ -110,13 +105,15 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
+            bool oneAdded = false;
             //Get the Players' party and assign each of them a battle position
             List<CombatCharacter> party = CombatManager.Party;
             for (int i = 0; i < party.Count; i++)
             {
                 if (party[i] != null)
                 {
-                    _combatMap[0, i].SetCombatant(party[i]);
+                    _combatMap[oneAdded ? 2 : 0, i].SetCombatant(party[i]);
+                    oneAdded = true;
                 }
             }
         }
@@ -186,7 +183,6 @@ namespace RiverHollow.Game_Managers
                     
                     ActiveCharacter = TurnOrder[TurnIndex];
                     if (ActiveCharacter.KnockedOut()) { NextTurn(); }
-                    else if (_listMonsters.Contains(ActiveCharacter)) { NextTurn(); }
                     else
                     {
                         ActiveCharacter.TickBuffs();
@@ -229,16 +225,24 @@ namespace RiverHollow.Game_Managers
         //When enemies get healing/defensive skills, they'll have their own logic to process
         public static void EnemyTakeTurn()
         {
-            //MAR
-            //RHRandom r = new RHRandom();
-            //ProcessActionChoice((CombatAction)CharacterManager.GetActionByIndex(1), false);//ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)]);
-            //if (!ChosenSkill.Target.Equals("Self"))
-            //{
-            //    do
-            //    {
-            //        PlayerTarget = r.Next(0, _listParty.Count - 1);
-            //    } while (_listParty[PlayerTarget].CurrentHP == 0);      //Equivalent to being KO
-            //}
+            RHRandom r = new RHRandom();
+            ProcessActionChoice((CombatAction)CharacterManager.GetActionByIndex(1), false);//ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)]);
+            if (!ChosenSkill.Target.Equals("Self"))
+            {
+                List<CombatTile> playerTiles = new List<CombatTile>();
+                int col = FindPlayerFrontLine();
+
+                for (int row = 0; row < MAX_ROW; row++)
+                {
+                    CombatTile tile = _combatMap[row, col];
+                    if (tile.Occupied() && tile.Character.CurrentHP > 0)
+                    {
+                        playerTiles.Add(tile);
+                    }
+                }
+
+                SelectedTile = playerTiles[r.Next(0, playerTiles.Count - 1)];
+            }
         }
 
         public static void ProcessActionChoice(CombatAction a, bool chooseTarget = true)
@@ -287,6 +291,21 @@ namespace RiverHollow.Game_Managers
             CurrentPhase = PhaseEnum.DisplayAttack;
             ClearSelectedTile();
         }
+        internal static void UseItem()
+        {
+            if (ChosenItem.Condition != ConditionEnum.None)
+            {
+                _targetTile.Character.ChangeConditionStatus(ChosenItem.Condition, !ChosenItem.Helpful);
+            }
+            int val = _targetTile.Character.IncreaseHealth(ChosenItem.Health);
+            if (val > 0)
+            {
+                _targetTile.GUITile.Heal(val);
+            }
+            InventoryManager.RemoveItemFromInventory(ChosenItem);
+
+            NextTurn();
+        }
 
         //Gives the total battle XP to every member of the party, remove the mob from the gameand drop items
         public static void EndBattle()
@@ -324,7 +343,7 @@ namespace RiverHollow.Game_Managers
         #region SelectionHandling
         public static void TestHoverTile(CombatTile tile)
         {
-            if (tile.Occupied() && tile.Col == FindFrontLine())
+            if (tile.Occupied() && tile.Col == FindEnemyFrontLine())
             {
                 tile.Select(true);
             }
@@ -377,7 +396,7 @@ namespace RiverHollow.Game_Managers
         {
             if (TargetType == TargetEnum.Enemy)
             {
-                int col = FindFrontLine();
+                int col = FindEnemyFrontLine();
 
                 for (int row = SelectedTile.Row; row < MAX_ROW; row++)
                 {
@@ -394,7 +413,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void FindLastTarget()
         {
-            int col = FindFrontLine();
+            int col = FindEnemyFrontLine();
 
             for (int row = SelectedTile.Row; row >= 0; row--)
             {
@@ -466,21 +485,39 @@ namespace RiverHollow.Game_Managers
             SelectedTile = null;
         }
 
-        public static int FindFrontLine()
+        public static int FindEnemyFrontLine()
         {
             int rv = 0;
-            if(TargetType == TargetEnum.Enemy)
+
+            //Go down each column, looking for a target
+            for (int col = ENEMY_FRONT; col < MAX_COL; col++)
             {
-                //Go down each column, looking for a target
-                for (int col = ENEMY_FRONT; col < MAX_COL; col++)
+                for (int row = 0; row < MAX_ROW; row++)
                 {
-                    for (int row = 0; row < MAX_ROW; row++)
+                    if (_combatMap[row, col].Occupied())
                     {
-                        if (_combatMap[row, col].Occupied())
-                        {
-                            rv = col;
-                            goto ExitFrontLine;
-                        }
+                        rv = col;
+                        goto ExitFrontLine;
+                    }
+                }
+            }
+            ExitFrontLine:
+
+            return rv;
+        }
+        public static int FindPlayerFrontLine()
+        {
+            int rv = 0;
+
+            //Go down each column, looking for a target
+            for (int col = ALLY_FRONT; col >= 0; col--)
+            {
+                for (int row = 0; row < MAX_ROW; row++)
+                {
+                    if (_combatMap[row, col].Occupied())
+                    {
+                        rv = col;
+                        goto ExitFrontLine;
                     }
                 }
             }
@@ -494,22 +531,6 @@ namespace RiverHollow.Game_Managers
         public static bool PhaseSelectSkill() { return CurrentPhase == PhaseEnum.SelectSkill; }
         public static bool PhaseChooseSkillTarget() { return CurrentPhase == PhaseEnum.ChooseSkillTarget; }
         public static bool PhaseChooseItemTarget() { return CurrentPhase == PhaseEnum.ChooseItemTarget; }
-
-        internal static void UseItem()
-        {
-            if(ChosenItem.Condition != ConditionEnum.None)
-            {
-                _targetTile.Character.ChangeConditionStatus(ChosenItem.Condition, !ChosenItem.Helpful);
-            }
-            int val = _targetTile.Character.IncreaseHealth(ChosenItem.Health);
-            if (val > 0)
-            {
-                _targetTile.GUITile.Heal(val);
-            }
-            InventoryManager.RemoveItemFromInventory(ChosenItem);
-
-            NextTurn();
-        }
 
         public class CombatTile
         {

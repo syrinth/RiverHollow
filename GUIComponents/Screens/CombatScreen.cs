@@ -143,7 +143,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 case CombatManager.PhaseEnum.EnemyTurn:
                     _cmbtMenu.NewTurn();
-                    //CombatManager.SetSkillTarget(_arrAllies[CombatManager.PlayerTarget]);
+                    CombatManager.SetSkillTarget();
                     break;
 
                 case CombatManager.PhaseEnum.NewTurn:
@@ -156,7 +156,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 case CombatManager.PhaseEnum.SelectSkill:
                     _cmbtMenu.SelectSkill();
                     break;
-
 
                 case CombatManager.PhaseEnum.ChooseSkillTarget:
                     CombatManager.HandleKeyboardTargetting();
@@ -290,7 +289,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             if(CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseSkillTarget)
             {
-                _gTile.Alpha = CombatManager.FindFrontLine() == _mapTile.Col ? 1 : 0.5f;
+                _gTile.Alpha = CombatManager.FindEnemyFrontLine() == _mapTile.Col ? 1 : 0.5f;
             }
             else
             {
