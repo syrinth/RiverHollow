@@ -159,11 +159,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
 
                 case CombatManager.PhaseEnum.ChooseSkillTarget:
-                    CombatManager.HandleSelectionMovement();
+                    CombatManager.HandleKeyboardTargetting();
                     break;
 
                 case CombatManager.PhaseEnum.ChooseItemTarget:
-                    CombatManager.HandleSelectionMovement();
+                    CombatManager.HandleKeyboardTargetting();
                     break;
 
                 case CombatManager.PhaseEnum.DisplayAttack:
@@ -288,7 +288,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            if(CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseSkillTarget)
+            {
+                _gTile.Alpha = CombatManager.FindFrontLine() == _mapTile.Col ? 1 : 0.5f;
+            }
+            else
+            {
+                _gTile.Alpha = 1;
+            }
+
             _gTile.Draw(spriteBatch);
+
             if (Occupied()) {
                 _gSprite.Draw(spriteBatch);
                 _gHP.Draw(spriteBatch);
@@ -371,7 +381,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             bool rv = false;
             if (Contains(mouse))
             {
-                _mapTile.Select(true);
+                CombatManager.TestHoverTile(_mapTile);
                 rv = true;
             }
 

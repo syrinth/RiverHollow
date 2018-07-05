@@ -322,65 +322,85 @@ namespace RiverHollow.Game_Managers
         }
 
         #region SelectionHandling
-        public static void HandleSelectionMovement()
+        public static void TestHoverTile(CombatTile tile)
+        {
+            if (tile.Occupied() && tile.Col == FindFrontLine())
+            {
+                tile.Select(true);
+            }
+        }
+        public static void HandleKeyboardTargetting()
         {
             bool melee = !ChosenSkill.IsSpell();
-            FindFirstTarget();
+            if (SelectedTile == null)
+            {
+                _combatMap[0, ENEMY_FRONT].Select(true);
+                if (!SelectedTile.Occupied())
+                {
+                    FindNextTarget();
+                }
+            }
 
-            CombatTile temp = null;
+            //CombatTile temp = null;
             if (InputManager.CheckPressedKey(Keys.A))
             {
-                temp = GetLeft(SelectedTile);
+                FindLastTarget();
+                //temp = GetLeft(SelectedTile);
             }
             else if (InputManager.CheckPressedKey(Keys.D))
             {
-                temp = GetRight(SelectedTile);
+                FindNextTarget();
+                //temp = GetRight(SelectedTile);
             }
             else if (InputManager.CheckPressedKey(Keys.W))
             {
-                temp = GetTop(SelectedTile);
+                FindLastTarget();
+                //temp = GetTop(SelectedTile);
             }
             else if (InputManager.CheckPressedKey(Keys.S))
             {
-                temp = GetBottom(SelectedTile);
+                FindNextTarget();
+                
+                //temp = GetBottom(SelectedTile);
             }
 
             //If we're targetting enemies, only move to enemy tiles
-            if (temp != null && temp.TargetType == TargetType) { temp.Select(true); }
+            //if (temp != null && temp.TargetType == TargetType) { temp.Select(true); }
 
             if (InputManager.CheckPressedKey(Keys.Enter))
             {
-                if (temp.TargetType == TargetEnum.Enemy) { CombatManager.SetSkillTarget(); }
+                if (true /*temp.TargetType == TargetEnum.Enemy*/) { CombatManager.SetSkillTarget(); }
                 else { CombatManager.SetItemTarget(); }
-                SelectedTile.Select(false);
             }
         }
-        public static void FindFirstTarget()
+        public static void FindNextTarget()
         {
-            if(SelectedTile == null)
+            if (TargetType == TargetEnum.Enemy)
             {
-                for(int row = 0; row < MAX_ROW; row++)
+                int col = FindFrontLine();
+
+                for (int row = SelectedTile.Row; row < MAX_ROW; row++)
                 {
-                    if (TargetType == TargetEnum.Enemy)
+                    if (FindFirstHelper(_combatMap[row, col]))
                     {
-                        for (int col = ENEMY_FRONT; col < MAX_COL; col++)
-                        {
-                            if(FindFirstHelper(_combatMap[row, col]))
-                            {
-                                goto FindFirstExit;
-                            }
-                        }
+                        goto FindFirstExit;
                     }
-                    else if (TargetType == TargetEnum.Ally)
-                    {
-                        for (int col = ALLY_FRONT; col >= 0; col--)
-                        {
-                            if (FindFirstHelper(_combatMap[row, col]))
-                            {
-                                goto FindFirstExit;
-                            }
-                        }
-                    }
+                }
+            }
+       
+            FindFirstExit:
+
+            return;
+        }
+        public static void FindLastTarget()
+        {
+            int col = FindFrontLine();
+
+            for (int row = SelectedTile.Row; row >= 0; row--)
+            {
+                if (FindFirstHelper(_combatMap[row, col]))
+                {
+                    goto FindFirstExit;
                 }
             }
             FindFirstExit:
@@ -390,7 +410,7 @@ namespace RiverHollow.Game_Managers
         private static bool FindFirstHelper(CombatTile tile)
         {
             bool rv = false;
-            if (tile.Occupied())
+            if (tile != SelectedTile && tile.Occupied())
             {
                 tile.Select(true);
                 rv = true;
@@ -459,10 +479,12 @@ namespace RiverHollow.Game_Managers
                         if (_combatMap[row, col].Occupied())
                         {
                             rv = col;
+                            goto ExitFrontLine;
                         }
                     }
                 }
             }
+            ExitFrontLine:
 
             return rv;
         }
