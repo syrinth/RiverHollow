@@ -62,7 +62,7 @@ namespace RiverHollow.Characters.CombatStuff
         protected Dictionary<ElementEnum, ElementAlignment> _diElementalAlignment;
         public Dictionary<ElementEnum, ElementAlignment> DiElementalAlignment => _diElementalAlignment;
 
-        public BattleLocation Location;
+        public GUICmbtTile Location;
 
         private Summon _linkedSummon;
         public Summon LinkedSummon =>  _linkedSummon;

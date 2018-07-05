@@ -80,7 +80,7 @@ namespace RiverHollow.Characters.CombatStuff
         int _textureRow;
         float _frameSpeed;
 
-        public BattleLocation TargetLocation;
+        public CombatManager.CombatTile TileTarget;
         public Vector2 UserStartPosition;
         public bool _used;
 
@@ -192,10 +192,10 @@ namespace RiverHollow.Characters.CombatStuff
         }
 
         //Sets the _used tag to be true so that it's known that we've started using it
-        public void AnimationSetup(BattleLocation target)
+        public void AnimationSetup(CombatManager.CombatTile target)
         {
             _used = true;
-            TargetLocation = target;
+            TileTarget = target;
         }
 
         public void ApplyEffectToSelf()
@@ -222,29 +222,29 @@ namespace RiverHollow.Characters.CombatStuff
             {
                 if (_effectTags.Contains("Harm"))
                 {
-                    int x = TargetLocation.Character.ProcessAttack(SkillUser.StatDmg, _effectHarm, _element);
-                    TargetLocation.AssignDamage(x);
+                    int x = TileTarget.Character.ProcessAttack(SkillUser.StatDmg, _effectHarm, _element);
+                    TileTarget.GUITile.AssignDamage(x);
                 }
                 else if (_effectTags.Contains("Heal"))
                 {
                     int val = _effectHeal;
-                    TargetLocation.Character.IncreaseHealth(val);
+                    TileTarget.Character.IncreaseHealth(val);
                     if (val > 0)
                     {
-                        TargetLocation.AssignDamage(_effectHarm);
+                        TileTarget.GUITile.AssignDamage(_effectHarm);
                     }
                 }
                 if (_effectTags.Contains("Status"))
                 {
                     foreach (ConditionEnum e in _liCondition)
                     {
-                        TargetLocation.Character.ChangeConditionStatus(e, Target.Equals("Enemy"));
+                        TileTarget.Character.ChangeConditionStatus(e, Target.Equals("Enemy"));
                     }
                 }
                 else if (_effectTags.Contains("Summon") && !_bSummoned)
                 {
                     _bSummoned = true;
-                    TargetLocation.Character.LinkSummon(_summon);
+                    TileTarget.Character.LinkSummon(_summon);
                 }
 
                 if (_buffs.Count > 0)
@@ -287,16 +287,16 @@ namespace RiverHollow.Characters.CombatStuff
             {
                 case "UserMove":
                     {
-                        if (SkillUser.Position != TargetLocation.GetAttackVec(UserStartPosition, new Vector2(SkillUser.Width, SkillUser.Height)))
-                        {
-                            Vector2 direction = Vector2.Zero;
-                            Util.GetMoveSpeed(SkillUser.Position, TargetLocation.GetAttackVec(UserStartPosition, new Vector2(SkillUser.Width, SkillUser.Height)), moveSpeed, ref direction);
-                            SkillUser.BodySprite.Position += direction;
-                        }
-                        else
-                        {
+                        //if (SkillUser.Position != TargetLocation.GetAttackVec(UserStartPosition, new Vector2(SkillUser.Width, SkillUser.Height)))
+                        //{
+                        //    Vector2 direction = Vector2.Zero;
+                        //    Util.GetMoveSpeed(SkillUser.Position, TargetLocation.GetAttackVec(UserStartPosition, new Vector2(SkillUser.Width, SkillUser.Height)), moveSpeed, ref direction);
+                        //    SkillUser.BodySprite.Position += direction;
+                        //}
+                        //else
+                        //{
                             _currentActionTag++;
-                        }
+                        //
                         break;
                     }
                 case "UserAttack":
@@ -325,7 +325,7 @@ namespace RiverHollow.Characters.CombatStuff
                     if (!Sprite.PlayedOnce && !Sprite.IsAnimating)
                     {
                         Sprite.IsAnimating = true;
-                        Sprite.Position = TargetLocation.Character.Position;
+                        Sprite.Position = TileTarget.Character.Position;
                     }
                     else if (Sprite.IsAnimating) { Sprite.Update(gameTime); }
                     else if (Sprite.PlayedOnce) {
@@ -342,7 +342,7 @@ namespace RiverHollow.Characters.CombatStuff
                     }
 
                     Summon s = CombatManager.ActiveCharacter.LinkedSummon;
-                    if (s != null && _actionTags.Contains("UserAttack") && TargetLocation.Character != null && TargetLocation.Character.CurrentHP > 0)
+                    if (s != null && _actionTags.Contains("UserAttack") && TileTarget.Character != null && TileTarget.Character.CurrentHP > 0)
                     {
                         if (!s.IsCurrentAnimation("Attack"))
                         {
@@ -350,8 +350,8 @@ namespace RiverHollow.Characters.CombatStuff
                         }
                         else if (s.AnimationPlayedXTimes(1))
                         {
-                            int x = TargetLocation.Character.ProcessAttack(s.Dmg, 1, s.Element);
-                            TargetLocation.AssignDamage(x);
+                            int x = TileTarget.Character.ProcessAttack(s.Dmg, 1, s.Element);
+                            TileTarget.GUITile.AssignDamage(x);
 
                             s.PlayAnimation("Idle");
                             _alreadyApplied = false;
@@ -370,10 +370,10 @@ namespace RiverHollow.Characters.CombatStuff
                         Sprite.IsAnimating = true;
                         Sprite.Position = SkillUser.Position;
                     }
-                    if(Sprite.Position != TargetLocation.Character.Position)
+                    if(Sprite.Position != TileTarget.Character.Position)
                     {
                         Vector2 direction = Vector2.Zero;
-                        Util.GetMoveSpeed(Sprite.Position, TargetLocation.Character.Position, 80, ref direction);
+                        Util.GetMoveSpeed(Sprite.Position, TileTarget.Character.Position, 80, ref direction);
                         Sprite.Position += direction;
                     }
                     else

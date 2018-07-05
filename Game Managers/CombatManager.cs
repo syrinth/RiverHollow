@@ -6,6 +6,8 @@ using RiverHollow.Misc;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using System;
+using static RiverHollow.GUIObjects.GUIObject;
+using Microsoft.Xna.Framework.Input;
 
 namespace RiverHollow.Game_Managers
 {
@@ -30,14 +32,40 @@ namespace RiverHollow.Game_Managers
 
         public static CombatAction ChosenSkill;
         public static CombatItem ChosenItem;
-        private static BattleLocation _target;
+        private static CombatTile _targetTile;
         public static Vector2 PlayerTarget;
 
         public static double Delay;
         public static string Text;
 
+        #region CombatGrid
+        public enum TargetEnum { None, Ally, Enemy };
+        public static TargetEnum TargetType;
+
+        public static CombatTile SelectedTile;
+
+        static readonly int MAX_COL = 8;
+        static readonly int MAX_ROW = 3;
+        static readonly int ALLY_FRONT = 3;
+        static readonly int ENEMY_FRONT = 4;
+
+        static List<int> _allyLines;
+        static List<int> _enemyLines;
+        static CombatTile[,] _combatMap;
+
+        #endregion
+
         public static void NewBattle(Mob m)
         {
+            _combatMap = new CombatTile[MAX_ROW, MAX_COL];
+            for(int row = 0; row < MAX_ROW; row++)
+            {
+                for (int col = 0; col < MAX_COL; col++)
+                {
+                    _combatMap[row, col] = new CombatTile(row, col, col < ENEMY_FRONT ? TargetEnum.Ally : TargetEnum.Enemy);
+                }
+            }
+
             Delay = 0;
             _mob = m;
             _listMonsters = _mob.Monsters;
@@ -64,8 +92,77 @@ namespace RiverHollow.Game_Managers
             PlayerManager.DecreaseStamina(1);
         }
 
+        public static void ConfigureAllies(ref GUICmbtTile[,] allyArray)
+        {
+            int cols = MAX_COL / 2;
+            if (_combatMap != null)
+            {
+                allyArray = new GUICmbtTile[MAX_ROW, cols];
+                for (int row = 0; row < MAX_ROW; row++)
+                {
+                    for (int col = 0; col < cols; col++)
+                    {
+                        allyArray[row, col] = new GUICmbtTile(_combatMap[row, col]);
+                        if (row == 0 && col == 0) { allyArray[row, col].AnchorToScreen(SideEnum.Left, 100); }
+                        else if (col == 0) { allyArray[row, col].AnchorAndAlignToObject(allyArray[row - 1, col], SideEnum.Bottom, SideEnum.Left); }
+                        else { allyArray[row, col].AnchorAndAlignToObject(allyArray[row, col - 1], SideEnum.Right, SideEnum.Bottom); }
+                    }
+                }
+            }
+
+            //Get the Players' party and assign each of them a battle position
+            List<CombatCharacter> party = CombatManager.Party;
+            for (int i = 0; i < party.Count; i++)
+            {
+                if (party[i] != null)
+                {
+                    _combatMap[0, i].SetCombatant(party[i]);
+                }
+            }
+        }
+        public static void ConfigureEnemies(ref GUICmbtTile[,] enemyArray)
+        {
+            int cols = MAX_COL / 2;
+            if (_combatMap != null)
+            {
+                enemyArray = new GUICmbtTile[MAX_ROW, cols];
+                for (int row = 0; row < MAX_ROW; row++)
+                {
+                    for (int col = cols - 1; col >= 0; col--)
+                    {
+                        enemyArray[row, col] = new GUICmbtTile(_combatMap[row, col + 4]);
+                        if (row == 0 && col == cols - 1) { enemyArray[row, col].AnchorToScreen(SideEnum.Right, 100); }
+                        else if (col == cols - 1) { enemyArray[row, col].AnchorAndAlignToObject(enemyArray[row - 1, col], SideEnum.Bottom, SideEnum.Right); }
+                        else { enemyArray[row, col].AnchorAndAlignToObject(enemyArray[row, col + 1], SideEnum.Left, SideEnum.Bottom); }
+                    }
+                }
+            }
+
+            //Get the Enemies and assign each of them a battle position
+            for (int i = 0; i < CurrentMob.Monsters.Count; i++)
+            {
+                int row = -1;
+                int col = -1;
+                do
+                {
+                    RHRandom random = new RHRandom();
+                    row = random.Next(0, MAX_ROW - 1);
+                    col = random.Next(ENEMY_FRONT, MAX_COL - 1);
+                } while (_combatMap[row, col].Occupied());
+
+                _combatMap[row, col].SetCombatant(CurrentMob.Monsters[i]);
+            }
+        }
+
         public static void Update(GameTime gameTime)
         {
+            foreach(CombatTile ct in _combatMap)
+            {
+                if(ct.TargetType == TargetEnum.Enemy && !_listMonsters.Contains(ct.Character))
+                {
+                    ct.SetCombatant(null);
+                }
+            }
         }
 
         //If we have not gone to the EndTurn phase, increment the turn loop as appropriate
@@ -152,7 +249,10 @@ namespace RiverHollow.Game_Managers
 
             if (!ChosenSkill.Target.Equals("Self"))
             {
-                if (chooseTarget) { CurrentPhase = PhaseEnum.ChooseSkillTarget; }  //Skips this phase for enemies. They don't "choose" targets
+                if (chooseTarget) {
+                    TargetType = ChosenSkill.Target.Equals("Enemy") ? TargetEnum.Enemy : TargetEnum.Ally;
+                    CurrentPhase = PhaseEnum.ChooseSkillTarget;
+                }  //Skips this phase for enemies. They don't "choose" targets
             }
             else
             {
@@ -165,23 +265,27 @@ namespace RiverHollow.Game_Managers
         {
             CurrentPhase = PhaseEnum.ChooseItemTarget;
             ChosenItem = it;
+
+            TargetType = ChosenItem.Helpful ? TargetEnum.Ally : TargetEnum.Enemy;
         }
 
         //Assign target to the skill as well as the skill user
-        public static void SetSkillTarget(BattleLocation target)
+        public static void SetSkillTarget()
         {
             ActiveCharacter.CurrentMP -= ChosenSkill.MPCost;          //Checked before Processing
-            _target = target;
-            ChosenSkill.AnimationSetup(target);
+            _targetTile = SelectedTile;
+            ChosenSkill.AnimationSetup(SelectedTile);
             Text = ChosenSkill.Name;
             CurrentPhase = PhaseEnum.DisplayAttack;
+            ClearSelectedTile();
         }
 
-        public static void SetItemTarget(BattleLocation target)
+        public static void SetItemTarget()
         {
-            _target = target;
+            _targetTile = SelectedTile;
             Text = ChosenItem.Name;
             CurrentPhase = PhaseEnum.DisplayAttack;
+            ClearSelectedTile();
         }
 
         //Gives the total battle XP to every member of the party, remove the mob from the gameand drop items
@@ -217,6 +321,154 @@ namespace RiverHollow.Game_Managers
             return stillOne;
         }
 
+        #region SelectionHandling
+        public static void HandleSelectionMovement()
+        {
+            bool melee = !ChosenSkill.IsSpell();
+            FindFirstTarget();
+
+            CombatTile temp = null;
+            if (InputManager.CheckPressedKey(Keys.A))
+            {
+                temp = GetLeft(SelectedTile);
+            }
+            else if (InputManager.CheckPressedKey(Keys.D))
+            {
+                temp = GetRight(SelectedTile);
+            }
+            else if (InputManager.CheckPressedKey(Keys.W))
+            {
+                temp = GetTop(SelectedTile);
+            }
+            else if (InputManager.CheckPressedKey(Keys.S))
+            {
+                temp = GetBottom(SelectedTile);
+            }
+
+            //If we're targetting enemies, only move to enemy tiles
+            if (temp != null && temp.TargetType == TargetType) { temp.Select(true); }
+
+            if (InputManager.CheckPressedKey(Keys.Enter))
+            {
+                if (temp.TargetType == TargetEnum.Enemy) { CombatManager.SetSkillTarget(); }
+                else { CombatManager.SetItemTarget(); }
+                SelectedTile.Select(false);
+            }
+        }
+        public static void FindFirstTarget()
+        {
+            if(SelectedTile == null)
+            {
+                for(int row = 0; row < MAX_ROW; row++)
+                {
+                    if (TargetType == TargetEnum.Enemy)
+                    {
+                        for (int col = ENEMY_FRONT; col < MAX_COL; col++)
+                        {
+                            if(FindFirstHelper(_combatMap[row, col]))
+                            {
+                                goto FindFirstExit;
+                            }
+                        }
+                    }
+                    else if (TargetType == TargetEnum.Ally)
+                    {
+                        for (int col = ALLY_FRONT; col >= 0; col--)
+                        {
+                            if (FindFirstHelper(_combatMap[row, col]))
+                            {
+                                goto FindFirstExit;
+                            }
+                        }
+                    }
+                }
+            }
+            FindFirstExit:
+
+            return;
+        }
+        private static bool FindFirstHelper(CombatTile tile)
+        {
+            bool rv = false;
+            if (tile.Occupied())
+            {
+                tile.Select(true);
+                rv = true;
+            }
+
+            return rv;
+        }
+
+        private static CombatTile GetTop(CombatTile t)
+        {
+            CombatTile rv = null;
+            if (t.Row > 0)
+            {
+                rv =  _combatMap[t.Row - 1, t.Col];
+            }
+
+            return rv;
+        }
+        private static CombatTile GetBottom(CombatTile t)
+        {
+            CombatTile rv = null;
+            if (t.Row < MAX_ROW - 1)
+            {
+                rv = _combatMap[t.Row + 1, t.Col];
+            }
+
+            return rv;
+        }
+        private static CombatTile GetLeft(CombatTile t)
+        {
+            CombatTile rv = null;
+            if (t.Col > 0)
+            {
+                rv = _combatMap[t.Row, t.Col - 1];
+            }
+
+            return rv;
+        }
+        private static CombatTile GetRight(CombatTile t)
+        {
+            CombatTile rv = null;
+            if (t.Col < MAX_COL - 1)
+            {
+                rv = _combatMap[t.Row, t.Col + 1];
+            }
+
+            return rv;
+        }
+
+        public static void ClearSelectedTile()
+        {
+            if(SelectedTile != null) { SelectedTile.Select(false); }
+            SelectedTile = null;
+        }
+
+        public static int FindFrontLine()
+        {
+            int rv = 0;
+            if(TargetType == TargetEnum.Enemy)
+            {
+                //Go down each column, looking for a target
+                for (int col = ENEMY_FRONT; col < MAX_COL; col++)
+                {
+                    for (int row = 0; row < MAX_ROW; row++)
+                    {
+                        if (_combatMap[row, col].Occupied())
+                        {
+                            rv = col;
+                        }
+                    }
+                }
+            }
+
+            return rv;
+        }
+
+        #endregion
+
         public static bool PhaseSelectSkill() { return CurrentPhase == PhaseEnum.SelectSkill; }
         public static bool PhaseChooseSkillTarget() { return CurrentPhase == PhaseEnum.ChooseSkillTarget; }
         public static bool PhaseChooseItemTarget() { return CurrentPhase == PhaseEnum.ChooseItemTarget; }
@@ -225,16 +477,71 @@ namespace RiverHollow.Game_Managers
         {
             if(ChosenItem.Condition != ConditionEnum.None)
             {
-                _target.Character.ChangeConditionStatus(ChosenItem.Condition, !ChosenItem.Helpful);
+                _targetTile.Character.ChangeConditionStatus(ChosenItem.Condition, !ChosenItem.Helpful);
             }
-            int val = _target.Character.IncreaseHealth(ChosenItem.Health);
+            int val = _targetTile.Character.IncreaseHealth(ChosenItem.Health);
             if (val > 0)
             {
-                _target.Heal(val);
+                _targetTile.GUITile.Heal(val);
             }
             InventoryManager.RemoveItemFromInventory(ChosenItem);
 
             NextTurn();
+        }
+
+        public class CombatTile
+        {
+            TargetEnum _tileType;
+            public TargetEnum TargetType => _tileType;
+
+            int _iHeal;
+            public int  HealAmount => _iHeal;
+            int _iRow;
+            public int Row => _iRow;
+            int _iCol;
+            public int Col => _iCol;
+
+            bool _bSelected;
+            public bool Selected => _bSelected;
+
+            CombatCharacter _character;
+            public CombatCharacter Character => _character;
+            GUICmbtTile _gTile;
+            public GUICmbtTile GUITile => _gTile;
+
+            public CombatTile(int row, int col, TargetEnum tileType)
+            {
+                _iRow = row;
+                _iCol = col;
+                _tileType = tileType;
+            }
+
+            public void SetCombatant(CombatCharacter c)
+            {
+                _character = c;
+                _gTile.SyncGUIObjects(c != null);
+            }
+
+            public void AssignGUITile(GUICmbtTile c)
+            {
+                _gTile = c;
+            }
+
+            public bool Occupied()
+            {
+                return _character != null;
+            }
+
+            public void Select(bool val)
+            {
+                _bSelected = val;
+
+                if (_bSelected && SelectedTile != this)
+                {
+                    if (SelectedTile != null) { SelectedTile.Select(false); }
+                    SelectedTile = this;
+                }
+            }
         }
     }
 }

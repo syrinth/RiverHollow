@@ -7,7 +7,6 @@ using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIObjects;
-using RiverHollow.Misc;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
@@ -17,14 +16,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class CombatScreen : GUIScreen
     {
-        const int POSITIONS = 8;
-        const int ROWS = 3;
-        const int COLS = 4;
-
-        Vector2 _vTarget;
         GUIImage _giBackground;
-        BattleLocation[,] _arrAllies;
-        BattleLocation[,] _arrEnemies;
+        GUICmbtTile[,] _arrAllies;
+        GUICmbtTile[,] _arrEnemies;
         GUITextWindow _gtwTextWindow;
         CmbtMenu _cmbtMenu;
         GUIStatDisplay _sdStamina;
@@ -33,7 +27,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public CombatScreen()
         {
-            Mob m = CombatManager.CurrentMob;
             _giBackground = new GUIImage(Vector2.Zero, new Rectangle(0, 0, 800, 480), RiverHollow.ScreenWidth, RiverHollow.ScreenHeight, GameContentManager.GetTexture(@"Textures\battle"));
             Controls.Add(_giBackground);
 
@@ -41,56 +34,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Controls.Add(_sdStamina);
 
             _cmbtMenu = new CmbtMenu();
-            _arrAllies = new BattleLocation[ROWS, COLS];
-            _arrEnemies = new BattleLocation[ROWS, COLS];
 
-            for (int i = 0; i < ROWS; i++)
-            {
-                for (int j = 0; j < COLS; j++)
-                {
-                    _arrAllies[i, j] = new BattleLocation(i, j);
-                    if(i == 0 && j == 0) { _arrAllies[i, j].AnchorToScreen(SideEnum.Left, 100); }
-                    else if (j == 0) { _arrAllies[i, j].AnchorAndAlignToObject(_arrAllies[i - 1, j], SideEnum.Bottom, SideEnum.Left); }
-                    else { _arrAllies[i, j].AnchorAndAlignToObject(_arrAllies[i, j-1], SideEnum.Right, SideEnum.Bottom); }
-                }
-            }
-
-            for (int i = 0; i < ROWS; i++)
-            {
-                for (int j = COLS -1; j >= 0; j--)
-                {
-                    _arrEnemies[i, j] = new BattleLocation(i, j);
-                    if (i == 0 && j == COLS-1) { _arrEnemies[i, j].AnchorToScreen(SideEnum.Right, 100); }
-                    else if (j == COLS-1) { _arrEnemies[i, j].AnchorAndAlignToObject(_arrEnemies[i - 1, j], SideEnum.Bottom, SideEnum.Right); }
-                    else { _arrEnemies[i, j].AnchorAndAlignToObject(_arrEnemies[i, j + 1], SideEnum.Left, SideEnum.Bottom); }
-                }
-            }
-
-            //Get the Players' party and assign each of them a battle position
-            List<CombatCharacter> party = CombatManager.Party;
-            for (int i = 0; i < party.Count; i++)
-            {
-                if (party[i] != null)
-                {
-                    _arrAllies[0, i].AssignCombatant(party[i]);
-                }
-
-            }
-            //Get the Enemies and assign each of them a battle position
-            for (int i = 0; i < m.Monsters.Count; i++)
-            {
-                int row = -1;
-                int col = -1;
-                do
-                {
-                    RHRandom random = new RHRandom();
-                    row = random.Next(0, ROWS-1);
-                    col = random.Next(0, COLS-1);
-                } while (_arrEnemies[row, col].Occupied());
-                _arrEnemies[row, col].AssignCombatant(m.Monsters[i]);
-            }
-
-            ClearTarget();
+            CombatManager.ConfigureAllies(ref _arrAllies);
+            CombatManager.ConfigureEnemies(ref _arrEnemies);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -118,12 +64,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         internal void HandleLeftClickTargeting(bool useSkill)
         {
-            //MAR
-            //BattleLocation loc = _arrCombatants[_iTarget];
-            //loc.Selected = false;
-            //if (useSkill) { CombatManager.SetSkillTarget(loc); }
-            //else { CombatManager.SetItemTarget(loc); }
-            //_iTarget = -1;
+            if (useSkill) {
+                CombatManager.SetSkillTarget();
+            }
+            else {
+                CombatManager.SetItemTarget();
+            }
         }
 
         //Right clicking will deselect the chosen skill
@@ -139,12 +85,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         internal void CancelAction()
         {
-            foreach (BattleLocation bl in _arrEnemies)
-            {
-                if (bl != null) { bl.Selected = false; }
-            }
-
-            ClearTarget();
+            CombatManager.ClearSelectedTile();
             _cmbtMenu.ProcessRightButtonClick();
         }
 
@@ -167,29 +108,25 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
 
-            rv = HoverTargetHelper(_arrEnemies);
-            if (!rv){ rv = HoverTargetHelper(_arrAllies); }
+            if (CombatManager.TargetType == CombatManager.TargetEnum.Enemy)
+            {
+                rv = HoverTargetHelper(_arrEnemies);
+            }
+            else if(CombatManager.TargetType == CombatManager.TargetEnum.Ally)
+            {
+                rv = HoverTargetHelper(_arrAllies);
+            }
 
             return rv;
         }
 
-        internal bool HoverTargetHelper(BattleLocation[,] array)
+        internal bool HoverTargetHelper(GUICmbtTile[,] array)
         {
             bool rv = false;
-            foreach (BattleLocation p in array)
+            foreach (GUICmbtTile p in array)
             {
                 if (rv) { break; }
                 rv = p.ProcessHover(GraphicCursor.Position.ToPoint());
-                if (rv)
-                {
-                    Vector2 newTarget = new Vector2(p.Row, p.Col);
-                    if (newTarget != _vTarget)
-                    {
-                        _arrEnemies[(int)_vTarget.Y, (int)_vTarget.X].Selected = false;
-                        _arrAllies[(int)_vTarget.Y, (int)_vTarget.X].Selected = false;
-                        _vTarget = newTarget;
-                    }
-                }
             }
 
             return rv;
@@ -220,12 +157,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _cmbtMenu.SelectSkill();
                     break;
 
+
                 case CombatManager.PhaseEnum.ChooseSkillTarget:
-                    HandleUpdateTargeting(CombatManager.ChosenSkill.Target.Equals("Enemy"));
+                    CombatManager.HandleSelectionMovement();
                     break;
 
                 case CombatManager.PhaseEnum.ChooseItemTarget:
-                    HandleUpdateTargeting(!CombatManager.ChosenItem.Helpful);
+                    CombatManager.HandleSelectionMovement();
                     break;
 
                 case CombatManager.PhaseEnum.DisplayAttack:
@@ -271,16 +209,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     break;
             }
 
-            foreach (BattleLocation location in _arrAllies)
+            foreach (GUICmbtTile location in _arrAllies)
             {
                 location.Update(gameTime);
             }
 
             //Update everyone in the party's battleLocation
-            foreach (BattleLocation p in _arrEnemies)
+            foreach (GUICmbtTile p in _arrEnemies)
             {
                 p.Update(gameTime);
-                if (!CombatManager.Monsters.Contains(p.Character)) { p.Kill(); }
             }
 
             //Cancel out of selections made if escape is hit
@@ -290,98 +227,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-        public void HandleUpdateTargeting(bool targetEnemies)
-        {
-            BattleLocation[,] array = targetEnemies ? _arrEnemies : _arrAllies;
-            if (!HasTarget())
-            {
-                FindFirstTarget(0, array, targetEnemies);
-            }
-
-            if (InputManager.CheckPressedKey(Keys.A))
-            {
-                array[(int)_vTarget.Y, (int)_vTarget.X].Selected = false;
-                if (_vTarget.X > 0) { _vTarget.X--; }
-            }
-            else if (InputManager.CheckPressedKey(Keys.D))
-            {
-                array[(int)_vTarget.Y, (int)_vTarget.X].Selected = false;
-                if (_vTarget.X < COLS - 1) { _vTarget.X++; }
-            }
-            else if (InputManager.CheckPressedKey(Keys.W))
-            {
-                array[(int)_vTarget.Y, (int)_vTarget.X].Selected = false;
-                if (_vTarget.Y > 0) { _vTarget.Y--; }
-            }
-            else if (InputManager.CheckPressedKey(Keys.S))
-            {
-                array[(int)_vTarget.Y, (int)_vTarget.X].Selected = false;
-                if (_vTarget.Y < ROWS - 1) { _vTarget.Y++; }
-            }
-
-            array[(int)_vTarget.Y, (int)_vTarget.X].Selected = true;
-
-            if (InputManager.CheckPressedKey(Keys.Enter))
-            {
-                BattleLocation loc = array[(int)_vTarget.Y, (int)_vTarget.X];
-                loc.Selected = false;
-                if (targetEnemies) { CombatManager.SetSkillTarget(loc); }
-                else { CombatManager.SetItemTarget(loc); }
-                ClearTarget();
-            }
-        }
-
-        public void FindFirstTarget(int startColumn, BattleLocation[,] array, bool goForwards)
-        {
-            for (int i = 0; i < ROWS; i++)
-            {
-                if (goForwards)
-                {
-                    for (int j = startColumn; j < COLS; j++)
-                    {
-                        if (FindFirstTargetHelper(array[i, j]))
-                        {
-                            return;
-                        }
-                    }
-                }
-                else
-                {
-                    for (int j = startColumn; j < COLS; j++)
-                    {
-                        if (FindFirstTargetHelper(array[i, j]))
-                        {
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-
-        public bool FindFirstTargetHelper(BattleLocation loc)
-        {
-            bool rv = false;
-
-            if (loc.Occupied())
-            {
-                _vTarget.X = loc.Col;
-                _vTarget.Y = loc.Row;
-                rv = true;
-            }
-
-            return rv;
-        }
-
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
             _cmbtMenu.Draw(spriteBatch);
-            foreach (BattleLocation p in _arrAllies)
+            foreach (GUICmbtTile p in _arrAllies)
             {
                 if (p != null) { p.Draw(spriteBatch); }
             }
 
-            foreach (BattleLocation p in _arrEnemies)
+            foreach (GUICmbtTile p in _arrEnemies)
             {
                 if (p != null) { p.Draw(spriteBatch); }
             }
@@ -398,35 +253,26 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (_gtwTextWindow != null) { _gtwTextWindow.Draw(spriteBatch); }
             if (CombatManager.ChosenSkill != null && CombatManager.ChosenSkill.Sprite.IsAnimating) { CombatManager.ChosenSkill.Sprite.Draw(spriteBatch, false); }
         }
-
-        private bool HasTarget() { return _vTarget.X != -1 && _vTarget.Y != -1; }
-        private void ClearTarget() { _vTarget = new Vector2(-1, -1); }
     }
 
-    public class BattleLocation : GUIObject
+    public class GUICmbtTile : GUIObject
     {
-        int _row;
-        public int Row => _row;
-        int _col;
-        public int Col => _col;
         GUIStatDisplay _gHP;
         GUIImage _gTargetter;
         GUIImage _gTile;
         GUISprite _gSprite;
         GUIText _gDmg;
 
-        CombatCharacter _character;
-        public CombatCharacter Character { get => _character; }
+        CombatManager.CombatTile _mapTile;
+        public CombatManager.CombatTile MapTile => _mapTile;
 
         SpriteFont _fDmg;
         int _iDmgTimer = 40;
-        public bool Selected;
 
-        public BattleLocation(int row, int col)
+        public GUICmbtTile(CombatManager.CombatTile tile)
         {
-            Selected = false;
-            _row = row;
-            _col = col;
+            _mapTile = tile;
+            _mapTile.AssignGUITile(this);
             _fDmg = GameContentManager.GetFont(@"Fonts\Font");
 
             _gTile = new GUIImage(Vector2.Zero, new Rectangle(128, 0, 32, 32), 32, 32, @"Textures\Dialog");
@@ -447,7 +293,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _gSprite.Draw(spriteBatch);
                 _gHP.Draw(spriteBatch);
             }
-            if (Selected) { _gTargetter.Draw(spriteBatch); }
+            if (_mapTile.Selected) { _gTargetter.Draw(spriteBatch); }
 
             if (_iDmgTimer < 40)
             {
@@ -477,12 +323,19 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-        public void AssignCombatant(CombatCharacter c)
+        public void SyncGUIObjects(bool occupied)
         {
-            _character = c;
-            _gSprite = new GUISprite(_character.BodySprite);
-            _gSprite.PlayAnimation("walk");
-            _gHP = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Health, _character, 100);
+            if (occupied)
+            {
+                _gSprite = new GUISprite(_mapTile.Character.BodySprite);
+                _gSprite.PlayAnimation("walk");
+                _gHP = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Health, _mapTile.Character, 100);
+            }
+            else
+            {
+                _gSprite = null;
+                _gHP = null;
+            }
             Setup();
         }
 
@@ -502,7 +355,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public bool Occupied()
         {
-            return _character != null;
+            return _mapTile.Occupied();
         }
 
         public override bool Contains(Point mouse) {
@@ -513,29 +366,27 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
 
-        public void Kill() { _character = null; }
-
         public bool ProcessHover(Point mouse)
         {
             bool rv = false;
             if (Contains(mouse))
             {
-                Selected = true;
+                _mapTile.Select(true);
                 rv = true;
             }
 
             return rv;
         }
 
-        public Vector2 GetAttackVec(Vector2 from, Vector2 widthHeight)
-        {
-            Vector2 rv = _character.Position;
-            int xOffset = _character.Width + 1;
-            rv.X += _character.Center.X < from.X ? xOffset : -xOffset;
-            rv.Y += _character.Height - widthHeight.Y;
+        //public Vector2 GetAttackVec(Vector2 from, Vector2 widthHeight)
+        //{
+        //    Vector2 rv = _character.Position;
+        //    int xOffset = _character.Width + 1;
+        //    rv.X += _character.Center.X < from.X ? xOffset : -xOffset;
+        //    rv.Y += _character.Height - widthHeight.Y;
 
-            return rv;
-        }
+        //    return rv;
+        //}
 
         public override void Position(Vector2 value)
         {
