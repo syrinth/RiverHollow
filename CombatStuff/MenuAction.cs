@@ -66,8 +66,10 @@ namespace RiverHollow.Characters.CombatStuff
         public int EffectHarm { get => _effectHarm; }
         int _effectHeal;
         public int EffectHeal { get => _effectHeal; }
-        string _target;
-        public string Target { get => _target; }
+        TargetEnum _target;
+        public TargetEnum Target { get => _target; }
+        RangeEnum _range;
+        public RangeEnum Range { get => _range; }
         List<String> _actionTags;
         int _currentActionTag = 0;
         List<String> _effectTags;
@@ -127,7 +129,11 @@ namespace RiverHollow.Characters.CombatStuff
                 }
                 else if (tagType[0].Equals("Target"))
                 {
-                    _target = tagType[1];
+                    _target = Util.ParseEnum<TargetEnum>(tagType[1]);
+                }
+                else if (tagType[0].Equals("Range"))
+                {
+                    _range = Util.ParseEnum<RangeEnum>(tagType[1]);
                 }
                 else if (tagType[0].Equals("Effect"))
                 {
@@ -335,7 +341,7 @@ namespace RiverHollow.Characters.CombatStuff
                 case "Apply":
                     if (!_alreadyApplied)
                     {
-                        if (!CombatManager.ChosenSkill.Target.Equals("Self")) { ApplyEffect(); }
+                        if (!CombatManager.SelectedAction.SelfOnly()) { ApplyEffect(); }
                         else { ApplyEffectToSelf(); }
 
                         _alreadyApplied = true;
@@ -399,6 +405,8 @@ namespace RiverHollow.Characters.CombatStuff
                     break;
             }
         }
+
+        public bool IsHelpful() { return _target == TargetEnum.Ally; }
     }
 
     internal struct BuffData

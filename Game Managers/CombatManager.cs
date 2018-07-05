@@ -8,6 +8,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using System;
 using static RiverHollow.GUIObjects.GUIObject;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace RiverHollow.Game_Managers
 {
@@ -24,11 +25,9 @@ namespace RiverHollow.Game_Managers
         private static List<CombatCharacter> _listParty;
         public static List<CombatCharacter> Party { get => _listParty; }
 
-        public enum PhaseEnum { Charging, NewTurn, EnemyTurn, SelectSkill, ChooseSkillTarget, ChooseItemTarget, DisplayAttack, PerformAction, EndCombat }
+        public enum PhaseEnum { Charging, NewTurn, EnemyTurn, SelectSkill, ChooseTarget, DisplayAttack, PerformAction, EndCombat }
         public static PhaseEnum CurrentPhase;
-
-        public static CombatAction ChosenSkill;
-        public static CombatItem ChosenItem;
+        public static ChosenAction SelectedAction;
         private static CombatTile _targetTile;
 
         public static double Delay;
@@ -40,9 +39,6 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region CombatGrid
-        public enum TargetEnum { None, Ally, Enemy };
-        public static TargetEnum TargetType;
-
         public static CombatTile SelectedTile;
 
         static readonly int MAX_COL = 8;
@@ -56,8 +52,7 @@ namespace RiverHollow.Game_Managers
         public static void NewBattle(Mob m)
         {
             ActiveCharacter = null;
-            ChosenItem = null;
-            ChosenSkill = null;
+            SelectedAction = null;
             SelectedTile = null;
 
             _combatMap = new CombatTile[MAX_ROW, MAX_COL];
@@ -188,7 +183,7 @@ namespace RiverHollow.Game_Managers
 
         internal static bool CanCancel()
         {
-            return CurrentPhase == PhaseEnum.ChooseItemTarget || CurrentPhase == PhaseEnum.ChooseSkillTarget || CurrentPhase == PhaseEnum.SelectSkill;
+            return CurrentPhase == PhaseEnum.ChooseTarget || CurrentPhase == PhaseEnum.SelectSkill;
         }
 
         private static bool EndCombatCheck()
@@ -217,8 +212,9 @@ namespace RiverHollow.Game_Managers
         public static void EnemyTakeTurn()
         {
             RHRandom r = new RHRandom();
-            ProcessActionChoice((CombatAction)CharacterManager.GetActionByIndex(1), false);//ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)]);
-            if (!ChosenSkill.Target.Equals("Self"))
+            //MAR
+            ProcessActionChoice((CombatAction)CharacterManager.GetActionByIndex(1));//ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)]);
+            if (!SelectedAction.SelfOnly())
             {
                 List<CombatTile> playerTiles = new List<CombatTile>();
                 int col = FindPlayerFrontLine();
@@ -236,65 +232,34 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void ProcessActionChoice(CombatAction a, bool chooseTarget = true)
+        public static void ProcessActionChoice(CombatAction a)
         {
-            ChosenSkill = a;
-            ChosenSkill.SkillUser = ActiveCharacter;
-            ChosenSkill.UserStartPosition = ActiveCharacter.Position;
+            SelectedAction = new ChosenAction(a);
 
-            if (!ChosenSkill.Target.Equals("Self"))
+            if (!SelectedAction.SelfOnly())
             {
-                if (chooseTarget) {
-                    TargetType = ChosenSkill.Target.Equals("Enemy") ? TargetEnum.Enemy : TargetEnum.Ally;
-                    CurrentPhase = PhaseEnum.ChooseSkillTarget;
+                if (!ActiveCharacter.IsMonster()) {
+                    CurrentPhase = PhaseEnum.ChooseTarget;
                 }  //Skips this phase for enemies. They don't "choose" targets
             }
             else
             {
                 CurrentPhase = PhaseEnum.DisplayAttack;
-                Text = ChosenSkill.Name;
+                Text = SelectedAction.Name;
             }
         }
 
         public static void ProcessItemChoice(CombatItem it)
         {
-            CurrentPhase = PhaseEnum.ChooseItemTarget;
-            ChosenItem = it;
-
-            TargetType = ChosenItem.Helpful ? TargetEnum.Ally : TargetEnum.Enemy;
+            CurrentPhase = PhaseEnum.ChooseTarget;
+            SelectedAction = new ChosenAction(it);
         }
 
         //Assign target to the skill as well as the skill user
-        public static void SetSkillTarget()
-        {
-            ActiveCharacter.CurrentMP -= ChosenSkill.MPCost;          //Checked before Processing
-            _targetTile = SelectedTile;
-            ChosenSkill.AnimationSetup(SelectedTile);
-            Text = ChosenSkill.Name;
-            CurrentPhase = PhaseEnum.DisplayAttack;
-            ClearSelectedTile();
-        }
-
-        public static void SetItemTarget()
-        {
-            _targetTile = SelectedTile;
-            Text = ChosenItem.Name;
-            CurrentPhase = PhaseEnum.DisplayAttack;
-            ClearSelectedTile();
-        }
+        
         internal static void UseItem()
         {
-            if (ChosenItem.Condition != ConditionEnum.None)
-            {
-                _targetTile.Character.ChangeConditionStatus(ChosenItem.Condition, !ChosenItem.Helpful);
-            }
-            int val = _targetTile.Character.IncreaseHealth(ChosenItem.Health);
-            if (val > 0)
-            {
-                _targetTile.GUITile.Heal(val);
-            }
-            InventoryManager.RemoveItemFromInventory(ChosenItem);
-
+            SelectedAction.UseItem();
             EndTurn();
         }
 
@@ -344,7 +309,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void HandleKeyboardTargetting()
         {
-            bool melee = !ChosenSkill.IsSpell();
+            bool melee = SelectedAction.IsMelee();
             if (SelectedTile == null)
             {
                 _combatMap[0, ENEMY_FRONT].Select(true);
@@ -382,13 +347,12 @@ namespace RiverHollow.Game_Managers
 
             if (InputManager.CheckPressedKey(Keys.Enter))
             {
-                if (true /*temp.TargetType == TargetEnum.Enemy*/) { CombatManager.SetSkillTarget(); }
-                else { CombatManager.SetItemTarget(); }
+                CombatManager.SelectedAction.SetSkillTarget();
             }
         }
         public static void FindNextTarget()
         {
-            if (TargetType == TargetEnum.Enemy)
+            if (SelectedAction.TargetsEnemy())
             {
                 int col = FindEnemyFrontLine();
 
@@ -566,16 +530,14 @@ namespace RiverHollow.Game_Managers
             {
                 if (CurrentPhase != PhaseEnum.EndCombat)
                 {
-                    ChosenSkill = null;
-                    ChosenItem = null;
+                    SelectedAction = null;
                     ActiveCharacter = null;
                 }
             }
         }
         #endregion
         public static bool PhaseSelectSkill() { return CurrentPhase == PhaseEnum.SelectSkill; }
-        public static bool PhaseChooseSkillTarget() { return CurrentPhase == PhaseEnum.ChooseSkillTarget; }
-        public static bool PhaseChooseItemTarget() { return CurrentPhase == PhaseEnum.ChooseItemTarget; }
+        public static bool PhaseChooseTarget() { return CurrentPhase == PhaseEnum.ChooseTarget; }
 
         public class CombatTile
         {
@@ -631,5 +593,135 @@ namespace RiverHollow.Game_Managers
                 }
             }
         }
+        public class ChosenAction
+        {
+            RangeEnum _range;
+            public RangeEnum Range => _range;
+            TargetEnum _targetType;
+            public TargetEnum TargetType => _targetType;
+            private CombatItem _chosenItem;
+            private CombatAction _chosenAction;
+
+            private List<CombatTile> _liLegalTiles;
+
+            string _name;
+            public string Name => _name;
+
+            bool _bDrawItem;
+
+            public ChosenAction(CombatItem it)
+            {
+                _chosenItem = it;
+                _name = _chosenItem.Name;
+                _liLegalTiles = new List<CombatTile>();
+            }
+            public ChosenAction(CombatAction ca)
+            {
+                _chosenAction = ca;
+                _name = _chosenAction.Name;
+
+                _chosenAction.SkillUser = ActiveCharacter;
+                _chosenAction.UserStartPosition = ActiveCharacter.Position;
+
+                _range = _chosenAction.Range;
+                _liLegalTiles = new List<CombatTile>();
+            }
+
+            public void Draw(SpriteBatch spritebatch)
+            {
+                if (_bDrawItem && _chosenItem != null)     //We want to draw the item above the character's head
+                {
+                    CombatCharacter c = CombatManager.ActiveCharacter;
+                    Point p = c.Position.ToPoint();
+                    p.X += c.Width / 2 - 16;
+                    _chosenItem.Draw(spritebatch, new Rectangle(p, new Point(32, 32)));
+                }
+                if (_chosenAction != null)
+                {
+                    _chosenAction.Sprite.Draw(spritebatch, false);
+                }
+            }
+
+            public void PerformAction(GameTime gameTime)
+            {
+                if (_chosenAction != null) { _chosenAction.HandlePhase(gameTime); }
+                else if (_chosenItem != null)
+                {
+                    bool finished = false;
+                    CombatCharacter c = CombatManager.ActiveCharacter;
+                    if (!c.IsCurrentAnimation("Cast"))
+                    {
+                        c.PlayAnimation("Cast");
+                        _bDrawItem = true;
+                    }
+                    else if (c.AnimationPlayedXTimes(3))
+                    {
+                        c.PlayAnimation("Walk");
+                        _bDrawItem = false;
+                        finished = true;
+                    }
+
+                    if (finished) { UseItem(); }
+                }
+            }
+
+            public void UseItem()
+            {
+                if (_chosenItem != null)
+                {
+                    if (_chosenItem.Condition != ConditionEnum.None)
+                    {
+                        _targetTile.Character.ChangeConditionStatus(_chosenItem.Condition, !_chosenItem.Helpful);
+                    }
+                    int val = _targetTile.Character.IncreaseHealth(_chosenItem.Health);
+                    if (val > 0)
+                    {
+                        _targetTile.GUITile.Heal(val);
+                    }
+                    InventoryManager.RemoveItemFromInventory(_chosenItem);
+                }
+            }
+
+            public void SetSkillTarget()
+            {
+                _targetTile = SelectedTile;
+                if (_chosenAction != null)
+                {
+                    
+                    CombatManager.ActiveCharacter.CurrentMP -= _chosenAction.MPCost;          //Checked before Processing
+                    _chosenAction.AnimationSetup(SelectedTile);
+                    CombatManager.Text = SelectedAction.Name;
+                }
+                else if (_chosenItem != null)
+                {
+                    CombatManager.Text = SelectedAction.Name;
+                }
+                CombatManager.CurrentPhase = PhaseEnum.DisplayAttack;
+                CombatManager.ClearSelectedTile();
+            }
+
+            public bool TargetsAlly()
+            {
+                bool rv = false;
+
+                if (_chosenAction != null) { rv = _chosenAction.IsHelpful(); }
+                else if(_chosenItem != null) { rv = _chosenItem.Helpful; }
+
+                return rv;
+            }
+            public bool TargetsEnemy()
+            {
+                bool rv = false;
+
+                if (_chosenAction != null) { rv = !_chosenAction.IsHelpful(); }
+                else if (_chosenItem != null) { rv = !_chosenItem.Helpful; }
+
+                return rv;
+            }
+            public bool SelfOnly() { return _range == RangeEnum.Self; }
+            public bool IsMelee() { return _range == RangeEnum.Melee; }
+            public bool IsRanged() { return _range == RangeEnum.Ranged; }
+        }
     }
 }
+ 
