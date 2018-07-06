@@ -14,10 +14,9 @@ namespace RiverHollow.Characters.CombatStuff
     public class MenuAction
     {
         protected int _id;
-        public int ActionID { get => _id; }
 
-        public enum ActionEnum { Action, Menu, Spell };
         protected ActionEnum _actionType;
+        protected MenuEnum _menuType;
         protected string _name;
         public string Name { get => _name; }
         protected string _description;
@@ -44,12 +43,19 @@ namespace RiverHollow.Characters.CombatStuff
                 {
                     _actionType = Util.ParseEnum<ActionEnum>(tagType[1]);
                 }
+                else if (tagType[0].Equals("Menu"))
+                {
+                    _menuType = Util.ParseEnum<MenuEnum>(tagType[1]);
+                }
             }
         }
 
         public bool IsMenu() { return _actionType == ActionEnum.Menu; }
         public bool IsAction() { return _actionType == ActionEnum.Action; }
         public bool IsSpell() { return _actionType == ActionEnum.Spell; }
+
+        public bool IsCastSpell() { return _menuType == MenuEnum.Cast; }
+        public bool IsUseItem() { return _menuType == MenuEnum.UseItem; }
     }
 
     public class CombatAction : MenuAction
@@ -70,6 +76,8 @@ namespace RiverHollow.Characters.CombatStuff
         public TargetEnum Target { get => _target; }
         RangeEnum _range;
         public RangeEnum Range { get => _range; }
+        AreaEffectEnum _areaOfEffect;
+        public AreaEffectEnum AreaOfEffect { get => _areaOfEffect; }
         List<String> _actionTags;
         int _currentActionTag = 0;
         List<String> _effectTags;
@@ -134,6 +142,10 @@ namespace RiverHollow.Characters.CombatStuff
                 else if (tagType[0].Equals("Range"))
                 {
                     _range = Util.ParseEnum<RangeEnum>(tagType[1]);
+                }
+                else if (tagType[0].Equals("Area"))
+                {
+                    _areaOfEffect = Util.ParseEnum<AreaEffectEnum>(tagType[1]);
                 }
                 else if (tagType[0].Equals("Effect"))
                 {
@@ -331,7 +343,7 @@ namespace RiverHollow.Characters.CombatStuff
                     if (!Sprite.PlayedOnce && !Sprite.IsAnimating)
                     {
                         Sprite.IsAnimating = true;
-                        Sprite.Position = TileTarget.Character.Position;
+                        Sprite.Position = TileTarget.GUITile.Position();
                     }
                     else if (Sprite.IsAnimating) { Sprite.Update(gameTime); }
                     else if (Sprite.PlayedOnce) {

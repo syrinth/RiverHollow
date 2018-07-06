@@ -30,6 +30,8 @@ namespace RiverHollow.Characters.CombatStuff
         public int MaxMP {  get => StatMagic * 3; }
 
         public int CurrentCharge;
+        public CombatManager.CombatTile Tile;
+        public GUICmbtTile Location => Tile.GUITile;
 
         protected int _statDmg;
         public virtual int StatDmg { get => _statDmg + _buffDmg; }
@@ -61,8 +63,6 @@ namespace RiverHollow.Characters.CombatStuff
 
         protected Dictionary<ElementEnum, ElementAlignment> _diElementalAlignment;
         public Dictionary<ElementEnum, ElementAlignment> DiElementalAlignment => _diElementalAlignment;
-
-        public GUICmbtTile Location;
 
         private Summon _linkedSummon;
         public Summon LinkedSummon =>  _linkedSummon;

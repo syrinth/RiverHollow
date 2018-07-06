@@ -235,7 +235,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gTile = new GUIImage(Vector2.Zero, new Rectangle(128, 0, 32, 32), 32, 32, @"Textures\Dialog");
             _gTile.SetScale(CombatManager.CombatScale);
             _gTargetter = new GUIImage(Vector2.Zero, new Rectangle(256, 96, 32, 32), 32, 32, @"Textures\Dialog");
-            _gDmg = new GUIText();
 
             Setup();
 
@@ -247,7 +246,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             if(CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseTarget)
             {
-                _gTile.Alpha = CombatManager.FindEnemyFrontLine() == _mapTile.Col ? 1 : 0.5f;
+                _gTile.Alpha = CombatManager.SelectedAction.LegalTiles.Contains(_mapTile) ? 1 : 0.5f;
             }
             else
             {
@@ -262,12 +261,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             if (_mapTile.Selected) { _gTargetter.Draw(spriteBatch); }
 
-            if (_iDmgTimer < 40)
+            if (_gDmg != null && _iDmgTimer < 40)
             {
                 _gDmg.Draw(spriteBatch);
-                _iDmgTimer++;
             }
-            else { _gDmg.SetText(""); }
         }
 
         public override void Update(GameTime gameTime)
@@ -276,6 +273,21 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 _gSprite.Update(gameTime);
                 _gHP.Update(gameTime);
+            }
+
+            if(_gDmg != null)
+            {
+                if (_iDmgTimer < 40)
+                {
+                    _gDmg.MoveBy(0, -1);
+                    _iDmgTimer++;
+                }
+                else if (Occupied())
+                {
+                    _gDmg.SetText("");
+                    _gDmg.AnchorAndAlignToObject(_gSprite, SideEnum.Top, SideEnum.CenterX);
+                }
+                else { _gDmg = null; }
             }
         }
 
@@ -287,6 +299,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _gSprite.CenterOnObject(_gTile);
                 _gSprite.MoveBy(0, -(_gTile.Height / 3));
                 _gHP.AnchorAndAlignToObject(_gSprite, SideEnum.Bottom, SideEnum.CenterX);
+                _gDmg = new GUIText();
+                _gDmg.AnchorAndAlignToObject(_gSprite, SideEnum.Top, SideEnum.CenterX);
             }
         }
 
@@ -310,14 +324,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             _iDmgTimer = 0;
             _gDmg.SetText(x);
-            _gDmg.SetColor(Color.LightGreen);
+            _gDmg.SetColor(Color.Red);
         }
 
         public void Heal(int x)
         {
             _iDmgTimer = 0;
             _gDmg.SetText(x);
-            _gDmg.SetColor(Color.Red);
+            _gDmg.SetColor(Color.LightGreen);
         }
 
         public bool Occupied()
@@ -494,12 +508,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     }
                     else
                     {
-                        if (a.ActionID == 2 && !CombatManager.ActiveCharacter.Silenced())
+                        if (a.IsMenu() && a.IsCastSpell() && !CombatManager.ActiveCharacter.Silenced())
                         {
                             DisplayType = Display.Spells;
                             _useMenuWindow.AssignSpells(CombatManager.ActiveCharacter.SpellList);
                         }
-                        else if (a.ActionID == 3)
+                        else if (a.IsMenu() && a.IsUseItem())
                         {
                             DisplayType = Display.Items;
                             _useMenuWindow.AssignItems(InventoryManager.GetPlayerCombatItems());

@@ -18,8 +18,11 @@ namespace RiverHollow.Game_Managers
 {
     public static class GameManager
     {
+        public enum ActionEnum { Action, Menu, Spell };
         public enum TargetEnum { Enemy, Ally};
-        public enum RangeEnum { Self, Melee, Ranged };
+        public enum MenuEnum { Action, Cast, UseItem };
+        public enum RangeEnum { Self, Melee, Ranged, Column };
+        public enum AreaEffectEnum { Single, Area };
         public enum ElementEnum { None, Fire, Ice, Lightning };
         public enum AttackTypeEnum { Physical, Magical };
         public enum ElementAlignment { Neutral, Vulnerable, Resists };

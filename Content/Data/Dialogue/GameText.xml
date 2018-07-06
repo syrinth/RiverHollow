@@ -116,6 +116,11 @@
     </Item>
     <Item>
       <Key>Action 4</Key>
+      <Value>Move/Moves to a new location</Value>
+    </Item>
+    <!--Special Action Text -->
+    <Item>
+      <Key>Action 50</Key>
       <Value>Meditate/Increases your dmg</Value>
     </Item>
     <!--Action Spell Text -->
