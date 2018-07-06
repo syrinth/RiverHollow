@@ -66,6 +66,8 @@ namespace RiverHollow.Characters.CombatStuff
         AttackTypeEnum _attackType = AttackTypeEnum.Physical;
         List<ConditionEnum> _liCondition;
         public List<ConditionEnum> LiCondition { get => _liCondition; }
+        int _iChargeCost;
+        public int ChargeCost => _iChargeCost;
         int _mpCost;
         public int MPCost { get => _mpCost; }
         int _effectHarm;
@@ -101,6 +103,8 @@ namespace RiverHollow.Characters.CombatStuff
             _effectTags = new List<string>();
             _buffs = new List<BuffData>();
             _actionTags = new List<string>();
+
+            _iChargeCost = 100;
             ImportBasics(id, stringData);
 
             Sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\AbilityAnimations"));
@@ -146,6 +150,10 @@ namespace RiverHollow.Characters.CombatStuff
                 else if (tagType[0].Equals("Area"))
                 {
                     _areaOfEffect = Util.ParseEnum<AreaEffectEnum>(tagType[1]);
+                }
+                else if (tagType[0].Equals("Charge"))
+                {
+                    _iChargeCost = int.Parse(tagType[1]);
                 }
                 else if (tagType[0].Equals("Effect"))
                 {
@@ -398,6 +406,11 @@ namespace RiverHollow.Characters.CombatStuff
                     {
                         _currentActionTag++;
                     }
+                    break;
+                case "Move":
+                    TileTarget.SetCombatant(SkillUser);
+                    UserStartPosition = SkillUser.Position;
+                    _currentActionTag++;
                     break;
                 case "End":
                     if (SkillUser.Position != UserStartPosition)

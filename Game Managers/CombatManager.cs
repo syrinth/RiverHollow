@@ -171,7 +171,7 @@ namespace RiverHollow.Game_Managers
 
             foreach(CombatTile ct in _combatMap)
             {
-                if(ct.TargetType == TargetEnum.Enemy && !_listMonsters.Contains(ct.Character))
+                if(ct.TargetType == TargetEnum.Enemy && ct.Occupied() && !_listMonsters.Contains(ct.Character))
                 {
                     ct.SetCombatant(null);
                 }
@@ -304,6 +304,7 @@ namespace RiverHollow.Game_Managers
             if (SelectedTile == null)
             {
                 SelectedAction.LegalTiles[0].Select(true);
+
                 if (!SelectedTile.Occupied())
                 {
                     FindNextTarget();
@@ -528,7 +529,6 @@ namespace RiverHollow.Game_Managers
             _liChargingCharacters.Add(ActiveCharacter);
             _liChargingCharacters.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));
 
-            ActiveCharacter.CurrentCharge = 0;
             ActiveCharacter.TickBuffs();
             if (ActiveCharacter.Poisoned())
             {
@@ -538,6 +538,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void EndTurn()
         {
+            ActiveCharacter.CurrentCharge -= SelectedAction.ChargeCost();
             if (!EndCombatCheck())
             {
                 if (CurrentPhase != PhaseEnum.EndCombat)
@@ -581,7 +582,12 @@ namespace RiverHollow.Game_Managers
             public void SetCombatant(CombatCharacter c)
             {
                 _character = c;
-                if (c != null) { _character.Tile = this; }
+                if (c != null) {
+                    if (c.Tile != null) {
+                        c.Tile.SetCombatant(null);
+                    }
+                    _character.Tile = this;
+                }
                 _gTile.SyncGUIObjects(c != null);
             }
 
@@ -680,6 +686,25 @@ namespace RiverHollow.Game_Managers
                 {
                     _liLegalTiles.Add(_user.Tile);
                 }
+                else if (Columns())
+                {
+                    int startCol = ActiveCharacter.Tile.Col;
+                    int endCol = ActiveCharacter.Tile.Col;
+
+                    if(ActiveCharacter.Tile.Col > 0) { startCol = ActiveCharacter.Tile.Col - 1; }
+                    if (ActiveCharacter.Tile.Col < ALLY_FRONT) { endCol = ActiveCharacter.Tile.Col + 1; }
+
+                    for (int row = 0; row < MAX_ROW; row++)
+                    {
+                        for (int col = startCol; col <= endCol; col++)
+                        {
+                            if (!_combatMap[row, col].Occupied())
+                            {
+                                _liLegalTiles.Add(_combatMap[row, col]);
+                            }
+                        }
+                    }
+                }
             }
 
             private void EnemyFrontLineLegal()
@@ -766,6 +791,15 @@ namespace RiverHollow.Game_Managers
                 CombatManager.ClearSelectedTile();
             }
 
+            public int ChargeCost()
+            {
+                int rv = 100;
+
+                if(_chosenAction != null) { rv = _chosenAction.ChargeCost; }
+
+                return rv;
+            }
+
             public bool CompareTargetType(TargetEnum t) { return t == _chosenAction.Target; }
             public bool TargetsAlly()
             {
@@ -800,6 +834,13 @@ namespace RiverHollow.Game_Managers
             {
                 bool rv = false;
                 if (_chosenAction != null) { rv = _chosenAction.AreaOfEffect == AreaEffectEnum.Area; }
+                else if (_chosenItem != null) { rv = false; }
+
+                return rv;
+            }
+            public bool Columns() {
+                bool rv = false;
+                if (_chosenAction != null) { rv = _chosenAction.Range == RangeEnum.Column; }
                 else if (_chosenItem != null) { rv = false; }
 
                 return rv;

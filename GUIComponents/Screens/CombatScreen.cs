@@ -386,6 +386,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         CmbtStatusWin _statusWindow;
         CmbtUseMenuWindow _useMenuWindow;
 
+        GUIButton _btnMove;
+
         public CmbtMenu()
         {
             int totalMenuWidth = RiverHollow.ScreenWidth / 3;
@@ -396,6 +398,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _statusWindow.AnchorAndAlignToObject(_gwMenu, SideEnum.Right, SideEnum.Bottom);
 
             _useMenuWindow = new CmbtUseMenuWindow(totalMenuWidth, _gwMenu.Width + _statusWindow.Width + GUIWindow.GreyWin.Edge * 2);
+
+            _btnMove = new GUIButton(new Rectangle(160, 0, 16, 16), 32, 32, @"Textures\Dialog", BtnMove);
+            _btnMove.AnchorAndAlignToObject(_gwMenu, SideEnum.Left, SideEnum.Bottom);
         }
 
         public void Update(GameTime gameTime)
@@ -410,6 +415,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            _btnMove.Draw(spriteBatch);
             _statusWindow.Draw(spriteBatch);
             _gwMenu.Draw(spriteBatch);
             if (DisplayType != Display.None)
@@ -434,6 +440,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         internal bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
+
+            _btnMove.ProcessLeftButtonClick(mouse);
 
             if (DisplayType != Display.None)
             {
@@ -534,6 +542,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             _gwMenu.Clear();
             _useMenuWindow.Clear();
+        }
+
+        internal void BtnMove()
+        {
+            CombatManager.ProcessActionChoice((CombatAction)CharacterManager.GetActionByIndex(4));
         }
     }
 

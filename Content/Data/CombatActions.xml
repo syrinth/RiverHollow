@@ -8,7 +8,7 @@
     <!--Buff Tags: Allies, Enemies, Target, Self-->
     <Item>
       <Key>1</Key>
-      <Value>[Type:Action][Target:Enemy][Range:Melee][Area:Single][Effect:Harm-1][Action:UserMove UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:Melee][Area:Single][Effect:Harm-1][Action:UserMove UserAttack Apply][Charge:60]</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -20,7 +20,7 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Action][Target:Ally][Range:Column][Area:Single][Effect:Move]</Value>
+      <Value>[Type:Action][Target:Ally][Range:Column][Area:Area][Action:Move][Charge:30]</Value>
     </Item>
     <!--<50> Special-->
     <Item>
