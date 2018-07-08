@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
+using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIObjects;
+using System;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.GUIObjects
@@ -140,6 +142,53 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 _gText.AnchorAndAlignToObject(_gChecked, SideEnum.Right, SideEnum.Bottom);
             }
+        }
+    }
+
+    public class GUIStatus : GUIObject
+    {
+        bool _bHover;
+
+        GUIImage _gImage;
+        GUITextWindow _gText;
+        ConditionEnum _status;
+        public ConditionEnum Status => _status;
+
+        public GUIStatus(ConditionEnum status)
+        {
+            _status = status;
+            int startX = 176;
+
+            startX += ((int)status - 2) * TileSize;
+
+            _gImage = new GUIImage(Vector2.Zero, new Rectangle(startX, 0, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog");
+
+            Width = _gImage.Width;
+            Height = _gImage.Height;
+        }
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            _gImage.Draw(spriteBatch);
+            if (_bHover)
+            {
+                if (_gText != null) { _gText.Draw(spriteBatch); }
+            }
+        }
+
+        public void ProcessHover(Point mouse)
+        {
+            if (_gImage.Contains(mouse))
+            {
+                _bHover = true;
+                _gText = new GUITextWindow(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32), GameContentManager.GetGameText(_status.ToString() + " Description"));
+            }
+            else { _bHover = false; }
+        }
+
+        public override void Position(Vector2 value)
+        {
+            base.Position(value);
+            _gImage.Position(value);
         }
     }
 }

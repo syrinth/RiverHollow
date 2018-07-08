@@ -41,10 +41,10 @@ namespace RiverHollow.Game_Managers
         #region CombatGrid
         public static CombatTile SelectedTile;
 
-        static readonly int MAX_COL = 8;
-        static readonly int MAX_ROW = 3;
-        static readonly int ALLY_FRONT = 3;
-        static readonly int ENEMY_FRONT = 4;
+        public static readonly int MAX_COL = 8;
+        public static readonly int MAX_ROW = 3;
+        public static readonly int ALLY_FRONT = 3;
+        public static readonly int ENEMY_FRONT = 4;
 
         static CombatTile[,] _combatMap;
         #endregion
@@ -409,7 +409,7 @@ namespace RiverHollow.Game_Managers
 
             return adj;
         }
-        private static CombatTile GetTop(CombatTile t)
+        public static CombatTile GetTop(CombatTile t)
         {
             CombatTile rv = null;
             if (t.Row > 0)
@@ -419,7 +419,7 @@ namespace RiverHollow.Game_Managers
 
             return rv;
         }
-        private static CombatTile GetBottom(CombatTile t)
+        public static CombatTile GetBottom(CombatTile t)
         {
             CombatTile rv = null;
             if (t.Row < MAX_ROW - 1)
@@ -429,7 +429,7 @@ namespace RiverHollow.Game_Managers
 
             return rv;
         }
-        private static CombatTile GetLeft(CombatTile t)
+        public static CombatTile GetLeft(CombatTile t)
         {
             CombatTile rv = null;
             if (t.Col > 0)
@@ -439,7 +439,7 @@ namespace RiverHollow.Game_Managers
 
             return rv;
         }
-        private static CombatTile GetRight(CombatTile t)
+        public static CombatTile GetRight(CombatTile t)
         {
             CombatTile rv = null;
             if (t.Col < MAX_COL - 1)
@@ -780,7 +780,7 @@ namespace RiverHollow.Game_Managers
                 {
 
                     CombatManager.ActiveCharacter.CurrentMP -= _chosenAction.MPCost;          //Checked before Processing
-                    _chosenAction.AnimationSetup(SelectedTile);
+                    _chosenAction.AnimationSetup();
                     CombatManager.Text = SelectedAction.Name;
                 }
                 else if (_chosenItem != null)
@@ -797,6 +797,88 @@ namespace RiverHollow.Game_Managers
 
                 if(_chosenAction != null) { rv = _chosenAction.ChargeCost; }
 
+                return rv;
+            }
+
+            public bool InArea(CombatTile t)
+            {
+                bool rv = false;
+                if (_chosenAction != null && SelectedTile != null && _chosenAction.Size > 0)
+                {
+                    int spellSize = _chosenAction.Size;
+
+                    if (t.TargetType == SelectedTile.TargetType && Math.Abs(t.Row - SelectedTile.Row) <= spellSize && Math.Abs(t.Col - SelectedTile.Col) <= spellSize)
+                    {
+                        if (!(Math.Abs(t.Row - SelectedTile.Row) == spellSize && Math.Abs(t.Col - SelectedTile.Col) == spellSize))
+                        {
+                            rv = true;
+                        }
+                    }
+                }
+
+                return rv;
+            }
+            public List<CombatTile> GetEffectedTiles(){
+                List<CombatTile> cbtTile = new List<CombatTile>();
+                int size = _chosenAction.Size;
+
+                if (size == 0) { cbtTile.Add(SelectedTile); }
+                else {
+                    if (_chosenAction != null && SelectedTile != null)
+                    {
+                        int minCol = TargetsAlly() ? 0 : ENEMY_FRONT;
+                        int maxCol = TargetsAlly() ? ENEMY_FRONT : MAX_COL;
+                        int rowStart = 0;
+                        int rowEnd = 0;
+                        int colStart = 0;
+                        int colEnd = 0;
+
+                        LoopFind(ref colStart, SelectedTile.Col, minCol, true);
+                        LoopFind(ref colEnd, SelectedTile.Col, maxCol, false);
+                        LoopFind(ref rowStart, SelectedTile.Row, 0, true);
+                        LoopFind(ref rowEnd, SelectedTile.Row, MAX_ROW, false);
+
+                        for (int row = rowStart; row < rowEnd; row++)
+                        {
+                            for (int col = colStart; col < colEnd; col++)
+                            {
+                                if(_combatMap[row, col].Occupied()) { cbtTile.Add(_combatMap[row, col]); }
+                            }
+                        }
+                    }
+                }
+                return cbtTile;
+            }
+
+            private void LoopFind(ref int val, int start, int compare, bool findMin)
+            {
+                bool found = false;
+                int temp = _chosenAction.Size;
+                do
+                {
+                    if (CheckIt(start, temp, compare, findMin))
+                    {
+                        val = start + (findMin ? -temp : temp);
+                        found = true;
+                    }
+                    else
+                    {
+                        temp--;
+                    }
+                } while (!found);
+            }
+
+            private bool CheckIt(int val, int iterator, int compare, bool findMin)
+            {
+                bool rv = false;
+                if (findMin)
+                {
+                    rv = (val - iterator >= compare);
+                }
+                else
+                {
+                    rv = (val + iterator <= compare);
+                }
                 return rv;
             }
 

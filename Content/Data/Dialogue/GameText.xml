@@ -123,6 +123,10 @@
       <Key>Action 50</Key>
       <Value>Meditate/Increases your dmg</Value>
     </Item>
+    <Item>
+      <Key>Action 51</Key>
+      <Value>Warding Blow/Push the enemy back</Value>
+    </Item>
     <!--Action Spell Text -->
     <Item>
       <Key>Action 101</Key>
@@ -141,6 +145,10 @@
       <Value>Poison/Poison them!</Value>
     </Item>
     <Item>
+      <Key>Action 105</Key>
+      <Value>Silence/No more magic!</Value>
+    </Item>
+    <Item>
       <Key>Action 150</Key>
       <Value>Minor Healing/A weak healing spell</Value>
     </Item>
@@ -151,6 +159,15 @@
     <Item>
       <Key>Action 200</Key>
       <Value>Summon Eye/Summons a Magical Eye to attack your foe</Value>
+    </Item>
+    <!--Status/Buff/Debuff-->
+    <Item>
+      <Key>Poisoned Description</Key>
+      <Value>This character has been poisoned!</Value>
+    </Item>
+    <Item>
+      <Key>Silenced Description</Key>
+      <Value>No more magic!</Value>
     </Item>
     <!--Building Text -->
     <Item>

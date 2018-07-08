@@ -18,6 +18,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class GameManager
     {
+        public enum ForceMoveEnum { None, Forward, Back };
         public enum ActionEnum { Action, Menu, Spell };
         public enum TargetEnum { Enemy, Ally};
         public enum MenuEnum { Action, Cast, UseItem };

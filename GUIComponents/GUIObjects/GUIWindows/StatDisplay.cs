@@ -66,6 +66,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gFillLeft = new GUIImage(Vector2.Zero, new Rectangle(64, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
             _gFillMid = new GUIImage(Vector2.Zero, new Rectangle(68, 32, 8, 16), _iMidWidth, 16, @"Textures\Dialog");
             _gFillRight = new GUIImage(Vector2.Zero, new Rectangle(76, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
+            _gText = new GUIText();
 
             PositionBars();
 
@@ -112,7 +113,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 else { text = string.Format("{0}/{1}", _character.CurrentHP, _character.MaxHP); }
 
                 _gText.SetText(text);
-                _gText.AlignToObject(_gFillMid, SideEnum.Center);
+                _gText.AlignToObject(_gMid, SideEnum.Center);
                 _gText.Draw(spriteBatch);
             }
         }

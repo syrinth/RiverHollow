@@ -27,22 +27,30 @@
       <Key>50</Key>
       <Value>[Type:Action][Target:Ally][Range:Self][Area:Single][Action:UserCast][Buff:3|2|Self]</Value>
     </Item>
+    <Item>
+      <Key>51</Key>
+      <Value>[Type:Action][Target:Enemy][Range:Melee][Area:Single][Effect:Move-Back-1][Action:UserMove UserAttack Apply]</Value>
+    </Item>
     <!--<100> Wizard Spells-->
     <Item>
       <Key>101</Key>
-      <Value>[Type:Spell][SpellAnimation:0-0.03][Target:Enemy][Range:Ranged][Area:Area][Effect:Cost-5 Harm-5 Direct][Action:UserCast Direct Apply][Element:Lightning][Type:Magical]</Value>
+      <Value>[Type:Spell][SpellAnimation:0-0.03][Target:Enemy][Range:Ranged][Area:Area][Size:1][Effect:Cost-5 Harm-5 Direct][Action:UserCast Direct Apply][Element:Lightning][Type:Magical]</Value>
     </Item>
     <Item>
       <Key>102</Key>
-      <Value>[Type:Spell][SpellAnimation:1-0.03][Target:Enemy][Range:Ranged][Area:Area][Effect:Cost-20 Harm-50][Action:UserCast Projectile Apply]</Value>
+      <Value>[Type:Spell][SpellAnimation:1-0.03][Target:Enemy][Range:Ranged][Area:Area][Size:1][Effect:Cost-20 Harm-50][Action:UserCast Projectile Apply]</Value>
     </Item>
     <Item>
       <Key>103</Key>
-      <Value>[Type:Spell][SpellAnimation:0-0.03][Target:Self][Range:Self][Area:Single][Effect:Cost-10][Action:UserCast][Buff:1|2|Self]</Value>
+      <Value>[Type:Spell][SpellAnimation:0-0.03][Target:Self][Range:Self][Area:Single][Size:1][Effect:Cost-10][Action:UserCast][Buff:1|2|Self]</Value>
     </Item>
     <Item>
       <Key>104</Key>
       <Value>[Type:Spell][SpellAnimation:0-0.03][Target:Enemy][Range:Ranged][Area:Single][Effect:Cost-5 Status-Poisoned][Action:UserCast Direct Apply]</Value>
+    </Item>
+    <Item>
+      <Key>105</Key>
+      <Value>[Type:Spell][SpellAnimation:0-0.03][Target:Enemy][Range:Ranged][Area:Single][Effect:Cost-5 Status-Silenced][Action:UserCast Direct Apply]</Value>
     </Item>
     <!--<150> Healer Spells-->
     <Item>

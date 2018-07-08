@@ -81,6 +81,25 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if(CombatManager.PhaseChooseTarget()){
                 rv = HandleHoverTargeting();
             }
+            else
+            {
+                bool loop = true;
+                GUICmbtTile[,] array = _arrAllies;
+                while (loop)
+                {
+                    foreach (GUICmbtTile t in array)
+                    {
+                        rv = t.ProcessHover(mouse);
+                        if (rv)
+                        {
+                            goto Exit;
+                        }
+                    }
+                    if (array != _arrEnemies) { array = _arrEnemies; }
+                    else { loop = false; }
+                }
+            }
+            Exit:
             
             return rv;
         }
@@ -107,7 +126,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             foreach (GUICmbtTile p in array)
             {
                 if (rv) { break; }
-                rv = p.ProcessHover(GraphicCursor.Position.ToPoint());
+                rv = p.CheckForTarget(GraphicCursor.Position.ToPoint());
             }
 
             return rv;
@@ -192,14 +211,21 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             base.Draw(spriteBatch);
             _cmbtMenu.Draw(spriteBatch);
-            foreach (GUICmbtTile p in _arrAllies)
-            {
-                if (p != null) { p.Draw(spriteBatch); }
-            }
 
-            foreach (GUICmbtTile p in _arrEnemies)
+            bool loop = true;
+            GUICmbtTile[,] array = _arrAllies;
+            while (loop)
             {
-                if (p != null) { p.Draw(spriteBatch); }
+                foreach (GUICmbtTile t in array)
+                {
+                    if (t != null) { t.Draw(spriteBatch); }
+                }
+                foreach (GUICmbtTile t in array)
+                {
+                    if (t != null) { t.DrawDescriptions(spriteBatch); }
+                }
+                if (array != _arrEnemies) { array = _arrEnemies; }
+                else { loop = false; }
             }
 
             if (CombatManager.SelectedAction != null)
@@ -219,6 +245,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIImage _gTile;
         GUISprite _gSprite;
         GUIText _gDmg;
+        List<GUIStatus> _liStatus;
 
         CombatManager.CombatTile _mapTile;
         public CombatManager.CombatTile MapTile => _mapTile;
@@ -235,6 +262,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gTile = new GUIImage(Vector2.Zero, new Rectangle(128, 0, 32, 32), 32, 32, @"Textures\Dialog");
             _gTile.SetScale(CombatManager.CombatScale);
             _gTargetter = new GUIImage(Vector2.Zero, new Rectangle(256, 96, 32, 32), 32, 32, @"Textures\Dialog");
+
+            _liStatus = new List<GUIStatus>();
 
             Setup();
 
@@ -253,6 +282,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _gTile.Alpha = 1;
             }
 
+            if (CombatManager.SelectedAction != null)
+            {
+                _gTile.SetColor(CombatManager.SelectedAction.InArea(_mapTile) ? Color.Red : Color.White);
+            }
+
             _gTile.Draw(spriteBatch);
 
             if (Occupied()) {
@@ -264,6 +298,20 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (_gDmg != null && _iDmgTimer < 40)
             {
                 _gDmg.Draw(spriteBatch);
+            }
+        }
+
+        public void DrawDescriptions(SpriteBatch spriteBatch)
+        {
+            if (Occupied())
+            {
+                foreach (GUIStatus stat in _liStatus)
+                {
+                    if (_mapTile.Character.DiConditions[stat.Status])
+                    {
+                        stat.Draw(spriteBatch);
+                    }
+                }
             }
         }
 
@@ -301,6 +349,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _gHP.AnchorAndAlignToObject(_gSprite, SideEnum.Bottom, SideEnum.CenterX);
                 _gDmg = new GUIText();
                 _gDmg.AnchorAndAlignToObject(_gSprite, SideEnum.Top, SideEnum.CenterX);
+
+                for (int i = 0; i < _liStatus.Count; i++)
+                {
+                    GUIStatus temp = _liStatus[i];
+                    if (i == 0) { temp.AnchorAndAlignToObject(_gHP, SideEnum.Bottom, SideEnum.Left); }
+                    else { temp.AnchorAndAlignToObject(_liStatus[i - 1], SideEnum.Right, SideEnum.Bottom); }
+                }
             }
         }
 
@@ -327,6 +382,26 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gDmg.SetColor(Color.Red);
         }
 
+        public void ChangeCondition(ConditionEnum c, TargetEnum target)
+        {
+            GUIStatus found = _liStatus.Find(test => test.Status == c);
+            if (target.Equals(TargetEnum.Enemy) && found == null)
+            {
+                _liStatus.Add(new GUIStatus(c));
+            }
+            else if(target.Equals(TargetEnum.Ally) && found != null)
+            {
+                _liStatus.Remove(found);
+            }
+
+            _liStatus.Sort((x, y) => x.Status.CompareTo(y.Status));
+            for(int i = 0; i< _liStatus.Count; i++)
+            {
+                if(i == 0) { _liStatus[i].AnchorAndAlignToObject(_gHP, SideEnum.Bottom, SideEnum.Left); }
+                else { _liStatus[i].AnchorAndAlignToObject(_liStatus[i - 1], SideEnum.Right, SideEnum.Bottom); }
+            }
+        }
+
         public void Heal(int x)
         {
             _iDmgTimer = 0;
@@ -350,10 +425,27 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public bool ProcessHover(Point mouse)
         {
             bool rv = false;
+
+            foreach (GUIStatus s in _liStatus)
+            {
+                s.ProcessHover(mouse);
+            }
+
+            if (_gHP != null){ _gHP.ProcessHover(mouse); }
+
+            return rv;
+        }
+
+        public bool CheckForTarget(Point mouse)
+        {
+            bool rv = false;
             if (Contains(mouse))
             {
-                CombatManager.TestHoverTile(_mapTile);
-                rv = true;
+                if (CombatManager.PhaseChooseTarget())
+                {
+                    CombatManager.TestHoverTile(_mapTile);
+                    rv = true;
+                }
             }
 
             return rv;

@@ -169,7 +169,6 @@ namespace RiverHollow.Game_Managers
             desc = _diGameText[val].Split('/')[1];
         }
 
-
         public static void GetActionText(int id, ref string name, ref string desc)
         {
             string val = "Action " + id;
