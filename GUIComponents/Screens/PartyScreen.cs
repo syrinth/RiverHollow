@@ -9,6 +9,7 @@ using static RiverHollow.WorldObjects.Equipment;
 using static RiverHollow.WorldObjects.Clothes;
 using RiverHollow.GUIComponents.GUIObjects;
 using static RiverHollow.GUIObjects.GUIObject;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {

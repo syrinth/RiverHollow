@@ -104,5 +104,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/GameText.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texClothes.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/champion.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/ItemTable.xml</File>
   </SourceFiles>
 </SourceFileCollection>

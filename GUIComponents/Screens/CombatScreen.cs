@@ -703,7 +703,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIText[] _arMana;
         GUIText[] _arHp;
 
-
         public CmbtStatusWin(int width, int height)
         {
             _fFont = GameContentManager.GetFont(@"Fonts\MenuFont");

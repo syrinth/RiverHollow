@@ -10,6 +10,7 @@ using static RiverHollow.Game_Managers.ObjectManager;
 using System.Collections.Generic;
 using System;
 using static RiverHollow.WorldObjects.Clothes;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {

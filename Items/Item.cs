@@ -317,12 +317,13 @@ namespace RiverHollow.WorldObjects
 
     public class Equipment : Item
     {
-        public enum EquipmentEnum { None, Armor, Weapon };
         public EquipmentEnum EquipType;
         private WeaponEnum _weaponType;
         public WeaponEnum WeaponType => _weaponType;
         private ArmorEnum _armorType;
         public ArmorEnum ArmorType => _armorType;
+
+        int _iTier;
 
         private int _attack;
         public int Attack => _attack; 
@@ -356,33 +357,37 @@ namespace RiverHollow.WorldObjects
                     if (EquipType == EquipmentEnum.Armor) { _armorType = Util.ParseEnum<ArmorEnum>(tagType[1]); }
                     else if (EquipType == EquipmentEnum.Weapon) { _weaponType = Util.ParseEnum<WeaponEnum>(tagType[1]); }
                 }
-                else if (tagType[0].Equals("Attack"))
+                else if (tagType[0].Equals("Tier"))
                 {
-                    _attack = int.Parse(tagType[1]);
+                    _iTier = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Atk"))
+                {
+                    _attack = GameContentManager.GetItemTierData(_iTier, tagType[1], false);
                 }
                 else if (tagType[0].Equals("Str"))
                 {
-                    _str = int.Parse(tagType[1]);
+                    _str = GameContentManager.GetItemTierData(_iTier, tagType[1]);
                 }
                 else if (tagType[0].Equals("Def"))
                 {
-                    _def = int.Parse(tagType[1]);
+                    _def = GameContentManager.GetItemTierData(_iTier, tagType[1]);
                 }
                 else if (tagType[0].Equals("Vit"))
                 {
-                    _vit = int.Parse(tagType[1]);
+                    _vit = GameContentManager.GetItemTierData(_iTier, tagType[1]);
                 }
                 else if (tagType[0].Equals("Mag"))
                 {
-                    _mag = int.Parse(tagType[1]);
+                    _mag = GameContentManager.GetItemTierData(_iTier, tagType[1]);
                 }
                 else if (tagType[0].Equals("Res"))
                 {
-                    _res = int.Parse(tagType[1]);
+                    _res = GameContentManager.GetItemTierData(_iTier, tagType[1]);
                 }
                 else if (tagType[0].Equals("Spd"))
                 {
-                    _spd = int.Parse(tagType[1]);
+                    _spd = GameContentManager.GetItemTierData(_iTier, tagType[1]);
                 }
                 
             }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Misc;
 using System.Collections.Generic;
 
 namespace RiverHollow.Game_Managers
@@ -19,6 +20,7 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<int, string> DiQuests { get => _diQuests; }
         private static Dictionary<int, string> _diItemText;
         private static Dictionary<int, string> _diClassText;
+        private static Dictionary<int, string> _diItemTable;
 
         public static void LoadContent(ContentManager Content)
         {
@@ -31,6 +33,7 @@ namespace RiverHollow.Game_Managers
             _diQuests = _content.Load<Dictionary<int, string>>(@"Data\Quests");
             _diItemText = _content.Load<Dictionary<int, string>>(@"Data\ItemText");
             _diClassText = _content.Load<Dictionary<int, string>>(@"Data\ClassesText");
+            _diItemTable = _content.Load<Dictionary<int, string>>(@"Data\ItemTable");
 
             _diGameText = LoadDialogue(@"Data\Dialogue\GameText");
 
@@ -174,6 +177,26 @@ namespace RiverHollow.Game_Managers
             string val = "Action " + id;
             name = _diGameText[val].Split('/')[0];
             desc = _diGameText[val].Split('/')[1];
+        }
+
+        public static int GetItemTierData(int tier, string modifier, bool isStat = true)
+        {
+            int rv = 0;
+
+            string dataMod = _diItemTable[tier];
+            string[] dataMods = Util.FindTags(dataMod);
+            foreach(string d in dataMods)
+            {
+                string[] tagType = d.Split(':');
+                if (tagType[0].Equals(modifier))
+                {
+                    string[] statSplit = tagType[1].Split('/');
+                    if (isStat) { rv = int.Parse(statSplit[0]); }
+                    else { rv = int.Parse(statSplit[1]); }
+                }
+            }
+
+            return rv;
         }
 
         public static Dictionary<string, string> LoadDialogue(string file)

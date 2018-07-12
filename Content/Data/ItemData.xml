@@ -21,7 +21,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Equipment][Image:0-0][Sell:500][EType:Weapon][ESub:Sword][Dmg:1]</Value>
+      <Value>[Type:Equipment][Image:0-0][Sell:500][EType:Weapon][ESub:Sword]</Value>
     </Item>
     <Item>
       <Key>7</Key>
@@ -33,11 +33,11 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Equipment][Image:2-0][Sell:1000][EType:Weapon][ESub:Staff][Dmg:20][Def:20][Spd:20][Mag:20][Hp:20]</Value>
+      <Value>[Type:Equipment][Image:2-0][Sell:1000][EType:Weapon][ESub:Staff][Tier:10][Atk:Major][Str:Major][Def:Minor]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Equipment][Image:1-0][Sell:1000][EType:Armor][ESub:Cloth][Def:20]</Value>
+      <Value>[Type:Equipment][Image:1-0][Sell:1000][EType:Armor][ESub:Cloth][Tier:10][Mag:Major][Vit:Minor][Res:Moderate]</Value>
     </Item>
     <!--<20-24> Tools-->
     <Item>
