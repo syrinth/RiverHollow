@@ -10,23 +10,26 @@ namespace RiverHollow.Characters.CombatStuff
     {
         int _iID;
         public int ID => _iID;
-        private int _statDmg;
-        public int StatDmg { get => _statDmg; }
+
+        private int _statStr;
+        public int StatStr => _statStr;
         private int _statDef;
-        public int StatDef { get => _statDef; }
-        private int _statHP;
-        public int StatHP { get => _statHP; }
+        public int StatDef  => _statDef;
+        private int _statVit;
+        public int StatVit  => _statVit;
         private int _statMagic;
-        public int StatMagic { get => _statMagic; }
+        public int StatMag => _statMagic;
+        private int _statRes;
+        public int StatRes => _statRes;
         private int _statSpd;
-        public int StatSpd { get => _statSpd; }
+        public int StatSpd => _statSpd;
 
         private string _name;
         public string Name { get => _name; }
         private string _description;
         public string Description { get => _description; }
         public List<MenuAction> AbilityList;
-        public List<CombatAction> SpellList;
+        public List<CombatAction> _spellList;
         WeaponEnum _weaponType;
         public WeaponEnum WeaponType=> _weaponType;
         ArmorEnum _armorType;
@@ -35,7 +38,7 @@ namespace RiverHollow.Characters.CombatStuff
         public CharacterClass(int id, string[] stringData)
         {
             AbilityList = new List<MenuAction>();
-            SpellList = new List<CombatAction>();
+            _spellList = new List<CombatAction>();
             ImportBasics(id, stringData);
         }
 
@@ -58,7 +61,7 @@ namespace RiverHollow.Characters.CombatStuff
                 }
                 else if (tagType[0].Equals("Dmg"))
                 {
-                    _statDmg = int.Parse(tagType[1]);
+                    _statStr = int.Parse(tagType[1]);
                 }
                 else if (tagType[0].Equals("Def"))
                 {
@@ -66,7 +69,7 @@ namespace RiverHollow.Characters.CombatStuff
                 }
                 else if (tagType[0].Equals("Hp"))
                 {
-                    _statHP = int.Parse(tagType[1]);
+                    _statVit = int.Parse(tagType[1]);
                 }
                 else if (tagType[0].Equals("Mag"))
                 {
@@ -89,7 +92,8 @@ namespace RiverHollow.Characters.CombatStuff
                     string[] spellSplit = tagType[1].Split('-');
                     foreach (string spell in spellSplit)
                     {
-                        SpellList.Add((CombatAction)CharacterManager.GetActionByIndex(int.Parse(spell)));
+                        CombatAction ac = (CombatAction)CharacterManager.GetActionByIndex(int.Parse(spell));
+                        _spellList.Add(ac);
                     }
                 }
             }

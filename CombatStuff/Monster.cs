@@ -41,21 +41,25 @@ namespace RiverHollow
                 {
                     _xp = int.Parse(tagType[1]);
                 }
-                else if (tagType[0].Equals("Dmg"))
+                else if (tagType[0].Equals("Str"))
                 {
-                    _statDmg = int.Parse(tagType[1]);
+                    _statStr = int.Parse(tagType[1]);
                 }
                 else if (tagType[0].Equals("Def"))
                 {
                     _statDef = int.Parse(tagType[1]);
                 }
-                else if (tagType[0].Equals("Hp"))
+                else if (tagType[0].Equals("Vit"))
                 {
-                    _statHP = int.Parse(tagType[1]);
+                    _statVit = int.Parse(tagType[1]);
                 }
-                else if (tagType[0].Equals("Magic"))
+                else if (tagType[0].Equals("Mag"))
                 {
-                    _statMagic = int.Parse(tagType[1]);
+                    _statMag = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Res"))
+                {
+                    _statRes = int.Parse(tagType[1]);
                 }
                 else if (tagType[0].Equals("Spd"))
                 {

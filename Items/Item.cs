@@ -323,16 +323,22 @@ namespace RiverHollow.WorldObjects
         public WeaponEnum WeaponType => _weaponType;
         private ArmorEnum _armorType;
         public ArmorEnum ArmorType => _armorType;
-        private int _dmg;
-        public int Dmg { get => _dmg; }
+
+        private int _attack;
+        public int Attack => _attack; 
+
+        private int _str;
+        public int Str => _str;
         private int _def;
-        public int Def { get => _def; }
-        private int _spd;
-        public int Spd { get => _spd; }
+        public int Def => _def;
+        private int _vit;
+        public int Vit => _vit;
         private int _mag;
-        public int Mag { get => _mag; }
-        private int _hp;
-        public int HP { get => _hp; }
+        public int Mag => _mag;
+        private int _res;
+        public int Res => _res;
+        private int _spd;
+        public int Spd => _spd;
 
         public Equipment(int id, string[] stringData)
         {
@@ -350,26 +356,35 @@ namespace RiverHollow.WorldObjects
                     if (EquipType == EquipmentEnum.Armor) { _armorType = Util.ParseEnum<ArmorEnum>(tagType[1]); }
                     else if (EquipType == EquipmentEnum.Weapon) { _weaponType = Util.ParseEnum<WeaponEnum>(tagType[1]); }
                 }
-                else if (tagType[0].Equals("Dmg"))
+                else if (tagType[0].Equals("Attack"))
                 {
-                    _dmg = int.Parse(tagType[1]);
+                    _attack = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("Str"))
+                {
+                    _str = int.Parse(tagType[1]);
                 }
                 else if (tagType[0].Equals("Def"))
                 {
                     _def = int.Parse(tagType[1]);
                 }
-                else if (tagType[0].Equals("Spd"))
+                else if (tagType[0].Equals("Vit"))
                 {
-                    _spd = int.Parse(tagType[1]);
+                    _vit = int.Parse(tagType[1]);
                 }
                 else if (tagType[0].Equals("Mag"))
                 {
                     _mag = int.Parse(tagType[1]);
                 }
-                else if (tagType[0].Equals("Hp"))
+                else if (tagType[0].Equals("Res"))
                 {
-                    _hp = int.Parse(tagType[1]);
+                    _res = int.Parse(tagType[1]);
                 }
+                else if (tagType[0].Equals("Spd"))
+                {
+                    _spd = int.Parse(tagType[1]);
+                }
+                
             }
 
             _texture = GameContentManager.GetTexture(@"Textures\weapons");
@@ -379,11 +394,13 @@ namespace RiverHollow.WorldObjects
         {
             string rv = base.GetDescription();
             rv += System.Environment.NewLine;
-            if (Dmg > 0) { rv += " Dmg: +" + _dmg + " "; }
+            if (Attack > 0) { rv += " Attack: +" + _attack + " "; }
+            if (Str > 0) { rv += " Str: +" + _str + " "; }
             if (Def > 0) { rv += " Def: +" + _def + " "; }
-            if (Spd > 0) { rv += " Spd: +" + _spd + " "; }
+            if (Vit > 0) { rv += " Vit: +" + _vit + " "; }
             if (Mag > 0) { rv += " Mag: +" + _mag + " "; }
-            if (HP > 0) { rv += " HP: +" + _hp + " "; }
+            if (Res > 0) { rv += " REs: +" + _res + " "; }
+            if (Spd > 0) { rv += " Spd: +" + _spd + " "; }
             rv = rv.Trim();
 
             return rv;

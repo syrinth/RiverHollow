@@ -161,7 +161,7 @@ namespace RiverHollow.Game_Managers
             {
                 if (_liQueuedCharacters.Count == 0)
                 {
-                    CombatTick();
+                    CombatTick(ref _liChargingCharacters, ref _liQueuedCharacters);
                 }
                 else
                 {
@@ -230,6 +230,50 @@ namespace RiverHollow.Game_Managers
 
                 SelectedTile = playerTiles[r.Next(0, playerTiles.Count - 1)];
             }
+        }
+
+        internal static List<string> CalculateTurnOrder()
+        {
+            List<string> rv = new List<string>();
+            List<CombatCharacter> queuedCopy = new List<CombatCharacter>();
+            List<CombatCharacter> chargingCopy = new List<CombatCharacter>();
+
+            foreach (CombatCharacter c in _liQueuedCharacters) { queuedCopy.Add(new CombatCharacter(c)); }
+            foreach (CombatCharacter c in _liChargingCharacters) { chargingCopy.Add(new CombatCharacter(c)); }
+
+            if (ActiveCharacter != null)
+            {
+                rv.Add(ActiveCharacter.Name);
+                chargingCopy.Find(x => x.Name == ActiveCharacter.Name).CurrentCharge -= (SelectedAction == null) ? 100 : SelectedAction.ChargeCost();
+                CombatCharacter c = queuedCopy.Find(x => x.Name == ActiveCharacter.Name);
+                if(c != null)
+                {
+                    int h = 0;
+                }
+            }
+
+            foreach (CombatCharacter c in queuedCopy)
+            {
+                chargingCopy.Add(c);
+                rv.Add(c.Name);
+            }
+            queuedCopy.Clear();
+            chargingCopy.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));
+
+            while (rv.Count < 10)
+            {
+                CombatTick(ref chargingCopy, ref queuedCopy);
+                foreach (CombatCharacter c in queuedCopy)
+                {
+                    rv.Add(c.Name);
+                    c.CurrentCharge = 0;
+                    chargingCopy.Add(c);
+                    chargingCopy.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));
+                }
+                queuedCopy.Clear();
+            }
+
+            return rv;
         }
 
         public static void ProcessActionChoice(CombatAction a)
@@ -500,10 +544,10 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Turn Handling
-        private static void CombatTick()
+        private static void CombatTick(ref List<CombatCharacter> charging, ref List<CombatCharacter> queued)
         {
             List<CombatCharacter> toQueue = new List<CombatCharacter>();
-            foreach(CombatCharacter c in _liChargingCharacters)
+            foreach(CombatCharacter c in charging)
             {
                 if (!c.KnockedOut())
                 {
@@ -518,8 +562,8 @@ namespace RiverHollow.Game_Managers
 
             foreach(CombatCharacter c in toQueue)
             {
-                _liQueuedCharacters.Add(c);
-                _liChargingCharacters.Remove(c);
+                queued.Add(c);
+                charging.Remove(c);
             }
         }
         private static void GetActiveCharacter()
@@ -532,7 +576,7 @@ namespace RiverHollow.Game_Managers
             ActiveCharacter.TickBuffs();
             if (ActiveCharacter.Poisoned())
             {
-                ActiveCharacter.Location.AssignDamage(ActiveCharacter.DecreaseHealth(Math.Max(1, (int)(ActiveCharacter.MaxHP / 20))));
+                ActiveCharacter.Location.AssignEffect(ActiveCharacter.DecreaseHealth(Math.Max(1, (int)(ActiveCharacter.MaxHP / 20))), true);
             }
             SetPhaseForTurn();
         }
@@ -582,13 +626,48 @@ namespace RiverHollow.Game_Managers
             public void SetCombatant(CombatCharacter c)
             {
                 _character = c;
-                if (c != null) {
-                    if (c.Tile != null) {
+                if (c != null)
+                {
+                    if (c.Tile != null)
+                    {
                         c.Tile.SetCombatant(null);
                     }
+                    if(_character.Tile != null) {
+                        foreach (CombatTile tile in GetAdjacent(_character.Tile))
+                        {
+                            CheckForProtected(tile);
+                        }
+                    }
                     _character.Tile = this;
+                    CheckForProtected(this);
                 }
                 _gTile.SyncGUIObjects(c != null);
+            }
+
+            private void CheckForProtected(CombatTile t)
+            {
+                bool found = false;
+                List<CombatTile> adjacent = GetAdjacent(t);
+                foreach (CombatTile tile in adjacent)
+                {
+                    if (tile.Occupied() && this.TargetType == tile.TargetType)
+                    {
+                        if (tile.Character != this.Character && tile.Character.IsCombatAdventurer() && this.Character.IsCombatAdventurer())
+                        {
+                            found = true;
+                            CombatAdventurer adv = (CombatAdventurer)tile.Character;
+                            adv.Protected = true;
+                            adv = (CombatAdventurer)this.Character;
+                            adv.Protected = true;
+                        }
+                    }
+                }
+
+                if (!found && this.Character.IsCombatAdventurer())
+                {
+                    CombatAdventurer adv = (CombatAdventurer)this.Character;
+                    adv.Protected = false;
+                }
             }
 
             public void AssignGUITile(GUICmbtTile c)
@@ -765,7 +844,7 @@ namespace RiverHollow.Game_Managers
                     int val = _targetTile.Character.IncreaseHealth(_chosenItem.Health);
                     if (val > 0)
                     {
-                        _targetTile.GUITile.Heal(val);
+                        _targetTile.GUITile.AssignEffect(val, false);
                     }
                     _chosenItem.Remove(1);
                 }
@@ -842,7 +921,10 @@ namespace RiverHollow.Game_Managers
                         {
                             for (int col = colStart; col < colEnd; col++)
                             {
-                                if(_combatMap[row, col].Occupied()) { cbtTile.Add(_combatMap[row, col]); }
+                                if(_combatMap[row, col].Occupied() && SelectedAction.InArea(_combatMap[row, col]))
+                                {
+                                    cbtTile.Add(_combatMap[row, col]);
+                                }
                             }
                         }
                     }
@@ -858,7 +940,7 @@ namespace RiverHollow.Game_Managers
                 {
                     if (CheckIt(start, temp, compare, findMin))
                     {
-                        val = start + (findMin ? -temp : temp);
+                        val = start + (findMin ? -temp : temp + 1);
                         found = true;
                     }
                     else
@@ -877,7 +959,7 @@ namespace RiverHollow.Game_Managers
                 }
                 else
                 {
-                    rv = (val + iterator <= compare);
+                    rv = (val + iterator < compare);
                 }
                 return rv;
             }

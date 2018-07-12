@@ -23,14 +23,25 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUITextWindow _gtwTextWindow;
         CmbtMenu _cmbtMenu;
         GUIStatDisplay _sdStamina;
+        GUIButton _btnTurnOrder;
+
+        List<GUIText> _liTurns;
+
+        bool _bTurns;
 
         public CombatScreen()
         {
+            _liTurns = new List<GUIText>();
+
             _giBackground = new GUIImage(Vector2.Zero, new Rectangle(0, 0, 800, 480), RiverHollow.ScreenWidth, RiverHollow.ScreenHeight, GameContentManager.GetTexture(@"Textures\battle"));
             Controls.Add(_giBackground);
 
             _sdStamina = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Energy);
             Controls.Add(_sdStamina);
+
+            _btnTurnOrder = new GUIButton("Turns", 128, 32, BtnTurnOrder);
+            _btnTurnOrder.AnchorToScreen(SideEnum.TopRight, 10);
+            Controls.Add(_btnTurnOrder);
 
             _cmbtMenu = new CmbtMenu();
 
@@ -41,6 +52,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
+
+            _btnTurnOrder.ProcessLeftButtonClick(mouse);
 
             //If the current Phase is skill selection, allow the user to pick a skill for the currentCharacter
             switch (CombatManager.CurrentPhase)
@@ -70,7 +83,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         internal void CancelAction()
         {
+            RefreshTurnOrder();
             CombatManager.ClearSelectedTile();
+            CombatManager.SelectedAction = null;
             _cmbtMenu.ProcessRightButtonClick();
         }
 
@@ -143,11 +158,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 case CombatManager.PhaseEnum.EnemyTurn:
                     _cmbtMenu.NewTurn();
+                    RefreshTurnOrder();
                     CombatManager.SelectedAction.SetSkillTarget();
                     break;
 
                 case CombatManager.PhaseEnum.NewTurn:
                     _cmbtMenu.NewTurn();
+                    RefreshTurnOrder();
                     CombatManager.SelectedAction = null;
                     CombatManager.CurrentPhase = CombatManager.PhaseEnum.SelectSkill;
                     break;
@@ -157,6 +174,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     break;
 
                 case CombatManager.PhaseEnum.ChooseTarget:
+                    RefreshTurnOrder();
                     CombatManager.HandleKeyboardTargetting();
                     break;
 
@@ -234,7 +252,40 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
 
             if (_gtwTextWindow != null) { _gtwTextWindow.Draw(spriteBatch); }
+
+            foreach(GUIText t in _liTurns)
+            {
+                t.Draw(spriteBatch);
+            }
             
+        }
+
+        public void BtnTurnOrder()
+        {
+            _bTurns = !_bTurns;
+
+            if (_bTurns) { DisplayTurnOrder(); }
+            else { _liTurns.Clear(); }
+        }
+        private void RefreshTurnOrder()
+        {
+            if (_bTurns)
+            {
+                _liTurns.Clear();
+                DisplayTurnOrder();
+            }
+        }
+
+        private void DisplayTurnOrder()
+        {
+            List<string> turnOrder = CombatManager.CalculateTurnOrder();
+            for (int i = 0; i < turnOrder.Count; i++)
+            {
+                GUIText temp = new GUIText(i.ToString() + "-" + turnOrder[i]);
+                _liTurns.Add(temp);
+                if (i == 0) { temp.AnchorAndAlignToObject(_btnTurnOrder, SideEnum.Bottom, SideEnum.Left); }
+                else { temp.AnchorAndAlignToObject(_liTurns[i - 1], SideEnum.Bottom, SideEnum.Left); }
+            }
         }
     }
 
@@ -244,7 +295,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIImage _gTargetter;
         GUIImage _gTile;
         GUISprite _gSprite;
-        GUIText _gDmg;
+        GUIText _gEffect;
         List<GUIStatus> _liStatus;
 
         CombatManager.CombatTile _mapTile;
@@ -282,10 +333,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _gTile.Alpha = 1;
             }
 
-            if (CombatManager.SelectedAction != null)
+            if (CombatManager.ActiveCharacter != null && CombatManager.ActiveCharacter == _mapTile.Character) {
+                _gTile.SetColor(Color.Yellow);
+            }
+            else if (CombatManager.SelectedAction != null)
             {
                 _gTile.SetColor(CombatManager.SelectedAction.InArea(_mapTile) ? Color.Red : Color.White);
             }
+            else if (CombatManager.SelectedAction == null) { _gTile.SetColor(Color.White); }
 
             _gTile.Draw(spriteBatch);
 
@@ -295,9 +350,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             if (_mapTile.Selected) { _gTargetter.Draw(spriteBatch); }
 
-            if (_gDmg != null && _iDmgTimer < 40)
+            if (_gEffect != null && _iDmgTimer < 40)
             {
-                _gDmg.Draw(spriteBatch);
+                _gEffect.Draw(spriteBatch);
             }
         }
 
@@ -323,19 +378,18 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _gHP.Update(gameTime);
             }
 
-            if(_gDmg != null)
+            if(_gEffect != null)
             {
                 if (_iDmgTimer < 40)
                 {
-                    _gDmg.MoveBy(0, -1);
+                    _gEffect.MoveBy(0, -1);
                     _iDmgTimer++;
                 }
                 else if (Occupied())
                 {
-                    _gDmg.SetText("");
-                    _gDmg.AnchorAndAlignToObject(_gSprite, SideEnum.Top, SideEnum.CenterX);
+                    _gEffect.SetText("");
                 }
-                else { _gDmg = null; }
+                else { _gEffect = null; }
             }
         }
 
@@ -347,8 +401,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _gSprite.CenterOnObject(_gTile);
                 _gSprite.MoveBy(0, -(_gTile.Height / 3));
                 _gHP.AnchorAndAlignToObject(_gSprite, SideEnum.Bottom, SideEnum.CenterX);
-                _gDmg = new GUIText();
-                _gDmg.AnchorAndAlignToObject(_gSprite, SideEnum.Top, SideEnum.CenterX);
+                _gEffect = new GUIText();
+                _gEffect.AnchorAndAlignToObject(_gSprite, SideEnum.Top, SideEnum.CenterX);
 
                 for (int i = 0; i < _liStatus.Count; i++)
                 {
@@ -375,11 +429,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Setup();
         }
 
-        public void AssignDamage(int x)
+        public void AssignEffect(int x, bool isNegative)
+        {
+            AssignEffect(x.ToString(), isNegative);
+        }
+        public void AssignEffect(string x, bool isNegative)
         {
             _iDmgTimer = 0;
-            _gDmg.SetText(x);
-            _gDmg.SetColor(Color.Red);
+            _gEffect.SetText(x);
+            _gEffect.SetColor(isNegative ? Color.Red : Color.LightGreen);
+            _gEffect.AnchorAndAlignToObject(_gSprite, SideEnum.Top, SideEnum.CenterX);
         }
 
         public void ChangeCondition(ConditionEnum c, TargetEnum target)
@@ -400,13 +459,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 if(i == 0) { _liStatus[i].AnchorAndAlignToObject(_gHP, SideEnum.Bottom, SideEnum.Left); }
                 else { _liStatus[i].AnchorAndAlignToObject(_liStatus[i - 1], SideEnum.Right, SideEnum.Bottom); }
             }
-        }
-
-        public void Heal(int x)
-        {
-            _iDmgTimer = 0;
-            _gDmg.SetText(x);
-            _gDmg.SetColor(Color.LightGreen);
         }
 
         public bool Occupied()

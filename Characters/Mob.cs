@@ -60,6 +60,18 @@ namespace RiverHollow
                     _monsters.Add(CharacterManager.GetMonsterByIndex(mID));
                 }
             }
+
+            foreach (CombatCharacter m in _monsters)
+            {
+                List<CombatCharacter> match = _monsters.FindAll(x => ((Monster)x).ID == ((Monster)m).ID);
+                if (match.Count > 1)
+                {
+                    for (int i = 0; i < match.Count; i++)
+                    {
+                        match[i].SetUnique(Util.NumToString(i+1, true));
+                    }
+                }
+            }
             _id = id;
             return 0;
         }

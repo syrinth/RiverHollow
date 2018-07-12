@@ -66,6 +66,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             foreach(GUIObject c in Controls)
             {
                 rv = c.ProcessLeftButtonClick(mouse);
+                if (rv) { break; }
             }
 
             return rv;

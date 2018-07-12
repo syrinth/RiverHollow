@@ -334,15 +334,19 @@ namespace RiverHollow.Characters
 
         public void SetClothes(Clothes c)
         {
-            if (c.IsShirt()) { _chest = c; }
-            else if(c.IsHat()) {
-                _spriteHair.FrameCutoff = 9;
-                _hat = c;
-            }
+            if (c != null)
+            {
+                if (c.IsShirt()) { _chest = c; }
+                else if (c.IsHat())
+                {
+                    _spriteHair.FrameCutoff = 9;
+                    _hat = c;
+                }
 
-            c.Sprite.Position = _bodySprite.Position;
-            c.Sprite.CurrentAnimation = _bodySprite.CurrentAnimation;
-            c.Sprite.SetDepthMod(0.004f);
+                c.Sprite.Position = _bodySprite.Position;
+                c.Sprite.CurrentAnimation = _bodySprite.CurrentAnimation;
+                c.Sprite.SetDepthMod(0.004f);
+            }
         }
 
         public void RemoveClothes(Clothes c)

@@ -217,7 +217,7 @@ namespace RiverHollow
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
 
                 GUIManager.Draw(spriteBatch);
-                if (!Informational())
+                if (!Informational() && !InCombat())
                 {
                     GameCalendar.Draw(spriteBatch);
                 }

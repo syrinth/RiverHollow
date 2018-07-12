@@ -166,10 +166,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gClass.SetText(_character.CharacterClass.Name);
             _gXP.SetText(_character.XP + @"/" + CombatAdventurer.LevelRange[_character.ClassLevel]);
 
-            _gMagic.SetText("Mag: " + _character.StatMagic);
+            _gDmg.SetText("Str: " + _character.StatStr);
             _gDef.SetText("Def: " + _character.StatDef);
-            _gDmg.SetText("Dmg: " + _character.StatDmg);
-            _gHP.SetText("HP: " + _character.StatHP);
+            _gHP.SetText("Vit: " + _character.StatVit);
+            _gMagic.SetText("Mag: " + _character.StatMag);
+            _gDef.SetText("Res: " + _character.StatRes);
             _gSpd.SetText("Spd: " + _character.StatSpd);
         }
 

@@ -7,19 +7,25 @@ using RiverHollow.SpriteAnimations;
 using RiverHollow.Game_Managers.GUIObjects;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.CombatStuff;
+using RiverHollow.Misc;
 
 namespace RiverHollow.Characters.CombatStuff
 {
     public class CombatCharacter : Character
     {
         #region Properties
+        const int MAX_STAT = 99;
+        protected string _sUnique;
+
+        public override string Name => String.IsNullOrEmpty(_sUnique) ? _sName : _sName + " " + _sUnique;
+
         protected int _currentHP;
         public int CurrentHP
         {
             get { return _currentHP; }
             set { _currentHP = value; }
         }
-        public int MaxHP {  get => StatHP * 3; }
+        public int MaxHP {  get => StatVit * 3; }
 
         protected int _currentMP;
         public int CurrentMP
@@ -27,27 +33,36 @@ namespace RiverHollow.Characters.CombatStuff
             get { return _currentMP; }
             set { _currentMP = value; }
         }
-        public int MaxMP {  get => StatMagic * 3; }
+        public int MaxMP {  get => StatMag * 3; }
 
         public int CurrentCharge;
         public CombatManager.CombatTile Tile;
         public GUICmbtTile Location => Tile.GUITile;
 
-        protected int _statDmg;
-        public virtual int StatDmg { get => _statDmg + _buffDmg; }
+        public virtual int Attack => (int)(StatStr*0.5);
+
+        protected int _statStr;
+        public virtual int StatStr { get => _statStr + _buffStr; }
         protected int _statDef;
         public virtual int StatDef { get => _statDef + _buffDef; }
-        protected int _statHP;
-        public virtual int StatHP { get => _statHP; }
-        protected int _statMagic;
-        public virtual int StatMagic { get => _statMagic + _buffMagic; }
+        protected int _statVit;
+        public virtual int StatVit { get => _statVit + _buffVit; }
+        protected int _statMag;
+        public virtual int StatMag { get => _statMag + _buffMag; }
+        protected int _statRes;
+        public virtual int StatRes { get => _statRes + _buffRes; }
         protected int _statSpd;
         public virtual int StatSpd { get => _statSpd + _buffSpd; }
 
-        protected int _buffDmg;
+        protected int _buffStr;
         protected int _buffDef;
-        protected int _buffMagic;
+        protected int _buffVit;
+        protected int _buffMag;
+        protected int _buffRes;
         protected int _buffSpd;
+
+        public int Evasion => (int)(40/(1+10*(Math.Pow(Math.E,(-0.05*StatSpd)))));
+        public int ResistStatus => (int)(50 / (1 + 10 * (Math.Pow(Math.E, (-0.05 * StatRes)))));
 
         protected List<MenuAction> _liActions;
         public virtual List<MenuAction> AbilityList { get => _liActions; }
@@ -87,6 +102,20 @@ namespace RiverHollow.Characters.CombatStuff
                 [ElementEnum.Ice] = ElementAlignment.Neutral,
                 [ElementEnum.Lightning] = ElementAlignment.Neutral
             };
+        }
+
+        //ONLY USE THIS FOR CALCULATING TURNS
+        public CombatCharacter(CombatCharacter c)
+        {
+            _sName = c.Name;
+            CurrentCharge = c.CurrentCharge;
+            _diConditions = c._diConditions;
+            _statStr = c.StatStr;
+            _statDef = c.StatDef;
+            _statVit = c.StatVit;
+            _statMag = c.StatMag;
+            _statRes = c.StatRes;
+            _statSpd = c.StatSpd;
         }
 
         public void LoadContent(string texture)
@@ -150,18 +179,32 @@ namespace RiverHollow.Characters.CombatStuff
             }
         }
 
-        public int ProcessAttack(int offensiveStat, int dmgMod, ElementEnum element = ElementEnum.None)
+        public int ProcessAttack(CombatCharacter attacker, int potency, ElementEnum element = ElementEnum.None)
         {
-            int iATK = offensiveStat* dmgMod;
-            double power = Math.Pow(((double)iATK / (double)StatDef), 2);
+            int base_attack = attacker.Attack;
+
+            double power = Math.Pow(((double)base_attack / (double)StatDef), 2) + attacker.StatStr;
             double dMult = Math.Min(2, Math.Max(0.01, power));
-            int dmg = (int)Math.Max(1, iATK * dMult);
+            int dmg = (int)Math.Max(1, base_attack * dMult); 
+
+            dmg += ApplyResistances(dmg, element);
+            return DecreaseHealth(dmg);
+        }
+        public int ProcessSpell(CombatCharacter attacker, int potency, ElementEnum element = ElementEnum.None)
+        {
+            int base_damage = (attacker.StatMag - StatRes/2) * potency;
+            int bonus = 0;
+
+            base_damage += ApplyResistances(base_damage, element);
+            return DecreaseHealth(base_damage);
+        }
+        public int ApplyResistances(int dmg, ElementEnum element = ElementEnum.None)
+        {
             int modifiedDmg = 0;
-
-
-            if(element != ElementEnum.None)
+            if (element != ElementEnum.None)
             {
-                if(MapManager.CurrentMap.IsOutside && GameCalendar.IsRaining()) {
+                if (MapManager.CurrentMap.IsOutside && GameCalendar.IsRaining())
+                {
                     if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (int)(dmg * 1.2) - dmg; }
                     else if (element.Equals(ElementEnum.Fire)) { modifiedDmg += (int)(dmg * 0.8) - dmg; }
                 }
@@ -181,9 +224,7 @@ namespace RiverHollow.Characters.CombatStuff
                 }
             }
 
-            dmg += modifiedDmg;
-
-            return DecreaseHealth(dmg);
+            return modifiedDmg;
         }
 
         public int DecreaseHealth(int value)
@@ -243,14 +284,20 @@ namespace RiverHollow.Characters.CombatStuff
                     {
                         switch (kvp.Key)
                         {
-                            case "Dmg":
-                                _buffDmg -= kvp.Value;
+                            case "Str":
+                                _buffStr -= kvp.Value;
                                 break;
                             case "Def":
                                 _buffDef -= kvp.Value;
                                 break;
-                            case "Magic":
-                                _buffMagic -= kvp.Value;
+                            case "Vit":
+                                _buffVit -= kvp.Value;
+                                break;
+                            case "Mag":
+                                _buffMag -= kvp.Value;
+                                break;
+                            case "Res":
+                                _buffRes -= kvp.Value;
                                 break;
                             case "Spd":
                                 _buffSpd -= kvp.Value;
@@ -277,17 +324,23 @@ namespace RiverHollow.Characters.CombatStuff
             {
                 switch (kvp.Key)
                 {
-                    case "Dmg":
-                        _buffDmg += kvp.Value;
+                    case "Str":
+                        _buffStr -= kvp.Value;
                         break;
                     case "Def":
-                        _buffDef += kvp.Value;
+                        _buffDef -= kvp.Value;
                         break;
-                    case "Magic":
-                        _buffMagic += kvp.Value;
+                    case "Vit":
+                        _buffVit -= kvp.Value;
+                        break;
+                    case "Mag":
+                        _buffMag -= kvp.Value;
+                        break;
+                    case "Res":
+                        _buffRes -= kvp.Value;
                         break;
                     case "Spd":
-                        _buffSpd += kvp.Value;
+                        _buffSpd -= kvp.Value;
                         break;
                 }
             }
@@ -307,6 +360,11 @@ namespace RiverHollow.Characters.CombatStuff
         public bool CanCast(int x)
         {
             return x <= CurrentMP;
+        }
+
+        public void SetUnique(string u)
+        {
+            _sUnique = u;
         }
 
         public bool KnockedOut()

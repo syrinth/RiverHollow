@@ -377,7 +377,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 GUIButton _btnMove;
                 WorldAdventurer _character;
-                GUIText _gName, _actionText, _gClass, _gXP, _gDmg, _gDef, _gHP, _gMagic, _gSpd;
+                GUIText _gName, _actionText, _gClass, _gXP, _gStr, _gDef, _gVit, _gMagic, _gRes, _gSpd;
                 GUIItemBox _weapon, _armor;
                 public WorkerDetailsWin(ManagementScreen s, WorldAdventurer selectedAdventurer) : base(s)
                 {
@@ -407,20 +407,24 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _armor = new GUIItemBox(Vector2.Zero + new Vector2(400, 0), new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Combat.Armor);
                     _armor.AnchorAndAlignToObject(_weapon, SideEnum.Left, SideEnum.Bottom);
 
-                    _gMagic = new GUIText("Mag: 999");
+                    _gStr = new GUIText("Dmg: 999");
                     _gDef = new GUIText("Def: 999");
-                    _gDmg = new GUIText("Dmg: 999");
-                    _gHP = new GUIText("HP: 999");
+                    _gVit = new GUIText("HP: 999");
+                    _gMagic = new GUIText("Mag: 999");
+                    _gRes = new GUIText("Res: 999");
                     _gSpd = new GUIText("Spd: 999");
                     _gMagic.AnchorAndAlignToObject(_gClass, SideEnum.Bottom, SideEnum.Left);
                     _gDef.AnchorAndAlignToObject(_gMagic, SideEnum.Right, SideEnum.Bottom, statSpacing);
-                    _gDmg.AnchorAndAlignToObject(_gDef, SideEnum.Right, SideEnum.Bottom, statSpacing);
-                    _gHP.AnchorAndAlignToObject(_gDmg, SideEnum.Right, SideEnum.Bottom, statSpacing);
-                    _gSpd.AnchorAndAlignToObject(_gHP, SideEnum.Right, SideEnum.Bottom, statSpacing);
-                    _gMagic.SetText("Mag: " + _character.Combat.StatMagic);
+                    _gStr.AnchorAndAlignToObject(_gDef, SideEnum.Right, SideEnum.Bottom, statSpacing);
+                    _gVit.AnchorAndAlignToObject(_gStr, SideEnum.Right, SideEnum.Bottom, statSpacing);
+                    _gSpd.AnchorAndAlignToObject(_gVit, SideEnum.Right, SideEnum.Bottom, statSpacing);
+                    _gRes.AnchorAndAlignToObject(_gSpd, SideEnum.Right, SideEnum.Bottom, statSpacing);
+
+                    _gStr.SetText("Str: " + _character.Combat.StatStr);
                     _gDef.SetText("Def: " + _character.Combat.StatDef);
-                    _gDmg.SetText("Dmg: " + _character.Combat.StatDmg);
-                    _gHP.SetText("HP: " + _character.Combat.StatHP);
+                    _gVit.SetText("Vit: " + _character.Combat.StatVit);
+                    _gMagic.SetText("Mag: " + _character.Combat.StatMag);
+                    _gRes.SetText("Res: " + _character.Combat.StatRes);
                     _gSpd.SetText("Spd: " + _character.Combat.StatSpd);
 
                     string strAction = "Idle";

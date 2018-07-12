@@ -158,6 +158,13 @@ namespace RiverHollow.Misc
         {
             return data.Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
         }
+
+        public static String NumToString(int number, bool isCaps)
+        {
+            Char c = (Char)((isCaps ? 65 : 97) + (number - 1));
+
+            return c.ToString();
+        }
     }
 
     public class RHRandom : Random

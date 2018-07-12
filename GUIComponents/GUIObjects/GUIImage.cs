@@ -9,7 +9,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
     public class GUIImage : GUIObject
     {
         public Rectangle _sourceRectangle;
-        Color _color = Color.White;
+        protected Color _color = Color.White;
         public GUIImage(Vector2 position, Rectangle sourceRect, int width, int height, Texture2D texture)
         {
             _texture = texture;

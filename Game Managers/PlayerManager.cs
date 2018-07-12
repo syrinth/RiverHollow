@@ -496,8 +496,11 @@ namespace RiverHollow.Game_Managers
 
         public static void Rollover()
         {
-            _party.Clear();
-            _party.Add(Combat);
+            if (GameManager.AutoDisband)
+            {
+                _party.Clear();
+                _party.Add(Combat);
+            }
         }
 
         public static void CompareTools(Tool t)

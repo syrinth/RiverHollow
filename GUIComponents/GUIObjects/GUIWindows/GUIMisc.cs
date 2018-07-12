@@ -4,6 +4,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIObjects;
+using RiverHollow.SpriteAnimations;
 using System;
 using static RiverHollow.Game_Managers.GameManager;
 
@@ -92,7 +93,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
     public class GUICheck : GUIObject
     {
-        bool _isChecked;
+        bool _bChecked;
         GUIImage _gUnchecked;
         GUIImage _gChecked;
         GUIText _gText;
@@ -100,7 +101,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             Width = TileSize*2;
             Height = TileSize*2;
-            _isChecked = isChecked;
+            _bChecked = isChecked;
             _gUnchecked = new GUIImage(Vector2.Zero, new Rectangle(16, 32, TileSize, TileSize), Width, Height, @"Textures\Dialog");
             _gChecked = new GUIImage(Vector2.Zero, new Rectangle(32, 32, TileSize, TileSize), Width, Height, @"Textures\Dialog");
 
@@ -112,7 +113,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (_isChecked) { _gChecked.Draw(spriteBatch); }
+            if (_bChecked) { _gChecked.Draw(spriteBatch); }
             else { _gUnchecked.Draw(spriteBatch); }
 
             if (_gText != null)
@@ -126,7 +127,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             bool rv = false;
             if (Contains(mouse))
             {
-                _isChecked = !_isChecked;
+                _bChecked = !_bChecked;
             }
 
             return rv;
@@ -142,6 +143,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 _gText.AnchorAndAlignToObject(_gChecked, SideEnum.Right, SideEnum.Bottom);
             }
+        }
+
+        public bool Checked()
+        {
+            return _bChecked;
         }
     }
 
@@ -189,6 +195,37 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             base.Position(value);
             _gImage.Position(value);
+        }
+    }
+
+    public class GUISwatch : GUIImage
+    {
+        public delegate void BtnClickDelegate();
+        private BtnClickDelegate _delAction;
+        public Color SwatchColor => _color;
+
+        public GUISwatch(Color c, BtnClickDelegate del = null) : base(Vector2.Zero, new Rectangle(0, 80, TileSize, TileSize), 8, 16, @"Textures\Dialog")
+        {
+            _color = c;
+            _delAction = del;
+        }
+
+        public GUISwatch(Color c, int width, int height, BtnClickDelegate del = null) : base(Vector2.Zero, new Rectangle(0, 80, TileSize, TileSize), width, height, @"Textures\Dialog")
+        {
+            _color = c;
+            _delAction = del;
+        }
+
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+            bool rv = false;
+            if (Contains(mouse) && _delAction != null)
+            {
+                _delAction();
+                rv = true;
+            }
+
+            return rv;
         }
     }
 }

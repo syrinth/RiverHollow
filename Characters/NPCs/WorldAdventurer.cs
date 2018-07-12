@@ -234,8 +234,11 @@ namespace RiverHollow.Characters.NPCs
         public bool Rollover()
         {
             bool rv = !Adventuring;
-            DrawIt = true;
-            Adventuring = false;
+            if (GameManager.AutoDisband)
+            {
+                DrawIt = true;
+                Adventuring = false;
+            }
             _c.CurrentHP = _c.MaxHP;
             return rv;
         }
@@ -269,7 +272,8 @@ namespace RiverHollow.Characters.NPCs
                 name = this.Name,
                 processedTime = this.ProcessedTime,
                 currentItemID = (this._currentlyMaking == null) ? -1 : this._currentlyMaking.Output,
-                heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID
+                heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID,
+                adventuring = Adventuring
             };
 
             return workerData;
@@ -282,11 +286,17 @@ namespace RiverHollow.Characters.NPCs
             _dProcessedTime = data.processedTime;
             _currentlyMaking = (data.currentItemID == -1) ? null : _diCrafting[data.currentItemID];
             _heldItem = ObjectManager.GetItem(data.heldItemID);
+            Adventuring = data.adventuring;
 
             SetCombat();
             Combat.LoadData(data.advData);
 
             if (_currentlyMaking != null) { _bodySprite.SetCurrentAnimation("Working"); }
+            if (Adventuring)
+            {
+                DrawIt = false;
+                PlayerManager.AddToParty(Combat);
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class GameManager
     {
+        public enum PlayerColorEnum { None, Eyes, Hair, Skin };
         public enum ForceMoveEnum { None, Forward, Back };
         public enum ActionEnum { Action, Menu, Spell };
         public enum TargetEnum { Enemy, Ally};
@@ -45,6 +46,8 @@ namespace RiverHollow.Game_Managers
 
         static long _iSaveID = -1;
         public static int MAX_NAME_LEN = 10;
+
+        public static bool AutoDisband;
 
         public static void LoadContent(ContentManager Content)
         {
@@ -76,6 +79,20 @@ namespace RiverHollow.Game_Managers
             gmActiveItem = null;
             gmDoor = null;
             gmSpirit = null;
+        }
+
+        public static OptionsData SaveOptions()
+        {
+            OptionsData data = new OptionsData
+            {
+                autoDisband = AutoDisband
+            };
+            return data;
+        }
+
+        public static void LoadOptions(OptionsData data)
+        {
+            AutoDisband = data.autoDisband;
         }
 
         #region States
@@ -153,6 +170,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Player")]
             public PlayerData playerData;
 
+            [XmlElement(ElementName = "Options")]
+            public OptionsData optionData;
+
             [XmlElement(ElementName = "CurrentMap")]
             public string currentMap;
 
@@ -180,7 +200,11 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "EligibleData")]
             public List<EligibleNPCData> EligibleData;
         }
-
+        public struct OptionsData
+        {
+            [XmlElement(ElementName = "AutoDisband")]
+            public bool autoDisband;
+        }
         public struct PlayerData
         {
             [XmlElement(ElementName = "Name")]
@@ -284,6 +308,9 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "HeldItemID")]
             public int heldItemID;
+
+            [XmlElement(ElementName = "Adventuring")]
+            public bool adventuring;
         }
         public struct AdventurerData
         {
@@ -502,7 +529,8 @@ namespace RiverHollow.Game_Managers
                 PlotQuestData = new List<QuestData>(),
                 QuestLogData = new List<QuestData>(),
                 NPCData = new List<NPCData>(),
-                EligibleData = new List<EligibleNPCData>()
+                EligibleData = new List<EligibleNPCData>(),
+                optionData = GameManager.SaveOptions()
             };
 
             PlayerData playerData = PlayerManager.SaveData();
@@ -605,6 +633,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager.CurrentMap = MapManager.Maps[data.currentMap].Name;
             PlayerManager.World.Position = Util.SnapToGrid(MapManager.Maps[PlayerManager.CurrentMap].GetCharacterSpawn("PlayerSpawn"));
             PlayerManager.World.DetermineFacing(new Vector2(0, 1));
+            LoadOptions(data.optionData);
             GameCalendar.LoadCalendar(data.Calendar); 
             foreach (BuildingData b in data.Buildings)
             {

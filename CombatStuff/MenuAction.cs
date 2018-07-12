@@ -63,7 +63,6 @@ namespace RiverHollow.Characters.CombatStuff
         const int moveSpeed = 60;
 
         ElementEnum _element = ElementEnum.None;
-        AttackTypeEnum _attackType = AttackTypeEnum.Physical;
         List<ConditionEnum> _liCondition;
         public List<ConditionEnum> LiCondition { get => _liCondition; }
         int _iChargeCost;
@@ -136,15 +135,15 @@ namespace RiverHollow.Characters.CombatStuff
                 //Parsing for important data
                 if (tagType[0].Equals("Type"))
                 {
+                    if(tagType[1] == "Spell")
+                    {
+                        int k = 0;
+                    }
                     _actionType = Util.ParseEnum<ActionEnum>(tagType[1]);
                 }
                 else if (tagType[0].Equals("Element"))
                 {
                     _element = Util.ParseEnum<ElementEnum>(tagType[1]);
-                }
-                else if (tagType[0].Equals("Type"))
-                {
-                    _attackType = Util.ParseEnum<AttackTypeEnum>(tagType[1]);
                 }
                 else if (tagType[0].Equals("Target"))
                 {
@@ -266,8 +265,26 @@ namespace RiverHollow.Characters.CombatStuff
                 {
                     foreach (CombatManager.CombatTile ct in TileTargetList)
                     {
-                        int x = ct.Character.ProcessAttack(SkillUser.StatDmg, _effectHarm, _element);
-                        ct.GUITile.AssignDamage(x);
+                        if (!IsSpell())
+                        {
+                            RHRandom random = new RHRandom();
+                            int evade = random.Next(1, 100);
+                            if (evade > ct.Character.Evasion)
+                            {
+                                int x = ct.Character.ProcessAttack(SkillUser, _effectHarm, _element);
+                                ct.GUITile.AssignEffect(x, true);
+                            }
+                            else
+                            {
+                                ct.GUITile.AssignEffect("Dodge!", true);
+                            }
+                        }
+                        else
+                        {
+
+                            int x = ct.Character.ProcessSpell(SkillUser, _effectHarm, _element);
+                            ct.GUITile.AssignEffect(x, true);
+                        }
                     }
                 }
                 else if (_effectTags.Contains("Heal"))
@@ -278,7 +295,7 @@ namespace RiverHollow.Characters.CombatStuff
                         ct.Character.IncreaseHealth(val);
                         if (val > 0)
                         {
-                            ct.GUITile.AssignDamage(_effectHarm);
+                            ct.GUITile.AssignEffect(_effectHeal, false);
                         }
                     }
                 }
@@ -288,8 +305,18 @@ namespace RiverHollow.Characters.CombatStuff
                     {
                         foreach (ConditionEnum e in _liCondition)
                         {
-                            ct.Character.ChangeConditionStatus(e, Target.Equals(TargetEnum.Enemy));
-                            ct.GUITile.ChangeCondition(e, Target);
+                            RHRandom random = new RHRandom();
+                            int evade = random.Next(1, 100);
+                            if (evade > ct.Character.ResistStatus)
+                            {
+                                ct.Character.ChangeConditionStatus(e, Target.Equals(TargetEnum.Enemy));
+                                ct.GUITile.ChangeCondition(e, Target);
+                                ct.GUITile.AssignEffect(e.ToString(), true);
+                            }
+                            else
+                            {
+                                ct.GUITile.AssignEffect("Resisted", false);
+                            }
                         }
                     }
                 }
@@ -446,8 +473,9 @@ namespace RiverHollow.Characters.CombatStuff
                         }
                         else if (s.AnimationPlayedXTimes(1))
                         {
-                            int x = TileTargetList[0].Character.ProcessAttack(s.Dmg, 1, s.Element);
-                            TileTargetList[0].GUITile.AssignDamage(x);
+                            //MAR
+                            //int x = TileTargetList[0].Character.ProcessAttack(s, 1, s.Element);
+                            //TileTargetList[0].GUITile.AssignDamage(x);
 
                             s.PlayAnimation("Idle");
                             _alreadyApplied = false;

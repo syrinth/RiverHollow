@@ -8,7 +8,7 @@
     <!--Buff Tags: Allies, Enemies, Target, Self-->
     <Item>
       <Key>1</Key>
-      <Value>[Type:Action][Target:Enemy][Range:Melee][Area:Single][Effect:Harm-1][Action:UserMove UserAttack Apply][Charge:60]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:Melee][Area:Single][Effect:Harm-1][Action:UserMove UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -20,7 +20,7 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Action][Target:Ally][Range:Column][Area:Area][Action:Move][Charge:30]</Value>
+      <Value>[Type:Action][Target:Ally][Range:Column][Area:Area][Action:Move][Charge:50]</Value>
     </Item>
     <!--<50> Special-->
     <Item>
@@ -34,11 +34,11 @@
     <!--<100> Wizard Spells-->
     <Item>
       <Key>101</Key>
-      <Value>[Type:Spell][SpellAnimation:0-0.03][Target:Enemy][Range:Ranged][Area:Area][Size:1][Effect:Cost-5 Harm-5 Direct][Action:UserCast Direct Apply][Element:Lightning][Type:Magical]</Value>
+      <Value>[Type:Spell][SpellAnimation:0-0.03][Target:Enemy][Range:Ranged][Area:Area][Size:1][Effect:Cost-5 Harm-5 Direct][Action:UserCast Direct Apply][Element:Lightning]</Value>
     </Item>
     <Item>
       <Key>102</Key>
-      <Value>[Type:Spell][SpellAnimation:1-0.03][Target:Enemy][Range:Ranged][Area:Area][Size:1][Effect:Cost-20 Harm-50][Action:UserCast Projectile Apply]</Value>
+      <Value>[Type:Spell][SpellAnimation:1-0.03][Target:Enemy][Range:Ranged][Area:Area][Size:1][Effect:Cost-10 Harm-50][Action:UserCast Projectile Apply]</Value>
     </Item>
     <Item>
       <Key>103</Key>

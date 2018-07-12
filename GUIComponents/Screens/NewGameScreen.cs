@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters.NPCs;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
@@ -9,17 +8,22 @@ using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIObjects;
+using RiverHollow.SpriteAnimations;
+using RiverHollow.WorldObjects;
 using System.Collections.Generic;
-
+using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow.GUIComponents.Screens
 {
     class NewGameScreen : GUIScreen
     {
-        List<Color> _liColors = new List<Color>() { Color.Red, Color.Blue, Color.Violet };
-        int _iHairColorIndex;
-        int _iHairTypeIndex;
+        static int _iHatIndex = 0;
+        static List<int> _liHats = new List<int> { -1, 402};
+        static int _iShirtIndex = 0;
+        static List<int> _liShirts = new List<int> { -1, 400, 401 };
+        bool _bCloseColorSelection;
+        static int _iHairTypeIndex;
         int _iHairTypeMax = GameContentManager.GetTexture(@"Textures\texPlayerHair").Height / 32;
         enum SelectionEnum { None, Name, Manor };
         SelectionEnum _selection;
@@ -37,14 +41,16 @@ namespace RiverHollow.GUIComponents.Screens
         ClassSelectionBox _selectedClass;
         PlayerDisplayBox _playerDisplayBox;
 
-        GUIText _gTextHairColor, _gTextHairType;
-        GUIButton _btnNextHairColor, _btnNextHairType;
+        GUISwatch _btnHairColor;
+        GUIButton _btnNextHairType, _btnNextHat, _btnNextShirt;
+        GUIImage _gHair, _gHat, _gShirt;
+
+        ColorSelectionBox _colorSelection;
 
         public NewGameScreen()
         {
             _selection = SelectionEnum.Name;
 
-            _iHairColorIndex = 0;
             int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIWindow.BrownWin.Edge;
 
             _window = new GUIWindow(new Vector2(startX, 0), GUIWindow.BrownWin, RiverHollow.ScreenHeight, RiverHollow.ScreenHeight);
@@ -76,17 +82,23 @@ namespace RiverHollow.GUIComponents.Screens
             _playerDisplayBox = new PlayerDisplayBox();
             _playerDisplayBox.AnchorToInnerSide(_window, SideEnum.TopLeft);
 
-            _gTextHairColor = new GUIText("Hair Color");
-            _gTextHairColor.AnchorAndAlignToObject(_playerDisplayBox, SideEnum.Bottom, SideEnum.Left);
-
-            _btnNextHairColor = new GUIButton(new Rectangle(288, 96, 32, 32), 32, 32, @"Textures\Dialog", BtnNextHairColor);
-            _btnNextHairColor.AnchorAndAlignToObject(_gTextHairColor, SideEnum.Right, SideEnum.Bottom, 10);
-
-            _gTextHairType = new GUIText("Hair Type");
-            _gTextHairType.AnchorAndAlignToObject(_gTextHairColor, SideEnum.Bottom, SideEnum.Left);
-
+            _btnHairColor = new GUISwatch(Color.White, 16, 32, BtnChooseHairColor);
+            _btnHairColor.AnchorAndAlignToObject(_playerDisplayBox, SideEnum.Bottom, SideEnum.Left);
+            _gHair = new GUIImage(Vector2.Zero, new Rectangle(192, 16, 16, 16), 32, 32, @"Textures\Dialog");
+            _gHair.AnchorAndAlignToObject(_btnHairColor, SideEnum.Right, SideEnum.Bottom, 10);
+            
             _btnNextHairType = new GUIButton(new Rectangle(288, 96, 32, 32), 32, 32, @"Textures\Dialog", BtnNextHairType);
-            _btnNextHairType.AnchorAndAlignToObject(_gTextHairType, SideEnum.Right, SideEnum.Bottom, 10);
+            _btnNextHairType.AnchorAndAlignToObject(_gHair, SideEnum.Right, SideEnum.Bottom, 10);
+
+            _gHat = new GUIImage(Vector2.Zero, new Rectangle(160, 16, 16, 16), 32, 32, @"Textures\Dialog");
+            _gHat.AnchorAndAlignToObject(_gHair, SideEnum.Bottom, SideEnum.Left, 10);
+            _btnNextHat = new GUIButton(new Rectangle(288, 96, 32, 32), 32, 32, @"Textures\Dialog", BtnNextHat);
+            _btnNextHat.AnchorAndAlignToObject(_gHat, SideEnum.Right, SideEnum.Bottom, 10);
+
+            _gShirt = new GUIImage(Vector2.Zero, new Rectangle(176, 16, 16, 16), 32, 32, @"Textures\Dialog");
+            _gShirt.AnchorAndAlignToObject(_gHat, SideEnum.Bottom, SideEnum.Left, 10);
+            _btnNextShirt = new GUIButton(new Rectangle(288, 96, 32, 32), 32, 32, @"Textures\Dialog", BtnNextShirt);
+            _btnNextShirt.AnchorAndAlignToObject(_gShirt, SideEnum.Right, SideEnum.Bottom, 10);
 
             GUIObject.CreateSpacedRow(ref _liClasses, _window.Height / 2, _window.Position().X, _window.Width, 20);
 
@@ -96,6 +108,12 @@ namespace RiverHollow.GUIComponents.Screens
 
         public override void Update(GameTime gameTime)
         {
+            if (_bCloseColorSelection)
+            {
+                _colorSelection.ParentWindow.Controls.Remove(_colorSelection);
+                _colorSelection = null;
+                _bCloseColorSelection = false;
+            }
             if(_selection == SelectionEnum.Name) { _nameWindow.Update(gameTime); }
             else if (_selection == SelectionEnum.Manor) { _manorWindow.Update(gameTime); }
 
@@ -105,12 +123,24 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 ((ClassSelectionBox)o).Update(gameTime);
             }
+
+            _playerDisplayBox.Update(gameTime);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            foreach(GUIObject c in Controls)
+            if (_colorSelection != null) {
+                rv = _colorSelection.ProcessLeftButtonClick(mouse);
+                if (rv) { return rv; }
+            }
+
+            foreach (GUIObject c in Controls)
             {
                 rv = c.ProcessLeftButtonClick(mouse);
                 if(rv) { break; }
@@ -139,6 +169,14 @@ namespace RiverHollow.GUIComponents.Screens
 
             return true;
         }
+        public override bool ProcessHover(Point mouse)
+        {
+            bool rv = false;
+            _btnOK.IsMouseHovering = _btnOK.Contains(mouse);
+            _btnCancel.IsMouseHovering = _btnCancel.Contains(mouse);
+            if (_colorSelection != null) { _colorSelection.ProcessHover(mouse); }
+            return rv;
+        }
 
         #region Button Logic
         public void BtnNewGame()
@@ -154,18 +192,35 @@ namespace RiverHollow.GUIComponents.Screens
             GUIManager.SetScreen(new IntroMenuScreen());
             GameManager.DontReadInput();
         }
-        public void BtnNextHairColor()
+        public void BtnChooseHairColor()
         {
-            if (_iHairColorIndex < _liColors.Count - 1) { _iHairColorIndex++; }
-            else { _iHairColorIndex = 0; }
-            PlayerManager.World.SetHairColor(_liColors[_iHairColorIndex]);
+            if (_colorSelection == null)
+            {
+                _colorSelection = new ColorSelectionBox(PlayerColorEnum.Hair, _btnHairColor, CloseColorSelection);
+                _colorSelection.AnchorAndAlignToObject(_btnHairColor, SideEnum.Right, SideEnum.Top);
+            }
         }
         public void BtnNextHairType()
         {
             if (_iHairTypeIndex < _iHairTypeMax - 1) { _iHairTypeIndex++; }
             else { _iHairTypeIndex = 0; }
 
-            _playerDisplayBox.SyncHair(_iHairTypeIndex);
+            _playerDisplayBox.Sync();
+        }
+        public void BtnNextHat()
+        {
+            if (_iHatIndex < _liHats.Count - 1) { _iHatIndex++; }
+            else { _iHatIndex = 0; }
+            
+            _playerDisplayBox.Sync();
+        }
+        public void BtnNextShirt()
+        {
+            Color currHair = PlayerManager.World.HairColor;
+            if (_iShirtIndex < _liShirts.Count - 1) { _iShirtIndex++; }
+            else { _iShirtIndex = 0; }
+
+            _playerDisplayBox.Sync();
         }
         public void BtnAssignClass(ClassSelectionBox o)
         {
@@ -177,15 +232,11 @@ namespace RiverHollow.GUIComponents.Screens
                     _selectedClass = csb;
                 }
         }
-        #endregion
-
-        public override bool ProcessHover(Point mouse)
+        public void CloseColorSelection()
         {
-            bool rv = false;
-            _btnOK.IsMouseHovering = _btnOK.Contains(mouse);
-            _btnCancel.IsMouseHovering = _btnCancel.Contains(mouse);
-            return rv;
+            _bCloseColorSelection = true;
         }
+        #endregion
 
         public class PlayerDisplayBox : GUIWindow
         {
@@ -197,18 +248,14 @@ namespace RiverHollow.GUIComponents.Screens
             public GUISprite HairSprite => _hairSprite;
             GUISprite _armSprite;
             public GUISprite ArmSprite => _armSprite;
+            GUISprite _hatSprite;
+            public GUISprite HatSprite => _hatSprite;
+            GUISprite _shirtSprite;
+            public GUISprite ShirtSprite => _shirtSprite;
 
             public PlayerDisplayBox()
             {
-                _bodySprite = new GUISprite(PlayerManager.World.BodySprite);
-                _eyeSprite = new GUISprite(PlayerManager.World.EyeSprite);
-                _hairSprite = new GUISprite(PlayerManager.World.HairSprite);
-                _armSprite = new GUISprite(PlayerManager.World.ArmSprite);
-
-                _bodySprite.SetScale((int)GameManager.Scale);
-                _eyeSprite.SetScale((int)GameManager.Scale);
-                _hairSprite.SetScale((int)GameManager.Scale);
-                _armSprite.SetScale((int)GameManager.Scale);
+                Configure();
 
                 _winData = GUIWindow.RedWin;
                 
@@ -221,15 +268,25 @@ namespace RiverHollow.GUIComponents.Screens
                 _eyeSprite.Update(gameTime);
                 _hairSprite.Update(gameTime);
                 _armSprite.Update(gameTime);
+                if (_hatSprite != null) { _hatSprite.Update(gameTime); }
+                if (_shirtSprite != null) { _shirtSprite.Update(gameTime); }
             }
 
-            public override void Draw(SpriteBatch spriteBatch)
+            private void Configure()
             {
-                base.Draw(spriteBatch);
-                _bodySprite.Draw(spriteBatch);
-                _eyeSprite.Draw(spriteBatch);
-                _hairSprite.Draw(spriteBatch);
-                _armSprite.Draw(spriteBatch);
+                _bodySprite = new GUISprite(PlayerManager.World.BodySprite);
+                _eyeSprite = new GUISprite(PlayerManager.World.EyeSprite);
+                _hairSprite = new GUISprite(PlayerManager.World.HairSprite);
+                _armSprite = new GUISprite(PlayerManager.World.ArmSprite);
+                if (PlayerManager.World.Hat != null) { _hatSprite = new GUISprite(PlayerManager.World.Hat.Sprite); }
+                if (PlayerManager.World.Chest != null) { _shirtSprite = new GUISprite(PlayerManager.World.Chest.Sprite); }
+
+                _bodySprite.SetScale((int)GameManager.Scale);
+                _eyeSprite.SetScale((int)GameManager.Scale);
+                _hairSprite.SetScale((int)GameManager.Scale);
+                _armSprite.SetScale((int)GameManager.Scale);
+                if (_hatSprite != null) { _hatSprite.SetScale((int)GameManager.Scale); }
+                if (_shirtSprite != null) { _shirtSprite.SetScale((int)GameManager.Scale); }
             }
 
             public override void Position(Vector2 value)
@@ -257,29 +314,30 @@ namespace RiverHollow.GUIComponents.Screens
                     Height = _bodySprite.Height + 2 * _bodySprite.Height / 4;
 
                 }
-                if (_eyeSprite != null)
+                PositionSprite(_eyeSprite);
+                PositionSprite(_hairSprite);
+                PositionSprite(_armSprite);
+                PositionSprite(_eyeSprite);
+                PositionSprite(_hatSprite);
+                PositionSprite(_shirtSprite);
+
+            }
+            private void PositionSprite(GUISprite sprite)
+            {
+                if (sprite != null)
                 {
-                    _eyeSprite.CenterOnWindow(this);
-                    _eyeSprite.AnchorToInnerSide(this, SideEnum.Bottom);
-                }
-                if (_hairSprite != null)
-                {
-                    _hairSprite.CenterOnWindow(this);
-                    _hairSprite.AnchorToInnerSide(this, SideEnum.Bottom);
-                }
-                if (_armSprite != null)
-                {
-                    _armSprite.CenterOnWindow(this);
-                    _armSprite.AnchorToInnerSide(this, SideEnum.Bottom);
+                    sprite.CenterOnWindow(this);
+                    sprite.AnchorToInnerSide(this, SideEnum.Bottom);
                 }
             }
 
-            public void SyncHair(int index)
+            public void Sync()
             {
-                PlayerManager.World.SetHairType(index);
+                PlayerManager.World.SetHairType(_iHairTypeIndex);
+                PlayerManager.World.SetClothes((Clothes)ObjectManager.GetItem(_liHats[_iHatIndex]));
+                PlayerManager.World.SetClothes((Clothes)ObjectManager.GetItem(_liShirts[_iShirtIndex]));
 
-                _hairSprite.SetSprite(PlayerManager.World.HairSprite);
-                _hairSprite.SetScale((int)GameManager.Scale);
+                Configure();
                 PositionSprites();
             }
         }
@@ -344,6 +402,103 @@ namespace RiverHollow.GUIComponents.Screens
                     rv = true;
                 }
                 return rv;
+            }
+        }
+
+        public class ColorSelectionBox : GUIWindow
+        {
+            const int MAX_COLUMN = 100;
+            PlayerColorEnum _target;
+            List<Color> colorList = new List<Color> { Color.Black, Color.Blue, Color.Yellow, Color.White, Color.Purple, Color.Orange, Color.Orchid, Color.Pink, Color.PeachPuff, Color.Green, Color.Gray };
+            List<GUISwatch> _liSwatches;
+
+            public delegate void CloseDelegate();
+            private CloseDelegate _closeAction;
+
+            GUISwatch _main;
+
+            public ColorSelectionBox(PlayerColorEnum target, GUISwatch mainSwatch, CloseDelegate closeIt)
+            {
+                _main = mainSwatch;
+                _closeAction = closeIt;
+                _liSwatches = new List<GUISwatch>();
+                _winData = GUIWindow.RedWin;
+
+                _target = target;
+                Width = 10;
+                Height = 10;
+                int id = 0;
+
+                for (int i = 0; i< colorList.Count; i++)
+                {
+                    Color temp = colorList[i];
+                
+                //for(int r = 0; r < 25; r++) {
+                //    for (int g = 0; g < 25; g++)
+                //    {
+                //        for (int b = 0; b < 25; b++)
+                //        {
+                            GUISwatch newSwatch = new GUISwatch(temp);
+                            _liSwatches.Add(newSwatch);
+
+                            if (id == 0) { newSwatch.AnchorToInnerSide(this, SideEnum.TopLeft); }
+                            else if (id % MAX_COLUMN == 0) { newSwatch.AnchorAndAlignToObject(_liSwatches[id - MAX_COLUMN], SideEnum.Bottom, SideEnum.Left); }
+                            else { newSwatch.AnchorAndAlignToObject(_liSwatches[id - 1], SideEnum.Right, SideEnum.Top); }
+                            id++;
+                    //    }
+                    //}
+                }
+
+                Resize();
+            }
+
+            public override bool ProcessLeftButtonClick(Point mouse)
+            {
+                bool rv = false;
+
+                foreach(GUISwatch g in _liSwatches)
+                {
+                    if (g.Contains(mouse))
+                    {
+                        SetPlayerColor(g.SwatchColor);
+                        _closeAction();
+                        rv = true;
+                        
+                        break;
+                    }
+                }
+
+                _closeAction();
+                return rv;
+            }
+            public bool ProcessHover(Point mouse)
+            {
+                bool rv = false;
+
+                foreach (GUISwatch g in _liSwatches)
+                {
+                    if (g.Contains(mouse))
+                    {
+                        SetPlayerColor(g.SwatchColor);
+                        rv = true;
+                        break;
+                    }
+                }
+
+                return rv;
+            }
+
+            private void SetPlayerColor(Color c)
+            {
+                _main.SetColor(c);
+                switch (_target)
+                {
+                    case PlayerColorEnum.Hair:
+                        PlayerManager.World.SetHairColor(c);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }

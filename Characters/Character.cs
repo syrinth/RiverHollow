@@ -12,7 +12,7 @@ namespace RiverHollow.Characters
         public CharacterEnum CharacterType => _characterType;
 
         protected string _sName;
-        public string Name { get => _sName; }
+        public virtual string Name { get => _sName; }
 
         protected AnimatedSprite _bodySprite;
         public AnimatedSprite BodySprite { get => _bodySprite; }
