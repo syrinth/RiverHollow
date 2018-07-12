@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using RiverHollow.Game_Managers;
 
 namespace RiverHollow.SpriteAnimations
 {
@@ -276,7 +277,18 @@ namespace RiverHollow.SpriteAnimations
                 }
                 else
                 {
-                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, this.Width, this.Height), CurrentFrameAnimation.FrameRectangle, _color * visibility);
+                    int newFrameCutoff = (int)(FrameCutoff * GameManager.Scale);
+                    int drawAtY = (int)this.Position.Y;
+                    Rectangle drawThis = CurrentFrameAnimation.FrameRectangle;
+
+                    //This is used for lopping off the top part of a sprite,specifically for hair for hats
+                    if (FrameCutoff != 0)
+                    {
+                        drawAtY += newFrameCutoff;
+                        drawThis = new Rectangle(drawThis.X, FrameCutoff, drawThis.Width, drawThis.Height - FrameCutoff);
+                    }
+
+                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, drawAtY, this.Width, this.Height - newFrameCutoff), drawThis, _color * visibility);
                 }
             }
         }

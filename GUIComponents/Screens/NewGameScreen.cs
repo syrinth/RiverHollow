@@ -82,7 +82,7 @@ namespace RiverHollow.GUIComponents.Screens
             _playerDisplayBox = new PlayerDisplayBox();
             _playerDisplayBox.AnchorToInnerSide(_window, SideEnum.TopLeft);
 
-            _btnHairColor = new GUISwatch(Color.White, 16, 32, BtnChooseHairColor);
+            _btnHairColor = new GUISwatch(PlayerManager.World.HairColor, 16, 32, BtnChooseHairColor);
             _btnHairColor.AnchorAndAlignToObject(_playerDisplayBox, SideEnum.Bottom, SideEnum.Left);
             _gHair = new GUIImage(Vector2.Zero, new Rectangle(192, 16, 16, 16), 32, 32, @"Textures\Dialog");
             _gHair.AnchorAndAlignToObject(_btnHairColor, SideEnum.Right, SideEnum.Bottom, 10);
