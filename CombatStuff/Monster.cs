@@ -9,9 +9,10 @@ namespace RiverHollow
     public class Monster : CombatCharacter
     {
         #region Properties
-        private int _id;
+        int _id;
         public int ID { get => _id; }
-        private int _xp;
+        int _iLvl;
+        int _xp;
         public int XP { get => _xp; }
         protected string _textureName;
         protected Vector2 _moveTo = Vector2.Zero;
@@ -37,33 +38,20 @@ namespace RiverHollow
                 {
                     _textureName = @"Textures\" + tagType[1];
                 }
-                else if (tagType[0].Equals("XP"))
+                else if (tagType[0].Equals("Lvl"))
                 {
-                    _xp = int.Parse(tagType[1]);
+                    _iLvl = int.Parse(tagType[1]);
+                    _xp = _iLvl * 10;
+                    _statStr = 2 * _iLvl + 10;
+                    _statDef = 2 * _iLvl + 10;
+                    _statVit = (3 * _iLvl) + 80;
+                    _statMag = 2 * _iLvl + 10;
+                    _statRes = 2 * _iLvl + 10;
+                    _statSpd = 10;
                 }
-                else if (tagType[0].Equals("Str"))
+                else if (tagType[0].Equals("Trait"))
                 {
-                    _statStr = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Def"))
-                {
-                    _statDef = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Vit"))
-                {
-                    _statVit = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Mag"))
-                {
-                    _statMag = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Res"))
-                {
-                    _statRes = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Spd"))
-                {
-                    _statSpd = int.Parse(tagType[1]);
+                    HandleTrait(GameContentManager.GetMonsterTraitData(tagType[1]));
                 }
                 else if (tagType[0].Equals("Resist"))
                 {
@@ -90,6 +78,51 @@ namespace RiverHollow
         public void LoadContent(int textureWidth, int textureHeight, int numFrames, float frameSpeed)
         {
             base.LoadContent(_textureName, textureWidth, textureHeight, numFrames, frameSpeed);
+        }
+
+        private void HandleTrait(string traitData)
+        {
+            string[] traits = Util.FindTags(traitData);
+            foreach(string s in traits)
+            {
+                string[] tagType = s.Split(':');
+                if (tagType[0].Equals("Str"))
+                {
+                    ApplyTrait(ref _statStr, tagType[1]);
+                }
+                else if (tagType[0].Equals("Def"))
+                {
+                    ApplyTrait(ref _statDef, tagType[1]);
+                }
+                else if (tagType[0].Equals("Vit"))
+                {
+                    ApplyTrait(ref _statVit, tagType[1]);
+                }
+                else if (tagType[0].Equals("Mag"))
+                {
+                    ApplyTrait(ref _statMag, tagType[1]);
+                }
+                else if (tagType[0].Equals("Res"))
+                {
+                    ApplyTrait(ref _statRes, tagType[1]);
+                }
+                else if (tagType[0].Equals("Spd"))
+                {
+                    ApplyTrait(ref _statSpd, tagType[1]);
+                }
+            }
+        }
+
+        private void ApplyTrait(ref int value, string data)
+        {
+            if (data.Equals("+"))
+            {
+                value = (int)(value * 1.1);
+            }
+            else if (data.Equals("-"))
+            {
+                value = (int)(value * 0.9);
+            }
         }
     }
 }

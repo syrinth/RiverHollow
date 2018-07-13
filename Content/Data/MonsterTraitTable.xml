@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, string]">
+    <!--Key: Tier-->
+    <!--Value:Stage: Stat/Atk-->
+    <Item>
+      <Key>Speedy</Key>
+      <Value>[Spd:+][Def:-]</Value>
+    </Item>
+    <Item>
+      <Key>Aggressive</Key>
+      <Value>[Str:+][Def:-]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

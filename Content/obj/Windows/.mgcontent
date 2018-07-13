@@ -105,5 +105,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texClothes.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/champion.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/ItemTable.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/MonsterTraitTable.xml</File>
   </SourceFiles>
 </SourceFileCollection>

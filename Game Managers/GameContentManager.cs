@@ -21,6 +21,7 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<int, string> _diItemText;
         private static Dictionary<int, string> _diClassText;
         private static Dictionary<int, string> _diItemTable;
+        private static Dictionary<string, string> _diMonsterTraits;
 
         public static void LoadContent(ContentManager Content)
         {
@@ -34,6 +35,7 @@ namespace RiverHollow.Game_Managers
             _diItemText = _content.Load<Dictionary<int, string>>(@"Data\ItemText");
             _diClassText = _content.Load<Dictionary<int, string>>(@"Data\ClassesText");
             _diItemTable = _content.Load<Dictionary<int, string>>(@"Data\ItemTable");
+            _diMonsterTraits = _content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
 
             _diGameText = LoadDialogue(@"Data\Dialogue\GameText");
 
@@ -197,6 +199,10 @@ namespace RiverHollow.Game_Managers
             }
 
             return rv;
+        }
+        public static string GetMonsterTraitData(string trait)
+        {
+            return _diMonsterTraits[trait];
         }
 
         public static Dictionary<string, string> LoadDialogue(string file)

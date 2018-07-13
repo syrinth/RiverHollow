@@ -822,3 +822,8 @@
 /processor:PassThroughProcessor
 /build:Data/ItemTable.xml
 
+#begin Data/MonsterTraitTable.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/MonsterTraitTable.xml
+
