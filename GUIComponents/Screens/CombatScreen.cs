@@ -17,6 +17,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class CombatScreen : GUIScreen
     {
+        double _dResultsTimer;
         GUIImage _giBackground;
         GUICmbtTile[,] _arrAllies;
         GUICmbtTile[,] _arrEnemies;
@@ -24,6 +25,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         CmbtMenu _cmbtMenu;
         GUIStatDisplay _sdStamina;
         GUIButton _btnTurnOrder;
+        GUIText _gResults;
 
         List<GUIText> _liTurns;
 
@@ -32,6 +34,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public CombatScreen()
         {
             _liTurns = new List<GUIText>();
+
+            _gResults = new GUIText();
 
             _giBackground = new GUIImage(Vector2.Zero, new Rectangle(0, 0, 800, 480), RiverHollow.ScreenWidth, RiverHollow.ScreenHeight, GameContentManager.GetTexture(@"Textures\battle"));
             Controls.Add(_giBackground);
@@ -205,6 +209,26 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     }
                     
                     break;
+                case CombatManager.PhaseEnum.DisplayXP:
+                    if(UpdateResults(gameTime, CombatManager.EarnedXP + " Exp. Earned"))
+                    {
+                        CombatManager.CurrentPhase = CombatManager.PhaseEnum.DisplayLevels;
+                    }
+                    
+                    break;
+                case CombatManager.PhaseEnum.DisplayLevels:
+                    if (CombatManager.LiLevels.Count > 0)
+                    {
+                        if (UpdateResults(gameTime, CombatManager.LiLevels[0]))
+                        {
+                            CombatManager.LiLevels.RemoveAt(0);
+                        }
+                    }
+                    else
+                    {
+                        CombatManager.EndCombat();
+                    }
+                    break;
             }
 
             foreach (GUICmbtTile location in _arrAllies)
@@ -225,10 +249,38 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
+        private bool UpdateResults(GameTime gameTime, string str)
+        {
+            bool rv = false;
+            if (String.IsNullOrEmpty(_gResults.Text))
+            {
+                _gResults.SetText(str);
+                _gResults.CenterOnScreen();
+                _dResultsTimer = 2.0f;
+            }
+            else
+            {
+                _dResultsTimer -= gameTime.ElapsedGameTime.TotalSeconds;
+                if (_dResultsTimer > 0)
+                {
+                    _gResults.MoveBy(0, -1);
+                }
+                else
+                {
+                    _gResults.SetText("");
+                    _dResultsTimer = 0;
+                    rv = true;
+                }
+            }
+
+            return rv;
+        }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
             _cmbtMenu.Draw(spriteBatch);
+            if (!String.IsNullOrEmpty(_gResults.Text)) { _gResults.Draw(spriteBatch); }
 
             bool loop = true;
             GUICmbtTile[,] array = _arrAllies;

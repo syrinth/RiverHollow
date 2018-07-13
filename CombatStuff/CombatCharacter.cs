@@ -183,7 +183,7 @@ namespace RiverHollow.Characters.CombatStuff
         {
             int base_attack = attacker.Attack;
 
-            double power = Math.Pow(((double)base_attack / (double)StatDef), 2) + attacker.StatStr;
+            double power = Math.Pow(((double)base_attack - (double)StatDef), 2) + attacker.StatStr;
             double dMult = Math.Min(2, Math.Max(0.01, power));
             int dmg = (int)Math.Max(1, base_attack * dMult); 
 

@@ -15,7 +15,7 @@ namespace RiverHollow.Game_Managers
     public static class CombatManager
     {
         public static int CombatScale = 5;
-        private static int _xpValue;
+        public static int EarnedXP;
         private static Mob _mob;
         private static int stamDrain = 1;
         public static Mob CurrentMob { get => _mob; }
@@ -24,8 +24,9 @@ namespace RiverHollow.Game_Managers
         public static List<CombatCharacter> Monsters { get => _listMonsters; }
         private static List<CombatCharacter> _listParty;
         public static List<CombatCharacter> Party { get => _listParty; }
+        public static List<string> LiLevels;
 
-        public enum PhaseEnum { Charging, NewTurn, EnemyTurn, SelectSkill, ChooseTarget, DisplayAttack, PerformAction, EndCombat }
+        public enum PhaseEnum { Charging, NewTurn, EnemyTurn, SelectSkill, ChooseTarget, DisplayAttack, DisplayXP, DisplayLevels, Lost, PerformAction, EndCombat }
         public static PhaseEnum CurrentPhase;
         public static ChosenAction SelectedAction;
         private static CombatTile _targetTile;
@@ -55,6 +56,8 @@ namespace RiverHollow.Game_Managers
             SelectedAction = null;
             SelectedTile = null;
 
+            LiLevels = new List<string>();
+
             _combatMap = new CombatTile[MAX_ROW, MAX_COL];
             for(int row = 0; row < MAX_ROW; row++)
             {
@@ -67,8 +70,8 @@ namespace RiverHollow.Game_Managers
             Delay = 0;
             _mob = m;
             _listMonsters = _mob.Monsters;
-            _xpValue = 0;
-            foreach (Monster mon in _listMonsters) { _xpValue += mon.XP; }                                      //Sets the accumulated xp for the battle
+            EarnedXP = 0;
+            foreach (Monster mon in _listMonsters) { EarnedXP += mon.XP; }                                      //Sets the accumulated xp for the battle
 
             _listParty = new List<CombatCharacter>();
             _listParty.AddRange(PlayerManager.GetParty());
@@ -189,13 +192,40 @@ namespace RiverHollow.Game_Managers
         private static bool EndCombatCheck()
         {
             bool rv = false;
-            if(!PartyUp() || _listMonsters.Count == 0)
+            if (!PartyUp() || _listMonsters.Count == 0)
             {
-                EndBattle();
+                CurrentPhase = PhaseEnum.DisplayXP;
+
+                if (PartyUp())
+                {
+                    
+                    foreach (CombatAdventurer a in _listParty)
+                    {
+                        int levl = a.ClassLevel;
+                        a.CurrentCharge = 0;
+                        a.AddXP(EarnedXP);
+
+                        if(levl != a.ClassLevel)
+                        {
+                            LiLevels.Add(a.Name + " Level Up!");
+                        }
+                    }
+                    //MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
+                }
+                
+
                 rv = true;
             }
 
             return rv;
+        }
+        public static void EndCombat()
+        {
+            GUIManager.FadeOut();
+            MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
+            MapManager.RemoveMob(_mob);
+            _mob = null;
+            GoToWorldMap();
         }
 
         private static void SetPhaseForTurn()
@@ -246,10 +276,6 @@ namespace RiverHollow.Game_Managers
                 rv.Add(ActiveCharacter.Name);
                 chargingCopy.Find(x => x.Name == ActiveCharacter.Name).CurrentCharge -= (SelectedAction == null) ? 100 : SelectedAction.ChargeCost();
                 CombatCharacter c = queuedCopy.Find(x => x.Name == ActiveCharacter.Name);
-                if(c != null)
-                {
-                    int h = 0;
-                }
             }
 
             foreach (CombatCharacter c in queuedCopy)
@@ -299,28 +325,13 @@ namespace RiverHollow.Game_Managers
             SelectedAction = new ChosenAction(it);
         }
 
-        //Gives the total battle XP to every member of the party, remove the mob from the gameand drop items
-        public static void EndBattle()
-        {
-            if (PartyUp())
-            {
-                foreach (CombatAdventurer a in _listParty) {
-                    a.CurrentCharge = 0;
-                    a.AddXP(_xpValue);
-                }
-                MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
-            }
-            MapManager.RemoveMob(_mob);
-            _mob = null;
-            GoToWorldMap();
-        }
-
         public static void Kill(CombatCharacter c)
         {
             if (_listMonsters.Contains((c)))
             {
                 _listMonsters.Remove(c);
                 _liChargingCharacters.Remove(c);                    //Remove the killed member from the turn order 
+                _liQueuedCharacters.Remove(c);
             }
         }
 
