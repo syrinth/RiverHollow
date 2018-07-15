@@ -8,6 +8,7 @@ using RiverHollow.Game_Managers.GUIObjects;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.CombatStuff;
 using RiverHollow.Misc;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
 namespace RiverHollow.Characters.CombatStuff
 {
@@ -225,6 +226,11 @@ namespace RiverHollow.Characters.CombatStuff
             }
 
             return modifiedDmg;
+        }
+
+        public GUISprite GetSprite()
+        {
+            return Tile.GUITile.CharacterSprite;
         }
 
         public int DecreaseHealth(int value)

@@ -3,11 +3,13 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow.Characters.CombatStuff
 {
@@ -410,16 +412,35 @@ namespace RiverHollow.Characters.CombatStuff
             {
                 case "UserMove":
                     {
-                        //if (SkillUser.Position != TargetLocation.GetAttackVec(UserStartPosition, new Vector2(SkillUser.Width, SkillUser.Height)))
-                        //{
-                        //    Vector2 direction = Vector2.Zero;
-                        //    Util.GetMoveSpeed(SkillUser.Position, TargetLocation.GetAttackVec(UserStartPosition, new Vector2(SkillUser.Width, SkillUser.Height)), moveSpeed, ref direction);
-                        //    SkillUser.BodySprite.Position += direction;
-                        //}
-                        //else
-                        //{
+                        GUISprite sprite = SkillUser.GetSprite();
+                        GUICmbtTile moveToTile = TileTargetList[0].GUITile;
+                        bool targetsEnemy = TileTargetList[0].GUITile.MapTile.TargetType == TargetEnum.Enemy;
+
+                        int mod = targetsEnemy ? - 1 : 1;
+                        Vector2 targetPosition = Vector2.Zero;
+
+                        if (targetsEnemy && TileTargetList[0].GUITile.MapTile.Col - 1 >= CombatManager.ENEMY_FRONT) {
+                            targetPosition = sprite.GetCenterOnObject(CombatManager.GetLeft(moveToTile.MapTile).GUITile);
+                        }
+                        else if (!targetsEnemy && TileTargetList[0].GUITile.MapTile.Col + 1 < CombatManager.ENEMY_FRONT) {
+                            targetPosition = sprite.GetCenterOnObject(CombatManager.GetRight(moveToTile.MapTile).GUITile);
+                        }
+                        else
+                        {
+                            targetPosition = sprite.GetAnchorAndAlignToObject(moveToTile, targetsEnemy ? SideEnum.Left : SideEnum.Right, SideEnum.Bottom);
+                        }
+                        targetPosition += new Vector2(0, -(moveToTile.Height / 3));
+
+                        if (sprite.Position() != targetPosition)
+                        {
+                            Vector2 direction = Vector2.Zero;
+                            Util.GetMoveSpeed(SkillUser.Position, targetPosition, moveSpeed, ref direction);
+                            sprite.MoveBy(direction);
+                        }
+                        else
+                        {
                             _currentActionTag++;
-                        //
+                        }
                         break;
                     }
                 case "UserAttack":
@@ -505,17 +526,12 @@ namespace RiverHollow.Characters.CombatStuff
                         _currentActionTag++;
                     }
                     break;
-                case "Move":
-                    TileTargetList[0].SetCombatant(SkillUser);
-                    UserStartPosition = SkillUser.Position;
-                    _currentActionTag++;
-                    break;
                 case "End":
                     if (SkillUser.Position != UserStartPosition)
                     {
                         Vector2 direction = Vector2.Zero;
                         Util.GetMoveSpeed(SkillUser.Position, UserStartPosition, moveSpeed, ref direction);
-                        SkillUser.BodySprite.Position += direction;
+                        SkillUser.GetSprite().MoveBy(direction);
                     }
                     else
                     {

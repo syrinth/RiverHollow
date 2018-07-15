@@ -282,21 +282,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _cmbtMenu.Draw(spriteBatch);
             if (!String.IsNullOrEmpty(_gResults.Text)) { _gResults.Draw(spriteBatch); }
 
-            bool loop = true;
-            GUICmbtTile[,] array = _arrAllies;
-            while (loop)
-            {
-                foreach (GUICmbtTile t in array)
-                {
-                    if (t != null) { t.Draw(spriteBatch); }
-                }
-                foreach (GUICmbtTile t in array)
-                {
-                    if (t != null) { t.DrawDescriptions(spriteBatch); }
-                }
-                if (array != _arrEnemies) { array = _arrEnemies; }
-                else { loop = false; }
-            }
+            Draw(spriteBatch, false);
+            Draw(spriteBatch, true);
 
             if (CombatManager.SelectedAction != null)
             {
@@ -310,6 +297,28 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 t.Draw(spriteBatch);
             }
             
+        }
+
+        private void Draw(SpriteBatch spriteBatch, bool drawCharacter)
+        {
+            bool loop = true;
+            GUICmbtTile[,] array = _arrAllies;
+            while (loop)
+            {
+                foreach (GUICmbtTile t in array)
+                {
+                    if (t != null) {
+                        if (drawCharacter) { t.DrawCharacter(spriteBatch); }
+                        else { t.Draw(spriteBatch); }
+                    }
+                }
+                foreach (GUICmbtTile t in array)
+                {
+                    if (t != null) { t.DrawDescriptions(spriteBatch); }
+                }
+                if (array != _arrEnemies) { array = _arrEnemies; }
+                else { loop = false; }
+            }
         }
 
         public void BtnTurnOrder()
@@ -347,6 +356,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIImage _gTargetter;
         GUIImage _gTile;
         GUISprite _gSprite;
+        public GUISprite CharacterSprite => _gSprite;
         GUIText _gEffect;
         List<GUIStatus> _liStatus;
 
@@ -405,6 +415,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (_gEffect != null && _iDmgTimer < 40)
             {
                 _gEffect.Draw(spriteBatch);
+            }
+        }
+        public void DrawCharacter(SpriteBatch spriteBatch)
+        {
+            if (Occupied())
+            {
+                _gSprite.Draw(spriteBatch);
+                _gHP.Draw(spriteBatch);
             }
         }
 
@@ -570,6 +588,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
             base.Position(value);
             _gTile.Position(value);
             Setup();
+        }
+        public Vector2 GetCharacterPosition()
+        {
+            Vector2 rv = Vector2.Zero;
+            if(_gSprite != null)
+            {
+                rv = _gSprite.Position();
+            }
+            return rv;
         }
     }
 

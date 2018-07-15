@@ -6,7 +6,7 @@ using RiverHollow.SpriteAnimations;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
-    class GUISprite : GUIObject
+   public  class GUISprite : GUIObject
     {
         AnimatedSprite _sprite;
         public AnimatedSprite Sprite => _sprite;
