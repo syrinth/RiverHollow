@@ -1,18 +1,19 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
+using RiverHollow.Characters.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.SpriteAnimations;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.CombatStuff
 {
-    public class Summon : Character
+    public class Summon : CombatCharacter
     {
         ElementEnum _element = ElementEnum.None;
         public ElementEnum Element => _element;
-        int _iHP;
-        int _iDmg;
-        public int Dmg => _iDmg;
+
+        public bool HasAttacked;
 
         public Summon()
         {
@@ -21,6 +22,16 @@ namespace RiverHollow.CombatStuff
             _bodySprite.AddAnimation("Attack", 32, 0, 16, 16, 4, 0.1f);
             _bodySprite.SetCurrentAnimation("Idle");
             _bodySprite.SetScale(5);
+        }
+
+        public void SetStats(int magStat)
+        {
+            _statStr = 2 * magStat + 10;
+            _statDef = 2 * magStat + 10;
+            _statVit = (3 * magStat) + 80;
+            _statMag = 2 * magStat + 10;
+            _statRes = 2 * magStat + 10;
+            _statSpd = 10;
         }
     }
 }

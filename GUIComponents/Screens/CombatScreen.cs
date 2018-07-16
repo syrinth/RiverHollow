@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters.CombatStuff;
+using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
@@ -380,6 +381,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIImage _gTile;
         GUISprite _gSprite;
         public GUISprite CharacterSprite => _gSprite;
+        GUISprite _gSummon;
+        public GUISprite SummonSprite => _gSummon;
         GUIText _gEffect;
         List<GUIStatus> _liStatus;
 
@@ -440,6 +443,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             if (Occupied())
             {
+                if(_gSummon != null) { _gSummon.Draw(spriteBatch); }
                 _gSprite.Draw(spriteBatch);
                 if (!(CombatManager.CurrentPhase == CombatManager.PhaseEnum.PerformAction && CombatManager.ActiveCharacter == _mapTile.Character))
                 {
@@ -466,6 +470,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             if (Occupied())
             {
+                if (_gSummon != null) { _gSummon.Update(gameTime); }
                 _gSprite.Update(gameTime);
                 _gHP.Update(gameTime);
             }
@@ -519,6 +524,18 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _gHP = null;
             }
             Setup();
+        }
+        public void LinkSummon(Summon s)
+        {
+            if (s != null) {
+                _gSummon = new GUISprite(s.BodySprite);
+                _gSummon.AnchorToObject(_gSprite, SideEnum.Top);
+                _gSummon.AnchorToObject(_gSprite, SideEnum.Left);
+            }
+            else
+            {
+                _gSummon = null;
+            }
         }
 
         public void AssignEffect(int x, bool isNegative)

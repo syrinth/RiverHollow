@@ -171,15 +171,6 @@ namespace RiverHollow.Characters.CombatStuff
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            _bodySprite.Draw(spriteBatch, false);
-            if(_linkedSummon != null)
-            {
-                _linkedSummon.Draw(spriteBatch);
-            }
-        }
-
         public int ProcessAttack(CombatCharacter attacker, int potency, ElementEnum element = ElementEnum.None)
         {
             int base_attack = attacker.Attack;
@@ -231,6 +222,11 @@ namespace RiverHollow.Characters.CombatStuff
         public GUISprite GetSprite()
         {
             return Tile.GUITile.CharacterSprite;
+        }
+
+        public GUISprite GetSummonGUISprite()
+        {
+            return Tile.GUITile.SummonSprite;
         }
 
         public int DecreaseHealth(int value)

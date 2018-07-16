@@ -9,6 +9,7 @@ using System;
 using static RiverHollow.GUIObjects.GUIObject;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.CombatStuff;
 
 namespace RiverHollow.Game_Managers
 {
@@ -175,9 +176,16 @@ namespace RiverHollow.Game_Managers
 
             foreach(CombatTile ct in _combatMap)
             {
-                if(ct.TargetType == TargetEnum.Enemy && ct.Occupied() && !_listMonsters.Contains(ct.Character))
+                if (ct.Occupied())
                 {
-                    ct.SetCombatant(null);
+                    if (ct.TargetType == TargetEnum.Enemy && !_listMonsters.Contains(ct.Character))
+                    {
+                        ct.SetCombatant(null);
+                    }
+                    else
+                    {
+                        ct.Character.Update(gameTime);
+                    }
                 }
             }
         }
@@ -543,7 +551,7 @@ namespace RiverHollow.Game_Managers
             {
                 for (int row = 0; row < MAX_ROW; row++)
                 {
-                    if (_combatMap[row, col].Occupied())
+                    if (_combatMap[row, col].Occupied() && !_combatMap[row, col].Character.DiConditions[ConditionEnum.KO])
                     {
                         rv = col;
                         goto ExitFrontLine;
@@ -656,6 +664,11 @@ namespace RiverHollow.Game_Managers
                     CheckForProtected(this);
                 }
                 _gTile.SyncGUIObjects(c != null);
+            }
+            public void SetSummon(Summon s)
+            {
+                _character.LinkSummon(s);
+                _gTile.LinkSummon(s);
             }
 
             private void CheckForProtected(CombatTile t)
