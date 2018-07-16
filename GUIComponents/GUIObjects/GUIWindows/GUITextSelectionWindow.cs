@@ -200,6 +200,16 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                     PlayerManager.AddToQuestLog(q);
                     GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, GameManager.gmNPC.GetDialogEntry("Quest"+q.QuestID)));
                 }
+                else if (action.StartsWith("Donate"))
+                {
+                    GameManager.gmNPC.FriendshipPoints += 40;
+                    GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, nextText));
+                }
+                else if (action.StartsWith("NoDonate"))
+                {
+                    GameManager.gmNPC.FriendshipPoints -= 1000;
+                    GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, nextText));
+                }
                 else if (!string.IsNullOrEmpty(nextText))
                 {
                     GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, nextText));

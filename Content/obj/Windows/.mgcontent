@@ -106,5 +106,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/champion.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/ItemTable.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/MonsterTraitTable.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapHospital.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC7.xml</File>
   </SourceFiles>
 </SourceFileCollection>

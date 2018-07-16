@@ -44,7 +44,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
         {
             if (text.Contains("["))
             {
-
                 _window = new GUITextSelectionWindow(talker, text);
             }
             else

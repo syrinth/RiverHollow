@@ -27,6 +27,10 @@
       <Value>[Type:ShopKeeper][PortRow:3][HomeMap:mapRiverHollowTown][Collection:7-8][ShopData:MagicShop]</Value>
     </Item>
     <Item>
+      <Key>7</Key>
+      <Value>[Type:Eligible][PortRow:1][HomeMap:mapHospital][Collection:0-1-2][Class:2]</Value>
+    </Item>
+    <Item>
       <Key>8</Key>
       <Value>[Type:Villager][PortRow:3][HomeMap:mapHouseNPC1][Collection:7-8]</Value>
     </Item>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextobjectid="30">
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextobjectid="32">
  <properties>
   <property name="Outside" type="bool" value="true"/>
   <property name="Town" type="bool" value="true"/>
@@ -584,6 +584,16 @@
   <object id="27" name="Entrance" x="691.583" y="35.1653" width="9.99993" height="8.66663">
    <properties>
     <property name="Entrance" value="mapHighlands"/>
+   </properties>
+  </object>
+  <object id="30" name="Exit" x="996.218" y="804.209" width="9.25" height="9.5">
+   <properties>
+    <property name="Exit" value="mapHospital"/>
+   </properties>
+  </object>
+  <object id="31" name="Entrance" x="994.083" y="834.708" width="11.8333" height="11.3333">
+   <properties>
+    <property name="Entrance" value="mapHospital"/>
    </properties>
   </object>
  </objectgroup>

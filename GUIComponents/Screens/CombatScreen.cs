@@ -4,9 +4,11 @@ using Microsoft.Xna.Framework.Input;
 using RiverHollow.Characters.CombatStuff;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIObjects;
+using RiverHollow.Misc;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
@@ -30,6 +32,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         List<GUIText> _liTurns;
 
         bool _bTurns;
+
+        public object UtilMapManager { get; private set; }
 
         public CombatScreen()
         {
@@ -68,6 +72,20 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 case CombatManager.PhaseEnum.ChooseTarget:
                     CombatManager.SelectedAction.SetSkillTarget();
+                    break;
+                case CombatManager.PhaseEnum.Defeat:
+                    GUIManager.SlowFadeOut();
+                    BackToMain();
+                    MapManager.CurrentMap = MapManager.Maps["mapHospital"];
+                    PlayerManager.CurrentMap = "mapHospital";
+                    PlayerManager.World.Position = Util.SnapToGrid(MapManager.CurrentMap.DictionaryCharacterLayer["playerSpawn"]);
+                    GUIManager.SetScreen(new TextScreen(CharacterManager.DiNPC[7], CharacterManager.DiNPC[7].GetDialogEntry("Healed")));
+                    foreach(CombatAdventurer c in PlayerManager.GetParty())
+                    {
+                        c.ClearConditions();
+                        c.IncreaseHealth((int)(c.MaxHP * 0.10));
+                    }
+                    
                     break;
             }
             
@@ -226,8 +244,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     }
                     else
                     {
-                        CombatManager.EndCombat();
+                        CombatManager.EndCombatVictory();
                     }
+                    break;
+                case CombatManager.PhaseEnum.Defeat:
+                    GUITextWindow window = new GUITextWindow("Defeated");
+                    window.CenterOnScreen();
+                    Controls.Add(window);
                     break;
             }
 
@@ -395,7 +418,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _gTile.Alpha = 1;
             }
 
-            if (CombatManager.ActiveCharacter != null && CombatManager.ActiveCharacter == _mapTile.Character) {
+            if (CombatManager.CurrentPhase != CombatManager.PhaseEnum.PerformAction && CombatManager.ActiveCharacter != null && CombatManager.ActiveCharacter == _mapTile.Character) {
                 _gTile.SetColor(Color.Yellow);
             }
             else if (CombatManager.SelectedAction != null)
@@ -406,10 +429,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             _gTile.Draw(spriteBatch);
 
-            if (Occupied()) {
-                _gSprite.Draw(spriteBatch);
-                _gHP.Draw(spriteBatch);
-            }
             if (_mapTile.Selected) { _gTargetter.Draw(spriteBatch); }
 
             if (_gEffect != null && _iDmgTimer < 40)
@@ -422,7 +441,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (Occupied())
             {
                 _gSprite.Draw(spriteBatch);
-                _gHP.Draw(spriteBatch);
+                if (!(CombatManager.CurrentPhase == CombatManager.PhaseEnum.PerformAction && CombatManager.ActiveCharacter == _mapTile.Character))
+                {
+                    _gHP.Draw(spriteBatch);
+                }
             }
         }
 

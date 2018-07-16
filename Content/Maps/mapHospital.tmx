@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="15" height="10" tilewidth="16" tileheight="16" infinite="0" nextobjectid="9">
+ <tileset firstgid="1" source="tilesetManorGrounds.tsx"/>
+ <tileset firstgid="626" source="tilesetHouses.tsx"/>
+ <layer name="Base Layer" width="15" height="10">
+  <data encoding="csv">
+27,27,27,27,36,27,27,27,27,27,27,27,27,27,27,
+27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,
+27,27,76,27,27,27,27,27,27,76,27,27,76,27,27,
+27,76,27,27,27,76,27,27,27,27,27,27,27,27,27,
+27,27,27,27,27,27,27,27,36,27,27,27,27,27,27,
+27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,
+36,27,27,27,27,27,27,27,36,27,27,27,27,76,27,
+27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,
+27,27,27,27,27,27,27,36,27,27,27,27,27,27,27,
+27,27,27,27,27,27,27,27,36,27,27,27,36,27,27
+</data>
+ </layer>
+ <layer name="Ground Layer" width="15" height="10">
+  <data encoding="csv">
+7,8,8,8,8,8,8,8,8,8,8,8,8,8,9,
+32,33,33,33,33,33,33,33,33,33,33,33,33,33,34,
+57,58,58,58,58,58,58,58,58,58,58,58,58,58,59,
+82,83,83,83,83,83,83,83,83,83,83,83,83,83,84,
+32,0,0,0,0,0,0,0,0,0,0,0,0,0,34,
+57,797,797,799,798,0,0,0,0,0,0,0,0,0,59,
+32,0,0,0,0,0,0,0,0,0,0,0,0,0,34,
+57,0,0,0,0,0,0,0,0,0,0,0,0,0,59,
+82,0,0,0,0,0,0,0,0,0,0,0,0,0,84,
+107,108,108,108,108,108,12,0,0,0,10,108,108,108,109
+</data>
+ </layer>
+ <layer name="Upper Layer" width="15" height="10" visible="0">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,787,787,789,758,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup name="Character Layer">
+  <object id="4" name="NPC7" x="132.333" y="84.8333" width="9" height="8"/>
+  <object id="5" name="playerSpawn" x="165.666" y="117.834" width="4" height="4"/>
+ </objectgroup>
+ <objectgroup name="Travel Layer">
+  <object id="1" name="Entrance" x="131.167" y="131.333" width="8.6667" height="8.3333">
+   <properties>
+    <property name="Entrance" value="mapRiverHollowTown"/>
+   </properties>
+  </object>
+  <object id="2" name="Exit" x="118.333" y="147.667" width="32.3333" height="12">
+   <properties>
+    <property name="Exit" value="mapRiverHollowTown"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

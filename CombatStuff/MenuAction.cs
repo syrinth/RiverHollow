@@ -526,6 +526,11 @@ namespace RiverHollow.Characters.CombatStuff
                         _currentActionTag++;
                     }
                     break;
+                case "Move":
+                    TileTargetList[0].SetCombatant(SkillUser);
+                    UserStartPosition = SkillUser.Position;
+                    _currentActionTag++;
+                    break;
                 case "End":
                     if (SkillUser.Position != UserStartPosition)
                     {

@@ -26,7 +26,7 @@ namespace RiverHollow.Game_Managers
         public static List<CombatCharacter> Party { get => _listParty; }
         public static List<string> LiLevels;
 
-        public enum PhaseEnum { Charging, NewTurn, EnemyTurn, SelectSkill, ChooseTarget, DisplayAttack, DisplayXP, DisplayLevels, Lost, PerformAction, EndCombat }
+        public enum PhaseEnum { Charging, NewTurn, EnemyTurn, SelectSkill, ChooseTarget, Defeat, DisplayAttack, DisplayXP, DisplayLevels, Lost, PerformAction, EndCombat }
         public static PhaseEnum CurrentPhase;
         public static ChosenAction SelectedAction;
         private static CombatTile _targetTile;
@@ -58,6 +58,7 @@ namespace RiverHollow.Game_Managers
 
             LiLevels = new List<string>();
 
+            CurrentPhase = PhaseEnum.Charging;
             _combatMap = new CombatTile[MAX_ROW, MAX_COL];
             for(int row = 0; row < MAX_ROW; row++)
             {
@@ -194,11 +195,9 @@ namespace RiverHollow.Game_Managers
             bool rv = false;
             if (!PartyUp() || _listMonsters.Count == 0)
             {
-                CurrentPhase = PhaseEnum.DisplayXP;
-
                 if (PartyUp())
                 {
-                    
+                    CurrentPhase = PhaseEnum.DisplayXP;
                     foreach (CombatAdventurer a in _listParty)
                     {
                         int levl = a.ClassLevel;
@@ -212,6 +211,10 @@ namespace RiverHollow.Game_Managers
                     }
                     //MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
                 }
+                else
+                {
+                    CurrentPhase = PhaseEnum.Defeat;
+                }
                 
 
                 rv = true;
@@ -219,7 +222,7 @@ namespace RiverHollow.Game_Managers
 
             return rv;
         }
-        public static void EndCombat()
+        public static void EndCombatVictory()
         {
             GUIManager.FadeOut();
             MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());

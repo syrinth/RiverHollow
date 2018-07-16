@@ -392,5 +392,13 @@ namespace RiverHollow.Characters.CombatStuff
         {
             _diConditions[c] = setTo;
         }
+
+        public void ClearConditions()
+        {
+            foreach (ConditionEnum condition in Enum.GetValues(typeof(ConditionEnum)))
+            {
+                ChangeConditionStatus(condition, false);
+            }
+        }
     }
 }

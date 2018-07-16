@@ -827,3 +827,13 @@
 /processor:PassThroughProcessor
 /build:Data/MonsterTraitTable.xml
 
+#begin Maps/mapHospital.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapHospital.tmx
+
+#begin Data/Dialogue/NPC7.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Dialogue/NPC7.xml
+
