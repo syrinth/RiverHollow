@@ -99,16 +99,16 @@ namespace RiverHollow
 
             if (SpottedPlayer())
             {
-                _moveTo = Vector2.Zero;
-                Vector2 targetPos = PlayerManager.World.Position;
+                //_moveTo = Vector2.Zero;
+                //Vector2 targetPos = PlayerManager.World.Position;
 
-                float deltaX = Math.Abs(targetPos.X - this.Position.X);
-                float deltaY = Math.Abs(targetPos.Y - this.Position.Y);
+                //float deltaX = Math.Abs(targetPos.X - this.Position.X);
+                //float deltaY = Math.Abs(targetPos.Y - this.Position.Y);
 
-                Util.GetMoveSpeed(Position, targetPos, Speed, ref direction);
-                CheckMapForCollisionsAndMove(direction);
+                //Util.GetMoveSpeed(Position, targetPos, Speed, ref direction);
+                //CheckMapForCollisionsAndMove(direction);
 
-                DetermineFacing(direction);
+                //DetermineFacing(direction);
             }
             else
             {

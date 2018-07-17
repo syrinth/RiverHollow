@@ -180,7 +180,7 @@ namespace RiverHollow.Characters.CombatStuff
             int dmg = (int)Math.Max(1, base_attack * dMult); 
 
             dmg += ApplyResistances(dmg, element);
-            return DecreaseHealth(dmg);
+            return DecreaseHealth(1);
         }
         public int ProcessSpell(CombatCharacter attacker, int potency, ElementEnum element = ElementEnum.None)
         {
@@ -219,14 +219,9 @@ namespace RiverHollow.Characters.CombatStuff
             return modifiedDmg;
         }
 
-        public GUISprite GetSprite()
+        public virtual GUISprite GetSprite()
         {
             return Tile.GUITile.CharacterSprite;
-        }
-
-        public GUISprite GetSummonGUISprite()
-        {
-            return Tile.GUITile.SummonSprite;
         }
 
         public int DecreaseHealth(int value)
@@ -237,6 +232,8 @@ namespace RiverHollow.Characters.CombatStuff
             {
                 _diConditions[ConditionEnum.KO] = true;
                 CombatManager.Kill(this);
+                UnlinkSummon();
+                Tile.GUITile.LinkSummon(null);
             }
 
             return value;
@@ -352,6 +349,7 @@ namespace RiverHollow.Characters.CombatStuff
         {
             _linkedSummon = s;
             _linkedSummon.Position = Position - new Vector2(100, 100);
+            s.Tile = Tile;
         }
 
         public void UnlinkSummon()
@@ -396,5 +394,7 @@ namespace RiverHollow.Characters.CombatStuff
                 ChangeConditionStatus(condition, false);
             }
         }
+
+        public virtual bool IsSummon() { return false; }
     }
 }

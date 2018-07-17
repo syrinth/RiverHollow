@@ -190,9 +190,6 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        //If we have not gone to the EndTurn phase, increment the turn loop as appropriate
-        //If we loop back to 0, reduce stamina by the desired amount.
-
         internal static bool CanCancel()
         {
             return CurrentPhase == PhaseEnum.ChooseTarget || CurrentPhase == PhaseEnum.SelectSkill;
@@ -605,13 +602,47 @@ namespace RiverHollow.Game_Managers
         public static void EndTurn()
         {
             ActiveCharacter.CurrentCharge -= SelectedAction.ChargeCost();
+
+            Summon actSummon = ActiveCharacter.LinkedSummon;
+            //If there is no linked summon, or it is a summon, end the turn normally.
+
             if (!EndCombatCheck())
             {
-                if (CurrentPhase != PhaseEnum.EndCombat)
+                if (actSummon != null)
                 {
-                    SelectedAction = null;
-                    ActiveCharacter = null;
+                    if (actSummon.Aggressive && SelectedAction.IsMelee())
+                    {
+                        List<CombatTile> targets = SelectedAction.GetTargetTiles();
+                        ActiveCharacter = actSummon;
+                        SelectedAction = new ChosenAction((CombatAction)CharacterManager.GetActionByIndex(1));
+                        SelectedAction.SetTargetTiles(targets);
+                    }
+                    else if (actSummon.TwinCast && SelectedAction.IsSpell() && !SelectedAction.IsSummonSpell())
+                    {
+                        ActiveCharacter = actSummon;
+                        SelectedAction.SetUser(actSummon);
+                        SelectedAction.SetUserStart(actSummon.GetSprite().Position());
+                    }
+                    else
+                    {
+                        TurnOver();
+                    }
                 }
+                else
+                {
+                    TurnOver();
+                }
+            }
+        }
+
+        private static void TurnOver()
+        {
+            SelectedAction.Clear();
+
+            if (CurrentPhase != PhaseEnum.EndCombat)
+            {
+                SelectedAction = null;
+                ActiveCharacter = null;
             }
         }
         #endregion
@@ -725,7 +756,7 @@ namespace RiverHollow.Game_Managers
 
             List<CombatTile> _liLegalTiles;
             public List<CombatTile> LegalTiles => _liLegalTiles;
-            CombatCharacter _user;
+            public CombatCharacter User;
 
             string _name;
             public string Name => _name;
@@ -734,7 +765,7 @@ namespace RiverHollow.Game_Managers
 
             public ChosenAction(CombatItem it)
             {
-                _user = ActiveCharacter;
+                User = ActiveCharacter;
                 _chosenItem = it;
                 _name = _chosenItem.Name;
                 _liLegalTiles = new List<CombatTile>();
@@ -742,9 +773,9 @@ namespace RiverHollow.Game_Managers
                 //Only the adjacent tiles are legal
                 if (TargetsAlly())
                 {
-                    _liLegalTiles.Add(_user.Tile);
+                    _liLegalTiles.Add(User.Tile);
 
-                    List<CombatTile> adj = GetAdjacent(_user.Tile);
+                    List<CombatTile> adj = GetAdjacent(User.Tile);
                     foreach (CombatTile t in adj)
                     {
                         if (t.TargetType == TargetEnum.Ally) { _liLegalTiles.Add(t); }
@@ -757,7 +788,7 @@ namespace RiverHollow.Game_Managers
             }
             public ChosenAction(CombatAction ca)
             {
-                _user = ActiveCharacter;
+                User = ActiveCharacter;
                 _chosenAction = ca;
                 _name = _chosenAction.Name;
 
@@ -790,7 +821,7 @@ namespace RiverHollow.Game_Managers
                 }
                 else if (SelfOnly())
                 {
-                    _liLegalTiles.Add(_user.Tile);
+                    _liLegalTiles.Add(User.Tile);
                 }
                 else if (Columns())
                 {
@@ -991,6 +1022,20 @@ namespace RiverHollow.Game_Managers
                 return rv;
             }
 
+            public void SetUser(CombatCharacter c) {
+                if (_chosenAction != null)
+                {
+                    _chosenAction.SkillUser = c;
+                }
+            }
+            public void SetUserStart(Vector2 pos)
+            {
+                if (_chosenAction != null)
+                {
+                    _chosenAction.UserStartPosition = pos;
+                }
+            }
+
             public bool CompareTargetType(TargetEnum t) { return t == _chosenAction.Target; }
             public bool TargetsAlly()
             {
@@ -1010,6 +1055,8 @@ namespace RiverHollow.Game_Managers
 
                 return rv;
             }
+            public bool IsSpell() { return _chosenAction != null && _chosenAction.IsSpell(); }
+            public bool IsSummonSpell() { return _chosenAction != null && _chosenAction.IsSummonSpell(); }
             public bool SelfOnly() { return _chosenAction.Range == RangeEnum.Self; }
             public bool IsMelee() { return _chosenAction.Range == RangeEnum.Melee; }
             public bool IsRanged() { return _chosenAction.Range == RangeEnum.Ranged; }
@@ -1035,6 +1082,31 @@ namespace RiverHollow.Game_Managers
                 else if (_chosenItem != null) { rv = false; }
 
                 return rv;
+            }
+
+            public void Clear()
+            {
+                if(_chosenAction != null) { _chosenAction.TileTargetList.Clear(); }
+                else if (_chosenItem != null) { _targetTile = null; }
+            }
+            public List<CombatTile> GetTargetTiles()
+            {
+                if (_chosenAction != null)
+                {
+                    return _chosenAction.TileTargetList;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            public void SetTargetTiles(List<CombatTile> li)
+            {
+                if (_chosenAction != null)
+                {
+                    _chosenAction.AnimationSetup();
+                    _chosenAction.TileTargetList = li;
+                }
             }
         }
     }

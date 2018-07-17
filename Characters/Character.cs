@@ -73,7 +73,7 @@ namespace RiverHollow.Characters
         public bool AnimationFinished() { return _bodySprite.PlayedOnce && _bodySprite.IsAnimating; }
         public bool IsCurrentAnimation(string val) { return _bodySprite.CurrentAnimation.Equals(val); }
         public bool IsAnimating() { return _bodySprite.IsAnimating; }
-        public bool AnimationPlayedXTimes(int x) { return _bodySprite.GetPlayCount() == x; }
+        public bool AnimationPlayedXTimes(int x) { return _bodySprite.GetPlayCount() >= x; }
 
         public bool IsCombatAdventurer() { return _characterType == CharacterEnum.CombatAdventurer; }
         public bool IsMob() { return _characterType == CharacterEnum.Mob; }

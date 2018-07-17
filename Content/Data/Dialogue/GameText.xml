@@ -164,6 +164,10 @@
       <Key>Action 200</Key>
       <Value>Summon Eye/Summons a Magical Eye to attack your foe</Value>
     </Item>
+    <Item>
+      <Key>Action 201</Key>
+      <Value>Summon Murder Eye/Summons a Magical Eye to attack your foe</Value>
+    </Item>
     <!--Status/Buff/Debuff-->
     <Item>
       <Key>Poisoned Description</Key>

@@ -94,7 +94,6 @@ namespace RiverHollow.Characters.CombatStuff
 
         Summon _summon;
         public Vector2 SummonStartPosition;
-        bool _bSummoned = false;
 
         int _textureRow;
         float _frameSpeed;
@@ -206,8 +205,20 @@ namespace RiverHollow.Characters.CombatStuff
                             if (parse[0] == "Summon")
                             {
                                 _summon = new Summon();
-                            }
 
+                                for (int summonTags = 2; summonTags < tags.Length; summonTags++)
+                                {
+                                    if (tags[summonTags].Equals("TwinCast"))
+                                    {
+                                        _summon.SetTwincast();
+                                    }
+                                    else if (tags[summonTags].Equals("Aggressive"))
+                                    {
+                                        _summon.SetAggressive();
+                                    }
+                                }
+                            }
+                            
                             _effectTags.Add(tag);
                         }
                     }
@@ -322,11 +333,11 @@ namespace RiverHollow.Characters.CombatStuff
                         }
                     }
                 }
-                if (_effectTags.Contains("Summon") && !_bSummoned)
+                if (_effectTags.Contains("Summon"))
                 {
                     foreach (CombatManager.CombatTile ct in TileTargetList)
                     {
-                        _bSummoned = true;
+                        _summon.Summoned = true;
                         _summon.SetStats(SkillUser.StatMag);
                         ct.Character.Tile.GUITile.LinkSummon(_summon);
                         ct.Character.LinkSummon(_summon);
@@ -473,47 +484,6 @@ namespace RiverHollow.Characters.CombatStuff
                         _currentActionTag++;
                     }
                     break;
-                case "UseSummon":
-                    Summon s = CombatManager.ActiveCharacter.LinkedSummon;
-                    if (s != null && TileTargetList[0].Character != null && TileTargetList[0].Character.CurrentHP > 0)
-                    {
-                        GUISprite sprite = SkillUser.GetSummonGUISprite();
-                        if (SummonStartPosition == Vector2.Zero) { SummonStartPosition = sprite.Position(); }
-                        GUICmbtTile moveToTile = TileTargetList[0].GUITile;
-                        bool targetsEnemy = TileTargetList[0].GUITile.MapTile.TargetType == TargetEnum.Enemy;
-
-                        Vector2 targetPosition = GetAttackTargetPosition(sprite, targetsEnemy, moveToTile);
-
-                        if (!s.HasAttacked)
-                        {
-                            if (MoveSpriteTo(sprite, targetPosition))
-                            {
-                                if (!s.IsCurrentAnimation("Attack")) { s.PlayAnimation("Attack"); }
-                                else if (!s.HasAttacked && s.BodySprite.CurrentAnimation.Equals("Attack") && s.AnimationPlayedXTimes(1))
-                                {
-                                    int x = TileTargetList[0].Character.ProcessAttack(s, 1, s.Element);
-                                    TileTargetList[0].GUITile.AssignEffect(x, true);
-
-                                    s.PlayAnimation("Idle");
-                                    s.HasAttacked = true;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if(MoveSpriteTo(sprite, SummonStartPosition))
-                            {
-                                SummonStartPosition = Vector2.Zero;
-                                s.HasAttacked = false;
-                                _currentActionTag++;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        _currentActionTag++;
-                    }
-                    break;
                 case "Projectile":
                     if (!Sprite.IsAnimating)
                     {
@@ -533,24 +503,19 @@ namespace RiverHollow.Characters.CombatStuff
                     break;
                 case "Move":
                     TileTargetList[0].SetCombatant(SkillUser);
+                    if (SkillUser.LinkedSummon != null)
+                    {
+                        SkillUser.LinkedSummon.Tile = TileTargetList[0];
+                        TileTargetList[0].GUITile.LinkSummon(SkillUser.LinkedSummon);
+                    }
                     UserStartPosition = SkillUser.Position;
                     _currentActionTag++;
                     break;
                 case "End":
-                    if (SkillUser.Position != UserStartPosition)
-                    {
-                        Vector2 direction = Vector2.Zero;
-                        Util.GetMoveSpeed(SkillUser.Position, UserStartPosition, moveSpeed, ref direction);
-                        SkillUser.GetSprite().MoveBy(direction);
-                    }
-                    else
-                    {
-                        _currentActionTag = 0;
-                        Sprite.IsAnimating = false;
-                        Sprite.PlayedOnce = false;
-                        TileTargetList.Clear();
-                        CombatManager.EndTurn();
-                    }
+                    _currentActionTag = 0;
+                    Sprite.IsAnimating = false;
+                    Sprite.PlayedOnce = false;
+                    CombatManager.EndTurn();
 
                     break;
             }
@@ -593,6 +558,7 @@ namespace RiverHollow.Characters.CombatStuff
         }
 
         public bool IsHelpful() { return _target == TargetEnum.Ally; }
+        public bool IsSummonSpell() { return _effectTags.Contains("Summon"); }
     }
 
     internal struct BuffData
