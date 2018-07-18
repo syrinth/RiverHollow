@@ -17,6 +17,7 @@ namespace RiverHollow.Characters.CombatStuff
     {
         protected int _id;
 
+        protected PotencyBonusEnum _bonusType;
         protected ActionEnum _actionType;
         protected MenuEnum _menuType;
         protected string _name;
@@ -101,6 +102,10 @@ namespace RiverHollow.Characters.CombatStuff
         public List<CombatManager.CombatTile> TileTargetList;
         public Vector2 UserStartPosition;
         public bool _used;
+
+        bool _pauseForCounter;
+        CombatCharacter counteringChar;
+        Summon counteringSummon;
 
         public AnimatedSprite Sprite;
         public CombatAction(int id, string[] stringData)
@@ -198,6 +203,10 @@ namespace RiverHollow.Characters.CombatStuff
                                     _liCondition.Add(Util.ParseEnum<ConditionEnum>(parse[j]));
                                 }
                             }
+                            else if (parse[0] == "Bonus")
+                            {
+                                _bonusType = Util.ParseEnum<PotencyBonusEnum>(parse[1]);
+                            }
                             _effectTags.Add(parse[0]);
                         }
                         else
@@ -215,6 +224,10 @@ namespace RiverHollow.Characters.CombatStuff
                                     else if (tags[summonTags].Equals("Aggressive"))
                                     {
                                         _summon.SetAggressive();
+                                    }
+                                    else if (tags[summonTags].Equals("Counter"))
+                                    {
+                                        _summon.Counter = true;
                                     }
                                 }
                             }
@@ -274,6 +287,20 @@ namespace RiverHollow.Characters.CombatStuff
         {
             if (_used)
             {
+                int bonus = 0;
+                if (_bonusType != PotencyBonusEnum.None)
+                {
+                    if(_bonusType == PotencyBonusEnum.Summons)
+                    {
+                        foreach(CombatAdventurer c in PlayerManager.GetParty())
+                        {
+                            if(c.LinkedSummon != null)
+                            {
+                                bonus++;
+                            }
+                        }
+                    }
+                }
                 if (_effectTags.Contains("Harm"))
                 {
                     foreach (CombatManager.CombatTile ct in TileTargetList)
@@ -284,8 +311,28 @@ namespace RiverHollow.Characters.CombatStuff
                             int evade = random.Next(1, 100);
                             if (evade > ct.Character.Evasion)
                             {
-                                int x = ct.Character.ProcessAttack(SkillUser, _effectHarm, _element);
+                                int x = ct.Character.ProcessAttack(SkillUser, _effectHarm + bonus, _element);
                                 ct.GUITile.AssignEffect(x, true);
+
+                                Summon summ = ct.Character.LinkedSummon;
+                                if (_areaOfEffect == AreaEffectEnum.Area && summ != null)
+                                {
+                                    
+                                    summ.ProcessAttack(SkillUser, _effectHarm + bonus, _element);
+                                    ct.GUITile.AssignEffect(x, true);
+                                }
+
+                                if (ct.Character.Counter)
+                                {
+                                    ct.Character.GoToCounter = true;
+                                    counteringChar = ct.Character;
+                                    _pauseForCounter = true;
+                                }
+                                if (summ != null && summ.Counter) { 
+                                    summ.GoToCounter = true;
+                                    counteringSummon = summ;
+                                    _pauseForCounter = true;
+                                }
                             }
                             else
                             {
@@ -337,10 +384,10 @@ namespace RiverHollow.Characters.CombatStuff
                 {
                     foreach (CombatManager.CombatTile ct in TileTargetList)
                     {
-                        _summon.Summoned = true;
+                        Summon newSummon = _summon.Clone();
                         _summon.SetStats(SkillUser.StatMag);
-                        ct.Character.Tile.GUITile.LinkSummon(_summon);
-                        ct.Character.LinkSummon(_summon);
+                        ct.Character.Tile.GUITile.LinkSummon(newSummon);
+                        ct.Character.LinkSummon(newSummon);
                     }
                 }
 
@@ -473,9 +520,56 @@ namespace RiverHollow.Characters.CombatStuff
                     }
                     break;
                 case "Apply":
-                    if (!CombatManager.SelectedAction.SelfOnly()) { ApplyEffect(); }
-                    else { ApplyEffectToSelf(); }
-                    _currentActionTag++;
+                    if (!_pauseForCounter)
+                    {
+                        if (!CombatManager.SelectedAction.SelfOnly()) { ApplyEffect(); }
+                        else { ApplyEffectToSelf(); }
+                    }
+
+                    //It's set in the above block, so we need to check again
+                    if (!_pauseForCounter)
+                    {
+                        _currentActionTag++;
+                    }
+                    else
+                    {
+                        if(counteringChar != null)
+                        {
+                            if (!counteringChar.IsCurrentAnimation("Attack"))
+                            {
+                                counteringChar.PlayAnimation("Attack");
+                            }
+                            else if (counteringChar.AnimationPlayedXTimes(1))
+                            {
+                                counteringChar.PlayAnimation("Walk");
+                                int x = SkillUser.ProcessAttack(counteringChar, ((CombatAction)CharacterManager.GetActionByIndex(1)).EffectHarm, ElementEnum.None);
+                                SkillUser.Tile.GUITile.AssignEffect(x, true);
+                                counteringChar = null;
+                                _pauseForCounter = false;
+                                _currentActionTag++;
+                            }
+                        }
+                        else if (counteringSummon != null)
+                        {
+                            if (!counteringSummon.IsCurrentAnimation("Attack"))
+                            {
+                                counteringSummon.PlayAnimation("Attack");
+                            }
+                            else if (counteringSummon.AnimationPlayedXTimes(1))
+                            {
+                                counteringSummon.PlayAnimation("Walk");
+                                int x = SkillUser.ProcessAttack(counteringSummon, ((CombatAction)CharacterManager.GetActionByIndex(1)).EffectHarm, ElementEnum.None);
+                                SkillUser.Tile.GUITile.AssignEffect(x, true);
+                                counteringSummon = null;
+                                _pauseForCounter = false;
+                                _currentActionTag++;
+                            }
+                        }
+                        else
+                        {
+                            _pauseForCounter = false;
+                        }
+                    }
 
                     break;
                 case "Return":

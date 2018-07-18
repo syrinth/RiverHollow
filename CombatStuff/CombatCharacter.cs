@@ -82,6 +82,9 @@ namespace RiverHollow.Characters.CombatStuff
 
         private Summon _linkedSummon;
         public Summon LinkedSummon =>  _linkedSummon;
+
+        public bool Counter;
+        public bool GoToCounter;
         #endregion
 
         public CombatCharacter() : base()
@@ -180,7 +183,7 @@ namespace RiverHollow.Characters.CombatStuff
             int dmg = (int)Math.Max(1, base_attack * dMult); 
 
             dmg += ApplyResistances(dmg, element);
-            return DecreaseHealth(1);
+            return DecreaseHealth(potency);
         }
         public int ProcessSpell(CombatCharacter attacker, int potency, ElementEnum element = ElementEnum.None)
         {

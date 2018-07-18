@@ -22,6 +22,10 @@
       <Key>4</Key>
       <Value>[Type:Action][Target:Ally][Range:Column][Area:Area][Action:Move][Charge:50]</Value>
     </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>[Type:Action][Target:Enemy][Range:Ranged][Area:Single][Effect:Harm-1 Bonus-Summons][Action:UserAttack Apply]</Value>
+    </Item>
     <!--<50> Special-->
     <Item>
       <Key>50</Key>
@@ -68,7 +72,7 @@
     </Item>
     <Item>
       <Key>201</Key>
-      <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Single][Effect:Cost-5 Summon Aggressive][Action:UserCast Apply]</Value>
+      <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Single][Effect:Cost-5 Summon Counter][Action:UserCast Apply]</Value>
     </Item>
   </Asset>
 </XnaContent>

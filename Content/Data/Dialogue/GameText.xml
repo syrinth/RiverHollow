@@ -122,6 +122,10 @@
       <Key>Action 4</Key>
       <Value>Move/Moves to a new location</Value>
     </Item>
+    <Item>
+      <Key>Action 5</Key>
+      <Value>Attack/Moves to a new location</Value>
+    </Item>
     <!--Special Action Text -->
     <Item>
       <Key>Action 50</Key>

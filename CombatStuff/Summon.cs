@@ -15,8 +15,9 @@ namespace RiverHollow.CombatStuff
         ElementEnum _element = ElementEnum.None;
         public ElementEnum Element => _element;
 
+        int _iMagStat;
+
         public bool Acted;
-        public bool Summoned;
         bool _bTwinCast;
         public bool TwinCast => _bTwinCast;
         bool _bAggressive;
@@ -32,8 +33,21 @@ namespace RiverHollow.CombatStuff
             _bodySprite.SetScale(5);
         }
 
+        public Summon Clone()
+        {
+            Summon copy = new Summon();
+            copy.SetStats(_iMagStat);
+            if (TwinCast) { copy.SetTwincast(); }
+            if (Aggressive) { copy.SetAggressive(); }
+            if (Counter) { copy.Counter = Counter; }
+            copy.Tile = Tile;
+
+            return copy;
+        }
+
         public void SetStats(int magStat)
         {
+            _iMagStat = magStat;
             _statStr = 2 * magStat + 10;
             _statDef = 2 * magStat + 10;
             _statVit = (3 * magStat) + 80;

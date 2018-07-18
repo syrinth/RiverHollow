@@ -381,9 +381,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIImage _gTile;
         GUISprite _gSprite;
         public GUISprite CharacterSprite => _gSprite;
+        GUIText _gEffect;
         GUISprite _gSummon;
         public GUISprite SummonSprite => _gSummon;
-        GUIText _gEffect;
+        GUIText _gSummonEffect;
+
         List<GUIStatus> _liStatus;
 
         CombatManager.CombatTile _mapTile;
@@ -438,6 +440,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 _gEffect.Draw(spriteBatch);
             }
+            if (_gSummonEffect != null && _iDmgTimer < 40)
+            {
+                _gSummonEffect.Draw(spriteBatch);
+            }
         }
         public void DrawCharacter(SpriteBatch spriteBatch)
         {
@@ -481,10 +487,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     _gEffect.MoveBy(0, -1);
                     _iDmgTimer++;
+
+                    if (_gSummonEffect != null) { _gSummonEffect.MoveBy(0, -1); }
                 }
                 else if (Occupied())
                 {
                     _gEffect.SetText("");
+                    if (_gSummonEffect != null) { _gSummonEffect.SetText(""); }
                 }
                 else { _gEffect = null; }
             }
@@ -548,6 +557,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gEffect.SetText(x);
             _gEffect.SetColor(isNegative ? Color.Red : Color.LightGreen);
             _gEffect.AnchorAndAlignToObject(_gSprite, SideEnum.Top, SideEnum.CenterX);
+        }
+
+        public void AssignEffectToSummon(string x)
+        {
+            _gSummonEffect.SetText(x);
+            _gSummonEffect.SetColor(Color.Red);
+            _gEffect.AnchorAndAlignToObject(_gSummon, SideEnum.Top, SideEnum.CenterX);
         }
 
         public void ChangeCondition(ConditionEnum c, TargetEnum target)

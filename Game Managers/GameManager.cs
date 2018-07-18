@@ -18,6 +18,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class GameManager
     {
+        public enum PotencyBonusEnum { None, Conditions, Summons }
         public enum EquipmentEnum { None, Armor, Weapon };
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
         public enum ForceMoveEnum { None, Forward, Back };
