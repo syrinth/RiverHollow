@@ -1,8 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Characters;
-using RiverHollow.Characters.CombatStuff;
+﻿using RiverHollow.Characters.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.SpriteAnimations;
@@ -18,10 +14,15 @@ namespace RiverHollow.CombatStuff
         int _iMagStat;
 
         public bool Acted;
+        public bool Swapped;
         bool _bTwinCast;
         public bool TwinCast => _bTwinCast;
         bool _bAggressive;
         public bool Aggressive => _bAggressive;
+        bool _bDefensive;
+        public bool Defensive => _bDefensive;
+
+        public CombatCharacter linkedChar;
 
         public Summon()
         {
@@ -40,6 +41,9 @@ namespace RiverHollow.CombatStuff
             if (TwinCast) { copy.SetTwincast(); }
             if (Aggressive) { copy.SetAggressive(); }
             if (Counter) { copy.Counter = Counter; }
+            if (Defensive) { copy.SetDefensive(); }
+
+            copy._element = _element;
             copy.Tile = Tile;
 
             return copy;
@@ -54,6 +58,20 @@ namespace RiverHollow.CombatStuff
             _statMag = 2 * magStat + 10;
             _statRes = 2 * magStat + 10;
             _statSpd = 10;
+
+            CurrentHP = MaxHP;
+        }
+
+        public override int DecreaseHealth(int value)
+        {
+            int rv = base.DecreaseHealth(value);
+
+            if (CurrentHP == 0)
+            {
+                linkedChar.UnlinkSummon();
+            }
+
+            return rv;
         }
         public override GUISprite GetSprite()
         {
@@ -62,6 +80,8 @@ namespace RiverHollow.CombatStuff
 
         public void SetTwincast() { _bTwinCast = true; }
         public void SetAggressive() { _bAggressive = true; }
+        public void SetDefensive() { _bDefensive = true; }
+        public void SetElement(ElementEnum el) { _element = el; }
 
         public override bool IsSummon() { return true; }
     }

@@ -77,6 +77,7 @@ namespace RiverHollow.Characters.CombatStuff
         protected Dictionary<ConditionEnum, bool> _diConditions;
         public Dictionary<ConditionEnum, bool> DiConditions => _diConditions;
 
+        private ElementEnum _elementAttackEnum;
         protected Dictionary<ElementEnum, ElementAlignment> _diElementalAlignment;
         public Dictionary<ElementEnum, ElementAlignment> DiElementalAlignment => _diElementalAlignment;
 
@@ -209,6 +210,14 @@ namespace RiverHollow.Characters.CombatStuff
                     else if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (int)(dmg * 0.8) - dmg; }
                 }
 
+                if (_linkedSummon != null && _diElementalAlignment[element].Equals(ElementAlignment.Neutral))
+                {
+                    if (_linkedSummon.Element.Equals(element))
+                    {
+                        modifiedDmg += (int)(dmg * 0.8) - dmg;
+                    }
+                }
+
                 if (_diElementalAlignment[element].Equals(ElementAlignment.Resists))
                 {
                     modifiedDmg += (int)(dmg * 0.8) - dmg;
@@ -227,7 +236,7 @@ namespace RiverHollow.Characters.CombatStuff
             return Tile.GUITile.CharacterSprite;
         }
 
-        public int DecreaseHealth(int value)
+        public virtual int DecreaseHealth(int value)
         {
             _currentHP -= (_currentHP - value >= 0) ? value : _currentHP;
             PlayAnimation("Hurt");
@@ -358,6 +367,17 @@ namespace RiverHollow.Characters.CombatStuff
         public void UnlinkSummon()
         {
             _linkedSummon = null;
+        }
+
+        public virtual ElementEnum GetAttackElement()
+        {
+            ElementEnum e = _elementAttackEnum;
+
+            if(LinkedSummon != null && e.Equals(ElementEnum.None))
+            {
+                e = LinkedSummon.Element;
+            }
+            return e;
         }
 
         public bool CanCast(int x)

@@ -225,9 +225,17 @@ namespace RiverHollow.Characters.CombatStuff
                                     {
                                         _summon.SetAggressive();
                                     }
+                                    else if (tags[summonTags].Equals("Defensive"))
+                                    {
+                                        _summon.SetDefensive();
+                                    }
                                     else if (tags[summonTags].Equals("Counter"))
                                     {
                                         _summon.Counter = true;
+                                    }
+                                    else if (tags[summonTags].StartsWith("Element"))
+                                    {
+                                        _summon.SetElement(Util.ParseEnum<ElementEnum>(tags[summonTags].Split('-')[1]));
                                     }
                                 }
                             }
@@ -311,15 +319,14 @@ namespace RiverHollow.Characters.CombatStuff
                             int evade = random.Next(1, 100);
                             if (evade > ct.Character.Evasion)
                             {
-                                int x = ct.Character.ProcessAttack(SkillUser, _effectHarm + bonus, _element);
+                                int x = ct.Character.ProcessAttack(SkillUser, _effectHarm + bonus, ct.Character.GetAttackElement());
                                 ct.GUITile.AssignEffect(x, true);
 
                                 Summon summ = ct.Character.LinkedSummon;
                                 if (_areaOfEffect == AreaEffectEnum.Area && summ != null)
                                 {
-                                    
-                                    summ.ProcessAttack(SkillUser, _effectHarm + bonus, _element);
-                                    ct.GUITile.AssignEffect(x, true);
+                                    summ.ProcessAttack(SkillUser, _effectHarm + bonus, ct.Character.GetAttackElement());
+                                    ct.GUITile.AssignEffectToSummon(x.ToString());
                                 }
 
                                 if (ct.Character.Counter)
@@ -338,10 +345,20 @@ namespace RiverHollow.Characters.CombatStuff
                             {
                                 ct.GUITile.AssignEffect("Dodge!", true);
                             }
+
+                            if(ct.Character.IsSummon() && ((Summon)ct.Character).Swapped)
+                            {
+                                Summon s = ((Summon)ct.Character);
+                                s.Swapped = false;
+
+                                Vector2 swap = s.GetSprite().Position();
+                                s.GetSprite().Position(s.linkedChar.GetSprite().Position());
+                                s.linkedChar.GetSprite().Position(swap);
+                                s.linkedChar.Tile.TargetPlayer = true;
+                            }
                         }
                         else
                         {
-
                             int x = ct.Character.ProcessSpell(SkillUser, _effectHarm, _element);
                             ct.GUITile.AssignEffect(x, true);
                         }
@@ -388,6 +405,7 @@ namespace RiverHollow.Characters.CombatStuff
                         _summon.SetStats(SkillUser.StatMag);
                         ct.Character.Tile.GUITile.LinkSummon(newSummon);
                         ct.Character.LinkSummon(newSummon);
+                        newSummon.linkedChar = ct.Character;
                     }
                 }
 
@@ -486,6 +504,16 @@ namespace RiverHollow.Characters.CombatStuff
                         break;
                     }
                 case "UserAttack":
+                    CombatCharacter original = TileTargetList[0].Character;
+                    Summon summ = original.LinkedSummon;
+                    if (summ != null && !summ.Swapped && summ.Defensive)
+                    {
+                        summ.Swapped = true;
+                        Vector2 swap = summ.GetSprite().Position();
+                        summ.GetSprite().Position(original.GetSprite().Position());
+                        original.GetSprite().Position(swap);
+                        original.Tile.TargetPlayer = false;
+                    }
                     if (!SkillUser.IsCurrentAnimation("Attack"))
                     {
                         SkillUser.PlayAnimation("Attack");
@@ -542,7 +570,7 @@ namespace RiverHollow.Characters.CombatStuff
                             else if (counteringChar.AnimationPlayedXTimes(1))
                             {
                                 counteringChar.PlayAnimation("Walk");
-                                int x = SkillUser.ProcessAttack(counteringChar, ((CombatAction)CharacterManager.GetActionByIndex(1)).EffectHarm, ElementEnum.None);
+                                int x = SkillUser.ProcessAttack(counteringChar, ((CombatAction)CharacterManager.GetActionByIndex(1)).EffectHarm, counteringChar.GetAttackElement());
                                 SkillUser.Tile.GUITile.AssignEffect(x, true);
                                 counteringChar = null;
                                 _pauseForCounter = false;
@@ -558,7 +586,7 @@ namespace RiverHollow.Characters.CombatStuff
                             else if (counteringSummon.AnimationPlayedXTimes(1))
                             {
                                 counteringSummon.PlayAnimation("Walk");
-                                int x = SkillUser.ProcessAttack(counteringSummon, ((CombatAction)CharacterManager.GetActionByIndex(1)).EffectHarm, ElementEnum.None);
+                                int x = SkillUser.ProcessAttack(counteringSummon, ((CombatAction)CharacterManager.GetActionByIndex(1)).EffectHarm, counteringSummon.GetAttackElement());
                                 SkillUser.Tile.GUITile.AssignEffect(x, true);
                                 counteringSummon = null;
                                 _pauseForCounter = false;

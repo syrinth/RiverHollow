@@ -492,8 +492,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
                 else if (Occupied())
                 {
-                    _gEffect.SetText("");
-                    if (_gSummonEffect != null) { _gSummonEffect.SetText(""); }
+                    if (!String.IsNullOrEmpty(_gEffect.Text))
+                    {
+                        _gEffect.SetText("");
+                        _gEffect.AnchorAndAlignToObject(_gSprite, SideEnum.Top, SideEnum.CenterX);
+                    }
+                    if (_gSummonEffect != null && !String.IsNullOrEmpty(_gSummonEffect.Text))
+                    {
+                        _gSummonEffect.SetText("");
+                        _gSummonEffect.AnchorAndAlignToObject(_gSprite, SideEnum.Top, SideEnum.CenterX);
+                    }
                 }
                 else { _gEffect = null; }
             }
@@ -540,10 +548,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _gSummon = new GUISprite(s.BodySprite);
                 _gSummon.AnchorToObject(_gSprite, SideEnum.Top);
                 _gSummon.AnchorToObject(_gSprite, SideEnum.Left);
+                _gSummonEffect = new GUIText();
+                _gSummonEffect.AnchorAndAlignToObject(_gSummon, SideEnum.Top, SideEnum.CenterX);
             }
             else
             {
                 _gSummon = null;
+                _gSummonEffect = null;
             }
         }
 
@@ -553,17 +564,23 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
         public void AssignEffect(string x, bool isNegative)
         {
-            _iDmgTimer = 0;
-            _gEffect.SetText(x);
-            _gEffect.SetColor(isNegative ? Color.Red : Color.LightGreen);
-            _gEffect.AnchorAndAlignToObject(_gSprite, SideEnum.Top, SideEnum.CenterX);
+            if (_mapTile.TargetPlayer)
+            {
+                _iDmgTimer = 0;
+                _gEffect.SetText(x);
+                _gEffect.SetColor(isNegative ? Color.Red : Color.LightGreen);
+            }
+            else
+            {
+                AssignEffectToSummon(x);
+            }
         }
 
         public void AssignEffectToSummon(string x)
         {
+            _iDmgTimer = 0;
             _gSummonEffect.SetText(x);
             _gSummonEffect.SetColor(Color.Red);
-            _gEffect.AnchorAndAlignToObject(_gSummon, SideEnum.Top, SideEnum.CenterX);
         }
 
         public void ChangeCondition(ConditionEnum c, TargetEnum target)
