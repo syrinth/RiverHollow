@@ -31,7 +31,7 @@ namespace RiverHollow.Characters
         protected bool _bActive = true;
         public bool Active => _bActive;
 
-        public int Speed = 5;
+        public int Speed = 2;
         #endregion
 
         public WorldCharacter() : base()

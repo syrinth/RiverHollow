@@ -181,7 +181,10 @@ namespace RiverHollow.Characters
                     if (Position == targetPos)
                     {
                         _currentPath.RemoveAt(0);
-                        DetermineFacing(Vector2.Zero);
+                        if (_currentPath.Count == 0)
+                        {
+                            DetermineFacing(Vector2.Zero);
+                        }
                     }
                     else
                     {
@@ -360,11 +363,24 @@ namespace RiverHollow.Characters
             {
                 _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\NPC8"));
             }
-            _bodySprite.AddAnimation("IdleDown", 0, 0, TileSize, TileSize * 2, 1, 0.2f);
-            _bodySprite.AddAnimation("WalkDown", 0, 0, TileSize, TileSize * 2, 4, 0.2f);
-            _bodySprite.AddAnimation("WalkUp", 0, 32, TileSize, TileSize * 2, 4, 0.2f);
-            _bodySprite.AddAnimation("WalkRight", 0, 64, TileSize, TileSize * 2, 4, 0.2f);
-            _bodySprite.AddAnimation("WalkLeft", 0, 96, TileSize, TileSize * 2, 4, 0.2f);
+
+            int startX = 0;
+            int startY = 0;
+            _bodySprite.AddAnimation("IdleDown", startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f);
+            _bodySprite.AddAnimation("WalkDown", startX, startY, TileSize, TileSize * 2, 3, 0.2f);
+
+            startX += TileSize * 3;
+            _bodySprite.AddAnimation("IdleUp", startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f);
+            _bodySprite.AddAnimation("WalkUp", startX, startY, TileSize, TileSize * 2, 3, 0.2f);
+
+            startX += TileSize * 3;
+            _bodySprite.AddAnimation("IdleLeft", startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f);
+            _bodySprite.AddAnimation("WalkLeft", startX, startY, TileSize, TileSize * 2, 3, 0.2f);
+
+            startX += TileSize * 3;
+            _bodySprite.AddAnimation("IdleRight", startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f);
+            _bodySprite.AddAnimation("WalkRight", startX, startY, TileSize, TileSize * 2, 3, 0.2f);
+
             _bodySprite.SetCurrentAnimation("IdleDown");
             _bodySprite.IsAnimating = true;
         }
