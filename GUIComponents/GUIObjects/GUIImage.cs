@@ -8,7 +8,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class GUIImage : GUIObject
     {
-        public Rectangle _sourceRectangle;
         protected Color _color = Color.White;
         public GUIImage(Vector2 position, Rectangle sourceRect, int width, int height, Texture2D texture)
         {
@@ -17,7 +16,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Width = width;
             Height = height;
             _drawRect = new Rectangle((int)Position().X, (int)Position().Y, Width, Height);
-            _sourceRectangle = sourceRect;
+            _sourceRect = sourceRect;
         }
 
         public GUIImage(Vector2 position, Rectangle sourceRect, int width, int height, string texture)
@@ -27,7 +26,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Width = width;
             Height = height;
             _drawRect = new Rectangle((int)Position().X, (int)Position().Y, Width, Height);
-            _sourceRectangle = sourceRect;
+            _sourceRect = sourceRect;
         }
 
         public void MoveImageTo(Vector2 pos)
@@ -44,12 +43,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _drawRect, _sourceRectangle, _color * Alpha);
+            spriteBatch.Draw(_texture, _drawRect, _sourceRect, _color * Alpha);
         }
 
         public void Draw(SpriteBatch spriteBatch, float alpha)
         {
-            spriteBatch.Draw(_texture, _drawRect, _sourceRectangle, Color.Black * alpha);
+            spriteBatch.Draw(_texture, _drawRect, _sourceRect, Color.Black * alpha);
         }
 
         public void SetScale(float scale)

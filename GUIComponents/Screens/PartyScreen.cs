@@ -43,12 +43,21 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 rv = c.ProcessLeftButtonClick(mouse);
                 if (rv) { break; }
             }
+
             return rv;
         }
 
         public override bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = true;
+
+            foreach(CharacterBox c in _partyList)
+            {
+                if (c.PositionMapOpen())
+                {
+                    c.ClosePositionMap();
+                }
+            }
             return rv;
         }
 
@@ -90,6 +99,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIItemBox _armorBox;
 
         GUIText _gName, _gClass, _gXP, _gMagic, _gDef, _gDmg, _gHP, _gSpd;
+        GUIButton _btnPosition;
+        PositionMap _giPositionMap;
 
         GUIButton _remove;
 
@@ -167,12 +178,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gClass.SetText(_character.CharacterClass.Name);
             _gXP.SetText(_character.XP + @"/" + CombatAdventurer.LevelRange[_character.ClassLevel]);
 
-            _gDmg.SetText("Str: " + _character.StatStr);
+            _gDmg.SetText("Dmg: " + _character.StatStr);
             _gDef.SetText("Def: " + _character.StatDef);
             _gHP.SetText("Vit: " + _character.StatVit);
             _gMagic.SetText("Mag: " + _character.StatMag);
-            _gDef.SetText("Res: " + _character.StatRes);
             _gSpd.SetText("Spd: " + _character.StatSpd);
+
+            _btnPosition = new GUIButton("Change", 128, 64, BtnChangePosition);
+            _btnPosition.AnchorToInnerSide(_window, SideEnum.BottomRight);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -185,6 +198,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _armorBox.DrawDescription(spriteBatch);
 
                 if (_remove != null) { _remove.Draw(spriteBatch); }
+
+                if(_giPositionMap != null)
+                {
+                    _giPositionMap.Draw(spriteBatch);
+                }
             }
         }
 
@@ -203,6 +221,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     rv = c.ProcessLeftButtonClick(mouse);
                     if (rv) { break; }
+                }
+
+                if(!rv && _giPositionMap != null)
+                {
+                    rv = _giPositionMap.ProcessLeftButtonClick(mouse);
                 }
 
                 //if (_remove != null && _remove.Contains(mouse))
@@ -307,7 +330,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
 
-
         private void AssignEquipment(GUIItemBox box, Equipment item)
         {
             if (box.EquipType == EquipmentEnum.Weapon) { _character.Weapon = item; }
@@ -380,6 +402,130 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             _character = c;
             Load();
+        }
+
+        public void BtnChangePosition()
+        {
+            _giPositionMap = new PositionMap(_character);
+        }
+        public bool PositionMapOpen()
+        {
+            return _giPositionMap != null;
+        }
+        public void ClosePositionMap()
+        {
+            _giPositionMap = null;
+        }
+
+        private class PositionMap : GUIWindow
+        {
+            StartPosition currPosition;
+            CombatCharacter _currChar;
+            StartPosition[,] _liStartPositions;
+
+            public PositionMap(CombatCharacter currentChar) :base(GUIWindow.BrownWin, 32, 32)
+            {
+                int maxCols = 4;
+                int maxRows = 3;
+
+                _currChar = currentChar;
+                _liStartPositions = new StartPosition[maxCols, maxRows];
+                for (int cols = 0; cols < maxCols; cols++)
+                {
+                    for (int rows = 0; rows < maxRows; rows++)
+                    {
+                        StartPosition pos = new StartPosition(cols, rows);
+                        _liStartPositions[cols, rows] = pos;
+                        if (cols == 0 && rows == 0)
+                        {
+                            pos.AnchorToInnerSide(this, SideEnum.TopLeft);
+                        }
+                        else if (cols == 0)
+                        {
+                            pos.AnchorAndAlignToObject(_liStartPositions[0, rows - 1], SideEnum.Bottom, SideEnum.Left);
+                        }
+                        else
+                        {
+                            pos.AnchorAndAlignToObject(_liStartPositions[cols - 1, rows], SideEnum.Right, SideEnum.Bottom);
+                        }
+                    }
+                }
+
+                foreach (CombatCharacter c in PlayerManager.GetParty())
+                {
+                    Vector2 vec = c.StartPos;
+                    bool current = c == _currChar;
+                    _liStartPositions[(int)vec.X, (int)vec.Y].SetOccupied(true, current);
+
+                    if (current) { currPosition = _liStartPositions[(int)vec.X, (int)vec.Y]; }
+                }
+
+                this.CenterOnScreen();
+                this.Resize();
+            }
+
+            public override bool ProcessLeftButtonClick(Point mouse)
+            {
+                bool rv = false;
+                foreach(StartPosition sp in _liStartPositions)
+                {
+                    if (sp.Contains(mouse) && !sp.Occupied)
+                    {
+                        rv = true;
+                        currPosition.SetOccupied(false);
+                        currPosition = sp;
+                        currPosition.SetOccupied(true, true);
+
+                        _currChar.SetStartPosition(new Vector2(currPosition.Col, currPosition.Row));
+                        break;
+                    }
+                }
+
+                return rv;
+            }
+
+            private class StartPosition : GUIImage
+            {
+                bool _bOccupied;
+                public bool Occupied => _bOccupied;
+                bool _bOccCurrent;
+
+                int _iCol;
+                int _iRow;
+                public int Col => _iCol;
+                public int Row => _iRow;
+
+                public StartPosition(int col, int row) : base(Vector2.Zero, new Rectangle(0, 80, 16, 16), 16, 16, @"Textures\Dialog")
+                {
+                    _bOccupied = false;
+                    _bOccCurrent = false;
+
+                    _iCol = col;
+                    _iRow = row;
+                }
+
+                public void SetOccupied(bool occupied, bool occCurrent = false)
+                {
+                    _bOccupied = occupied;
+                    _bOccCurrent = occCurrent;
+
+                    if (_bOccupied)
+                    {
+                        if (_bOccCurrent)
+                        {
+                            _sourceRect = new Rectangle(16, 80, 16, 16);
+                        }
+                        else
+                        {
+                            _sourceRect = new Rectangle(32, 80, 16, 16);
+                        }
+                    }
+                    else
+                    {
+                        _sourceRect = new Rectangle(0, 80, 16, 16);
+                    }
+                }
+            }
         }
     }
 }

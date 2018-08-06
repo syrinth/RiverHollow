@@ -114,15 +114,14 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            bool oneAdded = false;
             //Get the Players' party and assign each of them a battle position
             List<CombatCharacter> party = CombatManager.Party;
             for (int i = 0; i < party.Count; i++)
             {
                 if (party[i] != null)
                 {
-                    _combatMap[oneAdded ? 2 : 0, i].SetCombatant(party[i]);
-                    oneAdded = true;
+                    Vector2 vec = party[i].StartPos;
+                    _combatMap[(int)vec.Y, (int)vec.X].SetCombatant(party[i]);
                 }
             }
         }

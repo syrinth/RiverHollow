@@ -20,6 +20,9 @@ namespace RiverHollow.Characters.CombatStuff
 
         public override string Name => String.IsNullOrEmpty(_sUnique) ? _sName : _sName + " " + _sUnique;
 
+        private Vector2 _vStartPos;
+        public Vector2 StartPos => _vStartPos;
+
         protected int _currentHP;
         public int CurrentHP
         {
@@ -121,6 +124,8 @@ namespace RiverHollow.Characters.CombatStuff
             _statMag = c.StatMag;
             _statRes = c.StatRes;
             _statSpd = c.StatSpd;
+
+            _vStartPos = new Vector2(0, 0);
         }
 
         public void LoadContent(string texture)
@@ -416,6 +421,22 @@ namespace RiverHollow.Characters.CombatStuff
             {
                 ChangeConditionStatus(condition, false);
             }
+        }
+
+        public void IncreaseStartPos()
+        {
+            if(_vStartPos.Y < CombatManager.MAX_ROW)
+            {
+                _vStartPos.Y++;
+            }
+            else
+            {
+                _vStartPos = new Vector2(_vStartPos.X++, 0);
+            }
+        }
+        public void SetStartPosition(Vector2 startPos)
+        {
+            _vStartPos = startPos;
         }
 
         public virtual bool IsSummon() { return false; }

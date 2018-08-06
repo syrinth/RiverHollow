@@ -45,7 +45,7 @@ namespace RiverHollow.Game_Managers
         private static List<WorkerBuilding> _buildings;
         public static List<WorkerBuilding> Buildings { get => _buildings; }
 
-        private static List<CombatAdventurer> _party;
+        private static List<CombatAdventurer> _liParty;
 
         public static MerchantChest _merchantChest;
         public static string Name;
@@ -58,11 +58,11 @@ namespace RiverHollow.Game_Managers
 
         public static void Initialize()
         {
-            _party = new List<CombatAdventurer>();
+            _liParty = new List<CombatAdventurer>();
             _questLog = new List<Quest>();
             World = new PlayerCharacter();
             Combat = new CombatAdventurer(Name);
-            _party.Add(Combat);
+            _liParty.Add(Combat);
             _buildings = new List<WorkerBuilding>();
             _canMake = new List<int>();
 
@@ -210,20 +210,28 @@ namespace RiverHollow.Game_Managers
 
         public static List<CombatAdventurer> GetParty()
         {
-            return _party;
+            return _liParty;
         }
         public static void AddToParty(CombatAdventurer c)
         {
-            if (!_party.Contains(c))
+            foreach(CombatCharacter oldChar in _liParty)
             {
-                _party.Add(c);
+                if (oldChar.StartPos.Equals(c.StartPos))
+                {
+                    c.IncreaseStartPos();
+                }
+            }
+
+            if (!_liParty.Contains(c))
+            {
+                _liParty.Add(c);
             }
         }
         public static void RemoveFromParty(CombatAdventurer c)
         {
-            if (_party.Contains(c))
+            if (_liParty.Contains(c))
             {
-                _party.Remove(c);
+                _liParty.Remove(c);
             }
         }
 
@@ -498,8 +506,8 @@ namespace RiverHollow.Game_Managers
         {
             if (GameManager.AutoDisband)
             {
-                _party.Clear();
-                _party.Add(Combat);
+                _liParty.Clear();
+                _liParty.Add(Combat);
             }
         }
 
