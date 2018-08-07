@@ -623,7 +623,7 @@ namespace RiverHollow.Characters
                 string[] tagType = stringData[i].Split(':');
                 if (tagType[0].Equals("Class"))
                 {
-                    _combat = new CombatAdventurer(_sName);
+                    _combat = new CombatAdventurer(this);
                     _combat.SetClass(CharacterManager.GetClassByIndex(int.Parse(tagType[1])));
                     _combat.LoadContent(@"Textures\" + _combat.CharacterClass.Name);
                 }

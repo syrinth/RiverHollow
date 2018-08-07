@@ -10,8 +10,11 @@ namespace RiverHollow.Characters.CombatStuff
     {
         #region Properties
         public static List<int> LevelRange = new List<int> { 0, 10, 40, 100, 200, 600, 800, 1200, 1600, 2000};
-        private WorldAdventurer _world;
-        public WorldAdventurer World { get => _world; }
+        private WorldAdventurer _worldAdv;
+        public WorldAdventurer WorldAdv => _worldAdv;
+        private EligibleNPC _eligibleNPC;
+        public EligibleNPC EligibleNPC => _eligibleNPC;
+
         protected CharacterClass _class;
         public CharacterClass CharacterClass { get => _class; }
         private int _classLevel;
@@ -40,7 +43,13 @@ namespace RiverHollow.Characters.CombatStuff
         public CombatAdventurer(WorldAdventurer w) : this()
         {
             _sName = w.Name;
-            _world = w;
+            _worldAdv = w;
+        }
+
+        public CombatAdventurer(EligibleNPC c) : this()
+        {
+            _sName = c.Name;
+            _eligibleNPC= c;
         }
 
         public CombatAdventurer(string name) : this()

@@ -13,7 +13,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public GUISprite(AnimatedSprite sprite)
         {
-            _sprite = sprite;
+            _sprite = new AnimatedSprite(sprite);
             Width = sprite.Width;
             Height = sprite.Height;
         }

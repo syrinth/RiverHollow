@@ -162,6 +162,23 @@ namespace RiverHollow.SpriteAnimations
             _bPingPong = pingPong;
         }
 
+        public AnimatedSprite(AnimatedSprite sprite)
+        {
+            _texture = sprite._texture;
+            _bPingPong = sprite._bPingPong;
+            _frameAnimations = sprite._frameAnimations;
+            _iFrameCutoff = sprite._iFrameCutoff;
+            _color = sprite._color;
+            _currAnimation = sprite._currAnimation;
+            _iScale = sprite._iScale;
+
+            IsAnimating = sprite.IsAnimating;
+            PlayedOnce = sprite.PlayedOnce;
+
+            _width = sprite._width;
+            _height = sprite._height;
+        }
+
         //TODO: Remove this method, classes should do it manually, not in this level
         public void AddAnimation(string name, int frameWidth, int frameHeight, int numFrames, float frameSpeed, int startX = 0, int startY = 0, string nextAnimation = "")
         {

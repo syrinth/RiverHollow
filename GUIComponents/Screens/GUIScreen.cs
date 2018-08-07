@@ -89,6 +89,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 control.ParentScreen = this;
             }
         }
+        public void RemoveControl(GUIObject control)
+        {
+            if (Controls.Contains(control))
+            {
+                Controls.Remove(control);
+            }
+        }
 
         public virtual bool IsTextScreen() { return false; }
         public virtual bool IsGameMenuScreen() { return false; }
