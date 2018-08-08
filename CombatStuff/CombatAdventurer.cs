@@ -26,18 +26,99 @@ namespace RiverHollow.Characters.CombatStuff
         public bool Protected;
 
         public Equipment Weapon;
+        public Equipment TempWeapon;
         public Equipment Armor;
+        public Equipment TempArmor;
 
-        public override int Attack => (Weapon == null) ? base.Attack : Weapon.Attack;
-        public override int StatStr { get =>  10 + (_classLevel * _class.StatStr) + _buffStr + (Weapon == null ? 0 : Weapon.Attack) + (Armor == null ? 0 : Armor.Attack); }
-        public override int StatDef { get => 10 + (_classLevel * _class.StatDef) + _buffDef + (Weapon == null ? 0 : Weapon.Def) + (Armor == null ? 0 : Armor.Def) + (Protected ? 10 : 0); }
-        public override int StatVit { get => 10 + (_classLevel * _class.StatVit) + (Weapon == null ? 0 : Weapon.Vit) + (Armor == null ? 0 : Armor.Vit); }
-        public override int StatMag { get => 10 + (_classLevel * _class.StatMag) + _buffMag + (Weapon == null ? 0 : Weapon.Mag) + (Armor == null ? 0 : Armor.Mag); }
-        public override int StatRes { get => 10 + (_classLevel * _class.StatRes) + _buffRes + (Weapon == null ? 0 : Weapon.Res) + (Armor == null ? 0 : Armor.Res); }
-        public override int StatSpd { get => 10 + (_classLevel * _class.StatSpd) + +_buffSpd + (Weapon == null ? 0 : Weapon.Spd) + (Armor == null ? 0 : Armor.Spd); }
+        public override int Attack => GetGearAtk();
+        public override int StatStr { get =>  10 + (_classLevel * _class.StatStr) + _buffStr + GetGearStr(); }
+        public override int StatDef { get => 10 + (_classLevel * _class.StatDef) + _buffDef +  GetGearDef() + (Protected ? 10 : 0); }
+        public override int StatVit { get => 10 + (_classLevel * _class.StatVit) + GetGearVit(); }
+        public override int StatMag { get => 10 + (_classLevel * _class.StatMag) + _buffMag + GetGearMag(); }
+        public override int StatRes { get => 10 + (_classLevel * _class.StatRes) + _buffRes + GetGearRes(); }
+        public override int StatSpd { get => 10 + (_classLevel * _class.StatSpd) + +_buffSpd + GetGearSpd(); }
 
         public override List<MenuAction> AbilityList { get => _class.AbilityList; }
         public override List<CombatAction> SpellList { get => _class._spellList; }
+
+        public int GetGearAtk()
+        {
+            int rv = 0;
+
+            if (TempWeapon != null) { rv += TempWeapon.Attack; }
+            else if (Weapon != null) { rv += Weapon.Attack; }
+            else if (Weapon == null) { rv += base.Attack; }
+            if (TempArmor != null) { rv += TempArmor.Attack; }
+            else if (Armor != null) { rv += Armor.Attack; }
+
+            return rv;
+        }
+        public int GetGearStr()
+        {
+            int rv = 0;
+
+            if (TempWeapon != null) { rv += TempWeapon.Str; }
+            else if (Weapon != null) { rv += Weapon.Str; }
+            if (TempArmor != null) { rv += TempArmor.Str; }
+            else if (Armor != null) { rv += Armor.Str; }
+
+            return rv;
+        }
+        public int GetGearDef()
+        {
+            int rv = 0;
+
+            if (TempWeapon != null) { rv += TempWeapon.Def; }
+            else if (Weapon != null) { rv += Weapon.Def; }
+            if (TempArmor != null) { rv += TempArmor.Def; }
+            else if (Armor != null) { rv += Armor.Def; }
+
+            return rv;
+        }
+        public int GetGearVit()
+        {
+            int rv = 0;
+
+            if (TempWeapon != null) { rv += TempWeapon.Vit; }
+            else if (Weapon != null) { rv += Weapon.Vit; }
+            if (TempArmor != null) { rv += TempArmor.Vit; }
+            else if (Armor != null) { rv += Armor.Vit; }
+
+            return rv;
+        }
+        public int GetGearMag()
+        {
+            int rv = 0;
+
+            if (TempWeapon != null) { rv += TempWeapon.Mag; }
+            else if (Weapon != null) { rv += Weapon.Mag; }
+            if (TempArmor != null) { rv += TempArmor.Mag; }
+            else if (Armor != null) { rv += Armor.Mag; }
+
+            return rv;
+        }
+        public int GetGearRes()
+        {
+            int rv = 0;
+
+            if (TempWeapon != null) { rv += TempWeapon.Res; }
+            else if (Weapon != null) { rv += Weapon.Res; }
+            if (TempArmor != null) { rv += TempArmor.Res; }
+            else if (Armor != null) { rv += Armor.Res; }
+
+            return rv;
+        }
+        public int GetGearSpd()
+        {
+            int rv = 0;
+
+            if (TempWeapon != null) { rv += TempWeapon.Spd; }
+            else if (Weapon != null) { rv += Weapon.Spd; }
+            if (TempArmor != null) { rv += TempArmor.Spd; }
+            else if (Armor != null) { rv += Armor.Spd; }
+
+            return rv;
+        }
 
         #endregion
         public CombatAdventurer(WorldAdventurer w) : this()

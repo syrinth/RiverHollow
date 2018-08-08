@@ -11,11 +11,13 @@ using System.Collections.Generic;
 using System;
 using static RiverHollow.WorldObjects.Clothes;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.WorldObjects.Item;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
     public class GUIItemBox : GUIImage
     {
+        static Rectangle RECT_IMG = new Rectangle(288, 32, 32, 32);
         private Item _item;
         public Item Item => _item;
         protected bool _hover;
@@ -32,11 +34,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         int _iRow;
         public int Row => _iRow;
 
-        public EquipmentEnum EquipType;
-        public ClothesEnum ClothesType;
-
-        public delegate bool ItemSwap(GUIItemBox b);
-        private ItemSwap _delItemSwap;
+        public GUIItemBox(Item it = null) : base(Vector2.Zero, RECT_IMG, 32, 32, @"Textures\Dialog")
+        {
+            _item = it;
+        }
 
         public GUIItemBox(Vector2 position, Rectangle sourceRect, int width, int height, int row, int col, string texture, Item item, bool crafting = false) : base(position, sourceRect, width, height, texture)
         {
@@ -51,18 +52,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         {
         }
 
-        public GUIItemBox(Rectangle sourceRect, int width, int height, string texture, Item item, ItemSwap itemSwap, EquipmentEnum e) : this(Vector2.Zero, sourceRect, width, height, 0, 0, texture, item)
-        {
-            EquipType = e;
-            _delItemSwap = itemSwap;
-        }
-
-        public GUIItemBox(Rectangle sourceRect, int width, int height, string texture, Item item, ItemSwap itemSwap, ClothesEnum c) : this(Vector2.Zero, sourceRect, width, height, 0, 0, texture, item)
-        {
-            ClothesType = c;
-            _delItemSwap = itemSwap;
-        }
-
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
@@ -70,10 +59,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             {
                 _item.Draw(spriteBatch, _drawRect, false);
                 if (_textNum != null) { _textNum.Draw(spriteBatch); }
-            }
-            if (_hover)
-            {
-                if (_textWindow != null) { _textWindow.Draw(spriteBatch); }
+
+                if (_hover)
+                {
+                    if (_textWindow != null) { _textWindow.Draw(spriteBatch); }
+                }
             }
         }
 
@@ -88,17 +78,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             }
 
             return _hover;
-        }
-
-        public override bool ProcessLeftButtonClick(Point mouse)
-        {
-            bool rv = false;
-            if (Contains(mouse))
-            {
-                rv = _delItemSwap(this);
-            }
-
-            return rv;
         }
 
         public bool ProcessHover(Point mouse)
@@ -156,6 +135,54 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 {
                     _liItemReqs.Add(new GUIItemReq(kvp.Key, kvp.Value));
                 }
+            }
+        }
+
+        public class SpecializedBox : GUIItemBox
+        {
+            ItemEnum _itemType;
+            ArmorEnum _armorType;
+            ClothesEnum _clothesType;
+            WeaponEnum _weaponType;
+
+            #region Getters
+            public ItemEnum ItemType => _itemType;
+            public ArmorEnum ArmorType => _armorType;
+            public ClothesEnum ClothingType => _clothesType;
+            public WeaponEnum WeaponType => _weaponType;
+            #endregion
+
+            public delegate void OpenItemWindow(SpecializedBox itemBox);
+            private OpenItemWindow _delOpenItemWindow;
+
+            public SpecializedBox(ItemEnum itemType, Item item = null, OpenItemWindow del = null) : base()
+            {
+                _item = item;
+                _itemType = itemType;
+                _delOpenItemWindow = del;
+            }
+            public SpecializedBox(ArmorEnum armorType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Equipment, item, del)
+            {
+                _armorType = armorType;
+            }
+            public SpecializedBox(ClothesEnum clothesType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Clothes, item, del)
+            {
+                _clothesType = clothesType;
+            }
+            public SpecializedBox(WeaponEnum weaponType, Item item = null, OpenItemWindow del = null) : this(ItemEnum.Equipment, item, del)
+            {
+                _weaponType = weaponType;
+            }
+
+            public override bool ProcessLeftButtonClick(Point mouse)
+            {
+                bool rv = false;
+
+                if (Contains(mouse))
+                {
+                    _delOpenItemWindow(this);
+                }
+                return rv;
             }
         }
     }

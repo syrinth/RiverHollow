@@ -14,27 +14,20 @@ namespace RiverHollow.Game_Managers.GUIObjects
     {
         private Inventory _inventory;
         private Inventory _container;
-        private CharacterBox _character;
         private SpriteFont _font;
-        private int _iCharacterIndex;
 
         public InventoryScreen()
         {
-            _iCharacterIndex = 0;
-            _character = new CharacterBox(PlayerManager.GetParty()[_iCharacterIndex], new Vector2(128, 32));
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _inventory = new Inventory(4, InventoryManager.maxItemColumns, 32);
             Controls.Add(_inventory);
-            Controls.Add(_character);
         }
 
-        public InventoryScreen(CharacterBox c)
+        public InventoryScreen(CharacterDetailWindow c)
         {
-            _character = c;
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _inventory = new Inventory(4, InventoryManager.maxItemColumns, 32);
             Controls.Add(_inventory);
-            Controls.Add(_character);
             InventoryManager.PublicContainer = null;
         }
 
@@ -97,17 +90,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _container.ProcessLeftButtonClick(mouse, _container == null);
                 rv = true;
             }
-            else if (_character != null && _character.Contains(mouse))
-            {
-                rv = _character.ProcessLeftButtonClick(mouse);
-                if (!rv)
-                {
-                    if (_iCharacterIndex < PlayerManager.GetParty().Count - 1) { _iCharacterIndex++; }
-                    else { _iCharacterIndex = 0; }
-                    _character.AssignNewCharacter(PlayerManager.GetParty()[_iCharacterIndex]);
-                    rv = true;
-                }
-            }
 
             return rv;
         }
@@ -120,11 +102,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 rv = _inventory.ProcessRightButtonClick(mouse);
                 if (rv)
                 {
-                    if (_character != null)
-                    {
-                        _character.EquipItem(GraphicCursor.HeldItem);
-                    }
-
                     if (GraphicCursor.HeldItem != null && _container != null)
                     {
                         //InventoryManager.AddNewItemToFirstAvailableInventorySpot(GraphicCursor.HeldItem.ItemID);
@@ -140,13 +117,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 GameManager.GoToWorldMap();
             }
-            else if (_character != null && _character.Contains(mouse))
-            {
-                if (_iCharacterIndex > 0) { _iCharacterIndex--; }
-                else { _iCharacterIndex = PlayerManager.GetParty().Count - 1; }
-                _character.AssignNewCharacter(PlayerManager.GetParty()[_iCharacterIndex]);
-                rv = true;
-            }
+            
             return rv;
         }
 
@@ -155,13 +126,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             bool rv = true;
             if (!_inventory.ProcessHover(mouse))
             {
-                if (_character != null && !_character.ProcessHover(mouse))
-                {
-                    if (_container != null && !_container.ProcessHover(mouse))
-                    {
-                        rv = false;
-                    }
-                }
+                rv = false;
             }
             return rv;
         }

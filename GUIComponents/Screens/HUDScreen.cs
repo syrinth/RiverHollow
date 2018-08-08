@@ -24,7 +24,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gMoney = new GUIMoneyDisplay();
             _gMoney.AnchorAndAlignToObject(_staminaDisplay, SideEnum.Bottom, SideEnum.Left);
 
-            _gCurrentItem = new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), 64, 64, 0, 0, @"Textures\Dialog", null);
+            _gCurrentItem = new GUIItemBox();
+            _gCurrentItem.SetScale(2);
             _gCurrentItem.AnchorToScreen(SideEnum.BottomRight, 20);
         }
 

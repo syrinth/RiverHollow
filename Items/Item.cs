@@ -389,7 +389,6 @@ namespace RiverHollow.WorldObjects
                 {
                     _spd = GameContentManager.GetItemTierData(_iTier, tagType[1]);
                 }
-                
             }
 
             _texture = GameContentManager.GetTexture(@"Textures\weapons");

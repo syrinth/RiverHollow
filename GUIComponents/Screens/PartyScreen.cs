@@ -12,6 +12,10 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Characters.NPCs;
 using RiverHollow.Characters;
 using static RiverHollow.Game_Managers.GUIObjects.PartyScreen.NPCDisplayBox;
+using static RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIItemBox;
+using System.Collections.Generic;
+using static RiverHollow.WorldObjects.Item;
+using System;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -20,7 +24,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public static int WIDTH = RiverHollow.ScreenWidth / 3;
         public static int HEIGHT = RiverHollow.ScreenHeight / 3;
 
-        CharacterBox _charBox;
+        CharacterDetailWindow _charBox;
         NPCDisplayBox _selectedBox;
         GUIButton _btnMap;
         PositionMap _map;
@@ -29,11 +33,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public PartyScreen()
         {
-            _charBox = new CharacterBox(PlayerManager.Combat);
+            _btnMap = new GUIButton("Map", SwitchModes);
+            AddControl(_btnMap);
+
+            _charBox = new CharacterDetailWindow(PlayerManager.Combat, SyncCharacter);
             _charBox.CenterOnScreen();
             AddControl(_charBox);
 
-            _btnMap = new GUIButton("Map", SwitchModes);
             _btnMap.AnchorAndAlignToObject(_charBox, SideEnum.Right, SideEnum.Bottom);
 
             int partySize = PlayerManager.GetParty().Count;
@@ -92,7 +98,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override bool ProcessRightButtonClick(Point mouse)
         {
-            bool rv = true;
+            bool rv = false;
+            if(_charBox != null)
+            {
+                rv = _charBox.ProcessRightButtonClick(mouse);
+            }
             return rv;
         }
 
@@ -161,10 +171,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 RemoveControl(_map);
                 _map = null;
-                _charBox = new CharacterBox(_selectedBox.Character);
+                _charBox = new CharacterDetailWindow(_selectedBox.Character);
                 _charBox.AnchorAndAlignToObject(_arrDisplayBoxes[0], SideEnum.Bottom, SideEnum.Left);
                 AddControl(_charBox);
             }
+        }
+
+        public void SyncCharacter()
+        {
+            ((PlayerDisplayBox)_arrDisplayBoxes[0]).Configure();
+            ((PlayerDisplayBox)_arrDisplayBoxes[0]).PositionSprites();
         }
 
         private class PositionMap : GUIWindow
@@ -313,7 +329,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-
         public class NPCDisplayBox : GUIWindow
         {
             public delegate void ClickDelegate(CombatAdventurer selectedCharacter);
@@ -326,6 +341,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 _winData = GUIWindow.GreyWin;
                 _delAction = action;
+            }
+
+            public virtual void PlayAnimation(string animation)
+            {
+
             }
 
             public class CharacterDisplayBox : NPCDisplayBox
@@ -356,6 +376,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     Height = _sprite.Height + (_winData.Edge * 2);
                     _sprite.CenterOnWindow(this);
                     _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
+
+                    PlayAnimation("IdleDown");
                 }
 
                 public override void Update(GameTime gameTime)
@@ -379,7 +401,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     }
                 }
 
-                public void PlayAnimation(string animation)
+                public override void PlayAnimation(string animation)
                 {
                     _sprite.PlayAnimation(animation);
                 }
@@ -442,14 +464,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     return rv;
                 }
 
-                private void Configure()
+                public void Configure()
                 {
+                    Controls.Clear();
                     _bodySprite = new GUISprite(PlayerManager.World.BodySprite);
                     _eyeSprite = new GUISprite(PlayerManager.World.EyeSprite);
                     _hairSprite = new GUISprite(PlayerManager.World.HairSprite);
                     _armSprite = new GUISprite(PlayerManager.World.ArmSprite);
                     if (PlayerManager.World.Hat != null) { _hatSprite = new GUISprite(PlayerManager.World.Hat.Sprite); }
+                    else { _hatSprite = null; }
                     if (PlayerManager.World.Chest != null) { _shirtSprite = new GUISprite(PlayerManager.World.Chest.Sprite); }
+                    else { _shirtSprite = null; }
 
                     _bodySprite.SetScale((int)GameManager.Scale);
                     _eyeSprite.SetScale((int)GameManager.Scale);
@@ -467,12 +492,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     PositionSprites();
                 }
 
-                public void PlayAnimation(string animation)
+                public override void PlayAnimation(string animation)
                 {
                     _bodySprite.PlayAnimation(animation);
                     _eyeSprite.PlayAnimation(animation);
                     _hairSprite.PlayAnimation(animation);
                     _armSprite.PlayAnimation(animation);
+                    if (_hatSprite != null) { _hatSprite.PlayAnimation(animation); }
+                    if (_shirtSprite != null) { _shirtSprite.PlayAnimation(animation); }
                 }
 
                 public void PositionSprites()
@@ -505,74 +532,74 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
     }
 
-    public class CharacterBox : GUIObject
+    public class CharacterDetailWindow : GUIWindow
     {
-        GUIWindow _window;
+        EquipWindow _equipWindow;
+
         CombatAdventurer _character;
         SpriteFont _font;
-        Vector2 _size;
 
-        GUIItemBox _chestBox;
-        GUIItemBox _hatBox;
-        GUIItemBox _weaponBox;
-        GUIItemBox _armorBox;
+        List<SpecializedBox> _liGearBoxes;
+
+        SpecializedBox _chestBox;
+        SpecializedBox _hatBox;
+        SpecializedBox _weaponBox;
+        SpecializedBox _armorBox;
 
         GUIText _gName, _gClass, _gXP, _gMagic, _gDef, _gDmg, _gHP, _gSpd;
-        GUIButton _btnPosition;
 
-        //GUIButton _remove;
+        public delegate void SyncCharacter();
+        private SyncCharacter _delSyncCharacter;
 
-        public CharacterBox(CombatAdventurer c, Vector2 position)
+        public CharacterDetailWindow(CombatAdventurer c, SyncCharacter del = null) : base(Vector2.Zero, GUIWindow.RedWin, (QuestScreen.WIDTH) - (GUIWindow.RedWin.Edge * 2), (QuestScreen.HEIGHT / 4) - (GUIWindow.RedWin.Edge * 2))
         {
-            _character = c;
-            _font = GameContentManager.GetFont(@"Fonts\Font");
-            _window = new GUIWindow(position, GUIWindow.RedWin, RiverHollow.ScreenWidth - 100, 100);
-
-            Load();
-        }
-
-        public CharacterBox(CombatAdventurer c)
-        {
+            _delSyncCharacter = del;
             _character = c;
             _font = GameContentManager.GetFont(@"Fonts\Font");
             int boxHeight = (QuestScreen.HEIGHT / 4) - (GUIWindow.RedWin.Edge * 2);
             int boxWidth = (QuestScreen.WIDTH) - (GUIWindow.RedWin.Edge * 2);
-            _window = new GUIWindow(Vector2.Zero, GUIWindow.RedWin, boxWidth, boxHeight);
 
+            _liGearBoxes = new List<SpecializedBox>();
             Load();
         }
 
         private void Load()
         {
-            _window.Controls.Clear();
-            Width = _window.Width;
-            Height = _window.Height;
+            Controls.Clear();
+            _liGearBoxes.Clear();
 
             string nameLen = "";
             for (int i = 0; i < GameManager.MAX_NAME_LEN; i++) { nameLen += "X"; }
 
             _gName = new GUIText(nameLen);
-            _gName.AnchorToInnerSide(_window, SideEnum.TopLeft);
+            _gName.AnchorToInnerSide(this, SideEnum.TopLeft);
             _gClass = new GUIText("XXXXXXXX");
             _gClass.AnchorAndAlignToObject(_gName, SideEnum.Right, SideEnum.Bottom, 10);
 
-            _gXP = new GUIText(@"9999/9999");//new GUIText(_character.XP + @"/" + CombatAdventurer.LevelRange[_character.ClassLevel]);
+            _gXP = new GUIText(@"9999/9999");
             _gXP.AnchorAndAlignToObject(_gClass, SideEnum.Right, SideEnum.Top, 10);
 
-            _weaponBox = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Weapon, EquipmentSwap, EquipmentEnum.Weapon);
-            _armorBox = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Armor, EquipmentSwap, EquipmentEnum.Armor);
+            _weaponBox = new SpecializedBox(_character.CharacterClass.WeaponType, _character.Weapon, FindMatchingItems);
+            _armorBox = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Armor, FindMatchingItems);
 
             _weaponBox.AnchorAndAlignToObject(_gXP, SideEnum.Right, SideEnum.Top, 10);
             _armorBox.AnchorAndAlignToObject(_weaponBox, SideEnum.Right, SideEnum.Bottom, 10);
 
+            _liGearBoxes.Add(_weaponBox);
+            _liGearBoxes.Add(_armorBox);
+
             if (_character == PlayerManager.Combat)
             {
-                _hatBox = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", PlayerManager.World.Hat, ClothesSwap, ClothesEnum.Hat);
-                _chestBox = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", PlayerManager.World.Chest, ClothesSwap, ClothesEnum.Chest);
+                _hatBox = new SpecializedBox(ClothesEnum.Hat, PlayerManager.World.Hat, FindMatchingItems);
+                _chestBox = new SpecializedBox(ClothesEnum.Chest, PlayerManager.World.Chest, FindMatchingItems);
 
                 _hatBox.AnchorAndAlignToObject(_armorBox, SideEnum.Right, SideEnum.Bottom, 30);
                 _chestBox.AnchorAndAlignToObject(_hatBox, SideEnum.Right, SideEnum.Bottom, 10);
+
+                _liGearBoxes.Add(_hatBox);
+                _liGearBoxes.Add(_chestBox);
             }
+
 
             int statSpacing = 10;
             _gMagic = new GUIText("Mag: 999");
@@ -580,7 +607,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gDmg = new GUIText("Dmg: 999");
             _gHP = new GUIText("HP: 999");
             _gSpd = new GUIText("Spd: 999");
-            _gMagic.AnchorToInnerSide(_window, SideEnum.BottomLeft);
+            _gMagic.AnchorToInnerSide(this, SideEnum.BottomLeft);
             _gDef.AnchorAndAlignToObject(_gMagic, SideEnum.Right, SideEnum.Bottom, statSpacing);
             _gDmg.AnchorAndAlignToObject(_gDef, SideEnum.Right, SideEnum.Bottom, statSpacing);
             _gHP.AnchorAndAlignToObject(_gDmg, SideEnum.Right, SideEnum.Bottom, statSpacing);
@@ -589,6 +616,25 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gName.SetText(_character.Name);
             _gClass.SetText(_character.CharacterClass.Name);
             _gXP.SetText(_character.XP + @"/" + CombatAdventurer.LevelRange[_character.ClassLevel]);
+
+            DisplayStatText();
+
+            _equipWindow = new EquipWindow();
+            AddControl(_equipWindow);
+        }
+
+        public void DisplayStatText(Equipment tempGear = null)
+        {
+            if (tempGear != null)
+            {
+                if (tempGear.WeaponType != WeaponEnum.None) { _character.TempWeapon = tempGear; }
+                else if (tempGear.ArmorType != ArmorEnum.None) { _character.TempArmor = tempGear; }
+            }
+            else
+            {
+                _character.TempWeapon = null;
+                _character.TempArmor = null;
+            }
 
             _gDmg.SetText("Dmg: " + _character.StatStr);
             _gDef.SetText("Def: " + _character.StatDef);
@@ -601,17 +647,21 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             if (_character != null)
             {
-                _window.Draw(spriteBatch);
+                base.Draw(spriteBatch);
 
                 _weaponBox.DrawDescription(spriteBatch);
                 _armorBox.DrawDescription(spriteBatch);
+
+                if (_equipWindow.HasEntries())
+                {
+                    _equipWindow.Draw(spriteBatch);
+                }
             }
         }
 
         public override void Position(Vector2 value)
         {
             base.Position(value);
-            _window.Position(value);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -619,39 +669,86 @@ namespace RiverHollow.Game_Managers.GUIObjects
             bool rv = false;
             if (_character != null)
             {
-                foreach(GUIObject c in _window.Controls)
+                if (_equipWindow.HasEntries() && _equipWindow.ProcessLeftButtonClick(mouse))
                 {
-                    rv = c.ProcessLeftButtonClick(mouse);
-                    if (rv) { break; }
-                }
+                    Item olditem = _equipWindow.Box.Item;
 
-                //if (_remove != null && _remove.Contains(mouse))
-                //{
-                //    PlayerManager.RemoveFromParty(_character);
-                //    _character.World.DrawIt = true;
-                //    _character = null;
-                //    rv = true;
-                //}
+                    _equipWindow.Box.SetItem(_equipWindow.SelectedItem);
+                    if (_equipWindow.Box.ItemType.Equals(ItemEnum.Equipment))
+                    {
+                        AssignEquipment((Equipment)_equipWindow.SelectedItem);
+                    }
+                    else if (_equipWindow.Box.ItemType.Equals(ItemEnum.Clothes))
+                    {
+                        PlayerManager.World.SetClothes((Clothes)_equipWindow.SelectedItem);
+                        _delSyncCharacter();
+                    }
+
+                    InventoryManager.RemoveItemFromInventory(_equipWindow.SelectedItem);
+                    if (olditem != null) { InventoryManager.AddItemToInventory(olditem); }
+
+                    _equipWindow.Clear();
+                }
+                else
+                {
+                    foreach (GUIObject c in Controls)
+                    {
+                        rv = c.ProcessLeftButtonClick(mouse);
+                        if (rv) { break; }
+                    }
+                }
             }
+            return rv;
+        }
+
+        public override bool ProcessRightButtonClick(Point mouse)
+        {
+            bool rv = false;
+
+            if (_equipWindow.HasEntries()) {
+                _equipWindow.Clear();
+            }
+            else
+            {
+                foreach(SpecializedBox box in _liGearBoxes)
+                {
+                    if (box.Contains(mouse))
+                    {
+                        if (!box.WeaponType.Equals(WeaponEnum.None)) { _character.Weapon = null; }
+                        else if (!box.ArmorType.Equals(ArmorEnum.None)) { _character.Armor = null; }
+                        else if (!box.ClothingType.Equals(ClothesEnum.None))
+                        {
+                            PlayerManager.World.RemoveClothes((Clothes)box.Item);
+                            _delSyncCharacter();
+                        }
+
+                        InventoryManager.AddItemToInventory(box.Item);
+                        box.SetItem(null);
+                        rv = true;
+                    }
+                }
+            }
+
             return rv;
         }
 
         public bool ProcessHover(Point mouse)
         {
             bool rv = false;
-            if (_weaponBox.ProcessHover(mouse))
-            {
-                rv = true;
+            if (_equipWindow.HasEntries()) {
+                rv = _equipWindow.ProcessHover(mouse);
             }
-            if (_armorBox.ProcessHover(mouse))
+            else
             {
-                rv = true;
+                foreach(SpecializedBox box in _liGearBoxes)
+                {
+                    if (box.ProcessHover(mouse))
+                    {
+                        rv = true;
+                    }
+                }
             }
             return rv;
-        }
-        public override bool Contains(Point mouse)
-        {
-            return _window.Contains(mouse);
         }
 
         public void SetAdventurer(CombatAdventurer c)
@@ -660,151 +757,134 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Load();
         }
 
-        //MAR
-        private bool EquipmentSwap(GUIItemBox box)
+        private void FindMatchingItems(SpecializedBox boxMatch)
         {
-            bool rv = false;
-            if (GraphicCursor.HeldItem != null)
+            List<Item> liItems = new List<Item>();
+            foreach (Item i in InventoryManager.PlayerInventory)
             {
-                if (GraphicCursor.HeldItem.IsEquipment()) {
-                    Equipment equip = (Equipment)GraphicCursor.HeldItem;
-                    if (CheckValid(equip, box)) {
-                        if (box.Item != null)
-                        {
-                            Equipment temp = (Equipment)GraphicCursor.HeldItem;
-                            GraphicCursor.GrabItem(box.Item);
-                            box.SetItem(temp);
-                            AssignEquipment(box, temp);
-                            rv = true;
-                        }
-                        else
-                        {
-                            box.SetItem(GraphicCursor.HeldItem);
-                            AssignEquipment(box, (Equipment)GraphicCursor.HeldItem);
-                            GraphicCursor.DropItem();
-                            rv = true;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                rv = GraphicCursor.GrabItem(box.Item);
-                box.SetItem(null);
-                AssignEquipment(box, null);
-            }
-
-            return rv;
-        }
-        private bool ClothesSwap(GUIItemBox box)
-        {
-            bool rv = false;
-            if (GraphicCursor.HeldItem != null)
-            {
-                if (GraphicCursor.HeldItem.IsClothes())
+                if (i != null && i.ItemType.Equals(boxMatch.ItemType))
                 {
-                    Clothes theClothes = (Clothes)GraphicCursor.HeldItem;
-                    if (theClothes.ClothesType == box.ClothesType)
+                    if (boxMatch.ItemType.Equals(ItemEnum.Equipment) && i.IsEquipment())
                     {
-                        if (box.Item != null)
+                        if (boxMatch.ArmorType != ArmorEnum.None && ((Equipment)i).ArmorType == boxMatch.ArmorType)
                         {
-                            Clothes temp = (Clothes)GraphicCursor.HeldItem;
-                            GraphicCursor.GrabItem(box.Item);
-                            box.SetItem(temp);
-                            PlayerManager.World.SetClothes(temp);
+                            liItems.Add(i);
                         }
-                        else
+                        if (boxMatch.WeaponType != WeaponEnum.None && ((Equipment)i).WeaponType == boxMatch.WeaponType)
                         {
-                            box.SetItem(GraphicCursor.HeldItem);
-                            PlayerManager.World.SetClothes((Clothes)GraphicCursor.HeldItem);
-                            GraphicCursor.DropItem();
+                            liItems.Add(i);
                         }
-                        rv = true;
+                    }
+                    else if (boxMatch.ItemType.Equals(ItemEnum.Clothes) && i.IsClothes())
+                    {
+                        if (boxMatch.ClothingType != ClothesEnum.None && ((Clothes)i).ClothesType == boxMatch.ClothingType)
+                        {
+                            liItems.Add(i);
+                        }
                     }
                 }
             }
-            else
+
+            _equipWindow.Load(boxMatch, liItems, DisplayStatText);
+            _equipWindow.AnchorAndAlignToObject(boxMatch, SideEnum.Right, SideEnum.CenterY);
+        }
+
+        private void AssignEquipment(Equipment item)
+        {
+            if (item.WeaponType != WeaponEnum.None) { _character.Weapon = item; }
+            else if (item.ArmorType != ArmorEnum.None) { _character.Armor = item; }
+        }
+    }
+
+    public class EquipWindow : GUIWindow
+    {
+        List<GUIItemBox> _gItemBoxes;
+        Item _selectedItem;
+        public Item SelectedItem => _selectedItem;
+
+        ItemEnum _itemType;
+
+        SpecializedBox _box;
+        public SpecializedBox Box => _box;
+
+        public delegate void DisplayEQ(Equipment test);
+        private DisplayEQ _delDisplayEQ;
+
+        public EquipWindow() : base(BrownWin, 20, 20)
+        {
+            _gItemBoxes = new List<GUIItemBox>();
+        }
+
+        public void Load(SpecializedBox box, List<Item> items, DisplayEQ del)
+        {
+            _itemType = box.ItemType;
+            _delDisplayEQ = del;
+            _gItemBoxes = new List<GUIItemBox>();
+            Controls.Clear();
+            Width = 20;
+            Height = 20;
+            _box = box;
+
+            for (int i = 0; i < items.Count; i++)
             {
-                rv = GraphicCursor.GrabItem(box.Item);
-                box.SetItem(null);
-                PlayerManager.World.RemoveClothes((Clothes)GraphicCursor.HeldItem);
+                GUIItemBox newBox = new GUIItemBox(items[i]);
+
+                if (i == 0) { newBox.AnchorToInnerSide(this, SideEnum.TopLeft); }
+                else { newBox.AnchorAndAlignToObject(_gItemBoxes[i - 1], SideEnum.Right, SideEnum.Bottom); }
+
+                _gItemBoxes.Add(newBox);
             }
 
-            return rv;
+            Resize();
         }
 
-        private void AssignEquipment(GUIItemBox box, Equipment item)
-        {
-            if (box.EquipType == EquipmentEnum.Weapon) { _character.Weapon = item; }
-            else if (box.EquipType == EquipmentEnum.Armor) { _character.Armor = item; }
-        }
-
-        private bool CheckValid(Equipment equip, GUIItemBox box)
+        public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (equip.EquipType == box.EquipType)
+            foreach(GUIItemBox g in _gItemBoxes)
             {
-                if (box.EquipType == EquipmentEnum.Armor)
+                if (g.Contains(mouse))
                 {
-                    rv = equip.ArmorType == _character.CharacterClass.ArmorType;
-                }
-                else if (box.EquipType == EquipmentEnum.Weapon)
-                {
-                    rv = equip.WeaponType == _character.CharacterClass.WeaponType;
+                    _selectedItem = g.Item;
+                    rv = true;
+                    break;
                 }
             }
-
             return rv;
         }
-
-        public bool EquipItem(Item i)
+        public bool ProcessHover(Point mouse)
         {
             bool rv = false;
-            GUIItemBox gBox = null;
 
-            if (i.IsEquipment())
+            Equipment temp = null;
+            foreach (GUIItemBox box in _gItemBoxes)
             {
-                Equipment equip = (Equipment)i;
-                switch (equip.EquipType) {
-                    case EquipmentEnum.Armor:
-                        gBox = _armorBox;
-                        break;
-
-                    case EquipmentEnum.Weapon:
-                        gBox = _weaponBox;
-                        break;
-                }
-
-                if (gBox != null) {
-                    rv = EquipmentSwap(gBox);
+                rv = box.ProcessHover(mouse);
+                if (rv && _itemType.Equals(ItemEnum.Equipment))
+                {
+                    temp = (Equipment)box.Item;
                 }
             }
-            else if (i.IsClothes())
+
+            if (_itemType.Equals(ItemEnum.Equipment))
             {
-                Clothes equip = (Clothes)i;
-                switch (equip.ClothesType)
-                {
-                    case ClothesEnum.Hat:
-                        gBox = _hatBox;
-                        break;
-
-                    case ClothesEnum.Chest:
-                        gBox = _chestBox;
-                        break;
-                }
-
-                if (gBox != null) {
-                    rv = ClothesSwap(gBox);
-                }
+                _delDisplayEQ(temp);
             }
 
             return rv;
         }
 
-        public void AssignNewCharacter(CombatAdventurer c)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            _character = c;
-            Load();
+            if (HasEntries()) {
+                base.Draw(spriteBatch);
+            }
+        }
+        public bool HasEntries() { return _gItemBoxes.Count > 0; }
+
+        public void Clear() {
+            Controls.Clear();
+            _gItemBoxes.Clear();
         }
     }
 }

@@ -34,6 +34,10 @@
       <Key>10</Key>
       <Value>Magic Robes/Robes of a powerful mage</Value>
     </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>Maple Staff/Staff of staffiness</Value>
+    </Item>
     <!--<20-24> Tools-->
     <Item>
       <Key>20</Key>

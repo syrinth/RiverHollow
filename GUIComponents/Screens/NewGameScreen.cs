@@ -305,6 +305,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             public void PositionSprites()
             {
+                this.Controls.Clear();
                 if (_bodySprite != null)
                 {
                     _bodySprite.CenterOnWindow(this);

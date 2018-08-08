@@ -39,6 +39,10 @@
       <Key>10</Key>
       <Value>[Type:Equipment][Image:1-0][Sell:1000][EType:Armor][ESub:Cloth][Tier:10][Mag:Major][Vit:Minor][Res:Moderate]</Value>
     </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>[Type:Equipment][Image:2-0][Sell:1000][EType:Weapon][ESub:Staff][Tier:1][Atk:Minor][Str:Minor][Def:Minor]</Value>
+    </Item>
     <!--<20-24> Tools-->
     <Item>
       <Key>20</Key>
