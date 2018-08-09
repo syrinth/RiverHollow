@@ -11,9 +11,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         AnimatedSprite _sprite;
         public AnimatedSprite Sprite => _sprite;
 
-        public GUISprite(AnimatedSprite sprite)
+        public GUISprite(AnimatedSprite sprite, bool overwrite = false)
         {
-            _sprite = new AnimatedSprite(sprite);
+            _sprite = overwrite ? new AnimatedSprite(sprite) : sprite;
             Width = sprite.Width;
             Height = sprite.Height;
         }

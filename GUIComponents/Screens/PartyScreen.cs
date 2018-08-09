@@ -200,14 +200,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 int maxCols = 4;
                 int maxRows = 3;
 
-                int size = this.MidWidth() / 4;
-
                 _liStartPositions = new StartPosition[maxCols, maxRows];
                 for (int cols = 0; cols < maxCols; cols++)
                 {
                     for (int rows = 0; rows < maxRows; rows++)
                     {
-                        StartPosition pos = new StartPosition(cols, rows, size);
+                        StartPosition pos = new StartPosition(cols, rows);
                         _liStartPositions[cols, rows] = pos;
                         if (cols == 0 && rows == 0)
                         {
@@ -232,11 +230,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             public void SetOccupancy(CombatAdventurer currentCharacter)
             {
+                _currentCharacter = currentCharacter;
                 foreach (CombatAdventurer c in PlayerManager.GetParty())
                 {
                     Vector2 vec = c.StartPos;
                     bool current = (c == currentCharacter);
-                    _liStartPositions[(int)vec.X, (int)vec.Y].SetCharacter(c, current);
+                    _liStartPositions[(int)vec.X, (int)vec.Y].SetCharacter(c);
                     if (current)
                     {
                         _currPosition = _liStartPositions[(int)vec.X, (int)vec.Y];
@@ -247,7 +246,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             public override bool ProcessLeftButtonClick(Point mouse)
             {
                 bool rv = false;
-                bool charChanged = false;
 
                 if (Contains(mouse))
                 {
@@ -263,32 +261,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             rv = true;
                             _currPosition.SetCharacter(null);
                             _currPosition = sp;
-                            _currPosition.SetCharacter(_currentCharacter, true);
+                            _currPosition.SetCharacter(_currentCharacter);
                             _currentCharacter.SetStartPosition(new Vector2(_currPosition.Col, _currPosition.Row));
                         }
                         else
                         {
                             _currentCharacter = sp.Character;
                             _delAction(_currentCharacter);
-                            charChanged = true;
                         }
 
                         break;
-                    }
-                }
-
-                if (charChanged)
-                {
-                    foreach (StartPosition sp in _liStartPositions)
-                    {
-                        if (sp.Occupied())
-                        {
-                            if (sp.Character == _currentCharacter)
-                            {
-                                sp.SetCurrent();
-                            }
-                            else { sp.SetOccupied(); }
-                        }
                     }
                 }
 
@@ -297,12 +279,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             private class StartPosition : GUIImage
             {
-                #region Const Rectangles
-                Rectangle RECT_OCCUPIED = new Rectangle(32, 80, 16, 16);
-                Rectangle RECT_EMPTY = new Rectangle(0, 80, 16, 16);
-                Rectangle RECT_CURRENT = new Rectangle(16, 80, 16, 16);
-                #endregion
-
                 CombatAdventurer _character;
                 public CombatAdventurer Character => _character;
                 int _iCol;
@@ -310,22 +286,59 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 public int Col => _iCol;
                 public int Row => _iRow;
 
-                public StartPosition(int col, int row, int size) : base(Vector2.Zero, new Rectangle(0, 80, 16, 16), size, size, @"Textures\Dialog")
+                private GUIHeadShot _headshot;
+
+                public StartPosition(int col, int row) : base(Vector2.Zero, new Rectangle(0, 80, 16, 16), TileSize,  TileSize, @"Textures\Dialog")
                 {
                     _iCol = col;
                     _iRow = row;
+
+                    SetScale(Scale);
                 }
 
-                public void SetCharacter(CombatAdventurer c, bool current = false)
+                public override void Draw(SpriteBatch spriteBatch)
+                {
+                    base.Draw(spriteBatch);
+                    if(_headshot != null)
+                    {
+                        _headshot.Draw(spriteBatch);
+                    }
+                }
+
+                public void SetCharacter(CombatAdventurer c)
                 {
                     _character = c;
-                    _sourceRect = (_character != null) ? (current ? RECT_CURRENT : RECT_OCCUPIED) : RECT_EMPTY;
+                    if (c != null)
+                    {
+                        if (c.EligibleNPC != null)
+                        {
+                            _headshot = c.EligibleNPC.GetHeadShot();
+                        }
+                        else if (c.WorldAdv != null)
+                        {
+                            _headshot = c.WorldAdv.GetHeadShot();
+                        }
+                        else
+                        {
+                            _headshot = PlayerManager.World.GetHeadShot();
+                        }
+                        _headshot.CenterOnObject(this);
+                    }
+                    else
+                    {
+                        _headshot = null;
+                    }
                 }
 
-                public void SetCurrent() { _sourceRect = RECT_CURRENT; }
-                public void SetOccupied() { _sourceRect = RECT_OCCUPIED; }
-
                 public bool Occupied() { return _character != null; }
+
+                public override void Position(Vector2 value)
+                {
+                    base.Position(value);
+                    if (_headshot != null) {
+                        _headshot.Position(value);
+                    }
+                }
             }
         }
 
@@ -356,14 +369,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 public CharacterDisplayBox(WorldAdventurer w, ClickDelegate del) : base(del)
                 {
                     _character = w.Combat;
-                    _sprite = new GUISprite(w.BodySprite);
+                    _sprite = new GUISprite(w.BodySprite, true);
                     Setup();
                 }
 
                 public CharacterDisplayBox(EligibleNPC n, ClickDelegate del) : base(del)
                 {
                     _character = n.Combat;
-                    _sprite = new GUISprite(n.BodySprite);
+                    _sprite = new GUISprite(n.BodySprite, true);
                     Setup();
                 }
 
@@ -467,13 +480,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 public void Configure()
                 {
                     Controls.Clear();
-                    _bodySprite = new GUISprite(PlayerManager.World.BodySprite);
-                    _eyeSprite = new GUISprite(PlayerManager.World.EyeSprite);
-                    _hairSprite = new GUISprite(PlayerManager.World.HairSprite);
-                    _armSprite = new GUISprite(PlayerManager.World.ArmSprite);
-                    if (PlayerManager.World.Hat != null) { _hatSprite = new GUISprite(PlayerManager.World.Hat.Sprite); }
+                    _bodySprite = new GUISprite(PlayerManager.World.BodySprite, true);
+                    _eyeSprite = new GUISprite(PlayerManager.World.EyeSprite, true);
+                    _hairSprite = new GUISprite(PlayerManager.World.HairSprite, true);
+                    _armSprite = new GUISprite(PlayerManager.World.ArmSprite, true);
+                    if (PlayerManager.World.Hat != null) { _hatSprite = new GUISprite(PlayerManager.World.Hat.Sprite, true); }
                     else { _hatSprite = null; }
-                    if (PlayerManager.World.Chest != null) { _shirtSprite = new GUISprite(PlayerManager.World.Chest.Sprite); }
+                    if (PlayerManager.World.Chest != null) { _shirtSprite = new GUISprite(PlayerManager.World.Chest.Sprite, true); }
                     else { _shirtSprite = null; }
 
                     _bodySprite.SetScale((int)GameManager.Scale);

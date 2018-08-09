@@ -6,6 +6,10 @@ using RiverHollow.SpriteAnimations;
 
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.WorldObjects;
+using RiverHollow.GUIObjects;
+using RiverHollow.Game_Managers.GUIObjects;
+using System.Collections.Generic;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Characters
 {
@@ -26,10 +30,12 @@ namespace RiverHollow.Characters
             set { _bodySprite.Position = new Vector2(value.X, value.Y - _bodySprite.Height + TileSize); }
         }
 
-        public Rectangle CollisionBox { get => new Rectangle((int)Position.X + (Width/4), (int)Position.Y, Width/2, TileSize); }
+        public Rectangle CollisionBox { get => new Rectangle((int)Position.X + (Width / 4), (int)Position.Y, Width / 2, TileSize); }
 
         protected bool _bActive = true;
         public bool Active => _bActive;
+
+        protected GUIImage _headshot;
 
         public int Speed = 2;
         #endregion
@@ -43,17 +49,23 @@ namespace RiverHollow.Characters
 
         public virtual void LoadContent(string textureToLoad)
         {
-            AddDefaultAnimations(ref _bodySprite, textureToLoad, 0, 0);
+            _sTexture = textureToLoad;
+            AddDefaultAnimations(ref _bodySprite, 0, 0);
 
             _width = _bodySprite.Width;
             _height = _bodySprite.Height;
         }
 
+        public void AddDefaultAnimations(ref AnimatedSprite sprite, int startX, int startY, bool pingpong = false)
+        {
+            AddDefaultAnimations(ref sprite, _sTexture, startX, startY, pingpong);
+        }
         public void AddDefaultAnimations(ref AnimatedSprite sprite, string texture, int startX, int startY, bool pingpong = false)
         {
             sprite = new AnimatedSprite(GameContentManager.GetTexture(texture), pingpong);
             sprite.AddAnimation("WalkDown", TileSize, TileSize * 2, 3, 0.2f, startX, startY);
             sprite.AddAnimation("IdleDown", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize, startY);
+            _headshot = new GUIImage(Vector2.Zero, new Rectangle(startX + TileSize, startY, TileSize, TileSize), TileSize, TileSize, texture);
             sprite.AddAnimation("WalkUp", TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 3, startY);
             sprite.AddAnimation("IdleUp", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 4, startY);
             sprite.AddAnimation("WalkLeft", TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 6, startY);
@@ -76,7 +88,7 @@ namespace RiverHollow.Characters
         public void SetWalkingDir(DirectionEnum d)
         {
             Facing = d;
-            if(d == DirectionEnum.Up) { _bodySprite.CurrentAnimation = "Walk North"; }
+            if (d == DirectionEnum.Up) { _bodySprite.CurrentAnimation = "Walk North"; }
             else if (d == DirectionEnum.Down) { _bodySprite.CurrentAnimation = "Walk South"; }
             else if (d == DirectionEnum.Right) { _bodySprite.CurrentAnimation = "Walk East"; }
             else if (d == DirectionEnum.Left) { _bodySprite.CurrentAnimation = "Walk West"; }
@@ -162,8 +174,13 @@ namespace RiverHollow.Characters
 
             return rv;
         }
-        
+
         public void SetMoveObj(Vector2 vec) { _vMoveTo = vec; }
+
+        public virtual GUIHeadShot GetHeadShot()
+        {
+            return new GUIHeadShot(_headshot);
+        }
     }
 
     public class PlayerCharacter : WorldCharacter
@@ -205,7 +222,7 @@ namespace RiverHollow.Characters
         Clothes Legs;
         Clothes Feet;
 
-        public PlayerCharacter() :base()
+        public PlayerCharacter() : base()
         {
             _width = TileSize;
             _height = TileSize;
@@ -222,7 +239,7 @@ namespace RiverHollow.Characters
             _spriteArms.Update(theGameTime);
             _spriteHair.Update(theGameTime);
 
-            if(_chest != null) { _chest.Sprite.Update(theGameTime); }
+            if (_chest != null) { _chest.Sprite.Update(theGameTime); }
             if (Hat != null) { Hat.Sprite.Update(theGameTime); }
         }
 
@@ -246,7 +263,7 @@ namespace RiverHollow.Characters
 
             AddDefaultAnimations(ref _spriteEyes, textureToLoad, 0, TileSize * 2, true);
             _spriteEyes.SetDepthMod(0.001f);
-            
+
             AddDefaultAnimations(ref _spriteArms, textureToLoad, 0, TileSize * 4, true);
             _spriteArms.SetDepthMod(0.002f);
             _spriteArms.SetColor(bodyColor);
@@ -356,6 +373,75 @@ namespace RiverHollow.Characters
             {
                 _spriteHair.FrameCutoff = 0;
                 _hat = null;
+            }
+        }
+
+        public override GUIHeadShot GetHeadShot()
+        {
+            return new GUIHeadShot(new GUICoin());
+        }
+    }
+
+    public class GUIHeadShot : GUIObject
+    {
+        GUIImage _hat;
+        GUIImage _hair;
+        GUIImage _eyes;
+        GUIImage _body;
+        GUIImage _shirt;
+
+        List<GUIImage> _liImages;
+
+        public GUIHeadShot(GUIImage body)
+        {
+            _body = body;
+            _body.SetScale(Scale);
+
+            _liImages = new List<GUIImage>();
+            _liImages.Add(_body);
+
+            Width = _body.Height;
+            Height = _body.Height;
+        }
+
+        public GUIHeadShot(GUIImage body, GUIImage eyes, GUIImage hair, GUIImage hat, GUIImage shirt)
+        {
+            _body = body;
+            Width = _body.Height;
+            Height = _body.Height;
+
+            _eyes = eyes;
+            _hair = hair;
+            _hat = hat;
+            _shirt = shirt;
+
+            _liImages = new List<GUIImage>();
+            _liImages.Add(_body);
+            if (_eyes != null) { _liImages.Add(_eyes); }
+            if (_hair != null) { _liImages.Add(_hair); }
+            if (_hat != null) { _liImages.Add(_hat);}
+            if (_shirt != null) { _liImages.Add(_shirt);}
+
+            foreach(GUIImage g in _liImages)
+            {
+                g.SetScale(Scale);
+            }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            foreach (GUIImage g in _liImages)
+            {
+                g.Draw(spriteBatch);
+            }
+        }
+
+        public override void Position(Vector2 value)
+        {
+            base.Position(value);
+            foreach(GUIImage g in _liImages)
+            {
+                g.Position(value);
             }
         }
     }

@@ -24,6 +24,8 @@ namespace RiverHollow.GUIObjects
         }
         internal static Vector2 CenterScreen = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
 
+        protected int _iScale = 1;
+
         int _iHeight;
         public int Height
         {

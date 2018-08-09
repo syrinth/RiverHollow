@@ -105,6 +105,13 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 g.ParentWindow = this;
             }
         }
+        public void RemoveControl(GUIObject control)
+        {
+            if (Controls.Contains(control))
+            {
+                Controls.Remove(control);
+            }
+        }
         #region Draw
         public int SkipSize() { return _winData.Size + _winData.Edge; }
         public void DrawWindow(SpriteBatch spriteBatch)

@@ -7,6 +7,7 @@ namespace RiverHollow.Characters
 {
     public class Character
     {
+        protected string _sTexture;
         public enum CharacterEnum { Character, CombatAdventurer, CombatCharacter, Mob, Monster, NPC, Spirit, WorldAdventurer, WorldCharacter};
         protected CharacterEnum _characterType = CharacterEnum.Character;
         public CharacterEnum CharacterType => _characterType;
@@ -40,7 +41,8 @@ namespace RiverHollow.Characters
 
         public virtual void LoadContent(string textureToLoad, int frameWidth, int frameHeight, int numFrames, float frameSpeed,int startX = 0, int startY = 0)
         {
-            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(textureToLoad));
+            _sTexture = textureToLoad;
+            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(_sTexture));
             _bodySprite.AddAnimation("Walk", frameWidth, frameHeight, numFrames, frameSpeed, startX, startY);
             _bodySprite.AddAnimation("Attack", frameWidth, frameHeight, numFrames, frameSpeed, startX, startY);
             _bodySprite.SetCurrentAnimation("Walk");

@@ -11,6 +11,7 @@ using static RiverHollow.Game_Managers.ObjectManager;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 using System;
+using RiverHollow.Game_Managers.GUIObjects;
 
 namespace RiverHollow.Characters.NPCs
 {
@@ -33,7 +34,6 @@ namespace RiverHollow.Characters.NPCs
         public bool DrawIt;
         public bool Adventuring;
         public int Mood { get => _iMood; }
-        protected string _sTexture;
 
         protected double _dProcessedTime;
         public double ProcessedTime => _dProcessedTime;
@@ -59,7 +59,7 @@ namespace RiverHollow.Characters.NPCs
             _portraitRect = new Rectangle(0, 105, 80, 96);
             _portrait = GameContentManager.GetTexture(_sTexture);
 
-            LoadContent(_sTexture);
+            LoadContent();
             _iCurrFood = 0;
             _heldItem = null;
             _iMood = 0;
@@ -67,12 +67,14 @@ namespace RiverHollow.Characters.NPCs
             Adventuring = false;
         }
 
-        public  new void LoadContent(string texture)
+        public new void LoadContent()
         {
-            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(texture), true);
+            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(_sTexture), true);
             _bodySprite.AddAnimation("Idle", TileSize, 0, TileSize, TileSize * 2, 1, 0.3f);
             _bodySprite.AddAnimation("WalkDown", 0, 0, TileSize, TileSize * 2, 3, 0.3f);
             _bodySprite.SetCurrentAnimation("Idle");
+
+            _headshot = new GUIImage(Vector2.Zero, new Rectangle(TileSize, 0, TileSize, TileSize), TileSize, TileSize, _sTexture);
         }
 
         protected void ImportBasics(string[] stringData, int id)

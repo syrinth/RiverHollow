@@ -355,19 +355,16 @@ namespace RiverHollow.Characters
 
         public void LoadContent()
         {
-            if (_index != 8)
-            {
-                _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\NPC1"));
-            }
-            else
-            {
-                _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\NPC8"));
-            }
+            if (_index != 8) { _sTexture = @"Textures\NPC1";    }
+            else { _sTexture = @"Textures\NPC8"; }
+
+            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\NPC1"));
 
             int startX = 0;
             int startY = 0;
             _bodySprite.AddAnimation("IdleDown", startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f);
             _bodySprite.AddAnimation("WalkDown", startX, startY, TileSize, TileSize * 2, 3, 0.2f);
+            _headshot = new GUIImage(Vector2.Zero, new Rectangle(startX + TileSize, startY, TileSize, TileSize), TileSize, TileSize, _sTexture);
 
             startX += TileSize * 3;
             _bodySprite.AddAnimation("IdleUp", startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f);

@@ -180,6 +180,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
                 if (Contains(mouse))
                 {
+                    _hover = false;
                     _delOpenItemWindow(this);
                 }
                 return rv;

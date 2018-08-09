@@ -201,7 +201,6 @@ namespace RiverHollow.SpriteAnimations
 
         public void SetScale(int x)
         {
-
             _width = _width / _iScale;
             _height = _height / _iScale;
 

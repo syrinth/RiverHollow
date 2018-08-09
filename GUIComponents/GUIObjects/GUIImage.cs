@@ -51,10 +51,19 @@ namespace RiverHollow.Game_Managers.GUIObjects
             spriteBatch.Draw(_texture, _drawRect, _sourceRect, Color.Black * alpha);
         }
 
-        public void SetScale(float scale)
+        public void SetScale(float x)
         {
-            Width = (int)(Width * scale);
-            Height = (int)(Height * scale);
+            SetScale((int)x);
+        }
+        public void SetScale(int x)
+        {
+            Width = Width / _iScale;
+            Height = Height / _iScale;
+
+            Width = Width * x;
+            Height = Height * x;
+
+            _iScale = x;
         }
 
         public void SetColor(Color c)
