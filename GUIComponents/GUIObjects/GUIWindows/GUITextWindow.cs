@@ -1,4 +1,4 @@
-﻿using RiverHollow.Characters;
+﻿using RiverHollow.Actors;
 using RiverHollow.Game_Managers.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -39,7 +39,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _iCharHeight = _giText.CharHeight;
         }
 
-        public GUITextWindow(NPC npc, string text) : this()
+        public GUITextWindow(TalkingActor npc, string text) : this()
         {
             GameManager.gmNPC = npc;
             ParseText(text, false);

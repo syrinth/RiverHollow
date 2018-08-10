@@ -6,8 +6,8 @@ using RiverHollow.Game_Managers.GUIObjects;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
-using RiverHollow.Characters.NPCs;
-using RiverHollow.Characters;
+using RiverHollow.Actors.NPCs;
+using RiverHollow.Actors;
 using RiverHollow.Misc;
 using RiverHollow.GUIComponents.GUIObjects;
 
@@ -37,7 +37,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             PostParse();
         }
 
-        public GUITextSelectionWindow(NPC talker, string selectionText) : this()
+        public GUITextSelectionWindow(TalkingActor talker, string selectionText) : this()
         {
             GameManager.gmNPC = talker;
             Position(new Vector2(Position().X, RiverHollow.ScreenHeight - Height - SpaceFromBottom));
@@ -202,12 +202,12 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                 }
                 else if (action.StartsWith("Donate"))
                 {
-                    GameManager.gmNPC.FriendshipPoints += 40;
+                    ((Villager)GameManager.gmNPC).FriendshipPoints += 40;
                     GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, nextText));
                 }
                 else if (action.StartsWith("NoDonate"))
                 {
-                    GameManager.gmNPC.FriendshipPoints -= 1000;
+                    ((Villager)GameManager.gmNPC).FriendshipPoints -= 1000;
                     GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, nextText));
                 }
                 else if (!string.IsNullOrEmpty(nextText))

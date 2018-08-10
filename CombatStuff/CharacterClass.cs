@@ -4,7 +4,7 @@ using RiverHollow.Misc;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 
-namespace RiverHollow.Characters.CombatStuff
+namespace RiverHollow.Actors.CombatStuff
 {
     public class CharacterClass
     {

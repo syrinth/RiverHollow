@@ -4,7 +4,7 @@ using RiverHollow.WorldObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using RiverHollow.Characters.NPCs;
+using RiverHollow.Actors.NPCs;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {

@@ -1,4 +1,4 @@
-﻿using RiverHollow.Characters;
+﻿using RiverHollow.Actors;
 using RiverHollow.GUIObjects;
 using RiverHollow.WorldObjects;
 using RiverHollow.Tile_Engine;
@@ -59,7 +59,7 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void ChangeMaps(WorldCharacter c, string currMap, string newMapStr)
+        public static void ChangeMaps(WorldActor c, string currMap, string newMapStr)
         {
             Rectangle rectEntrance = Rectangle.Empty;
             string[] splitString = newMapStr.Split(':');
@@ -107,7 +107,7 @@ namespace RiverHollow.Game_Managers
             else
             {
                 if (c.IsNPC() || c.IsWorldCharacter()){
-                    ((NPC)c).ClearTileForMapChange();
+                    ((Villager)c).ClearTileForMapChange();
                 }
                 _tileMaps[currMap].RemoveCharacter(c);
                 _tileMaps[newMapName].AddCharacter(c);
@@ -293,7 +293,7 @@ namespace RiverHollow.Game_Managers
             _currentMap.RemoveWorldObject(o);
         }
 
-        public static void RemoveCharacter(WorldCharacter c)
+        public static void RemoveCharacter(WorldActor c)
         {
             _currentMap.RemoveCharacter(c);
         }

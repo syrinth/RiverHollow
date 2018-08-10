@@ -1,5 +1,4 @@
-﻿using RiverHollow.Characters.NPCs;
-using RiverHollow.Game_Managers;
+﻿using RiverHollow.Game_Managers;
 using RiverHollow.WorldObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,6 +9,8 @@ using RiverHollow.Buildings;
 using static RiverHollow.WorldObjects.WorldItem;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.PlayerManager;
+using RiverHollow.Actors;
+
 namespace RiverHollow
 {
     public class WorkerBuilding : Building

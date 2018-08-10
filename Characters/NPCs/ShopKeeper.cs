@@ -8,9 +8,9 @@ using RiverHollow.Tile_Engine;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GUIObjects.ManagementScreen;
 
-namespace RiverHollow.Characters.NPCs
+namespace RiverHollow.Actors.NPCs
 {
-    public class ShopKeeper : NPC
+    public class ShopKeeper : Villager
     {
         protected List<Merchandise> _liMerchandise;
         public List<Merchandise> Buildings { get => _liMerchandise; }

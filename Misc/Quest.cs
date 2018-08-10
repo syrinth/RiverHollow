@@ -1,12 +1,12 @@
-﻿using RiverHollow.Characters;
-using RiverHollow.Characters.NPCs;
+﻿using RiverHollow.Actors;
+using RiverHollow.Actors.NPCs;
 using RiverHollow.Game_Managers;
 using RiverHollow.Tile_Engine;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using static RiverHollow.Characters.NPCs.Merchandise;
+using static RiverHollow.Actors.NPCs.Merchandise;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Misc
@@ -22,8 +22,8 @@ namespace RiverHollow.Misc
         private string _description;
         public string Description => _description;
 
-        private NPC _questGiver;
-        public NPC QuestGiver => _questGiver;
+        private Villager _questGiver;
+        public Villager QuestGiver => _questGiver;
 
         private int _iTargetGoal;
         public int TargetGoal => _iTargetGoal;
@@ -77,7 +77,7 @@ namespace RiverHollow.Misc
 
             _liRewardItems = new List<Item>();
         }
-        public Quest(string name, QuestType type, string desc, int target, Monster m, Item i, NPC giver = null) : this()
+        public Quest(string name, QuestType type, string desc, int target, Monster m, Item i, Villager giver = null) : this()
         {
             _name = name;
             _goalType = type;

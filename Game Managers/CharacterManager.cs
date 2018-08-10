@@ -1,5 +1,5 @@
-﻿using RiverHollow.Characters;
-using RiverHollow.Characters.NPCs;
+﻿using RiverHollow.Actors;
+using RiverHollow.Actors.NPCs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RiverHollow.Characters.CombatStuff;
+using RiverHollow.Actors.CombatStuff;
 using System.IO;
 using RiverHollow.Misc;
 
@@ -17,8 +17,8 @@ namespace RiverHollow.Game_Managers
     {
         private static Dictionary<int, string> _mobDictionary;
         private static Dictionary<int, string> _monsterDictionary;
-        private static Dictionary<int, NPC> _npcDictionary;
-        public static Dictionary<int, NPC> DiNPC { get => _npcDictionary; }
+        private static Dictionary<int, Villager> _npcDictionary;
+        public static Dictionary<int, Villager> DiNPC { get => _npcDictionary; }
         private static Dictionary<int, string> _actionDictionary;
         private static Dictionary<int, string> _buffDictionary;
         private static Dictionary<int, string> _classDictionary;
@@ -39,10 +39,10 @@ namespace RiverHollow.Game_Managers
                 _dictSchedule.Add(temp, Content.Load<Dictionary<string, string>>(@"Data\NPCData\Schedules\" + temp));
             }
 
-            _npcDictionary = new Dictionary<int, NPC>();
+            _npcDictionary = new Dictionary<int, Villager>();
             foreach (KeyValuePair<int, string> kvp in Content.Load<Dictionary<int, string>>(@"Data\NPCData\Characters"))
             {
-                NPC n = null;
+                Villager n = null;
                 string _characterData = kvp.Value;
                 string[] _characterDataValues = Util.FindTags(_characterData);
                 switch (_characterDataValues[0].Split(':')[1])
@@ -54,7 +54,7 @@ namespace RiverHollow.Game_Managers
                         n = new EligibleNPC(kvp.Key, _characterDataValues);
                         break;
                     default:
-                        n = new NPC(kvp.Key, _characterDataValues);
+                        n = new Villager(kvp.Key, _characterDataValues);
                         break;
                 }
                 _npcDictionary.Add(kvp.Key, n);
@@ -157,7 +157,7 @@ namespace RiverHollow.Game_Managers
 
         public static void RollOver()
         {
-            foreach(NPC n in _npcDictionary.Values)
+            foreach(Villager n in _npcDictionary.Values)
             {
                 n.RollOver();
             }

@@ -1,5 +1,4 @@
-﻿using RiverHollow.Characters.NPCs;
-using RiverHollow.WorldObjects;
+﻿using RiverHollow.WorldObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,6 +9,7 @@ using static RiverHollow.WorldObjects.WorldItem.Machine;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Misc;
 using static RiverHollow.WorldObjects.Door;
+using RiverHollow.Actors;
 
 namespace RiverHollow.Game_Managers
 {

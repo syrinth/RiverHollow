@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using RiverHollow.Characters.CombatStuff;
+using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.Misc;
 using static RiverHollow.Game_Managers.GameManager;
@@ -21,7 +21,7 @@ namespace RiverHollow
 
         public Monster(int id, string[] stringData)
         {
-            _characterType = CharacterEnum.Monster;
+            _actorType = ActorEnum.Monster;
             ImportBasics(stringData, id);
             LoadContent(_textureName, 100, 100, 2, 0.2f);
         }

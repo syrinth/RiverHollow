@@ -2,7 +2,7 @@
 using RiverHollow.Screens;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIObjects;
-using RiverHollow.Characters;
+using RiverHollow.Actors;
 using System.Collections.Generic;
 using static RiverHollow.WorldObjects.WorldItem;
 using static RiverHollow.WorldObjects.Door;
@@ -53,7 +53,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             InventoryManager.PublicContainer = _container.Container;
         }
 
-        public InventoryScreen(NPC n)
+        public InventoryScreen(Villager n)
         {
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _inventory = new Inventory(n, 4, InventoryManager.maxItemColumns, 32);

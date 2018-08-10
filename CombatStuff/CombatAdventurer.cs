@@ -1,10 +1,10 @@
-﻿using RiverHollow.Characters.NPCs;
+﻿using RiverHollow.Actors.NPCs;
 using RiverHollow.Game_Managers;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 
-namespace RiverHollow.Characters.CombatStuff
+namespace RiverHollow.Actors.CombatStuff
 {
     public class CombatAdventurer : CombatCharacter
     {
@@ -140,7 +140,7 @@ namespace RiverHollow.Characters.CombatStuff
 
         public CombatAdventurer() : base()
         {
-            _characterType = CharacterEnum.CombatAdventurer;
+            _actorType = ActorEnum.CombatAdventurer;
             _classLevel = 1;
         }
 

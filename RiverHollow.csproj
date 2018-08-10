@@ -60,13 +60,12 @@
     <Compile Include="Buildings\Building.cs" />
     <Compile Include="Buildings\WorkerBuilding.cs" />
     <Compile Include="Camera.cs" />
-    <Compile Include="Characters\Character.cs" />
+    <Compile Include="Characters\Actor.cs" />
     <Compile Include="Characters\NPCs\Spirit.cs" />
     <Compile Include="CombatStuff\MenuAction.cs" />
     <Compile Include="CombatStuff\Buff.cs" />
     <Compile Include="CombatStuff\CharacterClass.cs" />
     <Compile Include="CombatStuff\CombatAdventurer.cs" />
-    <Compile Include="Characters\WorldCharacter.cs" />
     <Compile Include="CombatStuff\CombatCharacter.cs" />
     <Compile Include="Characters\Mob.cs" />
     <Compile Include="CombatStuff\Monster.cs" />
@@ -94,7 +93,6 @@
     <Compile Include="Items\MerchantChest.cs" />
     <Compile Include="Characters\NPCs\NPC.cs" />
     <Compile Include="Characters\NPCs\ShopKeeper.cs" />
-    <Compile Include="Characters\NPCs\WorldAdventurer.cs" />
     <Compile Include="Misc\Quest.cs" />
     <Compile Include="RiverHollow.cs" />
     <Compile Include="Game Managers\CharacterManager.cs" />

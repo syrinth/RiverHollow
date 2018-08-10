@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIObjects.GUIObject;
 
-namespace RiverHollow.Characters.CombatStuff
+namespace RiverHollow.Actors.CombatStuff
 {
     public class MenuAction
     {

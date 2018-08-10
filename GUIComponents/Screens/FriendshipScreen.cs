@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Characters;
+using RiverHollow.Actors;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIObjects;
@@ -22,7 +22,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _villagerList = new List<FriendshipBox>();
             _friendshipWindow = new GUIWindow(new Vector2(WIDTH, HEIGHT), GUIWindow.RedWin, WIDTH, HEIGHT);
 
-            foreach (NPC n in CharacterManager.DiNPC.Values)
+            foreach (Villager n in CharacterManager.DiNPC.Values)
             {
                 FriendshipBox f = new FriendshipBox(n, _friendshipWindow.MidWidth());
 
@@ -78,7 +78,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIImage _gGift;
         List<GUIImage> _liFriendship;
         
-        public FriendshipBox(NPC c, int mainWidth)
+        public FriendshipBox(Villager c, int mainWidth)
         {
             _liFriendship = new List<GUIImage>();
             _font = GameContentManager.GetFont(@"Fonts\Font");

@@ -1,7 +1,7 @@
 ﻿using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Characters.CombatStuff;
+using RiverHollow.Actors.CombatStuff;
 using RiverHollow.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
 

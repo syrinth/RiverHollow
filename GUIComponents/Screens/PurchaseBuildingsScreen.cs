@@ -1,4 +1,4 @@
-﻿using RiverHollow.Characters.NPCs;
+﻿using RiverHollow.Actors.NPCs;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.GUIObjects;
 using Microsoft.Xna.Framework;

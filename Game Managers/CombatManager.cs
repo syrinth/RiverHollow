@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using RiverHollow.Characters.CombatStuff;
+using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.WorldObjects;
 using RiverHollow.Misc;

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using RiverHollow.Misc;
-using RiverHollow.Characters;
-using RiverHollow.Characters.NPCs;
+using RiverHollow.Actors;
+using RiverHollow.Actors.NPCs;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIObjects;
 using RiverHollow.WorldObjects;
@@ -55,11 +55,11 @@ namespace RiverHollow.Tile_Engine
         public Dictionary<string, TiledMapTileLayer> Layers => _diLayers;
 
         protected List<RHTile> _liBuildingTiles;
-        protected List<WorldCharacter> _liCharacters;
+        protected List<WorldActor> _liCharacters;
         protected List<Mob> _liMobs;
         protected List<Door> _liDoors;
-        public List<WorldCharacter> ToRemove;
-        public List<WorldCharacter> ToAdd;
+        public List<WorldActor> ToRemove;
+        public List<WorldActor> ToAdd;
         protected List<WorkerBuilding> _liBuildings;
         protected List<RHTile> _liModifiedTiles;
         public List<RHTile> ModTiles => _liModifiedTiles;
@@ -78,7 +78,7 @@ namespace RiverHollow.Tile_Engine
         public RHMap() {
             _liBuildingTiles = new List<RHTile>();
             _liTilesets = new List<TiledMapTileset>();
-            _liCharacters = new List<WorldCharacter>();
+            _liCharacters = new List<WorldActor>();
             _liMobs = new List<Mob>();
             _liBuildings = new List<WorkerBuilding>();
             _liModifiedTiles = new List<RHTile>();
@@ -90,8 +90,8 @@ namespace RiverHollow.Tile_Engine
             _liShopData = new List<ShopData>();
             _liDoors = new List<Door>();
 
-            ToRemove = new List<WorldCharacter>();
-            ToAdd = new List<WorldCharacter>();
+            ToRemove = new List<WorldActor>();
+            ToAdd = new List<WorldActor>();
         }
 
         public RHMap(RHMap map) : this()
@@ -373,7 +373,7 @@ namespace RiverHollow.Tile_Engine
                 }
             }
 
-            foreach (WorldCharacter c in ToRemove)
+            foreach (WorldActor c in ToRemove)
             {
                 if (c.IsMob() && _liMobs.Contains((Mob)c)) { _liMobs.Remove((Mob)c); }
                 else if (_liCharacters.Contains(c)) { _liCharacters.Remove(c); }
@@ -382,8 +382,8 @@ namespace RiverHollow.Tile_Engine
 
             if (ToAdd.Count > 0)
             {
-                List<WorldCharacter> moved = new List<WorldCharacter>();
-                foreach (WorldCharacter c in ToAdd)
+                List<WorldActor> moved = new List<WorldActor>();
+                foreach (WorldActor c in ToAdd)
                 {
                     if (!MapManager.Maps[c.CurrentMapName].Contains(c))
                     {
@@ -395,7 +395,7 @@ namespace RiverHollow.Tile_Engine
                         moved.Add(c);
                     }
                 }
-                foreach (WorldCharacter c in moved)
+                foreach (WorldActor c in moved)
                 {
                     ToAdd.Remove(c);
                 }
@@ -404,7 +404,7 @@ namespace RiverHollow.Tile_Engine
 
             if (IsRunning())
             {
-                foreach (WorldCharacter c in _liCharacters)
+                foreach (WorldActor c in _liCharacters)
                 {
                     c.Update(gameTime);
                 }
@@ -426,7 +426,7 @@ namespace RiverHollow.Tile_Engine
 
         public void CheckSpirits()
         {
-            foreach (WorldCharacter c in _liCharacters)
+            foreach (WorldActor c in _liCharacters)
             {
                 if (c.IsSpirit())
                 {
@@ -435,14 +435,14 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
-        public bool Contains(WorldCharacter c)
+        public bool Contains(WorldActor c)
         {
             return _liCharacters.Contains(c);
         }
 
         public void ItemPickUpdate()
         {
-            WorldCharacter player = PlayerManager.World;
+            WorldActor player = PlayerManager.World;
             List<Item> removedList = new List<Item>();
             foreach (Item i in _liItems)
             {
@@ -476,7 +476,7 @@ namespace RiverHollow.Tile_Engine
 
             _renderer.Draw(_map, Camera._transform);
 
-            foreach(WorldCharacter c in _liCharacters)
+            foreach(WorldActor c in _liCharacters)
             {
                 c.Draw(spriteBatch, true);
             }
@@ -568,7 +568,7 @@ namespace RiverHollow.Tile_Engine
         }
 
         #region Collision Code
-        public bool CheckForCollisions(WorldCharacter c, Rectangle testX, Rectangle testY, ref Vector2 dir, bool ignoreCollisions = false)
+        public bool CheckForCollisions(WorldActor c, Rectangle testX, Rectangle testY, ref Vector2 dir, bool ignoreCollisions = false)
         {
             bool rv = true;
             if (MapChange(c, testX) || MapChange(c, testY)) { return false; }
@@ -589,7 +589,7 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public bool CheckNPCForCollisionsAndNudges(WorldCharacter c, Rectangle testX, Rectangle testY, ref Vector2 dir)
+        public bool CheckNPCForCollisionsAndNudges(WorldActor c, Rectangle testX, Rectangle testY, ref Vector2 dir)
         {
             bool xCol = false;
             bool yCol = false;
@@ -608,9 +608,9 @@ namespace RiverHollow.Tile_Engine
 
             return xCol || yCol;
         }
-        private float CheckNPCCollHelper(WorldCharacter mover, Rectangle movingChar, Vector2 dir, ref bool collision) {
+        private float CheckNPCCollHelper(WorldActor mover, Rectangle movingChar, Vector2 dir, ref bool collision) {
             float rv = 0;
-            foreach (WorldCharacter c in _liCharacters)
+            foreach (WorldActor c in _liCharacters)
             {
                 if (c.Active)
                 {
@@ -642,7 +642,7 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public bool MapChange(WorldCharacter c, Rectangle movingChar)
+        public bool MapChange(WorldActor c, Rectangle movingChar)
         {
             foreach(KeyValuePair<Rectangle, string>  kvp in _dictExit)
             {
@@ -828,7 +828,7 @@ namespace RiverHollow.Tile_Engine
 
             if (!rv)
             {
-                foreach (WorldCharacter c in _liCharacters)
+                foreach (WorldActor c in _liCharacters)
                 {
                     if (PlayerManager.PlayerInRange(c.CollisionBox.Center, (int)(TileSize * 1.5)) && c.CollisionContains(mouseLocation) && c.CanTalk() && c.Active)
                     {
@@ -839,7 +839,7 @@ namespace RiverHollow.Tile_Engine
                         }
                         else
                         {
-                            ((NPC)c).Talk();
+                            ((Villager)c).Talk();
                         }
                         break;
                     }
@@ -974,7 +974,7 @@ namespace RiverHollow.Tile_Engine
                     PlayerManager._merchantChest.AddItem(i);
                     InventoryManager.RemoveItemFromInventory(InventoryManager.CurrentItem);
                 }
-                foreach (WorldCharacter c in _liCharacters)
+                foreach (WorldActor c in _liCharacters)
                 {
                     if (c.IsWorldAdventurer())
                     {
@@ -988,7 +988,7 @@ namespace RiverHollow.Tile_Engine
                     }
                     else if (c.IsNPC())
                     {
-                        NPC n = (NPC)c;
+                        Villager n = (Villager)c;
                         if (InventoryManager.CurrentItem != null &&
                             n.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(n.CharCenter) &&
                             InventoryManager.CurrentItem.ItemType != Item.ItemEnum.Tool &&
@@ -1055,7 +1055,7 @@ namespace RiverHollow.Tile_Engine
             }
             else{
                 bool found = false;
-                foreach(WorldCharacter c in _liCharacters)
+                foreach(WorldActor c in _liCharacters)
                 {
                     if(!c.IsMob() && c.CollisionContains(mouseLocation)){
                         if (c.Active)
@@ -1134,7 +1134,7 @@ namespace RiverHollow.Tile_Engine
                 _liModifiedTiles.Remove(tile);
             }
         }
-        public void RemoveCharacter(WorldCharacter c)
+        public void RemoveCharacter(WorldActor c)
         {
             ToRemove.Add(c);
         }
@@ -1396,7 +1396,7 @@ namespace RiverHollow.Tile_Engine
             AssignMapTiles(obj, new List<RHTile>() { tile });
         }
 
-        public void AddCharacter(WorldCharacter c)
+        public void AddCharacter(WorldActor c)
         {
             ToAdd.Add(c);
         }
@@ -1795,7 +1795,7 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public bool Contains(NPC n)
+        public bool Contains(Villager n)
         {
             bool rv = false;
 

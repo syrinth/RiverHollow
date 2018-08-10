@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using RiverHollow.Characters;
+using RiverHollow.Actors;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
@@ -11,7 +11,7 @@ using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 using static RiverHollow.WorldObjects.Door;
-using RiverHollow.Characters.NPCs;
+using RiverHollow.Actors.NPCs;
 using static RiverHollow.Misc.Quest;
 
 namespace RiverHollow.Game_Managers
@@ -41,7 +41,7 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<int, Quest> DIQuests;
 
         public static Item gmActiveItem;
-        public static NPC gmNPC;
+        public static TalkingActor gmNPC;
         public static Spirit gmSpirit;
         public static KeyDoor gmDoor;
         public static Vector2 gmCurrentItem;
@@ -576,7 +576,7 @@ namespace RiverHollow.Game_Managers
                 data.QuestLogData.Add(q.SaveData());
             }
 
-            foreach (NPC n in CharacterManager.DiNPC.Values)
+            foreach (Villager n in CharacterManager.DiNPC.Values)
             {
                 if (n.IsEligible()) { data.EligibleData.Add(((EligibleNPC)n).SaveData()); }
                 else { data.NPCData.Add(n.SaveData()); }
@@ -666,7 +666,7 @@ namespace RiverHollow.Game_Managers
             }
             foreach (NPCData n in data.NPCData)
             {
-                NPC target = CharacterManager.DiNPC[n.npcID];
+                Villager target = CharacterManager.DiNPC[n.npcID];
                 target.LoadData(n);
             }
 

@@ -1,4 +1,4 @@
-﻿using RiverHollow.Characters.CombatStuff;
+﻿using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.SpriteAnimations;

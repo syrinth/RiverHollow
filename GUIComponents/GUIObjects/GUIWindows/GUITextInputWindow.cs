@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using RiverHollow.Characters.NPCs;
+using RiverHollow.Actors;
 using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows

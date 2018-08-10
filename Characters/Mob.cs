@@ -1,17 +1,17 @@
-﻿using RiverHollow.Characters;
+﻿using RiverHollow.Actors;
 using RiverHollow.Game_Managers;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Misc;
-using RiverHollow.Characters.CombatStuff;
+using RiverHollow.Actors.CombatStuff;
 using RiverHollow.SpriteAnimations;
 
 using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow
 {
-    public class Mob : WorldCharacter
+    public class Mob : WorldActor
     {
         #region Properties
         protected int _id;
@@ -27,7 +27,7 @@ namespace RiverHollow
 
         public Mob(int id, string[] stringData)
         {
-            _characterType = CharacterEnum.Mob;
+            _actorType = ActorEnum.Mob;
             _monsters = new List<CombatCharacter>();
             ImportBasics(stringData, id);
             _textureName = @"Textures\Monsters\Goblin Scout";

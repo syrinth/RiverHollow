@@ -3,7 +3,7 @@ using RiverHollow.WorldObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIObjects;
-using RiverHollow.Characters.NPCs;
+using RiverHollow.Actors.NPCs;
 using RiverHollow.GUIComponents.GUIObjects;
 using static RiverHollow.WorldObjects.Equipment;
 using static RiverHollow.Game_Managers.ObjectManager;
@@ -12,6 +12,7 @@ using System;
 using static RiverHollow.WorldObjects.Clothes;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.WorldObjects.Item;
+using RiverHollow.Actors;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
@@ -190,9 +191,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
     public class WorkerBox : GUIObject
     {
-        private SpriteFont _font;
-        private GUIWindow _workerWindow;
-        private GUIWindow _costWindow;
+        SpriteFont _font;
+        GUIWindow _workerWindow;
+        GUIWindow _costWindow;
         public WorldAdventurer _w;
         public int Cost;
 

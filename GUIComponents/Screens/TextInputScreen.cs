@@ -1,4 +1,4 @@
-﻿using RiverHollow.Characters.NPCs;
+﻿using RiverHollow.Actors;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Game_Managers.GUIObjects;
 

@@ -6,9 +6,9 @@ using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using System;
 using static RiverHollow.Game_Managers.GameManager;
-namespace RiverHollow.Characters.NPCs
+namespace RiverHollow.Actors.NPCs
 {
-    public class Spirit : WorldCharacter
+    public class Spirit : WorldActor
     {
         
         const float MIN_VISIBILITY = 0.05f;
@@ -21,7 +21,7 @@ namespace RiverHollow.Characters.NPCs
 
         public Spirit(string name, string type, string condition, string text) : base()
         {
-            _characterType = CharacterEnum.Spirit;
+            _actorType = ActorEnum.Spirit;
             _fVisibility = MIN_VISIBILITY;
 
             _sName = name;

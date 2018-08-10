@@ -5,7 +5,7 @@ using RiverHollow.WorldObjects;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using RiverHollow.Characters;
+using RiverHollow.Actors;
 using static RiverHollow.WorldObjects.WorldItem;
 using static RiverHollow.WorldObjects.Door;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
@@ -17,7 +17,7 @@ namespace RiverHollow.Screens
         protected GUIItemBox[,] _displayList;
         private Container _container;
         public Container Container { get => _container; }
-        private NPC _giveTo;
+        private Villager _giveTo;
         private KeyDoor _doorToOpen;
 
         protected const int _iBoxSize = 64;
@@ -46,7 +46,7 @@ namespace RiverHollow.Screens
             _container = c;
         }
 
-        public Inventory(NPC n, int rows, int columns, int edgeSize) : this(rows, columns, edgeSize)
+        public Inventory(Villager n, int rows, int columns, int edgeSize) : this(rows, columns, edgeSize)
         {
             _giveTo = n;
         }

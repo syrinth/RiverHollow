@@ -1,4 +1,4 @@
-﻿using RiverHollow.Characters;
+﻿using RiverHollow.Actors;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Game_Managers.GUIObjects;
@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIObjects;
 using static RiverHollow.WorldObjects.Door;
-using RiverHollow.Characters.NPCs;
+using RiverHollow.Actors.NPCs;
 
 namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
@@ -40,7 +40,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             AddControl(_window);
         }
 
-        public TextScreen(NPC talker, string text) : this()
+        public TextScreen(TalkingActor talker, string text) : this()
         {
             if (text.Contains("["))
             {

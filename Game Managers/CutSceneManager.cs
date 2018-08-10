@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using RiverHollow.Characters;
+using RiverHollow.Actors;
 using RiverHollow.Misc;
 using RiverHollow.Tile_Engine;
 using System;
@@ -58,7 +58,7 @@ namespace RiverHollow.Game_Managers
         int _iMinTime = -1;                                         //The earliest the cutscene can be triggered
         int _iMaxTime = -1;                                         //The latest the cutscene can be triggered
         int _iCurrentCommand;
-        List<NPC> _liUsedNPCs;                                      //The list of NPCs that take part in the cutscene.
+        List<Villager> _liUsedNPCs;                                      //The list of NPCs that take part in the cutscene.
         List<KeyValuePair<int, int>> _liReqFriendship;              //The list of required Friendships to trigger the cutscene, key is NPC index
         List<string> _liCommands;                                   //The sequence of commands to follow for the cutscene
         List<string> _liSetupCommands;
@@ -69,7 +69,7 @@ namespace RiverHollow.Game_Managers
             _bTriggered = false;
             _iCurrentCommand = 0;
 
-            _liUsedNPCs = new List<NPC>();
+            _liUsedNPCs = new List<Villager>();
             _liCommands = new List<string>();
             _liReqFriendship = new List<KeyValuePair<int, int>>();
             _liSetupCommands = new List<string>();
@@ -118,7 +118,7 @@ namespace RiverHollow.Game_Managers
                 {
                     if (stringTest.Length == 3)
                     {
-                        NPC n = _liUsedNPCs.Find(test => test.ID == int.Parse(stringTest[1]));
+                        Villager n = _liUsedNPCs.Find(test => test.ID == int.Parse(stringTest[1]));
                         n.Talk(stringTest[2]);
                         _iCurrentCommand++;
                     }
@@ -134,8 +134,8 @@ namespace RiverHollow.Game_Managers
                 {
                     if (stringTest.Length == 2)
                     {
-                        WorldCharacter n = stringTest[1].Equals("player") ? (WorldCharacter)PlayerManager.World : _liUsedNPCs.Find(test => test.ID == int.Parse(stringTest[1]));
-                        n.SetWalkingDir((WorldCharacter.DirectionEnum)HandleDir(stringTest[0]));
+                        WorldActor n = stringTest[1].Equals("player") ? (WorldActor)PlayerManager.World : _liUsedNPCs.Find(test => test.ID == int.Parse(stringTest[1]));
+                        n.SetWalkingDir((WorldActor.DirectionEnum)HandleDir(stringTest[0]));
                         //n.Sprite.IsAnimating = false;
                         _iCurrentCommand++;
                     }
@@ -164,7 +164,7 @@ namespace RiverHollow.Game_Managers
         //0-Up 1-Down 2-Right 3-Left
         private void HandleMove(string[] stringTest, int dir)
         {
-            WorldCharacter c = stringTest[1].Equals("Player") ? (WorldCharacter)PlayerManager.World : _liUsedNPCs.Find(test => test.ID == int.Parse(stringTest[1]));
+            WorldActor c = stringTest[1].Equals("Player") ? (WorldActor)PlayerManager.World : _liUsedNPCs.Find(test => test.ID == int.Parse(stringTest[1]));
             if (c.MoveToLocation == Vector2.Zero)
             {
                 Vector2 vec = Vector2.Zero;
@@ -212,7 +212,7 @@ namespace RiverHollow.Game_Managers
                     foreach (string f in friend)
                     {
                         string[] friendData = f.Split('-');
-                        NPC n = new NPC(CharacterManager.DiNPC[int.Parse(friendData[0])])
+                        Villager n = new Villager(CharacterManager.DiNPC[int.Parse(friendData[0])])
                         {
                             CurrentMapName = _cutsceneMap.Name,
                             Position = Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(friendData[1]))

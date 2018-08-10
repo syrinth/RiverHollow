@@ -10,9 +10,9 @@ using RiverHollow.CombatStuff;
 using RiverHollow.Misc;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
-namespace RiverHollow.Characters.CombatStuff
+namespace RiverHollow.Actors.CombatStuff
 {
-    public class CombatCharacter : Character
+    public class CombatCharacter : Actor
     {
         #region Properties
         const int MAX_STAT = 99;
@@ -93,7 +93,7 @@ namespace RiverHollow.Characters.CombatStuff
 
         public CombatCharacter() : base()
         {
-            _characterType = CharacterEnum.CombatCharacter;
+            _actorType = ActorEnum.CombatActor;
             _liSpells = new List<CombatAction>();
             _liActions = new List<MenuAction>();
             _liBuffs = new List<Buff>();

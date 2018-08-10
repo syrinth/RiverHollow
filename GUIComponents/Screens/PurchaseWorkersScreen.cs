@@ -1,4 +1,4 @@
-﻿using RiverHollow.Characters.NPCs;
+﻿using RiverHollow.Actors.NPCs;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.GUIObjects;
 using Microsoft.Xna.Framework;
@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.Actors;
 
 namespace RiverHollow.Game_Managers.GUIObjects.Screens
 {

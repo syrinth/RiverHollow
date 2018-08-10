@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RiverHollow.Characters.CombatStuff
+namespace RiverHollow.Actors.CombatStuff
 {
     public class Buff
     {
