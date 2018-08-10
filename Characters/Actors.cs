@@ -3,8 +3,6 @@ using RiverHollow.SpriteAnimations;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers.GUIObjects;
-
-using static RiverHollow.Game_Managers.GameManager;
 using System;
 using RiverHollow.WorldObjects;
 using RiverHollow.GUIObjects;
@@ -13,9 +11,13 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Misc;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.Actors.CombatStuff;
-using static RiverHollow.Game_Managers.ObjectManager;
 using RiverHollow.Tile_Engine;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Game_Managers.GUIObjects.Screens;
 
+using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Game_Managers.ObjectManager;
+using static RiverHollow.Game_Managers.GUIObjects.ManagementScreen;
 namespace RiverHollow.Actors
 {
     public class Actor
@@ -49,6 +51,9 @@ namespace RiverHollow.Actors
         public int Height { get => _height; }
         public int SpriteWidth { get => _bodySprite.Width; }
         public int SpriteHeight { get => _bodySprite.Height; }
+
+        protected bool _bCanTalk = false;
+        public bool CanTalk => _bCanTalk;
 
         public Actor() { }
 
@@ -96,7 +101,6 @@ namespace RiverHollow.Actors
         public bool IsNPC() { return _actorType == ActorEnum.NPC; }
         public bool IsWorldAdventurer() { return _actorType == ActorEnum.WorldAdventurer; }
         public bool IsWorldCharacter() { return _actorType == ActorEnum.WorldCharacter; }
-        public bool CanTalk() { return IsWorldCharacter() || IsNPC() || IsWorldAdventurer() || IsSpirit(); }
         public bool IsSpirit() { return _actorType == ActorEnum.Spirit; }
     }
 
@@ -270,7 +274,12 @@ namespace RiverHollow.Actors
             return new GUIHeadShot(_headshot);
         }
     }
-    public class TalkingActor : WorldActor
+    public class WorldCombatant : WorldActor
+    {
+        protected CombatAdventurer _combat;
+        public CombatAdventurer Combat => _combat;
+    }
+    public class TalkingActor : WorldCombatant
     {
         protected const int PortraitWidth = 160;
         protected const int PortraitHeight = 192;
@@ -282,6 +291,11 @@ namespace RiverHollow.Actors
         public Rectangle PortraitRectangle { get => _portraitRect; }
 
         protected Dictionary<string, string> _dialogueDictionary;
+
+        public TalkingActor() : base()
+        { 
+            _bCanTalk = true;
+        }
 
         public virtual string GetOpeningText()
         {
@@ -364,7 +378,6 @@ namespace RiverHollow.Actors
             return "What?";
         }
     }
-
     public class Villager : TalkingActor
     {
         protected int _index;
@@ -883,14 +896,220 @@ namespace RiverHollow.Actors
             }
         }
     }
+    public class ShopKeeper : Villager
+    {
+        protected List<Merchandise> _liMerchandise;
+        public List<Merchandise> Buildings { get => _liMerchandise; }
 
+        public ShopKeeper(int index, string[] stringData)
+        {
+            _currentPath = new List<RHTile>();
+            _liMerchandise = new List<Merchandise>();
+            _collection = new Dictionary<int, bool>();
+            _completeSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
+
+            LoadContent();
+
+            _index = index;
+            int i = ImportBasics(index, stringData);
+            for (; i < stringData.Length; i++)
+            {
+                string[] tagType = stringData[i].Split(':');
+                if (tagType[0].Equals("ShopData"))
+                {
+                    foreach (KeyValuePair<int, string> kvp in GameContentManager.GetMerchandise(tagType[1]))
+                    {
+                        _liMerchandise.Add(new Merchandise(kvp.Value));
+                    }
+                }
+            }
+
+            MapManager.Maps[CurrentMapName].AddCharacter(this);
+        }
+
+        public void Talk(bool IsOpen = false)
+        {
+            GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Talk;
+            string text = string.Empty;
+            if (!Introduced)
+            {
+                text = _dialogueDictionary["Introduction"];
+                Introduced = true;
+            }
+            else
+            {
+                if (IsOpen)
+                {
+                    text = _dialogueDictionary["ShopOpen"];
+                }
+                else
+                {
+                    text = GetText();
+                }
+            }
+            text = Util.ProcessText(text, _sName);
+            GUIManager.SetScreen(new TextScreen(this, text));
+        }
+
+        public override string GetDialogEntry(string entry)
+        {
+            string rv = string.Empty;
+            List<Merchandise> _liMerchandise = new List<Merchandise>();
+            if (entry.Equals("BuyBuildings"))
+            {
+                foreach (Merchandise m in this._liMerchandise)
+                {
+                    if ((m.MerchType == Merchandise.ItemType.Building || m.MerchType == Merchandise.ItemType.Upgrade) && m.Activated()) { _liMerchandise.Add(m); }
+                }
+
+                GUIManager.SetScreen(new PurchaseBuildingsScreen(_liMerchandise));
+                GameManager.ClearGMObjects();
+            }
+            else if (entry.Equals("BuyWorkers"))
+            {
+                foreach (Merchandise m in this._liMerchandise)
+                {
+                    if (m.MerchType == Merchandise.ItemType.Worker && m.Activated()) { _liMerchandise.Add(m); }
+                }
+                GUIManager.SetScreen(new PurchaseWorkersScreen(_liMerchandise));
+                GameManager.ClearGMObjects();
+            }
+            else if (entry.Equals("BuyItems"))
+            {
+                foreach (Merchandise m in this._liMerchandise)
+                {
+                    if (m.MerchType == Merchandise.ItemType.Item && m.Activated()) { _liMerchandise.Add(m); }
+                }
+                GUIManager.SetScreen(new PurchaseItemsScreen(_liMerchandise));
+                GameManager.ClearGMObjects();
+            }
+            else if (entry.Equals("SellWorkers"))
+            {
+                ManagementScreen s = new ManagementScreen();
+                s.Sell();
+                GUIManager.SetScreen(s);
+                GameManager.ClearGMObjects();
+            }
+            else if (entry.Equals("Move"))
+            {
+                GUIManager.SetScreen(null);
+                GameManager.Scry(true);
+                GameManager.MoveBuilding();
+                Camera.UnsetObserver();
+                MapManager.ViewMap(MapManager.HomeMap);
+                GameManager.ClearGMObjects();
+            }
+            else if (entry.Equals("UpgradeBuilding"))
+            {
+                ManagementScreen m = new ManagementScreen(ActionTypeEnum.Upgrade);
+                GUIManager.SetScreen(m);
+                GameManager.ClearGMObjects();
+            }
+            else if (entry.Equals("Destroy"))
+            {
+                GUIManager.SetScreen(null);
+                GameManager.Scry(true);
+                GameManager.DestroyBuilding();
+                Camera.UnsetObserver();
+                MapManager.ViewMap(MapManager.HomeMap);
+                GameManager.ClearGMObjects();
+            }
+            else
+            {
+                rv = base.GetDialogEntry(entry);
+            }
+
+            return rv;
+        }
+
+        public class Merchandise
+        {
+            string _sUniqueData;
+            public string UniqueData => _sUniqueData;
+            public enum ItemType { Building, Worker, Item, Upgrade }
+            public ItemType MerchType;
+            int _merchID = -1;
+            public int MerchID { get => _merchID; }
+            string _description;
+            int _moneyCost;
+            public int MoneyCost { get => _moneyCost; }
+            int _iQuestReq = -1;
+
+            List<KeyValuePair<int, int>> _items; //item, then num required
+            public List<KeyValuePair<int, int>> RequiredItems { get => _items; }
+
+            public Merchandise(string data)
+            {
+                _items = new List<KeyValuePair<int, int>>();
+                string[] dataValues = data.Split('/');
+
+                int i = 0;
+                if (dataValues[0] == "Building")
+                {
+                    MerchType = ItemType.Building;
+                    i = 1;
+                    _merchID = int.Parse(dataValues[i++]);
+                    _description = dataValues[i++];
+                    _moneyCost = int.Parse(dataValues[i++]);
+
+                    string[] reqItems = dataValues[i++].Split(':');
+                    foreach (string str in reqItems)
+                    {
+                        string[] itemsSplit = str.Split(' ');
+                        _items.Add(new KeyValuePair<int, int>(int.Parse(itemsSplit[0]), int.Parse(itemsSplit[1])));
+                    }
+                }
+                else if (dataValues[0] == "Worker")
+                {
+                    MerchType = ItemType.Worker;
+                    i = 1;
+                    _merchID = int.Parse(dataValues[i++]);
+                    _description = dataValues[i++];
+                    _moneyCost = int.Parse(dataValues[i++]);
+                }
+                else if (dataValues[0] == "Item")
+                {
+                    MerchType = ItemType.Item;
+                    i = 1;
+                    string[] itemData = dataValues[i++].Split('-');
+                    _merchID = int.Parse(itemData[0]);
+                    if (itemData.Length > 1) { _sUniqueData = itemData[1]; }
+                    _moneyCost = int.Parse(dataValues[i++]);
+                    if (dataValues.Length >= i + 1)
+                    {
+                        _iQuestReq = int.Parse(dataValues[i++]);
+                    }
+                }
+                else if (dataValues[0] == "Upgrade")
+                {
+                    MerchType = ItemType.Upgrade;
+                    i = 1;
+                    _merchID = int.Parse(dataValues[i++]);
+                    _description = dataValues[i++];
+                    _moneyCost = int.Parse(dataValues[i++]);
+
+                    string[] reqItems = dataValues[i++].Split(':');
+                    foreach (string str in reqItems)
+                    {
+                        string[] itemsSplit = str.Split(' ');
+                        _items.Add(new KeyValuePair<int, int>(int.Parse(itemsSplit[0]), int.Parse(itemsSplit[1])));
+                    }
+                }
+            }
+
+            public bool Activated()
+            {
+                bool rv = false;
+                rv = _iQuestReq == -1 || GameManager.DIQuests[_iQuestReq].Finished;
+                return rv;
+            }
+        }
+    }
     public class EligibleNPC : Villager
     {
         public bool Married;
         bool _bCanJoinParty = true;
         public bool CanJoinParty => _bCanJoinParty;
-        private CombatAdventurer _combat;
-        public CombatAdventurer Combat => _combat;
 
         public EligibleNPC(int index, string[] stringData)
         {
@@ -1058,7 +1277,6 @@ namespace RiverHollow.Actors
             }
         }
     }
-
     public class WorldAdventurer : TalkingActor
     {
         #region Properties
@@ -1085,9 +1303,6 @@ namespace RiverHollow.Actors
         public Dictionary<int, Recipe> CraftList => _diCrafting;
         Recipe _currentlyMaking;
         public Recipe CurrentlyMaking => _currentlyMaking;
-
-        private CombatAdventurer _c;
-        public CombatAdventurer Combat => _c;
         #endregion
 
         public WorldAdventurer(string[] stringData, int id)
@@ -1154,9 +1369,9 @@ namespace RiverHollow.Actors
 
         protected void SetCombat()
         {
-            _c = new CombatAdventurer(this);
-            _c.SetClass(CharacterManager.GetClassByIndex(_iAdventurerID));
-            _c.LoadContent(@"Textures\" + _c.CharacterClass.Name);
+            _combat = new CombatAdventurer(this);
+            _combat.SetClass(CharacterManager.GetClassByIndex(_iAdventurerID));
+            _combat.LoadContent(@"Textures\" + _combat.CharacterClass.Name);
         }
 
         public override void Update(GameTime gameTime)
@@ -1171,7 +1386,7 @@ namespace RiverHollow.Actors
                 {
                     //SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition);
                     _heldItem = ObjectManager.GetItem(_currentlyMaking.Output);
-                    _c.AddXP(_currentlyMaking.XP);
+                    _combat.AddXP(_currentlyMaking.XP);
                     _dProcessedTime = -1;
                     _currentlyMaking = null;
                     _bodySprite.SetCurrentAnimation("Idle");
@@ -1241,7 +1456,7 @@ namespace RiverHollow.Actors
             {
                 DrawIt = false;
                 Adventuring = true;
-                PlayerManager.AddToParty(_c);
+                PlayerManager.AddToParty(_combat);
                 rv = "Of course!";
             }
             return rv;
@@ -1286,7 +1501,7 @@ namespace RiverHollow.Actors
                 DrawIt = true;
                 Adventuring = false;
             }
-            _c.CurrentHP = _c.MaxHP;
+            _combat.CurrentHP = _combat.MaxHP;
             return rv;
         }
 
@@ -1306,10 +1521,10 @@ namespace RiverHollow.Actors
         public override void SetName(string name)
         {
             _sName = name;
-            _c.SetName(name);
+            _combat.SetName(name);
         }
 
-        public new WorkerData SaveData()
+        public WorkerData SaveData()
         {
             WorkerData workerData = new WorkerData
             {
@@ -1346,8 +1561,7 @@ namespace RiverHollow.Actors
             }
         }
     }
-
-    public class PlayerCharacter : WorldActor
+    public class PlayerCharacter : WorldCombatant
     {
         AnimatedSprite _spriteEyes;
         public AnimatedSprite EyeSprite => _spriteEyes;
@@ -1388,12 +1602,13 @@ namespace RiverHollow.Actors
 
         public PlayerCharacter() : base()
         {
+            _sName = PlayerManager.Name;
             _width = TileSize;
             _height = TileSize;
 
             _cHairColor = Color.Red;
 
-            Speed = 2;
+            Speed = 10;
         }
 
         public override void Update(GameTime theGameTime)
@@ -1608,6 +1823,1083 @@ namespace RiverHollow.Actors
                 g.Position(value);
             }
         }
+    }
+
+    public class Spirit : TalkingActor
+    {
+        const float MIN_VISIBILITY = 0.05f;
+        float _fVisibility;
+        string _sType;
+        string _sCondition;
+        string _sText;
+
+        public bool Triggered;
+
+        public Spirit(string name, string type, string condition, string text) : base()
+        {
+            _actorType = ActorEnum.Spirit;
+            _fVisibility = MIN_VISIBILITY;
+
+            _sName = name;
+            _sType = type;
+            _sText = text;
+            _sCondition = condition;
+            _bActive = false;
+
+            LoadContent(@"Textures\NPCs\Spirit_" + _sType);
+        }
+
+        public override void LoadContent(string textureToLoad)
+        {
+            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(textureToLoad));
+            _bodySprite.AddAnimation("Idle", 16, 18, 2, 0.6f, 0, 0);
+            _bodySprite.SetCurrentAnimation("Idle");
+
+            _width = _bodySprite.Width;
+            _height = _bodySprite.Height;
+        }
+
+        public override void Update(GameTime theGameTime)
+        {
+            if (_bActive)
+            {
+                base.Update(theGameTime);
+                if (!Triggered)
+                {
+                    int max = TileSize * 13;
+                    int dist = 0;
+                    if (PlayerManager.CurrentMap == CurrentMapName && PlayerManager.PlayerInRangeGetDist(_bodySprite.Center.ToPoint(), max, ref dist))
+                    {
+                        float fMax = max;
+                        float fDist = dist;
+                        float percentage = (Math.Abs(dist - fMax)) / fMax;
+                        percentage = Math.Max(percentage, MIN_VISIBILITY);
+                        _fVisibility = 0.4f * percentage;
+                    }
+                }
+            }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
+        {
+            if (_bActive)
+            {
+                _bodySprite.Draw(spriteBatch, useLayerDepth, _fVisibility);
+            }
+        }
+
+        public void CheckCondition()
+        {
+            bool active = false;
+            string[] splitCondition = _sCondition.Split('/');
+            foreach (string s in splitCondition)
+            {
+                if (s.Equals("Raining"))
+                {
+                    active = GameCalendar.IsRaining();
+                }
+                else if (s.Contains("day"))
+                {
+                    active = s.Equals(GameCalendar.GetDayOfWeek());
+                }
+                else if (s.Equals("Night"))
+                {
+                    active = GameCalendar.IsNight();
+                }
+
+                if (!active) { break; }
+            }
+
+            _bActive = active;
+            Triggered = false;
+        }
+        public override string GetOpeningText()
+        {
+            string rv = string.Empty;
+            if (_bActive)
+            {
+                Triggered = true;
+                _fVisibility = 1.0f;
+
+                string[] loot = GameContentManager.DiSpiritLoot[_sType].Split('/');
+                RHRandom r = new RHRandom();
+                int arrayID = r.Next(0, loot.Length - 1);
+                InventoryManager.AddNewItemToInventory(int.Parse(loot[arrayID]));
+
+                _sText = Util.ProcessText(_sText.Replace("*", "*" + loot[arrayID] + "*"));
+                GUIManager.SetScreen(new TextScreen(this, _sText));
+            }
+            return rv;
+        }
+    }
+    public class Mob : WorldActor
+    {
+        #region Properties
+        protected int _id;
+        public int ID { get => _id; }
+        protected double _dIdleFor;
+        protected int _iLeash = 7;
+
+        protected string _textureName;
+        protected Vector2 _moveTo = Vector2.Zero;
+        protected List<CombatActor> _monsters;
+        public List<CombatActor> Monsters { get => _monsters; }
+        #endregion
+
+        public Mob(int id, string[] stringData)
+        {
+            _actorType = ActorEnum.Mob;
+            _monsters = new List<CombatActor>();
+            ImportBasics(stringData, id);
+            _textureName = @"Textures\Monsters\Goblin Scout";
+            LoadContent();
+        }
+
+        public void LoadContent()
+        {
+            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(_textureName));
+            _bodySprite.AddAnimation("IdleDown", TileSize, TileSize, 1, 0.3f, 0, 0);
+            _bodySprite.AddAnimation("WalkDown", TileSize, TileSize, 2, 0.3f, 116, 0);
+            _bodySprite.AddAnimation("IdleUp", TileSize, TileSize, 1, 0.3f, 48, 0);
+            _bodySprite.AddAnimation("WalkUp", TileSize, TileSize, 2, 0.3f, 64, 0);
+            _bodySprite.AddAnimation("IdleLeft", TileSize, TileSize, 1, 0.3f, 96, 0);
+            _bodySprite.AddAnimation("WalkLeft", TileSize, TileSize, 2, 0.3f, 112, 0);
+            _bodySprite.AddAnimation("IdleRight", TileSize, TileSize, 1, 0.3f, 144, 0);
+            _bodySprite.AddAnimation("WalkRight", TileSize, TileSize, 2, 0.3f, 160, 0);
+            _bodySprite.SetCurrentAnimation("WalkLeft");
+
+            _width = _bodySprite.Width;
+            _height = _bodySprite.Height;
+        }
+
+        protected int ImportBasics(string[] stringData, int id)
+        {
+            for (int i = 0; i < stringData.Length; i++)
+            {
+                int mID = int.Parse(stringData[i]);
+                if (mID > 0)
+                {
+                    _monsters.Add(CharacterManager.GetMonsterByIndex(mID));
+                }
+            }
+
+            foreach (CombatActor m in _monsters)
+            {
+                List<CombatActor> match = _monsters.FindAll(x => ((Monster)x).ID == ((Monster)m).ID);
+                if (match.Count > 1)
+                {
+                    for (int i = 0; i < match.Count; i++)
+                    {
+                        match[i].SetUnique(Util.NumToString(i + 1, true));
+                    }
+                }
+            }
+            _id = id;
+            return 0;
+        }
+
+        public void LoadContent(int textureWidth, int textureHeight, int numFrames, float frameSpeed)
+        {
+            base.LoadContent(_textureName, textureWidth, textureHeight, numFrames, frameSpeed);
+        }
+
+        public override void Update(GameTime theGameTime)
+        {
+            UpdateMovement(theGameTime);
+            base.Update(theGameTime);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch, bool userLayerDepth = false)
+        {
+            base.Draw(spriteBatch, userLayerDepth);
+        }
+
+        private void UpdateMovement(GameTime theGameTime)
+        {
+            Vector2 direction = Vector2.Zero;
+
+
+            if (SpottedPlayer())
+            {
+                //_moveTo = Vector2.Zero;
+                //Vector2 targetPos = PlayerManager.World.Position;
+
+                //float deltaX = Math.Abs(targetPos.X - this.Position.X);
+                //float deltaY = Math.Abs(targetPos.Y - this.Position.Y);
+
+                //Util.GetMoveSpeed(Position, targetPos, Speed, ref direction);
+                //CheckMapForCollisionsAndMove(direction);
+
+                //DetermineFacing(direction);
+            }
+            else
+            {
+                if (CollisionBox.Intersects(PlayerManager.World.CollisionBox))
+                {
+                    CombatManager.NewBattle(this);
+                }
+                //IdleMovement(theGameTime);
+            }
+        }
+
+        private void IdleMovement(GameTime theGameTime)
+        {
+            if (_moveTo == Vector2.Zero && _dIdleFor <= 0)
+            {
+                int howFar = 2;
+                RHRandom r = new RHRandom();
+                int decision = r.Next(1, 5);
+                if (decision == 1) { _moveTo = new Vector2(Position.X - r.Next(1, howFar) * TileSize, Position.Y); }
+                else if (decision == 2) { _moveTo = new Vector2(Position.X + r.Next(1, howFar) * TileSize, Position.Y); }
+                else if (decision == 3) { _moveTo = new Vector2(Position.X, Position.Y - r.Next(1, howFar) * TileSize); }
+                else if (decision == 4) { _moveTo = new Vector2(Position.X, Position.Y + r.Next(1, howFar) * TileSize); }
+                else
+                {
+                    DetermineFacing(Vector2.Zero);
+                    _dIdleFor = 10;
+                }
+            }
+            else if (_moveTo != Vector2.Zero)
+            {
+                Vector2 direction = Vector2.Zero;
+                float deltaX = Math.Abs(_moveTo.X - this.Position.X);
+                float deltaY = Math.Abs(_moveTo.Y - this.Position.Y);
+
+                Util.GetMoveSpeed(Position, _moveTo, Speed, ref direction);
+                CheckMapForCollisionsAndMove(direction);
+
+                if (Position.X == _moveTo.X && Position.Y == _moveTo.Y)
+                {
+                    _moveTo = Vector2.Zero;
+                    DetermineFacing(_moveTo);
+                }
+            }
+            else
+            {
+                _dIdleFor -= theGameTime.ElapsedGameTime.TotalSeconds;
+            }
+        }
+
+        private bool SpottedPlayer()
+        {
+            bool rv = false;
+
+            if (PlayerManager.PlayerInRange(Position, _iLeash * TileSize))
+            {
+                Vector2 playerPos = PlayerManager.World.Position;
+                switch (Facing)
+                {
+                    case DirectionEnum.Up:
+                        rv = playerPos.Y < Position.Y;
+                        break;
+                    case DirectionEnum.Down:
+                        rv = playerPos.Y > Position.Y;
+                        break;
+                    case DirectionEnum.Left:
+                        rv = playerPos.X < Position.X;
+                        break;
+                    case DirectionEnum.Right:
+                        rv = playerPos.X > Position.X;
+                        break;
+                }
+            }
+
+            return rv;
+        }
+    }
+    #endregion
+
+    #region CombatActors
+    public class CombatActor : Actor
+    {
+        #region Properties
+        const int MAX_STAT = 99;
+        protected string _sUnique;
+
+        public override string Name => String.IsNullOrEmpty(_sUnique) ? _sName : _sName + " " + _sUnique;
+
+        private Vector2 _vStartPos;
+        public Vector2 StartPos => _vStartPos;
+
+        protected int _currentHP;
+        public int CurrentHP
+        {
+            get { return _currentHP; }
+            set { _currentHP = value; }
+        }
+        public int MaxHP { get => StatVit * 3; }
+
+        protected int _currentMP;
+        public int CurrentMP
+        {
+            get { return _currentMP; }
+            set { _currentMP = value; }
+        }
+        public int MaxMP { get => StatMag * 3; }
+
+        public int CurrentCharge;
+        public CombatManager.CombatTile Tile;
+        public GUICmbtTile Location => Tile.GUITile;
+
+        public virtual int Attack => (int)(StatStr * 0.5);
+
+        protected int _statStr;
+        public virtual int StatStr { get => _statStr + _buffStr; }
+        protected int _statDef;
+        public virtual int StatDef { get => _statDef + _buffDef; }
+        protected int _statVit;
+        public virtual int StatVit { get => _statVit + _buffVit; }
+        protected int _statMag;
+        public virtual int StatMag { get => _statMag + _buffMag; }
+        protected int _statRes;
+        public virtual int StatRes { get => _statRes + _buffRes; }
+        protected int _statSpd;
+        public virtual int StatSpd { get => _statSpd + _buffSpd; }
+
+        protected int _buffStr;
+        protected int _buffDef;
+        protected int _buffVit;
+        protected int _buffMag;
+        protected int _buffRes;
+        protected int _buffSpd;
+
+        public int Evasion => (int)(40 / (1 + 10 * (Math.Pow(Math.E, (-0.05 * StatSpd)))));
+        public int ResistStatus => (int)(50 / (1 + 10 * (Math.Pow(Math.E, (-0.05 * StatRes)))));
+
+        protected List<MenuAction> _liActions;
+        public virtual List<MenuAction> AbilityList { get => _liActions; }
+
+        protected List<CombatAction> _liSpells;
+        public virtual List<CombatAction> SpellList { get => _liSpells; }
+
+        protected List<Buff> _liBuffs;
+        public List<Buff> LiBuffs { get => _liBuffs; }
+
+        protected Dictionary<ConditionEnum, bool> _diConditions;
+        public Dictionary<ConditionEnum, bool> DiConditions => _diConditions;
+
+        private ElementEnum _elementAttackEnum;
+        protected Dictionary<ElementEnum, ElementAlignment> _diElementalAlignment;
+        public Dictionary<ElementEnum, ElementAlignment> DiElementalAlignment => _diElementalAlignment;
+
+        private Summon _linkedSummon;
+        public Summon LinkedSummon => _linkedSummon;
+
+        public bool Counter;
+        public bool GoToCounter;
+        #endregion
+
+        public CombatActor() : base()
+        {
+            _actorType = ActorEnum.CombatActor;
+            _liSpells = new List<CombatAction>();
+            _liActions = new List<MenuAction>();
+            _liBuffs = new List<Buff>();
+            _diConditions = new Dictionary<ConditionEnum, bool>
+            {
+                [ConditionEnum.KO] = false,
+                [ConditionEnum.Poisoned] = false,
+                [ConditionEnum.Silenced] = false
+            };
+
+            _diElementalAlignment = new Dictionary<ElementEnum, ElementAlignment>
+            {
+                [ElementEnum.Fire] = ElementAlignment.Neutral,
+                [ElementEnum.Ice] = ElementAlignment.Neutral,
+                [ElementEnum.Lightning] = ElementAlignment.Neutral
+            };
+        }
+
+        //ONLY USE THIS FOR CALCULATING TURNS
+        public CombatActor(CombatActor c)
+        {
+            _sName = c.Name;
+            CurrentCharge = c.CurrentCharge;
+            _diConditions = c._diConditions;
+            _statStr = c.StatStr;
+            _statDef = c.StatDef;
+            _statVit = c.StatVit;
+            _statMag = c.StatMag;
+            _statRes = c.StatRes;
+            _statSpd = c.StatSpd;
+
+            _vStartPos = new Vector2(0, 0);
+        }
+
+        public void LoadContent(string texture)
+        {
+            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(texture));
+            int xCrawl = 0;
+            int frameWidth = 24;
+            int frameHeight = 32;
+            _bodySprite.AddAnimation("Walk", frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 32);
+            xCrawl += 2;
+            _bodySprite.AddAnimation("Cast", frameWidth, frameHeight, 2, 0.2f, (xCrawl * frameWidth), 32);
+            xCrawl += 2;
+            _bodySprite.AddAnimation("Hurt", frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 32, "Walk");
+            xCrawl += 1;
+            _bodySprite.AddAnimation("Attack", frameWidth, frameHeight, 1, 0.3f, (xCrawl * frameWidth), 32);
+            xCrawl += 1;
+            _bodySprite.AddAnimation("Critical", frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 32);
+            xCrawl += 2;
+            _bodySprite.AddAnimation("KO", frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 32);
+
+            _bodySprite.SetCurrentAnimation("Walk");
+            _bodySprite.SetScale(CombatManager.CombatScale);
+            _width = _bodySprite.Width;
+            _height = _bodySprite.Height;
+        }
+
+        public override void Update(GameTime theGameTime)
+        {
+            base.Update(theGameTime);
+            if (CurrentHP > 0)
+            {
+                if ((float)CurrentHP / (float)MaxHP <= 0.25 && (IsCurrentAnimation("Walk") || IsCurrentAnimation("KO")))
+                {
+                    PlayAnimation("Critical");
+                }
+                else if ((float)CurrentHP / (float)MaxHP > 0.25 && IsCurrentAnimation("Critical"))
+                {
+                    PlayAnimation("Walk");
+                }
+            }
+            else
+            {
+                if (IsCurrentAnimation("Walk"))
+                {
+                    PlayAnimation("KO");
+                }
+            }
+
+            if (_linkedSummon != null)
+            {
+                _linkedSummon.Update(theGameTime);
+            }
+        }
+
+        public int ProcessAttack(CombatActor attacker, int potency, ElementEnum element = ElementEnum.None)
+        {
+            int base_attack = attacker.Attack;
+
+            double power = Math.Pow(((double)base_attack - (double)StatDef), 2) + attacker.StatStr;
+            double dMult = Math.Min(2, Math.Max(0.01, power));
+            int dmg = (int)Math.Max(1, base_attack * dMult);
+
+            dmg += ApplyResistances(dmg, element);
+            return DecreaseHealth(potency);
+        }
+        public int ProcessSpell(CombatActor attacker, int potency, ElementEnum element = ElementEnum.None)
+        {
+            int base_damage = (attacker.StatMag - StatRes / 2) * potency;
+            int bonus = 0;
+
+            base_damage += ApplyResistances(base_damage, element);
+            return DecreaseHealth(base_damage);
+        }
+        public int ApplyResistances(int dmg, ElementEnum element = ElementEnum.None)
+        {
+            int modifiedDmg = 0;
+            if (element != ElementEnum.None)
+            {
+                if (MapManager.CurrentMap.IsOutside && GameCalendar.IsRaining())
+                {
+                    if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (int)(dmg * 1.2) - dmg; }
+                    else if (element.Equals(ElementEnum.Fire)) { modifiedDmg += (int)(dmg * 0.8) - dmg; }
+                }
+                else if (MapManager.CurrentMap.IsOutside && GameCalendar.IsSnowing())
+                {
+                    if (element.Equals(ElementEnum.Ice)) { modifiedDmg += (int)(dmg * 1.2) - dmg; }
+                    else if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (int)(dmg * 0.8) - dmg; }
+                }
+
+                if (_linkedSummon != null && _diElementalAlignment[element].Equals(ElementAlignment.Neutral))
+                {
+                    if (_linkedSummon.Element.Equals(element))
+                    {
+                        modifiedDmg += (int)(dmg * 0.8) - dmg;
+                    }
+                }
+
+                if (_diElementalAlignment[element].Equals(ElementAlignment.Resists))
+                {
+                    modifiedDmg += (int)(dmg * 0.8) - dmg;
+                }
+                else if (_diElementalAlignment[element].Equals(ElementAlignment.Vulnerable))
+                {
+                    modifiedDmg += (int)(dmg * 1.2) - dmg;
+                }
+            }
+
+            return modifiedDmg;
+        }
+
+        public virtual GUISprite GetSprite()
+        {
+            return Tile.GUITile.CharacterSprite;
+        }
+
+        public virtual int DecreaseHealth(int value)
+        {
+            _currentHP -= (_currentHP - value >= 0) ? value : _currentHP;
+            PlayAnimation("Hurt");
+            if (_currentHP == 0)
+            {
+                _diConditions[ConditionEnum.KO] = true;
+                CombatManager.Kill(this);
+                UnlinkSummon();
+                Tile.GUITile.LinkSummon(null);
+            }
+
+            return value;
+        }
+
+        public int IncreaseHealth(int x)
+        {
+            int amountHealed = 0;
+            if (!KnockedOut())
+            {
+                amountHealed = x;
+                if (_currentHP + x <= MaxHP)
+                {
+                    _currentHP += x;
+                }
+                else
+                {
+                    amountHealed = MaxHP - _currentHP;
+                    _currentHP = MaxHP;
+                }
+            }
+
+            return amountHealed;
+        }
+
+        public void IncreaseMana(int x)
+        {
+            if (_currentMP + x <= MaxMP)
+            {
+                _currentMP += x;
+            }
+            else
+            {
+                _currentMP = MaxMP;
+            }
+        }
+
+        public void TickBuffs()
+        {
+            List<Buff> toRemove = new List<Buff>();
+            foreach (Buff b in _liBuffs)
+            {
+                if (--b.Duration == 0)
+                {
+                    toRemove.Add(b);
+                    foreach (KeyValuePair<string, int> kvp in b.StatMods)
+                    {
+                        switch (kvp.Key)
+                        {
+                            case "Str":
+                                _buffStr -= kvp.Value;
+                                break;
+                            case "Def":
+                                _buffDef -= kvp.Value;
+                                break;
+                            case "Vit":
+                                _buffVit -= kvp.Value;
+                                break;
+                            case "Mag":
+                                _buffMag -= kvp.Value;
+                                break;
+                            case "Res":
+                                _buffRes -= kvp.Value;
+                                break;
+                            case "Spd":
+                                _buffSpd -= kvp.Value;
+                                break;
+                        }
+                    }
+                }
+            }
+
+            foreach (Buff b in toRemove)
+            {
+                _liBuffs.Remove(b);
+            }
+            toRemove.Clear();
+        }
+
+        public void AddBuff(Buff b)
+        {
+            Buff find = _liBuffs.Find(buff => buff.Name == b.Name);
+            if (find == null) { _liBuffs.Add(b); }
+            else { find.Duration += b.Duration; }
+
+            foreach (KeyValuePair<string, int> kvp in b.StatMods)
+            {
+                switch (kvp.Key)
+                {
+                    case "Str":
+                        _buffStr -= kvp.Value;
+                        break;
+                    case "Def":
+                        _buffDef -= kvp.Value;
+                        break;
+                    case "Vit":
+                        _buffVit -= kvp.Value;
+                        break;
+                    case "Mag":
+                        _buffMag -= kvp.Value;
+                        break;
+                    case "Res":
+                        _buffRes -= kvp.Value;
+                        break;
+                    case "Spd":
+                        _buffSpd -= kvp.Value;
+                        break;
+                }
+            }
+        }
+
+        public void LinkSummon(Summon s)
+        {
+            _linkedSummon = s;
+            _linkedSummon.Position = Position - new Vector2(100, 100);
+            s.Tile = Tile;
+        }
+
+        public void UnlinkSummon()
+        {
+            _linkedSummon = null;
+        }
+
+        public virtual ElementEnum GetAttackElement()
+        {
+            ElementEnum e = _elementAttackEnum;
+
+            if (LinkedSummon != null && e.Equals(ElementEnum.None))
+            {
+                e = LinkedSummon.Element;
+            }
+            return e;
+        }
+
+        public bool CanCast(int x)
+        {
+            return x <= CurrentMP;
+        }
+
+        public void SetUnique(string u)
+        {
+            _sUnique = u;
+        }
+
+        public bool KnockedOut()
+        {
+            return _diConditions[ConditionEnum.KO];
+        }
+
+        public bool Poisoned()
+        {
+            return _diConditions[ConditionEnum.Poisoned];
+        }
+
+        public bool Silenced()
+        {
+            return _diConditions[ConditionEnum.Silenced];
+        }
+
+        public void ChangeConditionStatus(ConditionEnum c, bool setTo)
+        {
+            _diConditions[c] = setTo;
+        }
+
+        public void ClearConditions()
+        {
+            foreach (ConditionEnum condition in Enum.GetValues(typeof(ConditionEnum)))
+            {
+                ChangeConditionStatus(condition, false);
+            }
+        }
+
+        public void IncreaseStartPos()
+        {
+            if (_vStartPos.Y < CombatManager.MAX_ROW)
+            {
+                _vStartPos.Y++;
+            }
+            else
+            {
+                _vStartPos = new Vector2(_vStartPos.X++, 0);
+            }
+        }
+        public void SetStartPosition(Vector2 startPos)
+        {
+            _vStartPos = startPos;
+        }
+
+        public virtual bool IsSummon() { return false; }
+    }
+
+    public class CombatAdventurer : CombatActor
+    {
+        #region Properties
+        public static List<int> LevelRange = new List<int> { 0, 10, 40, 100, 200, 600, 800, 1200, 1600, 2000 };
+        private WorldCombatant _world;
+        public WorldCombatant World => _world;
+
+        protected CharacterClass _class;
+        public CharacterClass CharacterClass { get => _class; }
+        private int _classLevel;
+        public int ClassLevel { get => _classLevel; }
+
+        private int _xp;
+        public int XP { get => _xp; }
+
+        public bool Protected;
+
+        public Equipment Weapon;
+        public Equipment TempWeapon;
+        public Equipment Armor;
+        public Equipment TempArmor;
+
+        public override int Attack => GetGearAtk();
+        public override int StatStr { get => 10 + (_classLevel * _class.StatStr) + _buffStr + GetGearStr(); }
+        public override int StatDef { get => 10 + (_classLevel * _class.StatDef) + _buffDef + GetGearDef() + (Protected ? 10 : 0); }
+        public override int StatVit { get => 10 + (_classLevel * _class.StatVit) + GetGearVit(); }
+        public override int StatMag { get => 10 + (_classLevel * _class.StatMag) + _buffMag + GetGearMag(); }
+        public override int StatRes { get => 10 + (_classLevel * _class.StatRes) + _buffRes + GetGearRes(); }
+        public override int StatSpd { get => 10 + (_classLevel * _class.StatSpd) + +_buffSpd + GetGearSpd(); }
+
+        public override List<MenuAction> AbilityList { get => _class.AbilityList; }
+        public override List<CombatAction> SpellList { get => _class._spellList; }
+
+        public int GetGearAtk()
+        {
+            int rv = 0;
+
+            if (TempWeapon != null) { rv += TempWeapon.Attack; }
+            else if (Weapon != null) { rv += Weapon.Attack; }
+            else if (Weapon == null) { rv += base.Attack; }
+            if (TempArmor != null) { rv += TempArmor.Attack; }
+            else if (Armor != null) { rv += Armor.Attack; }
+
+            return rv;
+        }
+        public int GetGearStr()
+        {
+            int rv = 0;
+
+            if (TempWeapon != null) { rv += TempWeapon.Str; }
+            else if (Weapon != null) { rv += Weapon.Str; }
+            if (TempArmor != null) { rv += TempArmor.Str; }
+            else if (Armor != null) { rv += Armor.Str; }
+
+            return rv;
+        }
+        public int GetGearDef()
+        {
+            int rv = 0;
+
+            if (TempWeapon != null) { rv += TempWeapon.Def; }
+            else if (Weapon != null) { rv += Weapon.Def; }
+            if (TempArmor != null) { rv += TempArmor.Def; }
+            else if (Armor != null) { rv += Armor.Def; }
+
+            return rv;
+        }
+        public int GetGearVit()
+        {
+            int rv = 0;
+
+            if (TempWeapon != null) { rv += TempWeapon.Vit; }
+            else if (Weapon != null) { rv += Weapon.Vit; }
+            if (TempArmor != null) { rv += TempArmor.Vit; }
+            else if (Armor != null) { rv += Armor.Vit; }
+
+            return rv;
+        }
+        public int GetGearMag()
+        {
+            int rv = 0;
+
+            if (TempWeapon != null) { rv += TempWeapon.Mag; }
+            else if (Weapon != null) { rv += Weapon.Mag; }
+            if (TempArmor != null) { rv += TempArmor.Mag; }
+            else if (Armor != null) { rv += Armor.Mag; }
+
+            return rv;
+        }
+        public int GetGearRes()
+        {
+            int rv = 0;
+
+            if (TempWeapon != null) { rv += TempWeapon.Res; }
+            else if (Weapon != null) { rv += Weapon.Res; }
+            if (TempArmor != null) { rv += TempArmor.Res; }
+            else if (Armor != null) { rv += Armor.Res; }
+
+            return rv;
+        }
+        public int GetGearSpd()
+        {
+            int rv = 0;
+
+            if (TempWeapon != null) { rv += TempWeapon.Spd; }
+            else if (Weapon != null) { rv += Weapon.Spd; }
+            if (TempArmor != null) { rv += TempArmor.Spd; }
+            else if (Armor != null) { rv += Armor.Spd; }
+
+            return rv;
+        }
+
+        #endregion
+        public CombatAdventurer(WorldCombatant w) : this()
+        {
+            _sName = w.Name;
+            _world = w;
+        }
+
+        public CombatAdventurer() : base()
+        {
+            _actorType = ActorEnum.CombatAdventurer;
+            _classLevel = 1;
+        }
+
+        public void SetClass(CharacterClass x)
+        {
+            _class = x;
+            _currentHP = MaxHP;
+            _currentMP = MaxMP;
+        }
+
+        public void AddXP(int x)
+        {
+            _xp += x;
+            if (_xp >= LevelRange[_classLevel])
+            {
+                _classLevel++;
+            }
+        }
+
+        public AdventurerData SaveData()
+        {
+            AdventurerData advData = new AdventurerData
+            {
+                armor = Item.SaveData(Armor),
+                weapon = Item.SaveData(Weapon),
+                level = _classLevel,
+                xp = _xp
+            };
+
+            return advData;
+        }
+        public void LoadData(AdventurerData data)
+        {
+            Armor = (Equipment)ObjectManager.GetItem(data.armor.itemID, data.armor.num);
+            Weapon = (Equipment)ObjectManager.GetItem(data.weapon.itemID, data.weapon.num);
+            _classLevel = data.level;
+            _xp = data.xp;
+        }
+    }
+
+    public class Monster : CombatActor
+    {
+        #region Properties
+        int _id;
+        public int ID { get => _id; }
+        int _iLvl;
+        int _xp;
+        public int XP { get => _xp; }
+        protected string _textureName;
+        protected Vector2 _moveTo = Vector2.Zero;
+
+        #endregion
+
+        public Monster(int id, string[] stringData)
+        {
+            _actorType = ActorEnum.Monster;
+            ImportBasics(stringData, id);
+            LoadContent(_textureName, 100, 100, 2, 0.2f);
+        }
+
+        protected void ImportBasics(string[] stringData, int id)
+        {
+            _id = id;
+            _sName = GameContentManager.GetGameText("Monster " + _id);
+
+            foreach (string s in stringData)
+            {
+                string[] tagType = s.Split(':');
+                if (tagType[0].Equals("Texture"))
+                {
+                    _textureName = @"Textures\" + tagType[1];
+                }
+                else if (tagType[0].Equals("Lvl"))
+                {
+                    _iLvl = int.Parse(tagType[1]);
+                    _xp = _iLvl * 10;
+                    _statStr = 2 * _iLvl + 10;
+                    _statDef = 2 * _iLvl + 10;
+                    _statVit = (3 * _iLvl) + 80;
+                    _statMag = 2 * _iLvl + 10;
+                    _statRes = 2 * _iLvl + 10;
+                    _statSpd = 10;
+                }
+                else if (tagType[0].Equals("Trait"))
+                {
+                    HandleTrait(GameContentManager.GetMonsterTraitData(tagType[1]));
+                }
+                else if (tagType[0].Equals("Resist"))
+                {
+                    string[] elemSplit = tagType[1].Split('-');
+                    foreach (string elem in elemSplit)
+                    {
+                        _diElementalAlignment[Util.ParseEnum<ElementEnum>(elem)] = ElementAlignment.Resists;
+                    }
+                }
+                else if (tagType[0].Equals("Vuln"))
+                {
+                    string[] elemSplit = tagType[1].Split('-');
+                    foreach (string elem in elemSplit)
+                    {
+                        _diElementalAlignment[Util.ParseEnum<ElementEnum>(elem)] = ElementAlignment.Vulnerable;
+                    }
+                }
+            }
+
+            _currentHP = MaxHP;
+            _currentMP = MaxMP;
+        }
+
+        public void LoadContent(int textureWidth, int textureHeight, int numFrames, float frameSpeed)
+        {
+            base.LoadContent(_textureName, textureWidth, textureHeight, numFrames, frameSpeed);
+        }
+
+        private void HandleTrait(string traitData)
+        {
+            string[] traits = Util.FindTags(traitData);
+            foreach (string s in traits)
+            {
+                string[] tagType = s.Split(':');
+                if (tagType[0].Equals("Str"))
+                {
+                    ApplyTrait(ref _statStr, tagType[1]);
+                }
+                else if (tagType[0].Equals("Def"))
+                {
+                    ApplyTrait(ref _statDef, tagType[1]);
+                }
+                else if (tagType[0].Equals("Vit"))
+                {
+                    ApplyTrait(ref _statVit, tagType[1]);
+                }
+                else if (tagType[0].Equals("Mag"))
+                {
+                    ApplyTrait(ref _statMag, tagType[1]);
+                }
+                else if (tagType[0].Equals("Res"))
+                {
+                    ApplyTrait(ref _statRes, tagType[1]);
+                }
+                else if (tagType[0].Equals("Spd"))
+                {
+                    ApplyTrait(ref _statSpd, tagType[1]);
+                }
+            }
+        }
+
+        private void ApplyTrait(ref int value, string data)
+        {
+            if (data.Equals("+"))
+            {
+                value = (int)(value * 1.1);
+            }
+            else if (data.Equals("-"))
+            {
+                value = (int)(value * 0.9);
+            }
+        }
+    }
+
+    public class Summon : CombatActor
+    {
+        ElementEnum _element = ElementEnum.None;
+        public ElementEnum Element => _element;
+
+        int _iMagStat;
+
+        public bool Acted;
+        public bool Swapped;
+        bool _bTwinCast;
+        public bool TwinCast => _bTwinCast;
+        bool _bAggressive;
+        public bool Aggressive => _bAggressive;
+        bool _bDefensive;
+        public bool Defensive => _bDefensive;
+
+        public CombatActor linkedChar;
+
+        public Summon()
+        {
+            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\Eye"));
+            _bodySprite.AddAnimation("Walk", 0, 0, 16, 16, 2, 0.9f);
+            _bodySprite.AddAnimation("Attack", 32, 0, 16, 16, 4, 0.1f);
+            _bodySprite.AddAnimation("Cast", 32, 0, 16, 16, 4, 0.1f);
+            _bodySprite.SetCurrentAnimation("Idle");
+            _bodySprite.SetScale(5);
+        }
+
+        public Summon Clone()
+        {
+            Summon copy = new Summon();
+            copy.SetStats(_iMagStat);
+            if (TwinCast) { copy.SetTwincast(); }
+            if (Aggressive) { copy.SetAggressive(); }
+            if (Counter) { copy.Counter = Counter; }
+            if (Defensive) { copy.SetDefensive(); }
+
+            copy._element = _element;
+            copy.Tile = Tile;
+
+            return copy;
+        }
+
+        public void SetStats(int magStat)
+        {
+            _iMagStat = magStat;
+            _statStr = 2 * magStat + 10;
+            _statDef = 2 * magStat + 10;
+            _statVit = (3 * magStat) + 80;
+            _statMag = 2 * magStat + 10;
+            _statRes = 2 * magStat + 10;
+            _statSpd = 10;
+
+            CurrentHP = MaxHP;
+        }
+
+        public override int DecreaseHealth(int value)
+        {
+            int rv = base.DecreaseHealth(value);
+
+            if (CurrentHP == 0)
+            {
+                linkedChar.UnlinkSummon();
+            }
+
+            return rv;
+        }
+        public override GUISprite GetSprite()
+        {
+            return Tile.GUITile.SummonSprite;
+        }
+
+        public void SetTwincast() { _bTwinCast = true; }
+        public void SetAggressive() { _bAggressive = true; }
+        public void SetDefensive() { _bDefensive = true; }
+        public void SetElement(ElementEnum el) { _element = el; }
+
+        public override bool IsSummon() { return true; }
     }
     #endregion
 }

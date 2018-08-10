@@ -61,7 +61,7 @@ namespace RiverHollow.Game_Managers
             _liParty = new List<CombatAdventurer>();
             _questLog = new List<Quest>();
             World = new PlayerCharacter();
-            Combat = new CombatAdventurer(Name);
+            Combat = new CombatAdventurer(World);
             _liParty.Add(Combat);
             _buildings = new List<WorkerBuilding>();
             _canMake = new List<int>();
@@ -215,7 +215,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void AddToParty(CombatAdventurer c)
         {
-            foreach(CombatCharacter oldChar in _liParty)
+            foreach(CombatActor oldChar in _liParty)
             {
                 if (oldChar.StartPos.Equals(c.StartPos))
                 {

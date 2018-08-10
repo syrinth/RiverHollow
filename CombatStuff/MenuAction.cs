@@ -1,6 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
@@ -25,7 +23,7 @@ namespace RiverHollow.Actors.CombatStuff
         protected string _description;
         public string Description { get => _description; }
 
-        public CombatCharacter SkillUser;
+        public CombatActor SkillUser;
 
         public MenuAction() { }
         public MenuAction(int id, string[] stringData)
@@ -104,7 +102,7 @@ namespace RiverHollow.Actors.CombatStuff
         public bool _used;
 
         bool _pauseForCounter;
-        CombatCharacter counteringChar;
+        CombatActor counteringChar;
         Summon counteringSummon;
 
         public AnimatedSprite Sprite;
@@ -141,10 +139,6 @@ namespace RiverHollow.Actors.CombatStuff
                 //Parsing for important data
                 if (tagType[0].Equals("Type"))
                 {
-                    if (tagType[1] == "Spell")
-                    {
-                        int k = 0;
-                    }
                     _actionType = Util.ParseEnum<ActionEnum>(tagType[1]);
                 }
                 else if (tagType[0].Equals("Element"))
@@ -504,7 +498,7 @@ namespace RiverHollow.Actors.CombatStuff
                         break;
                     }
                 case "UserAttack":
-                    CombatCharacter original = TileTargetList[0].Character;
+                    CombatActor original = TileTargetList[0].Character;
                     Summon summ = original.LinkedSummon;
                     if (summ != null && !summ.Swapped && summ.Defensive)
                     {

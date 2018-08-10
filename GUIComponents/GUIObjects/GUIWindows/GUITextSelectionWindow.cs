@@ -1,12 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers.GUIObjects;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
-using RiverHollow.Actors.NPCs;
 using RiverHollow.Actors;
 using RiverHollow.Misc;
 using RiverHollow.GUIComponents.GUIObjects;

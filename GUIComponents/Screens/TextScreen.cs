@@ -5,9 +5,8 @@ using RiverHollow.Game_Managers.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIObjects;
-using static RiverHollow.WorldObjects.Door;
-using RiverHollow.Actors.NPCs;
 
+using static RiverHollow.WorldObjects.Door;
 namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
     class TextScreen : GUIScreen

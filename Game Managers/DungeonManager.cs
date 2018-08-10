@@ -6,6 +6,8 @@ using RiverHollow.Misc;
 using static RiverHollow.WorldObjects.WorldItem;
 
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.Actors;
+
 namespace RiverHollow.Game_Managers
 {
     static class DungeonManager

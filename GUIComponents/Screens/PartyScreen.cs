@@ -1,22 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using RiverHollow.Actors.CombatStuff;
 using RiverHollow.GUIObjects;
 using RiverHollow.WorldObjects;
-using static RiverHollow.WorldObjects.Clothes;
 using RiverHollow.GUIComponents.GUIObjects;
-using static RiverHollow.GUIObjects.GUIObject;
-using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Actors.NPCs;
 using RiverHollow.Actors;
+using System.Collections.Generic;
+
+using static RiverHollow.WorldObjects.Item;
+using static RiverHollow.GUIObjects.GUIObject;
+using static RiverHollow.WorldObjects.Clothes;
+using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.GUIObjects.PartyScreen.NPCDisplayBox;
 using static RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIItemBox;
-using System.Collections.Generic;
-using static RiverHollow.WorldObjects.Item;
-using System;
-
 namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class PartyScreen : GUIScreen
@@ -54,13 +51,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 else
                 {
                     CombatAdventurer c = PlayerManager.GetParty()[i];
-                    if (c.EligibleNPC != null)
+                    if (c.World != null)
                     {
-                        _arrDisplayBoxes[i] = new CharacterDisplayBox(c.EligibleNPC, ChangeSelectedCharacter);
-                    }
-                    else
-                    {
-                        _arrDisplayBoxes[i] = new CharacterDisplayBox(c.WorldAdv, ChangeSelectedCharacter);
+                        _arrDisplayBoxes[i] = new CharacterDisplayBox(c.World, ChangeSelectedCharacter);
                     }
                 }
 
@@ -310,17 +303,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _character = c;
                     if (c != null)
                     {
-                        if (c.EligibleNPC != null)
+                        if (c.World != null)
                         {
-                            _headshot = c.EligibleNPC.GetHeadShot();
-                        }
-                        else if (c.WorldAdv != null)
-                        {
-                            _headshot = c.WorldAdv.GetHeadShot();
-                        }
-                        else
-                        {
-                            _headshot = PlayerManager.World.GetHeadShot();
+                            _headshot = c.World.GetHeadShot();
                         }
                         _headshot.CenterOnObject(this);
                     }
@@ -347,8 +332,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             public delegate void ClickDelegate(CombatAdventurer selectedCharacter);
             private ClickDelegate _delAction;
 
-            CombatAdventurer _character;
-            public CombatAdventurer Character => _character;
+            CombatAdventurer _actor;
+            public CombatAdventurer Character => _actor;
 
             public NPCDisplayBox(ClickDelegate action)
             {
@@ -366,16 +351,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 GUISprite _sprite;
                 public GUISprite Sprite => _sprite;
  
-                public CharacterDisplayBox(WorldAdventurer w, ClickDelegate del) : base(del)
+                public CharacterDisplayBox(WorldCombatant w, ClickDelegate del) : base(del)
                 {
-                    _character = w.Combat;
+                    _actor = w.Combat;
                     _sprite = new GUISprite(w.BodySprite, true);
                     Setup();
                 }
 
                 public CharacterDisplayBox(EligibleNPC n, ClickDelegate del) : base(del)
                 {
-                    _character = n.Combat;
+                    _actor = n.Combat;
                     _sprite = new GUISprite(n.BodySprite, true);
                     Setup();
                 }
@@ -424,7 +409,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     bool rv = false;
                     if (Contains(mouse) && _delAction != null)
                     {
-                        _delAction(_character);
+                        _delAction(_actor);
                         rv = true;
                     }
                     return rv;
@@ -448,7 +433,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 public PlayerDisplayBox(ClickDelegate action) : base(action)
                 {
-                    _character = PlayerManager.Combat;
+                    _actor = PlayerManager.Combat;
                     Configure();
 
                     PositionSprites();

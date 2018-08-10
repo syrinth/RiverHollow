@@ -1,10 +1,8 @@
 ﻿using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIObjects;
-using RiverHollow.WorldObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using RiverHollow.Actors.NPCs;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {

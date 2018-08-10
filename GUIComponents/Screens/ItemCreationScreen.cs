@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.ObjectManager;
-using RiverHollow.Actors.NPCs;
 using RiverHollow.GUIObjects;
 using static RiverHollow.WorldObjects.WorldItem.Machine;
 using static RiverHollow.GUIObjects.GUIObject;

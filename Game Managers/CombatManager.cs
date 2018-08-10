@@ -9,7 +9,7 @@ using System;
 using static RiverHollow.GUIObjects.GUIObject;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.CombatStuff;
+using RiverHollow.Actors;
 
 namespace RiverHollow.Game_Managers
 {
@@ -18,13 +18,12 @@ namespace RiverHollow.Game_Managers
         public static int CombatScale = 5;
         public static int EarnedXP;
         private static Mob _mob;
-        private static int stamDrain = 1;
         public static Mob CurrentMob { get => _mob; }
-        public static CombatCharacter ActiveCharacter;
-        private static List<CombatCharacter> _listMonsters;
-        public static List<CombatCharacter> Monsters { get => _listMonsters; }
-        private static List<CombatCharacter> _listParty;
-        public static List<CombatCharacter> Party { get => _listParty; }
+        public static CombatActor ActiveCharacter;
+        private static List<CombatActor> _listMonsters;
+        public static List<CombatActor> Monsters { get => _listMonsters; }
+        private static List<CombatActor> _listParty;
+        public static List<CombatActor> Party { get => _listParty; }
         public static List<string> LiLevels;
 
         public enum PhaseEnum { Charging, NewTurn, EnemyTurn, SelectSkill, ChooseTarget, Defeat, DisplayAttack, DisplayXP, DisplayLevels, Lost, PerformAction, EndCombat }
@@ -36,8 +35,8 @@ namespace RiverHollow.Game_Managers
         public static string Text;
 
         #region Turn Sequence
-        static List<CombatCharacter> _liQueuedCharacters;
-        static List<CombatCharacter> _liChargingCharacters;
+        static List<CombatActor> _liQueuedCharacters;
+        static List<CombatActor> _liChargingCharacters;
         #endregion
 
         #region CombatGrid
@@ -75,11 +74,11 @@ namespace RiverHollow.Game_Managers
             EarnedXP = 0;
             foreach (Monster mon in _listMonsters) { EarnedXP += mon.XP; }                                      //Sets the accumulated xp for the battle
 
-            _listParty = new List<CombatCharacter>();
+            _listParty = new List<CombatActor>();
             _listParty.AddRange(PlayerManager.GetParty());
 
-            _liQueuedCharacters = new List<CombatCharacter>();
-            _liChargingCharacters = new List<CombatCharacter>();
+            _liQueuedCharacters = new List<CombatActor>();
+            _liChargingCharacters = new List<CombatActor>();
             _liChargingCharacters.AddRange(_listParty);
             _liChargingCharacters.AddRange(_listMonsters);
 
@@ -87,7 +86,7 @@ namespace RiverHollow.Game_Managers
             _liChargingCharacters.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));
 
             RHRandom random = new RHRandom();
-            foreach(CombatCharacter c in _liChargingCharacters)
+            foreach(CombatActor c in _liChargingCharacters)
             {
                 c.CurrentCharge += random.Next(0, 50);
             }
@@ -115,7 +114,7 @@ namespace RiverHollow.Game_Managers
             }
 
             //Get the Players' party and assign each of them a battle position
-            List<CombatCharacter> party = CombatManager.Party;
+            List<CombatActor> party = CombatManager.Party;
             for (int i = 0; i < party.Count; i++)
             {
                 if (party[i] != null)
@@ -272,20 +271,20 @@ namespace RiverHollow.Game_Managers
         internal static List<string> CalculateTurnOrder()
         {
             List<string> rv = new List<string>();
-            List<CombatCharacter> queuedCopy = new List<CombatCharacter>();
-            List<CombatCharacter> chargingCopy = new List<CombatCharacter>();
+            List<CombatActor> queuedCopy = new List<CombatActor>();
+            List<CombatActor> chargingCopy = new List<CombatActor>();
 
-            foreach (CombatCharacter c in _liQueuedCharacters) { queuedCopy.Add(new CombatCharacter(c)); }
-            foreach (CombatCharacter c in _liChargingCharacters) { chargingCopy.Add(new CombatCharacter(c)); }
+            foreach (CombatActor c in _liQueuedCharacters) { queuedCopy.Add(new CombatActor(c)); }
+            foreach (CombatActor c in _liChargingCharacters) { chargingCopy.Add(new CombatActor(c)); }
 
             if (ActiveCharacter != null)
             {
                 rv.Add(ActiveCharacter.Name);
                 chargingCopy.Find(x => x.Name == ActiveCharacter.Name).CurrentCharge -= (SelectedAction == null) ? 100 : SelectedAction.ChargeCost();
-                CombatCharacter c = queuedCopy.Find(x => x.Name == ActiveCharacter.Name);
+                CombatActor c = queuedCopy.Find(x => x.Name == ActiveCharacter.Name);
             }
 
-            foreach (CombatCharacter c in queuedCopy)
+            foreach (CombatActor c in queuedCopy)
             {
                 chargingCopy.Add(c);
                 rv.Add(c.Name);
@@ -296,7 +295,7 @@ namespace RiverHollow.Game_Managers
             while (rv.Count < 10)
             {
                 CombatTick(ref chargingCopy, ref queuedCopy);
-                foreach (CombatCharacter c in queuedCopy)
+                foreach (CombatActor c in queuedCopy)
                 {
                     rv.Add(c.Name);
                     c.CurrentCharge = 0;
@@ -332,7 +331,7 @@ namespace RiverHollow.Game_Managers
             SelectedAction = new ChosenAction(it);
         }
 
-        public static void Kill(CombatCharacter c)
+        public static void Kill(CombatActor c)
         {
             if (_listMonsters.Contains((c)))
             {
@@ -345,7 +344,7 @@ namespace RiverHollow.Game_Managers
         public static bool PartyUp()
         {
             bool stillOne = false;
-            foreach (CombatCharacter character in _listParty)
+            foreach (CombatActor character in _listParty)
             {
                 if (character.CurrentHP > 0) { stillOne = true; }
             }
@@ -562,10 +561,10 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Turn Handling
-        private static void CombatTick(ref List<CombatCharacter> charging, ref List<CombatCharacter> queued)
+        private static void CombatTick(ref List<CombatActor> charging, ref List<CombatActor> queued)
         {
-            List<CombatCharacter> toQueue = new List<CombatCharacter>();
-            foreach(CombatCharacter c in charging)
+            List<CombatActor> toQueue = new List<CombatActor>();
+            foreach(CombatActor c in charging)
             {
                 if (!c.KnockedOut())
                 {
@@ -578,7 +577,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            foreach(CombatCharacter c in toQueue)
+            foreach(CombatActor c in toQueue)
             {
                 queued.Add(c);
                 charging.Remove(c);
@@ -653,8 +652,6 @@ namespace RiverHollow.Game_Managers
             TargetEnum _tileType;
             public TargetEnum TargetType => _tileType;
 
-            int _iHeal;
-            public int  HealAmount => _iHeal;
             int _iRow;
             public int Row => _iRow;
             int _iCol;
@@ -665,8 +662,8 @@ namespace RiverHollow.Game_Managers
 
             public bool TargetPlayer = true;
 
-            CombatCharacter _character;
-            public CombatCharacter Character => TargetPlayer ? _character : _character.LinkedSummon;
+            CombatActor _character;
+            public CombatActor Character => TargetPlayer ? _character : _character.LinkedSummon;
             GUICmbtTile _gTile;
             public GUICmbtTile GUITile => _gTile;
 
@@ -677,7 +674,7 @@ namespace RiverHollow.Game_Managers
                 _tileType = tileType;
             }
 
-            public void SetCombatant(CombatCharacter c)
+            public void SetCombatant(CombatActor c)
             {
                 _character = c;
                 if (c != null)
@@ -757,7 +754,7 @@ namespace RiverHollow.Game_Managers
 
             List<CombatTile> _liLegalTiles;
             public List<CombatTile> LegalTiles => _liLegalTiles;
-            public CombatCharacter User;
+            public CombatActor User;
 
             string _name;
             public string Name => _name;
@@ -858,7 +855,7 @@ namespace RiverHollow.Game_Managers
             {
                 if (_bDrawItem && _chosenItem != null)     //We want to draw the item above the character's head
                 {
-                    CombatCharacter c = CombatManager.ActiveCharacter;
+                    CombatActor c = CombatManager.ActiveCharacter;
                     Point p = c.Position.ToPoint();
                     p.X += c.Width / 2 - 16;
                     _chosenItem.Draw(spritebatch, new Rectangle(p, new Point(32, 32)));
@@ -875,7 +872,7 @@ namespace RiverHollow.Game_Managers
                 else if (_chosenItem != null)
                 {
                     bool finished = false;
-                    CombatCharacter c = CombatManager.ActiveCharacter;
+                    CombatActor c = CombatManager.ActiveCharacter;
                     if (!c.IsCurrentAnimation("Cast"))
                     {
                         c.PlayAnimation("Cast");
@@ -1023,7 +1020,7 @@ namespace RiverHollow.Game_Managers
                 return rv;
             }
 
-            public void SetUser(CombatCharacter c) {
+            public void SetUser(CombatActor c) {
                 if (_chosenAction != null)
                 {
                     _chosenAction.SkillUser = c;

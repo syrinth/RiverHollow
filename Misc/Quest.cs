@@ -1,14 +1,11 @@
 ﻿using RiverHollow.Actors;
-using RiverHollow.Actors.NPCs;
 using RiverHollow.Game_Managers;
 using RiverHollow.Tile_Engine;
 using RiverHollow.WorldObjects;
-using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using static RiverHollow.Actors.NPCs.Merchandise;
-using static RiverHollow.Game_Managers.GameManager;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.Misc
 {
     public class Quest

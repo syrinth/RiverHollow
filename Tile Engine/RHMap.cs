@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using RiverHollow.Misc;
 using RiverHollow.Actors;
-using RiverHollow.Actors.NPCs;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIObjects;
 using RiverHollow.WorldObjects;
@@ -830,17 +829,10 @@ namespace RiverHollow.Tile_Engine
             {
                 foreach (WorldActor c in _liCharacters)
                 {
-                    if (PlayerManager.PlayerInRange(c.CollisionBox.Center, (int)(TileSize * 1.5)) && c.CollisionContains(mouseLocation) && c.CanTalk() && c.Active)
+                    if (PlayerManager.PlayerInRange(c.CollisionBox.Center, (int)(TileSize * 1.5)) && c.CollisionContains(mouseLocation) && c.CanTalk && c.Active)
                     {
+                        ((TalkingActor)c).Talk();
                         rv = true;
-                        if (c.IsSpirit())
-                        {
-                            ((Spirit)c).Talk();
-                        }
-                        else
-                        {
-                            ((Villager)c).Talk();
-                        }
                         break;
                     }
                 }
@@ -1555,10 +1547,6 @@ namespace RiverHollow.Tile_Engine
                         PlaceWorldObject(obj);
                     }
                     
-                }
-                else
-                {
-                    int i = 0;
                 }
             }
             foreach (ContainerData c in data.containers)

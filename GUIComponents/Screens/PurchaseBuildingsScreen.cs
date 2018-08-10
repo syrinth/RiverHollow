@@ -1,5 +1,4 @@
-﻿using RiverHollow.Actors.NPCs;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+﻿using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,6 +9,7 @@ using static RiverHollow.GUIObjects.GUIObject;
 using RiverHollow.GUIComponents.GUIObjects;
 
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Actors.ShopKeeper;
 
 namespace RiverHollow.Game_Managers.GUIObjects.Screens
 {

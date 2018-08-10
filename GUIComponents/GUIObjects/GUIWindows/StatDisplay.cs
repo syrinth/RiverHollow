@@ -1,9 +1,9 @@
 ﻿using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Actors.CombatStuff;
 using RiverHollow.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.Actors;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -12,7 +12,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public enum DisplayEnum { Energy, Health, Mana};
 
         DisplayEnum _toDisplay;
-        CombatCharacter _character;
+        CombatActor _character;
         float _percentage;
         bool _bHover;
         SpriteFont _font;
@@ -51,7 +51,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Width = 200;
         }
 
-        public GUIStatDisplay(DisplayEnum what, CombatCharacter c, int width)
+        public GUIStatDisplay(DisplayEnum what, CombatActor c, int width)
         {
             _character = c;
             _toDisplay = what;
