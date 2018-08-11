@@ -293,7 +293,7 @@ namespace RiverHollow.SpriteAnimations
                 }
                 else
                 {
-                    int newFrameCutoff = (int)(FrameCutoff * GameManager.Scale);
+                    int newFrameCutoff = (int)(FrameCutoff * _iScale);
                     int drawAtY = (int)this.Position.Y;
                     Rectangle drawThis = CurrentFrameAnimation.FrameRectangle;
 

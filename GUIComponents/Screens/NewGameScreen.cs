@@ -279,7 +279,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _hairSprite = new GUISprite(PlayerManager.World.HairSprite);
                 _armSprite = new GUISprite(PlayerManager.World.ArmSprite);
                 if (PlayerManager.World.Hat != null) { _hatSprite = new GUISprite(PlayerManager.World.Hat.Sprite); }
-                if (PlayerManager.World.Chest != null) { _shirtSprite = new GUISprite(PlayerManager.World.Chest.Sprite); }
+                if (PlayerManager.World.Shirt != null) { _shirtSprite = new GUISprite(PlayerManager.World.Shirt.Sprite); }
 
                 _bodySprite.SetScale((int)GameManager.Scale);
                 _eyeSprite.SetScale((int)GameManager.Scale);

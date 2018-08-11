@@ -97,6 +97,15 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 Position(Position());
             }
         }
+        public virtual void IncreaseSizeTo(int endWidth, int endHeight)
+        {
+            int modWidth = (endWidth - Width) / 2;
+            int modHeight = (endHeight - Height) / 2;
+
+            base.Position(Position() - new Vector2(modWidth, modHeight));
+            Width += modWidth * 2;
+            Height += modHeight * 2;
+        }
 
         public void AddControl(GUIObject g)
         {

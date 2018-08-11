@@ -127,8 +127,6 @@ namespace RiverHollow.Actors
         protected bool _bActive = true;
         public bool Active => _bActive;
 
-        protected GUIImage _headshot;
-
         public int Speed = 2;
         #endregion
 
@@ -157,7 +155,6 @@ namespace RiverHollow.Actors
             sprite = new AnimatedSprite(GameContentManager.GetTexture(texture), pingpong);
             sprite.AddAnimation("WalkDown", TileSize, TileSize * 2, 3, 0.2f, startX, startY);
             sprite.AddAnimation("IdleDown", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize, startY);
-            _headshot = new GUIImage(Vector2.Zero, new Rectangle(startX + TileSize, startY, TileSize, TileSize), TileSize, TileSize, texture);
             sprite.AddAnimation("WalkUp", TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 3, startY);
             sprite.AddAnimation("IdleUp", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 4, startY);
             sprite.AddAnimation("WalkLeft", TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 6, startY);
@@ -268,11 +265,6 @@ namespace RiverHollow.Actors
         }
 
         public void SetMoveObj(Vector2 vec) { _vMoveTo = vec; }
-
-        public virtual GUIHeadShot GetHeadShot()
-        {
-            return new GUIHeadShot(_headshot);
-        }
     }
     public class WorldCombatant : WorldActor
     {
@@ -782,7 +774,6 @@ namespace RiverHollow.Actors
             int startY = 0;
             _bodySprite.AddAnimation("IdleDown", startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f);
             _bodySprite.AddAnimation("WalkDown", startX, startY, TileSize, TileSize * 2, 3, 0.2f);
-            _headshot = new GUIImage(Vector2.Zero, new Rectangle(startX + TileSize, startY, TileSize, TileSize), TileSize, TileSize, _sTexture);
 
             startX += TileSize * 3;
             _bodySprite.AddAnimation("IdleUp", startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f);
@@ -1331,8 +1322,6 @@ namespace RiverHollow.Actors
             _bodySprite.AddAnimation("Idle", TileSize, 0, TileSize, TileSize * 2, 1, 0.3f);
             _bodySprite.AddAnimation("WalkDown", 0, 0, TileSize, TileSize * 2, 3, 0.3f);
             _bodySprite.SetCurrentAnimation("Idle");
-
-            _headshot = new GUIImage(Vector2.Zero, new Rectangle(TileSize, 0, TileSize, TileSize), TileSize, TileSize, _sTexture);
         }
 
         protected void ImportBasics(string[] stringData, int id)
@@ -1594,7 +1583,7 @@ namespace RiverHollow.Actors
         Clothes _hat;
         public Clothes Hat => _hat;
         Clothes _chest;
-        public Clothes Chest => _chest;
+        public Clothes Shirt => _chest;
         Clothes Back;
         Clothes Hands;
         Clothes Legs;
@@ -1607,8 +1596,6 @@ namespace RiverHollow.Actors
             _height = TileSize;
 
             _cHairColor = Color.Red;
-
-            Speed = 10;
         }
 
         public override void Update(GameTime theGameTime)
@@ -1747,80 +1734,14 @@ namespace RiverHollow.Actors
 
         public void RemoveClothes(Clothes c)
         {
-            if (c.IsShirt()) { _chest = null; }
-            else if (c.IsHat())
+            if (c != null)
             {
-                _spriteHair.FrameCutoff = 0;
-                _hat = null;
-            }
-        }
-
-        public override GUIHeadShot GetHeadShot()
-        {
-            return new GUIHeadShot(new GUICoin());
-        }
-    }
-
-    public class GUIHeadShot : GUIObject
-    {
-        GUIImage _hat;
-        GUIImage _hair;
-        GUIImage _eyes;
-        GUIImage _body;
-        GUIImage _shirt;
-
-        List<GUIImage> _liImages;
-
-        public GUIHeadShot(GUIImage body)
-        {
-            _body = body;
-            _body.SetScale(Scale);
-
-            _liImages = new List<GUIImage>();
-            _liImages.Add(_body);
-
-            Width = _body.Height;
-            Height = _body.Height;
-        }
-
-        public GUIHeadShot(GUIImage body, GUIImage eyes, GUIImage hair, GUIImage hat, GUIImage shirt)
-        {
-            _body = body;
-            Width = _body.Height;
-            Height = _body.Height;
-
-            _eyes = eyes;
-            _hair = hair;
-            _hat = hat;
-            _shirt = shirt;
-
-            _liImages = new List<GUIImage>();
-            _liImages.Add(_body);
-            if (_eyes != null) { _liImages.Add(_eyes); }
-            if (_hair != null) { _liImages.Add(_hair); }
-            if (_hat != null) { _liImages.Add(_hat); }
-            if (_shirt != null) { _liImages.Add(_shirt); }
-
-            foreach (GUIImage g in _liImages)
-            {
-                g.SetScale(Scale);
-            }
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            foreach (GUIImage g in _liImages)
-            {
-                g.Draw(spriteBatch);
-            }
-        }
-
-        public override void Position(Vector2 value)
-        {
-            base.Position(value);
-            foreach (GUIImage g in _liImages)
-            {
-                g.Position(value);
+                if (c.IsShirt()) { _chest = null; }
+                else if (c.IsHat())
+                {
+                    _spriteHair.FrameCutoff = 0;
+                    _hat = null;
+                }
             }
         }
     }

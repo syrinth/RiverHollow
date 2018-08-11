@@ -164,7 +164,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 RemoveControl(_map);
                 _map = null;
-                _charBox = new CharacterDetailWindow(_selectedBox.Character);
+                _charBox = new CharacterDetailWindow(_selectedBox.Character, SyncCharacter);
                 _charBox.AnchorAndAlignToObject(_arrDisplayBoxes[0], SideEnum.Bottom, SideEnum.Left);
                 AddControl(_charBox);
             }
@@ -180,12 +180,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             CombatAdventurer _currentCharacter;
             StartPosition _currPosition;
-            StartPosition[,] _liStartPositions;
+            StartPosition[,] _arrStartPositions;
 
             public delegate void ClickDelegate(CombatAdventurer selectedCharacter);
             private ClickDelegate _delAction;
 
-            public PositionMap(CombatAdventurer adv, ClickDelegate del) : base(BrownWin, (QuestScreen.WIDTH) - (BrownWin.Edge * 2), 16)
+            public PositionMap(CombatAdventurer adv, ClickDelegate del) : base(BrownWin, 16, 16)
             {
                 _delAction = del;
                 _currentCharacter = adv;
@@ -193,32 +193,37 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 int maxCols = 4;
                 int maxRows = 3;
 
-                _liStartPositions = new StartPosition[maxCols, maxRows];
+                int spacing = 10;
+                int totalSpaceCol = (maxCols + 1) * spacing;
+                int totalSpaceRow = (maxRows + 1) * spacing;
+                _arrStartPositions = new StartPosition[maxCols, maxRows];
                 for (int cols = 0; cols < maxCols; cols++)
                 {
                     for (int rows = 0; rows < maxRows; rows++)
                     {
                         StartPosition pos = new StartPosition(cols, rows);
-                        _liStartPositions[cols, rows] = pos;
+                        _arrStartPositions[cols, rows] = pos;
                         if (cols == 0 && rows == 0)
                         {
-                            pos.AnchorToInnerSide(this, SideEnum.TopLeft);
+                            pos.AnchorToInnerSide(this, SideEnum.TopLeft, spacing);
                         }
                         else if (cols == 0)
                         {
-                            pos.AnchorAndAlignToObject(_liStartPositions[0, rows - 1], SideEnum.Bottom, SideEnum.Left);
+                            pos.AnchorAndAlignToObject(_arrStartPositions[0, rows - 1], SideEnum.Bottom, SideEnum.Left, spacing);
                         }
                         else
                         {
-                            pos.AnchorAndAlignToObject(_liStartPositions[cols - 1, rows], SideEnum.Right, SideEnum.Bottom);
+                            pos.AnchorAndAlignToObject(_arrStartPositions[cols - 1, rows], SideEnum.Right, SideEnum.Bottom, spacing);
                         }
                     }
                 }
 
                 SetOccupancy(_currentCharacter);
 
-                this.CenterOnScreen();
                 this.Resize();
+                this.IncreaseSizeTo((QuestScreen.WIDTH) - (BrownWin.Edge * 2), (QuestScreen.HEIGHT) - (BrownWin.Edge * 2));
+
+
             }
 
             public void SetOccupancy(CombatAdventurer currentCharacter)
@@ -228,10 +233,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     Vector2 vec = c.StartPos;
                     bool current = (c == currentCharacter);
-                    _liStartPositions[(int)vec.X, (int)vec.Y].SetCharacter(c);
+                    _arrStartPositions[(int)vec.X, (int)vec.Y].SetCharacter(c);
                     if (current)
                     {
-                        _currPosition = _liStartPositions[(int)vec.X, (int)vec.Y];
+                        _currPosition = _arrStartPositions[(int)vec.X, (int)vec.Y];
                     }
                 }
             }
@@ -245,7 +250,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     rv = true;
                 }
 
-                foreach (StartPosition sp in _liStartPositions)
+                foreach (StartPosition sp in _arrStartPositions)
                 {
                     if (sp.Contains(mouse))
                     {
@@ -279,7 +284,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 public int Col => _iCol;
                 public int Row => _iRow;
 
-                private GUIHeadShot _headshot;
+                private GUICharacterSprite _sprite;
 
                 public StartPosition(int col, int row) : base(Vector2.Zero, new Rectangle(0, 80, 16, 16), TileSize,  TileSize, @"Textures\Dialog")
                 {
@@ -292,9 +297,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 public override void Draw(SpriteBatch spriteBatch)
                 {
                     base.Draw(spriteBatch);
-                    if(_headshot != null)
+                    if(_sprite != null)
                     {
-                        _headshot.Draw(spriteBatch);
+                        _sprite.Draw(spriteBatch);
                     }
                 }
 
@@ -305,13 +310,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     {
                         if (c.World != null)
                         {
-                            _headshot = c.World.GetHeadShot();
-                        }
-                        _headshot.CenterOnObject(this);
+                            if(c == PlayerManager.Combat) { _sprite = new GUICharacterSprite(true); }
+                            else { _sprite = new GUICharacterSprite(c.World.BodySprite, true); }
+                            
+                            _sprite.SetScale(2);
+                            _sprite.CenterOnObject(this);
+                            _sprite.MoveBy(new Vector2(0, -(this.Width/4)));
+                        }         
                     }
                     else
                     {
-                        _headshot = null;
+                        _sprite = null;
                     }
                 }
 
@@ -320,8 +329,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 public override void Position(Vector2 value)
                 {
                     base.Position(value);
-                    if (_headshot != null) {
-                        _headshot.Position(value);
+                    if (_sprite != null) {
+                        _sprite.CenterOnObject(this);
+                        _sprite.MoveBy(new Vector2(0, -(this.Width / 4)));
                     }
                 }
             }
@@ -418,19 +428,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             public class PlayerDisplayBox : NPCDisplayBox
             {
-                GUISprite _bodySprite;
-                public GUISprite BodySprite => _bodySprite;
-                GUISprite _eyeSprite;
-                public GUISprite EyeSprite => _eyeSprite;
-                GUISprite _hairSprite;
-                public GUISprite HairSprite => _hairSprite;
-                GUISprite _armSprite;
-                public GUISprite ArmSprite => _armSprite;
-                GUISprite _hatSprite;
-                public GUISprite HatSprite => _hatSprite;
-                GUISprite _shirtSprite;
-                public GUISprite ShirtSprite => _shirtSprite;
-
+                GUICharacterSprite _playerSprite;
+                public GUICharacterSprite PlayerSprite => _playerSprite;
+                
                 public PlayerDisplayBox(ClickDelegate action) : base(action)
                 {
                     _actor = PlayerManager.Combat;
@@ -441,12 +441,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 public override void Update(GameTime gameTime)
                 {
-                    _bodySprite.Update(gameTime);
-                    _eyeSprite.Update(gameTime);
-                    _hairSprite.Update(gameTime);
-                    _armSprite.Update(gameTime);
-                    if (_hatSprite != null) { _hatSprite.Update(gameTime); }
-                    if (_shirtSprite != null) { _shirtSprite.Update(gameTime); }
+                    _playerSprite.Update(gameTime);
                 }
 
                 public override bool ProcessLeftButtonClick(Point mouse)
@@ -465,23 +460,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 public void Configure()
                 {
                     Controls.Clear();
-                    _bodySprite = new GUISprite(PlayerManager.World.BodySprite, true);
-                    _eyeSprite = new GUISprite(PlayerManager.World.EyeSprite, true);
-                    _hairSprite = new GUISprite(PlayerManager.World.HairSprite, true);
-                    _armSprite = new GUISprite(PlayerManager.World.ArmSprite, true);
-                    if (PlayerManager.World.Hat != null) { _hatSprite = new GUISprite(PlayerManager.World.Hat.Sprite, true); }
-                    else { _hatSprite = null; }
-                    if (PlayerManager.World.Chest != null) { _shirtSprite = new GUISprite(PlayerManager.World.Chest.Sprite, true); }
-                    else { _shirtSprite = null; }
-
-                    _bodySprite.SetScale((int)GameManager.Scale);
-                    _eyeSprite.SetScale((int)GameManager.Scale);
-                    _hairSprite.SetScale((int)GameManager.Scale);
-                    _armSprite.SetScale((int)GameManager.Scale);
-                    if (_hatSprite != null) { _hatSprite.SetScale((int)GameManager.Scale); }
-                    if (_shirtSprite != null) { _shirtSprite.SetScale((int)GameManager.Scale); }
-
-                    PlayAnimation("IdleDown");
+                    _playerSprite = new GUICharacterSprite(true);
+                    _playerSprite.SetScale((int)GameManager.Scale);
+                    _playerSprite.PlayAnimation("IdleDown");
                 }
 
                 public override void Position(Vector2 value)
@@ -490,40 +471,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     PositionSprites();
                 }
 
-                public override void PlayAnimation(string animation)
-                {
-                    _bodySprite.PlayAnimation(animation);
-                    _eyeSprite.PlayAnimation(animation);
-                    _hairSprite.PlayAnimation(animation);
-                    _armSprite.PlayAnimation(animation);
-                    if (_hatSprite != null) { _hatSprite.PlayAnimation(animation); }
-                    if (_shirtSprite != null) { _shirtSprite.PlayAnimation(animation); }
-                }
-
                 public void PositionSprites()
                 {
-                    if (_bodySprite != null)
+                    if (_playerSprite != null)
                     {
-                        _bodySprite.CenterOnWindow(this);
-                        _bodySprite.AnchorToInnerSide(this, SideEnum.Bottom);
+                        _playerSprite.CenterOnWindow(this);
+                        _playerSprite.AnchorToInnerSide(this, SideEnum.Bottom);
 
-                        Width = _bodySprite.Width + _bodySprite.Width / 3;
-                        Height = _bodySprite.Height + (_winData.Edge * 2);
-                    }
-                    PositionSprite(_eyeSprite);
-                    PositionSprite(_hairSprite);
-                    PositionSprite(_armSprite);
-                    PositionSprite(_eyeSprite);
-                    PositionSprite(_hatSprite);
-                    PositionSprite(_shirtSprite);
-
-                }
-                private void PositionSprite(GUISprite sprite)
-                {
-                    if (sprite != null)
-                    {
-                        sprite.CenterOnWindow(this);
-                        sprite.AnchorToInnerSide(this, SideEnum.Bottom);
+                        Width = _playerSprite.Width + _playerSprite.Width / 3;
+                        Height = _playerSprite.Height + (_winData.Edge * 2);
                     }
                 }
             }
@@ -589,7 +545,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (_character == PlayerManager.Combat)
             {
                 _hatBox = new SpecializedBox(ClothesEnum.Hat, PlayerManager.World.Hat, FindMatchingItems);
-                _chestBox = new SpecializedBox(ClothesEnum.Chest, PlayerManager.World.Chest, FindMatchingItems);
+                _chestBox = new SpecializedBox(ClothesEnum.Chest, PlayerManager.World.Shirt, FindMatchingItems);
 
                 _hatBox.AnchorAndAlignToObject(_armorBox, SideEnum.Right, SideEnum.Bottom, 30);
                 _chestBox.AnchorAndAlignToObject(_hatBox, SideEnum.Right, SideEnum.Bottom, 10);
@@ -710,7 +666,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 foreach(SpecializedBox box in _liGearBoxes)
                 {
-                    if (box.Contains(mouse))
+                    if (box.Contains(mouse) && box.Item != null)
                     {
                         if (!box.WeaponType.Equals(WeaponEnum.None)) { _character.Weapon = null; }
                         else if (!box.ArmorType.Equals(ArmorEnum.None)) { _character.Armor = null; }

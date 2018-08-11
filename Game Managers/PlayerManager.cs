@@ -564,7 +564,7 @@ namespace RiverHollow.Game_Managers
                 hairColor = PlayerManager.World.HairColor,
                 hairIndex = PlayerManager.World.HairIndex,
                 hat = Item.SaveData(World.Hat),
-                chest = Item.SaveData(World.Chest),
+                chest = Item.SaveData(World.Shirt),
                 adventurerData = Combat.SaveData(),
                 currentClass = PlayerManager.Combat.CharacterClass.ID,
                 Items = new List<ItemData>()
