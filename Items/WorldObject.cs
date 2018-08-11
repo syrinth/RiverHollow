@@ -437,7 +437,7 @@ namespace RiverHollow.WorldObjects
             }
             public void LoadContent()
             {
-                _sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\texMachines"));
+                _sprite = new AnimatedSprite(@"Textures\texMachines");
                 _sprite.AddAnimation("Idle", (int)_vSourcePos.X, (int)_vSourcePos.Y, TileSize, TileSize * 2, 1, 0.3f);
                 _sprite.SetCurrentAnimation("Idle");
                 _sprite.IsAnimating = true;
@@ -472,7 +472,7 @@ namespace RiverHollow.WorldObjects
             }
             public void LoadContent()
             {
-                _sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\texMachines"));
+                _sprite = new AnimatedSprite(@"Textures\texMachines");
                 _sprite.AddAnimation("Idle", (int)_vSourcePos.X, (int)_vSourcePos.Y, TileSize, TileSize * 2, 1, 0.3f);
                 _sprite.AddAnimation("Working", (int)_vSourcePos.X + TileSize, (int)_vSourcePos.Y, TileSize, TileSize * 2, 2, 0.3f);
                 _sprite.SetCurrentAnimation("Idle");

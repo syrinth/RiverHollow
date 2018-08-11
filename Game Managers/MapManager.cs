@@ -192,13 +192,13 @@ namespace RiverHollow.Game_Managers
             mob.CurrentMapName = "mapManorGrounds";
             _tileMaps[MapManager.HomeMap].AddMob(mob);
 
-            for (int i = 0; i < 20; i++)
-            {
-                Vector2 vect = new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 2) * TileSize);
-                mob = CharacterManager.GetMobByIndex(2, vect);
-                mob.CurrentMapName = _tileMaps[MapManager.HomeMap].Name.Replace(@"Maps\", "");
-                _tileMaps[MapManager.HomeMap].AddMob(mob);
-            }
+            //for (int i = 0; i < 20; i++)
+            //{
+            //    Vector2 vect = new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 2) * TileSize);
+            //    mob = CharacterManager.GetMobByIndex(2, vect);
+            //    mob.CurrentMapName = _tileMaps[MapManager.HomeMap].Name.Replace(@"Maps\", "");
+            //    _tileMaps[MapManager.HomeMap].AddMob(mob);
+            //}
 
 
 
@@ -371,7 +371,7 @@ namespace RiverHollow.Game_Managers
             AnimatedSprite _sprite;
             public Weather(int x, int y)
             {
-                _sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\texWeather"))
+                _sprite = new AnimatedSprite(@"Textures\texWeather")
                 {
                     Position = new Vector2(x, y)
                 };

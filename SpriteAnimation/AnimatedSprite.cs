@@ -156,9 +156,9 @@ namespace RiverHollow.SpriteAnimations
 
         #endregion
 
-        public AnimatedSprite(Texture2D Texture, bool pingPong = false)
+        public AnimatedSprite(string Texture, bool pingPong = false)
         {
-            _texture = Texture;
+            _texture = GameContentManager.GetTexture(Texture);
             _bPingPong = pingPong;
         }
 

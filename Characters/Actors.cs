@@ -7,7 +7,6 @@ using System;
 using RiverHollow.WorldObjects;
 using RiverHollow.GUIObjects;
 using System.Collections.Generic;
-using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Misc;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.Actors.CombatStuff;
@@ -60,7 +59,7 @@ namespace RiverHollow.Actors
         public virtual void LoadContent(string textureToLoad, int frameWidth, int frameHeight, int numFrames, float frameSpeed,int startX = 0, int startY = 0)
         {
             _sTexture = textureToLoad;
-            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(_sTexture));
+            _bodySprite = new AnimatedSprite(_sTexture);
             _bodySprite.AddAnimation("Walk", frameWidth, frameHeight, numFrames, frameSpeed, startX, startY);
             _bodySprite.AddAnimation("Attack", frameWidth, frameHeight, numFrames, frameSpeed, startX, startY);
             _bodySprite.SetCurrentAnimation("Walk");
@@ -152,7 +151,7 @@ namespace RiverHollow.Actors
         }
         public void AddDefaultAnimations(ref AnimatedSprite sprite, string texture, int startX, int startY, bool pingpong = false)
         {
-            sprite = new AnimatedSprite(GameContentManager.GetTexture(texture), pingpong);
+            sprite = new AnimatedSprite(texture, pingpong);
             sprite.AddAnimation("WalkDown", TileSize, TileSize * 2, 3, 0.2f, startX, startY);
             sprite.AddAnimation("IdleDown", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize, startY);
             sprite.AddAnimation("WalkUp", TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 3, startY);
@@ -254,7 +253,7 @@ namespace RiverHollow.Actors
             //If the CheckForCollisions gave the all clear, move the sprite.
             if (MapManager.Maps[CurrentMapName].CheckForCollisions(this, testRectX, testRectY, ref direction, ignoreCollisions) && direction != Vector2.Zero)
             {
-                _bodySprite.MoveBy((int)direction.X, (int)direction.Y);
+                Position += new Vector2(direction.X, direction.Y);
                 rv = true;
             }
 
@@ -768,7 +767,7 @@ namespace RiverHollow.Actors
             if (_index != 8) { _sTexture = @"Textures\NPC1"; }
             else { _sTexture = @"Textures\NPC8"; }
 
-            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\NPC1"));
+            _bodySprite = new AnimatedSprite(_sTexture);
 
             int startX = 0;
             int startY = 0;
@@ -1318,7 +1317,7 @@ namespace RiverHollow.Actors
 
         public void LoadContent()
         {
-            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(_sTexture), true);
+            _bodySprite = new AnimatedSprite(_sTexture, true);
             _bodySprite.AddAnimation("Idle", TileSize, 0, TileSize, TileSize * 2, 1, 0.3f);
             _bodySprite.AddAnimation("WalkDown", 0, 0, TileSize, TileSize * 2, 3, 0.3f);
             _bodySprite.SetCurrentAnimation("Idle");
@@ -1772,7 +1771,7 @@ namespace RiverHollow.Actors
 
         public override void LoadContent(string textureToLoad)
         {
-            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(textureToLoad));
+            _bodySprite = new AnimatedSprite(textureToLoad);
             _bodySprite.AddAnimation("Idle", 16, 18, 2, 0.6f, 0, 0);
             _bodySprite.SetCurrentAnimation("Idle");
 
@@ -1856,6 +1855,15 @@ namespace RiverHollow.Actors
     public class Mob : WorldActor
     {
         #region Properties
+        public override Vector2 Position
+        {
+            get { return new Vector2(_bodySprite.Position.X, _bodySprite.Position.Y + _bodySprite.Height - TileSize); } //MAR this is fucked up
+            set {
+                _bodySprite.Position = new Vector2(value.X, value.Y - _bodySprite.Height + TileSize);
+                _sprAlert.Position = _bodySprite.Position - new Vector2(0, TileSize);
+            }
+        }
+
         protected int _id;
         public int ID { get => _id; }
         protected double _dIdleFor;
@@ -1865,6 +1873,19 @@ namespace RiverHollow.Actors
         protected Vector2 _moveTo = Vector2.Zero;
         protected List<CombatActor> _monsters;
         public List<CombatActor> Monsters { get => _monsters; }
+
+        int _iMaxRange = TileSize * 10;
+        bool _bAlert;
+        bool _bLockedOn;
+        bool _bLeashed;
+        const double MAX_ALERT = 1;
+        double _dAlertTimer;
+        AnimatedSprite _sprAlert;
+
+        FieldOfVision _FoV;
+        Vector2 _vLeashPoint;
+        float _fLeashRange = TileSize * 10;
+        
         #endregion
 
         public Mob(int id, string[] stringData)
@@ -1878,7 +1899,7 @@ namespace RiverHollow.Actors
 
         public void LoadContent()
         {
-            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(_textureName));
+            _bodySprite = new AnimatedSprite(_textureName);
             _bodySprite.AddAnimation("IdleDown", TileSize, TileSize, 1, 0.3f, 0, 0);
             _bodySprite.AddAnimation("WalkDown", TileSize, TileSize, 2, 0.3f, 116, 0);
             _bodySprite.AddAnimation("IdleUp", TileSize, TileSize, 1, 0.3f, 48, 0);
@@ -1887,10 +1908,16 @@ namespace RiverHollow.Actors
             _bodySprite.AddAnimation("WalkLeft", TileSize, TileSize, 2, 0.3f, 112, 0);
             _bodySprite.AddAnimation("IdleRight", TileSize, TileSize, 1, 0.3f, 144, 0);
             _bodySprite.AddAnimation("WalkRight", TileSize, TileSize, 2, 0.3f, 160, 0);
-            _bodySprite.SetCurrentAnimation("WalkLeft");
+            _bodySprite.SetCurrentAnimation("WalkDown");
+            Facing = DirectionEnum.Down;
 
             _width = _bodySprite.Width;
             _height = _bodySprite.Height;
+
+            _sprAlert = new AnimatedSprite(@"Textures\Dialog", true);
+            _sprAlert.AddAnimation("Gah", 64, 64, 16, 16, 3, 0.2f);
+            _sprAlert.SetCurrentAnimation("Gah");
+            _sprAlert.Position = (Position - new Vector2(0, TileSize));
         }
 
         protected int ImportBasics(string[] stringData, int id)
@@ -1924,8 +1951,18 @@ namespace RiverHollow.Actors
             base.LoadContent(_textureName, textureWidth, textureHeight, numFrames, frameSpeed);
         }
 
+        public void NewFoV()
+        {
+            _FoV = new FieldOfVision(this, _iMaxRange);
+        }
+
         public override void Update(GameTime theGameTime)
         {
+            if (_bAlert && !_bLockedOn)
+            {
+                _dAlertTimer += theGameTime.ElapsedGameTime.TotalSeconds;
+                _sprAlert.Update(theGameTime);
+            }
             UpdateMovement(theGameTime);
             base.Update(theGameTime);
         }
@@ -1933,33 +1970,62 @@ namespace RiverHollow.Actors
         public override void Draw(SpriteBatch spriteBatch, bool userLayerDepth = false)
         {
             base.Draw(spriteBatch, userLayerDepth);
+            if(_bAlert) { _sprAlert.Draw(spriteBatch, userLayerDepth); }
         }
 
         private void UpdateMovement(GameTime theGameTime)
         {
             Vector2 direction = Vector2.Zero;
 
-
-            if (SpottedPlayer())
+            if (!_bLeashed && _FoV.Contains(PlayerManager.World))
             {
-                //_moveTo = Vector2.Zero;
-                //Vector2 targetPos = PlayerManager.World.Position;
+                if (!_bAlert)
+                {
+                    _bAlert = true;
+                    _dAlertTimer = 0;
+                }
 
-                //float deltaX = Math.Abs(targetPos.X - this.Position.X);
-                //float deltaY = Math.Abs(targetPos.Y - this.Position.Y);
-
-                //Util.GetMoveSpeed(Position, targetPos, Speed, ref direction);
-                //CheckMapForCollisionsAndMove(direction);
-
-                //DetermineFacing(direction);
+                if (_dAlertTimer >= MAX_ALERT && _vLeashPoint == Vector2.Zero)
+                {
+                    _bLockedOn = true;
+                    _vLeashPoint = Position;
+                }
             }
             else
             {
-                if (CollisionBox.Intersects(PlayerManager.World.CollisionBox))
+                if (_bAlert)
                 {
-                    CombatManager.NewBattle(this);
+                    _bAlert = false;
+                    _dAlertTimer = 0;
                 }
-                //IdleMovement(theGameTime);
+                IdleMovement(theGameTime);
+            }
+
+            if (_bLockedOn)
+            {
+                if (Math.Abs(_vLeashPoint.X - Position.X) <= _fLeashRange && Math.Abs(_vLeashPoint.Y - Position.Y) <= _fLeashRange)
+                {
+                    _moveTo = Vector2.Zero;
+                    Vector2 targetPos = PlayerManager.World.Position;
+
+                    float deltaX = Math.Abs(targetPos.X - this.Position.X);
+                    float deltaY = Math.Abs(targetPos.Y - this.Position.Y);
+
+                    Util.GetMoveSpeed(Position, targetPos, Speed, ref direction);
+                    CheckMapForCollisionsAndMove(direction);
+                    NewFoV();
+                }
+                else
+                {
+                    _bLeashed = true;
+                    _bLockedOn = false;
+                    _moveTo = _vLeashPoint;
+                }
+            }
+
+            if (CollisionBox.Intersects(PlayerManager.World.CollisionBox))
+            {
+                CombatManager.NewBattle(this);
             }
         }
 
@@ -1987,10 +2053,23 @@ namespace RiverHollow.Actors
                 float deltaY = Math.Abs(_moveTo.Y - this.Position.Y);
 
                 Util.GetMoveSpeed(Position, _moveTo, Speed, ref direction);
-                CheckMapForCollisionsAndMove(direction);
+                if (CheckMapForCollisionsAndMove(direction))
+                {
+                    NewFoV();
+                }
+                else
+                {
+                    _moveTo = Vector2.Zero;
+                }
 
                 if (Position.X == _moveTo.X && Position.Y == _moveTo.Y)
                 {
+                    if (_bLeashed && _moveTo == _vLeashPoint)
+                    {
+                        _vLeashPoint = Vector2.Zero;
+                        _bLeashed = false;
+                    }
+
                     _moveTo = Vector2.Zero;
                     DetermineFacing(_moveTo);
                 }
@@ -2001,31 +2080,79 @@ namespace RiverHollow.Actors
             }
         }
 
-        private bool SpottedPlayer()
+        private class FieldOfVision
         {
-            bool rv = false;
+            int _iMaxRange;
+            Vector2 _vFirst;            //The LeftMost of the TopMost
+            Vector2 _vSecond;           //The RightMost of the BottomMost
+            DirectionEnum _eDir;
 
-            if (PlayerManager.PlayerInRange(Position, _iLeash * TileSize))
+            public FieldOfVision(Mob theMob, int maxRange)
             {
-                Vector2 playerPos = PlayerManager.World.Position;
-                switch (Facing)
+                int sideRange = TileSize * 2;
+                _iMaxRange = maxRange;
+                _eDir = theMob.Facing;
+                if (_eDir == DirectionEnum.Up || _eDir == DirectionEnum.Down)
                 {
-                    case DirectionEnum.Up:
-                        rv = playerPos.Y < Position.Y;
-                        break;
-                    case DirectionEnum.Down:
-                        rv = playerPos.Y > Position.Y;
-                        break;
-                    case DirectionEnum.Left:
-                        rv = playerPos.X < Position.X;
-                        break;
-                    case DirectionEnum.Right:
-                        rv = playerPos.X > Position.X;
-                        break;
+                    _vFirst = theMob.Center - new Vector2(sideRange, 0);
+                    _vSecond = theMob.Center + new Vector2(sideRange, 0);
+                }
+                else
+                {
+                    _vFirst = theMob.Center - new Vector2(0, sideRange);
+                    _vSecond = theMob.Center + new Vector2(0, sideRange);
                 }
             }
 
-            return rv;
+            public void MoveBy(Vector2 v)
+            {
+                _vFirst += v;
+                _vSecond += v;
+            }
+
+            public bool Contains(WorldActor actor)
+            {
+                bool rv = false;
+                Vector2 center = actor.CollisionBox.Center.ToVector2();
+
+                Vector2 firstFoV = _vFirst;
+                Vector2 secondFoV = _vSecond;
+                //Make sure the actor could be in range
+                if (_eDir == DirectionEnum.Up && Util.InBetween(center.Y, firstFoV.Y - _iMaxRange, firstFoV.Y))
+                {
+                    float yMod = Math.Abs(center.Y - firstFoV.Y);
+                    firstFoV += new Vector2(-yMod, -yMod);
+                    secondFoV += new Vector2(yMod, -yMod);
+
+                    rv =  Util.InBetween(center.X, firstFoV.X, secondFoV.X) && Util.InBetween(center.Y, firstFoV.Y, _vFirst.Y);
+                }
+                else if (_eDir == DirectionEnum.Down && Util.InBetween(center.Y, firstFoV.Y, firstFoV.Y + _iMaxRange))
+                {
+                    float yMod = Math.Abs(center.Y - firstFoV.Y);
+                    firstFoV += new Vector2(-yMod, yMod);
+                    secondFoV += new Vector2(yMod, yMod);
+
+                    rv = Util.InBetween(center.X, firstFoV.X, secondFoV.X) && Util.InBetween(center.Y, _vFirst.Y, firstFoV.Y);
+                }
+                else if(_eDir == DirectionEnum.Left && Util.InBetween(center.X, firstFoV.X - _iMaxRange, firstFoV.X))
+                {
+                    float xMod = Math.Abs(center.X - firstFoV.X);
+                    firstFoV += new Vector2(-xMod, -xMod);
+                    secondFoV += new Vector2(-xMod, xMod);
+
+                    rv = Util.InBetween(center.Y, firstFoV.Y, secondFoV.Y) && Util.InBetween(center.X, firstFoV.X, _vFirst.X);
+                }
+                else if (_eDir == DirectionEnum.Right && Util.InBetween(center.X, firstFoV.X, firstFoV.X + _iMaxRange))
+                {
+                    float xMod = Math.Abs(center.X - firstFoV.X);
+                    firstFoV += new Vector2(xMod, -xMod);
+                    secondFoV += new Vector2(xMod, xMod);
+
+                    rv = Util.InBetween(center.Y, firstFoV.Y, secondFoV.Y) && Util.InBetween(center.X, _vFirst.X, firstFoV.X);
+                }
+
+                return rv;
+            }
         }
     }
     #endregion
@@ -2149,7 +2276,7 @@ namespace RiverHollow.Actors
 
         public void LoadContent(string texture)
         {
-            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(texture));
+            _bodySprite = new AnimatedSprite(texture);
             int xCrawl = 0;
             int frameWidth = 24;
             int frameHeight = 32;
@@ -2763,7 +2890,7 @@ namespace RiverHollow.Actors
 
         public Summon()
         {
-            _bodySprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\Eye"));
+            _bodySprite = new AnimatedSprite(@"Textures\Eye");
             _bodySprite.AddAnimation("Walk", 0, 0, 16, 16, 2, 0.9f);
             _bodySprite.AddAnimation("Attack", 32, 0, 16, 16, 4, 0.1f);
             _bodySprite.AddAnimation("Cast", 32, 0, 16, 16, 4, 0.1f);

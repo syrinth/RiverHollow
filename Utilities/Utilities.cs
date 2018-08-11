@@ -165,6 +165,15 @@ namespace RiverHollow.Misc
 
             return c.ToString();
         }
+
+        public static bool InBetween(int check, int first, int second)
+        {
+            return InBetween((float)check, (float)first, (float)second);
+        }
+        public static bool InBetween(float check, float first, float second)
+        {
+            return (check >= first && check <= second);
+        }
     }
 
     public class RHRandom : Random

@@ -117,7 +117,7 @@ namespace RiverHollow.Actors.CombatStuff
             _iChargeCost = 100;
             ImportBasics(id, stringData);
 
-            Sprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\AbilityAnimations"));
+            Sprite = new AnimatedSprite(@"Textures\AbilityAnimations");
             Sprite.AddAnimation("Play", 100, 100, 4, _frameSpeed, 0, _textureRow * 100);
             Sprite.SetCurrentAnimation("Play");
             Sprite.IsAnimating = false;

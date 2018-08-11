@@ -1422,6 +1422,8 @@ namespace RiverHollow.Tile_Engine
         {
             m.CurrentMapName = _name;
             m.Position = position;
+            m.NewFoV();
+
             _liMobs.Add(m);
         }
         #endregion

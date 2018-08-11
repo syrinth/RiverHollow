@@ -444,7 +444,7 @@ namespace RiverHollow.WorldObjects
 
             int startX = 0;
             int startY = TileSize * row * 2;
-            _mainSprite = new AnimatedSprite(GameContentManager.GetTexture(@"Textures\texClothes"), true);
+            _mainSprite = new AnimatedSprite(@"Textures\texClothes", true);
             _mainSprite.AddAnimation("WalkDown", TileSize, TileSize * 2, 3, 0.2f, startX, startY);
             _mainSprite.AddAnimation("IdleDown", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize, startY);
             _mainSprite.AddAnimation("WalkUp", TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 3, startY);
@@ -510,7 +510,7 @@ namespace RiverHollow.WorldObjects
             _columnTextureSize = 128;
             _rowTextureSize = TileSize;
 
-            _sprite = new AnimatedSprite(_texture);
+            _sprite = new AnimatedSprite(@"Textures\tools");
             _sprite.AddAnimation("Left", (int)_sourcePos.X + TileSize, (int)_sourcePos.Y, TileSize, TileSize, 2, 0.3f);
 
             _sprite.CurrentAnimation = "Left";
