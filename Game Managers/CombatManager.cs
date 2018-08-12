@@ -92,7 +92,7 @@ namespace RiverHollow.Game_Managers
             }
 
             GoToCombat();
-            PlayerManager.DecreaseStamina(1);
+            PlayerManager.DecreaseStamina(3);       //Decrease Stamina once
         }
 
         public static void ConfigureAllies(ref GUICmbtTile[,] allyArray)
@@ -873,14 +873,14 @@ namespace RiverHollow.Game_Managers
                 {
                     bool finished = false;
                     CombatActor c = CombatManager.ActiveCharacter;
-                    if (!c.IsCurrentAnimation("Cast"))
+                    if (!c.IsCurrentAnimation(AnimationEnum.Cast))
                     {
-                        c.PlayAnimation("Cast");
+                        c.PlayAnimation(AnimationEnum.Cast);
                         _bDrawItem = true;
                     }
                     else if (c.AnimationPlayedXTimes(3))
                     {
-                        c.PlayAnimation("Walk");
+                        c.PlayAnimation(AnimationEnum.Walk);
                         _bDrawItem = false;
                         finished = true;
                     }

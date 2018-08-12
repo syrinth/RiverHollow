@@ -236,6 +236,36 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        public static int GetDuelistsInParty()
+        {
+            return GetClassInParty(5);
+        }
+        public static int GetKnightsInParty()
+        {
+            return GetClassInParty(6);
+        }
+        public static int GetRoguesInParty()
+        {
+            return GetClassInParty(7);
+        }
+        public static int GetBardsInParty()
+        {
+            return GetClassInParty(8);
+        }
+        public static int GetClassInParty(int classID)
+        {
+            int rv = 0;
+            foreach (CombatAdventurer c in _liParty)
+            {
+                if (c.CharacterClass.ID == classID)
+                {
+                    rv++;
+                }
+            }
+
+            return rv;
+        }
+
         //Random quests should not generate a quest with the same goal as a pre-existing quest
         public static void AddToQuestLog(Quest q)
         {

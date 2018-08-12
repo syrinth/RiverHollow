@@ -438,8 +438,8 @@ namespace RiverHollow.WorldObjects
             public void LoadContent()
             {
                 _sprite = new AnimatedSprite(@"Textures\texMachines");
-                _sprite.AddAnimation("Idle", (int)_vSourcePos.X, (int)_vSourcePos.Y, TileSize, TileSize * 2, 1, 0.3f);
-                _sprite.SetCurrentAnimation("Idle");
+                _sprite.AddAnimation(AnimationEnum.Idle, (int)_vSourcePos.X, (int)_vSourcePos.Y, TileSize, TileSize * 2, 1, 0.3f);
+                _sprite.SetCurrentAnimation(AnimationEnum.Idle);
                 _sprite.IsAnimating = true;
             }
             public virtual void Update(GameTime gameTime) { }
@@ -473,9 +473,9 @@ namespace RiverHollow.WorldObjects
             public void LoadContent()
             {
                 _sprite = new AnimatedSprite(@"Textures\texMachines");
-                _sprite.AddAnimation("Idle", (int)_vSourcePos.X, (int)_vSourcePos.Y, TileSize, TileSize * 2, 1, 0.3f);
-                _sprite.AddAnimation("Working", (int)_vSourcePos.X + TileSize, (int)_vSourcePos.Y, TileSize, TileSize * 2, 2, 0.3f);
-                _sprite.SetCurrentAnimation("Idle");
+                _sprite.AddAnimation(AnimationEnum.Idle, (int)_vSourcePos.X, (int)_vSourcePos.Y, TileSize, TileSize * 2, 1, 0.3f);
+                _sprite.AddAnimation(AnimationEnum.Play, (int)_vSourcePos.X + TileSize, (int)_vSourcePos.Y, TileSize, TileSize * 2, 2, 0.3f);
+                _sprite.SetCurrentAnimation(AnimationEnum.Idle);
                 _sprite.IsAnimating = true;
             }
             public virtual void Update(GameTime gameTime) { }
@@ -548,7 +548,7 @@ namespace RiverHollow.WorldObjects
                             _heldItem = ObjectManager.GetItem(_currentlyProcessing.Output);
                             _dProcessedTime = -1;
                             _currentlyProcessing = null;
-                            _sprite.SetCurrentAnimation("Idle");
+                            _sprite.SetCurrentAnimation(AnimationEnum.Idle);
                         }
                     }
                 }
@@ -566,7 +566,7 @@ namespace RiverHollow.WorldObjects
                             {
                                 heldItem.Remove(p.InputNum);
                                 _currentlyProcessing = p;
-                                _sprite.SetCurrentAnimation("Working");
+                                _sprite.SetCurrentAnimation(AnimationEnum.Play);
                             }
                         }
                     }
@@ -594,7 +594,7 @@ namespace RiverHollow.WorldObjects
                     _currentlyProcessing = (mac.currentItemID == -1) ? null : _diProcessing[mac.currentItemID];
                     _heldItem = ObjectManager.GetItem(mac.heldItemID);
 
-                    if (_currentlyProcessing != null) { _sprite.SetCurrentAnimation("Working"); }
+                    if (_currentlyProcessing != null) { _sprite.SetCurrentAnimation(AnimationEnum.Play); }
                 }
 
                 private class ProcessRecipe
@@ -675,7 +675,7 @@ namespace RiverHollow.WorldObjects
                             _heldItem = ObjectManager.GetItem(_currentlyMaking.Output);
                             _dProcessedTime = -1;
                             _currentlyMaking = null;
-                            _sprite.SetCurrentAnimation("Idle");
+                            _sprite.SetCurrentAnimation(AnimationEnum.Idle);
                         }
                     }
                 }
@@ -689,7 +689,7 @@ namespace RiverHollow.WorldObjects
                 public void MakeChosenItem(int itemID)
                 {
                     _currentlyMaking = _diCrafting[itemID];
-                    _sprite.SetCurrentAnimation("Working");
+                    _sprite.SetCurrentAnimation(AnimationEnum.Play);
                 }
 
                 public override MachineData SaveData()
@@ -714,7 +714,7 @@ namespace RiverHollow.WorldObjects
                     _currentlyMaking = (mac.currentItemID == -1) ? null : _diCrafting[mac.currentItemID];
                     _heldItem = ObjectManager.GetItem(mac.heldItemID);
 
-                    if (_currentlyMaking != null) { _sprite.SetCurrentAnimation("Working"); }
+                    if (_currentlyMaking != null) { _sprite.SetCurrentAnimation(AnimationEnum.Play); }
                 }
             }
         }

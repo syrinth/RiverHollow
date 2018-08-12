@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.SpriteAnimations
 {
     public class FrameAnimation :ICloneable
@@ -31,7 +32,7 @@ namespace RiverHollow.SpriteAnimations
         private int _iPlayCount = 0;
 
         // The animation that should be played after this animation
-        private string sNextAnimation = null;
+        private AnimationEnum eNextAnimation = AnimationEnum.None;
 
         bool _bBackTracking;
         bool _bPingPong = true;
@@ -93,10 +94,10 @@ namespace RiverHollow.SpriteAnimations
             set { _iPlayCount = value; }
         }
 
-        public string NextAnimation
+        public AnimationEnum NextAnimation
         {
-            get { return sNextAnimation; }
-            set { sNextAnimation = value; }
+            get { return eNextAnimation; }
+            set { eNextAnimation = value; }
         }
 
         public FrameAnimation(Rectangle FirstFrame, int Frames)
@@ -120,12 +121,12 @@ namespace RiverHollow.SpriteAnimations
 
         public FrameAnimation(int X, int Y,
             int Width, int Height, int Frames,
-            float FrameLength, bool pingPong, string strNextAnimation)
+            float FrameLength, bool pingPong, AnimationEnum enumNextAnimation)
         {
             rectInitialFrame = new Rectangle(X, Y, Width, Height);
             _iFrameCount = Frames;
             _fFrameLength = FrameLength;
-            sNextAnimation = strNextAnimation;
+            eNextAnimation = enumNextAnimation;
             _bPingPong = pingPong;
         }
 
@@ -184,7 +185,7 @@ namespace RiverHollow.SpriteAnimations
         {
                 return new FrameAnimation(this.rectInitialFrame.X, this.rectInitialFrame.Y,
                                           this.rectInitialFrame.Width, this.rectInitialFrame.Height,
-                                          this._iFrameCount, this._fFrameLength, this._bPingPong, sNextAnimation);
+                                          this._iFrameCount, this._fFrameLength, this._bPingPong, eNextAnimation);
         }
     }
 }

@@ -445,14 +445,14 @@ namespace RiverHollow.WorldObjects
             int startX = 0;
             int startY = TileSize * row * 2;
             _mainSprite = new AnimatedSprite(@"Textures\texClothes", true);
-            _mainSprite.AddAnimation("WalkDown", TileSize, TileSize * 2, 3, 0.2f, startX, startY);
-            _mainSprite.AddAnimation("IdleDown", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize, startY);
-            _mainSprite.AddAnimation("WalkUp", TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 3, startY);
-            _mainSprite.AddAnimation("IdleUp", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 4, startY);
-            _mainSprite.AddAnimation("WalkLeft", TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 6, startY);
-            _mainSprite.AddAnimation("IdleLeft", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 7, startY);
-            _mainSprite.AddAnimation("WalkRight", TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 9, startY);
-            _mainSprite.AddAnimation("IdleRight", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 10, startY);
+            _mainSprite.AddAnimation(AnimationEnum.WalkDown, TileSize, TileSize * 2, 3, 0.2f, startX, startY);
+            _mainSprite.AddAnimation(AnimationEnum.IdleDown, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize, startY);
+            _mainSprite.AddAnimation(AnimationEnum.WalkUp, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 3, startY);
+            _mainSprite.AddAnimation(AnimationEnum.IdleUp, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 4, startY);
+            _mainSprite.AddAnimation(AnimationEnum.WalkLeft, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 6, startY);
+            _mainSprite.AddAnimation(AnimationEnum.IdleLeft, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 7, startY);
+            _mainSprite.AddAnimation(AnimationEnum.WalkRight, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 9, startY);
+            _mainSprite.AddAnimation(AnimationEnum.IdleRight, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 10, startY);
         }
 
         public void SetSpritePosition(Vector2 Position)
@@ -511,9 +511,9 @@ namespace RiverHollow.WorldObjects
             _rowTextureSize = TileSize;
 
             _sprite = new AnimatedSprite(@"Textures\tools");
-            _sprite.AddAnimation("Left", (int)_sourcePos.X + TileSize, (int)_sourcePos.Y, TileSize, TileSize, 2, 0.3f);
+            _sprite.AddAnimation(AnimationEnum.ToolLeft, (int)_sourcePos.X + TileSize, (int)_sourcePos.Y, TileSize, TileSize, 2, 0.3f);
 
-            _sprite.CurrentAnimation = "Left";
+            _sprite.CurrentAnimation = AnimationEnum.ToolLeft;
             _sprite.IsAnimating = true;
             _sprite.PlaysOnce = true;
         }

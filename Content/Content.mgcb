@@ -805,18 +805,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/texClothes.png
 
-#begin Textures/champion.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/champion.png
-
 #begin Data/ItemTable.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -836,4 +824,16 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Dialogue/NPC7.xml
+
+#begin Textures/Duelist.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Duelist.png
 

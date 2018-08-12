@@ -60,9 +60,9 @@ namespace RiverHollow.Actors
         {
             _sTexture = textureToLoad;
             _bodySprite = new AnimatedSprite(_sTexture);
-            _bodySprite.AddAnimation("Walk", frameWidth, frameHeight, numFrames, frameSpeed, startX, startY);
-            _bodySprite.AddAnimation("Attack", frameWidth, frameHeight, numFrames, frameSpeed, startX, startY);
-            _bodySprite.SetCurrentAnimation("Walk");
+            _bodySprite.AddAnimation(AnimationEnum.Walk, frameWidth, frameHeight, numFrames, frameSpeed, startX, startY);
+            _bodySprite.AddAnimation(AnimationEnum.Attack, frameWidth, frameHeight, numFrames, frameSpeed, startX, startY);
+            _bodySprite.SetCurrentAnimation(AnimationEnum.Walk);
 
             _width = _bodySprite.Width;
             _height = _bodySprite.Height;
@@ -83,14 +83,14 @@ namespace RiverHollow.Actors
             _sName = text;
         }
 
-        public virtual void PlayAnimation(string animation)
+        public virtual void PlayAnimation(AnimationEnum animation)
         {
             _bodySprite.SetCurrentAnimation(animation);
         }
 
         public bool Contains(Point x) { return _bodySprite.BoundingBox.Contains(x); }
         public bool AnimationFinished() { return _bodySprite.PlayedOnce && _bodySprite.IsAnimating; }
-        public bool IsCurrentAnimation(string val) { return _bodySprite.CurrentAnimation.Equals(val); }
+        public bool IsCurrentAnimation(AnimationEnum val) { return _bodySprite.CurrentAnimation.Equals(val); }
         public bool IsAnimating() { return _bodySprite.IsAnimating; }
         public bool AnimationPlayedXTimes(int x) { return _bodySprite.GetPlayCount() >= x; }
 
@@ -152,15 +152,15 @@ namespace RiverHollow.Actors
         public void AddDefaultAnimations(ref AnimatedSprite sprite, string texture, int startX, int startY, bool pingpong = false)
         {
             sprite = new AnimatedSprite(texture, pingpong);
-            sprite.AddAnimation("WalkDown", TileSize, TileSize * 2, 3, 0.2f, startX, startY);
-            sprite.AddAnimation("IdleDown", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize, startY);
-            sprite.AddAnimation("WalkUp", TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 3, startY);
-            sprite.AddAnimation("IdleUp", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 4, startY);
-            sprite.AddAnimation("WalkLeft", TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 6, startY);
-            sprite.AddAnimation("IdleLeft", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 7, startY);
-            sprite.AddAnimation("WalkRight", TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 9, startY);
-            sprite.AddAnimation("IdleRight", TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 10, startY);
-            sprite.SetCurrentAnimation("IdleDown");
+            sprite.AddAnimation(AnimationEnum.WalkDown, TileSize, TileSize * 2, 3, 0.2f, startX, startY);
+            sprite.AddAnimation(AnimationEnum.IdleDown, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize, startY);
+            sprite.AddAnimation(AnimationEnum.WalkUp, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 3, startY);
+            sprite.AddAnimation(AnimationEnum.IdleUp, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 4, startY);
+            sprite.AddAnimation(AnimationEnum.WalkLeft, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 6, startY);
+            sprite.AddAnimation(AnimationEnum.IdleLeft, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 7, startY);
+            sprite.AddAnimation(AnimationEnum.WalkRight, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 9, startY);
+            sprite.AddAnimation(AnimationEnum.IdleRight, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 10, startY);
+            sprite.SetCurrentAnimation(AnimationEnum.IdleDown);
         }
 
         public virtual bool CollisionContains(Point mouse)
@@ -176,27 +176,27 @@ namespace RiverHollow.Actors
         public void SetWalkingDir(DirectionEnum d)
         {
             Facing = d;
-            if (d == DirectionEnum.Up) { _bodySprite.CurrentAnimation = "Walk North"; }
-            else if (d == DirectionEnum.Down) { _bodySprite.CurrentAnimation = "Walk South"; }
-            else if (d == DirectionEnum.Right) { _bodySprite.CurrentAnimation = "Walk East"; }
-            else if (d == DirectionEnum.Left) { _bodySprite.CurrentAnimation = "Walk West"; }
+            if (d == DirectionEnum.Up) { _bodySprite.CurrentAnimation = AnimationEnum.WalkUp; }
+            else if (d == DirectionEnum.Down) { _bodySprite.CurrentAnimation = AnimationEnum.WalkDown; }
+            else if (d == DirectionEnum.Right) { _bodySprite.CurrentAnimation = AnimationEnum.WalkRight; }
+            else if (d == DirectionEnum.Left) { _bodySprite.CurrentAnimation = AnimationEnum.WalkLeft; }
         }
 
         public void DetermineFacing(Vector2 direction)
         {
-            string animation = string.Empty;
+            AnimationEnum animation = AnimationEnum.None;
 
             if (Math.Abs((int)direction.X) > Math.Abs((int)direction.Y))
             {
                 if (direction.X > 0)
                 {
                     Facing = DirectionEnum.Right;
-                    animation = "WalkRight";
+                    animation = AnimationEnum.WalkRight;
                 }
                 else if (direction.X < 0)
                 {
                     Facing = DirectionEnum.Left;
-                    animation = "WalkLeft";
+                    animation = AnimationEnum.WalkLeft;
                 }
             }
             else
@@ -204,12 +204,12 @@ namespace RiverHollow.Actors
                 if (direction.Y > 0)
                 {
                     Facing = DirectionEnum.Down;
-                    animation = "WalkDown";
+                    animation = AnimationEnum.WalkDown;
                 }
                 else if (direction.Y < 0)
                 {
                     Facing = DirectionEnum.Up;
-                    animation = "WalkUp";
+                    animation = AnimationEnum.WalkUp;
                 }
             }
 
@@ -229,16 +229,16 @@ namespace RiverHollow.Actors
             switch (Facing)
             {
                 case DirectionEnum.Down:
-                    PlayAnimation("IdleDown");
+                    PlayAnimation(AnimationEnum.IdleDown);
                     break;
                 case DirectionEnum.Up:
-                    PlayAnimation("IdleUp");
+                    PlayAnimation(AnimationEnum.IdleUp);
                     break;
                 case DirectionEnum.Left:
-                    PlayAnimation("IdleLeft");
+                    PlayAnimation(AnimationEnum.IdleLeft);
                     break;
                 case DirectionEnum.Right:
-                    PlayAnimation("IdleRight");
+                    PlayAnimation(AnimationEnum.IdleRight);
                     break;
             }
         }
@@ -661,7 +661,7 @@ namespace RiverHollow.Actors
         {
             string currDay = GameCalendar.GetDayOfWeek();
             string currSeason = GameCalendar.GetSeason();
-            string currWeather = GameCalendar.GetWeather();
+            string currWeather = GameCalendar.GetWeatherString();
             if (_completeSchedule != null && _completeSchedule.Count > 0)
             {
                 string searchVal = currSeason + currDay + currWeather;
@@ -771,22 +771,22 @@ namespace RiverHollow.Actors
 
             int startX = 0;
             int startY = 0;
-            _bodySprite.AddAnimation("IdleDown", startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f);
-            _bodySprite.AddAnimation("WalkDown", startX, startY, TileSize, TileSize * 2, 3, 0.2f);
+            _bodySprite.AddAnimation(AnimationEnum.IdleDown, startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f);
+            _bodySprite.AddAnimation(AnimationEnum.WalkDown, startX, startY, TileSize, TileSize * 2, 3, 0.2f);
 
             startX += TileSize * 3;
-            _bodySprite.AddAnimation("IdleUp", startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f);
-            _bodySprite.AddAnimation("WalkUp", startX, startY, TileSize, TileSize * 2, 3, 0.2f);
+            _bodySprite.AddAnimation(AnimationEnum.IdleUp, startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f);
+            _bodySprite.AddAnimation(AnimationEnum.WalkUp, startX, startY, TileSize, TileSize * 2, 3, 0.2f);
 
             startX += TileSize * 3;
-            _bodySprite.AddAnimation("IdleLeft", startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f);
-            _bodySprite.AddAnimation("WalkLeft", startX, startY, TileSize, TileSize * 2, 3, 0.2f);
+            _bodySprite.AddAnimation(AnimationEnum.IdleLeft, startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f);
+            _bodySprite.AddAnimation(AnimationEnum.WalkLeft, startX, startY, TileSize, TileSize * 2, 3, 0.2f);
 
             startX += TileSize * 3;
-            _bodySprite.AddAnimation("IdleRight", startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f);
-            _bodySprite.AddAnimation("WalkRight", startX, startY, TileSize, TileSize * 2, 3, 0.2f);
+            _bodySprite.AddAnimation(AnimationEnum.IdleRight, startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f);
+            _bodySprite.AddAnimation(AnimationEnum.WalkRight, startX, startY, TileSize, TileSize * 2, 3, 0.2f);
 
-            _bodySprite.SetCurrentAnimation("IdleDown");
+            _bodySprite.SetCurrentAnimation(AnimationEnum.IdleDown);
             _bodySprite.IsAnimating = true;
         }
 
@@ -1318,9 +1318,9 @@ namespace RiverHollow.Actors
         public void LoadContent()
         {
             _bodySprite = new AnimatedSprite(_sTexture, true);
-            _bodySprite.AddAnimation("Idle", TileSize, 0, TileSize, TileSize * 2, 1, 0.3f);
-            _bodySprite.AddAnimation("WalkDown", 0, 0, TileSize, TileSize * 2, 3, 0.3f);
-            _bodySprite.SetCurrentAnimation("Idle");
+            _bodySprite.AddAnimation(AnimationEnum.Idle, TileSize, 0, TileSize, TileSize * 2, 1, 0.3f);
+            _bodySprite.AddAnimation(AnimationEnum.WalkDown, 0, 0, TileSize, TileSize * 2, 3, 0.3f);
+            _bodySprite.SetCurrentAnimation(AnimationEnum.Idle);
         }
 
         protected void ImportBasics(string[] stringData, int id)
@@ -1377,7 +1377,7 @@ namespace RiverHollow.Actors
                     _combat.AddXP(_currentlyMaking.XP);
                     _dProcessedTime = -1;
                     _currentlyMaking = null;
-                    _bodySprite.SetCurrentAnimation("Idle");
+                    _bodySprite.SetCurrentAnimation(AnimationEnum.Idle);
                 }
             }
         }
@@ -1453,7 +1453,7 @@ namespace RiverHollow.Actors
         public void ProcessChosenItem(int itemID)
         {
             _currentlyMaking = _diCrafting[itemID];
-            _bodySprite.SetCurrentAnimation("Working");
+            _bodySprite.SetCurrentAnimation(AnimationEnum.Play);
         }
 
         public int TakeItem()
@@ -1541,7 +1541,7 @@ namespace RiverHollow.Actors
             SetCombat();
             Combat.LoadData(data.advData);
 
-            if (_currentlyMaking != null) { _bodySprite.SetCurrentAnimation("Working"); }
+            if (_currentlyMaking != null) { _bodySprite.SetCurrentAnimation(AnimationEnum.Play); }
             if (Adventuring)
             {
                 DrawIt = false;
@@ -1662,20 +1662,20 @@ namespace RiverHollow.Actors
 
         public override void Idle()
         {
-            string animation = string.Empty;
+            AnimationEnum animation = AnimationEnum.None;
             switch (Facing)
             {
                 case DirectionEnum.Down:
-                    animation = "IdleDown";
+                    animation = AnimationEnum.IdleDown;
                     break;
                 case DirectionEnum.Up:
-                    animation = "IdleUp";
+                    animation = AnimationEnum.IdleUp;
                     break;
                 case DirectionEnum.Left:
-                    animation = "IdleLeft";
+                    animation = AnimationEnum.IdleLeft;
                     break;
                 case DirectionEnum.Right:
-                    animation = "IdleRight";
+                    animation = AnimationEnum.IdleRight;
                     break;
             }
 
@@ -1692,7 +1692,7 @@ namespace RiverHollow.Actors
             if (Hat != null) { Hat.Sprite.MoveBy(x, y); }
         }
 
-        public override void PlayAnimation(string anim)
+        public override void PlayAnimation(AnimationEnum anim)
         {
             _bodySprite.SetCurrentAnimation(anim);
             _spriteEyes.SetCurrentAnimation(anim);
@@ -1772,8 +1772,8 @@ namespace RiverHollow.Actors
         public override void LoadContent(string textureToLoad)
         {
             _bodySprite = new AnimatedSprite(textureToLoad);
-            _bodySprite.AddAnimation("Idle", 16, 18, 2, 0.6f, 0, 0);
-            _bodySprite.SetCurrentAnimation("Idle");
+            _bodySprite.AddAnimation(AnimationEnum.Idle, 16, 18, 2, 0.6f, 0, 0);
+            _bodySprite.SetCurrentAnimation(AnimationEnum.Idle);
 
             _width = _bodySprite.Width;
             _height = _bodySprite.Height;
@@ -1900,23 +1900,23 @@ namespace RiverHollow.Actors
         public void LoadContent()
         {
             _bodySprite = new AnimatedSprite(_textureName);
-            _bodySprite.AddAnimation("IdleDown", TileSize, TileSize, 1, 0.3f, 0, 0);
-            _bodySprite.AddAnimation("WalkDown", TileSize, TileSize, 2, 0.3f, 116, 0);
-            _bodySprite.AddAnimation("IdleUp", TileSize, TileSize, 1, 0.3f, 48, 0);
-            _bodySprite.AddAnimation("WalkUp", TileSize, TileSize, 2, 0.3f, 64, 0);
-            _bodySprite.AddAnimation("IdleLeft", TileSize, TileSize, 1, 0.3f, 96, 0);
-            _bodySprite.AddAnimation("WalkLeft", TileSize, TileSize, 2, 0.3f, 112, 0);
-            _bodySprite.AddAnimation("IdleRight", TileSize, TileSize, 1, 0.3f, 144, 0);
-            _bodySprite.AddAnimation("WalkRight", TileSize, TileSize, 2, 0.3f, 160, 0);
-            _bodySprite.SetCurrentAnimation("WalkDown");
+            _bodySprite.AddAnimation(AnimationEnum.IdleDown, TileSize, TileSize, 1, 0.3f, 0, 0);
+            _bodySprite.AddAnimation(AnimationEnum.WalkDown, TileSize, TileSize, 2, 0.3f, 116, 0);
+            _bodySprite.AddAnimation(AnimationEnum.IdleUp, TileSize, TileSize, 1, 0.3f, 48, 0);
+            _bodySprite.AddAnimation(AnimationEnum.WalkUp, TileSize, TileSize, 2, 0.3f, 64, 0);
+            _bodySprite.AddAnimation(AnimationEnum.IdleLeft, TileSize, TileSize, 1, 0.3f, 96, 0);
+            _bodySprite.AddAnimation(AnimationEnum.WalkLeft, TileSize, TileSize, 2, 0.3f, 112, 0);
+            _bodySprite.AddAnimation(AnimationEnum.IdleRight, TileSize, TileSize, 1, 0.3f, 144, 0);
+            _bodySprite.AddAnimation(AnimationEnum.WalkRight, TileSize, TileSize, 2, 0.3f, 160, 0);
+            _bodySprite.SetCurrentAnimation(AnimationEnum.WalkDown);
             Facing = DirectionEnum.Down;
 
             _width = _bodySprite.Width;
             _height = _bodySprite.Height;
 
             _sprAlert = new AnimatedSprite(@"Textures\Dialog", true);
-            _sprAlert.AddAnimation("Gah", 64, 64, 16, 16, 3, 0.2f);
-            _sprAlert.SetCurrentAnimation("Gah");
+            _sprAlert.AddAnimation(AnimationEnum.Play, 64, 64, 16, 16, 3, 0.2f);
+            _sprAlert.SetCurrentAnimation(AnimationEnum.Play);
             _sprAlert.Position = (Position - new Vector2(0, TileSize));
         }
 
@@ -2090,7 +2090,7 @@ namespace RiverHollow.Actors
             public FieldOfVision(Mob theMob, int maxRange)
             {
                 int sideRange = TileSize * 2;
-                _iMaxRange = maxRange;
+                _iMaxRange = (int)(maxRange * (1 - (0.1 * PlayerManager.GetRoguesInParty())));
                 _eDir = theMob.Facing;
                 if (_eDir == DirectionEnum.Up || _eDir == DirectionEnum.Down)
                 {
@@ -2280,19 +2280,19 @@ namespace RiverHollow.Actors
             int xCrawl = 0;
             int frameWidth = 24;
             int frameHeight = 32;
-            _bodySprite.AddAnimation("Walk", frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 32);
+            _bodySprite.AddAnimation(AnimationEnum.Walk, frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 32);
             xCrawl += 2;
-            _bodySprite.AddAnimation("Cast", frameWidth, frameHeight, 2, 0.2f, (xCrawl * frameWidth), 32);
+            _bodySprite.AddAnimation(AnimationEnum.Cast, frameWidth, frameHeight, 2, 0.2f, (xCrawl * frameWidth), 32);
             xCrawl += 2;
-            _bodySprite.AddAnimation("Hurt", frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 32, "Walk");
+            _bodySprite.AddAnimation(AnimationEnum.Hurt, frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 32, AnimationEnum.Walk);
             xCrawl += 1;
-            _bodySprite.AddAnimation("Attack", frameWidth, frameHeight, 1, 0.3f, (xCrawl * frameWidth), 32);
+            _bodySprite.AddAnimation(AnimationEnum.Attack, frameWidth, frameHeight, 1, 0.3f, (xCrawl * frameWidth), 32);
             xCrawl += 1;
-            _bodySprite.AddAnimation("Critical", frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 32);
+            _bodySprite.AddAnimation(AnimationEnum.Critical, frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 32);
             xCrawl += 2;
-            _bodySprite.AddAnimation("KO", frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 32);
+            _bodySprite.AddAnimation(AnimationEnum.KO, frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 32);
 
-            _bodySprite.SetCurrentAnimation("Walk");
+            _bodySprite.SetCurrentAnimation(AnimationEnum.Walk);
             _bodySprite.SetScale(CombatManager.CombatScale);
             _width = _bodySprite.Width;
             _height = _bodySprite.Height;
@@ -2303,20 +2303,20 @@ namespace RiverHollow.Actors
             base.Update(theGameTime);
             if (CurrentHP > 0)
             {
-                if ((float)CurrentHP / (float)MaxHP <= 0.25 && (IsCurrentAnimation("Walk") || IsCurrentAnimation("KO")))
+                if ((float)CurrentHP / (float)MaxHP <= 0.25 && (IsCurrentAnimation(AnimationEnum.Walk) || IsCurrentAnimation(AnimationEnum.KO)))
                 {
-                    PlayAnimation("Critical");
+                    PlayAnimation(AnimationEnum.Critical);
                 }
-                else if ((float)CurrentHP / (float)MaxHP > 0.25 && IsCurrentAnimation("Critical"))
+                else if ((float)CurrentHP / (float)MaxHP > 0.25 && IsCurrentAnimation(AnimationEnum.Critical))
                 {
-                    PlayAnimation("Walk");
+                    PlayAnimation(AnimationEnum.Walk);
                 }
             }
             else
             {
-                if (IsCurrentAnimation("Walk"))
+                if (IsCurrentAnimation(AnimationEnum.Walk))
                 {
-                    PlayAnimation("KO");
+                    PlayAnimation(AnimationEnum.KO);
                 }
             }
 
@@ -2390,7 +2390,7 @@ namespace RiverHollow.Actors
         public virtual int DecreaseHealth(int value)
         {
             _currentHP -= (_currentHP - value >= 0) ? value : _currentHP;
-            PlayAnimation("Hurt");
+            PlayAnimation(AnimationEnum.Hurt);
             if (_currentHP == 0)
             {
                 _diConditions[ConditionEnum.KO] = true;
@@ -2891,10 +2891,10 @@ namespace RiverHollow.Actors
         public Summon()
         {
             _bodySprite = new AnimatedSprite(@"Textures\Eye");
-            _bodySprite.AddAnimation("Walk", 0, 0, 16, 16, 2, 0.9f);
-            _bodySprite.AddAnimation("Attack", 32, 0, 16, 16, 4, 0.1f);
-            _bodySprite.AddAnimation("Cast", 32, 0, 16, 16, 4, 0.1f);
-            _bodySprite.SetCurrentAnimation("Idle");
+            _bodySprite.AddAnimation(AnimationEnum.Walk, 0, 0, 16, 16, 2, 0.9f);
+            _bodySprite.AddAnimation(AnimationEnum.Attack, 32, 0, 16, 16, 4, 0.1f);
+            _bodySprite.AddAnimation(AnimationEnum.Cast, 32, 0, 16, 16, 4, 0.1f);
+            _bodySprite.SetCurrentAnimation(AnimationEnum.Walk);
             _bodySprite.SetScale(5);
         }
 

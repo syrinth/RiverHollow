@@ -5,6 +5,7 @@ using RiverHollow.GUIObjects;
 using RiverHollow.SpriteAnimations;
 using System.Collections.Generic;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUISprite : GUIObject
@@ -35,7 +36,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _sprite.Position = Position();
         }
 
-        public virtual void PlayAnimation(string animation)
+        public virtual void PlayAnimation(AnimationEnum animation)
         {
             _sprite.SetCurrentAnimation(animation);
         }
@@ -127,7 +128,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
         }
 
-        public void PlayAnimation(string animation)
+        public void PlayAnimation(AnimationEnum animation)
         {
             foreach (GUISprite g in _liSprites)
             {

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 
+using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.SpriteAnimations
 {
     public class AnimatedSprite
@@ -18,10 +19,10 @@ namespace RiverHollow.SpriteAnimations
         private Vector2 _Position = Vector2.Zero;
 
         // Dictionary holding all of the FrameAnimation objects
-        Dictionary<string, FrameAnimation> _frameAnimations = new Dictionary<string, FrameAnimation>();
+        Dictionary<AnimationEnum, FrameAnimation> _frameAnimations = new Dictionary<AnimationEnum, FrameAnimation>();
 
         // Which FrameAnimation from the dictionary above is playing
-        string _currAnimation = null;
+        AnimationEnum _currAnimation = AnimationEnum.None;
 
         // Calculated center of the sprite
         Vector2 v2Center;
@@ -128,7 +129,7 @@ namespace RiverHollow.SpriteAnimations
         {
             get
             {
-                if (!string.IsNullOrEmpty(_currAnimation))
+                if (_currAnimation != AnimationEnum.None)
                     return _frameAnimations[_currAnimation];
                 else
                     return null;
@@ -139,7 +140,7 @@ namespace RiverHollow.SpriteAnimations
         /// The string name of the currently playing animaton.  Setting the animation
         /// resets the CurrentFrame and PlayCount properties to zero.
         ///
-        public string CurrentAnimation
+        public AnimationEnum CurrentAnimation
         {
             get { return _currAnimation; }
             set
@@ -180,20 +181,20 @@ namespace RiverHollow.SpriteAnimations
         }
 
         //TODO: Remove this method, classes should do it manually, not in this level
-        public void AddAnimation(string name, int frameWidth, int frameHeight, int numFrames, float frameSpeed, int startX = 0, int startY = 0, string nextAnimation = "")
+        public void AddAnimation(AnimationEnum animEnum, int frameWidth, int frameHeight, int numFrames, float frameSpeed, int startX = 0, int startY = 0, AnimationEnum nextAnimation = AnimationEnum.None)
         {
-            this.AddAnimation(name, startX, startY, frameWidth, frameHeight, numFrames, frameSpeed, nextAnimation);
+            this.AddAnimation(animEnum, startX, startY, frameWidth, frameHeight, numFrames, frameSpeed, nextAnimation);
             this.IsAnimating = true;
         }
 
-        public void SetCurrentAnimation(string animate)
+        public void SetCurrentAnimation(AnimationEnum animate)
         {
             CurrentAnimation = animate;
         }
 
-        public void AddAnimation(string Name, int X, int Y, int Width, int Height, int Frames, float FrameLength)
+        public void AddAnimation(AnimationEnum animEnum, int X, int Y, int Width, int Height, int Frames, float FrameLength)
         {
-            _frameAnimations.Add(Name, new FrameAnimation(X, Y, Width, Height, Frames, FrameLength));
+            _frameAnimations.Add(animEnum, new FrameAnimation(X, Y, Width, Height, Frames, FrameLength));
             _width = Width;
             _height = Height;
             v2Center = new Vector2(_width / 2, _height / 2);
@@ -210,19 +211,19 @@ namespace RiverHollow.SpriteAnimations
             _iScale = x;
         }
 
-        public void AddAnimation(string Name, int X, int Y, int Width, int Height, int Frames, float FrameLength, string NextAnimation)
+        public void AddAnimation(AnimationEnum animEnum, int X, int Y, int Width, int Height, int Frames, float FrameLength, AnimationEnum NextAnimation)
         {
-            _frameAnimations.Add(Name, new FrameAnimation(X, Y, Width, Height, Frames, FrameLength, _bPingPong, NextAnimation));
+            _frameAnimations.Add(animEnum, new FrameAnimation(X, Y, Width, Height, Frames, FrameLength, _bPingPong, NextAnimation));
             _width = Width;
             _height = Height;
             v2Center = new Vector2(_width / 2, _height / 2);
         }
 
-        public FrameAnimation GetAnimationByName(string Name)
+        public FrameAnimation GetAnimationByName(AnimationEnum animEnum)
         {
-            if (_frameAnimations.ContainsKey(Name))
+            if (_frameAnimations.ContainsKey(animEnum))
             {
-                return _frameAnimations[Name];
+                return _frameAnimations[animEnum];
             }
             else
             {
@@ -249,7 +250,7 @@ namespace RiverHollow.SpriteAnimations
                     {
                         // Set the active animation to the first animation
                         // associated with this sprite
-                        string[] sKeys = new string[_frameAnimations.Count];
+                        AnimationEnum[] sKeys = new AnimationEnum[_frameAnimations.Count];
                         _frameAnimations.Keys.CopyTo(sKeys, 0);
                         CurrentAnimation = sKeys[0];
                     }
@@ -270,7 +271,7 @@ namespace RiverHollow.SpriteAnimations
                 }
 
                 // Check to see if there is a "followup" animation named for this animation
-                if (!String.IsNullOrEmpty(CurrentFrameAnimation.NextAnimation))
+                if (CurrentFrameAnimation.NextAnimation != AnimationEnum.None)
                 {
                     // If there is, see if the currently playing animation has
                     // completed a full animation loop

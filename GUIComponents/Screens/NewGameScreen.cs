@@ -77,7 +77,7 @@ namespace RiverHollow.GUIComponents.Screens
                 Controls.Add(w);
             }
             _selectedClass = (ClassSelectionBox)_liClasses[0];
-            _selectedClass.PlayAnimation("WalkDown");
+            _selectedClass.PlayAnimation(AnimationEnum.WalkDown);
 
             _playerDisplayBox = new PlayerDisplayBox();
             _playerDisplayBox.AnchorToInnerSide(_window, SideEnum.TopLeft);
@@ -182,9 +182,10 @@ namespace RiverHollow.GUIComponents.Screens
         public void BtnNewGame()
         {
             PlayerManager.World.SetScale();
-            RiverHollow.NewGame();
             PlayerManager.SetClass(_selectedClass.ClassID);
             PlayerManager.SetName(_nameWindow.GetText());
+
+            RiverHollow.NewGame();
             GameManager.DontReadInput();
         }
         public void BtnCancel()
@@ -227,8 +228,8 @@ namespace RiverHollow.GUIComponents.Screens
                 ClassSelectionBox csb = ((ClassSelectionBox)o);
                 if (_selectedClass != csb)
                 {
-                    csb.PlayAnimation("WalkDown");
-                    _selectedClass.PlayAnimation("Idle");
+                    csb.PlayAnimation(AnimationEnum.WalkDown);
+                    _selectedClass.PlayAnimation(AnimationEnum.Idle);
                     _selectedClass = csb;
                 }
         }
@@ -295,7 +296,7 @@ namespace RiverHollow.GUIComponents.Screens
                 PositionSprites();
             }
 
-            public void PlayAnimation(string animation)
+            public void PlayAnimation(AnimationEnum animation)
             {
                 _bodySprite.PlayAnimation(animation);
                 _eyeSprite.PlayAnimation(animation);
@@ -389,7 +390,7 @@ namespace RiverHollow.GUIComponents.Screens
                 }
             }
 
-            public void PlayAnimation(string animation)
+            public void PlayAnimation(AnimationEnum animation)
             {
                 _sprite.PlayAnimation(animation);
             }

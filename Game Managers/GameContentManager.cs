@@ -54,7 +54,7 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\Wizard");
             AddTexture(Content, @"Textures\Healer");
             AddTexture(Content, @"Textures\Knight");
-            AddTexture(Content, @"Textures\Champion");
+            AddTexture(Content, @"Textures\Duelist");
             AddTexture(Content, @"Textures\Summoner");
             AddTexture(Content, @"Textures\Rogue");
             AddTexture(Content, @"Textures\Bard");
