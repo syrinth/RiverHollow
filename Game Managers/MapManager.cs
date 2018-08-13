@@ -334,7 +334,7 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void SetWeather(AnimationEnum weather)
+        public static void SetWeather(WeatherAnimEnum weather)
         {
             foreach(Weather w in _liWeather)
             {
@@ -375,14 +375,14 @@ namespace RiverHollow.Game_Managers
                 {
                     Position = new Vector2(x, y)
                 };
-                _sprite.AddAnimation(AnimationEnum.Rain, 0, 0, 160, 160, 2, 0.2f);
-                _sprite.AddAnimation(AnimationEnum.Snow, 0, 160, 160, 160, 3, 0.2f);
+                _sprite.AddAnimation(WeatherAnimEnum.Rain, 0, 0, 160, 160, 2, 0.2f);
+                _sprite.AddAnimation(WeatherAnimEnum.Snow, 0, 160, 160, 160, 3, 0.2f);
                 _sprite.IsAnimating = false;
             }
 
-            public void SetWeather(AnimationEnum weather)
+            public void SetWeather(WeatherAnimEnum weather)
             {
-                _sprite.CurrentAnimation = weather;
+                _sprite.SetCurrentAnimation(weather);
                 _sprite.IsAnimating = true;
             }
 

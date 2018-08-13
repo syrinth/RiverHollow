@@ -532,7 +532,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (occupied)
             {
                 _gSprite = new GUISprite(_mapTile.Character.BodySprite);
-                _gSprite.PlayAnimation(AnimationEnum.Walk);
+                _gSprite.PlayAnimation(CActorAnimEnum.Walk);
                 _gHP = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Health, _mapTile.Character, 100);
             }
             else

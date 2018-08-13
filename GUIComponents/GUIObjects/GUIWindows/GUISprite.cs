@@ -36,7 +36,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _sprite.Position = Position();
         }
 
-        public virtual void PlayAnimation(AnimationEnum animation)
+        public virtual void PlayAnimation<TEnum>(TEnum animation)
         {
             _sprite.SetCurrentAnimation(animation);
         }
@@ -128,7 +128,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
         }
 
-        public void PlayAnimation(AnimationEnum animation)
+        public void PlayAnimation<TEnum>(TEnum animation)
         {
             foreach (GUISprite g in _liSprites)
             {

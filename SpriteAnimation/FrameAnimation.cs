@@ -32,7 +32,7 @@ namespace RiverHollow.SpriteAnimations
         private int _iPlayCount = 0;
 
         // The animation that should be played after this animation
-        private AnimationEnum eNextAnimation = AnimationEnum.None;
+        private string eNextAnimation = string.Empty;
 
         bool _bBackTracking;
         bool _bPingPong = true;
@@ -94,7 +94,7 @@ namespace RiverHollow.SpriteAnimations
             set { _iPlayCount = value; }
         }
 
-        public AnimationEnum NextAnimation
+        public string NextAnimation
         {
             get { return eNextAnimation; }
             set { eNextAnimation = value; }
@@ -121,12 +121,12 @@ namespace RiverHollow.SpriteAnimations
 
         public FrameAnimation(int X, int Y,
             int Width, int Height, int Frames,
-            float FrameLength, bool pingPong, AnimationEnum enumNextAnimation)
+            float FrameLength, bool pingPong, string sNextAnimation)
         {
             rectInitialFrame = new Rectangle(X, Y, Width, Height);
             _iFrameCount = Frames;
             _fFrameLength = FrameLength;
-            eNextAnimation = enumNextAnimation;
+            eNextAnimation = sNextAnimation;
             _bPingPong = pingPong;
         }
 

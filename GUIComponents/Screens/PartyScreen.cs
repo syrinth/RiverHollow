@@ -351,7 +351,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _delAction = action;
             }
 
-            public virtual void PlayAnimation(AnimationEnum animation)
+            public virtual void PlayAnimation<TEnum>(TEnum animation)
             {
 
             }
@@ -385,7 +385,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _sprite.CenterOnWindow(this);
                     _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
 
-                    PlayAnimation(AnimationEnum.IdleDown);
+                    PlayAnimation(WActorAnimEnum.IdleDown);
                 }
 
                 public override void Update(GameTime gameTime)
@@ -409,7 +409,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     }
                 }
 
-                public override void PlayAnimation(AnimationEnum animation)
+                public override void PlayAnimation<TEnum>(TEnum animation)
                 {
                     _sprite.PlayAnimation(animation);
                 }
@@ -462,7 +462,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     Controls.Clear();
                     _playerSprite = new GUICharacterSprite(true);
                     _playerSprite.SetScale((int)GameManager.Scale);
-                    _playerSprite.PlayAnimation(AnimationEnum.IdleDown);
+                    _playerSprite.PlayAnimation(WActorAnimEnum.IdleDown);
                 }
 
                 public override void Position(Vector2 value)

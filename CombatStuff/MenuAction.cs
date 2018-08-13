@@ -118,8 +118,8 @@ namespace RiverHollow.Actors.CombatStuff
             ImportBasics(id, stringData);
 
             Sprite = new AnimatedSprite(@"Textures\AbilityAnimations");
-            Sprite.AddAnimation(AnimationEnum.Play, 100, 100, 4, _frameSpeed, 0, _textureRow * 100);
-            Sprite.SetCurrentAnimation(AnimationEnum.Play);
+            Sprite.AddAnimation(GenAnimEnum.Play, 100, 100, 4, _frameSpeed, 0, _textureRow * 100);
+            Sprite.SetCurrentAnimation(GenAnimEnum.Play);
             Sprite.IsAnimating = false;
             if (_actionTags.Contains("Direct"))
             {
@@ -508,24 +508,24 @@ namespace RiverHollow.Actors.CombatStuff
                         original.GetSprite().Position(swap);
                         original.Tile.TargetPlayer = false;
                     }
-                    if (!SkillUser.IsCurrentAnimation(AnimationEnum.Attack))
+                    if (!SkillUser.IsCurrentAnimation(CActorAnimEnum.Attack))
                     {
-                        SkillUser.PlayAnimation(AnimationEnum.Attack);
+                        SkillUser.PlayAnimation(CActorAnimEnum.Attack);
                     }
                     else if (SkillUser.AnimationPlayedXTimes(1))
                     {
-                        SkillUser.PlayAnimation(AnimationEnum.Walk);
+                        SkillUser.PlayAnimation(CActorAnimEnum.Walk);
                         _currentActionTag++;
                     }
                     break;
                 case "UserCast":
-                    if (!SkillUser.IsCurrentAnimation(AnimationEnum.Cast))
+                    if (!SkillUser.IsCurrentAnimation(CActorAnimEnum.Cast))
                     {
-                        SkillUser.PlayAnimation(AnimationEnum.Cast);
+                        SkillUser.PlayAnimation(CActorAnimEnum.Cast);
                     }
                     else if (SkillUser.AnimationPlayedXTimes(2))
                     {
-                        SkillUser.PlayAnimation(AnimationEnum.Walk);
+                        SkillUser.PlayAnimation(CActorAnimEnum.Walk);
                         _currentActionTag++;
                     }
                     break;
@@ -557,13 +557,13 @@ namespace RiverHollow.Actors.CombatStuff
                     {
                         if(counteringChar != null)
                         {
-                            if (!counteringChar.IsCurrentAnimation(AnimationEnum.Attack))
+                            if (!counteringChar.IsCurrentAnimation(CActorAnimEnum.Attack))
                             {
-                                counteringChar.PlayAnimation(AnimationEnum.Attack);
+                                counteringChar.PlayAnimation(CActorAnimEnum.Attack);
                             }
                             else if (counteringChar.AnimationPlayedXTimes(1))
                             {
-                                counteringChar.PlayAnimation(AnimationEnum.Walk);
+                                counteringChar.PlayAnimation(CActorAnimEnum.Walk);
                                 int x = SkillUser.ProcessAttack(counteringChar, ((CombatAction)CharacterManager.GetActionByIndex(1)).EffectHarm, counteringChar.GetAttackElement());
                                 SkillUser.Tile.GUITile.AssignEffect(x, true);
                                 counteringChar = null;
@@ -573,13 +573,13 @@ namespace RiverHollow.Actors.CombatStuff
                         }
                         else if (counteringSummon != null)
                         {
-                            if (!counteringSummon.IsCurrentAnimation(AnimationEnum.Attack))
+                            if (!counteringSummon.IsCurrentAnimation(CActorAnimEnum.Attack))
                             {
-                                counteringSummon.PlayAnimation(AnimationEnum.Attack);
+                                counteringSummon.PlayAnimation(CActorAnimEnum.Attack);
                             }
                             else if (counteringSummon.AnimationPlayedXTimes(1))
                             {
-                                counteringSummon.PlayAnimation(AnimationEnum.Walk);
+                                counteringSummon.PlayAnimation(CActorAnimEnum.Walk);
                                 int x = SkillUser.ProcessAttack(counteringSummon, ((CombatAction)CharacterManager.GetActionByIndex(1)).EffectHarm, counteringSummon.GetAttackElement());
                                 SkillUser.Tile.GUITile.AssignEffect(x, true);
                                 counteringSummon = null;

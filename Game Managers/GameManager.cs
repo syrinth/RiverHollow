@@ -17,7 +17,13 @@ namespace RiverHollow.Game_Managers
 {
     public static class GameManager
     {
-        public enum AnimationEnum { None, Play, IdleDown, IdleUp, IdleLeft, IdleRight, WalkDown, WalkUp, WalkLeft, WalkRight, Walk, Attack, Cast, Hurt, KO, Critical, Idle, ToolLeft, ToolRight, ToolUp, ToolDown, Rain, Snow };
+        public enum WActorAnimEnum { MakeItem, IdleDown, IdleUp, IdleLeft, IdleRight, WalkDown, WalkUp, WalkLeft, WalkRight };
+        public enum CActorAnimEnum { Walk, Attack, Cast, Hurt, KO, Critical };
+        public enum WeatherAnimEnum { None, Rain, Snow };
+        public enum ToolAnimEnum { Up, Down, Left, Right }
+        public enum MachineAnimEnum { Idle, Working };
+        public enum GenAnimEnum { Play };
+
         public enum PotencyBonusEnum { None, Conditions, Summons }
         public enum EquipmentEnum { None, Armor, Weapon };
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };

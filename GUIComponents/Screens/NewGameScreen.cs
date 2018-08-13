@@ -77,7 +77,7 @@ namespace RiverHollow.GUIComponents.Screens
                 Controls.Add(w);
             }
             _selectedClass = (ClassSelectionBox)_liClasses[0];
-            _selectedClass.PlayAnimation(AnimationEnum.WalkDown);
+            _selectedClass.PlayAnimation(WActorAnimEnum.WalkDown);
 
             _playerDisplayBox = new PlayerDisplayBox();
             _playerDisplayBox.AnchorToInnerSide(_window, SideEnum.TopLeft);
@@ -228,8 +228,8 @@ namespace RiverHollow.GUIComponents.Screens
                 ClassSelectionBox csb = ((ClassSelectionBox)o);
                 if (_selectedClass != csb)
                 {
-                    csb.PlayAnimation(AnimationEnum.WalkDown);
-                    _selectedClass.PlayAnimation(AnimationEnum.Idle);
+                    csb.PlayAnimation(WActorAnimEnum.WalkDown);
+                    _selectedClass.PlayAnimation(WActorAnimEnum.IdleDown);
                     _selectedClass = csb;
                 }
         }
@@ -296,7 +296,7 @@ namespace RiverHollow.GUIComponents.Screens
                 PositionSprites();
             }
 
-            public void PlayAnimation(AnimationEnum animation)
+            public void PlayAnimation<TEnum>(TEnum animation)
             {
                 _bodySprite.PlayAnimation(animation);
                 _eyeSprite.PlayAnimation(animation);
@@ -390,7 +390,7 @@ namespace RiverHollow.GUIComponents.Screens
                 }
             }
 
-            public void PlayAnimation(AnimationEnum animation)
+            public void PlayAnimation<TEnum>(TEnum animation)
             {
                 _sprite.PlayAnimation(animation);
             }

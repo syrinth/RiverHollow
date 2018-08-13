@@ -153,6 +153,14 @@ namespace RiverHollow.Misc
             rv = Enum.TryParse<TEnum>(convertThis, true, out rv) ? rv : default(TEnum);
             return rv;
         }
+        public static string GetEnumString<TEnum>(TEnum convertThis)
+        {
+            string rv = string.Empty;
+
+            rv = Enum.GetName(typeof(TEnum), convertThis);
+
+            return rv;
+        }
 
         public static string[] FindTags(string data)
         {

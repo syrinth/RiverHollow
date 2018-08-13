@@ -873,14 +873,14 @@ namespace RiverHollow.Game_Managers
                 {
                     bool finished = false;
                     CombatActor c = CombatManager.ActiveCharacter;
-                    if (!c.IsCurrentAnimation(AnimationEnum.Cast))
+                    if (!c.IsCurrentAnimation(CActorAnimEnum.Cast))
                     {
-                        c.PlayAnimation(AnimationEnum.Cast);
+                        c.PlayAnimation(CActorAnimEnum.Cast);
                         _bDrawItem = true;
                     }
                     else if (c.AnimationPlayedXTimes(3))
                     {
-                        c.PlayAnimation(AnimationEnum.Walk);
+                        c.PlayAnimation(CActorAnimEnum.Walk);
                         _bDrawItem = false;
                         finished = true;
                     }
