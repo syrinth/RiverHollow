@@ -580,40 +580,31 @@ namespace RiverHollow.Tile_Engine
             List<Rectangle> list = new List<Rectangle>();
             Rectangle newRectangle = new Rectangle((int)(actor.CollisionBox.X + dir.X), (int)(actor.CollisionBox.Y + dir.Y), actor.CollisionBox.Width, actor.CollisionBox.Height);
 
-            RHTile tile = null;
             if(dir.X > 0)
             {
-                tile = MapManager.CurrentMap.GetTile(Util.GetGridCoords(newRectangle.Right, newRectangle.Top));
-                if (TileValid(tile, list)) { list.Add(tile.Rect); }
-                tile = MapManager.CurrentMap.GetTile(Util.GetGridCoords(newRectangle.Right, newRectangle.Bottom));
-                if (TileValid(tile, list)) { list.Add(tile.Rect); }
+                AddTile(ref list, newRectangle.Right, newRectangle.Top);
+                AddTile(ref list, newRectangle.Right, newRectangle.Bottom);
             }
             else if(dir.X < 0)
             {
-                tile = MapManager.CurrentMap.GetTile(Util.GetGridCoords(newRectangle.Left, newRectangle.Top));
-                if (TileValid(tile, list)) { list.Add(tile.Rect); }
-                tile = MapManager.CurrentMap.GetTile(Util.GetGridCoords(newRectangle.Left, newRectangle.Bottom));
-                if (TileValid(tile, list)) { list.Add(tile.Rect); }
+                AddTile(ref list, newRectangle.Left, newRectangle.Top);
+                AddTile(ref list, newRectangle.Left, newRectangle.Bottom);
             }
 
             if (dir.Y > 0)
             {
-                tile = MapManager.CurrentMap.GetTile(Util.GetGridCoords(newRectangle.Left, newRectangle.Bottom));
-                if (TileValid(tile, list)) { list.Add(tile.Rect); }
-                tile = MapManager.CurrentMap.GetTile(Util.GetGridCoords(newRectangle.Right, newRectangle.Bottom));
-                if (TileValid(tile, list)) { list.Add(tile.Rect); }
+                AddTile(ref list, newRectangle.Left, newRectangle.Bottom);
+                AddTile(ref list, newRectangle.Right, newRectangle.Bottom);
             }
             else if (dir.Y < 0)
             {
-                tile = MapManager.CurrentMap.GetTile(Util.GetGridCoords(newRectangle.Left, newRectangle.Top));
-                if (TileValid(tile, list)) { list.Add(tile.Rect); }
-                tile = MapManager.CurrentMap.GetTile(Util.GetGridCoords(newRectangle.Right, newRectangle.Top));
-                if (TileValid(tile, list)) { list.Add(tile.Rect); }
+                AddTile(ref list, newRectangle.Left, newRectangle.Top);
+                AddTile(ref list, newRectangle.Right, newRectangle.Top);
             }
 
             foreach(WorldActor w in _liActors)
             {
-                if (w.Active && w != actor) { list.Add(w.CollisionBox);}
+                if (w.Active && w != actor && !actor.IsMob()) { list.Add(w.CollisionBox);}
             }
 
             if(actor != PlayerManager.World) {
@@ -622,7 +613,11 @@ namespace RiverHollow.Tile_Engine
 
             return list;
         }
-
+        private void AddTile(ref List<Rectangle> list, int one, int two)
+        {
+            RHTile tile = MapManager.CurrentMap.GetTile(Util.GetGridCoords(one, two));
+            if (TileValid(tile, list)) { list.Add(tile.Rect); }
+        }
         private bool TileValid(RHTile tile, List<Rectangle> list)
         {
             return tile != null && !tile.Passable() && !list.Contains(tile.Rect);
@@ -640,76 +635,46 @@ namespace RiverHollow.Tile_Engine
             foreach (Rectangle r in possibleCollisions)
             {
                 Vector2 coords = Util.GetGridCoords(r.Location);
-                bool yColl = false;
-                bool xColl = false;
                 if (dir.Y != 0 && r.Intersects(newRectangleY))
                 {
                     float initY = dir.Y;
 
-                    if (initY > 0) { dir.Y = 0; }//-= (newRectangleY.Bottom - r.Top + 1); }
-                    else if (initY < 0) { dir.Y = 0; }//+= (r.Bottom - newRectangleY.Top + 1); }
+                    if (initY > 0) { dir.Y -= Math.Min((newRectangleY.Bottom - r.Top + 1), dir.Y); }
+                    else if (initY < 0) { dir.Y += Math.Max((r.Bottom - newRectangleY.Top + 1), -dir.Y); }
 
-                    yColl = true;
+                    int modifier = (int)CheckToNudge(newRectangleY.Center.X, r.Center.X, coords.X, coords.Y, "Col");
+                    int yVal = dir.Y > 0 ? newRectangleY.Bottom : newRectangleY.Top;
+                    int xVal = (int)(modifier > 0 ? newRectangleX.Right : newRectangleX.Left) + modifier;
+
+                    dir.X += CheckNudgeAllowed(modifier, xVal, yVal);
                 }
                 if (dir.X != 0 && r.Intersects(newRectangleX))
                 {
                     float initX = dir.X;
-                    if (initX > 0) { dir.X = 0; }//-= (newRectangleX.Right - r.Left + 1); }
-                    else if (initX < 0) { dir.X = 0; }//+= (r.Right - newRectangleX.Left + 1); }
+                    if (initX > 0) { dir.X -= Math.Min((newRectangleX.Right - r.Left + 1), dir.X); }
+                    else if (initX < 0) { dir.X += Math.Max((r.Right - newRectangleX.Left + 1), -dir.X); }
 
-                    xColl = true;
-                }
-
-                if (yColl)
-                {
-                    float modifier = CheckToNudge(newRectangleY.Center.X, r.Center.X, coords.X, coords.Y, "Col");
-
-                    int yVal = dir.Y > 0 ? newRectangleY.Bottom : newRectangleY.Top;
-
-                    if (modifier > 0)
-                    {
-                        coords = Util.GetGridCoords(new Point((int)(newRectangleY.Right + modifier), yVal));
-                        if (MapManager.CurrentMap.GetTile(coords).Passable())
-                        {
-                            dir.X += modifier;
-                        }
-                    }
-                    else if (modifier < 0)
-                    {
-                        coords = Util.GetGridCoords(new Point((int)(newRectangleY.Left + modifier), yVal));
-                        if (MapManager.CurrentMap.GetTile(coords).Passable())
-                        {
-                            dir.X += modifier;
-                        }
-                    }
-
-                }
-                if (xColl)
-                {
-                    float modifier = CheckToNudge(newRectangleY.Center.Y, r.Center.Y, coords.X, coords.Y, "Row");
+                    int modifier = (int)CheckToNudge(newRectangleY.Center.Y, r.Center.Y, coords.X, coords.Y, "Row");
                     int xVal = dir.X > 0 ? newRectangleY.Right : newRectangleY.Left;
+                    int yVal = (int)(modifier > 0 ? newRectangleX.Bottom : newRectangleX.Top) + modifier;
 
-                    if (modifier > 0)
-                    {
-                        coords = Util.GetGridCoords(new Point(xVal, (int)(newRectangleY.Bottom + modifier)));
-                        if (MapManager.CurrentMap.GetTile(coords).Passable())
-                        {
-                            dir.Y += modifier;
-                        }
-                    }
-                    else if (modifier < 0)
-                    {
-                        coords = Util.GetGridCoords(new Point(xVal, (int)(newRectangleY.Top + modifier)));
-                        if (MapManager.CurrentMap.GetTile(coords).Passable())
-                        {
-                            dir.Y += modifier;
-                        }
-                    }
-                }                
+                    dir.Y += CheckNudgeAllowed(modifier, xVal, yVal);
+                }             
             }
 
             return rv;
         }
+        private float CheckNudgeAllowed(float modifier, int xVal, int yVal)
+        {
+            float rv = 0;
+            Vector2 coords = Util.GetGridCoords(new Point(xVal, yVal));
+            if (MapManager.CurrentMap.GetTile(coords).Passable())
+            {
+                rv = modifier;
+            }
+
+            return rv;
+        } 
 
         public bool CheckForCollisions(WorldActor c, Rectangle testX, Rectangle testY, ref Vector2 dir, bool ignoreCollisions = false)
         {
