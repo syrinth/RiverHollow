@@ -186,41 +186,42 @@ namespace RiverHollow.Actors
         {
             WActorAnimEnum animation = WActorAnimEnum.IdleDown;
 
-            if (Math.Abs((int)direction.X) > Math.Abs((int)direction.Y))
-            {
-                if (direction.X > 0)
-                {
-                    Facing = DirectionEnum.Right;
-                    animation = WActorAnimEnum.WalkRight;
-                }
-                else if (direction.X < 0)
-                {
-                    Facing = DirectionEnum.Left;
-                    animation = WActorAnimEnum.WalkLeft;
-                }
-            }
-            else
-            {
-                if (direction.Y > 0)
-                {
-                    Facing = DirectionEnum.Down;
-                    animation = WActorAnimEnum.WalkDown;
-                }
-                else if (direction.Y < 0)
-                {
-                    Facing = DirectionEnum.Up;
-                    animation = WActorAnimEnum.WalkUp;
-                }
-            }
-
             if (direction.Length() == 0)
             {
                 Idle();
             }
+            else {
+                if (Math.Abs((int)direction.X) > Math.Abs((int)direction.Y))
+                {
+                    if (direction.X > 0)
+                    {
+                        Facing = DirectionEnum.Right;
+                        animation = WActorAnimEnum.WalkRight;
+                    }
+                    else if (direction.X < 0)
+                    {
+                        Facing = DirectionEnum.Left;
+                        animation = WActorAnimEnum.WalkLeft;
+                    }
+                }
+                else
+                {
+                    if (direction.Y > 0)
+                    {
+                        Facing = DirectionEnum.Down;
+                        animation = WActorAnimEnum.WalkDown;
+                    }
+                    else if (direction.Y < 0)
+                    {
+                        Facing = DirectionEnum.Up;
+                        animation = WActorAnimEnum.WalkUp;
+                    }
+                }
 
-            if (_bodySprite.CurrentAnimation != Util.GetEnumString(animation))
-            {
-                PlayAnimation(animation);
+                if (_bodySprite.CurrentAnimation != Util.GetEnumString(animation))
+                {
+                    PlayAnimation(animation);
+                }
             }
         }
 
