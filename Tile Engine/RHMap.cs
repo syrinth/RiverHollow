@@ -1,24 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using RiverHollow.Misc;
-using RiverHollow.Actors;
-using RiverHollow.Game_Managers;
-using RiverHollow.GUIObjects;
-using RiverHollow.WorldObjects;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
-using static RiverHollow.RiverHollow;
-using static RiverHollow.Game_Managers.GameManager;
-using RiverHollow.Game_Managers.GUIComponents.Screens;
-using static RiverHollow.WorldObjects.WorldItem.Machine;
-using static RiverHollow.WorldObjects.WorldItem;
-using RiverHollow.Game_Managers.GUIObjects;
-using static RiverHollow.WorldObjects.Floor;
 using MonoGame.Extended.Tiled.Graphics;
+using RiverHollow.Actors;
+using RiverHollow.Game_Managers;
+using RiverHollow.Game_Managers.GUIComponents.Screens;
+using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.GUIObjects;
+using RiverHollow.Misc;
+using RiverHollow.WorldObjects;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.RiverHollow;
 using static RiverHollow.WorldObjects.Door;
+using static RiverHollow.WorldObjects.Floor;
+using static RiverHollow.WorldObjects.WorldItem;
+using static RiverHollow.WorldObjects.WorldItem.Machine;
 
 namespace RiverHollow.Tile_Engine
 {
@@ -54,7 +54,7 @@ namespace RiverHollow.Tile_Engine
         public Dictionary<string, TiledMapTileLayer> Layers => _diLayers;
 
         protected List<RHTile> _liBuildingTiles;
-        protected List<WorldActor> _liCharacters;
+        protected List<WorldActor> _liActors;
         protected List<Mob> _liMobs;
         protected List<Door> _liDoors;
         public List<WorldActor> ToRemove;
@@ -77,7 +77,7 @@ namespace RiverHollow.Tile_Engine
         public RHMap() {
             _liBuildingTiles = new List<RHTile>();
             _liTilesets = new List<TiledMapTileset>();
-            _liCharacters = new List<WorldActor>();
+            _liActors = new List<WorldActor>();
             _liMobs = new List<Mob>();
             _liBuildings = new List<WorkerBuilding>();
             _liModifiedTiles = new List<RHTile>();
@@ -274,7 +274,7 @@ namespace RiverHollow.Tile_Engine
                         Position = Util.SnapToGrid(obj.Position),
                         CurrentMapName = _name
                     };
-                    _liCharacters.Add(s);
+                    _liActors.Add(s);
                 }
             }
 
@@ -375,7 +375,7 @@ namespace RiverHollow.Tile_Engine
             foreach (WorldActor c in ToRemove)
             {
                 if (c.IsMob() && _liMobs.Contains((Mob)c)) { _liMobs.Remove((Mob)c); }
-                else if (_liCharacters.Contains(c)) { _liCharacters.Remove(c); }
+                else if (_liActors.Contains(c)) { _liActors.Remove(c); }
             }
             ToRemove.Clear();
 
@@ -387,7 +387,7 @@ namespace RiverHollow.Tile_Engine
                     if (!MapManager.Maps[c.CurrentMapName].Contains(c))
                     {
                         if (c.IsMob() && !_liMobs.Contains((Mob)c)) { _liMobs.Add((Mob)c); }
-                        else if (!_liCharacters.Contains(c)) { _liCharacters.Add(c); }
+                        else if (!_liActors.Contains(c)) { _liActors.Add(c); }
                         c.CurrentMapName = _name;
                         c.Position = c.NewMapPosition == Vector2.Zero ? c.Position : c.NewMapPosition;
                         c.NewMapPosition = Vector2.Zero;
@@ -403,7 +403,7 @@ namespace RiverHollow.Tile_Engine
 
             if (IsRunning())
             {
-                foreach (WorldActor c in _liCharacters)
+                foreach (WorldActor c in _liActors)
                 {
                     c.Update(gameTime);
                 }
@@ -425,7 +425,7 @@ namespace RiverHollow.Tile_Engine
 
         public void CheckSpirits()
         {
-            foreach (WorldActor c in _liCharacters)
+            foreach (WorldActor c in _liActors)
             {
                 if (c.IsSpirit())
                 {
@@ -436,7 +436,7 @@ namespace RiverHollow.Tile_Engine
 
         public bool Contains(WorldActor c)
         {
-            return _liCharacters.Contains(c);
+            return _liActors.Contains(c);
         }
 
         public void ItemPickUpdate()
@@ -475,7 +475,7 @@ namespace RiverHollow.Tile_Engine
 
             _renderer.Draw(_map, Camera._transform);
 
-            foreach(WorldActor c in _liCharacters)
+            foreach(WorldActor c in _liActors)
             {
                 c.Draw(spriteBatch, true);
             }
@@ -567,73 +567,159 @@ namespace RiverHollow.Tile_Engine
         }
 
         #region Collision Code
-        public bool CheckForCollisions(WorldActor c, Rectangle testX, Rectangle testY, ref Vector2 dir, bool ignoreCollisions = false)
+        public bool MoveAndCollide(WorldActor c, Rectangle originalRectangle, Vector2 dir, bool ignoreCollisions = false)
         {
             bool rv = true;
-            if (MapChange(c, testX) || MapChange(c, testY)) { return false; }
-            else if(!CheckNPCForCollisionsAndNudges(c, testX, testY, ref dir))
-            {
-                if (!ignoreCollisions)
-                {
-                    int column = ((dir.X < 0) ? testX.Left : testX.Right) / TileSize;
-                    int row = ((dir.Y < 0) ? testY.Top : testY.Bottom) / TileSize;
 
-                    //Do X-Axis comparison
-                    if (dir.X != 0) { CollisionDetectionHelper(testX, ref dir, column, -1, GetMinRow(testX), GetMaxRow(testX)); }
-                    //Do Y-Axis comparison
-                    if (dir.Y != 0) { CollisionDetectionHelper(testY, ref dir, -1, row, GetMinColumn(testY), GetMaxColumn(testY)); }
+
+            return rv;
+        }
+
+        private List<Rectangle> GetPossibleCollisions(WorldActor actor, Vector2 dir)
+        {
+            List<Rectangle> list = new List<Rectangle>();
+            Rectangle newRectangle = new Rectangle((int)(actor.CollisionBox.X + dir.X), (int)(actor.CollisionBox.Y + dir.Y), actor.CollisionBox.Width, actor.CollisionBox.Height);
+
+            RHTile tile = null;
+            if(dir.X > 0)
+            {
+                tile = MapManager.CurrentMap.GetTile(Util.GetGridCoords(newRectangle.Right, newRectangle.Top));
+                if (TileValid(tile, list)) { list.Add(tile.Rect); }
+                tile = MapManager.CurrentMap.GetTile(Util.GetGridCoords(newRectangle.Right, newRectangle.Bottom));
+                if (TileValid(tile, list)) { list.Add(tile.Rect); }
+            }
+            else if(dir.X < 0)
+            {
+                tile = MapManager.CurrentMap.GetTile(Util.GetGridCoords(newRectangle.Left, newRectangle.Top));
+                if (TileValid(tile, list)) { list.Add(tile.Rect); }
+                tile = MapManager.CurrentMap.GetTile(Util.GetGridCoords(newRectangle.Left, newRectangle.Bottom));
+                if (TileValid(tile, list)) { list.Add(tile.Rect); }
+            }
+
+            if (dir.Y > 0)
+            {
+                tile = MapManager.CurrentMap.GetTile(Util.GetGridCoords(newRectangle.Left, newRectangle.Bottom));
+                if (TileValid(tile, list)) { list.Add(tile.Rect); }
+                tile = MapManager.CurrentMap.GetTile(Util.GetGridCoords(newRectangle.Right, newRectangle.Bottom));
+                if (TileValid(tile, list)) { list.Add(tile.Rect); }
+            }
+            else if (dir.Y < 0)
+            {
+                tile = MapManager.CurrentMap.GetTile(Util.GetGridCoords(newRectangle.Left, newRectangle.Top));
+                if (TileValid(tile, list)) { list.Add(tile.Rect); }
+                tile = MapManager.CurrentMap.GetTile(Util.GetGridCoords(newRectangle.Right, newRectangle.Top));
+                if (TileValid(tile, list)) { list.Add(tile.Rect); }
+            }
+
+            foreach(WorldActor w in _liActors)
+            {
+                if (w.Active && w != actor) { list.Add(w.CollisionBox);}
+            }
+
+            if(actor != PlayerManager.World) {
+                list.Add(PlayerManager.World.CollisionBox);
+            }
+
+            return list;
+        }
+
+        private bool TileValid(RHTile tile, List<Rectangle> list)
+        {
+            return tile != null && !tile.Passable() && !list.Contains(tile.Rect);
+        }
+
+        private bool ChangeDir(List<Rectangle> possibleCollisions, Rectangle originalRectangle, ref Vector2 dir)
+        {
+            bool rv = false;
+
+            //Because of how objects interact with each other, this check needs to be broken up so that the x and y movement can be
+            //calculated seperately. If an object is above you and you move into it at an angle, if you check the collision as one rectangle
+            //then the collision nullification will hit the entire damn movement mode.
+            Rectangle newRectangleX = new Rectangle((int)(originalRectangle.X + dir.X), (int)(originalRectangle.Y), originalRectangle.Width, originalRectangle.Height);
+            Rectangle newRectangleY = new Rectangle((int)(originalRectangle.X), (int)(originalRectangle.Y + dir.Y), originalRectangle.Width, originalRectangle.Height);
+            foreach (Rectangle r in possibleCollisions)
+            {
+                Vector2 coords = Util.GetGridCoords(r.Location);
+                bool yColl = false;
+                bool xColl = false;
+                if (dir.Y != 0 && r.Intersects(newRectangleY))
+                {
+                    float initY = dir.Y;
+
+                    if (initY > 0) { dir.Y = 0; }//-= (newRectangleY.Bottom - r.Top + 1); }
+                    else if (initY < 0) { dir.Y = 0; }//+= (r.Bottom - newRectangleY.Top + 1); }
+
+                    yColl = true;
                 }
+                if (dir.X != 0 && r.Intersects(newRectangleX))
+                {
+                    float initX = dir.X;
+                    if (initX > 0) { dir.X = 0; }//-= (newRectangleX.Right - r.Left + 1); }
+                    else if (initX < 0) { dir.X = 0; }//+= (r.Right - newRectangleX.Left + 1); }
+
+                    xColl = true;
+                }
+
+                if (yColl)
+                {
+                    float modifier = CheckToNudge(newRectangleY.Center.X, r.Center.X, coords.X, coords.Y, "Col");
+
+                    int yVal = dir.Y > 0 ? newRectangleY.Bottom : newRectangleY.Top;
+
+                    if (modifier > 0)
+                    {
+                        coords = Util.GetGridCoords(new Point((int)(newRectangleY.Right + modifier), yVal));
+                        if (MapManager.CurrentMap.GetTile(coords).Passable())
+                        {
+                            dir.X += modifier;
+                        }
+                    }
+                    else if (modifier < 0)
+                    {
+                        coords = Util.GetGridCoords(new Point((int)(newRectangleY.Left + modifier), yVal));
+                        if (MapManager.CurrentMap.GetTile(coords).Passable())
+                        {
+                            dir.X += modifier;
+                        }
+                    }
+
+                }
+                if (xColl)
+                {
+                    float modifier = CheckToNudge(newRectangleY.Center.Y, r.Center.Y, coords.X, coords.Y, "Row");
+                    int xVal = dir.X > 0 ? newRectangleY.Right : newRectangleY.Left;
+
+                    if (modifier > 0)
+                    {
+                        coords = Util.GetGridCoords(new Point(xVal, (int)(newRectangleY.Bottom + modifier)));
+                        if (MapManager.CurrentMap.GetTile(coords).Passable())
+                        {
+                            dir.Y += modifier;
+                        }
+                    }
+                    else if (modifier < 0)
+                    {
+                        coords = Util.GetGridCoords(new Point(xVal, (int)(newRectangleY.Top + modifier)));
+                        if (MapManager.CurrentMap.GetTile(coords).Passable())
+                        {
+                            dir.Y += modifier;
+                        }
+                    }
+                }                
             }
 
             return rv;
         }
 
-        public bool CheckNPCForCollisionsAndNudges(WorldActor c, Rectangle testX, Rectangle testY, ref Vector2 dir)
+        public bool CheckForCollisions(WorldActor c, Rectangle testX, Rectangle testY, ref Vector2 dir, bool ignoreCollisions = false)
         {
-            bool xCol = false;
-            bool yCol = false;
-            Vector2 mod = Vector2.Zero;
+            bool rv = true;
 
-            mod.Y += CheckNPCCollHelper(c, testX, dir, ref yCol);
-            mod.X += CheckNPCCollHelper(c, testY, dir, ref xCol);
-
-            if (xCol) {
-                dir.X = mod.X;
-            }
-
-            if (yCol) {
-                dir.Y = mod.Y;
-            }
-
-            return xCol || yCol;
-        }
-        private float CheckNPCCollHelper(WorldActor mover, Rectangle movingChar, Vector2 dir, ref bool collision) {
-            float rv = 0;
-            foreach (WorldActor c in _liCharacters)
+            if (MapChange(c, testX) || MapChange(c, testY)) { return false; }
+            else if (!ignoreCollisions)
             {
-                if (c.Active)
-                {
-                    if (mover != c && !c.IsSpirit() && c.CollisionIntersects(movingChar))
-                    {
-                        collision = true;
-                        Vector2 collisionTileCoords = Util.GetGridCoords(c.CollisionBox.Location);
-                        if (dir.X != 0)
-                        {
-                            rv = CheckToNudge(movingChar.Center.Y, c.CollisionBox.Center.Y, collisionTileCoords.X, collisionTileCoords.Y, "Row");
-                            rv = CheckToNudge(movingChar.Center.Y, c.CollisionBox.Center.Y, collisionTileCoords.X, collisionTileCoords.Y, "Row");
-                        }
-                        if (dir.Y != 0)
-                        {
-                            rv = CheckToNudge(movingChar.Center.X, c.CollisionBox.Center.X, collisionTileCoords.X, collisionTileCoords.Y, "Col");
-                            rv = CheckToNudge(movingChar.Center.X, c.CollisionBox.Center.X, collisionTileCoords.X, collisionTileCoords.Y, "Col");
-                        }
-
-                        if (rv != 0)
-                        {
-                            break;
-                        }
-                    }
-                }
+                List<Rectangle> list = GetPossibleCollisions(c, dir);
+                ChangeDir(list, c.CollisionBox, ref dir);
             }
 
             return rv;
@@ -664,100 +750,7 @@ namespace RiverHollow.Tile_Engine
         }
 
         #region Collision Helpers
-        private void CollisionDetectionHelper(Rectangle movingChar, ref Vector2 dir, int column, int row, int min, int max)
-        {
-            try
-            {
-                for (int var = min; var <= max; var++)
-                {
-                    int varCol = (column != -1) ? column : var;
-                    int varRow = (row != -1) ? row : var;
-
-                    RHTile mapTile = _tileArray[varCol, varRow];
-                    Rectangle cellRect = new Rectangle(varCol * TileSize, varRow * TileSize, TileSize, TileSize);
-                    if (!mapTile.Passable() && cellRect.Intersects(movingChar))
-                    {
-                        if (row == -1)
-                        {
-                            //Walk the Rectangle back to get the actual
-                            Rectangle r = movingChar;
-                            r.X -= (int)dir.X;
-
-                            //Cancels out the X movement
-                            dir.X = dir.X < 0 ? (cellRect.Right - r.Left) : (cellRect.Left - r.Right);
-                            movingChar = r;
-
-                            //Logic to nudge player towards an edge
-                            float modifier = CheckToNudge(movingChar.Center.Y, cellRect.Center.Y, varCol, varRow, "Row");
-                            int xVal = dir.X > 0 ? movingChar.Right : movingChar.Left;
-
-                            if (modifier > 0)
-                            {
-                                Vector2 coords = Util.GetGridCoords(new Point(xVal, (int)(movingChar.Bottom + modifier)));
-                                if (MapManager.CurrentMap.GetTile(coords).Passable())
-                                {
-                                    dir.Y += modifier;
-                                }
-                                else { dir.Y = 0; }
-                            }
-                            else if (modifier < 0)
-                            {
-
-                                Vector2 coords = Util.GetGridCoords(new Point(xVal, (int)(movingChar.Top + modifier)));
-                                if (MapManager.CurrentMap.GetTile(coords).Passable())
-                                {
-                                    dir.Y += modifier;
-                                }
-                                else { dir.Y = 0; }
-                            }
-                        }
-                        if (column == -1)
-                        {
-                            Rectangle r = movingChar;
-                            r.Y -= (int)dir.Y;
-
-                            //Cancels out the Y movement
-                            dir.Y = dir.Y < 0 ? (cellRect.Bottom - r.Top) : (cellRect.Top - r.Bottom);
-                            movingChar = r;
-
-                            //Logic to nudge player towards an edge
-                            float modifier = CheckToNudge(movingChar.Center.X, cellRect.Center.X, varCol, varRow, "Col");
-                            int yVal = dir.Y > 0 ? movingChar.Bottom : movingChar.Top;
-
-                            if (modifier > 0)
-                            {
-                                Vector2 coords = Util.GetGridCoords(new Point((int)(movingChar.Right + modifier), yVal));
-                                if (MapManager.CurrentMap.GetTile(coords).Passable())
-                                {
-                                    dir.X += modifier;
-                                }
-                                else { dir.X = 0; }
-                            }
-                            else if (modifier < 0)
-                            {
-                                Vector2 coords = Util.GetGridCoords(new Point((int)(movingChar.Left + modifier), yVal));
-                                if (MapManager.CurrentMap.GetTile(coords).Passable())
-                                {
-                                    dir.X += modifier;
-                                }
-                                else { dir.X = 0; }
-                            }
-                        }
-                    }
-                }
-            }
-            catch(IndexOutOfRangeException ex)
-            {
-
-            }
-        }
-
         public float CheckToNudge(float movingCenter, float objCenter, float varCol, float varRow, string v)
-        {
-            return CheckToNudge(movingCenter, objCenter, (int)varCol, (int)varRow, v);
-        }
-
-        public float CheckToNudge(float movingCenter, float objCenter, int varCol, int varRow, string v)
         {
             float rv = 0;
             float centerDelta = movingCenter - objCenter;
@@ -767,40 +760,20 @@ namespace RiverHollow.Tile_Engine
             }
             else if (centerDelta > 0)
             {
-                RHTile testTile = _tileArray[varCol + (v.Equals("Col") ? 1 : 0), varRow + (v.Equals("Row") ? 1 : 0)];
+                RHTile testTile = _tileArray[(int)(varCol + (v.Equals("Col") ? 1 : 0)), (int)(varRow + (v.Equals("Row") ? 1 : 0))];
                 if (testTile != null && testTile.Passable()) {
                     rv = 1;
                 }
             }
             else if (centerDelta < 0)
             {
-                RHTile testTile = _tileArray[varCol - (v.Equals("Col") ? 1 : 0), varRow + (v.Equals("Row") ? 1 : 0)];
+                RHTile testTile = _tileArray[(int)(varCol - (v.Equals("Col") ? 1 : 0)), (int)(varRow + (v.Equals("Row") ? 1 : 0))];
                 if (testTile != null && testTile.Passable()) { rv = -1; }
             }
 
             return rv;
         }
 
-        public int GetMinColumn(Rectangle movingChar)
-        {
-            return (movingChar.Left / TileSize);
-        }
-
-        public int GetMaxColumn(Rectangle movingChar)
-        {
-            int i = (movingChar.Right / TileSize);
-            return i;
-        }
-
-        public int GetMinRow(Rectangle movingChar)
-        {
-            return (movingChar.Top / TileSize);
-        }
-
-        public int GetMaxRow(Rectangle movingChar)
-        {
-            return (movingChar.Bottom / TileSize);
-        }
         #endregion
         #endregion
 
@@ -868,7 +841,7 @@ namespace RiverHollow.Tile_Engine
 
             if (!rv)
             {
-                foreach (WorldActor c in _liCharacters)
+                foreach (WorldActor c in _liActors)
                 {
                     if (PlayerManager.PlayerInRange(c.CollisionBox.Center, (int)(TileSize * 1.5)) && c.CollisionContains(mouseLocation) && c.CanTalk && c.Active)
                     {
@@ -1007,7 +980,7 @@ namespace RiverHollow.Tile_Engine
                     PlayerManager._merchantChest.AddItem(i);
                     InventoryManager.RemoveItemFromInventory(InventoryManager.CurrentItem);
                 }
-                foreach (WorldActor c in _liCharacters)
+                foreach (WorldActor c in _liActors)
                 {
                     if (c.IsWorldAdventurer())
                     {
@@ -1088,7 +1061,7 @@ namespace RiverHollow.Tile_Engine
             }
             else{
                 bool found = false;
-                foreach(WorldActor c in _liCharacters)
+                foreach(WorldActor c in _liActors)
                 {
                     if(!c.IsMob() && c.CollisionContains(mouseLocation)){
                         if (c.Active)
@@ -1111,7 +1084,7 @@ namespace RiverHollow.Tile_Engine
 
         public void ClearWorkers()
         {
-            _liCharacters.Clear();
+            _liActors.Clear();
         }
 
         public RHTile RetrieveTile(int x, int y)
@@ -1236,7 +1209,7 @@ namespace RiverHollow.Tile_Engine
             for (int i = 0; i < b.Workers.Count; i++)
             {
                 b.Workers[i].Position = spawnPoints[i];
-                _liCharacters.Add(b.Workers[i]);
+                _liActors.Add(b.Workers[i]);
             }
             foreach (WorldObject w in b.PlacedObjects)
             {
