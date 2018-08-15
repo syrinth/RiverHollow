@@ -115,7 +115,7 @@ namespace RiverHollow.Game_Managers
                     case "Destructible":
                         return new Destructible(id, _stringDataValues, pos);
                     case "Tree":
-                        return new Tree(id, pos, new Rectangle(0, 0, 48, 64), GetTexture(@"Textures\tree"), TileSize * 3, TileSize * 4, false, true, 1, 10);
+                        return new Tree(id, pos, new Rectangle(0, 0, 48, 80), GetTexture(@"Textures\tree"), TileSize * 3, TileSize * 5, false, true, 1, 10);
                     case "Staircase":
                         return new Staircase(id, pos, new Rectangle(96, 0, 16, 16), GetTexture(@"Textures\worldObjects"), TileSize, TileSize);
                     case "Container":

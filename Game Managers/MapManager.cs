@@ -186,6 +186,10 @@ namespace RiverHollow.Game_Managers
                 {
                     _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
                 }
+                for (int i = 0; i < 10; i++)
+                {
+                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.BigRock, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
+                }
             }
 
             Mob mob = CharacterManager.GetMobByIndex(1, new Vector2(647, 539));

@@ -619,7 +619,6 @@ namespace RiverHollow.Tile_Engine
                         Vector2 collisionTileCoords = Util.GetGridCoords(c.CollisionBox.Location);
                         if (dir.X != 0)
                         {
-                            //rv = CheckToNudge(movingChar.Center.Y, c.CollisionBox.Center.Y, -1, -1, "Row");
                             rv = CheckToNudge(movingChar.Center.Y, c.CollisionBox.Center.Y, collisionTileCoords.X, collisionTileCoords.Y, "Row");
                             rv = CheckToNudge(movingChar.Center.Y, c.CollisionBox.Center.Y, collisionTileCoords.X, collisionTileCoords.Y, "Row");
                         }
@@ -627,7 +626,6 @@ namespace RiverHollow.Tile_Engine
                         {
                             rv = CheckToNudge(movingChar.Center.X, c.CollisionBox.Center.X, collisionTileCoords.X, collisionTileCoords.Y, "Col");
                             rv = CheckToNudge(movingChar.Center.X, c.CollisionBox.Center.X, collisionTileCoords.X, collisionTileCoords.Y, "Col");
-                            // rv = CheckToNudge(movingChar.Center.X, c.CollisionBox.Center.X, -1, -1, "Col");
                         }
 
                         if (rv != 0)
@@ -690,7 +688,28 @@ namespace RiverHollow.Tile_Engine
                             movingChar = r;
 
                             //Logic to nudge player towards an edge
-                            dir.Y += CheckToNudge(movingChar.Center.Y, cellRect.Center.Y, varCol, varRow, "Row");
+                            float modifier = CheckToNudge(movingChar.Center.Y, cellRect.Center.Y, varCol, varRow, "Row");
+                            int xVal = dir.X > 0 ? movingChar.Right : movingChar.Left;
+
+                            if (modifier > 0)
+                            {
+                                Vector2 coords = Util.GetGridCoords(new Point(xVal, (int)(movingChar.Bottom + modifier)));
+                                if (MapManager.CurrentMap.GetTile(coords).Passable())
+                                {
+                                    dir.Y += modifier;
+                                }
+                                else { dir.Y = 0; }
+                            }
+                            else if (modifier < 0)
+                            {
+
+                                Vector2 coords = Util.GetGridCoords(new Point(xVal, (int)(movingChar.Top + modifier)));
+                                if (MapManager.CurrentMap.GetTile(coords).Passable())
+                                {
+                                    dir.Y += modifier;
+                                }
+                                else { dir.Y = 0; }
+                            }
                         }
                         if (column == -1)
                         {
@@ -702,7 +721,27 @@ namespace RiverHollow.Tile_Engine
                             movingChar = r;
 
                             //Logic to nudge player towards an edge
-                            dir.X += CheckToNudge(movingChar.Center.X, cellRect.Center.X, varCol, varRow, "Col");
+                            float modifier = CheckToNudge(movingChar.Center.X, cellRect.Center.X, varCol, varRow, "Col");
+                            int yVal = dir.Y > 0 ? movingChar.Bottom : movingChar.Top;
+
+                            if (modifier > 0)
+                            {
+                                Vector2 coords = Util.GetGridCoords(new Point((int)(movingChar.Right + modifier), yVal));
+                                if (MapManager.CurrentMap.GetTile(coords).Passable())
+                                {
+                                    dir.X += modifier;
+                                }
+                                else { dir.X = 0; }
+                            }
+                            else if (modifier < 0)
+                            {
+                                Vector2 coords = Util.GetGridCoords(new Point((int)(movingChar.Left + modifier), yVal));
+                                if (MapManager.CurrentMap.GetTile(coords).Passable())
+                                {
+                                    dir.X += modifier;
+                                }
+                                else { dir.X = 0; }
+                            }
                         }
                     }
                 }
@@ -729,7 +768,9 @@ namespace RiverHollow.Tile_Engine
             else if (centerDelta > 0)
             {
                 RHTile testTile = _tileArray[varCol + (v.Equals("Col") ? 1 : 0), varRow + (v.Equals("Row") ? 1 : 0)];
-                if (testTile != null && testTile.Passable()) { rv = 1; }
+                if (testTile != null && testTile.Passable()) {
+                    rv = 1;
+                }
             }
             else if (centerDelta < 0)
             {
@@ -1449,6 +1490,10 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
+        public RHTile GetTile(Vector2 pos)
+        {
+            return GetTile((int)pos.X, (int)pos.Y);
+        }
         public RHTile GetTile(int x, int y)
         {
             RHTile tile = null;
