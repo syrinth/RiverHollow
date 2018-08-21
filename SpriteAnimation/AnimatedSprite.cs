@@ -21,7 +21,7 @@ namespace RiverHollow.SpriteAnimations
         private Vector2 _Position = Vector2.Zero;
 
         // Dictionary holding all of the FrameAnimation objects
-        Dictionary<string, FrameAnimation> _frameAnimations = new Dictionary<string, FrameAnimation>();
+        Dictionary<string, FrameAnimation> _diFrameAnimations = new Dictionary<string, FrameAnimation>();
 
         // Which FrameAnimation from the dictionary above is playing
         string _currAnimation = string.Empty;
@@ -131,8 +131,8 @@ namespace RiverHollow.SpriteAnimations
         {
             get
             {
-                if (_currAnimation != string.Empty)
-                    return _frameAnimations[_currAnimation];
+                if (_currAnimation != string.Empty && _diFrameAnimations.ContainsKey(_currAnimation))
+                    return _diFrameAnimations[_currAnimation];
                 else
                     return null;
             }
@@ -159,7 +159,7 @@ namespace RiverHollow.SpriteAnimations
         {
             _texture = sprite._texture;
             _bPingPong = sprite._bPingPong;
-            _frameAnimations = sprite._frameAnimations;
+            _diFrameAnimations = sprite._diFrameAnimations;
             _iFrameCutoff = sprite._iFrameCutoff;
             _color = sprite._color;
             _currAnimation = sprite._currAnimation;
@@ -181,7 +181,7 @@ namespace RiverHollow.SpriteAnimations
 
         public void AddAnimation<TEnum>(TEnum animEnum, int X, int Y, int Width, int Height, int Frames, float FrameLength)
         {
-            _frameAnimations.Add(Util.GetEnumString(animEnum), new FrameAnimation(X, Y, Width, Height, Frames, FrameLength));
+            _diFrameAnimations.Add(Util.GetEnumString(animEnum), new FrameAnimation(X, Y, Width, Height, Frames, FrameLength));
             _width = Width;
             _height = Height;
             v2Center = new Vector2(_width / 2, _height / 2);
@@ -189,7 +189,7 @@ namespace RiverHollow.SpriteAnimations
 
         public void AddNextAnimation<TEnum>(TEnum first, TEnum next)
         {
-            _frameAnimations[Util.GetEnumString(first)].NextAnimation = Util.GetEnumString(next);
+            _diFrameAnimations[Util.GetEnumString(first)].NextAnimation = Util.GetEnumString(next);
         }
 
         public void SetCurrentAnimation<TEnum>(TEnum animate)
@@ -199,9 +199,12 @@ namespace RiverHollow.SpriteAnimations
         public void SetCurrentAnimation(string animate)
         {
             _currAnimation = animate;
-            _frameAnimations[_currAnimation].FrameTimer = 0;
-            _frameAnimations[_currAnimation].CurrentFrame = 0;
-            _frameAnimations[_currAnimation].PlayCount = 0;
+            if (_diFrameAnimations.ContainsKey(_currAnimation))
+            {
+                _diFrameAnimations[_currAnimation].FrameTimer = 0;
+                _diFrameAnimations[_currAnimation].CurrentFrame = 0;
+                _diFrameAnimations[_currAnimation].PlayCount = 0;
+            }
         }
 
         public void SetScale(int x)
@@ -218,9 +221,9 @@ namespace RiverHollow.SpriteAnimations
         public FrameAnimation GetAnimationByName<TEnum>(TEnum animEnum)
         {
             string anim = Util.GetEnumString(animEnum);
-            if (_frameAnimations.ContainsKey(anim))
+            if (_diFrameAnimations.ContainsKey(anim))
             {
-                return _frameAnimations[anim];
+                return _diFrameAnimations[anim];
             }
             else
             {
@@ -243,12 +246,12 @@ namespace RiverHollow.SpriteAnimations
                 if (CurrentFrameAnimation == null)
                 {
                     // Make sure we have an animation associated with this sprite
-                    if (_frameAnimations.Count > 0)
+                    if (_diFrameAnimations.Count > 0)
                     {
                         // Set the active animation to the first animation
                         // associated with this sprite
-                        string[] sKeys = new string[_frameAnimations.Count];
-                        _frameAnimations.Keys.CopyTo(sKeys, 0);
+                        string[] sKeys = new string[_diFrameAnimations.Count];
+                        _diFrameAnimations.Keys.CopyTo(sKeys, 0);
                         SetCurrentAnimation(sKeys[0]);
                     }
                     else

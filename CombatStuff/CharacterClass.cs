@@ -84,7 +84,7 @@ namespace RiverHollow.Actors.CombatStuff
                     string[] abilitySplit = tagType[1].Split('-');
                     foreach (string ability in abilitySplit)
                     {
-                        AbilityList.Add(CharacterManager.GetActionByIndex(int.Parse(ability)));
+                        AbilityList.Add(ActorManager.GetActionByIndex(int.Parse(ability)));
                     }
                 }
                 else if (tagType[0].Equals("Spell"))
@@ -92,7 +92,7 @@ namespace RiverHollow.Actors.CombatStuff
                     string[] spellSplit = tagType[1].Split('-');
                     foreach (string spell in spellSplit)
                     {
-                        CombatAction ac = (CombatAction)CharacterManager.GetActionByIndex(int.Parse(spell));
+                        CombatAction ac = (CombatAction)ActorManager.GetActionByIndex(int.Parse(spell));
                         _spellList.Add(ac);
                     }
                 }

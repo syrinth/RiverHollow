@@ -249,7 +249,7 @@ namespace RiverHollow.Game_Managers
         {
             RHRandom r = new RHRandom();
             //MAR
-            ProcessActionChoice((CombatAction)CharacterManager.GetActionByIndex(1));//ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)]);
+            ProcessActionChoice((CombatAction)ActorManager.GetActionByIndex(1));//ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)]);
             if (!SelectedAction.SelfOnly())
             {
                 List<CombatTile> playerTiles = new List<CombatTile>();
@@ -612,7 +612,7 @@ namespace RiverHollow.Game_Managers
                     {
                         List<CombatTile> targets = SelectedAction.GetTargetTiles();
                         ActiveCharacter = actSummon;
-                        SelectedAction = new ChosenAction((CombatAction)CharacterManager.GetActionByIndex(1));
+                        SelectedAction = new ChosenAction((CombatAction)ActorManager.GetActionByIndex(1));
                         SelectedAction.SetTargetTiles(targets);
                     }
                     else if (actSummon.TwinCast && SelectedAction.IsSpell() && !SelectedAction.IsSummonSpell())

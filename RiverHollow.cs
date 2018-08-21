@@ -63,7 +63,7 @@ namespace RiverHollow
             GUIManager.LoadContent();
             MapManager.LoadContent(Content, GraphicsDevice);
             //TravelManager.Calculate();
-            CharacterManager.LoadContent(Content);
+            ActorManager.LoadContent(Content);
             DropManager.LoadContent(Content);
             CutsceneManager.LoadContent(Content);
             GameManager.LoadQuests(Content);
@@ -281,7 +281,7 @@ namespace RiverHollow
             {
                 b.Rollover();
             }
-            CharacterManager.RollOver();
+            ActorManager.RollOver();
             MapManager.Rollover();
         }
 

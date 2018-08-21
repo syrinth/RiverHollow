@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#000000" nextobjectid="38">
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#000000" nextobjectid="42">
  <properties>
+  <property name="ActiveSpawn" type="int" value="2"/>
   <property name="Outside" type="bool" value="true"/>
  </properties>
  <tileset firstgid="1" source="tilesetManorGrounds.tsx"/>
@@ -325,12 +326,21 @@
     <property name="Type" value="Forest_2"/>
    </properties>
   </object>
-  <object id="29" name="Tree" x="897.333" y="772" width="8.66667" height="6.66667"/>
-  <object id="33" name="Tree" x="866.333" y="774" width="8.66667" height="6.66667"/>
-  <object id="34" name="Tree" x="868.333" y="802.667" width="8.66667" height="6.66667"/>
-  <object id="35" name="Tree" x="893.667" y="808" width="8.66667" height="6.66667"/>
-  <object id="36" name="Tree" x="929.667" y="778" width="8.66667" height="2.66667"/>
-  <object id="37" name="Tree" x="931" y="804.667" width="8.66667" height="6.66667"/>
+  <object id="38" name="SpawnPoint" x="163" y="161" width="10" height="15">
+   <properties>
+    <property name="SpawnType" value="Forest"/>
+   </properties>
+  </object>
+  <object id="40" name="SpawnPoint" x="146.667" y="1459.5" width="10" height="10">
+   <properties>
+    <property name="SpawnType" value="Forest"/>
+   </properties>
+  </object>
+  <object id="41" name="SpawnPoint" x="787" y="129.833" width="10" height="15">
+   <properties>
+    <property name="SpawnType" value="Forest"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="Travel Layer" offsetx="0" offsety="-1.5">
   <object id="3" name="Exit" x="850.417" y="626.833" width="9.0833" height="9.0833">

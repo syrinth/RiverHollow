@@ -5,36 +5,51 @@ using System.Collections.Generic;
 using RiverHollow.Actors.CombatStuff;
 using System.IO;
 using RiverHollow.Misc;
+using System;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Game_Managers
 {
-    public static class CharacterManager
+    public static class ActorManager
     {
-        private static Dictionary<int, string> _mobDictionary;
-        private static Dictionary<int, string> _monsterDictionary;
-        private static Dictionary<int, Villager> _npcDictionary;
-        public static Dictionary<int, Villager> DiNPC { get => _npcDictionary; }
-        private static Dictionary<int, string> _actionDictionary;
-        private static Dictionary<int, string> _buffDictionary;
-        private static Dictionary<int, string> _classDictionary;
-        private static Dictionary<string, Dictionary<string, string>> _dictSchedule;
+        private static Dictionary<int, Mob> _diMobs;
+        private static Dictionary<int, string> _diMonsters;
+        private static Dictionary<int, Villager> _diNPCs;
+        public static Dictionary<int, Villager> DiNPC { get => _diNPCs; }
+        private static Dictionary<int, string> _diActions;
+        private static Dictionary<int, string> _diBuffs;
+        private static Dictionary<int, string> _diClasses;
+        private static Dictionary<string, Dictionary<string, string>> _diSchedule;
+
+        static List<int> _liForest;
+        static List<int> _liMountain;
+        static List<int> _liNight;
 
         public static void LoadContent(ContentManager Content)
         {
-            _dictSchedule = new Dictionary<string, Dictionary<string, string>>();
-            _monsterDictionary = Content.Load<Dictionary<int, string>>(@"Data\Monsters");
-            _mobDictionary = Content.Load<Dictionary<int, string>>(@"Data\Mobs");
-            _actionDictionary = Content.Load<Dictionary<int, string>>(@"Data\CombatActions");
-            _buffDictionary = Content.Load<Dictionary<int, string>>(@"Data\Buffs");
-            _classDictionary = Content.Load<Dictionary<int, string>>(@"Data\Classes");
-            
+            _liForest = new List<int>();
+            _liMountain = new List<int>();
+            _liNight = new List<int>();
+            _diMobs = new Dictionary<int, Mob>();
+            _diSchedule = new Dictionary<string, Dictionary<string, string>>();
+
+            _diMonsters = Content.Load<Dictionary<int, string>>(@"Data\Monsters");
+            _diActions = Content.Load<Dictionary<int, string>>(@"Data\CombatActions");
+            _diBuffs = Content.Load<Dictionary<int, string>>(@"Data\Buffs");
+            _diClasses = Content.Load<Dictionary<int, string>>(@"Data\Classes");
+
+            foreach (KeyValuePair<int, string> kvp in Content.Load<Dictionary<int, string>>(@"Data\Mobs"))
+            {
+                _diMobs.Add(kvp.Key, new Mob(kvp.Key, Util.FindTags(kvp.Value)));
+            }
+
             foreach (string s in Directory.GetFiles(@"Content\Data\NPCData\Schedules"))
             {
                 string temp = Path.GetFileNameWithoutExtension(s);
-                _dictSchedule.Add(temp, Content.Load<Dictionary<string, string>>(@"Data\NPCData\Schedules\" + temp));
+                _diSchedule.Add(temp, Content.Load<Dictionary<string, string>>(@"Data\NPCData\Schedules\" + temp));
             }
 
-            _npcDictionary = new Dictionary<int, Villager>();
+            _diNPCs = new Dictionary<int, Villager>();
             foreach (KeyValuePair<int, string> kvp in Content.Load<Dictionary<int, string>>(@"Data\NPCData\Characters"))
             {
                 Villager n = null;
@@ -52,21 +67,21 @@ namespace RiverHollow.Game_Managers
                         n = new Villager(kvp.Key, _characterDataValues);
                         break;
                 }
-                _npcDictionary.Add(kvp.Key, n);
+                _diNPCs.Add(kvp.Key, n);
             }
         }
 
         public static string GetCharacterNameByIndex(int i)
         {
-            return _npcDictionary[i].Name;
+            return _diNPCs[i].Name;
         }
 
         public static Monster GetMonsterByIndex(int id)
         {
             Monster m = null;
-            if (_monsterDictionary.ContainsKey(id))
+            if (_diMonsters.ContainsKey(id))
             {
-                string _itemData = _monsterDictionary[id];
+                string _itemData = _diMonsters[id];
                 string[] _itemDataValues = Util.FindTags(_itemData);
                 m = new Monster(id, _itemDataValues);
             }
@@ -75,14 +90,7 @@ namespace RiverHollow.Game_Managers
 
         public static Mob GetMobByIndex(int id)
         {
-            Mob m = null;
-            if (id != -1)
-            {
-                string _itemData = _mobDictionary[id];
-                string[] _itemDataValues = _itemData.Split('/');
-                m = new Mob(id, _itemDataValues);
-            }
-            return m;
+            return _diMobs[id];
         }
 
         public static Mob GetMobByIndex(int id, Vector2 pos)
@@ -96,7 +104,7 @@ namespace RiverHollow.Game_Managers
         {
             if (id != -1)
             {
-                string strData = _actionDictionary[id];
+                string strData = _diActions[id];
                 string[] strdataValues = Util.FindTags(strData);
                 switch (strdataValues[0].Split(':')[1])
                 {
@@ -116,7 +124,7 @@ namespace RiverHollow.Game_Managers
             Buff b = null;
             if (id != -1)
             {
-                string _stringData = _buffDictionary[id];
+                string _stringData = _diBuffs[id];
                 string[] _stringDataValues = _stringData.Split('/');
                 b = new Buff(id, _stringDataValues);
             }
@@ -125,14 +133,14 @@ namespace RiverHollow.Game_Managers
 
         public static int GetClassCount()
         {
-            return _classDictionary.Count;
+            return _diClasses.Count;
         }
         public static CharacterClass GetClassByIndex(int id)
         {
             CharacterClass c = null;
             if (id != -1)
             {
-                string strData = _classDictionary[id];
+                string strData = _diClasses[id];
                 string[] strDataValues = Util.FindTags(strData);
                 c = new CharacterClass(id, strDataValues);
             }
@@ -142,9 +150,9 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<string, string> GetSchedule(string npc)
         {
             Dictionary<string, string> rv = null;
-            if (_dictSchedule.ContainsKey(npc))
+            if (_diSchedule.ContainsKey(npc))
             {
-                rv = _dictSchedule[npc];
+                rv = _diSchedule[npc];
             }
 
             return rv;
@@ -152,10 +160,31 @@ namespace RiverHollow.Game_Managers
 
         public static void RollOver()
         {
-            foreach(Villager n in _npcDictionary.Values)
+            foreach(Villager n in _diNPCs.Values)
             {
                 n.RollOver();
             }
         }
+
+        #region Spawn Code
+        public static void AddToForest(int ID) { _liForest.Add(ID); }
+        public static void AddToMountain(int ID) { _liMountain.Add(ID); }
+        public static void AddToNight(int ID) { _liNight.Add(ID); }
+        internal static Mob GetMobToSpawn(SpawnConditionEnum eSpawnType)
+        {
+            List<Mob> allowedMobs = new List<Mob>();
+
+            foreach(Mob m in _diMobs.Values)
+            {
+                if (m.CheckValidConditions(eSpawnType)){
+                    allowedMobs.Add(m);
+                }
+            }
+
+
+            return GetMobByIndex(new RHRandom().Next(1, allowedMobs.Count-1));
+        }
+
+        #endregion
     }
 }

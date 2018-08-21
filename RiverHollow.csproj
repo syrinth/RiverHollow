@@ -87,7 +87,7 @@
     <Compile Include="Items\MerchantChest.cs" />
     <Compile Include="Misc\Quest.cs" />
     <Compile Include="RiverHollow.cs" />
-    <Compile Include="Game Managers\CharacterManager.cs" />
+    <Compile Include="Game Managers\ActorManager.cs" />
     <Compile Include="Game Managers\DropManager.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIItemBox.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUITextInputWindow.cs" />

@@ -192,20 +192,6 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            Mob mob = CharacterManager.GetMobByIndex(1, new Vector2(647, 539));
-            mob.CurrentMapName = "mapManorGrounds";
-            _tileMaps[MapManager.HomeMap].AddMob(mob);
-
-            //for (int i = 0; i < 20; i++)
-            //{
-            //    Vector2 vect = new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 2) * TileSize);
-            //    mob = CharacterManager.GetMobByIndex(2, vect);
-            //    mob.CurrentMapName = _tileMaps[MapManager.HomeMap].Name.Replace(@"Maps\", "");
-            //    _tileMaps[MapManager.HomeMap].AddMob(mob);
-            //}
-
-
-
             MerchantChest m = new MerchantChest();
             PlayerManager._merchantChest = m;
         }

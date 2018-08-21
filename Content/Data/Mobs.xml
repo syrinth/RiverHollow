@@ -4,15 +4,15 @@
     <!--Key: Index>0 Value:monster1/monster2/monster3/monster4-->
     <Item>
       <Key>1</Key>
-      <Value>1/0/0/0</Value>
+      <Value>[Monster:1][Condition:Forest][Condition:Summer]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>2/1/1/0</Value>
+      <Value>[Monster:2][Monster:1][Monster:1][Condition:Forest][Condition:Spring]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>3</Value>
+      <Value>[Monster:3][Condition:Forest]</Value>
     </Item>
   </Asset>
 </XnaContent>

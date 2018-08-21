@@ -691,7 +691,7 @@ namespace RiverHollow.WorldObjects
         {
             _iClassID = i;
 
-            string n = CharacterManager.GetClassByIndex(_iClassID).Name;
+            string n = ActorManager.GetClassByIndex(_iClassID).Name;
             _name += n;
             _description += n;
 

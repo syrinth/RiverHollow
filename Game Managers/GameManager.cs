@@ -40,6 +40,7 @@ namespace RiverHollow.Game_Managers
         public enum WorkerTypeEnum { None, Magic, Martial };
         public enum WeaponEnum { None, Staff, Sword };
         public enum ArmorEnum { None, Cloth, Heavy };
+        public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
         public static float Scale = 4f;
         public static int TileSize = 16;
         public static int MaxBldgLevel = 3;
@@ -582,7 +583,7 @@ namespace RiverHollow.Game_Managers
                 data.QuestLogData.Add(q.SaveData());
             }
 
-            foreach (Villager n in CharacterManager.DiNPC.Values)
+            foreach (Villager n in ActorManager.DiNPC.Values)
             {
                 if (n.IsEligible()) { data.EligibleData.Add(((EligibleNPC)n).SaveData()); }
                 else { data.NPCData.Add(n.SaveData()); }
@@ -672,13 +673,13 @@ namespace RiverHollow.Game_Managers
             }
             foreach (NPCData n in data.NPCData)
             {
-                Villager target = CharacterManager.DiNPC[n.npcID];
+                Villager target = ActorManager.DiNPC[n.npcID];
                 target.LoadData(n);
             }
 
             foreach (EligibleNPCData n in data.EligibleData)
             {
-                EligibleNPC target = (EligibleNPC)CharacterManager.DiNPC[n.npcData.npcID];
+                EligibleNPC target = (EligibleNPC)ActorManager.DiNPC[n.npcData.npcID];
                 target.LoadData(n);
             }
         }

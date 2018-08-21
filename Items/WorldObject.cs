@@ -451,7 +451,7 @@ namespace RiverHollow.WorldObjects
             public void ProcessClick()
             {
                 int currID = PlayerManager.Combat.CharacterClass.ID;
-                int toSet = (currID < CharacterManager.GetClassCount() - 1) ? (PlayerManager.Combat.CharacterClass.ID + 1) : 1;
+                int toSet = (currID < ActorManager.GetClassCount() - 1) ? (PlayerManager.Combat.CharacterClass.ID + 1) : 1;
                 PlayerManager.SetClass(toSet);
             }
 

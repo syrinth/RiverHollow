@@ -505,7 +505,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void SetClass(int x)
         {
-            CharacterClass combatClass = CharacterManager.GetClassByIndex(x);
+            CharacterClass combatClass = ActorManager.GetClassByIndex(x);
             Combat.SetClass(combatClass);
             Combat.LoadContent(@"Textures\"+ combatClass.Name);
         }

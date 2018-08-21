@@ -33,16 +33,18 @@ namespace RiverHollow.Tile_Engine
         protected WorkerBuilding _mapBuilding;
         public WorkerBuilding MapBuilding { get => _mapBuilding; }
 
-        public bool _bWorkerBuilding;
+        bool _bWorkerBuilding;
         public bool WorkerBuilding => _bWorkerBuilding;
-        public bool _bBuilding;
-        public bool IsBuilding { get => _bBuilding; }
-        public bool _bDungeon;
-        public bool IsDungeon { get => _bDungeon; }
-        public bool _bTown;
-        public bool IsTown { get => _bTown; }
-        public bool _bOutside;
-        public bool IsOutside { get => _bOutside; }
+        bool _bBuilding;
+        public bool IsBuilding => _bBuilding;
+        bool _bDungeon;
+        public bool IsDungeon => _bDungeon;
+        bool _bTown;
+        public bool IsTown => _bTown;
+        bool _bOutside;
+        public bool IsOutside => _bOutside; 
+        int _iActiveSpawnPoints;
+        public int ActiveSpawnPoints => _iActiveSpawnPoints;
 
         protected TiledMap _map;
         public TiledMap Map { get => _map; }
@@ -62,6 +64,7 @@ namespace RiverHollow.Tile_Engine
         protected List<WorkerBuilding> _liBuildings;
         protected List<RHTile> _liModifiedTiles;
         public List<RHTile> ModTiles => _liModifiedTiles;
+        protected List<SpawnPoint> _liSpawnPoints;
 
         protected List<Item> _liItems;
         protected List<ShopData> _liShopData;
@@ -75,6 +78,7 @@ namespace RiverHollow.Tile_Engine
         private List<TiledMapObject> _liMapObjects;
 
         public RHMap() {
+            _liSpawnPoints = new List<SpawnPoint>();
             _liBuildingTiles = new List<RHTile>();
             _liTilesets = new List<TiledMapTileset>();
             _liActors = new List<WorldActor>();
@@ -105,6 +109,10 @@ namespace RiverHollow.Tile_Engine
             _bDungeon = _map.Properties.ContainsKey("Dungeon");
             _bTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
+
+            if (_map.Properties.ContainsKey("ActiveSpawn")) {
+                int.TryParse(_map.Properties["ActiveSpawn"].ToString(), out _iActiveSpawnPoints);
+            }
 
             MapWidthTiles = _map.Width;
             MapHeightTiles = _map.Height;
@@ -141,6 +149,11 @@ namespace RiverHollow.Tile_Engine
             if (_map.Properties.ContainsKey("Outside"))
             {
                 bool.TryParse(_map.Properties["Outside"], out _bOutside);
+            }
+
+            if (_map.Properties.ContainsKey("ActiveSpawn"))
+            {
+                int.TryParse(_map.Properties["ActiveSpawn"].ToString(), out _iActiveSpawnPoints);
             }
 
             if (_bTown)
@@ -253,7 +266,7 @@ namespace RiverHollow.Tile_Engine
                 else if (obj.Name.Equals("Mob"))
                 {
                     Vector2 vect = obj.Position;
-                    Mob mob = CharacterManager.GetMobByIndex(int.Parse(obj.Properties["ID"]), vect);
+                    Mob mob = ActorManager.GetMobByIndex(int.Parse(obj.Properties["ID"]), vect);
                     AddMob(mob);
                 }
                 else if (obj.Name.Equals("Chest"))
@@ -275,6 +288,10 @@ namespace RiverHollow.Tile_Engine
                         CurrentMapName = _name
                     };
                     _liActors.Add(s);
+                }
+                else if (obj.Name.Equals("SpawnPoint"))
+                {
+                    _liSpawnPoints.Add(new SpawnPoint(this, obj));
                 }
             }
 
@@ -326,13 +343,15 @@ namespace RiverHollow.Tile_Engine
                     int chosenMob = r.Next(0, _liMobs.Count - 1);
 
                     Vector2 vect = new Vector2(r.Next(1, _map.Width - 1) * TileSize, r.Next(1, _map.Height - 2) * TileSize);
-                    Mob mob = CharacterManager.GetMobByIndex(_liMobs[chosenMob], vect);
+                    Mob mob = ActorManager.GetMobByIndex(_liMobs[chosenMob], vect);
                     mob.CurrentMapName = _name;
                     AddMob(mob);
 
                     numMobs--;
                 }
             }
+
+            SpawnMobs();
         }
 
         public void Update(GameTime gameTime)
@@ -420,7 +439,33 @@ namespace RiverHollow.Tile_Engine
                 tile.Rollover();
             }
 
+            SpawnMobs();
+
             CheckSpirits();
+        }
+
+        private void SpawnMobs()
+        {
+            foreach (SpawnPoint sp in _liSpawnPoints)
+            {
+                sp.Despawn();
+            }
+
+            RHRandom rand = new RHRandom();
+            for (int i = 0; i < _iActiveSpawnPoints; i++)
+            {
+                bool spawned = false;
+                do
+                {
+                    int point = rand.Next(0, _liSpawnPoints.Count-1);
+                    if (!_liSpawnPoints[point].HasSpawned())
+                    {
+                        spawned = true;
+                        _liSpawnPoints[point].Spawn();
+                    }
+
+                } while (!spawned);
+            }
         }
 
         public void CheckSpirits()
@@ -1569,6 +1614,41 @@ namespace RiverHollow.Tile_Engine
         } 
     }
 
+    public class SpawnPoint
+    {
+        Mob _mob;
+        RHMap _map;
+        Vector2 _vSpawnPoint;
+        SpawnConditionEnum _eSpawnType = SpawnConditionEnum.Forest;
+
+        public SpawnPoint(RHMap map, TiledMapObject obj)
+        {
+            _map = map;
+            _eSpawnType = Util.ParseEnum<SpawnConditionEnum>(obj.Properties["SpawnType"]);
+            _vSpawnPoint = map.GetTile(Util.GetGridCoords(obj.Position)).Center;
+        }
+
+        public void Spawn()
+        {
+            _mob = ActorManager.GetMobToSpawn(_eSpawnType);
+            if (_mob != null)
+            {
+                _map.AddMob(_mob, _vSpawnPoint);
+            }
+        }
+
+        public void Despawn()
+        {
+            _map.RemoveMob(_mob);
+            _mob = null;
+        }
+
+        public bool HasSpawned()
+        {
+            return _mob != null;
+        }
+    }
+
     public class RHTile
     {
         string _mapName;
@@ -1862,9 +1942,9 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
-            if(CharacterManager.DiNPC[_iShopID].CurrentMapName == _sMap)
+            if(ActorManager.DiNPC[_iShopID].CurrentMapName == _sMap)
             {
-                if (MapManager.RetrieveTile(_iShopX, _iShopY).Contains(CharacterManager.DiNPC[_iShopID]))
+                if (MapManager.RetrieveTile(_iShopX, _iShopY).Contains(ActorManager.DiNPC[_iShopID]))
                 {
                     rv = true;
                 }
@@ -1875,7 +1955,7 @@ namespace RiverHollow.Tile_Engine
 
         internal void Talk()
         {
-            ((ShopKeeper)CharacterManager.DiNPC[_iShopID]).Talk(true);
+            ((ShopKeeper)ActorManager.DiNPC[_iShopID]).Talk(true);
         }
     }
 }

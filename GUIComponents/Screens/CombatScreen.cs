@@ -80,7 +80,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     MapManager.CurrentMap = MapManager.Maps["mapHospital"];
                     PlayerManager.CurrentMap = "mapHospital";
                     PlayerManager.World.Position = Util.SnapToGrid(MapManager.CurrentMap.DictionaryCharacterLayer["playerSpawn"]);
-                    GUIManager.SetScreen(new TextScreen(CharacterManager.DiNPC[7], CharacterManager.DiNPC[7].GetDialogEntry("Healed")));
+                    GUIManager.SetScreen(new TextScreen(ActorManager.DiNPC[7], ActorManager.DiNPC[7].GetDialogEntry("Healed")));
                     foreach(CombatAdventurer c in PlayerManager.GetParty())
                     {
                         c.ClearConditions();
@@ -841,7 +841,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         internal void BtnMove()
         {
-            CombatManager.ProcessActionChoice((CombatAction)CharacterManager.GetActionByIndex(4));
+            CombatManager.ProcessActionChoice((CombatAction)ActorManager.GetActionByIndex(4));
         }
     }
 

@@ -22,7 +22,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _villagerList = new List<FriendshipBox>();
             _friendshipWindow = new GUIWindow(new Vector2(WIDTH, HEIGHT), GUIWindow.RedWin, WIDTH, HEIGHT);
 
-            foreach (Villager n in CharacterManager.DiNPC.Values)
+            foreach (Villager n in ActorManager.DiNPC.Values)
             {
                 FriendshipBox f = new FriendshipBox(n, _friendshipWindow.MidWidth());
 

@@ -274,7 +274,7 @@ namespace RiverHollow.Actors.CombatStuff
                 Buff b = null;
                 foreach (BuffData data in _buffs)
                 {
-                    b = CharacterManager.GetBuffByIndex(data.BuffID);
+                    b = ActorManager.GetBuffByIndex(data.BuffID);
                     b.Duration = data.Duration;
                     string[] tags = data.Tags.Split(' ');
                     foreach (string s in tags)
@@ -432,7 +432,7 @@ namespace RiverHollow.Actors.CombatStuff
                     Buff b = null;
                     foreach (BuffData data in _buffs)
                     {
-                        b = CharacterManager.GetBuffByIndex(data.BuffID);
+                        b = ActorManager.GetBuffByIndex(data.BuffID);
                         b.Duration = data.Duration;
                         string[] tags = data.Tags.Split(' ');
                         foreach (string s in tags)
@@ -564,7 +564,7 @@ namespace RiverHollow.Actors.CombatStuff
                             else if (counteringChar.AnimationPlayedXTimes(1))
                             {
                                 counteringChar.PlayAnimation(CActorAnimEnum.Walk);
-                                int x = SkillUser.ProcessAttack(counteringChar, ((CombatAction)CharacterManager.GetActionByIndex(1)).EffectHarm, counteringChar.GetAttackElement());
+                                int x = SkillUser.ProcessAttack(counteringChar, ((CombatAction)ActorManager.GetActionByIndex(1)).EffectHarm, counteringChar.GetAttackElement());
                                 SkillUser.Tile.GUITile.AssignEffect(x, true);
                                 counteringChar = null;
                                 _pauseForCounter = false;
@@ -580,7 +580,7 @@ namespace RiverHollow.Actors.CombatStuff
                             else if (counteringSummon.AnimationPlayedXTimes(1))
                             {
                                 counteringSummon.PlayAnimation(CActorAnimEnum.Walk);
-                                int x = SkillUser.ProcessAttack(counteringSummon, ((CombatAction)CharacterManager.GetActionByIndex(1)).EffectHarm, counteringSummon.GetAttackElement());
+                                int x = SkillUser.ProcessAttack(counteringSummon, ((CombatAction)ActorManager.GetActionByIndex(1)).EffectHarm, counteringSummon.GetAttackElement());
                                 SkillUser.Tile.GUITile.AssignEffect(x, true);
                                 counteringSummon = null;
                                 _pauseForCounter = false;
