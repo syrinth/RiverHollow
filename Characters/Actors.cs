@@ -560,7 +560,7 @@ namespace RiverHollow.Actors
                 }
             }
 
-            Dictionary<string, string> schedule = CharacterManager.GetSchedule("NPC" + _index);
+            Dictionary<string, string> schedule = ActorManager.GetSchedule("NPC" + _index);
             if (schedule != null)
             {
                 foreach (KeyValuePair<string, string> kvp in schedule)
@@ -1118,7 +1118,7 @@ namespace RiverHollow.Actors
                 if (tagType[0].Equals("Class"))
                 {
                     _combat = new CombatAdventurer(this);
-                    _combat.SetClass(CharacterManager.GetClassByIndex(int.Parse(tagType[1])));
+                    _combat.SetClass(ActorManager.GetClassByIndex(int.Parse(tagType[1])));
                     _combat.LoadContent(@"Textures\" + _combat.CharacterClass.Name);
                 }
             }
@@ -1359,7 +1359,7 @@ namespace RiverHollow.Actors
         protected void SetCombat()
         {
             _combat = new CombatAdventurer(this);
-            _combat.SetClass(CharacterManager.GetClassByIndex(_iAdventurerID));
+            _combat.SetClass(ActorManager.GetClassByIndex(_iAdventurerID));
             _combat.LoadContent(@"Textures\" + _combat.CharacterClass.Name);
         }
 
@@ -1887,11 +1887,14 @@ namespace RiverHollow.Actors
         FieldOfVision _FoV;
         Vector2 _vLeashPoint;
         float _fLeashRange = TileSize * 10;
+
+        List<SpawnConditionEnum> _liSpawnConditions;
         
         #endregion
 
         public Mob(int id, string[] stringData)
         {
+            _liSpawnConditions = new List<SpawnConditionEnum>();
             _actorType = ActorEnum.Mob;
             _monsters = new List<CombatActor>();
             ImportBasics(stringData, id);
@@ -1926,10 +1929,15 @@ namespace RiverHollow.Actors
         {
             for (int i = 0; i < stringData.Length; i++)
             {
-                int mID = int.Parse(stringData[i]);
-                if (mID > 0)
+                string[] tagType = stringData[i].Split(':');
+                if (tagType[0].Equals("Monster"))
                 {
-                    _monsters.Add(CharacterManager.GetMonsterByIndex(mID));
+                    int mID = int.Parse(tagType[1]);
+                    _monsters.Add(ActorManager.GetMonsterByIndex(mID));
+                }
+                else if (tagType[0].Equals("Condition"))
+                {
+                    _liSpawnConditions.Add(Util.ParseEnum<SpawnConditionEnum>(tagType[1]));
                 }
             }
 
@@ -2080,6 +2088,47 @@ namespace RiverHollow.Actors
             {
                 _dIdleFor -= theGameTime.ElapsedGameTime.TotalSeconds;
             }
+        }
+
+        public bool CheckValidConditions(SpawnConditionEnum s)
+        {
+            bool rv = true;
+
+            if (_liSpawnConditions.Contains(s))
+            {
+                foreach(SpawnConditionEnum e in _liSpawnConditions)
+                {
+                    if(e.Equals(SpawnConditionEnum.Night) && !GameCalendar.IsNight())
+                    {
+                        rv = false;
+                    }
+                    else if (CompareSpawnSeason(e, SpawnConditionEnum.Spring))
+                    {
+                        rv = false;
+                    }
+                    else if (CompareSpawnSeason(e, SpawnConditionEnum.Summer))
+                    {
+                        rv = false;
+                    }
+                    else if (CompareSpawnSeason(e, SpawnConditionEnum.Winter))
+                    {
+                        rv = false;
+                    }
+                    else if (CompareSpawnSeason(e, SpawnConditionEnum.Fall))
+                    {
+                        rv = false;
+                    }
+
+                    if (!rv) { break; }
+                }
+            }
+
+            return rv;
+        }
+
+        private bool CompareSpawnSeason(SpawnConditionEnum check, SpawnConditionEnum season)
+        {
+            return check.Equals(season) && !Util.ParseEnum<SpawnConditionEnum>(GameCalendar.GetSeason()).Equals(season);
         }
 
         private class FieldOfVision
@@ -2276,7 +2325,7 @@ namespace RiverHollow.Actors
             _vStartPos = new Vector2(0, 0);
         }
 
-        public void LoadContent(string texture)
+        public virtual void LoadContent(string texture)
         {
             _bodySprite = new AnimatedSprite(texture);
             int xCrawl = 0;
@@ -2761,7 +2810,6 @@ namespace RiverHollow.Actors
         int _iLvl;
         int _xp;
         public int XP { get => _xp; }
-        protected string _textureName;
         protected Vector2 _moveTo = Vector2.Zero;
 
         #endregion
@@ -2770,7 +2818,7 @@ namespace RiverHollow.Actors
         {
             _actorType = ActorEnum.Monster;
             ImportBasics(stringData, id);
-            LoadContent(_textureName, 100, 100, 2, 0.2f);
+            LoadContent();
         }
 
         protected void ImportBasics(string[] stringData, int id)
@@ -2783,7 +2831,7 @@ namespace RiverHollow.Actors
                 string[] tagType = s.Split(':');
                 if (tagType[0].Equals("Texture"))
                 {
-                    _textureName = @"Textures\" + tagType[1];
+                    _sTexture = @"Textures\" + tagType[1];
                 }
                 else if (tagType[0].Equals("Lvl"))
                 {
@@ -2822,9 +2870,30 @@ namespace RiverHollow.Actors
             _currentMP = MaxMP;
         }
 
-        public void LoadContent(int textureWidth, int textureHeight, int numFrames, float frameSpeed)
+        public void LoadContent()
         {
-            base.LoadContent(_textureName, textureWidth, textureHeight, numFrames, frameSpeed);
+            LoadContent(_sTexture, 100, 100, 2, 0.2f);
+            //_bodySprite = new AnimatedSprite(_sTexture);
+            //int xCrawl = 0;
+            //int frameWidth = 24;
+            //int frameHeight = 32;
+            //_bodySprite.AddAnimation(CActorAnimEnum.Walk, frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 32);
+            //xCrawl += 2;
+            //_bodySprite.AddAnimation(CActorAnimEnum.Cast, frameWidth, frameHeight, 2, 0.2f, (xCrawl * frameWidth), 32);
+            //xCrawl += 2;
+            //_bodySprite.AddAnimation(CActorAnimEnum.Hurt, frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 32);
+            //_bodySprite.AddNextAnimation(CActorAnimEnum.Hurt, CActorAnimEnum.Walk);
+            //xCrawl += 1;
+            //_bodySprite.AddAnimation(CActorAnimEnum.Attack, frameWidth, frameHeight, 1, 0.3f, (xCrawl * frameWidth), 32);
+            //xCrawl += 1;
+            //_bodySprite.AddAnimation(CActorAnimEnum.Critical, frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 32);
+            //xCrawl += 2;
+            //_bodySprite.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 32);
+
+            //_bodySprite.SetCurrentAnimation(CActorAnimEnum.Walk);
+            //_bodySprite.SetScale(CombatManager.CombatScale);
+            //_width = _bodySprite.Width;
+            //_height = _bodySprite.Height;
         }
 
         private void HandleTrait(string traitData)
