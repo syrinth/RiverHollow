@@ -181,7 +181,6 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-
             return GetMobByIndex(new RHRandom().Next(1, allowedMobs.Count-1));
         }
 

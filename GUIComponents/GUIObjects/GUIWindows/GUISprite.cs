@@ -51,18 +51,18 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
     public class GUICharacterSprite : GUIObject
     {
-        GUISprite _bodySprite;
-        public GUISprite BodySprite => _bodySprite;
-        GUISprite _eyeSprite;
-        public GUISprite EyeSprite => _eyeSprite;
-        GUISprite _hairSprite;
-        public GUISprite HairSprite => _hairSprite;
-        GUISprite _armSprite;
-        public GUISprite ArmSprite => _armSprite;
-        GUISprite _hatSprite;
-        public GUISprite HatSprite => _hatSprite;
-        GUISprite _shirtSprite;
-        public GUISprite ShirtSprite => _shirtSprite;
+        GUISprite _sprBody;
+        public GUISprite BodySprite => _sprBody;
+        GUISprite _sprEyes;
+        public GUISprite EyeSprite => _sprEyes;
+        GUISprite _sprHair;
+        public GUISprite HairSprite => _sprHair;
+        GUISprite _sprArms;
+        public GUISprite ArmSprite => _sprArms;
+        GUISprite _sprHat;
+        public GUISprite HatSprite => _sprHat;
+        GUISprite _sprChest;
+        public GUISprite ShirtSprite => _sprChest;
 
         List<GUISprite> _liSprites;
 
@@ -70,37 +70,37 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             _liSprites = new List<GUISprite>();
 
-            _bodySprite = new GUISprite(sprite, overwrite);
-            _liSprites.Add(_bodySprite);
+            _sprBody = new GUISprite(sprite, overwrite);
+            _liSprites.Add(_sprBody);
 
-            Width = _bodySprite.Width;
-            Height = _bodySprite.Height;
+            Width = _sprBody.Width;
+            Height = _sprBody.Height;
         }
         public GUICharacterSprite(bool overwrite = false)
         {
             _liSprites = new List<GUISprite>();
 
-            _bodySprite = new GUISprite(PlayerManager.World.BodySprite, overwrite);
-            _eyeSprite = new GUISprite(PlayerManager.World.EyeSprite, overwrite);
-            _hairSprite = new GUISprite(PlayerManager.World.HairSprite, overwrite);
-            _armSprite = new GUISprite(PlayerManager.World.ArmSprite, overwrite);
+            _sprBody = new GUISprite(PlayerManager.World.BodySprite, overwrite);
+            _sprEyes = new GUISprite(PlayerManager.World.EyeSprite, overwrite);
+            _sprHair = new GUISprite(PlayerManager.World.HairSprite, overwrite);
+            _sprArms = new GUISprite(PlayerManager.World.ArmSprite, overwrite);
 
-            if (_bodySprite != null) { _liSprites.Add(_bodySprite); }
-            if (_eyeSprite != null) { _liSprites.Add(_eyeSprite); }
-            if (_hairSprite != null) { _liSprites.Add(_hairSprite); }
-            if (_armSprite != null) { _liSprites.Add(_armSprite); }
+            if (_sprBody != null) { _liSprites.Add(_sprBody); }
+            if (_sprEyes != null) { _liSprites.Add(_sprEyes); }
+            if (_sprHair != null) { _liSprites.Add(_sprHair); }
+            if (_sprArms != null) { _liSprites.Add(_sprArms); }
             if (PlayerManager.World.Hat != null) {
-                _hatSprite = new GUISprite(PlayerManager.World.Hat.Sprite, overwrite);
-                _liSprites.Add(_hatSprite);
+                _sprHat = new GUISprite(PlayerManager.World.Hat.Sprite, overwrite);
+                _liSprites.Add(_sprHat);
             }
             if (PlayerManager.World.Shirt != null)
             {
-                _shirtSprite = new GUISprite(PlayerManager.World.Shirt.Sprite, overwrite);
-                _liSprites.Add(_shirtSprite);
+                _sprChest = new GUISprite(PlayerManager.World.Shirt.Sprite, overwrite);
+                _liSprites.Add(_sprChest);
             }
 
-            Width = _bodySprite.Width;
-            Height = _bodySprite.Height;
+            Width = _sprBody.Width;
+            Height = _sprBody.Height;
         }
 
         public override void Update(GameTime gameTime)
@@ -143,8 +143,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 g.SetScale(scale);
             }
 
-            Width = _bodySprite.Width;
-            Height = _bodySprite.Height;
+            Width = _sprBody.Width;
+            Height = _sprBody.Height;
         }
     }
 }

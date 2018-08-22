@@ -46,7 +46,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 if(PlayerManager.GetParty()[i] == PlayerManager.Combat)
                 {
-                    _arrDisplayBoxes[i] = new PlayerDisplayBox(ChangeSelectedCharacter);
+                    _arrDisplayBoxes[i] = new PlayerDisplayBox(true, ChangeSelectedCharacter);
                 }
                 else
                 {
@@ -345,7 +345,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             CombatAdventurer _actor;
             public CombatAdventurer Character => _actor;
 
-            public NPCDisplayBox(ClickDelegate action)
+            public NPCDisplayBox(ClickDelegate action = null)
             {
                 _winData = GUIWindow.GreyWin;
                 _delAction = action;
@@ -424,19 +424,46 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     }
                     return rv;
                 }
+
+                public class ClassSelectionBox : CharacterDisplayBox
+                {
+                    private ClickDelegate _delAction;
+                    public new delegate void ClickDelegate(ClassSelectionBox o);
+
+                    private int _iClassID;
+                    public int ClassID => _iClassID;
+
+                    public ClassSelectionBox(WorldAdventurer w, ClickDelegate del) : base(w, null)
+                    {
+                        _iClassID = w.Combat.CharacterClass.ID;
+                        _delAction = del;
+                    }
+
+                    public override bool ProcessLeftButtonClick(Point mouse)
+                    {
+                        bool rv = false;
+                        if (Contains(mouse) && _delAction != null)
+                        {
+                            _delAction(this);
+                            rv = true;
+                        }
+                        return rv;
+                    }
+                }
             }
 
             public class PlayerDisplayBox : NPCDisplayBox
             {
                 GUICharacterSprite _playerSprite;
                 public GUICharacterSprite PlayerSprite => _playerSprite;
+
+                bool _bOverwrite = false;
                 
-                public PlayerDisplayBox(ClickDelegate action) : base(action)
+                public PlayerDisplayBox(bool overwrite = false, ClickDelegate action = null) : base(action)
                 {
+                    _bOverwrite = overwrite;
                     _actor = PlayerManager.Combat;
                     Configure();
-
-                    PositionSprites();
                 }
 
                 public override void Update(GameTime gameTime)
@@ -448,7 +475,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     bool rv = false;
 
-                    if (Contains(mouse))
+                    if (Contains(mouse) && _delAction != null)
                     {
                         _delAction(PlayerManager.Combat);
                         rv = true;
@@ -460,9 +487,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 public void Configure()
                 {
                     Controls.Clear();
-                    _playerSprite = new GUICharacterSprite(true);
+                    _playerSprite = new GUICharacterSprite(_bOverwrite);
                     _playerSprite.SetScale((int)GameManager.Scale);
                     _playerSprite.PlayAnimation(WActorAnimEnum.IdleDown);
+
+                    PositionSprites();
                 }
 
                 public override void Position(Vector2 value)
@@ -672,7 +701,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         else if (!box.ArmorType.Equals(ArmorEnum.None)) { _character.Armor = null; }
                         else if (!box.ClothingType.Equals(ClothesEnum.None))
                         {
-                            PlayerManager.World.RemoveClothes((Clothes)box.Item);
+                            PlayerManager.World.RemoveClothes(((Clothes)box.Item).ClothesType);
                             _delSyncCharacter();
                         }
 

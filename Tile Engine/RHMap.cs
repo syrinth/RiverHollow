@@ -649,10 +649,10 @@ namespace RiverHollow.Tile_Engine
 
             foreach(WorldActor w in _liActors)
             {
-                if (w.Active && w != actor && !actor.IsMob()) { list.Add(w.CollisionBox);}
+                if (w.Active && w != actor) { list.Add(w.CollisionBox);}
             }
 
-            if(actor != PlayerManager.World) {
+            if(actor != PlayerManager.World && !actor.IsMob()) {
                 list.Add(PlayerManager.World.CollisionBox);
             }
 

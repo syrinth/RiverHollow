@@ -1,18 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Actors;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIObjects;
-using RiverHollow.SpriteAnimations;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Game_Managers.GUIObjects.PartyScreen.NPCDisplayBox;
+using static RiverHollow.Game_Managers.GUIObjects.PartyScreen.NPCDisplayBox.CharacterDisplayBox;
 using static RiverHollow.GUIObjects.GUIObject;
+using static RiverHollow.WorldObjects.Clothes;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -37,8 +37,8 @@ namespace RiverHollow.GUIComponents.Screens
 
         GUICheck _gCheck;
 
-        List<GUIObject> _liClasses;
-        ClassSelectionBox _selectedClass;
+        List<GUIObject> _liClassBoxes;
+        ClassSelectionBox _csbSelected;
         PlayerDisplayBox _playerDisplayBox;
 
         GUISwatch _btnHairColor;
@@ -69,17 +69,17 @@ namespace RiverHollow.GUIComponents.Screens
             _nameWindow = new GUITextInputWindow("Character Name:", SideEnum.Left);
             _nameWindow.AnchorAndAlignToObject(_manorWindow, SideEnum.Bottom, SideEnum.Right );
 
-            _liClasses = new List<GUIObject>();
+            _liClassBoxes = new List<GUIObject>();
             for (int i = 1; i <= ObjectManager.GetWorkerNum(); i++) {
-                ClassSelectionBox w = new ClassSelectionBox(Vector2.Zero, ObjectManager.GetWorker(i), BtnAssignClass);
-                _liClasses.Add(w);
+                ClassSelectionBox w = new ClassSelectionBox(ObjectManager.GetWorker(i), BtnAssignClass);
+                _liClassBoxes.Add(w);
                 _window.Controls.Add(w);
                 Controls.Add(w);
             }
-            _selectedClass = (ClassSelectionBox)_liClasses[0];
-            _selectedClass.PlayAnimation(WActorAnimEnum.WalkDown);
+            _csbSelected = (ClassSelectionBox)_liClassBoxes[0];
+            _csbSelected.PlayAnimation(WActorAnimEnum.WalkDown);
 
-            _playerDisplayBox = new PlayerDisplayBox();
+            _playerDisplayBox = new PlayerDisplayBox(false);
             _playerDisplayBox.AnchorToInnerSide(_window, SideEnum.TopLeft);
 
             _btnHairColor = new GUISwatch(PlayerManager.World.HairColor, 16, 32, BtnChooseHairColor);
@@ -100,7 +100,7 @@ namespace RiverHollow.GUIComponents.Screens
             _btnNextShirt = new GUIButton(new Rectangle(288, 96, 32, 32), 32, 32, @"Textures\Dialog", BtnNextShirt);
             _btnNextShirt.AnchorAndAlignToObject(_gShirt, SideEnum.Right, SideEnum.Bottom, 10);
 
-            GUIObject.CreateSpacedRow(ref _liClasses, _window.Height / 2, _window.Position().X, _window.Width, 20);
+            GUIObject.CreateSpacedRow(ref _liClassBoxes, _window.Height / 2, _window.Position().X, _window.Width, 20);
 
             _gCheck = new GUICheck("Skip Intro");
             _gCheck.AnchorToInnerSide(_window, SideEnum.BottomLeft);
@@ -119,7 +119,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             _btnOK.Enable(_nameWindow.GetText().Length > 0);
 
-            foreach (GUIObject o in _liClasses)
+            foreach (GUIObject o in _liClassBoxes)
             {
                 ((ClassSelectionBox)o).Update(gameTime);
             }
@@ -182,7 +182,7 @@ namespace RiverHollow.GUIComponents.Screens
         public void BtnNewGame()
         {
             PlayerManager.World.SetScale();
-            PlayerManager.SetClass(_selectedClass.ClassID);
+            PlayerManager.SetClass(_csbSelected.ClassID);
             PlayerManager.SetName(_nameWindow.GetText());
 
             RiverHollow.NewGame();
@@ -206,31 +206,41 @@ namespace RiverHollow.GUIComponents.Screens
             if (_iHairTypeIndex < _iHairTypeMax - 1) { _iHairTypeIndex++; }
             else { _iHairTypeIndex = 0; }
 
-            _playerDisplayBox.Sync();
+            PlayerManager.World.SetHairType(_iHairTypeIndex);
+            
+            _playerDisplayBox.Configure();
         }
         public void BtnNextHat()
         {
             if (_iHatIndex < _liHats.Count - 1) { _iHatIndex++; }
             else { _iHatIndex = 0; }
-            
-            _playerDisplayBox.Sync();
+
+            SyncClothing((Clothes)ObjectManager.GetItem((_liHats[_iHatIndex])), ClothesEnum.Hat);    
+            _playerDisplayBox.Configure();
         }
         public void BtnNextShirt()
         {
-            Color currHair = PlayerManager.World.HairColor;
             if (_iShirtIndex < _liShirts.Count - 1) { _iShirtIndex++; }
             else { _iShirtIndex = 0; }
 
-            _playerDisplayBox.Sync();
+            SyncClothing((Clothes)ObjectManager.GetItem((_liShirts[_iShirtIndex])), ClothesEnum.Chest);
+            _playerDisplayBox.Configure();
         }
+
+        private void SyncClothing(Clothes c, ClothesEnum e)
+        {
+            if (c != null) { PlayerManager.World.SetClothes(c); }
+            else { PlayerManager.World.RemoveClothes(e); }
+        }
+
         public void BtnAssignClass(ClassSelectionBox o)
         {
                 ClassSelectionBox csb = ((ClassSelectionBox)o);
-                if (_selectedClass != csb)
+                if (_csbSelected != csb)
                 {
                     csb.PlayAnimation(WActorAnimEnum.WalkDown);
-                    _selectedClass.PlayAnimation(WActorAnimEnum.IdleDown);
-                    _selectedClass = csb;
+                    _csbSelected.PlayAnimation(WActorAnimEnum.IdleDown);
+                    _csbSelected = csb;
                 }
         }
         public void CloseColorSelection()
@@ -238,174 +248,6 @@ namespace RiverHollow.GUIComponents.Screens
             _bCloseColorSelection = true;
         }
         #endregion
-
-        public class PlayerDisplayBox : GUIWindow
-        {
-            GUISprite _bodySprite;
-            public GUISprite BodySprite => _bodySprite;
-            GUISprite _eyeSprite;
-            public GUISprite EyeSprite => _eyeSprite;
-            GUISprite _hairSprite;
-            public GUISprite HairSprite => _hairSprite;
-            GUISprite _armSprite;
-            public GUISprite ArmSprite => _armSprite;
-            GUISprite _hatSprite;
-            public GUISprite HatSprite => _hatSprite;
-            GUISprite _shirtSprite;
-            public GUISprite ShirtSprite => _shirtSprite;
-
-            public PlayerDisplayBox()
-            {
-                Configure();
-
-                _winData = GUIWindow.RedWin;
-                
-                PositionSprites();
-            }
-
-            public override void Update(GameTime gameTime)
-            {
-                _bodySprite.Update(gameTime);
-                _eyeSprite.Update(gameTime);
-                _hairSprite.Update(gameTime);
-                _armSprite.Update(gameTime);
-                if (_hatSprite != null) { _hatSprite.Update(gameTime); }
-                if (_shirtSprite != null) { _shirtSprite.Update(gameTime); }
-            }
-
-            private void Configure()
-            {
-                _bodySprite = new GUISprite(PlayerManager.World.BodySprite);
-                _eyeSprite = new GUISprite(PlayerManager.World.EyeSprite);
-                _hairSprite = new GUISprite(PlayerManager.World.HairSprite);
-                _armSprite = new GUISprite(PlayerManager.World.ArmSprite);
-                if (PlayerManager.World.Hat != null) { _hatSprite = new GUISprite(PlayerManager.World.Hat.Sprite); }
-                if (PlayerManager.World.Shirt != null) { _shirtSprite = new GUISprite(PlayerManager.World.Shirt.Sprite); }
-
-                _bodySprite.SetScale((int)GameManager.Scale);
-                _eyeSprite.SetScale((int)GameManager.Scale);
-                _hairSprite.SetScale((int)GameManager.Scale);
-                _armSprite.SetScale((int)GameManager.Scale);
-                if (_hatSprite != null) { _hatSprite.SetScale((int)GameManager.Scale); }
-                if (_shirtSprite != null) { _shirtSprite.SetScale((int)GameManager.Scale); }
-            }
-
-            public override void Position(Vector2 value)
-            {
-                base.Position(value);
-                PositionSprites();
-            }
-
-            public void PlayAnimation<TEnum>(TEnum animation)
-            {
-                _bodySprite.PlayAnimation(animation);
-                _eyeSprite.PlayAnimation(animation);
-                _hairSprite.PlayAnimation(animation);
-                _armSprite.PlayAnimation(animation);
-            }
-
-            public void PositionSprites()
-            {
-                this.Controls.Clear();
-                if (_bodySprite != null)
-                {
-                    _bodySprite.CenterOnWindow(this);
-                    _bodySprite.AnchorToInnerSide(this, SideEnum.Bottom);
-
-                    Width = _bodySprite.Width + _bodySprite.Width / 3;
-                    Height = _bodySprite.Height + 2 * _bodySprite.Height / 4;
-
-                }
-                PositionSprite(_eyeSprite);
-                PositionSprite(_hairSprite);
-                PositionSprite(_armSprite);
-                PositionSprite(_eyeSprite);
-                PositionSprite(_hatSprite);
-                PositionSprite(_shirtSprite);
-
-            }
-            private void PositionSprite(GUISprite sprite)
-            {
-                if (sprite != null)
-                {
-                    sprite.CenterOnWindow(this);
-                    sprite.AnchorToInnerSide(this, SideEnum.Bottom);
-                }
-            }
-
-            public void Sync()
-            {
-                PlayerManager.World.SetHairType(_iHairTypeIndex);
-                PlayerManager.World.SetClothes((Clothes)ObjectManager.GetItem(_liHats[_iHatIndex]));
-                PlayerManager.World.SetClothes((Clothes)ObjectManager.GetItem(_liShirts[_iShirtIndex]));
-
-                Configure();
-                PositionSprites();
-            }
-        }
-
-        public class ClassSelectionBox : GUIWindow
-        {
-            GUISprite _sprite;
-            public GUISprite Sprite => _sprite;
-
-            int _iClassID;
-            public int ClassID => _iClassID;
-
-            public delegate void ClickDelegate(ClassSelectionBox o);
-            private ClickDelegate _delAction;
-
-            public ClassSelectionBox(Vector2 p, WorldAdventurer w, ClickDelegate del)
-            {
-                _sprite = new GUISprite(w.BodySprite);
-                _sprite.SetScale((int)GameManager.Scale);
-                _iClassID = w.AdventurerID;
-                Position(p);
-                _winData = GUIWindow.GreyWin;
-                Width = _sprite.Width + _sprite.Width / 4;
-                Height = _sprite.Height + (_winData.Edge * 2);
-                _sprite.CenterOnWindow(this);
-                _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
-
-                _delAction = del;
-            }
-
-            public override void Update(GameTime gameTime)
-            {
-                _sprite.Update(gameTime);
-            }
-
-            public override void Draw(SpriteBatch spriteBatch)
-            {
-                base.Draw(spriteBatch);
-                _sprite.Draw(spriteBatch);
-            }
-
-            public override void Position(Vector2 value)
-            {
-                base.Position(value);
-                if (_sprite != null) {
-                    _sprite.CenterOnWindow(this);
-                    _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
-                }
-            }
-
-            public void PlayAnimation<TEnum>(TEnum animation)
-            {
-                _sprite.PlayAnimation(animation);
-            }
-
-            public override bool ProcessLeftButtonClick(Point mouse)
-            {
-                bool rv = false;
-                if (Contains(mouse) && _delAction != null)
-                {
-                    _delAction(this);
-                    rv = true;
-                }
-                return rv;
-            }
-        }
 
         public class ColorSelectionBox : GUIWindow
         {

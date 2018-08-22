@@ -60,6 +60,12 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\Bard");
             AddTexture(Content, @"Textures\Witch");
             AddTexture(Content, @"Textures\NPC1");
+            AddTexture(Content, @"Textures\NPC2");
+            AddTexture(Content, @"Textures\NPC3");
+            AddTexture(Content, @"Textures\NPC4");
+            AddTexture(Content, @"Textures\NPC5");
+            AddTexture(Content, @"Textures\NPC6");
+            AddTexture(Content, @"Textures\NPC7");
             AddTexture(Content, @"Textures\NPC8");
             AddTexture(Content, @"Textures\Monsters\Goblin Scout");
             AddTexture(Content, @"Textures\Monsters\Goblin Soldier");
