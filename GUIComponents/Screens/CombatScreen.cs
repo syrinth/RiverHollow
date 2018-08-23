@@ -862,9 +862,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Height = height;
             _winData = GreyWin;
 
-            Vector2 mar = new Vector2((int)Position().X, (int)Position().Y);
-            _giCurrentTurn = new GUIImage(new Rectangle(288, 96, 32, 32), (int)_fCharacterHeight, (int)_fCharacterHeight, @"Textures\Dialog");
-
             _arNames = new GUIText[4];
             _arMana = new GUIText[4];
             _arHp = new GUIText[4];
@@ -882,7 +879,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 if (i == 0) {
                     _arNames[i].AnchorToInnerSide(this, SideEnum.TopLeft);
-                    _arMana[i].CenterOnWindow(this);
+                    _arMana[i].AlignToObject(this, SideEnum.CenterX);
                     _arMana[i].AnchorToInnerSide(this, SideEnum.Top);
                     _arHp[i].AnchorToInnerSide(this, SideEnum.TopRight);
                 }
