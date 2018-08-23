@@ -81,7 +81,7 @@
     <Compile Include="GUIComponents\Screens\ManagementScreen.cs" />
     <Compile Include="GUIComponents\Screens\OptionScreen.cs" />
     <Compile Include="GUIComponents\Screens\PartyScreen.cs" />
-    <Compile Include="GUIComponents\Screens\PurchaseItemsScreen.cs" />
+    <Compile Include="GUIComponents\Screens\PurchaseScreen.cs" />
     <Compile Include="GUIComponents\Screens\QuestScreen.cs" />
     <Compile Include="Game Managers\InventoryManager.cs" />
     <Compile Include="Items\MerchantChest.cs" />
@@ -95,12 +95,10 @@
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUITextWindow.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIImage.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUIWindow.cs" />
-    <Compile Include="GUIComponents\Screens\PurchaseBuildingsScreen.cs" />
     <Compile Include="GUIComponents\Screens\DayEndScreen.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\StatDisplay.cs" />
     <Compile Include="GUIComponents\Screens\InventoryScreen.cs" />
     <Compile Include="GUIComponents\Screens\ItemCreationScreen.cs" />
-    <Compile Include="GUIComponents\Screens\PurchaseWorkersScreen.cs" />
     <Compile Include="GUIComponents\Screens\TextInputScreen.cs" />
     <Compile Include="GUIComponents\Screens\TextScreen.cs" />
     <Compile Include="Game Managers\GUIManager.cs" />

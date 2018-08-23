@@ -12,12 +12,12 @@ using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Tile_Engine;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Game_Managers.GUIObjects.Screens;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.ObjectManager;
 using static RiverHollow.Game_Managers.GUIObjects.ManagementScreen;
 using static RiverHollow.WorldObjects.Clothes;
+using RiverHollow.GUIComponents.Screens;
 
 namespace RiverHollow.Actors
 {
