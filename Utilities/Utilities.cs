@@ -90,13 +90,25 @@ namespace RiverHollow.Misc
             return rv;
         }
 
-        public static void ParseContentFile(ref string filePath, ref string name)
+        public static void ParseContentFile(ref string filePath)
         {
-            FileInfo f = new FileInfo(filePath);
-            filePath = filePath.Replace(@"Content\", "");
-            filePath = filePath.Remove(filePath.Length - 4, 4);
+            if (filePath.StartsWith("Content"))
+            {
+                FileInfo f = new FileInfo(filePath);
+                filePath = filePath.Replace(@"Content\", "");
+                filePath = filePath.Remove(filePath.Length - 4, 4);
+            }
+        }
+        public static void ParseContentFileRetName(ref string filePath, ref string name)
+        {
+            if (filePath.StartsWith("Content"))
+            {
+                FileInfo f = new FileInfo(filePath);
+                filePath = filePath.Replace(@"Content\", "");
+                filePath = filePath.Remove(filePath.Length - 4, 4);
 
-            name = f.Name.Remove(f.Name.Length - 4);
+                name = f.Name.Remove(f.Name.Length - 4);
+            }
         }
 
         public static Rectangle FloatRectangle(Vector2 pos, float width, float height)

@@ -23,6 +23,12 @@ namespace RiverHollow.Actors
 {
     public class Actor
     {
+        protected static string _sVillagerFolder = @"Textures\Actors\Villagers\";
+        protected static string _sMonsterFolder = @"Textures\Actors\Monsters\";
+        protected static string _sMobFolder = @"Textures\Actors\Mobs\";
+        protected static string _sAdventurerFolder = @"Textures\Actors\Adventurers\";
+        protected static string _sNPsCFolder = @"Textures\Actors\NPCs\";
+
         protected string _sTexture;
         public enum ActorEnum { Actor, CombatAdventurer, CombatActor, Mob, Monster, NPC, Spirit, WorldAdventurer, WorldCharacter};
         protected ActorEnum _actorType = ActorEnum.Actor;
@@ -395,7 +401,7 @@ namespace RiverHollow.Actors
             _portrait = n.Portrait;
             _portraitRect = n._portraitRect;
 
-            LoadContent(@"Textures\NPC" + _iIndex);
+            LoadContent(_sVillagerFolder + "NPC" + _iIndex);
         }
 
         public Villager(int index, string[] data)
@@ -405,7 +411,7 @@ namespace RiverHollow.Actors
             _scheduleIndex = 0;
             _iIndex = index;
 
-            LoadContent(@"Textures\NPC" + _iIndex);
+            LoadContent(_sVillagerFolder + "NPC" + _iIndex);
             ImportBasics(data);
 
             MapManager.Maps[CurrentMapName].AddCharacter(this);
@@ -863,7 +869,7 @@ namespace RiverHollow.Actors
             _completeSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
 
             _iIndex = index;
-            LoadContent(@"Textures\NPC" + _iIndex);
+            LoadContent(_sVillagerFolder + "NPC" + _iIndex);
 
             int i = ImportBasics(stringData);
             for (; i < stringData.Length; i++)
@@ -1072,7 +1078,7 @@ namespace RiverHollow.Actors
             _completeSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
 
             _iIndex = index;
-            LoadContent(@"Textures\NPC" + _iIndex);
+            LoadContent(_sVillagerFolder + "NPC" + _iIndex);
             
             int i = ImportBasics(stringData);
             for (; i < stringData.Length; i++)
@@ -1082,7 +1088,7 @@ namespace RiverHollow.Actors
                 {
                     _combat = new CombatAdventurer(this);
                     _combat.SetClass(ActorManager.GetClassByIndex(int.Parse(tagType[1])));
-                    _combat.LoadContent(@"Textures\" + _combat.CharacterClass.Name, 32);
+                    _combat.LoadContent(_sAdventurerFolder + _combat.CharacterClass.Name, 32);
                 }
             }
 
@@ -1268,7 +1274,7 @@ namespace RiverHollow.Actors
 
             _sAdventurerType = Combat.CharacterClass.Name;
 
-            LoadContent(@"Textures\" + _sAdventurerType);
+            LoadContent(_sAdventurerFolder + _sAdventurerType);
 
             _portraitRect = new Rectangle(0, 105, 80, 96);
             _portrait = GameContentManager.GetTexture(_sTexture);
@@ -1316,7 +1322,7 @@ namespace RiverHollow.Actors
         {
             _combat = new CombatAdventurer(this);
             _combat.SetClass(ActorManager.GetClassByIndex(_iAdventurerID));
-            _combat.LoadContent(@"Textures\" + _combat.CharacterClass.Name, 32);
+            _combat.LoadContent(_sAdventurerFolder + _combat.CharacterClass.Name, 32);
         }
 
         public override void Update(GameTime gameTime)
@@ -1721,7 +1727,7 @@ namespace RiverHollow.Actors
             _sCondition = condition;
             _bActive = false;
 
-            LoadContent(@"Textures\NPCs\Spirit_" + _sType);
+            LoadContent(_sNPsCFolder + "Spirit_" + _sType);
         }
 
         public override void LoadContent(string textureToLoad)
@@ -1850,7 +1856,7 @@ namespace RiverHollow.Actors
             _actorType = ActorEnum.Mob;
             _monsters = new List<CombatActor>();
             ImportBasics(stringData, id);
-            _sTexture = @"Textures\Monsters\Goblin Scout";
+            _sTexture = _sMobFolder + "Goblin Scout";
             LoadContent();
         }
 
@@ -2779,7 +2785,7 @@ namespace RiverHollow.Actors
                 string[] tagType = s.Split(':');
                 if (tagType[0].Equals("Texture"))
                 {
-                    LoadContent(@"Textures\" + tagType[1], 0);
+                    LoadContent(_sMonsterFolder + tagType[1], 0);
                 }
                 else if (tagType[0].Equals("Lvl"))
                 {

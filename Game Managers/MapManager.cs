@@ -48,7 +48,7 @@ namespace RiverHollow.Game_Managers
             RHMap newMap = new RHMap();
 
             string name = string.Empty;
-            Util.ParseContentFile(ref mapToAdd, ref name);
+            Util.ParseContentFileRetName(ref mapToAdd, ref name);
             if (name.IndexOf("map") == 0)                       //Ensures that we're loading a map
             {
                 if (!_tileMaps.ContainsKey(name))

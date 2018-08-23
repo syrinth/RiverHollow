@@ -2,11 +2,14 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Misc;
 using System.Collections.Generic;
+using System.IO;
 
 namespace RiverHollow.Game_Managers
 {
     public static class GameContentManager
     {
+        const string _sActorsFolder = @"Textures\Actors";
+
         private static ContentManager _content;
         private static Dictionary<string, Texture2D> _diTextures;
         private static Dictionary<string, SpriteFont> _diFonts;
@@ -33,7 +36,6 @@ namespace RiverHollow.Game_Managers
             _diUpgrades = _content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
             _diQuests = _content.Load<Dictionary<int, string>>(@"Data\Quests");
             _diItemText = _content.Load<Dictionary<int, string>>(@"Data\ItemText");
-            _diClassText = _content.Load<Dictionary<int, string>>(@"Data\ClassesText");
             _diItemTable = _content.Load<Dictionary<int, string>>(@"Data\ItemTable");
             _diMonsterTraits = _content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
 
@@ -50,30 +52,10 @@ namespace RiverHollow.Game_Managers
         #region Load Methods
         public static void LoadCharacters(ContentManager Content)
         {
+            AddDirectoryTextures(Content, @"Content\" + _sActorsFolder);
+
             AddTexture(Content, @"Textures\texPlayer");
-            AddTexture(Content, @"Textures\Wizard");
-            AddTexture(Content, @"Textures\Healer");
-            AddTexture(Content, @"Textures\Knight");
-            AddTexture(Content, @"Textures\Duelist");
-            AddTexture(Content, @"Textures\Summoner");
-            AddTexture(Content, @"Textures\Rogue");
-            AddTexture(Content, @"Textures\Bard");
-            AddTexture(Content, @"Textures\Witch");
-            AddTexture(Content, @"Textures\NPC1");
-            AddTexture(Content, @"Textures\NPC2");
-            AddTexture(Content, @"Textures\NPC3");
-            AddTexture(Content, @"Textures\NPC4");
-            AddTexture(Content, @"Textures\NPC5");
-            AddTexture(Content, @"Textures\NPC6");
-            AddTexture(Content, @"Textures\NPC7");
-            AddTexture(Content, @"Textures\NPC8");
-            AddTexture(Content, @"Textures\Monsters\Goblin Scout");
-            AddTexture(Content, @"Textures\Monsters\Goblin Soldier");
-            AddTexture(Content, @"Textures\GoblinCombat");
-            AddTexture(Content, @"Textures\GoblinSoldier");
             AddTexture(Content, @"Textures\texFlooring");
-            AddTexture(Content, @"Textures\NPCs\Spirit_Forest_2");
-            AddTexture(Content, @"Textures\NPCs\Spirit_Water_1");
             AddTexture(Content, @"Textures\texWeather");
             AddTexture(Content, @"Textures\lightmask");
             AddTexture(Content, @"Textures\texPlayerHair");
@@ -81,10 +63,21 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\Eye");
         }
 
+        private static void AddDirectoryTextures(ContentManager Content, string directory)
+        {
+            foreach (string s in Directory.GetFiles(directory))
+            {
+                AddTexture(Content, s);
+            }
+            foreach (string s in Directory.GetDirectories(directory))
+            {
+                AddDirectoryTextures(Content, s);
+            }
+        }
+
         public static void LoadGUIs(ContentManager Content)
         {
             AddTexture(Content, @"Textures\Dialog");
-            AddTexture(Content, @"Textures\MiniInventory");
         }
 
         public static void LoadIcons(ContentManager Content)
@@ -95,7 +88,6 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\Armory");
             AddTexture(Content, @"Textures\tools");
             AddTexture(Content, @"Textures\worldObjects");
-            AddTexture(Content, @"Textures\chest");
             AddTexture(Content, @"Textures\portraits");
             AddTexture(Content, @"Textures\tree");
             AddTexture(Content, @"Textures\items");
@@ -126,6 +118,7 @@ namespace RiverHollow.Game_Managers
         #region AddMethods
         private static void AddTexture(ContentManager Content, string texture)
         {
+            Util.ParseContentFile(ref texture);
             _diTextures.Add(texture, Content.Load<Texture2D>(texture));
         }
 
