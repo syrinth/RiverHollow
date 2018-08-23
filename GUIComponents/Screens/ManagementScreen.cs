@@ -175,7 +175,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 Controls = new List<GUIObject>();
                 _parent = s;
 
-                _window = new GUIWindow(new Vector2(WIDTH, HEIGHT), GUIWindow.RedWin, WIDTH, HEIGHT);
+                _window = new GUIWindow(GUIWindow.RedWin, WIDTH, HEIGHT);
+                _window.CenterOnScreen();
+
                 Controls.Add(_window);
                 Width = _window.Width;
                 Height = _window.Height;
@@ -401,10 +403,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _gClass.SetText(_character.Combat.CharacterClass.Name + " " + _character.Combat.ClassLevel);
                     _gXP.SetText("Exp:" + _character.Combat.XP);
 
-                    _weapon = new GUIItemBox(Vector2.Zero, new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Combat.Weapon);
+                    _weapon = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Combat.Weapon);
                     _weapon.AnchorToInnerSide(_window, SideEnum.TopRight);
 
-                    _armor = new GUIItemBox(Vector2.Zero + new Vector2(400, 0), new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Combat.Armor);
+                    _armor = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Combat.Armor);
                     _armor.AnchorAndAlignToObject(_weapon, SideEnum.Left, SideEnum.Bottom);
 
                     _gStr = new GUIText("Dmg: 999");

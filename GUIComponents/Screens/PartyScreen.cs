@@ -140,7 +140,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             foreach(NPCDisplayBox box in _arrDisplayBoxes)
             {
-                if(box.Character == selectedCharacter)
+                if(box.Actor == selectedCharacter)
                 {
                     _selectedBox = box;
                     break;
@@ -156,7 +156,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 RemoveControl(_charBox);
                 _charBox = null;
-                _map = new PositionMap(_selectedBox.Character, ChangeSelectedCharacter);
+                _map = new PositionMap(_selectedBox.Actor, ChangeSelectedCharacter);
                 _map.AnchorAndAlignToObject(_arrDisplayBoxes[0], SideEnum.Bottom, SideEnum.Left);
                 AddControl(_map);
             }
@@ -164,7 +164,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 RemoveControl(_map);
                 _map = null;
-                _charBox = new CharacterDetailWindow(_selectedBox.Character, SyncCharacter);
+                _charBox = new CharacterDetailWindow(_selectedBox.Actor, SyncCharacter);
                 _charBox.AnchorAndAlignToObject(_arrDisplayBoxes[0], SideEnum.Bottom, SideEnum.Left);
                 AddControl(_charBox);
             }
@@ -286,7 +286,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 private GUICharacterSprite _sprite;
 
-                public StartPosition(int col, int row) : base(Vector2.Zero, new Rectangle(0, 80, 16, 16), TileSize,  TileSize, @"Textures\Dialog")
+                public StartPosition(int col, int row) : base(new Rectangle(0, 80, 16, 16), TileSize,  TileSize, @"Textures\Dialog")
                 {
                     _iCol = col;
                     _iRow = row;
@@ -343,7 +343,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             private ClickDelegate _delAction;
 
             CombatAdventurer _actor;
-            public CombatAdventurer Character => _actor;
+            public CombatAdventurer Actor => _actor;
 
             public NPCDisplayBox(ClickDelegate action = null)
             {
@@ -534,7 +534,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public delegate void SyncCharacter();
         private SyncCharacter _delSyncCharacter;
 
-        public CharacterDetailWindow(CombatAdventurer c, SyncCharacter del = null) : base(Vector2.Zero, GUIWindow.RedWin, (QuestScreen.WIDTH) - (GUIWindow.RedWin.Edge * 2), (QuestScreen.HEIGHT / 4) - (GUIWindow.RedWin.Edge * 2))
+        public CharacterDetailWindow(CombatAdventurer c, SyncCharacter del = null) : base(GUIWindow.RedWin, (QuestScreen.WIDTH) - (GUIWindow.RedWin.Edge * 2), (QuestScreen.HEIGHT / 4) - (GUIWindow.RedWin.Edge * 2))
         {
             _delSyncCharacter = del;
             _character = c;

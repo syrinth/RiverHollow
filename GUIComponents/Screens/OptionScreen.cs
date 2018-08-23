@@ -18,7 +18,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public OptionScreen()
         {
-            _partyWindow = new GUIWindow(new Vector2(WIDTH, HEIGHT), GUIWindow.RedWin, WIDTH, HEIGHT);
+            _partyWindow = new GUIWindow(GUIWindow.RedWin, WIDTH, HEIGHT);
+            _partyWindow.CenterOnScreen();
             Controls.Add(_partyWindow);
 
             _gAutoDisband = new GUICheck("Auto-Disband", GameManager.AutoDisband);

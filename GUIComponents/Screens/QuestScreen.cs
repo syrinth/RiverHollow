@@ -25,8 +25,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public QuestScreen()
         {
             _questList = new List<QuestBox>();
-            _questWindow = new GUIWindow(new Vector2(WIDTH, HEIGHT), GUIWindow.RedWin, WIDTH, HEIGHT);
-            _detailWindow = new DetailBox(new Vector2(WIDTH, HEIGHT), GUIWindow.RedWin, WIDTH, HEIGHT);
+            _questWindow = new GUIWindow(GUIWindow.RedWin, WIDTH, HEIGHT);
+            _detailWindow = new DetailBox(GUIWindow.RedWin, WIDTH, HEIGHT);
+            _questWindow.CenterOnScreen();
+            _detailWindow.CenterOnScreen();
 
             _btnUp = new GUIButton(new Rectangle(256, 64, 32, 32), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnUpClick);
             _btnDown = new GUIButton(new Rectangle(256, 96, 32, 32), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnDownClick);
@@ -153,8 +155,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             int boxHeight = (QuestScreen.HEIGHT / QuestScreen.MAX_SHOWN_QUESTS) - (win.EdgeSize * 2);
             int boxWidth = (QuestScreen.WIDTH) - (win.EdgeSize * 2) - QuestScreen.BTNSIZE;
-            Vector2 boxPoint = new Vector2(win.InnerTopLeft().X + win.EdgeSize, win.InnerTopLeft().Y + win.EdgeSize + (i * (boxHeight + (win.EdgeSize *2))));
-            _window = new GUIWindow(boxPoint, GUIWindow.RedWin, boxWidth, boxHeight);
+            _window = new GUIWindow(GUIWindow.RedWin, boxWidth, boxHeight);
+            _window.AnchorToInnerSide(win, SideEnum.TopLeft);
 
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _quest = null;
@@ -191,7 +193,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIText _name;
         GUIText _desc;
         GUIText _progress;
-        public DetailBox(Vector2 position, WindowData winData, int width, int height) : base(position, winData, width, height)
+        public DetailBox(WindowData winData, int width, int height) : base(winData, width, height)
         {
         }
 

@@ -9,20 +9,18 @@ namespace RiverHollow.Game_Managers.GUIObjects
     public class GUIImage : GUIObject
     {
         protected Color _color = Color.White;
-        public GUIImage(Vector2 position, Rectangle sourceRect, int width, int height, Texture2D texture)
+        public GUIImage(Rectangle sourceRect, int width, int height, Texture2D texture)
         {
             _texture = texture;
-            Position(position);
             Width = width;
             Height = height;
             _drawRect = new Rectangle((int)Position().X, (int)Position().Y, Width, Height);
             _sourceRect = sourceRect;
         }
 
-        public GUIImage(Vector2 position, Rectangle sourceRect, int width, int height, string texture)
+        public GUIImage(Rectangle sourceRect, int width, int height, string texture)
         {
             _texture = GameContentManager.GetTexture(texture);
-            Position(position);
             Width = width;
             Height = height;
             _drawRect = new Rectangle((int)Position().X, (int)Position().Y, Width, Height);

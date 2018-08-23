@@ -184,11 +184,12 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
 
                     int minWidth = _bldg.Texture.Width + margin * 2;
                     int minHeight = _bldg.Texture.Height + margin * 2;
-                    _mainWindow = new GUIWindow(Vector2.Zero, GUIWindow.RedWin, minWidth, minHeight);
+                    _mainWindow = new GUIWindow(GUIWindow.RedWin, minWidth, minHeight);
                     _mainWindow.CenterOnScreen();
 
                     Vector2 center = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
-                    _giBuilding = new GUIImage(PosFromCenter(center, _bldg.Texture.Width, _bldg.Texture.Height), _bldg.SourceRectangle, _bldg.Texture.Width, _bldg.Texture.Height, _bldg.Texture);
+                    _giBuilding = new GUIImage(_bldg.SourceRectangle, _bldg.Texture.Width, _bldg.Texture.Height, _bldg.Texture);
+                    _giBuilding.CenterOnObject(_mainWindow);
                 }
                 else
                 {
@@ -197,11 +198,12 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                     int height = 100;
                     int minWidth = width + margin * 2;
                     int minHeight = height + margin * 2;
-                    _mainWindow = new GUIWindow(Vector2.Zero, GUIWindow.RedWin, minWidth, minHeight);
+                    _mainWindow = new GUIWindow(GUIWindow.RedWin, minWidth, minHeight);
                     _mainWindow.CenterOnScreen();
 
-                    Vector2 center = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
-                    _giBuilding = new GUICoin();// GUIImage()PosFromCenter(center, width, height), _bldg.SourceRectangle, width, height, _bldg.Texture);
+                    //Placeholderimage
+                    _giBuilding = new GUICoin();
+                    _giBuilding.CenterOnObject(_mainWindow);
                 }
 
                 Width = _mainWindow.Width;

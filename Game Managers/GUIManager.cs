@@ -18,7 +18,7 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadContent()
         {
-            _fadeImg = new GUIImage(Vector2.Zero, new Rectangle(160, 128, TileSize, TileSize), RiverHollow.ScreenWidth*2, RiverHollow.ScreenHeight*2, @"Textures\Dialog");
+            _fadeImg = new GUIImage(new Rectangle(160, 128, TileSize, TileSize), RiverHollow.ScreenWidth*2, RiverHollow.ScreenHeight*2, @"Textures\Dialog");
             GraphicCursor.LoadContent();
         }
 

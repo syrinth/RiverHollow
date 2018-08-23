@@ -30,7 +30,14 @@ namespace RiverHollow.Game_Managers
         private static List<int> _canMake;
         public static List<int> CanMake { get => _canMake; }
         private static string _currentMap;
-        public static string CurrentMap { get => _currentMap; set => _currentMap = value; }
+        public static string CurrentMap
+        {
+            get { return _currentMap; }
+            set {
+                _currentMap = value;
+                World.CurrentMapName = _currentMap;
+            }
+        }
 
         public static PlayerCharacter World;
         private static Tool _pick;
@@ -72,7 +79,7 @@ namespace RiverHollow.Game_Managers
         public static void NewPlayer()
         {
             World.Position = new Vector2(200, 200);
-            _canMake.Add(6);
+            _canMake.Add(190);
 
             CurrentMap = MapManager.CurrentMap.Name;
             World.Position = Util.SnapToGrid(MapManager.Maps[CurrentMap].GetCharacterSpawn("PlayerSpawn"));

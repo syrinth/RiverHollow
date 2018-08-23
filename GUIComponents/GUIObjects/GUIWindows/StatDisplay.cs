@@ -36,13 +36,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _iMidWidth = 192;
 
-            _gLeft = new GUIImage(Vector2.Zero, new Rectangle(48, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
-            _gMid = new GUIImage(Vector2.Zero, new Rectangle(52, 32, 8, 16), _iMidWidth, 16, @"Textures\Dialog");
-            _gRight = new GUIImage(Vector2.Zero, new Rectangle(60, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
+            _gLeft = new GUIImage(new Rectangle(48, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
+            _gMid = new GUIImage(new Rectangle(52, 32, 8, 16), _iMidWidth, 16, @"Textures\Dialog");
+            _gRight = new GUIImage(new Rectangle(60, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
             
-            _gFillLeft = new GUIImage(Vector2.Zero, new Rectangle(64, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
-            _gFillMid = new GUIImage(Vector2.Zero, new Rectangle(68, 32, 8, 16), _iMidWidth, 16, @"Textures\Dialog");
-            _gFillRight = new GUIImage(Vector2.Zero, new Rectangle(76, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
+            _gFillLeft = new GUIImage(new Rectangle(64, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
+            _gFillMid = new GUIImage(new Rectangle(68, 32, 8, 16), _iMidWidth, 16, @"Textures\Dialog");
+            _gFillRight = new GUIImage(new Rectangle(76, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
             _gText = new GUIText();
 
             PositionBars();
@@ -59,13 +59,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _iMidWidth = width - (EDGE * 2);
 
-            _gLeft = new GUIImage(Vector2.Zero, new Rectangle(48, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
-            _gMid = new GUIImage(Vector2.Zero, new Rectangle(52, 32, 8, 16), _iMidWidth, 16, @"Textures\Dialog");
-            _gRight = new GUIImage(Vector2.Zero, new Rectangle(60, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
+            _gLeft = new GUIImage(new Rectangle(48, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
+            _gMid = new GUIImage(new Rectangle(52, 32, 8, 16), _iMidWidth, 16, @"Textures\Dialog");
+            _gRight = new GUIImage(new Rectangle(60, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
 
-            _gFillLeft = new GUIImage(Vector2.Zero, new Rectangle(64, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
-            _gFillMid = new GUIImage(Vector2.Zero, new Rectangle(68, 32, 8, 16), _iMidWidth, 16, @"Textures\Dialog");
-            _gFillRight = new GUIImage(Vector2.Zero, new Rectangle(76, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
+            _gFillLeft = new GUIImage(new Rectangle(64, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
+            _gFillMid = new GUIImage(new Rectangle(68, 32, 8, 16), _iMidWidth, 16, @"Textures\Dialog");
+            _gFillRight = new GUIImage(new Rectangle(76, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");
             _gText = new GUIText();
 
             PositionBars();

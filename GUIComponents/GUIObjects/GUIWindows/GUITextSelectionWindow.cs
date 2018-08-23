@@ -64,7 +64,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             Height = (((_numReturns + 1) + _diOptions.Count) * _iCharHeight);
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
             _iOptionsOffsetY = Math.Max(_iCharHeight, (int)((_numReturns + 1) * _iCharHeight));
-            _giSelection = new GUIImage(new Vector2((int)Position().X, (int)Position().Y + _iOptionsOffsetY), new Rectangle(288, 96, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");
+            Vector2 mar = new Vector2((int)Position().X, (int)Position().Y + _iOptionsOffsetY);
+            _giSelection = new GUIImage(new Rectangle(288, 96, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");
             _giSelection.AnchorAndAlignToObject(_giText, SideEnum.Bottom, SideEnum.Left);
             AddControl(_giSelection);
 

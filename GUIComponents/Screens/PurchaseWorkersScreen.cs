@@ -8,6 +8,7 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Actors;
 using static RiverHollow.Actors.ShopKeeper;
+using static RiverHollow.Game_Managers.GUIObjects.PartyScreen.NPCDisplayBox;
 
 namespace RiverHollow.Game_Managers.GUIObjects.Screens
 {
@@ -25,10 +26,10 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
 
                 int minWidth = 64;
                 int minHeight = 64;
-                _mainWindow = new GUIWindow(GUIObject.PosFromCenter(center, minWidth, minHeight), GUIWindow.RedWin, minWidth, minHeight);
-
+                _mainWindow = new GUIWindow(GUIWindow.RedWin, minWidth, minHeight);
+                _mainWindow.CenterOnScreen();
                 _mainWindow.PositionAdd(new Vector2(32, 32));
-                Vector2 position = _mainWindow.Position();
+
                 _liWorkers = new List<GUIObject>();
 
                 int i = 0;
@@ -37,7 +38,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                     if (m.MerchType == Merchandise.ItemType.Worker)
                     {
                         WorldAdventurer w = ObjectManager.GetWorker(m.MerchID);
-                        WorkerBox wb = new WorkerBox(position, w, m.MoneyCost);
+                        WorkerBox wb = new WorkerBox(w, m.MoneyCost);
                         _liWorkers.Add(wb);
 
                         if (i == 0) { wb.AnchorToInnerSide(_mainWindow, GUIObject.SideEnum.TopLeft); }
@@ -91,7 +92,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
                     if (PlayerManager.Buildings.Count > 0 && PlayerManager.Money >= wB.Cost)
                     {
                         ManagementScreen m = new ManagementScreen();
-                        m.PurchaseWorker(ObjectManager.GetWorker(wB._w.AdventurerID), wB.Cost);
+                        m.PurchaseWorker(ObjectManager.GetWorker(wB.ID), wB.Cost);
                         GUIManager.SetScreen(m);
 
                         rv = true;
@@ -117,21 +118,18 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
 
     public class WorkerBox : GUIObject
     {
-        GUIWindow _workerWindow;
+        CharacterDisplayBox _workerWindow;
         GUIWindow _costWindow;
-        GUISprite _sprite;
         GUIMoneyDisplay _gMoney;
-        public WorldAdventurer _w;
         public int Cost;
+        public int ID;
 
-        public WorkerBox(Vector2 p, WorldAdventurer w, int cost)
+        public WorkerBox(WorldAdventurer w, int cost)
         {
             Cost = cost;
-            _w = w;
-            _sprite = new GUISprite(w.BodySprite);
-            _sprite.SetScale((int)GameManager.Scale);
-            _workerWindow = new GUIWindow(p, GUIWindow.RedWin, _sprite.Width + _sprite.Width / 4, _sprite.Height + (2 * GUIWindow.RedWin.Edge));
-            _costWindow = new GUIWindow(Vector2.Zero, GUIWindow.RedWin, _sprite.Width + _sprite.Width / 4, 16);
+            ID = w.AdventurerID;
+            _workerWindow = new CharacterDisplayBox(w, null);
+            _costWindow = new GUIWindow(GUIWindow.RedWin, _workerWindow.Width, 16);
 
             _gMoney = new GUIMoneyDisplay(Cost);
             _gMoney.AnchorToInnerSide(_costWindow, SideEnum.TopRight);
@@ -145,7 +143,6 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
         {
             _workerWindow.Draw(spriteBatch);
             _costWindow.Draw(spriteBatch);
-            _sprite.Draw(spriteBatch);
             _gMoney.Draw(spriteBatch);
         }
 
@@ -159,8 +156,6 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             base.Position(value);
             _workerWindow.Position(value);
             _costWindow.AnchorAndAlignToObject(_workerWindow, SideEnum.Bottom, SideEnum.Left);
-            _sprite.CenterOnWindow(_workerWindow);
-            _sprite.AnchorToInnerSide(_workerWindow, SideEnum.Bottom);
 
             Width = _workerWindow.Width;
             Height = _workerWindow.Height + _costWindow.Height;

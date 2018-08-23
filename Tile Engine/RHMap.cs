@@ -668,7 +668,7 @@ namespace RiverHollow.Tile_Engine
             return tile != null && !tile.Passable() && !list.Contains(tile.Rect);
         }
 
-        private bool ChangeDir(List<Rectangle> possibleCollisions, Rectangle originalRectangle, ref Vector2 dir)
+        private bool ChangeDir(List<Rectangle> possibleCollisions, Rectangle originalRectangle, ref Vector2 dir, string map)
         {
             bool rv = false;
 
@@ -691,7 +691,7 @@ namespace RiverHollow.Tile_Engine
                     int yVal = dir.Y > 0 ? newRectangleY.Bottom : newRectangleY.Top;
                     int xVal = (int)(modifier > 0 ? newRectangleX.Right : newRectangleX.Left) + modifier;
 
-                    dir.X += CheckNudgeAllowed(modifier, xVal, yVal);
+                    dir.X += CheckNudgeAllowed(modifier, xVal, yVal, map);
                 }
                 if (dir.X != 0 && r.Intersects(newRectangleX))
                 {
@@ -703,17 +703,17 @@ namespace RiverHollow.Tile_Engine
                     int xVal = dir.X > 0 ? newRectangleY.Right : newRectangleY.Left;
                     int yVal = (int)(modifier > 0 ? newRectangleX.Bottom : newRectangleX.Top) + modifier;
 
-                    dir.Y += CheckNudgeAllowed(modifier, xVal, yVal);
+                    dir.Y += CheckNudgeAllowed(modifier, xVal, yVal, map);
                 }             
             }
 
             return rv;
         }
-        private float CheckNudgeAllowed(float modifier, int xVal, int yVal)
+        private float CheckNudgeAllowed(float modifier, int xVal, int yVal, string map)
         {
             float rv = 0;
             Vector2 coords = Util.GetGridCoords(new Point(xVal, yVal));
-            if (MapManager.CurrentMap.GetTile(coords).Passable())
+            if (MapManager.Maps[map].GetTile(coords).Passable())
             {
                 rv = modifier;
             }
@@ -729,7 +729,7 @@ namespace RiverHollow.Tile_Engine
             else if (!ignoreCollisions)
             {
                 List<Rectangle> list = GetPossibleCollisions(c, dir);
-                ChangeDir(list, c.CollisionBox, ref dir);
+                ChangeDir(list, c.CollisionBox, ref dir, c.CurrentMapName);
             }
 
             return rv;

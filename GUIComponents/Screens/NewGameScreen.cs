@@ -53,7 +53,8 @@ namespace RiverHollow.GUIComponents.Screens
 
             int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIWindow.BrownWin.Edge;
 
-            _window = new GUIWindow(new Vector2(startX, 0), GUIWindow.BrownWin, RiverHollow.ScreenHeight, RiverHollow.ScreenHeight);
+            _window = new GUIWindow(GUIWindow.BrownWin, RiverHollow.ScreenHeight, RiverHollow.ScreenHeight);
+            _window.CenterOnScreen();
             Controls.Add(_window);
 
             _btnCancel = new GUIButton("Cancel", BTN_WIDTH, BTN_HEIGHT, BtnCancel);
@@ -84,18 +85,18 @@ namespace RiverHollow.GUIComponents.Screens
 
             _btnHairColor = new GUISwatch(PlayerManager.World.HairColor, 16, 32, BtnChooseHairColor);
             _btnHairColor.AnchorAndAlignToObject(_playerDisplayBox, SideEnum.Bottom, SideEnum.Left);
-            _gHair = new GUIImage(Vector2.Zero, new Rectangle(192, 16, 16, 16), 32, 32, @"Textures\Dialog");
+            _gHair = new GUIImage(new Rectangle(192, 16, 16, 16), 32, 32, @"Textures\Dialog");
             _gHair.AnchorAndAlignToObject(_btnHairColor, SideEnum.Right, SideEnum.Bottom, 10);
             
             _btnNextHairType = new GUIButton(new Rectangle(288, 96, 32, 32), 32, 32, @"Textures\Dialog", BtnNextHairType);
             _btnNextHairType.AnchorAndAlignToObject(_gHair, SideEnum.Right, SideEnum.Bottom, 10);
 
-            _gHat = new GUIImage(Vector2.Zero, new Rectangle(160, 16, 16, 16), 32, 32, @"Textures\Dialog");
+            _gHat = new GUIImage( new Rectangle(160, 16, 16, 16), 32, 32, @"Textures\Dialog");
             _gHat.AnchorAndAlignToObject(_gHair, SideEnum.Bottom, SideEnum.Left, 10);
             _btnNextHat = new GUIButton(new Rectangle(288, 96, 32, 32), 32, 32, @"Textures\Dialog", BtnNextHat);
             _btnNextHat.AnchorAndAlignToObject(_gHat, SideEnum.Right, SideEnum.Bottom, 10);
 
-            _gShirt = new GUIImage(Vector2.Zero, new Rectangle(176, 16, 16, 16), 32, 32, @"Textures\Dialog");
+            _gShirt = new GUIImage(new Rectangle(176, 16, 16, 16), 32, 32, @"Textures\Dialog");
             _gShirt.AnchorAndAlignToObject(_gHat, SideEnum.Bottom, SideEnum.Left, 10);
             _btnNextShirt = new GUIButton(new Rectangle(288, 96, 32, 32), 32, 32, @"Textures\Dialog", BtnNextShirt);
             _btnNextShirt.AnchorAndAlignToObject(_gShirt, SideEnum.Right, SideEnum.Bottom, 10);

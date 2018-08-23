@@ -20,7 +20,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public FriendshipScreen()
         {
             _villagerList = new List<FriendshipBox>();
-            _friendshipWindow = new GUIWindow(new Vector2(WIDTH, HEIGHT), GUIWindow.RedWin, WIDTH, HEIGHT);
+            _friendshipWindow = new GUIWindow(GUIWindow.RedWin, WIDTH, HEIGHT);
+            _friendshipWindow.CenterOnScreen();
 
             foreach (Villager n in ActorManager.DiNPC.Values)
             {
@@ -85,7 +86,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gTextName = new GUIText("XXXXXXXXXX");
             if(c.GetFriendshipLevel() == 0)
             {
-                _liFriendship.Add(new GUIImage(Vector2.Zero, new Rectangle(0, 64, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog"));
+                _liFriendship.Add(new GUIImage(new Rectangle(0, 64, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog"));
             }
             else
             {
@@ -97,7 +98,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 while (notches > 0)
                 {
-                    _liFriendship.Add(new GUIImage(Vector2.Zero, new Rectangle(x, 64, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog"));
+                    _liFriendship.Add(new GUIImage(new Rectangle(x, 64, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog"));
                     notches--;
                 }
             }
@@ -112,14 +113,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             _gTextName.SetText(c.Name);
 
-            _gGift = new GUIImage(Vector2.Zero, new Rectangle(16, 48, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog");
+            _gGift = new GUIImage(new Rectangle(16, 48, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog");
             _gGift.AnchorToInnerSide(_gWin, SideEnum.Right);
             _gGift.AlignToObject(_gTextName, SideEnum.CenterY);
             _gGift.Alpha = (c.CanGiveGift) ? 1 : 0.3f;
 
             if (c.IsEligible()) {
                 EligibleNPC e = (EligibleNPC)c;
-                _gAdventure = new GUIImage(Vector2.Zero, new Rectangle(0, 48, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog");
+                _gAdventure = new GUIImage(new Rectangle(0, 48, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog");
                 _gAdventure.AnchorAndAlignToObject(_gGift, SideEnum.Left, SideEnum.CenterY);
                 if (PlayerManager.GetParty().Contains(e.Combat))
                 {

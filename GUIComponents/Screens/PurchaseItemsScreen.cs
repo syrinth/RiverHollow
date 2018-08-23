@@ -26,9 +26,10 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
 
                 int minWidth = 64 * merch.Count + 64;
                 int minHeight = 128 + 64;
-                _mainWindow = new GUIWindow(GUIObject.PosFromCenter(center, minWidth, minHeight), GUIWindow.RedWin, minWidth, minHeight);
-
+                _mainWindow = new GUIWindow(GUIWindow.RedWin, minWidth, minHeight);
+                _mainWindow.CenterOnScreen();
                 _mainWindow.PositionAdd(new Vector2(32, 32));
+
                 _liItems = new List<GUIObject>();
 
                 int i = 0;
@@ -123,7 +124,7 @@ namespace RiverHollow.Game_Managers.GUIObjects.Screens
             _font = GameContentManager.GetFont(@"Fonts\Font");
             Cost = cost;
             itemForSale = i;
-            _giItem = new GUIImage(Vector2.Zero, itemForSale.SourceRectangle, TileSize, TileSize, itemForSale.Texture);
+            _giItem = new GUIImage(itemForSale.SourceRectangle, TileSize, TileSize, itemForSale.Texture);
             _giItem.SetColor(i.ItemColor);
             _gTextName = new GUIText(itemForSale.Name);
             _gWin = new GUIWindow(GUIWindow.BrownWin, mainWidth, 16);

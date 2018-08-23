@@ -12,7 +12,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 {
     public class GUICoin : GUIImage
     {
-        public GUICoin() : base(Vector2.Zero, new Rectangle(0, 32, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog")
+        public GUICoin() : base(new Rectangle(0, 32, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog")
         {
         }
     }
@@ -102,8 +102,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
             Width = TileSize*2;
             Height = TileSize*2;
             _bChecked = isChecked;
-            _gUnchecked = new GUIImage(Vector2.Zero, new Rectangle(16, 32, TileSize, TileSize), Width, Height, @"Textures\Dialog");
-            _gChecked = new GUIImage(Vector2.Zero, new Rectangle(32, 32, TileSize, TileSize), Width, Height, @"Textures\Dialog");
+            _gUnchecked = new GUIImage(new Rectangle(16, 32, TileSize, TileSize), Width, Height, @"Textures\Dialog");
+            _gChecked = new GUIImage(new Rectangle(32, 32, TileSize, TileSize), Width, Height, @"Textures\Dialog");
 
             if (!string.IsNullOrEmpty(text))
             {
@@ -167,7 +167,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             startX += ((int)status - 2) * TileSize;
 
-            _gImage = new GUIImage(Vector2.Zero, new Rectangle(startX, 0, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog");
+            _gImage = new GUIImage(new Rectangle(startX, 0, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog");
 
             Width = _gImage.Width;
             Height = _gImage.Height;
@@ -204,13 +204,13 @@ namespace RiverHollow.GUIComponents.GUIObjects
         private BtnClickDelegate _delAction;
         public Color SwatchColor => _color;
 
-        public GUISwatch(Color c, BtnClickDelegate del = null) : base(Vector2.Zero, new Rectangle(0, 80, TileSize, TileSize), 8, 16, @"Textures\Dialog")
+        public GUISwatch(Color c, BtnClickDelegate del = null) : base(new Rectangle(0, 80, TileSize, TileSize), 8, 16, @"Textures\Dialog")
         {
             _color = c;
             _delAction = del;
         }
 
-        public GUISwatch(Color c, int width, int height, BtnClickDelegate del = null) : base(Vector2.Zero, new Rectangle(0, 80, TileSize, TileSize), width, height, @"Textures\Dialog")
+        public GUISwatch(Color c, int width, int height, BtnClickDelegate del = null) : base(new Rectangle(0, 80, TileSize, TileSize), width, height, @"Textures\Dialog")
         {
             _color = c;
             _delAction = del;

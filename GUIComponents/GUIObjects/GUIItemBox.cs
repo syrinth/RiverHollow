@@ -11,6 +11,8 @@ using static RiverHollow.WorldObjects.Clothes;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.WorldObjects.Item;
 using RiverHollow.Actors;
+using static RiverHollow.Game_Managers.GUIObjects.PartyScreen;
+using static RiverHollow.Game_Managers.GUIObjects.PartyScreen.NPCDisplayBox;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
@@ -33,12 +35,12 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         int _iRow;
         public int Row => _iRow;
 
-        public GUIItemBox(Item it = null) : base(Vector2.Zero, RECT_IMG, 32, 32, @"Textures\Dialog")
+        public GUIItemBox(Item it = null) : base(RECT_IMG, 32, 32, @"Textures\Dialog")
         {
             _item = it;
         }
 
-        public GUIItemBox(Vector2 position, Rectangle sourceRect, int width, int height, int row, int col, string texture, Item item, bool crafting = false) : base(position, sourceRect, width, height, texture)
+        public GUIItemBox(Rectangle sourceRect, int width, int height, int row, int col, string texture, Item item, bool crafting = false) : base(sourceRect, width, height, texture)
         {
             _bCrafting = crafting;
             SetItem(item);
@@ -47,7 +49,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _iRow = row;
         }
 
-        public GUIItemBox(Vector2 position, Rectangle sourceRect, int width, int height, string texture, Item item, bool crafting = false) : this(position, sourceRect, width, height, 0, 0, texture, item)
+        public GUIItemBox(Rectangle sourceRect, int width, int height, string texture, Item item, bool crafting = false) : this( sourceRect, width, height, 0, 0, texture, item)
         {
         }
 
@@ -187,38 +189,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         }
     }
 
-    public class WorkerBox : GUIObject
-    {
-        SpriteFont _font;
-        GUIWindow _workerWindow;
-        GUIWindow _costWindow;
-        public WorldAdventurer _w;
-        public int Cost;
-
-        public WorkerBox(Vector2 p, WorldAdventurer w, int cost)
-        {
-            _font = GameContentManager.GetFont(@"Fonts\Font");
-            Cost = cost;
-            _w = w;
-            _workerWindow = new GUIWindow(p, GUIWindow.RedWin, 64, 96);
-            _costWindow = new GUIWindow(new Vector2(p.X, p.Y + 96), GUIWindow.RedWin, 64, 32);
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            _workerWindow.Draw(spriteBatch);
-            _costWindow.Draw(spriteBatch);
-            _w.Position = new Vector2(_workerWindow.Position().X + _workerWindow.EdgeSize, (int)_workerWindow.Position().Y + _workerWindow.EdgeSize);
-            _w.Draw(spriteBatch);
-            spriteBatch.DrawString(_font, Cost.ToString(), _costWindow.Position() + new Vector2(_costWindow.EdgeSize/2, _costWindow.EdgeSize/2), Color.White);
-        }
-
-        public override bool Contains(Point mouse)
-        {
-            return _workerWindow.Contains(mouse);
-        }
-    }
-
     public class GUIItemReq : GUIObject
     {
         GUIImage _gImg;
@@ -227,7 +197,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         public GUIItemReq(int id, int number)
         {
             Item it = ObjectManager.GetItem(id);
-            _gImg = new GUIImage(Vector2.Zero, it.SourceRectangle, it.SourceRectangle.Width, it.SourceRectangle.Height, it.Texture);
+            _gImg = new GUIImage(it.SourceRectangle, it.SourceRectangle.Width, it.SourceRectangle.Height, it.Texture);
             _gText = new GUIText(number.ToString(), true, @"Fonts\DisplayFont");
             Width = _gImg.Width + _gText.Width;
             Height = Math.Max(_gImg.Height, _gText.Height);

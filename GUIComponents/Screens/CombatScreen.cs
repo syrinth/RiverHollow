@@ -42,7 +42,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             _gResults = new GUIText();
 
-            _giBackground = new GUIImage(Vector2.Zero, new Rectangle(0, 0, 800, 480), RiverHollow.ScreenWidth, RiverHollow.ScreenHeight, GameContentManager.GetTexture(@"Textures\battle"));
+            _giBackground = new GUIImage(new Rectangle(0, 0, 800, 480), RiverHollow.ScreenWidth, RiverHollow.ScreenHeight, GameContentManager.GetTexture(@"Textures\battle"));
             Controls.Add(_giBackground);
 
             _sdStamina = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Energy);
@@ -400,9 +400,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _mapTile.AssignGUITile(this);
             _fDmg = GameContentManager.GetFont(@"Fonts\Font");
 
-            _gTile = new GUIImage(Vector2.Zero, new Rectangle(128, 0, 32, 32), 32, 32, @"Textures\Dialog");
+            _gTile = new GUIImage(new Rectangle(128, 0, 32, 32), 32, 32, @"Textures\Dialog");
             _gTile.SetScale(CombatManager.CombatScale);
-            _gTargetter = new GUIImage(Vector2.Zero, new Rectangle(256, 96, 32, 32), 32, 32, @"Textures\Dialog");
+            _gTargetter = new GUIImage(new Rectangle(256, 96, 32, 32), 32, 32, @"Textures\Dialog");
 
             _liStatus = new List<GUIStatus>();
 
@@ -862,7 +862,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Height = height;
             _winData = GreyWin;
 
-            _giCurrentTurn = new GUIImage(new Vector2((int)Position().X, (int)Position().Y), new Rectangle(288, 96, 32, 32), (int)_fCharacterHeight, (int)_fCharacterHeight, @"Textures\Dialog");
+            Vector2 mar = new Vector2((int)Position().X, (int)Position().Y);
+            _giCurrentTurn = new GUIImage(new Rectangle(288, 96, 32, 32), (int)_fCharacterHeight, (int)_fCharacterHeight, @"Textures\Dialog");
 
             _arNames = new GUIText[4];
             _arMana = new GUIText[4];
@@ -941,7 +942,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             Position(new Vector2(startX, RiverHollow.ScreenHeight - GreyWin.Edge - (_vecMenuSize.Y * _iMaxMenuActions) - RiverHollow.ScreenHeight / 100));
 
-            _giSelection = new GUIImage(Vector2.Zero, new Rectangle(288, 96, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");
+            _giSelection = new GUIImage(new Rectangle(288, 96, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");
         }
 
         public void Assign(List<MenuAction> abilities)
@@ -1042,7 +1043,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             Position(new Vector2(startX, RiverHollow.ScreenHeight - GreyWin.Edge - (Height) - RiverHollow.ScreenHeight / 100));
 
-            _giSelection = new GUIImage(InnerTopLeft(), new Rectangle(288, 96, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");
+            _giSelection = new GUIImage(new Rectangle(288, 96, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");
+            _giSelection.AnchorToInnerSide(this, SideEnum.TopLeft);
 
             _selectWidth = _giSelection.Width;
             _textColOne = (int)Position().X + _selectWidth;

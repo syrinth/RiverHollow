@@ -45,7 +45,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             ParseText(text, false);
             Height = Math.Max(Height, (_iCharHeight * _maxRows));
 
-            _next = new GUIImage(Vector2.Zero, new Rectangle(288, 64, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");     //???
+            _next = new GUIImage(new Rectangle(288, 64, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");     //???
             _next.AnchorToInnerSide(this, SideEnum.BottomRight);
 
             Resize();

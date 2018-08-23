@@ -17,7 +17,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class MapManager
     {
-        public const string HomeMap = "mapManorGrounds"; //"mapRiverHollowTown"; //"mapForestDungeonZone"; //"mapRiverHollowTown"; //
+        public const string HomeMap = "mapRiverHollowTown"; //"mapManorGrounds"; //"mapForestDungeonZone"; //"mapRiverHollowTown"; //
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
 
@@ -40,7 +40,7 @@ namespace RiverHollow.Game_Managers
             foreach (string s in Directory.GetFiles(_sDungeonMapFolder)) { AddMap(s, Content, GraphicsDevice); }
 
             _currentMap = _tileMaps[MapManager.HomeMap];
-            _ambientLight = new GUIImage(Vector2.Zero, new Rectangle(160, 128, TileSize, TileSize), RiverHollow.ScreenWidth, RiverHollow.ScreenHeight, @"Textures\Dialog");
+            _ambientLight = new GUIImage(new Rectangle(160, 128, TileSize, TileSize), RiverHollow.ScreenWidth, RiverHollow.ScreenHeight, @"Textures\Dialog");
         }
 
         public static void AddMap(string mapToAdd, ContentManager Content, GraphicsDevice GraphicsDevice)

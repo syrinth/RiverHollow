@@ -61,17 +61,16 @@ namespace RiverHollow.Screens
             CenterOnScreen();
             _drawRect = new Rectangle((int)Position().X, (int)Position().Y, Width, Height);
 
-            Rectangle displayBox = new Rectangle((int)Position().X + _winData.Edge + _iMargin, (int)Position().Y + _winData.Edge + _iMargin, _iBoxSize, _iBoxSize);
             for (int i = 0; i < _rows; i++)
             {
                 for (int j = 0; j < _columns; j++)
                 {
-                    _displayList[i, j] = new GUIItemBox(displayBox.Location.ToVector2(), new Rectangle(288, 32, 32, 32), displayBox.Width, displayBox.Height, i, j, @"Textures\Dialog", null);
-                    Controls.Add(_displayList[i, j]);
-                    displayBox.X += _iBoxSize + _iMargin;
+                    _displayList[i, j] = new GUIItemBox(new Rectangle(288, 32, 32, 32), _iBoxSize, _iBoxSize, i, j, @"Textures\Dialog", null);
+
+                    if (i == 0 && j == 0) { _displayList[i, j].AnchorToInnerSide(this, SideEnum.TopLeft, _iMargin); }
+                    else if (j == 0) { _displayList[i, j].AnchorAndAlignToObject(_displayList[i - 1, j], SideEnum.Bottom, SideEnum.Left, _iMargin); }
+                    else { _displayList[i, j].AnchorAndAlignToObject(_displayList[i, j - 1], SideEnum.Right, SideEnum.Bottom, _iMargin); }
                 }
-                displayBox.X = (int)Position().X + _winData.Edge + _iMargin;
-                displayBox.Y += _iBoxSize + _iMargin;
             }
         }
 

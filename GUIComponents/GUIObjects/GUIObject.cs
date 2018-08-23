@@ -160,7 +160,7 @@ namespace RiverHollow.GUIObjects
         internal static void CreateSpacedGrid(ref List<GUIObject> components, Vector2 start, int totalWidth, int columns, int spacing = 0)
         {
             if (components.Count == 0) { return; }
-            if (spacing == 0) { spacing = (totalWidth - (components[0].Width * columns)) / (columns - 1); }
+            if (spacing == 0) { spacing = (totalWidth - (components[0].Width * columns)) / columns; }
 
             int i = 0; int j = 0;
             for (int index = 0; index < components.Count; index++)

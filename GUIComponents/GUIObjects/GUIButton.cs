@@ -57,7 +57,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             Width = width;
             Height = height;
-            _gImage = new GUIImage(Vector2.Zero, sourceRect, width, height, texture);
+            _gImage = new GUIImage(sourceRect, width, height, texture);
 
             _btnObject = _gImage;
 
