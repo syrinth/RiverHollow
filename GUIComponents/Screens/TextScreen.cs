@@ -7,10 +7,13 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIObjects;
 
 using static RiverHollow.WorldObjects.Door;
+using RiverHollow.Misc;
+
 namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
     class TextScreen : GUIScreen
     {
+        bool _bIsSelection;
         private GUITextWindow _window;
 
         private TextScreen()
@@ -24,10 +27,12 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             if (selection)
             {
                 _window = new GUITextSelectionWindow(text);
+                _bIsSelection = true;
             }
             else
             {
                 _window = new GUITextWindow(text);
+                _bIsSelection = false;
             }
             AddControl(_window);
         }
@@ -43,10 +48,12 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
         {
             if (text.Contains("["))
             {
+                _bIsSelection = true;
                 _window = new GUITextSelectionWindow(talker, text);
             }
             else
             {
+                _bIsSelection = false;
                 _window = new GUITextWindow(talker, text);
             }
             AddControl(_window);
@@ -86,7 +93,67 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
         {
             bool rv = true;
 
-            _window.ProcessLeftButtonClick(mouse);
+            if (_window.ProcessLeftButtonClick(mouse) && _bIsSelection)
+            {
+                string SelectAction = ((GUITextSelectionWindow)_window).SelectedAction;
+                if (GameManager.gmNPC != null)
+                {
+                    string nextText = GameManager.gmNPC.GetDialogEntry(SelectAction);
+
+                    if (SelectAction.StartsWith("Quest"))
+                    {
+                        Quest q = GameManager.DIQuests[int.Parse(SelectAction.Remove(0, "Quest".Length))];
+                        PlayerManager.AddToQuestLog(q);
+                        GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, GameManager.gmNPC.GetDialogEntry("Quest" + q.QuestID)));
+                    }
+                    else if (SelectAction.StartsWith("Donate"))
+                    {
+                        ((Villager)GameManager.gmNPC).FriendshipPoints += 40;
+                        GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, nextText));
+                    }
+                    else if (SelectAction.StartsWith("NoDonate"))
+                    {
+                        ((Villager)GameManager.gmNPC).FriendshipPoints -= 1000;
+                        GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, nextText));
+                    }
+                    else if (!string.IsNullOrEmpty(nextText))
+                    {
+                        GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, nextText));
+                    }
+                    else if (GUIManager.IsTextScreen())
+                    {
+                        GameManager.BackToMain();
+                    }
+                }
+                else
+                {
+                    if (SelectAction.Equals("SleepNow"))
+                    {
+                        GUIManager.SetScreen(new DayEndScreen());
+                    }
+                    else if (SelectAction.Equals("OpenDoor"))
+                    {
+                        GUIManager.SetScreen(new InventoryScreen(GameManager.gmDoor));
+                    }
+                    else if (SelectAction.Contains("UseItem"))
+                    {
+                        GameManager.UseItem();
+                    }
+                    else if (SelectAction.Contains("SellContract") && GameManager.gmNPC != null)
+                    {
+                        if (GameManager.gmNPC.IsWorldAdventurer())
+                        {
+                            ((WorldAdventurer)GameManager.gmNPC).Building.RemoveWorker((WorldAdventurer)GameManager.gmNPC);
+                            PlayerManager.AddMoney(1000);
+                            GameManager.BackToMain();
+                        }
+                    }
+                    else
+                    {
+                        GameManager.BackToMain();
+                    }
+                }
+            }
 
             if (_window != null)
             {

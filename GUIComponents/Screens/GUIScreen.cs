@@ -22,7 +22,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public virtual bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_gSelectionWindow != null) { rv = _gSelectionWindow.ProcessLeftButtonClick(mouse); }
+            if (_gSelectionWindow != null) {
+                rv = _gSelectionWindow.ProcessLeftButtonClick(mouse);
+            }
             return rv;
         }
         public virtual bool ProcessRightButtonClick(Point mouse)

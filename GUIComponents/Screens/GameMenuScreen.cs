@@ -83,6 +83,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (base.ProcessLeftButtonClick(mouse))
             {
                 rv = true;
+                if (_gSelectionWindow.SelectedAction.Contains("UseItem"))
+                {
+                    GameManager.UseItem();
+                }
             }
             else
             {

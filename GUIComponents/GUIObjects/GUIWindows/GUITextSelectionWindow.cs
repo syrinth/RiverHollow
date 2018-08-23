@@ -21,6 +21,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         protected int _iOptionsOffsetY;
         protected Dictionary<int, SelectionData> _diOptions;
 
+        public string SelectedAction;
+
         public GUITextSelectionWindow() : base()
         {
             _diOptions = new Dictionary<int, SelectionData>();
@@ -64,7 +66,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             Height = (((_numReturns + 1) + _diOptions.Count) * _iCharHeight);
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
             _iOptionsOffsetY = Math.Max(_iCharHeight, (int)((_numReturns + 1) * _iCharHeight));
-            Vector2 mar = new Vector2((int)Position().X, (int)Position().Y + _iOptionsOffsetY);
             _giSelection = new GUIImage(new Rectangle(288, 96, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");
             _giSelection.AnchorAndAlignToObject(_giText, SideEnum.Bottom, SideEnum.Left);
             AddControl(_giSelection);
@@ -136,15 +137,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         protected virtual void SelectAction()
         {
-            string action = _diOptions[_iKeySelection].Action;
-            if (GameManager.gmNPC == null || action.Equals("SellContract"))
-            {
-                ProcessGameTextSelection(action);
-            }
-            else
-            {
-                ProcessNPCDialogSelection(action);
-            }
+            SelectedAction = _diOptions[_iKeySelection].Action;
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -156,68 +149,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                 rv = true;
             }
             return rv;
-        }
-
-        protected virtual void ProcessGameTextSelection(string action)
-        {
-            if (action.Equals("SleepNow"))
-            {
-                GUIManager.SetScreen(new DayEndScreen());
-            }
-            else if (action.Equals("OpenDoor"))
-            {
-                GUIManager.SetScreen(new InventoryScreen(GameManager.gmDoor));
-            }
-            else if (action.Contains("UseItem"))
-            {
-                GameManager.UseItem();
-            }
-            else if (action.Contains("SellContract") && GameManager.gmNPC != null)
-            {
-                if (GameManager.gmNPC.IsWorldAdventurer())
-                {
-                    ((WorldAdventurer)GameManager.gmNPC).Building.RemoveWorker((WorldAdventurer)GameManager.gmNPC);
-                    PlayerManager.AddMoney(1000);
-                    GameManager.BackToMain();
-                }
-            }
-            else
-            {
-                GameManager.BackToMain();
-            }
-        }
-
-        private void ProcessNPCDialogSelection(string action)
-        {
-            if (GameManager.gmNPC != null)
-            {
-                string nextText = GameManager.gmNPC.GetDialogEntry(action);
-
-                if (action.StartsWith("Quest"))
-                {
-                    Quest q = GameManager.DIQuests[int.Parse(action.Remove(0, "Quest".Length))];
-                    PlayerManager.AddToQuestLog(q);
-                    GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, GameManager.gmNPC.GetDialogEntry("Quest"+q.QuestID)));
-                }
-                else if (action.StartsWith("Donate"))
-                {
-                    ((Villager)GameManager.gmNPC).FriendshipPoints += 40;
-                    GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, nextText));
-                }
-                else if (action.StartsWith("NoDonate"))
-                {
-                    ((Villager)GameManager.gmNPC).FriendshipPoints -= 1000;
-                    GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, nextText));
-                }
-                else if (!string.IsNullOrEmpty(nextText))
-                {
-                    GUIManager.SetScreen(new TextScreen(GameManager.gmNPC, nextText));
-                }
-                else if (GUIManager.IsTextScreen())
-                {
-                    GameManager.BackToMain();
-                }
-            }
         }
 
         internal void Clear()
