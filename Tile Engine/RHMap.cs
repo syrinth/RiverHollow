@@ -957,6 +957,13 @@ namespace RiverHollow.Tile_Engine
                     {
                         if (AddBuilding(GraphicCursor.HeldBuilding))
                         {
+                            PlayerManager.TakeMoney(gmMerchandise.MoneyCost);
+                            foreach (KeyValuePair<int, int> kvp in gmMerchandise.RequiredItems)
+                            {
+                                InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
+                            }
+
+                            gmMerchandise = null;
                             FinishedBuilding();
                             rv = true;
                         }
@@ -1292,7 +1299,7 @@ namespace RiverHollow.Tile_Engine
                 PlayerManager.AddBuilding(b);
                 if (openNameInput)
                 {
-                    GUIManager.SetScreen(new TextInputScreen(b));
+                    GUIManager.SetScreen(new NamingScreen(b));
                 }
                 rv = true;
             }
@@ -1313,7 +1320,7 @@ namespace RiverHollow.Tile_Engine
                         WorldAdventurer w = ObjectManager.GetWorker(GraphicCursor.WorkerToPlace);
                         b.AddWorker(w, r);
                         b._selected = false;
-                        GUIManager.SetScreen(new TextInputScreen(w));
+                        GUIManager.SetScreen(new NamingScreen(w));
                         //Scry(false);
                         rv = true;
                     }

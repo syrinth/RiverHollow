@@ -95,25 +95,45 @@ namespace RiverHollow.GUIObjects
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle source = Rectangle.Empty;
-            Texture2D drawIt = _texture;
-            float alpha = 1f;
-            switch (_CursorType)
+            if (_heldBuilding == null)
             {
-                case EnumCursorType.Normal:
-                    source = new Rectangle(288, 192, 32, 32);
-                    break;
-                case EnumCursorType.Talk:
-                    source = new Rectangle(288, 160, 32, 32);
-                    alpha = (PlayerManager.PlayerInRange(GetTranslatedMouseLocation().ToPoint(), (int)(TileSize * 1.5)))? 1 : 0.5f;
-                    break;
+                Rectangle source = Rectangle.Empty;
+                Texture2D drawIt = _texture;
+                float alpha = 1f;
+                switch (_CursorType)
+                {
+                    case EnumCursorType.Normal:
+                        source = new Rectangle(288, 192, 32, 32);
+                        break;
+                    case EnumCursorType.Talk:
+                        source = new Rectangle(288, 160, 32, 32);
+                        alpha = (PlayerManager.PlayerInRange(GetTranslatedMouseLocation().ToPoint(), (int)(TileSize * 1.5))) ? 1 : 0.5f;
+                        break;
+                }
+                Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, 32, 32);
+
+                spriteBatch.Draw(drawIt, drawRectangle, source, Color.White * alpha);
+                if (HeldItem != null)
+                {
+                    _heldItem.Draw(spriteBatch, new Rectangle((int)Position.X + 16, (int)Position.Y + 16, 32, 32));
+                }
             }
-            Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, 32, 32);
-            
-            spriteBatch.Draw(drawIt, drawRectangle, source, Color.White * alpha);
-            if (HeldItem != null)
+        }
+
+        public static void DrawBuilding(SpriteBatch spriteBatch)
+        {
+            if (GameManager.Scrying())
             {
-                _heldItem.Draw(spriteBatch, new Rectangle((int)Position.X+16, (int)Position.Y+16, 32, 32));
+                if (_heldBuilding != null)
+                {
+                    Vector2 mousePosition = GetTranslatedPosition();
+                    Texture2D drawIt = _heldBuilding.Texture;
+                    Rectangle drawRectangle = new Rectangle(((int)((mousePosition.X - drawIt.Width / 2) / TileSize)) * TileSize, ((int)((mousePosition.Y - drawIt.Height / 2) / TileSize)) * TileSize, drawIt.Width, drawIt.Height);
+                    Rectangle source = new Rectangle(0, 0, drawIt.Width, drawIt.Height);
+
+                    _heldBuilding.SetCoordinates(new Vector2(drawRectangle.X, drawRectangle.Y));
+                    spriteBatch.Draw(drawIt, drawRectangle, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, mousePosition.Y + drawIt.Height);
+                }
             }
         }
 

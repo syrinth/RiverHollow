@@ -952,12 +952,9 @@ namespace RiverHollow.Actors
             }
             else if (entry.Equals("Move"))
             {
-                GUIManager.SetScreen(null);
-                GameManager.Scry(true);
-                GameManager.MoveBuilding();
-                Camera.UnsetObserver();
-                MapManager.ViewMap(MapManager.HomeMap);
+                RiverHollow.HomeMapPlacement();
                 GameManager.ClearGMObjects();
+                GameManager.MoveBuilding();
             }
             else if (entry.Equals("UpgradeBuilding"))
             {
@@ -967,12 +964,9 @@ namespace RiverHollow.Actors
             }
             else if (entry.Equals("Destroy"))
             {
-                GUIManager.SetScreen(null);
-                GameManager.Scry(true);
-                GameManager.DestroyBuilding();
-                Camera.UnsetObserver();
-                MapManager.ViewMap(MapManager.HomeMap);
+                RiverHollow.HomeMapPlacement();
                 GameManager.ClearGMObjects();
+                GameManager.DestroyBuilding();
             }
             else
             {

@@ -101,7 +101,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     PlayerManager.TakeMoney(_iCost);
                     GameManager.BackToMain();
-                    GUIManager.SetScreen(new TextInputScreen(_worker));
+                    GUIManager.SetScreen(new NamingScreen(_worker));
                 }
                 
                 _worker = null;

@@ -189,7 +189,6 @@ namespace RiverHollow
                 {
                     MapManager.DrawBase(spriteBatch);
                     PlayerManager.Draw(spriteBatch);
-                    
                 }
                 spriteBatch.End();
             }
@@ -288,6 +287,14 @@ namespace RiverHollow
         public static void PrepExit()
         {
             _exit = true;
+        }
+
+        public static void HomeMapPlacement()
+        {
+            GUIManager.SetScreen(null);
+            GameManager.Scry(true);
+            Camera.UnsetObserver();
+            MapManager.ViewMap(MapManager.HomeMap);
         }
     }
 }

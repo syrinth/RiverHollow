@@ -214,29 +214,21 @@ namespace RiverHollow.GUIComponents.Screens
                     }
                 }
             }
-            //If all items are found, then remove them.
+
             if (create)
             {
-                Merchandise merch = _liMerchandise[_iCurrIndex];
-                PlayerManager.TakeMoney(merch.MoneyCost);
-                foreach (KeyValuePair<int, int> kvp in _liMerchandise[_iCurrIndex].RequiredItems)
-                {
-                    InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
-                }
+                gmMerchandise = _liMerchandise[_iCurrIndex];
 
-                if (merch.MerchType == Merchandise.ItemType.Building)
+                if (gmMerchandise.MerchType == Merchandise.ItemType.Building)
                 {
-                    GUIManager.SetScreen(null);
-                    WorkerBuilding b = ObjectManager.GetBuilding(merch.MerchID);
-                    GraphicCursor.PickUpBuilding(b);
-                    Scry(true);
+                    RiverHollow.HomeMapPlacement();
+                    GraphicCursor.PickUpBuilding(ObjectManager.GetBuilding(gmMerchandise.MerchID));
                     ConstructBuilding();
-                    Camera.UnsetObserver();
-                    MapManager.ViewMap(MapManager.HomeMap);
                 }
                 else
                 {
-                    DiUpgrades[merch.MerchID].Enabled = true;
+                    DiUpgrades[gmMerchandise.MerchID].Enabled = true;
+                    gmMerchandise = null;
                     BackToMain();
                 }
             }

@@ -314,6 +314,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             else { _sprite = new GUICharacterSprite(c.World.BodySprite, true); }
                             
                             _sprite.SetScale(2);
+                            _sprite.PlayAnimation(WActorAnimEnum.IdleDown);
                             _sprite.CenterOnObject(this);
                             _sprite.MoveBy(new Vector2(0, -(this.Width/4)));
                         }         

@@ -12,6 +12,7 @@ using System.Text;
 using System.Xml.Serialization;
 using static RiverHollow.WorldObjects.Door;
 using static RiverHollow.Misc.Quest;
+using static RiverHollow.Actors.ShopKeeper;
 
 namespace RiverHollow.Game_Managers
 {
@@ -47,6 +48,7 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<int, Upgrade> DiUpgrades;
         public static Dictionary<int, Quest> DIQuests;
 
+        public static Merchandise gmMerchandise;
         public static Item gmActiveItem;
         public static TalkingActor gmNPC;
         public static Spirit gmSpirit;

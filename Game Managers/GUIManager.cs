@@ -95,6 +95,10 @@ namespace RiverHollow.Game_Managers
 
         public static void SetScreen(GUIScreen newScreen)
         {
+            if( newScreen == null)
+            {
+                int i = 0;
+            }
             _currentGUIScreen = newScreen;
         }
 

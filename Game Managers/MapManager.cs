@@ -214,20 +214,7 @@ namespace RiverHollow.Game_Managers
         public static void DrawBase(SpriteBatch spriteBatch)
         {
             _currentMap.DrawBase(spriteBatch);
-
-            if (GameManager.Scrying())
-            {
-                if (GraphicCursor.HeldBuilding != null)
-                {
-                    Vector2 mousePosition = GraphicCursor.GetTranslatedPosition();
-                    Texture2D drawIt = GraphicCursor.HeldBuilding.Texture;
-                    Rectangle drawRectangle = new Rectangle(((int)(mousePosition.X / TileSize)) * TileSize, ((int)(mousePosition.Y / TileSize)) * TileSize, drawIt.Width, drawIt.Height);
-                    Rectangle source = new Rectangle(0, 0, drawIt.Width, drawIt.Height);
-
-                    GraphicCursor.HeldBuilding.SetCoordinates(new Vector2(drawRectangle.X, drawRectangle.Y));
-                    spriteBatch.Draw(drawIt, drawRectangle, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, mousePosition.Y + drawIt.Height);
-                }
-            }
+            GraphicCursor.DrawBuilding(spriteBatch);
         }
 
         public static void DrawUpper(SpriteBatch spriteBatch)

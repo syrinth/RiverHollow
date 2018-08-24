@@ -10,14 +10,18 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
     class GUITextInputWindow : GUITextWindow
     {
-        WorldAdventurer _w;
-        WorkerBuilding _b;
         SideEnum _textLoc;
         GUIText _gStatement;
         GUIText _gText;
         GUIMarker _gMarker;
 
         int _iCurr;
+
+        bool _bFinished;
+        public bool Finished => _bFinished;
+        public bool AcceptSpace;
+
+        public string EnteredText => _gText.Text;
 
 
         public GUITextInputWindow() : base()
@@ -33,27 +37,16 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         {
             StatementSetup(statement, textLoc);
             _textLoc = textLoc;
-            Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
         }
 
-        public GUITextInputWindow(WorldAdventurer w) : this()
+       public void SetupNaming()
         {
             _textLoc = SideEnum.Top;
-            StatementSetup("Enter name:");
+            StatementSetup("Enter Name:  ");
             Width = Math.Max(_gStatement.Width, _gStatement.CharWidth * 10);
-            Height = _gStatement.CharHeight * 2;
-            Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
-            _w = w;
-        }
+            Resize();
 
-        public GUITextInputWindow(WorkerBuilding b) : this()
-        {
-            _textLoc = SideEnum.Top;
-            StatementSetup("Name Building:");
-            Width = Math.Max(_gStatement.Width, _gStatement.CharWidth * 10);
-            Height = _gStatement.CharHeight * 2;
-            Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
-            _b = b;
+            CenterOnScreen();
         }
 
         private void StatementSetup(string text, SideEnum textLoc = SideEnum.Top)
@@ -102,27 +95,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                 {
                     if (k == Keys.Enter)
                     {
-                        bool finished = false;
-                        if (_w != null)
-                        {
-                            finished = true;
-                            _w.SetName(_gText.GetText());
-                        }
-                        if (_b != null)
-                        {
-                            finished = true;
-                            _b.SetName(_gText.GetText());  
-                        }
-
-                        if(finished){
-                            RiverHollow.ResetCamera();
-                            GameManager.Unpause();
-                            GameManager.Scry(false);
-                            GameManager.DontReadInput();
-                        }
-
+                        _bFinished = true;
                     }
-                    else if(k >= Keys.A && k <= Keys.Z || k == Keys.Delete || k == Keys.Back || k == Keys.Left || k == Keys.Right || k == Keys.Delete)
+                    else if(k >= Keys.A && k <= Keys.Z || (AcceptSpace && k == Keys.Space) || k == Keys.Delete || k == Keys.Back || k == Keys.Left || k == Keys.Right || k == Keys.Delete)
                     {
                         if (k == Keys.Left)
                         {
