@@ -155,6 +155,12 @@ namespace RiverHollow.Game_Managers
             desc = _diItemText[id].Split('/')[1];
         }
 
+        public static void GetBuildingText(int id, ref string name, ref string desc)
+        {
+            string val = "Building " + id;
+            name = _diGameText[val].Split('/')[0];
+            desc = _diGameText[val].Split('/')[1];
+        }
         public static void GetClassText(int id, ref string name, ref string desc) {
             string val = "Class " + id;
             name = _diGameText[val].Split('/')[0];

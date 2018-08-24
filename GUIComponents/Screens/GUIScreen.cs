@@ -9,6 +9,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
     //Represents a complete collection of associated GUIs to be displayed on the screen
     public abstract class GUIScreen
     {
+        protected const int MINI_BTN_HEIGHT = 32;
+        protected const int MINI_BTN_WIDTH = 128;
+
         protected GUITextSelectionWindow _gSelectionWindow;
         private List<GUIObject> _toRemove;
         protected List<GUIObject> Controls;

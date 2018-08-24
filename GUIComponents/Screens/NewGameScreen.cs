@@ -27,8 +27,6 @@ namespace RiverHollow.GUIComponents.Screens
         int _iHairTypeMax = GameContentManager.GetTexture(@"Textures\texPlayerHair").Height / 32;
         enum SelectionEnum { None, Name, Manor };
         SelectionEnum _selection;
-        const int BTN_HEIGHT = 32;
-        const int BTN_WIDTH= 128;
         GUIWindow _window;
         GUIButton _btnOK;
         GUIButton _btnCancel;
@@ -57,10 +55,10 @@ namespace RiverHollow.GUIComponents.Screens
             _window.CenterOnScreen();
             Controls.Add(_window);
 
-            _btnCancel = new GUIButton("Cancel", BTN_WIDTH, BTN_HEIGHT, BtnCancel);
+            _btnCancel = new GUIButton("Cancel", MINI_BTN_WIDTH, MINI_BTN_HEIGHT, BtnCancel);
             _btnCancel.AnchorToInnerSide(_window, SideEnum.BottomRight, 0);
             
-            _btnOK = new GUIButton("OK", BTN_WIDTH, BTN_HEIGHT, BtnNewGame);
+            _btnOK = new GUIButton("OK", MINI_BTN_WIDTH, MINI_BTN_HEIGHT, BtnNewGame);
             _window.Controls.Add(_btnOK);
             _btnOK.AnchorAndAlignToObject(_btnCancel, SideEnum.Left, SideEnum.Top, 0);
             

@@ -184,11 +184,11 @@
     <!--Building Text -->
     <Item>
       <Key>Building 1</Key>
-      <Value>Arcane Tower</Value>
+      <Value>Arcane Tower/Mystic Tower to house practitioners of the magical arts.</Value>
     </Item>
     <Item>
       <Key>Building 2</Key>
-      <Value>Armory</Value>
+      <Value>Armory/Ideal training space for martial characters.</Value>
     </Item>
     <!--Classes Text -->
     <Item>

@@ -104,11 +104,13 @@ namespace RiverHollow.GUIObjects
 
         public Vector2 PositionAdd(Vector2 value) {
             _vPos += value;
+            _drawRect.Location += value.ToPoint();
             return _vPos;
         }
         public Vector2 PositionSub(Vector2 value)
         {
             _vPos -= value;
+            _drawRect.Location -= value.ToPoint();
             return _vPos;
         }
         public virtual void Position(Vector2 value)
@@ -372,7 +374,6 @@ namespace RiverHollow.GUIObjects
         }
         internal void AnchorToScreen(SideEnum sidePlacement, int spacing = 0)
         {
-
             int screenHeight = RiverHollow.ScreenHeight;
             int screenWidth = RiverHollow.ScreenWidth;
 

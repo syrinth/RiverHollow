@@ -198,10 +198,12 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         {
             Item it = ObjectManager.GetItem(id);
             _gImg = new GUIImage(it.SourceRectangle, it.SourceRectangle.Width, it.SourceRectangle.Height, it.Texture);
-            _gText = new GUIText(number.ToString(), true, @"Fonts\DisplayFont");
+            _gImg.SetScale(Scale);
+            _gText = new GUIText("999"); 
             Width = _gImg.Width + _gText.Width;
             Height = Math.Max(_gImg.Height, _gText.Height);
-            Position(Vector2.Zero);
+
+            _gText.SetText(number.ToString());
         }
 
         public override void Draw(SpriteBatch spriteBatch)

@@ -20,6 +20,9 @@ namespace RiverHollow.Buildings
         protected int _iBldgLvl = 0;
         public int Level => _iBldgLvl;
 
+        protected string _sDescription;
+        public string Description => _sDescription;
+
         protected string _sName;
         public string Name => _sName;
         public string MapName => "map"+_sName.Replace(" ", "") + (_iBldgLvl == 0 ? "" : _iBldgLvl.ToString());
@@ -46,7 +49,7 @@ namespace RiverHollow.Buildings
         protected int ImportBasics(string[] stringData, int id)
         {
             _id = id;
-            _sName = GameContentManager.GetGameText("Building " + _id);
+            GameContentManager.GetBuildingText(_id, ref _sName, ref _sDescription);
 
             int i = 0;
             int totalCount = 0;

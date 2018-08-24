@@ -136,13 +136,13 @@ namespace RiverHollow.GUIComponents.Screens
                 _bldgWindow = new BuildingInfoDisplay(_liMerchandise[_iCurrIndex]);
                 AddControl(_bldgWindow);
 
-                _btnBuy = new GUIButton("Buy", BtnBuy);
+                _btnBuy = new GUIButton("Buy", MINI_BTN_WIDTH, MINI_BTN_HEIGHT, BtnBuy);
                 _btnBuy.AnchorAndAlignToObject(_bldgWindow, SideEnum.Bottom, SideEnum.CenterX, 50);
                 _bldgWindow.Load();
 
-                _btnLast = new GUIButton("Last", BtnLast);
+                _btnLast = new GUIButton("Last", MINI_BTN_WIDTH, MINI_BTN_HEIGHT, BtnLast);
                 _btnLast.AnchorAndAlignToObject(_btnBuy, SideEnum.Left, SideEnum.Bottom, 100);
-                _btnNext = new GUIButton("Next", BtnNext);
+                _btnNext = new GUIButton("Next", MINI_BTN_WIDTH, MINI_BTN_HEIGHT, BtnNext);
                 _btnNext.AnchorAndAlignToObject(_btnBuy, SideEnum.Right, SideEnum.CenterY, 100);
             }
             catch (Exception e)
@@ -269,9 +269,11 @@ namespace RiverHollow.GUIComponents.Screens
             SpriteFont _font;
             List<GUIObject> _liReqs;
             Merchandise _merch;
-            GUIWindow _mainWindow;
+            GUIWindow _bldgWindow;
+            GUIWindow _infoWindow;
             GUIMoneyDisplay _gMoney;
-            GUIText _gTextName;
+            GUIText _gtName;
+            GUIText _gtDesc;
 
             public BuildingInfoDisplay(Merchandise merch)
             {
@@ -282,36 +284,53 @@ namespace RiverHollow.GUIComponents.Screens
                 if (_merch.MerchType == Merchandise.ItemType.Building)
                 {
                     _bldg = ObjectManager.GetBuilding(_merch.MerchID);
-                    _gTextName = new GUIText(_bldg.Name);
                     _font = GameContentManager.GetFont(@"Fonts\Font");
 
-                    int minWidth = _bldg.Texture.Width + margin * 2;
-                    int minHeight = _bldg.Texture.Height + margin * 2;
-                    _mainWindow = new GUIWindow(GUIWindow.RedWin, minWidth, minHeight);
-                    _mainWindow.CenterOnScreen();
+                    float newScale = (float)(Scale * 0.75);
+                    int width = (int)(TileSize * 9 * newScale);
+                    int height = (int)(TileSize * 11 * newScale);
+                    _bldgWindow = new GUIWindow(GUIWindow.RedWin, width, height);
+                    _bldgWindow.CenterOnScreen();
+                    _bldgWindow.PositionSub(new Vector2(_bldgWindow.Width / 2 + TileSize / 2, 0));
 
-                    Vector2 center = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
                     _giBuilding = new GUIImage(_bldg.SourceRectangle, _bldg.Texture.Width, _bldg.Texture.Height, _bldg.Texture);
-                    _giBuilding.CenterOnObject(_mainWindow);
+                    _giBuilding.SetScale(newScale);
+                    _giBuilding.AnchorToInnerSide(_bldgWindow, SideEnum.Bottom);
+                    _giBuilding.AlignToObject(_bldgWindow, SideEnum.CenterX);
+
+                    _infoWindow = new GUIWindow(GUIWindow.RedWin, width, height);
+                    _infoWindow.AnchorAndAlignToObject(_bldgWindow, SideEnum.Right, SideEnum.Bottom, TileSize / 2);
+
+                    _gtName = new GUIText(_bldg.Name);
+                    _gtName.AnchorToInnerSide(_infoWindow, SideEnum.Top);
+                    _gtName.AlignToObject(_infoWindow, SideEnum.CenterX);
+
+                    _gtDesc = new GUIText(_bldg.Description);
+                    _gtDesc.ParseText(4, _infoWindow.Width);
+                    _gtDesc.AnchorToInnerSide(_infoWindow, SideEnum.Left);
+                    _gtDesc.AnchorToObject(_gtName, SideEnum.Bottom);
                 }
                 else
                 {
-                    _gTextName = new GUIText(DiUpgrades[merch.MerchID].Name);
+                    _gtName = new GUIText(DiUpgrades[merch.MerchID].Name);
                     int width = 100;
                     int height = 100;
                     int minWidth = width + margin * 2;
                     int minHeight = height + margin * 2;
-                    _mainWindow = new GUIWindow(GUIWindow.RedWin, minWidth, minHeight);
-                    _mainWindow.CenterOnScreen();
+                    _bldgWindow = new GUIWindow(GUIWindow.RedWin, minWidth, minHeight);
+                    _bldgWindow.CenterOnScreen();
+
+                    _infoWindow = new GUIWindow(GUIWindow.RedWin, width, height);
+                    _infoWindow.AnchorAndAlignToObject(_bldgWindow, SideEnum.Right, SideEnum.Bottom, TileSize / 2);
 
                     //Placeholderimage
                     _giBuilding = new GUICoin();
-                    _giBuilding.CenterOnObject(_mainWindow);
+                    _giBuilding.CenterOnObject(_bldgWindow);
                 }
 
-                Width = _mainWindow.Width;
-                Height = _mainWindow.Height;
-                Position(_mainWindow.Position());
+                Width = _bldgWindow.Width + _infoWindow.Width + TileSize;
+                Height = _bldgWindow.Height;
+                Position(_bldgWindow.Position());
             }
 
             public void Load()
@@ -325,15 +344,17 @@ namespace RiverHollow.GUIComponents.Screens
                     _liReqs.Add(it);
                 }
 
-                CreateSpacedColumn(ref _liReqs, _mainWindow.DrawRectangle.Right, _mainWindow.DrawRectangle.Top, _mainWindow.Height, 10, true);
-                _gMoney.AnchorAndAlignToObject(_liReqs[_liReqs.Count - 1], SideEnum.Bottom, SideEnum.Left, 10);
+                CreateSpacedGrid(ref _liReqs, new Vector2(_infoWindow.InnerLeft(), _infoWindow.DrawRectangle.Center.Y), _bldgWindow.Width, 3);
 
-                _mainWindow.AddControl(_gMoney);
+                _gMoney.AnchorToInnerSide(_infoWindow, SideEnum.BottomRight, 10);
+
+                _bldgWindow.AddControl(_gMoney);
             }
 
             public override void Draw(SpriteBatch spriteBatch)
             {
-                _mainWindow.Draw(spriteBatch);
+                _bldgWindow.Draw(spriteBatch);
+                _infoWindow.Draw(spriteBatch);
                 _giBuilding.Draw(spriteBatch);
                 _gMoney.Draw(spriteBatch);
                 foreach (GUIItemReq c in _liReqs)
