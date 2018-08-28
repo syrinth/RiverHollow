@@ -1146,7 +1146,7 @@ namespace RiverHollow.Actors
                     }
                     else
                     {
-                        item.Number++;
+                        item.Add(1);
                         InventoryManager.AddItemToInventory(item);
                         text = GetDialogEntry("MarriageNo");
                     }

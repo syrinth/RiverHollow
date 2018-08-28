@@ -40,7 +40,7 @@ namespace RiverHollow.Game_Managers
         {
             for (int i = 0; i < num; i++)
             {
-                itemList.Add(ObjectManager.GetItem(id, 1));
+                itemList.Add(ObjectManager.GetItem(id, 10));
             }
         }
 

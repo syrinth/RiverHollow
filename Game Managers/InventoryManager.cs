@@ -152,7 +152,7 @@ Exit:
                         int temp = testItem.Number;
                         if (testItem.Number >= leftToRemove)
                         {
-                            testItem.Number -= leftToRemove;
+                            testItem.Remove(leftToRemove);
                             if (testItem.Number == 0)
                             {
                                 toRemove.Add(inventory[i, j]);
@@ -160,7 +160,7 @@ Exit:
                         }
                         else
                         {
-                            testItem.Number = 0;
+                            testItem.Remove(testItem.Number);
                             toRemove.Add(inventory[i, j]);
                             leftToRemove -= temp;
                         }
@@ -235,7 +235,7 @@ Exit:
                 {
                     if (inventory[i, j] != null && inventory[i, j].DoesItStack && inventory[i, j].ItemID == itemToAdd.ItemID && inventory[i, j].Number < 999)
                     {
-                        inventory[i, j].Number += itemToAdd.Number;
+                        inventory[i, j].Add(itemToAdd.Number);
                         rv = true;
 
                         goto Exit;
@@ -283,7 +283,7 @@ Exit:
                 {
                     if (inventory[row, column].ItemID == item.ItemID && inventory[row, column].DoesItStack && 999 >= (inventory[row, column].Number + item.Number))
                     {
-                        inventory[row, column].Number += item.Number;
+                        inventory[row, column].Add(item.Number);
                         rv = true;
                     }
                 }
@@ -342,19 +342,9 @@ Exit:
             return;
         }
 
-        public static Item PlayerItemAtLocation()
+        public static Item GetCurrentItem()
         {
-            return PlayerItemAtLocation((int)GameManager.gmCurrentItem.X, (int)GameManager.gmCurrentItem.Y);
-        }
-        public static Item PlayerItemAtLocation(int row, int col)
-        {
-            Item i = null;
-            if(_playerInventory[row, col] != null)
-            {
-                i = _playerInventory[row, col];
-            }
-
-            return i;
+            return _playerInventory[GameManager.HUDItemRow, GameManager.HUDItemCol];
         }
 
         public static Tool FindTool(Tool.ToolEnum tool)

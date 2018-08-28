@@ -19,25 +19,31 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
     public class GUIItemBox : GUIImage
     {
         static Rectangle RECT_IMG = new Rectangle(288, 32, 32, 32);
+        static Rectangle RECT_SELECT_IMG = new Rectangle(288, 0, 32, 32);
         private Item _item;
         public Item Item => _item;
-        protected bool _hover;
-        private GUITextWindow _textWindow;
-        private GUIWindow _reqWindow;
-        private GUIText _textNum;
+        protected bool _bHover;
+        GUITextWindow _textWindow;
+        GUIWindow _reqWindow;
+        GUIText _gTextNum;
+        GUIImage _gItem;
+
+        GUIImage _gSelected = new GUIImage(RECT_SELECT_IMG, 64, 64, @"Textures\Dialog");
+
         Recipe _recipe;
         List<GUIObject> _liItemReqs;
 
         bool _bCrafting;
+        bool _bSelected;
 
         int _iCol;
         public int Col => _iCol;
         int _iRow;
         public int Row => _iRow;
 
-        public GUIItemBox(Item it = null) : base(RECT_IMG, 32, 32, @"Textures\Dialog")
+        public GUIItemBox(Item it = null) : base(RECT_IMG, 64, 64, @"Textures\Dialog")
         {
-            _item = it;
+            SetItem(it);
         }
 
         public GUIItemBox(Rectangle sourceRect, int width, int height, int row, int col, string texture, Item item, bool crafting = false) : base(sourceRect, width, height, texture)
@@ -56,12 +62,16 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            if (_item != null)
+            if (_bSelected)
             {
-                _item.Draw(spriteBatch, _drawRect, false);
-                if (_textNum != null) { _textNum.Draw(spriteBatch); }
+                _gSelected.Draw(spriteBatch);
+            }
+            if (_gItem != null)
+            {
+                _gItem.Draw(spriteBatch);
+                if (_gTextNum != null) { _gTextNum.Draw(spriteBatch); }
 
-                if (_hover)
+                if (_bHover)
                 {
                     if (_textWindow != null) { _textWindow.Draw(spriteBatch); }
                 }
@@ -78,7 +88,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 _reqWindow.Draw(spriteBatch);
             }
 
-            return _hover;
+            return _bHover;
         }
 
         public bool ProcessHover(Point mouse)
@@ -86,7 +96,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             bool rv = false;
             if (Contains(mouse))
             {
-                _hover = true;
+                _bHover = true;
                 if (_item != null)
                 {
                     _textWindow = new GUITextWindow(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32), _item.GetDescription());
@@ -112,31 +122,82 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             }
             else
             {
-                _hover = false;
+                _bHover = false;
                 _textWindow = null;
                 _reqWindow = null;
             }
             return rv;
         }
 
+        public void CloseDescription()
+        {
+            _bHover = false;
+            _textWindow = null;
+        }
+
         public void SetItem(Item it)
         {
             _item = it;
-            if (_item != null && _item.DoesItStack)
+            if (_gTextNum != null) { _gTextNum.SetText(""); }
+            if(_item != null)
             {
-                _textNum = new GUIText(_item.Number.ToString(), true, @"Fonts\DisplayFont");
-                _textNum.SetColor(Color.White);
-                _textNum.AnchorToInnerSide(this, SideEnum.BottomRight, 10);
-            }
-            if (_item != null && _bCrafting)
-            {
-                _liItemReqs = new List<GUIObject>();
-                _recipe = DictCrafting[_item.ItemID];
-                foreach (KeyValuePair<int, int> kvp in _recipe.RequiredItems)
+                _gItem = new GUIImage(_item.SourceRectangle, Width, Height, _item.Texture);
+                _gItem.Position(Position());
+
+                if (_item.DoesItStack)
                 {
-                    _liItemReqs.Add(new GUIItemReq(kvp.Key, kvp.Value));
+                    _gTextNum = new GUIText(_item.Number.ToString(), true, @"Fonts\DisplayFont");
+                    _gTextNum.SetColor(Color.White);
+                    _gTextNum.AnchorToInnerSide(this, SideEnum.BottomRight, 10);
+                }
+                if (_bCrafting)
+                {
+                    _liItemReqs = new List<GUIObject>();
+                    _recipe = DictCrafting[_item.ItemID];
+                    foreach (KeyValuePair<int, int> kvp in _recipe.RequiredItems)
+                    {
+                        _liItemReqs.Add(new GUIItemReq(kvp.Key, kvp.Value));
+                    }
                 }
             }
+            else
+            {
+                _gItem = null;
+            }
+        }
+
+        public void Select(bool val)
+        {
+            _bSelected = val;
+        }
+
+        public void SetAlpha(float val)
+        {
+            Alpha = val;
+            if (_gSelected != null)
+            {
+                _gSelected.Alpha = val;
+            }
+            SetItemAlpha(val);
+        }
+        public void SetItemAlpha(float val)
+        {
+            if (_gItem != null)
+            {
+                _gItem.Alpha = val;
+            }
+            if(_gTextNum != null)
+            {
+                _gTextNum.Alpha = val;
+            }
+        }
+        public float GetItemAlpha() { return _gItem.Alpha; }
+
+        public override void Position(Vector2 value)
+        {
+            base.Position(value);
+            if (_gItem != null) { _gItem.Position(value); }
+            _gSelected.Position(value);
         }
 
         public class SpecializedBox : GUIItemBox
@@ -181,7 +242,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
                 if (Contains(mouse))
                 {
-                    _hover = false;
+                    _bHover = false;
                     _delOpenItemWindow(this);
                 }
                 return rv;

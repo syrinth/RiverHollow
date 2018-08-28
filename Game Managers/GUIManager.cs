@@ -124,6 +124,11 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        public static void SyncScreen()
+        {
+            _currentGUIScreen.Sync();
+        }
+
         public static bool IsTextScreen() { return _currentGUIScreen != null && _currentGUIScreen.IsTextScreen(); }
         public static bool IsGameMenuScreen() { return _currentGUIScreen != null && _currentGUIScreen.IsGameMenuScreen(); }
         public static bool IsItemCreationScreen() { return _currentGUIScreen != null && _currentGUIScreen.IsItemCreationScreen(); }

@@ -77,6 +77,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
 
+        public virtual void Sync() { }
+
         public void AddTextSelection(string text)
         {
             if (Controls.Contains(_gSelectionWindow)) { Controls.Remove(_gSelectionWindow); }

@@ -495,7 +495,7 @@ namespace RiverHollow.Tile_Engine
                     if (((Item)i).FinishedMoving() && i.CollisionBox.Intersects(player.CollisionBox))
                     {
                         removedList.Add(i);
-                        InventoryManager.AddNewItemToInventory(i.ItemID);
+                        InventoryManager.AddNewItemToInventory(i.ItemID, i.Number);
                     }
                     else if (PlayerManager.PlayerInRange(i.CollisionBox.Center, 80))
                     {
@@ -887,7 +887,7 @@ namespace RiverHollow.Tile_Engine
                         {
                             Machine p = (Machine)s;
                             if (p.ProcessingFinished()) { p.TakeFinishedItem(); }
-                            else if (GraphicCursor.HeldItem != null && !p.Processing()) { p.ProcessClick(); }
+                            else if (InventoryManager.GetCurrentItem() != null && !p.Processing()) { p.ProcessClick(); }
                         }
                         else if (s.IsContainer())
                         {

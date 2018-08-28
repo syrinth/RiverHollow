@@ -14,6 +14,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public static int HEIGHT = RiverHollow.ScreenHeight / 3;
         GUIWindow _partyWindow;
         GUICheck _gAutoDisband;
+        GUICheck _gHideMiniInventory;
         GUIButton _btnSave;
 
         public OptionScreen()
@@ -24,6 +25,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             _gAutoDisband = new GUICheck("Auto-Disband", GameManager.AutoDisband);
             _gAutoDisband.AnchorToInnerSide(_partyWindow, SideEnum.TopLeft);
+
+            _gHideMiniInventory = new GUICheck("Hide Mini Inventory", GameManager.HideMiniInventory);
+            _gHideMiniInventory.AnchorAndAlignToObject(_gAutoDisband, SideEnum.Bottom, SideEnum.Left);
 
             _btnSave = new GUIButton("Save", BtnSave);
             _btnSave.AnchorToInnerSide(_partyWindow, SideEnum.BottomRight);
@@ -67,6 +71,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public void BtnSave()
         {
             GameManager.AutoDisband = _gAutoDisband.Checked();
+            GameManager.HideMiniInventory = _gHideMiniInventory.Checked();
             GameManager.BackToMain();
         }
     }

@@ -127,7 +127,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             bool rv = false;
             if (Contains(mouse))
             {
-                _bChecked = !_bChecked;
+                SetChecked(!_bChecked);
             }
 
             return rv;
@@ -149,6 +149,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             return _bChecked;
         }
+
+        public void SetChecked(bool val) { _bChecked = val; }
     }
 
     public class GUIStatus : GUIObject

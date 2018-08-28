@@ -81,12 +81,11 @@ namespace RiverHollow.Screens
             if (GraphicCursor.HeldItem != null)
             {
                 Item toSwitch = IsItemThere(mouse);
-                GameManager.gmActiveItem = toSwitch;
                 if (toSwitch != null)
                 {
                     if (GraphicCursor.HeldItem.ItemID == toSwitch.ItemID)
                     {
-                        toSwitch.Number++;
+                        toSwitch.Add(1);
                         GraphicCursor.DropItem();
                     }
                     else
@@ -137,41 +136,43 @@ namespace RiverHollow.Screens
 
             if (GraphicCursor.HeldItem == null)
             {
-                Item i = IsItemThere(mouse);
-                if (i != null)
+                GUIItemBox i = GetItemBox(mouse);
+                if (i != null && i.Item != null)
                 {
                     if (InventoryManager.PublicContainer == null)
                     {
-                        if (i.IsFood() || i.IsClassItem())
+                        if (i.Item.IsFood() || i.Item.IsClassItem())
                         {
                             string text = string.Empty;
-                            GameManager.gmActiveItem = i;
-                            if (i.IsFood())
+                            if (i.Item.IsFood())
                             {
                                 text = GameContentManager.GetGameText("FoodConfirm");
                             }
-                            else if (i.IsClassItem())
+                            else if (i.Item.IsClassItem())
                             {
                                 text = GameContentManager.GetGameText("ClassItemConfirm");
                             }
-                            GUIManager.AddTextSelection(string.Format(text, i.Name));
+                            i.CloseDescription();
+                            GUIManager.AddTextSelection(string.Format(text, i.Item.Name));
+                            GameManager.gmActiveItem = i.Item;
                         }
                     }
-
-                    if (i != null)
+                    else
                     {
-                        GraphicCursor.GrabItem(TakeItem(mouse));
-
-                        if (InventoryManager.PublicContainer != null)
+                        if (i != null && i.Item != null)
                         {
-                            if (_container != null) { InventoryManager.AddItemToInventory(i); }
-                            else { InventoryManager.AddItemToInventory(i, InventoryManager.PublicContainer); }
+                            GraphicCursor.GrabItem(TakeItem(mouse));
 
-                            GraphicCursor.DropItem();
+                            if (InventoryManager.PublicContainer != null)
+                            {
+                                if (_container != null) { InventoryManager.AddItemToInventory(i.Item); }
+                                else { InventoryManager.AddItemToInventory(i.Item, InventoryManager.PublicContainer); }
+
+                                GraphicCursor.DropItem();
+                            }
+                            rv = true;
                         }
-                        rv = true;
                     }
-
                 }
             }
 
@@ -210,6 +211,22 @@ namespace RiverHollow.Screens
             return rv;
         }
 
+        private GUIItemBox GetItemBox(Point mouse)
+        {
+            GUIItemBox rv = null;
+
+            foreach (GUIItemBox box in _displayList)
+            {
+                if (box.Contains(mouse) && box.Item != null)
+                {
+                    rv = box;
+                    break;
+                }
+            }
+
+            return rv;
+        }
+
         private Item IsItemThere(Point mouse)
         {
             Item rv = null;
@@ -239,7 +256,7 @@ namespace RiverHollow.Screens
                     {
                         int num = chosenItem.Number;
                         num = num / 2;
-                        chosenItem.Number = chosenItem.Number - num;
+                        chosenItem.Remove(num);
                         rv = ObjectManager.GetItem(chosenItem.ItemID, num);
                     }
                     else

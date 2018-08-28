@@ -556,15 +556,15 @@ namespace RiverHollow.WorldObjects
                 public override bool Processing() { return _currentlyProcessing != null; }
                 public override void ProcessClick()
                 {
-                    Item heldItem = GraphicCursor.HeldItem;
-                    if (heldItem != null)
+                    Item selectedItem = InventoryManager.GetCurrentItem();
+                    if (selectedItem != null)
                     {
-                        if (_diProcessing.ContainsKey(heldItem.ItemID))
+                        if (_diProcessing.ContainsKey(selectedItem.ItemID))
                         {
-                            ProcessRecipe p = _diProcessing[heldItem.ItemID];
-                            if (heldItem.Number >= p.InputNum)
+                            ProcessRecipe p = _diProcessing[selectedItem.ItemID];
+                            if (selectedItem.Number >= p.InputNum)
                             {
-                                heldItem.Remove(p.InputNum);
+                                selectedItem.Remove(p.InputNum);
                                 _currentlyProcessing = p;
                                 _sprite.SetCurrentAnimation(MachineAnimEnum.Working);
                             }

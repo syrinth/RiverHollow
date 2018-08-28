@@ -89,8 +89,8 @@ namespace RiverHollow.Game_Managers
 
         public static void AddTesting()
         {
-            InventoryManager.AddNewItemToInventory(0, 10);
-            InventoryManager.AddNewItemToInventory(2, 10);
+            InventoryManager.AddNewItemToInventory(0, 990);
+            InventoryManager.AddNewItemToInventory(2, 990);
             InventoryManager.AddNewItemToInventory(85, 10);
             InventoryManager.AddNewItemToInventory(5);
             InventoryManager.AddNewItemToInventory(20);
@@ -326,40 +326,25 @@ namespace RiverHollow.Game_Managers
                 if (PlayerManager.PlayerInRange(center.ToPoint()))
                 {
                     _targetTile = MapManager.RetrieveTile(mouseLocation);
-                    if (GraphicCursor.HeldItem != null && GraphicCursor.HeldItem.IsStaticItem())
+                    Item selectedItem = InventoryManager.GetCurrentItem();
+                    if (selectedItem != null && selectedItem.IsStaticItem())
                     {
-                        WorldObject obj = ObjectManager.GetWorldObject(GraphicCursor.HeldItem.ItemID);
+                        WorldItem obj = (WorldItem)ObjectManager.GetWorldObject(selectedItem.ItemID);
                         if (obj.IsMachine())
                         {
-                            Machine p = (Machine)obj;
-                            p.SetMapName(CurrentMap);
-                            p.MapPosition = mouseLocation.ToVector2();
-                            MapManager.PlacePlayerObject(p);
-                            GraphicCursor.DropItem();
+                            PlaceWorldObject(selectedItem, obj, mouseLocation);
                         }
                         else if (obj.IsContainer())
                         {
-                            Container c = (Container)obj;
-                            c.SetMapName(CurrentMap);
-                            c.MapPosition = mouseLocation.ToVector2();
-                            MapManager.PlacePlayerObject(c);
-                            GraphicCursor.DropItem();
+                            PlaceWorldObject(selectedItem, obj, mouseLocation);
                         }
                         else if (obj.IsClassChanger())
                         {
-                            ClassChanger c = (ClassChanger)obj;
-                            c.SetMapName(CurrentMap);
-                            c.MapPosition = mouseLocation.ToVector2();
-                            MapManager.PlacePlayerObject(c);
-                            GraphicCursor.DropItem();
+                            PlaceWorldObject(selectedItem, obj, mouseLocation);
                         }
                         else if (_targetTile.HasBeenDug() && obj.IsPlant())
                         {
-                            Plant p = (Plant)obj;
-                            p.SetMapName(CurrentMap);
-                            p.MapPosition = mouseLocation.ToVector2();
-                            MapManager.PlacePlayerObject(p);
-                            GraphicCursor.DropItem();
+                            PlaceWorldObject(selectedItem, obj, mouseLocation);
                         }
                     }
                     else if (_targetTile.WorldObject != null && _targetTile.WorldObject.IsDestructible())
@@ -398,6 +383,14 @@ namespace RiverHollow.Game_Managers
             }
 
             return rv;
+        }
+        private static void PlaceWorldObject(Item selectedItem, WorldItem obj, Point mouseLocation)
+        {
+            obj.SetMapName(CurrentMap);
+            obj.MapPosition = mouseLocation.ToVector2();
+            MapManager.PlacePlayerObject(obj);
+            selectedItem.Remove(1);
+            GUIManager.SyncScreen();
         }
 
         internal static bool SetTool(Tool t, Point mouse)

@@ -13,6 +13,7 @@ using System.Xml.Serialization;
 using static RiverHollow.WorldObjects.Door;
 using static RiverHollow.Misc.Quest;
 using static RiverHollow.Actors.ShopKeeper;
+using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers
 {
@@ -49,16 +50,19 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<int, Quest> DIQuests;
 
         public static Merchandise gmMerchandise;
-        public static Item gmActiveItem;
         public static TalkingActor gmNPC;
+        public static Item gmActiveItem;
         public static Spirit gmSpirit;
         public static KeyDoor gmDoor;
-        public static Vector2 gmCurrentItem;
 
         static long _iSaveID = -1;
         public static int MAX_NAME_LEN = 10;
 
         public static bool AutoDisband;
+        public static bool HideMiniInventory = true;
+
+        public static int HUDItemRow;
+        public static int HUDItemCol;
 
         public static void LoadContent(ContentManager Content)
         {
@@ -81,14 +85,13 @@ namespace RiverHollow.Game_Managers
         public static void UseItem()
         {
             gmActiveItem.UseItem();
-            gmActiveItem = null;
         }
 
         public static void ClearGMObjects()
         {
             gmNPC = null;
-            gmActiveItem = null;
             gmDoor = null;
+            gmActiveItem = null;
             gmSpirit = null;
         }
 
@@ -96,7 +99,8 @@ namespace RiverHollow.Game_Managers
         {
             OptionsData data = new OptionsData
             {
-                autoDisband = AutoDisband
+                autoDisband = AutoDisband,
+                hideMiniInventory = HideMiniInventory
             };
             return data;
         }
@@ -104,6 +108,7 @@ namespace RiverHollow.Game_Managers
         public static void LoadOptions(OptionsData data)
         {
             AutoDisband = data.autoDisband;
+            HideMiniInventory = data.hideMiniInventory;
         }
 
         #region States
@@ -215,6 +220,9 @@ namespace RiverHollow.Game_Managers
         {
             [XmlElement(ElementName = "AutoDisband")]
             public bool autoDisband;
+
+            [XmlElement(ElementName = "HideMiniInventory")]
+            public bool hideMiniInventory;
         }
         public struct PlayerData
         {

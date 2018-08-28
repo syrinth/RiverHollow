@@ -54,7 +54,7 @@ namespace RiverHollow.WorldObjects
         public bool DoesItStack => _bStacks;
 
         protected int _iNum;
-        public int Number { get => _iNum; set => _iNum = value; }
+        public int Number { get => _iNum; }
 
         protected int _sellPrice;
         public int SellPrice => _sellPrice;
@@ -194,6 +194,25 @@ namespace RiverHollow.WorldObjects
             return rv;
         }
 
+        /// <summary>
+        /// Increments the number of the item by the given value.
+        /// If it would exceed the max stack, make a new stack if possible.
+        /// </summary>
+        /// <param name="x"></param>
+        public void Add(int x)
+        {
+            if (_iNum + x <= 999)
+            {
+                _iNum += x;
+            }
+            else
+            {
+                int leftOver = _iNum + x - 999;
+                _iNum = 999;
+
+                InventoryManager.AddNewItemToInventory(_itemID, leftOver);
+            }
+        }
         public bool Remove(int x)
         {
             bool rv = false;
