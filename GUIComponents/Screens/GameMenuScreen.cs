@@ -96,7 +96,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     if (rv) { break; }
                 }
 
-                if (!rv && _infoScreen != null && _infoScreen.Contains(mouse))
+                if (!rv && _infoScreen != null)
                 {
                     _infoScreen.ProcessLeftButtonClick(mouse);
                     rv = true;

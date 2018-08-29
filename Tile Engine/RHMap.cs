@@ -490,7 +490,7 @@ namespace RiverHollow.Tile_Engine
             List<Item> removedList = new List<Item>();
             foreach (Item i in _liItems)
             {
-                if (i.OnTheMap && i.Pickup)
+                if (i.OnTheMap && i.AutoPickup)
                 {
                     if (((Item)i).FinishedMoving() && i.CollisionBox.Intersects(player.CollisionBox))
                     {
@@ -797,7 +797,7 @@ namespace RiverHollow.Tile_Engine
         public void AddCollectionItem(int itemID, int npcIndex, int index)
         {
             Item displayItem = ObjectManager.GetItem(itemID);
-            displayItem.Pickup = false;
+            displayItem.AutoPickup = false;
             displayItem.OnTheMap = true;
             displayItem.Position = _dictCharacterLayer[npcIndex + "Col" + index];
             _liItems.Add(displayItem);
@@ -873,6 +873,24 @@ namespace RiverHollow.Tile_Engine
                         break;
                     }
                 }
+            }
+
+            if (!rv)
+            {
+                List<Item> removedList = new List<Item>();
+                foreach (Item i in _liItems)
+                {
+                    if(i.ManualPickup && i.CollisionBox.Contains(GraphicCursor.GetTranslatedMouseLocation())){
+                        removedList.Add(i);
+                        InventoryManager.AddNewItemToInventory(i.ItemID, i.Number);
+                    }
+                }
+
+                foreach (Item i in removedList)
+                {
+                    _liItems.Remove(i);
+                }
+                removedList.Clear();
             }
 
             if (!rv)
@@ -1173,9 +1191,14 @@ namespace RiverHollow.Tile_Engine
         {
             foreach(Item i in items)
             {
-                ((Item)i).Pop(position);
-                _liItems.Add(i);
+                DropItemOnMap(i, position);
             }
+        }
+
+        public void DropItemOnMap(Item item, Vector2 position)
+        {
+            ((Item)item).Pop(position);
+            _liItems.Add(item);
         }
 
         public void LoadBuilding(WorkerBuilding b)

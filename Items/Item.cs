@@ -42,8 +42,10 @@ namespace RiverHollow.WorldObjects
         protected bool _onTheMap;
         public bool OnTheMap { get => _onTheMap; set => _onTheMap = value; }
 
-        protected bool _pickup = true;
-        public bool Pickup { get => _pickup; set => _pickup = value; }
+        protected bool _bAutoPickup = true;
+        public bool AutoPickup { get => _bAutoPickup; set => _bAutoPickup = value; }
+        protected bool _bManualPickup = false;
+        public bool ManualPickup { get => _bManualPickup; set => _bManualPickup = value; }
 
         protected string _description;
 
