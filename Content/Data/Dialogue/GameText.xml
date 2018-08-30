@@ -124,6 +124,10 @@
     </Item>
     <Item>
       <Key>Action 5</Key>
+      <Value>Escape/Flee from combat</Value>
+    </Item>
+    <Item>
+      <Key>Action 11</Key>
       <Value>Attack/Moves to a new location</Value>
     </Item>
     <!--Special Action Text -->

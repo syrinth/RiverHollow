@@ -7,24 +7,34 @@
     <!--Buff Format: [Buff:BuffId|Duration|<Tags>]-->
     <!--Buff Tags: Allies, Enemies, Target, Self-->
     <Item>
+      <!--Attack-->
       <Key>1</Key>
-      <Value>[Type:Action][Target:Enemy][Range:Melee][Area:Single][Effect:Harm-1][Action:UserMove UserAttack Apply Return]</Value>
+      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:Melee][Area:Single][Effect:Harm-1][Action:UserMove UserAttack Apply Return]</Value>
     </Item>
     <Item>
+      <!--Cast Spell-->
       <Key>2</Key>
-      <Value>[Type:Menu][Menu:Cast]</Value>
+      <Value>[Type:Menu][Menu:Cast][Icon:1-0]</Value>
     </Item>
     <Item>
+      <!--Use Item-->
       <Key>3</Key>
-      <Value>[Type:Menu][Menu:UseItem]</Value>
+      <Value>[Type:Menu][Menu:UseItem][Icon:2-0]</Value>
     </Item>
     <Item>
+      <!--Move-->
       <Key>4</Key>
-      <Value>[Type:Action][Target:Ally][Range:Column][Area:Area][Action:Move][Charge:50]</Value>
+      <Value>[Type:Action][Target:Ally][Icon:3-0][Range:Column][Area:Area][Action:Move][Charge:50]</Value>
     </Item>
     <Item>
+      <!--Escape-->
       <Key>5</Key>
-      <Value>[Type:Action][Target:Enemy][Range:Ranged][Area:Single][Effect:Harm-1 Bonus-Summons][Action:UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Self][Icon:4-0][Range:Single][Action:Escape]</Value>
+    </Item>
+    <Item>
+      <!--Summoner Attack-->
+      <Key>11</Key>
+      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:Ranged][Area:Single][Effect:Harm-1 Bonus-Summons][Action:UserAttack Apply]</Value>
     </Item>
     <!--<50> Special-->
     <Item>

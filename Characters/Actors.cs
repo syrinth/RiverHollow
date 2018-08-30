@@ -1,23 +1,22 @@
-﻿using RiverHollow.Game_Managers;
-using RiverHollow.SpriteAnimations;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Game_Managers.GUIObjects;
-using System;
-using RiverHollow.WorldObjects;
-using RiverHollow.GUIObjects;
-using System.Collections.Generic;
-using RiverHollow.Misc;
-using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.Actors.CombatStuff;
-using RiverHollow.Tile_Engine;
+using RiverHollow.Game_Managers;
+using RiverHollow.Game_Managers.GUIComponents.Screens;
+using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-
-using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Game_Managers.ObjectManager;
-using static RiverHollow.Game_Managers.GUIObjects.ManagementScreen;
-using static RiverHollow.WorldObjects.Clothes;
 using RiverHollow.GUIComponents.Screens;
+using RiverHollow.GUIObjects;
+using RiverHollow.Misc;
+using RiverHollow.SpriteAnimations;
+using RiverHollow.Tile_Engine;
+using RiverHollow.WorldObjects;
+using System;
+using System.Collections.Generic;
+using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Game_Managers.GUIObjects.ManagementScreen;
+using static RiverHollow.Game_Managers.ObjectManager;
+using static RiverHollow.WorldObjects.Clothes;
 
 namespace RiverHollow.Actors
 {
@@ -1828,6 +1827,7 @@ namespace RiverHollow.Actors
         protected List<CombatActor> _monsters;
         public List<CombatActor> Monsters { get => _monsters; }
 
+        double _dStun;
         int _iMaxRange = TileSize * 10;
         bool _bAlert;
         bool _bLockedOn;
@@ -1915,12 +1915,21 @@ namespace RiverHollow.Actors
 
         public override void Update(GameTime theGameTime)
         {
-            if (_bAlert && !_bLockedOn)
+            if (_dStun > 0)
             {
-                _dAlertTimer += theGameTime.ElapsedGameTime.TotalSeconds;
-                _sprAlert.Update(theGameTime);
+                _dStun -= theGameTime.ElapsedGameTime.TotalSeconds;
+                if(_dStun < 0) { _dStun = 0; }
             }
-            UpdateMovement(theGameTime);
+            else
+            {
+                if (_bAlert && !_bLockedOn)
+                {
+                    _dAlertTimer += theGameTime.ElapsedGameTime.TotalSeconds;
+                    _sprAlert.Update(theGameTime);
+                }
+                UpdateMovement(theGameTime);
+            }
+
             base.Update(theGameTime);
         }
 
@@ -1982,6 +1991,8 @@ namespace RiverHollow.Actors
 
             if (CollisionBox.Intersects(PlayerManager.World.CollisionBox))
             {
+                _bAlert = false;
+                _bLockedOn = false;
                 CombatManager.NewBattle(this);
             }
         }
@@ -2076,6 +2087,11 @@ namespace RiverHollow.Actors
         private bool CompareSpawnSeason(SpawnConditionEnum check, SpawnConditionEnum season)
         {
             return check.Equals(season) && !Util.ParseEnum<SpawnConditionEnum>(GameCalendar.GetSeason()).Equals(season);
+        }
+
+        public void Stun()
+        {
+            _dStun = 5.0f;
         }
 
         private class FieldOfVision

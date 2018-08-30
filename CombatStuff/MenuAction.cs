@@ -25,6 +25,9 @@ namespace RiverHollow.Actors.CombatStuff
 
         public CombatActor SkillUser;
 
+        protected Vector2 _vIconGrid;
+        public Vector2 IconGrid => _vIconGrid;
+
         public MenuAction() { }
         public MenuAction(int id, string[] stringData)
         {
@@ -47,6 +50,11 @@ namespace RiverHollow.Actors.CombatStuff
                 else if (tagType[0].Equals("Menu"))
                 {
                     _menuType = Util.ParseEnum<MenuEnum>(tagType[1]);
+                }
+                else if (tagType[0].Equals("Icon"))
+                {
+                    string[] tags = tagType[1].Split('-');
+                    _vIconGrid = new Vector2(int.Parse(tags[0]), int.Parse(tags[1]));
                 }
             }
         }
@@ -78,7 +86,7 @@ namespace RiverHollow.Actors.CombatStuff
         public int EffectHeal { get => _effectHeal; }
 
         ForceMoveEnum _forceMove;
-        int _iMoveStr;
+        int _iMoveDistance;
 
         TargetEnum _target;
         public TargetEnum Target { get => _target; }
@@ -145,6 +153,11 @@ namespace RiverHollow.Actors.CombatStuff
                 {
                     _element = Util.ParseEnum<ElementEnum>(tagType[1]);
                 }
+                else if (tagType[0].Equals("Icon"))
+                {
+                    string[] tags = tagType[1].Split('-');
+                    _vIconGrid = new Vector2(int.Parse(tags[0]), int.Parse(tags[1]));
+                }
                 else if (tagType[0].Equals("Target"))
                 {
                     _target = Util.ParseEnum<TargetEnum>(tagType[1]);
@@ -188,7 +201,7 @@ namespace RiverHollow.Actors.CombatStuff
                             else if (parse[0] == "Move")
                             {
                                 _forceMove = Util.ParseEnum<ForceMoveEnum>(parse[1]);
-                                _iMoveStr = int.Parse(parse[2]);
+                                _iMoveDistance = int.Parse(parse[2]);
                             }
                             else if (parse[0] == "Status")
                             {
@@ -408,7 +421,7 @@ namespace RiverHollow.Actors.CombatStuff
                     foreach (CombatManager.CombatTile ct in TileTargetList)
                     {
                         bool loop = true;
-                        int temp = _iMoveStr;
+                        int temp = _iMoveDistance;
                         CombatManager.CombatTile test;
                         do
                         {
@@ -484,6 +497,11 @@ namespace RiverHollow.Actors.CombatStuff
         {
             switch (_actionTags[_currentActionTag])
             {
+                case "Escape":
+                    {
+                        CombatManager.EndCombatEscape();
+                        break;
+                    }
                 case "UserMove":
                     {
                         GUISprite sprite = SkillUser.GetSprite();

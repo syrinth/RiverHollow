@@ -235,7 +235,7 @@ namespace RiverHollow.GUIObjects
                     position.Y += focus.Height + spacing;
                     break;
                 case SideEnum.Left:
-                    position.X -= this.Width + spacing;
+                    position.X -= (this.Width + spacing);
                     position.Y = this.Position().Y;
                     break;
                 case SideEnum.Right:
@@ -244,7 +244,7 @@ namespace RiverHollow.GUIObjects
                     break;
                 case SideEnum.Top:
                     position.X = this.Position().X;
-                    position.Y -= this.Height + spacing;
+                    position.Y -= (this.Height + spacing);
                     break;
             }
             this.Position(position);

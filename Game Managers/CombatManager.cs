@@ -234,6 +234,13 @@ namespace RiverHollow.Game_Managers
             GoToWorldMap();
         }
 
+        public static void EndCombatEscape()
+        {
+            GUIManager.FadeOut();
+            _mob.Stun();
+            GoToWorldMap();
+        }
+
         private static void SetPhaseForTurn()
         {
             if (_listMonsters.Contains(ActiveCharacter)) {
@@ -480,6 +487,7 @@ namespace RiverHollow.Game_Managers
 
             return rv;
         }
+
         public static CombatTile GetBottom(CombatTile t)
         {
             CombatTile rv = null;

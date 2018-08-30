@@ -93,6 +93,7 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\items");
             AddTexture(Content, @"Textures\AbilityAnimations");
             AddTexture(Content, @"Textures\texMachines");
+            AddTexture(Content, @"Textures\texCmbtActions");
         }
 
         public static void LoadFont(ContentManager Content)

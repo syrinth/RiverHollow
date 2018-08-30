@@ -197,6 +197,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         {
             base.Position(value);
             if (_gItem != null) { _gItem.Position(value); }
+            if(_gTextNum != null) { _gTextNum.AnchorToInnerSide(this, SideEnum.BottomRight, 10); }
             _gSelected.Position(value);
         }
 
