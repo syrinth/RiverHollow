@@ -704,7 +704,11 @@ namespace RiverHollow.Tile_Engine
                     int yVal = (int)(modifier > 0 ? newRectangleX.Bottom : newRectangleX.Top) + modifier;
 
                     dir.Y += CheckNudgeAllowed(modifier, xVal, yVal, map);
-                }             
+                }
+                if (dir.X != 0 && dir.Y != 0 && r.Intersects(newRectangleX) && r.Intersects(newRectangleY))
+                {
+                    dir.X = 0;
+                }
             }
 
             return rv;
@@ -770,14 +774,14 @@ namespace RiverHollow.Tile_Engine
             }
             else if (centerDelta > 0)
             {
-                RHTile testTile = _tileArray[(int)(varCol + (v.Equals("Col") ? 1 : 0)), (int)(varRow + (v.Equals("Row") ? 1 : 0))];
+                RHTile testTile = GetTile((int)(varCol + (v.Equals("Col") ? 1 : 0)), (int)(varRow + (v.Equals("Row") ? 1 : 0)));
                 if (testTile != null && testTile.Passable()) {
                     rv = 1;
                 }
             }
             else if (centerDelta < 0)
             {
-                RHTile testTile = _tileArray[(int)(varCol - (v.Equals("Col") ? 1 : 0)), (int)(varRow + (v.Equals("Row") ? 1 : 0))];
+                RHTile testTile = GetTile((int)(varCol - (v.Equals("Col") ? 1 : 0)), (int)(varRow + (v.Equals("Row") ? 1 : 0)));
                 if (testTile != null && testTile.Passable()) { rv = -1; }
             }
 
