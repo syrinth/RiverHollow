@@ -719,7 +719,9 @@ namespace RiverHollow.Tile_Engine
         private float CheckNudgeAllowed(float modifier, Point first, Point second, string map)
         {
             float rv = 0;
-            if (MapManager.Maps[map].GetTile(Util.GetGridCoords(first)).Passable() && MapManager.Maps[map].GetTile(Util.GetGridCoords(second)).Passable())
+            RHTile firstTile = MapManager.Maps[map].GetTile(Util.GetGridCoords(first));
+            RHTile secondTile = MapManager.Maps[map].GetTile(Util.GetGridCoords(second));
+            if (firstTile != null && firstTile.Passable() && secondTile != null && secondTile.Passable())
             {
                 rv = modifier;
             }

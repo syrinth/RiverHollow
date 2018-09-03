@@ -685,11 +685,11 @@ namespace RiverHollow.Game_Managers
             public void SetCombatant(CombatActor c)
             {
                 _character = c;
-                if (c != null)
+                if (_character != null)
                 {
-                    if (c.Tile != null)
+                    if (_character.Tile != null)
                     {
-                        c.Tile.SetCombatant(null);
+                        _character.Tile.SetCombatant(null);
                     }
                     if(_character.Tile != null) {
                         foreach (CombatTile tile in GetAdjacent(_character.Tile))
@@ -700,7 +700,18 @@ namespace RiverHollow.Game_Managers
                     _character.Tile = this;
                     CheckForProtected(this);
                 }
-                _gTile.SyncGUIObjects(c != null);
+
+                _gTile.SyncGUIObjects(_character != null);
+                if (_character != null)
+                {
+                    foreach (KeyValuePair<ConditionEnum, bool> kvp in _character.DiConditions)
+                    {
+                        if (kvp.Value)
+                        {
+                            GUITile.ChangeCondition(kvp.Key, TargetEnum.Enemy);
+                        }
+                    }
+                }
             }
             public void SetSummon(Summon s)
             {

@@ -49,6 +49,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             Height = 16;
             Width = 200;
+
+            SetColor();
         }
 
         public GUIStatDisplay(DisplayEnum what, CombatActor c, int width)
@@ -72,6 +74,32 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             Height = 16;
             Width = width;
+
+            SetColor();
+        }
+
+        public void SetColor()
+        {
+            Color c = Color.White;
+            if (_toDisplay.Equals(DisplayEnum.Energy))
+            {
+                c = Color.LightGreen;
+            }
+            else if (_toDisplay.Equals(DisplayEnum.Health))
+            {
+                c = Color.Red;
+            }
+            else if (_toDisplay.Equals(DisplayEnum.Mana))
+            {
+                c = Color.LightBlue;
+            }
+
+            _gFillLeft.SetColor(c);
+            _gFillMid.SetColor(c);
+            _gFillRight.SetColor(c);
+            _gLeft.SetColor(c);
+            _gMid.SetColor(c);
+            _gRight.SetColor(c);
         }
 
         public void PositionBars()
@@ -84,14 +112,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override void Update(GameTime gameTime)
         {
-            if (_toDisplay == DisplayEnum.Energy)
-            {
-                _percentage = (PlayerManager.Stamina / (float)PlayerManager.MaxStamina);
-            }
-            else
-            {
-                _percentage = ((float)_character.CurrentHP / (float)_character.MaxHP);
-            }
+            if (_toDisplay == DisplayEnum.Energy) { _percentage = (PlayerManager.Stamina / (float)PlayerManager.MaxStamina); }
+            else if (_toDisplay == DisplayEnum.Health) { _percentage = ((float)_character.CurrentHP / (float)_character.MaxHP); }
+            else if (_toDisplay == DisplayEnum.Mana) { _percentage = ((float)_character.CurrentMP / (float)_character.MaxMP); }
             base.Update(gameTime);
         }
 
@@ -110,7 +133,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 string text = string.Empty;
 
                 if (_toDisplay == DisplayEnum.Energy) { text = string.Format("{0}/{1}", PlayerManager.Stamina, PlayerManager.MaxStamina); }
-                else { text = string.Format("{0}/{1}", _character.CurrentHP, _character.MaxHP); }
+                else if (_toDisplay == DisplayEnum.Health) { text = string.Format("{0}/{1}", _character.CurrentHP, _character.MaxHP); }
+                else if (_toDisplay == DisplayEnum.Mana) { text = string.Format("{0}/{1}", _character.CurrentMP, _character.MaxMP); }
 
                 _gText.SetText(text);
                 _gText.AlignToObject(_gMid, SideEnum.Center);
