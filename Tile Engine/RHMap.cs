@@ -687,11 +687,11 @@ namespace RiverHollow.Tile_Engine
                     if (initY > 0) { dir.Y -= Math.Min((newRectangleY.Bottom - r.Top + 1), dir.Y); }
                     else if (initY < 0) { dir.Y += Math.Max((r.Bottom - newRectangleY.Top + 1), -dir.Y); }
 
+                    //Modifier is to determine if the nudge is positive or negative
                     int modifier = (int)CheckToNudge(newRectangleY.Center.X, r.Center.X, coords.X, coords.Y, "Col");
-                    int yVal = dir.Y > 0 ? newRectangleY.Bottom : newRectangleY.Top;
-                    int xVal = (int)(modifier > 0 ? newRectangleX.Right : newRectangleX.Left) + modifier;
+                    int xVal = (int)(modifier > 0 ? newRectangleX.Right : newRectangleX.Left) + modifier;               //Constructs the new rectangle based on the mod
 
-                    dir.X += CheckNudgeAllowed(modifier, xVal, yVal, map);
+                    dir.X += CheckNudgeAllowed(modifier, new Point(xVal, newRectangleY.Top), new Point(xVal, newRectangleY.Bottom), map);
                 }
                 if (dir.X != 0 && r.Intersects(newRectangleX))
                 {
@@ -699,12 +699,15 @@ namespace RiverHollow.Tile_Engine
                     if (initX > 0) { dir.X -= Math.Min((newRectangleX.Right - r.Left + 1), dir.X); }
                     else if (initX < 0) { dir.X += Math.Max((r.Right - newRectangleX.Left + 1), -dir.X); }
 
+                    //Modifier is to determine if the nudge is positive or negative
                     int modifier = (int)CheckToNudge(newRectangleY.Center.Y, r.Center.Y, coords.X, coords.Y, "Row");
-                    int xVal = dir.X > 0 ? newRectangleY.Right : newRectangleY.Left;
-                    int yVal = (int)(modifier > 0 ? newRectangleX.Bottom : newRectangleX.Top) + modifier;
+                    int yVal = (int)(modifier > 0 ? newRectangleX.Bottom : newRectangleX.Top) + modifier;               //Constructs the new rectangle based on the mod
 
-                    dir.Y += CheckNudgeAllowed(modifier, xVal, yVal, map);
+                    dir.Y += CheckNudgeAllowed(modifier, new Point(newRectangleY.Left, yVal), new Point(newRectangleY.Right, yVal), map);
                 }
+
+                //Because of diagonal movement, it's possible to have no issue on either the x axis or y axis but have a collision
+                //diagonal to the actor. In this case, just mnull out the x movement.
                 if (dir.X != 0 && dir.Y != 0 && r.Intersects(newRectangleX) && r.Intersects(newRectangleY))
                 {
                     dir.X = 0;
@@ -713,11 +716,10 @@ namespace RiverHollow.Tile_Engine
 
             return rv;
         }
-        private float CheckNudgeAllowed(float modifier, int xVal, int yVal, string map)
+        private float CheckNudgeAllowed(float modifier, Point first, Point second, string map)
         {
             float rv = 0;
-            Vector2 coords = Util.GetGridCoords(new Point(xVal, yVal));
-            if (MapManager.Maps[map].GetTile(coords).Passable())
+            if (MapManager.Maps[map].GetTile(Util.GetGridCoords(first)).Passable() && MapManager.Maps[map].GetTile(Util.GetGridCoords(second)).Passable())
             {
                 rv = modifier;
             }
