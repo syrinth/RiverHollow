@@ -18,7 +18,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
     public class GUIItemBox : GUIImage
     {
-        static Rectangle RECT_IMG = new Rectangle(288, 32, 32, 32);
+        public static Rectangle RECT_IMG = new Rectangle(288, 32, 32, 32);
         static Rectangle RECT_SELECT_IMG = new Rectangle(288, 0, 32, 32);
         private Item _item;
         public Item Item => _item;

@@ -6,7 +6,7 @@
     <Item>
       <!--Wizard-->
       <Key>1</Key>
-      <Value>[Weapon:Staff][Armor:Cloth][Dmg:5][Def:1][Hp:3][Magic:5][Spd:1][Ability:1-2-3-4-50-5][Spell:101-103-101-103-101-103-101-103-101-103]</Value>
+      <Value>[Weapon:Staff][Armor:Cloth][Dmg:5][Def:1][Hp:3][Magic:5][Spd:1][Ability:1-2-3-50-4-5][Spell:101-103]</Value>
     </Item>
     <Item>
       <!--Healer-->

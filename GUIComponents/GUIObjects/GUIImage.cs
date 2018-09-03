@@ -53,7 +53,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             SetScale((int)x);
         }
-        public void SetScale(int x)
+        public virtual void SetScale(int x)
         {
             Width = Width / _iScale;
             Height = Height / _iScale;

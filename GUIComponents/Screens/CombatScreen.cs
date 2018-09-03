@@ -214,6 +214,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     break;
 
                 case CombatManager.PhaseEnum.DisplayAttack:
+                    _gActionSelect.SetCharacter(null);
                     if (!string.IsNullOrEmpty(CombatManager.Text))
                     {
                         if (_gtwTextWindow == null)
@@ -770,11 +771,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
     {
         ActionMenu _actionMenu;
         CombatActor _actor;
-        ActionButton _selectedAction;
+        ActionButton _gSelectedAction;
+        ActionButton _gSelectedMenu;
         List<ActionButton> _liActionButtons;
 
-        public MenuAction SelectedAction => _selectedAction != null ? _selectedAction.Action : null;
-        public Item SelectedItem => (_actionMenu != null && _actionMenu.SelectedItem != null) ? _actionMenu.SelectedItem.Item : null;
+        public MenuAction SelectedAction => _gSelectedAction != null ? _gSelectedAction.Action : null;
+        public Item SelectedItem => (_actionMenu != null && _actionMenu.SelectedAction.Item != null) ? _actionMenu.SelectedAction.Item : null;
 
         public ActionBar()
         {
@@ -785,8 +787,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             foreach (ActionButton ab in _liActionButtons)
             {
-                ab.Draw(spriteBatch);
+                if (ab != _gSelectedAction && ab != _gSelectedMenu)
+                {
+                    ab.Draw(spriteBatch);
+                }
             }
+
+            if (_gSelectedMenu != null) { _gSelectedMenu.Draw(spriteBatch); }
+            if (_gSelectedAction != null) { _gSelectedAction.Draw(spriteBatch); }
 
             if(_actionMenu != null) { _actionMenu.Draw(spriteBatch); }
         }
@@ -809,7 +817,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     }
                     else if (_actionMenu.ShowItems())
                     {
-                        CombatManager.ProcessItemChoice((CombatItem)_actionMenu.SelectedItem.Item);
+                        CombatManager.ProcessItemChoice((CombatItem)_actionMenu.SelectedAction.Item);
                     }
                 }
             }
@@ -832,12 +840,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     {
                         if (a.IsMenu() && a.IsCastSpell() && !CombatManager.ActiveCharacter.Silenced())
                         {
-                            _actionMenu = new ActionMenu(ActionMenu.DisplayEnum.Spells, CombatManager.ActiveCharacter.SpellList);
+                            _gSelectedMenu = ab;
+                            _actionMenu = new ActionMenu(CombatManager.ActiveCharacter.SpellList);
                             _actionMenu.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX, 10);
                         }
                         else if (a.IsMenu() && a.IsUseItem())
                         {
-                            _actionMenu = new ActionMenu(ActionMenu.DisplayEnum.Items, InventoryManager.GetPlayerCombatItems());
+                            _gSelectedMenu = ab;
+                            _actionMenu = new ActionMenu(InventoryManager.GetPlayerCombatItems());
                             _actionMenu.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX, 10);
                         }
                     }
@@ -858,18 +868,22 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 if (_actionMenu.ProcessHover(mouse))
                 {
                     rv = true;
-                    _selectedAction = _actionMenu.SelectedAction;
+                    _gSelectedAction = _actionMenu.SelectedAction;
                 }
             }
-
-            for (int i = 0; i < _liActionButtons.Count; i++)
+            else
             {
-                ActionButton ab = _liActionButtons[i];
-                if (ab.Contains(mouse))
+                for (int i = 0; i < _liActionButtons.Count; i++)
                 {
-                    rv = true;
-                    _selectedAction = ab;
-                    break;
+                    ActionButton ab = _liActionButtons[i];
+                    if (ab.Contains(mouse))
+                    {
+                        rv = true;
+                        if (_gSelectedAction != null) { _gSelectedAction.Unselect(); }
+                        _gSelectedAction = ab;
+                        _gSelectedAction.Select();
+                        break;
+                    }
                 }
             }
 
@@ -880,26 +894,41 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             if (_actionMenu != null)
             {
-                _actionMenu = null;
-                _selectedAction = _liActionButtons[0];
+                if (CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseTarget)
+                {
+                    _gSelectedAction = (_gSelectedMenu != null) ? _gSelectedMenu : _liActionButtons[0];
+                }
+                else
+                {
+                    _actionMenu = null;
+                    _gSelectedAction = (_gSelectedMenu != null) ? _gSelectedMenu : _liActionButtons[0];
+                }
+                
                 ProcessHover(GraphicCursor.Position.ToPoint());
             }
         }
 
         public void SetCharacter(CombatActor activeCharacter)
         {
+            _actionMenu = null;
+            _gSelectedMenu = null;
+            _gSelectedAction = null;
+
             _actor = activeCharacter;
             _liActionButtons.Clear();
 
-            foreach (MenuAction ca in _actor.AbilityList)
+            if (_actor != null)
             {
-                _liActionButtons.Add(new ActionButton(ca));
+                foreach (MenuAction ca in _actor.AbilityList)
+                {
+                    _liActionButtons.Add(new ActionButton(ca));
+                }
+
+                _gSelectedAction = _liActionButtons[0];
+
+                Width = _liActionButtons.Count * _liActionButtons[0].Width;
+                Height = _liActionButtons[0].Height;
             }
-
-            _selectedAction = _liActionButtons[0];
-
-            Width = _liActionButtons.Count * _liActionButtons[0].Width;
-            Height = _liActionButtons[0].Height;
         }
 
         public override void Position(Vector2 value)
@@ -919,95 +948,82 @@ namespace RiverHollow.Game_Managers.GUIObjects
             public enum DisplayEnum { Spells, Items };
             private DisplayEnum _display;
 
-            List<GUIItemBox> _liItems;
-            List<ActionButton> _liSpells;
+            List<ActionButton> _liActions;
 
             ActionButton _gSelectedAction;
             public ActionButton SelectedAction => _gSelectedAction;
 
-            GUIItemBox _gSelectedItem;
-            public GUIItemBox SelectedItem => _gSelectedItem;
-
-            public ActionMenu(DisplayEnum displayType, List<CombatAction> spellList)
+            public ActionMenu(List<CombatAction> spellList)
             {
-                _display = displayType;
-                _liSpells = new List<ActionButton>();
+                _display = DisplayEnum.Spells;
+                _liActions = new List<ActionButton>();
 
                 for (int i = 0; i < spellList.Count; i++)
                 {
-                    _liSpells.Add(new ActionButton(spellList[i]));
+                    _liActions.Add(new ActionButton(spellList[i]));
                 }
 
-                Width = Math.Min(_liSpells.Count, 5) * _liSpells[0].Width;
+                Width = Math.Min(_liActions.Count, 5) * _liActions[0].Width;
                 int numRows = 0;
-                int temp = _liSpells.Count;
+                int temp = _liActions.Count;
                 do
                 {
                     numRows++;
                     temp -= 5;
                 } while (temp > 0);
-                Height = numRows * _liSpells[0].Height;
+                Height = numRows * _liActions[0].Height;
 
                 Position(Position());
             }
 
-            public ActionMenu(DisplayEnum displayType, List<CombatItem> itemList)
+            public ActionMenu(List<CombatItem> itemList)
             {
-                _display = displayType;
-                _liItems = new List<GUIItemBox>();
+                _display = DisplayEnum.Items;
+                _liActions = new List<ActionButton>();
 
                 for (int i = 0; i < itemList.Count; i++)
                 {
-                    _liItems.Add(new GUIItemBox(itemList[i]));
+                    _liActions.Add(new ActionButton(itemList[i]));
                 }
 
-                Width = Math.Min(_liItems.Count, 5) * _liItems[0].Width;
+                Width = Math.Min(_liActions.Count, 5) * _liActions[0].Width;
                 int numRows = 0;
-                int temp = _liItems.Count;
+                int temp = _liActions.Count;
                 do
                 {
                     numRows++;
                     temp -= 5;
                 } while (temp > 0);
-                Height = numRows * _liItems[0].Height;
+                Height = numRows * _liActions[0].Height;
 
                 Position(Position());
             }
 
             public override void Draw(SpriteBatch spriteBatch)
             {
-                if (_liSpells != null)
+                if (_liActions != null)
                 {
-                    foreach (ActionButton ab in _liSpells)
+                    foreach (ActionButton ab in _liActions)
                     {
-                        ab.Draw(spriteBatch);
+                        if (ab != SelectedAction)
+                        {
+                            ab.Draw(spriteBatch);
+                        }
                     }
-                }
-                if (_liItems != null)
-                {
-                    foreach (GUIItemBox ib in _liItems)
-                    {
-                        ib.Draw(spriteBatch);
-                    }
+
+                    if (SelectedAction != null) { SelectedAction.Draw(spriteBatch); }
                 }
             }
 
             public override bool ProcessLeftButtonClick(Point mouse)
             {
                 bool rv = false;
-                if (_liSpells != null)
+                if (_liActions != null)
                 {
-                    for (int i = 0; i < _liSpells.Count; i++)
+                    for (int i = 0; i < _liActions.Count; i++)
                     {
-                        return _liSpells[i].Contains(mouse);
-                    }
-                }
-
-                if (_liItems != null)
-                {
-                    for (int i = 0; i < _liItems.Count; i++)
-                    {
-                        return _liItems[i].Contains(mouse);
+                        rv = _liActions[i].Contains(mouse);
+                        if (rv) { break; }
                     }
                 }
 
@@ -1018,29 +1034,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 bool rv = false;
 
-                if (_liSpells != null)
+                if (_liActions != null)
                 {
-                    for (int i = 0; i < _liSpells.Count; i++)
+                    for (int i = 0; i < _liActions.Count; i++)
                     {
-                        ActionButton ab = _liSpells[i];
+                        ActionButton ab = _liActions[i];
                         if (ab.Contains(mouse))
                         {
                             rv = true;
+                            if (_gSelectedAction != null) { _gSelectedAction.Unselect(); }
                             _gSelectedAction = ab;
-                            break;
-                        }
-                    }
-                }
-
-                if (_liItems != null)
-                {
-                    for (int i = 0; i < _liItems.Count; i++)
-                    {
-                        GUIItemBox ib = _liItems[i];
-                        if (ib.Contains(mouse))
-                        {
-                            rv = true;
-                            _gSelectedItem = ib;
+                            _gSelectedAction.Select();
                             break;
                         }
                     }
@@ -1052,37 +1056,21 @@ namespace RiverHollow.Game_Managers.GUIObjects
             public override void Position(Vector2 value)
             {
                 base.Position(value);
-                if (_liSpells != null)
+                if (_liActions != null)
                 {
-                    _liSpells[0].AnchorToInnerSide(this, SideEnum.BottomLeft);
-                    for (int i = 1; i < _liSpells.Count; i++)
+                    _liActions[0].AnchorToInnerSide(this, SideEnum.BottomLeft);
+                    for (int i = 1; i < _liActions.Count; i++)
                     {
                         if (i % 5 == 0)
                         {
-                            _liSpells[i].AnchorAndAlignToObject(_liSpells[i - 5], SideEnum.Top, SideEnum.Left);
+                            _liActions[i].AnchorAndAlignToObject(_liActions[i - 5], SideEnum.Top, SideEnum.Left);
                         }
                         else
                         {
-                            _liSpells[i].AnchorAndAlignToObject(_liSpells[i - 1], SideEnum.Right, SideEnum.Bottom);
+                            _liActions[i].AnchorAndAlignToObject(_liActions[i - 1], SideEnum.Right, SideEnum.Bottom);
                         }
                     }
-                }
-
-                if (_liItems != null)
-                {
-                    _liItems[0].Position(value);
-                    for (int i = 1; i < _liItems.Count; i++)
-                    {
-                        if ((i + 1) % 5 == 0)
-                        {
-                            _liItems[i].AnchorAndAlignToObject(_liItems[i - 5], SideEnum.Top, SideEnum.Left);
-                        }
-                        else
-                        {
-                            _liItems[i].AnchorAndAlignToObject(_liItems[i - 1], SideEnum.Right, SideEnum.Bottom);
-                        }
-                    }
-                }
+                } 
             }
 
             public bool ShowItems() { return _display == DisplayEnum.Items; }
@@ -1093,12 +1081,74 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             MenuAction _action;
             public MenuAction Action => _action;
-            public string Name => _action.Name;
+
+            Item _item;
+            public Item Item => _item;
+
+            GUIImage _gItem;
 
             public ActionButton(MenuAction action) : base(new Rectangle((int)action.IconGrid.X * TileSize, (int)action.IconGrid.Y * TileSize, TileSize, TileSize), TileSize, TileSize, @"Textures\texCmbtActions")
             {
                 _action = action;
                 SetScale(CombatManager.CombatScale);
+            }
+
+            public ActionButton(Item i) : base(new Rectangle(288, 32, 32, 32), 16, 16, @"Textures\Dialog")
+            {
+                _item = i;
+                _gItem = new GUIImage(_item.SourceRectangle, Width, Height, _item.Texture);
+                SetScale(CombatManager.CombatScale);
+            }
+
+            public override void Draw(SpriteBatch spriteBatch)
+            {
+                base.Draw(spriteBatch);
+                if(_item != null) { _gItem.Draw(spriteBatch); }
+            }
+
+            public string GetName()
+            {
+                string rv = string.Empty;
+
+                if(_action != null) { rv = _action.Name; }
+                else if(_item != null) { rv = _item.Name; }
+
+                return rv;
+            }
+
+            public void Select()
+            {
+                int firstWidth = Width;
+                int firstHeight = Height;
+                SetScale(CombatManager.CombatScale + 1);
+
+                int diffWidth = Width - firstWidth;
+                int diffHeight = Height - firstHeight;
+
+                MoveBy(new Vector2(-diffWidth/2, -diffHeight/2));
+            }
+            public void Unselect()
+            {
+                int firstWidth = Width;
+                int firstHeight = Height;
+                SetScale(CombatManager.CombatScale);
+
+                int diffWidth = firstWidth - Width;
+                int diffHeight = firstHeight - Height;
+
+                MoveBy(new Vector2(diffWidth / 2, diffHeight / 2));
+            }
+
+            public override void Position(Vector2 value)
+            {
+                base.Position(value);
+                if (_gItem != null) { _gItem.Position(value); }
+            }
+
+            public override void SetScale(int x)
+            {
+                base.SetScale(x);
+                if (_gItem != null) { _gItem.SetScale(x); }
             }
         }
     }
