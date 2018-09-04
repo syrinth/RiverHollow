@@ -499,7 +499,11 @@ namespace RiverHollow.Actors.CombatStuff
             {
                 case "Escape":
                     {
-                        CombatManager.EndCombatEscape();
+                        int spd = CombatManager.ActiveCharacter.StatSpd;
+                        RHRandom r = new RHRandom();
+                        if (r.Next(1, 20) + spd/2 > 15){
+                            CombatManager.EndCombatEscape();
+                        }
                         break;
                     }
                 case "UserMove":
