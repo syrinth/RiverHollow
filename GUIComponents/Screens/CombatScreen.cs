@@ -26,13 +26,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUICmbtTile[,] _arrEnemies;
         GUITextWindow _gtwTextWindow;
         GUIStatDisplay _sdStamina;
-        GUIButton _btnTurnOrder;
         GUIText _gResults;
 
         List<GUIText> _liTurns;
         ActionSelectObject _gActionSelect;
 
-        bool _bTurns;
+        TurnOrderDisplay _gTurnOrder;
 
         public object UtilMapManager { get; private set; }
 
@@ -48,21 +47,18 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _sdStamina = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Energy);
             Controls.Add(_sdStamina);
 
-            _btnTurnOrder = new GUIButton("Turns", 128, 32, BtnTurnOrder);
-            _btnTurnOrder.AnchorToScreen(SideEnum.TopRight, 10);
-            Controls.Add(_btnTurnOrder);
-
             _gActionSelect = new ActionSelectObject();
 
             CombatManager.ConfigureAllies(ref _arrAllies);
             CombatManager.ConfigureEnemies(ref _arrEnemies);
+
+            _gTurnOrder = new TurnOrderDisplay();
+            _gTurnOrder.AnchorToScreen(SideEnum.Top);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-
-            _btnTurnOrder.ProcessLeftButtonClick(mouse);
 
             //If the current Phase is skill selection, allow the user to pick a skill for the currentCharacter
             switch (CombatManager.CurrentPhase)
@@ -106,7 +102,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         internal void CancelAction()
         {
-            RefreshTurnOrder();
             CombatManager.ClearSelectedTile();
             CombatManager.SelectedAction = null;
             _gActionSelect.CancelAction();
@@ -180,35 +175,29 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             base.Update(gameTime);
             CombatManager.Update(gameTime);
-            
-            //_cmbtMenu.Update(gameTime);
 
             switch (CombatManager.CurrentPhase)
             {
                 case CombatManager.PhaseEnum.EnemyTurn:
-                    //_cmbtMenu.NewTurn();
-                    RefreshTurnOrder();
+                    _gTurnOrder.CalculateTurnOrder();
                     CombatManager.SelectedAction.SetSkillTarget();
                     break;
 
                 case CombatManager.PhaseEnum.NewTurn:
-                    // _cmbtMenu.NewTurn();
                     if (!CombatManager.ActiveCharacter.IsMonster())
                     {
                         _gActionSelect.SetCharacter(CombatManager.ActiveCharacter);
                         _gActionSelect.AnchorToScreen(SideEnum.Bottom);
                     }
-                    RefreshTurnOrder();
+                    _gTurnOrder.CalculateTurnOrder();
                     CombatManager.SelectedAction = null;
                     CombatManager.CurrentPhase = CombatManager.PhaseEnum.SelectSkill;
                     break;
 
                 case CombatManager.PhaseEnum.SelectSkill:
-                    //_cmbtMenu.SelectSkill();
                     break;
 
                 case CombatManager.PhaseEnum.ChooseTarget:
-                    RefreshTurnOrder();
                     CombatManager.HandleKeyboardTargetting();
                     break;
 
@@ -332,7 +321,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 t.Draw(spriteBatch);
             }
-            
+
+            _gTurnOrder.Draw(spriteBatch);
         }
 
         private void Draw(SpriteBatch spriteBatch, bool drawCharacter)
@@ -351,34 +341,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 if (array != _arrEnemies) { array = _arrEnemies; }
                 else { loop = false; }
-            }
-        }
-
-        public void BtnTurnOrder()
-        {
-            _bTurns = !_bTurns;
-
-            if (_bTurns) { DisplayTurnOrder(); }
-            else { _liTurns.Clear(); }
-        }
-        private void RefreshTurnOrder()
-        {
-            if (_bTurns)
-            {
-                _liTurns.Clear();
-                DisplayTurnOrder();
-            }
-        }
-
-        private void DisplayTurnOrder()
-        {
-            List<string> turnOrder = CombatManager.CalculateTurnOrder();
-            for (int i = 0; i < turnOrder.Count; i++)
-            {
-                GUIText temp = new GUIText(i.ToString() + "-" + turnOrder[i]);
-                _liTurns.Add(temp);
-                if (i == 0) { temp.AnchorAndAlignToObject(_btnTurnOrder, SideEnum.Bottom, SideEnum.Left); }
-                else { temp.AnchorAndAlignToObject(_liTurns[i - 1], SideEnum.Bottom, SideEnum.Left); }
             }
         }
     }
@@ -753,279 +715,93 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gActionBar.CancelAction();
             SyncText();
         }
-    }
-    
-    public class ActionBar : GUIObject
-    {
-        ActionMenu _actionMenu;
-        CombatActor _actor;
-        ActionButton _gSelectedAction;
-        ActionButton _gSelectedMenu;
-        List<ActionButton> _liActionButtons;
 
-        public MenuAction SelectedAction => _gSelectedAction != null ? _gSelectedAction.Action : null;
-        public Item SelectedItem => (_actionMenu != null && _actionMenu.SelectedAction.Item != null) ? _actionMenu.SelectedAction.Item : null;
-
-        public ActionBar()
+        public class ActionBar : GUIObject
         {
-            _liActionButtons = new List<ActionButton>();
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            foreach (ActionButton ab in _liActionButtons)
-            {
-                if (ab != _gSelectedAction && ab != _gSelectedMenu)
-                {
-                    ab.Draw(spriteBatch);
-                }
-            }
-
-            if (_gSelectedMenu != null) { _gSelectedMenu.Draw(spriteBatch); }
-            if (_gSelectedAction != null) { _gSelectedAction.Draw(spriteBatch); }
-
-            if(_actionMenu != null) { _actionMenu.Draw(spriteBatch); }
-        }
-
-        public override bool ProcessLeftButtonClick(Point mouse)
-        {
-            bool rv = false;
-            if (_actionMenu != null)
-            {
-                if (_actionMenu.ProcessLeftButtonClick(mouse))
-                {
-                    rv = true;
-                    if (_actionMenu.ShowSpells())
-                    {
-                        MenuAction a = _actionMenu.SelectedAction.Action;
-                        if (CombatManager.ActiveCharacter.CanCast(((CombatAction)a).MPCost))
-                        {
-                            CombatManager.ProcessActionChoice((CombatAction)a);
-                        }
-                    }
-                    else if (_actionMenu.ShowItems())
-                    {
-                        CombatManager.ProcessItemChoice((CombatItem)_actionMenu.SelectedAction.Item);
-                    }
-                }
-            }
-
-            for (int i = 0; i < _liActionButtons.Count; i++)
-            {
-                ActionButton ab = _liActionButtons[i];
-                if (ab.ProcessLeftButtonClick(mouse))
-                {
-                    rv = true;
-                    MenuAction a = ab.Action;
-                    if (!a.IsMenu())
-                    {
-                        if (CombatManager.ActiveCharacter.CanCast(((CombatAction)a).MPCost))
-                        {
-                            CombatManager.ProcessActionChoice((CombatAction)a);
-                        }
-                    }
-                    else
-                    {
-                        if (a.IsMenu() && a.IsCastSpell() && !CombatManager.ActiveCharacter.Silenced())
-                        {
-                            _gSelectedMenu = ab;
-                            _actionMenu = new ActionMenu(CombatManager.ActiveCharacter.SpellList);
-                            _actionMenu.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX, 10);
-                        }
-                        else if (a.IsMenu() && a.IsUseItem() && InventoryManager.GetPlayerCombatItems().Count > 0)
-                        {
-                            _gSelectedMenu = ab;
-                            _actionMenu = new ActionMenu(InventoryManager.GetPlayerCombatItems());
-                            _actionMenu.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX, 10);
-                        }
-                    }
-
-                    break;
-                }
-            }
-
-            return rv;
-        }
-
-        public bool ProcessHover(Point mouse)
-        {
-            bool rv = false;
-
-            if (_actionMenu != null)
-            {
-                if (_actionMenu.ProcessHover(mouse))
-                {
-                    rv = true;
-                    _gSelectedAction = _actionMenu.SelectedAction;
-                }
-            }
-            else
-            {
-                for (int i = 0; i < _liActionButtons.Count; i++)
-                {
-                    ActionButton ab = _liActionButtons[i];
-                    if (ab.Contains(mouse))
-                    {
-                        rv = true;
-                        if (_gSelectedAction != null) { _gSelectedAction.Unselect(); }
-                        _gSelectedAction = ab;
-                        _gSelectedAction.Select();
-                        break;
-                    }
-                }
-            }
-
-            return rv;
-        }
-
-        public void CancelAction()
-        {
-            if (_actionMenu != null)
-            {
-                if (CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseTarget)
-                {
-                    _gSelectedAction = (_gSelectedMenu != null) ? _gSelectedMenu : _liActionButtons[0];
-                }
-                else
-                {
-                    _actionMenu = null;
-                    _gSelectedAction = (_gSelectedMenu != null) ? _gSelectedMenu : _liActionButtons[0];
-                }
-                
-                ProcessHover(GraphicCursor.Position.ToPoint());
-            }
-        }
-
-        public void SetCharacter(CombatActor activeCharacter)
-        {
-            _actionMenu = null;
-            _gSelectedMenu = null;
-            _gSelectedAction = null;
-
-            _actor = activeCharacter;
-            _liActionButtons.Clear();
-
-            if (_actor != null)
-            {
-                foreach (MenuAction ca in _actor.AbilityList)
-                {
-                    ActionButton ab = new ActionButton(ca);
-                    _liActionButtons.Add(ab);
-
-                    if(ab.Action.IsMenu() && ab.Action.IsCastSpell() && CombatManager.ActiveCharacter.Silenced())
-                    {
-                        ab.Enable(false);
-                    }
-                    if (ab.Action.IsMenu() && ab.Action.IsUseItem() && InventoryManager.GetPlayerCombatItems().Count == 0)
-                    {
-                        ab.Enable(false);
-                    }
-                }
-
-                _gSelectedAction = _liActionButtons[0];
-
-                Width = _liActionButtons.Count * _liActionButtons[0].Width;
-                Height = _liActionButtons[0].Height;
-            }
-        }
-
-        public override void Position(Vector2 value)
-        {
-            base.Position(value);
-            _liActionButtons[0].Position(value);
-            for(int i=1; i< _liActionButtons.Count; i++)
-            {
-                _liActionButtons[i].AnchorAndAlignToObject(_liActionButtons[i - 1], SideEnum.Right, SideEnum.CenterY);
-            }
-
-            if (_actionMenu != null) { _actionMenu.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX, 10); }
-        }
-
-        private class ActionMenu : GUIObject
-        {
-            public enum DisplayEnum { Spells, Items };
-            private DisplayEnum _display;
-
-            List<ActionButton> _liActions;
-
+            ActionMenu _actionMenu;
+            CombatActor _actor;
             ActionButton _gSelectedAction;
-            public ActionButton SelectedAction => _gSelectedAction;
+            ActionButton _gSelectedMenu;
+            List<ActionButton> _liActionButtons;
 
-            public ActionMenu(List<CombatAction> spellList)
+            public MenuAction SelectedAction => _gSelectedAction != null ? _gSelectedAction.Action : null;
+            public Item SelectedItem => (_actionMenu != null && _actionMenu.SelectedAction.Item != null) ? _actionMenu.SelectedAction.Item : null;
+
+            public ActionBar()
             {
-                _display = DisplayEnum.Spells;
-                _liActions = new List<ActionButton>();
-
-                for (int i = 0; i < spellList.Count; i++)
-                {
-                    _liActions.Add(new ActionButton(spellList[i]));
-                    if(spellList[i].MPCost > CombatManager.ActiveCharacter.CurrentMP)
-                    {
-                        _liActions[i].Enable(false);
-                    }
-                }
-
-                Width = Math.Min(_liActions.Count, 5) * _liActions[0].Width;
-                int numRows = 0;
-                int temp = _liActions.Count;
-                do
-                {
-                    numRows++;
-                    temp -= 5;
-                } while (temp > 0);
-                Height = numRows * _liActions[0].Height;
-
-                Position(Position());
-            }
-
-            public ActionMenu(List<CombatItem> itemList)
-            {
-                _display = DisplayEnum.Items;
-                _liActions = new List<ActionButton>();
-
-                for (int i = 0; i < itemList.Count; i++)
-                {
-                    _liActions.Add(new ActionButton(itemList[i]));
-                }
-
-                Width = Math.Min(_liActions.Count, 5) * _liActions[0].Width;
-                int numRows = 0;
-                int temp = _liActions.Count;
-                do
-                {
-                    numRows++;
-                    temp -= 5;
-                } while (temp > 0);
-                Height = numRows * _liActions[0].Height;
-
-                Position(Position());
+                _liActionButtons = new List<ActionButton>();
             }
 
             public override void Draw(SpriteBatch spriteBatch)
             {
-                if (_liActions != null)
+                foreach (ActionButton ab in _liActionButtons)
                 {
-                    foreach (ActionButton ab in _liActions)
+                    if (ab != _gSelectedAction && ab != _gSelectedMenu)
                     {
-                        if (ab != SelectedAction)
-                        {
-                            ab.Draw(spriteBatch);
-                        }
+                        ab.Draw(spriteBatch);
                     }
-
-                    if (SelectedAction != null) { SelectedAction.Draw(spriteBatch); }
                 }
+
+                if (_gSelectedMenu != null) { _gSelectedMenu.Draw(spriteBatch); }
+                if (_gSelectedAction != null) { _gSelectedAction.Draw(spriteBatch); }
+
+                if (_actionMenu != null) { _actionMenu.Draw(spriteBatch); }
             }
 
             public override bool ProcessLeftButtonClick(Point mouse)
             {
                 bool rv = false;
-                if (_liActions != null)
+                if (_actionMenu != null)
                 {
-                    for (int i = 0; i < _liActions.Count; i++)
+                    if (_actionMenu.ProcessLeftButtonClick(mouse))
                     {
-                        rv = _liActions[i].Contains(mouse);
-                        if (rv) { break; }
+                        rv = true;
+                        if (_actionMenu.ShowSpells())
+                        {
+                            MenuAction a = _actionMenu.SelectedAction.Action;
+                            if (CombatManager.ActiveCharacter.CanCast(((CombatAction)a).MPCost))
+                            {
+                                CombatManager.ProcessActionChoice((CombatAction)a);
+                            }
+                        }
+                        else if (_actionMenu.ShowItems())
+                        {
+                            CombatManager.ProcessItemChoice((CombatItem)_actionMenu.SelectedAction.Item);
+                        }
+                    }
+                }
+
+                for (int i = 0; i < _liActionButtons.Count; i++)
+                {
+                    ActionButton ab = _liActionButtons[i];
+                    if (ab.ProcessLeftButtonClick(mouse))
+                    {
+                        rv = true;
+                        MenuAction a = ab.Action;
+                        if (!a.IsMenu())
+                        {
+                            if (CombatManager.ActiveCharacter.CanCast(((CombatAction)a).MPCost))
+                            {
+                                CombatManager.ProcessActionChoice((CombatAction)a);
+                            }
+                        }
+                        else
+                        {
+                            if (a.IsMenu() && a.IsCastSpell() && !CombatManager.ActiveCharacter.Silenced())
+                            {
+                                _gSelectedMenu = ab;
+                                _actionMenu = new ActionMenu(CombatManager.ActiveCharacter.SpellList);
+                                _actionMenu.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX, 10);
+                            }
+                            else if (a.IsMenu() && a.IsUseItem() && InventoryManager.GetPlayerCombatItems().Count > 0)
+                            {
+                                _gSelectedMenu = ab;
+                                _actionMenu = new ActionMenu(InventoryManager.GetPlayerCombatItems());
+                                _actionMenu.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX, 10);
+                            }
+                        }
+
+                        break;
                     }
                 }
 
@@ -1036,11 +812,19 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 bool rv = false;
 
-                if (_liActions != null)
+                if (_actionMenu != null)
                 {
-                    for (int i = 0; i < _liActions.Count; i++)
+                    if (_actionMenu.ProcessHover(mouse))
                     {
-                        ActionButton ab = _liActions[i];
+                        rv = true;
+                        _gSelectedAction = _actionMenu.SelectedAction;
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < _liActionButtons.Count; i++)
+                    {
+                        ActionButton ab = _liActionButtons[i];
                         if (ab.Contains(mouse))
                         {
                             rv = true;
@@ -1055,102 +839,384 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 return rv;
             }
 
+            public void CancelAction()
+            {
+                if (_actionMenu != null)
+                {
+                    if (CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseTarget)
+                    {
+                        _gSelectedAction = (_gSelectedMenu != null) ? _gSelectedMenu : _liActionButtons[0];
+                    }
+                    else
+                    {
+                        _actionMenu = null;
+                        _gSelectedAction = (_gSelectedMenu != null) ? _gSelectedMenu : _liActionButtons[0];
+                    }
+
+                    ProcessHover(GraphicCursor.Position.ToPoint());
+                }
+            }
+
+            public void SetCharacter(CombatActor activeCharacter)
+            {
+                _actionMenu = null;
+                _gSelectedMenu = null;
+                _gSelectedAction = null;
+
+                _actor = activeCharacter;
+                _liActionButtons.Clear();
+
+                if (_actor != null)
+                {
+                    foreach (MenuAction ca in _actor.AbilityList)
+                    {
+                        ActionButton ab = new ActionButton(ca);
+                        _liActionButtons.Add(ab);
+
+                        if (ab.Action.IsMenu() && ab.Action.IsCastSpell() && CombatManager.ActiveCharacter.Silenced())
+                        {
+                            ab.Enable(false);
+                        }
+                        if (ab.Action.IsMenu() && ab.Action.IsUseItem() && InventoryManager.GetPlayerCombatItems().Count == 0)
+                        {
+                            ab.Enable(false);
+                        }
+                    }
+
+                    _gSelectedAction = _liActionButtons[0];
+
+                    Width = _liActionButtons.Count * _liActionButtons[0].Width;
+                    Height = _liActionButtons[0].Height;
+                }
+            }
+
             public override void Position(Vector2 value)
             {
                 base.Position(value);
-                if (_liActions != null)
+                _liActionButtons[0].Position(value);
+                for (int i = 1; i < _liActionButtons.Count; i++)
                 {
-                    _liActions[0].AnchorToInnerSide(this, SideEnum.BottomLeft);
-                    for (int i = 1; i < _liActions.Count; i++)
+                    _liActionButtons[i].AnchorAndAlignToObject(_liActionButtons[i - 1], SideEnum.Right, SideEnum.CenterY);
+                }
+
+                if (_actionMenu != null) { _actionMenu.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX, 10); }
+            }
+
+            private class ActionMenu : GUIObject
+            {
+                public enum DisplayEnum { Spells, Items };
+                private DisplayEnum _display;
+
+                List<ActionButton> _liActions;
+
+                ActionButton _gSelectedAction;
+                public ActionButton SelectedAction => _gSelectedAction;
+
+                public ActionMenu(List<CombatAction> spellList)
+                {
+                    _display = DisplayEnum.Spells;
+                    _liActions = new List<ActionButton>();
+
+                    for (int i = 0; i < spellList.Count; i++)
                     {
-                        if (i % 5 == 0)
+                        _liActions.Add(new ActionButton(spellList[i]));
+                        if (spellList[i].MPCost > CombatManager.ActiveCharacter.CurrentMP)
                         {
-                            _liActions[i].AnchorAndAlignToObject(_liActions[i - 5], SideEnum.Top, SideEnum.Left);
-                        }
-                        else
-                        {
-                            _liActions[i].AnchorAndAlignToObject(_liActions[i - 1], SideEnum.Right, SideEnum.Bottom);
+                            _liActions[i].Enable(false);
                         }
                     }
-                } 
+
+                    Width = Math.Min(_liActions.Count, 5) * _liActions[0].Width;
+                    int numRows = 0;
+                    int temp = _liActions.Count;
+                    do
+                    {
+                        numRows++;
+                        temp -= 5;
+                    } while (temp > 0);
+                    Height = numRows * _liActions[0].Height;
+
+                    Position(Position());
+                }
+
+                public ActionMenu(List<CombatItem> itemList)
+                {
+                    _display = DisplayEnum.Items;
+                    _liActions = new List<ActionButton>();
+
+                    for (int i = 0; i < itemList.Count; i++)
+                    {
+                        _liActions.Add(new ActionButton(itemList[i]));
+                    }
+
+                    Width = Math.Min(_liActions.Count, 5) * _liActions[0].Width;
+                    int numRows = 0;
+                    int temp = _liActions.Count;
+                    do
+                    {
+                        numRows++;
+                        temp -= 5;
+                    } while (temp > 0);
+                    Height = numRows * _liActions[0].Height;
+
+                    Position(Position());
+                }
+
+                public override void Draw(SpriteBatch spriteBatch)
+                {
+                    if (_liActions != null)
+                    {
+                        foreach (ActionButton ab in _liActions)
+                        {
+                            if (ab != SelectedAction)
+                            {
+                                ab.Draw(spriteBatch);
+                            }
+                        }
+
+                        if (SelectedAction != null) { SelectedAction.Draw(spriteBatch); }
+                    }
+                }
+
+                public override bool ProcessLeftButtonClick(Point mouse)
+                {
+                    bool rv = false;
+                    if (_liActions != null)
+                    {
+                        for (int i = 0; i < _liActions.Count; i++)
+                        {
+                            rv = _liActions[i].Contains(mouse);
+                            if (rv) { break; }
+                        }
+                    }
+
+                    return rv;
+                }
+
+                public bool ProcessHover(Point mouse)
+                {
+                    bool rv = false;
+
+                    if (_liActions != null)
+                    {
+                        for (int i = 0; i < _liActions.Count; i++)
+                        {
+                            ActionButton ab = _liActions[i];
+                            if (ab.Contains(mouse))
+                            {
+                                rv = true;
+                                if (_gSelectedAction != null) { _gSelectedAction.Unselect(); }
+                                _gSelectedAction = ab;
+                                _gSelectedAction.Select();
+                                break;
+                            }
+                        }
+                    }
+
+                    return rv;
+                }
+
+                public override void Position(Vector2 value)
+                {
+                    base.Position(value);
+                    if (_liActions != null)
+                    {
+                        _liActions[0].AnchorToInnerSide(this, SideEnum.BottomLeft);
+                        for (int i = 1; i < _liActions.Count; i++)
+                        {
+                            if (i % 5 == 0)
+                            {
+                                _liActions[i].AnchorAndAlignToObject(_liActions[i - 5], SideEnum.Top, SideEnum.Left);
+                            }
+                            else
+                            {
+                                _liActions[i].AnchorAndAlignToObject(_liActions[i - 1], SideEnum.Right, SideEnum.Bottom);
+                            }
+                        }
+                    }
+                }
+
+                public bool ShowItems() { return _display == DisplayEnum.Items; }
+                public bool ShowSpells() { return _display == DisplayEnum.Spells; }
             }
 
-            public bool ShowItems() { return _display == DisplayEnum.Items; }
-            public bool ShowSpells() { return _display == DisplayEnum.Spells; }
+            private class ActionButton : GUIImage
+            {
+                MenuAction _action;
+                public MenuAction Action => _action;
+
+                Item _item;
+                public Item Item => _item;
+
+                GUIImage _gItem;
+
+                public ActionButton(MenuAction action) : base(new Rectangle((int)action.IconGrid.X * TileSize, (int)action.IconGrid.Y * TileSize, TileSize, TileSize), TileSize, TileSize, @"Textures\texCmbtActions")
+                {
+                    _action = action;
+                    SetScale(CombatManager.CombatScale);
+                }
+
+                public ActionButton(Item i) : base(new Rectangle(288, 32, 32, 32), 16, 16, @"Textures\Dialog")
+                {
+                    _item = i;
+                    _gItem = new GUIImage(_item.SourceRectangle, Width, Height, _item.Texture);
+                    SetScale(CombatManager.CombatScale);
+                }
+
+                public override void Draw(SpriteBatch spriteBatch)
+                {
+                    spriteBatch.Draw(_texture, _drawRect, _sourceRect, _cEnabled * Alpha);
+                    if (_item != null) { _gItem.Draw(spriteBatch); }
+                }
+
+                public string GetName()
+                {
+                    string rv = string.Empty;
+
+                    if (_action != null) { rv = _action.Name; }
+                    else if (_item != null) { rv = _item.Name; }
+
+                    return rv;
+                }
+
+                public void Select()
+                {
+                    int firstWidth = Width;
+                    int firstHeight = Height;
+                    SetScale(CombatManager.CombatScale + 1);
+
+                    int diffWidth = Width - firstWidth;
+                    int diffHeight = Height - firstHeight;
+
+                    MoveBy(new Vector2(-diffWidth / 2, -diffHeight / 2));
+                }
+                public void Unselect()
+                {
+                    int firstWidth = Width;
+                    int firstHeight = Height;
+                    SetScale(CombatManager.CombatScale);
+
+                    int diffWidth = firstWidth - Width;
+                    int diffHeight = firstHeight - Height;
+
+                    MoveBy(new Vector2(diffWidth / 2, diffHeight / 2));
+                }
+
+                public override void Position(Vector2 value)
+                {
+                    base.Position(value);
+                    if (_gItem != null) { _gItem.Position(value); }
+                }
+
+                public override void SetScale(int x)
+                {
+                    base.SetScale(x);
+                    if (_gItem != null) { _gItem.SetScale(x); }
+                }
+            }
+        }
+    }
+    
+    public class TurnOrderDisplay : GUIObject
+    {
+        List<TurnDisplay> _liTurnDisplay;
+        List<GUIImage> _liBarDisplay;
+
+        public TurnOrderDisplay()
+        {
+            _liTurnDisplay = new List<TurnDisplay>();
+            _liBarDisplay = new List<GUIImage>();
+            CalculateTurnOrder();
         }
 
-        private class ActionButton : GUIImage
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            MenuAction _action;
-            public MenuAction Action => _action;
-
-            Item _item;
-            public Item Item => _item;
-
-            GUIImage _gItem;
-
-            public ActionButton(MenuAction action) : base(new Rectangle((int)action.IconGrid.X * TileSize, (int)action.IconGrid.Y * TileSize, TileSize, TileSize), TileSize, TileSize, @"Textures\texCmbtActions")
+            foreach (TurnDisplay displ in _liTurnDisplay)
             {
-                _action = action;
-                SetScale(CombatManager.CombatScale);
+                displ.Draw(spriteBatch);
+            }
+            foreach (GUIImage bar in _liBarDisplay)
+            {
+                bar.Draw(spriteBatch);
+            }
+        }
+
+        public void CalculateTurnOrder()
+        {
+            _liTurnDisplay.Clear();
+            _liBarDisplay.Clear();
+
+            List<CombatActor> turnOrder = CombatManager.CalculateTurnOrder();
+            for (int i = 0; i < turnOrder.Count; i++)
+            {
+                TurnDisplay temp = new TurnDisplay(turnOrder[i]);
+                _liTurnDisplay.Add(temp);
+                GUIImage img = new GUIImage(new Rectangle(48, 58, 10, 2), 10, 2, @"Textures\Dialog");
+                img.SetScale(CombatManager.CombatScale);
+                _liBarDisplay.Add(img);
             }
 
-            public ActionButton(Item i) : base(new Rectangle(288, 32, 32, 32), 16, 16, @"Textures\Dialog")
+            Width = _liTurnDisplay.Count * _liTurnDisplay[0].Width;
+            Height = (2 * _liTurnDisplay[0].Height) + _liBarDisplay[0].Height;
+
+            Position(Position());
+        }
+
+        public override void Position(Vector2 value)
+        {
+            base.Position(value);
+            for (int i = _liTurnDisplay.Count - 1; i >= 0; i--)
             {
-                _item = i;
-                _gItem = new GUIImage(_item.SourceRectangle, Width, Height, _item.Texture);
-                SetScale(CombatManager.CombatScale);
+                if (i == _liTurnDisplay.Count - 1) { _liTurnDisplay[i].Position(value); }
+                else { _liTurnDisplay[i].AnchorAndAlignToObject(_liTurnDisplay[i + 1], SideEnum.Right, SideEnum.Bottom); }
+            }
+
+            for (int i = 0; i < _liBarDisplay.Count; i++)
+            {
+                _liBarDisplay[i].AnchorAndAlignToObject(_liTurnDisplay[i], SideEnum.Bottom, SideEnum.CenterX);
+                if (!_liTurnDisplay[i].IsInParty()) { _liTurnDisplay[i].AnchorAndAlignToObject(_liBarDisplay[i], SideEnum.Bottom, SideEnum.CenterX); }
+            }
+        }
+
+        public class TurnDisplay : GUIObject
+        {
+            GUIText _gName;
+            GUIImage _gImage;
+            CombatActor _actor;
+
+            public TurnDisplay(CombatActor actor)
+            {
+                _actor = actor;
+                _gImage = new GUIImage(new Rectangle(48, 48, 10, 10), 10, 10, @"Textures\Dialog");
+                _gImage.SetScale(CombatManager.CombatScale);
+                _gName = new GUIText(_actor.Name.Substring(0, 1));
+                _gName.CenterOnObject(_gImage);
+
+                Width = _gImage.Width;
+                Height = _gImage.Height;
             }
 
             public override void Draw(SpriteBatch spriteBatch)
             {
-                spriteBatch.Draw(_texture, _drawRect, _sourceRect, _cEnabled * Alpha);
-                if (_item != null) { _gItem.Draw(spriteBatch); }
-            }
-
-            public string GetName()
-            {
-                string rv = string.Empty;
-
-                if(_action != null) { rv = _action.Name; }
-                else if(_item != null) { rv = _item.Name; }
-
-                return rv;
-            }
-
-            public void Select()
-            {
-                int firstWidth = Width;
-                int firstHeight = Height;
-                SetScale(CombatManager.CombatScale + 1);
-
-                int diffWidth = Width - firstWidth;
-                int diffHeight = Height - firstHeight;
-
-                MoveBy(new Vector2(-diffWidth/2, -diffHeight/2));
-            }
-            public void Unselect()
-            {
-                int firstWidth = Width;
-                int firstHeight = Height;
-                SetScale(CombatManager.CombatScale);
-
-                int diffWidth = firstWidth - Width;
-                int diffHeight = firstHeight - Height;
-
-                MoveBy(new Vector2(diffWidth / 2, diffHeight / 2));
+                _gImage.Draw(spriteBatch);
+                _gName.Draw(spriteBatch);
             }
 
             public override void Position(Vector2 value)
             {
                 base.Position(value);
-                if (_gItem != null) { _gItem.Position(value); }
+                _gImage.Position(value);
+                _gName.CenterOnObject(_gImage);
             }
 
-            public override void SetScale(int x)
+            public bool IsInParty()
             {
-                base.SetScale(x);
-                if (_gItem != null) { _gItem.SetScale(x); }
+                foreach (CombatAdventurer ca in PlayerManager.GetParty())
+                {
+                    if(ca.Name == _actor.Name) { return true; }
+                }
+
+                return false;
             }
         }
     }

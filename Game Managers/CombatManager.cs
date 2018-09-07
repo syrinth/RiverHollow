@@ -88,7 +88,7 @@ namespace RiverHollow.Game_Managers
             RHRandom random = new RHRandom();
             foreach(CombatActor c in _liChargingCharacters)
             {
-                c.CurrentCharge += random.Next(0, 50);
+                c.CurrentCharge = random.Next(0, 50);
             }
 
             GoToCombat();
@@ -275,39 +275,53 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        internal static List<string> CalculateTurnOrder()
+        internal static List<CombatActor> CalculateTurnOrder()
         {
-            List<string> rv = new List<string>();
+            List<CombatActor> rv = new List<CombatActor>();
             List<CombatActor> queuedCopy = new List<CombatActor>();
             List<CombatActor> chargingCopy = new List<CombatActor>();
 
             foreach (CombatActor c in _liQueuedCharacters) { queuedCopy.Add(new CombatActor(c)); }
             foreach (CombatActor c in _liChargingCharacters) { chargingCopy.Add(new CombatActor(c)); }
 
+            //If there is an Active Character, Add them to the Turn Order list and blank their currentCharge
             if (ActiveCharacter != null)
             {
-                rv.Add(ActiveCharacter.Name);
-                chargingCopy.Find(x => x.Name == ActiveCharacter.Name).CurrentCharge -= (SelectedAction == null) ? 100 : SelectedAction.ChargeCost();
-                CombatActor c = queuedCopy.Find(x => x.Name == ActiveCharacter.Name);
+                rv.Add(ActiveCharacter);
+                CombatActor c = chargingCopy.Find(x => x.Name == ActiveCharacter.Name);
+                c.CurrentCharge -= (SelectedAction == null) ? c.CurrentCharge : SelectedAction.ChargeCost();
             }
 
+            //If there are any queued Actors, add them to the charging list
             foreach (CombatActor c in queuedCopy)
             {
-                chargingCopy.Add(c);
-                rv.Add(c.Name);
-            }
-            queuedCopy.Clear();
-            chargingCopy.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));
-
-            while (rv.Count < 10)
-            {
-                CombatTick(ref chargingCopy, ref queuedCopy);
-                foreach (CombatActor c in queuedCopy)
+                if (rv.Count < 10)
                 {
-                    rv.Add(c.Name);
+                    rv.Add(c);
                     c.CurrentCharge = 0;
                     chargingCopy.Add(c);
-                    chargingCopy.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));
+                }
+                else { break; }
+            }
+            queuedCopy.Clear();                                                 //Clear the queue
+
+            //Cap out entries at 10
+            while(rv.Count < 10)
+            {
+                chargingCopy.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));        //Sort the charging Actors by their speed
+                CombatTick(ref chargingCopy, ref queuedCopy);                       //Tick
+
+                //For all entries in the queue add them to the TurnOrder List,
+                //set the Charge to 0, and add to the queue, sorting by Spd
+                foreach (CombatActor c in queuedCopy)
+                {
+                    if (rv.Count < 10)
+                    {
+                        rv.Add(c);
+                        c.CurrentCharge = 0;
+                        chargingCopy.Add(c);
+                    }
+                    else { break; }
                 }
                 queuedCopy.Clear();
             }
@@ -574,6 +588,7 @@ namespace RiverHollow.Game_Managers
             List<CombatActor> toQueue = new List<CombatActor>();
             foreach(CombatActor c in charging)
             {
+                //If Actor is not knocked out, increment the charge, capping to 100
                 if (!c.KnockedOut())
                 {
                     c.CurrentCharge += c.StatSpd;

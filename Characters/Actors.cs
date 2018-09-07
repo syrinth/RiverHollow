@@ -1277,6 +1277,9 @@ namespace RiverHollow.Actors
             _iMood = 0;
             DrawIt = true;
             Adventuring = false;
+
+            _sName = _sAdventurerType.Substring(0, 1);
+            Combat.SetName(_sName);
         }
 
         protected void ImportBasics(string[] stringData, int id)
@@ -2783,6 +2786,8 @@ namespace RiverHollow.Actors
         {
             _actorType = ActorEnum.Monster;
             ImportBasics(stringData, id);
+
+            _statSpd = 90;
         }
 
         protected void ImportBasics(string[] stringData, int id)
