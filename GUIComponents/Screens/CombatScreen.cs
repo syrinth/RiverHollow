@@ -21,7 +21,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
     public class CombatScreen : GUIScreen
     {
         double _dResultsTimer;
-        GUIImage _giBackground;
+        //GUIImage _giBackground;
         GUICmbtTile[,] _arrAllies;
         GUICmbtTile[,] _arrEnemies;
         GUITextWindow _gtwTextWindow;
@@ -41,8 +41,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             _gResults = new GUIText();
 
-            _giBackground = new GUIImage(new Rectangle(0, 0, 800, 480), RiverHollow.ScreenWidth, RiverHollow.ScreenHeight, GameContentManager.GetTexture(@"Textures\battle"));
-            Controls.Add(_giBackground);
+            //_giBackground = new GUIImage(new Rectangle(0, 0, 800, 480), RiverHollow.ScreenWidth, RiverHollow.ScreenHeight, GameContentManager.GetTexture(@"Textures\battle"));
+            //Controls.Add(_giBackground);
 
             _sdStamina = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Energy);
             Controls.Add(_sdStamina);
@@ -175,6 +175,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             base.Update(gameTime);
             CombatManager.Update(gameTime);
+            _gTurnOrder.Update(gameTime);
 
             switch (CombatManager.CurrentPhase)
             {
@@ -1119,87 +1120,230 @@ namespace RiverHollow.Game_Managers.GUIObjects
     
     public class TurnOrderDisplay : GUIObject
     {
-        List<TurnDisplay> _liTurnDisplay;
-        List<GUIImage> _liBarDisplay;
+        const int MAX_SHOWN = 10;
+        int _iCurrUpdate = MAX_SHOWN;
+        double _dTimer = 0;
+        bool _bUpdate = false;
+        bool _bTriggered = false;
+
+        GUIImage[] _arrBarDisplay;
+        TurnDisplay[] _arrPartyTurns;
+        TurnDisplay[] _arrEnemyTurns;
+        List<CombatActor> _liNewTurnOrder;
 
         public TurnOrderDisplay()
         {
-            _liTurnDisplay = new List<TurnDisplay>();
-            _liBarDisplay = new List<GUIImage>();
-            CalculateTurnOrder();
+            _arrPartyTurns = new TurnDisplay[MAX_SHOWN];
+            _arrEnemyTurns = new TurnDisplay[MAX_SHOWN];
+            _arrBarDisplay = new GUIImage[MAX_SHOWN];
+
+            for (int i = 0; i < MAX_SHOWN; i++)
+            {
+                _arrPartyTurns[i] = new TurnDisplay(true);
+                _arrEnemyTurns[i] = new TurnDisplay(true);
+                _arrBarDisplay[i] = new GUIImage(new Rectangle(48, 58, 10, 2), 10, 2, @"Textures\Dialog");
+                _arrBarDisplay[i].SetScale(CombatManager.CombatScale);
+            }
+
+            Width = MAX_SHOWN * _arrPartyTurns[0].Width;
+            Height = (2 * _arrPartyTurns[0].Height) + _arrBarDisplay[0].Height;
+            Position(Position());
+
+            //Sets up the first turn order display
+            _liNewTurnOrder = CombatManager.CalculateTurnOrder(MAX_SHOWN);
+            for (int i = 0; i < MAX_SHOWN; i++)
+            {
+                CombatActor c = _liNewTurnOrder[i];
+                if (c.IsMonster()) {
+                    _arrEnemyTurns[i].SetActor(c);
+                }
+                else { _arrPartyTurns[i].SetActor(c); }
+            }
+        }
+        
+        public override void Update(GameTime gameTime)
+        {
+            if (_bUpdate)
+            {
+                _dTimer -= gameTime.ElapsedGameTime.TotalSeconds;
+
+                UpdateTurnDisplay(_arrEnemyTurns[_iCurrUpdate], false, gameTime);
+                UpdateTurnDisplay(_arrPartyTurns[_iCurrUpdate], true, gameTime);
+
+                if (_dTimer <= 0) { _dTimer = 0.03; }
+
+                if (_bUpdate && (_arrEnemyTurns[_iCurrUpdate].Finished() || _arrPartyTurns[_iCurrUpdate].Finished()))
+                {
+                    _iCurrUpdate++;
+
+                    //After incrememnting the count, which will bring us one to the left, we set
+                    //The next box, ie: the box we just left, to equal the current, leftmost, box.
+                    //So, 9 -> 8, 8 -> 7, 7 -> 6, 6 -> 5, 5 -> 4, 4 -> 3, 3 -> 2, 2 -> 1, 1 -> 0
+                    if (_iCurrUpdate < MAX_SHOWN)
+                    {
+                        _arrEnemyTurns[_iCurrUpdate - 1] = _arrEnemyTurns[_iCurrUpdate];
+                        _arrPartyTurns[_iCurrUpdate - 1] = _arrPartyTurns[_iCurrUpdate];
+
+                        _arrEnemyTurns[_iCurrUpdate].Moving(true);
+                        _arrPartyTurns[_iCurrUpdate].Moving(true);
+
+                        //Reset the finished status, DUH
+                        _arrEnemyTurns[_iCurrUpdate].Finished(false);
+                        _arrPartyTurns[_iCurrUpdate].Finished(false);
+                    }
+                    else if (_iCurrUpdate == MAX_SHOWN)
+                    {
+                        int mod = --_iCurrUpdate;   //We need to act on the new, 9th box so we need to bump it back one.
+
+                        _arrEnemyTurns[mod] = new TurnDisplay(false);
+                        _arrEnemyTurns[mod].AnchorAndAlignToObject(_arrBarDisplay[mod], SideEnum.Bottom, SideEnum.CenterX);
+                        _arrPartyTurns[mod] = new TurnDisplay(true);
+                        _arrPartyTurns[mod].AnchorAndAlignToObject(_arrBarDisplay[mod], SideEnum.Top, SideEnum.CenterX);
+
+                        if (_liNewTurnOrder[mod].IsMonster()) { _arrEnemyTurns[mod].SetActor(_liNewTurnOrder[mod]); }
+                        else { _arrPartyTurns[mod].SetActor(_liNewTurnOrder[mod]); }
+
+                        _arrEnemyTurns[mod].SetAlpha(0);
+                        _arrEnemyTurns[mod].FadeIn(true);
+                        _arrPartyTurns[mod].SetAlpha(0);
+                        _arrPartyTurns[mod].FadeIn(true);
+                    }
+                }
+            }
+        }
+
+        public void UpdateTurnDisplay(TurnDisplay turn, bool party, GameTime gameTime)
+        {
+            if (_dTimer <= 0)
+            {
+                if (turn.FadeOut())
+                {
+                    if (turn.Alpha > 0)
+                    {
+                        turn.SetAlpha(turn.Alpha - 0.3f);
+                    }
+                    else
+                    {
+                        turn.FadeOut(false);
+                        turn.Finished(true);
+                    }
+                }
+                else if (turn.FadeIn())
+                {
+                    if (turn.Alpha < 1)
+                    {
+                        turn.SetAlpha(turn.Alpha + 0.3f);
+                    }
+                    else
+                    {
+                        _bUpdate = false;
+                        turn.FadeIn(false);
+                        turn.Finished(true);
+                    }
+                }
+                else if (turn.Moving())
+                {
+                    Vector2 moveTo = turn.GetAnchorAndAlignToObject(_arrBarDisplay[_iCurrUpdate-1], party ? SideEnum.Top : SideEnum.Bottom, SideEnum.CenterX);
+                    if(turn.Position() != moveTo)
+                    {
+                        Vector2 moveDir = new Vector2(turn.Width / 2, 0);
+                        turn.MoveBy(moveDir);
+                    }
+                    else
+                    {
+                        turn.Moving(false);
+                        turn.Finished(true);
+                    }
+                }
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            foreach (TurnDisplay displ in _liTurnDisplay)
-            {
-                displ.Draw(spriteBatch);
-            }
-            foreach (GUIImage bar in _liBarDisplay)
-            {
-                bar.Draw(spriteBatch);
-            }
+            foreach (TurnDisplay displ in _arrPartyTurns) { displ.Draw(spriteBatch); }
+            foreach (TurnDisplay displ in _arrEnemyTurns) { displ.Draw(spriteBatch); }
+            foreach (GUIImage bar in _arrBarDisplay) { bar.Draw(spriteBatch); }
         }
 
+        //Called to acquire the next turn order sequence and start off the new updates
+        //Tell the currently active turn to fade out to start the updates
         public void CalculateTurnOrder()
         {
-            _liTurnDisplay.Clear();
-            _liBarDisplay.Clear();
-
-            List<CombatActor> turnOrder = CombatManager.CalculateTurnOrder();
-            for (int i = 0; i < turnOrder.Count; i++)
+            if (_bTriggered)
             {
-                TurnDisplay temp = new TurnDisplay(turnOrder[i]);
-                _liTurnDisplay.Add(temp);
-                GUIImage img = new GUIImage(new Rectangle(48, 58, 10, 2), 10, 2, @"Textures\Dialog");
-                img.SetScale(CombatManager.CombatScale);
-                _liBarDisplay.Add(img);
+                _liNewTurnOrder = CombatManager.CalculateTurnOrder(MAX_SHOWN);
+                _iCurrUpdate = 0;
+                _bUpdate = true;
+
+                _arrEnemyTurns[_iCurrUpdate].FadeOut(true);
+                _arrPartyTurns[_iCurrUpdate].FadeOut(true);
+                _dTimer = 0.03;
             }
-
-            Width = _liTurnDisplay.Count * _liTurnDisplay[0].Width;
-            Height = (2 * _liTurnDisplay[0].Height) + _liBarDisplay[0].Height;
-
-            Position(Position());
+            else
+            {
+                _bTriggered = true;
+            }
         }
 
         public override void Position(Vector2 value)
         {
             base.Position(value);
-            for (int i = _liTurnDisplay.Count - 1; i >= 0; i--)
+            for (int i = MAX_SHOWN - 1; i >= 0; i--)
             {
-                if (i == _liTurnDisplay.Count - 1) { _liTurnDisplay[i].Position(value); }
-                else { _liTurnDisplay[i].AnchorAndAlignToObject(_liTurnDisplay[i + 1], SideEnum.Right, SideEnum.Bottom); }
-            }
-
-            for (int i = 0; i < _liBarDisplay.Count; i++)
-            {
-                _liBarDisplay[i].AnchorAndAlignToObject(_liTurnDisplay[i], SideEnum.Bottom, SideEnum.CenterX);
-                if (!_liTurnDisplay[i].IsInParty()) { _liTurnDisplay[i].AnchorAndAlignToObject(_liBarDisplay[i], SideEnum.Bottom, SideEnum.CenterX); }
+                if (i == MAX_SHOWN - 1) {
+                    _arrPartyTurns[i].Position(value);
+                }
+                else {
+                    _arrPartyTurns[i].AnchorAndAlignToObject(_arrPartyTurns[i + 1], SideEnum.Right, SideEnum.Bottom);
+                }
+                _arrBarDisplay[i].AnchorAndAlignToObject(_arrPartyTurns[i], SideEnum.Bottom, SideEnum.CenterX);
+                _arrEnemyTurns[i].AnchorAndAlignToObject(_arrBarDisplay[i], SideEnum.Bottom, SideEnum.CenterX);
             }
         }
 
         public class TurnDisplay : GUIObject
         {
+            bool _bPartyTrack;
             GUIText _gName;
             GUIImage _gImage;
             CombatActor _actor;
+            public CombatActor Actor => _actor;
 
-            public TurnDisplay(CombatActor actor)
+            bool _bFadeIn;
+            bool _bFadeOut;
+            bool _bMoving;
+            bool _bFinished;
+
+            public TurnDisplay(bool inParty)
             {
-                _actor = actor;
+                _bPartyTrack = inParty;
+                _gName = new GUIText("");
                 _gImage = new GUIImage(new Rectangle(48, 48, 10, 10), 10, 10, @"Textures\Dialog");
                 _gImage.SetScale(CombatManager.CombatScale);
-                _gName = new GUIText(_actor.Name.Substring(0, 1));
-                _gName.CenterOnObject(_gImage);
-
                 Width = _gImage.Width;
                 Height = _gImage.Height;
             }
 
+            public TurnDisplay(CombatActor actor, bool inParty) : this(inParty)
+            {
+                _actor = actor;
+
+                _gName = new GUIText(_actor.Name.Substring(0, 1));
+                _gName.CenterOnObject(_gImage);
+            }
+
+            public override void Update(GameTime gameTime)
+            {
+                
+            }
+
             public override void Draw(SpriteBatch spriteBatch)
             {
-                _gImage.Draw(spriteBatch);
-                _gName.Draw(spriteBatch);
+                if (_actor != null)
+                {
+                    _gImage.Draw(spriteBatch);
+                    _gName.Draw(spriteBatch);
+                }
             }
 
             public override void Position(Vector2 value)
@@ -1211,12 +1355,39 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             public bool IsInParty()
             {
-                foreach (CombatAdventurer ca in PlayerManager.GetParty())
-                {
-                    if(ca.Name == _actor.Name) { return true; }
-                }
+                return _bPartyTrack;
+            }
 
-                return false;
+            public void SetActor(CombatActor c)
+            {
+                _actor = c;
+                _gName.SetText(_actor.Name.Substring(0, 1));
+                _gName.CenterOnObject(_gImage);
+            }
+
+            public bool Occupied() { return _actor != null; }
+
+            public void FadeOut(bool val) { _bFadeOut = val; }
+            public bool FadeOut() { return _bFadeOut; }
+
+            public void FadeIn(bool val) { _bFadeIn = val; }
+            public bool FadeIn() { return _bFadeIn; }
+
+            public void Moving(bool val) { _bMoving = val; }
+            public bool Moving() { return _bMoving; }
+
+            public void Finished(bool val) { _bFinished = val; }
+            public bool Finished() { return _bFinished; }
+
+            public void SetAlpha(float alpha) {
+                Alpha = alpha;
+                _gImage.Alpha = alpha;
+                _gName.Alpha = alpha;
+            }
+
+            public string GetName()
+            {
+                return _actor != null ? _actor.Name : string.Empty;
             }
         }
     }

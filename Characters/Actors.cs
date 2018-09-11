@@ -2203,6 +2203,7 @@ namespace RiverHollow.Actors
         public int MaxMP { get => StatMag * 3; }
 
         public int CurrentCharge;
+        public int DummyCharge;
         public CombatManager.CombatTile Tile;
         public GUICmbtTile Location => Tile.GUITile;
 
@@ -2273,22 +2274,6 @@ namespace RiverHollow.Actors
                 [ElementEnum.Ice] = ElementAlignment.Neutral,
                 [ElementEnum.Lightning] = ElementAlignment.Neutral
             };
-        }
-
-        //ONLY USE THIS FOR CALCULATING TURNS
-        public CombatActor(CombatActor c)
-        {
-            _sName = c.Name;
-            CurrentCharge = c.CurrentCharge;
-            _diConditions = c._diConditions;
-            _statStr = c.StatStr;
-            _statDef = c.StatDef;
-            _statVit = c.StatVit;
-            _statMag = c.StatMag;
-            _statRes = c.StatRes;
-            _statSpd = c.StatSpd;
-
-            _vStartPos = new Vector2(0, 0);
         }
 
         public virtual void LoadContent(string texture, int height)
@@ -2786,8 +2771,6 @@ namespace RiverHollow.Actors
         {
             _actorType = ActorEnum.Monster;
             ImportBasics(stringData, id);
-
-            _statSpd = 90;
         }
 
         protected void ImportBasics(string[] stringData, int id)
