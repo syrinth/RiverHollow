@@ -1124,38 +1124,27 @@ namespace RiverHollow.Game_Managers.GUIObjects
         bool _bTriggered = false;
 
         GUIImage[] _arrBarDisplay;
-        TurnDisplay[] _arrPartyTurns;
-        TurnDisplay[] _arrEnemyTurns;
+        TurnDisplay[] _arrTurnDisplay;
         List<CombatActor> _liNewTurnOrder;
 
         public TurnOrderDisplay()
         {
-            _arrPartyTurns = new TurnDisplay[MAX_SHOWN];
-            _arrEnemyTurns = new TurnDisplay[MAX_SHOWN];
+            _arrTurnDisplay = new TurnDisplay[MAX_SHOWN];
             _arrBarDisplay = new GUIImage[MAX_SHOWN];
+
+            _liNewTurnOrder = CombatManager.CalculateTurnOrder(MAX_SHOWN);
 
             for (int i = 0; i < MAX_SHOWN; i++)
             {
-                _arrPartyTurns[i] = new TurnDisplay(true);
-                _arrEnemyTurns[i] = new TurnDisplay(true);
+                _arrTurnDisplay[i] = new TurnDisplay(_liNewTurnOrder[i], _arrBarDisplay);
                 _arrBarDisplay[i] = new GUIImage(new Rectangle(48, 58, 10, 2), 10, 2, @"Textures\Dialog");
                 _arrBarDisplay[i].SetScale(CombatManager.CombatScale);
             }
 
-            Width = MAX_SHOWN * _arrPartyTurns[0].Width;
-            Height = (2 * _arrPartyTurns[0].Height) + _arrBarDisplay[0].Height;
-            Position(Position());
+            Width = MAX_SHOWN * _arrTurnDisplay[0].Width;
+            Height = (2 * _arrTurnDisplay[0].Height) + _arrBarDisplay[0].Height;
 
-            //Sets up the first turn order display
-            _liNewTurnOrder = CombatManager.CalculateTurnOrder(MAX_SHOWN);
-            for (int i = 0; i < MAX_SHOWN; i++)
-            {
-                CombatActor c = _liNewTurnOrder[i];
-                if (c.IsMonster()) {
-                    _arrEnemyTurns[i].SetActor(c);
-                }
-                else { _arrPartyTurns[i].SetActor(c); }
-            }
+            Position(Position());
         }
         
         public override void Update(GameTime gameTime)
@@ -1164,20 +1153,24 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 _dTimer -= gameTime.ElapsedGameTime.TotalSeconds;
 
-                UpdateTurnDisplay(_arrEnemyTurns[_iCurrUpdate], false, gameTime);
-                UpdateTurnDisplay(_arrPartyTurns[_iCurrUpdate], true, gameTime);
+                if (_dTimer <= 0)
+                {
+                    _arrTurnDisplay[_iCurrUpdate].Update(gameTime);
+                    if(_iCurrUpdate == MAX_SHOWN -1 && _arrTurnDisplay[_iCurrUpdate].Finished && _arrTurnDisplay[_iCurrUpdate].Action == TurnDisplay.ActionEnum.Insert)
+                    {
+                        _bUpdate = false;
+                    }
+                }
 
                 if (_dTimer <= 0) { _dTimer = 0.03; }
 
-                if (_bUpdate && (_arrEnemyTurns[_iCurrUpdate].Finished() || _arrPartyTurns[_iCurrUpdate].Finished()))
+                if (_bUpdate && (_arrTurnDisplay[_iCurrUpdate].Finished))
                 {
                     _iCurrUpdate++;
 
                     if (_iCurrUpdate == _iInsertion)
                     {
-                        _arrEnemyTurns[_iCurrUpdate].FadeIn();
-                        _arrPartyTurns[_iCurrUpdate].FadeIn();
-
+                        //_arrTurnDisplay[_iCurrUpdate].Insert(_iInsertion);
                     }
                     else
                     {
@@ -1186,11 +1179,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         {
                             if (_iCurrUpdate < MAX_SHOWN)
                             {
-                                CombatActor a = _liNewTurnOrder[_iCurrUpdate];
-                                _arrEnemyTurns[_iCurrUpdate].SetActor(a.IsMonster() ? a : null);
-                                _arrPartyTurns[_iCurrUpdate].SetActor(a.IsMonster() ? null : a);
+                                _arrTurnDisplay[_iCurrUpdate].SetActor(_liNewTurnOrder[_iCurrUpdate]);
                             }
-                            else
+                            else if (_iCurrUpdate == MAX_SHOWN && _arrTurnDisplay[_iCurrUpdate - 1].Action == TurnDisplay.ActionEnum.Insert)
                             {
                                 _iInsertion = -1;
                                 _bUpdate = false;
@@ -1201,34 +1192,18 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             //After incrememnting the count, which will bring us one to the left, we set
                             //The next box, ie: the box we just left, to equal the current, leftmost, box.
                             //So, 9 -> 8, 8 -> 7, 7 -> 6, 6 -> 5, 5 -> 4, 4 -> 3, 3 -> 2, 2 -> 1, 1 -> 0
-                            if (_iCurrUpdate < MAX_SHOWN)
+                            if (_iCurrUpdate < MAX_SHOWN && _arrTurnDisplay[_iCurrUpdate - 1].Action != TurnDisplay.ActionEnum.Insert)
                             {
-                                _arrEnemyTurns[_iCurrUpdate - 1] = _arrEnemyTurns[_iCurrUpdate];
-                                _arrPartyTurns[_iCurrUpdate - 1] = _arrPartyTurns[_iCurrUpdate];
+                                _arrTurnDisplay[_iCurrUpdate - 1] = _arrTurnDisplay[_iCurrUpdate];
 
-                                _arrEnemyTurns[_iCurrUpdate].Moving(true);
-                                _arrPartyTurns[_iCurrUpdate].Moving(true);
-
-                                //Reset the finished status, DUH
-                                _arrEnemyTurns[_iCurrUpdate].Finished(false);
-                                _arrPartyTurns[_iCurrUpdate].Finished(false);
+                                _arrTurnDisplay[_iCurrUpdate].SetIndex(_iCurrUpdate - 1);
                             }
                             else if (_iCurrUpdate == MAX_SHOWN)
                             {
                                 int mod = --_iCurrUpdate;   //We need to act on the new, 9th box so we need to bump it back one.
 
-                                _arrEnemyTurns[mod] = new TurnDisplay(false);
-                                _arrEnemyTurns[mod].AnchorAndAlignToObject(_arrBarDisplay[mod], SideEnum.Bottom, SideEnum.CenterX);
-                                _arrPartyTurns[mod] = new TurnDisplay(true);
-                                _arrPartyTurns[mod].AnchorAndAlignToObject(_arrBarDisplay[mod], SideEnum.Top, SideEnum.CenterX);
-
-                                if (_liNewTurnOrder[mod].IsMonster()) { _arrEnemyTurns[mod].SetActor(_liNewTurnOrder[mod]); }
-                                else { _arrPartyTurns[mod].SetActor(_liNewTurnOrder[mod]); }
-
-                                _arrEnemyTurns[mod].SetAlpha(0);
-                                _arrEnemyTurns[mod].FadeIn(true);
-                                _arrPartyTurns[mod].SetAlpha(0);
-                                _arrPartyTurns[mod].FadeIn(true);
+                                _arrTurnDisplay[mod] = new TurnDisplay(_liNewTurnOrder[mod], _arrBarDisplay);
+                                _arrTurnDisplay[mod].Insert(mod);
                             }
                         }
                     }
@@ -1236,56 +1211,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-        public void UpdateTurnDisplay(TurnDisplay turn, bool party, GameTime gameTime)
-        {
-            if (_dTimer <= 0)
-            {
-                if (turn.FadeOut())
-                {
-                    if (turn.Alpha > 0)
-                    {
-                        turn.SetAlpha(turn.Alpha - 0.3f);
-                    }
-                    else
-                    {
-                        turn.FadeOut(false);
-                        turn.Finished(true);
-                    }
-                }
-                else if (turn.FadeIn())
-                {
-                    if (turn.Alpha < 1)
-                    {
-                        turn.SetAlpha(turn.Alpha + 0.3f);
-                    }
-                    else
-                    {
-                        _bUpdate = false;
-                        turn.FadeIn(false);
-                        turn.Finished(true);
-                    }
-                }
-                else if (turn.Moving())
-                {
-                    Vector2 moveTo = turn.GetAnchorAndAlignToObject(_arrBarDisplay[_iCurrUpdate-1], party ? SideEnum.Top : SideEnum.Bottom, SideEnum.CenterX);
-                    if(turn.Position() != moveTo)
-                    {
-                        Vector2 moveDir = new Vector2(turn.Width / 2, 0);
-                        turn.MoveBy(moveDir);
-                    }
-                    else
-                    {
-                        turn.Moving(false);
-                        turn.Finished(true);
-                    }
-                }
-            }
-        }
-
         public override void Draw(SpriteBatch spriteBatch)
         {
-            foreach (TurnDisplay displ in _arrPartyTurns) { displ.Draw(spriteBatch); }
-            foreach (TurnDisplay displ in _arrEnemyTurns) { displ.Draw(spriteBatch); }
+            foreach (TurnDisplay displ in _arrTurnDisplay) { displ.Draw(spriteBatch); }
             foreach (GUIImage bar in _arrBarDisplay) { bar.Draw(spriteBatch); }
         }
 
@@ -1312,66 +1240,117 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _iCurrUpdate = 0;
                 _bUpdate = true;
 
-                _arrEnemyTurns[_iCurrUpdate].FadeOut(true);
-                _arrPartyTurns[_iCurrUpdate].FadeOut(true);
+                _arrTurnDisplay[_iCurrUpdate].Pop();
                 _dTimer = 0.03;
             }
             else
             {
                 _bTriggered = true;
+                _iCurrUpdate = 0;
+                _bUpdate = true;
+                _dTimer = 0.03;
             }
         }
 
         public override void Position(Vector2 value)
         {
             base.Position(value);
+
+            _arrTurnDisplay[MAX_SHOWN - 1].Position(value);     //Just used as a base point to start it off
             for (int i = MAX_SHOWN - 1; i >= 0; i--)
             {
-                if (i == MAX_SHOWN - 1) {
-                    _arrPartyTurns[i].Position(value);
-                }
-                else {
-                    _arrPartyTurns[i].AnchorAndAlignToObject(_arrPartyTurns[i + 1], SideEnum.Right, SideEnum.Bottom);
-                }
-                _arrBarDisplay[i].AnchorAndAlignToObject(_arrPartyTurns[i], SideEnum.Bottom, SideEnum.CenterX);
-                _arrEnemyTurns[i].AnchorAndAlignToObject(_arrBarDisplay[i], SideEnum.Bottom, SideEnum.CenterX);
+                if (i == MAX_SHOWN - 1) { _arrBarDisplay[i].AnchorAndAlignToObject(_arrTurnDisplay[i], SideEnum.Bottom, SideEnum.CenterX); }
+                else { _arrBarDisplay[i].AnchorAndAlignToObject(_arrBarDisplay[i + 1], SideEnum.Right, SideEnum.CenterY); }
+
+                _arrTurnDisplay[i].Insert(i, 0.5f);
             }
         }
 
         public class TurnDisplay : GUIObject
         {
-            bool _bPartyTrack;
+            public enum ActionEnum { Pop, Insert, Move };
+            public ActionEnum Action;
+            bool _bInParty;
             GUIText _gName;
             GUIImage _gImage;
             CombatActor _actor;
             public CombatActor Actor => _actor;
 
             bool _bFadeIn;
+            public bool FadeIn => _bFadeIn;
             bool _bFadeOut;
-            bool _bMoving;
-            bool _bFinished;
+            public bool Finished;
 
-            public TurnDisplay(bool inParty)
+            float _fFadeSpeed;
+            int _iIndex;
+            Vector2 _vMoveTo = new Vector2(0, 0);
+
+            GUIImage[] _arrBarDisplay;
+
+            public TurnDisplay(CombatActor actor, GUIImage[] barDisplay)
             {
-                _bPartyTrack = inParty;
-                _gName = new GUIText("");
+                _actor = actor;
+                _bInParty = !actor.IsMonster();
+                _gName = new GUIText(actor.Name.Substring(0, 1));
                 _gImage = new GUIImage(new Rectangle(48, 48, 10, 10), 10, 10, @"Textures\Dialog");
                 _gImage.SetScale(CombatManager.CombatScale);
+
+                _arrBarDisplay = barDisplay;
                 Width = _gImage.Width;
                 Height = _gImage.Height;
             }
 
-            public TurnDisplay(CombatActor actor, bool inParty) : this(inParty)
-            {
-                _actor = actor;
-
-                _gName = new GUIText(_actor.Name.Substring(0, 1));
-                _gName.CenterOnObject(_gImage);
-            }
-
             public override void Update(GameTime gameTime)
             {
-                
+                if (_bFadeOut)
+                {
+                    UpdateFadeOut(gameTime);
+                }
+                else if (_bFadeIn)
+                {
+                    UpdateFadeIn(gameTime);
+                }
+                else if (_vMoveTo != Vector2.Zero)
+                {
+                    UpdateMove(gameTime);
+                }
+            }
+            private void UpdateFadeOut(GameTime gameTime)
+            {
+                if (Alpha > 0)
+                {
+                    SetAlpha(Alpha - _fFadeSpeed);
+                }
+                else
+                {
+                    _bFadeOut = false;
+                    Finished = true;
+                }
+            }
+            private void UpdateFadeIn(GameTime gameTime)
+            {
+                if (Alpha < 1)
+                {
+                    SetAlpha(Alpha + _fFadeSpeed);
+                }
+                else
+                {
+                    _bFadeIn = false;
+                    Finished = true;
+                }
+            }
+            private void UpdateMove(GameTime gameTime)
+            {
+                if (Position() != _vMoveTo)
+                {
+                    Vector2 moveDir = new Vector2(Width / 2, 0);
+                    MoveBy(moveDir);
+                }
+                else
+                {
+                    _vMoveTo = Vector2.Zero;
+                    Finished = true;
+                }
             }
 
             public override void Draw(SpriteBatch spriteBatch)
@@ -1392,29 +1371,27 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             public bool IsInParty()
             {
-                return _bPartyTrack;
+                return _bInParty;
             }
 
             public void SetActor(CombatActor c)
             {
                 _actor = c;
+                _bInParty = !_actor.IsMonster();
                 _gName.SetText(c != null ? _actor.Name.Substring(0, 1) : string.Empty);
                 _gName.CenterOnObject(_gImage);
             }
+            public void SetIndex(int val)
+            {
+                _iIndex = val;
+
+                _vMoveTo = GetAlignToObject(_arrBarDisplay[_iIndex], SideEnum.CenterX);
+
+                Finished = false;
+                Action = ActionEnum.Move;
+            }
 
             public bool Occupied() { return _actor != null; }
-
-            public void FadeOut(bool val) { _bFadeOut = val; }
-            public bool FadeOut() { return _bFadeOut; }
-
-            public void FadeIn(bool val) { _bFadeIn = val; }
-            public bool FadeIn() { return _bFadeIn; }
-
-            public void Moving(bool val) { _bMoving = val; }
-            public bool Moving() { return _bMoving; }
-
-            public void Finished(bool val) { _bFinished = val; }
-            public bool Finished() { return _bFinished; }
 
             public void SetAlpha(float alpha) {
                 Alpha = alpha;
@@ -1425,6 +1402,26 @@ namespace RiverHollow.Game_Managers.GUIObjects
             public string GetName()
             {
                 return _actor != null ? _actor.Name : string.Empty;
+            }
+
+            public void Pop()
+            {
+                Finished = false;
+                _bFadeOut = true;
+                Action = ActionEnum.Pop;
+            }
+            public void Insert(int index, float speed = 0.3f)
+            {
+                if (_actor != null)
+                {
+                    Action = ActionEnum.Insert;
+                    _iIndex = index;
+                    _bFadeIn = true;
+                    _fFadeSpeed = speed;
+                    Finished = false;
+                    SetAlpha(0);
+                    AnchorAndAlignToObject(_arrBarDisplay[_iIndex], IsInParty() ? SideEnum.Top : SideEnum.Bottom, SideEnum.CenterX);
+                }
             }
         }
     }
