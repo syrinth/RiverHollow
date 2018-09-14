@@ -102,8 +102,14 @@ namespace RiverHollow.Actors.CombatStuff
         Summon _summon;
         public Vector2 SummonStartPosition;
 
-        int _textureRow;
-        float _frameSpeed;
+        float _fFrameSpeed;
+        int _iStartX;
+        int _iStartY;
+        int _iAnimWidth;
+        int _iAnimHeight;
+        int _iFrames;
+        int _iAnimOffset;
+
 
         public List<CombatManager.CombatTile> TileTargetList;
         public Vector2 UserStartPosition;
@@ -113,7 +119,7 @@ namespace RiverHollow.Actors.CombatStuff
         CombatActor counteringChar;
         Summon counteringSummon;
 
-        public AnimatedSprite Sprite;
+        public GUISprite Sprite;
         public CombatAction(int id, string[] stringData)
         {
             TileTargetList = new List<CombatManager.CombatTile>();
@@ -125,14 +131,17 @@ namespace RiverHollow.Actors.CombatStuff
             _iChargeCost = 100;
             ImportBasics(id, stringData);
 
-            Sprite = new AnimatedSprite(@"Textures\AbilityAnimations");
-            Sprite.AddAnimation(GenAnimEnum.Play, 100, 100, 4, _frameSpeed, 0, _textureRow * 100);
-            Sprite.SetCurrentAnimation(GenAnimEnum.Play);
-            Sprite.IsAnimating = false;
+            AnimatedSprite sprite = new AnimatedSprite(@"Textures\LightningSprite");
+            sprite.AddAnimation(GenAnimEnum.Play, _iAnimWidth, _iAnimHeight, _iFrames, _fFrameSpeed, _iStartX, _iStartY);
+            sprite.SetCurrentAnimation(GenAnimEnum.Play);
+            sprite.IsAnimating = false;
+            sprite.SetScale(CombatManager.CombatScale);
             if (_actionTags.Contains("Direct"))
             {
-                Sprite.PlaysOnce = true;
+                sprite.PlaysOnce = true;
             }
+
+            Sprite = new GUISprite(sprite);
         }
 
         protected void ImportBasics(int id, string[] stringData)
@@ -264,10 +273,16 @@ namespace RiverHollow.Actors.CombatStuff
                 else if (tagType[0].Equals("SpellAnimation"))
                 {
                     string[] parse = tagType[1].Split('-');
-                    if (parse.Length > 1)
+                    if (parse.Length == 7)
                     {
-                        _textureRow = int.Parse(parse[0]);
-                        _frameSpeed = float.Parse(parse[1]);
+                        int i = 0;
+                        _iStartX = int.Parse(parse[i++]);
+                        _iStartY = int.Parse(parse[i++]);
+                        _iAnimWidth = int.Parse(parse[i++]);
+                        _iAnimHeight = int.Parse(parse[i++]);
+                        _iFrames = int.Parse(parse[i++]);
+                        _fFrameSpeed = float.Parse(parse[i++]);
+                        _iAnimOffset = int.Parse(parse[i++]);
                     }
                 }
             }
@@ -555,7 +570,9 @@ namespace RiverHollow.Actors.CombatStuff
                     if (!Sprite.PlayedOnce && !Sprite.IsAnimating)
                     {
                         Sprite.IsAnimating = true;
-                        Sprite.Position = TileTargetList[0].GUITile.Position();
+                        Sprite.AlignToObject(TileTargetList[0].GUITile, SideEnum.Bottom);
+                        Sprite.AlignToObject(TileTargetList[0].GUITile, SideEnum.CenterX);
+                        Sprite.MoveBy(new Vector2(0, _iAnimOffset * CombatManager.CombatScale));
                     }
                     else if (Sprite.IsAnimating) { Sprite.Update(gameTime); }
                     else if (Sprite.PlayedOnce)
@@ -623,21 +640,21 @@ namespace RiverHollow.Actors.CombatStuff
                     }
                     break;
                 case "Projectile":
-                    if (!Sprite.IsAnimating)
-                    {
-                        Sprite.IsAnimating = true;
-                        Sprite.Position = SkillUser.Position;
-                    }
-                    if (Sprite.Position != TileTargetList[0].Character.Position)
-                    {
-                        Vector2 direction = Vector2.Zero;
-                        Util.GetMoveSpeed(Sprite.Position, TileTargetList[0].Character.Position, 80, ref direction);
-                        Sprite.Position += direction;
-                    }
-                    else
-                    {
-                        _currentActionTag++;
-                    }
+                    //if (!Sprite.IsAnimating)
+                    //{
+                    //    Sprite.IsAnimating = true;
+                    //    Sprite.Position = SkillUser.Position;
+                    //}
+                    //if (Sprite.Position != TileTargetList[0].Character.Position)
+                    //{
+                    //    Vector2 direction = Vector2.Zero;
+                    //    Util.GetMoveSpeed(Sprite.Position, TileTargetList[0].Character.Position, 80, ref direction);
+                    //    Sprite.Position += direction;
+                    //}
+                    //else
+                    //{
+                    //    _currentActionTag++;
+                    //}
                     break;
                 case "Move":
                     TileTargetList[0].SetCombatant(SkillUser);

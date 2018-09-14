@@ -6,6 +6,7 @@
     <!--Effect Tags: Projectile, Direct, Harm, Heal-->
     <!--Buff Format: [Buff:BuffId|Duration|<Tags>]-->
     <!--Buff Tags: Allies, Enemies, Target, Self-->
+    <!--[SpellAnimation:X-Y-Width-Height-Frames-FrameSpeed-Offset]-->
     <Item>
       <!--Attack-->
       <Key>1</Key>
@@ -48,23 +49,23 @@
     <!--<100> Wizard Spells-->
     <Item>
       <Key>101</Key>
-      <Value>[Type:Spell][SpellAnimation:0-0.03][Target:Enemy][Range:Ranged][Area:Area][Size:1][Effect:Cost-5 Harm-5 Direct][Action:UserCast Direct Apply][Element:Lightning]</Value>
+      <Value>[Type:Spell][SpellAnimation:0-0-94-160-15-0.1-32][Target:Enemy][Range:Ranged][Area:Area][Size:1][Effect:Cost-5 Harm-5 Direct][Action:UserCast Direct Apply][Element:Lightning]</Value>
     </Item>
     <Item>
       <Key>102</Key>
-      <Value>[Type:Spell][SpellAnimation:1-0.03][Target:Enemy][Range:Ranged][Area:Area][Size:1][Effect:Cost-10 Harm-50][Action:UserCast Projectile Apply]</Value>
+      <Value>[Type:Spell][SpellAnimation:0-0-94-160-15-0.1-32][Target:Enemy][Range:Ranged][Area:Area][Size:1][Effect:Cost-10 Harm-50][Action:UserCast Projectile Apply]</Value>
     </Item>
     <Item>
       <Key>103</Key>
-      <Value>[Type:Spell][SpellAnimation:0-0.03][Target:Self][Range:Self][Area:Single][Size:1][Effect:Cost-10][Action:UserCast][Buff:1|2|Self]</Value>
+      <Value>[Type:Spell][SpellAnimation:0-0-94-160-15-0.1-32][Target:Self][Range:Self][Area:Single][Size:1][Effect:Cost-10][Action:UserCast][Buff:1|2|Self]</Value>
     </Item>
     <Item>
       <Key>104</Key>
-      <Value>[Type:Spell][SpellAnimation:0-0.03][Target:Enemy][Range:Ranged][Area:Single][Effect:Cost-5 Status-Poisoned][Action:UserCast Direct Apply]</Value>
+      <Value>[Type:Spell][SpellAnimation:0-0-94-160-15-0.1-32][Target:Enemy][Range:Ranged][Area:Single][Effect:Cost-5 Status-Poisoned][Action:UserCast Direct Apply]</Value>
     </Item>
     <Item>
       <Key>105</Key>
-      <Value>[Type:Spell][SpellAnimation:0-0.03][Target:Enemy][Range:Ranged][Area:Single][Effect:Cost-5 Status-Silenced][Action:UserCast Direct Apply]</Value>
+      <Value>[Type:Spell][SpellAnimation:0-0-94-160-15-0.1-32][Target:Enemy][Range:Ranged][Area:Single][Effect:Cost-5 Status-Silenced][Action:UserCast Direct Apply]</Value>
     </Item>
     <!--<150> Healer Spells-->
     <Item>

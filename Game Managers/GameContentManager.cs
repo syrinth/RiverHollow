@@ -92,6 +92,7 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\tree");
             AddTexture(Content, @"Textures\items");
             AddTexture(Content, @"Textures\AbilityAnimations");
+            AddTexture(Content, @"Textures\LightningSprite");
             AddTexture(Content, @"Textures\texMachines");
             AddTexture(Content, @"Textures\texCmbtActions");
         }

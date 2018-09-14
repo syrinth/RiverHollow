@@ -21,7 +21,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
     public class CombatScreen : GUIScreen
     {
         double _dResultsTimer;
-        //GUIImage _giBackground;
         GUICmbtTile[,] _arrAllies;
         GUICmbtTile[,] _arrEnemies;
         GUITextWindow _gtwTextWindow;
@@ -40,9 +39,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _liTurns = new List<GUIText>();
 
             _gResults = new GUIText();
-
-            //_giBackground = new GUIImage(new Rectangle(0, 0, 800, 480), RiverHollow.ScreenWidth, RiverHollow.ScreenHeight, GameContentManager.GetTexture(@"Textures\battle"));
-            //Controls.Add(_giBackground);
 
             _sdStamina = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Energy);
             Controls.Add(_sdStamina);
@@ -1121,6 +1117,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
     public class TurnOrderDisplay : GUIObject
     {
         const int MAX_SHOWN = 10;
+        int _iInsertion = -1;
         int _iCurrUpdate = MAX_SHOWN;
         double _dTimer = 0;
         bool _bUpdate = false;
@@ -1176,37 +1173,64 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     _iCurrUpdate++;
 
-                    //After incrememnting the count, which will bring us one to the left, we set
-                    //The next box, ie: the box we just left, to equal the current, leftmost, box.
-                    //So, 9 -> 8, 8 -> 7, 7 -> 6, 6 -> 5, 5 -> 4, 4 -> 3, 3 -> 2, 2 -> 1, 1 -> 0
-                    if (_iCurrUpdate < MAX_SHOWN)
+                    if (_iCurrUpdate == _iInsertion)
                     {
-                        _arrEnemyTurns[_iCurrUpdate - 1] = _arrEnemyTurns[_iCurrUpdate];
-                        _arrPartyTurns[_iCurrUpdate - 1] = _arrPartyTurns[_iCurrUpdate];
+                        _arrEnemyTurns[_iCurrUpdate].FadeIn();
+                        _arrPartyTurns[_iCurrUpdate].FadeIn();
 
-                        _arrEnemyTurns[_iCurrUpdate].Moving(true);
-                        _arrPartyTurns[_iCurrUpdate].Moving(true);
-
-                        //Reset the finished status, DUH
-                        _arrEnemyTurns[_iCurrUpdate].Finished(false);
-                        _arrPartyTurns[_iCurrUpdate].Finished(false);
                     }
-                    else if (_iCurrUpdate == MAX_SHOWN)
+                    else
                     {
-                        int mod = --_iCurrUpdate;   //We need to act on the new, 9th box so we need to bump it back one.
 
-                        _arrEnemyTurns[mod] = new TurnDisplay(false);
-                        _arrEnemyTurns[mod].AnchorAndAlignToObject(_arrBarDisplay[mod], SideEnum.Bottom, SideEnum.CenterX);
-                        _arrPartyTurns[mod] = new TurnDisplay(true);
-                        _arrPartyTurns[mod].AnchorAndAlignToObject(_arrBarDisplay[mod], SideEnum.Top, SideEnum.CenterX);
+                        if (_iInsertion != -1 && _iCurrUpdate > _iInsertion)
+                        {
+                            if (_iCurrUpdate < MAX_SHOWN)
+                            {
+                                CombatActor a = _liNewTurnOrder[_iCurrUpdate];
+                                _arrEnemyTurns[_iCurrUpdate].SetActor(a.IsMonster() ? a : null);
+                                _arrPartyTurns[_iCurrUpdate].SetActor(a.IsMonster() ? null : a);
+                            }
+                            else
+                            {
+                                _iInsertion = -1;
+                                _bUpdate = false;
+                            }
+                        }
+                        else
+                        {
+                            //After incrememnting the count, which will bring us one to the left, we set
+                            //The next box, ie: the box we just left, to equal the current, leftmost, box.
+                            //So, 9 -> 8, 8 -> 7, 7 -> 6, 6 -> 5, 5 -> 4, 4 -> 3, 3 -> 2, 2 -> 1, 1 -> 0
+                            if (_iCurrUpdate < MAX_SHOWN)
+                            {
+                                _arrEnemyTurns[_iCurrUpdate - 1] = _arrEnemyTurns[_iCurrUpdate];
+                                _arrPartyTurns[_iCurrUpdate - 1] = _arrPartyTurns[_iCurrUpdate];
 
-                        if (_liNewTurnOrder[mod].IsMonster()) { _arrEnemyTurns[mod].SetActor(_liNewTurnOrder[mod]); }
-                        else { _arrPartyTurns[mod].SetActor(_liNewTurnOrder[mod]); }
+                                _arrEnemyTurns[_iCurrUpdate].Moving(true);
+                                _arrPartyTurns[_iCurrUpdate].Moving(true);
 
-                        _arrEnemyTurns[mod].SetAlpha(0);
-                        _arrEnemyTurns[mod].FadeIn(true);
-                        _arrPartyTurns[mod].SetAlpha(0);
-                        _arrPartyTurns[mod].FadeIn(true);
+                                //Reset the finished status, DUH
+                                _arrEnemyTurns[_iCurrUpdate].Finished(false);
+                                _arrPartyTurns[_iCurrUpdate].Finished(false);
+                            }
+                            else if (_iCurrUpdate == MAX_SHOWN)
+                            {
+                                int mod = --_iCurrUpdate;   //We need to act on the new, 9th box so we need to bump it back one.
+
+                                _arrEnemyTurns[mod] = new TurnDisplay(false);
+                                _arrEnemyTurns[mod].AnchorAndAlignToObject(_arrBarDisplay[mod], SideEnum.Bottom, SideEnum.CenterX);
+                                _arrPartyTurns[mod] = new TurnDisplay(true);
+                                _arrPartyTurns[mod].AnchorAndAlignToObject(_arrBarDisplay[mod], SideEnum.Top, SideEnum.CenterX);
+
+                                if (_liNewTurnOrder[mod].IsMonster()) { _arrEnemyTurns[mod].SetActor(_liNewTurnOrder[mod]); }
+                                else { _arrPartyTurns[mod].SetActor(_liNewTurnOrder[mod]); }
+
+                                _arrEnemyTurns[mod].SetAlpha(0);
+                                _arrEnemyTurns[mod].FadeIn(true);
+                                _arrPartyTurns[mod].SetAlpha(0);
+                                _arrPartyTurns[mod].FadeIn(true);
+                            }
+                        }
                     }
                 }
             }
@@ -1271,7 +1295,20 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             if (_bTriggered)
             {
-                _liNewTurnOrder = CombatManager.CalculateTurnOrder(MAX_SHOWN);
+                List<CombatActor> newList = CombatManager.CalculateTurnOrder(MAX_SHOWN);
+
+                //Assume that only one entry can be wrong for insertions
+                for(int i = 0; i< MAX_SHOWN -1; i++)
+                {
+                    if (_liNewTurnOrder[i + 1] != newList[i])
+                    {
+                        _iInsertion = i;
+                        break;
+                    }
+                }
+
+                _liNewTurnOrder = newList;
+
                 _iCurrUpdate = 0;
                 _bUpdate = true;
 
@@ -1361,7 +1398,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             public void SetActor(CombatActor c)
             {
                 _actor = c;
-                _gName.SetText(_actor.Name.Substring(0, 1));
+                _gName.SetText(c != null ? _actor.Name.Substring(0, 1) : string.Empty);
                 _gName.CenterOnObject(_gImage);
             }
 

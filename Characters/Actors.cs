@@ -140,7 +140,7 @@ namespace RiverHollow.Actors
             _height = _bodySprite.Height;
         }
 
-        public void AddDefaultAnimations(ref AnimatedSprite sprite, int startX, int startY, bool pingpong = false)
+        public void AddDefaultAnimations(ref AnimatedSprite sprite, int startX, int startY, bool pingpong = true)
         {
             AddDefaultAnimations(ref sprite, _sTexture, startX, startY, pingpong);
         }

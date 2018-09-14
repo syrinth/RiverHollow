@@ -13,6 +13,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         protected AnimatedSprite _sprite;
         public AnimatedSprite Sprite => _sprite;
 
+        public bool PlayedOnce
+        {
+            get { return _sprite.PlayedOnce; }
+            set { _sprite.PlayedOnce = value; }
+        }
+        public bool IsAnimating {
+            get { return _sprite.IsAnimating; }
+            set { _sprite.IsAnimating = value; }
+        }
+
         public GUISprite(AnimatedSprite sprite, bool overwrite = false)
         {
             _sprite = overwrite ? new AnimatedSprite(sprite) : sprite;

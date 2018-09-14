@@ -911,7 +911,7 @@ namespace RiverHollow.Game_Managers
                 }
                 if (_chosenAction != null)
                 {
-                    _chosenAction.Sprite.Draw(spritebatch, false);
+                    _chosenAction.Sprite.Draw(spritebatch);
                 }
             }
 

@@ -181,7 +181,7 @@ namespace RiverHollow.SpriteAnimations
 
         public void AddAnimation<TEnum>(TEnum animEnum, int X, int Y, int Width, int Height, int Frames, float FrameLength)
         {
-            _diFrameAnimations.Add(Util.GetEnumString(animEnum), new FrameAnimation(X, Y, Width, Height, Frames, FrameLength));
+            _diFrameAnimations.Add(Util.GetEnumString(animEnum), new FrameAnimation(X, Y, Width, Height, Frames, FrameLength, _bPingPong));
             _width = Width;
             _height = Height;
             v2Center = new Vector2(_width / 2, _height / 2);

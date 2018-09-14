@@ -35,7 +35,7 @@ namespace RiverHollow.SpriteAnimations
         private string eNextAnimation = string.Empty;
 
         bool _bBackTracking;
-        bool _bPingPong = true;
+        bool _bPingPong;
 
         /// 
         /// The number of frames the animation contains
@@ -100,23 +100,26 @@ namespace RiverHollow.SpriteAnimations
             set { eNextAnimation = value; }
         }
 
-        public FrameAnimation(Rectangle FirstFrame, int Frames)
+        public FrameAnimation(Rectangle FirstFrame, int Frames, bool pingPong)
         {
             rectInitialFrame = FirstFrame;
             _iFrameCount = Frames;
+            _bPingPong = pingPong;
         }
 
-        public FrameAnimation(int X, int Y, int Width, int Height, int Frames)
+        public FrameAnimation(int X, int Y, int Width, int Height, int Frames, bool pingPong)
         {
             rectInitialFrame = new Rectangle(X, Y, Width, Height);
             _iFrameCount = Frames;
+            _bPingPong = pingPong;
         }
 
-        public FrameAnimation(int X, int Y, int Width, int Height, int Frames, float FrameLength)
+        public FrameAnimation(int X, int Y, int Width, int Height, int Frames, float FrameLength, bool pingPong)
         {
             rectInitialFrame = new Rectangle(X, Y, Width, Height);
             _iFrameCount = Frames;
             _fFrameLength = FrameLength;
+            _bPingPong = pingPong;
         }
 
         public FrameAnimation(int X, int Y,
