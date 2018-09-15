@@ -111,7 +111,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             rv = _sdStamina.ProcessHover(mouse);
 
             if (!rv) { rv = _gActionSelect.ProcessHover(mouse); }
-
+            if (!rv) { rv = _gTurnOrder.ProcessHover(mouse); }
             if(CombatManager.PhaseChooseTarget()){
                 rv = HandleHoverTargeting();
             }
@@ -1126,7 +1126,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIImage[] _arrBarDisplay;
         TurnDisplay[] _arrTurnDisplay;
         List<CombatActor> _liNewTurnOrder;
-        List<CombatActor> _liQueuedUpdate;
+        GUIWindow _gWindow;
 
         public TurnOrderDisplay()
         {
@@ -1209,6 +1209,38 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             foreach (TurnDisplay displ in _arrTurnDisplay) { displ.Draw(spriteBatch); }
             foreach (GUIImage bar in _arrBarDisplay) { bar.Draw(spriteBatch); }
+
+            if(_gWindow != null) { _gWindow.Draw(spriteBatch); }
+        }
+
+        public bool ProcessHover(Point mouse)
+        {
+            bool rv = false;
+            CombatActor a = null;
+            foreach (TurnDisplay t in _arrTurnDisplay)
+            {
+                if (t.Contains(mouse))
+                {
+                    rv = true;
+                    a = t.Actor;
+                    break;
+                }
+            }
+
+            if (rv)
+            {
+                _gWindow = new GUIWindow(GUIWindow.RedWin, 10, 10);
+                GUIText gText = new GUIText(a.Name);
+                gText.AnchorToInnerSide(_gWindow, SideEnum.TopLeft);
+                _gWindow.Resize();
+                _gWindow.AnchorToScreen(SideEnum.BottomRight);
+            }
+            else
+            {
+                _gWindow = null;
+            }
+
+            return rv;
         }
 
         //Called to acquire the next turn order sequence and start off the new updates
