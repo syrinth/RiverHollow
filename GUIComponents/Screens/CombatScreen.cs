@@ -1117,15 +1117,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
     public class TurnOrderDisplay : GUIObject
     {
         const int MAX_SHOWN = 10;
-        int _iInsertion = -1;
         int _iCurrUpdate = MAX_SHOWN;
         double _dTimer = 0;
         bool _bUpdate = false;
         bool _bTriggered = false;
+        bool _bSyncing = false;
 
         GUIImage[] _arrBarDisplay;
         TurnDisplay[] _arrTurnDisplay;
         List<CombatActor> _liNewTurnOrder;
+        List<CombatActor> _liQueuedUpdate;
 
         public TurnOrderDisplay()
         {
@@ -1156,7 +1157,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 if (_dTimer <= 0)
                 {
                     _arrTurnDisplay[_iCurrUpdate].Update(gameTime);
-                    if(_iCurrUpdate == MAX_SHOWN -1 && _arrTurnDisplay[_iCurrUpdate].Finished && _arrTurnDisplay[_iCurrUpdate].Action == TurnDisplay.ActionEnum.Insert)
+                    if(!_bSyncing && _iCurrUpdate == MAX_SHOWN -1 && _arrTurnDisplay[_iCurrUpdate].Finished && _arrTurnDisplay[_iCurrUpdate].Action == TurnDisplay.ActionEnum.Insert)
                     {
                         _bUpdate = false;
                     }
@@ -1168,43 +1169,36 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     _iCurrUpdate++;
 
-                    if (_iCurrUpdate == _iInsertion)
+                    //After incrememnting the count, which will bring us one to the left, we set
+                    //The next box, ie: the box we just left, to equal the current, leftmost, box.
+                    //So, 9 -> 8, 8 -> 7, 7 -> 6, 6 -> 5, 5 -> 4, 4 -> 3, 3 -> 2, 2 -> 1, 1 -> 0
+                    if (!_bSyncing && _iCurrUpdate < MAX_SHOWN && _arrTurnDisplay[_iCurrUpdate - 1].Action != TurnDisplay.ActionEnum.Insert)
                     {
-                        //_arrTurnDisplay[_iCurrUpdate].Insert(_iInsertion);
+                        _arrTurnDisplay[_iCurrUpdate - 1] = _arrTurnDisplay[_iCurrUpdate];
+                        _arrTurnDisplay[_iCurrUpdate].SetIndex(_iCurrUpdate - 1);
                     }
-                    else
+                    //If we're Syncing, we want to re-insert a node at the position we just popped
+                    else if (_bSyncing && _arrTurnDisplay[_iCurrUpdate - 1].Action == TurnDisplay.ActionEnum.Pop)
                     {
-
-                        if (_iInsertion != -1 && _iCurrUpdate > _iInsertion)
+                        _iCurrUpdate--;
+                        _arrTurnDisplay[_iCurrUpdate].SetActor(_liNewTurnOrder[_iCurrUpdate]);
+                        _arrTurnDisplay[_iCurrUpdate].Insert(_iCurrUpdate);
+                    }
+                    //When we get to the last node, we need to do some special actions
+                    else if (_iCurrUpdate == MAX_SHOWN)
+                    {
+                        //If we're syncing, STAHP
+                        if (_bSyncing)
                         {
-                            if (_iCurrUpdate < MAX_SHOWN)
-                            {
-                                _arrTurnDisplay[_iCurrUpdate].SetActor(_liNewTurnOrder[_iCurrUpdate]);
-                            }
-                            else if (_iCurrUpdate == MAX_SHOWN && _arrTurnDisplay[_iCurrUpdate - 1].Action == TurnDisplay.ActionEnum.Insert)
-                            {
-                                _iInsertion = -1;
-                                _bUpdate = false;
-                            }
+                            _bSyncing = false;
+                            _bUpdate = false;
                         }
                         else
                         {
-                            //After incrememnting the count, which will bring us one to the left, we set
-                            //The next box, ie: the box we just left, to equal the current, leftmost, box.
-                            //So, 9 -> 8, 8 -> 7, 7 -> 6, 6 -> 5, 5 -> 4, 4 -> 3, 3 -> 2, 2 -> 1, 1 -> 0
-                            if (_iCurrUpdate < MAX_SHOWN && _arrTurnDisplay[_iCurrUpdate - 1].Action != TurnDisplay.ActionEnum.Insert)
-                            {
-                                _arrTurnDisplay[_iCurrUpdate - 1] = _arrTurnDisplay[_iCurrUpdate];
+                            int mod = --_iCurrUpdate;   //We need to act on the new, 9th box so we need to bump it back one.
 
-                                _arrTurnDisplay[_iCurrUpdate].SetIndex(_iCurrUpdate - 1);
-                            }
-                            else if (_iCurrUpdate == MAX_SHOWN)
-                            {
-                                int mod = --_iCurrUpdate;   //We need to act on the new, 9th box so we need to bump it back one.
-
-                                _arrTurnDisplay[mod] = new TurnDisplay(_liNewTurnOrder[mod], _arrBarDisplay);
-                                _arrTurnDisplay[mod].Insert(mod);
-                            }
+                            _arrTurnDisplay[mod] = new TurnDisplay(_liNewTurnOrder[mod], _arrBarDisplay);
+                            _arrTurnDisplay[mod].Insert(mod);
                         }
                     }
                 }
@@ -1221,35 +1215,44 @@ namespace RiverHollow.Game_Managers.GUIObjects
         //Tell the currently active turn to fade out to start the updates
         public void CalculateTurnOrder()
         {
-            if (_bTriggered)
-            {
+            if (_bTriggered) { 
                 List<CombatActor> newList = CombatManager.CalculateTurnOrder(MAX_SHOWN);
 
+                bool change = false;
                 //Assume that only one entry can be wrong for insertions
                 for(int i = 0; i< MAX_SHOWN -1; i++)
                 {
-                    if (_liNewTurnOrder[i + 1] != newList[i])
+                    if (_bUpdate || _liNewTurnOrder[i + 1] != newList[i])
                     {
-                        _iInsertion = i;
+                        change = true;
                         break;
                     }
                 }
 
                 _liNewTurnOrder = newList;
+                
 
-                _iCurrUpdate = 0;
-                _bUpdate = true;
-
-                _arrTurnDisplay[_iCurrUpdate].Pop();
-                _dTimer = 0.03;
+                if (change)
+                {
+                    for (int i = 0; i < MAX_SHOWN; i++)
+                    {
+                        _arrTurnDisplay[i].Pop();
+                        _bSyncing = true;
+                    }
+                }
+                else
+                {
+                    _arrTurnDisplay[0].Pop();
+                }
             }
             else
             {
                 _bTriggered = true;
-                _iCurrUpdate = 0;
-                _bUpdate = true;
-                _dTimer = 0.03;
             }
+
+            _iCurrUpdate = 0;
+            _bUpdate = true;
+            _dTimer = 0.03;
         }
 
         public override void Position(Vector2 value)
