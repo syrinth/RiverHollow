@@ -488,21 +488,25 @@ namespace RiverHollow.Tile_Engine
         {
             WorldActor player = PlayerManager.World;
             List<Item> removedList = new List<Item>();
-            foreach (Item i in _liItems)
+            for(int i = 0; i < _liItems.Count; i++)
             {
-                if (i.OnTheMap && i.AutoPickup)
+                Item it = _liItems[i];
+                if (InventoryManager.HasSpaceInInventory(it.ItemID, it.Number))
                 {
-                    if (((Item)i).FinishedMoving() && i.CollisionBox.Intersects(player.CollisionBox))
+                    if (it.OnTheMap && it.AutoPickup)
                     {
-                        removedList.Add(i);
-                        InventoryManager.AddNewItemToInventory(i.ItemID, i.Number);
-                    }
-                    else if (PlayerManager.PlayerInRange(i.CollisionBox.Center, 80))
-                    {
-                        float speed = 3;
-                        Vector2 direction = Util.MoveUpTo(i.Position, player.CollisionBox.Location.ToVector2(), speed);
-                        direction.Normalize();
-                        i.Position += (direction * speed);
+                        if (it.FinishedMoving() && it.CollisionBox.Intersects(player.CollisionBox))
+                        {
+                            removedList.Add(it);
+                            InventoryManager.AddNewItemToInventory(it.ItemID, it.Number);
+                        }
+                        else if (PlayerManager.PlayerInRange(it.CollisionBox.Center, 80))
+                        {
+                            float speed = 3;
+                            Vector2 direction = Util.MoveUpTo(it.Position, player.CollisionBox.Location.ToVector2(), speed);
+                            direction.Normalize();
+                            it.Position += (direction * speed);
+                        }
                     }
                 }
             }
@@ -886,11 +890,15 @@ namespace RiverHollow.Tile_Engine
             if (!rv)
             {
                 List<Item> removedList = new List<Item>();
-                foreach (Item i in _liItems)
+                for (int i = 0; i < _liItems.Count; i++)
                 {
-                    if(i.ManualPickup && i.CollisionBox.Contains(GraphicCursor.GetTranslatedMouseLocation())){
-                        removedList.Add(i);
-                        InventoryManager.AddNewItemToInventory(i.ItemID, i.Number);
+                    Item it = _liItems[i];
+                    if(it.ManualPickup && it.CollisionBox.Contains(GraphicCursor.GetTranslatedMouseLocation())){
+                        if(InventoryManager.AddItemToInventory(it))
+                        {
+                            removedList.Add(it);
+                            break;
+                        }
                     }
                 }
 

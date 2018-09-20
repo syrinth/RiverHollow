@@ -94,9 +94,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 if(GraphicCursor.HeldItem != null)
                 {
-                    GraphicCursor.HeldItem.AutoPickup = false;
-                    GraphicCursor.HeldItem.ManualPickup = true;
-                    MapManager.CurrentMap.DropItemOnMap(GraphicCursor.HeldItem, PlayerManager.World.Position);
+                    InventoryManager.DropItemOnMap(GraphicCursor.HeldItem);
                     GraphicCursor.DropItem();
                 }
             }

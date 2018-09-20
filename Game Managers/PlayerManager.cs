@@ -113,6 +113,10 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddNewItemToInventory(400);
             InventoryManager.AddNewItemToInventory(402);
             InventoryManager.AddNewItemToInventory(11);
+            for(int i = 0; i < 20; i++)
+            {
+                InventoryManager.AddNewItemToInventory(11);
+            }
 
             PlayerManager.AddToParty(ObjectManager.GetWorker(5).Combat);
             PlayerManager.AddToParty(ObjectManager.GetWorker(2).Combat);

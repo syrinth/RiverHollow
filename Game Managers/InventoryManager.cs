@@ -51,11 +51,11 @@ namespace RiverHollow.Game_Managers
             CheckOperation(c, ref inventory);
         }
 
-        public static bool HasSpaceInInventory(int itemID)
+        public static bool HasSpaceInInventory(int itemID, int num = 1)
         {
-            return HasSpaceInInventory(itemID, null);
+            return HasSpaceInInventory(itemID, num, null);
         }
-        public static bool HasSpaceInInventory(int itemID, Container c)
+        public static bool HasSpaceInInventory(int itemID, int num, Container c)
         {
             int maxRows = 0;
             int maxColumns = 0;
@@ -77,7 +77,7 @@ namespace RiverHollow.Game_Managers
                         }
                         else
                         {
-                            if (testItem.ItemID == itemID && testItem.DoesItStack && testItem.Number < 999)
+                            if (testItem.ItemID == itemID && testItem.DoesItStack && testItem.Number + num < 999)
                             {
                                 rv = true;
                                 break;
@@ -174,51 +174,69 @@ Exit:
             }
         }
 
-        public static void AddNewItemToInventory(int itemToAdd, int num)
+        public static bool AddNewItemToInventory(int itemToAdd, int num)
         {
-            AddItemToInventory(ObjectManager.GetItem(itemToAdd, num), null);
+            return AddItemToInventory(ObjectManager.GetItem(itemToAdd, num), null);
         }
-        public static void AddNewItemToInventory(int itemToAdd)
+        public static bool AddNewItemToInventory(int itemToAdd)
         {
-            AddItemToInventory(ObjectManager.GetItem(itemToAdd), null);
+            return AddItemToInventory(ObjectManager.GetItem(itemToAdd), null);
         }
-        public static void AddNewItemToInventory(int itemToAdd, Container c)
+        public static bool AddNewItemToInventory(int itemToAdd, Container c)
         {
-            AddItemToInventory(ObjectManager.GetItem(itemToAdd), c);
+            return AddItemToInventory(ObjectManager.GetItem(itemToAdd), c);
         }
-        public static void AddItemToInventory(Item itemToAdd)
+        public static bool AddItemToInventory(Item itemToAdd)
         {
-            AddItemToInventory(itemToAdd, null);
+            return AddItemToInventory(itemToAdd, null);
         }
-        public static void AddItemToInventory(Item itemToAdd, Container c)
+        public static bool AddItemToInventory(Item itemToAdd, Container c)
         {
+            bool rv = false;
             int maxRows = 0;
             int maxColumns = 0;
             Item[,] _inventory = null;
             CheckOperation(c, ref maxRows, ref maxColumns, ref _inventory);
 
-            if (!IncrementExistingItem(itemToAdd, c))
+            if (HasSpaceInInventory(itemToAdd.ItemID))
             {
-                for (int i = 0; i < maxRows; i++)
+                if (!IncrementExistingItem(itemToAdd, c))
                 {
-                    for (int j = 0; j < maxColumns; j++)
+                    for (int i = 0; i < maxRows; i++)
                     {
-                        if (_inventory[i, j] == null)
+                        for (int j = 0; j < maxColumns; j++)
                         {
-                            _inventory[i, j] = itemToAdd;
-                            //Only perform this check if we are adding to the playerInventory
-                            if (_inventory == _playerInventory)
+                            if (_inventory[i, j] == null)
                             {
-                                PlayerManager.AdvanceQuestProgress(itemToAdd);
-                                if(_playerInventory[i, j].ItemType == Item.ItemEnum.Tool)PlayerManager.CompareTools((Tool)_playerInventory[i, j]);
+                                rv = true;
+                                _inventory[i, j] = itemToAdd;
+                                //Only perform this check if we are adding to the playerInventory
+                                if (_inventory == _playerInventory)
+                                {
+                                    PlayerManager.AdvanceQuestProgress(itemToAdd);
+                                    if (_playerInventory[i, j].ItemType == Item.ItemEnum.Tool) PlayerManager.CompareTools((Tool)_playerInventory[i, j]);
+                                }
+                                j = maxColumns;
+                                i = maxRows;
                             }
-                            goto Exit;
                         }
                     }
                 }
+                else { rv = true; }
             }
-Exit:
-            return;
+
+            if (!rv && !itemToAdd.ManualPickup)
+            {
+                DropItemOnMap(itemToAdd);
+            }
+            return rv;
+        }
+
+        public static void DropItemOnMap(Item item)
+        {
+            item.AutoPickup = false;
+            item.ManualPickup = true;
+            MapManager.CurrentMap.DropItemOnMap(item, PlayerManager.World.Position);
         }
 
         public static bool IncrementExistingItem(Item itemToAdd, Container c)
