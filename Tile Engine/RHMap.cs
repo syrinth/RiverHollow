@@ -442,6 +442,7 @@ namespace RiverHollow.Tile_Engine
             SpawnMobs();
 
             CheckSpirits();
+            _liItems.Clear();
         }
 
         private void SpawnMobs()
