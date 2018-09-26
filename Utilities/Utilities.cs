@@ -201,18 +201,31 @@ namespace RiverHollow.Misc
         {
             return (check >= first && check <= second);
         }
+
+        public static float GetRandomFloat(int min, int max, int precision)
+        {
+            float rv = 0;
+            RHRandom r = new RHRandom();
+            string composite = r.Next(min, max).ToString() + ".";
+
+            for (int i = 0; i < precision; i++)
+            {
+                composite += r.Next(0, 9);
+            }
+
+            rv = float.Parse(composite);
+
+            return rv;
+        }
     }
 
     public class RHRandom : Random
     {
-        public RHRandom() : base()
-        {
-            Thread.Sleep(1);
-        }
+        public RHRandom() : base() {}
 
         public override int Next(int min, int max)
         {
-            //Thread.Sleep(1);
+            Thread.Sleep(1);
             int rv = 0;
             rv = base.Next(min, max + 1);
             return rv;

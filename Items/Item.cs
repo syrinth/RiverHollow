@@ -16,41 +16,41 @@ namespace RiverHollow.WorldObjects
         public enum ItemEnum { Resource, Class, Equipment, Tool, Container, Food, Map, Combat, StaticItem, Marriage, Clothes  };
 
         #region properties
-        protected ItemEnum _itemType;
-        public ItemEnum ItemType => _itemType;
-        protected int _itemID;
-        public int ItemID => _itemID;
+        protected ItemEnum _eItemType;
+        public ItemEnum ItemType => _eItemType;
+        protected int _iItemID;
+        public int ItemID => _iItemID;
         protected Color _c = Color.White;
         public Color ItemColor => _c;
 
         protected double _dWidth = 16;
         protected double _dHeight = 16;
-        protected string _name;
-        public string Name => _name;
+        protected string _sName;
+        public string Name => _sName;
 
         protected Texture2D _texture;
         public Texture2D Texture => _texture;
 
-        protected Vector2 _sourcePos;
+        protected Vector2 _vSourcePos;
 
-        protected Vector2 _position;
-        public virtual Vector2 Position { get => _position; set => _position = value; }
+        protected Vector2 _vPosition;
+        public virtual Vector2 Position { get => _vPosition; set => _vPosition = value; }
 
         public virtual Rectangle CollisionBox { get => new Rectangle((int)Position.X, (int)Position.Y, TileSize, TileSize); }
-        public Rectangle SourceRectangle { get => new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, (int)_dWidth, (int)_dHeight); }
+        public Rectangle SourceRectangle { get => new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, (int)_dWidth, (int)_dHeight); }
 
-        protected bool _onTheMap;
-        public bool OnTheMap { get => _onTheMap; set => _onTheMap = value; }
+        protected bool _bOnMap;
+        public bool OnTheMap { get => _bOnMap; set => _bOnMap = value; }
 
         protected bool _bAutoPickup = true;
         public bool AutoPickup { get => _bAutoPickup; set => _bAutoPickup = value; }
         protected bool _bManualPickup = false;
         public bool ManualPickup { get => _bManualPickup; set => _bManualPickup = value; }
 
-        protected string _description;
+        protected string _sDescription;
 
-        protected int _columnTextureSize = TileSize;
-        protected int _rowTextureSize = TileSize;
+        protected int _iColTexSize = TileSize;
+        protected int _iRowTexSize = TileSize;
         private Parabola _movement;
         protected bool _bStacks;
         public bool DoesItStack => _bStacks;
@@ -58,8 +58,8 @@ namespace RiverHollow.WorldObjects
         protected int _iNum;
         public int Number { get => _iNum; }
 
-        protected int _sellPrice;
-        public int SellPrice => _sellPrice;
+        protected int _iSellPrice;
+        public int SellPrice => _iSellPrice;
         #endregion
         public Item() { }
 
@@ -75,8 +75,8 @@ namespace RiverHollow.WorldObjects
         {
             _iNum = num;
 
-            _itemID = id;
-            GameContentManager.GetIemText(_itemID, ref _name, ref _description);
+            _iItemID = id;
+            GameContentManager.GetIemText(_iItemID, ref _sName, ref _sDescription);
 
             int i = 0;
             int totalCount = 0;
@@ -85,18 +85,18 @@ namespace RiverHollow.WorldObjects
                 string[] tagType = stringData[i].Split(':');
                 if (tagType[0].Equals("Type"))
                 {
-                    _itemType = Util.ParseEnum<ItemEnum>(tagType[1]);
+                    _eItemType = Util.ParseEnum<ItemEnum>(tagType[1]);
                     totalCount++;
                 }
                 else if (tagType[0].Equals("Image"))
                 {
                     string[] texIndices = tagType[1].Split('-');
-                    _sourcePos = new Vector2(0 + TileSize * int.Parse(texIndices[0]), 0 + TileSize * int.Parse(texIndices[1]));
+                    _vSourcePos = new Vector2(0 + TileSize * int.Parse(texIndices[0]), 0 + TileSize * int.Parse(texIndices[1]));
                     totalCount++;
                 }
                 else if (tagType[0].Equals("Sell"))
                 {
-                    _sellPrice = int.Parse(tagType[1]);
+                    _iSellPrice = int.Parse(tagType[1]);
                     totalCount++;
                 }
 
@@ -111,12 +111,12 @@ namespace RiverHollow.WorldObjects
         //Copy Constructor
         public Item(Item item)
         {
-            _itemID = item.ItemID;
-            _itemType = item.ItemType;
-            _sourcePos = item._sourcePos;
-            _name = item.Name;
+            _iItemID = item.ItemID;
+            _eItemType = item.ItemType;
+            _vSourcePos = item._vSourcePos;
+            _sName = item.Name;
             _texture = item.Texture;
-            _description = item._description;
+            _sDescription = item._sDescription;
             _iNum = item.Number;
             _bStacks = item.DoesItStack;
         }
@@ -127,7 +127,7 @@ namespace RiverHollow.WorldObjects
             {
                 if (!_movement.Finished)
                 {
-                    _position = _movement.MoveTo();
+                    _vPosition = _movement.MoveTo();
                     _movement.Update();
                 }
                 else
@@ -139,50 +139,34 @@ namespace RiverHollow.WorldObjects
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if (_onTheMap)
+            if (_bOnMap)
             {
-                spriteBatch.Draw(_texture, new Rectangle((int)_position.X, (int)_position.Y, (int)_dWidth, (int)_dHeight), SourceRectangle, _c);
+                spriteBatch.Draw(_texture, new Rectangle((int)_vPosition.X, (int)_vPosition.Y, (int)_dWidth, (int)_dHeight), SourceRectangle, _c, 0, Vector2.Zero, SpriteEffects.None, (float)(Position.Y + _dHeight + (Position.X / 100)));
             }
         }
 
         public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox, bool LayerDepth = false)
         {
-            double drawHeight = _dHeight;
-            int tempX = drawBox.X;
-            int tempWidth = drawBox.Width;
-
-            if (_dHeight != _dWidth)
-            {
-                double drawWidth = (_dHeight != _dWidth) ? drawBox.Width * (_dWidth / _dHeight) : drawBox.Width;
-                int drawX = (_dHeight != _dWidth) ? (int)drawWidth / 2 : drawBox.X;
-                drawBox.X += drawX;
-                drawBox.Width = (int)drawWidth;
-            }
-
             if (LayerDepth)
             {
-                spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, (int)_dWidth, (int)_dHeight), _c, 0, Vector2.Zero, SpriteEffects.None, 99999);
+                spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, (int)_dWidth, (int)_dHeight), _c, 0, Vector2.Zero, SpriteEffects.None, 99999);
             }
             else
             {
-                spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_sourcePos.X, (int)_sourcePos.Y, (int)_dWidth, (int)_dHeight), _c);
+                spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, (int)_dWidth, (int)_dHeight), _c);
             }
-
-            drawBox.X = tempX;
-            drawBox.Width = tempWidth;
         }
 
         public virtual string GetDescription()
         {
-            return _description;
+            return _sDescription;
         }
 
         public void Pop(Vector2 pos)
         {
-
-            _position = pos;
-            _onTheMap = true;
-            _movement = new Parabola(_position, RandomVelocityVector(), RandNumber(8, TileSize, 0, 0));
+            _vPosition = pos;
+            _bOnMap = true;
+            _movement = new Parabola(_vPosition, RandomVelocityVector(), Util.GetRandomFloat(-TileSize*2, TileSize*2, 3));
         }
 
         public bool FinishedMoving()
@@ -212,7 +196,7 @@ namespace RiverHollow.WorldObjects
                 int leftOver = _iNum + x - 999;
                 _iNum = 999;
 
-                InventoryManager.AddNewItemToInventory(_itemID, leftOver);
+                InventoryManager.AddNewItemToInventory(_iItemID, leftOver);
             }
         }
         public bool Remove(int x)
@@ -233,45 +217,26 @@ namespace RiverHollow.WorldObjects
 
         public Vector2 RandomVelocityVector()
         {
-            float xVal = RandNumber(-3, 3, -1, 1);
-            float divider = RandNumber(3, 5, 0, 0);
-            return new Vector2(xVal/divider, RandNumber(-5, -2, 0, 0));
+            return new Vector2(Util.GetRandomFloat(-1, 1, 3), Util.GetRandomFloat(-5, 2, 3));
         }
 
-        public int RandNumber(int minValue, int maxValue, int minExclude, int maxExclude)
-        {
-            Thread.Sleep(1);
-            int rv = 0;
-            int seed = (int)DateTime.Now.Ticks & 0x0000FFFF;
-            Random r = new Random(seed);
-            bool found = false;
-            while (!found)
-            {
-                rv = r.Next(minValue, maxValue);
-                if (rv < minExclude || rv > maxExclude)
-                {
-                    found = true;
-                }
-            }
-
-            return rv;
-        }
+        
 
         public virtual void UseItem() { }
 
         public virtual void ApplyUniqueData(string str) { }
         public virtual string GetUniqueData() { return string.Empty; }
 
-        public bool IsTool() { return _itemType == ItemEnum.Tool; }
-        public bool IsCombatItem() { return _itemType == ItemEnum.Combat; }
-        public bool IsEquipment() { return _itemType == ItemEnum.Equipment; }
-        public bool IsFood() { return _itemType == ItemEnum.Food; }
-        public bool IsClassItem() { return _itemType == ItemEnum.Class; }
-        public bool IsContainer() { return _itemType == ItemEnum.Container; }
-        public bool IsStaticItem() { return _itemType == ItemEnum.StaticItem; }
-        public bool IsMarriage() { return _itemType == ItemEnum.Marriage; }
-        public bool IsMap() { return _itemType == ItemEnum.Map; }
-        public bool IsClothes() { return _itemType == ItemEnum.Clothes; }
+        public bool IsTool() { return _eItemType == ItemEnum.Tool; }
+        public bool IsCombatItem() { return _eItemType == ItemEnum.Combat; }
+        public bool IsEquipment() { return _eItemType == ItemEnum.Equipment; }
+        public bool IsFood() { return _eItemType == ItemEnum.Food; }
+        public bool IsClassItem() { return _eItemType == ItemEnum.Class; }
+        public bool IsContainer() { return _eItemType == ItemEnum.Container; }
+        public bool IsStaticItem() { return _eItemType == ItemEnum.StaticItem; }
+        public bool IsMarriage() { return _eItemType == ItemEnum.Marriage; }
+        public bool IsMap() { return _eItemType == ItemEnum.Map; }
+        public bool IsClothes() { return _eItemType == ItemEnum.Clothes; }
 
         public static ItemData SaveData(Item i)
         {
@@ -300,38 +265,48 @@ namespace RiverHollow.WorldObjects
 
         private class Parabola
         {
-            private Vector2 _pos;
-            private Vector2 _vel;
-            public Vector2 Velocity { get => _vel; }
-            private Vector2 _initialVelocity;
-            private int _finalY;
-            private bool _finished = false;
-            public bool Finished { get => _finished; }
-            public Parabola(Vector2 pos, Vector2 velocity, int Y)
+            Vector2 _vStart;
+            Vector2 _vVel;
+            public Vector2 Velocity { get => _vVel; }
+            private Vector2 _vInitialVel;
+            private float _fFinalY;
+            private bool _bFinished = false;
+            public bool Finished { get => _bFinished; }
+
+            bool _bDownCurve;
+            public Parabola(Vector2 pos, Vector2 velocity, float Y)
             {
-                _pos = pos;
-                _vel = velocity;
-                _initialVelocity = _vel;
-                _finalY = (int)_pos.Y + Y;
+                _vStart = pos;
+                _vVel = velocity;
+                _vInitialVel = _vVel;
+                _fFinalY = _vStart.Y + Y;
             }
 
             public void Update()
             {
-                _vel.Y += 0.2f;
-                if (_pos.Y >= _finalY)
+                _vVel.Y += 0.2f;
+
+                if(_vVel.Y >= 0) {
+                    _bDownCurve = true;
+                }
+
+                if (_bDownCurve && _vStart.Y >= _fFinalY)
                 {
-                    _vel.Y = _initialVelocity.Y/1.5f;
-                    _initialVelocity = _vel;
-                    if (_vel.Y >= -1f)
+                    //Reset velocity for bouncing
+                    _vVel.Y = _vInitialVel.Y/1.5f;
+                    _vInitialVel = _vVel;
+                    _bDownCurve = false;
+
+                    if (_vVel.Y >= -1f)         //Only bounce a few times
                     {
-                        _finished = true;
+                        _bFinished = true;
                     }
                 }
             }
 
             public Vector2 MoveTo()
             {
-                return _pos += _vel;
+                return _vStart += _vVel;
             }
         }
     }
@@ -501,8 +476,8 @@ namespace RiverHollow.WorldObjects
         public override Vector2 Position {
             set
             {
-                _position = value;
-                _sprite.Position = _position;
+                _vPosition = value;
+                _sprite.Position = _vPosition;
             }
         }
 
@@ -528,11 +503,11 @@ namespace RiverHollow.WorldObjects
             }
             _texture = GameContentManager.GetTexture(@"Textures\tools");
 
-            _columnTextureSize = 128;
-            _rowTextureSize = TileSize;
+            _iColTexSize = 128;
+            _iRowTexSize = TileSize;
 
             _sprite = new AnimatedSprite(@"Textures\tools");
-            _sprite.AddAnimation(ToolAnimEnum.Left, (int)_sourcePos.X + TileSize, (int)_sourcePos.Y, TileSize, TileSize, 2, 0.3f);
+            _sprite.AddAnimation(ToolAnimEnum.Left, (int)_vSourcePos.X + TileSize, (int)_vSourcePos.Y, TileSize, TileSize, 2, 0.3f);
 
             _sprite.SetCurrentAnimation(ToolAnimEnum.Left);
             _sprite.IsAnimating = true;
@@ -607,8 +582,9 @@ namespace RiverHollow.WorldObjects
         public int Difficulty { get => _difficulty; }
         public AdventureMap(int id, string[] stringData, int num)
         {
+            RHRandom r = new RHRandom();
             int i = ImportBasics(stringData, id, num);
-            _difficulty = RandNumber(4, 5, 0, 0);
+            _difficulty = r.Next(4, 5);
 
             _bStacks = false;
             _texture = GameContentManager.GetTexture(@"Textures\items");
@@ -629,7 +605,7 @@ namespace RiverHollow.WorldObjects
         public MarriageItem(int id, string[] stringData)
         {
             ImportBasics(stringData, id, 1);
-            _itemType = ItemEnum.Marriage;
+            _eItemType = ItemEnum.Marriage;
             _iNum = 1;
             _bStacks = false;
             _texture = GameContentManager.GetTexture(@"Textures\items");
@@ -713,8 +689,8 @@ namespace RiverHollow.WorldObjects
             _iClassID = i;
 
             string n = ActorManager.GetClassByIndex(_iClassID).Name;
-            _name += n;
-            _description += n;
+            _sName += n;
+            _sDescription += n;
 
             switch (_iClassID)
             {
