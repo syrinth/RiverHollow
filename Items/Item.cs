@@ -357,10 +357,6 @@ namespace RiverHollow.WorldObjects
                 {
                     _iTier = int.Parse(tagType[1]);
                 }
-                else if (tagType[0].Equals("Atk"))
-                {
-                    _attack = GameContentManager.GetItemTierData(_iTier, tagType[1], false);
-                }
                 else if (tagType[0].Equals("Str"))
                 {
                     _str = GameContentManager.GetItemTierData(_iTier, tagType[1]);
@@ -387,6 +383,7 @@ namespace RiverHollow.WorldObjects
                 }
             }
 
+            _attack = _iTier * 10;
             _texture = GameContentManager.GetTexture(@"Textures\weapons");
         }
 

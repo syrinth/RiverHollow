@@ -11,13 +11,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class HUDScreen : GUIScreen
     {
-        GUIItemBox _gSelectedBox;
-
         GUIStatDisplay _healthDisplay;
         GUIStatDisplay _staminaDisplay;
         GUIMoneyDisplay _gMoney;
 
         HUDInventory _gInventory;
+        GUIItemBox _addedItem;
+        double _dTimer;
 
         public HUDScreen()
         {
@@ -73,12 +73,35 @@ namespace RiverHollow.Game_Managers.GUIObjects
             base.Update(gameTime);
             _gMoney.Update(gameTime);
             _gInventory.Update(gameTime);
+
+            if (InventoryManager.AddedItem != null && _addedItem == null)
+            {
+                _addedItem = new GUIItemBox(InventoryManager.AddedItem);
+                _addedItem.AnchorAndAlignToObject(_gInventory, SideEnum.Left, SideEnum.CenterY, 10);
+                _dTimer = 1;
+            }
+            else {
+                if (_addedItem != null && _addedItem.Alpha > 0)
+                {
+                    _dTimer -= gameTime.ElapsedGameTime.TotalSeconds;
+                    _addedItem.SetAlpha((float)_dTimer);
+                }
+                else if (_addedItem != null)
+                {
+                    _addedItem = null;
+                    InventoryManager.AddedItem = null;
+                }
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
             _gInventory.Draw(spriteBatch);
+            if (_addedItem != null)
+            {
+                _addedItem.Draw(spriteBatch);
+            }
         }
 
         public override void Sync()

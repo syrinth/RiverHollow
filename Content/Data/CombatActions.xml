@@ -10,7 +10,7 @@
     <Item>
       <!--Attack-->
       <Key>1</Key>
-      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:Melee][Area:Single][Effect:Harm-1][Action:UserMove UserAttack Apply Return]</Value>
+      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:Melee][Area:Single][Effect:Harm-100][Action:UserMove UserAttack Apply Return]</Value>
     </Item>
     <Item>
       <!--Cast Spell-->
@@ -35,7 +35,7 @@
     <Item>
       <!--Summoner Attack-->
       <Key>11</Key>
-      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:Ranged][Area:Single][Effect:Harm-1 Bonus-Summons][Action:UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:Ranged][Area:Single][Effect:Harm-100 Bonus-Summons][Action:UserAttack Apply]</Value>
     </Item>
     <!--<50> Special-->
     <Item>
@@ -49,11 +49,11 @@
     <!--<100> Wizard Spells-->
     <Item>
       <Key>101</Key>
-      <Value>[Type:Spell][SpellAnimation:0-0-94-160-15-0.1-32][Target:Enemy][Range:Ranged][Area:Area][Size:1][Effect:Cost-5 Harm-5 Direct][Action:UserCast Direct Apply][Element:Lightning]</Value>
+      <Value>[Type:Spell][SpellAnimation:0-0-94-160-15-0.1-32][Target:Enemy][Range:Ranged][Area:Area][Size:1][Effect:Cost-5 Harm-150 Direct][Action:UserCast Direct Apply][Element:Lightning]</Value>
     </Item>
     <Item>
       <Key>102</Key>
-      <Value>[Type:Spell][SpellAnimation:0-0-94-160-15-0.1-32][Target:Enemy][Range:Ranged][Area:Area][Size:1][Effect:Cost-10 Harm-50][Action:UserCast Projectile Apply]</Value>
+      <Value>[Type:Spell][SpellAnimation:0-0-94-160-15-0.1-32][Target:Enemy][Range:Ranged][Area:Area][Size:1][Effect:Cost-10 Harm-200][Action:UserCast Projectile Apply]</Value>
     </Item>
     <Item>
       <Key>103</Key>
@@ -70,7 +70,7 @@
     <!--<150> Healer Spells-->
     <Item>
       <Key>150</Key>
-      <Value>[Type:Spell][SpellAnimation:0-0.03][Target:Ally][Range:Ranged][Area:Single][Effect:Cost-5 Heal-10 Direct][Action:UserCast Direct Apply]</Value>
+      <Value>[Type:Spell][SpellAnimation:0-0.03][Target:Ally][Range:Ranged][Area:Single][Effect:Cost-5 Heal-100 Direct][Action:UserCast Direct Apply]</Value>
     </Item>
     <Item>
       <Key>151</Key>

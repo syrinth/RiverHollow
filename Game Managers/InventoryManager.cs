@@ -24,6 +24,8 @@ namespace RiverHollow.Game_Managers
         public static int CurrentItemNumber { get => _currentInventorySlot; set => _currentInventorySlot = value; }
         //private Item _currentItem;
         public static Item CurrentItem { get => _playerInventory[0, _currentInventorySlot]; }
+
+        public static Item AddedItem;
         #endregion
 
         public static void Init()
@@ -218,6 +220,8 @@ Exit:
                                 }
                                 j = maxColumns;
                                 i = maxRows;
+
+                                AddedItem = itemToAdd;
                             }
                         }
                     }
@@ -253,6 +257,7 @@ Exit:
                 {
                     if (inventory[i, j] != null && inventory[i, j].DoesItStack && inventory[i, j].ItemID == itemToAdd.ItemID && inventory[i, j].Number < 999)
                     {
+                        AddedItem = itemToAdd;
                         inventory[i, j].Add(itemToAdd.Number);
                         rv = true;
 

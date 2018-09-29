@@ -2178,7 +2178,7 @@ namespace RiverHollow.Actors
     public class CombatActor : Actor
     {
         #region Properties
-        const int MAX_STAT = 99;
+        protected const int MAX_STAT = 99;
         protected string _sUnique;
 
         public override string Name => String.IsNullOrEmpty(_sUnique) ? _sName : _sName + " " + _sUnique;
@@ -2192,7 +2192,7 @@ namespace RiverHollow.Actors
             get { return _currentHP; }
             set { _currentHP = value; }
         }
-        public int MaxHP { get => StatVit * 3; }
+        public virtual int MaxHP => 20 + (int)Math.Pow(((double)StatVit / 3), 1.98);
 
         protected int _currentMP;
         public int CurrentMP
@@ -2200,14 +2200,15 @@ namespace RiverHollow.Actors
             get { return _currentMP; }
             set { _currentMP = value; }
         }
-        public int MaxMP { get => StatMag * 3; }
+        public virtual int MaxMP => StatMag * 3; 
 
         public int CurrentCharge;
         public int DummyCharge;
         public CombatManager.CombatTile Tile;
         public GUICmbtTile Location => Tile.GUITile;
 
-        public virtual int Attack => (int)(StatStr * 0.5);
+        public virtual int Attack => 20;
+        public double StrMult => Math.Round(1 + ((double)StatStr/4 * (double)StatStr / MAX_STAT), 2);
 
         protected int _statStr;
         public virtual int StatStr { get => _statStr + _buffStr; }
@@ -2333,22 +2334,24 @@ namespace RiverHollow.Actors
 
         public int ProcessAttack(CombatActor attacker, int potency, ElementEnum element = ElementEnum.None)
         {
-            int base_attack = attacker.Attack;
+            double compression = 0.8;
+            double potencyMod = potency / 100;   //100 potency is considered an average attack
+            double base_attack = attacker.Attack;  //Attack stat is either weapon damage or mod on monster str
 
-            double power = Math.Pow(((double)base_attack - (double)StatDef), 2) + attacker.StatStr;
-            double dMult = Math.Min(2, Math.Max(0.01, power));
-            int dmg = (int)Math.Max(1, base_attack * dMult);
+            int dmg = (int)( Math.Max(1, base_attack - StatDef) * compression * attacker.StrMult);
 
             dmg += ApplyResistances(dmg, element);
-            return DecreaseHealth(potency);
+            return DecreaseHealth(dmg);
         }
         public int ProcessSpell(CombatActor attacker, int potency, ElementEnum element = ElementEnum.None)
         {
-            int base_damage = (attacker.StatMag - StatRes / 2) * potency;
-            int bonus = 0;
+            double maxDmg = (1 + potency) * 3;
+            double divisor = 1 + (15 * Math.Pow(Math.E, -0.12 * (attacker.StatMag - StatRes) * Math.Round((double)attacker.StatMag / MAX_STAT, 2)));
 
-            base_damage += ApplyResistances(base_damage, element);
-            return DecreaseHealth(base_damage);
+            int damage = (int)Math.Round(maxDmg / divisor);
+            damage += ApplyResistances(damage, element);
+
+            return DecreaseHealth(damage);
         }
         public int ApplyResistances(int dmg, ElementEnum element = ElementEnum.None)
         {
@@ -2616,12 +2619,12 @@ namespace RiverHollow.Actors
         public Equipment TempArmor;
 
         public override int Attack => GetGearAtk();
-        public override int StatStr { get => 10 + (_classLevel * _class.StatStr) + _buffStr + GetGearStr(); }
-        public override int StatDef { get => 10 + (_classLevel * _class.StatDef) + _buffDef + GetGearDef() + (Protected ? 10 : 0); }
-        public override int StatVit { get => 10 + (_classLevel * _class.StatVit) + GetGearVit(); }
-        public override int StatMag { get => 10 + (_classLevel * _class.StatMag) + _buffMag + GetGearMag(); }
-        public override int StatRes { get => 10 + (_classLevel * _class.StatRes) + _buffRes + GetGearRes(); }
-        public override int StatSpd { get => 10 + (_classLevel * _class.StatSpd) + +_buffSpd + GetGearSpd(); }
+        public override int StatStr => 10 + _buffStr + GetGearStr();
+        public override int StatDef => 10 + _buffDef + GetGearDef() + (Protected ? 10 : 0);
+        public override int StatVit => 10 + (_classLevel * _class.StatVit) + GetGearVit();
+        public override int StatMag => 10 +  _buffMag + GetGearMag();
+        public override int StatRes => 10 + _buffRes + GetGearRes();
+        public override int StatSpd => 10 + _class.StatSpd +_buffSpd + GetGearSpd();
 
         public override List<MenuAction> AbilityList { get => _class.AbilityList; }
         public override List<CombatAction> SpellList { get => _class._spellList; }
@@ -2760,10 +2763,14 @@ namespace RiverHollow.Actors
         #region Properties
         int _id;
         public int ID { get => _id; }
-        int _iLvl;
+        int _iRating;
         int _xp;
         public int XP { get => _xp; }
         protected Vector2 _moveTo = Vector2.Zero;
+
+        public override int Attack => 20 + (_iRating * 10);
+
+        public override int MaxHP => (int)((((Math.Pow(_iRating, 2))* 10) + 20) * Math.Pow(Math.Max(1, (double)_iRating / 14), 2));
 
         #endregion
 
@@ -2787,13 +2794,13 @@ namespace RiverHollow.Actors
                 }
                 else if (tagType[0].Equals("Lvl"))
                 {
-                    _iLvl = int.Parse(tagType[1]);
-                    _xp = _iLvl * 10;
-                    _statStr = 2 * _iLvl + 10;
-                    _statDef = 2 * _iLvl + 10;
-                    _statVit = (3 * _iLvl) + 80;
-                    _statMag = 2 * _iLvl + 10;
-                    _statRes = 2 * _iLvl + 10;
+                    _iRating = int.Parse(tagType[1]);
+                    _xp = _iRating * 10;
+                    _statStr = 1 + _iRating;
+                    _statDef = 10 + (_iRating *3 );
+                    _statVit = 2 * _iRating + 10;
+                    _statMag = 2 * _iRating + 10;
+                    _statRes = 2 * _iRating + 10;
                     _statSpd = 10;
                 }
                 else if (tagType[0].Equals("Trait"))
