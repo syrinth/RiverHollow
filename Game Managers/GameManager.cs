@@ -40,8 +40,9 @@ namespace RiverHollow.Game_Managers
         public enum ElementAlignment { Neutral, Vulnerable, Resists };
         public enum ConditionEnum { None, KO, Poisoned, Silenced };
         public enum WorkerTypeEnum { None, Magic, Martial };
-        public enum WeaponEnum { None, Staff, Sword };
-        public enum ArmorEnum { None, Cloth, Heavy };
+        public enum WeaponEnum { None, Sword, Mace, Rapier, Bow, Wand, Knife, Orb, Staff };
+        public enum ArmorEnum { None, Cloth, Light, Heavy };
+        public enum ArmorSlotEnum { None, Head, Armor, Wrist };
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
         public static float Scale = 4f;
         public static int TileSize = 16;

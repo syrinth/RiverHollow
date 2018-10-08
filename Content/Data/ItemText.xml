@@ -15,28 +15,12 @@
       <Value>Wood/Wood, it builds stuff</Value>
     </Item>
     <Item>
-      <Key>5</Key>
-      <Value>Basic Sword/Swing this fucker</Value>
-    </Item>
-    <Item>
       <Key>7</Key>
       <Value>Apple/Nomnom</Value>
     </Item>
     <Item>
       <Key>8</Key>
       <Value>Adventure Map/Off to find adventures!</Value>
-    </Item>
-    <Item>
-      <Key>9</Key>
-      <Value>Ultima Weapon/Swing this fucker</Value>
-    </Item>
-    <Item>
-      <Key>10</Key>
-      <Value>Magic Robes/Robes of a powerful mage</Value>
-    </Item>
-    <Item>
-      <Key>11</Key>
-      <Value>Maple Staff/Staff of staffiness</Value>
     </Item>
     <!--<20-24> Tools-->
     <Item>
@@ -166,6 +150,85 @@
     <Item>
       <Key>402</Key>
       <Value>Witch's Hat/A fashionable hat</Value>
+    </Item>
+    <!--<600> Weapons-->
+    <!--Wizard-->
+    <Item>
+      <Key>600</Key>
+      <Value>Wooden Wand/A basic wand</Value>
+    </Item>
+    <!--Healer-->
+    <Item>
+      <Key>610</Key>
+      <Value>Acolyte's Staff/A staff for trainee healers</Value>
+    </Item>
+    <!--Summoner-->
+    <Item>
+      <Key>620</Key>
+      <Value>Glass Orb/An orb made of glass</Value>
+    </Item>
+    <!--Witch-->
+    <Item>
+      <Key>630</Key>
+      <Value>Dulled Knife/It could use sharpening</Value>
+    </Item>
+    <!--Duelist-->
+    <Item>
+      <Key>640</Key>
+      <Value>Training Sword/A blade with blunted edges for training</Value>
+    </Item>
+    <!--Knight-->
+    <Item>
+      <Key>650</Key>
+      <Value>Wooden Mace/More of a club, honestly</Value>
+    </Item>
+    <!--Rogue-->
+    <Item>
+      <Key>660</Key>
+      <Value>Shortbow/A small bow used to hunt game</Value>
+    </Item>
+    <!--Bard-->
+    <Item>
+      <Key>670</Key>
+      <Value>Flimsy Rapier/A thin rapier</Value>
+    </Item>
+    <!--<700> Armor-->
+    <!--<700> Cloth-->
+    <Item>
+      <Key>700</Key>
+      <Value>Cloth Robes/Robes made of simple cloth</Value>
+    </Item>
+    <!--<720> Light Armor-->
+    <Item>
+      <Key>720</Key>
+      <Value>Basic Armor/Training Armor</Value>
+    </Item>
+    <!--<740> Heavy Armor-->
+    <Item>
+      <Key>740</Key>
+      <Value>Heavy Armor/It's heavy</Value>
+    </Item>
+    <!--<760> Headpiece-->
+    <!--<760> Cloth Head-->
+    <Item>
+      <Key>760</Key>
+      <Value>Cloth Hat/A floppy brimmed hat</Value>
+    </Item>
+    <!--<780> Light Helm-->
+    <Item>
+      <Key>780</Key>
+      <Value>Leather Helm/A light leather helm</Value>
+    </Item>
+    <!--<800> Heavy Helm-->
+    <Item>
+      <Key>800</Key>
+      <Value>Heavy Helm/A heavy helm</Value>
+    </Item>
+    <!--<820> Boots-->
+    <!--<880> Wrists-->
+    <Item>
+      <Key>880</Key>
+      <Value>Heavy Bracelet/A defensible bracelet</Value>
     </Item>
     <!--<1000> Class Change-->
     <Item>

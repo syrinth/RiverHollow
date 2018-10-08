@@ -314,28 +314,30 @@ namespace RiverHollow.WorldObjects
     public class Equipment : Item
     {
         public EquipmentEnum EquipType;
-        private WeaponEnum _weaponType;
-        public WeaponEnum WeaponType => _weaponType;
-        private ArmorEnum _armorType;
-        public ArmorEnum ArmorType => _armorType;
+        private WeaponEnum _eWeaponType;
+        public WeaponEnum WeaponType => _eWeaponType;
+        private ArmorEnum _eArmorType;
+        public ArmorEnum ArmorType => _eArmorType;
+        private ArmorSlotEnum _eArmorSlot;
+        public ArmorSlotEnum ArmorSlot => _eArmorSlot;
 
         int _iTier;
 
-        private int _attack;
-        public int Attack => _attack; 
+        private int _iAttack;
+        public int Attack => _iAttack; 
 
-        private int _str;
-        public int Str => _str;
-        private int _def;
-        public int Def => _def;
-        private int _vit;
-        public int Vit => _vit;
-        private int _mag;
-        public int Mag => _mag;
-        private int _res;
-        public int Res => _res;
-        private int _spd;
-        public int Spd => _spd;
+        private int iStr;
+        public int Str => iStr;
+        private int _iDef;
+        public int Def => _iDef;
+        private int _iVit;
+        public int Vit => _iVit;
+        private int _iMag;
+        public int Mag => _iMag;
+        private int _iRes;
+        public int Res => _iRes;
+        private int _iSpd;
+        public int Spd => _iSpd;
 
         public Equipment(int id, string[] stringData)
         {
@@ -347,11 +349,18 @@ namespace RiverHollow.WorldObjects
                 if (tagType[0].Equals("EType"))
                 {
                     EquipType = Util.ParseEnum<EquipmentEnum>(tagType[1]);
+
+                    if (EquipType.Equals(EquipmentEnum.Armor)) { _texture = GameContentManager.GetTexture(@"Textures\armor"); }
+                    else if (EquipType.Equals(EquipmentEnum.Weapon)) { _texture = GameContentManager.GetTexture(@"Textures\weapons"); }
                 }
                 else if (tagType[0].Equals("ESub"))
                 {
-                    if (EquipType == EquipmentEnum.Armor) { _armorType = Util.ParseEnum<ArmorEnum>(tagType[1]); }
-                    else if (EquipType == EquipmentEnum.Weapon) { _weaponType = Util.ParseEnum<WeaponEnum>(tagType[1]); }
+                    if (EquipType == EquipmentEnum.Armor) { _eArmorType = Util.ParseEnum<ArmorEnum>(tagType[1]); }
+                    else if (EquipType == EquipmentEnum.Weapon) { _eWeaponType = Util.ParseEnum<WeaponEnum>(tagType[1]); }
+                }
+                if (tagType[0].Equals("ASlot"))
+                {
+                    _eArmorSlot = Util.ParseEnum<ArmorSlotEnum>(tagType[1]);
                 }
                 else if (tagType[0].Equals("Tier"))
                 {
@@ -359,45 +368,68 @@ namespace RiverHollow.WorldObjects
                 }
                 else if (tagType[0].Equals("Str"))
                 {
-                    _str = GameContentManager.GetItemTierData(_iTier, tagType[1]);
+                    iStr = GetItemTierData(_iTier, tagType[1]);
                 }
                 else if (tagType[0].Equals("Def"))
                 {
-                    _def = GameContentManager.GetItemTierData(_iTier, tagType[1]);
+                    _iDef = GetItemTierData(_iTier, tagType[1]);
                 }
                 else if (tagType[0].Equals("Vit"))
                 {
-                    _vit = GameContentManager.GetItemTierData(_iTier, tagType[1]);
+                    _iVit = GetItemTierData(_iTier, tagType[1]);
                 }
                 else if (tagType[0].Equals("Mag"))
                 {
-                    _mag = GameContentManager.GetItemTierData(_iTier, tagType[1]);
+                    _iMag = GetItemTierData(_iTier, tagType[1]);
                 }
                 else if (tagType[0].Equals("Res"))
                 {
-                    _res = GameContentManager.GetItemTierData(_iTier, tagType[1]);
+                    _iRes = GetItemTierData(_iTier, tagType[1]);
                 }
                 else if (tagType[0].Equals("Spd"))
                 {
-                    _spd = GameContentManager.GetItemTierData(_iTier, tagType[1]);
+                    _iSpd = GetItemTierData(_iTier, tagType[1]);
+                }
+                else if (tagType[0].Equals("Atk"))
+                {
+                    _iAttack = GetItemTierData(_iTier, tagType[1], false);
                 }
             }
+        }
 
-            _attack = _iTier * 10;
-            _texture = GameContentManager.GetTexture(@"Textures\weapons");
+        private int GetItemTierData(int tier, string modifier, bool isStat = true)
+        {
+            int DivideBy = isStat ? 4 : 1; //If it's not a stat,it's localize on oneitem, don't divide.
+            double rv = 0;
+
+            if (modifier.Equals("Minor"))
+            {
+                rv = tier * (double)6 / DivideBy;
+            }
+            else if (modifier.Equals("Moderate"))
+            {
+                rv = tier * (double)8 / DivideBy;
+            }
+            else if (modifier.Equals("Major"))
+            {
+                rv = tier * (double)10 / DivideBy;
+            }
+
+            if (rv % 2 > 0) { rv++; }
+
+            return (int)rv;
         }
 
         public override string GetDescription()
         {
             string rv = base.GetDescription();
             rv += System.Environment.NewLine;
-            if (Attack > 0) { rv += " Attack: +" + _attack + " "; }
-            if (Str > 0) { rv += " Str: +" + _str + " "; }
-            if (Def > 0) { rv += " Def: +" + _def + " "; }
-            if (Vit > 0) { rv += " Vit: +" + _vit + " "; }
-            if (Mag > 0) { rv += " Mag: +" + _mag + " "; }
-            if (Res > 0) { rv += " REs: +" + _res + " "; }
-            if (Spd > 0) { rv += " Spd: +" + _spd + " "; }
+            if (Attack > 0) { rv += " Attack: +" + _iAttack + " "; }
+            if (Str > 0) { rv += " Str: +" + iStr + " "; }
+            if (Def > 0) { rv += " Def: +" + _iDef + " "; }
+            if (Mag > 0) { rv += " Mag: +" + _iMag + " "; }
+            if (Res > 0) { rv += " Res: +" + _iRes + " "; }
+            if (Spd > 0) { rv += " Spd: +" + _iSpd + " "; }
             rv = rv.Trim();
 
             return rv;

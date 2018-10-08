@@ -35,6 +35,11 @@ namespace RiverHollow.Actors.CombatStuff
         ArmorEnum _armorType;
         public ArmorEnum ArmorType => _armorType;
 
+        public int WeaponID;
+        public int ArmorID;
+        public int HeadID;
+        public int WristID;
+
         public CharacterClass(int id, string[] stringData)
         {
             AbilityList = new List<MenuAction>();
@@ -95,6 +100,22 @@ namespace RiverHollow.Actors.CombatStuff
                         CombatAction ac = (CombatAction)ActorManager.GetActionByIndex(int.Parse(spell));
                         _spellList.Add(ac);
                     }
+                }
+                else if (tagType[0].Equals("DWeap"))
+                {
+                    WeaponID = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("DArmor"))
+                {
+                    ArmorID = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("DHead"))
+                {
+                    HeadID = int.Parse(tagType[1]);
+                }
+                else if (tagType[0].Equals("DWrist"))
+                {
+                    WristID = int.Parse(tagType[1]);
                 }
             }
         }

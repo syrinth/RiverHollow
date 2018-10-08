@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Misc;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -23,7 +24,6 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<int, string> DiQuests { get => _diQuests; }
         private static Dictionary<int, string> _diItemText;
         private static Dictionary<int, string> _diClassText;
-        private static Dictionary<int, string> _diItemTable;
         private static Dictionary<string, string> _diMonsterTraits;
 
         public static void LoadContent(ContentManager Content)
@@ -36,7 +36,6 @@ namespace RiverHollow.Game_Managers
             _diUpgrades = _content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
             _diQuests = _content.Load<Dictionary<int, string>>(@"Data\Quests");
             _diItemText = _content.Load<Dictionary<int, string>>(@"Data\ItemText");
-            _diItemTable = _content.Load<Dictionary<int, string>>(@"Data\ItemTable");
             _diMonsterTraits = _content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
 
             _diGameText = LoadDialogue(@"Data\Dialogue\GameText");
@@ -84,6 +83,7 @@ namespace RiverHollow.Game_Managers
         {
             AddTexture(Content, @"Textures\battle");
             AddTexture(Content, @"Textures\weapons");
+            AddTexture(Content, @"Textures\armor");
             AddTexture(Content, @"Textures\ArcaneTower");
             AddTexture(Content, @"Textures\Armory");
             AddTexture(Content, @"Textures\tools");
@@ -188,25 +188,6 @@ namespace RiverHollow.Game_Managers
             desc = _diGameText[val].Split('/')[1];
         }
 
-        public static int GetItemTierData(int tier, string modifier, bool isStat = true)
-        {
-            int rv = 0;
-
-            string dataMod = _diItemTable[tier];
-            string[] dataMods = Util.FindTags(dataMod);
-            foreach(string d in dataMods)
-            {
-                string[] tagType = d.Split(':');
-                if (tagType[0].Equals(modifier))
-                {
-                    string[] statSplit = tagType[1].Split('/');
-                    if (isStat) { rv = int.Parse(statSplit[0]); }
-                    else { rv = int.Parse(statSplit[1]); }
-                }
-            }
-
-            return rv;
-        }
         public static string GetMonsterTraitData(string trait)
         {
             return _diMonsterTraits[trait];

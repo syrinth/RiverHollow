@@ -4,7 +4,6 @@
     <!--Key: ID-->
     <!--Valid Types: Resource, Food, Map, Equipment, Tool, Food, Combat, StaticItem, Class-->
     <!--All:[Type:ItemType][Image:X-Y][Sell:SellPrice]-->
-    <!--Equipment: [EType:Weapon or Armor][ESub:Equip Subtype][Dmg:X][Def:X][Spd:X][Mag:X][Hp:X]]-->
     <!--Tool: [ToolType:Type][Dmg:Tooldmg][Stam:StamCost]-->
     <!--Food: [Stam:X][Hp:X]-->
     <Item>
@@ -20,28 +19,12 @@
       <Value>[Type:Resource][Image:1-0][Sell:10]</Value>
     </Item>
     <Item>
-      <Key>5</Key>
-      <Value>[Type:Equipment][Image:0-0][Sell:500][EType:Weapon][ESub:Sword]</Value>
-    </Item>
-    <Item>
       <Key>7</Key>
       <Value>[Type:Food][Image:1-1][Sell:50][Stam:10][Hp:5]</Value>
     </Item>
     <Item>
       <Key>8</Key>
       <Value>[Type:Map][Image:0-2]</Value>
-    </Item>
-    <Item>
-      <Key>9</Key>
-      <Value>[Type:Equipment][Image:2-0][Sell:1000][EType:Weapon][ESub:Staff][Tier:10][Str:Major][Def:Minor]</Value>
-    </Item>
-    <Item>
-      <Key>10</Key>
-      <Value>[Type:Equipment][Image:1-0][Sell:1000][EType:Armor][ESub:Cloth][Tier:10][Mag:Major][Vit:Minor][Res:Moderate]</Value>
-    </Item>
-    <Item>
-      <Key>11</Key>
-      <Value>[Type:Equipment][Image:2-0][Sell:1000][EType:Weapon][ESub:Staff][Tier:1][Str:Minor][Def:Minor]</Value>
     </Item>
     <!--<20-24> Tools-->
     <Item>
@@ -171,6 +154,86 @@
     <Item>
       <Key>402</Key>
       <Value>[Type:Clothes][Image:2-4][Sell:0][CType:Hat][Row:2]</Value>
+    </Item>
+    <!--<600> Weapons-->
+    <!--Equipment: [EType:Weapon or Armor][ESub:Equip Subtype][ASub:Armor slot][Tier:X][Atk:X][Str:X][Def:X][Mag:X][Res:X][Spd:X]-->
+    <!--<600> Wizard-->
+    <Item>
+      <Key>600</Key>
+      <Value>[Type:Equipment][Image:0-0][Sell:1000][EType:Weapon][ESub:Wand][Tier:1][Atk:Minor][Mag:Major]</Value>
+    </Item>
+    <!--<610> Healer-->
+    <Item>
+      <Key>610</Key>
+      <Value>[Type:Equipment][Image:0-1][Sell:1000][EType:Weapon][ESub:Staff][Tier:1][Atk:Moderate][Mag:Major]</Value>
+    </Item>
+    <!--<620> Summoner-->
+    <Item>
+      <Key>620</Key>
+      <Value>[Type:Equipment][Image:0-2][Sell:1000][EType:Weapon][ESub:Orb][Tier:1][Atk:Moderate][Mag:Major]</Value>
+    </Item>
+    <!--<630> Witch-->
+    <Item>
+      <Key>630</Key>
+      <Value>[Type:Equipment][Image:0-3][Sell:1000][EType:Weapon][ESub:Knife][Tier:1][Atk:Moderate][Mag:Major]</Value>
+    </Item>
+    <!--<640> Duelist-->
+    <Item>
+      <Key>640</Key>
+      <Value>[Type:Equipment][Image:0-4][Sell:1000][EType:Weapon][ESub:Sword][Tier:1][Atk:Major][Str:Major]</Value>
+    </Item>
+    <!--<650> Knight-->
+    <Item>
+      <Key>650</Key>
+      <Value>[Type:Equipment][Image:0-5][Sell:1000][EType:Weapon][ESub:Mace][Tier:1][Atk:Minor][Str:Minor]</Value>
+    </Item>
+    <!--<660> Rogue-->
+    <Item>
+      <Key>660</Key>
+      <Value>[Type:Equipment][Image:0-6][Sell:1000][EType:Weapon][ESub:Bow][Tier:1][Atk:Moderate][Str:Moderate]</Value>
+    </Item>
+    <!--<670> Bard-->
+    <Item>
+      <Key>670</Key>
+      <Value>[Type:Equipment][Image:0-7][Sell:1000][EType:Weapon][ESub:Rapier][Tier:1][Atk:Moderate][Str:Moderate]</Value>
+    </Item>
+    <!--<700> Armor-->
+    <!--<700> Cloth-->
+    <Item>
+      <Key>700</Key>
+      <Value>[Type:Equipment][Image:0-0][Sell:1000][EType:Armor][ESub:Cloth][ASlot:Armor][Tier:1][Def:Minor][Mag:Major][Res:Minor]</Value>
+    </Item>
+    <!--<720> Light Armor-->
+    <Item>
+      <Key>720</Key>
+      <Value>[Type:Equipment][Image:0-1][Sell:1000][EType:Armor][ESub:Light][ASlot:Armor][Tier:1][Def:Moderate][Str:Major]</Value>
+    </Item>
+    <!--<740> Heavy Armor-->
+    <Item>
+      <Key>740</Key>
+      <Value>[Type:Equipment][Image:0-2][Sell:1000][EType:Armor][ESub:Heavy][ASlot:Armor][Tier:1][Def:Major][Str:Moderate]</Value>
+    </Item>
+    <!--<760> Headpiece-->
+    <!--<760> Cloth Head-->
+    <Item>
+      <Key>760</Key>
+      <Value>[Type:Equipment][Image:0-3][Sell:1000][EType:Armor][ESub:Cloth][ASlot:Head][Tier:1][Def:Minor][Mag:Major][Res:Minor]</Value>
+    </Item>
+    <!--<780> Light Helm-->
+    <Item>
+      <Key>780</Key>
+      <Value>[Type:Equipment][Image:0-4][Sell:1000][EType:Armor][ESub:Light][ASlot:Head][Tier:1][Def:Moderate][Str:Major]</Value>
+    </Item>
+    <!--<800> Heavy Helm-->
+    <Item>
+      <Key>800</Key>
+      <Value>[Type:Equipment][Image:1-0][Sell:1000][EType:Armor][ESub:Heavy][ASlot:Head][Tier:1][Def:Major][Str:Moderate]</Value>
+    </Item>
+    <!--<820> Boots-->
+    <!--<880> Wrists-->
+    <Item>
+      <Key>880</Key>
+      <Value>[Type:Equipment][Image:0-6][Sell:1000][EType:Armor][ESub:None][ASlot:Wrist][Tier:1][Def:Major][Str:Minor]</Value>
     </Item>
     <!--<1000> Class Change-->
     <Item>

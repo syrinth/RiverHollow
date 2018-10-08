@@ -92,7 +92,6 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddNewItemToInventory(0, 990);
             InventoryManager.AddNewItemToInventory(2, 990);
             InventoryManager.AddNewItemToInventory(85, 10);
-            InventoryManager.AddNewItemToInventory(5);
             InventoryManager.AddNewItemToInventory(20);
             InventoryManager.AddNewItemToInventory(21);
             InventoryManager.AddNewItemToInventory(22);
@@ -100,8 +99,6 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddNewItemToInventory(190);
             InventoryManager.AddNewItemToInventory(190);
             InventoryManager.AddNewItemToInventory(7);
-            InventoryManager.AddNewItemToInventory(9);
-            InventoryManager.AddNewItemToInventory(10);
             InventoryManager.AddNewItemToInventory(101);
             InventoryManager.AddNewItemToInventory(200);
             InventoryManager.AddNewItemToInventory(80, 10);
@@ -113,8 +110,17 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddNewItemToInventory(400);
             InventoryManager.AddNewItemToInventory(402);
 
+            InventoryManager.AddNewItemToInventory(600);
+            InventoryManager.AddNewItemToInventory(610);
+            InventoryManager.AddNewItemToInventory(620);
+            InventoryManager.AddNewItemToInventory(630);
+            InventoryManager.AddNewItemToInventory(640);
+            InventoryManager.AddNewItemToInventory(650);
+            InventoryManager.AddNewItemToInventory(660);
+            InventoryManager.AddNewItemToInventory(670);
+
             PlayerManager.AddToParty(ObjectManager.GetWorker(5).Combat);
-            PlayerManager.AddToParty(ObjectManager.GetWorker(2).Combat);
+            PlayerManager.AddToParty(ObjectManager.GetWorker(6).Combat);
 
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestType.Fetch, "Getwood, dumbass", 1, null, ObjectManager.GetItem(2)));
         }

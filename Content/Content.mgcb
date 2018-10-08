@@ -613,11 +613,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/texClothes.png
 
-#begin Data/ItemTable.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/ItemTable.xml
-
 #begin Data/MonsterTraitTable.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -932,4 +927,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/LightningSprite.png
+
+#begin Textures/armor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/armor.png
 

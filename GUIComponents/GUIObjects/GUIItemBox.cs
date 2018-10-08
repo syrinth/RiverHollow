@@ -71,6 +71,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 _gItem.Draw(spriteBatch);
                 if (_gTextNum != null) { _gTextNum.Draw(spriteBatch); }
 
+                //MAR?
                 if (_bHover)
                 {
                     if (_textWindow != null) { _textWindow.Draw(spriteBatch); }
@@ -220,7 +221,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
             public SpecializedBox(ItemEnum itemType, Item item = null, OpenItemWindow del = null) : base()
             {
-                _item = item;
+                SetItem(item);
                 _itemType = itemType;
                 _delOpenItemWindow = del;
             }

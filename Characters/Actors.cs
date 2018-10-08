@@ -2207,7 +2207,7 @@ namespace RiverHollow.Actors
         public CombatManager.CombatTile Tile;
         public GUICmbtTile Location => Tile.GUITile;
 
-        public virtual int Attack => 20;
+        public virtual int Attack => 9;
         public double StrMult => Math.Round(1 + ((double)StatStr/4 * (double)StatStr / MAX_STAT), 2);
 
         protected int _statStr;
@@ -2617,6 +2617,10 @@ namespace RiverHollow.Actors
         public Equipment TempWeapon;
         public Equipment Armor;
         public Equipment TempArmor;
+        public Equipment Head;
+        public Equipment TempHead;
+        public Equipment Wrist;
+        public Equipment TempWrist;
 
         public override int Attack => GetGearAtk();
         public override int StatStr => 10 + _buffStr + GetGearStr();
@@ -2635,9 +2639,8 @@ namespace RiverHollow.Actors
 
             if (TempWeapon != null) { rv += TempWeapon.Attack; }
             else if (Weapon != null) { rv += Weapon.Attack; }
-            else if (Weapon == null) { rv += base.Attack; }
-            if (TempArmor != null) { rv += TempArmor.Attack; }
-            else if (Armor != null) { rv += Armor.Attack; }
+
+            rv += base.Attack;
 
             return rv;
         }
@@ -2726,6 +2729,11 @@ namespace RiverHollow.Actors
             _class = x;
             _currentHP = MaxHP;
             _currentMP = MaxMP;
+
+            Weapon = (Equipment)GetItem(_class.WeaponID);
+            Armor = (Equipment)GetItem(_class.ArmorID);
+            Head = (Equipment)GetItem(_class.HeadID);
+            Wrist = (Equipment)GetItem(_class.WristID);
         }
 
         public void AddXP(int x)

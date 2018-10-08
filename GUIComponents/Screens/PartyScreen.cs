@@ -37,7 +37,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _charBox.CenterOnScreen();
             AddControl(_charBox);
 
-            _btnMap.AnchorAndAlignToObject(_charBox, SideEnum.Right, SideEnum.Bottom);
+            _btnMap.AnchorAndAlignToObject(_charBox, SideEnum.Bottom, SideEnum.Right);
 
             int partySize = PlayerManager.GetParty().Count;
             _arrDisplayBoxes = new NPCDisplayBox[partySize];
@@ -518,6 +518,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
     public class CharacterDetailWindow : GUIWindow
     {
+        const int SPACING = 10;
         EquipWindow _equipWindow;
 
         CombatAdventurer _character;
@@ -525,12 +526,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         List<SpecializedBox> _liGearBoxes;
 
-        SpecializedBox _chestBox;
-        SpecializedBox _hatBox;
-        SpecializedBox _weaponBox;
-        SpecializedBox _armorBox;
+        //SpecializedBox _chestBox;
+        //SpecializedBox _hatBox;
+        SpecializedBox _sBoxArmor;
+        SpecializedBox _sBoxHead;
+        SpecializedBox _sBoxWeapon;
+        SpecializedBox _sBoxWrist;
+        //GUIButton _btnSwap;
 
-        GUIText _gName, _gClass, _gXP, _gMagic, _gDef, _gDmg, _gHP, _gSpd;
+        GUIText _gName, _gClass, _gXP, _gStr, _gDef, _gMagic, _gRes, _gSpd;
 
         public delegate void SyncCharacter();
         private SyncCharacter _delSyncCharacter;
@@ -545,6 +549,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             _liGearBoxes = new List<SpecializedBox>();
             Load();
+            Resize();
+            this.Height += SPACING;
         }
 
         private void Load()
@@ -556,46 +562,52 @@ namespace RiverHollow.Game_Managers.GUIObjects
             for (int i = 0; i < GameManager.MAX_NAME_LEN; i++) { nameLen += "X"; }
 
             _gName = new GUIText(nameLen);
-            _gName.AnchorToInnerSide(this, SideEnum.TopLeft);
+            _gName.AnchorToInnerSide(this, SideEnum.TopLeft, SPACING);
             _gClass = new GUIText("XXXXXXXX");
             _gClass.AnchorAndAlignToObject(_gName, SideEnum.Right, SideEnum.Bottom, 10);
 
             _gXP = new GUIText(@"9999/9999");
             _gXP.AnchorAndAlignToObject(_gClass, SideEnum.Right, SideEnum.Top, 10);
 
-            _weaponBox = new SpecializedBox(_character.CharacterClass.WeaponType, _character.Weapon, FindMatchingItems);
-            _armorBox = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Armor, FindMatchingItems);
+            _sBoxHead = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Head, FindMatchingItems);
+            _sBoxArmor = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Armor, FindMatchingItems);
+            _sBoxWeapon = new SpecializedBox(_character.CharacterClass.WeaponType, _character.Weapon, FindMatchingItems);
+            _sBoxWrist = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Wrist, FindMatchingItems);
 
-            _weaponBox.AnchorAndAlignToObject(_gXP, SideEnum.Right, SideEnum.Top, 10);
-            _armorBox.AnchorAndAlignToObject(_weaponBox, SideEnum.Right, SideEnum.Bottom, 10);
+            _sBoxArmor.AnchorToInnerSide(this, SideEnum.TopRight, SPACING);
+            _sBoxHead.AnchorAndAlignToObject(_sBoxArmor, SideEnum.Left, SideEnum.Top, SPACING);
+            _sBoxWrist.AnchorAndAlignToObject(_sBoxArmor, SideEnum.Bottom, SideEnum.Right, SPACING);
+            _sBoxWeapon.AnchorAndAlignToObject(_sBoxWrist, SideEnum.Left, SideEnum.Top, SPACING);
 
-            _liGearBoxes.Add(_weaponBox);
-            _liGearBoxes.Add(_armorBox);
+            _liGearBoxes.Add(_sBoxHead);
+            _liGearBoxes.Add(_sBoxArmor);
+            _liGearBoxes.Add(_sBoxWeapon);
+            _liGearBoxes.Add(_sBoxWrist);
 
             if (_character == PlayerManager.Combat)
             {
-                _hatBox = new SpecializedBox(ClothesEnum.Hat, PlayerManager.World.Hat, FindMatchingItems);
-                _chestBox = new SpecializedBox(ClothesEnum.Chest, PlayerManager.World.Shirt, FindMatchingItems);
+                //_btnSwap = new GUIButton("Clothes");
+                //_btnSwap.AnchorAndAlignToObject(this, SideEnum.Right, SideEnum.Top);
+                //_hatBox = new SpecializedBox(ClothesEnum.Hat, PlayerManager.World.Hat, FindMatchingItems);
+                //_chestBox = new SpecializedBox(ClothesEnum.Chest, PlayerManager.World.Shirt, FindMatchingItems);
 
-                _hatBox.AnchorAndAlignToObject(_armorBox, SideEnum.Right, SideEnum.Bottom, 30);
-                _chestBox.AnchorAndAlignToObject(_hatBox, SideEnum.Right, SideEnum.Bottom, 10);
+                //_hatBox.AnchorAndAlignToObject(_armorBox, SideEnum.Right, SideEnum.Bottom, 30);
+                //_chestBox.AnchorAndAlignToObject(_hatBox, SideEnum.Right, SideEnum.Bottom, 10);
 
-                _liGearBoxes.Add(_hatBox);
-                _liGearBoxes.Add(_chestBox);
+                //_liGearBoxes.Add(_hatBox);
+                //_liGearBoxes.Add(_chestBox);
             }
 
-
-            int statSpacing = 10;
-            _gMagic = new GUIText("Mag: 999");
-            _gDef = new GUIText("Def: 999");
-            _gDmg = new GUIText("Dmg: 999");
-            _gHP = new GUIText("HP: 999");
+            _gStr = new GUIText("Str: 99");
+            _gDef = new GUIText("Def: 99");
+            _gMagic = new GUIText("Mag: 99");
+            _gRes = new GUIText("Res: 999");
             _gSpd = new GUIText("Spd: 999");
-            _gMagic.AnchorToInnerSide(this, SideEnum.BottomLeft);
-            _gDef.AnchorAndAlignToObject(_gMagic, SideEnum.Right, SideEnum.Bottom, statSpacing);
-            _gDmg.AnchorAndAlignToObject(_gDef, SideEnum.Right, SideEnum.Bottom, statSpacing);
-            _gHP.AnchorAndAlignToObject(_gDmg, SideEnum.Right, SideEnum.Bottom, statSpacing);
-            _gSpd.AnchorAndAlignToObject(_gHP, SideEnum.Right, SideEnum.Bottom, statSpacing);
+            _gStr.AnchorAndAlignToObject(_gName, SideEnum.Bottom, SideEnum.Left, SPACING);
+            _gDef.AnchorAndAlignToObject(_gStr, SideEnum.Bottom, SideEnum.Left, SPACING);
+            _gMagic.AnchorAndAlignToObject(_gDef, SideEnum.Bottom, SideEnum.Left, SPACING);
+            _gRes.AnchorAndAlignToObject(_gMagic, SideEnum.Bottom, SideEnum.Left, SPACING);
+            _gSpd.AnchorAndAlignToObject(_gRes, SideEnum.Bottom, SideEnum.Left, SPACING);
 
             _gName.SetText(_character.Name);
             _gClass.SetText(_character.CharacterClass.Name);
@@ -620,10 +632,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _character.TempArmor = null;
             }
 
-            _gDmg.SetText("Dmg: " + _character.StatStr);
+            _gStr.SetText("Str: " + _character.StatStr);
             _gDef.SetText("Def: " + _character.StatDef);
-            _gHP.SetText("Vit: " + _character.StatVit);
             _gMagic.SetText("Mag: " + _character.StatMag);
+            _gRes.SetText("Res: " + _character.StatRes);
             _gSpd.SetText("Spd: " + _character.StatSpd);
         }
 
@@ -633,8 +645,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 base.Draw(spriteBatch);
 
-                _weaponBox.DrawDescription(spriteBatch);
-                _armorBox.DrawDescription(spriteBatch);
+                foreach (SpecializedBox box in _liGearBoxes)
+                {
+                    box.DrawDescription(spriteBatch);
+                }
 
                 if (_equipWindow.HasEntries())
                 {
