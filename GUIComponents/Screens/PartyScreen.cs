@@ -37,7 +37,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _charBox.CenterOnScreen();
             AddControl(_charBox);
 
-            _btnMap.AnchorAndAlignToObject(_charBox, SideEnum.Bottom, SideEnum.Right);
+            _btnMap.AnchorAndAlignToObject(_charBox.WinDisplay, SideEnum.Right, SideEnum.Top);
 
             int partySize = PlayerManager.GetParty().Count;
             _arrDisplayBoxes = new NPCDisplayBox[partySize];
@@ -516,7 +516,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
     }
 
-    public class CharacterDetailWindow : GUIWindow
+    public class CharacterDetailWindow : GUIObject
     {
         const int SPACING = 10;
         EquipWindow _equipWindow;
@@ -526,55 +526,75 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         List<SpecializedBox> _liGearBoxes;
 
-        //SpecializedBox _chestBox;
-        //SpecializedBox _hatBox;
+        GUIWindow _winName;
+        public GUIWindow WinDisplay;
+        GUIWindow _winClothes;
+
         SpecializedBox _sBoxArmor;
         SpecializedBox _sBoxHead;
         SpecializedBox _sBoxWeapon;
         SpecializedBox _sBoxWrist;
-        //GUIButton _btnSwap;
+        SpecializedBox _sBoxShirt;
+        SpecializedBox _sBoxHat;
+        GUIButton _btnSwap;
 
-        GUIText _gName, _gClass, _gXP, _gStr, _gDef, _gMagic, _gRes, _gSpd;
+        GUIText _gName, _gClass, _gLvl, _gStr, _gDef, _gMagic, _gRes, _gSpd;
+        GUIStatDisplay _gBarXP, _gBarHP, _gBarMP;
 
         public delegate void SyncCharacter();
         private SyncCharacter _delSyncCharacter;
 
-        public CharacterDetailWindow(CombatAdventurer c, SyncCharacter del = null) : base(GUIWindow.RedWin, (QuestScreen.WIDTH) - (GUIWindow.RedWin.Edge * 2), (QuestScreen.HEIGHT / 4) - (GUIWindow.RedWin.Edge * 2))
+        public CharacterDetailWindow(CombatAdventurer c, SyncCharacter del = null)
         {
+            _winName = new GUIWindow(GUIWindow.RedWin, (QuestScreen.WIDTH) - (GUIWindow.RedWin.Edge * 2), 10);
+            WinDisplay = new GUIWindow(GUIWindow.RedWin, (QuestScreen.WIDTH) - (GUIWindow.RedWin.Edge * 2), (QuestScreen.HEIGHT / 4) - (GUIWindow.RedWin.Edge * 2));
+            WinDisplay.AnchorAndAlignToObject(_winName, SideEnum.Bottom, SideEnum.Left);
+            _winClothes = new GUIWindow(GUIWindow.RedWin, 10, 10);
+            _winClothes.AnchorAndAlignToObject(WinDisplay, SideEnum.Bottom, SideEnum.Left);
+
             _delSyncCharacter = del;
             _character = c;
             _font = GameContentManager.GetFont(@"Fonts\Font");
-            int boxHeight = (QuestScreen.HEIGHT / 4) - (GUIWindow.RedWin.Edge * 2);
-            int boxWidth = (QuestScreen.WIDTH) - (GUIWindow.RedWin.Edge * 2);
 
             _liGearBoxes = new List<SpecializedBox>();
             Load();
-            Resize();
-            this.Height += SPACING;
+
+            _winName.Resize();
+            _winName.Height += SPACING;
+
+            WinDisplay.Resize();
+            WinDisplay.Height += SPACING;
+
+            _winClothes.Resize();
+            _winClothes.Height += SPACING;
+            _winClothes.Width += SPACING;
+
+            Width = _winName.Width;
+            Height = _winName.Height + WinDisplay.Height;
         }
 
         private void Load()
         {
-            Controls.Clear();
+            _winClothes.Controls.Clear();
+            _winName.Controls.Clear();
+            WinDisplay.Controls.Clear();
+            
             _liGearBoxes.Clear();
 
             string nameLen = "";
             for (int i = 0; i < GameManager.MAX_NAME_LEN; i++) { nameLen += "X"; }
 
             _gName = new GUIText(nameLen);
-            _gName.AnchorToInnerSide(this, SideEnum.TopLeft, SPACING);
+            _gName.AnchorToInnerSide(_winName, SideEnum.TopLeft, SPACING);
             _gClass = new GUIText("XXXXXXXX");
             _gClass.AnchorAndAlignToObject(_gName, SideEnum.Right, SideEnum.Bottom, 10);
-
-            _gXP = new GUIText(@"9999/9999");
-            _gXP.AnchorAndAlignToObject(_gClass, SideEnum.Right, SideEnum.Top, 10);
 
             _sBoxHead = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Head, FindMatchingItems);
             _sBoxArmor = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Armor, FindMatchingItems);
             _sBoxWeapon = new SpecializedBox(_character.CharacterClass.WeaponType, _character.Weapon, FindMatchingItems);
             _sBoxWrist = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Wrist, FindMatchingItems);
 
-            _sBoxArmor.AnchorToInnerSide(this, SideEnum.TopRight, SPACING);
+            _sBoxArmor.AnchorToInnerSide(WinDisplay, SideEnum.TopRight, SPACING);
             _sBoxHead.AnchorAndAlignToObject(_sBoxArmor, SideEnum.Left, SideEnum.Top, SPACING);
             _sBoxWrist.AnchorAndAlignToObject(_sBoxArmor, SideEnum.Bottom, SideEnum.Right, SPACING);
             _sBoxWeapon.AnchorAndAlignToObject(_sBoxWrist, SideEnum.Left, SideEnum.Top, SPACING);
@@ -584,18 +604,30 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _liGearBoxes.Add(_sBoxWeapon);
             _liGearBoxes.Add(_sBoxWrist);
 
+            int barWidth = _sBoxArmor.DrawRectangle.Right - _sBoxHead.DrawRectangle.Left;
+            _gBarXP = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.XP, _character, barWidth);
+            _gBarXP.AnchorToInnerSide(_winName, SideEnum.Right, SPACING);
+            _gBarXP.AlignToObject(_gName, SideEnum.CenterY);
+
+            _gLvl = new GUIText("LV. X");
+            _gLvl.AnchorAndAlignToObject(_gBarXP, SideEnum.Left, SideEnum.CenterY, SPACING);
+            _gLvl.SetText("LV. " + _character.ClassLevel);
+
+            _gBarHP = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Health, _character, barWidth);
+            _gBarHP.AnchorAndAlignToObject(_sBoxHead, SideEnum.Left, SideEnum.Top, SPACING);
+            _gBarMP = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Mana, _character, barWidth);
+            _gBarMP.AnchorAndAlignToObject(_gBarHP, SideEnum.Bottom, SideEnum.Right, SPACING);
+
             if (_character == PlayerManager.Combat)
             {
-                //_btnSwap = new GUIButton("Clothes");
-                //_btnSwap.AnchorAndAlignToObject(this, SideEnum.Right, SideEnum.Top);
-                //_hatBox = new SpecializedBox(ClothesEnum.Hat, PlayerManager.World.Hat, FindMatchingItems);
-                //_chestBox = new SpecializedBox(ClothesEnum.Chest, PlayerManager.World.Shirt, FindMatchingItems);
+                _sBoxHat = new SpecializedBox(ClothesEnum.Hat, PlayerManager.World.Hat, FindMatchingItems);
+                _sBoxShirt = new SpecializedBox(ClothesEnum.Chest, PlayerManager.World.Shirt, FindMatchingItems);
 
-                //_hatBox.AnchorAndAlignToObject(_armorBox, SideEnum.Right, SideEnum.Bottom, 30);
-                //_chestBox.AnchorAndAlignToObject(_hatBox, SideEnum.Right, SideEnum.Bottom, 10);
+                _sBoxHat.AnchorToInnerSide(_winClothes, SideEnum.TopLeft, SPACING);
+                _sBoxShirt.AnchorAndAlignToObject(_sBoxHat, SideEnum.Right, SideEnum.Top, SPACING);
 
-                //_liGearBoxes.Add(_hatBox);
-                //_liGearBoxes.Add(_chestBox);
+                _liGearBoxes.Add(_sBoxHat);
+                _liGearBoxes.Add(_sBoxShirt);
             }
 
             _gStr = new GUIText("Str: 99");
@@ -603,7 +635,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gMagic = new GUIText("Mag: 99");
             _gRes = new GUIText("Res: 999");
             _gSpd = new GUIText("Spd: 999");
-            _gStr.AnchorAndAlignToObject(_gName, SideEnum.Bottom, SideEnum.Left, SPACING);
+            _gStr.AnchorToInnerSide(WinDisplay, SideEnum.TopLeft, SPACING);
             _gDef.AnchorAndAlignToObject(_gStr, SideEnum.Bottom, SideEnum.Left, SPACING);
             _gMagic.AnchorAndAlignToObject(_gDef, SideEnum.Bottom, SideEnum.Left, SPACING);
             _gRes.AnchorAndAlignToObject(_gMagic, SideEnum.Bottom, SideEnum.Left, SPACING);
@@ -611,12 +643,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             _gName.SetText(_character.Name);
             _gClass.SetText(_character.CharacterClass.Name);
-            _gXP.SetText(_character.XP + @"/" + CombatAdventurer.LevelRange[_character.ClassLevel]);
 
             DisplayStatText();
 
             _equipWindow = new EquipWindow();
-            AddControl(_equipWindow);
+            WinDisplay.AddControl(_equipWindow);
+            _winClothes.AddControl(_equipWindow);
         }
 
         public void DisplayStatText(Equipment tempGear = null)
@@ -643,7 +675,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             if (_character != null)
             {
-                base.Draw(spriteBatch);
+                _winName.Draw(spriteBatch);
+                WinDisplay.Draw(spriteBatch);
+                if (_character == PlayerManager.Combat) { _winClothes.Draw(spriteBatch); }
 
                 foreach (SpecializedBox box in _liGearBoxes)
                 {
@@ -660,6 +694,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override void Position(Vector2 value)
         {
             base.Position(value);
+            _winName.Position(value);
+            WinDisplay.AnchorAndAlignToObject(_winName, SideEnum.Bottom, SideEnum.Left);
+            _winClothes.AnchorAndAlignToObject(WinDisplay, SideEnum.Bottom, SideEnum.Left);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -689,10 +726,19 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
                 else
                 {
-                    foreach (GUIObject c in Controls)
+                    foreach (GUIObject c in WinDisplay.Controls)
                     {
                         rv = c.ProcessLeftButtonClick(mouse);
                         if (rv) { break; }
+                    }
+
+                    if (!rv && _character == PlayerManager.Combat)
+                    {
+                        foreach (GUIObject c in _winClothes.Controls)
+                        {
+                            rv = c.ProcessLeftButtonClick(mouse);
+                            if (rv) { break; }
+                        }
                     }
                 }
             }
@@ -745,6 +791,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         rv = true;
                     }
                 }
+
+                _gBarXP.ProcessHover(mouse);
+                _gBarHP.ProcessHover(mouse);
+                _gBarMP.ProcessHover(mouse);
             }
             return rv;
         }

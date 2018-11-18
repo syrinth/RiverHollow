@@ -1081,7 +1081,7 @@ namespace RiverHollow.Actors
                 {
                     _combat = new CombatAdventurer(this);
                     _combat.SetClass(ActorManager.GetClassByIndex(int.Parse(tagType[1])));
-                    _combat.LoadContent(_sAdventurerFolder + _combat.CharacterClass.Name, 32);
+                    _combat.LoadContent(_sAdventurerFolder + _combat.CharacterClass.Name);
                 }
             }
 
@@ -1266,8 +1266,8 @@ namespace RiverHollow.Actors
             SetCombat();
 
             _sAdventurerType = Combat.CharacterClass.Name;
-
-            LoadContent(_sAdventurerFolder + _sAdventurerType);
+            _sTexture = _sAdventurerFolder + "WorldAdventurers";
+            LoadContent(_iAdventurerID);
 
             _portraitRect = new Rectangle(0, 105, 80, 96);
             _portrait = GameContentManager.GetTexture(_sTexture);
@@ -1280,6 +1280,14 @@ namespace RiverHollow.Actors
 
             _sName = _sAdventurerType.Substring(0, 1);
             Combat.SetName(_sName);
+        }
+
+        public void LoadContent(int ID)
+        {
+            AddDefaultAnimations(ref _bodySprite, 0, (ID - 1) * TileSize * 2);
+
+            _width = _bodySprite.Width;
+            _height = _bodySprite.Height;
         }
 
         protected void ImportBasics(string[] stringData, int id)
@@ -1318,7 +1326,7 @@ namespace RiverHollow.Actors
         {
             _combat = new CombatAdventurer(this);
             _combat.SetClass(ActorManager.GetClassByIndex(_iAdventurerID));
-            _combat.LoadContent(_sAdventurerFolder + _combat.CharacterClass.Name, 32);
+            _combat.LoadContent(_sAdventurerFolder + _combat.CharacterClass.Name);
         }
 
         public override void Update(GameTime gameTime)
@@ -1827,8 +1835,8 @@ namespace RiverHollow.Actors
         protected int _iLeash = 7;
 
         protected Vector2 _moveTo = Vector2.Zero;
-        protected List<CombatActor> _monsters;
-        public List<CombatActor> Monsters { get => _monsters; }
+        protected List<CombatActor> _liMonsters;
+        public List<CombatActor> Monsters { get => _liMonsters; }
 
         double _dStun;
         int _iMaxRange = TileSize * 10;
@@ -1851,23 +1859,23 @@ namespace RiverHollow.Actors
         {
             _liSpawnConditions = new List<SpawnConditionEnum>();
             _actorType = ActorEnum.Mob;
-            _monsters = new List<CombatActor>();
+            _liMonsters = new List<CombatActor>();
             ImportBasics(stringData, id);
-            _sTexture = _sMobFolder + "Goblin Scout";
+            _sTexture = _sMobFolder + "FangedFur";
             LoadContent();
         }
 
         public void LoadContent()
         {
             _bodySprite = new AnimatedSprite(_sTexture);
-            _bodySprite.AddAnimation(WActorAnimEnum.IdleDown, TileSize, TileSize, 1, 0.3f, 0, 0);
-            _bodySprite.AddAnimation(WActorAnimEnum.WalkDown, TileSize, TileSize, 2, 0.3f, 116, 0);
-            _bodySprite.AddAnimation(WActorAnimEnum.IdleUp, TileSize, TileSize, 1, 0.3f, 48, 0);
-            _bodySprite.AddAnimation(WActorAnimEnum.WalkUp, TileSize, TileSize, 2, 0.3f, 64, 0);
-            _bodySprite.AddAnimation(WActorAnimEnum.IdleLeft, TileSize, TileSize, 1, 0.3f, 96, 0);
-            _bodySprite.AddAnimation(WActorAnimEnum.WalkLeft, TileSize, TileSize, 2, 0.3f, 112, 0);
-            _bodySprite.AddAnimation(WActorAnimEnum.IdleRight, TileSize, TileSize, 1, 0.3f, 144, 0);
-            _bodySprite.AddAnimation(WActorAnimEnum.WalkRight, TileSize, TileSize, 2, 0.3f, 160, 0);
+            _bodySprite.AddAnimation(WActorAnimEnum.IdleDown, TileSize, TileSize * 2, 1, 0.2f, 0, 0);
+            _bodySprite.AddAnimation(WActorAnimEnum.WalkDown, TileSize, TileSize * 2, 4, 0.2f, 0, 0);
+            _bodySprite.AddAnimation(WActorAnimEnum.IdleUp, TileSize, TileSize * 2, 1, 0.2f, 64, 0);
+            _bodySprite.AddAnimation(WActorAnimEnum.WalkUp, TileSize, TileSize * 2, 4, 0.2f, 64, 0);
+            _bodySprite.AddAnimation(WActorAnimEnum.IdleLeft, TileSize, TileSize * 2, 1, 0.2f, 128, 0);
+            _bodySprite.AddAnimation(WActorAnimEnum.WalkLeft, TileSize, TileSize * 2, 4, 0.2f, 128, 0);
+            _bodySprite.AddAnimation(WActorAnimEnum.IdleRight, TileSize, TileSize * 2, 1, 0.2f, 192, 0);
+            _bodySprite.AddAnimation(WActorAnimEnum.WalkRight, TileSize, TileSize * 2, 4, 0.2f, 192, 0);
             _bodySprite.SetCurrentAnimation(WActorAnimEnum.WalkDown);
             Facing = DirectionEnum.Down;
 
@@ -1888,7 +1896,7 @@ namespace RiverHollow.Actors
                 if (tagType[0].Equals("Monster"))
                 {
                     int mID = int.Parse(tagType[1]);
-                    _monsters.Add(ActorManager.GetMonsterByIndex(mID));
+                    _liMonsters.Add(ActorManager.GetMonsterByIndex(mID));
                 }
                 else if (tagType[0].Equals("Condition"))
                 {
@@ -1896,9 +1904,9 @@ namespace RiverHollow.Actors
                 }
             }
 
-            foreach (CombatActor m in _monsters)
+            foreach (CombatActor m in _liMonsters)
             {
-                List<CombatActor> match = _monsters.FindAll(x => ((Monster)x).ID == ((Monster)m).ID);
+                List<CombatActor> match = _liMonsters.FindAll(x => ((Monster)x).ID == ((Monster)m).ID);
                 if (match.Count > 1)
                 {
                     for (int i = 0; i < match.Count; i++)
@@ -2208,7 +2216,6 @@ namespace RiverHollow.Actors
         public GUICmbtTile Location => Tile.GUITile;
 
         public virtual int Attack => 9;
-        public double StrMult => Math.Round(1 + ((double)StatStr/4 * (double)StatStr / MAX_STAT), 2);
 
         protected int _statStr;
         public virtual int StatStr { get => _statStr + _buffStr; }
@@ -2277,26 +2284,25 @@ namespace RiverHollow.Actors
             };
         }
 
-        public virtual void LoadContent(string texture, int height)
+        public virtual void LoadContent(string texture)
         {
             _sTexture = texture;
 
-            _bodySprite = new AnimatedSprite(texture);
+            _bodySprite = new AnimatedSprite(texture.Replace(" ",""));
             int xCrawl = 0;
             int frameWidth = 24;
             int frameHeight = 32;
-            _bodySprite.AddAnimation(CActorAnimEnum.Walk, frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), height);
+            _bodySprite.AddAnimation(CActorAnimEnum.Walk, frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 0);
             xCrawl += 2;
-            _bodySprite.AddAnimation(CActorAnimEnum.Cast, frameWidth, frameHeight, 2, 0.2f, (xCrawl * frameWidth), height);
+            _bodySprite.AddAnimation(CActorAnimEnum.Cast, frameWidth, frameHeight, 2, 0.4f, (xCrawl * frameWidth), 0);
             xCrawl += 2;
-            _bodySprite.AddAnimation(CActorAnimEnum.Hurt, frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), height);
-            _bodySprite.AddNextAnimation(CActorAnimEnum.Hurt, CActorAnimEnum.Walk);
+            _bodySprite.AddAnimation(CActorAnimEnum.Hurt, frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 0);
             xCrawl += 1;
-            _bodySprite.AddAnimation(CActorAnimEnum.Attack, frameWidth, frameHeight, 1, 0.3f, (xCrawl * frameWidth), height);
+            _bodySprite.AddAnimation(CActorAnimEnum.Attack, frameWidth, frameHeight, 1, 0.3f, (xCrawl * frameWidth), 0);
             xCrawl += 1;
-            _bodySprite.AddAnimation(CActorAnimEnum.Critical, frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), height);
+            _bodySprite.AddAnimation(CActorAnimEnum.Critical, frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 0);
             xCrawl += 2;
-            _bodySprite.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), height);
+            _bodySprite.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 0);
 
             _bodySprite.SetCurrentAnimation(CActorAnimEnum.Walk);
             _bodySprite.SetScale(CombatManager.CombatScale);
@@ -2307,23 +2313,24 @@ namespace RiverHollow.Actors
         public override void Update(GameTime theGameTime)
         {
             base.Update(theGameTime);
-            if (CurrentHP > 0)
+
+            //Finished being hit, determine action
+            if (IsCurrentAnimation(CActorAnimEnum.Hurt) && BodySprite.GetPlayCount() == 1)
             {
-                if ((float)CurrentHP / (float)MaxHP <= 0.25 && (IsCurrentAnimation(CActorAnimEnum.Walk) || IsCurrentAnimation(CActorAnimEnum.KO)))
-                {
-                    PlayAnimation(CActorAnimEnum.Critical);
-                }
-                else if ((float)CurrentHP / (float)MaxHP > 0.25 && IsCurrentAnimation(CActorAnimEnum.Critical))
-                {
-                    PlayAnimation(CActorAnimEnum.Walk);
-                }
+                if(CurrentHP == 0) { PlayAnimation(CActorAnimEnum.KO); }
+                else if (IsCritical()) { PlayAnimation(CActorAnimEnum.Critical); }
+                else { PlayAnimation(CActorAnimEnum.Walk); }
             }
-            else
+
+            if(!_diConditions[ConditionEnum.KO] && IsCurrentAnimation(CActorAnimEnum.KO))
             {
-                if (IsCurrentAnimation(CActorAnimEnum.Walk))
-                {
-                    PlayAnimation(CActorAnimEnum.KO);
-                }
+                if (IsCritical()) { PlayAnimation(CActorAnimEnum.Critical); }
+                else { PlayAnimation(CActorAnimEnum.Walk); }
+            }
+
+            if (IsCurrentAnimation(CActorAnimEnum.Critical) && !IsCritical())
+            {
+                PlayAnimation(CActorAnimEnum.Walk);
             }
 
             if (_linkedSummon != null)
@@ -2337,8 +2344,9 @@ namespace RiverHollow.Actors
             double compression = 0.8;
             double potencyMod = potency / 100;   //100 potency is considered an average attack
             double base_attack = attacker.Attack;  //Attack stat is either weapon damage or mod on monster str
+            double StrMult = Math.Round(1 + ((double)attacker.StatStr / 4 * attacker.StatStr / MAX_STAT), 2);
 
-            int dmg = (int)( Math.Max(1, base_attack - StatDef) * compression * attacker.StrMult);
+            double dmg = ( Math.Max(1, base_attack - StatDef) * compression * StrMult);
 
             dmg += ApplyResistances(dmg, element);
             return DecreaseHealth(dmg);
@@ -2346,44 +2354,44 @@ namespace RiverHollow.Actors
         public int ProcessSpell(CombatActor attacker, int potency, ElementEnum element = ElementEnum.None)
         {
             double maxDmg = (1 + potency) * 3;
-            double divisor = 1 + (15 * Math.Pow(Math.E, -0.12 * (attacker.StatMag - StatRes) * Math.Round((double)attacker.StatMag / MAX_STAT, 2)));
+            double divisor = 1 + (30 * Math.Pow(Math.E, -0.12 * (attacker.StatMag - StatRes) * Math.Round((double)attacker.StatMag / MAX_STAT, 2)));
 
-            int damage = (int)Math.Round(maxDmg / divisor);
+            double damage = Math.Round(maxDmg / divisor);
             damage += ApplyResistances(damage, element);
 
             return DecreaseHealth(damage);
         }
-        public int ApplyResistances(int dmg, ElementEnum element = ElementEnum.None)
+        public double ApplyResistances(double dmg, ElementEnum element = ElementEnum.None)
         {
-            int modifiedDmg = 0;
+            double modifiedDmg = 0;
             if (element != ElementEnum.None)
             {
                 if (MapManager.CurrentMap.IsOutside && GameCalendar.IsRaining())
                 {
-                    if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (int)(dmg * 1.2) - dmg; }
-                    else if (element.Equals(ElementEnum.Fire)) { modifiedDmg += (int)(dmg * 0.8) - dmg; }
+                    if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (dmg * 1.2) - dmg; }
+                    else if (element.Equals(ElementEnum.Fire)) { modifiedDmg += (dmg * 0.8) - dmg; }
                 }
                 else if (MapManager.CurrentMap.IsOutside && GameCalendar.IsSnowing())
                 {
-                    if (element.Equals(ElementEnum.Ice)) { modifiedDmg += (int)(dmg * 1.2) - dmg; }
-                    else if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (int)(dmg * 0.8) - dmg; }
+                    if (element.Equals(ElementEnum.Ice)) { modifiedDmg += (dmg * 1.2) - dmg; }
+                    else if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (dmg * 0.8) - dmg; }
                 }
 
                 if (_linkedSummon != null && _diElementalAlignment[element].Equals(ElementAlignment.Neutral))
                 {
                     if (_linkedSummon.Element.Equals(element))
                     {
-                        modifiedDmg += (int)(dmg * 0.8) - dmg;
+                        modifiedDmg += (dmg * 0.8) - dmg;
                     }
                 }
 
                 if (_diElementalAlignment[element].Equals(ElementAlignment.Resists))
                 {
-                    modifiedDmg += (int)(dmg * 0.8) - dmg;
+                    modifiedDmg += (dmg * 0.8) - dmg;
                 }
                 else if (_diElementalAlignment[element].Equals(ElementAlignment.Vulnerable))
                 {
-                    modifiedDmg += (int)(dmg * 1.2) - dmg;
+                    modifiedDmg += (dmg * 1.2) - dmg;
                 }
             }
 
@@ -2395,19 +2403,19 @@ namespace RiverHollow.Actors
             return Tile.GUITile.CharacterSprite;
         }
 
-        public virtual int DecreaseHealth(int value)
+        public virtual int DecreaseHealth(double value)
         {
-            _currentHP -= (_currentHP - value >= 0) ? value : _currentHP;
+            int iValue = (int)Math.Round(value);
+            _currentHP -= (_currentHP - iValue >= 0) ? iValue : _currentHP;
             PlayAnimation(CActorAnimEnum.Hurt);
             if (_currentHP == 0)
             {
                 _diConditions[ConditionEnum.KO] = true;
-                CombatManager.Kill(this);
                 UnlinkSummon();
                 Tile.GUITile.LinkSummon(null);
             }
 
-            return value;
+            return iValue;
         }
 
         public int IncreaseHealth(int x)
@@ -2428,6 +2436,11 @@ namespace RiverHollow.Actors
             }
 
             return amountHealed;
+        }
+
+        public bool IsCritical()
+        {
+            return (float)CurrentHP / (float)MaxHP <= 0.25;
         }
 
         public void IncreaseMana(int x)
@@ -2798,14 +2811,14 @@ namespace RiverHollow.Actors
                 string[] tagType = s.Split(':');
                 if (tagType[0].Equals("Texture"))
                 {
-                    LoadContent(_sMonsterFolder + tagType[1], 0);
+                    LoadContent(_sMonsterFolder + tagType[1]);
                 }
                 else if (tagType[0].Equals("Lvl"))
                 {
                     _iRating = int.Parse(tagType[1]);
                     _xp = _iRating * 10;
                     _statStr = 1 + _iRating;
-                    _statDef = 10 + (_iRating *3 );
+                    _statDef = 8 + (_iRating *3 );
                     _statVit = 2 * _iRating + 10;
                     _statMag = 2 * _iRating + 10;
                     _statRes = 2 * _iRating + 10;
@@ -2835,6 +2848,15 @@ namespace RiverHollow.Actors
 
             _currentHP = MaxHP;
             _currentMP = MaxMP;
+        }
+
+        public override void Update(GameTime theGameTime)
+        {
+            base.Update(theGameTime);
+            if(BodySprite.CurrentAnimation == Util.GetEnumString(CActorAnimEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
+            {
+                CombatManager.Kill(this);
+            }
         }
 
         private void HandleTrait(string traitData)
@@ -2880,6 +2902,26 @@ namespace RiverHollow.Actors
             {
                 value = (int)(value * 0.9);
             }
+        }
+
+        public override void LoadContent(string texture)
+        {
+            _sTexture = texture;
+
+            _bodySprite = new AnimatedSprite(texture.Replace(" ", ""));
+            int yCrawl = 0;
+            int frameWidth = 24;
+            int frameHeight = 32;
+
+            _bodySprite.AddAnimation(CActorAnimEnum.Walk, frameWidth, frameHeight, 2, 0.5f, 0, (yCrawl++ * frameHeight));
+            _bodySprite.AddAnimation(CActorAnimEnum.Attack, frameWidth, frameHeight, 2, 0.2f, 0, (yCrawl++ * frameHeight));
+            _bodySprite.AddAnimation(CActorAnimEnum.Hurt, frameWidth, frameHeight, 1, 0.5f, 0, (yCrawl++ * frameHeight));
+            _bodySprite.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, 2, 0.5f, 0, (yCrawl++ * frameHeight));
+
+            _bodySprite.SetCurrentAnimation(CActorAnimEnum.Walk);
+            _bodySprite.SetScale(CombatManager.CombatScale);
+            _width = _bodySprite.Width;
+            _height = _bodySprite.Height;
         }
     }
 
@@ -2939,7 +2981,7 @@ namespace RiverHollow.Actors
             CurrentHP = MaxHP;
         }
 
-        public override int DecreaseHealth(int value)
+        public override int DecreaseHealth(double value)
         {
             int rv = base.DecreaseHealth(value);
 

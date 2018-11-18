@@ -14,5 +14,9 @@
       <Key>3</Key>
       <Value>[Item:100-301]</Value>
     </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>[Item:90-0][Item:30- 7][Item:50-8][Item:100-1]</Value>
+    </Item>
   </Asset>
 </XnaContent>

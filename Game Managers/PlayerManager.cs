@@ -515,7 +515,7 @@ namespace RiverHollow.Game_Managers
         {
             CharacterClass combatClass = ActorManager.GetClassByIndex(x);
             Combat.SetClass(combatClass);
-            Combat.LoadContent(@"Textures\Actors\Adventurers\" + combatClass.Name, 32);
+            Combat.LoadContent(@"Textures\Actors\Adventurers\" + combatClass.Name);
         }
 
         public static bool DecreaseStamina(int x)

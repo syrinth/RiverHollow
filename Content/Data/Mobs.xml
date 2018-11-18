@@ -14,5 +14,10 @@
       <Key>3</Key>
       <Value>[Monster:3][Condition:Forest]</Value>
     </Item>
+    <!--FangedFur-->
+    <Item>
+      <Key>4</Key>
+      <Value>[Monster:4][Condition:Forest]</Value>
+    </Item>
   </Asset>
 </XnaContent>

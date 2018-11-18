@@ -9,9 +9,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class GUIStatDisplay : GUIObject
     {
-        public enum DisplayEnum { Energy, Health, Mana};
+        public enum DisplayEnum { Energy, Health, Mana, XP};
 
-        DisplayEnum _toDisplay;
+        DisplayEnum _eDisplayType;
         CombatActor _character;
         float _percentage;
         bool _bHover;
@@ -31,7 +31,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public GUIStatDisplay(DisplayEnum what)
         {
             _character = PlayerManager.Combat;
-            _toDisplay = what;
+            _eDisplayType = what;
             _percentage = 0;
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _iMidWidth = 192;
@@ -51,12 +51,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Width = 200;
 
             SetColor();
+            CalcPercent();
         }
 
         public GUIStatDisplay(DisplayEnum what, CombatActor c, int width)
         {
             _character = c;
-            _toDisplay = what;
+            _eDisplayType = what;
             _percentage = 0;
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _iMidWidth = width - (EDGE * 2);
@@ -76,22 +77,27 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Width = width;
 
             SetColor();
+            CalcPercent();
         }
 
         public void SetColor()
         {
             Color c = Color.White;
-            if (_toDisplay.Equals(DisplayEnum.Energy))
+            if (_eDisplayType.Equals(DisplayEnum.Energy))
             {
                 c = Color.LightGreen;
             }
-            else if (_toDisplay.Equals(DisplayEnum.Health))
+            else if (_eDisplayType.Equals(DisplayEnum.Health))
             {
                 c = Color.Red;
             }
-            else if (_toDisplay.Equals(DisplayEnum.Mana))
+            else if (_eDisplayType.Equals(DisplayEnum.Mana))
             {
                 c = Color.LightBlue;
+            }
+            else if (_eDisplayType.Equals(DisplayEnum.XP))
+            {
+                c = Color.Yellow;
             }
 
             _gFillLeft.SetColor(c);
@@ -112,10 +118,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override void Update(GameTime gameTime)
         {
-            if (_toDisplay == DisplayEnum.Energy) { _percentage = (PlayerManager.Stamina / (float)PlayerManager.MaxStamina); }
-            else if (_toDisplay == DisplayEnum.Health) { _percentage = ((float)_character.CurrentHP / (float)_character.MaxHP); }
-            else if (_toDisplay == DisplayEnum.Mana) { _percentage = ((float)_character.CurrentMP / (float)_character.MaxMP); }
             base.Update(gameTime);
+            CalcPercent();
+        }
+
+        private void CalcPercent()
+        {
+            if (_eDisplayType == DisplayEnum.Energy) { _percentage = (PlayerManager.Stamina / (float)PlayerManager.MaxStamina); }
+            else if (_eDisplayType == DisplayEnum.Health) { _percentage = ((float)_character.CurrentHP / (float)_character.MaxHP); }
+            else if (_eDisplayType == DisplayEnum.Mana) { _percentage = ((float)_character.CurrentMP / (float)_character.MaxMP); }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -132,9 +143,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 string text = string.Empty;
 
-                if (_toDisplay == DisplayEnum.Energy) { text = string.Format("{0}/{1}", PlayerManager.Stamina, PlayerManager.MaxStamina); }
-                else if (_toDisplay == DisplayEnum.Health) { text = string.Format("{0}/{1}", _character.CurrentHP, _character.MaxHP); }
-                else if (_toDisplay == DisplayEnum.Mana) { text = string.Format("{0}/{1}", _character.CurrentMP, _character.MaxMP); }
+                if (_eDisplayType == DisplayEnum.Energy) { text = string.Format("{0}/{1}", PlayerManager.Stamina, PlayerManager.MaxStamina); }
+                else if (_eDisplayType == DisplayEnum.Health) { text = string.Format("{0}/{1}", _character.CurrentHP, _character.MaxHP); }
+                else if (_eDisplayType == DisplayEnum.Mana) { text = string.Format("{0}/{1}", _character.CurrentMP, _character.MaxMP); }
+                else if (_eDisplayType == DisplayEnum.XP) { text = string.Format("{0}/{1}", ((CombatAdventurer)_character).XP, CombatAdventurer.LevelRange[((CombatAdventurer)_character).ClassLevel]); }
 
                 _gText.SetText(text);
                 _gText.AlignToObject(_gMid, SideEnum.Center);

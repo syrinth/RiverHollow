@@ -12,7 +12,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class ActorManager
     {
-        private static Dictionary<int, Mob> _diMobs;
+        private static Dictionary<int, string> _diMobs;
         private static Dictionary<int, string> _diMonsters;
         private static Dictionary<int, Villager> _diNPCs;
         public static Dictionary<int, Villager> DiNPC { get => _diNPCs; }
@@ -30,18 +30,14 @@ namespace RiverHollow.Game_Managers
             _liForest = new List<int>();
             _liMountain = new List<int>();
             _liNight = new List<int>();
-            _diMobs = new Dictionary<int, Mob>();
+            _diMobs = new Dictionary<int, string>();
             _diSchedule = new Dictionary<string, Dictionary<string, string>>();
 
+            _diMobs = Content.Load<Dictionary<int, string>>(@"Data\Mobs");
             _diMonsters = Content.Load<Dictionary<int, string>>(@"Data\Monsters");
             _diActions = Content.Load<Dictionary<int, string>>(@"Data\CombatActions");
             _diBuffs = Content.Load<Dictionary<int, string>>(@"Data\Buffs");
             _diClasses = Content.Load<Dictionary<int, string>>(@"Data\Classes");
-
-            foreach (KeyValuePair<int, string> kvp in Content.Load<Dictionary<int, string>>(@"Data\Mobs"))
-            {
-                _diMobs.Add(kvp.Key, new Mob(kvp.Key, Util.FindTags(kvp.Value)));
-            }
 
             foreach (string s in Directory.GetFiles(@"Content\Data\NPCData\Schedules"))
             {
@@ -82,15 +78,22 @@ namespace RiverHollow.Game_Managers
             if (_diMonsters.ContainsKey(id))
             {
                 string _itemData = _diMonsters[id];
-                string[] _itemDataValues = Util.FindTags(_itemData);
-                m = new Monster(id, _itemDataValues);
+                string[] _itemDataVals = Util.FindTags(_itemData);
+                m = new Monster(id, _itemDataVals);
             }
             return m;
         }
 
         public static Mob GetMobByIndex(int id)
         {
-            return _diMobs[id];
+            Mob m = null;
+            if (_diMobs.ContainsKey(id))
+            {
+                string _sData = _diMobs[id];
+                string[] _itemDataVals = Util.FindTags(_sData);
+                m = new Mob(id, _itemDataVals);
+            }
+            return m;
         }
 
         public static Mob GetMobByIndex(int id, Vector2 pos)
@@ -174,14 +177,14 @@ namespace RiverHollow.Game_Managers
         {
             List<Mob> allowedMobs = new List<Mob>();
 
-            foreach(Mob m in _diMobs.Values)
-            {
-                if (m.CheckValidConditions(eSpawnType)){
-                    allowedMobs.Add(m);
-                }
-            }
+            //foreach(Mob m in _diMobs.Values)
+            //{
+            //    if (m.CheckValidConditions(eSpawnType)){
+            //        allowedMobs.Add(m);
+            //    }
+            //}
 
-            return GetMobByIndex(new RHRandom().Next(1, allowedMobs.Count-1));
+            return GetMobByIndex(4);// new RHRandom().Next(1, allowedMobs.Count-1));
         }
 
         #endregion

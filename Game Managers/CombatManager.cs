@@ -20,8 +20,8 @@ namespace RiverHollow.Game_Managers
         private static Mob _mob;
         public static Mob CurrentMob { get => _mob; }
         public static CombatActor ActiveCharacter;
-        private static List<CombatActor> _listMonsters;
-        public static List<CombatActor> Monsters { get => _listMonsters; }
+        private static List<CombatActor> _liMonsters;
+        public static List<CombatActor> Monsters { get => _liMonsters; }
         private static List<CombatActor> _listParty;
         public static List<CombatActor> Party { get => _listParty; }
         public static List<string> LiLevels;
@@ -70,9 +70,9 @@ namespace RiverHollow.Game_Managers
 
             Delay = 0;
             _mob = m;
-            _listMonsters = _mob.Monsters;
+            _liMonsters = _mob.Monsters;
             EarnedXP = 0;
-            foreach (Monster mon in _listMonsters) { EarnedXP += mon.XP; }                                      //Sets the accumulated xp for the battle
+            foreach (Monster mon in _liMonsters) { EarnedXP += mon.XP; }                                      //Sets the accumulated xp for the battle
 
             _listParty = new List<CombatActor>();
             _listParty.AddRange(PlayerManager.GetParty());
@@ -80,7 +80,7 @@ namespace RiverHollow.Game_Managers
             _liQueuedCharacters = new List<CombatActor>();
             _liChargingCharacters = new List<CombatActor>();
             _liChargingCharacters.AddRange(_listParty);
-            _liChargingCharacters.AddRange(_listMonsters);
+            _liChargingCharacters.AddRange(_liMonsters);
 
             //Characters with higher Spd go first
             _liChargingCharacters.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));
@@ -176,7 +176,7 @@ namespace RiverHollow.Game_Managers
             {
                 if (ct.Occupied())
                 {
-                    if (ct.TargetType == TargetEnum.Enemy && !_listMonsters.Contains(ct.Character))
+                    if (ct.TargetType == TargetEnum.Enemy && !_liMonsters.Contains(ct.Character))
                     {
                         ct.SetCombatant(null);
                     }
@@ -196,35 +196,43 @@ namespace RiverHollow.Game_Managers
         private static bool EndCombatCheck()
         {
             bool rv = false;
-            if (!PartyUp() || _listMonsters.Count == 0)
+
+            bool monstersDown = true;
+            foreach (CombatActor m in _liMonsters)
             {
-                if (PartyUp())
+                if (m.CurrentHP != 0)
                 {
-                    CurrentPhase = PhaseEnum.DisplayXP;
-                    foreach (CombatAdventurer a in _listParty)
-                    {
-                        int levl = a.ClassLevel;
-                        a.CurrentCharge = 0;
-                        a.AddXP(EarnedXP);
-
-                        if(levl != a.ClassLevel)
-                        {
-                            LiLevels.Add(a.Name + " Level Up!");
-                        }
-                    }
-                    //MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
+                    monstersDown = false;
+                    break;
                 }
-                else
-                {
-                    CurrentPhase = PhaseEnum.Defeat;
-                }
-                
+            }
 
+            if (PartyUp())
+            {
                 rv = true;
+                CurrentPhase = PhaseEnum.DisplayXP;
+                foreach (CombatAdventurer a in _listParty)
+                {
+                    int levl = a.ClassLevel;
+                    a.CurrentCharge = 0;
+                    a.AddXP(EarnedXP);
+
+                    if (levl != a.ClassLevel)
+                    {
+                        LiLevels.Add(a.Name + " Level Up!");
+                    }
+                }
+                //MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
+            }
+            else
+            {
+                rv = true;
+                CurrentPhase = PhaseEnum.Defeat;
             }
 
             return rv;
         }
+
         public static void EndCombatVictory()
         {
             GUIManager.FadeOut();
@@ -243,7 +251,7 @@ namespace RiverHollow.Game_Managers
 
         private static void SetPhaseForTurn()
         {
-            if (_listMonsters.Contains(ActiveCharacter)) {
+            if (_liMonsters.Contains(ActiveCharacter)) {
                 CurrentPhase = PhaseEnum.EnemyTurn;
                 EnemyTakeTurn();
             }
@@ -364,9 +372,10 @@ namespace RiverHollow.Game_Managers
 
         public static void Kill(CombatActor c)
         {
-            if (_listMonsters.Contains((c)))
+            if (_liMonsters.Contains((c)))
             {
-                _listMonsters.Remove(c);
+                c.BodySprite.IsAnimating = false;
+                _liMonsters.Remove(c);
                 _liChargingCharacters.Remove(c);                    //Remove the killed member from the turn order 
                 _liQueuedCharacters.Remove(c);
             }
@@ -962,7 +971,6 @@ namespace RiverHollow.Game_Managers
                 _targetTile = SelectedTile;
                 if (_chosenAction != null)
                 {
-
                     CombatManager.ActiveCharacter.CurrentMP -= _chosenAction.MPCost;          //Checked before Processing
                     _chosenAction.AnimationSetup();
                     CombatManager.Text = SelectedAction.Name;
@@ -1006,27 +1014,28 @@ namespace RiverHollow.Game_Managers
                 List<CombatTile> cbtTile = new List<CombatTile>();
                 int size = _chosenAction.Size;
 
-                if (size == 0) { cbtTile.Add(SelectedTile); }
-                else {
-                    if (_chosenAction != null && SelectedTile != null)
+                cbtTile.Add(SelectedTile);
+                if (_chosenAction != null && SelectedTile != null)
+                {
+                    int minCol = TargetsAlly() ? 0 : ENEMY_FRONT;
+                    int maxCol = TargetsAlly() ? ENEMY_FRONT : MAX_COL;
+                    int rowStart = 0;
+                    int rowEnd = 0;
+                    int colStart = 0;
+                    int colEnd = 0;
+
+                    LoopFind(ref colStart, SelectedTile.Col, minCol, true);
+                    LoopFind(ref colEnd, SelectedTile.Col, maxCol, false);
+                    LoopFind(ref rowStart, SelectedTile.Row, 0, true);
+                    LoopFind(ref rowEnd, SelectedTile.Row, MAX_ROW, false);
+
+                    for (int row = rowStart; row < rowEnd; row++)
                     {
-                        int minCol = TargetsAlly() ? 0 : ENEMY_FRONT;
-                        int maxCol = TargetsAlly() ? ENEMY_FRONT : MAX_COL;
-                        int rowStart = 0;
-                        int rowEnd = 0;
-                        int colStart = 0;
-                        int colEnd = 0;
-
-                        LoopFind(ref colStart, SelectedTile.Col, minCol, true);
-                        LoopFind(ref colEnd, SelectedTile.Col, maxCol, false);
-                        LoopFind(ref rowStart, SelectedTile.Row, 0, true);
-                        LoopFind(ref rowEnd, SelectedTile.Row, MAX_ROW, false);
-
-                        for (int row = rowStart; row < rowEnd; row++)
+                        for (int col = colStart; col < colEnd; col++)
                         {
-                            for (int col = colStart; col < colEnd; col++)
+                            if (_combatMap[row, col].Occupied() && SelectedAction.InArea(_combatMap[row, col]))
                             {
-                                if(_combatMap[row, col].Occupied() && SelectedAction.InArea(_combatMap[row, col]))
+                                if (!cbtTile.Contains(_combatMap[row, col]))
                                 {
                                     cbtTile.Add(_combatMap[row, col]);
                                 }

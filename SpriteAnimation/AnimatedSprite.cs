@@ -187,11 +187,6 @@ namespace RiverHollow.SpriteAnimations
             v2Center = new Vector2(_width / 2, _height / 2);
         }
 
-        public void AddNextAnimation<TEnum>(TEnum first, TEnum next)
-        {
-            _diFrameAnimations[Util.GetEnumString(first)].NextAnimation = Util.GetEnumString(next);
-        }
-
         public void SetCurrentAnimation<TEnum>(TEnum animate)
         {
             SetCurrentAnimation(Util.GetEnumString<TEnum>(animate));
@@ -268,18 +263,6 @@ namespace RiverHollow.SpriteAnimations
                     PlayedOnce = true;
                     IsAnimating = false;
                     CurrentFrameAnimation.PlayCount = 0;
-                }
-
-                // Check to see if there is a "followup" animation named for this animation
-                if (CurrentFrameAnimation.NextAnimation != string.Empty)
-                {
-                    // If there is, see if the currently playing animation has
-                    // completed a full animation loop
-                    if (CurrentFrameAnimation.PlayCount > 0)
-                    {
-                        // If it has, set up the next animation
-                        SetCurrentAnimation(CurrentFrameAnimation.NextAnimation);
-                    }
                 }
             }
         }

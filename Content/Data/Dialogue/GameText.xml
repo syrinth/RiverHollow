@@ -95,6 +95,10 @@
       <Key>Monster 3</Key>
       <Value>Goblin Sneak Thief</Value>
     </Item>
+    <Item>
+      <Key>Monster 4</Key>
+      <Value>Fanged Fur</Value>
+    </Item>
     <!--Quest Text-->
     <Item>
       <Key>Quest 1</Key>

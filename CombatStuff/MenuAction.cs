@@ -335,6 +335,8 @@ namespace RiverHollow.Actors.CombatStuff
                 {
                     foreach (CombatManager.CombatTile ct in TileTargetList)
                     {
+                        if(ct.Character == null) { continue; }
+
                         if (!IsSpell())
                         {
                             RHRandom random = new RHRandom();
@@ -527,6 +529,9 @@ namespace RiverHollow.Actors.CombatStuff
                         GUICmbtTile moveToTile = TileTargetList[0].GUITile;
                         bool targetsEnemy = TileTargetList[0].GUITile.MapTile.TargetType == TargetEnum.Enemy;
 
+                        //If we're in Critical HP, start walking first.
+                        if (SkillUser.IsCurrentAnimation(CActorAnimEnum.Critical)) { SkillUser.PlayAnimation(CActorAnimEnum.Walk); }
+
                         if (MoveSpriteTo(sprite, GetAttackTargetPosition(sprite, targetsEnemy, moveToTile)))
                         {
                             _currentActionTag++;
@@ -636,6 +641,8 @@ namespace RiverHollow.Actors.CombatStuff
                 case "Return":
                     if (MoveSpriteTo(SkillUser.GetSprite(), UserStartPosition))
                     {
+                        //If we're in Critical HP, go back down.
+                        if (SkillUser.IsCritical()) { SkillUser.PlayAnimation(CActorAnimEnum.Critical); }
                         _currentActionTag++;
                     }
                     break;

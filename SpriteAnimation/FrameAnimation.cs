@@ -31,9 +31,6 @@ namespace RiverHollow.SpriteAnimations
         // The number of times this animation has been played
         private int _iPlayCount = 0;
 
-        // The animation that should be played after this animation
-        private string eNextAnimation = string.Empty;
-
         bool _bBackTracking;
         bool _bPingPong;
 
@@ -94,12 +91,6 @@ namespace RiverHollow.SpriteAnimations
             set { _iPlayCount = value; }
         }
 
-        public string NextAnimation
-        {
-            get { return eNextAnimation; }
-            set { eNextAnimation = value; }
-        }
-
         public FrameAnimation(Rectangle FirstFrame, int Frames, bool pingPong)
         {
             rectInitialFrame = FirstFrame;
@@ -119,17 +110,6 @@ namespace RiverHollow.SpriteAnimations
             rectInitialFrame = new Rectangle(X, Y, Width, Height);
             _iFrameCount = Frames;
             _fFrameLength = FrameLength;
-            _bPingPong = pingPong;
-        }
-
-        public FrameAnimation(int X, int Y,
-            int Width, int Height, int Frames,
-            float FrameLength, bool pingPong, string sNextAnimation)
-        {
-            rectInitialFrame = new Rectangle(X, Y, Width, Height);
-            _iFrameCount = Frames;
-            _fFrameLength = FrameLength;
-            eNextAnimation = sNextAnimation;
             _bPingPong = pingPong;
         }
 
@@ -188,7 +168,7 @@ namespace RiverHollow.SpriteAnimations
         {
                 return new FrameAnimation(this.rectInitialFrame.X, this.rectInitialFrame.Y,
                                           this.rectInitialFrame.Width, this.rectInitialFrame.Height,
-                                          this._iFrameCount, this._fFrameLength, this._bPingPong, eNextAnimation);
+                                          this._iFrameCount, this._fFrameLength, this._bPingPong);
         }
     }
 }

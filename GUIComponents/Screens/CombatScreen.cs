@@ -403,12 +403,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             _gTile.Draw(spriteBatch);
 
-            if (_mapTile.Selected) { _gTargetter.Draw(spriteBatch); }
-
-            if (_gEffect != null && _iDmgTimer < 40)
-            {
-                _gEffect.Draw(spriteBatch);
-            }
             if (_gSummonEffect != null && _iDmgTimer < 40)
             {
                 _gSummonEffect.Draw(spriteBatch);
@@ -420,7 +414,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 if(_gSummon != null) { _gSummon.Draw(spriteBatch); }
                 _gSprite.Draw(spriteBatch);
-                if (!(CombatManager.CurrentPhase == CombatManager.PhaseEnum.PerformAction && CombatManager.ActiveCharacter == _mapTile.Character))
+
+                if (!(CombatManager.CurrentPhase == CombatManager.PhaseEnum.PerformAction && CombatManager.ActiveCharacter == _mapTile.Character)
+                    && !(_mapTile.Character.IsMonster() && _mapTile.Character.IsCurrentAnimation(CActorAnimEnum.KO)))
                 {
                     _gHP.Draw(spriteBatch);
                     if (_gMP != null) { _gMP.Draw(spriteBatch); }
@@ -434,6 +430,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     }
                 }
             }
+
+            if (_gEffect != null && _iDmgTimer < 40)
+            {
+                _gEffect.Draw(spriteBatch);
+            }
+
+            if (_mapTile.Selected) { _gTargetter.Draw(spriteBatch); }
         }
 
         public override void Update(GameTime gameTime)
@@ -658,7 +661,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
 
-            if (_gActionBar.ProcessHover(mouse))
+            if (CombatManager.CurrentPhase != CombatManager.PhaseEnum.ChooseTarget && _gActionBar.ProcessHover(mouse))
             {
                 rv = true;
                 SyncText();
