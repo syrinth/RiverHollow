@@ -207,7 +207,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            if (PartyUp())
+            if (PartyUp() && monstersDown)
             {
                 rv = true;
                 CurrentPhase = PhaseEnum.DisplayXP;
@@ -224,7 +224,7 @@ namespace RiverHollow.Game_Managers
                 }
                 //MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
             }
-            else
+            else if (!PartyUp())
             {
                 rv = true;
                 CurrentPhase = PhaseEnum.Defeat;
