@@ -26,22 +26,22 @@
     <Item>
       <!--Duelist-->
       <Key>5</Key>
-      <Value>[Weapon:Sword][Armor:Heavy][Hp:6][Ability:1-2-3-4-5][DWeap:640][DArmor:720][DHead:780][DWrist:880]</Value>
+      <Value>[Weapon:Sword][Armor:Heavy][Hp:6][Ability:1-51-3-4-5][DWeap:640][DArmor:720][DHead:780][DWrist:880]</Value>
     </Item>
     <Item>
       <!--Knight-->
       <Key>6</Key>
-      <Value>[Weapon:Mace][Armor:Heavy][Hp:10][Spd:1][Ability:1-2-3-4-51-5][DWeap:650][DArmor:740][DHead:800][DWrist:880]</Value>
+      <Value>[Weapon:Mace][Armor:Heavy][Hp:10][Spd:1][Ability:1-3-4-51-5][DWeap:650][DArmor:740][DHead:800][DWrist:880]</Value>
     </Item>
     <Item>
       <!--Rogue-->
       <Key>7</Key>
-      <Value>[Weapon:Bow][Armor:Heavy][Hp:5][Spd:1][Ability:1-2-3-4-5][DWeap:660][DArmor:720][DHead:780][DWrist:880]</Value>
+      <Value>[Weapon:Bow][Armor:Heavy][Hp:5][Spd:1][Ability:1-3-4-5][DWeap:660][DArmor:720][DHead:780][DWrist:880]</Value>
     </Item>
     <Item>
       <!--Bard-->
       <Key>8</Key>
-      <Value>[Weapon:Rapier][Armor:Heavy][Hp:5][Spd:1][Ability:1-2-3-4-5][DWeap:670][DArmor:720][DHead:780][DWrist:880]</Value>
+      <Value>[Weapon:Rapier][Armor:Heavy][Hp:5][Spd:1][Ability:1-3-4-5][DWeap:670][DArmor:720][DHead:780][DWrist:880]</Value>
     </Item>
   </Asset>
 </XnaContent>

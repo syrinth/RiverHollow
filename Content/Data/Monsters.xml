@@ -4,19 +4,25 @@
     <!--Key: Index>0 Value:Name/CombatTexture/XP/Str/Def/Vit/Magic/Speed/Resist/Vulnerability-->
     <Item>
       <Key>1</Key>
-      <Value>[Texture:CombatGoblin][Lvl:1][Trait:Speedy][Resist:Fire][Vuln:Lightning]</Value>
+      <Value>[Texture:CombatGoblin][Lvl:1][Trait:Speedy][Ability:1][Resist:Fire][Vuln:Lightning]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Texture:CombatGoblinSoldier][Lvl:3][Trait:Aggressive][Resist:Lightning][Vuln:Fire]</Value>
+      <Value>[Texture:CombatGoblinSoldier][Lvl:3][Ability:1][Trait:Aggressive][Resist:Lightning][Vuln:Fire]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Texture:CombatGoblinSoldier][Lvl:5][Resist:Lightning][Vuln:Fire]</Value>
+      <Value>[Texture:CombatGoblinSoldier][Lvl:5][Ability:1][Resist:Lightning][Vuln:Fire]</Value>
     </Item>
+    <!--FangedFur-->
     <Item>
       <Key>4</Key>
-      <Value>[Texture:CombatFangedFur][Lvl:1][Vuln:Fire]</Value>
+      <Value>[Texture:CombatFangedFur][Lvl:1][Ability:1]</Value>
+    </Item>
+    <!--MagicMushroom-->
+    <Item>
+      <Key>5</Key>
+      <Value>[Texture:CombatMagicMushroom][Lvl:1][Ability:1-101][Trait:Spellcaster][Idle:4-0.4][Attack:2-0.6]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -44,7 +44,7 @@
     </Item>
     <Item>
       <Key>51</Key>
-      <Value>[Type:Action][Target:Enemy][Range:Melee][Area:Single][Effect:Move-Back-1][Action:UserMove UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:Melee][Area:Single][Effect:Move-Back-1][Action:UserMove UserAttack Apply Return]</Value>
     </Item>
     <!--<100> Wizard Spells-->
     <Item>

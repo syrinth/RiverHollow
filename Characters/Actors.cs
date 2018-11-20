@@ -2292,7 +2292,7 @@ namespace RiverHollow.Actors
             int xCrawl = 0;
             int frameWidth = 24;
             int frameHeight = 32;
-            _bodySprite.AddAnimation(CActorAnimEnum.Walk, frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 0);
+            _bodySprite.AddAnimation(CActorAnimEnum.Idle, frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 0);
             xCrawl += 2;
             _bodySprite.AddAnimation(CActorAnimEnum.Cast, frameWidth, frameHeight, 2, 0.4f, (xCrawl * frameWidth), 0);
             xCrawl += 2;
@@ -2304,7 +2304,7 @@ namespace RiverHollow.Actors
             xCrawl += 2;
             _bodySprite.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 0);
 
-            _bodySprite.SetCurrentAnimation(CActorAnimEnum.Walk);
+            _bodySprite.SetCurrentAnimation(CActorAnimEnum.Idle);
             _bodySprite.SetScale(CombatManager.CombatScale);
             _width = _bodySprite.Width;
             _height = _bodySprite.Height;
@@ -2319,18 +2319,18 @@ namespace RiverHollow.Actors
             {
                 if(CurrentHP == 0) { PlayAnimation(CActorAnimEnum.KO); }
                 else if (IsCritical()) { PlayAnimation(CActorAnimEnum.Critical); }
-                else { PlayAnimation(CActorAnimEnum.Walk); }
+                else { PlayAnimation(CActorAnimEnum.Idle); }
             }
 
             if(!_diConditions[ConditionEnum.KO] && IsCurrentAnimation(CActorAnimEnum.KO))
             {
                 if (IsCritical()) { PlayAnimation(CActorAnimEnum.Critical); }
-                else { PlayAnimation(CActorAnimEnum.Walk); }
+                else { PlayAnimation(CActorAnimEnum.Idle); }
             }
 
             if (IsCurrentAnimation(CActorAnimEnum.Critical) && !IsCritical())
             {
-                PlayAnimation(CActorAnimEnum.Walk);
+                PlayAnimation(CActorAnimEnum.Idle);
             }
 
             if (_linkedSummon != null)
@@ -2806,23 +2806,35 @@ namespace RiverHollow.Actors
             _id = id;
             _sName = GameContentManager.GetGameText("Monster " + _id);
 
+            string texture = string.Empty;
+            float[] idle = new float[2] { 2, 0.5f };
+            float[] attack = new float[2] { 2, 0.2f };
+
             foreach (string s in stringData)
             {
                 string[] tagType = s.Split(':');
                 if (tagType[0].Equals("Texture"))
                 {
-                    LoadContent(_sMonsterFolder + tagType[1]);
+                    texture = tagType[1];
                 }
                 else if (tagType[0].Equals("Lvl"))
                 {
                     _iRating = int.Parse(tagType[1]);
                     _xp = _iRating * 10;
                     _statStr = 1 + _iRating;
-                    _statDef = 8 + (_iRating *3 );
+                    _statDef = 8 + (_iRating * 3);
                     _statVit = 2 * _iRating + 10;
-                    _statMag = 2 * _iRating + 10;
+                    _statMag = 2 * _iRating + 2;
                     _statRes = 2 * _iRating + 10;
                     _statSpd = 10;
+                }
+                else if (tagType[0].Equals("Ability"))
+                {
+                    string[] split = tagType[1].Split('-');
+                    foreach (string ability in split)
+                    {
+                        AbilityList.Add(ActorManager.GetActionByIndex(int.Parse(ability)));
+                    }
                 }
                 else if (tagType[0].Equals("Trait"))
                 {
@@ -2830,21 +2842,35 @@ namespace RiverHollow.Actors
                 }
                 else if (tagType[0].Equals("Resist"))
                 {
-                    string[] elemSplit = tagType[1].Split('-');
-                    foreach (string elem in elemSplit)
+                    string[] split = tagType[1].Split('-');
+                    foreach (string elem in split)
                     {
                         _diElementalAlignment[Util.ParseEnum<ElementEnum>(elem)] = ElementAlignment.Resists;
                     }
                 }
                 else if (tagType[0].Equals("Vuln"))
                 {
-                    string[] elemSplit = tagType[1].Split('-');
-                    foreach (string elem in elemSplit)
+                    string[] split = tagType[1].Split('-');
+                    foreach (string elem in split)
                     {
                         _diElementalAlignment[Util.ParseEnum<ElementEnum>(elem)] = ElementAlignment.Vulnerable;
                     }
                 }
+                else if (tagType[0].Equals("Idle"))
+                {
+                    string[] split = tagType[1].Split('-');
+                    idle[0] = float.Parse(split[0]);
+                    idle[1] = float.Parse(split[1]);
+                }
+                else if (tagType[0].Equals("Attack"))
+                {
+                    string[] split = tagType[1].Split('-');
+                    attack[0] = float.Parse(split[0]);
+                    attack[1] = float.Parse(split[1]);
+                }
             }
+
+            LoadContent(_sMonsterFolder + texture, idle, attack);
 
             _currentHP = MaxHP;
             _currentMP = MaxMP;
@@ -2904,7 +2930,7 @@ namespace RiverHollow.Actors
             }
         }
 
-        public override void LoadContent(string texture)
+        public void LoadContent(string texture, float[] idle, float[] attack)
         {
             _sTexture = texture;
 
@@ -2913,12 +2939,13 @@ namespace RiverHollow.Actors
             int frameWidth = 24;
             int frameHeight = 32;
 
-            _bodySprite.AddAnimation(CActorAnimEnum.Walk, frameWidth, frameHeight, 2, 0.5f, 0, (yCrawl++ * frameHeight));
-            _bodySprite.AddAnimation(CActorAnimEnum.Attack, frameWidth, frameHeight, 2, 0.2f, 0, (yCrawl++ * frameHeight));
+            _bodySprite.AddAnimation(CActorAnimEnum.Idle, frameWidth, frameHeight, (int)idle[0], idle[1], 0, (yCrawl++ * frameHeight));
+            _bodySprite.AddAnimation(CActorAnimEnum.Attack, frameWidth, frameHeight, (int)attack[0], attack[1], 0, (yCrawl++ * frameHeight));
             _bodySprite.AddAnimation(CActorAnimEnum.Hurt, frameWidth, frameHeight, 1, 0.5f, 0, (yCrawl++ * frameHeight));
+            _bodySprite.AddAnimation(CActorAnimEnum.Cast, frameWidth, frameHeight, 1, 0.5f, 0, (yCrawl++ * frameHeight));
             _bodySprite.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, 2, 0.5f, 0, (yCrawl++ * frameHeight));
 
-            _bodySprite.SetCurrentAnimation(CActorAnimEnum.Walk);
+            _bodySprite.SetCurrentAnimation(CActorAnimEnum.Idle);
             _bodySprite.SetScale(CombatManager.CombatScale);
             _width = _bodySprite.Width;
             _height = _bodySprite.Height;
@@ -2946,10 +2973,10 @@ namespace RiverHollow.Actors
         public Summon()
         {
             _bodySprite = new AnimatedSprite(@"Textures\Eye");
-            _bodySprite.AddAnimation(CActorAnimEnum.Walk, 0, 0, 16, 16, 2, 0.9f);
+            _bodySprite.AddAnimation(CActorAnimEnum.Idle, 0, 0, 16, 16, 2, 0.9f);
             _bodySprite.AddAnimation(CActorAnimEnum.Attack, 32, 0, 16, 16, 4, 0.1f);
             _bodySprite.AddAnimation(CActorAnimEnum.Cast, 32, 0, 16, 16, 4, 0.1f);
-            _bodySprite.SetCurrentAnimation(CActorAnimEnum.Walk);
+            _bodySprite.SetCurrentAnimation(CActorAnimEnum.Idle);
             _bodySprite.SetScale(5);
         }
 

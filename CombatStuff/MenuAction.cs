@@ -437,23 +437,7 @@ namespace RiverHollow.Actors.CombatStuff
                 {
                     foreach (CombatManager.CombatTile ct in TileTargetList)
                     {
-                        bool loop = true;
-                        int temp = _iMoveDistance;
-                        CombatManager.CombatTile test;
-                        do
-                        {
-                            test = DetermineMovementTile(ct.GUITile.MapTile);
-                            if (test != null && !test.Occupied() && test.TargetType == ct.TargetType)
-                            {
-                                test.SetCombatant(ct.Character);
-                                temp--;
-                            }
-                            else
-                            {
-                                loop = false;
-                            }
-                            if (temp == 0) { loop = false; }
-                        } while (loop);
+                        PushBack(ct);
                     }
                 }
 
@@ -475,6 +459,30 @@ namespace RiverHollow.Actors.CombatStuff
                     }
                 }
             }
+        }
+
+        private bool PushBack(CombatManager.CombatTile ct)
+        {
+            bool rv = false;
+            CombatManager.CombatTile test;
+            test = DetermineMovementTile(ct.GUITile.MapTile);
+            if (test != null)
+            {
+                if (!test.Occupied())
+                {
+                    test.SetCombatant(ct.Character);
+                    rv = true;
+                }
+                else if (test.Occupied())
+                {
+                    if (PushBack(test))
+                    {
+                        test.SetCombatant(ct.Character);
+                    }
+                }
+            }
+
+            return rv;
         }
 
         private CombatManager.CombatTile DetermineMovementTile(CombatManager.CombatTile tile)
@@ -530,7 +538,7 @@ namespace RiverHollow.Actors.CombatStuff
                         bool targetsEnemy = TileTargetList[0].GUITile.MapTile.TargetType == TargetEnum.Enemy;
 
                         //If we're in Critical HP, start walking first.
-                        if (SkillUser.IsCurrentAnimation(CActorAnimEnum.Critical)) { SkillUser.PlayAnimation(CActorAnimEnum.Walk); }
+                        if (SkillUser.IsCurrentAnimation(CActorAnimEnum.Critical)) { SkillUser.PlayAnimation(CActorAnimEnum.Idle); }
 
                         if (MoveSpriteTo(sprite, GetAttackTargetPosition(sprite, targetsEnemy, moveToTile)))
                         {
@@ -556,7 +564,7 @@ namespace RiverHollow.Actors.CombatStuff
                     }
                     else if (SkillUser.AnimationPlayedXTimes(1))
                     {
-                        SkillUser.PlayAnimation(CActorAnimEnum.Walk);
+                        SkillUser.PlayAnimation(CActorAnimEnum.Idle);
                         _currentActionTag++;
                     }
                     break;
@@ -567,7 +575,7 @@ namespace RiverHollow.Actors.CombatStuff
                     }
                     else if (SkillUser.AnimationPlayedXTimes(2))
                     {
-                        SkillUser.PlayAnimation(CActorAnimEnum.Walk);
+                        SkillUser.PlayAnimation(CActorAnimEnum.Idle);
                         _currentActionTag++;
                     }
                     break;
@@ -607,7 +615,7 @@ namespace RiverHollow.Actors.CombatStuff
                             }
                             else if (counteringChar.AnimationPlayedXTimes(1))
                             {
-                                counteringChar.PlayAnimation(CActorAnimEnum.Walk);
+                                counteringChar.PlayAnimation(CActorAnimEnum.Idle);
                                 int x = SkillUser.ProcessAttack(counteringChar, ((CombatAction)ActorManager.GetActionByIndex(1)).EffectHarm, counteringChar.GetAttackElement());
                                 SkillUser.Tile.GUITile.AssignEffect(x, true);
                                 counteringChar = null;
@@ -623,7 +631,7 @@ namespace RiverHollow.Actors.CombatStuff
                             }
                             else if (counteringSummon.AnimationPlayedXTimes(1))
                             {
-                                counteringSummon.PlayAnimation(CActorAnimEnum.Walk);
+                                counteringSummon.PlayAnimation(CActorAnimEnum.Idle);
                                 int x = SkillUser.ProcessAttack(counteringSummon, ((CombatAction)ActorManager.GetActionByIndex(1)).EffectHarm, counteringSummon.GetAttackElement());
                                 SkillUser.Tile.GUITile.AssignEffect(x, true);
                                 counteringSummon = null;

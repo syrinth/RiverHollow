@@ -278,7 +278,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 _gResults.SetText(str);
                 _gResults.CenterOnScreen();
-                _dResultsTimer = 2.0f;
+                _dResultsTimer = 1.0f;
             }
             else
             {
@@ -502,7 +502,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (occupied)
             {
                 _gSprite = new GUISprite(_mapTile.Character.BodySprite);
-                _gSprite.PlayAnimation(CActorAnimEnum.Walk);
+                _gSprite.PlayAnimation(CActorAnimEnum.Idle);
                 _gHP = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Health, _mapTile.Character, 100);
                 if (_mapTile.Character.MaxMP > 0) { _gMP = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Mana, _mapTile.Character, 100); }
             }

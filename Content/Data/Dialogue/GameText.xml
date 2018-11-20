@@ -99,6 +99,10 @@
       <Key>Monster 4</Key>
       <Value>Fanged Fur</Value>
     </Item>
+    <Item>
+      <Key>Monster 5</Key>
+      <Value>Magic Mushroom</Value>
+    </Item>
     <!--Quest Text-->
     <Item>
       <Key>Quest 1</Key>

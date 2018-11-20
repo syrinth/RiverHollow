@@ -263,24 +263,44 @@ namespace RiverHollow.Game_Managers
         public static void EnemyTakeTurn()
         {
             RHRandom r = new RHRandom();
-            //MAR
-            ProcessActionChoice((CombatAction)ActorManager.GetActionByIndex(1));//ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)]);
+            CombatAction action = null;
+            bool canCast = false;
+            do
+            {
+                action = (CombatAction)ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)];
+                if (action.MPCost <= ActiveCharacter.CurrentMP)
+                {
+                    canCast = true;
+                }
+            } while (!canCast);
+
+            ProcessActionChoice(action);
             if (!SelectedAction.SelfOnly())
             {
-                List<CombatTile> playerTiles = new List<CombatTile>();
-                int col = FindPlayerFrontLine();
-
-                for (int row = 0; row < MAX_ROW; row++)
+                if (action.Range == RangeEnum.Melee)
                 {
-                    CombatTile tile = _combatMap[row, col];
-                    if (tile.Occupied() && tile.Character.CurrentHP > 0)
-                    {
-                        playerTiles.Add(tile);
-                    }
-                }
+                    List<CombatTile> playerTiles = new List<CombatTile>();
+                    int col = FindPlayerFrontLine();
 
-                SelectedTile = playerTiles[r.Next(0, playerTiles.Count - 1)];
+                    for (int row = 0; row < MAX_ROW; row++)
+                    {
+                        CombatTile tile = _combatMap[row, col];
+                        if (tile.Occupied() && tile.Character.CurrentHP > 0)
+                        {
+                            playerTiles.Add(tile);
+                        }
+                    }
+
+                    SelectedTile = playerTiles[r.Next(0, playerTiles.Count - 1)];
+                }
+                else
+                {
+                    CombatActor adv = _listParty[r.Next(0, _listParty.Count - 1)];
+                    SelectedTile = adv.Tile;
+                }
             }
+
+            ActiveCharacter.CurrentMP -= action.MPCost;
         }
 
         internal static List<CombatActor> CalculateTurnOrder(int maxShown)
@@ -938,7 +958,7 @@ namespace RiverHollow.Game_Managers
                     }
                     else if (c.AnimationPlayedXTimes(3))
                     {
-                        c.PlayAnimation(CActorAnimEnum.Walk);
+                        c.PlayAnimation(CActorAnimEnum.Idle);
                         _bDrawItem = false;
                         finished = true;
                     }
@@ -1014,11 +1034,12 @@ namespace RiverHollow.Game_Managers
                 List<CombatTile> cbtTile = new List<CombatTile>();
                 int size = _chosenAction.Size;
 
+                CombatActor actor = _chosenAction.SkillUser;
                 cbtTile.Add(SelectedTile);
                 if (_chosenAction != null && SelectedTile != null)
                 {
-                    int minCol = TargetsAlly() ? 0 : ENEMY_FRONT;
-                    int maxCol = TargetsAlly() ? ENEMY_FRONT : MAX_COL;
+                    int minCol = actor.IsMonster() ? (TargetsAlly() ? ENEMY_FRONT : 0) : (TargetsAlly() ? 0 : ENEMY_FRONT);
+                    int maxCol = actor.IsMonster() ? (TargetsAlly() ? MAX_COL : ENEMY_FRONT) : (TargetsAlly() ? ENEMY_FRONT : MAX_COL);
                     int rowStart = 0;
                     int rowEnd = 0;
                     int colStart = 0;

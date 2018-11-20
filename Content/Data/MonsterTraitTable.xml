@@ -11,5 +11,9 @@
       <Key>Aggressive</Key>
       <Value>[Str:+][Def:-]</Value>
     </Item>
+    <Item>
+      <Key>Spellcaster</Key>
+      <Value>[Mag:+][Def:-]</Value>
+    </Item>
   </Asset>
 </XnaContent>
