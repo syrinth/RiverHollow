@@ -103,6 +103,18 @@
       <Key>Monster 5</Key>
       <Value>Magic Mushroom</Value>
     </Item>
+    <Item>
+      <Key>Monster 6</Key>
+      <Value>Impling</Value>
+    </Item>
+    <Item>
+      <Key>Monster 7</Key>
+      <Value>Forest Impling</Value>
+    </Item>
+    <Item>
+      <Key>Monster 8</Key>
+      <Value>Mimic</Value>
+    </Item>
     <!--Quest Text-->
     <Item>
       <Key>Quest 1</Key>

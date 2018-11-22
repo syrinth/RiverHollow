@@ -628,7 +628,7 @@ namespace RiverHollow.Game_Managers
             foreach(CombatActor c in charging)
             {
                 //If Actor is not knocked out, increment the charge, capping to 100
-                if (!c.KnockedOut())
+                if (!c.KnockedOut() || c.CurrentHP > 0)
                 {
                     if (dummy) { HandleChargeTick(ref c.DummyCharge, ref toQueue, c); }
                     else { HandleChargeTick(ref c.CurrentCharge, ref toQueue, c); }
@@ -652,17 +652,23 @@ namespace RiverHollow.Game_Managers
         }
         private static void GetActiveCharacter()
         {
-            ActiveCharacter = _liQueuedCharacters[0];
-            _liQueuedCharacters.RemoveAt(0);
-            _liChargingCharacters.Add(ActiveCharacter);
-            _liChargingCharacters.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));
+            if (_liQueuedCharacters[0].CurrentHP > 0) {
+                ActiveCharacter = _liQueuedCharacters[0];
+                _liQueuedCharacters.RemoveAt(0);
+                _liChargingCharacters.Add(ActiveCharacter);
+                _liChargingCharacters.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));
 
-            ActiveCharacter.TickBuffs();
-            if (ActiveCharacter.Poisoned())
-            {
-                ActiveCharacter.Location.AssignEffect(ActiveCharacter.DecreaseHealth(Math.Max(1, (int)(ActiveCharacter.MaxHP / 20))), true);
+                ActiveCharacter.TickBuffs();
+                if (ActiveCharacter.Poisoned())
+                {
+                    ActiveCharacter.Location.AssignEffect(ActiveCharacter.DecreaseHealth(Math.Max(1, (int)(ActiveCharacter.MaxHP / 20))), true);
+                }
+                SetPhaseForTurn();
             }
-            SetPhaseForTurn();
+            else
+            {
+                int i = 0;
+            }
         }
         public static void EndTurn()
         {

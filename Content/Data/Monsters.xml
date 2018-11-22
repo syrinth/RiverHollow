@@ -22,7 +22,22 @@
     <!--MagicMushroom-->
     <Item>
       <Key>5</Key>
-      <Value>[Texture:CombatMagicMushroom][Lvl:1][Ability:1-101][Trait:Spellcaster][Idle:4-0.4][Attack:2-0.6]</Value>
+      <Value>[Texture:CombatMagicMushroom][Lvl:1][Ability:1-101][Trait:Spellcaster][Idle:4-0.6][Attack:2-0.6]</Value>
+    </Item>
+    <!--Impling-->
+    <Item>
+      <Key>6</Key>
+      <Value>[Texture:CombatImpling][Lvl:1][Ability:1][Trait:Speedy][Idle:2-0.9][Attack:2-0.6][Hurt:1-0.9]</Value>
+    </Item>
+    <!--Forest Impling-->
+    <Item>
+      <Key>7</Key>
+      <Value>[Texture:CombatImplingForest][Lvl:1][Ability:1][Trait:Speedy][Idle:2-0.9][Attack:2-0.6][Hurt:1-0.9]</Value>
+    </Item>
+    <!--Mimic-->
+    <Item>
+      <Key>8</Key>
+      <Value>[Texture:CombatMimic][Lvl:1][Ability:1][Idle:6-0.3][Attack:2-0.2][Hurt:1-0.8]</Value>
     </Item>
   </Asset>
 </XnaContent>

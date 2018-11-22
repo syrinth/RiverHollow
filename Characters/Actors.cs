@@ -2809,6 +2809,7 @@ namespace RiverHollow.Actors
             string texture = string.Empty;
             float[] idle = new float[2] { 2, 0.5f };
             float[] attack = new float[2] { 2, 0.2f };
+            float[] hurt = new float[2] { 1, 0.5f };
 
             foreach (string s in stringData)
             {
@@ -2868,9 +2869,15 @@ namespace RiverHollow.Actors
                     attack[0] = float.Parse(split[0]);
                     attack[1] = float.Parse(split[1]);
                 }
+                else if (tagType[0].Equals("Hurt"))
+                {
+                    string[] split = tagType[1].Split('-');
+                    hurt[0] = float.Parse(split[0]);
+                    hurt[1] = float.Parse(split[1]);
+                }
             }
 
-            LoadContent(_sMonsterFolder + texture, idle, attack);
+            LoadContent(_sMonsterFolder + texture, idle, attack, hurt);
 
             _currentHP = MaxHP;
             _currentMP = MaxMP;
@@ -2930,7 +2937,7 @@ namespace RiverHollow.Actors
             }
         }
 
-        public void LoadContent(string texture, float[] idle, float[] attack)
+        public void LoadContent(string texture, float[] idle, float[] attack, float[] hurt)
         {
             _sTexture = texture;
 
@@ -2941,9 +2948,9 @@ namespace RiverHollow.Actors
 
             _bodySprite.AddAnimation(CActorAnimEnum.Idle, frameWidth, frameHeight, (int)idle[0], idle[1], 0, (yCrawl++ * frameHeight));
             _bodySprite.AddAnimation(CActorAnimEnum.Attack, frameWidth, frameHeight, (int)attack[0], attack[1], 0, (yCrawl++ * frameHeight));
-            _bodySprite.AddAnimation(CActorAnimEnum.Hurt, frameWidth, frameHeight, 1, 0.5f, 0, (yCrawl++ * frameHeight));
+            _bodySprite.AddAnimation(CActorAnimEnum.Hurt, frameWidth, frameHeight, (int)hurt[0], hurt[1], 0, (yCrawl++ * frameHeight));
             _bodySprite.AddAnimation(CActorAnimEnum.Cast, frameWidth, frameHeight, 1, 0.5f, 0, (yCrawl++ * frameHeight));
-            _bodySprite.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, 2, 0.5f, 0, (yCrawl++ * frameHeight));
+            _bodySprite.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, 3, 0.3f, 0, (yCrawl++ * frameHeight));
 
             _bodySprite.SetCurrentAnimation(CActorAnimEnum.Idle);
             _bodySprite.SetScale(CombatManager.CombatScale);

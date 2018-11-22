@@ -532,7 +532,7 @@ namespace RiverHollow.Tile_Engine
 
             foreach (Mob m in _liMobs)
             {
-                m.Draw(spriteBatch);
+                m.Draw(spriteBatch, true);
             }
 
             foreach (WorkerBuilding b in _liBuildings)

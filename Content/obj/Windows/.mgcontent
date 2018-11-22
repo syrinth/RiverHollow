@@ -120,5 +120,8 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/CombatGoblin.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/CombatGoblinSoldier.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/CombatMagicMushroom.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/CombatImpling.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/CombatImplingForest.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/CombatMimic.png</File>
   </SourceFiles>
 </SourceFileCollection>
