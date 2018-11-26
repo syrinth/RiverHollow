@@ -314,7 +314,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             else { _sprite = new GUICharacterSprite(c.World.BodySprite, true); }
                             
                             _sprite.SetScale(2);
-                            _sprite.PlayAnimation(WActorAnimEnum.IdleDown);
+                            _sprite.PlayAnimation(WActorWalkAnim.IdleDown);
                             _sprite.CenterOnObject(this);
                             _sprite.MoveBy(new Vector2(0, -(this.Width/4)));
                         }         
@@ -386,7 +386,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _sprite.CenterOnWindow(this);
                     _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
 
-                    PlayAnimation(WActorAnimEnum.IdleDown);
+                    PlayAnimation(WActorWalkAnim.IdleDown);
                 }
 
                 public override void Update(GameTime gameTime)
@@ -490,7 +490,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     Controls.Clear();
                     _playerSprite = new GUICharacterSprite(_bOverwrite);
                     _playerSprite.SetScale((int)GameManager.Scale);
-                    _playerSprite.PlayAnimation(WActorAnimEnum.IdleDown);
+                    _playerSprite.PlayAnimation(WActorWalkAnim.IdleDown);
 
                     PositionSprites();
                 }

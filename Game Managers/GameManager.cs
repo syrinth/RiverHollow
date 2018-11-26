@@ -19,7 +19,10 @@ namespace RiverHollow.Game_Managers
 {
     public static class GameManager
     {
-        public enum WActorAnimEnum { MakeItem, IdleDown, IdleUp, IdleLeft, IdleRight, WalkDown, WalkUp, WalkLeft, WalkRight };
+        public enum WActorSpecialAnim { MakeItem };
+        public enum WActorWalkAnim { IdleDown, IdleUp, IdleLeft, IdleRight, WalkDown, WalkUp, WalkLeft, WalkRight };
+        public enum WActorJumpAnim { GroundDown, GroundUp, GroundLeft, GroundRight, AirDown, AirUp, AirLeft, AirRight };
+
         public enum CActorAnimEnum { Idle, Attack, Cast, Hurt, KO, Critical };
         public enum WeatherAnimEnum { None, Rain, Snow };
         public enum ToolAnimEnum { Up, Down, Left, Right }

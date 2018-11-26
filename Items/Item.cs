@@ -470,14 +470,14 @@ namespace RiverHollow.WorldObjects
             int startX = 0;
             int startY = TileSize * row * 2;
             _mainSprite = new AnimatedSprite(@"Textures\texClothes", true);
-            _mainSprite.AddAnimation(WActorAnimEnum.WalkDown, TileSize, TileSize * 2, 3, 0.2f, startX, startY);
-            _mainSprite.AddAnimation(WActorAnimEnum.IdleDown, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize, startY);
-            _mainSprite.AddAnimation(WActorAnimEnum.WalkUp, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 3, startY);
-            _mainSprite.AddAnimation(WActorAnimEnum.IdleUp, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 4, startY);
-            _mainSprite.AddAnimation(WActorAnimEnum.WalkLeft, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 6, startY);
-            _mainSprite.AddAnimation(WActorAnimEnum.IdleLeft, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 7, startY);
-            _mainSprite.AddAnimation(WActorAnimEnum.WalkRight, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 9, startY);
-            _mainSprite.AddAnimation(WActorAnimEnum.IdleRight, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 10, startY);
+            _mainSprite.AddAnimation(WActorWalkAnim.WalkDown, TileSize, TileSize * 2, 3, 0.2f, startX, startY);
+            _mainSprite.AddAnimation(WActorWalkAnim.IdleDown, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize, startY);
+            _mainSprite.AddAnimation(WActorWalkAnim.WalkUp, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 3, startY);
+            _mainSprite.AddAnimation(WActorWalkAnim.IdleUp, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 4, startY);
+            _mainSprite.AddAnimation(WActorWalkAnim.WalkLeft, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 6, startY);
+            _mainSprite.AddAnimation(WActorWalkAnim.IdleLeft, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 7, startY);
+            _mainSprite.AddAnimation(WActorWalkAnim.WalkRight, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 9, startY);
+            _mainSprite.AddAnimation(WActorWalkAnim.IdleRight, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 10, startY);
         }
 
         public void SetSpritePosition(Vector2 Position)
