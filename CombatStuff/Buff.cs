@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using System.Collections.Generic;
 
 namespace RiverHollow.Actors.CombatStuff
 {
     public class Buff
     {
+        public CombatActor Caster;
+        public bool DoT;
         private int _id;
         private string _name;
         public string Name { get => _name; }
+        public int Potency;
         public int Duration;
         private List<KeyValuePair<string, int>> _stats;
         public List<KeyValuePair<string, int>> StatMods { get => _stats; }
@@ -29,8 +33,11 @@ namespace RiverHollow.Actors.CombatStuff
             //This is where we parse for stats effected
             foreach (string s in split)
             {
-                string[] statMods = s.Split(':');
-                _stats.Add(new KeyValuePair<string, int>(statMods[0], int.Parse(statMods[1])));
+                if (!string.IsNullOrEmpty(s))
+                {
+                    string[] statMods = s.Split(':');
+                    _stats.Add(new KeyValuePair<string, int>(statMods[0], int.Parse(statMods[1])));
+                }
             }
 
             _id = id;

@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
 
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.Buildings;
+
 namespace RiverHollow.GUIObjects
 {
     public static class GraphicCursor
@@ -14,8 +16,8 @@ namespace RiverHollow.GUIObjects
         public static MouseState LastMouseState = new MouseState();
         private static Item _heldItem;
         public static Item HeldItem { get => _heldItem; }
-        private static WorkerBuilding _heldBuilding;
-        public static WorkerBuilding HeldBuilding { get => _heldBuilding; }
+        private static Building _heldBuilding;
+        public static Building HeldBuilding { get => _heldBuilding; }
 
         private static int _workerID = -1;
         public static int WorkerToPlace { get => _workerID; }
@@ -59,7 +61,7 @@ namespace RiverHollow.GUIObjects
             _heldItem = null;
         }
 
-        public static bool PickUpBuilding(WorkerBuilding bldg)
+        public static bool PickUpBuilding(Building bldg)
         {
             bool rv = false;
             if (bldg != null)

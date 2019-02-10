@@ -10,6 +10,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Misc;
 using static RiverHollow.WorldObjects.Door;
 using RiverHollow.Actors;
+using RiverHollow.Buildings;
 
 namespace RiverHollow.Game_Managers
 {
@@ -40,15 +41,20 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static WorkerBuilding GetBuilding(int id)
+        public static Building GetBuilding(int id)
         {
             if (_dictBuilding.ContainsKey(id))
             {
                 string buildingData = _dictBuilding[id];
                 string[] _buildingDataValues = Util.FindTags(buildingData);
-                return new WorkerBuilding(_buildingDataValues, id);
+                return new Building(_buildingDataValues, id);
             }
             return null;     
+        }
+
+        public static Building GetManor()
+        {
+            return new Building(Util.FindTags(_dictBuilding[0]), 0);
         }
 
         public static WorldAdventurer GetWorker(int id)

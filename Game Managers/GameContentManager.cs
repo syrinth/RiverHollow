@@ -81,18 +81,21 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadIcons(ContentManager Content)
         {
+            AddDirectoryTextures(Content, @"Content\Textures\ActionEffects");
             AddTexture(Content, @"Textures\battle");
             AddTexture(Content, @"Textures\weapons");
             AddTexture(Content, @"Textures\armor");
-            AddTexture(Content, @"Textures\ArcaneTower");
-            AddTexture(Content, @"Textures\Armory");
+            AddTexture(Content, @"Textures\Tower");
+            AddTexture(Content, @"Textures\Lodge");
+            AddTexture(Content, @"Textures\Cottage");
+            AddTexture(Content, @"Textures\Manor");
+            AddTexture(Content, @"Textures\Barracks");
             AddTexture(Content, @"Textures\tools");
             AddTexture(Content, @"Textures\worldObjects");
             AddTexture(Content, @"Textures\portraits");
             AddTexture(Content, @"Textures\tree");
             AddTexture(Content, @"Textures\items");
             AddTexture(Content, @"Textures\AbilityAnimations");
-            AddTexture(Content, @"Textures\LightningSprite");
             AddTexture(Content, @"Textures\texMachines");
             AddTexture(Content, @"Textures\texCmbtActions");
         }

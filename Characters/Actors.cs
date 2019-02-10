@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Actors.CombatStuff;
+using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.Game_Managers.GUIObjects;
@@ -16,6 +17,7 @@ using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.GUIObjects.ManagementScreen;
 using static RiverHollow.Game_Managers.ObjectManager;
+using static RiverHollow.GUIObjects.GUIObject;
 using static RiverHollow.WorldObjects.Clothes;
 
 namespace RiverHollow.Actors
@@ -152,14 +154,14 @@ namespace RiverHollow.Actors
         {
             sprite = new AnimatedSprite(texture, pingpong);
             sprite.AddAnimation(WActorWalkAnim.WalkDown, TileSize, TileSize * 2, 3, 0.2f, startX, startY);
-            sprite.AddAnimation(WActorWalkAnim.IdleDown, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize, startY);
+            sprite.AddAnimation(WActorBaseAnim.IdleDown, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize, startY);
             sprite.AddAnimation(WActorWalkAnim.WalkUp, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 3, startY);
-            sprite.AddAnimation(WActorWalkAnim.IdleUp, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 4, startY);
+            sprite.AddAnimation(WActorBaseAnim.IdleUp, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 4, startY);
             sprite.AddAnimation(WActorWalkAnim.WalkLeft, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 6, startY);
-            sprite.AddAnimation(WActorWalkAnim.IdleLeft, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 7, startY);
+            sprite.AddAnimation(WActorBaseAnim.IdleLeft, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 7, startY);
             sprite.AddAnimation(WActorWalkAnim.WalkRight, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 9, startY);
-            sprite.AddAnimation(WActorWalkAnim.IdleRight, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 10, startY);
-            sprite.SetCurrentAnimation(WActorWalkAnim.IdleDown);
+            sprite.AddAnimation(WActorBaseAnim.IdleRight, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 10, startY);
+            sprite.SetCurrentAnimation(WActorBaseAnim.IdleDown);
         }
 
         public virtual bool CollisionContains(Point mouse)
@@ -183,7 +185,7 @@ namespace RiverHollow.Actors
 
         public virtual void DetermineFacing(Vector2 direction)
         {
-            WActorWalkAnim animation = WActorWalkAnim.IdleDown;
+            WActorWalkAnim animation = WActorWalkAnim.WalkDown;
 
             if (direction.Length() == 0)
             {
@@ -229,21 +231,21 @@ namespace RiverHollow.Actors
             switch (Facing)
             {
                 case DirectionEnum.Down:
-                    PlayAnimation(WActorWalkAnim.IdleDown);
+                    PlayAnimation(WActorBaseAnim.IdleDown);
                     break;
                 case DirectionEnum.Up:
-                    PlayAnimation(WActorWalkAnim.IdleUp);
+                    PlayAnimation(WActorBaseAnim.IdleUp);
                     break;
                 case DirectionEnum.Left:
-                    PlayAnimation(WActorWalkAnim.IdleLeft);
+                    PlayAnimation(WActorBaseAnim.IdleLeft);
                     break;
                 case DirectionEnum.Right:
-                    PlayAnimation(WActorWalkAnim.IdleRight);
+                    PlayAnimation(WActorBaseAnim.IdleRight);
                     break;
             }
         }
 
-        protected bool CheckMapForCollisionsAndMove(Vector2 direction, bool ignoreCollisions = false, bool determineFacing = true)
+        protected bool CheckMapForCollisionsAndMove(Vector2 direction, bool ignoreCollisions = false)
         {
             bool rv = false;
             //Create the X and Y rectangles to test for collisions
@@ -256,8 +258,6 @@ namespace RiverHollow.Actors
                 Position += new Vector2(direction.X, direction.Y);
                 rv = true;
             }
-
-            if (determineFacing) { DetermineFacing(direction); }
 
             return rv;
         }
@@ -1241,8 +1241,8 @@ namespace RiverHollow.Actors
         protected int _iAdventurerID;
         public int AdventurerID { get => _iAdventurerID; }
         protected string _sAdventurerType;
-        private WorkerBuilding _building;
-        public WorkerBuilding Building => _building;
+        private Building _building;
+        public Building Building => _building;
         protected int _iDailyFoodReq;
         protected int _iCurrFood;
         protected int _iDailyItemID;
@@ -1347,7 +1347,7 @@ namespace RiverHollow.Actors
                     _combat.AddXP(_currentlyMaking.XP);
                     _dProcessedTime = -1;
                     _currentlyMaking = null;
-                    _bodySprite.SetCurrentAnimation(WActorWalkAnim.IdleDown);
+                    _bodySprite.SetCurrentAnimation(WActorBaseAnim.IdleDown);
                 }
             }
         }
@@ -1423,7 +1423,7 @@ namespace RiverHollow.Actors
         public void ProcessChosenItem(int itemID)
         {
             _currentlyMaking = _diCrafting[itemID];
-            _bodySprite.SetCurrentAnimation(WActorSpecialAnim.MakeItem);
+            _bodySprite.SetCurrentAnimation(WActorBaseAnim.MakeItem);
         }
 
         public int TakeItem()
@@ -1446,7 +1446,7 @@ namespace RiverHollow.Actors
             return -1;
         }
 
-        public void SetBuilding(WorkerBuilding b)
+        public void SetBuilding(Building b)
         {
             _building = b;
         }
@@ -1511,7 +1511,7 @@ namespace RiverHollow.Actors
             SetCombat();
             Combat.LoadData(data.advData);
 
-            if (_currentlyMaking != null) { _bodySprite.SetCurrentAnimation(WActorSpecialAnim.MakeItem); }
+            if (_currentlyMaking != null) { _bodySprite.SetCurrentAnimation(WActorBaseAnim.MakeItem); }
             if (Adventuring)
             {
                 DrawIt = false;
@@ -1631,28 +1631,6 @@ namespace RiverHollow.Actors
             _spriteHair.SetDepthMod(0.003f);
         }
 
-        public override void Idle()
-        {
-            WActorWalkAnim animation = WActorWalkAnim.IdleDown;
-            switch (Facing)
-            {
-                case DirectionEnum.Down:
-                    animation = WActorWalkAnim.IdleDown;
-                    break;
-                case DirectionEnum.Up:
-                    animation = WActorWalkAnim.IdleUp;
-                    break;
-                case DirectionEnum.Left:
-                    animation = WActorWalkAnim.IdleLeft;
-                    break;
-                case DirectionEnum.Right:
-                    animation = WActorWalkAnim.IdleRight;
-                    break;
-            }
-
-            PlayAnimation(animation);
-        }
-
         public void MoveBy(int x, int y)
         {
             _bodySprite.MoveBy(x, y);
@@ -1741,8 +1719,8 @@ namespace RiverHollow.Actors
         public override void LoadContent(string textureToLoad)
         {
             _bodySprite = new AnimatedSprite(textureToLoad);
-            _bodySprite.AddAnimation(WActorWalkAnim.IdleDown, 16, 18, 2, 0.6f, 0, 0);
-            _bodySprite.SetCurrentAnimation(WActorWalkAnim.IdleDown);
+            _bodySprite.AddAnimation(WActorBaseAnim.IdleDown, 16, 18, 2, 0.6f, 0, 0);
+            _bodySprite.SetCurrentAnimation(WActorBaseAnim.IdleDown);
 
             _width = _bodySprite.Width;
             _height = _bodySprite.Height;
@@ -1838,7 +1816,7 @@ namespace RiverHollow.Actors
         protected double _dIdleFor;
         protected int _iLeash = 7;
 
-        protected Vector2 _moveTo = Vector2.Zero;
+        protected Vector2 _vMoveTo = Vector2.Zero;
         protected List<CombatActor> _liMonsters;
         public List<CombatActor> Monsters { get => _liMonsters; }
 
@@ -1856,6 +1834,7 @@ namespace RiverHollow.Actors
         FieldOfVision _FoV;
         Vector2 _vLeashPoint;
         float _fLeashRange = TileSize * 30;
+        int _iMoveFailures = 0;
 
         List<SpawnConditionEnum> _liSpawnConditions;
         
@@ -1877,27 +1856,34 @@ namespace RiverHollow.Actors
 
             if (!_bJump)
             {
-                _bodySprite.AddAnimation(WActorWalkAnim.IdleDown, TileSize, TileSize * 2, 1, 0.2f, 0, 0);
+                _bodySprite.AddAnimation(WActorBaseAnim.IdleDown, TileSize, TileSize * 2, 1, 0.2f, 0, 0);
                 _bodySprite.AddAnimation(WActorWalkAnim.WalkDown, TileSize, TileSize * 2, 4, 0.2f, 0, 0);
-                _bodySprite.AddAnimation(WActorWalkAnim.IdleUp, TileSize, TileSize * 2, 1, 0.2f, 64, 0);
+                _bodySprite.AddAnimation(WActorBaseAnim.IdleUp, TileSize, TileSize * 2, 1, 0.2f, 64, 0);
                 _bodySprite.AddAnimation(WActorWalkAnim.WalkUp, TileSize, TileSize * 2, 4, 0.2f, 64, 0);
-                _bodySprite.AddAnimation(WActorWalkAnim.IdleLeft, TileSize, TileSize * 2, 1, 0.2f, 128, 0);
+                _bodySprite.AddAnimation(WActorBaseAnim.IdleLeft, TileSize, TileSize * 2, 1, 0.2f, 128, 0);
                 _bodySprite.AddAnimation(WActorWalkAnim.WalkLeft, TileSize, TileSize * 2, 4, 0.2f, 128, 0);
-                _bodySprite.AddAnimation(WActorWalkAnim.IdleRight, TileSize, TileSize * 2, 1, 0.2f, 192, 0);
+                _bodySprite.AddAnimation(WActorBaseAnim.IdleRight, TileSize, TileSize * 2, 1, 0.2f, 192, 0);
                 _bodySprite.AddAnimation(WActorWalkAnim.WalkRight, TileSize, TileSize * 2, 4, 0.2f, 192, 0);
                 _bodySprite.SetCurrentAnimation(WActorWalkAnim.WalkDown);
             }
             else
             {
+                _bodySprite.AddAnimation(WActorBaseAnim.IdleDown, TileSize, TileSize * 2, 2, 0.2f, 0, 0);
                 _bodySprite.AddAnimation(WActorJumpAnim.GroundDown, TileSize, TileSize * 2, 2, 0.2f, 0, 0);
                 _bodySprite.AddAnimation(WActorJumpAnim.AirDown, TileSize, TileSize * 2, 2, 0.2f, 32, 0);
+
+                _bodySprite.AddAnimation(WActorBaseAnim.IdleUp, TileSize, TileSize * 2, 2, 0.2f, 64, 0);
                 _bodySprite.AddAnimation(WActorJumpAnim.GroundUp, TileSize, TileSize * 2, 2, 0.2f, 64, 0);
                 _bodySprite.AddAnimation(WActorJumpAnim.AirUp, TileSize, TileSize * 2, 2, 0.2f, 96, 0);
-                _bodySprite.AddAnimation(WActorJumpAnim.GroundLeft, TileSize, TileSize * 2, 1, 0.2f, 128, 0);
+
+                _bodySprite.AddAnimation(WActorBaseAnim.IdleLeft, TileSize, TileSize * 2, 2, 0.2f, 128, 0);
+                _bodySprite.AddAnimation(WActorJumpAnim.GroundLeft, TileSize, TileSize * 2, 2, 0.2f, 128, 0);
                 _bodySprite.AddAnimation(WActorJumpAnim.AirLeft, TileSize, TileSize * 2, 2, 0.2f, 160, 0);
-                _bodySprite.AddAnimation(WActorJumpAnim.GroundRight, TileSize, TileSize * 2, 1, 0.2f, 192, 0);
+
+                _bodySprite.AddAnimation(WActorBaseAnim.IdleRight, TileSize, TileSize * 2, 2, 0.2f, 192, 0);
+                _bodySprite.AddAnimation(WActorJumpAnim.GroundRight, TileSize, TileSize * 2, 2, 0.2f, 192, 0);
                 _bodySprite.AddAnimation(WActorJumpAnim.AirRight, TileSize, TileSize * 2, 2, 0.2f, 224, 0);
-                _bodySprite.SetCurrentAnimation(WActorJumpAnim.GroundDown);
+                _bodySprite.SetCurrentAnimation(WActorBaseAnim.IdleDown);
             }
             Facing = DirectionEnum.Down;
 
@@ -1952,6 +1938,7 @@ namespace RiverHollow.Actors
 
         public override void Update(GameTime theGameTime)
         {
+            //Check if the mob is still stunned
             if (_dStun > 0)
             {
                 _dStun -= theGameTime.ElapsedGameTime.TotalSeconds;
@@ -1959,15 +1946,22 @@ namespace RiverHollow.Actors
             }
             else
             {
-                if (_bAlert && !_bLockedOn)
-                {
-                    _dAlertTimer += theGameTime.ElapsedGameTime.TotalSeconds;
-                    _sprAlert.Update(theGameTime);
-                }
+                UpdateAlertTimer(theGameTime);
                 UpdateMovement(theGameTime);
             }
 
             base.Update(theGameTime);
+        }
+
+        private void UpdateAlertTimer(GameTime theGameTime)
+        {
+            //If mob is on alert, but not locked on to
+            //the player, increment the timer.
+            if (_bAlert && !_bLockedOn)
+            {
+                _dAlertTimer += theGameTime.ElapsedGameTime.TotalSeconds;
+                _sprAlert.Update(theGameTime);
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool userLayerDepth = false)
@@ -1978,97 +1972,118 @@ namespace RiverHollow.Actors
 
         private void UpdateMovement(GameTime theGameTime)
         {
+            bool move = true;
             Vector2 direction = Vector2.Zero;
 
-            if (!_bLeashed && _FoV.Contains(PlayerManager.World))
-            {
-                if (!_bAlert)
-                {
-                    _bAlert = true;
-                    _dAlertTimer = 0;
-                }
-
-                if (_dAlertTimer >= MAX_ALERT && _vLeashPoint == Vector2.Zero)
-                {
-                    _bLockedOn = true;
-                    _vLeashPoint = Position;
-                }
-            }
-            else
-            {
-                if (_bAlert)
-                {
-                    _bAlert = false;
-                    _dAlertTimer = 0;
-                }
-                IdleMovement(theGameTime);
-            }
+            //Handle Leashing and Idle Movement targetting
+            HandlePassivity(theGameTime);
 
             if (_bLockedOn)
             {
-                bool move = true;
-                if (_bJump)
-                {
-                    if (BodySprite.CurrentAnimation.StartsWith("Ground") && BodySprite.CurrentFrameAnimation.PlayCount < 1)
-                    {
-                        move = false;
-                    }
-                    else if (BodySprite.CurrentFrameAnimation.PlayCount >= 1)
-                    {
-                        bool jumping = BodySprite.CurrentAnimation.StartsWith("Air");
-                        string animation = "";
-                        switch (Facing)
-                        {
-                            case DirectionEnum.Down:
-                                animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundDown) : Util.GetEnumString(WActorJumpAnim.AirDown);
-                                break;
-                            case DirectionEnum.Up:
-                                animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundUp) : Util.GetEnumString(WActorJumpAnim.AirUp); ;
-                                break;
-                            case DirectionEnum.Left:
-                                animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundLeft) : Util.GetEnumString(WActorJumpAnim.AirLeft); ;
-                                break;
-                            case DirectionEnum.Right:
-                                animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundRight) : Util.GetEnumString(WActorJumpAnim.AirRight); ;
-                                break;
-                        }
-                        _vJumpTo = Vector2.Zero;
-                        PlayAnimation(animation);
-                    }
-                }
-
                 if (Math.Abs(_vLeashPoint.X - Position.X) <= _fLeashRange && Math.Abs(_vLeashPoint.Y - Position.Y) <= _fLeashRange)
                 {
-                    if (move)
+                    _vMoveTo = Vector2.Zero;
+
+                    if (_bJump)
                     {
-                        _moveTo = Vector2.Zero;
-                        Vector2 targetPos = Vector2.Zero;
-                        if (_bJump)
+                        if (_vJumpTo == Vector2.Zero)
                         {
-                            if (_vJumpTo == Vector2.Zero)
-                            {
-                                _vJumpTo = PlayerManager.World.Position;
-                            }
-                            targetPos = _vJumpTo;
+                            _vJumpTo = PlayerManager.World.Position;
                         }
-                        else
-                        {
-                            targetPos = PlayerManager.World.Position;
-                        }
-
-                        float deltaX = Math.Abs(targetPos.X - this.Position.X);
-                        float deltaY = Math.Abs(targetPos.Y - this.Position.Y);
-
-                        Util.GetMoveSpeed(Position, targetPos, Speed, ref direction);
-                        CheckMapForCollisionsAndMove(direction, false, !BodySprite.CurrentAnimation.StartsWith("Air"));
-                        NewFoV();
+                        _vMoveTo = _vJumpTo;
+                    }
+                    else
+                    {
+                        _vMoveTo = PlayerManager.World.Position;
                     }
                 }
-                else
+                else if(!BodySprite.CurrentAnimation.StartsWith("Air"))
                 {
                     _bLeashed = true;
                     _bLockedOn = false;
-                    _moveTo = _vLeashPoint;
+                    _vMoveTo = _vLeashPoint;
+                    DetermineFacing(new Vector2(_vMoveTo.X - Position.X, _vMoveTo.Y - Position.Y));
+                }
+            }
+
+            if (_bJump)
+            {
+                if (_vMoveTo != Vector2.Zero && BodySprite.CurrentAnimation.StartsWith("Idle"))
+                {
+                    move = false;
+
+                    string animation = "";
+                    switch (Facing)
+                    {
+                        case DirectionEnum.Down:
+                            animation = Util.GetEnumString(WActorJumpAnim.GroundDown);
+                            break;
+                        case DirectionEnum.Up:
+                            animation = Util.GetEnumString(WActorJumpAnim.GroundUp);
+                            break;
+                        case DirectionEnum.Left:
+                            animation = Util.GetEnumString(WActorJumpAnim.GroundLeft);
+                            break;
+                        case DirectionEnum.Right:
+                            animation = Util.GetEnumString(WActorJumpAnim.GroundRight);
+                            break;
+                    }
+
+                    PlayAnimation(animation);
+                }
+                else if (BodySprite.CurrentAnimation.StartsWith("Ground") && BodySprite.CurrentFrameAnimation.PlayCount < 1)
+                {
+                    move = false;
+                }
+                else if (!BodySprite.CurrentAnimation.StartsWith("Idle") && BodySprite.CurrentFrameAnimation.PlayCount >= 1)
+                {
+                    bool jumping = BodySprite.CurrentAnimation.StartsWith("Air");
+                    string animation = "";
+                    switch (Facing)
+                    {
+                        case DirectionEnum.Down:
+                            animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundDown) : Util.GetEnumString(WActorJumpAnim.AirDown);
+                            break;
+                        case DirectionEnum.Up:
+                            animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundUp) : Util.GetEnumString(WActorJumpAnim.AirUp); ;
+                            break;
+                        case DirectionEnum.Left:
+                            animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundLeft) : Util.GetEnumString(WActorJumpAnim.AirLeft); ;
+                            break;
+                        case DirectionEnum.Right:
+                            animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundRight) : Util.GetEnumString(WActorJumpAnim.AirRight); ;
+                            break;
+                    }
+                    _vJumpTo = Vector2.Zero;
+                    PlayAnimation(animation);
+                }
+            }
+
+            if (move && _vMoveTo != Vector2.Zero)
+            {
+                float deltaX = Math.Abs(_vMoveTo.X - this.Position.X);
+                float deltaY = Math.Abs(_vMoveTo.Y - this.Position.Y);
+
+                Util.GetMoveSpeed(Position, _vMoveTo, Speed, ref direction);
+                DetermineFacing(direction);
+                if(!CheckMapForCollisionsAndMove(direction, false))
+                {
+                    _iMoveFailures++;
+                }
+                NewFoV();
+
+                //We have finished moving
+                if (Position.X == _vMoveTo.X && Position.Y == _vMoveTo.Y)
+                {
+                    //If we were peashing back to our start point unset it.
+                    if (_bLeashed && _vMoveTo == _vLeashPoint)
+                    {
+                        _vLeashPoint = Vector2.Zero;
+                        _bLeashed = false;
+                    }
+
+                    _vMoveTo = Vector2.Zero;
+                    Idle();
                 }
             }
 
@@ -2080,52 +2095,62 @@ namespace RiverHollow.Actors
             }
         }
 
-        private void IdleMovement(GameTime theGameTime)
+        //If mob is not returning to leash point and player in in range
+        private void HandlePassivity(GameTime theGameTime)
         {
-            if (_moveTo == Vector2.Zero && _dIdleFor <= 0)
+            if (!_bLeashed && !_bLockedOn && _FoV.Contains(PlayerManager.World))
             {
-                int howFar = 2;
-                RHRandom r = new RHRandom();
-                int decision = r.Next(1, 5);
-                if (decision == 1) { _moveTo = new Vector2(Position.X - r.Next(1, howFar) * TileSize, Position.Y); }
-                else if (decision == 2) { _moveTo = new Vector2(Position.X + r.Next(1, howFar) * TileSize, Position.Y); }
-                else if (decision == 3) { _moveTo = new Vector2(Position.X, Position.Y - r.Next(1, howFar) * TileSize); }
-                else if (decision == 4) { _moveTo = new Vector2(Position.X, Position.Y + r.Next(1, howFar) * TileSize); }
-                else
+                //If alert if not on, set alert
+                if (!_bAlert)
                 {
-                    DetermineFacing(Vector2.Zero);
-                    _dIdleFor = 10;
-                }
-            }
-            else if (_moveTo != Vector2.Zero)
-            {
-                Vector2 direction = Vector2.Zero;
-                float deltaX = Math.Abs(_moveTo.X - this.Position.X);
-                float deltaY = Math.Abs(_moveTo.Y - this.Position.Y);
-
-                Util.GetMoveSpeed(Position, _moveTo, Speed, ref direction);
-                if (CheckMapForCollisionsAndMove(direction))
-                {
-                    NewFoV();
-                }
-                else
-                {
-                    _moveTo = Vector2.Zero;
+                    _bAlert = true;
+                    _dAlertTimer = 0;
                 }
 
-                if (Position.X == _moveTo.X && Position.Y == _moveTo.Y)
+                if (_dAlertTimer >= MAX_ALERT)
                 {
-                    if (_bLeashed && _moveTo == _vLeashPoint)
-                    {
-                        _vLeashPoint = Vector2.Zero;
-                        _bLeashed = false;
-                    }
-
-                    _moveTo = Vector2.Zero;
-                    DetermineFacing(_moveTo);
+                    if (_vLeashPoint == Vector2.Zero) { _vLeashPoint = Position; }
+                    _bLockedOn = true;
+                    _bAlert = false;
                 }
             }
             else
+            {
+                if (_bAlert)
+                {
+                    _bAlert = false;
+                    _dAlertTimer = 0;
+                }
+                GetIdleMovementTarget(theGameTime);
+            }
+        }
+        private void GetIdleMovementTarget(GameTime theGameTime)
+        {
+            if ((_vMoveTo == Vector2.Zero && _dIdleFor <= 0 && !BodySprite.CurrentAnimation.StartsWith("Air")) || _iMoveFailures == 5)
+            {
+                _iMoveFailures = 0;
+                int howFar = 2;
+                bool skip = false;
+                RHRandom r = new RHRandom();
+                int decision = r.Next(1, 5);
+                if (decision == 1) { _vMoveTo = new Vector2(Position.X - r.Next(1, howFar) * TileSize, Position.Y); }
+                else if (decision == 2) { _vMoveTo = new Vector2(Position.X + r.Next(1, howFar) * TileSize, Position.Y); }
+                else if (decision == 3) { _vMoveTo = new Vector2(Position.X, Position.Y - r.Next(1, howFar) * TileSize); }
+                else if (decision == 4) { _vMoveTo = new Vector2(Position.X, Position.Y + r.Next(1, howFar) * TileSize); }
+                else
+                {
+                    _vMoveTo = Vector2.Zero;
+                    _dIdleFor = 4;
+                    Idle();
+                    skip = true;
+                }
+
+                if (!skip)
+                {
+                    DetermineFacing(new Vector2(_vMoveTo.X - Position.X, _vMoveTo.Y - Position.Y));
+                }
+            }
+            else if (_vMoveTo == Vector2.Zero)
             {
                 _dIdleFor -= theGameTime.ElapsedGameTime.TotalSeconds;
             }
@@ -2170,35 +2195,9 @@ namespace RiverHollow.Actors
                         }
                     }
 
-                    if (_bodySprite.CurrentAnimation != animation)
-                    {
-                        PlayAnimation(animation);
-                    }
+                    PlayAnimation(animation);
                 }
             }
-        }
-
-        public override void Idle()
-        {
-            string animation = string.Empty;
-            switch (Facing)
-            {
-                case DirectionEnum.Down:
-                    animation = _bJump ? Util.GetEnumString(WActorJumpAnim.GroundDown) : Util.GetEnumString(WActorWalkAnim.IdleDown);
-                    break;
-                case DirectionEnum.Up:
-                    animation = _bJump ? Util.GetEnumString(WActorJumpAnim.GroundUp) : Util.GetEnumString(WActorWalkAnim.IdleUp);
-                    break;
-                case DirectionEnum.Left:
-                    animation = _bJump ? Util.GetEnumString(WActorJumpAnim.GroundLeft) : Util.GetEnumString(WActorWalkAnim.IdleLeft);
-                    break;
-                case DirectionEnum.Right:
-                    animation = _bJump ? Util.GetEnumString(WActorJumpAnim.GroundRight) : Util.GetEnumString(WActorWalkAnim.IdleRight);
-                    break;
-            }
-
-
-            PlayAnimation(animation);
         }
 
         public bool CheckValidConditions(SpawnConditionEnum s)
@@ -2459,12 +2458,12 @@ namespace RiverHollow.Actors
             //Finished being hit, determine action
             if (IsCurrentAnimation(CActorAnimEnum.Hurt) && BodySprite.GetPlayCount() == 1)
             {
-                if(CurrentHP == 0) { PlayAnimation(CActorAnimEnum.KO); }
+                if (CurrentHP == 0) { PlayAnimation(CActorAnimEnum.KO); }
                 else if (IsCritical()) { PlayAnimation(CActorAnimEnum.Critical); }
                 else { PlayAnimation(CActorAnimEnum.Idle); }
             }
 
-            if(!_diConditions[ConditionEnum.KO] && IsCurrentAnimation(CActorAnimEnum.KO))
+            if (!_diConditions[ConditionEnum.KO] && IsCurrentAnimation(CActorAnimEnum.KO))
             {
                 if (IsCritical()) { PlayAnimation(CActorAnimEnum.Critical); }
                 else { PlayAnimation(CActorAnimEnum.Idle); }
@@ -2628,6 +2627,13 @@ namespace RiverHollow.Actors
                                 _buffSpd -= kvp.Value;
                                 break;
                         }
+                    }
+                }
+                else
+                {
+                    if (b.DoT)
+                    {
+                        this.Tile.GUITile.AssignEffect(ProcessSpell(b.Caster, b.Potency), true);
                     }
                 }
             }

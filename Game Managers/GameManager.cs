@@ -14,13 +14,14 @@ using static RiverHollow.WorldObjects.Door;
 using static RiverHollow.Misc.Quest;
 using static RiverHollow.Actors.ShopKeeper;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.Buildings;
 
 namespace RiverHollow.Game_Managers
 {
     public static class GameManager
     {
-        public enum WActorSpecialAnim { MakeItem };
-        public enum WActorWalkAnim { IdleDown, IdleUp, IdleLeft, IdleRight, WalkDown, WalkUp, WalkLeft, WalkRight };
+        public enum WActorBaseAnim { MakeItem, IdleDown, IdleUp, IdleLeft, IdleRight };
+        public enum WActorWalkAnim { WalkDown, WalkUp, WalkLeft, WalkRight };
         public enum WActorJumpAnim { GroundDown, GroundUp, GroundLeft, GroundRight, AirDown, AirUp, AirLeft, AirRight };
 
         public enum CActorAnimEnum { Idle, Attack, Cast, Hurt, KO, Critical };
@@ -567,7 +568,7 @@ namespace RiverHollow.Game_Managers
 
             data.playerData = playerData;
 
-            foreach (WorkerBuilding b in PlayerManager.Buildings)
+            foreach (Building b in PlayerManager.Buildings)
             {
                 data.Buildings.Add(b.SaveData());
             }
@@ -660,9 +661,9 @@ namespace RiverHollow.Game_Managers
             GameCalendar.LoadCalendar(data.Calendar); 
             foreach (BuildingData b in data.Buildings)
             {
-                WorkerBuilding newBuilding = ObjectManager.GetBuilding(b.buildingID);
+                Building newBuilding = ObjectManager.GetBuilding(b.buildingID);
                 newBuilding.LoadData(b);
-                MapManager.Maps[MapManager.HomeMap].AddBuilding(newBuilding, false);
+                MapManager.Maps[MapManager.HomeMap].AddBuilding(newBuilding);
             }
 
             foreach (MapData mapData in data.MapData)

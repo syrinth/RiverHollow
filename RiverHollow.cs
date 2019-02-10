@@ -7,6 +7,8 @@ using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.Buildings;
+
 namespace RiverHollow
 {
     /// <summary>
@@ -276,7 +278,7 @@ namespace RiverHollow
         public static void RollOver()
         {
             PlayerManager.Rollover();
-            foreach(WorkerBuilding b in PlayerManager.Buildings)
+            foreach(Building b in PlayerManager.Buildings)
             {
                 b.Rollover();
             }

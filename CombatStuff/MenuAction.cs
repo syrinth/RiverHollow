@@ -80,11 +80,15 @@ namespace RiverHollow.Actors.CombatStuff
         public int MPCost { get => _mpCost; }
         int _iSize;
         public int Size { get => _iSize; }
-        int _effectHarm;
-        public int EffectHarm { get => _effectHarm; }
-        int _effectHeal;
-        public int EffectHeal { get => _effectHeal; }
+        int _iPotency;
+        public int Potency => _iPotency;
 
+        bool _bHarm;
+        public bool Harm => _bHarm;
+        bool _bHeal;
+        public bool Heal => _bHeal;
+
+        string _sAnimation;
         ForceMoveEnum _forceMove;
         int _iMoveDistance;
 
@@ -97,14 +101,12 @@ namespace RiverHollow.Actors.CombatStuff
         List<String> _actionTags;
         int _currentActionTag = 0;
         List<String> _effectTags;
-        List<BuffData> _buffs;         //Key = Buff ID, string = Duration/<Tag> <Tag>
+        List<BuffData> _liBuffs;         //Key = Buff ID, string = Duration/<Tag> <Tag>
 
         Summon _summon;
         public Vector2 SummonStartPosition;
 
         float _fFrameSpeed;
-        int _iStartX;
-        int _iStartY;
         int _iAnimWidth;
         int _iAnimHeight;
         int _iFrames;
@@ -125,23 +127,11 @@ namespace RiverHollow.Actors.CombatStuff
             TileTargetList = new List<CombatManager.CombatTile>();
             _liCondition = new List<ConditionEnum>();
             _effectTags = new List<string>();
-            _buffs = new List<BuffData>();
+            _liBuffs = new List<BuffData>();
             _actionTags = new List<string>();
 
             _iChargeCost = 100;
             ImportBasics(id, stringData);
-
-            AnimatedSprite sprite = new AnimatedSprite(@"Textures\LightningSprite");
-            sprite.AddAnimation(GenAnimEnum.Play, _iAnimWidth, _iAnimHeight, _iFrames, _fFrameSpeed, _iStartX, _iStartY);
-            sprite.SetCurrentAnimation(GenAnimEnum.Play);
-            sprite.IsAnimating = false;
-            sprite.SetScale(CombatManager.CombatScale);
-            if (_actionTags.Contains("Direct"))
-            {
-                sprite.PlaysOnce = true;
-            }
-
-            Sprite = new GUISprite(sprite);
         }
 
         protected void ImportBasics(int id, string[] stringData)
@@ -195,13 +185,17 @@ namespace RiverHollow.Actors.CombatStuff
                         string[] parse = tag.Split('-');
                         if (parse.Length > 1)
                         {
-                            if (parse[0] == "Harm")
+                            if (parse[0] == "P")
                             {
-                                _effectHarm = int.Parse(parse[1]);
+                                _iPotency = int.Parse(parse[1]);
+                            }
+                            else if (parse[0] == "Harm")
+                            {
+                                _bHarm = true;
                             }
                             else if (parse[0] == "Heal")
                             {
-                                _effectHeal = int.Parse(parse[1]);
+                                _bHeal = true;
                             }
                             else if (parse[0] == "Cost")
                             {
@@ -218,6 +212,16 @@ namespace RiverHollow.Actors.CombatStuff
                                 {
                                     _liCondition.Add(Util.ParseEnum<ConditionEnum>(parse[j]));
                                 }
+                            }
+                            else if (parse[0] == "Buff")
+                            {
+                                BuffData buff = new BuffData() { BuffID = int.Parse(parse[1]), Duration = int.Parse(parse[2]), Tags = parse[3] };
+                                if(buff.Tags == "DoT")
+                                {
+                                    buff.Potency = _iPotency;
+                                }
+                                buff.Sprite = Sprite;
+                                _liBuffs.Add(buff);
                             }
                             else if (parse[0] == "Bonus")
                             {
@@ -260,32 +264,36 @@ namespace RiverHollow.Actors.CombatStuff
                         }
                     }
                 }
-                else if (tagType[0].Equals("Buff"))
-                {
-                    string[] details = tagType[1].Split('|');
-                    _buffs.Add(new BuffData() { BuffID = int.Parse(details[0]), Duration = int.Parse(details[1]), Tags = details[2] });
-                }
                 else if (tagType[0].Equals("Action"))
                 {
                     _actionTags.AddRange(tagType[1].Split(' '));
                     _actionTags.Add("End");
                 }
-                else if (tagType[0].Equals("SpellAnimation"))
+                else if (tagType[0].Equals("Animation"))
                 {
                     string[] parse = tagType[1].Split('-');
-                    if (parse.Length == 7)
+                    int i = 0;
+                    _sAnimation = @"Textures\ActionEffects\" + parse[i++];
+                    _iAnimWidth = int.Parse(parse[i++]);
+                    _iAnimHeight = int.Parse(parse[i++]);
+                    _iFrames = int.Parse(parse[i++]);
+                    _fFrameSpeed = float.Parse(parse[i++]);
+                    if (parse.Length == i + 1)
                     {
-                        int i = 0;
-                        _iStartX = int.Parse(parse[i++]);
-                        _iStartY = int.Parse(parse[i++]);
-                        _iAnimWidth = int.Parse(parse[i++]);
-                        _iAnimHeight = int.Parse(parse[i++]);
-                        _iFrames = int.Parse(parse[i++]);
-                        _fFrameSpeed = float.Parse(parse[i++]);
                         _iAnimOffset = int.Parse(parse[i++]);
                     }
+
+                    AnimatedSprite sprite = new AnimatedSprite(_sAnimation);
+                    sprite.AddAnimation(GenAnimEnum.Play, _iAnimWidth, _iAnimHeight, _iFrames, _fFrameSpeed);
+                    sprite.SetCurrentAnimation(GenAnimEnum.Play);
+                    sprite.IsAnimating = false;
+                    sprite.SetScale(CombatManager.CombatScale);
+                    sprite.PlaysOnce = true;
+
+                    Sprite = new GUISprite(sprite);
                 }
             }
+
         }
 
         //Sets the _used tag to be true so that it's known that we've started using it
@@ -297,17 +305,20 @@ namespace RiverHollow.Actors.CombatStuff
 
         public void ApplyEffectToSelf()
         {
-            if (_buffs.Count > 0)
+            if (_liBuffs.Count > 0)
             {
                 Buff b = null;
-                foreach (BuffData data in _buffs)
+                foreach (BuffData data in _liBuffs)
                 {
                     b = ActorManager.GetBuffByIndex(data.BuffID);
                     b.Duration = data.Duration;
+                    b.Potency = data.Potency;
+                    b.Caster = SkillUser;
                     string[] tags = data.Tags.Split(' ');
                     foreach (string s in tags)
                     {
                         if (s.Equals("Self")) { SkillUser.AddBuff(b); }
+                        else if (s.Equals("DoT")) { b.DoT = true; }
                     }
                 }
             }
@@ -343,13 +354,13 @@ namespace RiverHollow.Actors.CombatStuff
                             int evade = random.Next(1, 100);
                             if (evade > ct.Character.Evasion)
                             {
-                                int x = ct.Character.ProcessAttack(SkillUser, _effectHarm + bonus, ct.Character.GetAttackElement());
+                                int x = ct.Character.ProcessAttack(SkillUser, _iPotency + bonus, ct.Character.GetAttackElement());
                                 ct.GUITile.AssignEffect(x, true);
 
                                 Summon summ = ct.Character.LinkedSummon;
                                 if (_areaOfEffect == AreaEffectEnum.Area && summ != null)
                                 {
-                                    summ.ProcessAttack(SkillUser, _effectHarm + bonus, ct.Character.GetAttackElement());
+                                    summ.ProcessAttack(SkillUser, _iPotency + bonus, ct.Character.GetAttackElement());
                                     ct.GUITile.AssignEffectToSummon(x.ToString());
                                 }
 
@@ -383,7 +394,7 @@ namespace RiverHollow.Actors.CombatStuff
                         }
                         else
                         {
-                            int x = ct.Character.ProcessSpell(SkillUser, _effectHarm, _element);
+                            int x = ct.Character.ProcessSpell(SkillUser, _iPotency, _element);
                             ct.GUITile.AssignEffect(x, true);
                         }
                     }
@@ -392,11 +403,11 @@ namespace RiverHollow.Actors.CombatStuff
                 {
                     foreach (CombatManager.CombatTile ct in TileTargetList)
                     {
-                        int val = _effectHeal;
+                        int val = _iPotency;
                         ct.Character.IncreaseHealth(val);
                         if (val > 0)
                         {
-                            ct.GUITile.AssignEffect(_effectHeal, false);
+                            ct.GUITile.AssignEffect(_iPotency, false);
                         }
                     }
                 }
@@ -441,19 +452,22 @@ namespace RiverHollow.Actors.CombatStuff
                     }
                 }
 
-                if (_buffs.Count > 0)
+                if (_liBuffs.Count > 0)
                 {
                     Buff b = null;
-                    foreach (BuffData data in _buffs)
+                    foreach (BuffData data in _liBuffs)
                     {
                         b = ActorManager.GetBuffByIndex(data.BuffID);
                         b.Duration = data.Duration;
+                        b.Caster = SkillUser;
+                        b.Potency = data.Potency;
                         string[] tags = data.Tags.Split(' ');
                         foreach (string s in tags)
                         {
-                            if (s.Equals("Self"))
-                            {
-                                SkillUser.AddBuff(b);
+                            if (s.Equals("Self")) { SkillUser.AddBuff(b); }
+                            else if (s.Equals("DoT")) {
+                                TileTargetList[0].Character.AddBuff(b);
+                                b.DoT = true;
                             }
                         }
                     }
@@ -616,7 +630,7 @@ namespace RiverHollow.Actors.CombatStuff
                             else if (counteringChar.AnimationPlayedXTimes(1))
                             {
                                 counteringChar.PlayAnimation(CActorAnimEnum.Idle);
-                                int x = SkillUser.ProcessAttack(counteringChar, ((CombatAction)ActorManager.GetActionByIndex(1)).EffectHarm, counteringChar.GetAttackElement());
+                                int x = SkillUser.ProcessAttack(counteringChar, ((CombatAction)ActorManager.GetActionByIndex(1)).Potency, counteringChar.GetAttackElement());
                                 SkillUser.Tile.GUITile.AssignEffect(x, true);
                                 counteringChar = null;
                                 _pauseForCounter = false;
@@ -632,7 +646,7 @@ namespace RiverHollow.Actors.CombatStuff
                             else if (counteringSummon.AnimationPlayedXTimes(1))
                             {
                                 counteringSummon.PlayAnimation(CActorAnimEnum.Idle);
-                                int x = SkillUser.ProcessAttack(counteringSummon, ((CombatAction)ActorManager.GetActionByIndex(1)).EffectHarm, counteringSummon.GetAttackElement());
+                                int x = SkillUser.ProcessAttack(counteringSummon, ((CombatAction)ActorManager.GetActionByIndex(1)).Potency, counteringSummon.GetAttackElement());
                                 SkillUser.Tile.GUITile.AssignEffect(x, true);
                                 counteringSummon = null;
                                 _pauseForCounter = false;
@@ -683,8 +697,11 @@ namespace RiverHollow.Actors.CombatStuff
                     break;
                 case "End":
                     _currentActionTag = 0;
-                    Sprite.IsAnimating = false;
-                    Sprite.PlayedOnce = false;
+                    if (Sprite != null)
+                    {
+                        Sprite.IsAnimating = false;
+                        Sprite.PlayedOnce = false;
+                    }
                     CombatManager.EndTurn();
 
                     break;
@@ -735,6 +752,8 @@ namespace RiverHollow.Actors.CombatStuff
     {
         public int BuffID;
         public int Duration;
+        public int Potency;
         public string Tags;
+        public GUISprite Sprite;
     }
 }

@@ -12,6 +12,7 @@ using System.IO;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.Buildings;
 
 namespace RiverHollow.Game_Managers
 {
@@ -79,7 +80,7 @@ namespace RiverHollow.Game_Managers
                     string testName = testString[0];
                     string testID = (testString.Length == 2) ? testString[1] : "";
 
-                    if (c == PlayerManager.World && !string.IsNullOrEmpty(PlayerManager._inBuilding))
+                    if (c == PlayerManager.World && !string.IsNullOrEmpty(PlayerManager._inBuilding) && !_tileMaps[currMap].IsManor)
                     {
                         rectEntrance = _tileMaps[newMapName].DictionaryEntrance[PlayerManager._inBuilding];
                         PlayerManager._inBuilding = string.Empty;
@@ -137,7 +138,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager.World.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
         }
 
-        public static void EnterBuilding(WorkerBuilding b)
+        public static void EnterBuilding(Building b)
         {
             Rectangle rectEntrance = Rectangle.Empty;
             PlayerManager._inBuilding = b.ID.ToString();
@@ -150,7 +151,10 @@ namespace RiverHollow.Game_Managers
                 }
             }
             _currentMap = _tileMaps[b.MapName];
-            _currentMap.LoadBuilding(b);
+            if (b.ID > 0)
+            {
+                _currentMap.LoadBuilding((Building)b);
+            }
 
             PlayerManager.CurrentMap = _currentMap.Name;
             PlayerManager.World.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);

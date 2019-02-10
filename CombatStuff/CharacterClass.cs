@@ -117,6 +117,10 @@ namespace RiverHollow.Actors.CombatStuff
                 {
                     WristID = int.Parse(tagType[1]);
                 }
+
+                //AbilityList.Add(ActorManager.GetActionByIndex(2));
+                //AbilityList.Add(ActorManager.GetActionByIndex(0));
+                //AbilityList.Add(ActorManager.GetActionByIndex(1));
             }
         }
     }

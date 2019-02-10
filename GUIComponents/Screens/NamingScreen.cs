@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Actors;
+using RiverHollow.Buildings;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Game_Managers.GUIObjects;
 
@@ -9,7 +10,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
     {
         private GUITextInputWindow _window;
         WorldAdventurer _w;
-        WorkerBuilding _b;
+        Building _b;
 
         private NamingScreen()
         {
@@ -24,7 +25,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             _w = w;
         }
 
-        public NamingScreen(WorkerBuilding b) : this()
+        public NamingScreen(Building b) : this()
         {
             _b = b;
             _window.AcceptSpace = true;

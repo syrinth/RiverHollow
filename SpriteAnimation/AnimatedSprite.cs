@@ -24,7 +24,7 @@ namespace RiverHollow.SpriteAnimations
         Dictionary<string, FrameAnimation> _diFrameAnimations = new Dictionary<string, FrameAnimation>();
 
         // Which FrameAnimation from the dictionary above is playing
-        string _currAnimation = string.Empty;
+        string _sCurrAnim = string.Empty;
 
         // Calculated center of the sprite
         Vector2 v2Center;
@@ -131,8 +131,8 @@ namespace RiverHollow.SpriteAnimations
         {
             get
             {
-                if (_currAnimation != string.Empty && _diFrameAnimations.ContainsKey(_currAnimation))
-                    return _diFrameAnimations[_currAnimation];
+                if (_sCurrAnim != string.Empty && _diFrameAnimations.ContainsKey(_sCurrAnim))
+                    return _diFrameAnimations[_sCurrAnim];
                 else
                     return null;
             }
@@ -144,7 +144,7 @@ namespace RiverHollow.SpriteAnimations
         ///
         public string CurrentAnimation
         {
-            get { return _currAnimation; }
+            get { return _sCurrAnim; }
         }
 
         #endregion
@@ -162,7 +162,7 @@ namespace RiverHollow.SpriteAnimations
             _diFrameAnimations = sprite._diFrameAnimations;
             _iFrameCutoff = sprite._iFrameCutoff;
             _color = sprite._color;
-            _currAnimation = sprite._currAnimation;
+            _sCurrAnim = sprite._sCurrAnim;
             _iScale = sprite._iScale;
 
             IsAnimating = sprite.IsAnimating;
@@ -193,12 +193,15 @@ namespace RiverHollow.SpriteAnimations
         }
         public void SetCurrentAnimation(string animate)
         {
-            _currAnimation = animate;
-            if (_diFrameAnimations.ContainsKey(_currAnimation))
+            if (_sCurrAnim != animate)
             {
-                _diFrameAnimations[_currAnimation].FrameTimer = 0;
-                _diFrameAnimations[_currAnimation].CurrentFrame = 0;
-                _diFrameAnimations[_currAnimation].PlayCount = 0;
+                _sCurrAnim = animate;
+                if (_diFrameAnimations.ContainsKey(_sCurrAnim))
+                {
+                    _diFrameAnimations[_sCurrAnim].FrameTimer = 0;
+                    _diFrameAnimations[_sCurrAnim].CurrentFrame = 0;
+                    _diFrameAnimations[_sCurrAnim].PlayCount = 0;
+                }
             }
         }
 

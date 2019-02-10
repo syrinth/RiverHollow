@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Graphics;
 using RiverHollow.Actors;
+using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.Game_Managers.GUIObjects;
@@ -30,17 +31,17 @@ namespace RiverHollow.Tile_Engine
         private string _name;
         public string Name { get => _name.Replace(@"Maps\", ""); set => _name = value; } //Fuck off with that path bullshit
 
-        protected WorkerBuilding _mapBuilding;
-        public WorkerBuilding MapBuilding { get => _mapBuilding; }
+        protected Building _mapBuilding;
+        public Building MapBuilding { get => _mapBuilding; }
 
-        bool _bWorkerBuilding;
-        public bool WorkerBuilding => _bWorkerBuilding;
         bool _bBuilding;
         public bool IsBuilding => _bBuilding;
         bool _bDungeon;
         public bool IsDungeon => _bDungeon;
         bool _bTown;
         public bool IsTown => _bTown;
+        bool _bManor;
+        public bool IsManor => _bManor;
         bool _bOutside;
         public bool IsOutside => _bOutside; 
         int _iActiveSpawnPoints;
@@ -61,7 +62,7 @@ namespace RiverHollow.Tile_Engine
         protected List<Door> _liDoors;
         public List<WorldActor> ToRemove;
         public List<WorldActor> ToAdd;
-        protected List<WorkerBuilding> _liBuildings;
+        protected List<Building> _liBuildings;
         protected List<RHTile> _liModifiedTiles;
         public List<RHTile> ModTiles => _liModifiedTiles;
         protected List<SpawnPoint> _liSpawnPoints;
@@ -83,7 +84,7 @@ namespace RiverHollow.Tile_Engine
             _liTilesets = new List<TiledMapTileset>();
             _liActors = new List<WorldActor>();
             _liMobs = new List<Mob>();
-            _liBuildings = new List<WorkerBuilding>();
+            _liBuildings = new List<Building>();
             _liModifiedTiles = new List<RHTile>();
             _liItems = new List<Item>();
             _liMapObjects = new List<TiledMapObject>();
@@ -105,10 +106,10 @@ namespace RiverHollow.Tile_Engine
             _tileArray = map._tileArray;
 
             _bBuilding = _map.Properties.ContainsKey("Building");
-            _bWorkerBuilding = _map.Properties.ContainsKey("WorkerBuilding");
             _bDungeon = _map.Properties.ContainsKey("Dungeon");
             _bTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
+            _bManor = _map.Properties.ContainsKey("Manor");
 
             if (_map.Properties.ContainsKey("ActiveSpawn")) {
                 int.TryParse(_map.Properties["ActiveSpawn"].ToString(), out _iActiveSpawnPoints);
@@ -141,11 +142,13 @@ namespace RiverHollow.Tile_Engine
                     _tileArray[j, i].SetProperties(this);
                 }
             }
-            
+
             _bBuilding = _map.Properties.ContainsKey("Building");
-            _bWorkerBuilding = _map.Properties.ContainsKey("WorkerBuilding");
             _bDungeon = _map.Properties.ContainsKey("Dungeon");
             _bTown = _map.Properties.ContainsKey("Town");
+            _bOutside = _map.Properties.ContainsKey("Outside");
+            _bManor = _map.Properties.ContainsKey("Manor");
+
             if (_map.Properties.ContainsKey("Outside"))
             {
                 bool.TryParse(_map.Properties["Outside"], out _bOutside);
@@ -191,13 +194,16 @@ namespace RiverHollow.Tile_Engine
                         string ID = (mapObject.Properties.ContainsKey("ID")) ? (":" + mapObject.Properties["ID"]) : "";
                         Rectangle r = new Rectangle((int)mapObject.Position.X, (int)mapObject.Position.Y, (int)mapObject.Size.Width, (int)mapObject.Size.Height);
 
+                        string map = string.Empty;
                         if (mapObject.Properties.ContainsKey("Exit"))
                         {
-                            _dictExit.Add(r, mapObject.Properties["Exit"] + ID);
+                            map = mapObject.Properties["Exit"] == "Home" ? MapManager.HomeMap : mapObject.Properties["Exit"] + ID;
+                            _dictExit.Add(r, map);
                         }
                         else if (mapObject.Properties.ContainsKey("Entrance"))
                         {
-                            _dictEntrance.Add(mapObject.Properties["Entrance"] + ID, r);
+                            map = mapObject.Properties["Entrance"] == "Home" ? MapManager.HomeMap : mapObject.Properties["Entrance"] + ID;
+                            _dictEntrance.Add(map, r);
                         }
                     }
                 }
@@ -292,6 +298,12 @@ namespace RiverHollow.Tile_Engine
                 else if (obj.Name.Equals("SpawnPoint"))
                 {
                     _liSpawnPoints.Add(new SpawnPoint(this, obj));
+                }
+                else if (obj.Name.Equals("Manor"))
+                {
+                    Building manor = ObjectManager.GetManor();
+                    manor.SetCoordinates(obj.Position);
+                    AddBuilding(manor);
                 }
             }
 
@@ -535,7 +547,7 @@ namespace RiverHollow.Tile_Engine
                 m.Draw(spriteBatch, true);
             }
 
-            foreach (WorkerBuilding b in _liBuildings)
+            foreach(Building b in _liBuildings)
             {
                 b.Draw(spriteBatch);
             }
@@ -555,6 +567,7 @@ namespace RiverHollow.Tile_Engine
                 bool passable = t.Passable();
                 spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)t.Position.X, (int)t.Position.Y, TileSize, TileSize), new Rectangle(288, 128, TileSize, TileSize) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
             }
+
         }
 
         public void DrawUpper(SpriteBatch spriteBatch)
@@ -877,9 +890,9 @@ namespace RiverHollow.Tile_Engine
 
             if (!rv)
             {
-                foreach (WorkerBuilding b in _liBuildings)
+                foreach (Building b in _liBuildings)
                 {
-                    if (b.BoxToEnter.Contains(mouseLocation) && PlayerManager.PlayerInRange(b.BoxToEnter.Center))
+                    if (b.BoxToEnter.Contains(mouseLocation) && PlayerManager.PlayerInRange(b.BoxToEnter))
                     {
                         rv = true;
                         MapManager.EnterBuilding(b);
@@ -992,6 +1005,8 @@ namespace RiverHollow.Tile_Engine
                     {
                         if (AddBuilding(GraphicCursor.HeldBuilding))
                         {
+                            GUIManager.SetScreen(new NamingScreen(GraphicCursor.HeldBuilding));
+
                             PlayerManager.TakeMoney(gmMerchandise.MoneyCost);
                             foreach (KeyValuePair<int, int> kvp in gmMerchandise.RequiredItems)
                             {
@@ -1092,22 +1107,25 @@ namespace RiverHollow.Tile_Engine
 
             if (Scrying())
             {
-                WorkerBuilding building = GraphicCursor.HeldBuilding;
+                Building building = GraphicCursor.HeldBuilding;
                 _liBuildingTiles = new List<RHTile>();
                 if (building != null)
                 {
                     TestMapTiles(building, _liBuildingTiles);
                 }
 
-                foreach (WorkerBuilding b in _liBuildings)
+                foreach (Building b in _liBuildings)
                 {
-                    if (b.SelectionBox.Contains(mouseLocation) && GraphicCursor.HeldBuilding == null)
+                    if (!b.IsManor)
                     {
-                        b._selected = true;
-                    }
-                    else
-                    {
-                        b._selected = false;
+                        if (b.SelectionBox.Contains(mouseLocation) && GraphicCursor.HeldBuilding == null)
+                        {
+                            b._selected = true;
+                        }
+                        else
+                        {
+                            b._selected = false;
+                        }
                     }
                 }
             }
@@ -1218,7 +1236,7 @@ namespace RiverHollow.Tile_Engine
             _liItems.Add(item);
         }
 
-        public void LoadBuilding(WorkerBuilding b)
+        public void LoadBuilding(Building b)
         {
             _mapBuilding = b;
             ClearWorkers();
@@ -1236,7 +1254,7 @@ namespace RiverHollow.Tile_Engine
         }
 
         #region Adders
-        public void AddBuildingObjectsToMap(WorkerBuilding b)
+        public void AddBuildingObjectsToMap(Building b)
         {
             List<Vector2> spawnPoints = new List<Vector2>();
             ReadOnlyCollection<TiledMapObjectLayer> entrLayer = _map.ObjectLayers;
@@ -1276,14 +1294,17 @@ namespace RiverHollow.Tile_Engine
 
         public void PickUpBuilding(Point mouseLocation)
         {
-            foreach(WorkerBuilding b in _liBuildings)
+            foreach (Building b in _liBuildings)
             {
-                if (b.Contains(mouseLocation))
+                if (!b.IsManor)
                 {
-                    GraphicCursor.PickUpBuilding(b);
-                    b.RemoveSelfFromTiles();
-                    _dictEntrance.Remove(b.PersonalID.ToString());
-                    break;
+                    if (b.Contains(mouseLocation))
+                    {
+                        GraphicCursor.PickUpBuilding(b);
+                        b.RemoveSelfFromTiles();
+                        _dictEntrance.Remove(b.PersonalID.ToString());
+                        break;
+                    }
                 }
             }
         }
@@ -1291,25 +1312,28 @@ namespace RiverHollow.Tile_Engine
         public bool RemoveBuilding(Point mouseLocation)
         {
             bool rv = false;
-            WorkerBuilding bldg = null;
-            foreach (WorkerBuilding b in _liBuildings)
+            Building bldg = null;
+            foreach (Building b in _liBuildings)
             {
-                if (b.Contains(mouseLocation))
+                if (!b.IsManor)
                 {
-                    if (b.Workers.Count == 0)
+                    if (b.Contains(mouseLocation))
                     {
-                        bldg = b;
-                        b.RemoveSelfFromTiles();
-                        _dictEntrance.Remove(b.PersonalID.ToString());
-                        PlayerManager.RemoveBuilding(b);
-                        FinishedBuilding();
-                        Unpause();
-                        Scry(false);
-                        ResetCamera();
-                    }
-                    else
-                    {
-                        GUIManager.SetScreen(new TextScreen("Cannot Destroy occupied buildings.",false));
+                        if (b.Workers.Count == 0)
+                        {
+                            bldg = b;
+                            b.RemoveSelfFromTiles();
+                            _dictEntrance.Remove(b.PersonalID.ToString());
+                            PlayerManager.RemoveBuilding(b);
+                            FinishedBuilding();
+                            Unpause();
+                            Scry(false);
+                            ResetCamera();
+                        }
+                        else
+                        {
+                            GUIManager.SetScreen(new TextScreen("Cannot Destroy occupied buildings.", false));
+                        }
                     }
                 }
             }
@@ -1321,7 +1345,7 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public bool AddBuilding(WorkerBuilding b, bool openNameInput = true)
+        public bool AddBuilding(Building b)
         {
             bool rv = false;
             List<RHTile> tiles = new List<RHTile>();
@@ -1329,18 +1353,21 @@ namespace RiverHollow.Tile_Engine
             {
                 _liBuildingTiles.Clear();
                 AssignMapTiles(b, tiles);
-                Vector3 translate = Camera._transform.Translation;
-                Vector2 newPos = new Vector2((b.MapPosition.X - translate.X) / Scale, (b.MapPosition.Y - translate.Y) / Scale);
-                _dictEntrance.Add(b.PersonalID.ToString(), b.BoxToExit); //TODO: FIX THIS
-                GraphicCursor.DropBuilding();
-                if (!_liBuildings.Contains(b)) {
-                    _liBuildings.Add(b);
-                } //For the use case of moving buildings
-                PlayerManager.AddBuilding(b);
-                if (openNameInput)
+                if (b.IsManor)
                 {
-                    GUIManager.SetScreen(new NamingScreen(b));
+                    _dictEntrance.Add("mapManor", b.BoxToExit);
                 }
+                else
+                {
+                    _dictEntrance.Add(b.PersonalID.ToString(), b.BoxToExit); //TODO: FIX THIS
+                }
+                GraphicCursor.DropBuilding();
+                if (!_liBuildings.Contains(b)) //For the use case of moving buildings
+                { 
+                    _liBuildings.Add(b);
+                } 
+                PlayerManager.AddBuilding(b);
+                
                 rv = true;
             }
 
@@ -1350,19 +1377,22 @@ namespace RiverHollow.Tile_Engine
         public bool AddWorkerToBuilding(Point mouseLocation)
         {
             bool rv = false;
-            foreach(WorkerBuilding b in _liBuildings)
+            foreach (Building b in _liBuildings)
             {
-                if (b.SelectionBox.Contains(mouseLocation))
+                if (!b.IsManor)
                 {
-                    if (b.HasSpace())
+                    if (b.SelectionBox.Contains(mouseLocation))
                     {
-                        RHRandom r = new RHRandom();
-                        WorldAdventurer w = ObjectManager.GetWorker(GraphicCursor.WorkerToPlace);
-                        b.AddWorker(w, r);
-                        b._selected = false;
-                        GUIManager.SetScreen(new NamingScreen(w));
-                        //Scry(false);
-                        rv = true;
+                        if (b.HasSpace())
+                        {
+                            RHRandom r = new RHRandom();
+                            WorldAdventurer w = ObjectManager.GetWorker(GraphicCursor.WorkerToPlace);
+                            b.AddWorker(w, r);
+                            b._selected = false;
+                            GUIManager.SetScreen(new NamingScreen(w));
+                            //Scry(false);
+                            rv = true;
+                        }
                     }
                 }
             }
@@ -1495,7 +1525,10 @@ namespace RiverHollow.Tile_Engine
             m.Position = position;
             m.NewFoV();
 
-            _liMobs.Add(m);
+            if (_liMobs.Count == 0)
+            {
+                _liMobs.Add(m);
+            }
         }
         #endregion
         

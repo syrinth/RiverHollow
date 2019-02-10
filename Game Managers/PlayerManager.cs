@@ -12,6 +12,8 @@ using RiverHollow.GUIObjects;
 using static RiverHollow.WorldObjects.WorldItem;
 
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.Buildings;
+
 namespace RiverHollow.Game_Managers
 {
     public static class PlayerManager
@@ -49,8 +51,8 @@ namespace RiverHollow.Game_Managers
         public static int HitPoints { get => Combat.CurrentHP; }
         public static int MaxHitPoints { get => Combat.MaxHP; }
 
-        private static List<WorkerBuilding> _buildings;
-        public static List<WorkerBuilding> Buildings { get => _buildings; }
+        private static List<Building> _buildings;
+        public static List<Building> Buildings { get => _buildings; }
 
         private static List<CombatAdventurer> _liParty;
 
@@ -70,7 +72,7 @@ namespace RiverHollow.Game_Managers
             World = new PlayerCharacter();
             Combat = new CombatAdventurer(World);
             _liParty.Add(Combat);
-            _buildings = new List<WorkerBuilding>();
+            _buildings = new List<Building>();
             _canMake = new List<int>();
 
             World.LoadContent(@"Textures\texPlayer");
@@ -119,8 +121,8 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddNewItemToInventory(660);
             InventoryManager.AddNewItemToInventory(670);
 
-            PlayerManager.AddToParty(ObjectManager.GetWorker(5).Combat);
-            PlayerManager.AddToParty(ObjectManager.GetWorker(6).Combat);
+            PlayerManager.AddToParty(ObjectManager.GetWorker(4).Combat);
+            PlayerManager.AddToParty(ObjectManager.GetWorker(4).Combat);
 
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestType.Fetch, "Getwood, dumbass", 1, null, ObjectManager.GetItem(2)));
         }
@@ -142,7 +144,7 @@ namespace RiverHollow.Game_Managers
 
                 //UseTool
                 if (_targetTile != null && finished){
-                    if (_targetTile.WorldObject != null && UseTool == _pick || UseTool == _axe)
+                    if (_targetTile.WorldObject != null && (UseTool == _pick || UseTool == _axe))
                     {
                         _targetTile.DamageObject(UseTool.DmgValue);
                     }
@@ -427,17 +429,41 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static void AddBuilding(WorkerBuilding b)
+        public static void AddBuilding(Building b)
         {
             _buildings.Add(b);
         }
-        public static void RemoveBuilding(WorkerBuilding b)
+        public static void RemoveBuilding(Building b)
         {
             _buildings.Remove(b);
         }
         public static int GetNewBuildingID()
         {
-            return _buildings.Count +1;
+            return _buildings.Count +1 ;
+        }
+
+        public static bool PlayerInRange(Rectangle rect)
+        {
+            bool rv = false;
+            int range = TileSize;
+            if (PlayerInRange(new Vector2(rect.Center.X, rect.Top), range))
+            {
+                rv = true;
+            }
+            else if (PlayerInRange(new Vector2(rect.Center.X, rect.Bottom), range))
+            {
+                rv = true;
+            }
+            else if (PlayerInRange(new Vector2(rect.Left, rect.Center.Y), range))
+            {
+                rv = true;
+            }
+            else if (PlayerInRange(new Vector2(rect.Right, rect.Center.Y), range))
+            {
+                rv = true;
+            }
+
+            return rv;
         }
 
         public static bool PlayerInRange(Point centre)
@@ -456,7 +482,7 @@ namespace RiverHollow.Game_Managers
         {
             bool rv = false;
 
-            Rectangle playerRect = World.GetRectangle();
+            Rectangle playerRect = World.CollisionBox;
             int a = Math.Abs(playerRect.Center.X - centre.X);
             int b = Math.Abs(playerRect.Center.Y - centre.Y);
             int c = (int)Math.Sqrt(a * a + b * b);

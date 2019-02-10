@@ -238,7 +238,7 @@ namespace RiverHollow.GUIComponents.Screens
                 if (_csbSelected != csb)
                 {
                     csb.PlayAnimation(WActorWalkAnim.WalkDown);
-                    _csbSelected.PlayAnimation(WActorWalkAnim.IdleDown);
+                    _csbSelected.PlayAnimation(WActorBaseAnim.IdleDown);
                     _csbSelected = csb;
                 }
         }

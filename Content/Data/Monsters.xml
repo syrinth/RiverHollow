@@ -4,40 +4,40 @@
     <!--Key: Index>0 Value:Name/CombatTexture/XP/Str/Def/Vit/Magic/Speed/Resist/Vulnerability-->
     <Item>
       <Key>1</Key>
-      <Value>[Texture:CombatGoblin][Lvl:1][Trait:Speedy][Ability:1][Resist:Fire][Vuln:Lightning]</Value>
+      <Value>[Texture:CombatGoblin][Lvl:1][Trait:Speedy][Ability:300][Resist:Fire][Vuln:Lightning]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Texture:CombatGoblinSoldier][Lvl:3][Ability:1][Trait:Aggressive][Resist:Lightning][Vuln:Fire]</Value>
+      <Value>[Texture:CombatGoblinSoldier][Lvl:3][Ability:300][Trait:Aggressive][Resist:Lightning][Vuln:Fire]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Texture:CombatGoblinSoldier][Lvl:5][Ability:1][Resist:Lightning][Vuln:Fire]</Value>
+      <Value>[Texture:CombatGoblinSoldier][Lvl:5][Ability:300][Resist:Lightning][Vuln:Fire]</Value>
     </Item>
     <!--FangedFur-->
     <Item>
       <Key>4</Key>
-      <Value>[Texture:CombatFangedFur][Lvl:1][Ability:1]</Value>
+      <Value>[Texture:CombatFangedFur][Lvl:1][Ability:300]</Value>
     </Item>
     <!--MagicMushroom-->
     <Item>
       <Key>5</Key>
-      <Value>[Texture:CombatMagicMushroom][Lvl:1][Ability:1-101][Trait:Spellcaster][Idle:4-0.6][Attack:2-0.6]</Value>
+      <Value>[Texture:CombatMagicMushroom][Lvl:1][Ability:300-20][Trait:Spellcaster][Idle:4-0.6][Attack:2-0.6]</Value>
     </Item>
     <!--Impling-->
     <Item>
       <Key>6</Key>
-      <Value>[Texture:CombatImpling][Lvl:1][Ability:1][Trait:Speedy][Idle:2-0.9][Attack:2-0.6][Hurt:1-0.9]</Value>
+      <Value>[Texture:CombatImpling][Lvl:1][Ability:300][Trait:Speedy][Idle:2-0.9][Attack:2-0.6][Hurt:1-0.9]</Value>
     </Item>
     <!--Forest Impling-->
     <Item>
       <Key>7</Key>
-      <Value>[Texture:CombatImplingForest][Lvl:1][Ability:1][Trait:Speedy][Idle:2-0.9][Attack:2-0.6][Hurt:1-0.9]</Value>
+      <Value>[Texture:CombatImplingForest][Lvl:1][Ability:300][Trait:Speedy][Idle:2-0.9][Attack:2-0.6][Hurt:1-0.9]</Value>
     </Item>
     <!--Mimic-->
     <Item>
       <Key>8</Key>
-      <Value>[Texture:CombatMimic][Lvl:1][Ability:1][Idle:6-0.3][Attack:2-0.2][Hurt:1-0.8]</Value>
+      <Value>[Texture:CombatMimic][Lvl:1][Ability:300][Idle:6-0.3][Attack:2-0.2][Hurt:1-0.8]</Value>
     </Item>
   </Asset>
 </XnaContent>

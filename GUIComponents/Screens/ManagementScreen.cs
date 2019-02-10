@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Actors;
+using RiverHollow.Buildings;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.GUIComponents.GUIObjects;
@@ -77,7 +78,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             base.Update(gameTime);
         }
 
-        public void HandleBuildingSelection(WorkerBuilding selectedBuilding)
+        public void HandleBuildingSelection(Building selectedBuilding)
         {
             if (_worker == null)
             {
@@ -208,7 +209,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 public MainBuildingsWin(ManagementScreen s, WorldAdventurer w = null) : base(s)
                 {
-                    foreach (WorkerBuilding b in PlayerManager.Buildings)
+                    foreach (Building b in PlayerManager.Buildings)
                     {
                         bool good = false;
 
@@ -257,10 +258,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     bool _bShowWorkers;
                     GUIButton _btn;
                     GUIText _gText;
-                    WorkerBuilding _b;
-                    public WorkerBuilding Building => _b;
+                    Building _b;
+                    public Building Building => _b;
 
-                    public BuildingBox(WorkerBuilding b, bool showWorkerNum)
+                    public BuildingBox(Building b, bool showWorkerNum)
                     {
                         _b = b;
                         _btn = new GUIButton(b.GivenName);
@@ -301,7 +302,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             public class BuildingDetailsWin : MgmtWindow
             {
-                public BuildingDetailsWin(ManagementScreen s, WorkerBuilding selectedBuilding) : base(s)
+                public BuildingDetailsWin(ManagementScreen s, Building selectedBuilding) : base(s)
                 {
                     foreach (WorldAdventurer w in selectedBuilding.Workers)
                     {

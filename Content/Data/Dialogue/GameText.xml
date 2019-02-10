@@ -127,74 +127,73 @@
     </Item>
     <!--Action Text -->
     <Item>
+      <Key>Action 0</Key>
+      <Value>Move/Move</Value>
+    </Item>
+    <Item>
       <Key>Action 1</Key>
-      <Value>Attack/Basic Attack</Value>
+      <Value>Escape/Escape</Value>
     </Item>
     <Item>
       <Key>Action 2</Key>
-      <Value>Cast Spell/Casts Spell</Value>
+      <Value>Use Item/Use Item</Value>
     </Item>
     <Item>
       <Key>Action 3</Key>
-      <Value>Use Item/Basic Attack</Value>
+      <Value>Cast Spell/Casts a Spell</Value>
     </Item>
     <Item>
       <Key>Action 4</Key>
-      <Value>Move/Moves to a new location</Value>
+      <Value>Special/Special Skills</Value>
+    </Item>
+    <!--Wizard Skills-->
+    <Item>
+      <Key>Action 20</Key>
+      <Value>Thunder/Thunder</Value>
     </Item>
     <Item>
-      <Key>Action 5</Key>
-      <Value>Escape/Flee from combat</Value>
+      <Key>Action 21</Key>
+      <Value>Fireball/Fireball</Value>
     </Item>
+    <!--Healer Skills-->
     <Item>
-      <Key>Action 11</Key>
-      <Value>Attack/Moves to a new location</Value>
-    </Item>
-    <!--Special Action Text -->
-    <Item>
-      <Key>Action 50</Key>
-      <Value>Meditate/Increases your dmg</Value>
-    </Item>
-    <Item>
-      <Key>Action 51</Key>
-      <Value>Warding Blow/Push the enemy back</Value>
-    </Item>
-    <!--Action Spell Text -->
-    <Item>
-      <Key>Action 101</Key>
-      <Value>Thunder/Call down thunder on your foes</Value>
-    </Item>
-    <Item>
-      <Key>Action 102</Key>
-      <Value>Fireball/Flames!</Value>
-    </Item>
-    <Item>
-      <Key>Action 103</Key>
-      <Value>Shield/Summon a rock</Value>
-    </Item>
-    <Item>
-      <Key>Action 104</Key>
-      <Value>Poison/Poison them!</Value>
-    </Item>
-    <Item>
-      <Key>Action 105</Key>
-      <Value>Silence/No more magic!</Value>
-    </Item>
-    <Item>
-      <Key>Action 150</Key>
+      <Key>Action 40</Key>
       <Value>Minor Healing/A weak healing spell</Value>
     </Item>
     <Item>
-      <Key>Action 151</Key>
-      <Value>Esuna/Purges Poisons</Value>
+      <Key>Action 41</Key>
+      <Value>Esuna/Heals conditions</Value>
+    </Item>
+    <!--Summoner Skills-->
+    <Item>
+      <Key>Action 60</Key>
+      <Value>Attack/Summon Attack</Value>
     </Item>
     <Item>
-      <Key>Action 200</Key>
-      <Value>Summon Eye/Summons a Magical Eye to attack your foe</Value>
+      <Key>Action 61</Key>
+      <Value>Summon Mystic Eye/EYE</Value>
     </Item>
     <Item>
-      <Key>Action 201</Key>
-      <Value>Summon Murder Eye/Summons a Magical Eye to attack your foe</Value>
+      <Key>Action 62</Key>
+      <Value>Summon Earth Elemental/EARTH</Value>
+    </Item>
+    <!--Witch Skills-->
+    <Item>
+      <Key>Action 80</Key>
+      <Value>Witch's Curse/Inflict a curse</Value>
+    </Item>
+    <!--Duelist Skills-->
+    <!--Knight Skills-->
+    <Item>
+      <Key>Action 120</Key>
+      <Value>Drive Back/Drives them back</Value>
+    </Item>
+    <!--Rogue Skills-->
+    <!--Bard Skills-->
+    <!--Generic Skills-->
+    <Item>
+      <Key>Action 300</Key>
+      <Value>Attack/Attacks the enemy</Value>
     </Item>
     <!--Status/Buff/Debuff-->
     <Item>
@@ -207,12 +206,24 @@
     </Item>
     <!--Building Text -->
     <Item>
+      <Key>Building 0</Key>
+      <Value>Manor/Manor</Value>
+    </Item>
+    <Item>
       <Key>Building 1</Key>
-      <Value>Arcane Tower/Mystic Tower to house practitioners of the magical arts.</Value>
+      <Value>Tower/Mystic Tower to house practitioners of the magical arts.</Value>
     </Item>
     <Item>
       <Key>Building 2</Key>
-      <Value>Armory/Ideal training space for martial characters.</Value>
+      <Value>Barracks/Ideal training space for martial characters.</Value>
+    </Item>
+    <Item>
+      <Key>Building 3</Key>
+      <Value>Lodge/A comfortable place where Scout and Bards can train.</Value>
+    </Item>
+    <Item>
+      <Key>Building 4</Key>
+      <Value>Cottage/A cozy, earthy place where Witches and Healers work.</Value>
     </Item>
     <!--Classes Text -->
     <Item>

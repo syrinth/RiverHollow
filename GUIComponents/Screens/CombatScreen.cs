@@ -530,17 +530,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-        public void AssignEffect(int x, bool isNegative)
+        public void AssignEffect(int x, bool harms)
         {
-            AssignEffect(x.ToString(), isNegative);
+            AssignEffect(x.ToString(), harms);
         }
-        public void AssignEffect(string x, bool isNegative)
+        public void AssignEffect(string x, bool harms)
         {
             if (_mapTile.TargetPlayer)
             {
                 _iDmgTimer = 0;
                 _gEffect.SetText(x);
-                _gEffect.SetColor(isNegative ? Color.Red : Color.LightGreen);
+                _gEffect.SetColor(harms ? Color.Red : Color.LightGreen);
             }
             else
             {

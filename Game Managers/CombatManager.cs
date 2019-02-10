@@ -944,7 +944,7 @@ namespace RiverHollow.Game_Managers
                     p.X += c.Width / 2 - 16;
                     _chosenItem.Draw(spritebatch, new Rectangle(p, new Point(32, 32)));
                 }
-                if (_chosenAction != null)
+                if (_chosenAction != null && _chosenAction.Sprite != null)
                 {
                     _chosenAction.Sprite.Draw(spritebatch);
                 }

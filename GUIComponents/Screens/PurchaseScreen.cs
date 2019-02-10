@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Actors;
+using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIObjects;
@@ -255,8 +256,8 @@ namespace RiverHollow.GUIComponents.Screens
         {
             private const int margin = 64;
 
-            WorkerBuilding _bldg;
-            public WorkerBuilding Building => _bldg;
+            Building _bldg;
+            public Building Building => _bldg;
             GUIImage _giBuilding;
             SpriteFont _font;
             List<GUIObject> _liReqs;

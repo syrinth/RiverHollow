@@ -19,7 +19,7 @@ namespace RiverHollow.Game_Managers
 
             foreach (RHMap map in MapManager.Maps.Values)
             {
-                if (!map.WorkerBuilding && !map.IsDungeon)
+                if (!map.IsBuilding && !map.IsDungeon)
                 {
                     _diNodes.Add(map.Name, new Node(map));
                 }

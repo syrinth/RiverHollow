@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="11" height="11" tilewidth="16" tileheight="16" infinite="0" nextobjectid="7">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="11" height="11" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="7">
+ <properties>
+  <property name="Manor" type="bool" value="true"/>
+ </properties>
  <tileset firstgid="1" source="tilesetManor.tsx"/>
  <tileset firstgid="101" source="tilesetHouses.tsx"/>
- <layer name="Base Layer" width="11" height="11">
+ <layer id="1" name="Base Layer" width="11" height="11">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,
@@ -17,7 +20,7 @@
 0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="Ground Layer" width="11" height="11">
+ <layer id="2" name="Ground Layer" width="11" height="11">
   <data encoding="csv">
 8,3,5,6,6,6,6,6,6,7,8,
 12,13,14,15,16,14,15,16,16,17,18,
@@ -32,7 +35,7 @@
 8,8,8,8,52,41,58,8,8,8,8
 </data>
  </layer>
- <layer name="Upper Layer" width="11" height="11">
+ <layer id="3" name="Upper Layer" width="11" height="11">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,
@@ -47,7 +50,7 @@
 0,0,0,0,0,65,0,0,0,0,68
 </data>
  </layer>
- <objectgroup name="Travel Layer">
+ <objectgroup id="4" name="Travel Layer">
   <object id="1" name="Entrance" x="81.7194" y="146.94" width="11.8333" height="11.3333">
    <properties>
     <property name="Entrance" value="mapManorGrounds"/>
@@ -59,7 +62,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Character Layer">
+ <objectgroup id="5" name="Character Layer">
   <object id="4" name="PlayerSpawn" x="100" y="85.833" width="8" height="5.33333"/>
   <object id="5" name="Spouse" x="33.25" y="96.5" width="13.75" height="14.25"/>
  </objectgroup>
