@@ -513,16 +513,6 @@
 /processor:PassThroughProcessor
 /build:Data/NPCData/Schedules/NPC1.xml
 
-#begin Maps/mapArcaneTower2.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapArcaneTower2.tmx
-
-#begin Maps/mapArcaneTower3.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapArcaneTower3.tmx
-
 #begin Data/Dialogue/NPC6.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -1014,11 +1004,6 @@
 /processorParam:TextureFormat=Color
 /build:Maps/tsWallsFloors.png
 
-#begin Maps/mapArcaneTower1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapArcaneTower1.tmx
-
 #begin Maps/tsFurniture.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1031,7 +1016,7 @@
 /processorParam:TextureFormat=Color
 /build:Maps/tsFurniture.png
 
-#begin Textures/Lodge.png
+#begin Textures/Buildings/Barracks.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1041,9 +1026,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Lodge.png
+/build:Textures/Buildings/Barracks.png
 
-#begin Textures/Barracks.png
+#begin Textures/Buildings/Cottage.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1053,9 +1038,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Barracks.png
+/build:Textures/Buildings/Cottage.png
 
-#begin Textures/Tower.png
+#begin Textures/Buildings/Lodge.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1065,9 +1050,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Tower.png
+/build:Textures/Buildings/Lodge.png
 
-#begin Textures/Cottage.png
+#begin Textures/Buildings/Manor.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1077,9 +1062,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Cottage.png
+/build:Textures/Buildings/Manor.png
 
-#begin Textures/Manor.png
+#begin Textures/Buildings/Tower.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1089,5 +1074,32 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Manor.png
+/build:Textures/Buildings/Tower.png
+
+#begin Textures/Shadow.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Shadow.png
+
+#begin Maps/mapTower1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapTower1.tmx
+
+#begin Maps/mapTower2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapTower2.tmx
+
+#begin Maps/mapTower3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapTower3.tmx
 

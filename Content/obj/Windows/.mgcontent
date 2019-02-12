@@ -74,8 +74,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/SpiritLoot.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC3.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC1.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapArcaneTower2.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapArcaneTower3.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC6.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Quests.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texPlayerHair.png</File>
@@ -121,12 +119,15 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/ActionEffects/LightningSprite.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/ActionEffects/WitchsCurse.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tsWallsFloors.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapArcaneTower1.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tsFurniture.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Lodge.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Barracks.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Tower.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Cottage.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Manor.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Buildings/Barracks.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Buildings/Cottage.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Buildings/Lodge.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Buildings/Manor.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Buildings/Tower.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Shadow.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapTower1.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapTower2.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapTower3.tmx</File>
   </SourceFiles>
 </SourceFileCollection>

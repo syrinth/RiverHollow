@@ -23,30 +23,33 @@ namespace RiverHollow
 
         public static void Update(GameTime gametime)
         {
-            if (!Scrying() && !TakingInput())
+            if (!TakingInput())
             {
-                _observer = PlayerManager.World.CharCenter.ToVector2() * Scale;
-            }
-            else if(!TakingInput())
-            {
-                KeyboardState ks = Keyboard.GetState();
-                int speed = 10;
-                if (ks.IsKeyDown(Keys.W))
+                if (!Scrying())
                 {
-                    _observer += new Vector2(0, -speed);
+                    _observer = PlayerManager.World.CharCenter.ToVector2() * Scale;
                 }
-                else if (ks.IsKeyDown(Keys.S))
+                else
                 {
-                    _observer += new Vector2(0, speed);
-                }
+                    KeyboardState ks = Keyboard.GetState();
+                    int speed = 10;
+                    if (ks.IsKeyDown(Keys.W))
+                    {
+                        _observer += new Vector2(0, -speed);
+                    }
+                    else if (ks.IsKeyDown(Keys.S))
+                    {
+                        _observer += new Vector2(0, speed);
+                    }
 
-                if (ks.IsKeyDown(Keys.A))
-                {
-                    _observer += new Vector2(-speed, 0);
-                }
-                else if (ks.IsKeyDown(Keys.D))
-                {
-                    _observer += new Vector2(speed, 0);
+                    if (ks.IsKeyDown(Keys.A))
+                    {
+                        _observer += new Vector2(-speed, 0);
+                    }
+                    else if (ks.IsKeyDown(Keys.D))
+                    {
+                        _observer += new Vector2(speed, 0);
+                    }
                 }
             }
 
@@ -67,13 +70,13 @@ namespace RiverHollow
 
             if (!xLocked)
             {
-                if (_observer.X <= (RiverHollow.ScreenWidth / 2) + BorderOffset)
+                if (_observer.X <= (RiverHollow.ScreenWidth / 2))
                 {
-                    _observer.X = (RiverHollow.ScreenWidth / 2) + BorderOffset;
+                    _observer.X = (RiverHollow.ScreenWidth / 2);
                 }
-                else if (_observer.X >= MapManager.CurrentMap.GetMapWidth() - (RiverHollow.ScreenWidth / 2) - BorderOffset)
+                else if (_observer.X >= MapManager.CurrentMap.GetMapWidth() - (RiverHollow.ScreenWidth / 2))
                 {
-                    _observer.X = MapManager.CurrentMap.GetMapWidth() - (RiverHollow.ScreenWidth / 2) - BorderOffset;
+                    _observer.X = MapManager.CurrentMap.GetMapWidth() - (RiverHollow.ScreenWidth / 2);
                 }
             }
 

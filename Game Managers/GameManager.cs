@@ -23,6 +23,7 @@ namespace RiverHollow.Game_Managers
         public enum WActorBaseAnim { MakeItem, IdleDown, IdleUp, IdleLeft, IdleRight };
         public enum WActorWalkAnim { WalkDown, WalkUp, WalkLeft, WalkRight };
         public enum WActorJumpAnim { GroundDown, GroundUp, GroundLeft, GroundRight, AirDown, AirUp, AirLeft, AirRight };
+        public enum WActorShadow { Idle, Move };
 
         public enum CActorAnimEnum { Idle, Attack, Cast, Hurt, KO, Critical };
         public enum WeatherAnimEnum { None, Rain, Snow };
@@ -49,7 +50,7 @@ namespace RiverHollow.Game_Managers
         public enum ArmorSlotEnum { None, Head, Armor, Wrist };
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
         public static float Scale = 4f;
-        public static int TileSize = 16;
+        public const int TileSize = 16;
         public static int MaxBldgLevel = 3;
         public static Dictionary<int, Upgrade> DiUpgrades;
         public static Dictionary<int, Quest> DIQuests;

@@ -135,6 +135,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             foreach (GUISprite g in _liSprites)
             {
                 g.Position(value);
+
+                if(g == _sprArms)
+                {
+                    g.MoveBy(0, TileSize * _iScale);
+                }
             }
         }
 
@@ -148,6 +153,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public void SetScale(int scale)
         {
+            _iScale = scale;
+
             foreach (GUISprite g in _liSprites)
             {
                 g.SetScale(scale);

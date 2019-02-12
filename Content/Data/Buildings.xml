@@ -4,15 +4,15 @@
     <!--Key: Index>0 Value:texture/width height/firstBaseSquare baseWidth baseHeight/EntranceSquareXY/workerType-->
     <Item>
       <Key>0</Key>
-      <Value>[Texture:Manor][Dimensions:11-12][FirstBase:0-8][Width:11][Height:5][Entrance:80-176-16-32][Manor]</Value>
+      <Value>[Texture:Manor][Dimensions:11-13][FirstBase:0-7][Width:11][Height:5][Entrance:80-176-16-32][Manor]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Texture:Tower][Dimensions:5-13][FirstBase:0-10][Width:5][Height:3][Entrance:32-176-16-32][Workers:1-3]</Value>
+      <Value>[Texture:Tower][Dimensions:5-14][FirstBase:0-10][Width:5][Height:3][Entrance:32-176-16-32][Workers:1-3]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Texture:Barracks][Dimensions:8-9][FirstBase:0-5][Width:8][Height:4][Entrance:80-112-16-32][Workers:5-6]</Value>
+      <Value>[Texture:Barracks][Dimensions:8-10][FirstBase:0-5][Width:8][Height:4][Entrance:80-112-16-32][Workers:5-6]</Value>
     </Item>
     <Item>
       <Key>3</Key>

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Misc;
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -9,7 +8,8 @@ namespace RiverHollow.Game_Managers
 {
     public static class GameContentManager
     {
-        const string _sActorsFolder = @"Textures\Actors";
+        public const string ACTOR_FOLDER = @"Textures\Actors\";
+        public const string BUILDING_FOLDER = @"Textures\Buildings\";
 
         private static ContentManager _content;
         private static Dictionary<string, Texture2D> _diTextures;
@@ -44,6 +44,7 @@ namespace RiverHollow.Game_Managers
             LoadGUIs(_content);
             LoadIcons(_content);
             LoadMerchandise(_content);
+            AddDirectoryTextures(Content, BUILDING_FOLDER);
 
             LoadFont(_content);
         }
@@ -51,9 +52,10 @@ namespace RiverHollow.Game_Managers
         #region Load Methods
         public static void LoadCharacters(ContentManager Content)
         {
-            AddDirectoryTextures(Content, @"Content\" + _sActorsFolder);
+            AddDirectoryTextures(Content, ACTOR_FOLDER);
 
             AddTexture(Content, @"Textures\texPlayer");
+            AddTexture(Content, @"Textures\Shadow");
             AddTexture(Content, @"Textures\texFlooring");
             AddTexture(Content, @"Textures\texWeather");
             AddTexture(Content, @"Textures\lightmask");
@@ -62,15 +64,16 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\Eye");
         }
 
-        private static void AddDirectoryTextures(ContentManager Content, string directory)
+        private static void AddDirectoryTextures(ContentManager Content, string directory, bool AddContent = true)
         {
-            foreach (string s in Directory.GetFiles(directory))
+            string folder = AddContent ? @"Content\" + directory : directory;
+            foreach (string s in Directory.GetFiles(folder))
             {
                 AddTexture(Content, s);
             }
-            foreach (string s in Directory.GetDirectories(directory))
+            foreach (string s in Directory.GetDirectories(folder))
             {
-                AddDirectoryTextures(Content, s);
+                AddDirectoryTextures(Content, s, false);
             }
         }
 
@@ -81,15 +84,10 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadIcons(ContentManager Content)
         {
-            AddDirectoryTextures(Content, @"Content\Textures\ActionEffects");
+            AddDirectoryTextures(Content, @"Textures\ActionEffects");
             AddTexture(Content, @"Textures\battle");
             AddTexture(Content, @"Textures\weapons");
             AddTexture(Content, @"Textures\armor");
-            AddTexture(Content, @"Textures\Tower");
-            AddTexture(Content, @"Textures\Lodge");
-            AddTexture(Content, @"Textures\Cottage");
-            AddTexture(Content, @"Textures\Manor");
-            AddTexture(Content, @"Textures\Barracks");
             AddTexture(Content, @"Textures\tools");
             AddTexture(Content, @"Textures\worldObjects");
             AddTexture(Content, @"Textures\portraits");

@@ -21,8 +21,8 @@ namespace RiverHollow.Buildings
         protected int _iBaseY;
         protected int _iBaseWidth; //In Tiles
         public int BaseWidth { get => _iBaseWidth * TileSize; } //In Pixels
-        protected int _baseHeight; //In Tiles
-        public int BaseHeight { get => _baseHeight * TileSize; } //In Pixels
+        protected int _iBaseHeight; //In Tiles
+        public int BaseHeight { get => _iBaseHeight * TileSize; } //In Pixels
 
         protected int _iBldgLvl = 0;
         public int Level => _iBldgLvl;
@@ -95,7 +95,7 @@ namespace RiverHollow.Buildings
                 string[] tagType = stringData[i].Split(':');
                 if (tagType[0].Equals("Texture"))
                 {
-                    _texture = GameContentManager.GetTexture(@"Textures\" + tagType[1]);
+                    _texture = GameContentManager.GetTexture(GameContentManager.BUILDING_FOLDER + tagType[1]);
                     totalCount++;
                 }
                 else if (tagType[0].Equals("Dimensions"))
@@ -119,7 +119,7 @@ namespace RiverHollow.Buildings
                 }
                 else if (tagType[0].Equals("Height"))
                 {
-                    _baseHeight = int.Parse(tagType[1]);
+                    _iBaseHeight = int.Parse(tagType[1]);
                     totalCount++;
                 }
                 else if (tagType[0].Equals("Entrance"))
@@ -138,6 +138,7 @@ namespace RiverHollow.Buildings
                 }
                 else if (tagType[0].Equals("Workers"))
                 {
+                    _iBldgLvl = 1;
                     _bHoldsWorkers = true;
                     _arrWorkerTypes = new int[2];
 
@@ -169,7 +170,7 @@ namespace RiverHollow.Buildings
             int startX = (int)_vMapPosition.X + (_iBaseX * TileSize);
             int startY = (int)_vMapPosition.Y + (_iBaseY * TileSize);
 
-            return new Rectangle(startX, startY, _iBaseWidth * TileSize, _baseHeight * TileSize);
+            return new Rectangle(startX, startY,BaseWidth, BaseHeight);
         }
 
         public void SetName(string val)

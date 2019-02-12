@@ -80,10 +80,10 @@ namespace RiverHollow.Game_Managers
                     string testName = testString[0];
                     string testID = (testString.Length == 2) ? testString[1] : "";
 
-                    if (c == PlayerManager.World && !string.IsNullOrEmpty(PlayerManager._inBuilding) && !_tileMaps[currMap].IsManor)
+                    if (c == PlayerManager.World && !string.IsNullOrEmpty(PlayerManager._sBuildingID))
                     {
-                        rectEntrance = _tileMaps[newMapName].DictionaryEntrance[PlayerManager._inBuilding];
-                        PlayerManager._inBuilding = string.Empty;
+                        rectEntrance = _tileMaps[newMapName].DictionaryEntrance[PlayerManager._sBuildingID];
+                        PlayerManager._sBuildingID = string.Empty;
                     }
                     else
                     {
@@ -141,7 +141,7 @@ namespace RiverHollow.Game_Managers
         public static void EnterBuilding(Building b)
         {
             Rectangle rectEntrance = Rectangle.Empty;
-            PlayerManager._inBuilding = b.ID.ToString();
+            PlayerManager._sBuildingID = b.PersonalID.ToString();
 
             foreach (string s in _tileMaps[b.MapName].DictionaryEntrance.Keys)
             {

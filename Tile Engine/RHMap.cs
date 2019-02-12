@@ -1353,14 +1353,7 @@ namespace RiverHollow.Tile_Engine
             {
                 _liBuildingTiles.Clear();
                 AssignMapTiles(b, tiles);
-                if (b.IsManor)
-                {
-                    _dictEntrance.Add("mapManor", b.BoxToExit);
-                }
-                else
-                {
-                    _dictEntrance.Add(b.PersonalID.ToString(), b.BoxToExit); //TODO: FIX THIS
-                }
+                _dictEntrance.Add(b.PersonalID.ToString(), b.BoxToExit); //TODO: FIX THIS
                 GraphicCursor.DropBuilding();
                 if (!_liBuildings.Contains(b)) //For the use case of moving buildings
                 { 

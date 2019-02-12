@@ -28,7 +28,7 @@ namespace RiverHollow.Game_Managers
         
         public static int Stamina = 50;
         public static int MaxStamina = 50;
-        public static string _inBuilding = string.Empty;
+        public static string _sBuildingID = string.Empty;
         private static List<int> _canMake;
         public static List<int> CanMake { get => _canMake; }
         private static string _currentMap;

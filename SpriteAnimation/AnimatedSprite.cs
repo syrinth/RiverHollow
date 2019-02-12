@@ -270,13 +270,14 @@ namespace RiverHollow.SpriteAnimations
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, bool useLayerDepth = true, float visibility = 1.0f)
+        public void Draw(SpriteBatch spriteBatch, bool useLayerDepth = true, float visibility = 1.0f, float forcedLayerDepth = -1)
         {
             if (_animating)
             {
                 if (useLayerDepth)
                 {
-                    Draw(spriteBatch, Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100), visibility);
+                    float layerDepth = forcedLayerDepth < 0 ? Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100) : forcedLayerDepth;
+                    Draw(spriteBatch, layerDepth, visibility);
                 }
                 else
                 {
