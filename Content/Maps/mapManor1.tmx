@@ -133,6 +133,6 @@
   <object id="5" name="Spouse" x="177.25" y="400.5" width="13.75" height="14.25"/>
   <object id="7" name="WSpawn0" x="428.5" y="332.5" width="10" height="7"/>
   <object id="9" name="WSpawn1" x="410" y="398" width="11" height="10.5"/>
-  <object id="10" name="PlayerSpawn" x="323" y="309.583" width="8" height="5.33333"/>
+  <object id="10" name="PlayerSpawn" x="315.75" y="307.333" width="8" height="5.33333"/>
  </objectgroup>
 </map>

@@ -129,8 +129,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                 {
                     if (SelectAction.Equals("SleepNow"))
                     {
-                        Vector2 pos = PlayerManager.World.Center;
+                        Vector2 pos = PlayerManager.World.CollisionBox.Center.ToVector2();
                         PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"], MapManager.CurrentMap.Name));
+                        TravelManager.ClearPathingTracks();
                         GameManager.BackToMain();
                     }
                     else if (SelectAction.Equals("OpenDoor"))

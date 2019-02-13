@@ -143,7 +143,9 @@ namespace RiverHollow.Game_Managers
         {
             Vector2 moveDir = Vector2.Zero;
 
-            if (UseTool != null)
+            if (!World.FollowingPath)
+            {
+                if (UseTool != null)
                 {
                     UseTool.Update(gameTime);
                     bool finished = !UseTool.ToolAnimation.IsAnimating;
@@ -170,7 +172,7 @@ namespace RiverHollow.Game_Managers
                         _busy = false;
                     }
                 }
-            else
+                else
                 {
                     KeyboardState ks = Keyboard.GetState();
                     if (ks.IsKeyDown(Keys.W))
@@ -207,6 +209,7 @@ namespace RiverHollow.Game_Managers
                         }
                     }
                 }
+            }
             World.Update(gameTime);
         }
         public static void UpdateCombat(GameTime gameTime)

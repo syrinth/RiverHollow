@@ -132,6 +132,7 @@ namespace RiverHollow.Actors
             }
         }
 
+        public bool FollowingPath => _currentPath.Count > 0;
         protected List<RHTile> _currentPath;
         protected double _dEtherealCD;
         protected bool _bIgnoreCollisions;
@@ -285,6 +286,7 @@ namespace RiverHollow.Actors
             //If the CheckForCollisions gave the all clear, move the sprite.
             if (MapManager.Maps[CurrentMapName].CheckForCollisions(this, testRectX, testRectY, ref direction, ignoreCollisions) && direction != Vector2.Zero)
             {
+                DetermineFacing(direction);
                 Position += new Vector2(direction.X, direction.Y);
                 rv = true;
             }
@@ -1628,6 +1630,7 @@ namespace RiverHollow.Actors
                             {
                                 if (_dCooldown == 0)
                                 {
+                                    Facing = DirectionEnum.Left;
                                     PlayAnimation(WActorBaseAnim.IdleLeft);
                                     _dCooldown = 3;
                                 }
