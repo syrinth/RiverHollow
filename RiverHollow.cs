@@ -8,6 +8,7 @@ using RiverHollow.Game_Managers.GUIComponents.Screens;
 
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Buildings;
+using RiverHollow.Actors;
 
 namespace RiverHollow
 {
@@ -267,10 +268,13 @@ namespace RiverHollow
             GUIManager.SetScreen(new HUDScreen());
         }
 
-        public static void NewGame()
+        public static void NewGame(WorldAdventurer a, WorldAdventurer b)
         {
             PlayerManager.NewPlayer();
-            MapManager.PopulateHomeMap(false);
+            MapManager.PopulateMaps(false);
+            PlayerManager.Buildings[0].AddWorker(a);
+            PlayerManager.Buildings[0].AddWorker(b);
+
             GameCalendar.NewCalendar();
             BackToMain();
         }

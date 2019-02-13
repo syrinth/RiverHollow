@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="27" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="14">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="27" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="14">
  <properties>
   <property name="Building" type="bool" value="true"/>
   <property name="WorkerBuilding" type="bool" value="true"/>
@@ -778,11 +778,13 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="5" name="Building Layer">
-  <object id="4" name="Spawn1" x="59.5837" y="88.42" width="9.0833" height="6.3333"/>
-  <object id="5" name="Spawn2" x="309.33" y="98.0003" width="6.3333" height="12.6667"/>
-  <object id="6" name="Spawn3" x="323.67" y="241.683" width="9.33333" height="11.6364"/>
-  <object id="9" name="BuildingChest" x="117.5" y="227.833" width="8.5" height="7"/>
+ <objectgroup id="5" name="Character Layer">
+  <object id="4" name="WSpawn0" x="59.5837" y="88.42" width="9.0833" height="6.3333"/>
+  <object id="5" name="WSpawn1" x="371.33" y="126" width="6.3333" height="12.6667"/>
+  <object id="6" name="WSpawn2" x="358.17" y="271.683" width="9.33333" height="11.6364"/>
+ </objectgroup>
+ <objectgroup id="9" name="MapObject Layer">
   <object id="11" name="Pantry" x="52.5833" y="229.417" width="5.5" height="5.5"/>
+  <object id="9" name="BuildingChest" x="117.5" y="227.833" width="8.5" height="7"/>
  </objectgroup>
 </map>

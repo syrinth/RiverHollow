@@ -56,7 +56,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texFlooring.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetManorGrounds.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetManor.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapManor.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapManorGrounds.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetHouses.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest.tmx</File>
@@ -129,5 +128,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapTower1.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapTower2.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapTower3.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapManor1.tmx</File>
   </SourceFiles>
 </SourceFileCollection>

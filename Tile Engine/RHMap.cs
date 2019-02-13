@@ -43,7 +43,9 @@ namespace RiverHollow.Tile_Engine
         bool _bManor;
         public bool IsManor => _bManor;
         bool _bOutside;
-        public bool IsOutside => _bOutside; 
+        public bool IsOutside => _bOutside;
+        bool _bProduction = true;
+        public bool Production => _bProduction;
         int _iActiveSpawnPoints;
         public int ActiveSpawnPoints => _iActiveSpawnPoints;
 
@@ -65,7 +67,7 @@ namespace RiverHollow.Tile_Engine
         protected List<Building> _liBuildings;
         protected List<RHTile> _liModifiedTiles;
         public List<RHTile> ModTiles => _liModifiedTiles;
-        protected List<SpawnPoint> _liSpawnPoints;
+        protected List<SpawnPoint> _liMonsterSpawnPoints;
 
         protected List<Item> _liItems;
         protected List<ShopData> _liShopData;
@@ -79,7 +81,7 @@ namespace RiverHollow.Tile_Engine
         private List<TiledMapObject> _liMapObjects;
 
         public RHMap() {
-            _liSpawnPoints = new List<SpawnPoint>();
+            _liMonsterSpawnPoints = new List<SpawnPoint>();
             _liBuildingTiles = new List<RHTile>();
             _liTilesets = new List<TiledMapTileset>();
             _liActors = new List<WorldActor>();
@@ -110,6 +112,10 @@ namespace RiverHollow.Tile_Engine
             _bTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
             _bManor = _map.Properties.ContainsKey("Manor");
+
+            if (_map.Properties.ContainsKey("Production")) {
+                bool.TryParse(_map.Properties["Production"], out _bProduction);
+            }
 
             if (_map.Properties.ContainsKey("ActiveSpawn")) {
                 int.TryParse(_map.Properties["ActiveSpawn"].ToString(), out _iActiveSpawnPoints);
@@ -148,6 +154,11 @@ namespace RiverHollow.Tile_Engine
             _bTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
             _bManor = _map.Properties.ContainsKey("Manor");
+
+            if (_map.Properties.ContainsKey("Production"))
+            {
+                bool.TryParse(_map.Properties["Production"], out _bProduction);
+            }
 
             if (_map.Properties.ContainsKey("Outside"))
             {
@@ -297,12 +308,13 @@ namespace RiverHollow.Tile_Engine
                 }
                 else if (obj.Name.Equals("SpawnPoint"))
                 {
-                    _liSpawnPoints.Add(new SpawnPoint(this, obj));
+                    _liMonsterSpawnPoints.Add(new SpawnPoint(this, obj));
                 }
                 else if (obj.Name.Equals("Manor"))
                 {
                     Building manor = ObjectManager.GetManor();
                     manor.SetCoordinates(obj.Position);
+                    manor.SetName(PlayerManager.ManorName);          
                     AddBuilding(manor);
                 }
             }
@@ -459,7 +471,7 @@ namespace RiverHollow.Tile_Engine
 
         private void SpawnMobs()
         {
-            foreach (SpawnPoint sp in _liSpawnPoints)
+            foreach (SpawnPoint sp in _liMonsterSpawnPoints)
             {
                 sp.Despawn();
             }
@@ -470,11 +482,11 @@ namespace RiverHollow.Tile_Engine
                 bool spawned = false;
                 do
                 {
-                    int point = rand.Next(0, _liSpawnPoints.Count-1);
-                    if (!_liSpawnPoints[point].HasSpawned())
+                    int point = rand.Next(0, _liMonsterSpawnPoints.Count-1);
+                    if (!_liMonsterSpawnPoints[point].HasSpawned())
                     {
                         spawned = true;
-                        _liSpawnPoints[point].Spawn();
+                        _liMonsterSpawnPoints[point].Spawn();
                     }
 
                 } while (!spawned);
@@ -1256,19 +1268,14 @@ namespace RiverHollow.Tile_Engine
         #region Adders
         public void AddBuildingObjectsToMap(Building b)
         {
-            List<Vector2> spawnPoints = new List<Vector2>();
             ReadOnlyCollection<TiledMapObjectLayer> entrLayer = _map.ObjectLayers;
             foreach (TiledMapObjectLayer ol in entrLayer)
             {
-                if (ol.Name == "Building Layer")
+                if (ol.Name == "MapObject Layer")
                 {
                     foreach (TiledMapObject mapObject in ol.Objects)
                     {
-                        if (mapObject.Name.Contains("Spawn"))
-                        {
-                            spawnPoints.Add(mapObject.Position);
-                        }
-                        else if (mapObject.Name.Contains("BuildingChest"))
+                        if (mapObject.Name.Contains("BuildingChest"))
                         {
                             b.BuildingChest.MapPosition = Util.SnapToGrid(mapObject.Position);
                             PlacePlayerObject(b.BuildingChest);
@@ -1283,7 +1290,7 @@ namespace RiverHollow.Tile_Engine
             }
             for (int i = 0; i < b.Workers.Count; i++)
             {
-                b.Workers[i].Position = spawnPoints[i];
+                b.Workers[i].Position = GetCharacterSpawn("WSpawn"+i);
                 _liActors.Add(b.Workers[i]);
             }
             foreach (WorldObject w in b.PlacedObjects)
@@ -1378,9 +1385,8 @@ namespace RiverHollow.Tile_Engine
                     {
                         if (b.HasSpace())
                         {
-                            RHRandom r = new RHRandom();
                             WorldAdventurer w = ObjectManager.GetWorker(GraphicCursor.WorkerToPlace);
-                            b.AddWorker(w, r);
+                            b.AddWorker(w);
                             b._selected = false;
                             GUIManager.SetScreen(new NamingScreen(w));
                             //Scry(false);

@@ -151,10 +151,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
             _currentMap = _tileMaps[b.MapName];
-            if (b.ID > 0)
-            {
-                _currentMap.LoadBuilding((Building)b);
-            }
+            _currentMap.LoadBuilding((Building)b);
 
             PlayerManager.CurrentMap = _currentMap.Name;
             PlayerManager.World.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
@@ -170,7 +167,7 @@ namespace RiverHollow.Game_Managers
             _currentMap = _tileMaps[newMap];
         }
 
-        public static void PopulateHomeMap(bool loaded)
+        public static void PopulateMaps(bool loaded)
         {
             foreach(RHMap map in _tileMaps.Values)
             {

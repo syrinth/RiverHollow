@@ -58,9 +58,9 @@ namespace RiverHollow.Buildings
         private int[] _arrWorkerTypes;
         public bool _selected = false;
 
-        protected const int WORK_PER_LVL = 3;
-        protected const int MAX_LEVEL = 9;
-        protected int _iCurrWorkerMax => WORK_PER_LVL * _iBldgLvl;
+        protected int _iWorkersPerLevel = 3;
+        protected int _iMaxWorkers = 9;
+        protected int _iCurrWorkerMax => _iWorkersPerLevel * _iBldgLvl;
         public int MaxWorkers => _iCurrWorkerMax;
 
         protected List<WorldAdventurer> _liWorkers;
@@ -146,6 +146,10 @@ namespace RiverHollow.Buildings
                     _arrWorkerTypes[0] = int.Parse(workerTypes[0]);
                     _arrWorkerTypes[1] = int.Parse(workerTypes[1]);
                 }
+                else if (tagType[0].Equals("WorkersPerLevel"))
+                {
+                    _iWorkersPerLevel = int.Parse(tagType[1]);
+                }
 
                 _iPersonalID = PlayerManager.GetNewBuildingID();
                 _liWorkers = new List<WorldAdventurer>();
@@ -198,7 +202,7 @@ namespace RiverHollow.Buildings
             return rv;
         }
 
-        public bool AddWorker(WorldAdventurer worker, RHRandom r)
+        public bool AddWorker(WorldAdventurer worker)
         {
             bool rv = false;
 
@@ -206,8 +210,7 @@ namespace RiverHollow.Buildings
             {
                 worker.SetBuilding(this);
                 _liWorkers.Add(worker);
-                Vector2 pos = new Vector2(r.Next(1160, 1860), r.Next(990, 1340));
-                worker.Position = pos;
+
                 rv = true;
             }
 
@@ -220,30 +223,33 @@ namespace RiverHollow.Buildings
 
         public void Rollover()
         {
-            foreach (WorldAdventurer w in _liWorkers)
+            if (MapManager.Maps[MapName].Production)
             {
-                if (w.Rollover())
+                foreach (WorldAdventurer w in _liWorkers)
                 {
-                    w.MakeDailyItem();
-                    //bool eaten = false;
-                    //for (int i = 0; i < Pantry.Rows; i++)
-                    //{
-                    //    for (int j = 0; j < Pantry.Rows; j++)
-                    //    {
-                    //        Item item = Pantry.Inventory[i, j];
-                    //        if (item != null && item.Type == Item.ItemType.Food)
-                    //        {
-                    //            Pantry.RemoveItemFromInventory(i, j);
-                    //            w.MakeDailyItem();
-                    //            eaten = true;
-                    //            break;
-                    //        }
-                    //    }
-                    //    if (!eaten)
-                    //    {
-                    //        break;
-                    //    }
-                    //}
+                    if (w.Rollover())
+                    {
+                        w.MakeDailyItem();
+                        //bool eaten = false;
+                        //for (int i = 0; i < Pantry.Rows; i++)
+                        //{
+                        //    for (int j = 0; j < Pantry.Rows; j++)
+                        //    {
+                        //        Item item = Pantry.Inventory[i, j];
+                        //        if (item != null && item.Type == Item.ItemType.Food)
+                        //        {
+                        //            Pantry.RemoveItemFromInventory(i, j);
+                        //            w.MakeDailyItem();
+                        //            eaten = true;
+                        //            break;
+                        //        }
+                        //    }
+                        //    if (!eaten)
+                        //    {
+                        //        break;
+                        //    }
+                        //}
+                    }
                 }
             }
         }
@@ -297,12 +303,11 @@ namespace RiverHollow.Buildings
             _iPersonalID = data.id;
             _iBldgLvl = data.bldgLvl == 0 ? 1 : data.bldgLvl;
 
-            RHRandom r = new RHRandom();
             foreach (WorkerData wData in data.Workers)
             {
                 WorldAdventurer w = ObjectManager.GetWorker(wData.workerID);
                 w.LoadData(wData);
-                AddWorker(w, r);
+                AddWorker(w);
             }
             this._sGivenName = data.name;
             this.Pantry = (Container)ObjectManager.GetWorldObject(data.pantry.containerID);

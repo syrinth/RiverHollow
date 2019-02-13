@@ -54,10 +54,13 @@ namespace RiverHollow.Game_Managers
         private static List<Building> _buildings;
         public static List<Building> Buildings { get => _buildings; }
 
+        public static bool ReadyToSleep = false;
+
         private static List<CombatAdventurer> _liParty;
 
         public static MerchantChest _merchantChest;
         public static string Name;
+        public static string ManorName;
 
         private static int _money = 2000;
         public static int Money { get => _money; }
@@ -121,10 +124,13 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddNewItemToInventory(660);
             InventoryManager.AddNewItemToInventory(670);
 
-            PlayerManager.AddToParty(ObjectManager.GetWorker(4).Combat);
-            PlayerManager.AddToParty(ObjectManager.GetWorker(4).Combat);
-
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestType.Fetch, "Getwood, dumbass", 1, null, ObjectManager.GetItem(2)));
+        }
+
+        public static void SetPath(List<RHTile> list)
+        {
+            ReadyToSleep = true;
+            World.SetPath(list);
         }
 
         public static void Update(GameTime gameTime)
@@ -138,68 +144,69 @@ namespace RiverHollow.Game_Managers
             Vector2 moveDir = Vector2.Zero;
 
             if (UseTool != null)
-            {
-                UseTool.Update(gameTime);
-                bool finished = !UseTool.ToolAnimation.IsAnimating;
+                {
+                    UseTool.Update(gameTime);
+                    bool finished = !UseTool.ToolAnimation.IsAnimating;
 
-                //UseTool
-                if (_targetTile != null && finished){
-                    if (_targetTile.WorldObject != null && (UseTool == _pick || UseTool == _axe))
+                    //UseTool
+                    if (_targetTile != null && finished)
                     {
-                        _targetTile.DamageObject(UseTool.DmgValue);
-                    }
-                    else if (UseTool == _shovel)
-                    {
-                        _targetTile.Dig();
-                        MapManager.CurrentMap.ModTiles.Add(_targetTile);
-                    }
-                    else if (UseTool == _wateringCan)
-                    {
-                        _targetTile.Water(true);
-                    }
+                        if (_targetTile.WorldObject != null && (UseTool == _pick || UseTool == _axe))
+                        {
+                            _targetTile.DamageObject(UseTool.DmgValue);
+                        }
+                        else if (UseTool == _shovel)
+                        {
+                            _targetTile.Dig();
+                            MapManager.CurrentMap.ModTiles.Add(_targetTile);
+                        }
+                        else if (UseTool == _wateringCan)
+                        {
+                            _targetTile.Water(true);
+                        }
 
-                    _targetTile = null;
-                    UseTool = null;
-                    _busy = false;
+                        _targetTile = null;
+                        UseTool = null;
+                        _busy = false;
+                    }
                 }
-            }
             else
-            {
-                KeyboardState ks = Keyboard.GetState();
-                if (ks.IsKeyDown(Keys.W))
                 {
-                    moveDir += new Vector2(0, -World.Speed);
-                }
-                else if (ks.IsKeyDown(Keys.S))
-                {
-                    moveDir += new Vector2(0, World.Speed);
-                }
-
-                if (ks.IsKeyDown(Keys.A))
-                {
-                    moveDir += new Vector2(-World.Speed, 0);
-                }
-                else if (ks.IsKeyDown(Keys.D))
-                {
-                    moveDir += new Vector2(World.Speed, 0);
-                }
-
-                World.DetermineFacing(moveDir);
-
-                if (moveDir.Length() != 0)
-                {
-                    Rectangle testRectX = new Rectangle((int)World.CollisionBox.X + (int)moveDir.X, (int)World.CollisionBox.Y, World.CollisionBox.Width, World.CollisionBox.Height);
-                    Rectangle testRectY = new Rectangle((int)World.CollisionBox.X, (int)World.CollisionBox.Y + (int)moveDir.Y, World.CollisionBox.Width, World.CollisionBox.Height);
-
-                    if(MapManager.CurrentMap.CheckForCollisions(World, testRectX, testRectY, ref moveDir))
+                    KeyboardState ks = Keyboard.GetState();
+                    if (ks.IsKeyDown(Keys.W))
                     {
-                        //Might be technically correct but FEELS wrong
-                        //moveDir.Normalize();
-                        //moveDir *= World.Speed;
-                        World.MoveBy((int)moveDir.X, (int)moveDir.Y);
+                        moveDir += new Vector2(0, -World.Speed);
                     }
-                }                
-            }
+                    else if (ks.IsKeyDown(Keys.S))
+                    {
+                        moveDir += new Vector2(0, World.Speed);
+                    }
+
+                    if (ks.IsKeyDown(Keys.A))
+                    {
+                        moveDir += new Vector2(-World.Speed, 0);
+                    }
+                    else if (ks.IsKeyDown(Keys.D))
+                    {
+                        moveDir += new Vector2(World.Speed, 0);
+                    }
+
+                    World.DetermineFacing(moveDir);
+
+                    if (moveDir.Length() != 0)
+                    {
+                        Rectangle testRectX = new Rectangle((int)World.CollisionBox.X + (int)moveDir.X, (int)World.CollisionBox.Y, World.CollisionBox.Width, World.CollisionBox.Height);
+                        Rectangle testRectY = new Rectangle((int)World.CollisionBox.X, (int)World.CollisionBox.Y + (int)moveDir.Y, World.CollisionBox.Width, World.CollisionBox.Height);
+
+                        if (MapManager.CurrentMap.CheckForCollisions(World, testRectX, testRectY, ref moveDir))
+                        {
+                            //Might be technically correct but FEELS wrong
+                            //moveDir.Normalize();
+                            //moveDir *= World.Speed;
+                            World.MoveBy((int)moveDir.X, (int)moveDir.Y);
+                        }
+                    }
+                }
             World.Update(gameTime);
         }
         public static void UpdateCombat(GameTime gameTime)
@@ -536,6 +543,10 @@ namespace RiverHollow.Game_Managers
         {
             Name = x;
             Combat.SetName(x);
+        }
+        public static void SetManorName(string x)
+        {
+            ManorName = x;
         }
         public static void SetClass(int x)
         {

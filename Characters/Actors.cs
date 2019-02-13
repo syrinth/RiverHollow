@@ -119,7 +119,6 @@ namespace RiverHollow.Actors
         public Texture2D Texture { get => _spriteBody.Texture; }
         public Point CharCenter => GetRectangle().Center;
 
-        //protected AnimatedSprite _spriteShadow;
         public override Vector2 Position
         {
             get { return new Vector2(_spriteBody.Position.X, _spriteBody.Position.Y + _spriteBody.Height - TileSize); } //MAR this is fucked up
@@ -132,6 +131,12 @@ namespace RiverHollow.Actors
                 //}
             }
         }
+
+        protected List<RHTile> _currentPath;
+        protected double _dEtherealCD;
+        protected bool _bIgnoreCollisions;
+
+        protected double _dCooldown = 0;
 
         public Rectangle CollisionBox { get => new Rectangle((int)Position.X + (Width / 4), (int)Position.Y, Width / 2, TileSize); }
 
@@ -188,14 +193,6 @@ namespace RiverHollow.Actors
 
             //CreateShadow();
         }
-
-        //public void CreateShadow()
-        //{
-        //    _spriteShadow = new AnimatedSprite(@"Textures\Shadow", true);
-        //    _spriteShadow.AddAnimation(WActorShadow.Move, TileSize, TileSize, 2, 0.2f, 0, 0);
-        //    _spriteShadow.AddAnimation(WActorShadow.Idle, TileSize, TileSize, 1, 0.2f, TileSize, 0);
-        //    _spriteShadow.SetCurrentAnimation(WActorShadow.Idle);
-        //}
 
         public virtual bool CollisionContains(Point mouse)
         {
@@ -293,6 +290,19 @@ namespace RiverHollow.Actors
             }
 
             return rv;
+        }
+
+        protected void HandleMove(Vector2 target)
+        {
+            Vector2 direction = Vector2.Zero;
+            float deltaX = Math.Abs(target.X - this.Position.X);
+            float deltaY = Math.Abs(target.Y - this.Position.Y);
+
+            Util.GetMoveSpeed(Position, target, Speed, ref direction);
+            if (!CheckMapForCollisionsAndMove(direction, _bIgnoreCollisions))
+            {
+                if (_dEtherealCD == 0) { _dEtherealCD = 5; }
+            }
         }
 
         public void SetMoveObj(Vector2 vec) { _vMoveTo = vec; }
@@ -418,12 +428,8 @@ namespace RiverHollow.Actors
         public bool CanGiveGift = true;
 
         protected Dictionary<string, List<KeyValuePair<string, string>>> _completeSchedule;         //Every day with a list of KVP Time/GoToLocations
-        List<KeyValuePair<string, List<RHTile>>> _todaysPathing = null;                             //List of Times with the associated pathing
-        protected List<RHTile> _currentPath;                                                        //List of Tiles to currently be traversing
+        List<KeyValuePair<string, List<RHTile>>> _todaysPathing = null;                             //List of Times with the associated pathing                                                     //List of Tiles to currently be traversing
         protected int _scheduleIndex;
-
-        protected double _dEtherealCD;
-        protected bool _bIgnoreCollisions;
 
         public Villager() { }
         //For Cutscenes
@@ -663,19 +669,6 @@ namespace RiverHollow.Actors
                         HandleMove(targetPos);
                     }
                 }
-            }
-        }
-
-        private void HandleMove(Vector2 target)
-        {
-            Vector2 direction = Vector2.Zero;
-            float deltaX = Math.Abs(target.X - this.Position.X);
-            float deltaY = Math.Abs(target.Y - this.Position.Y);
-
-            Util.GetMoveSpeed(Position, target, Speed, ref direction);
-            if (!CheckMapForCollisionsAndMove(direction, _bIgnoreCollisions))
-            {
-                if (_dEtherealCD == 0) { _dEtherealCD = 5; }
             }
         }
 
@@ -1601,10 +1594,57 @@ namespace RiverHollow.Actors
 
             _cHairColor = Color.Red;
             Speed = 2;
+
+            _currentPath = new List<RHTile>();
         }
 
         public override void Update(GameTime theGameTime)
         {
+            if (_dCooldown > 0)
+            {
+                _dCooldown -= theGameTime.ElapsedGameTime.TotalSeconds;
+                if (_currentPath.Count == 0 && _dCooldown <= 0 && PlayerManager.ReadyToSleep)
+                {
+                    GUIManager.SetScreen(new DayEndScreen());
+                    _dCooldown = 0;
+                }
+            }
+
+            if (_currentPath.Count > 0)
+            {
+                if (_vMoveTo != Vector2.Zero)
+                {
+                    HandleMove(_vMoveTo);
+                }
+                else
+                {
+                    Vector2 targetPos = _currentPath[0].Position;
+                    if (Position == targetPos)
+                    {
+                        _currentPath.RemoveAt(0);
+                        if (_currentPath.Count == 0)
+                        {
+                            if (PlayerManager.ReadyToSleep)
+                            {
+                                if (_dCooldown == 0)
+                                {
+                                    PlayAnimation(WActorBaseAnim.IdleLeft);
+                                    _dCooldown = 3;
+                                }
+                            }
+                            else
+                            {
+                                DetermineFacing(Vector2.Zero);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        HandleMove(targetPos);
+                    }
+                }
+            }
+
             _spriteBody.Update(theGameTime);
             _spriteEyes.Update(theGameTime);
             _spriteArms.Update(theGameTime);
@@ -1736,6 +1776,11 @@ namespace RiverHollow.Actors
                 _spriteHair.FrameCutoff = 0;
                 _hat = null;
             }
+        }
+
+        public void SetPath(List<RHTile> list)
+        {
+            _currentPath = list;
         }
     }
 

@@ -96,7 +96,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _worker.Building.RemoveWorker(_worker);
                 }
 
-                selectedBuilding.AddWorker(_worker, r);
+                selectedBuilding.AddWorker(_worker);
                 
                 if (_eAction == ActionTypeEnum.Buy)
                 {

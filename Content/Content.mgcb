@@ -387,11 +387,6 @@
 /processorParam:TextureFormat=Color
 /build:Maps/tilesetManor.png
 
-#begin Maps/mapManor.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapManor.tmx
-
 #begin Maps/mapManorGrounds.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -1102,4 +1097,9 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/mapTower3.tmx
+
+#begin Maps/mapManor1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapManor1.tmx
 

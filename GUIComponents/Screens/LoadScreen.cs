@@ -109,7 +109,7 @@ namespace RiverHollow.GUIComponents.Screens
                 if (Contains(mouse))
                 {
                     Load(Data);
-                    MapManager.PopulateHomeMap(true);
+                    MapManager.PopulateMaps(true);
                     BackToMain();
                     rv = true;
                 }
