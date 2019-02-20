@@ -17,7 +17,7 @@
     <!--FangedFur-->
     <Item>
       <Key>4</Key>
-      <Value>[Monster:4][Monster:5][Monster:6][Monster:7][Monster:8][Condition:Forest][Jump]</Value>
+      <Value>[Monster:4][Monster:5][Monster:6][Condition:Forest][Jump]</Value>
     </Item>
   </Asset>
 </XnaContent>

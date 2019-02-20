@@ -349,7 +349,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIImage _gTargetter;
         GUIImage _gTile;
         GUISprite _gSprite;
+        GUISprite _gSpriteWeapon;
         public GUISprite CharacterSprite => _gSprite;
+        public GUISprite CharacterWeaponSprite => _gSpriteWeapon;
         GUIText _gEffect;
         GUISprite _gSummon;
         public GUISprite SummonSprite => _gSummon;
@@ -413,6 +415,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (Occupied())
             {
                 if(_gSummon != null) { _gSummon.Draw(spriteBatch); }
+                if (_gSpriteWeapon != null) { _gSpriteWeapon.Draw(spriteBatch); }
                 _gSprite.Draw(spriteBatch);
 
                 if (!(CombatManager.CurrentPhase == CombatManager.PhaseEnum.PerformAction && CombatManager.ActiveCharacter == _mapTile.Character)
@@ -444,6 +447,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (Occupied())
             {
                 if (_gSummon != null) { _gSummon.Update(gameTime); }
+                if (_gSpriteWeapon != null) { _gSpriteWeapon.Update(gameTime); }
                 _gSprite.Update(gameTime);
                 _gHP.Update(gameTime);
                 if (_gMP != null) { _gMP.Update(gameTime); }
@@ -482,6 +486,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 _gSprite.CenterOnObject(_gTile);
                 _gSprite.MoveBy(0, -(_gTile.Height / 3));
+
+                if (_gSpriteWeapon != null)
+                {
+                    _gSpriteWeapon.CenterOnObject(_gSprite);
+                }
+
                 _gHP.AnchorAndAlignToObject(_gSprite, SideEnum.Bottom, SideEnum.CenterX);
                 if (_gMP != null) { _gMP.AnchorAndAlignToObject(_gHP, SideEnum.Bottom, SideEnum.Left); }
 
@@ -503,6 +513,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 _gSprite = new GUISprite(_mapTile.Character.BodySprite);
                 _gSprite.PlayAnimation(CActorAnimEnum.Idle);
+                if (_mapTile.Character.IsCombatAdventurer())
+                {
+                    CombatAdventurer adv = (CombatAdventurer)_mapTile.Character;
+                    _gSpriteWeapon = new GUISprite(adv.SpriteWeapon);
+                    _gSpriteWeapon.PlayAnimation(CActorAnimEnum.Idle);
+                }
                 _gHP = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Health, _mapTile.Character, 100);
                 if (_mapTile.Character.MaxMP > 0) { _gMP = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Mana, _mapTile.Character, 100); }
             }
@@ -787,11 +803,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         }
                         else
                         {
-                            if (a.IsMenu() && a.IsCastSpell() && !CombatManager.ActiveCharacter.Silenced())
+                            if (a.IsMenu() && a.IsSpecial() && !CombatManager.ActiveCharacter.Silenced())
                             {
-                                _gSelectedMenu = ab;
-                                _actionMenu = new ActionMenu(CombatManager.ActiveCharacter.SpellList);
-                                _actionMenu.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX, 10);
+                                if (CombatManager.ActiveCharacter.SpecialActions.Count > 0) {
+                                    _gSelectedMenu = ab;
+                                    _actionMenu = new ActionMenu(CombatManager.ActiveCharacter.SpecialActions);
+                                    _actionMenu.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX, 10);
+                                }
                             }
                             else if (a.IsMenu() && a.IsUseItem() && InventoryManager.GetPlayerCombatItems().Count > 0)
                             {
@@ -873,7 +891,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         ActionButton ab = new ActionButton(ca);
                         _liActionButtons.Add(ab);
 
-                        if (ab.Action.IsMenu() && ab.Action.IsCastSpell() && CombatManager.ActiveCharacter.Silenced())
+                        if (ab.Action.IsMenu() && ab.Action.IsSpecial() && CombatManager.ActiveCharacter.Silenced())
                         {
                             ab.Enable(false);
                         }
@@ -912,15 +930,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 ActionButton _gSelectedAction;
                 public ActionButton SelectedAction => _gSelectedAction;
 
-                public ActionMenu(List<CombatAction> spellList)
+                public ActionMenu(List<CombatAction> specialsList)
                 {
                     _display = DisplayEnum.Spells;
                     _liActions = new List<ActionButton>();
 
-                    for (int i = 0; i < spellList.Count; i++)
+                    for (int i = 0; i < specialsList.Count; i++)
                     {
-                        _liActions.Add(new ActionButton(spellList[i]));
-                        if (spellList[i].MPCost > CombatManager.ActiveCharacter.CurrentMP)
+                        _liActions.Add(new ActionButton(specialsList[i]));
+                        if (specialsList[i].MPCost > CombatManager.ActiveCharacter.CurrentMP)
                         {
                             _liActions[i].Enable(false);
                         }

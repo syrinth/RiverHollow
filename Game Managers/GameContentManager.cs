@@ -87,6 +87,7 @@ namespace RiverHollow.Game_Managers
             AddDirectoryTextures(Content, @"Textures\ActionEffects");
             AddTexture(Content, @"Textures\battle");
             AddTexture(Content, @"Textures\weapons");
+            AddTexture(Content, @"Textures\Staves");
             AddTexture(Content, @"Textures\armor");
             AddTexture(Content, @"Textures\tools");
             AddTexture(Content, @"Textures\worldObjects");

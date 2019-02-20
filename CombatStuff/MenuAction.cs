@@ -63,7 +63,7 @@ namespace RiverHollow.Actors.CombatStuff
         public bool IsAction() { return _actionType == ActionEnum.Action; }
         public bool IsSpell() { return _actionType == ActionEnum.Spell; }
 
-        public bool IsCastSpell() { return _menuType == MenuEnum.Cast; }
+        public bool IsSpecial() { return _menuType == MenuEnum.Special; }
         public bool IsUseItem() { return _menuType == MenuEnum.UseItem; }
     }
 
@@ -594,15 +594,15 @@ namespace RiverHollow.Actors.CombatStuff
                     }
                     break;
                 case "Direct":
-                    if (!Sprite.PlayedOnce && !Sprite.IsAnimating)
+                    if (Sprite != null && !Sprite.PlayedOnce && !Sprite.IsAnimating)
                     {
                         Sprite.IsAnimating = true;
                         Sprite.AlignToObject(TileTargetList[0].GUITile, SideEnum.Bottom);
                         Sprite.AlignToObject(TileTargetList[0].GUITile, SideEnum.CenterX);
                         Sprite.MoveBy(new Vector2(0, _iAnimOffset * CombatManager.CombatScale));
                     }
-                    else if (Sprite.IsAnimating) { Sprite.Update(gameTime); }
-                    else if (Sprite.PlayedOnce)
+                    else if (Sprite != null && Sprite.IsAnimating) { Sprite.Update(gameTime); }
+                    else if (Sprite == null || Sprite.PlayedOnce)
                     {
                         _currentActionTag++;
                     }

@@ -216,6 +216,7 @@ namespace RiverHollow.Game_Managers
                     int levl = a.ClassLevel;
                     a.CurrentCharge = 0;
                     a.AddXP(EarnedXP);
+                    a.PlayAnimation(CActorAnimEnum.Win);
 
                     if (levl != a.ClassLevel)
                     {

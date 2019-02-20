@@ -26,7 +26,7 @@
     <Item>
       <!--Cast Spell-->
       <Key>3</Key>
-      <Value>[Type:Menu][Menu:Cast][Icon:1-0]</Value>
+      <Value>[Type:Menu][Menu:Special][Icon:1-0]</Value>
     </Item>
     <Item>
       <!--Special-->

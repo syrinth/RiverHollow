@@ -25,7 +25,7 @@ namespace RiverHollow.Game_Managers
         public enum WActorJumpAnim { GroundDown, GroundUp, GroundLeft, GroundRight, AirDown, AirUp, AirLeft, AirRight };
         public enum WActorShadow { Idle, Move };
 
-        public enum CActorAnimEnum { Idle, Attack, Cast, Hurt, KO, Critical };
+        public enum CActorAnimEnum { Idle, Attack, Cast, Hurt, KO, Critical, Win };
         public enum WeatherAnimEnum { None, Rain, Snow };
         public enum ToolAnimEnum { Up, Down, Left, Right }
         public enum MachineAnimEnum { Idle, Working };
@@ -37,7 +37,7 @@ namespace RiverHollow.Game_Managers
         public enum ForceMoveEnum { None, Forward, Back };
         public enum ActionEnum { Action, Menu, Spell };
         public enum TargetEnum { Enemy, Ally};
-        public enum MenuEnum { Action, Cast, UseItem };
+        public enum MenuEnum { Action, Special, UseItem };
         public enum RangeEnum { Self, Melee, Ranged, Column };
         public enum AreaEffectEnum { Single, Area };
         public enum ElementEnum { None, Fire, Ice, Lightning };

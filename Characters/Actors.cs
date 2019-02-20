@@ -1434,10 +1434,6 @@ namespace RiverHollow.Actors
                 RHRandom r = new RHRandom();
                 rv = GameContentManager.GetGameText(_sAdventurerType + r.Next(1, 2));
             }
-            else if (entry.Equals("Craft"))
-            {
-                GUIManager.SetScreen(new CraftingScreen(this));
-            }
             else if (entry.Equals("Party"))
             {
                 DrawIt = false;
@@ -2479,8 +2475,8 @@ namespace RiverHollow.Actors
         protected List<MenuAction> _liActions;
         public virtual List<MenuAction> AbilityList { get => _liActions; }
 
-        protected List<CombatAction> _liSpells;
-        public virtual List<CombatAction> SpellList { get => _liSpells; }
+        protected List<CombatAction> _liSpecialActions;
+        public virtual List<CombatAction> SpecialActions { get => _liSpecialActions; }
 
         protected List<Buff> _liBuffs;
         public List<Buff> LiBuffs { get => _liBuffs; }
@@ -2502,7 +2498,7 @@ namespace RiverHollow.Actors
         public CombatActor() : base()
         {
             _actorType = ActorEnum.CombatActor;
-            _liSpells = new List<CombatAction>();
+            _liSpecialActions = new List<CombatAction>();
             _liActions = new List<MenuAction>();
             _liBuffs = new List<Buff>();
             _diConditions = new Dictionary<ConditionEnum, bool>
@@ -2536,7 +2532,7 @@ namespace RiverHollow.Actors
             xCrawl += 1;
             _spriteBody.AddAnimation(CActorAnimEnum.Attack, frameWidth, frameHeight, 1, 0.3f, (xCrawl * frameWidth), 0);
             xCrawl += 1;
-            _spriteBody.AddAnimation(CActorAnimEnum.Critical, frameWidth, frameHeight, 2, 0.5f, (xCrawl * frameWidth), 0);
+            _spriteBody.AddAnimation(CActorAnimEnum.Critical, frameWidth, frameHeight, 2, 0.9f, (xCrawl * frameWidth), 0);
             xCrawl += 2;
             _spriteBody.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 0);
 
@@ -2548,8 +2544,6 @@ namespace RiverHollow.Actors
 
         public override void Update(GameTime theGameTime)
         {
-            base.Update(theGameTime);
-
             //Finished being hit, determine action
             if (IsCurrentAnimation(CActorAnimEnum.Hurt) && BodySprite.GetPlayCount() == 1)
             {
@@ -2869,6 +2863,8 @@ namespace RiverHollow.Actors
 
         public bool Protected;
 
+        public AnimatedSprite SpriteWeapon;
+
         public Equipment Weapon;
         public Equipment TempWeapon;
         public Equipment Armor;
@@ -2886,8 +2882,8 @@ namespace RiverHollow.Actors
         public override int StatRes => 10 + _buffRes + GetGearRes();
         public override int StatSpd => 10 + _class.StatSpd +_buffSpd + GetGearSpd();
 
-        public override List<MenuAction> AbilityList { get => _class.AbilityList; }
-        public override List<CombatAction> SpellList { get => _class._spellList; }
+        public override List<MenuAction> AbilityList { get => _class.ActionList; }
+        public override List<CombatAction> SpecialActions { get => _class._liSpecialActionsList; }
 
         public int GetGearAtk()
         {
@@ -2972,12 +2968,46 @@ namespace RiverHollow.Actors
         {
             _sName = w.Name;
             _world = w;
+
+            SpriteWeapon = new AnimatedSprite(@"Textures\Staves");
+            SpriteWeapon.AddAnimation(CActorAnimEnum.Idle, 32, 32, 2, 0.4f, 0, 0);
+            SpriteWeapon.SetScale(CombatManager.CombatScale);
         }
 
         public CombatAdventurer() : base()
         {
             _actorType = ActorEnum.CombatAdventurer;
             _classLevel = 1;
+        }
+
+        public override void LoadContent(string texture)
+        {
+            base.LoadContent(texture);
+
+            _sTexture = texture;
+
+            _spriteBody = new AnimatedSprite(texture.Replace(" ", ""));
+            int xCrawl = 0;
+            int frameWidth = 32;
+            int frameHeight = 32;
+            _spriteBody.AddAnimation(CActorAnimEnum.Idle, frameWidth, frameHeight, _class.IdleFrames, _class.IdleFramesLength, (xCrawl * frameWidth), 0);
+            xCrawl += _class.IdleFrames;
+            _spriteBody.AddAnimation(CActorAnimEnum.Cast, frameWidth, frameHeight, _class.CastFrames, _class.CastFramesLength, (xCrawl * frameWidth), 0);
+            xCrawl += _class.CastFrames;
+            _spriteBody.AddAnimation(CActorAnimEnum.Hurt, frameWidth, frameHeight, _class.HitFrames, _class.HitFramesLength, (xCrawl * frameWidth), 0);
+            xCrawl += _class.HitFrames;
+            _spriteBody.AddAnimation(CActorAnimEnum.Attack, frameWidth, frameHeight, _class.AttackFrames, _class.AttackFramesLength, (xCrawl * frameWidth), 0);
+            xCrawl += _class.AttackFrames;
+            _spriteBody.AddAnimation(CActorAnimEnum.Critical, frameWidth, frameHeight, _class.CriticalFrames, _class.CriticalFramesLength, (xCrawl * frameWidth), 0);
+            xCrawl += _class.CriticalFrames;
+            _spriteBody.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, _class.KOFrames, _class.KOFramesLength, (xCrawl * frameWidth), 0);
+            xCrawl += _class.KOFrames;
+            _spriteBody.AddAnimation(CActorAnimEnum.Win, frameWidth, frameHeight, _class.WinFrames, _class.WinFramesLength, (xCrawl * frameWidth), 0);
+
+            _spriteBody.SetCurrentAnimation(CActorAnimEnum.Idle);
+            _spriteBody.SetScale(CombatManager.CombatScale);
+            _width = _spriteBody.Width;
+            _height = _spriteBody.Height;
         }
 
         public void SetClass(CharacterClass x)
@@ -2999,6 +3029,12 @@ namespace RiverHollow.Actors
             {
                 _classLevel++;
             }
+        }
+
+        public override void PlayAnimation(string animation)
+        {
+            base.PlayAnimation(animation);
+            SpriteWeapon.SetCurrentAnimation(animation);
         }
 
         public AdventurerData SaveData()

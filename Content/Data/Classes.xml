@@ -6,42 +6,42 @@
     <Item>
       <!--Wizard-->
       <Key>1</Key>
-      <Value>[Weapon:Wand][Armor:Cloth][Hp:4][Ability:300-3][Spell:20][DWeap:600][DArmor:700][DHead:760][DWrist:880]</Value>
+      <Value>[Weapon:Wand][Armor:Cloth][Hp:4][Idle:2-0.6][Cast:3-0.2][Hit:1-0.6][Attack:1-0.6][Crit:2-0.6][KO:1-0.6][Win:2-0.23][Ability:300][Spell:20][DWeap:600][DArmor:700][DHead:760][DWrist:880]</Value>
     </Item>
     <Item>
       <!--Healer-->
       <Key>2</Key>
-      <Value>[Weapon:Staff][Armor:Cloth][Hp:3][Ability:300-3][Spell:40-41][DWeap:610][DArmor:700][DHead:760][DWrist:880]</Value>
+      <Value>[Weapon:Staff][Armor:Cloth][Hp:3][Idle:2-0.4][Cast:2-0.6][Hit:1-0.6][Attack:1-0.6][Crit:2-0.6][KO:1-0.6][Win:2-0.6][Ability:300][Spell:40-41][DWeap:610][DArmor:700][DHead:760][DWrist:880]</Value>
     </Item>
     <Item>
       <!--Summoner-->
       <Key>3</Key>
-      <Value>[Weapon:Orb][Armor:Cloth][Hp:4][Ability:60-3][Spell:61-62][DWeap:620][DArmor:700][DHead:760][DWrist:880]</Value>
+      <Value>[Weapon:Orb][Armor:Cloth][Hp:4][Idle:4-0.3][Cast:3-0.4][Hit:1-0.6][Attack:3-0.4][Crit:2-0.6][KO:1-0.6][Win:3-0.2][Ability:60][Spell:61-62][DWeap:620][DArmor:700][DHead:760][DWrist:880]</Value>
     </Item>
     <Item>
       <!--Witch-->
       <Key>4</Key>
-      <Value>[Weapon:Knife][Armor:Cloth][Hp:4][Ability:300-3][Spell:80][DWeap:630][DArmor:700][DHead:760][DWrist:880]</Value>
+      <Value>[Weapon:Knife][Armor:Cloth][Hp:4][Idle:2-0.6][Cast:2-0.6][Hit:1-0.6][Attack:1-0.6][Crit:2-0.6][KO:1-0.6][Win:2-0.6][Ability:300][Spell:80][DWeap:630][DArmor:700][DHead:760][DWrist:880]</Value>
     </Item>
     <Item>
       <!--Duelist-->
       <Key>5</Key>
-      <Value>[Weapon:Sword][Armor:Heavy][Hp:6][Ability:300-3][DWeap:640][DArmor:720][DHead:780][DWrist:880]</Value>
+      <Value>[Weapon:Sword][Armor:Heavy][Hp:6][Idle:2-0.6][Cast:2-0.6][Hit:1-0.6][Attack:1-0.6][Crit:2-0.6][KO:1-0.6][Win:2-0.6][Ability:300][DWeap:640][DArmor:720][DHead:780][DWrist:880]</Value>
     </Item>
     <Item>
       <!--Knight-->
       <Key>6</Key>
-      <Value>[Weapon:Mace][Armor:Heavy][Hp:10][Spd:1][Ability:300-3][DWeap:650][DArmor:740][DHead:800][DWrist:880]</Value>
+      <Value>[Weapon:Mace][Armor:Heavy][Hp:10][Spd:1][Idle:2-0.6][Cast:2-0.6][Hit:1-0.6][Attack:1-0.6][Crit:2-0.6][KO:1-0.6][Win:2-0.6][Ability:300][DWeap:650][DArmor:740][DHead:800][DWrist:880]</Value>
     </Item>
     <Item>
       <!--Rogue-->
       <Key>7</Key>
-      <Value>[Weapon:Bow][Armor:Heavy][Hp:5][Spd:1][Ability:300-3][DWeap:660][DArmor:720][DHead:780][DWrist:880]</Value>
+      <Value>[Weapon:Bow][Armor:Heavy][Hp:5][Spd:1][Idle:2-0.6][Cast:2-0.6][Hit:1-0.6][Attack:1-0.6][Crit:2-0.6][KO:1-0.6][Win:2-0.6][Ability:300][DWeap:660][DArmor:720][DHead:780][DWrist:880]</Value>
     </Item>
     <Item>
       <!--Bard-->
       <Key>8</Key>
-      <Value>[Weapon:Rapier][Armor:Heavy][Hp:5][Spd:1][Ability:300-3][DWeap:670][DArmor:720][DHead:780][DWrist:880]</Value>
+      <Value>[Weapon:Rapier][Armor:Heavy][Hp:5][Spd:1][Idle:2-0.6][Cast:2-0.6][Hit:1-0.6][Attack:1-0.6][Crit:2-0.6][KO:1-0.6][Win:2-0.6][Ability:300][DWeap:670][DArmor:720][DHead:780][DWrist:880]</Value>
     </Item>
   </Asset>
 </XnaContent>
