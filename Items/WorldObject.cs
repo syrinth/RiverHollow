@@ -522,7 +522,7 @@ namespace RiverHollow.WorldObjects
                         {
                             ReadSourcePos(tagType[1]);
                         }
-                        else if (tagType[0].Equals("Makes"))
+                        else if (tagType[0].Equals("Processes"))
                         {
                             string[] recipeStr = Util.FindTags(tagType[1]);
                             foreach (string recipe in recipeStr)
@@ -559,30 +559,13 @@ namespace RiverHollow.WorldObjects
                     Item itemToProcess = InventoryManager.GetCurrentItem();
                     if (itemToProcess != null)
                     {
-                        int ItemToMake = -1;
-                        foreach (ProcessRecipe pr in _diProcessing.Values)
+                        if (_diProcessing.ContainsKey(itemToProcess.ItemID))
                         {
-                            ItemToMake = pr.Output;
-                            List<KeyValuePair<int, int>> requirements = ObjectManager.GetItem(pr.Output).GetIngredients();
-                            foreach (KeyValuePair<int, int> kvp in requirements)
+                            ProcessRecipe pr = _diProcessing[itemToProcess.ItemID];
+                            if (itemToProcess.Number >= pr.InputNum)
                             {
-                                if (kvp.Key == itemToProcess.ItemID)
-                                {
-                                    ItemToMake = pr.Output;
-                                    break;
-                                }
-                            }
-
-                            if (ItemToMake != -1) { break; }
-                        }
-
-                        if (ItemToMake != -1)
-                        {
-                            ProcessRecipe p = _diProcessing[ItemToMake];
-                            if (itemToProcess.Number >= p.InputNum)
-                            {
-                                itemToProcess.Remove(p.InputNum);
-                                _currentlyProcessing = p;
+                                itemToProcess.Remove(pr.InputNum);
+                                _currentlyProcessing = pr;
                                 _sprite.SetCurrentAnimation(MachineAnimEnum.Working);
                             }
                         }
@@ -627,21 +610,12 @@ namespace RiverHollow.WorldObjects
 
                     public ProcessRecipe(string[] data)
                     {
-                        _iOutput = int.Parse(data[0]);
+                        _iInput = int.Parse(data[0]);
+                        _iProcessingTime = int.Parse(data[1]);
 
-                        Item it = ObjectManager.GetItem(_iOutput);
-                        List<KeyValuePair<int, int>> liKVPs = it.GetIngredients();
-                        if (liKVPs.Count == 1)
-                        {
-                            _iProcessingTime = int.Parse(data[1]);
-                            _iInput = liKVPs[0].Key;
-                            _iReqInput = liKVPs[0].Value;
-                        }
-                        else
-                        {
-                            int i = 0;
-                            i++;
-                        }
+                        Item processedItem = ObjectManager.GetItem(_iInput);
+                        _iOutput = processedItem.RefinesInto.Key;
+                        _iReqInput = processedItem.RefinesInto.Value;
                     }
                 }
             }

@@ -62,7 +62,12 @@ namespace RiverHollow.WorldObjects
         protected int _iSellPrice;
         public int SellPrice => _iSellPrice;
 
+        //What items and in what numebrs are required to make this item
         protected Dictionary<int, int> _diReqToMake;
+
+        //Wahat this item refines into and how  many are required
+        protected KeyValuePair<int, int> _kvpRefinesInto;
+        public KeyValuePair<int, int> RefinesInto => _kvpRefinesInto;
         #endregion
         public Item() { }
 
@@ -101,6 +106,12 @@ namespace RiverHollow.WorldObjects
                     string[] splitData = s.Split('-');
                     _diReqToMake[int.Parse(splitData[0])] = int.Parse(splitData[1]);
                 }
+            }
+
+            if (stringData.ContainsKey("RefinesInto"))
+            {
+                string[] splitData = stringData["RefinesInto"].Split('-');
+                _kvpRefinesInto = new KeyValuePair<int, int>(int.Parse(splitData[0]), int.Parse(splitData[1]));
             }
         }
         //Copy Constructor

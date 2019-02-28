@@ -56,43 +56,43 @@
     <!--<80-89> Ores and Bars-->
     <Item>
       <Key>80</Key>
-      <Value>[Type:Resource][Image:0-16][Sell:5]</Value>
+      <Value>[Type:Resource][Image:0-16][Sell:5][RefinesInto:85-3]</Value>
     </Item>
     <Item>
       <Key>81</Key>
-      <Value>[Type:Resource][Image:16-16][Sell:10]</Value>
+      <Value>[Type:Resource][Image:16-16][Sell:10][RefinesInto:85-3]</Value>
     </Item>
     <Item>
       <Key>82</Key>
-      <Value>[Type:Resource][Image:32-16][Sell:15]</Value>
+      <Value>[Type:Resource][Image:32-16][Sell:15][RefinesInto:85-3]</Value>
     </Item>
     <Item>
       <Key>83</Key>
-      <Value>[Type:Resource][Image:48-16][Sell:20]</Value>
+      <Value>[Type:Resource][Image:48-16][Sell:20][RefinesInto:85-3]</Value>
     </Item>
     <Item>
       <Key>84</Key>
-      <Value>[Type:Resource][Image:64-16][Sell:75]</Value>
+      <Value>[Type:Resource][Image:64-16][Sell:75][RefinesInto:85-3]</Value>
     </Item>
     <Item>
       <Key>85</Key>
-      <Value>[Type:Resource][Image:0-32][Sell:100][ReqItems:80-3]</Value>
+      <Value>[Type:Resource][Image:0-32][Sell:100]</Value>
     </Item>
     <Item>
       <Key>86</Key>
-      <Value>[Type:Resource][Image:16-32][Sell:10][ReqItems:81-3]</Value>
+      <Value>[Type:Resource][Image:16-32][Sell:10]</Value>
     </Item>
     <Item>
       <Key>87</Key>
-      <Value>[Type:Resource][Image:32-32][Sell:10][ReqItems:82-3]</Value>
+      <Value>[Type:Resource][Image:32-32][Sell:10]</Value>
     </Item>
     <Item>
       <Key>88</Key>
-      <Value>[Type:Resource][Image:48-32][Sell:10][ReqItems:83-3]</Value>
+      <Value>[Type:Resource][Image:48-32][Sell:10]</Value>
     </Item>
     <Item>
       <Key>89</Key>
-      <Value>[Type:Resource][Image:64-32][Sell:10][ReqItems:84-3]</Value>
+      <Value>[Type:Resource][Image:64-32][Sell:10]</Value>
     </Item>
     <!--<100> Combat:Status/Stamina/Health/Mana-->
     <Item>
