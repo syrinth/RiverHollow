@@ -78,6 +78,7 @@ namespace RiverHollow.WorldObjects
         {
             _iNum = num;
             _iItemID = id;
+            _diReqToMake = new Dictionary<int, int>();
 
             GameContentManager.GetItemText(_iItemID, ref _sName, ref _sDescription);
 
@@ -98,7 +99,7 @@ namespace RiverHollow.WorldObjects
                 foreach(string s in split)
                 {
                     string[] splitData = s.Split('-');
-                    _diReqToMake[int.Parse(split[0])] = int.Parse(split[1]);
+                    _diReqToMake[int.Parse(splitData[0])] = int.Parse(splitData[1]);
                 }
             }
         }
