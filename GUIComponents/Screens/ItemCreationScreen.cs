@@ -31,8 +31,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
 
         public CraftingScreen()
         {
-            //Setup(ObjectManager.DictCrafting);
-
             Controls.Add(_creationWindow);
             Controls.Add(_inventory);
         }
@@ -40,7 +38,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
         public CraftingScreen(Crafter crafter)
         {
             _craftMachine = crafter;
-           // Setup(crafter.CraftList);
+            Setup(crafter.CraftList);
 
             Controls.Add(_creationWindow);
             Controls.Add(_inventory);

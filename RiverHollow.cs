@@ -254,7 +254,7 @@ namespace RiverHollow
                         }
                         else
                         {
-                            GUIManager.SetScreen(new CraftingScreen());
+                           // GUIManager.SetScreen(new CraftingScreen());
                         }
                     }
                 }

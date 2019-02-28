@@ -676,7 +676,7 @@ namespace RiverHollow.WorldObjects
 
                 public void MakeChosenItem(int itemID)
                 {
-                    _iCurrentlyMaking = _diCrafting[itemID];
+                    _iCurrentlyMaking = itemID;
                     _sprite.SetCurrentAnimation(MachineAnimEnum.Working);
                 }
 
