@@ -31,7 +31,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
 
         public CraftingScreen()
         {
-            Setup(ObjectManager.DictCrafting);
+            //Setup(ObjectManager.DictCrafting);
 
             Controls.Add(_creationWindow);
             Controls.Add(_inventory);
@@ -40,7 +40,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
         public CraftingScreen(Crafter crafter)
         {
             _craftMachine = crafter;
-            Setup(crafter.CraftList);
+           // Setup(crafter.CraftList);
 
             Controls.Add(_creationWindow);
             Controls.Add(_inventory);
@@ -55,7 +55,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             Controls.Add(_inventory);
         }
 
-        public void Setup(Dictionary<int, Recipe> recipes)
+        public void Setup(Dictionary<int, int> recipes)
         {
             GameManager.Pause();
             Vector2 centerPoint = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
@@ -118,7 +118,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                     {
                         //Check that all required items are there first
                         bool create = true;
-                        foreach(KeyValuePair<int, int> kvp in DictCrafting[gIB.Item.ItemID].RequiredItems)
+                        foreach(KeyValuePair<int, int> kvp in gIB.Item.GetIngredients())
                         {
                             if(!InventoryManager.HasItemInInventory(kvp.Key, kvp.Value))
                             {
@@ -128,7 +128,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                         //If all items are found, then remove them.
                         if (create)
                         {
-                            foreach (KeyValuePair<int, int> kvp in ObjectManager.DictCrafting[gIB.Item.ItemID].RequiredItems)
+                            foreach (KeyValuePair<int, int> kvp in gIB.Item.GetIngredients())
                             {
                                 InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
                                 if (_craftMachine != null) {

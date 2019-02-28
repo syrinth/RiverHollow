@@ -13,7 +13,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/items.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/weapons.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/ItemData.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CraftingData.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC1.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC2.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC3.xml</File>
@@ -130,5 +129,11 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapTower3.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapManor1.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Staves.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/WizardPortrait.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Consumables.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Equipment.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Food.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Resources.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/StaticObjects.png</File>
   </SourceFiles>
 </SourceFileCollection>

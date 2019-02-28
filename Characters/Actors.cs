@@ -184,12 +184,13 @@ namespace RiverHollow.Actors
             sprite = new AnimatedSprite(texture, pingpong);
             sprite.AddAnimation(WActorWalkAnim.WalkDown, TileSize, height, 3, 0.2f, startX, startY);
             sprite.AddAnimation(WActorBaseAnim.IdleDown, TileSize, height, 1, 0.2f, startX + TileSize, startY);
-            sprite.AddAnimation(WActorWalkAnim.WalkUp, TileSize, height, 3, 0.2f, startX + TileSize * 3, startY);
-            sprite.AddAnimation(WActorBaseAnim.IdleUp, TileSize, height, 1, 0.2f, startX + TileSize * 4, startY);
-            sprite.AddAnimation(WActorWalkAnim.WalkLeft, TileSize, height, 3, 0.2f, startX + TileSize * 6, startY);
-            sprite.AddAnimation(WActorBaseAnim.IdleLeft, TileSize, height, 1, 0.2f, startX + TileSize * 7, startY);
-            sprite.AddAnimation(WActorWalkAnim.WalkRight, TileSize, height, 3, 0.2f, startX + TileSize * 9, startY);
-            sprite.AddAnimation(WActorBaseAnim.IdleRight, TileSize, height, 1, 0.2f, startX + TileSize * 10, startY);
+            sprite.AddAnimation(WActorWalkAnim.WalkRight, TileSize, height, 3, 0.2f, startX + TileSize * 3, startY);
+            sprite.AddAnimation(WActorBaseAnim.IdleRight, TileSize, height, 1, 0.2f, startX + TileSize * 4, startY);
+            sprite.AddAnimation(WActorWalkAnim.WalkUp, TileSize, height, 3, 0.2f, startX + TileSize * 6, startY);
+            sprite.AddAnimation(WActorBaseAnim.IdleUp, TileSize, height, 1, 0.2f, startX + TileSize * 7, startY);
+            sprite.AddAnimation(WActorWalkAnim.WalkLeft, TileSize, height, 3, 0.2f, startX + TileSize * 9, startY);
+            sprite.AddAnimation(WActorBaseAnim.IdleLeft, TileSize, height, 1, 0.2f, startX + TileSize * 10, startY);
+            
             sprite.SetCurrentAnimation(WActorBaseAnim.IdleDown);
 
             //CreateShadow();
@@ -319,8 +320,8 @@ namespace RiverHollow.Actors
         protected const int PortraitWidth = 160;
         protected const int PortraitHeight = 192;
 
-        protected Texture2D _portrait;
-        public Texture2D Portrait { get => _portrait; }
+        protected string _sPortrait;
+        public string Portrait { get => _sPortrait; }
 
         protected Rectangle _portraitRect;
         public Rectangle PortraitRectangle { get => _portraitRect; }
@@ -352,13 +353,6 @@ namespace RiverHollow.Actors
             }
             text = Util.ProcessText(text, _sName);
             GUIManager.SetScreen(new TextScreen(this, text));
-        }
-        public void DrawPortrait(SpriteBatch spriteBatch, Vector2 dest)
-        {
-            if (_portrait != null)
-            {
-                spriteBatch.Draw(_portrait, new Vector2(dest.X, dest.Y - PortraitRectangle.Height), PortraitRectangle, Color.White);
-            }
         }
 
         public virtual string GetSelectionText()
@@ -441,7 +435,7 @@ namespace RiverHollow.Actors
             _iIndex = n.ID;
             _sName = n.Name;
             _dialogueDictionary = n._dialogueDictionary;
-            _portrait = n.Portrait;
+            _sPortrait = n.Portrait;
             _portraitRect = n._portraitRect;
 
             LoadContent(_sVillagerFolder + "NPC" + _iIndex);
@@ -558,7 +552,7 @@ namespace RiverHollow.Actors
         protected int ImportBasics(string[] stringData)
         {
             _sName = GameContentManager.GetGameText("NPC" + _iIndex);
-            _portrait = GameContentManager.GetTexture(@"Textures\portraits");
+            _sPortrait = _sAdventurerFolder + "WizardPortrait";
             _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + _iIndex);
 
             int i = 0;
@@ -1283,10 +1277,10 @@ namespace RiverHollow.Actors
         protected double _dProcessedTime;
         public double ProcessedTime => _dProcessedTime;
 
-        Dictionary<int, Recipe> _diCrafting;
-        public Dictionary<int, Recipe> CraftList => _diCrafting;
-        Recipe _currentlyMaking;
-        public Recipe CurrentlyMaking => _currentlyMaking;
+        Dictionary<int, int> _diCrafting;
+        public Dictionary<int, int> CraftList => _diCrafting;
+        int _iCurrentlyMaking;
+        public int CurrentlyMaking => _iCurrentlyMaking;
         #endregion
 
         public WorldAdventurer(string[] stringData, int id)
@@ -1300,8 +1294,8 @@ namespace RiverHollow.Actors
             _sTexture = _sAdventurerFolder + "WorldAdventurers";
             LoadContent(_iAdventurerID);
 
-            _portraitRect = new Rectangle(0, 105, 80, 96);
-            _portrait = GameContentManager.GetTexture(_sTexture);
+            _portraitRect = new Rectangle(0, 0, 48, 60);
+            _sPortrait = _sAdventurerFolder + "WizardPortrait";
 
             _iCurrFood = 0;
             _heldItem = null;
@@ -1323,7 +1317,7 @@ namespace RiverHollow.Actors
 
         protected void ImportBasics(string[] stringData, int id)
         {
-            _diCrafting = new Dictionary<int, Recipe>();
+            _diCrafting = new Dictionary<int, int>();
 
             _iAdventurerID = id;
 
@@ -1347,7 +1341,7 @@ namespace RiverHollow.Actors
                     string[] crafting = tagType[1].Split(' ');
                     foreach (string recipe in crafting)
                     {
-                        _diCrafting.Add(int.Parse(recipe), ObjectManager.DictCrafting[int.Parse(recipe)]);
+                        _diCrafting.Add(int.Parse(recipe), int.Parse(recipe));
                     }
                 }
             }
@@ -1363,21 +1357,6 @@ namespace RiverHollow.Actors
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (_currentlyMaking != null)
-            {
-                _spriteBody.Update(gameTime);
-                _dProcessedTime += gameTime.ElapsedGameTime.TotalSeconds;
-                int modifiedTime = (int)(_currentlyMaking.ProcessingTime * (0.5 + 0.5 * ((100 - Mood) / 100)));   //Workers work faster the happier they are.
-                if (_dProcessedTime >= modifiedTime)        //NPCs
-                {
-                    //SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition);
-                    _heldItem = ObjectManager.GetItem(_currentlyMaking.Output);
-                    _combat.AddXP(_currentlyMaking.XP);
-                    _dProcessedTime = -1;
-                    _currentlyMaking = null;
-                    _spriteBody.SetCurrentAnimation(WActorBaseAnim.IdleDown);
-                }
-            }
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
@@ -1446,7 +1425,7 @@ namespace RiverHollow.Actors
 
         public void ProcessChosenItem(int itemID)
         {
-            _currentlyMaking = _diCrafting[itemID];
+            _iCurrentlyMaking = _diCrafting[itemID];
             _spriteBody.SetCurrentAnimation(WActorBaseAnim.MakeItem);
         }
 
@@ -1515,7 +1494,7 @@ namespace RiverHollow.Actors
                 mood = this.Mood,
                 name = this.Name,
                 processedTime = this.ProcessedTime,
-                currentItemID = (this._currentlyMaking == null) ? -1 : this._currentlyMaking.Output,
+                currentItemID = (this._iCurrentlyMaking == null) ? -1 : this._iCurrentlyMaking,
                 heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID,
                 adventuring = Adventuring
             };
@@ -1528,14 +1507,14 @@ namespace RiverHollow.Actors
             _iMood = data.mood;
             _sName = data.name;
             _dProcessedTime = data.processedTime;
-            _currentlyMaking = (data.currentItemID == -1) ? null : _diCrafting[data.currentItemID];
+            _iCurrentlyMaking = data.currentItemID;
             _heldItem = ObjectManager.GetItem(data.heldItemID);
             Adventuring = data.adventuring;
 
             SetCombat();
             Combat.LoadData(data.advData);
 
-            if (_currentlyMaking != null) { _spriteBody.SetCurrentAnimation(WActorBaseAnim.MakeItem); }
+            if (_iCurrentlyMaking != null) { _spriteBody.SetCurrentAnimation(WActorBaseAnim.MakeItem); }
             if (Adventuring)
             {
                 DrawIt = false;

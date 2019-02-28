@@ -12,6 +12,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
     {
         GUIImage _next;
         protected GUIText _giText;
+        protected GUIImage _giPortrait;
         List<string> _liText;
 
         public double Duration;
@@ -47,6 +48,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
             _next = new GUIImage(new Rectangle(288, 64, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");     //???
             _next.AnchorToInnerSide(this, SideEnum.BottomRight);
+
+            _giPortrait = new GUIImage(npc.PortraitRectangle, npc.PortraitRectangle.Width, npc.PortraitRectangle.Height, npc.Portrait);
+            _giPortrait.SetScale(GameManager.Scale);
+            _giPortrait.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.Left);
 
             Resize();
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
@@ -119,9 +124,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 _next.Draw(spriteBatch);
             }
 
-            if (GameManager.gmNPC != null && GUIManager.IsTextScreen())
+            if (_giPortrait != null)
             {
-                GameManager.gmNPC.DrawPortrait(spriteBatch, new Vector2(InnerTopLeft().X, InnerTopLeft().Y - EdgeSize));
+                _giPortrait.Draw(spriteBatch);
             }
         }
 

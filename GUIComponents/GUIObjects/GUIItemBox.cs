@@ -30,7 +30,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         GUIImage _gSelected = new GUIImage(RECT_SELECT_IMG, 64, 64, @"Textures\Dialog");
 
-        Recipe _recipe;
+        Item _itToCraft;
         List<GUIObject> _liItemReqs;
 
         bool _bCrafting;
@@ -154,8 +154,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 if (_bCrafting)
                 {
                     _liItemReqs = new List<GUIObject>();
-                    _recipe = DictCrafting[_item.ItemID];
-                    foreach (KeyValuePair<int, int> kvp in _recipe.RequiredItems)
+                    _itToCraft = it;
+                    foreach (KeyValuePair<int, int> kvp in _itToCraft.GetIngredients())
                     {
                         _liItemReqs.Add(new GUIItemReq(kvp.Key, kvp.Value));
                     }

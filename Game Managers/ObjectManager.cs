@@ -17,27 +17,27 @@ namespace RiverHollow.Game_Managers
     public static class ObjectManager
     {
         private static Dictionary<int, string> _dictBuilding;
-        private static Dictionary<int, Recipe> _dictCrafting;
-        private static Dictionary<int, string> _dictItem;
+        private static Dictionary<int, Dictionary<string, string>> _dictItem;
         private static Dictionary<int, string> _dictWorkers;
         private static Dictionary<int, string> _dictWorldObjects;
-        public static Dictionary<int, Recipe> DictCrafting { get => _dictCrafting; }
 
         public static void LoadContent(ContentManager Content)
         {
+            _dictItem = new Dictionary<int, Dictionary<string, string>>();
             _dictBuilding = Content.Load<Dictionary<int, string>>(@"Data\Buildings");
-            _dictItem = Content.Load<Dictionary<int, string>>(@"Data\ItemData");
             _dictWorkers = Content.Load<Dictionary<int, string>>(@"Data\Workers");
             _dictWorldObjects = Content.Load<Dictionary<int, string>>(@"Data\WorldObjects");
-            LoadRecipes(Content);
-        }
 
-        private static void LoadRecipes(ContentManager Content)
-        {
-            _dictCrafting = new Dictionary<int, Recipe>();
-            foreach (KeyValuePair<int, string> kvp in Content.Load<Dictionary<int, string>>(@"Data\CraftingData"))
+            Dictionary<int, string> itemData = Content.Load<Dictionary<int, string>>(@"Data\ItemData");
+            foreach(KeyValuePair<int, string> kvp in itemData)
             {
-                _dictCrafting.Add(kvp.Key, new Recipe(kvp.Key, kvp.Value));
+                Dictionary<string, string> dss = new Dictionary<string, string>();
+                foreach (string s in Util.FindTags(kvp.Value))
+                {
+                    string[] tagSplit = s.Split(':');
+                    dss[tagSplit[0]] = tagSplit[1];
+                }
+                _dictItem[kvp.Key] = dss;
             }
         }
 
@@ -77,30 +77,29 @@ namespace RiverHollow.Game_Managers
         {
             if (id != -1)
             {
-                string _itemData = _dictItem[id];
-                string[] _itemTags = Util.FindTags(_itemData);
-                switch (_itemTags[0].Split(':')[1])
+                Dictionary<string, string> liData = _dictItem[id];
+                switch (liData["Type"])
                 {
                     case "Resource":
-                        return new Item(id, _itemTags, num);
+                        return new Item(id, liData, num);
                     case "Tool":
-                        return new Tool(id, _itemTags);
+                        return new Tool(id, liData);
                     case "Equipment":
-                        return new Equipment(id, _itemTags);
+                        return new Equipment(id, liData);
                     case "StaticItem":
-                        return new StaticItem(id, _itemTags);
+                        return new StaticItem(id, liData);
                     case "Food":
-                        return new Food(id, _itemTags, num);
+                        return new Food(id, liData, num);
                     case "Map":
-                        return new AdventureMap(id, _itemTags, num);
+                        return new AdventureMap(id, liData, num);
                     case "Combat":
-                        return new CombatItem(id, _itemTags, num);
+                        return new CombatItem(id, liData, num);
                     case "Class":
-                        return new ClassItem(id, _itemTags, num);
+                        return new ClassItem(id, liData, num);
                     case "Marriage":
-                        return new MarriageItem(id, _itemTags);
+                        return new MarriageItem(id, liData);
                     case "Clothes":
-                        return new Clothes(id, _itemTags);
+                        return new Clothes(id, liData);
                 }
             }
             return null;
@@ -165,49 +164,6 @@ namespace RiverHollow.Game_Managers
         public static int GetWorkerNum()
         {
             return _dictWorkers.Count;
-        }
-
-
-        public class Recipe
-        {
-            private int _iXP;
-            public int XP => _iXP;
-            private int _iProcessingTime;
-            public int ProcessingTime => _iProcessingTime;
-            private int _iOutput;
-            public int Output => _iOutput;
-            private Dictionary<int, int> _requiredItems;
-            public Dictionary<int, int> RequiredItems { get => _requiredItems; }
-
-            public Recipe(int id, string stringData)
-            {
-                _iOutput = id;
-                _requiredItems = new Dictionary<int, int>();
-
-                string[] splitData = Util.FindTags(stringData);
-                foreach (string s in splitData)
-                {
-                    string[] tagType = s.Split(':');
-                    if (tagType[0].Equals("Time"))
-                    {
-                        _iProcessingTime = int.Parse(tagType[1]);
-                    }
-                    else if (tagType[0].Equals("XP"))
-                    {
-                        _iXP = int.Parse(tagType[1]);
-                    }
-                    else if (tagType[0].Equals("ReqItem"))
-                    {
-                        string[] itemParams = tagType[1].Split('-');
-                        _requiredItems.Add(int.Parse(itemParams[0]), int.Parse(itemParams[1]));
-                    }
-                }
-            }
-
-            public override string ToString()
-            {
-                return ObjectManager.GetItem(_iOutput).Name;
-            }
         }
     }
 }

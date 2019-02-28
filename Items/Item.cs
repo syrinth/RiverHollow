@@ -8,6 +8,7 @@ using RiverHollow.GUIObjects;
 
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Misc;
+using System.Collections.Generic;
 
 namespace RiverHollow.WorldObjects
 {
@@ -28,8 +29,8 @@ namespace RiverHollow.WorldObjects
         protected string _sName;
         public string Name => _sName;
 
-        protected Texture2D _texture;
-        public Texture2D Texture => _texture;
+        protected Texture2D _texTexture;
+        public Texture2D Texture => _texTexture;
 
         protected Vector2 _vSourcePos;
 
@@ -60,53 +61,46 @@ namespace RiverHollow.WorldObjects
 
         protected int _iSellPrice;
         public int SellPrice => _iSellPrice;
+
+        protected Dictionary<int, int> _diReqToMake;
         #endregion
         public Item() { }
 
-        public Item(int id, string[] stringData, int num)
+        public Item(int id, Dictionary<string, string> stringData, int num)
         {
             ImportBasics(stringData, id, num);
 
             _bStacks = true;
-            _texture = GameContentManager.GetTexture(@"Textures\items");
+            _texTexture = GameContentManager.GetTexture(GameContentManager.ITEM_FOLDER + "Resources");
         }
 
-        protected int ImportBasics(string[] stringData, int id, int num)
+        protected void ImportBasics(Dictionary<string, string> stringData, int id, int num)
         {
             _iNum = num;
-
             _iItemID = id;
-            GameContentManager.GetIemText(_iItemID, ref _sName, ref _sDescription);
 
-            int i = 0;
-            int totalCount = 0;
-            for(; i< stringData.Length; i++)
+            GameContentManager.GetItemText(_iItemID, ref _sName, ref _sDescription);
+
+            //Item Type
+            _eItemType = Util.ParseEnum<ItemEnum>(stringData["Type"]);
+
+            //SellPrice
+            _iSellPrice = int.Parse(stringData["Sell"]);
+
+            //Image information
+            string[] texIndices = stringData["Image"].Split('-');
+            _vSourcePos = new Vector2(int.Parse(texIndices[0]), int.Parse(texIndices[1]));
+
+            if (stringData.ContainsKey("ReqItems"))
             {
-                string[] tagType = stringData[i].Split(':');
-                if (tagType[0].Equals("Type"))
+                //Split by " " for each item set required
+                string[] split = stringData["ReqItems"].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach(string s in split)
                 {
-                    _eItemType = Util.ParseEnum<ItemEnum>(tagType[1]);
-                    totalCount++;
-                }
-                else if (tagType[0].Equals("Image"))
-                {
-                    string[] texIndices = tagType[1].Split('-');
-                    _vSourcePos = new Vector2(0 + TileSize * int.Parse(texIndices[0]), 0 + TileSize * int.Parse(texIndices[1]));
-                    totalCount++;
-                }
-                else if (tagType[0].Equals("Sell"))
-                {
-                    _iSellPrice = int.Parse(tagType[1]);
-                    totalCount++;
-                }
-
-                if(totalCount == 3)
-                {
-                    break;
+                    string[] splitData = s.Split('-');
+                    _diReqToMake[int.Parse(split[0])] = int.Parse(split[1]);
                 }
             }
-
-            return i;
         }
         //Copy Constructor
         public Item(Item item)
@@ -115,7 +109,7 @@ namespace RiverHollow.WorldObjects
             _eItemType = item.ItemType;
             _vSourcePos = item._vSourcePos;
             _sName = item.Name;
-            _texture = item.Texture;
+            _texTexture = item.Texture;
             _sDescription = item._sDescription;
             _iNum = item.Number;
             _bStacks = item.DoesItStack;
@@ -141,7 +135,7 @@ namespace RiverHollow.WorldObjects
         {
             if (_bOnMap)
             {
-                spriteBatch.Draw(_texture, new Rectangle((int)_vPosition.X, (int)_vPosition.Y, (int)_dWidth, (int)_dHeight), SourceRectangle, _c, 0, Vector2.Zero, SpriteEffects.None, (float)(Position.Y + _dHeight + (Position.X / 100)));
+                spriteBatch.Draw(_texTexture, new Rectangle((int)_vPosition.X, (int)_vPosition.Y, (int)_dWidth, (int)_dHeight), SourceRectangle, _c, 0, Vector2.Zero, SpriteEffects.None, (float)(Position.Y + _dHeight + (Position.X / 100)));
             }
         }
 
@@ -149,11 +143,11 @@ namespace RiverHollow.WorldObjects
         {
             if (LayerDepth)
             {
-                spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, (int)_dWidth, (int)_dHeight), _c, 0, Vector2.Zero, SpriteEffects.None, 99999);
+                spriteBatch.Draw(_texTexture, drawBox, new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, (int)_dWidth, (int)_dHeight), _c, 0, Vector2.Zero, SpriteEffects.None, 99999);
             }
             else
             {
-                spriteBatch.Draw(_texture, drawBox, new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, (int)_dWidth, (int)_dHeight), _c);
+                spriteBatch.Draw(_texTexture, drawBox, new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, (int)_dWidth, (int)_dHeight), _c);
             }
         }
 
@@ -220,7 +214,16 @@ namespace RiverHollow.WorldObjects
             return new Vector2(Util.GetRandomFloat(-1, 1, 3), Util.GetRandomFloat(-5, 2, 3));
         }
 
-        
+        public List<KeyValuePair<int, int>> GetIngredients()
+        {
+            List<KeyValuePair<int, int>> ret = new List<KeyValuePair<int, int>>();
+            foreach(int key in _diReqToMake.Keys)
+            {
+                ret.Add(new KeyValuePair<int, int>(key, _diReqToMake[key]));
+            }
+
+            return ret;
+        }
 
         public virtual void UseItem() { }
 
@@ -326,8 +329,8 @@ namespace RiverHollow.WorldObjects
         private int _iAttack;
         public int Attack => _iAttack; 
 
-        private int iStr;
-        public int Str => iStr;
+        private int _iStr;
+        public int Str => _iStr;
         private int _iDef;
         public int Def => _iDef;
         private int _iVit;
@@ -339,62 +342,36 @@ namespace RiverHollow.WorldObjects
         private int _iSpd;
         public int Spd => _iSpd;
 
-        public Equipment(int id, string[] stringData)
+        public Equipment(int id, Dictionary<string, string> stringData)
         {
-            int i = ImportBasics(stringData, id, 1);
+            ImportBasics(stringData, id, 1);
 
-            for (; i < stringData.Length; i++)
+
+            //EType
+            EquipType = Util.ParseEnum<EquipmentEnum>(stringData["EType"]);
+
+            if (EquipType.Equals(EquipmentEnum.Armor)) { _texTexture = GameContentManager.GetTexture(@"Textures\armor"); }
+            else if (EquipType.Equals(EquipmentEnum.Weapon)) { _texTexture = GameContentManager.GetTexture(@"Textures\weapons"); }
+
+            //ESub
+            if (EquipType == EquipmentEnum.Armor) { _eArmorType = Util.ParseEnum<ArmorEnum>(stringData["ESub"]); }
+            else if (EquipType == EquipmentEnum.Weapon) { _eWeaponType = Util.ParseEnum<WeaponEnum>(stringData["ESub"]); }
+
+            if (EquipType == EquipmentEnum.Armor)
             {
-                string[] tagType = stringData[i].Split(':');
-                if (tagType[0].Equals("EType"))
-                {
-                    EquipType = Util.ParseEnum<EquipmentEnum>(tagType[1]);
-
-                    if (EquipType.Equals(EquipmentEnum.Armor)) { _texture = GameContentManager.GetTexture(@"Textures\armor"); }
-                    else if (EquipType.Equals(EquipmentEnum.Weapon)) { _texture = GameContentManager.GetTexture(@"Textures\weapons"); }
-                }
-                else if (tagType[0].Equals("ESub"))
-                {
-                    if (EquipType == EquipmentEnum.Armor) { _eArmorType = Util.ParseEnum<ArmorEnum>(tagType[1]); }
-                    else if (EquipType == EquipmentEnum.Weapon) { _eWeaponType = Util.ParseEnum<WeaponEnum>(tagType[1]); }
-                }
-                if (tagType[0].Equals("ASlot"))
-                {
-                    _eArmorSlot = Util.ParseEnum<ArmorSlotEnum>(tagType[1]);
-                }
-                else if (tagType[0].Equals("Tier"))
-                {
-                    _iTier = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Str"))
-                {
-                    iStr = GetItemTierData(_iTier, tagType[1]);
-                }
-                else if (tagType[0].Equals("Def"))
-                {
-                    _iDef = GetItemTierData(_iTier, tagType[1]);
-                }
-                else if (tagType[0].Equals("Vit"))
-                {
-                    _iVit = GetItemTierData(_iTier, tagType[1]);
-                }
-                else if (tagType[0].Equals("Mag"))
-                {
-                    _iMag = GetItemTierData(_iTier, tagType[1]);
-                }
-                else if (tagType[0].Equals("Res"))
-                {
-                    _iRes = GetItemTierData(_iTier, tagType[1]);
-                }
-                else if (tagType[0].Equals("Spd"))
-                {
-                    _iSpd = GetItemTierData(_iTier, tagType[1]);
-                }
-                else if (tagType[0].Equals("Atk"))
-                {
-                    _iAttack = GetItemTierData(_iTier, tagType[1], false);
-                }
+                //Armor Slot
+                _eArmorSlot = Util.ParseEnum<ArmorSlotEnum>(stringData["ASlot"]);
             }
+
+            //Stats
+            _iTier = int.Parse(stringData["Tier"]);
+            if (stringData.ContainsKey("Str")) { _iStr = GetItemTierData(_iTier, stringData["Str"]); }
+            if (stringData.ContainsKey("Def")) { _iDef = GetItemTierData(_iTier, stringData["Def"]); }
+            if (stringData.ContainsKey("Vit")) { _iVit = GetItemTierData(_iTier, stringData["Vit"]); }
+            if (stringData.ContainsKey("Mag")) { _iMag = GetItemTierData(_iTier, stringData["Mag"]); }
+            if (stringData.ContainsKey("Res")) { _iRes = GetItemTierData(_iTier, stringData["Res"]); }
+            if (stringData.ContainsKey("Spd")) { _iSpd = GetItemTierData(_iTier, stringData["Spd"]); }
+            if (stringData.ContainsKey("Atk1")) { _iAttack = GetItemTierData(_iTier, stringData["Atk1"], false); }
         }
 
         private int GetItemTierData(int tier, string modifier, bool isStat = true)
@@ -425,7 +402,7 @@ namespace RiverHollow.WorldObjects
             string rv = base.GetDescription();
             rv += System.Environment.NewLine;
             if (Attack > 0) { rv += " Attack: +" + _iAttack + " "; }
-            if (Str > 0) { rv += " Str: +" + iStr + " "; }
+            if (Str > 0) { rv += " Str: +" + _iStr + " "; }
             if (Def > 0) { rv += " Def: +" + _iDef + " "; }
             if (Mag > 0) { rv += " Mag: +" + _iMag + " "; }
             if (Res > 0) { rv += " Res: +" + _iRes + " "; }
@@ -445,39 +422,29 @@ namespace RiverHollow.WorldObjects
         private AnimatedSprite _mainSprite;
         public AnimatedSprite Sprite => _mainSprite;
 
-        public Clothes(int id, string[] stringData)
+        public Clothes(int id, Dictionary<string, string> stringData)
         {
-            int i = ImportBasics(stringData, id, 1);
+            ImportBasics(stringData, id, 1);
 
-            _texture = GameContentManager.GetTexture(@"Textures\items");
+            _texTexture = GameContentManager.GetTexture(@"Textures\items");
 
             _bStacks = false;
             int row = 0;
 
-            for (; i < stringData.Length; i++)
-            {
-                string[] tagType = stringData[i].Split(':');
-                if (tagType[0].Equals("CType"))
-                {
-                    _clothesType = Util.ParseEnum<ClothesEnum>(tagType[1]);
-                }
-                else if (tagType[0].Equals("Row"))
-                {
-                    row = int.Parse(tagType[1]);
-                }
-            }
+            _clothesType = Util.ParseEnum<ClothesEnum>(stringData["CType"]);
+            row = int.Parse(stringData["Row"]);
 
             int startX = 0;
             int startY = TileSize * row * 2;
             _mainSprite = new AnimatedSprite(@"Textures\texClothes", true);
             _mainSprite.AddAnimation(WActorWalkAnim.WalkDown, TileSize, TileSize * 2, 3, 0.2f, startX, startY);
             _mainSprite.AddAnimation(WActorBaseAnim.IdleDown, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize, startY);
-            _mainSprite.AddAnimation(WActorWalkAnim.WalkUp, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 3, startY);
-            _mainSprite.AddAnimation(WActorBaseAnim.IdleUp, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 4, startY);
-            _mainSprite.AddAnimation(WActorWalkAnim.WalkLeft, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 6, startY);
-            _mainSprite.AddAnimation(WActorBaseAnim.IdleLeft, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 7, startY);
-            _mainSprite.AddAnimation(WActorWalkAnim.WalkRight, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 9, startY);
-            _mainSprite.AddAnimation(WActorBaseAnim.IdleRight, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 10, startY);
+            _mainSprite.AddAnimation(WActorWalkAnim.WalkRight, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 3, startY);
+            _mainSprite.AddAnimation(WActorBaseAnim.IdleRight, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 4, startY);
+            _mainSprite.AddAnimation(WActorWalkAnim.WalkUp, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 6, startY);
+            _mainSprite.AddAnimation(WActorBaseAnim.IdleUp, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 7, startY);
+            _mainSprite.AddAnimation(WActorWalkAnim.WalkLeft, TileSize, TileSize * 2, 3, 0.2f, startX + TileSize * 9, startY);
+            _mainSprite.AddAnimation(WActorBaseAnim.IdleLeft, TileSize, TileSize * 2, 1, 0.2f, startX + TileSize * 10, startY);
         }
 
         public void SetSpritePosition(Vector2 Position)
@@ -510,27 +477,15 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        public Tool(int id, string[] stringData)
+        public Tool(int id, Dictionary<string, string> stringData)
         {
-            int i = ImportBasics(stringData, id, 1);
+            ImportBasics(stringData, id, 1);
 
-            for (; i < stringData.Length; i++)
-            {
-                string[] tagType = stringData[i].Split(':');
-                if (tagType[0].Equals("ToolType"))
-                {
-                    ToolType = Util.ParseEnum<ToolEnum>(tagType[1]);
-                }
-                else if (tagType[0].Equals("Dmg"))
-                {
-                    _dmgValue = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Stam"))
-                {
-                    _staminaCost = int.Parse(tagType[1]);
-                }         
-            }
-            _texture = GameContentManager.GetTexture(@"Textures\tools");
+            ToolType = Util.ParseEnum<ToolEnum>(stringData["ToolType"]);
+            _dmgValue = int.Parse(stringData["Dmg"]);
+            _staminaCost = int.Parse(stringData["Stam"]);
+
+            _texTexture = GameContentManager.GetTexture(@"Textures\tools");
 
             _iColTexSize = 128;
             _iRowTexSize = TileSize;
@@ -561,25 +516,16 @@ namespace RiverHollow.WorldObjects
         private int _health;
         public int Health { get => _health; }
 
-        public Food(int id, string[] stringData, int num)
+        public Food(int id, Dictionary<string, string> stringData, int num)
         {
-            int i = ImportBasics(stringData, id, num);
+            _texTexture = GameContentManager.GetTexture(GameContentManager.ITEM_FOLDER + "Food");
 
-            for (; i < stringData.Length; i++)
-            {
-                string[] tagType = stringData[i].Split(':');
-                if (tagType[0].Equals("Stam"))
-                {
-                    _stam = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Hp"))
-                {
-                    _health = int.Parse(tagType[1]);
-                }
-            }
+            ImportBasics(stringData, id, num);
+
+            if (stringData.ContainsKey("Stam")) { _stam = int.Parse(stringData["Stam"]); }
+            if (stringData.ContainsKey("Hp")) { _health = int.Parse(stringData["Hp"]); }
 
             _bStacks = true;
-            _texture = GameContentManager.GetTexture(@"Textures\items");
         }
 
         public override string GetDescription()
@@ -609,14 +555,14 @@ namespace RiverHollow.WorldObjects
     {
         private int _difficulty;
         public int Difficulty { get => _difficulty; }
-        public AdventureMap(int id, string[] stringData, int num)
+        public AdventureMap(int id, Dictionary<string, string> stringData, int num)
         {
             RHRandom r = new RHRandom();
-            int i = ImportBasics(stringData, id, num);
+            ImportBasics(stringData, id, num);
             _difficulty = r.Next(4, 5);
 
             _bStacks = false;
-            _texture = GameContentManager.GetTexture(@"Textures\items");
+            _texTexture = GameContentManager.GetTexture(@"Textures\items");
         }
 
         public override string GetDescription()
@@ -631,13 +577,13 @@ namespace RiverHollow.WorldObjects
 
     public class MarriageItem : Item
     {
-        public MarriageItem(int id, string[] stringData)
+        public MarriageItem(int id, Dictionary<string, string> stringData)
         {
             ImportBasics(stringData, id, 1);
             _eItemType = ItemEnum.Marriage;
             _iNum = 1;
             _bStacks = false;
-            _texture = GameContentManager.GetTexture(@"Textures\items");
+            _texTexture = GameContentManager.GetTexture(@"Textures\items");
         }
     }
 
@@ -654,37 +600,18 @@ namespace RiverHollow.WorldObjects
 
         public bool Helpful;
 
-        public CombatItem(int id, string[] stringData, int num)
+        public CombatItem(int id, Dictionary<string, string> stringData, int num)
         {
-            int i = ImportBasics(stringData, id, num);
+            ImportBasics(stringData, id, num);
 
-            for (; i < stringData.Length; i++)
-            {
-                string[] tagType = stringData[i].Split(':');
-                if (tagType[0].Equals("CombatType"))
-                {
-                    Helpful = tagType[1].Equals("Helpful");
-                }
-                else if (tagType[0].Equals("Status"))
-                {
-                    _targetsCondition = Util.ParseEnum<ConditionEnum>(tagType[1]);
-                }
-                else if (tagType[0].Equals("Stam"))
-                {
-                    _iStam = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Hp"))
-                {
-                    _iHealth = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Mana"))
-                {
-                    _iMana = int.Parse(tagType[1]);
-                }
-            }
+            Helpful = stringData["CombatType"].Equals("Helpful");
+            _targetsCondition = Util.ParseEnum<ConditionEnum>(stringData["Status"]);
+            _iStam = int.Parse(stringData["Stam"]);
+            _iHealth = int.Parse(stringData["Hp"]);
+            _iMana = int.Parse(stringData["Mana"]);
 
             _bStacks = true;
-            _texture = GameContentManager.GetTexture(@"Textures\items");
+            _texTexture = GameContentManager.GetTexture(@"Textures\items");
         }
 
         public override string GetDescription()
@@ -705,12 +632,12 @@ namespace RiverHollow.WorldObjects
     {
         private int _iClassID;
 
-        public ClassItem(int id, string[] stringData, int num)
+        public ClassItem(int id, Dictionary<string, string> stringData, int num)
         {
-            int i = ImportBasics(stringData, id, num);
+            ImportBasics(stringData, id, num);
 
             _bStacks = false;
-            _texture = GameContentManager.GetTexture(@"Textures\items");
+            _texTexture = GameContentManager.GetTexture(@"Textures\items");
         }
 
         public void SetClassChange(int i)

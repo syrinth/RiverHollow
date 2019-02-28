@@ -44,11 +44,11 @@
     <!--<200> Machines-->
     <Item>
       <Key>200</Key>
-      <Value>[Type:Processor][Image:0-0][Process:80-5-85-10][Process:81-5-86-20][Process:82-5-87-40][Process:83-5-88-80][Process:84-5-89-90]</Value>
+      <Value>[Type:Processor][Image:0-0][Makes:85-10][Makes:86-10][Makes:87-10][Makes:88-10][Makes:89-10]</Value>
     </Item>
     <Item>
       <Key>201</Key>
-      <Value>[Type:Crafter][Image:0-2][Recipes:9-5]</Value>
+      <Value>[Type:Crafter][Image:0-2][Makes:190-5]</Value>
     </Item>
     <Item>
       <Key>299</Key>

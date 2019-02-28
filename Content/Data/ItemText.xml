@@ -15,12 +15,12 @@
       <Value>Wood/Wood, it builds stuff</Value>
     </Item>
     <Item>
-      <Key>7</Key>
-      <Value>Apple/Nomnom</Value>
-    </Item>
-    <Item>
       <Key>8</Key>
       <Value>Adventure Map/Off to find adventures!</Value>
+    </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>Peat/Saying it smells earthy is a kindness.</Value>
     </Item>
     <!--<20-24> Tools-->
     <Item>
@@ -150,6 +150,27 @@
     <Item>
       <Key>402</Key>
       <Value>Witch's Hat/A fashionable hat</Value>
+    </Item>
+    <!--<500> Food-->
+    <Item>
+      <Key>500</Key>
+      <Value>Meat/A slice of meat, used for cooking</Value>
+    </Item>
+    <Item>
+      <Key>501</Key>
+      <Value>Egg/A single plain egg, you think it's clean...</Value>
+    </Item>
+    <Item>
+      <Key>502</Key>
+      <Value>Flour/Freshly milled flour, not delicious... yet.</Value>
+    </Item>
+    <Item>
+      <Key>503</Key>
+      <Value>Apple/Nomnom</Value>
+    </Item>
+    <Item>
+      <Key>504</Key>
+      <Value>Strawberry/Delicious and fruity</Value>
     </Item>
     <!--<600> Weapons-->
     <!--Wizard-->

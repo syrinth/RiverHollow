@@ -10,6 +10,7 @@ namespace RiverHollow.Game_Managers
     {
         public const string ACTOR_FOLDER = @"Textures\Actors\";
         public const string BUILDING_FOLDER = @"Textures\Buildings\";
+        public const string ITEM_FOLDER = @"Textures\Items\";
 
         private static ContentManager _content;
         private static Dictionary<string, Texture2D> _diTextures;
@@ -45,6 +46,7 @@ namespace RiverHollow.Game_Managers
             LoadIcons(_content);
             LoadMerchandise(_content);
             AddDirectoryTextures(Content, BUILDING_FOLDER);
+            AddDirectoryTextures(Content, ITEM_FOLDER);
 
             LoadFont(_content);
         }
@@ -145,7 +147,13 @@ namespace RiverHollow.Game_Managers
 
         public static string GetGameText(string key)
         {
-            return _diGameText[key];
+            string rv = string.Empty;
+            if (_diGameText.ContainsKey(key))
+            {
+                rv =  _diGameText[key];
+            }
+
+            return rv;
         }
 
         public static Dictionary<int, string> GetMerchandise(string file)
@@ -153,7 +161,7 @@ namespace RiverHollow.Game_Managers
             return _diMerchandise[file];
         }
 
-        public static void GetIemText(int id, ref string name, ref string desc)
+        public static void GetItemText(int id, ref string name, ref string desc)
         {
             name = _diItemText[id].Split('/')[0];
             desc = _diItemText[id].Split('/')[1];

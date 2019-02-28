@@ -631,15 +631,15 @@ namespace RiverHollow.WorldObjects
 
             public class Crafter : Machine
             {
-                Dictionary<int, Recipe> _diCrafting;
-                public Dictionary<int, Recipe> CraftList => _diCrafting;
-                Recipe _currentlyMaking;
+                Dictionary<int, int> _diCrafting;
+                public Dictionary<int, int> CraftList => _diCrafting;
+                int _iCurrentlyMaking = -1;
 
                 public Crafter(int id, string[] stringData) : base()
                 {
                     _id = id;
                     Type = ObjectType.Crafter;
-                    _diCrafting = new Dictionary<int, Recipe>();
+                    _diCrafting = new Dictionary<int, int>();
                     _dProcessedTime = -1;
                     _heldItem = null;
 
@@ -650,13 +650,10 @@ namespace RiverHollow.WorldObjects
                         {
                             ReadSourcePos(tagType[1]);
                         }
-                        else if (tagType[0].Equals("Recipes"))
+                        else if (tagType[0].Equals("Makes"))
                         {
                             string[] processStr = tagType[1].Split('-');
-                            foreach (string str in processStr)
-                            {
-                                _diCrafting.Add(int.Parse(str), ObjectManager.DictCrafting[int.Parse(str)]);
-                            }
+                            _diCrafting.Add(int.Parse(processStr[0]), int.Parse(processStr[1]));
                         }
                     }         
 
@@ -665,22 +662,22 @@ namespace RiverHollow.WorldObjects
 
                 public override void Update(GameTime gameTime)
                 {
-                    if (_currentlyMaking != null)
+                    if (_iCurrentlyMaking != -1)
                     {
                         _sprite.Update(gameTime);
                         _dProcessedTime += gameTime.ElapsedGameTime.TotalSeconds;
-                        if (_dProcessedTime >= _currentlyMaking.ProcessingTime)
+                        if (_dProcessedTime >= _diCrafting[_iCurrentlyMaking])
                         {
                             SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition);
-                            _heldItem = ObjectManager.GetItem(_currentlyMaking.Output);
+                            _heldItem = ObjectManager.GetItem(_iCurrentlyMaking);
                             _dProcessedTime = -1;
-                            _currentlyMaking = null;
+                            _iCurrentlyMaking = -1;
                             _sprite.SetCurrentAnimation(MachineAnimEnum.Idle);
                         }
                     }
                 }
 
-                public override bool Processing() { return _currentlyMaking != null; }
+                public override bool Processing() { return _iCurrentlyMaking != -1; }
                 public override void ProcessClick()
                 {
                     GUIManager.SetScreen(new CraftingScreen(this));
@@ -688,7 +685,7 @@ namespace RiverHollow.WorldObjects
 
                 public void MakeChosenItem(int itemID)
                 {
-                    _currentlyMaking = _diCrafting[itemID];
+                    _iCurrentlyMaking = _diCrafting[itemID];
                     _sprite.SetCurrentAnimation(MachineAnimEnum.Working);
                 }
 
@@ -700,7 +697,7 @@ namespace RiverHollow.WorldObjects
                         x = (int)this.MapPosition.X,
                         y = (int)this.MapPosition.Y,
                         processedTime = this.ProcessedTime,
-                        currentItemID = (this._currentlyMaking == null) ? -1 : this._currentlyMaking.Output,
+                        currentItemID = this._iCurrentlyMaking,
                         heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID
                     };
 
@@ -711,10 +708,10 @@ namespace RiverHollow.WorldObjects
                     _id = mac.ID;
                     MapPosition = new Vector2(mac.x, mac.y);
                     _dProcessedTime = mac.processedTime;
-                    _currentlyMaking = (mac.currentItemID == -1) ? null : _diCrafting[mac.currentItemID];
+                    _iCurrentlyMaking = mac.currentItemID;
                     _heldItem = ObjectManager.GetItem(mac.heldItemID);
 
-                    if (_currentlyMaking != null) { _sprite.SetCurrentAnimation(MachineAnimEnum.Working); }
+                    if (_iCurrentlyMaking != -1) { _sprite.SetCurrentAnimation(MachineAnimEnum.Working); }
                 }
             }
         }

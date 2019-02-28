@@ -42,6 +42,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             GameManager.gmNPC = talker;
             Position(new Vector2(Position().X, RiverHollow.ScreenHeight - Height - SpaceFromBottom));
 
+            _giPortrait = new GUIImage(talker.PortraitRectangle, talker.PortraitRectangle.Width, talker.PortraitRectangle.Height, talker.Portrait);
+            _giPortrait = new GUIImage(talker.PortraitRectangle, talker.PortraitRectangle.Width, talker.PortraitRectangle.Height, talker.Portrait);
+            _giPortrait.SetScale(GameManager.Scale);
+            _giPortrait.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.Left);
+
             Setup(selectionText);
             PostParse();
         }

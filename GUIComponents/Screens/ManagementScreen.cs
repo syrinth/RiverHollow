@@ -431,11 +431,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _gSpd.SetText("Spd: " + _character.Combat.StatSpd);
 
                     string strAction = "Idle";
-                    if (_character.CurrentlyMaking != null)
-                    {
-                        strAction = "Making " + _character.CurrentlyMaking.ToString() + ", done in " + (int)(_character.CurrentlyMaking.ProcessingTime-_character.ProcessedTime) + " minutes";
-                    }
-                    else if (_character.Adventuring)
+                    if (_character.Adventuring)
                     {
                         strAction = "Adventuring";
                     }
