@@ -102,7 +102,7 @@ namespace RiverHollow.Buildings
                 {
                     string[] dimensions = tagType[1].Split('-');
                     _width = int.Parse(dimensions[0]);
-                    _height = int.Parse(dimensions[1]);
+                    _iHeight = int.Parse(dimensions[1]);
                     totalCount++;
                 }
                 else if (tagType[0].Equals("FirstBase"))

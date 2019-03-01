@@ -62,11 +62,12 @@ namespace RiverHollow
             SoundManager.LoadContent(Content);
             GameContentManager.LoadContent(Content);
             GameManager.LoadContent(Content);
+            MapManager.LoadContent(Content, GraphicsDevice);
             ObjectManager.LoadContent(Content);
             GUIManager.LoadContent();
-            MapManager.LoadContent(Content, GraphicsDevice);
+            
             //TravelManager.Calculate();
-            ActorManager.LoadContent(Content);
+            ObjectManager.LoadContent(Content);
             DropManager.LoadContent(Content);
             CutsceneManager.LoadContent(Content);
             GameManager.LoadQuests(Content);
@@ -286,7 +287,7 @@ namespace RiverHollow
             {
                 b.Rollover();
             }
-            ActorManager.RollOver();
+            ObjectManager.RollOver();
             MapManager.Rollover();
         }
 

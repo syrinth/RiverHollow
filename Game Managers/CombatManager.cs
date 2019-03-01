@@ -686,7 +686,7 @@ namespace RiverHollow.Game_Managers
                     {
                         List<CombatTile> targets = SelectedAction.GetTargetTiles();
                         ActiveCharacter = actSummon;
-                        SelectedAction = new ChosenAction((CombatAction)ActorManager.GetActionByIndex(1));
+                        SelectedAction = new ChosenAction((CombatAction)ObjectManager.GetActionByIndex(1));
                         SelectedAction.SetTargetTiles(targets);
                     }
                     else if (actSummon.TwinCast && SelectedAction.IsSpell() && !SelectedAction.IsSummonSpell())

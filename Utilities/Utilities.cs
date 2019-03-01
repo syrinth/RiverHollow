@@ -132,7 +132,7 @@ namespace RiverHollow.Misc
                     if (int.TryParse(nameSections[i], out int val))
                     {
                         if (val == 0) { nameSections[i] = name; }
-                        else { nameSections[i] = ActorManager.GetCharacterNameByIndex(val); }
+                        else { nameSections[i] = ObjectManager.GetCharacterNameByIndex(val); }
                     }
                     else if (nameSections[i] == "^") { nameSections[i] = PlayerManager.Name; }
 

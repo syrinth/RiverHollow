@@ -23,7 +23,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _friendshipWindow = new GUIWindow(GUIWindow.RedWin, WIDTH, HEIGHT);
             _friendshipWindow.CenterOnScreen();
 
-            foreach (Villager n in ActorManager.DiNPC.Values)
+            foreach (Villager n in ObjectManager.DiNPC.Values)
             {
                 FriendshipBox f = new FriendshipBox(n, _friendshipWindow.MidWidth());
 

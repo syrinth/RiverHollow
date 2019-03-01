@@ -6,6 +6,7 @@ using RiverHollow.Game_Managers;
 
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Buildings;
+using RiverHollow.SpriteAnimations;
 
 namespace RiverHollow.GUIObjects
 {
@@ -124,18 +125,25 @@ namespace RiverHollow.GUIObjects
 
         public static void DrawBuilding(SpriteBatch spriteBatch)
         {
-            if (GameManager.Scrying())
+            if (GameManager.Scrying() && _heldBuilding != null)
             {
-                if (_heldBuilding != null)
-                {
-                    Vector2 mousePosition = GetTranslatedPosition();
-                    Texture2D drawIt = _heldBuilding.Texture;
-                    Rectangle drawRectangle = new Rectangle(((int)((mousePosition.X - drawIt.Width / 2) / TileSize)) * TileSize, ((int)((mousePosition.Y - drawIt.Height / 2) / TileSize)) * TileSize, drawIt.Width, drawIt.Height);
-                    Rectangle source = new Rectangle(0, 0, drawIt.Width, drawIt.Height);
+                Vector2 mousePosition = GetTranslatedPosition();
+                Texture2D drawIt = _heldBuilding.Texture;
+                Rectangle drawRectangle = new Rectangle(((int)((mousePosition.X - drawIt.Width / 2) / TileSize)) * TileSize, ((int)((mousePosition.Y - drawIt.Height / 2) / TileSize)) * TileSize, drawIt.Width, drawIt.Height);
+                Rectangle source = new Rectangle(0, 0, drawIt.Width, drawIt.Height);
 
-                    _heldBuilding.SetCoordinates(new Vector2(drawRectangle.X, drawRectangle.Y));
-                    spriteBatch.Draw(drawIt, drawRectangle, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, mousePosition.Y + drawIt.Height);
-                }
+                _heldBuilding.SetCoordinates(new Vector2(drawRectangle.X, drawRectangle.Y));
+                spriteBatch.Draw(drawIt, drawRectangle, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, mousePosition.Y + drawIt.Height);
+            }
+        }
+
+        public static void DrawPotentialWorldObject(SpriteBatch spriteBatch)
+        {
+            StaticItem it = InventoryManager.GetCurrentStaticItem();
+            if (it != null)
+            {
+                WorldItem obj = it.GetWorldItem();
+                obj.Draw(spriteBatch);
             }
         }
 

@@ -29,34 +29,21 @@ namespace RiverHollow.Actors.CombatStuff
         public Vector2 IconGrid => _vIconGrid;
 
         public MenuAction() { }
-        public MenuAction(int id, string[] stringData)
+        public MenuAction(int id, Dictionary<string, string> stringData)
         {
             ImportBasics(stringData, id);
         }
 
-        protected void ImportBasics(string[] stringData, int id)
+        protected void ImportBasics(Dictionary<string, string> stringData, int id)
         {
             _id = id;
-
             GameContentManager.GetActionText(_id, ref _name, ref _description);
 
-            foreach (string s in stringData)
-            {
-                string[] tagType = s.Split(':');
-                if (tagType[0].Equals("Type"))
-                {
-                    _actionType = Util.ParseEnum<ActionEnum>(tagType[1]);
-                }
-                else if (tagType[0].Equals("Menu"))
-                {
-                    _menuType = Util.ParseEnum<MenuEnum>(tagType[1]);
-                }
-                else if (tagType[0].Equals("Icon"))
-                {
-                    string[] tags = tagType[1].Split('-');
-                    _vIconGrid = new Vector2(int.Parse(tags[0]), int.Parse(tags[1]));
-                }
-            }
+            _actionType = Util.ParseEnum<ActionEnum>(stringData["Type"]);
+            _menuType = Util.ParseEnum<MenuEnum>(stringData["Menu"]);
+
+            string[] tags = stringData["Icon"].Split('-');
+            _vIconGrid = new Vector2(int.Parse(tags[0]), int.Parse(tags[1]));
         }
 
         public bool IsMenu() { return _actionType == ActionEnum.Menu; }
@@ -122,7 +109,7 @@ namespace RiverHollow.Actors.CombatStuff
         Summon counteringSummon;
 
         public GUISprite Sprite;
-        public CombatAction(int id, string[] stringData)
+        public CombatAction(int id, Dictionary<string, string> stringData)
         {
             TileTargetList = new List<CombatManager.CombatTile>();
             _liCondition = new List<ConditionEnum>();
@@ -134,166 +121,144 @@ namespace RiverHollow.Actors.CombatStuff
             ImportBasics(id, stringData);
         }
 
-        protected void ImportBasics(int id, string[] stringData)
+        protected void ImportBasics(int id, Dictionary<string, string> stringData)
         {
             _id = id;
             GameContentManager.GetActionText(_id, ref _name, ref _description);
 
-            //This is where we parse for tags
-            foreach (string s in stringData)
+            _actionType = Util.ParseEnum<ActionEnum>(stringData["Type"]);
+            if (stringData.ContainsKey("Element")){ _element = Util.ParseEnum<ElementEnum>(stringData["Element"]); }
+            if (stringData.ContainsKey("Target")) { _target = Util.ParseEnum<TargetEnum>(stringData["Target"]); }
+            if (stringData.ContainsKey("Range")) { _range = Util.ParseEnum<RangeEnum>(stringData["Range"]); }
+            if (stringData.ContainsKey("Area")) { _areaOfEffect = Util.ParseEnum<AreaEffectEnum>(stringData["Area"]); }
+            if (stringData.ContainsKey("Charge")) { _iChargeCost = int.Parse(stringData["Charge"]); }
+            if (stringData.ContainsKey("Size")) { _iSize = int.Parse(stringData["Size"]); }
+
+            if (stringData.ContainsKey("Icon"))
             {
-                string[] tagType = s.Split(':');
-                //Parsing for important data
-                if (tagType[0].Equals("Type"))
+                string[] tags = stringData["Icon"].Split('-');
+                _vIconGrid = new Vector2(int.Parse(tags[0]), int.Parse(tags[1]));
+            }
+
+            //Get the Effects
+            if (stringData.ContainsKey("Effect"))
+            {
+                string[] tags = stringData["Effect"].Split(' ');
+                foreach (string tag in tags)
                 {
-                    _actionType = Util.ParseEnum<ActionEnum>(tagType[1]);
-                }
-                else if (tagType[0].Equals("Element"))
-                {
-                    _element = Util.ParseEnum<ElementEnum>(tagType[1]);
-                }
-                else if (tagType[0].Equals("Icon"))
-                {
-                    string[] tags = tagType[1].Split('-');
-                    _vIconGrid = new Vector2(int.Parse(tags[0]), int.Parse(tags[1]));
-                }
-                else if (tagType[0].Equals("Target"))
-                {
-                    _target = Util.ParseEnum<TargetEnum>(tagType[1]);
-                }
-                else if (tagType[0].Equals("Range"))
-                {
-                    _range = Util.ParseEnum<RangeEnum>(tagType[1]);
-                }
-                else if (tagType[0].Equals("Area"))
-                {
-                    _areaOfEffect = Util.ParseEnum<AreaEffectEnum>(tagType[1]);
-                }
-                else if (tagType[0].Equals("Charge"))
-                {
-                    _iChargeCost = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Size"))
-                {
-                    _iSize = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Effect"))
-                {
-                    string[] tags = tagType[1].Split(' ');
-                    foreach (string tag in tags)
+                    string[] parse = tag.Split('-');
+                    if (parse.Length > 1)
                     {
-                        string[] parse = tag.Split('-');
-                        if (parse.Length > 1)
+                        if (parse[0] == "P")
                         {
-                            if (parse[0] == "P")
-                            {
-                                _iPotency = int.Parse(parse[1]);
-                            }
-                            else if (parse[0] == "Harm")
-                            {
-                                _bHarm = true;
-                            }
-                            else if (parse[0] == "Heal")
-                            {
-                                _bHeal = true;
-                            }
-                            else if (parse[0] == "Cost")
-                            {
-                                _mpCost = int.Parse(parse[1]);
-                            }
-                            else if (parse[0] == "Move")
-                            {
-                                _forceMove = Util.ParseEnum<ForceMoveEnum>(parse[1]);
-                                _iMoveDistance = int.Parse(parse[2]);
-                            }
-                            else if (parse[0] == "Status")
-                            {
-                                for (int j = 1; j < parse.Length; j++)
-                                {
-                                    _liCondition.Add(Util.ParseEnum<ConditionEnum>(parse[j]));
-                                }
-                            }
-                            else if (parse[0] == "Buff")
-                            {
-                                BuffData buff = new BuffData() { BuffID = int.Parse(parse[1]), Duration = int.Parse(parse[2]), Tags = parse[3] };
-                                if(buff.Tags == "DoT")
-                                {
-                                    buff.Potency = _iPotency;
-                                }
-                                buff.Sprite = Sprite;
-                                _liBuffs.Add(buff);
-                            }
-                            else if (parse[0] == "Bonus")
-                            {
-                                _bonusType = Util.ParseEnum<PotencyBonusEnum>(parse[1]);
-                            }
-                            _effectTags.Add(parse[0]);
+                            _iPotency = int.Parse(parse[1]);
                         }
-                        else
+                        else if (parse[0] == "Harm")
                         {
-                            if (parse[0] == "Summon")
-                            {
-                                _summon = new Summon();
-
-                                for (int summonTags = 2; summonTags < tags.Length; summonTags++)
-                                {
-                                    if (tags[summonTags].Equals("TwinCast"))
-                                    {
-                                        _summon.SetTwincast();
-                                    }
-                                    else if (tags[summonTags].Equals("Aggressive"))
-                                    {
-                                        _summon.SetAggressive();
-                                    }
-                                    else if (tags[summonTags].Equals("Defensive"))
-                                    {
-                                        _summon.SetDefensive();
-                                    }
-                                    else if (tags[summonTags].Equals("Counter"))
-                                    {
-                                        _summon.Counter = true;
-                                    }
-                                    else if (tags[summonTags].StartsWith("Element"))
-                                    {
-                                        _summon.SetElement(Util.ParseEnum<ElementEnum>(tags[summonTags].Split('-')[1]));
-                                    }
-                                }
-                            }
-                            
-                            _effectTags.Add(tag);
+                            _bHarm = true;
                         }
+                        else if (parse[0] == "Heal")
+                        {
+                            _bHeal = true;
+                        }
+                        else if (parse[0] == "Cost")
+                        {
+                            _mpCost = int.Parse(parse[1]);
+                        }
+                        else if (parse[0] == "Move")
+                        {
+                            _forceMove = Util.ParseEnum<ForceMoveEnum>(parse[1]);
+                            _iMoveDistance = int.Parse(parse[2]);
+                        }
+                        else if (parse[0] == "Status")
+                        {
+                            for (int j = 1; j < parse.Length; j++)
+                            {
+                                _liCondition.Add(Util.ParseEnum<ConditionEnum>(parse[j]));
+                            }
+                        }
+                        else if (parse[0] == "Buff")
+                        {
+                            BuffData buff = new BuffData() { BuffID = int.Parse(parse[1]), Duration = int.Parse(parse[2]), Tags = parse[3] };
+                            if (buff.Tags == "DoT")
+                            {
+                                buff.Potency = _iPotency;
+                            }
+                            buff.Sprite = Sprite;
+                            _liBuffs.Add(buff);
+                        }
+                        else if (parse[0] == "Bonus")
+                        {
+                            _bonusType = Util.ParseEnum<PotencyBonusEnum>(parse[1]);
+                        }
+                        _effectTags.Add(parse[0]);
                     }
-                }
-                else if (tagType[0].Equals("Action"))
-                {
-                    _actionTags.AddRange(tagType[1].Split(' '));
-                    _actionTags.Add("End");
-                }
-                else if (tagType[0].Equals("Animation"))
-                {
-                    string[] parse = tagType[1].Split('-');
-                    int i = 0;
-                    _sAnimation = @"Textures\ActionEffects\" + parse[i++];
-                    _iAnimWidth = int.Parse(parse[i++]);
-                    _iAnimHeight = int.Parse(parse[i++]);
-                    _iFrames = int.Parse(parse[i++]);
-                    _fFrameSpeed = float.Parse(parse[i++]);
-                    if (parse.Length == i + 1)
+                    else
                     {
-                        _iAnimOffset = int.Parse(parse[i++]);
+                        if (parse[0] == "Summon")
+                        {
+                            _summon = new Summon();
+
+                            for (int summonTags = 2; summonTags < tags.Length; summonTags++)
+                            {
+                                if (tags[summonTags].Equals("TwinCast"))
+                                {
+                                    _summon.SetTwincast();
+                                }
+                                else if (tags[summonTags].Equals("Aggressive"))
+                                {
+                                    _summon.SetAggressive();
+                                }
+                                else if (tags[summonTags].Equals("Defensive"))
+                                {
+                                    _summon.SetDefensive();
+                                }
+                                else if (tags[summonTags].Equals("Counter"))
+                                {
+                                    _summon.Counter = true;
+                                }
+                                else if (tags[summonTags].StartsWith("Element"))
+                                {
+                                    _summon.SetElement(Util.ParseEnum<ElementEnum>(tags[summonTags].Split('-')[1]));
+                                }
+                            }
+                        }
+
+                        _effectTags.Add(tag);
                     }
-
-                    AnimatedSprite sprite = new AnimatedSprite(_sAnimation);
-                    sprite.AddAnimation(GenAnimEnum.Play, _iAnimWidth, _iAnimHeight, _iFrames, _fFrameSpeed);
-                    sprite.SetCurrentAnimation(GenAnimEnum.Play);
-                    sprite.IsAnimating = false;
-                    sprite.SetScale(CombatManager.CombatScale);
-                    sprite.PlaysOnce = true;
-
-                    Sprite = new GUISprite(sprite);
                 }
             }
 
+            //Action tags
+            if (stringData.ContainsKey("Action")){
+                _actionTags.AddRange(stringData["Action"].Split(' '));
+                _actionTags.Add("End");
+            }
+
+            //Animation tags
+            if (stringData.ContainsKey("Animation"))
+            {
+                string[] parse = stringData["Animation"].Split('-');
+                int i = 0;
+                _sAnimation = @"Textures\ActionEffects\" + parse[i++];
+                _iAnimWidth = int.Parse(parse[i++]);
+                _iAnimHeight = int.Parse(parse[i++]);
+                _iFrames = int.Parse(parse[i++]);
+                _fFrameSpeed = float.Parse(parse[i++]);
+                if (parse.Length == i + 1)
+                {
+                    _iAnimOffset = int.Parse(parse[i++]);
+                }
+
+                AnimatedSprite sprite = new AnimatedSprite(_sAnimation);
+                sprite.AddAnimation(GenAnimEnum.Play, _iAnimWidth, _iAnimHeight, _iFrames, _fFrameSpeed);
+                sprite.SetCurrentAnimation(GenAnimEnum.Play);
+                sprite.IsAnimating = false;
+                sprite.SetScale(CombatManager.CombatScale);
+                sprite.PlaysOnce = true;
+
+                Sprite = new GUISprite(sprite);
+            }
         }
 
         //Sets the _used tag to be true so that it's known that we've started using it
@@ -310,7 +275,7 @@ namespace RiverHollow.Actors.CombatStuff
                 Buff b = null;
                 foreach (BuffData data in _liBuffs)
                 {
-                    b = ActorManager.GetBuffByIndex(data.BuffID);
+                    b = ObjectManager.GetBuffByIndex(data.BuffID);
                     b.Duration = data.Duration;
                     b.Potency = data.Potency;
                     b.Caster = SkillUser;
@@ -457,7 +422,7 @@ namespace RiverHollow.Actors.CombatStuff
                     Buff b = null;
                     foreach (BuffData data in _liBuffs)
                     {
-                        b = ActorManager.GetBuffByIndex(data.BuffID);
+                        b = ObjectManager.GetBuffByIndex(data.BuffID);
                         b.Duration = data.Duration;
                         b.Caster = SkillUser;
                         b.Potency = data.Potency;
@@ -630,7 +595,7 @@ namespace RiverHollow.Actors.CombatStuff
                             else if (counteringChar.AnimationPlayedXTimes(1))
                             {
                                 counteringChar.PlayAnimation(CActorAnimEnum.Idle);
-                                int x = SkillUser.ProcessAttack(counteringChar, ((CombatAction)ActorManager.GetActionByIndex(1)).Potency, counteringChar.GetAttackElement());
+                                int x = SkillUser.ProcessAttack(counteringChar, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, counteringChar.GetAttackElement());
                                 SkillUser.Tile.GUITile.AssignEffect(x, true);
                                 counteringChar = null;
                                 _pauseForCounter = false;
@@ -646,7 +611,7 @@ namespace RiverHollow.Actors.CombatStuff
                             else if (counteringSummon.AnimationPlayedXTimes(1))
                             {
                                 counteringSummon.PlayAnimation(CActorAnimEnum.Idle);
-                                int x = SkillUser.ProcessAttack(counteringSummon, ((CombatAction)ActorManager.GetActionByIndex(1)).Potency, counteringSummon.GetAttackElement());
+                                int x = SkillUser.ProcessAttack(counteringSummon, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, counteringSummon.GetAttackElement());
                                 SkillUser.Tile.GUITile.AssignEffect(x, true);
                                 counteringSummon = null;
                                 _pauseForCounter = false;

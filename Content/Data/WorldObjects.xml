@@ -39,20 +39,24 @@
     <!--<190> Containers-->
     <Item>
       <Key>190</Key>
-      <Value>[Type:Container][Image:0-1][Rows:1][Cols:8]</Value>
+      <Value>[Type:Container][Image:0-1][Width:16][Height:16][Rows:1][Cols:8]</Value>
     </Item>
     <!--<200> Machines-->
     <Item>
       <Key>200</Key>
-      <Value>[Type:Processor][Image:0-0][Processes:80-10][Processes:81-10][Processes:82-10][Processes:83-10][Processes:84-10]</Value>
+      <Value>[Type:Processor][Image:0-0][Width:16][Height:32][Processes:80-10|81-10|82-10|83-10|84-10]</Value>
     </Item>
     <Item>
       <Key>201</Key>
-      <Value>[Type:Crafter][Image:0-2][Makes:190-5]</Value>
+      <Value>[Type:Crafter][Image:0-2][Width:16][Height:32][Makes:190-5|200-30]</Value>
+    </Item>
+    <Item>
+      <Key>202</Key>
+      <Value>[Type:Crafter][Image:0-4][Width:32][Height:32][Makes:190-5][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>299</Key>
-      <Value>[Type:ClassChanger][Image:0-2]</Value>
+      <Value>[Type:ClassChanger][Image:0-2][Width:16][Height:32]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -19,11 +19,8 @@ namespace RiverHollow.Game_Managers
         public static Container PublicContainer { get => _container; set => _container = value; }
         private static Item[,] _playerInventory;
         public static Item[,] PlayerInventory { get => _playerInventory; }
-
-        private static int _currentInventorySlot = 0;
-        public static int CurrentItemNumber { get => _currentInventorySlot; set => _currentInventorySlot = value; }
-        //private Item _currentItem;
-        public static Item CurrentItem { get => _playerInventory[0, _currentInventorySlot]; }
+    
+        private static WorldObject CurrentWorldObject;
 
         public static Item AddedItem;
         #endregion
@@ -368,6 +365,18 @@ Exit:
         public static Item GetCurrentItem()
         {
             return _playerInventory[GameManager.HUDItemRow, GameManager.HUDItemCol];
+        }
+
+        public static StaticItem GetCurrentStaticItem()
+        {
+            StaticItem rv = null;
+            Item it = _playerInventory[GameManager.HUDItemRow, GameManager.HUDItemCol];
+
+            if (it != null && it.IsStaticItem())
+            {
+                rv = (StaticItem)it;
+            }
+            return rv;
         }
 
         public static Tool FindTool(Tool.ToolEnum tool)

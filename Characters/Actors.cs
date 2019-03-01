@@ -122,14 +122,7 @@ namespace RiverHollow.Actors
         public override Vector2 Position
         {
             get { return new Vector2(_spriteBody.Position.X, _spriteBody.Position.Y + _spriteBody.Height - TileSize); } //MAR this is fucked up
-            set {
-                _spriteBody.Position = new Vector2(value.X, value.Y - _spriteBody.Height + TileSize);
-                //if (_spriteShadow != null)
-                //{
-                //    _spriteShadow.Position = _spriteBody.Position;
-                //    _spriteShadow.Y += (int)(TileSize * 1.5);
-                //}
-            }
+            set { _spriteBody.Position = new Vector2(value.X, value.Y - _spriteBody.Height + TileSize); }
         }
 
         public bool FollowingPath => _currentPath.Count > 0;
@@ -146,17 +139,6 @@ namespace RiverHollow.Actors
 
         public int Speed = 2;
 
-        public override void Update(GameTime theGameTime)
-        {
-            //_spriteShadow.Update(theGameTime);
-            base.Update(theGameTime);
-        }
-
-        public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
-        {
-            //_spriteShadow.Draw(spriteBatch, useLayerDepth);
-            base.Draw(spriteBatch, useLayerDepth);
-        }
         #endregion
 
         public WorldActor() : base()
@@ -594,7 +576,7 @@ namespace RiverHollow.Actors
                 }
             }
 
-            Dictionary<string, string> schedule = ActorManager.GetSchedule("NPC" + _iIndex);
+            Dictionary<string, string> schedule = ObjectManager.GetSchedule("NPC" + _iIndex);
             if (schedule != null)
             {
                 foreach (KeyValuePair<string, string> kvp in schedule)
@@ -1105,7 +1087,7 @@ namespace RiverHollow.Actors
                 if (tagType[0].Equals("Class"))
                 {
                     _combat = new CombatAdventurer(this);
-                    _combat.SetClass(ActorManager.GetClassByIndex(int.Parse(tagType[1])));
+                    _combat.SetClass(ObjectManager.GetClassByIndex(int.Parse(tagType[1])));
                     _combat.LoadContent(_sAdventurerFolder + _combat.CharacterClass.Name);
                 }
             }
@@ -1350,7 +1332,7 @@ namespace RiverHollow.Actors
         protected void SetCombat()
         {
             _combat = new CombatAdventurer(this);
-            _combat.SetClass(ActorManager.GetClassByIndex(_iAdventurerID));
+            _combat.SetClass(ObjectManager.GetClassByIndex(_iAdventurerID));
             _combat.LoadContent(_sAdventurerFolder + _combat.CharacterClass.Name);
         }
 
@@ -1546,8 +1528,6 @@ namespace RiverHollow.Actors
                 _spriteEyes.Position = _spriteBody.Position;
                 _spriteArms.Position = _spriteBody.Position + new Vector2(0, TileSize);
                 _spriteHair.Position = _spriteBody.Position;
-                //_spriteShadow.Position = _spriteBody.Position;
-                //_spriteShadow.Y += (int)(TileSize * 1.5);
 
                 if (_chest != null) { _chest.SetSpritePosition(_spriteBody.Position); }
                 if (Hat != null) { _hat.SetSpritePosition(_spriteBody.Position); }
@@ -1627,7 +1607,6 @@ namespace RiverHollow.Actors
             _spriteEyes.Update(theGameTime);
             _spriteArms.Update(theGameTime);
             _spriteHair.Update(theGameTime);
-            //_spriteShadow.Update(theGameTime);
 
             if (_chest != null) { _chest.Sprite.Update(theGameTime); }
             if (Hat != null) { Hat.Sprite.Update(theGameTime); }
@@ -1635,7 +1614,6 @@ namespace RiverHollow.Actors
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
-            //_spriteShadow.Draw(spriteBatch, false);
             _spriteBody.Draw(spriteBatch, useLayerDepth);
 
             float bodyDepth = _spriteBody.Position.Y + _spriteBody.CurrentFrameAnimation.FrameHeight + (Position.X / 100);
@@ -1643,7 +1621,7 @@ namespace RiverHollow.Actors
             _spriteArms.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
             _spriteHair.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
 
-            if (_chest != null) { _chest.Sprite.Draw(spriteBatch, useLayerDepth); }
+            if (_chest != null) { _chest.Sprite.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth + 0.01f); }
             if (Hat != null) { Hat.Sprite.Draw(spriteBatch, useLayerDepth); }
         }
 
@@ -1696,7 +1674,6 @@ namespace RiverHollow.Actors
             _spriteEyes.MoveBy(x, y);
             _spriteArms.MoveBy(x, y);
             _spriteHair.MoveBy(x, y);
-            //_spriteShadow.MoveBy(x, y);
             if (_chest != null) { _chest.Sprite.MoveBy(x, y); }
             if (Hat != null) { Hat.Sprite.MoveBy(x, y); }
         }
@@ -1707,11 +1684,6 @@ namespace RiverHollow.Actors
             _spriteEyes.SetCurrentAnimation(anim);
             _spriteArms.SetCurrentAnimation(anim);
             _spriteHair.SetCurrentAnimation(anim);
-            //if (Util.GetEnumString<TEnum>(anim).Contains("Idle"))
-            //{
-            //    _spriteShadow.SetCurrentAnimation(WActorShadow.Idle);
-            //}
-            //else { _spriteShadow.SetCurrentAnimation(WActorShadow.Move); }
 
             if (_chest != null) { _chest.Sprite.SetCurrentAnimation(anim); }
             if (Hat != null) { Hat.Sprite.SetCurrentAnimation(anim); }
@@ -1974,7 +1946,7 @@ namespace RiverHollow.Actors
                 if (tagType[0].Equals("Monster"))
                 {
                     int mID = int.Parse(tagType[1]);
-                    _liMonsters.Add(ActorManager.GetMonsterByIndex(mID));
+                    _liMonsters.Add(ObjectManager.GetMonsterByIndex(mID));
                 }
                 else if (tagType[0].Equals("Condition"))
                 {
@@ -3092,7 +3064,7 @@ namespace RiverHollow.Actors
                     string[] split = tagType[1].Split('-');
                     foreach (string ability in split)
                     {
-                        AbilityList.Add(ActorManager.GetActionByIndex(int.Parse(ability)));
+                        AbilityList.Add(ObjectManager.GetActionByIndex(int.Parse(ability)));
                     }
                 }
                 else if (tagType[0].Equals("Trait"))

@@ -212,7 +212,7 @@ namespace RiverHollow.Game_Managers
                     foreach (string f in friend)
                     {
                         string[] friendData = f.Split('-');
-                        Villager n = new Villager(ActorManager.DiNPC[int.Parse(friendData[0])])
+                        Villager n = new Villager(ObjectManager.DiNPC[int.Parse(friendData[0])])
                         {
                             CurrentMapName = _cutsceneMap.Name,
                             Position = Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(friendData[1]))
@@ -255,7 +255,7 @@ namespace RiverHollow.Game_Managers
             bool rv = false;
             foreach (KeyValuePair<int, int> kvp in _liReqFriendship)
             {
-                if(ActorManager.DiNPC[kvp.Key].FriendshipPoints < kvp.Value) { goto friendshipExit; }
+                if(ObjectManager.DiNPC[kvp.Key].FriendshipPoints < kvp.Value) { goto friendshipExit; }
             }
 
             rv = true;

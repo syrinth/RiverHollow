@@ -107,6 +107,8 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddNewItemToInventory(80, 10);
             InventoryManager.AddNewItemToInventory(200);
             InventoryManager.AddNewItemToInventory(201);
+            InventoryManager.AddNewItemToInventory(202);
+            InventoryManager.AddNewItemToInventory(403);
 
 
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestType.Fetch, "Getwood, dumbass", 1, null, ObjectManager.GetItem(2)));
@@ -331,26 +333,10 @@ namespace RiverHollow.Game_Managers
                 if (PlayerManager.PlayerInRange(center.ToPoint()))
                 {
                     _targetTile = MapManager.RetrieveTile(mouseLocation);
-                    Item selectedItem = InventoryManager.GetCurrentItem();
-                    if (selectedItem != null && selectedItem.IsStaticItem())
+                    StaticItem selectedItem = InventoryManager.GetCurrentStaticItem();
+                    if (selectedItem != null)
                     {
-                        WorldItem obj = (WorldItem)ObjectManager.GetWorldObject(selectedItem.ItemID);
-                        if (obj.IsMachine())
-                        {
-                            PlaceWorldObject(selectedItem, obj, mouseLocation);
-                        }
-                        else if (obj.IsContainer())
-                        {
-                            PlaceWorldObject(selectedItem, obj, mouseLocation);
-                        }
-                        else if (obj.IsClassChanger())
-                        {
-                            PlaceWorldObject(selectedItem, obj, mouseLocation);
-                        }
-                        else if (_targetTile.HasBeenDug() && obj.IsPlant())
-                        {
-                            PlaceWorldObject(selectedItem, obj, mouseLocation);
-                        }
+                        PlaceWorldObject(selectedItem, mouseLocation);
                     }
                     else if (_targetTile.WorldObject != null && _targetTile.WorldObject.IsDestructible())
                     {
@@ -389,13 +375,15 @@ namespace RiverHollow.Game_Managers
 
             return rv;
         }
-        private static void PlaceWorldObject(Item selectedItem, WorldItem obj, Point mouseLocation)
+        private static void PlaceWorldObject(StaticItem selectedItem, Point mouseLocation)
         {
-            obj.SetMapName(CurrentMap);
-            obj.MapPosition = mouseLocation.ToVector2();
-            MapManager.PlacePlayerObject(obj);
-            selectedItem.Remove(1);
-            GUIManager.SyncScreen();
+            WorldItem obj = selectedItem.GetWorldItem();
+            if (MapManager.PlacePlayerObject(obj))
+            {
+                obj.SetMapName(CurrentMap);
+                selectedItem.Remove(1);
+                GUIManager.SyncScreen();
+            }
         }
 
         internal static bool SetTool(Tool t, Point mouse)
@@ -538,7 +526,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void SetClass(int x)
         {
-            CharacterClass combatClass = ActorManager.GetClassByIndex(x);
+            CharacterClass combatClass = ObjectManager.GetClassByIndex(x);
             Combat.SetClass(combatClass);
             Combat.LoadContent(@"Textures\Actors\Adventurers\" + combatClass.Name);
         }

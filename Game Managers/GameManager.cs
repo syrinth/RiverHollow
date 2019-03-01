@@ -599,7 +599,7 @@ namespace RiverHollow.Game_Managers
                 data.QuestLogData.Add(q.SaveData());
             }
 
-            foreach (Villager n in ActorManager.DiNPC.Values)
+            foreach (Villager n in ObjectManager.DiNPC.Values)
             {
                 if (n.IsEligible()) { data.EligibleData.Add(((EligibleNPC)n).SaveData()); }
                 else { data.NPCData.Add(n.SaveData()); }
@@ -689,13 +689,13 @@ namespace RiverHollow.Game_Managers
             }
             foreach (NPCData n in data.NPCData)
             {
-                Villager target = ActorManager.DiNPC[n.npcID];
+                Villager target = ObjectManager.DiNPC[n.npcID];
                 target.LoadData(n);
             }
 
             foreach (EligibleNPCData n in data.EligibleData)
             {
-                EligibleNPC target = (EligibleNPC)ActorManager.DiNPC[n.npcData.npcID];
+                EligibleNPC target = (EligibleNPC)ObjectManager.DiNPC[n.npcData.npcID];
                 target.LoadData(n);
             }
         }

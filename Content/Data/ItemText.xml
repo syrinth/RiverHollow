@@ -22,6 +22,10 @@
       <Key>9</Key>
       <Value>Peat/Saying it smells earthy is a kindness.</Value>
     </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>Potion Base/You basically can't make potions without it.</Value>
+    </Item>
     <!--<20-24> Tools-->
     <Item>
       <Key>20</Key>
@@ -122,6 +126,10 @@
       <Value>Anvil/Makes Shit</Value>
     </Item>
     <Item>
+      <Key>202</Key>
+      <Value>Cauldron/Used for brewing potions</Value>
+    </Item>
+    <Item>
       <Key>299</Key>
       <Value>Essense Extractor/Changes your class</Value>
     </Item>
@@ -150,6 +158,10 @@
     <Item>
       <Key>402</Key>
       <Value>Witch's Hat/A fashionable hat</Value>
+    </Item>
+    <Item>
+      <Key>403</Key>
+      <Value>Wizard's Robes/ The robes of a true wizard!</Value>
     </Item>
     <!--<500> Food-->
     <Item>

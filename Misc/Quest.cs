@@ -102,7 +102,7 @@ namespace RiverHollow.Misc
                 string[] tagType = s.Split(':');
                 if (tagType[0].Equals("QuestGiver"))
                 {
-                    _questGiver = ActorManager.DiNPC[int.Parse(tagType[1])];
+                    _questGiver = ObjectManager.DiNPC[int.Parse(tagType[1])];
                 }
                 else if (tagType[0].Equals("Type"))
                 {
@@ -138,7 +138,7 @@ namespace RiverHollow.Misc
                     string[] parse = tagType[1].Split('-');
                     if (parse.Length > 1)
                     {
-                        _spawnMob = ActorManager.GetMobByIndex(int.Parse(parse[0]));
+                        _spawnMob = ObjectManager.GetMobByIndex(int.Parse(parse[0]));
                         _sSpawnMap = parse[1];
                         _sLocName = parse[2];
                     }
@@ -345,9 +345,9 @@ namespace RiverHollow.Misc
                 _iQuestID = qData.questID;
                 _name = qData.name;
                 _description = qData.description;
-                _questGiver = qData.questGiver != -1 ? ActorManager.DiNPC[qData.questGiver] : null;
+                _questGiver = qData.questGiver != -1 ? ObjectManager.DiNPC[qData.questGiver] : null;
                 _questItem = qData.itemID != -1 ? ObjectManager.GetItem(qData.itemID) : null;
-                _questMob = qData.mobID != -1 ? ActorManager.GetMonsterByIndex(qData.mobID) : null;
+                _questMob = qData.mobID != -1 ? ObjectManager.GetMonsterByIndex(qData.mobID) : null;
                 _iTargetGoal = qData.targetGoal;
                 _iAccomplished = qData.accomplished;
                 _bReadyForHandIn = qData.readyForHandIn;

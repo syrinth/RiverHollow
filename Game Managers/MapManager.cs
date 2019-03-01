@@ -216,6 +216,7 @@ namespace RiverHollow.Game_Managers
         {
             _currentMap.DrawBase(spriteBatch);
             GraphicCursor.DrawBuilding(spriteBatch);
+            GraphicCursor.DrawPotentialWorldObject(spriteBatch);
         }
 
         public static void DrawUpper(SpriteBatch spriteBatch)
@@ -287,9 +288,9 @@ namespace RiverHollow.Game_Managers
         {
             _currentMap.PlaceWorldObject(worldObject);
         }
-        public static void PlacePlayerObject(WorldObject worldObject)
+        public static bool PlacePlayerObject(WorldObject worldObject)
         {
-            _currentMap.PlacePlayerObject(worldObject);
+            return _currentMap.PlacePlayerObject(worldObject);
         }
 
         public static void InitWeather()

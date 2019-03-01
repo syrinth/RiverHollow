@@ -37,15 +37,21 @@ namespace RiverHollow.WorldObjects
         }
 
         protected Rectangle _rSource;
-        public Rectangle SourceRectangle { get => _rSource;  }
+        public Rectangle SourceRectangle => _rSource;
 
-        public virtual Rectangle CollisionBox {  get => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _width, _height); }
+        public virtual Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _width, _iHeight);
 
         protected Texture2D _texture;
         public Texture2D Texture { get => _texture; }
 
         protected int _width;
-        protected int _height;
+        protected int _iHeight;
+        public int Height => _iHeight;
+
+        protected int _iBaseWidth = TileSize;
+        public int BaseWidth => _iBaseWidth;
+        protected int _iBaseHeight = TileSize;
+        public int BaseHeight => _iBaseHeight;
 
         protected int _id;
         public int ID { get => _id; }
@@ -59,7 +65,7 @@ namespace RiverHollow.WorldObjects
             _id = id;
             _vMapPosition = pos;
             _width = width;
-            _height = height;
+            _iHeight = height;
             _texture = tex;
             _wallObject = false;
 
@@ -69,7 +75,7 @@ namespace RiverHollow.WorldObjects
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, new Rectangle((int)_vMapPosition.X, (int)_vMapPosition.Y, _width, _height), _rSource, Color.White, 0, Vector2.Zero, SpriteEffects.None, _vMapPosition.Y + _height + (_vMapPosition.X / 100));
+            spriteBatch.Draw(_texture, new Rectangle((int)_vMapPosition.X, (int)_vMapPosition.Y, _width, _iHeight), _rSource, Color.White, 0, Vector2.Zero, SpriteEffects.None, _vMapPosition.Y + _iHeight + (_vMapPosition.X / 100));
         }
 
         public virtual bool IntersectsWith(Rectangle r)
@@ -84,7 +90,7 @@ namespace RiverHollow.WorldObjects
 
         public virtual void SetCoordinates(Vector2 position)
         {
-            _vMapPosition = position;
+            MapPosition = position;
         }
 
         public void RemoveSelfFromTiles()
@@ -113,16 +119,16 @@ namespace RiverHollow.WorldObjects
         protected int _hp;
         public int HP => _hp;
 
-        protected bool _breakable;
-        public bool Breakable => _breakable;
+        protected bool _bBreakable;
+        public bool Breakable => _bBreakable;
 
-        protected bool _choppable;
-        public bool Choppable => _choppable;
+        protected bool _bChoppable;
+        public bool Choppable => _bChoppable;
 
         protected int _lvltoDmg;
         public int LvlToDmg => _lvltoDmg;
 
-        public Destructible(int id, string[] stringData, Vector2 pos)
+        public Destructible(int id, Dictionary<string, string> stringData, Vector2 pos)
         {
             Type = ObjectType.Destructible;
             _id = id;
@@ -135,42 +141,19 @@ namespace RiverHollow.WorldObjects
             int y = 0;
             _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
 
-            foreach (string s in stringData)
-            {
-                string[] tagType = s.Split(':');
-                if (tagType[0].Equals("Image"))
-                {
-                    string[] texIndices = tagType[1].Split('-');
-                    x = int.Parse(texIndices[0]);
-                    y = int.Parse(texIndices[1]);
-                }
-                else if (tagType[0].Equals("Width"))
-                {
-                    _width = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Height"))
-                {
-                    _height = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Chop"))
-                {
-                    _choppable = true;
-                }
-                else if (tagType[0].Equals("Break"))
-                {
-                    _breakable = true;
-                }
-                else if (tagType[0].Equals("Hp"))
-                {
-                    _hp = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("ReqLvl"))
-                {
-                    _lvltoDmg = int.Parse(tagType[1]);
-                }
-            }
+            string[] texIndices = stringData["Image"].Split('-');
+            x = int.Parse(texIndices[0]);
+            y = int.Parse(texIndices[1]);
 
-            _rSource = new Rectangle(0 + TileSize * x, 0 + TileSize * y, _width, _height);
+            _width = int.Parse(stringData["Width"]);
+            _iHeight = int.Parse(stringData["Height"]);
+
+            if (stringData.ContainsKey("Chop")) { _bChoppable = true; }
+            if (stringData.ContainsKey("Break")) { _bBreakable = true; }
+            if (stringData.ContainsKey("Hp")) { _hp = int.Parse(stringData["Hp"]); }
+            if (stringData.ContainsKey("ReqLvl")) { _lvltoDmg = int.Parse(stringData["ReqLvl"]); }
+
+            _rSource = new Rectangle(0 + TileSize * x, 0 + TileSize * y, _width, _iHeight);
         }
 
         public Destructible(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height, bool breakIt, bool chopIt, int lvl, int hp) : base(id, pos, sourceRectangle, tex, width, height)
@@ -178,8 +161,8 @@ namespace RiverHollow.WorldObjects
             Type = ObjectType.Destructible;
 
             _hp = hp;
-            _breakable = breakIt;
-            _choppable = chopIt;
+            _bBreakable = breakIt;
+            _bChoppable = chopIt;
             _lvltoDmg = lvl;
         }
 
@@ -340,7 +323,7 @@ namespace RiverHollow.WorldObjects
             _texture = GameContentManager.GetTexture(@"Textures\texFlooring");
 
             _width = TileSize; ;
-            _height = TileSize;
+            _iHeight = TileSize;
         }
 
         public Floor(int id)
@@ -350,7 +333,7 @@ namespace RiverHollow.WorldObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, new Rectangle((int)_vMapPosition.X, (int)_vMapPosition.Y, _width, _height), _rSource, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+            spriteBatch.Draw(_texture, new Rectangle((int)_vMapPosition.X, (int)_vMapPosition.Y, _width, _iHeight), _rSource, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
         }
 
         internal FloorData SaveData()
@@ -400,6 +383,10 @@ namespace RiverHollow.WorldObjects
                 Vector2 norm = Util.SnapToGrid(value);
                 _vMapPosition = norm;
                 HeldItemPos = norm;
+                if (_sprite != null)
+                {
+                    _sprite.Position = _vMapPosition;
+                }
             }
         }
         public Vector2 HeldItemPos
@@ -410,10 +397,12 @@ namespace RiverHollow.WorldObjects
                 _vMapPosition = value;
                 if (_sprite != null)
                 {
-                    _sprite.Position = new Vector2(_sprite.Width > TileSize ? value.X - (_sprite.Width - TileSize) / 2 : value.X, (_sprite.Height > TileSize) ? value.Y - (_sprite.Height - TileSize) : value.Y);
+                    _sprite.Position = _vMapPosition;// new Vector2(_sprite.Width > TileSize ? value.X - (_sprite.Width - TileSize) / 2 : value.X, (_sprite.Height > TileSize) ? value.Y - (_sprite.Height - TileSize) : value.Y);
                 }
             }
         }
+
+        public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + (_iHeight - BaseHeight), BaseWidth, BaseHeight);
 
         protected void ReadSourcePos(string str)
         {
@@ -433,7 +422,7 @@ namespace RiverHollow.WorldObjects
                 MapPosition = position;
 
                 _width = TileSize;
-                _height = TileSize * 2;
+                _iHeight = TileSize * 2;
             }
             public void LoadContent()
             {
@@ -451,7 +440,7 @@ namespace RiverHollow.WorldObjects
             public void ProcessClick()
             {
                 int currID = PlayerManager.Combat.CharacterClass.ID;
-                int toSet = (currID < ActorManager.GetClassCount() - 1) ? (PlayerManager.Combat.CharacterClass.ID + 1) : 1;
+                int toSet = (currID < ObjectManager.GetClassCount() - 1) ? (PlayerManager.Combat.CharacterClass.ID + 1) : 1;
                 PlayerManager.SetClass(toSet);
             }
 
@@ -465,16 +454,25 @@ namespace RiverHollow.WorldObjects
             protected double _dProcessedTime;
             public double ProcessedTime => _dProcessedTime;
 
-            public Machine()
+            public Machine(Dictionary<string, string> stringData)
             {
-                _width = TileSize;
-                _height = TileSize*2;
+                ReadSourcePos(stringData["Image"]);
+
+                _width = int.Parse(stringData["Width"]);
+                _iHeight = int.Parse(stringData["Height"]);
+
+                if (stringData.ContainsKey("Base"))
+                {
+                    string[] baseStr = stringData["Base"].Split('-');
+                    _iBaseWidth = int.Parse(baseStr[0]) * TileSize;
+                    _iBaseHeight = int.Parse(baseStr[1]) * TileSize;
+                }
             }
             public void LoadContent()
             {
                 _sprite = new AnimatedSprite(@"Textures\texMachines");
-                _sprite.AddAnimation(MachineAnimEnum.Idle, (int)_vSourcePos.X, (int)_vSourcePos.Y, TileSize, TileSize * 2, 1, 0.3f);
-                _sprite.AddAnimation(MachineAnimEnum.Working, (int)_vSourcePos.X + TileSize, (int)_vSourcePos.Y, TileSize, TileSize * 2, 2, 0.3f);
+                _sprite.AddAnimation(MachineAnimEnum.Idle, (int)_vSourcePos.X, (int)_vSourcePos.Y, _width, _iHeight, 1, 0.3f);
+                _sprite.AddAnimation(MachineAnimEnum.Working, (int)_vSourcePos.X + _width, (int)_vSourcePos.Y, _width, _iHeight, 2, 0.3f);
                 _sprite.SetCurrentAnimation(MachineAnimEnum.Idle);
                 _sprite.IsAnimating = true;
             }
@@ -507,7 +505,7 @@ namespace RiverHollow.WorldObjects
                 Dictionary<int, ProcessRecipe> _diProcessing;
                 ProcessRecipe _currentlyProcessing;
 
-                public Processor(int id, string[] stringData)
+                public Processor(int id, Dictionary<string, string> stringData) : base(stringData)
                 {
                     _id = id;
                     Type = ObjectType.Processor;
@@ -515,22 +513,12 @@ namespace RiverHollow.WorldObjects
                     _dProcessedTime = -1;
                     _heldItem = null;
 
-                    foreach (string s in stringData)
+                    //Read in what items the machine processes
+                    string[] processes = stringData["Processes"].Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string recipe in processes)
                     {
-                        string[] tagType = s.Split(':');
-                        if (tagType[0].Equals("Image"))
-                        {
-                            ReadSourcePos(tagType[1]);
-                        }
-                        else if (tagType[0].Equals("Processes"))
-                        {
-                            string[] recipeStr = Util.FindTags(tagType[1]);
-                            foreach (string recipe in recipeStr)
-                            {
-                                string[] pieces = recipe.Split('-');
-                                _diProcessing.Add(int.Parse(pieces[0]), new ProcessRecipe(pieces));
-                            }
-                        }
+                        string[] pieces = recipe.Split('-');
+                        _diProcessing.Add(int.Parse(pieces[0]), new ProcessRecipe(pieces));
                     }
 
                     LoadContent();
@@ -626,7 +614,7 @@ namespace RiverHollow.WorldObjects
                 public Dictionary<int, int> CraftList => _diCrafting;
                 int _iCurrentlyMaking = -1;
 
-                public Crafter(int id, string[] stringData) : base()
+                public Crafter(int id, Dictionary<string, string> stringData) : base(stringData)
                 {
                     _id = id;
                     Type = ObjectType.Crafter;
@@ -634,19 +622,13 @@ namespace RiverHollow.WorldObjects
                     _dProcessedTime = -1;
                     _heldItem = null;
 
-                    foreach (string s in stringData)
+                    //Read in what items the machine processes
+                    string[] processes = stringData["Makes"].Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string recipe in processes)
                     {
-                        string[] tagType = s.Split(':');
-                        if (tagType[0].Equals("Image"))
-                        {
-                            ReadSourcePos(tagType[1]);
-                        }
-                        else if (tagType[0].Equals("Makes"))
-                        {
-                            string[] processStr = tagType[1].Split('-');
-                            _diCrafting.Add(int.Parse(processStr[0]), int.Parse(processStr[1]));
-                        }
-                    }         
+                        string[] pieces = recipe.Split('-');
+                        _diCrafting.Add(int.Parse(pieces[0]), int.Parse(pieces[1]));
+                    }   
 
                     LoadContent();
                 }
@@ -717,30 +699,17 @@ namespace RiverHollow.WorldObjects
             Item[,] _inventory;
             public Item[,] Inventory { get => _inventory; }
 
-            public Container(int id, string[] stringData)
+            public Container(int id, Dictionary<string, string> stringData)
             {
                 _id = id;
                 Type = ObjectType.Container;
 
-                _width = TileSize;
-                _height = TileSize;
+                _width = int.Parse(stringData["Width"]);
+                _iHeight = int.Parse(stringData["Height"]);
 
-                foreach (string s in stringData)
-                {
-                    string[] tagType = s.Split(':');
-                    if (tagType[0].Equals("Image"))
-                    {
-                        ReadSourcePos(tagType[1]);
-                    }
-                    else if (tagType[0].Equals("Rows"))
-                    {
-                        _iRows = int.Parse(tagType[1]);
-                    }
-                    else if (tagType[0].Equals("Cols"))
-                    {
-                        _iColumns = int.Parse(tagType[1]);
-                    }
-                }
+                ReadSourcePos(stringData["Image"]);
+                _iRows = int.Parse(stringData["Rows"]);
+                _iColumns = int.Parse(stringData["Cols"]);
 
                 LoadContent();
 
@@ -749,7 +718,7 @@ namespace RiverHollow.WorldObjects
             public void LoadContent()
             {
                 _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
-                _rSource = new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, _width, _height);
+                _rSource = new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, _width, _iHeight);
             }
 
             internal ContainerData SaveData()
@@ -793,7 +762,7 @@ namespace RiverHollow.WorldObjects
             int _iDaysLeft;
             Dictionary<int, int> _diTransitionTimes;
 
-            public Plant(int id, string[] stringData)
+            public Plant(int id, Dictionary<string, string> stringData)
             {
                 _id = id;
                 Type = ObjectType.Plant;
@@ -803,34 +772,19 @@ namespace RiverHollow.WorldObjects
                 _diTransitionTimes = new Dictionary<int, int>();
 
                 _width = TileSize;
-                _height = TileSize;
+                _iHeight = TileSize;
 
-                foreach (string s in stringData)
+                ReadSourcePos(stringData["Image"]);
+                _iResourceID = int.Parse(stringData["Item"]);
+                _iMaxStates = int.Parse(stringData["TrNum"]);       //Number of growth phases
+
+                //The amount of time for each phase
+                string[] dayStr = stringData["TrTime"].Split('-');
+                for (int j = 0; j < _iMaxStates - 1; j++)
                 {
-                    string[] tagType = s.Split(':');
-                    if (tagType[0].Equals("Image"))
-                    {
-                        ReadSourcePos(tagType[1]);
-                    }
-                    else if (tagType[0].Equals("Item"))
-                    {
-                        _iResourceID = int.Parse(tagType[1]);
-                    }
-                    else if (tagType[0].Equals("TrNum"))
-                    {
-                        _iMaxStates = int.Parse(tagType[1]);
-                    }
-                    else if (tagType[0].Equals("TrTime"))
-                    {
-                        string[] dayStr = tagType[1].Split('-');
-                        for (int j = 0; j < _iMaxStates - 1; j++)
-                        {
-                            _diTransitionTimes.Add(j, int.Parse(dayStr[j]));
-                        }
-
-                        _iDaysLeft = _diTransitionTimes[0];
-                    }
+                    _diTransitionTimes.Add(j, int.Parse(dayStr[j]));
                 }
+                _iDaysLeft = _diTransitionTimes[0];
 
                 LoadContent();
             }
@@ -838,12 +792,12 @@ namespace RiverHollow.WorldObjects
             public override void Draw(SpriteBatch spriteBatch)
             {
                 float layerDepth = (_iCurrentState == 0) ? 1 : _vMapPosition.Y + (_vMapPosition.X / 100);
-                spriteBatch.Draw(_texture, new Rectangle((int)_vMapPosition.X, (int)_vMapPosition.Y, _width, _height), _rSource, Color.White, 0, Vector2.Zero, SpriteEffects.None, layerDepth);
+                spriteBatch.Draw(_texture, new Rectangle((int)_vMapPosition.X, (int)_vMapPosition.Y, _width, _iHeight), _rSource, Color.White, 0, Vector2.Zero, SpriteEffects.None, layerDepth);
             }
             public void LoadContent()
             {
                 _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
-                _rSource = new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, _width, _height);
+                _rSource = new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, _width, _iHeight);
             }
 
             public void Rollover()

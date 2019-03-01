@@ -640,6 +640,35 @@ namespace RiverHollow.WorldObjects
         }
     }
 
+    public class StaticItem : Item
+    {
+        WorldItem worldObj;
+
+        public StaticItem() { }
+        public StaticItem(int id, Dictionary<string, string> stringData)
+        {
+            ImportBasics(stringData, id, 1);
+            _texTexture = GameContentManager.GetTexture(GameContentManager.ITEM_FOLDER + "StaticObjects");
+
+            worldObj = (WorldItem)ObjectManager.GetWorldObject(id);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+        }
+
+        public WorldItem GetWorldItem()
+        {
+            return worldObj;
+        }
+
+        public void SetWorldObjectCoords(Vector2 vec)
+        {
+            worldObj.SetCoordinates(vec);
+        }
+    }
+
     public class ClassItem : Item
     {
         private int _iClassID;
@@ -656,7 +685,7 @@ namespace RiverHollow.WorldObjects
         {
             _iClassID = i;
 
-            string n = ActorManager.GetClassByIndex(_iClassID).Name;
+            string n = ObjectManager.GetClassByIndex(_iClassID).Name;
             _sName += n;
             _sDescription += n;
 

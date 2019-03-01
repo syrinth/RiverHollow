@@ -11,57 +11,125 @@ using RiverHollow.Misc;
 using static RiverHollow.WorldObjects.Door;
 using RiverHollow.Actors;
 using RiverHollow.Buildings;
+using RiverHollow.Actors.CombatStuff;
+using System.IO;
 
 namespace RiverHollow.Game_Managers
 {
     public static class ObjectManager
     {
-        private static Dictionary<int, string> _dictBuilding;
+        private static Dictionary<int, string> _diBuildings;
         private static Dictionary<int, Dictionary<string, string>> _dictItem;
-        private static Dictionary<int, string> _dictWorkers;
-        private static Dictionary<int, string> _dictWorldObjects;
+        private static Dictionary<int, string> _diWorkers;
+        private static Dictionary<int, Dictionary<string, string>> _diWorldObjects;
+
+        private static Dictionary<int, string> _diMobs;
+        private static Dictionary<int, string> _diMonsters;
+        private static Dictionary<int, Villager> _diNPCs;
+        public static Dictionary<int, Villager> DiNPC { get => _diNPCs; }
+        private static Dictionary<int, Dictionary<string, string>> _diActions;
+        private static Dictionary<int, string> _diBuffs;
+        private static Dictionary<int, string> _diClasses;
+        private static Dictionary<string, Dictionary<string, string>> _diSchedule;
+
+        static List<int> _liForest;
+        static List<int> _liMountain;
+        static List<int> _liNight;
 
         public static void LoadContent(ContentManager Content)
         {
             _dictItem = new Dictionary<int, Dictionary<string, string>>();
-            _dictBuilding = Content.Load<Dictionary<int, string>>(@"Data\Buildings");
-            _dictWorkers = Content.Load<Dictionary<int, string>>(@"Data\Workers");
-            _dictWorldObjects = Content.Load<Dictionary<int, string>>(@"Data\WorldObjects");
+            _diActions = new Dictionary<int, Dictionary<string, string>>();
+            _diWorldObjects = new Dictionary<int, Dictionary<string, string>>();
+            _diBuildings = Content.Load<Dictionary<int, string>>(@"Data\Buildings");
+            _diWorkers = Content.Load<Dictionary<int, string>>(@"Data\Workers");
 
-            Dictionary<int, string> itemData = Content.Load<Dictionary<int, string>>(@"Data\ItemData");
-            foreach(KeyValuePair<int, string> kvp in itemData)
+            AddToDictionary(_dictItem, @"Data\ItemData", Content);
+            AddToDictionary(_diWorldObjects, @"Data\WorldObjects", Content);
+            AddToDictionary(_diActions, @"Data\CombatActions", Content);
+
+            _liForest = new List<int>();
+            _liMountain = new List<int>();
+            _liNight = new List<int>();
+            _diMobs = new Dictionary<int, string>();
+            _diSchedule = new Dictionary<string, Dictionary<string, string>>();
+
+            _diMobs = Content.Load<Dictionary<int, string>>(@"Data\Mobs");
+            _diMonsters = Content.Load<Dictionary<int, string>>(@"Data\Monsters");
+            _diBuffs = Content.Load<Dictionary<int, string>>(@"Data\Buffs");
+            _diClasses = Content.Load<Dictionary<int, string>>(@"Data\Classes");
+
+            foreach (string s in Directory.GetFiles(@"Content\Data\NPCData\Schedules"))
+            {
+                string temp = Path.GetFileNameWithoutExtension(s);
+                _diSchedule.Add(temp, Content.Load<Dictionary<string, string>>(@"Data\NPCData\Schedules\" + temp));
+            }
+
+            _diNPCs = new Dictionary<int, Villager>();
+            foreach (KeyValuePair<int, string> kvp in Content.Load<Dictionary<int, string>>(@"Data\NPCData\Characters"))
+            {
+                Villager n = null;
+                string _characterData = kvp.Value;
+                string[] _characterDataValues = Util.FindTags(_characterData);
+                switch (_characterDataValues[0].Split(':')[1])
+                {
+                    case "ShopKeeper":
+                        n = new ShopKeeper(kvp.Key, _characterDataValues);
+                        break;
+                    case "Eligible":
+                        n = new EligibleNPC(kvp.Key, _characterDataValues);
+                        break;
+                    default:
+                        n = new Villager(kvp.Key, _characterDataValues);
+                        break;
+                }
+                _diNPCs.Add(kvp.Key, n);
+            }
+        }
+
+        //@"Data\ItemData"
+        private static void AddToDictionary(Dictionary<int, Dictionary<string, string>> dictionaryAddTo, string dataFile, ContentManager Content)
+        {
+            Dictionary<int, string> dictionaryData = Content.Load<Dictionary<int, string>>(dataFile);
+            foreach (KeyValuePair<int, string> kvp in dictionaryData)
             {
                 Dictionary<string, string> dss = new Dictionary<string, string>();
                 foreach (string s in Util.FindTags(kvp.Value))
                 {
-                    string[] tagSplit = s.Split(':');
-                    dss[tagSplit[0]] = tagSplit[1];
+                    if (s.Contains(":"))
+                    {
+                        string[] tagSplit = s.Split(':');
+                        dss[tagSplit[0]] = tagSplit[1];
+                    }
+                    else {
+                        dss[s] = "";
+                    }
                 }
-                _dictItem[kvp.Key] = dss;
+                dictionaryAddTo[kvp.Key] = dss;
             }
         }
 
         public static Building GetBuilding(int id)
         {
-            if (_dictBuilding.ContainsKey(id))
+            if (_diBuildings.ContainsKey(id))
             {
-                string buildingData = _dictBuilding[id];
+                string buildingData = _diBuildings[id];
                 string[] _buildingDataValues = Util.FindTags(buildingData);
                 return new Building(_buildingDataValues, id);
             }
-            return null;     
+            return null;
         }
 
         public static Building GetManor()
         {
-            return new Building(Util.FindTags(_dictBuilding[0]), 0);
+            return new Building(Util.FindTags(_diBuildings[0]), 0);
         }
 
         public static WorldAdventurer GetWorker(int id)
         {
-            if (_dictWorkers.ContainsKey(id))
+            if (_diWorkers.ContainsKey(id))
             {
-                string stringData = _dictWorkers[id];
+                string stringData = _diWorkers[id];
                 string[] stringDataValues = Util.FindTags(stringData);
                 return new WorldAdventurer(stringDataValues, id);
             }
@@ -113,26 +181,25 @@ namespace RiverHollow.Game_Managers
         {
             if (id != -1)
             {
-                string _stringData = _dictWorldObjects[id];
-                string[] _stringDataValues = Util.FindTags(_stringData);
-                switch (_stringDataValues[0].Split(':')[1])
+                Dictionary<string, string> liData = _diWorldObjects[id];
+                switch (liData["Type"])
                 {
                     case "Destructible":
-                        return new Destructible(id, _stringDataValues, pos);
+                        return new Destructible(id, liData, pos);
                     case "Tree":
                         return new Tree(id, pos, new Rectangle(0, 0, 48, 80), GetTexture(@"Textures\tree"), TileSize * 3, TileSize * 5, false, true, 1, 10);
                     case "Staircase":
                         return new Staircase(id, pos, new Rectangle(96, 0, 16, 16), GetTexture(@"Textures\worldObjects"), TileSize, TileSize);
                     case "Container":
-                        return new Container(id, _stringDataValues);
+                        return new Container(id, liData);
                     case "Processor":
-                        return new Processor(id, _stringDataValues);
+                        return new Processor(id, liData);
                     case "ClassChanger":
                         return new ClassChanger(id, pos);
                     case "Plant":
-                        return new Plant(id, _stringDataValues);
+                        return new Plant(id, liData);
                     case "Crafter":
-                        return new Crafter(id, _stringDataValues);
+                        return new Crafter(id, liData);
                 }
             }
 
@@ -163,7 +230,128 @@ namespace RiverHollow.Game_Managers
 
         public static int GetWorkerNum()
         {
-            return _dictWorkers.Count;
+            return _diWorkers.Count;
         }
+
+        public static string GetCharacterNameByIndex(int i)
+        {
+            return _diNPCs[i].Name;
+        }
+
+        public static Monster GetMonsterByIndex(int id)
+        {
+            Monster m = null;
+            if (_diMonsters.ContainsKey(id))
+            {
+                string _itemData = _diMonsters[id];
+                string[] _itemDataVals = Util.FindTags(_itemData);
+                m = new Monster(id, _itemDataVals);
+            }
+            return m;
+        }
+
+        public static Mob GetMobByIndex(int id)
+        {
+            Mob m = null;
+            if (_diMobs.ContainsKey(id))
+            {
+                string _sData = _diMobs[id];
+                string[] _itemDataVals = Util.FindTags(_sData);
+                m = new Mob(id, _itemDataVals);
+            }
+            return m;
+        }
+
+        public static Mob GetMobByIndex(int id, Vector2 pos)
+        {
+            Mob m = GetMobByIndex(id);
+            m.Position = pos;
+            return m;
+        }
+
+        public static MenuAction GetActionByIndex(int id)
+        {
+            if (id != -1)
+            {
+                Dictionary<string, string> liData = _diActions[id];
+                switch (liData["Type"])
+                {
+                    case "Menu":
+                        return new MenuAction(id, liData);
+                    case "Spell":
+                        return new CombatAction(id, liData);
+                    case "Action":
+                        return new CombatAction(id, liData);
+                }
+            }
+
+            return null;
+        }
+        public static Buff GetBuffByIndex(int id)
+        {
+            Buff b = null;
+            if (id != -1)
+            {
+                string _stringData = _diBuffs[id];
+                string[] _stringDataValues = _stringData.Split('/');
+                b = new Buff(id, _stringDataValues);
+            }
+            return b;
+        }
+
+        public static int GetClassCount()
+        {
+            return _diClasses.Count;
+        }
+        public static CharacterClass GetClassByIndex(int id)
+        {
+            CharacterClass c = null;
+            if (id != -1)
+            {
+                string strData = _diClasses[id];
+                string[] strDataValues = Util.FindTags(strData);
+                c = new CharacterClass(id, strDataValues);
+            }
+            return c;
+        }
+
+        public static Dictionary<string, string> GetSchedule(string npc)
+        {
+            Dictionary<string, string> rv = null;
+            if (_diSchedule.ContainsKey(npc))
+            {
+                rv = _diSchedule[npc];
+            }
+
+            return rv;
+        }
+
+        public static void RollOver()
+        {
+            foreach (Villager n in _diNPCs.Values)
+            {
+                n.RollOver();
+            }
+        }
+
+        #region Spawn Code
+        public static void AddToForest(int ID) { _liForest.Add(ID); }
+        public static void AddToMountain(int ID) { _liMountain.Add(ID); }
+        public static void AddToNight(int ID) { _liNight.Add(ID); }
+        internal static Mob GetMobToSpawn(SpawnConditionEnum eSpawnType)
+        {
+            List<Mob> allowedMobs = new List<Mob>();
+
+            //foreach(Mob m in _diMobs.Values)
+            //{
+            //    if (m.CheckValidConditions(eSpawnType)){
+            //        allowedMobs.Add(m);
+            //    }
+            //}
+
+            return GetMobByIndex(4);// new RHRandom().Next(1, allowedMobs.Count-1));
+        }
+
+        #endregion
     }
 }

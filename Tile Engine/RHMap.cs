@@ -58,7 +58,7 @@ namespace RiverHollow.Tile_Engine
         protected Dictionary<string, TiledMapTileLayer> _diLayers;
         public Dictionary<string, TiledMapTileLayer> Layers => _diLayers;
 
-        protected List<RHTile> _liBuildingTiles;
+        protected List<RHTile> _liTestTiles;
         protected List<WorldActor> _liActors;
         protected List<Mob> _liMobs;
         protected List<Door> _liDoors;
@@ -82,7 +82,7 @@ namespace RiverHollow.Tile_Engine
 
         public RHMap() {
             _liMonsterSpawnPoints = new List<SpawnPoint>();
-            _liBuildingTiles = new List<RHTile>();
+            _liTestTiles = new List<RHTile>();
             _liTilesets = new List<TiledMapTileset>();
             _liActors = new List<WorldActor>();
             _liMobs = new List<Mob>();
@@ -283,7 +283,7 @@ namespace RiverHollow.Tile_Engine
                 else if (obj.Name.Equals("Mob"))
                 {
                     Vector2 vect = obj.Position;
-                    Mob mob = ActorManager.GetMobByIndex(int.Parse(obj.Properties["ID"]), vect);
+                    Mob mob = ObjectManager.GetMobByIndex(int.Parse(obj.Properties["ID"]), vect);
                     AddMob(mob);
                 }
                 else if (obj.Name.Equals("Chest"))
@@ -367,7 +367,7 @@ namespace RiverHollow.Tile_Engine
                     int chosenMob = r.Next(0, _liMobs.Count - 1);
 
                     Vector2 vect = new Vector2(r.Next(1, _map.Width - 1) * TileSize, r.Next(1, _map.Height - 2) * TileSize);
-                    Mob mob = ActorManager.GetMobByIndex(_liMobs[chosenMob], vect);
+                    Mob mob = ObjectManager.GetMobByIndex(_liMobs[chosenMob], vect);
                     mob.CurrentMapName = _name;
                     AddMob(mob);
 
@@ -574,7 +574,7 @@ namespace RiverHollow.Tile_Engine
                 i.Draw(spriteBatch);
             }
 
-            foreach(RHTile t in _liBuildingTiles)
+            foreach(RHTile t in _liTestTiles)
             {
                 bool passable = t.Passable();
                 spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)t.Position.X, (int)t.Position.Y, TileSize, TileSize), new Rectangle(288, 128, TileSize, TileSize) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
@@ -1055,9 +1055,9 @@ namespace RiverHollow.Tile_Engine
             {
                 if (PlayerManager._merchantChest.Contains(mouseLocation))
                 {
-                    Item i = InventoryManager.CurrentItem;
+                    Item i = InventoryManager.GetCurrentItem();
                     PlayerManager._merchantChest.AddItem(i);
-                    InventoryManager.RemoveItemFromInventory(InventoryManager.CurrentItem);
+                    InventoryManager.RemoveItemFromInventory(InventoryManager.GetCurrentItem());
                 }
                 foreach (WorldActor c in _liActors)
                 {
@@ -1074,12 +1074,12 @@ namespace RiverHollow.Tile_Engine
                     else if (c.IsNPC())
                     {
                         Villager n = (Villager)c;
-                        if (InventoryManager.CurrentItem != null &&
+                        if (InventoryManager.GetCurrentItem() != null &&
                             n.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(n.CharCenter) &&
-                            InventoryManager.CurrentItem.ItemType != Item.ItemEnum.Tool &&
-                            InventoryManager.CurrentItem.ItemType != Item.ItemEnum.Equipment)
+                            InventoryManager.GetCurrentItem().ItemType != Item.ItemEnum.Tool &&
+                            InventoryManager.GetCurrentItem().ItemType != Item.ItemEnum.Equipment)
                         {
-                            n.Gift(InventoryManager.CurrentItem);
+                            n.Gift(InventoryManager.GetCurrentItem());
                             rv = true;
                         }
                     }
@@ -1112,18 +1112,15 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
-            if(GraphicCursor.HeldBuilding == null)
-            {
-                if (_liBuildingTiles.Count > 0) { _liBuildingTiles.Clear(); }
-            }
+            if (_liTestTiles.Count > 0) { _liTestTiles.Clear(); }
 
             if (Scrying())
             {
                 Building building = GraphicCursor.HeldBuilding;
-                _liBuildingTiles = new List<RHTile>();
+                _liTestTiles = new List<RHTile>();
                 if (building != null)
                 {
-                    TestMapTiles(building, _liBuildingTiles);
+                    TestMapTiles(building, _liTestTiles);
                 }
 
                 foreach (Building b in _liBuildings)
@@ -1153,6 +1150,13 @@ namespace RiverHollow.Tile_Engine
                             break;
                         }
                     }
+                }
+                StaticItem selectedStaticItem = InventoryManager.GetCurrentStaticItem();
+                if (selectedStaticItem != null)
+                {
+                    Vector2 vec = mouseLocation.ToVector2() - new Vector2(0, selectedStaticItem.GetWorldItem().Height- selectedStaticItem.GetWorldItem().BaseHeight);
+                    selectedStaticItem.SetWorldObjectCoords(vec);
+                    TestMapTiles(selectedStaticItem.GetWorldItem(), _liTestTiles);
                 }
                 if (!found)
                 {
@@ -1358,7 +1362,7 @@ namespace RiverHollow.Tile_Engine
             List<RHTile> tiles = new List<RHTile>();
             if (TestMapTiles(b, tiles))
             {
-                _liBuildingTiles.Clear();
+                _liTestTiles.Clear();
                 AssignMapTiles(b, tiles);
                 _dictEntrance.Add(b.PersonalID.ToString(), b.BoxToExit); //TODO: FIX THIS
                 GraphicCursor.DropBuilding();
@@ -1481,11 +1485,39 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
-        public void PlacePlayerObject(WorldObject obj)
+        public bool PlacePlayerObject(WorldObject obj)
         {
-            RHTile tile = _tileArray[(int)obj.MapPosition.X / TileSize, (int)obj.MapPosition.Y / TileSize];
-            tile.SetWorldObject(obj);
-            AssignMapTiles(obj, new List<RHTile>() { tile });
+            bool rv = false;
+            if (_liTestTiles.Count == 0)
+            {
+                RHTile tile = _tileArray[(int)obj.MapPosition.X / TileSize, (int)obj.MapPosition.Y / TileSize];
+                if (tile.Passable())
+                {
+                    tile.SetWorldObject(obj);
+                    AssignMapTiles(obj, new List<RHTile>() { tile });
+                    rv = true;
+                }
+            }
+            else
+            {
+                bool placeIt = true;
+                foreach (RHTile t in _liTestTiles)
+                {
+                    if (!t.Passable())
+                    {
+                        placeIt = false;
+                        break;
+                    }
+                }
+
+                if (placeIt)
+                {
+                    AssignMapTiles(obj, _liTestTiles);
+                    rv = true;
+                }
+            }
+
+            return rv;
         }
 
         public void AddCharacter(WorldActor c)
@@ -1709,7 +1741,7 @@ namespace RiverHollow.Tile_Engine
 
         public void Spawn()
         {
-            _mob = ActorManager.GetMobByIndex(4);//ActorManager.GetMobToSpawn(_eSpawnType);
+            _mob = ObjectManager.GetMobByIndex(4);//ObjectManager.GetMobToSpawn(_eSpawnType);
             if (_mob != null)
             {
                 _map.AddMob(_mob, _vSpawnPoint);
@@ -2021,9 +2053,9 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
-            if(ActorManager.DiNPC[_iShopID].CurrentMapName == _sMap)
+            if(ObjectManager.DiNPC[_iShopID].CurrentMapName == _sMap)
             {
-                if (MapManager.RetrieveTile(_iShopX, _iShopY).Contains(ActorManager.DiNPC[_iShopID]))
+                if (MapManager.RetrieveTile(_iShopX, _iShopY).Contains(ObjectManager.DiNPC[_iShopID]))
                 {
                     rv = true;
                 }
@@ -2034,7 +2066,7 @@ namespace RiverHollow.Tile_Engine
 
         internal void Talk()
         {
-            ((ShopKeeper)ActorManager.DiNPC[_iShopID]).Talk(true);
+            ((ShopKeeper)ObjectManager.DiNPC[_iShopID]).Talk(true);
         }
     }
 }

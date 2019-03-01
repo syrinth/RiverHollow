@@ -157,14 +157,14 @@ namespace RiverHollow.Actors.CombatStuff
                 }
                 else if (tagType[0].Equals("Ability"))
                 {
-                    ActionList.Add(ActorManager.GetActionByIndex(int.Parse(tagType[1])));
+                    ActionList.Add(ObjectManager.GetActionByIndex(int.Parse(tagType[1])));
                 }
                 else if (tagType[0].Equals("Spell"))
                 {
                     string[] spellSplit = tagType[1].Split('-');
                     foreach (string spell in spellSplit)
                     {
-                        CombatAction ac = (CombatAction)ActorManager.GetActionByIndex(int.Parse(spell));
+                        CombatAction ac = (CombatAction)ObjectManager.GetActionByIndex(int.Parse(spell));
                         _liSpecialActionsList.Add(ac);
                     }
                 }
@@ -187,10 +187,10 @@ namespace RiverHollow.Actors.CombatStuff
             }
 
             //Adds Special, Use Item, Move, and Escape to the Actions
-            ActionList.Add(ActorManager.GetActionByIndex(3));
-            ActionList.Add(ActorManager.GetActionByIndex(2));
-            ActionList.Add(ActorManager.GetActionByIndex(0));
-            ActionList.Add(ActorManager.GetActionByIndex(1));
+            ActionList.Add(ObjectManager.GetActionByIndex(3));
+            ActionList.Add(ObjectManager.GetActionByIndex(2));
+            ActionList.Add(ObjectManager.GetActionByIndex(0));
+            ActionList.Add(ObjectManager.GetActionByIndex(1));
         }
     }
 }

@@ -77,7 +77,7 @@ namespace RiverHollow.GUIComponents.Screens
             public SaveWindow(SaveData data, int id)
             {
                 _data = data;
-                _gText = new GUIText(data.playerData.name + ", " + ActorManager.GetClassByIndex(data.playerData.currentClass).Name);
+                _gText = new GUIText(data.playerData.name + ", " + ObjectManager.GetClassByIndex(data.playerData.currentClass).Name);
                 _iId = id;
                 Position(Vector2.Zero);
                 _winData = GUIWindow.RedWin;

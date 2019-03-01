@@ -24,7 +24,11 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Resource][Image:48-0]</Value>
+      <Value>[Type:Resource][Image:48-0][Sell:15]</Value>
+    </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>[Type:Resource][Image:0-64][Sell:20]</Value>
     </Item>
     <!--<20-24> Tools-->
     <Item>
@@ -60,19 +64,19 @@
     </Item>
     <Item>
       <Key>81</Key>
-      <Value>[Type:Resource][Image:16-16][Sell:10][RefinesInto:85-3]</Value>
+      <Value>[Type:Resource][Image:16-16][Sell:10][RefinesInto:86-3]</Value>
     </Item>
     <Item>
       <Key>82</Key>
-      <Value>[Type:Resource][Image:32-16][Sell:15][RefinesInto:85-3]</Value>
+      <Value>[Type:Resource][Image:32-16][Sell:15][RefinesInto:87-3]</Value>
     </Item>
     <Item>
       <Key>83</Key>
-      <Value>[Type:Resource][Image:48-16][Sell:20][RefinesInto:85-3]</Value>
+      <Value>[Type:Resource][Image:48-16][Sell:20][RefinesInto:88-3]</Value>
     </Item>
     <Item>
       <Key>84</Key>
-      <Value>[Type:Resource][Image:64-16][Sell:75][RefinesInto:85-3]</Value>
+      <Value>[Type:Resource][Image:64-16][Sell:75][RefinesInto:89-3]</Value>
     </Item>
     <Item>
       <Key>85</Key>
@@ -126,6 +130,10 @@
       <Value>[Type:StaticItem][Image:32-0][Sell:3000]</Value>
     </Item>
     <Item>
+      <Key>202</Key>
+      <Value>[Type:StaticItem][Image:48-0][Sell:1000]</Value>
+    </Item>
+    <Item>
       <Key>299</Key>
       <Value>[Type:StaticItem][Image:0-32][Sell:3000]</Value>
     </Item>
@@ -154,6 +162,10 @@
     <Item>
       <Key>402</Key>
       <Value>[Type:Clothes][Image:32-64][Sell:0][CType:Hat][Row:2]</Value>
+    </Item>
+    <Item>
+      <Key>403</Key>
+      <Value>[Type:Clothes][Image:48-64][Sell:0][CType:Chest][Row:3]</Value>
     </Item>
     <!--<500> Food-->
     <Item>
