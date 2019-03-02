@@ -123,15 +123,19 @@
     <!--<200> Machines-->
     <Item>
       <Key>200</Key>
-      <Value>[Type:StaticItem][Image:16-0][Sell:3000]</Value>
+      <Value>[Type:StaticItem][Image:16-0][Sell:3000][ReqItems:85-5]</Value>
     </Item>
     <Item>
       <Key>201</Key>
-      <Value>[Type:StaticItem][Image:32-0][Sell:3000]</Value>
+      <Value>[Type:StaticItem][Image:32-0][Sell:3000][ReqItems:85-5]</Value>
     </Item>
     <Item>
       <Key>202</Key>
-      <Value>[Type:StaticItem][Image:48-0][Sell:1000]</Value>
+      <Value>[Type:StaticItem][Image:48-0][Sell:1000][ReqItems:85-5]</Value>
+    </Item>
+    <Item>
+      <Key>203</Key>
+      <Value>[Type:StaticItem][Image:64-0][Sell:500][ReqItems:2-5]</Value>
     </Item>
     <Item>
       <Key>299</Key>

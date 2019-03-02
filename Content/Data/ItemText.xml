@@ -130,6 +130,10 @@
       <Value>Cauldron/Used for brewing potions</Value>
     </Item>
     <Item>
+      <Key>203</Key>
+      <Value>Workbench/The perfect crafting station</Value>
+    </Item>
+    <Item>
       <Key>299</Key>
       <Value>Essense Extractor/Changes your class</Value>
     </Item>

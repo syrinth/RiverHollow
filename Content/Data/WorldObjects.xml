@@ -13,7 +13,7 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Destructible][Image:2-2][Width:32][Height:32][Break][Hp:5][ReqLvl:1]</Value>
+      <Value>[Type:Destructible][Image:32-32][Width:32][Height:32][Break][Hp:5][ReqLvl:1]</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -21,25 +21,25 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Staircase][Image:3-0][Width:16][Height:16]</Value>
+      <Value>[Type:Staircase][Image:48-0][Width:16][Height:16]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Door][Image:4-0][Width:16][Height:32]</Value>
+      <Value>[Type:Door][Image:64-0][Width:16][Height:32]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Destructible][Image:0-2][Width:16][Height:16][Hp:2][ReqLvl:1]</Value>
+      <Value>[Type:Destructible][Image:0-32][Width:16][Height:16][Hp:2][ReqLvl:1]</Value>
     </Item>
     <!--<60-79> Plants-->
     <Item>
       <Key>60</Key>
-      <Value>[Type:Plant][Image:0-4][Item:40][TrNum:4][TrTime:2-3-4]</Value>
+      <Value>[Type:Plant][Image:0-64][Item:40][TrNum:4][TrTime:2-3-4]</Value>
     </Item>
     <!--<190> Containers-->
     <Item>
       <Key>190</Key>
-      <Value>[Type:Container][Image:0-1][Width:16][Height:16][Rows:1][Cols:8]</Value>
+      <Value>[Type:Container][Image:0-16][Width:16][Height:16][Rows:1][Cols:8]</Value>
     </Item>
     <!--<200> Machines-->
     <Item>
@@ -48,11 +48,15 @@
     </Item>
     <Item>
       <Key>201</Key>
-      <Value>[Type:Crafter][Image:0-2][Width:16][Height:32][Makes:190-5|200-30]</Value>
+      <Value>[Type:Crafter][Image:0-32][Width:16][Height:32][Makes:190-5|200-30]</Value>
     </Item>
     <Item>
       <Key>202</Key>
-      <Value>[Type:Crafter][Image:0-4][Width:32][Height:32][Makes:190-5][Base:2-1]</Value>
+      <Value>[Type:Crafter][Image:0-64][Width:32][Height:32][Makes:190-5][Base:2-1]</Value>
+    </Item>
+    <Item>
+      <Key>203</Key>
+      <Value>[Type:Crafter][Image:0-96][Width:32][Height:32][Makes:203-5|200-5|201-5|202-5][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>299</Key>

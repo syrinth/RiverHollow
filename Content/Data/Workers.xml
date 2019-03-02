@@ -32,7 +32,7 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Martial][Item:-1][Food:3]</Value>
+      <Value>[Type:Martial][Item:10][Food:3]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -407,7 +407,7 @@ namespace RiverHollow.WorldObjects
         protected void ReadSourcePos(string str)
         {
             string[] strPos = str.Split('-');
-            _vSourcePos = new Vector2(0 + TileSize * int.Parse(strPos[0]), 0 + TileSize * int.Parse(strPos[1]));
+            _vSourcePos = new Vector2(int.Parse(strPos[0]), int.Parse(strPos[1]));
         }
         public void SetMapName(string val) { _sMapName = val; }
 
