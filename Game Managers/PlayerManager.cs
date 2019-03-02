@@ -19,7 +19,8 @@ namespace RiverHollow.Game_Managers
     public static class PlayerManager
     {
         #region Properties
-        private static bool _busy;
+        private static bool _bBusy;
+        public static bool Busy => _bBusy;
         public static Tool UseTool;
 
         private static List<Quest> _questLog;
@@ -168,6 +169,33 @@ namespace RiverHollow.Game_Managers
                             //moveDir *= World.Speed;
                             World.MoveBy((int)moveDir.X, (int)moveDir.Y);
                         }
+                    }
+                }
+                else
+                {
+                    UseTool.Update(gameTime);
+                    bool finished = !PlayerManager.UseTool.ToolAnimation.IsAnimating;
+
+                    RHTile target = MapManager.CurrentMap.TargetTile;
+                    //UseTool
+                    if (target != null && finished)
+                    {
+                        if (target.WorldObject != null && (PlayerManager.ToolIsAxe() || PlayerManager.ToolIsPick()))
+                        {
+                            target.DamageObject(PlayerManager.UseTool.DmgValue);
+                        }
+                        else if (PlayerManager.ToolIsShovel())
+                        {
+                            target.Dig();
+                            MapManager.CurrentMap.ModTiles.Add(target);
+                        }
+                        else if (PlayerManager.ToolIsWateringCan())
+                        {
+                            target.Water(true);
+                        }
+
+                        target = null;
+                        PlayerManager.UnsetTool();
                     }
                 }
             }
@@ -320,9 +348,9 @@ namespace RiverHollow.Game_Managers
                 rv = true;
                 UseTool = t;
                 UseTool.Position = Util.SnapToGrid(mouse.ToVector2());
-                if (UseTool != null && !_busy)
+                if (UseTool != null && !_bBusy)
                 {
-                    _busy = true;
+                    _bBusy = true;
                     if (DecreaseStamina(UseTool.StaminaCost))
                     {
                         UseTool.ToolAnimation.IsAnimating = true;
@@ -339,7 +367,7 @@ namespace RiverHollow.Game_Managers
         public static void UnsetTool()
         {
             PlayerManager.UseTool = null;
-            _busy = false;
+            _bBusy = false;
         }
 
         public static void AddBuilding(Building b)

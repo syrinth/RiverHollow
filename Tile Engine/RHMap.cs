@@ -49,7 +49,8 @@ namespace RiverHollow.Tile_Engine
         int _iActiveSpawnPoints;
         public int ActiveSpawnPoints => _iActiveSpawnPoints;
 
-        private static RHTile _targetTile = null;
+        private RHTile _targetTile = null;
+        public RHTile TargetTile => _targetTile;
 
         protected TiledMap _map;
         public TiledMap Map { get => _map; }
@@ -384,33 +385,6 @@ namespace RiverHollow.Tile_Engine
 
         public void Update(GameTime gameTime)
         {
-            Tool useTool = PlayerManager.UseTool;
-            if (useTool != null)
-            {
-                useTool.Update(gameTime);
-                bool finished = !PlayerManager.UseTool.ToolAnimation.IsAnimating;
-
-                //UseTool
-                if (_targetTile != null && finished)
-                {
-                    if (_targetTile.WorldObject != null && (PlayerManager.ToolIsAxe() || PlayerManager.ToolIsPick()))
-                    {
-                        _targetTile.DamageObject(PlayerManager.UseTool.DmgValue);
-                    }
-                    else if (PlayerManager.ToolIsShovel())
-                    {
-                        _targetTile.Dig();
-                        MapManager.CurrentMap.ModTiles.Add(_targetTile);
-                    }
-                    else if (PlayerManager.ToolIsWateringCan())
-                    {
-                        _targetTile.Water(true);
-                    }
-
-                    _targetTile = null;
-                    PlayerManager.UnsetTool();
-                }
-            }
             if (this == MapManager.CurrentMap)
             {
                 _renderer.Update(_map, gameTime);
@@ -1031,134 +1005,136 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
-            if (Scrying()) {
-
-                if (Constructing() || MovingBuildings())
-                {
-                    if (GraphicCursor.HeldBuilding != null)
-                    {
-                        if (AddBuilding(GraphicCursor.HeldBuilding))
-                        {
-                            GUIManager.SetScreen(new NamingScreen(GraphicCursor.HeldBuilding));
-
-                            PlayerManager.TakeMoney(gmMerchandise.MoneyCost);
-                            foreach (KeyValuePair<int, int> kvp in gmMerchandise.RequiredItems)
-                            {
-                                InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
-                            }
-
-                            gmMerchandise = null;
-                            FinishedBuilding();
-                            rv = true;
-                        }
-                    }
-                    else if (GraphicCursor.HeldBuilding == null)
-                    {
-                        PickUpBuilding(mouseLocation);
-                        rv = true;
-                    }
-                }
-                else if (DestroyingBuildings())
-                {
-                    rv = RemoveBuilding(mouseLocation);
-                }
-                else
-                {
-                    if (GraphicCursor.WorkerToPlace > -1)
-                    {
-                        if (AddWorkerToBuilding(mouseLocation))
-                        {
-                            rv = true;
-                        }
-                    }
-                }
-            }
-            else
+            if (!PlayerManager.Busy)
             {
-                RHTile t = MapManager.RetrieveTile(mouseLocation);
-                if (t != null)
+                if (Scrying())
                 {
-                    WorldObject obj = t.WorldObject;
-                    if (obj != null)
-                    {
-                        if (obj == PlayerManager._merchantChest)
-                        {
-                            Item i = InventoryManager.GetCurrentItem();
-                            PlayerManager._merchantChest.AddItem(i);
-                            InventoryManager.RemoveItemFromInventory(InventoryManager.GetCurrentItem());
-                        }
-                        else if (obj.IsMachine())
-                        {
-                            Machine p = (Machine)obj;
-                            if (p.ProcessingFinished()) { p.TakeFinishedItem(); }
-                            else if (!p.Processing()) { p.ProcessClick(); }
-                            GUIManager.SyncScreen();
-                        }
-                        else if (obj.IsClassChanger())
-                        {
-                            ((ClassChanger)obj).ProcessClick();
-                        }
-                        else if (t.WorldObject.IsDestructible())
-                        {
-                            _targetTile = t;
-                            Destructible d = (Destructible)_targetTile.WorldObject;
 
-                            if (d != null)
+                    if (Constructing() || MovingBuildings())
+                    {
+                        if (GraphicCursor.HeldBuilding != null)
+                        {
+                            if (AddBuilding(GraphicCursor.HeldBuilding))
                             {
-                                if (d.Breakable) { rv = PlayerManager.SetTool(Tool.ToolEnum.Pick, mouseLocation); }
-                                else if (d.Choppable) { rv = PlayerManager.SetTool(Tool.ToolEnum.Axe, mouseLocation); }
+                                GUIManager.SetScreen(new NamingScreen(GraphicCursor.HeldBuilding));
+
+                                PlayerManager.TakeMoney(gmMerchandise.MoneyCost);
+                                foreach (KeyValuePair<int, int> kvp in gmMerchandise.RequiredItems)
+                                {
+                                    InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
+                                }
+
+                                gmMerchandise = null;
+                                FinishedBuilding();
+                                rv = true;
                             }
                         }
+                        else if (GraphicCursor.HeldBuilding == null)
+                        {
+                            PickUpBuilding(mouseLocation);
+                            rv = true;
+                        }
+                    }
+                    else if (DestroyingBuildings())
+                    {
+                        rv = RemoveBuilding(mouseLocation);
                     }
                     else
                     {
-                        Vector2 center = t.Center;
-                        if (PlayerManager.PlayerInRange(center.ToPoint()))
+                        if (GraphicCursor.WorkerToPlace > -1)
                         {
-                            _targetTile = t;
-                            StaticItem selectedItem = InventoryManager.GetCurrentStaticItem();
-                            if (selectedItem != null)
+                            if (AddWorkerToBuilding(mouseLocation))
                             {
-                                WorldItem newItem = selectedItem.GetWorldItem();
-                                if (MapManager.PlacePlayerObject(newItem))
-                                {
-                                    newItem.SetMapName(this.Name);
-                                    selectedItem.Remove(1);
-                                }
-                            }
-                            else if (_targetTile.CanDig())
-                            {
-                                rv = PlayerManager.SetTool(Tool.ToolEnum.Shovel, mouseLocation);
-                            }
-                            else if (_targetTile.Flooring != null && _targetTile.Flooring.IsEarth())
-                            {
-                                rv = PlayerManager.SetTool(Tool.ToolEnum.WateringCan, mouseLocation);
+                                rv = true;
                             }
                         }
                     }
-
-                    foreach (WorldActor c in _liActors)
+                }
+                else
+                {
+                    _targetTile = MapManager.RetrieveTile(mouseLocation);
+                    if (_targetTile != null)
                     {
-                        if (c.IsWorldAdventurer())
+                        WorldObject obj = _targetTile.WorldObject;
+                        if (obj != null)
                         {
-                            WorldAdventurer w = (WorldAdventurer)c;
-                            if (w.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(w.CharCenter) &&
-                                InventoryManager.HasSpaceInInventory(w.WhatAreYouHolding()))
+                            if (obj == PlayerManager._merchantChest)
                             {
-                                InventoryManager.AddNewItemToInventory(w.TakeItem());
-                                rv = true;
+                                Item i = InventoryManager.GetCurrentItem();
+                                PlayerManager._merchantChest.AddItem(i);
+                                InventoryManager.RemoveItemFromInventory(InventoryManager.GetCurrentItem());
+                            }
+                            else if (obj.IsMachine())
+                            {
+                                Machine p = (Machine)obj;
+                                if (p.ProcessingFinished()) { p.TakeFinishedItem(); }
+                                else if (!p.Processing()) { p.ProcessClick(); }
+                                GUIManager.SyncScreen();
+                            }
+                            else if (obj.IsClassChanger())
+                            {
+                                ((ClassChanger)obj).ProcessClick();
+                            }
+                            else if (_targetTile.WorldObject.IsDestructible())
+                            {
+                                Destructible d = (Destructible)_targetTile.WorldObject;
+
+                                if (d != null)
+                                {
+                                    if (d.Breakable) { rv = PlayerManager.SetTool(Tool.ToolEnum.Pick, mouseLocation); }
+                                    else if (d.Choppable) { rv = PlayerManager.SetTool(Tool.ToolEnum.Axe, mouseLocation); }
+                                }
                             }
                         }
-                        else if (c.IsNPC())
+                        else
                         {
-                            Villager n = (Villager)c;
-                            if (InventoryManager.GetCurrentItem() != null &&
-                                n.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(n.CharCenter) &&
-                                InventoryManager.GetCurrentItem().ItemType != Item.ItemEnum.Tool &&
-                                InventoryManager.GetCurrentItem().ItemType != Item.ItemEnum.Equipment)
+                            Vector2 center = _targetTile.Center;
+                            if (PlayerManager.PlayerInRange(center.ToPoint()))
                             {
-                                n.Gift(InventoryManager.GetCurrentItem());
-                                rv = true;
+                                StaticItem selectedItem = InventoryManager.GetCurrentStaticItem();
+                                if (selectedItem != null)
+                                {
+                                    WorldItem newItem = selectedItem.GetWorldItem();
+                                    if (MapManager.PlacePlayerObject(newItem))
+                                    {
+                                        newItem.SetMapName(this.Name);
+                                        selectedItem.Remove(1);
+                                    }
+                                }
+                                else if (_targetTile.CanDig())
+                                {
+                                    rv = PlayerManager.SetTool(Tool.ToolEnum.Shovel, mouseLocation);
+                                }
+                                else if (_targetTile.Flooring != null && _targetTile.Flooring.IsEarth())
+                                {
+                                    rv = PlayerManager.SetTool(Tool.ToolEnum.WateringCan, mouseLocation);
+                                }
+                            }
+                        }
+
+                        foreach (WorldActor c in _liActors)
+                        {
+                            if (c.IsWorldAdventurer())
+                            {
+                                WorldAdventurer w = (WorldAdventurer)c;
+                                if (w.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(w.CharCenter) &&
+                                    InventoryManager.HasSpaceInInventory(w.WhatAreYouHolding()))
+                                {
+                                    InventoryManager.AddNewItemToInventory(w.TakeItem());
+                                    rv = true;
+                                }
+                            }
+                            else if (c.IsNPC())
+                            {
+                                Villager n = (Villager)c;
+                                if (InventoryManager.GetCurrentItem() != null &&
+                                    n.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(n.CharCenter) &&
+                                    InventoryManager.GetCurrentItem().ItemType != Item.ItemEnum.Tool &&
+                                    InventoryManager.GetCurrentItem().ItemType != Item.ItemEnum.Equipment)
+                                {
+                                    n.Gift(InventoryManager.GetCurrentItem());
+                                    rv = true;
+                                }
                             }
                         }
                     }
@@ -1263,28 +1239,25 @@ namespace RiverHollow.Tile_Engine
         }
         public void RemoveWorldObject(WorldObject o)
         {
-            List<RHTile> toRemove = new List<RHTile>();
-            foreach (RHTile tile in _liModifiedTiles)
+            if (_liPlacedWorldObjects.Contains(o))
             {
-                if (tile.WorldObject == o)
-                {
-                    tile.RemoveWorldObject();
-                }
-                if (tile.Flooring == o)
-                {
-                    tile.RemoveFlooring();
-                    
-                }
-                if (tile.Flooring == null && tile.WorldObject == null)
-                {
-                    toRemove.Add(tile);
-                }
+                _liPlacedWorldObjects.Remove(o);
             }
 
-            foreach (RHTile tile in toRemove)
-            {
-                _liModifiedTiles.Remove(tile);
-            }
+            //if (tile.Flooring == o)
+            //{
+            //    tile.RemoveFlooring();
+
+            //}
+            //if (tile.Flooring == null && tile.WorldObject == null)
+            //{
+            //    toRemove.Add(tile);
+            //}
+
+            //foreach (RHTile tile in toRemove)
+            //{
+            //    _liModifiedTiles.Remove(tile);
+            //}
         }
         public void RemoveCharacter(WorldActor c)
         {
@@ -2061,8 +2034,8 @@ namespace RiverHollow.Tile_Engine
                 if (rv)
                 {
                     MapManager.DropItemsOnMap(DropManager.DropItemsFromWorldObject(_obj.ID), _obj.CollisionBox.Center.ToVector2());
-                    _obj.RemoveSelfFromTiles();
                     MapManager.RemoveWorldObject(_obj);
+                    _obj.RemoveSelfFromTiles();
                 }
             }
 
