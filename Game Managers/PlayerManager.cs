@@ -21,7 +21,6 @@ namespace RiverHollow.Game_Managers
         #region Properties
         private static bool _busy;
         public static Tool UseTool;
-        private static RHTile _targetTile = null;
 
         private static List<Quest> _questLog;
         public static List<Quest> QuestLog { get => _questLog; }
@@ -96,7 +95,9 @@ namespace RiverHollow.Game_Managers
         {
             InventoryManager.AddNewItemToInventory(0, 990);
             InventoryManager.AddNewItemToInventory(2, 990);
-  
+            InventoryManager.AddNewItemToInventory(20);
+            InventoryManager.AddNewItemToInventory(21);
+            InventoryManager.AddNewItemToInventory(22);
             InventoryManager.AddNewItemToInventory(302);
             InventoryManager.AddNewItemToInventory(400);
             InventoryManager.AddNewItemToInventory(500);
@@ -132,34 +133,7 @@ namespace RiverHollow.Game_Managers
 
             if (!World.FollowingPath)
             {
-                if (UseTool != null)
-                {
-                    UseTool.Update(gameTime);
-                    bool finished = !UseTool.ToolAnimation.IsAnimating;
-
-                    //UseTool
-                    if (_targetTile != null && finished)
-                    {
-                        if (_targetTile.WorldObject != null && (UseTool == _pick || UseTool == _axe))
-                        {
-                            _targetTile.DamageObject(UseTool.DmgValue);
-                        }
-                        else if (UseTool == _shovel)
-                        {
-                            _targetTile.Dig();
-                            MapManager.CurrentMap.ModTiles.Add(_targetTile);
-                        }
-                        else if (UseTool == _wateringCan)
-                        {
-                            _targetTile.Water(true);
-                        }
-
-                        _targetTile = null;
-                        UseTool = null;
-                        _busy = false;
-                    }
-                }
-                else
+                if(UseTool == null)
                 {
                     KeyboardState ks = Keyboard.GetState();
                     if (ks.IsKeyDown(Keys.W))
@@ -208,7 +182,6 @@ namespace RiverHollow.Game_Managers
         {
             if (GameManager.InCombat()) { DrawCombat(spriteBatch); }
             else { DrawWorld(spriteBatch); }
-           // _merchantChest.Draw(spriteBatch);
         }
         public static void DrawWorld(SpriteBatch spriteBatch)
         {
@@ -321,75 +294,27 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static bool ProcessLeftButtonClick(Point mouseLocation)
-        {
-            bool rv = false;
-
-            Point point = Util.SnapToGrid(mouseLocation);
-            RHTile t = MapManager.RetrieveTile(point);
-            if (t != null)
-            {
-                Vector2 center = t.Center;
-                if (PlayerManager.PlayerInRange(center.ToPoint()))
-                {
-                    _targetTile = MapManager.RetrieveTile(mouseLocation);
-                    StaticItem selectedItem = InventoryManager.GetCurrentStaticItem();
-                    if (selectedItem != null)
-                    {
-                        PlaceWorldObject(selectedItem, mouseLocation);
-                    }
-                    else if (_targetTile.WorldObject != null && _targetTile.WorldObject.IsDestructible())
-                    {
-                        Destructible d = (Destructible)_targetTile.WorldObject;
-
-                        if (d != null)
-                        {
-                            if (d.Breakable) { rv = SetTool(_pick, mouseLocation); }
-                            else if (d.Choppable) { rv = SetTool(_axe, mouseLocation); }
-                        }
-                    }
-                    else if (_targetTile.WorldObject == null && _targetTile.CanDig())
-                    {
-                        rv = SetTool(_shovel, mouseLocation);
-                    }
-                    else if (_targetTile.Flooring != null && _targetTile.Flooring.IsEarth())
-                    {
-                        rv = SetTool(_wateringCan, mouseLocation);
-                    }
-                }
-
-                //if (InventoryManager.CurrentItem != null)
-                //{
-                //    if (InventoryManager.CurrentItem.Type == Item.ItemType.Container)
-                //    {
-                //        MapManager.PlaceWorldItem((Container)InventoryManager.CurrentItem, mouseLocation.ToVector2());
-                //        InventoryManager.RemoveItemFromInventory(InventoryManager.CurrentItem);
-                //    }
-                //    else if (InventoryManager.CurrentItem.Type == Item.ItemType.Food)
-                //    {
-                //        Food f = ((Food)InventoryManager.CurrentItem);
-                //        GUIManager.AddTextSelection(f, string.Format("Really eat the {0}? [Yes:Eat|No:DoNothing]", f.Name));
-                //    }
-                //}
-            }
-
-            return rv;
-        }
-        private static void PlaceWorldObject(StaticItem selectedItem, Point mouseLocation)
-        {
-            WorldItem obj = selectedItem.GetWorldItem();
-            if (MapManager.PlacePlayerObject(obj))
-            {
-                obj.SetMapName(CurrentMap);
-                selectedItem.Remove(1);
-                GUIManager.SyncScreen();
-            }
-        }
-
-        internal static bool SetTool(Tool t, Point mouse)
+        public static bool SetTool(Tool.ToolEnum toolType, Point mouse)
         {
             bool rv = false;
             PlayerManager.World.Idle();
+
+            Tool t = null;
+            switch (toolType)
+            {
+                case Tool.ToolEnum.Axe:
+                    t = _axe;
+                    break;
+                case Tool.ToolEnum.Pick:
+                    t = _pick;
+                    break;
+                case Tool.ToolEnum.Shovel:
+                    t = _shovel;
+                    break;
+                case Tool.ToolEnum.WateringCan:
+                    t = _wateringCan;
+                    break;
+            }
             if (t != null && UseTool == null)
             {
                 rv = true;
@@ -410,6 +335,11 @@ namespace RiverHollow.Game_Managers
             }
 
             return rv;
+        }
+        public static void UnsetTool()
+        {
+            PlayerManager.UseTool = null;
+            _busy = false;
         }
 
         public static void AddBuilding(Building b)
@@ -650,5 +580,10 @@ namespace RiverHollow.Game_Managers
                 }
             }
         }
+
+        public static bool ToolIsAxe() { return UseTool == _axe; }
+        public static bool ToolIsPick() { return UseTool == _pick; }
+        public static bool ToolIsShovel() { return UseTool == _shovel; }
+        public static bool ToolIsWateringCan() { return UseTool == _wateringCan; }
     }
 }

@@ -494,7 +494,7 @@ namespace RiverHollow.WorldObjects
             ImportBasics(stringData, id, 1);
 
             ToolType = Util.ParseEnum<ToolEnum>(stringData["ToolType"]);
-            _dmgValue = int.Parse(stringData["Dmg"]);
+            if (stringData.ContainsKey("Dmg")) { _dmgValue = int.Parse(stringData["Dmg"]); }
             _staminaCost = int.Parse(stringData["Stam"]);
 
             _texTexture = GameContentManager.GetTexture(@"Textures\tools");

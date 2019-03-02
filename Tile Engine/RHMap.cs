@@ -49,6 +49,8 @@ namespace RiverHollow.Tile_Engine
         int _iActiveSpawnPoints;
         public int ActiveSpawnPoints => _iActiveSpawnPoints;
 
+        private static RHTile _targetTile = null;
+
         protected TiledMap _map;
         public TiledMap Map { get => _map; }
 
@@ -66,6 +68,7 @@ namespace RiverHollow.Tile_Engine
         public List<WorldActor> ToAdd;
         protected List<Building> _liBuildings;
         protected List<RHTile> _liModifiedTiles;
+        protected List<WorldObject> _liPlacedWorldObjects;
         public List<RHTile> ModTiles => _liModifiedTiles;
         protected List<SpawnPoint> _liMonsterSpawnPoints;
 
@@ -95,6 +98,7 @@ namespace RiverHollow.Tile_Engine
             _dictCharacterLayer = new Dictionary<string, Vector2>();
             _liShopData = new List<ShopData>();
             _liDoors = new List<Door>();
+            _liPlacedWorldObjects = new List<WorldObject>();
 
             ToRemove = new List<WorldActor>();
             ToAdd = new List<WorldActor>();
@@ -380,6 +384,33 @@ namespace RiverHollow.Tile_Engine
 
         public void Update(GameTime gameTime)
         {
+            Tool useTool = PlayerManager.UseTool;
+            if (useTool != null)
+            {
+                useTool.Update(gameTime);
+                bool finished = !PlayerManager.UseTool.ToolAnimation.IsAnimating;
+
+                //UseTool
+                if (_targetTile != null && finished)
+                {
+                    if (_targetTile.WorldObject != null && (PlayerManager.ToolIsAxe() || PlayerManager.ToolIsPick()))
+                    {
+                        _targetTile.DamageObject(PlayerManager.UseTool.DmgValue);
+                    }
+                    else if (PlayerManager.ToolIsShovel())
+                    {
+                        _targetTile.Dig();
+                        MapManager.CurrentMap.ModTiles.Add(_targetTile);
+                    }
+                    else if (PlayerManager.ToolIsWateringCan())
+                    {
+                        _targetTile.Water(true);
+                    }
+
+                    _targetTile = null;
+                    PlayerManager.UnsetTool();
+                }
+            }
             if (this == MapManager.CurrentMap)
             {
                 _renderer.Update(_map, gameTime);
@@ -397,21 +428,17 @@ namespace RiverHollow.Tile_Engine
                 }
             }
 
-            foreach (RHTile tile in _liModifiedTiles)
+            foreach (WorldObject obj in _liPlacedWorldObjects)
             {
-                WorldObject obj = tile.WorldObject;
-                if (obj != null)
+                if (obj.IsProcessor())
                 {
-                    if (obj.IsProcessor())
-                    {
-                        Processor p = (Processor)obj;
-                        p.Update(gameTime);
-                    }
-                    else if (obj.IsCrafter())
-                    {
-                        Crafter c = (Crafter)obj;
-                        c.Update(gameTime);
-                    }
+                    Processor p = (Processor)obj;
+                    p.Update(gameTime);
+                }
+                else if (obj.IsCrafter())
+                {
+                    Crafter c = (Crafter)obj;
+                    c.Update(gameTime);
                 }
             }
 
@@ -569,6 +596,11 @@ namespace RiverHollow.Tile_Engine
                 t.Draw(spriteBatch);
             }
 
+            foreach (WorldObject obj in _liPlacedWorldObjects)
+            {
+                obj.Draw(spriteBatch);
+            }
+
             foreach (Item i in _liItems)
             {
                 i.Draw(spriteBatch);
@@ -576,10 +608,9 @@ namespace RiverHollow.Tile_Engine
 
             foreach(RHTile t in _liTestTiles)
             {
-                bool passable = t.Passable();
+                bool passable = t.Passable() && PlayerManager.PlayerInRange(t.Rect);
                 spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)t.Position.X, (int)t.Position.Y, TileSize, TileSize), new Rectangle(288, 128, TileSize, TileSize) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
             }
-
         }
 
         public void DrawUpper(SpriteBatch spriteBatch)
@@ -877,6 +908,64 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
+            RHTile tile = MapManager.RetrieveTile(mouseLocation);
+            if (tile.WorldObject != null)
+            {
+                WorldObject obj = tile.WorldObject;
+                if (tile.WorldObject.IsBuilding())
+                {
+                    Building b = (Building)obj;
+                    if (b.BoxToEnter.Contains(mouseLocation) && PlayerManager.PlayerInRange(b.BoxToEnter))
+                    {
+                        rv = true;
+                        MapManager.EnterBuilding(b);
+                    }
+                }
+                else if (obj.IsMachine())
+                {
+                    Machine p = (Machine)obj;
+                    if (p.ProcessingFinished()) { p.TakeFinishedItem(); }
+                    else if (InventoryManager.GetCurrentItem() != null && !p.Processing()) { p.ProcessClick(); }
+                }
+                else if (obj.IsContainer())
+                {
+                    if (IsDungeon && DungeonManager.IsEndChest((Container)obj))
+                    {
+                        Staircase stairs = (Staircase)ObjectManager.GetWorldObject(3, Vector2.Zero);
+                        stairs.SetExit(MapManager.HomeMap);
+                        PlaceWorldObject(stairs, true);
+                    }
+                    GUIManager.SetScreen(new InventoryScreen((Container)obj));
+                }
+                else if (obj.IsPlant())
+                {
+                    Plant p = (Plant)obj;
+                    if (p.FinishedGrowing())
+                    {
+                        Item i = p.Harvest();
+                        if (i != null)
+                        {
+                            _liItems.Add(i);
+                        }
+                        MapManager.RemoveWorldObject(p);
+                        p.RemoveSelfFromTiles();
+                    }
+                }
+                else if (obj.IsDoor())
+                {
+                    ((Door)obj).ReadInscription();
+                }
+                else if (tile.WorldObject.ID == 3) //Checks to see if the tile contains a staircase object
+                {
+                    MapManager.ChangeMaps(PlayerManager.World, this.Name, ((Staircase)tile.WorldObject).ToMap);
+                }
+            }
+
+            if (tile.ContainsProperty("Journal", out string val) && val.Equals("true"))
+            {
+                GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameText("Journal"), true));
+            }
+
             foreach (ShopData shop in _liShopData)
             {
                 if (shop.Contains(mouseLocation) && shop.IsOpen())
@@ -900,18 +989,6 @@ namespace RiverHollow.Tile_Engine
                 }
             }
 
-            if (!rv)
-            {
-                foreach (Building b in _liBuildings)
-                {
-                    if (b.BoxToEnter.Contains(mouseLocation) && PlayerManager.PlayerInRange(b.BoxToEnter))
-                    {
-                        rv = true;
-                        MapManager.EnterBuilding(b);
-                        break;
-                    }
-                }
-            }
 
             if (!rv)
             {
@@ -919,8 +996,9 @@ namespace RiverHollow.Tile_Engine
                 for (int i = 0; i < _liItems.Count; i++)
                 {
                     Item it = _liItems[i];
-                    if(it.ManualPickup && it.CollisionBox.Contains(GraphicCursor.GetTranslatedMouseLocation())){
-                        if(InventoryManager.AddItemToInventory(it))
+                    if (it.ManualPickup && it.CollisionBox.Contains(GraphicCursor.GetTranslatedMouseLocation()))
+                    {
+                        if (InventoryManager.AddItemToInventory(it))
                         {
                             removedList.Add(it);
                             break;
@@ -933,62 +1011,6 @@ namespace RiverHollow.Tile_Engine
                     _liItems.Remove(i);
                 }
                 removedList.Clear();
-            }
-
-            if (!rv)
-            {
-                RHTile tile = GetTile(mouseLocation.X / TileSize, mouseLocation.Y / TileSize);
-                if (tile != null)
-                {
-                    if (tile.WorldObject != null)
-                    {
-                        WorldObject s = tile.WorldObject;
-                        if (s.IsMachine())
-                        {
-                            Machine p = (Machine)s;
-                            if (p.ProcessingFinished()) { p.TakeFinishedItem(); }
-                            else if (InventoryManager.GetCurrentItem() != null && !p.Processing()) { p.ProcessClick(); }
-                        }
-                        else if (s.IsContainer())
-                        {
-                            if (IsDungeon && DungeonManager.IsEndChest((Container)s))
-                            {
-                                Staircase stairs = (Staircase)ObjectManager.GetWorldObject(3, Vector2.Zero);
-                                stairs.SetExit(MapManager.HomeMap);
-                                PlaceWorldObject(stairs, true);
-                            }
-                            GUIManager.SetScreen(new InventoryScreen((Container)s));
-                        }
-                        else if (s.IsPlant())
-                        {
-                            Plant p = (Plant)s;
-                            if (p.FinishedGrowing())
-                            {
-                                Item i = p.Harvest();
-                                if (i != null)
-                                {
-                                    _liItems.Add(i);
-                                }
-                                MapManager.RemoveWorldObject(p);
-                                p.RemoveSelfFromTiles();
-                            }
-                        }
-                        else if (s.IsDoor())
-                        {
-                            ((Door)s).ReadInscription();
-                        }
-                    }
-
-                    if (tile.ContainsProperty("Journal", out string val) && val.Equals("true"))
-                    {
-                        GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameText("Journal"), true));
-                    }
-
-                    if (tile.WorldObject != null && tile.WorldObject.ID == 3) //Checks to see if the tile contains a staircase object
-                    {
-                        MapManager.ChangeMaps(PlayerManager.World, this.Name, ((Staircase)tile.WorldObject).ToMap);
-                    }
-                }
             }
 
             if (!rv)
@@ -1053,54 +1075,92 @@ namespace RiverHollow.Tile_Engine
             }
             else
             {
-                if (PlayerManager._merchantChest.Contains(mouseLocation))
+                RHTile t = MapManager.RetrieveTile(mouseLocation);
+                if (t != null)
                 {
-                    Item i = InventoryManager.GetCurrentItem();
-                    PlayerManager._merchantChest.AddItem(i);
-                    InventoryManager.RemoveItemFromInventory(InventoryManager.GetCurrentItem());
-                }
-                foreach (WorldActor c in _liActors)
-                {
-                    if (c.IsWorldAdventurer())
+                    WorldObject obj = t.WorldObject;
+                    if (obj != null)
                     {
-                        WorldAdventurer w = (WorldAdventurer)c;
-                        if (w.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(w.CharCenter) &&
-                            InventoryManager.HasSpaceInInventory(w.WhatAreYouHolding()))
+                        if (obj == PlayerManager._merchantChest)
                         {
-                            InventoryManager.AddNewItemToInventory(w.TakeItem());
-                            rv = true;
+                            Item i = InventoryManager.GetCurrentItem();
+                            PlayerManager._merchantChest.AddItem(i);
+                            InventoryManager.RemoveItemFromInventory(InventoryManager.GetCurrentItem());
                         }
-                    }
-                    else if (c.IsNPC())
-                    {
-                        Villager n = (Villager)c;
-                        if (InventoryManager.GetCurrentItem() != null &&
-                            n.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(n.CharCenter) &&
-                            InventoryManager.GetCurrentItem().ItemType != Item.ItemEnum.Tool &&
-                            InventoryManager.GetCurrentItem().ItemType != Item.ItemEnum.Equipment)
-                        {
-                            n.Gift(InventoryManager.GetCurrentItem());
-                            rv = true;
-                        }
-                    }
-                }
-                foreach (RHTile tile in _liModifiedTiles)
-                {
-                    WorldObject obj = tile.WorldObject;
-                    if (obj != null && obj.CollisionBox.Contains(mouseLocation))
-                    {
-                        if (obj.IsMachine())
+                        else if (obj.IsMachine())
                         {
                             Machine p = (Machine)obj;
                             if (p.ProcessingFinished()) { p.TakeFinishedItem(); }
                             else if (!p.Processing()) { p.ProcessClick(); }
+                            GUIManager.SyncScreen();
                         }
                         else if (obj.IsClassChanger())
                         {
                             ((ClassChanger)obj).ProcessClick();
                         }
+                        else if (t.WorldObject.IsDestructible())
+                        {
+                            _targetTile = t;
+                            Destructible d = (Destructible)_targetTile.WorldObject;
 
-                        break;
+                            if (d != null)
+                            {
+                                if (d.Breakable) { rv = PlayerManager.SetTool(Tool.ToolEnum.Pick, mouseLocation); }
+                                else if (d.Choppable) { rv = PlayerManager.SetTool(Tool.ToolEnum.Axe, mouseLocation); }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Vector2 center = t.Center;
+                        if (PlayerManager.PlayerInRange(center.ToPoint()))
+                        {
+                            _targetTile = t;
+                            StaticItem selectedItem = InventoryManager.GetCurrentStaticItem();
+                            if (selectedItem != null)
+                            {
+                                WorldItem newItem = selectedItem.GetWorldItem();
+                                if (MapManager.PlacePlayerObject(newItem))
+                                {
+                                    newItem.SetMapName(this.Name);
+                                    selectedItem.Remove(1);
+                                }
+                            }
+                            else if (_targetTile.CanDig())
+                            {
+                                rv = PlayerManager.SetTool(Tool.ToolEnum.Shovel, mouseLocation);
+                            }
+                            else if (_targetTile.Flooring != null && _targetTile.Flooring.IsEarth())
+                            {
+                                rv = PlayerManager.SetTool(Tool.ToolEnum.WateringCan, mouseLocation);
+                            }
+                        }
+                    }
+
+                    foreach (WorldActor c in _liActors)
+                    {
+                        if (c.IsWorldAdventurer())
+                        {
+                            WorldAdventurer w = (WorldAdventurer)c;
+                            if (w.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(w.CharCenter) &&
+                                InventoryManager.HasSpaceInInventory(w.WhatAreYouHolding()))
+                            {
+                                InventoryManager.AddNewItemToInventory(w.TakeItem());
+                                rv = true;
+                            }
+                        }
+                        else if (c.IsNPC())
+                        {
+                            Villager n = (Villager)c;
+                            if (InventoryManager.GetCurrentItem() != null &&
+                                n.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(n.CharCenter) &&
+                                InventoryManager.GetCurrentItem().ItemType != Item.ItemEnum.Tool &&
+                                InventoryManager.GetCurrentItem().ItemType != Item.ItemEnum.Equipment)
+                            {
+                                n.Gift(InventoryManager.GetCurrentItem());
+                                rv = true;
+                            }
+                        }
                     }
                 }
             }
@@ -1154,7 +1214,7 @@ namespace RiverHollow.Tile_Engine
                 StaticItem selectedStaticItem = InventoryManager.GetCurrentStaticItem();
                 if (selectedStaticItem != null)
                 {
-                    Vector2 vec = mouseLocation.ToVector2() - new Vector2(0, selectedStaticItem.GetWorldItem().Height- selectedStaticItem.GetWorldItem().BaseHeight);
+                    Vector2 vec = mouseLocation.ToVector2() - new Vector2(selectedStaticItem.GetWorldItem().Width / 4, selectedStaticItem.GetWorldItem().Height- selectedStaticItem.GetWorldItem().BaseHeight);
                     selectedStaticItem.SetWorldObjectCoords(vec);
                     TestMapTiles(selectedStaticItem.GetWorldItem(), _liTestTiles);
                 }
@@ -1475,9 +1535,9 @@ namespace RiverHollow.Tile_Engine
         public void AssignMapTiles(WorldObject o, List<RHTile> tiles)
         {
             o.Tiles = tiles;
-            if (!_liModifiedTiles.Contains(tiles[0]))
+            if (!_liPlacedWorldObjects.Contains(o))
             {
-                _liModifiedTiles.Add(tiles[0]);
+                _liPlacedWorldObjects.Add(o);
             }
             foreach (RHTile t in tiles)
             {

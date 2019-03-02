@@ -140,7 +140,7 @@ namespace RiverHollow.GUIObjects
         public static void DrawPotentialWorldObject(SpriteBatch spriteBatch)
         {
             StaticItem it = InventoryManager.GetCurrentStaticItem();
-            if (it != null)
+            if (!Scrying() && it != null)
             {
                 WorldItem obj = it.GetWorldItem();
                 obj.Draw(spriteBatch);

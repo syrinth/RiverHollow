@@ -18,7 +18,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
     {
         const int _iBoxSize = 64;
         const int _iMargin = 3;
-        const int _iMaxColumns = 4;
+        const int _iMaxColumns = 5;
 
         Crafter _craftMachine;
         WorldAdventurer _craftAdventurer;

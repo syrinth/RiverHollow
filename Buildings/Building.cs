@@ -101,7 +101,7 @@ namespace RiverHollow.Buildings
                 else if (tagType[0].Equals("Dimensions"))
                 {
                     string[] dimensions = tagType[1].Split('-');
-                    _width = int.Parse(dimensions[0]);
+                    _iWidth = int.Parse(dimensions[0]);
                     _iHeight = int.Parse(dimensions[1]);
                     totalCount++;
                 }

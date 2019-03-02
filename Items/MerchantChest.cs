@@ -13,7 +13,7 @@ namespace RiverHollow.WorldObjects
         public MerchantChest()
         {
             _vMapPosition = new Vector2(800, 800);
-            _width = 64;
+            _iWidth = 64;
             _iHeight = 64;
             _rSource = new Rectangle(32, 0, 64, 64);
             _texture = GameContentManager.GetTexture(@"Textures\worldObjects");

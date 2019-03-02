@@ -134,10 +134,7 @@ namespace RiverHollow
                         mousePoint.Y = (int)((mousePoint.Y - translate.Y) / Scale);
                         if (IsRunning())
                         {
-                            if (!MapManager.ProcessLeftButtonClick(mousePoint))
-                            {
-                                PlayerManager.ProcessLeftButtonClick(mousePoint);
-                            }
+                            MapManager.ProcessLeftButtonClick(mousePoint);
                         }
                     }
                 }
