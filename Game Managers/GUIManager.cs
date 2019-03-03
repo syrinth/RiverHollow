@@ -5,6 +5,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.Actors;
+using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using System;
+
 namespace RiverHollow.Game_Managers
 {
     public static class GUIManager
@@ -88,6 +92,27 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
+        public static bool CloseTextWindow(GUITextWindow win) {
+            GameManager.Unpause();
+            return _currentGUIScreen.CloseTextWindow(win);
+        }
+        public static bool IsTextWindowOpen() { return _currentGUIScreen.IsTextWindowOpen(); }
+        public static void OpenTextWindow(string text)
+        {
+            GameManager.Pause();
+            _currentGUIScreen.OpenTextWindow(text);
+        }
+        public static void OpenTextWindow(string text, TalkingActor talker)
+        {
+            GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Normal;
+            GameManager.gmNPC = talker;
+            OpenTextWindow(text);
+        }
+        public static void SetWindowText(string value)
+        {
+            _currentGUIScreen.SetWindowText(value);
+        }
+
         public static void AddTextSelection(string text)
         {
             _currentGUIScreen.AddTextSelection(text);
@@ -129,7 +154,7 @@ namespace RiverHollow.Game_Managers
             _currentGUIScreen.Sync();
         }
 
-        public static bool IsTextScreen() { return _currentGUIScreen != null && _currentGUIScreen.IsTextScreen(); }
+//public static bool IsTextScreen() { return _currentGUIScreen != null && _currentGUIScreen.IsTextScreen(); }
         public static bool IsGameMenuScreen() { return _currentGUIScreen != null && _currentGUIScreen.IsGameMenuScreen(); }
         public static bool IsItemCreationScreen() { return _currentGUIScreen != null && _currentGUIScreen.IsItemCreationScreen(); }
         public static bool IsHUD() { return _currentGUIScreen != null && _currentGUIScreen.IsHUD(); }

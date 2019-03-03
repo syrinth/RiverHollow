@@ -100,7 +100,6 @@
     <Compile Include="GUIComponents\Screens\InventoryScreen.cs" />
     <Compile Include="GUIComponents\Screens\ItemCreationScreen.cs" />
     <Compile Include="GUIComponents\Screens\NamingScreen.cs" />
-    <Compile Include="GUIComponents\Screens\TextScreen.cs" />
     <Compile Include="Game Managers\GUIManager.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIButton.cs" />
     <Compile Include="GUIComponents\Screens\GUIScreen.cs" />

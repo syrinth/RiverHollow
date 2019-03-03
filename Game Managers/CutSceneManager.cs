@@ -111,7 +111,7 @@ namespace RiverHollow.Game_Managers
 
         public void Update(GameTime gameTime)
         {
-            if (!GUIManager.IsTextScreen())                 //If someone is currently talking, do NOT process additional tags
+            if (!GUIManager.IsTextWindowOpen())                 //If someone is currently talking, do NOT process additional tags
             {
                 string[] stringTest = _liCommands[_iCurrentCommand].Split('-');
                 if (stringTest[0].Equals("Speak"))

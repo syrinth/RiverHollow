@@ -36,11 +36,11 @@
     </Item>
     <Item>
       <Key>FoodConfirm</Key>
-      <Value>Really eat the {0}? [Yes:UseItem|No:DoNothing]</Value>
+      <Value>Really eat the {0}? [Yes:UseItem|No:Cancel]</Value>
     </Item>
     <Item>
       <Key>ClassItemConfirm</Key>
-      <Value>Really use the {0}? [Yes:UseItem|No:DoNothing]</Value>
+      <Value>Really use the {0}? [Yes:UseItem|No:Cancel]</Value>
     </Item>
     <Item>
       <Key>AdventurerTree</Key>
@@ -48,7 +48,7 @@
     </Item>
     <Item>
       <Key>Journal</Key>
-      <Value>Write in your journal and go to bed?[Yes:SleepNow|No:Nothing]</Value>
+      <Value>Write in your journal and go to bed?[Yes:SleepNow|No:Cancel]</Value>
     </Item>
     <Item>
       <Key>Wizard1</Key>

@@ -311,7 +311,7 @@ namespace RiverHollow.Actors
         protected Dictionary<string, string> _dialogueDictionary;
 
         public TalkingActor() : base()
-        { 
+        {
             _bCanTalk = true;
         }
 
@@ -322,9 +322,9 @@ namespace RiverHollow.Actors
         public virtual void Talk()
         {
             string text = GetOpeningText();
-            
+
             text = Util.ProcessText(text, _sName);
-            GUIManager.SetScreen(new TextScreen(this, text));
+            GUIManager.OpenTextWindow(text, this);
         }
         public void Talk(string dialogTag)
         {
@@ -334,7 +334,7 @@ namespace RiverHollow.Actors
                 text = _dialogueDictionary[dialogTag];
             }
             text = Util.ProcessText(text, _sName);
-            GUIManager.SetScreen(new TextScreen(this, text));
+            GUIManager.OpenTextWindow(text, this);
         }
 
         public virtual string GetSelectionText()
@@ -388,6 +388,44 @@ namespace RiverHollow.Actors
         {
             return "What?";
         }
+
+        public bool HandleTextInteraction(string chosenAction)
+        {
+            bool rv = true;
+            string nextText = GameManager.gmNPC.GetDialogEntry(chosenAction);
+
+            if (chosenAction.StartsWith("Quest"))
+            {
+                rv = true;
+                Quest q = GameManager.DIQuests[int.Parse(chosenAction.Remove(0, "Quest".Length))];
+                PlayerManager.AddToQuestLog(q);
+                GUIManager.SetWindowText(GameManager.gmNPC.GetDialogEntry("Quest" + q.QuestID));
+            }
+            else if (chosenAction.StartsWith("Donate"))
+            {
+                ((Villager)GameManager.gmNPC).FriendshipPoints += 40;
+                GUIManager.SetWindowText(nextText);
+            }
+            else if (chosenAction.StartsWith("NoDonate"))
+            {
+                ((Villager)GameManager.gmNPC).FriendshipPoints -= 1000;
+                GUIManager.SetWindowText(nextText);
+            }
+            else if (!string.IsNullOrEmpty(nextText))
+            {
+                GUIManager.SetWindowText(nextText);
+            }
+            else if (chosenAction.StartsWith("Cancel"))
+            {
+                rv = false;
+            }
+            else
+            {
+                rv = false;
+            }
+
+            return rv;
+        }
     }
     public class Villager : TalkingActor
     {
@@ -417,8 +455,10 @@ namespace RiverHollow.Actors
             _iIndex = n.ID;
             _sName = n.Name;
             _dialogueDictionary = n._dialogueDictionary;
-            _sPortrait = n.Portrait;
-            _portraitRect = n._portraitRect;
+            //_sPortrait = n.Portrait;
+            //_portraitRect = n._portraitRect;
+            _portraitRect = new Rectangle(0, 0, 48, 60);
+            _sPortrait = _sAdventurerFolder + "WizardPortrait";
 
             LoadContent(_sVillagerFolder + "NPC" + _iIndex);
         }
@@ -533,6 +573,7 @@ namespace RiverHollow.Actors
 
         protected int ImportBasics(string[] stringData)
         {
+            _sPortrait = _sAdventurerFolder + "WizardPortrait";
             _sName = GameContentManager.GetGameText("NPC" + _iIndex);
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
             _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + _iIndex);
@@ -549,7 +590,7 @@ namespace RiverHollow.Actors
                 }
                 else if (tagType[0].Equals("PortRow"))
                 {
-                    _portraitRect = new Rectangle(0, int.Parse(tagType[1]) * 192, PortraitWidth, PortraitHeight);
+                    _portraitRect = new Rectangle(0, 0, 48, 60);
                     totalCount++;
                 }
                 else if (tagType[0].Equals("HomeMap"))
@@ -805,7 +846,7 @@ namespace RiverHollow.Actors
 
                 if (!string.IsNullOrEmpty(text))
                 {
-                    GUIManager.SetScreen(new TextScreen(this, text));
+                    GUIManager.OpenTextWindow(text, this);
                 }
             }
         }
@@ -914,7 +955,7 @@ namespace RiverHollow.Actors
                 }
             }
             text = Util.ProcessText(text, _sName);
-            GUIManager.SetScreen(new TextScreen(this, text));
+            GUIManager.OpenTextWindow(text, this);
         }
 
         public override string GetDialogEntry(string entry)
@@ -1185,7 +1226,7 @@ namespace RiverHollow.Actors
 
                 if (!string.IsNullOrEmpty(text))
                 {
-                    GUIManager.SetScreen(new TextScreen(this, text));
+                    GUIManager.OpenTextWindow(text, this);
                 }
             }
         }
@@ -1836,7 +1877,7 @@ namespace RiverHollow.Actors
                 InventoryManager.AddNewItemToInventory(int.Parse(loot[arrayID]));
 
                 _sText = Util.ProcessText(_sText.Replace("*", "*" + loot[arrayID] + "*"));
-                GUIManager.SetScreen(new TextScreen(this, _sText));
+                GUIManager.OpenTextWindow(_sText, this);
             }
             return rv;
         }

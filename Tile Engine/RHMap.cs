@@ -937,7 +937,8 @@ namespace RiverHollow.Tile_Engine
 
             if (tile.ContainsProperty("Journal", out string val) && val.Equals("true"))
             {
-                GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameText("Journal"), true));
+                GUIManager.OpenTextWindow(GameContentManager.GetGameText("Journal"));
+                //GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameText("Journal"), true));
             }
 
             foreach (ShopData shop in _liShopData)
@@ -1376,7 +1377,8 @@ namespace RiverHollow.Tile_Engine
                         }
                         else
                         {
-                            GUIManager.SetScreen(new TextScreen("Cannot Destroy occupied buildings.", false));
+                            GUIManager.OpenTextWindow(GameContentManager.GetGameText("Cannot Destroy occupied buildings."));
+                            //GUIManager.SetScreen(new TextScreen("Cannot Destroy occupied buildings.", false));
                         }
                     }
                 }

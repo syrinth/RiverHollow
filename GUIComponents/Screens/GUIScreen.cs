@@ -3,6 +3,7 @@ using RiverHollow.GUIObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -12,6 +13,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         protected const int MINI_BTN_HEIGHT = 32;
         protected const int MINI_BTN_WIDTH = 128;
 
+        private GUITextWindow _guiTextWindow;
         protected GUITextSelectionWindow _gSelectionWindow;
         private List<GUIObject> _toRemove;
         protected List<GUIObject> Controls;
@@ -28,12 +30,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (_gSelectionWindow != null) {
                 rv = _gSelectionWindow.ProcessLeftButtonClick(mouse);
             }
+            else if (_guiTextWindow != null) { rv = _guiTextWindow.ProcessLeftButtonClick(mouse); }
             return rv;
         }
         public virtual bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = false;
             if (_gSelectionWindow != null) { _gSelectionWindow.ProcessRightButtonClick(mouse); }
+            else if ( _guiTextWindow != null) { _guiTextWindow.ProcessRightButtonClick(mouse); }
             else { GameManager.BackToMain(); }
             return rv;
         }
@@ -45,6 +49,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
         public virtual void Update(GameTime gameTime)
         {
+            if(_guiTextWindow != null) { _guiTextWindow.Update(gameTime); }
+
             foreach (GUIObject g in Controls)
             {
                 g.Update(gameTime);
@@ -57,10 +63,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            foreach(GUIObject g in Controls)
+            foreach (GUIObject g in Controls)
             {
                 g.Draw(spriteBatch);
             }
+
+            if (_guiTextWindow != null) { _guiTextWindow.Draw(spriteBatch); }
         }
         public virtual bool Contains(Point mouse)
         {
@@ -79,11 +87,43 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public virtual void Sync() { }
 
+        public virtual bool CloseTextWindow(GUITextWindow win) {
+            bool rv = false;
+            if (win == _guiTextWindow)
+            {
+                GameManager.gmNPC = null;
+                _guiTextWindow = null;
+                rv = true;
+            }
+
+            return rv;
+        }
+        public bool IsTextWindowOpen() { return _guiTextWindow != null; }
+        public virtual void OpenTextWindow(string text)
+        {
+            bool selection = text.Contains("[");
+            if (selection) { _guiTextWindow = new GUITextSelectionWindow(text); }
+            else { _guiTextWindow = new GUITextWindow(text); }
+        }
+        public void SetWindowText(string value)
+        {
+            if(_guiTextWindow != null)
+            {
+                if (_guiTextWindow.IsSelectionBox())
+                {
+                    OpenTextWindow(value);
+                }
+                else
+                {
+                    _guiTextWindow.ResetText(value);
+                }
+            }
+        }
+
         public void AddTextSelection(string text)
         {
             if (Controls.Contains(_gSelectionWindow)) { Controls.Remove(_gSelectionWindow); }
             _gSelectionWindow = new GUITextSelectionWindow(text);
-            Controls.Add(_gSelectionWindow);
         }
 
         public void AddControl(GUIObject control)
@@ -102,7 +142,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-        public virtual bool IsTextScreen() { return false; }
         public virtual bool IsGameMenuScreen() { return false; }
         public virtual bool IsItemCreationScreen() { return false; }
         public virtual bool IsHUD() { return false; }

@@ -222,7 +222,8 @@ namespace RiverHollow.WorldObjects
             }
 
             public override void ReadInscription() {
-                GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameText("MobDoor"), false));
+                GUIManager.OpenTextWindow(GameContentManager.GetGameText("MobDoor"));
+               // GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameText("MobDoor"), false));
             }
 
             public void Check(int mobCount)
@@ -249,7 +250,8 @@ namespace RiverHollow.WorldObjects
 
             public override void ReadInscription()
             {
-                GUIManager.SetScreen(new TextScreen(this, GameContentManager.GetGameText("KeyDoor")));
+                GUIManager.OpenTextWindow(GameContentManager.GetGameText("KeyDoor"));
+                //GUIManager.SetScreen(new TextScreen(this, GameContentManager.GetGameText("KeyDoor")));
             }
 
             public bool Check(Item item)
@@ -281,7 +283,8 @@ namespace RiverHollow.WorldObjects
 
             public override void ReadInscription()
             {
-                GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameText("SpringDoor"), false));
+                GUIManager.OpenTextWindow(GameContentManager.GetGameText("SpringDoor"));
+                //GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameText("SpringDoor"), false));
             }
 
             public bool Check()

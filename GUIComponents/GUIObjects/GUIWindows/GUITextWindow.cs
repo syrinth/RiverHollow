@@ -40,33 +40,22 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _iCharHeight = _giText.CharHeight;
         }
 
-        public GUITextWindow(TalkingActor npc, string text) : this()
+        //Used for the default TextWindow that sits on the bottom of the screen
+        public GUITextWindow(string text) : this()
         {
-            GameManager.gmNPC = npc;
-            ParseText(text, false);
+            ParseText(text);
             Height = Math.Max(Height, (_iCharHeight * _maxRows));
+            Resize();
+
+            _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
 
             _next = new GUIImage(new Rectangle(288, 64, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");     //???
             _next.AnchorToInnerSide(this, SideEnum.BottomRight);
 
-            _giPortrait = new GUIImage(npc.PortraitRectangle, npc.PortraitRectangle.Width, npc.PortraitRectangle.Height, npc.Portrait);
-            _giPortrait.SetScale(GameManager.Scale);
-            _giPortrait.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.Left);
-
-            Resize();
-            _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
+            Setup();
         }
 
-        public GUITextWindow(string text) : this()
-        {
-            ParseText(text);
-
-            Height = (int)_giText.TextSize.Y;
-            SetWidthMax((int)_giText.TextSize.X);
-            _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
-            Resize();
-        }
-
+        //Informational boxes that show up anywhere, like tooltips
         public GUITextWindow(Vector2 position, string text) : this()
         {
             Height = (int)_giText.MeasureString(text).Y + (_winData.Edge * 2);
@@ -86,6 +75,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             Resize();
         }
 
+        //Temporary TextWindow that just shows up briefly and is disposed of later.
+        //MAR this should probably be deleted.
         public GUITextWindow(string text, double duration) : this()
         {
             ParseText(text);
@@ -96,6 +87,18 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             Position(Vector2.Zero);
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
             Resize();
+        }
+
+        public void Setup()
+        {
+            if (GameManager.gmNPC != null)
+            {
+                TalkingActor talker = GameManager.gmNPC;
+                _giPortrait = new GUIImage(talker.PortraitRectangle, talker.PortraitRectangle.Width, talker.PortraitRectangle.Height, talker.Portrait);
+                _giPortrait = new GUIImage(talker.PortraitRectangle, talker.PortraitRectangle.Width, talker.PortraitRectangle.Height, talker.Portrait);
+                _giPortrait.SetScale(GameManager.Scale);
+                _giPortrait.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.Left);
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -128,6 +131,39 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             {
                 _giPortrait.Draw(spriteBatch);
             }
+        }
+
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+           return HandleButtonClick();
+            
+        }
+
+        public override bool ProcessRightButtonClick(Point mouse)
+        {
+            return HandleButtonClick();
+        }
+
+        private bool HandleButtonClick()
+        {
+            bool rv = false;
+            if (!Paused)
+            {
+                PrintAll();
+            }
+            else
+            {
+                if (!NextText())
+                {
+                    rv = GUIManager.CloseTextWindow(this);
+                }
+                else
+                {
+                    rv = true;
+                }
+            }
+
+            return rv;
         }
 
         protected void ParseText(string text, bool printAll = true)
@@ -177,14 +213,19 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             return Paused && _next != null;
         }
 
-        public void NextText()
+        public bool NextText()
         {
+            bool rv = false;
+
             Paused = false;
             _iCurrText++;
             if (_iCurrText < _liText.Count)
             {
                 _giText.ResetText(_liText[_iCurrText]);
+                rv = true;
             }
+
+            return rv;
         }
 
         public void PrintAll()
@@ -197,6 +238,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             return _iCurrText == _liText.Count && _giText.Done;
         }
 
+        public void ResetText(string text)
+        {
+            _giText.ResetText(text);
+        }
+
         protected void SetWidthMax(int val)
         {
             SetWidthMax(val, RiverHollow.ScreenWidth / 3);   
@@ -207,5 +253,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             val += (_winData.Edge * 2);
             Width = val > maxWidth ? maxWidth : val;
         }
+
+        public virtual bool IsSelectionBox() { return false; }
     }
 }

@@ -113,7 +113,7 @@ namespace RiverHollow.Screens
                     if (_doorToOpen.Check(IsItemThere(mouse))) { text = GameContentManager.GetGameText("KeyDoorOpen"); }
                     else { text = GameContentManager.GetGameText("KeyDoorClose"); }
 
-                    GUIManager.SetScreen(new TextScreen(text, false));
+                    GUIManager.OpenTextWindow(text);
                 }
                 else
                 {

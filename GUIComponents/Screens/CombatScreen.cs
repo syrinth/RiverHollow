@@ -72,8 +72,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     MapManager.CurrentMap = MapManager.Maps["mapHospital"];
                     PlayerManager.CurrentMap = "mapHospital";
                     PlayerManager.World.Position = Util.SnapToGrid(MapManager.CurrentMap.DictionaryCharacterLayer["playerSpawn"]);
-                    GUIManager.SetScreen(new TextScreen(ObjectManager.DiNPC[7], ObjectManager.DiNPC[7].GetDialogEntry("Healed")));
-                    foreach(CombatAdventurer c in PlayerManager.GetParty())
+                    GUIManager.OpenTextWindow(ObjectManager.DiNPC[7].GetDialogEntry("Healed"), ObjectManager.DiNPC[7]);
+
+                    foreach (CombatAdventurer c in PlayerManager.GetParty())
                     {
                         c.ClearConditions();
                         c.IncreaseHealth((int)(c.MaxHP * 0.10));

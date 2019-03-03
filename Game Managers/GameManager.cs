@@ -88,9 +88,28 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void UseItem()
+        public static void ProcessTextInteraction(string selectedAction)
         {
-            gmActiveItem.UseItem();
+            if (selectedAction.Equals("SleepNow"))
+            {
+                Vector2 pos = PlayerManager.World.CollisionBox.Center.ToVector2();
+                PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"], MapManager.CurrentMap.Name));
+                TravelManager.ClearPathingTracks();
+                GameManager.BackToMain();
+            }
+            else if (selectedAction.Equals("OpenDoor"))
+            {
+                GUIManager.SetScreen(new InventoryScreen(GameManager.gmDoor));
+            }
+            else if (selectedAction.Contains("SellContract") && GameManager.gmNPC != null)
+            {
+                if (GameManager.gmNPC.IsWorldAdventurer())
+                {
+                    ((WorldAdventurer)GameManager.gmNPC).Building.RemoveWorker((WorldAdventurer)GameManager.gmNPC);
+                    PlayerManager.AddMoney(1000);
+                    GameManager.BackToMain();
+                }
+            }
         }
 
         public static void ClearGMObjects()
@@ -134,7 +153,9 @@ namespace RiverHollow.Game_Managers
         public static void DontReadInput() { _inputState = InputEnum.None; }
         public static bool TakingInput() { return _inputState == InputEnum.Input; }
 
-        public static void Pause() { _state = StateEnum.Paused; }
+        public static void Pause() {
+            _state = StateEnum.Paused;
+        }
         public static bool IsPaused() { return _state == StateEnum.Paused; }
 
         public static void Unpause() { _state = StateEnum.Running; }
@@ -157,6 +178,7 @@ namespace RiverHollow.Game_Managers
             GUIManager.SetScreen(new HUDScreen());
         }
         public static bool Informational() { return _mapState == MapEnum.None; }
+
         public static void GoToInformation() {
             _mapState = MapEnum.None;
             _state = StateEnum.Paused;

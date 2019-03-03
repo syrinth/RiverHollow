@@ -31,7 +31,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             _window.AcceptSpace = true;
         }
 
-        public override bool IsTextScreen() { return true; }
+        //public override bool IsTextScreen() { return true; }
 
         public override void Update(GameTime gameTime)
         {

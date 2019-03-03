@@ -21,49 +21,18 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         protected int _iOptionsOffsetY;
         protected Dictionary<int, SelectionData> _diOptions;
 
-        public string SelectedAction;
-
         public GUITextSelectionWindow() : base()
         {
             _diOptions = new Dictionary<int, SelectionData>();
         }
         public GUITextSelectionWindow(string selectionText) : this()
         {
-            Setup(selectionText);
-
-            SetWidthMax(((int)new GUIText(selectionText.Split('[')[0]).TextSize.X));
-
-            Position(new Vector2(RiverHollow.ScreenWidth / 2 - Width / 2, RiverHollow.ScreenHeight / 2 - Height / 2));
-            PostParse();
-        }
-
-        public GUITextSelectionWindow(TalkingActor talker, string selectionText) : this()
-        {
-            GameManager.gmNPC = talker;
             Position(new Vector2(Position().X, RiverHollow.ScreenHeight - Height - SpaceFromBottom));
+            Setup();
 
-            _giPortrait = new GUIImage(talker.PortraitRectangle, talker.PortraitRectangle.Width, talker.PortraitRectangle.Height, talker.Portrait);
-            _giPortrait = new GUIImage(talker.PortraitRectangle, talker.PortraitRectangle.Width, talker.PortraitRectangle.Height, talker.Portrait);
-            _giPortrait.SetScale(GameManager.Scale);
-            _giPortrait.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.Left);
-
-            Setup(selectionText);
-            PostParse();
-        }
-
-        public GUITextSelectionWindow(string selectionText, int door = -1) : this()
-        {
-            Position(new Vector2(Position().X, RiverHollow.ScreenHeight - Height - SpaceFromBottom));
-
-            Setup(selectionText);
-            PostParse();
-        }
-
-        public void Setup(string selectionText)
-        {
-            GameManager.Pause();
             _iKeySelection = 0;
             SeparateText(selectionText);
+            PostParse();
         }
         public void PostParse()
         {
@@ -142,7 +111,28 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         protected virtual void SelectAction()
         {
-            SelectedAction = _diOptions[_iKeySelection].Action;
+            string selectedAction = _diOptions[_iKeySelection].Action;
+
+            if (GameManager.gmNPC != null)
+            {
+                if (!GameManager.gmNPC.HandleTextInteraction(selectedAction))
+                {
+                    GUIManager.CloseTextWindow(this);
+                }
+            }
+            else if (GameManager.gmActiveItem != null)
+            {
+                if (string.Equals(selectedAction, "UseItem"))
+                {
+                    GameManager.gmActiveItem.UseItem();
+                }
+                GUIManager.CloseTextWindow(this);
+            }
+            else
+            {
+                GameManager.ProcessTextInteraction(selectedAction);
+                GUIManager.CloseTextWindow(this);
+            }
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -197,5 +187,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                 _sAction = action;
             }
         }
+
+        public override bool IsSelectionBox() { return true; }
     }
 }

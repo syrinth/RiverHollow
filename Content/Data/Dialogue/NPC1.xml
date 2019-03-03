@@ -36,7 +36,7 @@
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Hello, what can I do for you?.[Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Nothing]</Value>
+      <Value>Hello, what can I do for you?.[Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel]</Value>
     </Item>
     <Item>
       <Key>JoinPartyYes</Key>

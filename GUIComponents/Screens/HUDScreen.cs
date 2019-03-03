@@ -36,15 +36,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-
-            if (base.ProcessLeftButtonClick(mouse))
-            {
-                if (_gSelectionWindow.SelectedAction.Contains("UseItem"))
-                {
-                    GameManager.UseItem();
-                }
-            }
-            else
+            rv = base.ProcessLeftButtonClick(mouse);
+            if (!rv)
             {
                 rv = _gInventory.ProcessLeftButtonClick(mouse);
             }
@@ -55,7 +48,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = false;
-            rv = _gInventory.ProcessRightButtonClick(mouse);
+            rv = base.ProcessLeftButtonClick(mouse);
+            if (!rv)
+            {
+                rv = _gInventory.ProcessRightButtonClick(mouse);
+            }
             return rv;
         }
 
@@ -110,6 +107,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
 
         public override bool IsHUD() { return true; }
+
+        public override void OpenTextWindow(string text)
+        {
+            base.OpenTextWindow(text);
+        }
+        public override bool CloseTextWindow(GUITextWindow win)
+        {
+            bool rv = base.CloseTextWindow(win);
+            return rv;
+        }
     }
 
     public class HUDInventory : GUIWindow

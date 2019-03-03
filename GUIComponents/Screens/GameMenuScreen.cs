@@ -80,15 +80,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (base.ProcessLeftButtonClick(mouse))
-            {
-                rv = true;
-                if (_gSelectionWindow.SelectedAction.Contains("UseItem"))
-                {
-                    GameManager.UseItem();
-                }
-            }
-            else
+            rv = base.ProcessLeftButtonClick(mouse);
+            if (!rv)
             {
                 foreach (GUIObject c in Controls)
                 {

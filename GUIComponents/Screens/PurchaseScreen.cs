@@ -68,7 +68,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
             catch (Exception e)
             {
-
+                int i = 0;
             }
         }
 
