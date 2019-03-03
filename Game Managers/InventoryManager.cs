@@ -349,8 +349,11 @@ Exit:
                     {
                         if (inventory == _playerInventory)
                         {
-                            PlayerManager.RemoveQuestProgress(inventory[i, j]);
-                            if (_playerInventory[i, j].IsTool()) { PlayerManager.CompareTools((Tool)_playerInventory[i, j]); }
+                            if (_playerInventory[i, j] != null)
+                            {
+                                PlayerManager.RemoveQuestProgress(inventory[i, j]);
+                                if (_playerInventory[i, j].IsTool()) { PlayerManager.CompareTools((Tool)_playerInventory[i, j]); }
+                            }
                         }
                         inventory[i, j] = null;
                         goto Exit;
@@ -403,16 +406,16 @@ Exit:
             return rv;
         }
 
-        internal static List<CombatItem> GetPlayerCombatItems()
+        internal static List<Consumable> GetPlayerCombatItems()
         {
-            List<CombatItem> items = new List<CombatItem>();
+            List<Consumable> items = new List<Consumable>();
             for (int i = 0; i < maxItemRows; i++)
             {
                 for (int j = 0; j < maxItemColumns; j++)
                 {
-                    if (_playerInventory[i, j] != null && _playerInventory[i, j].IsCombatItem())
+                    if (_playerInventory[i, j] != null && _playerInventory[i, j].IsConsumable())
                     {
-                        items.Add((CombatItem)_playerInventory[i, j]);
+                        items.Add((Consumable)_playerInventory[i, j]);
                     }
                 }
             }

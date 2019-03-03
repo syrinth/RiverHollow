@@ -160,8 +160,8 @@ namespace RiverHollow.Game_Managers
                         return new Food(id, liData, num);
                     case "Map":
                         return new AdventureMap(id, liData, num);
-                    case "Combat":
-                        return new CombatItem(id, liData, num);
+                    case "Consumable":
+                        return new Consumable(id, liData, num);
                     case "Class":
                         return new ClassItem(id, liData, num);
                     case "Marriage":

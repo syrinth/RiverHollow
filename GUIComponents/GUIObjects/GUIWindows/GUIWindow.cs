@@ -126,13 +126,16 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            DrawTop(spriteBatch);
-            DrawMiddle(spriteBatch);
-            DrawBottom(spriteBatch);
-
-            foreach(GUIObject g in Controls)
+            if (Show)
             {
-                g.Draw(spriteBatch);
+                DrawTop(spriteBatch);
+                DrawMiddle(spriteBatch);
+                DrawBottom(spriteBatch);
+
+                foreach (GUIObject g in Controls)
+                {
+                    g.Draw(spriteBatch);
+                }
             }
         }
 

@@ -3005,7 +3005,7 @@ namespace RiverHollow.Actors
         public void SetClass(CharacterClass x)
         {
             _class = x;
-            _currentHP = MaxHP;
+            _currentHP = MaxHP/2;
             _currentMP = MaxMP;
 
             Weapon = (Equipment)GetItem(_class.WeaponID);

@@ -57,7 +57,7 @@ namespace RiverHollow.GUIObjects
         protected Texture2D _texture = GameContentManager.GetTexture(@"Textures\Dialog");
         protected Color _cEnabled = Color.White;
 
-        public bool Hide = true;
+        public bool Show = true;
 
         public GUIObject() { }
         public GUIObject(GUIObject g)
@@ -74,7 +74,7 @@ namespace RiverHollow.GUIObjects
         public virtual void Update(GameTime gameTime) { }
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if (Hide)
+            if (Show)
             {
                 spriteBatch.Draw(_texture, _drawRect, _sourceRect, _cEnabled * Alpha);
             }

@@ -9,12 +9,13 @@ using RiverHollow.GUIObjects;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Misc;
 using System.Collections.Generic;
+using RiverHollow.Actors;
 
 namespace RiverHollow.WorldObjects
 {
     public class Item
     {
-        public enum ItemEnum { Resource, Class, Equipment, Tool, Container, Food, Map, Combat, StaticItem, Marriage, Clothes  };
+        public enum ItemEnum { Resource, Class, Equipment, Tool, Container, Food, Map, Consumable, StaticItem, Marriage, Clothes  };
 
         #region properties
         protected ItemEnum _eItemType;
@@ -100,7 +101,7 @@ namespace RiverHollow.WorldObjects
             if (stringData.ContainsKey("ReqItems"))
             {
                 //Split by " " for each item set required
-                string[] split = stringData["ReqItems"].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] split = stringData["ReqItems"].Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
                 foreach(string s in split)
                 {
                     string[] splitData = s.Split('-');
@@ -237,13 +238,13 @@ namespace RiverHollow.WorldObjects
             return ret;
         }
 
-        public virtual void UseItem() { }
+        public virtual void UseItem(string action) { }
 
         public virtual void ApplyUniqueData(string str) { }
         public virtual string GetUniqueData() { return string.Empty; }
 
         public bool IsTool() { return _eItemType == ItemEnum.Tool; }
-        public bool IsCombatItem() { return _eItemType == ItemEnum.Combat; }
+        public bool IsConsumable() { return _eItemType == ItemEnum.Consumable; }
         public bool IsEquipment() { return _eItemType == ItemEnum.Equipment; }
         public bool IsFood() { return _eItemType == ItemEnum.Food; }
         public bool IsClassItem() { return _eItemType == ItemEnum.Class; }
@@ -551,7 +552,7 @@ namespace RiverHollow.WorldObjects
             return rv;
         }
 
-        public override void UseItem()
+        public override void UseItem(string action)
         {
             if (Number > 0)
             {
@@ -599,12 +600,10 @@ namespace RiverHollow.WorldObjects
         }
     }
 
-    public class CombatItem : Item
+    public class Consumable : Item
     {
         private ConditionEnum _targetsCondition;
         public ConditionEnum Condition => _targetsCondition;
-        private int _iStam;
-        public int Stamina => _iStam;
         private int _iHealth;
         public int Health => _iHealth;
         private int _iMana;
@@ -612,18 +611,17 @@ namespace RiverHollow.WorldObjects
 
         public bool Helpful;
 
-        public CombatItem(int id, Dictionary<string, string> stringData, int num)
+        public Consumable(int id, Dictionary<string, string> stringData, int num)
         {
             ImportBasics(stringData, id, num);
 
             Helpful = stringData["CombatType"].Equals("Helpful");
-            _targetsCondition = Util.ParseEnum<ConditionEnum>(stringData["Status"]);
-            _iStam = int.Parse(stringData["Stam"]);
-            _iHealth = int.Parse(stringData["Hp"]);
-            _iMana = int.Parse(stringData["Mana"]);
+            if (stringData.ContainsKey("Status")){ _targetsCondition = Util.ParseEnum<ConditionEnum>(stringData["Status"]); }
+            if (stringData.ContainsKey("Hp")) { _iHealth = int.Parse(stringData["Hp"]); }
+            if (stringData.ContainsKey("Mana")) { _iMana = int.Parse(stringData["Mana"]); }
 
             _bStacks = true;
-            _texTexture = GameContentManager.GetTexture(@"Textures\items");
+            _texTexture = GameContentManager.GetTexture(GameContentManager.ITEM_FOLDER + "Consumables");
         }
 
         public override string GetDescription()
@@ -632,11 +630,23 @@ namespace RiverHollow.WorldObjects
             rv += System.Environment.NewLine;
             if (_targetsCondition > 0) { rv += "Fixes: " + _targetsCondition.ToString() + " "; }
             if (_iHealth > 0) { rv += "Health: +" + _iHealth + " "; }
-            if (_iStam > 0) { rv += "Stamina: +" + _iStam + " "; }
             if (_iMana > 0) { rv += "Mana: +" + _iMana + " "; }
             rv = rv.Trim();
 
             return rv;
+        }
+
+        public override void UseItem(string action)
+        {
+            if (Helpful)
+            {
+                CombatActor target = PlayerManager.GetParty()[int.Parse(action)];
+
+                if (_iHealth > 0) { target.IncreaseHealth(_iHealth); }
+                if (_iMana > 0) { target.IncreaseMana(_iMana); }
+
+                Remove(1);
+            }
         }
     }
 
@@ -706,7 +716,7 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        public override void UseItem()
+        public override void UseItem(string action)
         {
             if (Number > 0)
             {

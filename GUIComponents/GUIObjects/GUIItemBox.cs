@@ -79,17 +79,41 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             }
         }
 
-        public bool DrawDescription(SpriteBatch spriteBatch)
+        public override bool ProcessRightButtonClick(Point mouse)
         {
-            if (_textWindow != null) {
-                _textWindow.Draw(spriteBatch);
-            }
-            if (_reqWindow != null)
+            bool rv = false;
+            if (Contains(mouse))
             {
-                _reqWindow.Draw(spriteBatch);
+                rv = true;
+                string text = string.Empty;
+                if (Item.IsFood())                  //Text has a {0} parameter so Item.Name fills it out
+                {
+                    text = string.Format(GameContentManager.GetGameText("FoodConfirm"), Item.Name);
+                }
+                else if (Item.IsClassItem())        //Class Change handler
+                {
+                    text = GameContentManager.GetGameText("ClassItemConfirm");
+                }
+                else if (Item.IsConsumable())       //If the item is a Consumable, construct the selection options from the party
+                {
+                    int i = 0;
+                    text = string.Format("Use {0} on who? [", Item.Name);
+                    foreach (CombatAdventurer adv in PlayerManager.GetParty())
+                    {
+                        text += adv.Name + ":" + i++ + "|";
+                    }
+                    text += "Cancel:Cancel]";
+                }
+
+                //If we have a text string after handling, set the active item and open a new textWindow
+                if (!string.IsNullOrEmpty(text))
+                {
+                    GameManager.gmActiveItem = Item;
+                    GUIManager.OpenTextWindow(text);
+                }
             }
 
-            return _bHover;
+            return rv;
         }
 
         public bool ProcessHover(Point mouse)
@@ -134,6 +158,19 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         {
             _bHover = false;
             _textWindow = null;
+        }
+        public bool DrawDescription(SpriteBatch spriteBatch)
+        {
+            if (_textWindow != null)
+            {
+                _textWindow.Draw(spriteBatch);
+            }
+            if (_reqWindow != null)
+            {
+                _reqWindow.Draw(spriteBatch);
+            }
+
+            return _bHover;
         }
 
         public void SetItem(Item it)

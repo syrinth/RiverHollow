@@ -37,7 +37,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public void PostParse()
         {
             ParseText(_sStatement);
-            Height = (((_numReturns + 1) + _diOptions.Count) * _iCharHeight);
+            Height = Math.Max(Height, (_numReturns + 1 + _diOptions.Count) * _iCharHeight);
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
             _iOptionsOffsetY = Math.Max(_iCharHeight, (int)((_numReturns + 1) * _iCharHeight));
             _giSelection = new GUIImage(new Rectangle(288, 96, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");
@@ -122,10 +122,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             }
             else if (GameManager.gmActiveItem != null)
             {
-                if (string.Equals(selectedAction, "UseItem"))
-                {
-                    GameManager.gmActiveItem.UseItem();
-                }
+                if (!selectedAction.Equals("Cancel")) { GameManager.gmActiveItem.UseItem(selectedAction); }
                 GUIManager.CloseTextWindow(this);
             }
             else

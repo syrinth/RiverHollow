@@ -385,7 +385,7 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void ProcessItemChoice(CombatItem it)
+        public static void ProcessItemChoice(Consumable it)
         {
             CurrentPhase = PhaseEnum.ChooseTarget;
             SelectedAction = new ChosenAction(it);
@@ -834,7 +834,7 @@ namespace RiverHollow.Game_Managers
         }
         public class ChosenAction
         {
-            private CombatItem _chosenItem;
+            private Consumable _chosenItem;
             private CombatAction _chosenAction;
 
             List<CombatTile> _liLegalTiles;
@@ -846,7 +846,7 @@ namespace RiverHollow.Game_Managers
 
             bool _bDrawItem;
 
-            public ChosenAction(CombatItem it)
+            public ChosenAction(Consumable it)
             {
                 User = ActiveCharacter;
                 _chosenItem = it;

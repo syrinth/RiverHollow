@@ -783,7 +783,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         }
                         else if (_actionMenu.ShowItems())
                         {
-                            CombatManager.ProcessItemChoice((CombatItem)_actionMenu.SelectedAction.Item);
+                            CombatManager.ProcessItemChoice((Consumable)_actionMenu.SelectedAction.Item);
                         }
                     }
                 }
@@ -958,7 +958,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     Position(Position());
                 }
 
-                public ActionMenu(List<CombatItem> itemList)
+                public ActionMenu(List<Consumable> itemList)
                 {
                     _display = DisplayEnum.Items;
                     _liActions = new List<ActionButton>();

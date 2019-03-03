@@ -92,6 +92,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (win == _guiTextWindow)
             {
                 GameManager.gmNPC = null;
+                GameManager.gmActiveItem = null;
                 _guiTextWindow = null;
                 rv = true;
             }

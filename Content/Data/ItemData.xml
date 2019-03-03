@@ -50,7 +50,7 @@
     <!--<40-59> Plant Resources-->
     <Item>
       <Key>40</Key>
-      <Value>[Type:Resource][Image:48-48][Sell:8]</Value>
+      <Value>[Type:Resource][Image:64-0][Sell:8]</Value>
     </Item>
     <!--<60-79> Seeds-->
     <Item>
@@ -98,10 +98,10 @@
       <Key>89</Key>
       <Value>[Type:Resource][Image:64-32][Sell:10]</Value>
     </Item>
-    <!--<100> Combat:Status/Stamina/Health/Mana-->
+    <!--<100> Consumables:Buffs/Health/Mana-->
     <Item>
       <Key>101</Key>
-      <Value>[Type:Combat][Image:16-32][Sell:3000][CombatType:Helpful][Hp:20]</Value>
+      <Value>[Type:Consumable][Image:16-0][Sell:3000][CombatType:Helpful][Hp:20][ReqItems:10-1|40-5]</Value>
     </Item>
     <Item>
       <Key>102</Key>
@@ -182,11 +182,11 @@
     </Item>
     <Item>
       <Key>502</Key>
-      <Value>[Type:Food][Image:0-16][Sell:100][Stam:-1]</Value>
+      <Value>[Type:Food][Image:0-32][Sell:100][Stam:-1]</Value>
     </Item>
     <Item>
       <Key>503</Key>
-      <Value>[Type:Food][Image:0-32][Sell:20][Stam:2]</Value>
+      <Value>[Type:Food][Image:0-16][Sell:20][Stam:2]</Value>
     </Item>
     <Item>
       <Key>504</Key>

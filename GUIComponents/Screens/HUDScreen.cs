@@ -6,6 +6,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using System.Collections.Generic;
 using RiverHollow.GUIObjects;
+using RiverHollow.Actors;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -111,10 +112,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override void OpenTextWindow(string text)
         {
             base.OpenTextWindow(text);
+            _gInventory.Show = false;
         }
         public override bool CloseTextWindow(GUITextWindow win)
         {
             bool rv = base.CloseTextWindow(win);
+            _gInventory.Show = true;
             return rv;
         }
     }
@@ -157,7 +160,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
+
+                base.Draw(spriteBatch);
         }
 
         public override void Update(GameTime gameTime)
@@ -268,22 +272,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 foreach (GUIItemBox gib in _liItems)
                 {
-                    if (gib.Contains(mouse))
+                    rv = gib.ProcessRightButtonClick(mouse);
+                    if (rv)
                     {
-                        if (gib.Item.IsFood() || gib.Item.IsClassItem())
-                        {
-                            string text = string.Empty;
-                            if (gib.Item.IsFood())
-                            {
-                                text = GameContentManager.GetGameText("FoodConfirm");
-                            }
-                            else if (gib.Item.IsClassItem())
-                            {
-                                text = GameContentManager.GetGameText("ClassItemConfirm");
-                            }
-                            GameManager.gmActiveItem = gib.Item;
-                            GUIManager.AddTextSelection(string.Format(text, gib.Item.Name));
-                        }
+                        break;
                     }
                 }
             }
