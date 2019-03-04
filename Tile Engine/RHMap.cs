@@ -72,6 +72,7 @@ namespace RiverHollow.Tile_Engine
         protected List<WorldObject> _liPlacedWorldObjects;
         public List<RHTile> ModTiles => _liModifiedTiles;
         protected List<SpawnPoint> _liMonsterSpawnPoints;
+        protected List<int> _liRandomSpawnItems;
 
         protected List<Item> _liItems;
         protected List<ShopData> _liShopData;
@@ -100,6 +101,7 @@ namespace RiverHollow.Tile_Engine
             _liShopData = new List<ShopData>();
             _liDoors = new List<Door>();
             _liPlacedWorldObjects = new List<WorldObject>();
+            _liRandomSpawnItems = new List<int>();
 
             ToRemove = new List<WorldActor>();
             ToAdd = new List<WorldActor>();
@@ -159,6 +161,15 @@ namespace RiverHollow.Tile_Engine
             _bTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
             _bManor = _map.Properties.ContainsKey("Manor");
+
+            if (_map.Properties.ContainsKey("Daily"))
+            {
+                string[] dailySpawns = _map.Properties["Daily"].Split('-');
+                foreach(string s in dailySpawns)
+                {
+                    _liRandomSpawnItems.Add(int.Parse(s));
+                }
+            }
 
             if (_map.Properties.ContainsKey("Production"))
             {
@@ -360,6 +371,17 @@ namespace RiverHollow.Tile_Engine
                     PlaceWorldObject(ObjectManager.GetWorldObject(resources[chosenResource], new Vector2(r.Next(1, _map.Width - 1) * TileSize, r.Next(1, _map.Height - 1) * TileSize)), true);
 
                     numResources--;
+                }
+            }
+
+            if(_liRandomSpawnItems.Count > 0)
+            {
+                RHRandom r = new RHRandom();
+                for (int i = 0; i < 30; i++)
+                {
+                    Plant obj = (Plant)ObjectManager.GetWorldObject(_liRandomSpawnItems[0], new Vector2(r.Next(1, _map.Width - 1) * TileSize, r.Next(1, _map.Height - 1) * TileSize));
+                    obj.FinishGrowth();
+                    PlaceWorldObject(obj, true);
                 }
             }
 
@@ -916,11 +938,11 @@ namespace RiverHollow.Tile_Engine
                     Plant p = (Plant)obj;
                     if (p.FinishedGrowing())
                     {
-                        Item i = p.Harvest();
-                        if (i != null)
-                        {
-                            _liItems.Add(i);
-                        }
+                        Item i = p.Harvest(false);
+                        //if (i != null)
+                        //{
+                        //    _liItems.Add(i);
+                        //}
                         MapManager.RemoveWorldObject(p);
                         p.RemoveSelfFromTiles();
                     }
@@ -1075,6 +1097,17 @@ namespace RiverHollow.Tile_Engine
                             else if (obj.IsClassChanger())
                             {
                                 ((ClassChanger)obj).ProcessClick();
+                            }
+                            else if (obj.IsPlant())
+                            {
+                                Plant p = (Plant)obj;
+                                Item i = p.Harvest(false);
+                                //if (i != null)
+                                //{
+                                //    _liItems.Add(i);
+                                //}
+                                MapManager.RemoveWorldObject(p);
+                                p.RemoveSelfFromTiles();
                             }
                             else if (_targetTile.WorldObject.IsDestructible())
                             {
@@ -1492,7 +1525,7 @@ namespace RiverHollow.Tile_Engine
                     }
                     RHTile tempTile = _tileArray[x, y];
 
-                    if ((!o.WallObject && tempTile.Passable()) || (o.WallObject && tempTile.IsValidWall()))
+                    if ((!o.WallObject && tempTile.Passable() && tempTile.WorldObject == null) || (o.WallObject && tempTile.IsValidWall()))
                     {
                         tiles.Add(tempTile);
                     }

@@ -155,7 +155,7 @@ namespace RiverHollow.WorldObjects
             if (stringData.ContainsKey("Hp")) { _hp = int.Parse(stringData["Hp"]); }
             if (stringData.ContainsKey("ReqLvl")) { _lvltoDmg = int.Parse(stringData["ReqLvl"]); }
 
-            _rSource = new Rectangle(0 + TileSize * x, 0 + TileSize * y, _iWidth, _iHeight);
+            _rSource = new Rectangle(x, y, _iWidth, _iHeight);
         }
 
         public Destructible(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height, bool breakIt, bool chopIt, int lvl, int hp) : base(id, pos, sourceRectangle, tex, width, height)
@@ -796,7 +796,7 @@ namespace RiverHollow.WorldObjects
 
             public override void Draw(SpriteBatch spriteBatch)
             {
-                float layerDepth = (_iCurrentState == 0) ? 1 : _vMapPosition.Y + (_vMapPosition.X / 100);
+                float layerDepth = (_iCurrentState == 0) ? 1 : _vMapPosition.Y + _iHeight +  (_vMapPosition.X / 100);
                 spriteBatch.Draw(_texture, new Rectangle((int)_vMapPosition.X, (int)_vMapPosition.Y, _iWidth, _iHeight), _rSource, Color.White, 0, Vector2.Zero, SpriteEffects.None, layerDepth);
             }
             public void LoadContent()
@@ -824,15 +824,28 @@ namespace RiverHollow.WorldObjects
                 }
             }
             public bool FinishedGrowing() { return _iCurrentState == _iMaxStates-1; }
-            public Item Harvest()
+            public Item Harvest(bool pop)
             {
                 Item it = null;
                 if (FinishedGrowing())
                 {
                     it = ObjectManager.GetItem(_iResourceID);
-                    it.Pop(MapPosition);
+                    if (pop)
+                    {
+                        it.Pop(MapPosition);
+                    }
+                    else
+                    {
+                        InventoryManager.AddItemToInventory(it);
+                    }
                 }
                 return it;
+            }
+
+            public void FinishGrowth()
+            {
+                _iCurrentState = _iMaxStates - 1;
+                //_rSource.X += _iWidth * _iCurrentState;
             }
 
             internal PlantData SaveData()

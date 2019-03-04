@@ -109,7 +109,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 if (!string.IsNullOrEmpty(text))
                 {
                     GameManager.gmActiveItem = Item;
-                    GUIManager.OpenTextWindow(text);
+                    GUIManager.OpenTextWindow(text, false);
                 }
             }
 

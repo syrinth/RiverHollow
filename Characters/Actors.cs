@@ -846,7 +846,7 @@ namespace RiverHollow.Actors
 
                 if (!string.IsNullOrEmpty(text))
                 {
-                    GUIManager.OpenTextWindow(text, this);
+                    GUIManager.OpenTextWindow(text, this, false);
                 }
             }
         }
@@ -1226,7 +1226,7 @@ namespace RiverHollow.Actors
 
                 if (!string.IsNullOrEmpty(text))
                 {
-                    GUIManager.OpenTextWindow(text, this);
+                    GUIManager.OpenTextWindow(text, this, false);
                 }
             }
         }

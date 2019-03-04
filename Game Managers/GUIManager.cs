@@ -97,16 +97,16 @@ namespace RiverHollow.Game_Managers
             return _currentGUIScreen.CloseTextWindow(win);
         }
         public static bool IsTextWindowOpen() { return _currentGUIScreen.IsTextWindowOpen(); }
-        public static void OpenTextWindow(string text)
+        public static void OpenTextWindow(string text, bool open = true)
         {
             GameManager.Pause();
-            _currentGUIScreen.OpenTextWindow(text);
+            _currentGUIScreen.OpenTextWindow(text, open);
         }
-        public static void OpenTextWindow(string text, TalkingActor talker)
+        public static void OpenTextWindow(string text, TalkingActor talker, bool open = true)
         {
             GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Normal;
             GameManager.gmNPC = talker;
-            OpenTextWindow(text);
+            OpenTextWindow(text, open);
         }
         public static void SetWindowText(string value)
         {

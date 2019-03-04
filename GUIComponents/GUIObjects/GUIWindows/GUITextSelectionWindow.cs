@@ -25,10 +25,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         {
             _diOptions = new Dictionary<int, SelectionData>();
         }
-        public GUITextSelectionWindow(string selectionText) : this()
+        public GUITextSelectionWindow(string selectionText, bool open = true) : this()
         {
             Position(new Vector2(Position().X, RiverHollow.ScreenHeight - Height - SpaceFromBottom));
-            Setup();
+            Setup(open);
 
             _iKeySelection = 0;
             SeparateText(selectionText);
@@ -68,44 +68,51 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public override void Update(GameTime gameTime)
         {
-            if (InputManager.CheckPressedKey(Keys.W) || InputManager.CheckPressedKey(Keys.Up))
+            if (_bOpening)
             {
-                if (_iKeySelection - 1 >= 0)
-                {
-                    _giSelection.AlignToObject(_diOptions[_iKeySelection-1].GText, SideEnum.Bottom);
-                    _iKeySelection--;
-                }
-            }
-            else if (InputManager.CheckPressedKey(Keys.S) || InputManager.CheckPressedKey(Keys.Down))
-            {
-                if (_iKeySelection + 1 < _diOptions.Count)
-                {
-                    _giSelection.AlignToObject(_diOptions[_iKeySelection+1].GText, SideEnum.Bottom);
-                    _iKeySelection++;
-                }
+                HandleOpening(gameTime);
             }
             else
             {
-                //Until fixed for specific motion
-                if (_poiMouse != GraphicCursor.Position.ToPoint() && Contains(GraphicCursor.Position.ToPoint()))
+                if (InputManager.CheckPressedKey(Keys.W) || InputManager.CheckPressedKey(Keys.Up))
                 {
-                    _poiMouse = GraphicCursor.Position.ToPoint();
-                    if (_iKeySelection - 1 >= 0 && GraphicCursor.Position.Y < _giSelection.Position().Y)
+                    if (_iKeySelection - 1 >= 0)
                     {
                         _giSelection.AlignToObject(_diOptions[_iKeySelection - 1].GText, SideEnum.Bottom);
                         _iKeySelection--;
                     }
-                    else if (_iKeySelection + 1 < _diOptions.Count && GraphicCursor.Position.Y > _giSelection.Position().Y + _giSelection.Height)
+                }
+                else if (InputManager.CheckPressedKey(Keys.S) || InputManager.CheckPressedKey(Keys.Down))
+                {
+                    if (_iKeySelection + 1 < _diOptions.Count)
                     {
                         _giSelection.AlignToObject(_diOptions[_iKeySelection + 1].GText, SideEnum.Bottom);
                         _iKeySelection++;
                     }
                 }
-            }
+                else
+                {
+                    //Until fixed for specific motion
+                    if (_poiMouse != GraphicCursor.Position.ToPoint() && Contains(GraphicCursor.Position.ToPoint()))
+                    {
+                        _poiMouse = GraphicCursor.Position.ToPoint();
+                        if (_iKeySelection - 1 >= 0 && GraphicCursor.Position.Y < _giSelection.Position().Y)
+                        {
+                            _giSelection.AlignToObject(_diOptions[_iKeySelection - 1].GText, SideEnum.Bottom);
+                            _iKeySelection--;
+                        }
+                        else if (_iKeySelection + 1 < _diOptions.Count && GraphicCursor.Position.Y > _giSelection.Position().Y + _giSelection.Height)
+                        {
+                            _giSelection.AlignToObject(_diOptions[_iKeySelection + 1].GText, SideEnum.Bottom);
+                            _iKeySelection++;
+                        }
+                    }
+                }
 
-            if (InputManager.CheckPressedKey(Keys.Enter))
-            {
-                SelectAction();
+                if (InputManager.CheckPressedKey(Keys.Enter))
+                {
+                    SelectAction();
+                }
             }
         }
 

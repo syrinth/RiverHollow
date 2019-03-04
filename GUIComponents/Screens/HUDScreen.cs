@@ -109,9 +109,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override bool IsHUD() { return true; }
 
-        public override void OpenTextWindow(string text)
+        public override void OpenTextWindow(string text, bool open = true)
         {
-            base.OpenTextWindow(text);
+            base.OpenTextWindow(text, open);
             _gInventory.Show = false;
         }
         public override bool CloseTextWindow(GUITextWindow win)

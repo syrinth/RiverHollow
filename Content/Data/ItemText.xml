@@ -48,6 +48,10 @@
       <Key>40</Key>
       <Value>Silver Leaf/Used in potions</Value>
     </Item>
+    <Item>
+      <Key>41</Key>
+      <Value>Mage Bell/A small flower sought out for it's magical properties</Value>
+    </Item>
     <!--<60-79> Seeds-->
     <Item>
       <Key>60</Key>
@@ -110,6 +114,10 @@
     <Item>
       <Key>104</Key>
       <Value>Poisoned Knife/Inflicts Poison</Value>
+    </Item>
+    <Item>
+      <Key>105</Key>
+      <Value>Lesser Mana Potion/This energy drink will get you casting in no time.</Value>
     </Item>
     <!--<190> Container:Stamina/Health/Mana-->
     <Item>

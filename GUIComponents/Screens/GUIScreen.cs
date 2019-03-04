@@ -100,11 +100,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
         public bool IsTextWindowOpen() { return _guiTextWindow != null; }
-        public virtual void OpenTextWindow(string text)
+        public virtual void OpenTextWindow(string text, bool open = true)
         {
             bool selection = text.Contains("[");
-            if (selection) { _guiTextWindow = new GUITextSelectionWindow(text); }
-            else { _guiTextWindow = new GUITextWindow(text); }
+            if (selection) { _guiTextWindow = new GUITextSelectionWindow(text, open); }
+            else { _guiTextWindow = new GUITextWindow(text, open); }
         }
         public void SetWindowText(string value)
         {
@@ -112,7 +112,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 if (_guiTextWindow.IsSelectionBox())
                 {
-                    OpenTextWindow(value);
+                    OpenTextWindow(value, false);
                 }
                 else
                 {

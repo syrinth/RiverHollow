@@ -26,6 +26,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         protected int _iCharHeight;
         protected int _iCharWidth;
+
+        protected bool _bOpening = false;
+        protected double _dOpenTimer;
+        protected GUIWindow _guiOpenWin;
         #endregion
 
         #region Display
@@ -41,7 +45,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         }
 
         //Used for the default TextWindow that sits on the bottom of the screen
-        public GUITextWindow(string text) : this()
+        public GUITextWindow(string text, bool open = true) : this()
         {
             ParseText(text);
             Height = Math.Max(Height, (_iCharHeight * _maxRows));
@@ -52,7 +56,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _next = new GUIImage(new Rectangle(288, 64, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");     //???
             _next.AnchorToInnerSide(this, SideEnum.BottomRight);
 
-            Setup();
+            Setup(open);
         }
 
         //Informational boxes that show up anywhere, like tooltips
@@ -89,7 +93,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             Resize();
         }
 
-        public void Setup()
+        public void Setup(bool openUp)
         {
             if (GameManager.gmNPC != null)
             {
@@ -99,21 +103,37 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 _giPortrait.SetScale(GameManager.Scale);
                 _giPortrait.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.Left);
             }
+
+            if (openUp)
+            {
+                Show = false;
+                _guiOpenWin = new GUIWindow(GUIWindow.RedWin, Width / 2, Height / 2);
+                _guiOpenWin.CenterOnObject(this);
+                _bOpening = true;
+                _dOpenTimer = 0.03;
+            }
         }
 
         public override void Update(GameTime gameTime)
         {
-            if (ShowNextButton())
+            if (_bOpening)
             {
-                _next.Update(gameTime);
+                HandleOpening(gameTime);
             }
+            else
+            { 
+                if (ShowNextButton())
+                {
+                    _next.Update(gameTime);
+                }
 
-            if (Duration > 0) { Duration -= gameTime.ElapsedGameTime.TotalSeconds; }
-            _giText.Update(gameTime);
+                if (Duration > 0) { Duration -= gameTime.ElapsedGameTime.TotalSeconds; }
+                _giText.Update(gameTime);
 
-            if (_giText.Done)
-            {
-                Paused = true;
+                if (_giText.Done)
+                {
+                    Paused = true;
+                }
             }
         }
 
@@ -121,15 +141,22 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         {
             base.Draw(spriteBatch);
 
-            _giText.Draw(spriteBatch);
-            if (ShowNextButton())
+            if (_bOpening)
             {
-                _next.Draw(spriteBatch);
+                _guiOpenWin.Draw(spriteBatch);
             }
-
-            if (_giPortrait != null)
+            else
             {
-                _giPortrait.Draw(spriteBatch);
+                _giText.Draw(spriteBatch);
+                if (ShowNextButton())
+                {
+                    _next.Draw(spriteBatch);
+                }
+
+                if (_giPortrait != null)
+                {
+                    _giPortrait.Draw(spriteBatch);
+                }
             }
         }
 
@@ -166,6 +193,16 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             return rv;
         }
 
+        protected void HandleOpening(GameTime gameTime)
+        {
+            _dOpenTimer -= gameTime.ElapsedGameTime.TotalSeconds;
+            if (_dOpenTimer <= 0)
+            {
+                _bOpening = false;
+                _guiOpenWin = null;
+                Show = true;
+            }
+        }
         protected void ParseText(string text, bool printAll = true)
         {
             bool grabLast = true;
