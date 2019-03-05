@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIObjects;
+using System;
 using System.Collections.Generic;
 
 namespace RiverHollow.GUIObjects
@@ -24,7 +25,7 @@ namespace RiverHollow.GUIObjects
         }
         internal static Vector2 CenterScreen = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
 
-        protected int _iScale = 1;
+        protected double _dScale = 1;
 
         int _iHeight;
         public int Height
@@ -58,6 +59,10 @@ namespace RiverHollow.GUIObjects
         protected Color _cEnabled = Color.White;
 
         public bool Show = true;
+
+        protected bool _bInitScaleSet = false;
+        protected Vector2 _vInitVals;       //X = Width, Y = Height
+        protected Vector2 _vInitPos;
 
         public GUIObject() { }
         public GUIObject(GUIObject g)
@@ -122,6 +127,51 @@ namespace RiverHollow.GUIObjects
         {
             _vPos = value;
             _drawRect = new Rectangle((int)_vPos.X, (int)_vPos.Y, Width, Height);
+        }
+
+        public virtual void SetScale(double x, bool anchorToPos = true)
+        {
+            if(!_bInitScaleSet)
+            {
+                _bInitScaleSet = true;
+
+                _vInitPos = Position();
+                _vInitVals = new Vector2(Width, Height);
+            }
+
+            int oldWidth = Width;
+            int oldHeight = Height;
+
+            if (x == 1)
+            {
+                Width = (int)_vInitVals.X;
+                Height = (int)_vInitVals.Y;
+                Position(_vInitPos);
+            }
+            else
+            {
+                Width = (int)(_vInitVals.X * x);
+                Height = (int)(_vInitVals.Y * x);
+            }
+
+            int deltaWidth = Math.Abs(oldWidth - Width) / 2;
+            int deltaHeight = Math.Abs(oldHeight - Height) / 2;
+
+            if (!anchorToPos)
+            {
+                Vector2 newPos = Position();
+                if (_dScale < x)
+                {
+                    newPos -= new Vector2(deltaWidth, deltaHeight);
+                }
+                else
+                {
+                    newPos += new Vector2(deltaWidth, deltaHeight);
+                }
+                Position(newPos);
+            }
+
+            _dScale = x;
         }
 
         #region Positioning Code

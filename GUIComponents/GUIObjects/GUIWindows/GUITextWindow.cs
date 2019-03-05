@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIComponents.GUIObjects;
 using System.Collections.Generic;
 using System;
+using RiverHollow.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
@@ -17,7 +18,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         public double Duration;
 
-        protected const int _maxRows = 3;
+        protected const int MAX_ROWS = 5;
 
         #region Parsing
         protected int _iCurrText = 0;
@@ -29,7 +30,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         protected bool _bOpening = false;
         protected double _dOpenTimer;
-        protected GUIWindow _guiOpenWin;
+        protected double _dStartScale = 0.05;
+        protected double _dOpenScale = 0.1;
+        protected double _dTimer = 0.005;
+        protected bool _bGoneOver = true;
         #endregion
 
         #region Display
@@ -47,14 +51,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         //Used for the default TextWindow that sits on the bottom of the screen
         public GUITextWindow(string text, bool open = true) : this()
         {
+            Height = Math.Max(Height, (_iCharHeight * MAX_ROWS));
             ParseText(text);
-            Height = Math.Max(Height, (_iCharHeight * _maxRows));
-            Resize();
-
-            _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
-
-            _next = new GUIImage(new Rectangle(288, 64, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");     //???
-            _next.AnchorToInnerSide(this, SideEnum.BottomRight);
 
             Setup(open);
         }
@@ -95,6 +93,21 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         public void Setup(bool openUp)
         {
+            if (openUp)
+            {
+                _bOpening = true;
+                _dOpenTimer = _dTimer;
+                SetScale(_dStartScale, false);
+            }
+            else
+            {
+                SyncObjects();
+                SetScale(1, false);
+            }
+        }
+
+        protected void SyncObjects()
+        {
             if (GameManager.gmNPC != null)
             {
                 TalkingActor talker = GameManager.gmNPC;
@@ -104,14 +117,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 _giPortrait.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.Left);
             }
 
-            if (openUp)
-            {
-                Show = false;
-                _guiOpenWin = new GUIWindow(GUIWindow.RedWin, Width / 2, Height / 2);
-                _guiOpenWin.CenterOnObject(this);
-                _bOpening = true;
-                _dOpenTimer = 0.03;
-            }
+            _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
+
+            _next = new GUIImage(new Rectangle(288, 64, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");     //???
+            _next.AnchorToInnerSide(this, SideEnum.BottomRight);
         }
 
         public override void Update(GameTime gameTime)
@@ -139,13 +148,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
+            DrawWindow(spriteBatch);
 
-            if (_bOpening)
-            {
-                _guiOpenWin.Draw(spriteBatch);
-            }
-            else
+            if (!_bOpening)
             {
                 _giText.Draw(spriteBatch);
                 if (ShowNextButton())
@@ -156,6 +161,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 if (_giPortrait != null)
                 {
                     _giPortrait.Draw(spriteBatch);
+                }
+
+                foreach (GUIObject g in Controls)
+                {
+                    g.Draw(spriteBatch);
                 }
             }
         }
@@ -198,9 +208,27 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _dOpenTimer -= gameTime.ElapsedGameTime.TotalSeconds;
             if (_dOpenTimer <= 0)
             {
-                _bOpening = false;
-                _guiOpenWin = null;
-                Show = true;
+                _dStartScale += _dOpenScale;
+                if(_dStartScale >= 1)
+                {
+                    if (_bGoneOver)
+                    {
+                        SetScale(1, false);
+                        Position(new Vector2(RiverHollow.ScreenWidth / 4, RiverHollow.ScreenHeight - Height - SpaceFromBottom));
+                        _bOpening = false;
+                        SyncObjects();
+                    }
+                    else
+                    {
+                        SetScale(1 + 0.05, false);
+                        _bGoneOver = true;
+                    }
+                }
+                else
+                {
+                    SetScale(Math.Min(1, _dStartScale), false);
+                    _dOpenTimer = _dTimer;
+                }
             }
         }
         protected void ParseText(string text, bool printAll = true)
@@ -216,7 +244,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 Vector2 measure = _giText.MeasureString(line + word);
 
                 if (measure.Length() >= (Width) ||
-                    _numReturns == _maxRows - 1 && measure.Length() >= (Width) - _giText.CharHeight)
+                    _numReturns == MAX_ROWS - 1 && measure.Length() >= (Width) - _giText.CharHeight)
                 {
                     returnString = returnString + line + '\n';
                     line = string.Empty;

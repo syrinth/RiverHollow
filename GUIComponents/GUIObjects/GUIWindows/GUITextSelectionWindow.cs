@@ -8,6 +8,7 @@ using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.Actors;
 using RiverHollow.Misc;
 using RiverHollow.GUIComponents.GUIObjects;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
@@ -27,17 +28,18 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         }
         public GUITextSelectionWindow(string selectionText, bool open = true) : this()
         {
+            Height = Math.Max(Height, (_iCharHeight * MAX_ROWS));
             Position(new Vector2(Position().X, RiverHollow.ScreenHeight - Height - SpaceFromBottom));
-            Setup(open);
-
             _iKeySelection = 0;
             SeparateText(selectionText);
             PostParse();
+
+            Setup(open);
         }
+
         public void PostParse()
         {
             ParseText(_sStatement);
-            Height = Math.Max(Height, (_numReturns + 1 + _diOptions.Count) * _iCharHeight);
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
             _iOptionsOffsetY = Math.Max(_iCharHeight, (int)((_numReturns + 1) * _iCharHeight));
             _giSelection = new GUIImage(new Rectangle(288, 96, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");
@@ -45,7 +47,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             AddControl(_giSelection);
 
             AssignToColumn();
-            Resize();
         }
 
         private void SeparateText(string selectionText)

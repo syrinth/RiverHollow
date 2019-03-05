@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Actors;
 using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
@@ -160,7 +161,15 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
+            if (Show)
+            {
+                DrawWindow(spriteBatch);
+
+                foreach (GUIObject g in Controls)
+                {
+                    g.Draw(spriteBatch);
+                }
+            }
         }
 
         public string GetText()

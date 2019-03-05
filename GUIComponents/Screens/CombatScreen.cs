@@ -1127,7 +1127,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     if (_gItem != null) { _gItem.Position(value); }
                 }
 
-                public override void SetScale(int x)
+                public override void SetScale(double x, bool anchorToPos = true)
                 {
                     base.SetScale(x);
                     if (_gItem != null) { _gItem.SetScale(x); }
