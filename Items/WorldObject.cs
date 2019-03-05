@@ -91,7 +91,7 @@ namespace RiverHollow.WorldObjects
 
         public virtual void SetCoordinates(Vector2 position)
         {
-            MapPosition = position;
+            MapPosition = Util.SnapToGrid(position);
         }
 
         public void RemoveSelfFromTiles()

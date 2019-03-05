@@ -85,6 +85,8 @@ namespace RiverHollow.Tile_Engine
         public Dictionary<string, Vector2> DictionaryCharacterLayer { get => _dictCharacterLayer; }
         private List<TiledMapObject> _liMapObjects;
 
+        private Dictionary<int, List<TiledMapObject>> _diResourceSpawns;
+
         public RHMap() {
             _liMonsterSpawnPoints = new List<SpawnPoint>();
             _liTestTiles = new List<RHTile>();
@@ -102,6 +104,8 @@ namespace RiverHollow.Tile_Engine
             _liDoors = new List<Door>();
             _liPlacedWorldObjects = new List<WorldObject>();
             _liRandomSpawnItems = new List<int>();
+
+            _diResourceSpawns = new Dictionary<int, List<TiledMapObject>>();
 
             ToRemove = new List<WorldActor>();
             ToAdd = new List<WorldActor>();
@@ -162,15 +166,6 @@ namespace RiverHollow.Tile_Engine
             _bOutside = _map.Properties.ContainsKey("Outside");
             _bManor = _map.Properties.ContainsKey("Manor");
 
-            if (_map.Properties.ContainsKey("Daily"))
-            {
-                string[] dailySpawns = _map.Properties["Daily"].Split('-');
-                foreach(string s in dailySpawns)
-                {
-                    _liRandomSpawnItems.Add(int.Parse(s));
-                }
-            }
-
             if (_map.Properties.ContainsKey("Production"))
             {
                 bool.TryParse(_map.Properties["Production"], out _bProduction);
@@ -211,6 +206,7 @@ namespace RiverHollow.Tile_Engine
 
         public void LoadMapObjects()
         {
+            List<TiledMapObject> spawnObjects = new List<TiledMapObject>();
             ReadOnlyCollection<TiledMapObjectLayer> objectLayers = _map.ObjectLayers;
             foreach (TiledMapObjectLayer ol in objectLayers)
             {
@@ -255,6 +251,39 @@ namespace RiverHollow.Tile_Engine
                         _liMapObjects.Add(mapObject);
                     }
                 }
+                else if (ol.Name.Equals("Spawn"))
+                {
+                    foreach (TiledMapObject mapObject in ol.Objects)
+                    {
+                        spawnObjects.Add(mapObject);
+                    }
+                }
+            }
+
+            //Sets up the Dictionaries for the resource spawn points
+            if (_map.Properties.ContainsKey("ResourceSpawn"))
+            {
+                string[] whatResources = _map.Properties["ResourceSpawn"].Split('-');
+                foreach (string resourceID in whatResources)
+                {
+                    int resource = int.Parse(resourceID);
+                    foreach (TiledMapObject obj in spawnObjects)
+                    {
+                        if (obj.Properties.ContainsKey("Resource"))
+                        {
+                            string[] spawnResources = obj.Properties["Resource"].Split('-');
+                            foreach (string s in spawnResources)
+                            {
+                                int iSpawnResource = int.Parse(s);
+                                if (!_diResourceSpawns.ContainsKey(iSpawnResource))
+                                {
+                                    _diResourceSpawns[iSpawnResource] = new List<TiledMapObject>();
+                                }
+                                _diResourceSpawns[iSpawnResource].Add(obj);
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -265,8 +294,8 @@ namespace RiverHollow.Tile_Engine
             int minMobs = 0;
             int maxMobs = 0;
             List<int> resources = new List<int>();
-            int minRes = 0;
-            int maxRes = 0;
+            int _iMinResources = 0;
+            int _iMaxResources = 0;
 
             foreach (TiledMapObject obj in _liMapObjects)
             {
@@ -356,14 +385,14 @@ namespace RiverHollow.Tile_Engine
                         resources.Add(int.Parse(s));
                     }
                 }
-                else if (prop.Key.Equals("ResourcesMax")) { maxRes = int.Parse(prop.Value); }
-                else if (prop.Key.Equals("ResourcesMin")) { minRes = int.Parse(prop.Value); }
+                else if (prop.Key.Equals("ResourcesMax")) { _iMaxResources = int.Parse(prop.Value); }
+                else if (prop.Key.Equals("ResourcesMin")) { _iMinResources = int.Parse(prop.Value); }
             }
 
             if(resources.Count > 0)
             {
                 RHRandom r = new RHRandom();
-                int numResources = r.Next(minRes, maxRes);
+                int numResources = r.Next(_iMinResources, _iMaxResources);
                 while(numResources != 0)
                 {
                     int chosenResource = r.Next(0, resources.Count - 1);
@@ -385,6 +414,7 @@ namespace RiverHollow.Tile_Engine
                 }
             }
 
+        
             if (_liMobs.Count > 0)
             {
                 RHRandom r = new RHRandom();
@@ -403,6 +433,37 @@ namespace RiverHollow.Tile_Engine
             }
 
             SpawnMobs();
+
+            //Spawns a random assortment of resources them ap will allow wherever they're allowed
+            if (_map.Properties.ContainsKey("ResourceSpawn"))
+            {
+                string[] whatResources = _map.Properties["ResourceSpawn"].Split('-');
+                RHRandom r = new RHRandom();
+                int spawnNumber = r.Next(_iMinResources, _iMaxResources);
+                for (int i = 0; i < spawnNumber; i++)
+                {
+                    int whichResource = int.Parse(whatResources[r.Next(0, whatResources.Length - 1)]);
+
+                    List<TiledMapObject> spawnPoints = _diResourceSpawns[whichResource];
+
+                    int whichPoint = r.Next(0, spawnPoints.Count - 1);
+                    if (spawnPoints.Count > 0)
+                    {
+                        TiledMapObject mapObj = spawnPoints[whichPoint];
+                        int xPoint = r.Next((int)(mapObj.Position.X), (int)(mapObj.Position.X + mapObj.Size.Width));
+                        int yPoint = r.Next((int)(mapObj.Position.Y), (int)(mapObj.Position.Y + mapObj.Size.Height));
+
+                        WorldObject wObj = ObjectManager.GetWorldObject(whichResource);
+                        wObj.SetCoordinates(new Vector2(xPoint, yPoint));
+
+                        if (wObj.IsPlant())
+                        {
+                            ((Plant)wObj).FinishGrowth();
+                        }
+                        PlaceWorldObject(wObj, false);
+                    }
+                }
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -1348,12 +1409,12 @@ namespace RiverHollow.Tile_Engine
                     {
                         if (mapObject.Name.Contains("BuildingChest"))
                         {
-                            b.BuildingChest.MapPosition = Util.SnapToGrid(mapObject.Position);
+                            b.BuildingChest.SetCoordinates(mapObject.Position);
                             PlacePlayerObject(b.BuildingChest);
                         }
                         else if (mapObject.Name.Contains("Pantry"))
                         {
-                            b.Pantry.MapPosition = Util.SnapToGrid(mapObject.Position);
+                            b.Pantry.SetCoordinates(mapObject.Position);
                             PlacePlayerObject(b.Pantry);
                         }
                     }
@@ -1501,7 +1562,7 @@ namespace RiverHollow.Tile_Engine
 
         public bool TestMapTiles(WorldObject o, List<RHTile> tiles)
         {
-            bool rv = false;
+            bool rv = true;
             tiles.Clear();
             Vector2 position = o.MapPosition;
             position.X = ((int)(position.X / TileSize)) * TileSize;
@@ -1509,9 +1570,8 @@ namespace RiverHollow.Tile_Engine
 
             int colColumns = o.CollisionBox.Width / TileSize;
             int colRows = o.CollisionBox.Height / TileSize;
-
-            rv = true;
-            //BUG: Went out of bounds?
+            
+            //This is used to get all the tiles based off the collisonbox size
             for (int i = 0; i < colRows; i++)
             {
                 for (int j = 0; j < colColumns; j++)

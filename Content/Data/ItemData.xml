@@ -56,6 +56,10 @@
       <Key>41</Key>
       <Value>[Type:Resource][Image:64-48][Sell:8]</Value>
     </Item>
+    <Item>
+      <Key>42</Key>
+      <Value>[Type:Resource][Image:80-48][Sell:10]</Value>
+    </Item>
     <!--<60-79> Seeds-->
     <Item>
       <Key>60</Key>

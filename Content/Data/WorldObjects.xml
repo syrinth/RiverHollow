@@ -17,7 +17,7 @@
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Tree][Texture:tree]</Value>
+      <Value>[Type:Tree][Texture:tree][Chop]</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -29,7 +29,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Destructible][Image:0-32][Width:16][Height:16][Hp:2][ReqLvl:1]</Value>
+      <Value>[Type:Destructible][Image:0-32][Width:16][Height:16][Break][Hp:2][ReqLvl:1]</Value>
     </Item>
     <!--<60-79> Plants-->
     <Item>
@@ -39,6 +39,10 @@
     <Item>
       <Key>61</Key>
       <Value>[Type:Plant][Image:64-48][Item:41][TrNum:4][TrTime:2-3-4]</Value>
+    </Item>
+    <Item>
+      <Key>62</Key>
+      <Value>[Type:Plant][Image:80-48][Item:42][TrNum:4][TrTime:2-3-4]</Value>
     </Item>
     <!--<190> Containers-->
     <Item>

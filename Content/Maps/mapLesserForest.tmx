@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="100" height="150" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="16">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="100" height="150" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="25">
  <properties>
-  <property name="Daily" value="61"/>
   <property name="Outside" type="bool" value="true"/>
+  <property name="ResourceSpawn" value="61-5-62"/>
+  <property name="ResourcesMax" type="int" value="50"/>
+  <property name="ResourcesMin" type="int" value="30"/>
  </properties>
  <tileset firstgid="1" source="tilesetManorGrounds.tsx"/>
  <layer id="1" name="Spring Base" width="100" height="150">
@@ -506,6 +508,33 @@
   <object id="13" name="Entrance" x="1554.31" y="450.075" width="9.24993" height="10">
    <properties>
     <property name="Entrance" value="mapHighlands"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="5" name="Spawn">
+  <object id="16" name="Spawn" x="575" y="1368" width="62.6667" height="64.3333">
+   <properties>
+    <property name="Resource" value="61"/>
+   </properties>
+  </object>
+  <object id="18" name="Spawn" x="554.333" y="1527.33" width="112.333" height="111">
+   <properties>
+    <property name="Resource" value="5-62"/>
+   </properties>
+  </object>
+  <object id="20" name="Spawn" x="1494" y="871.833" width="97.3334" height="195">
+   <properties>
+    <property name="Resource" value="61-0"/>
+   </properties>
+  </object>
+  <object id="23" name="Spawn" x="764.667" y="1126.5" width="284" height="123">
+   <properties>
+    <property name="Resource" value="61-62-5"/>
+   </properties>
+  </object>
+  <object id="24" name="Spawn" x="195.333" y="87.8333" width="297.333" height="228.333">
+   <properties>
+    <property name="Resource" value="62"/>
    </properties>
   </object>
  </objectgroup>
