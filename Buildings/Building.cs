@@ -182,7 +182,7 @@ namespace RiverHollow.Buildings
             _sGivenName = val;
         }
 
-        public override void SetCoordinates(Vector2 position)
+        public override void SetCoordinatesByGrid(Vector2 position)
         {
             _vMapPosition = position;
 
@@ -299,7 +299,7 @@ namespace RiverHollow.Buildings
         }
         public void LoadData(BuildingData data)
         {
-            SetCoordinates(new Vector2(data.positionX, data.positionY));
+            SetCoordinatesByGrid(new Vector2(data.positionX, data.positionY));
             _iPersonalID = data.id;
             _iBldgLvl = data.bldgLvl == 0 ? 1 : data.bldgLvl;
 

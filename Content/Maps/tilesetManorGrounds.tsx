@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset name="tilesetManorGrounds" tilewidth="16" tileheight="16" tilecount="625" columns="25">
+<tileset version="1.2" tiledversion="1.2.2" name="tilesetManorGrounds" tilewidth="16" tileheight="16" tilecount="625" columns="25">
  <image source="tilesetManorGrounds.png" trans="ffffff" width="400" height="400"/>
  <terraintypes>
   <terrain name="Blank" tile="18"/>
@@ -7,6 +7,8 @@
   <terrain name="Dirt" tile="29"/>
   <terrain name="Leaves" tile="38"/>
   <terrain name="Shade Grass" tile="126"/>
+  <terrain name="Swamp" tile="201"/>
+  <terrain name="Swamp Water" tile="207"/>
  </terraintypes>
  <tile id="0" terrain="2,2,2,1"/>
  <tile id="1" terrain="2,2,1,1"/>
@@ -263,6 +265,115 @@
  <tile id="153" terrain="4,1,4,4"/>
  <tile id="154" terrain="1,1,4,4"/>
  <tile id="155" terrain="1,4,4,4"/>
+ <tile id="157" terrain="6,6,6,6" probability="0.1"/>
+ <tile id="175" terrain="1,1,1,5"/>
+ <tile id="176" terrain="1,1,5,5"/>
+ <tile id="177" terrain="1,1,5,1"/>
+ <tile id="178" terrain="5,5,5,1"/>
+ <tile id="179" terrain="5,5,1,1"/>
+ <tile id="180" terrain="5,5,1,5"/>
+ <tile id="181" terrain="5,5,5,6">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="182" terrain="5,5,6,6">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="183" terrain="5,5,6,5">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="184" terrain="6,6,6,5">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="185" terrain="6,6,5,5">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="186" terrain="6,6,5,6">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="200" terrain="1,5,1,5"/>
+ <tile id="201" terrain="5,5,5,5"/>
+ <tile id="202" terrain="5,1,5,1"/>
+ <tile id="203" terrain="5,1,5,1"/>
+ <tile id="204" terrain="1,1,1,1"/>
+ <tile id="205" terrain="1,5,1,5"/>
+ <tile id="206" terrain="5,6,5,6">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="207" terrain="6,6,6,6">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="208" terrain="6,5,6,5">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="209" terrain="6,5,6,5">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="210" terrain="5,5,5,5">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="211" terrain="5,6,5,6">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="225" terrain="1,5,1,1"/>
+ <tile id="226" terrain="5,5,1,1"/>
+ <tile id="227" terrain="5,1,1,1"/>
+ <tile id="228" terrain="5,1,5,5"/>
+ <tile id="229" terrain="1,1,5,5"/>
+ <tile id="230" terrain="1,5,5,5"/>
+ <tile id="231" terrain="5,6,5,5">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="232" terrain="6,6,5,5">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="233" terrain="6,5,5,5">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="234" terrain="6,5,6,6">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="235" terrain="5,5,6,6">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="236" terrain="5,6,6,6">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="377">
   <properties>
    <property name="Impassable" type="bool" value="true"/>

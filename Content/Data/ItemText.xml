@@ -123,6 +123,10 @@
       <Key>105</Key>
       <Value>Lesser Mana Potion/This energy drink will get you casting in no time.</Value>
     </Item>
+    <Item>
+      <Key>106</Key>
+      <Value>Intelligence Powder/These mushrooms will expand your mind</Value>
+    </Item>
     <!--<190> Container:Stamina/Health/Mana-->
     <Item>
       <Key>190</Key>
@@ -144,6 +148,10 @@
     <Item>
       <Key>203</Key>
       <Value>Workbench/The perfect crafting station</Value>
+    </Item>
+    <Item>
+      <Key>204</Key>
+      <Value>Mortar and Pestle/Allows the creation of powders</Value>
     </Item>
     <Item>
       <Key>299</Key>

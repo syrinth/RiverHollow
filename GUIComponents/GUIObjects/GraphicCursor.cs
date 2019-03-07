@@ -132,7 +132,7 @@ namespace RiverHollow.GUIObjects
                 Rectangle drawRectangle = new Rectangle(((int)((mousePosition.X - drawIt.Width / 2) / TileSize)) * TileSize, ((int)((mousePosition.Y - drawIt.Height / 2) / TileSize)) * TileSize, drawIt.Width, drawIt.Height);
                 Rectangle source = new Rectangle(0, 0, drawIt.Width, drawIt.Height);
 
-                _heldBuilding.SetCoordinates(new Vector2(drawRectangle.X, drawRectangle.Y));
+                _heldBuilding.SetCoordinatesByGrid(new Vector2(drawRectangle.X, drawRectangle.Y));
                 spriteBatch.Draw(drawIt, drawRectangle, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, mousePosition.Y + drawIt.Height);
             }
         }

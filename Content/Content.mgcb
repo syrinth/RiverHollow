@@ -1182,3 +1182,8 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Items/StaticObjects.png
 
+#begin Maps/mapSwamp.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapSwamp.tmx
+

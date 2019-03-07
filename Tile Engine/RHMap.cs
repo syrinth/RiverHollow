@@ -358,7 +358,7 @@ namespace RiverHollow.Tile_Engine
                 else if (obj.Name.Equals("Manor"))
                 {
                     Building manor = ObjectManager.GetManor();
-                    manor.SetCoordinates(obj.Position);
+                    manor.SetCoordinatesByGrid(obj.Position);
                     manor.SetName(PlayerManager.ManorName);          
                     AddBuilding(manor);
                 }
@@ -454,7 +454,7 @@ namespace RiverHollow.Tile_Engine
                         int yPoint = r.Next((int)(mapObj.Position.Y), (int)(mapObj.Position.Y + mapObj.Size.Height));
 
                         WorldObject wObj = ObjectManager.GetWorldObject(whichResource);
-                        wObj.SetCoordinates(new Vector2(xPoint, yPoint));
+                        wObj.SetCoordinatesByGrid(new Vector2(xPoint, yPoint));
 
                         if (wObj.IsPlant())
                         {
@@ -1170,6 +1170,12 @@ namespace RiverHollow.Tile_Engine
                                 MapManager.RemoveWorldObject(p);
                                 p.RemoveSelfFromTiles();
                             }
+                            else if (obj.IsForageable())
+                            {
+                                InventoryManager.AddItemToInventory(ObjectManager.GetItem(((Forageable)obj).DropID));
+                                MapManager.RemoveWorldObject(obj);
+                                obj.RemoveSelfFromTiles();
+                            }
                             else if (_targetTile.WorldObject.IsDestructible())
                             {
                                 Destructible d = (Destructible)_targetTile.WorldObject;
@@ -1409,12 +1415,12 @@ namespace RiverHollow.Tile_Engine
                     {
                         if (mapObject.Name.Contains("BuildingChest"))
                         {
-                            b.BuildingChest.SetCoordinates(mapObject.Position);
+                            b.BuildingChest.SetCoordinatesByGrid(mapObject.Position);
                             PlacePlayerObject(b.BuildingChest);
                         }
                         else if (mapObject.Name.Contains("Pantry"))
                         {
-                            b.Pantry.SetCoordinates(mapObject.Position);
+                            b.Pantry.SetCoordinatesByGrid(mapObject.Position);
                             PlacePlayerObject(b.Pantry);
                         }
                     }
@@ -1546,7 +1552,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     position.X = (int)(r.Next(1, (MapWidthTiles - 1) * TileSize) / TileSize) * TileSize;
                     position.Y = (int)(r.Next(1, (MapHeightTiles - 1) * TileSize) / TileSize) * TileSize;
-                    o.SetCoordinates(position);
+                    o.SetCoordinatesByGrid(position);
 
                     rv = TestMapTiles(o, tiles);
                 } while (!rv);

@@ -31,6 +31,10 @@
       <Key>5</Key>
       <Value>[Type:Destructible][Image:0-32][Width:16][Height:16][Break][Hp:2][ReqLvl:1]</Value>
     </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>[Type:Forageable][Image:80-64][Width:16][Height:16][Item:9]</Value>
+    </Item>
     <!--<60-79> Plants-->
     <Item>
       <Key>60</Key>
@@ -64,7 +68,11 @@
     </Item>
     <Item>
       <Key>203</Key>
-      <Value>[Type:Crafter][Image:0-96][Width:32][Height:32][Makes:203-5|200-5|201-5|202-5|190-10][Base:2-1]</Value>
+      <Value>[Type:Crafter][Image:0-96][Width:32][Height:32][Makes:203-5|200-5|201-5|202-5|190-10|204-10][Base:2-1]</Value>
+    </Item>
+    <Item>
+      <Key>204</Key>
+      <Value>[Type:Crafter][Image:0-128][Width:16][Height:32][Makes:106-15][Base:1-1]</Value>
     </Item>
     <Item>
       <Key>299</Key>

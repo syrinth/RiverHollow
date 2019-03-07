@@ -18,5 +18,9 @@
       <Key>4</Key>
       <Value>Witch's Curse/Continuing damage on turn//</Value>
     </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>Intelligence Boost/Intelligence has been increased/Mag:10</Value>
+    </Item>
   </Asset>
 </XnaContent>

@@ -10,6 +10,7 @@ using RiverHollow.GUIObjects;
 using System;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Misc;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.WorldObjects
 {
@@ -19,7 +20,7 @@ namespace RiverHollow.WorldObjects
         public static int Rock = 0;
         public static int BigRock = 1;
         public static int Tree = 2;
-        public enum ObjectType { Building, ClassChanger, Crafter, Container, Door, Earth, Floor, WorldObject, Destructible, Processor, Plant};
+        public enum ObjectType { Building, ClassChanger, Crafter, Container, Door, Earth, Floor, WorldObject, Destructible, Processor, Plant, Forageable};
         public ObjectType Type;
 
         public List<RHTile> Tiles;
@@ -89,9 +90,13 @@ namespace RiverHollow.WorldObjects
             return CollisionBox.Contains(m);
         }
 
-        public virtual void SetCoordinates(Vector2 position)
+        public virtual void SetCoordinatesByGrid(Vector2 position)
         {
             MapPosition = Util.SnapToGrid(position);
+        }
+        public virtual void SetCoordinates(Vector2 position)
+        {
+            MapPosition = position;
         }
 
         public void RemoveSelfFromTiles()
@@ -114,6 +119,37 @@ namespace RiverHollow.WorldObjects
         public bool IsDoor() { return Type == ObjectType.Door; }
         public bool IsClassChanger() { return Type == ObjectType.ClassChanger; }
         public bool IsBuilding() { return Type == ObjectType.Building; }
+        public bool IsForageable() { return Type == ObjectType.Forageable; }
+    }
+
+    public class Forageable : WorldObject
+    {
+        int _iDropID;
+        public int DropID => _iDropID;
+
+        public Forageable(int id, Dictionary<string, string> stringData, Vector2 pos)
+        {
+            Type = ObjectType.Forageable;
+            _id = id;
+            _vMapPosition = pos;
+
+            _wallObject = false;
+            Tiles = new List<RHTile>();
+
+            int x = 0;
+            int y = 0;
+            _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
+
+            string[] texIndices = stringData["Image"].Split('-');
+            x = int.Parse(texIndices[0]);
+            y = int.Parse(texIndices[1]);
+
+            _iWidth = int.Parse(stringData["Width"]);
+            _iHeight = int.Parse(stringData["Height"]);
+            _iDropID = int.Parse(stringData["Item"]);
+
+            _rSource = new Rectangle(x, y, _iWidth, _iHeight);
+        }
     }
 
     public class Destructible : WorldObject
@@ -455,6 +491,7 @@ namespace RiverHollow.WorldObjects
 
         public class Machine : WorldItem
         {
+            protected ItemBubble _itemBubble;
             protected Item _heldItem;
             protected double _dProcessedTime;
             public double ProcessedTime => _dProcessedTime;
@@ -481,13 +518,18 @@ namespace RiverHollow.WorldObjects
                 _sprite.SetCurrentAnimation(MachineAnimEnum.Idle);
                 _sprite.IsAnimating = true;
             }
-            public virtual void Update(GameTime gameTime) { }
+            public virtual void Update(GameTime gameTime) {
+                if (_itemBubble != null)
+                {
+                    _itemBubble.Update(gameTime);
+                }
+            }
             public override void Draw(SpriteBatch spriteBatch)
             {
-                _sprite.Draw(spriteBatch, true);
-                if (_heldItem != null)
+                _sprite.Draw(spriteBatch);
+                if(_itemBubble != null)
                 {
-                    _heldItem.Draw(spriteBatch, new Rectangle(HeldItemPos.ToPoint(), new Point(TileSize, TileSize)), true);
+                    _itemBubble.Draw(spriteBatch);
                 }
             }
 
@@ -498,6 +540,7 @@ namespace RiverHollow.WorldObjects
             {
                 InventoryManager.AddItemToInventory(_heldItem);
                 _heldItem = null;
+                _itemBubble = null;
             }
 
             public virtual int GetProcessingItemId() { return -1; }
@@ -531,6 +574,7 @@ namespace RiverHollow.WorldObjects
 
                 public override void Update(GameTime gameTime)
                 {
+                    base.Update(gameTime);
                     if (_currentlyProcessing != null)
                     {
                         _sprite.Update(gameTime);
@@ -542,6 +586,8 @@ namespace RiverHollow.WorldObjects
                             _dProcessedTime = -1;
                             _currentlyProcessing = null;
                             _sprite.SetCurrentAnimation(MachineAnimEnum.Idle);
+
+                            _itemBubble = new ItemBubble(_heldItem, this);
                         }
                     }
                 }
@@ -640,6 +686,7 @@ namespace RiverHollow.WorldObjects
 
                 public override void Update(GameTime gameTime)
                 {
+                    base.Update(gameTime);
                     if (_iCurrentlyMaking != -1)
                     {
                         _sprite.Update(gameTime);
@@ -651,6 +698,8 @@ namespace RiverHollow.WorldObjects
                             _dProcessedTime = -1;
                             _iCurrentlyMaking = -1;
                             _sprite.SetCurrentAnimation(MachineAnimEnum.Idle);
+
+                            _itemBubble = new ItemBubble(_heldItem, this);
                         }
                     }
                 }
@@ -690,6 +739,73 @@ namespace RiverHollow.WorldObjects
                     _heldItem = ObjectManager.GetItem(mac.heldItemID);
 
                     if (_iCurrentlyMaking != -1) { _sprite.SetCurrentAnimation(MachineAnimEnum.Working); }
+                }
+            }
+
+            public class ItemBubble : WorldObject
+            {
+                private const int MAX_POSITIONS = 3;
+                private const double TICK_TIMER = 0.3;
+                private Item _item;
+                private double _dTimer;
+                private Vector2[] _vArrPositions;
+                private int _iCurrentPosition;
+                private bool _bDec;
+
+                public ItemBubble(Item it, Machine myMachine)
+                {
+                    _item = it;
+
+                    _texture = GameContentManager.GetTexture(@"Textures\Dialog");
+                    _iWidth = TileSize * 2;
+                    _iHeight = TileSize * 2;
+                    _rSource = new Rectangle(16, 80, _iWidth, _iHeight);
+
+                    _bDec = false;
+                    _dTimer = 0;
+                    _iCurrentPosition = 0;
+
+                    MapPosition =  myMachine._vMapPosition + new Vector2((myMachine.Width / 2) - (_iWidth / 2), -_iHeight);
+
+                    _vArrPositions = new Vector2[3];
+                    _vArrPositions[0] = new Vector2(_vMapPosition.X, _vMapPosition.Y + 1);
+                    _vArrPositions[1] = new Vector2(_vMapPosition.X, _vMapPosition.Y);
+                    _vArrPositions[2] = new Vector2(_vMapPosition.X, _vMapPosition.Y - 1);
+                }
+
+                public override void Draw(SpriteBatch spriteBatch)
+                {
+                    spriteBatch.Draw(_texture, new Rectangle((int)_vMapPosition.X, (int)_vMapPosition.Y, _iWidth, _iHeight), _rSource, Color.White, 0, Vector2.Zero, SpriteEffects.None, 99990);
+                    if (_item != null)
+                    {
+                        _item.Draw(spriteBatch, new Rectangle((int)(_vMapPosition.X + 8), (int)(_vMapPosition.Y + 8), TileSize, TileSize), true);
+                    }
+                }
+
+                public void Update(GameTime gameTime)
+                {
+                    _dTimer += gameTime.ElapsedGameTime.TotalSeconds;
+                    if(_dTimer >= TICK_TIMER)
+                    {
+                        _dTimer = 0;
+
+                        if(_iCurrentPosition == MAX_POSITIONS - 1)
+                        {
+                            _bDec = true;
+                            _iCurrentPosition--;
+                        }
+                        else if (_iCurrentPosition == 0) {
+                            _bDec = false;
+                            _iCurrentPosition++;
+                        }
+                        else
+                        {
+                            if (_bDec) { _iCurrentPosition--; }
+                            else { _iCurrentPosition++; }
+                        }
+
+                        _vMapPosition = _vArrPositions[_iCurrentPosition];
+                    }
                 }
             }
         }

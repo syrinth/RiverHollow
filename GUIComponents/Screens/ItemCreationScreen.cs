@@ -69,7 +69,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             }
 
             _columns = (canMake.Count < _iMaxColumns) ? canMake.Count : _iMaxColumns;
-            _rows = (canMake.Count < _iMaxColumns) ? 1 : Math.Max(1, canMake.Count / _columns);
+            _rows = (canMake.Count < _iMaxColumns) ? 1 : (int)(Math.Round(((double)(canMake.Count + _columns - 1) / (double)_columns)));
 
             _displayList = new GUIItemBox[_columns, _rows];
             _inventory = new Inventory(4, InventoryManager.maxItemColumns, 32);
@@ -167,7 +167,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             {
                 foreach (GUIItemBox gIB in _displayList)
                 {
-                    rv = gIB.ProcessHover(mouse);
+                    if (gIB != null)
+                    {
+                        rv = gIB.ProcessHover(mouse);
+                        if (rv) { break; }
+                    }
                 }
             }
             rv = rv || _inventory.ProcessHover(mouse);

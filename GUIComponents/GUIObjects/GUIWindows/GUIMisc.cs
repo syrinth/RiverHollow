@@ -5,6 +5,7 @@ using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIObjects;
 using RiverHollow.SpriteAnimations;
+using RiverHollow.WorldObjects;
 using System;
 using static RiverHollow.Game_Managers.GameManager;
 

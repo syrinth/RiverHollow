@@ -200,6 +200,8 @@ namespace RiverHollow.Game_Managers
                         return new Plant(id, liData);
                     case "Crafter":
                         return new Crafter(id, liData);
+                    case "Forageable":
+                        return new Forageable(id, liData, pos);
                 }
             }
 

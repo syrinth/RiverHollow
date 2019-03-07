@@ -127,6 +127,10 @@
       <Key>105</Key>
       <Value>[Type:Consumable][Image:16-16][Sell:3000][CombatType:Helpful][Mana:20][ReqItems:10-1|41-3]</Value>
     </Item>
+    <Item>
+      <Key>106</Key>
+      <Value>[Type:Consumable][Image:80-0][Sell:3000][CombatType:Helpful][Buff:5-10][ReqItems:42-4]</Value>
+    </Item>
     <!--<190> Container:Stamina/Health/Mana-->
     <Item>
       <Key>190</Key>
@@ -148,6 +152,10 @@
     <Item>
       <Key>203</Key>
       <Value>[Type:StaticItem][Image:64-0][Sell:500][ReqItems:2-5]</Value>
+    </Item>
+    <Item>
+      <Key>204</Key>
+      <Value>[Type:StaticItem][Image:80-0][Sell:500][ReqItems:2-5|2-5]</Value>
     </Item>
     <Item>
       <Key>299</Key>
