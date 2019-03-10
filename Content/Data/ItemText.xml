@@ -26,6 +26,10 @@
       <Key>10</Key>
       <Value>Potion Base/You basically can't make potions without it.</Value>
     </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>Darkwood Lumber/A piece of swamp wood, you can almost feel the power radiating off of i-oh, OH! what is that SMELL?!</Value>
+    </Item>
     <!--<20-24> Tools-->
     <Item>
       <Key>20</Key>
@@ -55,6 +59,10 @@
     <Item>
       <Key>42</Key>
       <Value>Tiny Mushroom/Useful as a base for powders and unguents. Don't take too much though.</Value>
+    </Item>
+    <Item>
+      <Key>43</Key>
+      <Value>Sprig of Lavender/A sprig of fresh lavender, usedi n various alchemical creations.</Value>
     </Item>
     <!--<60-79> Seeds-->
     <Item>
@@ -213,6 +221,10 @@
     <Item>
       <Key>600</Key>
       <Value>Wooden Wand/A basic wand</Value>
+    </Item>
+    <Item>
+      <Key>601</Key>
+      <Value>Bronze Wand/A magical wand</Value>
     </Item>
     <!--Healer-->
     <Item>

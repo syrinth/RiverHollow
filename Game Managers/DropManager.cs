@@ -31,6 +31,9 @@ namespace RiverHollow.Game_Managers
                 case 5:
                     AddItems(ref itemList, 80, 2);
                     break;
+                case 8:
+                    AddItems(ref itemList, 11, 8);
+                    break;
             }
 
             return itemList;

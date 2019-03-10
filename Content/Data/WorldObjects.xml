@@ -17,7 +17,7 @@
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Tree][Texture:tree][Chop]</Value>
+      <Value>[Type:Tree][Texture:Textures\tree][Image:0-0][Width:48][Height:80][Hp:3][ReqLvl:1]</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -34,6 +34,14 @@
     <Item>
       <Key>6</Key>
       <Value>[Type:Forageable][Image:80-64][Width:16][Height:16][Item:9]</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>[Type:Forageable][Image:96-16][Width:16][Height:16][Item:43]</Value>
+    </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>[Type:Tree][Texture:Textures\DarkWoodTree][Image:0-0][Width:48][Height:80][Hp:5][ReqLvl:2]</Value>
     </Item>
     <!--<60-79> Plants-->
     <Item>

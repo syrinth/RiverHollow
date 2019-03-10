@@ -95,6 +95,7 @@ namespace RiverHollow.Game_Managers
             AddTexture(Content, @"Textures\worldObjects");
             AddTexture(Content, @"Textures\portraits");
             AddTexture(Content, @"Textures\tree");
+            AddTexture(Content, @"Textures\DarkWoodTree");
             AddTexture(Content, @"Textures\items");
             AddTexture(Content, @"Textures\AbilityAnimations");
             AddTexture(Content, @"Textures\texMachines");

@@ -30,6 +30,10 @@
       <Key>10</Key>
       <Value>[Type:Resource][Image:0-64][Sell:20]</Value>
     </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>[Type:Resource][Image:32-64][Sell:20]</Value>
+    </Item>
     <!--<20-24> Tools-->
     <Item>
       <Key>20</Key>
@@ -59,6 +63,10 @@
     <Item>
       <Key>42</Key>
       <Value>[Type:Resource][Image:80-48][Sell:10]</Value>
+    </Item>
+    <Item>
+      <Key>43</Key>
+      <Value>[Type:Resource][Image:16-64][Sell:10]</Value>
     </Item>
     <!--<60-79> Seeds-->
     <Item>
@@ -155,7 +163,7 @@
     </Item>
     <Item>
       <Key>204</Key>
-      <Value>[Type:StaticItem][Image:80-0][Sell:500][ReqItems:2-5|2-5]</Value>
+      <Value>[Type:StaticItem][Image:80-0][Sell:500][ReqItems:2-5]</Value>
     </Item>
     <Item>
       <Key>299</Key>
@@ -218,6 +226,10 @@
     <Item>
       <Key>600</Key>
       <Value>[Type:Equipment][Image:0-0][Sell:1000][EType:Weapon][ESub:Wand][Tier:1][Atk:Minor][Mag:Major]</Value>
+    </Item>
+    <Item>
+      <Key>601</Key>
+      <Value>[Type:Equipment][Image:16-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:2][Atk:Minor][Mag:Major][ReqItems:5-3]</Value>
     </Item>
     <!--<610> Healer-->
     <Item>

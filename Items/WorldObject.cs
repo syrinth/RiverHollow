@@ -218,9 +218,11 @@ namespace RiverHollow.WorldObjects
     {
         public override Rectangle CollisionBox { get => new Rectangle((int)MapPosition.X + TileSize, (int)MapPosition.Y + TileSize * 4, TileSize, TileSize); }
 
-        public Tree(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height, bool breakIt, bool chopIt, int lvl, int hp) : base(id, pos, sourceRectangle, tex, width, height, breakIt, chopIt, lvl, hp)
+        public Tree(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
         {
             Type = ObjectType.Destructible;
+            if (stringData.ContainsKey("Texture")) { _texture = GameContentManager.GetTexture(stringData["Texture"]); }
+            _bChoppable = true;
         }
     }
 

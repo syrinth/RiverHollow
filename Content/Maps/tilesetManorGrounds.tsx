@@ -328,11 +328,7 @@
    <property name="Impassable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="210" terrain="5,5,5,5">
-  <properties>
-   <property name="Impassable" type="bool" value="true"/>
-  </properties>
- </tile>
+ <tile id="210" terrain="5,5,5,5"/>
  <tile id="211" terrain="5,6,5,6">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
