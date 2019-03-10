@@ -487,15 +487,10 @@ namespace RiverHollow.Tile_Engine
 
             foreach (WorldObject obj in _liPlacedWorldObjects)
             {
-                if (obj.IsProcessor())
+                if (obj.IsMachine())
                 {
-                    Processor p = (Processor)obj;
+                    Machine p = (Machine)obj;
                     p.Update(gameTime);
-                }
-                else if (obj.IsCrafter())
-                {
-                    Crafter c = (Crafter)obj;
-                    c.Update(gameTime);
                 }
             }
 
@@ -981,8 +976,8 @@ namespace RiverHollow.Tile_Engine
                 else if (obj.IsMachine())
                 {
                     Machine p = (Machine)obj;
-                    if (p.ProcessingFinished()) { p.TakeFinishedItem(); }
-                    else if (InventoryManager.GetCurrentItem() != null && !p.Processing()) { p.ProcessClick(); }
+                    if (p.HasItem()) { p.TakeFinishedItem(); }
+                    else if (InventoryManager.GetCurrentItem() != null && !p.Working()) { p.ProcessClick(); }
                 }
                 else if (obj.IsContainer())
                 {
@@ -1151,8 +1146,8 @@ namespace RiverHollow.Tile_Engine
                             else if (obj.IsMachine())
                             {
                                 Machine p = (Machine)obj;
-                                if (p.ProcessingFinished()) { p.TakeFinishedItem(); }
-                                else if (!p.Processing()) { p.ProcessClick(); }
+                                if (p.HasItem()) { p.TakeFinishedItem(); }
+                                else if (!p.Working()) { p.ProcessClick(); }
                                 GUIManager.SyncScreen();
                             }
                             else if (obj.IsClassChanger())

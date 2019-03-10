@@ -11,6 +11,7 @@ using RiverHollow.GUIObjects;
 using static RiverHollow.WorldObjects.WorldItem.Machine;
 using static RiverHollow.GUIObjects.GUIObject;
 using RiverHollow.Actors;
+using static RiverHollow.WorldObjects.WorldItem;
 
 namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
@@ -20,7 +21,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
         const int _iMargin = 3;
         const int _iMaxColumns = 5;
 
-        Crafter _craftMachine;
+        Machine _craftMachine;
         WorldAdventurer _craftAdventurer;
         private Inventory _inventory;
         private GUIWindow _creationWindow;
@@ -35,7 +36,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             Controls.Add(_inventory);
         }
 
-        public CraftingScreen(Crafter crafter)
+        public CraftingScreen(Machine crafter)
         {
             _craftMachine = crafter;
             Setup(crafter.CraftList);

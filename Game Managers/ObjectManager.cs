@@ -192,14 +192,12 @@ namespace RiverHollow.Game_Managers
                         return new Staircase(id, pos, new Rectangle(96, 0, 16, 16), GetTexture(@"Textures\worldObjects"), TileSize, TileSize);
                     case "Container":
                         return new Container(id, liData);
-                    case "Processor":
-                        return new Processor(id, liData);
                     case "ClassChanger":
                         return new ClassChanger(id, pos);
                     case "Plant":
                         return new Plant(id, liData);
-                    case "Crafter":
-                        return new Crafter(id, liData);
+                    case "Machine":
+                        return new Machine(id, liData);
                     case "Forageable":
                         return new Forageable(id, liData, pos);
                 }
