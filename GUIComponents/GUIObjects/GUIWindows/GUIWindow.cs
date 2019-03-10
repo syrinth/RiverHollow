@@ -7,8 +7,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
     public class GUIWindow : GUIObject
     {
-        const int DialogSize = 32;
-
         internal List<GUIObject> Controls;
         public struct WindowData
         {
@@ -16,19 +14,22 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             public Vector2 Src => _vSource;
             int _iEdge;
             public int Edge => _iEdge;
+            int _iBottomEdge;
+            public int BottomEdge => _iBottomEdge;
             int _iSize;
             public int Size => _iSize;  //The size of the non-edges
 
-            public WindowData(int x, int y, int edge)
+            public WindowData(int x, int y, int edge, int size, int BottomEdge = -1)
             {
                 _vSource = new Vector2(x, y);
                 _iEdge = edge;
-                _iSize = DialogSize - (_iEdge * 2);
+                _iBottomEdge = (BottomEdge == -1 ? _iEdge : BottomEdge);
+                _iSize = size - (_iEdge * 2);
             }
         };
-        internal static WindowData RedWin = new WindowData(0, 0, 5);
-        internal static WindowData BrownWin = new WindowData(32, 0, 5);
-        internal static WindowData GreyWin = new WindowData(64, 0, 5);
+        internal static WindowData RedWin = new WindowData(120, 56, 9, 34, 10);
+        internal static WindowData BrownWin = new WindowData(168, 56, 9, 32);
+        internal static WindowData GreyWin = new WindowData(216, 56, 9, 32);
 
         protected const int SpaceFromBottom = 32;
 
@@ -178,9 +179,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         {
             int BorderLeft = (int)Position().X;
 
-            spriteBatch.Draw(_texture, new Rectangle(BorderLeft, EndStartY(), _winData.Edge, _winData.Edge), new Rectangle((int)_winData.Src.X, (int)_winData.Src.Y + SkipSize(), _winData.Edge, _winData.Edge), _cEnabled * Alpha);
-            spriteBatch.Draw(_texture, new Rectangle(MidStartX(), EndStartY(), MidWidth(), _winData.Edge), new Rectangle((int)_winData.Src.X + _winData.Edge, (int)_winData.Src.Y + SkipSize(), _winData.Size, _winData.Edge), _cEnabled * Alpha);
-            spriteBatch.Draw(_texture, new Rectangle(EndStartX(), EndStartY(), _winData.Edge, _winData.Edge), new Rectangle((int)_winData.Src.X + SkipSize(), (int)_winData.Src.Y + SkipSize(), _winData.Edge, _winData.Edge), _cEnabled * Alpha);
+            spriteBatch.Draw(_texture, new Rectangle(BorderLeft, EndStartY(), _winData.Edge, _winData.BottomEdge), new Rectangle((int)_winData.Src.X, (int)_winData.Src.Y + SkipSize(), _winData.Edge, _winData.BottomEdge), _cEnabled * Alpha);
+            spriteBatch.Draw(_texture, new Rectangle(MidStartX(), EndStartY(), MidWidth(), _winData.BottomEdge), new Rectangle((int)_winData.Src.X + _winData.Edge, (int)_winData.Src.Y + SkipSize(), _winData.Size, _winData.BottomEdge), _cEnabled * Alpha);
+            spriteBatch.Draw(_texture, new Rectangle(EndStartX(), EndStartY(), _winData.Edge, _winData.BottomEdge), new Rectangle((int)_winData.Src.X + SkipSize(), (int)_winData.Src.Y + SkipSize(), _winData.Edge, _winData.BottomEdge), _cEnabled * Alpha);
         }
 
         public int MidStartX() { return (int)Position().X + _winData.Edge; }
