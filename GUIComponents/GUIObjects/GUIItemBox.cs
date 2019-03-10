@@ -28,6 +28,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         GUIText _gTextNum;
         GUIImage _gItem;
 
+        public bool DrawNum = true;
+
         GUIImage _gSelected = new GUIImage(RECT_SELECT_IMG, 64, 64, @"Textures\Dialog");
 
         Item _itToCraft;
@@ -69,7 +71,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             if (_gItem != null)
             {
                 _gItem.Draw(spriteBatch);
-                if (_gTextNum != null) { _gTextNum.Draw(spriteBatch); }
+                if (DrawNum && _gTextNum != null) { _gTextNum.Draw(spriteBatch); }
 
                 //MAR?
                 if (_bHover)

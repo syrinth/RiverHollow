@@ -40,7 +40,8 @@ namespace RiverHollow.WorldObjects
         protected Rectangle _rSource;
         public Rectangle SourceRectangle => _rSource;
 
-        public virtual Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _iWidth, _iHeight);
+        public Rectangle ClickBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _iWidth, _iHeight);                  //ClickBox is always hard set
+        public virtual Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _iWidth, _iHeight);      //Can be overriden to only be the base
 
         protected Texture2D _texture;
         public Texture2D Texture { get => _texture; }
@@ -104,6 +105,7 @@ namespace RiverHollow.WorldObjects
             foreach (RHTile t in Tiles)
             {
                 t.RemoveWorldObject();
+                t.RemoveShadowObject();
             }
         }
 
@@ -493,6 +495,8 @@ namespace RiverHollow.WorldObjects
 
         public class Machine : WorldItem
         {
+            protected int _iWorkingFrames = 2;
+            protected float _fFrameSpeed = 0.3f;
             protected ItemBubble _itemBubble;
             protected Item _heldItem;
             protected double _dProcessedTime;
@@ -505,6 +509,13 @@ namespace RiverHollow.WorldObjects
                 _iWidth = int.Parse(stringData["Width"]);
                 _iHeight = int.Parse(stringData["Height"]);
 
+                if (stringData.ContainsKey("Work"))
+                {
+                    string[] split = stringData["Work"].Split('-');
+                    _iWorkingFrames = int.Parse(split[0]);
+                    _fFrameSpeed = float.Parse(split[1]);
+                }
+
                 if (stringData.ContainsKey("Base"))
                 {
                     string[] baseStr = stringData["Base"].Split('-');
@@ -514,9 +525,9 @@ namespace RiverHollow.WorldObjects
             }
             public void LoadContent()
             {
-                _sprite = new AnimatedSprite(@"Textures\texMachines");
+                _sprite = new AnimatedSprite(@"Textures\texMachines", true);
                 _sprite.AddAnimation(MachineAnimEnum.Idle, (int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight, 1, 0.3f);
-                _sprite.AddAnimation(MachineAnimEnum.Working, (int)_vSourcePos.X + _iWidth, (int)_vSourcePos.Y, _iWidth, _iHeight, 2, 0.3f);
+                _sprite.AddAnimation(MachineAnimEnum.Working, (int)_vSourcePos.X + _iWidth, (int)_vSourcePos.Y, _iWidth, _iHeight, _iWorkingFrames, _fFrameSpeed);
                 _sprite.SetCurrentAnimation(MachineAnimEnum.Idle);
                 _sprite.IsAnimating = true;
             }

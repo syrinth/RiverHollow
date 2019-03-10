@@ -55,7 +55,7 @@ namespace RiverHollow.Tile_Engine
         protected TiledMap _map;
         public TiledMap Map { get => _map; }
 
-        protected RHTile[,] _tileArray;
+        protected RHTile[,] _arrTiles;
         protected TiledMapRenderer _renderer;
         protected List<TiledMapTileset> _liTilesets;
         protected Dictionary<string, TiledMapTileLayer> _diLayers;
@@ -116,7 +116,7 @@ namespace RiverHollow.Tile_Engine
             _map = map.Map;
             _name = map.Name;
             _renderer = map._renderer;
-            _tileArray = map._tileArray;
+            _arrTiles = map._arrTiles;
 
             _bBuilding = _map.Properties.ContainsKey("Building");
             _bDungeon = _map.Properties.ContainsKey("Dungeon");
@@ -151,12 +151,12 @@ namespace RiverHollow.Tile_Engine
                 _diLayers.Add(l.Name, l);
             }
 
-            _tileArray = new RHTile[MapWidthTiles, MapHeightTiles];
+            _arrTiles = new RHTile[MapWidthTiles, MapHeightTiles];
             for (int i = 0; i < MapHeightTiles; i++) {
                 for (int j = 0; j < MapWidthTiles; j++)
                 {
-                    _tileArray[j, i] = new RHTile(j, i, _name);
-                    _tileArray[j, i].SetProperties(this);
+                    _arrTiles[j, i] = new RHTile(j, i, _name);
+                    _arrTiles[j, i].SetProperties(this);
                 }
             }
 
@@ -966,10 +966,10 @@ namespace RiverHollow.Tile_Engine
             bool rv = false;
 
             RHTile tile = MapManager.RetrieveTile(mouseLocation);
-            if (tile.WorldObject != null)
+            if (tile.GetWorldObject() != null)
             {
-                WorldObject obj = tile.WorldObject;
-                if (tile.WorldObject.IsBuilding())
+                WorldObject obj = tile.GetWorldObject();
+                if (obj.IsBuilding())
                 {
                     Building b = (Building)obj;
                     if (b.BoxToEnter.Contains(mouseLocation) && PlayerManager.PlayerInRange(b.BoxToEnter))
@@ -1012,9 +1012,9 @@ namespace RiverHollow.Tile_Engine
                 {
                     ((Door)obj).ReadInscription();
                 }
-                else if (tile.WorldObject.ID == 3) //Checks to see if the tile contains a staircase object
+                else if (obj.ID == 3) //Checks to see if the tile contains a staircase object
                 {
-                    MapManager.ChangeMaps(PlayerManager.World, this.Name, ((Staircase)tile.WorldObject).ToMap);
+                    MapManager.ChangeMaps(PlayerManager.World, this.Name, ((Staircase)obj).ToMap);
                 }
             }
 
@@ -1139,7 +1139,7 @@ namespace RiverHollow.Tile_Engine
                     _targetTile = MapManager.RetrieveTile(mouseLocation);
                     if (_targetTile != null)
                     {
-                        WorldObject obj = _targetTile.WorldObject;
+                        WorldObject obj = _targetTile.GetWorldObject();
                         if (obj != null)
                         {
                             if (obj == PlayerManager._merchantChest)
@@ -1176,7 +1176,7 @@ namespace RiverHollow.Tile_Engine
                                 MapManager.RemoveWorldObject(obj);
                                 obj.RemoveSelfFromTiles();
                             }
-                            else if (_targetTile.WorldObject.IsDestructible())
+                            else if (_targetTile.WorldObject != null && _targetTile.WorldObject.IsDestructible())
                             {
                                 Destructible d = (Destructible)_targetTile.WorldObject;
 
@@ -1315,7 +1315,7 @@ namespace RiverHollow.Tile_Engine
             if (x >= MapWidthTiles || x < 0) { return null; }
             if (y >= MapHeightTiles || y < 0) { return null; }
 
-            return _tileArray[x, y];
+            return _arrTiles[x, y];
         }
         public RHTile RetrieveTile(Point targetLoc)
         {
@@ -1324,7 +1324,7 @@ namespace RiverHollow.Tile_Engine
 
             try
             {
-                return _tileArray[targetLoc.X / TileSize, targetLoc.Y / TileSize];
+                return _arrTiles[targetLoc.X / TileSize, targetLoc.Y / TileSize];
             }
             catch (Exception ex)
             {
@@ -1336,7 +1336,7 @@ namespace RiverHollow.Tile_Engine
             if (targetLoc.X >= MapWidthTiles || targetLoc.X < 0) { return null; }
             if (targetLoc.Y >= MapHeightTiles || targetLoc.Y < 0) { return null; }
 
-            return _tileArray[targetLoc.X, targetLoc.Y];
+            return _arrTiles[targetLoc.X, targetLoc.Y];
         }
         public void RemoveWorldObject(WorldObject o)
         {
@@ -1566,10 +1566,10 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public bool TestMapTiles(WorldObject o, List<RHTile> tiles)
+        public bool TestMapTiles(WorldObject o, List<RHTile> collisionTiles)
         {
             bool rv = true;
-            tiles.Clear();
+            collisionTiles.Clear();
             Vector2 position = o.MapPosition;
             position.X = ((int)(position.X / TileSize)) * TileSize;
             position.Y = ((int)(position.Y / TileSize)) * TileSize;
@@ -1589,15 +1589,15 @@ namespace RiverHollow.Tile_Engine
                         rv = false;
                         break;
                     }
-                    RHTile tempTile = _tileArray[x, y];
+                    RHTile tempTile = _arrTiles[x, y];
 
                     if ((!o.WallObject && tempTile.Passable() && tempTile.WorldObject == null) || (o.WallObject && tempTile.IsValidWall()))
                     {
-                        tiles.Add(tempTile);
+                        collisionTiles.Add(tempTile);
                     }
                     else
                     {
-                        tiles.Add(tempTile);
+                        collisionTiles.Add(tempTile);
                         rv = false;
                     }
                 }
@@ -1617,6 +1617,19 @@ namespace RiverHollow.Tile_Engine
             {
                 t.SetWorldObject(o);
             }
+
+            for (int i = (int)o.MapPosition.X; i < o.MapPosition.X + o.Width; i += TileSize)
+            {
+                for (int j = (int)o.MapPosition.Y; j < o.MapPosition.Y + o.Height; j += TileSize)
+                {
+                    RHTile t = GetTile(Util.GetGridCoords(i, j));
+                    if (t != null)
+                    {
+                        t.SetShadowObject(o);
+                        o.Tiles.Add(t);
+                    }
+                }
+            }
         }
 
         public bool PlacePlayerObject(WorldObject obj)
@@ -1624,7 +1637,7 @@ namespace RiverHollow.Tile_Engine
             bool rv = false;
             if (_liTestTiles.Count == 0)
             {
-                RHTile tile = _tileArray[(int)obj.MapPosition.X / TileSize, (int)obj.MapPosition.Y / TileSize];
+                RHTile tile = _arrTiles[(int)obj.MapPosition.X / TileSize, (int)obj.MapPosition.Y / TileSize];
                 if (tile.Passable())
                 {
                     tile.SetWorldObject(obj);
@@ -1667,14 +1680,14 @@ namespace RiverHollow.Tile_Engine
             position.X = ((int)(position.X / TileSize)) * TileSize;
             position.Y = ((int)(position.Y / TileSize)) * TileSize;
 
-            rv = _tileArray[((int)position.X / TileSize), ((int)position.Y / TileSize)].Passable();
+            rv = _arrTiles[((int)position.X / TileSize), ((int)position.Y / TileSize)].Passable();
             if (!rv)
             {
                 do
                 {
                     position.X = (int)(r.Next(1, (MapWidthTiles - 1) * TileSize) / TileSize) * TileSize;
                     position.Y = (int)(r.Next(1, (MapHeightTiles - 1) * TileSize) / TileSize) * TileSize;
-                    rv = _tileArray[((int)position.X / TileSize), ((int)position.Y / TileSize)].Passable();
+                    rv = _arrTiles[((int)position.X / TileSize), ((int)position.Y / TileSize)].Passable();
                 } while (!rv);
             }
 
@@ -1728,7 +1741,7 @@ namespace RiverHollow.Tile_Engine
 
             if(x >= 0 && x < MapWidthTiles && y >= 0 && y < MapHeightTiles)
             {
-                tile = _tileArray[x, y];
+                tile = _arrTiles[x, y];
             }
 
             return tile;
@@ -1852,7 +1865,7 @@ namespace RiverHollow.Tile_Engine
             {
                 Earth e = new Earth();
                 e.LoadData(earthData);
-                RHTile tile = _tileArray[(int)e.MapPosition.X / TileSize, (int)e.MapPosition.Y / TileSize];
+                RHTile tile = _arrTiles[(int)e.MapPosition.X / TileSize, (int)e.MapPosition.Y / TileSize];
                 tile.SetFloorObject(e);
                 _liModifiedTiles.Add(tile);
             }
@@ -1910,6 +1923,9 @@ namespace RiverHollow.Tile_Engine
         Dictionary<TiledMapTileLayer, Dictionary<string, string>> _diProps;
         WorldObject _obj;
         public WorldObject WorldObject => _obj;
+        //A WorldObject that doesn't live on this tile but is drawn over it.
+        WorldObject _shadowObj;
+        public WorldObject ShadowObject => _shadowObj;
 
         Floor _floorObj;
         public Floor Flooring => _floorObj;
@@ -2007,6 +2023,14 @@ namespace RiverHollow.Tile_Engine
             _isRoad = ContainsProperty("Road", out string value) && value.Equals("true");
         }
 
+        public WorldObject GetWorldObject()
+        {
+            WorldObject obj;
+            if(_obj != null) { obj = _obj; }
+            else { obj = _shadowObj; }
+
+            return obj;
+        }
         public bool SetWallWorldObject(WorldObject o)
         {
             bool rv = false;
@@ -2021,6 +2045,10 @@ namespace RiverHollow.Tile_Engine
         {
             _obj = null;
         }
+        public void RemoveShadowObject()
+        {
+            _shadowObj = null;
+        }
         public void RemoveFlooring()
         {
             _floorObj = null;
@@ -2031,6 +2059,16 @@ namespace RiverHollow.Tile_Engine
             if ((!o.WallObject && Passable()) || (o.WallObject && IsValidWall()))
             {
                 _obj = o;
+                rv = true;
+            }
+            return rv;
+        }
+        public bool SetShadowObject(WorldObject o)
+        {
+            bool rv = false;
+            if ((!o.WallObject && Passable()) || (o.WallObject && IsValidWall()))
+            {
+                _shadowObj = o;
                 rv = true;
             }
             return rv;

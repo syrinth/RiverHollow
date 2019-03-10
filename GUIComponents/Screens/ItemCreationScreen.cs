@@ -24,7 +24,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
         WorldAdventurer _craftAdventurer;
         private Inventory _inventory;
         private GUIWindow _creationWindow;
-        protected GUIItemBox[,] _displayList;
+        protected GUIItemBox[,] _liDisplay;
 
         private int _rows;
         private int _columns;
@@ -71,7 +71,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             _columns = (canMake.Count < _iMaxColumns) ? canMake.Count : _iMaxColumns;
             _rows = (canMake.Count < _iMaxColumns) ? 1 : (int)(Math.Round(((double)(canMake.Count + _columns - 1) / (double)_columns)));
 
-            _displayList = new GUIItemBox[_columns, _rows];
+            _liDisplay = new GUIItemBox[_columns, _rows];
             _inventory = new Inventory(4, InventoryManager.maxItemColumns, 32);
             _inventory.Setup();
 
@@ -95,7 +95,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
 
             foreach (GUIObject g in boxes)
             {
-                _displayList[i, j] = (GUIItemBox)g;
+                GUIItemBox box = (GUIItemBox)g;
+                box.DrawNum = false;
+                _liDisplay[i, j] = box;
                 i++;
                 if (i == _columns)
                 {
@@ -110,7 +112,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             bool rv = false;
             if (_creationWindow.Contains(mouse))
             {
-                foreach (GUIItemBox gIB in _displayList)
+                foreach (GUIItemBox gIB in _liDisplay)
                 {
                     if (gIB != null && gIB.Contains(mouse))
                     {
@@ -165,7 +167,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             bool rv = false;
             if (_creationWindow.Contains(mouse))
             {
-                foreach (GUIItemBox gIB in _displayList)
+                foreach (GUIItemBox gIB in _liDisplay)
                 {
                     if (gIB != null)
                     {
@@ -183,14 +185,14 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
         {
             base.Draw(spriteBatch);
 
-            foreach (GUIItemBox gIB in _displayList)
+            foreach (GUIItemBox gIB in _liDisplay)
             {
                 if (gIB != null)
                 {
                     gIB.Draw(spriteBatch);
                 }
             }
-            foreach (GUIItemBox gIB in _displayList)
+            foreach (GUIItemBox gIB in _liDisplay)
             {
                 if (gIB != null)
                 {
