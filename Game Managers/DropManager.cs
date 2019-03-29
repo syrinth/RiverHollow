@@ -34,6 +34,12 @@ namespace RiverHollow.Game_Managers
                 case 8:
                     AddItems(ref itemList, 11, 8);
                     break;
+                case 10:
+                    AddItems(ref itemList, 90, 1);
+                    break;
+                case 11:
+                    AddItems(ref itemList, 91, 1);
+                    break;
             }
 
             return itemList;
@@ -43,7 +49,7 @@ namespace RiverHollow.Game_Managers
         {
             for (int i = 0; i < num; i++)
             {
-                itemList.Add(ObjectManager.GetItem(id, 10));
+                itemList.Add(ObjectManager.GetItem(id, num));
             }
         }
 

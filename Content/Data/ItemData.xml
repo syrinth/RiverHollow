@@ -34,6 +34,26 @@
       <Key>11</Key>
       <Value>[Type:Resource][Image:32-64][Sell:20]</Value>
     </Item>
+    <Item>
+      <Key>12</Key>
+      <Value>[Type:Resource][Image:96-0][Sell:20]</Value>
+    </Item>
+    <Item>
+      <Key>13</Key>
+      <Value>[Type:Resource][Image:0-48][Sell:20]</Value>
+    </Item>
+    <Item>
+      <Key>14</Key>
+      <Value>[Type:Resource][Image:16-48][Sell:40]</Value>
+    </Item>
+    <Item>
+      <Key>15</Key>
+      <Value>[Type:Resource][Image:64-64][Sell:20]</Value>
+    </Item>
+    <Item>
+      <Key>16</Key>
+      <Value>[Type:Resource][Image:80-64][Sell:20]</Value>
+    </Item>
     <!--<20-24> Tools-->
     <Item>
       <Key>20</Key>
@@ -67,6 +87,10 @@
     <Item>
       <Key>43</Key>
       <Value>[Type:Resource][Image:16-64][Sell:10]</Value>
+    </Item>
+    <Item>
+      <Key>44</Key>
+      <Value>[Type:Resource][Image:48-64][Sell:10][RefinesInto:12-5]</Value>
     </Item>
     <!--<60-79> Seeds-->
     <Item>
@@ -113,6 +137,34 @@
     <Item>
       <Key>89</Key>
       <Value>[Type:Resource][Image:64-32][Sell:10]</Value>
+    </Item>
+    <Item>
+      <Key>90</Key>
+      <Value>[Type:Resource][Image:80-16][Sell:1000]</Value>
+    </Item>
+    <Item>
+      <Key>91</Key>
+      <Value>[Type:Resource][Image:144-16][Sell:1000]</Value>
+    </Item>
+    <Item>
+      <Key>92</Key>
+      <Value>[Type:Resource][Image:128-16][Sell:1000]</Value>
+    </Item>
+    <Item>
+      <Key>93</Key>
+      <Value>[Type:Resource][Image:96-16][Sell:1000]</Value>
+    </Item>
+    <Item>
+      <Key>94</Key>
+      <Value>[Type:Resource][Image:80-32][Sell:1000]</Value>
+    </Item>
+    <Item>
+      <Key>95</Key>
+      <Value>[Type:Resource][Image:112-16][Sell:1000]</Value>
+    </Item>
+    <Item>
+      <Key>96</Key>
+      <Value>[Type:Resource][Image:112-32][Sell:1000]</Value>
     </Item>
     <!--<100> Consumables:Buffs/Health/Mana-->
     <Item>
@@ -164,6 +216,10 @@
     <Item>
       <Key>204</Key>
       <Value>[Type:StaticItem][Image:80-0][Sell:500][ReqItems:2-5]</Value>
+    </Item>
+    <Item>
+      <Key>205</Key>
+      <Value>[Type:StaticItem][Image:96-0][Sell:500][ReqItems:2-10]</Value>
     </Item>
     <Item>
       <Key>299</Key>
@@ -270,7 +326,7 @@
     <!--<700> Cloth-->
     <Item>
       <Key>700</Key>
-      <Value>[Type:Equipment][Image:0-0][Sell:1000][EType:Armor][ESub:Cloth][ASlot:Armor][Tier:1][Def:Minor][Mag:Major][Res:Minor]</Value>
+      <Value>[Type:Equipment][Image:0-0][Sell:1000][EType:Armor][ESub:Cloth][ASlot:Armor][Tier:1][Def:Minor][Mag:Major][Res:Minor][ReqItems:12-3][15-2]</Value>
     </Item>
     <!--<720> Light Armor-->
     <Item>

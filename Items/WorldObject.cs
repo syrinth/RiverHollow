@@ -25,10 +25,12 @@ namespace RiverHollow.WorldObjects
 
         public List<RHTile> Tiles;
 
-        protected bool _blocking = true;
-        public bool Blocking => _blocking;
+        protected bool _bImpassable = true;
+        public bool Blocking => _bImpassable;
         protected bool _wallObject;
         public bool WallObject => _wallObject;
+
+        protected KeyValuePair<int, int> _kvpDrop; //itemID, # of items dropped
 
         protected Vector2 _vMapPosition;
         public virtual Vector2 MapPosition
@@ -76,6 +78,8 @@ namespace RiverHollow.WorldObjects
             Tiles = new List<RHTile>();
         }
 
+        public virtual void Update(GameTime theGameTime) {}
+
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, new Rectangle((int)_vMapPosition.X, (int)_vMapPosition.Y, _iWidth, _iHeight), _rSource, Color.White, 0, Vector2.Zero, SpriteEffects.None, _vMapPosition.Y + _iHeight + (_vMapPosition.X / 100));
@@ -109,6 +113,27 @@ namespace RiverHollow.WorldObjects
             }
         }
 
+        public void ReadItemDrops(string itemDrop)
+        {
+            string[] split = itemDrop.Split('-');
+            int id = int.Parse(split[0]);
+            int num = 1;
+
+            if (split.Length == 2) { num = int.Parse(split[1]); }
+            _kvpDrop = new KeyValuePair<int, int>(id, num);
+        }
+
+        public List<Item> GetDroppedItems()
+        {
+            List<Item> itemList = new List<Item>();
+            for (int i = 0; i < _kvpDrop.Value; i++)
+            {
+                itemList.Add(ObjectManager.GetItem(_kvpDrop.Key, _kvpDrop.Value));
+            }
+
+            return itemList;
+        }
+
         public bool IsContainer() { return Type == ObjectType.Container; }
         public bool IsDestructible() { return Type == ObjectType.Destructible; }
         public bool IsMachine() { return Type == ObjectType.Machine; }
@@ -124,21 +149,19 @@ namespace RiverHollow.WorldObjects
 
     public class Forageable : WorldObject
     {
-        int _iDropID;
-        public int DropID => _iDropID;
+        AnimatedSprite _sprite;
+        public int ForageItem => _kvpDrop.Key;
 
         public Forageable(int id, Dictionary<string, string> stringData, Vector2 pos)
         {
             Type = ObjectType.Forageable;
             _id = id;
-            _vMapPosition = pos;
 
-            _wallObject = false;
+             _wallObject = false;
             Tiles = new List<RHTile>();
 
             int x = 0;
             int y = 0;
-            _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
 
             string[] texIndices = stringData["Image"].Split('-');
             x = int.Parse(texIndices[0]);
@@ -146,9 +169,47 @@ namespace RiverHollow.WorldObjects
 
             _iWidth = int.Parse(stringData["Width"]);
             _iHeight = int.Parse(stringData["Height"]);
-            _iDropID = int.Parse(stringData["Item"]);
+
+            if (stringData.ContainsKey("Item")) { ReadItemDrops(stringData["Item"]); }
+            if (stringData.ContainsKey("Passable")) { _bImpassable = false; }
 
             _rSource = new Rectangle(x, y, _iWidth, _iHeight);
+
+            _sprite = new AnimatedSprite(@"Textures\worldObjects");
+            _sprite.AddAnimation(WorldObjAnimEnum.Idle, _iWidth, _iHeight, 1, 1f, x, y);
+
+            if (stringData.ContainsKey("Shake"))
+            {
+                string[] frameSplit = stringData["Shake"].Split('-');
+                _sprite.AddAnimation(WorldObjAnimEnum.Shake, _iWidth, _iHeight, int.Parse(frameSplit[0]), float.Parse(frameSplit[1]), x, y);
+            }
+
+            SetCoordinates(pos);
+        }
+
+        public override void SetCoordinatesByGrid(Vector2 position)
+        {
+            base.SetCoordinatesByGrid(position);
+            _sprite.Position = _vMapPosition;
+        }
+
+        public override void Update(GameTime theGameTime)
+        {
+            _sprite.Update(theGameTime);
+
+            if(_sprite.CurrentAnimation == "Shake" && _sprite.GetPlayCount() >= 1) {
+                _sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
+            }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            _sprite.Draw(spriteBatch);
+        }
+
+        public void Shake()
+        {
+            _sprite.SetCurrentAnimation(WorldObjAnimEnum.Shake);
         }
     }
 
@@ -185,6 +246,7 @@ namespace RiverHollow.WorldObjects
 
             _iWidth = int.Parse(stringData["Width"]);
             _iHeight = int.Parse(stringData["Height"]);
+            if (stringData.ContainsKey("Item")) { ReadItemDrops(stringData["Item"]); }
 
             if (stringData.ContainsKey("Chop")) { _bChoppable = true; }
             if (stringData.ContainsKey("Break")) { _bBreakable = true; }
@@ -268,7 +330,7 @@ namespace RiverHollow.WorldObjects
             {
                 if (mobCount == 0)
                 {
-                    _blocking = false;
+                    _bImpassable = false;
                     _bVisible = false;
                 }
             }
@@ -299,7 +361,7 @@ namespace RiverHollow.WorldObjects
                 {
                     rv = true;
                     item.Remove(1);
-                    _blocking = false;
+                    _bImpassable = false;
                     _bVisible = false;
                 }
 
@@ -331,7 +393,7 @@ namespace RiverHollow.WorldObjects
                 bool unlocked = _sSeason == GameCalendar.GetSeason();
 
                 rv = unlocked;
-                _blocking = !unlocked;
+                _bImpassable = !unlocked;
                 _bVisible = !unlocked;
 
                 return rv;
@@ -470,8 +532,8 @@ namespace RiverHollow.WorldObjects
             public void LoadContent()
             {
                 _sprite = new AnimatedSprite(@"Textures\texMachines");
-                _sprite.AddAnimation(MachineAnimEnum.Idle, (int)_vSourcePos.X, (int)_vSourcePos.Y, TileSize, TileSize * 2, 1, 0.3f);
-                _sprite.SetCurrentAnimation(MachineAnimEnum.Idle);
+                _sprite.AddAnimation(WorldObjAnimEnum.Idle, (int)_vSourcePos.X, (int)_vSourcePos.Y, TileSize, TileSize * 2, 1, 0.3f);
+                _sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
                 _sprite.IsAnimating = true;
             }
             public virtual void Update(GameTime gameTime) { }
@@ -563,12 +625,12 @@ namespace RiverHollow.WorldObjects
             public void LoadContent()
             {
                 _sprite = new AnimatedSprite(@"Textures\texMachines", true);
-                _sprite.AddAnimation(MachineAnimEnum.Idle, (int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight, 1, 0.3f);
-                _sprite.AddAnimation(MachineAnimEnum.Working, (int)_vSourcePos.X + _iWidth, (int)_vSourcePos.Y, _iWidth, _iHeight, _iWorkingFrames, _fFrameSpeed);
-                _sprite.SetCurrentAnimation(MachineAnimEnum.Idle);
+                _sprite.AddAnimation(WorldObjAnimEnum.Idle, (int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight, 1, 0.3f);
+                _sprite.AddAnimation(WorldObjAnimEnum.Working, (int)_vSourcePos.X + _iWidth, (int)_vSourcePos.Y, _iWidth, _iHeight, _iWorkingFrames, _fFrameSpeed);
+                _sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
                 _sprite.IsAnimating = true;
             }
-            public virtual void Update(GameTime gameTime) {
+            public override void Update(GameTime gameTime) {
                 if (_itemBubble != null)
                 {
                     _itemBubble.Update(gameTime);
@@ -609,7 +671,7 @@ namespace RiverHollow.WorldObjects
                 _heldItem = ObjectManager.GetItem(itemID);
                 _dProcessedTime = -1;
                 _iCurrentlyMaking = -1;
-                _sprite.SetCurrentAnimation(MachineAnimEnum.Idle);
+                _sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
 
                 _itemBubble = new ItemBubble(_heldItem, this);
             }
@@ -629,7 +691,7 @@ namespace RiverHollow.WorldObjects
                             Processed = true;
                             itemToProcess.Remove(pr.InputNum);
                             _iCurrentlyMaking = pr.Input;
-                            _sprite.SetCurrentAnimation(MachineAnimEnum.Working);
+                            _sprite.SetCurrentAnimation(WorldObjAnimEnum.Working);
                         }
                     }
                 }
@@ -649,7 +711,7 @@ namespace RiverHollow.WorldObjects
             public void MakeChosenItem(int itemID)
             {
                 _iCurrentlyMaking = itemID;
-                _sprite.SetCurrentAnimation(MachineAnimEnum.Working);
+                _sprite.SetCurrentAnimation(WorldObjAnimEnum.Working);
             }
 
             public virtual int GetProcessingItemId() { return -1; }
@@ -676,7 +738,7 @@ namespace RiverHollow.WorldObjects
                 _iCurrentlyMaking = mac.currentItemID;
                 _heldItem = ObjectManager.GetItem(mac.heldItemID);
 
-                if (CurrentlyProcessing != null) { _sprite.SetCurrentAnimation(MachineAnimEnum.Working); }
+                if (CurrentlyProcessing != null) { _sprite.SetCurrentAnimation(WorldObjAnimEnum.Working); }
             }
 
             private class ProcessRecipe
@@ -846,7 +908,7 @@ namespace RiverHollow.WorldObjects
             {
                 _id = id;
                 Type = ObjectType.Plant;
-                _blocking = false;
+                _bImpassable = false;
 
                 _iCurrentState = 0;
                 _diTransitionTimes = new Dictionary<int, int>();

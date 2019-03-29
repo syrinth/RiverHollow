@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="100" height="150" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="28">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="100" height="150" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="29">
  <properties>
   <property name="Outside" type="bool" value="true"/>
-  <property name="ResourceSpawn" value="61-5-62-7"/>
   <property name="ResourcesMax" type="int" value="50"/>
   <property name="ResourcesMin" type="int" value="30"/>
  </properties>
@@ -524,27 +523,32 @@
  <objectgroup id="5" name="Spawn">
   <object id="16" name="Spawn" x="575" y="1368" width="62.6667" height="64.3333">
    <properties>
-    <property name="Resource" value="61"/>
+    <property name="Resources" value="61-11"/>
    </properties>
   </object>
   <object id="18" name="Spawn" x="554.333" y="1527.33" width="112.333" height="111">
    <properties>
-    <property name="Resource" value="5-62"/>
+    <property name="Resources" value="5-62"/>
    </properties>
   </object>
   <object id="20" name="Spawn" x="1494" y="871.833" width="97.3334" height="195">
    <properties>
-    <property name="Resource" value="61-0"/>
+    <property name="Resources" value="9"/>
    </properties>
   </object>
   <object id="23" name="Spawn" x="764.667" y="1126.5" width="284" height="123">
    <properties>
-    <property name="Resource" value="61-62-7"/>
+    <property name="Resources" value="61-62-7"/>
    </properties>
   </object>
   <object id="24" name="Spawn" x="195.333" y="87.8333" width="297.333" height="228.333">
    <properties>
-    <property name="Resource" value="62-7"/>
+    <property name="Resources" value="62-7"/>
+   </properties>
+  </object>
+  <object id="28" name="Spawn" x="1150.67" y="1778.67" width="193.333" height="157.333">
+   <properties>
+    <property name="Resources" value="10"/>
    </properties>
   </object>
  </objectgroup>

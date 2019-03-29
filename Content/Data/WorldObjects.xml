@@ -9,15 +9,15 @@
     <!--Value: Crafter/srcRow srcColumn/Recipe1 Recipe2 ...-->
     <Item>
       <Key>0</Key>
-      <Value>[Type:Destructible][Image:0-0][Width:16][Height:16][Break][Hp:1][ReqLvl:1]</Value>
+      <Value>[Type:Destructible][Image:0-0][Width:16][Height:16][Break][Hp:1][ReqLvl:1][Item:0-1]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Destructible][Image:32-32][Width:32][Height:32][Break][Hp:5][ReqLvl:1]</Value>
+      <Value>[Type:Destructible][Image:32-32][Width:32][Height:32][Break][Hp:5][ReqLvl:1][Item:0-5]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Tree][Texture:Textures\tree][Image:0-0][Width:48][Height:80][Hp:3][ReqLvl:1]</Value>
+      <Value>[Type:Tree][Texture:Textures\tree][Image:0-0][Width:48][Height:80][Hp:3][ReqLvl:1][Item:2-7]</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -29,7 +29,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Destructible][Image:0-32][Width:16][Height:16][Break][Hp:2][ReqLvl:1]</Value>
+      <Value>[Type:Destructible][Image:0-32][Width:16][Height:16][Break][Hp:2][ReqLvl:1][Item:80]</Value>
     </Item>
     <Item>
       <Key>6</Key>
@@ -41,7 +41,39 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Tree][Texture:Textures\DarkWoodTree][Image:0-0][Width:48][Height:80][Hp:5][ReqLvl:2]</Value>
+      <Value>[Type:Tree][Texture:Textures\DarkWoodTree][Image:0-0][Width:48][Height:80][Hp:5][ReqLvl:2][Item:11-8]</Value>
+    </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>[Type:Forageable][Image:80-32][Width:16][Height:16][Item:44][Passable][Shake:5-0.1]</Value>
+    </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>[Type:Destructible][Image:96-48][Width:16][Height:16][Break][Hp:10][ReqLvl:1][Item:90-1]</Value>
+    </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>[Type:Destructible][Image:112-48][Width:16][Height:16][Break][Hp:10][ReqLvl:1][Item:91]</Value>
+    </Item>
+    <Item>
+      <Key>12</Key>
+      <Value>[Type:Destructible][Image:128-48][Width:16][Height:16][Break][Hp:10][ReqLvl:1][Item:92]</Value>
+    </Item>
+    <Item>
+      <Key>13</Key>
+      <Value>[Type:Destructible][Image:144-48][Width:16][Height:16][Break][Hp:10][ReqLvl:1][Item:93]</Value>
+    </Item>
+    <Item>
+      <Key>14</Key>
+      <Value>[Type:Destructible][Image:160-48][Width:16][Height:16][Break][Hp:10][ReqLvl:1][Item:94]</Value>
+    </Item>
+    <Item>
+      <Key>15</Key>
+      <Value>[Type:Destructible][Image:96-64][Width:16][Height:16][Break][Hp:10][ReqLvl:1][Item:95]</Value>
+    </Item>
+    <Item>
+      <Key>16</Key>
+      <Value>[Type:Destructible][Image:112-64][Width:16][Height:16][Break][Hp:10][ReqLvl:1][Item:96]</Value>
     </Item>
     <!--<60-79> Plants-->
     <Item>
@@ -64,11 +96,11 @@
     <!--<200> Machines-->
     <Item>
       <Key>200</Key>
-      <Value>[Type:Machine][Image:0-0][Width:16][Height:32][Processes:80-10|81-10|82-10|83-10|84-10]</Value>
+      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Width:16][Height:32][Processes:80-10|81-10|82-10|83-10|84-10]</Value>
     </Item>
     <Item>
       <Key>201</Key>
-      <Value>[Type:Machine][Image:0-32][Width:16][Height:32][Makes:190-5|200-30]</Value>
+      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:190-5|200-30][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>202</Key>
@@ -80,7 +112,11 @@
     </Item>
     <Item>
       <Key>204</Key>
-      <Value>[Type:Machine][Image:0-128][Width:16][Height:32][Makes:106-15][Base:1-1]</Value>
+      <Value>[Type:Machine][Image:0-128][Work:3-0.15][Width:16][Height:32][Makes:106-15][Base:1-1]</Value>
+    </Item>
+    <Item>
+      <Key>205</Key>
+      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Processes:44-5][Makes:700-15][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>299</Key>

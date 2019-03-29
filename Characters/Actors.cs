@@ -237,6 +237,20 @@ namespace RiverHollow.Actors
                 {
                     PlayAnimation(animation);
                 }
+
+                List<RHTile> cornerTiles = new List<RHTile>();
+                cornerTiles.Add(MapManager.CurrentMap.RetrieveTileFromGridPosition(Util.GetGridCoords(new Vector2(CollisionBox.Left, CollisionBox.Top)).ToPoint()));
+                cornerTiles.Add(MapManager.CurrentMap.RetrieveTileFromGridPosition(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Top)).ToPoint()));
+                cornerTiles.Add(MapManager.CurrentMap.RetrieveTileFromGridPosition(Util.GetGridCoords(new Vector2(CollisionBox.Left, CollisionBox.Bottom)).ToPoint()));
+                cornerTiles.Add(MapManager.CurrentMap.RetrieveTileFromGridPosition(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Bottom)).ToPoint()));
+                foreach (RHTile tile in cornerTiles)
+                {
+                    if (tile != null && tile.WorldObject != null && tile.WorldObject.IsForageable())
+                    {
+                        Forageable f = (Forageable)tile.WorldObject;
+                        f.Shake();
+                    }
+                }
             }
         }
 

@@ -30,6 +30,26 @@
       <Key>11</Key>
       <Value>Darkwood Lumber/A piece of swamp wood, you can almost feel the power radiating off of i-oh, OH! what is that SMELL?!</Value>
     </Item>
+    <Item>
+      <Key>12</Key>
+      <Value>Linen Cloth/A fabric used to make typical clothing.</Value>
+    </Item>
+    <Item>
+      <Key>13</Key>
+      <Value>Song Bottle/An enchanted bottle holding a magical song.</Value>
+    </Item>
+    <Item>
+      <Key>14</Key>
+      <Value>Poppet/A doll imbued with an animate spirit</Value>
+    </Item>
+    <Item>
+      <Key>15</Key>
+      <Value>Fanged Fur/The shed fur of a fanged fur.</Value>
+    </Item>
+    <Item>
+      <Key>16</Key>
+      <Value>Imp Essence/The swirling essence of a troublesome imp.</Value>
+    </Item>
     <!--<20-24> Tools-->
     <Item>
       <Key>20</Key>
@@ -63,6 +83,10 @@
     <Item>
       <Key>43</Key>
       <Value>Sprig of Lavender/A sprig of fresh lavender, usedi n various alchemical creations.</Value>
+    </Item>
+    <Item>
+      <Key>44</Key>
+      <Value>Flax/A crop used to produce textiles</Value>
     </Item>
     <!--<60-79> Seeds-->
     <Item>
@@ -110,6 +134,34 @@
       <Key>89</Key>
       <Value>Adamantine Ore/Alright ore</Value>
     </Item>
+    <Item>
+      <Key>90</Key>
+      <Value>Diamond/A bright, shining diamond</Value>
+    </Item>
+    <Item>
+      <Key>91</Key>
+      <Value>Emerald/A brilliant emerald</Value>
+    </Item>
+    <Item>
+      <Key>92</Key>
+      <Value>Ruby/A blazing red gem</Value>
+    </Item>
+    <Item>
+      <Key>93</Key>
+      <Value>Sapphire/A bright blue stone</Value>
+    </Item>
+    <Item>
+      <Key>94</Key>
+      <Value>Opal/A scintillating stone</Value>
+    </Item>
+    <Item>
+      <Key>95</Key>
+      <Value>Jet/A dull black stone</Value>
+    </Item>
+    <Item>
+      <Key>96</Key>
+      <Value>Amber/A gemstone of hardened sap. There appears to be something inside of it.</Value>
+    </Item>
     <!--<100> Consumables:Status/Stamina/Health/Mana-->
     <Item>
       <Key>101</Key>
@@ -147,7 +199,7 @@
     </Item>
     <Item>
       <Key>201</Key>
-      <Value>Anvil/Makes Shit</Value>
+      <Value>Bronze Anvil/Hammer out your problems</Value>
     </Item>
     <Item>
       <Key>202</Key>
@@ -160,6 +212,10 @@
     <Item>
       <Key>204</Key>
       <Value>Mortar and Pestle/Allows the creation of powders</Value>
+    </Item>
+    <Item>
+      <Key>205</Key>
+      <Value>Loom/You can make clothes here.</Value>
     </Item>
     <Item>
       <Key>299</Key>

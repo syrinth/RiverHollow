@@ -193,15 +193,12 @@ namespace RiverHollow.SpriteAnimations
         }
         public void SetCurrentAnimation(string animate)
         {
-            if (_sCurrAnim != animate)
+            if (_sCurrAnim != animate && _diFrameAnimations.ContainsKey(animate))
             {
                 _sCurrAnim = animate;
-                if (_diFrameAnimations.ContainsKey(_sCurrAnim))
-                {
-                    _diFrameAnimations[_sCurrAnim].FrameTimer = 0;
-                    _diFrameAnimations[_sCurrAnim].CurrentFrame = 0;
-                    _diFrameAnimations[_sCurrAnim].PlayCount = 0;
-                }
+                _diFrameAnimations[_sCurrAnim].FrameTimer = 0;
+                _diFrameAnimations[_sCurrAnim].CurrentFrame = 0;
+                _diFrameAnimations[_sCurrAnim].PlayCount = 0;
             }
         }
 

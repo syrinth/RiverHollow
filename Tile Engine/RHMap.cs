@@ -85,6 +85,7 @@ namespace RiverHollow.Tile_Engine
         public Dictionary<string, Vector2> DictionaryCharacterLayer { get => _dictCharacterLayer; }
         private List<TiledMapObject> _liMapObjects;
 
+        //The dictionary of all resource spawn points on the map, by the resource they spawn.
         private Dictionary<int, List<TiledMapObject>> _diResourceSpawns;
 
         public RHMap() {
@@ -253,25 +254,12 @@ namespace RiverHollow.Tile_Engine
                 }
                 else if (ol.Name.Equals("Spawn"))
                 {
+                    //Sets up the Dictionaries for the resource spawn points
                     foreach (TiledMapObject mapObject in ol.Objects)
                     {
-                        spawnObjects.Add(mapObject);
-                    }
-                }
-            }
-
-            //Sets up the Dictionaries for the resource spawn points
-            if (_map.Properties.ContainsKey("ResourceSpawn"))
-            {
-                string[] whatResources = _map.Properties["ResourceSpawn"].Split('-');
-                foreach (string resourceID in whatResources)
-                {
-                    int resource = int.Parse(resourceID);
-                    foreach (TiledMapObject obj in spawnObjects)
-                    {
-                        if (obj.Properties.ContainsKey("Resource"))
+                        if (mapObject.Properties.ContainsKey("Resources"))
                         {
-                            string[] spawnResources = obj.Properties["Resource"].Split('-');
+                            string[] spawnResources = mapObject.Properties["Resources"].Split('-');
                             foreach (string s in spawnResources)
                             {
                                 int iSpawnResource = int.Parse(s);
@@ -279,7 +267,7 @@ namespace RiverHollow.Tile_Engine
                                 {
                                     _diResourceSpawns[iSpawnResource] = new List<TiledMapObject>();
                                 }
-                                _diResourceSpawns[iSpawnResource].Add(obj);
+                                _diResourceSpawns[iSpawnResource].Add(mapObject);
                             }
                         }
                     }
@@ -435,15 +423,15 @@ namespace RiverHollow.Tile_Engine
             SpawnMobs();
 
             //Spawns a random assortment of resources them ap will allow wherever they're allowed
-            if (_map.Properties.ContainsKey("ResourceSpawn"))
+            if (_diResourceSpawns.Count > 0)
             {
-                string[] whatResources = _map.Properties["ResourceSpawn"].Split('-');
                 RHRandom r = new RHRandom();
+                List<int> whatResources = new List<int>(_diResourceSpawns.Keys);
+
                 int spawnNumber = r.Next(_iMinResources, _iMaxResources);
                 for (int i = 0; i < spawnNumber; i++)
                 {
-                    int whichResource = int.Parse(whatResources[r.Next(0, whatResources.Length - 1)]);
-
+                    int whichResource = whatResources[r.Next(0, whatResources.Count - 1)];
                     List<TiledMapObject> spawnPoints = _diResourceSpawns[whichResource];
 
                     int whichPoint = r.Next(0, spawnPoints.Count - 1);
@@ -487,11 +475,7 @@ namespace RiverHollow.Tile_Engine
 
             foreach (WorldObject obj in _liPlacedWorldObjects)
             {
-                if (obj.IsMachine())
-                {
-                    Machine p = (Machine)obj;
-                    p.Update(gameTime);
-                }
+                obj.Update(gameTime);
             }
 
             foreach (WorldActor c in ToRemove)
@@ -1167,7 +1151,7 @@ namespace RiverHollow.Tile_Engine
                             }
                             else if (obj.IsForageable())
                             {
-                                InventoryManager.AddItemToInventory(ObjectManager.GetItem(((Forageable)obj).DropID));
+                                InventoryManager.AddItemToInventory(ObjectManager.GetItem(((Forageable)obj).ForageItem));
                                 MapManager.RemoveWorldObject(obj);
                                 obj.RemoveSelfFromTiles();
                             }
@@ -1579,7 +1563,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     int x = Math.Min((o.CollisionBox.Left + (j * TileSize)) / TileSize, MapWidthTiles-1);
                     int y = Math.Min((o.CollisionBox.Top + (i * TileSize)) / TileSize, MapHeightTiles-1);
-                    if (x < 0 || x > 99 || y < 0 || y > 99)
+                    if (x < 0 || x > this.MapWidthTiles || y < 0 || y > this.MapHeightTiles)
                     {
                         rv = false;
                         break;
@@ -2167,7 +2151,7 @@ namespace RiverHollow.Tile_Engine
                 rv = ((Destructible)_obj).DealDamage(dmg);
                 if (rv)
                 {
-                    MapManager.DropItemsOnMap(DropManager.DropItemsFromWorldObject(_obj.ID), _obj.CollisionBox.Center.ToVector2());
+                    MapManager.DropItemsOnMap(_obj.GetDroppedItems(), _obj.CollisionBox.Center.ToVector2());
                     MapManager.RemoveWorldObject(_obj);
                     _obj.RemoveSelfFromTiles();
                 }

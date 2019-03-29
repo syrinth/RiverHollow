@@ -28,7 +28,7 @@ namespace RiverHollow.Game_Managers
         public enum CActorAnimEnum { Idle, Attack, Cast, Hurt, KO, Critical, Win };
         public enum WeatherAnimEnum { None, Rain, Snow };
         public enum ToolAnimEnum { Up, Down, Left, Right }
-        public enum MachineAnimEnum { Idle, Working };
+        public enum WorldObjAnimEnum { Idle, Working, Shake};
         public enum GenAnimEnum { Play };
 
         public enum PotencyBonusEnum { None, Conditions, Summons }

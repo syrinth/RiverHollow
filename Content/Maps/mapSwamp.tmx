@@ -2,7 +2,6 @@
 <map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="8">
  <properties>
   <property name="Outside" type="bool" value="true"/>
-  <property name="ResourceSpawn" value="6-8"/>
   <property name="ResourcesMax" type="int" value="20"/>
   <property name="ResourcesMin" type="int" value="10"/>
  </properties>
@@ -155,12 +154,12 @@
  <objectgroup id="2" name="Spawn">
   <object id="3" name="Spawn" x="2.176" y="178.527" width="193.667" height="368.333">
    <properties>
-    <property name="Resource" value="6-8"/>
+    <property name="Resources" value="6-8"/>
    </properties>
   </object>
-  <object id="6" name="Spawn" x="369.167" y="179.833" width="253.667" height="185">
+  <object id="6" name="Spawn" x="369.167" y="179.833" width="253.667" height="189">
    <properties>
-    <property name="Resource" value="6"/>
+    <property name="Resources" value="6"/>
    </properties>
   </object>
  </objectgroup>
