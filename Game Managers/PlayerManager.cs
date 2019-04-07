@@ -370,7 +370,7 @@ namespace RiverHollow.Game_Managers
                     if (DecreaseStamina(UseTool.StaminaCost))
                     {
                         UseTool.ToolAnimation.IsAnimating = true;
-                        PlayerManager.World.PlayAnimation(ToolAnimEnum.Down);
+                        PlayerManager.World.PlayAnimation(WActorBaseAnim.ToolDown);
                     }
                     else
                     {

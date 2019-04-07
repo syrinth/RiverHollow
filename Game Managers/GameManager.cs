@@ -20,7 +20,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class GameManager
     {
-        public enum WActorBaseAnim { MakeItem, IdleDown, IdleUp, IdleLeft, IdleRight };
+        public enum WActorBaseAnim { MakeItem, IdleDown, ToolDown, IdleUp, IdleLeft, IdleRight };
         public enum WActorWalkAnim { WalkDown, WalkUp, WalkLeft, WalkRight };
         public enum WActorJumpAnim { GroundDown, GroundUp, GroundLeft, GroundRight, AirDown, AirUp, AirLeft, AirRight };
         public enum WActorShadow { Idle, Move };

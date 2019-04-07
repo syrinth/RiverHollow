@@ -624,9 +624,9 @@ namespace RiverHollow.WorldObjects
             }
             public void LoadContent()
             {
-                _sprite = new AnimatedSprite(@"Textures\texMachines", true);
-                _sprite.AddAnimation(WorldObjAnimEnum.Idle, (int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight, 1, 0.3f);
-                _sprite.AddAnimation(WorldObjAnimEnum.Working, (int)_vSourcePos.X + _iWidth, (int)_vSourcePos.Y, _iWidth, _iHeight, _iWorkingFrames, _fFrameSpeed);
+                _sprite = new AnimatedSprite(@"Textures\texMachines");
+                _sprite.AddAnimation(WorldObjAnimEnum.Idle, (int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight, 1, 0.3f, true);
+                _sprite.AddAnimation(WorldObjAnimEnum.Working, (int)_vSourcePos.X + _iWidth, (int)_vSourcePos.Y, _iWidth, _iHeight, _iWorkingFrames, _fFrameSpeed, true);
                 _sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
                 _sprite.IsAnimating = true;
             }

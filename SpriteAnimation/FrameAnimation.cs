@@ -20,6 +20,10 @@ namespace RiverHollow.SpriteAnimations
         // Amount of time (in seconds) to display each frame
         private float _fFrameLength = 0.2f;
 
+        // The next animation to play
+        private string _sNextAnimation;
+        public string NextAnimation => _sNextAnimation;
+
         // Amount of time that has passed since we last animated
         private float _fFrameTimer = 0.0f;
         public float FrameTimer
@@ -162,6 +166,11 @@ namespace RiverHollow.SpriteAnimations
                     _iPlayCount = (int)MathHelper.Min(_iPlayCount + 1, int.MaxValue);
                 }
             }
+        }
+
+        public void SetNextAnimation(string animation)
+        {
+            _sNextAnimation = animation;
         }
 
         object ICloneable.Clone()

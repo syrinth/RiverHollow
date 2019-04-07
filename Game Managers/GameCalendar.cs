@@ -62,7 +62,7 @@ namespace RiverHollow
             CheckDungeonLocks();
             
             _iCurrWeather = 0;
-            RollForWeatherEffects();
+            //RollForWeatherEffects();
 
             MapManager.CheckSpirits();
         }
@@ -168,7 +168,7 @@ namespace RiverHollow
             }
             else { _iCurrDay++; }
 
-            RollForWeatherEffects();
+            //RollForWeatherEffects();
         }
 
         private static void RollForWeatherEffects()

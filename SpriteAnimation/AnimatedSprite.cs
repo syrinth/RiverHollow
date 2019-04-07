@@ -23,8 +23,7 @@ namespace RiverHollow.SpriteAnimations
         // Dictionary holding all of the FrameAnimation objects
         Dictionary<string, FrameAnimation> _diFrameAnimations = new Dictionary<string, FrameAnimation>();
 
-        // Which FrameAnimation from the dictionary above is playing
-        string _sCurrAnim = string.Empty;
+        string _sCurrAnim = string.Empty;   // Which FrameAnimation from the dictionary above is playing
 
         // Calculated center of the sprite
         Vector2 v2Center;
@@ -36,7 +35,6 @@ namespace RiverHollow.SpriteAnimations
         int _height;
         public int Height { get => _height; }
 
-        bool _bPingPong;
         int _iScale = 1;
 
         int _iFrameCutoff;          //Used for cutting off the top of hair
@@ -149,16 +147,14 @@ namespace RiverHollow.SpriteAnimations
 
         #endregion
 
-        public AnimatedSprite(string Texture, bool pingPong = false)
+        public AnimatedSprite(string Texture)
         {
             _texture = GameContentManager.GetTexture(Texture);
-            _bPingPong = pingPong;
         }
 
         public AnimatedSprite(AnimatedSprite sprite)
         {
             _texture = sprite._texture;
-            _bPingPong = sprite._bPingPong;
             _diFrameAnimations = sprite._diFrameAnimations;
             _iFrameCutoff = sprite._iFrameCutoff;
             _color = sprite._color;
@@ -173,15 +169,15 @@ namespace RiverHollow.SpriteAnimations
         }
 
         //TODO: Remove this method, classes should do it manually, not in this level
-        public void AddAnimation<TEnum>(TEnum animEnum, int frameWidth, int frameHeight, int numFrames, float frameSpeed, int startX = 0, int startY = 0)
+        public void AddAnimation<TEnum>(TEnum animEnum, int frameWidth, int frameHeight, int numFrames, float frameSpeed, int startX = 0, int startY = 0, bool pingPong = false)
         {
-            this.AddAnimation(animEnum, startX, startY, frameWidth, frameHeight, numFrames, frameSpeed);
+            this.AddAnimation(animEnum, startX, startY, frameWidth, frameHeight, numFrames, frameSpeed, pingPong);
             this.IsAnimating = true;
         }
 
-        public void AddAnimation<TEnum>(TEnum animEnum, int X, int Y, int Width, int Height, int Frames, float FrameLength)
+        public void AddAnimation<TEnum>(TEnum animEnum, int X, int Y, int Width, int Height, int Frames, float FrameLength, bool pingPong = false)
         {
-            _diFrameAnimations.Add(Util.GetEnumString(animEnum), new FrameAnimation(X, Y, Width, Height, Frames, FrameLength, _bPingPong));
+            _diFrameAnimations.Add(Util.GetEnumString(animEnum), new FrameAnimation(X, Y, Width, Height, Frames, FrameLength, pingPong));
             _width = Width;
             _height = Height;
             v2Center = new Vector2(_width / 2, _height / 2);
@@ -200,6 +196,11 @@ namespace RiverHollow.SpriteAnimations
                 _diFrameAnimations[_sCurrAnim].CurrentFrame = 0;
                 _diFrameAnimations[_sCurrAnim].PlayCount = 0;
             }
+        }
+
+        public void SetNextAnimation<TEnum>(TEnum first, TEnum next)
+        {
+            _diFrameAnimations[Util.GetEnumString(first)].SetNextAnimation(Util.GetEnumString(next));
         }
 
         public void SetScale(int x)
@@ -258,11 +259,18 @@ namespace RiverHollow.SpriteAnimations
                 // Run the Animation's update method
                 CurrentFrameAnimation.Update(gameTime);
 
-                if (PlaysOnce && CurrentFrameAnimation.PlayCount > 0)
+                if (CurrentFrameAnimation.PlayCount > 0)
                 {
-                    PlayedOnce = true;
-                    IsAnimating = false;
-                    CurrentFrameAnimation.PlayCount = 0;
+                    if(!String.IsNullOrEmpty(CurrentFrameAnimation.NextAnimation))
+                    {
+                        SetCurrentAnimation(CurrentFrameAnimation.NextAnimation);
+                    }
+                    else if (PlaysOnce)
+                    {
+                        PlayedOnce = true;
+                        IsAnimating = false;
+                        CurrentFrameAnimation.PlayCount = 0;
+                    }
                 }
             }
         }

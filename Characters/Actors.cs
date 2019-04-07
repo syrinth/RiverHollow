@@ -157,21 +157,21 @@ namespace RiverHollow.Actors
             _height = _spriteBody.Height;
         }
 
-        public void AddDefaultAnimations(ref AnimatedSprite sprite, int height, int startX, int startY, bool pingpong = true)
+        public void AddDefaultAnimations(ref AnimatedSprite sprite, int height, int startX, int startY)
         {
-            AddDefaultAnimations(ref sprite, height, _sTexture, startX, startY, pingpong);
+            AddDefaultAnimations(ref sprite, height, _sTexture, startX, startY);
         }
-        public virtual void AddDefaultAnimations(ref AnimatedSprite sprite, int height, string texture, int startX, int startY, bool pingpong = false)
+        public virtual void AddDefaultAnimations(ref AnimatedSprite sprite, int height, string texture, int startX, int startY)
         {
-            sprite = new AnimatedSprite(texture, pingpong);
-            sprite.AddAnimation(WActorWalkAnim.WalkDown, TileSize, height, 3, 0.2f, startX, startY);
-            sprite.AddAnimation(WActorBaseAnim.IdleDown, TileSize, height, 1, 0.2f, startX + TileSize, startY);
-            sprite.AddAnimation(WActorWalkAnim.WalkRight, TileSize, height, 3, 0.2f, startX + TileSize * 3, startY);
-            sprite.AddAnimation(WActorBaseAnim.IdleRight, TileSize, height, 1, 0.2f, startX + TileSize * 4, startY);
-            sprite.AddAnimation(WActorWalkAnim.WalkUp, TileSize, height, 3, 0.2f, startX + TileSize * 6, startY);
-            sprite.AddAnimation(WActorBaseAnim.IdleUp, TileSize, height, 1, 0.2f, startX + TileSize * 7, startY);
-            sprite.AddAnimation(WActorWalkAnim.WalkLeft, TileSize, height, 3, 0.2f, startX + TileSize * 9, startY);
-            sprite.AddAnimation(WActorBaseAnim.IdleLeft, TileSize, height, 1, 0.2f, startX + TileSize * 10, startY);
+            sprite = new AnimatedSprite(texture);
+            sprite.AddAnimation(WActorWalkAnim.WalkDown, TileSize, height, 3, 0.2f, startX, startY, true);
+            sprite.AddAnimation(WActorBaseAnim.IdleDown, TileSize, height, 1, 0.2f, startX + TileSize, startY, true);
+            sprite.AddAnimation(WActorWalkAnim.WalkRight, TileSize, height, 3, 0.2f, startX + TileSize * 3, startY, true);
+            sprite.AddAnimation(WActorBaseAnim.IdleRight, TileSize, height, 1, 0.2f, startX + TileSize * 4, startY, true);
+            sprite.AddAnimation(WActorWalkAnim.WalkUp, TileSize, height, 3, 0.2f, startX + TileSize * 6, startY, true);
+            sprite.AddAnimation(WActorBaseAnim.IdleUp, TileSize, height, 1, 0.2f, startX + TileSize * 7, startY, true);
+            sprite.AddAnimation(WActorWalkAnim.WalkLeft, TileSize, height, 3, 0.2f, startX + TileSize * 9, startY, true);
+            sprite.AddAnimation(WActorBaseAnim.IdleLeft, TileSize, height, 1, 0.2f, startX + TileSize * 10, startY, true);
 
             sprite.SetCurrentAnimation(WActorBaseAnim.IdleDown);
         }
@@ -1606,10 +1606,11 @@ namespace RiverHollow.Actors
             _currentPath = new List<RHTile>();
         }
 
-        public override void AddDefaultAnimations(ref AnimatedSprite sprite, int height, string texture, int startX, int startY, bool pingpong = false)
+        public override void AddDefaultAnimations(ref AnimatedSprite sprite, int height, string texture, int startX, int startY)
         {
-            base.AddDefaultAnimations(ref sprite, height, texture, startX, startY, pingpong);
-            sprite.AddAnimation(ToolAnimEnum.Down, TileSize, height, 3, TOOL_ANIM_SPEED, startX + TileSize * 12, startY);
+            base.AddDefaultAnimations(ref sprite, height, texture, startX, startY);
+            sprite.AddAnimation(WActorBaseAnim.ToolDown, TileSize, height, 3, TOOL_ANIM_SPEED, startX + TileSize * 12, startY, false);
+            sprite.SetNextAnimation(WActorBaseAnim.ToolDown, WActorBaseAnim.IdleDown);
         }
 
         public override void Update(GameTime theGameTime)
@@ -1684,13 +1685,13 @@ namespace RiverHollow.Actors
         {
             Color bodyColor = Color.White;
 
-            AddDefaultAnimations(ref _spriteBody, HUMAN_HEIGHT, textureToLoad, 0, 0, true);
+            AddDefaultAnimations(ref _spriteBody, HUMAN_HEIGHT, textureToLoad, 0, 0);
             _spriteBody.SetColor(bodyColor);
 
-            AddDefaultAnimations(ref _spriteEyes, TileSize, textureToLoad, 0, TileSize * 3, true);
+            AddDefaultAnimations(ref _spriteEyes, TileSize, textureToLoad, 0, TileSize * 3);
             _spriteEyes.SetDepthMod(0.001f);
 
-            AddDefaultAnimations(ref _spriteHair, TileSize * 2, @"Textures\texPlayerHair", 0, _iHairIndex * TileSize * 2, true);
+            AddDefaultAnimations(ref _spriteHair, TileSize * 2, @"Textures\texPlayerHair", 0, _iHairIndex * TileSize * 2);
             _spriteHair.SetColor(_cHairColor);
             _spriteHair.SetDepthMod(0.003f);
 
@@ -1712,7 +1713,7 @@ namespace RiverHollow.Actors
         public void SetHairType(int index)
         {
             _iHairIndex = index;
-            AddDefaultAnimations(ref _spriteHair, TileSize * 2, @"Textures\texPlayerHair", 0, _iHairIndex * TileSize * 2, true);
+            AddDefaultAnimations(ref _spriteHair, TileSize * 2, @"Textures\texPlayerHair", 0, _iHairIndex * TileSize * 2);
             _spriteHair.SetColor(_cHairColor);
             _spriteHair.SetDepthMod(0.003f);
         }
@@ -1978,8 +1979,8 @@ namespace RiverHollow.Actors
             _width = _spriteBody.Width;
             _height = _spriteBody.Height;
 
-            _sprAlert = new AnimatedSprite(@"Textures\Dialog", true);
-            _sprAlert.AddAnimation(GenAnimEnum.Play, 64, 64, 16, 16, 3, 0.2f);
+            _sprAlert = new AnimatedSprite(@"Textures\Dialog");
+            _sprAlert.AddAnimation(GenAnimEnum.Play, 64, 64, 16, 16, 3, 0.2f, true);
             _sprAlert.SetCurrentAnimation(GenAnimEnum.Play);
             _sprAlert.Position = (Position - new Vector2(0, TileSize));
         }
