@@ -57,7 +57,6 @@ namespace RiverHollow.Game_Managers
             AddDirectoryTextures(Content, ACTOR_FOLDER);
 
             AddTexture(Content, @"Textures\texPlayer");
-            AddTexture(Content, @"Textures\Shadow");
             AddTexture(Content, @"Textures\texFlooring");
             AddTexture(Content, @"Textures\texWeather");
             AddTexture(Content, @"Textures\lightmask");

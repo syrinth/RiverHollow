@@ -1116,7 +1116,7 @@ namespace RiverHollow.Tile_Engine
                 else
                 {
                     _targetTile = MapManager.RetrieveTile(mouseLocation);
-                    if (_targetTile != null)
+                    if (_targetTile != null && PlayerManager.PlayerInRange(_targetTile.Center.ToPoint()))
                     {
                         WorldObject obj = _targetTile.GetWorldObject();
                         if (obj != null)

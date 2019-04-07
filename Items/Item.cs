@@ -505,9 +505,9 @@ namespace RiverHollow.WorldObjects
             _iRowTexSize = TileSize;
 
             _sprite = new AnimatedSprite(@"Textures\tools");
-            _sprite.AddAnimation(ToolAnimEnum.Left, (int)_vSourcePos.X + TileSize, (int)_vSourcePos.Y, TileSize, TileSize, 2, 0.3f);
+            _sprite.AddAnimation(ToolAnimEnum.Down, (int)_vSourcePos.X + TileSize, (int)_vSourcePos.Y, TileSize, TileSize * 2, 3, TOOL_ANIM_SPEED);
 
-            _sprite.SetCurrentAnimation(ToolAnimEnum.Left);
+            _sprite.SetCurrentAnimation(ToolAnimEnum.Down);
             _sprite.IsAnimating = true;
             _sprite.PlaysOnce = true;
         }

@@ -27,7 +27,7 @@ namespace RiverHollow.Game_Managers
 
         public enum CActorAnimEnum { Idle, Attack, Cast, Hurt, KO, Critical, Win };
         public enum WeatherAnimEnum { None, Rain, Snow };
-        public enum ToolAnimEnum { Up, Down, Left, Right }
+        public enum ToolAnimEnum { Down, Up, Left, Right }
         public enum WorldObjAnimEnum { Idle, Working, Shake};
         public enum GenAnimEnum { Play };
 
@@ -66,6 +66,8 @@ namespace RiverHollow.Game_Managers
 
         public static bool AutoDisband;
         public static bool HideMiniInventory = true;
+
+        public const float TOOL_ANIM_SPEED = 0.15f;
 
         public static int HUDItemRow;
         public static int HUDItemCol;

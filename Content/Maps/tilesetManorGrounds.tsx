@@ -281,6 +281,10 @@
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
+  <animation>
+   <frame tileid="182" duration="500"/>
+   <frame tileid="188" duration="500"/>
+  </animation>
  </tile>
  <tile id="183" terrain="5,5,6,5">
   <properties>

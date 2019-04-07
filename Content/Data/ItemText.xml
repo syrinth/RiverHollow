@@ -162,6 +162,10 @@
       <Key>96</Key>
       <Value>Amber/A gemstone of hardened sap. There appears to be something inside of it.</Value>
     </Item>
+    <Item>
+      <Key>97</Key>
+      <Value>Jade/A stone sought after for it'smystical properties</Value>
+    </Item>
     <!--<100> Consumables:Status/Stamina/Health/Mana-->
     <Item>
       <Key>101</Key>
@@ -286,6 +290,14 @@
     <Item>
       <Key>610</Key>
       <Value>Acolyte's Staff/A staff for trainee healers</Value>
+    </Item>
+    <Item>
+      <Key>611</Key>
+      <Value>Coiled Staff/A carefully worked staff that twists and coils</Value>
+    </Item>
+    <Item>
+      <Key>612</Key>
+      <Value>Emerald Staff/A carven staff topped with an emerald</Value>
     </Item>
     <!--Summoner-->
     <Item>

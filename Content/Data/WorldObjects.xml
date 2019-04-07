@@ -75,6 +75,10 @@
       <Key>16</Key>
       <Value>[Type:Destructible][Image:112-64][Width:16][Height:16][Break][Hp:10][ReqLvl:1][Item:96]</Value>
     </Item>
+    <Item>
+      <Key>17</Key>
+      <Value>[Type:Destructible][Image:128-64][Width:16][Height:16][Break][Hp:10][ReqLvl:1][Item:97]</Value>
+    </Item>
     <!--<60-79> Plants-->
     <Item>
       <Key>60</Key>

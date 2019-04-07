@@ -67,8 +67,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public GUISprite EyeSprite => _sprEyes;
         GUISprite _sprHair;
         public GUISprite HairSprite => _sprHair;
-        GUISprite _sprArms;
-        public GUISprite ArmSprite => _sprArms;
         GUISprite _sprHat;
         public GUISprite HatSprite => _sprHat;
         GUISprite _sprChest;
@@ -93,12 +91,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _sprBody = new GUISprite(PlayerManager.World.BodySprite, overwrite);
             _sprEyes = new GUISprite(PlayerManager.World.EyeSprite, overwrite);
             _sprHair = new GUISprite(PlayerManager.World.HairSprite, overwrite);
-            _sprArms = new GUISprite(PlayerManager.World.ArmSprite, overwrite);
 
             if (_sprBody != null) { _liSprites.Add(_sprBody); }
             if (_sprEyes != null) { _liSprites.Add(_sprEyes); }
             if (_sprHair != null) { _liSprites.Add(_sprHair); }
-            if (_sprArms != null) { _liSprites.Add(_sprArms); }
             if (PlayerManager.World.Hat != null) {
                 _sprHat = new GUISprite(PlayerManager.World.Hat.Sprite, overwrite);
                 _liSprites.Add(_sprHat);
@@ -135,11 +131,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             foreach (GUISprite g in _liSprites)
             {
                 g.Position(value);
-
-                if(g == _sprArms)
-                {
-                    g.MoveBy(0, (float)(TileSize * _dScale));
-                }
             }
         }
 

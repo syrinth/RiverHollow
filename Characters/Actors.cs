@@ -74,7 +74,7 @@ namespace RiverHollow.Actors
 
         public virtual void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
-            _spriteBody.Draw(spriteBatch, useLayerDepth);
+            //_spriteBody.Draw(spriteBatch, useLayerDepth);
         }
 
         public virtual void SetName(string text)
@@ -161,7 +161,7 @@ namespace RiverHollow.Actors
         {
             AddDefaultAnimations(ref sprite, height, _sTexture, startX, startY, pingpong);
         }
-        public void AddDefaultAnimations(ref AnimatedSprite sprite, int height, string texture, int startX, int startY, bool pingpong = false)
+        public virtual void AddDefaultAnimations(ref AnimatedSprite sprite, int height, string texture, int startX, int startY, bool pingpong = false)
         {
             sprite = new AnimatedSprite(texture, pingpong);
             sprite.AddAnimation(WActorWalkAnim.WalkDown, TileSize, height, 3, 0.2f, startX, startY);
@@ -172,10 +172,8 @@ namespace RiverHollow.Actors
             sprite.AddAnimation(WActorBaseAnim.IdleUp, TileSize, height, 1, 0.2f, startX + TileSize * 7, startY);
             sprite.AddAnimation(WActorWalkAnim.WalkLeft, TileSize, height, 3, 0.2f, startX + TileSize * 9, startY);
             sprite.AddAnimation(WActorBaseAnim.IdleLeft, TileSize, height, 1, 0.2f, startX + TileSize * 10, startY);
-            
-            sprite.SetCurrentAnimation(WActorBaseAnim.IdleDown);
 
-            //CreateShadow();
+            sprite.SetCurrentAnimation(WActorBaseAnim.IdleDown);
         }
 
         public virtual bool CollisionContains(Point mouse)
@@ -1563,8 +1561,6 @@ namespace RiverHollow.Actors
     {
         AnimatedSprite _spriteEyes;
         public AnimatedSprite EyeSprite => _spriteEyes;
-        AnimatedSprite _spriteArms;
-        public AnimatedSprite ArmSprite => _spriteArms;
         AnimatedSprite _spriteHair;
         public AnimatedSprite HairSprite => _spriteHair;
 
@@ -1574,6 +1570,7 @@ namespace RiverHollow.Actors
         int _iHairIndex = 0;
         public int HairIndex => _iHairIndex;
 
+        public Vector2 BodyPosition => _spriteBody.Position;
         public override Vector2 Position
         {
             get { return new Vector2(_spriteBody.Position.X, _spriteBody.Position.Y + _spriteBody.Height - TileSize); }
@@ -1581,7 +1578,6 @@ namespace RiverHollow.Actors
             {
                 _spriteBody.Position = new Vector2(value.X, value.Y - _spriteBody.Height + TileSize);
                 _spriteEyes.Position = _spriteBody.Position;
-                _spriteArms.Position = _spriteBody.Position + new Vector2(0, TileSize);
                 _spriteHair.Position = _spriteBody.Position;
 
                 if (_chest != null) { _chest.SetSpritePosition(_spriteBody.Position); }
@@ -1608,6 +1604,12 @@ namespace RiverHollow.Actors
             Speed = 2;
 
             _currentPath = new List<RHTile>();
+        }
+
+        public override void AddDefaultAnimations(ref AnimatedSprite sprite, int height, string texture, int startX, int startY, bool pingpong = false)
+        {
+            base.AddDefaultAnimations(ref sprite, height, texture, startX, startY, pingpong);
+            sprite.AddAnimation(ToolAnimEnum.Down, TileSize, height, 3, TOOL_ANIM_SPEED, startX + TileSize * 12, startY);
         }
 
         public override void Update(GameTime theGameTime)
@@ -1660,7 +1662,6 @@ namespace RiverHollow.Actors
 
             _spriteBody.Update(theGameTime);
             _spriteEyes.Update(theGameTime);
-            _spriteArms.Update(theGameTime);
             _spriteHair.Update(theGameTime);
 
             if (_chest != null) { _chest.Sprite.Update(theGameTime); }
@@ -1673,7 +1674,6 @@ namespace RiverHollow.Actors
 
             float bodyDepth = _spriteBody.Position.Y + _spriteBody.CurrentFrameAnimation.FrameHeight + (Position.X / 100);
             _spriteEyes.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
-            _spriteArms.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
             _spriteHair.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
 
             if (_chest != null) { _chest.Sprite.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth + 0.01f); }
@@ -1690,15 +1690,9 @@ namespace RiverHollow.Actors
             AddDefaultAnimations(ref _spriteEyes, TileSize, textureToLoad, 0, TileSize * 3, true);
             _spriteEyes.SetDepthMod(0.001f);
 
-            AddDefaultAnimations(ref _spriteArms, TileSize, textureToLoad, 0, TileSize * 4, true);
-            _spriteArms.SetDepthMod(0.002f);
-            _spriteArms.SetColor(bodyColor);
-
             AddDefaultAnimations(ref _spriteHair, TileSize * 2, @"Textures\texPlayerHair", 0, _iHairIndex * TileSize * 2, true);
             _spriteHair.SetColor(_cHairColor);
             _spriteHair.SetDepthMod(0.003f);
-
-            //CreateShadow();
 
             _width = _spriteBody.Width;
             _height = _spriteBody.Height;
@@ -1727,7 +1721,6 @@ namespace RiverHollow.Actors
         {
             _spriteBody.MoveBy(x, y);
             _spriteEyes.MoveBy(x, y);
-            _spriteArms.MoveBy(x, y);
             _spriteHair.MoveBy(x, y);
             if (_chest != null) { _chest.Sprite.MoveBy(x, y); }
             if (Hat != null) { Hat.Sprite.MoveBy(x, y); }
@@ -1737,7 +1730,6 @@ namespace RiverHollow.Actors
         {
             _spriteBody.SetCurrentAnimation(anim);
             _spriteEyes.SetCurrentAnimation(anim);
-            _spriteArms.SetCurrentAnimation(anim);
             _spriteHair.SetCurrentAnimation(anim);
 
             if (_chest != null) { _chest.Sprite.SetCurrentAnimation(anim); }
@@ -1748,7 +1740,6 @@ namespace RiverHollow.Actors
         {
             _spriteBody.SetScale(scale);
             _spriteEyes.SetScale(scale);
-            _spriteArms.SetScale(scale);
             _spriteHair.SetScale(scale);
 
             if (_chest != null) { _chest.Sprite.SetScale(scale); }
@@ -1825,23 +1816,23 @@ namespace RiverHollow.Actors
 
         public override void Update(GameTime theGameTime)
         {
-            if (_bActive)
-            {
-                base.Update(theGameTime);
-                if (!Triggered)
-                {
-                    int max = TileSize * 13;
-                    int dist = 0;
-                    if (PlayerManager.CurrentMap == CurrentMapName && PlayerManager.PlayerInRangeGetDist(_spriteBody.Center.ToPoint(), max, ref dist))
-                    {
-                        float fMax = max;
-                        float fDist = dist;
-                        float percentage = (Math.Abs(dist - fMax)) / fMax;
-                        percentage = Math.Max(percentage, MIN_VISIBILITY);
-                        _fVisibility = 0.4f * percentage;
-                    }
-                }
-            }
+            //if (_bActive)
+            //{
+            //    base.Update(theGameTime);
+            //    if (!Triggered)
+            //    {
+            //        int max = TileSize * 13;
+            //        int dist = 0;
+            //        if (PlayerManager.CurrentMap == CurrentMapName && PlayerManager.PlayerInRangeGetDist(_spriteBody.Center.ToPoint(), max, ref dist))
+            //        {
+            //            float fMax = max;
+            //            float fDist = dist;
+            //            float percentage = (Math.Abs(dist - fMax)) / fMax;
+            //            percentage = Math.Max(percentage, MIN_VISIBILITY);
+            //            _fVisibility = 0.4f * percentage;
+            //        }
+            //    }
+            //}
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)

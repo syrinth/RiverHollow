@@ -119,6 +119,9 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddNewItemToInventory(44, 30);
             InventoryManager.AddNewItemToInventory(106, 10);
             InventoryManager.AddNewItemToInventory(205);
+            InventoryManager.AddNewItemToInventory(610);
+            InventoryManager.AddNewItemToInventory(611);
+            InventoryManager.AddNewItemToInventory(612);
 
 
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestType.Fetch, "Getwood, dumbass", 1, null, ObjectManager.GetItem(2)));
@@ -181,8 +184,12 @@ namespace RiverHollow.Game_Managers
                 }
                 else
                 {
+                    int i = 0;
                     UseTool.Update(gameTime);
-                    bool finished = !PlayerManager.UseTool.ToolAnimation.IsAnimating;
+                    bool one = !PlayerManager.UseTool.ToolAnimation.IsAnimating;
+                    bool two = World.BodySprite.GetPlayCount() == 1;
+
+                    bool finished = (one && two);
 
                     RHTile target = MapManager.CurrentMap.TargetTile;
                     //UseTool
@@ -204,6 +211,7 @@ namespace RiverHollow.Game_Managers
 
                         target = null;
                         PlayerManager.UnsetTool();
+                        World.PlayAnimation(WActorBaseAnim.IdleDown);
                     }
                 }
             }
@@ -355,13 +363,14 @@ namespace RiverHollow.Game_Managers
             {
                 rv = true;
                 UseTool = t;
-                UseTool.Position = Util.SnapToGrid(mouse.ToVector2());
+                UseTool.Position = World.BodyPosition;
                 if (UseTool != null && !_bBusy)
                 {
                     _bBusy = true;
                     if (DecreaseStamina(UseTool.StaminaCost))
                     {
                         UseTool.ToolAnimation.IsAnimating = true;
+                        PlayerManager.World.PlayAnimation(ToolAnimEnum.Down);
                     }
                     else
                     {

@@ -166,6 +166,10 @@
       <Key>96</Key>
       <Value>[Type:Resource][Image:112-32][Sell:1000]</Value>
     </Item>
+    <Item>
+      <Key>97</Key>
+      <Value>[Type:Resource][Image:144-32][Sell:500]</Value>
+    </Item>
     <!--<100> Consumables:Buffs/Health/Mana-->
     <Item>
       <Key>101</Key>
@@ -290,7 +294,15 @@
     <!--<610> Healer-->
     <Item>
       <Key>610</Key>
-      <Value>[Type:Equipment][Image:0-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:1][Atk:Moderate][Mag:Major]</Value>
+      <Value>[Type:Equipment][Image:0-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:1][Atk:Moderate][Mag:Major][ReqItems:2-10]</Value>
+    </Item>
+    <Item>
+      <Key>611</Key>
+      <Value>[Type:Equipment][Image:16-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:2][Atk:Moderate][Mag:Major][ReqItems:2-5|10-2]</Value>
+    </Item>
+    <Item>
+      <Key>612</Key>
+      <Value>[Type:Equipment][Image:32-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:3][Atk:Moderate][Mag:Major][ReqItems:91-1]</Value>
     </Item>
     <!--<620> Summoner-->
     <Item>
