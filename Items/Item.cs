@@ -11,6 +11,7 @@ using RiverHollow.Misc;
 using System.Collections.Generic;
 using RiverHollow.Actors;
 using RiverHollow.Actors.CombatStuff;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
 namespace RiverHollow.WorldObjects
 {
@@ -339,6 +340,8 @@ namespace RiverHollow.WorldObjects
         public ArmorSlotEnum ArmorSlot => _eArmorSlot;
 
         int _iTier;
+        int _iCombatRow;  //Which row of the sprite the combat info is on
+        public int CombatRow => _iCombatRow;
 
         private int _iAttack;
         public int Attack => _iAttack; 
@@ -360,7 +363,6 @@ namespace RiverHollow.WorldObjects
         {
             ImportBasics(stringData, id, 1);
 
-
             //EType
             EquipType = Util.ParseEnum<EquipmentEnum>(stringData["EType"]);
 
@@ -379,6 +381,7 @@ namespace RiverHollow.WorldObjects
 
             //Stats
             _iTier = int.Parse(stringData["Tier"]);
+            if (stringData.ContainsKey("Row")) { _iCombatRow = int.Parse(stringData["Row"]); }
             if (stringData.ContainsKey("Str")) { _iStr = GetItemTierData(_iTier, stringData["Str"]); }
             if (stringData.ContainsKey("Def")) { _iDef = GetItemTierData(_iTier, stringData["Def"]); }
             if (stringData.ContainsKey("Vit")) { _iVit = GetItemTierData(_iTier, stringData["Vit"]); }
@@ -387,6 +390,7 @@ namespace RiverHollow.WorldObjects
             if (stringData.ContainsKey("Spd")) { _iSpd = GetItemTierData(_iTier, stringData["Spd"]); }
             if (stringData.ContainsKey("Atk1")) { _iAttack = GetItemTierData(_iTier, stringData["Atk1"], false); }
         }
+
 
         private int GetItemTierData(int tier, string modifier, bool isStat = true)
         {

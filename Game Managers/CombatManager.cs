@@ -831,6 +831,11 @@ namespace RiverHollow.Game_Managers
                     SelectedTile = this;
                 }
             }
+
+            public void PlayAnimation<TEnum>(TEnum animation)
+            {
+                _gTile.PlayAnimation(animation);
+            }
         }
         public class ChosenAction
         {

@@ -517,7 +517,7 @@ namespace RiverHollow.Actors.CombatStuff
                         bool targetsEnemy = TileTargetList[0].GUITile.MapTile.TargetType == TargetEnum.Enemy;
 
                         //If we're in Critical HP, start walking first.
-                        if (SkillUser.IsCurrentAnimation(CActorAnimEnum.Critical)) { SkillUser.PlayAnimation(CActorAnimEnum.Idle); }
+                        if (SkillUser.IsCurrentAnimation(CActorAnimEnum.Critical)) { SkillUser.Tile.PlayAnimation(CActorAnimEnum.Idle); }
 
                         if (MoveSpriteTo(sprite, GetAttackTargetPosition(sprite, targetsEnemy, moveToTile)))
                         {
@@ -539,22 +539,22 @@ namespace RiverHollow.Actors.CombatStuff
                     }
                     if (!SkillUser.IsCurrentAnimation(CActorAnimEnum.Attack))
                     {
-                        SkillUser.PlayAnimation(CActorAnimEnum.Attack);
+                        SkillUser.Tile.PlayAnimation(CActorAnimEnum.Attack);
                     }
                     else if (SkillUser.AnimationPlayedXTimes(1))
                     {
-                        SkillUser.PlayAnimation(CActorAnimEnum.Idle);
+                        SkillUser.Tile.PlayAnimation(CActorAnimEnum.Idle);
                         _currentActionTag++;
                     }
                     break;
                 case "UserCast":
                     if (!SkillUser.IsCurrentAnimation(CActorAnimEnum.Cast))
                     {
-                        SkillUser.PlayAnimation(CActorAnimEnum.Cast);
+                        SkillUser.Tile.PlayAnimation(CActorAnimEnum.Cast);
                     }
                     else if (SkillUser.AnimationPlayedXTimes(2))
                     {
-                        SkillUser.PlayAnimation(CActorAnimEnum.Idle);
+                        SkillUser.Tile.PlayAnimation(CActorAnimEnum.Idle);
                         _currentActionTag++;
                     }
                     break;
@@ -590,11 +590,11 @@ namespace RiverHollow.Actors.CombatStuff
                         {
                             if (!counteringChar.IsCurrentAnimation(CActorAnimEnum.Attack))
                             {
-                                counteringChar.PlayAnimation(CActorAnimEnum.Attack);
+                                counteringChar.Tile.PlayAnimation(CActorAnimEnum.Attack);
                             }
                             else if (counteringChar.AnimationPlayedXTimes(1))
                             {
-                                counteringChar.PlayAnimation(CActorAnimEnum.Idle);
+                                counteringChar.Tile.PlayAnimation(CActorAnimEnum.Idle);
                                 int x = SkillUser.ProcessAttack(counteringChar, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, counteringChar.GetAttackElement());
                                 SkillUser.Tile.GUITile.AssignEffect(x, true);
                                 counteringChar = null;
@@ -629,7 +629,7 @@ namespace RiverHollow.Actors.CombatStuff
                     if (MoveSpriteTo(SkillUser.GetSprite(), UserStartPosition))
                     {
                         //If we're in Critical HP, go back down.
-                        if (SkillUser.IsCritical()) { SkillUser.PlayAnimation(CActorAnimEnum.Critical); }
+                        if (SkillUser.IsCritical()) { SkillUser.Tile.PlayAnimation(CActorAnimEnum.Critical); }
                         _currentActionTag++;
                     }
                     break;
