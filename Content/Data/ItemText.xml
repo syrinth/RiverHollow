@@ -284,7 +284,7 @@
     </Item>
     <Item>
       <Key>601</Key>
-      <Value>Bronze Wand/A magical wand</Value>
+      <Value>Copper Wand/A magical wand</Value>
     </Item>
     <!--Healer-->
     <Item>
@@ -303,6 +303,10 @@
     <Item>
       <Key>620</Key>
       <Value>Glass Orb/An orb made of glass</Value>
+    </Item>
+    <Item>
+      <Key>621</Key>
+      <Value>Copper Orb/A magical orb made of polished copper</Value>
     </Item>
     <!--Witch-->
     <Item>

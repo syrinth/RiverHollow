@@ -10,6 +10,7 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIObjects;
 using RiverHollow.Misc;
+using RiverHollow.SpriteAnimations;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
@@ -416,8 +417,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (Occupied())
             {
                 if(_gSummon != null) { _gSummon.Draw(spriteBatch); }
-                if (_gSpriteWeapon != null) { _gSpriteWeapon.Draw(spriteBatch); }
                 _gSprite.Draw(spriteBatch);
+
+                if (_gSpriteWeapon != null) { _gSpriteWeapon.Draw(spriteBatch); } 
 
                 if (!(CombatManager.CurrentPhase == CombatManager.PhaseEnum.PerformAction && CombatManager.ActiveCharacter == _mapTile.Character)
                     && !(_mapTile.Character.IsMonster() && _mapTile.Character.IsCurrentAnimation(CActorAnimEnum.KO)))
@@ -517,7 +519,30 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 if (_mapTile.Character.IsCombatAdventurer())
                 {
                     CombatAdventurer adv = (CombatAdventurer)_mapTile.Character;
-                    _gSpriteWeapon = new GUISprite(adv.SpriteWeapon);
+                    CharacterClass cClass = adv.CharacterClass;
+                    
+                    AnimatedSprite sprCombatSprite = new AnimatedSprite(GameContentManager.ITEM_FOLDER + "Cmbt" + cClass.WeaponType.ToString());
+
+                    int yHeight = adv.Weapon.CombatRow * (TileSize * 2);
+                    int xCrawl = 0;
+                    int frameWidth = 32;
+                    int frameHeight = 32;
+                    sprCombatSprite.AddAnimation(CActorAnimEnum.Idle, 32, 32, cClass.IdleFrames, cClass.IdleFramesLength, xCrawl, yHeight);
+                    xCrawl += cClass.IdleFrames;
+                    sprCombatSprite.AddAnimation(CActorAnimEnum.Cast, frameWidth, frameHeight, cClass.CastFrames, cClass.CastFramesLength, (xCrawl * frameWidth), yHeight);
+                    xCrawl += cClass.CastFrames;
+                    sprCombatSprite.AddAnimation(CActorAnimEnum.Hurt, frameWidth, frameHeight, cClass.HitFrames, cClass.HitFramesLength, (xCrawl * frameWidth), yHeight);
+                    xCrawl += cClass.HitFrames;
+                    sprCombatSprite.AddAnimation(CActorAnimEnum.Attack, frameWidth, frameHeight, cClass.AttackFrames, cClass.AttackFramesLength, (xCrawl * frameWidth), yHeight);
+                    xCrawl += cClass.AttackFrames;
+                    sprCombatSprite.AddAnimation(CActorAnimEnum.Critical, frameWidth, frameHeight, cClass.CriticalFrames, cClass.CriticalFramesLength, (xCrawl * frameWidth), yHeight);
+                    xCrawl += cClass.CriticalFrames;
+                    sprCombatSprite.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, cClass.KOFrames, cClass.KOFramesLength, (xCrawl * frameWidth), yHeight);
+                    xCrawl += cClass.KOFrames;
+                    sprCombatSprite.AddAnimation(CActorAnimEnum.Win, frameWidth, frameHeight, cClass.WinFrames, cClass.WinFramesLength, (xCrawl * frameWidth), yHeight);
+                    sprCombatSprite.SetScale(CombatManager.CombatScale);
+
+                    _gSpriteWeapon = new GUISprite(sprCombatSprite);
                     _gSpriteWeapon.PlayAnimation(CActorAnimEnum.Idle);
                 }
                 _gHP = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Health, _mapTile.Character, 100);
@@ -649,6 +674,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 rv = _gSprite.Position();
             }
             return rv;
+        }
+
+        public void PlayAnimation<TEnum>(TEnum animation)
+        {
+            _gSprite.PlayAnimation(animation);
+            if(_gSpriteWeapon != null) {
+                _gSpriteWeapon.PlayAnimation(animation); }
         }
     }
 

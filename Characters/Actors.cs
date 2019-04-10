@@ -74,7 +74,7 @@ namespace RiverHollow.Actors
 
         public virtual void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
-            //_spriteBody.Draw(spriteBatch, useLayerDepth);
+            _spriteBody.Draw(spriteBatch, useLayerDepth);
         }
 
         public virtual void SetName(string text)
@@ -2545,20 +2545,20 @@ namespace RiverHollow.Actors
             //Finished being hit, determine action
             if (IsCurrentAnimation(CActorAnimEnum.Hurt) && BodySprite.GetPlayCount() == 1)
             {
-                if (CurrentHP == 0) { PlayAnimation(CActorAnimEnum.KO); }
-                else if (IsCritical()) { PlayAnimation(CActorAnimEnum.Critical); }
-                else { PlayAnimation(CActorAnimEnum.Idle); }
+                if (CurrentHP == 0) { Tile.PlayAnimation(CActorAnimEnum.KO); }
+                else if (IsCritical()) { Tile.PlayAnimation(CActorAnimEnum.Critical); }
+                else { Tile.PlayAnimation(CActorAnimEnum.Idle); }
             }
 
             if (!_diConditions[ConditionEnum.KO] && IsCurrentAnimation(CActorAnimEnum.KO))
             {
-                if (IsCritical()) { PlayAnimation(CActorAnimEnum.Critical); }
-                else { PlayAnimation(CActorAnimEnum.Idle); }
+                if (IsCritical()) { Tile.PlayAnimation(CActorAnimEnum.Critical); }
+                else { Tile.PlayAnimation(CActorAnimEnum.Idle); }
             }
 
             if (IsCurrentAnimation(CActorAnimEnum.Critical) && !IsCritical())
             {
-                PlayAnimation(CActorAnimEnum.Idle);
+                Tile.PlayAnimation(CActorAnimEnum.Idle);
             }
 
             if (_linkedSummon != null)
@@ -2635,7 +2635,7 @@ namespace RiverHollow.Actors
         {
             int iValue = (int)Math.Round(value);
             _currentHP -= (_currentHP - iValue >= 0) ? iValue : _currentHP;
-            PlayAnimation(CActorAnimEnum.Hurt);
+            Tile.PlayAnimation(CActorAnimEnum.Hurt);
             if (_currentHP == 0)
             {
                 _diConditions[ConditionEnum.KO] = true;
@@ -2861,8 +2861,6 @@ namespace RiverHollow.Actors
 
         public bool Protected;
 
-        public AnimatedSprite SpriteWeapon;
-
         public Equipment Weapon;
         public Equipment TempWeapon;
         public Equipment Armor;
@@ -2966,10 +2964,6 @@ namespace RiverHollow.Actors
         {
             _sName = w.Name;
             _world = w;
-
-            SpriteWeapon = new AnimatedSprite(@"Textures\Staves");
-            SpriteWeapon.AddAnimation(CActorAnimEnum.Idle, 32, 32, 2, 0.4f, 0, 0);
-            SpriteWeapon.SetScale(CombatManager.CombatScale);
         }
 
         public CombatAdventurer() : base()
@@ -3032,7 +3026,6 @@ namespace RiverHollow.Actors
         public override void PlayAnimation(string animation)
         {
             base.PlayAnimation(animation);
-            SpriteWeapon.SetCurrentAnimation(animation);
         }
 
         public AdventurerData SaveData()

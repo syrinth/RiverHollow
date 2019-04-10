@@ -24,14 +24,14 @@
       <Value>[Weapon:Knife][Armor:Cloth][Hp:4][Idle:2-0.6][Cast:2-0.6][Hit:1-0.6][Attack:1-0.6][Crit:2-0.6][KO:1-0.6][Win:2-0.6][Ability:300][Spell:80][DWeap:630][DArmor:700][DHead:760][DWrist:880]</Value>
     </Item>
     <Item>
-      <!--Duelist-->
+      <!--Lancer-->
       <Key>5</Key>
-      <Value>[Weapon:Sword][Armor:Heavy][Hp:6][Idle:2-0.6][Cast:2-0.6][Hit:1-0.6][Attack:1-0.6][Crit:2-0.6][KO:1-0.6][Win:2-0.6][Ability:300][DWeap:640][DArmor:720][DHead:780][DWrist:880]</Value>
+      <Value>[Weapon:Spear][Armor:Heavy][Hp:6][Idle:2-0.6][Cast:2-0.6][Hit:1-0.6][Attack:1-0.6][Crit:2-0.6][KO:1-0.6][Win:2-0.6][Ability:300][DWeap:640][DArmor:720][DHead:780][DWrist:880]</Value>
     </Item>
     <Item>
       <!--Knight-->
       <Key>6</Key>
-      <Value>[Weapon:Mace][Armor:Heavy][Hp:10][Spd:1][Idle:2-0.6][Cast:2-0.6][Hit:1-0.6][Attack:1-0.6][Crit:2-0.6][KO:1-0.6][Win:2-0.6][Ability:300][DWeap:650][DArmor:740][DHead:800][DWrist:880]</Value>
+      <Value>[Weapon:Shield][Armor:Heavy][Hp:10][Spd:1][Idle:2-0.6][Cast:2-0.6][Hit:1-0.6][Attack:1-0.6][Crit:2-0.6][KO:1-0.6][Win:2-0.6][Ability:300][DWeap:650][DArmor:740][DHead:800][DWrist:880]</Value>
     </Item>
     <Item>
       <!--Rogue-->

@@ -122,6 +122,7 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddNewItemToInventory(610);
             InventoryManager.AddNewItemToInventory(611);
             InventoryManager.AddNewItemToInventory(612);
+            InventoryManager.AddNewItemToInventory(621);
 
 
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestType.Fetch, "Getwood, dumbass", 1, null, ObjectManager.GetItem(2)));
@@ -184,12 +185,9 @@ namespace RiverHollow.Game_Managers
                 }
                 else
                 {
-                    int i = 0;
                     UseTool.Update(gameTime);
-                    bool one = !PlayerManager.UseTool.ToolAnimation.IsAnimating;
-                    bool two = World.BodySprite.GetPlayCount() == 1;
 
-                    bool finished = (one && two);
+                    bool finished = !World.BodySprite.CurrentAnimation.StartsWith("Tool");
 
                     RHTile target = MapManager.CurrentMap.TargetTile;
                     //UseTool

@@ -96,7 +96,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC7.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC8.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Bard.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Duelist.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Knight.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Rogue.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Summoner.png</File>
@@ -128,7 +127,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapTower2.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapTower3.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapManor1.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Staves.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/WizardPortrait.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Consumables.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Equipment.png</File>
@@ -137,5 +135,14 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/StaticObjects.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapSwamp.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/DarkWoodTree.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/CmbtBow.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/CmbtKnife.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/CmbtRapier.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/CmbtShield.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/CmbtSpear.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/CmbtOrb.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/CmbtStaff.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/CmbtWand.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Lancer.png</File>
   </SourceFiles>
 </SourceFileCollection>
