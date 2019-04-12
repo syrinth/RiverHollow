@@ -340,8 +340,6 @@ namespace RiverHollow.WorldObjects
         public ArmorSlotEnum ArmorSlot => _eArmorSlot;
 
         int _iTier;
-        int _iCombatRow;  //Which row of the sprite the combat info is on
-        public int CombatRow => _iCombatRow;
 
         private int _iAttack;
         public int Attack => _iAttack; 
@@ -381,7 +379,6 @@ namespace RiverHollow.WorldObjects
 
             //Stats
             _iTier = int.Parse(stringData["Tier"]);
-            if (stringData.ContainsKey("Row")) { _iCombatRow = int.Parse(stringData["Row"]); }
             if (stringData.ContainsKey("Str")) { _iStr = GetItemTierData(_iTier, stringData["Str"]); }
             if (stringData.ContainsKey("Def")) { _iDef = GetItemTierData(_iTier, stringData["Def"]); }
             if (stringData.ContainsKey("Vit")) { _iVit = GetItemTierData(_iTier, stringData["Vit"]); }

@@ -2848,7 +2848,7 @@ namespace RiverHollow.Actors
     {
         #region Properties
         public static List<int> LevelRange = new List<int> { 0, 10, 40, 100, 200, 600, 800, 1200, 1600, 2000 };
-        private WorldCombatant _world;
+        protected WorldCombatant _world;
         public WorldCombatant World => _world;
 
         protected CharacterClass _class;
@@ -3046,6 +3046,13 @@ namespace RiverHollow.Actors
             Weapon = (Equipment)ObjectManager.GetItem(data.weapon.itemID, data.weapon.num);
             _classLevel = data.level;
             _xp = data.xp;
+        }
+    }
+
+    public class PlayerCombat : CombatAdventurer
+    {
+        public PlayerCombat(WorldCombatant w) : base(w)
+        {
         }
     }
 

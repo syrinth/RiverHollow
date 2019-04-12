@@ -73,7 +73,7 @@ namespace RiverHollow.Game_Managers
             _liParty = new List<CombatAdventurer>();
             _questLog = new List<Quest>();
             World = new PlayerCharacter();
-            Combat = new CombatAdventurer(World);
+            Combat = new PlayerCombat(World);
             _liParty.Add(Combat);
             _buildings = new List<Building>();
             _canMake = new List<int>();
@@ -501,7 +501,7 @@ namespace RiverHollow.Game_Managers
         {
             CharacterClass combatClass = ObjectManager.GetClassByIndex(x);
             Combat.SetClass(combatClass);
-            Combat.LoadContent(@"Textures\Actors\Adventurers\" + combatClass.Name);
+            Combat.LoadContent(GameContentManager.PLAYER_FOLDER + "Player" + combatClass.Name);
         }
 
         public static bool DecreaseStamina(int x)

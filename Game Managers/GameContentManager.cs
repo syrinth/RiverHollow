@@ -11,6 +11,7 @@ namespace RiverHollow.Game_Managers
         public const string ACTOR_FOLDER = @"Textures\Actors\";
         public const string BUILDING_FOLDER = @"Textures\Buildings\";
         public const string ITEM_FOLDER = @"Textures\Items\";
+        public const string PLAYER_FOLDER = @"Textures\Actors\Player\";
 
         private static ContentManager _content;
         private static Dictionary<string, Texture2D> _diTextures;

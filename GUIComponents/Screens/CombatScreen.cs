@@ -521,25 +521,24 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     CombatAdventurer adv = (CombatAdventurer)_mapTile.Character;
                     CharacterClass cClass = adv.CharacterClass;
                     
-                    AnimatedSprite sprCombatSprite = new AnimatedSprite(GameContentManager.ITEM_FOLDER + "Cmbt" + cClass.WeaponType.ToString());
+                    AnimatedSprite sprCombatSprite = new AnimatedSprite(GameContentManager.ITEM_FOLDER + "Combat\\Weapons\\"+ cClass.WeaponType.ToString() + "\\" + adv.Weapon.ItemID);
 
-                    int yHeight = adv.Weapon.CombatRow * (TileSize * 2);
                     int xCrawl = 0;
                     int frameWidth = 32;
                     int frameHeight = 32;
-                    sprCombatSprite.AddAnimation(CActorAnimEnum.Idle, 32, 32, cClass.IdleFrames, cClass.IdleFramesLength, xCrawl, yHeight);
+                    sprCombatSprite.AddAnimation(CActorAnimEnum.Idle, 32, 32, cClass.IdleFrames, cClass.IdleFramesLength, xCrawl, 0);
                     xCrawl += cClass.IdleFrames;
-                    sprCombatSprite.AddAnimation(CActorAnimEnum.Cast, frameWidth, frameHeight, cClass.CastFrames, cClass.CastFramesLength, (xCrawl * frameWidth), yHeight);
+                    sprCombatSprite.AddAnimation(CActorAnimEnum.Cast, frameWidth, frameHeight, cClass.CastFrames, cClass.CastFramesLength, (xCrawl * frameWidth), 0);
                     xCrawl += cClass.CastFrames;
-                    sprCombatSprite.AddAnimation(CActorAnimEnum.Hurt, frameWidth, frameHeight, cClass.HitFrames, cClass.HitFramesLength, (xCrawl * frameWidth), yHeight);
+                    sprCombatSprite.AddAnimation(CActorAnimEnum.Hurt, frameWidth, frameHeight, cClass.HitFrames, cClass.HitFramesLength, (xCrawl * frameWidth), 0);
                     xCrawl += cClass.HitFrames;
-                    sprCombatSprite.AddAnimation(CActorAnimEnum.Attack, frameWidth, frameHeight, cClass.AttackFrames, cClass.AttackFramesLength, (xCrawl * frameWidth), yHeight);
+                    sprCombatSprite.AddAnimation(CActorAnimEnum.Attack, frameWidth, frameHeight, cClass.AttackFrames, cClass.AttackFramesLength, (xCrawl * frameWidth), 0);
                     xCrawl += cClass.AttackFrames;
-                    sprCombatSprite.AddAnimation(CActorAnimEnum.Critical, frameWidth, frameHeight, cClass.CriticalFrames, cClass.CriticalFramesLength, (xCrawl * frameWidth), yHeight);
+                    sprCombatSprite.AddAnimation(CActorAnimEnum.Critical, frameWidth, frameHeight, cClass.CriticalFrames, cClass.CriticalFramesLength, (xCrawl * frameWidth), 0);
                     xCrawl += cClass.CriticalFrames;
-                    sprCombatSprite.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, cClass.KOFrames, cClass.KOFramesLength, (xCrawl * frameWidth), yHeight);
+                    sprCombatSprite.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, cClass.KOFrames, cClass.KOFramesLength, (xCrawl * frameWidth), 0);
                     xCrawl += cClass.KOFrames;
-                    sprCombatSprite.AddAnimation(CActorAnimEnum.Win, frameWidth, frameHeight, cClass.WinFrames, cClass.WinFramesLength, (xCrawl * frameWidth), yHeight);
+                    sprCombatSprite.AddAnimation(CActorAnimEnum.Win, frameWidth, frameHeight, cClass.WinFrames, cClass.WinFramesLength, (xCrawl * frameWidth), 0);
                     sprCombatSprite.SetScale(CombatManager.CombatScale);
 
                     _gSpriteWeapon = new GUISprite(sprCombatSprite);

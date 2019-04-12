@@ -285,58 +285,58 @@
     <!--<600> Wizard-->
     <Item>
       <Key>600</Key>
-      <Value>[Type:Equipment][Image:0-0][Sell:1000][EType:Weapon][ESub:Wand][Tier:1][Row:0][Atk:Minor][Mag:Major]</Value>
+      <Value>[Type:Equipment][Image:0-0][Sell:1000][EType:Weapon][ESub:Wand][Tier:1][Atk:Minor][Mag:Major]</Value>
     </Item>
     <Item>
       <Key>601</Key>
-      <Value>[Type:Equipment][Image:16-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:2][Row:0][Atk:Minor][Mag:Major][ReqItems:5-3]</Value>
+      <Value>[Type:Equipment][Image:16-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:2][[Atk:Minor][Mag:Major][ReqItems:5-3]</Value>
     </Item>
     <!--<610> Healer-->
     <Item>
       <Key>610</Key>
-      <Value>[Type:Equipment][Image:0-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:1][Row:0][Atk:Moderate][Mag:Major][ReqItems:2-10]</Value>
+      <Value>[Type:Equipment][Image:0-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:1][Atk:Moderate][Mag:Major][ReqItems:2-10]</Value>
     </Item>
     <Item>
       <Key>611</Key>
-      <Value>[Type:Equipment][Image:16-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:2][Row:1][Atk:Moderate][Mag:Major][ReqItems:2-5|10-2]</Value>
+      <Value>[Type:Equipment][Image:16-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:2][Atk:Moderate][Mag:Major][ReqItems:2-5|10-2]</Value>
     </Item>
     <Item>
       <Key>612</Key>
-      <Value>[Type:Equipment][Image:32-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:3][Row:2][Atk:Moderate][Mag:Major][ReqItems:91-1]</Value>
+      <Value>[Type:Equipment][Image:32-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:3][Atk:Moderate][Mag:Major][ReqItems:91-1]</Value>
     </Item>
     <!--<620> Summoner-->
     <Item>
       <Key>620</Key>
-      <Value>[Type:Equipment][Image:0-32][Sell:1000][EType:Weapon][ESub:Orb][Tier:1][Row:0][Atk:Moderate][Mag:Major]</Value>
+      <Value>[Type:Equipment][Image:0-32][Sell:1000][EType:Weapon][ESub:Orb][Tier:1][Atk:Moderate][Mag:Major]</Value>
     </Item>
     <Item>
       <Key>621</Key>
-      <Value>[Type:Equipment][Image:16-32][Sell:1000][EType:Weapon][ESub:Orb][Tier:2][Row:1][Atk:Moderate][Mag:Major][ReqItems:85-2]</Value>
+      <Value>[Type:Equipment][Image:16-32][Sell:1000][EType:Weapon][ESub:Orb][Tier:2][Atk:Moderate][Mag:Major][ReqItems:85-2]</Value>
     </Item>
     <!--<630> Witch-->
     <Item>
       <Key>630</Key>
-      <Value>[Type:Equipment][Image:0-48][Sell:1000][EType:Weapon][ESub:Knife][Tier:1][Row:0][Atk:Moderate][Mag:Major]</Value>
+      <Value>[Type:Equipment][Image:0-48][Sell:1000][EType:Weapon][ESub:Knife][Tier:1][Atk:Moderate][Mag:Major]</Value>
     </Item>
-    <!--<640> Duelist-->
+    <!--<640> Lancer-->
     <Item>
       <Key>640</Key>
-      <Value>[Type:Equipment][Image:0-64][Sell:1000][EType:Weapon][ESub:Sword][Tier:1][Row:0][Atk:Major][Str:Major]</Value>
+      <Value>[Type:Equipment][Image:0-64][Sell:1000][EType:Weapon][ESub:Sword][Tier:1][Atk:Major][Str:Major]</Value>
     </Item>
     <!--<650> Knight-->
     <Item>
       <Key>650</Key>
-      <Value>[Type:Equipment][Image:0-80][Sell:1000][EType:Weapon][ESub:Mace][Tier:1][Row:0][Atk:Minor][Str:Minor]</Value>
+      <Value>[Type:Equipment][Image:0-80][Sell:1000][EType:Weapon][ESub:Mace][Tier:1][Atk:Minor][Str:Minor]</Value>
     </Item>
     <!--<660> Rogue-->
     <Item>
       <Key>660</Key>
-      <Value>[Type:Equipment][Image:0-96][Sell:1000][EType:Weapon][ESub:Bow][Tier:1][Row:0][Atk:Moderate][Str:Moderate]</Value>
+      <Value>[Type:Equipment][Image:0-96][Sell:1000][EType:Weapon][ESub:Bow][Tier:1][Atk:Moderate][Str:Moderate]</Value>
     </Item>
     <!--<670> Bard-->
     <Item>
       <Key>670</Key>
-      <Value>[Type:Equipment][Image:0-112][Sell:1000][EType:Weapon][ESub:Rapier][Tier:1][Row:0][Atk:Moderate][Str:Moderate]</Value>
+      <Value>[Type:Equipment][Image:0-112][Sell:1000][EType:Weapon][ESub:Rapier][Tier:1][Atk:Moderate][Str:Moderate]</Value>
     </Item>
     <!--<700> Armor-->
     <!--<700> Cloth-->

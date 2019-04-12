@@ -135,14 +135,19 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/StaticObjects.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapSwamp.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/DarkWoodTree.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/CmbtBow.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/CmbtKnife.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/CmbtRapier.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/CmbtShield.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/CmbtSpear.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/CmbtOrb.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/CmbtStaff.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/CmbtWand.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Lancer.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Bow/660.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Knife/630.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Orb/620.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Orb/621.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Rapier/670.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Shield/650.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Spear/640.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Staff/610.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Staff/611.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Staff/612.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Wand/600.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerSummoner.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerWizard.png</File>
   </SourceFiles>
 </SourceFileCollection>
