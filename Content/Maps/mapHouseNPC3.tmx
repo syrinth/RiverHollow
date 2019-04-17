@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="15" height="10" tilewidth="16" tileheight="16" infinite="0" nextobjectid="9">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="15" height="10" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="13">
  <tileset firstgid="1" source="tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" source="tilesetHouses.tsx"/>
- <layer name="Base Layer" width="15" height="10">
+ <layer id="1" name="Base Layer" width="15" height="10">
   <data encoding="csv">
 27,27,27,27,36,27,27,27,27,27,27,27,27,27,27,
 27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,
@@ -16,27 +16,27 @@
 27,27,27,27,27,27,27,27,36,27,27,27,36,27,27
 </data>
  </layer>
- <layer name="Ground Layer" width="15" height="10">
+ <layer id="2" name="Ground Layer" width="15" height="10">
   <data encoding="csv">
 7,8,8,8,8,8,8,8,8,8,8,8,8,8,9,
 32,33,33,33,33,33,33,33,33,33,33,33,33,33,34,
 57,58,58,58,58,58,58,58,58,58,58,58,58,58,59,
 82,83,83,83,83,83,83,83,83,83,83,83,83,83,84,
 32,0,0,0,0,0,0,0,0,0,0,0,0,0,34,
-57,797,797,799,798,0,0,0,0,0,0,0,0,0,59,
+57,796,797,799,798,0,0,0,0,0,796,797,799,798,59,
 32,0,0,0,0,0,0,0,0,0,0,0,0,0,34,
 57,0,0,0,0,0,0,0,0,0,0,0,0,0,59,
 82,0,0,0,0,0,0,0,0,0,0,0,0,0,84,
 107,108,108,108,108,108,12,0,0,0,10,108,108,108,109
 </data>
  </layer>
- <layer name="Upper Layer" width="15" height="10" visible="0">
+ <layer id="3" name="Upper Layer" width="15" height="10">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,787,787,789,758,0,0,0,0,0,0,0,0,0,0,
+0,756,787,789,758,0,0,0,0,0,756,787,789,758,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -44,10 +44,18 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="Character Layer">
-  <object id="4" name="NPC3" x="50" y="67.8333" width="9" height="8"/>
-  <object id="5" name="Wait" x="181.333" y="87.8337" width="4" height="4"/>
+ <objectgroup id="4" name="Character Layer">
+  <object id="4" name="NPC9" x="50" y="67.8333" width="9" height="8"/>
+  <object id="5" name="Wait" x="101" y="118.5" width="4" height="4"/>
   <object id="8" name="Shop" x="47.9983" y="71.5" width="16.0034" height="25">
+   <properties>
+    <property name="Owner" value="9"/>
+    <property name="ShopKeepX" type="int" value="3"/>
+    <property name="ShopKeepY" type="int" value="4"/>
+   </properties>
+  </object>
+  <object id="10" name="NPC3" x="196.167" y="68.6667" width="9" height="8"/>
+  <object id="12" name="Shop" x="191.998" y="71.1667" width="16.0034" height="25">
    <properties>
     <property name="Owner" value="3"/>
     <property name="ShopKeepX" type="int" value="3"/>
@@ -55,7 +63,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Travel Layer">
+ <objectgroup id="5" name="Travel Layer">
   <object id="1" x="131.167" y="131.333" width="8.6667" height="8.3333">
    <properties>
     <property name="Entrance" value="mapRiverHollowTown"/>

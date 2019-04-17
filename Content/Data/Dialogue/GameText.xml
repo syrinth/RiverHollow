@@ -8,11 +8,11 @@
     </Item>
     <Item>
       <Key>NPC2</Key>
-      <Value>Kyle</Value>
+      <Value>Taylor</Value>
     </Item>
     <Item>
       <Key>NPC3</Key>
-      <Value>Taylor</Value>
+      <Value>Eric</Value>
     </Item>
     <Item>
       <Key>NPC4</Key>
@@ -33,6 +33,10 @@
     <Item>
       <Key>NPC8</Key>
       <Value>Gail</Value>
+    </Item>
+    <Item>
+      <Key>NPC9</Key>
+      <Value>Kyle</Value>
     </Item>
     <Item>
       <Key>FoodConfirm</Key>

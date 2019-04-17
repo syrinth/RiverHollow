@@ -350,6 +350,13 @@ namespace RiverHollow.Tile_Engine
                     manor.SetName(PlayerManager.ManorName);          
                     AddBuilding(manor);
                 }
+                //else if (obj.Name.Equals("Building"))
+                //{
+                //    Building b = ObjectManager.GetBuilding(int.Parse(obj.Properties["ID"]));
+                //    b.SetCoordinatesByGrid(obj.Position);
+                //    //b.SetName(PlayerManager.ManorName);
+                //    AddBuilding(b);
+                //}
             }
 
             string[] split;

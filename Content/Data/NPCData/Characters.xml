@@ -12,7 +12,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:ShopKeeper][PortRow:3][HomeMap:mapHouseNPC3][Collection:5-6][ShopData:Buildings]</Value>
+      <Value>[Type:ShopKeeper][PortRow:3][HomeMap:mapHouseNPC3][Collection:5-6]</Value>
     </Item>
     <Item>
       <Key>4</Key>
@@ -33,6 +33,10 @@
     <Item>
       <Key>8</Key>
       <Value>[Type:Villager][PortRow:3][HomeMap:mapHouseNPC1][Collection:7-8]</Value>
+    </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>[Type:ShopKeeper][PortRow:3][HomeMap:mapHouseNPC3][Collection:7-8][ShopData:Buildings]</Value>
     </Item>
   </Asset>
 </XnaContent>

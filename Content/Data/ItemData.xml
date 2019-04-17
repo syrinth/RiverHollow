@@ -170,6 +170,14 @@
       <Key>97</Key>
       <Value>[Type:Resource][Image:144-32][Sell:500]</Value>
     </Item>
+    <Item>
+      <Key>98</Key>
+      <Value>[Type:Resource][Image:128-32][Sell:500]</Value>
+    </Item>
+    <Item>
+      <Key>99</Key>
+      <Value>[Type:Resource][Image:96-32][Sell:500]</Value>
+    </Item>
     <!--<100> Consumables:Buffs/Health/Mana-->
     <Item>
       <Key>101</Key>

@@ -149,5 +149,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Wand/600.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerSummoner.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerWizard.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC9.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC9.xml</File>
   </SourceFiles>
 </SourceFileCollection>

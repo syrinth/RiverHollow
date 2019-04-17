@@ -166,6 +166,14 @@
       <Key>97</Key>
       <Value>Jade/A stone sought after for it'smystical properties</Value>
     </Item>
+    <Item>
+      <Key>98</Key>
+      <Value>Amethyst/A purple gemstone</Value>
+    </Item>
+    <Item>
+      <Key>99</Key>
+      <Value>Topaz/A warm, yellowgemstone used for healing.</Value>
+    </Item>
     <!--<100> Consumables:Status/Stamina/Health/Mana-->
     <Item>
       <Key>101</Key>

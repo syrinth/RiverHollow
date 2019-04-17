@@ -22,5 +22,10 @@
       <Key>4</Key>
       <Value>[Texture:Cottage][Dimensions:7-8][FirstBase:0-4][Width:7][Height:4][Entrance:112-128-16-32][Workers:2-4]</Value>
     </Item>
+    <!--River Hollow Town Buildings-->
+    <Item>
+      <Key>5</Key>
+      <Value>[Texture:TownStore][Dimensions:7-8][FirstBase:0-4][Width:7][Height:4][Entrance:56-97-16-32]</Value>
+    </Item>
   </Asset>
 </XnaContent>

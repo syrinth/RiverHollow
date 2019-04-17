@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.2.2" name="tilesetManorGrounds" tilewidth="16" tileheight="16" tilecount="625" columns="25">
+<tileset version="1.2" tiledversion="1.2.3" name="tilesetManorGrounds" tilewidth="16" tileheight="16" tilecount="625" columns="25">
  <image source="tilesetManorGrounds.png" trans="ffffff" width="400" height="400"/>
  <terraintypes>
   <terrain name="Blank" tile="18"/>
@@ -9,6 +9,8 @@
   <terrain name="Shade Grass" tile="126"/>
   <terrain name="Swamp" tile="201"/>
   <terrain name="Swamp Water" tile="207"/>
+  <terrain name="Road" tile="279"/>
+  <terrain name="Water" tile="285"/>
  </terraintypes>
  <tile id="0" terrain="2,2,2,1"/>
  <tile id="1" terrain="2,2,1,1"/>
@@ -370,6 +372,57 @@
   </properties>
  </tile>
  <tile id="236" terrain="5,6,6,6">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="253" terrain="1,1,1,7"/>
+ <tile id="254" terrain="1,1,7,7"/>
+ <tile id="255" terrain="1,1,7,1"/>
+ <tile id="256" terrain="7,7,7,1"/>
+ <tile id="257" terrain="7,7,1,1"/>
+ <tile id="258" terrain="7,7,1,7"/>
+ <tile id="259" terrain="1,1,1,8"/>
+ <tile id="260" terrain="1,1,8,8"/>
+ <tile id="261" terrain="1,1,8,1"/>
+ <tile id="262" terrain="8,8,8,1"/>
+ <tile id="263" terrain="8,8,1,1"/>
+ <tile id="264" terrain="8,8,1,8"/>
+ <tile id="278" terrain="1,7,1,7"/>
+ <tile id="279" terrain="7,7,7,7"/>
+ <tile id="280" terrain="7,1,7,1"/>
+ <tile id="281" terrain="7,1,7,1"/>
+ <tile id="282" terrain="1,1,1,1"/>
+ <tile id="283" terrain="1,7,1,7"/>
+ <tile id="284" terrain="1,8,1,8"/>
+ <tile id="285" terrain="8,8,8,8"/>
+ <tile id="286" terrain="8,1,8,1"/>
+ <tile id="287" terrain="8,1,8,1"/>
+ <tile id="288" terrain="1,1,1,1"/>
+ <tile id="289" terrain="1,8,1,8"/>
+ <tile id="303" terrain="1,7,1,1"/>
+ <tile id="304" terrain="7,7,1,1"/>
+ <tile id="305" terrain="7,1,1,1"/>
+ <tile id="306" terrain="7,1,7,7"/>
+ <tile id="307" terrain="1,1,7,7"/>
+ <tile id="308" terrain="1,7,7,7"/>
+ <tile id="309" terrain="1,8,1,1"/>
+ <tile id="310" terrain="8,8,1,1"/>
+ <tile id="311" terrain="8,1,1,1"/>
+ <tile id="312" terrain="8,1,8,8"/>
+ <tile id="313" terrain="1,1,8,8"/>
+ <tile id="314" terrain="1,8,8,8"/>
+ <tile id="325">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="326">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="327">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>

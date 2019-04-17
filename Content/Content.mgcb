@@ -1343,3 +1343,20 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Player/PlayerWizard.png
 
+#begin Textures/Actors/Villagers/NPC9.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Villagers/NPC9.png
+
+#begin Data/Dialogue/NPC9.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Dialogue/NPC9.xml
+
