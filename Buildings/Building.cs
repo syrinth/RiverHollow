@@ -190,7 +190,7 @@ namespace RiverHollow.Buildings
             int startY = (int)_vMapPosition.Y + _iEntY;
 
             _boxToEnter = new Rectangle(startX, startY, _iEntWidth, _iEntHeight);
-            _leaveLocation = new Rectangle(_boxToEnter.X, _boxToEnter.Y + TileSize, TileSize, TileSize);
+            _leaveLocation = new Rectangle(_boxToEnter.Left, _boxToEnter.Bottom, TileSize, TileSize);
         }
 
         public bool HasSpace()

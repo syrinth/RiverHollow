@@ -663,7 +663,7 @@ namespace RiverHollow.Tile_Engine
 
             foreach(RHTile t in _liTestTiles)
             {
-                bool passable = t.Passable() && PlayerManager.PlayerInRange(t.Rect);
+                bool passable = t.Passable() && (Scrying() || PlayerManager.PlayerInRange(t.Rect));
                 spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)t.Position.X, (int)t.Position.Y, TileSize, TileSize), new Rectangle(288, 128, TileSize, TileSize) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
             }
         }
@@ -967,24 +967,16 @@ namespace RiverHollow.Tile_Engine
             if(tile.GetMapObject() != null) {
                 RHTile.TileObject obj = tile.GetMapObject();
 
-                if (PlayerManager.PlayerInRange(obj.Rect.Center, 64))
+                if (PlayerManager.PlayerInRange(obj.Rect))
                 {
-                    MapManager.ChangeMaps(PlayerManager.World, this.Name, _dictExit[obj.Rect]);
+                    if (obj.PlayerBuilding != null) { MapManager.EnterBuilding(obj.PlayerBuilding); }
+                    else { MapManager.ChangeMaps(PlayerManager.World, this.Name, _dictExit[obj.Rect]); }
                 }
             }
             else if (tile.GetWorldObject() != null)
             {
                 WorldObject obj = tile.GetWorldObject();
-                if (obj.IsBuilding())
-                {
-                    Building b = (Building)obj;
-                    if (b.BoxToEnter.Contains(mouseLocation) && PlayerManager.PlayerInRange(b.BoxToEnter))
-                    {
-                        rv = true;
-                        MapManager.EnterBuilding(b);
-                    }
-                }
-                else if (obj.IsMachine())
+                if (obj.IsMachine())
                 {
                     Machine p = (Machine)obj;
                     if (p.HasItem()) { p.TakeFinishedItem(); }
@@ -1289,6 +1281,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     found = true;
                     GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Door;
+                    GraphicCursor.Alpha = (PlayerManager.PlayerInRange(t.GetMapObject().Rect) ? 1 : 0.5f);
                 }
 
                 foreach (WorldActor c in _liActors)
@@ -1486,12 +1479,12 @@ namespace RiverHollow.Tile_Engine
                 _liTestTiles.Clear();
                 AssignMapTiles(b, tiles);
                 _dictEntrance.Add(b.PersonalID.ToString(), b.BoxToExit); //TODO: FIX THIS
-                for (float x = b.BoxToExit.X; x < b.BoxToExit.X + b.BoxToExit.Width; x += TileSize)
+                for (float x = b.BoxToEnter.X; x < b.BoxToEnter.X + b.BoxToEnter.Width; x += TileSize)
                 {
-                    for (float y = b.BoxToExit.Y; y < b.BoxToExit.Y + b.BoxToExit.Height; y += TileSize)
+                    for (float y = b.BoxToEnter.Y; y < b.BoxToEnter.Y + b.BoxToEnter.Height; y += TileSize)
                     {
                         RHTile t = GetTileOffGrid((int)x, (int)y);
-                        t.SetMapObject(b.BoxToExit);
+                        t.SetMapObject(b);
                     }
                 }
 
@@ -1584,8 +1577,8 @@ namespace RiverHollow.Tile_Engine
                         rv = false;
                         break;
                     }
-                    RHTile tempTile = _arrTiles[x, y];
 
+                    RHTile tempTile = _arrTiles[x, y];
                     if ((!o.WallObject && tempTile.Passable() && tempTile.WorldObject == null) || (o.WallObject && tempTile.IsValidWall()))
                     {
                         collisionTiles.Add(tempTile);
@@ -2150,6 +2143,11 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
+        public void SetMapObject(Building b)
+        {
+            _tileMapObj = new TileObject(b);
+        }
+
         public void SetMapObject(Rectangle obj)
         {
             _tileMapObj = new TileObject(obj);
@@ -2230,8 +2228,16 @@ namespace RiverHollow.Tile_Engine
 
         public class TileObject
         {
+            Building _building;
+            public Building PlayerBuilding => _building;
             Rectangle _rectMapObject;
             public Rectangle Rect => _rectMapObject;
+
+            public TileObject(Building b)
+            {
+                _rectMapObject = b.BoxToEnter;
+                _building = b;
+            }
 
             public TileObject(Rectangle rect)
             {

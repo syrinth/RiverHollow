@@ -28,6 +28,8 @@ namespace RiverHollow.GUIObjects
 
         private static Texture2D _texture;
 
+        public static float Alpha = 1f;
+
         public static void LoadContent()
         {
             _texture = GameContentManager.GetTexture(@"Textures\Dialog");
@@ -102,7 +104,6 @@ namespace RiverHollow.GUIObjects
             {
                 Rectangle source = Rectangle.Empty;
                 Texture2D drawIt = _texture;
-                float alpha = 1f;
                 switch (_CursorType)
                 {
                     case EnumCursorType.Normal:
@@ -110,16 +111,15 @@ namespace RiverHollow.GUIObjects
                         break;
                     case EnumCursorType.Talk:
                         source = new Rectangle(288, 160, 16, 16);
-                        alpha = (PlayerManager.PlayerInRange(GetTranslatedMouseLocation().ToPoint(), (int)(TileSize * 1.5))) ? 1 : 0.5f;
+                        Alpha = (PlayerManager.PlayerInRange(GetTranslatedMouseLocation().ToPoint(), (int)(TileSize * 1.5))) ? 1 : 0.5f;
                         break;
                     case EnumCursorType.Door:
                         source = new Rectangle(288, 176, 16, 16);
-                        alpha = (PlayerManager.PlayerInRange(GetTranslatedMouseLocation().ToPoint(), (int)(TileSize * 1.5))) ? 1 : 0.5f;
                         break;
                 }
                 Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, TileSize * 2, TileSize * 2);
 
-                spriteBatch.Draw(drawIt, drawRectangle, source, Color.White * alpha);
+                spriteBatch.Draw(drawIt, drawRectangle, source, Color.White * Alpha);
                 if (HeldItem != null)
                 {
                     _heldItem.Draw(spriteBatch, new Rectangle((int)Position.X + 16, (int)Position.Y + 16, 32, 32));

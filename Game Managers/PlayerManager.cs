@@ -400,8 +400,11 @@ namespace RiverHollow.Game_Managers
 
         public static bool PlayerInRange(Rectangle rect)
         {
+            return PlayerInRange(rect, TileSize);
+        }
+        public static bool PlayerInRange(Rectangle rect, int range)
+        {
             bool rv = false;
-            int range = TileSize;
             if (PlayerInRange(new Vector2(rect.Center.X, rect.Top), range))
             {
                 rv = true;
