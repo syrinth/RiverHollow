@@ -18,7 +18,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class MapManager
     {
-        public const string HomeMap = "mapManorGrounds"; //"mapRiverHollowTown"; //"mapManorGrounds"; //"mapForestDungeonZone"; //"mapRiverHollowTown"; //
+        public const string HomeMap = "mapRiverHollowTown"; //"mapManorGrounds"; //"mapManorGrounds"; //"mapForestDungeonZone"; //"mapRiverHollowTown"; //
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
 
@@ -261,11 +261,11 @@ namespace RiverHollow.Game_Managers
         }
         public static RHTile RetrieveTile(int x, int y)
         {
-            return _currentMap.RetrieveTile(x, y);
+            return _currentMap.GetTile(x, y);
         }
         public static RHTile RetrieveTile(Point mouseLocation)
         {
-            return _currentMap.RetrieveTile(mouseLocation);
+            return _currentMap.GetTileOffGrid(mouseLocation);
         }
         public static void RemoveWorldObject(WorldObject o)
         {

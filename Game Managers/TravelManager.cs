@@ -173,7 +173,7 @@ namespace RiverHollow.Game_Managers
                 //Iterate over the exits in the map we're testing and pathfind to them.
                 foreach (KeyValuePair<Rectangle, string> exit in MapManager.Maps[testMap].DictionaryExit)
                 {
-                    //Find the shortest patht o the exit in question
+                    //Find the shortest path to the exit in question
                     
                     List<RHTile> pathToExit = FindPathToLocation(ref start, exit.Key.Location.ToVector2(), testMapStr);
                     if (pathToExit != null)
@@ -205,8 +205,8 @@ namespace RiverHollow.Game_Managers
         {
             List<RHTile> returnList = null;
             RHMap map = MapManager.Maps[mapName.Split(':')[0]];
-            RHTile startTile = map.RetrieveTile(start.ToPoint());
-            RHTile goalNode = map.RetrieveTile(target.ToPoint());
+            RHTile startTile = map.GetTileOffGrid(start.ToPoint());
+            RHTile goalNode = map.GetTileOffGrid(target.ToPoint());
             var frontier = new PriorityQueue<RHTile>();
             frontier.Enqueue(startTile, 0);
 

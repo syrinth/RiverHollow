@@ -237,10 +237,10 @@ namespace RiverHollow.Actors
                 }
 
                 List<RHTile> cornerTiles = new List<RHTile>();
-                cornerTiles.Add(MapManager.CurrentMap.RetrieveTileFromGridPosition(Util.GetGridCoords(new Vector2(CollisionBox.Left, CollisionBox.Top)).ToPoint()));
-                cornerTiles.Add(MapManager.CurrentMap.RetrieveTileFromGridPosition(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Top)).ToPoint()));
-                cornerTiles.Add(MapManager.CurrentMap.RetrieveTileFromGridPosition(Util.GetGridCoords(new Vector2(CollisionBox.Left, CollisionBox.Bottom)).ToPoint()));
-                cornerTiles.Add(MapManager.CurrentMap.RetrieveTileFromGridPosition(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Bottom)).ToPoint()));
+                cornerTiles.Add(MapManager.CurrentMap.GetTile(Util.GetGridCoords(new Vector2(CollisionBox.Left, CollisionBox.Top)).ToPoint()));
+                cornerTiles.Add(MapManager.CurrentMap.GetTile(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Top)).ToPoint()));
+                cornerTiles.Add(MapManager.CurrentMap.GetTile(Util.GetGridCoords(new Vector2(CollisionBox.Left, CollisionBox.Bottom)).ToPoint()));
+                cornerTiles.Add(MapManager.CurrentMap.GetTile(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Bottom)).ToPoint()));
                 foreach (RHTile tile in cornerTiles)
                 {
                     if (tile != null && tile.WorldObject != null && tile.WorldObject.IsForageable())
@@ -693,6 +693,11 @@ namespace RiverHollow.Actors
                         if (_currentPath.Count == 0)
                         {
                             DetermineFacing(Vector2.Zero);
+                        }
+
+                        if (_currentPath[0].GetMapObject() != null)
+                        {
+                            MapManager.ChangeMaps(this, CurrentMapName, MapManager.CurrentMap.DictionaryExit[_currentPath[0].GetMapObject().Rect]);
                         }
                     }
                     else

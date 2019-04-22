@@ -39,6 +39,10 @@
       <Value>Kyle</Value>
     </Item>
     <Item>
+      <Key>NPC10</Key>
+      <Value>Taylor</Value>
+    </Item>
+    <Item>
       <Key>FoodConfirm</Key>
       <Value>Really eat the {0}? [Yes:UseItem|No:Cancel]</Value>
     </Item>

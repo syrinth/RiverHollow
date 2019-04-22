@@ -38,5 +38,9 @@
       <Key>9</Key>
       <Value>[Type:ShopKeeper][PortRow:3][HomeMap:mapHouseNPC3][Collection:7-8][ShopData:Buildings]</Value>
     </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>[Type:Village][PortRow:3][HomeMap:mapRiverHollowTown][Collection:7-8]</Value>
+    </Item>
   </Asset>
 </XnaContent>

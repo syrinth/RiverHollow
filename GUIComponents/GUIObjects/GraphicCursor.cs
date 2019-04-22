@@ -12,7 +12,7 @@ namespace RiverHollow.GUIObjects
 {
     public static class GraphicCursor
     {
-        public enum EnumCursorType { Normal, Talk, Gift};
+        public enum EnumCursorType { Normal, Talk, Gift, Door};
         public static EnumCursorType _CursorType;
         public static MouseState LastMouseState = new MouseState();
         private static Item _heldItem;
@@ -106,14 +106,18 @@ namespace RiverHollow.GUIObjects
                 switch (_CursorType)
                 {
                     case EnumCursorType.Normal:
-                        source = new Rectangle(288, 192, 32, 32);
+                        source = new Rectangle(304, 160, 16, 16);
                         break;
                     case EnumCursorType.Talk:
-                        source = new Rectangle(288, 160, 32, 32);
+                        source = new Rectangle(288, 160, 16, 16);
+                        alpha = (PlayerManager.PlayerInRange(GetTranslatedMouseLocation().ToPoint(), (int)(TileSize * 1.5))) ? 1 : 0.5f;
+                        break;
+                    case EnumCursorType.Door:
+                        source = new Rectangle(288, 176, 16, 16);
                         alpha = (PlayerManager.PlayerInRange(GetTranslatedMouseLocation().ToPoint(), (int)(TileSize * 1.5))) ? 1 : 0.5f;
                         break;
                 }
-                Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, 32, 32);
+                Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, TileSize * 2, TileSize * 2);
 
                 spriteBatch.Draw(drawIt, drawRectangle, source, Color.White * alpha);
                 if (HeldItem != null)
