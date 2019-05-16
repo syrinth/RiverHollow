@@ -193,16 +193,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                     gIB.Draw(spriteBatch);
                 }
             }
-            foreach (GUIItemBox gIB in _liDisplay)
-            {
-                if (gIB != null)
-                {
-                    if (gIB.DrawDescription(spriteBatch))
-                    {
-                        break;
-                    }
-                }
-            }
         }
 
         public override bool IsItemCreationScreen() { return true; }

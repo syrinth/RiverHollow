@@ -651,24 +651,46 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _winClothes.AddControl(_equipWindow);
         }
 
+        /// <summary>
+        /// Delegate for hovering over equipment to equip. Updates the characters stats as apporpriate
+        /// </summary>
+        /// <param name="tempGear"></param>
         public void DisplayStatText(Equipment tempGear = null)
         {
+            bool compareTemp = true;
             if (tempGear != null)
             {
                 if (tempGear.WeaponType != WeaponEnum.None) { _character.TempWeapon = tempGear; }
                 else if (tempGear.ArmorType != ArmorEnum.None) { _character.TempArmor = tempGear; }
+                else
+                {
+                    compareTemp = false;
+                }
             }
             else
             {
+                compareTemp = false;
                 _character.TempWeapon = null;
                 _character.TempArmor = null;
             }
 
-            _gStr.SetText("Str: " + _character.StatStr);
-            _gDef.SetText("Def: " + _character.StatDef);
-            _gMagic.SetText("Mag: " + _character.StatMag);
-            _gRes.SetText("Res: " + _character.StatRes);
-            _gSpd.SetText("Spd: " + _character.StatSpd);
+            AssignStatText(_gStr, "Str", _character.StatStr, _character.TempStatStr, compareTemp);
+            AssignStatText(_gDef, "Def", _character.StatDef, _character.TempStatDef, compareTemp);
+            AssignStatText(_gMagic, "Mag", _character.StatMag, _character.TempStatMag, compareTemp);
+            AssignStatText(_gRes, "Res", _character.StatRes, _character.TempStatRes, compareTemp);
+            AssignStatText(_gSpd, "Spd", _character.StatSpd, _character.TempStatSpd, compareTemp);
+        }
+
+        private void AssignStatText(GUIText txtStat, string statString, int startStat, int tempStat, bool compareTemp)
+        {
+            txtStat.SetText(statString + ": " + (compareTemp ? tempStat : startStat));
+            if (!compareTemp) { txtStat.SetColor(Color.White); }
+            else
+            {
+                if (startStat < tempStat) { txtStat.SetColor(Color.Green); }
+                else if (startStat > tempStat) { txtStat.SetColor(Color.Red); }
+                else { txtStat.SetColor(Color.White); }
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -678,11 +700,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _winName.Draw(spriteBatch);
                 WinDisplay.Draw(spriteBatch);
                 if (_character == PlayerManager.Combat) { _winClothes.Draw(spriteBatch); }
-
-                foreach (SpecializedBox box in _liGearBoxes)
-                {
-                    box.DrawDescription(spriteBatch);
-                }
 
                 if (_equipWindow.HasEntries())
                 {
@@ -722,6 +739,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     InventoryManager.RemoveItemFromInventory(_equipWindow.SelectedItem);
                     if (olditem != null) { InventoryManager.AddItemToInventory(olditem); }
 
+                    DisplayStatText();
+                    GUIManager.CloseHoverWindow();
                     _equipWindow.Clear();
                 }
                 else
@@ -729,7 +748,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     foreach (GUIObject c in WinDisplay.Controls)
                     {
                         rv = c.ProcessLeftButtonClick(mouse);
-                        if (rv) { break; }
+                        if (rv) {
+                            GUIManager.CloseHoverWindow();
+                            break;
+                        }
                     }
 
                     if (!rv && _character == PlayerManager.Combat)
@@ -737,7 +759,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         foreach (GUIObject c in _winClothes.Controls)
                         {
                             rv = c.ProcessLeftButtonClick(mouse);
-                            if (rv) { break; }
+                            if (rv) {
+                                GUIManager.CloseHoverWindow();
+                                break;
+                            }
                         }
                     }
                 }
@@ -805,8 +830,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Load();
         }
 
+        /// <summary>
+        /// Delegate method asssigned to the SpecializedItemBoxes
+        /// When clicked, the itembox will find matching items int he players inventory.
+        /// </summary>
+        /// <param name="boxMatch"></param>
         private void FindMatchingItems(SpecializedBox boxMatch)
         {
+            GUIManager.CloseHoverWindow();
+
             List<Item> liItems = new List<Item>();
             foreach (Item i in InventoryManager.PlayerInventory)
             {

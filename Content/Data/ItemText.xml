@@ -50,6 +50,14 @@
       <Key>16</Key>
       <Value>Imp Essence/The swirling essence of a troublesome imp.</Value>
     </Item>
+    <Item>
+      <Key>17</Key>
+      <Value>Blue Feather/A bright feather from a bird.</Value>
+    </Item>
+    <Item>
+      <Key>18</Key>
+      <Value>Flame Mote/A small fragment of elemental fire.</Value>
+    </Item>
     <!--<20-24> Tools-->
     <Item>
       <Key>20</Key>
@@ -321,10 +329,14 @@
       <Key>630</Key>
       <Value>Dulled Knife/It could use sharpening</Value>
     </Item>
-    <!--Duelist-->
+    <!--Lancer-->
     <Item>
       <Key>640</Key>
-      <Value>Training Sword/A blade with blunted edges for training</Value>
+      <Value>Spear/A sharpened spear</Value>
+    </Item>
+    <Item>
+      <Key>641</Key>
+      <Value>Copper Spear/A copper tipped spear, decorated with a bright feather</Value>
     </Item>
     <!--Knight-->
     <Item>

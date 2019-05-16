@@ -123,6 +123,18 @@
       <Key>Monster 8</Key>
       <Value>Mimic</Value>
     </Item>
+    <Item>
+      <Key>Monster 9</Key>
+      <Value>Muck Dweller</Value>
+    </Item>
+    <Item>
+      <Key>Monster 10</Key>
+      <Value>Down Goose</Value>
+    </Item>
+    <Item>
+      <Key>Monster 11</Key>
+      <Value>Lef</Value>
+    </Item>
     <!--Quest Text-->
     <Item>
       <Key>Quest 1</Key>

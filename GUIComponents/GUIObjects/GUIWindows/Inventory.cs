@@ -336,17 +336,6 @@ Exit:
                     _displayList[i, j].Draw(spriteBatch);//, alpha);
                 }
             }
-
-            foreach (GUIItemBox gIB in _displayList)
-            {
-                if (gIB != null)
-                {
-                    if (gIB.DrawDescription(spriteBatch))
-                    {
-                        break;
-                    }
-                }
-            }
         }
     }
 }

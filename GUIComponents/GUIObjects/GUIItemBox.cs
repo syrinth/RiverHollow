@@ -22,8 +22,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         static Rectangle RECT_SELECT_IMG = new Rectangle(288, 0, 32, 32);
         private Item _item;
         public Item Item => _item;
-        protected bool _bHover;
-        GUITextWindow _textWindow;
         GUIWindow _reqWindow;
         GUIText _gTextNum;
         GUIImage _gItem;
@@ -72,12 +70,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             {
                 _gItem.Draw(spriteBatch);
                 if (DrawNum && _gTextNum != null) { _gTextNum.Draw(spriteBatch); }
-
-                //MAR?
-                if (_bHover)
-                {
-                    if (_textWindow != null) { _textWindow.Draw(spriteBatch); }
-                }
             }
         }
 
@@ -123,16 +115,14 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             bool rv = false;
             if (Contains(mouse))
             {
-                _bHover = true;
                 if (_item != null)
                 {
-                    _textWindow = new GUITextWindow(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32), _item.GetDescription());
-
+                    GUIManager.OpenHoverWindow(new GUITextWindow(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32), _item.GetDescription()), this);
                     if (_bCrafting)
                     {
                         _reqWindow = new GUIWindow(GUIWindow.RedWin, _liItemReqs[0].Width, _liItemReqs[0].Height * _liItemReqs.Count);
                         _reqWindow.Position(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32));
-                        _reqWindow.AnchorAndAlignToObject(_textWindow, SideEnum.Bottom, SideEnum.Left);
+                        //_reqWindow.AnchorAndAlignToObject(_textWindow, SideEnum.Bottom, SideEnum.Left);
                         for (int i=0; i < _liItemReqs.Count; i++)
                         {
                             GUIObject r = _liItemReqs[i];
@@ -149,30 +139,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             }
             else
             {
-                _bHover = false;
-                _textWindow = null;
                 _reqWindow = null;
             }
             return rv;
-        }
-
-        public void CloseDescription()
-        {
-            _bHover = false;
-            _textWindow = null;
-        }
-        public bool DrawDescription(SpriteBatch spriteBatch)
-        {
-            if (_textWindow != null)
-            {
-                _textWindow.Draw(spriteBatch);
-            }
-            if (_reqWindow != null)
-            {
-                _reqWindow.Draw(spriteBatch);
-            }
-
-            return _bHover;
         }
 
         public void SetItem(Item it)
@@ -283,7 +252,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
                 if (Contains(mouse))
                 {
-                    _bHover = false;
                     _delOpenItemWindow(this);
                 }
                 return rv;

@@ -185,7 +185,7 @@ namespace RiverHollow.GUIComponents.Screens
             PlayerManager.SetName(_nameWindow.GetText());
             PlayerManager.SetManorName(_manorWindow.GetText());
 
-            RiverHollow.NewGame(ObjectManager.GetWorker(6), ObjectManager.GetWorker(2));
+            RiverHollow.NewGame(ObjectManager.GetWorker(5), ObjectManager.GetWorker(2));
             GameManager.DontReadInput();
         }
         public void BtnCancel()

@@ -97,7 +97,7 @@ namespace RiverHollow.Actors.CombatStuff
                 {
                     _statStr = int.Parse(tagType[1]);
                 }
-                else if (tagType[0].Equals("Def"))
+                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Def)))
                 {
                     _statDef = int.Parse(tagType[1]);
                 }
@@ -105,11 +105,11 @@ namespace RiverHollow.Actors.CombatStuff
                 {
                     _statVit = int.Parse(tagType[1]);
                 }
-                else if (tagType[0].Equals("Mag"))
+                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Mag)))
                 {
                     _statMagic = int.Parse(tagType[1]);
                 }
-                else if (tagType[0].Equals("Spd"))
+                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Spd)))
                 {
                     _statSpd = int.Parse(tagType[1]);
                 }

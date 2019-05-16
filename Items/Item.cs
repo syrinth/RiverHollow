@@ -379,13 +379,13 @@ namespace RiverHollow.WorldObjects
 
             //Stats
             _iTier = int.Parse(stringData["Tier"]);
-            if (stringData.ContainsKey("Str")) { _iStr = GetItemTierData(_iTier, stringData["Str"]); }
-            if (stringData.ContainsKey("Def")) { _iDef = GetItemTierData(_iTier, stringData["Def"]); }
-            if (stringData.ContainsKey("Vit")) { _iVit = GetItemTierData(_iTier, stringData["Vit"]); }
-            if (stringData.ContainsKey("Mag")) { _iMag = GetItemTierData(_iTier, stringData["Mag"]); }
-            if (stringData.ContainsKey("Res")) { _iRes = GetItemTierData(_iTier, stringData["Res"]); }
-            if (stringData.ContainsKey("Spd")) { _iSpd = GetItemTierData(_iTier, stringData["Spd"]); }
-            if (stringData.ContainsKey("Atk1")) { _iAttack = GetItemTierData(_iTier, stringData["Atk1"], false); }
+            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Str))) { _iStr = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Str)]); }
+            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Def))) { _iDef = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Def)]); }
+            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Vit))) { _iVit = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Vit)]); }
+            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Mag))) { _iMag = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Mag)]); }
+            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Res))) { _iRes = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Res)]); }
+            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Spd))) { _iSpd = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Spd)]); }
+            if (stringData.ContainsKey(Util.GetEnumString(StatEnum.Atk))) { _iAttack = GetItemTierData(_iTier, stringData[Util.GetEnumString(StatEnum.Atk)], false); }
         }
 
 
@@ -412,6 +412,10 @@ namespace RiverHollow.WorldObjects
             return (int)rv;
         }
 
+        /// <summary>
+        /// Appends the stats of the equipment to the item description
+        /// </summary>
+        /// <returns></returns>
         public override string GetDescription()
         {
             string rv = base.GetDescription();
@@ -423,6 +427,31 @@ namespace RiverHollow.WorldObjects
             if (Res > 0) { rv += " Res: +" + _iRes + " "; }
             if (Spd > 0) { rv += " Spd: +" + _iSpd + " "; }
             rv = rv.Trim();
+
+            return rv;
+        }
+
+        internal int GetStat(StatEnum stat)
+        {
+            int rv = 0;
+            switch (stat)
+            {
+                case StatEnum.Def:
+                    rv += this.Def;
+                    break;
+                case StatEnum.Mag:
+                    rv += this.Mag;
+                    break;
+                case StatEnum.Res:
+                    rv += this.Res;
+                    break;
+                case StatEnum.Spd:
+                    rv += this.Spd;
+                    break;
+                case StatEnum.Str:
+                    rv += this.Str;
+                    break;
+            }
 
             return rv;
         }

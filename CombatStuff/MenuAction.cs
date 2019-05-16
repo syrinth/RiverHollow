@@ -524,6 +524,11 @@ namespace RiverHollow.Actors.CombatStuff
                             _currentActionTag++;
                         }
 
+                        if (SkillUser.Tile.GUITile.CharacterWeaponSprite != null)
+                        {
+                            SkillUser.Tile.GUITile.CharacterWeaponSprite.CenterOnObject(sprite);
+                        }
+
                         break;
                     }
                 case "UserAttack":
@@ -632,6 +637,12 @@ namespace RiverHollow.Actors.CombatStuff
                         if (SkillUser.IsCritical()) { SkillUser.Tile.PlayAnimation(CActorAnimEnum.Critical); }
                         _currentActionTag++;
                     }
+
+                    if (SkillUser.Tile.GUITile.CharacterWeaponSprite != null)
+                    {
+                        SkillUser.Tile.GUITile.CharacterWeaponSprite.CenterOnObject(SkillUser.GetSprite());
+                    }
+
                     break;
                 case "Projectile":
                     //if (!Sprite.IsAnimating)

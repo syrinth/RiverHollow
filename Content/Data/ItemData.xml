@@ -54,6 +54,14 @@
       <Key>16</Key>
       <Value>[Type:Resource][Image:80-64][Sell:20]</Value>
     </Item>
+    <Item>
+      <Key>17</Key>
+      <Value>[Type:Resource][Image:96-48][Sell:20]</Value>
+    </Item>
+    <Item>
+      <Key>18</Key>
+      <Value>[Type:Resource][Image:96-64][Sell:50]</Value>
+    </Item>
     <!--<20-24> Tools-->
     <Item>
       <Key>20</Key>
@@ -329,7 +337,11 @@
     <!--<640> Lancer-->
     <Item>
       <Key>640</Key>
-      <Value>[Type:Equipment][Image:0-64][Sell:1000][EType:Weapon][ESub:Sword][Tier:1][Atk:Major][Str:Major]</Value>
+      <Value>[Type:Equipment][Image:0-64][Sell:1000][EType:Weapon][ESub:Spear][Tier:1][Atk:Major][Str:Major]</Value>
+    </Item>
+    <Item>
+      <Key>641</Key>
+      <Value>[Type:Equipment][Image:16-64][Sell:1000][EType:Weapon][ESub:Spear][Tier:2][Atk:Major][Str:Major]</Value>
     </Item>
     <!--<650> Knight-->
     <Item>

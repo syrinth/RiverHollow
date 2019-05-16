@@ -57,6 +57,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             Width = _sprite.Width;
             Height = _sprite.Height;
         }
+
+        public void Reset()
+        {
+            _sprite.Reset();
+        }
     }
 
     public class GUICharacterSprite : GUIObject

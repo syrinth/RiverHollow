@@ -695,7 +695,7 @@ namespace RiverHollow.Actors
                             DetermineFacing(Vector2.Zero);
                         }
 
-                        if (_currentPath[0].GetMapObject() != null)
+                        if (_currentPath[0] != null && _currentPath[0].GetMapObject() != null)
                         {
                             MapManager.ChangeMaps(this, CurrentMapName, MapManager.CurrentMap.DictionaryExit[_currentPath[0].GetMapObject().Rect]);
                         }
@@ -2876,12 +2876,19 @@ namespace RiverHollow.Actors
         public Equipment TempWrist;
 
         public override int Attack => GetGearAtk();
-        public override int StatStr => 10 + _buffStr + GetGearStr();
-        public override int StatDef => 10 + _buffDef + GetGearDef() + (Protected ? 10 : 0);
-        public override int StatVit => 10 + (_classLevel * _class.StatVit) + GetGearVit();
-        public override int StatMag => 10 +  _buffMag + GetGearMag();
-        public override int StatRes => 10 + _buffRes + GetGearRes();
-        public override int StatSpd => 10 + _class.StatSpd +_buffSpd + GetGearSpd();
+        public override int StatStr => 10 + _buffStr + GetGearStat(StatEnum.Str);
+        public override int StatDef => 10 + _buffDef + GetGearStat(StatEnum.Def) + (Protected ? 10 : 0);
+        public override int StatVit => 10 + (_classLevel * _class.StatVit) + GetGearStat(StatEnum.Vit);
+        public override int StatMag => 10 +  _buffMag + GetGearStat(StatEnum.Mag);
+        public override int StatRes => 10 + _buffRes + GetGearStat(StatEnum.Res);
+        public override int StatSpd => 10 + _class.StatSpd +_buffSpd + GetGearStat(StatEnum.Spd);
+
+        public int TempStatStr => 10 + _buffStr + GetTempGearStat(StatEnum.Str);
+        public int TempStatDef => 10 + _buffDef + GetTempGearStat(StatEnum.Def) + (Protected ? 10 : 0);
+        public int TempStatVit => 10 + (_classLevel * _class.StatVit) + GetTempGearStat(StatEnum.Vit);
+        public int TempStatMag => 10 + _buffMag + GetTempGearStat(StatEnum.Mag);
+        public int TempStatRes => 10 + _buffRes + GetTempGearStat(StatEnum.Res);
+        public int TempStatSpd => 10 + _class.StatSpd + _buffSpd + GetTempGearStat(StatEnum.Spd);
 
         public override List<MenuAction> AbilityList { get => _class.ActionList; }
         public override List<CombatAction> SpecialActions { get => _class._liSpecialActionsList; }
@@ -2897,69 +2904,26 @@ namespace RiverHollow.Actors
 
             return rv;
         }
-        public int GetGearStr()
+
+        public int GetGearStat(StatEnum stat)
         {
             int rv = 0;
 
-            if (TempWeapon != null) { rv += TempWeapon.Str; }
-            else if (Weapon != null) { rv += Weapon.Str; }
-            if (TempArmor != null) { rv += TempArmor.Str; }
-            else if (Armor != null) { rv += Armor.Str; }
+            if (Weapon != null) { rv += Weapon.GetStat(stat); }
+            if (Armor != null) { rv += Armor.GetStat(stat); }
 
             return rv;
         }
-        public int GetGearDef()
+
+        public int GetTempGearStat(StatEnum stat)
         {
             int rv = 0;
 
-            if (TempWeapon != null) { rv += TempWeapon.Def; }
-            else if (Weapon != null) { rv += Weapon.Def; }
-            if (TempArmor != null) { rv += TempArmor.Def; }
-            else if (Armor != null) { rv += Armor.Def; }
+            if (TempWeapon != null) { rv += TempWeapon.GetStat(stat); }
+            else if (Weapon != null) { rv += Weapon.GetStat(stat); }
 
-            return rv;
-        }
-        public int GetGearVit()
-        {
-            int rv = 0;
-
-            if (TempWeapon != null) { rv += TempWeapon.Vit; }
-            else if (Weapon != null) { rv += Weapon.Vit; }
-            if (TempArmor != null) { rv += TempArmor.Vit; }
-            else if (Armor != null) { rv += Armor.Vit; }
-
-            return rv;
-        }
-        public int GetGearMag()
-        {
-            int rv = 0;
-
-            if (TempWeapon != null) { rv += TempWeapon.Mag; }
-            else if (Weapon != null) { rv += Weapon.Mag; }
-            if (TempArmor != null) { rv += TempArmor.Mag; }
-            else if (Armor != null) { rv += Armor.Mag; }
-
-            return rv;
-        }
-        public int GetGearRes()
-        {
-            int rv = 0;
-
-            if (TempWeapon != null) { rv += TempWeapon.Res; }
-            else if (Weapon != null) { rv += Weapon.Res; }
-            if (TempArmor != null) { rv += TempArmor.Res; }
-            else if (Armor != null) { rv += Armor.Res; }
-
-            return rv;
-        }
-        public int GetGearSpd()
-        {
-            int rv = 0;
-
-            if (TempWeapon != null) { rv += TempWeapon.Spd; }
-            else if (Weapon != null) { rv += Weapon.Spd; }
-            if (TempArmor != null) { rv += TempArmor.Spd; }
-            else if (Armor != null) { rv += Armor.Spd; }
+            if (TempArmor != null) { rv += TempArmor.GetStat(stat); }
+            else if (Armor != null) { rv += Armor.GetStat(stat); }
 
             return rv;
         }
@@ -3092,6 +3056,7 @@ namespace RiverHollow.Actors
             float[] idle = new float[2] { 2, 0.5f };
             float[] attack = new float[2] { 2, 0.2f };
             float[] hurt = new float[2] { 1, 0.5f };
+            float[] cast = new float[2] { 2, 0.5f };
 
             foreach (string s in stringData)
             {
@@ -3157,9 +3122,15 @@ namespace RiverHollow.Actors
                     hurt[0] = float.Parse(split[0]);
                     hurt[1] = float.Parse(split[1]);
                 }
+                else if (tagType[0].Equals("Cast"))
+                {
+                    string[] split = tagType[1].Split('-');
+                    cast[0] = float.Parse(split[0]);
+                    cast[1] = float.Parse(split[1]);
+                }
             }
 
-            LoadContent(_sMonsterFolder + texture, idle, attack, hurt);
+            LoadContent(_sMonsterFolder + texture, idle, attack, hurt, cast);
 
             _currentHP = MaxHP;
             _currentMP = MaxMP;
@@ -3180,27 +3151,27 @@ namespace RiverHollow.Actors
             foreach (string s in traits)
             {
                 string[] tagType = s.Split(':');
-                if (tagType[0].Equals("Str"))
+                if (tagType[0].Equals(Util.GetEnumString(StatEnum.Str)))
                 {
                     ApplyTrait(ref _statStr, tagType[1]);
                 }
-                else if (tagType[0].Equals("Def"))
+                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Def)))
                 {
                     ApplyTrait(ref _statDef, tagType[1]);
                 }
-                else if (tagType[0].Equals("Vit"))
+                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Vit)))
                 {
                     ApplyTrait(ref _statVit, tagType[1]);
                 }
-                else if (tagType[0].Equals("Mag"))
+                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Mag)))
                 {
                     ApplyTrait(ref _statMag, tagType[1]);
                 }
-                else if (tagType[0].Equals("Res"))
+                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Res)))
                 {
                     ApplyTrait(ref _statRes, tagType[1]);
                 }
-                else if (tagType[0].Equals("Spd"))
+                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Spd)))
                 {
                     ApplyTrait(ref _statSpd, tagType[1]);
                 }
@@ -3219,20 +3190,25 @@ namespace RiverHollow.Actors
             }
         }
 
-        public void LoadContent(string texture, float[] idle, float[] attack, float[] hurt)
+        public void LoadContent(string texture, float[] idle, float[] attack, float[] hurt, float[] cast)
         {
             _sTexture = texture;
 
             _spriteBody = new AnimatedSprite(texture.Replace(" ", ""));
-            int yCrawl = 0;
-            int frameWidth = 24;
-            int frameHeight = 32;
 
-            _spriteBody.AddAnimation(CActorAnimEnum.Idle, frameWidth, frameHeight, (int)idle[0], idle[1], 0, (yCrawl++ * frameHeight));
-            _spriteBody.AddAnimation(CActorAnimEnum.Attack, frameWidth, frameHeight, (int)attack[0], attack[1], 0, (yCrawl++ * frameHeight));
-            _spriteBody.AddAnimation(CActorAnimEnum.Hurt, frameWidth, frameHeight, (int)hurt[0], hurt[1], 0, (yCrawl++ * frameHeight));
-            _spriteBody.AddAnimation(CActorAnimEnum.Cast, frameWidth, frameHeight, 1, 0.5f, 0, (yCrawl++ * frameHeight));
-            _spriteBody.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, 3, 0.3f, 0, (yCrawl++ * frameHeight));
+            int xCrawl = 0;
+            int frameWidth = 32;
+            int frameHeight = 32;
+            _spriteBody.AddAnimation(CActorAnimEnum.Idle, frameWidth, frameHeight, (int)idle[0], idle[1], (xCrawl * frameWidth), 0);
+            xCrawl += (int)idle[0];
+            _spriteBody.AddAnimation(CActorAnimEnum.Attack, frameWidth, frameHeight, (int)attack[0], attack[1], (xCrawl * frameWidth), 0);
+            xCrawl += (int)attack[0];
+            _spriteBody.AddAnimation(CActorAnimEnum.Hurt, frameWidth, frameHeight, (int)hurt[0], hurt[1], (xCrawl * frameWidth), 0);
+            xCrawl += (int)hurt[0];
+            _spriteBody.AddAnimation(CActorAnimEnum.Cast, frameWidth, frameHeight, (int)cast[0], cast[1], (xCrawl * frameWidth), 0);
+            xCrawl += (int)cast[0];
+            
+            _spriteBody.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 0);
 
             _spriteBody.SetCurrentAnimation(CActorAnimEnum.Idle);
             _spriteBody.SetScale(CombatManager.CombatScale);

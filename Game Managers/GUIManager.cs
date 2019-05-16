@@ -113,6 +113,14 @@ namespace RiverHollow.Game_Managers
             _currentGUIScreen.SetWindowText(value);
         }
 
+        public static void CloseHoverWindow() {
+            _currentGUIScreen.CloseHoverWindow();
+        }
+        public static void OpenHoverWindow(GUITextWindow hoverWindow, GUIObject hoverObject)
+        {
+            _currentGUIScreen.OpenHoverWindow(hoverWindow, hoverObject);
+        }
+
         public static void AddTextSelection(string text)
         {
             _currentGUIScreen.AddTextSelection(text);

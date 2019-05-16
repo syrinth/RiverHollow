@@ -31,7 +31,8 @@ namespace RiverHollow.Game_Managers
         public enum WorldObjAnimEnum { Idle, Working, Shake};
         public enum GenAnimEnum { Play };
 
-        public enum PotencyBonusEnum { None, Conditions, Summons }
+        public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit};
+        public enum PotencyBonusEnum { None, Conditions, Summons };
         public enum EquipmentEnum { None, Armor, Weapon };
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
         public enum ForceMoveEnum { None, Forward, Back };

@@ -515,6 +515,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (occupied)
             {
                 _gSprite = new GUISprite(_mapTile.Character.BodySprite);
+                _gSprite.Reset();
                 _gSprite.PlayAnimation(CActorAnimEnum.Idle);
                 if (_mapTile.Character.IsCombatAdventurer())
                 {
@@ -542,6 +543,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     sprCombatSprite.SetScale(CombatManager.CombatScale);
 
                     _gSpriteWeapon = new GUISprite(sprCombatSprite);
+                    _gSpriteWeapon.Reset();
                     _gSpriteWeapon.PlayAnimation(CActorAnimEnum.Idle);
                 }
                 _gHP = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Health, _mapTile.Character, 100);

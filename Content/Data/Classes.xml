@@ -26,7 +26,7 @@
     <Item>
       <!--Lancer-->
       <Key>5</Key>
-      <Value>[Weapon:Spear][Armor:Heavy][Hp:6][Idle:2-0.6][Cast:2-0.6][Hit:1-0.6][Attack:1-0.6][Crit:2-0.6][KO:1-0.6][Win:2-0.6][Ability:300][DWeap:640][DArmor:720][DHead:780][DWrist:880]</Value>
+      <Value>[Weapon:Spear][Armor:Heavy][Hp:6][Idle:2-0.4][Cast:3-0.6][Hit:1-0.6][Attack:3-0.2][Crit:2-0.6][KO:1-0.6][Win:3-0.6][Ability:300][DWeap:640][DArmor:720][DHead:780][DWrist:880]</Value>
     </Item>
     <Item>
       <!--Knight-->
@@ -41,7 +41,7 @@
     <Item>
       <!--Bard-->
       <Key>8</Key>
-      <Value>[Weapon:Rapier][Armor:Heavy][Hp:5][Spd:1][Idle:2-0.6][Cast:2-0.6][Hit:1-0.6][Attack:1-0.6][Crit:2-0.6][KO:1-0.6][Win:2-0.6][Ability:300][DWeap:670][DArmor:720][DHead:780][DWrist:880]</Value>
+      <Value>[Weapon:Rapier][Armor:Heavy][Hp:5][Spd:1][Idle:4-0.35][Cast:3-0.6][Hit:1-0.6][Attack:2-0.3][Crit:2-0.6][KO:1-0.6][Win:2-0.6][Ability:300][DWeap:670][DArmor:720][DHead:780][DWrist:880]</Value>
     </Item>
   </Asset>
 </XnaContent>

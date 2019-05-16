@@ -154,5 +154,13 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC10.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC10.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tsBuildings.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/CombatMuckDweller.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Spear/641.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Wand/601.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/CombatDownGoose.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerLancer.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerBard.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/CombatLef.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerHealer.png</File>
   </SourceFiles>
 </SourceFileCollection>

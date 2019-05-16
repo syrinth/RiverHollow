@@ -18,5 +18,13 @@
       <Key>4</Key>
       <Value>{Item:15-2]</Value>
     </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>{Item:17-1]</Value>
+    </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>{Item:18-2]</Value>
+    </Item>
   </Asset>
 </XnaContent>

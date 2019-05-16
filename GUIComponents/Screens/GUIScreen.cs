@@ -14,6 +14,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         protected const int MINI_BTN_WIDTH = 128;
 
         private GUITextWindow _guiTextWindow;
+        private GUITextWindow _guiHoverWindow;
+        private GUIObject _guiHoverObject;
         protected GUITextSelectionWindow _gSelectionWindow;
         private List<GUIObject> _toRemove;
         protected List<GUIObject> Controls;
@@ -44,13 +46,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public virtual bool ProcessHover(Point mouse)
         {
             bool rv = false;
-            rv = _gSelectionWindow != null;
+            rv = _guiHoverWindow != null && _gSelectionWindow != null;
             return rv;
         }
         public virtual void Update(GameTime gameTime)
         {
-            if(_guiTextWindow != null) { _guiTextWindow.Update(gameTime); }
-
             foreach (GUIObject g in Controls)
             {
                 g.Update(gameTime);
@@ -60,6 +60,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 Controls.Remove(g);
             }
             _toRemove.Clear();
+
+            if (_guiTextWindow != null) { _guiTextWindow.Update(gameTime); }
+
+            if (_guiHoverObject != null && !_guiHoverObject.Contains(GraphicCursor.Position.ToPoint())) {
+                CloseHoverWindow();
+            }
         }
         public virtual void Draw(SpriteBatch spriteBatch)
         {
@@ -69,6 +75,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
 
             if (_guiTextWindow != null) { _guiTextWindow.Draw(spriteBatch); }
+            if (_guiHoverWindow != null) { _guiHoverWindow.Draw(spriteBatch); }
         }
         public virtual bool Contains(Point mouse)
         {
@@ -86,6 +93,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
 
         public virtual void Sync() { }
+
+        public virtual void CloseHoverWindow() {
+            _guiHoverWindow = null;
+            _guiHoverObject = null;
+        }
+        public bool IsHoverWindowOpen() { return _guiHoverWindow != null; }
+        public virtual void OpenHoverWindow(GUITextWindow hoverWindow, GUIObject hoverObject)
+        {
+            _guiHoverWindow = hoverWindow;
+            _guiHoverObject = hoverObject;
+        }
 
         public virtual bool CloseTextWindow(GUITextWindow win) {
             bool rv = false;
