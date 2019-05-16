@@ -26,7 +26,7 @@ namespace RiverHollow.Game_Managers
         public static List<CombatActor> Party { get => _listParty; }
         public static List<string> LiLevels;
 
-        public enum PhaseEnum { Charging, NewTurn, EnemyTurn, SelectSkill, ChooseTarget, Defeat, DisplayAttack, DisplayXP, DisplayLevels, Lost, PerformAction, EndCombat }
+        public enum PhaseEnum { Charging, NewTurn, EnemyTurn, SelectSkill, ChooseTarget, Defeat, DisplayAttack, DisplayVictory, DisplayLevels, Lost, PerformAction, EndCombat }
         public static PhaseEnum CurrentPhase;
         public static ChosenAction SelectedAction;
         private static CombatTile _targetTile;
@@ -210,18 +210,18 @@ namespace RiverHollow.Game_Managers
             if (PartyUp() && monstersDown)
             {
                 rv = true;
-                CurrentPhase = PhaseEnum.DisplayXP;
+                CurrentPhase = PhaseEnum.DisplayVictory;
                 foreach (CombatAdventurer a in _listParty)
                 {
                     int levl = a.ClassLevel;
                     a.CurrentCharge = 0;
-                    a.AddXP(EarnedXP);
+                    //a.AddXP(EarnedXP);
                     a.PlayAnimation(CActorAnimEnum.Win);
 
-                    if (levl != a.ClassLevel)
-                    {
-                        LiLevels.Add(a.Name + " Level Up!");
-                    }
+                    //if (levl != a.ClassLevel)
+                    //{
+                    //    LiLevels.Add(a.Name + " Level Up!");
+                    //}
                 }
                 //MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
             }
@@ -237,7 +237,7 @@ namespace RiverHollow.Game_Managers
         public static void EndCombatVictory()
         {
             GUIManager.FadeOut();
-            MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
+            //MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
             MapManager.RemoveMob(_mob);
             _mob = null;
             GoToWorldMap();

@@ -4,18 +4,18 @@ using Microsoft.Xna.Framework.Input;
 using RiverHollow.Actors;
 using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIObjects;
 using RiverHollow.Misc;
+using RiverHollow.Screens;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIObjects.GUIObject;
+using static RiverHollow.WorldObjects.WorldItem;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -27,6 +27,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUITextWindow _gtwTextWindow;
         GUIStatDisplay _sdStamina;
         GUIText _gResults;
+
+        PostCombatScreen _gPostScreen;
 
         List<GUIText> _liTurns;
         ActionSelectObject _gActionSelect;
@@ -66,6 +68,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 case CombatManager.PhaseEnum.ChooseTarget:
                     CombatManager.SelectedAction.SetSkillTarget();
+                    break;
+                case CombatManager.PhaseEnum.DisplayVictory:
+                    _gPostScreen = null;
+                    CombatManager.EndCombatVictory();
                     break;
                 case CombatManager.PhaseEnum.Defeat:
                     GUIManager.SlowFadeOut();
@@ -228,11 +234,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     }
                     
                     break;
-                case CombatManager.PhaseEnum.DisplayXP:
-                    if(UpdateResults(gameTime, CombatManager.EarnedXP + " Exp. Earned"))
-                    {
-                        CombatManager.CurrentPhase = CombatManager.PhaseEnum.DisplayLevels;
+                case CombatManager.PhaseEnum.DisplayVictory:
+                    if(_gPostScreen == null) {
+                        _gPostScreen = new PostCombatScreen(CombatManager.EarnedXP);
+                        _gPostScreen.CenterOnScreen();
                     }
+                    else { _gPostScreen.Update(gameTime); }
+                    //if(UpdateResults(gameTime, CombatManager.EarnedXP + " Exp. Earned"))
+                    //{
+                    //    CombatManager.CurrentPhase = CombatManager.PhaseEnum.DisplayLevels;
+                    //}
                     
                     break;
                 case CombatManager.PhaseEnum.DisplayLevels:
@@ -322,6 +333,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
 
             _gTurnOrder.Draw(spriteBatch);
+
+            if (_gPostScreen != null) { _gPostScreen.Draw(spriteBatch); }
         }
 
         private void Draw(SpriteBatch spriteBatch, bool drawCharacter)
@@ -1513,6 +1526,30 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     AnchorAndAlignToObject(_arrBarDisplay[_iIndex], IsInParty() ? SideEnum.Top : SideEnum.Bottom, SideEnum.CenterX);
                 }
             }
+        }
+    }
+
+    public class PostCombatScreen : GUIObject
+    {
+        GUIWindow _gWin;
+        GUIText _gText;
+        //Container _mobContainer;
+        //Inventory _mobInventory;
+
+        public PostCombatScreen(int xp)
+        {
+            _gWin = new GUIWindow(GUIWindow.BrownWin, 30, 30);
+            _gText = new GUIText("Earned " + xp + " xp");
+            _gText.CenterOnObject(_gWin);_gWin.Resize();
+            _gWin.AddControl(_gText);
+            _gWin.Resize();
+
+            AddControl(_gWin);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            _gWin.Draw(spriteBatch);
         }
     }
 }

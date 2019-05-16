@@ -10,6 +10,8 @@ namespace RiverHollow.GUIObjects
 {
     public class GUIObject
     {
+        internal List<GUIObject> Controls;
+
         GUIWindow _parentControl;
         public GUIWindow ParentWindow
         {
@@ -64,8 +66,10 @@ namespace RiverHollow.GUIObjects
         protected Vector2 _vInitVals;       //X = Width, Y = Height
         protected Vector2 _vInitPos;
 
-        public GUIObject() { }
-        public GUIObject(GUIObject g)
+        public GUIObject() {
+            Controls = new List<GUIObject>();
+        }
+        public GUIObject(GUIObject g) : this()
         {
             Position(g.Position());
             Width = g.Width;
@@ -82,6 +86,11 @@ namespace RiverHollow.GUIObjects
             if (Show)
             {
                 spriteBatch.Draw(_texture, _drawRect, _sourceRect, _cEnabled * Alpha);
+            }
+
+            foreach (GUIObject g in Controls)
+            {
+                g.Draw(spriteBatch);
             }
         }
 
@@ -117,16 +126,46 @@ namespace RiverHollow.GUIObjects
             _drawRect.Location += value.ToPoint();
             return _vPos;
         }
+
+        /// <summary>
+        /// Subtracts the given value from the location of the GUIObject,
+        /// then, it subtracts the same value from all controls of the GUIObject.
+        /// 
+        /// This recursively goes up the entire chain.
+        /// </summary>
+        /// <param name="value">The value to subtract from the GUIObject's location</param>
+        /// <returns>The new value of the Object</returns>
         public Vector2 PositionSub(Vector2 value)
         {
             _vPos -= value;
             _drawRect.Location -= value.ToPoint();
+
+            foreach (GUIObject g in Controls)
+            {
+                g.PositionSub(value);
+            }
             return _vPos;
         }
+        /// <summary>
+        /// Set the location of this GUIObject to the indicated value.
+        /// 
+        /// Then, calculate how far it moved, and subtract that value 
+        /// from the location of every control within the object.
+        /// </summary>
+        /// <param name="value">The new TopLeft value of the GUIObject</param>
         public virtual void Position(Vector2 value)
         {
+            Vector2 startVec = Position();
+
             _vPos = value;
             _drawRect = new Rectangle((int)_vPos.X, (int)_vPos.Y, Width, Height);
+
+            Vector2 delta = startVec - value;
+
+            foreach (GUIObject g in Controls)
+            {
+                g.PositionSub(delta);
+            }
         }
 
         public virtual void SetScale(double x, bool anchorToPos = true)
@@ -172,6 +211,21 @@ namespace RiverHollow.GUIObjects
             }
 
             _dScale = x;
+        }
+
+        public virtual void AddControl(GUIObject g)
+        {
+            if (g != null && !Controls.Contains(g))
+            {
+                Controls.Add(g);
+            }
+        }
+        public virtual void RemoveControl(GUIObject control)
+        {
+            if (Controls.Contains(control))
+            {
+                Controls.Remove(control);
+            }
         }
 
         #region Positioning Code

@@ -44,6 +44,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         public GUIItemBox(Item it = null) : base(RECT_IMG, 64, 64, @"Textures\Dialog")
         {
             SetItem(it);
+
+            AddControl(_gSelected);
         }
 
         public GUIItemBox(Rectangle sourceRect, int width, int height, int row, int col, string texture, Item item, bool crafting = false) : base(sourceRect, width, height, texture)
@@ -53,10 +55,13 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             
             _iCol = col;
             _iRow = row;
+
+            AddControl(_gSelected);
         }
 
         public GUIItemBox(Rectangle sourceRect, int width, int height, string texture, Item item, bool crafting = false) : this( sourceRect, width, height, 0, 0, texture, item)
         {
+            AddControl(_gSelected);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -152,12 +157,14 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             {
                 _gItem = new GUIImage(_item.SourceRectangle, Width, Height, _item.Texture);
                 _gItem.Position(Position());
+                AddControl(_gItem);
 
                 if (_item.DoesItStack)
                 {
                     _gTextNum = new GUIText(_item.Number.ToString(), true, @"Fonts\DisplayFont");
                     _gTextNum.SetColor(Color.White);
                     _gTextNum.AnchorToInnerSide(this, SideEnum.BottomRight, 10);
+                    AddControl(_gTextNum);
                 }
                 if (_bCrafting)
                 {

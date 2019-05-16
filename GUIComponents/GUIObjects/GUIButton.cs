@@ -51,6 +51,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _btnObject = _gWindow;
 
             if (del != null) { _delAction = del; }
+            Setup();
         }
 
         public GUIButton(Rectangle sourceRect, int width, int height, string texture, BtnClickDelegate del = null)
@@ -62,6 +63,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _btnObject = _gImage;
 
             if (del != null) { _delAction = del; }
+
+            Setup();
+        }
+
+        private void Setup()
+        {
+            AddControl(_gImage);
+            AddControl(_btnObject);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -90,12 +99,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
 
             return rv;
-        }
-
-        public override void Position(Vector2 value)
-        {
-            base.Position(value);
-            _btnObject.Position(value);
         }
 
         public override void Enable(bool value)

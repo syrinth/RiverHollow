@@ -7,7 +7,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
     public class GUIWindow : GUIObject
     {
-        internal List<GUIObject> Controls;
         public struct WindowData
         {
             Vector2 _vSource;
@@ -38,7 +37,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         public GUIWindow()
         {
-            Controls = new List<GUIObject>();
             Height = 184;
             Width = RiverHollow.ScreenWidth / 2;
             Vector2 startPos = new Vector2(RiverHollow.ScreenWidth / 4, RiverHollow.ScreenHeight - Height - SpaceFromBottom);
@@ -69,16 +67,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             return rv;
         }
 
-        public override void Position(Vector2 value)
-        {
-            Vector2 delta = Position() - value;
-            foreach (GUIObject g in Controls)
-            {
-                g.Position(g.PositionSub(delta));
-            }
-            base.Position(value);
-        }
-
         public virtual void Resize()
         {
             foreach(GUIObject g in Controls)
@@ -104,18 +92,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             Height += modHeight * 2;
         }
 
-        public void AddControl(GUIObject g)
+        public override void AddControl(GUIObject g)
         {
             if (!Controls.Contains(g)) {
                 Controls.Add(g);
                 g.ParentWindow = this;
-            }
-        }
-        public void RemoveControl(GUIObject control)
-        {
-            if (Controls.Contains(control))
-            {
-                Controls.Remove(control);
             }
         }
         #region Draw
@@ -137,11 +118,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             if (Show)
             {
                 DrawWindow(spriteBatch);
-
-                foreach (GUIObject g in Controls)
-                {
-                    g.Draw(spriteBatch);
-                }
+                base.Draw(spriteBatch);
             }
         }
 
