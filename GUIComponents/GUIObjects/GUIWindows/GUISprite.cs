@@ -40,6 +40,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _sprite.Draw(spriteBatch, false);
         }
 
+        /// <summary>
+        /// Because the AnimatedSprite is nota GUI Object,is does not inherent
+        /// the Position method like other GUIObjects,so this method call is required.
+        /// </summary>
+        /// <param name="value"></param>
         public override void Position(Vector2 value)
         {
             base.Position(value);

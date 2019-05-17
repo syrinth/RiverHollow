@@ -47,11 +47,24 @@ namespace RiverHollow.GUIComponents.GUIObjects
         private void Setup()
         {
             _gCoin = new GUICoin();
-            if (_bCoinOnRight) { _gCoin.AnchorAndAlignToObject(_gTextMoney, SideEnum.Right, SideEnum.CenterY); }
-            else { _gCoin.AnchorAndAlignToObject(_gTextMoney, SideEnum.Left, SideEnum.CenterY); }
+            //if (_bCoinOnRight) { _gCoin.AnchorAndAlignToObject(_gTextMoney, SideEnum.Right, SideEnum.CenterY); }
+            //else { _gCoin.AnchorAndAlignToObject(_gTextMoney, SideEnum.Left, SideEnum.CenterY); }
+
+            if (_bCoinOnRight)
+            {
+                _gCoin.AnchorAndAlignToObject(_gTextMoney, SideEnum.Right, SideEnum.CenterY);
+            }
+            else
+            {
+                _gTextMoney.AnchorAndAlignToObject(_gCoin, SideEnum.Right, SideEnum.Top);
+                _gCoin.AlignToObject(_gTextMoney, SideEnum.CenterY);
+            }
 
             Height = _gTextMoney.Height;
             Width = _gTextMoney.Width + _gCoin.Width;
+
+            AddControl(_gCoin);
+            AddControl(_gTextMoney);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -66,24 +79,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 _gTextMoney.SetText(PlayerManager.Money.ToString("N0"));
             }
-        }
-
-        public override void Position(Vector2 value)
-        {
-            base.Position(value);
-
-            if (_bCoinOnRight) {
-                _gTextMoney.Position(value);
-                _gCoin.AnchorAndAlignToObject(_gTextMoney, SideEnum.Right, SideEnum.CenterY);
-            }
-            else {
-                _gCoin.Position(value);
-                _gTextMoney.AnchorAndAlignToObject(_gCoin, SideEnum.Right, SideEnum.Top);
-                _gCoin.AlignToObject(_gTextMoney, SideEnum.CenterY);
-            }
-
-            Height = _gTextMoney.Height;
-            Width = _gTextMoney.Width + _gCoin.Width;
         }
 
         public void SetColor(Color c)

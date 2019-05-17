@@ -38,8 +38,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public virtual bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_gSelectionWindow != null) { _gSelectionWindow.ProcessRightButtonClick(mouse); }
-            else if ( _guiTextWindow != null) { _guiTextWindow.ProcessRightButtonClick(mouse); }
+            if (_gSelectionWindow != null) { rv = _gSelectionWindow.ProcessRightButtonClick(mouse); }
+            else if ( _guiTextWindow != null) { rv = _guiTextWindow.ProcessRightButtonClick(mouse); }
             else { GameManager.BackToMain(); }
             return rv;
         }

@@ -71,7 +71,7 @@ namespace RiverHollow
             CutsceneManager.LoadContent(Content);
             GameManager.LoadQuests(Content);
 
-            
+            MissionManager.Load();
             
             var pp = GraphicsDevice.PresentationParameters;
             lightsTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
@@ -276,14 +276,15 @@ namespace RiverHollow
             BackToMain();
         }
 
-        public static void RollOver()
+        public static void Rollover()
         {
+            MissionManager.Rollover();
             PlayerManager.Rollover();
             foreach(Building b in PlayerManager.Buildings)
             {
                 b.Rollover();
             }
-            ObjectManager.RollOver();
+            ObjectManager.Rollover();
             MapManager.Rollover();
         }
 

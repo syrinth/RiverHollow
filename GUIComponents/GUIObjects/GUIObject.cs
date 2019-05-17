@@ -121,9 +121,26 @@ namespace RiverHollow.GUIObjects
             return _vPos;
         }
 
+        /// <summary>
+        /// Adds the given value from the location of the GUIObject,
+        /// then, it subtracts the same value from all controls of the GUIObject.
+        /// 
+        /// This recursively goes up the entire chain.
+        /// </summary>
+        /// <param name="value">The value to subtract from the GUIObject's location</param>
+        /// <returns>The new value of the Object</returns>
         public Vector2 PositionAdd(Vector2 value) {
             _vPos += value;
             _drawRect.Location += value.ToPoint();
+
+            foreach (GUIObject g in Controls)
+            {
+                g.PositionSub(value);
+            }
+
+            //This is an important redundancy, because it will ensure that any Positional
+            //overrides are called. This is NEEDED for GUISprites.
+            Position(_vPos);
             return _vPos;
         }
 
@@ -144,6 +161,11 @@ namespace RiverHollow.GUIObjects
             {
                 g.PositionSub(value);
             }
+
+            //This is an important redundancy, because it will ensure that any Positional
+            //overrides are called. This is NEEDED for GUISprites.
+            Position(_vPos);
+
             return _vPos;
         }
         /// <summary>

@@ -221,35 +221,36 @@ namespace RiverHollow.Buildings
             _liWorkers.Remove(worker);
         }
 
+        /// <summary>
+        /// During rollover, the worker only makes their item if they were not
+        /// adventuring that day, and if they are assigned to a production building.
+        /// </summary>
         public void Rollover()
         {
-            if (MapManager.Maps[MapName].Production)
+            foreach (WorldAdventurer w in _liWorkers)
             {
-                foreach (WorldAdventurer w in _liWorkers)
+                if (w.Rollover() && MapManager.Maps[MapName].Production)
                 {
-                    if (w.Rollover())
-                    {
-                        w.MakeDailyItem();
-                        //bool eaten = false;
-                        //for (int i = 0; i < Pantry.Rows; i++)
-                        //{
-                        //    for (int j = 0; j < Pantry.Rows; j++)
-                        //    {
-                        //        Item item = Pantry.Inventory[i, j];
-                        //        if (item != null && item.Type == Item.ItemType.Food)
-                        //        {
-                        //            Pantry.RemoveItemFromInventory(i, j);
-                        //            w.MakeDailyItem();
-                        //            eaten = true;
-                        //            break;
-                        //        }
-                        //    }
-                        //    if (!eaten)
-                        //    {
-                        //        break;
-                        //    }
-                        //}
-                    }
+                    w.MakeDailyItem();
+                    //bool eaten = false;
+                    //for (int i = 0; i < Pantry.Rows; i++)
+                    //{
+                    //    for (int j = 0; j < Pantry.Rows; j++)
+                    //    {
+                    //        Item item = Pantry.Inventory[i, j];
+                    //        if (item != null && item.Type == Item.ItemType.Food)
+                    //        {
+                    //            Pantry.RemoveItemFromInventory(i, j);
+                    //            w.MakeDailyItem();
+                    //            eaten = true;
+                    //            break;
+                    //        }
+                    //    }
+                    //    if (!eaten)
+                    //    {
+                    //        break;
+                    //    }
+                    //}
                 }
             }
         }

@@ -69,6 +69,7 @@
     <Compile Include="Game Managers\CutSceneManager.cs" />
     <Compile Include="Game Managers\DungeonManager.cs" />
     <Compile Include="Game Managers\GameManager.cs" />
+    <Compile Include="Game Managers\MissionManager.cs" />
     <Compile Include="Game Managers\SoundManager.cs" />
     <Compile Include="Game Managers\TravelManager.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIText.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="GUIComponents\Screens\FriendshipScreen.cs" />
     <Compile Include="GUIComponents\Screens\GameMenuScreen.cs" />
     <Compile Include="GUIComponents\Screens\LoadScreen.cs" />
+    <Compile Include="GUIComponents\Screens\MissionScreen.cs" />
     <Compile Include="GUIComponents\Screens\NewGameScreen.cs" />
     <Compile Include="GUIComponents\Screens\ManagementScreen.cs" />
     <Compile Include="GUIComponents\Screens\OptionScreen.cs" />

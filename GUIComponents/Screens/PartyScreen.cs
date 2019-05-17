@@ -222,8 +222,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 this.Resize();
                 this.IncreaseSizeTo((QuestScreen.WIDTH) - (BrownWin.Edge * 2), (QuestScreen.HEIGHT) - (BrownWin.Edge * 2));
-
-
             }
 
             public void SetOccupancy(CombatAdventurer currentCharacter)
@@ -359,54 +357,73 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             public class CharacterDisplayBox : NPCDisplayBox
             {
+                public WorldAdventurer WorldAdv;
                 GUISprite _sprite;
                 public GUISprite Sprite => _sprite;
- 
+
                 public CharacterDisplayBox(WorldCombatant w, ClickDelegate del) : base(del)
                 {
-                    _actor = w.Combat;
-                    _sprite = new GUISprite(w.BodySprite, true);
+                    if (w != null)
+                    {
+                        _actor = w.Combat;
+                        _sprite = new GUISprite(w.BodySprite, true);
+                    }
                     Setup();
                 }
 
                 public CharacterDisplayBox(EligibleNPC n, ClickDelegate del) : base(del)
                 {
-                    _actor = n.Combat;
-                    _sprite = new GUISprite(n.BodySprite, true);
+                    if (n != null)
+                    {
+                        _actor = n.Combat;
+                        _sprite = new GUISprite(n.BodySprite, true);
+                    }
                     Setup();
+                }
+
+                public void AssignToBox(WorldAdventurer adv)
+                {
+                    if (adv != null)
+                    {
+                        WorldAdv = adv;
+                        _actor = adv.Combat;
+                        _sprite = new GUISprite(adv.BodySprite, true);
+
+                        _sprite.SetScale((int)GameManager.Scale);
+                        _sprite.CenterOnWindow(this);
+                        _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
+
+                        PlayAnimation(WActorBaseAnim.IdleDown);
+                    }
+                    else
+                    {
+                        RemoveControl(_sprite);
+                        WorldAdv = null;
+                        _actor = null;
+                        _sprite = null;
+                    }
                 }
 
                 public void Setup()
                 {
-                    _sprite.SetScale((int)GameManager.Scale);
+                    Width = ((int)Scale * TileSize) + ((int)Scale * TileSize) / 4;
+                    Height = (int)Scale * ((TileSize * 2) + 2) + (_winData.Edge * 2);
 
-                    Position(Vector2.Zero);
-                    Width = _sprite.Width + _sprite.Width / 4;
-                    Height = _sprite.Height + (_winData.Edge * 2);
-                    _sprite.CenterOnWindow(this);
-                    _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
+                    if (_actor != null)
+                    {
+                        _sprite.SetScale((int)GameManager.Scale);
+                        _sprite.CenterOnWindow(this);
+                        _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
 
-                    PlayAnimation(WActorBaseAnim.IdleDown);
+                        PlayAnimation(WActorBaseAnim.IdleDown);
+                    }
                 }
 
                 public override void Update(GameTime gameTime)
                 {
-                    _sprite.Update(gameTime);
-                }
-
-                public override void Draw(SpriteBatch spriteBatch)
-                {
-                    base.Draw(spriteBatch);
-                    _sprite.Draw(spriteBatch);
-                }
-
-                public override void Position(Vector2 value)
-                {
-                    base.Position(value);
                     if (_sprite != null)
                     {
-                        _sprite.CenterOnWindow(this);
-                        _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
+                        _sprite.Update(gameTime);
                     }
                 }
 

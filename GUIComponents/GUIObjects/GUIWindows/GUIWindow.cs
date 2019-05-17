@@ -94,7 +94,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         public override void AddControl(GUIObject g)
         {
-            if (!Controls.Contains(g)) {
+            if (g != null && !Controls.Contains(g)) {
                 Controls.Add(g);
                 g.ParentWindow = this;
             }

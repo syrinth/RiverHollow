@@ -464,6 +464,7 @@ namespace RiverHollow.Actors
         public Villager(Villager n)
         {
             _actorType = ActorEnum.NPC;
+            _npcType = NPCTypeEnum.Villager;
             _iIndex = n.ID;
             _sName = n.Name;
             _dialogueDictionary = n._dialogueDictionary;
@@ -695,7 +696,7 @@ namespace RiverHollow.Actors
                             DetermineFacing(Vector2.Zero);
                         }
 
-                        if (_currentPath[0] != null && _currentPath[0].GetMapObject() != null)
+                        if (_currentPath.Count > 0 && _currentPath[0] != null && _currentPath[0].GetMapObject() != null)
                         {
                             MapManager.ChangeMaps(this, CurrentMapName, MapManager.CurrentMap.DictionaryExit[_currentPath[0].GetMapObject().Rect]);
                         }
@@ -927,6 +928,7 @@ namespace RiverHollow.Actors
 
         public ShopKeeper(int index, string[] stringData)
         {
+            _npcType = NPCTypeEnum.Shopkeeper;
             _currentPath = new List<RHTile>();
             _liMerchandise = new List<Merchandise>();
             _collection = new Dictionary<int, bool>();
@@ -975,6 +977,12 @@ namespace RiverHollow.Actors
             GUIManager.OpenTextWindow(text, this);
         }
 
+        /// <summary>
+        /// Used to determine what to do based off of a string entry in
+        /// the chosen text string.
+        /// </summary>
+        /// <param name="entry">The action to act on</param>
+        /// <returns>A string value containing any response returned to the player.</returns>
         public override string GetDialogEntry(string entry)
         {
             string rv = string.Empty;
@@ -996,6 +1004,11 @@ namespace RiverHollow.Actors
                     if (m.MerchType == Merchandise.ItemType.Worker && m.Activated()) { _liMerchandise.Add(m); }
                 }
                 GUIManager.SetScreen(new PurchaseWorkersScreen(_liMerchandise));
+                GameManager.ClearGMObjects();
+            }
+            else if (entry.Equals("Missions"))
+            {
+                GUIManager.SetScreen(new MissionScreen());
                 GameManager.ClearGMObjects();
             }
             else if (entry.Equals("BuyItems"))
@@ -1131,6 +1144,7 @@ namespace RiverHollow.Actors
 
         public EligibleNPC(int index, string[] stringData)
         {
+            _npcType = NPCTypeEnum.Eligible;
             _currentPath = new List<RHTile>();
             _collection = new Dictionary<int, bool>();
             _completeSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
@@ -1314,6 +1328,9 @@ namespace RiverHollow.Actors
         public bool Adventuring;
         public int Mood { get => _iMood; }
 
+        Mission _curMission;
+        public Mission CurrentMission => _curMission;
+
         protected double _dProcessedTime;
         public double ProcessedTime => _dProcessedTime;
 
@@ -1496,14 +1513,27 @@ namespace RiverHollow.Actors
 
         public bool Rollover()
         {
-            bool rv = !Adventuring;
-            if (GameManager.AutoDisband)
+            bool rv = false;
+
+            if(_curMission != null)
             {
-                DrawIt = true;
-                Adventuring = false;
+                if (_curMission.Completed())
+                {
+                    Adventuring = false;
+                    DrawIt = true;
+                    _curMission = null;
+                }
             }
-            _combat.CurrentHP = _combat.MaxHP;
+
             return rv;
+            //bool rv = !Adventuring;
+            //if (GameManager.AutoDisband)
+            //{
+            //    DrawIt = true;
+            //    Adventuring = false;
+            //}
+            //_combat.CurrentHP = _combat.MaxHP;
+            //return rv;
         }
 
         public void MakeDailyItem()
@@ -1523,6 +1553,26 @@ namespace RiverHollow.Actors
         {
             _sName = name;
             _combat.SetName(name);
+        }
+
+        /// <summary>
+        /// Assigns the WorldAdventurer to the given mission.
+        /// </summary>
+        /// <param name="m">The mission they are on</param>
+        public void AssignToMission(Mission m)
+        {
+            _curMission = m;
+            DrawIt = false;
+            Adventuring = true;
+        }
+
+        /// <summary>
+        /// Cancels the indicated mission, returning the adventurer to their
+        /// home building.
+        /// </summary>
+        public void EndMission()
+        {
+            _curMission = null;
         }
 
         public WorkerData SaveData()

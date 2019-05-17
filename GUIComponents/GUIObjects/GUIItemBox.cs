@@ -209,14 +209,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         }
         public float GetItemAlpha() { return _gItem.Alpha; }
 
-        public override void Position(Vector2 value)
-        {
-            base.Position(value);
-            if (_gItem != null) { _gItem.Position(value); }
-            if(_gTextNum != null) { _gTextNum.AnchorToInnerSide(this, SideEnum.BottomRight, 10); }
-            _gSelected.Position(value);
-        }
-
         public class SpecializedBox : GUIItemBox
         {
             ItemEnum _itemType;

@@ -1091,7 +1091,6 @@ namespace RiverHollow.Tile_Engine
             {
                 if (Scrying())
                 {
-
                     if (Constructing() || MovingBuildings())
                     {
                         if (GraphicCursor.HeldBuilding != null)
@@ -1099,6 +1098,7 @@ namespace RiverHollow.Tile_Engine
                             if (AddBuilding(GraphicCursor.HeldBuilding))
                             {
                                 GUIManager.SetScreen(new NamingScreen(GraphicCursor.HeldBuilding));
+                                GraphicCursor.DropBuilding();
 
                                 PlayerManager.TakeMoney(gmMerchandise.MoneyCost);
                                 foreach (KeyValuePair<int, int> kvp in gmMerchandise.RequiredItems)
@@ -1488,7 +1488,6 @@ namespace RiverHollow.Tile_Engine
                     }
                 }
 
-                GraphicCursor.DropBuilding();
                 if (!_liBuildings.Contains(b)) //For the use case of moving buildings
                 { 
                     _liBuildings.Add(b);

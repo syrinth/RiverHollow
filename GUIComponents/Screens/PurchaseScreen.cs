@@ -98,6 +98,7 @@ namespace RiverHollow.GUIComponents.Screens
                     InventoryManager.AddItemToInventory(new Item(wB.itemForSale));
 
                     rv = true;
+                    break;
                 }
             }
 
