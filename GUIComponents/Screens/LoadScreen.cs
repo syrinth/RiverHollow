@@ -110,6 +110,7 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     Load(Data);
                     MapManager.PopulateMaps(true);
+                    MapManager.EnterBuilding(PlayerManager.Buildings[0]);
                     BackToMain();
                     rv = true;
                 }

@@ -51,8 +51,8 @@ namespace RiverHollow.Game_Managers
         public static int HitPoints { get => Combat.CurrentHP; }
         public static int MaxHitPoints { get => Combat.MaxHP; }
 
-        private static List<Building> _buildings;
-        public static List<Building> Buildings { get => _buildings; }
+        private static List<Building> _liBuildings;
+        public static List<Building> Buildings { get => _liBuildings; }
 
         public static bool ReadyToSleep = false;
 
@@ -75,7 +75,7 @@ namespace RiverHollow.Game_Managers
             World = new PlayerCharacter();
             Combat = new PlayerCombat(World);
             _liParty.Add(Combat);
-            _buildings = new List<Building>();
+            _liBuildings = new List<Building>();
             _canMake = new List<int>();
 
             World.LoadContent(@"Textures\texPlayer");
@@ -266,6 +266,46 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        /// <summary>
+        /// Iterates through all buildings owned by the Player, and 
+        /// adds all of the workers to the total number.
+        /// </summary>
+        /// <returns>The total number of workers</returns>
+        public static int GetTotalWorkers()
+        {
+            int rv = 0;
+            foreach(Building b in _liBuildings)
+            {
+                rv += b.Workers.Count;
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Iterates through every building, searching for the adventurer 
+        /// with the matching PersonalID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static WorldAdventurer GetWorkerByPersonalID(int id)
+        {
+            WorldAdventurer adv = null;
+
+            foreach (Building b in _liBuildings)
+            {
+                foreach(WorldAdventurer w in b.Workers)
+                {
+                    if(w.PersonalID == id)
+                    {
+                        adv = w;
+                        break;
+                    }
+                }
+            }
+
+            return adv;
+        }
         public static int GetDuelistsInParty()
         {
             return GetClassInParty(5);
@@ -388,15 +428,15 @@ namespace RiverHollow.Game_Managers
 
         public static void AddBuilding(Building b)
         {
-            _buildings.Add(b);
+            _liBuildings.Add(b);
         }
         public static void RemoveBuilding(Building b)
         {
-            _buildings.Remove(b);
+            _liBuildings.Remove(b);
         }
         public static int GetNewBuildingID()
         {
-            return _buildings.Count +1 ;
+            return _liBuildings.Count +1 ;
         }
 
         public static bool PlayerInRange(Rectangle rect)

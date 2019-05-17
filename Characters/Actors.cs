@@ -445,8 +445,8 @@ namespace RiverHollow.Actors
         public int ID { get => _iIndex; }
         protected string _homeMap;
         public enum NPCTypeEnum { Eligible, Villager, Shopkeeper, Ranger, Worker }
-        protected NPCTypeEnum _npcType;
-        public NPCTypeEnum NPCType { get => _npcType; }
+        protected NPCTypeEnum _eNPCType;
+        public NPCTypeEnum NPCType { get => _eNPCType; }
         public static List<int> FriendRange = new List<int> { 0, 10, 40, 100, 200, 600, 800, 1200, 1600, 2000 };
         public int FriendshipPoints = 1900;
 
@@ -464,7 +464,6 @@ namespace RiverHollow.Actors
         public Villager(Villager n)
         {
             _actorType = ActorEnum.NPC;
-            _npcType = NPCTypeEnum.Villager;
             _iIndex = n.ID;
             _sName = n.Name;
             _dialogueDictionary = n._dialogueDictionary;
@@ -476,7 +475,7 @@ namespace RiverHollow.Actors
             LoadContent(_sVillagerFolder + "NPC" + _iIndex);
         }
 
-        public Villager(int index, string[] data)
+        public Villager(int index, Dictionary<string, string> stringData)
         {
             _collection = new Dictionary<int, bool>();
             _completeSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
@@ -484,7 +483,7 @@ namespace RiverHollow.Actors
             _iIndex = index;
 
             LoadContent(_sVillagerFolder + "NPC" + _iIndex);
-            ImportBasics(data);
+            ImportBasics(stringData);
 
             MapManager.Maps[CurrentMapName].AddCharacter(this);
         }
@@ -584,49 +583,28 @@ namespace RiverHollow.Actors
             return _liCommands;
         }
 
-        protected int ImportBasics(string[] stringData)
+        protected void ImportBasics(Dictionary<string, string> stringData)
         {
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
             _sName = GameContentManager.GetGameText("NPC" + _iIndex);
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
             _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + _iIndex);
 
-            int i = 0;
-            int totalCount = 0;
-            for (; i < stringData.Length; i++)
+
+            if (stringData.ContainsKey("Type")) { _eNPCType = Util.ParseEnum<NPCTypeEnum>(stringData["Type"]); }
+            if (stringData.ContainsKey("PortRow")) { _portraitRect = new Rectangle(0, 0, 48, 60); }
+            if (stringData.ContainsKey("HomeMap")) {
+                CurrentMapName = stringData["HomeMap"];
+                _homeMap = CurrentMapName;
+                Position = Util.SnapToGrid(MapManager.Maps[CurrentMapName].GetCharacterSpawn("NPC" + _iIndex));
+            }
+
+            if (stringData.ContainsKey("Collection"))
             {
-                string[] tagType = stringData[i].Split(':');
-                if (tagType[0].Equals("Type"))
+                string[] vectorSplit = stringData["Collection"].Split('-');
+                foreach (string s in vectorSplit)
                 {
-                    _npcType = Util.ParseEnum<NPCTypeEnum>(tagType[1]);
-                    totalCount++;
-                }
-                else if (tagType[0].Equals("PortRow"))
-                {
-                    _portraitRect = new Rectangle(0, 0, 48, 60);
-                    totalCount++;
-                }
-                else if (tagType[0].Equals("HomeMap"))
-                {
-                    CurrentMapName = tagType[1];
-                    _homeMap = CurrentMapName;
-                    Position = Util.SnapToGrid(MapManager.Maps[CurrentMapName].GetCharacterSpawn("NPC" + _iIndex));
-
-                    totalCount++;
-                }
-                else if (tagType[0].Equals("Collection"))
-                {
-                    string[] vectorSplit = tagType[1].Split('-');
-                    foreach (string s in vectorSplit)
-                    {
-                        _collection.Add(int.Parse(s), false);
-                    }
-                    totalCount++;
-                }
-
-                if (totalCount == 4)
-                {
-                    break;
+                    _collection.Add(int.Parse(s), false);
                 }
             }
 
@@ -648,8 +626,8 @@ namespace RiverHollow.Actors
 
             _currentPath = new List<RHTile>();
             CalculatePathing();
-            return i;
         }
+
         public override void Update(GameTime theGameTime)
         {
             base.Update(theGameTime);
@@ -883,7 +861,7 @@ namespace RiverHollow.Actors
             return rv;
         }
 
-        public bool IsEligible() { return _npcType == NPCTypeEnum.Eligible; }
+        public bool IsEligible() { return _eNPCType == NPCTypeEnum.Eligible; }
 
         public NPCData SaveData()
         {
@@ -926,9 +904,8 @@ namespace RiverHollow.Actors
         protected List<Merchandise> _liMerchandise;
         public List<Merchandise> Buildings { get => _liMerchandise; }
 
-        public ShopKeeper(int index, string[] stringData)
+        public ShopKeeper(int index, Dictionary<string, string> stringData)
         {
-            _npcType = NPCTypeEnum.Shopkeeper;
             _currentPath = new List<RHTile>();
             _liMerchandise = new List<Merchandise>();
             _collection = new Dictionary<int, bool>();
@@ -937,16 +914,13 @@ namespace RiverHollow.Actors
             _iIndex = index;
             LoadContent(_sVillagerFolder + "NPC" + _iIndex);
 
-            int i = ImportBasics(stringData);
-            for (; i < stringData.Length; i++)
+            ImportBasics(stringData);
+
+            if (stringData.ContainsKey("ShopData"))
             {
-                string[] tagType = stringData[i].Split(':');
-                if (tagType[0].Equals("ShopData"))
+                foreach (KeyValuePair<int, string> kvp in GameContentManager.GetMerchandise(stringData["ShopData"]))
                 {
-                    foreach (KeyValuePair<int, string> kvp in GameContentManager.GetMerchandise(tagType[1]))
-                    {
-                        _liMerchandise.Add(new Merchandise(kvp.Value));
-                    }
+                    _liMerchandise.Add(new Merchandise(kvp.Value));
                 }
             }
 
@@ -1142,9 +1116,8 @@ namespace RiverHollow.Actors
         bool _bCanJoinParty = true;
         public bool CanJoinParty => _bCanJoinParty;
 
-        public EligibleNPC(int index, string[] stringData)
+        public EligibleNPC(int index, Dictionary<string, string> stringData)
         {
-            _npcType = NPCTypeEnum.Eligible;
             _currentPath = new List<RHTile>();
             _collection = new Dictionary<int, bool>();
             _completeSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
@@ -1152,16 +1125,13 @@ namespace RiverHollow.Actors
             _iIndex = index;
             LoadContent(_sVillagerFolder + "NPC" + _iIndex);
             
-            int i = ImportBasics(stringData);
-            for (; i < stringData.Length; i++)
+            ImportBasics(stringData);
+
+            if (stringData.ContainsKey("Class"))
             {
-                string[] tagType = stringData[i].Split(':');
-                if (tagType[0].Equals("Class"))
-                {
-                    _combat = new CombatAdventurer(this);
-                    _combat.SetClass(ObjectManager.GetClassByIndex(int.Parse(tagType[1])));
-                    _combat.LoadContent(_sAdventurerFolder + _combat.CharacterClass.Name);
-                }
+                _combat = new CombatAdventurer(this);
+                _combat.SetClass(ObjectManager.GetClassByIndex(int.Parse(stringData["Class"])));
+                _combat.LoadContent(_sAdventurerFolder + _combat.CharacterClass.Name);
             }
 
             MapManager.Maps[CurrentMapName].AddCharacter(this);
@@ -1312,10 +1282,14 @@ namespace RiverHollow.Actors
     public class WorldAdventurer : TalkingActor
     {
         #region Properties
+        private enum WorkerStateEnum { Idle, InParty, OnMission };
+        private WorkerStateEnum _eState;
         private WorkerTypeEnum _workerType;
         public WorkerTypeEnum WorkerType => _workerType;
-        protected int _iAdventurerID;
-        public int AdventurerID { get => _iAdventurerID; }
+        protected int _iPersonalID;
+        public int PersonalID { get => _iPersonalID; }
+        protected int _iWorkerID;
+        public int WorkerID { get => _iWorkerID; }
         protected string _sAdventurerType;
         private Building _building;
         public Building Building => _building;
@@ -1324,8 +1298,7 @@ namespace RiverHollow.Actors
         protected int _iDailyItemID;
         protected Item _heldItem;
         protected int _iMood;
-        public bool DrawIt;
-        public bool Adventuring;
+        private int _iResting;
         public int Mood { get => _iMood; }
 
         Mission _curMission;
@@ -1342,14 +1315,15 @@ namespace RiverHollow.Actors
 
         public WorldAdventurer(string[] stringData, int id)
         {
-            _iAdventurerID = id;
+            _iWorkerID = id;
+            _iPersonalID = PlayerManager.GetTotalWorkers();
             _actorType = ActorEnum.WorldAdventurer;
             ImportBasics(stringData, id);
             SetCombat();
 
             _sAdventurerType = Combat.CharacterClass.Name;
             _sTexture = _sAdventurerFolder + "WorldAdventurers";
-            LoadContent(_iAdventurerID);
+            LoadContent(_iWorkerID);
 
             _portraitRect = new Rectangle(0, 0, 48, 60);
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
@@ -1357,8 +1331,8 @@ namespace RiverHollow.Actors
             _iCurrFood = 0;
             _heldItem = null;
             _iMood = 0;
-            DrawIt = true;
-            Adventuring = false;
+
+            _eState = WorkerStateEnum.Idle;
 
             _sName = _sAdventurerType.Substring(0, 1);
             Combat.SetName(_sName);
@@ -1376,7 +1350,7 @@ namespace RiverHollow.Actors
         {
             _diCrafting = new Dictionary<int, int>();
 
-            _iAdventurerID = id;
+            _iWorkerID = id;
 
             foreach (string s in stringData)
             {
@@ -1407,7 +1381,7 @@ namespace RiverHollow.Actors
         protected void SetCombat()
         {
             _combat = new CombatAdventurer(this);
-            _combat.SetClass(ObjectManager.GetClassByIndex(_iAdventurerID));
+            _combat.SetClass(ObjectManager.GetClassByIndex(_iWorkerID));
             _combat.LoadContent(_sAdventurerFolder + _combat.CharacterClass.Name);
         }
 
@@ -1418,7 +1392,7 @@ namespace RiverHollow.Actors
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
-            if (DrawIt)
+            if (_eState == WorkerStateEnum.Idle)
             {
                 base.Draw(spriteBatch, useLayerDepth);
                 if (_heldItem != null)
@@ -1431,7 +1405,7 @@ namespace RiverHollow.Actors
         public override bool CollisionContains(Point mouse)
         {
             bool rv = false;
-            if (DrawIt)
+            if (_eState == WorkerStateEnum.Idle)
             {
                 rv = base.CollisionContains(mouse);
             }
@@ -1440,7 +1414,7 @@ namespace RiverHollow.Actors
         public override bool CollisionIntersects(Rectangle rect)
         {
             bool rv = false;
-            if (DrawIt)
+            if (_eState == WorkerStateEnum.Idle)
             {
                 rv = base.CollisionIntersects(rect);
             }
@@ -1472,8 +1446,7 @@ namespace RiverHollow.Actors
             }
             else if (entry.Equals("Party"))
             {
-                DrawIt = false;
-                Adventuring = true;
+                _eState = WorkerStateEnum.InParty;
                 PlayerManager.AddToParty(_combat);
                 rv = "Of course!";
             }
@@ -1511,29 +1484,41 @@ namespace RiverHollow.Actors
             _building = b;
         }
 
+        /// <summary>
+        /// Called on rollover, if the WorldAdventurer is in a rest state, subtract one
+        /// from the int. If they are currently on a mission, but the mission has been 
+        /// completed by the MissionManager's rollover method, reset the state to idle,
+        /// null the mission, and set _iResting to be half of the runtime of the Mission.
+        /// </summary>
+        /// <returns>True if the WorldAdventurer should make their daily item.</returns>
         public bool Rollover()
         {
             bool rv = false;
 
-            if(_curMission != null)
-            {
-                if (_curMission.Completed())
-                {
-                    Adventuring = false;
-                    DrawIt = true;
-                    _curMission = null;
-                }
+            if (_iResting > 0) { _iResting--; }
+
+            switch(_eState) {
+                case WorkerStateEnum.Idle:
+                    _combat.CurrentHP = _combat.MaxHP;
+                    rv = true;
+                    break;
+                case WorkerStateEnum.InParty:
+                    if (GameManager.AutoDisband)
+                    {
+                        _eState = WorkerStateEnum.Idle;
+                    }
+                    break;
+                case WorkerStateEnum.OnMission:
+                    if (_curMission.Completed())
+                    {
+                        _eState = WorkerStateEnum.Idle;
+                        _iResting = _curMission.DaysToComplete / 2;
+                        _curMission = null;
+                    }
+                    break;
             }
 
             return rv;
-            //bool rv = !Adventuring;
-            //if (GameManager.AutoDisband)
-            //{
-            //    DrawIt = true;
-            //    Adventuring = false;
-            //}
-            //_combat.CurrentHP = _combat.MaxHP;
-            //return rv;
         }
 
         public void MakeDailyItem()
@@ -1562,54 +1547,84 @@ namespace RiverHollow.Actors
         public void AssignToMission(Mission m)
         {
             _curMission = m;
-            DrawIt = false;
-            Adventuring = true;
+            _eState = WorkerStateEnum.OnMission;
         }
 
         /// <summary>
         /// Cancels the indicated mission, returning the adventurer to their
-        /// home building.
+        /// home building. Does not get called unless a mission has been canceled.
         /// </summary>
         public void EndMission()
         {
+            _iResting = _curMission.DaysToComplete / 2;
             _curMission = null;
+        }
+
+        /// <summary>
+        /// Gets a string representation of the WorldAdventurers current state
+        /// </summary>
+        public string GetStateText()
+        {
+            string rv = string.Empty;
+
+            switch (_eState) {
+                case WorkerStateEnum.Idle:
+                    rv = "Idle";
+                    break;
+                case WorkerStateEnum.InParty:
+                    rv = "In Party";
+                    break;
+                case WorkerStateEnum.OnMission:
+                    rv = "On Mission \"" + _curMission.Name + "\" days left: " + (_curMission.DaysToComplete - _curMission.DaysFinished).ToString();
+                    break;
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// WorldAdventurers are only available for missions if they're not on
+        /// a mission and they are not currently in a resting state.
+        /// </summary>
+        public bool AvailableForMissions()
+        {
+            return (_eState != WorkerStateEnum.OnMission && _iResting == 0);
         }
 
         public WorkerData SaveData()
         {
             WorkerData workerData = new WorkerData
             {
-                workerID = this.AdventurerID,
+                workerID = this.WorkerID,
+                PersonalID = this.PersonalID,
                 advData = Combat.SaveData(),
                 mood = this.Mood,
                 name = this.Name,
                 processedTime = this.ProcessedTime,
                 currentItemID = (this._iCurrentlyMaking == null) ? -1 : this._iCurrentlyMaking,
                 heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID,
-                adventuring = Adventuring
+                state = (int)_eState
             };
 
             return workerData;
         }
         public void LoadData(WorkerData data)
         {
-            _iAdventurerID = data.workerID;
+            _iWorkerID = data.workerID;
+            _iPersonalID = data.PersonalID;
             _iMood = data.mood;
             _sName = data.name;
             _dProcessedTime = data.processedTime;
             _iCurrentlyMaking = data.currentItemID;
             _heldItem = ObjectManager.GetItem(data.heldItemID);
-            Adventuring = data.adventuring;
+            _eState = (WorkerStateEnum)data.state;
 
             SetCombat();
             Combat.LoadData(data.advData);
 
             if (_iCurrentlyMaking != null) { _spriteBody.SetCurrentAnimation(WActorBaseAnim.MakeItem); }
-            if (Adventuring)
-            {
-                DrawIt = false;
-                PlayerManager.AddToParty(Combat);
-            }
+
+            if (_eState == WorkerStateEnum.InParty) { PlayerManager.AddToParty(Combat); }
         }
     }
     public class PlayerCharacter : WorldCombatant

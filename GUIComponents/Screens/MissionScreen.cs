@@ -25,8 +25,13 @@ namespace RiverHollow.GUIComponents.Screens
     {
         public static int WIDTH = RiverHollow.ScreenWidth / 3;
         public static int HEIGHT = RiverHollow.ScreenHeight / 3;
+        public static int BTNSIZE = 32;
         public static int MAX_SHOWN_MISSIONS = 4;
 
+        int _iTopMission = 0;
+
+        GUIButton _btnUp;
+        GUIButton _btnDown;
         GUIWindow _gWin;
         DetailWindow _gDetailWindow;
         WorkerWindow _gWinWorkers;
@@ -40,19 +45,27 @@ namespace RiverHollow.GUIComponents.Screens
             _liMissions = new List<MissionBox>();
 
             AddControl(_gWin);
-            for (int i = 0; i < MAX_SHOWN_MISSIONS && i < MissionManager.AvailableMissions.Count; i++)
-            {
-                MissionBox q = new MissionBox(MissionManager.AvailableMissions[i], OpenDetailBox, _gWin.MidWidth(), _gWin.MidHeight() / MAX_SHOWN_MISSIONS);
 
-                if(_liMissions.Count == 0) { q.AnchorToInnerSide(_gWin, SideEnum.TopLeft); }
-                else { q.AnchorAndAlignToObject(_liMissions[_liMissions.Count() - 1], SideEnum.Bottom, SideEnum.Left); }
-
-                AddControl(q);
-
-                _liMissions.Add(q);
-            }
+            AssignMissionWindows();
 
             _gWin.CenterOnScreen();
+
+            if(MissionManager.AvailableMissions.Count > MAX_SHOWN_MISSIONS)
+            {
+                _btnUp = new GUIButton(new Rectangle(256, 64, 32, 32), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnUpClick);
+                _btnDown = new GUIButton(new Rectangle(256, 96, 32, 32), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnDownClick);
+
+                _btnUp.AnchorAndAlignToObject(_gWin, GUIObject.SideEnum.Right, GUIObject.SideEnum.Top);
+                _btnDown.AnchorAndAlignToObject(_gWin, GUIObject.SideEnum.Right, GUIObject.SideEnum.Bottom);
+
+                _btnUp.Enable(false);
+                _btnDown.Enable(false);
+
+                RemoveControl(_btnDown);
+                RemoveControl(_btnUp);
+                _gWin.AddControl(_btnDown);
+                _gWin.AddControl(_btnUp);
+            }
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -68,12 +81,23 @@ namespace RiverHollow.GUIComponents.Screens
                 rv = _gDetailWindow.ProcessLeftButtonClick(mouse);
             }
             else{
-                foreach (MissionBox box in _liMissions)
+                if (_btnDown != null && _btnDown.ProcessLeftButtonClick(mouse))
                 {
-                    if (box.ProcessLeftButtonClick(mouse))
+                    rv = true;
+                }
+                else if (_btnUp != null && _btnUp.ProcessLeftButtonClick(mouse))
+                {
+                    rv = true;
+                }
+                else
+                {
+                    foreach (MissionBox box in _liMissions)
                     {
-                        rv = true;
-                        break;
+                        if (box.ProcessLeftButtonClick(mouse))
+                        {
+                            rv = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -90,6 +114,7 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     RemoveControl(_gDetailWindow);
                     _gDetailWindow = null;
+                    AddControl(_gWin);
                 }
             }
             else
@@ -117,6 +142,26 @@ namespace RiverHollow.GUIComponents.Screens
         }
 
         /// <summary>
+        /// Clears and assigns the list of mission boxes based off of the top mission
+        /// and the total number of available missions
+        /// </summary>
+        public void AssignMissionWindows()
+        {
+            _liMissions.Clear();
+            for (int i = _iTopMission; i < _iTopMission + MAX_SHOWN_MISSIONS && i < MissionManager.AvailableMissions.Count; i++)
+            {
+                MissionBox q = new MissionBox(MissionManager.AvailableMissions[i], OpenDetailBox, _gWin.MidWidth(), _gWin.MidHeight() / MAX_SHOWN_MISSIONS);
+
+                if (_liMissions.Count == 0) { q.AnchorToInnerSide(_gWin, SideEnum.TopLeft); }
+                else { q.AnchorAndAlignToObject(_liMissions[_liMissions.Count() - 1], SideEnum.Bottom, SideEnum.Left); }
+
+                AddControl(q);
+
+                _liMissions.Add(q);
+            }
+        }
+
+        /// <summary>
         /// Opens a new window for advanced information on the indicated Mission.
         /// Inform the Mission Manager which Mission we're looking at, so it can better
         /// handle the information.
@@ -127,6 +172,7 @@ namespace RiverHollow.GUIComponents.Screens
             MissionManager.SelectMission(m);
             _gDetailWindow = new DetailWindow(m, OpenWorkerWindow, AcceptMission);
             AddControl(_gDetailWindow);
+            RemoveControl(_gWin);
         }
 
         /// <summary>
@@ -159,7 +205,7 @@ namespace RiverHollow.GUIComponents.Screens
             _gDetailWindow.AssignToBox(adv);
             _gWinWorkers = null;
 
-            if(MissionManager.CurrentPartySize == MissionManager.SelectedMission.PartySize)
+            if(MissionManager.MissionReady())
             {
                 _gDetailWindow.EnableAccept();
             }
@@ -173,6 +219,29 @@ namespace RiverHollow.GUIComponents.Screens
         {
             MissionManager.AcceptMission();
             GameManager.BackToMain();
+        }
+
+        /// <summary>
+        /// Moves the topmost displayed mission up one and reassigns the mission boxes
+        /// </summary>
+        public void BtnUpClick()
+        {
+            if (_iTopMission - 1 >= 0) {
+                _iTopMission--;
+
+                AssignMissionWindows();
+            }
+        }
+
+        /// <summary>
+        /// Moves the topmost displayed mission up one and reassigns the mission boxes
+        /// </summary>
+        public void BtnDownClick()
+        {
+            if (_iTopMission + MAX_SHOWN_MISSIONS < MissionManager.AvailableMissions.Count) {
+                _iTopMission++;
+            }
+            AssignMissionWindows();
         }
 
         /// <summary>
@@ -236,6 +305,11 @@ namespace RiverHollow.GUIComponents.Screens
             GUIButton _btnAccept;
 
             GUIText _gName;
+            GUIText _gClass;
+            GUIText _gDaysToFinish;
+            GUIText _gDaysUntilExpiry;
+            GUIText _gReqLevel;
+
             GUIMoneyDisplay _gMoney;
 
             List<GUIItemBox> _liItems;
@@ -249,13 +323,29 @@ namespace RiverHollow.GUIComponents.Screens
 
             public DetailWindow(Mission m, BoxClickDelegate open, BtnClickDelegate accept) : base(GUIWindow.RedWin, WIDTH, HEIGHT)
             {
-                _delOpen = open;
-                _gName = new GUIText(m.Name);
                 _liItems = new List<GUIItemBox>();
                 _liParty = new List<CharacterDisplayBox>();
+
+                _delOpen = open;
+
+                _gName = new GUIText(m.Name);
+                _gDaysToFinish = new GUIText("Requires " + m.DaysToComplete + " days");
+                _gDaysUntilExpiry = new GUIText("Expires in " + (m.TotalDaysToExpire - m.DaysExpired) + " days");
+                _gReqLevel = new GUIText("Required Level: " + m.ReqLevel);
+
                 _gMoney = new GUIMoneyDisplay(m.Money);
 
                 _gName.AnchorToInnerSide(this, SideEnum.TopLeft);
+                _gReqLevel.AnchorAndAlignToObject(_gName, SideEnum.Bottom, SideEnum.Left);
+                _gDaysToFinish.AnchorAndAlignToObject(_gReqLevel, SideEnum.Bottom, SideEnum.Left);
+
+                if (m.CharClass != null)
+                {
+                    _gClass = new GUIText("Requires " + m.CharClass.Name);
+                    _gClass.AnchorAndAlignToObject(_gDaysToFinish, SideEnum.Bottom, SideEnum.Left);
+                }
+
+                _gDaysUntilExpiry.AnchorToInnerSide(this, SideEnum.BottomLeft);
                 _gMoney.AnchorToInnerSide(this, SideEnum.BottomRight);
 
                 //Adds the GUIItemBoxes to display Mission rewards
@@ -396,7 +486,7 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     foreach(WorldAdventurer adv in b.Workers)
                     {
-                        if (!adv.Adventuring && !MissionManager.PartyContains(adv))
+                        if (adv.AvailableForMissions() && adv.Combat.ClassLevel >= MissionManager.SelectedMission.ReqLevel)
                         {
                             CharacterDisplayBox box = new CharacterDisplayBox(adv, null);
                             box.WorldAdv = adv;

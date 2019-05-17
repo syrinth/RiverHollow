@@ -18,8 +18,10 @@ namespace RiverHollow.Game_Managers
 {
     public static class ObjectManager
     {
+        private static Dictionary<int, Dictionary<string, string>> _diVillagerData;
+
         private static Dictionary<int, string> _diBuildings;
-        private static Dictionary<int, Dictionary<string, string>> _dictItem;
+        private static Dictionary<int, Dictionary<string, string>> _diItems;
         private static Dictionary<int, string> _diWorkers;
         private static Dictionary<int, Dictionary<string, string>> _diWorldObjects;
 
@@ -38,15 +40,17 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadContent(ContentManager Content)
         {
-            _dictItem = new Dictionary<int, Dictionary<string, string>>();
+            _diVillagerData = new Dictionary<int, Dictionary<string, string>>();
+            _diItems = new Dictionary<int, Dictionary<string, string>>();
             _diActions = new Dictionary<int, Dictionary<string, string>>();
             _diWorldObjects = new Dictionary<int, Dictionary<string, string>>();
             _diBuildings = Content.Load<Dictionary<int, string>>(@"Data\Buildings");
             _diWorkers = Content.Load<Dictionary<int, string>>(@"Data\Workers");
 
-            AddToDictionary(_dictItem, @"Data\ItemData", Content);
+            AddToDictionary(_diItems, @"Data\ItemData", Content);
             AddToDictionary(_diWorldObjects, @"Data\WorldObjects", Content);
             AddToDictionary(_diActions, @"Data\CombatActions", Content);
+            AddToDictionary(_diVillagerData, @"Data\NPCData\Characters", Content);
 
             _liForest = new List<int>();
             _liMountain = new List<int>();
@@ -66,24 +70,24 @@ namespace RiverHollow.Game_Managers
             }
 
             _diNPCs = new Dictionary<int, Villager>();
-            foreach (KeyValuePair<int, string> kvp in Content.Load<Dictionary<int, string>>(@"Data\NPCData\Characters"))
+            foreach (KeyValuePair<int, Dictionary<string, string>> npcData in _diVillagerData)
             {
                 Villager n = null;
-                string _characterData = kvp.Value;
-                string[] _characterDataValues = Util.FindTags(_characterData);
-                switch (_characterDataValues[0].Split(':')[1])
+
+                Dictionary<string, string> diData = _diVillagerData[npcData.Key];
+                switch (diData["Type"])
                 {
                     case "ShopKeeper":
-                        n = new ShopKeeper(kvp.Key, _characterDataValues);
+                        n = new ShopKeeper(npcData.Key, diData);
                         break;
                     case "Eligible":
-                        n = new EligibleNPC(kvp.Key, _characterDataValues);
+                        n = new EligibleNPC(npcData.Key, diData);
                         break;
                     default:
-                        n = new Villager(kvp.Key, _characterDataValues);
+                        n = new Villager(npcData.Key, diData);
                         break;
                 }
-                _diNPCs.Add(kvp.Key, n);
+                _diNPCs.Add(npcData.Key, n);
             }
         }
 
@@ -145,7 +149,7 @@ namespace RiverHollow.Game_Managers
         {
             if (id != -1)
             {
-                Dictionary<string, string> liData = _dictItem[id];
+                Dictionary<string, string> liData = _diItems[id];
                 switch (liData["Type"])
                 {
                     case "Resource":

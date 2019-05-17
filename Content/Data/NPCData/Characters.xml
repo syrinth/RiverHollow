@@ -40,7 +40,7 @@
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Village][PortRow:3][HomeMap:mapRiverHollowTown][Collection:7-8]</Value>
+      <Value>[Type:Villager][PortRow:3][HomeMap:mapRiverHollowTown][Collection:7-8]</Value>
     </Item>
   </Asset>
 </XnaContent>

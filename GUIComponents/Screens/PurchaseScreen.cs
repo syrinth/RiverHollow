@@ -476,7 +476,7 @@ namespace RiverHollow.GUIComponents.Screens
         public WorkerBox(WorldAdventurer w, int cost)
         {
             Cost = cost;
-            ID = w.AdventurerID;
+            ID = w.WorkerID;
             _workerWindow = new CharacterDisplayBox(w, null);
             _costWindow = new GUIWindow(GUIWindow.RedWin, _workerWindow.Width, 16);
 

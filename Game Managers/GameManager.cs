@@ -241,6 +241,12 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "QuestLog")]
             public List<QuestData> QuestLogData;
 
+            [XmlArray(ElementName = "CurrentMissions")]
+            public List<MissionData> CurrentMissions;
+
+            [XmlArray(ElementName = "AvailableMissions")]
+            public List<MissionData> AvailableMissions;
+
             [XmlArray(ElementName = "NPCData")]
             public List<NPCData> NPCData;
 
@@ -341,6 +347,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "WorkerID")]
             public int workerID;
 
+            [XmlElement(ElementName = "PersonalID")]
+            public int PersonalID;
+
             [XmlElement(ElementName = "Name")]
             public string name;
 
@@ -359,8 +368,8 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "HeldItemID")]
             public int heldItemID;
 
-            [XmlElement(ElementName = "Adventuring")]
-            public bool adventuring;
+            [XmlElement(ElementName = "State")]
+            public int state;
         }
         public struct AdventurerData
         {
@@ -418,7 +427,6 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Enabled")]
             public bool enabled;
         }
-        
         public struct NPCData
         {
             [XmlElement(ElementName = "NPCID")]
@@ -556,6 +564,42 @@ namespace RiverHollow.Game_Managers
             public int y;
         }
 
+        public struct MissionData
+        {
+            [XmlElement(ElementName = "Name")]
+            public string Name;
+
+            [XmlElement(ElementName = "DaysToComplete")]
+            public int DaysToComplete;
+
+            [XmlElement(ElementName = "DaysFinished")]
+            public int DaysFinished;
+
+            [XmlElement(ElementName = "TotalDaysToExpire")]
+            public int TotalDaysToExpire;
+
+            [XmlElement(ElementName = "DaysExpired")]
+            public int DaysExpired;
+
+            [XmlElement(ElementName = "Money")]
+            public int Money;
+
+            [XmlElement(ElementName = "ReqLevel")]
+            public int ReqLevel;
+
+            [XmlElement(ElementName = "PartySize")]
+            public int PartySize;
+
+            [XmlElement(ElementName = "ReqClassID")]
+            public int ReqClassID;
+
+            [XmlArray(ElementName = "Items")]
+            public List<ItemData> Items;
+
+            [XmlArray(ElementName = "Adventurers")]
+            public List<int> ListAdventurerIDs;
+        }
+
         public static long GetSaveID()
         {
             if (_iSaveID == -1)
@@ -578,6 +622,8 @@ namespace RiverHollow.Game_Managers
                 UpgradeData = new List<UpgradeData>(),
                 PlotQuestData = new List<QuestData>(),
                 QuestLogData = new List<QuestData>(),
+                CurrentMissions = new List<MissionData>(),
+                AvailableMissions = new List<MissionData>(),
                 NPCData = new List<NPCData>(),
                 EligibleData = new List<EligibleNPCData>(),
                 optionData = GameManager.SaveOptions()
@@ -622,6 +668,16 @@ namespace RiverHollow.Game_Managers
             foreach (Quest q in PlayerManager.QuestLog)
             {
                 data.QuestLogData.Add(q.SaveData());
+            }
+
+            foreach(Mission m in MissionManager.AvailableMissions)
+            {
+                data.AvailableMissions.Add(m.SaveData());
+            }
+
+            foreach (Mission m in MissionManager.CurrentMissions)
+            {
+                data.CurrentMissions.Add(m.SaveData());
             }
 
             foreach (Villager n in ObjectManager.DiNPC.Values)
@@ -711,6 +767,18 @@ namespace RiverHollow.Game_Managers
                 Quest newQuest = new Quest();
                 newQuest.LoadData(q);
                 PlayerManager.AddToQuestLog(newQuest);
+            }
+            foreach(MissionData m in data.CurrentMissions)
+            {
+                Mission newMission = new Mission();
+                newMission.LoadData(m);
+                MissionManager.CurrentMissions.Add(newMission);
+            }
+            foreach (MissionData m in data.AvailableMissions)
+            {
+                Mission newMission = new Mission();
+                newMission.LoadData(m);
+                MissionManager.AvailableMissions.Add(newMission);
             }
             foreach (NPCData n in data.NPCData)
             {

@@ -70,8 +70,6 @@ namespace RiverHollow
             DropManager.LoadContent(Content);
             CutsceneManager.LoadContent(Content);
             GameManager.LoadQuests(Content);
-
-            MissionManager.Load();
             
             var pp = GraphicsDevice.PresentationParameters;
             lightsTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
@@ -79,8 +77,9 @@ namespace RiverHollow
             lightMask = GameContentManager.GetTexture(@"Textures\lightmask");
             effect1 = Content.Load<Effect>(@"lighteffect");
 
-            //MAR
             PlayerManager.Initialize();
+
+            MissionManager.Load();
 
             //Set the Main Menu Screen
             GUIManager.SetScreen(new IntroMenuScreen());

@@ -333,7 +333,7 @@ namespace RiverHollow.Buildings
 
         internal bool CanHold(WorldAdventurer w)
         {
-            return w.AdventurerID == _arrWorkerTypes[0] || w.AdventurerID == _arrWorkerTypes[1];
+            return w.WorkerID == _arrWorkerTypes[0] || w.WorkerID == _arrWorkerTypes[1];
         }
     }
 }

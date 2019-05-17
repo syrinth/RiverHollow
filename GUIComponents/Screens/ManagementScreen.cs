@@ -430,13 +430,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _gRes.SetText("Res: " + _character.Combat.StatRes);
                     _gSpd.SetText("Spd: " + _character.Combat.StatSpd);
 
-                    string strAction = "Idle";
-                    if (_character.Adventuring)
-                    {
-                        strAction = "Adventuring";
-                    }
 
-                    _actionText = new GUIText(strAction);
+                    _actionText = new GUIText(_character.GetStateText());
                     _actionText.AnchorToInnerSide(_window, SideEnum.BottomLeft);
                 }
 

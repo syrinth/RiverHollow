@@ -1,4 +1,5 @@
 ﻿using RiverHollow.Actors;
+using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Misc;
 using RiverHollow.WorldObjects;
 using System;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Game_Managers
 {
@@ -42,11 +44,11 @@ namespace RiverHollow.Game_Managers
         /// <summary>
         /// Call during rollover to add new missions to the queue
         /// </summary>
-        public static void GenerateNewMissions()
+        public static void GenerateNewMissions(int num = 5)
         {
-            for(int i = 0; i < 5; i++)
+            for(int i = 0; i < num; i++)
             {
-                Thread.Sleep(994);
+                Thread.Sleep(500);
                 _liAvailableMissions.Add(new Mission());
             }
         }
@@ -119,9 +121,18 @@ namespace RiverHollow.Game_Managers
             _liAdventurers.Remove(adv);
         }
 
+        /// <summary>
+        /// Called on Rollover to advance current missions and update
+        /// expiry dates.
+        /// 
+        /// After missions expire, replace them with that many missions
+        /// </summary>
         public static void Rollover()
         {
             List<Mission> toRemove = new List<Mission>();
+
+            //Advance the completion dates of the CurrentMissions and
+            //if the mission is completed, reward the player.
             foreach (Mission m in _liCurrentMissions) {
                 m.IncreaseDays();
                 if(m.Completed())
@@ -139,10 +150,13 @@ namespace RiverHollow.Game_Managers
                 _liCurrentMissions.Remove(m);
             }
             toRemove.Clear();
+
+            //Advance the expiry dates on available missions and
+            //remove any that have expired
             foreach (Mission m in _liAvailableMissions)
             {
                 m.IncreaseExpiry();
-                if (m.DaysExpired == m.DaysToExpiry)
+                if (m.DaysExpired == m.TotalDaysToExpire)
                 {
                     toRemove.Add(m);
                 }
@@ -151,18 +165,43 @@ namespace RiverHollow.Game_Managers
             {
                 _liAvailableMissions.Remove(m);
             }
+
+            GenerateNewMissions(toRemove.Count());
             toRemove.Clear();
         }
 
-        public static bool PartyContains(WorldAdventurer adv)
-        {
-            return _liAdventurers.Contains(adv);
-        }
-
+        /// <summary>
+        /// Used to wipe out the temp data for Mission selection
+        /// </summary>
         public static void ClearMissionAcceptance()
         {
             _selectedMission = null;
             _liAdventurers.Clear();
+        }
+
+        /// <summary>
+        /// Returns true if the CurrentPartySize has enough WorldAdventurers, and
+        /// if the party contains the required class.
+        /// </summary>
+        /// <returns></returns>
+        public static bool MissionReady()
+        {
+            return (CurrentPartySize == SelectedMission.PartySize) && PartyContainsClass();
+        }
+
+        /// <summary>
+        /// Returns true if the temp party contains the required class or if there is no required class
+        /// </summary>
+        public static bool PartyContainsClass()
+        {
+            bool rv = false;
+            if (SelectedMission.CharClass != null)
+            {
+                rv = _liAdventurers.Find(adv => adv.Combat.CharacterClass.ID == SelectedMission.CharClass.ID) != null;
+            }
+            else { rv = true; }
+
+            return rv;
         }
     }
 
@@ -174,40 +213,56 @@ namespace RiverHollow.Game_Managers
         public int DaysToComplete => _iDaysToComplete;
         int _iDaysFinished;
         public int DaysFinished => _iDaysFinished;
-        int _iDaysToExpiry;
-        public int DaysToExpiry => _iDaysToExpiry;
+        int _iTotalDaysToExpire;
+        public int TotalDaysToExpire => _iTotalDaysToExpire;
         int _iDaysExpired;
         public int DaysExpired => _iDaysExpired;
         int _iMoney;
         public int Money => _iMoney;
-        int _iRecLvl;
-        public int ReqLevel => _iRecLvl;
+        int _iReqLevel;
+        public int ReqLevel => _iReqLevel;
         int _iPartySize;
         public int PartySize => _iPartySize;
+        CharacterClass _charClass;
+        public CharacterClass CharClass => _charClass;
 
         List<Item> _liItems;
         public List<Item> Items => _liItems;
         List<WorldAdventurer> _liAdventurers;
+
+        List<string> _liMissionNames;
       
         public Mission()
         {
+            _liMissionNames = new List<string>(new string[] { "Dungeon Delve", "Rescue Mission", "Defeat the Monster" });
+
             _liItems = new List<Item>();
             _liAdventurers = new List<WorldAdventurer>();
 
             //Temp just for testing
             RHRandom r = new RHRandom();
-            _sName = "test" + r.Next(0, 1000);
-            _iDaysToComplete = 1;
-            _iDaysFinished = 0;
-            _iDaysToExpiry = 1;// r.Next(0, 3);
-            _iMoney = r.Next(100, 500);
-            _iRecLvl = 1;
-            _iPartySize = r.Next(1, 4);
+            _sName = _liMissionNames[r.Next(0, _liMissionNames.Count - 1)];
+            _iDaysToComplete = r.Next(2, 5);
+            _iTotalDaysToExpire = r.Next(2, 7);
+            _iReqLevel = r.Next(1, PlayerManager.Combat.ClassLevel + 1);
+            _iPartySize = r.Next(1, PlayerManager.GetTotalWorkers());
 
+            int missionLvl = _iPartySize * _iReqLevel * _iDaysToComplete;
+
+            _iMoney = missionLvl * 10;
             int total = r.Next(0, 4);
             for (int i = 0; i < total; i++)
             {
                 _liItems.Add(ObjectManager.GetItem(r.Next(9, 17)));
+            }
+
+            _iDaysFinished = 0;
+            _iDaysExpired = 0;
+
+            //Only one fourth of missions have a required class
+            if (r.Next(1, 4) == 1)
+            {
+                _charClass = ObjectManager.GetClassByIndex(r.Next(1, ObjectManager.GetClassCount() - 1));
             }
         }
 
@@ -218,7 +273,7 @@ namespace RiverHollow.Game_Managers
         /// <param name="party"></param>
         public void AssignToMission(List<WorldAdventurer> party)
         {
-            _liAdventurers = party;
+            _liAdventurers.AddRange(party);
             foreach(WorldAdventurer adv in party)
             {
                 adv.AssignToMission(this);
@@ -237,53 +292,88 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        /// <summary>
+        /// Increments the days that have been spent on this Mission
+        /// </summary>
         public void IncreaseDays()
         {
             _iDaysFinished++;
         }
 
+        /// <summary>
+        /// Increases the number of days the mission has been waiting
+        /// to pass before it expires and it removed.
+        /// </summary>
         public void IncreaseExpiry()
         {
             _iDaysExpired++;
         }
 
+        /// <summary>
+        /// Returns if the Mission number of days finished is equal to the 
+        /// days required to complete.
+        /// </summary>
         public bool Completed() { return _iDaysFinished == _iDaysToComplete; }
 
-        //public WorkerData SaveData()
-        //{
-        //    WorkerData workerData = new WorkerData
-        //    {
-        //        workerID = this.AdventurerID,
-        //        advData = Combat.SaveData(),
-        //        mood = this.Mood,
-        //        name = this.Name,
-        //        processedTime = this.ProcessedTime,
-        //        currentItemID = (this._iCurrentlyMaking == null) ? -1 : this._iCurrentlyMaking,
-        //        heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID,
-        //        adventuring = Adventuring
-        //    };
+        public MissionData SaveData()
+        {
+            MissionData data = new MissionData
+            {
+                Name = this.Name,
+                Money = this.Money,
+                DaysExpired = this.DaysExpired,
+                DaysFinished = this.DaysFinished,
+                DaysToComplete = this.DaysToComplete,
+                TotalDaysToExpire = this.TotalDaysToExpire,
+                PartySize = this.PartySize,
+                ReqClassID = (this.CharClass == null ? 0 : this.CharClass.ID),
+                ReqLevel = this.ReqLevel
+            };
 
-        //    return workerData;
-        //}
-        //public void LoadData(WorkerData data)
-        //{
-        //    _iAdventurerID = data.workerID;
-        //    _iMood = data.mood;
-        //    _sName = data.name;
-        //    _dProcessedTime = data.processedTime;
-        //    _iCurrentlyMaking = data.currentItemID;
-        //    _heldItem = ObjectManager.GetItem(data.heldItemID);
-        //    Adventuring = data.adventuring;
+            data.Items = new List<ItemData>();
+            foreach (Item i in this.Items)
+            {
+                ItemData itemData = Item.SaveData(i);
+                data.Items.Add(itemData);
+            }
 
-        //    SetCombat();
-        //    Combat.LoadData(data.advData);
+            data.ListAdventurerIDs = new List<int>();
+            foreach(WorldAdventurer adv in _liAdventurers)
+            {
+                data.ListAdventurerIDs.Add(adv.PersonalID);
+            }
 
-        //    if (_iCurrentlyMaking != null) { _spriteBody.SetCurrentAnimation(WActorBaseAnim.MakeItem); }
-        //    if (Adventuring)
-        //    {
-        //        DrawIt = false;
-        //        PlayerManager.AddToParty(Combat);
-        //    }
-        //}
+            return data;
+        }
+        public void LoadData(MissionData data)
+        {
+            _sName = data.Name;
+            _iMoney = data.Money;
+            _iDaysExpired = data.DaysExpired;
+            _iDaysFinished = data.DaysFinished;
+            _iDaysToComplete = data.DaysToComplete;
+            _iTotalDaysToExpire = data.TotalDaysToExpire;
+            _iPartySize = data.PartySize;
+            _charClass = (data.ReqClassID != 0 ? ObjectManager.GetClassByIndex(data.ReqClassID) : null);
+            _iReqLevel = data.ReqLevel;
+
+            _liItems.Clear();
+            foreach (ItemData id in data.Items)
+            {
+                _liItems.Add(ObjectManager.GetItem(id.itemID, id.num));
+            }
+
+            List<WorldAdventurer> advList = new List<WorldAdventurer>();
+            foreach (int personalID in data.ListAdventurerIDs)
+            {
+                WorldAdventurer adv = PlayerManager.GetWorkerByPersonalID(personalID);
+                if(adv != null)
+                {
+                    advList.Add(adv);
+                }
+            }
+
+            AssignToMission(advList);
+        }
     }
 }
