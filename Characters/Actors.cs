@@ -2613,7 +2613,7 @@ namespace RiverHollow.Actors
         public override void Update(GameTime theGameTime)
         {
             //Finished being hit, determine action
-            if (IsCurrentAnimation(CActorAnimEnum.Hurt) && BodySprite.GetPlayCount() == 1)
+            if (IsCurrentAnimation(CActorAnimEnum.Hurt) && BodySprite.GetPlayCount() >= 1)
             {
                 if (CurrentHP == 0) { Tile.PlayAnimation(CActorAnimEnum.KO); }
                 else if (IsCritical()) { Tile.PlayAnimation(CActorAnimEnum.Critical); }
@@ -3273,7 +3273,7 @@ namespace RiverHollow.Actors
             _spriteBody.AddAnimation(CActorAnimEnum.Cast, frameWidth, frameHeight, (int)cast[0], cast[1], (xCrawl * frameWidth), 0);
             xCrawl += (int)cast[0];
             
-            _spriteBody.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, 1, 0.5f, (xCrawl * frameWidth), 0);
+            _spriteBody.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, 3, 0.2f, (xCrawl * frameWidth), 0);
 
             _spriteBody.SetCurrentAnimation(CActorAnimEnum.Idle);
             _spriteBody.SetScale(CombatManager.CombatScale);
