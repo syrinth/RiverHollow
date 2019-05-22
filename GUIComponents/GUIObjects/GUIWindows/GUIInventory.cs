@@ -12,9 +12,9 @@ using RiverHollow.Game_Managers.GUIComponents.Screens;
 
 namespace RiverHollow.Screens
 {
-    public class Inventory : GUIWindow
+    public class GUIInventory : GUIWindow
     {
-        protected GUIItemBox[,] _displayList;
+        protected GUIItemBox[,] _gItemBoxes;
         private Container _container;
         public Container Container { get => _container; }
         private Villager _giveTo;
@@ -26,14 +26,14 @@ namespace RiverHollow.Screens
         protected int _columns;
         protected int _rows;
 
-        public Inventory(int rows, int columns, int edgeSize)
+        public GUIInventory(int rows, int columns, int edgeSize)
         {
             _container = null;
             _winData = GUIWindow.BrownWin;
             _rows = rows;
             _columns = columns;
 
-            _displayList = new GUIItemBox[rows, columns];
+            _gItemBoxes = new GUIItemBox[rows, columns];
             Width = (_winData.Edge * 2) + (_columns * _iBoxSize) + (_iMargin * (_columns + 1));
             Height = (_winData.Edge * 2) + (_rows * _iBoxSize) + (_iMargin * (_rows + 1));
             Setup();
@@ -41,35 +41,70 @@ namespace RiverHollow.Screens
             _texture = GameContentManager.GetTexture(@"Textures\Dialog");
         }
 
-        public Inventory(Container c, int edgeSize): this(c.Rows, c.Columns, edgeSize)
+        public GUIInventory(Container c, int edgeSize): this(c.Rows, c.Columns, edgeSize)
         {
             _container = c;
         }
 
-        public Inventory(Villager n, int rows, int columns, int edgeSize) : this(rows, columns, edgeSize)
+        public GUIInventory(Villager n, int rows, int columns, int edgeSize) : this(rows, columns, edgeSize)
         {
             _giveTo = n;
         }
 
-        public Inventory(KeyDoor door, int rows, int columns, int edgeSize) : this(rows, columns, edgeSize)
+        public GUIInventory(KeyDoor door, int rows, int columns, int edgeSize) : this(rows, columns, edgeSize)
         {
             _doorToOpen = door;
         }
 
-        public void Setup()
+        public override void Update(GameTime gameTime)
         {
-            CenterOnScreen();
-            _drawRect = new Rectangle((int)Position().X, (int)Position().Y, Width, Height);
+            for (int i = 0; i < _rows; i++)
+            {
+                for (int j = 0; j < _columns; j++)
+                {
+                    if (_container == null)
+                    {
+                        _gItemBoxes[i, j].SetItem(InventoryManager.PlayerInventory[i, j]);
+                    }
+                    else
+                    {
+                        _gItemBoxes[i, j].SetItem(_container.Inventory[i, j]);
+                    }
+                }
+            }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
 
             for (int i = 0; i < _rows; i++)
             {
                 for (int j = 0; j < _columns; j++)
                 {
-                    _displayList[i, j] = new GUIItemBox(new Rectangle(288, 32, 32, 32), _iBoxSize, _iBoxSize, i, j, @"Textures\Dialog", null);
+                    //float alpha = 1.0f;// _vSelectedItem == new Vector2(i, j) ? 0.5f : 1;
+                    _gItemBoxes[i, j].Draw(spriteBatch);//, alpha);
+                }
+            }
+        }
 
-                    if (i == 0 && j == 0) { _displayList[i, j].AnchorToInnerSide(this, SideEnum.TopLeft, _iMargin); }
-                    else if (j == 0) { _displayList[i, j].AnchorAndAlignToObject(_displayList[i - 1, j], SideEnum.Bottom, SideEnum.Left, _iMargin); }
-                    else { _displayList[i, j].AnchorAndAlignToObject(_displayList[i, j - 1], SideEnum.Right, SideEnum.Bottom, _iMargin); }
+        /// <summary>
+        /// Centers the gui object on the screen, then initializes
+        /// the ItemBox array and positions them appropriately.
+        /// </summary>
+        public void Setup()
+        {
+            CenterOnScreen();
+
+            for (int i = 0; i < _rows; i++)
+            {
+                for (int j = 0; j < _columns; j++)
+                {
+                    _gItemBoxes[i, j] = new GUIItemBox(new Rectangle(288, 32, 32, 32), _iBoxSize, _iBoxSize, i, j, @"Textures\Dialog", null);
+
+                    if (i == 0 && j == 0) { _gItemBoxes[i, j].AnchorToInnerSide(this, SideEnum.TopLeft, _iMargin); }
+                    else if (j == 0) { _gItemBoxes[i, j].AnchorAndAlignToObject(_gItemBoxes[i - 1, j], SideEnum.Bottom, SideEnum.Left, _iMargin); }
+                    else { _gItemBoxes[i, j].AnchorAndAlignToObject(_gItemBoxes[i, j - 1], SideEnum.Right, SideEnum.Bottom, _iMargin); }
                 }
             }
         }
@@ -78,26 +113,26 @@ namespace RiverHollow.Screens
         {
             bool rv = false;
 
-            if (GraphicCursor.HeldItem != null)
+            if (GameManager.HeldItem != null)
             {
                 Item toSwitch = IsItemThere(mouse);
                 if (toSwitch != null)
                 {
-                    if (GraphicCursor.HeldItem.ItemID == toSwitch.ItemID)
+                    if (GameManager.HeldItem.ItemID == toSwitch.ItemID)
                     {
                         toSwitch.Add(1);
-                        GraphicCursor.DropItem();
+                        GameManager.DropItem();
                     }
                     else
                     {
-                        Item temp = GraphicCursor.HeldItem;
-                        GraphicCursor.GrabItem(TakeItem(mouse));
+                        Item temp = GameManager.HeldItem;
+                        GameManager.GrabItem(TakeItem(mouse));
                         GiveItem(temp, true);
                     }
                 }
-                else if (GiveItem(GraphicCursor.HeldItem))
+                else if (GiveItem(GameManager.HeldItem))
                 {
-                    GraphicCursor.DropItem();
+                    GameManager.DropItem();
                     rv = true;
                 }
             }
@@ -119,7 +154,7 @@ namespace RiverHollow.Screens
                 {
                     rv = true;
                     bool takeHalf = InputManager.IsKeyHeld(Keys.LeftShift) || InputManager.IsKeyHeld(Keys.RightShift);
-                    rv = GraphicCursor.GrabItem(TakeItem(mouse, takeHalf));
+                    rv = GameManager.GrabItem(TakeItem(mouse, takeHalf));
                     
                     if (onlyInv)
                     {
@@ -127,35 +162,59 @@ namespace RiverHollow.Screens
                     }
                 }
             }
+
+            //Close any hover windows that may be open,otherwise they'll be open
+            //on an empty object
+            if (rv) { GUIManager.CloseHoverWindow(); }
+
+
             return rv;
         }
 
+        /// <summary>
+        /// Handler for right clicking the GUI Inventory.
+        /// </summary>
+        /// <param name="mouse"></param>
+        /// <returns></returns>
         public override bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = false;
 
-            if (GraphicCursor.HeldItem == null)
+            //If we're not holding anything
+            if (GameManager.HeldItem == null)
             {
+                //Retrieve the item from the GUIBox we clicked on
                 GUIItemBox i = GetItemBox(mouse);
                 if (i != null && i.Item != null)
                 {
-                    if (InventoryManager.PublicContainer == null)
+                    //If the only inventory we are working with is the player's inventory,
+                    //pass the handler to the GUIItemBox ad have it handle the item click
+                    if (!InventoryManager.ManagingExtraInventory())
                     {
                         rv = i.ProcessRightButtonClick(mouse);
                     }
-                    else
+                    else  //We are managing an additional Inventory
                     {
+                        //Ensure that there is a GUIBox where we clicked, and the box has an Item
                         if (i != null && i.Item != null)
                         {
-                            GraphicCursor.GrabItem(TakeItem(mouse));
+                            int row = 0;
+                            int col = 0;
 
-                            if (InventoryManager.PublicContainer != null)
+                            //Use _container != null to get the statusof the inverse of whichever we are clicking on
+                            if (InventoryManager.HasSpaceInInventory(i.Item.ItemID, i.Item.Number, ref row, ref col, _container != null))
                             {
-                                if (_container != null) { InventoryManager.AddItemToInventory(i.Item); }
-                                else { InventoryManager.AddItemToInventory(i.Item, InventoryManager.PublicContainer); }
+                                GameManager.GrabItem(TakeItem(mouse));
+                                //If the GUI represents a Container, move the Item to the PlayerInventory
+                                //else, move the Item to the Container's inventory
+                                InventoryManager.AddItemToInventorySpot(i.Item, row, col, _container != null);
+                                GameManager.DropItem();
 
-                                GraphicCursor.DropItem();
+                               //Close any hover windows that may be open,otherwise they'll be open on an empty object
+                               GUIManager.CloseHoverWindow(); 
+
                             }
+
                             rv = true;
                         }
                     }
@@ -165,11 +224,16 @@ namespace RiverHollow.Screens
             return rv;
         }
 
+        /// <summary>
+        /// Triggers a ProcessHover for each GUIItemBox
+        /// </summary>
+        /// <param name="mouse"></param>
+        /// <returns></returns>
         public virtual bool ProcessHover(Point mouse)
         {
             bool rv = false;
 
-            foreach(GUIItemBox i in _displayList)
+            foreach(GUIItemBox i in _gItemBoxes)
             {
                 if (i.ProcessHover(mouse))
                 {
@@ -186,7 +250,7 @@ namespace RiverHollow.Screens
             {
                 for (int j = 0; j < _columns; j++)
                 {
-                    if (_displayList[i, j].Contains(mouse) && _displayList[i, j].Item != null)
+                    if (_gItemBoxes[i, j].Contains(mouse) && _gItemBoxes[i, j].Item != null)
                     {
                         rv = new Vector2(i, j);
                         goto Exit;
@@ -201,7 +265,7 @@ namespace RiverHollow.Screens
         {
             GUIItemBox rv = null;
 
-            foreach (GUIItemBox box in _displayList)
+            foreach (GUIItemBox box in _gItemBoxes)
             {
                 if (box.Contains(mouse) && box.Item != null)
                 {
@@ -217,7 +281,7 @@ namespace RiverHollow.Screens
         {
             Item rv = null;
 
-            foreach(GUIItemBox box in _displayList)
+            foreach(GUIItemBox box in _gItemBoxes)
             {
                 if(box.Contains(mouse) && box.Item != null)
                 {
@@ -233,7 +297,7 @@ namespace RiverHollow.Screens
         {
             Item rv = null;
 
-            foreach (GUIItemBox box in _displayList)
+            foreach (GUIItemBox box in _gItemBoxes)
             {
                 if (box.Contains(mouse) && box.Item != null)
                 {
@@ -252,14 +316,7 @@ namespace RiverHollow.Screens
 
                     if (!takeHalf)
                     {
-                        if (_container == null)
-                        {
-                            InventoryManager.RemoveItemFromInventoryLocation(box);
-                        }
-                        else
-                        {
-                            InventoryManager.RemoveItemFromInventoryLocation(box, _container);
-                        }
+                        InventoryManager.RemoveItemFromInventorySpot(box.Row, box.Col, _container == null);
                     }
 
                     break;
@@ -286,15 +343,9 @@ namespace RiverHollow.Screens
                     {
                         for (int j = 0; j < _columns; j++)
                         {
-                            if (_displayList[i, j].Contains(mouse) && (Force || _displayList[i, j].Item == null))
+                            if (_gItemBoxes[i, j].Contains(mouse) && (Force || _gItemBoxes[i, j].Item == null))
                             {
-                                if (_container == null)
-                                {
-                                    rv = InventoryManager.AddItemToInventorySpot(item, i, j);
-                                }
-                                else{
-                                    rv = InventoryManager.AddItemToInventorySpot(item, i, j, _container);
-                                }
+                                rv = InventoryManager.AddItemToInventorySpot(item, i, j, _container == null);
                                 goto Exit;
                             }
                         }
@@ -304,38 +355,6 @@ namespace RiverHollow.Screens
 Exit:
 
             return rv;
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            for (int i = 0; i < _rows; i++)
-            {
-                for (int j = 0; j < _columns; j++)
-                {
-                    if (_container == null)
-                    {
-                        _displayList[i, j].SetItem(InventoryManager.PlayerInventory[i, j]);
-                    }
-                    else
-                    {
-                        _displayList[i, j].SetItem(_container.Inventory[i, j]);
-                    }
-                }
-            }
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-
-            for (int i = 0; i < _rows; i++)
-            {
-                for (int j = 0; j < _columns; j++)
-                {
-                    //float alpha = 1.0f;// _vSelectedItem == new Vector2(i, j) ? 0.5f : 1;
-                    _displayList[i, j].Draw(spriteBatch);//, alpha);
-                }
-            }
         }
     }
 }

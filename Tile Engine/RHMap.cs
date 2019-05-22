@@ -334,13 +334,15 @@ namespace RiverHollow.Tile_Engine
                 else if (obj.Name.Equals("Chest"))
                 {
                     Container c = (Container)ObjectManager.GetWorldObject(190);
+                    InventoryManager.InitContainerInventory(c);
                     c.MapPosition = obj.Position;
                     PlacePlayerObject(c);
                     string[] holdSplit = obj.Properties["Holding"].Split('/');
                     foreach (string s in holdSplit)
                     {
-                        InventoryManager.AddNewItemToInventory(int.Parse(s), c);
+                        InventoryManager.AddToInventory(int.Parse(s), 1, false);
                     }
+                    InventoryManager.ClearExtraInventory();
                 }
                 else if (obj.Name.Equals("Spirit"))
                 {
@@ -597,15 +599,17 @@ namespace RiverHollow.Tile_Engine
             List<Item> removedList = new List<Item>();
             for(int i = 0; i < _liItems.Count; i++)
             {
+                int row = 0;
+                int col = 0;
                 Item it = _liItems[i];
-                if (InventoryManager.HasSpaceInInventory(it.ItemID, it.Number))
+                if (InventoryManager.HasSpaceInInventory(it.ItemID, it.Number, ref row, ref col, true))
                 {
                     if (it.OnTheMap && it.AutoPickup)
                     {
                         if (it.FinishedMoving() && it.CollisionBox.Intersects(player.CollisionBox))
                         {
                             removedList.Add(it);
-                            InventoryManager.AddNewItemToInventory(it.ItemID, it.Number);
+                            InventoryManager.AddItemToInventorySpot(ObjectManager.GetItem(it.ItemID, it.Number), row, col);
                         }
                         else if (PlayerManager.PlayerInRange(it.CollisionBox.Center, 80))
                         {
@@ -1054,7 +1058,7 @@ namespace RiverHollow.Tile_Engine
                     Item it = _liItems[i];
                     if (it.ManualPickup && it.CollisionBox.Contains(GraphicCursor.GetTranslatedMouseLocation()))
                     {
-                        if (InventoryManager.AddItemToInventory(it))
+                        if (InventoryManager.AddToInventory(it))
                         {
                             removedList.Add(it);
                             break;
@@ -1093,12 +1097,12 @@ namespace RiverHollow.Tile_Engine
                 {
                     if (Constructing() || MovingBuildings())
                     {
-                        if (GraphicCursor.HeldBuilding != null)
+                        if (GameManager.HeldBuilding != null)
                         {
-                            if (AddBuilding(GraphicCursor.HeldBuilding))
+                            if (AddBuilding(GameManager.HeldBuilding))
                             {
-                                GUIManager.SetScreen(new NamingScreen(GraphicCursor.HeldBuilding));
-                                GraphicCursor.DropBuilding();
+                                GUIManager.SetScreen(new NamingScreen(GameManager.HeldBuilding));
+                                GameManager.DropBuilding();
 
                                 PlayerManager.TakeMoney(gmMerchandise.MoneyCost);
                                 foreach (KeyValuePair<int, int> kvp in gmMerchandise.RequiredItems)
@@ -1111,7 +1115,7 @@ namespace RiverHollow.Tile_Engine
                                 rv = true;
                             }
                         }
-                        else if (GraphicCursor.HeldBuilding == null)
+                        else if (GameManager.HeldBuilding == null)
                         {
                             PickUpBuilding(mouseLocation);
                             rv = true;
@@ -1170,7 +1174,7 @@ namespace RiverHollow.Tile_Engine
                             }
                             else if (obj.IsForageable())
                             {
-                                InventoryManager.AddItemToInventory(ObjectManager.GetItem(((Forageable)obj).ForageItem));
+                                InventoryManager.AddToInventory(ObjectManager.GetItem(((Forageable)obj).ForageItem));
                                 MapManager.RemoveWorldObject(obj);
                                 obj.RemoveSelfFromTiles();
                             }
@@ -1215,11 +1219,13 @@ namespace RiverHollow.Tile_Engine
                         {
                             if (c.IsWorldAdventurer())
                             {
+                                int row = 0;
+                                int col = 0;
                                 WorldAdventurer w = (WorldAdventurer)c;
                                 if (w.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(w.CharCenter) &&
-                                    InventoryManager.HasSpaceInInventory(w.WhatAreYouHolding()))
+                                    InventoryManager.HasSpaceInInventory(w.WhatAreYouHolding(), 1, ref row, ref col, true))
                                 {
-                                    InventoryManager.AddNewItemToInventory(w.TakeItem());
+                                    InventoryManager.AddItemToInventorySpot(ObjectManager.GetItem(w.TakeItem()), row, col);
                                     rv = true;
                                 }
                             }
@@ -1251,7 +1257,7 @@ namespace RiverHollow.Tile_Engine
 
             if (Scrying())
             {
-                Building building = GraphicCursor.HeldBuilding;
+                Building building = GameManager.HeldBuilding;
                 _liTestTiles = new List<RHTile>();
                 if (building != null)
                 {
@@ -1262,7 +1268,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     if (!b.IsManor)
                     {
-                        if (b.SelectionBox.Contains(mouseLocation) && GraphicCursor.HeldBuilding == null)
+                        if (b.SelectionBox.Contains(mouseLocation) && GameManager.HeldBuilding == null)
                         {
                             b._selected = true;
                         }
@@ -1424,7 +1430,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     if (b.Contains(mouseLocation))
                     {
-                        GraphicCursor.PickUpBuilding(b);
+                        GameManager.PickUpBuilding(b);
                         b.RemoveSelfFromTiles();
                         _dictEntrance.Remove(b.PersonalID.ToString());
                         break;

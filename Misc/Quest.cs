@@ -223,7 +223,7 @@ namespace RiverHollow.Misc
             text = QuestGiver.GetDialogEntry("Quest"+_iQuestID+"End");
             foreach (Item i in LiRewardItems)
             {
-                InventoryManager.AddItemToInventory(i);
+                InventoryManager.AddToInventory(i);
             }
             PlayerManager.AddMoney(_iRewardMoney);
 

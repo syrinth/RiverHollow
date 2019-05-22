@@ -1192,10 +1192,10 @@ namespace RiverHollow.Actors
                         Married = true;
                         text = GetDialogEntry("MarriageYes");
                     }
-                    else
+                    else   //Marriage refused, readd the item
                     {
                         item.Add(1);
-                        InventoryManager.AddItemToInventory(item);
+                        InventoryManager.AddToInventory(item);
                         text = GetDialogEntry("MarriageNo");
                     }
                 }
@@ -1521,11 +1521,17 @@ namespace RiverHollow.Actors
             return rv;
         }
 
+        /// <summary>
+        /// Creates the worers daily item in the inventory of the building's container.
+        /// Need to set the InventoryManager to look at it, then clear it.
+        /// </summary>
         public void MakeDailyItem()
         {
             if (_iDailyItemID != -1)
             {
-                InventoryManager.AddNewItemToInventory(_iDailyItemID, _building.BuildingChest);
+                InventoryManager.InitContainerInventory(_building.BuildingChest);
+                InventoryManager.AddToInventory(_iDailyItemID, 1, false);
+                InventoryManager.ClearExtraInventory();
             }
         }
 
@@ -1950,7 +1956,7 @@ namespace RiverHollow.Actors
                 string[] loot = GameContentManager.DiSpiritLoot[_sType].Split('/');
                 RHRandom r = new RHRandom();
                 int arrayID = r.Next(0, loot.Length - 1);
-                InventoryManager.AddNewItemToInventory(int.Parse(loot[arrayID]));
+                InventoryManager.AddToInventory(int.Parse(loot[arrayID]));
 
                 _sText = Util.ProcessText(_sText.Replace("*", "*" + loot[arrayID] + "*"));
                 GUIManager.OpenTextWindow(_sText, this);
@@ -2403,6 +2409,21 @@ namespace RiverHollow.Actors
         public void Stun()
         {
             _dStun = 5.0f;
+        }
+
+        /// <summary>
+        /// Gets all the items that the Monsters drop. Each monster gives one item
+        /// </summary>
+        /// <returns>The list of items to be given to the player</returns>
+        public List<Item> GetLoot()
+        {
+            List<Item> items = new List<Item>();
+
+            foreach(Monster m in _liMonsters)
+            {
+                items.Add(m.GetLoot());
+            }
+            return items;
         }
 
         private class FieldOfVision
@@ -3099,6 +3120,7 @@ namespace RiverHollow.Actors
         int _xp;
         public int XP { get => _xp; }
         protected Vector2 _moveTo = Vector2.Zero;
+        int _iLootID;
 
         public override int Attack => 20 + (_iRating * 10);
 
@@ -3106,13 +3128,13 @@ namespace RiverHollow.Actors
 
         #endregion
 
-        public Monster(int id, string[] stringData)
+        public Monster(int id, Dictionary<string, string> data)
         {
             _actorType = ActorEnum.Monster;
-            ImportBasics(stringData, id);
+            ImportBasics(data, id);
         }
 
-        protected void ImportBasics(string[] stringData, int id)
+        protected void ImportBasics(Dictionary<string, string> data, int id)
         {
             _id = id;
             _sName = GameContentManager.GetGameText("Monster " + _id);
@@ -3123,76 +3145,74 @@ namespace RiverHollow.Actors
             float[] hurt = new float[2] { 1, 0.5f };
             float[] cast = new float[2] { 2, 0.5f };
 
-            foreach (string s in stringData)
+            texture = data["Texture"];
+
+            _iRating = int.Parse(data["Lvl"]);
+            _xp = _iRating * 10;
+            _statStr = 1 + _iRating;
+            _statDef = 8 + (_iRating * 3);
+            _statVit = 2 * _iRating + 10;
+            _statMag = 2 * _iRating + 2;
+            _statRes = 2 * _iRating + 10;
+            _statSpd = 10;
+
+            foreach (string ability in data["Ability"].Split('-'))
             {
-                string[] tagType = s.Split(':');
-                if (tagType[0].Equals("Texture"))
+                AbilityList.Add(ObjectManager.GetActionByIndex(int.Parse(ability)));
+            }
+
+            if (data.ContainsKey("Trait"))
+            {
+                HandleTrait(GameContentManager.GetMonsterTraitData(data["Trait"]));
+            }
+
+            if (data.ContainsKey("Resist"))
+            {
+                foreach (string elem in data["Resist"].Split('-'))
                 {
-                    texture = tagType[1];
+                    _diElementalAlignment[Util.ParseEnum<ElementEnum>(elem)] = ElementAlignment.Resists;
                 }
-                else if (tagType[0].Equals("Lvl"))
+            }
+
+            if (data.ContainsKey("Vuln"))
+            {
+                foreach (string elem in data["Vuln"].Split('-'))
                 {
-                    _iRating = int.Parse(tagType[1]);
-                    _xp = _iRating * 10;
-                    _statStr = 1 + _iRating;
-                    _statDef = 8 + (_iRating * 3);
-                    _statVit = 2 * _iRating + 10;
-                    _statMag = 2 * _iRating + 2;
-                    _statRes = 2 * _iRating + 10;
-                    _statSpd = 10;
+                    _diElementalAlignment[Util.ParseEnum<ElementEnum>(elem)] = ElementAlignment.Vulnerable;
                 }
-                else if (tagType[0].Equals("Ability"))
-                {
-                    string[] split = tagType[1].Split('-');
-                    foreach (string ability in split)
-                    {
-                        AbilityList.Add(ObjectManager.GetActionByIndex(int.Parse(ability)));
-                    }
-                }
-                else if (tagType[0].Equals("Trait"))
-                {
-                    HandleTrait(GameContentManager.GetMonsterTraitData(tagType[1]));
-                }
-                else if (tagType[0].Equals("Resist"))
-                {
-                    string[] split = tagType[1].Split('-');
-                    foreach (string elem in split)
-                    {
-                        _diElementalAlignment[Util.ParseEnum<ElementEnum>(elem)] = ElementAlignment.Resists;
-                    }
-                }
-                else if (tagType[0].Equals("Vuln"))
-                {
-                    string[] split = tagType[1].Split('-');
-                    foreach (string elem in split)
-                    {
-                        _diElementalAlignment[Util.ParseEnum<ElementEnum>(elem)] = ElementAlignment.Vulnerable;
-                    }
-                }
-                else if (tagType[0].Equals("Idle"))
-                {
-                    string[] split = tagType[1].Split('-');
-                    idle[0] = float.Parse(split[0]);
-                    idle[1] = float.Parse(split[1]);
-                }
-                else if (tagType[0].Equals("Attack"))
-                {
-                    string[] split = tagType[1].Split('-');
-                    attack[0] = float.Parse(split[0]);
-                    attack[1] = float.Parse(split[1]);
-                }
-                else if (tagType[0].Equals("Hurt"))
-                {
-                    string[] split = tagType[1].Split('-');
-                    hurt[0] = float.Parse(split[0]);
-                    hurt[1] = float.Parse(split[1]);
-                }
-                else if (tagType[0].Equals("Cast"))
-                {
-                    string[] split = tagType[1].Split('-');
-                    cast[0] = float.Parse(split[0]);
-                    cast[1] = float.Parse(split[1]);
-                }
+            }
+
+            if (data.ContainsKey("Idle"))
+            {
+                string[] split = data["Idle"].Split('-');
+                idle[0] = float.Parse(split[0]);
+                idle[1] = float.Parse(split[1]);
+            }
+
+            if (data.ContainsKey("Attack"))
+            {
+                string[] split = data["Attack"].Split('-');
+                attack[0] = float.Parse(split[0]);
+                attack[1] = float.Parse(split[1]);
+            }
+
+            if (data.ContainsKey("Hurt"))
+            {
+                string[] split = data["Hurt"].Split('-');
+                hurt[0] = float.Parse(split[0]);
+                hurt[1] = float.Parse(split[1]);
+            }
+
+            if (data.ContainsKey("Cast"))
+            {
+                string[] split = data["Cast"].Split('-');
+                cast[0] = float.Parse(split[0]);
+                cast[1] = float.Parse(split[1]);
+            }
+
+            if (data.ContainsKey("Loot"))
+            {
+                _iLootID = int.Parse(data["Loot"]);
             }
 
             LoadContent(_sMonsterFolder + texture, idle, attack, hurt, cast);
@@ -3279,6 +3299,11 @@ namespace RiverHollow.Actors
             _spriteBody.SetScale(CombatManager.CombatScale);
             _width = _spriteBody.Width;
             _height = _spriteBody.Height;
+        }
+
+        public Item GetLoot()
+        {
+            return ObjectManager.GetItem(_iLootID);
         }
     }
 

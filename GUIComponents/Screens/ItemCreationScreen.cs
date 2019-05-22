@@ -23,7 +23,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
 
         Machine _craftMachine;
         WorldAdventurer _craftAdventurer;
-        private Inventory _inventory;
+        private GUIInventory _inventory;
         private GUIWindow _creationWindow;
         protected GUIItemBox[,] _liDisplay;
 
@@ -73,7 +73,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             _rows = (canMake.Count < _iMaxColumns) ? 1 : (int)(Math.Round(((double)(canMake.Count + _columns - 1) / (double)_columns)));
 
             _liDisplay = new GUIItemBox[_columns, _rows];
-            _inventory = new Inventory(4, InventoryManager.maxItemColumns, 32);
+            _inventory = new GUIInventory(4, InventoryManager.maxItemColumns, 32);
             _inventory.Setup();
 
             int creationWidth = (GUIWindow.RedWin.Edge * 2) + (_columns * _iBoxSize) + (_iMargin * (_columns + 1));
@@ -105,6 +105,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                     i = 0;
                     j++;
                 }
+
+                _creationWindow.AddControl(g);
             }
         }
 
@@ -121,7 +123,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                         bool create = true;
                         foreach(KeyValuePair<int, int> kvp in gIB.Item.GetIngredients())
                         {
-                            if(!InventoryManager.HasItemInInventory(kvp.Key, kvp.Value))
+                            if(!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
                             {
                                 create = false;
                             }
@@ -142,7 +144,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                                     GameManager.BackToMain();
                                 }
                                 else {
-                                    InventoryManager.AddNewItemToInventory(gIB.Item.ItemID);
+                                    InventoryManager.AddToInventory(gIB.Item.ItemID);
                                 }
                             }
                         }
@@ -180,19 +182,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             rv = rv || _inventory.ProcessHover(mouse);
 
             return rv;
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-
-            foreach (GUIItemBox gIB in _liDisplay)
-            {
-                if (gIB != null)
-                {
-                    gIB.Draw(spriteBatch);
-                }
-            }
         }
 
         public override bool IsItemCreationScreen() { return true; }

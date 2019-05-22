@@ -21,12 +21,12 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<int, Dictionary<string, string>> _diVillagerData;
 
         private static Dictionary<int, string> _diBuildings;
-        private static Dictionary<int, Dictionary<string, string>> _diItems;
+        private static Dictionary<int, Dictionary<string, string>> _diItemData;
         private static Dictionary<int, string> _diWorkers;
         private static Dictionary<int, Dictionary<string, string>> _diWorldObjects;
 
         private static Dictionary<int, string> _diMobs;
-        private static Dictionary<int, string> _diMonsters;
+        private static Dictionary<int, Dictionary<string, string>> _diMonsterData;
         private static Dictionary<int, Villager> _diNPCs;
         public static Dictionary<int, Villager> DiNPC { get => _diNPCs; }
         private static Dictionary<int, Dictionary<string, string>> _diActions;
@@ -41,16 +41,18 @@ namespace RiverHollow.Game_Managers
         public static void LoadContent(ContentManager Content)
         {
             _diVillagerData = new Dictionary<int, Dictionary<string, string>>();
-            _diItems = new Dictionary<int, Dictionary<string, string>>();
+            _diItemData = new Dictionary<int, Dictionary<string, string>>();
             _diActions = new Dictionary<int, Dictionary<string, string>>();
             _diWorldObjects = new Dictionary<int, Dictionary<string, string>>();
+            _diMonsterData = new Dictionary<int, Dictionary<string, string>>();
             _diBuildings = Content.Load<Dictionary<int, string>>(@"Data\Buildings");
             _diWorkers = Content.Load<Dictionary<int, string>>(@"Data\Workers");
 
-            AddToDictionary(_diItems, @"Data\ItemData", Content);
+            AddToDictionary(_diItemData, @"Data\ItemData", Content);
             AddToDictionary(_diWorldObjects, @"Data\WorldObjects", Content);
             AddToDictionary(_diActions, @"Data\CombatActions", Content);
             AddToDictionary(_diVillagerData, @"Data\NPCData\Characters", Content);
+            AddToDictionary(_diMonsterData, @"Data\Monsters", Content);
 
             _liForest = new List<int>();
             _liMountain = new List<int>();
@@ -59,7 +61,6 @@ namespace RiverHollow.Game_Managers
             _diSchedule = new Dictionary<string, Dictionary<string, string>>();
 
             _diMobs = Content.Load<Dictionary<int, string>>(@"Data\Mobs");
-            _diMonsters = Content.Load<Dictionary<int, string>>(@"Data\Monsters");
             _diBuffs = Content.Load<Dictionary<int, string>>(@"Data\Buffs");
             _diClasses = Content.Load<Dictionary<int, string>>(@"Data\Classes");
 
@@ -147,9 +148,9 @@ namespace RiverHollow.Game_Managers
 
         public static Item GetItem(int id, int num)
         {
-            if (id != -1)
+            if (id != -1 && _diItemData.ContainsKey(id))
             {
-                Dictionary<string, string> liData = _diItems[id];
+                Dictionary<string, string> liData = _diItemData[id];
                 switch (liData["Type"])
                 {
                     case "Resource":
@@ -183,7 +184,7 @@ namespace RiverHollow.Game_Managers
         }
         public static WorldObject GetWorldObject(int id, Vector2 pos)
         {
-            if (id != -1)
+            if (id != -1 && _diWorldObjects.ContainsKey(id))
             {
                 Dictionary<string, string> liData = _diWorldObjects[id];
                 switch (liData["Type"])
@@ -245,11 +246,10 @@ namespace RiverHollow.Game_Managers
         public static Monster GetMonsterByIndex(int id)
         {
             Monster m = null;
-            if (_diMonsters.ContainsKey(id))
+
+            if (_diMonsterData.ContainsKey(id))
             {
-                string _itemData = _diMonsters[id];
-                string[] _itemDataVals = Util.FindTags(_itemData);
-                m = new Monster(id, _itemDataVals);
+                m = new Monster(id, _diMonsterData[id]);
             }
             return m;
         }

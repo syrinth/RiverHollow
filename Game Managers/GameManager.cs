@@ -139,6 +139,53 @@ namespace RiverHollow.Game_Managers
             HideMiniInventory = data.hideMiniInventory;
         }
 
+        #region Held Objects
+        static Item _heldItem;
+        public static Item HeldItem { get => _heldItem; }
+        static Building _heldBuilding;
+        public static Building HeldBuilding { get => _heldBuilding; }
+
+        /// <summary>
+        /// Grabs a building to be placed and/or moved.
+        /// </summary>
+        /// <returns>True if the building exists</returns>
+        public static bool PickUpBuilding(Building bldg)
+        {
+            bool rv = false;
+            if (bldg != null)
+            {
+                _heldBuilding = bldg;
+                rv = true;
+            }
+
+            return rv;
+        }
+        public static void DropBuilding()
+        {
+            _heldBuilding = null;
+        }
+
+        /// <summary>
+        /// Grabs an item to be moved around inventory
+        /// </summary>
+        /// <returns>True if the item exists</returns>
+        public static bool GrabItem(Item item)
+        {
+            bool rv = false;
+            if (item != null)
+            {
+                _heldItem = item;
+                rv = true;
+            }
+
+            return rv;
+        }
+        public static void DropItem()
+        {
+            _heldItem = null;
+        }
+        #endregion
+
         #region States
         private static bool _scrying;
         private enum StateEnum { Paused, Running, Information }

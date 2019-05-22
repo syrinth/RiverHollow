@@ -193,19 +193,19 @@ namespace RiverHollow.WorldObjects
         /// Increments the number of the item by the given value.
         /// If it would exceed the max stack, make a new stack if possible.
         /// </summary>
-        /// <param name="x"></param>
-        public void Add(int x)
+        /// <param name="number"></param>
+        public void Add(int number, bool playerInventory = true)
         {
-            if (_iNum + x <= 999)
+            if (_iNum + number <= 999)
             {
-                _iNum += x;
+                _iNum += number;
             }
             else
             {
-                int leftOver = _iNum + x - 999;
+                int leftOver = _iNum + number - 999;
                 _iNum = 999;
 
-                InventoryManager.AddNewItemToInventory(_iItemID, leftOver);
+                InventoryManager.AddToInventory(_iItemID, leftOver, playerInventory);
             }
         }
         public bool Remove(int x)
@@ -217,7 +217,7 @@ namespace RiverHollow.WorldObjects
                 _iNum -= x;
                 if (_iNum == 0)
                 {
-                    if(GraphicCursor.HeldItem == this) { GraphicCursor.DropItem(); }
+                    if(GameManager.HeldItem == this) { GameManager.DropItem(); }
                     InventoryManager.RemoveItemFromInventory(this);
                 }
             }

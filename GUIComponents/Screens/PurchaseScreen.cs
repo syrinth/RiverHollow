@@ -95,7 +95,7 @@ namespace RiverHollow.GUIComponents.Screens
                 if (wB.Contains(mouse) && PlayerManager.Money >= wB.Cost)
                 {
                     PlayerManager.TakeMoney(wB.Cost);
-                    InventoryManager.AddItemToInventory(new Item(wB.itemForSale));
+                    InventoryManager.AddToInventory(new Item(wB.itemForSale));
 
                     rv = true;
                     break;
@@ -210,7 +210,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 foreach (KeyValuePair<int, int> kvp in _liMerchandise[_iCurrIndex].RequiredItems)
                 {
-                    if (!InventoryManager.HasItemInInventory(kvp.Key, kvp.Value))
+                    if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
                     {
                         create = false;
                     }
@@ -224,7 +224,7 @@ namespace RiverHollow.GUIComponents.Screens
                 if (gmMerchandise.MerchType == Merchandise.ItemType.Building)
                 {
                     RiverHollow.HomeMapPlacement();
-                    GraphicCursor.PickUpBuilding(ObjectManager.GetBuilding(gmMerchandise.MerchID));
+                    GameManager.PickUpBuilding(ObjectManager.GetBuilding(gmMerchandise.MerchID));
                     ConstructBuilding();
                 }
                 else
@@ -557,7 +557,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public override void Update(GameTime gameTime)
         {
-            if (!InventoryManager.HasSpaceInInventory(itemForSale.ItemID) || PlayerManager.Money < Cost)
+            if (!InventoryManager.HasSpaceInInventory(itemForSale.ItemID, itemForSale.Number) || PlayerManager.Money < Cost)
             {
                 _gMoney.SetColor(Color.Red);
             }

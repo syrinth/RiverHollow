@@ -12,31 +12,31 @@ namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class InventoryScreen : GUIScreen
     {
-        private Inventory _inventory;
-        private Inventory _container;
+        private GUIInventory _inventory;
+        private GUIInventory _container;
         private SpriteFont _font;
 
         public InventoryScreen()
         {
             _font = GameContentManager.GetFont(@"Fonts\Font");
-            _inventory = new Inventory(4, InventoryManager.maxItemColumns, 32);
+            _inventory = new GUIInventory(4, InventoryManager.maxItemColumns, 32);
             Controls.Add(_inventory);
         }
 
         public InventoryScreen(CharacterDetailWindow c)
         {
             _font = GameContentManager.GetFont(@"Fonts\Font");
-            _inventory = new Inventory(4, InventoryManager.maxItemColumns, 32);
+            _inventory = new GUIInventory(4, InventoryManager.maxItemColumns, 32);
             Controls.Add(_inventory);
-            InventoryManager.PublicContainer = null;
+            InventoryManager.ClearExtraInventory();
         }
 
         public InventoryScreen(Container c)
         {
             Vector2 centerPoint = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
             _font = GameContentManager.GetFont(@"Fonts\Font");
-            _container = new Inventory(c, 32);
-            _inventory = new Inventory(4, InventoryManager.maxItemColumns, 32);
+            _container = new GUIInventory(c, 32);
+            _inventory = new GUIInventory(4, InventoryManager.maxItemColumns, 32);
 
             Vector2 contWidthHeight = new Vector2(_container.MidWidth(), _container.InnerRectangle().Height);
             Vector2 mainWidthHeight = new Vector2(_inventory.MidWidth(), _inventory.InnerRectangle().Height);
@@ -50,31 +50,31 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             Controls.Add(_inventory);
             Controls.Add(_container);
-            InventoryManager.PublicContainer = _container.Container;
+            InventoryManager.InitContainerInventory(c);
         }
 
         public InventoryScreen(Villager n)
         {
             _font = GameContentManager.GetFont(@"Fonts\Font");
-            _inventory = new Inventory(n, 4, InventoryManager.maxItemColumns, 32);
+            _inventory = new GUIInventory(n, 4, InventoryManager.maxItemColumns, 32);
 
             Vector2 mainWidthHeight = new Vector2(_inventory.InnerRectangle().Width, _inventory.InnerRectangle().Height);
             _inventory.Setup();
 
             Controls.Add(_inventory);
-            InventoryManager.PublicContainer = null;
+            InventoryManager.ClearExtraInventory();
         }
 
         public InventoryScreen(KeyDoor door)
         {
             _font = GameContentManager.GetFont(@"Fonts\Font");
-            _inventory = new Inventory(door, 4, InventoryManager.maxItemColumns, 32);
+            _inventory = new GUIInventory(door, 4, InventoryManager.maxItemColumns, 32);
 
             Vector2 mainWidthHeight = new Vector2(_inventory.InnerRectangle().Width, _inventory.InnerRectangle().Height);
             _inventory.Setup();
 
             Controls.Add(_inventory);
-            InventoryManager.PublicContainer = null;
+            InventoryManager.ClearExtraInventory();
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -92,10 +92,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             else
             {
-                if(GraphicCursor.HeldItem != null)
+                if(GameManager.HeldItem != null)
                 {
-                    InventoryManager.DropItemOnMap(GraphicCursor.HeldItem);
-                    GraphicCursor.DropItem();
+                    InventoryManager.DropItemOnMap(GameManager.HeldItem);
+                    GameManager.DropItem();
                 }
             }
 
@@ -110,9 +110,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 rv = _inventory.ProcessRightButtonClick(mouse);
                 if (rv)
                 {
-                    if (GraphicCursor.HeldItem != null && _container != null)
+                    if (GameManager.HeldItem != null && _container != null)
                     {
-                        //InventoryManager.AddNewItemToFirstAvailableInventorySpot(GraphicCursor.HeldItem.ItemID);
+                        //InventoryManager.AddNewItemToFirstAvailableInventorySpot(GameManager.HeldItem.ItemID);
                        // GraphicCursor.DropItem();
                     }
                 }
@@ -123,7 +123,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             else if (_container != null && !_container.DrawRectangle.Contains(mouse))
             {
-                GraphicCursor.DropItem();
+                GameManager.DropItem();
                 GameManager.GoToWorldMap();
             }
             

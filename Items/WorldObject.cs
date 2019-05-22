@@ -703,7 +703,7 @@ namespace RiverHollow.WorldObjects
             public bool HasItem() { return _heldItem != null; }
             public void TakeFinishedItem()
             {
-                InventoryManager.AddItemToInventory(_heldItem);
+                InventoryManager.AddToInventory(_heldItem);
                 _heldItem = null;
                 _itemBubble = null;
             }
@@ -855,7 +855,7 @@ namespace RiverHollow.WorldObjects
 
                 LoadContent();
 
-                _inventory = new Item[InventoryManager.maxItemRows, InventoryManager.maxItemColumns];
+                _inventory = new Item[_iRows, _iColumns];
             }
             public void LoadContent()
             {
@@ -890,7 +890,10 @@ namespace RiverHollow.WorldObjects
                         ItemData item = data.Items[i * InventoryManager.maxItemRows + j];
                         Item newItem = GetItem(item.itemID, item.num);
                         if (newItem != null) { newItem.ApplyUniqueData(item.strData); }
-                        InventoryManager.AddItemToInventorySpot(newItem, i, j, this);
+
+                        InventoryManager.InitContainerInventory(this);
+                        InventoryManager.AddItemToInventorySpot(newItem, i, j, false);
+                        InventoryManager.ClearExtraInventory();
                     }
                 }
             }
@@ -973,7 +976,7 @@ namespace RiverHollow.WorldObjects
                     }
                     else
                     {
-                        InventoryManager.AddItemToInventory(it);
+                        InventoryManager.AddToInventory(it);
                     }
                 }
                 return it;

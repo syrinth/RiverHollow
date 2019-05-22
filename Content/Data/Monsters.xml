@@ -42,17 +42,17 @@
     <!--Muck Dweller-->
     <Item>
       <Key>9</Key>
-      <Value>[Texture:CombatMuckDweller][Lvl:1][Ability:300-20][Idle:4-0.25][Attack:2-0.1][Hurt:2-0.3][Cast:3-0.3]</Value>
+      <Value>[Texture:CombatMuckDweller][Lvl:1][Ability:300-20][Idle:4-0.25][Attack:2-0.1][Hurt:2-0.3][Cast:3-0.3][Loot:16]</Value>
     </Item>
     <!--DownGoose-->
     <Item>
       <Key>10</Key>
-      <Value>[Texture:CombatDownGoose][Lvl:1][Ability:300][Idle:4-0.15][Attack:3-0.1][Hurt:2-0.2]</Value>
+      <Value>[Texture:CombatDownGoose][Lvl:1][Ability:300][Idle:4-0.15][Attack:3-0.1][Hurt:2-0.2][Loot:17]</Value>
     </Item>
     <!--Lef-->
     <Item>
       <Key>11</Key>
-      <Value>[Texture:CombatLef][Lvl:1][Ability:300][Idle:4-0.15][Attack:3-0.1]</Value>
+      <Value>[Texture:CombatLef][Lvl:1][Ability:300][Idle:4-0.15][Attack:3-0.1][Loot:18]</Value>
     </Item>
   </Asset>
 </XnaContent>

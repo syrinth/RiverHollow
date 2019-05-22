@@ -141,7 +141,7 @@ namespace RiverHollow.Game_Managers
                     PlayerManager.AddMoney(m.Money);
                     foreach(Item i in m.Items)
                     {
-                        InventoryManager.AddItemToInventory(i);
+                        InventoryManager.AddToInventory(i);
                     }
                 }
             }

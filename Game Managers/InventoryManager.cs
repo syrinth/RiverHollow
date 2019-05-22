@@ -15,93 +15,165 @@ namespace RiverHollow.Game_Managers
         public static int maxItemColumns = 10;
         public static int maxItemRows = 4;
 
-        private static Container _container;
-        public static Container PublicContainer { get => _container; set => _container = value; }
-        private static Item[,] _playerInventory;
-        public static Item[,] PlayerInventory { get => _playerInventory; }
-    
+        private static Item[,] _arrPlayerInventory;
+        public static Item[,] PlayerInventory => _arrPlayerInventory;
+        private static Item[,] _arrExtraInventory;
+
         private static WorldObject CurrentWorldObject;
 
         public static Item AddedItem;
         #endregion
 
-        public static void Init()
+        /// <summary>
+        /// Called on initial game loading. Readies the players inventory
+        /// to hold items.
+        /// </summary>
+        public static void InitPlayerInventory()
         {
-            _playerInventory = new Item[maxItemRows, maxItemColumns];
-        }
-        public static void CheckOperation(Container c, ref Item[,] inventory)
-        {
-            if (c == null) { inventory = _playerInventory; }
-            else { inventory = c.Inventory; }
-        }
-        public static void CheckOperation(Container c, ref int rows, ref int columns, ref Item[,] inventory)
-        {
-            if (c == null)
-            {
-                rows = maxItemRows;
-                columns = maxItemColumns;
-
-            }
-            else
-            {
-                rows = c.Rows;
-                columns = c.Columns;
-            }
-            CheckOperation(c, ref inventory);
+            _arrPlayerInventory = new Item[maxItemRows, maxItemColumns];
         }
 
-        public static bool HasSpaceInInventory(int itemID, int num = 1)
+        /// <summary>
+        /// Called at end of combat, to initialize the mob inventory for the drops
+        /// </summary>
+        /// <param name="x">Number of rows</param>
+        /// <param name="y">Number of columns</param>
+        public static void InitMobInventory(int rows, int cols)
         {
-            return HasSpaceInInventory(itemID, num, null);
+            _arrExtraInventory = new Item[rows, cols];
+            List<Item> items = CombatManager.CurrentMob.GetLoot();
+
+            foreach(Item i in items)
+            {
+                AddToInventory(i, false);
+            }
         }
-        public static bool HasSpaceInInventory(int itemID, int num, Container c)
+
+        public static void InitContainerInventory(Container c)
         {
+            _arrExtraInventory = c.Inventory;
+        }
+
+        public static void ClearExtraInventory()
+        {
+            _arrExtraInventory = null;
+        }
+
+        #region Helpers
+        /// <summary>
+        /// Determines which Inventory we're working on based off the boolean
+        /// </summary>
+        private static Item[,] GetInventory(bool PlayerInventory)
+        {
+            return (PlayerInventory ? _arrPlayerInventory : _arrExtraInventory);
+        }
+
+        /// <summary>
+        /// Gets the deimensions of the Inventory
+        /// </summary>
+        private static void GetDimensions(Item[,] inventory, ref int rows, ref int cols)
+        {
+            rows = inventory.GetLength(0);
+            cols = inventory.GetLength(1);
+        }
+        #endregion
+
+        #region Has Space in Inventory
+        /// <summary>
+        /// Helper for HasPSaceInInventory
+        /// </summary>
+        public static bool HasSpaceInInventory(int itemID, int num, bool playerInventory = true)
+        {
+            int validRow = 0;
+            int validCol = 0;
+            return HasSpaceInInventory(itemID, num, GetInventory(playerInventory), ref validRow, ref validCol);
+        }
+
+        public static bool HasSpaceInInventory(int itemID, int num, ref int validRow, ref int validCol, bool playerInventory = true)
+        {
+            return HasSpaceInInventory(itemID, num, GetInventory(playerInventory), ref validRow, ref validCol);
+        }
+
+        /// <summary>
+        /// Call to see if the indicated item and number can fit in the Inventory
+        /// </summary>
+        /// <param name="itemID">ID of the item to try to add</param>
+        /// <param name="num">Number of items</param>
+        /// <param name="validRow">Row # of the first valid item space</param>
+        /// <param name="validCol">Col # of the first valid item space</param>
+        /// <param name="inventory">Inventory to test</param>
+        /// <returns></returns>
+        private static bool HasSpaceInInventory(int itemID, int num, Item[,] inventory, ref int validRow, ref int validCol)
+        {
+            bool rv = false;
             int maxRows = 0;
             int maxColumns = 0;
-            Item[,] inventory = null;
-            CheckOperation(c, ref maxRows, ref maxColumns, ref inventory);
+            GetDimensions(inventory, ref maxRows, ref maxColumns);
 
-            bool rv = false;
+            //Confirm a valid itemId range
             if (itemID != -1)
             {
+
+                //Iterate through the Inventory
                 for (int i = 0; i < maxRows; i++)
                 {
                     for (int j = 0; j < maxColumns; j++)
                     {
+                        //Retrieve any item that exists in the indicated spot
                         Item testItem = inventory[i, j];
-                        if (testItem == null)
+                        if (testItem == null && !rv)   //If no item exists, and we have found no previous matching node, then we are clear to place it here
                         {
                             rv = true;
-                            break;
+                            validRow = i;
+                            validCol = j;
                         }
-                        else
+                        else if(testItem != null)
                         {
+                            //If there is an item there, check to see if it has the same ID, can stack,
+                            //and if the number we want to add is less than the max item stack. Once we find a matching stack
+                            //we need to exit, we are done.
                             if (testItem.ItemID == itemID && testItem.DoesItStack && testItem.Number + num < 999)
                             {
                                 rv = true;
-                                break;
+                                validRow = i;
+                                validCol = j;
+                                goto Exit;
                             }
                         }
                     }
                 }
             }
+            Exit:
 
             return rv;
         }
+        #endregion
 
-        public static bool HasItemInInventory(int itemID, int x)
+        /// <summary>
+        /// Helper to redirect to the Players Inventory
+        /// </summary>
+        public static bool HasItemInPlayerInventory(int itemID, int x)
         {
-            return HasItemInInventory(itemID, x, null);
+            return HasItemInInventory(itemID, x, _arrPlayerInventory);
         }
-        public static bool HasItemInInventory(int itemID, int x, Container c)
+
+        /// <summary>
+        /// Iterates through the given Inventory, looking for an item
+        /// of the given type and number
+        /// </summary>
+        /// <param name="itemID">Type of item to look for</param>
+        /// <param name="number">The number to find</param>
+        /// <param name="inventory">Inventory to search</param>
+        /// <returns></returns>
+        public static bool HasItemInInventory(int itemID, int number, Item [,] inventory)
         {
             bool rv = false;
+
             int maxRows = 0;
             int maxColumns = 0;
-            Item[,] inventory = null;
-            CheckOperation(c, ref maxRows, ref maxColumns, ref inventory);
+            GetDimensions(inventory, ref maxRows, ref maxColumns);
 
-            int leftToFind = x;
+            int leftToFind = number;
             if (itemID != -1)
             {
                 for (int i = 0; i < maxRows; i++)
@@ -125,18 +197,29 @@ Exit:
             return rv;
         }
 
-        public static void RemoveItemsFromInventory(int itemID, int x)
+        #region Remove items from inventory
+        /// <summary>
+        /// Helper for RemoveItemsFromInventory
+        /// </summary>
+        public static void RemoveItemsFromInventory(int itemID, int number, bool playerInventory = true)
         {
-            RemoveItemsFromInventory(itemID, x, null);
+            RemoveItemsFromInventory(itemID, number, _arrPlayerInventory);
         }
-        public static void RemoveItemsFromInventory(int itemID, int x, Container c)
+
+        /// <summary>
+        /// Finds and removes the specified number of the given item from the given inventory
+        /// </summary>
+        /// <param name="itemID">The item ID to match</param>
+        /// <param name="number">The number of items to remove</param>
+        /// <param name="inventory">The inventory to act on</param>
+        private static void RemoveItemsFromInventory(int itemID, int number, Item[,] inventory)
         {
-            int leftToRemove = x;
+            int leftToRemove = number;
             bool done = false;
+
             int maxRows = 0;
             int maxColumns = 0;
-            Item[,] inventory = null;
-            CheckOperation(c, ref maxRows, ref maxColumns, ref inventory);
+            GetDimensions(inventory, ref maxRows, ref maxColumns);
 
             List<Item> toRemove = new List<Item>();
             for (int i = 0; i < maxRows; i++)
@@ -172,67 +255,7 @@ Exit:
                 RemoveItemFromInventory(i);
             }
         }
-
-        public static bool AddNewItemToInventory(int itemToAdd, int num)
-        {
-            return AddItemToInventory(ObjectManager.GetItem(itemToAdd, num), null);
-        }
-        public static bool AddNewItemToInventory(int itemToAdd)
-        {
-            return AddItemToInventory(ObjectManager.GetItem(itemToAdd), null);
-        }
-        public static bool AddNewItemToInventory(int itemToAdd, Container c)
-        {
-            return AddItemToInventory(ObjectManager.GetItem(itemToAdd), c);
-        }
-        public static bool AddItemToInventory(Item itemToAdd)
-        {
-            return AddItemToInventory(itemToAdd, null);
-        }
-        public static bool AddItemToInventory(Item itemToAdd, Container c)
-        {
-            bool rv = false;
-            int maxRows = 0;
-            int maxColumns = 0;
-            Item[,] _inventory = null;
-            CheckOperation(c, ref maxRows, ref maxColumns, ref _inventory);
-
-            if (HasSpaceInInventory(itemToAdd.ItemID))
-            {
-                if (!IncrementExistingItem(itemToAdd, c))
-                {
-                    for (int i = 0; i < maxRows; i++)
-                    {
-                        for (int j = 0; j < maxColumns; j++)
-                        {
-                            if (_inventory[i, j] == null)
-                            {
-                                rv = true;
-                                _inventory[i, j] = itemToAdd;
-                                //Only perform this check if we are adding to the playerInventory
-                                if (_inventory == _playerInventory)
-                                {
-                                    PlayerManager.AdvanceQuestProgress(itemToAdd);
-                                    if (_playerInventory[i, j].ItemType == Item.ItemEnum.Tool) PlayerManager.CompareTools((Tool)_playerInventory[i, j]);
-                                }
-                                j = maxColumns;
-                                i = maxRows;
-
-                                AddedItem = itemToAdd;
-                            }
-                        }
-                    }
-                }
-                else { rv = true; }
-            }
-
-            if (!rv && !itemToAdd.ManualPickup)
-            {
-                DropItemOnMap(itemToAdd);
-            }
-            return rv;
-        }
-
+        #endregion
         public static void DropItemOnMap(Item item)
         {
             item.AutoPickup = false;
@@ -240,42 +263,112 @@ Exit:
             MapManager.CurrentMap.DropItemOnMap(item, PlayerManager.World.Position);
         }
 
-        public static bool IncrementExistingItem(Item itemToAdd, Container c)
+        #region Add Item to Inventory
+        /// <summary>
+        /// Creates a new item wth the indicated number and adds it to the indicated inventory
+        /// </summary>
+        /// <param name="itemToAdd">ID of the item to create</param>
+        /// <param name="num">Number of items</param>
+        /// <param name="playerInventory">Bool representing whether or not to act on the players Inventory</param>
+        /// <returns>True if successful</returns>
+        public static bool AddToInventory(int itemToAdd, int num = 1, bool playerInventory = true)
+        {
+            return AddToInventory(ObjectManager.GetItem(itemToAdd, num), playerInventory);
+        }
+
+        /// <summary>
+        /// Adds the given item to the indicated inventory
+        /// </summary>
+        /// <param name="itemToAdd">The Item object to add</param>
+        /// <param name="playerInventory">Bool representing whether or not to act on the players Inventory</param>
+        /// <returns>True if successful</returns>
+        public static bool AddToInventory(Item itemToAdd, bool playerInventory = true)
+        {
+            return AddToInventory(itemToAdd, GetInventory(playerInventory));
+        }
+
+        /// <summary>
+        /// Adds the givenItem object to the given Inventory
+        /// </summary>
+        /// <param name="itemToAdd">The Item object to add</param>
+        /// <param name="inventory">The Inventory to act on</param>
+        /// <returns></returns>
+        private static bool AddToInventory(Item itemToAdd, Item[,] inventory)
         {
             bool rv = false;
-            int maxRows = 0;
-            int maxColumns = 0;
-            Item[,] inventory = null;
-            CheckOperation(c, ref maxRows, ref maxColumns, ref inventory);
-
-            for (int i = 0; i < maxRows; i++)
+            int validRow = -1;
+            int validCol = -1;
+            //First,confirm that the inventory has space to proceed
+            if (HasSpaceInInventory(itemToAdd.ItemID, itemToAdd.Number, inventory, ref validRow, ref validCol))
             {
-                for (int j = 0; j < maxColumns; j++)
-                {
-                    if (inventory[i, j] != null && inventory[i, j].DoesItStack && inventory[i, j].ItemID == itemToAdd.ItemID && inventory[i, j].Number < 999)
+                //If there is no item there, assign it, otherwise increment it.
+                if(inventory[validRow, validCol] == null){
+                    inventory[validRow, validCol] = itemToAdd;
+                }
+                else
+                { 
+                    //If we are trying to add more items than the stack can hold, we need to
+                    //break it up, remove the added numbers, and then attempt to add what's
+                    //left to the indicated inventory.
+                    if (inventory[validRow, validCol].Number + itemToAdd.Number > 999)
                     {
-                        AddedItem = itemToAdd;
-                        inventory[i, j].Add(itemToAdd.Number);
-                        rv = true;
+                        int numToAdd = 999 - inventory[validRow, validCol].Number;
+                        int leftOver = itemToAdd.Number - numToAdd;
 
-                        goto Exit;
+                        inventory[validRow, validCol].Add(numToAdd, inventory == _arrPlayerInventory);
+                        itemToAdd.Remove(numToAdd);
+                        AddToInventory(itemToAdd, inventory);
+                    }
+                    else
+                    {
+                        inventory[validRow, validCol].Add(itemToAdd.Number, inventory == _arrPlayerInventory);
                     }
                 }
+
+                //Only perform this check if we are adding to the playerInventory
+                if (inventory == _arrPlayerInventory)
+                {
+                    PlayerManager.AdvanceQuestProgress(itemToAdd);
+                    if (_arrPlayerInventory[validRow, validCol].ItemType == Item.ItemEnum.Tool) PlayerManager.CompareTools((Tool)_arrPlayerInventory[validRow, validCol]);
+                }
+
+                //Used to display an item that was just added to the inventory
+                AddedItem = itemToAdd;
+
+                rv = true;
+
             }
-Exit:
+
+            //If we failed to add it, then we need to drop it onto the world map.
+            if (!rv && !itemToAdd.ManualPickup)
+            {
+                DropItemOnMap(itemToAdd);
+            }
             return rv;
         }
+        #endregion
 
-        public static bool AddItemToInventorySpot(Item item, int row, int column)
+        #region Add item to Inventory Spot
+        /// <summary>
+        /// Helper to redirect to the right inventory
+        /// </summary>
+        public static bool AddItemToInventorySpot(Item item, int row, int column, bool playerInventory = true)
         {
-            return AddItemToInventorySpot(item, row, column, null);
+            return AddItemToInventorySpot(item, row, column, GetInventory(playerInventory));
         }
-        public static bool AddItemToInventorySpot(Item item, int row, int column, Container c)
+        /// <summary>
+        /// Adds an item to a specified inventory location
+        /// </summary>
+        /// <param name="item">The item to add</param>
+        /// <param name="row">The row to add it to</param>
+        /// <param name="column">The column to add it to</param>
+        /// <param name="inventory">Which inventory to add the item to</param>
+        /// <returns></returns>
+        private static bool AddItemToInventorySpot(Item item, int row, int column, Item[,] inventory)
         {
             bool rv = false;
-            Item[,] inventory = null;
-            CheckOperation(c, ref inventory);
 
+            //Ensure that the item is not null, we do not place null =.
             if (item != null)
             {
                 if (inventory[row, column] == null)
@@ -287,13 +380,13 @@ Exit:
                     else if (item.IsTool())
                     {
                         inventory[row, column] = (Tool)(item);
-                        if (inventory == _playerInventory) { PlayerManager.CompareTools((Tool)_playerInventory[row, column]); }
+                        if (inventory == _arrPlayerInventory) { PlayerManager.CompareTools((Tool)_arrPlayerInventory[row, column]); }
                     }
                     else
                     {
                         inventory[row, column] = item;
                     }
-                    if (inventory == _playerInventory)
+                    if (inventory == _arrPlayerInventory)
                     {
                         PlayerManager.AdvanceQuestProgress(item);
                     }
@@ -303,58 +396,77 @@ Exit:
                 {
                     if (inventory[row, column].ItemID == item.ItemID && inventory[row, column].DoesItStack && 999 >= (inventory[row, column].Number + item.Number))
                     {
-                        inventory[row, column].Add(item.Number);
+                        inventory[row, column].Add(item.Number, inventory == _arrPlayerInventory);
                         rv = true;
                     }
                 }
             }
             return rv;
         }
+        #endregion
 
-        public static void RemoveItemFromInventoryLocation(GUIItemBox box)
+        #region Remove Item from Inventory Spot
+        /// <summary>
+        /// These methods remove an item completely from the Inventory location
+        /// </summary>
+        /// <param name="row">The row of the Item to remove</param>
+        /// <param name="column">The col of the Item to remove</param>
+        public static void RemoveItemFromInventorySpot(int row, int column, bool playerInventory)
         {
-            RemoveItemFromInventoryLocation(box, null);
+            RemoveItemFromPlayerInventorySpot(row, column, GetInventory(playerInventory));
         }
-
-        public static void RemoveItemFromInventoryLocation(GUIItemBox box, Container c)
+        private static void RemoveItemFromPlayerInventorySpot(int row, int column, Item[,] inventory)
         {
-            Item[,] inventory = null;
-            int i = box.Row;
-            int j = box.Col;
-            CheckOperation(c, ref inventory);
-            if (inventory == _playerInventory)
+            if (inventory == _arrPlayerInventory)
             {
-                PlayerManager.RemoveQuestProgress(inventory[i, j]);
-                if (_playerInventory[i, j].IsTool()) { PlayerManager.CompareTools((Tool)_playerInventory[i, j]); }
+                PlayerManager.RemoveQuestProgress(inventory[row, column]);
+                if (_arrPlayerInventory[row, column].IsTool()) { PlayerManager.CompareTools((Tool)_arrPlayerInventory[row, column]); }
             }
 
-            inventory[i, j] = null;
+            inventory[row, column] = null;
+        }
+        #endregion
+
+        #region Remove Item from Inventory
+        /// <summary>
+        /// Helper to redirect method to the players Inventory
+        /// </summary>
+        /// <param name="it">The Item object to remove</param>
+        public static void RemoveItemFromInventory(Item it, bool playerInventory = true)
+        {
+            RemoveItemFromInventory(it, GetInventory(playerInventory));
         }
 
-        public static void RemoveItemFromInventory(Item it)
+        /// <summary>
+        /// Removes the given item object from the inventory
+        /// </summary>
+        /// <param name="it">The item object to remove</param>
+        /// <param name="inventory">The inventory to search</param>
+        public static void RemoveItemFromInventory(Item it, Item[,] inventory)
         {
-            RemoveItemFromInventory(it, null);
-        }
-        public static void RemoveItemFromInventory(Item it, Container c)
-        {
+            //Retrieve the max rows and columns from the inventory
             int maxRows = 0;
             int maxColumns = 0;
-            Item[,] inventory = null;
-            CheckOperation(c, ref maxRows, ref maxColumns, ref inventory);
+            GetDimensions(inventory, ref maxRows, ref maxColumns);
+
+            //iterate the the Inventory
             for (int i = 0; i < maxRows; i++)
             {
                 for (int j = 0; j < maxColumns; j++)
                 {
+                    //if the inventoryitem is the exact object we are looking for
                     if (inventory[i, j] == it)
                     {
-                        if (inventory == _playerInventory)
+                        //Do the customary comparisons for updating information
+                        if (inventory == _arrPlayerInventory)
                         {
-                            if (_playerInventory[i, j] != null)
+                            if (_arrPlayerInventory[i, j] != null)
                             {
                                 PlayerManager.RemoveQuestProgress(inventory[i, j]);
-                                if (_playerInventory[i, j].IsTool()) { PlayerManager.CompareTools((Tool)_playerInventory[i, j]); }
+                                if (_arrPlayerInventory[i, j].IsTool()) { PlayerManager.CompareTools((Tool)_arrPlayerInventory[i, j]); }
                             }
                         }
+                        //null the item and exit
                         inventory[i, j] = null;
                         goto Exit;
                     }
@@ -364,16 +476,17 @@ Exit:
 
             return;
         }
+        #endregion
 
         public static Item GetCurrentItem()
         {
-            return _playerInventory[GameManager.HUDItemRow, GameManager.HUDItemCol];
+            return _arrPlayerInventory[GameManager.HUDItemRow, GameManager.HUDItemCol];
         }
 
         public static StaticItem GetCurrentStaticItem()
         {
             StaticItem rv = null;
-            Item it = _playerInventory[GameManager.HUDItemRow, GameManager.HUDItemCol];
+            Item it = _arrPlayerInventory[GameManager.HUDItemRow, GameManager.HUDItemCol];
 
             if (it != null && it.IsStaticItem())
             {
@@ -389,11 +502,11 @@ Exit:
             {
                 for (int j = 0; j < maxItemColumns; j++)
                 {
-                    if (_playerInventory[i, j] != null)
+                    if (_arrPlayerInventory[i, j] != null)
                     {
-                        if(_playerInventory[i, j].IsTool())
+                        if(_arrPlayerInventory[i, j].IsTool())
                         {
-                            Tool t = (Tool)_playerInventory[i, j];
+                            Tool t = (Tool)_arrPlayerInventory[i, j];
                             if(t.ToolType == tool)
                             {
                                 if(rv != null && t.DmgValue > rv.DmgValue) { rv = t; }
@@ -413,13 +526,18 @@ Exit:
             {
                 for (int j = 0; j < maxItemColumns; j++)
                 {
-                    if (_playerInventory[i, j] != null && _playerInventory[i, j].IsConsumable())
+                    if (_arrPlayerInventory[i, j] != null && _arrPlayerInventory[i, j].IsConsumable())
                     {
-                        items.Add((Consumable)_playerInventory[i, j]);
+                        items.Add((Consumable)_arrPlayerInventory[i, j]);
                     }
                 }
             }
             return items;
+        }
+
+        internal static bool ManagingExtraInventory()
+        {
+            return _arrExtraInventory != null;
         }
     }
 }

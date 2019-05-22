@@ -754,7 +754,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     }
 
                     InventoryManager.RemoveItemFromInventory(_equipWindow.SelectedItem);
-                    if (olditem != null) { InventoryManager.AddItemToInventory(olditem); }
+                    if (olditem != null) { InventoryManager.AddToInventory(olditem); }
 
                     DisplayStatText();
                     GUIManager.CloseHoverWindow();
@@ -808,7 +808,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             _delSyncCharacter();
                         }
 
-                        InventoryManager.AddItemToInventory(box.Item);
+                        InventoryManager.AddToInventory(box.Item);
                         box.SetItem(null);
                         rv = true;
                     }

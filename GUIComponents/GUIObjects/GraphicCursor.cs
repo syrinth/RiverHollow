@@ -15,10 +15,6 @@ namespace RiverHollow.GUIObjects
         public enum EnumCursorType { Normal, Talk, Gift, Door};
         public static EnumCursorType _CursorType;
         public static MouseState LastMouseState = new MouseState();
-        private static Item _heldItem;
-        public static Item HeldItem { get => _heldItem; }
-        private static Building _heldBuilding;
-        public static Building HeldBuilding { get => _heldBuilding; }
 
         private static int _workerID = -1;
         public static int WorkerToPlace { get => _workerID; }
@@ -47,34 +43,6 @@ namespace RiverHollow.GUIObjects
             return mousePoint;
         }
 
-        public static bool GrabItem(Item item)
-        {
-            bool rv = false;
-            if(item != null)
-            {
-                _heldItem = item;
-                rv = true;
-            }
-
-            return rv;
-        }
-
-        public static void DropItem()
-        {
-            _heldItem = null;
-        }
-
-        public static bool PickUpBuilding(Building bldg)
-        {
-            bool rv = false;
-            if (bldg != null)
-            {
-                _heldBuilding = bldg;
-                rv = true;
-            }
-
-            return rv;
-        }
 
         public static bool PickUpWorker(int id)
         {
@@ -88,10 +56,7 @@ namespace RiverHollow.GUIObjects
             return rv;
         }
 
-        public static void DropBuilding()
-        {
-            _heldBuilding = null;
-        }
+        
 
         public static void Update()
         {
@@ -100,7 +65,7 @@ namespace RiverHollow.GUIObjects
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            if (_heldBuilding == null)
+            if (GameManager.HeldBuilding == null)
             {
                 Rectangle source = Rectangle.Empty;
                 Texture2D drawIt = _texture;
@@ -122,21 +87,21 @@ namespace RiverHollow.GUIObjects
                 spriteBatch.Draw(drawIt, drawRectangle, source, Color.White * Alpha);
                 if (HeldItem != null)
                 {
-                    _heldItem.Draw(spriteBatch, new Rectangle((int)Position.X + 16, (int)Position.Y + 16, 32, 32));
+                    GameManager.HeldItem.Draw(spriteBatch, new Rectangle((int)Position.X + 16, (int)Position.Y + 16, 32, 32));
                 }
             }
         }
 
         public static void DrawBuilding(SpriteBatch spriteBatch)
         {
-            if (GameManager.Scrying() && _heldBuilding != null)
+            if (GameManager.Scrying() && GameManager.HeldBuilding != null)
             {
                 Vector2 mousePosition = GetTranslatedPosition();
-                Texture2D drawIt = _heldBuilding.Texture;
+                Texture2D drawIt = GameManager.HeldBuilding.Texture;
                 Rectangle drawRectangle = new Rectangle(((int)((mousePosition.X - drawIt.Width / 2) / TileSize)) * TileSize, ((int)((mousePosition.Y - drawIt.Height / 2) / TileSize)) * TileSize, drawIt.Width, drawIt.Height);
                 Rectangle source = new Rectangle(0, 0, drawIt.Width, drawIt.Height);
 
-                _heldBuilding.SetCoordinatesByGrid(new Vector2(drawRectangle.X, drawRectangle.Y));
+                GameManager.HeldBuilding.SetCoordinatesByGrid(new Vector2(drawRectangle.X, drawRectangle.Y));
                 spriteBatch.Draw(drawIt, drawRectangle, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, mousePosition.Y + drawIt.Height);
             }
         }

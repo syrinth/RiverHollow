@@ -28,7 +28,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIStatDisplay _sdStamina;
         GUIText _gResults;
 
-        PostCombatScreen _gPostScreen;
+        GUIPostCombatDisplay _gPostScreen;
 
         List<GUIText> _liTurns;
         ActionSelectObject _gActionSelect;
@@ -236,7 +236,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     break;
                 case CombatManager.PhaseEnum.DisplayVictory:
                     if(_gPostScreen == null) {
-                        _gPostScreen = new PostCombatScreen(CombatManager.EarnedXP);
+                        _gPostScreen = new GUIPostCombatDisplay(CombatManager.EarnedXP);
                         _gPostScreen.CenterOnScreen();
                     }
                     else { _gPostScreen.Update(gameTime); }
@@ -1529,14 +1529,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
     }
 
-    public class PostCombatScreen : GUIObject
+    public class GUIPostCombatDisplay : GUIObject
     {
         GUIWindow _gWin;
         GUIText _gText;
         //Container _mobContainer;
         //Inventory _mobInventory;
 
-        public PostCombatScreen(int xp)
+        public GUIPostCombatDisplay(int xp)
         {
             _gWin = new GUIWindow(GUIWindow.BrownWin, 30, 30);
             _gText = new GUIText("Earned " + xp + " xp");

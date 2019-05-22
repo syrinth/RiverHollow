@@ -119,7 +119,7 @@
     <Compile Include="Items\WorldObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GUIComponents\GUIObjects\GUIWindows\Inventory.cs" />
+    <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUIInventory.cs" />
     <Compile Include="SpriteAnimation\FrameAnimation.cs" />
     <Compile Include="SpriteAnimation\AnimatedSprite.cs" />
     <Compile Include="Tile Engine\RHMap.cs" />

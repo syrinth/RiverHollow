@@ -211,6 +211,7 @@ namespace RiverHollow.Game_Managers
             {
                 rv = true;
                 CurrentPhase = PhaseEnum.DisplayVictory;
+                InventoryManager.InitMobInventory(1, 5);    //Just temp values
                 foreach (CombatAdventurer a in _listParty)
                 {
                     int levl = a.ClassLevel;
