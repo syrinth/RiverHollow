@@ -732,14 +732,6 @@ namespace RiverHollow.Tile_Engine
         }
 
         #region Collision Code
-        public bool MoveAndCollide(WorldActor c, Rectangle originalRectangle, Vector2 dir, bool ignoreCollisions = false)
-        {
-            bool rv = true;
-
-
-            return rv;
-        }
-
         private List<Rectangle> GetPossibleCollisions(WorldActor actor, Vector2 dir)
         {
             List<Rectangle> list = new List<Rectangle>();

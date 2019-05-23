@@ -135,7 +135,7 @@ namespace RiverHollow.Actors
         public Rectangle CollisionBox { get => new Rectangle((int)Position.X + (Width / 4), (int)Position.Y, Width / 2, TileSize); }
 
         protected bool _bActive = true;
-        public bool Active => _bActive;
+        public virtual bool Active => _bActive;
 
         public int Speed = 2;
 
@@ -1311,6 +1311,8 @@ namespace RiverHollow.Actors
         public Dictionary<int, int> CraftList => _diCrafting;
         int _iCurrentlyMaking;
         public int CurrentlyMaking => _iCurrentlyMaking;
+
+        public override bool Active => _eState == WorkerStateEnum.Idle;
         #endregion
 
         public WorldAdventurer(string[] stringData, int id)

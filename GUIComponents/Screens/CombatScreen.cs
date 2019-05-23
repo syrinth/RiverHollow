@@ -1540,7 +1540,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             _gWin = new GUIWindow(GUIWindow.BrownWin, 30, 30);
             _gText = new GUIText("Earned " + xp + " xp");
-            _gText.CenterOnObject(_gWin);_gWin.Resize();
+            _gText.CenterOnObject(_gWin);
+            _gText.AnchorToInnerSide(_gWin, SideEnum.Top);
+            _gWin.Resize();
             _gWin.AddControl(_gText);
             _gWin.Resize();
 
