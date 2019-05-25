@@ -80,7 +80,12 @@ namespace RiverHollow.GUIObjects
         {
             return DrawRectangle.Contains(mouse);
         }
-        public virtual void Update(GameTime gameTime) { }
+        public virtual void Update(GameTime gameTime) {
+            foreach (GUIObject g in Controls)
+            {
+                g.Update(gameTime);
+            }
+        }
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             if (Show)

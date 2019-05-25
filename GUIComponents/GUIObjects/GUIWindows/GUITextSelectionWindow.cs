@@ -121,9 +121,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         {
             string selectedAction = _diOptions[_iKeySelection].Action;
 
-            if (GameManager.gmNPC != null)
+            if (GameManager.CurrentNPC != null)
             {
-                if (!GameManager.gmNPC.HandleTextInteraction(selectedAction))
+                if (!GameManager.CurrentNPC.HandleTextInteraction(selectedAction))
                 {
                     GUIManager.CloseTextWindow(this);
                 }

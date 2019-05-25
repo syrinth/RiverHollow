@@ -18,25 +18,22 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public InventoryScreen()
         {
-            _font = GameContentManager.GetFont(@"Fonts\Font");
-            _inventory = new GUIInventory(4, InventoryManager.maxItemColumns, 32);
-            Controls.Add(_inventory);
-        }
-
-        public InventoryScreen(CharacterDetailWindow c)
-        {
-            _font = GameContentManager.GetFont(@"Fonts\Font");
-            _inventory = new GUIInventory(4, InventoryManager.maxItemColumns, 32);
-            Controls.Add(_inventory);
             InventoryManager.ClearExtraInventory();
+            _font = GameContentManager.GetFont(@"Fonts\Font");
+            _inventory = new GUIInventory(true);
+            Controls.Add(_inventory);
         }
 
         public InventoryScreen(Container c)
         {
+            InventoryManager.ClearExtraInventory();
+
             Vector2 centerPoint = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
             _font = GameContentManager.GetFont(@"Fonts\Font");
-            _container = new GUIInventory(c, 32);
-            _inventory = new GUIInventory(4, InventoryManager.maxItemColumns, 32);
+
+            InventoryManager.InitContainerInventory(c);
+            _container = new GUIInventory();
+            _inventory = new GUIInventory(true);
 
             Vector2 contWidthHeight = new Vector2(_container.MidWidth(), _container.InnerRectangle().Height);
             Vector2 mainWidthHeight = new Vector2(_inventory.MidWidth(), _inventory.InnerRectangle().Height);
@@ -50,31 +47,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             Controls.Add(_inventory);
             Controls.Add(_container);
-            InventoryManager.InitContainerInventory(c);
-        }
-
-        public InventoryScreen(Villager n)
-        {
-            _font = GameContentManager.GetFont(@"Fonts\Font");
-            _inventory = new GUIInventory(n, 4, InventoryManager.maxItemColumns, 32);
-
-            Vector2 mainWidthHeight = new Vector2(_inventory.InnerRectangle().Width, _inventory.InnerRectangle().Height);
-            _inventory.Setup();
-
-            Controls.Add(_inventory);
-            InventoryManager.ClearExtraInventory();
-        }
-
-        public InventoryScreen(KeyDoor door)
-        {
-            _font = GameContentManager.GetFont(@"Fonts\Font");
-            _inventory = new GUIInventory(door, 4, InventoryManager.maxItemColumns, 32);
-
-            Vector2 mainWidthHeight = new Vector2(_inventory.InnerRectangle().Width, _inventory.InnerRectangle().Height);
-            _inventory.Setup();
-
-            Controls.Add(_inventory);
-            InventoryManager.ClearExtraInventory();
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)

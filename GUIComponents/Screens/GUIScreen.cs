@@ -109,7 +109,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             bool rv = false;
             if (win == _guiTextWindow)
             {
-                GameManager.gmNPC = null;
+                GameManager.CurrentNPC = null;
                 GameManager.gmActiveItem = null;
                 _guiTextWindow = null;
                 rv = true;

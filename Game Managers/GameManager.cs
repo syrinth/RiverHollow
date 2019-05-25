@@ -57,10 +57,10 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<int, Quest> DIQuests;
 
         public static Merchandise gmMerchandise;
-        public static TalkingActor gmNPC;
+        public static TalkingActor CurrentNPC;
         public static Item gmActiveItem;
         public static Spirit gmSpirit;
-        public static KeyDoor gmDoor;
+        public static KeyDoor CurrentDoor;
 
         static long _iSaveID = -1;
         public static int MAX_NAME_LEN = 10;
@@ -102,13 +102,13 @@ namespace RiverHollow.Game_Managers
             }
             else if (selectedAction.Equals("OpenDoor"))
             {
-                GUIManager.SetScreen(new InventoryScreen(GameManager.gmDoor));
+                GUIManager.SetScreen(new InventoryScreen());
             }
-            else if (selectedAction.Contains("SellContract") && GameManager.gmNPC != null)
+            else if (selectedAction.Contains("SellContract") && GameManager.CurrentNPC != null)
             {
-                if (GameManager.gmNPC.IsWorldAdventurer())
+                if (GameManager.CurrentNPC.IsWorldAdventurer())
                 {
-                    ((WorldAdventurer)GameManager.gmNPC).Building.RemoveWorker((WorldAdventurer)GameManager.gmNPC);
+                    ((WorldAdventurer)GameManager.CurrentNPC).Building.RemoveWorker((WorldAdventurer)GameManager.CurrentNPC);
                     PlayerManager.AddMoney(1000);
                     GameManager.BackToMain();
                 }
@@ -117,8 +117,8 @@ namespace RiverHollow.Game_Managers
 
         public static void ClearGMObjects()
         {
-            gmNPC = null;
-            gmDoor = null;
+            CurrentNPC = null;
+            CurrentDoor = null;
             gmActiveItem = null;
             gmSpirit = null;
         }

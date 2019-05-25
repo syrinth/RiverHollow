@@ -43,7 +43,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             _gResults = new GUIText();
 
-            _sdStamina = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Energy);
+            _sdStamina = new GUIStatDisplay(PlayerManager.GetStamina, Color.Red);
             Controls.Add(_sdStamina);
 
             _gActionSelect = new ActionSelectObject();
@@ -236,6 +236,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     break;
                 case CombatManager.PhaseEnum.DisplayVictory:
                     if(_gPostScreen == null) {
+                        InventoryManager.InitMobInventory(1, 5);
                         _gPostScreen = new GUIPostCombatDisplay(CombatManager.EarnedXP);
                         _gPostScreen.CenterOnScreen();
                     }
@@ -559,8 +560,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _gSpriteWeapon.Reset();
                     _gSpriteWeapon.PlayAnimation(CActorAnimEnum.Idle);
                 }
-                _gHP = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Health, _mapTile.Character, 100);
-                if (_mapTile.Character.MaxMP > 0) { _gMP = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Mana, _mapTile.Character, 100); }
+                _gHP = new GUIStatDisplay(_mapTile.Character.GetHP, Color.Green, 100);
+                if (_mapTile.Character.MaxMP > 0) { _gMP = new GUIStatDisplay(_mapTile.Character.GetMP, Color.LightBlue, 100); }
             }
             else
             {
@@ -1531,21 +1532,24 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
     public class GUIPostCombatDisplay : GUIObject
     {
-        GUIWindow _gWin;
         GUIText _gText;
-        //Container _mobContainer;
-        //Inventory _mobInventory;
+        GUIWindow _gWin;
+        GUIInventory _gMobItems;
 
         public GUIPostCombatDisplay(int xp)
         {
-            _gWin = new GUIWindow(GUIWindow.BrownWin, 30, 30);
+            _gWin = new GUIWindow(GUIWindow.BrownWin, RiverHollow.ScreenWidth/3, RiverHollow.ScreenHeight/3);
             _gText = new GUIText("Earned " + xp + " xp");
             _gText.CenterOnObject(_gWin);
             _gText.AnchorToInnerSide(_gWin, SideEnum.Top);
-            _gWin.Resize();
             _gWin.AddControl(_gText);
             _gWin.Resize();
 
+            _gMobItems = new GUIInventory();_gMobItems.AnchorAndAlignToObject(_gWin, SideEnum.Bottom, SideEnum.CenterX);
+            _gWin.AddControl(_gMobItems);
+
+            Width = _gWin.Width;
+            Height = _gWin.Height + _gMobItems.Height;
             AddControl(_gWin);
         }
 

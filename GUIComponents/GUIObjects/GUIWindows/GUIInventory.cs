@@ -15,10 +15,6 @@ namespace RiverHollow.Screens
     public class GUIInventory : GUIWindow
     {
         protected GUIItemBox[,] _gItemBoxes;
-        private Container _container;
-        public Container Container { get => _container; }
-        private Villager _giveTo;
-        private KeyDoor _doorToOpen;
 
         protected const int _iBoxSize = 64;
         protected const int _iMargin = 3;
@@ -26,34 +22,22 @@ namespace RiverHollow.Screens
         protected int _columns;
         protected int _rows;
 
-        public GUIInventory(int rows, int columns, int edgeSize)
-        {
-            _container = null;
-            _winData = GUIWindow.BrownWin;
-            _rows = rows;
-            _columns = columns;
+        bool _bPlayerInventory;
 
-            _gItemBoxes = new GUIItemBox[rows, columns];
+        public GUIInventory(bool PlayerInventory = false)
+        {
+            _winData = GUIWindow.BrownWin;
+            _bPlayerInventory = PlayerInventory;
+
+            //Retrieve the dimensions of the Inventory we're workingo n frmo the InventoryManager
+            InventoryManager.GetDimensions(ref _rows, ref _columns, _bPlayerInventory);
+
+            _gItemBoxes = new GUIItemBox[_rows, _columns];
             Width = (_winData.Edge * 2) + (_columns * _iBoxSize) + (_iMargin * (_columns + 1));
             Height = (_winData.Edge * 2) + (_rows * _iBoxSize) + (_iMargin * (_rows + 1));
             Setup();
 
             _texture = GameContentManager.GetTexture(@"Textures\Dialog");
-        }
-
-        public GUIInventory(Container c, int edgeSize): this(c.Rows, c.Columns, edgeSize)
-        {
-            _container = c;
-        }
-
-        public GUIInventory(Villager n, int rows, int columns, int edgeSize) : this(rows, columns, edgeSize)
-        {
-            _giveTo = n;
-        }
-
-        public GUIInventory(KeyDoor door, int rows, int columns, int edgeSize) : this(rows, columns, edgeSize)
-        {
-            _doorToOpen = door;
         }
 
         public override void Update(GameTime gameTime)
@@ -62,14 +46,7 @@ namespace RiverHollow.Screens
             {
                 for (int j = 0; j < _columns; j++)
                 {
-                    if (_container == null)
-                    {
-                        _gItemBoxes[i, j].SetItem(InventoryManager.PlayerInventory[i, j]);
-                    }
-                    else
-                    {
-                        _gItemBoxes[i, j].SetItem(_container.Inventory[i, j]);
-                    }
+                    _gItemBoxes[i,j].SetItem(InventoryManager.GetItemFromLocation(i, j, _bPlayerInventory));
                 }
             }
         }
@@ -138,14 +115,14 @@ namespace RiverHollow.Screens
             }
             else
             {
-                if (_giveTo != null)
+                if (GameManager.CurrentNPC != null)
                 {
-                    _giveTo.Gift(IsItemThere(mouse));
+                    //CurrentNPC.Gift(IsItemThere(mouse));
                 }
-                else if (_doorToOpen != null)
+                else if (GameManager.CurrentDoor != null)
                 {
                     string text = string.Empty;
-                    if (_doorToOpen.Check(IsItemThere(mouse))) { text = GameContentManager.GetGameText("KeyDoorOpen"); }
+                    if (GameManager.CurrentDoor.Check(IsItemThere(mouse))) { text = GameContentManager.GetGameText("KeyDoorOpen"); }
                     else { text = GameContentManager.GetGameText("KeyDoorClose"); }
 
                     GUIManager.OpenTextWindow(text);
@@ -201,13 +178,13 @@ namespace RiverHollow.Screens
                             int row = 0;
                             int col = 0;
 
-                            //Use _container != null to get the statusof the inverse of whichever we are clicking on
-                            if (InventoryManager.HasSpaceInInventory(i.Item.ItemID, i.Item.Number, ref row, ref col, _container != null))
+                            //Use _container != null to get the status of the inverse of whichever we are clicking on
+                            if (InventoryManager.HasSpaceInInventory(i.Item.ItemID, i.Item.Number, ref row, ref col, !_bPlayerInventory))
                             {
                                 GameManager.GrabItem(TakeItem(mouse));
                                 //If the GUI represents a Container, move the Item to the PlayerInventory
                                 //else, move the Item to the Container's inventory
-                                InventoryManager.AddItemToInventorySpot(i.Item, row, col, _container != null);
+                                InventoryManager.AddItemToInventorySpot(i.Item, row, col, !_bPlayerInventory);
                                 GameManager.DropItem();
 
                                //Close any hover windows that may be open,otherwise they'll be open on an empty object
@@ -316,7 +293,7 @@ namespace RiverHollow.Screens
 
                     if (!takeHalf)
                     {
-                        InventoryManager.RemoveItemFromInventorySpot(box.Row, box.Col, _container == null);
+                        InventoryManager.RemoveItemFromInventorySpot(box.Row, box.Col, _bPlayerInventory);
                     }
 
                     break;
@@ -345,7 +322,7 @@ namespace RiverHollow.Screens
                         {
                             if (_gItemBoxes[i, j].Contains(mouse) && (Force || _gItemBoxes[i, j].Item == null))
                             {
-                                rv = InventoryManager.AddItemToInventorySpot(item, i, j, _container == null);
+                                rv = InventoryManager.AddItemToInventorySpot(item, i, j, _bPlayerInventory);
                                 goto Exit;
                             }
                         }

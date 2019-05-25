@@ -622,7 +622,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _liGearBoxes.Add(_sBoxWrist);
 
             int barWidth = _sBoxArmor.DrawRectangle.Right - _sBoxHead.DrawRectangle.Left;
-            _gBarXP = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.XP, _character, barWidth);
+            _gBarXP = new GUIStatDisplay(_character.GetXP, Color.Yellow, barWidth);
             _gBarXP.AnchorToInnerSide(_winName, SideEnum.Right, SPACING);
             _gBarXP.AlignToObject(_gName, SideEnum.CenterY);
 
@@ -630,9 +630,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gLvl.AnchorAndAlignToObject(_gBarXP, SideEnum.Left, SideEnum.CenterY, SPACING);
             _gLvl.SetText("LV. " + _character.ClassLevel);
 
-            _gBarHP = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Health, _character, barWidth);
+            _gBarHP = new GUIStatDisplay(_character.GetHP, Color.Green, barWidth);
             _gBarHP.AnchorAndAlignToObject(_sBoxHead, SideEnum.Left, SideEnum.Top, SPACING);
-            _gBarMP = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Mana, _character, barWidth);
+            _gBarMP = new GUIStatDisplay(_character.GetMP, Color.LightBlue, barWidth);
             _gBarMP.AnchorAndAlignToObject(_gBarHP, SideEnum.Bottom, SideEnum.Right, SPACING);
 
             if (_character == PlayerManager.Combat)

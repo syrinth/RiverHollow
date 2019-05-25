@@ -73,7 +73,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             _rows = (canMake.Count < _iMaxColumns) ? 1 : (int)(Math.Round(((double)(canMake.Count + _columns - 1) / (double)_columns)));
 
             _liDisplay = new GUIItemBox[_columns, _rows];
-            _inventory = new GUIInventory(4, InventoryManager.maxItemColumns, 32);
+            _inventory = new GUIInventory(true);
             _inventory.Setup();
 
             int creationWidth = (GUIWindow.RedWin.Edge * 2) + (_columns * _iBoxSize) + (_iMargin * (_columns + 1));

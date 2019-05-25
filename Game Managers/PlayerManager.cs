@@ -623,6 +623,12 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        public static void GetStamina(ref int curr, ref int max)
+        {
+            curr = Stamina;
+            max = MaxStamina;
+        }
+
         public static PlayerData SaveData()
         {
             PlayerData d = new PlayerData()

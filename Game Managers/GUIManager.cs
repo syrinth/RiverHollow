@@ -105,7 +105,7 @@ namespace RiverHollow.Game_Managers
         public static void OpenTextWindow(string text, TalkingActor talker, bool open = true)
         {
             GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Normal;
-            GameManager.gmNPC = talker;
+            GameManager.CurrentNPC = talker;
             OpenTextWindow(text, open);
         }
         public static void SetWindowText(string value)

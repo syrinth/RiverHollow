@@ -22,9 +22,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public HUDScreen()
         {
-            _healthDisplay = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Health);
+            _healthDisplay = new GUIStatDisplay(PlayerManager.Combat.GetHP, Color.Green);
             _healthDisplay.AnchorToScreen(this, SideEnum.TopLeft, 10);
-            _staminaDisplay = new GUIStatDisplay(GUIStatDisplay.DisplayEnum.Energy);
+            _staminaDisplay = new GUIStatDisplay(PlayerManager.GetStamina, Color.Red);
             _staminaDisplay.AnchorAndAlignToObject(_healthDisplay, SideEnum.Bottom, SideEnum.Left);
 
             _gMoney = new GUIMoneyDisplay();

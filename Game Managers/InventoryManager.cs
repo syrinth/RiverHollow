@@ -71,6 +71,10 @@ namespace RiverHollow.Game_Managers
         /// <summary>
         /// Gets the deimensions of the Inventory
         /// </summary>
+        public static void GetDimensions(ref int rows, ref int cols, bool PlayerInventory)
+        {
+            GetDimensions(GetInventory(PlayerInventory), ref rows, ref cols);
+        }
         private static void GetDimensions(Item[,] inventory, ref int rows, ref int cols)
         {
             rows = inventory.GetLength(0);
@@ -330,10 +334,10 @@ Exit:
                 {
                     PlayerManager.AdvanceQuestProgress(itemToAdd);
                     if (_arrPlayerInventory[validRow, validCol].ItemType == Item.ItemEnum.Tool) PlayerManager.CompareTools((Tool)_arrPlayerInventory[validRow, validCol]);
-                }
 
-                //Used to display an item that was just added to the inventory
-                AddedItem = itemToAdd;
+                    //Used to display an item that was just added to the inventory
+                    AddedItem = itemToAdd;
+                }
 
                 rv = true;
 
@@ -538,6 +542,11 @@ Exit:
         internal static bool ManagingExtraInventory()
         {
             return _arrExtraInventory != null;
+        }
+
+        public static Item GetItemFromLocation(int row, int column, bool PlayerInventory = true)
+        {
+            return GetInventory(PlayerInventory)[row, column];
         }
     }
 }

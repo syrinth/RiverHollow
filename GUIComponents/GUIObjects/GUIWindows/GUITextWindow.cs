@@ -108,9 +108,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         protected void SyncObjects()
         {
-            if (GameManager.gmNPC != null)
+            if (GameManager.CurrentNPC != null)
             {
-                TalkingActor talker = GameManager.gmNPC;
+                TalkingActor talker = GameManager.CurrentNPC;
                 _giPortrait = new GUIImage(talker.PortraitRectangle, talker.PortraitRectangle.Width, talker.PortraitRectangle.Height, talker.Portrait);
                 _giPortrait = new GUIImage(talker.PortraitRectangle, talker.PortraitRectangle.Width, talker.PortraitRectangle.Height, talker.Portrait);
                 _giPortrait.SetScale(GameManager.Scale);

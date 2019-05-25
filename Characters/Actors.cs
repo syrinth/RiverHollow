@@ -404,23 +404,23 @@ namespace RiverHollow.Actors
         public bool HandleTextInteraction(string chosenAction)
         {
             bool rv = true;
-            string nextText = GameManager.gmNPC.GetDialogEntry(chosenAction);
+            string nextText = GameManager.CurrentNPC.GetDialogEntry(chosenAction);
 
             if (chosenAction.StartsWith("Quest"))
             {
                 rv = true;
                 Quest q = GameManager.DIQuests[int.Parse(chosenAction.Remove(0, "Quest".Length))];
                 PlayerManager.AddToQuestLog(q);
-                GUIManager.SetWindowText(GameManager.gmNPC.GetDialogEntry("Quest" + q.QuestID));
+                GUIManager.SetWindowText(GameManager.CurrentNPC.GetDialogEntry("Quest" + q.QuestID));
             }
             else if (chosenAction.StartsWith("Donate"))
             {
-                ((Villager)GameManager.gmNPC).FriendshipPoints += 40;
+                ((Villager)GameManager.CurrentNPC).FriendshipPoints += 40;
                 GUIManager.SetWindowText(nextText);
             }
             else if (chosenAction.StartsWith("NoDonate"))
             {
-                ((Villager)GameManager.gmNPC).FriendshipPoints -= 1000;
+                ((Villager)GameManager.CurrentNPC).FriendshipPoints -= 1000;
                 GUIManager.SetWindowText(nextText);
             }
             else if (!string.IsNullOrEmpty(nextText))
@@ -517,7 +517,8 @@ namespace RiverHollow.Actors
             }
             else if (entry.Equals("GiveGift"))
             {
-                GUIManager.SetScreen(new InventoryScreen(this));
+                GameManager.CurrentNPC = this;
+                GUIManager.SetScreen(new InventoryScreen());
             }
             else if (entry.Equals("Party"))
             {
@@ -2517,19 +2518,19 @@ namespace RiverHollow.Actors
         private Vector2 _vStartPos;
         public Vector2 StartPos => _vStartPos;
 
-        protected int _currentHP;
+        protected int _iCurrentHP;
         public int CurrentHP
         {
-            get { return _currentHP; }
-            set { _currentHP = value; }
+            get { return _iCurrentHP; }
+            set { _iCurrentHP = value; }
         }
         public virtual int MaxHP => 20 + (int)Math.Pow(((double)StatVit / 3), 1.98);
 
-        protected int _currentMP;
+        protected int _iCurrentMP;
         public int CurrentMP
         {
-            get { return _currentMP; }
-            set { _currentMP = value; }
+            get { return _iCurrentMP; }
+            set { _iCurrentMP = value; }
         }
         public virtual int MaxMP => StatMag * 3; 
 
@@ -2727,9 +2728,9 @@ namespace RiverHollow.Actors
         public virtual int DecreaseHealth(double value)
         {
             int iValue = (int)Math.Round(value);
-            _currentHP -= (_currentHP - iValue >= 0) ? iValue : _currentHP;
+            _iCurrentHP -= (_iCurrentHP - iValue >= 0) ? iValue : _iCurrentHP;
             Tile.PlayAnimation(CActorAnimEnum.Hurt);
-            if (_currentHP == 0)
+            if (_iCurrentHP == 0)
             {
                 _diConditions[ConditionEnum.KO] = true;
                 UnlinkSummon();
@@ -2745,14 +2746,14 @@ namespace RiverHollow.Actors
             if (!KnockedOut())
             {
                 amountHealed = x;
-                if (_currentHP + x <= MaxHP)
+                if (_iCurrentHP + x <= MaxHP)
                 {
-                    _currentHP += x;
+                    _iCurrentHP += x;
                 }
                 else
                 {
-                    amountHealed = MaxHP - _currentHP;
-                    _currentHP = MaxHP;
+                    amountHealed = MaxHP - _iCurrentHP;
+                    _iCurrentHP = MaxHP;
                 }
             }
 
@@ -2766,13 +2767,13 @@ namespace RiverHollow.Actors
 
         public void IncreaseMana(int x)
         {
-            if (_currentMP + x <= MaxMP)
+            if (_iCurrentMP + x <= MaxMP)
             {
-                _currentMP += x;
+                _iCurrentMP += x;
             }
             else
             {
-                _currentMP = MaxMP;
+                _iCurrentMP = MaxMP;
             }
         }
 
@@ -2934,6 +2935,18 @@ namespace RiverHollow.Actors
             _vStartPos = startPos;
         }
 
+        public void GetHP(ref int curr, ref int max)
+        {
+            curr = _iCurrentHP;
+            max = MaxHP;
+        }
+
+        public void GetMP(ref int curr, ref int max)
+        {
+            curr = _iCurrentMP;
+            max = MaxMP;
+        }
+
         public virtual bool IsSummon() { return false; }
     }
 
@@ -2949,8 +2962,8 @@ namespace RiverHollow.Actors
         private int _classLevel;
         public int ClassLevel { get => _classLevel; }
 
-        private int _xp;
-        public int XP { get => _xp; }
+        private int _iXP;
+        public int XP { get => _iXP; }
 
         public bool Protected;
 
@@ -3062,8 +3075,8 @@ namespace RiverHollow.Actors
         public void SetClass(CharacterClass x)
         {
             _class = x;
-            _currentHP = MaxHP;
-            _currentMP = MaxMP;
+            _iCurrentHP = MaxHP;
+            _iCurrentMP = MaxMP;
 
             Weapon = (Equipment)GetItem(_class.WeaponID);
             Armor = (Equipment)GetItem(_class.ArmorID);
@@ -3073,8 +3086,8 @@ namespace RiverHollow.Actors
 
         public void AddXP(int x)
         {
-            _xp += x;
-            if (_xp >= LevelRange[_classLevel])
+            _iXP += x;
+            if (_iXP >= LevelRange[_classLevel])
             {
                 _classLevel++;
             }
@@ -3085,6 +3098,12 @@ namespace RiverHollow.Actors
             base.PlayAnimation(animation);
         }
 
+        public void GetXP(ref int curr, ref int max)
+        {
+            curr = _iXP;
+            max = CombatAdventurer.LevelRange[this.ClassLevel];
+        }
+
         public AdventurerData SaveData()
         {
             AdventurerData advData = new AdventurerData
@@ -3092,7 +3111,7 @@ namespace RiverHollow.Actors
                 armor = Item.SaveData(Armor),
                 weapon = Item.SaveData(Weapon),
                 level = _classLevel,
-                xp = _xp
+                xp = _iXP
             };
 
             return advData;
@@ -3102,7 +3121,7 @@ namespace RiverHollow.Actors
             Armor = (Equipment)ObjectManager.GetItem(data.armor.itemID, data.armor.num);
             Weapon = (Equipment)ObjectManager.GetItem(data.weapon.itemID, data.weapon.num);
             _classLevel = data.level;
-            _xp = data.xp;
+            _iXP = data.xp;
         }
     }
 
@@ -3219,8 +3238,8 @@ namespace RiverHollow.Actors
 
             LoadContent(_sMonsterFolder + texture, idle, attack, hurt, cast);
 
-            _currentHP = MaxHP;
-            _currentMP = MaxMP;
+            _iCurrentHP = MaxHP;
+            _iCurrentMP = MaxMP;
         }
 
         public override void Update(GameTime theGameTime)
