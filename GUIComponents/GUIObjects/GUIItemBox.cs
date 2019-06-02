@@ -115,7 +115,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             return rv;
         }
 
-        public bool ProcessHover(Point mouse)
+        public override bool ProcessHover(Point mouse)
         {
             bool rv = false;
             if (Contains(mouse))

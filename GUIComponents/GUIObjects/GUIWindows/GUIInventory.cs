@@ -5,13 +5,34 @@ using RiverHollow.WorldObjects;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using RiverHollow.Actors;
-using static RiverHollow.WorldObjects.WorldItem;
-using static RiverHollow.WorldObjects.Door;
-using RiverHollow.Game_Managers.GUIComponents.Screens;
+using System.Collections.Generic;
 
 namespace RiverHollow.Screens
 {
+    public class GUIInventoriesDisplay : GUIObject
+    {
+        GUIInventory _gPlayerInventory;
+        GUIInventory _gExtraInventory;
+
+        public GUIInventoriesDisplay()
+        {
+            _gPlayerInventory = new GUIInventory(true);
+            _gExtraInventory = new GUIInventory(false);
+
+            _gPlayerInventory.AnchorAndAlignToObject(_gExtraInventory, SideEnum.Bottom, SideEnum.CenterX);
+
+            Width = _gPlayerInventory.Width;
+            Height = _gPlayerInventory.Height + _gExtraInventory.Height;
+
+            MoveBy(new Vector2(-((_gPlayerInventory.Width-_gExtraInventory.Width)/2) ,0));
+
+            AddControl(_gPlayerInventory);
+            AddControl(_gExtraInventory);
+
+            this.CenterOnScreen();
+        }
+
+    }
     public class GUIInventory : GUIWindow
     {
         protected GUIItemBox[,] _gItemBoxes;
@@ -26,10 +47,11 @@ namespace RiverHollow.Screens
 
         public GUIInventory(bool PlayerInventory = false)
         {
+            Position(Vector2.Zero);
             _winData = GUIWindow.BrownWin;
             _bPlayerInventory = PlayerInventory;
 
-            //Retrieve the dimensions of the Inventory we're workingo n frmo the InventoryManager
+            //Retrieve the dimensions of the Inventory we're working on from the InventoryManager
             InventoryManager.GetDimensions(ref _rows, ref _columns, _bPlayerInventory);
 
             _gItemBoxes = new GUIItemBox[_rows, _columns];
@@ -51,28 +73,12 @@ namespace RiverHollow.Screens
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-
-            for (int i = 0; i < _rows; i++)
-            {
-                for (int j = 0; j < _columns; j++)
-                {
-                    //float alpha = 1.0f;// _vSelectedItem == new Vector2(i, j) ? 0.5f : 1;
-                    _gItemBoxes[i, j].Draw(spriteBatch);//, alpha);
-                }
-            }
-        }
-
         /// <summary>
         /// Centers the gui object on the screen, then initializes
         /// the ItemBox array and positions them appropriately.
         /// </summary>
         public void Setup()
         {
-            CenterOnScreen();
-
             for (int i = 0; i < _rows; i++)
             {
                 for (int j = 0; j < _columns; j++)
@@ -82,11 +88,13 @@ namespace RiverHollow.Screens
                     if (i == 0 && j == 0) { _gItemBoxes[i, j].AnchorToInnerSide(this, SideEnum.TopLeft, _iMargin); }
                     else if (j == 0) { _gItemBoxes[i, j].AnchorAndAlignToObject(_gItemBoxes[i - 1, j], SideEnum.Bottom, SideEnum.Left, _iMargin); }
                     else { _gItemBoxes[i, j].AnchorAndAlignToObject(_gItemBoxes[i, j - 1], SideEnum.Right, SideEnum.Bottom, _iMargin); }
+
+                    AddControl(_gItemBoxes[i, j]);
                 }
             }
         }
 
-        public bool ProcessLeftButtonClick(Point mouse, bool onlyInv)
+        public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
 
@@ -132,11 +140,6 @@ namespace RiverHollow.Screens
                     rv = true;
                     bool takeHalf = InputManager.IsKeyHeld(Keys.LeftShift) || InputManager.IsKeyHeld(Keys.RightShift);
                     rv = GameManager.GrabItem(TakeItem(mouse, takeHalf));
-                    
-                    if (onlyInv)
-                    {
-                        //GameManager.BackToMain();
-                    }
                 }
             }
 
@@ -206,7 +209,7 @@ namespace RiverHollow.Screens
         /// </summary>
         /// <param name="mouse"></param>
         /// <returns></returns>
-        public virtual bool ProcessHover(Point mouse)
+        public override bool ProcessHover(Point mouse)
         {
             bool rv = false;
 

@@ -69,15 +69,15 @@
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[Type:Tool][Image:0-16][Sell:3000][ToolType:Axe][Dmg:1][Stam:1]</Value>
+      <Value>[Type:Tool][Image:0-32][Sell:3000][ToolType:Axe][Dmg:1][Stam:1]</Value>
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Type:Tool][Image:0-32][Sell:3000][ToolType:Shovel][Stam:1]</Value>
+      <Value>[Type:Tool][Image:0-48][Sell:3000][ToolType:Shovel][Stam:1]</Value>
     </Item>
     <Item>
       <Key>23</Key>
-      <Value>[Type:Tool][Image:0-48][Sell:3000][ToolType:WateringCan][Stam:1]</Value>
+      <Value>[Type:Tool][Image:0-64][Sell:3000][ToolType:WateringCan][Stam:1]</Value>
     </Item>
     <!--<40-59> Plant Resources-->
     <Item>

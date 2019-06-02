@@ -14,6 +14,7 @@ using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Game_Managers.GUIObjects.GUIButton;
 using static RiverHollow.GUIObjects.GUIObject;
 using static RiverHollow.WorldObjects.WorldItem;
 
@@ -44,9 +45,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gResults = new GUIText();
 
             _sdStamina = new GUIStatDisplay(PlayerManager.GetStamina, Color.Red);
-            Controls.Add(_sdStamina);
+            AddControl(_sdStamina);
 
             _gActionSelect = new ActionSelectObject();
+            AddControl(_gActionSelect);
 
             CombatManager.ConfigureAllies(ref _arrAllies);
             CombatManager.ConfigureEnemies(ref _arrEnemies);
@@ -70,8 +72,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     CombatManager.SelectedAction.SetSkillTarget();
                     break;
                 case CombatManager.PhaseEnum.DisplayVictory:
-                    _gPostScreen = null;
-                    CombatManager.EndCombatVictory();
+                    rv = _gPostScreen.ProcessLeftButtonClick(mouse);
                     break;
                 case CombatManager.PhaseEnum.Defeat:
                     GUIManager.SlowFadeOut();
@@ -140,6 +141,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     if (array != _arrEnemies) { array = _arrEnemies; }
                     else { loop = false; }
                 }
+            }
+
+            if(_gPostScreen != null)
+            {
+                _gPostScreen.ProcessHover(mouse);
             }
             Exit:
             
@@ -237,7 +243,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 case CombatManager.PhaseEnum.DisplayVictory:
                     if(_gPostScreen == null) {
                         InventoryManager.InitMobInventory(1, 5);
-                        _gPostScreen = new GUIPostCombatDisplay(CombatManager.EarnedXP);
+                        _gPostScreen = new GUIPostCombatDisplay(ClosePostCombatDisplay);
                         _gPostScreen.CenterOnScreen();
                     }
                     else { _gPostScreen.Update(gameTime); }
@@ -314,12 +320,24 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
             _gActionSelect.Draw(spriteBatch);
             if (!String.IsNullOrEmpty(_gResults.Text)) { _gResults.Draw(spriteBatch); }
 
-            Draw(spriteBatch, false);
-            Draw(spriteBatch, true);
+            bool loop = true;
+            GUICmbtTile[,] array = _arrAllies;
+            while (loop)
+            {
+                foreach (GUICmbtTile t in array)
+                {
+                    if (t != null)
+                    {
+                        t.Draw(spriteBatch);
+                    }
+                }
+
+                if (array != _arrEnemies) { array = _arrEnemies; }
+                else { loop = false; }
+            }
 
             if (CombatManager.SelectedAction != null)
             {
@@ -336,25 +354,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gTurnOrder.Draw(spriteBatch);
 
             if (_gPostScreen != null) { _gPostScreen.Draw(spriteBatch); }
+
+            base.Draw(spriteBatch);
         }
 
-        private void Draw(SpriteBatch spriteBatch, bool drawCharacter)
+        private void ClosePostCombatDisplay()
         {
-            bool loop = true;
-            GUICmbtTile[,] array = _arrAllies;
-            while (loop)
-            {
-                foreach (GUICmbtTile t in array)
-                {
-                    if (t != null) {
-                        if (drawCharacter) { t.DrawCharacter(spriteBatch); }
-                        else { t.Draw(spriteBatch); }
-                    }
-                }
-
-                if (array != _arrEnemies) { array = _arrEnemies; }
-                else { loop = false; }
-            }
+            _gPostScreen = null;
+            CombatManager.EndCombatVictory();
         }
     }
 
@@ -425,15 +432,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 _gSummonEffect.Draw(spriteBatch);
             }
-        }
-        public void DrawCharacter(SpriteBatch spriteBatch)
-        {
+
             if (Occupied())
             {
-                if(_gSummon != null) { _gSummon.Draw(spriteBatch); }
+                if (_gSummon != null) { _gSummon.Draw(spriteBatch); }
                 _gSprite.Draw(spriteBatch);
 
-                if (_gSpriteWeapon != null) { _gSpriteWeapon.Draw(spriteBatch); } 
+                if (_gSpriteWeapon != null) { _gSpriteWeapon.Draw(spriteBatch); }
 
                 if (!(CombatManager.CurrentPhase == CombatManager.PhaseEnum.PerformAction && CombatManager.ActiveCharacter == _mapTile.Character)
                     && !(_mapTile.Character.IsMonster() && _mapTile.Character.IsCurrentAnimation(CActorAnimEnum.KO)))
@@ -645,7 +650,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
 
-        public bool ProcessHover(Point mouse)
+        public override bool ProcessHover(Point mouse)
         {
             bool rv = false;
 
@@ -721,7 +726,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return _gActionBar.ProcessLeftButtonClick(mouse);
         }
 
-        public bool ProcessHover(Point mouse)
+        public override bool ProcessHover(Point mouse)
         {
             bool rv = false;
 
@@ -874,7 +879,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 return rv;
             }
 
-            public bool ProcessHover(Point mouse)
+            public override bool ProcessHover(Point mouse)
             {
                 bool rv = false;
 
@@ -1059,7 +1064,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     return rv;
                 }
 
-                public bool ProcessHover(Point mouse)
+                public override bool ProcessHover(Point mouse)
                 {
                     bool rv = false;
 
@@ -1282,7 +1287,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if(_gWindow != null) { _gWindow.Draw(spriteBatch); }
         }
 
-        public bool ProcessHover(Point mouse)
+        public override bool ProcessHover(Point mouse)
         {
             bool rv = false;
             CombatActor a = null;
@@ -1532,30 +1537,64 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
     public class GUIPostCombatDisplay : GUIObject
     {
-        GUIText _gText;
+        GUIButton _btnClose;
         GUIWindow _gWin;
-        GUIInventory _gMobItems;
+        GUIInventoriesDisplay _gItemManager;
+        GUIStatDisplay _gXPToGive;
+        GUIStatDisplay[] _arrCharXP;
 
-        public GUIPostCombatDisplay(int xp)
+        bool _bDisplayItems;
+
+        public GUIPostCombatDisplay(BtnClickDelegate closeDelegate)
         {
-            _gWin = new GUIWindow(GUIWindow.BrownWin, RiverHollow.ScreenWidth/3, RiverHollow.ScreenHeight/3);
-            _gText = new GUIText("Earned " + xp + " xp");
-            _gText.CenterOnObject(_gWin);
-            _gText.AnchorToInnerSide(_gWin, SideEnum.Top);
-            _gWin.AddControl(_gText);
-            _gWin.Resize();
+            _bDisplayItems = false;
+            _arrCharXP = new GUIStatDisplay[4];
+            _gWin = new GUIWindow(GUIWindow.BrownWin, RiverHollow.ScreenWidth / 3, RiverHollow.ScreenHeight / 3);
+            _gXPToGive = new GUIStatDisplay(CombatManager.CurrentMob.GetXP, Color.Yellow);
+            _gXPToGive.CenterOnObject(_gWin);
+            _gXPToGive.AnchorToInnerSide(_gWin, SideEnum.Top);
 
-            _gMobItems = new GUIInventory();_gMobItems.AnchorAndAlignToObject(_gWin, SideEnum.Bottom, SideEnum.CenterX);
-            _gWin.AddControl(_gMobItems);
+            for (int i = 0; i < PlayerManager.GetParty().Count; i++)
+            {
+                CombatAdventurer adv  = PlayerManager.GetParty()[i];
+                _arrCharXP[i] = new GUIStatDisplay(adv.GetXP, Color.Yellow);
+
+                if(i == 0) { _arrCharXP[i].AnchorToInnerSide(_gWin, SideEnum.BottomLeft); }
+                else { _arrCharXP[i].AnchorAndAlignToObject(_arrCharXP[i - 1], SideEnum.Right, SideEnum.Bottom); }
+
+                _gWin.AddControl(_arrCharXP[i]);
+            }
+
+            _btnClose = new GUIButton("Close", closeDelegate);
 
             Width = _gWin.Width;
-            Height = _gWin.Height + _gMobItems.Height;
+            Height = _gWin.Height;
             AddControl(_gWin);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override bool ProcessLeftButtonClick(Point mouse)
         {
-            _gWin.Draw(spriteBatch);
+            bool rv = false;
+            if (!_bDisplayItems) {
+                _bDisplayItems = true;
+                RemoveControl(_gWin);
+
+                _gItemManager = new GUIInventoriesDisplay();
+                _btnClose.AnchorAndAlignToObject(_gItemManager, SideEnum.Right, SideEnum.Bottom);
+                AddControl(_gItemManager);
+                AddControl(_btnClose);
+            }
+            else
+            {
+                rv = _gItemManager.ProcessLeftButtonClick(mouse);
+                if (!rv)
+                {
+                 rv = _btnClose.ProcessLeftButtonClick(mouse);
+                }
+            }
+
+            return rv;
         }
+
     }
 }

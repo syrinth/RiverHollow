@@ -177,7 +177,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _quest = q;
         }
 
-        public bool ProcessHover(Point mouse)
+        public override bool ProcessHover(Point mouse)
         {
             bool rv = false;
             return rv;

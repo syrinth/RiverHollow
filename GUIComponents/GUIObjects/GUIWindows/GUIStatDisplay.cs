@@ -85,7 +85,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-        public bool ProcessHover(Point mouse)
+        public override bool ProcessHover(Point mouse)
         {
             _bHover = _gLeft.Contains(mouse) || _gMid.Contains(mouse) || _gRight.Contains(mouse);
             return _bHover;

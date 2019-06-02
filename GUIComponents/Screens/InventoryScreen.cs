@@ -14,12 +14,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
     {
         private GUIInventory _inventory;
         private GUIInventory _container;
-        private SpriteFont _font;
 
         public InventoryScreen()
         {
             InventoryManager.ClearExtraInventory();
-            _font = GameContentManager.GetFont(@"Fonts\Font");
             _inventory = new GUIInventory(true);
             Controls.Add(_inventory);
         }
@@ -28,15 +26,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             InventoryManager.ClearExtraInventory();
 
-            Vector2 centerPoint = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
-            _font = GameContentManager.GetFont(@"Fonts\Font");
-
             InventoryManager.InitContainerInventory(c);
             _container = new GUIInventory();
             _inventory = new GUIInventory(true);
-
-            Vector2 contWidthHeight = new Vector2(_container.MidWidth(), _container.InnerRectangle().Height);
-            Vector2 mainWidthHeight = new Vector2(_inventory.MidWidth(), _inventory.InnerRectangle().Height);
 
             _inventory.Setup();
             _container.Setup();
@@ -54,12 +46,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
             bool rv = false;
             if (_inventory.Contains(mouse))
             {
-                _inventory.ProcessLeftButtonClick(mouse, _container == null);
+                _inventory.ProcessLeftButtonClick(mouse);
                 rv = true;
             }
             else if (_container != null && _container.Contains(mouse))
             {
-                _container.ProcessLeftButtonClick(mouse, _container == null);
+                _container.ProcessLeftButtonClick(mouse);
                 rv = true;
             }
             else

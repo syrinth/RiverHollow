@@ -200,11 +200,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
             }
 
-            public virtual bool ProcessHover(Point mouse)
-            {
-                return false;
-            }
-
             public class MainBuildingsWin : MgmtWindow
             {
                 public MainBuildingsWin(ManagementScreen s, WorldAdventurer w = null) : base(s)

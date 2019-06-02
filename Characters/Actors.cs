@@ -2005,6 +2005,9 @@ namespace RiverHollow.Actors
         int _iMoveFailures = 0;
 
         List<SpawnConditionEnum> _liSpawnConditions;
+
+        int _iXP;
+        int _iXPToGive;
         
         #endregion
 
@@ -2016,6 +2019,10 @@ namespace RiverHollow.Actors
             ImportBasics(stringData, id);
             _sTexture = _sMobFolder + "FangedFur";
             LoadContent();
+
+            _iXP = 0;
+            foreach (Monster mon in _liMonsters) { _iXP += mon.XP; }
+            _iXPToGive = _iXP;
         }
 
         public void LoadContent()
@@ -2427,6 +2434,27 @@ namespace RiverHollow.Actors
                 items.Add(m.GetLoot());
             }
             return items;
+        }
+
+        /// <summary>
+        /// Delegate method to retrieve XP data
+        /// </summary>
+        /// <param name="xpLeftToGive">The amount of xp left to give</param>
+        /// <param name="totalXP">The total amount of XP to give</param>
+        public void GetXP(ref int xpLeftToGive, ref int totalXP)
+        {
+            xpLeftToGive= _iXPToGive;
+            totalXP = _iXP;
+        }
+
+        /// <summary>
+        /// Drains away the given amount of XP fromt he pool of XP left to give.
+        /// If it would go below zero, we instead drain whatever remains.
+        /// </summary>
+        /// <param name="v"></param>
+        public void DrainXP(int v)
+        {
+            _iXPToGive -= Math.Min(v, _iXPToGive);
         }
 
         private class FieldOfVision
@@ -2953,7 +2981,7 @@ namespace RiverHollow.Actors
     public class CombatAdventurer : CombatActor
     {
         #region Properties
-        public static List<int> LevelRange = new List<int> { 0, 10, 40, 100, 200, 600, 800, 1200, 1600, 2000 };
+        public static List<int> LevelRange = new List<int> { 0, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240 };
         protected WorldCombatant _world;
         public WorldCombatant World => _world;
 

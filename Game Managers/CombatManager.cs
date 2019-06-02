@@ -16,7 +16,6 @@ namespace RiverHollow.Game_Managers
     public static class CombatManager
     {
         public static int CombatScale = 5;
-        public static int EarnedXP;
         private static Mob _mob;
         public static Mob CurrentMob { get => _mob; }
         public static CombatActor ActiveCharacter;
@@ -71,8 +70,6 @@ namespace RiverHollow.Game_Managers
             Delay = 0;
             _mob = m;
             _liMonsters = _mob.Monsters;
-            EarnedXP = 0;
-            foreach (Monster mon in _liMonsters) { EarnedXP += mon.XP; }                                      //Sets the accumulated xp for the battle
 
             _listParty = new List<CombatActor>();
             _listParty.AddRange(PlayerManager.GetParty());
@@ -186,8 +183,39 @@ namespace RiverHollow.Game_Managers
                     }
                 }
             }
+
+            switch (CurrentPhase)
+            {
+                case PhaseEnum.DisplayVictory:
+                    if (Delay <= 0)
+                    {
+                        Delay = 0.05f;
+                        GiveXP();
+                    }
+                    else
+                    {
+                        Delay -= gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+                    break;
+            }
         }
 
+        private static void GiveXP()
+        {
+            int toGive = 0;
+            int total = 0;
+            CurrentMob.GetXP(ref toGive, ref total);
+
+            int xpDrain = 5;
+            if (toGive > 0)
+            {
+                CurrentMob.DrainXP(xpDrain);
+                foreach (CombatAdventurer a in _listParty)
+                {
+                    a.AddXP(xpDrain);
+                }
+            }
+        }
         internal static bool CanCancel()
         {
             return CurrentPhase == PhaseEnum.ChooseTarget || CurrentPhase == PhaseEnum.SelectSkill;

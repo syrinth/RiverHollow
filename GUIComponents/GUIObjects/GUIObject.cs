@@ -114,11 +114,51 @@ namespace RiverHollow.GUIObjects
         }
         public virtual bool ProcessLeftButtonClick(Point mouse)
         {
-            return Contains(mouse);
+            bool rv = false;
+
+            foreach(GUIObject c in Controls)
+            {
+                rv = c.ProcessLeftButtonClick(mouse);
+            }
+
+            if (!rv)
+            {
+                rv = Contains(mouse);
+            }
+
+            return rv;
         }
         public virtual bool ProcessRightButtonClick(Point mouse)
         {
-            return Contains(mouse);
+            bool rv = false;
+
+            foreach (GUIObject c in Controls)
+            {
+                rv = c.ProcessLeftButtonClick(mouse);
+            }
+
+            if (!rv)
+            {
+                rv = Contains(mouse);
+            }
+
+            return rv;
+        }
+        public virtual bool ProcessHover(Point mouse)
+        {
+            bool rv = false;
+
+            foreach (GUIObject c in Controls)
+            {
+                rv = c.ProcessHover(mouse);
+            }
+
+            if (!rv)
+            {
+                rv = Contains(mouse);
+            }
+
+            return rv;
         }
 
         public Vector2 Position()

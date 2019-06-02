@@ -315,7 +315,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _closeAction();
                 return rv;
             }
-            public bool ProcessHover(Point mouse)
+            public override bool ProcessHover(Point mouse)
             {
                 bool rv = false;
 
