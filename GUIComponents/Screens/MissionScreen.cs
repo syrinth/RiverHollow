@@ -7,16 +7,10 @@ using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIObjects;
-using RiverHollow.WorldObjects;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static RiverHollow.Game_Managers.GUIObjects.GUIButton;
-using static RiverHollow.Game_Managers.GUIObjects.ManagementScreen;
-using static RiverHollow.Game_Managers.GUIObjects.PartyScreen;
-using static RiverHollow.Game_Managers.GUIObjects.PartyScreen.NPCDisplayBox;
+using static RiverHollow.Game_Managers.GUIObjects.HUDMenu.HUDParty.NPCDisplayBox;
 using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow.GUIComponents.Screens

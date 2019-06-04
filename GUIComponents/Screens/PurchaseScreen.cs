@@ -7,14 +7,14 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.GUIComponents.Screens;
 using RiverHollow.GUIObjects;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Actors.ShopKeeper;
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Game_Managers.GUIObjects.PartyScreen.NPCDisplayBox;
+using static RiverHollow.Game_Managers.GUIObjects.HUDMenu;
+using static RiverHollow.Game_Managers.GUIObjects.HUDMenu.HUDParty.NPCDisplayBox;
 using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow.GUIComponents.Screens
@@ -440,9 +440,9 @@ namespace RiverHollow.GUIComponents.Screens
                     //If all items are found, then remove them.
                     if (PlayerManager.Buildings.Count > 0 && PlayerManager.Money >= wB.Cost)
                     {
-                        ManagementScreen m = new ManagementScreen();
+                        HUDManagement m = new HUDManagement();
                         m.PurchaseWorker(ObjectManager.GetWorker(wB.ID), wB.Cost);
-                        GUIManager.SetScreen(m);
+                        GUIManager.OpenMainObject(m);
 
                         rv = true;
                     }

@@ -17,49 +17,88 @@ namespace RiverHollow.Game_Managers.GUIObjects
         private GUITextWindow _guiHoverWindow;
         private GUIObject _guiHoverObject;
         protected GUITextSelectionWindow _gSelectionWindow;
-        private List<GUIObject> _toRemove;
+        private List<GUIObject> _liToRemove;
+        private List<GUIObject> _liToAdd;
         protected List<GUIObject> Controls;
         public bool IsVisible;
 
         public GUIScreen()
         {
-            _toRemove = new List<GUIObject>();
+            _liToRemove = new List<GUIObject>();
+            _liToAdd = new List<GUIObject>();
             Controls = new List<GUIObject>();
         }
         public virtual bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_gSelectionWindow != null) {
-                rv = _gSelectionWindow.ProcessLeftButtonClick(mouse);
+            foreach(GUIObject g in Controls)
+            {
+                rv = g.ProcessLeftButtonClick(mouse);
+
+                if (rv) { break; }
             }
-            else if (_guiTextWindow != null) { rv = _guiTextWindow.ProcessLeftButtonClick(mouse); }
             return rv;
         }
         public virtual bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = false;
-            if (_gSelectionWindow != null) { rv = _gSelectionWindow.ProcessRightButtonClick(mouse); }
-            else if ( _guiTextWindow != null) { rv = _guiTextWindow.ProcessRightButtonClick(mouse); }
-            else { GameManager.BackToMain(); }
+
+            if (_gSelectionWindow == null && _guiTextWindow == null) { GameManager.BackToMain(); }
+            else
+            {
+                foreach (GUIObject g in Controls)
+                {
+                    rv = g.ProcessRightButtonClick(mouse);
+
+                    if (rv) { break; }
+                }
+
+                if(!rv && IsMenuOpen())
+                {
+                    GameManager.BackToMain();
+                }
+            }
+
             return rv;
         }
         public virtual bool ProcessHover(Point mouse)
         {
+            //bool rv = false;
+            //rv = _guiHoverWindow != null && _gSelectionWindow != null;
+            //return rv;
             bool rv = false;
-            rv = _guiHoverWindow != null && _gSelectionWindow != null;
+            foreach (GUIObject g in Controls)
+            {
+                rv = g.ProcessHover(mouse);
+
+                if (rv) { break; }
+            }
             return rv;
         }
         public virtual void Update(GameTime gameTime)
         {
+            foreach (GUIObject g in _liToAdd)
+            {
+                if (!Controls.Contains(g))
+                {
+                    Controls.Add(g);
+                    g.ParentScreen = this;
+                }
+            }
+            _liToAdd.Clear();
             foreach (GUIObject g in Controls)
             {
                 g.Update(gameTime);
             }
-            foreach (GUIObject g in _toRemove)
+
+            foreach (GUIObject g in _liToRemove)
             {
-                Controls.Remove(g);
+                if (Controls.Contains(g))
+                {
+                    Controls.Remove(g);
+                }
             }
-            _toRemove.Clear();
+            _liToRemove.Clear();
 
             if (_guiTextWindow != null) { _guiTextWindow.Update(gameTime); }
 
@@ -94,21 +133,27 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public virtual void Sync() { }
 
+        //Hover Window Code
         public virtual void CloseHoverWindow() {
+            RemoveControl(_guiHoverWindow);
             _guiHoverWindow = null;
             _guiHoverObject = null;
         }
         public bool IsHoverWindowOpen() { return _guiHoverWindow != null; }
         public virtual void OpenHoverWindow(GUITextWindow hoverWindow, GUIObject hoverObject)
         {
+            CloseHoverWindow();
             _guiHoverWindow = hoverWindow;
             _guiHoverObject = hoverObject;
+            AddControl(_guiHoverWindow);
         }
 
+        //Hover Text Window
         public virtual bool CloseTextWindow(GUITextWindow win) {
             bool rv = false;
             if (win == _guiTextWindow)
             {
+                RemoveControl(_guiTextWindow);
                 GameManager.CurrentNPC = null;
                 GameManager.gmActiveItem = null;
                 _guiTextWindow = null;
@@ -120,9 +165,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public bool IsTextWindowOpen() { return _guiTextWindow != null; }
         public virtual void OpenTextWindow(string text, bool open = true)
         {
+            RemoveControl(_guiTextWindow);
             bool selection = text.Contains("[");
             if (selection) { _guiTextWindow = new GUITextSelectionWindow(text, open); }
             else { _guiTextWindow = new GUITextWindow(text, open); }
+            AddControl(_guiTextWindow);
         }
         public void SetWindowText(string value)
         {
@@ -139,26 +186,29 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
+        //Menu Code
+        public virtual void OpenMenu() { }
+        public virtual void CloseMenu() { }
+        public virtual bool IsMenuOpen() { return false; }
+
+        //Main Object
+        public virtual void OpenMainObject(GUIObject o) { }
+        public virtual void CloseMainObject(GUIObject o) { }
+
         public void AddTextSelection(string text)
         {
-            if (Controls.Contains(_gSelectionWindow)) { Controls.Remove(_gSelectionWindow); }
+            RemoveControl(_gSelectionWindow);
             _gSelectionWindow = new GUITextSelectionWindow(text);
+            AddControl(_gSelectionWindow);
         }
 
         public void AddControl(GUIObject control)
         {
-            if (!Controls.Contains(control))
-            {
-                Controls.Add(control);
-                control.ParentScreen = this;
-            }
+            _liToAdd.Add(control);
         }
         public void RemoveControl(GUIObject control)
         {
-            if (Controls.Contains(control))
-            {
-                Controls.Remove(control);
-            }
+            _liToRemove.Add(control);
         }
 
         public virtual bool IsGameMenuScreen() { return false; }

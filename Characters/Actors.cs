@@ -15,9 +15,9 @@ using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Game_Managers.GUIObjects.ManagementScreen;
+using static RiverHollow.Game_Managers.GUIObjects.HUDMenu;
+using static RiverHollow.Game_Managers.GUIObjects.HUDMenu.HUDManagement;
 using static RiverHollow.Game_Managers.ObjectManager;
-using static RiverHollow.GUIObjects.GUIObject;
 using static RiverHollow.WorldObjects.Clothes;
 
 namespace RiverHollow.Actors
@@ -997,9 +997,9 @@ namespace RiverHollow.Actors
             }
             else if (entry.Equals("SellWorkers"))
             {
-                ManagementScreen s = new ManagementScreen();
+                HUDManagement s = new HUDManagement();
                 s.Sell();
-                GUIManager.SetScreen(s);
+                GUIManager.OpenMainObject(s);
                 GameManager.ClearGMObjects();
             }
             else if (entry.Equals("Move"))
@@ -1010,8 +1010,8 @@ namespace RiverHollow.Actors
             }
             else if (entry.Equals("UpgradeBuilding"))
             {
-                ManagementScreen m = new ManagementScreen(ActionTypeEnum.Upgrade);
-                GUIManager.SetScreen(m);
+                HUDManagement m = new HUDManagement(ActionTypeEnum.Upgrade);
+                GUIManager.OpenMainObject(m);
                 GameManager.ClearGMObjects();
             }
             else if (entry.Equals("Destroy"))

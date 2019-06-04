@@ -11,8 +11,6 @@ using static RiverHollow.WorldObjects.Clothes;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.WorldObjects.Item;
 using RiverHollow.Actors;
-using static RiverHollow.Game_Managers.GUIObjects.PartyScreen;
-using static RiverHollow.Game_Managers.GUIObjects.PartyScreen.NPCDisplayBox;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {

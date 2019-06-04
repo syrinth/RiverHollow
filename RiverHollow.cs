@@ -230,9 +230,9 @@ namespace RiverHollow
             {
                 if (OnMap() && InputManager.CheckPressedKey(Keys.Escape))
                 {
-                    if (!GUIManager.IsGameMenuScreen())
+                    if (!GUIManager.IsMenuScreenOpen())
                     {
-                        GUIManager.SetScreen(new GameMenuScreen());
+                        GUIManager.OpenMenu();
                     }
                 }
                 if (InputManager.CheckPressedKey(Keys.P))

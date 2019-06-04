@@ -9,8 +9,8 @@ using RiverHollow.GUIObjects;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Game_Managers.GUIObjects.PartyScreen.NPCDisplayBox;
-using static RiverHollow.Game_Managers.GUIObjects.PartyScreen.NPCDisplayBox.CharacterDisplayBox;
+using static RiverHollow.Game_Managers.GUIObjects.HUDMenu.HUDParty.NPCDisplayBox;
+using static RiverHollow.Game_Managers.GUIObjects.HUDMenu.HUDParty.NPCDisplayBox.CharacterDisplayBox;
 using static RiverHollow.GUIObjects.GUIObject;
 using static RiverHollow.WorldObjects.Clothes;
 

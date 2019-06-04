@@ -76,16 +76,10 @@
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUIMisc.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUISprite.cs" />
     <Compile Include="GUIComponents\Screens\CombatScreen.cs" />
-    <Compile Include="GUIComponents\Screens\FriendshipScreen.cs" />
-    <Compile Include="GUIComponents\Screens\GameMenuScreen.cs" />
     <Compile Include="GUIComponents\Screens\LoadScreen.cs" />
     <Compile Include="GUIComponents\Screens\MissionScreen.cs" />
     <Compile Include="GUIComponents\Screens\NewGameScreen.cs" />
-    <Compile Include="GUIComponents\Screens\ManagementScreen.cs" />
-    <Compile Include="GUIComponents\Screens\OptionScreen.cs" />
-    <Compile Include="GUIComponents\Screens\PartyScreen.cs" />
     <Compile Include="GUIComponents\Screens\PurchaseScreen.cs" />
-    <Compile Include="GUIComponents\Screens\QuestScreen.cs" />
     <Compile Include="Game Managers\InventoryManager.cs" />
     <Compile Include="Items\MerchantChest.cs" />
     <Compile Include="Misc\Quest.cs" />
