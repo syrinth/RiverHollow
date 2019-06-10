@@ -9,9 +9,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Dialog.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/portraits.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/tree.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/tools.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/items.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/weapons.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/ItemData.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC1.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC2.xml</File>
@@ -103,7 +101,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Wizard.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Healer.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texCmbtActions.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/armor.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/WorldAdventurers.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Mobs/FangedFur.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/CombatFangedFur.png</File>
@@ -162,5 +159,9 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerBard.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/CombatLef.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerHealer.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Accessories.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/armor.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/weapons.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/tools.png</File>
   </SourceFiles>
 </SourceFileCollection>

@@ -1222,10 +1222,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _gClass = new GUIText("XXXXXXXX");
                     _gClass.AnchorAndAlignToObject(_gName, SideEnum.Right, SideEnum.Bottom, 10);
 
-                    _sBoxHead = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Head, FindMatchingItems);
-                    _sBoxArmor = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Armor, FindMatchingItems);
-                    _sBoxWeapon = new SpecializedBox(_character.CharacterClass.WeaponType, _character.Weapon, FindMatchingItems);
-                    _sBoxWrist = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Wrist, FindMatchingItems);
+                    _sBoxHead = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Head.GetItem(), FindMatchingItems);
+                    _sBoxArmor = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Armor.GetItem(), FindMatchingItems);
+                    _sBoxWeapon = new SpecializedBox(_character.CharacterClass.WeaponType, _character.Weapon.GetItem(), FindMatchingItems);
+                    _sBoxWrist = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Wrist.GetItem(), FindMatchingItems);
 
                     _sBoxArmor.AnchorToInnerSide(WinDisplay, SideEnum.TopRight, SPACING);
                     _sBoxHead.AnchorAndAlignToObject(_sBoxArmor, SideEnum.Left, SideEnum.Top, SPACING);
@@ -1293,8 +1293,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     bool compareTemp = true;
                     if (tempGear != null)
                     {
-                        if (tempGear.WeaponType != WeaponEnum.None) { _character.TempWeapon = tempGear; }
-                        else if (tempGear.ArmorType != ArmorEnum.None) { _character.TempArmor = tempGear; }
+                        if (tempGear.WeaponType != WeaponEnum.None) { _character.Weapon.SetTemp(tempGear); }
+                        else if (tempGear.ArmorType != ArmorEnum.None) { _character.Armor.SetTemp(tempGear); }
                         else
                         {
                             compareTemp = false;
@@ -1303,8 +1303,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     else
                     {
                         compareTemp = false;
-                        _character.TempWeapon = null;
-                        _character.TempArmor = null;
+                        _character.Weapon.SetTemp(null);
+                        _character.Armor.SetTemp(null);
                     }
 
                     AssignStatText(_gStr, "Str", _character.StatStr, _character.TempStatStr, compareTemp);
@@ -1508,8 +1508,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 private void AssignEquipment(Equipment item)
                 {
-                    if (item.WeaponType != WeaponEnum.None) { _character.Weapon = item; }
-                    else if (item.ArmorType != ArmorEnum.None) { _character.Armor = item; }
+                    if (item.WeaponType != WeaponEnum.None) { _character.Weapon.SetGear(item); }
+                    else if (item.ArmorType != ArmorEnum.None) { _character.Armor.SetGear(item); }
                 }
             }
 
@@ -2128,10 +2128,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         _gClass.SetText(_character.Combat.CharacterClass.Name + " " + _character.Combat.ClassLevel);
                         _gXP.SetText("Exp:" + _character.Combat.XP);
 
-                        _weapon = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Combat.Weapon);
+                        _weapon = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Combat.Weapon.GetItem());
                         _weapon.AnchorToInnerSide(_window, SideEnum.TopRight);
 
-                        _armor = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Combat.Armor);
+                        _armor = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Combat.Armor.GetItem());
                         _armor.AnchorAndAlignToObject(_weapon, SideEnum.Left, SideEnum.Bottom);
 
                         _gStr = new GUIText("Dmg: 999");

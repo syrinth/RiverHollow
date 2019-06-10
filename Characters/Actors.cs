@@ -2980,6 +2980,7 @@ namespace RiverHollow.Actors
 
     public class CombatAdventurer : CombatActor
     {
+        
         #region Properties
         public static List<int> LevelRange = new List<int> { 0, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240 };
         protected WorldCombatant _world;
@@ -2995,14 +2996,13 @@ namespace RiverHollow.Actors
 
         public bool Protected;
 
-        public Equipment Weapon;
-        public Equipment TempWeapon;
-        public Equipment Armor;
-        public Equipment TempArmor;
-        public Equipment Head;
-        public Equipment TempHead;
-        public Equipment Wrist;
-        public Equipment TempWrist;
+        public List<GearSlot> _liGearSlots;
+        public GearSlot Weapon;
+        public GearSlot Armor;
+        public GearSlot Head;
+        public GearSlot Wrist;
+        public GearSlot Accessory1;
+        public GearSlot Accessory2;
 
         public override int Attack => GetGearAtk();
         public override int StatStr => 10 + _buffStr + GetGearStat(StatEnum.Str);
@@ -3026,9 +3026,7 @@ namespace RiverHollow.Actors
         {
             int rv = 0;
 
-            if (TempWeapon != null) { rv += TempWeapon.Attack; }
-            else if (Weapon != null) { rv += Weapon.Attack; }
-
+            rv += Weapon.GetStat(StatEnum.Atk);
             rv += base.Attack;
 
             return rv;
@@ -3038,8 +3036,10 @@ namespace RiverHollow.Actors
         {
             int rv = 0;
 
-            if (Weapon != null) { rv += Weapon.GetStat(stat); }
-            if (Armor != null) { rv += Armor.GetStat(stat); }
+            foreach (GearSlot g in _liGearSlots)
+            {
+                rv += g.GetStat(stat);
+            }
 
             return rv;
         }
@@ -3048,26 +3048,40 @@ namespace RiverHollow.Actors
         {
             int rv = 0;
 
-            if (TempWeapon != null) { rv += TempWeapon.GetStat(stat); }
-            else if (Weapon != null) { rv += Weapon.GetStat(stat); }
-
-            if (TempArmor != null) { rv += TempArmor.GetStat(stat); }
-            else if (Armor != null) { rv += Armor.GetStat(stat); }
+            foreach (GearSlot g in _liGearSlots)
+            {
+                rv += g.GetTempStat(stat);
+            }
 
             return rv;
         }
 
         #endregion
-        public CombatAdventurer(WorldCombatant w) : this()
-        {
-            _sName = w.Name;
-            _world = w;
-        }
-
         public CombatAdventurer() : base()
         {
             _actorType = ActorEnum.CombatAdventurer;
             _classLevel = 1;
+
+            _liGearSlots = new List<GearSlot>();
+            Weapon = new GearSlot(EquipmentEnum.Weapon);
+            Armor = new GearSlot(EquipmentEnum.Armor);
+            Head = new GearSlot(EquipmentEnum.Head);
+            Wrist = new GearSlot(EquipmentEnum.Wrist);
+            Accessory1 = new GearSlot(EquipmentEnum.Accessory);
+            Accessory2 = new GearSlot(EquipmentEnum.Accessory);
+
+            _liGearSlots.Add(Weapon);
+            _liGearSlots.Add(Armor);
+            _liGearSlots.Add(Head);
+            _liGearSlots.Add(Wrist);
+            _liGearSlots.Add(Accessory1);
+            _liGearSlots.Add(Accessory2);
+        }
+
+        public CombatAdventurer(WorldCombatant w) : this()
+        {
+            _sName = w.Name;
+            _world = w;
         }
 
         public override void LoadContent(string texture)
@@ -3106,10 +3120,10 @@ namespace RiverHollow.Actors
             _iCurrentHP = MaxHP;
             _iCurrentMP = MaxMP;
 
-            Weapon = (Equipment)GetItem(_class.WeaponID);
-            Armor = (Equipment)GetItem(_class.ArmorID);
-            Head = (Equipment)GetItem(_class.HeadID);
-            Wrist = (Equipment)GetItem(_class.WristID);
+            Weapon.SetGear((Equipment)GetItem(_class.WeaponID));
+            Armor.SetGear((Equipment)GetItem(_class.ArmorID));
+            Head.SetGear((Equipment)GetItem(_class.HeadID));
+            Wrist.SetGear((Equipment)GetItem(_class.WristID));
         }
 
         public void AddXP(int x)
@@ -3136,8 +3150,8 @@ namespace RiverHollow.Actors
         {
             AdventurerData advData = new AdventurerData
             {
-                armor = Item.SaveData(Armor),
-                weapon = Item.SaveData(Weapon),
+                armor = Item.SaveData(Armor.GetItem()),
+                weapon = Item.SaveData(Weapon.GetItem()),
                 level = _classLevel,
                 xp = _iXP
             };
@@ -3146,10 +3160,50 @@ namespace RiverHollow.Actors
         }
         public void LoadData(AdventurerData data)
         {
-            Armor = (Equipment)ObjectManager.GetItem(data.armor.itemID, data.armor.num);
-            Weapon = (Equipment)ObjectManager.GetItem(data.weapon.itemID, data.weapon.num);
+            Armor.SetGear((Equipment)ObjectManager.GetItem(data.armor.itemID, data.armor.num));
+            Weapon.SetGear((Equipment)ObjectManager.GetItem(data.weapon.itemID, data.weapon.num));
             _classLevel = data.level;
             _iXP = data.xp;
+        }
+
+        /// <summary>
+        /// Structure that represents the slot for the character.
+        /// Holds both the actual item and a temp item to compare against.
+        /// </summary>
+        public class GearSlot
+        {
+            EquipmentEnum _enumType;
+            Equipment _eGear;
+            Equipment _eTempGear;
+            public GearSlot(EquipmentEnum type)
+            {
+                _enumType = type;
+            }
+
+            public void SetGear(Equipment e) { _eGear = e; }
+            public void SetTemp(Equipment e) { _eTempGear = e; }
+
+            public int GetStat(StatEnum stat)
+            {
+                int rv = 0;
+
+                if (_eGear != null) {
+                    rv += _eGear.GetStat(stat);
+                }
+
+                return rv;
+            }
+            public int GetTempStat(StatEnum stat) {
+                int rv = 0;
+
+                if (_eTempGear != null) {
+                    rv += _eTempGear.GetStat(stat); }
+                else if (_eGear != null) {
+                    rv += _eGear.GetStat(stat); }
+
+                return rv;
+            }
+            public Equipment GetItem() { return _eGear; }
         }
     }
 

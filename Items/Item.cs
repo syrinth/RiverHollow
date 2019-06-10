@@ -364,12 +364,16 @@ namespace RiverHollow.WorldObjects
             //EType
             EquipType = Util.ParseEnum<EquipmentEnum>(stringData["EType"]);
 
-            if (EquipType.Equals(EquipmentEnum.Armor)) { _texTexture = GameContentManager.GetTexture(@"Textures\armor"); }
-            else if (EquipType.Equals(EquipmentEnum.Weapon)) { _texTexture = GameContentManager.GetTexture(@"Textures\weapons"); }
+            if (EquipType.Equals(EquipmentEnum.Armor)) { _texTexture = GameContentManager.GetTexture(@"Textures\Items\armor"); }
+            else if (EquipType.Equals(EquipmentEnum.Weapon)) { _texTexture = GameContentManager.GetTexture(@"Textures\Items\weapons"); }
+            else if (EquipType.Equals(EquipmentEnum.Accessory)) { _texTexture = GameContentManager.GetTexture(@"Textures\Items\Accessories"); }
 
             //ESub
-            if (EquipType == EquipmentEnum.Armor) { _eArmorType = Util.ParseEnum<ArmorEnum>(stringData["ESub"]); }
-            else if (EquipType == EquipmentEnum.Weapon) { _eWeaponType = Util.ParseEnum<WeaponEnum>(stringData["ESub"]); }
+            if (stringData.ContainsKey("ESub"))
+            {
+                if (EquipType == EquipmentEnum.Armor) { _eArmorType = Util.ParseEnum<ArmorEnum>(stringData["ESub"]); }
+                else if (EquipType == EquipmentEnum.Weapon) { _eWeaponType = Util.ParseEnum<WeaponEnum>(stringData["ESub"]); }
+            }
 
             if (EquipType == EquipmentEnum.Armor)
             {
@@ -436,6 +440,9 @@ namespace RiverHollow.WorldObjects
             int rv = 0;
             switch (stat)
             {
+                case StatEnum.Atk:
+                    rv += this.Attack;
+                    break;
                 case StatEnum.Def:
                     rv += this.Def;
                     break;
@@ -529,12 +536,12 @@ namespace RiverHollow.WorldObjects
             if (stringData.ContainsKey("Dmg")) { _dmgValue = int.Parse(stringData["Dmg"]); }
             _staminaCost = int.Parse(stringData["Stam"]);
 
-            _texTexture = GameContentManager.GetTexture(@"Textures\tools");
+            _texTexture = GameContentManager.GetTexture(@"Textures\Items\tools");
 
             _iColTexSize = 128;
             _iRowTexSize = TileSize;
 
-            _sprite = new AnimatedSprite(@"Textures\tools");
+            _sprite = new AnimatedSprite(@"Textures\Items\tools");
             _sprite.AddAnimation(ToolAnimEnum.Down, (int)_vSourcePos.X + TileSize, (int)_vSourcePos.Y, TileSize, TileSize * 2, 3, TOOL_ANIM_SPEED);
 
             _sprite.SetCurrentAnimation(ToolAnimEnum.Down);

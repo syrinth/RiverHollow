@@ -123,7 +123,8 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddToInventory(611);
             InventoryManager.AddToInventory(612);
             InventoryManager.AddToInventory(641);
-            InventoryManager.AddToInventory(640);
+            InventoryManager.AddToInventory(19);
+            InventoryManager.AddToInventory(970);
 
 
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestType.Fetch, "Getwood, dumbass", 1, null, ObjectManager.GetItem(2)));

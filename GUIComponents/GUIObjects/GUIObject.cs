@@ -49,6 +49,11 @@ namespace RiverHollow.GUIObjects
             }
         }
 
+        public int Top => (int)_vPos.Y;
+        public int Left => (int)_vPos.X;
+        public int Bottom => (int)_vPos.Y + Height;
+        public int Right => (int)_vPos.X + Width;
+
         private Vector2 _vPos;
         public float Alpha = 1.0f;
 
@@ -672,6 +677,27 @@ namespace RiverHollow.GUIObjects
             GUIObject g = new GUIObject(this);
             g.CenterOnObject(obj);
             return g.Position();
+        }
+
+        internal void SetSize()
+        {
+            if (Controls.Count > 0)
+            {
+                int iTop = Controls[0].Top;
+                int iBottom = Controls[0].Bottom;
+                int iLeft = Controls[0].Left;
+                int iRight = Controls[0].Right;
+                foreach (GUIObject obj in Controls)
+                {
+                    if (obj.Top < iTop) { iTop = obj.Top; }
+                    if (obj.Left < iLeft) { iLeft = obj.Left; }
+                    if (obj.Bottom > iBottom) { iBottom = obj.Bottom; }
+                    if (obj.Right > iRight) { iRight = obj.Right; }
+                }
+
+                Width = iRight - iLeft;
+                Height = iBottom - iTop;
+            }
         }
 
         #endregion

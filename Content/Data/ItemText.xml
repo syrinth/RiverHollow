@@ -58,6 +58,10 @@
       <Key>18</Key>
       <Value>Flame Mote/A small fragment of elemental fire.</Value>
     </Item>
+    <Item>
+      <Key>19</Key>
+      <Value>Enchanted Seed/A small seed glowing with potential.</Value>
+    </Item>
     <!--<20-24> Tools-->
     <Item>
       <Key>20</Key>
@@ -390,6 +394,11 @@
     <Item>
       <Key>880</Key>
       <Value>Heavy Bracelet/A defensible bracelet</Value>
+    </Item>
+    <!--<970> Wrists-->
+    <Item>
+      <Key>970</Key>
+      <Value>Ring of Protection/A bronze ring that wards against harm</Value>
     </Item>
     <!--<1000> Class Change-->
     <Item>

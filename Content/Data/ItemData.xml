@@ -62,6 +62,10 @@
       <Key>18</Key>
       <Value>[Type:Resource][Image:96-64][Sell:50]</Value>
     </Item>
+    <Item>
+      <Key>19</Key>
+      <Value>[Type:Resource][Image:112-64][Sell:100]</Value>
+    </Item>
     <!--<20-24> Tools-->
     <Item>
       <Key>20</Key>
@@ -395,6 +399,11 @@
     <Item>
       <Key>880</Key>
       <Value>[Type:Equipment][Image:0-96][Sell:1000][EType:Armor][ESub:None][ASlot:Wrist][Tier:1][Def:Major][Str:Minor]</Value>
+    </Item>
+    <!--<970> Rings-->
+    <Item>
+      <Key>970</Key>
+      <Value>[Type:Equipment][Image:0-0][Sell:1000][EType:Accessory][Tier:1][Def:Major][Str:Minor]</Value>
     </Item>
     <!--<1000> Class Change-->
     <Item>
