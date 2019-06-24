@@ -1,15 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using RiverHollow.Actors;
 using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Game_Managers.GUIObjects;
-using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
+using RiverHollow.WorldObjects;
+using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
-using System;
 using static RiverHollow.GUIObjects.GUIObject;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Actors;
 
 namespace RiverHollow.Game_Managers
 {
@@ -23,9 +23,8 @@ namespace RiverHollow.Game_Managers
         public static List<CombatActor> Monsters { get => _liMonsters; }
         private static List<CombatActor> _listParty;
         public static List<CombatActor> Party { get => _listParty; }
-        public static List<string> LiLevels;
-
-        public enum PhaseEnum { Charging, NewTurn, EnemyTurn, SelectSkill, ChooseTarget, Defeat, DisplayAttack, DisplayVictory, DisplayLevels, Lost, PerformAction, EndCombat }
+        
+        public enum PhaseEnum { Charging, NewTurn, EnemyTurn, SelectSkill, ChooseTarget, Defeat, DisplayAttack, DisplayVictory, Lost, PerformAction, EndCombat }
         public static PhaseEnum CurrentPhase;
         public static ChosenAction SelectedAction;
         private static CombatTile _targetTile;
@@ -54,8 +53,6 @@ namespace RiverHollow.Game_Managers
             ActiveCharacter = null;
             SelectedAction = null;
             SelectedTile = null;
-
-            LiLevels = new List<string>();
 
             CurrentPhase = PhaseEnum.Charging;
             _combatMap = new CombatTile[MAX_ROW, MAX_COL];
@@ -92,24 +89,12 @@ namespace RiverHollow.Game_Managers
             PlayerManager.DecreaseStamina(3);       //Decrease Stamina once
         }
 
-        public static void ConfigureAllies(ref GUICmbtTile[,] allyArray)
+        public static CombatTile GetMapTile(int row, int col)
         {
-            int cols = MAX_COL / 2;
-            if (_combatMap != null)
-            {
-                allyArray = new GUICmbtTile[MAX_ROW, cols];
-                for (int row = 0; row < MAX_ROW; row++)
-                {
-                    for (int col = 0; col < cols; col++)
-                    {
-                        allyArray[row, col] = new GUICmbtTile(_combatMap[row, col]);
-                        if (row == 0 && col == 0) { allyArray[row, col].AnchorToScreen(SideEnum.Left, 100); }
-                        else if (col == 0) { allyArray[row, col].AnchorAndAlignToObject(allyArray[row - 1, col], SideEnum.Bottom, SideEnum.Left); }
-                        else { allyArray[row, col].AnchorAndAlignToObject(allyArray[row, col - 1], SideEnum.Right, SideEnum.Bottom); }
-                    }
-                }
-            }
-
+            return _combatMap[row, col];
+        }
+        public static void AssignPositions(ref GUICmbtTile[,] allyArray)
+        {
             //Get the Players' party and assign each of them a battle position
             List<CombatActor> party = CombatManager.Party;
             for (int i = 0; i < party.Count; i++)
@@ -120,25 +105,6 @@ namespace RiverHollow.Game_Managers
                     _combatMap[(int)vec.Y, (int)vec.X].SetCombatant(party[i]);
                 }
             }
-        }
-        public static void ConfigureEnemies(ref GUICmbtTile[,] enemyArray)
-        {
-            int cols = MAX_COL / 2;
-            if (_combatMap != null)
-            {
-                enemyArray = new GUICmbtTile[MAX_ROW, cols];
-                for (int row = 0; row < MAX_ROW; row++)
-                {
-                    for (int col = cols - 1; col >= 0; col--)
-                    {
-                        enemyArray[row, col] = new GUICmbtTile(_combatMap[row, col + 4]);
-                        if (row == 0 && col == cols - 1) { enemyArray[row, col].AnchorToScreen(SideEnum.Right, 100); }
-                        else if (col == cols - 1) { enemyArray[row, col].AnchorAndAlignToObject(enemyArray[row - 1, col], SideEnum.Bottom, SideEnum.Right); }
-                        else { enemyArray[row, col].AnchorAndAlignToObject(enemyArray[row, col + 1], SideEnum.Left, SideEnum.Bottom); }
-                    }
-                }
-            }
-
             //Get the Enemies and assign each of them a battle position
             for (int i = 0; i < CurrentMob.Monsters.Count; i++)
             {
@@ -974,10 +940,12 @@ namespace RiverHollow.Game_Managers
             {
                 if (_bDrawItem && _chosenItem != null)     //We want to draw the item above the character's head
                 {
+                    int size = TileSize * CombatManager.CombatScale;
+                    GUIImage gItem = new GUIImage(_chosenItem.SourceRectangle, size, size, _chosenItem.Texture);
                     CombatActor c = CombatManager.ActiveCharacter;
-                    Point p = c.Position.ToPoint();
-                    p.X += c.Width / 2 - 16;
-                    _chosenItem.Draw(spritebatch, new Rectangle(p, new Point(32, 32)));
+
+                    gItem.AnchorAndAlignToObject(c.GetSprite(), SideEnum.Top, SideEnum.CenterX);
+                    gItem.Draw(spritebatch);
                 }
                 if (_chosenAction != null && _chosenAction.Sprite != null)
                 {

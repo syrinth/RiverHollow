@@ -97,11 +97,11 @@ namespace RiverHollow.GUIObjects
             if (Show)
             {
                 spriteBatch.Draw(_texture, _drawRect, _sourceRect, _cEnabled * Alpha);
-            }
 
-            foreach (GUIObject g in Controls)
-            {
-                g.Draw(spriteBatch);
+                foreach (GUIObject g in Controls)
+                {
+                    g.Draw(spriteBatch);
+                }
             }
         }
 

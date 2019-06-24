@@ -2,16 +2,13 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Threading;
 using RiverHollow.SpriteAnimations;
-using RiverHollow.GUIObjects;
-
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Misc;
 using System.Collections.Generic;
 using RiverHollow.Actors;
 using RiverHollow.Actors.CombatStuff;
-using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Game_Managers.GUIObjects;
 
 namespace RiverHollow.WorldObjects
 {

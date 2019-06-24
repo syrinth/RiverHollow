@@ -22,40 +22,83 @@ namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class CombatScreen : GUIScreen
     {
-        double _dResultsTimer;
         GUICmbtTile[,] _arrAllies;
         GUICmbtTile[,] _arrEnemies;
-        GUITextWindow _gtwTextWindow;
+        GUITextWindow _gActionTextWindow;
         GUIStatDisplay _sdStamina;
-        GUIText _gResults;
+        GUIImage _gActionEffect;
 
         GUIPostCombatDisplay _gPostScreen;
 
-        List<GUIText> _liTurns;
         ActionSelectObject _gActionSelect;
 
         TurnOrderDisplay _gTurnOrder;
 
-        public object UtilMapManager { get; private set; }
-
         public CombatScreen()
         {
-            _liTurns = new List<GUIText>();
-
-            _gResults = new GUIText();
-
             _sdStamina = new GUIStatDisplay(PlayerManager.GetStamina, Color.Red);
             AddControl(_sdStamina);
 
             _gActionSelect = new ActionSelectObject();
             AddControl(_gActionSelect);
 
-            CombatManager.ConfigureAllies(ref _arrAllies);
-            CombatManager.ConfigureEnemies(ref _arrEnemies);
+            ConfigureGUIMap();
+
+            CombatManager.AssignPositions(ref _arrAllies);
 
             _gTurnOrder = new TurnOrderDisplay();
             _gTurnOrder.AnchorToScreen(SideEnum.Top);
+            AddControl(_gTurnOrder);
         }
+
+        #region Map Configuration
+        /// <summary>
+        /// Calls the two GUI Map configurations
+        /// </summary>
+        private void ConfigureGUIMap()
+        {
+            ConfigureAllies();
+            ConfigureEnemies();
+        }
+        /// <summary>
+        /// Sets up the GUICmbtTiles for the players side of the map
+        /// </summary>
+        private void ConfigureAllies()
+        {
+            int cols = CombatManager.MAX_COL / 2;
+            _arrAllies = new GUICmbtTile[CombatManager.MAX_ROW, cols];
+            for (int row = 0; row < CombatManager.MAX_ROW; row++)
+            {
+                for (int col = 0; col < cols; col++)
+                {
+                    _arrAllies[row, col] = new GUICmbtTile(CombatManager.GetMapTile(row, col));
+                    if (row == 0 && col == 0) { _arrAllies[row, col].AnchorToScreen(SideEnum.Left, 100); }
+                    else if (col == 0) { _arrAllies[row, col].AnchorAndAlignToObject(_arrAllies[row - 1, col], SideEnum.Bottom, SideEnum.Left); }
+                    else { _arrAllies[row, col].AnchorAndAlignToObject(_arrAllies[row, col - 1], SideEnum.Right, SideEnum.Bottom); }
+                    AddControl(_arrAllies[row, col]);
+                }
+            }
+        }
+        /// <summary>
+        /// Sets up the GUICmbtTiles for the enemy's side of the map
+        /// </summary>
+        private void ConfigureEnemies()
+        {
+            int cols = CombatManager.MAX_COL / 2;
+            _arrEnemies = new GUICmbtTile[CombatManager.MAX_ROW, cols];
+            for (int row = 0; row < CombatManager.MAX_ROW; row++)
+            {
+                for (int col = cols - 1; col >= 0; col--)
+                {
+                    _arrEnemies[row, col] = new GUICmbtTile(CombatManager.GetMapTile(row, col + 4));
+                    if (row == 0 && col == cols - 1) { _arrEnemies[row, col].AnchorToScreen(SideEnum.Right, 100); }
+                    else if (col == cols - 1) { _arrEnemies[row, col].AnchorAndAlignToObject(_arrEnemies[row - 1, col], SideEnum.Bottom, SideEnum.Right); }
+                    else { _arrEnemies[row, col].AnchorAndAlignToObject(_arrEnemies[row, col + 1], SideEnum.Left, SideEnum.Bottom); }
+                    AddControl(_arrEnemies[row, col]);
+                }
+            }
+        }
+        #endregion
 
         public override bool ProcessLeftButtonClick(Point mouse)
         {
@@ -87,10 +130,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         c.ClearConditions();
                         c.IncreaseHealth((int)(c.MaxHP * 0.10));
                     }
-                    
+
                     break;
             }
-            
+
             return rv;
         }
 
@@ -111,7 +154,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             CombatManager.SelectedAction = null;
             _gActionSelect.CancelAction();
 
-            if(CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseTarget) { CombatManager.CurrentPhase = CombatManager.PhaseEnum.SelectSkill; }
+            if (CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseTarget) { CombatManager.CurrentPhase = CombatManager.PhaseEnum.SelectSkill; }
         }
 
         public override bool ProcessHover(Point mouse)
@@ -121,7 +164,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             if (!rv) { rv = _gActionSelect.ProcessHover(mouse); }
             if (!rv) { rv = _gTurnOrder.ProcessHover(mouse); }
-            if(CombatManager.PhaseChooseTarget()){
+            if (CombatManager.PhaseChooseTarget()) {
                 rv = HandleHoverTargeting();
             }
             else
@@ -143,12 +186,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
             }
 
-            if(_gPostScreen != null)
+            if (_gPostScreen != null)
             {
                 _gPostScreen.ProcessHover(mouse);
             }
             Exit:
-            
+
             return rv;
         }
 
@@ -160,7 +203,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 rv = HoverTargetHelper(_arrEnemies);
             }
-            else if(CombatManager.SelectedAction.TargetsAlly())
+            else if (CombatManager.SelectedAction.TargetsAlly())
             {
                 rv = HoverTargetHelper(_arrAllies);
             }
@@ -183,9 +226,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         //First, call the update for the CombatManager
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
             CombatManager.Update(gameTime);
-            _gTurnOrder.Update(gameTime);
+            base.Update(gameTime);
 
             switch (CombatManager.CurrentPhase)
             {
@@ -205,9 +247,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     CombatManager.CurrentPhase = CombatManager.PhaseEnum.SelectSkill;
                     break;
 
-                case CombatManager.PhaseEnum.SelectSkill:
-                    break;
-
                 case CombatManager.PhaseEnum.ChooseTarget:
                     CombatManager.HandleKeyboardTargetting();
                     break;
@@ -216,17 +255,19 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _gActionSelect.SetCharacter(null);
                     if (!string.IsNullOrEmpty(CombatManager.Text))
                     {
-                        if (_gtwTextWindow == null)
+                        if (_gActionTextWindow == null)
                         {
-                            _gtwTextWindow = new GUITextWindow(CombatManager.Text, 0.5);
-                            _gtwTextWindow.CenterOnScreen();
+                            _gActionTextWindow = new GUITextWindow(CombatManager.Text, 0.5);
+                            _gActionTextWindow.CenterOnScreen();
+                            AddControl(_gActionTextWindow);
                         }
                         else
                         {
-                            _gtwTextWindow.Update(gameTime);
-                            if (_gtwTextWindow.Duration <= 0)
+                            _gActionTextWindow.Update(gameTime);
+                            if (_gActionTextWindow.Duration <= 0)
                             {
-                                _gtwTextWindow = null;
+                                RemoveControl(_gActionTextWindow);
+                                _gActionTextWindow = null;
                                 CombatManager.CurrentPhase = CombatManager.PhaseEnum.PerformAction;
                             }
                         }
@@ -234,54 +275,26 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     break;
 
                 case CombatManager.PhaseEnum.PerformAction:
-                    if(CombatManager.SelectedAction != null)
+                    if (CombatManager.SelectedAction != null)
                     {
                         CombatManager.SelectedAction.PerformAction(gameTime);
                     }
-                    
+
                     break;
                 case CombatManager.PhaseEnum.DisplayVictory:
-                    if(_gPostScreen == null) {
+                    if (_gPostScreen == null) {
                         InventoryManager.InitMobInventory(1, 5);
                         _gPostScreen = new GUIPostCombatDisplay(ClosePostCombatDisplay);
                         _gPostScreen.CenterOnScreen();
+                        AddControl(_gPostScreen);
                     }
-                    else { _gPostScreen.Update(gameTime); }
-                    //if(UpdateResults(gameTime, CombatManager.EarnedXP + " Exp. Earned"))
-                    //{
-                    //    CombatManager.CurrentPhase = CombatManager.PhaseEnum.DisplayLevels;
-                    //}
-                    
-                    break;
-                case CombatManager.PhaseEnum.DisplayLevels:
-                    if (CombatManager.LiLevels.Count > 0)
-                    {
-                        if (UpdateResults(gameTime, CombatManager.LiLevels[0]))
-                        {
-                            CombatManager.LiLevels.RemoveAt(0);
-                        }
-                    }
-                    else
-                    {
-                        CombatManager.EndCombatVictory();
-                    }
+
                     break;
                 case CombatManager.PhaseEnum.Defeat:
                     GUITextWindow window = new GUITextWindow("Defeated");
                     window.CenterOnScreen();
                     AddControl(window);
                     break;
-            }
-
-            foreach (GUICmbtTile location in _arrAllies)
-            {
-                location.Update(gameTime);
-            }
-
-            //Update everyone in the party's battleLocation
-            foreach (GUICmbtTile p in _arrEnemies)
-            {
-                p.Update(gameTime);
             }
 
             //Cancel out of selections made if escape is hit
@@ -291,90 +304,32 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-        private bool UpdateResults(GameTime gameTime, string str)
-        {
-            bool rv = false;
-            if (String.IsNullOrEmpty(_gResults.Text))
-            {
-                _gResults.SetText(str);
-                _gResults.CenterOnScreen();
-                _dResultsTimer = 1.0f;
-            }
-            else
-            {
-                _dResultsTimer -= gameTime.ElapsedGameTime.TotalSeconds;
-                if (_dResultsTimer > 0)
-                {
-                    _gResults.MoveBy(0, -1);
-                }
-                else
-                {
-                    _gResults.SetText("");
-                    _dResultsTimer = 0;
-                    rv = true;
-                }
-            }
-
-            return rv;
-        }
-
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _gActionSelect.Draw(spriteBatch);
-            if (!String.IsNullOrEmpty(_gResults.Text)) { _gResults.Draw(spriteBatch); }
-
-            bool loop = true;
-            GUICmbtTile[,] array = _arrAllies;
-            while (loop)
-            {
-                foreach (GUICmbtTile t in array)
-                {
-                    if (t != null)
-                    {
-                        t.Draw(spriteBatch);
-                    }
-                }
-
-                if (array != _arrEnemies) { array = _arrEnemies; }
-                else { loop = false; }
-            }
-
-            if (CombatManager.SelectedAction != null)
-            {
-                CombatManager.SelectedAction.Draw(spriteBatch);
-            }
-
-            if (_gtwTextWindow != null) { _gtwTextWindow.Draw(spriteBatch); }
-
-            foreach(GUIText t in _liTurns)
-            {
-                t.Draw(spriteBatch);
-            }
-
-            _gTurnOrder.Draw(spriteBatch);
-
-            if (_gPostScreen != null) { _gPostScreen.Draw(spriteBatch); }
-
             base.Draw(spriteBatch);
+
+            //Characters need to be drawn after the tiles because they move and can need to be drawn on top of them
+            foreach(GUICmbtTile tile in _arrAllies) { tile.DrawCharacters(spriteBatch); }
+            foreach (GUICmbtTile tile in _arrEnemies) { tile.DrawCharacters(spriteBatch); }
+
+            if (CombatManager.SelectedAction != null) { CombatManager.SelectedAction.Draw(spriteBatch); }
         }
 
         private void ClosePostCombatDisplay()
         {
             _gPostScreen = null;
+            RemoveControl(_gPostScreen);
             CombatManager.EndCombatVictory();
         }
     }
 
     public class GUICmbtTile : GUIObject
     {
-        GUIStatDisplay _gHP;
-        GUIStatDisplay _gMP;
         GUIImage _gTargetter;
         GUIImage _gTile;
-        GUISprite _gSprite;
-        GUISprite _gSpriteWeapon;
-        public GUISprite CharacterSprite => _gSprite;
-        public GUISprite CharacterWeaponSprite => _gSpriteWeapon;
+        GUICombatActorInfo _gCombatSprite;
+        public GUISprite CharacterSprite => _gCombatSprite.CharacterSprite;
+        public GUISprite CharacterWeaponSprite => _gCombatSprite.CharacterWeaponSprite;
         GUIText _gEffect;
         GUISprite _gSummon;
         public GUISprite SummonSprite => _gSummon;
@@ -408,7 +363,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if(CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseTarget)
+            if (CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseTarget)
             {
                 _gTile.Alpha = CombatManager.SelectedAction.LegalTiles.Contains(_mapTile) ? 1 : 0.5f;
             }
@@ -432,20 +387,19 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 _gSummonEffect.Draw(spriteBatch);
             }
+        }
 
+        public void DrawCharacters(SpriteBatch spriteBatch)
+        {
             if (Occupied())
             {
                 if (_gSummon != null) { _gSummon.Draw(spriteBatch); }
-                _gSprite.Draw(spriteBatch);
 
-                if (_gSpriteWeapon != null) { _gSpriteWeapon.Draw(spriteBatch); }
+                _gCombatSprite.Draw(spriteBatch);
 
                 if (!(CombatManager.CurrentPhase == CombatManager.PhaseEnum.PerformAction && CombatManager.ActiveCharacter == _mapTile.Character)
                     && !(_mapTile.Character.IsMonster() && _mapTile.Character.IsCurrentAnimation(CActorAnimEnum.KO)))
                 {
-                    _gHP.Draw(spriteBatch);
-                    if (_gMP != null) { _gMP.Draw(spriteBatch); }
-
                     foreach (GUIStatus stat in _liStatus)
                     {
                         if (_mapTile.Character.DiConditions[stat.Status])
@@ -469,13 +423,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (Occupied())
             {
                 if (_gSummon != null) { _gSummon.Update(gameTime); }
-                if (_gSpriteWeapon != null) { _gSpriteWeapon.Update(gameTime); }
-                _gSprite.Update(gameTime);
-                _gHP.Update(gameTime);
-                if (_gMP != null) { _gMP.Update(gameTime); }
+                _gCombatSprite.Update(gameTime);
             }
 
-            if(_gEffect != null)
+            if (_gEffect != null)
             {
                 if (_iDmgTimer < 40)
                 {
@@ -489,12 +440,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     if (!String.IsNullOrEmpty(_gEffect.Text))
                     {
                         _gEffect.SetText("");
-                        _gEffect.AnchorAndAlignToObject(_gSprite, SideEnum.Top, SideEnum.CenterX);
+                        _gEffect.AnchorAndAlignToObject(_gCombatSprite, SideEnum.Top, SideEnum.CenterX);
                     }
                     if (_gSummonEffect != null && !String.IsNullOrEmpty(_gSummonEffect.Text))
                     {
                         _gSummonEffect.SetText("");
-                        _gSummonEffect.AnchorAndAlignToObject(_gSprite, SideEnum.Top, SideEnum.CenterX);
+                        _gSummonEffect.AnchorAndAlignToObject(_gCombatSprite, SideEnum.Top, SideEnum.CenterX);
                     }
                 }
                 else { _gEffect = null; }
@@ -506,26 +457,18 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gTargetter.AnchorAndAlignToObject(_gTile, SideEnum.Top, SideEnum.CenterX, 30);
             if (Occupied())
             {
-                _gSprite.CenterOnObject(_gTile);
-                _gSprite.MoveBy(0, -(_gTile.Height / 3));
-
-                if (_gSpriteWeapon != null)
-                {
-                    _gSpriteWeapon.CenterOnObject(_gSprite);
-                }
-
-                _gHP.AnchorAndAlignToObject(_gSprite, SideEnum.Bottom, SideEnum.CenterX);
-                if (_gMP != null) { _gMP.AnchorAndAlignToObject(_gHP, SideEnum.Bottom, SideEnum.Left); }
+                _gCombatSprite.CenterOnObject(_gTile);
+                _gCombatSprite.MoveBy(0, -(_gTile.Height / 3));
 
                 _gEffect = new GUIText();
-                _gEffect.AnchorAndAlignToObject(_gSprite, SideEnum.Top, SideEnum.CenterX);
+                _gEffect.AnchorAndAlignToObject(_gCombatSprite, SideEnum.Top, SideEnum.CenterX);
 
-                for (int i = 0; i < _liStatus.Count; i++)
-                {
-                    GUIStatus temp = _liStatus[i];
-                    if (i == 0) { temp.AnchorAndAlignToObject(_gMP == null ? _gHP : _gMP, SideEnum.Bottom, SideEnum.Left); }
-                    else { temp.AnchorAndAlignToObject(_liStatus[i - 1], SideEnum.Right, SideEnum.Bottom); }
-                }
+                //for (int i = 0; i < _liStatus.Count; i++)
+                //{
+                //    GUIStatus temp = _liStatus[i];
+                //    if (i == 0) { temp.AnchorAndAlignToObject(_gMP == null ? _gHP : _gMP, SideEnum.Bottom, SideEnum.Left); }
+                //    else { temp.AnchorAndAlignToObject(_liStatus[i - 1], SideEnum.Right, SideEnum.Bottom); }
+                //}
             }
         }
 
@@ -533,46 +476,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             if (occupied)
             {
-                _gSprite = new GUISprite(_mapTile.Character.BodySprite);
-                _gSprite.Reset();
-                _gSprite.PlayAnimation(CActorAnimEnum.Idle);
-                if (_mapTile.Character.IsCombatAdventurer())
-                {
-                    CombatAdventurer adv = (CombatAdventurer)_mapTile.Character;
-                    CharacterClass cClass = adv.CharacterClass;
-                    
-                    AnimatedSprite sprCombatSprite = new AnimatedSprite(GameContentManager.ITEM_FOLDER + "Combat\\Weapons\\"+ cClass.WeaponType.ToString() + "\\" + adv.Weapon.GetItem().ItemID);
+                _gCombatSprite = new GUICombatActorInfo(_mapTile.Character);
+                AddControl(_gCombatSprite);
 
-                    int xCrawl = 0;
-                    int frameWidth = 32;
-                    int frameHeight = 32;
-                    sprCombatSprite.AddAnimation(CActorAnimEnum.Idle, 32, 32, cClass.IdleFrames, cClass.IdleFramesLength, xCrawl, 0);
-                    xCrawl += cClass.IdleFrames;
-                    sprCombatSprite.AddAnimation(CActorAnimEnum.Cast, frameWidth, frameHeight, cClass.CastFrames, cClass.CastFramesLength, (xCrawl * frameWidth), 0);
-                    xCrawl += cClass.CastFrames;
-                    sprCombatSprite.AddAnimation(CActorAnimEnum.Hurt, frameWidth, frameHeight, cClass.HitFrames, cClass.HitFramesLength, (xCrawl * frameWidth), 0);
-                    xCrawl += cClass.HitFrames;
-                    sprCombatSprite.AddAnimation(CActorAnimEnum.Attack, frameWidth, frameHeight, cClass.AttackFrames, cClass.AttackFramesLength, (xCrawl * frameWidth), 0);
-                    xCrawl += cClass.AttackFrames;
-                    sprCombatSprite.AddAnimation(CActorAnimEnum.Critical, frameWidth, frameHeight, cClass.CriticalFrames, cClass.CriticalFramesLength, (xCrawl * frameWidth), 0);
-                    xCrawl += cClass.CriticalFrames;
-                    sprCombatSprite.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, cClass.KOFrames, cClass.KOFramesLength, (xCrawl * frameWidth), 0);
-                    xCrawl += cClass.KOFrames;
-                    sprCombatSprite.AddAnimation(CActorAnimEnum.Win, frameWidth, frameHeight, cClass.WinFrames, cClass.WinFramesLength, (xCrawl * frameWidth), 0);
-                    sprCombatSprite.SetScale(CombatManager.CombatScale);
-
-                    _gSpriteWeapon = new GUISprite(sprCombatSprite);
-                    _gSpriteWeapon.Reset();
-                    _gSpriteWeapon.PlayAnimation(CActorAnimEnum.Idle);
-                }
-                _gHP = new GUIStatDisplay(_mapTile.Character.GetHP, Color.Green, 100);
-                if (_mapTile.Character.MaxMP > 0) { _gMP = new GUIStatDisplay(_mapTile.Character.GetMP, Color.LightBlue, 100); }
+                _gCombatSprite.Reset();
+                _gCombatSprite.PlayAnimation(CActorAnimEnum.Idle);
             }
             else
             {
-                _gSprite = null;
-                _gHP = null;
-                _gMP = null;
+                _gCombatSprite = null;
             }
             Setup();
         }
@@ -580,8 +492,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             if (s != null) {
                 _gSummon = new GUISprite(s.BodySprite);
-                _gSummon.AnchorToObject(_gSprite, SideEnum.Top);
-                _gSummon.AnchorToObject(_gSprite, SideEnum.Left);
+                _gSummon.AnchorToObject(_gCombatSprite, SideEnum.Top);
+                _gSummon.AnchorToObject(_gCombatSprite, SideEnum.Left);
                 _gSummonEffect = new GUIText();
                 _gSummonEffect.AnchorAndAlignToObject(_gSummon, SideEnum.Top, SideEnum.CenterX);
             }
@@ -624,17 +536,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 _liStatus.Add(new GUIStatus(c));
             }
-            else if(target.Equals(TargetEnum.Ally) && found != null)    //If it targets an ally, we remove it
+            else if (target.Equals(TargetEnum.Ally) && found != null)    //If it targets an ally, we remove it
             {
                 _liStatus.Remove(found);
             }
 
             _liStatus.Sort((x, y) => x.Status.CompareTo(y.Status));
-            for(int i = 0; i< _liStatus.Count; i++)
-            {
-                if(i == 0) { _liStatus[i].AnchorAndAlignToObject(_gMP == null ? _gHP : _gMP, SideEnum.Bottom, SideEnum.Left); }
-                else { _liStatus[i].AnchorAndAlignToObject(_liStatus[i - 1], SideEnum.Right, SideEnum.Bottom); }
-            }
+            //for (int i = 0; i < _liStatus.Count; i++)
+            //{
+            //    if (i == 0) { _liStatus[i].AnchorAndAlignToObject(_gMP == null ? _gHP : _gMP, SideEnum.Bottom, SideEnum.Left); }
+            //    else { _liStatus[i].AnchorAndAlignToObject(_liStatus[i - 1], SideEnum.Right, SideEnum.Bottom); }
+            //}
         }
 
         public bool Occupied()
@@ -645,22 +557,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool Contains(Point mouse) {
             bool rv = false;
 
-            rv = _gTile.Contains(mouse) || (Occupied() && _gSprite.Contains(mouse));
-
-            return rv;
-        }
-
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = false;
-
-            foreach (GUIStatus s in _liStatus)
-            {
-                s.ProcessHover(mouse);
-            }
-
-            if (_gHP != null){ _gHP.ProcessHover(mouse); }
-            if (_gMP != null) { _gMP.ProcessHover(mouse); }
+            rv = _gTile.Contains(mouse) || (Occupied() && _gCombatSprite.Contains(mouse));
 
             return rv;
         }
@@ -689,18 +586,146 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public Vector2 GetCharacterPosition()
         {
             Vector2 rv = Vector2.Zero;
-            if(_gSprite != null)
+            if (_gCombatSprite != null)
             {
-                rv = _gSprite.Position();
+                rv = _gCombatSprite.Position();
             }
             return rv;
         }
 
         public void PlayAnimation<TEnum>(TEnum animation)
         {
-            _gSprite.PlayAnimation(animation);
-            if(_gSpriteWeapon != null) {
-                _gSpriteWeapon.PlayAnimation(animation); }
+            _gCombatSprite.PlayAnimation(animation);
+        }
+    }
+
+    /// <summary>
+    /// This class represents a combat actor, as well as thedisplay information for them
+    /// </summary>
+    public class GUICombatActorInfo : GUIObject
+    {
+        GUICmbtTile _gAssignedTile;     //This tile is justa reference
+        CombatActor _actor;
+        GUIStatDisplay _gHP;
+        GUIStatDisplay _gMP;
+        GUICombatActor _gCombatActor;
+        public GUISprite CharacterSprite => _gCombatActor.CharacterSprite;
+        public GUISprite CharacterWeaponSprite => _gCombatActor.CharacterWeaponSprite;
+        public GUICmbtTile AssignedTile => _gAssignedTile;
+
+        public GUICombatActorInfo(CombatActor actor)
+        {
+            _actor = actor;
+            _gCombatActor = new GUICombatActor(actor.BodySprite);
+            AddControl(_gCombatActor);
+
+            SetWeapon();
+            _gHP = new GUIStatDisplay(actor.GetHP, Color.Green, 100);
+            _gHP.AnchorAndAlignToObject(_gCombatActor, SideEnum.Bottom, SideEnum.CenterX);
+            AddControl(_gHP);
+
+            if (actor.MaxMP > 0) { 
+                _gMP = new GUIStatDisplay(actor.GetMP, Color.LightBlue, 100);
+                _gMP.AnchorAndAlignToObject(_gHP, SideEnum.Bottom, SideEnum.Left);
+                AddControl(_gMP);
+            }
+
+            Width = _gCombatActor.Width;
+            Height = _gMP.Bottom - _gCombatActor.Top;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if(CombatManager.CurrentPhase == CombatManager.PhaseEnum.PerformAction && CombatManager.ActiveCharacter == _actor)
+            {
+                _gHP.Show = false;
+                if (_gMP != null) { _gMP.Show = false; }
+            }
+            base.Draw(spriteBatch);
+
+            _gHP.Show = true;
+            if (_gMP != null) { _gMP.Show = true; }
+        }
+
+        public void SetWeapon()
+        {
+            if (_actor.IsCombatAdventurer())
+            {
+                CombatAdventurer adv = (CombatAdventurer)_actor;
+                CharacterClass cClass = adv.CharacterClass;
+
+                AnimatedSprite sprWeaponSprite = new AnimatedSprite(GameContentManager.ITEM_FOLDER + "Combat\\Weapons\\" + cClass.WeaponType.ToString() + "\\" + adv.Weapon.GetItem().ItemID);
+
+                int xCrawl = 0;
+                int frameWidth = 32;
+                int frameHeight = 32;
+                sprWeaponSprite.AddAnimation(CActorAnimEnum.Idle, 32, 32, cClass.IdleFrames, cClass.IdleFramesLength, xCrawl, 0);
+                xCrawl += cClass.IdleFrames;
+                sprWeaponSprite.AddAnimation(CActorAnimEnum.Cast, frameWidth, frameHeight, cClass.CastFrames, cClass.CastFramesLength, (xCrawl * frameWidth), 0);
+                xCrawl += cClass.CastFrames;
+                sprWeaponSprite.AddAnimation(CActorAnimEnum.Hurt, frameWidth, frameHeight, cClass.HitFrames, cClass.HitFramesLength, (xCrawl * frameWidth), 0);
+                xCrawl += cClass.HitFrames;
+                sprWeaponSprite.AddAnimation(CActorAnimEnum.Attack, frameWidth, frameHeight, cClass.AttackFrames, cClass.AttackFramesLength, (xCrawl * frameWidth), 0);
+                xCrawl += cClass.AttackFrames;
+                sprWeaponSprite.AddAnimation(CActorAnimEnum.Critical, frameWidth, frameHeight, cClass.CriticalFrames, cClass.CriticalFramesLength, (xCrawl * frameWidth), 0);
+                xCrawl += cClass.CriticalFrames;
+                sprWeaponSprite.AddAnimation(CActorAnimEnum.KO, frameWidth, frameHeight, cClass.KOFrames, cClass.KOFramesLength, (xCrawl * frameWidth), 0);
+                xCrawl += cClass.KOFrames;
+                sprWeaponSprite.AddAnimation(CActorAnimEnum.Win, frameWidth, frameHeight, cClass.WinFrames, cClass.WinFramesLength, (xCrawl * frameWidth), 0);
+                sprWeaponSprite.SetScale(CombatManager.CombatScale);
+
+                _gCombatActor.SetWeapon(sprWeaponSprite);
+            }
+        }
+
+        public void AssignTile(GUICmbtTile tile)
+        {
+            _gAssignedTile = tile;
+        }
+
+        public void Reset()
+        {
+            _gCombatActor.Reset();
+        }
+
+        public void PlayAnimation<TEnum>(TEnum animation)
+        {
+            _gCombatActor.PlayAnimation(animation);
+        }
+
+        public class GUICombatActor : GUIObject
+        {
+            GUISprite _gSprite;
+            GUISprite _gSpriteWeapon;
+            public GUISprite CharacterSprite => _gSprite;
+            public GUISprite CharacterWeaponSprite => _gSpriteWeapon;
+
+            public GUICombatActor(AnimatedSprite sprite)
+            {
+                _gSprite = new GUISprite(sprite);
+                AddControl(_gSprite);
+
+                Width = _gSprite.Width;
+                Height = _gSprite.Height;
+            }
+
+            public void SetWeapon(AnimatedSprite sprite)
+            {
+                _gSpriteWeapon = new GUISprite(sprite);
+                AddControl(_gSpriteWeapon);
+            }
+
+            public void Reset()
+            {
+                _gSprite.Reset();
+                if (_gSpriteWeapon != null) { _gSpriteWeapon.Reset(); }
+            }
+
+            public void PlayAnimation<TEnum>(TEnum animation)
+            {
+                _gSprite.PlayAnimation(animation);
+                if (_gSpriteWeapon != null) { _gSpriteWeapon.PlayAnimation(animation); }
+            }
         }
     }
 

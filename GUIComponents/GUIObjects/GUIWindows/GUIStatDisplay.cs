@@ -20,6 +20,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIImage _gFillRight;
         GUIText _gText;
 
+        int _iMax;
+        int _iCurr;
+
         int _iMidWidth;
         const int EDGE = 4;
 
@@ -28,6 +31,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public GUIStatDisplay(DelegateRetrieveValues del, Color c, int width = 200)
         {
+            _iMax = 0;
+            _iCurr = 0;
+
             _delAction = del;
             _font = GameContentManager.GetFont(@"Fonts\Font");
             _iMidWidth = width - (EDGE * 2);
@@ -71,8 +77,18 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            if(_iMax != 0)
+            {
+                _gFillMid.Width = (int)(_iMidWidth * _iCurr / _iMax);
+            }
             base.Draw(spriteBatch);
             RemoveControl(_gText);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            _delAction(ref _iCurr, ref _iMax);
         }
 
         public override bool ProcessHover(Point mouse)
@@ -80,11 +96,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             bool rv = false;
             if (Contains(mouse))
             {
-                int curr = 0;
-                int max = 0;
-                _delAction(ref curr, ref max);
-
-                _gText.SetText(string.Format("{0}/{1}", curr, max));
+                _gText.SetText(string.Format("{0}/{1}", _iCurr, _iMax));
                 _gText.AlignToObject(_gMid, SideEnum.Center);
                 AddControl(_gText);
                 rv = true;
