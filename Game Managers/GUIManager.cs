@@ -13,6 +13,8 @@ namespace RiverHollow.Game_Managers
 {
     public static class GUIManager
     {
+        public static int MAIN_COMPONENT_WIDTH = RiverHollow.ScreenWidth / 3;
+        public static int MAIN_COMPONENT_HEIGHT = RiverHollow.ScreenWidth / 3;
         private static GUIScreen _currentGUIScreen;
         private static GUIImage _fadeImg;
         private static float _fadeVal = 1f;

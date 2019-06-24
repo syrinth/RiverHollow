@@ -115,33 +115,13 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 _liSprites.Add(_sprChest);
             }
 
+            foreach(GUISprite sprite in _liSprites)
+            {
+                AddControl(sprite);
+            }
+
             Width = _sprBody.Width;
             Height = _sprBody.Height;
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            foreach (GUISprite g in _liSprites)
-            {
-                g.Update(gameTime);
-            }
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            foreach(GUISprite g in _liSprites)
-            {
-                g.Draw(spriteBatch);
-            }
-        }
-
-        public override void Position(Vector2 value)
-        {
-            base.Position(value);
-            foreach (GUISprite g in _liSprites)
-            {
-                g.Position(value);
-            }
         }
 
         public void PlayAnimation<TEnum>(TEnum animation)

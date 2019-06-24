@@ -19,7 +19,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             InventoryManager.ClearExtraInventory();
             _inventory = new GUIInventory(true);
-            Controls.Add(_inventory);
+            AddControl(_inventory);
         }
 
         public InventoryScreen(Container c)
@@ -37,8 +37,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             List<GUIObject> liWins = new List<GUIObject>() { _container, _inventory };
             GUIObject.CenterAndAlignToScreen(ref liWins);
 
-            Controls.Add(_inventory);
-            Controls.Add(_container);
+            AddControl(_inventory);
+            AddControl(_container);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)

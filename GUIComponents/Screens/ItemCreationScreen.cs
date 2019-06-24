@@ -32,8 +32,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
 
         public CraftingScreen()
         {
-            Controls.Add(_creationWindow);
-            Controls.Add(_inventory);
+            AddControl(_creationWindow);
+            AddControl(_inventory);
         }
 
         public CraftingScreen(Machine crafter)
@@ -41,8 +41,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             _craftMachine = crafter;
             Setup(crafter.CraftList);
 
-            Controls.Add(_creationWindow);
-            Controls.Add(_inventory);
+            AddControl(_creationWindow);
+            AddControl(_inventory);
         }
 
         public CraftingScreen(WorldAdventurer crafter)
@@ -50,8 +50,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             _craftAdventurer = crafter;
             Setup(crafter.CraftList);
 
-            Controls.Add(_creationWindow);
-            Controls.Add(_inventory);
+            AddControl(_creationWindow);
+            AddControl(_inventory);
         }
 
         public void Setup(Dictionary<int, int> recipes)

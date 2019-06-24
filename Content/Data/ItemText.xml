@@ -395,10 +395,14 @@
       <Key>880</Key>
       <Value>Heavy Bracelet/A defensible bracelet</Value>
     </Item>
-    <!--<970> Wrists-->
+    <!--<970> Accessories-->
     <Item>
       <Key>970</Key>
       <Value>Ring of Protection/A bronze ring that wards against harm</Value>
+    </Item>
+    <Item>
+      <Key>971</Key>
+      <Value>Bracelet of Speed/A bracelet that enhancers the users speed</Value>
     </Item>
     <!--<1000> Class Change-->
     <Item>

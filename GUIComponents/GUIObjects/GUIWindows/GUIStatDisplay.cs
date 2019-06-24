@@ -48,6 +48,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gFillMid.SetColor(c);
             _gFillRight.SetColor(c);
 
+            AddControl(_gLeft);
+            AddControl(_gMid);
+            AddControl(_gRight);
+            AddControl(_gFillLeft);
+            AddControl(_gFillMid);
+            AddControl(_gFillRight);
+
             PositionBars();
 
             Height = 16;
@@ -64,39 +71,25 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            int curr = 0;
-            int max = 0;
-
-            _delAction(ref curr, ref max);
-
-            _gFillLeft.Draw(spriteBatch);
-            _gFillMid.Width = (int)(_iMidWidth * curr/max);
-            _gFillMid.Draw(spriteBatch);
-            _gFillRight.Draw(spriteBatch);
-            _gLeft.Draw(spriteBatch);
-            _gMid.Draw(spriteBatch);
-            _gRight.Draw(spriteBatch);
-
-            if (_bHover)
-            {
-                _gText.SetText(string.Format("{0}/{1}", curr, max));
-                _gText.AlignToObject(_gMid, SideEnum.Center);
-                _gText.Draw(spriteBatch);
-            }
+            base.Draw(spriteBatch);
+            RemoveControl(_gText);
         }
 
         public override bool ProcessHover(Point mouse)
         {
-            _bHover = _gLeft.Contains(mouse) || _gMid.Contains(mouse) || _gRight.Contains(mouse);
-            return _bHover;
-        }
+            bool rv = false;
+            if (Contains(mouse))
+            {
+                int curr = 0;
+                int max = 0;
+                _delAction(ref curr, ref max);
 
-        public override void Position(Vector2 value)
-        {
-            base.Position(value);
-            _gLeft.Position(value);
-            _gFillLeft.Position(value);
-            PositionBars();
+                _gText.SetText(string.Format("{0}/{1}", curr, max));
+                _gText.AlignToObject(_gMid, SideEnum.Center);
+                AddControl(_gText);
+                rv = true;
+            }
+            return rv;
         }
     }
 }

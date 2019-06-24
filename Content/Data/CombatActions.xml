@@ -91,5 +91,10 @@
       <Key>300</Key>
       <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:Melee][Area:Single][Effect:P-100 Harm][Action:UserMove UserAttack Apply Return]</Value>
     </Item>
+    <Item>
+      <Key>301</Key>
+      <Value>[Type:Action][Animation:LeafCutter-32-32-3-0.1][Target:Enemy][Icon:0-0][Range:Melee][Area:Single][Effect:P-100 Harm][Action:UserMove UserAttack Direct Apply Return]</Value>
+      <!--Attack-->
+    </Item>
   </Asset>
 </XnaContent>

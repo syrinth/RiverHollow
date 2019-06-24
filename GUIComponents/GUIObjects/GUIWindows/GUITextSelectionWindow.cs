@@ -159,7 +159,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             {
                 if (Controls.Contains(g.GText))
                 {
-                    Controls.Remove(g.GText);
+                    RemoveControl(g.GText);
                 }
             }
 

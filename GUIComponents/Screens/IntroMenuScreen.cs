@@ -20,9 +20,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             List <GUIObject> listButtons = new List<GUIObject>() { _btnNewGame, _btnLoadGame, _btnExit };
             GUIObject.CreateSpacedColumn(ref listButtons, RiverHollow.ScreenWidth/2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
 
-            Controls.Add(_btnNewGame);
-            Controls.Add(_btnLoadGame);
-            Controls.Add(_btnExit);
+            AddControl(_btnNewGame);
+            AddControl(_btnLoadGame);
+            AddControl(_btnExit);
 
             GameManager.GoToInformation();
         }
@@ -68,11 +68,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _btnNewGame.IsMouseHovering = _btnNewGame.Contains(mouse);
             _btnLoadGame.IsMouseHovering = _btnLoadGame.Contains(mouse);
             return rv;
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            //_btnNewGame.Update(gameTime);
         }
     }
 }

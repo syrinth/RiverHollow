@@ -25,7 +25,7 @@ namespace RiverHollow.GUIComponents.Screens
             foreach(SaveData data in _liData)
             {
                 SaveWindow s = new SaveWindow(data, _liData.IndexOf(data));
-                Controls.Add(s);
+                AddControl(s);
                 _liDataWindows.Add(s);
             }
 
@@ -79,28 +79,15 @@ namespace RiverHollow.GUIComponents.Screens
                 _data = data;
                 _gText = new GUIText(data.playerData.name + ", " + ObjectManager.GetClassByIndex(data.playerData.currentClass).Name);
                 _iId = id;
-                Position(Vector2.Zero);
                 _winData = GUIWindow.RedWin;
+
+                AddControl(_gText);
 
                 Vector2 stringsize = _gText.MeasureString("XXXXXXXXXXX XXXXXXXXXXXXXX");
                 Width = (int)stringsize.X;
                 Height = (int)stringsize.Y;
-            }
 
-            public override void Update(GameTime gameTime)
-            {
-                _gText.Update(gameTime);
-            }
-
-            public override void Draw(SpriteBatch spriteBatch)
-            {
-                base.Draw(spriteBatch);
-            }
-
-            public override void Position(Vector2 value)
-            {
-                base.Position(value);
-                if (_gText != null) { _gText.CenterOnWindow(this); }
+                _gText.CenterOnWindow(this);
             }
 
             public override bool ProcessLeftButtonClick(Point mouse)

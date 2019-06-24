@@ -103,6 +103,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public void SetText(string text, bool changePos = false)
         {
             _sText = text;
+            _sFullText = _sText;
             SetDimensions(text);
         }
 

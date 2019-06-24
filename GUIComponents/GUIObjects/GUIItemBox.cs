@@ -266,7 +266,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             Item it = ObjectManager.GetItem(id);
             _gImg = new GUIImage(it.SourceRectangle, it.SourceRectangle.Width, it.SourceRectangle.Height, it.Texture);
             _gImg.SetScale(Scale);
-            _gText = new GUIText("999"); 
+            _gText = new GUIText("999");
+
+            AddControl(_gImg);
+            AddControl(_gText);
+
             Width = _gImg.Width + _gText.Width;
             Height = Math.Max(_gImg.Height, _gText.Height);
 
@@ -277,13 +281,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         {
             _gImg.Draw(spriteBatch);
             _gText.Draw(spriteBatch);
-        }
-
-        public override void Position(Vector2 value)
-        {
-            base.Position(value);
-            _gImg.Position(value);
-            _gText.AnchorAndAlignToObject(_gImg, SideEnum.Right, SideEnum.Bottom);
         }
     }
 }

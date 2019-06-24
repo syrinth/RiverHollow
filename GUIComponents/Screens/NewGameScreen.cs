@@ -9,8 +9,8 @@ using RiverHollow.GUIObjects;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Game_Managers.GUIObjects.HUDMenu.HUDParty.NPCDisplayBox;
-using static RiverHollow.Game_Managers.GUIObjects.HUDMenu.HUDParty.NPCDisplayBox.CharacterDisplayBox;
+using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
+using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox.CharacterDisplayBox;
 using static RiverHollow.GUIObjects.GUIObject;
 using static RiverHollow.WorldObjects.Clothes;
 
@@ -25,8 +25,6 @@ namespace RiverHollow.GUIComponents.Screens
         bool _bCloseColorSelection;
         static int _iHairTypeIndex;
         int _iHairTypeMax = GameContentManager.GetTexture(@"Textures\texPlayerHair").Height / 32;
-        enum SelectionEnum { None, Name, Manor };
-        SelectionEnum _selection;
         GUIWindow _window;
         GUIButton _btnOK;
         GUIButton _btnCancel;
@@ -47,19 +45,17 @@ namespace RiverHollow.GUIComponents.Screens
 
         public NewGameScreen()
         {
-            _selection = SelectionEnum.Name;
-
             int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIWindow.BrownWin.Edge;
 
             _window = new GUIWindow(GUIWindow.BrownWin, RiverHollow.ScreenHeight, RiverHollow.ScreenHeight);
             _window.CenterOnScreen();
-            Controls.Add(_window);
+            AddControl(_window);
 
             _btnCancel = new GUIButton("Cancel", MINI_BTN_WIDTH, MINI_BTN_HEIGHT, BtnCancel);
             _btnCancel.AnchorToInnerSide(_window, SideEnum.BottomRight, 0);
             
             _btnOK = new GUIButton("OK", MINI_BTN_WIDTH, MINI_BTN_HEIGHT, BtnNewGame);
-            _window.Controls.Add(_btnOK);
+            _window.AddControl(_btnOK);
             _btnOK.AnchorAndAlignToObject(_btnCancel, SideEnum.Left, SideEnum.Top, 0);
             
             _manorWindow = new GUITextInputWindow("Manor Name:", SideEnum.Left);
@@ -67,13 +63,13 @@ namespace RiverHollow.GUIComponents.Screens
             
             _nameWindow = new GUITextInputWindow("Character Name:", SideEnum.Left);
             _nameWindow.AnchorAndAlignToObject(_manorWindow, SideEnum.Bottom, SideEnum.Right );
+            _nameWindow.TakeInput = true;
 
             _liClassBoxes = new List<GUIObject>();
             for (int i = 1; i <= ObjectManager.GetWorkerNum(); i++) {
                 ClassSelectionBox w = new ClassSelectionBox(ObjectManager.GetWorker(i), BtnAssignClass);
                 _liClassBoxes.Add(w);
-                _window.Controls.Add(w);
-                Controls.Add(w);
+                _window.AddControl(w);
             }
             _csbSelected = (ClassSelectionBox)_liClassBoxes[0];
             _csbSelected.PlayAnimation(WActorWalkAnim.WalkDown);
@@ -107,29 +103,17 @@ namespace RiverHollow.GUIComponents.Screens
 
         public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
             if (_bCloseColorSelection)
             {
-                _colorSelection.ParentWindow.Controls.Remove(_colorSelection);
+                _colorSelection.ParentWindow.RemoveControl(_colorSelection);
                 _colorSelection = null;
                 _bCloseColorSelection = false;
             }
-            if(_selection == SelectionEnum.Name) { _nameWindow.Update(gameTime); }
-            else if (_selection == SelectionEnum.Manor) { _manorWindow.Update(gameTime); }
 
             _btnOK.Enable(_nameWindow.GetText().Length > 0);
-
-            foreach (GUIObject o in _liClassBoxes)
-            {
-                ((ClassSelectionBox)o).Update(gameTime);
-            }
-
-            _playerDisplayBox.Update(gameTime);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-        }
 
         public override bool ProcessLeftButtonClick(Point mouse)
         {
@@ -146,17 +130,13 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             if (_nameWindow.Contains(mouse)) {
-                _selection = SelectionEnum.Name;
-                _manorWindow.HideCursor();
+                SetSelection(_nameWindow);
             }
             else if (_manorWindow.Contains(mouse)) {
-                _selection = SelectionEnum.Manor;
-                _nameWindow.HideCursor();
+                SetSelection(_manorWindow);
             }
             else {
-                _selection = SelectionEnum.None;
-                _nameWindow.HideCursor();
-                _manorWindow.HideCursor();
+                SetSelection(null);
             }
 
             return rv;
@@ -177,6 +157,28 @@ namespace RiverHollow.GUIComponents.Screens
             return rv;
         }
 
+        public void SetSelection(GUITextInputWindow g)
+        {
+            if(g == _nameWindow)
+            {
+                _nameWindow.TakeInput = true;
+                _manorWindow.TakeInput = false;
+                _manorWindow.HideCursor();
+            }
+            else if (g == _manorWindow)
+            { 
+                _nameWindow.TakeInput = false;
+                _manorWindow.TakeInput = true;
+                _nameWindow.HideCursor();
+            }
+            else
+            {
+                _nameWindow.TakeInput = false;
+                _manorWindow.TakeInput = false;
+                _nameWindow.HideCursor();
+                _manorWindow.HideCursor();
+            }
+        }
         #region Button Logic
         public void BtnNewGame()
         {

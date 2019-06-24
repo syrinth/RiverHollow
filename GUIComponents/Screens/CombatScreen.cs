@@ -269,7 +269,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 case CombatManager.PhaseEnum.Defeat:
                     GUITextWindow window = new GUITextWindow("Defeated");
                     window.CenterOnScreen();
-                    Controls.Add(window);
+                    AddControl(window);
                     break;
             }
 

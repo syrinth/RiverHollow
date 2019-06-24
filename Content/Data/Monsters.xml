@@ -54,5 +54,10 @@
       <Key>11</Key>
       <Value>[Texture:CombatLef][Lvl:1][Ability:300][Idle:4-0.15][Attack:3-0.1][Loot:18]</Value>
     </Item>
+    <!--Malice-->
+    <Item>
+      <Key>12</Key>
+      <Value>[Texture:CombatMalice][Lvl:1][Ability:301][Idle:4-0.15][Attack:2-0.15][Loot:18]</Value>
+    </Item>
   </Asset>
 </XnaContent>

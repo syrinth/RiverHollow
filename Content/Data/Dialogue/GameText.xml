@@ -135,6 +135,10 @@
       <Key>Monster 11</Key>
       <Value>Lef</Value>
     </Item>
+    <Item>
+      <Key>Monster 12</Key>
+      <Value>Malice</Value>
+    </Item>
     <!--Quest Text-->
     <Item>
       <Key>Quest 1</Key>
@@ -214,6 +218,10 @@
     <Item>
       <Key>Action 300</Key>
       <Value>Attack/Attacks the enemy</Value>
+    </Item>
+    <Item>
+      <Key>Action 301</Key>
+      <Value>Leaf Cutter/Throws a branch</Value>
     </Item>
     <!--Status/Buff/Debuff-->
     <Item>

@@ -39,15 +39,14 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         {
             Height = 184;
             Width = RiverHollow.ScreenWidth / 2;
-            Vector2 startPos = new Vector2(RiverHollow.ScreenWidth / 4, RiverHollow.ScreenHeight - Height - SpaceFromBottom);
-            Position(startPos);
+            //Vector2 startPos = new Vector2(RiverHollow.ScreenWidth / 4, RiverHollow.ScreenHeight - Height - SpaceFromBottom);
+            //Position(startPos);
 
             _winData = RedWin;
         }
 
         public GUIWindow(WindowData winData, int width, int height)
         {
-            Controls = new List<GUIObject>();
             Width = width;
             Height = height;
 
@@ -92,6 +91,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             Height += modHeight * 2;
         }
 
+        public override bool ProcessHover(Point mouse)
+        {
+            return base.ProcessHover(mouse);
+        }
+
         public override void AddControl(GUIObject g)
         {
             if (g != null && !Controls.Contains(g)) {
@@ -99,6 +103,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 g.ParentWindow = this;
             }
         }
+
         #region Draw
         public int SkipSize() { return _winData.Size + _winData.Edge; }
         public void DrawWindow(SpriteBatch spriteBatch)

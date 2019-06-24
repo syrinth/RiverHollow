@@ -10,6 +10,7 @@ namespace RiverHollow.GUIObjects
 {
     public class GUIObject
     {
+        public GUIObject MemberOf;
         internal List<GUIObject> Controls;
 
         GUIWindow _parentControl;
@@ -287,16 +288,18 @@ namespace RiverHollow.GUIObjects
 
         public virtual void AddControl(GUIObject g)
         {
-            if (g != null && !Controls.Contains(g))
+            if (g != null && g.MemberOf == null && !Controls.Contains(g))
             {
                 Controls.Add(g);
+                g.MemberOf = this;
             }
         }
         public virtual void RemoveControl(GUIObject control)
         {
-            if (Controls.Contains(control))
+            if (control != null && Controls.Contains(control))
             {
                 Controls.Remove(control);
+                control.MemberOf = null;
             }
         }
 
@@ -661,7 +664,7 @@ namespace RiverHollow.GUIObjects
         }
         internal void CenterOnWindow(GUIWindow win)
         {
-            if (!win.Controls.Contains(this)) { win.Controls.Add(this); }
+            if (!win.Controls.Contains(this)) { win.AddControl(this); }
             this.CenterOnObject(win);
         }
         internal void CenterOnObject(GUIObject obj)

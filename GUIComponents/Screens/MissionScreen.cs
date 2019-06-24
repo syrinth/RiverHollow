@@ -10,7 +10,7 @@ using RiverHollow.GUIObjects;
 using System.Collections.Generic;
 using System.Linq;
 using static RiverHollow.Game_Managers.GUIObjects.GUIButton;
-using static RiverHollow.Game_Managers.GUIObjects.HUDMenu.HUDParty.NPCDisplayBox;
+using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
 using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow.GUIComponents.Screens

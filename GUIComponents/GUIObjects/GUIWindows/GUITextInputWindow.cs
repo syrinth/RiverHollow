@@ -21,9 +21,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         bool _bFinished;
         public bool Finished => _bFinished;
         public bool AcceptSpace;
+        public bool TakeInput = false;
 
         public string EnteredText => _gText.Text;
-
 
         public GUITextInputWindow() : base()
         {
@@ -89,54 +89,58 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public override void Update(GameTime gameTime)
         {
-            _gMarker.Update(gameTime);
-            foreach (Keys k in InputManager.KeyDownDictionary.Keys.ToList())
+            if (TakeInput)
             {
-                if (InputManager.CheckPressedKey(k))
+                _gMarker.Update(gameTime);
+                foreach (Keys k in InputManager.KeyDownDictionary.Keys.ToList())
                 {
-                    if (k == Keys.Enter)
+                    if (InputManager.CheckPressedKey(k))
                     {
-                        _bFinished = true;
-                    }
-                    else if(k >= Keys.A && k <= Keys.Z || (AcceptSpace && k == Keys.Space) || k == Keys.Delete || k == Keys.Back || k == Keys.Left || k == Keys.Right || k == Keys.Delete)
-                    {
-                        if (k == Keys.Left)
+                        if (k == Keys.Enter)
                         {
-                            DecrementMarker();
+                            _bFinished = true;
+                            break;
                         }
-                        else if(k == Keys.Right)
+                        else if (k >= Keys.A && k <= Keys.Z || (AcceptSpace && k == Keys.Space) || k == Keys.Delete || k == Keys.Back || k == Keys.Left || k == Keys.Right || k == Keys.Delete)
                         {
-                            IncrementMarker();
-                        }
-                        else
-                        {
-                            string input = InputManager.GetCharFromKey(k);
-                            if (input == "--")
+                            if (k == Keys.Left)
                             {
-                                if (_gText.Length > 0)
-                                {
-                                    _gText.Remove(_iCurr);
-                                    DecrementMarker();
-                                }
+                                DecrementMarker();
                             }
-                            else if (input == "-+")
+                            else if (k == Keys.Right)
                             {
-                                if (_gText.Length > 0)
-                                {
-                                    _gText.Remove(_iCurr+1);
-                                }
-                            }
-                            else if (_gText.Length < GameManager.MAX_NAME_LEN)
-                            {
-                                _gText.Insert(input, _iCurr);
                                 IncrementMarker();
                             }
-                        }
+                            else
+                            {
+                                string input = InputManager.GetCharFromKey(k);
+                                if (input == "--")
+                                {
+                                    if (_gText.Length > 0)
+                                    {
+                                        _gText.Remove(_iCurr);
+                                        DecrementMarker();
+                                    }
+                                }
+                                else if (input == "-+")
+                                {
+                                    if (_gText.Length > 0)
+                                    {
+                                        _gText.Remove(_iCurr + 1);
+                                    }
+                                }
+                                else if (_gText.Length < GameManager.MAX_NAME_LEN)
+                                {
+                                    _gText.Insert(input, _iCurr);
+                                    IncrementMarker();
+                                }
+                            }
 
-                        _gMarker.Position(_gText.Position());
-                        if (_gText.Text.Length > 0)
-                        {
-                            _gMarker.PositionAdd(new Vector2(_gText.MeasureString(_iCurr).X, 0));
+                            _gMarker.Position(_gText.Position());
+                            if (_gText.Text.Length > 0)
+                            {
+                                _gMarker.PositionAdd(new Vector2(_gText.MeasureString(_iCurr).X, 0));
+                            }
                         }
                     }
                 }

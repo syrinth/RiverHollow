@@ -14,10 +14,10 @@ using static RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIItemBox;
 using RiverHollow.WorldObjects;
 using static RiverHollow.WorldObjects.Item;
 using static RiverHollow.WorldObjects.Clothes;
-using static RiverHollow.Game_Managers.GUIObjects.HUDMenu.HUDParty.NPCDisplayBox;
 using RiverHollow.Buildings;
 using static RiverHollow.Game_Managers.GUIObjects.HUDMenu.HUDManagement.MgmtWindow;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
+using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -61,7 +61,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _addedItem.AnchorAndAlignToObject(_gInventory, SideEnum.Left, SideEnum.CenterY, 10);
                 _dTimer = 1;
             }
-            else {
+            else
+            {
                 if (_addedItem != null && _addedItem.Alpha > 0)
                 {
                     _dTimer -= gameTime.ElapsedGameTime.TotalSeconds;
@@ -94,11 +95,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
 
-        public override void OpenMenu() {
+        public override void OpenMenu()
+        {
             _gMenu = new HUDMenu();
             AddControl(_gMenu);
         }
-        public override void CloseMenu() {
+        public override void CloseMenu()
+        {
             RemoveControl(_gMenu);
             _gMenu = null;
         }
@@ -176,7 +179,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             else
             {
-                if (_fBarFade < 1) {
+                if (_fBarFade < 1)
+                {
                     _fBarFade += FADE_OUT;
                 }
 
@@ -363,7 +367,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             _liButtons = new List<GUIObject>() { _btnInventory, _btnParty, _btnManagement, _btnQuestLog, _btnOptions, _btnFriendship, _btnExitGame };
             GUIObject.CreateSpacedColumn(ref _liButtons, -GUIButton.BTN_WIDTH, 0, RiverHollow.ScreenHeight, BTN_PADDING);
-            foreach (GUIObject o in _liButtons) { Controls.Add(o); }
 
             GameManager.Pause();
             _open = true;
@@ -466,11 +469,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _questList.Add(q);
                 }
 
-                Controls.Add(_btnUp);
-                Controls.Add(_btnDown);
+                AddControl(_btnUp);
+                AddControl(_btnDown);
                 foreach (QuestBox q in _questList)
                 {
-                    Controls.Add(q);
+                    AddControl(q);
                 }
             }
 
@@ -500,9 +503,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         if (c.Contains(mouse))
                         {
                             _detailWindow.SetData(c.TheQuest);
-                            Controls.Add(_detailWindow);
-                            Controls.Remove(_btnUp);
-                            Controls.Remove(_btnDown);
+                            AddControl(_detailWindow);
+                            RemoveControl(_btnUp);
+                            RemoveControl(_btnDown);
 
                             rv = true;
                         }
@@ -517,9 +520,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 bool rv = true;
                 if (Controls.Contains(_detailWindow))
                 {
-                    Controls.Remove(_detailWindow);
-                    Controls.Add(_btnUp);
-                    Controls.Add(_btnDown);
+                    RemoveControl(_detailWindow);
+                    AddControl(_btnUp);
+                    AddControl(_btnDown);
                 }
                 return rv;
             }
@@ -637,7 +640,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             public static int WIDTH = RiverHollow.ScreenWidth / 3;
             public static int HEIGHT = RiverHollow.ScreenHeight / 3;
 
-            CharacterDetailWindow _charBox;
+            CharacterDetailObject _charBox;
             NPCDisplayBox _selectedBox;
             GUIButton _btnMap;
             PositionMap _map;
@@ -649,7 +652,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _btnMap = new GUIButton("Map", SwitchModes);
                 AddControl(_btnMap);
 
-                _charBox = new CharacterDetailWindow(PlayerManager.Combat, SyncCharacter);
+                _charBox = new CharacterDetailObject(PlayerManager.Combat, SyncCharacter);
                 _charBox.CenterOnScreen();
                 AddControl(_charBox);
 
@@ -780,7 +783,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     RemoveControl(_map);
                     _map = null;
-                    _charBox = new CharacterDetailWindow(_selectedBox.Actor, SyncCharacter);
+                    _charBox = new CharacterDetailObject(_selectedBox.Actor, SyncCharacter);
                     _charBox.AnchorAndAlignToObject(_arrDisplayBoxes[0], SideEnum.Bottom, SideEnum.Left);
                     AddControl(_charBox);
                 }
@@ -789,7 +792,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             public void SyncCharacter()
             {
                 ((PlayerDisplayBox)_arrDisplayBoxes[0]).Configure();
-                ((PlayerDisplayBox)_arrDisplayBoxes[0]).PositionSprites();
             }
 
             private class PositionMap : GUIWindow
@@ -931,225 +933,21 @@ namespace RiverHollow.Game_Managers.GUIObjects
                                 _sprite.PlayAnimation(WActorBaseAnim.IdleDown);
                                 _sprite.CenterOnObject(this);
                                 _sprite.MoveBy(new Vector2(0, -(this.Width / 4)));
+                                AddControl(_sprite);
                             }
                         }
                         else
                         {
+                            RemoveControl(_sprite);
                             _sprite = null;
                         }
                     }
 
                     public bool Occupied() { return _character != null; }
-
-                    public override void Position(Vector2 value)
-                    {
-                        base.Position(value);
-                        if (_sprite != null)
-                        {
-                            _sprite.CenterOnObject(this);
-                            _sprite.MoveBy(new Vector2(0, -(this.Width / 4)));
-                        }
-                    }
                 }
             }
 
-            public class NPCDisplayBox : GUIWindow
-            {
-                public delegate void ClickDelegate(CombatAdventurer selectedCharacter);
-                private ClickDelegate _delAction;
-
-                CombatAdventurer _actor;
-                public CombatAdventurer Actor => _actor;
-
-                public NPCDisplayBox(ClickDelegate action = null)
-                {
-                    _winData = GUIWindow.GreyWin;
-                    _delAction = action;
-                }
-
-                public virtual void PlayAnimation<TEnum>(TEnum animation)
-                {
-
-                }
-
-                public class CharacterDisplayBox : NPCDisplayBox
-                {
-                    public WorldAdventurer WorldAdv;
-                    GUISprite _sprite;
-                    public GUISprite Sprite => _sprite;
-
-                    public CharacterDisplayBox(WorldCombatant w, ClickDelegate del) : base(del)
-                    {
-                        if (w != null)
-                        {
-                            _actor = w.Combat;
-                            _sprite = new GUISprite(w.BodySprite, true);
-                        }
-                        Setup();
-                    }
-
-                    public CharacterDisplayBox(EligibleNPC n, ClickDelegate del) : base(del)
-                    {
-                        if (n != null)
-                        {
-                            _actor = n.Combat;
-                            _sprite = new GUISprite(n.BodySprite, true);
-                        }
-                        Setup();
-                    }
-
-                    public void AssignToBox(WorldAdventurer adv)
-                    {
-                        if (adv != null)
-                        {
-                            WorldAdv = adv;
-                            _actor = adv.Combat;
-                            _sprite = new GUISprite(adv.BodySprite, true);
-
-                            _sprite.SetScale((int)GameManager.Scale);
-                            _sprite.CenterOnWindow(this);
-                            _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
-
-                            PlayAnimation(WActorBaseAnim.IdleDown);
-                        }
-                        else
-                        {
-                            RemoveControl(_sprite);
-                            WorldAdv = null;
-                            _actor = null;
-                            _sprite = null;
-                        }
-                    }
-
-                    public void Setup()
-                    {
-                        Width = ((int)Scale * TileSize) + ((int)Scale * TileSize) / 4;
-                        Height = (int)Scale * ((TileSize * 2) + 2) + (_winData.Edge * 2);
-
-                        if (_actor != null)
-                        {
-                            _sprite.SetScale((int)GameManager.Scale);
-                            _sprite.CenterOnWindow(this);
-                            _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
-
-                            PlayAnimation(WActorBaseAnim.IdleDown);
-                        }
-                    }
-
-                    public override void Update(GameTime gameTime)
-                    {
-                        if (_sprite != null)
-                        {
-                            _sprite.Update(gameTime);
-                        }
-                    }
-
-                    public override void PlayAnimation<TEnum>(TEnum animation)
-                    {
-                        _sprite.PlayAnimation(animation);
-                    }
-
-                    public override bool ProcessLeftButtonClick(Point mouse)
-                    {
-                        bool rv = false;
-                        if (Contains(mouse) && _delAction != null)
-                        {
-                            _delAction(_actor);
-                            rv = true;
-                        }
-                        return rv;
-                    }
-
-                    public class ClassSelectionBox : CharacterDisplayBox
-                    {
-                        private ClickDelegate _delAction;
-                        public new delegate void ClickDelegate(ClassSelectionBox o);
-
-                        private int _iClassID;
-                        public int ClassID => _iClassID;
-
-                        public ClassSelectionBox(WorldAdventurer w, ClickDelegate del) : base(w, null)
-                        {
-                            _iClassID = w.Combat.CharacterClass.ID;
-                            _delAction = del;
-                        }
-
-                        public override bool ProcessLeftButtonClick(Point mouse)
-                        {
-                            bool rv = false;
-                            if (Contains(mouse) && _delAction != null)
-                            {
-                                _delAction(this);
-                                rv = true;
-                            }
-                            return rv;
-                        }
-                    }
-                }
-
-                public class PlayerDisplayBox : NPCDisplayBox
-                {
-                    GUICharacterSprite _playerSprite;
-                    public GUICharacterSprite PlayerSprite => _playerSprite;
-
-                    bool _bOverwrite = false;
-
-                    public PlayerDisplayBox(bool overwrite = false, ClickDelegate action = null) : base(action)
-                    {
-                        _bOverwrite = overwrite;
-                        _actor = PlayerManager.Combat;
-                        Configure();
-                    }
-
-                    public override void Update(GameTime gameTime)
-                    {
-                        _playerSprite.Update(gameTime);
-                    }
-
-                    public override bool ProcessLeftButtonClick(Point mouse)
-                    {
-                        bool rv = false;
-
-                        if (Contains(mouse) && _delAction != null)
-                        {
-                            _delAction(PlayerManager.Combat);
-                            rv = true;
-                        }
-
-                        return rv;
-                    }
-
-                    public void Configure()
-                    {
-                        Controls.Clear();
-                        _playerSprite = new GUICharacterSprite(_bOverwrite);
-                        _playerSprite.SetScale((int)GameManager.Scale);
-                        _playerSprite.PlayAnimation(WActorBaseAnim.IdleDown);
-
-                        PositionSprites();
-                    }
-
-                    public override void Position(Vector2 value)
-                    {
-                        base.Position(value);
-                        PositionSprites();
-                    }
-
-                    public void PositionSprites()
-                    {
-                        if (_playerSprite != null)
-                        {
-                            _playerSprite.CenterOnWindow(this);
-                            _playerSprite.AnchorToInnerSide(this, SideEnum.Bottom);
-
-                            Width = _playerSprite.Width + _playerSprite.Width / 3;
-                            Height = _playerSprite.Height + (_winData.Edge * 2);
-                        }
-                    }
-                }
-            }
-
-            public class CharacterDetailWindow : GUIObject
+            public class CharacterDetailObject : GUIObject
             {
                 const int SPACING = 10;
                 EquipWindow _equipWindow;
@@ -1177,7 +975,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 public delegate void SyncCharacter();
                 private SyncCharacter _delSyncCharacter;
 
-                public CharacterDetailWindow(CombatAdventurer c, SyncCharacter del = null)
+                public CharacterDetailObject(CombatAdventurer c, SyncCharacter del = null)
                 {
                     _winName = new GUIWindow(GUIWindow.RedWin, (HUDParty.WIDTH) - (GUIWindow.RedWin.Edge * 2), 10);
                     WinDisplay = new GUIWindow(GUIWindow.RedWin, (HUDParty.WIDTH) - (GUIWindow.RedWin.Edge * 2), (HUDParty.HEIGHT / 4) - (GUIWindow.RedWin.Edge * 2));
@@ -1201,6 +999,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _winClothes.Resize();
                     _winClothes.Height += SPACING;
                     _winClothes.Width += SPACING;
+
+                    WinDisplay.AnchorAndAlignToObject(_winName, SideEnum.Bottom, SideEnum.Left);
+                    _winClothes.AnchorAndAlignToObject(WinDisplay, SideEnum.Bottom, SideEnum.Left);
+
+                    AddControl(_winName);
+                    AddControl(_winClothes);
+                    AddControl(WinDisplay);
 
                     Width = _winName.Width;
                     Height = _winName.Height + WinDisplay.Height;
@@ -1339,14 +1144,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             _equipWindow.Draw(spriteBatch);
                         }
                     }
-                }
-
-                public override void Position(Vector2 value)
-                {
-                    base.Position(value);
-                    _winName.Position(value);
-                    WinDisplay.AnchorAndAlignToObject(_winName, SideEnum.Bottom, SideEnum.Left);
-                    _winClothes.AnchorAndAlignToObject(WinDisplay, SideEnum.Bottom, SideEnum.Left);
                 }
 
                 public override bool ProcessLeftButtonClick(Point mouse)
@@ -1661,17 +1458,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 base.Update(gameTime);
             }
-            public class FriendshipBox : GUIObject
+            public class FriendshipBox : GUIWindow
             {
                 private SpriteFont _font;
                 GUIText _gTextName;
-                GUIText _gTextPoints;
-                GUIWindow _gWin;
                 GUIImage _gAdventure;
                 GUIImage _gGift;
                 List<GUIImage> _liFriendship;
 
-                public FriendshipBox(Villager c, int mainWidth)
+                public FriendshipBox(Villager c, int mainWidth) : base(GUIWindow.BrownWin, mainWidth, 16)
                 {
                     _liFriendship = new List<GUIImage>();
                     _font = GameContentManager.GetFont(@"Fonts\Font");
@@ -1695,9 +1490,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         }
                     }
 
-                    _gWin = new GUIWindow(GUIWindow.BrownWin, mainWidth, 16);
-
-                    _gTextName.AnchorToInnerSide(_gWin, SideEnum.TopLeft);
+                    _gTextName.AnchorToInnerSide(this, SideEnum.TopLeft);
                     for (int j = 0; j < _liFriendship.Count; j++)
                     {
                         if (j == 0) { _liFriendship[j].AnchorAndAlignToObject(_gTextName, SideEnum.Right, SideEnum.CenterY); }
@@ -1706,7 +1499,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _gTextName.SetText(c.Name);
 
                     _gGift = new GUIImage(new Rectangle(16, 48, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog");
-                    _gGift.AnchorToInnerSide(_gWin, SideEnum.Right);
+                    _gGift.AnchorToInnerSide(this, SideEnum.Right);
                     _gGift.AlignToObject(_gTextName, SideEnum.CenterY);
                     _gGift.Alpha = (c.CanGiveGift) ? 1 : 0.3f;
 
@@ -1722,21 +1515,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         else { _gAdventure.Alpha = (e.CanJoinParty) ? 1 : 0.3f; }
                     }
 
-                    _gWin.Resize();
-                }
-
-                public override void Draw(SpriteBatch spriteBatch)
-                {
-                    _gWin.Draw(spriteBatch);
-                }
-
-                public override void Position(Vector2 value)
-                {
-                    base.Position(value);
-                    _gWin.Position(value);
-
-                    Width = _gWin.Width;
-                    Height = _gWin.Height;
+                    Resize();
                 }
             }
         }
@@ -1762,7 +1541,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _liWorkers = new List<GUIObject>();
 
                 _mgmtWindow = new MainBuildingsWin(this);
-                Controls.Add(_mgmtWindow);
+                AddControl(_mgmtWindow);
             }
 
             public override bool ProcessLeftButtonClick(Point mouse)
@@ -1811,9 +1590,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     if (selectedBuilding != null)
                     {
-                        Controls.Remove(_mgmtWindow);
+                        RemoveControl(_mgmtWindow);
                         _mgmtWindow = new BuildingDetailsWin(this, selectedBuilding);
-                        Controls.Add(_mgmtWindow);
+                        AddControl(_mgmtWindow);
                     }
                 }
                 else
@@ -1841,18 +1620,18 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 if (worldAdventurer != null)
                 {
-                    Controls.Remove(_mgmtWindow);
+                    RemoveControl(_mgmtWindow);
                     _mgmtWindow = new MainBuildingsWin(this);
                     _worker = worldAdventurer;
-                    Controls.Add(_mgmtWindow);
+                    AddControl(_mgmtWindow);
                 }
             }
 
             public void SetMgmtWindow(MgmtWindow newWin)
             {
-                Controls.Remove(_mgmtWindow);
+                RemoveControl(_mgmtWindow);
                 _mgmtWindow = newWin;
-                Controls.Add(_mgmtWindow);
+                AddControl(_mgmtWindow);
             }
 
             public void Sell()
@@ -1896,7 +1675,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 protected GUIWindow _window;
                 protected HUDManagement _parent;
                 protected List<GUIObject> _liButtons;
-                protected List<GUIObject> Controls;
 
                 private MgmtWindow(HUDManagement s)
                 {
@@ -1905,27 +1683,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _parent = s;
 
                     _window = new GUIWindow(GUIWindow.RedWin, WIDTH, HEIGHT);
-                    _window.CenterOnScreen();
+                    AddControl(_window);
 
-                    Controls.Add(_window);
+                    AddControl(_window);
                     Width = _window.Width;
                     Height = _window.Height;
-                    Position(_window.Position());
-                }
 
-                public override void Update(GameTime gameTime)
-                {
-                    foreach (GUIObject g in Controls)
-                    {
-                        g.Update(gameTime);
-                    }
-                }
-                public override void Draw(SpriteBatch spriteBatch)
-                {
-                    foreach (GUIObject g in Controls)
-                    {
-                        g.Draw(spriteBatch);
-                    }
+                    _window.CenterOnScreen();
                 }
 
                 public class MainBuildingsWin : MgmtWindow
@@ -1943,7 +1707,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             {
                                 BuildingBox box = new BuildingBox(b, w != null);
                                 _liButtons.Add(box);
-                                Controls.Add(box);
+                                AddControl(box);
                             }
                         }
 
@@ -1992,14 +1756,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             _bShowWorkers = showWorkerNum;
 
                             _gText = new GUIText(b.Workers.Count + @"/" + b.MaxWorkers);
-                            _gText.AnchorAndAlignToObject(_btn, SideEnum.Bottom, SideEnum.Left);
+                            _gText.AnchorAndAlignToObject(_btn, SideEnum.Bottom, SideEnum.CenterX);
+
+                            AddControl(_btn);
+                            AddControl(_gText);
                             Width = _btn.Width > _gText.Width ? _btn.Width : _gText.Width;
                             Height = _btn.Height + _gText.Height;
-                        }
-
-                        public override void Update(GameTime gameTime)
-                        {
-                            _btn.Update(gameTime);
                         }
 
                         public override void Draw(SpriteBatch spriteBatch)
@@ -2009,18 +1771,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             {
                                 _gText.Draw(spriteBatch);
                             }
-                        }
-
-                        public override bool Contains(Point mouse)
-                        {
-                            return _btn.Contains(mouse);
-                        }
-
-                        public override void Position(Vector2 value)
-                        {
-                            base.Position(value);
-                            _btn.Position(value);
-                            _gText.AnchorAndAlignToObject(_btn, SideEnum.Bottom, SideEnum.CenterX);
                         }
                     }
                 }
@@ -2032,7 +1782,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         {
                             WorkerBox btn = new WorkerBox(w);
                             _liButtons.Add(btn);
-                            Controls.Add(btn);
+                            AddControl(btn);
                         }
                         CreateSpacedGrid(ref _liButtons, _window.InnerTopLeft(), _window.MidWidth(), 3);
                     }
@@ -2074,32 +1824,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         {
                             _w = w;
                             _btn = new GUIButton(w.Name);
+                            AddControl(_btn);
+
                             Width = _btn.Width;
                             Height = _btn.Height;
                         }
-
-                        public override void Update(GameTime gameTime)
-                        {
-                            _btn.Update(gameTime);
-                        }
-
-                        public override void Draw(SpriteBatch spriteBatch)
-                        {
-                            _btn.Draw(spriteBatch);
-                        }
-
-                        public override bool Contains(Point mouse)
-                        {
-                            return _btn.Contains(mouse);
-                        }
-
-                        public override void Position(Vector2 value)
-                        {
-                            base.Position(value);
-                            _btn.Position(value);
-                        }
                     }
                 }
+
                 public class WorkerDetailsWin : MgmtWindow
                 {
                     GUIButton _btnMove;
@@ -2175,32 +1907,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         _parent.SetMgmtWindow(new BuildingDetailsWin(_parent, _character.Building));
                         return true;
                     }
-
-                    public override bool ProcessHover(Point mouse)
-                    {
-                        bool rv = false;
-                        if (_weapon.ProcessHover(mouse))
-                        {
-                            rv = true;
-                        }
-                        if (_armor.ProcessHover(mouse))
-                        {
-                            rv = true;
-                        }
-                        return rv;
-                    }
                 }
             }
         }
         public class HUDOptions : GUIWindow
         {
-            public static int WIDTH = RiverHollow.ScreenWidth / 3;
-            public static int HEIGHT = RiverHollow.ScreenHeight / 3;
             GUICheck _gAutoDisband;
             GUICheck _gHideMiniInventory;
             GUIButton _btnSave;
 
-            public HUDOptions() : base(GUIWindow.RedWin, WIDTH, HEIGHT)
+            public HUDOptions() : base(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_WIDTH)
             {
                 this.CenterOnScreen();
 
@@ -2256,5 +1972,5 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 GameManager.BackToMain();
             }
         }
-    }  
+    }
 }

@@ -101,9 +101,13 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _gUnchecked = new GUIImage(new Rectangle(16, 32, TileSize, TileSize), Width, Height, @"Textures\Dialog");
             _gChecked = new GUIImage(new Rectangle(32, 32, TileSize, TileSize), Width, Height, @"Textures\Dialog");
 
+            AddControl(_gUnchecked);
+            AddControl(_gChecked);
             if (!string.IsNullOrEmpty(text))
             {
                 _gText = new GUIText(text);
+                _gText.AnchorAndAlignToObject(_gChecked, SideEnum.Right, SideEnum.Bottom);
+                AddControl(_gText);
             }
         }
 
@@ -127,18 +131,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
 
             return rv;
-        }
-
-        public override void Position(Vector2 value)
-        {
-            base.Position(value);
-
-            _gChecked.Position(value);
-            _gUnchecked.Position(value);
-            if (_gText != null)
-            {
-                _gText.AnchorAndAlignToObject(_gChecked, SideEnum.Right, SideEnum.Bottom);
-            }
         }
 
         public bool Checked()
@@ -166,33 +158,30 @@ namespace RiverHollow.GUIComponents.GUIObjects
             startX += ((int)status - 2) * TileSize;
 
             _gImage = new GUIImage(new Rectangle(startX, 0, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog");
+            AddControl(_gImage);
 
             Width = _gImage.Width;
             Height = _gImage.Height;
         }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _gImage.Draw(spriteBatch);
-            if (_bHover)
-            {
-                if (_gText != null) { _gText.Draw(spriteBatch); }
-            }
+            base.Draw(spriteBatch);
+            RemoveControl(_gText);
         }
 
-        public void ProcessHover(Point mouse)
+        public override bool ProcessHover(Point mouse)
         {
+            bool rv = false;
+
             if (_gImage.Contains(mouse))
             {
-                _bHover = true;
+                rv = true;
                 _gText = new GUITextWindow(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32), GameContentManager.GetGameText(_status.ToString() + " Description"));
+                AddControl(_gText);
             }
-            else { _bHover = false; }
-        }
 
-        public override void Position(Vector2 value)
-        {
-            base.Position(value);
-            _gImage.Position(value);
+            return rv;
         }
     }
 

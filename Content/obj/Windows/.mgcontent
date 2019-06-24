@@ -163,5 +163,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/armor.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/weapons.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/tools.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/ActionEffects/LeafCutter.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/CombatMalice.png</File>
   </SourceFiles>
 </SourceFileCollection>

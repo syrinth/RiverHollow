@@ -400,10 +400,14 @@
       <Key>880</Key>
       <Value>[Type:Equipment][Image:0-96][Sell:1000][EType:Armor][ESub:None][ASlot:Wrist][Tier:1][Def:Major][Str:Minor]</Value>
     </Item>
-    <!--<970> Rings-->
+    <!--<970> Accessories-->
     <Item>
       <Key>970</Key>
       <Value>[Type:Equipment][Image:0-0][Sell:1000][EType:Accessory][Tier:1][Def:Major][Str:Minor]</Value>
+    </Item>
+    <Item>
+      <Key>971</Key>
+      <Value>[Type:Equipment][Image:16-0][Sell:1000][EType:Accessory][Tier:3][Spd:Major][Res:Moderate]</Value>
     </Item>
     <!--<1000> Class Change-->
     <Item>
