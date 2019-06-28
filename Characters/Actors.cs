@@ -586,11 +586,10 @@ namespace RiverHollow.Actors
 
         protected void ImportBasics(Dictionary<string, string> stringData)
         {
+            _dialogueDictionary = GameContentManager.GetNPCDialogue(_iIndex);
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
-            _sName = GameContentManager.GetGameText("NPC" + _iIndex);
+            _sName = _dialogueDictionary["Name"];
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
-            _dialogueDictionary = GameContentManager.LoadDialogue(@"Data\Dialogue\NPC" + _iIndex);
-
 
             if (stringData.ContainsKey("Type")) { _eNPCType = Util.ParseEnum<NPCTypeEnum>(stringData["Type"]); }
             if (stringData.ContainsKey("PortRow")) { _portraitRect = new Rectangle(0, 0, 48, 60); }
@@ -1445,7 +1444,7 @@ namespace RiverHollow.Actors
                 _iMood += 1;
 
                 RHRandom r = new RHRandom();
-                rv = GameContentManager.GetGameText(_sAdventurerType + r.Next(1, 2));
+                rv = GameContentManager.GetAdventurerDialogue(_sAdventurerType + r.Next(1, 2));
             }
             else if (entry.Equals("Party"))
             {
@@ -2011,13 +2010,12 @@ namespace RiverHollow.Actors
         
         #endregion
 
-        public Mob(int id, string[] stringData)
+        public Mob(int id, Dictionary<string, string> data)
         {
             _liSpawnConditions = new List<SpawnConditionEnum>();
             _actorType = ActorEnum.Mob;
             _liMonsters = new List<CombatActor>();
-            ImportBasics(stringData, id);
-            _sTexture = _sMobFolder + "FangedFur";
+            ImportBasics(data, id);
             LoadContent();
 
             _iXP = 0;
@@ -2031,13 +2029,13 @@ namespace RiverHollow.Actors
 
             if (!_bJump)
             {
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleDown, TileSize, TileSize * 2, 1, 0.2f, 0, 0);
+                _spriteBody.AddAnimation(WActorBaseAnim.IdleDown, TileSize, TileSize * 2, 4, 0.2f, 0, 0);
                 _spriteBody.AddAnimation(WActorWalkAnim.WalkDown, TileSize, TileSize * 2, 4, 0.2f, 0, 0);
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleUp, TileSize, TileSize * 2, 1, 0.2f, 64, 0);
+                _spriteBody.AddAnimation(WActorBaseAnim.IdleUp, TileSize, TileSize * 2, 4, 0.2f, 64, 0);
                 _spriteBody.AddAnimation(WActorWalkAnim.WalkUp, TileSize, TileSize * 2, 4, 0.2f, 64, 0);
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleLeft, TileSize, TileSize * 2, 1, 0.2f, 128, 0);
+                _spriteBody.AddAnimation(WActorBaseAnim.IdleLeft, TileSize, TileSize * 2, 4, 0.2f, 128, 0);
                 _spriteBody.AddAnimation(WActorWalkAnim.WalkLeft, TileSize, TileSize * 2, 4, 0.2f, 128, 0);
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleRight, TileSize, TileSize * 2, 1, 0.2f, 192, 0);
+                _spriteBody.AddAnimation(WActorBaseAnim.IdleRight, TileSize, TileSize * 2, 4, 0.2f, 192, 0);
                 _spriteBody.AddAnimation(WActorWalkAnim.WalkRight, TileSize, TileSize * 2, 4, 0.2f, 192, 0);
                 _spriteBody.SetCurrentAnimation(WActorWalkAnim.WalkDown);
             }
@@ -2071,25 +2069,24 @@ namespace RiverHollow.Actors
             _sprAlert.Position = (Position - new Vector2(0, TileSize));
         }
 
-        protected int ImportBasics(string[] stringData, int id)
+        protected int ImportBasics(Dictionary<string, string> data, int id)
         {
-            for (int i = 0; i < stringData.Length; i++)
+            _sTexture = GameContentManager.MOB_FOLDER + data["Texture"];
+
+            string[] split = data["Monster"].Split('-');
+            for (int i = 0; i < split.Length; i++)
             {
-                string[] tagType = stringData[i].Split(':');
-                if (tagType[0].Equals("Monster"))
-                {
-                    int mID = int.Parse(tagType[1]);
-                    _liMonsters.Add(ObjectManager.GetMonsterByIndex(mID));
-                }
-                else if (tagType[0].Equals("Condition"))
-                {
-                    _liSpawnConditions.Add(Util.ParseEnum<SpawnConditionEnum>(tagType[1]));
-                }
-                else if (tagType[0].Equals("Jump"))
-                {
-                    _bJump = true;
-                }
+                int mID = int.Parse(split[i]);
+                _liMonsters.Add(ObjectManager.GetMonsterByIndex(mID));
             }
+
+            split = data["Condition"].Split('-');
+            for (int i = 0; i < split.Length; i++)
+            {
+                _liSpawnConditions.Add(Util.ParseEnum<SpawnConditionEnum>(split[i]));
+            }
+
+            _bJump = data.ContainsKey("Jump");
 
             foreach (CombatActor m in _liMonsters)
             {
@@ -3240,7 +3237,7 @@ namespace RiverHollow.Actors
         protected void ImportBasics(Dictionary<string, string> data, int id)
         {
             _id = id;
-            _sName = GameContentManager.GetGameText("Monster " + _id);
+            _sName = GameContentManager.GetMonsterInfo("Monster " + _id);
 
             string texture = string.Empty;
             float[] idle = new float[2] { 2, 0.5f };

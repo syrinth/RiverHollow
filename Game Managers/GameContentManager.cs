@@ -11,12 +11,18 @@ namespace RiverHollow.Game_Managers
         public const string ACTOR_FOLDER = @"Textures\Actors\";
         public const string BUILDING_FOLDER = @"Textures\Buildings\";
         public const string ITEM_FOLDER = @"Textures\Items\";
+        public const string MOB_FOLDER = @"Textures\Actors\Mobs\";
         public const string PLAYER_FOLDER = @"Textures\Actors\Player\";
+        public const string TEXT_FILE_FOLDER = @"Data\Text Files\";
 
         private static ContentManager _content;
         private static Dictionary<string, Texture2D> _diTextures;
         private static Dictionary<string, SpriteFont> _diFonts;
         private static Dictionary<string, string> _diGameText;
+        private static Dictionary<string, string> _diMonsterInfo;
+        private static Dictionary<string, string> _diCombatSkillsText;
+        private static Dictionary<string, string> _diAdventurerDialogue;
+        private static Dictionary<int, Dictionary<string, string>> _diNPCDialogue;
         private static Dictionary<string, Dictionary<int, string>> _diMerchandise;
         private static Dictionary<int, string> _diUpgrades;
         private static Dictionary<string, string> _diSpiritLoot;
@@ -37,97 +43,110 @@ namespace RiverHollow.Game_Managers
             _diSpiritLoot = _content.Load<Dictionary<string, string>>(@"Data\SpiritLoot");
             _diUpgrades = _content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
             _diQuests = _content.Load<Dictionary<int, string>>(@"Data\Quests");
-            _diItemText = _content.Load<Dictionary<int, string>>(@"Data\ItemText");
             _diMonsterTraits = _content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
 
-            _diGameText = LoadDialogue(@"Data\Dialogue\GameText");
+            LoadTextFiles();
 
-            LoadCharacters(_content);
-            LoadGUIs(_content);
-            LoadIcons(_content);
-            LoadMerchandise(_content);
-            AddDirectoryTextures(Content, BUILDING_FOLDER);
-            AddDirectoryTextures(Content, ITEM_FOLDER);
+            LoadCharacters();
+            LoadGUIs();
+            LoadIcons();
+            LoadMerchandise();
+            AddDirectoryTextures(BUILDING_FOLDER);
+            AddDirectoryTextures(ITEM_FOLDER);
 
             LoadFont(_content);
         }
 
         #region Load Methods
-        public static void LoadCharacters(ContentManager Content)
+        private static void LoadTextFiles()
         {
-            AddDirectoryTextures(Content, ACTOR_FOLDER);
+            _diItemText = _content.Load<Dictionary<int, string>>(TEXT_FILE_FOLDER + "ItemText");
+            _diGameText = _content.Load<Dictionary<string, string>>(TEXT_FILE_FOLDER + "GameText");
+            _diMonsterInfo = _content.Load<Dictionary<string, string>>(TEXT_FILE_FOLDER + "MonsterInfo");
+            _diCombatSkillsText = _content.Load<Dictionary<string, string>>(TEXT_FILE_FOLDER + "CombatSkillsText");
 
-            AddTexture(Content, @"Textures\texPlayer");
-            AddTexture(Content, @"Textures\texFlooring");
-            AddTexture(Content, @"Textures\texWeather");
-            AddTexture(Content, @"Textures\lightmask");
-            AddTexture(Content, @"Textures\texPlayerHair");
-            AddTexture(Content, @"Textures\texClothes");
-            AddTexture(Content, @"Textures\Eye");
+            _diAdventurerDialogue = _content.Load<Dictionary<string, string>>(TEXT_FILE_FOLDER + @"Dialogue\Adventurers");
+            _diNPCDialogue = new Dictionary<int, Dictionary<string, string>>();
+            foreach (string s in Directory.GetFiles(@"Content\" + TEXT_FILE_FOLDER + "Dialogue"))
+            {
+                string fileName = Path.GetFileName(s).Replace("NPC", "").Split('.')[0];
+                int file = -1;
+                if (int.TryParse(fileName, out file))
+                {
+                    fileName = s;
+                    Util.ParseContentFile(ref fileName);
+                    _diNPCDialogue.Add(file, _content.Load<Dictionary<string, string>>(fileName));
+                }
+            }
         }
+        private static void LoadCharacters()
+        {
+            AddDirectoryTextures(ACTOR_FOLDER);
 
-        private static void AddDirectoryTextures(ContentManager Content, string directory, bool AddContent = true)
+            AddTexture(@"Textures\texPlayer");
+            AddTexture(@"Textures\texFlooring");
+            AddTexture(@"Textures\texWeather");
+            AddTexture(@"Textures\lightmask");
+            AddTexture(@"Textures\texPlayerHair");
+            AddTexture(@"Textures\texClothes");
+            AddTexture(@"Textures\Eye");
+        }
+        private static void AddDirectoryTextures(string directory, bool AddContent = true)
         {
             string folder = AddContent ? @"Content\" + directory : directory;
             foreach (string s in Directory.GetFiles(folder))
             {
-                AddTexture(Content, s);
+                AddTexture(s);
             }
             foreach (string s in Directory.GetDirectories(folder))
             {
-                AddDirectoryTextures(Content, s, false);
+                AddDirectoryTextures(s, false);
             }
         }
-
-        public static void LoadGUIs(ContentManager Content)
+        private static void LoadGUIs()
         {
-            AddTexture(Content, @"Textures\Dialog");
+            AddTexture(@"Textures\Dialog");
         }
-
-        public static void LoadIcons(ContentManager Content)
+        private static void LoadIcons()
         {
-            AddDirectoryTextures(Content, @"Textures\ActionEffects");
-            AddTexture(Content, @"Textures\battle");
-            AddTexture(Content, @"Textures\worldObjects");
-            AddTexture(Content, @"Textures\portraits");
-            AddTexture(Content, @"Textures\tree");
-            AddTexture(Content, @"Textures\DarkWoodTree");
-            AddTexture(Content, @"Textures\items");
-            AddTexture(Content, @"Textures\AbilityAnimations");
-            AddTexture(Content, @"Textures\texMachines");
-            AddTexture(Content, @"Textures\texCmbtActions");
+            AddDirectoryTextures(@"Textures\ActionEffects");
+            AddTexture(@"Textures\battle");
+            AddTexture(@"Textures\worldObjects");
+            AddTexture(@"Textures\portraits");
+            AddTexture(@"Textures\tree");
+            AddTexture(@"Textures\DarkWoodTree");
+            AddTexture(@"Textures\items");
+            AddTexture(@"Textures\AbilityAnimations");
+            AddTexture(@"Textures\texMachines");
+            AddTexture(@"Textures\texCmbtActions");
         }
-
-        public static void LoadFont(ContentManager Content)
+        private static void LoadFont(ContentManager Content)
         {
-            AddFont(Content, @"Fonts\DisplayFont");
-            AddFont(Content, @"Fonts\Font");
-            AddFont(Content, @"Fonts\MenuFont");
+            AddFont(@"Fonts\DisplayFont");
+            AddFont(@"Fonts\Font");
+            AddFont(@"Fonts\MenuFont");
+        }
+        private static void LoadMerchandise()
+        {
+            LoadMerchandiseByFile(@"Data\Shops\Buildings");
+            LoadMerchandiseByFile(@"Data\Shops\Adventurers");
+            LoadMerchandiseByFile(@"Data\Shops\MagicShop");
+        }
+        private static void LoadMerchandiseByFile(string file)
+        {
+            _diMerchandise.Add(file.Replace(@"Data\Shops\", ""), _content.Load<Dictionary<int, string>>(file));
         }
         #endregion
 
-        public static void LoadMerchandise(ContentManager Content)
-        {
-            LoadMerchandiseByFile(Content, @"Data\Shops\Buildings");
-            LoadMerchandiseByFile(Content, @"Data\Shops\Adventurers");
-            LoadMerchandiseByFile(Content, @"Data\Shops\MagicShop");
-        }
-
-        public static void LoadMerchandiseByFile(ContentManager Content, string file)
-        {
-            _diMerchandise.Add(file.Replace(@"Data\Shops\", ""), Content.Load<Dictionary<int, string>>(file));
-        }
-
-        #region AddMethods
-        private static void AddTexture(ContentManager Content, string texture)
+        #region Add Methods
+        private static void AddTexture(string texture)
         {
             Util.ParseContentFile(ref texture);
-            _diTextures.Add(texture, Content.Load<Texture2D>(texture));
+            _diTextures.Add(texture, _content.Load<Texture2D>(texture));
         }
-
-        private static void AddFont(ContentManager Content, string font)
+        private static void AddFont(string font)
         {
-            _diFonts.Add(font, Content.Load<SpriteFont>(font));
+            _diFonts.Add(font, _content.Load<SpriteFont>(font));
         }
         #endregion
 
@@ -142,12 +161,46 @@ namespace RiverHollow.Game_Managers
             return _diFonts[font];
         }
 
+        public static Dictionary<string, string> GetNPCDialogue(int id)
+        {
+            Dictionary<string, string> rv = null;
+
+            if (_diNPCDialogue.ContainsKey(id))
+            {
+                rv = _diNPCDialogue[id];
+            }
+
+            return rv;
+        }
+
+        public static string GetMonsterInfo(string key)
+        {
+            string rv = string.Empty;
+            if (_diMonsterInfo.ContainsKey(key))
+            {
+                rv = _diMonsterInfo[key];
+            }
+
+            return rv;
+        }
+
         public static string GetGameText(string key)
         {
             string rv = string.Empty;
             if (_diGameText.ContainsKey(key))
             {
                 rv =  _diGameText[key];
+            }
+
+            return rv;
+        }
+
+        public static string GetAdventurerDialogue(string key)
+        {
+            string rv = string.Empty;
+            if (_diAdventurerDialogue.ContainsKey(key))
+            {
+                rv = _diAdventurerDialogue[key];
             }
 
             return rv;
@@ -191,18 +244,13 @@ namespace RiverHollow.Game_Managers
         public static void GetActionText(int id, ref string name, ref string desc)
         {
             string val = "Action " + id;
-            name = _diGameText[val].Split('/')[0];
-            desc = _diGameText[val].Split('/')[1];
+            name = _diCombatSkillsText[val].Split('/')[0];
+            desc = _diCombatSkillsText[val].Split('/')[1];
         }
 
         public static string GetMonsterTraitData(string trait)
         {
             return _diMonsterTraits[trait];
-        }
-
-        public static Dictionary<string, string> LoadDialogue(string file)
-        {
-            return _content.Load<Dictionary<string, string>>(file);
         }
         #endregion
     }

@@ -1895,7 +1895,7 @@ namespace RiverHollow.Tile_Engine
 
         public void Spawn()
         {
-            _mob = ObjectManager.GetMobByIndex(4);//ObjectManager.GetMobToSpawn(_eSpawnType);
+            _mob = ObjectManager.GetMobByIndex(2);//ObjectManager.GetMobToSpawn(_eSpawnType);
             if (_mob != null)
             {
                 _map.AddMob(_mob, _vSpawnPoint);

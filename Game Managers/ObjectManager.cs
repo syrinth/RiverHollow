@@ -25,7 +25,7 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<int, string> _diWorkers;
         private static Dictionary<int, Dictionary<string, string>> _diWorldObjects;
 
-        private static Dictionary<int, string> _diMobs;
+        private static Dictionary<int, Dictionary<string, string>> _diMobs;
         private static Dictionary<int, Dictionary<string, string>> _diMonsterData;
         private static Dictionary<int, Villager> _diNPCs;
         public static Dictionary<int, Villager> DiNPC { get => _diNPCs; }
@@ -57,10 +57,10 @@ namespace RiverHollow.Game_Managers
             _liForest = new List<int>();
             _liMountain = new List<int>();
             _liNight = new List<int>();
-            _diMobs = new Dictionary<int, string>();
+            _diMobs = new Dictionary<int, Dictionary<string, string>>();
             _diSchedule = new Dictionary<string, Dictionary<string, string>>();
 
-            _diMobs = Content.Load<Dictionary<int, string>>(@"Data\Mobs");
+            AddToDictionary(_diMobs, @"Data\Mobs", Content);
             _diBuffs = Content.Load<Dictionary<int, string>>(@"Data\Buffs");
             _diClasses = Content.Load<Dictionary<int, string>>(@"Data\Classes");
 
@@ -259,9 +259,7 @@ namespace RiverHollow.Game_Managers
             Mob m = null;
             if (_diMobs.ContainsKey(id))
             {
-                string _sData = _diMobs[id];
-                string[] _itemDataVals = Util.FindTags(_sData);
-                m = new Mob(id, _itemDataVals);
+                m = new Mob(id, _diMobs[id]);
             }
             return m;
         }

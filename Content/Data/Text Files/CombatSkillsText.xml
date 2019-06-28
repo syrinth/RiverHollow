@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, string]">
+    <!--Action Text -->
+    <Item>
+      <Key>Action 0</Key>
+      <Value>Move/Move</Value>
+    </Item>
+    <Item>
+      <Key>Action 1</Key>
+      <Value>Escape/Escape</Value>
+    </Item>
+    <Item>
+      <Key>Action 2</Key>
+      <Value>Use Item/Use Item</Value>
+    </Item>
+    <Item>
+      <Key>Action 3</Key>
+      <Value>Cast Spell/Casts a Spell</Value>
+    </Item>
+    <Item>
+      <Key>Action 4</Key>
+      <Value>Special/Special Skills</Value>
+    </Item>
+    <!--Wizard Skills-->
+    <Item>
+      <Key>Action 20</Key>
+      <Value>Thunder/Thunder</Value>
+    </Item>
+    <Item>
+      <Key>Action 21</Key>
+      <Value>Fireball/Fireball</Value>
+    </Item>
+    <!--Healer Skills-->
+    <Item>
+      <Key>Action 40</Key>
+      <Value>Minor Healing/A weak healing spell</Value>
+    </Item>
+    <Item>
+      <Key>Action 41</Key>
+      <Value>Esuna/Heals conditions</Value>
+    </Item>
+    <!--Summoner Skills-->
+    <Item>
+      <Key>Action 60</Key>
+      <Value>Attack/Summon Attack</Value>
+    </Item>
+    <Item>
+      <Key>Action 61</Key>
+      <Value>Summon Mystic Eye/EYE</Value>
+    </Item>
+    <Item>
+      <Key>Action 62</Key>
+      <Value>Summon Earth Elemental/EARTH</Value>
+    </Item>
+    <!--Witch Skills-->
+    <Item>
+      <Key>Action 80</Key>
+      <Value>Witch's Curse/Inflict a curse</Value>
+    </Item>
+    <!--Duelist Skills-->
+    <!--Knight Skills-->
+    <Item>
+      <Key>Action 120</Key>
+      <Value>Drive Back/Drives them back</Value>
+    </Item>
+    <!--Rogue Skills-->
+    <!--Bard Skills-->
+    <!--Generic Skills-->
+    <Item>
+      <Key>Action 300</Key>
+      <Value>Attack/Attacks the enemy</Value>
+    </Item>
+    <Item>
+      <Key>Action 301</Key>
+      <Value>Leaf Cutter/Throws a branch</Value>
+    </Item>
+  </Asset>
+</XnaContent>

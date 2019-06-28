@@ -4,21 +4,11 @@
     <!--Key: Index>0 Value:monster1/monster2/monster3/monster4-->
     <Item>
       <Key>1</Key>
-      <Value>[Monster:1][Condition:Forest][Condition:Summer]</Value>
+      <Value>[Texture:FangedFur][Monster:4-5-6][Condition:Forest-Summer][Jump]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Monster:2][Monster:1][Monster:1][Condition:Forest][Condition:Spring]</Value>
+      <Value>[Texture:Malice][Monster:12-4-10][Condition:Forest-Summer]</Value>
     </Item>
-    <Item>
-      <Key>3</Key>
-      <Value>[Monster:3][Condition:Forest]</Value>
-    </Item>
-    <!--FangedFur-->
-    <Item>
-      <Key>4</Key>
-      <Value>[Monster:12][Condition:Forest][Jump]</Value>
-    </Item>
-    <!--DownGoose-->
   </Asset>
 </XnaContent>

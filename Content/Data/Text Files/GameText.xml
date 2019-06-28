@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, string]">
+    <Item>
+      <Key>FoodConfirm</Key>
+      <Value>Really eat the {0}? [Yes:UseItem|No:Cancel]</Value>
+    </Item>
+    <Item>
+      <Key>ClassItemConfirm</Key>
+      <Value>Really use the {0}? [Yes:UseItem|No:Cancel]</Value>
+    </Item>
+    <Item>
+      <Key>AdventurerTree</Key>
+      <Value>...[Talk:Talk|Join Party:Party]</Value>
+    </Item>
+    <Item>
+      <Key>Journal</Key>
+      <Value>Write in your journal and go to bed?[Yes:SleepNow|No:Cancel]</Value>
+    </Item>
+    <Item>
+      <Key>ReallyExit</Key>
+      <Value>Are you sure?[Exit:Exit|Cancel:Cancel]</Value>
+    </Item>
+    <Item>
+      <Key>MobDoor</Key>
+      <Value>An inscription upon the door reads: "None shall pass until all are vanquished."</Value>
+    </Item>
+    <Item>
+      <Key>KeyDoor</Key>
+      <Value>A strangely shaped keyhole is embedded in the door [Attempt to Open:OpenDoor|Never Mind:Cancel]</Value>
+    </Item>
+    <Item>
+      <Key>KeyDoorOpen</Key>
+      <Value>As you place the item into the keyhole, it vanishes, becoming one with the door!</Value>
+    </Item>
+    <Item>
+      <Key>KeyDoorClose</Key>
+      <Value>No matter how hard you try, it seems like that item won't fit here.</Value>
+    </Item>
+    <Item>
+      <Key>SpringDoor</Key>
+      <Value>Nope</Value>
+    </Item>
+    <!--Quest Text-->
+    <Item>
+      <Key>Quest 1</Key>
+      <Value>Griselda's Orb/Griselda wants you to get her orb back from the goblins who stole it. Apparently, they ran off to the East and are hiding inside of the Forest.</Value>
+    </Item>
+    <!--Upgrade Text -->
+    <Item>
+      <Key>Upgrade 1</Key>
+      <Value>Tavern/A place where people can gather</Value>
+    </Item>
+    <!--Status/Buff/Debuff-->
+    <Item>
+      <Key>Poisoned Description</Key>
+      <Value>This character has been poisoned!</Value>
+    </Item>
+    <Item>
+      <Key>Silenced Description</Key>
+      <Value>No more magic!</Value>
+    </Item>
+    <!--Building Text -->
+    <Item>
+      <Key>Building 0</Key>
+      <Value>Manor/Manor</Value>
+    </Item>
+    <Item>
+      <Key>Building 1</Key>
+      <Value>Tower/Mystic Tower to house practitioners of the magical arts.</Value>
+    </Item>
+    <Item>
+      <Key>Building 2</Key>
+      <Value>Barracks/Ideal training space for martial characters.</Value>
+    </Item>
+    <Item>
+      <Key>Building 3</Key>
+      <Value>Lodge/A comfortable place where Scout and Bards can train.</Value>
+    </Item>
+    <Item>
+      <Key>Building 4</Key>
+      <Value>Cottage/A cozy, earthy place where Witches and Healers work.</Value>
+    </Item>
+    <!--Classes Text -->
+    <Item>
+      <Key>Class 1</Key>
+      <Value>Wizard/Uses magic!</Value>
+    </Item>
+    <Item>
+      <Key>Class 2</Key>
+      <Value>Healer/Master of Healing and potions</Value>
+    </Item>
+    <Item>
+      <Key>Class 3</Key>
+      <Value>Summoner/Summons magical beings to aid you</Value>
+    </Item>
+    <Item>
+      <Key>Class 4</Key>
+      <Value>Witch/Expert in curses and hexing your opponents</Value>
+    </Item>
+    <Item>
+      <Key>Class 5</Key>
+      <Value>Lancer/Master of Melee</Value>
+    </Item>
+    <Item>
+      <Key>Class 6</Key>
+      <Value>Knight/Defensible warrior</Value>
+    </Item>
+    <Item>
+      <Key>Class 7</Key>
+      <Value>Rogue/Fast and agile, uses a bow</Value>
+    </Item>
+    <Item>
+      <Key>Class 8</Key>
+      <Value>Bard/Music</Value>
+    </Item>
+  </Asset>
+</XnaContent>

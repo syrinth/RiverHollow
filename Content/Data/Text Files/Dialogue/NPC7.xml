@@ -1,6 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[string, string]">
+    <!--Name-->
+    <Item>
+      <Key>Name</Key>
+      <Value>Michael</Value>
+    </Item>
     <!--Key:NPCType#, Value:Text-->
     <Item>
       <Key>Introduction</Key>

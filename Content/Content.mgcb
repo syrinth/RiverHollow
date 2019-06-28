@@ -81,21 +81,6 @@
 /processor:PassThroughProcessor
 /build:Data/ItemData.xml
 
-#begin Data/Dialogue/NPC1.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Dialogue/NPC1.xml
-
-#begin Data/Dialogue/NPC2.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Dialogue/NPC2.xml
-
-#begin Data/Dialogue/NPC3.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Dialogue/NPC3.xml
-
 #begin Data/Shops/Buildings.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -124,11 +109,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Maps/Dungeons/DungeonSheet.png
-
-#begin Data/Dialogue/NPC4.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Dialogue/NPC4.xml
 
 #begin Data/Monsters.xml
 /importer:XmlImporter
@@ -188,11 +168,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/NPCData/Characters.xml
-
-#begin Data/Dialogue/NPC5.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Dialogue/NPC5.xml
 
 #begin Data/TownUpgrades.xml
 /importer:XmlImporter
@@ -287,11 +262,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/CutScenes.xml
-
-#begin Data/Dialogue/NPC8.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Dialogue/NPC8.xml
 
 #begin Textures/texMachines.png
 /importer:TextureImporter
@@ -479,11 +449,6 @@
 /processor:PassThroughProcessor
 /build:Data/NPCData/Schedules/NPC1.xml
 
-#begin Data/Dialogue/NPC6.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Dialogue/NPC6.xml
-
 #begin Data/Quests.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -518,16 +483,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Eye.png
 
-#begin Data/ItemText.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/ItemText.xml
-
-#begin Data/Dialogue/GameText.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Dialogue/GameText.xml
-
 #begin Textures/texClothes.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -544,23 +499,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/MonsterTraitTable.xml
-
-#begin Data/Dialogue/NPC7.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Dialogue/NPC7.xml
-
-#begin Textures/Actors/Mobs/Goblin Scout.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Actors/Mobs/Goblin Scout.png
 
 #begin Textures/Actors/NPCs/Spirit_Forest_1.png
 /importer:TextureImporter
@@ -1319,16 +1257,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Villagers/NPC9.png
 
-#begin Data/Dialogue/NPC9.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Dialogue/NPC9.xml
-
-#begin Data/Dialogue/NPC10.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Dialogue/NPC10.xml
-
 #begin Textures/Actors/Villagers/NPC10.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1520,4 +1448,91 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Monsters/CombatMalice.png
+
+#begin Textures/Actors/Mobs/Malice.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Mobs/Malice.png
+
+#begin Data/Text Files/GameText.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/GameText.xml
+
+#begin Data/Text Files/Dialogue/NPC1.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC1.xml
+
+#begin Data/Text Files/Dialogue/NPC2.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC2.xml
+
+#begin Data/Text Files/Dialogue/NPC3.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC3.xml
+
+#begin Data/Text Files/Dialogue/NPC4.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC4.xml
+
+#begin Data/Text Files/Dialogue/NPC5.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC5.xml
+
+#begin Data/Text Files/Dialogue/NPC6.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC6.xml
+
+#begin Data/Text Files/Dialogue/NPC7.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC7.xml
+
+#begin Data/Text Files/Dialogue/NPC8.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC8.xml
+
+#begin Data/Text Files/Dialogue/NPC9.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC9.xml
+
+#begin Data/Text Files/Dialogue/NPC10.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC10.xml
+
+#begin Data/Text Files/MonsterInfo.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/MonsterInfo.xml
+
+#begin Data/Text Files/ItemText.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/ItemText.xml
+
+#begin Data/Text Files/CombatSkillsText.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/CombatSkillsText.xml
+
+#begin Data/Text Files/Dialogue/Adventurers.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Adventurers.xml
 

@@ -11,13 +11,9 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/tree.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/items.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/ItemData.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC1.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC2.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC3.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/Buildings.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/worldObjects.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/DungeonSheet.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC4.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Monsters.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Buildings.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Workers.xml</File>
@@ -27,7 +23,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/MobDrops.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/AbilityAnimations.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Characters.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC5.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/TownUpgrades.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Buffs.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/Adventurers.xml</File>
@@ -46,7 +41,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapRoom4.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapRoom5.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CutScenes.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC8.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texMachines.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texPlayer.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/WorldObjects.xml</File>
@@ -70,17 +64,12 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/SpiritLoot.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC3.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC1.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC6.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Quests.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texPlayerHair.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/MagicShop.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Eye.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/ItemText.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/GameText.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texClothes.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/MonsterTraitTable.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC7.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Mobs/Goblin Scout.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/NPCs/Spirit_Forest_1.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/NPCs/Spirit_Forest_2.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/NPCs/Spirit_Water_1.png</File>
@@ -147,8 +136,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerSummoner.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerWizard.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC9.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC9.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Dialogue/NPC10.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC10.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tsBuildings.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/CombatMuckDweller.png</File>
@@ -165,5 +152,21 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/tools.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/ActionEffects/LeafCutter.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/CombatMalice.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Mobs/Malice.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/GameText.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC1.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC2.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC3.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC4.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC5.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC6.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC7.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC8.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC9.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC10.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/MonsterInfo.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/ItemText.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/CombatSkillsText.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/Adventurers.xml</File>
   </SourceFiles>
 </SourceFileCollection>
