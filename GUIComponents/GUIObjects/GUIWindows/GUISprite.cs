@@ -56,9 +56,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _sprite.SetCurrentAnimation(animation);
         }
 
-        public virtual void SetScale(int scale)
+        public override void SetScale(double x, bool anchorToPos = true)
         {
-            _sprite.SetScale(scale);
+            _sprite.SetScale((int)x);
             Width = _sprite.Width;
             Height = _sprite.Height;
         }

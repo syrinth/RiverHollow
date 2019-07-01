@@ -43,20 +43,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
 
-            if (_gSelectionWindow == null && _guiTextWindow == null) { GameManager.BackToMain(); }
-            else
+
+            foreach (GUIObject g in Controls)
             {
-                foreach (GUIObject g in Controls)
-                {
-                    rv = g.ProcessRightButtonClick(mouse);
+                rv = g.ProcessRightButtonClick(mouse);
 
-                    if (rv) { break; }
-                }
+                if (rv) { break; }
+            }
 
-                if(!rv && IsMenuOpen())
-                {
-                    GameManager.BackToMain();
-                }
+            if (!rv && IsMenuOpen() && (_gSelectionWindow == null || _guiTextWindow == null))
+            {
+                GameManager.BackToMain();
             }
 
             return rv;
@@ -163,6 +160,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
         public bool IsTextWindowOpen() { return _guiTextWindow != null; }
+
+        /// <summary>
+        /// Removes any previous existing Text Windows fromthe Control, then determines whether
+        /// or not the given text requires a selection window or not, and creates the appropriate
+        /// GUITextWindow.
+        /// 
+        /// Afterward, adds the new Window to the Controls.
+        /// </summary>
+        /// <param name="text">Text for the window</param>
+        /// <param name="open">Whether or not to display an open animation</param>
         public virtual void OpenTextWindow(string text, bool open = true)
         {
             RemoveControl(_guiTextWindow);

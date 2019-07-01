@@ -104,6 +104,11 @@ namespace RiverHollow
                 KeyboardState ks = Keyboard.GetState();
                 //If we're not in the game and we're not on an input screen, handle input
                 HandleImportantInput();
+                
+                if (HarpManager.PlayingMusic)
+                {
+                    HarpManager.Update(gameTime);
+                }
 
                 //GUIManager always needs to update, regardless of game state
                 GUIManager.Update(gameTime);

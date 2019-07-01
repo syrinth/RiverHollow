@@ -22,8 +22,7 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<string, string> _diMonsterInfo;
         private static Dictionary<string, string> _diCombatSkillsText;
         private static Dictionary<string, string> _diAdventurerDialogue;
-        private static Dictionary<int, Dictionary<string, string>> _diNPCDialogue;
-        private static Dictionary<string, Dictionary<int, string>> _diMerchandise;
+        
         private static Dictionary<int, string> _diUpgrades;
         private static Dictionary<string, string> _diSpiritLoot;
         public static Dictionary<string, string> DiSpiritLoot { get => _diSpiritLoot; }
@@ -33,6 +32,10 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<int, string> _diItemText;
         private static Dictionary<int, string> _diClassText;
         private static Dictionary<string, string> _diMonsterTraits;
+
+        private static Dictionary<int, List<string>> _diSongs;
+        private static Dictionary<int, Dictionary<string, string>> _diNPCDialogue;
+        private static Dictionary<string, Dictionary<int, string>> _diMerchandise;
 
         public static void LoadContent(ContentManager Content)
         {
@@ -65,6 +68,7 @@ namespace RiverHollow.Game_Managers
             _diMonsterInfo = _content.Load<Dictionary<string, string>>(TEXT_FILE_FOLDER + "MonsterInfo");
             _diCombatSkillsText = _content.Load<Dictionary<string, string>>(TEXT_FILE_FOLDER + "CombatSkillsText");
 
+            _diSongs = _content.Load<Dictionary<int, List<string>>>(@"Data\Songs");
             _diAdventurerDialogue = _content.Load<Dictionary<string, string>>(TEXT_FILE_FOLDER + @"Dialogue\Adventurers");
             _diNPCDialogue = new Dictionary<int, Dictionary<string, string>>();
             foreach (string s in Directory.GetFiles(@"Content\" + TEXT_FILE_FOLDER + "Dialogue"))
@@ -239,6 +243,18 @@ namespace RiverHollow.Game_Managers
             string val = "Upgrade " + id;
             name = _diGameText[val].Split('/')[0];
             desc = _diGameText[val].Split('/')[1];
+        }
+
+        public static List<string> GetSong(int id)
+        {
+            if (_diSongs.ContainsKey(id))
+            {
+                return _diSongs[id];
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static void GetActionText(int id, ref string name, ref string desc)

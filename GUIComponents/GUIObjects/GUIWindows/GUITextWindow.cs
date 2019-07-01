@@ -46,6 +46,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _liText = new List<string>();
             _iCharWidth = _giText.CharWidth;
             _iCharHeight = _giText.CharHeight;
+
+            AddControl(_giText);
         }
 
         //Used for the default TextWindow that sits on the bottom of the screen
@@ -86,13 +88,13 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
             Height = _iCharHeight;
             Width = (int)_giText.TextSize.X;
-            Position(Vector2.Zero);
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
             Resize();
         }
 
         public void Setup(bool openUp)
         {
+            AnchorToScreen(SideEnum.Bottom, SpaceFromBottom);
             if (openUp)
             {
                 _bOpening = true;
@@ -106,21 +108,28 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             }
         }
 
+        /// <summary>
+        /// Method used to ensure that the components for the TextWindow are synced
+        /// together. Called on finishing the opening animation, or immediately after
+        /// creating the window if we do not play it.
+        /// </summary>
         protected void SyncObjects()
         {
             if (GameManager.CurrentNPC != null)
             {
                 TalkingActor talker = GameManager.CurrentNPC;
                 _giPortrait = new GUIImage(talker.PortraitRectangle, talker.PortraitRectangle.Width, talker.PortraitRectangle.Height, talker.Portrait);
-                _giPortrait = new GUIImage(talker.PortraitRectangle, talker.PortraitRectangle.Width, talker.PortraitRectangle.Height, talker.Portrait);
                 _giPortrait.SetScale(GameManager.Scale);
                 _giPortrait.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.Left);
+                AddControl(_giPortrait);
             }
 
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
 
             _next = new GUIImage(new Rectangle(288, 64, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");     //???
             _next.AnchorToInnerSide(this, SideEnum.BottomRight);
+
+            AnchorToScreen(SideEnum.Bottom, SpaceFromBottom);
         }
 
         public override void Update(GameTime gameTime)
@@ -214,7 +223,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                     if (_bGoneOver)
                     {
                         SetScale(1, false);
-                        Position(new Vector2(RiverHollow.ScreenWidth / 4, RiverHollow.ScreenHeight - Height - SpaceFromBottom));
                         _bOpening = false;
                         SyncObjects();
                     }
@@ -306,11 +314,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         public void ResetText(string text)
         {
             _giText.ResetText(text);
-        }
-
-        protected void SetWidthMax(int val)
-        {
-            SetWidthMax(val, RiverHollow.ScreenWidth / 3);   
         }
 
         protected void SetWidthMax(int val, int maxWidth)

@@ -588,6 +588,21 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
+        public Spirit FindSpirit()
+        {
+            Spirit rv = null;
+
+            foreach(Actor a in _liActors)
+            {
+                if(a.IsSpirit() && PlayerManager.PlayerInRange(a.Position.ToPoint(), 500))
+                {
+                    rv = (Spirit)a;
+                }
+            }
+
+            return rv;
+        }
+
         public bool Contains(WorldActor c)
         {
             return _liActors.Contains(c);

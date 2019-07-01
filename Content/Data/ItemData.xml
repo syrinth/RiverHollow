@@ -83,6 +83,10 @@
       <Key>23</Key>
       <Value>[Type:Tool][Image:0-64][Sell:3000][ToolType:WateringCan][Stam:1]</Value>
     </Item>
+    <Item>
+      <Key>24</Key>
+      <Value>[Type:Tool][Image:0-80][Sell:3000][ToolType:Harp][Stam:1]</Value>
+    </Item>
     <!--<40-59> Plant Resources-->
     <Item>
       <Key>40</Key>

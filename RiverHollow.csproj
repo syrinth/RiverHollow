@@ -69,9 +69,11 @@
     <Compile Include="Game Managers\CutSceneManager.cs" />
     <Compile Include="Game Managers\DungeonManager.cs" />
     <Compile Include="Game Managers\GameManager.cs" />
+    <Compile Include="Game Managers\HarpManager.cs" />
     <Compile Include="Game Managers\MissionManager.cs" />
     <Compile Include="Game Managers\SoundManager.cs" />
     <Compile Include="Game Managers\TravelManager.cs" />
+    <Compile Include="GUIComponents\GUIHarp.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUICharacterDisplayBox.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIText.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUIMisc.cs" />

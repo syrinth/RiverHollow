@@ -507,7 +507,7 @@ namespace RiverHollow.WorldObjects
 
     public class Tool : Item
     {
-        public enum ToolEnum { Pick, Axe, Shovel, WateringCan };
+        public enum ToolEnum { Pick, Axe, Shovel, WateringCan, Harp };
         public ToolEnum ToolType;
         protected int _staminaCost;
         public int StaminaCost { get => _staminaCost; }

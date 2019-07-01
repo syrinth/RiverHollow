@@ -83,6 +83,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override bool IsHUD() { return true; }
 
+        /// <summary>
+        /// Overrides the Screens OpenTextWindow method to first hide any HUD components desired.
+        /// </summary>
+        /// <param name="text">Text to open with</param>
+        /// <param name="open">Whether to play the open animation</param>
         public override void OpenTextWindow(string text, bool open = true)
         {
             base.OpenTextWindow(text, open);
@@ -437,8 +442,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public class HUDQuestLog : GUIWindow
         {
-            public static int WIDTH = RiverHollow.ScreenWidth / 3;
-            public static int HEIGHT = RiverHollow.ScreenHeight / 3;
             public static int BTNSIZE = 32;
             public static int MAX_SHOWN_QUESTS = 4;
             List<QuestBox> _questList;
@@ -448,11 +451,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             bool _bMoved;
             int _topQuest;
-            public HUDQuestLog() : base(GUIWindow.RedWin, WIDTH, HEIGHT)
+            public HUDQuestLog() : base(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT)
             {
                 this.CenterOnScreen();
                 _questList = new List<QuestBox>();
-                _detailWindow = new DetailBox(GUIWindow.RedWin, WIDTH, HEIGHT);
+                _detailWindow = new DetailBox(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
                 _detailWindow.CenterOnScreen();
 
                 _btnUp = new GUIButton(new Rectangle(256, 64, 32, 32), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnUpClick);
@@ -575,8 +578,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     _index = i;
 
-                    int boxHeight = (HUDQuestLog.HEIGHT / HUDQuestLog.MAX_SHOWN_QUESTS) - (win.EdgeSize * 2);
-                    int boxWidth = (HUDQuestLog.WIDTH) - (win.EdgeSize * 2) - HUDQuestLog.BTNSIZE;
+                    int boxHeight = (GUIManager.MAIN_COMPONENT_HEIGHT / HUDQuestLog.MAX_SHOWN_QUESTS) - (win.EdgeSize * 2);
+                    int boxWidth = (GUIManager.MAIN_COMPONENT_WIDTH) - (win.EdgeSize * 2) - HUDQuestLog.BTNSIZE;
                     _window = new GUIWindow(GUIWindow.RedWin, boxWidth, boxHeight);
                     _window.AnchorToInnerSide(win, SideEnum.TopLeft);
 
@@ -635,11 +638,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
 
         }
-        public class HUDParty : GUIWindow
+        public class HUDParty : GUIObject
         {
-            public static int WIDTH = RiverHollow.ScreenWidth / 3;
-            public static int HEIGHT = RiverHollow.ScreenHeight / 3;
-
             CharacterDetailObject _charBox;
             NPCDisplayBox _selectedBox;
             GUIButton _btnMap;
@@ -677,6 +677,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     }
 
                     _arrDisplayBoxes[i].Enable(false);
+                    AddControl(_arrDisplayBoxes[i]);
 
                     if (i == 0)
                     {
@@ -690,6 +691,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
                 _selectedBox = _arrDisplayBoxes[0];
                 _selectedBox.Enable(true);
+
+                Width = _btnMap.Right - _charBox.Left;
+                Height = _charBox.Bottom - _arrDisplayBoxes[0].Top;
             }
 
             public override bool ProcessLeftButtonClick(Point mouse)
@@ -839,7 +843,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     SetOccupancy(_currentCharacter);
 
                     this.Resize();
-                    this.IncreaseSizeTo((HUDParty.WIDTH) - (BrownWin.Edge * 2), (HUDParty.HEIGHT) - (BrownWin.Edge * 2));
+                    this.IncreaseSizeTo((GUIManager.MAIN_COMPONENT_WIDTH) - (BrownWin.Edge * 2), (GUIManager.MAIN_COMPONENT_HEIGHT) - (BrownWin.Edge * 2));
                 }
 
                 public void SetOccupancy(CombatAdventurer currentCharacter)
@@ -977,8 +981,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 public CharacterDetailObject(CombatAdventurer c, SyncCharacter del = null)
                 {
-                    _winName = new GUIWindow(GUIWindow.RedWin, (HUDParty.WIDTH) - (GUIWindow.RedWin.Edge * 2), 10);
-                    WinDisplay = new GUIWindow(GUIWindow.RedWin, (HUDParty.WIDTH) - (GUIWindow.RedWin.Edge * 2), (HUDParty.HEIGHT / 4) - (GUIWindow.RedWin.Edge * 2));
+                    _winName = new GUIWindow(GUIWindow.RedWin, (GUIManager.MAIN_COMPONENT_WIDTH) - (GUIWindow.RedWin.Edge * 2), 10);
+                    WinDisplay = new GUIWindow(GUIWindow.RedWin, (GUIManager.MAIN_COMPONENT_WIDTH) - (GUIWindow.RedWin.Edge * 2), (GUIManager.MAIN_COMPONENT_HEIGHT / 4) - (GUIWindow.RedWin.Edge * 2));
                     WinDisplay.AnchorAndAlignToObject(_winName, SideEnum.Bottom, SideEnum.Left);
                     _winClothes = new GUIWindow(GUIWindow.RedWin, 10, 10);
                     _winClothes.AnchorAndAlignToObject(WinDisplay, SideEnum.Bottom, SideEnum.Left);
@@ -1008,7 +1012,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     AddControl(WinDisplay);
 
                     Width = _winName.Width;
-                    Height = _winName.Height + WinDisplay.Height;
+                    Height = _winClothes.Bottom - _winName.Top;
                 }
 
                 private void Load()
@@ -1406,11 +1410,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
         public class HUDFriendship : GUIWindow
         {
-            public static int WIDTH = RiverHollow.ScreenWidth / 3;
-            public static int HEIGHT = RiverHollow.ScreenHeight / 3;
             List<FriendshipBox> _villagerList;
 
-            public HUDFriendship() : base(GUIWindow.RedWin, WIDTH, HEIGHT)
+            public HUDFriendship() : base(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT)
             {
                 this.CenterOnScreen();
                 _villagerList = new List<FriendshipBox>();
@@ -1525,8 +1527,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             private ActionTypeEnum _eAction;
             public ActionTypeEnum Action => _eAction;
             public static int BTN_PADDING = 20;
-            public static int WIDTH = RiverHollow.ScreenWidth / 3;
-            public static int HEIGHT = RiverHollow.ScreenHeight / 3;
 
             MgmtWindow _mgmtWindow;
 
@@ -1682,7 +1682,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     Controls = new List<GUIObject>();
                     _parent = s;
 
-                    _window = new GUIWindow(GUIWindow.RedWin, WIDTH, HEIGHT);
+                    _window = new GUIWindow(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
                     AddControl(_window);
 
                     AddControl(_window);

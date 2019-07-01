@@ -1574,7 +1574,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             _bDisplayItems = false;
             _arrCharXP = new GUIStatDisplay[4];
-            _gWin = new GUIWindow(GUIWindow.BrownWin, RiverHollow.ScreenWidth / 3, RiverHollow.ScreenHeight / 3);
+            _gWin = new GUIWindow(GUIWindow.BrownWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
             _gXPToGive = new GUIStatDisplay(CombatManager.CurrentMob.GetXP, Color.Yellow);
             _gXPToGive.CenterOnObject(_gWin);
             _gXPToGive.AnchorToInnerSide(_gWin, SideEnum.Top);

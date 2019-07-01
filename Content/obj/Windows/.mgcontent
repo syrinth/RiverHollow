@@ -168,5 +168,9 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/ItemText.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/CombatSkillsText.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/Adventurers.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Songs.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Harp/c3.wav</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Harp/d2.wav</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Harp/e2.wav</File>
   </SourceFiles>
 </SourceFileCollection>

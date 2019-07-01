@@ -12,6 +12,7 @@ namespace RiverHollow.Game_Managers
     {
         const string _sSongFolder = @"Content\Sound\Stock\Songs";
         const string _sEffectFolder = @"Content\Sound\Stock\Effects";
+        const string _sHarpFolder = @"Content\Sound\Stock\Harp";
         static float _iMusicVol = 0.03f;
         static float _iEffectVol = 0.03f;
         public static Dictionary<string, Song> _diSongs;
@@ -25,6 +26,7 @@ namespace RiverHollow.Game_Managers
             MediaPlayer.Volume = _iMusicVol;
             foreach(string s in Directory.GetFiles(_sSongFolder)) { AddSong(Content, s); }
             foreach (string s in Directory.GetFiles(_sEffectFolder)) { AddEffect(Content, s); }
+            foreach (string s in Directory.GetFiles(_sHarpFolder)) { AddEffect(Content, s); }
         }
 
         static void AddSong(ContentManager Content, string song)

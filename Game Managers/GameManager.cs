@@ -52,6 +52,7 @@ namespace RiverHollow.Game_Managers
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
         public static float Scale = 4f;
         public const int TileSize = 16;
+        public static int ScaledTileSize => (int)(TileSize * Scale);
         public static int MaxBldgLevel = 3;
         public static Dictionary<int, Upgrade> DiUpgrades;
         public static Dictionary<int, Quest> DIQuests;

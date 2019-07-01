@@ -22,14 +22,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         protected int _iOptionsOffsetY;
         protected Dictionary<int, SelectionData> _diOptions;
 
-        public GUITextSelectionWindow() : base()
+        public GUITextSelectionWindow(string selectionText, bool open = true)
         {
             _diOptions = new Dictionary<int, SelectionData>();
-        }
-        public GUITextSelectionWindow(string selectionText, bool open = true) : this()
-        {
             Height = Math.Max(Height, (_iCharHeight * MAX_ROWS));
-            Position(new Vector2(Position().X, RiverHollow.ScreenHeight - Height - SpaceFromBottom));
             _iKeySelection = 0;
             SeparateText(selectionText);
             PostParse();

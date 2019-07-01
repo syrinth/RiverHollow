@@ -91,6 +91,13 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 {
                     text = GameContentManager.GetGameText("ClassItemConfirm");
                 }
+                else if (Item.IsTool() && ((Tool)Item).ToolType == Tool.ToolEnum.Harp) {
+                    Spirit s = MapManager.CurrentMap.FindSpirit();
+                    if (s != null)
+                    {
+                        HarpManager.NewSong(s);
+                    }
+                }
                 else if (Item.IsConsumable())       //If the item is a Consumable, construct the selection options from the party
                 {
                     int i = 0;

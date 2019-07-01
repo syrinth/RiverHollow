@@ -1536,3 +1536,26 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Adventurers.xml
 
+#begin Data/Songs.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Songs.xml
+
+#begin Sound/Stock/Harp/c3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Harp/c3.wav
+
+#begin Sound/Stock/Harp/d2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Harp/d2.wav
+
+#begin Sound/Stock/Harp/e2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Harp/e2.wav
+

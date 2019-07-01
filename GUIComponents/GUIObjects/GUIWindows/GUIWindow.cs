@@ -39,8 +39,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         {
             Height = 184;
             Width = RiverHollow.ScreenWidth / 2;
-            //Vector2 startPos = new Vector2(RiverHollow.ScreenWidth / 4, RiverHollow.ScreenHeight - Height - SpaceFromBottom);
-            //Position(startPos);
 
             _winData = RedWin;
         }

@@ -327,10 +327,17 @@ namespace RiverHollow.Actors
             _bCanTalk = true;
         }
 
+        /// <summary>
+        /// Stand-in Virtual method to be overrriden. Should never get called.
+        /// </summary>
         public virtual string GetOpeningText()
         {
             return "I have nothing to say.";
         }
+
+        /// <summary>
+        /// Retrieves any opening text, processes it, then opens a text window
+        /// </summary>
         public virtual void Talk()
         {
             string text = GetOpeningText();
@@ -338,6 +345,12 @@ namespace RiverHollow.Actors
             text = Util.ProcessText(text, _sName);
             GUIManager.OpenTextWindow(text, this);
         }
+
+        /// <summary>
+        /// Used when already talking to an NPC, gets the next dialog tag in the conversation
+        /// and opens a new window for it.
+        /// </summary>
+        /// <param name="dialogTag">The dialog tag to talk with</param>
         public void Talk(string dialogTag)
         {
             string text = string.Empty;
@@ -1867,6 +1880,9 @@ namespace RiverHollow.Actors
         string _sCondition;
         string _sText;
 
+        int _iSongID = 1;
+        public int SongID => _iSongID;
+
         public bool Triggered;
 
         public Spirit(string name, string type, string condition, string text) : base()
@@ -1932,9 +1948,9 @@ namespace RiverHollow.Actors
                 {
                     active = GameCalendar.IsRaining();
                 }
-                else if (s.Contains("day"))
+                else if (s.Contains("Day"))
                 {
-                    active = s.Equals(GameCalendar.GetDayOfWeek());
+                    active = !GameCalendar.IsNight();//s.Equals(GameCalendar.GetDayOfWeek());
                 }
                 else if (s.Equals("Night"))
                 {
