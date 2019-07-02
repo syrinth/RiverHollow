@@ -1,0 +1,38 @@
+Max Level = 99;
+Max Stat = 999;
+Avg Stat inc/lvl = 5
+Stats for lvl 99 naked character = 500 (98*5) + 10
+499 points of stats to be made up in gear over the course of the game
+10 tiers of gear
+Exponential growth of gear bonus, first few tiers have minimal, while last few tiers have the most
+Tier
+1 30
+2 50
+3 70
+4 100
+5 140
+6 190
+7 250
+8 320
+9 400
+10 500
+
+Max Damage = 9,999
+In order to achieve max dmg, you need a Maxed stat or a maxed weapon. Both is overkill but may result in a damage limit break?
+Main weight of dmg should be based off the weapon's atk
+
+
+Max Player HP = 9,999
+Max Player MP - 999
+
+-Enemies should have more Vit than players.
+-Enemies should have notably less Str and Mag than players
+-Aside form Vit, all enemy stats should be, on average, lower than players
+
+Monster HP = (Vit/2)^2 + 80
+Monster Vit = (Lvl/4)^2 + (3*Lvl)
+
+Player HP = (Vit/32)^2 + 30
+Player Vit = 10*Lvl 
+
+~6 hits to down a player, 3 hits for an enemy
