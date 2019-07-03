@@ -16,6 +16,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
         {
             _window = new GUITextInputWindow();
             _window.SetupNaming();
+            _window.TakeInput = true;
 
             AddControl(_window);
         }

@@ -54,9 +54,9 @@ namespace RiverHollow.WorldObjects
         public int Height => _iHeight;
 
         protected int _iBaseWidth = TileSize;
-        public int BaseWidth => _iBaseWidth;
+        public virtual int BaseWidth => _iBaseWidth;
         protected int _iBaseHeight = TileSize;
-        public int BaseHeight => _iBaseHeight;
+        public virtual int BaseHeight => _iBaseHeight;
 
         protected int _id;
         public int ID { get => _id; }

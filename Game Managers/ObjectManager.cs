@@ -20,7 +20,7 @@ namespace RiverHollow.Game_Managers
     {
         private static Dictionary<int, Dictionary<string, string>> _diVillagerData;
 
-        private static Dictionary<int, string> _diBuildings;
+        private static Dictionary<int, Dictionary<string, string>> _diBuildings;
         private static Dictionary<int, Dictionary<string, string>> _diItemData;
         private static Dictionary<int, string> _diWorkers;
         private static Dictionary<int, Dictionary<string, string>> _diWorldObjects;
@@ -45,7 +45,7 @@ namespace RiverHollow.Game_Managers
             _diActions = new Dictionary<int, Dictionary<string, string>>();
             _diWorldObjects = new Dictionary<int, Dictionary<string, string>>();
             _diMonsterData = new Dictionary<int, Dictionary<string, string>>();
-            _diBuildings = Content.Load<Dictionary<int, string>>(@"Data\Buildings");
+            _diBuildings = new Dictionary<int, Dictionary<string, string>>();
             _diWorkers = Content.Load<Dictionary<int, string>>(@"Data\Workers");
 
             AddToDictionary(_diItemData, @"Data\ItemData", Content);
@@ -53,6 +53,7 @@ namespace RiverHollow.Game_Managers
             AddToDictionary(_diActions, @"Data\CombatActions", Content);
             AddToDictionary(_diVillagerData, @"Data\NPCData\Characters", Content);
             AddToDictionary(_diMonsterData, @"Data\Monsters", Content);
+            AddToDictionary(_diBuildings, @"Data\Buildings", Content);
 
             _liForest = new List<int>();
             _liMountain = new List<int>();
@@ -118,16 +119,18 @@ namespace RiverHollow.Game_Managers
         {
             if (_diBuildings.ContainsKey(id))
             {
-                string buildingData = _diBuildings[id];
-                string[] _buildingDataValues = Util.FindTags(buildingData);
-                return new Building(_buildingDataValues, id);
+                return new Building(_diBuildings[id], id);
             }
             return null;
         }
 
+        /// <summary>
+        /// The Manor is Building 0, so make a new building from the data
+        /// </summary>
+        /// <returns>A new building representing the Manor house.</returns>
         public static Building GetManor()
         {
-            return new Building(Util.FindTags(_diBuildings[0]), 0);
+            return new Building(_diBuildings[0], 0);
         }
 
         public static WorldAdventurer GetWorker(int id)

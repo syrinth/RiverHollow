@@ -130,33 +130,25 @@ namespace RiverHollow.GUIComponents.Screens
 
         public PurchaseBuildingsScreen(List<Merchandise> merch)
         {
-            try
-            {
-                _liMerchandise = merch;
-                _iCurrIndex = 0;
+            _liMerchandise = merch;
+            _iCurrIndex = 0;
 
-                _bldgWindow = new BuildingInfoDisplay(_liMerchandise[_iCurrIndex]);
-                AddControl(_bldgWindow);
+            _bldgWindow = new BuildingInfoDisplay(_liMerchandise[_iCurrIndex]);
+            AddControl(_bldgWindow);
 
-                _btnBuy = new GUIButton("Buy", MINI_BTN_WIDTH, MINI_BTN_HEIGHT, BtnBuy);
-                _btnBuy.AnchorAndAlignToObject(_bldgWindow, SideEnum.Bottom, SideEnum.CenterX, 50);
-                _bldgWindow.Load();
+            _btnBuy = new GUIButton("Buy", MINI_BTN_WIDTH, MINI_BTN_HEIGHT, BtnBuy);
+            _btnBuy.AnchorAndAlignToObject(_bldgWindow, SideEnum.Bottom, SideEnum.CenterX, 50);
+            AddControl(_btnBuy);
+            _bldgWindow.Load();
 
-                _btnLast = new GUIButton("Last", MINI_BTN_WIDTH, MINI_BTN_HEIGHT, BtnLast);
-                _btnLast.AnchorAndAlignToObject(_btnBuy, SideEnum.Left, SideEnum.Bottom, 100);
-                _btnNext = new GUIButton("Next", MINI_BTN_WIDTH, MINI_BTN_HEIGHT, BtnNext);
-                _btnNext.AnchorAndAlignToObject(_btnBuy, SideEnum.Right, SideEnum.CenterY, 100);
-            }
-            catch (Exception e)
-            {
-
-            }
+            _btnLast = new GUIButton("Last", MINI_BTN_WIDTH, MINI_BTN_HEIGHT, BtnLast);
+            _btnLast.AnchorAndAlignToObject(_btnBuy, SideEnum.Left, SideEnum.Bottom, 100);
+            AddControl(_btnLast);
+            _btnNext = new GUIButton("Next", MINI_BTN_WIDTH, MINI_BTN_HEIGHT, BtnNext);
+            _btnNext.AnchorAndAlignToObject(_btnBuy, SideEnum.Right, SideEnum.CenterY, 100);
+            AddControl(_btnNext);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-        }
 
         public override void Update(GameTime gameTime)
         {
@@ -287,7 +279,7 @@ namespace RiverHollow.GUIComponents.Screens
                     _bldgWindow.CenterOnScreen();
                     _bldgWindow.PositionSub(new Vector2(_bldgWindow.Width / 2 + TileSize / 2, 0));
 
-                    _giBuilding = new GUIImage(_bldg.SourceRectangle, _bldg.Texture.Width, _bldg.Texture.Height, _bldg.Texture);
+                    _giBuilding = new GUIImage(_bldg.SourceRectangle, _bldg.PxWidth, _bldg.PxHeight, _bldg.Texture);
                     _giBuilding.SetScale(newScale);
                     _giBuilding.AnchorToInnerSide(_bldgWindow, SideEnum.Bottom);
                     _giBuilding.AlignToObject(_bldgWindow, SideEnum.CenterX);

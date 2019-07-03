@@ -98,11 +98,10 @@ namespace RiverHollow.GUIObjects
             {
                 Vector2 mousePosition = GetTranslatedPosition();
                 Texture2D drawIt = GameManager.HeldBuilding.Texture;
-                Rectangle drawRectangle = new Rectangle(((int)((mousePosition.X - drawIt.Width / 2) / TileSize)) * TileSize, ((int)((mousePosition.Y - drawIt.Height / 2) / TileSize)) * TileSize, drawIt.Width, drawIt.Height);
-                Rectangle source = new Rectangle(0, 0, drawIt.Width, drawIt.Height);
+                Rectangle drawRectangle = new Rectangle(((int)((mousePosition.X - HeldBuilding.PxWidth / 2) / TileSize)) * TileSize, ((int)((mousePosition.Y - HeldBuilding.PxHeight / 2) / TileSize)) * TileSize, HeldBuilding.PxWidth, HeldBuilding.PxHeight);
 
                 GameManager.HeldBuilding.SetCoordinatesByGrid(new Vector2(drawRectangle.X, drawRectangle.Y));
-                spriteBatch.Draw(drawIt, drawRectangle, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, mousePosition.Y + drawIt.Height);
+                spriteBatch.Draw(drawIt, drawRectangle, HeldBuilding.SourceRectangle, Color.White, 0, Vector2.Zero, SpriteEffects.None, mousePosition.Y + drawIt.Height);
             }
         }
 
