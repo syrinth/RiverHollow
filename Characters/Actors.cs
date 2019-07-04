@@ -3238,6 +3238,9 @@ namespace RiverHollow.Actors
         protected Vector2 _moveTo = Vector2.Zero;
         int _iLootID;
 
+        int _iWidth;
+        int _iHeight;
+
         public override int Attack => 20 + (_iRating * 10);
 
         public override int MaxHP => (int)((((Math.Pow(_iRating, 2))* 10) + 20) * Math.Pow(Math.Max(1, (double)_iRating / 14), 2));
@@ -3253,7 +3256,7 @@ namespace RiverHollow.Actors
         protected void ImportBasics(Dictionary<string, string> data, int id)
         {
             _id = id;
-            _sName = GameContentManager.GetMonsterInfo("Monster " + _id);
+            _sName = GameContentManager.GetMonsterInfo(_id);
 
             string texture = string.Empty;
             float[] idle = new float[2] { 2, 0.5f };
@@ -3262,6 +3265,9 @@ namespace RiverHollow.Actors
             float[] cast = new float[2] { 2, 0.5f };
 
             texture = data["Texture"];
+
+            _iWidth = int.Parse(data["Width"]);
+            _iHeight = int.Parse(data["Height"]);
 
             _iRating = int.Parse(data["Lvl"]);
             _xp = _iRating * 10;
@@ -3398,8 +3404,8 @@ namespace RiverHollow.Actors
             _spriteBody = new AnimatedSprite(texture.Replace(" ", ""));
 
             int xCrawl = 0;
-            int frameWidth = 32;
-            int frameHeight = 32;
+            int frameWidth = _iWidth;
+            int frameHeight = _iHeight;
             _spriteBody.AddAnimation(CActorAnimEnum.Idle, frameWidth, frameHeight, (int)idle[0], idle[1], (xCrawl * frameWidth), 0);
             xCrawl += (int)idle[0];
             _spriteBody.AddAnimation(CActorAnimEnum.Attack, frameWidth, frameHeight, (int)attack[0], attack[1], (xCrawl * frameWidth), 0);

@@ -4,60 +4,64 @@
     <!--Key: Index>0 Value:Name/CombatTexture/XP/Str/Def/Vit/Magic/Speed/Resist/Vulnerability-->
     <Item>
       <Key>1</Key>
-      <Value>[Texture:CombatGoblin][Lvl:1][Trait:Speedy][Ability:300][Resist:Fire][Vuln:Lightning]</Value>
+      <Value>[Texture:CombatGoblin][Width:32][Height:32][Lvl:1][Trait:Speedy][Ability:300][Resist:Fire][Vuln:Lightning]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Texture:CombatGoblinSoldier][Lvl:3][Ability:300][Trait:Aggressive][Resist:Lightning][Vuln:Fire]</Value>
+      <Value>[Texture:CombatGoblinSoldier][Width:32][Height:32][Lvl:3][Ability:300][Trait:Aggressive][Resist:Lightning][Vuln:Fire]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Texture:CombatGoblinSoldier][Lvl:5][Ability:300][Resist:Lightning][Vuln:Fire]</Value>
+      <Value>[Texture:CombatGoblinSoldier][Width:32][Height:32][Lvl:5][Ability:300][Resist:Lightning][Vuln:Fire]</Value>
     </Item>
     <!--FangedFur-->
     <Item>
       <Key>4</Key>
-      <Value>[Texture:CombatFangedFur][Lvl:1][Ability:300]</Value>
+      <Value>[Texture:CombatFangedFur][Width:32][Height:32][Lvl:1][Ability:300]</Value>
     </Item>
     <!--MagicMushroom-->
     <Item>
       <Key>5</Key>
-      <Value>[Texture:CombatMagicMushroom][Lvl:1][Ability:300-20][Trait:Spellcaster][Idle:4-0.6][Attack:2-0.6]</Value>
+      <Value>[Texture:CombatMagicMushroom][Width:32][Height:32][Lvl:1][Ability:300-20][Trait:Spellcaster][Idle:4-0.6][Attack:2-0.6]</Value>
     </Item>
     <!--Impling-->
     <Item>
       <Key>6</Key>
-      <Value>[Texture:CombatImpling][Lvl:1][Ability:300][Trait:Speedy][Idle:2-0.9][Attack:2-0.6][Hurt:1-0.9]</Value>
+      <Value>[Texture:CombatImpling][Width:32][Height:32][Lvl:1][Ability:300][Trait:Speedy][Idle:2-0.9][Attack:2-0.6][Hurt:1-0.9]</Value>
     </Item>
     <!--Forest Impling-->
     <Item>
       <Key>7</Key>
-      <Value>[Texture:CombatImplingForest][Lvl:1][Ability:300][Trait:Speedy][Idle:2-0.9][Attack:2-0.6][Hurt:1-0.9]</Value>
+      <Value>[Texture:CombatImplingForest][Width:32][Height:32][Lvl:1][Ability:300][Trait:Speedy][Idle:2-0.9][Attack:2-0.6][Hurt:1-0.9]</Value>
     </Item>
     <!--Mimic-->
     <Item>
       <Key>8</Key>
-      <Value>[Texture:CombatMimic][Lvl:1][Ability:300][Idle:6-0.3][Attack:2-0.2][Hurt:1-0.8]</Value>
+      <Value>[Texture:CombatMimic][Width:32][Height:32][Lvl:1][Ability:300][Idle:6-0.3][Attack:2-0.2][Hurt:1-0.8]</Value>
     </Item>
     <!--Muck Dweller-->
     <Item>
       <Key>9</Key>
-      <Value>[Texture:CombatMuckDweller][Lvl:1][Ability:300-20][Idle:4-0.25][Attack:2-0.1][Hurt:2-0.3][Cast:3-0.3][Loot:16]</Value>
+      <Value>[Texture:CombatMuckDweller][Width:32][Height:32][Lvl:1][Ability:300-20][Idle:4-0.25][Attack:2-0.1][Hurt:2-0.3][Cast:3-0.3][Loot:16]</Value>
     </Item>
     <!--DownGoose-->
     <Item>
       <Key>10</Key>
-      <Value>[Texture:CombatDownGoose][Lvl:1][Ability:300][Idle:4-0.15][Attack:3-0.1][Hurt:2-0.2][Loot:17]</Value>
+      <Value>[Texture:CombatDownGoose][Width:32][Height:32][Lvl:1][Ability:300][Idle:4-0.15][Attack:3-0.1][Hurt:2-0.2][Loot:17]</Value>
     </Item>
     <!--Lef-->
     <Item>
       <Key>11</Key>
-      <Value>[Texture:CombatLef][Lvl:1][Ability:300][Idle:4-0.15][Attack:3-0.1][Loot:18]</Value>
+      <Value>[Texture:CombatLef][Width:32][Height:32][Lvl:1][Ability:300][Idle:4-0.15][Attack:3-0.1][Loot:18]</Value>
     </Item>
     <!--Malice-->
     <Item>
       <Key>12</Key>
-      <Value>[Texture:CombatMalice][Lvl:1][Ability:301][Idle:4-0.15][Attack:2-0.15][Loot:18]</Value>
+      <Value>[Texture:CombatMalice][Width:32][Height:32][Lvl:1][Ability:301][Idle:4-0.15][Attack:2-0.15][Loot:18]</Value>
+    </Item>
+    <Item>
+      <Key>13</Key>
+      <Value>[Texture:CombatSkull][Width:64][Height:64][Lvl:1][Ability:301][Idle:4-0.15][Attack:2-0.15][Loot:18]</Value>
     </Item>
   </Asset>
 </XnaContent>

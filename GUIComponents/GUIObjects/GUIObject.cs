@@ -673,12 +673,6 @@ namespace RiverHollow.GUIObjects
             this.SetX(centerX - Width / 2);
             this.SetY(centerY - Height / 2);
         }
-        internal Vector2 GetCenterOnObject(GUIObject obj)
-        {
-            GUIObject g = new GUIObject(this);
-            g.CenterOnObject(obj);
-            return g.Position();
-        }
 
         internal void SetSize()
         {

@@ -19,7 +19,7 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<string, Texture2D> _diTextures;
         private static Dictionary<string, SpriteFont> _diFonts;
         private static Dictionary<string, string> _diGameText;
-        private static Dictionary<string, string> _diMonsterInfo;
+        private static Dictionary<int, string> _diMonsterInfo;
         private static Dictionary<string, string> _diCombatSkillsText;
         private static Dictionary<string, string> _diAdventurerDialogue;
         
@@ -65,7 +65,7 @@ namespace RiverHollow.Game_Managers
         {
             _diItemText = _content.Load<Dictionary<int, string>>(TEXT_FILE_FOLDER + "ItemText");
             _diGameText = _content.Load<Dictionary<string, string>>(TEXT_FILE_FOLDER + "GameText");
-            _diMonsterInfo = _content.Load<Dictionary<string, string>>(TEXT_FILE_FOLDER + "MonsterInfo");
+            _diMonsterInfo = _content.Load<Dictionary<int, string>>(TEXT_FILE_FOLDER + "MonsterInfo");
             _diCombatSkillsText = _content.Load<Dictionary<string, string>>(TEXT_FILE_FOLDER + "CombatSkillsText");
 
             _diSongs = _content.Load<Dictionary<int, List<string>>>(@"Data\Songs");
@@ -177,12 +177,12 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static string GetMonsterInfo(string key)
+        public static string GetMonsterInfo(int id)
         {
             string rv = string.Empty;
-            if (_diMonsterInfo.ContainsKey(key))
+            if (_diMonsterInfo.ContainsKey(id))
             {
-                rv = _diMonsterInfo[key];
+                rv = _diMonsterInfo[id];
             }
 
             return rv;

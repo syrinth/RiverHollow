@@ -457,8 +457,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gTargetter.AnchorAndAlignToObject(_gTile, SideEnum.Top, SideEnum.CenterX, 30);
             if (Occupied())
             {
-                _gCombatSprite.CenterOnObject(_gTile);
-                _gCombatSprite.MoveBy(0, -(_gTile.Height / 3));
+                _gCombatSprite.Position(GetIdleLocation(_gCombatSprite.CharacterSprite));
 
                 _gEffect = new GUIText();
                 _gEffect.AnchorAndAlignToObject(_gCombatSprite, SideEnum.Top, SideEnum.CenterX);
@@ -591,6 +590,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 rv = _gCombatSprite.Position();
             }
             return rv;
+        }
+
+        public Vector2 GetIdleLocation(GUISprite sprite)
+        {
+            GUISprite temp = new GUISprite(sprite.Sprite, true);
+
+            temp.AlignToObject(this, SideEnum.CenterX);
+            temp.AlignToObject(this, SideEnum.Bottom);
+            temp.MoveBy(0, -(this.Height / 3));
+
+            return temp.Position();
         }
 
         public void PlayAnimation<TEnum>(TEnum animation)

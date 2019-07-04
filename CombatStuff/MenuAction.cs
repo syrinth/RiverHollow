@@ -691,17 +691,19 @@ namespace RiverHollow.Actors.CombatStuff
 
             if (targetsEnemy && TileTargetList[0].GUITile.MapTile.Col - 1 >= CombatManager.ENEMY_FRONT)
             {
-                targetPosition = sprite.GetCenterOnObject(CombatManager.GetLeft(moveToTile.MapTile).GUITile);
+                GUICmbtTile target = CombatManager.GetLeft(moveToTile.MapTile).GUITile;
+                targetPosition = target.GetIdleLocation(sprite);
             }
             else if (!targetsEnemy && TileTargetList[0].GUITile.MapTile.Col + 1 < CombatManager.ENEMY_FRONT)
             {
-                targetPosition = sprite.GetCenterOnObject(CombatManager.GetRight(moveToTile.MapTile).GUITile);
+                GUICmbtTile target = CombatManager.GetRight(moveToTile.MapTile).GUITile;
+                targetPosition = target.GetIdleLocation(sprite);
             }
             else
             {
                 targetPosition = sprite.GetAnchorAndAlignToObject(moveToTile, targetsEnemy ? SideEnum.Left : SideEnum.Right, SideEnum.Bottom);
+                targetPosition += new Vector2(0, -(moveToTile.Height / 3));
             }
-            targetPosition += new Vector2(0, -(moveToTile.Height / 3));
 
             return targetPosition;
         }
