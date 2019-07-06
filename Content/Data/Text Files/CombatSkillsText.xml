@@ -38,7 +38,7 @@
     </Item>
     <Item>
       <Key>Action 41</Key>
-      <Value>Esuna/Heals conditions</Value>
+      <Value>Grand Heal/Heals everyone</Value>
     </Item>
     <!--Summoner Skills-->
     <Item>
@@ -58,14 +58,42 @@
       <Key>Action 80</Key>
       <Value>Witch's Curse/Inflict a curse</Value>
     </Item>
-    <!--Duelist Skills-->
+    <!--Lancer Skills-->
+    <Item>
+      <Key>Action 100</Key>
+      <Value>Allira's Gambit/Open yourself to strike your enemy</Value>
+    </Item>
+    <Item>
+      <Key>Action 101</Key>
+      <Value>Fighting Retreat/Deliver a strong blow before taking a quick step backwards.</Value>
+    </Item>
+    <Item>
+      <Key>Action 102</Key>
+      <Value>Penetrating Strike/Deliver a strong blow before taking a quick step backwards.</Value>
+    </Item>
     <!--Knight Skills-->
     <Item>
       <Key>Action 120</Key>
-      <Value>Drive Back/Drives them back</Value>
+      <Value>Challenge/Draws the enemy out</Value>
+    </Item>
+    <Item>
+      <Key>Action 121</Key>
+      <Value>Shield Charge/Charges forward, and pushan enemy backwards</Value>
     </Item>
     <!--Rogue Skills-->
     <!--Bard Skills-->
+    <Item>
+      <Key>Action 160</Key>
+      <Value>Fighting Retreat/Stike and then move back</Value>
+    </Item>
+    <Item>
+      <Key>Action 161</Key>
+      <Value>Song of Power/Power</Value>
+    </Item>
+    <Item>
+      <Key>Action 162</Key>
+      <Value>Song of Magic/Magic</Value>
+    </Item>
     <!--Generic Skills-->
     <Item>
       <Key>Action 300</Key>

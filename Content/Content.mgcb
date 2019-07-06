@@ -174,11 +174,6 @@
 /processor:PassThroughProcessor
 /build:Data/TownUpgrades.xml
 
-#begin Data/Buffs.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Buffs.xml
-
 #begin Data/Shops/Adventurers.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -1570,4 +1565,26 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Monsters/CombatSkull.png
+
+#begin Data/StatusEffects.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/StatusEffects.xml
+
+#begin Data/Text Files/StatusText.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/StatusText.xml
+
+#begin Textures/Actors/Player/PlayerKnight.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Player/PlayerKnight.png
 

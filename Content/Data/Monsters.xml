@@ -61,7 +61,7 @@
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Texture:CombatSkull][Width:64][Height:64][Lvl:1][Ability:301][Idle:4-0.15][Attack:2-0.15][Loot:18]</Value>
+      <Value>[Texture:CombatSkull][Width:64][Height:64][Lvl:1][Ability:102][Idle:4-0.15][Attack:2-0.15][Loot:18]</Value>
     </Item>
   </Asset>
 </XnaContent>

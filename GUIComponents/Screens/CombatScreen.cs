@@ -377,7 +377,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             else if (CombatManager.SelectedAction != null)
             {
-                _gTile.SetColor(CombatManager.SelectedAction.InArea(_mapTile) ? Color.Red : Color.White);
+                _gTile.SetColor(CombatManager.SelectedAction.GetEffectedTiles().Contains(MapTile) ? Color.Red : Color.White);
             }
             else if (CombatManager.SelectedAction == null) { _gTile.SetColor(Color.White); }
 
@@ -462,12 +462,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _gEffect = new GUIText();
                 _gEffect.AnchorAndAlignToObject(_gCombatSprite, SideEnum.Top, SideEnum.CenterX);
 
-                //for (int i = 0; i < _liStatus.Count; i++)
-                //{
-                //    GUIStatus temp = _liStatus[i];
-                //    if (i == 0) { temp.AnchorAndAlignToObject(_gMP == null ? _gHP : _gMP, SideEnum.Bottom, SideEnum.Left); }
-                //    else { temp.AnchorAndAlignToObject(_liStatus[i - 1], SideEnum.Right, SideEnum.Bottom); }
-                //}
+                for (int i = 0; i < _liStatus.Count; i++)
+                {
+                    GUIStatus temp = _liStatus[i];
+                    if (i == 0) { temp.AnchorAndAlignToObject(_gCombatSprite, SideEnum.Bottom, SideEnum.Left); }
+                    else { temp.AnchorAndAlignToObject(_liStatus[i - 1], SideEnum.Right, SideEnum.Bottom); }
+                }
             }
         }
 
@@ -541,11 +541,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
 
             _liStatus.Sort((x, y) => x.Status.CompareTo(y.Status));
-            //for (int i = 0; i < _liStatus.Count; i++)
-            //{
-            //    if (i == 0) { _liStatus[i].AnchorAndAlignToObject(_gMP == null ? _gHP : _gMP, SideEnum.Bottom, SideEnum.Left); }
-            //    else { _liStatus[i].AnchorAndAlignToObject(_liStatus[i - 1], SideEnum.Right, SideEnum.Bottom); }
-            //}
+            for (int i = 0; i < _liStatus.Count; i++)
+            {
+                if (i == 0) { _liStatus[i].AnchorAndAlignToObject(_gCombatSprite, SideEnum.Bottom, SideEnum.Left); }
+                else { _liStatus[i].AnchorAndAlignToObject(_liStatus[i - 1], SideEnum.Right, SideEnum.Bottom); }
+            }
         }
 
         public bool Occupied()

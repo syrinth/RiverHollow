@@ -2582,25 +2582,25 @@ namespace RiverHollow.Actors
 
         public virtual int Attack => 9;
 
-        protected int _statStr;
-        public virtual int StatStr { get => _statStr + _buffStr; }
-        protected int _statDef;
-        public virtual int StatDef { get => _statDef + _buffDef; }
-        protected int _statVit;
-        public virtual int StatVit { get => _statVit + _buffVit; }
-        protected int _statMag;
-        public virtual int StatMag { get => _statMag + _buffMag; }
-        protected int _statRes;
-        public virtual int StatRes { get => _statRes + _buffRes; }
-        protected int _statSpd;
-        public virtual int StatSpd { get => _statSpd + _buffSpd; }
+        protected int _iStrength;
+        public virtual int StatStr { get => _iStrength + _iBuffStr; }
+        protected int _iDefense;
+        public virtual int StatDef { get => _iDefense + _iBuffDef; }
+        protected int _iVitality;
+        public virtual int StatVit { get => _iVitality + _iBuffVit; }
+        protected int _iMagic;
+        public virtual int StatMag { get => _iMagic + _iBuffMag; }
+        protected int _iResistance;
+        public virtual int StatRes { get => _iResistance + _iBuffRes; }
+        protected int _iSpeed;
+        public virtual int StatSpd { get => _iSpeed + _iBuffSpd; }
 
-        protected int _buffStr;
-        protected int _buffDef;
-        protected int _buffVit;
-        protected int _buffMag;
-        protected int _buffRes;
-        protected int _buffSpd;
+        protected int _iBuffStr;
+        protected int _iBuffDef;
+        protected int _iBuffVit;
+        protected int _iBuffMag;
+        protected int _iBuffRes;
+        protected int _iBuffSpd;
 
         public int Evasion => (int)(40 / (1 + 10 * (Math.Pow(Math.E, (-0.05 * StatSpd)))));
         public int ResistStatus => (int)(50 / (1 + 10 * (Math.Pow(Math.E, (-0.05 * StatRes)))));
@@ -2611,8 +2611,8 @@ namespace RiverHollow.Actors
         protected List<CombatAction> _liSpecialActions;
         public virtual List<CombatAction> SpecialActions { get => _liSpecialActions; }
 
-        protected List<Buff> _liBuffs;
-        public List<Buff> LiBuffs { get => _liBuffs; }
+        protected List<StatusEffect> _liStatusEffects;
+        public List<StatusEffect> LiBuffs { get => _liStatusEffects; }
 
         protected Dictionary<ConditionEnum, bool> _diConditions;
         public Dictionary<ConditionEnum, bool> DiConditions => _diConditions;
@@ -2633,7 +2633,7 @@ namespace RiverHollow.Actors
             _actorType = ActorEnum.CombatActor;
             _liSpecialActions = new List<CombatAction>();
             _liActions = new List<MenuAction>();
-            _liBuffs = new List<Buff>();
+            _liStatusEffects = new List<StatusEffect>();
             _diConditions = new Dictionary<ConditionEnum, bool>
             {
                 [ConditionEnum.KO] = false,
@@ -2820,36 +2820,13 @@ namespace RiverHollow.Actors
 
         public void TickBuffs()
         {
-            List<Buff> toRemove = new List<Buff>();
-            foreach (Buff b in _liBuffs)
+            List<StatusEffect> toRemove = new List<StatusEffect>();
+            foreach (StatusEffect b in _liStatusEffects)
             {
                 if (--b.Duration == 0)
                 {
                     toRemove.Add(b);
-                    foreach (KeyValuePair<string, int> kvp in b.StatMods)
-                    {
-                        switch (kvp.Key)
-                        {
-                            case "Str":
-                                _buffStr -= kvp.Value;
-                                break;
-                            case "Def":
-                                _buffDef -= kvp.Value;
-                                break;
-                            case "Vit":
-                                _buffVit -= kvp.Value;
-                                break;
-                            case "Mag":
-                                _buffMag -= kvp.Value;
-                                break;
-                            case "Res":
-                                _buffRes -= kvp.Value;
-                                break;
-                            case "Spd":
-                                _buffSpd -= kvp.Value;
-                                break;
-                        }
-                    }
+                    RemoveStatusEffect(b);
                 }
                 else
                 {
@@ -2860,43 +2837,93 @@ namespace RiverHollow.Actors
                 }
             }
 
-            foreach (Buff b in toRemove)
+            foreach (StatusEffect b in toRemove)
             {
-                _liBuffs.Remove(b);
+                _liStatusEffects.Remove(b);
             }
             toRemove.Clear();
         }
 
-        public void AddBuff(Buff b)
+        /// <summary>
+        /// Adds the StatusEffect objectto the character's list of status effects.
+        /// </summary>
+        /// <param name="b">Effect toadd</param>
+        public void AddStatusEffect(StatusEffect b)
         {
-            Buff find = _liBuffs.Find(buff => buff.Name == b.Name);
-            if (find == null) { _liBuffs.Add(b); }
-            else { find.Duration += b.Duration; }
+            //Only one song allowed at a time so see if there is another
+            //songand,if so, remove it.
+            if (b.Song)
+            {
+                StatusEffect song = _liStatusEffects.Find(status => status.Song);
+                if (song != null) {
+                    RemoveStatusEffect(song);
+                    _liStatusEffects.Remove(song);
+                }
+            }
+
+            //Look to see if the status effect already exists, if so, just
+            //set the duration to be the new duration. No stacking.
+            StatusEffect find = _liStatusEffects.Find(status => status.Name == b.Name);
+            if (find == null) { _liStatusEffects.Add(b); }
+            else { find.Duration = b.Duration; }
 
             foreach (KeyValuePair<string, int> kvp in b.StatMods)
             {
                 switch (kvp.Key)
                 {
                     case "Str":
-                        _buffStr -= kvp.Value;
+                        _iBuffStr += kvp.Value;
                         break;
                     case "Def":
-                        _buffDef -= kvp.Value;
+                        _iBuffDef += kvp.Value;
                         break;
                     case "Vit":
-                        _buffVit -= kvp.Value;
+                        _iBuffVit += kvp.Value;
                         break;
                     case "Mag":
-                        _buffMag -= kvp.Value;
+                        _iBuffMag += kvp.Value;
                         break;
                     case "Res":
-                        _buffRes -= kvp.Value;
+                        _iBuffRes += kvp.Value;
                         break;
                     case "Spd":
-                        _buffSpd -= kvp.Value;
+                        _iBuffSpd += kvp.Value;
                         break;
                 }
             }
+
+            //If the status effect provides counter, turn counter on.
+            if (b.Counter) { Counter = true; }
+        }
+
+        public void RemoveStatusEffect(StatusEffect b)
+        {
+            foreach (KeyValuePair<string, int> kvp in b.StatMods)
+            {
+                switch (kvp.Key)
+                {
+                    case "Str":
+                        _iBuffStr -= kvp.Value;
+                        break;
+                    case "Def":
+                        _iBuffDef -= kvp.Value;
+                        break;
+                    case "Vit":
+                        _iBuffVit -= kvp.Value;
+                        break;
+                    case "Mag":
+                        _iBuffMag -= kvp.Value;
+                        break;
+                    case "Res":
+                        _iBuffRes -= kvp.Value;
+                        break;
+                    case "Spd":
+                        _iBuffSpd -= kvp.Value;
+                        break;
+                }
+            }
+
+            if (b.Counter) { Counter = false; }
         }
 
         public void LinkSummon(Summon s)
@@ -3018,19 +3045,19 @@ namespace RiverHollow.Actors
         public GearSlot Accessory2;
 
         public override int Attack => GetGearAtk();
-        public override int StatStr => 10 + _buffStr + GetGearStat(StatEnum.Str);
-        public override int StatDef => 10 + _buffDef + GetGearStat(StatEnum.Def) + (Protected ? 10 : 0);
+        public override int StatStr => 10 + _iBuffStr + GetGearStat(StatEnum.Str);
+        public override int StatDef => 10 + _iBuffDef + GetGearStat(StatEnum.Def) + (Protected ? 10 : 0);
         public override int StatVit => 10 + (_classLevel * _class.StatVit) + GetGearStat(StatEnum.Vit);
-        public override int StatMag => 10 +  _buffMag + GetGearStat(StatEnum.Mag);
-        public override int StatRes => 10 + _buffRes + GetGearStat(StatEnum.Res);
-        public override int StatSpd => 10 + _class.StatSpd +_buffSpd + GetGearStat(StatEnum.Spd);
+        public override int StatMag => 10 +  _iBuffMag + GetGearStat(StatEnum.Mag);
+        public override int StatRes => 10 + _iBuffRes + GetGearStat(StatEnum.Res);
+        public override int StatSpd => 10 + _class.StatSpd +_iBuffSpd + GetGearStat(StatEnum.Spd);
 
-        public int TempStatStr => 10 + _buffStr + GetTempGearStat(StatEnum.Str);
-        public int TempStatDef => 10 + _buffDef + GetTempGearStat(StatEnum.Def) + (Protected ? 10 : 0);
+        public int TempStatStr => 10 + _iBuffStr + GetTempGearStat(StatEnum.Str);
+        public int TempStatDef => 10 + _iBuffDef + GetTempGearStat(StatEnum.Def) + (Protected ? 10 : 0);
         public int TempStatVit => 10 + (_classLevel * _class.StatVit) + GetTempGearStat(StatEnum.Vit);
-        public int TempStatMag => 10 + _buffMag + GetTempGearStat(StatEnum.Mag);
-        public int TempStatRes => 10 + _buffRes + GetTempGearStat(StatEnum.Res);
-        public int TempStatSpd => 10 + _class.StatSpd + _buffSpd + GetTempGearStat(StatEnum.Spd);
+        public int TempStatMag => 10 + _iBuffMag + GetTempGearStat(StatEnum.Mag);
+        public int TempStatRes => 10 + _iBuffRes + GetTempGearStat(StatEnum.Res);
+        public int TempStatSpd => 10 + _class.StatSpd + _iBuffSpd + GetTempGearStat(StatEnum.Spd);
 
         public override List<MenuAction> AbilityList { get => _class.ActionList; }
         public override List<CombatAction> SpecialActions { get => _class._liSpecialActionsList; }
@@ -3271,12 +3298,12 @@ namespace RiverHollow.Actors
 
             _iRating = int.Parse(data["Lvl"]);
             _xp = _iRating * 10;
-            _statStr = 1 + _iRating;
-            _statDef = 8 + (_iRating * 3);
-            _statVit = 2 * _iRating + 10;
-            _statMag = 2 * _iRating + 2;
-            _statRes = 2 * _iRating + 10;
-            _statSpd = 10;
+            _iStrength = 1 + _iRating;
+            _iDefense = 8 + (_iRating * 3);
+            _iVitality = 2 * _iRating + 10;
+            _iMagic = 2 * _iRating + 2;
+            _iResistance = 2 * _iRating + 10;
+            _iSpeed = 10;
 
             foreach (string ability in data["Ability"].Split('-'))
             {
@@ -3360,27 +3387,27 @@ namespace RiverHollow.Actors
                 string[] tagType = s.Split(':');
                 if (tagType[0].Equals(Util.GetEnumString(StatEnum.Str)))
                 {
-                    ApplyTrait(ref _statStr, tagType[1]);
+                    ApplyTrait(ref _iStrength, tagType[1]);
                 }
                 else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Def)))
                 {
-                    ApplyTrait(ref _statDef, tagType[1]);
+                    ApplyTrait(ref _iDefense, tagType[1]);
                 }
                 else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Vit)))
                 {
-                    ApplyTrait(ref _statVit, tagType[1]);
+                    ApplyTrait(ref _iVitality, tagType[1]);
                 }
                 else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Mag)))
                 {
-                    ApplyTrait(ref _statMag, tagType[1]);
+                    ApplyTrait(ref _iMagic, tagType[1]);
                 }
                 else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Res)))
                 {
-                    ApplyTrait(ref _statRes, tagType[1]);
+                    ApplyTrait(ref _iResistance, tagType[1]);
                 }
                 else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Spd)))
                 {
-                    ApplyTrait(ref _statSpd, tagType[1]);
+                    ApplyTrait(ref _iSpeed, tagType[1]);
                 }
             }
         }
@@ -3475,12 +3502,12 @@ namespace RiverHollow.Actors
         public void SetStats(int magStat)
         {
             _iMagStat = magStat;
-            _statStr = 2 * magStat + 10;
-            _statDef = 2 * magStat + 10;
-            _statVit = (3 * magStat) + 80;
-            _statMag = 2 * magStat + 10;
-            _statRes = 2 * magStat + 10;
-            _statSpd = 10;
+            _iStrength = 2 * magStat + 10;
+            _iDefense = 2 * magStat + 10;
+            _iVitality = (3 * magStat) + 80;
+            _iMagic = 2 * magStat + 10;
+            _iResistance = 2 * magStat + 10;
+            _iSpeed = 10;
 
             CurrentHP = MaxHP;
         }

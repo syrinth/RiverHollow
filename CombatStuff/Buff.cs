@@ -1,48 +1,63 @@
-﻿using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+﻿using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using System.Collections.Generic;
 
 namespace RiverHollow.Actors.CombatStuff
 {
-    public class Buff
+    public class StatusEffect
     {
         public CombatActor Caster;
         public bool DoT;
+        public bool _bSong;
+        public bool Song => _bSong;
         private int _id;
-        private string _name;
-        public string Name { get => _name; }
+        private string _sName;
+        public string Name { get => _sName; }
         public int Potency;
         public int Duration;
-        private List<KeyValuePair<string, int>> _stats;
-        public List<KeyValuePair<string, int>> StatMods { get => _stats; }
+        private List<KeyValuePair<string, int>> _liStats;
+        public List<KeyValuePair<string, int>> StatMods  => _liStats;
         private int _conditionID;
-        private string _description;
-        public string Description { get => _description; }
+        private string _sDescription;
+        public string Description { get => _sDescription; }
 
-        public Buff(int id, string[] stringData)
+        private bool _bCounter;
+        public bool Counter => _bCounter;
+
+        public StatusEffect(int id, Dictionary<string, string> data)
         {
-            _stats = new List<KeyValuePair<string, int>>();
-            ImportBasics(id, stringData);
+            _id = id;
+            GameContentManager.GetStatusEffectText(id, ref _sName, ref _sDescription);
+
+            _liStats = new List<KeyValuePair<string, int>>();
+            ImportBasics(id, data);
         }
-        protected int ImportBasics(int id, string[] stringData)
+        protected void ImportBasics(int id, Dictionary<string, string> data)
         {
-            int i = 0;
-            _name = stringData[i++];
-            _description = stringData[i++];
-            string[] split = stringData[i++].Split(' ');
-
             //This is where we parse for stats effected
-            foreach (string s in split)
+            if (data.ContainsKey("Buff"))
             {
-                if (!string.IsNullOrEmpty(s))
+                string[] splitEffects = data["Buff"].Split(' ');
+                foreach (string effect in splitEffects)
                 {
-                    string[] statMods = s.Split(':');
-                    _stats.Add(new KeyValuePair<string, int>(statMods[0], int.Parse(statMods[1])));
+                    string[] statMods = effect.Split('-');
+                    _liStats.Add(new KeyValuePair<string, int>(statMods[0], int.Parse(statMods[1])));
                 }
             }
 
-            _id = id;
+            if (data.ContainsKey("Debuff"))
+            {
+                string[] splitEffects = data["Debuff"].Split(' ');
+                foreach (string effect in splitEffects)
+                {
+                    string[] statMods = effect.Split('-');
+                    _liStats.Add(new KeyValuePair<string, int>(statMods[0], -int.Parse(statMods[1])));
+                }
+            }
 
-            return i;
+            _bSong = data.ContainsKey("Song");
+
+            _bCounter = data.ContainsKey("Counter");
         }
     }
 }

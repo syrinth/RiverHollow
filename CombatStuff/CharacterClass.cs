@@ -157,7 +157,12 @@ namespace RiverHollow.Actors.CombatStuff
                 }
                 else if (tagType[0].Equals("Ability"))
                 {
-                    ActionList.Add(ObjectManager.GetActionByIndex(int.Parse(tagType[1])));
+                    string[] split = tagType[1].Split('-');
+                    foreach (string ability in split)
+                    {
+                        CombatAction ac = (CombatAction)ObjectManager.GetActionByIndex(int.Parse(ability));
+                        ActionList.Add(ac);
+                    }
                 }
                 else if (tagType[0].Equals("Spell"))
                 {

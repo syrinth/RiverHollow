@@ -194,7 +194,7 @@
       <Key>99</Key>
       <Value>[Type:Resource][Image:96-32][Sell:500]</Value>
     </Item>
-    <!--<100> Consumables:Buffs/Health/Mana-->
+    <!--<100> Consumables:StatusEffects/Health/Mana-->
     <Item>
       <Key>101</Key>
       <Value>[Type:Consumable][Image:16-0][Sell:3000][CombatType:Helpful][Hp:20][ReqItems:10-1|40-5]</Value>
@@ -217,7 +217,7 @@
     </Item>
     <Item>
       <Key>106</Key>
-      <Value>[Type:Consumable][Image:80-0][Sell:3000][CombatType:Helpful][Buff:5-10][ReqItems:42-4]</Value>
+      <Value>[Type:Consumable][Image:80-0][Sell:3000][CombatType:Helpful][StatusEffect:5-10][ReqItems:42-4]</Value>
     </Item>
     <!--<190> Container:Stamina/Health/Mana-->
     <Item>

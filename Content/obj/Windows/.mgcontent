@@ -24,7 +24,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/AbilityAnimations.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Characters.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/TownUpgrades.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Buffs.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/Adventurers.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/MenuFont.spritefont</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CombatActions.xml</File>
@@ -173,5 +172,8 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Harp/d2.wav</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Harp/e2.wav</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/CombatSkull.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/StatusEffects.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/StatusText.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerKnight.png</File>
   </SourceFiles>
 </SourceFileCollection>

@@ -409,6 +409,11 @@ namespace RiverHollow.Game_Managers
         }
 
         #region SelectionHandling
+
+        /// <summary>
+        /// Determines whether or not the given tile has been selected while hovering over it
+        /// </summary>
+        /// <param name="tile">The tile to test against</param>
         public static void TestHoverTile(CombatTile tile)
         {
             if (SelectedAction.LegalTiles.Contains(tile) && (tile.Occupied() || SelectedAction.AreaOfEffect()))
@@ -547,20 +552,29 @@ namespace RiverHollow.Game_Managers
 
             return rv;
         }
+        /// <summary>
+        /// Retrieves the Tile to the Left of the indicated tile as long as it does
+        /// not pass over the divide between player and enemy
+        /// </summary>
         public static CombatTile GetLeft(CombatTile t)
         {
             CombatTile rv = null;
-            if (t.Col > 0)
+            if (t.Col > 0 && (t.Col < ENEMY_FRONT || t.Col - 1 >= ENEMY_FRONT))
             {
                 rv = _combatMap[t.Row, t.Col - 1];
             }
 
             return rv;
         }
+
+        /// <summary>
+        /// Retrieves the Tile to the Right of the indicated tile as long as it does
+        /// not pass over the divide between player and enemy
+        /// </summary>
         public static CombatTile GetRight(CombatTile t)
         {
             CombatTile rv = null;
-            if (t.Col < MAX_COL - 1)
+            if (t.Col < MAX_COL - 1 && (t.Col >= ENEMY_FRONT || t.Col + 1 < ENEMY_FRONT))
             {
                 rv = _combatMap[t.Row, t.Col + 1];
             }
@@ -688,7 +702,6 @@ namespace RiverHollow.Game_Managers
                     {
                         ActiveCharacter = actSummon;
                         SelectedAction.SetUser(actSummon);
-                        SelectedAction.SetUserStart(actSummon.GetSprite().Position());
                     }
                     else
                     {
@@ -714,7 +727,7 @@ namespace RiverHollow.Game_Managers
         }
         #endregion
         public static bool PhaseSelectSkill() { return CurrentPhase == PhaseEnum.SelectSkill; }
-        public static bool PhaseChooseTarget() { return CurrentPhase == PhaseEnum.ChooseTarget; }
+        public static bool PhaseChooseTarget() { return CurrentPhase == PhaseEnum.ChooseTarget && !SelectedAction.TargetsEach(); }
 
         public class CombatTile
         {
@@ -743,7 +756,7 @@ namespace RiverHollow.Game_Managers
                 _tileType = tileType;
             }
 
-            public void SetCombatant(CombatActor c)
+            public void SetCombatant(CombatActor c, bool moveCharNow = true)
             {
                 _character = c;
                 if (_character != null)
@@ -876,7 +889,6 @@ namespace RiverHollow.Game_Managers
                 _name = _chosenAction.Name;
 
                 _chosenAction.SkillUser = ActiveCharacter;
-                _chosenAction.UserStartPosition = ActiveCharacter.Position;
 
                 _liLegalTiles = new List<CombatTile>();
                 if (IsMelee())
@@ -1021,104 +1033,105 @@ namespace RiverHollow.Game_Managers
                 return rv;
             }
 
-            public bool InArea(CombatTile t)
-            {
-                bool rv = false;
-                if (_chosenAction != null && SelectedTile != null && _chosenAction.Size > 0)
-                {
-                    int spellSize = _chosenAction.Size;
-
-                    if (t.TargetType == SelectedTile.TargetType && Math.Abs(t.Row - SelectedTile.Row) <= spellSize && Math.Abs(t.Col - SelectedTile.Col) <= spellSize)
-                    {
-                        if (!(Math.Abs(t.Row - SelectedTile.Row) == spellSize && Math.Abs(t.Col - SelectedTile.Col) == spellSize))
-                        {
-                            rv = true;
-                        }
-                    }
-                }
-
-                return rv;
-            }
+            /// <summary>
+            /// Retrieves the tiles that will be effected by this skill based off the area type
+            /// </summary>
+            /// <returns>A complete list of tiles that will be hit</returns>
             public List<CombatTile> GetEffectedTiles(){
                 List<CombatTile> cbtTile = new List<CombatTile>();
-                int size = _chosenAction.Size;
-
-                CombatActor actor = _chosenAction.SkillUser;
-                cbtTile.Add(SelectedTile);
-                if (_chosenAction != null && SelectedTile != null)
+                if (_chosenItem != null) {
+                    cbtTile.Add(SelectedTile);
+                }
+                else
                 {
-                    int minCol = actor.IsMonster() ? (TargetsAlly() ? ENEMY_FRONT : 0) : (TargetsAlly() ? 0 : ENEMY_FRONT);
-                    int maxCol = actor.IsMonster() ? (TargetsAlly() ? MAX_COL : ENEMY_FRONT) : (TargetsAlly() ? ENEMY_FRONT : MAX_COL);
-                    int rowStart = 0;
-                    int rowEnd = 0;
-                    int colStart = 0;
-                    int colEnd = 0;
-
-                    LoopFind(ref colStart, SelectedTile.Col, minCol, true);
-                    LoopFind(ref colEnd, SelectedTile.Col, maxCol, false);
-                    LoopFind(ref rowStart, SelectedTile.Row, 0, true);
-                    LoopFind(ref rowEnd, SelectedTile.Row, MAX_ROW, false);
-
-                    for (int row = rowStart; row < rowEnd; row++)
+                    CombatActor actor = _chosenAction.SkillUser;
+                    if (SelectedTile != null)
                     {
-                        for (int col = colStart; col < colEnd; col++)
+                        cbtTile.Add(SelectedTile);
+                        if (_chosenAction.AreaOfEffect != AreaEffectEnum.Single)
                         {
-                            if (_combatMap[row, col].Occupied() && SelectedAction.InArea(_combatMap[row, col]))
+                            //Describes which side of the Battlefield we are targetting
+                            bool monsterSide = (actor.IsCombatAdventurer() && TargetsEnemy()) || (actor.IsMonster() && TargetsAlly());
+                            bool partySide = (actor.IsMonster() && TargetsEnemy()) || (actor.IsCombatAdventurer() && TargetsAlly());
+
+                            //All we need to do here is select all of the tiles containing the appropriate characters
+                            if (_chosenAction.AreaOfEffect == AreaEffectEnum.Each)
                             {
-                                if (!cbtTile.Contains(_combatMap[row, col]))
+                                if (monsterSide)
                                 {
-                                    cbtTile.Add(_combatMap[row, col]);
+                                    foreach(Monster m in _liMonsters)
+                                    {
+                                        if (!cbtTile.Contains(m.Tile)) { cbtTile.Add(m.Tile); }
+                                    }
+                                }
+                                else
+                                {
+                                    foreach (CombatActor adv in _listParty)
+                                    {
+                                        if (!cbtTile.Contains(adv.Tile)) { cbtTile.Add(adv.Tile); }
+                                    }
+                                }
+                            }
+                            else {
+                                //The coordinates of the selected tile
+                                int targetRow = SelectedTile.Row;
+                                int targetCol = SelectedTile.Col;
+
+                                //Determines how far to the side the skill can go, based on whether it grows left or right
+                                int minCol = monsterSide ? ENEMY_FRONT : 0;
+                                int maxCol = monsterSide ? MAX_COL : ENEMY_FRONT;
+                                if (_chosenAction.AreaOfEffect == AreaEffectEnum.Cross)
+                                {
+                                    if (targetRow - 1 >= 0) { cbtTile.Add(_combatMap[targetRow - 1, targetCol]); }
+                                    if (targetRow + 1 < MAX_ROW) { cbtTile.Add(_combatMap[targetRow + 1, targetCol]); }
+
+                                    if (targetCol - 1 >= minCol) { cbtTile.Add(_combatMap[targetRow, targetCol - 1]); }
+                                    if (targetCol + 1 < maxCol) { cbtTile.Add(_combatMap[targetRow, targetCol + 1]); }
+                                }
+                                else if (_chosenAction.AreaOfEffect == AreaEffectEnum.Rectangle)
+                                {
+                                    KeyValuePair<int, int> dimensions = _chosenAction.Dimensions;
+                                    if (monsterSide)
+                                    {
+                                        for (int rows = targetRow; rows < MAX_ROW && rows < targetRow + dimensions.Key; rows++)
+                                        {
+                                            for (int cols = targetCol; cols < maxCol && cols < targetCol + dimensions.Value; cols++)
+                                            {
+                                                CombatTile t = _combatMap[rows, cols];
+                                                if (!cbtTile.Contains(t))
+                                                {
+                                                    cbtTile.Add(t);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else if (partySide)
+                                    {
+                                        for (int rows = targetRow; rows < MAX_ROW && rows < targetRow + dimensions.Key; rows++)
+                                        {
+                                            for (int cols = targetCol; cols >= minCol && cols > targetCol - dimensions.Value; cols--)
+                                            {
+                                                CombatTile t = _combatMap[rows, cols];
+                                                if (!cbtTile.Contains(t))
+                                                {
+                                                    cbtTile.Add(t);
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
+
                 return cbtTile;
-            }
-
-            private void LoopFind(ref int val, int start, int compare, bool findMin)
-            {
-                bool found = false;
-                int temp = _chosenAction.Size;
-                do
-                {
-                    if (CheckIt(start, temp, compare, findMin))
-                    {
-                        val = start + (findMin ? -temp : temp + 1);
-                        found = true;
-                    }
-                    else
-                    {
-                        temp--;
-                    }
-                } while (!found);
-            }
-
-            private bool CheckIt(int val, int iterator, int compare, bool findMin)
-            {
-                bool rv = false;
-                if (findMin)
-                {
-                    rv = (val - iterator >= compare);
-                }
-                else
-                {
-                    rv = (val + iterator < compare);
-                }
-                return rv;
             }
 
             public void SetUser(CombatActor c) {
                 if (_chosenAction != null)
                 {
                     _chosenAction.SkillUser = c;
-                }
-            }
-            public void SetUserStart(Vector2 pos)
-            {
-                if (_chosenAction != null)
-                {
-                    _chosenAction.UserStartPosition = pos;
                 }
             }
 
@@ -1154,10 +1167,25 @@ namespace RiverHollow.Game_Managers
 
                 return rv;
             }
+
+            /// <summary>
+            /// Used to determine whether or not the skill is used over an
+            /// area or needs to have a specifiedsingle target.
+            /// </summary>
+            /// <returns>True if can be spread over an area</returns>
+            public bool TargetsEach()
+            {
+                bool rv = false;
+
+                if(_chosenAction != null) { rv = _chosenAction.TargetsEach(); }
+
+                return rv;
+            }
             public bool AreaOfEffect()
             {
                 bool rv = false;
-                if (_chosenAction != null) { rv = _chosenAction.AreaOfEffect == AreaEffectEnum.Area; }
+
+                if (_chosenAction != null) { rv = _chosenAction.AreaOfEffect != AreaEffectEnum.Single; }
                 else if (_chosenItem != null) { rv = false; }
 
                 return rv;

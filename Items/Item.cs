@@ -643,8 +643,8 @@ namespace RiverHollow.WorldObjects
         public int Health => _iHealth;
         private int _iMana;
         public int Mana => _iMana;
-        private Buff _buff;
-        private int _iBuffDuration;
+        private StatusEffect _statusEffect;
+        private int _iStatusDuration;
 
         public bool Helpful;
 
@@ -656,10 +656,10 @@ namespace RiverHollow.WorldObjects
             if (stringData.ContainsKey("Status")){ _targetsCondition = Util.ParseEnum<ConditionEnum>(stringData["Status"]); }
             if (stringData.ContainsKey("Hp")) { _iHealth = int.Parse(stringData["Hp"]); }
             if (stringData.ContainsKey("Mana")) { _iMana = int.Parse(stringData["Mana"]); }
-            if (stringData.ContainsKey("Buff")) {
-                string[] strBuffer = stringData["Buff"].Split('-');
-                _buff = ObjectManager.GetBuffByIndex(int.Parse(strBuffer[0]));
-                _iBuffDuration = int.Parse(strBuffer[1]);
+            if (stringData.ContainsKey("StatusEffect")) {
+                string[] strBuffer = stringData["StatusEffect"].Split('-');
+                _statusEffect = ObjectManager.GetStatusEffectByIndex(int.Parse(strBuffer[0]));
+                _iStatusDuration = int.Parse(strBuffer[1]);
             }
 
             _bStacks = true;
@@ -686,7 +686,7 @@ namespace RiverHollow.WorldObjects
 
                 if (_iHealth > 0) { target.IncreaseHealth(_iHealth); }
                 if (_iMana > 0) { target.IncreaseMana(_iMana); }
-                if(_buff != null) { target.AddBuff(_buff); }
+                if(_statusEffect != null) { target.AddStatusEffect(_statusEffect); }
 
                 Remove(1);
             }

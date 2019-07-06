@@ -20,6 +20,7 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<string, SpriteFont> _diFonts;
         private static Dictionary<string, string> _diGameText;
         private static Dictionary<int, string> _diMonsterInfo;
+        private static Dictionary<int, string> _diStatusEffectText;
         private static Dictionary<string, string> _diCombatSkillsText;
         private static Dictionary<string, string> _diAdventurerDialogue;
         
@@ -66,6 +67,7 @@ namespace RiverHollow.Game_Managers
             _diItemText = _content.Load<Dictionary<int, string>>(TEXT_FILE_FOLDER + "ItemText");
             _diGameText = _content.Load<Dictionary<string, string>>(TEXT_FILE_FOLDER + "GameText");
             _diMonsterInfo = _content.Load<Dictionary<int, string>>(TEXT_FILE_FOLDER + "MonsterInfo");
+            _diStatusEffectText = _content.Load<Dictionary<int, string>>(TEXT_FILE_FOLDER + "StatusText");
             _diCombatSkillsText = _content.Load<Dictionary<string, string>>(TEXT_FILE_FOLDER + "CombatSkillsText");
 
             _diSongs = _content.Load<Dictionary<int, List<string>>>(@"Data\Songs");
@@ -243,6 +245,14 @@ namespace RiverHollow.Game_Managers
             string val = "Upgrade " + id;
             name = _diGameText[val].Split('/')[0];
             desc = _diGameText[val].Split('/')[1];
+        }
+        public static void GetStatusEffectText(int id, ref string name, ref string desc)
+        {
+            if (_diStatusEffectText.ContainsKey(id))
+            {
+                name = _diStatusEffectText[id].Split('/')[0];
+                desc = _diStatusEffectText[id].Split('/')[1];
+            }
         }
 
         public static List<string> GetSong(int id)

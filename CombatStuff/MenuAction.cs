@@ -65,10 +65,10 @@ namespace RiverHollow.Actors.CombatStuff
         public int ChargeCost => _iChargeCost;
         int _mpCost;
         public int MPCost { get => _mpCost; }
-        int _iSize;
-        public int Size { get => _iSize; }
         int _iPotency;
         public int Potency => _iPotency;
+        KeyValuePair<int, int> _kvpAreaDimensions;
+        public KeyValuePair<int, int> Dimensions => _kvpAreaDimensions;
 
         bool _bHarm;
         public bool Harm => _bHarm;
@@ -76,19 +76,17 @@ namespace RiverHollow.Actors.CombatStuff
         public bool Heal => _bHeal;
 
         string _sAnimation;
-        ForceMoveEnum _forceMove;
-        int _iMoveDistance;
 
         TargetEnum _target;
-        public TargetEnum Target { get => _target; }
+        public TargetEnum Target => _target;
         RangeEnum _range;
-        public RangeEnum Range { get => _range; }
+        public RangeEnum Range => _range;
         AreaEffectEnum _areaOfEffect;
-        public AreaEffectEnum AreaOfEffect { get => _areaOfEffect; }
+        public AreaEffectEnum AreaOfEffect => _areaOfEffect;
         List<String> _actionTags;
         int _currentActionTag = 0;
-        List<String> _effectTags;
-        List<BuffData> _liBuffs;         //Key = Buff ID, string = Duration/<Tag> <Tag>
+        List<SkillTagsEnum> _liEffects;
+        List<StatusEffectData> _liStatusEffects;         //Key = Buff ID, string = Duration/<Tag> <Tag>
 
         Summon _summon;
         public Vector2 SummonStartPosition;
@@ -99,22 +97,26 @@ namespace RiverHollow.Actors.CombatStuff
         int _iFrames;
         int _iAnimOffset;
 
-
         public List<CombatManager.CombatTile> TileTargetList;
-        public Vector2 UserStartPosition;
-        public bool _used;
+        public bool _bUsed;
+        public bool _bCounter;
 
         bool _pauseForCounter;
         CombatActor counteringChar;
         Summon counteringSummon;
+
+        int _iPushVal;
+        int _iPullVal;
+        int _iRetreatVal;
+        int _iStepVal;
 
         public GUISprite Sprite;
         public CombatAction(int id, Dictionary<string, string> stringData)
         {
             TileTargetList = new List<CombatManager.CombatTile>();
             _liCondition = new List<ConditionEnum>();
-            _effectTags = new List<string>();
-            _liBuffs = new List<BuffData>();
+            _liEffects = new List<SkillTagsEnum>();
+            _liStatusEffects = new List<StatusEffectData>();
             _actionTags = new List<string>();
 
             _iChargeCost = 100;
@@ -127,111 +129,121 @@ namespace RiverHollow.Actors.CombatStuff
             GameContentManager.GetActionText(_id, ref _name, ref _description);
 
             _actionType = Util.ParseEnum<ActionEnum>(stringData["Type"]);
-            if (stringData.ContainsKey("Element")){ _element = Util.ParseEnum<ElementEnum>(stringData["Element"]); }
+            if (stringData.ContainsKey("Element")) { _element = Util.ParseEnum<ElementEnum>(stringData["Element"]); }
             if (stringData.ContainsKey("Target")) { _target = Util.ParseEnum<TargetEnum>(stringData["Target"]); }
             if (stringData.ContainsKey("Range")) { _range = Util.ParseEnum<RangeEnum>(stringData["Range"]); }
-            if (stringData.ContainsKey("Area")) { _areaOfEffect = Util.ParseEnum<AreaEffectEnum>(stringData["Area"]); }
             if (stringData.ContainsKey("Charge")) { _iChargeCost = int.Parse(stringData["Charge"]); }
-            if (stringData.ContainsKey("Size")) { _iSize = int.Parse(stringData["Size"]); }
+            if (stringData.ContainsKey("Area")) {
+                string[] tags = stringData["Area"].Split('-');
+                _areaOfEffect = Util.ParseEnum<AreaEffectEnum>(tags[0]);
+                if(_areaOfEffect == AreaEffectEnum.Rectangle)
+                {
+                    _kvpAreaDimensions = new KeyValuePair<int, int>(int.Parse(tags[1]), int.Parse(tags[2]));
+                }
+            }
 
             if (stringData.ContainsKey("Icon"))
             {
-                string[] tags = stringData["Icon"].Split('-');
-                _vIconGrid = new Vector2(int.Parse(tags[0]), int.Parse(tags[1]));
+                string[] icon = stringData["Icon"].Split('-');
+                _vIconGrid = new Vector2(int.Parse(icon[0]), int.Parse(icon[1]));
             }
 
-            //Get the Effects
-            if (stringData.ContainsKey("Effect"))
+            //Effect tags
             {
-                string[] tags = stringData["Effect"].Split(' ');
-                foreach (string tag in tags)
+                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Harm)))
                 {
-                    string[] parse = tag.Split('-');
-                    if (parse.Length > 1)
+                    _bHarm = true;
+                    _iPotency = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.Harm)]);
+                    _liEffects.Add(SkillTagsEnum.Harm);
+                }
+                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Heal)))
+                {
+                    _bHeal = true;
+                    _iPotency = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.Heal)]);
+                    _liEffects.Add(SkillTagsEnum.Heal);
+                }
+
+                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Push)))
+                {
+                    _iPushVal = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.Push)]);
+                    _liEffects.Add(SkillTagsEnum.Push);
+                }
+                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Pull)))
+                {
+                    _iPullVal = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.Pull)]);
+                    _liEffects.Add(SkillTagsEnum.Pull);
+                }
+                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Step)))
+                {
+                    _iStepVal = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.Step)]);
+                    _liEffects.Add(SkillTagsEnum.Step);
+                }
+                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Retreat)))
+                {
+                    _iRetreatVal = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.Retreat)]);
+                    _liEffects.Add(SkillTagsEnum.Retreat);
+                }
+
+                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Status)))
+                {
+                    string[] parse = stringData[Util.GetEnumString(SkillTagsEnum.Status)].Split('-');
+                    StatusEffectData buff = new StatusEffectData() { BuffID = int.Parse(parse[0]), Duration = int.Parse(parse[1]), Tags = parse[2] };
+                    if (buff.Tags == "DoT")
                     {
-                        if (parse[0] == "P")
-                        {
-                            _iPotency = int.Parse(parse[1]);
-                        }
-                        else if (parse[0] == "Harm")
-                        {
-                            _bHarm = true;
-                        }
-                        else if (parse[0] == "Heal")
-                        {
-                            _bHeal = true;
-                        }
-                        else if (parse[0] == "Cost")
-                        {
-                            _mpCost = int.Parse(parse[1]);
-                        }
-                        else if (parse[0] == "Move")
-                        {
-                            _forceMove = Util.ParseEnum<ForceMoveEnum>(parse[1]);
-                            _iMoveDistance = int.Parse(parse[2]);
-                        }
-                        else if (parse[0] == "Status")
-                        {
-                            for (int j = 1; j < parse.Length; j++)
-                            {
-                                _liCondition.Add(Util.ParseEnum<ConditionEnum>(parse[j]));
-                            }
-                        }
-                        else if (parse[0] == "Buff")
-                        {
-                            BuffData buff = new BuffData() { BuffID = int.Parse(parse[1]), Duration = int.Parse(parse[2]), Tags = parse[3] };
-                            if (buff.Tags == "DoT")
-                            {
-                                buff.Potency = _iPotency;
-                            }
-                            buff.Sprite = Sprite;
-                            _liBuffs.Add(buff);
-                        }
-                        else if (parse[0] == "Bonus")
-                        {
-                            _bonusType = Util.ParseEnum<PotencyBonusEnum>(parse[1]);
-                        }
-                        _effectTags.Add(parse[0]);
+                        buff.Potency = _iPotency;
                     }
-                    else
-                    {
-                        if (parse[0] == "Summon")
-                        {
-                            _summon = new Summon();
+                    buff.Sprite = Sprite;
+                    _liStatusEffects.Add(buff);
+                    _liEffects.Add(SkillTagsEnum.Status);
+                }
 
-                            for (int summonTags = 2; summonTags < tags.Length; summonTags++)
-                            {
-                                if (tags[summonTags].Equals("TwinCast"))
-                                {
-                                    _summon.SetTwincast();
-                                }
-                                else if (tags[summonTags].Equals("Aggressive"))
-                                {
-                                    _summon.SetAggressive();
-                                }
-                                else if (tags[summonTags].Equals("Defensive"))
-                                {
-                                    _summon.SetDefensive();
-                                }
-                                else if (tags[summonTags].Equals("Counter"))
-                                {
-                                    _summon.Counter = true;
-                                }
-                                else if (tags[summonTags].StartsWith("Element"))
-                                {
-                                    _summon.SetElement(Util.ParseEnum<ElementEnum>(tags[summonTags].Split('-')[1]));
-                                }
-                            }
+                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Bonus)))
+                {
+                    _bonusType = Util.ParseEnum<PotencyBonusEnum>(stringData[Util.GetEnumString(SkillTagsEnum.Bonus)]);
+                    _liEffects.Add(SkillTagsEnum.Bonus);
+                }
+
+                if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Summon)))
+                {
+                    string[] tags = stringData[Util.GetEnumString(SkillTagsEnum.Summon)].Split('-');
+                    _summon = new Summon();
+
+                    foreach (string summonTag in tags)
+                    {
+                        if (summonTag.Equals("TwinCast"))
+                        {
+                            _summon.SetTwincast();
+                        }
+                        else if (summonTag.Equals("Aggressive"))
+                        {
+                            _summon.SetAggressive();
+                        }
+                        else if (summonTag.Equals("Defensive"))
+                        {
+                            _summon.SetDefensive();
+                        }
+                        else if (summonTag.Equals("Counter"))
+                        {
+                            _summon.Counter = true;
                         }
 
-                        _effectTags.Add(tag);
+                        if (_element != ElementEnum.None)
+                        {
+                            _summon.SetElement(_element);
+                        }
                     }
                 }
             }
 
             //Action tags
-            if (stringData.ContainsKey("Action")){
+            if (stringData.ContainsKey("Action"))
+            {
                 _actionTags.AddRange(stringData["Action"].Split(' '));
+                if (_actionTags.Contains("UserMove"))
+                {
+                    //Since we've moved, add the Return action to theend of the ability.
+                    _actionTags.Add("Return");
+                }
                 _actionTags.Add("End");
             }
 
@@ -261,28 +273,31 @@ namespace RiverHollow.Actors.CombatStuff
             }
         }
 
-        //Sets the _used tag to be true so that it's known that we've started using it
+        /// <summary>
+        /// Sets the _bUsed tag to be true so that it's known that we've started using the Action
+        /// Then retrieve the list of tiles that will be effected by this skill
+        /// </summary>
         public void AnimationSetup()
         {
-            _used = true;
+            _bUsed = true;
             TileTargetList.AddRange(CombatManager.SelectedAction.GetEffectedTiles());
         }
 
         public void ApplyEffectToSelf()
         {
-            if (_liBuffs.Count > 0)
+            if (_liStatusEffects.Count > 0)
             {
-                Buff b = null;
-                foreach (BuffData data in _liBuffs)
+                StatusEffect b = null;
+                foreach (StatusEffectData data in _liStatusEffects)
                 {
-                    b = ObjectManager.GetBuffByIndex(data.BuffID);
+                    b = ObjectManager.GetStatusEffectByIndex(data.BuffID);
                     b.Duration = data.Duration;
                     b.Potency = data.Potency;
                     b.Caster = SkillUser;
                     string[] tags = data.Tags.Split(' ');
                     foreach (string s in tags)
                     {
-                        if (s.Equals("Self")) { SkillUser.AddBuff(b); }
+                        if (s.Equals("Self")) { SkillUser.AddStatusEffect(b); }
                         else if (s.Equals("DoT")) { b.DoT = true; }
                     }
                 }
@@ -291,7 +306,7 @@ namespace RiverHollow.Actors.CombatStuff
 
         public void ApplyEffect()
         {
-            if (_used)
+            if (_bUsed)
             {
                 int bonus = 0;
                 if (_bonusType != PotencyBonusEnum.None)
@@ -307,7 +322,7 @@ namespace RiverHollow.Actors.CombatStuff
                         }
                     }
                 }
-                if (_effectTags.Contains("Harm"))
+                if (_liEffects.Contains(SkillTagsEnum.Harm))
                 {
                     foreach (CombatManager.CombatTile ct in TileTargetList)
                     {
@@ -323,7 +338,7 @@ namespace RiverHollow.Actors.CombatStuff
                                 ct.GUITile.AssignEffect(x, true);
 
                                 Summon summ = ct.Character.LinkedSummon;
-                                if (_areaOfEffect == AreaEffectEnum.Area && summ != null)
+                                if (_areaOfEffect == AreaEffectEnum.Single && summ != null)
                                 {
                                     summ.ProcessAttack(SkillUser, _iPotency + bonus, ct.Character.GetAttackElement());
                                     ct.GUITile.AssignEffectToSummon(x.ToString());
@@ -364,7 +379,7 @@ namespace RiverHollow.Actors.CombatStuff
                         }
                     }
                 }
-                else if (_effectTags.Contains("Heal"))
+                else if (_liEffects.Contains(SkillTagsEnum.Heal))
                 {
                     foreach (CombatManager.CombatTile ct in TileTargetList)
                     {
@@ -376,7 +391,7 @@ namespace RiverHollow.Actors.CombatStuff
                         }
                     }
                 }
-                if (_effectTags.Contains("Status"))
+                if (_liEffects.Contains(SkillTagsEnum.Status))
                 {
                     foreach (CombatManager.CombatTile ct in TileTargetList)
                     {
@@ -397,7 +412,7 @@ namespace RiverHollow.Actors.CombatStuff
                         }
                     }
                 }
-                if (_effectTags.Contains("Summon"))
+                if (_liEffects.Contains(SkillTagsEnum.Summon))
                 {
                     foreach (CombatManager.CombatTile ct in TileTargetList)
                     {
@@ -409,30 +424,47 @@ namespace RiverHollow.Actors.CombatStuff
                     }
                 }
 
-                if (_effectTags.Contains("Move"))
+                if (_liEffects.Contains(SkillTagsEnum.Push))
                 {
                     foreach (CombatManager.CombatTile ct in TileTargetList)
                     {
-                        PushBack(ct);
+                        Push(ct);
                     }
                 }
 
-                if (_liBuffs.Count > 0)
+                if (_liEffects.Contains(SkillTagsEnum.Pull))
                 {
-                    Buff b = null;
-                    foreach (BuffData data in _liBuffs)
+                    foreach (CombatManager.CombatTile ct in TileTargetList)
                     {
-                        b = ObjectManager.GetBuffByIndex(data.BuffID);
-                        b.Duration = data.Duration;
-                        b.Caster = SkillUser;
-                        b.Potency = data.Potency;
-                        string[] tags = data.Tags.Split(' ');
-                        foreach (string s in tags)
+                        Pull(ct);
+                    }
+                }
+
+                if (_liEffects.Contains(SkillTagsEnum.Retreat))
+                {
+                    Retreat(SkillUser.Tile);
+                }
+
+                if (_liEffects.Contains(SkillTagsEnum.Step))
+                {
+                    Step(SkillUser.Tile);
+                }
+
+                if (_liStatusEffects.Count > 0)
+                {
+                    StatusEffect b = null;
+                    foreach (CombatManager.CombatTile ct in TileTargetList)
+                    {
+                        foreach (StatusEffectData data in _liStatusEffects)
                         {
-                            if (s.Equals("Self")) { SkillUser.AddBuff(b); }
-                            else if (s.Equals("DoT")) {
-                                TileTargetList[0].Character.AddBuff(b);
-                                b.DoT = true;
+                            b = ObjectManager.GetStatusEffectByIndex(data.BuffID);
+                            b.Duration = data.Duration;
+                            b.Caster = SkillUser;
+                            b.Potency = data.Potency;
+                            string[] tags = data.Tags.Split(' ');
+                            foreach (string s in tags)
+                            {
+                                ct.Character.AddStatusEffect(b);
                             }
                         }
                     }
@@ -440,43 +472,136 @@ namespace RiverHollow.Actors.CombatStuff
             }
         }
 
-        private bool PushBack(CombatManager.CombatTile ct)
+        /// <summary>
+        /// Attempts to reassign the occupant of the targeted tile to the
+        /// tile right behind it. If there is an occupant of that tile, push
+        /// themback too if possible.
+        /// </summary>
+        /// <param name="ct">Tile to push backf rom</param>
+        /// <returns>True if the target was successfully pushed</returns>
+        private bool Push(CombatManager.CombatTile ct)
         {
             bool rv = false;
-            CombatManager.CombatTile test;
-            test = DetermineMovementTile(ct.GUITile.MapTile);
-            if (test != null)
+            int i = _iPushVal;
+            while (i > 0)
             {
-                if (!test.Occupied())
+                CombatManager.CombatTile test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Push);
+                if (test != null)
                 {
-                    test.SetCombatant(ct.Character);
-                    rv = true;
-                }
-                else if (test.Occupied())
-                {
-                    if (PushBack(test))
+                    if (!test.Occupied())
                     {
                         test.SetCombatant(ct.Character);
+                        ct = test;
+                        rv = true;
+                    }
+                    else if (test.Occupied())
+                    {
+                        if (Push(test))
+                        {
+                            test.SetCombatant(ct.Character);
+                        }
                     }
                 }
+                i--;
             }
 
             return rv;
         }
 
-        private CombatManager.CombatTile DetermineMovementTile(CombatManager.CombatTile tile)
+        private bool Pull(CombatManager.CombatTile ct)
+        {
+            bool rv = false;
+            int i = _iPullVal;
+            while (i > 0)
+            {
+                CombatManager.CombatTile test;
+                test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Pull);
+                if (test != null)
+                {
+                    if (!test.Occupied())
+                    {
+                        test.SetCombatant(ct.Character);
+                        ct = test;
+                        rv = true;
+                    }
+                }
+                i--;
+            }
+
+            return rv;
+        }
+
+        private bool Step(CombatManager.CombatTile ct)
+        {
+            bool rv = false;
+            int i = _iStepVal;
+            while (i > 0)
+            {
+                CombatManager.CombatTile test;
+                test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Step);
+                if (test != null)
+                {
+                    if (!test.Occupied())
+                    {
+                        test.SetCombatant(ct.Character);
+                        ct = test;
+                        rv = true;
+                    }
+                }
+                i--;
+            }
+
+            return rv;
+        }
+
+        private bool Retreat(CombatManager.CombatTile ct)
+        {
+            bool rv = false;
+            int i = _iRetreatVal;
+            while (i > 0)
+            {
+                CombatManager.CombatTile test;
+                test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Retreat);
+                if (test != null)
+                {
+                    if (!test.Occupied())
+                    {
+                        test.SetCombatant(ct.Character);
+                        ct = test;
+                        rv = true;
+                    }
+                }
+                i--;
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Figures out the next tile in the given direction of the movement tag
+        /// </summary>
+        /// <param name="tile">The tile to move from</param>
+        /// <param name="action">The skill tag describing the movement type</param>
+        /// <returns></returns>
+        private CombatManager.CombatTile DetermineMovementTile(CombatManager.CombatTile tile, SkillTagsEnum action)
         {
             CombatManager.CombatTile rv = null;
 
-            if (_target.Equals(TargetEnum.Ally))
+            //The meaning of push and pull is dependent on whether or not
+            //it's an ally or enemy tile.
+            if (tile.Character.IsCombatAdventurer())
             {
-                if (_forceMove.Equals(ForceMoveEnum.Back)) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
-                else if (_forceMove.Equals(ForceMoveEnum.Forward)) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
+                if (action == SkillTagsEnum.Push) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
+                else if (action == SkillTagsEnum.Pull) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
+                else if (action == SkillTagsEnum.Retreat) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
+                else if (action == SkillTagsEnum.Step) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
             }
-            else if (_target.Equals(TargetEnum.Enemy))
+            else
             {
-                if (_forceMove.Equals(ForceMoveEnum.Back)) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
-                else if (_forceMove.Equals(ForceMoveEnum.Forward)) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
+                if (action == SkillTagsEnum.Push) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
+                else if (action == SkillTagsEnum.Pull) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
+                else if (action == SkillTagsEnum.Retreat) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
+                else if (action == SkillTagsEnum.Step) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
             }
 
             return rv;
@@ -527,20 +652,23 @@ namespace RiverHollow.Actors.CombatStuff
                         if (SkillUser.Tile.GUITile.CharacterWeaponSprite != null)
                         {
                             SkillUser.Tile.GUITile.CharacterWeaponSprite.CenterOnObject(sprite);
-                        }
+                        }                     
 
                         break;
                     }
                 case "UserAttack":
                     CombatActor original = TileTargetList[0].Character;
-                    Summon summ = original.LinkedSummon;
-                    if (summ != null && !summ.Swapped && summ.Defensive)
+                    if (original != null)
                     {
-                        summ.Swapped = true;
-                        Vector2 swap = summ.GetSprite().Position();
-                        summ.GetSprite().Position(original.GetSprite().Position());
-                        original.GetSprite().Position(swap);
-                        original.Tile.TargetPlayer = false;
+                        Summon summ = original.LinkedSummon;
+                        if (summ != null && !summ.Swapped && summ.Defensive)
+                        {
+                            summ.Swapped = true;
+                            Vector2 swap = summ.GetSprite().Position();
+                            summ.GetSprite().Position(original.GetSprite().Position());
+                            original.GetSprite().Position(swap);
+                            original.Tile.TargetPlayer = false;
+                        }
                     }
                     if (!SkillUser.IsCurrentAnimation(CActorAnimEnum.Attack))
                     {
@@ -631,7 +759,7 @@ namespace RiverHollow.Actors.CombatStuff
 
                     break;
                 case "Return":
-                    if (MoveSpriteTo(SkillUser.GetSprite(), UserStartPosition))
+                    if (MoveSpriteTo(SkillUser.GetSprite(), SkillUser.Tile.GUITile.GetIdleLocation(SkillUser.GetSprite())))
                     {
                         //If we're in Critical HP, go back down.
                         if (SkillUser.IsCritical()) { SkillUser.Tile.PlayAnimation(CActorAnimEnum.Critical); }
@@ -668,7 +796,6 @@ namespace RiverHollow.Actors.CombatStuff
                         SkillUser.LinkedSummon.Tile = TileTargetList[0];
                         TileTargetList[0].GUITile.LinkSummon(SkillUser.LinkedSummon);
                     }
-                    UserStartPosition = SkillUser.Position;
                     _currentActionTag++;
                     break;
                 case "End":
@@ -722,11 +849,12 @@ namespace RiverHollow.Actors.CombatStuff
             return rv;
         }
 
+        public bool TargetsEach() { return _areaOfEffect == AreaEffectEnum.Each; }
         public bool IsHelpful() { return _target == TargetEnum.Ally; }
-        public bool IsSummonSpell() { return _effectTags.Contains("Summon"); }
+        public bool IsSummonSpell() { return _liEffects.Contains(SkillTagsEnum.Summon); }
     }
 
-    internal struct BuffData
+    internal struct StatusEffectData
     {
         public int BuffID;
         public int Duration;

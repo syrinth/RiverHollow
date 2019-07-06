@@ -22,6 +22,7 @@ namespace RiverHollow.Game_Managers
 
         private static Dictionary<int, Dictionary<string, string>> _diBuildings;
         private static Dictionary<int, Dictionary<string, string>> _diItemData;
+        private static Dictionary<int, Dictionary<string, string>> _diStatusEffects;
         private static Dictionary<int, string> _diWorkers;
         private static Dictionary<int, Dictionary<string, string>> _diWorldObjects;
 
@@ -30,7 +31,7 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<int, Villager> _diNPCs;
         public static Dictionary<int, Villager> DiNPC { get => _diNPCs; }
         private static Dictionary<int, Dictionary<string, string>> _diActions;
-        private static Dictionary<int, string> _diBuffs;
+        
         private static Dictionary<int, string> _diClasses;
         private static Dictionary<string, Dictionary<string, string>> _diSchedule;
 
@@ -46,6 +47,7 @@ namespace RiverHollow.Game_Managers
             _diWorldObjects = new Dictionary<int, Dictionary<string, string>>();
             _diMonsterData = new Dictionary<int, Dictionary<string, string>>();
             _diBuildings = new Dictionary<int, Dictionary<string, string>>();
+            _diStatusEffects = new Dictionary<int, Dictionary<string, string>>();
             _diWorkers = Content.Load<Dictionary<int, string>>(@"Data\Workers");
 
             AddToDictionary(_diItemData, @"Data\ItemData", Content);
@@ -54,6 +56,7 @@ namespace RiverHollow.Game_Managers
             AddToDictionary(_diVillagerData, @"Data\NPCData\Characters", Content);
             AddToDictionary(_diMonsterData, @"Data\Monsters", Content);
             AddToDictionary(_diBuildings, @"Data\Buildings", Content);
+            AddToDictionary(_diStatusEffects, @"Data\StatusEffects", Content);
 
             _liForest = new List<int>();
             _liMountain = new List<int>();
@@ -62,7 +65,6 @@ namespace RiverHollow.Game_Managers
             _diSchedule = new Dictionary<string, Dictionary<string, string>>();
 
             AddToDictionary(_diMobs, @"Data\Mobs", Content);
-            _diBuffs = Content.Load<Dictionary<int, string>>(@"Data\Buffs");
             _diClasses = Content.Load<Dictionary<int, string>>(@"Data\Classes");
 
             foreach (string s in Directory.GetFiles(@"Content\Data\NPCData\Schedules"))
@@ -292,14 +294,12 @@ namespace RiverHollow.Game_Managers
 
             return null;
         }
-        public static Buff GetBuffByIndex(int id)
+        public static StatusEffect GetStatusEffectByIndex(int id)
         {
-            Buff b = null;
+            StatusEffect b = null;
             if (id != -1)
             {
-                string _stringData = _diBuffs[id];
-                string[] _stringDataValues = _stringData.Split('/');
-                b = new Buff(id, _stringDataValues);
+                b = new StatusEffect(id, _diStatusEffects[id]);
             }
             return b;
         }

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <!--Key: Index>0 Value:Name/Description/Stat:Val Stat:Val/Condition-->
+    <Item>
+      <Key>1</Key>
+      <Value>[Buff:Def-10]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Counter]</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Buff:Int-10]</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>[Buff:Mag-10]</Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>[Buff:Str-10][Debuff:Def-10][Counter]</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>[Buff:Def-10 Spd-10][Song]</Value>
+    </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>[Buff:Mag-10][Song]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

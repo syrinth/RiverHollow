@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <!--Text -->
+    <Item>
+      <Key>1</Key>
+      <Value>Guard/This character is on guard, defense is increased</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>CounterStance/Ready to strike back</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>Meditate/Character has focused their magical powers.</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>Witch's Curse/Continuing damage on turn/</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>Intelligence Boost/Intelligence has been increased</Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>Allira's Gambit/Ready to strike back</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>Song of Power/Enhances the listener's power</Value>
+    </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>Song of Magic/Gives magic</Value>
+    </Item>
+  </Asset>
+</XnaContent>
