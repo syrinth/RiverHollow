@@ -63,7 +63,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="Characters\Actors.cs" />
     <Compile Include="CombatStuff\MenuAction.cs" />
-    <Compile Include="CombatStuff\Buff.cs" />
+    <Compile Include="CombatStuff\StatusEffect.cs" />
     <Compile Include="CombatStuff\CharacterClass.cs" />
     <Compile Include="Game Managers\CombatManager.cs" />
     <Compile Include="Game Managers\CutSceneManager.cs" />

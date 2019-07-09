@@ -65,11 +65,19 @@
     </Item>
     <Item>
       <Key>Action 101</Key>
-      <Value>Fighting Retreat/Deliver a strong blow before taking a quick step backwards.</Value>
+      <Value>Pressing Attack/Drive the enemy back with a blow of your spear</Value>
     </Item>
     <Item>
       <Key>Action 102</Key>
       <Value>Penetrating Strike/Deliver a strong blow before taking a quick step backwards.</Value>
+    </Item>
+    <Item>
+      <Key>Action 103</Key>
+      <Value>Focus/Take a moment to focus your energies and increase your chances to strike a critical hit.</Value>
+    </Item>
+    <Item>
+      <Key>Action 104</Key>
+      <Value>Flurry of Strikes/Damages the entire front line</Value>
     </Item>
     <!--Knight Skills-->
     <Item>
@@ -80,7 +88,31 @@
       <Key>Action 121</Key>
       <Value>Shield Charge/Charges forward, and pushan enemy backwards</Value>
     </Item>
-    <!--Rogue Skills-->
+    <Item>
+      <Key>Action 122</Key>
+      <Value>Bulwark/Ready yourself for the enemy</Value>
+    </Item>
+    <!--Scout Skills-->
+    <Item>
+      <Key>Action 140</Key>
+      <Value>Dodge/Dodge Duh</Value>
+    </Item>
+    <Item>
+      <Key>Action 141</Key>
+      <Value>Knee Shot/Arrow to the Knee</Value>
+    </Item>
+    <Item>
+      <Key>Action 142</Key>
+      <Value>Blitz/Rain Death upon your enemies</Value>
+    </Item>
+    <Item>
+      <Key>Action 143</Key>
+      <Value>Called Shot/Less chance of hitting but if it hits, it can hit hard</Value>
+    </Item>
+    <Item>
+      <Key>Action 144</Key>
+      <Value>Called Shot/Less chance of hitting but if it hits, it can hit hard</Value>
+    </Item>
     <!--Bard Skills-->
     <Item>
       <Key>Action 160</Key>
@@ -93,6 +125,26 @@
     <Item>
       <Key>Action 162</Key>
       <Value>Song of Magic/Magic</Value>
+    </Item>
+    <Item>
+      <Key>Action 163</Key>
+      <Value>Requiem of Recovery/Heals the party</Value>
+    </Item>
+    <Item>
+      <Key>Action 164</Key>
+      <Value>Quick Attack/Attack and then increase speed</Value>
+    </Item>
+    <Item>
+      <Key>Action 165</Key>
+      <Value>Chant of Celerity/Increases the SPD of the party</Value>
+    </Item>
+    <Item>
+      <Key>Action 166</Key>
+      <Value>Song of Resistance/Raises the magic defence of the party</Value>
+    </Item>
+    <Item>
+      <Key>Action 167</Key>
+      <Value>Dance of Death/Attackt he foe and inspire your allies</Value>
     </Item>
     <!--Generic Skills-->
     <Item>

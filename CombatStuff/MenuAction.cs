@@ -83,8 +83,8 @@ namespace RiverHollow.Actors.CombatStuff
         public RangeEnum Range => _range;
         AreaEffectEnum _areaOfEffect;
         public AreaEffectEnum AreaOfEffect => _areaOfEffect;
-        List<String> _actionTags;
-        int _currentActionTag = 0;
+        List<String> _liActionTags;
+        int _iCurrentAction = 0;
         List<SkillTagsEnum> _liEffects;
         List<StatusEffectData> _liStatusEffects;         //Key = Buff ID, string = Duration/<Tag> <Tag>
 
@@ -98,7 +98,6 @@ namespace RiverHollow.Actors.CombatStuff
         int _iAnimOffset;
 
         public List<CombatManager.CombatTile> TileTargetList;
-        public bool _bUsed;
         public bool _bCounter;
 
         bool _pauseForCounter;
@@ -110,6 +109,9 @@ namespace RiverHollow.Actors.CombatStuff
         int _iRetreatVal;
         int _iStepVal;
 
+        int _iCritRating;
+        int _iAccuracy;
+
         public GUISprite Sprite;
         public CombatAction(int id, Dictionary<string, string> stringData)
         {
@@ -117,7 +119,7 @@ namespace RiverHollow.Actors.CombatStuff
             _liCondition = new List<ConditionEnum>();
             _liEffects = new List<SkillTagsEnum>();
             _liStatusEffects = new List<StatusEffectData>();
-            _actionTags = new List<string>();
+            _liActionTags = new List<string>();
 
             _iChargeCost = 100;
             ImportBasics(id, stringData);
@@ -133,6 +135,8 @@ namespace RiverHollow.Actors.CombatStuff
             if (stringData.ContainsKey("Target")) { _target = Util.ParseEnum<TargetEnum>(stringData["Target"]); }
             if (stringData.ContainsKey("Range")) { _range = Util.ParseEnum<RangeEnum>(stringData["Range"]); }
             if (stringData.ContainsKey("Charge")) { _iChargeCost = int.Parse(stringData["Charge"]); }
+            if (stringData.ContainsKey("Crit")) { _iCritRating = int.Parse(stringData["Crit"]); }
+            if (stringData.ContainsKey("Accuracy")) { _iAccuracy = int.Parse(stringData["Accuracy"]); }
             if (stringData.ContainsKey("Area")) {
                 string[] tags = stringData["Area"].Split('-');
                 _areaOfEffect = Util.ParseEnum<AreaEffectEnum>(tags[0]);
@@ -187,13 +191,10 @@ namespace RiverHollow.Actors.CombatStuff
                 if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Status)))
                 {
                     string[] parse = stringData[Util.GetEnumString(SkillTagsEnum.Status)].Split('-');
-                    StatusEffectData buff = new StatusEffectData() { BuffID = int.Parse(parse[0]), Duration = int.Parse(parse[1]), Tags = parse[2] };
-                    if (buff.Tags == "DoT")
-                    {
-                        buff.Potency = _iPotency;
-                    }
-                    buff.Sprite = Sprite;
-                    _liStatusEffects.Add(buff);
+
+                    StatusEffectData statEffect = new StatusEffectData() { BuffID = int.Parse(parse[0]), Duration = int.Parse(parse[1]), Tags = parse[2] };
+                    statEffect.Sprite = Sprite;
+                    _liStatusEffects.Add(statEffect);
                     _liEffects.Add(SkillTagsEnum.Status);
                 }
 
@@ -238,13 +239,13 @@ namespace RiverHollow.Actors.CombatStuff
             //Action tags
             if (stringData.ContainsKey("Action"))
             {
-                _actionTags.AddRange(stringData["Action"].Split(' '));
-                if (_actionTags.Contains("UserMove"))
+                _liActionTags.AddRange(stringData["Action"].Split(' '));
+                if (_liActionTags.Contains("UserMove"))
                 {
                     //Since we've moved, add the Return action to theend of the ability.
-                    _actionTags.Add("Return");
+                    _liActionTags.Add("Return");
                 }
-                _actionTags.Add("End");
+                _liActionTags.Add("End");
             }
 
             //Animation tags
@@ -279,199 +280,257 @@ namespace RiverHollow.Actors.CombatStuff
         /// </summary>
         public void AnimationSetup()
         {
-            _bUsed = true;
             TileTargetList.AddRange(CombatManager.SelectedAction.GetEffectedTiles());
         }
 
-        public void ApplyEffectToSelf()
-        {
-            if (_liStatusEffects.Count > 0)
-            {
-                StatusEffect b = null;
-                foreach (StatusEffectData data in _liStatusEffects)
-                {
-                    b = ObjectManager.GetStatusEffectByIndex(data.BuffID);
-                    b.Duration = data.Duration;
-                    b.Potency = data.Potency;
-                    b.Caster = SkillUser;
-                    string[] tags = data.Tags.Split(' ');
-                    foreach (string s in tags)
-                    {
-                        if (s.Equals("Self")) { SkillUser.AddStatusEffect(b); }
-                        else if (s.Equals("DoT")) { b.DoT = true; }
-                    }
-                }
-            }
-        }
-
+        /// <summary>
+        /// This method applies the effects of the CombatAction upon the appropriate targets
+        /// We do this by checking to see if specific tags are int he _liEffects list and performing
+        /// the appropriate action
+        /// </summary>
         public void ApplyEffect()
         {
-            if (_bUsed)
+            //If the action has some type of bonus associated, we need to figure out what it is
+            //and get the appropriate bonus
+            int bonus = 0;
+            if (_bonusType != PotencyBonusEnum.None)
             {
-                int bonus = 0;
-                if (_bonusType != PotencyBonusEnum.None)
+                //Bonus Summons increased the bonus amount for each summon attached to the party
+                //Note that this currently does not support enemy summons
+                if (_bonusType == PotencyBonusEnum.Summons)
                 {
-                    if(_bonusType == PotencyBonusEnum.Summons)
+                    foreach (CombatAdventurer c in PlayerManager.GetParty())
                     {
-                        foreach(CombatAdventurer c in PlayerManager.GetParty())
+                        if (c.LinkedSummon != null)
                         {
-                            if(c.LinkedSummon != null)
-                            {
-                                bonus++;
-                            }
+                            bonus++;
                         }
                     }
                 }
-                if (_liEffects.Contains(SkillTagsEnum.Harm))
+            }
+
+            //This tag means that the action harms whatever is targetted
+            if (_liEffects.Contains(SkillTagsEnum.Harm))
+            {
+                //Iterate over each tile in the target list
+                foreach (CombatManager.CombatTile ct in TileTargetList)
                 {
-                    foreach (CombatManager.CombatTile ct in TileTargetList)
+                    //If the tile is unoccupied, don't do anything
+                    if (ct.Character == null) { continue; }
+
+                    //Lot more logic has to go into skills then spells
+                    if (!IsSpell())
                     {
-                        if(ct.Character == null) { continue; }
-
-                        if (!IsSpell())
+                        //Roll randomly between 1-100 to determine the chance of hir
+                        RHRandom random = new RHRandom();
+                        int attackRoll = random.Next(1, 100);
+                        attackRoll -= _iAccuracy;                       //Modify the chance to hit by the skill's accuracy. Rolling low is good, so subtract a positive and add a negative
+                        if (attackRoll <= 90 - ct.Character.Evasion)    //If the modified attack roll is less than 90 minus the character's evasion, then we hit
                         {
-                            RHRandom random = new RHRandom();
-                            int evade = random.Next(1, 100);
-                            if (evade > ct.Character.Evasion)
+                            int x = ct.Character.ProcessAttack(SkillUser, _iPotency + bonus, _iCritRating, ct.Character.GetAttackElement());
+                            ct.GUITile.AssignEffect(x, true);
+
+                            //If the target has a Summon linked to them, and they take
+                            //any area damage, hit the Summon as well
+                            Summon summ = ct.Character.LinkedSummon;
+                            if (_areaOfEffect != AreaEffectEnum.Single && summ != null)
                             {
-                                int x = ct.Character.ProcessAttack(SkillUser, _iPotency + bonus, ct.Character.GetAttackElement());
-                                ct.GUITile.AssignEffect(x, true);
+                                summ.ProcessAttack(SkillUser, _iPotency + bonus, _iCritRating, ct.Character.GetAttackElement());
+                                ct.GUITile.AssignEffectToSummon(x.ToString());
+                            }
 
-                                Summon summ = ct.Character.LinkedSummon;
-                                if (_areaOfEffect == AreaEffectEnum.Single && summ != null)
-                                {
-                                    summ.ProcessAttack(SkillUser, _iPotency + bonus, ct.Character.GetAttackElement());
-                                    ct.GUITile.AssignEffectToSummon(x.ToString());
-                                }
-
+                            #region Countering setup
+                            //If the target has Counter turn on, prepare to counterattack
+                            //Only counter melee attacks
+                            if (_range == RangeEnum.Melee)
+                            {
                                 if (ct.Character.Counter)
                                 {
-                                    ct.Character.GoToCounter = true;
-                                    counteringChar = ct.Character;
-                                    _pauseForCounter = true;
+                                    ct.Character.GoToCounter = true;    //Sets the character to be ready for countering
+                                    counteringChar = ct.Character;      //Sets who the countering character is
+                                    _pauseForCounter = true;            //Tells the game to pause to allow for a counter
                                 }
-                                if (summ != null && summ.Counter) { 
+
+                                //If there is a summon and it can counter, prepare it for countering.
+                                if (summ != null && summ.Counter)
+                                {
                                     summ.GoToCounter = true;
                                     counteringSummon = summ;
                                     _pauseForCounter = true;
                                 }
                             }
-                            else
-                            {
-                                ct.GUITile.AssignEffect("Dodge!", true);
-                            }
-
-                            if(ct.Character.IsSummon() && ((Summon)ct.Character).Swapped)
-                            {
-                                Summon s = ((Summon)ct.Character);
-                                s.Swapped = false;
-
-                                Vector2 swap = s.GetSprite().Position();
-                                s.GetSprite().Position(s.linkedChar.GetSprite().Position());
-                                s.linkedChar.GetSprite().Position(swap);
-                                s.linkedChar.Tile.TargetPlayer = true;
-                            }
+                            #endregion
                         }
-                        else
+                        else    //Handling for when an attack is dodged
                         {
-                            int x = ct.Character.ProcessSpell(SkillUser, _iPotency, _element);
-                            ct.GUITile.AssignEffect(x, true);
+                            ct.GUITile.AssignEffect("Dodge!", true);
                         }
-                    }
-                }
-                else if (_liEffects.Contains(SkillTagsEnum.Heal))
-                {
-                    foreach (CombatManager.CombatTile ct in TileTargetList)
-                    {
-                        int val = _iPotency;
-                        ct.Character.IncreaseHealth(val);
-                        if (val > 0)
+
+                        //This code handles when a Summon is guarding the target and takes the damage for them instead
+                        //Damage has already been applied above, so we need to unset the Swapped flag, and reset the
+                        //image positions of the Summon and it's linked character
+                        if (ct.Character.IsSummon() && ((Summon)ct.Character).Swapped)
                         {
-                            ct.GUITile.AssignEffect(_iPotency, false);
+                            Summon s = ((Summon)ct.Character);
+                            s.Swapped = false;
+
+                            Vector2 swap = s.GetSprite().Position();
+                            s.GetSprite().Position(s.linkedChar.GetSprite().Position());
+                            s.linkedChar.GetSprite().Position(swap);
+                            s.linkedChar.Tile.TargetPlayer = true;
                         }
                     }
-                }
-                if (_liEffects.Contains(SkillTagsEnum.Status))
-                {
-                    foreach (CombatManager.CombatTile ct in TileTargetList)
+                    else   //Handling for spells
                     {
-                        foreach (ConditionEnum e in _liCondition)
-                        {
-                            RHRandom random = new RHRandom();
-                            int evade = random.Next(1, 100);
-                            if (evade > ct.Character.ResistStatus)
-                            {
-                                ct.Character.ChangeConditionStatus(e, Target.Equals(TargetEnum.Enemy));
-                                ct.GUITile.ChangeCondition(e, Target);
-                                ct.GUITile.AssignEffect(e.ToString(), true);
-                            }
-                            else
-                            {
-                                ct.GUITile.AssignEffect("Resisted", false);
-                            }
-                        }
-                    }
-                }
-                if (_liEffects.Contains(SkillTagsEnum.Summon))
-                {
-                    foreach (CombatManager.CombatTile ct in TileTargetList)
-                    {
-                        Summon newSummon = _summon.Clone();
-                        _summon.SetStats(SkillUser.StatMag);
-                        ct.Character.Tile.GUITile.LinkSummon(newSummon);
-                        ct.Character.LinkSummon(newSummon);
-                        newSummon.linkedChar = ct.Character;
-                    }
-                }
-
-                if (_liEffects.Contains(SkillTagsEnum.Push))
-                {
-                    foreach (CombatManager.CombatTile ct in TileTargetList)
-                    {
-                        Push(ct);
-                    }
-                }
-
-                if (_liEffects.Contains(SkillTagsEnum.Pull))
-                {
-                    foreach (CombatManager.CombatTile ct in TileTargetList)
-                    {
-                        Pull(ct);
-                    }
-                }
-
-                if (_liEffects.Contains(SkillTagsEnum.Retreat))
-                {
-                    Retreat(SkillUser.Tile);
-                }
-
-                if (_liEffects.Contains(SkillTagsEnum.Step))
-                {
-                    Step(SkillUser.Tile);
-                }
-
-                if (_liStatusEffects.Count > 0)
-                {
-                    StatusEffect b = null;
-                    foreach (CombatManager.CombatTile ct in TileTargetList)
-                    {
-                        foreach (StatusEffectData data in _liStatusEffects)
-                        {
-                            b = ObjectManager.GetStatusEffectByIndex(data.BuffID);
-                            b.Duration = data.Duration;
-                            b.Caster = SkillUser;
-                            b.Potency = data.Potency;
-                            string[] tags = data.Tags.Split(' ');
-                            foreach (string s in tags)
-                            {
-                                ct.Character.AddStatusEffect(b);
-                            }
-                        }
+                        //Process the damage of the spell, then apply it to the targeted tile
+                        int x = ct.Character.ProcessSpell(SkillUser, _iPotency, _element);
+                        ct.GUITile.AssignEffect(x, true);
                     }
                 }
             }
+            else if (_liEffects.Contains(SkillTagsEnum.Heal))       //Handling for healing
+            {
+                foreach (CombatManager.CombatTile ct in TileTargetList)
+                {
+                    int val = ct.Character.ProcessHealingSpell(SkillUser, _iPotency);
+                    if (val > 0)    //Don't bother saying it healed for 0
+                    {
+                        ct.GUITile.AssignEffect(_iPotency, false);
+                    }
+                }
+            }
+
+            //Handles when the action applies status effects
+            if (_liEffects.Contains(SkillTagsEnum.Status))
+            {
+                foreach (StatusEffectData effect in _liStatusEffects)
+                {
+                    //Makes a new StatusEffectobject from the data held in the action
+                    StatusEffect status = ObjectManager.GetStatusEffectByIndex(effect.BuffID);
+                    status.Duration = effect.Duration;
+                    status.Caster = SkillUser;
+
+                    //Search for relevant tags, primarily targetting
+                    string[] tags = effect.Tags.Split(' ');
+                    foreach (string s in tags)
+                    {
+                        //Handle the targetting of where to send the status effect
+                        List<CombatActor> targets = new List<CombatActor>();
+
+                        //Apply it to self
+                        if (s.Equals("Self"))
+                        {
+                            targets.Add(SkillUser);
+                        }
+
+                        //Apply to all targets of the skill
+                        if (s.Equals("Target"))
+                        {
+                            foreach (CombatManager.CombatTile ct in TileTargetList) { targets.Add(ct.Character); }
+                        }
+
+                        //Apply to all allies of the user
+                        if (s.Equals("Allies"))
+                        {
+                            if (SkillUser.IsCombatAdventurer())
+                            {
+                                targets.AddRange(CombatManager.Party);
+                            }
+                            else
+                            {
+                                targets.AddRange(CombatManager.Monsters);
+                            }
+                        }
+
+                        //Apply to all enemies of the user
+                        if (s.Equals("Enemies"))
+                        {
+                            if (SkillUser.IsCombatAdventurer())
+                            {
+                                targets.AddRange(CombatManager.Monsters);
+
+                            }
+                            else
+                            {
+                                targets.AddRange(CombatManager.Party);
+                            }
+                        }
+
+                        //actualyl apply the StatusEffect to the targets
+                        foreach (CombatActor actor in targets)
+                        {
+                            actor.AddStatusEffect(status);
+                        }
+                    }
+                }
+                //foreach (CombatManager.CombatTile ct in TileTargetList)
+                //{
+                //    //Conditions are being phased out
+                //    //foreach (ConditionEnum e in _liCondition)
+                //    //{
+                //    //    RHRandom random = new RHRandom();
+                //    //    int evade = random.Next(1, 100);
+                //    //    if (evade > ct.Character.ResistStatus)
+                //    //    {
+                //    //        ct.Character.ChangeConditionStatus(e, Target.Equals(TargetEnum.Enemy));
+                //    //        ct.GUITile.ChangeCondition(e, Target);
+                //    //        ct.GUITile.AssignEffect(e.ToString(), true);
+                //    //    }
+                //    //    else
+                //    //    {
+                //    //        ct.GUITile.AssignEffect("Resisted", false);
+                //    //    }
+                //    //}
+                //}
+            }
+
+            //Handler for if the action Summons something
+            if (_liEffects.Contains(SkillTagsEnum.Summon))
+            {
+                //This should only ever be one, butjust in case
+                foreach (CombatManager.CombatTile ct in TileTargetList)
+                {
+                    //The action maintains the summon itself, so clone a new copy to give to the player
+                    Summon newSummon = _summon.Clone();
+                    _summon.SetStats(SkillUser.StatMag);                //Summon stats are based off the Magic stat
+                    ct.Character.Tile.GUITile.LinkSummon(newSummon);    //Links the summon to the tile
+                    ct.Character.LinkSummon(newSummon);                 //Links the summon to the character
+                    newSummon.linkedChar = ct.Character;                //Links the character to the new summon
+                }
+            }
+
+            //Handler to push back the target
+            if (_liEffects.Contains(SkillTagsEnum.Push))
+            {
+                foreach (CombatManager.CombatTile ct in TileTargetList)
+                {
+                    Push(ct);
+                }
+            }
+
+            //Handler to pull the target forwards
+            if (_liEffects.Contains(SkillTagsEnum.Pull))
+            {
+                foreach (CombatManager.CombatTile ct in TileTargetList)
+                {
+                    Pull(ct);
+                }
+            }
+
+            //Handler for the SkillUser to retreat
+            if (_liEffects.Contains(SkillTagsEnum.Retreat))
+            {
+                Retreat(SkillUser.Tile);
+            }
+
+            //Handler for the SkillUser to move forwrd
+            if (_liEffects.Contains(SkillTagsEnum.Step))
+            {
+                Step(SkillUser.Tile);
+            }
         }
 
+        #region Combat Action Movement
         /// <summary>
         /// Attempts to reassign the occupant of the targeted tile to the
         /// tile right behind it. If there is an occupant of that tile, push
@@ -606,25 +665,18 @@ namespace RiverHollow.Actors.CombatStuff
 
             return rv;
         }
+        #endregion
 
-        //public double GetDelay()
-        //{
-        //    double rv = 0;
-        //    if (_effectTags.Contains("Projectile"))
-        //    {
-        //        rv = 0.2;
-        //    }
-        //    else if (_effectTags.Contains("Direct"))
-        //    {
-        //        rv = Sprite.CurrentFrameAnimation.FrameCount * Sprite.CurrentFrameAnimation.FrameLength;
-        //    }
-
-        //    return rv;
-        //}
-
+        /// <summary>
+        /// The method that makes the abilities actually do things. Each ability has a list of action tags
+        /// that describe, in order, what steps need to take place to have the ability function.
+        /// 
+        /// We maintain an index to which action is the current action so we know which action we are currently processing
+        /// </summary>
+        /// <param name="gameTime"></param>
         public void HandlePhase(GameTime gameTime)
         {
-            switch (_actionTags[_currentActionTag])
+            switch (_liActionTags[_iCurrentAction])
             {
                 case "Escape":
                     {
@@ -646,7 +698,7 @@ namespace RiverHollow.Actors.CombatStuff
 
                         if (MoveSpriteTo(sprite, GetAttackTargetPosition(sprite, targetsEnemy, moveToTile)))
                         {
-                            _currentActionTag++;
+                            _iCurrentAction++;
                         }
 
                         if (SkillUser.Tile.GUITile.CharacterWeaponSprite != null)
@@ -677,7 +729,7 @@ namespace RiverHollow.Actors.CombatStuff
                     else if (SkillUser.AnimationPlayedXTimes(1))
                     {
                         SkillUser.Tile.PlayAnimation(CActorAnimEnum.Idle);
-                        _currentActionTag++;
+                        _iCurrentAction++;
                     }
                     break;
                 case "UserCast":
@@ -688,7 +740,7 @@ namespace RiverHollow.Actors.CombatStuff
                     else if (SkillUser.AnimationPlayedXTimes(2))
                     {
                         SkillUser.Tile.PlayAnimation(CActorAnimEnum.Idle);
-                        _currentActionTag++;
+                        _iCurrentAction++;
                     }
                     break;
                 case "Direct":
@@ -702,20 +754,19 @@ namespace RiverHollow.Actors.CombatStuff
                     else if (Sprite != null && Sprite.IsAnimating) { Sprite.Update(gameTime); }
                     else if (Sprite == null || Sprite.PlayedOnce)
                     {
-                        _currentActionTag++;
+                        _iCurrentAction++;
                     }
                     break;
                 case "Apply":
                     if (!_pauseForCounter)
                     {
-                        if (!CombatManager.SelectedAction.SelfOnly()) { ApplyEffect(); }
-                        else { ApplyEffectToSelf(); }
+                        ApplyEffect();
                     }
 
                     //It's set in the above block, so we need to check again
                     if (!_pauseForCounter)
                     {
-                        _currentActionTag++;
+                        _iCurrentAction++;
                     }
                     else
                     {
@@ -728,11 +779,11 @@ namespace RiverHollow.Actors.CombatStuff
                             else if (counteringChar.AnimationPlayedXTimes(1))
                             {
                                 counteringChar.Tile.PlayAnimation(CActorAnimEnum.Idle);
-                                int x = SkillUser.ProcessAttack(counteringChar, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, counteringChar.GetAttackElement());
+                                int x = SkillUser.ProcessAttack(counteringChar, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, _iCritRating, counteringChar.GetAttackElement());
                                 SkillUser.Tile.GUITile.AssignEffect(x, true);
                                 counteringChar = null;
                                 _pauseForCounter = false;
-                                _currentActionTag++;
+                                _iCurrentAction++;
                             }
                         }
                         else if (counteringSummon != null)
@@ -744,11 +795,11 @@ namespace RiverHollow.Actors.CombatStuff
                             else if (counteringSummon.AnimationPlayedXTimes(1))
                             {
                                 counteringSummon.PlayAnimation(CActorAnimEnum.Idle);
-                                int x = SkillUser.ProcessAttack(counteringSummon, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, counteringSummon.GetAttackElement());
+                                int x = SkillUser.ProcessAttack(counteringSummon, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, _iCritRating, counteringSummon.GetAttackElement());
                                 SkillUser.Tile.GUITile.AssignEffect(x, true);
                                 counteringSummon = null;
                                 _pauseForCounter = false;
-                                _currentActionTag++;
+                                _iCurrentAction++;
                             }
                         }
                         else
@@ -763,7 +814,7 @@ namespace RiverHollow.Actors.CombatStuff
                     {
                         //If we're in Critical HP, go back down.
                         if (SkillUser.IsCritical()) { SkillUser.Tile.PlayAnimation(CActorAnimEnum.Critical); }
-                        _currentActionTag++;
+                        _iCurrentAction++;
                     }
 
                     if (SkillUser.Tile.GUITile.CharacterWeaponSprite != null)
@@ -796,10 +847,10 @@ namespace RiverHollow.Actors.CombatStuff
                         SkillUser.LinkedSummon.Tile = TileTargetList[0];
                         TileTargetList[0].GUITile.LinkSummon(SkillUser.LinkedSummon);
                     }
-                    _currentActionTag++;
+                    _iCurrentAction++;
                     break;
                 case "End":
-                    _currentActionTag = 0;
+                    _iCurrentAction = 0;
                     if (Sprite != null)
                     {
                         Sprite.IsAnimating = false;
@@ -858,7 +909,6 @@ namespace RiverHollow.Actors.CombatStuff
     {
         public int BuffID;
         public int Duration;
-        public int Potency;
         public string Tags;
         public GUISprite Sprite;
     }

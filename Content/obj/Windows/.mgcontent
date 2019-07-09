@@ -83,7 +83,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC8.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Bard.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Knight.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Rogue.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Summoner.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Witch.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Wizard.png</File>
@@ -175,5 +174,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/StatusEffects.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/StatusText.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerKnight.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerScout.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Scout.png</File>
   </SourceFiles>
 </SourceFileCollection>

@@ -34,5 +34,41 @@
       <Key>8</Key>
       <Value>Song of Magic/Gives magic</Value>
     </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>Focus/Martial skills focused, enhancing critical chances.</Value>
+    </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>Bulwark/Readied to face the foe. DEF+</Value>
+    </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>Evade/Dodging attacks</Value>
+    </Item>
+    <Item>
+      <Key>12</Key>
+      <Value>Knee Shot/Damage to movement</Value>
+    </Item>
+    <Item>
+      <Key>13</Key>
+      <Value>Song of Recovery/Healing over time</Value>
+    </Item>
+    <Item>
+      <Key>14</Key>
+      <Value>Quick Attack/Speed increased shortly</Value>
+    </Item>
+    <Item>
+      <Key>15</Key>
+      <Value>Chant of Celerity/Whole partys speed increased</Value>
+    </Item>
+    <Item>
+      <Key>16</Key>
+      <Value>Song of Resistance/Resistance to magic increased</Value>
+    </Item>
+    <Item>
+      <Key>17</Key>
+      <Value>Dance of Death/Damage increased</Value>
+    </Item>
   </Asset>
 </XnaContent>

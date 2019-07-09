@@ -2583,17 +2583,17 @@ namespace RiverHollow.Actors
         public virtual int Attack => 9;
 
         protected int _iStrength;
-        public virtual int StatStr { get => _iStrength + _iBuffStr; }
+        public virtual int StatStr => _iStrength + _iBuffStr;
         protected int _iDefense;
-        public virtual int StatDef { get => _iDefense + _iBuffDef; }
+        public virtual int StatDef => _iDefense + _iBuffDef;
         protected int _iVitality;
-        public virtual int StatVit { get => _iVitality + _iBuffVit; }
+        public virtual int StatVit => _iVitality + _iBuffVit;
         protected int _iMagic;
-        public virtual int StatMag { get => _iMagic + _iBuffMag; }
+        public virtual int StatMag => _iMagic + _iBuffMag;
         protected int _iResistance;
-        public virtual int StatRes { get => _iResistance + _iBuffRes; }
+        public virtual int StatRes => _iResistance + _iBuffRes;
         protected int _iSpeed;
-        public virtual int StatSpd { get => _iSpeed + _iBuffSpd; }
+        public virtual int StatSpd => _iSpeed + _iBuffSpd;
 
         protected int _iBuffStr;
         protected int _iBuffDef;
@@ -2601,8 +2601,13 @@ namespace RiverHollow.Actors
         protected int _iBuffMag;
         protected int _iBuffRes;
         protected int _iBuffSpd;
+        protected int _iBuffCrit;
+        protected int _iBuffEvade;
 
-        public int Evasion => (int)(40 / (1 + 10 * (Math.Pow(Math.E, (-0.05 * StatSpd)))));
+        protected int _iCrit = 10;
+        public int CritRating => _iCrit + _iBuffCrit;
+
+        public int Evasion => (int)(40 / (1 + 10 * (Math.Pow(Math.E, (-0.05 * StatSpd))))) + _iBuffEvade;
         public int ResistStatus => (int)(50 / (1 + 10 * (Math.Pow(Math.E, (-0.05 * StatRes)))));
 
         protected List<MenuAction> _liActions;
@@ -2702,16 +2707,33 @@ namespace RiverHollow.Actors
             }
         }
 
-        public int ProcessAttack(CombatActor attacker, int potency, ElementEnum element = ElementEnum.None)
+        /// <summary>
+        /// Calculates the damage to be dealt against the actor.
+        /// 
+        /// Run the damage equation against the defender, then apply any 
+        /// relevant elemental resistances.
+        /// 
+        /// Finally, roll against the crit rating. Rolling higher than the 
+        /// rating on a percentile roll means no crit. Crit Rating 10 means
+        /// roll 10 or less
+        /// </summary>
+        /// <param name="attacker">Who is attacking</param>
+        /// <param name="potency">The potency of the attack</param>
+        /// <param name="element">any associated element</param>
+        /// <returns></returns>
+        public int ProcessAttack(CombatActor attacker, int potency, int critRating, ElementEnum element = ElementEnum.None)
         {
             double compression = 0.8;
             double potencyMod = potency / 100;   //100 potency is considered an average attack
             double base_attack = attacker.Attack;  //Attack stat is either weapon damage or mod on monster str
-            double StrMult = Math.Round(1 + ((double)attacker.StatStr / 4 * attacker.StatStr / MAX_STAT), 2);
+            double StrMult = Math.Round(1 + ((double)attacker.StatStr / 4 * attacker.StatStr / MAX_STAT), 2);   
 
             double dmg = ( Math.Max(1, base_attack - StatDef) * compression * StrMult);
-
             dmg += ApplyResistances(dmg, element);
+
+            RHRandom rand = new RHRandom();
+            if(rand.Next(1, 100) <= (attacker.CritRating + critRating)) { dmg *= 2; }
+            
             return DecreaseHealth(dmg);
         }
         public int ProcessSpell(CombatActor attacker, int potency, ElementEnum element = ElementEnum.None)
@@ -2761,6 +2783,15 @@ namespace RiverHollow.Actors
             return modifiedDmg;
         }
 
+        public int ProcessHealingSpell(CombatActor attacker, int potency)
+        {
+            double maxDmg = (1 + potency) * 3;
+            double divisor = 1 + (30 * Math.Pow(Math.E, -0.12 * (attacker.StatMag - StatRes) * Math.Round((double)attacker.StatMag / MAX_STAT, 2)));
+
+            int damage = (int)Math.Round(maxDmg / divisor);
+
+            return IncreaseHealth(damage);
+        }
         public virtual GUISprite GetSprite()
         {
             return Tile.GUITile.CharacterSprite;
@@ -2818,7 +2849,12 @@ namespace RiverHollow.Actors
             }
         }
 
-        public void TickBuffs()
+        /// <summary>
+        /// Reduce the duration of each status effect on the Actor by one
+        /// If the effect's duration reaches 0, remove it, otherwise have it run
+        /// any upkeep effects it may need to do.
+        /// </summary>
+        public void TickStatusEffects()
         {
             List<StatusEffect> toRemove = new List<StatusEffect>();
             foreach (StatusEffect b in _liStatusEffects)
@@ -2833,6 +2869,10 @@ namespace RiverHollow.Actors
                     if (b.DoT)
                     {
                         this.Tile.GUITile.AssignEffect(ProcessSpell(b.Caster, b.Potency), true);
+                    }
+                    if (b.HoT)
+                    {
+                        this.Tile.GUITile.AssignEffect(ProcessHealingSpell(b.Caster, b.Potency), false);
                     }
                 }
             }
@@ -2869,61 +2909,66 @@ namespace RiverHollow.Actors
 
             foreach (KeyValuePair<string, int> kvp in b.StatMods)
             {
-                switch (kvp.Key)
-                {
-                    case "Str":
-                        _iBuffStr += kvp.Value;
-                        break;
-                    case "Def":
-                        _iBuffDef += kvp.Value;
-                        break;
-                    case "Vit":
-                        _iBuffVit += kvp.Value;
-                        break;
-                    case "Mag":
-                        _iBuffMag += kvp.Value;
-                        break;
-                    case "Res":
-                        _iBuffRes += kvp.Value;
-                        break;
-                    case "Spd":
-                        _iBuffSpd += kvp.Value;
-                        break;
-                }
+                HandleStatBuffs(kvp);
             }
 
             //If the status effect provides counter, turn counter on.
             if (b.Counter) { Counter = true; }
         }
 
+        /// <summary>
+        /// Removes the status effect from the Actor
+        /// </summary>
+        /// <param name="b"></param>
         public void RemoveStatusEffect(StatusEffect b)
         {
             foreach (KeyValuePair<string, int> kvp in b.StatMods)
             {
-                switch (kvp.Key)
-                {
-                    case "Str":
-                        _iBuffStr -= kvp.Value;
-                        break;
-                    case "Def":
-                        _iBuffDef -= kvp.Value;
-                        break;
-                    case "Vit":
-                        _iBuffVit -= kvp.Value;
-                        break;
-                    case "Mag":
-                        _iBuffMag -= kvp.Value;
-                        break;
-                    case "Res":
-                        _iBuffRes -= kvp.Value;
-                        break;
-                    case "Spd":
-                        _iBuffSpd -= kvp.Value;
-                        break;
-                }
+                HandleStatBuffs(kvp, true);
             }
 
             if (b.Counter) { Counter = false; }
+        }
+
+        /// <summary>
+        /// Helper to not repeat code for the Stat buffing/debuffing
+        /// 
+        /// Pass in the statmod kvp and an integer representing positive or negative
+        /// and multiply the mod by it. If we are adding, it will remain unchanged, 
+        /// if we are subtracting, the positive value will go negative.
+        /// </summary>
+        /// <param name="kvp">The stat to modifiy and how much</param>
+        /// <param name="negative">Whether or not we need to add or remove the value</param>
+        private void HandleStatBuffs(KeyValuePair<string, int> kvp, bool negative = false)
+        {
+            int modifier = negative ? -1 : 1;
+            switch (kvp.Key)
+            {
+                case "Str":
+                    _iBuffStr += kvp.Value * modifier;
+                    break;
+                case "Def":
+                    _iBuffDef += kvp.Value * modifier;
+                    break;
+                case "Vit":
+                    _iBuffVit += kvp.Value * modifier;
+                    break;
+                case "Mag":
+                    _iBuffMag += kvp.Value * modifier;
+                    break;
+                case "Res":
+                    _iBuffRes += kvp.Value * modifier;
+                    break;
+                case "Spd":
+                    _iBuffSpd += kvp.Value * modifier;
+                    break;
+                case "Crit":
+                    _iBuffCrit += kvp.Value * modifier;
+                    break;
+                case "Evade":
+                    _iBuffEvade += kvp.Value * modifier;
+                    break;
+            }
         }
 
         public void LinkSummon(Summon s)

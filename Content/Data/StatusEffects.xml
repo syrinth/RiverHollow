@@ -30,5 +30,50 @@
       <Key>8</Key>
       <Value>[Buff:Mag-10][Song]</Value>
     </Item>
+    <!--Focus-->
+    <Item>
+      <Key>9</Key>
+      <Value>[Buff:Crit-20]</Value>
+    </Item>
+    <!--Bulwark-->
+    <Item>
+      <Key>10</Key>
+      <Value>[Buff:Def-20]</Value>
+    </Item>
+    <!--Dodge-->
+    <Item>
+      <Key>11</Key>
+      <Value>[Buff:Eva-10]</Value>
+    </Item>
+    <!--Knee Shot-->
+    <Item>
+      <Key>12</Key>
+      <Value>[Debuff:Eva-10 Spd-10]</Value>
+    </Item>
+    <!--Song of Recovery-->
+    <Item>
+      <Key>13</Key>
+      <Value>[HoT][Song][Potency:80]</Value>
+    </Item>
+    <!--Quick Attack-->
+    <Item>
+      <Key>14</Key>
+      <Value>[Buff:Spd-10]</Value>
+    </Item>
+    <!--Chant of Celerity-->
+    <Item>
+      <Key>15</Key>
+      <Value>[Buff:Spd-10]</Value>
+    </Item>
+    <!--Song of Resistance-->
+    <Item>
+      <Key>16</Key>
+      <Value>[Buff:Res-10]</Value>
+    </Item>
+    <!--Dance of Death-->
+    <Item>
+      <Key>17</Key>
+      <Value>[Buff:Str-20]</Value>
+    </Item>
   </Asset>
 </XnaContent>

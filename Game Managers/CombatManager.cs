@@ -668,7 +668,7 @@ namespace RiverHollow.Game_Managers
                 _liChargingCharacters.Add(ActiveCharacter);
                 _liChargingCharacters.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));
 
-                ActiveCharacter.TickBuffs();
+                ActiveCharacter.TickStatusEffects();
                 if (ActiveCharacter.Poisoned())
                 {
                     ActiveCharacter.Location.AssignEffect(ActiveCharacter.DecreaseHealth(Math.Max(1, (int)(ActiveCharacter.MaxHP / 20))), true);

@@ -7,13 +7,17 @@ namespace RiverHollow.Actors.CombatStuff
     public class StatusEffect
     {
         public CombatActor Caster;
-        public bool DoT;
+        private bool _bDoT;
+        public bool DoT => _bDoT;
+        private bool _bHoT;
+        public bool HoT => _bHoT;
         public bool _bSong;
         public bool Song => _bSong;
         private int _id;
         private string _sName;
-        public string Name { get => _sName; }
-        public int Potency;
+        public string Name => _sName;
+        int _iPotency;
+        public int Potency => _iPotency;
         public int Duration;
         private List<KeyValuePair<string, int>> _liStats;
         public List<KeyValuePair<string, int>> StatMods  => _liStats;
@@ -54,6 +58,14 @@ namespace RiverHollow.Actors.CombatStuff
                     _liStats.Add(new KeyValuePair<string, int>(statMods[0], -int.Parse(statMods[1])));
                 }
             }
+
+            if (data.ContainsKey("Potency"))
+            {
+                _iPotency = int.Parse(data["Potency"]);
+            }
+
+            _bHoT = data.ContainsKey("HoT");
+            _bDoT = data.ContainsKey("DoT");
 
             _bSong = data.ContainsKey("Song");
 
