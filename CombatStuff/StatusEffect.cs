@@ -28,6 +28,9 @@ namespace RiverHollow.Actors.CombatStuff
         private bool _bCounter;
         public bool Counter => _bCounter;
 
+        private bool _bGuard;
+        public bool Guard => _bGuard;
+
         public StatusEffect(int id, Dictionary<string, string> data)
         {
             _id = id;
@@ -70,6 +73,7 @@ namespace RiverHollow.Actors.CombatStuff
             _bSong = data.ContainsKey("Song");
 
             _bCounter = data.ContainsKey("Counter");
+            _bGuard = data.ContainsKey("Guard");
         }
     }
 }

@@ -75,5 +75,10 @@
       <Key>17</Key>
       <Value>[Buff:Str-20]</Value>
     </Item>
+    <!--Guard-->
+    <Item>
+      <Key>18</Key>
+      <Value>[Guard]</Value>
+    </Item>
   </Asset>
 </XnaContent>

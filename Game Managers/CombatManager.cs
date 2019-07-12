@@ -742,10 +742,8 @@ namespace RiverHollow.Game_Managers
             bool _bSelected;
             public bool Selected => _bSelected;
 
-            public bool TargetPlayer = true;
-
             CombatActor _character;
-            public CombatActor Character => TargetPlayer ? _character : _character.LinkedSummon;
+            public CombatActor Character => _character;
             GUICmbtTile _gTile;
             public GUICmbtTile GUITile => _gTile;
 

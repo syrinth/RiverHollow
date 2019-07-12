@@ -70,5 +70,9 @@
       <Key>17</Key>
       <Value>Dance of Death/Damage increased</Value>
     </Item>
+    <Item>
+      <Key>18</Key>
+      <Value>Guard/On guard</Value>
+    </Item>
   </Asset>
 </XnaContent>

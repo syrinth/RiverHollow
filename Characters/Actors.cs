@@ -2631,6 +2631,13 @@ namespace RiverHollow.Actors
 
         public bool Counter;
         public bool GoToCounter;
+
+        public CombatActor MyGuard;
+        public CombatActor GuardTarget;
+        protected bool _bGuard;
+        public bool Guard => _bGuard;
+
+        public bool Swapped;
         #endregion
 
         public CombatActor() : base()
@@ -2914,6 +2921,8 @@ namespace RiverHollow.Actors
 
             //If the status effect provides counter, turn counter on.
             if (b.Counter) { Counter = true; }
+
+            if (b.Guard) { _bGuard = true; }
         }
 
         /// <summary>
@@ -2928,6 +2937,7 @@ namespace RiverHollow.Actors
             }
 
             if (b.Counter) { Counter = false; }
+            if (b.Guard) { _bGuard = false; }
         }
 
         /// <summary>
@@ -2974,8 +2984,13 @@ namespace RiverHollow.Actors
         public void LinkSummon(Summon s)
         {
             _linkedSummon = s;
-            _linkedSummon.Position = Position - new Vector2(100, 100);
+            _linkedSummon.Position = GetSummonPosition();
             s.Tile = Tile;
+        }
+
+        public Vector2 GetSummonPosition()
+        {
+            return Position - new Vector2(100, 100);
         }
 
         public void UnlinkSummon()
@@ -3509,13 +3524,10 @@ namespace RiverHollow.Actors
         int _iMagStat;
 
         public bool Acted;
-        public bool Swapped;
         bool _bTwinCast;
         public bool TwinCast => _bTwinCast;
         bool _bAggressive;
         public bool Aggressive => _bAggressive;
-        bool _bDefensive;
-        public bool Defensive => _bDefensive;
 
         public CombatActor linkedChar;
 
@@ -3536,7 +3548,7 @@ namespace RiverHollow.Actors
             if (TwinCast) { copy.SetTwincast(); }
             if (Aggressive) { copy.SetAggressive(); }
             if (Counter) { copy.Counter = Counter; }
-            if (Defensive) { copy.SetDefensive(); }
+            if (Guard) { copy.SetGuard(); }
 
             copy._element = _element;
             copy.Tile = Tile;
@@ -3575,7 +3587,7 @@ namespace RiverHollow.Actors
 
         public void SetTwincast() { _bTwinCast = true; }
         public void SetAggressive() { _bAggressive = true; }
-        public void SetDefensive() { _bDefensive = true; }
+        public void SetGuard() { _bGuard = true; }
         public void SetElement(ElementEnum el) { _element = el; }
 
         public override bool IsSummon() { return true; }

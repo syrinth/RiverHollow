@@ -92,6 +92,10 @@
       <Key>Action 122</Key>
       <Value>Bulwark/Ready yourself for the enemy</Value>
     </Item>
+    <Item>
+      <Key>Action 123</Key>
+      <Value>Guard/Go on guard</Value>
+    </Item>
     <!--Scout Skills-->
     <Item>
       <Key>Action 140</Key>

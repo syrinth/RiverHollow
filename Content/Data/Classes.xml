@@ -31,7 +31,7 @@
     <Item>
       <!--Knight-->
       <Key>6</Key>
-      <Value>[Weapon:Shield][Armor:Heavy][Hp:10][Spd:1][Idle:2-0.6][Cast:2-0.6][Hit:1-0.6][Attack:1-0.6][Crit:2-0.6][KO:1-0.6][Win:2-0.6][Ability:300-120-121-122][DWeap:650][DArmor:740][DHead:800][DWrist:880]</Value>
+      <Value>[Weapon:Shield][Armor:Heavy][Hp:10][Spd:1][Idle:2-0.6][Cast:2-0.6][Hit:1-0.6][Attack:1-0.6][Crit:2-0.6][KO:1-0.6][Win:2-0.6][Ability:300-120-121-122-123][DWeap:650][DArmor:740][DHead:800][DWrist:880]</Value>
     </Item>
     <Item>
       <!--Rogue-->

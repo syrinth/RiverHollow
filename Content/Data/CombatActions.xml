@@ -103,6 +103,10 @@
       <Key>122</Key>
       <Value>[Type:Action][Target:Enemy][Range:Ranged][Area:Single][Harm:50][Push:1][Step:2][Action:UserMove UserAttack Apply]</Value>
     </Item>
+    <Item>
+      <Key>123</Key>
+      <Value>[Type:Action][Target:Self][Status:18-3-Self][Action:UserCast Apply]</Value>
+    </Item>
     <!--<140> Scout Skills-->
     <Item>
       <Key>140</Key>

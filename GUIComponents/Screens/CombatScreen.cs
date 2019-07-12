@@ -509,15 +509,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
         public void AssignEffect(string x, bool harms)
         {
-            if (_mapTile.TargetPlayer)
+            if (_mapTile.Character.MyGuard != null && _mapTile.Character.MyGuard.IsSummon())
+            {
+                AssignEffectToSummon(x);
+            }
+            else
             {
                 _iDmgTimer = 0;
                 _gEffect.SetText(x);
                 _gEffect.SetColor(harms ? Color.Red : Color.LightGreen);
-            }
-            else
-            {
-                AssignEffectToSummon(x);
             }
         }
 
