@@ -89,6 +89,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _liSprites = new List<GUISprite>();
 
             _sprBody = new GUISprite(sprite, overwrite);
+            AddControl(_sprBody);
             _liSprites.Add(_sprBody);
 
             Width = _sprBody.Width;
