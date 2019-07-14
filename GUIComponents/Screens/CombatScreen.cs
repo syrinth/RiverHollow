@@ -249,6 +249,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 case CombatManager.PhaseEnum.ChooseTarget:
                     CombatManager.HandleKeyboardTargetting();
+
+                    //Cancel out of selections made if escape is hit
+                    if (InputManager.CheckPressedKey(Keys.Escape))
+                    {
+                        CancelAction();
+                    }
                     break;
 
                 case CombatManager.PhaseEnum.DisplayAttack:
@@ -295,13 +301,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     window.CenterOnScreen();
                     AddControl(window);
                     break;
-            }
-
-            //Cancel out of selections made if escape is hit
-            if (InputManager.CheckPressedKey(Keys.Escape))
-            {
-                CancelAction();
-            }
+            }   
         }
 
         public override void Draw(SpriteBatch spriteBatch)
