@@ -299,7 +299,7 @@ namespace RiverHollow
 
         public static void HomeMapPlacement()
         {
-            GUIManager.SetScreen(null);
+            GUIManager.CloseMainObject();
             GameManager.Scry(true);
             Camera.UnsetObserver();
             MapManager.ViewMap(MapManager.HomeMap);

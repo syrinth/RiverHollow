@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Game_Managers.GUIObjects.HUDMenu;
 using static RiverHollow.RiverHollow;
 using static RiverHollow.WorldObjects.Door;
 using static RiverHollow.WorldObjects.Floor;
@@ -975,6 +976,10 @@ namespace RiverHollow.Tile_Engine
             bool rv = false;
 
             RHTile tile = MapManager.RetrieveTile(mouseLocation);
+
+            //Do nothing if no tile could be retrieved
+            if (tile == null) { return rv; }
+
             if(tile.GetMapObject() != null) {
                 RHTile.TileObject obj = tile.GetMapObject();
 
@@ -1001,7 +1006,7 @@ namespace RiverHollow.Tile_Engine
                         stairs.SetExit(MapManager.HomeMap);
                         PlaceWorldObject(stairs, true);
                     }
-                    GUIManager.SetScreen(new InventoryScreen((Container)obj));
+                    GUIManager.OpenMainObject(new HUDInventoryDisplay((Container)obj));
                 }
                 else if (obj.IsPlant())
                 {
@@ -1108,7 +1113,7 @@ namespace RiverHollow.Tile_Engine
                         {
                             if (AddBuilding(GameManager.HeldBuilding))
                             {
-                                GUIManager.SetScreen(new NamingScreen(GameManager.HeldBuilding));
+                                GUIManager.OpenMainObject(new HUDNamingWindow(GameManager.HeldBuilding));
                                 GameManager.DropBuilding();
 
                                 PlayerManager.TakeMoney(gmMerchandise.MoneyCost);
@@ -1527,7 +1532,7 @@ namespace RiverHollow.Tile_Engine
                             WorldAdventurer w = ObjectManager.GetWorker(GraphicCursor.WorkerToPlace);
                             b.AddWorker(w);
                             b._selected = false;
-                            GUIManager.SetScreen(new NamingScreen(w));
+                            GUIManager.OpenMainObject(new HUDNamingWindow(w));
                             //Scry(false);
                             rv = true;
                         }

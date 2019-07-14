@@ -531,7 +531,7 @@ namespace RiverHollow.Actors
             else if (entry.Equals("GiveGift"))
             {
                 GameManager.CurrentNPC = this;
-                GUIManager.SetScreen(new InventoryScreen());
+                GUIManager.OpenMainObject(new HUDInventoryDisplay());
             }
             else if (entry.Equals("Party"))
             {
@@ -981,7 +981,7 @@ namespace RiverHollow.Actors
                     if ((m.MerchType == Merchandise.ItemType.Building || m.MerchType == Merchandise.ItemType.Upgrade) && m.Activated()) { _liMerchandise.Add(m); }
                 }
 
-                GUIManager.SetScreen(new PurchaseBuildingsScreen(_liMerchandise));
+                GUIManager.OpenMainObject(new HUDPurchaseBuildings(_liMerchandise));
                 GameManager.ClearGMObjects();
             }
             else if (entry.Equals("BuyWorkers"))
@@ -990,12 +990,12 @@ namespace RiverHollow.Actors
                 {
                     if (m.MerchType == Merchandise.ItemType.Worker && m.Activated()) { _liMerchandise.Add(m); }
                 }
-                GUIManager.SetScreen(new PurchaseWorkersScreen(_liMerchandise));
+                GUIManager.OpenMainObject(new HUDPurchaseWorkers(_liMerchandise));
                 GameManager.ClearGMObjects();
             }
             else if (entry.Equals("Missions"))
             {
-                GUIManager.SetScreen(new MissionScreen());
+                GUIManager.OpenMainObject(new HUDMissionWindow());
                 GameManager.ClearGMObjects();
             }
             else if (entry.Equals("BuyItems"))
@@ -1004,7 +1004,7 @@ namespace RiverHollow.Actors
                 {
                     if (m.MerchType == Merchandise.ItemType.Item && m.Activated()) { _liMerchandise.Add(m); }
                 }
-                GUIManager.SetScreen(new PurchaseItemsScreen(_liMerchandise));
+                GUIManager.OpenMainObject(new HUDPurchaseItems(_liMerchandise));
                 GameManager.ClearGMObjects();
             }
             else if (entry.Equals("SellWorkers"))

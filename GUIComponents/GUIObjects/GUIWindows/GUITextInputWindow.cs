@@ -9,16 +9,16 @@ using RiverHollow.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
-    class GUITextInputWindow : GUITextWindow
+    public class GUITextInputWindow : GUITextWindow
     {
         SideEnum _textLoc;
-        GUIText _gStatement;
-        GUIText _gText;
-        GUIMarker _gMarker;
+        protected GUIText _gStatement;
+        protected GUIText _gText;
+        protected GUIMarker _gMarker;
 
-        int _iCurr;
+        protected int _iCurr;
 
-        bool _bFinished;
+        protected bool _bFinished;
         public bool Finished => _bFinished;
         public bool AcceptSpace;
         public bool TakeInput = false;
@@ -186,7 +186,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             _gMarker.Hide();
         }
 
-        private class GUIMarker : GUIText
+        protected class GUIMarker : GUIText
         {
             readonly double DBL_FLASH_RATE = 0.5;
 

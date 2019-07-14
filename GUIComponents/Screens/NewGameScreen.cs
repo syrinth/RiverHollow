@@ -51,10 +51,10 @@ namespace RiverHollow.GUIComponents.Screens
             _window.CenterOnScreen();
             AddControl(_window);
 
-            _btnCancel = new GUIButton("Cancel", MINI_BTN_WIDTH, MINI_BTN_HEIGHT, BtnCancel);
+            _btnCancel = new GUIButton("Cancel", GUIManager.MINI_BTN_WIDTH, GUIManager.MINI_BTN_HEIGHT, BtnCancel);
             _btnCancel.AnchorToInnerSide(_window, SideEnum.BottomRight, 0);
             
-            _btnOK = new GUIButton("OK", MINI_BTN_WIDTH, MINI_BTN_HEIGHT, BtnNewGame);
+            _btnOK = new GUIButton("OK", GUIManager.MINI_BTN_WIDTH, GUIManager.MINI_BTN_HEIGHT, BtnNewGame);
             _window.AddControl(_btnOK);
             _btnOK.AnchorAndAlignToObject(_btnCancel, SideEnum.Left, SideEnum.Top, 0);
             

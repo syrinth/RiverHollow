@@ -13,6 +13,9 @@ namespace RiverHollow.Game_Managers
 {
     public static class GUIManager
     {
+        public static int MINI_BTN_HEIGHT = 32;
+        public static int MINI_BTN_WIDTH = 128;
+
         public static int MAIN_COMPONENT_WIDTH = RiverHollow.ScreenWidth / 3;
         public static int MAIN_COMPONENT_HEIGHT = RiverHollow.ScreenWidth / 3;
         private static GUIScreen _currentGUIScreen;
@@ -135,7 +138,7 @@ namespace RiverHollow.Game_Managers
 
         //Main Object
         public static void OpenMainObject(GUIObject o) { _currentGUIScreen.OpenMainObject(o); }
-        public static void CloseMainObject(GUIObject o) { _currentGUIScreen.CloseMainObject(o); }
+        public static void CloseMainObject() { _currentGUIScreen.CloseMainObject(); }
 
         public static void AddTextSelection(string text)
         {

@@ -697,7 +697,7 @@ namespace RiverHollow.WorldObjects
                 }
 
                 if (!Processed) {
-                    GUIManager.SetScreen(new CraftingScreen(this));
+                    GUIManager.OpenMainObject(new HUDCraftingDisplay(this));
                 }
             }
             public bool HasItem() { return _heldItem != null; }

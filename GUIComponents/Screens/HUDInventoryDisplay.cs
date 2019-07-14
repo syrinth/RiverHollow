@@ -2,27 +2,26 @@
 using RiverHollow.Screens;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIObjects;
-using RiverHollow.Actors;
-using System.Collections.Generic;
 using static RiverHollow.WorldObjects.WorldItem;
-using static RiverHollow.WorldObjects.Door;
-using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
-    public class InventoryScreen : GUIScreen
+    public class HUDInventoryDisplay : GUIObject
     {
         private GUIInventory _inventory;
         private GUIInventory _container;
 
-        public InventoryScreen()
+        public HUDInventoryDisplay()
         {
             InventoryManager.ClearExtraInventory();
             _inventory = new GUIInventory(true);
             AddControl(_inventory);
+
+            DetermineSize();
+            CenterOnScreen();
         }
 
-        public InventoryScreen(Container c)
+        public HUDInventoryDisplay(Container c)
         {
             InventoryManager.ClearExtraInventory();
 
@@ -34,11 +33,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _container.Setup();
             _container.AnchorAndAlignToObject(_inventory, SideEnum.Top, SideEnum.CenterX);           
 
-            List<GUIObject> liWins = new List<GUIObject>() { _container, _inventory };
-            GUIObject.CenterAndAlignToScreen(ref liWins);
+            SetY(_container.Top);
 
             AddControl(_inventory);
             AddControl(_container);
+
+            DetermineSize();
+            CenterOnScreen();
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)

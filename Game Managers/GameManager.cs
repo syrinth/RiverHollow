@@ -103,7 +103,7 @@ namespace RiverHollow.Game_Managers
             }
             else if (selectedAction.Equals("OpenDoor"))
             {
-                GUIManager.SetScreen(new InventoryScreen());
+                GUIManager.OpenMainObject(new HUDInventoryDisplay());
             }
             else if (selectedAction.Contains("SellContract") && GameManager.CurrentNPC != null)
             {

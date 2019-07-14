@@ -10,9 +10,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
     //Represents a complete collection of associated GUIs to be displayed on the screen
     public abstract class GUIScreen
     {
-        protected const int MINI_BTN_HEIGHT = 32;
-        protected const int MINI_BTN_WIDTH = 128;
-
         private GUITextWindow _guiTextWindow;
         private GUITextWindow _guiHoverWindow;
         private GUIObject _guiHoverObject;
@@ -51,7 +48,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 if (rv) { break; }
             }
 
-            if (!rv && IsMenuOpen() && (_gSelectionWindow == null || _guiTextWindow == null))
+            //If the right click has not been processed, we probably want to close our entries
+            //and call BackToMain.
+            //Only allow goingback if there is no _guiTextWindow and either the menu is open, or
+            //the screen says we can close on click.
+            if (!rv && _guiTextWindow == null && (IsMenuOpen() || CloseOnRightClick()))
             {
                 GameManager.BackToMain();
             }
@@ -161,6 +162,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
         public bool IsTextWindowOpen() { return _guiTextWindow != null; }
 
+        public virtual bool CloseOnRightClick() { return false; }
+
         /// <summary>
         /// Removes any previous existing Text Windows fromthe Control, then determines whether
         /// or not the given text requires a selection window or not, and creates the appropriate
@@ -200,7 +203,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         //Main Object
         public virtual void OpenMainObject(GUIObject o) { }
-        public virtual void CloseMainObject(GUIObject o) { }
+        public virtual void CloseMainObject() { }
 
         public void AddTextSelection(string text)
         {

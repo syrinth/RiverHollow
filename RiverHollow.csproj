@@ -82,7 +82,7 @@
     <Compile Include="GUIComponents\Screens\LoadScreen.cs" />
     <Compile Include="GUIComponents\Screens\MissionScreen.cs" />
     <Compile Include="GUIComponents\Screens\NewGameScreen.cs" />
-    <Compile Include="GUIComponents\Screens\PurchaseScreen.cs" />
+    <Compile Include="GUIComponents\Screens\HUDPurchaseWindows.cs" />
     <Compile Include="Game Managers\InventoryManager.cs" />
     <Compile Include="Items\MerchantChest.cs" />
     <Compile Include="Misc\Quest.cs" />
@@ -96,9 +96,8 @@
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUIWindow.cs" />
     <Compile Include="GUIComponents\Screens\DayEndScreen.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUIStatDisplay.cs" />
-    <Compile Include="GUIComponents\Screens\InventoryScreen.cs" />
-    <Compile Include="GUIComponents\Screens\ItemCreationScreen.cs" />
-    <Compile Include="GUIComponents\Screens\NamingScreen.cs" />
+    <Compile Include="GUIComponents\Screens\HUDInventoryDisplay.cs" />
+    <Compile Include="GUIComponents\Screens\HUDCraftingDisplay.cs" />
     <Compile Include="Game Managers\GUIManager.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIButton.cs" />
     <Compile Include="GUIComponents\Screens\GUIScreen.cs" />

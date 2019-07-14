@@ -140,7 +140,9 @@ namespace RiverHollow.GUIObjects
 
             foreach (GUIObject c in Controls)
             {
-                rv = c.ProcessLeftButtonClick(mouse);
+                rv = c.ProcessRightButtonClick(mouse);
+
+                if (rv) { break; }
             }
 
             if (!rv)
@@ -304,7 +306,7 @@ namespace RiverHollow.GUIObjects
         }
 
         #region Positioning Code
-        internal enum SideEnum { Bottom, BottomLeft, BottomRight, Center, CenterX, CenterY, Left, Right, Top, TopLeft, TopRight, };
+        public enum SideEnum { Bottom, BottomLeft, BottomRight, Center, CenterX, CenterY, Left, Right, Top, TopLeft, TopRight, };
         public void MoveBy(Vector2 dir)
         {
             MoveBy(dir.X, dir.Y);
@@ -674,7 +676,7 @@ namespace RiverHollow.GUIObjects
             this.SetY(centerY - Height / 2);
         }
 
-        internal void SetSize()
+        internal void DetermineSize()
         {
             if (Controls.Count > 0)
             {

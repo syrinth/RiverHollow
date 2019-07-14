@@ -19,71 +19,54 @@ using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow.GUIComponents.Screens
 {
-    public class PurchaseItemsScreen : GUIScreen
+    public class HUDPurchaseItems : GUIObject
     {
         GUIMoneyDisplay _gMoney;
         GUIWindow _mainWindow;
         List<GUIObject> _liItems;
 
-        public PurchaseItemsScreen(List<Merchandise> merch)
+        public HUDPurchaseItems(List<Merchandise> merch)
         {
-            try
+            Vector2 center = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
+
+            int minWidth = 64 * merch.Count + 64;
+            int minHeight = 128 + 64;
+            _mainWindow = new GUIWindow(GUIWindow.RedWin, minWidth, minHeight);
+
+            _liItems = new List<GUIObject>();
+
+            int i = 0;
+            foreach (Merchandise m in merch)
             {
-                Vector2 center = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
+                Item it = ObjectManager.GetItem(m.MerchID);
+                it.ApplyUniqueData(m.UniqueData);
 
-                int minWidth = 64 * merch.Count + 64;
-                int minHeight = 128 + 64;
-                _mainWindow = new GUIWindow(GUIWindow.RedWin, minWidth, minHeight);
-                _mainWindow.CenterOnScreen();
-                _mainWindow.PositionAdd(new Vector2(32, 32));
+                _liItems.Add(new BuyItemBox(it, m.MoneyCost, _mainWindow.InnerRectangle().Width));
 
-                _liItems = new List<GUIObject>();
-
-                int i = 0;
-                foreach (Merchandise m in merch)
+                if (i == 0)
                 {
-                    Item it = ObjectManager.GetItem(m.MerchID);
-                    it.ApplyUniqueData(m.UniqueData);
-
-                    _liItems.Add(new BuyItemBox(it, m.MoneyCost, _mainWindow.InnerRectangle().Width));
-
-                    if (i == 0)
-                    {
-                        _liItems[i].AnchorToInnerSide(_mainWindow, GUIObject.SideEnum.TopLeft);
-                    }
-                    else
-                    {
-                        _liItems[i].AnchorAndAlignToObject(_liItems[i - 1], GUIObject.SideEnum.Bottom, GUIObject.SideEnum.Left);
-                    }
-                    i++;
+                    _liItems[i].AnchorToInnerSide(_mainWindow, GUIObject.SideEnum.TopLeft);
                 }
-
-                _mainWindow.Resize();
-
-                _gMoney = new GUIMoneyDisplay();
-                _gMoney.AnchorAndAlignToObject(_mainWindow, GUIObject.SideEnum.Top, GUIObject.SideEnum.Left);
-
-                AddControl(_mainWindow);
-                AddControl(_gMoney);
+                else
+                {
+                    _liItems[i].AnchorAndAlignToObject(_liItems[i - 1], GUIObject.SideEnum.Bottom, GUIObject.SideEnum.Left);
+                }
+                _mainWindow.AddControl(_liItems[i]);
+                i++;
             }
-            catch (Exception e)
-            {
-                int i = 0;
-            }
-        }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-        }
+            _mainWindow.Resize();
 
-        public override void Update(GameTime gameTime)
-        {
-            _gMoney.Update(gameTime);
-            foreach (BuyItemBox wB in _liItems)
-            {
-                wB.Update(gameTime);
-            }
+            _gMoney = new GUIMoneyDisplay();
+            _gMoney.AnchorAndAlignToObject(_mainWindow, GUIObject.SideEnum.Top, GUIObject.SideEnum.Left);
+
+            AddControl(_mainWindow);
+            AddControl(_gMoney);
+
+            Width = _mainWindow.Width;
+            Height = _mainWindow.Height;
+
+            CenterOnScreen();
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -118,7 +101,7 @@ namespace RiverHollow.GUIComponents.Screens
         }
     }
 
-    public class PurchaseBuildingsScreen : GUIScreen
+    public class HUDPurchaseBuildings : GUIObject
     {
         private List<Merchandise> _liMerchandise;
         private GUIButton _btnNext;
@@ -128,7 +111,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         private BuildingInfoDisplay _bldgWindow;
 
-        public PurchaseBuildingsScreen(List<Merchandise> merch)
+        public HUDPurchaseBuildings(List<Merchandise> merch)
         {
             _liMerchandise = merch;
             _iCurrIndex = 0;
@@ -136,19 +119,21 @@ namespace RiverHollow.GUIComponents.Screens
             _bldgWindow = new BuildingInfoDisplay(_liMerchandise[_iCurrIndex]);
             AddControl(_bldgWindow);
 
-            _btnBuy = new GUIButton("Buy", MINI_BTN_WIDTH, MINI_BTN_HEIGHT, BtnBuy);
+            _btnBuy = new GUIButton("Buy", GUIManager.MINI_BTN_WIDTH, GUIManager.MINI_BTN_HEIGHT, BtnBuy);
             _btnBuy.AnchorAndAlignToObject(_bldgWindow, SideEnum.Bottom, SideEnum.CenterX, 50);
             AddControl(_btnBuy);
             _bldgWindow.Load();
 
-            _btnLast = new GUIButton("Last", MINI_BTN_WIDTH, MINI_BTN_HEIGHT, BtnLast);
+            _btnLast = new GUIButton("Last", GUIManager.MINI_BTN_WIDTH, GUIManager.MINI_BTN_HEIGHT, BtnLast);
             _btnLast.AnchorAndAlignToObject(_btnBuy, SideEnum.Left, SideEnum.Bottom, 100);
             AddControl(_btnLast);
-            _btnNext = new GUIButton("Next", MINI_BTN_WIDTH, MINI_BTN_HEIGHT, BtnNext);
+            _btnNext = new GUIButton("Next", GUIManager.MINI_BTN_WIDTH, GUIManager.MINI_BTN_HEIGHT, BtnNext);
             _btnNext.AnchorAndAlignToObject(_btnBuy, SideEnum.Right, SideEnum.CenterY, 100);
             AddControl(_btnNext);
-        }
 
+            Width = _bldgWindow.Width;
+            Height = _bldgWindow.Height;
+        }
 
         public override void Update(GameTime gameTime)
         {
@@ -351,74 +336,62 @@ namespace RiverHollow.GUIComponents.Screens
         }
     }
 
-    public class PurchaseWorkersScreen : GUIScreen
+    public class HUDPurchaseWorkers : GUIObject
     {
         GUIMoneyDisplay _gMoney;
         private GUIWindow _mainWindow;
         private List<GUIObject> _liWorkers;
 
-        public PurchaseWorkersScreen(List<Merchandise> merch)
+        public HUDPurchaseWorkers(List<Merchandise> merch)
         {
-            try
+            Vector2 center = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
+
+            int minWidth = 64;
+            int minHeight = 64;
+            _mainWindow = new GUIWindow(GUIWindow.RedWin, minWidth, minHeight);
+
+            _liWorkers = new List<GUIObject>();
+
+            int i = 0;
+            foreach (Merchandise m in merch)
             {
-                Vector2 center = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
-
-                int minWidth = 64;
-                int minHeight = 64;
-                _mainWindow = new GUIWindow(GUIWindow.RedWin, minWidth, minHeight);
-                _mainWindow.CenterOnScreen();
-                _mainWindow.PositionAdd(new Vector2(32, 32));
-
-                _liWorkers = new List<GUIObject>();
-
-                int i = 0;
-                foreach (Merchandise m in merch)
+                if (m.MerchType == Merchandise.ItemType.Worker)
                 {
-                    if (m.MerchType == Merchandise.ItemType.Worker)
-                    {
-                        WorldAdventurer w = ObjectManager.GetWorker(m.MerchID);
-                        WorkerBox wb = new WorkerBox(w, m.MoneyCost);
-                        _liWorkers.Add(wb);
+                    WorldAdventurer w = ObjectManager.GetWorker(m.MerchID);
+                    WorkerBox wb = new WorkerBox(w, m.MoneyCost);
+                    _liWorkers.Add(wb);
 
-                        if (i == 0) { wb.AnchorToInnerSide(_mainWindow, GUIObject.SideEnum.TopLeft); }
+                    if (i == 0) { wb.AnchorToInnerSide(_mainWindow, GUIObject.SideEnum.TopLeft); }
+                    else
+                    {
+                        if (i == merch.Count / 2)
+                        {
+                            wb.AnchorAndAlignToObject(_liWorkers[0], GUIObject.SideEnum.Bottom, GUIObject.SideEnum.Left, 20);
+                        }
                         else
                         {
-                            if (i == merch.Count / 2)
-                            {
-                                wb.AnchorAndAlignToObject(_liWorkers[0], GUIObject.SideEnum.Bottom, GUIObject.SideEnum.Left, 20);
-                            }
-                            else
-                            {
-                                wb.AnchorAndAlignToObject(_liWorkers[i - 1], GUIObject.SideEnum.Right, GUIObject.SideEnum.Top, 20);
-                            }
+                            wb.AnchorAndAlignToObject(_liWorkers[i - 1], GUIObject.SideEnum.Right, GUIObject.SideEnum.Top, 20);
                         }
-                        i++;
                     }
+
+                    _mainWindow.AddControl(wb);
+                    i++;
                 }
-
-                _mainWindow.Resize();
-                _mainWindow.CenterOnScreen();
-
-                _gMoney = new GUIMoneyDisplay();
-                _gMoney.AnchorAndAlignToObject(_mainWindow, GUIObject.SideEnum.Top, GUIObject.SideEnum.Left);
-
-                AddControl(_mainWindow);
-                AddControl(_gMoney);
-                AddControl(_gMoney);
             }
-            catch (Exception e)
-            {
 
-            }
-        }
+            _mainWindow.Resize();
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-            foreach (WorkerBox wB in _liWorkers)
-            {
-                wB.Draw(spriteBatch);
-            }
+            _gMoney = new GUIMoneyDisplay();
+            _gMoney.AnchorAndAlignToObject(_mainWindow, GUIObject.SideEnum.Top, GUIObject.SideEnum.Left);
+
+            AddControl(_mainWindow);
+            AddControl(_gMoney);
+            AddControl(_gMoney);
+
+            Width = _mainWindow.Width;
+            Height = _mainWindow.Height;
+
+            CenterOnScreen();
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
