@@ -1138,6 +1138,8 @@ namespace RiverHollow.Actors
 
         /// <summary>
         /// Override, if mason is building,t hey need to have the highest float depth
+        /// 
+        /// That being said, this is awful and we should try to find a different way of doing this
         /// </summary>
         /// <param name="spriteBatch"></param>
         /// <param name="useLayerDepth"></param>

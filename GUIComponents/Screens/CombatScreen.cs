@@ -292,7 +292,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         InventoryManager.InitMobInventory(1, 5);
                         _gPostScreen = new GUIPostCombatDisplay(ClosePostCombatDisplay);
                         _gPostScreen.CenterOnScreen();
-                        AddControl(_gPostScreen);
                     }
 
                     break;
@@ -308,17 +307,23 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             base.Draw(spriteBatch);
 
-            //Characters need to be drawn after the tiles because they move and can need to be drawn on top of them
+            //Characters need to be drawn after the tiles because they move and need to be drawn on top of them
             foreach(GUICmbtTile tile in _arrAllies) { tile.DrawCharacters(spriteBatch); }
             foreach (GUICmbtTile tile in _arrEnemies) { tile.DrawCharacters(spriteBatch); }
 
             if (CombatManager.SelectedAction != null) { CombatManager.SelectedAction.Draw(spriteBatch); }
+
+            //Draw here instead of leaving it to the controls because the
+            //characters will get drawnon top of it otherwise.
+            if(_gPostScreen != null)
+            {
+                _gPostScreen.Draw(spriteBatch);
+            }
         }
 
         private void ClosePostCombatDisplay()
         {
             _gPostScreen = null;
-            RemoveControl(_gPostScreen);
             CombatManager.EndCombatVictory();
         }
     }

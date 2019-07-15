@@ -441,7 +441,12 @@ namespace RiverHollow.Actors.CombatStuff
                         //Apply to all targets of the skill
                         if (s.Equals("Target"))
                         {
-                            foreach (CombatManager.CombatTile ct in TileTargetList) { targets.Add(ct.Character); }
+                            foreach (CombatManager.CombatTile ct in TileTargetList) {
+                                if (ct.Character != null && !ct.Character.KnockedOut())
+                                {
+                                    targets.Add(ct.Character);
+                                }
+                            }
                         }
 
                         //Apply to all allies of the user
@@ -500,7 +505,10 @@ namespace RiverHollow.Actors.CombatStuff
             {
                 foreach (CombatManager.CombatTile ct in TileTargetList)
                 {
-                    Push(ct);
+                    if (ct.Character != null && !ct.Character.KnockedOut())
+                    {
+                        Push(ct);
+                    }
                 }
             }
 
@@ -509,7 +517,10 @@ namespace RiverHollow.Actors.CombatStuff
             {
                 foreach (CombatManager.CombatTile ct in TileTargetList)
                 {
-                    Pull(ct);
+                    if (ct.Character != null && !ct.Character.KnockedOut())
+                    {
+                        Pull(ct);
+                    }
                 }
             }
 
