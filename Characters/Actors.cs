@@ -1200,12 +1200,14 @@ namespace RiverHollow.Actors
         }
 
         /// <summary>
-        /// Assigns the building forthe mason to build
+        /// Assigns the building for the mason to build
+        /// If there is no building, also unset the building flag because he's finished.
         /// </summary>
-        /// <param name="b"></param>
+        /// <param name="b">The building to build</param>
         public void SetBuildTarget(Building b)
         {
             _buildTarget = b;
+            if(b == null) { _bStartedBuilding = false; }
         }
 
         /// <summary>

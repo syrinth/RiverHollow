@@ -314,10 +314,14 @@ namespace RiverHollow.Buildings
         /// 
         /// Increment it by one to account for the fact that the upgrade shouldn't
         /// officially start until the day after we call this method.
+        /// 
+        /// Parameter only used when building is first being built, otherwise leave
+        /// the original building level.
         /// </summary>
-        public void StartBuilding()
+        /// <param name="startAtZero"> Whether to reset the building's value to 0 or not</param>
+        public void StartBuilding(bool startAtZero = true)
         {
-            _iBldgLvl = 0;
+            if (startAtZero) { _iBldgLvl = 0; }
             _iUpgradeTimer = _iUpgradeTime + 1;
             SetSourceRect();
 
@@ -328,6 +332,8 @@ namespace RiverHollow.Buildings
         /// Increases the building level as long as it will not exceed the Building's max level
         /// Also move the source rectangle over by the width of the building to change exterior and,
         /// if the building was at level 0, tell the map to create the building entrance.
+        /// 
+        /// Once we've finished upgrading the building, unset the Mason's build target.
         /// </summary>
         public void Upgrade()
         {
@@ -341,6 +347,8 @@ namespace RiverHollow.Buildings
                 _iBldgLvl++;
                 _rSource.X += PxWidth;
             }
+
+            GameManager.TownMason.SetBuildTarget(null);
         }
 
         /// <summary>

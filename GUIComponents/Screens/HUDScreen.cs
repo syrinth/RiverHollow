@@ -1729,7 +1729,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             {
                                 if (_parent._eAction == ActionTypeEnum.Upgrade)
                                 {
-                                    b.Building.Upgrade();
+                                    b.Building.StartBuilding(false);
                                     GameManager.BackToMain();
                                 }
                                 else { _parent.HandleBuildingSelection(b.Building); }
