@@ -30,6 +30,7 @@ namespace RiverHollow.Buildings
         protected string _sDescription;
         public string Description => _sDescription;
 
+        protected string _sHomeMap;
         protected string _sName;
         public string Name => _sName;
         public string MapName => "map" +_sName.Replace(" ", "") + (_iBldgLvl == 0 ? "" : _iBldgLvl.ToString());
@@ -51,6 +52,12 @@ namespace RiverHollow.Buildings
 
         protected bool _bManor;
         public bool IsManor => _bManor;
+
+        protected int _iUpgradeTime;
+        protected int _iUpgradeTimer;
+
+        protected Vector2 _vecBuildspot;
+        public Vector2 BuildFromPosition => _vecBuildspot;
 
         #region Worker Info
         private bool _bHoldsWorkers;
@@ -109,9 +116,19 @@ namespace RiverHollow.Buildings
             _iEntWidth = int.Parse(ent[2]);
             _iEntHeight = int.Parse(ent[3]);
 
+            //The amount of time it takes for a building to change stages
+            if (data.ContainsKey("UpgradeTime")) { _iUpgradeTime = int.Parse(data["UpgradeTime"]); }
+
+            //Sets the position from which the Mason will spawn tobuild the building
+            if (data.ContainsKey("BuildSpot")) {
+                string[] split = data["BuildSpot"].Split('-');
+                _vecBuildspot = new Vector2(int.Parse(split[0]) * TileSize, int.Parse(split[1]) * TileSize);
+            }
+
             //Worker data for the building, if appropriate
             if (data.ContainsKey("Workers"))
             {
+                //Start level is 1 so that we display in built state
                 _iBldgLvl = 1;
                 _bHoldsWorkers = true;
                 _arrWorkerTypes = new int[2];
@@ -135,13 +152,12 @@ namespace RiverHollow.Buildings
             _liWorkers = new List<WorldAdventurer>();
             _liPlacedObjects = new List<WorldObject>();
 
-            _rSource = new Rectangle(0, 0, PxWidth, PxHeight);
+            SetSourceRect();
         }
 
         /// <summary>
         /// Gets the Building to draw itself, the source rectangle needs to move along the x-axis
-        /// in order to get the proper building image. Building levels start at 1, so need to subtract 1
-        /// in order to get a start position of 0,0
+        /// in order to get the proper building image
         /// </summary>
         /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
@@ -253,6 +269,17 @@ namespace RiverHollow.Buildings
         /// </summary>
         public void Rollover()
         {
+            //If we are upgrading the building, get closer to the build count
+            if (_iUpgradeTimer > 0) {
+                _iUpgradeTimer--;
+
+                //When the timer reaches 0, Upgrade the Building
+                if (_iUpgradeTimer == 0)
+                {
+                    Upgrade();
+                }
+            }
+
             foreach (WorldAdventurer w in _liWorkers)
             {
                 if (w.Rollover() && MapManager.Maps[MapName].Production)
@@ -282,16 +309,55 @@ namespace RiverHollow.Buildings
         }
 
         /// <summary>
-        /// Increases the building level as long as it will not exceed the Building's max level
-        /// Also move the source rectangle over by the width of the building to change exterior
+        /// Sets the upgrade timer on the building so we know how long we have
+        /// until we need to upgrade it to the next stage.
+        /// 
+        /// Increment it by one to account for the fact that the upgrade shouldn't
+        /// officially start until the day after we call this method.
         /// </summary>
-        internal void Upgrade()
+        public void StartBuilding()
         {
+            _iBldgLvl = 0;
+            _iUpgradeTimer = _iUpgradeTime + 1;
+            SetSourceRect();
+
+            GameManager.TownMason.SetBuildTarget(this);
+        }
+
+        /// <summary>
+        /// Increases the building level as long as it will not exceed the Building's max level
+        /// Also move the source rectangle over by the width of the building to change exterior and,
+        /// if the building was at level 0, tell the map to create the building entrance.
+        /// </summary>
+        public void Upgrade()
+        {
+            if(_iBldgLvl == 0)
+            {
+                MapManager.Maps[_sHomeMap].CreateBuildingEntrance(this);
+            }
+
             if (_iBldgLvl + 1 < MaxBldgLevel)
             {
                 _iBldgLvl++;
                 _rSource.X += PxWidth;
             }
+        }
+
+        /// <summary>
+        /// Called to move the source rectangle whenever the building level changes
+        /// </summary>
+        private void SetSourceRect()
+        {
+            _rSource = new Rectangle(_iBldgLvl * PxWidth, 0, PxWidth, PxHeight);
+        }
+
+        /// <summary>
+        /// Sets the name of the map the building lives on
+        /// </summary>
+        /// <param name="name"></param>
+        public void SetHomeMap(string name)
+        {
+            _sHomeMap = name;
         }
 
         public BuildingData SaveData()
@@ -336,7 +402,7 @@ namespace RiverHollow.Buildings
         {
             SetCoordinatesByGrid(new Vector2(data.positionX, data.positionY));
             _iPersonalID = data.id;
-            _iBldgLvl = data.bldgLvl == 0 ? 1 : data.bldgLvl;
+            _iBldgLvl = data.bldgLvl;
 
             foreach (WorkerData wData in data.Workers)
             {

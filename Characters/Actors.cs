@@ -457,7 +457,7 @@ namespace RiverHollow.Actors
         protected int _iIndex;
         public int ID { get => _iIndex; }
         protected string _homeMap;
-        public enum NPCTypeEnum { Eligible, Villager, Shopkeeper, Ranger, Worker }
+        public enum NPCTypeEnum { Eligible, Villager, Shopkeeper, Ranger, Worker, Mason }
         protected NPCTypeEnum _eNPCType;
         public NPCTypeEnum NPCType { get => _eNPCType; }
         public static List<int> FriendRange = new List<int> { 0, 10, 40, 100, 200, 600, 800, 1200, 1600, 2000 };
@@ -687,9 +687,9 @@ namespace RiverHollow.Actors
                             DetermineFacing(Vector2.Zero);
                         }
 
-                        if (_currentPath.Count > 0 && _currentPath[0] != null && _currentPath[0].GetMapObject() != null)
+                        if (_currentPath.Count > 0 && _currentPath[0] != null && _currentPath[0].GetDoorObject() != null)
                         {
-                            MapManager.ChangeMaps(this, CurrentMapName, MapManager.CurrentMap.DictionaryExit[_currentPath[0].GetMapObject().Rect]);
+                            MapManager.ChangeMaps(this, CurrentMapName, MapManager.CurrentMap.DictionaryExit[_currentPath[0].GetDoorObject().Rect]);
                         }
                     }
                     else
@@ -1123,6 +1123,98 @@ namespace RiverHollow.Actors
             }
         }
     }
+    public class Mason : ShopKeeper
+    {
+        Building _buildTarget;
+        bool _bStartedBuilding;
+
+        public Mason(int index, Dictionary<string, string> stringData) : base(index, stringData)
+        {
+            if(GameManager.TownMason == null)
+            {
+                GameManager.TownMason = this;
+            }
+        }
+
+        /// <summary>
+        /// Override, if mason is building,t hey need to have the highest float depth
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="useLayerDepth"></param>
+        public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
+        {
+            if (IsBuilding())
+            {
+                _spriteBody.Draw(spriteBatch, true, 1, 99999999999);
+            }
+            else
+            {
+                base.Draw(spriteBatch, useLayerDepth);
+            }
+        }
+
+        /// <summary>
+        /// Overrides the Rollover command to make the mason spawn on HomeMap at the
+        /// delineated portion of the building to be built.
+        /// 
+        /// Also ensures that mason only truly starst building at the start of a day.
+        /// </summary>
+        public override void RollOver()
+        {
+            if(!_bStartedBuilding && _buildTarget != null)
+            {
+                _bStartedBuilding = true;
+            }
+
+            if (IsBuilding())
+            {
+                MapManager.Maps[CurrentMapName].RemoveCharacter(this);
+                RHMap map = MapManager.Maps[MapManager.HomeMap];
+
+                Position = Util.SnapToGrid(_buildTarget.MapPosition + _buildTarget.BuildFromPosition);
+                map.AddCharacter(this);
+            }
+            else
+            {
+                base.RollOver();
+            }
+        }
+
+        /// <summary>
+        /// If the mason is currently building something, do NOT run any normal update calls
+        /// </summary>
+        /// <param name="theGameTime"></param>
+        public override void Update(GameTime theGameTime)
+        {
+            if (IsBuilding())
+            {
+                BodySprite.Update(theGameTime);
+                
+            }
+            else
+            {
+                base.Update(theGameTime);
+            }
+        }
+
+        /// <summary>
+        /// Assigns the building forthe mason to build
+        /// </summary>
+        /// <param name="b"></param>
+        public void SetBuildTarget(Building b)
+        {
+            _buildTarget = b;
+        }
+
+        /// <summary>
+        /// Use to determine whether the mason is currently building and nees to follow
+        /// nonstandardlogic
+        /// </summary>
+        private bool IsBuilding()
+        {
+            return _bStartedBuilding && _buildTarget != null;
+        }
+    }    
     public class EligibleNPC : Villager
     {
         public bool Married;

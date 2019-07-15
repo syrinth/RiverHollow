@@ -980,8 +980,8 @@ namespace RiverHollow.Tile_Engine
             //Do nothing if no tile could be retrieved
             if (tile == null) { return rv; }
 
-            if(tile.GetMapObject() != null) {
-                RHTile.TileObject obj = tile.GetMapObject();
+            if(tile.GetDoorObject() != null) {
+                RHTile.TileObject obj = tile.GetDoorObject();
 
                 if (PlayerManager.PlayerInRange(obj.Rect))
                 {
@@ -1111,8 +1111,9 @@ namespace RiverHollow.Tile_Engine
                     {
                         if (GameManager.HeldBuilding != null)
                         {
-                            if (AddBuilding(GameManager.HeldBuilding))
+                            if (AddBuilding(GameManager.HeldBuilding, false))
                             {
+                                GameManager.HeldBuilding.StartBuilding();
                                 GUIManager.OpenMainObject(new HUDNamingWindow(GameManager.HeldBuilding));
                                 GameManager.DropBuilding();
 
@@ -1295,11 +1296,11 @@ namespace RiverHollow.Tile_Engine
                 bool found = false;
 
                 RHTile t = GetTileOffGrid(GraphicCursor.GetTranslatedMouseLocation().ToPoint());
-                if(t != null && t.GetMapObject() != null)
+                if(t != null && t.GetDoorObject() != null)
                 {
                     found = true;
                     GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Door;
-                    GraphicCursor.Alpha = (PlayerManager.PlayerInRange(t.GetMapObject().Rect) ? 1 : 0.5f);
+                    GraphicCursor.Alpha = (PlayerManager.PlayerInRange(t.GetDoorObject().Rect) ? 1 : 0.5f);
                 }
 
                 foreach (WorldActor c in _liActors)
@@ -1488,7 +1489,7 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public bool AddBuilding(Building b)
+        public bool AddBuilding(Building b, bool createEntrance = true)
         {
             bool rv = false;
             List<RHTile> tiles = new List<RHTile>();
@@ -1496,14 +1497,11 @@ namespace RiverHollow.Tile_Engine
             {
                 _liTestTiles.Clear();
                 AssignMapTiles(b, tiles);
-                _dictEntrance.Add(b.PersonalID.ToString(), b.BoxToExit); //TODO: FIX THIS
-                for (float x = b.BoxToEnter.X; x < b.BoxToEnter.X + b.BoxToEnter.Width; x += TileSize)
-                {
-                    for (float y = b.BoxToEnter.Y; y < b.BoxToEnter.Y + b.BoxToEnter.Height; y += TileSize)
-                    {
-                        RHTile t = GetTileOffGrid((int)x, (int)y);
-                        t.SetMapObject(b);
-                    }
+
+                b.SetHomeMap(this.Name);
+                //Only create the entrance is the bool is set
+                if (createEntrance){
+                    CreateBuildingEntrance(b);
                 }
 
                 if (!_liBuildings.Contains(b)) //For the use case of moving buildings
@@ -1516,6 +1514,19 @@ namespace RiverHollow.Tile_Engine
             }
 
             return rv;
+        }
+
+        public void CreateBuildingEntrance(Building b)
+        {
+            _dictEntrance.Add(b.PersonalID.ToString(), b.BoxToExit); //TODO: FIX THIS
+            for (float x = b.BoxToEnter.X; x < b.BoxToEnter.X + b.BoxToEnter.Width; x += TileSize)
+            {
+                for (float y = b.BoxToEnter.Y; y < b.BoxToEnter.Y + b.BoxToEnter.Height; y += TileSize)
+                {
+                    RHTile t = GetTileOffGrid((int)x, (int)y);
+                    t.SetMapObject(b);
+                }
+            }
         }
 
         public bool AddWorkerToBuilding(Point mouseLocation)
@@ -2025,7 +2036,7 @@ namespace RiverHollow.Tile_Engine
             foreach (Vector2 d in DIRS)
             {
                 RHTile tile = MapManager.Maps[MapName].GetTile(new Point((int)(_X + d.X), (int)(_Y + d.Y)));
-                if (tile != null && (tile.Passable() || tile.GetMapObject() != null ) && tile.WorldObject == null) {
+                if (tile != null && (tile.Passable() || tile.GetDoorObject() != null ) && tile.WorldObject == null) {
                     neighbours.Add(tile);
                 }
             }
@@ -2170,7 +2181,7 @@ namespace RiverHollow.Tile_Engine
             _tileMapObj = new TileObject(obj);
         }
 
-        public TileObject GetMapObject()
+        public TileObject GetDoorObject()
         {
             return _tileMapObj;
         }

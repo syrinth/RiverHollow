@@ -84,6 +84,9 @@ namespace RiverHollow.Game_Managers
                     case "ShopKeeper":
                         n = new ShopKeeper(npcData.Key, diData);
                         break;
+                    case "Mason":
+                        n = new Mason(npcData.Key, diData);
+                        break;
                     case "Eligible":
                         n = new EligibleNPC(npcData.Key, diData);
                         break;

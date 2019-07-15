@@ -63,6 +63,8 @@ namespace RiverHollow.Game_Managers
         public static Spirit gmSpirit;
         public static KeyDoor CurrentDoor;
 
+        public static Mason TownMason;
+
         static long _iSaveID = -1;
         public static int MAX_NAME_LEN = 10;
 

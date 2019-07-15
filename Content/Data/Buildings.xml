@@ -4,23 +4,23 @@
     <!--Key: Index>0 Value:texture/width height/firstBaseSquare baseWidth baseHeight/EntranceSquareXY/workerType-->
     <Item>
       <Key>0</Key>
-      <Value>[Texture:Manor][Dimensions:11-13][FirstBase:0-7][Width:11][Height:5][Entrance:80-176-16-32][Manor][Workers:1-2-3-4-5-6-7-8][WorkersPerLevel:2]</Value>
+      <Value>[Texture:Manor][Dimensions:11-13][FirstBase:0-7][Width:11][Height:5][Entrance:80-176-16-32][Manor][Workers:1-2-3-4-5-6-7-8][WorkersPerLevel:2][UpgradeTime:3]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Texture:Tower][Dimensions:5-14][FirstBase:0-10][Width:5][Height:3][Entrance:32-176-16-32][Workers:1-3]</Value>
+      <Value>[Texture:Tower][Dimensions:5-14][FirstBase:0-10][Width:5][Height:3][Entrance:32-176-16-32][Workers:1-3][UpgradeTime:3][BuildSpot:3-11]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Texture:Barracks][Dimensions:8-9][FirstBase:0-5][Width:8][Height:4][Entrance:80-112-16-32][Workers:5-6]</Value>
+      <Value>[Texture:Barracks][Dimensions:8-9][FirstBase:0-5][Width:8][Height:4][Entrance:80-112-16-32][Workers:5-6][UpgradeTime:3]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Texture:Lodge][Dimensions:7-8][FirstBase:0-4][Width:7][Height:4][Entrance:112-128-16-32][Workers:7-8]</Value>
+      <Value>[Texture:Lodge][Dimensions:7-8][FirstBase:0-4][Width:7][Height:4][Entrance:112-128-16-32][Workers:7-8][UpgradeTime:3]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Texture:Cottage][Dimensions:7-8][FirstBase:0-4][Width:7][Height:4][Entrance:112-128-16-32][Workers:2-4]</Value>
+      <Value>[Texture:Cottage][Dimensions:7-8][FirstBase:0-4][Width:7][Height:4][Entrance:112-128-16-32][Workers:2-4][UpgradeTime:3]</Value>
     </Item>
     <!--River Hollow Town Buildings-->
     <Item>
