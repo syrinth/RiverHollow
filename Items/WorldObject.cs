@@ -20,10 +20,11 @@ namespace RiverHollow.WorldObjects
         public static int Rock = 0;
         public static int BigRock = 1;
         public static int Tree = 2;
-        public enum ObjectType { Building, ClassChanger, Machine, Container, Door, Earth, Floor, WorldObject, Destructible, Plant, Forageable};
+        public enum ObjectType { Building, ClassChanger, Machine, Container, Door, Earth, Floor, WorldObject, Destructible, Plant, Forageable, Wall};
         public ObjectType Type;
 
         public List<RHTile> Tiles;
+        public List<RHTile> ShadowTiles;
 
         protected bool _bImpassable = true;
         public bool Blocking => _bImpassable;
@@ -62,9 +63,12 @@ namespace RiverHollow.WorldObjects
         public int ID { get => _id; }
         #endregion
 
-        protected WorldObject() { }
+        protected WorldObject() {
+            Tiles = new List<RHTile>();
+            ShadowTiles = new List<RHTile>();
+        }
 
-        public WorldObject(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height)
+        public WorldObject(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height) : this()
         {
             Type = ObjectType.WorldObject;
             _id = id;
@@ -75,7 +79,6 @@ namespace RiverHollow.WorldObjects
             _wallObject = false;
 
             _rSource = sourceRectangle;
-            Tiles = new List<RHTile>();
         }
 
         public virtual void Update(GameTime theGameTime) {}
@@ -158,7 +161,6 @@ namespace RiverHollow.WorldObjects
             _id = id;
 
              _wallObject = false;
-            Tiles = new List<RHTile>();
 
             int x = 0;
             int y = 0;
@@ -234,7 +236,6 @@ namespace RiverHollow.WorldObjects
             _vMapPosition = pos;
 
             _wallObject = false;
-            Tiles = new List<RHTile>();
 
             int x = 0;
             int y = 0;
@@ -1008,6 +1009,153 @@ namespace RiverHollow.WorldObjects
                 _iDaysLeft = data.daysLeft;
 
                 _rSource.X += _iWidth * _iCurrentState;
+            }
+        }
+
+        /// <summary>
+        /// Wall object that can adjust themselves based off of other, adjacent walls
+        /// </summary>
+        public class Wall : WorldItem
+        {
+            public Wall(int id, Dictionary<string, string> stringData)
+            {
+                _id = id;
+                Type = ObjectType.Wall;
+                ReadSourcePos(stringData["Image"]);
+
+                _iWidth = int.Parse(stringData["Width"]);
+                _iHeight = int.Parse(stringData["Height"]);
+
+                _rSource = new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight);
+
+                _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
+            }
+
+            /// <summary>
+            /// Adjusts the source rectangle for the Wall compared to nearby wall segments
+            /// 
+            /// First thing to do is to determine how many walls are adjacent to the wall and where, we then
+            /// create a string in NSEW order to determine which segment we need to get.
+            /// 
+            /// Then compare the string and determine which piece it corresponds to.
+            /// 
+            /// Finally, run this method again on each of the adjacent walls to update their appearance
+            /// </summary>
+            /// <param name="adjustAdjacent">Whether or not to call this method against the adjacent tiles</param>
+            public void AdjustWall(bool adjustAdjacent = true)
+            {
+                List<RHTile> liAdjacentTiles = new List<RHTile>();
+                RHTile startTile = Tiles[0];
+
+                string sAdjacent = string.Empty;
+
+                //Create the adjacent tiles string
+                MakeAdjustments("N", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sMapName].GetTile(new Point((int)(startTile.X), (int)(startTile.Y - 1))));
+                MakeAdjustments("S", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sMapName].GetTile(new Point((int)(startTile.X), (int)(startTile.Y + 1))));
+                MakeAdjustments("E", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sMapName].GetTile(new Point((int)(startTile.X + 1), (int)(startTile.Y))));
+                MakeAdjustments("W", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sMapName].GetTile(new Point((int)(startTile.X - 1), (int)(startTile.Y))));
+
+                //Gross switch statement against the adjacency string to determine
+                //which world object to use.
+                switch (sAdjacent)
+                {
+                    case "E":
+                        _rSource = Util.FloatRectangle(_vSourcePos.X + TileSize * 13, _vSourcePos.Y, _iWidth, _iHeight);
+                        break;
+                    case "S":
+                        _rSource = Util.FloatRectangle(_vSourcePos.X + TileSize * 14, _vSourcePos.Y, _iWidth, _iHeight);
+                        break;
+                    case "W":
+                        _rSource = Util.FloatRectangle(_vSourcePos.X + TileSize * 12, _vSourcePos.Y, _iWidth, _iHeight);
+                        break;
+                    case "N":
+                        _rSource = Util.FloatRectangle(_vSourcePos.X + TileSize * 15, _vSourcePos.Y, _iWidth, _iHeight);
+                        break;
+                    case "NS":
+                        _rSource = Util.FloatRectangle(_vSourcePos.X + TileSize, _vSourcePos.Y, _iWidth, _iHeight);
+                        break;
+                    case "EW":
+                        _rSource = Util.FloatRectangle(_vSourcePos.X + TileSize * 2, _vSourcePos.Y, _iWidth, _iHeight);
+                        break;
+                    case "SW":
+                        _rSource = Util.FloatRectangle(_vSourcePos.X + TileSize * 3, _vSourcePos.Y, _iWidth, _iHeight);
+                        break;
+                    case "NW":
+                        _rSource = Util.FloatRectangle(_vSourcePos.X + TileSize * 4, _vSourcePos.Y, _iWidth, _iHeight);
+                        break;
+                    case "NE":
+                        _rSource = Util.FloatRectangle(_vSourcePos.X + TileSize * 5, _vSourcePos.Y, _iWidth, _iHeight);
+                        break;
+                    case "SE":
+                        _rSource = Util.FloatRectangle(_vSourcePos.X + TileSize * 6, _vSourcePos.Y, _iWidth, _iHeight);
+                        break;
+                    case "NSE":
+                        _rSource = Util.FloatRectangle(_vSourcePos.X + TileSize * 7, _vSourcePos.Y, _iWidth, _iHeight);
+                        break;
+                    case "NSW":
+                        _rSource = Util.FloatRectangle(_vSourcePos.X + TileSize * 8, _vSourcePos.Y, _iWidth, _iHeight);
+                        break;
+                    case "NEW":
+                        _rSource = Util.FloatRectangle(_vSourcePos.X + TileSize * 9, _vSourcePos.Y, _iWidth, _iHeight);
+                        break;
+                    case "SEW":
+                        _rSource = Util.FloatRectangle(_vSourcePos.X + TileSize * 10, _vSourcePos.Y, _iWidth, _iHeight);
+                        break;
+                    case "NSEW":
+                        _rSource = Util.FloatRectangle(_vSourcePos.X + TileSize * 11, _vSourcePos.Y, _iWidth, _iHeight);
+                        break;
+                    default:
+                        _rSource = Util.FloatRectangle(_vSourcePos.X, _vSourcePos.Y, _iWidth, _iHeight);
+                        break;
+                }
+
+                //Call this methodo n the adjacent tiles. Do not recurse.
+                if (adjustAdjacent)
+                {
+                    foreach (RHTile t in liAdjacentTiles)
+                    {
+                        Wall w = ((Wall)t.GetWorldObject());
+                        w.AdjustWall(false);
+                    }
+                }
+            }
+
+            /// <summary>
+            /// If the given tile passes the Wall test, add the ifValdid
+            /// string to the adjacency string then add to the list
+            /// </summary>
+            /// <param name="ifValid">Which directional value to add on a pass</param>
+            /// <param name="adjacentStr">Ref to the adjacency string</param>
+            /// <param name="adjacentList">ref to the adjacency list</param>
+            /// <param name="tile">The tile to test</param>
+            private void MakeAdjustments(string ifValid, ref string adjacentStr, ref List<RHTile> adjacentList, RHTile tile)
+            {
+                if (WallTest(tile))
+                {
+                    adjacentStr += ifValid;
+                    adjacentList.Add(tile);
+                }
+            }
+
+            /// <summary>
+            /// Check to see that the tile exists, has an object and that object is a wall
+            /// </summary>
+            /// <param name="tile">Tile to test against</param>
+            /// <returns>True if the tile exists and contains a Wall</returns>
+            private bool WallTest(RHTile tile)
+            {
+                bool rv = false;
+
+                if (tile != null)
+                {
+                    WorldObject obj = tile.GetWorldObject(false);
+                    if (obj != null && obj.Type == ObjectType.Wall)
+                    {
+                        rv = true;
+                    }
+                }
+
+                return rv;
             }
         }
     }

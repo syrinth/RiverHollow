@@ -243,7 +243,7 @@ namespace RiverHollow.Game_Managers
         public static void MoveBuilding() { _buildType = EnumBuildType.Move; }
         public static bool DestroyingBuildings() { return _buildType == EnumBuildType.Destroy; }
         public static void DestroyBuilding() { _buildType = EnumBuildType.Destroy; }
-        public static void FinishedBuilding() { _buildType = EnumBuildType.None; }
+        public static void LeaveBuildMode() { _buildType = EnumBuildType.None; }
 
         public static void BackToMain()
         {

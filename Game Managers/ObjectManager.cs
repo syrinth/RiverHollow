@@ -168,7 +168,7 @@ namespace RiverHollow.Game_Managers
                     case "Equipment":
                         return new Equipment(id, liData);
                     case "StaticItem":
-                        return new StaticItem(id, liData);
+                        return new StaticItem(id, liData, num);
                     case "Food":
                         return new Food(id, liData, num);
                     case "Map":
@@ -211,6 +211,8 @@ namespace RiverHollow.Game_Managers
                         return new Plant(id, liData);
                     case "Machine":
                         return new Machine(id, liData);
+                    case "Wall":
+                        return new Wall(id, liData);
                     case "Forageable":
                         return new Forageable(id, liData, pos);
                 }

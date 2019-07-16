@@ -245,6 +245,11 @@
       <Key>205</Key>
       <Value>Loom/You can make clothes here.</Value>
     </Item>
+    <!--<300> Misc-->
+    <Item>
+      <Key>240</Key>
+      <Value>Wall/Stone Wall</Value>
+    </Item>
     <Item>
       <Key>299</Key>
       <Value>Essense Extractor/Changes your class</Value>

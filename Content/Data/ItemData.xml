@@ -249,6 +249,11 @@
       <Key>205</Key>
       <Value>[Type:StaticItem][Image:96-0][Sell:500][ReqItems:2-10]</Value>
     </Item>
+    <!--<240> Machines-->
+    <Item>
+      <Key>240</Key>
+      <Value>[Type:StaticItem][Image:0-16][Sell:500][Stacks]</Value>
+    </Item>
     <Item>
       <Key>299</Key>
       <Value>[Type:StaticItem][Image:0-32][Sell:3000]</Value>

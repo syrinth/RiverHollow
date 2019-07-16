@@ -1089,7 +1089,7 @@ namespace RiverHollow.Tile_Engine
             {
                 if (Scrying())
                 {
-                    FinishedBuilding();
+                    LeaveBuildMode();
                     Unpause();
                     Scry(false);
                     ResetCamera();
@@ -1099,6 +1099,11 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
+        /// <summary>
+        /// The Map's left-click handler
+        /// </summary>
+        /// <param name="mouseLocation"></param>
+        /// <returns></returns>
         public bool ProcessLeftButtonClick(Point mouseLocation)
         {
             bool rv = false;
@@ -1107,127 +1112,21 @@ namespace RiverHollow.Tile_Engine
             {
                 if (Scrying())
                 {
-                    if (Constructing() || MovingBuildings())
-                    {
-                        if (GameManager.HeldBuilding != null)
-                        {
-                            if (AddBuilding(GameManager.HeldBuilding, false))
-                            {
-                                GameManager.HeldBuilding.StartBuilding();
-                                GUIManager.OpenMainObject(new HUDNamingWindow(GameManager.HeldBuilding));
-                                GameManager.DropBuilding();
-
-                                PlayerManager.TakeMoney(gmMerchandise.MoneyCost);
-                                foreach (KeyValuePair<int, int> kvp in gmMerchandise.RequiredItems)
-                                {
-                                    InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
-                                }
-
-                                gmMerchandise = null;
-                                FinishedBuilding();
-                                rv = true;
-                            }
-                        }
-                        else if (GameManager.HeldBuilding == null)
-                        {
-                            PickUpBuilding(mouseLocation);
-                            rv = true;
-                        }
-                    }
-                    else if (DestroyingBuildings())
-                    {
-                        rv = RemoveBuilding(mouseLocation);
-                    }
-                    else
-                    {
-                        if (GraphicCursor.WorkerToPlace > -1)
-                        {
-                            if (AddWorkerToBuilding(mouseLocation))
-                            {
-                                rv = true;
-                            }
-                        }
-                    }
+                    rv = ProcessLeftButtonClickHandleBuilding(mouseLocation);
                 }
                 else
                 {
+                    //Ensure that we have a tile that we clicked on and that the player is close enough to interact with it.
                     _targetTile = MapManager.RetrieveTile(mouseLocation);
                     if (_targetTile != null && PlayerManager.PlayerInRange(_targetTile.Center.ToPoint()))
                     {
-                        WorldObject obj = _targetTile.GetWorldObject();
-                        if (obj != null)
-                        {
-                            if (obj == PlayerManager._merchantChest)
-                            {
-                                Item i = InventoryManager.GetCurrentItem();
-                                PlayerManager._merchantChest.AddItem(i);
-                                InventoryManager.RemoveItemFromInventory(InventoryManager.GetCurrentItem());
-                            }
-                            else if (obj.IsMachine())
-                            {
-                                Machine p = (Machine)obj;
-                                if (p.HasItem()) { p.TakeFinishedItem(); }
-                                else if (!p.Working()) { p.ProcessClick(); }
-                                GUIManager.SyncScreen();
-                            }
-                            else if (obj.IsClassChanger())
-                            {
-                                ((ClassChanger)obj).ProcessClick();
-                            }
-                            else if (obj.IsPlant())
-                            {
-                                Plant p = (Plant)obj;
-                                Item i = p.Harvest(false);
-                                //if (i != null)
-                                //{
-                                //    _liItems.Add(i);
-                                //}
-                                MapManager.RemoveWorldObject(p);
-                                p.RemoveSelfFromTiles();
-                            }
-                            else if (obj.IsForageable())
-                            {
-                                InventoryManager.AddToInventory(ObjectManager.GetItem(((Forageable)obj).ForageItem));
-                                MapManager.RemoveWorldObject(obj);
-                                obj.RemoveSelfFromTiles();
-                            }
-                            else if (_targetTile.WorldObject != null && _targetTile.WorldObject.IsDestructible())
-                            {
-                                Destructible d = (Destructible)_targetTile.WorldObject;
+                        //Handles interactions with objects on the tile, both actual and Shadow
+                        rv = ProcessLeftButtonClickOnObject(mouseLocation);
 
-                                if (d != null)
-                                {
-                                    if (d.Breakable) { rv = PlayerManager.SetTool(Tool.ToolEnum.Pick, mouseLocation); }
-                                    else if (d.Choppable) { rv = PlayerManager.SetTool(Tool.ToolEnum.Axe, mouseLocation); }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Vector2 center = _targetTile.Center;
-                            if (PlayerManager.PlayerInRange(center.ToPoint()))
-                            {
-                                StaticItem selectedItem = InventoryManager.GetCurrentStaticItem();
-                                if (selectedItem != null)
-                                {
-                                    WorldItem newItem = selectedItem.GetWorldItem();
-                                    if (MapManager.PlacePlayerObject(newItem))
-                                    {
-                                        newItem.SetMapName(this.Name);
-                                        selectedItem.Remove(1);
-                                    }
-                                }
-                                else if (_targetTile.CanDig())
-                                {
-                                    rv = PlayerManager.SetTool(Tool.ToolEnum.Shovel, mouseLocation);
-                                }
-                                else if (_targetTile.Flooring != null && _targetTile.Flooring.IsEarth())
-                                {
-                                    rv = PlayerManager.SetTool(Tool.ToolEnum.WateringCan, mouseLocation);
-                                }
-                            }
-                        }
+                        //Handles interactions with a tile that is actually empty, ignores Shadow Tiles
+                        rv = ProcessLeftButtonClickOnEmptyTile(mouseLocation);
 
+                        //Handles interacting with NPCs
                         foreach (WorldActor c in _liActors)
                         {
                             if (c.IsWorldAdventurer())
@@ -1257,6 +1156,172 @@ namespace RiverHollow.Tile_Engine
                         }
                     }
                 }
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Handles building interactions. Called after a successful Scrying check in the main handler.
+        /// </summary>
+        /// <param name="mouseLocation">Location of the mouse</param>
+        /// <returns>True if we successfully interacted with a building</returns>
+        private bool ProcessLeftButtonClickHandleBuilding(Point mouseLocation)
+        {
+            bool rv = false;
+
+            //Are we constructing or moving a building?
+            if (Constructing() || MovingBuildings())
+            {
+                //If we are holding a building, we should attempt to drop it.
+                if (GameManager.HeldBuilding != null && AddBuilding(GameManager.HeldBuilding, false))
+                {
+                    GameManager.HeldBuilding.StartBuilding();   //Set the building to start being built
+                    GUIManager.OpenMainObject(new HUDNamingWindow(GameManager.HeldBuilding));   //Open a naming window
+                    GameManager.DropBuilding();                 //Drop the Building from the GameManger
+
+                    //Take the resources from the player if there is merchandise
+                    if (gmMerchandise != null)
+                    {
+                        PlayerManager.TakeMoney(gmMerchandise.MoneyCost);
+                        foreach (KeyValuePair<int, int> kvp in gmMerchandise.RequiredItems)
+                        {
+                            InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
+                        }
+
+                        gmMerchandise = null;
+                    }
+
+                    LeaveBuildMode();
+                    rv = true;
+                }
+                else if (GameManager.HeldBuilding == null)
+                {
+                    PickUpBuilding(mouseLocation);
+                    rv = true;
+                }
+            }
+            else if (DestroyingBuildings())
+            {
+                rv = RemoveBuilding(mouseLocation);
+            }
+            else
+            {
+                if (GraphicCursor.WorkerToPlace > -1)
+                {
+                    if (AddWorkerToBuilding(mouseLocation))
+                    {
+                        rv = true;
+                    }
+                }
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Handles clicking on any objects that may exist on the clicked tile
+        /// </summary>
+        /// <param name="mouseLocation">Location of the mouse</param>
+        /// <returns></returns>
+        private bool ProcessLeftButtonClickOnObject(Point mouseLocation)
+        {
+            bool rv = false;
+
+            //Retrieves any object associated with the tile, this will include
+            //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
+            //as being on the tile.
+            WorldObject obj = _targetTile.GetWorldObject();
+            if (obj != null)
+            {
+                //Player tries to add something to the merchant chest to sell it.
+                if (obj == PlayerManager._merchantChest)
+                {
+                    Item i = InventoryManager.GetCurrentItem();
+                    PlayerManager._merchantChest.AddItem(i);
+                    InventoryManager.RemoveItemFromInventory(InventoryManager.GetCurrentItem());
+                }
+                else if (obj.IsMachine())       //Player interacts with a machine to either take a finished item or start working
+                {
+                    Machine p = (Machine)obj;
+                    if (p.HasItem()) { p.TakeFinishedItem(); }
+                    else if (!p.Working()) { p.ProcessClick(); }
+                }
+                else if (obj.IsClassChanger())
+                {
+                    ((ClassChanger)obj).ProcessClick();
+                }
+                else if (obj.IsPlant())
+                {
+                    Plant p = (Plant)obj;
+                    Item i = p.Harvest(false);
+                    //if (i != null)
+                    //{
+                    //    _liItems.Add(i);
+                    //}
+                    MapManager.RemoveWorldObject(p);
+                    p.RemoveSelfFromTiles();
+                }
+                else if (obj.IsForageable())    //Remove self from the map and harvest the item
+                {
+                    InventoryManager.AddToInventory(ObjectManager.GetItem(((Forageable)obj).ForageItem));
+                    MapManager.RemoveWorldObject(obj);
+                    obj.RemoveSelfFromTiles();
+                }
+                else if (obj.IsDestructible())  //Handle damaging destructibles
+                {
+                    Destructible d = (Destructible)_targetTile.WorldObject;
+
+                    //Sets the appropriate player tool to use
+                    if (d.Breakable) { rv = PlayerManager.SetTool(Tool.ToolEnum.Pick, mouseLocation); }
+                    else if (d.Choppable) { rv = PlayerManager.SetTool(Tool.ToolEnum.Axe, mouseLocation); }
+                }
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Handles clicking on tiles that have nothing actually set to them.
+        /// This ignores Shadow Tiles.
+        /// </summary>
+        /// <param name="mouseLocation">Location of the mouse</param>
+        /// <returns></returns>
+        private bool ProcessLeftButtonClickOnEmptyTile(Point mouseLocation)
+        {
+            bool rv = false;
+
+            //Get any actual tiles, the false excludes Shadow Tiles
+            WorldObject obj = _targetTile.GetWorldObject(false);
+            if (obj == null)    //Only procees if tile is empty
+            {
+                //If the player is currently holding an StaticItem, we need to move to place it
+                StaticItem selectedItem = InventoryManager.GetCurrentStaticItem();
+                if (selectedItem != null)
+                {
+                    //Take the actual WorldObject item from the item and attempt to place it on the map
+                    WorldItem newItem = selectedItem.GetWorldItem();
+                    if (MapManager.PlacePlayerObject(newItem))
+                    {
+                        newItem.SetMapName(this.Name);      //Assign the map name tot he WorldItem
+                        selectedItem.Remove(1);             //Remove one of them from the inventory
+
+                        //If the item placed was a wall object, we need to adjust it based off any adjacent walls
+                        if (newItem.Type == WorldObject.ObjectType.Wall)
+                        {
+                            ((Wall)newItem).AdjustWall();
+                        }
+                    }
+                }
+                else if (_targetTile.CanDig())      //If you can dig, set the shovel
+                {
+                    rv = PlayerManager.SetTool(Tool.ToolEnum.Shovel, mouseLocation);
+                }
+                else if (_targetTile.Flooring != null && _targetTile.Flooring.IsEarth())
+                {
+                    rv = PlayerManager.SetTool(Tool.ToolEnum.WateringCan, mouseLocation);
+                }
+
             }
 
             return rv;
@@ -1468,7 +1533,7 @@ namespace RiverHollow.Tile_Engine
                             b.RemoveSelfFromTiles();
                             _dictEntrance.Remove(b.PersonalID.ToString());
                             PlayerManager.RemoveBuilding(b);
-                            FinishedBuilding();
+                            LeaveBuildMode();
                             Unpause();
                             Scry(false);
                             ResetCamera();
@@ -1622,27 +1687,47 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
+
+        /// <summary>
+        /// Assigns the Tiles that a WorldObject will occupy to the object, adds the
+        /// object to the list of placed player objects, and also sets the world object
+        /// to the tiles that it belongs to. Both must know each other
+        /// 
+        /// After setting actual Tiles, determine if there are any Shadow Tiles that must
+        /// be added, and set those as well. Shadow Tiles are tiles that the image is on
+        /// a part of, but is not technically sitting on.
+        /// </summary>
+        /// <param name="o">The object to add</param>
+        /// <param name="tiles">The list of tiles to add to the object</param>
         public void AssignMapTiles(WorldObject o, List<RHTile> tiles)
         {
-            o.Tiles = tiles;
+            //Call AddRange to ensure that it has the actual tiles, and isn't just a copy of the list
+            o.Tiles.AddRange(tiles);                    
+
+            //Adds the object to the list of player objects
             if (!_liPlacedWorldObjects.Contains(o))
             {
                 _liPlacedWorldObjects.Add(o);
             }
+
+            //Sets the WorldObject to each RHTile
             foreach (RHTile t in tiles)
             {
                 t.SetWorldObject(o);
             }
 
+            //Iterate over the WorldObject image in TileSize increments to discover any tiles
+            //that theimage overlaps. Add those tiles as Shadow Tiles as long as they're not
+            //actual Tiles the object sits on. Also add the Tiles to the objects Shadow Tiles list
             for (int i = (int)o.MapPosition.X; i < o.MapPosition.X + o.Width; i += TileSize)
             {
                 for (int j = (int)o.MapPosition.Y; j < o.MapPosition.Y + o.Height; j += TileSize)
                 {
                     RHTile t = GetTile(Util.GetGridCoords(i, j));
-                    if (t != null)
+                    if (t != null && !o.Tiles.Contains(t))
                     {
                         t.SetShadowObject(o);
-                        o.Tiles.Add(t);
+                        o.ShadowTiles.Add(t);
                     }
                 }
             }
@@ -2063,11 +2148,18 @@ namespace RiverHollow.Tile_Engine
             _isRoad = ContainsProperty("Road", out string value) && value.Equals("true");
         }
 
-        public WorldObject GetWorldObject()
+        /// <summary>
+        /// Retrieves the WorldObject on the Tile. If the parameter is false,
+        /// it will not return the shadow object
+        /// </summary>
+        /// <param name="AlsoCheckShadow">Whether or not to return a shadow object</param>
+        /// <returns>The relevant associated WorldObject</returns>
+        public WorldObject GetWorldObject(bool AlsoCheckShadow = true)
         {
-            WorldObject obj;
+            WorldObject obj = null;
+
             if(_obj != null) { obj = _obj; }
-            else { obj = _shadowObj; }
+            else if(AlsoCheckShadow) { obj = _shadowObj; }
 
             return obj;
         }

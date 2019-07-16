@@ -205,7 +205,7 @@ namespace RiverHollow.WorldObjects
                 InventoryManager.AddToInventory(_iItemID, leftOver, playerInventory);
             }
         }
-        public bool Remove(int x)
+        public virtual bool Remove(int x)
         {
             bool rv = false;
             if (x <= _iNum)
@@ -698,10 +698,12 @@ namespace RiverHollow.WorldObjects
         WorldItem worldObj;
 
         public StaticItem() { }
-        public StaticItem(int id, Dictionary<string, string> stringData)
+        public StaticItem(int id, Dictionary<string, string> stringData, int num = 1)
         {
-            ImportBasics(stringData, id, 1);
+            ImportBasics(stringData, id, num);
             _texTexture = GameContentManager.GetTexture(GameContentManager.ITEM_FOLDER + "StaticObjects");
+
+            _bStacks = stringData.ContainsKey("Stacks");
 
             worldObj = (WorldItem)ObjectManager.GetWorldObject(id);
         }
@@ -719,6 +721,24 @@ namespace RiverHollow.WorldObjects
         public void SetWorldObjectCoords(Vector2 vec)
         {
             worldObj.SetCoordinatesByGrid(vec);
+        }
+
+        /// <summary>
+        /// Overrides the base Item remove method because StaticItem items have the
+        /// WorldItem objects within them for drawing purposes. If we don't make a new one
+        /// then any items that stack, like Walls, have all of their items attached
+        /// to onlt the one worldObj
+        /// </summary>
+        /// <param name="x">The number to remove</param>
+        /// <returns>True if item was successfully removed</returns>
+        public override bool Remove(int x)
+        {
+            bool rv = base.Remove(x);
+
+            //Create a new worldObj for any instances of the item that remains
+            worldObj = (WorldItem)ObjectManager.GetWorldObject(_iItemID);
+
+            return rv;
         }
     }
 
