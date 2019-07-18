@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="100" height="150" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="18">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="100" height="150" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="19">
  <properties>
   <property name="Outside" type="bool" value="true"/>
  </properties>
@@ -497,18 +497,18 @@
     <property name="Exit" value="mapManorGrounds"/>
    </properties>
   </object>
-  <object id="14" name="Entrance" x="691.679" y="2356.32" width="8.99997" height="9.66663">
+  <object id="14" name="Entrance" x="691.315" y="2339.96" width="8.99997" height="9.66663">
    <properties>
     <property name="Entrance" value="mapRiverHollowTown"/>
    </properties>
   </object>
-  <object id="15" name="Exit" x="688.321" y="2384.83" width="15.167" height="14.3333">
+  <object id="15" name="Exit" x="688.821" y="2384.95" width="14.417" height="13.9583">
    <properties>
     <property name="Exit" value="mapRiverHollowTown"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="5" name="Character Layer">
-  <object id="16" name="GoHere" x="180" y="1862" width="16" height="10"/>
+  <object id="18" name="GoHere" x="194.917" y="1797.92" width="8.83333" height="8.16667"/>
  </objectgroup>
 </map>

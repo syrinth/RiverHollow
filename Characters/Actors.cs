@@ -743,12 +743,14 @@ namespace RiverHollow.Actors
                     List<KeyValuePair<string, List<RHTile>>> lTimetoTilePath = new List<KeyValuePair<string, List<RHTile>>>();
                     Vector2 start = Position;
                     string mapName = CurrentMapName;
+
+                    TravelManager.NewTravelLog(_sName);
                     foreach (KeyValuePair<string, string> kvp in listPathingForDay)
                     {
                         List<RHTile> timePath;
 
                         //If the map we're currently on has the target location, pathfind to it.
-                        //Otherwise,we need to pathfind to the map that does first.
+                        //Otherwise, we need to pathfind to the map that does first.
                         if (MapManager.Maps[CurrentMapName].DictionaryCharacterLayer.ContainsKey(kvp.Value))
                         {
                             timePath = TravelManager.FindPathToLocation(ref start, MapManager.Maps[CurrentMapName].DictionaryCharacterLayer[kvp.Value], CurrentMapName);
@@ -760,13 +762,19 @@ namespace RiverHollow.Actors
                         lTimetoTilePath.Add(new KeyValuePair<string, List<RHTile>>(kvp.Key, timePath));
                         TravelManager.ClearPathingTracks();
                     }
+                    TravelManager.CloseTravelLog();
 
                     _todaysPathing = lTimetoTilePath;
                 }
             }
         }
 
-        //When we change maps, we need to empty out all tiles we're moving to on the map we left
+        /// <summary>
+        /// Because the Actor pathfinds based off of objective locations of the exit object
+        /// it is possible, and probable, that they will enter the object, triggering a map
+        /// change, a tile or two earlier than anticipated. In which case, we need to wipe
+        /// any tiles that are on that map from the remaining path to follow.
+        /// </summary>
         public void ClearTileForMapChange()
         {
             while (_currentPath[0].MapName == CurrentMapName)
