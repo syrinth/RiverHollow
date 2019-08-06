@@ -53,6 +53,10 @@
       <Key>Action 62</Key>
       <Value>Summon Earth Elemental/EARTH</Value>
     </Item>
+    <Item>
+      <Key>Action 63</Key>
+      <Value>Summon Water Elemental/Water</Value>
+    </Item>
     <!--Witch Skills-->
     <Item>
       <Key>Action 80</Key>

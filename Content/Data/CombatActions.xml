@@ -56,12 +56,17 @@
     <Item>
       <!--Summon Mystic Eye-->
       <Key>61</Key>
-      <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Single][Cost:5][Summon:TwinCast][Action:UserCast Apply]</Value>
+      <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Single][Cost:5][Summon:0][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <!--Summon Earth Elemental-->
       <Key>62</Key>
-      <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Single][Cost:5][Summon:Defensive][Action:UserCast Apply]</Value>
+      <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Single][Cost:5][Summon:1][Action:UserCast Apply]</Value>
+    </Item>
+    <Item>
+      <!--Summon Water Elemental-->
+      <Key>63</Key>
+      <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Single][Cost:5][Summon:2][Action:UserCast Apply]</Value>
     </Item>
     <!--<80> Witch Skills-->
     <Item>

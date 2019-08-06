@@ -95,7 +95,6 @@ namespace RiverHollow.Game_Managers
             AddTexture(@"Textures\lightmask");
             AddTexture(@"Textures\texPlayerHair");
             AddTexture(@"Textures\texClothes");
-            AddTexture(@"Textures\Eye");
         }
         private static void AddDirectoryTextures(string directory, bool AddContent = true)
         {

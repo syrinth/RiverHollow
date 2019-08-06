@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <!--Key: Index>0 Value:Name/CombatTexture/XP/Str/Def/Vit/Magic/Speed/Resist/Vulnerability-->
+    <Item>
+      <Key>0</Key>
+      <Value>[Texture:Eye][Spawn:6-.1][Idle:7-.2][Cast:3-.2][Defensive]</Value>
+    </Item>
+    <!--Earth Elemental-->
+    <Item>
+      <Key>1</Key>
+      <Value>[Texture:EarthElemental][Spawn:6-.1][Idle:7-.2][Cast:3-.2][Defensive]</Value>
+    </Item>
+    <!--Water Elemental-->
+    <Item>
+      <Key>2</Key>
+      <Value>[Texture:WaterElemental][Spawn:2-.1][Idle:6-.2][Cast:3-.2][Regen]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

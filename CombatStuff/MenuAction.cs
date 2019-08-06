@@ -89,7 +89,7 @@ namespace RiverHollow.Actors.CombatStuff
         List<SkillTagsEnum> _liEffects;
         List<StatusEffectData> _liStatusEffects;         //Key = Buff ID, string = Duration/<Tag> <Tag>
 
-        Summon _summon;
+        int _iSummonID;
         public Vector2 SummonStartPosition;
 
         float _fFrameSpeed;
@@ -101,7 +101,7 @@ namespace RiverHollow.Actors.CombatStuff
         public List<CombatManager.CombatTile> TileTargetList;
         public bool _bCounter;
 
-        bool _pauseForCounter;
+        bool _bPauseActionHandler;
         CombatActor counteringChar;
         Summon counteringSummon;
 
@@ -208,33 +208,7 @@ namespace RiverHollow.Actors.CombatStuff
                 if (stringData.ContainsKey(Util.GetEnumString(SkillTagsEnum.Summon)))
                 {
                     _liEffects.Add(SkillTagsEnum.Summon);
-                    string[] tags = stringData[Util.GetEnumString(SkillTagsEnum.Summon)].Split('-');
-                    _summon = new Summon();
-
-                    foreach (string summonTag in tags)
-                    {
-                        if (summonTag.Equals("TwinCast"))
-                        {
-                            _summon.SetTwincast();
-                        }
-                        else if (summonTag.Equals("Aggressive"))
-                        {
-                            _summon.SetAggressive();
-                        }
-                        else if (summonTag.Equals("Defensive"))
-                        {
-                            _summon.SetGuard();
-                        }
-                        else if (summonTag.Equals("Counter"))
-                        {
-                            _summon.Counter = true;
-                        }
-
-                        if (_element != ElementEnum.None)
-                        {
-                            _summon.SetElement(_element);
-                        }
-                    }
+                    _iSummonID = int.Parse(stringData[Util.GetEnumString(SkillTagsEnum.Summon)]);
                 }
             }
 
@@ -359,7 +333,7 @@ namespace RiverHollow.Actors.CombatStuff
                                 {
                                     targetActor.GoToCounter = true;    //Sets the character to be ready for countering
                                     counteringChar = targetActor;      //Sets who the countering character is
-                                    _pauseForCounter = true;            //Tells the game to pause to allow for a counter
+                                    _bPauseActionHandler = true;            //Tells the game to pause to allow for a counter
                                 }
 
                                 //If there is a summon and it can counter, prepare it for countering.
@@ -367,7 +341,7 @@ namespace RiverHollow.Actors.CombatStuff
                                 {
                                     summ.GoToCounter = true;
                                     counteringSummon = summ;
-                                    _pauseForCounter = true;
+                                    _bPauseActionHandler = true;
                                 }
                             }
                             #endregion
@@ -388,7 +362,7 @@ namespace RiverHollow.Actors.CombatStuff
                             //Put the GuardTarget back firstin case the guard is a Summon
                             actor.GuardTarget.GetSprite().Position(actor.GuardTarget.Tile.GUITile.GetIdleLocation(actor.GuardTarget.GetSprite()));
 
-                            if (actor.IsSummon()) { actor.GetSprite().Position(actor.GuardTarget.GetSummonPosition()); }
+                            if (actor.IsSummon()) { actor.GetSprite().Position(actor.GuardTarget.Tile.GUITile.GetIdleSummonLocation()); }
                             else { actor.GetSprite().Position(actor.Tile.GUITile.GetIdleLocation(actor.GetSprite())); }
 
                             actor.GuardTarget.MyGuard = null;
@@ -491,12 +465,12 @@ namespace RiverHollow.Actors.CombatStuff
                 //This should only ever be one, butjust in case
                 foreach (CombatManager.CombatTile ct in TileTargetList)
                 {
-                    //The action maintains the summon itself, so clone a new copy to give to the player
-                    Summon newSummon = _summon.Clone();
-                    _summon.SetStats(SkillUser.StatMag);                //Summon stats are based off the Magic stat
-                    ct.Character.Tile.GUITile.LinkSummon(newSummon);    //Links the summon to the tile
+                    Summon newSummon = ObjectManager.GetSummonByIndex(_iSummonID);
+                    newSummon.SetStats(SkillUser.StatMag);                //Summon stats are based off the Magic stat
                     ct.Character.LinkSummon(newSummon);                 //Links the summon to the character
+                    ct.Character.Tile.GUITile.LinkSummon(newSummon);    //Links the summon to the tile
                     newSummon.linkedChar = ct.Character;                //Links the character to the new summon
+                    _bPauseActionHandler = true;
                 }
             }
 
@@ -785,53 +759,64 @@ namespace RiverHollow.Actors.CombatStuff
                     }
                     break;
                 case "Apply":
-                    if (!_pauseForCounter)
+                    if (!_bPauseActionHandler)
                     {
                         ApplyEffect();
                     }
 
                     //It's set in the above block, so we need to check again
-                    if (!_pauseForCounter)
+                    if (!_bPauseActionHandler)
                     {
                         _iCurrentAction++;
                     }
                     else
                     {
-                        if(counteringChar != null)
+                        if (counteringChar == null && counteringSummon == null && TileTargetList[0].Character.LinkedSummon != null)
                         {
-                            if (!counteringChar.IsCurrentAnimation(CActorAnimEnum.Attack))
+                            if (TileTargetList[0].Character.LinkedSummon.BodySprite.CurrentAnimation == "Idle")
                             {
-                                counteringChar.Tile.PlayAnimation(CActorAnimEnum.Attack);
-                            }
-                            else if (counteringChar.AnimationPlayedXTimes(1))
-                            {
-                                counteringChar.Tile.PlayAnimation(CActorAnimEnum.Idle);
-                                int x = SkillUser.ProcessAttack(counteringChar, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, _iCritRating, counteringChar.GetAttackElement());
-                                SkillUser.Tile.GUITile.AssignEffect(x, true);
-                                counteringChar = null;
-                                _pauseForCounter = false;
-                                _iCurrentAction++;
-                            }
-                        }
-                        else if (counteringSummon != null)
-                        {
-                            if (!counteringSummon.IsCurrentAnimation(CActorAnimEnum.Attack))
-                            {
-                                counteringSummon.PlayAnimation(CActorAnimEnum.Attack);
-                            }
-                            else if (counteringSummon.AnimationPlayedXTimes(1))
-                            {
-                                counteringSummon.PlayAnimation(CActorAnimEnum.Idle);
-                                int x = SkillUser.ProcessAttack(counteringSummon, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, _iCritRating, counteringSummon.GetAttackElement());
-                                SkillUser.Tile.GUITile.AssignEffect(x, true);
-                                counteringSummon = null;
-                                _pauseForCounter = false;
+                                _bPauseActionHandler = false;
                                 _iCurrentAction++;
                             }
                         }
                         else
                         {
-                            _pauseForCounter = false;
+                            if (counteringChar != null)
+                            {
+                                if (!counteringChar.IsCurrentAnimation(CActorAnimEnum.Attack))
+                                {
+                                    counteringChar.Tile.PlayAnimation(CActorAnimEnum.Attack);
+                                }
+                                else if (counteringChar.AnimationPlayedXTimes(1))
+                                {
+                                    counteringChar.Tile.PlayAnimation(CActorAnimEnum.Idle);
+                                    int x = SkillUser.ProcessAttack(counteringChar, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, _iCritRating, counteringChar.GetAttackElement());
+                                    SkillUser.Tile.GUITile.AssignEffect(x, true);
+                                    counteringChar = null;
+                                    _bPauseActionHandler = false;
+                                    _iCurrentAction++;
+                                }
+                            }
+                            else if (counteringSummon != null)
+                            {
+                                if (!counteringSummon.IsCurrentAnimation(CActorAnimEnum.Attack))
+                                {
+                                    counteringSummon.PlayAnimation(CActorAnimEnum.Attack);
+                                }
+                                else if (counteringSummon.AnimationPlayedXTimes(1))
+                                {
+                                    counteringSummon.PlayAnimation(CActorAnimEnum.Idle);
+                                    int x = SkillUser.ProcessAttack(counteringSummon, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, _iCritRating, counteringSummon.GetAttackElement());
+                                    SkillUser.Tile.GUITile.AssignEffect(x, true);
+                                    counteringSummon = null;
+                                    _bPauseActionHandler = false;
+                                    _iCurrentAction++;
+                                }
+                            }
+                            else
+                            {
+                                _bPauseActionHandler = false;
+                            }
                         }
                     }
 

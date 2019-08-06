@@ -3088,13 +3088,7 @@ namespace RiverHollow.Actors
         public void LinkSummon(Summon s)
         {
             _linkedSummon = s;
-            _linkedSummon.Position = GetSummonPosition();
             s.Tile = Tile;
-        }
-
-        public Vector2 GetSummonPosition()
-        {
-            return Position - new Vector2(100, 100);
         }
 
         public void UnlinkSummon()
@@ -3632,32 +3626,42 @@ namespace RiverHollow.Actors
         public bool TwinCast => _bTwinCast;
         bool _bAggressive;
         public bool Aggressive => _bAggressive;
+        bool _bRegen;
+        public bool Regen => _bRegen;
 
         public CombatActor linkedChar;
 
-        public Summon()
+        private Summon() { }
+        public Summon(int id, Dictionary<string, string> stringData)
         {
-            _spriteBody = new AnimatedSprite(@"Textures\Eye");
-            _spriteBody.AddAnimation(CActorAnimEnum.Idle, 0, 0, 16, 16, 2, 0.9f);
-            _spriteBody.AddAnimation(CActorAnimEnum.Attack, 32, 0, 16, 16, 4, 0.1f);
-            _spriteBody.AddAnimation(CActorAnimEnum.Cast, 32, 0, 16, 16, 4, 0.1f);
-            _spriteBody.SetCurrentAnimation(CActorAnimEnum.Idle);
+            _bGuard = stringData.ContainsKey("Defensive");
+            _bAggressive = stringData.ContainsKey("Aggressive");
+            _bTwinCast = stringData.ContainsKey("TwinCast");
+            _bRegen = stringData.ContainsKey("Regen");
+            Counter = stringData.ContainsKey("Counter");
+
+            if (stringData.ContainsKey("Element"))
+            {
+                SetElement(Util.ParseEnum<ElementEnum>(stringData["Element"]));
+            }
+
+            string[] spawn = stringData["Spawn"].Split('-');
+            string[] idle = stringData["Idle"].Split('-');
+            string[] cast = stringData["Cast"].Split('-');
+
+            int iFrameSize = 16;
+            int startX = 0;
+            int startY = 0;
+
+            _spriteBody = new AnimatedSprite(@"Textures\Actors\Summons\" + stringData["Texture"]);
+            _spriteBody.AddAnimation(CActorAnimEnum.Spawn, startX, startY, iFrameSize, iFrameSize, int.Parse(spawn[0]), float.Parse(spawn[1]));
+            startX += int.Parse(spawn[0]) * iFrameSize;
+            _spriteBody.AddAnimation(CActorAnimEnum.Idle, startX, startY, iFrameSize, iFrameSize, int.Parse(idle[0]), float.Parse(idle[1]));
+            startX += int.Parse(idle[0]) * iFrameSize;
+            _spriteBody.AddAnimation(CActorAnimEnum.Cast, startX, startY, iFrameSize, iFrameSize, int.Parse(cast[0]), float.Parse(cast[1]));
+            _spriteBody.SetNextAnimation(CActorAnimEnum.Spawn, CActorAnimEnum.Idle);
+            _spriteBody.SetCurrentAnimation(CActorAnimEnum.Spawn);
             _spriteBody.SetScale(5);
-        }
-
-        public Summon Clone()
-        {
-            Summon copy = new Summon();
-            copy.SetStats(_iMagStat);
-            if (TwinCast) { copy.SetTwincast(); }
-            if (Aggressive) { copy.SetAggressive(); }
-            if (Counter) { copy.Counter = Counter; }
-            if (Guard) { copy.SetGuard(); }
-
-            copy._element = _element;
-            copy.Tile = Tile;
-
-            return copy;
         }
 
         public void SetStats(int magStat)
@@ -3690,6 +3694,7 @@ namespace RiverHollow.Actors
         }
 
         public void SetTwincast() { _bTwinCast = true; }
+        public void SetRegen() { _bRegen = true; }
         public void SetAggressive() { _bAggressive = true; }
         public void SetGuard() { _bGuard = true; }
         public void SetElement(ElementEnum el) { _element = el; }

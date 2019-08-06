@@ -288,7 +288,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                     break;
                 case CombatManager.PhaseEnum.DisplayVictory:
-                    if (_gPostScreen == null) {
+                    if (_gPostScreen == null)
+                    {
                         InventoryManager.InitMobInventory(1, 5);
                         _gPostScreen = new GUIPostCombatDisplay(ClosePostCombatDisplay);
                         _gPostScreen.CenterOnScreen();
@@ -300,7 +301,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     window.CenterOnScreen();
                     AddControl(window);
                     break;
-            }   
+            }
+
+            List<Summon> summons = new List<Summon>();
+            foreach (CombatActor act in CombatManager.Party)
+            {
+                if (act.LinkedSummon != null)
+                {
+                    summons.Add(act.LinkedSummon);
+                }
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -496,8 +506,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             if (s != null) {
                 _gSummon = new GUISprite(s.BodySprite);
-                _gSummon.AnchorToObject(_gCombatSprite, SideEnum.Top);
-                _gSummon.AnchorToObject(_gCombatSprite, SideEnum.Left);
+                _gSummon.Position(GetIdleSummonLocation());
                 _gSummonEffect = new GUIText();
                 _gSummonEffect.AnchorAndAlignToObject(_gSummon, SideEnum.Top, SideEnum.CenterX);
             }
@@ -606,6 +615,20 @@ namespace RiverHollow.Game_Managers.GUIObjects
             temp.MoveBy(0, -(this.Height / 3));
 
             return temp.Position();
+        }
+
+        public Vector2 GetIdleSummonLocation()
+        {
+            Vector2 rv = Vector2.Zero;
+            if (_mapTile.Character.LinkedSummon != null)
+            {
+                GUISprite temp = new GUISprite(_mapTile.Character.LinkedSummon.BodySprite, true);
+
+                temp.AnchorAndAlignToObject(_gCombatSprite, SideEnum.Left, SideEnum.Top);
+                rv = temp.Position();
+            }
+
+            return rv;
         }
 
         public void PlayAnimation<TEnum>(TEnum animation)

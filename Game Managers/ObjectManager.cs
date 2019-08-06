@@ -18,17 +18,18 @@ namespace RiverHollow.Game_Managers
 {
     public static class ObjectManager
     {
-        private static Dictionary<int, Dictionary<string, string>> _diVillagerData;
+        static Dictionary<int, Dictionary<string, string>> _diVillagerData;
 
-        private static Dictionary<int, Dictionary<string, string>> _diBuildings;
-        private static Dictionary<int, Dictionary<string, string>> _diItemData;
-        private static Dictionary<int, Dictionary<string, string>> _diStatusEffects;
-        private static Dictionary<int, string> _diWorkers;
-        private static Dictionary<int, Dictionary<string, string>> _diWorldObjects;
+        static Dictionary<int, Dictionary<string, string>> _diBuildings;
+        static Dictionary<int, Dictionary<string, string>> _diItemData;
+        static Dictionary<int, Dictionary<string, string>> _diStatusEffects;
+        static Dictionary<int, string> _diWorkers;
+        static Dictionary<int, Dictionary<string, string>> _diWorldObjects;
 
-        private static Dictionary<int, Dictionary<string, string>> _diMobs;
-        private static Dictionary<int, Dictionary<string, string>> _diMonsterData;
-        private static Dictionary<int, Villager> _diNPCs;
+        static Dictionary<int, Dictionary<string, string>> _diMobs;
+        static Dictionary<int, Dictionary<string, string>> _diMonsterData;
+        static Dictionary<int, Dictionary<string, string>> _diSummonData;
+        static Dictionary<int, Villager> _diNPCs;
         public static Dictionary<int, Villager> DiNPC { get => _diNPCs; }
         private static Dictionary<int, Dictionary<string, string>> _diActions;
         
@@ -46,6 +47,7 @@ namespace RiverHollow.Game_Managers
             _diActions = new Dictionary<int, Dictionary<string, string>>();
             _diWorldObjects = new Dictionary<int, Dictionary<string, string>>();
             _diMonsterData = new Dictionary<int, Dictionary<string, string>>();
+            _diSummonData = new Dictionary<int, Dictionary<string, string>>();
             _diBuildings = new Dictionary<int, Dictionary<string, string>>();
             _diStatusEffects = new Dictionary<int, Dictionary<string, string>>();
             _diWorkers = Content.Load<Dictionary<int, string>>(@"Data\Workers");
@@ -55,6 +57,7 @@ namespace RiverHollow.Game_Managers
             AddToDictionary(_diActions, @"Data\CombatActions", Content);
             AddToDictionary(_diVillagerData, @"Data\NPCData\Characters", Content);
             AddToDictionary(_diMonsterData, @"Data\Monsters", Content);
+            AddToDictionary(_diSummonData, @"Data\Summons", Content);
             AddToDictionary(_diBuildings, @"Data\Buildings", Content);
             AddToDictionary(_diStatusEffects, @"Data\StatusEffects", Content);
 
@@ -251,6 +254,17 @@ namespace RiverHollow.Game_Managers
         public static string GetCharacterNameByIndex(int i)
         {
             return _diNPCs[i].Name;
+        }
+
+        public static Summon GetSummonByIndex(int id)
+        {
+            Summon m = null;
+
+            if (_diSummonData.ContainsKey(id))
+            {
+                m = new Summon(id, _diSummonData[id]);
+            }
+            return m;
         }
 
         public static Monster GetMonsterByIndex(int id)

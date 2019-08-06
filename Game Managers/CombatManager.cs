@@ -24,7 +24,7 @@ namespace RiverHollow.Game_Managers
         private static List<CombatActor> _listParty;
         public static List<CombatActor> Party { get => _listParty; }
         
-        public enum PhaseEnum { Charging, NewTurn, EnemyTurn, SelectSkill, ChooseTarget, Defeat, DisplayAttack, DisplayVictory, Lost, PerformAction, EndCombat }
+        public enum PhaseEnum { Charging, Upkeep, NewTurn, EnemyTurn, SelectSkill, ChooseTarget, Defeat, DisplayAttack, DisplayVictory, Lost, PerformAction, EndCombat }
         public static PhaseEnum CurrentPhase;
         public static ChosenAction SelectedAction;
         private static CombatTile _targetTile;
@@ -163,6 +163,27 @@ namespace RiverHollow.Game_Managers
                         Delay -= gameTime.ElapsedGameTime.TotalSeconds;
                     }
                     break;
+
+                case PhaseEnum.Upkeep:
+                    Summon activeSummon = ActiveCharacter.LinkedSummon;
+                    if (activeSummon == null || !activeSummon.Regen)
+                    {
+                        SetPhaseForTurn();
+                    }
+                    else if (activeSummon != null && activeSummon.Regen && activeSummon.BodySprite.CurrentAnimation != "Cast")
+                    {
+                        activeSummon.PlayAnimation(CActorAnimEnum.Cast);
+                    }
+                    else if(activeSummon.BodySprite.GetPlayCount() >= 1)
+                    {
+                        activeSummon.PlayAnimation(CActorAnimEnum.Idle);
+                        ActiveCharacter.IncreaseHealth(30);
+                        ActiveCharacter.Tile.GUITile.AssignEffect(30, false);
+                        SetPhaseForTurn();
+                    }
+                    
+                    break;
+
             }
         }
 
@@ -245,7 +266,7 @@ namespace RiverHollow.Game_Managers
             GoToWorldMap();
         }
 
-        private static void SetPhaseForTurn()
+        public static void SetPhaseForTurn()
         {
             if (_liMonsters.Contains(ActiveCharacter)) {
                 CurrentPhase = PhaseEnum.EnemyTurn;
@@ -673,7 +694,8 @@ namespace RiverHollow.Game_Managers
                 {
                     ActiveCharacter.Location.AssignEffect(ActiveCharacter.DecreaseHealth(Math.Max(1, (int)(ActiveCharacter.MaxHP / 20))), true);
                 }
-                SetPhaseForTurn();
+
+                CurrentPhase = PhaseEnum.Upkeep;    //We have a charcter, but go into Upkeep phase first
             }
             else
             {
