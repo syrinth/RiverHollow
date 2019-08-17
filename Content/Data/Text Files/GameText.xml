@@ -46,6 +46,10 @@
       <Key>Quest 1</Key>
       <Value>Griselda's Orb/Griselda wants you to get her orb back from the goblins who stole it. Apparently, they ran off to the East and are hiding inside of the Forest.</Value>
     </Item>
+    <Item>
+      <Key>Quest 2</Key>
+      <Value>Explore the Manor/You should probably explore the manor, you might find something useful.</Value>
+    </Item>
     <!--Upgrade Text -->
     <Item>
       <Key>Upgrade 1</Key>

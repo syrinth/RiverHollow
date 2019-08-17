@@ -804,7 +804,7 @@ namespace RiverHollow.WorldObjects
                     }
                 }
 
-                public void Update(GameTime gameTime)
+                public override void Update(GameTime gameTime)
                 {
                     _dTimer += gameTime.ElapsedGameTime.TotalSeconds;
                     if(_dTimer >= TICK_TIMER)

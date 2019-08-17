@@ -4,11 +4,11 @@
     <!--Key: Index>0 Value:monster1/monster2/monster3/monster4-->
     <Item>
       <Key>1</Key>
-      <Value>[Texture:FangedFur][Monster:4-5-6][Condition:Forest-Summer][Jump]</Value>
+      <Value>[Texture:FangedFur][Monster:4][Condition:Forest-Summer][Jump]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Texture:Malice][Monster:10-11-13][Condition:Forest-Summer]</Value>
+      <Value>[Texture:Malice][Monster:10-11-9][Condition:Forest-Summer]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#000000" nextlayerid="7" nextobjectid="46">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#000000" nextlayerid="7" nextobjectid="48">
  <properties>
   <property name="ActiveSpawn" type="int" value="2"/>
   <property name="Outside" type="bool" value="true"/>
@@ -317,7 +317,7 @@
 39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,41,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42
 </data>
  </layer>
- <objectgroup id="4" name="MapObject Layer">
+ <objectgroup id="4" name="MapObject">
   <object id="27" name="Spirit" x="772" y="755.667" width="8.66667" height="9.33333">
    <properties>
     <property name="Condition" value="Day"/>
@@ -378,5 +378,7 @@
  </objectgroup>
  <objectgroup id="6" name="Character Layer">
   <object id="7" name="PlayerSpawn" x="885" y="695" width="5.63636" height="5.27273"/>
+  <object id="46" name="NPC11" x="1013" y="595" width="8.5" height="11.5"/>
+  <object id="47" name="NPC0" x="769.688" y="673.469" width="12.375" height="14.0625"/>
  </objectgroup>
 </map>

@@ -64,7 +64,9 @@ namespace RiverHollow.GUIObjects
         protected Rectangle _sourceRect;
 
         protected Texture2D _texture = GameContentManager.GetTexture(@"Textures\Dialog");
-        protected Color _cEnabled = Color.White;
+        protected Color EnabledColor => _bEnabled ? Color.White : Color.Gray;
+        protected bool _bEnabled = true;
+        public bool Enabled => _bEnabled;
 
         public bool Show = true;
 
@@ -96,7 +98,7 @@ namespace RiverHollow.GUIObjects
         {
             if (Show)
             {
-                spriteBatch.Draw(_texture, _drawRect, _sourceRect, _cEnabled * Alpha);
+                spriteBatch.Draw(_texture, _drawRect, _sourceRect, EnabledColor * Alpha);
 
                 foreach (GUIObject g in Controls)
                 {
@@ -107,7 +109,7 @@ namespace RiverHollow.GUIObjects
 
         public virtual void Enable(bool value)
         {
-            _cEnabled = value ? Color.White : Color.Gray;
+            _bEnabled = value;
         }
 
         public static Vector2 PosFromCenter(Vector2 center, int width, int height)

@@ -148,7 +148,7 @@
     </Item>
     <Item>
       <Key>89</Key>
-      <Value>Adamantine Ore/Alright ore</Value>
+      <Value>Adamantine Bar/Alright Bar</Value>
     </Item>
     <Item>
       <Key>90</Key>
@@ -336,6 +336,18 @@
     <Item>
       <Key>621</Key>
       <Value>Copper Orb/A magical orb made of polished copper</Value>
+    </Item>
+    <Item>
+      <Key>622</Key>
+      <Value>Gazing Orb/An orb of polished steel set with a bright Sapphire.</Value>
+    </Item>
+    <Item>
+      <Key>623</Key>
+      <Value>Ruby Rose/These stones were first popularized by a trio of sisters that defended the Western Woods.</Value>
+    </Item>
+    <Item>
+      <Key>629</Key>
+      <Value>Eye of Eternity/Only the purest Diamond and Adamantine can be used to make this orb. The first such orb was said to have been blessed by the spirits that dwell beyond our world, granting it's wielder insight into worlds beyond our own.</Value>
     </Item>
     <!--Witch-->
     <Item>

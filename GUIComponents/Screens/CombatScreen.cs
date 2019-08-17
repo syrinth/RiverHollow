@@ -1199,7 +1199,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 public override void Draw(SpriteBatch spriteBatch)
                 {
-                    spriteBatch.Draw(_texture, _drawRect, _sourceRect, _cEnabled * Alpha);
+                    spriteBatch.Draw(_texture, _drawRect, _sourceRect, EnabledColor * Alpha);
                     if (_item != null) { _gItem.Draw(spriteBatch); }
                 }
 

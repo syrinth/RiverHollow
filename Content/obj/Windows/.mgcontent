@@ -175,9 +175,18 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerKnight.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerScout.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Scout.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Summons/Eye.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Summons/EarthElemental.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Summons/WaterElemental.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Summons.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Summons/FireElemental.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Summons/AirElemental.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Summons/Magus.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Orb/623.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Orb/622.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC0.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC11.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Orb/629.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC0.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC11.xml</File>
   </SourceFiles>
 </SourceFileCollection>

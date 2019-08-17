@@ -15,6 +15,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class CombatManager
     {
+        public const int BASIC_ATTACK = 300;
         public static int CombatScale = 5;
         private static Mob _mob;
         public static Mob CurrentMob { get => _mob; }
@@ -697,33 +698,30 @@ namespace RiverHollow.Game_Managers
 
                 CurrentPhase = PhaseEnum.Upkeep;    //We have a charcter, but go into Upkeep phase first
             }
-            else
-            {
-                int i = 0;
-            }
         }
         public static void EndTurn()
         {
             ActiveCharacter.CurrentCharge -= SelectedAction.ChargeCost();
 
-            Summon actSummon = ActiveCharacter.LinkedSummon;
+            Summon activeSummon = ActiveCharacter.LinkedSummon;
             //If there is no linked summon, or it is a summon, end the turn normally.
 
             if (!EndCombatCheck())
             {
-                if (actSummon != null)
+                if (activeSummon != null)
                 {
-                    if (actSummon.Aggressive && SelectedAction.IsMelee())
+                    if (activeSummon.Aggressive && SelectedAction.IsMelee())
                     {
                         List<CombatTile> targets = SelectedAction.GetTargetTiles();
-                        ActiveCharacter = actSummon;
-                        SelectedAction = new ChosenAction((CombatAction)ObjectManager.GetActionByIndex(1));
+                        ActiveCharacter = activeSummon;
+                        SelectedAction = new ChosenAction((CombatAction)ObjectManager.GetActionByIndex(CombatManager.BASIC_ATTACK));
+                        SelectedAction.SetUser(ActiveCharacter);
                         SelectedAction.SetTargetTiles(targets);
                     }
-                    else if (actSummon.TwinCast && SelectedAction.IsSpell() && !SelectedAction.IsSummonSpell())
+                    else if (activeSummon.TwinCast && SelectedAction.IsSpell() && !SelectedAction.IsSummonSpell() && SelectedAction.CanTwinCast())
                     {
-                        ActiveCharacter = actSummon;
-                        SelectedAction.SetUser(actSummon);
+                        ActiveCharacter = activeSummon;
+                        SelectedAction.SetUser(activeSummon);
                     }
                     else
                     {
@@ -806,11 +804,6 @@ namespace RiverHollow.Game_Managers
                         }
                     }
                 }
-            }
-            public void SetSummon(Summon s)
-            {
-                _character.LinkSummon(s);
-                _gTile.LinkSummon(s);
             }
 
             private void CheckForProtected(CombatTile t)
@@ -1185,6 +1178,14 @@ namespace RiverHollow.Game_Managers
                 if (_chosenAction != null) { rv = _chosenAction.AreaOfEffect == AreaEffectEnum.Single; }
                 else if (_chosenItem != null) { rv = true; }
 
+                return rv;
+            }
+            public bool CanTwinCast()
+            {
+                bool rv = false;
+                if(_chosenAction != null){
+                    rv = _chosenAction.Potency > 0;
+                }
                 return rv;
             }
 

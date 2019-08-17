@@ -14,7 +14,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public static int BTN_HEIGHT = 64;
         protected SpriteFont _font;
         public bool IsMouseHovering = false;
-        public bool Enabled = true;
 
         private GUIObject _btnObject;
 

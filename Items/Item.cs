@@ -553,7 +553,8 @@ namespace RiverHollow.WorldObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _sprite.Draw(spriteBatch, 99999);
+            if (OnTheMap) { base.Draw(spriteBatch); }
+            else { _sprite.Draw(spriteBatch, 99999); }
         }
     }
 

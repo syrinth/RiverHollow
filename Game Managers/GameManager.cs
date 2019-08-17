@@ -31,12 +31,12 @@ namespace RiverHollow.Game_Managers
         public enum WorldObjAnimEnum { Idle, Working, Shake};
         public enum GenAnimEnum { Play };
 
-        public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit};
+        public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade};
         public enum PotencyBonusEnum { None, Conditions, Summons };
         public enum EquipmentEnum { Armor, Weapon, Accessory, Head, Wrist};
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
         public enum ActionEnum { Action, Menu, Spell };
-        public enum SkillTagsEnum { Bonus, Harm, Heal, Push, Pull, Retreat, Step, Status, Summon};
+        public enum SkillTagsEnum { Bonus, Harm, Heal, Push, Pull, Remove, Retreat, Step, Status, Summon};
         public enum TargetEnum { Enemy, Ally};
         public enum MenuEnum { Action, Special, UseItem };
         public enum RangeEnum { Self, Melee, Ranged, Column };

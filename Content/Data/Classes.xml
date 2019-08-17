@@ -16,7 +16,7 @@
     <Item>
       <!--Summoner-->
       <Key>3</Key>
-      <Value>[Weapon:Orb][Armor:Cloth][Hp:4][Idle:4-0.3][Cast:3-0.4][Hit:1-0.6][Attack:3-0.4][Crit:2-0.6][KO:1-0.6][Win:3-0.2][Ability:60][Spell:61-62-63][DWeap:620][DArmor:700][DHead:760][DWrist:880]</Value>
+      <Value>[Weapon:Orb][Armor:Cloth][Hp:4][Idle:4-0.3][Cast:3-0.4][Hit:1-0.6][Attack:3-0.4][Crit:2-0.6][KO:1-0.6][Win:3-0.2][Ability:60][Spell:61-62-63-64-65-66][DWeap:620][DArmor:700][DHead:760][DWrist:880]</Value>
     </Item>
     <Item>
       <!--Witch-->

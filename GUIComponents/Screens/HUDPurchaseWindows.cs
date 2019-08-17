@@ -138,8 +138,8 @@ namespace RiverHollow.GUIComponents.Screens
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            _btnLast.Enabled = _iCurrIndex != 0;
-            _btnNext.Enabled = _iCurrIndex != _liMerchandise.Count - 1;
+            _btnLast.Enable(_iCurrIndex != 0);
+            _btnNext.Enable(_iCurrIndex != _liMerchandise.Count - 1);
 
             if (InputManager.CheckPressedKey(Keys.Escape))
             {

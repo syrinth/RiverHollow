@@ -1,6 +1,8 @@
 ﻿using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Misc;
 using System.Collections.Generic;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Actors.CombatStuff
 {
@@ -19,8 +21,8 @@ namespace RiverHollow.Actors.CombatStuff
         int _iPotency;
         public int Potency => _iPotency;
         public int Duration;
-        private List<KeyValuePair<string, int>> _liStats;
-        public List<KeyValuePair<string, int>> StatMods  => _liStats;
+        private List<KeyValuePair<StatEnum, int>> _liStats;
+        public List<KeyValuePair<StatEnum, int>> StatMods  => _liStats;
         private int _conditionID;
         private string _sDescription;
         public string Description { get => _sDescription; }
@@ -36,7 +38,7 @@ namespace RiverHollow.Actors.CombatStuff
             _id = id;
             GameContentManager.GetStatusEffectText(id, ref _sName, ref _sDescription);
 
-            _liStats = new List<KeyValuePair<string, int>>();
+            _liStats = new List<KeyValuePair<StatEnum, int>>();
             ImportBasics(id, data);
         }
         protected void ImportBasics(int id, Dictionary<string, string> data)
@@ -48,7 +50,7 @@ namespace RiverHollow.Actors.CombatStuff
                 foreach (string effect in splitEffects)
                 {
                     string[] statMods = effect.Split('-');
-                    _liStats.Add(new KeyValuePair<string, int>(statMods[0], int.Parse(statMods[1])));
+                    _liStats.Add(new KeyValuePair<StatEnum, int>(Util.ParseEnum<StatEnum>(statMods[0]), int.Parse(statMods[1])));
                 }
             }
 
@@ -58,7 +60,7 @@ namespace RiverHollow.Actors.CombatStuff
                 foreach (string effect in splitEffects)
                 {
                     string[] statMods = effect.Split('-');
-                    _liStats.Add(new KeyValuePair<string, int>(statMods[0], -int.Parse(statMods[1])));
+                    _liStats.Add(new KeyValuePair<StatEnum, int>(Util.ParseEnum<StatEnum>(statMods[0]), -int.Parse(statMods[1])));
                 }
             }
 

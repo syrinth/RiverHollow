@@ -19,8 +19,8 @@ namespace RiverHollow.Misc
         private string _description;
         public string Description => _description;
 
-        private Villager _questGiver;
-        public Villager QuestGiver => _questGiver;
+        private Villager _npcHandInTo;
+        public Villager HandInTo => _npcHandInTo;
 
         private int _iTargetGoal;
         public int TargetGoal => _iTargetGoal;
@@ -64,7 +64,7 @@ namespace RiverHollow.Misc
             _iDay = -1;
             _name = string.Empty;
             _description = string.Empty;
-            _questGiver = null;
+            _npcHandInTo = null;
             _questItem = null;
             _questMob = null;
             _iTargetGoal = -1;
@@ -79,7 +79,7 @@ namespace RiverHollow.Misc
             _name = name;
             _goalType = type;
             _description = desc;
-            _questGiver = giver;
+            _npcHandInTo = giver;
             _iTargetGoal = target;
             _questMob = m;
             _questItem = i;
@@ -100,9 +100,9 @@ namespace RiverHollow.Misc
             foreach (string s in split)
             {
                 string[] tagType = s.Split(':');
-                if (tagType[0].Equals("QuestGiver"))
+                if (tagType[0].Equals("HandTo"))
                 {
-                    _questGiver = ObjectManager.DiNPC[int.Parse(tagType[1])];
+                    _npcHandInTo = ObjectManager.DiNPC[int.Parse(tagType[1])];
                 }
                 else if (tagType[0].Equals("Type"))
                 {
@@ -220,7 +220,7 @@ namespace RiverHollow.Misc
         {
             _bFinished = true;
 
-            text = QuestGiver.GetDialogEntry("Quest"+_iQuestID+"End");
+            text = HandInTo.GetDialogEntry("Quest"+_iQuestID+"End");
             foreach (Item i in LiRewardItems)
             {
                 InventoryManager.AddToInventory(i);
@@ -229,7 +229,7 @@ namespace RiverHollow.Misc
 
             if (_sFriendTarget.Equals("Giver"))
             {
-                _questGiver.FriendshipPoints += _iFriendship;
+                _npcHandInTo.FriendshipPoints += _iFriendship;
             }
 
             PlayerManager.QuestLog.Remove(this);
@@ -316,7 +316,7 @@ namespace RiverHollow.Misc
                 questID = _iQuestID,
                 name = _name,
                 description = _description,
-                questGiver = _questGiver != null ? _questGiver.ID : -1,
+                questGiver = _npcHandInTo != null ? _npcHandInTo.ID : -1,
                 itemID = _questItem != null  ? _questItem.ItemID : -1,
                 mobID = _questMob != null ? _questMob.ID : -1,
                 targetGoal = _iTargetGoal, 
@@ -345,7 +345,7 @@ namespace RiverHollow.Misc
                 _iQuestID = qData.questID;
                 _name = qData.name;
                 _description = qData.description;
-                _questGiver = qData.questGiver != -1 ? ObjectManager.DiNPC[qData.questGiver] : null;
+                _npcHandInTo = qData.questGiver != -1 ? ObjectManager.DiNPC[qData.questGiver] : null;
                 _questItem = qData.itemID != -1 ? ObjectManager.GetItem(qData.itemID) : null;
                 _questMob = qData.mobID != -1 ? ObjectManager.GetMonsterByIndex(qData.mobID) : null;
                 _iTargetGoal = qData.targetGoal;

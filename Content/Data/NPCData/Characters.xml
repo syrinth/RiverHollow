@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: Index>0 Value:Type/Name/PortraitsRow/Map/Collection/[Merchandise]-->
+    <!--Key: Index>=0 Value:Type/Name/PortraitsRow/Map/Collection/[Merchandise]-->
+    <Item>
+      <Key>0</Key>
+      <Value>[Type:Villager][PortRow:1][HomeMap:mapManorGrounds][Collection:0-1-2]</Value>
+    </Item>
     <Item>
       <Key>1</Key>
       <Value>[Type:Eligible][PortRow:1][HomeMap:mapHouseNPC1][Collection:0-1-2][Class:5]</Value>
@@ -41,6 +45,10 @@
     <Item>
       <Key>10</Key>
       <Value>[Type:Villager][PortRow:3][HomeMap:mapRiverHollowTown][Collection:7-8]</Value>
+    </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>[Type:Villager][PortRow:3][HomeMap:mapManorGrounds][Collection:7-8]</Value>
     </Item>
   </Asset>
 </XnaContent>

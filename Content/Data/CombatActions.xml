@@ -51,12 +51,12 @@
     <Item>
       <!--Summoner Attack-->
       <Key>60</Key>
-      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:Ranged][Area:Single][Harm:100][Bonus:Summons][Action:UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:Ranged][Area:Single][Harm:100][Bonus:Summons-10][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
-      <!--Summon Mystic Eye-->
+      <!--Summon Magus-->
       <Key>61</Key>
-      <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Single][Cost:5][Summon:0][Action:UserCast Apply]</Value>
+      <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Single][Cost:5][Summon:5][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <!--Summon Earth Elemental-->
@@ -67,6 +67,21 @@
       <!--Summon Water Elemental-->
       <Key>63</Key>
       <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Single][Cost:5][Summon:2][Action:UserCast Apply]</Value>
+    </Item>
+    <Item>
+      <!--Summon Fire Elemental-->
+      <Key>64</Key>
+      <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Single][Cost:5][Summon:3][Action:UserCast Apply]</Value>
+    </Item>
+    <Item>
+      <!--Summon Air Elemental-->
+      <Key>65</Key>
+      <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Single][Cost:5][Summon:4][Action:UserCast Apply]</Value>
+    </Item>
+    <Item>
+      <!--Unity-->
+      <Key>66</Key>
+      <Value>[Type:Spell][Target:Enemy][Range:Ranged][Area:Single][Cost:5][Remove:Summons-Every][Harm:0][Bonus:Summons-100][Action:UserCast Apply]</Value>
     </Item>
     <!--<80> Witch Skills-->
     <Item>

@@ -258,7 +258,7 @@ namespace RiverHollow.Tile_Engine
                         }
                     }
                 }
-                else if (ol.Name == "MapObject Layer")
+                else if (ol.Name == "MapObject")
                 {
                     foreach (TiledMapObject mapObject in ol.Objects)
                     {
@@ -364,6 +364,15 @@ namespace RiverHollow.Tile_Engine
                     manor.SetCoordinatesByGrid(obj.Position);
                     manor.SetName(PlayerManager.ManorName);          
                     AddBuilding(manor);
+                }
+                else if (obj.Properties.ContainsKey("Item"))
+                {
+                    Item item = ObjectManager.GetItem(int.Parse(obj.Properties["Item"]));
+                    item.AutoPickup = false;
+                    item.ManualPickup = true;
+                    item.OnTheMap = true;
+                    item.Position = Util.SnapToGrid(obj.Position);
+                    _liItems.Add(item);
                 }
                 //else if (obj.Name.Equals("Building"))
                 //{

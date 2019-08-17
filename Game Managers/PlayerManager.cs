@@ -101,31 +101,7 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddToInventory(21);
             InventoryManager.AddToInventory(22);
             InventoryManager.AddToInventory(24);
-            InventoryManager.AddToInventory(302);
-            InventoryManager.AddToInventory(400);
-            InventoryManager.AddToInventory(500);
-            InventoryManager.AddToInventory(501);
-            InventoryManager.AddToInventory(502);
-            InventoryManager.AddToInventory(503);
-            InventoryManager.AddToInventory(504);
-            InventoryManager.AddToInventory(80, 10);
-            InventoryManager.AddToInventory(200);
-            InventoryManager.AddToInventory(201);
-            InventoryManager.AddToInventory(203);
-            InventoryManager.AddToInventory(85, 5);
-            InventoryManager.AddToInventory(40, 10);
-            InventoryManager.AddToInventory(10, 5);
-            InventoryManager.AddToInventory(101);
-            InventoryManager.AddToInventory(105);
-            InventoryManager.AddToInventory(42, 30);
-            InventoryManager.AddToInventory(44, 30);
-            InventoryManager.AddToInventory(106, 10);
-            InventoryManager.AddToInventory(205);
-            InventoryManager.AddToInventory(610);
-            InventoryManager.AddToInventory(611);
-            InventoryManager.AddToInventory(612);
-            InventoryManager.AddToInventory(641);
-            InventoryManager.AddToInventory(19);
+            InventoryManager.AddToInventory(623);
 
 
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestType.Fetch, "Getwood, dumbass", 1, null, ObjectManager.GetItem(2)));

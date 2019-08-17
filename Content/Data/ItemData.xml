@@ -342,6 +342,18 @@
       <Key>621</Key>
       <Value>[Type:Equipment][Image:16-32][Sell:1000][EType:Weapon][ESub:Orb][Tier:2][Atk:Moderate][Mag:Major][ReqItems:85-2]</Value>
     </Item>
+    <Item>
+      <Key>622</Key>
+      <Value>[Type:Equipment][Image:32-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:3][Atk:Moderate][Mag:Major][ReqItems:86-2|93-1]</Value>
+    </Item>
+    <Item>
+      <Key>623</Key>
+      <Value>[Type:Equipment][Image:48-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:4][Atk:Moderate][Mag:Major][ReqItems:92-4]</Value>
+    </Item>
+    <Item>
+      <Key>629</Key>
+      <Value>[Type:Equipment][Image:144-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:10][Atk:Moderate][Mag:Major][ReqItems:90-4|89-4|1-10]</Value>
+    </Item>
     <!--<630> Witch-->
     <Item>
       <Key>630</Key>

@@ -317,10 +317,10 @@ namespace RiverHollow.Actors
         protected string _sPortrait;
         public string Portrait { get => _sPortrait; }
 
-        protected Rectangle _portraitRect;
-        public Rectangle PortraitRectangle { get => _portraitRect; }
+        protected Rectangle _rPortrait;
+        public Rectangle PortraitRectangle { get => _rPortrait; }
 
-        protected Dictionary<string, string> _dialogueDictionary;
+        protected Dictionary<string, string> _diDialogue;
 
         public TalkingActor() : base()
         {
@@ -354,9 +354,9 @@ namespace RiverHollow.Actors
         public void Talk(string dialogTag)
         {
             string text = string.Empty;
-            if (_dialogueDictionary.ContainsKey(dialogTag))
+            if (_diDialogue.ContainsKey(dialogTag))
             {
-                text = _dialogueDictionary[dialogTag];
+                text = _diDialogue[dialogTag];
             }
             text = Util.ProcessText(text, _sName);
             GUIManager.OpenTextWindow(text, this);
@@ -365,7 +365,7 @@ namespace RiverHollow.Actors
         public virtual string GetSelectionText()
         {
             RHRandom r = new RHRandom();
-            string text = _dialogueDictionary["Selection"];
+            string text = _diDialogue["Selection"];
             Util.ProcessText(text, _sName);
 
             string[] textFromData = Util.FindTags(text);
@@ -402,7 +402,7 @@ namespace RiverHollow.Actors
         public string GetText()
         {
             RHRandom r = new RHRandom();
-            string text = _dialogueDictionary[r.Next(1, 2).ToString()];
+            string text = _diDialogue[r.Next(1, 2).ToString()];
             return Util.ProcessText(text, _sName);
         }
         public virtual string GetDialogEntry(string entry)
@@ -463,14 +463,14 @@ namespace RiverHollow.Actors
         public static List<int> FriendRange = new List<int> { 0, 10, 40, 100, 200, 600, 800, 1200, 1600, 2000 };
         public int FriendshipPoints = 1900;
 
-        protected Dictionary<int, bool> _collection;
-        public Dictionary<int, bool> Collection { get => _collection; }
+        protected Dictionary<int, bool> _diCollection;
+        public Dictionary<int, bool> Collection { get => _diCollection; }
         public bool Introduced;
         public bool CanGiveGift = true;
 
-        protected Dictionary<string, List<KeyValuePair<string, string>>> _completeSchedule;         //Every day with a list of KVP Time/GoToLocations
+        protected Dictionary<string, List<KeyValuePair<string, string>>> _diCompleteSchedule;         //Every day with a list of KVP Time/GoToLocations
         List<KeyValuePair<string, List<RHTile>>> _todaysPathing = null;                             //List of Times with the associated pathing                                                     //List of Tiles to currently be traversing
-        protected int _scheduleIndex;
+        protected int _iScheduleIndex;
 
         public Villager() { }
         //For Cutscenes
@@ -479,10 +479,10 @@ namespace RiverHollow.Actors
             _actorType = ActorEnum.NPC;
             _iIndex = n.ID;
             _sName = n.Name;
-            _dialogueDictionary = n._dialogueDictionary;
+            _diDialogue = n._diDialogue;
             //_sPortrait = n.Portrait;
             //_portraitRect = n._portraitRect;
-            _portraitRect = new Rectangle(0, 0, 48, 60);
+            _rPortrait = new Rectangle(0, 0, 48, 60);
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
 
             LoadContent(_sVillagerFolder + "NPC" + _iIndex);
@@ -490,9 +490,9 @@ namespace RiverHollow.Actors
 
         public Villager(int index, Dictionary<string, string> stringData)
         {
-            _collection = new Dictionary<int, bool>();
-            _completeSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
-            _scheduleIndex = 0;
+            _diCollection = new Dictionary<int, bool>();
+            _diCompleteSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
+            _iScheduleIndex = 0;
             _iIndex = index;
 
             LoadContent(_sVillagerFolder + "NPC" + _iIndex);
@@ -506,7 +506,7 @@ namespace RiverHollow.Actors
             string rv = string.Empty;
             if (!Introduced)
             {
-                rv = _dialogueDictionary["Introduction"];
+                rv = _diDialogue["Introduction"];
                 Introduced = true;
             }
             else
@@ -541,16 +541,16 @@ namespace RiverHollow.Actors
                     if (e.Married || e.CanJoinParty)
                     {
                         e.JoinParty();
-                        return _dialogueDictionary["JoinPartyYes"];
+                        return _diDialogue["JoinPartyYes"];
                     }
                     else
                     {
-                        return _dialogueDictionary["JoinPartyNo"];
+                        return _diDialogue["JoinPartyNo"];
                     }
                 }
             }
 
-            return _dialogueDictionary.ContainsKey(entry) ? Util.ProcessText(_dialogueDictionary[entry], _sName) : string.Empty;
+            return _diDialogue.ContainsKey(entry) ? Util.ProcessText(_diDialogue[entry], _sName) : string.Empty;
         }
         public override List<string> RemoveEntries(string[] options)
         {
@@ -599,13 +599,14 @@ namespace RiverHollow.Actors
 
         protected void ImportBasics(Dictionary<string, string> stringData)
         {
-            _dialogueDictionary = GameContentManager.GetNPCDialogue(_iIndex);
+            _diDialogue = GameContentManager.GetNPCDialogue(_iIndex);
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
-            _sName = _dialogueDictionary["Name"];
+            _sName = _diDialogue["Name"];
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
 
+            if (stringData.ContainsKey("Inactive")) { _bActive = false; }
             if (stringData.ContainsKey("Type")) { _eNPCType = Util.ParseEnum<NPCTypeEnum>(stringData["Type"]); }
-            if (stringData.ContainsKey("PortRow")) { _portraitRect = new Rectangle(0, 0, 48, 60); }
+            if (stringData.ContainsKey("PortRow")) { _rPortrait = new Rectangle(0, 0, 48, 60); }
             if (stringData.ContainsKey("HomeMap")) {
                 CurrentMapName = stringData["HomeMap"];
                 _homeMap = CurrentMapName;
@@ -617,7 +618,7 @@ namespace RiverHollow.Actors
                 string[] vectorSplit = stringData["Collection"].Split('-');
                 foreach (string s in vectorSplit)
                 {
-                    _collection.Add(int.Parse(s), false);
+                    _diCollection.Add(int.Parse(s), false);
                 }
             }
 
@@ -633,7 +634,7 @@ namespace RiverHollow.Actors
                         string[] data = s.Split('|');
                         temp.Add(new KeyValuePair<string, string>(data[0], data[1]));
                     }
-                    _completeSchedule.Add(kvp.Key, temp);
+                    _diCompleteSchedule.Add(kvp.Key, temp);
                 }
             }
 
@@ -671,9 +672,9 @@ namespace RiverHollow.Actors
                 string currTime = GameCalendar.GetTime();
                 //_scheduleIndex keeps track of which pathing route we're currently following.
                 //Running late code to be implemented later
-                if (_scheduleIndex < _todaysPathing.Count && ((_todaysPathing[_scheduleIndex].Key == currTime)))// || RunningLate(movementList[_scheduleIndex].Key, currTime)))
+                if (_iScheduleIndex < _todaysPathing.Count && ((_todaysPathing[_iScheduleIndex].Key == currTime)))// || RunningLate(movementList[_scheduleIndex].Key, currTime)))
                 {
-                    _currentPath = _todaysPathing[_scheduleIndex++].Value;
+                    _currentPath = _todaysPathing[_iScheduleIndex++].Value;
                 }
 
                 if (_currentPath.Count > 0)
@@ -716,24 +717,24 @@ namespace RiverHollow.Actors
             string currDay = GameCalendar.GetDayOfWeek();
             string currSeason = GameCalendar.GetSeason();
             string currWeather = GameCalendar.GetWeatherString();
-            if (_completeSchedule != null && _completeSchedule.Count > 0)
+            if (_diCompleteSchedule != null && _diCompleteSchedule.Count > 0)
             {
                 string searchVal = currSeason + currDay + currWeather;
                 List<KeyValuePair<string, string>> listPathingForDay = null;
 
                 //Search to see if there exists any pathing instructions for the day.
                 //If so, set the value of listPathingForDay to the list of times/locations
-                if (_completeSchedule.ContainsKey(currSeason + currDay + currWeather))
+                if (_diCompleteSchedule.ContainsKey(currSeason + currDay + currWeather))
                 {
-                    listPathingForDay = _completeSchedule[currSeason + currDay + currWeather];
+                    listPathingForDay = _diCompleteSchedule[currSeason + currDay + currWeather];
                 }
-                else if (_completeSchedule.ContainsKey(currSeason + currDay))
+                else if (_diCompleteSchedule.ContainsKey(currSeason + currDay))
                 {
-                    listPathingForDay = _completeSchedule[currSeason + currDay];
+                    listPathingForDay = _diCompleteSchedule[currSeason + currDay];
                 }
-                else if (_completeSchedule.ContainsKey(currDay))
+                else if (_diCompleteSchedule.ContainsKey(currDay))
                 {
-                    listPathingForDay = _completeSchedule[currDay];
+                    listPathingForDay = _diCompleteSchedule[currDay];
                 }
 
                 //If there is pathing instructions for the day, proceed
@@ -812,7 +813,7 @@ namespace RiverHollow.Actors
 
             foreach (Quest q in PlayerManager.QuestLog)
             {
-                if (q.ReadyForHandIn && q.QuestGiver == this)
+                if (q.ReadyForHandIn && q.HandInTo == this)
                 {
                     q.FinishQuest(ref text);
 
@@ -838,20 +839,20 @@ namespace RiverHollow.Actors
                 else
                 {
                     CanGiveGift = false;
-                    if (_collection.ContainsKey(item.ItemID))
+                    if (_diCollection.ContainsKey(item.ItemID))
                     {
-                        FriendshipPoints += _collection[item.ItemID] ? 50 : 20;
+                        FriendshipPoints += _diCollection[item.ItemID] ? 50 : 20;
                         text = GetDialogEntry("Collection");
                         int index = 1;
-                        foreach (int items in _collection.Keys)
+                        foreach (int items in _diCollection.Keys)
                         {
-                            if (_collection[items])
+                            if (_diCollection[items])
                             {
                                 index++;
                             }
                         }
 
-                        _collection[item.ItemID] = true;
+                        _diCollection[item.ItemID] = true;
                         MapManager.Maps["mapHouseNPC" + _iIndex].AddCollectionItem(item.ItemID, _iIndex, index);
                     }
                     else
@@ -929,8 +930,8 @@ namespace RiverHollow.Actors
         {
             _currentPath = new List<RHTile>();
             _liMerchandise = new List<Merchandise>();
-            _collection = new Dictionary<int, bool>();
-            _completeSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
+            _diCollection = new Dictionary<int, bool>();
+            _diCompleteSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
 
             _iIndex = index;
             LoadContent(_sVillagerFolder + "NPC" + _iIndex);
@@ -954,14 +955,14 @@ namespace RiverHollow.Actors
             string text = string.Empty;
             if (!Introduced)
             {
-                text = _dialogueDictionary["Introduction"];
+                text = _diDialogue["Introduction"];
                 Introduced = true;
             }
             else
             {
                 if (IsOpen)
                 {
-                    text = _dialogueDictionary["ShopOpen"];
+                    text = _diDialogue["ShopOpen"];
                 }
                 else
                 {
@@ -1236,8 +1237,8 @@ namespace RiverHollow.Actors
         public EligibleNPC(int index, Dictionary<string, string> stringData)
         {
             _currentPath = new List<RHTile>();
-            _collection = new Dictionary<int, bool>();
-            _completeSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
+            _diCollection = new Dictionary<int, bool>();
+            _diCompleteSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
 
             _iIndex = index;
             LoadContent(_sVillagerFolder + "NPC" + _iIndex);
@@ -1319,20 +1320,20 @@ namespace RiverHollow.Actors
                 else
                 {
                     CanGiveGift = false;
-                    if (_collection.ContainsKey(item.ItemID))
+                    if (_diCollection.ContainsKey(item.ItemID))
                     {
-                        FriendshipPoints += _collection[item.ItemID] ? 50 : 20;
+                        FriendshipPoints += _diCollection[item.ItemID] ? 50 : 20;
                         text = GetDialogEntry("Collection");
                         int index = 1;
-                        foreach (int items in _collection.Keys)
+                        foreach (int items in _diCollection.Keys)
                         {
-                            if (_collection[items])
+                            if (_diCollection[items])
                             {
                                 index++;
                             }
                         }
 
-                        _collection[item.ItemID] = true;
+                        _diCollection[item.ItemID] = true;
                         MapManager.Maps["mapHouseNPC" + _iIndex].AddCollectionItem(item.ItemID, _iIndex, index);
                     }
                     else
@@ -1444,7 +1445,7 @@ namespace RiverHollow.Actors
             _sTexture = _sAdventurerFolder + "WorldAdventurers";
             LoadContent(_iWorkerID);
 
-            _portraitRect = new Rectangle(0, 0, 48, 60);
+            _rPortrait = new Rectangle(0, 0, 48, 60);
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
 
             _iCurrFood = 0;
@@ -1548,7 +1549,7 @@ namespace RiverHollow.Actors
         public override string GetSelectionText()
         {
             RHRandom r = new RHRandom();
-            string text = _dialogueDictionary[r.Next(1, 2).ToString()];
+            string text = _diDialogue[r.Next(1, 2).ToString()];
             return Util.ProcessText(text, _sName);
         }
 
@@ -2917,7 +2918,6 @@ namespace RiverHollow.Actors
             {
                 _diConditions[ConditionEnum.KO] = true;
                 UnlinkSummon();
-                Tile.GUITile.LinkSummon(null);
             }
 
             return iValue;
@@ -3018,7 +3018,7 @@ namespace RiverHollow.Actors
             if (find == null) { _liStatusEffects.Add(b); }
             else { find.Duration = b.Duration; }
 
-            foreach (KeyValuePair<string, int> kvp in b.StatMods)
+            foreach (KeyValuePair<StatEnum, int> kvp in b.StatMods)
             {
                 HandleStatBuffs(kvp);
             }
@@ -3035,7 +3035,7 @@ namespace RiverHollow.Actors
         /// <param name="b"></param>
         public void RemoveStatusEffect(StatusEffect b)
         {
-            foreach (KeyValuePair<string, int> kvp in b.StatMods)
+            foreach (KeyValuePair<StatEnum, int> kvp in b.StatMods)
             {
                 HandleStatBuffs(kvp, true);
             }
@@ -3053,33 +3053,33 @@ namespace RiverHollow.Actors
         /// </summary>
         /// <param name="kvp">The stat to modifiy and how much</param>
         /// <param name="negative">Whether or not we need to add or remove the value</param>
-        private void HandleStatBuffs(KeyValuePair<string, int> kvp, bool negative = false)
+        private void HandleStatBuffs(KeyValuePair<StatEnum, int> kvp, bool negative = false)
         {
             int modifier = negative ? -1 : 1;
             switch (kvp.Key)
             {
-                case "Str":
+                case StatEnum.Str:
                     _iBuffStr += kvp.Value * modifier;
                     break;
-                case "Def":
+                case StatEnum.Def:
                     _iBuffDef += kvp.Value * modifier;
                     break;
-                case "Vit":
+                case StatEnum.Vit:
                     _iBuffVit += kvp.Value * modifier;
                     break;
-                case "Mag":
+                case StatEnum.Mag:
                     _iBuffMag += kvp.Value * modifier;
                     break;
-                case "Res":
+                case StatEnum.Res:
                     _iBuffRes += kvp.Value * modifier;
                     break;
-                case "Spd":
+                case StatEnum.Spd:
                     _iBuffSpd += kvp.Value * modifier;
                     break;
-                case "Crit":
+                case StatEnum.Crit:
                     _iBuffCrit += kvp.Value * modifier;
                     break;
-                case "Evade":
+                case StatEnum.Evade:
                     _iBuffEvade += kvp.Value * modifier;
                     break;
             }
@@ -3089,10 +3089,25 @@ namespace RiverHollow.Actors
         {
             _linkedSummon = s;
             s.Tile = Tile;
+
+            foreach (KeyValuePair<StatEnum, int> kvp in _linkedSummon.BuffedStats)
+            {
+                this.HandleStatBuffs(kvp, false);
+            }
+
+            Tile.GUITile.LinkSummon(s);
         }
 
         public void UnlinkSummon()
         {
+            if (_linkedSummon != null)
+            {
+                foreach (KeyValuePair<StatEnum, int> kvp in _linkedSummon.BuffedStats)
+                {
+                    this.HandleStatBuffs(kvp, true);
+                }
+            }
+            Tile.GUITile.LinkSummon(null);
             _linkedSummon = null;
         }
 
@@ -3620,6 +3635,8 @@ namespace RiverHollow.Actors
         public ElementEnum Element => _element;
 
         int _iMagStat;
+        List<KeyValuePair<StatEnum, int>> _liBuffedStats;
+        public List<KeyValuePair<StatEnum, int>> BuffedStats => _liBuffedStats;
 
         public bool Acted;
         bool _bTwinCast;
@@ -3631,9 +3648,9 @@ namespace RiverHollow.Actors
 
         public CombatActor linkedChar;
 
-        private Summon() { }
         public Summon(int id, Dictionary<string, string> stringData)
         {
+            _liBuffedStats = new List<KeyValuePair<StatEnum, int>>();
             _bGuard = stringData.ContainsKey("Defensive");
             _bAggressive = stringData.ContainsKey("Aggressive");
             _bTwinCast = stringData.ContainsKey("TwinCast");
@@ -3642,12 +3659,21 @@ namespace RiverHollow.Actors
 
             if (stringData.ContainsKey("Element"))
             {
-                SetElement(Util.ParseEnum<ElementEnum>(stringData["Element"]));
+                _element = Util.ParseEnum<ElementEnum>(stringData["Element"]);
+            }
+
+            foreach (StatEnum stat in Enum.GetValues(typeof(StatEnum)))
+            {
+                if (stringData.ContainsKey(Util.GetEnumString(stat)))
+                {
+                    _liBuffedStats.Add(new KeyValuePair<StatEnum, int>(stat, 0));
+                }
             }
 
             string[] spawn = stringData["Spawn"].Split('-');
             string[] idle = stringData["Idle"].Split('-');
             string[] cast = stringData["Cast"].Split('-');
+            string[] attack = stringData["Attack"].Split('-');
 
             int iFrameSize = 16;
             int startX = 0;
@@ -3659,6 +3685,8 @@ namespace RiverHollow.Actors
             _spriteBody.AddAnimation(CActorAnimEnum.Idle, startX, startY, iFrameSize, iFrameSize, int.Parse(idle[0]), float.Parse(idle[1]));
             startX += int.Parse(idle[0]) * iFrameSize;
             _spriteBody.AddAnimation(CActorAnimEnum.Cast, startX, startY, iFrameSize, iFrameSize, int.Parse(cast[0]), float.Parse(cast[1]));
+            startX += int.Parse(cast[0]) * iFrameSize;
+            _spriteBody.AddAnimation(CActorAnimEnum.Attack, startX, startY, iFrameSize, iFrameSize, int.Parse(attack[0]), float.Parse(attack[1]));
             _spriteBody.SetNextAnimation(CActorAnimEnum.Spawn, CActorAnimEnum.Idle);
             _spriteBody.SetCurrentAnimation(CActorAnimEnum.Spawn);
             _spriteBody.SetScale(5);
@@ -3674,7 +3702,17 @@ namespace RiverHollow.Actors
             _iResistance = 2 * magStat + 10;
             _iSpeed = 10;
 
+            for (int i = 0; i < _liBuffedStats.Count; i++)
+            {
+                _liBuffedStats[i] = new KeyValuePair<StatEnum, int>(_liBuffedStats[i].Key, magStat/2);
+            }
+
             CurrentHP = MaxHP;
+        }
+
+        public override void PlayAnimation<TEnum>(TEnum animation)
+        {
+            base.PlayAnimation(animation);
         }
 
         public override int DecreaseHealth(double value)
@@ -3692,12 +3730,6 @@ namespace RiverHollow.Actors
         {
             return Tile.GUITile.SummonSprite;
         }
-
-        public void SetTwincast() { _bTwinCast = true; }
-        public void SetRegen() { _bRegen = true; }
-        public void SetAggressive() { _bAggressive = true; }
-        public void SetGuard() { _bGuard = true; }
-        public void SetElement(ElementEnum el) { _element = el; }
 
         public override bool IsSummon() { return true; }
     }

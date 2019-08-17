@@ -57,6 +57,18 @@
       <Key>Action 63</Key>
       <Value>Summon Water Elemental/Water</Value>
     </Item>
+    <Item>
+      <Key>Action 64</Key>
+      <Value>Summon Fire Elemental/Fire</Value>
+    </Item>
+    <Item>
+      <Key>Action 65</Key>
+      <Value>Summon Air Elemental/Air</Value>
+    </Item>
+    <Item>
+      <Key>Action 66</Key>
+      <Value>Unity/Unity</Value>
+    </Item>
     <!--Witch Skills-->
     <Item>
       <Key>Action 80</Key>
