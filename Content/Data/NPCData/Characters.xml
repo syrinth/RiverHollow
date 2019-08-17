@@ -4,7 +4,7 @@
     <!--Key: Index>=0 Value:Type/Name/PortraitsRow/Map/Collection/[Merchandise]-->
     <Item>
       <Key>0</Key>
-      <Value>[Type:Villager][PortRow:1][HomeMap:mapManorGrounds][Collection:0-1-2]</Value>
+      <Value>[Type:Villager][PortRow:1][HomeMap:mapManorGrounds][Collection:0-1-2][Hover]</Value>
     </Item>
     <Item>
       <Key>1</Key>

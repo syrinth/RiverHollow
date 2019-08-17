@@ -1063,7 +1063,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     if (PlayerManager.PlayerInRange(c.CollisionBox.Center, (int)(TileSize * 1.5)) && c.CollisionContains(mouseLocation) && c.CanTalk && c.Active)
                     {
-                        ((TalkingActor)c).Talk();
+                        ((TalkingActor)c).Talk(true);
                         rv = true;
                         break;
                     }

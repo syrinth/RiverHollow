@@ -137,6 +137,8 @@ namespace RiverHollow.Actors
         protected bool _bActive = true;
         public virtual bool Active => _bActive;
 
+        protected bool _bHover;
+
         public int Speed = 2;
 
         #endregion
@@ -164,14 +166,26 @@ namespace RiverHollow.Actors
         public virtual void AddDefaultAnimations(ref AnimatedSprite sprite, int height, string texture, int startX, int startY)
         {
             sprite = new AnimatedSprite(texture);
-            sprite.AddAnimation(WActorWalkAnim.WalkDown, TileSize, height, 3, 0.2f, startX, startY, true);
-            sprite.AddAnimation(WActorBaseAnim.IdleDown, TileSize, height, 1, 0.2f, startX + TileSize, startY, true);
-            sprite.AddAnimation(WActorWalkAnim.WalkRight, TileSize, height, 3, 0.2f, startX + TileSize * 3, startY, true);
-            sprite.AddAnimation(WActorBaseAnim.IdleRight, TileSize, height, 1, 0.2f, startX + TileSize * 4, startY, true);
+
+            sprite.AddAnimation(WActorWalkAnim.WalkDown, TileSize, height, 3, 0.2f, startX, startY, true);        
+            sprite.AddAnimation(WActorWalkAnim.WalkRight, TileSize, height, 3, 0.2f, startX + TileSize * 3, startY, true);         
             sprite.AddAnimation(WActorWalkAnim.WalkUp, TileSize, height, 3, 0.2f, startX + TileSize * 6, startY, true);
-            sprite.AddAnimation(WActorBaseAnim.IdleUp, TileSize, height, 1, 0.2f, startX + TileSize * 7, startY, true);
             sprite.AddAnimation(WActorWalkAnim.WalkLeft, TileSize, height, 3, 0.2f, startX + TileSize * 9, startY, true);
-            sprite.AddAnimation(WActorBaseAnim.IdleLeft, TileSize, height, 1, 0.2f, startX + TileSize * 10, startY, true);
+
+            if (_bHover)
+            {
+                sprite.AddAnimation(WActorBaseAnim.IdleDown, TileSize, height, 3, 0.2f, startX, startY, true);
+                sprite.AddAnimation(WActorBaseAnim.IdleRight, TileSize, height, 3, 0.2f, startX + TileSize * 3, startY, true);
+                sprite.AddAnimation(WActorBaseAnim.IdleUp, TileSize, height, 3, 0.2f, startX + TileSize * 6, startY, true);
+                sprite.AddAnimation(WActorBaseAnim.IdleLeft, TileSize, height, 3, 0.2f, startX + TileSize * 9, startY, true);
+            }
+            else
+            {
+                sprite.AddAnimation(WActorBaseAnim.IdleDown, TileSize, height, 1, 0.2f, startX + TileSize, startY, true);
+                sprite.AddAnimation(WActorBaseAnim.IdleRight, TileSize, height, 1, 0.2f, startX + TileSize * 4, startY, true);
+                sprite.AddAnimation(WActorBaseAnim.IdleUp, TileSize, height, 1, 0.2f, startX + TileSize * 7, startY, true);
+                sprite.AddAnimation(WActorBaseAnim.IdleLeft, TileSize, height, 1, 0.2f, startX + TileSize * 10, startY, true);
+            }
 
             sprite.SetCurrentAnimation(WActorBaseAnim.IdleDown);
         }
@@ -336,11 +350,46 @@ namespace RiverHollow.Actors
         }
 
         /// <summary>
-        /// Retrieves any opening text, processes it, then opens a text window
+        ///  Retrieves any opening text, processes it, then opens a text window
         /// </summary>
-        public virtual void Talk()
+        /// <param name="facePlayer">Whether the NPC should face the player. Mainly used to avoid messing up a cutscene</param>
+        public virtual void Talk(bool facePlayer)
         {
             string text = GetOpeningText();
+
+            
+            //Determine the position based off of where the player and then have the NPC face the player
+            //Only do this if they are idle so as to not disturb other animations they may be performing.
+            if (facePlayer && BodySprite.CurrentAnimation.StartsWith("Idle"))
+            {
+                Point diff = GetRectangle().Center - PlayerManager.World.GetRectangle().Center;
+                if (Math.Abs(diff.X) > Math.Abs(diff.Y))
+                {
+                    if (diff.X > 0)  //The player is to the left
+                    {
+                        Facing = DirectionEnum.Left;
+                        Idle();
+                    }
+                    else
+                    {
+                        Facing = DirectionEnum.Right;
+                        Idle();
+                    }
+                }
+                else
+                {
+                    if (diff.Y > 0)  //The player is above
+                    {
+                        Facing = DirectionEnum.Up;
+                        Idle();
+                    }
+                    else
+                    {
+                        Facing = DirectionEnum.Down;
+                        Idle();
+                    }
+                }
+            }
 
             text = Util.ProcessText(text, _sName);
             GUIManager.OpenTextWindow(text, this);
@@ -494,6 +543,8 @@ namespace RiverHollow.Actors
             _diCompleteSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
             _iScheduleIndex = 0;
             _iIndex = index;
+
+            _bHover = stringData.ContainsKey("Hover");
 
             LoadContent(_sVillagerFolder + "NPC" + _iIndex);
             ImportBasics(stringData);
