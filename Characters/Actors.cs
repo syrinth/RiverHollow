@@ -139,7 +139,9 @@ namespace RiverHollow.Actors
 
         protected bool _bHover;
 
-        public int Speed = 2;
+        private int _iBaseSpeed = 2;
+        public float Speed => _iBaseSpeed * SpdMult;
+        public float SpdMult = 1;
 
         #endregion
 
@@ -1856,7 +1858,6 @@ namespace RiverHollow.Actors
             _height = TileSize;
 
             _cHairColor = Color.Red;
-            Speed = 2;
 
             _currentPath = new List<RHTile>();
         }

@@ -11,7 +11,7 @@ namespace RiverHollow.Misc
 {
     public class Util
     {
-        public static void GetMoveSpeed(Vector2 currentPos, Vector2 targetPos, int speed, ref Vector2 direction)
+        public static void GetMoveSpeed(Vector2 currentPos, Vector2 targetPos, float speed, ref Vector2 direction)
         {
             float newX = 0; float newY = 0;
             if (targetPos.X != currentPos.X)

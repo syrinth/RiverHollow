@@ -21,7 +21,7 @@
         <!--Setup Details [map:mapName][actors:ID-spawn name2-spawn ...][playerSpawn:Player1]-->
         <Item>[map:mapManorGrounds][player:PlayerSpawn][actors:11-CS1Spawn]</Item>
         <!--CutScene Sequencing Move<dir>-<char>-<numTiles> Speak-<id>-<dialogKey> Face<dir>-<char>-->
-        <Item>[Face:11-Up][Face:Player-Up][Speak:11-1][Move:11-3-Up Player-3-Up][Speak:11-2][Face:11-Left Player-Right][Speak:11-3][Wait:0.5][Move:11-1-Down][Wait:1][Speak:11-4][Wait:1][Move:11-5-Down][Quest:2]</Item>
+        <Item>[Face:11-Up Player-Up][Speed:Player-0.5 11-0.2][Speak:11-1][Move:11-3-Up Player-3-Up][Speak:11-2][Face:11-Left Player-Right][Speak:11-3][Wait:0.5][Move:11-1-Down][Wait:1][Speak:11-4][Wait:1][Move:11-5-Down][Quest:2]</Item>
       </Value>
     </Item>
   </Asset>

@@ -78,7 +78,7 @@ namespace RiverHollow.Game_Managers
 
     public class Cutscene
     {
-        enum EnumCSCommand { Speak, Move, Face, Wait, End, Quest };
+        enum EnumCSCommand { Speak, Move, Face, Wait, End, Quest, Speed };
         private class CutSceneCommand
         {
             public EnumCSCommand Command;
@@ -209,7 +209,7 @@ namespace RiverHollow.Game_Managers
                                     break;
                                 case EnumCSCommand.Move:
                                     _bWaitForMove = true;
-                                    AssignMovement(GetNPCData(sCommandData[0]), int.Parse(sCommandData[1]), HandleDir(sCommandData[2]));
+                                    AssignMovement(sCommandData[0], int.Parse(sCommandData[1]), HandleDir(sCommandData[2]));
                                     break;
                                 case EnumCSCommand.Wait:
                                     _dTimer = double.Parse(sCommandData[0]);
@@ -218,9 +218,13 @@ namespace RiverHollow.Game_Managers
                                     PlayerManager.AddToQuestLog(GameManager.DiQuests[int.Parse(sCommandData[0])]);
                                     bGoToNext = true;
                                     break;
+                                case EnumCSCommand.Speed:
+                                    WorldActor c = GetActor(sCommandData[0]);
+                                    c.SpdMult = float.Parse(sCommandData[1]);
+                                    bGoToNext = true;
+                                    break;
                                 case EnumCSCommand.Face:
-                                    npcID = GetNPCData(sCommandData[0]);
-                                    WorldActor n = (npcID == -1 ? (WorldActor)PlayerManager.World : _liUsedNPCs.Find(test => test.ID == npcID));
+                                    WorldActor n = GetActor(sCommandData[0]);
                                     n.SetWalkingDir((WorldActor.DirectionEnum)HandleDir(sCommandData[1]));
                                     n.Idle();
                                     bGoToNext = true;
@@ -265,6 +269,16 @@ namespace RiverHollow.Game_Managers
             _cutsceneMap.Update(gameTime);
         }
 
+        private WorldActor GetActor(string npcID) {
+            int characterID = -1;
+            if (!int.TryParse(npcID, out characterID))
+            {
+                //If the NPC ID could not be converted, effect the player. The string should be 'Player'
+                characterID = -1;
+            }
+            return (characterID == -1 ? (WorldActor)PlayerManager.World : _liUsedNPCs.Find(test => test.ID == characterID));
+        }
+
         private int GetNPCData(string npcID)
         {
             int rv = -1;
@@ -288,9 +302,9 @@ namespace RiverHollow.Game_Managers
         }
 
         //0-Up 1-Down 2-Right 3-Left
-        private void AssignMovement(int characterID, int numSquares, int dir)
+        private void AssignMovement(string characterID, int numSquares, int dir)
         {
-            WorldActor c = (characterID == -1 ? (WorldActor)PlayerManager.World : _liUsedNPCs.Find(test => test.ID == characterID));
+            WorldActor c = GetActor(characterID);
             if (c.MoveToLocation == Vector2.Zero)
             {
                 Vector2 vec = Vector2.Zero;
