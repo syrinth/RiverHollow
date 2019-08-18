@@ -65,6 +65,8 @@ namespace RiverHollow.Game_Managers
         private static int _money = 2000;
         public static int Money { get => _money; }
 
+        public static bool AllowMovement = true;
+
         private static EligibleNPC _marriedTo;
         #endregion
 
@@ -109,6 +111,7 @@ namespace RiverHollow.Game_Managers
 
         public static void SetPath(List<RHTile> list)
         {
+            PlayerManager.AllowMovement = false;
             ReadyToSleep = true;
             World.SetPath(list);
         }
@@ -123,7 +126,7 @@ namespace RiverHollow.Game_Managers
         {
             Vector2 moveDir = Vector2.Zero;
 
-            if (!World.FollowingPath)
+            if (AllowMovement)
             {
                 if(UseTool == null)
                 {

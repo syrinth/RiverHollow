@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, List[string]]">
+    <!--Key to Dictionary is the cutscene id, list of strings is the cutscene text-->
+    <Item>
+      <Key>0</Key>
+      <Value>
+        <Item>[1:No. No I don't. I've told you before, I need to train. I need to be as ready as I can.]</Item>
+        <Item>[2:$1$... I wish you'd listen to me. You push yourself too hard.]</Item>
+        <Item>[3:So what? You'd rather I just cower in fear the next time monsters raid the town? No, I won't do that.]</Item>
+        <Item>[4:..\nWe'll talk about this later, we have a guest. Is that you $^$? I'm sorry you had to see that. What can I help you with?]</Item>
+        <Item>[5:Ready for what? I know you're skilled with that sword of yours, but every time you leave the house with it, I'm so afraid.]</Item>
+      </Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>
+        <Item>[1:Well... Heh, this is it. It's not much to look at I'm afraid.]</Item>
+        <Item>[2:...]</Item>
+        <Item>[3:I'm told it was once a fine old house, but after your grandparents passed... we just weren't really able to maintain it.]</Item>
+        <Item>[4:You should take the time to explore the manor. Maybe you'll find something useful that's still usable. Good luck, I hope to see you around town soon.]</Item>
+      </Value>
+    </Item>
+  </Asset>
+</XnaContent>

@@ -316,7 +316,9 @@ namespace RiverHollow.Actors
             }
         }
 
-        public void SetMoveObj(Vector2 vec) { _vMoveTo = vec; }
+        public void SetMoveObj(Vector2 vec) {
+            _vMoveTo = vec;
+        }
     }
     public class WorldCombatant : WorldActor
     {
@@ -410,6 +412,12 @@ namespace RiverHollow.Actors
             text = Util.ProcessText(text, _sName);
             GUIManager.OpenTextWindow(text, this);
         }
+        public void TalkCutscene(string cutsceneLine)
+        {
+            string text = cutsceneLine;
+            text = Util.ProcessText(text, _sName);
+            GUIManager.OpenTextWindow(text, this);
+        }
 
         public virtual string GetSelectionText()
         {
@@ -471,7 +479,7 @@ namespace RiverHollow.Actors
             if (chosenAction.StartsWith("Quest"))
             {
                 rv = true;
-                Quest q = GameManager.DIQuests[int.Parse(chosenAction.Remove(0, "Quest".Length))];
+                Quest q = GameManager.DiQuests[int.Parse(chosenAction.Remove(0, "Quest".Length))];
                 PlayerManager.AddToQuestLog(q);
                 GUIManager.SetWindowText(GameManager.CurrentNPC.GetDialogEntry("Quest" + q.QuestID));
             }
@@ -625,7 +633,7 @@ namespace RiverHollow.Actors
                     }
                     else if (specialVal[0].Equals("Quest"))
                     {
-                        Quest newQuest = GameManager.DIQuests[val];
+                        Quest newQuest = GameManager.DiQuests[val];
                         removeIt = PlayerManager.QuestLog.Contains(newQuest) || newQuest.ReadyForHandIn || newQuest.Finished || !newQuest.CanBeGiven();
                     }
 
@@ -1178,7 +1186,7 @@ namespace RiverHollow.Actors
             public bool Activated()
             {
                 bool rv = false;
-                rv = _iQuestReq == -1 || GameManager.DIQuests[_iQuestReq].Finished;
+                rv = _iQuestReq == -1 || GameManager.DiQuests[_iQuestReq].Finished;
                 return rv;
             }
         }
@@ -1872,39 +1880,37 @@ namespace RiverHollow.Actors
                 }
             }
 
-            if (_currentPath.Count > 0)
+            if (_vMoveTo != Vector2.Zero)
             {
-                if (_vMoveTo != Vector2.Zero)
+                HandleMove(_vMoveTo);
+            }
+            else if (_currentPath.Count > 0)
+            {
+                Vector2 targetPos = _currentPath[0].Position;
+                if (Position == targetPos)
                 {
-                    HandleMove(_vMoveTo);
+                    _currentPath.RemoveAt(0);
+                    if (_currentPath.Count == 0)
+                    {
+                        if (PlayerManager.ReadyToSleep)
+                        {
+                            if (_dCooldown == 0)
+                            {
+                                Facing = DirectionEnum.Left;
+                                PlayAnimation(WActorBaseAnim.IdleLeft);
+                                _dCooldown = 3;
+                                PlayerManager.AllowMovement = true;
+                            }
+                        }
+                        else
+                        {
+                            DetermineFacing(Vector2.Zero);
+                        }
+                    }
                 }
                 else
                 {
-                    Vector2 targetPos = _currentPath[0].Position;
-                    if (Position == targetPos)
-                    {
-                        _currentPath.RemoveAt(0);
-                        if (_currentPath.Count == 0)
-                        {
-                            if (PlayerManager.ReadyToSleep)
-                            {
-                                if (_dCooldown == 0)
-                                {
-                                    Facing = DirectionEnum.Left;
-                                    PlayAnimation(WActorBaseAnim.IdleLeft);
-                                    _dCooldown = 3;
-                                }
-                            }
-                            else
-                            {
-                                DetermineFacing(Vector2.Zero);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        HandleMove(targetPos);
-                    }
+                    HandleMove(targetPos);
                 }
             }
 

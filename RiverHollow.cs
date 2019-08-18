@@ -278,6 +278,7 @@ namespace RiverHollow
             PlayerManager.Buildings[0].AddWorker(b);
 
             GameCalendar.NewCalendar();
+            CutsceneManager.CheckForTriggedCutscene();
             BackToMain();
         }
 

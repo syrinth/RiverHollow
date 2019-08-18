@@ -55,7 +55,7 @@ namespace RiverHollow.Game_Managers
         public static int ScaledTileSize => (int)(TileSize * Scale);
         public static int MaxBldgLevel = 3;
         public static Dictionary<int, Upgrade> DiUpgrades;
-        public static Dictionary<int, Quest> DIQuests;
+        public static Dictionary<int, Quest> DiQuests;
 
         public static Merchandise gmMerchandise;
         public static TalkingActor CurrentNPC;
@@ -87,10 +87,10 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadQuests(ContentManager Content)
         {
-            DIQuests = new Dictionary<int, Quest>();
+            DiQuests = new Dictionary<int, Quest>();
             foreach (KeyValuePair<int, string> kvp in GameContentManager.DiQuests)
             {
-                DIQuests.Add(kvp.Key, new Quest(kvp.Value, kvp.Key));
+                DiQuests.Add(kvp.Key, new Quest(kvp.Value, kvp.Key));
             }
         }
 
@@ -710,7 +710,7 @@ namespace RiverHollow.Game_Managers
                 data.UpgradeData.Add(upgData);
             }
 
-            foreach (Quest q in DIQuests.Values)
+            foreach (Quest q in DiQuests.Values)
             {
                 data.PlotQuestData.Add(q.SaveData());
             }
@@ -809,7 +809,7 @@ namespace RiverHollow.Game_Managers
             }
             foreach (QuestData q in data.PlotQuestData)
             {
-                Quest plotQuest = DIQuests[q.questID];
+                Quest plotQuest = DiQuests[q.questID];
                 plotQuest.LoadData(q);
             }
             foreach (QuestData q in data.QuestLogData)

@@ -134,6 +134,8 @@ namespace RiverHollow.Tile_Engine
                 int.TryParse(_map.Properties["ActiveSpawn"].ToString(), out _iActiveSpawnPoints);
             }
 
+            _liBuildings = map._liBuildings;
+
             MapWidthTiles = _map.Width;
             MapHeightTiles = _map.Height;
 

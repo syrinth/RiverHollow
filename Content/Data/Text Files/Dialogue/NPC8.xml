@@ -27,13 +27,5 @@
       <Key>Selection</Key>
       <Value>Oh, hello. [Talk:Talk|Gift:GiveGift|Never Mind:Cancel]</Value>
     </Item>
-    <Item>
-      <Key>Cs0a</Key>
-      <Value>$1$... I wish you'd listen to me. You push yourself too hard.</Value>
-    </Item>
-    <Item>
-      <Key>Cs0b</Key>
-      <Value>Ready for what? I know you're skilled with that sword of yours, but every time you leave the house with it, I'm so afraid.</Value>
-    </Item>
   </Asset>
 </XnaContent>

@@ -1723,3 +1723,8 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/NPC11.xml
 
+#begin Data/Text Files/Dialogue/CutsceneDialogue.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/CutsceneDialogue.xml
+
