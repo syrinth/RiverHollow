@@ -118,7 +118,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     rv = _gPostScreen.ProcessLeftButtonClick(mouse);
                     break;
                 case CombatManager.PhaseEnum.Defeat:
-                    GUIManager.SlowFadeOut();
+                    GUIManager.BeginFadeOut(true);
                     BackToMain();
                     MapManager.CurrentMap = MapManager.Maps["mapHospital"];
                     PlayerManager.CurrentMap = "mapHospital";

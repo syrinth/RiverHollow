@@ -98,7 +98,7 @@ namespace RiverHollow.Game_Managers
 
             if (c == PlayerManager.World)
             {
-                GUIManager.FadeOut();
+                GUIManager.BeginFadeOut();
                 SoundManager.PlayEffect("126426__cabeeno-rossley__timer-ends-time-up");
                 _currentMap = _tileMaps[newMapName];
 
@@ -119,7 +119,7 @@ namespace RiverHollow.Game_Managers
 
         public static void EnterDungeon()
         {
-            GUIManager.FadeOut();
+            GUIManager.BeginFadeOut();
             _currentMap = DungeonManager.Maps[0];
 
             PlayerManager.CurrentMap = _currentMap.Name;
@@ -128,7 +128,7 @@ namespace RiverHollow.Game_Managers
 
         public static void ChangeDungeonRoom(string direction, bool straightOut = false)
         {
-            GUIManager.FadeOut();
+            GUIManager.BeginFadeOut();
             RHMap newMap = DungeonManager.RoomChange(direction, straightOut);
 
             Rectangle rectEntrance = newMap.IsDungeon ? newMap.DictionaryEntrance[direction] : newMap.DictionaryEntrance["Dungeon"];

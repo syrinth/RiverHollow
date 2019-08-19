@@ -242,8 +242,10 @@ namespace RiverHollow.Game_Managers
                                     _bTriggered = true;
                                     PlayerManager.AllowMovement = true;
                                     CutsceneManager.Playing = false;
-                                    MapManager.CurrentMap = MapManager.Maps[_cutsceneMap.Name];
-                                    GUIManager.SlowFadeOut();
+                                    PlayerManager.CurrentMap = _cutsceneMap.Name.Replace("Clone", "");
+                                    MapManager.CurrentMap = MapManager.Maps[_cutsceneMap.Name.Replace("Clone", "")];
+                                    MapManager.Maps.Remove(_cutsceneMap.Name);
+                                    GUIManager.BeginFadeOut();
                                     break;
                             }
                         }
@@ -364,6 +366,9 @@ namespace RiverHollow.Game_Managers
                 if (tags[0].Equals("map"))
                 {
                     _cutsceneMap = new RHMap(MapManager.Maps[tags[1]]);
+                    MapManager.Maps.Add(_cutsceneMap.Name, _cutsceneMap);
+                    MapManager.CurrentMap = _cutsceneMap;
+                    PlayerManager.CurrentMap = _cutsceneMap.Name;
                 }
                 if (tags[0].Equals("player"))
                 {

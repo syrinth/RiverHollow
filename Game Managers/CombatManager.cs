@@ -253,7 +253,7 @@ namespace RiverHollow.Game_Managers
 
         public static void EndCombatVictory()
         {
-            GUIManager.FadeOut();
+            GUIManager.BeginFadeOut();
             //MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
             MapManager.RemoveMob(_mob);
             _mob = null;
@@ -262,7 +262,7 @@ namespace RiverHollow.Game_Managers
 
         public static void EndCombatEscape()
         {
-            GUIManager.FadeOut();
+            GUIManager.BeginFadeOut();
             _mob.Stun();
             GoToWorldMap();
         }

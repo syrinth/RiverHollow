@@ -116,7 +116,7 @@ namespace RiverHollow.Tile_Engine
         public RHMap(RHMap map) : this()
         {
             _map = map.Map;
-            _name = map.Name;
+            _name = map.Name+"Clone";
             _renderer = map._renderer;
             _arrTiles = map._arrTiles;
 
@@ -135,6 +135,7 @@ namespace RiverHollow.Tile_Engine
             }
 
             _liBuildings = map._liBuildings;
+            _liPlacedWorldObjects = map._liPlacedWorldObjects;
 
             MapWidthTiles = _map.Width;
             MapHeightTiles = _map.Height;
