@@ -136,6 +136,11 @@ namespace RiverHollow.Game_Managers
         public static void OpenMenu() { _currentGUIScreen.OpenMenu(); }
         public static void CloseMenu() { _currentGUIScreen.CloseMenu(); }
 
+        public static void DisplayImage(GUIImage newImage)
+        {
+            _currentGUIScreen.CreateNewImage(newImage);
+        }
+
         //Main Object
         public static void OpenMainObject(GUIObject o) { _currentGUIScreen.OpenMainObject(o); }
         public static void CloseMainObject() { _currentGUIScreen.CloseMainObject(); }
@@ -181,7 +186,7 @@ namespace RiverHollow.Game_Managers
             _currentGUIScreen.Sync();
         }
 
-//public static bool IsTextScreen() { return _currentGUIScreen != null && _currentGUIScreen.IsTextScreen(); }
+        //public static bool IsTextScreen() { return _currentGUIScreen != null && _currentGUIScreen.IsTextScreen(); }
         public static bool IsMenuScreenOpen() { return _currentGUIScreen.IsMenuOpen(); }
         public static bool IsItemCreationScreen() { return _currentGUIScreen != null && _currentGUIScreen.IsItemCreationScreen(); }
         public static bool IsHUD() { return _currentGUIScreen != null && _currentGUIScreen.IsHUD(); }

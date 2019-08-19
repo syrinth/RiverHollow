@@ -111,6 +111,7 @@ namespace RiverHollow.Game_Managers
         private static void LoadGUIs()
         {
             AddTexture(@"Textures\Dialog");
+            AddTexture(@"Textures\Valley");
         }
         private static void LoadIcons()
         {

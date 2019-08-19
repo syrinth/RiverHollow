@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using System;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -200,6 +201,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public virtual void OpenMenu() { }
         public virtual void CloseMenu() { }
         public virtual bool IsMenuOpen() { return false; }
+
+
+        public virtual void CreateNewImage(GUIImage newImage)
+        {
+            newImage.CenterOnScreen();
+            AddControl(newImage);
+        }
 
         //Main Object
         public virtual void OpenMainObject(GUIObject o) { }

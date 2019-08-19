@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using RiverHollow.Actors;
+using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Misc;
 using RiverHollow.Tile_Engine;
 using System;
@@ -78,7 +79,7 @@ namespace RiverHollow.Game_Managers
 
     public class Cutscene
     {
-        enum EnumCSCommand { Speak, Move, Face, Wait, End, Quest, Speed };
+        enum EnumCSCommand { Speak, Move, Face, Wait, End, Quest, Speed, Text, Image };
         private class CutSceneCommand
         {
             public EnumCSCommand Command;
@@ -185,27 +186,35 @@ namespace RiverHollow.Game_Managers
             }
             else
             {
-                if (!GUIManager.IsTextWindowOpen())                 //If someone is currently talking, do NOT process additional tags
+                //If someone is currently talking, do NOT process additional tags
+                if (!GUIManager.IsTextWindowOpen())                 
                 {
                     CutSceneCommand currentCommand = _liCommands[_iCurrentCommand];
-                    if (!currentCommand.ActionPerformed)
+                    if (!currentCommand.ActionPerformed)     //If we've already performed the action, do not do it again
                     {
                         bool bGoToNext = false;
-                        foreach (string s in currentCommand.Data)
+                        foreach (string s in currentCommand.Data)   //Need to perform the action for each character
                         {
-                            string[] sCommandData = s.Split('-');
                             int npcID = -1;
-
+                            string[] sCommandData = s.Split('-');   //split the data into segments
                             switch (currentCommand.Command)
                             {
                                 case EnumCSCommand.Speak:
                                     npcID = GetNPCData(sCommandData[0]);
-                                    if (npcID != -1)
+                                    if (npcID != -1)    //Player should never be talking
                                     {
                                         Villager v = _liUsedNPCs.Find(test => test.ID == npcID);
                                         v.TalkCutscene(CutsceneManager.GetDialogue(_iID, sCommandData[1]));
                                         bGoToNext = true;
                                     }
+                                    break;
+                                case EnumCSCommand.Image:
+                                    GUIManager.DisplayImage(new GUIImage(new Rectangle(0, 0, 448, 336), (int)(448 * Scale), (int)(336 * Scale), sCommandData[0]));
+                                    bGoToNext = true;
+                                    break;
+                                case EnumCSCommand.Text:
+                                    GUIManager.OpenTextWindow(CutsceneManager.GetDialogue(_iID, sCommandData[0]));
+                                    bGoToNext = true;
                                     break;
                                 case EnumCSCommand.Move:
                                     _bWaitForMove = true;
