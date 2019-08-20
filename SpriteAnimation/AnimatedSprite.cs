@@ -196,13 +196,15 @@ namespace RiverHollow.SpriteAnimations
             }
         }
 
+        /// <summary>
+        /// After ensuring that we have the frame we think we're on call Reset on it
+        /// so that all of the timer data and counting data has been reset to 0.
+        /// </summary>
         public void Reset()
         {
             if (!string.IsNullOrEmpty(_sCurrAnim))
             {
-                _diFrameAnimations[_sCurrAnim].FrameTimer = 0;
-                _diFrameAnimations[_sCurrAnim].CurrentFrame = 0;
-                _diFrameAnimations[_sCurrAnim].PlayCount = 0;
+                _diFrameAnimations[_sCurrAnim].FullReset();
             }
         }
 
@@ -277,7 +279,7 @@ namespace RiverHollow.SpriteAnimations
                     {
                         PlayedOnce = true;
                         IsAnimating = false;
-                        CurrentFrameAnimation.PlayCount = 0;
+                        CurrentFrameAnimation.ResetPlayCount();
                     }
                 }
             }

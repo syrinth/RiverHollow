@@ -18,6 +18,18 @@ namespace RiverHollow.Game_Managers
 {
     public static class MapManager
     {
+        struct NewMapInfo
+        {
+            public RHMap NextMap;
+            public Vector2 PlayerPosition;
+            public Building EnteredBuilding;
+            public NewMapInfo(RHMap map, Vector2 pos, Building b)
+            {
+                NextMap = map;
+                PlayerPosition = pos;
+                EnteredBuilding = b;
+            }
+        }
         public const string HomeMap = "mapManorGrounds";
         public const string SpawnMap = "mapManorGrounds"; //"mapRiverHollowTown"; //"mapForestDungeonZone"; //"mapRiverHollowTown"; //;
         const string _sMapFolder = @"Content\Maps";
@@ -26,6 +38,7 @@ namespace RiverHollow.Game_Managers
         static Dictionary<string, RHMap> _tileMaps;
         public static Dictionary<string, RHMap> Maps { get => _tileMaps; }
 
+        static NewMapInfo _newMapInfo;
         static RHMap _currentMap;
         public static RHMap CurrentMap { get => _currentMap; set => _currentMap = value; }
 
@@ -98,13 +111,8 @@ namespace RiverHollow.Game_Managers
 
             if (c == PlayerManager.World)
             {
-                GUIManager.BeginFadeOut();
+                FadeToNewMap(_tileMaps[newMapName], Util.SnapToGrid(new Vector2(rectEntrance.Left, rectEntrance.Top)));
                 SoundManager.PlayEffect("126426__cabeeno-rossley__timer-ends-time-up");
-                _currentMap = _tileMaps[newMapName];
-
-                PlayerManager.CurrentMap = _currentMap.Name;
-                PlayerManager.World.Position = Util.SnapToGrid(new Vector2(rectEntrance.Left, rectEntrance.Top));
-                CutsceneManager.CheckForTriggedCutscene();
             }
             else
             {
@@ -119,24 +127,28 @@ namespace RiverHollow.Game_Managers
 
         public static void EnterDungeon()
         {
-            GUIManager.BeginFadeOut();
-            _currentMap = DungeonManager.Maps[0];
-
-            PlayerManager.CurrentMap = _currentMap.Name;
-            PlayerManager.World.Position = new Vector2(DungeonManager.Entrance.Left, DungeonManager.Entrance.Top);
+            FadeToNewMap(DungeonManager.Maps[0], new Vector2(DungeonManager.Entrance.Left, DungeonManager.Entrance.Top));
         }
 
         public static void ChangeDungeonRoom(string direction, bool straightOut = false)
         {
-            GUIManager.BeginFadeOut();
             RHMap newMap = DungeonManager.RoomChange(direction, straightOut);
-
             Rectangle rectEntrance = newMap.IsDungeon ? newMap.DictionaryEntrance[direction] : newMap.DictionaryEntrance["Dungeon"];
-            
-            _currentMap = newMap;
 
-            PlayerManager.CurrentMap = _currentMap.Name;
-            PlayerManager.World.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
+            FadeToNewMap(newMap, new Vector2(rectEntrance.Left, rectEntrance.Top));
+        }
+
+        /// <summary>
+        /// Begins a fadeot so we can move to the next map and sets the info the map manager needs
+        /// so that we know whichmap to move to once the fade is done.
+        /// </summary>
+        /// <param name="newMap">Map to move to</param>
+        /// <param name="playerPos">The position of the player</param>
+        public static void FadeToNewMap(RHMap newMap, Vector2 playerPos, Building b = null)
+        {
+            GUIManager.BeginFadeOut();
+            PlayerManager.World.Idle();
+            _newMapInfo = new NewMapInfo(newMap, playerPos, b);
         }
 
         public static void EnterBuilding(Building b)
@@ -151,11 +163,8 @@ namespace RiverHollow.Game_Managers
                     rectEntrance = _tileMaps[b.MapName].DictionaryEntrance[s];
                 }
             }
-            _currentMap = _tileMaps[b.MapName];
-            _currentMap.LoadBuilding((Building)b);
 
-            PlayerManager.CurrentMap = _currentMap.Name;
-            PlayerManager.World.Position = new Vector2(rectEntrance.Left, rectEntrance.Top);
+            FadeToNewMap(_tileMaps[b.MapName], new Vector2(rectEntrance.Left, rectEntrance.Top), b);
         }
 
         public static void BackToPlayer()
@@ -200,6 +209,19 @@ namespace RiverHollow.Game_Managers
 
         public static void Update(GameTime gametime)
         {
+            if(!_newMapInfo.Equals(default(NewMapInfo)) && GUIManager.FadingIn)
+            {
+                _currentMap = _newMapInfo.NextMap;
+                if (_newMapInfo.EnteredBuilding != null)
+                {
+                    _currentMap.LoadBuilding(_newMapInfo.EnteredBuilding);
+                }
+
+                PlayerManager.CurrentMap = _newMapInfo.NextMap.Name;
+                PlayerManager.World.Position = Util.SnapToGrid(_newMapInfo.PlayerPosition);
+                CutsceneManager.CheckForTriggedCutscene();
+            }
+
             foreach(RHMap map in _tileMaps.Values)
             {
                 map.Update(gametime);

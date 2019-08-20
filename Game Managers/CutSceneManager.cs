@@ -17,6 +17,10 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Dictionary<string, string>> _diCutsceneDialogue;
         public static bool Playing;
 
+        /// <summary>
+        /// Loads the Cutscenesinto theManager
+        /// </summary>
+        /// <param name="Content">The Content pipeline</param>
         public static void LoadContent(ContentManager Content)
         {
             Playing = false;
@@ -47,6 +51,11 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        /// <summary>
+        /// When called, iterates over every CutScene in the list and checkto see
+        /// if the coditions are right for it to have been called.If so, set it up and 
+        /// confirm thatwe are playinga Cutscene.
+        /// </summary>
         public static void CheckForTriggedCutscene()
         {
             foreach (KeyValuePair<int, Cutscene> kvp in _diCutscenes)
@@ -61,16 +70,22 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        /// <summary>
+        /// Runs update on the current Cutscene
+        /// </summary>
+        /// <param name="gameTime">The Gametime info for timing</param>
         public static void Update(GameTime gameTime)
         {
             _currentCutscene.Update(gameTime);
         }
 
-        public static void Setup()
-        {
-            _currentCutscene.Setup();
-        }
-
+        /// <summary>
+        /// Dialogue is stored in the CutsceneManager, call this method
+        /// to find the requested text entry
+        /// </summary>
+        /// <param name="cutsceneID">ID of the Cutscene</param>
+        /// <param name="stringID">The string ID to query for</param>
+        /// <returns></returns>
         public static string GetDialogue(int cutsceneID, string stringID)
         {
             return _diCutsceneDialogue[cutsceneID][stringID];
@@ -79,12 +94,17 @@ namespace RiverHollow.Game_Managers
 
     public class Cutscene
     {
+        #region CutScene Commandinformation
         enum EnumCSCommand { Speak, Move, Face, Wait, End, Quest, Speed, Text, Image };
+
+        /// <summary>
+        /// A class to hold the information for a CutSceneCommand step
+        /// </summary>
         private class CutSceneCommand
         {
-            public EnumCSCommand Command;
-            public string[] Data;
-            public bool ActionPerformed;
+            public EnumCSCommand Command;   //What is the command
+            public string[] Data;           //What data does it have
+            public bool ActionPerformed;    //Has it been performed yet.
 
             public CutSceneCommand(EnumCSCommand command, string[] v = null)
             {
@@ -101,6 +121,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
         }
+        #endregion
 
         int _iID;
         RHMap _cutsceneMap;
@@ -108,9 +129,9 @@ namespace RiverHollow.Game_Managers
         int _iMinTime = -1;                                         //The earliest the cutscene can be triggered
         int _iMaxTime = -1;                                         //The latest the cutscene can be triggered
         int _iCurrentCommand;
-        List<Villager> _liUsedNPCs;                                      //The list of NPCs that take part in the cutscene.
+        List<Villager> _liUsedNPCs;                                 //The list of NPCs that take part in the cutscene.
         List<KeyValuePair<int, int>> _liReqFriendship;              //The list of required Friendships to trigger the cutscene, key is NPC index
-        List<CutSceneCommand> _liCommands;                                   //The sequence of commands to follow for the cutscene
+        List<CutSceneCommand> _liCommands;                          //The sequence of commands to follow for the cutscene
         List<string> _liSetupCommands;
         bool _bTriggered;
         bool _bWaitForMove;
@@ -120,6 +141,11 @@ namespace RiverHollow.Game_Managers
 
         double _dTimer;
 
+        /// <summary>
+        /// Constructor for a Cutsceneo bject
+        /// </summary>
+        /// <param name="id">The Cutscene's global ID</param>
+        /// <param name="strData">The list of data associated with it</param>
         public Cutscene(int id, List<string> strData)
         {
             _iID = id;
@@ -174,8 +200,13 @@ namespace RiverHollow.Game_Managers
             _liCommands.Add(new CutSceneCommand(EnumCSCommand.End));
         }
 
+        /// <summary>
+        /// Updates the current Cutscene so it runs.
+        /// </summary>
+        /// <param name="gameTime">The GameTime object</param>
         public void Update(GameTime gameTime)
         {
+            //If the Wait command has been called, we need to count down to zero
             if (_dTimer > 0)
             {
                 _dTimer -= gameTime.ElapsedGameTime.TotalSeconds;
@@ -242,10 +273,8 @@ namespace RiverHollow.Game_Managers
                                     _bTriggered = true;
                                     PlayerManager.AllowMovement = true;
                                     CutsceneManager.Playing = false;
-                                    PlayerManager.CurrentMap = _cutsceneMap.Name.Replace("Clone", "");
-                                    MapManager.CurrentMap = MapManager.Maps[_cutsceneMap.Name.Replace("Clone", "")];
                                     MapManager.Maps.Remove(_cutsceneMap.Name);
-                                    GUIManager.BeginFadeOut();
+                                    MapManager.FadeToNewMap(MapManager.Maps[_cutsceneMap.Name.Replace("Clone", "")], PlayerManager.World.Position);
                                     break;
                             }
                         }
@@ -259,16 +288,20 @@ namespace RiverHollow.Game_Managers
                         }
                     }
 
+                    //See if the moving characters have finished moving
                     foreach (WorldActor actor in _liMoving)
                     {
                         CheckFinishedMovement(actor);
                     }
+
+                    //Remove any characters that have finished moving from the list
                     foreach (WorldActor actor in _liToRemove)
                     {
                         _liMoving.Remove(actor);
                     }
                     _liToRemove.Clear();
 
+                    //Now that everyone has finished moving, we can go to the next step
                     if (_bWaitForMove && _liMoving.Count == 0)
                     {
                         _bWaitForMove = false;
@@ -276,20 +309,33 @@ namespace RiverHollow.Game_Managers
                     }
                 }
             }
+
+            //Update the Player character
             PlayerManager.UpdateWorld(gameTime);
+
+            //Update the Clone map the cutscene is on
             _cutsceneMap.Update(gameTime);
         }
 
+        /// <summary>
+        /// Retrieves the desired actor from the list of Actors usedin the Cutscene
+        /// </summary>
+        /// <param name="npcID">A string value representing the NPC ID</param>
         private WorldActor GetActor(string npcID) {
             int characterID = -1;
             if (!int.TryParse(npcID, out characterID))
             {
-                //If the NPC ID could not be converted, effect the player. The string should be 'Player'
+                //If the NPC ID could not be converted, effect the player. The string should be 'Player', but does not need to be
                 characterID = -1;
             }
+
             return (characterID == -1 ? (WorldActor)PlayerManager.World : _liUsedNPCs.Find(test => test.ID == characterID));
         }
 
+        /// <summary>
+        /// Parses the given string to an int
+        /// </summary>
+        /// <param name="npcID">The NPcId to get, 'Player' if we are effecting the player.</param>
         private int GetNPCData(string npcID)
         {
             int rv = -1;
@@ -301,6 +347,11 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
+        /// <summary>
+        /// Converts the string to an int directional value
+        /// </summary>
+        /// <param name="str">The directional string to convert</param>
+        /// <returns>The int directional value</returns>
         private int HandleDir(string str)
         {
             int rv = -1;
@@ -312,7 +363,14 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        //0-Up 1-Down 2-Right 3-Left
+        /// <summary>
+        /// Tells the WorldActor to movethe given number of tiles and adds them
+        /// to thelist of moving NPCs.
+        /// 0-Up 1-Down 2-Right 3-Left
+        /// </summary>
+        /// <param name="characterID">The Id of the NPC we're actingo n</param>
+        /// <param name="numSquares">How many squares to move</param>
+        /// <param name="dir">The directional to move in</param>
         private void AssignMovement(string characterID, int numSquares, int dir)
         {
             WorldActor c = GetActor(characterID);
@@ -343,6 +401,11 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        /// <summary>
+        /// Checks whether the given WorldActor has arrived at their destination.
+        /// If they have, make them Idle, and then add them to the ToRemove list.
+        /// </summary>
+        /// <param name="c">The WorldActor to check</param>
         private void CheckFinishedMovement(WorldActor c)
         {
             if (c.Position == c.MoveToLocation)
@@ -356,13 +419,21 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        /// <summary>
+        /// Sets up the Cutscene for playingbased off it's datas
+        /// </summary>
         public void Setup()
         {
+            //Stop the player from moving
             PlayerManager.AllowMovement = false;
+
+            //Iterates over all of the setup commands
             foreach (string s in _liSetupCommands)
             {
                 string[] tags = s.Split(':');
-                //Parsing for important data
+
+                //Clone the map and put the player on it and tell the MapManager
+                //that the new clone map is the current one
                 if (tags[0].Equals("map"))
                 {
                     _cutsceneMap = new RHMap(MapManager.Maps[tags[1]]);
@@ -370,12 +441,16 @@ namespace RiverHollow.Game_Managers
                     MapManager.CurrentMap = _cutsceneMap;
                     PlayerManager.CurrentMap = _cutsceneMap.Name;
                 }
+
+                //Set thePlayer to the given position
                 if (tags[0].Equals("player"))
                 {
                     PlayerManager.World.Position = Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(tags[1]));
                 }
                 else if (tags[0].Equals("actors"))
                 {
+                    //Find all the NPCs that are going to be used in this Cutscene,
+                    //and add them to the Clone map at the given positions.
                     string[] friend = tags[1].Split(' ');
                     foreach (string f in friend)
                     {
@@ -390,14 +465,23 @@ namespace RiverHollow.Game_Managers
                     }
                 }
             }
-            MapManager.CurrentMap = _cutsceneMap;
         }
 
+        /// <summary>
+        /// Check the various map conditions to see if the Cutscene should be triggered
+        /// </summary>
+        /// <returns>True if the Cutscene should be triggered.</returns>
         public bool Triggered()
         {
-            return !_bTriggered && TimePassed() && TriggeredMap() && FriendshipReqs();
+            return !_bTriggered && InTimeWindow() && TriggeredMap() && FriendshipReqs();
         }
-        private bool TimePassed()
+
+        /// <summary>
+        /// Confirms whether or not the current time is greater than the minimum start time
+        /// and less than the maximum start time.
+        /// </summary>
+        /// <returns>True if in the activation window.</returns>
+        private bool InTimeWindow()
         {
             bool rv = false;
             if (_iMinTime != -1)
@@ -415,10 +499,11 @@ namespace RiverHollow.Game_Managers
             timeExit:
             return rv;
         }
-        private bool TriggeredMap()
-        {
-            return MapManager.CurrentMap.Name == _sTriggerMap;
-        }
+        
+        /// <summary>
+        /// Confirms whether the Friendship level requirements have been met for the given NPCs
+        /// </summary>
+        /// <returns>True if met.</returns>
         private bool FriendshipReqs()
         {
             bool rv = false;
@@ -431,6 +516,15 @@ namespace RiverHollow.Game_Managers
             friendshipExit:
 
             return rv;
+        }
+
+        /// <summary>
+        /// Checks if the map has been triggered or not.
+        /// </summary>
+        /// <returns>True if triggered.</returns>
+        private bool TriggeredMap()
+        {
+            return MapManager.CurrentMap.Name == _sTriggerMap;
         }
     }
 }

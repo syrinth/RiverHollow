@@ -13,6 +13,9 @@ namespace RiverHollow.Game_Managers
 {
     public static class GUIManager
     {
+        enum Fade { None, Out, In};
+        static Fade _eFade;
+
         public static int MINI_BTN_HEIGHT = 32;
         public static int MINI_BTN_WIDTH = 128;
 
@@ -20,10 +23,10 @@ namespace RiverHollow.Game_Managers
         public static int MAIN_COMPONENT_HEIGHT = RiverHollow.ScreenWidth / 3;
         private static GUIScreen _currentGUIScreen;
         private static GUIImage _fadeImg;
-        private static float _fadeVal = 1f;
-        private static bool _fading = false;
-        private static bool _slowFade = false;
-        public static bool Fading { get => _fading; }
+        private static float _fFadeVal = 0f;
+        private static bool _bFadeSlow = false;
+        public static bool Fading  => _eFade != Fade.None;
+        public static bool FadingIn => _eFade == Fade.In;
 
         public static void LoadContent()
         {
@@ -33,7 +36,7 @@ namespace RiverHollow.Game_Managers
 
         public static void Update(GameTime gameTime)
         {
-            if (_fading)
+            if (Fading)
             {
                 UpdateFade();
             }
@@ -46,17 +49,20 @@ namespace RiverHollow.Game_Managers
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            if (_fading)
+            if (Fading)
             {
-                _fadeImg.Draw(spriteBatch, _fadeVal);
+                _fadeImg.Draw(spriteBatch, _fFadeVal);
 
             }
-            if (_currentGUIScreen != null)
+            else
             {
-                _currentGUIScreen.Draw(spriteBatch);
-            }
+                if (_currentGUIScreen != null)
+                {
+                    _currentGUIScreen.Draw(spriteBatch);
+                }
 
-            GraphicCursor.Draw(spriteBatch);
+                GraphicCursor.Draw(spriteBatch);
+            }
         }
 
         public static void ClearScreen()
@@ -152,32 +158,41 @@ namespace RiverHollow.Game_Managers
 
         public static void SetScreen(GUIScreen newScreen)
         {
-            if( newScreen == null)
-            {
-                int i = 0;
-            }
             _currentGUIScreen = newScreen;
         }
 
-        public static void FadeOut()
+        /// <summary>
+        /// Starts a FadeOut
+        /// </summary>
+        /// <param name="slowFadeout">Whether or not the fading is fast or slow</param>
+        public static void BeginFadeOut(bool slowFadeout = false)
         {
-            _slowFade = false;
-            _fading = true;
+            _bFadeSlow = slowFadeout;
+            _eFade = Fade.Out;
+            PlayerManager.AllowMovement = false;
         }
 
-        public static void SlowFadeOut()
-        {
-            _fading = true;
-            _slowFade = true;
-        }
-
+        /// <summary>
+        /// When we're fading, we need to update how  opaque the blackout is. When fading out
+        /// we need to increase the Opacity. When Fading In we need to decrease it.
+        /// </summary>
         private static void UpdateFade()
         {
-            _fadeVal -= _slowFade ? 0.01f : 0.05f;
-            if (_fadeVal <= 0)
+            float modVal = _bFadeSlow ? 0.01f : 0.05f;
+
+            if (_eFade == Fade.Out) { _fFadeVal += modVal; }
+            else if (_eFade == Fade.In) { _fFadeVal -= modVal; }
+
+            if(_fFadeVal >= 1)              //We've faded out, start fading back in
             {
-                _fadeVal = 1;
-                _fading = false;
+                _eFade = Fade.In;
+                _fFadeVal = 1;
+            }
+            else if (_fFadeVal <= 0)        //We've faded in, so turn off fading and allow the player to move
+            {
+                _fFadeVal = 0;
+                _eFade = Fade.None;
+                PlayerManager.AllowMovement = true;
             }
         }
 

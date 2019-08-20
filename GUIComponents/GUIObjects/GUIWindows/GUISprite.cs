@@ -63,6 +63,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             Height = _sprite.Height;
         }
 
+        /// <summary>
+        /// Helper for the AnimatedSprite Reset method.
+        /// </summary>
         public void Reset()
         {
             _sprite.Reset();

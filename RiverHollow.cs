@@ -185,41 +185,38 @@ namespace RiverHollow
             //spriteBatch.Draw(lightMask, new Vector2(800, 576), Color.White);
             //spriteBatch.End();
 
-            if (!GUIManager.Fading)
+            GraphicsDevice.SetRenderTarget(mainTarget);
+            GraphicsDevice.Clear(Color.Transparent);
             {
-                GraphicsDevice.SetRenderTarget(mainTarget);
-                GraphicsDevice.Clear(Color.Transparent);
+                spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
+                //If we're in an informational state, then only the GUIScreen data should be visible, don't draw anything except for the GUI
+                if (!Informational())
                 {
-                    spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
-                    //If we're in an informational state, then only the GUIScreen data should be visible, don't draw anything except for the GUI
-                    if (!Informational())
-                    {
-                        MapManager.DrawBase(spriteBatch);
-                        PlayerManager.Draw(spriteBatch);
-                    }
-                    spriteBatch.End();
+                    MapManager.DrawBase(spriteBatch);
+                    PlayerManager.Draw(spriteBatch);
                 }
+                spriteBatch.End();
+            }
+            {
+                spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, null);
+                if (!Informational())
                 {
-                    spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, null);
-                    if (!Informational())
-                    {
-                        MapManager.DrawUpper(spriteBatch);
-                    }
-
-                    spriteBatch.End();
-
-                    GraphicsDevice.SetRenderTarget(null);
-                    GraphicsDevice.Clear(Color.Black);
-
-                    spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
-                    //if (OnMap())
-                    //{
-                    //    effect1.Parameters["lightMask"].SetValue(lightsTarget);
-                    //    effect1.CurrentTechnique.Passes[0].Apply();
-                    //}
-                    spriteBatch.Draw(mainTarget, Vector2.Zero, Color.White);
-                    spriteBatch.End();
+                    MapManager.DrawUpper(spriteBatch);
                 }
+
+                spriteBatch.End();
+
+                GraphicsDevice.SetRenderTarget(null);
+                GraphicsDevice.Clear(Color.Black);
+
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
+                //if (OnMap())
+                //{
+                //    effect1.Parameters["lightMask"].SetValue(lightsTarget);
+                //    effect1.CurrentTechnique.Passes[0].Apply();
+                //}
+                spriteBatch.Draw(mainTarget, Vector2.Zero, Color.White);
+                spriteBatch.End();
             }
 
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);

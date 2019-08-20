@@ -342,7 +342,7 @@
    </properties>
   </object>
   <object id="42" name="Manor" x="800" y="448" width="175.5" height="192"/>
-  <object id="45" name="Rock" x="836.75" y="646" width="5.75" height="5.75"/>
+  <object id="45" name="Rock" x="964.5" y="646" width="5.75" height="5.75"/>
  </objectgroup>
  <objectgroup id="5" name="Travel Layer" offsetx="0" offsety="-1.5">
   <object id="10" name="Entrance" x="19.8748" y="835.082" width="7.9166" height="10">

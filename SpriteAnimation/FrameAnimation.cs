@@ -26,11 +26,7 @@ namespace RiverHollow.SpriteAnimations
 
         // Amount of time that has passed since we last animated
         private float _fFrameTimer = 0.0f;
-        public float FrameTimer
-        {
-            get { return _fFrameTimer; }
-            set { _fFrameTimer = value; }
-        }
+        public float FrameTimer => _fFrameTimer;
 
         // The number of times this animation has been played
         private int _iPlayCount = 0;
@@ -59,11 +55,7 @@ namespace RiverHollow.SpriteAnimations
         /// 
         /// The frame number currently being displayed
         /// 
-        public int CurrentFrame
-        {
-            get { return _iCurrFrame; }
-            set { _iCurrFrame = (int)MathHelper.Clamp(value, 0, _iFrameCount - 1); }
-        }
+        public int CurrentFrame => _iCurrFrame;
 
         public int FrameWidth
         {
@@ -89,11 +81,7 @@ namespace RiverHollow.SpriteAnimations
             }
         }
 
-        public int PlayCount
-        {
-            get { return _iPlayCount; }
-            set { _iPlayCount = value; }
-        }
+        public int PlayCount => _iPlayCount;
 
         public FrameAnimation(Rectangle FirstFrame, int Frames, bool pingPong)
         {
@@ -171,6 +159,18 @@ namespace RiverHollow.SpriteAnimations
         public void SetNextAnimation(string animation)
         {
             _sNextAnimation = animation;
+        }
+
+        public void FullReset()
+        {
+            _fFrameTimer = 0;
+            _iCurrFrame = 0;
+            ResetPlayCount();
+        }
+
+        public void ResetPlayCount()
+        {
+            _iPlayCount = 0;
         }
 
         object ICloneable.Clone()
