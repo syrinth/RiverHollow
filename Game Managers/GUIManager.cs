@@ -142,9 +142,14 @@ namespace RiverHollow.Game_Managers
         public static void OpenMenu() { _currentGUIScreen.OpenMenu(); }
         public static void CloseMenu() { _currentGUIScreen.CloseMenu(); }
 
-        public static void DisplayImage(GUIImage newImage)
+        public static void AssignBackgroundImage(GUIImage newImage)
         {
-            _currentGUIScreen.CreateNewImage(newImage);
+            _currentGUIScreen.AssignBackgroundImage(newImage);
+        }
+
+        public static void ClearBackgroundImage()
+        {
+            _currentGUIScreen.ClearBackgroundImage();
         }
 
         //Main Object

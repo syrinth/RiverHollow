@@ -107,8 +107,9 @@ namespace RiverHollow.SpriteAnimations
 
         public void Update(GameTime gameTime)
         {
-            if(_iFrameCount > 1) { 
-            _fFrameTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (_iFrameCount > 1)
+            {
+                _fFrameTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 if (_fFrameTimer > _fFrameLength)
                 {
@@ -125,11 +126,13 @@ namespace RiverHollow.SpriteAnimations
                             _iCurrFrame--;
                         }
 
-                        if (_iCurrFrame == 0) {
+                        if (_iCurrFrame == 0)
+                        {
                             _bBackTracking = false;
                             _iPlayCount = (int)MathHelper.Min(_iPlayCount + 1, int.MaxValue);
                         }
-                        else if (_iCurrFrame == (_iFrameCount - 1)) {
+                        else if (_iCurrFrame == (_iFrameCount - 1))
+                        {
                             _bBackTracking = true;
                         }
                     }

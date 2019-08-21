@@ -95,7 +95,7 @@ namespace RiverHollow.Game_Managers
     public class Cutscene
     {
         #region CutScene Commandinformation
-        enum EnumCSCommand { Speak, Move, Face, Wait, End, Quest, Speed, Text, Image };
+        enum EnumCSCommand { Speak, Move, Face, Wait, End, Quest, Speed, Text, Background, RemoveBackground };
 
         /// <summary>
         /// A class to hold the information for a CutSceneCommand step
@@ -195,7 +195,7 @@ namespace RiverHollow.Game_Managers
             foreach (string s in commands)
             {
                 string[] tags = s.Split(':');
-                _liCommands.Add(new CutSceneCommand(Util.ParseEnum<EnumCSCommand>(tags[0]), tags[1].Split(' ')));
+                _liCommands.Add(new CutSceneCommand(Util.ParseEnum<EnumCSCommand>(tags[0]), (tags.Length > 1 ? tags[1].Split(' ') : null)));
             }
             _liCommands.Add(new CutSceneCommand(EnumCSCommand.End));
         }
@@ -239,8 +239,12 @@ namespace RiverHollow.Game_Managers
                                         bGoToNext = true;
                                     }
                                     break;
-                                case EnumCSCommand.Image:
-                                    GUIManager.DisplayImage(new GUIImage(new Rectangle(0, 0, 448, 336), (int)(448 * Scale), (int)(336 * Scale), sCommandData[0]));
+                                case EnumCSCommand.Background:
+                                    GUIManager.AssignBackgroundImage(new GUIImage(new Rectangle(0, 0, 448, 336), (int)(448 * Scale), (int)(336 * Scale), sCommandData[0]));
+                                    bGoToNext = true;
+                                    break;
+                                case EnumCSCommand.RemoveBackground:
+                                    GUIManager.ClearBackgroundImage();
                                     bGoToNext = true;
                                     break;
                                 case EnumCSCommand.Text:

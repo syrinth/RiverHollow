@@ -355,6 +355,10 @@
       <Value>[Type:Equipment][Image:80-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:6][Atk:Moderate][Mag:Major][ReqItems:87-5]</Value>
     </Item>
     <Item>
+      <Key>626</Key>
+      <Value>[Type:Equipment][Image:96-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:7][Atk:Moderate][Mag:Major][ReqItems:94-4|13-2]</Value>
+    </Item>
+    <Item>
       <Key>627</Key>
       <Value>[Type:Equipment][Image:12-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:8][Atk:Moderate][Mag:Major][ReqItems:97-4]</Value>
     </Item>

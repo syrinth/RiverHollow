@@ -11,12 +11,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
     //Represents a complete collection of associated GUIs to be displayed on the screen
     public abstract class GUIScreen
     {
-        private GUITextWindow _guiTextWindow;
-        private GUITextWindow _guiHoverWindow;
-        private GUIObject _guiHoverObject;
+        GUIImage _guiBackgroundImg;
+        GUITextWindow _guiTextWindow;
+        GUITextWindow _guiHoverWindow;
+        GUIObject _guiHoverObject;
         protected GUITextSelectionWindow _gSelectionWindow;
-        private List<GUIObject> _liToRemove;
-        private List<GUIObject> _liToAdd;
+        List<GUIObject> _liToRemove;
+        List<GUIObject> _liToAdd;
         protected List<GUIObject> Controls;
         public bool IsVisible;
 
@@ -29,7 +30,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public virtual bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            foreach(GUIObject g in Controls)
+            foreach (GUIObject g in Controls)
             {
                 rv = g.ProcessLeftButtonClick(mouse);
 
@@ -40,7 +41,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public virtual bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = false;
-
 
             foreach (GUIObject g in Controls)
             {
@@ -62,9 +62,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
         public virtual bool ProcessHover(Point mouse)
         {
-            //bool rv = false;
-            //rv = _guiHoverWindow != null && _gSelectionWindow != null;
-            //return rv;
             bool rv = false;
             foreach (GUIObject g in Controls)
             {
@@ -107,6 +104,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
         public virtual void Draw(SpriteBatch spriteBatch)
         {
+            if (_guiBackgroundImg != null)
+            {
+                _guiBackgroundImg.Draw(spriteBatch);
+            }
             foreach (GUIObject g in Controls)
             {
                 g.Draw(spriteBatch);
@@ -202,11 +203,23 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public virtual void CloseMenu() { }
         public virtual bool IsMenuOpen() { return false; }
 
-
-        public virtual void CreateNewImage(GUIImage newImage)
+        /// <summary>
+        /// Assigns a background image to be drawn behind all other GUI components.
+        /// Do not add it to the controls because we don't want it responding to anything
+        /// </summary>
+        /// <param name="newImage">The Image touse</param>
+        public virtual void AssignBackgroundImage(GUIImage newImage)
         {
             newImage.CenterOnScreen();
-            AddControl(newImage);
+            _guiBackgroundImg = newImage;
+        }
+
+        /// <summary>
+        /// Because it's not assigned to the Controls we need only make the value null to close it
+        /// </summary>
+        public virtual void ClearBackgroundImage()
+        {
+            _guiBackgroundImg = null;
         }
 
         //Main Object
