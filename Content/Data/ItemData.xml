@@ -360,7 +360,11 @@
     </Item>
     <Item>
       <Key>627</Key>
-      <Value>[Type:Equipment][Image:12-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:8][Atk:Moderate][Mag:Major][ReqItems:97-4]</Value>
+      <Value>[Type:Equipment][Image:112-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:8][Atk:Moderate][Mag:Major][ReqItems:97-4]</Value>
+    </Item>
+    <Item>
+      <Key>628</Key>
+      <Value>[Type:Equipment][Image:128-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:9][Atk:Moderate][Mag:Major][ReqItems:98-4|43-4]</Value>
     </Item>
     <Item>
       <Key>629</Key>

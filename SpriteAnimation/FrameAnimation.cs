@@ -166,6 +166,7 @@ namespace RiverHollow.SpriteAnimations
 
         public void FullReset()
         {
+            _bBackTracking = false;
             _fFrameTimer = 0;
             _iCurrFrame = 0;
             ResetPlayCount();

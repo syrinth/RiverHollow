@@ -1764,3 +1764,15 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Items/Combat/Weapons/Orb/626.png
 
+#begin Textures/Items/Combat/Weapons/Orb/628.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Items/Combat/Weapons/Orb/628.png
+
