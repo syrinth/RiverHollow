@@ -164,6 +164,10 @@ namespace RiverHollow.SpriteAnimations
             _sNextAnimation = animation;
         }
 
+        /// <summary>
+        /// Resets the variables that track where the FrameAnimation is to
+        /// their base state so that it starts at the very beginning.
+        /// </summary>
         public void FullReset()
         {
             _bBackTracking = false;
@@ -172,6 +176,9 @@ namespace RiverHollow.SpriteAnimations
             ResetPlayCount();
         }
 
+        /// <summary>
+        /// Sets the current numberof plays to 0
+        /// </summary>
         public void ResetPlayCount()
         {
             _iPlayCount = 0;

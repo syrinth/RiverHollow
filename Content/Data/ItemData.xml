@@ -333,6 +333,10 @@
       <Key>612</Key>
       <Value>[Type:Equipment][Image:32-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:3][Atk:Moderate][Mag:Major][ReqItems:91-1]</Value>
     </Item>
+    <Item>
+      <Key>618</Key>
+      <Value>[Type:Equipment][Image:128-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:9][Atk:Moderate][Mag:Major][ReqItems:93-2|88-4]</Value>
+    </Item>
     <!--<620> Summoner-->
     <Item>
       <Key>620</Key>
