@@ -76,7 +76,7 @@ namespace RiverHollow.WorldObjects
             ImportBasics(stringData, id, num);
 
             _bStacks = true;
-            _texTexture = GameContentManager.GetTexture(GameContentManager.ITEM_FOLDER + "Resources");
+            _texTexture = GameContentManager.GetTexture(GameContentManager.FOLDER_ITEMS + "Resources");
         }
 
         protected void ImportBasics(Dictionary<string, string> stringData, int id, int num)
@@ -507,12 +507,11 @@ namespace RiverHollow.WorldObjects
 
     public class Tool : Item
     {
-        public enum ToolEnum { Pick, Axe, Shovel, WateringCan, Harp };
         public ToolEnum ToolType;
         protected int _staminaCost;
-        public int StaminaCost { get => _staminaCost; }
-        protected int _dmgValue;
-        public int DmgValue { get => _dmgValue; }
+        public int StaminaCost => _staminaCost;
+        protected int _iPower;
+        public int Power => _iPower;
 
         protected AnimatedSprite _sprite;
         public AnimatedSprite ToolAnimation { get => _sprite; }
@@ -530,15 +529,17 @@ namespace RiverHollow.WorldObjects
             ImportBasics(stringData, id, 1);
 
             ToolType = Util.ParseEnum<ToolEnum>(stringData["ToolType"]);
-            if (stringData.ContainsKey("Dmg")) { _dmgValue = int.Parse(stringData["Dmg"]); }
+            if (stringData.ContainsKey("Power")) {
+                _iPower = int.Parse(stringData["Power"]);
+            }
             _staminaCost = int.Parse(stringData["Stam"]);
 
-            _texTexture = GameContentManager.GetTexture(@"Textures\Items\tools");
+            _texTexture = GameContentManager.GetTexture(GameContentManager.FOLDER_ITEMS + "Tools");
 
             _iColTexSize = 128;
             _iRowTexSize = TileSize;
 
-            _sprite = new AnimatedSprite(@"Textures\Items\tools");
+            _sprite = new AnimatedSprite(@"Textures\Items\ToolAnimations");
             _sprite.AddAnimation(ToolAnimEnum.Down, (int)_vSourcePos.X + TileSize, (int)_vSourcePos.Y, TileSize, TileSize * 2, 3, TOOL_ANIM_SPEED);
 
             _sprite.SetCurrentAnimation(ToolAnimEnum.Down);
@@ -567,7 +568,7 @@ namespace RiverHollow.WorldObjects
 
         public Food(int id, Dictionary<string, string> stringData, int num)
         {
-            _texTexture = GameContentManager.GetTexture(GameContentManager.ITEM_FOLDER + "Food");
+            _texTexture = GameContentManager.GetTexture(GameContentManager.FOLDER_ITEMS + "Food");
 
             ImportBasics(stringData, id, num);
 
@@ -664,7 +665,7 @@ namespace RiverHollow.WorldObjects
             }
 
             _bStacks = true;
-            _texTexture = GameContentManager.GetTexture(GameContentManager.ITEM_FOLDER + "Consumables");
+            _texTexture = GameContentManager.GetTexture(GameContentManager.FOLDER_ITEMS + "Consumables");
         }
 
         public override string GetDescription()
@@ -702,7 +703,7 @@ namespace RiverHollow.WorldObjects
         public StaticItem(int id, Dictionary<string, string> stringData, int num = 1)
         {
             ImportBasics(stringData, id, num);
-            _texTexture = GameContentManager.GetTexture(GameContentManager.ITEM_FOLDER + "StaticObjects");
+            _texTexture = GameContentManager.GetTexture(GameContentManager.FOLDER_ITEMS + "StaticObjects");
 
             _bStacks = stringData.ContainsKey("Stacks");
 

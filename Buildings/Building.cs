@@ -93,7 +93,7 @@ namespace RiverHollow.Buildings
             _id = id;
             GameContentManager.GetBuildingText(_id, ref _sName, ref _sDescription);
 
-            _texture = GameContentManager.GetTexture(GameContentManager.BUILDING_FOLDER + data["Texture"]);
+            _texture = GameContentManager.GetTexture(GameContentManager.FOLDER_BUILDINGS + data["Texture"]);
 
             //The dimensions of the Building in tiles
             string[] dimensions = data["Dimensions"].Split('-');

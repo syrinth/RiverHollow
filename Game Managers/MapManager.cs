@@ -31,7 +31,7 @@ namespace RiverHollow.Game_Managers
             }
         }
         public const string HomeMap = "mapManorGrounds";
-        public const string SpawnMap = "mapManorGrounds"; //"mapRiverHollowTown"; //"mapForestDungeonZone"; //"mapRiverHollowTown"; //;
+        public const string SpawnMap = "mapSwamp"; // "mapManorGrounds"; //"mapRiverHollowTown"; //"mapForestDungeonZone"; //"mapRiverHollowTown"; //;
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
 
@@ -220,6 +220,7 @@ namespace RiverHollow.Game_Managers
                 PlayerManager.CurrentMap = _newMapInfo.NextMap.Name;
                 PlayerManager.World.Position = Util.SnapToGrid(_newMapInfo.PlayerPosition);
                 CutsceneManager.CheckForTriggedCutscene();
+                _newMapInfo = default;
             }
 
             foreach(RHMap map in _tileMaps.Values)

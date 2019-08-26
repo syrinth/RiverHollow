@@ -177,7 +177,7 @@ namespace RiverHollow.WorldObjects
 
             _rSource = new Rectangle(x, y, _iWidth, _iHeight);
 
-            _sprite = new AnimatedSprite(@"Textures\worldObjects");
+            _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
             _sprite.AddAnimation(WorldObjAnimEnum.Idle, _iWidth, _iHeight, 1, 1f, x, y);
 
             if (stringData.ContainsKey("Shake"))
@@ -217,14 +217,11 @@ namespace RiverHollow.WorldObjects
 
     public class Destructible : WorldObject
     {
-        protected int _hp;
-        public int HP => _hp;
+        protected int _iHP;
+        public int HP => _iHP;
 
-        protected bool _bBreakable;
-        public bool Breakable => _bBreakable;
-
-        protected bool _bChoppable;
-        public bool Choppable => _bChoppable;
+        protected ToolEnum _eToolType;
+        public ToolEnum WhichTool => _eToolType;
 
         protected int _lvltoDmg;
         public int LvlToDmg => _lvltoDmg;
@@ -239,7 +236,7 @@ namespace RiverHollow.WorldObjects
 
             int x = 0;
             int y = 0;
-            _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
+            _texture = GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS);
 
             string[] texIndices = stringData["Image"].Split('-');
             x = int.Parse(texIndices[0]);
@@ -249,29 +246,26 @@ namespace RiverHollow.WorldObjects
             _iHeight = int.Parse(stringData["Height"]);
             if (stringData.ContainsKey("Item")) { ReadItemDrops(stringData["Item"]); }
 
-            if (stringData.ContainsKey("Chop")) { _bChoppable = true; }
-            if (stringData.ContainsKey("Break")) { _bBreakable = true; }
-            if (stringData.ContainsKey("Hp")) { _hp = int.Parse(stringData["Hp"]); }
+            if (stringData.ContainsKey("Tool")) { _eToolType = Util.ParseEnum<ToolEnum>(stringData["Tool"]);}
+            if (stringData.ContainsKey("Hp")) { _iHP = int.Parse(stringData["Hp"]); }
             if (stringData.ContainsKey("ReqLvl")) { _lvltoDmg = int.Parse(stringData["ReqLvl"]); }
 
             _rSource = new Rectangle(x, y, _iWidth, _iHeight);
         }
 
-        public Destructible(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height, bool breakIt, bool chopIt, int lvl, int hp) : base(id, pos, sourceRectangle, tex, width, height)
+        public Destructible(int id, Vector2 pos, Rectangle sourceRectangle, Texture2D tex, int width, int height, ToolEnum whatTool , int lvl, int hp) : base(id, pos, sourceRectangle, tex, width, height)
         {
             Type = ObjectType.Destructible;
-
-            _hp = hp;
-            _bBreakable = breakIt;
-            _bChoppable = chopIt;
+            _eToolType = whatTool;
+            _iHP = hp;
             _lvltoDmg = lvl;
         }
 
-        public bool DealDamage(int dmg)
+        public virtual bool DealDamage(int dmg)
         {
             bool rv = false;
-            _hp -= dmg;
-            rv = _hp <= 0;
+            _iHP -= dmg;
+            rv = _iHP <= 0;
 
             return rv;
         }
@@ -285,7 +279,66 @@ namespace RiverHollow.WorldObjects
         {
             Type = ObjectType.Destructible;
             if (stringData.ContainsKey("Texture")) { _texture = GameContentManager.GetTexture(stringData["Texture"]); }
-            _bChoppable = true;
+            _eToolType = ToolEnum.Axe;
+        }
+    }
+
+    public class EchoNode : Destructible
+    {
+        AnimatedSprite _sprite;
+
+        public override Vector2 MapPosition
+        {
+            set
+            {
+                Vector2 norm = Util.SnapToGrid(value);
+                _vMapPosition = norm;
+                if (_sprite != null)
+                {
+                    _sprite.Position = _vMapPosition;
+                }
+            }
+        }
+
+        public EchoNode(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
+        {
+            Type = ObjectType.Destructible;
+            _eToolType = ToolEnum.Lantern;
+            _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
+
+            string[] imageSplit = stringData["Image"].Split('-');
+            string[] idleSplit = stringData["Idle"].Split('-');
+            string[] gatheredSplit = stringData["Gathered"].Split('-');
+
+            int startX = int.Parse(imageSplit[0]);
+            int startY = int.Parse(imageSplit[1]);
+            _sprite.AddAnimation(WorldObjAnimEnum.Idle, startX, startY, TileSize, TileSize, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
+            _sprite.AddAnimation(WorldObjAnimEnum.Gathered, startX + (int.Parse(idleSplit[0]) * TileSize), startY, TileSize, TileSize, int.Parse(gatheredSplit[0]), float.Parse(gatheredSplit[1]));
+
+            _sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
+            _sprite.IsAnimating = true;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            _sprite.Draw(spriteBatch);
+        }
+
+        public override void Update(GameTime theGameTime)
+        {
+            _sprite.Update(theGameTime);
+        }
+
+        public override bool DealDamage(int dmg)
+        {
+            bool rv = false;
+            rv = base.DealDamage(dmg);
+
+            if (rv)
+            {
+                _sprite.SetCurrentAnimation(WorldObjAnimEnum.Gathered);
+            }
+            return rv;
         }
     }
 
@@ -860,7 +913,7 @@ namespace RiverHollow.WorldObjects
             }
             public void LoadContent()
             {
-                _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
+                _texture = GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS);
                 _rSource = new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight);
             }
 
@@ -942,7 +995,7 @@ namespace RiverHollow.WorldObjects
             }
             public void LoadContent()
             {
-                _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
+                _texture = GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS);
                 _rSource = new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight);
             }
 
@@ -1028,7 +1081,7 @@ namespace RiverHollow.WorldObjects
 
                 _rSource = new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight);
 
-                _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
+                _texture = GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS);
             }
 
             /// <summary>

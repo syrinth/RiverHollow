@@ -1285,8 +1285,9 @@ namespace RiverHollow.Tile_Engine
                     Destructible d = (Destructible)_targetTile.WorldObject;
 
                     //Sets the appropriate player tool to use
-                    if (d.Breakable) { rv = PlayerManager.SetTool(Tool.ToolEnum.Pick, mouseLocation); }
-                    else if (d.Choppable) { rv = PlayerManager.SetTool(Tool.ToolEnum.Axe, mouseLocation); }
+                    if (d.WhichTool == ToolEnum.Pick) { rv = PlayerManager.SetTool(GameManager.ToolEnum.Pick, mouseLocation); }
+                    else if (d.WhichTool == ToolEnum.Axe) { rv = PlayerManager.SetTool(GameManager.ToolEnum.Axe, mouseLocation); }
+                    else if (d.WhichTool == ToolEnum.Lantern) { rv = PlayerManager.SetTool(GameManager.ToolEnum.Lantern, mouseLocation); }
                 }
             }
 
@@ -1327,11 +1328,11 @@ namespace RiverHollow.Tile_Engine
                 }
                 else if (_targetTile.CanDig())      //If you can dig, set the shovel
                 {
-                    rv = PlayerManager.SetTool(Tool.ToolEnum.Shovel, mouseLocation);
+                    rv = PlayerManager.SetTool(GameManager.ToolEnum.Shovel, mouseLocation);
                 }
                 else if (_targetTile.Flooring != null && _targetTile.Flooring.IsEarth())
                 {
-                    rv = PlayerManager.SetTool(Tool.ToolEnum.WateringCan, mouseLocation);
+                    rv = PlayerManager.SetTool(GameManager.ToolEnum.WateringCan, mouseLocation);
                 }
 
             }

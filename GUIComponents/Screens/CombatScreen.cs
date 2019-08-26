@@ -692,7 +692,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 CombatAdventurer adv = (CombatAdventurer)_actor;
                 CharacterClass cClass = adv.CharacterClass;
 
-                AnimatedSprite sprWeaponSprite = new AnimatedSprite(GameContentManager.ITEM_FOLDER + "Combat\\Weapons\\" + cClass.WeaponType.ToString() + "\\" + adv.Weapon.GetItem().ItemID);
+                AnimatedSprite sprWeaponSprite = new AnimatedSprite(GameContentManager.FOLDER_ITEMS + "Combat\\Weapons\\" + cClass.WeaponType.ToString() + "\\" + adv.Weapon.GetItem().ItemID);
 
                 int xCrawl = 0;
                 int frameWidth = 32;

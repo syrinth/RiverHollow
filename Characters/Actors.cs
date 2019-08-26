@@ -26,11 +26,11 @@ namespace RiverHollow.Actors
     {
         protected const int HUMAN_HEIGHT = (TileSize * 2) + 2;
 
-        protected static string _sVillagerFolder = GameContentManager.ACTOR_FOLDER + @"Villagers\";
-        protected static string _sMonsterFolder = GameContentManager.ACTOR_FOLDER + @"Monsters\";
-        protected static string _sMobFolder = GameContentManager.ACTOR_FOLDER + @"Mobs\";
-        protected static string _sAdventurerFolder = GameContentManager.ACTOR_FOLDER + @"Adventurers\";
-        protected static string _sNPsCFolder = GameContentManager.ACTOR_FOLDER + @"NPCs\";
+        protected static string _sVillagerFolder = GameContentManager.FOLDER_ACTOR + @"Villagers\";
+        protected static string _sMonsterFolder = GameContentManager.FOLDER_ACTOR + @"Monsters\";
+        protected static string _sMobFolder = GameContentManager.FOLDER_ACTOR + @"Mobs\";
+        protected static string _sAdventurerFolder = GameContentManager.FOLDER_ACTOR + @"Adventurers\";
+        protected static string _sNPsCFolder = GameContentManager.FOLDER_ACTOR + @"NPCs\";
 
         protected string _sTexture;
         public enum ActorEnum { Actor, CombatAdventurer, CombatActor, Mob, Monster, NPC, Spirit, WorldAdventurer, WorldCharacter};
@@ -2250,7 +2250,7 @@ namespace RiverHollow.Actors
 
         protected int ImportBasics(Dictionary<string, string> data, int id)
         {
-            _sTexture = GameContentManager.MOB_FOLDER + data["Texture"];
+            _sTexture = GameContentManager.FOLDER_MOBS + data["Texture"];
 
             string[] split = data["Monster"].Split('-');
             for (int i = 0; i < split.Length; i++)

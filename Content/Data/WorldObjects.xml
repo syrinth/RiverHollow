@@ -9,11 +9,11 @@
     <!--Value: Crafter/srcRow srcColumn/Recipe1 Recipe2 ...-->
     <Item>
       <Key>0</Key>
-      <Value>[Type:Destructible][Image:0-0][Width:16][Height:16][Break][Hp:1][ReqLvl:1][Item:0-1]</Value>
+      <Value>[Type:Destructible][Image:0-0][Width:16][Height:16][Tool:Pick][Hp:1][ReqLvl:1][Item:0-1]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Destructible][Image:32-32][Width:32][Height:32][Break][Hp:5][ReqLvl:1][Item:0-5]</Value>
+      <Value>[Type:Destructible][Image:32-32][Width:32][Height:32][Tool:Pick][Hp:5][ReqLvl:1][Item:0-5]</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -29,7 +29,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Destructible][Image:0-32][Width:16][Height:16][Break][Hp:2][ReqLvl:1][Item:80]</Value>
+      <Value>[Type:Destructible][Image:0-32][Width:16][Height:16][Tool:Pick][Hp:2][ReqLvl:1][Item:80]</Value>
     </Item>
     <Item>
       <Key>6</Key>
@@ -49,43 +49,47 @@
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Destructible][Image:96-48][Width:16][Height:16][Break][Hp:10][ReqLvl:1][Item:90-1]</Value>
+      <Value>[Type:Destructible][Image:96-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:90-1]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Destructible][Image:112-48][Width:16][Height:16][Break][Hp:10][ReqLvl:1][Item:91]</Value>
+      <Value>[Type:Destructible][Image:112-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:91]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Destructible][Image:128-48][Width:16][Height:16][Break][Hp:10][ReqLvl:1][Item:92]</Value>
+      <Value>[Type:Destructible][Image:128-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:92]</Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Destructible][Image:144-48][Width:16][Height:16][Break][Hp:10][ReqLvl:1][Item:93]</Value>
+      <Value>[Type:Destructible][Image:144-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:93]</Value>
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Destructible][Image:160-48][Width:16][Height:16][Break][Hp:10][ReqLvl:1][Item:94]</Value>
+      <Value>[Type:Destructible][Image:160-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:94]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Destructible][Image:96-64][Width:16][Height:16][Break][Hp:10][ReqLvl:1][Item:95]</Value>
+      <Value>[Type:Destructible][Image:96-64][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:95]</Value>
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Destructible][Image:112-64][Width:16][Height:16][Break][Hp:10][ReqLvl:1][Item:96]</Value>
+      <Value>[Type:Destructible][Image:112-64][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:96]</Value>
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Type:Destructible][Image:128-64][Width:16][Height:16][Break][Hp:10][ReqLvl:1][Item:97]</Value>
+      <Value>[Type:Destructible][Image:128-64][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:97]</Value>
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Destructible][Image:144-64][Width:16][Height:16][Break][Hp:5][ReqLvl:1][Item:98]</Value>
+      <Value>[Type:Destructible][Image:144-64][Width:16][Height:16][Tool:Pick][Hp:5][ReqLvl:1][Item:98]</Value>
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Type:Destructible][Image:160-64][Width:16][Height:16][Break][Hp:5][ReqLvl:1][Item:99]</Value>
+      <Value>[Type:Destructible][Image:160-64][Width:16][Height:16][Tool:Pick][Hp:5][ReqLvl:1][Item:99]</Value>
+    </Item>
+    <Item>
+      <Key>20</Key>
+      <Value>[Type:EchoNode][Image:0-80][Width:16][Height:16][Tool:Lantern][Hp:5][ReqLvl:1][Item:35][Idle:5-0.150][Gathered:7-0.150]</Value>
     </Item>
     <!--<60-79> Plants-->
     <Item>

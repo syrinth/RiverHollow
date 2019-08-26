@@ -69,23 +69,40 @@
     <!--<20-24> Tools-->
     <Item>
       <Key>20</Key>
-      <Value>[Type:Tool][Image:0-0][Sell:3000][ToolType:Pick][Dmg:1][Stam:1]</Value>
+      <Value>[Type:Tool][Image:0-0][Sell:3000][ToolType:Pick][Stam:1][Power:1]</Value>
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[Type:Tool][Image:0-32][Sell:3000][ToolType:Axe][Dmg:1][Stam:1]</Value>
+      <Value>[Type:Tool][Image:0-16][Sell:3000][ToolType:Axe][Stam:1][Power:1]</Value>
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Type:Tool][Image:0-48][Sell:3000][ToolType:Shovel][Stam:1]</Value>
+      <Value>[Type:Tool][Image:0-32][Sell:3000][ToolType:Shovel][Stam:1][Power:1]</Value>
     </Item>
     <Item>
       <Key>23</Key>
-      <Value>[Type:Tool][Image:0-64][Sell:3000][ToolType:WateringCan][Stam:1]</Value>
+      <Value>[Type:Tool][Image:0-96][Sell:3000][ToolType:WateringCan][Stam:1][Power:1]</Value>
     </Item>
     <Item>
       <Key>24</Key>
-      <Value>[Type:Tool][Image:0-80][Sell:3000][ToolType:Harp][Stam:1]</Value>
+      <Value>[Type:Tool][Image:0-64][Sell:3000][ToolType:Harp][Stam:1][Power:1]</Value>
+    </Item>
+    <Item>
+      <Key>25</Key>
+      <Value>[Type:Tool][Image:0-64][Sell:3000][ToolType:Lantern][Stam:1][Power:1]</Value>
+    </Item>
+    <!--<35-39> Essence Resources-->
+    <Item>
+      <Key>35</Key>
+      <Value>[Type:Resource][Image:0-80][Sell:30]</Value>
+    </Item>
+    <Item>
+      <Key>36</Key>
+      <Value>[Type:Resource][Image:16-80][Sell:60]</Value>
+    </Item>
+    <Item>
+      <Key>37</Key>
+      <Value>[Type:Resource][Image:32-80][Sell:90]</Value>
     </Item>
     <!--<40-59> Plant Resources-->
     <Item>
@@ -355,8 +372,12 @@
       <Value>[Type:Equipment][Image:48-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:4][Atk:Moderate][Mag:Major][ReqItems:92-4]</Value>
     </Item>
     <Item>
+      <Key>624</Key>
+      <Value>[Type:Equipment][Image:64-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:5][Atk:Moderate][Mag:Major][ReqItems:87-5]</Value>
+    </Item>
+    <Item>
       <Key>625</Key>
-      <Value>[Type:Equipment][Image:80-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:6][Atk:Moderate][Mag:Major][ReqItems:87-5]</Value>
+      <Value>[Type:Equipment][Image:80-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:6][Atk:Moderate][Mag:Major][ReqItems:88-3|96-3]</Value>
     </Item>
     <Item>
       <Key>626</Key>

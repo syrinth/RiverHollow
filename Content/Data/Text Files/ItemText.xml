@@ -83,6 +83,23 @@
       <Key>24</Key>
       <Value>Harp/The harp of your ancestors. According to legend, this instrument will let you communicate with the spirits of nature.</Value>
     </Item>
+    <Item>
+      <Key>25</Key>
+      <Value>Lantern/Used to call forth the energy of spent emotions</Value>
+    </Item>
+    <!--<35-39> Echo Resources-->
+    <Item>
+      <Key>35</Key>
+      <Value>Echo of Joy/Joy given form</Value>
+    </Item>
+    <Item>
+      <Key>36</Key>
+      <Value>Echo of Sorrow/Echoes of a long lost pain</Value>
+    </Item>
+    <Item>
+      <Key>37</Key>
+      <Value>Echo of Rage/An echo of a long ago wrong.</Value>
+    </Item>
     <!--<40-59> Plant Resources-->
     <Item>
       <Key>40</Key>
@@ -350,8 +367,12 @@
       <Value>Ruby Rose/These stones were first popularized by a trio of sisters that defended the Western Woods.</Value>
     </Item>
     <Item>
+      <Key>624</Key>
+      <Value>Light of Inspiration/A polished golden orb which holds the magical accomplishments of countless Summoners within its polished depths.</Value>
+    </Item>
+    <Item>
       <Key>625</Key>
-      <Value>Light of Inspiration/a polished golden orb which holds the magical accomplishments of countless Summoners within its polished depths.</Value>
+      <Value>Ancient Orb/This orb holds within it whispers and echoes of an ancient time, held in amber and boundi nmythril.</Value>
     </Item>
     <Item>
       <Key>626</Key>

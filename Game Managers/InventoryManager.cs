@@ -499,7 +499,7 @@ Exit:
             return rv;
         }
 
-        public static Tool FindTool(Tool.ToolEnum tool)
+        public static Tool FindTool(GameManager.ToolEnum tool)
         {
             Tool rv = null;
             for (int i = 0; i < maxItemRows; i++)
@@ -513,7 +513,7 @@ Exit:
                             Tool t = (Tool)_arrPlayerInventory[i, j];
                             if(t.ToolType == tool)
                             {
-                                if(rv != null && t.DmgValue > rv.DmgValue) { rv = t; }
+                                if(rv != null && t.Power > rv.Power) { rv = t; }
                                 else { rv = t; }
                             }
                         }

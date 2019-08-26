@@ -28,7 +28,7 @@ namespace RiverHollow.Game_Managers
         public enum CActorAnimEnum { Spawn, Idle, Attack, Cast, Hurt, KO, Critical, Win };
         public enum WeatherAnimEnum { None, Rain, Snow };
         public enum ToolAnimEnum { Down, Up, Left, Right }
-        public enum WorldObjAnimEnum { Idle, Working, Shake};
+        public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
         public enum GenAnimEnum { Play };
 
         public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade};
@@ -50,6 +50,7 @@ namespace RiverHollow.Game_Managers
         public enum ArmorEnum { None, Cloth, Light, Heavy };
         public enum ArmorSlotEnum { None, Head, Armor, Wrist };
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
+        public enum ToolEnum { Pick, Axe, Shovel, WateringCan, Harp, Lantern };
         public static float Scale = 4f;
         public const int TileSize = 16;
         public static int ScaledTileSize => (int)(TileSize * Scale);

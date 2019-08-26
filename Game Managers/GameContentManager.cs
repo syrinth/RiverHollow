@@ -8,12 +8,13 @@ namespace RiverHollow.Game_Managers
 {
     public static class GameContentManager
     {
-        public const string ACTOR_FOLDER = @"Textures\Actors\";
-        public const string BUILDING_FOLDER = @"Textures\Buildings\";
-        public const string ITEM_FOLDER = @"Textures\Items\";
-        public const string MOB_FOLDER = @"Textures\Actors\Mobs\";
-        public const string PLAYER_FOLDER = @"Textures\Actors\Player\";
-        public const string TEXT_FILE_FOLDER = @"Data\Text Files\";
+        public const string FILE_WORLDOBJECTS = @"Textures\worldObjects";
+        public const string FOLDER_ACTOR = @"Textures\Actors\";
+        public const string FOLDER_BUILDINGS = @"Textures\Buildings\";
+        public const string FOLDER_ITEMS = @"Textures\Items\";
+        public const string FOLDER_MOBS = @"Textures\Actors\Mobs\";
+        public const string FOLDER_PLAYER = @"Textures\Actors\Player\";
+        public const string FOLDER_TEXTFILES = @"Data\Text Files\";
 
         private static ContentManager _content;
         private static Dictionary<string, Texture2D> _diTextures;
@@ -55,8 +56,8 @@ namespace RiverHollow.Game_Managers
             LoadGUIs();
             LoadIcons();
             LoadMerchandise();
-            AddDirectoryTextures(BUILDING_FOLDER);
-            AddDirectoryTextures(ITEM_FOLDER);
+            AddDirectoryTextures(FOLDER_BUILDINGS);
+            AddDirectoryTextures(FOLDER_ITEMS);
 
             LoadFont(_content);
         }
@@ -64,16 +65,16 @@ namespace RiverHollow.Game_Managers
         #region Load Methods
         private static void LoadTextFiles()
         {
-            _diItemText = _content.Load<Dictionary<int, string>>(TEXT_FILE_FOLDER + "ItemText");
-            _diGameText = _content.Load<Dictionary<string, string>>(TEXT_FILE_FOLDER + "GameText");
-            _diMonsterInfo = _content.Load<Dictionary<int, string>>(TEXT_FILE_FOLDER + "MonsterInfo");
-            _diStatusEffectText = _content.Load<Dictionary<int, string>>(TEXT_FILE_FOLDER + "StatusText");
-            _diCombatSkillsText = _content.Load<Dictionary<string, string>>(TEXT_FILE_FOLDER + "CombatSkillsText");
+            _diItemText = _content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + "ItemText");
+            _diGameText = _content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + "GameText");
+            _diMonsterInfo = _content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + "MonsterInfo");
+            _diStatusEffectText = _content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + "StatusText");
+            _diCombatSkillsText = _content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + "CombatSkillsText");
 
             _diSongs = _content.Load<Dictionary<int, List<string>>>(@"Data\Songs");
-            _diAdventurerDialogue = _content.Load<Dictionary<string, string>>(TEXT_FILE_FOLDER + @"Dialogue\Adventurers");
+            _diAdventurerDialogue = _content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + @"Dialogue\Adventurers");
             _diNPCDialogue = new Dictionary<int, Dictionary<string, string>>();
-            foreach (string s in Directory.GetFiles(@"Content\" + TEXT_FILE_FOLDER + "Dialogue"))
+            foreach (string s in Directory.GetFiles(@"Content\" + FOLDER_TEXTFILES + "Dialogue"))
             {
                 string fileName = Path.GetFileName(s).Replace("NPC", "").Split('.')[0];
                 int file = -1;
@@ -87,7 +88,7 @@ namespace RiverHollow.Game_Managers
         }
         private static void LoadCharacters()
         {
-            AddDirectoryTextures(ACTOR_FOLDER);
+            AddDirectoryTextures(FOLDER_ACTOR);
 
             AddTexture(@"Textures\texPlayer");
             AddTexture(@"Textures\texFlooring");

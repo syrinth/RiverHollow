@@ -91,7 +91,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 {
                     text = GameContentManager.GetGameText("ClassItemConfirm");
                 }
-                else if (Item.IsTool() && ((Tool)Item).ToolType == Tool.ToolEnum.Harp) {
+                else if (Item.IsTool() && ((Tool)Item).ToolType == GameManager.ToolEnum.Harp) {
                     Spirit s = MapManager.CurrentMap.FindSpirit();
                     if (s != null)
                     {

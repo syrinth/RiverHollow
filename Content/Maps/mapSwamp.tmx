@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="9">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="11">
  <properties>
   <property name="Outside" type="bool" value="true"/>
   <property name="ResourcesMax" type="int" value="20"/>
@@ -150,11 +150,13 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="7" name="Character Layer"/>
+ <objectgroup id="7" name="Character Layer">
+  <object id="10" name="PlayerSpawn" x="229.5" y="103.25" width="11" height="9.5"/>
+ </objectgroup>
  <objectgroup id="2" name="Spawn">
   <object id="3" name="Spawn" x="2.176" y="178.527" width="193.667" height="368.333">
    <properties>
-    <property name="Resources" value="6-8-17"/>
+    <property name="Resources" value="20"/>
    </properties>
   </object>
   <object id="8" name="Spawn" x="386.5" y="211.833" width="236.334" height="157">
