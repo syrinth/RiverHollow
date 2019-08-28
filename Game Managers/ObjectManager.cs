@@ -205,7 +205,7 @@ namespace RiverHollow.Game_Managers
                     case "Tree":
                         return new Tree(id, liData, pos);
                     case "Staircase":
-                        return new Staircase(id, pos, new Rectangle(96, 0, 16, 16), GetTexture(@"Textures\worldObjects"), TileSize, TileSize);
+                        return new Staircase(id, pos, TileSize, TileSize);
                     case "Container":
                         return new Container(id, liData);
                     case "ClassChanger":
@@ -230,15 +230,15 @@ namespace RiverHollow.Game_Managers
         {
             if (doorType.Equals("MobDoor"))
             {
-                return new MobDoor(Util.SnapToGrid(pos), new Rectangle(64, 0, 16, 32), GetTexture(@"Textures\worldObjects"), TileSize, TileSize * 2);
+                return new MobDoor(Util.SnapToGrid(pos), TileSize, TileSize * 2);
             }
             else if (doorType.Equals("KeyDoor"))
             {
-                return new KeyDoor(Util.SnapToGrid(pos), new Rectangle(64, 0, 16, 32), GetTexture(@"Textures\worldObjects"), TileSize, TileSize * 2);
+                return new KeyDoor(Util.SnapToGrid(pos), TileSize, TileSize * 2);
             }
             else if (doorType.Equals("SeasonDoor"))
             {
-                return new SeasonDoor(Util.SnapToGrid(pos), new Rectangle(64, 0, 16, 32), GetTexture(@"Textures\worldObjects"), TileSize, TileSize * 2);
+                return new SeasonDoor(Util.SnapToGrid(pos), TileSize, TileSize * 2);
             }
             return null;
         }

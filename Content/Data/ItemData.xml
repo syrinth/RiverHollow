@@ -81,11 +81,11 @@
     </Item>
     <Item>
       <Key>23</Key>
-      <Value>[Type:Tool][Image:0-96][Sell:3000][ToolType:WateringCan][Stam:1][Power:1]</Value>
+      <Value>[Type:Tool][Image:0-48][Sell:3000][ToolType:WateringCan][Stam:1][Power:1]</Value>
     </Item>
     <Item>
       <Key>24</Key>
-      <Value>[Type:Tool][Image:0-64][Sell:3000][ToolType:Harp][Stam:1][Power:1]</Value>
+      <Value>[Type:Tool][Image:0-96][Sell:3000][ToolType:Harp][Stam:1][Power:1]</Value>
     </Item>
     <Item>
       <Key>25</Key>
@@ -128,7 +128,7 @@
     <!--<60-79> Seeds-->
     <Item>
       <Key>60</Key>
-      <Value>[Type:StaticItem][Image:48-16][Sell:3]</Value>
+      <Value>[Type:StaticItem][Image:0-32][Sell:3][Stacks]</Value>
     </Item>
     <!--<80-89> Ores and Bars-->
     <Item>
@@ -336,6 +336,10 @@
     <Item>
       <Key>601</Key>
       <Value>[Type:Equipment][Image:16-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:2][[Atk:Minor][Mag:Major][ReqItems:5-3]</Value>
+    </Item>
+    <Item>
+      <Key>609</Key>
+      <Value>[Type:Equipment][Image:128-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:10][[Atk:Minor][Mag:Major][ReqItems:99-3|2-3]</Value>
     </Item>
     <!--<610> Healer-->
     <Item>

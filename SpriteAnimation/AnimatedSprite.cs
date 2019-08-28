@@ -168,19 +168,21 @@ namespace RiverHollow.SpriteAnimations
             _height = sprite._height;
         }
 
-        //TODO: Remove this method, classes should do it manually, not in this level
-        public void AddAnimation<TEnum>(TEnum animEnum, int frameWidth, int frameHeight, int numFrames, float frameSpeed, int startX = 0, int startY = 0, bool pingPong = false)
+        public void AddAnimation<TEnum>(TEnum animEnum, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false)
         {
-            this.AddAnimation(animEnum, startX, startY, frameWidth, frameHeight, numFrames, frameSpeed, pingPong);
-            this.IsAnimating = true;
+            AddAnimation(Util.GetEnumString(animEnum), startX, startY, Width, Height, Frames, FrameLength, pingPong);
         }
 
-        public void AddAnimation<TEnum>(TEnum animEnum, int X, int Y, int Width, int Height, int Frames, float FrameLength, bool pingPong = false)
+        public void AddAnimation(string animationName, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false)
         {
-            _diFrameAnimations.Add(Util.GetEnumString(animEnum), new FrameAnimation(X, Y, Width, Height, Frames, FrameLength, pingPong));
+            _diFrameAnimations.Add(animationName, new FrameAnimation(startX, startY, Width, Height, Frames, FrameLength, pingPong));
             _width = Width;
             _height = Height;
             v2Center = new Vector2(_width / 2, _height / 2);
+            if (_diFrameAnimations.Count == 1)
+            {
+                SetCurrentAnimation(animationName);
+            }
         }
 
         public void SetCurrentAnimation<TEnum>(TEnum animate)

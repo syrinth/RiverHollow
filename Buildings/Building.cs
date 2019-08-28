@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Actors;
 using RiverHollow.Game_Managers;
 using RiverHollow.Misc;
+using RiverHollow.SpriteAnimations;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 
@@ -19,10 +20,8 @@ namespace RiverHollow.Buildings
         protected int _iEntHeight;
         protected int _iBaseX;
         protected int _iBaseY;
-        public override int BaseWidth => _iBaseWidth * TileSize; //In Pixels
-        public override int BaseHeight => _iBaseHeight * TileSize; //In Pixels
-        public int PxWidth => _iWidth * TileSize;
-        public int PxHeight => _iHeight * TileSize;
+        public override int BaseWidth => _iBaseWidth;
+        public override int BaseHeight => _iBaseHeight;
 
         protected int _iBldgLvl = 0;
         public int Level => _iBldgLvl;
@@ -39,7 +38,7 @@ namespace RiverHollow.Buildings
         public string GivenName=> _sGivenName;
 
         public override Rectangle CollisionBox { get => GenerateCollisionBox(); }
-        public Rectangle SelectionBox { get => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _texture.Width, _texture.Height); }
+        public Rectangle SelectionBox { get => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _sprite.Width, _sprite.Height); }
 
         protected Rectangle _rExit;
         public Rectangle BoxToExit { get => _rExit; }
@@ -88,52 +87,50 @@ namespace RiverHollow.Buildings
             ImportBasics(data, id);
         }
 
-        protected void ImportBasics(Dictionary<string, string> data, int id)
+        protected void ImportBasics(Dictionary<string, string> stringData, int id)
         {
             _id = id;
             GameContentManager.GetBuildingText(_id, ref _sName, ref _sDescription);
 
-            _texture = GameContentManager.GetTexture(GameContentManager.FOLDER_BUILDINGS + data["Texture"]);
-
             //The dimensions of the Building in tiles
-            string[] dimensions = data["Dimensions"].Split('-');
+            string[] dimensions = stringData["Dimensions"].Split('-');
             _iWidth = int.Parse(dimensions[0]);
             _iHeight = int.Parse(dimensions[1]);
 
             //The top-left most tile that forms the base of the building
-            string[] baseSq = data["FirstBase"].Split('-');
+            string[] baseSq = stringData["FirstBase"].Split('-');
             _iBaseX = int.Parse(baseSq[0]);
             _iBaseY = int.Parse(baseSq[1]);
 
             //Width and Height of the building's base
-            _iBaseWidth = int.Parse(data["Width"]);
-            _iBaseHeight = int.Parse(data["Height"]);
+            _iBaseWidth = int.Parse(stringData["Width"]);
+            _iBaseHeight = int.Parse(stringData["Height"]);
 
             //The rectangle, in pixels, that forms the entrance to the building
-            string[] ent = data["Entrance"].Split('-');
+            string[] ent = stringData["Entrance"].Split('-');
             _iEntX = int.Parse(ent[0]);
             _iEntY = int.Parse(ent[1]);
             _iEntWidth = int.Parse(ent[2]);
             _iEntHeight = int.Parse(ent[3]);
 
             //The amount of time it takes for a building to change stages
-            if (data.ContainsKey("UpgradeTime")) { _iUpgradeTime = int.Parse(data["UpgradeTime"]); }
+            if (stringData.ContainsKey("UpgradeTime")) { _iUpgradeTime = int.Parse(stringData["UpgradeTime"]); }
 
             //Sets the position from which the Mason will spawn tobuild the building
-            if (data.ContainsKey("BuildSpot")) {
-                string[] split = data["BuildSpot"].Split('-');
-                _vecBuildspot = new Vector2(int.Parse(split[0]) * TileSize, int.Parse(split[1]) * TileSize);
+            if (stringData.ContainsKey("BuildSpot")) {
+                string[] split = stringData["BuildSpot"].Split('-');
+                _vecBuildspot = new Vector2(int.Parse(split[0]), int.Parse(split[1]));
             }
 
             //Worker data for the building, if appropriate
-            if (data.ContainsKey("Workers"))
+            if (stringData.ContainsKey("Workers"))
             {
                 //Start level is 1 so that we display in built state
                 _iBldgLvl = 1;
                 _bHoldsWorkers = true;
                 _arrWorkerTypes = new int[2];
 
-                string[] workerTypes = data["Workers"].Split('-');
+                string[] workerTypes = stringData["Workers"].Split('-');
                 _arrWorkerTypes[0] = int.Parse(workerTypes[0]);
                 _arrWorkerTypes[1] = int.Parse(workerTypes[1]);
 
@@ -143,16 +140,30 @@ namespace RiverHollow.Buildings
             }
 
             //Default is 3, but some buildings may allow more or less
-            if (data.ContainsKey("WorkersPerLevel")) { _iWorkersPerLevel = int.Parse(data["WorkersPerLevel"]); }
+            if (stringData.ContainsKey("WorkersPerLevel")) { _iWorkersPerLevel = int.Parse(stringData["WorkersPerLevel"]); }
 
             //Flag for whether or not this building is the Manor
-            _bManor = data.ContainsKey("Manor");
+            _bManor = stringData.ContainsKey("Manor");
 
             _iPersonalID = PlayerManager.GetNewBuildingID();
             _liWorkers = new List<WorldAdventurer>();
             _liPlacedObjects = new List<WorldObject>();
 
-            SetSourceRect();
+            LoadSprite(stringData, GameContentManager.FOLDER_BUILDINGS + stringData["Texture"]);
+        }
+
+        protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = "Textures\\worldObjects")
+        {
+            int startX = 0;
+            int startY = 0;
+
+            _sprite = new AnimatedSprite(textureName);
+            for(int i = 0; i < MaxBldgLevel; i++)
+            {
+                _sprite.AddAnimation(i.ToString(), startX, startY, _iWidth, _iHeight);
+                startX += _iWidth;
+            }
+            _sprite.SetCurrentAnimation(_iBldgLvl.ToString());
         }
 
         /// <summary>
@@ -162,8 +173,8 @@ namespace RiverHollow.Buildings
         /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle destRect = new Rectangle((int)this.MapPosition.X, (int)this.MapPosition.Y, PxWidth, PxHeight);
-            spriteBatch.Draw(_texture, destRect, _rSource, _selected ? Color.Green : Color.White, 0, Vector2.Zero, SpriteEffects.None, MapPosition.Y + Texture.Height);
+            _sprite.SetColor(_selected ? Color.Green : Color.White);
+            base.Draw(spriteBatch);
         }
 
         /// <summary>
@@ -173,8 +184,8 @@ namespace RiverHollow.Buildings
         {
             //Start at the top left corner of the building, then move over and
             //down by the number of pixels required to get to the base.
-            int startX = (int)_vMapPosition.X + (_iBaseX * TileSize);
-            int startY = (int)_vMapPosition.Y + (_iBaseY * TileSize);
+            int startX = (int)_vMapPosition.X + _iBaseX;
+            int startY = (int)_vMapPosition.Y + _iBaseY;
 
             return new Rectangle(startX, startY, BaseWidth, BaseHeight);
         }
@@ -196,7 +207,7 @@ namespace RiverHollow.Buildings
         public override void SetCoordinatesByGrid(Vector2 position)
         {
             //Set the top-left corner of the building position 
-            _vMapPosition = position;
+            MapPosition = position;
 
             //Determine where the top-left corner of the entrance Rectangle should be
             int startX = (int)_vMapPosition.X + _iEntX;
@@ -323,7 +334,7 @@ namespace RiverHollow.Buildings
         {
             if (startAtZero) { _iBldgLvl = 0; }
             _iUpgradeTimer = _iUpgradeTime + 1;
-            SetSourceRect();
+            _sprite.SetCurrentAnimation(_iBldgLvl.ToString());
 
             GameManager.TownMason.SetBuildTarget(this);
         }
@@ -345,18 +356,11 @@ namespace RiverHollow.Buildings
             if (_iBldgLvl + 1 < MaxBldgLevel)
             {
                 _iBldgLvl++;
-                _rSource.X += PxWidth;
             }
 
-            GameManager.TownMason.SetBuildTarget(null);
-        }
+            _sprite.SetCurrentAnimation(_iBldgLvl.ToString());
 
-        /// <summary>
-        /// Called to move the source rectangle whenever the building level changes
-        /// </summary>
-        private void SetSourceRect()
-        {
-            _rSource = new Rectangle(_iBldgLvl * PxWidth, 0, PxWidth, PxHeight);
+            GameManager.TownMason.SetBuildTarget(null);
         }
 
         /// <summary>

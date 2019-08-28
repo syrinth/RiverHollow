@@ -30,6 +30,7 @@ namespace RiverHollow.Game_Managers
         public enum ToolAnimEnum { Down, Up, Left, Right }
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
         public enum GenAnimEnum { Play };
+        public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
 
         public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade};
         public enum PotencyBonusEnum { None, Conditions, Summons };

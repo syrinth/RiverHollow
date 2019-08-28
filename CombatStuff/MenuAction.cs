@@ -250,7 +250,7 @@ namespace RiverHollow.Actors.CombatStuff
                 }
 
                 AnimatedSprite sprite = new AnimatedSprite(_sAnimation);
-                sprite.AddAnimation(GenAnimEnum.Play, _iAnimWidth, _iAnimHeight, _iFrames, _fFrameSpeed);
+                sprite.AddAnimation(GenAnimEnum.Play, 0, 0, _iAnimWidth, _iAnimHeight, _iFrames, _fFrameSpeed);
                 sprite.SetCurrentAnimation(GenAnimEnum.Play);
                 sprite.IsAnimating = false;
                 sprite.SetScale(CombatManager.CombatScale);

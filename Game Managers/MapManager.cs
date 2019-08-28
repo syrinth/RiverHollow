@@ -31,7 +31,7 @@ namespace RiverHollow.Game_Managers
             }
         }
         public const string HomeMap = "mapManorGrounds";
-        public const string SpawnMap = "mapSwamp"; // "mapManorGrounds"; //"mapRiverHollowTown"; //"mapForestDungeonZone"; //"mapRiverHollowTown"; //;
+        public const string SpawnMap = "mapRiverHollowTown"; //"mapSwamp"; // "mapManorGrounds"; //"mapForestDungeonZone"; //"mapRiverHollowTown"; //;
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
 

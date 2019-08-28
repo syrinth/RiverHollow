@@ -2,6 +2,8 @@
 using RiverHollow.Game_Managers;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using RiverHollow.SpriteAnimations;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.WorldObjects
 {
@@ -15,8 +17,8 @@ namespace RiverHollow.WorldObjects
             _vMapPosition = new Vector2(800, 800);
             _iWidth = 64;
             _iHeight = 64;
-            _rSource = new Rectangle(32, 0, 64, 64);
-            _texture = GameContentManager.GetTexture(@"Textures\worldObjects");
+            _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
+            _sprite.AddAnimation(WorldObjAnimEnum.Idle, 32, 0, 64, 64);
 
             _toSell = new List<Item>();
         }

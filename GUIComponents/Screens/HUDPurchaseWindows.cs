@@ -7,6 +7,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIObjects;
 using RiverHollow.WorldObjects;
 using System;
@@ -236,7 +237,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             Building _bldg;
             public Building Building => _bldg;
-            GUIImage _giBuilding;
+            GUISprite _giBuilding;
             SpriteFont _font;
             List<GUIObject> _liReqs;
             Merchandise _merch;
@@ -264,7 +265,7 @@ namespace RiverHollow.GUIComponents.Screens
                     _bldgWindow.CenterOnScreen();
                     _bldgWindow.PositionSub(new Vector2(_bldgWindow.Width / 2 + TileSize / 2, 0));
 
-                    _giBuilding = new GUIImage(_bldg.SourceRectangle, _bldg.PxWidth, _bldg.PxHeight, _bldg.Texture);
+                    _giBuilding = new GUISprite(_bldg.Sprite);
                     _giBuilding.SetScale(newScale);
                     _giBuilding.AnchorToInnerSide(_bldgWindow, SideEnum.Bottom);
                     _giBuilding.AlignToObject(_bldgWindow, SideEnum.CenterX);
@@ -295,7 +296,7 @@ namespace RiverHollow.GUIComponents.Screens
                     _infoWindow.AnchorAndAlignToObject(_bldgWindow, SideEnum.Right, SideEnum.Bottom, TileSize / 2);
 
                     //Placeholderimage
-                    _giBuilding = new GUICoin();
+                    _giBuilding = new GUISprite(new SpriteAnimations.AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS));
                     _giBuilding.CenterOnObject(_bldgWindow);
                 }
 

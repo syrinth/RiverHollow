@@ -332,6 +332,10 @@
       <Key>601</Key>
       <Value>Copper Wand/A magical wand</Value>
     </Item>
+    <Item>
+      <Key>609</Key>
+      <Value>Thunderstorm/These crackling wands were first created during the largest thunderstorm in three centuries.</Value>
+    </Item>
     <!--Healer-->
     <Item>
       <Key>610</Key>

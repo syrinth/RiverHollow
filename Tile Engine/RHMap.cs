@@ -1267,12 +1267,16 @@ namespace RiverHollow.Tile_Engine
                 {
                     Plant p = (Plant)obj;
                     Item i = p.Harvest(false);
-                    //if (i != null)
-                    //{
-                    //    _liItems.Add(i);
-                    //}
-                    MapManager.RemoveWorldObject(p);
-                    p.RemoveSelfFromTiles();
+                    if (i != null)
+                    {
+                        _liItems.Add(i);
+                        MapManager.RemoveWorldObject(p);
+                        p.RemoveSelfFromTiles();
+                    }   //If we failed to harvest, water the plant if possible
+                    else if (_targetTile.Flooring != null && _targetTile.Flooring.IsEarth())
+                    {
+                        rv = PlayerManager.SetTool(GameManager.ToolEnum.WateringCan, mouseLocation);
+                    }
                 }
                 else if (obj.IsForageable())    //Remove self from the map and harvest the item
                 {
@@ -1330,11 +1334,6 @@ namespace RiverHollow.Tile_Engine
                 {
                     rv = PlayerManager.SetTool(GameManager.ToolEnum.Shovel, mouseLocation);
                 }
-                else if (_targetTile.Flooring != null && _targetTile.Flooring.IsEarth())
-                {
-                    rv = PlayerManager.SetTool(GameManager.ToolEnum.WateringCan, mouseLocation);
-                }
-
             }
 
             return rv;
