@@ -4,6 +4,7 @@ using RiverHollow.Actors;
 using RiverHollow.Game_Managers;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
+using RiverHollow.Tile_Engine;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 
@@ -23,7 +24,7 @@ namespace RiverHollow.Buildings
         public override int BaseWidth => _iBaseWidth;
         public override int BaseHeight => _iBaseHeight;
 
-        protected int _iBldgLvl = 0;
+        protected int _iBldgLvl = 1;
         public int Level => _iBldgLvl;
 
         protected string _sDescription;
@@ -86,6 +87,8 @@ namespace RiverHollow.Buildings
 
         public Building(Dictionary<string, string> data, int id)
         {
+            _liWorkers = new List<WorldAdventurer>();
+            _liPlacedObjects = new List<WorldObject>();
             ImportBasics(data, id);
         }
 
@@ -151,8 +154,6 @@ namespace RiverHollow.Buildings
             _bUnique = stringData.ContainsKey("Unique");
 
             _iPersonalID = PlayerManager.GetNewBuildingID();
-            _liWorkers = new List<WorldAdventurer>();
-            _liPlacedObjects = new List<WorldObject>();
 
             LoadSprite(stringData, GameContentManager.FOLDER_BUILDINGS + stringData["Texture"]);
         }
@@ -163,7 +164,7 @@ namespace RiverHollow.Buildings
             int startY = 0;
 
             _sprite = new AnimatedSprite(textureName);
-            for(int i = 0; i < MaxBldgLevel; i++)
+            for(int i = 1; i <= MaxBldgLevel; i++)
             {
                 _sprite.AddAnimation(i.ToString(), startX, startY, _iWidth, _iHeight);
                 startX += _iWidth;
@@ -178,8 +179,11 @@ namespace RiverHollow.Buildings
         /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _sprite.SetColor(_selected ? Color.Green : Color.White);
-            base.Draw(spriteBatch);
+            if (_iBldgLvl > 0)
+            {
+                _sprite.SetColor(_selected ? Color.Green : Color.White);
+                base.Draw(spriteBatch);
+            }
         }
 
         /// <summary>
@@ -331,23 +335,82 @@ namespace RiverHollow.Buildings
         /// Increment it by one to account for the fact that the upgrade shouldn't
         /// officially start until the day after we call this method.
         /// 
+        /// If we are starting at zero, we need to set the building's level as such,
+        /// so that we know to not draw the building as well as set up the construction
+        /// walls and flooring.
+        /// 
         /// Parameter only used when building is first being built, otherwise leave
         /// the original building level.
         /// </summary>
         /// <param name="startAtZero"> Whether to reset the building's value to 0 or not</param>
         public void StartBuilding(bool startAtZero = true)
         {
-            if (startAtZero) { _iBldgLvl = 0; }
-            _iUpgradeTimer = _iUpgradeTime + 1;
-            _sprite.SetCurrentAnimation(_iBldgLvl.ToString());
+            if (startAtZero)
+            {
+                _iBldgLvl = 0;
 
+                Vector2 startAt = new Vector2(CollisionBox.X, CollisionBox.Y - TileSize);
+
+                for (int x = (int)startAt.X; x < startAt.X + CollisionBox.Width; x += TileSize)
+                {
+                    for (int y = (int)startAt.Y; y < startAt.Y + CollisionBox.Height; y += TileSize)
+                    {
+                        //Add Flooring Here
+                    }
+                }
+
+                for (int x = (int)startAt.X; x < startAt.X + CollisionBox.Width; x += TileSize)
+                {
+                    PlaceWall(new Vector2(x, startAt.Y));
+                }
+
+                for (int x = (int)startAt.X; x < startAt.X + CollisionBox.Width; x += TileSize)
+                {
+                    if (!_rEntrance.Contains(new Vector2(x, startAt.Y + CollisionBox.Height - TileSize)))
+                    {
+                        PlaceWall(new Vector2(x, startAt.Y + CollisionBox.Height - TileSize));
+                    }
+                }
+
+                for (int y = (int)startAt.Y; y < startAt.Y + CollisionBox.Height; y += TileSize)
+                {
+                    PlaceWall(new Vector2(startAt.X, y));
+                }
+
+                for (int y = (int)startAt.Y; y < startAt.Y + CollisionBox.Height; y += TileSize)
+                {
+                    PlaceWall(new Vector2(startAt.X + CollisionBox.Width - TileSize, y));
+                }
+            }
+            _iUpgradeTimer = _iUpgradeTime + 1;
+            _sprite.SetCurrentAnimation(_iBldgLvl.ToString()); 
+           
             GameManager.TownMason.SetBuildTarget(this);
         }
 
         /// <summary>
-        /// Increases the building level as long as it will not exceed the Building's max level
-        /// Also move the source rectangle over by the width of the building to change exterior and,
-        /// if the building was at level 0, tell the map to create the building entrance.
+        /// Helper method for when we start building to place a wall
+        /// at the given location in the buildings collision box.
+        /// </summary>
+        /// <param name="location">The map location to create the wall.</param>
+        private void PlaceWall(Vector2 location)
+        {
+            WorldItem obj = (WorldItem)ObjectManager.GetWorldObject(240);
+            ((Wall)obj).SetMapName(MapManager.CurrentMap.Name);
+            obj.SetCoordinatesByGrid(location);
+            MapManager.CurrentMap.TestMapTiles(obj);
+            if (MapManager.PlacePlayerObject(obj))
+            {
+                ((Wall)obj).AdjustWall();
+            }
+        }
+
+        /// <summary>
+        /// Increases the building level as long as it will not exceed the Building's max level.
+        /// 
+        /// If we are coming off of a level 0 building, we need to clean up the walls that we placed
+        /// during construction and actually set the building to the tiles, as well as creating the
+        /// entryway so the building map can be accessed.
         /// 
         /// Once we've finished upgrading the building, unset the Mason's build target.
         /// </summary>
@@ -355,10 +418,19 @@ namespace RiverHollow.Buildings
         {
             if(_iBldgLvl == 0)
             {
-                MapManager.Maps[_sHomeMap].CreateBuildingEntrance(this);
+                RHMap buildingMap = MapManager.Maps[_sHomeMap];
+                foreach (RHTile t in Tiles)
+                {
+                    WorldObject w = t.WorldObject;
+                    buildingMap.RemoveWorldObject(w);
+                    w.RemoveSelfFromTiles();
+
+                    buildingMap.AssignMapTiles(this, Tiles);
+                }
+                buildingMap.CreateBuildingEntrance(this);
             }
 
-            if (_iBldgLvl + 1 < MaxBldgLevel)
+            if (_iBldgLvl + 1 <= MaxBldgLevel)
             {
                 _iBldgLvl++;
             }
@@ -375,6 +447,16 @@ namespace RiverHollow.Buildings
         public void SetHomeMap(string name)
         {
             _sHomeMap = name;
+        }
+
+        /// <summary>
+        /// Tells the building which tiles it is sitting on for the base. Required
+        /// for the set up and take down of the walls during initial construction.
+        /// </summary>
+        /// <param name="tiles">List of Tiles on the building's base.</param>
+        public void SetTiles(List<RHTile> tiles)
+        {
+            Tiles = tiles;
         }
 
         public BuildingData SaveData()

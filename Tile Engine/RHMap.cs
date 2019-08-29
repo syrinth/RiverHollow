@@ -1098,6 +1098,7 @@ namespace RiverHollow.Tile_Engine
             {
                 if (Scrying())
                 {
+                    GameManager.DropBuilding();
                     LeaveBuildMode();
                     Unpause();
                     Scry(false);
@@ -1309,7 +1310,7 @@ namespace RiverHollow.Tile_Engine
             WorldObject obj = _targetTile.GetWorldObject(false);
             if (obj == null)    //Only procees if tile is empty
             {
-                //If the player is currently holding an StaticItem, we need to move to place it
+                //If the player is currently holding a StaticItem, we need to place it
                 StaticItem selectedItem = InventoryManager.GetCurrentStaticItem();
                 if (selectedItem != null)
                 {
@@ -1391,7 +1392,7 @@ namespace RiverHollow.Tile_Engine
                 StaticItem selectedStaticItem = InventoryManager.GetCurrentStaticItem();
                 if (selectedStaticItem != null)
                 {
-                    Vector2 vec = mouseLocation.ToVector2() - new Vector2(selectedStaticItem.GetWorldItem().Width / 4, selectedStaticItem.GetWorldItem().Height- selectedStaticItem.GetWorldItem().BaseHeight);
+                    Vector2 vec = mouseLocation.ToVector2() - new Vector2(selectedStaticItem.GetWorldItem().Width / 4, selectedStaticItem.GetWorldItem().Height - selectedStaticItem.GetWorldItem().BaseHeight);
                     selectedStaticItem.SetWorldObjectCoords(vec);
                     TestMapTiles(selectedStaticItem.GetWorldItem(), _liTestTiles);
                 }
@@ -1581,7 +1582,7 @@ namespace RiverHollow.Tile_Engine
             if (TestMapTiles(b, tiles))
             {
                 _liTestTiles.Clear();
-                AssignMapTiles(b, tiles);
+                b.SetTiles(tiles);
 
                 b.SetHomeMap(this.Name);
                 //Only create the entrance is the bool is set
@@ -1667,6 +1668,23 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
+        /// <summary>
+        /// Helper for TestMapTiles for programatic assignation of objects
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        public bool TestMapTiles(WorldObject o)
+        {
+            return TestMapTiles(o, _liTestTiles);
+        }
+
+        /// <summary>
+        /// Given a World Object item, determine which tiles on the map collide with
+        /// the defined CollisionBox of the WorldObject.
+        /// </summary>
+        /// <param name="o">The WorldObject to test</param>
+        /// <param name="collisionTiles">The Tiles on the map that are in the object's CollisionBox</param>
+        /// <returns></returns>
         public bool TestMapTiles(WorldObject o, List<RHTile> collisionTiles)
         {
             bool rv = true;
@@ -1737,7 +1755,7 @@ namespace RiverHollow.Tile_Engine
             }
 
             //Iterate over the WorldObject image in TileSize increments to discover any tiles
-            //that theimage overlaps. Add those tiles as Shadow Tiles as long as they're not
+            //that the image overlaps. Add those tiles as Shadow Tiles as long as they're not
             //actual Tiles the object sits on. Also add the Tiles to the objects Shadow Tiles list
             for (int i = (int)o.MapPosition.X; i < o.MapPosition.X + o.Width; i += TileSize)
             {

@@ -197,7 +197,10 @@ namespace RiverHollow.Game_Managers
             {
                 _fFadeVal = 0;
                 _eFade = Fade.None;
-                PlayerManager.AllowMovement = true;
+                if (!CutsceneManager.Playing)
+                {
+                    PlayerManager.AllowMovement = true;
+                }
             }
         }
 
