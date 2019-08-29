@@ -22,5 +22,14 @@
         <Item>[4:You should take the time to explore the manor. Maybe you'll find something useful that's still usable. Good luck, I hope to see you around town soon.]</Item>
       </Value>
     </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>
+        <Item>[IntroText:Something about the old harp calls to you. Idly, you strum your fingers along the strings, and a soft series of notes echoes throughthe long deserted Manor.]</Item>
+        <Item>[1:...]</Item>
+        <Item>[2:Is that... the harp?]</Item>
+        <Item>[3:You! You've come home! Master! Oh, I had begun to think this day would never come. The Manor has a master again at last! I'm $^$,the spirit of the manor, and it is my utmost pleasure to have one of your line to serve once more!]</Item>
+      </Value>
+    </Item>
   </Asset>
 </XnaContent>

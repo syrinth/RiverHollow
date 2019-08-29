@@ -277,6 +277,8 @@ namespace RiverHollow
             PlayerManager.Buildings[0].AddWorker(a);
             PlayerManager.Buildings[0].AddWorker(b);
 
+            MapManager.Maps[PlayerManager.Buildings[0].MapName].AddBuildingObjectsToMap(PlayerManager.Buildings[0]);
+
             GameCalendar.NewCalendar();
             CutsceneManager.CheckForTriggedCutscene();
             BackToMain();

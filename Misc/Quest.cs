@@ -16,8 +16,8 @@ namespace RiverHollow.Misc
         private QuestType _goalType;
         private string _name;
         public string Name => _name;
-        private string _description;
-        public string Description => _description;
+        private string _sDescription;
+        public string Description => _sDescription;
 
         private Villager _npcHandInTo;
         public Villager HandInTo => _npcHandInTo;
@@ -36,6 +36,8 @@ namespace RiverHollow.Misc
         bool _bFinished;
         public bool Finished => _bFinished;
 
+        bool _bImmediate;
+        int _iActivateID;
 
         #region Rewards
         int _iFriendship;
@@ -59,11 +61,14 @@ namespace RiverHollow.Misc
 
         public Quest()
         {
+            _bImmediate = false;
+            _iActivateID = -1;
             _iQuestID = -1;
             _iSeason = -1;
             _iDay = -1;
             _name = string.Empty;
-            _description = string.Empty;
+            _sDescription = string.Empty;
+            _sFriendTarget = string.Empty;
             _npcHandInTo = null;
             _questItem = null;
             _questMob = null;
@@ -78,7 +83,7 @@ namespace RiverHollow.Misc
         {
             _name = name;
             _goalType = type;
-            _description = desc;
+            _sDescription = desc;
             _npcHandInTo = giver;
             _iTargetGoal = target;
             _questMob = m;
@@ -94,7 +99,7 @@ namespace RiverHollow.Misc
             _liRewardItems = new List<Item>();
             string[] splitParams = stringData.Split('/');
             int i = 0;
-            GameContentManager.GetQuestText(_iQuestID, ref _name, ref _description);
+            GameContentManager.GetQuestText(_iQuestID, ref _name, ref _sDescription);
 
             string[] split = Util.FindTags(splitParams[i++]);
             foreach (string s in split)
@@ -155,6 +160,14 @@ namespace RiverHollow.Misc
                 {
                     _iSeason = int.Parse(tagType[1]);
                 }
+                else if (tagType[0].Equals("Immediate"))
+                {
+                    _bImmediate = true;
+                }
+                else if (tagType[0].Equals("Activate"))
+                {
+                    _iActivateID = int.Parse(tagType[1]);
+                }
             }        
         }
 
@@ -182,6 +195,7 @@ namespace RiverHollow.Misc
 
             return rv;
         }
+
         public void IncrementProgress(int num)
         {
             if (_iAccomplished < _iTargetGoal)
@@ -191,6 +205,11 @@ namespace RiverHollow.Misc
                 {
                     _iAccomplished = _iTargetGoal;
                     _bReadyForHandIn = true;
+                    if (_bImmediate)
+                    {
+                        string questCompleteText = string.Empty;
+                        FinishQuest(ref questCompleteText);
+                    }
                 }
             }
         }
@@ -220,7 +239,11 @@ namespace RiverHollow.Misc
         {
             _bFinished = true;
 
-            text = HandInTo.GetDialogEntry("Quest"+_iQuestID+"End");
+            if (HandInTo != null)
+            {
+                HandInTo.Talk("Quest" + _iQuestID + "End");
+            }
+            //text = HandInTo.GetDialogEntry("Quest"+_iQuestID+"End");
             foreach (Item i in LiRewardItems)
             {
                 InventoryManager.AddToInventory(i);
@@ -232,7 +255,14 @@ namespace RiverHollow.Misc
                 _npcHandInTo.FriendshipPoints += _iFriendship;
             }
 
+            if (_iActivateID > -1)
+            {
+                ObjectManager.DiNPC[_iActivateID].Activate(true);
+            }
+
             PlayerManager.QuestLog.Remove(this);
+
+            CutsceneManager.CheckForTriggedCutscene();
         }
 
         public bool CanBeGiven() {
@@ -315,7 +345,7 @@ namespace RiverHollow.Misc
             {
                 questID = _iQuestID,
                 name = _name,
-                description = _description,
+                description = _sDescription,
                 questGiver = _npcHandInTo != null ? _npcHandInTo.ID : -1,
                 itemID = _questItem != null  ? _questItem.ItemID : -1,
                 mobID = _questMob != null ? _questMob.ID : -1,
@@ -344,7 +374,7 @@ namespace RiverHollow.Misc
             {
                 _iQuestID = qData.questID;
                 _name = qData.name;
-                _description = qData.description;
+                _sDescription = qData.description;
                 _npcHandInTo = qData.questGiver != -1 ? ObjectManager.DiNPC[qData.questGiver] : null;
                 _questItem = qData.itemID != -1 ? ObjectManager.GetItem(qData.itemID) : null;
                 _questMob = qData.mobID != -1 ? ObjectManager.GetMonsterByIndex(qData.mobID) : null;

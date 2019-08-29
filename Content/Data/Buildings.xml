@@ -4,7 +4,7 @@
     <!--Key: Index>0 Value:texture/width height/firstBaseSquare baseWidth baseHeight/EntranceSquareXY/workerType-->
     <Item>
       <Key>0</Key>
-      <Value>[Texture:Manor][Dimensions:176-208][FirstBase:0-112][Width:176][Height:80][Entrance:80-176-16-32][Manor][Workers:1-2-3-4-5-6-7-8][WorkersPerLevel:2][UpgradeTime:3]</Value>
+      <Value>[Texture:Manor][Dimensions:176-208][FirstBase:0-112][Width:176][Height:80][Entrance:80-176-16-32][Manor][Unique][Workers:1-2-3-4-5-6-7-8][WorkersPerLevel:2][UpgradeTime:3]</Value>
     </Item>
     <Item>
       <Key>1</Key>

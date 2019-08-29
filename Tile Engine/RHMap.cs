@@ -32,9 +32,6 @@ namespace RiverHollow.Tile_Engine
         private string _name;
         public string Name { get => _name.Replace(@"Maps\", ""); set => _name = value; } //Fuck off with that path bullshit
 
-        protected Building _mapBuilding;
-        public Building MapBuilding { get => _mapBuilding; }
-
         bool _bBuilding;
         public bool IsBuilding => _bBuilding;
         bool _bDungeon;
@@ -1461,11 +1458,22 @@ namespace RiverHollow.Tile_Engine
             _liItems.Add(item);
         }
 
+        /// <summary>
+        /// When we enter a Building, we may need to load up whatever has been saved to the Building.
+        /// This is because non unique buildings like Arcane Tower, Barracks, etc all use the same map,
+        /// but different specific buildings will have different content.
+        /// 
+        /// If the building is Unique, do not modify the map at all as everything in it will
+        /// be saved to the map itself.
+        /// </summary>
+        /// <param name="b">The building to load</param>
         public void LoadBuilding(Building b)
         {
-            _mapBuilding = b;
-            ClearWorkers();
-            AddBuildingObjectsToMap(b);
+            if (!b.Unique)
+            {
+                ClearWorkers();
+                AddBuildingObjectsToMap(b);
+            }
         }
 
         public void LayerVisible(string name, bool val) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="13">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="14">
  <properties>
   <property name="Manor" type="bool" value="true"/>
   <property name="Production" type="bool" value="false"/>
@@ -141,5 +141,6 @@
   <object id="7" name="WSpawn0" x="428.5" y="332.5" width="10" height="7"/>
   <object id="9" name="WSpawn1" x="410" y="398" width="11" height="10.5"/>
   <object id="10" name="PlayerSpawn" x="315.75" y="307.333" width="8" height="5.33333"/>
+  <object id="13" name="NPC0" x="145.691" y="97.4839" width="12.375" height="14.0625"/>
  </objectgroup>
 </map>

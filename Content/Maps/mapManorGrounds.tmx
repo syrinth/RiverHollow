@@ -379,6 +379,5 @@
  <objectgroup id="6" name="Character Layer">
   <object id="7" name="PlayerSpawn" x="883" y="742.667" width="5.63636" height="5.27273"/>
   <object id="46" name="CS1Spawn" x="918" y="742" width="7.16667" height="6.5"/>
-  <object id="47" name="NPC0" x="769.688" y="673.469" width="12.375" height="14.0625"/>
  </objectgroup>
 </map>

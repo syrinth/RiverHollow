@@ -35,5 +35,9 @@
       <Key>Maintenance</Key>
       <Value>What do you want to do?[Upgrade Buildings:UpgradeBuilding|Move Buildings:Move|Destroy Buildings:Destroy]</Value>
     </Item>
+    <Item>
+      <Key>Quest2End</Key>
+      <Value>I'm awake! Hello master, how are you?</Value>
+    </Item>
   </Asset>
 </XnaContent>

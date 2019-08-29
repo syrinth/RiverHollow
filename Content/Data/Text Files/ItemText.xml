@@ -333,6 +333,10 @@
       <Value>Copper Wand/A magical wand</Value>
     </Item>
     <Item>
+      <Key>602</Key>
+      <Value>Divining Wand/A wand used by seers to help them predict the future.</Value>
+    </Item>
+    <Item>
       <Key>609</Key>
       <Value>Thunderstorm/These crackling wands were first created during the largest thunderstorm in three centuries.</Value>
     </Item>

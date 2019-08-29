@@ -49,6 +49,8 @@ namespace RiverHollow.Buildings
         protected int _iPersonalID;
         public int PersonalID { get => _iPersonalID; }
 
+        protected bool _bUnique;
+        public bool Unique => _bUnique;
         protected bool _bManor;
         public bool IsManor => _bManor;
 
@@ -70,7 +72,7 @@ namespace RiverHollow.Buildings
         public int MaxWorkers => _iCurrWorkerMax;
 
         protected List<WorldAdventurer> _liWorkers;
-        public List<WorldAdventurer> Workers { get => _liWorkers; }
+        public List<WorldAdventurer> Workers => _liWorkers;
 
         protected Container _buildingChest;
         public Container BuildingChest { get => _buildingChest; set => _buildingChest = value; }
@@ -79,7 +81,7 @@ namespace RiverHollow.Buildings
         public Container Pantry { get => _pantry; set => _pantry = value; }
 
         protected List<WorldObject> _liPlacedObjects;
-        public List<WorldObject> PlacedObjects { get => _liPlacedObjects; }
+        public List<WorldObject> PlacedObjects => _liPlacedObjects;
         #endregion
 
         public Building(Dictionary<string, string> data, int id)
@@ -144,6 +146,9 @@ namespace RiverHollow.Buildings
 
             //Flag for whether or not this building is the Manor
             _bManor = stringData.ContainsKey("Manor");
+
+            //Flag for whether or not this building is unique
+            _bUnique = stringData.ContainsKey("Unique");
 
             _iPersonalID = PlayerManager.GetNewBuildingID();
             _liWorkers = new List<WorldAdventurer>();

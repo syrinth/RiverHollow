@@ -161,6 +161,14 @@ namespace RiverHollow.Actors
             _height = _spriteBody.Height;
         }
 
+        public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
+        {
+            if (_bActive)
+            {
+                base.Draw(spriteBatch, useLayerDepth);
+            }
+        }
+
         public void AddDefaultAnimations(ref AnimatedSprite sprite, int height, int startX, int startY)
         {
             AddDefaultAnimations(ref sprite, height, _sTexture, startX, startY);
@@ -320,6 +328,15 @@ namespace RiverHollow.Actors
 
         public void SetMoveObj(Vector2 vec) {
             _vMoveTo = vec;
+        }
+
+        /// <summary>
+        /// Sets the active status of the WorldActor
+        /// </summary>
+        /// <param name="value">Whether the actor is active or not.</param>
+        public void Activate (bool value)
+        {
+            _bActive = value;
         }
     }
     public class WorldCombatant : WorldActor
@@ -665,7 +682,7 @@ namespace RiverHollow.Actors
             _sName = _diDialogue["Name"];
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
 
-            if (stringData.ContainsKey("Inactive")) { _bActive = false; }
+            _bActive = !stringData.ContainsKey("Inactive");
             if (stringData.ContainsKey("Type")) { _eNPCType = Util.ParseEnum<NPCTypeEnum>(stringData["Type"]); }
             if (stringData.ContainsKey("PortRow")) { _rPortrait = new Rectangle(0, 0, 48, 60); }
             if (stringData.ContainsKey("HomeMap")) {
@@ -1316,13 +1333,6 @@ namespace RiverHollow.Actors
             MapManager.Maps[CurrentMapName].AddCharacter(this);
         }
 
-        public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
-        {
-            if (_bActive)
-            {
-                base.Draw(spriteBatch, useLayerDepth);
-            }
-        }
         public override void Update(GameTime theGameTime)
         {
             if (_bActive && !Married)   //Just for now
