@@ -139,7 +139,7 @@ namespace RiverHollow.Actors
 
         protected bool _bHover;
 
-        private int _iBaseSpeed = 2;
+        int _iBaseSpeed = 2;
         public float Speed => _iBaseSpeed * SpdMult;
         public float SpdMult = 1;
 

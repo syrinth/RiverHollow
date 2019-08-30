@@ -91,6 +91,10 @@
       <Key>20</Key>
       <Value>[Type:EchoNode][Image:0-80][Width:16][Height:16][Tool:Lantern][Hp:5][ReqLvl:1][Item:35][Idle:5-0.150][Gathered:7-0.150]</Value>
     </Item>
+    <Item>
+      <Key>21</Key>
+      <Value>[Type:Forageable][Image:96-0][Width:16][Height:16][Item:45][Passable][Shake:5-0.1]</Value>
+    </Item>
     <!--<60-79> Plants-->
     <Item>
       <Key>60</Key>

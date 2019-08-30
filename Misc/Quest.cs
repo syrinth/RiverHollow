@@ -22,6 +22,8 @@ namespace RiverHollow.Misc
         private Villager _npcHandInTo;
         public Villager HandInTo => _npcHandInTo;
 
+        int _iCutsceneID;
+
         private int _iTargetGoal;
         public int TargetGoal => _iTargetGoal;
         private int _iAccomplished;
@@ -61,6 +63,7 @@ namespace RiverHollow.Misc
 
         public Quest()
         {
+            _iCutsceneID = -1;
             _bImmediate = false;
             _iActivateID = -1;
             _iQuestID = -1;
@@ -168,6 +171,10 @@ namespace RiverHollow.Misc
                 {
                     _iActivateID = int.Parse(tagType[1]);
                 }
+                else if (tagType[0].Equals("Cutscene"))
+                {
+                    _iCutsceneID = int.Parse(tagType[1]);
+                }
             }        
         }
 
@@ -262,7 +269,10 @@ namespace RiverHollow.Misc
 
             PlayerManager.QuestLog.Remove(this);
 
-            CutsceneManager.CheckForTriggedCutscene();
+            if (_iCutsceneID != -1)
+            {
+                CutsceneManager.TriggerCutscene(_iCutsceneID);
+            }
         }
 
         public bool CanBeGiven() {

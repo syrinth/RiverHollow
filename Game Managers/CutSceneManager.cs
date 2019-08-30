@@ -56,18 +56,20 @@ namespace RiverHollow.Game_Managers
         /// if the coditions are right for it to have been called.If so, set it up and 
         /// confirm thatwe are playinga Cutscene.
         /// </summary>
-        public static void CheckForTriggedCutscene()
+        /// <param name="Content">The Content pipeline</param>
+        public static void CheckForTriggedCutscene(int id)
         {
-            foreach (KeyValuePair<int, Cutscene> kvp in _diCutscenes)
+            if (_diCutscenes[id].CanBeTriggered())
             {
-                if (kvp.Value.Triggered())
-                {
-                    _currentCutscene = _diCutscenes[kvp.Key];
-                    _currentCutscene.Setup();
-                    Playing = true;
-                    break;
-                }
+                TriggerCutscene(id);
             }
+        }
+
+        public static void TriggerCutscene(int id)
+        {
+            _currentCutscene = _diCutscenes[id];
+            _currentCutscene.Setup();
+            Playing = true;
         }
 
         /// <summary>
@@ -124,11 +126,11 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         int _iID;
+        RHMap _originalMap;
+        Vector2 _vOriginalPlayerPos;
         RHMap _cutsceneMap;
-        string _sTriggerMap;
         int _iMinTime = -1;                                         //The earliest the cutscene can be triggered
         int _iMaxTime = -1;                                         //The latest the cutscene can be triggered
-        int _iQuestID = -1;
         int _iCurrentCommand;
         List<Villager> _liUsedNPCs;                                 //The list of NPCs that take part in the cutscene.
         List<KeyValuePair<int, int>> _liReqFriendship;              //The list of required Friendships to trigger the cutscene, key is NPC index
@@ -167,11 +169,7 @@ namespace RiverHollow.Game_Managers
             {
                 string[] tags = s.Split(':');
                 //Parsing for important data
-                if (tags[0].Equals("Trigger"))
-                {
-                    _sTriggerMap = tags[1];
-                }
-                else if (tags[0].Equals("Time"))
+                if (tags[0].Equals("Time"))
                 {
                     string[] time = tags[1].Split(' ');
                     _iMinTime = int.Parse(time[0]);
@@ -185,10 +183,6 @@ namespace RiverHollow.Game_Managers
                         string[] friendData = f.Split('-');
                         _liReqFriendship.Add(new KeyValuePair<int, int>(int.Parse(friendData[0]), int.Parse(friendData[1])));
                     }
-                }
-                else if (tags[0].Equals("Quest"))
-                {
-                    _iQuestID = int.Parse(tags[1]);
                 }
             }
 
@@ -292,7 +286,7 @@ namespace RiverHollow.Game_Managers
                                     PlayerManager.AllowMovement = true;
                                     CutsceneManager.Playing = false;
                                     MapManager.Maps.Remove(_cutsceneMap.Name);
-                                    MapManager.FadeToNewMap(MapManager.Maps[_cutsceneMap.Name.Replace("Clone", "")], PlayerManager.World.Position);
+                                    MapManager.FadeToNewMap(_originalMap, _vOriginalPlayerPos);
                                     break;
                             }
                         }
@@ -445,6 +439,9 @@ namespace RiverHollow.Game_Managers
             //Stop the player from moving
             PlayerManager.AllowMovement = false;
 
+            _originalMap = MapManager.CurrentMap;
+            _vOriginalPlayerPos = PlayerManager.World.Position;
+
             //Iterates over all of the setup commands
             foreach (string s in _liSetupCommands)
             {
@@ -509,9 +506,9 @@ namespace RiverHollow.Game_Managers
         /// Check the various map conditions to see if the Cutscene should be triggered
         /// </summary>
         /// <returns>True if the Cutscene should be triggered.</returns>
-        public bool Triggered()
+        public bool CanBeTriggered()
         {
-            return !_bTriggered && QuestActivated() && InTimeWindow() && TriggeredMap() && FriendshipReqs();
+            return !_bTriggered && InTimeWindow() && FriendshipReqs();
         }
 
         /// <summary>
@@ -537,22 +534,6 @@ namespace RiverHollow.Game_Managers
             timeExit:
             return rv;
         }
-
-        /// <summary>
-        /// Checks to see if the quest required for this cutscene has been done yet
-        /// </summary>
-        /// <returns>True if the quest has been completed</returns>
-        private bool QuestActivated()
-        {
-            bool rv = true;
-
-            if (_iQuestID != -1)
-            {
-                rv =  GameManager.DiQuests[_iQuestID].Finished;
-            }
-
-            return rv;
-        }
         
         /// <summary>
         /// Confirms whether the Friendship level requirements have been met for the given NPCs
@@ -568,21 +549,6 @@ namespace RiverHollow.Game_Managers
 
             rv = true;
             friendshipExit:
-
-            return rv;
-        }
-
-        /// <summary>
-        /// Checks if the map has been triggered or not.
-        /// </summary>
-        /// <returns>True if triggered.</returns>
-        private bool TriggeredMap()
-        {
-            bool rv = true;
-
-            if (!string.IsNullOrEmpty(_sTriggerMap)){
-                rv = MapManager.CurrentMap.Name == _sTriggerMap;
-            }
 
             return rv;
         }

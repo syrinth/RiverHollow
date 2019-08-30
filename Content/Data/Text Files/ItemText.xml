@@ -15,6 +15,10 @@
       <Value>Wood/Wood, it builds stuff</Value>
     </Item>
     <Item>
+      <Key>3</Key>
+      <Value>Cotton Cloth/Soft cloth made from the finest picked cotton.</Value>
+    </Item>
+    <Item>
       <Key>8</Key>
       <Value>Adventure Map/Off to find adventures!</Value>
     </Item>
@@ -115,11 +119,15 @@
     </Item>
     <Item>
       <Key>43</Key>
-      <Value>Sprig of Lavender/A sprig of fresh lavender, usedi n various alchemical creations.</Value>
+      <Value>Sprig of Lavender/A sprig of fresh lavender, used in various alchemical creations.</Value>
     </Item>
     <Item>
       <Key>44</Key>
       <Value>Flax/A crop used to produce textiles</Value>
+    </Item>
+    <Item>
+      <Key>45</Key>
+      <Value>Cotton Boll/Soft cotton used for fabric</Value>
     </Item>
     <!--<60-79> Seeds-->
     <Item>

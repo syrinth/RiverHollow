@@ -71,6 +71,7 @@ namespace RiverHollow.Tile_Engine
         public List<RHTile> ModTiles => _liModifiedTiles;
         protected List<SpawnPoint> _liMonsterSpawnPoints;
         protected List<int> _liRandomSpawnItems;
+        protected List<int> _liCutscenes;
 
         protected List<Item> _liItems;
         protected List<ShopData> _liShopData;
@@ -103,6 +104,7 @@ namespace RiverHollow.Tile_Engine
             _liDoors = new List<Door>();
             _liPlacedWorldObjects = new List<WorldObject>();
             _liRandomSpawnItems = new List<int>();
+            _liCutscenes = new List<int>();
 
             _diResourceSpawns = new Dictionary<int, List<TiledMapObject>>();
 
@@ -181,6 +183,15 @@ namespace RiverHollow.Tile_Engine
             if (_map.Properties.ContainsKey("ActiveSpawn"))
             {
                 int.TryParse(_map.Properties["ActiveSpawn"].ToString(), out _iActiveSpawnPoints);
+            }
+
+            if (_map.Properties.ContainsKey("Cutscenes"))
+            {
+                string[] split = _map.Properties["Cutscenes"].Split(' ');
+                foreach(string cutsceneID in split)
+                {
+                    _liCutscenes.Add(int.Parse(cutsceneID));
+                }
             }
 
             if (_bTown)
@@ -362,8 +373,8 @@ namespace RiverHollow.Tile_Engine
                 {
                     Building manor = ObjectManager.GetManor();
                     manor.SetCoordinatesByGrid(obj.Position);
-                    manor.SetName(PlayerManager.ManorName);          
-                    AddBuilding(manor);
+                    manor.SetName(PlayerManager.ManorName);
+                    AddBuilding(manor, true);
                 }
                 else if (obj.Properties.ContainsKey("Item"))
                 {
@@ -1184,7 +1195,7 @@ namespace RiverHollow.Tile_Engine
             if (Constructing() || MovingBuildings())
             {
                 //If we are holding a building, we should attempt to drop it.
-                if (GameManager.HeldBuilding != null && AddBuilding(GameManager.HeldBuilding, false))
+                if (GameManager.HeldBuilding != null && AddBuilding(GameManager.HeldBuilding, false, false))
                 {
                     GameManager.HeldBuilding.StartBuilding();   //Set the building to start being built
                     GUIManager.OpenMainObject(new HUDNamingWindow(GameManager.HeldBuilding));   //Open a naming window
@@ -1575,7 +1586,7 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public bool AddBuilding(Building b, bool createEntrance = true)
+        public bool AddBuilding(Building b, bool placeImmediately = false, bool createEntrance = true)
         {
             bool rv = false;
             List<RHTile> tiles = new List<RHTile>();
@@ -1583,6 +1594,11 @@ namespace RiverHollow.Tile_Engine
             {
                 _liTestTiles.Clear();
                 b.SetTiles(tiles);
+
+                if (placeImmediately)
+                {
+                    AssignMapTiles(b, b.Tiles);
+                }
 
                 b.SetHomeMap(this.Name);
                 //Only create the entrance is the bool is set
@@ -1867,6 +1883,14 @@ namespace RiverHollow.Tile_Engine
                 {
                     ((SeasonDoor)d).Check();
                 }
+            }
+        }
+
+        public void CheckForTriggeredCutScenes()
+        {
+            foreach(int cutsceneID in _liCutscenes)
+            {
+                CutsceneManager.CheckForTriggedCutscene(cutsceneID);
             }
         }
 

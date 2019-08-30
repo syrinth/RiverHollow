@@ -19,6 +19,10 @@
       <Value>[Type:Resource][Image:16-0][Sell:10]</Value>
     </Item>
     <Item>
+      <Key>3</Key>
+      <Value>[Type:Resource][Image:112-0][Sell:100]</Value>
+    </Item>
+    <Item>
       <Key>8</Key>
       <Value>[Type:Map][Image:0-32]</Value>
     </Item>
@@ -124,6 +128,10 @@
     <Item>
       <Key>44</Key>
       <Value>[Type:Resource][Image:48-64][Sell:10][RefinesInto:12-5]</Value>
+    </Item>
+    <Item>
+      <Key>45</Key>
+      <Value>[Type:Resource][Image:128-48][Sell:10][RefinesInto:3-5]</Value>
     </Item>
     <!--<60-79> Seeds-->
     <Item>

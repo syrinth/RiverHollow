@@ -12,7 +12,7 @@
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Fetch][GoalItem:24-1][Activate:0][Immediate]</Value>
+      <Value>[Type:Fetch][GoalItem:24-1][Activate:0][Immediate][Cutscene:2]</Value>
     </Item>
   </Asset>
 </XnaContent>

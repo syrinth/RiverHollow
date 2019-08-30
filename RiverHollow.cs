@@ -270,7 +270,7 @@ namespace RiverHollow
             GUIManager.SetScreen(new HUDScreen());
         }
 
-        public static void NewGame(WorldAdventurer a, WorldAdventurer b)
+        public static void NewGame(WorldAdventurer a, WorldAdventurer b, bool playIntro)
         {
             PlayerManager.NewPlayer();
             MapManager.PopulateMaps(false);
@@ -280,7 +280,14 @@ namespace RiverHollow
             MapManager.Maps[PlayerManager.Buildings[0].MapName].AddBuildingObjectsToMap(PlayerManager.Buildings[0]);
 
             GameCalendar.NewCalendar();
-            CutsceneManager.CheckForTriggedCutscene();
+            if (playIntro)
+            {
+                CutsceneManager.TriggerCutscene(1);
+            }
+            else
+            {
+                PlayerManager.AddToQuestLog(GameManager.DiQuests[2]);
+            }
             BackToMain();
         }
 
