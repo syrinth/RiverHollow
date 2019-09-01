@@ -104,11 +104,6 @@ namespace RiverHollow.WorldObjects
                 string[] gatherSplit = stringData["Gathered"].Split('-');
                 _sprite.AddAnimation(WorldObjAnimEnum.Gathered, startX, startY, _iWidth, _iHeight, int.Parse(gatherSplit[0]), float.Parse(gatherSplit[1]));
             }
-            if (stringData.ContainsKey("Shake"))
-            {
-                string[] shakeSplit = stringData["Shake"].Split('-');
-                _sprite.AddAnimation(WorldObjAnimEnum.Shake, startX, startY, _iWidth, _iHeight, int.Parse(shakeSplit[0]), float.Parse(shakeSplit[1]));
-            }
             _sprite.Position = _vMapPosition;
         }
 
@@ -185,6 +180,12 @@ namespace RiverHollow.WorldObjects
 
     public class Forageable : WorldObject
     {
+        const float MAX_ROTATION = 0.4f;
+        const float ROTATION_MOD = 0.09f;
+        bool _bShaking = false;
+        float _fCurrentRotation = 0f;
+        int _iBounceCount = 0;
+
         public int ForageItem => _kvpDrop.Key;
 
         public Forageable(int id, Dictionary<string, string> stringData, Vector2 pos)
@@ -201,7 +202,12 @@ namespace RiverHollow.WorldObjects
             if (stringData.ContainsKey("Passable")) { _bImpassable = false; }
 
             SetCoordinates(pos);
-            LoadSprite(stringData);           
+            LoadSprite(stringData);
+
+            string[] texIndices = stringData["Image"].Split('-');
+            int startX = int.Parse(texIndices[0]);
+            int startY = int.Parse(texIndices[1]);
+            _sprite.SetRotationOrigin(new Vector2(_iWidth / 2, _iHeight - 1));    //Subtract one to keep it in the bounds of the rectangle
         }
 
         public override void SetCoordinatesByGrid(Vector2 position)
@@ -212,11 +218,40 @@ namespace RiverHollow.WorldObjects
 
         public override void Update(GameTime theGameTime)
         {
-            _sprite.Update(theGameTime);
+            //If the object is shaking, we need to determine what step it's in
+            if (_bShaking)
+            {
+                //We start out going right
+                if (_iBounceCount == 0)
+                {
+                    _fCurrentRotation += ROTATION_MOD;
+                }
+                else if (_iBounceCount == 1) //After one bounce, we go left
+                {
+                    _fCurrentRotation -= ROTATION_MOD;
+                }
+                else   //After we've bounced twice, stop bouncing completely
+                {
+                    _bShaking = false;
+                    _iBounceCount = 0;
+                    _fCurrentRotation = 0;
+                }
+                _sprite.SetRotationAngle(_fCurrentRotation);
 
-            if(_sprite.CurrentAnimation == "Shake" && _sprite.GetPlayCount() >= 1) {
-                _sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
+                //If we've reached the end of our bounce, increment the bounce count
+                //and set us to just below the trigger value for the statement we just hit.
+                if (_fCurrentRotation >= MAX_ROTATION)
+                {
+                    _fCurrentRotation = MAX_ROTATION - ROTATION_MOD;
+                    _iBounceCount++;
+                }
+                else if (_fCurrentRotation <= -MAX_ROTATION)
+                {
+                    _fCurrentRotation = MAX_ROTATION + ROTATION_MOD;
+                    _iBounceCount++;
+                }
             }
+            _sprite.Update(theGameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -224,9 +259,12 @@ namespace RiverHollow.WorldObjects
             _sprite.Draw(spriteBatch);
         }
 
+        /// <summary>
+        /// Tell the object to shake
+        /// </summary>
         public void Shake()
         {
-            _sprite.SetCurrentAnimation(WorldObjAnimEnum.Shake);
+            _bShaking = true;
         }
     }
 

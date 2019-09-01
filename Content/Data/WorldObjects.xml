@@ -45,7 +45,7 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Forageable][Image:80-32][Width:16][Height:16][Item:44][Passable][Shake:5-0.1]</Value>
+      <Value>[Type:Forageable][Image:80-32][Width:16][Height:16][Item:44][Passable]</Value>
     </Item>
     <Item>
       <Key>10</Key>
@@ -93,7 +93,7 @@
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[Type:Forageable][Image:96-0][Width:16][Height:16][Item:45][Passable][Shake:5-0.1]</Value>
+      <Value>[Type:Forageable][Image:96-0][Width:16][Height:16][Item:45][Passable]</Value>
     </Item>
     <!--<60-79> Plants-->
     <Item>

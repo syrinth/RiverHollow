@@ -18,7 +18,7 @@ namespace RiverHollow.SpriteAnimations
         Color _color = Color.White;              // If set to anything other than Color.White, will colorize the sprite with that color.
 
         // Screen Position of the Sprite
-        private Vector2 _Position = Vector2.Zero;
+        private Vector2 _vPosition = Vector2.Zero;
 
         // Dictionary holding all of the FrameAnimation objects
         Dictionary<string, FrameAnimation> _diFrameAnimations = new Dictionary<string, FrameAnimation>();
@@ -27,7 +27,7 @@ namespace RiverHollow.SpriteAnimations
 
         // Calculated center of the sprite
         Vector2 v2Center;
-        public Vector2 Center { get => new Vector2(_Position.X + _width / 2, Position.Y + _height / 2); }
+        public Vector2 Center { get => new Vector2(_vPosition.X + _width / 2, Position.Y + _height / 2); }
 
         // Calculated width and height of the sprite
         int _width;
@@ -49,8 +49,8 @@ namespace RiverHollow.SpriteAnimations
         ///
         public Vector2 Position
         {
-            get { return _Position; }
-            set {_Position = value; }
+            get { return _vPosition; }
+            set {_vPosition = value; }
         }
 
         ///
@@ -58,8 +58,8 @@ namespace RiverHollow.SpriteAnimations
         ///
         public int X
         {
-            get { return (int)_Position.X; }
-            set { _Position.X = value; }
+            get { return (int)_vPosition.X; }
+            set { _vPosition.X = value; }
         }
 
         ///
@@ -67,8 +67,8 @@ namespace RiverHollow.SpriteAnimations
         ///
         public int Y
         {
-            get { return (int)_Position.Y; }
-            set { _Position.Y = value; }
+            get { return (int)_vPosition.Y; }
+            set { _vPosition.Y = value; }
         }
 
         ///
@@ -120,6 +120,9 @@ namespace RiverHollow.SpriteAnimations
         {
             _fLayerDepthMod = val;
         }
+
+        float _fRotationAngle = 0;
+        Vector2 _vRotationOrigin = Vector2.Zero;
 
         public bool PlaysOnce = false;
         ///
@@ -241,8 +244,8 @@ namespace RiverHollow.SpriteAnimations
 
         public void MoveBy(float x, float y)
         {
-            _Position.X += x;
-            _Position.Y += y; 
+            _vPosition.X += x;
+            _vPosition.Y += y; 
         }
 
         public void Update(GameTime gameTime)
@@ -327,13 +330,50 @@ namespace RiverHollow.SpriteAnimations
                     drawAtY += FrameCutoff;
                     drawThis = new Rectangle(drawThis.X, FrameCutoff, drawThis.Width, drawThis.Height-FrameCutoff);
                 }
-                spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, drawAtY, this.Width, this.Height - FrameCutoff), drawThis, _color * visibility, 0, Vector2.Zero, SpriteEffects.None, layerDepth + _fLayerDepthMod);
+                Draw(spriteBatch, new Rectangle((int)this.Position.X, drawAtY, this.Width, this.Height - FrameCutoff), drawThis, visibility, layerDepth + _fLayerDepthMod);
             }
         }
 
+        /// <summary>
+        /// Helper function for Drawing an AnimatedSprite
+        /// </summary>
+        /// <param name="spriteBatch">The spritebatch being used to draw</param>
+        /// <param name="destinationRectangle">The Rectangle describing where on the screen to draw</param>
+        /// <param name="sourceRectangle">The Rectangle describing where on the image we draw from</param>
+        /// <param name="visibility">The opacity of the sprite</param>
+        /// <param name="layerDepth">At what depth to draw the image, 0 is at the bottom.</param>
+        private void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle, Rectangle sourceRectangle, float visibility = 1.0f, float layerDepth = 0)
+        {
+            Rectangle rotationalRect = destinationRectangle;
+            rotationalRect.X += (int)_vRotationOrigin.X;
+            rotationalRect.Y += (int)_vRotationOrigin.Y;
+            spriteBatch.Draw(_texture, rotationalRect, CurrentFrameAnimation.FrameRectangle, _color * visibility, _fRotationAngle, _vRotationOrigin, SpriteEffects.None, layerDepth);
+        }
+
+        /// <summary>
+        /// Returns the number of times the AnimatedSprite has fully played
+        /// </summary>
         public int GetPlayCount()
         {
             return CurrentFrameAnimation.PlayCount;
+        }
+
+        /// <summary>
+        /// Sets the angle to rotate the drawnsprite at
+        /// </summary>
+        /// <param name="angle">The angle, with 0 being straight</param>
+        public void SetRotationAngle(float angle)
+        {
+            _fRotationAngle = angle;
+        }
+
+        /// <summary>
+        /// Sets the location on the Texture2D to rotate around
+        /// </summary>
+        /// <param name="center"></param>
+        public void SetRotationOrigin(Vector2 center)
+        {
+            _vRotationOrigin = center;
         }
     }
 }

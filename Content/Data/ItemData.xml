@@ -350,6 +350,10 @@
       <Value>[Type:Equipment][Image:32-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:3][[Atk:Minor][Mag:Major][ReqItems:86-2|93-1]</Value>
     </Item>
     <Item>
+      <Key>604</Key>
+      <Value>[Type:Equipment][Image:64-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:5][[Atk:Minor][Mag:Major][ReqItems:86-2|93-1]</Value>
+    </Item>
+    <Item>
       <Key>609</Key>
       <Value>[Type:Equipment][Image:128-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:10][[Atk:Minor][Mag:Major][ReqItems:99-3|2-3]</Value>
     </Item>

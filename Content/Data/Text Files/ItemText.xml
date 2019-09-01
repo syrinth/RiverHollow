@@ -345,6 +345,10 @@
       <Value>Divining Wand/A wand used by seers to help them predict the future.</Value>
     </Item>
     <Item>
+      <Key>604</Key>
+      <Value>Black Night/This wand was enchanted with the essences of many dark creaures, giving it a sinister power.</Value>
+    </Item>
+    <Item>
       <Key>609</Key>
       <Value>Thunderstorm/These crackling wands were first created during the largest thunderstorm in three centuries.</Value>
     </Item>
