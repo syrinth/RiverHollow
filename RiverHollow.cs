@@ -17,7 +17,8 @@ namespace RiverHollow
     /// </summary>
     public class RiverHollow : Game
     {
-        private static bool _exit = false;
+        private static bool _bLightingOn = false;
+        private static bool _bExit = false;
 
         public GraphicsDeviceManager _graphicsDeviceManager;
         public SpriteBatch spriteBatch;
@@ -26,9 +27,9 @@ namespace RiverHollow
 
         //TEST
         public static Texture2D lightMask;
-        public static Effect effect1;
-        static RenderTarget2D lightsTarget;
-        static RenderTarget2D mainTarget;
+        public static Effect _effectLights;
+        static RenderTarget2D _renderLights;
+        static RenderTarget2D _renderMain;
 
         public RiverHollow()
         {
@@ -49,7 +50,7 @@ namespace RiverHollow
             Camera.SetViewport(GraphicsDevice.Viewport);
             InventoryManager.InitPlayerInventory();
             GoToInformation();
-            
+
             base.Initialize();
         }
 
@@ -66,17 +67,17 @@ namespace RiverHollow
             ObjectManager.LoadContent(Content);
 
             GUIManager.LoadContent();
-            
+
             //TravelManager.Calculate();
             DropManager.LoadContent(Content);
             CutsceneManager.LoadContent(Content);
             GameManager.LoadQuests(Content);
-            
+
             var pp = GraphicsDevice.PresentationParameters;
-            lightsTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
-            mainTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
+            _renderLights = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
+            _renderMain = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
             lightMask = GameContentManager.GetTexture(@"Textures\lightmask");
-            effect1 = Content.Load<Effect>(@"lighteffect");
+            _effectLights = Content.Load<Effect>(@"Effects\lighteffect");
 
             PlayerManager.Initialize();
 
@@ -97,7 +98,7 @@ namespace RiverHollow
         {
             if (this.IsActive)
             {
-                if (_exit)
+                if (_bExit)
                 {
                     Exit();
                 }
@@ -105,7 +106,7 @@ namespace RiverHollow
                 KeyboardState ks = Keyboard.GetState();
                 //If we're not in the game and we're not on an input screen, handle input
                 HandleImportantInput();
-                
+
                 if (HarpManager.PlayingMusic)
                 {
                     HarpManager.Update(gameTime);
@@ -178,46 +179,49 @@ namespace RiverHollow
 
         protected override void Draw(GameTime gameTime)
         {
-            //GraphicsDevice.SetRenderTarget(lightsTarget);
-            //GraphicsDevice.Clear(Color.DarkGray);
-            //spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
-            ////draw light mask where there should be torches etc...
-            //spriteBatch.Draw(lightMask, new Vector2(800, 576), Color.White);
-            //spriteBatch.End();
-
-            GraphicsDevice.SetRenderTarget(mainTarget);
-            GraphicsDevice.Clear(Color.Transparent);
+            if (_bLightingOn)
             {
+                GraphicsDevice.SetRenderTarget(_renderLights);
+                GraphicsDevice.Clear(GameCalendar.GetLightColor());
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, null, null, null, Camera._transform);
+                //draw light mask where there should be torches etc...
+                MapManager.DrawLights(spriteBatch);
+                spriteBatch.End();
+            }
+
+            //This is when we start drawing the World
+            //If we're in an informational state, then only the GUIScreen data should be visible, don't draw anything except for the GUI
+            if (!Informational())
+            {
+                //Start rendering to the main target
+                GraphicsDevice.SetRenderTarget(_renderMain);
+                GraphicsDevice.Clear(Color.Transparent);
+
                 spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
-                //If we're in an informational state, then only the GUIScreen data should be visible, don't draw anything except for the GUI
-                if (!Informational())
-                {
-                    MapManager.DrawBase(spriteBatch);
-                    PlayerManager.Draw(spriteBatch);
-                }
+                MapManager.DrawBase(spriteBatch);
+                PlayerManager.Draw(spriteBatch);
+                spriteBatch.End();
+
+                spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Camera._transform);
+                MapManager.DrawUpper(spriteBatch);
                 spriteBatch.End();
             }
+
+            GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.Clear(Color.Black);
+
+            //This is the portion of code where we draw to the screen. If we are on the map, we want to apply the
+            //lighting effect. Since we will be drawing on the _renderMain, the effectsfile.
+            //testMask is the name of the texture contained in the _effectLights file.
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
+            if (OnMap() && _bLightingOn)
             {
-                spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, null);
-                if (!Informational())
-                {
-                    MapManager.DrawUpper(spriteBatch);
-                }
-
-                spriteBatch.End();
-
-                GraphicsDevice.SetRenderTarget(null);
-                GraphicsDevice.Clear(Color.Black);
-
-                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
-                //if (OnMap())
-                //{
-                //    effect1.Parameters["lightMask"].SetValue(lightsTarget);
-                //    effect1.CurrentTechnique.Passes[0].Apply();
-                //}
-                spriteBatch.Draw(mainTarget, Vector2.Zero, Color.White);
-                spriteBatch.End();
+                _effectLights.Parameters["playerCoords"].SetValue(PlayerManager.World.Position);
+                _effectLights.Parameters["lightMask1"].SetValue(_renderLights);
+                _effectLights.CurrentTechnique.Passes[0].Apply();
             }
+            spriteBatch.Draw(_renderMain, Vector2.Zero, Color.White);
+            spriteBatch.End();
 
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
 
@@ -229,7 +233,7 @@ namespace RiverHollow
             spriteBatch.End();
             base.Draw(gameTime);
         }
-
+    
         public void HandleImportantInput()
         {
             if (!Informational() && !TakingInput())
@@ -256,7 +260,7 @@ namespace RiverHollow
                         }
                         else
                         {
-                           // GUIManager.SetScreen(new CraftingScreen());
+                            // GUIManager.SetScreen(new CraftingScreen());
                         }
                     }
                 }
@@ -295,7 +299,7 @@ namespace RiverHollow
         {
             MissionManager.Rollover();
             PlayerManager.Rollover();
-            foreach(Building b in PlayerManager.Buildings)
+            foreach (Building b in PlayerManager.Buildings)
             {
                 b.Rollover();
             }
@@ -305,7 +309,7 @@ namespace RiverHollow
 
         public static void PrepExit()
         {
-            _exit = true;
+            _bExit = true;
         }
 
         public static void HomeMapPlacement()

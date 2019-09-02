@@ -220,6 +220,8 @@ namespace RiverHollow.Game_Managers
                         return new Forageable(id, liData, pos);
                     case "EchoNode":
                         return new EchoNode(id, liData, pos);
+                    case "Light":
+                        return new Light(id, liData, pos);
                 }
             }
 

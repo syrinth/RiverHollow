@@ -59,7 +59,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetOutsideWinter.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texWeather.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/lightmask.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/lighteffect.fx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/SpiritLoot.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC3.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC1.xml</File>
@@ -199,5 +198,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Tools.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Wand/609.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Wand/602.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Effects/lighteffect.fx</File>
   </SourceFiles>
 </SourceFileCollection>

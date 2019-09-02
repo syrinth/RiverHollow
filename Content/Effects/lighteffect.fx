@@ -1,12 +1,13 @@
 ﻿sampler s0;  
-		
-texture lightMask;  
-sampler lightSampler = sampler_state{Texture = (lightMask);};  
-     
+texture lightMask1;
+
+sampler lightSampler = sampler_state{Texture = (lightMask1);};  
+
 float4 PixelShaderLight(float4 pos : SV_POSITION, float4 color1 : COLOR0, float2 coords: TEXCOORD0) : COLOR0
 {  
     float4 color = tex2D(s0, coords);  
-    float4 lightColor = tex2D(lightSampler, coords);  
+    float4 lightColor = tex2D(lightSampler, coords);
+	
     return color * lightColor;  
 }  
 

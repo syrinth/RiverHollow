@@ -147,5 +147,9 @@
       <Key>299</Key>
       <Value>[Type:ClassChanger][Image:0-2][Width:16][Height:32]</Value>
     </Item>
+    <Item>
+      <Key>303</Key>
+      <Value>[Type:Light][Image:112-0][Width:16][Height:16][Idle:6-0.1]</Value>
+    </Item>
   </Asset>
 </XnaContent>

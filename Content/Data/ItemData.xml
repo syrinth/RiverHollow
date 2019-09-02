@@ -296,6 +296,10 @@
       <Key>302</Key>
       <Value>[Type:Marriage][Image:32-48][Sell:0]</Value>
     </Item>
+    <Item>
+      <Key>303</Key>
+      <Value>[Type:StaticItem][Image:16-16][Sell:0][Stacks]</Value>
+    </Item>
     <!--<400> Clothes-->
     <Item>
       <Key>400</Key>

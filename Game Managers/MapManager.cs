@@ -43,7 +43,6 @@ namespace RiverHollow.Game_Managers
         public static RHMap CurrentMap { get => _currentMap; set => _currentMap = value; }
 
         static List<Weather> _liWeather;
-        static GUIImage _ambientLight;
 
         public static void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice)
         {
@@ -55,7 +54,6 @@ namespace RiverHollow.Game_Managers
             foreach (string s in Directory.GetFiles(_sDungeonMapFolder)) { AddMap(s, Content, GraphicsDevice); }
 
             _currentMap = _tileMaps[MapManager.SpawnMap];
-            _ambientLight = new GUIImage(new Rectangle(160, 128, TileSize, TileSize), RiverHollow.ScreenWidth, RiverHollow.ScreenHeight, @"Textures\Dialog");
         }
 
         public static void AddMap(string mapToAdd, ContentManager Content, GraphicsDevice GraphicsDevice)
@@ -243,12 +241,15 @@ namespace RiverHollow.Game_Managers
             GraphicCursor.DrawPotentialWorldObject(spriteBatch);
         }
 
+        public static void DrawLights(SpriteBatch spriteBatch)
+        {
+            _currentMap.DrawLights(spriteBatch);
+        }
         public static void DrawUpper(SpriteBatch spriteBatch)
         {
             _currentMap.DrawUpper(spriteBatch);
             if (_currentMap.IsOutside)
             {
-                _ambientLight.Draw(spriteBatch, GameCalendar.GetAmbientLight());
                 if (!GameCalendar.IsSunny())
                 {
                     foreach (Weather s in _liWeather)

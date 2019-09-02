@@ -708,6 +708,17 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
+        public void DrawLights(SpriteBatch spriteBatch)
+        {
+            foreach (WorldObject obj in _liPlacedWorldObjects)
+            {
+                if(obj.Type == WorldObject.ObjectType.Light)
+                {
+                    spriteBatch.Draw(lightMask, new Vector2(obj.CollisionBox.Center.X - lightMask.Width / 2, obj.CollisionBox.Y - lightMask.Height / 2), Color.White);
+                }
+            }
+        }
+
         public void DrawUpper(SpriteBatch spriteBatch)
         {
             SetLayerVisibility(true);

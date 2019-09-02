@@ -99,7 +99,7 @@ namespace RiverHollow
 
         public static void IncrementMinutes()
         {
-            if (_iCurrMin >= 60)
+            if (_iCurrMin  > 59)
             {
                 _iCurrMin = 0;
                 _iCurrHour++;
@@ -112,7 +112,7 @@ namespace RiverHollow
             }
             else
             {
-                _iCurrMin++;
+                _iCurrMin += 20;
             }
         }
 
@@ -240,13 +240,24 @@ namespace RiverHollow
             CheckDungeonLocks();
         }
 
-        internal static float GetAmbientLight()
+        /// <summary>
+        /// Using the time of day, calculate how dark it should be
+        /// </summary>
+        /// <returns>The Color of thenight-time darkness mask</returns>
+        public static Color GetLightColor()
         {
-            float rv = 0;
-
-            if (_iCurrHour >= 18)
+            Color rv = Color.White;
+            if(_iCurrHour >= 18)
             {
-                rv = ((float)_iCurrHour - 17f) / 8f * 0.5f;
+                int totalMinutes = 360;
+                float timeModifier = _iCurrMin + ((_iCurrHour - 18) * 60);  //Total number of minutes since 6 P.M.
+                float darkPercent = timeModifier / totalMinutes;
+
+                //Subtract the percent of darkness we currently have from the max then subtract
+                // it from the max value of 255 to find our relative number. Since new Color takes
+                //a float between 0 and 1, we need to divide our relative number by the max
+                float value = (255 - (255 *  (0.5f * darkPercent))) / 255;  
+                rv = new Color(value, value, value);
             }
 
             return rv;

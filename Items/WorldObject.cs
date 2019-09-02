@@ -20,7 +20,7 @@ namespace RiverHollow.WorldObjects
         public static int Rock = 0;
         public static int BigRock = 1;
         public static int Tree = 2;
-        public enum ObjectType { Building, ClassChanger, Machine, Container, Door, Earth, Floor, WorldObject, Destructible, Plant, Forageable, Wall};
+        public enum ObjectType { Building, ClassChanger, Machine, Container, Door, Earth, Floor, WorldObject, Destructible, Plant, Forageable, Wall, Light};
         public ObjectType Type;
 
         protected AnimatedSprite _sprite;
@@ -363,6 +363,27 @@ namespace RiverHollow.WorldObjects
                 _sprite.SetCurrentAnimation(WorldObjAnimEnum.Gathered);
             }
             return rv;
+        }
+    }
+
+    public class Light : WorldItem
+    {
+        public Light(int id, Dictionary<string, string> stringData, Vector2 pos)
+        {
+            Type = ObjectType.Light;
+            _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
+
+            _iHeight = TileSize;
+            _iWidth = TileSize;
+            string[] imageSplit = stringData["Image"].Split('-');
+            string[] idleSplit = stringData["Idle"].Split('-');
+
+            int startX = int.Parse(imageSplit[0]);
+            int startY = int.Parse(imageSplit[1]);
+            _sprite.AddAnimation(WorldObjAnimEnum.Idle, startX, startY, TileSize, TileSize, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
+
+            _sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
+            _sprite.IsAnimating = true;
         }
     }
 

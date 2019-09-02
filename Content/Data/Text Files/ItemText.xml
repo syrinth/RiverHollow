@@ -292,6 +292,10 @@
       <Key>302</Key>
       <Value>Mask of Marriage/A mask used by the people of River hollow to proess their love to one another.</Value>
     </Item>
+    <Item>
+      <Key>303</Key>
+      <Value>Torch/A torch to light the way</Value>
+    </Item>
     <!--<400> Clothes-->
     <Item>
       <Key>400</Key>

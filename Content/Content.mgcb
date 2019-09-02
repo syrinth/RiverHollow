@@ -423,12 +423,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/lightmask.png
 
-#begin lighteffect.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:lighteffect.fx
-
 #begin Data/SpiritLoot.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -1847,4 +1841,10 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Items/Combat/Weapons/Wand/602.png
+
+#begin Effects/lighteffect.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/lighteffect.fx
 
