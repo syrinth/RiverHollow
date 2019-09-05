@@ -179,7 +179,7 @@ namespace RiverHollow.Game_Managers
         {
             foreach(RHMap map in _tileMaps.Values)
             {
-                map.PopulateMap();
+                map.PopulateMap(loaded);
             }
             int mapWidth = _tileMaps[MapManager.HomeMap].MapWidthTiles;
             int mapHeight = _tileMaps[MapManager.HomeMap].MapHeightTiles;

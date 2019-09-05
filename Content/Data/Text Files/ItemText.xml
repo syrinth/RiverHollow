@@ -270,10 +270,14 @@
       <Key>205</Key>
       <Value>Loom/You can make clothes here.</Value>
     </Item>
-    <!--<300> Misc-->
+    <!--<240> Walls and Flooring-->
     <Item>
       <Key>240</Key>
       <Value>Wall/Stone Wall</Value>
+    </Item>
+    <Item>
+      <Key>241</Key>
+      <Value>Stone Floor/Flooring made of stone</Value>
     </Item>
     <Item>
       <Key>299</Key>

@@ -65,8 +65,6 @@ namespace RiverHollow.Game_Managers
         public static Spirit gmSpirit;
         public static KeyDoor CurrentDoor;
 
-        public static Mason TownMason;
-
         static long _iSaveID = -1;
         public static int MAX_NAME_LEN = 10;
 
@@ -371,22 +369,25 @@ namespace RiverHollow.Game_Managers
             public List<MachineData> machines;
 
             [XmlElement(ElementName = "name")]
-            public string name;
+            public string sName;
 
             [XmlElement(ElementName = "positionX")]
-            public int positionX;
+            public int iPosX;
 
             [XmlElement(ElementName = "positionY")]
-            public int positionY;
+            public int iPosY;
 
             [XmlElement(ElementName = "BuildingID")]
-            public int buildingID;
+            public int iBuildingID;
 
             [XmlElement(ElementName = "PersonalID")]
-            public int id;
+            public int iPersonalID;
 
             [XmlElement(ElementName = "BldgLvl")]
-            public int bldgLvl;
+            public int iBldgLevel;
+
+            [XmlElement(ElementName = "UpgradeTime")]
+            public int iUpgradeTimer;
 
             [XmlElement(ElementName = "BuildingChest")]
             public ContainerData buildingChest;
@@ -569,6 +570,12 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "Y")]
             public int y;
+
+            [XmlElement(ElementName = "Rows")]
+            public int rows;
+
+            [XmlElement(ElementName = "Columns")]
+            public int cols;
 
             [XmlArray(ElementName = "Items")]
             public List<ItemData> Items;
@@ -795,9 +802,10 @@ namespace RiverHollow.Game_Managers
             GameCalendar.LoadCalendar(data.Calendar); 
             foreach (BuildingData b in data.Buildings)
             {
-                Building newBuilding = ObjectManager.GetBuilding(b.buildingID);
+                Building newBuilding = ObjectManager.GetBuilding(b.iBuildingID);
                 newBuilding.LoadData(b);
-                MapManager.Maps[MapManager.HomeMap].AddBuilding(newBuilding);
+                bool place = b.iBuildingID == 0 || b.iBldgLevel != 0;
+                MapManager.Maps[MapManager.HomeMap].AddBuilding(newBuilding, place, place);
             }
 
             foreach (MapData mapData in data.MapData)
@@ -820,7 +828,7 @@ namespace RiverHollow.Game_Managers
                 newQuest.LoadData(q);
                 PlayerManager.AddToQuestLog(newQuest);
             }
-            foreach(MissionData m in data.CurrentMissions)
+            foreach (MissionData m in data.CurrentMissions)
             {
                 Mission newMission = new Mission();
                 newMission.LoadData(m);

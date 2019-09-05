@@ -87,9 +87,6 @@ namespace RiverHollow.Game_Managers
                     case "ShopKeeper":
                         n = new ShopKeeper(npcData.Key, diData);
                         break;
-                    case "Mason":
-                        n = new Mason(npcData.Key, diData);
-                        break;
                     case "Eligible":
                         n = new EligibleNPC(npcData.Key, diData);
                         break;
@@ -215,7 +212,9 @@ namespace RiverHollow.Game_Managers
                     case "Machine":
                         return new Machine(id, liData);
                     case "Wall":
-                        return new Wall(id, liData);
+                        return new Wall(id, liData, pos);
+                    case "Floor":
+                        return new Floor(id, liData, pos);
                     case "Forageable":
                         return new Forageable(id, liData, pos);
                     case "EchoNode":

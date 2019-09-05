@@ -24,6 +24,20 @@ namespace RiverHollow.Game_Managers
             _swWriter.Close();
         }
 
+        /// <summary>
+        /// Wrapper for writing to the logs. We don't care if it fails.
+        /// </summary>
+        /// <param name="text"></param>
+        public static void WriteToTravelLog(string text)
+        {
+            try
+            {
+                _swWriter.WriteLine(text);
+            }
+            catch (Exception e){ 
+            }
+        }
+
         public static void Calculate()
         {
             _diNodes = new Dictionary<string, Node>();
@@ -147,7 +161,7 @@ namespace RiverHollow.Game_Managers
             Dictionary<string, string> mapCameFrom = new Dictionary<string, string>();      
             Dictionary<string, double> mapCostSoFar = new Dictionary<string, double>();     //Records the cost to travel to maps that we've discovered
 
-            _swWriter.WriteLine("====================== " + mapName + " => " + findKey + " ======================");
+            WriteToTravelLog("====================== " + mapName + " => " + findKey + " ======================");
 
             //Initialize pathfinding. Add the start node to the map frontier
             //The map frontier is a list of maps discovered and the cost to arrive at them
@@ -199,8 +213,8 @@ namespace RiverHollow.Game_Managers
                     //TravelManager Log
                     foreach (List<RHTile> l in liTotalPath)
                     {
-                        _swWriter.WriteLine("");
-                        _swWriter.WriteLine("[" + l[0].X + ", " + l[0].Y + "] => [" + l[l.Count()-1].X + ", " + l[l.Count() - 1].Y + "]");
+                        WriteToTravelLog("");
+                        WriteToTravelLog("[" + l[0].X + ", " + l[0].Y + "] => [" + l[l.Count()-1].X + ", " + l[l.Count() - 1].Y + "]");
                         _completeTilePath.AddRange(l);
                     }
 
@@ -257,7 +271,7 @@ namespace RiverHollow.Game_Managers
         //Pathfinds from one point to another on a given map
         public static List<RHTile> FindPathToLocation(ref Vector2 start, Vector2 target, string mapName)
         {
-            _swWriter.WriteLine(System.Environment.NewLine + "+++ " + mapName + " -- [" + (int)start.X/16 + ", " + (int)start.Y / 16 + "] == > [ " + (int)target.X / 16 + ", " + (int)target.Y / 16 + " ] +++");
+            WriteToTravelLog(System.Environment.NewLine + "+++ " + mapName + " -- [" + (int)start.X/16 + ", " + (int)start.Y / 16 + "] == > [ " + (int)target.X / 16 + ", " + (int)target.Y / 16 + " ] +++");
             
             List<RHTile> returnList = null;
             RHMap map = MapManager.Maps[mapName.Split(':')[0]];
@@ -284,15 +298,15 @@ namespace RiverHollow.Game_Managers
 
                         if (i != 0 && i % 10 == 0)
                         {
-                            _swWriter.WriteLine(print);
+                            WriteToTravelLog(print);
                             print = string.Empty;
                         }
                         else if(i == returnList.Count() - 1)
                         {
-                            _swWriter.WriteLine(print);
+                            WriteToTravelLog(print);
                         }
                     }
-                    _swWriter.WriteLine("---- " + returnList.Count() + " ----");
+                    WriteToTravelLog("---- " + returnList.Count() + " ----");
 
                     break;
                 }

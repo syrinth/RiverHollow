@@ -135,12 +135,16 @@ namespace RiverHollow.WorldObjects
             MapPosition = position;
         }
 
+        /// <summary>
+        /// Removes the object from the Tiles this Object sits upon
+        /// </summary>
         public void RemoveSelfFromTiles()
         {
             foreach (RHTile t in Tiles)
             {
-                t.RemoveWorldObject();
-                t.RemoveShadowObject();
+                if (t.Flooring == this) { t.RemoveFlooring(); }
+                if (t.WorldObject == this) { t.RemoveWorldObject(); }
+                if (t.ShadowObject == this) { t.RemoveShadowObject(); }
             }
         }
 
@@ -523,72 +527,6 @@ namespace RiverHollow.WorldObjects
         {
             _toMap = map;
         }
-    }
-
-    public class Floor : WorldObject
-    {
-        protected Vector2 _vSourcePos;
-
-        public Floor()
-        {
-            Type = ObjectType.Floor;
-            _iWidth = TileSize;
-            _iHeight = TileSize;
-
-            _sprite = new AnimatedSprite(@"Textures\texFlooring");
-            _sprite.AddAnimation(WorldObjAnimEnum.Idle, 0, 0, _iWidth, _iHeight);
-        }
-
-        public Floor(int id)
-        {
-            _id = id;
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            _sprite.Draw(spriteBatch, 0);
-        }
-
-        internal FloorData SaveData()
-        {
-            FloorData floorData = new FloorData
-            {
-                ID = _id,
-                x = (int)MapPosition.X,
-                y = (int)MapPosition.Y
-            };
-
-            return floorData;
-        }
-        internal void LoadData(FloorData data)
-        {
-            _id = data.ID;
-            MapPosition = new Vector2(data.x, data.y);
-        }
-
-        public class Earth : Floor
-        {
-            bool _bWatered;
-
-            public Earth()
-            {
-                _id = 0;
-                Type = ObjectType.Earth;
-
-                _sprite = new AnimatedSprite(@"Textures\texFlooring");
-                _sprite.AddAnimation(WorldObjAnimEnum.Idle, 0, 0, TileSize, TileSize);
-                _sprite.AddAnimation("Watered", TileSize, 0, TileSize, TileSize);
-
-                Watered(false);
-            }
-
-            public void Watered(bool value)
-            {
-                _bWatered = value;
-                _sprite.SetCurrentAnimation(value ? "Watered" : Util.GetEnumString(WorldObjAnimEnum.Idle));
-            }
-            public bool Watered() { return _bWatered; }
-        }   
     }
 
     public class WorldItem : WorldObject
@@ -986,6 +924,8 @@ namespace RiverHollow.WorldObjects
                 ContainerData containerData = new ContainerData
                 {
                     containerID = this.ID,
+                    rows = _iRows,
+                    cols = _iColumns,
                     x = (int)this.MapPosition.X,
                     y = (int)this.MapPosition.Y
                 };
@@ -1001,9 +941,9 @@ namespace RiverHollow.WorldObjects
             internal void LoadData(ContainerData data)
             {
                 MapPosition = new Vector2(data.x, data.y);
-                for (int i = 0; i < InventoryManager.maxItemRows; i++)
+                for (int i = 0; i < Rows; i++)
                 {
-                    for (int j = 0; j < InventoryManager.maxItemColumns; j++)
+                    for (int j = 0; j < Columns; j++)
                     {
                         ItemData item = data.Items[i * InventoryManager.maxItemRows + j];
                         Item newItem = GetItem(item.itemID, item.num);
@@ -1128,51 +1068,51 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        /// <summary>
-        /// Wall object that can adjust themselves based off of other, adjacent walls
-        /// </summary>
-        public class Wall : WorldItem
+        public class AdjustableObject : WorldItem
         {
-            public Wall(int id, Dictionary<string, string> stringData)
+            //This is used for subtypes that have different sprites.
+            //Like the Earth which has a watered and unwatered Sprite
+            protected virtual AnimatedSprite Target => _sprite;
+
+            /// <summary>
+            /// Loads in the different sprite versions required for an AdjustableObject
+            /// so that they can be easily played and referenced in the future.
+            /// </summary>
+            /// <param name="sprite">The AnimatedSprite to load the animations into</param>
+            /// <param name="vStart">The source position for this texture series</param>
+            protected void LoadSprite(AnimatedSprite sprite, Vector2 vStart)
             {
-                _id = id;
-                Type = ObjectType.Wall;
-                ReadSourcePos(stringData["Image"]);
-
-                _iWidth = int.Parse(stringData["Width"]);
-                _iHeight = int.Parse(stringData["Height"]);
-
-                _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
-                _sprite.AddAnimation("None", (int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                _sprite.AddAnimation("E", (int)_vSourcePos.X + TileSize * 13, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                _sprite.AddAnimation("S", (int)_vSourcePos.X + TileSize * 14, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                _sprite.AddAnimation("W", (int)_vSourcePos.X + TileSize * 12, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                _sprite.AddAnimation("N", (int)_vSourcePos.X + TileSize * 15, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                _sprite.AddAnimation("NS", (int)_vSourcePos.X + TileSize, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                _sprite.AddAnimation("EW", (int)_vSourcePos.X + TileSize * 2, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                _sprite.AddAnimation("SW", (int)_vSourcePos.X + TileSize * 3, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                _sprite.AddAnimation("NW", (int)_vSourcePos.X + TileSize * 4, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                _sprite.AddAnimation("NE", (int)_vSourcePos.X + TileSize * 5, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                _sprite.AddAnimation("SE", (int)_vSourcePos.X + TileSize * 6, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                _sprite.AddAnimation("NSE", (int)_vSourcePos.X + TileSize * 7, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                _sprite.AddAnimation("NSW", (int)_vSourcePos.X + TileSize * 8, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                _sprite.AddAnimation("NEW", (int)_vSourcePos.X + TileSize * 9, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                _sprite.AddAnimation("SEW", (int)_vSourcePos.X + TileSize * 10, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                _sprite.AddAnimation("NSEW", (int)_vSourcePos.X + TileSize * 11, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("None", (int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("NS", (int)_vSourcePos.X + TileSize, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("EW", (int)_vSourcePos.X + TileSize * 2, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("SW", (int)_vSourcePos.X + TileSize * 3, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("NW", (int)_vSourcePos.X + TileSize * 4, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("NE", (int)_vSourcePos.X + TileSize * 5, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("SE", (int)_vSourcePos.X + TileSize * 6, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("NSE", (int)_vSourcePos.X + TileSize * 7, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("NSW", (int)_vSourcePos.X + TileSize * 8, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("NEW", (int)_vSourcePos.X + TileSize * 9, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("SEW", (int)_vSourcePos.X + TileSize * 10, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("NSEW", (int)_vSourcePos.X + TileSize * 11, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("W", (int)_vSourcePos.X + TileSize * 12, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("E", (int)_vSourcePos.X + TileSize * 13, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("S", (int)_vSourcePos.X + TileSize * 14, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("N", (int)_vSourcePos.X + TileSize * 15, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                
             }
 
             /// <summary>
-            /// Adjusts the source rectangle for the Wall compared to nearby wall segments
+            /// Adjusts the source rectangle for the AdjustableObject compared to nearby AdjustableObjects
             /// 
-            /// First thing to do is to determine how many walls are adjacent to the wall and where, we then
+            /// First thing to do is to determine how many AdjustableObjects are adjacent to the AdjustableObject and where, we then
             /// create a string in NSEW order to determine which segment we need to get.
             /// 
             /// Then compare the string and determine which piece it corresponds to.
             /// 
-            /// Finally, run this method again on each of the adjacent walls to update their appearance
+            /// Finally, run this method again on each of the adjacent AdjustableObjects to update their appearance
             /// </summary>
             /// <param name="adjustAdjacent">Whether or not to call this method against the adjacent tiles</param>
-            public void AdjustWall(bool adjustAdjacent = true)
+            public void AdjustObject(bool adjustAdjacent = true)
             {
                 List<RHTile> liAdjacentTiles = new List<RHTile>();
                 RHTile startTile = Tiles[0];
@@ -1185,30 +1125,34 @@ namespace RiverHollow.WorldObjects
                 MakeAdjustments("E", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sMapName].GetTile(new Point((int)(startTile.X + 1), (int)(startTile.Y))));
                 MakeAdjustments("W", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sMapName].GetTile(new Point((int)(startTile.X - 1), (int)(startTile.Y))));
 
-                _sprite.SetCurrentAnimation(string.IsNullOrEmpty(sAdjacent) ? "None" : sAdjacent);
+                Target.SetCurrentAnimation(string.IsNullOrEmpty(sAdjacent) ? "None" : sAdjacent);
 
-                //Call this methodo n the adjacent tiles. Do not recurse.
+                //Find all matching objects in the adjacent tiles and call
+                //this method without recursion on them.
                 if (adjustAdjacent)
                 {
                     foreach (RHTile t in liAdjacentTiles)
                     {
-                        Wall w = ((Wall)t.GetWorldObject());
-                        w.AdjustWall(false);
+                        AdjustableObject obj = null;
+                        if(MatchingObjectTest(t, ref obj))
+                        {
+                            obj.AdjustObject(false);
+                        }
                     }
                 }
             }
 
             /// <summary>
-            /// If the given tile passes the Wall test, add the ifValdid
+            /// If the given tile passes the AdjustableObject test, add the if Valdid
             /// string to the adjacency string then add to the list
             /// </summary>
             /// <param name="ifValid">Which directional value to add on a pass</param>
             /// <param name="adjacentStr">Ref to the adjacency string</param>
             /// <param name="adjacentList">ref to the adjacency list</param>
             /// <param name="tile">The tile to test</param>
-            private void MakeAdjustments(string ifValid, ref string adjacentStr, ref List<RHTile> adjacentList, RHTile tile)
+            protected void MakeAdjustments(string ifValid, ref string adjacentStr, ref List<RHTile> adjacentList, RHTile tile)
             {
-                if (WallTest(tile))
+                if (MatchingObjectTest(tile))
                 {
                     adjacentStr += ifValid;
                     adjacentList.Add(tile);
@@ -1216,19 +1160,167 @@ namespace RiverHollow.WorldObjects
             }
 
             /// <summary>
-            /// Check to see that the tile exists, has an object and that object is a wall
+            /// Helper for the MatchingObjectTest method for when we don't care about the object
+            /// </summary>
+            /// <param name="tile">Tile to test against</param>
+            /// <returns>True if the tile exists and contains a matching AdjustableObject</returns>
+            protected virtual bool MatchingObjectTest(RHTile tile) {
+                AdjustableObject obj = null;
+                return MatchingObjectTest(tile, ref obj);
+            }
+
+            /// <summary>
+            /// Check to see that the tile exists, has an AdjustableObject and that AdjustableObject matches the initial type
+            /// </summary>
+            /// <param name="tile">Tile to test against</param>
+            /// <param name="obj">Reference to any AdjustableObject that may be found</param>
+            /// <returns>True if the tile exists and contains a matching AdjustableObject</returns>
+            protected virtual bool MatchingObjectTest(RHTile tile, ref AdjustableObject obj) { return false; }
+        }
+
+        public class Floor : AdjustableObject
+        {
+            /// <summary>
+            /// Base Constructor to hard define the Height and Width
+            /// </summary>
+            protected Floor() {
+                _iWidth = TileSize;
+                _iHeight = TileSize;
+            }
+
+            public Floor(int id, Dictionary<string, string> stringData, Vector2 pos) : this()
+            {
+                _id = id;
+                Type = ObjectType.Floor;
+                ReadSourcePos(stringData["Image"]);
+
+                _sprite = new AnimatedSprite(GameContentManager.FILE_FLOORING);
+                LoadSprite(_sprite, _vSourcePos);
+
+                MapPosition = pos;
+            }
+
+            /// <summary>
+            /// Overriding because weneed to set the Depth to 0 for drawing since
+            /// this is a floor object and needs to beon the bottom.
+            /// </summary>
+            public override void Draw(SpriteBatch spriteBatch)
+            {
+                Target.Draw(spriteBatch, 0);
+            }
+
+            /// <summary>
+            /// Check to see that the tile exists, has an AdjustableObject and that AdjustableObject matches the initial type
             /// </summary>
             /// <param name="tile">Tile to test against</param>
             /// <returns>True if the tile exists and contains a Wall</returns>
-            private bool WallTest(RHTile tile)
+            protected override bool MatchingObjectTest(RHTile tile, ref AdjustableObject obj)
             {
                 bool rv = false;
 
                 if (tile != null)
                 {
-                    WorldObject obj = tile.GetWorldObject(false);
-                    if (obj != null && obj.Type == ObjectType.Wall)
+                    obj = tile.GetFloorObject();
+                    if (obj != null && obj.Type == Type)
                     {
+                        rv = true;
+                    }
+                }
+
+                return rv;
+            }
+
+            internal FloorData SaveData()
+            {
+                FloorData floorData = new FloorData
+                {
+                    ID = _id,
+                    x = (int)MapPosition.X,
+                    y = (int)MapPosition.Y
+                };
+
+                return floorData;
+            }
+            internal void LoadData(FloorData data)
+            {
+                _id = data.ID;
+                MapPosition = new Vector2(data.x, data.y);
+            }
+
+            public class Earth : Floor
+            {
+                protected override AnimatedSprite Target => _bWatered ? _sprWatered : _sprite;
+                public override Vector2 MapPosition
+                {
+                    set
+                    {
+                        base.MapPosition = value;
+                        _sprWatered.Position = _vMapPosition;
+                    }
+                }
+
+                AnimatedSprite _sprWatered;
+                bool _bWatered;
+
+                public Earth()
+                {
+                    _id = 0;
+                    Type = ObjectType.Earth;
+                    _vSourcePos = Vector2.Zero;
+
+                    _sprite = new AnimatedSprite(GameContentManager.FILE_FLOORING);
+                    LoadSprite(_sprite, _vSourcePos);
+
+                    _sprWatered = new AnimatedSprite(GameContentManager.FILE_FLOORING);
+                    LoadSprite(_sprWatered, new Vector2(_vSourcePos.X, _vSourcePos.Y + TileSize));
+
+                    Watered(false);
+                }
+
+                public void Watered(bool value)
+                {
+                    _bWatered = value;
+                    _sprWatered.SetCurrentAnimation(_sprite.CurrentAnimation);
+                }
+                public bool Watered() { return _bWatered; }
+            }
+        }
+
+        /// <summary>
+        /// Wall object that can adjust themselves based off of other, adjacent walls
+        /// </summary>
+        public class Wall : AdjustableObject
+        {
+            public Wall(int id, Dictionary<string, string> stringData, Vector2 pos)
+            {
+                _id = id;
+                Type = ObjectType.Wall;
+                ReadSourcePos(stringData["Image"]);
+
+                _iWidth = int.Parse(stringData["Width"]);
+                _iHeight = int.Parse(stringData["Height"]);
+
+                _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
+                LoadSprite(_sprite, _vSourcePos);
+
+                MapPosition = pos;
+            }
+
+            /// <summary>
+            /// Check to see that the tile exists, has an AdjustableObject and that AdjustableObject matches the initial type
+            /// </summary>
+            /// <param name="tile">Tile to test against</param>
+            /// <returns>True if the tile exists and contains a Wall</returns>
+            protected override bool MatchingObjectTest(RHTile tile, ref AdjustableObject obj)
+            {
+                bool rv = false;
+
+                if (tile != null)
+                {
+                    WorldObject wObj = tile.GetWorldObject(false);
+                    if (wObj != null && wObj.Type == Type)
+                    {
+                        obj = (AdjustableObject)wObj;
                         rv = true;
                     }
                 }

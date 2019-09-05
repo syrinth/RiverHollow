@@ -9,6 +9,7 @@ namespace RiverHollow.Game_Managers
     public static class GameContentManager
     {
         public const string FILE_WORLDOBJECTS = @"Textures\worldObjects";
+        public const string FILE_FLOORING = @"Textures\texFlooring";
         public const string FOLDER_ACTOR = @"Textures\Actors\";
         public const string FOLDER_BUILDINGS = @"Textures\Buildings\";
         public const string FOLDER_ITEMS = @"Textures\Items\";

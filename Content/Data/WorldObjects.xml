@@ -138,10 +138,14 @@
       <Key>205</Key>
       <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Processes:44-5][Makes:700-15][Base:2-1]</Value>
     </Item>
-    <!--<240> Walls-->
+    <!--<240> Walls and Flooring-->
     <Item>
       <Key>240</Key>
       <Value>[Type:Wall][Image:0-128][Width:16][Height:32]</Value>
+    </Item>
+    <Item>
+      <Key>241</Key>
+      <Value>[Type:Floor][Image:0-32]</Value>
     </Item>
     <Item>
       <Key>299</Key>

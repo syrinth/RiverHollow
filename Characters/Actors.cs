@@ -530,6 +530,10 @@ namespace RiverHollow.Actors
     }
     public class Villager : TalkingActor
     {
+        //Data for building structures
+        Building _buildTarget;
+        bool _bStartedBuilding;
+
         protected int _iIndex;
         public int ID { get => _iIndex; }
         protected string _homeMap;
@@ -576,7 +580,7 @@ namespace RiverHollow.Actors
             LoadContent(_sVillagerFolder + "NPC" + _iIndex);
             ImportBasics(stringData);
 
-            MapManager.Maps[CurrentMapName].AddCharacter(this);
+            MapManager.Maps[CurrentMapName].AddCharacterImmediately(this);
         }
 
         public override string GetOpeningText()
@@ -781,14 +785,23 @@ namespace RiverHollow.Actors
 
         public virtual void RollOver()
         {
-            MapManager.Maps[CurrentMapName].RemoveCharacter(this);
-            RHMap map = MapManager.Maps[_homeMap];
-            string Spawn = "NPC" + _iIndex;
+            if (!_bStartedBuilding && _buildTarget != null)
+            {
+                _bStartedBuilding = true;
+            }
 
-            Position = Util.SnapToGrid(map.GetCharacterSpawn(Spawn));
-            map.AddCharacter(this);
+            //If we failed to move the NPC to a building location, because there was none
+            //Add the NPC to their home map
+            if (!MoveToBuildingLocation()) { 
+                MapManager.Maps[CurrentMapName].RemoveCharacter(this);
+                RHMap map = MapManager.Maps[_homeMap];
+                string Spawn = "NPC" + _iIndex;
 
-            CalculatePathing();
+                Position = Util.SnapToGrid(map.GetCharacterSpawn(Spawn));
+                map.AddCharacterImmediately(this);
+
+                CalculatePathing();
+            }
         }
         public void CalculatePathing()
         {
@@ -963,6 +976,54 @@ namespace RiverHollow.Actors
 
         public bool IsEligible() { return _eNPCType == NPCTypeEnum.Eligible; }
 
+        /// <summary>
+        /// Assigns the building for the mason to build
+        /// If there is no building, also unset the building flag because he's finished.
+        /// </summary>
+        /// <param name="b">The building to build</param>
+        public void SetBuildTarget(Building b, bool startBuilding = false)
+        {
+            _buildTarget = b;
+            if (b == null)
+            {
+                _bStartedBuilding = false;
+            }
+            else
+            {
+                _bStartedBuilding = startBuilding;
+            }
+        }
+
+        /// <summary>
+        /// Use to determine whether the mason is currently building and nees to follow
+        /// nonstandardlogic
+        /// </summary>
+        private bool IsBuilding()
+        {
+            return _bStartedBuilding && _buildTarget != null;
+        }
+
+        /// <summary>
+        /// Check to see if the NPC is currently responsible for building anything and,
+        /// if so, move them to the appropriate map and position.
+        /// </summary>
+        /// <returns>True if they are buildingand have been moved.</returns>
+        private bool MoveToBuildingLocation()
+        {
+            bool rv = false;
+            if (IsBuilding())
+            {
+                rv = true;
+                MapManager.Maps[CurrentMapName].RemoveCharacter(this);
+                RHMap map = MapManager.Maps[MapManager.HomeMap];
+                CurrentMapName = MapManager.HomeMap;
+                Position = Util.SnapToGrid(_buildTarget.MapPosition + _buildTarget.BuildFromPosition);
+                map.AddCharacterImmediately(this);
+            }
+
+            return rv;
+        }
+
         public NPCData SaveData()
         {
             NPCData npcData = new NPCData()
@@ -997,6 +1058,7 @@ namespace RiverHollow.Actors
                     MapManager.Maps["HouseNPC" + data.npcID].AddCollectionItem(c.itemID, data.npcID, index++);
                 }
             }
+            MoveToBuildingLocation();
         }
     }
     public class ShopKeeper : Villager
@@ -1027,7 +1089,7 @@ namespace RiverHollow.Actors
             MapManager.Maps[CurrentMapName].AddCharacter(this);
         }
 
-        public void Talk(bool IsOpen = false)
+        public override void Talk(bool IsOpen = false)
         {
             GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Talk;
             string text = string.Empty;
@@ -1210,102 +1272,7 @@ namespace RiverHollow.Actors
             }
         }
     }
-    public class Mason : ShopKeeper
-    {
-        Building _buildTarget;
-        bool _bStartedBuilding;
 
-        public Mason(int index, Dictionary<string, string> stringData) : base(index, stringData)
-        {
-            if(GameManager.TownMason == null)
-            {
-                GameManager.TownMason = this;
-            }
-        }
-
-        /// <summary>
-        /// Override, if mason is building,t hey need to have the highest float depth
-        /// 
-        /// That being said, this is awful and we should try to find a different way of doing this
-        /// </summary>
-        /// <param name="spriteBatch"></param>
-        /// <param name="useLayerDepth"></param>
-        public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
-        {
-            if (IsBuilding())
-            {
-                _spriteBody.Draw(spriteBatch, true, 1, 99999999999);
-            }
-            else
-            {
-                base.Draw(spriteBatch, useLayerDepth);
-            }
-        }
-
-        /// <summary>
-        /// Overrides the Rollover command to make the mason spawn on HomeMap at the
-        /// delineated portion of the building to be built.
-        /// 
-        /// Also ensures that mason only truly starst building at the start of a day.
-        /// </summary>
-        public override void RollOver()
-        {
-            if(!_bStartedBuilding && _buildTarget != null)
-            {
-                _bStartedBuilding = true;
-            }
-
-            if (IsBuilding())
-            {
-                MapManager.Maps[CurrentMapName].RemoveCharacter(this);
-                RHMap map = MapManager.Maps[MapManager.HomeMap];
-
-                Position = Util.SnapToGrid(_buildTarget.MapPosition + _buildTarget.BuildFromPosition);
-                map.AddCharacter(this);
-            }
-            else
-            {
-                base.RollOver();
-            }
-        }
-
-        /// <summary>
-        /// If the mason is currently building something, do NOT run any normal update calls
-        /// </summary>
-        /// <param name="theGameTime"></param>
-        public override void Update(GameTime theGameTime)
-        {
-            if (IsBuilding())
-            {
-                BodySprite.Update(theGameTime);
-                
-            }
-            else
-            {
-                base.Update(theGameTime);
-            }
-        }
-
-        /// <summary>
-        /// Assigns the building for the mason to build
-        /// If there is no building, also unset the building flag because he's finished.
-        /// </summary>
-        /// <param name="b">The building to build</param>
-        public void SetBuildTarget(Building b)
-        {
-            _buildTarget = b;
-            if(b == null) { _bStartedBuilding = false; }
-        }
-
-        /// <summary>
-        /// Use to determine whether the mason is currently building and nees to follow
-        /// nonstandardlogic
-        /// </summary>
-        private bool IsBuilding()
-        {
-            return _bStartedBuilding && _buildTarget != null;
-        }
-    }    
     public class EligibleNPC : Villager
     {
         public bool Married;

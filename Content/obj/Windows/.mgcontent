@@ -43,7 +43,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texMachines.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texPlayer.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/WorldObjects.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texFlooring.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetManorGrounds.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetManor.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapManorGrounds.tmx</File>
@@ -199,5 +198,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Wand/609.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Wand/602.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Effects/lighteffect.fx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texFlooring.png</File>
   </SourceFiles>
 </SourceFileCollection>

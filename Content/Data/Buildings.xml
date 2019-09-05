@@ -8,19 +8,19 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Texture:Tower][Dimensions:80-224][FirstBase:0-160][Width:80][Height:48][Entrance:32-176-16-32][Workers:1-3][UpgradeTime:3][BuildSpot:48-176]</Value>
+      <Value>[Texture:Tower][Dimensions:80-224][FirstBase:0-160][Width:80][Height:48][Entrance:32-176-16-32][Workers:1-3][UpgradeTime:3][Builder:9][BuildSpot:48-176]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Texture:Barracks][Dimensions:128-144][FirstBase:0-80][Width:128][Height:64][Entrance:80-112-16-32][Workers:5-6][UpgradeTime:3]</Value>
+      <Value>[Texture:Barracks][Dimensions:128-144][FirstBase:0-80][Width:128][Height:64][Entrance:80-112-16-32][Workers:5-6][UpgradeTime:3][Builder:9]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Texture:Lodge][Dimensions:112-128][FirstBase:0-64][Width:112][Height:64][Entrance:112-128-16-32][Workers:7-8][UpgradeTime:3]</Value>
+      <Value>[Texture:Lodge][Dimensions:112-128][FirstBase:0-64][Width:112][Height:64][Entrance:112-128-16-32][Workers:7-8][UpgradeTime:3][Builder:9]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Texture:Cottage][Dimensions:112-128][FirstBase:0-64][Width:112][Height:64][Entrance:112-128-16-32][Workers:2-4][UpgradeTime:3]</Value>
+      <Value>[Texture:Cottage][Dimensions:112-128][FirstBase:0-64][Width:112][Height:64][Entrance:112-128-16-32][Workers:2-4][UpgradeTime:3][Builder:9]</Value>
     </Item>
     <!--River Hollow Town Buildings-->
     <Item>

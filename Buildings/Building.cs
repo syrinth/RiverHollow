@@ -15,6 +15,7 @@ namespace RiverHollow.Buildings
 {
     public class Building : WorldObject
     {
+        protected int _iNPCBuilderID;
         protected int _iEntX;
         protected int _iEntY;
         protected int _iEntWidth;
@@ -120,6 +121,11 @@ namespace RiverHollow.Buildings
 
             //The amount of time it takes for a building to change stages
             if (stringData.ContainsKey("UpgradeTime")) { _iUpgradeTime = int.Parse(stringData["UpgradeTime"]); }
+
+            if (stringData.ContainsKey("Builder"))
+            {
+                _iNPCBuilderID = int.Parse(stringData["Builder"]);
+            }
 
             //Sets the position from which the Mason will spawn tobuild the building
             if (stringData.ContainsKey("BuildSpot")) {
@@ -353,9 +359,16 @@ namespace RiverHollow.Buildings
 
                 for (int x = (int)startAt.X; x < startAt.X + CollisionBox.Width; x += TileSize)
                 {
-                    for (int y = (int)startAt.Y; y < startAt.Y + CollisionBox.Height; y += TileSize)
+                    for (int y = (int)startAt.Y + TileSize; y < startAt.Y + TileSize + CollisionBox.Height; y += TileSize)
                     {
-                        //Add Flooring Here
+                        Floor obj = (Floor)ObjectManager.GetWorldObject(241);
+                        obj.SetMapName(MapManager.CurrentMap.Name);
+                        obj.SetCoordinatesByGrid(new Vector2(x, y));
+                        MapManager.CurrentMap.TestMapTiles(obj);
+                        if (MapManager.PlacePlayerObject(obj))
+                        {
+                            obj.AdjustObject();
+                        }
                     }
                 }
 
@@ -383,9 +396,9 @@ namespace RiverHollow.Buildings
                 }
             }
             _iUpgradeTimer = _iUpgradeTime + 1;
-            _sprite.SetCurrentAnimation(_iBldgLvl.ToString()); 
-           
-            GameManager.TownMason.SetBuildTarget(this);
+            _sprite.SetCurrentAnimation(_iBldgLvl.ToString());
+
+            ObjectManager.DiNPC[_iNPCBuilderID].SetBuildTarget(this);
         }
 
         /// <summary>
@@ -401,7 +414,7 @@ namespace RiverHollow.Buildings
             MapManager.CurrentMap.TestMapTiles(obj);
             if (MapManager.PlacePlayerObject(obj))
             {
-                ((Wall)obj).AdjustWall();
+                ((Wall)obj).AdjustObject();
             }
         }
 
@@ -422,11 +435,19 @@ namespace RiverHollow.Buildings
                 foreach (RHTile t in Tiles)
                 {
                     WorldObject w = t.WorldObject;
-                    buildingMap.RemoveWorldObject(w);
-                    w.RemoveSelfFromTiles();
-
-                    buildingMap.AssignMapTiles(this, Tiles);
+                    if (w != null)
+                    {
+                        buildingMap.RemoveWorldObject(w);
+                        w.RemoveSelfFromTiles();
+                    }
+                    w = t.Flooring;
+                    if (w != null)
+                    {
+                        buildingMap.RemoveWorldObject(w);
+                        w.RemoveSelfFromTiles();
+                    }
                 }
+                buildingMap.AssignMapTiles(this, Tiles);
                 buildingMap.CreateBuildingEntrance(this);
             }
 
@@ -437,7 +458,7 @@ namespace RiverHollow.Buildings
 
             _sprite.SetCurrentAnimation(_iBldgLvl.ToString());
 
-            GameManager.TownMason.SetBuildTarget(null);
+            ObjectManager.DiNPC[_iNPCBuilderID].SetBuildTarget(null);
         }
 
         /// <summary>
@@ -463,12 +484,13 @@ namespace RiverHollow.Buildings
         {
             BuildingData buildingData = new BuildingData
             {
-                bldgLvl = this._iBldgLvl,
-                buildingID = this.ID,
-                positionX = (int)this.MapPosition.X,
-                positionY = (int)this.MapPosition.Y,
-                id = this.PersonalID,
-                name = this._sGivenName,
+                iBldgLevel = this._iBldgLvl,
+                iBuildingID = this.ID,
+                iPosX = (int)this.MapPosition.X,
+                iPosY = (int)this.MapPosition.Y,
+                iPersonalID = this.PersonalID,
+                sName = this._sGivenName,
+                iUpgradeTimer = this._iUpgradeTimer,
 
                 Workers = new List<WorkerData>()
             };
@@ -499,9 +521,15 @@ namespace RiverHollow.Buildings
         }
         public void LoadData(BuildingData data)
         {
-            SetCoordinatesByGrid(new Vector2(data.positionX, data.positionY));
-            _iPersonalID = data.id;
-            _iBldgLvl = data.bldgLvl;
+            SetCoordinatesByGrid(new Vector2(data.iPosX, data.iPosY));
+            _iPersonalID = data.iPersonalID;
+            _iBldgLvl = data.iBldgLevel;
+            _iUpgradeTimer = data.iUpgradeTimer;
+
+            if(_iUpgradeTimer > 0)
+            {
+                ObjectManager.DiNPC[_iNPCBuilderID].SetBuildTarget(this, true);
+            }
 
             foreach (WorkerData wData in data.Workers)
             {
@@ -509,7 +537,7 @@ namespace RiverHollow.Buildings
                 w.LoadData(wData);
                 AddWorker(w);
             }
-            this._sGivenName = data.name;
+            this._sGivenName = data.sName;
             this.Pantry = (Container)ObjectManager.GetWorldObject(data.pantry.containerID);
             Pantry.LoadData(data.pantry);
             this.BuildingChest = (Container)ObjectManager.GetWorldObject(data.pantry.containerID);

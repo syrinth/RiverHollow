@@ -287,18 +287,6 @@
 /processor:PassThroughProcessor
 /build:Data/WorldObjects.xml
 
-#begin Textures/texFlooring.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/texFlooring.png
-
 #begin Maps/tilesetManorGrounds.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1847,4 +1835,16 @@
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:Effects/lighteffect.fx
+
+#begin Textures/texFlooring.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/texFlooring.png
 
