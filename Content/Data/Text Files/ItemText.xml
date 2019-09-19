@@ -91,6 +91,19 @@
       <Key>25</Key>
       <Value>Lantern/Used to call forth the energy of spent emotions</Value>
     </Item>
+    <!--<26-34> Monster Drops-->
+    <Item>
+      <Key>26</Key>
+      <Value>Swamp Muck/A dollop of swamp muck from a Muck Dweller</Value>
+    </Item>
+    <Item>
+      <Key>27</Key>
+      <Value>Magical Leaf/An enchanted leaf bestowed with power</Value>
+    </Item>
+    <Item>
+      <Key>28</Key>
+      <Value>Mushroom Powder/Powdered mushrooms... better not take too much.</Value>
+    </Item>
     <!--<35-39> Echo Resources-->
     <Item>
       <Key>35</Key>
@@ -123,11 +136,31 @@
     </Item>
     <Item>
       <Key>44</Key>
-      <Value>Flax/A crop used to produce textiles</Value>
+      <Value>Flax Fiber/The fibers of a Flax plant, used to spin into textiles</Value>
     </Item>
     <Item>
       <Key>45</Key>
       <Value>Cotton Boll/Soft cotton used for fabric</Value>
+    </Item>
+    <Item>
+      <Key>46</Key>
+      <Value>Black Thistle/Rumor has it that a single prick fromt his thistle can cause an endless torpor</Value>
+    </Item>
+    <Item>
+      <Key>47</Key>
+      <Value>Winter Berry/Rumors says that this berry was first grown by the Spirits to help the villagers during the first Winter in the hollow.</Value>
+    </Item>
+    <Item>
+      <Key>48</Key>
+      <Value>Potion Berry/A berry with helpful healing properites commonly used in potions.</Value>
+    </Item>
+    <Item>
+      <Key>49</Key>
+      <Value>Silkworm Cocoon/Cocoon of the silkworm, used to make silk.</Value>
+    </Item>
+    <Item>
+      <Key>50</Key>
+      <Value>Dragon Fiber/The fibers of the Dragonleaf plant.</Value>
     </Item>
     <!--<60-79> Seeds-->
     <Item>
@@ -239,6 +272,19 @@
     <Item>
       <Key>106</Key>
       <Value>Intelligence Powder/These mushrooms will expand your mind</Value>
+    </Item>
+    <!--<150> Refined Resources-->
+    <Item>
+      <Key>150</Key>
+      <Value>Silk Cloth/Luxurious fabric coveted by the higher classes.</Value>
+    </Item>
+    <Item>
+      <Key>151</Key>
+      <Value>Dragonweave Cloth/A luxuriously soft, magical cloth highly sought after by magic users.</Value>
+    </Item>
+    <Item>
+      <Key>152</Key>
+      <Value>Token of Mirth/A jade token from the spirits blessing the bearer with mirth</Value>
     </Item>
     <!--<190> Container:Stamina/Health/Mana-->
     <Item>
@@ -357,8 +403,12 @@
       <Value>Black Night/This wand was enchanted with the essences of many dark creaures, giving it a sinister power.</Value>
     </Item>
     <Item>
-      <Key>609</Key>
+      <Key>608</Key>
       <Value>Thunderstorm/These crackling wands were first created during the largest thunderstorm in three centuries.</Value>
+    </Item>
+    <Item>
+      <Key>609</Key>
+      <Value>Will of the Archmage/Only the mostpuissant of Wizards canhope to channel the powerful energies thatcourse through this wand.</Value>
     </Item>
     <!--Healer-->
     <Item>

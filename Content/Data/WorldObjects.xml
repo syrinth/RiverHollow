@@ -95,6 +95,14 @@
       <Key>21</Key>
       <Value>[Type:Forageable][Image:96-0][Width:16][Height:16][Item:45][Passable]</Value>
     </Item>
+    <Item>
+      <Key>22</Key>
+      <Value>[Type:Forageable][Image:112-16][Width:16][Height:32][Item:46][Passable]</Value>
+    </Item>
+    <Item>
+      <Key>23</Key>
+      <Value>[Type:Forageable][Image:128-16][Width:16][Height:32][Item:48][Passable]</Value>
+    </Item>
     <!--<60-79> Plants-->
     <Item>
       <Key>60</Key>

@@ -1016,7 +1016,6 @@ namespace RiverHollow.Actors
                 rv = true;
                 MapManager.Maps[CurrentMapName].RemoveCharacter(this);
                 RHMap map = MapManager.Maps[MapManager.HomeMap];
-                CurrentMapName = MapManager.HomeMap;
                 Position = Util.SnapToGrid(_buildTarget.MapPosition + _buildTarget.BuildFromPosition);
                 map.AddCharacterImmediately(this);
             }

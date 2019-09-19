@@ -216,7 +216,6 @@ namespace RiverHollow
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
             if (OnMap() && _bLightingOn)
             {
-                _effectLights.Parameters["playerCoords"].SetValue(PlayerManager.World.Position);
                 _effectLights.Parameters["lightMask1"].SetValue(_renderLights);
                 _effectLights.CurrentTechnique.Passes[0].Apply();
             }

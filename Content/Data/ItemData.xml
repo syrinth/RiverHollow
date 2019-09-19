@@ -95,6 +95,19 @@
       <Key>25</Key>
       <Value>[Type:Tool][Image:0-64][Sell:3000][ToolType:Lantern][Stam:1][Power:1]</Value>
     </Item>
+    <!--<26-34> Monster Drops-->
+    <Item>
+      <Key>26</Key>
+      <Value>[Type:Resource][Image:48-80][Sell:20]</Value>
+    </Item>
+    <Item>
+      <Key>27</Key>
+      <Value>[Type:Resource][Image:64-80][Sell:20]</Value>
+    </Item>
+    <Item>
+      <Key>28</Key>
+      <Value>[Type:Resource][Image:112-80][Sell:20]</Value>
+    </Item>
     <!--<35-39> Essence Resources-->
     <Item>
       <Key>35</Key>
@@ -132,6 +145,26 @@
     <Item>
       <Key>45</Key>
       <Value>[Type:Resource][Image:128-48][Sell:10][RefinesInto:3-5]</Value>
+    </Item>
+    <Item>
+      <Key>46</Key>
+      <Value>[Type:Resource][Image:128-80][Sell:10]</Value>
+    </Item>
+    <Item>
+      <Key>47</Key>
+      <Value>[Type:Resource][Image:96-80][Sell:10]</Value>
+    </Item>
+    <Item>
+      <Key>48</Key>
+      <Value>[Type:Resource][Image:80-80][Sell:10]</Value>
+    </Item>
+    <Item>
+      <Key>49</Key>
+      <Value>[Type:Resource][Image:128-64][Sell:20][RefinesInto:150-5]</Value>
+    </Item>
+    <Item>
+      <Key>50</Key>
+      <Value>[Type:Resource][Image:144-64][Sell:20][RefinesInto:151-5]</Value>
     </Item>
     <!--<60-79> Seeds-->
     <Item>
@@ -243,6 +276,19 @@
     <Item>
       <Key>106</Key>
       <Value>[Type:Consumable][Image:80-0][Sell:3000][CombatType:Helpful][StatusEffect:5-10][ReqItems:42-4]</Value>
+    </Item>
+    <!--<150> Refined Resources-->
+    <Item>
+      <Key>150</Key>
+      <Value>[Type:Resource][Image:128-0][Sell:20]</Value>
+    </Item>
+    <Item>
+      <Key>151</Key>
+      <Value>[Type:Resource][Image:144-0][Sell:20]</Value>
+    </Item>
+    <Item>
+      <Key>152</Key>
+      <Value>[Type:Resource][Image:112-96][Sell:20]</Value>
     </Item>
     <!--<190> Container:Stamina/Health/Mana-->
     <Item>
@@ -362,8 +408,12 @@
       <Value>[Type:Equipment][Image:64-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:5][[Atk:Minor][Mag:Major][ReqItems:86-2|93-1]</Value>
     </Item>
     <Item>
+      <Key>608</Key>
+      <Value>[Type:Equipment][Image:128-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:9][[Atk:Minor][Mag:Major][ReqItems:99-3|2-3]</Value>
+    </Item>
+    <Item>
       <Key>609</Key>
-      <Value>[Type:Equipment][Image:128-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:10][[Atk:Minor][Mag:Major][ReqItems:99-3|2-3]</Value>
+      <Value>[Type:Equipment][Image:144-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:10][[Atk:Minor][Mag:Major][ReqItems:90-4|89-4]</Value>
     </Item>
     <!--<610> Healer-->
     <Item>

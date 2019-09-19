@@ -222,7 +222,7 @@ namespace RiverHollow.Tile_Engine
             ReadOnlyCollection<TiledMapObjectLayer> objectLayers = _map.ObjectLayers;
             foreach (TiledMapObjectLayer ol in objectLayers)
             {
-                if (ol.Name == "Travel Layer")
+                if (ol.Name.Contains("Travel"))
                 {
                     foreach (TiledMapObject mapObject in ol.Objects)
                     {
@@ -254,7 +254,7 @@ namespace RiverHollow.Tile_Engine
                         }
                     }
                 }
-                else if (ol.Name == "Character Layer")
+                else if (ol.Name.Contains("Character"))
                 {
                     foreach (TiledMapObject mapObject in ol.Objects)
                     {
@@ -268,14 +268,14 @@ namespace RiverHollow.Tile_Engine
                         }
                     }
                 }
-                else if (ol.Name == "MapObject")
+                else if (ol.Name.Contains("MapObject"))
                 {
                     foreach (TiledMapObject mapObject in ol.Objects)
                     {
                         _liMapObjects.Add(mapObject);
                     }
                 }
-                else if (ol.Name.Equals("Spawn"))
+                else if (ol.Name.Contains("Spawn"))
                 {
                     //Sets up the Dictionaries for the resource spawn points
                     foreach (TiledMapObject mapObject in ol.Objects)

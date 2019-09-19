@@ -1848,3 +1848,13 @@
 /processorParam:TextureFormat=Color
 /build:Textures/texFlooring.png
 
+#begin Maps/Dungeons/mapSpringDungeonC.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapSpringDungeonC.tmx
+
+#begin Maps/Dungeons/mapSpringDungeonD.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapSpringDungeonD.tmx
+

@@ -112,7 +112,7 @@ namespace RiverHollow
             }
             else
             {
-                _iCurrMin += 20;
+                _iCurrMin ++;
             }
         }
 

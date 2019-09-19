@@ -199,5 +199,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Wand/602.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Effects/lighteffect.fx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texFlooring.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapSpringDungeonC.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapSpringDungeonD.tmx</File>
   </SourceFiles>
 </SourceFileCollection>

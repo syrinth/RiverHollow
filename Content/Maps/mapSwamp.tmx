@@ -156,12 +156,12 @@
  <objectgroup id="2" name="Spawn">
   <object id="3" name="Spawn" x="2.176" y="178.527" width="193.667" height="368.333">
    <properties>
-    <property name="Resources" value="20"/>
+    <property name="Resources" value="20-22"/>
    </properties>
   </object>
   <object id="8" name="Spawn" x="386.5" y="211.833" width="236.334" height="157">
    <properties>
-    <property name="Resources" value="6-15"/>
+    <property name="Resources" value="6-23-22"/>
    </properties>
   </object>
  </objectgroup>

@@ -184,6 +184,7 @@ namespace RiverHollow.WorldObjects
 
     public class Forageable : WorldObject
     {
+        public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + _iHeight - TileSize, TileSize, TileSize);
         const float MAX_ROTATION = 0.4f;
         const float ROTATION_MOD = 0.09f;
         bool _bShaking = false;
@@ -251,7 +252,7 @@ namespace RiverHollow.WorldObjects
                 }
                 else if (_fCurrentRotation <= -MAX_ROTATION)
                 {
-                    _fCurrentRotation = MAX_ROTATION + ROTATION_MOD;
+                    _fCurrentRotation = MAX_ROTATION  + ROTATION_MOD;
                     _iBounceCount++;
                 }
             }
