@@ -273,7 +273,7 @@ namespace RiverHollow
             GUIManager.SetScreen(new HUDScreen());
         }
 
-        public static void NewGame(WorldAdventurer a, WorldAdventurer b, bool playIntro)
+        public static void NewGame(Adventurer a, Adventurer b, bool playIntro)
         {
             PlayerManager.NewPlayer();
             MapManager.PopulateMaps(false);

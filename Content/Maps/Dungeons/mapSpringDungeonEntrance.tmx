@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="22" height="21" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="30">
  <properties>
-  <property name="Mobs" value="1"/>
-  <property name="MobsMax" type="int" value="3"/>
-  <property name="MobsMin" type="int" value="1"/>
+  <property name="Monsters" value="3"/>
+  <property name="MonstersMax" type="int" value="3"/>
+  <property name="MonstersMin" type="int" value="1"/>
   <property name="Outside" type="bool" value="false"/>
   <property name="Resources" value="0/5"/>
   <property name="ResourcesMax" type="int" value="60"/>

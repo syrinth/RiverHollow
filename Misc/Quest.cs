@@ -52,7 +52,7 @@ namespace RiverHollow.Misc
         public List<Item> LiRewardItems => _liRewardItems;
         #endregion
         #region Spawn Mobs
-        Mob _spawnMob;
+        Monster _spawnMob;
         string _sSpawnMap;
         string _sLocName;
         #endregion
@@ -146,7 +146,7 @@ namespace RiverHollow.Misc
                     string[] parse = tagType[1].Split('-');
                     if (parse.Length > 1)
                     {
-                        _spawnMob = ObjectManager.GetMobByIndex(int.Parse(parse[0]));
+                        _spawnMob = ObjectManager.GetMonsterByIndex(int.Parse(parse[0]));
                         _sSpawnMap = parse[1];
                         _sLocName = parse[2];
                     }
@@ -239,7 +239,7 @@ namespace RiverHollow.Misc
             if (_spawnMob != null)
             {
                 RHMap map = MapManager.Maps[_sSpawnMap];
-                map.AddMob(_spawnMob, map.DictionaryCharacterLayer[_sLocName]);
+                map.AddMonsterByPosition(_spawnMob, map.DictionaryCharacterLayer[_sLocName]);
             }
         }
         public void FinishQuest(ref string text)

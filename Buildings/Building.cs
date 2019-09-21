@@ -73,8 +73,8 @@ namespace RiverHollow.Buildings
         protected int _iCurrWorkerMax => _iWorkersPerLevel * _iBldgLvl;
         public int MaxWorkers => _iCurrWorkerMax;
 
-        protected List<WorldAdventurer> _liWorkers;
-        public List<WorldAdventurer> Workers => _liWorkers;
+        protected List<Adventurer> _liWorkers;
+        public List<Adventurer> Workers => _liWorkers;
 
         protected Container _buildingChest;
         public Container BuildingChest { get => _buildingChest; set => _buildingChest = value; }
@@ -88,7 +88,7 @@ namespace RiverHollow.Buildings
 
         public Building(Dictionary<string, string> data, int id)
         {
-            _liWorkers = new List<WorldAdventurer>();
+            _liWorkers = new List<Adventurer>();
             _liPlacedObjects = new List<WorldObject>();
             ImportBasics(data, id);
         }
@@ -240,7 +240,7 @@ namespace RiverHollow.Buildings
         /// </summary>
         /// <param name="w">The Adventurer to compare against.</param>
         /// <returns>True if the building will accept the type of Worker</returns>
-        internal bool CanHold(WorldAdventurer w)
+        internal bool CanHold(Adventurer w)
         {
             return _bManor || w.WorkerID == _arrWorkerTypes[0] || w.WorkerID == _arrWorkerTypes[1];
         }
@@ -265,7 +265,7 @@ namespace RiverHollow.Buildings
         /// </summary>
         /// <param name="worker"></param>
         /// <returns>True if the worker has been successfully added</returns>
-        public bool AddWorker(WorldAdventurer worker)
+        public bool AddWorker(Adventurer worker)
         {
             bool rv = false;
 
@@ -284,7 +284,7 @@ namespace RiverHollow.Buildings
         /// Call to remove a worker from the building
         /// </summary>
         /// <param name="worker"></param>
-        public void RemoveWorker(WorldAdventurer worker)
+        public void RemoveWorker(Adventurer worker)
         {
             _liWorkers.Remove(worker);
         }
@@ -306,7 +306,7 @@ namespace RiverHollow.Buildings
                 }
             }
 
-            foreach (WorldAdventurer w in _liWorkers)
+            foreach (Adventurer w in _liWorkers)
             {
                 if (w.Rollover() && MapManager.Maps[MapName].Production)
                 {
@@ -495,9 +495,9 @@ namespace RiverHollow.Buildings
                 Workers = new List<WorkerData>()
             };
 
-            foreach (WorldAdventurer w in this.Workers)
+            foreach (Adventurer w in this.Workers)
             {
-                buildingData.Workers.Add(w.SaveData());
+                buildingData.Workers.Add(w.SaveAdventurerData());
             }
 
             buildingData.pantry = this.Pantry.SaveData();
@@ -533,8 +533,8 @@ namespace RiverHollow.Buildings
 
             foreach (WorkerData wData in data.Workers)
             {
-                WorldAdventurer w = ObjectManager.GetWorker(wData.workerID);
-                w.LoadData(wData);
+                Adventurer w = ObjectManager.GetWorker(wData.workerID);
+                w.LoadAdventurerData(wData);
                 AddWorker(w);
             }
             this._sGivenName = data.sName;

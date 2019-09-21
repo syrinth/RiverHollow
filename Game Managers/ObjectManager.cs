@@ -26,7 +26,6 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, string> _diWorkers;
         static Dictionary<int, Dictionary<string, string>> _diWorldObjects;
 
-        static Dictionary<int, Dictionary<string, string>> _diMobs;
         static Dictionary<int, Dictionary<string, string>> _diMonsterData;
         static Dictionary<int, Dictionary<string, string>> _diSummonData;
         static Dictionary<int, Villager> _diNPCs;
@@ -64,10 +63,8 @@ namespace RiverHollow.Game_Managers
             _liForest = new List<int>();
             _liMountain = new List<int>();
             _liNight = new List<int>();
-            _diMobs = new Dictionary<int, Dictionary<string, string>>();
             _diSchedule = new Dictionary<string, Dictionary<string, string>>();
 
-            AddToDictionary(_diMobs, @"Data\Mobs", Content);
             _diClasses = Content.Load<Dictionary<int, string>>(@"Data\Classes");
 
             foreach (string s in Directory.GetFiles(@"Content\Data\NPCData\Schedules"))
@@ -138,13 +135,13 @@ namespace RiverHollow.Game_Managers
             return new Building(_diBuildings[0], 0);
         }
 
-        public static WorldAdventurer GetWorker(int id)
+        public static Adventurer GetWorker(int id)
         {
             if (_diWorkers.ContainsKey(id))
             {
                 string stringData = _diWorkers[id];
                 string[] stringDataValues = Util.FindTags(stringData);
-                return new WorldAdventurer(stringDataValues, id);
+                return new Adventurer(stringDataValues, id);
             }
             return null;
         }
@@ -281,19 +278,9 @@ namespace RiverHollow.Game_Managers
             return m;
         }
 
-        public static Mob GetMobByIndex(int id)
+        public static Monster GetMonster(int id, Vector2 pos)
         {
-            Mob m = null;
-            if (_diMobs.ContainsKey(id))
-            {
-                m = new Mob(id, _diMobs[id]);
-            }
-            return m;
-        }
-
-        public static Mob GetMobByIndex(int id, Vector2 pos)
-        {
-            Mob m = GetMobByIndex(id);
+            Monster m = GetMonsterByIndex(id);
             m.Position = pos;
             return m;
         }
@@ -365,9 +352,9 @@ namespace RiverHollow.Game_Managers
         public static void AddToForest(int ID) { _liForest.Add(ID); }
         public static void AddToMountain(int ID) { _liMountain.Add(ID); }
         public static void AddToNight(int ID) { _liNight.Add(ID); }
-        internal static Mob GetMobToSpawn(SpawnConditionEnum eSpawnType)
+        internal static Monster GetMonsterToSpawn(SpawnConditionEnum eSpawnType)
         {
-            List<Mob> allowedMobs = new List<Mob>();
+            List<Monster> allowedMobs = new List<Monster>();
 
             //foreach(Mob m in _diMobs.Values)
             //{
@@ -376,7 +363,7 @@ namespace RiverHollow.Game_Managers
             //    }
             //}
 
-            return GetMobByIndex(4);// new RHRandom().Next(1, allowedMobs.Count-1));
+            return GetMonsterByIndex(4);// new RHRandom().Next(1, allowedMobs.Count-1));
         }
 
         #endregion

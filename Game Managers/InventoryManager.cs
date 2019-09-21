@@ -41,12 +41,12 @@ namespace RiverHollow.Game_Managers
         public static void InitMobInventory(int rows, int cols)
         {
             _arrExtraInventory = new Item[rows, cols];
-            List<Item> items = CombatManager.CurrentMob.GetLoot();
+            //List<Item> items = CombatManager.CurrentMob.GetLoot();
 
-            foreach(Item i in items)
-            {
-                AddToInventory(i, false);
-            }
+            //foreach(Item i in items)
+            //{
+            //    AddToInventory(i, false);
+            //}
         }
 
         public static void InitContainerInventory(Container c)

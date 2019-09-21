@@ -285,7 +285,7 @@ namespace RiverHollow.Actors.CombatStuff
                 //Note that this currently does not support enemy summons
                 if (_eBonusType == PotencyBonusEnum.Summons)
                 {
-                    foreach (CombatAdventurer c in CombatManager.Party)
+                    foreach (ClassedCombatant c in CombatManager.Party)
                     {
                         if (c.LinkedSummon != null)
                         {
@@ -437,7 +437,7 @@ namespace RiverHollow.Actors.CombatStuff
                         //Apply to all allies of the user
                         if (s.Equals("Allies"))
                         {
-                            if (SkillUser.IsCombatAdventurer())
+                            if (SkillUser.IsAdventurer())
                             {
                                 targets.AddRange(CombatManager.Party);
                             }
@@ -450,7 +450,7 @@ namespace RiverHollow.Actors.CombatStuff
                         //Apply to all enemies of the user
                         if (s.Equals("Enemies"))
                         {
-                            if (SkillUser.IsCombatAdventurer())
+                            if (SkillUser.IsAdventurer())
                             {
                                 targets.AddRange(CombatManager.Monsters);
 
@@ -530,7 +530,7 @@ namespace RiverHollow.Actors.CombatStuff
                 {
                     if(strArea == "Every")
                     {
-                        foreach(CombatAdventurer adv in CombatManager.Party)
+                        foreach(ClassedCombatant adv in CombatManager.Party)
                         {
                             adv.UnlinkSummon();
                         }
@@ -657,7 +657,7 @@ namespace RiverHollow.Actors.CombatStuff
 
             //The meaning of push and pull is dependent on whether or not
             //it's an ally or enemy tile.
-            if (tile.Character.IsCombatAdventurer())
+            if (tile.Character.IsAdventurer())
             {
                 if (action == SkillTagsEnum.Push) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
                 else if (action == SkillTagsEnum.Pull) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }

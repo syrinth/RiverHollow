@@ -48,16 +48,15 @@ namespace RiverHollow.Game_Managers
         private static Tool _wateringCan;
         private static Tool _lantern;
 
-        public static CombatAdventurer Combat;
-        public static int HitPoints { get => Combat.CurrentHP; }
-        public static int MaxHitPoints { get => Combat.MaxHP; }
+        public static int HitPoints => World.CurrentHP;
+        public static int MaxHitPoints  => World.MaxHP;
 
         private static List<Building> _liBuildings;
         public static List<Building> Buildings { get => _liBuildings; }
 
         public static bool ReadyToSleep = false;
 
-        private static List<CombatAdventurer> _liParty;
+        private static List<ClassedCombatant> _liParty;
 
         public static MerchantChest _merchantChest;
         public static string Name;
@@ -73,11 +72,10 @@ namespace RiverHollow.Game_Managers
 
         public static void Initialize()
         {
-            _liParty = new List<CombatAdventurer>();
+            _liParty = new List<ClassedCombatant>();
             _questLog = new List<Quest>();
             World = new PlayerCharacter();
-            Combat = new PlayerCombat(World);
-            _liParty.Add(Combat);
+            _liParty.Add(World);
             _liBuildings = new List<Building>();
             _canMake = new List<int>();
 
@@ -227,11 +225,11 @@ namespace RiverHollow.Game_Managers
         {
         }
 
-        public static List<CombatAdventurer> GetParty()
+        public static List<ClassedCombatant> GetParty()
         {
             return _liParty;
         }
-        public static void AddToParty(CombatAdventurer c)
+        public static void AddToParty(ClassedCombatant c)
         {
             foreach(CombatActor oldChar in _liParty)
             {
@@ -246,7 +244,7 @@ namespace RiverHollow.Game_Managers
                 _liParty.Add(c);
             }
         }
-        public static void RemoveFromParty(CombatAdventurer c)
+        public static void RemoveFromParty(ClassedCombatant c)
         {
             if (_liParty.Contains(c))
             {
@@ -276,13 +274,13 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static WorldAdventurer GetWorkerByPersonalID(int id)
+        public static Adventurer GetWorkerByPersonalID(int id)
         {
-            WorldAdventurer adv = null;
+            Adventurer adv = null;
 
             foreach (Building b in _liBuildings)
             {
-                foreach(WorldAdventurer w in b.Workers)
+                foreach(Adventurer w in b.Workers)
                 {
                     if(w.PersonalID == id)
                     {
@@ -313,7 +311,7 @@ namespace RiverHollow.Game_Managers
         public static int GetClassInParty(int classID)
         {
             int rv = 0;
-            foreach (CombatAdventurer c in _liParty)
+            foreach (ClassedCombatant c in _liParty)
             {
                 if (c.CharacterClass.ID == classID)
                 {
@@ -526,7 +524,7 @@ namespace RiverHollow.Game_Managers
         public static void SetName(string x)
         {
             Name = x;
-            Combat.SetName(x);
+            World.SetName(x);
         }
         public static void SetManorName(string x)
         {
@@ -535,8 +533,8 @@ namespace RiverHollow.Game_Managers
         public static void SetClass(int x)
         {
             CharacterClass combatClass = ObjectManager.GetClassByIndex(x);
-            Combat.SetClass(combatClass);
-            Combat.LoadContent(GameContentManager.FOLDER_PLAYER + "Player" + combatClass.Name);
+            World.SetClass(combatClass);
+            World.LoadClassAnimations();
         }
 
         public static bool DecreaseStamina(int x)
@@ -567,7 +565,7 @@ namespace RiverHollow.Game_Managers
             if (GameManager.AutoDisband)
             {
                 _liParty.Clear();
-                _liParty.Add(Combat);
+                _liParty.Add(World);
             }
         }
 
@@ -639,8 +637,8 @@ namespace RiverHollow.Game_Managers
                 hairIndex = PlayerManager.World.HairIndex,
                 hat = Item.SaveData(World.Hat),
                 chest = Item.SaveData(World.Shirt),
-                adventurerData = Combat.SaveData(),
-                currentClass = PlayerManager.Combat.CharacterClass.ID,
+                adventurerData = World.SaveClassedCharData(),
+                currentClass = World.CharacterClass.ID,
                 Items = new List<ItemData>()
             };
 
@@ -655,7 +653,7 @@ namespace RiverHollow.Game_Managers
             World.SetHairType(data.hairIndex);
 
             SetClass(data.currentClass);
-            Combat.LoadData(data.adventurerData);
+            World.LoadClassedCharData(data.adventurerData);
 
             World.SetClothes((Clothes)ObjectManager.GetItem(data.hat.itemID));
             World.SetClothes((Clothes)ObjectManager.GetItem(data.chest.itemID));

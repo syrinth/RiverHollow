@@ -60,7 +60,7 @@ namespace RiverHollow.Tile_Engine
 
         protected List<RHTile> _liTestTiles;
         protected List<WorldActor> _liActors;
-        protected List<Mob> _liMobs;
+        protected List<Monster> _liMonsters;
         protected List<Door> _liDoors;
         public List<WorldActor> ToRemove;
         public List<WorldActor> ToAdd;
@@ -91,7 +91,7 @@ namespace RiverHollow.Tile_Engine
             _liTestTiles = new List<RHTile>();
             _liTilesets = new List<TiledMapTileset>();
             _liActors = new List<WorldActor>();
-            _liMobs = new List<Mob>();
+            _liMonsters = new List<Monster>();
             _liBuildings = new List<Building>();
             _liTilledTiles = new List<RHTile>();
             _liItems = new List<Item>();
@@ -336,11 +336,11 @@ namespace RiverHollow.Tile_Engine
                 {
                     PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, Util.SnapToGrid(obj.Position)));
                 }
-                else if (obj.Name.Equals("Mob"))
+                else if (obj.Name.Equals("Monster"))
                 {
                     Vector2 vect = obj.Position;
-                    Mob mob = ObjectManager.GetMobByIndex(int.Parse(obj.Properties["ID"]), vect);
-                    AddMob(mob);
+                    Monster mob = ObjectManager.GetMonster(int.Parse(obj.Properties["ID"]), vect);
+                    AddMonster(mob);
                 }
                 else if (obj.Name.Equals("Chest"))
                 {
@@ -396,7 +396,7 @@ namespace RiverHollow.Tile_Engine
             string[] split;
             foreach (KeyValuePair<string, string> prop in props)
             {
-                if (prop.Key.Equals("Mobs"))
+                if (prop.Key.Equals("Monsters"))
                 {
                     split = prop.Value.Split('/');
                     foreach (string s in split)
@@ -404,8 +404,8 @@ namespace RiverHollow.Tile_Engine
                         _liMobs.Add(int.Parse(s));
                     }
                 }
-                else if (prop.Key.Equals("MobsMax")) { maxMobs = int.Parse(prop.Value); }
-                else if (prop.Key.Equals("MobsMin")) { minMobs = int.Parse(prop.Value); }
+                else if (prop.Key.Equals("MonstersMax")) { maxMobs = int.Parse(prop.Value); }
+                else if (prop.Key.Equals("MonstersMin")) { minMobs = int.Parse(prop.Value); }
                 if (prop.Key.Equals("Resources"))
                 {
                     split = prop.Value.Split('/');
@@ -453,9 +453,9 @@ namespace RiverHollow.Tile_Engine
                     int chosenMob = r.Next(0, _liMobs.Count - 1);
 
                     Vector2 vect = new Vector2(r.Next(1, _map.Width - 1) * TileSize, r.Next(1, _map.Height - 2) * TileSize);
-                    Mob mob = ObjectManager.GetMobByIndex(_liMobs[chosenMob], vect);
-                    mob.CurrentMapName = _name;
-                    AddMob(mob);
+                    Monster newMonster = ObjectManager.GetMonster(_liMobs[chosenMob], vect);
+                    newMonster.CurrentMapName = _name;
+                    AddMonster(newMonster);
 
                     numMobs--;
                 }
@@ -502,7 +502,7 @@ namespace RiverHollow.Tile_Engine
                 _renderer.Update(_map, gameTime);
                 if (IsRunning())
                 {
-                    foreach (Mob m in _liMobs)
+                    foreach (Monster m in _liMonsters)
                     {
                         m.Update(gameTime);
                     }
@@ -538,7 +538,7 @@ namespace RiverHollow.Tile_Engine
 
             foreach (WorldActor c in ToRemove)
             {
-                if (c.IsMob() && _liMobs.Contains((Mob)c)) { _liMobs.Remove((Mob)c); }
+                if (c.IsMonster() && _liMonsters.Contains((Monster)c)) { _liMonsters.Remove((Monster)c); }
                 else if (_liActors.Contains(c)) { _liActors.Remove(c); }
             }
             ToRemove.Clear();
@@ -670,7 +670,7 @@ namespace RiverHollow.Tile_Engine
                 c.Draw(spriteBatch, true);
             }
 
-            foreach (Mob m in _liMobs)
+            foreach (Monster m in _liMonsters)
             {
                 m.Draw(spriteBatch, true);
             }
@@ -805,7 +805,7 @@ namespace RiverHollow.Tile_Engine
                 if (w.Active && w != actor) { list.Add(w.CollisionBox);}
             }
 
-            if(actor != PlayerManager.World && !actor.IsMob()) {
+            if(actor != PlayerManager.World && !actor.IsMonster()) {
                 list.Add(PlayerManager.World.CollisionBox);
             }
 
@@ -1155,11 +1155,11 @@ namespace RiverHollow.Tile_Engine
                         //Handles interacting with NPCs
                         foreach (WorldActor c in _liActors)
                         {
-                            if (c.IsWorldAdventurer())
+                            if (c.IsAdventurer())
                             {
                                 int row = 0;
                                 int col = 0;
-                                WorldAdventurer w = (WorldAdventurer)c;
+                                Adventurer w = (Adventurer)c;
                                 if (w.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(w.CharCenter) &&
                                     InventoryManager.HasSpaceInInventory(w.WhatAreYouHolding(), 1, ref row, ref col, true))
                                 {
@@ -1396,7 +1396,7 @@ namespace RiverHollow.Tile_Engine
 
                 foreach (WorldActor c in _liActors)
                 {
-                    if(!c.IsMob() && c.CollisionContains(mouseLocation)){
+                    if(!c.IsMonster() && c.CollisionContains(mouseLocation)){
                         if (c.Active)
                         {
                             GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Talk;
@@ -1453,12 +1453,12 @@ namespace RiverHollow.Tile_Engine
         {
             ToRemove.Add(c);
         }
-        public void RemoveMob(Mob m)
+        public void RemoveMonster(Monster m)
         {
-            _liMobs.Remove(m);
+            _liMonsters.Remove(m);
             foreach (Door d in _liDoors)
             {
-                if (d.IsMobDoor()) { ((MobDoor)d).Check(_liMobs.Count); }
+                if (d.IsMobDoor()) { ((MobDoor)d).Check(_liMonsters.Count); }
             }
         }
         public void DropItemsOnMap(List<Item>items, Vector2 position)
@@ -1647,7 +1647,7 @@ namespace RiverHollow.Tile_Engine
                     {
                         if (b.HasSpace())
                         {
-                            WorldAdventurer w = ObjectManager.GetWorker(GraphicCursor.WorkerToPlace);
+                            Adventurer w = ObjectManager.GetWorker(GraphicCursor.WorkerToPlace);
                             b.AddWorker(w);
                             b._selected = false;
                             GUIManager.OpenMainObject(new HUDNamingWindow(w));
@@ -1846,7 +1846,7 @@ namespace RiverHollow.Tile_Engine
             if (!MapManager.Maps[c.CurrentMapName].Contains(c))
             {
                 rv = true;
-                if (c.IsMob() && !_liMobs.Contains((Mob)c)) { _liMobs.Add((Mob)c); }
+                if (c.IsMonster() && !_liMonsters.Contains((Monster)c)) { _liMonsters.Add((Monster)c); }
                 else if (!_liActors.Contains(c)) { _liActors.Add(c); }
                 c.CurrentMapName = _name;
                 c.Position = c.NewMapPosition == Vector2.Zero ? c.Position : c.NewMapPosition;
@@ -1856,7 +1856,7 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public void AddMob(Mob m)
+        public void AddMonster(Monster m)
         {
             bool rv = false;
             RHRandom r = new RHRandom();
@@ -1877,19 +1877,19 @@ namespace RiverHollow.Tile_Engine
 
             if (rv)
             {
-                AddMob(m, position);
+                AddMonsterByPosition(m, position);
             }
         }
 
-        public void AddMob(Mob m, Vector2 position)
+        public void AddMonsterByPosition(Monster m, Vector2 position)
         {
             m.CurrentMapName = _name;
             m.Position = position;
             m.NewFoV();
 
-            if (_liMobs.Count == 0)
+            if (_liMonsters.Count == 0)
             {
-                _liMobs.Add(m);
+                _liMonsters.Add(m);
             }
         }
         #endregion
@@ -2099,7 +2099,7 @@ namespace RiverHollow.Tile_Engine
 
     public class SpawnPoint
     {
-        Mob _mob;
+        Monster _monster;
         RHMap _map;
         Vector2 _vSpawnPoint;
         SpawnConditionEnum _eSpawnType = SpawnConditionEnum.Forest;
@@ -2113,22 +2113,22 @@ namespace RiverHollow.Tile_Engine
 
         public void Spawn()
         {
-            _mob = ObjectManager.GetMobByIndex(2);//ObjectManager.GetMobToSpawn(_eSpawnType);
-            if (_mob != null)
+            _monster = ObjectManager.GetMonsterByIndex(2);//ObjectManager.GetMobToSpawn(_eSpawnType);
+            if (_monster != null)
             {
-                _map.AddMob(_mob, _vSpawnPoint);
+                _map.AddMonsterByPosition(_monster, _vSpawnPoint);
             }
         }
 
         public void Despawn()
         {
-            _map.RemoveMob(_mob);
-            _mob = null;
+            _map.RemoveMonster(_monster);
+            _monster = null;
         }
 
         public bool HasSpawned()
         {
-            return _mob != null;
+            return _monster != null;
         }
     }
 

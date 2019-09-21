@@ -358,7 +358,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 if (m.MerchType == Merchandise.ItemType.Worker)
                 {
-                    WorldAdventurer w = ObjectManager.GetWorker(m.MerchID);
+                    Adventurer w = ObjectManager.GetWorker(m.MerchID);
                     WorkerBox wb = new WorkerBox(w, m.MoneyCost);
                     _liWorkers.Add(wb);
 
@@ -439,7 +439,7 @@ namespace RiverHollow.GUIComponents.Screens
         public int Cost;
         public int ID;
 
-        public WorkerBox(WorldAdventurer w, int cost)
+        public WorkerBox(Adventurer w, int cost)
         {
             Cost = cost;
             ID = w.WorkerID;

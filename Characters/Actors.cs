@@ -14,6 +14,7 @@ using RiverHollow.Tile_Engine;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
+using static RiverHollow.Actors.WorldActor;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.GUIObjects.HUDMenu;
 using static RiverHollow.Game_Managers.GUIObjects.HUDMenu.HUDManagement;
@@ -22,20 +23,26 @@ using static RiverHollow.WorldObjects.Clothes;
 
 namespace RiverHollow.Actors
 {
-    public class Actor
+    #region Abstract Supertypes
+    ///These abstract classes are separate to compartmentalize the various properties and
+    ///methods for each layer of an Actor's existence. Technically could be one large abstract class
+    ///but they have been separated for ease of access
+
+    /// <summary>
+    /// The base proprties and methods for each Actor
+    /// </summary>
+    public abstract class Actor
     {
         protected const int HUMAN_HEIGHT = (TileSize * 2) + 2;
 
         protected static string _sVillagerFolder = GameContentManager.FOLDER_ACTOR + @"Villagers\";
-        protected static string _sMonsterFolder = GameContentManager.FOLDER_ACTOR + @"Monsters\";
-        protected static string _sMobFolder = GameContentManager.FOLDER_ACTOR + @"Mobs\";
         protected static string _sAdventurerFolder = GameContentManager.FOLDER_ACTOR + @"Adventurers\";
         protected static string _sNPsCFolder = GameContentManager.FOLDER_ACTOR + @"NPCs\";
 
         protected string _sTexture;
-        public enum ActorEnum { Actor, CombatAdventurer, CombatActor, Mob, Monster, NPC, Spirit, WorldAdventurer, WorldCharacter};
-        protected ActorEnum _actorType = ActorEnum.Actor;
-        public ActorEnum ActorType => _actorType;
+        public enum ActorEnum { Actor, Adventurer, CombatActor, Mob, Monster, NPC, Spirit, WorldCharacter};
+        protected ActorEnum _eActorType = ActorEnum.Actor;
+        public ActorEnum ActorType => _eActorType;
 
         protected string _sName;
         public virtual string Name { get => _sName; }
@@ -97,17 +104,17 @@ namespace RiverHollow.Actors
         public bool IsAnimating() { return _spriteBody.IsAnimating; }
         public bool AnimationPlayedXTimes(int x) { return _spriteBody.GetPlayCount() >= x; }
 
-        public bool IsCombatAdventurer() { return _actorType == ActorEnum.CombatAdventurer; }
-        public bool IsMob() { return _actorType == ActorEnum.Mob; }
-        public bool IsMonster() { return _actorType == ActorEnum.Monster; }
-        public bool IsNPC() { return _actorType == ActorEnum.NPC; }
-        public bool IsWorldAdventurer() { return _actorType == ActorEnum.WorldAdventurer; }
-        public bool IsWorldCharacter() { return _actorType == ActorEnum.WorldCharacter; }
-        public bool IsSpirit() { return _actorType == ActorEnum.Spirit; }
+        public bool IsMonster() { return _eActorType == ActorEnum.Monster; }
+        public bool IsNPC() { return _eActorType == ActorEnum.NPC; }
+        public bool IsAdventurer() { return _eActorType == ActorEnum.Adventurer; }
+        public bool IsWorldCharacter() { return _eActorType == ActorEnum.WorldCharacter; }
+        public bool IsSpirit() { return _eActorType == ActorEnum.Spirit; }
     }
-
-    #region WorldActors
-    public class WorldActor : Actor
+    /// <summary>
+    /// The properties and methods for each actor that pertain to existing on and
+    /// interacting with the WorldMap itself
+    /// </summary>
+    public abstract class WorldActor : Actor
     {
         #region Properties
         protected Vector2 _vMoveTo;
@@ -147,7 +154,7 @@ namespace RiverHollow.Actors
 
         public WorldActor() : base()
         {
-            _actorType = ActorEnum.WorldCharacter;
+            _eActorType = ActorEnum.WorldCharacter;
             _width = TileSize;
             _height = TileSize;
         }
@@ -339,12 +346,748 @@ namespace RiverHollow.Actors
             _bActive = value;
         }
     }
-    public class WorldCombatant : WorldActor
+    /// <summary>
+    /// The properties and methodsthat pertain to Combat, stats, gear, etc
+    /// </summary>
+    public abstract class CombatActor : WorldActor
     {
-        protected CombatAdventurer _combat;
-        public CombatAdventurer Combat => _combat;
+        #region Properties
+        protected const int MAX_STAT = 99;
+        protected string _sUnique;
+
+        public override string Name => String.IsNullOrEmpty(_sUnique) ? _sName : _sName + " " + _sUnique;
+
+        private Vector2 _vStartPos;
+        public Vector2 StartPos => _vStartPos;
+
+        protected int _iCurrentHP;
+        public int CurrentHP
+        {
+            get { return _iCurrentHP; }
+            set { _iCurrentHP = value; }
+        }
+        public virtual int MaxHP => 20 + (int)Math.Pow(((double)StatVit / 3), 1.98);
+
+        protected int _iCurrentMP;
+        public int CurrentMP
+        {
+            get { return _iCurrentMP; }
+            set { _iCurrentMP = value; }
+        }
+        public virtual int MaxMP => StatMag * 3;
+
+        public int CurrentCharge;
+        public int DummyCharge;
+        public CombatManager.CombatTile Tile;
+        public GUICmbtTile Location => Tile.GUITile;
+
+        public virtual int Attack => 9;
+
+        protected int _iStrength;
+        public virtual int StatStr => _iStrength + _iBuffStr;
+        protected int _iDefense;
+        public virtual int StatDef => _iDefense + _iBuffDef;
+        protected int _iVitality;
+        public virtual int StatVit => _iVitality + _iBuffVit;
+        protected int _iMagic;
+        public virtual int StatMag => _iMagic + _iBuffMag;
+        protected int _iResistance;
+        public virtual int StatRes => _iResistance + _iBuffRes;
+        protected int _iSpeed;
+        public virtual int StatSpd => _iSpeed + _iBuffSpd;
+
+        protected int _iBuffStr;
+        protected int _iBuffDef;
+        protected int _iBuffVit;
+        protected int _iBuffMag;
+        protected int _iBuffRes;
+        protected int _iBuffSpd;
+        protected int _iBuffCrit;
+        protected int _iBuffEvade;
+
+        protected int _iCrit = 10;
+        public int CritRating => _iCrit + _iBuffCrit;
+
+        public int Evasion => (int)(40 / (1 + 10 * (Math.Pow(Math.E, (-0.05 * StatSpd))))) + _iBuffEvade;
+        public int ResistStatus => (int)(50 / (1 + 10 * (Math.Pow(Math.E, (-0.05 * StatRes)))));
+
+        protected List<MenuAction> _liActions;
+        public virtual List<MenuAction> AbilityList { get => _liActions; }
+
+        protected List<CombatAction> _liSpecialActions;
+        public virtual List<CombatAction> SpecialActions { get => _liSpecialActions; }
+
+        protected List<StatusEffect> _liStatusEffects;
+        public List<StatusEffect> LiBuffs { get => _liStatusEffects; }
+
+        protected Dictionary<ConditionEnum, bool> _diConditions;
+        public Dictionary<ConditionEnum, bool> DiConditions => _diConditions;
+
+        private ElementEnum _elementAttackEnum;
+        protected Dictionary<ElementEnum, ElementAlignment> _diElementalAlignment;
+        public Dictionary<ElementEnum, ElementAlignment> DiElementalAlignment => _diElementalAlignment;
+
+        private Summon _linkedSummon;
+        public Summon LinkedSummon => _linkedSummon;
+
+        public bool Counter;
+        public bool GoToCounter;
+
+        public CombatActor MyGuard;
+        public CombatActor GuardTarget;
+        protected bool _bGuard;
+        public bool Guard => _bGuard;
+
+        public bool Swapped;
+        #endregion
+
+        public CombatActor() : base()
+        {
+            _eActorType = ActorEnum.CombatActor;
+            _liSpecialActions = new List<CombatAction>();
+            _liActions = new List<MenuAction>();
+            _liStatusEffects = new List<StatusEffect>();
+            _diConditions = new Dictionary<ConditionEnum, bool>
+            {
+                [ConditionEnum.KO] = false,
+                [ConditionEnum.Poisoned] = false,
+                [ConditionEnum.Silenced] = false
+            };
+
+            _diElementalAlignment = new Dictionary<ElementEnum, ElementAlignment>
+            {
+                [ElementEnum.Fire] = ElementAlignment.Neutral,
+                [ElementEnum.Ice] = ElementAlignment.Neutral,
+                [ElementEnum.Lightning] = ElementAlignment.Neutral
+            };
+        }
+
+        public override void Update(GameTime theGameTime)
+        {
+            //Finished being hit, determine action
+            if (IsCurrentAnimation(CActorAnimEnum.Hurt) && BodySprite.GetPlayCount() >= 1)
+            {
+                if (CurrentHP == 0) { Tile.PlayAnimation(CActorAnimEnum.KO); }
+                else if (IsCritical()) { Tile.PlayAnimation(CActorAnimEnum.Critical); }
+                else { Tile.PlayAnimation(CActorAnimEnum.Idle); }
+            }
+
+            if (!_diConditions[ConditionEnum.KO] && IsCurrentAnimation(CActorAnimEnum.KO))
+            {
+                if (IsCritical()) { Tile.PlayAnimation(CActorAnimEnum.Critical); }
+                else { Tile.PlayAnimation(CActorAnimEnum.Idle); }
+            }
+
+            if (IsCurrentAnimation(CActorAnimEnum.Critical) && !IsCritical())
+            {
+                Tile.PlayAnimation(CActorAnimEnum.Idle);
+            }
+
+            if (_linkedSummon != null)
+            {
+                _linkedSummon.Update(theGameTime);
+            }
+        }
+
+        /// <summary>
+        /// Calculates the damage to be dealt against the actor.
+        /// 
+        /// Run the damage equation against the defender, then apply any 
+        /// relevant elemental resistances.
+        /// 
+        /// Finally, roll against the crit rating. Rolling higher than the 
+        /// rating on a percentile roll means no crit. Crit Rating 10 means
+        /// roll 10 or less
+        /// </summary>
+        /// <param name="attacker">Who is attacking</param>
+        /// <param name="potency">The potency of the attack</param>
+        /// <param name="element">any associated element</param>
+        /// <returns></returns>
+        public int ProcessAttack(CombatActor attacker, int potency, int critRating, ElementEnum element = ElementEnum.None)
+        {
+            double compression = 0.8;
+            double potencyMod = potency / 100;   //100 potency is considered an average attack
+            double base_attack = attacker.Attack;  //Attack stat is either weapon damage or mod on monster str
+            double StrMult = Math.Round(1 + ((double)attacker.StatStr / 4 * attacker.StatStr / MAX_STAT), 2);
+
+            double dmg = (Math.Max(1, base_attack - StatDef) * compression * StrMult);
+            dmg += ApplyResistances(dmg, element);
+
+            RHRandom rand = new RHRandom();
+            if (rand.Next(1, 100) <= (attacker.CritRating + critRating)) { dmg *= 2; }
+
+            return DecreaseHealth(dmg);
+        }
+        public int ProcessSpell(CombatActor attacker, int potency, ElementEnum element = ElementEnum.None)
+        {
+            double maxDmg = (1 + potency) * 3;
+            double divisor = 1 + (30 * Math.Pow(Math.E, -0.12 * (attacker.StatMag - StatRes) * Math.Round((double)attacker.StatMag / MAX_STAT, 2)));
+
+            double damage = Math.Round(maxDmg / divisor);
+            damage += ApplyResistances(damage, element);
+
+            return DecreaseHealth(damage);
+        }
+        public double ApplyResistances(double dmg, ElementEnum element = ElementEnum.None)
+        {
+            double modifiedDmg = 0;
+            if (element != ElementEnum.None)
+            {
+                if (MapManager.CurrentMap.IsOutside && GameCalendar.IsRaining())
+                {
+                    if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (dmg * 1.2) - dmg; }
+                    else if (element.Equals(ElementEnum.Fire)) { modifiedDmg += (dmg * 0.8) - dmg; }
+                }
+                else if (MapManager.CurrentMap.IsOutside && GameCalendar.IsSnowing())
+                {
+                    if (element.Equals(ElementEnum.Ice)) { modifiedDmg += (dmg * 1.2) - dmg; }
+                    else if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (dmg * 0.8) - dmg; }
+                }
+
+                if (_linkedSummon != null && _diElementalAlignment[element].Equals(ElementAlignment.Neutral))
+                {
+                    if (_linkedSummon.Element.Equals(element))
+                    {
+                        modifiedDmg += (dmg * 0.8) - dmg;
+                    }
+                }
+
+                if (_diElementalAlignment[element].Equals(ElementAlignment.Resists))
+                {
+                    modifiedDmg += (dmg * 0.8) - dmg;
+                }
+                else if (_diElementalAlignment[element].Equals(ElementAlignment.Vulnerable))
+                {
+                    modifiedDmg += (dmg * 1.2) - dmg;
+                }
+            }
+
+            return modifiedDmg;
+        }
+
+        public int ProcessHealingSpell(CombatActor attacker, int potency)
+        {
+            double maxDmg = (1 + potency) * 3;
+            double divisor = 1 + (30 * Math.Pow(Math.E, -0.12 * (attacker.StatMag - StatRes) * Math.Round((double)attacker.StatMag / MAX_STAT, 2)));
+
+            int damage = (int)Math.Round(maxDmg / divisor);
+
+            return IncreaseHealth(damage);
+        }
+        public virtual GUISprite GetSprite()
+        {
+            return Tile.GUITile.CharacterSprite;
+        }
+
+        public virtual int DecreaseHealth(double value)
+        {
+            int iValue = (int)Math.Round(value);
+            _iCurrentHP -= (_iCurrentHP - iValue >= 0) ? iValue : _iCurrentHP;
+            Tile.PlayAnimation(CActorAnimEnum.Hurt);
+            if (_iCurrentHP == 0)
+            {
+                _diConditions[ConditionEnum.KO] = true;
+                UnlinkSummon();
+            }
+
+            return iValue;
+        }
+
+        public int IncreaseHealth(int x)
+        {
+            int amountHealed = 0;
+            if (!KnockedOut())
+            {
+                amountHealed = x;
+                if (_iCurrentHP + x <= MaxHP)
+                {
+                    _iCurrentHP += x;
+                }
+                else
+                {
+                    amountHealed = MaxHP - _iCurrentHP;
+                    _iCurrentHP = MaxHP;
+                }
+            }
+
+            return amountHealed;
+        }
+
+        public bool IsCritical()
+        {
+            return (float)CurrentHP / (float)MaxHP <= 0.25;
+        }
+
+        public void IncreaseMana(int x)
+        {
+            if (_iCurrentMP + x <= MaxMP)
+            {
+                _iCurrentMP += x;
+            }
+            else
+            {
+                _iCurrentMP = MaxMP;
+            }
+        }
+
+        /// <summary>
+        /// Reduce the duration of each status effect on the Actor by one
+        /// If the effect's duration reaches 0, remove it, otherwise have it run
+        /// any upkeep effects it may need to do.
+        /// </summary>
+        public void TickStatusEffects()
+        {
+            List<StatusEffect> toRemove = new List<StatusEffect>();
+            foreach (StatusEffect b in _liStatusEffects)
+            {
+                if (--b.Duration == 0)
+                {
+                    toRemove.Add(b);
+                    RemoveStatusEffect(b);
+                }
+                else
+                {
+                    if (b.DoT)
+                    {
+                        this.Tile.GUITile.AssignEffect(ProcessSpell(b.Caster, b.Potency), true);
+                    }
+                    if (b.HoT)
+                    {
+                        this.Tile.GUITile.AssignEffect(ProcessHealingSpell(b.Caster, b.Potency), false);
+                    }
+                }
+            }
+
+            foreach (StatusEffect b in toRemove)
+            {
+                _liStatusEffects.Remove(b);
+            }
+            toRemove.Clear();
+        }
+
+        /// <summary>
+        /// Adds the StatusEffect objectto the character's list of status effects.
+        /// </summary>
+        /// <param name="b">Effect toadd</param>
+        public void AddStatusEffect(StatusEffect b)
+        {
+            //Only one song allowed at a time so see if there is another
+            //songand,if so, remove it.
+            if (b.Song)
+            {
+                StatusEffect song = _liStatusEffects.Find(status => status.Song);
+                if (song != null)
+                {
+                    RemoveStatusEffect(song);
+                    _liStatusEffects.Remove(song);
+                }
+            }
+
+            //Look to see if the status effect already exists, if so, just
+            //set the duration to be the new duration. No stacking.
+            StatusEffect find = _liStatusEffects.Find(status => status.Name == b.Name);
+            if (find == null) { _liStatusEffects.Add(b); }
+            else { find.Duration = b.Duration; }
+
+            foreach (KeyValuePair<StatEnum, int> kvp in b.StatMods)
+            {
+                HandleStatBuffs(kvp);
+            }
+
+            //If the status effect provides counter, turn counter on.
+            if (b.Counter) { Counter = true; }
+
+            if (b.Guard) { _bGuard = true; }
+        }
+
+        /// <summary>
+        /// Removes the status effect from the Actor
+        /// </summary>
+        /// <param name="b"></param>
+        public void RemoveStatusEffect(StatusEffect b)
+        {
+            foreach (KeyValuePair<StatEnum, int> kvp in b.StatMods)
+            {
+                HandleStatBuffs(kvp, true);
+            }
+
+            if (b.Counter) { Counter = false; }
+            if (b.Guard) { _bGuard = false; }
+        }
+
+        /// <summary>
+        /// Helper to not repeat code for the Stat buffing/debuffing
+        /// 
+        /// Pass in the statmod kvp and an integer representing positive or negative
+        /// and multiply the mod by it. If we are adding, it will remain unchanged, 
+        /// if we are subtracting, the positive value will go negative.
+        /// </summary>
+        /// <param name="kvp">The stat to modifiy and how much</param>
+        /// <param name="negative">Whether or not we need to add or remove the value</param>
+        private void HandleStatBuffs(KeyValuePair<StatEnum, int> kvp, bool negative = false)
+        {
+            int modifier = negative ? -1 : 1;
+            switch (kvp.Key)
+            {
+                case StatEnum.Str:
+                    _iBuffStr += kvp.Value * modifier;
+                    break;
+                case StatEnum.Def:
+                    _iBuffDef += kvp.Value * modifier;
+                    break;
+                case StatEnum.Vit:
+                    _iBuffVit += kvp.Value * modifier;
+                    break;
+                case StatEnum.Mag:
+                    _iBuffMag += kvp.Value * modifier;
+                    break;
+                case StatEnum.Res:
+                    _iBuffRes += kvp.Value * modifier;
+                    break;
+                case StatEnum.Spd:
+                    _iBuffSpd += kvp.Value * modifier;
+                    break;
+                case StatEnum.Crit:
+                    _iBuffCrit += kvp.Value * modifier;
+                    break;
+                case StatEnum.Evade:
+                    _iBuffEvade += kvp.Value * modifier;
+                    break;
+            }
+        }
+
+        public void LinkSummon(Summon s)
+        {
+            _linkedSummon = s;
+            s.Tile = Tile;
+
+            foreach (KeyValuePair<StatEnum, int> kvp in _linkedSummon.BuffedStats)
+            {
+                this.HandleStatBuffs(kvp, false);
+            }
+
+            Tile.GUITile.LinkSummon(s);
+        }
+
+        public void UnlinkSummon()
+        {
+            if (_linkedSummon != null)
+            {
+                foreach (KeyValuePair<StatEnum, int> kvp in _linkedSummon.BuffedStats)
+                {
+                    this.HandleStatBuffs(kvp, true);
+                }
+            }
+            Tile.GUITile.LinkSummon(null);
+            _linkedSummon = null;
+        }
+
+        public virtual ElementEnum GetAttackElement()
+        {
+            ElementEnum e = _elementAttackEnum;
+
+            if (LinkedSummon != null && e.Equals(ElementEnum.None))
+            {
+                e = LinkedSummon.Element;
+            }
+            return e;
+        }
+
+        public bool CanCast(int x)
+        {
+            return x <= CurrentMP;
+        }
+
+        public void SetUnique(string u)
+        {
+            _sUnique = u;
+        }
+
+        public bool KnockedOut()
+        {
+            return _diConditions[ConditionEnum.KO];
+        }
+
+        public bool Poisoned()
+        {
+            return _diConditions[ConditionEnum.Poisoned];
+        }
+
+        public bool Silenced()
+        {
+            return _diConditions[ConditionEnum.Silenced];
+        }
+
+        public void ChangeConditionStatus(ConditionEnum c, bool setTo)
+        {
+            _diConditions[c] = setTo;
+        }
+
+        public void ClearConditions()
+        {
+            foreach (ConditionEnum condition in Enum.GetValues(typeof(ConditionEnum)))
+            {
+                ChangeConditionStatus(condition, false);
+            }
+        }
+
+        public void IncreaseStartPos()
+        {
+            if (_vStartPos.Y < CombatManager.MAX_ROW)
+            {
+                _vStartPos.Y++;
+            }
+            else
+            {
+                _vStartPos = new Vector2(_vStartPos.X++, 0);
+            }
+        }
+        public void SetStartPosition(Vector2 startPos)
+        {
+            _vStartPos = startPos;
+        }
+
+        public void GetHP(ref int curr, ref int max)
+        {
+            curr = _iCurrentHP;
+            max = MaxHP;
+        }
+
+        public void GetMP(ref int curr, ref int max)
+        {
+            curr = _iCurrentMP;
+            max = MaxMP;
+        }
+
+        public virtual bool IsSummon() { return false; }
     }
-    public class TalkingActor : WorldCombatant
+    #endregion
+
+    public class ClassedCombatant : CombatActor
+    {
+        #region Properties
+        public static List<int> LevelRange = new List<int> { 0, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240 };
+
+        protected CharacterClass _class;
+        public CharacterClass CharacterClass { get => _class; }
+        private int _classLevel;
+        public int ClassLevel { get => _classLevel; }
+
+        private int _iXP;
+        public int XP { get => _iXP; }
+
+        public bool Protected;
+
+        public List<GearSlot> _liGearSlots;
+        public GearSlot Weapon;
+        public GearSlot Armor;
+        public GearSlot Head;
+        public GearSlot Wrist;
+        public GearSlot Accessory1;
+        public GearSlot Accessory2;
+
+        public override int Attack => GetGearAtk();
+        public override int StatStr => 10 + _iBuffStr + GetGearStat(StatEnum.Str);
+        public override int StatDef => 10 + _iBuffDef + GetGearStat(StatEnum.Def) + (Protected ? 10 : 0);
+        public override int StatVit => 10 + (_classLevel * _class.StatVit) + GetGearStat(StatEnum.Vit);
+        public override int StatMag => 10 + _iBuffMag + GetGearStat(StatEnum.Mag);
+        public override int StatRes => 10 + _iBuffRes + GetGearStat(StatEnum.Res);
+        public override int StatSpd => 10 + _class.StatSpd + _iBuffSpd + GetGearStat(StatEnum.Spd);
+
+        public int TempStatStr => 10 + _iBuffStr + GetTempGearStat(StatEnum.Str);
+        public int TempStatDef => 10 + _iBuffDef + GetTempGearStat(StatEnum.Def) + (Protected ? 10 : 0);
+        public int TempStatVit => 10 + (_classLevel * _class.StatVit) + GetTempGearStat(StatEnum.Vit);
+        public int TempStatMag => 10 + _iBuffMag + GetTempGearStat(StatEnum.Mag);
+        public int TempStatRes => 10 + _iBuffRes + GetTempGearStat(StatEnum.Res);
+        public int TempStatSpd => 10 + _class.StatSpd + _iBuffSpd + GetTempGearStat(StatEnum.Spd);
+
+        public override List<MenuAction> AbilityList { get => _class.ActionList; }
+        public override List<CombatAction> SpecialActions { get => _class._liSpecialActionsList; }
+
+        public int GetGearAtk()
+        {
+            int rv = 0;
+
+            rv += Weapon.GetStat(StatEnum.Atk);
+            rv += base.Attack;
+
+            return rv;
+        }
+        public int GetGearStat(StatEnum stat)
+        {
+            int rv = 0;
+
+            foreach (GearSlot g in _liGearSlots)
+            {
+                rv += g.GetStat(stat);
+            }
+
+            return rv;
+        }
+        public int GetTempGearStat(StatEnum stat)
+        {
+            int rv = 0;
+
+            foreach (GearSlot g in _liGearSlots)
+            {
+                rv += g.GetTempStat(stat);
+            }
+
+            return rv;
+        }
+        #endregion
+
+        public ClassedCombatant() : base()
+        {
+            _eActorType = ActorEnum.Adventurer;
+            _classLevel = 1;
+
+            _liGearSlots = new List<GearSlot>();
+            Weapon = new GearSlot(EquipmentEnum.Weapon);
+            Armor = new GearSlot(EquipmentEnum.Armor);
+            Head = new GearSlot(EquipmentEnum.Head);
+            Wrist = new GearSlot(EquipmentEnum.Wrist);
+            Accessory1 = new GearSlot(EquipmentEnum.Accessory);
+            Accessory2 = new GearSlot(EquipmentEnum.Accessory);
+
+            _liGearSlots.Add(Weapon);
+            _liGearSlots.Add(Armor);
+            _liGearSlots.Add(Head);
+            _liGearSlots.Add(Wrist);
+            _liGearSlots.Add(Accessory1);
+            _liGearSlots.Add(Accessory2);
+        }
+
+        public void LoadClassAnimations()
+        {
+            _spriteBody.RemoveAnimation(CActorAnimEnum.Idle);
+            _spriteBody.RemoveAnimation(CActorAnimEnum.Cast);
+            _spriteBody.RemoveAnimation(CActorAnimEnum.Hurt);
+            _spriteBody.RemoveAnimation(CActorAnimEnum.Attack);
+            _spriteBody.RemoveAnimation(CActorAnimEnum.Critical);
+            _spriteBody.RemoveAnimation(CActorAnimEnum.KO);
+            _spriteBody.RemoveAnimation(CActorAnimEnum.Win);
+
+            //int xCrawl = 0;
+            //int frameWidth = 32;
+            //int frameHeight = 32;
+            //_spriteBody.AddAnimation(CActorAnimEnum.Idle, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.IdleFrames, _class.IdleFramesLength);
+            //xCrawl += _class.IdleFrames;
+            //_spriteBody.AddAnimation(CActorAnimEnum.Cast, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.CastFrames, _class.CastFramesLength);
+            //xCrawl += _class.CastFrames;
+            //_spriteBody.AddAnimation(CActorAnimEnum.Hurt, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.HitFrames, _class.HitFramesLength);
+            //xCrawl += _class.HitFrames;
+            //_spriteBody.AddAnimation(CActorAnimEnum.Attack, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.AttackFrames, _class.AttackFramesLength);
+            //xCrawl += _class.AttackFrames;
+            //_spriteBody.AddAnimation(CActorAnimEnum.Critical, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.CriticalFrames, _class.CriticalFramesLength);
+            //xCrawl += _class.CriticalFrames;
+            //_spriteBody.AddAnimation(CActorAnimEnum.KO, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.KOFrames, _class.KOFramesLength);
+            //xCrawl += _class.KOFrames;
+            //_spriteBody.AddAnimation(CActorAnimEnum.Win, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.WinFrames, _class.WinFramesLength);
+
+            //_width = _spriteBody.Width;
+            //_height = _spriteBody.Height;
+        }
+
+        public void SetClass(CharacterClass x)
+        {
+            _class = x;
+            _iCurrentHP = MaxHP;
+            _iCurrentMP = MaxMP;
+
+            Weapon.SetGear((Equipment)GetItem(_class.WeaponID));
+            Armor.SetGear((Equipment)GetItem(_class.ArmorID));
+            Head.SetGear((Equipment)GetItem(_class.HeadID));
+            Wrist.SetGear((Equipment)GetItem(_class.WristID));
+        }
+
+        public void AddXP(int x)
+        {
+            _iXP += x;
+            if (_iXP >= LevelRange[_classLevel])
+            {
+                _classLevel++;
+            }
+        }
+
+        public override void PlayAnimation(string animation)
+        {
+            base.PlayAnimation(animation);
+        }
+
+        public void GetXP(ref int curr, ref int max)
+        {
+            curr = _iXP;
+            max = ClassedCombatant.LevelRange[this.ClassLevel];
+        }
+
+        public ClassedCharData SaveClassedCharData()
+        {
+            ClassedCharData advData = new ClassedCharData
+            {
+                armor = Item.SaveData(Armor.GetItem()),
+                weapon = Item.SaveData(Weapon.GetItem()),
+                level = _classLevel,
+                xp = _iXP
+            };
+
+            return advData;
+        }
+        public void LoadClassedCharData(ClassedCharData data)
+        {
+            Armor.SetGear((Equipment)ObjectManager.GetItem(data.armor.itemID, data.armor.num));
+            Weapon.SetGear((Equipment)ObjectManager.GetItem(data.weapon.itemID, data.weapon.num));
+            _classLevel = data.level;
+            _iXP = data.xp;
+        }
+
+        /// <summary>
+        /// Structure that represents the slot for the character.
+        /// Holds both the actual item and a temp item to compare against.
+        /// </summary>
+        public class GearSlot
+        {
+            EquipmentEnum _enumType;
+            Equipment _eGear;
+            Equipment _eTempGear;
+            public GearSlot(EquipmentEnum type)
+            {
+                _enumType = type;
+            }
+
+            public void SetGear(Equipment e) { _eGear = e; }
+            public void SetTemp(Equipment e) { _eTempGear = e; }
+
+            public int GetStat(StatEnum stat)
+            {
+                int rv = 0;
+
+                if (_eGear != null)
+                {
+                    rv += _eGear.GetStat(stat);
+                }
+
+                return rv;
+            }
+            public int GetTempStat(StatEnum stat)
+            {
+                int rv = 0;
+
+                if (_eTempGear != null)
+                {
+                    rv += _eTempGear.GetStat(stat);
+                }
+                else if (_eGear != null)
+                {
+                    rv += _eGear.GetStat(stat);
+                }
+
+                return rv;
+            }
+            public Equipment GetItem() { return _eGear; }
+        }
+    }
+    public class TalkingActor : ClassedCombatant
     {
         protected const int PortraitWidth = 160;
         protected const int PortraitHeight = 192;
@@ -556,7 +1299,7 @@ namespace RiverHollow.Actors
         //For Cutscenes
         public Villager(Villager n)
         {
-            _actorType = ActorEnum.NPC;
+            _eActorType = ActorEnum.NPC;
             _iIndex = n.ID;
             _sName = n.Name;
             _diDialogue = n._diDialogue;
@@ -1073,8 +1816,8 @@ namespace RiverHollow.Actors
             _diCompleteSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
 
             _iIndex = index;
-            LoadContent(_sVillagerFolder + "NPC" + _iIndex);
 
+            LoadContent(_sVillagerFolder + "NPC" + _iIndex);
             ImportBasics(stringData);
 
             if (stringData.ContainsKey("ShopData"))
@@ -1271,7 +2014,6 @@ namespace RiverHollow.Actors
             }
         }
     }
-
     public class EligibleNPC : Villager
     {
         public bool Married;
@@ -1285,16 +2027,16 @@ namespace RiverHollow.Actors
             _diCompleteSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
 
             _iIndex = index;
-            LoadContent(_sVillagerFolder + "NPC" + _iIndex);
-            
-            ImportBasics(stringData);
 
             if (stringData.ContainsKey("Class"))
             {
-                _combat = new CombatAdventurer(this);
-                _combat.SetClass(ObjectManager.GetClassByIndex(int.Parse(stringData["Class"])));
-                _combat.LoadContent(_sAdventurerFolder + _combat.CharacterClass.Name);
+                SetClass(ObjectManager.GetClassByIndex(int.Parse(stringData["Class"])));
             }
+
+            LoadContent(_sVillagerFolder + "NPC" + _iIndex);
+            LoadClassAnimations();
+
+            ImportBasics(stringData);
 
             MapManager.Maps[CurrentMapName].AddCharacter(this);
         }
@@ -1317,7 +2059,7 @@ namespace RiverHollow.Actors
             map.AddCharacter(this);
 
             _bActive = true;
-            PlayerManager.RemoveFromParty(_combat);
+            PlayerManager.RemoveFromParty(this);
 
             //Reset on Monday
             if (GameCalendar.DayOfWeek == 0)
@@ -1391,7 +2133,7 @@ namespace RiverHollow.Actors
         {
             _bActive = false;
             _bCanJoinParty = false;
-            PlayerManager.AddToParty(((EligibleNPC)this).Combat);
+            PlayerManager.AddToParty(((EligibleNPC)this));
         }
 
         public new EligibleNPCData SaveData()
@@ -1402,7 +2144,7 @@ namespace RiverHollow.Actors
                 married = Married,
                 canJoinParty = _bCanJoinParty,
                 canGiveGift = CanGiveGift,
-                adventurerData = Combat.SaveData()
+                classedData = SaveClassedCharData()
             };
 
             return npcData;
@@ -1414,7 +2156,7 @@ namespace RiverHollow.Actors
             Married = data.married;
             _bCanJoinParty = data.canJoinParty;
             CanGiveGift = data.canGiveGift;
-            Combat.LoadData(data.adventurerData);
+            LoadClassedCharData(data.classedData);
 
             int index = 1;
             foreach (CollectionData c in data.npcData.collection)
@@ -1434,11 +2176,12 @@ namespace RiverHollow.Actors
             }
         }
     }
-    public class WorldAdventurer : TalkingActor
+
+    public class Adventurer : TalkingActor
     {
         #region Properties
-        private enum WorkerStateEnum { Idle, InParty, OnMission };
-        private WorkerStateEnum _eState;
+        private enum AdventurerStateEnum { Idle, InParty, OnMission };
+        private AdventurerStateEnum _eState;
         private WorkerTypeEnum _workerType;
         public WorkerTypeEnum WorkerType => _workerType;
         protected int _iPersonalID;
@@ -1467,18 +2210,18 @@ namespace RiverHollow.Actors
         int _iCurrentlyMaking;
         public int CurrentlyMaking => _iCurrentlyMaking;
 
-        public override bool Active => _eState == WorkerStateEnum.Idle;
+        public override bool Active => _eState == AdventurerStateEnum.Idle;
         #endregion
 
-        public WorldAdventurer(string[] stringData, int id)
+        public Adventurer(string[] stringData, int id)
         {
             _iWorkerID = id;
             _iPersonalID = PlayerManager.GetTotalWorkers();
-            _actorType = ActorEnum.WorldAdventurer;
+            _eActorType = ActorEnum.Adventurer;
             ImportBasics(stringData, id);
-            SetCombat();
 
-            _sAdventurerType = Combat.CharacterClass.Name;
+            SetClass(ObjectManager.GetClassByIndex(_iWorkerID));
+            _sAdventurerType = CharacterClass.Name;
             _sTexture = _sAdventurerFolder + "WorldAdventurers";
             LoadContent(_iWorkerID);
 
@@ -1489,15 +2232,15 @@ namespace RiverHollow.Actors
             _heldItem = null;
             _iMood = 0;
 
-            _eState = WorkerStateEnum.Idle;
+            _eState = AdventurerStateEnum.Idle;
 
             _sName = _sAdventurerType.Substring(0, 1);
-            Combat.SetName(_sName);
         }
 
         public void LoadContent(int ID)
         {
             AddDefaultAnimations(ref _spriteBody, HUMAN_HEIGHT, 0, (ID - 1) * TileSize * 3);
+            LoadClassAnimations();
 
             _width = _spriteBody.Width;
             _height = _spriteBody.Height;
@@ -1535,13 +2278,6 @@ namespace RiverHollow.Actors
             }
         }
 
-        protected void SetCombat()
-        {
-            _combat = new CombatAdventurer(this);
-            _combat.SetClass(ObjectManager.GetClassByIndex(_iWorkerID));
-            _combat.LoadContent(_sAdventurerFolder + _combat.CharacterClass.Name);
-        }
-
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -1549,7 +2285,7 @@ namespace RiverHollow.Actors
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
-            if (_eState == WorkerStateEnum.Idle)
+            if (_eState == AdventurerStateEnum.Idle)
             {
                 base.Draw(spriteBatch, useLayerDepth);
                 if (_heldItem != null)
@@ -1562,7 +2298,7 @@ namespace RiverHollow.Actors
         public override bool CollisionContains(Point mouse)
         {
             bool rv = false;
-            if (_eState == WorkerStateEnum.Idle)
+            if (_eState == AdventurerStateEnum.Idle)
             {
                 rv = base.CollisionContains(mouse);
             }
@@ -1571,7 +2307,7 @@ namespace RiverHollow.Actors
         public override bool CollisionIntersects(Rectangle rect)
         {
             bool rv = false;
-            if (_eState == WorkerStateEnum.Idle)
+            if (_eState == AdventurerStateEnum.Idle)
             {
                 rv = base.CollisionIntersects(rect);
             }
@@ -1603,8 +2339,8 @@ namespace RiverHollow.Actors
             }
             else if (entry.Equals("Party"))
             {
-                _eState = WorkerStateEnum.InParty;
-                PlayerManager.AddToParty(_combat);
+                _eState = AdventurerStateEnum.InParty;
+                PlayerManager.AddToParty(this);
                 rv = "Of course!";
             }
             return rv;
@@ -1655,20 +2391,20 @@ namespace RiverHollow.Actors
             if (_iResting > 0) { _iResting--; }
 
             switch(_eState) {
-                case WorkerStateEnum.Idle:
-                    _combat.CurrentHP = _combat.MaxHP;
+                case AdventurerStateEnum.Idle:
+                    _iCurrentHP = MaxHP;
                     rv = true;
                     break;
-                case WorkerStateEnum.InParty:
+                case AdventurerStateEnum.InParty:
                     if (GameManager.AutoDisband)
                     {
-                        _eState = WorkerStateEnum.Idle;
+                        _eState = AdventurerStateEnum.Idle;
                     }
                     break;
-                case WorkerStateEnum.OnMission:
+                case AdventurerStateEnum.OnMission:
                     if (_curMission.Completed())
                     {
-                        _eState = WorkerStateEnum.Idle;
+                        _eState = AdventurerStateEnum.Idle;
                         _iResting = _curMission.DaysToComplete / 2;
                         _curMission = null;
                     }
@@ -1697,12 +2433,6 @@ namespace RiverHollow.Actors
             return _sName;
         }
 
-        public override void SetName(string name)
-        {
-            _sName = name;
-            _combat.SetName(name);
-        }
-
         /// <summary>
         /// Assigns the WorldAdventurer to the given mission.
         /// </summary>
@@ -1710,7 +2440,7 @@ namespace RiverHollow.Actors
         public void AssignToMission(Mission m)
         {
             _curMission = m;
-            _eState = WorkerStateEnum.OnMission;
+            _eState = AdventurerStateEnum.OnMission;
         }
 
         /// <summary>
@@ -1731,13 +2461,13 @@ namespace RiverHollow.Actors
             string rv = string.Empty;
 
             switch (_eState) {
-                case WorkerStateEnum.Idle:
+                case AdventurerStateEnum.Idle:
                     rv = "Idle";
                     break;
-                case WorkerStateEnum.InParty:
+                case AdventurerStateEnum.InParty:
                     rv = "In Party";
                     break;
-                case WorkerStateEnum.OnMission:
+                case AdventurerStateEnum.OnMission:
                     rv = "On Mission \"" + _curMission.Name + "\" days left: " + (_curMission.DaysToComplete - _curMission.DaysFinished).ToString();
                     break;
             }
@@ -1751,27 +2481,27 @@ namespace RiverHollow.Actors
         /// </summary>
         public bool AvailableForMissions()
         {
-            return (_eState != WorkerStateEnum.OnMission && _iResting == 0);
+            return (_eState != AdventurerStateEnum.OnMission && _iResting == 0);
         }
 
-        public WorkerData SaveData()
+        public WorkerData SaveAdventurerData()
         {
             WorkerData workerData = new WorkerData
             {
                 workerID = this.WorkerID,
                 PersonalID = this.PersonalID,
-                advData = Combat.SaveData(),
+                advData = base.SaveClassedCharData(),
                 mood = this.Mood,
                 name = this.Name,
                 processedTime = this.ProcessedTime,
-                currentItemID = (this._iCurrentlyMaking == null) ? -1 : this._iCurrentlyMaking,
+                currentItemID = (this._iCurrentlyMaking == -1) ? -1 : this._iCurrentlyMaking,
                 heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID,
                 state = (int)_eState
             };
 
             return workerData;
         }
-        public void LoadData(WorkerData data)
+        public void LoadAdventurerData(WorkerData data)
         {
             _iWorkerID = data.workerID;
             _iPersonalID = data.PersonalID;
@@ -1780,17 +2510,18 @@ namespace RiverHollow.Actors
             _dProcessedTime = data.processedTime;
             _iCurrentlyMaking = data.currentItemID;
             _heldItem = ObjectManager.GetItem(data.heldItemID);
-            _eState = (WorkerStateEnum)data.state;
+            _eState = (AdventurerStateEnum)data.state;
 
-            SetCombat();
-            Combat.LoadData(data.advData);
+            base.LoadClassedCharData(data.advData);
 
-            if (_iCurrentlyMaking != null) { _spriteBody.SetCurrentAnimation(WActorBaseAnim.MakeItem); }
+            if (_iCurrentlyMaking != -1) {_spriteBody.SetCurrentAnimation(WActorBaseAnim.MakeItem); }
 
-            if (_eState == WorkerStateEnum.InParty) { PlayerManager.AddToParty(Combat); }
+            if (_eState == AdventurerStateEnum.InParty) {
+                PlayerManager.AddToParty(this);
+            }
         }
     }
-    public class PlayerCharacter : WorldCombatant
+    public class PlayerCharacter : ClassedCombatant
     {
         AnimatedSprite _spriteEyes;
         public AnimatedSprite EyeSprite => _spriteEyes;
@@ -2026,7 +2757,7 @@ namespace RiverHollow.Actors
 
         public Spirit(string name, string type, string condition, string text) : base()
         {
-            _actorType = ActorEnum.Spirit;
+            _eActorType = ActorEnum.Spirit;
             _fVisibility = MIN_VISIBILITY;
 
             _sName = name;
@@ -2121,26 +2852,39 @@ namespace RiverHollow.Actors
             return rv;
         }
     }
-    public class Mob : WorldActor
+ 
+    public class Monster : CombatActor
     {
         #region Properties
+        int _id;
+        public int ID  => _id;
+        int _iRating;
+        int _xp;
+        public int XP { get => _xp; }
+        protected Vector2 _moveTo = Vector2.Zero;
+        int _iLootID;
+
+        int _iWidth;
+        int _iHeight;
+
+        public override int Attack => 20 + (_iRating * 10);
+
+        public override int MaxHP => (int)((((Math.Pow(_iRating, 2))* 10) + 20) * Math.Pow(Math.Max(1, (double)_iRating / 14), 2));
+
         public override Vector2 Position
         {
             get { return new Vector2(_spriteBody.Position.X, _spriteBody.Position.Y + _spriteBody.Height - TileSize); } //MAR this is fucked up
-            set {
+            set
+            {
                 _spriteBody.Position = new Vector2(value.X, value.Y - _spriteBody.Height + TileSize);
                 _sprAlert.Position = _spriteBody.Position - new Vector2(0, TileSize);
             }
         }
 
-        protected int _id;
-        public int ID { get => _id; }
         protected double _dIdleFor;
         protected int _iLeash = 7;
 
         protected Vector2 _vMoveTo = Vector2.Zero;
-        protected List<CombatActor> _liMonsters;
-        public List<CombatActor> Monsters { get => _liMonsters; }
 
         double _dStun;
         int _iMaxRange = TileSize * 10;
@@ -2162,22 +2906,227 @@ namespace RiverHollow.Actors
 
         int _iXP;
         int _iXPToGive;
-        
+
         #endregion
 
-        public Mob(int id, Dictionary<string, string> data)
+        public Monster(int id, Dictionary<string, string> data)
         {
-            _liSpawnConditions = new List<SpawnConditionEnum>();
-            _actorType = ActorEnum.Mob;
-            _liMonsters = new List<CombatActor>();
+            //_liSpawnConditions = new List<SpawnConditionEnum>();
+            //_eActorType = ActorEnum.Mob;
+            //_liMonsters = new List<CombatActor>();
+            //ImportBasics(data, id);
+            //LoadContent();
+
+            //_iXP = 0;
+            //foreach (Monster mon in _liMonsters) { _iXP += mon.XP; }
+            //_iXPToGive = _iXP;
+
+            _eActorType = ActorEnum.Monster;
             ImportBasics(data, id);
             LoadContent();
-
-            _iXP = 0;
-            foreach (Monster mon in _liMonsters) { _iXP += mon.XP; }
-            _iXPToGive = _iXP;
         }
 
+        protected void ImportBasics(Dictionary<string, string> data, int id)
+        {
+            _id = id;
+            _sName = GameContentManager.GetMonsterInfo(_id);
+            _sTexture = GameContentManager.FOLDER_MONSTERS + data["Texture"];
+
+            float[] idle = new float[2] { 2, 0.5f };
+            float[] attack = new float[2] { 2, 0.2f };
+            float[] hurt = new float[2] { 1, 0.5f };
+            float[] cast = new float[2] { 2, 0.5f };
+
+            _iWidth = int.Parse(data["Width"]);
+            _iHeight = int.Parse(data["Height"]);
+
+            _iRating = int.Parse(data["Lvl"]);
+            _xp = _iRating * 10;
+            _iStrength = 1 + _iRating;
+            _iDefense = 8 + (_iRating * 3);
+            _iVitality = 2 * _iRating + 10;
+            _iMagic = 2 * _iRating + 2;
+            _iResistance = 2 * _iRating + 10;
+            _iSpeed = 10;
+
+            string[] split;
+            if (data.ContainsKey("Condition"))
+            {
+                split = data["Condition"].Split('-');
+                for (int i = 0; i < split.Length; i++)
+                {
+                    _liSpawnConditions.Add(Util.ParseEnum<SpawnConditionEnum>(split[i]));
+                }
+            }
+
+            _bJump = data.ContainsKey("Jump");
+
+            foreach (string ability in data["Ability"].Split('-'))
+            {
+                AbilityList.Add(ObjectManager.GetActionByIndex(int.Parse(ability)));
+            }
+
+            if (data.ContainsKey("Trait"))
+            {
+                HandleTrait(GameContentManager.GetMonsterTraitData(data["Trait"]));
+            }
+
+            if (data.ContainsKey("Resist"))
+            {
+                foreach (string elem in data["Resist"].Split('-'))
+                {
+                    _diElementalAlignment[Util.ParseEnum<ElementEnum>(elem)] = ElementAlignment.Resists;
+                }
+            }
+
+            if (data.ContainsKey("Vuln"))
+            {
+                foreach (string elem in data["Vuln"].Split('-'))
+                {
+                    _diElementalAlignment[Util.ParseEnum<ElementEnum>(elem)] = ElementAlignment.Vulnerable;
+                }
+            }
+
+            if (data.ContainsKey("Idle"))
+            {
+                split = data["Idle"].Split('-');
+                idle[0] = float.Parse(split[0]);
+                idle[1] = float.Parse(split[1]);
+            }
+
+            if (data.ContainsKey("Attack"))
+            {
+                split = data["Attack"].Split('-');
+                attack[0] = float.Parse(split[0]);
+                attack[1] = float.Parse(split[1]);
+            }
+
+            if (data.ContainsKey("Hurt"))
+            {
+                split = data["Hurt"].Split('-');
+                hurt[0] = float.Parse(split[0]);
+                hurt[1] = float.Parse(split[1]);
+            }
+
+            if (data.ContainsKey("Cast"))
+            {
+                split = data["Cast"].Split('-');
+                cast[0] = float.Parse(split[0]);
+                cast[1] = float.Parse(split[1]);
+            }
+
+            if (data.ContainsKey("Loot"))
+            {
+                _iLootID = int.Parse(data["Loot"]);
+            }
+
+            LoadContent(_sTexture, idle, attack, hurt, cast);
+
+            _iCurrentHP = MaxHP;
+            _iCurrentMP = MaxMP;
+        }
+
+        public override void Update(GameTime theGameTime)
+        {
+            base.Update(theGameTime);
+            if(BodySprite.CurrentAnimation == Util.GetEnumString(CActorAnimEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
+            {
+                CombatManager.Kill(this);
+            }
+
+            ///If not in Combat
+            //Check if the mob is still stunned
+            //if (_dStun > 0)
+            //{
+            //    _dStun -= theGameTime.ElapsedGameTime.TotalSeconds;
+            //    if (_dStun < 0) { _dStun = 0; }
+            //}
+            //else
+            //{
+            //    UpdateAlertTimer(theGameTime);
+            //    UpdateMovement(theGameTime);
+            //}
+
+            //base.Update(theGameTime);
+        }
+
+        private void HandleTrait(string traitData)
+        {
+            string[] traits = Util.FindTags(traitData);
+            foreach (string s in traits)
+            {
+                string[] tagType = s.Split(':');
+                if (tagType[0].Equals(Util.GetEnumString(StatEnum.Str)))
+                {
+                    ApplyTrait(ref _iStrength, tagType[1]);
+                }
+                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Def)))
+                {
+                    ApplyTrait(ref _iDefense, tagType[1]);
+                }
+                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Vit)))
+                {
+                    ApplyTrait(ref _iVitality, tagType[1]);
+                }
+                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Mag)))
+                {
+                    ApplyTrait(ref _iMagic, tagType[1]);
+                }
+                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Res)))
+                {
+                    ApplyTrait(ref _iResistance, tagType[1]);
+                }
+                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Spd)))
+                {
+                    ApplyTrait(ref _iSpeed, tagType[1]);
+                }
+            }
+        }
+
+        private void ApplyTrait(ref int value, string data)
+        {
+            if (data.Equals("+"))
+            {
+                value = (int)(value * 1.1);
+            }
+            else if (data.Equals("-"))
+            {
+                value = (int)(value * 0.9);
+            }
+        }
+
+        public void LoadContent(string texture, float[] idle, float[] attack, float[] hurt, float[] cast)
+        {
+            _sTexture = texture;
+
+            _spriteBody = new AnimatedSprite(texture.Replace(" ", ""));
+
+            int xCrawl = 0;
+            int frameWidth = _iWidth;
+            int frameHeight = _iHeight;
+            _spriteBody.AddAnimation(CActorAnimEnum.Idle, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)idle[0], idle[1]);
+            xCrawl += (int)idle[0];
+            _spriteBody.AddAnimation(CActorAnimEnum.Attack, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)attack[0], attack[1]);
+            xCrawl += (int)attack[0];
+            _spriteBody.AddAnimation(CActorAnimEnum.Hurt, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)hurt[0], hurt[1]);
+            xCrawl += (int)hurt[0];
+            _spriteBody.AddAnimation(CActorAnimEnum.Cast, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)cast[0], cast[1]);
+            xCrawl += (int)cast[0];
+            
+            _spriteBody.AddAnimation(CActorAnimEnum.KO, (xCrawl * frameWidth), 0, frameWidth, frameHeight, 3, 0.2f);
+
+            _spriteBody.SetCurrentAnimation(CActorAnimEnum.Idle);
+            _spriteBody.SetScale(CombatManager.CombatScale);
+            _width = _spriteBody.Width;
+            _height = _spriteBody.Height;
+        }
+
+        public Item GetLoot()
+        {
+            return ObjectManager.GetItem(_iLootID);
+        }
+
+        ///////////
         public void LoadContent()
         {
             _spriteBody = new AnimatedSprite(_sTexture);
@@ -2224,60 +3173,9 @@ namespace RiverHollow.Actors
             _sprAlert.Position = (Position - new Vector2(0, TileSize));
         }
 
-        protected int ImportBasics(Dictionary<string, string> data, int id)
-        {
-            _sTexture = GameContentManager.FOLDER_MOBS + data["Texture"];
-
-            string[] split = data["Monster"].Split('-');
-            for (int i = 0; i < split.Length; i++)
-            {
-                int mID = int.Parse(split[i]);
-                _liMonsters.Add(ObjectManager.GetMonsterByIndex(mID));
-            }
-
-            split = data["Condition"].Split('-');
-            for (int i = 0; i < split.Length; i++)
-            {
-                _liSpawnConditions.Add(Util.ParseEnum<SpawnConditionEnum>(split[i]));
-            }
-
-            _bJump = data.ContainsKey("Jump");
-
-            foreach (CombatActor m in _liMonsters)
-            {
-                List<CombatActor> match = _liMonsters.FindAll(x => ((Monster)x).ID == ((Monster)m).ID);
-                if (match.Count > 1)
-                {
-                    for (int i = 0; i < match.Count; i++)
-                    {
-                        match[i].SetUnique(Util.NumToString(i + 1, true));
-                    }
-                }
-            }
-            _id = id;
-            return 0;
-        }
-
         public void NewFoV()
         {
             _FoV = new FieldOfVision(this, _iMaxRange);
-        }
-
-        public override void Update(GameTime theGameTime)
-        {
-            //Check if the mob is still stunned
-            if (_dStun > 0)
-            {
-                _dStun -= theGameTime.ElapsedGameTime.TotalSeconds;
-                if(_dStun < 0) { _dStun = 0; }
-            }
-            else
-            {
-                UpdateAlertTimer(theGameTime);
-                UpdateMovement(theGameTime);
-            }
-
-            base.Update(theGameTime);
         }
 
         private void UpdateAlertTimer(GameTime theGameTime)
@@ -2294,7 +3192,7 @@ namespace RiverHollow.Actors
         public override void Draw(SpriteBatch spriteBatch, bool userLayerDepth = false)
         {
             base.Draw(spriteBatch, userLayerDepth);
-            if(_bAlert) { _sprAlert.Draw(spriteBatch, userLayerDepth); }
+            if (_bAlert) { _sprAlert.Draw(spriteBatch, userLayerDepth); }
         }
 
         private void UpdateMovement(GameTime theGameTime)
@@ -2324,7 +3222,7 @@ namespace RiverHollow.Actors
                         _vMoveTo = PlayerManager.World.Position;
                     }
                 }
-                else if(!BodySprite.CurrentAnimation.StartsWith("Air"))
+                else if (!BodySprite.CurrentAnimation.StartsWith("Air"))
                 {
                     _bLeashed = true;
                     _bLockedOn = false;
@@ -2393,7 +3291,7 @@ namespace RiverHollow.Actors
 
                 Util.GetMoveSpeed(Position, _vMoveTo, Speed, ref direction);
                 DetermineFacing(direction);
-                if(!CheckMapForCollisionsAndMove(direction, false))
+                if (!CheckMapForCollisionsAndMove(direction, false))
                 {
                     _iMoveFailures++;
                 }
@@ -2418,7 +3316,7 @@ namespace RiverHollow.Actors
             {
                 _bAlert = false;
                 _bLockedOn = false;
-                CombatManager.NewBattle(this);
+                CombatManager.NewBattle();
             }
         }
 
@@ -2533,9 +3431,9 @@ namespace RiverHollow.Actors
 
             if (_liSpawnConditions.Contains(s))
             {
-                foreach(SpawnConditionEnum e in _liSpawnConditions)
+                foreach (SpawnConditionEnum e in _liSpawnConditions)
                 {
-                    if(e.Equals(SpawnConditionEnum.Night) && !GameCalendar.IsNight())
+                    if (e.Equals(SpawnConditionEnum.Night) && !GameCalendar.IsNight())
                     {
                         rv = false;
                     }
@@ -2568,26 +3466,6 @@ namespace RiverHollow.Actors
             return check.Equals(season) && !Util.ParseEnum<SpawnConditionEnum>(GameCalendar.GetSeason()).Equals(season);
         }
 
-        public void Stun()
-        {
-            _dStun = 5.0f;
-        }
-
-        /// <summary>
-        /// Gets all the items that the Monsters drop. Each monster gives one item
-        /// </summary>
-        /// <returns>The list of items to be given to the player</returns>
-        public List<Item> GetLoot()
-        {
-            List<Item> items = new List<Item>();
-
-            foreach(Monster m in _liMonsters)
-            {
-                items.Add(m.GetLoot());
-            }
-            return items;
-        }
-
         /// <summary>
         /// Delegate method to retrieve XP data
         /// </summary>
@@ -2595,7 +3473,7 @@ namespace RiverHollow.Actors
         /// <param name="totalXP">The total amount of XP to give</param>
         public void GetXP(ref int xpLeftToGive, ref int totalXP)
         {
-            xpLeftToGive= _iXPToGive;
+            xpLeftToGive = _iXPToGive;
             totalXP = _iXP;
         }
 
@@ -2616,20 +3494,20 @@ namespace RiverHollow.Actors
             Vector2 _vSecond;           //The RightMost of the BottomMost
             DirectionEnum _eDir;
 
-            public FieldOfVision(Mob theMob, int maxRange)
+            public FieldOfVision(Monster theMonster, int maxRange)
             {
                 int sideRange = TileSize * 2;
                 _iMaxRange = (int)(maxRange * (1 - (0.1 * PlayerManager.GetRoguesInParty())));
-                _eDir = theMob.Facing;
+                _eDir = theMonster.Facing;
                 if (_eDir == DirectionEnum.Up || _eDir == DirectionEnum.Down)
                 {
-                    _vFirst = theMob.Center - new Vector2(sideRange, 0);
-                    _vSecond = theMob.Center + new Vector2(sideRange, 0);
+                    _vFirst = theMonster.Center - new Vector2(sideRange, 0);
+                    _vSecond = theMonster.Center + new Vector2(sideRange, 0);
                 }
                 else
                 {
-                    _vFirst = theMob.Center - new Vector2(0, sideRange);
-                    _vSecond = theMob.Center + new Vector2(0, sideRange);
+                    _vFirst = theMonster.Center - new Vector2(0, sideRange);
+                    _vSecond = theMonster.Center + new Vector2(0, sideRange);
                 }
             }
 
@@ -2653,7 +3531,7 @@ namespace RiverHollow.Actors
                     firstFoV += new Vector2(-yMod, -yMod);
                     secondFoV += new Vector2(yMod, -yMod);
 
-                    rv =  Util.InBetween(center.X, firstFoV.X, secondFoV.X) && Util.InBetween(center.Y, firstFoV.Y, _vFirst.Y);
+                    rv = Util.InBetween(center.X, firstFoV.X, secondFoV.X) && Util.InBetween(center.Y, firstFoV.Y, _vFirst.Y);
                 }
                 else if (_eDir == DirectionEnum.Down && Util.InBetween(center.Y, firstFoV.Y, firstFoV.Y + _iMaxRange))
                 {
@@ -2663,7 +3541,7 @@ namespace RiverHollow.Actors
 
                     rv = Util.InBetween(center.X, firstFoV.X, secondFoV.X) && Util.InBetween(center.Y, _vFirst.Y, firstFoV.Y);
                 }
-                else if(_eDir == DirectionEnum.Left && Util.InBetween(center.X, firstFoV.X - _iMaxRange, firstFoV.X))
+                else if (_eDir == DirectionEnum.Left && Util.InBetween(center.X, firstFoV.X - _iMaxRange, firstFoV.X))
                 {
                     float xMod = Math.Abs(center.X - firstFoV.X);
                     firstFoV += new Vector2(-xMod, -xMod);
@@ -2684,985 +3562,6 @@ namespace RiverHollow.Actors
             }
         }
     }
-    #endregion
-
-    #region CombatActors
-    public class CombatActor : Actor
-    {
-        #region Properties
-        protected const int MAX_STAT = 99;
-        protected string _sUnique;
-
-        public override string Name => String.IsNullOrEmpty(_sUnique) ? _sName : _sName + " " + _sUnique;
-
-        private Vector2 _vStartPos;
-        public Vector2 StartPos => _vStartPos;
-
-        protected int _iCurrentHP;
-        public int CurrentHP
-        {
-            get { return _iCurrentHP; }
-            set { _iCurrentHP = value; }
-        }
-        public virtual int MaxHP => 20 + (int)Math.Pow(((double)StatVit / 3), 1.98);
-
-        protected int _iCurrentMP;
-        public int CurrentMP
-        {
-            get { return _iCurrentMP; }
-            set { _iCurrentMP = value; }
-        }
-        public virtual int MaxMP => StatMag * 3; 
-
-        public int CurrentCharge;
-        public int DummyCharge;
-        public CombatManager.CombatTile Tile;
-        public GUICmbtTile Location => Tile.GUITile;
-
-        public virtual int Attack => 9;
-
-        protected int _iStrength;
-        public virtual int StatStr => _iStrength + _iBuffStr;
-        protected int _iDefense;
-        public virtual int StatDef => _iDefense + _iBuffDef;
-        protected int _iVitality;
-        public virtual int StatVit => _iVitality + _iBuffVit;
-        protected int _iMagic;
-        public virtual int StatMag => _iMagic + _iBuffMag;
-        protected int _iResistance;
-        public virtual int StatRes => _iResistance + _iBuffRes;
-        protected int _iSpeed;
-        public virtual int StatSpd => _iSpeed + _iBuffSpd;
-
-        protected int _iBuffStr;
-        protected int _iBuffDef;
-        protected int _iBuffVit;
-        protected int _iBuffMag;
-        protected int _iBuffRes;
-        protected int _iBuffSpd;
-        protected int _iBuffCrit;
-        protected int _iBuffEvade;
-
-        protected int _iCrit = 10;
-        public int CritRating => _iCrit + _iBuffCrit;
-
-        public int Evasion => (int)(40 / (1 + 10 * (Math.Pow(Math.E, (-0.05 * StatSpd))))) + _iBuffEvade;
-        public int ResistStatus => (int)(50 / (1 + 10 * (Math.Pow(Math.E, (-0.05 * StatRes)))));
-
-        protected List<MenuAction> _liActions;
-        public virtual List<MenuAction> AbilityList { get => _liActions; }
-
-        protected List<CombatAction> _liSpecialActions;
-        public virtual List<CombatAction> SpecialActions { get => _liSpecialActions; }
-
-        protected List<StatusEffect> _liStatusEffects;
-        public List<StatusEffect> LiBuffs { get => _liStatusEffects; }
-
-        protected Dictionary<ConditionEnum, bool> _diConditions;
-        public Dictionary<ConditionEnum, bool> DiConditions => _diConditions;
-
-        private ElementEnum _elementAttackEnum;
-        protected Dictionary<ElementEnum, ElementAlignment> _diElementalAlignment;
-        public Dictionary<ElementEnum, ElementAlignment> DiElementalAlignment => _diElementalAlignment;
-
-        private Summon _linkedSummon;
-        public Summon LinkedSummon => _linkedSummon;
-
-        public bool Counter;
-        public bool GoToCounter;
-
-        public CombatActor MyGuard;
-        public CombatActor GuardTarget;
-        protected bool _bGuard;
-        public bool Guard => _bGuard;
-
-        public bool Swapped;
-        #endregion
-
-        public CombatActor() : base()
-        {
-            _actorType = ActorEnum.CombatActor;
-            _liSpecialActions = new List<CombatAction>();
-            _liActions = new List<MenuAction>();
-            _liStatusEffects = new List<StatusEffect>();
-            _diConditions = new Dictionary<ConditionEnum, bool>
-            {
-                [ConditionEnum.KO] = false,
-                [ConditionEnum.Poisoned] = false,
-                [ConditionEnum.Silenced] = false
-            };
-
-            _diElementalAlignment = new Dictionary<ElementEnum, ElementAlignment>
-            {
-                [ElementEnum.Fire] = ElementAlignment.Neutral,
-                [ElementEnum.Ice] = ElementAlignment.Neutral,
-                [ElementEnum.Lightning] = ElementAlignment.Neutral
-            };
-        }
-
-        public virtual void LoadContent(string texture)
-        {
-            _sTexture = texture;
-
-            _spriteBody = new AnimatedSprite(texture.Replace(" ",""));
-            int xCrawl = 0;
-            int frameWidth = 24;
-            int frameHeight = 32;
-            _spriteBody.AddAnimation(CActorAnimEnum.Idle, (xCrawl * frameWidth), 0, frameWidth, frameHeight, 2, 0.5f);
-            xCrawl += 2;
-            _spriteBody.AddAnimation(CActorAnimEnum.Cast, (xCrawl * frameWidth), 0, frameWidth, frameHeight, 2, 0.4f);
-            xCrawl += 2;
-            _spriteBody.AddAnimation(CActorAnimEnum.Hurt, (xCrawl * frameWidth), 0, frameWidth, frameHeight, 1, 0.5f);
-            xCrawl += 1;
-            _spriteBody.AddAnimation(CActorAnimEnum.Attack, (xCrawl * frameWidth), 0, frameWidth, frameHeight, 1, 0.3f);
-            xCrawl += 1;
-            _spriteBody.AddAnimation(CActorAnimEnum.Critical, (xCrawl * frameWidth), 0, frameWidth, frameHeight, 2, 0.9f);
-            xCrawl += 2;
-            _spriteBody.AddAnimation(CActorAnimEnum.KO, (xCrawl * frameWidth), 0, frameWidth, frameHeight, 1, 0.5f);
-
-            _spriteBody.SetCurrentAnimation(CActorAnimEnum.Idle);
-            _spriteBody.SetScale(CombatManager.CombatScale);
-            _width = _spriteBody.Width;
-            _height = _spriteBody.Height;
-        }
-
-        public override void Update(GameTime theGameTime)
-        {
-            //Finished being hit, determine action
-            if (IsCurrentAnimation(CActorAnimEnum.Hurt) && BodySprite.GetPlayCount() >= 1)
-            {
-                if (CurrentHP == 0) { Tile.PlayAnimation(CActorAnimEnum.KO); }
-                else if (IsCritical()) { Tile.PlayAnimation(CActorAnimEnum.Critical); }
-                else { Tile.PlayAnimation(CActorAnimEnum.Idle); }
-            }
-
-            if (!_diConditions[ConditionEnum.KO] && IsCurrentAnimation(CActorAnimEnum.KO))
-            {
-                if (IsCritical()) { Tile.PlayAnimation(CActorAnimEnum.Critical); }
-                else { Tile.PlayAnimation(CActorAnimEnum.Idle); }
-            }
-
-            if (IsCurrentAnimation(CActorAnimEnum.Critical) && !IsCritical())
-            {
-                Tile.PlayAnimation(CActorAnimEnum.Idle);
-            }
-
-            if (_linkedSummon != null)
-            {
-                _linkedSummon.Update(theGameTime);
-            }
-        }
-
-        /// <summary>
-        /// Calculates the damage to be dealt against the actor.
-        /// 
-        /// Run the damage equation against the defender, then apply any 
-        /// relevant elemental resistances.
-        /// 
-        /// Finally, roll against the crit rating. Rolling higher than the 
-        /// rating on a percentile roll means no crit. Crit Rating 10 means
-        /// roll 10 or less
-        /// </summary>
-        /// <param name="attacker">Who is attacking</param>
-        /// <param name="potency">The potency of the attack</param>
-        /// <param name="element">any associated element</param>
-        /// <returns></returns>
-        public int ProcessAttack(CombatActor attacker, int potency, int critRating, ElementEnum element = ElementEnum.None)
-        {
-            double compression = 0.8;
-            double potencyMod = potency / 100;   //100 potency is considered an average attack
-            double base_attack = attacker.Attack;  //Attack stat is either weapon damage or mod on monster str
-            double StrMult = Math.Round(1 + ((double)attacker.StatStr / 4 * attacker.StatStr / MAX_STAT), 2);   
-
-            double dmg = ( Math.Max(1, base_attack - StatDef) * compression * StrMult);
-            dmg += ApplyResistances(dmg, element);
-
-            RHRandom rand = new RHRandom();
-            if(rand.Next(1, 100) <= (attacker.CritRating + critRating)) { dmg *= 2; }
-            
-            return DecreaseHealth(dmg);
-        }
-        public int ProcessSpell(CombatActor attacker, int potency, ElementEnum element = ElementEnum.None)
-        {
-            double maxDmg = (1 + potency) * 3;
-            double divisor = 1 + (30 * Math.Pow(Math.E, -0.12 * (attacker.StatMag - StatRes) * Math.Round((double)attacker.StatMag / MAX_STAT, 2)));
-
-            double damage = Math.Round(maxDmg / divisor);
-            damage += ApplyResistances(damage, element);
-
-            return DecreaseHealth(damage);
-        }
-        public double ApplyResistances(double dmg, ElementEnum element = ElementEnum.None)
-        {
-            double modifiedDmg = 0;
-            if (element != ElementEnum.None)
-            {
-                if (MapManager.CurrentMap.IsOutside && GameCalendar.IsRaining())
-                {
-                    if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (dmg * 1.2) - dmg; }
-                    else if (element.Equals(ElementEnum.Fire)) { modifiedDmg += (dmg * 0.8) - dmg; }
-                }
-                else if (MapManager.CurrentMap.IsOutside && GameCalendar.IsSnowing())
-                {
-                    if (element.Equals(ElementEnum.Ice)) { modifiedDmg += (dmg * 1.2) - dmg; }
-                    else if (element.Equals(ElementEnum.Lightning)) { modifiedDmg += (dmg * 0.8) - dmg; }
-                }
-
-                if (_linkedSummon != null && _diElementalAlignment[element].Equals(ElementAlignment.Neutral))
-                {
-                    if (_linkedSummon.Element.Equals(element))
-                    {
-                        modifiedDmg += (dmg * 0.8) - dmg;
-                    }
-                }
-
-                if (_diElementalAlignment[element].Equals(ElementAlignment.Resists))
-                {
-                    modifiedDmg += (dmg * 0.8) - dmg;
-                }
-                else if (_diElementalAlignment[element].Equals(ElementAlignment.Vulnerable))
-                {
-                    modifiedDmg += (dmg * 1.2) - dmg;
-                }
-            }
-
-            return modifiedDmg;
-        }
-
-        public int ProcessHealingSpell(CombatActor attacker, int potency)
-        {
-            double maxDmg = (1 + potency) * 3;
-            double divisor = 1 + (30 * Math.Pow(Math.E, -0.12 * (attacker.StatMag - StatRes) * Math.Round((double)attacker.StatMag / MAX_STAT, 2)));
-
-            int damage = (int)Math.Round(maxDmg / divisor);
-
-            return IncreaseHealth(damage);
-        }
-        public virtual GUISprite GetSprite()
-        {
-            return Tile.GUITile.CharacterSprite;
-        }
-
-        public virtual int DecreaseHealth(double value)
-        {
-            int iValue = (int)Math.Round(value);
-            _iCurrentHP -= (_iCurrentHP - iValue >= 0) ? iValue : _iCurrentHP;
-            Tile.PlayAnimation(CActorAnimEnum.Hurt);
-            if (_iCurrentHP == 0)
-            {
-                _diConditions[ConditionEnum.KO] = true;
-                UnlinkSummon();
-            }
-
-            return iValue;
-        }
-
-        public int IncreaseHealth(int x)
-        {
-            int amountHealed = 0;
-            if (!KnockedOut())
-            {
-                amountHealed = x;
-                if (_iCurrentHP + x <= MaxHP)
-                {
-                    _iCurrentHP += x;
-                }
-                else
-                {
-                    amountHealed = MaxHP - _iCurrentHP;
-                    _iCurrentHP = MaxHP;
-                }
-            }
-
-            return amountHealed;
-        }
-
-        public bool IsCritical()
-        {
-            return (float)CurrentHP / (float)MaxHP <= 0.25;
-        }
-
-        public void IncreaseMana(int x)
-        {
-            if (_iCurrentMP + x <= MaxMP)
-            {
-                _iCurrentMP += x;
-            }
-            else
-            {
-                _iCurrentMP = MaxMP;
-            }
-        }
-
-        /// <summary>
-        /// Reduce the duration of each status effect on the Actor by one
-        /// If the effect's duration reaches 0, remove it, otherwise have it run
-        /// any upkeep effects it may need to do.
-        /// </summary>
-        public void TickStatusEffects()
-        {
-            List<StatusEffect> toRemove = new List<StatusEffect>();
-            foreach (StatusEffect b in _liStatusEffects)
-            {
-                if (--b.Duration == 0)
-                {
-                    toRemove.Add(b);
-                    RemoveStatusEffect(b);
-                }
-                else
-                {
-                    if (b.DoT)
-                    {
-                        this.Tile.GUITile.AssignEffect(ProcessSpell(b.Caster, b.Potency), true);
-                    }
-                    if (b.HoT)
-                    {
-                        this.Tile.GUITile.AssignEffect(ProcessHealingSpell(b.Caster, b.Potency), false);
-                    }
-                }
-            }
-
-            foreach (StatusEffect b in toRemove)
-            {
-                _liStatusEffects.Remove(b);
-            }
-            toRemove.Clear();
-        }
-
-        /// <summary>
-        /// Adds the StatusEffect objectto the character's list of status effects.
-        /// </summary>
-        /// <param name="b">Effect toadd</param>
-        public void AddStatusEffect(StatusEffect b)
-        {
-            //Only one song allowed at a time so see if there is another
-            //songand,if so, remove it.
-            if (b.Song)
-            {
-                StatusEffect song = _liStatusEffects.Find(status => status.Song);
-                if (song != null) {
-                    RemoveStatusEffect(song);
-                    _liStatusEffects.Remove(song);
-                }
-            }
-
-            //Look to see if the status effect already exists, if so, just
-            //set the duration to be the new duration. No stacking.
-            StatusEffect find = _liStatusEffects.Find(status => status.Name == b.Name);
-            if (find == null) { _liStatusEffects.Add(b); }
-            else { find.Duration = b.Duration; }
-
-            foreach (KeyValuePair<StatEnum, int> kvp in b.StatMods)
-            {
-                HandleStatBuffs(kvp);
-            }
-
-            //If the status effect provides counter, turn counter on.
-            if (b.Counter) { Counter = true; }
-
-            if (b.Guard) { _bGuard = true; }
-        }
-
-        /// <summary>
-        /// Removes the status effect from the Actor
-        /// </summary>
-        /// <param name="b"></param>
-        public void RemoveStatusEffect(StatusEffect b)
-        {
-            foreach (KeyValuePair<StatEnum, int> kvp in b.StatMods)
-            {
-                HandleStatBuffs(kvp, true);
-            }
-
-            if (b.Counter) { Counter = false; }
-            if (b.Guard) { _bGuard = false; }
-        }
-
-        /// <summary>
-        /// Helper to not repeat code for the Stat buffing/debuffing
-        /// 
-        /// Pass in the statmod kvp and an integer representing positive or negative
-        /// and multiply the mod by it. If we are adding, it will remain unchanged, 
-        /// if we are subtracting, the positive value will go negative.
-        /// </summary>
-        /// <param name="kvp">The stat to modifiy and how much</param>
-        /// <param name="negative">Whether or not we need to add or remove the value</param>
-        private void HandleStatBuffs(KeyValuePair<StatEnum, int> kvp, bool negative = false)
-        {
-            int modifier = negative ? -1 : 1;
-            switch (kvp.Key)
-            {
-                case StatEnum.Str:
-                    _iBuffStr += kvp.Value * modifier;
-                    break;
-                case StatEnum.Def:
-                    _iBuffDef += kvp.Value * modifier;
-                    break;
-                case StatEnum.Vit:
-                    _iBuffVit += kvp.Value * modifier;
-                    break;
-                case StatEnum.Mag:
-                    _iBuffMag += kvp.Value * modifier;
-                    break;
-                case StatEnum.Res:
-                    _iBuffRes += kvp.Value * modifier;
-                    break;
-                case StatEnum.Spd:
-                    _iBuffSpd += kvp.Value * modifier;
-                    break;
-                case StatEnum.Crit:
-                    _iBuffCrit += kvp.Value * modifier;
-                    break;
-                case StatEnum.Evade:
-                    _iBuffEvade += kvp.Value * modifier;
-                    break;
-            }
-        }
-
-        public void LinkSummon(Summon s)
-        {
-            _linkedSummon = s;
-            s.Tile = Tile;
-
-            foreach (KeyValuePair<StatEnum, int> kvp in _linkedSummon.BuffedStats)
-            {
-                this.HandleStatBuffs(kvp, false);
-            }
-
-            Tile.GUITile.LinkSummon(s);
-        }
-
-        public void UnlinkSummon()
-        {
-            if (_linkedSummon != null)
-            {
-                foreach (KeyValuePair<StatEnum, int> kvp in _linkedSummon.BuffedStats)
-                {
-                    this.HandleStatBuffs(kvp, true);
-                }
-            }
-            Tile.GUITile.LinkSummon(null);
-            _linkedSummon = null;
-        }
-
-        public virtual ElementEnum GetAttackElement()
-        {
-            ElementEnum e = _elementAttackEnum;
-
-            if (LinkedSummon != null && e.Equals(ElementEnum.None))
-            {
-                e = LinkedSummon.Element;
-            }
-            return e;
-        }
-
-        public bool CanCast(int x)
-        {
-            return x <= CurrentMP;
-        }
-
-        public void SetUnique(string u)
-        {
-            _sUnique = u;
-        }
-
-        public bool KnockedOut()
-        {
-            return _diConditions[ConditionEnum.KO];
-        }
-
-        public bool Poisoned()
-        {
-            return _diConditions[ConditionEnum.Poisoned];
-        }
-
-        public bool Silenced()
-        {
-            return _diConditions[ConditionEnum.Silenced];
-        }
-
-        public void ChangeConditionStatus(ConditionEnum c, bool setTo)
-        {
-            _diConditions[c] = setTo;
-        }
-
-        public void ClearConditions()
-        {
-            foreach (ConditionEnum condition in Enum.GetValues(typeof(ConditionEnum)))
-            {
-                ChangeConditionStatus(condition, false);
-            }
-        }
-
-        public void IncreaseStartPos()
-        {
-            if (_vStartPos.Y < CombatManager.MAX_ROW)
-            {
-                _vStartPos.Y++;
-            }
-            else
-            {
-                _vStartPos = new Vector2(_vStartPos.X++, 0);
-            }
-        }
-        public void SetStartPosition(Vector2 startPos)
-        {
-            _vStartPos = startPos;
-        }
-
-        public void GetHP(ref int curr, ref int max)
-        {
-            curr = _iCurrentHP;
-            max = MaxHP;
-        }
-
-        public void GetMP(ref int curr, ref int max)
-        {
-            curr = _iCurrentMP;
-            max = MaxMP;
-        }
-
-        public virtual bool IsSummon() { return false; }
-    }
-
-    public class CombatAdventurer : CombatActor
-    {
-        
-        #region Properties
-        public static List<int> LevelRange = new List<int> { 0, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240 };
-        protected WorldCombatant _world;
-        public WorldCombatant World => _world;
-
-        protected CharacterClass _class;
-        public CharacterClass CharacterClass { get => _class; }
-        private int _classLevel;
-        public int ClassLevel { get => _classLevel; }
-
-        private int _iXP;
-        public int XP { get => _iXP; }
-
-        public bool Protected;
-
-        public List<GearSlot> _liGearSlots;
-        public GearSlot Weapon;
-        public GearSlot Armor;
-        public GearSlot Head;
-        public GearSlot Wrist;
-        public GearSlot Accessory1;
-        public GearSlot Accessory2;
-
-        public override int Attack => GetGearAtk();
-        public override int StatStr => 10 + _iBuffStr + GetGearStat(StatEnum.Str);
-        public override int StatDef => 10 + _iBuffDef + GetGearStat(StatEnum.Def) + (Protected ? 10 : 0);
-        public override int StatVit => 10 + (_classLevel * _class.StatVit) + GetGearStat(StatEnum.Vit);
-        public override int StatMag => 10 +  _iBuffMag + GetGearStat(StatEnum.Mag);
-        public override int StatRes => 10 + _iBuffRes + GetGearStat(StatEnum.Res);
-        public override int StatSpd => 10 + _class.StatSpd +_iBuffSpd + GetGearStat(StatEnum.Spd);
-
-        public int TempStatStr => 10 + _iBuffStr + GetTempGearStat(StatEnum.Str);
-        public int TempStatDef => 10 + _iBuffDef + GetTempGearStat(StatEnum.Def) + (Protected ? 10 : 0);
-        public int TempStatVit => 10 + (_classLevel * _class.StatVit) + GetTempGearStat(StatEnum.Vit);
-        public int TempStatMag => 10 + _iBuffMag + GetTempGearStat(StatEnum.Mag);
-        public int TempStatRes => 10 + _iBuffRes + GetTempGearStat(StatEnum.Res);
-        public int TempStatSpd => 10 + _class.StatSpd + _iBuffSpd + GetTempGearStat(StatEnum.Spd);
-
-        public override List<MenuAction> AbilityList { get => _class.ActionList; }
-        public override List<CombatAction> SpecialActions { get => _class._liSpecialActionsList; }
-
-        public int GetGearAtk()
-        {
-            int rv = 0;
-
-            rv += Weapon.GetStat(StatEnum.Atk);
-            rv += base.Attack;
-
-            return rv;
-        }
-
-        public int GetGearStat(StatEnum stat)
-        {
-            int rv = 0;
-
-            foreach (GearSlot g in _liGearSlots)
-            {
-                rv += g.GetStat(stat);
-            }
-
-            return rv;
-        }
-
-        public int GetTempGearStat(StatEnum stat)
-        {
-            int rv = 0;
-
-            foreach (GearSlot g in _liGearSlots)
-            {
-                rv += g.GetTempStat(stat);
-            }
-
-            return rv;
-        }
-
-        #endregion
-        public CombatAdventurer() : base()
-        {
-            _actorType = ActorEnum.CombatAdventurer;
-            _classLevel = 1;
-
-            _liGearSlots = new List<GearSlot>();
-            Weapon = new GearSlot(EquipmentEnum.Weapon);
-            Armor = new GearSlot(EquipmentEnum.Armor);
-            Head = new GearSlot(EquipmentEnum.Head);
-            Wrist = new GearSlot(EquipmentEnum.Wrist);
-            Accessory1 = new GearSlot(EquipmentEnum.Accessory);
-            Accessory2 = new GearSlot(EquipmentEnum.Accessory);
-
-            _liGearSlots.Add(Weapon);
-            _liGearSlots.Add(Armor);
-            _liGearSlots.Add(Head);
-            _liGearSlots.Add(Wrist);
-            _liGearSlots.Add(Accessory1);
-            _liGearSlots.Add(Accessory2);
-        }
-
-        public CombatAdventurer(WorldCombatant w) : this()
-        {
-            _sName = w.Name;
-            _world = w;
-        }
-
-        public override void LoadContent(string texture)
-        {
-            base.LoadContent(texture);
-
-            _sTexture = texture;
-
-            _spriteBody = new AnimatedSprite(texture.Replace(" ", ""));
-            int xCrawl = 0;
-            int frameWidth = 32;
-            int frameHeight = 32;
-            _spriteBody.AddAnimation(CActorAnimEnum.Idle, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.IdleFrames, _class.IdleFramesLength);
-            xCrawl += _class.IdleFrames;
-            _spriteBody.AddAnimation(CActorAnimEnum.Cast, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.CastFrames, _class.CastFramesLength);
-            xCrawl += _class.CastFrames;
-            _spriteBody.AddAnimation(CActorAnimEnum.Hurt, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.HitFrames, _class.HitFramesLength);
-            xCrawl += _class.HitFrames;
-            _spriteBody.AddAnimation(CActorAnimEnum.Attack, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.AttackFrames, _class.AttackFramesLength);
-            xCrawl += _class.AttackFrames;
-            _spriteBody.AddAnimation(CActorAnimEnum.Critical, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.CriticalFrames, _class.CriticalFramesLength);
-            xCrawl += _class.CriticalFrames;
-            _spriteBody.AddAnimation(CActorAnimEnum.KO, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.KOFrames, _class.KOFramesLength);
-            xCrawl += _class.KOFrames;
-            _spriteBody.AddAnimation(CActorAnimEnum.Win, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.WinFrames, _class.WinFramesLength);
-
-            _spriteBody.SetCurrentAnimation(CActorAnimEnum.Idle);
-            _spriteBody.SetScale(CombatManager.CombatScale);
-            _width = _spriteBody.Width;
-            _height = _spriteBody.Height;
-        }
-
-        public void SetClass(CharacterClass x)
-        {
-            _class = x;
-            _iCurrentHP = MaxHP;
-            _iCurrentMP = MaxMP;
-
-            Weapon.SetGear((Equipment)GetItem(_class.WeaponID));
-            Armor.SetGear((Equipment)GetItem(_class.ArmorID));
-            Head.SetGear((Equipment)GetItem(_class.HeadID));
-            Wrist.SetGear((Equipment)GetItem(_class.WristID));
-        }
-
-        public void AddXP(int x)
-        {
-            _iXP += x;
-            if (_iXP >= LevelRange[_classLevel])
-            {
-                _classLevel++;
-            }
-        }
-
-        public override void PlayAnimation(string animation)
-        {
-            base.PlayAnimation(animation);
-        }
-
-        public void GetXP(ref int curr, ref int max)
-        {
-            curr = _iXP;
-            max = CombatAdventurer.LevelRange[this.ClassLevel];
-        }
-
-        public AdventurerData SaveData()
-        {
-            AdventurerData advData = new AdventurerData
-            {
-                armor = Item.SaveData(Armor.GetItem()),
-                weapon = Item.SaveData(Weapon.GetItem()),
-                level = _classLevel,
-                xp = _iXP
-            };
-
-            return advData;
-        }
-        public void LoadData(AdventurerData data)
-        {
-            Armor.SetGear((Equipment)ObjectManager.GetItem(data.armor.itemID, data.armor.num));
-            Weapon.SetGear((Equipment)ObjectManager.GetItem(data.weapon.itemID, data.weapon.num));
-            _classLevel = data.level;
-            _iXP = data.xp;
-        }
-
-        /// <summary>
-        /// Structure that represents the slot for the character.
-        /// Holds both the actual item and a temp item to compare against.
-        /// </summary>
-        public class GearSlot
-        {
-            EquipmentEnum _enumType;
-            Equipment _eGear;
-            Equipment _eTempGear;
-            public GearSlot(EquipmentEnum type)
-            {
-                _enumType = type;
-            }
-
-            public void SetGear(Equipment e) { _eGear = e; }
-            public void SetTemp(Equipment e) { _eTempGear = e; }
-
-            public int GetStat(StatEnum stat)
-            {
-                int rv = 0;
-
-                if (_eGear != null) {
-                    rv += _eGear.GetStat(stat);
-                }
-
-                return rv;
-            }
-            public int GetTempStat(StatEnum stat) {
-                int rv = 0;
-
-                if (_eTempGear != null) {
-                    rv += _eTempGear.GetStat(stat); }
-                else if (_eGear != null) {
-                    rv += _eGear.GetStat(stat); }
-
-                return rv;
-            }
-            public Equipment GetItem() { return _eGear; }
-        }
-    }
-
-    public class PlayerCombat : CombatAdventurer
-    {
-        public PlayerCombat(WorldCombatant w) : base(w)
-        {
-        }
-    }
-
-    public class Monster : CombatActor
-    {
-        #region Properties
-        int _id;
-        public int ID { get => _id; }
-        int _iRating;
-        int _xp;
-        public int XP { get => _xp; }
-        protected Vector2 _moveTo = Vector2.Zero;
-        int _iLootID;
-
-        int _iWidth;
-        int _iHeight;
-
-        public override int Attack => 20 + (_iRating * 10);
-
-        public override int MaxHP => (int)((((Math.Pow(_iRating, 2))* 10) + 20) * Math.Pow(Math.Max(1, (double)_iRating / 14), 2));
-
-        #endregion
-
-        public Monster(int id, Dictionary<string, string> data)
-        {
-            _actorType = ActorEnum.Monster;
-            ImportBasics(data, id);
-        }
-
-        protected void ImportBasics(Dictionary<string, string> data, int id)
-        {
-            _id = id;
-            _sName = GameContentManager.GetMonsterInfo(_id);
-
-            string texture = string.Empty;
-            float[] idle = new float[2] { 2, 0.5f };
-            float[] attack = new float[2] { 2, 0.2f };
-            float[] hurt = new float[2] { 1, 0.5f };
-            float[] cast = new float[2] { 2, 0.5f };
-
-            texture = data["Texture"];
-
-            _iWidth = int.Parse(data["Width"]);
-            _iHeight = int.Parse(data["Height"]);
-
-            _iRating = int.Parse(data["Lvl"]);
-            _xp = _iRating * 10;
-            _iStrength = 1 + _iRating;
-            _iDefense = 8 + (_iRating * 3);
-            _iVitality = 2 * _iRating + 10;
-            _iMagic = 2 * _iRating + 2;
-            _iResistance = 2 * _iRating + 10;
-            _iSpeed = 10;
-
-            foreach (string ability in data["Ability"].Split('-'))
-            {
-                AbilityList.Add(ObjectManager.GetActionByIndex(int.Parse(ability)));
-            }
-
-            if (data.ContainsKey("Trait"))
-            {
-                HandleTrait(GameContentManager.GetMonsterTraitData(data["Trait"]));
-            }
-
-            if (data.ContainsKey("Resist"))
-            {
-                foreach (string elem in data["Resist"].Split('-'))
-                {
-                    _diElementalAlignment[Util.ParseEnum<ElementEnum>(elem)] = ElementAlignment.Resists;
-                }
-            }
-
-            if (data.ContainsKey("Vuln"))
-            {
-                foreach (string elem in data["Vuln"].Split('-'))
-                {
-                    _diElementalAlignment[Util.ParseEnum<ElementEnum>(elem)] = ElementAlignment.Vulnerable;
-                }
-            }
-
-            if (data.ContainsKey("Idle"))
-            {
-                string[] split = data["Idle"].Split('-');
-                idle[0] = float.Parse(split[0]);
-                idle[1] = float.Parse(split[1]);
-            }
-
-            if (data.ContainsKey("Attack"))
-            {
-                string[] split = data["Attack"].Split('-');
-                attack[0] = float.Parse(split[0]);
-                attack[1] = float.Parse(split[1]);
-            }
-
-            if (data.ContainsKey("Hurt"))
-            {
-                string[] split = data["Hurt"].Split('-');
-                hurt[0] = float.Parse(split[0]);
-                hurt[1] = float.Parse(split[1]);
-            }
-
-            if (data.ContainsKey("Cast"))
-            {
-                string[] split = data["Cast"].Split('-');
-                cast[0] = float.Parse(split[0]);
-                cast[1] = float.Parse(split[1]);
-            }
-
-            if (data.ContainsKey("Loot"))
-            {
-                _iLootID = int.Parse(data["Loot"]);
-            }
-
-            LoadContent(_sMonsterFolder + texture, idle, attack, hurt, cast);
-
-            _iCurrentHP = MaxHP;
-            _iCurrentMP = MaxMP;
-        }
-
-        public override void Update(GameTime theGameTime)
-        {
-            base.Update(theGameTime);
-            if(BodySprite.CurrentAnimation == Util.GetEnumString(CActorAnimEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
-            {
-                CombatManager.Kill(this);
-            }
-        }
-
-        private void HandleTrait(string traitData)
-        {
-            string[] traits = Util.FindTags(traitData);
-            foreach (string s in traits)
-            {
-                string[] tagType = s.Split(':');
-                if (tagType[0].Equals(Util.GetEnumString(StatEnum.Str)))
-                {
-                    ApplyTrait(ref _iStrength, tagType[1]);
-                }
-                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Def)))
-                {
-                    ApplyTrait(ref _iDefense, tagType[1]);
-                }
-                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Vit)))
-                {
-                    ApplyTrait(ref _iVitality, tagType[1]);
-                }
-                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Mag)))
-                {
-                    ApplyTrait(ref _iMagic, tagType[1]);
-                }
-                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Res)))
-                {
-                    ApplyTrait(ref _iResistance, tagType[1]);
-                }
-                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Spd)))
-                {
-                    ApplyTrait(ref _iSpeed, tagType[1]);
-                }
-            }
-        }
-
-        private void ApplyTrait(ref int value, string data)
-        {
-            if (data.Equals("+"))
-            {
-                value = (int)(value * 1.1);
-            }
-            else if (data.Equals("-"))
-            {
-                value = (int)(value * 0.9);
-            }
-        }
-
-        public void LoadContent(string texture, float[] idle, float[] attack, float[] hurt, float[] cast)
-        {
-            _sTexture = texture;
-
-            _spriteBody = new AnimatedSprite(texture.Replace(" ", ""));
-
-            int xCrawl = 0;
-            int frameWidth = _iWidth;
-            int frameHeight = _iHeight;
-            _spriteBody.AddAnimation(CActorAnimEnum.Idle, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)idle[0], idle[1]);
-            xCrawl += (int)idle[0];
-            _spriteBody.AddAnimation(CActorAnimEnum.Attack, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)attack[0], attack[1]);
-            xCrawl += (int)attack[0];
-            _spriteBody.AddAnimation(CActorAnimEnum.Hurt, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)hurt[0], hurt[1]);
-            xCrawl += (int)hurt[0];
-            _spriteBody.AddAnimation(CActorAnimEnum.Cast, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)cast[0], cast[1]);
-            xCrawl += (int)cast[0];
-            
-            _spriteBody.AddAnimation(CActorAnimEnum.KO, (xCrawl * frameWidth), 0, frameWidth, frameHeight, 3, 0.2f);
-
-            _spriteBody.SetCurrentAnimation(CActorAnimEnum.Idle);
-            _spriteBody.SetScale(CombatManager.CombatScale);
-            _width = _spriteBody.Width;
-            _height = _spriteBody.Height;
-        }
-
-        public Item GetLoot()
-        {
-            return ObjectManager.GetItem(_iLootID);
-        }
-    }
-
     public class Summon : CombatActor
     {
         ElementEnum _element = ElementEnum.None;
@@ -3767,5 +3666,4 @@ namespace RiverHollow.Actors
 
         public override bool IsSummon() { return true; }
     }
-    #endregion
 }

@@ -188,6 +188,15 @@ namespace RiverHollow.SpriteAnimations
             }
         }
 
+        public void RemoveAnimation<TEnum>(TEnum animEnum)
+        {
+            RemoveAnimation(Util.GetEnumString(animEnum));
+        }
+        public void RemoveAnimation(string animationName)
+        {
+            _diFrameAnimations.Remove(animationName);
+        }
+
         public void SetCurrentAnimation<TEnum>(TEnum animate)
         {
             SetCurrentAnimation(Util.GetEnumString<TEnum>(animate));

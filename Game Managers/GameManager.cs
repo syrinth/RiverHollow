@@ -109,9 +109,9 @@ namespace RiverHollow.Game_Managers
             }
             else if (selectedAction.Contains("SellContract") && GameManager.CurrentNPC != null)
             {
-                if (GameManager.CurrentNPC.IsWorldAdventurer())
+                if (GameManager.CurrentNPC.IsAdventurer())
                 {
-                    ((WorldAdventurer)GameManager.CurrentNPC).Building.RemoveWorker((WorldAdventurer)GameManager.CurrentNPC);
+                    ((Adventurer)GameManager.CurrentNPC).Building.RemoveWorker((Adventurer)GameManager.CurrentNPC);
                     PlayerManager.AddMoney(1000);
                     GameManager.BackToMain();
                 }
@@ -338,7 +338,7 @@ namespace RiverHollow.Game_Managers
             public List<ItemData> Items;
 
             [XmlElement(ElementName = "AdventurerData")]
-            public AdventurerData adventurerData;
+            public ClassedCharData adventurerData;
         }
         public struct CalendarData
         {
@@ -407,7 +407,7 @@ namespace RiverHollow.Game_Managers
             public string name;
 
             [XmlElement(ElementName = "AdventurerData")]
-            public AdventurerData advData;
+            public ClassedCharData advData;
 
             [XmlElement(ElementName = "Mood")]
             public int mood;
@@ -424,7 +424,7 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "State")]
             public int state;
         }
-        public struct AdventurerData
+        public struct ClassedCharData
         {
             [XmlElement(ElementName = "XP")]
             public int xp;
@@ -510,7 +510,7 @@ namespace RiverHollow.Game_Managers
             public bool canGiveGift;
 
             [XmlElement(ElementName = "AdventurerData")]
-            public AdventurerData adventurerData;
+            public ClassedCharData classedData;
         }
 
         public struct CollectionData

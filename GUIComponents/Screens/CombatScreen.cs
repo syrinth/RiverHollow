@@ -125,7 +125,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     PlayerManager.World.Position = Util.SnapToGrid(MapManager.CurrentMap.DictionaryCharacterLayer["playerSpawn"]);
                     GUIManager.OpenTextWindow(ObjectManager.DiNPC[7].GetDialogEntry("Healed"), ObjectManager.DiNPC[7]);
 
-                    foreach (CombatAdventurer c in PlayerManager.GetParty())
+                    foreach (ClassedCombatant c in PlayerManager.GetParty())
                     {
                         c.ClearConditions();
                         c.IncreaseHealth((int)(c.MaxHP * 0.10));
@@ -687,9 +687,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public void SetWeapon()
         {
-            if (_actor.IsCombatAdventurer())
+            if (_actor.IsAdventurer())
             {
-                CombatAdventurer adv = (CombatAdventurer)_actor;
+                ClassedCombatant adv = (ClassedCombatant)_actor;
                 CharacterClass cClass = adv.CharacterClass;
 
                 AnimatedSprite sprWeaponSprite = new AnimatedSprite(GameContentManager.FOLDER_ITEMS + "Combat\\Weapons\\" + cClass.WeaponType.ToString() + "\\" + adv.Weapon.GetItem().ItemID);
@@ -1619,7 +1619,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             for (int i = 0; i < PlayerManager.GetParty().Count; i++)
             {
-                CombatAdventurer adv  = PlayerManager.GetParty()[i];
+                ClassedCombatant adv  = PlayerManager.GetParty()[i];
                 _arrCharXP[i] = new GUIStatDisplay(adv.GetXP, Color.Yellow);
 
                 if(i == 0) { _arrCharXP[i].AnchorToInnerSide(_gWin, SideEnum.BottomLeft); }

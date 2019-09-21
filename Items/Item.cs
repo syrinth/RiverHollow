@@ -595,7 +595,7 @@ namespace RiverHollow.WorldObjects
             {
                 Remove(1);
                 PlayerManager.IncreaseStamina(Stamina);
-                PlayerManager.Combat.IncreaseHealth(Health);
+                PlayerManager.World.IncreaseHealth(Health);
             }
             BackToMain();
         }

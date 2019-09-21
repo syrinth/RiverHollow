@@ -102,7 +102,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 {
                     int i = 0;
                     text = string.Format("Use {0} on who? [", Item.Name);
-                    foreach (CombatAdventurer adv in PlayerManager.GetParty())
+                    foreach (ClassedCombatant adv in PlayerManager.GetParty())
                     {
                         text += adv.Name + ":" + i++ + "|";
                     }

@@ -17,8 +17,8 @@ namespace RiverHollow.Game_Managers
     {
         public const int BASIC_ATTACK = 300;
         public static int CombatScale = 5;
-        private static Mob _mob;
-        public static Mob CurrentMob { get => _mob; }
+        private static Monster _mob;
+        public static Monster CurrentMob { get => _mob; }
         public static CombatActor ActiveCharacter;
         private static List<CombatActor> _liMonsters;
         public static List<CombatActor> Monsters { get => _liMonsters; }
@@ -49,7 +49,7 @@ namespace RiverHollow.Game_Managers
         static CombatTile[,] _combatMap;
         #endregion
 
-        public static void NewBattle(Mob m)
+        public static void NewBattle()
         {
             ActiveCharacter = null;
             SelectedAction = null;
@@ -66,8 +66,8 @@ namespace RiverHollow.Game_Managers
             }
 
             Delay = 0;
-            _mob = m;
-            _liMonsters = _mob.Monsters;
+            //_mob = m;
+            //_liMonsters = _mob.Monsters;
 
             _listParty = new List<CombatActor>();
             _listParty.AddRange(PlayerManager.GetParty());
@@ -107,19 +107,19 @@ namespace RiverHollow.Game_Managers
                 }
             }
             //Get the Enemies and assign each of them a battle position
-            for (int i = 0; i < CurrentMob.Monsters.Count; i++)
-            {
-                int row = -1;
-                int col = -1;
-                do
-                {
-                    RHRandom random = new RHRandom();
-                    row = random.Next(0, MAX_ROW - 1);
-                    col = random.Next(ENEMY_FRONT, MAX_COL - 1);
-                } while (_combatMap[row, col].Occupied());
+            //for (int i = 0; i < CurrentMob.Monsters.Count; i++)
+            //{
+            //    int row = -1;
+            //    int col = -1;
+            //    do
+            //    {
+            //        RHRandom random = new RHRandom();
+            //        row = random.Next(0, MAX_ROW - 1);
+            //        col = random.Next(ENEMY_FRONT, MAX_COL - 1);
+            //    } while (_combatMap[row, col].Occupied());
 
-                _combatMap[row, col].SetCombatant(CurrentMob.Monsters[i]);
-            }
+            //    _combatMap[row, col].SetCombatant(CurrentMob.Monsters[i]);
+            //}
         }
 
         public static void Update(GameTime gameTime)
@@ -198,7 +198,7 @@ namespace RiverHollow.Game_Managers
             if (toGive > 0)
             {
                 CurrentMob.DrainXP(xpDrain);
-                foreach (CombatAdventurer a in _listParty)
+                foreach (ClassedCombatant a in _listParty)
                 {
                     a.AddXP(xpDrain);
                 }
@@ -228,7 +228,7 @@ namespace RiverHollow.Game_Managers
                 rv = true;
                 CurrentPhase = PhaseEnum.DisplayVictory;
                 InventoryManager.InitMobInventory(1, 5);    //Just temp values
-                foreach (CombatAdventurer a in _listParty)
+                foreach (ClassedCombatant a in _listParty)
                 {
                     int levl = a.ClassLevel;
                     a.CurrentCharge = 0;
@@ -255,7 +255,7 @@ namespace RiverHollow.Game_Managers
         {
             GUIManager.BeginFadeOut();
             //MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
-            MapManager.RemoveMob(_mob);
+           // MapManager.RemoveMob(_mob);
             _mob = null;
             GoToWorldMap();
         }
@@ -263,7 +263,7 @@ namespace RiverHollow.Game_Managers
         public static void EndCombatEscape()
         {
             GUIManager.BeginFadeOut();
-            _mob.Stun();
+            //_mob.Stun();
             GoToWorldMap();
         }
 
@@ -810,26 +810,26 @@ namespace RiverHollow.Game_Managers
             {
                 bool found = false;
                 List<CombatTile> adjacent = GetAdjacent(t);
-                foreach (CombatTile tile in adjacent)
-                {
-                    if (tile.Occupied() && this.TargetType == tile.TargetType)
-                    {
-                        if (tile.Character != this.Character && tile.Character.IsCombatAdventurer() && this.Character.IsCombatAdventurer())
-                        {
-                            found = true;
-                            CombatAdventurer adv = (CombatAdventurer)tile.Character;
-                            adv.Protected = true;
-                            adv = (CombatAdventurer)this.Character;
-                            adv.Protected = true;
-                        }
-                    }
-                }
+                //foreach (CombatTile tile in adjacent)
+                //{
+                //    if (tile.Occupied() && this.TargetType == tile.TargetType)
+                //    {
+                //        if (tile.Character != this.Character && tile.Character.IsCombatAdventurer() && this.Character.IsCombatAdventurer())
+                //        {
+                //            found = true;
+                //            ClassedCombatant adv = (ClassedCombatant)tile.Character;
+                //            adv.Protected = true;
+                //            adv = (ClassedCombatant)this.Character;
+                //            adv.Protected = true;
+                //        }
+                //    }
+                //}
 
-                if (!found && this.Character.IsCombatAdventurer())
-                {
-                    CombatAdventurer adv = (CombatAdventurer)this.Character;
-                    adv.Protected = false;
-                }
+                //if (!found && this.Character.IsCombatAdventurer())
+                //{
+                //    ClassedCombatant adv = (ClassedCombatant)this.Character;
+                //    adv.Protected = false;
+                //}
             }
 
             public void AssignGUITile(GUICmbtTile c)
@@ -1064,76 +1064,76 @@ namespace RiverHollow.Game_Managers
                         if (_chosenAction.AreaOfEffect != AreaEffectEnum.Single)
                         {
                             //Describes which side of the Battlefield we are targetting
-                            bool monsterSide = (actor.IsCombatAdventurer() && TargetsEnemy()) || (actor.IsMonster() && TargetsAlly());
-                            bool partySide = (actor.IsMonster() && TargetsEnemy()) || (actor.IsCombatAdventurer() && TargetsAlly());
+                            //bool monsterSide = (actor.IsCombatAdventurer() && TargetsEnemy()) || (actor.IsMonster() && TargetsAlly());
+                            //bool partySide = (actor.IsMonster() && TargetsEnemy()) || (actor.IsCombatAdventurer() && TargetsAlly());
 
-                            //All we need to do here is select all of the tiles containing the appropriate characters
-                            if (_chosenAction.AreaOfEffect == AreaEffectEnum.Each)
-                            {
-                                if (monsterSide)
-                                {
-                                    foreach(Monster m in _liMonsters)
-                                    {
-                                        if (!cbtTile.Contains(m.Tile)) { cbtTile.Add(m.Tile); }
-                                    }
-                                }
-                                else
-                                {
-                                    foreach (CombatActor adv in _listParty)
-                                    {
-                                        if (!cbtTile.Contains(adv.Tile)) { cbtTile.Add(adv.Tile); }
-                                    }
-                                }
-                            }
-                            else {
-                                //The coordinates of the selected tile
-                                int targetRow = SelectedTile.Row;
-                                int targetCol = SelectedTile.Col;
+                            ////All we need to do here is select all of the tiles containing the appropriate characters
+                            //if (_chosenAction.AreaOfEffect == AreaEffectEnum.Each)
+                            //{
+                            //    if (monsterSide)
+                            //    {
+                            //        foreach(Monster m in _liMonsters)
+                            //        {
+                            //            if (!cbtTile.Contains(m.Tile)) { cbtTile.Add(m.Tile); }
+                            //        }
+                            //    }
+                            //    else
+                            //    {
+                            //        foreach (CombatActor adv in _listParty)
+                            //        {
+                            //            if (!cbtTile.Contains(adv.Tile)) { cbtTile.Add(adv.Tile); }
+                            //        }
+                            //    }
+                            //}
+                            //else {
+                            //    //The coordinates of the selected tile
+                            //    int targetRow = SelectedTile.Row;
+                            //    int targetCol = SelectedTile.Col;
 
-                                //Determines how far to the side the skill can go, based on whether it grows left or right
-                                int minCol = monsterSide ? ENEMY_FRONT : 0;
-                                int maxCol = monsterSide ? MAX_COL : ENEMY_FRONT;
-                                if (_chosenAction.AreaOfEffect == AreaEffectEnum.Cross)
-                                {
-                                    if (targetRow - 1 >= 0) { cbtTile.Add(_combatMap[targetRow - 1, targetCol]); }
-                                    if (targetRow + 1 < MAX_ROW) { cbtTile.Add(_combatMap[targetRow + 1, targetCol]); }
+                            //    //Determines how far to the side the skill can go, based on whether it grows left or right
+                            //    int minCol = monsterSide ? ENEMY_FRONT : 0;
+                            //    int maxCol = monsterSide ? MAX_COL : ENEMY_FRONT;
+                            //    if (_chosenAction.AreaOfEffect == AreaEffectEnum.Cross)
+                            //    {
+                            //        if (targetRow - 1 >= 0) { cbtTile.Add(_combatMap[targetRow - 1, targetCol]); }
+                            //        if (targetRow + 1 < MAX_ROW) { cbtTile.Add(_combatMap[targetRow + 1, targetCol]); }
 
-                                    if (targetCol - 1 >= minCol) { cbtTile.Add(_combatMap[targetRow, targetCol - 1]); }
-                                    if (targetCol + 1 < maxCol) { cbtTile.Add(_combatMap[targetRow, targetCol + 1]); }
-                                }
-                                else if (_chosenAction.AreaOfEffect == AreaEffectEnum.Rectangle)
-                                {
-                                    KeyValuePair<int, int> dimensions = _chosenAction.Dimensions;
-                                    if (monsterSide)
-                                    {
-                                        for (int rows = targetRow; rows < MAX_ROW && rows < targetRow + dimensions.Key; rows++)
-                                        {
-                                            for (int cols = targetCol; cols < maxCol && cols < targetCol + dimensions.Value; cols++)
-                                            {
-                                                CombatTile t = _combatMap[rows, cols];
-                                                if (!cbtTile.Contains(t))
-                                                {
-                                                    cbtTile.Add(t);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else if (partySide)
-                                    {
-                                        for (int rows = targetRow; rows < MAX_ROW && rows < targetRow + dimensions.Key; rows++)
-                                        {
-                                            for (int cols = targetCol; cols >= minCol && cols > targetCol - dimensions.Value; cols--)
-                                            {
-                                                CombatTile t = _combatMap[rows, cols];
-                                                if (!cbtTile.Contains(t))
-                                                {
-                                                    cbtTile.Add(t);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            //        if (targetCol - 1 >= minCol) { cbtTile.Add(_combatMap[targetRow, targetCol - 1]); }
+                            //        if (targetCol + 1 < maxCol) { cbtTile.Add(_combatMap[targetRow, targetCol + 1]); }
+                            //    }
+                            //    else if (_chosenAction.AreaOfEffect == AreaEffectEnum.Rectangle)
+                            //    {
+                            //        KeyValuePair<int, int> dimensions = _chosenAction.Dimensions;
+                            //        if (monsterSide)
+                            //        {
+                            //            for (int rows = targetRow; rows < MAX_ROW && rows < targetRow + dimensions.Key; rows++)
+                            //            {
+                            //                for (int cols = targetCol; cols < maxCol && cols < targetCol + dimensions.Value; cols++)
+                            //                {
+                            //                    CombatTile t = _combatMap[rows, cols];
+                            //                    if (!cbtTile.Contains(t))
+                            //                    {
+                            //                        cbtTile.Add(t);
+                            //                    }
+                            //                }
+                            //            }
+                            //        }
+                            //        else if (partySide)
+                            //        {
+                            //            for (int rows = targetRow; rows < MAX_ROW && rows < targetRow + dimensions.Key; rows++)
+                            //            {
+                            //                for (int cols = targetCol; cols >= minCol && cols > targetCol - dimensions.Value; cols--)
+                            //                {
+                            //                    CombatTile t = _combatMap[rows, cols];
+                            //                    if (!cbtTile.Contains(t))
+                            //                    {
+                            //                        cbtTile.Add(t);
+                            //                    }
+                            //                }
+                            //            }
+                            //        }
+                            //    }
+                            //}
                         }
                     }
                 }

@@ -23,7 +23,7 @@ namespace RiverHollow.Game_Managers
         static Mission _selectedMission;          //The selected mission that is curently being acted on.
         public static Mission SelectedMission => _selectedMission;
 
-        static List<WorldAdventurer> _liAdventurers;
+        static List<Adventurer> _liAdventurers;
         public static int CurrentPartySize => _liAdventurers.Count();
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace RiverHollow.Game_Managers
             _liAvailableMissions = new List<Mission>();
             _liCurrentMissions = new List<Mission>();
 
-            _liAdventurers = new List<WorldAdventurer>();
+            _liAdventurers = new List<Adventurer>();
 
             GenerateNewMissions();
         }
@@ -103,7 +103,7 @@ namespace RiverHollow.Game_Managers
         /// Adventurers are not actually assigned until the mission is accepted
         /// </summary>
         /// <param name="adv">Adventurer to assign to the party.</param>
-        public static void AddToParty(WorldAdventurer adv)
+        public static void AddToParty(Adventurer adv)
         {
             if (_liAdventurers.Count < _selectedMission.PartySize)
             {
@@ -116,7 +116,7 @@ namespace RiverHollow.Game_Managers
         /// of adventurers to assign to the mission.
         /// </summary>
         /// <param name="adv">Adventurer to remove.</param>
-        public static void RemoveFromParty(WorldAdventurer adv)
+        public static void RemoveFromParty(Adventurer adv)
         {
             _liAdventurers.Remove(adv);
         }
@@ -197,7 +197,7 @@ namespace RiverHollow.Game_Managers
             bool rv = false;
             if (SelectedMission.CharClass != null)
             {
-                rv = _liAdventurers.Find(adv => adv.Combat.CharacterClass.ID == SelectedMission.CharClass.ID) != null;
+                rv = _liAdventurers.Find(adv => adv.CharacterClass.ID == SelectedMission.CharClass.ID) != null;
             }
             else { rv = true; }
 
@@ -228,7 +228,7 @@ namespace RiverHollow.Game_Managers
 
         List<Item> _liItems;
         public List<Item> Items => _liItems;
-        List<WorldAdventurer> _liAdventurers;
+        List<Adventurer> _liAdventurers;
 
         List<string> _liMissionNames;
       
@@ -237,14 +237,14 @@ namespace RiverHollow.Game_Managers
             _liMissionNames = new List<string>(new string[] { "Dungeon Delve", "Rescue Mission", "Defeat the Monster" });
 
             _liItems = new List<Item>();
-            _liAdventurers = new List<WorldAdventurer>();
+            _liAdventurers = new List<Adventurer>();
 
             //Temp just for testing
             RHRandom r = new RHRandom();
             _sName = _liMissionNames[r.Next(0, _liMissionNames.Count - 1)];
             _iDaysToComplete = r.Next(2, 5);
             _iTotalDaysToExpire = r.Next(2, 7);
-            _iReqLevel = r.Next(1, PlayerManager.Combat.ClassLevel + 1);
+            _iReqLevel = r.Next(1, PlayerManager.World.ClassLevel + 1);
             _iPartySize = r.Next(1, PlayerManager.GetTotalWorkers());
 
             int missionLvl = _iPartySize * _iReqLevel * _iDaysToComplete;
@@ -271,10 +271,10 @@ namespace RiverHollow.Game_Managers
         /// Loops over each party member and assigns them to the mission.
         /// </summary>
         /// <param name="party"></param>
-        public void AssignToMission(List<WorldAdventurer> party)
+        public void AssignToMission(List<Adventurer> party)
         {
             _liAdventurers.AddRange(party);
-            foreach(WorldAdventurer adv in party)
+            foreach(Adventurer adv in party)
             {
                 adv.AssignToMission(this);
             }
@@ -286,7 +286,7 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public void CancelMission()
         {
-            foreach (WorldAdventurer adv in _liAdventurers)
+            foreach (Adventurer adv in _liAdventurers)
             {
                 adv.EndMission();
             }
@@ -338,7 +338,7 @@ namespace RiverHollow.Game_Managers
             }
 
             data.ListAdventurerIDs = new List<int>();
-            foreach(WorldAdventurer adv in _liAdventurers)
+            foreach(Adventurer adv in _liAdventurers)
             {
                 data.ListAdventurerIDs.Add(adv.PersonalID);
             }
@@ -363,10 +363,10 @@ namespace RiverHollow.Game_Managers
                 _liItems.Add(ObjectManager.GetItem(id.itemID, id.num));
             }
 
-            List<WorldAdventurer> advList = new List<WorldAdventurer>();
+            List<Adventurer> advList = new List<Adventurer>();
             foreach (int personalID in data.ListAdventurerIDs)
             {
-                WorldAdventurer adv = PlayerManager.GetWorkerByPersonalID(personalID);
+                Adventurer adv = PlayerManager.GetWorkerByPersonalID(personalID);
                 if(adv != null)
                 {
                     advList.Add(adv);

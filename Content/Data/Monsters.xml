@@ -3,16 +3,8 @@
   <Asset Type="Dictionary[int, string]">
     <!--Key: Index>0 Value:Name/CombatTexture/XP/Str/Def/Vit/Magic/Speed/Resist/Vulnerability-->
     <Item>
-      <Key>1</Key>
-      <Value>[Texture:CombatGoblin][Width:32][Height:32][Lvl:1][Trait:Speedy][Ability:300][Resist:Fire][Vuln:Lightning]</Value>
-    </Item>
-    <Item>
-      <Key>2</Key>
-      <Value>[Texture:CombatGoblinSoldier][Width:32][Height:32][Lvl:3][Ability:300][Trait:Aggressive][Resist:Lightning][Vuln:Fire]</Value>
-    </Item>
-    <Item>
       <Key>3</Key>
-      <Value>[Texture:CombatGoblinSoldier][Width:32][Height:32][Lvl:5][Ability:300][Resist:Lightning][Vuln:Fire]</Value>
+      <Value>[Texture:CombatFangedFur][Width:32][Height:32][Lvl:1][Ability:300]</Value>
     </Item>
     <!--FangedFur-->
     <Item>
@@ -59,6 +51,7 @@
       <Key>12</Key>
       <Value>[Texture:CombatMalice][Width:32][Height:32][Lvl:1][Ability:301][Idle:4-0.15][Attack:2-0.15][Loot:18]</Value>
     </Item>
+    <!--Skull-->
     <Item>
       <Key>13</Key>
       <Value>[Texture:CombatSkull][Width:64][Height:64][Lvl:1][Ability:102][Idle:4-0.15][Attack:2-0.15][Loot:18]</Value>

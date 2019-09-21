@@ -37,7 +37,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public HUDScreen()
         {
-            _gHealthDisplay = new GUIStatDisplay(PlayerManager.Combat.GetHP, Color.Green);
+            _gHealthDisplay = new GUIStatDisplay(PlayerManager.World.GetHP, Color.Green);
             _gHealthDisplay.AnchorToScreen(this, SideEnum.TopLeft, 10);
             AddControl(_gHealthDisplay);
             _gStaminaDisplay = new GUIStatDisplay(PlayerManager.GetStamina, Color.Red);
@@ -658,7 +658,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _btnMap = new GUIButton("Map", SwitchModes);
                 AddControl(_btnMap);
 
-                _charBox = new CharacterDetailObject(PlayerManager.Combat, SyncCharacter);
+                _charBox = new CharacterDetailObject(PlayerManager.World, SyncCharacter);
                 _charBox.CenterOnScreen();
                 AddControl(_charBox);
 
@@ -669,16 +669,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 for (int i = 0; i < partySize; i++)
                 {
-                    if (PlayerManager.GetParty()[i] == PlayerManager.Combat)
+                    if (PlayerManager.GetParty()[i] == PlayerManager.World)
                     {
                         _arrDisplayBoxes[i] = new PlayerDisplayBox(true, ChangeSelectedCharacter);
                     }
                     else
                     {
-                        CombatAdventurer c = PlayerManager.GetParty()[i];
-                        if (c.World != null)
+                        ClassedCombatant c = PlayerManager.GetParty()[i];
+                        if (c != null)
                         {
-                            _arrDisplayBoxes[i] = new CharacterDisplayBox(c.World, ChangeSelectedCharacter);
+                            _arrDisplayBoxes[i] = new CharacterDisplayBox(c, ChangeSelectedCharacter);
                         }
                     }
 
@@ -750,12 +750,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 base.Update(gameTime);
             }
 
-            public void UpdateCharacterBox(CombatAdventurer displayCharacter)
+            public void UpdateCharacterBox(ClassedCombatant displayCharacter)
             {
                 _charBox.SetAdventurer(displayCharacter);
             }
 
-            public void ChangeSelectedCharacter(CombatAdventurer selectedCharacter)
+            public void ChangeSelectedCharacter(ClassedCombatant selectedCharacter)
             {
                 _selectedBox.Enable(false);
                 if (_charBox != null)
@@ -806,14 +806,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             private class PositionMap : GUIWindow
             {
-                CombatAdventurer _currentCharacter;
+                ClassedCombatant _currentCharacter;
                 StartPosition _currPosition;
                 StartPosition[,] _arrStartPositions;
 
-                public delegate void ClickDelegate(CombatAdventurer selectedCharacter);
+                public delegate void ClickDelegate(ClassedCombatant selectedCharacter);
                 private ClickDelegate _delAction;
 
-                public PositionMap(CombatAdventurer adv, ClickDelegate del) : base(BrownWin, 16, 16)
+                public PositionMap(ClassedCombatant adv, ClickDelegate del) : base(BrownWin, 16, 16)
                 {
                     _delAction = del;
                     _currentCharacter = adv;
@@ -852,10 +852,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     this.IncreaseSizeTo((GUIManager.MAIN_COMPONENT_WIDTH) - (BrownWin.Edge * 2), (GUIManager.MAIN_COMPONENT_HEIGHT) - (BrownWin.Edge * 2));
                 }
 
-                public void SetOccupancy(CombatAdventurer currentCharacter)
+                public void SetOccupancy(ClassedCombatant currentCharacter)
                 {
                     _currentCharacter = currentCharacter;
-                    foreach (CombatAdventurer c in PlayerManager.GetParty())
+                    foreach (ClassedCombatant c in PlayerManager.GetParty())
                     {
                         Vector2 vec = c.StartPos;
                         bool current = (c == currentCharacter);
@@ -903,8 +903,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 private class StartPosition : GUIImage
                 {
-                    CombatAdventurer _character;
-                    public CombatAdventurer Character => _character;
+                    ClassedCombatant _character;
+                    public ClassedCombatant Character => _character;
                     int _iCol;
                     int _iRow;
                     public int Col => _iCol;
@@ -929,15 +929,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         }
                     }
 
-                    public void SetCharacter(CombatAdventurer c)
+                    public void SetCharacter(ClassedCombatant c)
                     {
                         _character = c;
                         if (c != null)
                         {
-                            if (c.World != null)
+                            if (c != null)
                             {
-                                if (c == PlayerManager.Combat) { _sprite = new GUICharacterSprite(true); }
-                                else { _sprite = new GUICharacterSprite(c.World.BodySprite, true); }
+                                if (c == PlayerManager.World) { _sprite = new GUICharacterSprite(true); }
+                                else { _sprite = new GUICharacterSprite(c.BodySprite, true); }
 
                                 _sprite.SetScale(2);
                                 _sprite.PlayAnimation(WActorBaseAnim.IdleDown);
@@ -962,7 +962,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 const int SPACING = 10;
                 EquipWindow _equipWindow;
 
-                CombatAdventurer _character;
+                ClassedCombatant _character;
                 SpriteFont _font;
 
                 List<SpecializedBox> _liGearBoxes;
@@ -985,7 +985,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 public delegate void SyncCharacter();
                 private SyncCharacter _delSyncCharacter;
 
-                public CharacterDetailObject(CombatAdventurer c, SyncCharacter del = null)
+                public CharacterDetailObject(ClassedCombatant c, SyncCharacter del = null)
                 {
                     _winName = new GUIWindow(GUIWindow.RedWin, (GUIManager.MAIN_COMPONENT_WIDTH) - (GUIWindow.RedWin.Edge * 2), 10);
                     WinDisplay = new GUIWindow(GUIWindow.RedWin, (GUIManager.MAIN_COMPONENT_WIDTH) - (GUIWindow.RedWin.Edge * 2), (GUIManager.MAIN_COMPONENT_HEIGHT / 4) - (GUIWindow.RedWin.Edge * 2));
@@ -1066,7 +1066,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _gBarMP = new GUIStatDisplay(_character.GetMP, Color.LightBlue, barWidth);
                     _gBarMP.AnchorAndAlignToObject(_gBarHP, SideEnum.Bottom, SideEnum.Right, SPACING);
 
-                    if (_character == PlayerManager.Combat)
+                    if (_character == PlayerManager.World)
                     {
                         _sBoxHat = new SpecializedBox(ClothesEnum.Hat, PlayerManager.World.Hat, FindMatchingItems);
                         _sBoxShirt = new SpecializedBox(ClothesEnum.Chest, PlayerManager.World.Shirt, FindMatchingItems);
@@ -1147,7 +1147,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     {
                         _winName.Draw(spriteBatch);
                         WinDisplay.Draw(spriteBatch);
-                        if (_character == PlayerManager.Combat) { _winClothes.Draw(spriteBatch); }
+                        if (_character == PlayerManager.World) { _winClothes.Draw(spriteBatch); }
 
                         if (_equipWindow.HasEntries())
                         {
@@ -1195,7 +1195,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                                 }
                             }
 
-                            if (!rv && _character == PlayerManager.Combat)
+                            if (!rv && _character == PlayerManager.World)
                             {
                                 foreach (GUIObject c in _winClothes.Controls)
                                 {
@@ -1268,7 +1268,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     return rv;
                 }
 
-                public void SetAdventurer(CombatAdventurer c)
+                public void SetAdventurer(ClassedCombatant c)
                 {
                     _character = c;
                     Load();
@@ -1516,7 +1516,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         EligibleNPC e = (EligibleNPC)c;
                         _gAdventure = new GUIImage(new Rectangle(0, 48, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog");
                         _gAdventure.AnchorAndAlignToObject(_gGift, SideEnum.Left, SideEnum.CenterY);
-                        if (PlayerManager.GetParty().Contains(e.Combat))
+                        if (PlayerManager.GetParty().Contains(e))
                         {
                             _gAdventure.SetColor(Color.Gold);
                         }
@@ -1538,7 +1538,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             List<GUIObject> _liWorkers;
 
-            WorldAdventurer _worker;
+            Adventurer _worker;
             int _iCost;
 
             public HUDManagement(ActionTypeEnum action = ActionTypeEnum.View)
@@ -1622,7 +1622,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
             }
 
-            public void HandleMoveWorker(WorldAdventurer worldAdventurer)
+            public void HandleMoveWorker(Adventurer worldAdventurer)
             {
                 if (worldAdventurer != null)
                 {
@@ -1650,7 +1650,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 return _eAction == ActionTypeEnum.Sell;
             }
 
-            public void PurchaseWorker(WorldAdventurer w, int cost)
+            public void PurchaseWorker(Adventurer w, int cost)
             {
                 if (w != null)
                 {
@@ -1700,7 +1700,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 public class MainBuildingsWin : MgmtWindow
                 {
-                    public MainBuildingsWin(HUDManagement s, WorldAdventurer w = null) : base(s)
+                    public MainBuildingsWin(HUDManagement s, Adventurer w = null) : base(s)
                     {
                         foreach (Building b in PlayerManager.Buildings)
                         {
@@ -1784,7 +1784,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     public BuildingDetailsWin(HUDManagement s, Building selectedBuilding) : base(s)
                     {
-                        foreach (WorldAdventurer w in selectedBuilding.Workers)
+                        foreach (Adventurer w in selectedBuilding.Workers)
                         {
                             WorkerBox btn = new WorkerBox(w);
                             _liButtons.Add(btn);
@@ -1824,9 +1824,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     private class WorkerBox : GUIObject
                     {
                         GUIButton _btn;
-                        WorldAdventurer _w;
-                        public WorldAdventurer Worker => _w;
-                        public WorkerBox(WorldAdventurer w)
+                        Adventurer _w;
+                        public Adventurer Worker => _w;
+                        public WorkerBox(Adventurer w)
                         {
                             _w = w;
                             _btn = new GUIButton(w.Name);
@@ -1841,10 +1841,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 public class WorkerDetailsWin : MgmtWindow
                 {
                     GUIButton _btnMove;
-                    WorldAdventurer _character;
+                    Adventurer _character;
                     GUIText _gName, _actionText, _gClass, _gXP, _gStr, _gDef, _gVit, _gMagic, _gRes, _gSpd;
                     GUIItemBox _weapon, _armor;
-                    public WorkerDetailsWin(HUDManagement s, WorldAdventurer selectedAdventurer) : base(s)
+                    public WorkerDetailsWin(HUDManagement s, Adventurer selectedAdventurer) : base(s)
                     {
                         int statSpacing = 10;
                         _character = selectedAdventurer;
@@ -1863,13 +1863,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         _gXP.AnchorAndAlignToObject(_gClass, SideEnum.Right, SideEnum.Top, 10);
 
                         _gName.SetText(_character.Name);
-                        _gClass.SetText(_character.Combat.CharacterClass.Name + " " + _character.Combat.ClassLevel);
-                        _gXP.SetText("Exp:" + _character.Combat.XP);
+                        _gClass.SetText(_character.CharacterClass.Name + " " + _character.ClassLevel);
+                        _gXP.SetText("Exp:" + _character.XP);
 
-                        _weapon = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Combat.Weapon.GetItem());
+                        _weapon = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Weapon.GetItem());
                         _weapon.AnchorToInnerSide(_window, SideEnum.TopRight);
 
-                        _armor = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Combat.Armor.GetItem());
+                        _armor = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Armor.GetItem());
                         _armor.AnchorAndAlignToObject(_weapon, SideEnum.Left, SideEnum.Bottom);
 
                         _gStr = new GUIText("Dmg: 999");
@@ -1885,12 +1885,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         _gSpd.AnchorAndAlignToObject(_gVit, SideEnum.Right, SideEnum.Bottom, statSpacing);
                         _gRes.AnchorAndAlignToObject(_gSpd, SideEnum.Right, SideEnum.Bottom, statSpacing);
 
-                        _gStr.SetText("Str: " + _character.Combat.StatStr);
-                        _gDef.SetText("Def: " + _character.Combat.StatDef);
-                        _gVit.SetText("Vit: " + _character.Combat.StatVit);
-                        _gMagic.SetText("Mag: " + _character.Combat.StatMag);
-                        _gRes.SetText("Res: " + _character.Combat.StatRes);
-                        _gSpd.SetText("Spd: " + _character.Combat.StatSpd);
+                        _gStr.SetText("Str: " + _character.StatStr);
+                        _gDef.SetText("Def: " + _character.StatDef);
+                        _gVit.SetText("Vit: " + _character.StatVit);
+                        _gMagic.SetText("Mag: " + _character.StatMag);
+                        _gRes.SetText("Res: " + _character.StatRes);
+                        _gSpd.SetText("Spd: " + _character.StatSpd);
 
 
                         _actionText = new GUIText(_character.GetStateText());
@@ -1982,7 +1982,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public class HUDNamingWindow : GUITextInputWindow
         {
             Building _bldg;
-            WorldAdventurer _adv;
+            Adventurer _adv;
 
             /// <summary>
             /// Never called outwardly, only for private use
@@ -1997,7 +1997,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             /// Constructor to name a WorldAdventurer
             /// </summary>
             /// <param name="w">WorldAdventurer to name</param>
-            public HUDNamingWindow(WorldAdventurer w) : this()
+            public HUDNamingWindow(Adventurer w) : this()
             {
                 _adv = w;
             }
@@ -2231,7 +2231,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         /// to enable the Accept button.
         /// </summary>
         /// <param name="adv"></param>
-        public void WorkerAssigned(WorldAdventurer adv)
+        public void WorkerAssigned(Adventurer adv)
         {
             AddControl(_gDetailWindow);
             RemoveControl(_gWinWorkers);
@@ -2480,7 +2480,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             /// <summary>
             /// Assign the indicated WorldAdventurer to the CharacterDisplayBox
             /// </summary>
-            public void AssignToBox(WorldAdventurer adv)
+            public void AssignToBox(Adventurer adv)
             {
                 _selected.AssignToBox(adv);
                 _selected = null;
@@ -2504,7 +2504,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             List<CharacterDisplayBox> _liWorkers;
 
             //Delegate method for when it's time to close this window.
-            public delegate void BoxClickDelegate(WorldAdventurer adv);
+            public delegate void BoxClickDelegate(Adventurer adv);
             private BoxClickDelegate _delClose;
 
             /// <summary>
@@ -2520,9 +2520,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 //Find all the relevant workers and create a CharacterDisplayBox for them
                 foreach (Building b in PlayerManager.Buildings)
                 {
-                    foreach (WorldAdventurer adv in b.Workers)
+                    foreach (Adventurer adv in b.Workers)
                     {
-                        if (adv.AvailableForMissions() && adv.Combat.ClassLevel >= MissionManager.SelectedMission.ReqLevel)
+                        if (adv.AvailableForMissions() && adv.ClassLevel >= MissionManager.SelectedMission.ReqLevel)
                         {
                             CharacterDisplayBox box = new CharacterDisplayBox(adv, null);
                             box.WorldAdv = adv;

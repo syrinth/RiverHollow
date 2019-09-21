@@ -18,11 +18,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
     public class NPCDisplayBox : GUIWindow
     {
-        public delegate void ClickDelegate(CombatAdventurer selectedCharacter);
+        public delegate void ClickDelegate(ClassedCombatant selectedCharacter);
         private ClickDelegate _delAction;
 
-        CombatAdventurer _actor;
-        public CombatAdventurer Actor => _actor;
+        ClassedCombatant _actor;
+        public ClassedCombatant Actor => _actor;
 
         public NPCDisplayBox(ClickDelegate action = null)
         {
@@ -37,36 +37,26 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public class CharacterDisplayBox : NPCDisplayBox
         {
-            public WorldAdventurer WorldAdv;
+            public Adventurer WorldAdv;
             GUISprite _sprite;
             public GUISprite Sprite => _sprite;
 
-            public CharacterDisplayBox(WorldCombatant w, ClickDelegate del) : base(del)
+            public CharacterDisplayBox(ClassedCombatant w, ClickDelegate del) : base(del)
             {
                 if (w != null)
                 {
-                    _actor = w.Combat;
+                    _actor = w;
                     _sprite = new GUISprite(w.BodySprite, true);
                 }
                 Setup();
             }
 
-            public CharacterDisplayBox(EligibleNPC n, ClickDelegate del) : base(del)
-            {
-                if (n != null)
-                {
-                    _actor = n.Combat;
-                    _sprite = new GUISprite(n.BodySprite, true);
-                }
-                Setup();
-            }
-
-            public void AssignToBox(WorldAdventurer adv)
+            public void AssignToBox(Adventurer adv)
             {
                 if (adv != null)
                 {
                     WorldAdv = adv;
-                    _actor = adv.Combat;
+                    _actor = adv;
                     _sprite = new GUISprite(adv.BodySprite, true);
 
                     _sprite.SetScale((int)GameManager.Scale);
@@ -131,9 +121,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 private int _iClassID;
                 public int ClassID => _iClassID;
 
-                public ClassSelectionBox(WorldAdventurer w, ClickDelegate del) : base(w, null)
+                public ClassSelectionBox(Adventurer w, ClickDelegate del) : base(w, null)
                 {
-                    _iClassID = w.Combat.CharacterClass.ID;
+                    _iClassID = w.CharacterClass.ID;
                     _delAction = del;
                 }
 
@@ -160,7 +150,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             public PlayerDisplayBox(bool overwrite = false, ClickDelegate action = null) : base(action)
             {
                 _bOverwrite = overwrite;
-                _actor = PlayerManager.Combat;
+                _actor = PlayerManager.World;
                 Configure();
             }
 
@@ -175,7 +165,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
                 if (Contains(mouse) && _delAction != null)
                 {
-                    _delAction(PlayerManager.Combat);
+                    _delAction(PlayerManager.World);
                     rv = true;
                 }
 

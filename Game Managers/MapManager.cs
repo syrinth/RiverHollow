@@ -31,7 +31,7 @@ namespace RiverHollow.Game_Managers
             }
         }//[Friends:1-30]
         public const string HomeMap = "mapManorGrounds";
-        public const string SpawnMap = "mapSpringDungeonC"; //"mapRiverHollowTown"; //"mapManorGrounds"; // "mapForestDungeonZone"; //"mapRiverHollowTown"; //;
+        public const string SpawnMap = "mapManorGrounds"; //"mapRiverHollowTown"; //"mapSpringDungeonC"; // "mapForestDungeonZone"; //"mapRiverHollowTown"; //;
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
 
@@ -301,9 +301,9 @@ namespace RiverHollow.Game_Managers
         {
             _currentMap.RemoveCharacter(c);
         }
-        public static void RemoveMob(Mob m)
+        public static void RemoveMonster(Monster m)
         {
-            _currentMap.RemoveMob(m);
+            _currentMap.RemoveMonster(m);
         }
         public static void DropItemsOnMap(List<Item> items, Vector2 position)
         {

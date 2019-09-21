@@ -125,11 +125,6 @@
 /processor:PassThroughProcessor
 /build:Data/Workers.xml
 
-#begin Data/Mobs.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Mobs.xml
-
 #begin Textures/battle.png
 /importer:TextureImporter
 /processor:TextureProcessor
