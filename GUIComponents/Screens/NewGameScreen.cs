@@ -102,9 +102,9 @@ namespace RiverHollow.GUIComponents.Screens
             _gCheck.AnchorToInnerSide(_window, SideEnum.BottomLeft);
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
-            base.Update(gameTime);
+            base.Update(gTime);
             if (_bCloseColorSelection)
             {
                 _colorSelection.ParentWindow.RemoveControl(_colorSelection);

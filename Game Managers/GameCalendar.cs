@@ -78,9 +78,9 @@ namespace RiverHollow
             _text.CenterOnWindow(_displayWindow);
         }
 
-        public static void Update(GameTime gameTime)
+        public static void Update(GameTime gTime)
         {
-            _dLastUpdateinSeconds += gameTime.ElapsedGameTime.TotalSeconds;
+            _dLastUpdateinSeconds += gTime.ElapsedGameTime.TotalSeconds;
             if(_iCurrHour == 26)
             {
                 GUIManager.SetScreen(new DayEndScreen());

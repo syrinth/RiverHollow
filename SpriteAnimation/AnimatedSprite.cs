@@ -257,7 +257,7 @@ namespace RiverHollow.SpriteAnimations
             _vPosition.Y += y; 
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gTime)
         {
             // Don't do anything if the sprite is not animating
             if (_animating)
@@ -281,7 +281,7 @@ namespace RiverHollow.SpriteAnimations
                 }
 
                 // Run the Animation's update method
-                CurrentFrameAnimation.Update(gameTime);
+                CurrentFrameAnimation.Update(gTime);
 
                 if (CurrentFrameAnimation.PlayCount > 0)
                 {

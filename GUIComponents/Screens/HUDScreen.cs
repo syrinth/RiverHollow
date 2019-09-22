@@ -53,9 +53,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             AddControl(_gInventory);
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
-            base.Update(gameTime);
+            base.Update(gTime);
 
             if (InventoryManager.AddedItem != null && _addedItem == null)
             {
@@ -67,7 +67,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 if (_addedItem != null && _addedItem.Alpha > 0)
                 {
-                    _dTimer -= gameTime.ElapsedGameTime.TotalSeconds;
+                    _dTimer -= gTime.ElapsedGameTime.TotalSeconds;
                     _addedItem.SetAlpha((float)_dTimer);
                 }
                 else if (_addedItem != null)
@@ -176,9 +176,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             base.Draw(spriteBatch);
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
-            base.Update(gameTime);
+            base.Update(gTime);
             float startFade = _fBarFade;
             if (_bFadeOutBar && GameManager.HideMiniInventory)
             {
@@ -383,9 +383,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _open = true;
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
-            base.Update(gameTime);
+            base.Update(gTime);
             int _openingFinished = 0;
             foreach (GUIObject o in Controls)
             {
@@ -564,9 +564,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 base.Draw(spriteBatch);
             }
 
-            public override void Update(GameTime gameTime)
+            public override void Update(GameTime gTime)
             {
-                base.Update(gameTime);
+                base.Update(gTime);
             }
 
             public class QuestBox : GUIObject
@@ -745,9 +745,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 base.Draw(spriteBatch);
             }
 
-            public override void Update(GameTime gameTime)
+            public override void Update(GameTime gTime)
             {
-                base.Update(gameTime);
+                base.Update(gTime);
             }
 
             public void UpdateCharacterBox(ClassedCombatant displayCharacter)
@@ -1462,9 +1462,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 base.Draw(spriteBatch);
             }
 
-            public override void Update(GameTime gameTime)
+            public override void Update(GameTime gTime)
             {
-                base.Update(gameTime);
+                base.Update(gTime);
             }
             public class FriendshipBox : GUIWindow
             {
@@ -1585,9 +1585,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 base.Draw(spriteBatch);
             }
 
-            public override void Update(GameTime gameTime)
+            public override void Update(GameTime gTime)
             {
-                base.Update(gameTime);
+                base.Update(gTime);
             }
 
             public void HandleBuildingSelection(Building selectedBuilding)
@@ -1966,9 +1966,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 base.Draw(spriteBatch);
             }
 
-            public override void Update(GameTime gameTime)
+            public override void Update(GameTime gTime)
             {
-                base.Update(gameTime);
+                base.Update(gTime);
             }
 
             public void BtnSave()
@@ -2019,10 +2019,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             /// 
             /// Only setthe name of the component when it is finished taking input
             /// </summary>
-            /// <param name="gameTime"></param>
-            public override void Update(GameTime gameTime)
+            /// <param name="gTime"></param>
+            public override void Update(GameTime gTime)
             {
-                base.Update(gameTime);
+                base.Update(gTime);
                 if (Finished)
                 {
                     if (_adv != null)

@@ -34,7 +34,7 @@ namespace RiverHollow.Game_Managers
             GraphicCursor.LoadContent();
         }
 
-        public static void Update(GameTime gameTime)
+        public static void Update(GameTime gTime)
         {
             if (Fading)
             {
@@ -42,7 +42,7 @@ namespace RiverHollow.Game_Managers
             }
             if (_currentGUIScreen != null)
             {
-                _currentGUIScreen.Update(gameTime);
+                _currentGUIScreen.Update(gTime);
             }
             GraphicCursor.Update();
         }

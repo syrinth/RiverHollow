@@ -147,7 +147,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
             if (!PrintAll)
             {
@@ -155,7 +155,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 {
                     if (_dTypedTextLen < _sFullText.Length)
                     {
-                        _dTypedTextLen = _dTypedTextLen + (gameTime.ElapsedGameTime.TotalMilliseconds / _iDelayMS);
+                        _dTypedTextLen = _dTypedTextLen + (gTime.ElapsedGameTime.TotalMilliseconds / _iDelayMS);
 
                         if (_dTypedTextLen >= _sFullText.Length)
                         {

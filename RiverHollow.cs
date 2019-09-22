@@ -94,7 +94,7 @@ namespace RiverHollow
             Content.Unload();
         }
 
-        protected override void Update(GameTime gameTime)
+        protected override void Update(GameTime gTime)
         {
             if (this.IsActive)
             {
@@ -109,11 +109,11 @@ namespace RiverHollow
 
                 if (HarpManager.PlayingMusic)
                 {
-                    HarpManager.Update(gameTime);
+                    HarpManager.Update(gTime);
                 }
 
                 //GUIManager always needs to update, regardless of game state
-                GUIManager.Update(gameTime);
+                GUIManager.Update(gTime);
 
                 Point mousePoint = Mouse.GetState().Position;
                 Vector3 translate = Camera._transform.Translation;
@@ -160,24 +160,24 @@ namespace RiverHollow
 
                 if (OnMap())
                 {
-                    Camera.Update(gameTime);
-                    if (CutsceneManager.Playing) { CutsceneManager.Update(gameTime); }
+                    Camera.Update(gTime);
+                    if (CutsceneManager.Playing) { CutsceneManager.Update(gTime); }
                     else
                     {
                         if (IsRunning())
                         {
-                            MapManager.Update(gameTime);
-                            GameCalendar.Update(gameTime);
-                            if (!Scrying()) { PlayerManager.Update(gameTime); }
+                            MapManager.Update(gTime);
+                            GameCalendar.Update(gTime);
+                            if (!Scrying()) { PlayerManager.Update(gTime); }
                         }
                     }
                 }
 
-                base.Update(gameTime);
+                base.Update(gTime);
             }
         }
 
-        protected override void Draw(GameTime gameTime)
+        protected override void Draw(GameTime gTime)
         {
             if (_bLightingOn)
             {
@@ -230,7 +230,7 @@ namespace RiverHollow
                 GameCalendar.Draw(spriteBatch);
             }
             spriteBatch.End();
-            base.Draw(gameTime);
+            base.Draw(gTime);
         }
     
         public void HandleImportantInput()

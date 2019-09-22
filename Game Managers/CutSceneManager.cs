@@ -75,10 +75,10 @@ namespace RiverHollow.Game_Managers
         /// <summary>
         /// Runs update on the current Cutscene
         /// </summary>
-        /// <param name="gameTime">The Gametime info for timing</param>
-        public static void Update(GameTime gameTime)
+        /// <param name="gTime">The Gametime info for timing</param>
+        public static void Update(GameTime gTime)
         {
-            _currentCutscene.Update(gameTime);
+            _currentCutscene.Update(gTime);
         }
 
         /// <summary>
@@ -202,13 +202,13 @@ namespace RiverHollow.Game_Managers
         /// <summary>
         /// Updates the current Cutscene so it runs.
         /// </summary>
-        /// <param name="gameTime">The GameTime object</param>
-        public void Update(GameTime gameTime)
+        /// <param name="gTime">The GameTime object</param>
+        public void Update(GameTime gTime)
         {
             //If the Wait command has been called, we need to count down to zero
             if (_dTimer > 0)
             {
-                _dTimer -= gameTime.ElapsedGameTime.TotalSeconds;
+                _dTimer -= gTime.ElapsedGameTime.TotalSeconds;
                 if (_dTimer <= 0) {
                     _iCurrentCommand++;
                     _dTimer = 0;
@@ -323,10 +323,10 @@ namespace RiverHollow.Game_Managers
             }
 
             //Update the Player character
-            PlayerManager.UpdateWorld(gameTime);
+            PlayerManager.UpdateWorld(gTime);
 
             //Update the Clone map the cutscene is on
-            _cutsceneMap.Update(gameTime);
+            _cutsceneMap.Update(gTime);
         }
 
         /// <summary>

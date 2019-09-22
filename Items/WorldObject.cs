@@ -107,8 +107,8 @@ namespace RiverHollow.WorldObjects
             _sprite.Position = _vMapPosition;
         }
 
-        public virtual void Update(GameTime theGameTime) {
-            _sprite.Update(theGameTime);
+        public virtual void Update(GameTime gTime) {
+            _sprite.Update(gTime);
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
@@ -221,7 +221,7 @@ namespace RiverHollow.WorldObjects
             _sprite.Position = _vMapPosition;
         }
 
-        public override void Update(GameTime theGameTime)
+        public override void Update(GameTime gTime)
         {
             //If the object is shaking, we need to determine what step it's in
             if (_bShaking)
@@ -256,7 +256,7 @@ namespace RiverHollow.WorldObjects
                     _iBounceCount++;
                 }
             }
-            _sprite.Update(theGameTime);
+            _sprite.Update(gTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -353,9 +353,9 @@ namespace RiverHollow.WorldObjects
             _sprite.Draw(spriteBatch);
         }
 
-        public override void Update(GameTime theGameTime)
+        public override void Update(GameTime gTime)
         {
-            _sprite.Update(theGameTime);
+            _sprite.Update(gTime);
         }
 
         public override bool DealDamage(int dmg)
@@ -584,7 +584,7 @@ namespace RiverHollow.WorldObjects
                 _sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
                 _sprite.IsAnimating = true;
             }
-            public virtual void Update(GameTime gameTime) { }
+            public virtual void Update(GameTime gTime) { }
             public override void Draw(SpriteBatch spriteBatch)
             {
                 _sprite.Draw(spriteBatch, true);
@@ -678,17 +678,17 @@ namespace RiverHollow.WorldObjects
                 _sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
                 _sprite.IsAnimating = true;
             }
-            public override void Update(GameTime gameTime) {
+            public override void Update(GameTime gTime) {
                 if (_itemBubble != null)
                 {
-                    _itemBubble.Update(gameTime);
+                    _itemBubble.Update(gTime);
                 }
 
                 //Processing Handling
                 if (CurrentlyProcessing != null)
                 {
-                    _sprite.Update(gameTime);
-                    _dProcessedTime += gameTime.ElapsedGameTime.TotalSeconds;
+                    _sprite.Update(gTime);
+                    _dProcessedTime += gTime.ElapsedGameTime.TotalSeconds;
                     if (_dProcessedTime >= CurrentlyProcessing.ProcessingTime)
                     {
                         SetHeldItem(CurrentlyProcessing.Output);
@@ -696,8 +696,8 @@ namespace RiverHollow.WorldObjects
                 }
                 else if (_iCurrentlyMaking != -1)       //Crafting Handling
                 {
-                    _sprite.Update(gameTime);
-                    _dProcessedTime += gameTime.ElapsedGameTime.TotalSeconds;
+                    _sprite.Update(gTime);
+                    _dProcessedTime += gTime.ElapsedGameTime.TotalSeconds;
                     if (_dProcessedTime >= _diCrafting[_iCurrentlyMaking])
                     {
                         SetHeldItem(_iCurrentlyMaking);
@@ -864,9 +864,9 @@ namespace RiverHollow.WorldObjects
                     }
                 }
 
-                public override void Update(GameTime gameTime)
+                public override void Update(GameTime gTime)
                 {
-                    _dTimer += gameTime.ElapsedGameTime.TotalSeconds;
+                    _dTimer += gTime.ElapsedGameTime.TotalSeconds;
                     if(_dTimer >= TICK_TIMER)
                     {
                         _dTimer = 0;

@@ -224,10 +224,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
 
         //First, call the update for the CombatManager
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
-            CombatManager.Update(gameTime);
-            base.Update(gameTime);
+            CombatManager.Update(gTime);
+            base.Update(gTime);
 
             switch (CombatManager.CurrentPhase)
             {
@@ -269,7 +269,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         }
                         else
                         {
-                            _gActionTextWindow.Update(gameTime);
+                            _gActionTextWindow.Update(gTime);
                             if (_gActionTextWindow.Duration <= 0)
                             {
                                 RemoveControl(_gActionTextWindow);
@@ -283,7 +283,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 case CombatManager.PhaseEnum.PerformAction:
                     if (CombatManager.SelectedAction != null)
                     {
-                        CombatManager.SelectedAction.PerformAction(gameTime);
+                        CombatManager.SelectedAction.PerformAction(gTime);
                     }
 
                     break;
@@ -433,12 +433,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (_mapTile.Selected) { _gTargetter.Draw(spriteBatch); }
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
             if (Occupied())
             {
-                if (_gSummon != null) { _gSummon.Update(gameTime); }
-                _gCombatSprite.Update(gameTime);
+                if (_gSummon != null) { _gSummon.Update(gTime); }
+                _gCombatSprite.Update(gTime);
             }
 
             if (_gEffect != null)
@@ -1285,15 +1285,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Position(Position());
         }
         
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
             if (_bUpdate)
             {
-                _dTimer -= gameTime.ElapsedGameTime.TotalSeconds;
+                _dTimer -= gTime.ElapsedGameTime.TotalSeconds;
 
                 if (_dTimer <= 0)
                 {
-                    _arrTurnDisplay[_iCurrUpdate].Update(gameTime);
+                    _arrTurnDisplay[_iCurrUpdate].Update(gTime);
                     if(!_bSyncing && _iCurrUpdate == MAX_SHOWN -1 && _arrTurnDisplay[_iCurrUpdate].Finished && _arrTurnDisplay[_iCurrUpdate].Action == TurnDisplay.ActionEnum.Insert)
                     {
                         _bUpdate = false;
@@ -1472,22 +1472,22 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 Height = _gImage.Height;
             }
 
-            public override void Update(GameTime gameTime)
+            public override void Update(GameTime gTime)
             {
                 if (_bFadeOut)
                 {
-                    UpdateFadeOut(gameTime);
+                    UpdateFadeOut(gTime);
                 }
                 else if (_bFadeIn)
                 {
-                    UpdateFadeIn(gameTime);
+                    UpdateFadeIn(gTime);
                 }
                 else if (_vMoveTo != Vector2.Zero)
                 {
-                    UpdateMove(gameTime);
+                    UpdateMove(gTime);
                 }
             }
-            private void UpdateFadeOut(GameTime gameTime)
+            private void UpdateFadeOut(GameTime gTime)
             {
                 if (Alpha > 0)
                 {
@@ -1499,7 +1499,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     Finished = true;
                 }
             }
-            private void UpdateFadeIn(GameTime gameTime)
+            private void UpdateFadeIn(GameTime gTime)
             {
                 if (Alpha < 1)
                 {
@@ -1511,7 +1511,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     Finished = true;
                 }
             }
-            private void UpdateMove(GameTime gameTime)
+            private void UpdateMove(GameTime gTime)
             {
                 if (Position() != _vMoveTo)
                 {

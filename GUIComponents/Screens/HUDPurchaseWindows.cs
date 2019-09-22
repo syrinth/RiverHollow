@@ -136,9 +136,9 @@ namespace RiverHollow.GUIComponents.Screens
             Height = _bldgWindow.Height;
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
-            base.Update(gameTime);
+            base.Update(gTime);
             _btnLast.Enable(_iCurrIndex != 0);
             _btnNext.Enable(_iCurrIndex != _liMerchandise.Count - 1);
 
@@ -495,7 +495,7 @@ namespace RiverHollow.GUIComponents.Screens
             Resize();
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
             if (!InventoryManager.HasSpaceInInventory(itemForSale.ItemID, itemForSale.Number) || PlayerManager.Money < Cost)
             {

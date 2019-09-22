@@ -62,7 +62,7 @@ namespace RiverHollow.Screens
             _texture = GameContentManager.GetTexture(@"Textures\Dialog");
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
             for (int i = 0; i < _rows; i++)
             {

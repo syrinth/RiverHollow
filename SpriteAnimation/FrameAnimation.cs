@@ -105,11 +105,11 @@ namespace RiverHollow.SpriteAnimations
             _bPingPong = pingPong;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gTime)
         {
             if (_iFrameCount > 1)
             {
-                _fFrameTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                _fFrameTimer += (float)gTime.ElapsedGameTime.TotalSeconds;
 
                 if (_fFrameTimer > _fFrameLength)
                 {
@@ -149,7 +149,7 @@ namespace RiverHollow.SpriteAnimations
             }
             else if (_iFrameCount == 1)
             {
-                _fFrameTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                _fFrameTimer += (float)gTime.ElapsedGameTime.TotalSeconds;
 
                 if (_fFrameTimer > _fFrameLength)
                 {

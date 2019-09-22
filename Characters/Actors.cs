@@ -74,9 +74,9 @@ namespace RiverHollow.Actors
 
         public Actor() { }
 
-        public virtual void Update(GameTime theGameTime)
+        public virtual void Update(GameTime gTime)
         {
-            _spriteBody.Update(theGameTime);
+            _spriteBody.Update(gTime);
         }
 
         public virtual void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
@@ -462,30 +462,37 @@ namespace RiverHollow.Actors
             };
         }
 
-        public override void Update(GameTime theGameTime)
+        public override void Update(GameTime gTime)
         {
-            //Finished being hit, determine action
-            if (IsCurrentAnimation(CActorAnimEnum.Hurt) && BodySprite.GetPlayCount() >= 1)
+            if (CombatManager.InCombat)
             {
-                if (CurrentHP == 0) { Tile.PlayAnimation(CActorAnimEnum.KO); }
-                else if (IsCritical()) { Tile.PlayAnimation(CActorAnimEnum.Critical); }
-                else { Tile.PlayAnimation(CActorAnimEnum.Idle); }
-            }
+                //Finished being hit, determine action
+                if (IsCurrentAnimation(CActorAnimEnum.Hurt) && BodySprite.GetPlayCount() >= 1)
+                {
+                    if (CurrentHP == 0) { Tile.PlayAnimation(CActorAnimEnum.KO); }
+                    else if (IsCritical()) { Tile.PlayAnimation(CActorAnimEnum.Critical); }
+                    else { Tile.PlayAnimation(CActorAnimEnum.Idle); }
+                }
 
-            if (!_diConditions[ConditionEnum.KO] && IsCurrentAnimation(CActorAnimEnum.KO))
-            {
-                if (IsCritical()) { Tile.PlayAnimation(CActorAnimEnum.Critical); }
-                else { Tile.PlayAnimation(CActorAnimEnum.Idle); }
-            }
+                if (!_diConditions[ConditionEnum.KO] && IsCurrentAnimation(CActorAnimEnum.KO))
+                {
+                    if (IsCritical()) { Tile.PlayAnimation(CActorAnimEnum.Critical); }
+                    else { Tile.PlayAnimation(CActorAnimEnum.Idle); }
+                }
 
-            if (IsCurrentAnimation(CActorAnimEnum.Critical) && !IsCritical())
-            {
-                Tile.PlayAnimation(CActorAnimEnum.Idle);
-            }
+                if (IsCurrentAnimation(CActorAnimEnum.Critical) && !IsCritical())
+                {
+                    Tile.PlayAnimation(CActorAnimEnum.Idle);
+                }
 
-            if (_linkedSummon != null)
+                if (_linkedSummon != null)
+                {
+                    _linkedSummon.Update(gTime);
+                }
+            }
+            else
             {
-                _linkedSummon.Update(theGameTime);
+                base.Update(gTime);
             }
         }
 
@@ -1467,13 +1474,13 @@ namespace RiverHollow.Actors
             CalculatePathing();
         }
 
-        public override void Update(GameTime theGameTime)
+        public override void Update(GameTime gTime)
         {
-            base.Update(theGameTime);
+            base.Update(gTime);
 
             if (_dEtherealCD != 0)
             {
-                _dEtherealCD -= theGameTime.ElapsedGameTime.TotalSeconds;
+                _dEtherealCD -= gTime.ElapsedGameTime.TotalSeconds;
                 if (_dEtherealCD <= 0)
                 {
                     if (!_bIgnoreCollisions)
@@ -2041,11 +2048,11 @@ namespace RiverHollow.Actors
             MapManager.Maps[CurrentMapName].AddCharacter(this);
         }
 
-        public override void Update(GameTime theGameTime)
+        public override void Update(GameTime gTime)
         {
             if (_bActive && !Married)   //Just for now
             {
-                base.Update(theGameTime);
+                base.Update(gTime);
             }
         }
 
@@ -2278,9 +2285,9 @@ namespace RiverHollow.Actors
             }
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
-            base.Update(gameTime);
+            base.Update(gTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
@@ -2576,11 +2583,11 @@ namespace RiverHollow.Actors
             sprite.SetNextAnimation(WActorBaseAnim.ToolDown, WActorBaseAnim.IdleDown);
         }
 
-        public override void Update(GameTime theGameTime)
+        public override void Update(GameTime gTime)
         {
             if (_dCooldown > 0)
             {
-                _dCooldown -= theGameTime.ElapsedGameTime.TotalSeconds;
+                _dCooldown -= gTime.ElapsedGameTime.TotalSeconds;
                 if (_currentPath.Count == 0 && _dCooldown <= 0 && PlayerManager.ReadyToSleep)
                 {
                     GUIManager.SetScreen(new DayEndScreen());
@@ -2622,12 +2629,12 @@ namespace RiverHollow.Actors
                 }
             }
 
-            _spriteBody.Update(theGameTime);
-            _spriteEyes.Update(theGameTime);
-            _spriteHair.Update(theGameTime);
+            _spriteBody.Update(gTime);
+            _spriteEyes.Update(gTime);
+            _spriteHair.Update(gTime);
 
-            if (_chest != null) { _chest.Sprite.Update(theGameTime); }
-            if (Hat != null) { Hat.Sprite.Update(theGameTime); }
+            if (_chest != null) { _chest.Sprite.Update(gTime); }
+            if (Hat != null) { Hat.Sprite.Update(gTime); }
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
@@ -2779,11 +2786,11 @@ namespace RiverHollow.Actors
             _height = _spriteBody.Height;
         }
 
-        public override void Update(GameTime theGameTime)
+        public override void Update(GameTime gTime)
         {
             //if (_bActive)
             //{
-            //    base.Update(theGameTime);
+            //    base.Update(gTime);
             //    if (!Triggered)
             //    {
             //        int max = TileSize * 13;
@@ -3026,9 +3033,9 @@ namespace RiverHollow.Actors
             _iCurrentMP = MaxMP;
         }
 
-        public override void Update(GameTime theGameTime)
+        public override void Update(GameTime gTime)
         {
-            base.Update(theGameTime);
+            base.Update(gTime);
             if(BodySprite.CurrentAnimation == Util.GetEnumString(CActorAnimEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
             {
                 CombatManager.Kill(this);
@@ -3038,16 +3045,16 @@ namespace RiverHollow.Actors
             //Check if the mob is still stunned
             //if (_dStun > 0)
             //{
-            //    _dStun -= theGameTime.ElapsedGameTime.TotalSeconds;
+            //    _dStun -= gTime.ElapsedGameTime.TotalSeconds;
             //    if (_dStun < 0) { _dStun = 0; }
             //}
             //else
             //{
-            //    UpdateAlertTimer(theGameTime);
-            //    UpdateMovement(theGameTime);
+            //    UpdateAlertTimer(gTime);
+            //    UpdateMovement(gTime);
             //}
 
-            //base.Update(theGameTime);
+            //base.Update(gTime);
         }
 
         private void HandleTrait(string traitData)
@@ -3178,14 +3185,14 @@ namespace RiverHollow.Actors
             _FoV = new FieldOfVision(this, _iMaxRange);
         }
 
-        private void UpdateAlertTimer(GameTime theGameTime)
+        private void UpdateAlertTimer(GameTime gTime)
         {
             //If mob is on alert, but not locked on to
             //the player, increment the timer.
             if (_bAlert && !_bLockedOn)
             {
-                _dAlertTimer += theGameTime.ElapsedGameTime.TotalSeconds;
-                _sprAlert.Update(theGameTime);
+                _dAlertTimer += gTime.ElapsedGameTime.TotalSeconds;
+                _sprAlert.Update(gTime);
             }
         }
 
@@ -3195,13 +3202,13 @@ namespace RiverHollow.Actors
             if (_bAlert) { _sprAlert.Draw(spriteBatch, userLayerDepth); }
         }
 
-        private void UpdateMovement(GameTime theGameTime)
+        private void UpdateMovement(GameTime gTime)
         {
             bool move = true;
             Vector2 direction = Vector2.Zero;
 
             //Handle Leashing and Idle Movement targetting
-            HandlePassivity(theGameTime);
+            HandlePassivity(gTime);
 
             if (_bLockedOn)
             {
@@ -3321,7 +3328,7 @@ namespace RiverHollow.Actors
         }
 
         //If mob is not returning to leash point and player in in range
-        private void HandlePassivity(GameTime theGameTime)
+        private void HandlePassivity(GameTime gTime)
         {
             if (!_bLeashed && !_bLockedOn && _FoV.Contains(PlayerManager.World))
             {
@@ -3346,10 +3353,10 @@ namespace RiverHollow.Actors
                     _bAlert = false;
                     _dAlertTimer = 0;
                 }
-                GetIdleMovementTarget(theGameTime);
+                GetIdleMovementTarget(gTime);
             }
         }
-        private void GetIdleMovementTarget(GameTime theGameTime)
+        private void GetIdleMovementTarget(GameTime gTime)
         {
             if ((_vMoveTo == Vector2.Zero && _dIdleFor <= 0 && !BodySprite.CurrentAnimation.StartsWith("Air")) || _iMoveFailures == 5)
             {
@@ -3377,7 +3384,7 @@ namespace RiverHollow.Actors
             }
             else if (_vMoveTo == Vector2.Zero)
             {
-                _dIdleFor -= theGameTime.ElapsedGameTime.TotalSeconds;
+                _dIdleFor -= gTime.ElapsedGameTime.TotalSeconds;
             }
         }
 

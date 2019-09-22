@@ -21,7 +21,7 @@ namespace RiverHollow
             //_view = view;
         }
 
-        public static void Update(GameTime gametime)
+        public static void Update(GameTime gTime)
         {
             if (!TakingInput())
             {

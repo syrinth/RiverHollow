@@ -205,7 +205,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager._merchantChest = m;
         }
 
-        public static void Update(GameTime gametime)
+        public static void Update(GameTime gTime)
         {
             if(!_newMapInfo.Equals(default(NewMapInfo)) && GUIManager.FadingIn)
             {
@@ -223,13 +223,13 @@ namespace RiverHollow.Game_Managers
 
             foreach(RHMap map in _tileMaps.Values)
             {
-                map.Update(gametime);
+                map.Update(gTime);
             }
             if (_currentMap.IsOutside)
             {
                 foreach (Weather s in _liWeather)
                 {
-                    s.Update(gametime);
+                    s.Update(gTime);
                 }
             }
         }
@@ -400,9 +400,9 @@ namespace RiverHollow.Game_Managers
                 _sprite.Draw(spriteBatch, false);
             }
 
-            internal void Update(GameTime gametime)
+            internal void Update(GameTime gTime)
             {
-                _sprite.Update(gametime);
+                _sprite.Update(gTime);
             }
         }
     }

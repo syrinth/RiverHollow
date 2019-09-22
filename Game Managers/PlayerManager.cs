@@ -121,13 +121,13 @@ namespace RiverHollow.Game_Managers
             World.SetPath(list);
         }
 
-        public static void Update(GameTime gameTime)
+        public static void Update(GameTime gTime)
         {
-            if (GameManager.InCombat()) { UpdateCombat(gameTime); }
-            else { UpdateWorld(gameTime); }
+            if (GameManager.InCombat()) { UpdateCombat(gTime); }
+            else { UpdateWorld(gTime); }
         }
 
-        public static void UpdateWorld(GameTime gameTime)
+        public static void UpdateWorld(GameTime gTime)
         {
             Vector2 moveDir = Vector2.Zero;
 
@@ -172,7 +172,7 @@ namespace RiverHollow.Game_Managers
                 }
                 else
                 {
-                    UseTool.Update(gameTime);
+                    UseTool.Update(gTime);
 
                     bool finished = !World.BodySprite.CurrentAnimation.StartsWith("Tool");
 
@@ -200,9 +200,9 @@ namespace RiverHollow.Game_Managers
                     }
                 }
             }
-            World.Update(gameTime);
+            World.Update(gTime);
         }
-        public static void UpdateCombat(GameTime gameTime)
+        public static void UpdateCombat(GameTime gTime)
         {
             
         }

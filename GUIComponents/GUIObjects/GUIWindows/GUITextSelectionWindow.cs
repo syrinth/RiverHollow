@@ -63,11 +63,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             }
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
             if (_bOpening)
             {
-                HandleOpening(gameTime);
+                HandleOpening(gTime);
             }
             else
             {

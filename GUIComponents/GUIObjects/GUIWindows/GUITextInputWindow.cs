@@ -87,11 +87,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             Resize();
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
             if (TakeInput)
             {
-                _gMarker.Update(gameTime);
+                _gMarker.Update(gTime);
                 foreach (Keys k in InputManager.KeyDownDictionary.Keys.ToList())
                 {
                     if (InputManager.CheckPressedKey(k))
@@ -200,9 +200,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                 _dRefresh = DBL_FLASH_RATE;
             }
 
-            public override void Update(GameTime gameTime)
+            public override void Update(GameTime gTime)
             {
-                _dRefresh -= gameTime.ElapsedGameTime.TotalSeconds;
+                _dRefresh -= gTime.ElapsedGameTime.TotalSeconds;
                 if (_dRefresh <= 0)
                 {
                     _dRefresh = DBL_FLASH_RATE;

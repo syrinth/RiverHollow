@@ -495,16 +495,16 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gTime)
         {
             if (this == MapManager.CurrentMap)
             {
-                _renderer.Update(_map, gameTime);
+                _renderer.Update(_map, gTime);
                 if (IsRunning())
                 {
                     foreach (Monster m in _liMonsters)
                     {
-                        m.Update(gameTime);
+                        m.Update(gTime);
                     }
                 }
                 
@@ -516,7 +516,7 @@ namespace RiverHollow.Tile_Engine
 
             foreach (WorldObject obj in _liPlacedWorldObjects)
             {
-                obj.Update(gameTime);
+                obj.Update(gTime);
             }
 
             if (ToAdd.Count > 0)
@@ -547,7 +547,7 @@ namespace RiverHollow.Tile_Engine
             {
                 foreach (WorldActor c in _liActors)
                 {
-                    c.Update(gameTime);
+                    c.Update(gTime);
                 }
             }
             

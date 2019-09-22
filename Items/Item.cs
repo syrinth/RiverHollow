@@ -547,9 +547,9 @@ namespace RiverHollow.WorldObjects
             _sprite.PlaysOnce = true;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gTime)
         {
-            _sprite.Update(gameTime);
+            _sprite.Update(gTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

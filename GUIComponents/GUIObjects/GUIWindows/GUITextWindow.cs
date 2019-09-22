@@ -132,21 +132,21 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             AnchorToScreen(SideEnum.Bottom, SpaceFromBottom);
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
             if (_bOpening)
             {
-                HandleOpening(gameTime);
+                HandleOpening(gTime);
             }
             else
             { 
                 if (ShowNextButton())
                 {
-                    _next.Update(gameTime);
+                    _next.Update(gTime);
                 }
 
-                if (Duration > 0) { Duration -= gameTime.ElapsedGameTime.TotalSeconds; }
-                _giText.Update(gameTime);
+                if (Duration > 0) { Duration -= gTime.ElapsedGameTime.TotalSeconds; }
+                _giText.Update(gTime);
 
                 if (_giText.Done)
                 {
@@ -212,9 +212,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             return rv;
         }
 
-        protected void HandleOpening(GameTime gameTime)
+        protected void HandleOpening(GameTime gTime)
         {
-            _dOpenTimer -= gameTime.ElapsedGameTime.TotalSeconds;
+            _dOpenTimer -= gTime.ElapsedGameTime.TotalSeconds;
             if (_dOpenTimer <= 0)
             {
                 _dStartScale += _dOpenScale;

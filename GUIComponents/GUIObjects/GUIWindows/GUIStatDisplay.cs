@@ -85,9 +85,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             RemoveControl(_gText);
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
-            base.Update(gameTime);
+            base.Update(gTime);
             _delAction(ref _iCurr, ref _iMax);
         }
 

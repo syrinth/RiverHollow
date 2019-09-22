@@ -33,6 +33,9 @@ namespace RiverHollow.Game_Managers
         public static double Delay;
         public static string Text;
 
+        private static bool _bInCombat = false;
+        public static bool InCombat => _bInCombat;
+
         #region Turn Sequence
         static List<CombatActor> _liQueuedCharacters;
         static List<CombatActor> _liChargingCharacters;
@@ -122,7 +125,7 @@ namespace RiverHollow.Game_Managers
             //}
         }
 
-        public static void Update(GameTime gameTime)
+        public static void Update(GameTime gTime)
         {
             if (ActiveCharacter == null)
             {
@@ -146,7 +149,7 @@ namespace RiverHollow.Game_Managers
                     }
                     else
                     {
-                        ct.Character.Update(gameTime);
+                        ct.Character.Update(gTime);
                     }
                 }
             }
@@ -161,7 +164,7 @@ namespace RiverHollow.Game_Managers
                     }
                     else
                     {
-                        Delay -= gameTime.ElapsedGameTime.TotalSeconds;
+                        Delay -= gTime.ElapsedGameTime.TotalSeconds;
                     }
                     break;
 
@@ -978,9 +981,9 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            public void PerformAction(GameTime gameTime)
+            public void PerformAction(GameTime gTime)
             {
-                if (_chosenAction != null) { _chosenAction.HandlePhase(gameTime); }
+                if (_chosenAction != null) { _chosenAction.HandlePhase(gTime); }
                 else if (_chosenItem != null)
                 {
                     bool finished = false;

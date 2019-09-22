@@ -29,9 +29,9 @@ namespace RiverHollow.Game_Managers
             GUIManager.OpenMainObject(_gHarp);
         }
 
-        public static void Update(GameTime gameTime)
+        public static void Update(GameTime gTime)
         {
-            _currSong.Update(gameTime);
+            _currSong.Update(gTime);
         }
 
         public static void SpawnNotes(string newNotes)
@@ -81,9 +81,9 @@ namespace RiverHollow.Game_Managers
                 _dTimer = _liNotes[_iIndex].Key;
             }
 
-            public void Update(GameTime gameTime)
+            public void Update(GameTime gTime)
             {
-                _dTimer -= gameTime.ElapsedGameTime.TotalSeconds;
+                _dTimer -= gTime.ElapsedGameTime.TotalSeconds;
 
                 if(_dTimer <= 0)
                 {

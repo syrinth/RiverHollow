@@ -71,7 +71,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             return rv;
         }
-        public virtual void Update(GameTime gameTime)
+        public virtual void Update(GameTime gTime)
         {
             foreach (GUIObject g in _liToAdd)
             {
@@ -84,7 +84,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _liToAdd.Clear();
             foreach (GUIObject g in Controls)
             {
-                g.Update(gameTime);
+                g.Update(gTime);
             }
 
             foreach (GUIObject g in _liToRemove)
@@ -96,7 +96,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             _liToRemove.Clear();
 
-            if (_guiTextWindow != null) { _guiTextWindow.Update(gameTime); }
+            if (_guiTextWindow != null) { _guiTextWindow.Update(gTime); }
 
             if (_guiHoverObject != null && !_guiHoverObject.Contains(GraphicCursor.Position.ToPoint())) {
                 CloseHoverWindow();

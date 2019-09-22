@@ -24,9 +24,9 @@ namespace RiverHollow.GUIComponents
             CenterOnScreen();
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
-            base.Update(gameTime);
+            base.Update(gTime);
 
             //If the music note has fallen off thebottom of the window, remove it
             List<GUIMusicNote> ToRemove = new List<GUIMusicNote>();
@@ -79,7 +79,7 @@ namespace RiverHollow.GUIComponents
 
             }
 
-            public override void Update(GameTime gameTime)
+            public override void Update(GameTime gTime)
             {
                 PositionAdd(new Vector2(0, 2));
             }

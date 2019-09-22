@@ -682,8 +682,8 @@ namespace RiverHollow.Actors.CombatStuff
         /// 
         /// We maintain an index to which action is the current action so we know which action we are currently processing
         /// </summary>
-        /// <param name="gameTime"></param>
-        public void HandlePhase(GameTime gameTime)
+        /// <param name="gTime"></param>
+        public void HandlePhase(GameTime gTime)
         {
             switch (_liActionTags[_iCurrentAction])
             {
@@ -784,7 +784,7 @@ namespace RiverHollow.Actors.CombatStuff
                         Sprite.AlignToObject(TileTargetList[0].GUITile, SideEnum.CenterX);
                         Sprite.MoveBy(new Vector2(0, _iAnimOffset * CombatManager.CombatScale));
                     }
-                    else if (Sprite != null && Sprite.IsAnimating) { Sprite.Update(gameTime); }
+                    else if (Sprite != null && Sprite.IsAnimating) { Sprite.Update(gTime); }
                     else if (Sprite == null || Sprite.PlayedOnce)
                     {
                         _iCurrentAction++;

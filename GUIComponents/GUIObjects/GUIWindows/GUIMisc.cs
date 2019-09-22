@@ -73,7 +73,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _gCoin.Draw(spriteBatch);
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
             if (_bIsPlayerMoney)
             {

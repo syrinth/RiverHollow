@@ -89,11 +89,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 }
             }
 
-            public override void Update(GameTime gameTime)
+            public override void Update(GameTime gTime)
             {
                 if (_sprite != null)
                 {
-                    _sprite.Update(gameTime);
+                    _sprite.Update(gTime);
                 }
             }
 
@@ -154,9 +154,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 Configure();
             }
 
-            public override void Update(GameTime gameTime)
+            public override void Update(GameTime gTime)
             {
-                _playerSprite.Update(gameTime);
+                _playerSprite.Update(gTime);
             }
 
             public override bool ProcessLeftButtonClick(Point mouse)

@@ -30,9 +30,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             Height = sprite.Height;
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gTime)
         {
-            _sprite.Update(gameTime);
+            _sprite.Update(gTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
