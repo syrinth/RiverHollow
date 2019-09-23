@@ -200,5 +200,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texFlooring.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapSpringDungeonC.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapSpringDungeonD.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/FangedFur.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/Malice.png</File>
   </SourceFiles>
 </SourceFileCollection>

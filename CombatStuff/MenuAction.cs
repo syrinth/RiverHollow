@@ -4,6 +4,7 @@ using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
+using RiverHollow.Tile_Engine;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.CombatManager;
@@ -99,7 +100,7 @@ namespace RiverHollow.Actors.CombatStuff
         int _iAnimOffset;
         int _iBonusMod;
 
-        public List<CombatManager.CombatTile> TileTargetList;
+        public List<RHTile> TileTargetList;
         public bool _bCounter;
 
         bool _bPauseActionHandler;
@@ -119,7 +120,7 @@ namespace RiverHollow.Actors.CombatStuff
         public GUISprite Sprite;
         public CombatAction(int id, Dictionary<string, string> stringData)
         {
-            TileTargetList = new List<CombatManager.CombatTile>();
+            TileTargetList = new List<RHTile>();
             _liCondition = new List<ConditionEnum>();
             _liEffects = new List<SkillTagsEnum>();
             _liStatusEffects = new List<StatusEffectData>();
@@ -300,10 +301,10 @@ namespace RiverHollow.Actors.CombatStuff
             {
                 int totalPotency = _iPotency + bonus;
                 //Iterate over each tile in the target list
-                foreach (CombatManager.CombatTile ct in TileTargetList)
+                foreach (RHTile t in TileTargetList)
                 {
-                    CombatTile targetTile = ct;
-                    CombatActor targetActor = ct.Character;
+                    RHTile targetTile = t;
+                    CombatActor targetActor = t.Character;
                     //If the tile is unoccupied, don't do anything
                     if (targetActor == null) { continue; }
 
@@ -323,8 +324,7 @@ namespace RiverHollow.Actors.CombatStuff
                         attackRoll -= _iAccuracy;                       //Modify the chance to hit by the skill's accuracy. Rolling low is good, so subtract a positive and add a negative
                         if (attackRoll <= 90 - targetActor.Evasion)    //If the modified attack roll is less than 90 minus the character's evasion, then we hit
                         {
-                            int x = targetActor.ProcessAttack(SkillUser, totalPotency, _iCritRating, targetActor.GetAttackElement());
-                            targetTile.GUITile.AssignEffect(x, true);
+                            targetActor.ProcessAttack(SkillUser, totalPotency, _iCritRating, targetActor.GetAttackElement());
 
                             //If the target has a Summon linked to them, and they take
                             //any area damage, hit the Summon as well
@@ -332,7 +332,6 @@ namespace RiverHollow.Actors.CombatStuff
                             if (_areaOfEffect != AreaEffectEnum.Single && summ != null)
                             {
                                 summ.ProcessAttack(SkillUser, _iPotency + bonus, _iCritRating, targetActor.GetAttackElement());
-                                targetTile.GUITile.AssignEffectToSummon(x.ToString());
                             }
 
                             #region Countering setup
@@ -359,7 +358,7 @@ namespace RiverHollow.Actors.CombatStuff
                         }
                         else    //Handling for when an attack is dodged
                         {
-                            targetTile.GUITile.AssignEffect("Dodge!", true);
+                            //ToDo: Display Dodge
                         }
 
                         //This code handles when someone is guarding the target and takes the damage for them instead
@@ -371,10 +370,10 @@ namespace RiverHollow.Actors.CombatStuff
                             actor.Swapped = false;
 
                             //Put the GuardTarget back firstin case the guard is a Summon
-                            actor.GuardTarget.GetSprite().Position(actor.GuardTarget.Tile.GUITile.GetIdleLocation(actor.GuardTarget.GetSprite()));
+                            //actor.GuardTarget.GetSprite().Position(actor.GuardTarget.Tile.GUITile.GetIdleLocation(actor.GuardTarget.GetSprite()));
 
-                            if (actor.IsSummon()) { actor.GetSprite().Position(actor.GuardTarget.Tile.GUITile.GetIdleSummonLocation()); }
-                            else { actor.GetSprite().Position(actor.Tile.GUITile.GetIdleLocation(actor.GetSprite())); }
+                            //if (actor.IsSummon()) { actor.GetSprite().Position(actor.GuardTarget.Tile.GUITile.GetIdleSummonLocation()); }
+                            //else { actor.GetSprite().Position(actor.Tile.GUITile.GetIdleLocation(actor.GetSprite())); }
 
                             actor.GuardTarget.MyGuard = null;
                             actor.GuardTarget = null;
@@ -383,20 +382,15 @@ namespace RiverHollow.Actors.CombatStuff
                     else   //Handling for spells
                     {
                         //Process the damage of the spell, then apply it to the targeted tile
-                        int x = targetActor.ProcessSpell(SkillUser, totalPotency, _element);
-                        targetTile.GUITile.AssignEffect(x, true);
+                        targetActor.ProcessSpell(SkillUser, totalPotency, _element);
                     }
                 }
             }
             else if (_liEffects.Contains(SkillTagsEnum.Heal))       //Handling for healing
             {
-                foreach (CombatManager.CombatTile ct in TileTargetList)
+                foreach (RHTile t in TileTargetList)
                 {
-                    int val = ct.Character.ProcessHealingSpell(SkillUser, _iPotency);
-                    if (val > 0)    //Don't bother saying it healed for 0
-                    {
-                        ct.GUITile.AssignEffect(_iPotency, false);
-                    }
+                    t.Character.ProcessHealingSpell(SkillUser, _iPotency);
                 }
             }
 
@@ -426,10 +420,10 @@ namespace RiverHollow.Actors.CombatStuff
                         //Apply to all targets of the skill
                         if (s.Equals("Target"))
                         {
-                            foreach (CombatManager.CombatTile ct in TileTargetList) {
-                                if (ct.Character != null && !ct.Character.KnockedOut())
+                            foreach (RHTile t in TileTargetList) {
+                                if (t.Character != null && !t.Character.KnockedOut())
                                 {
-                                    targets.Add(ct.Character);
+                                    targets.Add(t.Character);
                                 }
                             }
                         }
@@ -474,12 +468,12 @@ namespace RiverHollow.Actors.CombatStuff
             if (_liEffects.Contains(SkillTagsEnum.Summon))
             {
                 //This should only ever be one, butjust in case
-                foreach (CombatManager.CombatTile ct in TileTargetList)
+                foreach (RHTile t in TileTargetList)
                 {
                     Summon newSummon = ObjectManager.GetSummonByIndex(_iSummonID);
                     newSummon.SetStats(SkillUser.StatMag);                //Summon stats are based off the Magic stat
-                    ct.Character.LinkSummon(newSummon);                 //Links the summon to the character
-                    newSummon.linkedChar = ct.Character;                //Links the character to the new summon
+                    t.Character.LinkSummon(newSummon);                 //Links the summon to the character
+                    newSummon.linkedChar = t.Character;                //Links the character to the new summon
                     _bPauseActionHandler = true;
                 }
             }
@@ -487,11 +481,11 @@ namespace RiverHollow.Actors.CombatStuff
             //Handler to push back the target
             if (_liEffects.Contains(SkillTagsEnum.Push))
             {
-                foreach (CombatManager.CombatTile ct in TileTargetList)
+                foreach (RHTile t in TileTargetList)
                 {
-                    if (ct.Character != null && !ct.Character.KnockedOut())
+                    if (t.Character != null && !t.Character.KnockedOut())
                     {
-                        Push(ct);
+                        Push(t);
                     }
                 }
             }
@@ -499,11 +493,11 @@ namespace RiverHollow.Actors.CombatStuff
             //Handler to pull the target forwards
             if (_liEffects.Contains(SkillTagsEnum.Pull))
             {
-                foreach (CombatManager.CombatTile ct in TileTargetList)
+                foreach (RHTile t in TileTargetList)
                 {
-                    if (ct.Character != null && !ct.Character.KnockedOut())
+                    if (t.Character != null && !t.Character.KnockedOut())
                     {
-                        Pull(ct);
+                        Pull(t);
                     }
                 }
             }
@@ -545,28 +539,29 @@ namespace RiverHollow.Actors.CombatStuff
         /// tile right behind it. If there is an occupant of that tile, push
         /// themback too if possible.
         /// </summary>
-        /// <param name="ct">Tile to push backf rom</param>
+        /// <param name="t">Tile to push backf rom</param>
         /// <returns>True if the target was successfully pushed</returns>
-        private bool Push(CombatManager.CombatTile ct)
+        private bool Push(RHTile t)
         {
             bool rv = false;
             int i = _iPushVal;
             while (i > 0)
             {
-                CombatManager.CombatTile test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Push);
+                RHTile test = null;
+                test = DetermineMovementTile(test, SkillTagsEnum.Push);
                 if (test != null)
                 {
-                    if (!test.Occupied())
+                    if (!test.HasCombatant())
                     {
-                        test.SetCombatant(ct.Character);
-                        ct = test;
+                        test.SetCombatant(t.Character);
+                        t = test;
                         rv = true;
                     }
-                    else if (test.Occupied())
+                    else if (test.HasCombatant())
                     {
                         if (Push(test))
                         {
-                            test.SetCombatant(ct.Character);
+                            test.SetCombatant(t.Character);
                         }
                     }
                 }
@@ -576,20 +571,20 @@ namespace RiverHollow.Actors.CombatStuff
             return rv;
         }
 
-        private bool Pull(CombatManager.CombatTile ct)
+        private bool Pull(RHTile t)
         {
             bool rv = false;
             int i = _iPullVal;
             while (i > 0)
             {
-                CombatManager.CombatTile test;
-                test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Pull);
+                RHTile test = null;
+                test = DetermineMovementTile(test, SkillTagsEnum.Pull);
                 if (test != null)
                 {
-                    if (!test.Occupied())
+                    if (!test.HasCombatant())
                     {
-                        test.SetCombatant(ct.Character);
-                        ct = test;
+                        test.SetCombatant(t.Character);
+                        t = test;
                         rv = true;
                     }
                 }
@@ -599,20 +594,20 @@ namespace RiverHollow.Actors.CombatStuff
             return rv;
         }
 
-        private bool Step(CombatManager.CombatTile ct)
+        private bool Step(RHTile t)
         {
             bool rv = false;
             int i = _iStepVal;
             while (i > 0)
             {
-                CombatManager.CombatTile test;
-                test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Step);
+                RHTile test = null;
+                test = DetermineMovementTile(test, SkillTagsEnum.Step);
                 if (test != null)
                 {
-                    if (!test.Occupied())
+                    if (!test.HasCombatant())
                     {
-                        test.SetCombatant(ct.Character);
-                        ct = test;
+                        test.SetCombatant(t.Character);
+                        t = test;
                         rv = true;
                     }
                 }
@@ -622,20 +617,20 @@ namespace RiverHollow.Actors.CombatStuff
             return rv;
         }
 
-        private bool Retreat(CombatManager.CombatTile ct)
+        private bool Retreat(RHTile t)
         {
             bool rv = false;
             int i = _iRetreatVal;
             while (i > 0)
             {
-                CombatManager.CombatTile test;
-                test = DetermineMovementTile(ct.GUITile.MapTile, SkillTagsEnum.Retreat);
+                RHTile test = null;
+                test = DetermineMovementTile(test, SkillTagsEnum.Retreat);
                 if (test != null)
                 {
-                    if (!test.Occupied())
+                    if (!test.HasCombatant())
                     {
-                        test.SetCombatant(ct.Character);
-                        ct = test;
+                        test.SetCombatant(t.Character);
+                        t = test;
                         rv = true;
                     }
                 }
@@ -651,26 +646,26 @@ namespace RiverHollow.Actors.CombatStuff
         /// <param name="tile">The tile to move from</param>
         /// <param name="action">The skill tag describing the movement type</param>
         /// <returns></returns>
-        private CombatManager.CombatTile DetermineMovementTile(CombatManager.CombatTile tile, SkillTagsEnum action)
+        private RHTile DetermineMovementTile(RHTile tile, SkillTagsEnum action)
         {
-            CombatManager.CombatTile rv = null;
+            RHTile rv = null;
 
-            //The meaning of push and pull is dependent on whether or not
-            //it's an ally or enemy tile.
-            if (tile.Character.IsAdventurer())
-            {
-                if (action == SkillTagsEnum.Push) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
-                else if (action == SkillTagsEnum.Pull) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
-                else if (action == SkillTagsEnum.Retreat) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
-                else if (action == SkillTagsEnum.Step) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
-            }
-            else
-            {
-                if (action == SkillTagsEnum.Push) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
-                else if (action == SkillTagsEnum.Pull) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
-                else if (action == SkillTagsEnum.Retreat) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
-                else if (action == SkillTagsEnum.Step) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
-            }
+            ////The meaning of push and pull is dependent on whether or not
+            ////it's an ally or enemy tile.
+            //if (tile.Character.IsAdventurer())
+            //{
+            //    if (action == SkillTagsEnum.Push) { rv = tile.GetTileByDirection();
+            //    else if (action == SkillTagsEnum.Pull) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
+            //    else if (action == SkillTagsEnum.Retreat) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
+            //    else if (action == SkillTagsEnum.Step) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
+            //}
+            //else
+            //{
+            //    if (action == SkillTagsEnum.Push) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
+            //    else if (action == SkillTagsEnum.Pull) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
+            //    else if (action == SkillTagsEnum.Retreat) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
+            //    else if (action == SkillTagsEnum.Step) { rv = CombatManager.GetLeft(tile.GUITile.MapTile); }
+            //}
 
             return rv;
         }
@@ -696,29 +691,8 @@ namespace RiverHollow.Actors.CombatStuff
                         }
                         break;
                     }
-                case "UserMove":
-                    {
-                        GUISprite sprite = SkillUser.GetSprite();
-                        GUICmbtTile moveToTile = TileTargetList[0].GUITile;
-                        bool targetsEnemy = TileTargetList[0].GUITile.MapTile.TargetType == TargetEnum.Enemy;
-
-                        //If we're in Critical HP, start walking first.
-                        if (SkillUser.IsCurrentAnimation(CActorAnimEnum.Critical)) { SkillUser.Tile.PlayAnimation(CActorAnimEnum.Idle); }
-
-                        if (MoveSpriteTo(sprite, GetAttackTargetPosition(sprite, targetsEnemy, moveToTile)))
-                        {
-                            _iCurrentAction++;
-                        }
-
-                        if (!SkillUser.IsSummon() && SkillUser.Tile.GUITile.CharacterWeaponSprite != null)
-                        {
-                            SkillUser.Tile.GUITile.CharacterWeaponSprite.CenterOnObject(sprite);
-                        }                     
-
-                        break;
-                    }
                 case "UserAttack":
-                    foreach (CombatTile tile in TileTargetList)
+                    foreach (RHTile tile in TileTargetList)
                     {
                         List<CombatActor> liPotentialGuards = new List<CombatActor>();
                         CombatActor original = tile.Character;
@@ -726,12 +700,14 @@ namespace RiverHollow.Actors.CombatStuff
                         //Only assign a guard to the character if they are not guarding and they have no guard
                         if (original != null && !original.Guard & original.MyGuard == null)
                         {
-                            CombatTile top = CombatManager.GetTop(tile);
-                            if(top != null && top.Character != null && top.Character.Guard) { liPotentialGuards.Add(top.Character); }
-
-                            CombatTile bottom = CombatManager.GetBottom(tile);
-                            if (bottom != null && bottom.Character != null && bottom.Character.Guard) { liPotentialGuards.Add(bottom.Character); }
-
+                            List<RHTile> adj = tile.GetAdjacent();
+                            foreach(RHTile t in adj)
+                            {
+                                if (t.Character != null && t.Character.Guard) {
+                                    liPotentialGuards.Add(t.Character);
+                                }
+                            }
+                            
                             Summon summ = tile.Character.LinkedSummon;
                             if (summ != null && !summ.Swapped && summ.Guard) { liPotentialGuards.Add(summ); }
 
@@ -745,8 +721,8 @@ namespace RiverHollow.Actors.CombatStuff
                                 guard.GuardTarget = original;
                                 original.MyGuard = guard;
 
-                                guard.GetSprite().Position(original.GetSprite().Position());
-                                original.GetSprite().PositionSub(new Vector2(100, 0));
+                                //guard.GetSprite().Position(original.GetSprite().Position());
+                                //original.GetSprite().PositionSub(new Vector2(100, 0));
                             }
                         }
                     }
@@ -754,12 +730,12 @@ namespace RiverHollow.Actors.CombatStuff
                     if (!SkillUser.IsCurrentAnimation(CActorAnimEnum.Attack))
                     {
                         if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(CActorAnimEnum.Attack); }
-                        else { SkillUser.Tile.PlayAnimation(CActorAnimEnum.Attack); }
+                        else { SkillUser.PlayAnimation(CActorAnimEnum.Attack); }
                     }
                     else if (SkillUser.AnimationPlayedXTimes(1))
                     {
                         if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(CActorAnimEnum.Idle); }
-                        else { SkillUser.Tile.PlayAnimation(CActorAnimEnum.Idle); }
+                        else { SkillUser.PlayAnimation(CActorAnimEnum.Idle); }
                         _iCurrentAction++;
                     }
                     break;
@@ -767,12 +743,12 @@ namespace RiverHollow.Actors.CombatStuff
                     if (!SkillUser.IsCurrentAnimation(CActorAnimEnum.Cast))
                     {
                         if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(CActorAnimEnum.Cast); }
-                        else { SkillUser.Tile.PlayAnimation(CActorAnimEnum.Cast); }
+                        else { SkillUser.PlayAnimation(CActorAnimEnum.Cast); }
                     }
                     else if (SkillUser.AnimationPlayedXTimes(2))
                     {
                         if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(CActorAnimEnum.Idle); }
-                        else { SkillUser.Tile.PlayAnimation(CActorAnimEnum.Idle); }
+                        else { SkillUser.PlayAnimation(CActorAnimEnum.Idle); }
                         _iCurrentAction++;
                     }
                     break;
@@ -780,8 +756,8 @@ namespace RiverHollow.Actors.CombatStuff
                     if (Sprite != null && !Sprite.PlayedOnce && !Sprite.IsAnimating)
                     {
                         Sprite.IsAnimating = true;
-                        Sprite.AlignToObject(TileTargetList[0].GUITile, SideEnum.Bottom);
-                        Sprite.AlignToObject(TileTargetList[0].GUITile, SideEnum.CenterX);
+                        //Sprite.AlignToObject(TileTargetList[0].GUITile, SideEnum.Bottom);
+                        //Sprite.AlignToObject(TileTargetList[0].GUITile, SideEnum.CenterX);
                         Sprite.MoveBy(new Vector2(0, _iAnimOffset * CombatManager.CombatScale));
                     }
                     else if (Sprite != null && Sprite.IsAnimating) { Sprite.Update(gTime); }
@@ -817,13 +793,12 @@ namespace RiverHollow.Actors.CombatStuff
                             {
                                 if (!counteringChar.IsCurrentAnimation(CActorAnimEnum.Attack))
                                 {
-                                    counteringChar.Tile.PlayAnimation(CActorAnimEnum.Attack);
+                                    counteringChar.PlayAnimation(CActorAnimEnum.Attack);
                                 }
                                 else if (counteringChar.AnimationPlayedXTimes(1))
                                 {
-                                    counteringChar.Tile.PlayAnimation(CActorAnimEnum.Idle);
-                                    int x = SkillUser.ProcessAttack(counteringChar, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, _iCritRating, counteringChar.GetAttackElement());
-                                    SkillUser.Tile.GUITile.AssignEffect(x, true);
+                                    counteringChar.PlayAnimation(CActorAnimEnum.Idle);
+                                    SkillUser.ProcessAttack(counteringChar, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, _iCritRating, counteringChar.GetAttackElement());
                                     counteringChar = null;
                                     _bPauseActionHandler = false;
                                     _iCurrentAction++;
@@ -838,8 +813,7 @@ namespace RiverHollow.Actors.CombatStuff
                                 else if (counteringSummon.AnimationPlayedXTimes(1))
                                 {
                                     counteringSummon.PlayAnimation(CActorAnimEnum.Idle);
-                                    int x = SkillUser.ProcessAttack(counteringSummon, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, _iCritRating, counteringSummon.GetAttackElement());
-                                    SkillUser.Tile.GUITile.AssignEffect(x, true);
+                                    SkillUser.ProcessAttack(counteringSummon, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, _iCritRating, counteringSummon.GetAttackElement());
                                     counteringSummon = null;
                                     _bPauseActionHandler = false;
                                     _iCurrentAction++;
@@ -850,24 +824,6 @@ namespace RiverHollow.Actors.CombatStuff
                                 _bPauseActionHandler = false;
                             }
                         }
-                    }
-
-                    break;
-                case "Return":
-                    Vector2 moveTo = !SkillUser.IsSummon() ? SkillUser.Tile.GUITile.GetIdleLocation(SkillUser.GetSprite()) : SkillUser.Tile.GUITile.GetIdleSummonLocation();
-                    if (MoveSpriteTo(SkillUser.GetSprite(), moveTo))
-                    {
-                        //If we're in Critical HP, go back down.
-                        if (SkillUser.IsCritical()) {
-                            if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(CActorAnimEnum.Critical); }
-                            else { SkillUser.Tile.PlayAnimation(CActorAnimEnum.Critical); }
-                        }
-                        _iCurrentAction++;
-                    }
-
-                    if (!SkillUser.IsSummon() && SkillUser.Tile.GUITile.CharacterWeaponSprite != null)
-                    {
-                        SkillUser.Tile.GUITile.CharacterWeaponSprite.CenterOnObject(SkillUser.GetSprite());
                     }
 
                     break;
@@ -893,7 +849,7 @@ namespace RiverHollow.Actors.CombatStuff
                     if (SkillUser.LinkedSummon != null)
                     {
                         SkillUser.LinkedSummon.Tile = TileTargetList[0];
-                        TileTargetList[0].GUITile.LinkSummon(SkillUser.LinkedSummon);
+                        //TileTargetList[0].GUITile.LinkSummon(SkillUser.LinkedSummon);
                     }
                     _iCurrentAction++;
                     break;
@@ -908,30 +864,6 @@ namespace RiverHollow.Actors.CombatStuff
 
                     break;
             }
-        }
-
-        public Vector2 GetAttackTargetPosition(GUISprite sprite, bool targetsEnemy, GUICmbtTile moveToTile)
-        {
-            Vector2 targetPosition = Vector2.Zero;
-            int mod = targetsEnemy ? -1 : 1;
-
-            if (targetsEnemy && TileTargetList[0].GUITile.MapTile.Col - 1 >= CombatManager.ENEMY_FRONT)
-            {
-                GUICmbtTile target = CombatManager.GetLeft(moveToTile.MapTile).GUITile;
-                targetPosition = target.GetIdleLocation(sprite);
-            }
-            else if (!targetsEnemy && TileTargetList[0].GUITile.MapTile.Col + 1 < CombatManager.ENEMY_FRONT)
-            {
-                GUICmbtTile target = CombatManager.GetRight(moveToTile.MapTile).GUITile;
-                targetPosition = target.GetIdleLocation(sprite);
-            }
-            else
-            {
-                targetPosition = sprite.GetAnchorAndAlignToObject(moveToTile, targetsEnemy ? SideEnum.Left : SideEnum.Right, SideEnum.Bottom);
-                targetPosition += new Vector2(0, -(moveToTile.Height / 3));
-            }
-
-            return targetPosition;
         }
 
         public bool MoveSpriteTo(GUISprite sprite, Vector2 target)

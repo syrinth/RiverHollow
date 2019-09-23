@@ -4,7 +4,7 @@
     <!--Key: Index>0 Value:Name/CombatTexture/XP/Str/Def/Vit/Magic/Speed/Resist/Vulnerability-->
     <Item>
       <Key>3</Key>
-      <Value>[Texture:CombatFangedFur][Width:32][Height:32][Lvl:1][Ability:300]</Value>
+      <Value>[Texture:FangedFur][Condition:Forest-Summer][Jump][Lvl:1][Ability:300]</Value>
     </Item>
     <!--FangedFur-->
     <Item>
@@ -49,7 +49,7 @@
     <!--Malice-->
     <Item>
       <Key>12</Key>
-      <Value>[Texture:CombatMalice][Width:32][Height:32][Lvl:1][Ability:301][Idle:4-0.15][Attack:2-0.15][Loot:18]</Value>
+      <Value>[Texture:Malice][Condition:Forest-Summer]&lt;[Lvl:1][Ability:301][Idle:4-0.15][Attack:2-0.15][Loot:18]</Value>
     </Item>
     <!--Skull-->
     <Item>

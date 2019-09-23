@@ -5,6 +5,7 @@ using RiverHollow.Actors;
 using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Misc;
+using RiverHollow.Tile_Engine;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
@@ -21,14 +22,14 @@ namespace RiverHollow.Game_Managers
         public static Monster CurrentMob { get => _mob; }
         public static CombatActor ActiveCharacter;
         private static List<CombatActor> _liMonsters;
-        public static List<CombatActor> Monsters { get => _liMonsters; }
+        public static List<CombatActor> Monsters  => _liMonsters;
         private static List<CombatActor> _listParty;
-        public static List<CombatActor> Party { get => _listParty; }
+        public static List<CombatActor> Party => _listParty;
         
         public enum PhaseEnum { Charging, Upkeep, NewTurn, EnemyTurn, SelectSkill, ChooseTarget, Defeat, DisplayAttack, DisplayVictory, Lost, PerformAction, EndCombat }
         public static PhaseEnum CurrentPhase;
         public static ChosenAction SelectedAction;
-        private static CombatTile _targetTile;
+        private static RHTile _targetTile;
 
         public static double Delay;
         public static string Text;
@@ -41,16 +42,7 @@ namespace RiverHollow.Game_Managers
         static List<CombatActor> _liChargingCharacters;
         #endregion
 
-        #region CombatGrid
-        public static CombatTile SelectedTile;
-
-        public static readonly int MAX_COL = 8;
-        public static readonly int MAX_ROW = 3;
-        public static readonly int ALLY_FRONT = 3;
-        public static readonly int ENEMY_FRONT = 4;
-
-        static CombatTile[,] _combatMap;
-        #endregion
+        public static RHTile SelectedTile;
 
         public static void NewBattle()
         {
@@ -59,21 +51,14 @@ namespace RiverHollow.Game_Managers
             SelectedTile = null;
 
             CurrentPhase = PhaseEnum.Charging;
-            _combatMap = new CombatTile[MAX_ROW, MAX_COL];
-            for(int row = 0; row < MAX_ROW; row++)
-            {
-                for (int col = 0; col < MAX_COL; col++)
-                {
-                    _combatMap[row, col] = new CombatTile(row, col, col < ENEMY_FRONT ? TargetEnum.Ally : TargetEnum.Enemy);
-                }
-            }
 
             Delay = 0;
-            //_mob = m;
-            //_liMonsters = _mob.Monsters;
 
             _listParty = new List<CombatActor>();
             _listParty.AddRange(PlayerManager.GetParty());
+
+            _liMonsters = new List<CombatActor>();
+            _liMonsters.AddRange(MapManager.CurrentMap.Monsters);
 
             _liQueuedCharacters = new List<CombatActor>();
             _liChargingCharacters = new List<CombatActor>();
@@ -89,40 +74,18 @@ namespace RiverHollow.Game_Managers
                 c.CurrentCharge = random.Next(0, 50);
             }
 
+            foreach (CombatActor c in _liMonsters)
+            {
+                c.Tile = MapManager.CurrentMap.GetTileOffGrid(c.CollisionBox.Center);
+            }
+
+            foreach (CombatActor c in Party)
+            {
+                c.Tile = MapManager.CurrentMap.GetTileOffGrid(c.CollisionBox.Center);
+            }
+
             GoToCombat();
             PlayerManager.DecreaseStamina(3);       //Decrease Stamina once
-        }
-
-        public static CombatTile GetMapTile(int row, int col)
-        {
-            return _combatMap[row, col];
-        }
-        public static void AssignPositions(ref GUICmbtTile[,] allyArray)
-        {
-            //Get the Players' party and assign each of them a battle position
-            List<CombatActor> party = CombatManager.Party;
-            for (int i = 0; i < party.Count; i++)
-            {
-                if (party[i] != null)
-                {
-                    Vector2 vec = party[i].StartPos;
-                    _combatMap[(int)vec.Y, (int)vec.X].SetCombatant(party[i]);
-                }
-            }
-            //Get the Enemies and assign each of them a battle position
-            //for (int i = 0; i < CurrentMob.Monsters.Count; i++)
-            //{
-            //    int row = -1;
-            //    int col = -1;
-            //    do
-            //    {
-            //        RHRandom random = new RHRandom();
-            //        row = random.Next(0, MAX_ROW - 1);
-            //        col = random.Next(ENEMY_FRONT, MAX_COL - 1);
-            //    } while (_combatMap[row, col].Occupied());
-
-            //    _combatMap[row, col].SetCombatant(CurrentMob.Monsters[i]);
-            //}
         }
 
         public static void Update(GameTime gTime)
@@ -136,21 +99,6 @@ namespace RiverHollow.Game_Managers
                 else
                 {
                     GetActiveCharacter();
-                }
-            }
-
-            foreach(CombatTile ct in _combatMap)
-            {
-                if (ct.Occupied())
-                {
-                    if (ct.TargetType == TargetEnum.Enemy && !_liMonsters.Contains(ct.Character))
-                    {
-                        ct.SetCombatant(null);
-                    }
-                    else
-                    {
-                        ct.Character.Update(gTime);
-                    }
                 }
             }
 
@@ -181,8 +129,7 @@ namespace RiverHollow.Game_Managers
                     else if(activeSummon.BodySprite.GetPlayCount() >= 1)
                     {
                         activeSummon.PlayAnimation(CActorAnimEnum.Idle);
-                        ActiveCharacter.IncreaseHealth(30);
-                        ActiveCharacter.Tile.GUITile.AssignEffect(30, false);
+                        ActiveCharacter.ModifyHealth(30, false);
                         SetPhaseForTurn();
                     }
                     
@@ -283,45 +230,90 @@ namespace RiverHollow.Game_Managers
         //When enemies get healing/defensive skills, they'll have their own logic to process
         public static void EnemyTakeTurn()
         {
-            RHRandom r = new RHRandom();
-            CombatAction action = null;
-            bool canCast = false;
-            do
-            {
-                action = (CombatAction)ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)];
-                if (action.MPCost <= ActiveCharacter.CurrentMP)
-                {
-                    canCast = true;
-                }
-            } while (!canCast);
+            bool moveToPlayer = false;
+            RHTile targetTile = null;
+            //RHRandom r = new RHRandom();
+            //CombatAction action = null;
+            ////Step one determine if we are in range of a target
+            //foreach(CombatAction c in ActiveCharacter.AbilityList)
+            //{
+            //    if(c.Range == RangeEnum.Melee)
+            //    {
+            //        foreach(RHTile t in ActiveCharacter.Tile.GetAdjacent())
+            //        {
+            //            if(t.HasCombatant() && t.Character.IsAdventurer())
+            //            {
+            //                moveToPlayer = true;
+            //                action = c;
+            //                targetTile = t;
+            //                break;
+            //            }
+            //        }
+            //    }
+            //}
 
-            ProcessActionChoice(action);
-            if (!SelectedAction.SelfOnly())
-            {
-                if (action.Range == RangeEnum.Melee)
+            //Step two if not in range, move towards a target
+            if (!ActiveCharacter.FollowingPath) {
+                if (targetTile == null)
                 {
-                    List<CombatTile> playerTiles = new List<CombatTile>();
-                    int col = FindPlayerFrontLine();
+                    double closestDistance = 0;
+                    Vector2 start = ActiveCharacter.Tile.Center;
+                    Vector2 closest = Vector2.Zero;
 
-                    for (int row = 0; row < MAX_ROW; row++)
+                    foreach (CombatActor actor in Party)
                     {
-                        CombatTile tile = _combatMap[row, col];
-                        if (tile.Occupied() && tile.Character.CurrentHP > 0)
+                        Vector2 target = actor.Tile.Center;
+
+                        int deltaX = (int)Math.Abs(start.X - target.X);
+                        int deltaY = (int)Math.Abs(start.Y - target.Y);
+
+                        double distance = Math.Sqrt(deltaX ^ 2 + deltaY ^ 2);
+                        if (distance < closestDistance || closestDistance == 0)
                         {
-                            playerTiles.Add(tile);
+                            closest = target;
+                            closestDistance = distance;
                         }
                     }
 
-                    SelectedTile = playerTiles[r.Next(0, playerTiles.Count - 1)];
-                }
-                else
-                {
-                    CombatActor adv = _listParty[r.Next(0, _listParty.Count - 1)];
-                    SelectedTile = adv.Tile;
+                    List<RHTile> tilePath = TravelManager.FindPathToLocation(ref start, closest, PlayerManager.CurrentMap);
+
+                    //If we are moving to a Player character, we need to remove the last tile since it actually
+                    //contains the character in question.
+                    if (moveToPlayer) { tilePath.RemoveAt(tilePath.Count - 1); }
+                    ActiveCharacter.SetPath(tilePath);
                 }
             }
 
-            ActiveCharacter.CurrentMP -= action.MPCost;
+            ////Step three use action
+            //if(action != null && targetTile != null)
+            //{
+            //    //bool canCast = false;
+            //    //do
+            //    //{
+            //    //    action = (CombatAction)ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)];
+            //    //    if (action.MPCost <= ActiveCharacter.CurrentMP)
+            //    //    {
+            //    //        canCast = true;
+            //    //    }
+            //    //} while (!canCast);
+
+            //    ProcessActionChoice(action);
+            //    if (!SelectedAction.SelfOnly())
+            //    {
+            //        if (action.Range == RangeEnum.Melee)
+            //        {
+            //            //ToDo Fix this
+            //            //SelectedTile = 
+            //        }
+            //        else
+            //        {
+            //            CombatActor adv = _listParty[r.Next(0, _listParty.Count - 1)];
+            //            SelectedTile = adv.Tile;
+            //        }
+            //    }
+
+            //    ActiveCharacter.CurrentMP -= action.MPCost;
+            //} 
         }
 
         internal static List<CombatActor> CalculateTurnOrder(int maxShown)
@@ -439,9 +431,9 @@ namespace RiverHollow.Game_Managers
         /// Determines whether or not the given tile has been selected while hovering over it
         /// </summary>
         /// <param name="tile">The tile to test against</param>
-        public static void TestHoverTile(CombatTile tile)
+        public static void TestHoverTile(RHTile tile)
         {
-            if (SelectedAction.LegalTiles.Contains(tile) && (tile.Occupied() || SelectedAction.AreaOfEffect()))
+            if (SelectedAction.LegalTiles.Contains(tile) && (tile.HasCombatant() || SelectedAction.AreaOfEffect()))
             {
                 tile.Select(true);
             }
@@ -452,37 +444,35 @@ namespace RiverHollow.Game_Managers
             {
                 SelectedAction.LegalTiles[0].Select(true);
 
-                if (!SelectedTile.Occupied())
+                if (!SelectedTile.HasCombatant())
                 {
                     FindNextTarget();
                 }
             }
 
-            CombatTile temp = null;
+            RHTile temp = null;
             if (InputManager.CheckPressedKey(Keys.A))
             {
                 if (SelectedAction.IsMelee()) { FindLastTarget(); }
-                else { temp = GetLeft(SelectedTile); }
+                else { temp = SelectedTile.GetTileByDirection(DirectionEnum.Left); }
             }
             else if (InputManager.CheckPressedKey(Keys.D))
             {
                 if (SelectedAction.IsMelee()) { FindNextTarget(); }
-                else { temp = GetRight(SelectedTile); }
+                else { temp = SelectedTile.GetTileByDirection(DirectionEnum.Right); }
             }
             else if (InputManager.CheckPressedKey(Keys.W))
             {
                 if (SelectedAction.IsMelee()) { FindLastTarget(); }
-                else { temp = GetTop(SelectedTile); }
+                else { temp = SelectedTile.GetTileByDirection(DirectionEnum.Up); }
             }
             else if (InputManager.CheckPressedKey(Keys.S))
             {
                 if (SelectedAction.IsMelee()) { FindNextTarget(); }
-                else { temp = GetBottom(SelectedTile); }
+                else { temp = SelectedTile.GetTileByDirection(DirectionEnum.Down); }
             }
 
-            if (temp != null && SelectedAction.CompareTargetType(temp.TargetType)) {
-                temp.Select(true);
-            }
+            SelectTile(temp, true);
 
             if (InputManager.CheckPressedKey(Keys.Enter))
             {
@@ -493,14 +483,14 @@ namespace RiverHollow.Game_Managers
         {
             for (int i = 0; i < SelectedAction.LegalTiles.Count; i++)
             {
-                CombatTile t = SelectedAction.LegalTiles[i];
+                RHTile t = SelectedAction.LegalTiles[i];
 
                 if (t == SelectedTile)
                 {
                     while (i < SelectedAction.LegalTiles.Count - 1)
                     {
                         t = SelectedAction.LegalTiles[i + 1];
-                        if (t.Occupied())
+                        if (t.HasCombatant())
                         {
                             t.Select(true);
                             goto Exit;
@@ -519,13 +509,13 @@ namespace RiverHollow.Game_Managers
         {
             for (int i = 0; i < SelectedAction.LegalTiles.Count; i++)
             {
-                CombatTile t = SelectedAction.LegalTiles[i];
+                RHTile t = SelectedAction.LegalTiles[i];
                 if (t == SelectedTile)
                 {
                     while (i > 0)
                     {
                         t = SelectedAction.LegalTiles[i - 1];
-                        if (t.Occupied())
+                        if (t.HasCombatant())
                         {
                             t.Select(true);
                             goto Exit;
@@ -541,117 +531,21 @@ namespace RiverHollow.Game_Managers
             return;
         }
 
-        private static List<CombatTile> GetAdjacent(CombatTile t) {
-            List<CombatTile> adj = new List<CombatTile>();
-
-            //Have to null check
-            CombatTile temp = GetTop(t);
-            if (temp != null) { adj.Add(temp); }
-            temp = GetBottom(t);
-            if (temp != null) { adj.Add(temp); }
-            temp = GetLeft(t);
-            if (temp != null) { adj.Add(temp); }
-            temp = GetRight(t);
-            if (temp != null) { adj.Add(temp); }
-
-            return adj;
-        }
-        public static CombatTile GetTop(CombatTile t)
+        public static void SelectTile(RHTile tile, bool val)
         {
-            CombatTile rv = null;
-            if (t.Row > 0)
+            tile.Select(val);
+
+            if (val && SelectedTile != tile)
             {
-                rv =  _combatMap[t.Row - 1, t.Col];
+                if (SelectedTile != null) { SelectedTile.Select(false); }
+                SelectedTile = tile;
             }
-
-            return rv;
-        }
-
-        public static CombatTile GetBottom(CombatTile t)
-        {
-            CombatTile rv = null;
-            if (t.Row < MAX_ROW - 1)
-            {
-                rv = _combatMap[t.Row + 1, t.Col];
-            }
-
-            return rv;
-        }
-        /// <summary>
-        /// Retrieves the Tile to the Left of the indicated tile as long as it does
-        /// not pass over the divide between player and enemy
-        /// </summary>
-        public static CombatTile GetLeft(CombatTile t)
-        {
-            CombatTile rv = null;
-            if (t.Col > 0 && (t.Col < ENEMY_FRONT || t.Col - 1 >= ENEMY_FRONT))
-            {
-                rv = _combatMap[t.Row, t.Col - 1];
-            }
-
-            return rv;
-        }
-
-        /// <summary>
-        /// Retrieves the Tile to the Right of the indicated tile as long as it does
-        /// not pass over the divide between player and enemy
-        /// </summary>
-        public static CombatTile GetRight(CombatTile t)
-        {
-            CombatTile rv = null;
-            if (t.Col < MAX_COL - 1 && (t.Col >= ENEMY_FRONT || t.Col + 1 < ENEMY_FRONT))
-            {
-                rv = _combatMap[t.Row, t.Col + 1];
-            }
-
-            return rv;
         }
 
         public static void ClearSelectedTile()
         {
             if(SelectedTile != null) { SelectedTile.Select(false); }
             SelectedTile = null;
-        }
-
-        public static int FindEnemyFrontLine()
-        {
-            int rv = 0;
-
-            //Go down each column, looking for a target
-            for (int col = ENEMY_FRONT; col < MAX_COL; col++)
-            {
-                for (int row = 0; row < MAX_ROW; row++)
-                {
-                    if (_combatMap[row, col].Occupied())
-                    {
-                        rv = col;
-                        goto ExitFrontLine;
-                    }
-                }
-            }
-            ExitFrontLine:
-
-            return rv;
-        }
-        public static int FindPlayerFrontLine()
-        {
-            int rv = 0;
-
-            //Go down each column, looking for a target
-            for (int col = ALLY_FRONT; col >= 0; col--)
-            {
-                for (int row = 0; row < MAX_ROW; row++)
-                {
-                    if (_combatMap[row, col].Occupied() && !_combatMap[row, col].Character.DiConditions[ConditionEnum.KO])
-                    {
-                        rv = col;
-                        goto ExitFrontLine;
-                    }
-                }
-            }
-            ExitFrontLine:
-
-            return rv;
         }
 
         #endregion
@@ -696,7 +590,7 @@ namespace RiverHollow.Game_Managers
                 ActiveCharacter.TickStatusEffects();
                 if (ActiveCharacter.Poisoned())
                 {
-                    ActiveCharacter.Location.AssignEffect(ActiveCharacter.DecreaseHealth(Math.Max(1, (int)(ActiveCharacter.MaxHP / 20))), true);
+                    ActiveCharacter.ModifyHealth(Math.Max(1, (int)(ActiveCharacter.MaxHP / 20)), true);
                 }
 
                 CurrentPhase = PhaseEnum.Upkeep;    //We have a charcter, but go into Upkeep phase first
@@ -715,7 +609,7 @@ namespace RiverHollow.Game_Managers
                 {
                     if (activeSummon.Aggressive && SelectedAction.IsMelee())
                     {
-                        List<CombatTile> targets = SelectedAction.GetTargetTiles();
+                        List<RHTile> targets = SelectedAction.GetTargetTiles();
                         ActiveCharacter = activeSummon;
                         SelectedAction = new ChosenAction((CombatAction)ObjectManager.GetActionByIndex(CombatManager.BASIC_ATTACK));
                         SelectedAction.SetUser(ActiveCharacter);
@@ -752,122 +646,122 @@ namespace RiverHollow.Game_Managers
         public static bool PhaseSelectSkill() { return CurrentPhase == PhaseEnum.SelectSkill; }
         public static bool PhaseChooseTarget() { return CurrentPhase == PhaseEnum.ChooseTarget && !SelectedAction.TargetsEach(); }
 
-        public class CombatTile
-        {
-            TargetEnum _tileType;
-            public TargetEnum TargetType => _tileType;
+        //public class CombatTile
+        //{
+        //    TargetEnum _tileType;
+        //    public TargetEnum TargetType => _tileType;
 
-            int _iRow;
-            public int Row => _iRow;
-            int _iCol;
-            public int Col => _iCol;
+        //    int _iRow;
+        //    public int Row => _iRow;
+        //    int _iCol;
+        //    public int Col => _iCol;
 
-            bool _bSelected;
-            public bool Selected => _bSelected;
+        //    bool _bSelected;
+        //    public bool Selected => _bSelected;
 
-            CombatActor _character;
-            public CombatActor Character => _character;
-            GUICmbtTile _gTile;
-            public GUICmbtTile GUITile => _gTile;
+        //    CombatActor _character;
+        //    public CombatActor Character => _character;
+        //    GUICmbtTile _gTile;
+        //    public GUICmbtTile GUITile => _gTile;
 
-            public CombatTile(int row, int col, TargetEnum tileType)
-            {
-                _iRow = row;
-                _iCol = col;
-                _tileType = tileType;
-            }
+        //    public CombatTile(int row, int col, TargetEnum tileType)
+        //    {
+        //        _iRow = row;
+        //        _iCol = col;
+        //        _tileType = tileType;
+        //    }
 
-            public void SetCombatant(CombatActor c, bool moveCharNow = true)
-            {
-                _character = c;
-                if (_character != null)
-                {
-                    if (_character.Tile != null)
-                    {
-                        _character.Tile.SetCombatant(null);
-                    }
-                    if(_character.Tile != null) {
-                        foreach (CombatTile tile in GetAdjacent(_character.Tile))
-                        {
-                            CheckForProtected(tile);
-                        }
-                    }
-                    _character.Tile = this;
-                    CheckForProtected(this);
-                }
+        //    public void SetCombatant(CombatActor c, bool moveCharNow = true)
+        //    {
+        //        _character = c;
+        //        if (_character != null)
+        //        {
+        //            if (_character.Tile != null)
+        //            {
+        //                _character.Tile.SetCombatant(null);
+        //            }
+        //            if(_character.Tile != null) {
+        //                foreach (CombatTile tile in GetAdjacent(_character.Tile))
+        //                {
+        //                    CheckForProtected(tile);
+        //                }
+        //            }
+        //            _character.Tile = this;
+        //            CheckForProtected(this);
+        //        }
 
-                _gTile.SyncGUIObjects(_character != null);
-                if (_character != null)
-                {
-                    foreach (KeyValuePair<ConditionEnum, bool> kvp in _character.DiConditions)
-                    {
-                        if (kvp.Value)
-                        {
-                            GUITile.ChangeCondition(kvp.Key, TargetEnum.Enemy);
-                        }
-                    }
-                }
-            }
+        //        _gTile.SyncGUIObjects(_character != null);
+        //        if (_character != null)
+        //        {
+        //            foreach (KeyValuePair<ConditionEnum, bool> kvp in _character.DiConditions)
+        //            {
+        //                if (kvp.Value)
+        //                {
+        //                    GUITile.ChangeCondition(kvp.Key, TargetEnum.Enemy);
+        //                }
+        //            }
+        //        }
+        //    }
 
-            private void CheckForProtected(CombatTile t)
-            {
-                bool found = false;
-                List<CombatTile> adjacent = GetAdjacent(t);
-                //foreach (CombatTile tile in adjacent)
-                //{
-                //    if (tile.Occupied() && this.TargetType == tile.TargetType)
-                //    {
-                //        if (tile.Character != this.Character && tile.Character.IsCombatAdventurer() && this.Character.IsCombatAdventurer())
-                //        {
-                //            found = true;
-                //            ClassedCombatant adv = (ClassedCombatant)tile.Character;
-                //            adv.Protected = true;
-                //            adv = (ClassedCombatant)this.Character;
-                //            adv.Protected = true;
-                //        }
-                //    }
-                //}
+        //    private void CheckForProtected(CombatTile t)
+        //    {
+        //        bool found = false;
+        //        List<CombatTile> adjacent = GetAdjacent(t);
+        //        //foreach (CombatTile tile in adjacent)
+        //        //{
+        //        //    if (tile.Occupied() && this.TargetType == tile.TargetType)
+        //        //    {
+        //        //        if (tile.Character != this.Character && tile.Character.IsCombatAdventurer() && this.Character.IsCombatAdventurer())
+        //        //        {
+        //        //            found = true;
+        //        //            ClassedCombatant adv = (ClassedCombatant)tile.Character;
+        //        //            adv.Protected = true;
+        //        //            adv = (ClassedCombatant)this.Character;
+        //        //            adv.Protected = true;
+        //        //        }
+        //        //    }
+        //        //}
 
-                //if (!found && this.Character.IsCombatAdventurer())
-                //{
-                //    ClassedCombatant adv = (ClassedCombatant)this.Character;
-                //    adv.Protected = false;
-                //}
-            }
+        //        //if (!found && this.Character.IsCombatAdventurer())
+        //        //{
+        //        //    ClassedCombatant adv = (ClassedCombatant)this.Character;
+        //        //    adv.Protected = false;
+        //        //}
+        //    }
 
-            public void AssignGUITile(GUICmbtTile c)
-            {
-                _gTile = c;
-            }
+        //    public void AssignGUITile(GUICmbtTile c)
+        //    {
+        //        _gTile = c;
+        //    }
 
-            public bool Occupied()
-            {
-                return _character != null;
-            }
+        //    public bool Occupied()
+        //    {
+        //        return _character != null;
+        //    }
 
-            public void Select(bool val)
-            {
-                _bSelected = val;
+        //    public void Select(bool val)
+        //    {
+        //        _bSelected = val;
 
-                if (_bSelected && SelectedTile != this)
-                {
-                    if (SelectedTile != null) { SelectedTile.Select(false); }
-                    SelectedTile = this;
-                }
-            }
+        //        if (_bSelected && SelectedTile != this)
+        //        {
+        //            if (SelectedTile != null) { SelectedTile.Select(false); }
+        //            SelectedTile = this;
+        //        }
+        //    }
 
-            public void PlayAnimation<TEnum>(TEnum animation)
-            {
-                _gTile.PlayAnimation(animation);
-            }
-        }
+        //    public void PlayAnimation<TEnum>(TEnum animation)
+        //    {
+        //        _gTile.PlayAnimation(animation);
+        //    }
+        //}
         public class ChosenAction
         {
             private Consumable _chosenItem;
             private CombatAction _chosenAction;
 
-            List<CombatTile> _liLegalTiles;
-            public List<CombatTile> LegalTiles => _liLegalTiles;
+            List<RHTile> _liLegalTiles;
+            public List<RHTile> LegalTiles => _liLegalTiles;
             public CombatActor User;
 
             string _name;
@@ -880,24 +774,12 @@ namespace RiverHollow.Game_Managers
                 User = ActiveCharacter;
                 _chosenItem = it;
                 _name = _chosenItem.Name;
-                _liLegalTiles = new List<CombatTile>();
+                _liLegalTiles = new List<RHTile>();
 
                 //Only the adjacent tiles are legal
-                if (TargetsAlly())
-                {
-                    _liLegalTiles.Add(User.Tile);
-
-                    List<CombatTile> adj = GetAdjacent(User.Tile);
-                    foreach (CombatTile t in adj)
-                    {
-                        if (t.TargetType == TargetEnum.Ally) { _liLegalTiles.Add(t); }
-                    }
-                }
-                else if (TargetsEnemy())
-                {
-                    EnemyFrontLineLegal();
-                }
+                _liLegalTiles = User.Tile.GetAdjacent();
             }
+
             public ChosenAction(CombatAction ca)
             {
                 User = ActiveCharacter;
@@ -906,29 +788,29 @@ namespace RiverHollow.Game_Managers
 
                 _chosenAction.SkillUser = ActiveCharacter;
 
-                _liLegalTiles = new List<CombatTile>();
+                _liLegalTiles = new List<RHTile>();
                 if (IsMelee())
                 {
-                    EnemyFrontLineLegal();
+                    _liLegalTiles = User.Tile.GetAdjacent();
                 }
                 else if (IsRanged())
                 {
-                    int col = -1;
-                    int maxCol = MAX_COL;
-                    if (TargetsEnemy()) { col = ENEMY_FRONT; }
-                    else
-                    {
-                        col = 0;
-                        maxCol = ENEMY_FRONT;
-                    }
+                    //int col = -1;
+                    //int maxCol = MAX_COL;
+                    //if (TargetsEnemy()) { col = ENEMY_FRONT; }
+                    //else
+                    //{
+                    //    col = 0;
+                    //    maxCol = ENEMY_FRONT;
+                    //}
 
-                    for (; col < maxCol; col++)
-                    {
-                        for (int row = 0; row < MAX_ROW; row++)
-                        {
-                            _liLegalTiles.Add(_combatMap[row, col]);
-                        }
-                    }
+                    //for (; col < maxCol; col++)
+                    //{
+                    //    for (int row = 0; row < MAX_ROW; row++)
+                    //    {
+                    //        //_liLegalTiles.Add(_combatMap[row, col]);
+                    //    }
+                    //}
                 }
                 else if (SelfOnly())
                 {
@@ -936,31 +818,22 @@ namespace RiverHollow.Game_Managers
                 }
                 else if (Columns())
                 {
-                    int startCol = ActiveCharacter.Tile.Col;
-                    int endCol = ActiveCharacter.Tile.Col;
+                    //int startCol = ActiveCharacter.Tile.X;
+                    //int endCol = ActiveCharacter.Tile.X;
 
-                    if(ActiveCharacter.Tile.Col > 0) { startCol = ActiveCharacter.Tile.Col - 1; }
-                    if (ActiveCharacter.Tile.Col < ALLY_FRONT) { endCol = ActiveCharacter.Tile.Col + 1; }
+                    //if(ActiveCharacter.Tile.X > 0) { startCol = ActiveCharacter.Tile.X - 1; }
+                    //if (ActiveCharacter.Tile.Col < ALLY_FRONT) { endCol = ActiveCharacter.Tile.Col + 1; }
 
-                    for (int row = 0; row < MAX_ROW; row++)
-                    {
-                        for (int col = startCol; col <= endCol; col++)
-                        {
-                            if (!_combatMap[row, col].Occupied())
-                            {
-                                _liLegalTiles.Add(_combatMap[row, col]);
-                            }
-                        }
-                    }
-                }
-            }
-
-            private void EnemyFrontLineLegal()
-            {
-                int col = FindEnemyFrontLine();
-                for (int row = 0; row < MAX_ROW; row++)
-                {
-                    _liLegalTiles.Add(_combatMap[row, col]);
+                    //for (int row = 0; row < MAX_ROW; row++)
+                    //{
+                    //    for (int col = startCol; col <= endCol; col++)
+                    //    {
+                    //        if (!_combatMap[row, col].Occupied())
+                    //        {
+                    //            _liLegalTiles.Add(_combatMap[row, col]);
+                    //        }
+                    //    }
+                    //}
                 }
             }
 
@@ -969,11 +842,11 @@ namespace RiverHollow.Game_Managers
                 if (_bDrawItem && _chosenItem != null)     //We want to draw the item above the character's head
                 {
                     int size = TileSize * CombatManager.CombatScale;
-                    GUIImage gItem = new GUIImage(_chosenItem.SourceRectangle, size, size, _chosenItem.Texture);
-                    CombatActor c = CombatManager.ActiveCharacter;
+                    //GUIImage gItem = new GUIImage(_chosenItem.SourceRectangle, size, size, _chosenItem.Texture);
+                    //CombatActor c = CombatManager.ActiveCharacter;
 
-                    gItem.AnchorAndAlignToObject(c.GetSprite(), SideEnum.Top, SideEnum.CenterX);
-                    gItem.Draw(spritebatch);
+                    //gItem.AnchorAndAlignToObject(c.BodySprite, SideEnum.Top, SideEnum.CenterX);
+                    //gItem.Draw(spritebatch);
                 }
                 if (_chosenAction != null && _chosenAction.Sprite != null)
                 {
@@ -1012,11 +885,7 @@ namespace RiverHollow.Game_Managers
                     {
                         _targetTile.Character.ChangeConditionStatus(_chosenItem.Condition, !_chosenItem.Helpful);
                     }
-                    int val = _targetTile.Character.IncreaseHealth(_chosenItem.Health);
-                    if (val > 0)
-                    {
-                        _targetTile.GUITile.AssignEffect(val, false);
-                    }
+                    _targetTile.Character.ModifyHealth(_chosenItem.Health, false);
                     _chosenItem.Remove(1);
                 }
 
@@ -1053,8 +922,8 @@ namespace RiverHollow.Game_Managers
             /// Retrieves the tiles that will be effected by this skill based off the area type
             /// </summary>
             /// <returns>A complete list of tiles that will be hit</returns>
-            public List<CombatTile> GetEffectedTiles(){
-                List<CombatTile> cbtTile = new List<CombatTile>();
+            public List<RHTile> GetEffectedTiles(){
+                List<RHTile> cbtTile = new List<RHTile>();
                 if (_chosenItem != null) {
                     cbtTile.Add(SelectedTile);
                 }
@@ -1151,7 +1020,6 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            public bool CompareTargetType(TargetEnum t) { return t == _chosenAction.Target; }
             public bool TargetsAlly()
             {
                 bool rv = false;
@@ -1227,7 +1095,7 @@ namespace RiverHollow.Game_Managers
                 if(_chosenAction != null) { _chosenAction.TileTargetList.Clear(); }
                 else if (_chosenItem != null) { _targetTile = null; }
             }
-            public List<CombatTile> GetTargetTiles()
+            public List<RHTile> GetTargetTiles()
             {
                 if (_chosenAction != null)
                 {
@@ -1238,7 +1106,7 @@ namespace RiverHollow.Game_Managers
                     return null;
                 }
             }
-            public void SetTargetTiles(List<CombatTile> li)
+            public void SetTargetTiles(List<RHTile> li)
             {
                 if (_chosenAction != null)
                 {

@@ -595,7 +595,7 @@ namespace RiverHollow.WorldObjects
             {
                 Remove(1);
                 PlayerManager.IncreaseStamina(Stamina);
-                PlayerManager.World.IncreaseHealth(Health);
+                PlayerManager.World.ModifyHealth(Health, true);
             }
             BackToMain();
         }
@@ -686,7 +686,7 @@ namespace RiverHollow.WorldObjects
             {
                 CombatActor target = PlayerManager.GetParty()[int.Parse(action)];
 
-                if (_iHealth > 0) { target.IncreaseHealth(_iHealth); }
+                if (_iHealth > 0) { target.ModifyHealth(_iHealth, false); }
                 if (_iMana > 0) { target.IncreaseMana(_iMana); }
                 if(_statusEffect != null) { target.AddStatusEffect(_statusEffect); }
 

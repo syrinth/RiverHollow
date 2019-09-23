@@ -326,12 +326,12 @@
     <property name="Type" value="Forest_2"/>
    </properties>
   </object>
-  <object id="38" name="SpawnPoint" x="966.333" y="937.667" width="10" height="15">
+  <object id="38" name="SpawnPoint" x="979.333" y="932.667" width="6.5" height="8.5">
    <properties>
     <property name="SpawnType" value="Forest"/>
    </properties>
   </object>
-  <object id="40" name="SpawnPoint" x="832.667" y="965.5" width="10" height="10">
+  <object id="40" name="SpawnPoint" x="835.667" y="964.5" width="10" height="10">
    <properties>
     <property name="SpawnType" value="Forest"/>
    </properties>

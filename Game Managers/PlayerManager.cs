@@ -209,20 +209,14 @@ namespace RiverHollow.Game_Managers
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            if (GameManager.InCombat()) { DrawCombat(spriteBatch); }
-            else { DrawWorld(spriteBatch); }
-        }
-        public static void DrawWorld(SpriteBatch spriteBatch)
-        {
-            if (_currentMap == MapManager.CurrentMap.Name) {
+            if (_currentMap == MapManager.CurrentMap.Name)
+            {
                 World.Draw(spriteBatch, true);
-                if (UseTool != null) {
+                if (UseTool != null)
+                {
                     UseTool.Draw(spriteBatch);
                 }
             }
-        }
-        public static void DrawCombat(SpriteBatch spriteBatch)
-        {
         }
 
         public static List<ClassedCombatant> GetParty()
@@ -231,14 +225,6 @@ namespace RiverHollow.Game_Managers
         }
         public static void AddToParty(ClassedCombatant c)
         {
-            foreach(CombatActor oldChar in _liParty)
-            {
-                if (oldChar.StartPos.Equals(c.StartPos))
-                {
-                    c.IncreaseStartPos();
-                }
-            }
-
             if (!_liParty.Contains(c))
             {
                 _liParty.Add(c);

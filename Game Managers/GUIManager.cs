@@ -8,6 +8,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Actors;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using System;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers
 {
@@ -152,9 +153,16 @@ namespace RiverHollow.Game_Managers
             _currentGUIScreen.ClearBackgroundImage();
         }
 
-        //Main Object
+        #region MainObject Control
         public static void OpenMainObject(GUIObject o) { _currentGUIScreen.OpenMainObject(o); }
         public static void CloseMainObject() { _currentGUIScreen.CloseMainObject(); }
+        #endregion
+
+        #region FloatingText Control
+        public static void AddFloatingText(int num, Color c) { _currentGUIScreen.AddFloatingText(num.ToString(), c); }
+        public static void AddFloatingText(string text, Color c) { _currentGUIScreen.AddFloatingText(text, c); }
+        public static void RemoveFloatingText(GUIFloatingText o) { _currentGUIScreen.RemoveFloatingText(o); }
+        #endregion
 
         public static void AddTextSelection(string text)
         {

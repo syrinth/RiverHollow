@@ -286,7 +286,7 @@ namespace RiverHollow.Game_Managers
         }
         public static RHTile RetrieveTile(int x, int y)
         {
-            return _currentMap.GetTile(x, y);
+            return _currentMap.GetTileByGrid(x, y);
         }
         public static RHTile RetrieveTile(Point mouseLocation)
         {

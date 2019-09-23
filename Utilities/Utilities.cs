@@ -41,14 +41,6 @@ namespace RiverHollow.Misc
 
             return newVec;
         }
-        public static Point SnapToGrid(Point p)
-        {
-            Point newVec = Point.Zero;
-            newVec.X = ((int)(p.X / TileSize)) * TileSize;
-            newVec.Y = ((int)(p.Y / TileSize)) * TileSize;
-
-            return newVec;
-        }
 
         public static Vector2 GetGridCoords(int x, int y)
         {

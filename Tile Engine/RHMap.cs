@@ -6,7 +6,6 @@ using MonoGame.Extended.Tiled.Graphics;
 using RiverHollow.Actors;
 using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
-using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIObjects;
 using RiverHollow.Misc;
@@ -61,6 +60,7 @@ namespace RiverHollow.Tile_Engine
         protected List<RHTile> _liTestTiles;
         protected List<WorldActor> _liActors;
         protected List<Monster> _liMonsters;
+        public List<Monster> Monsters => _liMonsters;
         protected List<Door> _liDoors;
         public List<WorldActor> ToRemove;
         public List<WorldActor> ToAdd;
@@ -495,66 +495,6 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
-        public void Update(GameTime gTime)
-        {
-            if (this == MapManager.CurrentMap)
-            {
-                _renderer.Update(_map, gTime);
-                if (IsRunning())
-                {
-                    foreach (Monster m in _liMonsters)
-                    {
-                        m.Update(gTime);
-                    }
-                }
-                
-                foreach (Item i in _liItems)
-                {
-                    ((Item)i).Update();
-                }
-            }
-
-            foreach (WorldObject obj in _liPlacedWorldObjects)
-            {
-                obj.Update(gTime);
-            }
-
-            if (ToAdd.Count > 0)
-            {
-                List<WorldActor> moved = new List<WorldActor>();
-                foreach (WorldActor c in ToAdd)
-                {
-                    if (AddCharacterImmediately(c))
-                    {
-                        moved.Add(c);
-                    }
-                }
-                foreach (WorldActor c in moved)
-                {
-                    ToAdd.Remove(c);
-                }
-                moved.Clear();
-            }
-
-            foreach (WorldActor c in ToRemove)
-            {
-                if (c.IsMonster() && _liMonsters.Contains((Monster)c)) { _liMonsters.Remove((Monster)c); }
-                else if (_liActors.Contains(c)) { _liActors.Remove(c); }
-            }
-            ToRemove.Clear();
-
-            if (IsRunning())
-            {
-                foreach (WorldActor c in _liActors)
-                {
-                    c.Update(gTime);
-                }
-            }
-            
-
-            ItemPickUpdate();
-        }
-
         public void Rollover()
         {
             foreach(RHTile tile in _liTilledTiles)
@@ -657,6 +597,66 @@ namespace RiverHollow.Tile_Engine
                 _liItems.Remove(i);
             }
             removedList.Clear();
+        }
+
+        public void Update(GameTime gTime)
+        {
+            if (this == MapManager.CurrentMap)
+            {
+                _renderer.Update(_map, gTime);
+                if (IsRunning())
+                {
+                    foreach (Monster m in _liMonsters)
+                    {
+                        m.Update(gTime);
+                    }
+                }
+
+                foreach (Item i in _liItems)
+                {
+                    ((Item)i).Update();
+                }
+            }
+
+            foreach (WorldObject obj in _liPlacedWorldObjects)
+            {
+                obj.Update(gTime);
+            }
+
+            if (ToAdd.Count > 0)
+            {
+                List<WorldActor> moved = new List<WorldActor>();
+                foreach (WorldActor c in ToAdd)
+                {
+                    if (AddCharacterImmediately(c))
+                    {
+                        moved.Add(c);
+                    }
+                }
+                foreach (WorldActor c in moved)
+                {
+                    ToAdd.Remove(c);
+                }
+                moved.Clear();
+            }
+
+            foreach (WorldActor c in ToRemove)
+            {
+                if (c.IsMonster() && _liMonsters.Contains((Monster)c)) { _liMonsters.Remove((Monster)c); }
+                else if (_liActors.Contains(c)) { _liActors.Remove(c); }
+            }
+            ToRemove.Clear();
+
+            if (IsRunning())
+            {
+                foreach (WorldActor c in _liActors)
+                {
+                    c.Update(gTime);
+                }
+            }
+
+
+            ItemPickUpdate();
         }
 
         public void DrawBase(SpriteBatch spriteBatch)
@@ -813,7 +813,7 @@ namespace RiverHollow.Tile_Engine
         }
         private void AddTile(ref List<Rectangle> list, int one, int two)
         {
-            RHTile tile = MapManager.CurrentMap.GetTile(Util.GetGridCoords(one, two));
+            RHTile tile = MapManager.CurrentMap.GetTileByGrid(Util.GetGridCoords(one, two));
             if (TileValid(tile, list)) { list.Add(tile.Rect); }
         }
         private bool TileValid(RHTile tile, List<Rectangle> list)
@@ -872,8 +872,8 @@ namespace RiverHollow.Tile_Engine
         private float CheckNudgeAllowed(float modifier, Point first, Point second, string map)
         {
             float rv = 0;
-            RHTile firstTile = MapManager.Maps[map].GetTile(Util.GetGridCoords(first));
-            RHTile secondTile = MapManager.Maps[map].GetTile(Util.GetGridCoords(second));
+            RHTile firstTile = MapManager.Maps[map].GetTileByGrid(Util.GetGridCoords(first));
+            RHTile secondTile = MapManager.Maps[map].GetTileByGrid(Util.GetGridCoords(second));
             if (firstTile != null && firstTile.Passable() && secondTile != null && secondTile.Passable())
             {
                 rv = modifier;
@@ -931,14 +931,14 @@ namespace RiverHollow.Tile_Engine
             }
             else if (centerDelta > 0)
             {
-                RHTile testTile = GetTile((int)(varCol + (v.Equals("Col") ? 1 : 0)), (int)(varRow + (v.Equals("Row") ? 1 : 0)));
+                RHTile testTile = GetTileByGrid((int)(varCol + (v.Equals("Col") ? 1 : 0)), (int)(varRow + (v.Equals("Row") ? 1 : 0)));
                 if (testTile != null && testTile.Passable()) {
                     rv = 1;
                 }
             }
             else if (centerDelta < 0)
             {
-                RHTile testTile = GetTile((int)(varCol - (v.Equals("Col") ? 1 : 0)), (int)(varRow + (v.Equals("Row") ? 1 : 0)));
+                RHTile testTile = GetTileByGrid((int)(varCol - (v.Equals("Col") ? 1 : 0)), (int)(varRow + (v.Equals("Row") ? 1 : 0)));
                 if (testTile != null && testTile.Passable()) { rv = -1; }
             }
 
@@ -1782,7 +1782,7 @@ namespace RiverHollow.Tile_Engine
             {
                 for (int j = (int)o.MapPosition.Y; j < o.MapPosition.Y + o.Height; j += TileSize)
                 {
-                    RHTile t = GetTile(Util.GetGridCoords(i, j));
+                    RHTile t = GetTileByGrid(Util.GetGridCoords(i, j));
                     if (t != null && !o.Tiles.Contains(t))
                     {
                         t.SetShadowObject(o);
@@ -1884,8 +1884,7 @@ namespace RiverHollow.Tile_Engine
         public void AddMonsterByPosition(Monster m, Vector2 position)
         {
             m.CurrentMapName = _name;
-            m.Position = position;
-            m.NewFoV();
+            m.Position = Util.SnapToGrid(position);
 
             if (_liMonsters.Count == 0)
             {
@@ -1941,15 +1940,15 @@ namespace RiverHollow.Tile_Engine
                 return null;
             }
         }
-        public RHTile GetTile(Point targetLoc)
+        public RHTile GetTileByGrid(Point targetLoc)
         {
-            return GetTile(targetLoc.ToVector2());
+            return GetTileByGrid(targetLoc.ToVector2());
         }
-        public RHTile GetTile(Vector2 pos)
+        public RHTile GetTileByGrid(Vector2 pos)
         {
-            return GetTile((int)pos.X, (int)pos.Y);
+            return GetTileByGrid((int)pos.X, (int)pos.Y);
         }
-        public RHTile GetTile(int x, int y)
+        public RHTile GetTileByGrid(int x, int y)
         {
             RHTile tile = null;
 
@@ -2108,12 +2107,12 @@ namespace RiverHollow.Tile_Engine
         {
             _map = map;
             _eSpawnType = Util.ParseEnum<SpawnConditionEnum>(obj.Properties["SpawnType"]);
-            _vSpawnPoint = map.GetTile(Util.GetGridCoords(obj.Position)).Center;
+            _vSpawnPoint = map.GetTileByGrid(Util.GetGridCoords(obj.Position)).Center;
         }
 
         public void Spawn()
         {
-            _monster = ObjectManager.GetMonsterByIndex(2);//ObjectManager.GetMobToSpawn(_eSpawnType);
+            _monster = ObjectManager.GetMonsterByIndex(3);//ObjectManager.GetMobToSpawn(_eSpawnType);
             if (_monster != null)
             {
                 _map.AddMonsterByPosition(_monster, _vSpawnPoint);
@@ -2145,6 +2144,10 @@ namespace RiverHollow.Tile_Engine
         public Vector2 Center => new Vector2(Position.X + TileSize/2, Position.Y + TileSize/2);
         public Rectangle Rect => Util.FloatRectangle(Position, TileSize, TileSize);
 
+        TileObject _tileMapObj;
+        CombatActor _combatActor;
+        public CombatActor Character => _combatActor;
+
         Dictionary<TiledMapTileLayer, Dictionary<string, string>> _diProps;
         WorldObject _obj;
         public WorldObject WorldObject => _obj;
@@ -2152,13 +2155,14 @@ namespace RiverHollow.Tile_Engine
         WorldObject _shadowObj;
         public WorldObject ShadowObject => _shadowObj;
 
-        TileObject _tileMapObj;
-
         Floor _floorObj;
         public Floor Flooring => _floorObj;
 
         bool _isRoad;
         public bool IsRoad => _isRoad;
+
+        bool _bSelected = false;
+        public bool Selected => _bSelected;
 
         public RHTile(int x, int y, string mapName)
         {
@@ -2228,21 +2232,6 @@ namespace RiverHollow.Tile_Engine
         public bool HasBeenDug()
         {
             return _floorObj != null && _floorObj.IsEarth();
-        }
-
-        public List<RHTile> GetWalkableNeighbours()
-        {
-            Vector2[] DIRS = new[] { new Vector2(1, 0), new Vector2(0, -1), new Vector2(-1, 0), new Vector2(0, 1) };
-            List<RHTile> neighbours = new List<RHTile>();
-            foreach (Vector2 d in DIRS)
-            {
-                RHTile tile = MapManager.Maps[MapName].GetTile(new Point((int)(_X + d.X), (int)(_Y + d.Y)));
-                if (tile != null && (tile.Passable() || tile.GetDoorObject() != null ) && tile.WorldObject == null) {
-                    neighbours.Add(tile);
-                }
-            }
-
-            return neighbours;
         }
 
         public void SetProperties(RHMap map)
@@ -2463,6 +2452,117 @@ namespace RiverHollow.Tile_Engine
                 ((Earth)_floorObj).Watered(false);
             }
         }
+
+        /// <summary>
+        /// Returns if the tile has a CombatActor assigned to it. 
+        /// </summary>
+        public bool HasCombatant()
+        {
+            return _combatActor != null;
+        }
+
+        /// <summary>
+        /// Assigns a CombatActor to the RHTile
+        /// </summary>
+        /// <param name="c"></param>
+        public void SetCombatant(CombatActor c)
+        {
+            _combatActor = c;
+        }
+
+        /// <summary>
+        /// Sets the selected value of the RHTile
+        /// </summary>
+        /// <param name="val">Whether to set or unset the selected value</param>
+        public void Select(bool val)
+        {
+            _bSelected = val;
+        }
+
+        #region TileTraversal
+        private RHMap MyMap()
+        {
+            return MapManager.Maps[MapName];
+        }
+
+        public List<RHTile> GetWalkableNeighbours()
+        {
+            Vector2[] DIRS = new[] { new Vector2(1, 0), new Vector2(0, -1), new Vector2(-1, 0), new Vector2(0, 1) };
+            List<RHTile> neighbours = new List<RHTile>();
+            foreach (Vector2 d in DIRS)
+            {
+                RHTile tile = MyMap().GetTileByGrid(new Point((int)(_X + d.X), (int)(_Y + d.Y)));
+                if (tile != null && (tile.Passable() || tile.GetDoorObject() != null) && tile.WorldObject == null)
+                {
+                    neighbours.Add(tile);
+                }
+            }
+
+            return neighbours;
+        }
+
+        /// <summary>
+        /// Returns a list of all RHTiles adjacent to thistile
+        /// </summary>
+        /// <returns></returns>
+        public List<RHTile> GetAdjacent()
+        {
+            List<RHTile> adj = new List<RHTile>();
+
+            //Have to null check
+            RHTile temp = GetTileByDirection(DirectionEnum.Up);
+            if (temp != null) { adj.Add(temp); }
+            temp = GetTileByDirection(DirectionEnum.Down);
+            if (temp != null) { adj.Add(temp); }
+            temp = GetTileByDirection(DirectionEnum.Left);
+            if (temp != null) { adj.Add(temp); }
+            temp = GetTileByDirection(DirectionEnum.Right);
+            if (temp != null) { adj.Add(temp); }
+
+            return adj;
+        }
+
+        /// <summary>
+        /// Returns the tile on the TileMap in the given direction from the MapTile
+        /// </summary>
+        /// <param name="t">The direction to look in</param>
+        /// <returns>The Tile if it exists, or null</returns>
+        public RHTile GetTileByDirection(DirectionEnum t)
+        {
+            RHTile rvTile = null;
+            switch (t)
+            {
+                case DirectionEnum.Down:
+                    if (this.Y < MyMap().MapHeightTiles - 1)
+                    {
+                        rvTile = MyMap().GetTileByGrid(this.X, this.Y + 1);
+                    }
+                    break;
+                case DirectionEnum.Left:
+                    if (this.X > 0)
+                    {
+                        rvTile = MyMap().GetTileByGrid(this.X - 1, this.Y);
+                    }
+                    break;
+                case DirectionEnum.Up:
+                    RHTile rv = null;
+                    if (this.Y > 0)
+                    {
+                        rvTile = MyMap().GetTileByGrid(this.X, this.Y - 1);
+                    }
+                    break;
+                case DirectionEnum.Right:
+                    if (this.X < MyMap().MapWidthTiles - 1)
+                    {
+                        rvTile = MyMap().GetTileByGrid(this.X + 1, this.Y);
+                    }
+                    break;
+            }
+
+
+            return rvTile;
+        }
+        #endregion
 
         public class TileObject
         {

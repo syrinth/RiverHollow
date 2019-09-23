@@ -648,21 +648,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             CharacterDetailObject _charBox;
             NPCDisplayBox _selectedBox;
-            GUIButton _btnMap;
-            PositionMap _map;
 
             NPCDisplayBox[] _arrDisplayBoxes;
 
             public HUDParty()
             {
-                _btnMap = new GUIButton("Map", SwitchModes);
-                AddControl(_btnMap);
-
                 _charBox = new CharacterDetailObject(PlayerManager.World, SyncCharacter);
                 _charBox.CenterOnScreen();
                 AddControl(_charBox);
-
-                _btnMap.AnchorAndAlignToObject(_charBox.WinDisplay, SideEnum.Right, SideEnum.Top);
 
                 int partySize = PlayerManager.GetParty().Count;
                 _arrDisplayBoxes = new NPCDisplayBox[partySize];
@@ -698,7 +691,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _selectedBox = _arrDisplayBoxes[0];
                 _selectedBox.Enable(true);
 
-                Width = _btnMap.Right - _charBox.Left;
+                Width = _charBox.Width;
                 Height = _charBox.Bottom - _arrDisplayBoxes[0].Top;
             }
 
@@ -762,10 +755,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     _charBox.SetAdventurer(selectedCharacter);
                 }
-                else if (_map != null)
-                {
-                    _map.SetOccupancy(selectedCharacter);
-                }
 
                 foreach (NPCDisplayBox box in _arrDisplayBoxes)
                 {
@@ -779,182 +768,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _selectedBox.Enable(true);
             }
 
-            public void SwitchModes()
-            {
-                if (_charBox != null)
-                {
-                    RemoveControl(_charBox);
-                    _charBox = null;
-                    _map = new PositionMap(_selectedBox.Actor, ChangeSelectedCharacter);
-                    _map.AnchorAndAlignToObject(_arrDisplayBoxes[0], SideEnum.Bottom, SideEnum.Left);
-                    AddControl(_map);
-                }
-                else if (_map != null)
-                {
-                    RemoveControl(_map);
-                    _map = null;
-                    _charBox = new CharacterDetailObject(_selectedBox.Actor, SyncCharacter);
-                    _charBox.AnchorAndAlignToObject(_arrDisplayBoxes[0], SideEnum.Bottom, SideEnum.Left);
-                    AddControl(_charBox);
-                }
-            }
-
             public void SyncCharacter()
             {
                 ((PlayerDisplayBox)_arrDisplayBoxes[0]).Configure();
-            }
-
-            private class PositionMap : GUIWindow
-            {
-                ClassedCombatant _currentCharacter;
-                StartPosition _currPosition;
-                StartPosition[,] _arrStartPositions;
-
-                public delegate void ClickDelegate(ClassedCombatant selectedCharacter);
-                private ClickDelegate _delAction;
-
-                public PositionMap(ClassedCombatant adv, ClickDelegate del) : base(BrownWin, 16, 16)
-                {
-                    _delAction = del;
-                    _currentCharacter = adv;
-
-                    int maxCols = 4;
-                    int maxRows = 3;
-
-                    int spacing = 10;
-                    int totalSpaceCol = (maxCols + 1) * spacing;
-                    int totalSpaceRow = (maxRows + 1) * spacing;
-                    _arrStartPositions = new StartPosition[maxCols, maxRows];
-                    for (int cols = 0; cols < maxCols; cols++)
-                    {
-                        for (int rows = 0; rows < maxRows; rows++)
-                        {
-                            StartPosition pos = new StartPosition(cols, rows);
-                            _arrStartPositions[cols, rows] = pos;
-                            if (cols == 0 && rows == 0)
-                            {
-                                pos.AnchorToInnerSide(this, SideEnum.TopLeft, spacing);
-                            }
-                            else if (cols == 0)
-                            {
-                                pos.AnchorAndAlignToObject(_arrStartPositions[0, rows - 1], SideEnum.Bottom, SideEnum.Left, spacing);
-                            }
-                            else
-                            {
-                                pos.AnchorAndAlignToObject(_arrStartPositions[cols - 1, rows], SideEnum.Right, SideEnum.Bottom, spacing);
-                            }
-                        }
-                    }
-
-                    SetOccupancy(_currentCharacter);
-
-                    this.Resize();
-                    this.IncreaseSizeTo((GUIManager.MAIN_COMPONENT_WIDTH) - (BrownWin.Edge * 2), (GUIManager.MAIN_COMPONENT_HEIGHT) - (BrownWin.Edge * 2));
-                }
-
-                public void SetOccupancy(ClassedCombatant currentCharacter)
-                {
-                    _currentCharacter = currentCharacter;
-                    foreach (ClassedCombatant c in PlayerManager.GetParty())
-                    {
-                        Vector2 vec = c.StartPos;
-                        bool current = (c == currentCharacter);
-                        _arrStartPositions[(int)vec.X, (int)vec.Y].SetCharacter(c);
-                        if (current)
-                        {
-                            _currPosition = _arrStartPositions[(int)vec.X, (int)vec.Y];
-                        }
-                    }
-                }
-
-                public override bool ProcessLeftButtonClick(Point mouse)
-                {
-                    bool rv = false;
-
-                    if (Contains(mouse))
-                    {
-                        rv = true;
-                    }
-
-                    foreach (StartPosition sp in _arrStartPositions)
-                    {
-                        if (sp.Contains(mouse))
-                        {
-                            if (!sp.Occupied())
-                            {
-                                rv = true;
-                                _currPosition.SetCharacter(null);
-                                _currPosition = sp;
-                                _currPosition.SetCharacter(_currentCharacter);
-                                _currentCharacter.SetStartPosition(new Vector2(_currPosition.Col, _currPosition.Row));
-                            }
-                            else
-                            {
-                                _currentCharacter = sp.Character;
-                                _delAction(_currentCharacter);
-                            }
-
-                            break;
-                        }
-                    }
-
-                    return rv;
-                }
-
-                private class StartPosition : GUIImage
-                {
-                    ClassedCombatant _character;
-                    public ClassedCombatant Character => _character;
-                    int _iCol;
-                    int _iRow;
-                    public int Col => _iCol;
-                    public int Row => _iRow;
-
-                    private GUICharacterSprite _sprite;
-
-                    public StartPosition(int col, int row) : base(new Rectangle(0, 80, 16, 16), TileSize, TileSize, @"Textures\Dialog")
-                    {
-                        _iCol = col;
-                        _iRow = row;
-
-                        SetScale(Scale);
-                    }
-
-                    public override void Draw(SpriteBatch spriteBatch)
-                    {
-                        base.Draw(spriteBatch);
-                        if (_sprite != null)
-                        {
-                            _sprite.Draw(spriteBatch);
-                        }
-                    }
-
-                    public void SetCharacter(ClassedCombatant c)
-                    {
-                        _character = c;
-                        if (c != null)
-                        {
-                            if (c != null)
-                            {
-                                if (c == PlayerManager.World) { _sprite = new GUICharacterSprite(true); }
-                                else { _sprite = new GUICharacterSprite(c.BodySprite, true); }
-
-                                _sprite.SetScale(2);
-                                _sprite.PlayAnimation(WActorBaseAnim.IdleDown);
-                                _sprite.CenterOnObject(this);
-                                _sprite.MoveBy(new Vector2(0, -(this.Width / 4)));
-                                AddControl(_sprite);
-                            }
-                        }
-                        else
-                        {
-                            RemoveControl(_sprite);
-                            _sprite = null;
-                        }
-                    }
-
-                    public bool Occupied() { return _character != null; }
-                }
             }
 
             public class CharacterDetailObject : GUIObject

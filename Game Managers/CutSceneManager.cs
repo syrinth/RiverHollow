@@ -277,7 +277,7 @@ namespace RiverHollow.Game_Managers
                                     break;
                                 case EnumCSCommand.Face:
                                     WorldActor n = GetActor(sCommandData[0]);
-                                    n.SetWalkingDir((WorldActor.DirectionEnum)HandleDir(sCommandData[1]));
+                                    n.SetWalkingDir((DirectionEnum)HandleDir(sCommandData[1]));
                                     n.Idle();
                                     bGoToNext = true;
                                     break;

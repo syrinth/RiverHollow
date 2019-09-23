@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using System;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -222,9 +223,20 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _guiBackgroundImg = null;
         }
 
-        //Main Object
+        #region Main Object Control
         public virtual void OpenMainObject(GUIObject o) { }
         public virtual void CloseMainObject() { }
+        #endregion
+
+        #region Floating Text Control
+        public void AddFloatingText(string text, Color c) {
+
+            AddControl(new GUIFloatingText(text, c));
+        }
+        public void RemoveFloatingText(GUIFloatingText o) {
+            RemoveControl(o);
+        }
+        #endregion
 
         public void AddTextSelection(string text)
         {

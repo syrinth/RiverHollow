@@ -4,9 +4,6 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIObjects;
-using RiverHollow.SpriteAnimations;
-using RiverHollow.WorldObjects;
-using System;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.GUIObjects
@@ -213,6 +210,29 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
 
             return rv;
+        }
+    }
+
+    public class GUIFloatingText : GUIObject
+    {
+        const double VANISH_AFTER = 1.0;
+        double _dCountDown = 0;
+        GUIText _gText;
+
+        public GUIFloatingText(string text, Color c)
+        {
+            _gText = new GUIText(text);
+            _gText.SetColor(c);            
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            _gText.MoveBy(new Vector2(0, 0.05f));
+            _dCountDown += gTime.ElapsedGameTime.TotalSeconds;
+            if(_dCountDown >= VANISH_AFTER)
+            {
+                GUIManager.RemoveFloatingText(this);
+            }
         }
     }
 }
