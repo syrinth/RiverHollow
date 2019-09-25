@@ -118,7 +118,7 @@ namespace RiverHollow.Actors
     {
         #region Properties
         protected Vector2 _vMoveTo;
-        public Vector2 MoveToLocation { get => _vMoveTo; }
+        public Vector2 MoveToLocation => _vMoveTo;
         public string CurrentMapName;
         public Vector2 NewMapPosition;
         public DirectionEnum Facing = DirectionEnum.Down;
@@ -320,16 +320,32 @@ namespace RiverHollow.Actors
             return rv;
         }
 
+        /// <summary>
+        /// Attempts to move the Actor to the indicated target
+        /// </summary>
+        /// <param name="target">The target location on the world map to move to</param>
         protected void HandleMove(Vector2 target)
         {
+            //Determines the distance that needs to be traveled fromthe current
+            //position to the target
             Vector2 direction = Vector2.Zero;
             float deltaX = Math.Abs(target.X - this.Position.X);
             float deltaY = Math.Abs(target.Y - this.Position.Y);
 
+            //Determines how much of the needed position we're capable of moving in one movement
             Util.GetMoveSpeed(Position, target, Speed, ref direction);
+
+            //Attempt to move
             if (!CheckMapForCollisionsAndMove(direction, _bIgnoreCollisions))
             {
+                //If we can't move, set a timer to go Ethereal
                 if (_dEtherealCD == 0) { _dEtherealCD = 5; }
+            }
+
+            //If, after movement, we've reached the given location, zero it.
+            if(_vMoveTo == Position)
+            {
+                _vMoveTo = Vector2.Zero;
             }
         }
 
@@ -2614,13 +2630,21 @@ namespace RiverHollow.Actors
 
         public override void Update(GameTime gTime)
         {
-            if (_dCooldown > 0)
+            if (_dEtherealCD != 0)
             {
-                _dCooldown -= gTime.ElapsedGameTime.TotalSeconds;
-                if (_liTilePath.Count == 0 && _dCooldown <= 0 && PlayerManager.ReadyToSleep)
+                _dEtherealCD -= gTime.ElapsedGameTime.TotalSeconds;
+                if (_dEtherealCD <= 0)
                 {
-                    GUIManager.SetScreen(new DayEndScreen());
-                    _dCooldown = 0;
+                    if (!_bIgnoreCollisions)
+                    {
+                        _dEtherealCD = 5;
+                        _bIgnoreCollisions = true;
+                    }
+                    else
+                    {
+                        _dEtherealCD = 0;
+                        _bIgnoreCollisions = false;
+                    }
                 }
             }
 
@@ -2628,7 +2652,7 @@ namespace RiverHollow.Actors
             {
                 HandleMove(_vMoveTo);
             }
-            else if (_liTilePath.Count > 0)
+            if (_liTilePath.Count > 0)
             {
                 Vector2 targetPos = _liTilePath[0].Position;
                 if (Position == targetPos)
@@ -2636,20 +2660,12 @@ namespace RiverHollow.Actors
                     _liTilePath.RemoveAt(0);
                     if (_liTilePath.Count == 0)
                     {
-                        if (PlayerManager.ReadyToSleep)
-                        {
-                            if (_dCooldown == 0)
-                            {
-                                Facing = DirectionEnum.Left;
-                                PlayAnimation(WActorBaseAnim.IdleLeft);
-                                _dCooldown = 3;
-                                PlayerManager.AllowMovement = true;
-                            }
-                        }
-                        else
-                        {
-                            DetermineFacing(Vector2.Zero);
-                        }
+                        DetermineFacing(Vector2.Zero);
+                    }
+
+                    if (_liTilePath.Count > 0 && _liTilePath[0] != null && _liTilePath[0].GetDoorObject() != null)
+                    {
+                        MapManager.ChangeMaps(this, CurrentMapName, MapManager.CurrentMap.DictionaryExit[_liTilePath[0].GetDoorObject().Rect]);
                     }
                 }
                 else
@@ -2770,11 +2786,6 @@ namespace RiverHollow.Actors
                 _spriteHair.FrameCutoff = 0;
                 _hat = null;
             }
-        }
-
-        public void SetPath(List<RHTile> list)
-        {
-            _liTilePath = list;
         }
     }
 
@@ -3046,7 +3057,7 @@ namespace RiverHollow.Actors
             {
                 UpdateMovement(gTime);
 
-                if (PlayerManager.PlayerInRange(this.Center, TileSize * 5))
+                if (PlayerManager.PlayerInRange(this.Center, TileSize * 8))
                 {
                     CombatManager.NewBattle();
                 }

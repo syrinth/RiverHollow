@@ -56,8 +56,6 @@ namespace RiverHollow.GUIObjects
             return rv;
         }
 
-        
-
         public static void Update()
         {
             Position = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);

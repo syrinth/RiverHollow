@@ -123,17 +123,11 @@ namespace RiverHollow.Game_Managers
 
         public static void Update(GameTime gTime)
         {
-            if (GameManager.InCombat()) { UpdateCombat(gTime); }
-            else { UpdateWorld(gTime); }
-        }
-
-        public static void UpdateWorld(GameTime gTime)
-        {
             Vector2 moveDir = Vector2.Zero;
 
             if (AllowMovement)
             {
-                if(UseTool == null)
+                if (UseTool == null)
                 {
                     KeyboardState ks = Keyboard.GetState();
                     if (ks.IsKeyDown(Keys.W))
@@ -201,10 +195,6 @@ namespace RiverHollow.Game_Managers
                 }
             }
             World.Update(gTime);
-        }
-        public static void UpdateCombat(GameTime gTime)
-        {
-            
         }
 
         public static void Draw(SpriteBatch spriteBatch)

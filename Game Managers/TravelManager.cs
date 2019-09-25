@@ -327,6 +327,7 @@ namespace RiverHollow.Game_Managers
             }
             return returnList;
         }
+
         private static List<RHTile> BackTrack(RHTile current)
         {
             List<RHTile> list = new List<RHTile>();
@@ -346,8 +347,9 @@ namespace RiverHollow.Game_Managers
             int total = 0;
             int distance = (Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y));
 
+            //Do not perform any wall buffer checks if we are in combat
             List<RHTile> futureTiles = a.GetWalkableNeighbours();
-            int wallBuffer = (futureTiles.Count < 4) ? 10 : 0;
+            int wallBuffer = CombatManager.InCombat ? 0 : ((futureTiles.Count < 4) ? 10 : 0);
 
             int multiplier = (a.IsRoad ? 1 : slowCost);
 

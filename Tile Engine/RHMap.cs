@@ -665,7 +665,15 @@ namespace RiverHollow.Tile_Engine
 
             _renderer.Draw(_map, Camera._transform);
 
-            foreach(WorldActor c in _liActors)
+            if (CombatManager.InCombat)
+            {
+                foreach (RHTile t in CombatManager.LegalTiles)
+                {
+                    t.Draw(spriteBatch);
+                }
+            }
+
+            foreach (WorldActor c in _liActors)
             {
                 c.Draw(spriteBatch, true);
             }
@@ -1134,7 +1142,7 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
-            if (!PlayerManager.Busy)
+            if (!PlayerManager.Busy && !CombatManager.InCombat)
             {
                 if (Scrying())
                 {
@@ -1922,6 +1930,10 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
+        public RHTile GetTileOffGrid(Vector2 targetLoc)
+        {
+            return GetTileOffGrid((int)targetLoc.X, (int)targetLoc.Y);
+        }
         public RHTile GetTileOffGrid(Point targetLoc)
         {
             return GetTileOffGrid(targetLoc.X, targetLoc.Y);
@@ -2162,7 +2174,10 @@ namespace RiverHollow.Tile_Engine
         public bool IsRoad => _isRoad;
 
         bool _bSelected = false;
-        public bool Selected => _bSelected;
+        public bool IsSelected => _bSelected;
+
+        bool _bLegalTile;
+        public bool IsLegal => _bLegalTile;
 
         public RHTile(int x, int y, string mapName)
         {
@@ -2173,10 +2188,28 @@ namespace RiverHollow.Tile_Engine
             _diProps = new Dictionary<TiledMapTileLayer, Dictionary<string, string>>();
         }
 
-        internal void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            if (_floorObj != null) { _floorObj.Draw(spriteBatch); }
-            if (_obj != null) { _obj.Draw(spriteBatch); }
+            if (_bLegalTile)
+            {
+                Rectangle source = new Rectangle(0, 112, 16, 16);
+                Rectangle dest = new Rectangle((int)Position.X, (int)Position.Y, TileSize, TileSize);
+
+                spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, source, Color.White);
+            }
+            if (_bSelected)
+            {
+                Rectangle source = new Rectangle(16, 112, 16, 16);
+                Rectangle dest = new Rectangle((int)Position.X, (int)Position.Y, TileSize, TileSize);
+
+                spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, source, Color.White);
+            }
+            if (_floorObj != null) {
+                _floorObj.Draw(spriteBatch);
+            }
+            if (_obj != null) {
+                _obj.Draw(spriteBatch);
+            }
         }
 
         public void Dig()
@@ -2354,6 +2387,20 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
+        /// <summary>
+        /// For use only during Combat to see if can path through
+        /// </summary>
+        /// <returns>True if not in combat, or character is null</returns>
+        public bool CanPathThroughInCombat()
+        {
+            bool rv = true;
+            if (CombatManager.InCombat)
+            {
+                rv = Character == null;
+            }
+            return rv;
+        }
+
         public bool IsValidWall()
         {
             bool rv = false;
@@ -2479,6 +2526,15 @@ namespace RiverHollow.Tile_Engine
             _bSelected = val;
         }
 
+        /// <summary>
+        /// Sets the legal value of the RHTile
+        /// </summary>
+        /// <param name="val">Whether to set or unset the selected value</param>
+        public void LegalTile(bool val)
+        {
+            _bLegalTile = val;
+        }
+
         #region TileTraversal
         private RHMap MyMap()
         {
@@ -2492,7 +2548,7 @@ namespace RiverHollow.Tile_Engine
             foreach (Vector2 d in DIRS)
             {
                 RHTile tile = MyMap().GetTileByGrid(new Point((int)(_X + d.X), (int)(_Y + d.Y)));
-                if (tile != null && (tile.Passable() || tile.GetDoorObject() != null) && tile.WorldObject == null)
+                if (tile != null && ((tile.Passable() && tile.CanPathThroughInCombat()) || tile.GetDoorObject() != null) && tile.WorldObject == null)
                 {
                     neighbours.Add(tile);
                 }

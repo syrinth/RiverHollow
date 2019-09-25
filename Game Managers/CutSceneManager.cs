@@ -323,7 +323,7 @@ namespace RiverHollow.Game_Managers
             }
 
             //Update the Player character
-            PlayerManager.UpdateWorld(gTime);
+            PlayerManager.Update(gTime);
 
             //Update the Clone map the cutscene is on
             _cutsceneMap.Update(gTime);

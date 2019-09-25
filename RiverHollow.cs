@@ -112,6 +112,8 @@ namespace RiverHollow
                     HarpManager.Update(gTime);
                 }
 
+                if (CombatManager.InCombat) { CombatManager.Update(gTime);}
+
                 //GUIManager always needs to update, regardless of game state
                 GUIManager.Update(gTime);
 
@@ -225,7 +227,7 @@ namespace RiverHollow
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
 
             GUIManager.Draw(spriteBatch);
-            if (!Informational() && !InCombat())
+            if (!Informational() && !CombatManager.InCombat)
             {
                 GameCalendar.Draw(spriteBatch);
             }

@@ -198,7 +198,7 @@ namespace RiverHollow.Game_Managers
         private enum InputEnum { None, Input }
         private static InputEnum _inputState;
 
-        private enum MapEnum { None, WorldMap, Combat }
+        private enum MapEnum { None, WorldMap }
         private static MapEnum _mapState;
 
         private enum EnumBuildType { None, Construct, Destroy, Move }
@@ -222,11 +222,6 @@ namespace RiverHollow.Game_Managers
         }
         public static bool Scrying() { return _scrying; }
 
-        public static bool InCombat() { return _mapState == MapEnum.Combat; }
-        public static void GoToCombat() {
-            _mapState = MapEnum.Combat;
-            GUIManager.SetScreen(new CombatScreen());
-        }
         public static bool OnMap() { return _mapState == MapEnum.WorldMap; }
         public static void GoToWorldMap() {
             _mapState = MapEnum.WorldMap;
