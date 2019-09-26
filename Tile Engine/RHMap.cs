@@ -671,6 +671,14 @@ namespace RiverHollow.Tile_Engine
                 {
                     t.Draw(spriteBatch);
                 }
+
+                foreach (RHTile t in CombatManager.AreaTiles)
+                {
+                    if (!CombatManager.LegalTiles.Contains(t))
+                    {
+                        t.Draw(spriteBatch);
+                    }
+                }
             }
 
             foreach (WorldActor c in _liActors)
@@ -2173,11 +2181,9 @@ namespace RiverHollow.Tile_Engine
         bool _isRoad;
         public bool IsRoad => _isRoad;
 
+        bool _bArea = false;
         bool _bSelected = false;
-        public bool IsSelected => _bSelected;
-
-        bool _bLegalTile;
-        public bool IsLegal => _bLegalTile;
+        bool _bLegalTile = false;
 
         public RHTile(int x, int y, string mapName)
         {
@@ -2190,6 +2196,13 @@ namespace RiverHollow.Tile_Engine
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            if (_bArea)
+            {
+                Rectangle source = new Rectangle(32, 112, 16, 16);
+                Rectangle dest = new Rectangle((int)Position.X, (int)Position.Y, TileSize, TileSize);
+
+                spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, source, Color.White);
+            }
             if (_bLegalTile)
             {
                 Rectangle source = new Rectangle(0, 112, 16, 16);
@@ -2533,6 +2546,15 @@ namespace RiverHollow.Tile_Engine
         public void LegalTile(bool val)
         {
             _bLegalTile = val;
+        }
+
+        /// <summary>
+        /// Sets the area value of the RHTile
+        /// </summary>
+        /// <param name="val">Whether to set or unset the area value</param>
+        public void AreaTile(bool val)
+        {
+            _bArea = val;
         }
 
         #region TileTraversal

@@ -42,8 +42,6 @@ namespace RiverHollow.Game_Managers
         public enum SkillTagsEnum { Bonus, Harm, Heal, Push, Pull, Remove, Retreat, Step, Status, Summon};
         public enum TargetEnum { Enemy, Ally};
         public enum MenuEnum { Action, Special, UseItem };
-        public enum RangeEnum { Self, Melee, Ranged, Column };
-        public enum AreaEffectEnum { Single, Rectangle, Cross, Each};
         public enum ElementEnum { None, Fire, Ice, Lightning };
         public enum AttackTypeEnum { Physical, Magical };
         public enum ElementAlignment { Neutral, Vulnerable, Resists };

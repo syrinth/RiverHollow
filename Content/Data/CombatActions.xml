@@ -11,12 +11,12 @@
     <Item>
       <!--Move-->
       <Key>0</Key>
-      <Value>[Type:Action][Target:Ally][Icon:3-0][Range:Column][Area:Rectangle-1-1][Action:Move][Charge:50]</Value>
+      <Value>[Type:Action][Target:Ally][Icon:3-0][Range:0][Area:0][Action:Move][Charge:50]</Value>
     </Item>
     <Item>
       <!--Escape-->
       <Key>1</Key>
-      <Value>[Type:Action][Target:Self][Icon:4-0][Range:Single][Action:Escape]</Value>
+      <Value>[Type:Action][Target:Self][Icon:4-0][Range:0][Action:Escape]</Value>
     </Item>
     <Item>
       <!--Use Item-->
@@ -36,92 +36,92 @@
     <!--<20> Wizard Skills-->
     <Item>
       <Key>20</Key>
-      <Value>[Type:Spell][Animation:LightningSprite-94-160-15-0.1-32][Target:Enemy][Range:Ranged][Area:Cross][Cost:5][Harm:150][Action:UserCast Direct Apply][Element:Lightning]</Value>
+      <Value>[Type:Spell][Animation:LightningSprite-94-160-15-0.1-32][Target:Enemy][Range:8][Area:1][Cost:5][Harm:150][Action:UserCast Direct Apply][Element:Lightning]</Value>
     </Item>
     <!--<40> Healer Skills-->
     <Item>
       <Key>40</Key>
-      <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Single][Cost:5][Heal:100][Action:UserCast Direct Apply]</Value>
+      <Value>[Type:Spell][Target:Ally][Range:5][Area:0][Cost:5][Heal:100][Action:UserCast Direct Apply]</Value>
     </Item>
     <Item>
       <Key>41</Key>
-      <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Each][Cost:5][Heal:100][Action:UserCast Direct Apply]</Value>
+      <Value>[Type:Spell][Target:Ally][Range:5][Area:0][Cost:5][Heal:100][Action:UserCast Direct Apply]</Value>
     </Item>
     <!--<60> Summoner Skills-->
     <Item>
       <!--Summoner Attack-->
       <Key>60</Key>
-      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:Ranged][Area:Single][Harm:100][Bonus:Summons-10][Action:UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:5][Area:0][Harm:100][Bonus:Summons-10][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
       <!--Summon Magus-->
       <Key>61</Key>
-      <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Single][Cost:5][Summon:5][Action:UserCast Apply]</Value>
+      <Value>[Type:Spell][Target:Ally][Range:5][Area:0][Cost:5][Summon:5][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <!--Summon Earth Elemental-->
       <Key>62</Key>
-      <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Single][Cost:5][Summon:1][Action:UserCast Apply]</Value>
+      <Value>[Type:Spell][Target:Ally][Range:5][Area:0][Cost:5][Summon:1][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <!--Summon Water Elemental-->
       <Key>63</Key>
-      <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Single][Cost:5][Summon:2][Action:UserCast Apply]</Value>
+      <Value>[Type:Spell][Target:Ally][Range:5][Area:0][Cost:5][Summon:2][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <!--Summon Fire Elemental-->
       <Key>64</Key>
-      <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Single][Cost:5][Summon:3][Action:UserCast Apply]</Value>
+      <Value>[Type:Spell][Target:Ally][Range:5][Area:0][Cost:5][Summon:3][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <!--Summon Air Elemental-->
       <Key>65</Key>
-      <Value>[Type:Spell][Target:Ally][Range:Ranged][Area:Single][Cost:5][Summon:4][Action:UserCast Apply]</Value>
+      <Value>[Type:Spell][Target:Ally][Range:5][Area:0][Cost:5][Summon:4][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <!--Unity-->
       <Key>66</Key>
-      <Value>[Type:Spell][Target:Enemy][Range:Ranged][Area:Single][Cost:5][Remove:Summons-Every][Harm:0][Bonus:Summons-100][Action:UserCast Apply]</Value>
+      <Value>[Type:Spell][Target:Enemy][Range:5][Area:0][Cost:5][Remove:Summons-Every][Harm:0][Bonus:Summons-100][Action:UserCast Apply]</Value>
     </Item>
     <!--<80> Witch Skills-->
     <Item>
       <!--Poison-->
       <Key>80</Key>
-      <Value>[Type:Spell][Animation:WitchsCurse-30-38-8-0.1][Target:Enemy][Range:Ranged][Area:Single][Cost:5][Status:4-4-Target][Action:UserCast Direct Apply]</Value>
+      <Value>[Type:Spell][Animation:WitchsCurse-30-38-8-0.1][Target:Enemy][Range:5][Area:0][Cost:5][Status:4-4-Target][Action:UserCast Direct Apply]</Value>
     </Item>
     <!--<100> Lancer Skills-->
     <Item>
       <Key>100</Key>
-      <Value>[Type:Action][Target:Self][Area:Single][Status:6-3-Self][Action:UserCast Apply]</Value>
+      <Value>[Type:Action][Target:Self][Area:0][Status:6-3-Self][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <Key>101</Key>
-      <Value>[Type:Action][Target:Enemy][Range:Melee][Area:Single][Harm:120][Push:2][Action:UserMove UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:0][Area:0][Harm:120][Push:2][Action:UserMove UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>102</Key>
-      <Value>[Type:Action][Target:Enemy][Range:Melee][Area:Rectangle-1-3][Harm:120][Action:UserMove UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:0][Area:0][Harm:120][Action:UserMove UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>103</Key>
-      <Value>[Type:Action][Target:Self][Area:Single][Status:9-4-Self][Action:UserCast Apply]</Value>
+      <Value>[Type:Action][Target:Self][Area:0][Status:9-4-Self][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <Key>104</Key>
-      <Value>[Type:Action][Target:Enemy][Range:Melee][Area:Rectangle-3-1][Harm:70][Action:UserMove UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:0][Area:0][Harm:70][Action:UserMove UserAttack Apply]</Value>
     </Item>
     <!--<120> Knight Skills-->
     <Item>
       <Key>120</Key>
-      <Value>[Type:Action][Target:Enemy][Range:Ranged][Area:Single][Pull:1][Action:UserCast Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:5][Area:0][Pull:1][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <Key>121</Key>
-      <Value>[Type:Action][Target:Enemy][Range:Ranged][Area:Single][Harm:50][Push:1][Step:2][Action:UserMove UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:5][Area:0][Harm:50][Push:1][Step:2][Action:UserMove UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>122</Key>
-      <Value>[Type:Action][Target:Enemy][Range:Ranged][Area:Single][Harm:50][Push:1][Step:2][Action:UserMove UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:5][Area:0][Harm:50][Push:1][Step:2][Action:UserMove UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>123</Key>
@@ -134,52 +134,52 @@
     </Item>
     <Item>
       <Key>141</Key>
-      <Value>[Type:Action][Target:Enemy][Range:Ranged][Area:Single][Status:12-3-Target][Action:UserCast Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:5][Area:0][Status:12-3-Target][Action:UserCast Apply]</Value>
     </Item>
     <Item>
       <Key>142</Key>
-      <Value>[Type:Action][Target:Enemy][Range:Ranged][Area:Rectangle-2-2][Harm:80][Action:UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:5][Area:0][Harm:80][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>143</Key>
-      <Value>[Type:Action][Target:Enemy][Range:Ranged][Area:Single][Harm:110][Action:UserAttack Apply][Crit:80][Accuracy:-10]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:5][Area:0][Harm:110][Action:UserAttack Apply][Crit:80][Accuracy:-10]</Value>
     </Item>
     <Item>
       <Key>144</Key>
-      <Value>[Type:Action][Target:Enemy][Range:Ranged][Area:Single][Harm:90][Retreat-1][Action:UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:5][Area:0][Harm:90][Retreat-1][Action:UserAttack Apply]</Value>
     </Item>
     <!--<160> Bard Skills-->
     <Item>
       <Key>160</Key>
-      <Value>[Type:Action][Target:Enemy][Range:Melee][Area:Single][Action:UserMove UserAttack Apply][Harm:100][Retreat:1]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:0][Area:0][Action:UserMove UserAttack Apply][Harm:100][Retreat:1]</Value>
     </Item>
     <Item>
       <Key>161</Key>
-      <Value>[Type:Action][Target:Ally][Range:Ranged][Area:Each][Action:UserCast Apply][Status:7-3-Self]</Value>
+      <Value>[Type:Action][Target:Ally][Range:5][Area:0][Action:UserCast Apply][Status:7-3-Self]</Value>
     </Item>
     <Item>
       <Key>162</Key>
-      <Value>[Type:Action][Target:Ally][Range:Ranged][Area:Each][Action:UserCast Apply][Status:8-3-Self]</Value>
+      <Value>[Type:Action][Target:Ally][Range:5][Area:0][Action:UserCast Apply][Status:8-3-Self]</Value>
     </Item>
     <Item>
       <Key>163</Key>
-      <Value>[Type:Action][Target:Allies][Area:Each][Action:UserCast Apply][Status:13-10-Allies]</Value>
+      <Value>[Type:Action][Target:Allies][Area:0][Action:UserCast Apply][Status:13-10-Allies]</Value>
     </Item>
     <Item>
       <Key>164</Key>
-      <Value>[Type:Action][Target:Enemy][Area:Single][Range:Melee][Status:14-2-Self][Action:UserMove UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Area:0][Range:0][Status:14-2-Self][Action:UserMove UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>165</Key>
-      <Value>[Type:Action][Target:Allies][Area:Each][Action:UserCast Apply][Status:15-10-Allies]</Value>
+      <Value>[Type:Action][Target:Allies][Area:0][Action:UserCast Apply][Status:15-10-Allies]</Value>
     </Item>
     <Item>
       <Key>166</Key>
-      <Value>[Type:Action][Target:Allies][Area:Each][Action:UserCast Apply][Status:16-10-Allies]</Value>
+      <Value>[Type:Action][Target:Allies][Area:0][Action:UserCast Apply][Status:16-10-Allies]</Value>
     </Item>
     <Item>
       <Key>167</Key>
-      <Value>[Type:Action][Target:Enemy][Area:Rectangle-3-1][Range:Melee][Status:17-3-Allies][Action:UserMove UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Area:0][Range:0][Status:17-3-Allies][Action:UserMove UserAttack Apply]</Value>
     </Item>
     <!--<180> Later-->
     <!--<200> Later-->
@@ -189,11 +189,11 @@
     <Item>
       <!--Attack-->
       <Key>300</Key>
-      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:Melee][Area:Single][Harm:100][Action:UserMove UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:1][Area:0][Harm:100][Action:UserMove UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>301</Key>
-      <Value>[Type:Action][Animation:LeafCutter-32-32-3-0.1][Target:Enemy][Icon:0-0][Range:Melee][Area:Single][Harm:100][Action:UserMove UserAttack Direct Apply]</Value>
+      <Value>[Type:Action][Animation:LeafCutter-32-32-3-0.1][Target:Enemy][Icon:0-0][Range:0][Area:0][Harm:100][Action:UserMove UserAttack Direct Apply]</Value>
       <!--Attack-->
     </Item>
   </Asset>

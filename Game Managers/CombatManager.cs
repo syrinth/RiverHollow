@@ -23,6 +23,9 @@ namespace RiverHollow.Game_Managers
         private static List<RHTile> _liLegalTiles;
         public static List<RHTile> LegalTiles => _liLegalTiles;
 
+        private static List<RHTile> _liAreaTiles;
+        public static List<RHTile> AreaTiles => _liAreaTiles;
+
         public static CombatActor ActiveCharacter;
         private static List<CombatActor> _liMonsters;
         public static List<CombatActor> Monsters  => _liMonsters;
@@ -59,6 +62,7 @@ namespace RiverHollow.Game_Managers
             Delay = 0;
 
             _liLegalTiles = new List<RHTile>();
+            _liAreaTiles = new List<RHTile>();
             _listParty = new List<CombatActor>();
             _listParty.AddRange(PlayerManager.GetParty());
 
@@ -82,11 +86,13 @@ namespace RiverHollow.Game_Managers
             foreach (CombatActor c in _liMonsters)
             {
                 c.Tile = MapManager.CurrentMap.GetTileOffGrid(c.CollisionBox.Center);
+                c.Tile.SetCombatant(c);
             }
 
             foreach (CombatActor c in Party)
             {
                 c.Tile = MapManager.CurrentMap.GetTileOffGrid(c.CollisionBox.Center);
+                c.Tile.SetCombatant(c);
             }
 
             _scrCombat = new CombatScreen();
@@ -313,180 +319,6 @@ namespace RiverHollow.Game_Managers
             GoToWorldMap();
         }
 
-        //For now, when the enemy takes their turn, have them select a random party member
-        //When enemies get healing/defensive skills, they'll have their own logic to process
-        public static void EnemyTakeTurn()
-        {
-            bool moveToPlayer = false;
-            RHTile targetTile = null;
-            RHRandom r = new RHRandom();
-            CombatAction action = null;
-            bool gottaMove = true;
-            //Step one determine if we are in range of a target
-            foreach (CombatAction c in ActiveCharacter.AbilityList)
-            {
-                if (c.Range == RangeEnum.Melee)
-                {
-                    
-                    foreach (RHTile t in ActiveCharacter.Tile.GetAdjacent())
-                    {
-                        if (t.HasCombatant() && t.Character.IsAdventurer())
-                        {
-                            gottaMove = false;
-                            action = c;
-                            targetTile = t;
-                            break;
-                        }
-                    }
-                    if (gottaMove)
-                    {
-                        moveToPlayer = true;
-                    }
-                }
-            }
-
-            //Step two if not in range, move towards a target
-            if (!_turnInfo.HasMoved)
-            {
-                if (gottaMove && !ActiveCharacter.FollowingPath)
-                {
-                    if (targetTile == null)
-                    {
-                        double closestDistance = 0;
-                        Vector2 start = ActiveCharacter.Tile.Center;
-                        Vector2 closest = Vector2.Zero;
-
-                        foreach (CombatActor actor in Party)
-                        {
-                            Vector2 target = actor.Tile.Center;
-
-                            int deltaX = (int)Math.Abs(start.X - target.X);
-                            int deltaY = (int)Math.Abs(start.Y - target.Y);
-
-                            double distance = Math.Sqrt(deltaX ^ 2 + deltaY ^ 2);
-                            if (distance < closestDistance || closestDistance == 0)
-                            {
-                                closest = target;
-                                closestDistance = distance;
-                            }
-                        }
-
-                        SelectedTile = MapManager.CurrentMap.GetTileOffGrid(closest);
-
-                        //Need to unset the Combatant from the tile the monster is moving to so that
-                        //we can pathfind to it
-                        CombatActor act = SelectedTile.Character;
-                        SelectedTile.SetCombatant(null);
-
-                        //Determine the pathfinding for the Monster
-                        SetMoveTarget();
-
-                        //Reset the CombatActor's RHTile
-                        MapManager.CurrentMap.GetTileOffGrid(closest).SetCombatant(act);
-                    }
-                }
-                else
-                {
-                    EndTurn();
-                }
-            }
-
-            ////Step three use action
-            //if(action != null && targetTile != null)
-            //{
-            //    //bool canCast = false;
-            //    //do
-            //    //{
-            //    //    action = (CombatAction)ActiveCharacter.AbilityList[r.Next(0, ActiveCharacter.AbilityList.Count - 1)];
-            //    //    if (action.MPCost <= ActiveCharacter.CurrentMP)
-            //    //    {
-            //    //        canCast = true;
-            //    //    }
-            //    //} while (!canCast);
-
-            //    ProcessActionChoice(action);
-            //    if (!SelectedAction.SelfOnly())
-            //    {
-            //        if (action.Range == RangeEnum.Melee)
-            //        {
-            //            //ToDo Fix this
-            //            //SelectedTile = 
-            //        }
-            //        else
-            //        {
-            //            CombatActor adv = _listParty[r.Next(0, _listParty.Count - 1)];
-            //            SelectedTile = adv.Tile;
-            //        }
-            //    }
-
-            //    ActiveCharacter.CurrentMP -= action.MPCost;
-            //} 
-        }
-
-        internal static List<CombatActor> CalculateTurnOrder(int maxShown)
-        {
-            List<CombatActor> rv = new List<CombatActor>();
-            List<CombatActor> queuedCopy = new List<CombatActor>();
-            List<CombatActor> chargingCopy = new List<CombatActor>();
-
-            LoadList(ref queuedCopy, _liQueuedCharacters);
-            LoadList(ref chargingCopy, _liChargingCharacters);
-
-            //If there is an Active Character, Add them to the Turn Order list and blank their DummyCharge
-            if (ActiveCharacter != null)
-            {
-                rv.Add(ActiveCharacter);
-                CombatActor c = chargingCopy.Find(x => x.Name == ActiveCharacter.Name);
-                c.DummyCharge -= (SelectedAction == null) ? c.DummyCharge : SelectedAction.ChargeCost();
-            }
-
-            //If there are any queued Actors, add them to the charging list
-            foreach (CombatActor c in queuedCopy)
-            {
-                if (rv.Count < maxShown)
-                {
-                    rv.Add(c);
-                    c.DummyCharge = 0;
-                    chargingCopy.Add(c);
-                }
-                else { break; }
-            }
-            queuedCopy.Clear();                                                 //Clear the queue
-
-            //Cap out entries at maxShown
-            while (rv.Count < maxShown)
-            {
-                chargingCopy.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));        //Sort the charging Actors by their speed
-                CombatTick(ref chargingCopy, ref queuedCopy, true);                       //Tick
-
-                //For all entries in the queue add them to the TurnOrder List,
-                //set the Charge to 0, and add to the queue, sorting by Spd
-                foreach (CombatActor c in queuedCopy)
-                {
-                    if (rv.Count < maxShown)
-                    {
-                        rv.Add(c);
-                        c.DummyCharge = 0;
-                        chargingCopy.Add(c);
-                    }
-                    else { break; }
-                }
-                queuedCopy.Clear();
-            }
-
-            return rv;
-        }
-
-        private static void LoadList(ref List<CombatActor> toFill, List<CombatActor> takeFrom)
-        {
-            foreach (CombatActor c in takeFrom)
-            {
-                CombatActor actor = c;
-                actor.DummyCharge = c.CurrentCharge;
-                toFill.Add(actor);
-            }
-        }
-
         public static void ProcessActionChoice(CombatAction a)
         {
             SelectedAction = new ChosenAction(a);
@@ -494,7 +326,12 @@ namespace RiverHollow.Game_Managers
             if (SelectedAction.Name.Equals("Move"))
             {
                 CurrentPhase = PhaseEnum.ChooseMoveTarget;
-                HighlightLegalTiles();
+                FindAndHighlightLegalTiles();
+            }
+            else
+            {
+                CurrentPhase = PhaseEnum.ChooseActionTarget;
+                FindAndHighlightLegalTiles();
             }
  
             //if (!SelectedAction.SelfOnly())
@@ -538,110 +375,146 @@ namespace RiverHollow.Game_Managers
             return stillOne;
         }
 
-        #region SelectionHandling   
-        #region Legal/Selected Tile Handling
-        /// <summary>
-        /// Take the range value of the ChosenAction, and find every tile
-        /// that is in range.
-        /// </summary>
-        public static void HighlightLegalTiles()
+        #region Enemy AI
+
+        //For now, when the enemy takes their turn, have them select a random party member
+        //When enemies get healing/defensive skills, they'll have their own logic to process
+        public static void EnemyTakeTurn()
         {
-            int distance = 5;   //Make this effected by the action
-            RHTile startTile = ActiveCharacter.Tile;
-            if (distance > 0)
+            bool moveToPlayer = false;
+            RHTile targetTile = null;
+            RHRandom r = new RHRandom();
+            CombatAction action = null;
+            bool gottaMove = true;
+
+            //
+            //Step one determine if we are in range of a target
+            foreach (CombatAction c in ActiveCharacter.AbilityList)
             {
-                int startX = (startTile.X - distance > 0) ? startTile.X - distance : 0;
-                int endX = (startTile.X + distance < MapManager.CurrentMap.MapWidthTiles) ? startTile.X + distance : MapManager.CurrentMap.MapWidthTiles - 1;
-
-                int startY = (startTile.Y - distance > 0) ? startTile.Y - distance : 0;
-                int endY = (startTile.Y + distance < MapManager.CurrentMap.MapHeightTiles) ? startTile.Y + distance : MapManager.CurrentMap.MapHeightTiles - 1;
-
-                //Loop over the grid defined by the ChosenAction's range
-                for (int x = startX; x <= endX; x++)
+                if (c.Range == 0)
                 {
-                    for (int y = startY; y <= endY; y++)
+                    foreach (RHTile t in ActiveCharacter.Tile.GetAdjacent())
                     {
-                        RHTile testTile = MapManager.CurrentMap.GetTileByGrid(x, y);
-                        if (testTile != startTile)
+                        if (t.HasCombatant() && t.Character.IsAdventurer())
                         {
-                            int deltaX = Math.Abs(testTile.X - startTile.X);
-                            int deltaY = Math.Abs(testTile.Y - startTile.Y);
-
-                            //If the delta of the tiles position difference is less than the range,
-                            //then it's a legal target
-                            if (deltaX + deltaY <= distance)
-                            {
-                                if (CurrentPhase == PhaseEnum.ChooseMoveTarget)
-                                {
-                                    if (testTile.Passable() && testTile.Character == null)
-                                    {
-                                        testTile.LegalTile(true);
-                                        _liLegalTiles.Add(testTile);
-                                    }
-                                }
-                                else
-                                {
-                                    testTile.LegalTile(true);
-                                    _liLegalTiles.Add(testTile);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                //Ensure that the legal tiles are actually legal when all is said and done.
-                EnsureWalkable();
-            }
-        }
-
-        /// <summary>
-        /// If we are in the move targetting phase, we need to ensure that
-        /// all tiles are actually pathable.
-        /// 
-        /// If a tile in the legal tiles list does not have any valid neighbours,
-        /// there is no "pathable" way for us to get there so it must be removed.
-        /// </summary>
-        private static void EnsureWalkable()
-        {
-            if (CurrentPhase == PhaseEnum.ChooseMoveTarget)
-            {
-                List<RHTile> wipe = new List<RHTile>();
-                foreach (RHTile tile in _liLegalTiles)
-                {
-                    bool found = false;
-                    foreach (RHTile t in tile.GetAdjacent())
-                    {
-                        if (_liLegalTiles.Contains(t))
-                        {
-                            found = true;
+                            gottaMove = false;
+                            action = c;
+                            targetTile = t;
                             break;
                         }
                     }
-
-                    if (!found)
+                    if (gottaMove)
                     {
-                        wipe.Add(tile);
+                        moveToPlayer = true;
                     }
                 }
+            }
 
-                foreach (RHTile t in wipe)
+            //If we have found a target to attack, but we need to move to get into range of them
+            //Then find the shortest path, and move as close as you can.
+            if (!_turnInfo.HasMoved && gottaMove && !ActiveCharacter.FollowingPath)
+            {
+                if (targetTile == null)
                 {
-                    t.LegalTile(false);
-                    _liLegalTiles.Remove(t);
+                    double closestDistance = 0;
+                    Vector2 start = ActiveCharacter.Tile.Center;
+                    Vector2 closest = Vector2.Zero;
+
+                    foreach (CombatActor actor in Party)
+                    {
+                        Vector2 target = actor.Tile.Center;
+
+                        int deltaX = (int)Math.Abs(start.X - target.X);
+                        int deltaY = (int)Math.Abs(start.Y - target.Y);
+
+                        double distance = Math.Sqrt(deltaX ^ 2 + deltaY ^ 2);
+                        if (distance < closestDistance || closestDistance == 0)
+                        {
+                            closest = target;
+                            closestDistance = distance;
+                        }
+                    }
+
+                    SelectedTile = MapManager.CurrentMap.GetTileOffGrid(closest);
+
+                    //Need to unset the Combatant from the tile the monster is moving to so that
+                    //we can pathfind to it
+                    CombatActor act = SelectedTile.Character;
+                    SelectedTile.SetCombatant(null);
+
+                    //Determine the pathfinding for the Monster
+                    SetMoveTarget();
+
+                    //Reset the CombatActor's RHTile
+                    MapManager.CurrentMap.GetTileOffGrid(closest).SetCombatant(act);
+                }
+            }
+
+            //If we have not yet acted, we need to move, and we are not following a path
+            if (!_turnInfo.HasActed && !gottaMove && !ActiveCharacter.FollowingPath)
+            {
+                foreach (RHTile t in ActiveCharacter.Tile.GetAdjacent())
+                {
+                    if (t.HasCombatant() && t.Character.IsAdventurer())
+                    {
+                    }
                 }
             }
         }
 
         /// <summary>
-        /// Set each Legal Tile to be illegal and then Clear the list
+        /// Have the enemy iterate over it's skills and determine if
+        /// there are any targets in range.
         /// </summary>
-        public static void ClearLegalTiles()
+        private static void EnemyCheckforTargets()
         {
+            foreach (MenuAction action in ActiveCharacter.AbilityList) {
+
+            }
+        }
+        #endregion
+
+        #region Tile Handling
+        /// <summary>
+        /// Highlight all RHTiles in the LegalTiles list.
+        /// </summary>
+        public static void FindAndHighlightLegalTiles()
+        {
+            int distance = (CurrentPhase == PhaseEnum.ChooseMoveTarget ? 5 : SelectedAction.Range);
+            RecursivelyGrowRange(ActiveCharacter.Tile, _liLegalTiles, 0, distance);
+
             foreach (RHTile t in _liLegalTiles)
             {
-                t.LegalTile(false);
+                t.LegalTile(true);
             }
-            _liLegalTiles.Clear();
+        }
+
+        /// <summary>
+        /// Call this method to determine the range of the skill by taking adjacent RHTiles from the start tile
+        /// and iterating a specified number of times in "growth rings"
+        /// </summary>
+        /// <param name="startTile">The tile to grab adjacent tiles of</param>
+        /// <param name="depth">How many "growth rings" we are in</param>
+        /// <param name="tileList">The list of RHTiles to add to</param>
+        /// <param name="maxDepth">The maximium depth to go for</param>
+        private static void RecursivelyGrowRange(RHTile startTile, List<RHTile> tileList, int depth, int maxDepth)
+        {
+            //If we haven't exceeded the maxDepth, discover the adhacent tiles
+            if (depth < maxDepth)
+            {
+                depth++;
+                foreach (RHTile t in startTile.GetAdjacent())
+                {
+                    //The tile is legal if we are choosing a target for an action, or if we are moving, it is passable, and there is no character
+                    //If so, add it to the LegalTiles list and then recursively grow.
+                    //Can never target walls or otherwise blocked tiles.
+                    if (t.Passable() && (CurrentPhase == PhaseEnum.ChooseMoveTarget && t.CanPathThroughInCombat() || CurrentPhase == PhaseEnum.ChooseActionTarget))
+                    {
+                        if (!tileList.Contains(t)) { tileList.Add(t); }
+                        RecursivelyGrowRange(t, tileList, depth, maxDepth);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -658,6 +531,40 @@ namespace RiverHollow.Game_Managers
                 if (SelectedTile != null) { SelectedTile.Select(false); }
                 SelectedTile = tile;
             }
+
+            if (CurrentPhase == PhaseEnum.ChooseActionTarget)
+            {
+                ClearAreaTiles();
+
+                RecursivelyGrowRange(SelectedTile, _liAreaTiles, 0, SelectedAction.AreaOfEffect());
+                foreach (RHTile t in _liAreaTiles)
+                {
+                    t.AreaTile(true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Clears the Legal, Selected, and Area tile lists and unsets the flags
+        /// from the given RHTiles
+        /// </summary>
+        public static void ClearAllTiles()
+        {
+            ClearLegalTiles();
+            ClearSelectedTile();
+            ClearAreaTiles();
+        }
+
+        /// <summary>
+        /// Set each Legal Tile to be illegal and then Clear the list
+        /// </summary>
+        public static void ClearLegalTiles()
+        {
+            foreach (RHTile t in _liLegalTiles)
+            {
+                t.LegalTile(false);
+            }
+            _liLegalTiles.Clear();
         }
 
         /// <summary>
@@ -668,19 +575,32 @@ namespace RiverHollow.Game_Managers
             if (SelectedTile != null) { SelectedTile.Select(false); }
             SelectedTile = null;
         }
+
+        /// <summary>
+        /// Unsets all Area Tiles and then clears the list
+        /// </summary>
+        public static void ClearAreaTiles()
+        {
+            foreach (RHTile t in AreaTiles)
+            {
+                t.AreaTile(false);
+            }
+            _liAreaTiles.Clear();
+        }
         #endregion
 
+        #region SelectionHandling   
         /// <summary>
         /// Determines whether or not the given tile has been selected while hovering over it
         /// </summary>
         /// <param name="tile">The tile to test against</param>
-        public static void TestHoverTile(RHTile tile)
-        {
-            if (SelectedAction.LegalTiles.Contains(tile) && (tile.HasCombatant() || SelectedAction.AreaOfEffect()))
-            {
-                tile.Select(true);
-            }
-        }
+        //public static void TestHoverTile(RHTile tile)
+        //{
+        //    if (SelectedAction.LegalTiles.Contains(tile) && (tile.HasCombatant() || SelectedAction.AreaOfEffect()))
+        //    {
+        //        tile.Select(true);
+        //    }
+        //}
         public static void HandleKeyboardTargetting()
         {
             RHTile temp = SelectedTile;
@@ -770,10 +690,8 @@ namespace RiverHollow.Game_Managers
         private static void ClearToPerformAction()
         {
             _scrCombat.CloseMainSelection();
-            ClearLegalTiles();
-            ClearSelectedTile();
+            ClearAllTiles();
         }
-
         #endregion
 
         #region Turn Handling
@@ -803,6 +721,70 @@ namespace RiverHollow.Game_Managers
             {
                 charge = 100;
                 toQueue.Add(c);
+            }
+        }
+
+        public static List<CombatActor> CalculateTurnOrder(int maxShown)
+        {
+            List<CombatActor> rv = new List<CombatActor>();
+            List<CombatActor> queuedCopy = new List<CombatActor>();
+            List<CombatActor> chargingCopy = new List<CombatActor>();
+
+            LoadList(ref queuedCopy, _liQueuedCharacters);
+            LoadList(ref chargingCopy, _liChargingCharacters);
+
+            //If there is an Active Character, Add them to the Turn Order list and blank their DummyCharge
+            if (ActiveCharacter != null)
+            {
+                rv.Add(ActiveCharacter);
+                CombatActor c = chargingCopy.Find(x => x.Name == ActiveCharacter.Name);
+                c.DummyCharge -= (SelectedAction == null) ? c.DummyCharge : SelectedAction.ChargeCost();
+            }
+
+            //If there are any queued Actors, add them to the charging list
+            foreach (CombatActor c in queuedCopy)
+            {
+                if (rv.Count < maxShown)
+                {
+                    rv.Add(c);
+                    c.DummyCharge = 0;
+                    chargingCopy.Add(c);
+                }
+                else { break; }
+            }
+            queuedCopy.Clear();                                                 //Clear the queue
+
+            //Cap out entries at maxShown
+            while (rv.Count < maxShown)
+            {
+                chargingCopy.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));        //Sort the charging Actors by their speed
+                CombatTick(ref chargingCopy, ref queuedCopy, true);                       //Tick
+
+                //For all entries in the queue add them to the TurnOrder List,
+                //set the Charge to 0, and add to the queue, sorting by Spd
+                foreach (CombatActor c in queuedCopy)
+                {
+                    if (rv.Count < maxShown)
+                    {
+                        rv.Add(c);
+                        c.DummyCharge = 0;
+                        chargingCopy.Add(c);
+                    }
+                    else { break; }
+                }
+                queuedCopy.Clear();
+            }
+
+            return rv;
+        }
+
+        private static void LoadList(ref List<CombatActor> toFill, List<CombatActor> takeFrom)
+        {
+            foreach (CombatActor c in takeFrom)
+            {
+                CombatActor actor = c;
+                actor.DummyCharge = c.CurrentCharge;
+                toFill.Add(actor);
             }
         }
 
@@ -1007,6 +989,7 @@ namespace RiverHollow.Game_Managers
         //}
         public class ChosenAction
         {
+            public int Range => (_chosenItem != null ? 1 : _chosenAction.Range);    //Items only have 1 tile of range
             private Consumable _chosenItem;
             private CombatAction _chosenAction;
 
@@ -1066,8 +1049,8 @@ namespace RiverHollow.Game_Managers
                 {
                     _liLegalTiles.Add(User.Tile);
                 }
-                else if (Columns())
-                {
+                //else if (Columns())
+                //{
                     //int startCol = ActiveCharacter.Tile.X;
                     //int endCol = ActiveCharacter.Tile.X;
 
@@ -1084,7 +1067,7 @@ namespace RiverHollow.Game_Managers
                     //        }
                     //    }
                     //}
-                }
+                //}
             }
 
             public void Draw(SpriteBatch spritebatch)
@@ -1183,7 +1166,7 @@ namespace RiverHollow.Game_Managers
                     if (SelectedTile != null)
                     {
                         cbtTile.Add(SelectedTile);
-                        if (_chosenAction.AreaOfEffect != AreaEffectEnum.Single)
+                        if (_chosenAction.AreaOfEffect > 0)
                         {
                             //Describes which side of the Battlefield we are targetting
                             //bool monsterSide = (actor.IsCombatAdventurer() && TargetsEnemy()) || (actor.IsMonster() && TargetsAlly());
@@ -1290,13 +1273,13 @@ namespace RiverHollow.Game_Managers
             }
             public bool IsSpell() { return _chosenAction != null && _chosenAction.IsSpell(); }
             public bool IsSummonSpell() { return _chosenAction != null && _chosenAction.IsSummonSpell(); }
-            public bool SelfOnly() { return _chosenAction.Range == RangeEnum.Self; }
-            public bool IsMelee() { return _chosenAction.Range == RangeEnum.Melee; }
-            public bool IsRanged() { return _chosenAction.Range == RangeEnum.Ranged; }
+            public bool SelfOnly() { return _chosenAction.Range == 0; }
+            public bool IsMelee() { return _chosenAction.Range == 1; }
+            public bool IsRanged() { return _chosenAction.Range > 1; }
             public bool SingleTarget()
             {
                 bool rv = false;
-                if (_chosenAction != null) { rv = _chosenAction.AreaOfEffect == AreaEffectEnum.Single; }
+                if (_chosenAction != null) { rv = _chosenAction.AreaOfEffect > 0; }
                 else if (_chosenItem != null) { rv = true; }
 
                 return rv;
@@ -1323,19 +1306,19 @@ namespace RiverHollow.Game_Managers
 
                 return rv;
             }
-            public bool AreaOfEffect()
+
+            /// <summary>
+            /// Returns the area of effect of the chosen action.
+            /// Items have a range of 1
+            /// </summary>
+            /// <returns></returns>
+            public int AreaOfEffect()
             {
-                bool rv = false;
+                int rv = 1;
 
-                if (_chosenAction != null) { rv = _chosenAction.AreaOfEffect != AreaEffectEnum.Single; }
-                else if (_chosenItem != null) { rv = false; }
-
-                return rv;
-            }
-            public bool Columns() {
-                bool rv = false;
-                if (_chosenAction != null) { rv = _chosenAction.Range == RangeEnum.Column; }
-                else if (_chosenItem != null) { rv = false; }
+                if (_chosenAction != null) {
+                    rv = _chosenAction.AreaOfEffect;
+                }
 
                 return rv;
             }
@@ -1371,7 +1354,7 @@ namespace RiverHollow.Game_Managers
         /// 
         /// For now, only used to store whether thet havemoved or acted.
         /// </summary>
-        public class TurnInfo
+        public struct TurnInfo
         {
             public bool HasMoved;
             public bool HasActed;

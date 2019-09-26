@@ -81,10 +81,10 @@ namespace RiverHollow.Actors.CombatStuff
 
         TargetEnum _target;
         public TargetEnum Target => _target;
-        RangeEnum _range;
-        public RangeEnum Range => _range;
-        AreaEffectEnum _areaOfEffect;
-        public AreaEffectEnum AreaOfEffect => _areaOfEffect;
+        int _iRange;
+        public int Range => _iRange;
+        int _iArea;
+        public int AreaOfEffect => _iArea;
         List<String> _liActionTags;
         int _iCurrentAction = 0;
         List<SkillTagsEnum> _liEffects;
@@ -138,17 +138,13 @@ namespace RiverHollow.Actors.CombatStuff
             _actionType = Util.ParseEnum<ActionEnum>(stringData["Type"]);
             if (stringData.ContainsKey("Element")) { _element = Util.ParseEnum<ElementEnum>(stringData["Element"]); }
             if (stringData.ContainsKey("Target")) { _target = Util.ParseEnum<TargetEnum>(stringData["Target"]); }
-            if (stringData.ContainsKey("Range")) { _range = Util.ParseEnum<RangeEnum>(stringData["Range"]); }
+            if (stringData.ContainsKey("Range")) { _iRange = int.Parse(stringData["Range"]); }
             if (stringData.ContainsKey("Charge")) { _iChargeCost = int.Parse(stringData["Charge"]); }
             if (stringData.ContainsKey("Crit")) { _iCritRating = int.Parse(stringData["Crit"]); }
             if (stringData.ContainsKey("Accuracy")) { _iAccuracy = int.Parse(stringData["Accuracy"]); }
             if (stringData.ContainsKey("Area")) {
                 string[] tags = stringData["Area"].Split('-');
-                _areaOfEffect = Util.ParseEnum<AreaEffectEnum>(tags[0]);
-                if(_areaOfEffect == AreaEffectEnum.Rectangle)
-                {
-                    _kvpAreaDimensions = new KeyValuePair<int, int>(int.Parse(tags[1]), int.Parse(tags[2]));
-                }
+                _iArea = int.Parse(tags[0]);
             }
 
             if (stringData.ContainsKey("Icon"))
@@ -329,7 +325,7 @@ namespace RiverHollow.Actors.CombatStuff
                             //If the target has a Summon linked to them, and they take
                             //any area damage, hit the Summon as well
                             Summon summ = targetActor.LinkedSummon;
-                            if (_areaOfEffect != AreaEffectEnum.Single && summ != null)
+                            if (_iArea > 0 && summ != null)
                             {
                                 summ.ProcessAttack(SkillUser, _iPotency + bonus, _iCritRating, targetActor.GetAttackElement());
                             }
@@ -337,7 +333,7 @@ namespace RiverHollow.Actors.CombatStuff
                             #region Countering setup
                             //If the target has Counter turn on, prepare to counterattack
                             //Only counter melee attacks
-                            if (_range == RangeEnum.Melee)
+                            if (_iRange == 0)
                             {
                                 if (targetActor.Counter)
                                 {
@@ -880,7 +876,7 @@ namespace RiverHollow.Actors.CombatStuff
             return rv;
         }
 
-        public bool TargetsEach() { return _areaOfEffect == AreaEffectEnum.Each; }
+        public bool TargetsEach() { return _iArea > 0; }
         public bool IsHelpful() { return _target == TargetEnum.Ally; }
         public bool IsSummonSpell() { return _liEffects.Contains(SkillTagsEnum.Summon); }
     }

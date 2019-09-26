@@ -452,9 +452,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gText.AnchorAndAlignToObject(_gActionBar, SideEnum.Bottom, SideEnum.CenterX);
         }
 
+        /// <summary>
+        /// Tell the ActionBar to Cancel whatever selection it had
+        /// Backtrack the CurrentPhase to the appropriate step
+        /// Clear any selected or highlited RHTiles
+        /// </summary>
         public void CancelAction()
         {
             _gActionBar.CancelAction();
+            CombatManager.CurrentPhase = CombatManager.PhaseEnum.MainSelection;
+            CombatManager.ClearAllTiles();
             SyncText();
         }
 
@@ -617,15 +624,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 if (_actionMenu != null)
                 {
-                    //if (CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseTarget)
-                    //{
-                    //    _gSelectedAction = (_gSelectedMenu != null) ? _gSelectedMenu : _liActionButtons[0];
-                    //}
-                    //else
-                    //{
-                    //    _actionMenu = null;
-                    //    _gSelectedAction = (_gSelectedMenu != null) ? _gSelectedMenu : _liActionButtons[0];
-                    //}
+                    if (CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseMoveTarget)
+                    {
+                        _gSelectedAction = (_gSelectedMenu != null) ? _gSelectedMenu : _liActionButtons[0];
+                    }
+                    else if( CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseActionTarget)
+                    {
+                        _actionMenu = null;
+                        _gSelectedAction = (_gSelectedMenu != null) ? _gSelectedMenu : _liActionButtons[0];
+                    }
 
                     ProcessHover(GraphicCursor.Position.ToPoint());
                 }
