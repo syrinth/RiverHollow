@@ -27,8 +27,8 @@ namespace RiverHollow.Tile_Engine
         public int MapWidthTiles = 100;
         public int MapHeightTiles = 100;
         
-        private string _name;
-        public string Name { get => _name.Replace(@"Maps\", ""); set => _name = value; } //Fuck off with that path bullshit
+        private string _sName;
+        public string Name { get => _sName.Replace(@"Maps\", ""); set => _sName = value; } //Fuck off with that path bullshit
 
         bool _bBuilding;
         public bool IsBuilding => _bBuilding;
@@ -114,7 +114,7 @@ namespace RiverHollow.Tile_Engine
         public RHMap(RHMap map) : this()
         {
             _map = map.Map;
-            _name = map.Name+"Clone";
+            _sName = map.Name+"Clone";
             _renderer = map._renderer;
             _arrTiles = map._arrTiles;
 
@@ -144,7 +144,7 @@ namespace RiverHollow.Tile_Engine
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, string newMap, string mapName)
         {
             _map = Content.Load<TiledMap>(newMap);
-            _name = mapName;
+            _sName = mapName;
             MapWidthTiles = _map.Width;
             MapHeightTiles = _map.Height;
 
@@ -158,7 +158,7 @@ namespace RiverHollow.Tile_Engine
             for (int i = 0; i < MapHeightTiles; i++) {
                 for (int j = 0; j < MapWidthTiles; j++)
                 {
-                    _arrTiles[j, i] = new RHTile(j, i, _name);
+                    _arrTiles[j, i] = new RHTile(j, i, _sName);
                     _arrTiles[j, i].SetProperties(this);
                 }
             }
@@ -260,7 +260,7 @@ namespace RiverHollow.Tile_Engine
                     {
                         if (mapObject.Name.Equals("Shop"))
                         {
-                            _liShopData.Add(new ShopData(_name, mapObject));
+                            _liShopData.Add(new ShopData(_sName, mapObject));
                         }
                         else
                         {
@@ -360,7 +360,7 @@ namespace RiverHollow.Tile_Engine
                     Spirit s = new Spirit(obj.Properties["Name"], obj.Properties["Type"], obj.Properties["Condition"], obj.Properties["Text"])
                     {
                         Position = Util.SnapToGrid(obj.Position),
-                        CurrentMapName = _name
+                        CurrentMapName = _sName
                     };
                     _liActors.Add(s);
                 }
@@ -454,7 +454,7 @@ namespace RiverHollow.Tile_Engine
 
                     Vector2 vect = new Vector2(r.Next(1, _map.Width - 1) * TileSize, r.Next(1, _map.Height - 2) * TileSize);
                     Monster newMonster = ObjectManager.GetMonster(_liMobs[chosenMob], vect);
-                    newMonster.CurrentMapName = _name;
+                    newMonster.CurrentMapName = _sName;
                     AddMonster(newMonster);
 
                     numMobs--;
@@ -667,6 +667,11 @@ namespace RiverHollow.Tile_Engine
 
             if (CombatManager.InCombat)
             {
+                if(CombatManager.ActiveCharacter != null && CombatManager.ActiveCharacter.IsAdventurer())
+                {
+                    CombatManager.ActiveCharacter.Tile.Draw(spriteBatch);
+                }
+
                 foreach (RHTile t in CombatManager.LegalTiles)
                 {
                     t.Draw(spriteBatch);
@@ -1551,6 +1556,7 @@ namespace RiverHollow.Tile_Engine
             for (int i = 0; i < b.Workers.Count; i++)
             {
                 b.Workers[i].Position = GetCharacterSpawn("WSpawn"+i);
+                b.Workers[i].CurrentMapName = _sName;
                 _liActors.Add(b.Workers[i]);
             }
             foreach (WorldObject w in b.PlacedObjects)
@@ -1870,7 +1876,7 @@ namespace RiverHollow.Tile_Engine
                 rv = true;
                 if (c.IsMonster() && !_liMonsters.Contains((Monster)c)) { _liMonsters.Add((Monster)c); }
                 else if (!_liActors.Contains(c)) { _liActors.Add(c); }
-                c.CurrentMapName = _name;
+                c.CurrentMapName = _sName;
                 c.Position = c.NewMapPosition == Vector2.Zero ? c.Position : c.NewMapPosition;
                 c.NewMapPosition = Vector2.Zero;
             }
@@ -1905,7 +1911,7 @@ namespace RiverHollow.Tile_Engine
 
         public void AddMonsterByPosition(Monster m, Vector2 position)
         {
-            m.CurrentMapName = _name;
+            m.CurrentMapName = _sName;
             m.Position = Util.SnapToGrid(position);
 
             if (_liMonsters.Count == 0)
@@ -2205,7 +2211,8 @@ namespace RiverHollow.Tile_Engine
             Rectangle dest = new Rectangle((int)Position.X, (int)Position.Y, TileSize, TileSize);
 
             //Only draw one of the tile targetting types
-            if (_bSelected) { spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, new Rectangle(16, 112, 16, 16), Color.White); }
+            if(this == CombatManager.ActiveCharacter.Tile) { spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, new Rectangle(48, 112, 16, 16), Color.White); }
+            else if (_bSelected) { spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, new Rectangle(16, 112, 16, 16), Color.White); }
             else if (_bArea) { spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, new Rectangle(32, 112, 16, 16), Color.White); }
             else if (_bLegalTile) { spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, new Rectangle(0, 112, 16, 16), Color.White); }
 

@@ -56,6 +56,8 @@ namespace RiverHollow.Game_Managers
 
         public static void NewBattle()
         {
+            CurrentPhase = PhaseEnum.Setup;
+
             ActiveCharacter = null;
             SelectedAction = null;
             SelectedTile = null;
@@ -90,10 +92,23 @@ namespace RiverHollow.Game_Managers
                 c.Tile.SetCombatant(c);
             }
 
+            PlayerManager.World.Tile = MapManager.CurrentMap.GetTileOffGrid(PlayerManager.World.CollisionBox.Center);
+            PlayerManager.World.Tile.SetCombatant(PlayerManager.World);
+
+            List<RHTile> tileList = new List<RHTile>();
+            RecursivelyGrowRange(PlayerManager.World.Tile, tileList, 0, 2);
             foreach (CombatActor c in Party)
             {
-                c.Tile = MapManager.CurrentMap.GetTileOffGrid(c.CollisionBox.Center);
-                c.Tile.SetCombatant(c);
+                if(c != PlayerManager.World)
+                {
+                    MapManager.Maps[c.CurrentMapName].RemoveCharacter(c);
+                    c.Activate(true);
+                    c.Tile = tileList[random.Next(tileList.Count)];
+                    c.Tile.SetCombatant(c);
+                    c.CurrentMapName = MapManager.CurrentMap.Name;
+                    MapManager.CurrentMap.AddCharacter(c);
+                    c.Position = c.Tile.Position;
+                }   
             }
 
             _scrCombat = new CombatScreen();
@@ -104,8 +119,6 @@ namespace RiverHollow.Game_Managers
             PlayerManager.World.Idle();
 
             PlayerManager.World.SetMoveObj(Util.SnapToGrid(PlayerManager.World.Tile.Center));
-
-            CurrentPhase = PhaseEnum.Setup;
         }
 
         public static void Update(GameTime gTime)
@@ -136,6 +149,10 @@ namespace RiverHollow.Game_Managers
                         {
                             //If there is at least one character, retrieve it
                             GetActiveCharacter();
+                            if (ActiveCharacter.IsAdventurer())
+                            {
+                                Camera.SetObserver(ActiveCharacter);
+                            }
                         }
                     }
                     break;
@@ -522,7 +539,7 @@ namespace RiverHollow.Game_Managers
                 {
                     //The tile is legal if we are choosing a target for an action; or if we are moving, it is passable, and there is no character
                     //If so, add it to the LegalTiles list and then recursively grow.
-                    if ((t.Passable() && CurrentPhase == PhaseEnum.ChooseMoveTarget && t.CanPathThroughInCombat()) || CurrentPhase == PhaseEnum.ChooseActionTarget)
+                    if ((t.Passable() && t.CanPathThroughInCombat() && (CurrentPhase == PhaseEnum.ChooseMoveTarget || CurrentPhase == PhaseEnum.Setup)) || CurrentPhase == PhaseEnum.ChooseActionTarget)
                     {
                         //Can never target walls or otherwise blocked tiles.
                         if (!tileList.Contains(t) && t.Passable()) { tileList.Add(t); }

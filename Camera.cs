@@ -4,11 +4,13 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.Actors;
 
 namespace RiverHollow
 {
     public static class Camera
     {
+        private static WorldActor _actObserver;
         public static Matrix _transform;
         public static Viewport _view;
         public static Vector2 _center;
@@ -27,7 +29,7 @@ namespace RiverHollow
             {
                 if (!Scrying())
                 {
-                    _observer = PlayerManager.World.CharCenter.ToVector2() * Scale;
+                    _observer = _actObserver.CharCenter.ToVector2() * Scale;
                 }
                 else
                 {
@@ -94,6 +96,11 @@ namespace RiverHollow
 
             _center = new Vector2(_observer.X - (RiverHollow.ScreenWidth / 2), _observer.Y - (RiverHollow.ScreenHeight / 2));
             _transform = Matrix.CreateScale(new Vector3(Scale, Scale, 0)) * Matrix.CreateTranslation(new Vector3(-_center.X, -_center.Y, 0));
+        }
+
+        public static void SetObserver(WorldActor act)
+        {
+            _actObserver = act;
         }
 
         public static void UnsetObserver()

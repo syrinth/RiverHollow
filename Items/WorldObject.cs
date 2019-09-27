@@ -532,7 +532,7 @@ namespace RiverHollow.WorldObjects
 
     public class WorldItem : WorldObject
     {
-        protected string _sMapName;                                 //Used to play sounds on that map
+        protected string _sName;                                 //Used to play sounds on that map
         protected Vector2 _vSourcePos;
         public override Vector2 MapPosition
         {
@@ -562,7 +562,7 @@ namespace RiverHollow.WorldObjects
             string[] strPos = str.Split('-');
             _vSourcePos = new Vector2(int.Parse(strPos[0]), int.Parse(strPos[1]));
         }
-        public void SetMapName(string val) { _sMapName = val; }
+        public void SetMapName(string val) { _sName = val; }
 
         public class ClassChanger : WorldItem
         {
@@ -715,7 +715,7 @@ namespace RiverHollow.WorldObjects
 
             public void SetHeldItem(int itemID)
             {
-                SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition);
+                SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sName, MapPosition);
                 _heldItem = ObjectManager.GetItem(itemID);
                 _dProcessedTime = -1;
                 _iCurrentlyMaking = -1;
@@ -1121,10 +1121,10 @@ namespace RiverHollow.WorldObjects
                 string sAdjacent = string.Empty;
 
                 //Create the adjacent tiles string
-                MakeAdjustments("N", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sMapName].GetTileByGrid(new Point((int)(startTile.X), (int)(startTile.Y - 1))));
-                MakeAdjustments("S", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sMapName].GetTileByGrid(new Point((int)(startTile.X), (int)(startTile.Y + 1))));
-                MakeAdjustments("E", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sMapName].GetTileByGrid(new Point((int)(startTile.X + 1), (int)(startTile.Y))));
-                MakeAdjustments("W", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sMapName].GetTileByGrid(new Point((int)(startTile.X - 1), (int)(startTile.Y))));
+                MakeAdjustments("N", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sName].GetTileByGrid(new Point((int)(startTile.X), (int)(startTile.Y - 1))));
+                MakeAdjustments("S", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sName].GetTileByGrid(new Point((int)(startTile.X), (int)(startTile.Y + 1))));
+                MakeAdjustments("E", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sName].GetTileByGrid(new Point((int)(startTile.X + 1), (int)(startTile.Y))));
+                MakeAdjustments("W", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sName].GetTileByGrid(new Point((int)(startTile.X - 1), (int)(startTile.Y))));
 
                 Target.SetCurrentAnimation(string.IsNullOrEmpty(sAdjacent) ? "None" : sAdjacent);
 

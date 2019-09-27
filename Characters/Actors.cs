@@ -63,11 +63,11 @@ namespace RiverHollow.Actors
         }
 
         protected int _iWidth;
-        public int Width { get => _iWidth; }
+        public int Width => _iWidth;
         protected int _iHeight;
-        public int Height { get => _iHeight; }
-        public int SpriteWidth { get => _spriteBody.Width; }
-        public int SpriteHeight { get => _spriteBody.Height; }
+        public int Height => _iHeight; 
+        public int SpriteWidth => _spriteBody.Width;
+        public int SpriteHeight => _spriteBody.Height;
 
         protected bool _bCanTalk = false;
         public bool CanTalk => _bCanTalk;
@@ -173,6 +173,28 @@ namespace RiverHollow.Actors
             if (_bActive)
             {
                 base.Draw(spriteBatch, useLayerDepth);
+            }
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            base.Update(gTime);
+            if (_dEtherealCD != 0)
+            {
+                _dEtherealCD -= gTime.ElapsedGameTime.TotalSeconds;
+                if (_dEtherealCD <= 0)
+                {
+                    if (!_bIgnoreCollisions)
+                    {
+                        _dEtherealCD = 5;
+                        _bIgnoreCollisions = true;
+                    }
+                    else
+                    {
+                        _dEtherealCD = 0;
+                        _bIgnoreCollisions = false;
+                    }
+                }
             }
         }
 
@@ -1329,7 +1351,7 @@ namespace RiverHollow.Actors
         bool _bStartedBuilding;
 
         protected int _iIndex;
-        public int ID { get => _iIndex; }
+        public int ID  => _iIndex;
         protected string _homeMap;
         public enum NPCTypeEnum { Eligible, Villager, Shopkeeper, Ranger, Worker, Mason }
         protected NPCTypeEnum _eNPCType;
@@ -1375,7 +1397,7 @@ namespace RiverHollow.Actors
             LoadContent(_sVillagerFolder + "NPC" + _iIndex);
             ImportBasics(stringData);
 
-            MapManager.Maps[CurrentMapName].AddCharacterImmediately(this);
+            MapManager.Maps[_homeMap].AddCharacterImmediately(this);
         }
 
         public override string GetOpeningText()
@@ -1521,25 +1543,6 @@ namespace RiverHollow.Actors
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-
-            if (_dEtherealCD != 0)
-            {
-                _dEtherealCD -= gTime.ElapsedGameTime.TotalSeconds;
-                if (_dEtherealCD <= 0)
-                {
-                    if (!_bIgnoreCollisions)
-                    {
-                        _dEtherealCD = 5;
-                        _bIgnoreCollisions = true;
-                    }
-                    else
-                    {
-                        _dEtherealCD = 0;
-                        _bIgnoreCollisions = false;
-                    }
-                }
-            }
-
 
             if (_vMoveTo != Vector2.Zero)
             {
@@ -2339,7 +2342,7 @@ namespace RiverHollow.Actors
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
-            if (_eState == AdventurerStateEnum.Idle)
+            if (_eState == AdventurerStateEnum.Idle || (CombatManager.InCombat && _eState == AdventurerStateEnum.InParty))
             {
                 base.Draw(spriteBatch, useLayerDepth);
                 if (_heldItem != null)

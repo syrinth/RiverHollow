@@ -80,6 +80,7 @@ namespace RiverHollow
             _effectLights = Content.Load<Effect>(@"Effects\lighteffect");
 
             PlayerManager.Initialize();
+            Camera.SetObserver(PlayerManager.World);
 
             MissionManager.Load();
 
