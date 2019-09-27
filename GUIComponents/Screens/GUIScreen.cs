@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using System;
 using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.Misc;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -229,9 +230,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
         #endregion
 
         #region Floating Text Control
-        public void AddFloatingText(string text, Color c) {
 
-            AddControl(new GUIFloatingText(text, c));
+        public void AddFloatingText(string text, Vector2 position, Color c) {
+            GUIFloatingText gFloatingText = new GUIFloatingText(text, c);
+            position.X += (GameManager.TileSize / 2); //Center the Damage Text
+            gFloatingText.Position(Util.GetScreenPositionFromWorld(position));
+            AddControl(gFloatingText);
         }
         public void RemoveFloatingText(GUIFloatingText o) {
             RemoveControl(o);

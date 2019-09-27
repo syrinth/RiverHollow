@@ -5,8 +5,6 @@ using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
 
 using static RiverHollow.Game_Managers.GameManager;
-using RiverHollow.Buildings;
-using RiverHollow.SpriteAnimations;
 
 namespace RiverHollow.GUIObjects
 {
@@ -17,7 +15,7 @@ namespace RiverHollow.GUIObjects
         public static MouseState LastMouseState = new MouseState();
 
         private static int _workerID = -1;
-        public static int WorkerToPlace { get => _workerID; }
+        public static int WorkerToPlace => _workerID; 
 
         private static Vector2 _position;
         public static Vector2 Position { get => _position; set => _position = value; }
@@ -33,7 +31,7 @@ namespace RiverHollow.GUIObjects
             _CursorType = EnumCursorType.Normal;
         }
 
-        public static Vector2 GetTranslatedPosition()
+        public static Vector2 GetWorldMousePosition()
         {
             Vector3 translate = Camera._transform.Translation;
             Vector2 mousePoint = Vector2.Zero;
@@ -42,7 +40,6 @@ namespace RiverHollow.GUIObjects
 
             return mousePoint;
         }
-
 
         public static bool PickUpWorker(int id)
         {
@@ -74,7 +71,7 @@ namespace RiverHollow.GUIObjects
                         break;
                     case EnumCursorType.Talk:
                         source = new Rectangle(288, 160, 16, 16);
-                        Alpha = (PlayerManager.PlayerInRange(GetTranslatedMouseLocation().ToPoint(), (int)(TileSize * 1.5))) ? 1 : 0.5f;
+                        Alpha = (PlayerManager.PlayerInRange(GetWorldMousePosition().ToPoint(), (int)(TileSize * 1.5))) ? 1 : 0.5f;
                         break;
                     case EnumCursorType.Door:
                         source = new Rectangle(288, 176, 16, 16);
@@ -94,7 +91,7 @@ namespace RiverHollow.GUIObjects
         {
             if (GameManager.Scrying() && GameManager.HeldBuilding != null)
             {
-                Vector2 mousePosition = GetTranslatedPosition();
+                Vector2 mousePosition = GetWorldMousePosition();
                 Rectangle drawRectangle = new Rectangle(((int)((mousePosition.X - HeldBuilding.Width / 2) / TileSize)) * TileSize, ((int)((mousePosition.Y - HeldBuilding.Height / 2) / TileSize)) * TileSize, HeldBuilding.Width, HeldBuilding.Height);
 
                 GameManager.HeldBuilding.SetCoordinatesByGrid(new Vector2(drawRectangle.X, drawRectangle.Y));
@@ -110,15 +107,6 @@ namespace RiverHollow.GUIObjects
                 WorldItem obj = it.GetWorldItem();
                 obj.Draw(spriteBatch);
             }
-        }
-
-        public static Vector2 GetTranslatedMouseLocation()
-        {
-            Vector2 mousePoint = Position;
-            Vector3 translate = Camera._transform.Translation;
-            mousePoint.X = (int)((mousePoint.X - translate.X) / Scale);
-            mousePoint.Y = (int)((mousePoint.Y - translate.Y) / Scale);
-            return mousePoint;
         }
     }
 }

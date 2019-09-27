@@ -55,14 +55,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _gActionSelect.Update(gTime);
                     break;
 
-                case CombatManager.PhaseEnum.PerformAction:
-                    if (CombatManager.SelectedAction != null)
-                    {
-                        CombatManager.SelectedAction.PerformAction(gTime);
-                    }
-
-                    break;
-
                 case CombatManager.PhaseEnum.DisplayVictory:
                     if (_gPostScreen == null)
                     {
@@ -147,18 +139,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 case CombatManager.PhaseEnum.ChooseMoveTarget:
                     CombatManager.SetMoveTarget();
                     break;
+
+                case CombatManager.PhaseEnum.ChooseActionTarget:
+                    CombatManager.SelectedAction.AssignTarget();
+                    break;
             }
 
             //If the current Phase is skill selection, allow the user to pick a skill for the currentCharacter
             //switch (CombatManager.CurrentPhase)
-            //{
-            //    case CombatManager.PhaseEnum.SelectSkill:
-            //        rv = _gActionSelect.ProcessLeftButtonClick(mouse);
-            //        break;
-
-            //    case CombatManager.PhaseEnum.ChooseTarget:
-            //        CombatManager.SelectedAction.SetSkillTarget();
-            //        break;
+            //{  
             //    case CombatManager.PhaseEnum.DisplayVictory:
             //        rv = _gPostScreen.ProcessLeftButtonClick(mouse);
             //        break;

@@ -6,6 +6,7 @@ using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIObjects;
 using RiverHollow.Misc;
+using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
 using RiverHollow.WorldObjects;
 using System;
@@ -119,6 +120,7 @@ namespace RiverHollow.Game_Managers
                         CurrentPhase = PhaseEnum.Charging;
                     }
                     break;
+
                 //For when there is no character so we must charge until someone hits 100
                 case PhaseEnum.Charging:
                     //If there is no ActiveCharacter, we need to get the next one
@@ -163,6 +165,7 @@ namespace RiverHollow.Game_Managers
                         GoToMainSelection();
                     }
                     break;
+
                 case CombatManager.PhaseEnum.ChooseActionTarget:
                     HandleTargetting();
                     break;
@@ -171,6 +174,7 @@ namespace RiverHollow.Game_Managers
                     HandleTargetting();
                     break;
 
+                //Use this phase for when the ActiveCharacter is currently moving
                 case PhaseEnum.Moving:
                     if (!ActiveCharacter.FollowingPath)
                     {
@@ -183,6 +187,15 @@ namespace RiverHollow.Game_Managers
                         EndTurn();
                         //if (ActiveCharacter.IsMonster()) { }
                     }
+                    break;
+
+                //Use this phase to use the SelectedAction
+                case PhaseEnum.PerformAction:
+                    if (SelectedAction != null)
+                    {
+                        SelectedAction.Update(gTime);
+                    }
+
                     break;
 
                 case PhaseEnum.DisplayVictory:
@@ -387,11 +400,10 @@ namespace RiverHollow.Game_Managers
             CombatAction action = null;
             bool gottaMove = true;
 
-            //
             //Step one determine if we are in range of a target
             foreach (CombatAction c in ActiveCharacter.AbilityList)
             {
-                if (c.Range == 0)
+                if (c.Range == 1)
                 {
                     foreach (RHTile t in ActiveCharacter.Tile.GetAdjacent())
                     {
@@ -457,6 +469,9 @@ namespace RiverHollow.Game_Managers
                 {
                     if (t.HasCombatant() && t.Character.IsAdventurer())
                     {
+                        SelectedTile = t;
+                        SelectedAction = new ChosenAction((CombatAction)ActiveCharacter.AbilityList[0]);
+                        SelectedAction.AssignTarget();
                     }
                 }
             }
@@ -505,12 +520,12 @@ namespace RiverHollow.Game_Managers
                 depth++;
                 foreach (RHTile t in startTile.GetAdjacent())
                 {
-                    //The tile is legal if we are choosing a target for an action, or if we are moving, it is passable, and there is no character
+                    //The tile is legal if we are choosing a target for an action; or if we are moving, it is passable, and there is no character
                     //If so, add it to the LegalTiles list and then recursively grow.
-                    //Can never target walls or otherwise blocked tiles.
-                    if (t.Passable() && (CurrentPhase == PhaseEnum.ChooseMoveTarget && t.CanPathThroughInCombat() || CurrentPhase == PhaseEnum.ChooseActionTarget))
+                    if ((t.Passable() && CurrentPhase == PhaseEnum.ChooseMoveTarget && t.CanPathThroughInCombat()) || CurrentPhase == PhaseEnum.ChooseActionTarget)
                     {
-                        if (!tileList.Contains(t)) { tileList.Add(t); }
+                        //Can never target walls or otherwise blocked tiles.
+                        if (!tileList.Contains(t) && t.Passable()) { tileList.Add(t); }
                         RecursivelyGrowRange(t, tileList, depth, maxDepth);
                     }
                 }
@@ -645,7 +660,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void HandleMouseTargetting()
         {
-            Vector2 mouseCursor = GraphicCursor.GetTranslatedPosition();
+            Vector2 mouseCursor = GraphicCursor.GetWorldMousePosition();
             RHTile tile = MapManager.CurrentMap.GetTileOffGrid(mouseCursor);
             if (tile != null && _liLegalTiles.Contains(tile))
             {
@@ -992,6 +1007,7 @@ namespace RiverHollow.Game_Managers
             public int Range => (_chosenItem != null ? 1 : _chosenAction.Range);    //Items only have 1 tile of range
             private Consumable _chosenItem;
             private CombatAction _chosenAction;
+            public AnimatedSprite Sprite => _chosenAction.Sprite;
 
             List<RHTile> _liLegalTiles;
             public List<RHTile> LegalTiles => _liLegalTiles;
@@ -1087,7 +1103,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            public void PerformAction(GameTime gTime)
+            public void Update(GameTime gTime)
             {
                 if (_chosenAction != null) { _chosenAction.HandlePhase(gTime); }
                 else if (_chosenItem != null)
@@ -1125,19 +1141,24 @@ namespace RiverHollow.Game_Managers
                 EndTurn();
             }
 
+            /// <summary>
+            /// Call to officially lock the SelectedTile as the _targetTile
+            /// Clear out the tiles and close the window
+            /// </summary>
             public void AssignTarget()
             {
                 _tTarget = SelectedTile;
                 if (_chosenAction != null)
                 {
                     ActiveCharacter.CurrentMP -= _chosenAction.MPCost;          //Checked before Processing
-                    _chosenAction.AnimationSetup();
+                    _chosenAction.AssignTiles();
                     Text = SelectedAction.Name;
                 }
                 else if (_chosenItem != null)
                 {
                     Text = SelectedAction.Name;
                 }
+                CombatManager.CurrentPhase = PhaseEnum.PerformAction;
 
                 ClearToPerformAction();
             }
@@ -1149,101 +1170,6 @@ namespace RiverHollow.Game_Managers
                 if(_chosenAction != null) { rv = _chosenAction.ChargeCost; }
 
                 return rv;
-            }
-
-            /// <summary>
-            /// Retrieves the tiles that will be effected by this skill based off the area type
-            /// </summary>
-            /// <returns>A complete list of tiles that will be hit</returns>
-            public List<RHTile> GetEffectedTiles(){
-                List<RHTile> cbtTile = new List<RHTile>();
-                if (_chosenItem != null) {
-                    cbtTile.Add(SelectedTile);
-                }
-                else
-                {
-                    CombatActor actor = _chosenAction.SkillUser;
-                    if (SelectedTile != null)
-                    {
-                        cbtTile.Add(SelectedTile);
-                        if (_chosenAction.AreaOfEffect > 0)
-                        {
-                            //Describes which side of the Battlefield we are targetting
-                            //bool monsterSide = (actor.IsCombatAdventurer() && TargetsEnemy()) || (actor.IsMonster() && TargetsAlly());
-                            //bool partySide = (actor.IsMonster() && TargetsEnemy()) || (actor.IsCombatAdventurer() && TargetsAlly());
-
-                            ////All we need to do here is select all of the tiles containing the appropriate characters
-                            //if (_chosenAction.AreaOfEffect == AreaEffectEnum.Each)
-                            //{
-                            //    if (monsterSide)
-                            //    {
-                            //        foreach(Monster m in _liMonsters)
-                            //        {
-                            //            if (!cbtTile.Contains(m.Tile)) { cbtTile.Add(m.Tile); }
-                            //        }
-                            //    }
-                            //    else
-                            //    {
-                            //        foreach (CombatActor adv in _listParty)
-                            //        {
-                            //            if (!cbtTile.Contains(adv.Tile)) { cbtTile.Add(adv.Tile); }
-                            //        }
-                            //    }
-                            //}
-                            //else {
-                            //    //The coordinates of the selected tile
-                            //    int targetRow = SelectedTile.Row;
-                            //    int targetCol = SelectedTile.Col;
-
-                            //    //Determines how far to the side the skill can go, based on whether it grows left or right
-                            //    int minCol = monsterSide ? ENEMY_FRONT : 0;
-                            //    int maxCol = monsterSide ? MAX_COL : ENEMY_FRONT;
-                            //    if (_chosenAction.AreaOfEffect == AreaEffectEnum.Cross)
-                            //    {
-                            //        if (targetRow - 1 >= 0) { cbtTile.Add(_combatMap[targetRow - 1, targetCol]); }
-                            //        if (targetRow + 1 < MAX_ROW) { cbtTile.Add(_combatMap[targetRow + 1, targetCol]); }
-
-                            //        if (targetCol - 1 >= minCol) { cbtTile.Add(_combatMap[targetRow, targetCol - 1]); }
-                            //        if (targetCol + 1 < maxCol) { cbtTile.Add(_combatMap[targetRow, targetCol + 1]); }
-                            //    }
-                            //    else if (_chosenAction.AreaOfEffect == AreaEffectEnum.Rectangle)
-                            //    {
-                            //        KeyValuePair<int, int> dimensions = _chosenAction.Dimensions;
-                            //        if (monsterSide)
-                            //        {
-                            //            for (int rows = targetRow; rows < MAX_ROW && rows < targetRow + dimensions.Key; rows++)
-                            //            {
-                            //                for (int cols = targetCol; cols < maxCol && cols < targetCol + dimensions.Value; cols++)
-                            //                {
-                            //                    CombatTile t = _combatMap[rows, cols];
-                            //                    if (!cbtTile.Contains(t))
-                            //                    {
-                            //                        cbtTile.Add(t);
-                            //                    }
-                            //                }
-                            //            }
-                            //        }
-                            //        else if (partySide)
-                            //        {
-                            //            for (int rows = targetRow; rows < MAX_ROW && rows < targetRow + dimensions.Key; rows++)
-                            //            {
-                            //                for (int cols = targetCol; cols >= minCol && cols > targetCol - dimensions.Value; cols--)
-                            //                {
-                            //                    CombatTile t = _combatMap[rows, cols];
-                            //                    if (!cbtTile.Contains(t))
-                            //                    {
-                            //                        cbtTile.Add(t);
-                            //                    }
-                            //                }
-                            //            }
-                            //        }
-                            //    }
-                            //}
-                        }
-                    }
-                }
-
-                return cbtTile;
             }
 
             public void SetUser(CombatActor c) {
@@ -1343,7 +1269,7 @@ namespace RiverHollow.Game_Managers
             {
                 if (_chosenAction != null)
                 {
-                    _chosenAction.AnimationSetup();
+                    _chosenAction.AssignTiles();
                     _chosenAction.TileTargetList = li;
                 }
             }

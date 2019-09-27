@@ -159,8 +159,8 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region FloatingText Control
-        public static void AddFloatingText(int num, Color c) { _currentGUIScreen.AddFloatingText(num.ToString(), c); }
-        public static void AddFloatingText(string text, Color c) { _currentGUIScreen.AddFloatingText(text, c); }
+        public static void AddFloatingText(int num, Vector2 position, Color c) { AddFloatingText(num.ToString(), position, c); }
+        public static void AddFloatingText(string text, Vector2 position, Color c) { _currentGUIScreen.AddFloatingText(text, position, c); }
         public static void RemoveFloatingText(GUIFloatingText o) { _currentGUIScreen.RemoveFloatingText(o); }
         #endregion
 

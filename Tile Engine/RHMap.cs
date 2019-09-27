@@ -679,6 +679,10 @@ namespace RiverHollow.Tile_Engine
                         t.Draw(spriteBatch);
                     }
                 }
+
+                if (CombatManager.SelectedAction != null) {
+                    CombatManager.SelectedAction.Draw(spriteBatch);
+                }
             }
 
             foreach (WorldActor c in _liActors)
@@ -732,7 +736,9 @@ namespace RiverHollow.Tile_Engine
         public void DrawUpper(SpriteBatch spriteBatch)
         {
             SetLayerVisibility(true);
+
             _renderer.Draw(_map, Camera._transform);
+
             SetLayerVisibility(false);
         }
 
@@ -1109,7 +1115,7 @@ namespace RiverHollow.Tile_Engine
                 for (int i = 0; i < _liItems.Count; i++)
                 {
                     Item it = _liItems[i];
-                    if (it.ManualPickup && it.CollisionBox.Contains(GraphicCursor.GetTranslatedMouseLocation()))
+                    if (it.ManualPickup && it.CollisionBox.Contains(GraphicCursor.GetWorldMousePosition()))
                     {
                         if (InventoryManager.AddToInventory(it))
                         {
@@ -1402,7 +1408,7 @@ namespace RiverHollow.Tile_Engine
             else{
                 bool found = false;
 
-                RHTile t = GetTileOffGrid(GraphicCursor.GetTranslatedMouseLocation().ToPoint());
+                RHTile t = GetTileOffGrid(GraphicCursor.GetWorldMousePosition().ToPoint());
                 if(t != null && t.GetDoorObject() != null)
                 {
                     found = true;
@@ -2196,33 +2202,15 @@ namespace RiverHollow.Tile_Engine
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (_bArea)
-            {
-                Rectangle source = new Rectangle(32, 112, 16, 16);
-                Rectangle dest = new Rectangle((int)Position.X, (int)Position.Y, TileSize, TileSize);
+            Rectangle dest = new Rectangle((int)Position.X, (int)Position.Y, TileSize, TileSize);
 
-                spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, source, Color.White);
-            }
-            if (_bLegalTile)
-            {
-                Rectangle source = new Rectangle(0, 112, 16, 16);
-                Rectangle dest = new Rectangle((int)Position.X, (int)Position.Y, TileSize, TileSize);
+            //Only draw one of the tile targetting types
+            if (_bSelected) { spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, new Rectangle(16, 112, 16, 16), Color.White); }
+            else if (_bArea) { spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, new Rectangle(32, 112, 16, 16), Color.White); }
+            else if (_bLegalTile) { spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, new Rectangle(0, 112, 16, 16), Color.White); }
 
-                spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, source, Color.White);
-            }
-            if (_bSelected)
-            {
-                Rectangle source = new Rectangle(16, 112, 16, 16);
-                Rectangle dest = new Rectangle((int)Position.X, (int)Position.Y, TileSize, TileSize);
-
-                spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, source, Color.White);
-            }
-            if (_floorObj != null) {
-                _floorObj.Draw(spriteBatch);
-            }
-            if (_obj != null) {
-                _obj.Draw(spriteBatch);
-            }
+            if (_floorObj != null) { _floorObj.Draw(spriteBatch); }
+            if (_obj != null) { _obj.Draw(spriteBatch); }
         }
 
         public void Dig()

@@ -222,12 +222,16 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public GUIFloatingText(string text, Color c)
         {
             _gText = new GUIText(text);
-            _gText.SetColor(c);            
+            _gText.SetColor(c);
+            AddControl(_gText);
+
+            Width = _gText.Width;
+            Height = _gText.Height;
         }
 
         public override void Update(GameTime gTime)
         {
-            _gText.MoveBy(new Vector2(0, 0.05f));
+            _gText.MoveBy(new Vector2(0, -1));
             _dCountDown += gTime.ElapsedGameTime.TotalSeconds;
             if(_dCountDown >= VANISH_AFTER)
             {

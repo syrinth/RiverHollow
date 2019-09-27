@@ -36,7 +36,7 @@
     <!--<20> Wizard Skills-->
     <Item>
       <Key>20</Key>
-      <Value>[Type:Spell][Animation:LightningSprite-94-160-15-0.1-32][Target:Enemy][Range:8][Area:1][Cost:5][Harm:150][Action:UserCast Direct Apply][Element:Lightning]</Value>
+      <Value>[Type:Spell][Animation:LightningSprite-94-160-15-0.1][AnimContact:49-114][Target:Enemy][Range:8][Area:1][Cost:5][Harm:150][Action:UserCast Direct Apply][Element:Lightning]</Value>
     </Item>
     <!--<40> Healer Skills-->
     <Item>
@@ -96,11 +96,11 @@
     </Item>
     <Item>
       <Key>101</Key>
-      <Value>[Type:Action][Target:Enemy][Range:0][Area:0][Harm:120][Push:2][Action:UserMove UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:0][Area:0][Harm:120][Push:2][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>102</Key>
-      <Value>[Type:Action][Target:Enemy][Range:0][Area:0][Harm:120][Action:UserMove UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:0][Area:0][Harm:120][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>103</Key>
@@ -108,7 +108,7 @@
     </Item>
     <Item>
       <Key>104</Key>
-      <Value>[Type:Action][Target:Enemy][Range:0][Area:0][Harm:70][Action:UserMove UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:0][Area:0][Harm:70][Action:UserAttack Apply]</Value>
     </Item>
     <!--<120> Knight Skills-->
     <Item>
@@ -117,11 +117,11 @@
     </Item>
     <Item>
       <Key>121</Key>
-      <Value>[Type:Action][Target:Enemy][Range:5][Area:0][Harm:50][Push:1][Step:2][Action:UserMove UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:5][Area:0][Harm:50][Push:1][Step:2][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>122</Key>
-      <Value>[Type:Action][Target:Enemy][Range:5][Area:0][Harm:50][Push:1][Step:2][Action:UserMove UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:5][Area:0][Harm:50][Push:1][Step:2][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>123</Key>
@@ -151,7 +151,7 @@
     <!--<160> Bard Skills-->
     <Item>
       <Key>160</Key>
-      <Value>[Type:Action][Target:Enemy][Range:0][Area:0][Action:UserMove UserAttack Apply][Harm:100][Retreat:1]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:0][Area:0][Action:UserAttack Apply][Harm:100][Retreat:1]</Value>
     </Item>
     <Item>
       <Key>161</Key>
@@ -167,7 +167,7 @@
     </Item>
     <Item>
       <Key>164</Key>
-      <Value>[Type:Action][Target:Enemy][Area:0][Range:0][Status:14-2-Self][Action:UserMove UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Area:0][Range:0][Status:14-2-Self][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>165</Key>
@@ -179,7 +179,7 @@
     </Item>
     <Item>
       <Key>167</Key>
-      <Value>[Type:Action][Target:Enemy][Area:0][Range:0][Status:17-3-Allies][Action:UserMove UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Area:0][Range:0][Status:17-3-Allies][Action:UserAttack Apply]</Value>
     </Item>
     <!--<180> Later-->
     <!--<200> Later-->
@@ -189,11 +189,11 @@
     <Item>
       <!--Attack-->
       <Key>300</Key>
-      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:1][Area:0][Harm:100][Action:UserMove UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:1][Area:0][Harm:100][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>301</Key>
-      <Value>[Type:Action][Animation:LeafCutter-32-32-3-0.1][Target:Enemy][Icon:0-0][Range:0][Area:0][Harm:100][Action:UserMove UserAttack Direct Apply]</Value>
+      <Value>[Type:Action][Animation:LeafCutter-32-32-3-0.1][Target:Enemy][Icon:0-0][Range:0][Area:0][Harm:100][Action:UserAttack Direct Apply]</Value>
       <!--Attack-->
     </Item>
   </Asset>

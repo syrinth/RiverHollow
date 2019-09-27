@@ -1,15 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
-using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
 using System;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.CombatManager;
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow.Actors.CombatStuff
 {
@@ -20,9 +17,9 @@ namespace RiverHollow.Actors.CombatStuff
         protected ActionEnum _actionType;
         protected MenuEnum _menuType;
         protected string _name;
-        public string Name { get => _name; }
+        public string Name => _name;
         protected string _description;
-        public string Description { get => _description; }
+        public string Description => _description;
 
         public CombatActor SkillUser;
 
@@ -62,11 +59,11 @@ namespace RiverHollow.Actors.CombatStuff
         PotencyBonusEnum _eBonusType;
         ElementEnum _element = ElementEnum.None;
         List<ConditionEnum> _liCondition;
-        public List<ConditionEnum> LiCondition { get => _liCondition; }
+        public List<ConditionEnum> LiCondition => _liCondition;
         int _iChargeCost;
         public int ChargeCost => _iChargeCost;
         int _mpCost;
-        public int MPCost { get => _mpCost; }
+        public int MPCost => _mpCost;
         int _iPotency;
         public int Potency => _iPotency;
         KeyValuePair<int, int> _kvpAreaDimensions;
@@ -97,7 +94,8 @@ namespace RiverHollow.Actors.CombatStuff
         int _iAnimWidth;
         int _iAnimHeight;
         int _iFrames;
-        int _iAnimOffset;
+        int _iAnimContactX;
+        int _iAnimContactY;
         int _iBonusMod;
 
         public List<RHTile> TileTargetList;
@@ -117,7 +115,7 @@ namespace RiverHollow.Actors.CombatStuff
 
         string _sRemoveString;
 
-        public GUISprite Sprite;
+        public AnimatedSprite Sprite;
         public CombatAction(int id, Dictionary<string, string> stringData)
         {
             TileTargetList = new List<RHTile>();
@@ -142,7 +140,8 @@ namespace RiverHollow.Actors.CombatStuff
             if (stringData.ContainsKey("Charge")) { _iChargeCost = int.Parse(stringData["Charge"]); }
             if (stringData.ContainsKey("Crit")) { _iCritRating = int.Parse(stringData["Crit"]); }
             if (stringData.ContainsKey("Accuracy")) { _iAccuracy = int.Parse(stringData["Accuracy"]); }
-            if (stringData.ContainsKey("Area")) {
+            if (stringData.ContainsKey("Area"))
+            {
                 string[] tags = stringData["Area"].Split('-');
                 _iArea = int.Parse(tags[0]);
             }
@@ -241,29 +240,29 @@ namespace RiverHollow.Actors.CombatStuff
                 _iAnimHeight = int.Parse(parse[i++]);
                 _iFrames = int.Parse(parse[i++]);
                 _fFrameSpeed = float.Parse(parse[i++]);
-                if (parse.Length == i + 1)
-                {
-                    _iAnimOffset = int.Parse(parse[i++]);
-                }
 
-                AnimatedSprite sprite = new AnimatedSprite(_sAnimation);
-                sprite.AddAnimation(GenAnimEnum.Play, 0, 0, _iAnimWidth, _iAnimHeight, _iFrames, _fFrameSpeed);
-                sprite.SetCurrentAnimation(GenAnimEnum.Play);
-                sprite.IsAnimating = false;
-                sprite.SetScale(CombatManager.CombatScale);
-                sprite.PlaysOnce = true;
+                Sprite = new AnimatedSprite(_sAnimation);
+                Sprite.AddAnimation(GenAnimEnum.Play, 0, 0, _iAnimWidth, _iAnimHeight, _iFrames, _fFrameSpeed);
+                Sprite.SetCurrentAnimation(GenAnimEnum.Play);
+                Sprite.IsAnimating = false;
+                Sprite.PlaysOnce = true;
+            }
 
-                Sprite = new GUISprite(sprite);
+            if (stringData.ContainsKey("AnimContact"))
+            {
+                string[] parse = stringData["AnimContact"].Split('-');
+                _iAnimContactX = int.Parse(parse[0]);
+                _iAnimContactY = int.Parse(parse[1]);
             }
         }
 
         /// <summary>
-        /// Sets the _bUsed tag to be true so that it's known that we've started using the Action
-        /// Then retrieve the list of tiles that will be effected by this skill
+        /// Assigns the CombatManager's SelectedTileand AreaTiles to the CombatAction
         /// </summary>
-        public void AnimationSetup()
+        public void AssignTiles()
         {
-            TileTargetList.AddRange(CombatManager.SelectedAction.GetEffectedTiles());
+            TileTargetList.Add(CombatManager.SelectedTile);
+            TileTargetList.AddRange(CombatManager.AreaTiles);
         }
 
         /// <summary>
@@ -725,26 +724,22 @@ namespace RiverHollow.Actors.CombatStuff
 
                     if (!SkillUser.IsCurrentAnimation(CActorAnimEnum.Attack))
                     {
-                        if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(CActorAnimEnum.Attack); }
-                        else { SkillUser.PlayAnimation(CActorAnimEnum.Attack); }
+                       SkillUser.PlayAnimation(CActorAnimEnum.Attack);
                     }
                     else if (SkillUser.AnimationPlayedXTimes(1))
                     {
-                        if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(CActorAnimEnum.Idle); }
-                        else { SkillUser.PlayAnimation(CActorAnimEnum.Idle); }
+                        SkillUser.PlayAnimation(CActorAnimEnum.Idle);
                         _iCurrentAction++;
                     }
                     break;
                 case "UserCast":
                     if (!SkillUser.IsCurrentAnimation(CActorAnimEnum.Cast))
                     {
-                        if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(CActorAnimEnum.Cast); }
-                        else { SkillUser.PlayAnimation(CActorAnimEnum.Cast); }
+                        SkillUser.PlayAnimation(CActorAnimEnum.Cast);
                     }
                     else if (SkillUser.AnimationPlayedXTimes(2))
                     {
-                        if (SkillUser.IsSummon()) { SkillUser.PlayAnimation(CActorAnimEnum.Idle); }
-                        else { SkillUser.PlayAnimation(CActorAnimEnum.Idle); }
+                        SkillUser.Idle();
                         _iCurrentAction++;
                     }
                     break;
@@ -752,9 +747,10 @@ namespace RiverHollow.Actors.CombatStuff
                     if (Sprite != null && !Sprite.PlayedOnce && !Sprite.IsAnimating)
                     {
                         Sprite.IsAnimating = true;
-                        //Sprite.AlignToObject(TileTargetList[0].GUITile, SideEnum.Bottom);
-                        //Sprite.AlignToObject(TileTargetList[0].GUITile, SideEnum.CenterX);
-                        Sprite.MoveBy(new Vector2(0, _iAnimOffset * CombatManager.CombatScale));
+                        int overFlowX = (Sprite.Width - TileSize) / 2;
+                        int overFlowY = (Sprite.Height - _iAnimContactX);
+                        Sprite.Position = TileTargetList[0].Center;
+                        Sprite.Position -= new Vector2(_iAnimContactX, _iAnimContactY);
                     }
                     else if (Sprite != null && Sprite.IsAnimating) { Sprite.Update(gTime); }
                     else if (Sprite == null || Sprite.PlayedOnce)
@@ -886,6 +882,6 @@ namespace RiverHollow.Actors.CombatStuff
         public int BuffID;
         public int Duration;
         public string Tags;
-        public GUISprite Sprite;
+        public AnimatedSprite Sprite;
     }
 }

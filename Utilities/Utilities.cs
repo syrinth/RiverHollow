@@ -209,6 +209,22 @@ namespace RiverHollow.Misc
 
             return rv;
         }
+
+        /// <summary>
+        /// Uses the Camera's Translation Matrix to translate the given RHMap position
+        /// to the Screen position.
+        /// </summary>
+        /// <param name="worldPosition">The World position to translate</param>
+        /// <returns></returns>
+        public static Vector2 GetScreenPositionFromWorld(Vector2 worldPosition)
+        {
+            Vector3 translate = Camera._transform.Translation;
+            Vector2 newPos = Vector2.Zero;
+            newPos.X = (int)translate.X + (worldPosition.X * Scale);
+            newPos.Y = (int)translate.Y + (worldPosition.Y * Scale);
+
+            return newPos;
+        }
     }
 
     public class RHRandom : Random
