@@ -88,12 +88,10 @@ namespace RiverHollow.Game_Managers
 
             foreach (CombatActor c in _liMonsters)
             {
-                c.Tile = MapManager.CurrentMap.GetTileOffGrid(c.CollisionBox.Center);
-                c.Tile.SetCombatant(c);
+                MapManager.CurrentMap.GetTileOffGrid(c.CollisionBox.Center).SetCombatant(c);
             }
 
-            PlayerManager.World.Tile = MapManager.CurrentMap.GetTileOffGrid(PlayerManager.World.CollisionBox.Center);
-            PlayerManager.World.Tile.SetCombatant(PlayerManager.World);
+            MapManager.CurrentMap.GetTileOffGrid(PlayerManager.World.CollisionBox.Center).SetCombatant(PlayerManager.World);
 
             List<RHTile> tileList = new List<RHTile>();
             RecursivelyGrowRange(PlayerManager.World.Tile, tileList, 0, 2);
@@ -103,8 +101,7 @@ namespace RiverHollow.Game_Managers
                 {
                     MapManager.Maps[c.CurrentMapName].RemoveCharacter(c);
                     c.Activate(true);
-                    c.Tile = tileList[random.Next(tileList.Count)];
-                    c.Tile.SetCombatant(c);
+                    tileList[random.Next(tileList.Count)].SetCombatant(c);
                     c.CurrentMapName = MapManager.CurrentMap.Name;
                     MapManager.CurrentMap.AddCharacter(c);
                     c.Position = c.Tile.Position;
@@ -149,10 +146,7 @@ namespace RiverHollow.Game_Managers
                         {
                             //If there is at least one character, retrieve it
                             GetActiveCharacter();
-                            if (ActiveCharacter.IsAdventurer())
-                            {
-                                Camera.SetObserver(ActiveCharacter);
-                            }
+                            Camera.SetObserver(ActiveCharacter, true);
                         }
                     }
                     break;
@@ -167,9 +161,12 @@ namespace RiverHollow.Game_Managers
                     }
 
                     Summon activeSummon = ActiveCharacter.LinkedSummon;
-                    if (activeSummon == null || !activeSummon.Regen)
+                    if ((activeSummon == null || !activeSummon.Regen))
                     {
-                        GoToMainSelection();
+                        if (!Camera.IsMoving())
+                        {
+                            GoToMainSelection();
+                        }
                     }
                     else if (activeSummon != null && activeSummon.Regen && activeSummon.BodySprite.CurrentAnimation != "Cast")
                     {
@@ -195,9 +192,7 @@ namespace RiverHollow.Game_Managers
                 case PhaseEnum.Moving:
                     if (!ActiveCharacter.FollowingPath)
                     {
-                        ActiveCharacter.Tile.SetCombatant(null);
-                        ActiveCharacter.Tile = MapManager.CurrentMap.GetTileOffGrid(ActiveCharacter.CollisionBox.Center);
-                        ActiveCharacter.Tile.SetCombatant(ActiveCharacter);
+                        MapManager.CurrentMap.GetTileOffGrid(ActiveCharacter.CollisionBox.Center).SetCombatant(ActiveCharacter);
                         //GoToMainSelection();
                         _turnInfo.HasMoved = true;
 
@@ -600,7 +595,7 @@ namespace RiverHollow.Game_Managers
         }
 
         /// <summary>
-        /// Unsets the SelectedTile
+        /// Unsets the CurrentTile
         /// </summary>
         public static void ClearSelectedTile()
         {
@@ -697,6 +692,7 @@ namespace RiverHollow.Game_Managers
             {
                 _tTarget = SelectedTile;
                 CurrentPhase = PhaseEnum.Moving;
+                ActiveCharacter.Tile.SetCombatant(null);
                 Vector2 start = ActiveCharacter.Position;
 
                 List<RHTile> tilePath = TravelManager.FindPathToLocation(ref start, _tTarget.Center, MapManager.CurrentMap.Name);
@@ -1114,10 +1110,8 @@ namespace RiverHollow.Game_Managers
                     //gItem.AnchorAndAlignToObject(c.BodySprite, SideEnum.Top, SideEnum.CenterX);
                     //gItem.Draw(spritebatch);
                 }
-                if (_chosenAction != null && _chosenAction.Sprite != null)
-                {
-                    _chosenAction.Sprite.Draw(spritebatch);
-                }
+
+                _chosenAction?.Sprite?.Draw(spritebatch);
             }
 
             public void Update(GameTime gTime)
@@ -1273,15 +1267,9 @@ namespace RiverHollow.Game_Managers
             }
             public List<RHTile> GetTargetTiles()
             {
-                if (_chosenAction != null)
-                {
-                    return _chosenAction.TileTargetList;
-                }
-                else
-                {
-                    return null;
-                }
+                return _chosenAction?.TileTargetList;
             }
+
             public void SetTargetTiles(List<RHTile> li)
             {
                 if (_chosenAction != null)

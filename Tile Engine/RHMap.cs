@@ -669,7 +669,7 @@ namespace RiverHollow.Tile_Engine
             {
                 if(CombatManager.ActiveCharacter != null && CombatManager.ActiveCharacter.IsAdventurer())
                 {
-                    CombatManager.ActiveCharacter.Tile.Draw(spriteBatch);
+                    CombatManager.ActiveCharacter.Tile?.Draw(spriteBatch);
                 }
 
                 foreach (RHTile t in CombatManager.LegalTiles)
@@ -2210,11 +2210,14 @@ namespace RiverHollow.Tile_Engine
         {
             Rectangle dest = new Rectangle((int)Position.X, (int)Position.Y, TileSize, TileSize);
 
-            //Only draw one of the tile targetting types
-            if(this == CombatManager.ActiveCharacter.Tile) { spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, new Rectangle(48, 112, 16, 16), Color.White); }
-            else if (_bSelected) { spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, new Rectangle(16, 112, 16, 16), Color.White); }
-            else if (_bArea) { spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, new Rectangle(32, 112, 16, 16), Color.White); }
-            else if (_bLegalTile) { spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, new Rectangle(0, 112, 16, 16), Color.White); }
+            if (CombatManager.InCombat)
+            {
+                //Only draw one of the tile targetting types
+                if (this == CombatManager.ActiveCharacter.Tile) { spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, new Rectangle(48, 112, 16, 16), Color.White); }
+                else if (_bSelected) { spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, new Rectangle(16, 112, 16, 16), Color.White); }
+                else if (_bArea) { spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, new Rectangle(32, 112, 16, 16), Color.White); }
+                else if (_bLegalTile) { spriteBatch.Draw(GameContentManager.GetTexture(GameContentManager.FILE_WORLDOBJECTS), dest, new Rectangle(0, 112, 16, 16), Color.White); }
+            }
 
             if (_floorObj != null) { _floorObj.Draw(spriteBatch); }
             if (_obj != null) { _obj.Draw(spriteBatch); }
@@ -2522,6 +2525,8 @@ namespace RiverHollow.Tile_Engine
         /// <param name="c"></param>
         public void SetCombatant(CombatActor c)
         {
+            if (c == null) { _combatActor.Tile = null; }
+            else { c.Tile = this; }
             _combatActor = c;
         }
 

@@ -212,31 +212,4 @@ namespace RiverHollow.GUIComponents.GUIObjects
             return rv;
         }
     }
-
-    public class GUIFloatingText : GUIObject
-    {
-        const double VANISH_AFTER = 1.0;
-        double _dCountDown = 0;
-        GUIText _gText;
-
-        public GUIFloatingText(string text, Color c)
-        {
-            _gText = new GUIText(text);
-            _gText.SetColor(c);
-            AddControl(_gText);
-
-            Width = _gText.Width;
-            Height = _gText.Height;
-        }
-
-        public override void Update(GameTime gTime)
-        {
-            _gText.MoveBy(new Vector2(0, -1));
-            _dCountDown += gTime.ElapsedGameTime.TotalSeconds;
-            if(_dCountDown >= VANISH_AFTER)
-            {
-                GUIManager.RemoveFloatingText(this);
-            }
-        }
-    }
 }

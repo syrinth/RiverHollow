@@ -229,19 +229,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public virtual void CloseMainObject() { }
         #endregion
 
-        #region Floating Text Control
-
-        public void AddFloatingText(string text, Vector2 position, Color c) {
-            GUIFloatingText gFloatingText = new GUIFloatingText(text, c);
-            position.X += (GameManager.TileSize / 2); //Center the Damage Text
-            gFloatingText.Position(Util.GetScreenPositionFromWorld(position));
-            AddControl(gFloatingText);
-        }
-        public void RemoveFloatingText(GUIFloatingText o) {
-            RemoveControl(o);
-        }
-        #endregion
-
         public void AddTextSelection(string text)
         {
             RemoveControl(_gSelectionWindow);

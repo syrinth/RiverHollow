@@ -310,16 +310,20 @@ namespace RiverHollow.Actors
             switch (Facing)
             {
                 case DirectionEnum.Down:
-                    PlayAnimation(WActorBaseAnim.IdleDown);
+                    if (CombatManager.InCombat) { PlayAnimation(WActorWalkAnim.WalkDown); }
+                    else { PlayAnimation(WActorBaseAnim.IdleDown); }
                     break;
                 case DirectionEnum.Up:
-                    PlayAnimation(WActorBaseAnim.IdleUp);
+                    if (CombatManager.InCombat) { PlayAnimation(WActorWalkAnim.WalkUp); }
+                    else { PlayAnimation(WActorBaseAnim.IdleUp); }
                     break;
                 case DirectionEnum.Left:
-                    PlayAnimation(WActorBaseAnim.IdleLeft);
+                    if (CombatManager.InCombat) { PlayAnimation(WActorWalkAnim.WalkLeft); }
+                    else { PlayAnimation(WActorBaseAnim.IdleLeft); }
                     break;
                 case DirectionEnum.Right:
-                    PlayAnimation(WActorBaseAnim.IdleRight);
+                    if (CombatManager.InCombat) { PlayAnimation(WActorWalkAnim.WalkRight); }
+                    else { PlayAnimation(WActorBaseAnim.IdleRight); }
                     break;
             }
         }
@@ -356,6 +360,22 @@ namespace RiverHollow.Actors
 
             //Determines how much of the needed position we're capable of moving in one movement
             Util.GetMoveSpeed(Position, target, Speed, ref direction);
+
+            //If we're following a path and there's more than one tile left, we don't want to cut
+            //short on individual steps, so recalculate based on the next target
+            float length = direction.Length();
+            if(length < Speed)
+            {
+                int i = 0;
+            }
+            if(_liTilePath.Count > 1 && length < Speed)
+            {
+                _liTilePath.RemoveAt(0);
+
+                //Recalculate for the next target
+                target = _liTilePath[0].Position;
+                Util.GetMoveSpeed(Position, target, Speed, ref direction);
+            }
 
             //Attempt to move
             if (!CheckMapForCollisionsAndMove(direction, _bIgnoreCollisions))
@@ -483,6 +503,8 @@ namespace RiverHollow.Actors
         public bool Guard => _bGuard;
 
         public bool Swapped;
+
+        protected FloatingText _fText;
         #endregion
 
         public CombatActor() : base()
@@ -504,6 +526,11 @@ namespace RiverHollow.Actors
                 [ElementEnum.Ice] = ElementAlignment.Neutral,
                 [ElementEnum.Lightning] = ElementAlignment.Neutral
             };
+        }
+        public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
+        {
+            base.Draw(spriteBatch, useLayerDepth);
+            _fText?.Draw(spriteBatch);
         }
 
         public override void Update(GameTime gTime)
@@ -529,10 +556,8 @@ namespace RiverHollow.Actors
                 PlayAnimation(CActorAnimEnum.Idle);
             }
 
-            if (_linkedSummon != null)
-            {
-                _linkedSummon.Update(gTime);
-            }
+            _fText?.Update(gTime);
+            _linkedSummon?.Update(gTime);
 
             if (_vMoveTo != Vector2.Zero)
             {
@@ -697,9 +722,7 @@ namespace RiverHollow.Actors
                     }
                 }
             }
-
-            GUIManager.AddFloatingText(iValue, Position, bHarmful ? Color.Red : Color.Green);
-
+            _fText = new FloatingText(this, iValue.ToString(), bHarmful ? Color.Red : Color.Green);
         }
 
         public bool IsCritical()
@@ -931,6 +954,45 @@ namespace RiverHollow.Actors
         }
 
         public virtual bool IsSummon() { return false; }
+
+        public void RemoveFloatingText() { _fText = null; }
+
+        public class FloatingText
+        {
+            CombatActor _actOwner;
+            Vector2 Position;
+            protected SpriteFont _font;
+            protected Color _cTextColor;
+            const double VANISH_AFTER = 1.0;
+            double _dCountDown = 0;
+            protected string _sText;
+
+            public FloatingText(CombatActor owner, string text, Color c)
+            {
+                _font = GameContentManager.GetFont(@"Fonts\Font");
+                _sText = text;
+                _cTextColor = c;
+                _actOwner = owner;
+
+                Position = _actOwner.Position;
+                Position.X += TileSize / 2;
+            }
+
+            public void Draw(SpriteBatch spriteBatch)
+            {
+                spriteBatch.DrawString(_font, _sText, Position, _cTextColor);
+            }
+
+            public void Update(GameTime gTime)
+            {
+                Position += new Vector2(0, -1);
+                _dCountDown += gTime.ElapsedGameTime.TotalSeconds;
+                if (_dCountDown >= VANISH_AFTER)
+                {
+                    _actOwner.RemoveFloatingText();
+                }
+            }
+        }
     }
     #endregion
 
@@ -1043,7 +1105,7 @@ namespace RiverHollow.Actors
 
             int xCrawl = 0;
             int frameWidth = 16;
-            int frameHeight = 32;
+            int frameHeight = 34;
             _spriteBody.AddAnimation(CActorAnimEnum.Idle, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.IdleFrames, _class.IdleFramesLength);
             xCrawl += _class.IdleFrames;
             _spriteBody.AddAnimation(CActorAnimEnum.Cast, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.CastFrames, _class.CastFramesLength);
@@ -1533,7 +1595,7 @@ namespace RiverHollow.Actors
                         string[] data = s.Split('|');
                         temp.Add(new KeyValuePair<string, string>(data[0], data[1]));
                     }
-                    _diCompleteSchedule.Add(kvp.Key, temp);
+                    //_diCompleteSchedule.Add(kvp.Key, temp);
                 }
             }
 
@@ -2657,9 +2719,18 @@ namespace RiverHollow.Actors
             {
                 HandleMove(_vMoveTo);
             }
+
+            //If there are tiles remaining on the path to follow
             if (_liTilePath.Count > 0)
             {
                 Vector2 targetPos = _liTilePath[0].Position;
+
+                Vector2 _vToTarget = Vector2.Zero;
+                Util.GetMoveSpeed(Position, targetPos, Speed, ref _vToTarget);
+                //Vector2 _vToNextTarget = Vector2.Zero;
+                //if(_liTilePath.Count > 1) {  Util.GetMoveSpeed(Position, targetPos, Speed, ref _vToNextTarget); }
+
+                float length = _vToTarget.Length();
                 if (Position == targetPos)
                 {
                     _liTilePath.RemoveAt(0);
