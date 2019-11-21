@@ -1877,3 +1877,8 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Monsters/Malice.png
 
+#begin Maps/mapForest1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapForest1.tmx
+

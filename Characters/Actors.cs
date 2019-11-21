@@ -3,9 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
-using RiverHollow.Game_Managers.GUIComponents.Screens;
 using RiverHollow.Game_Managers.GUIObjects;
-using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.GUIObjects;
 using RiverHollow.Misc;
@@ -14,7 +12,6 @@ using RiverHollow.Tile_Engine;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
-using static RiverHollow.Actors.WorldActor;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.GUIObjects.HUDMenu;
 using static RiverHollow.Game_Managers.GUIObjects.HUDMenu.HUDManagement;
@@ -332,8 +329,8 @@ namespace RiverHollow.Actors
         {
             bool rv = false;
             //Create the X and Y rectangles to test for collisions
-            Rectangle testRectX = new Rectangle((int)(Position.X + direction.X), (int)Position.Y, Width, Height);
-            Rectangle testRectY = new Rectangle((int)Position.X, (int)(Position.Y + direction.Y), Width, Height);
+            Rectangle testRectX = new Rectangle((int)(Position.X + direction.X), (int)Position.Y, CollisionBox.Width, CollisionBox.Height);
+            Rectangle testRectY = new Rectangle((int)Position.X, (int)(Position.Y + direction.Y), CollisionBox.Width, CollisionBox.Height);
 
             //If the CheckForCollisions gave the all clear, move the sprite.
             if (MapManager.Maps[CurrentMapName].CheckForCollisions(this, testRectX, testRectY, ref direction, ignoreCollisions) && direction != Vector2.Zero)
@@ -540,7 +537,10 @@ namespace RiverHollow.Actors
             //Finished being hit, determine action
             if (IsCurrentAnimation(CActorAnimEnum.Hurt) && BodySprite.GetPlayCount() >= 1)
             {
-                if (CurrentHP == 0) { PlayAnimation(CActorAnimEnum.KO); }
+                if (CurrentHP == 0) {
+                    CombatManager.KO(this);
+                    PlayAnimation(CActorAnimEnum.KO);
+                }
                 else if (IsCritical()) { PlayAnimation(CActorAnimEnum.Critical); }
                 else { PlayAnimation(CActorAnimEnum.Idle); }
             }
@@ -1595,7 +1595,7 @@ namespace RiverHollow.Actors
                         string[] data = s.Split('|');
                         temp.Add(new KeyValuePair<string, string>(data[0], data[1]));
                     }
-                    //_diCompleteSchedule.Add(kvp.Key, temp);
+                    _diCompleteSchedule.Add(kvp.Key, temp);
                 }
             }
 
@@ -3019,22 +3019,15 @@ namespace RiverHollow.Actors
         {
             base.Update(gTime);
 
-            if (CombatManager.InCombat)
+            if (BodySprite.CurrentAnimation == Util.GetEnumString(CActorAnimEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
             {
-                if (BodySprite.CurrentAnimation == Util.GetEnumString(CActorAnimEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
-                {
-                    CombatManager.Kill(this);
-                }
+                MapManager.RemoveMonster(this);
             }
-            else
-            {
-                UpdateMovement(gTime);
 
-                if (PlayerManager.PlayerInRange(this.Center, TileSize * 8))
-                {
-                    CombatManager.NewBattle();
-                }
-            }
+            // Only comment this out for now in case we implement stealth or something so you can sneak past enemies without aggroing them
+            //if (!CombatManager.InCombat) {
+            //    UpdateMovement(gTime);
+            //}
         }
 
         protected void ImportBasics(Dictionary<string, string> data, int id)

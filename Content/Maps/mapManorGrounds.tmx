@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#000000" nextlayerid="7" nextobjectid="50">
+<map version="1.2" tiledversion="1.3.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#000000" nextlayerid="7" nextobjectid="51">
  <properties>
-  <property name="ActiveSpawn" type="int" value="2"/>
   <property name="Outside" type="bool" value="true"/>
  </properties>
  <tileset firstgid="1" source="tilesetManorGrounds.tsx"/>
@@ -324,21 +323,6 @@
     <property name="Name" value="Palmo"/>
     <property name="Text" value="I really like the stars, don't you? ... Here, take this *"/>
     <property name="Type" value="Forest_2"/>
-   </properties>
-  </object>
-  <object id="38" name="SpawnPoint" x="979.333" y="932.667" width="6.5" height="8.5">
-   <properties>
-    <property name="SpawnType" value="Forest"/>
-   </properties>
-  </object>
-  <object id="40" name="SpawnPoint" x="835.667" y="964.5" width="10" height="10">
-   <properties>
-    <property name="SpawnType" value="Forest"/>
-   </properties>
-  </object>
-  <object id="41" name="SpawnPoint" x="787" y="129.833" width="10" height="15" visible="0">
-   <properties>
-    <property name="SpawnType" value="Forest"/>
    </properties>
   </object>
   <object id="42" name="Manor" x="800" y="448" width="175.5" height="192"/>

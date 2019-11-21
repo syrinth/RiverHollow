@@ -20,6 +20,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class GameManager
     {
+        public enum ZoneEnum { Forest, Mountain, Field, Swamp, Town };
         public enum DirectionEnum { Up, Down, Right, Left };
 
         public enum WActorBaseAnim { MakeItem, IdleDown, ToolDown, IdleUp, IdleLeft, IdleRight };

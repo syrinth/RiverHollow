@@ -47,6 +47,8 @@ namespace RiverHollow.Game_Managers
         private static bool _bInCombat = false;
         public static bool InCombat => _bInCombat;
 
+        private static int _iXPMultiplier = 1;
+
         private static TurnInfo _turnInfo;
 
         #region Turn Sequence
@@ -326,21 +328,22 @@ namespace RiverHollow.Game_Managers
                // CurrentPhase = PhaseEnum.Defeat;
             }
 
+            if (rv) {
+                _bInCombat = false;
+            }
+
             return rv;
         }
 
         public static void EndCombatVictory()
         {
             GUIManager.BeginFadeOut();
-            //MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
-           // MapManager.RemoveMob(_mob);
             GoToWorldMap();
         }
 
         public static void EndCombatEscape()
         {
             GUIManager.BeginFadeOut();
-            //_mob.Stun();
             GoToWorldMap();
         }
 
@@ -378,15 +381,26 @@ namespace RiverHollow.Game_Managers
             SelectedAction = new ChosenAction(it);
         }
 
-        public static void Kill(CombatActor c)
+        public static void IncrementXPMultiplier()
         {
+            _iXPMultiplier++;
+        }
+
+        /// <summary>
+        /// Perform any actions required of the CombatManager on a KO'd Actor.
+        /// </summary>
+        /// <param name="c">The KO'd Actor</param>
+        public static void KO(CombatActor c)
+        {
+            //If the Actor was a Monster, remove it from the list
             if (_liMonsters.Contains((c)))
             {
-                c.BodySprite.IsAnimating = false;
                 _liMonsters.Remove(c);
-                _liChargingCharacters.Remove(c);                    //Remove the killed member from the turn order 
-                _liQueuedCharacters.Remove(c);
             }
+
+            //Remove the Actor from the turn order 
+            _liChargingCharacters.Remove(c);                    
+            _liQueuedCharacters.Remove(c);
         }
 
         public static bool PartyUp()
@@ -786,7 +800,7 @@ namespace RiverHollow.Game_Managers
             while (rv.Count < maxShown)
             {
                 chargingCopy.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));        //Sort the charging Actors by their speed
-                CombatTick(ref chargingCopy, ref queuedCopy, true);                       //Tick
+                CombatTick(ref chargingCopy, ref queuedCopy, true);                 //Tick
 
                 //For all entries in the queue add them to the TurnOrder List,
                 //set the Charge to 0, and add to the queue, sorting by Spd

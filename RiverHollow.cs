@@ -49,6 +49,7 @@ namespace RiverHollow
             // TODO: Add your initialization logic here
             Camera.SetViewport(GraphicsDevice.Viewport);
             InventoryManager.InitPlayerInventory();
+            ZoneManager.Initialize();
             GoToInformation();
 
             base.Initialize();

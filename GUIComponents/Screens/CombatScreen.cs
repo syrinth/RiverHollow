@@ -58,9 +58,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 case CombatManager.PhaseEnum.DisplayVictory:
                     if (_gPostScreen == null)
                     {
-                        InventoryManager.InitMobInventory(1, 5);
-                        _gPostScreen = new GUIPostCombatDisplay(ClosePostCombatDisplay);
-                        _gPostScreen.CenterOnScreen();
+                        CombatManager.EndCombatVictory();
+                        //InventoryManager.InitMobInventory(1, 5);
+                        //_gPostScreen = new GUIPostCombatDisplay(ClosePostCombatDisplay);
+                        //_gPostScreen.CenterOnScreen();
                     }
 
                     break;

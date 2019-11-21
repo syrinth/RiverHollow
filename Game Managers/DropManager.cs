@@ -2,6 +2,7 @@
 using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
 using System.Collections.Generic;
+using RiverHollow.Actors;
 
 namespace RiverHollow.Game_Managers
 {
@@ -53,11 +54,11 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static List<Item> DropItemsFromMob(int id)
+        public static List<Item> DropItemsFromMonster(Monster m)
         {
             List<Item> itemList = new List<Item>();
             RHRandom r = new RHRandom();
-            string[] drops = Util.FindTags(_diMobDrops[id]);
+            string[] drops = new string[10];//.FindTags(_diMobDrops[id]);
             foreach(string s in drops)
             {
                 string[] tagType = s.Split(':');

@@ -219,6 +219,12 @@ namespace RiverHollow.Game_Managers
                 PlayerManager.World.Position = Util.SnapToGrid(_newMapInfo.PlayerPosition);
                 _currentMap.CheckForTriggeredCutScenes();
                 _newMapInfo = default;
+
+                //Enter combat upon entering a map with living monsters
+                if (_currentMap.Monsters.Count > 0)
+                {
+                    CombatManager.NewBattle();
+                }
             }
 
             foreach(RHMap map in _tileMaps.Values)

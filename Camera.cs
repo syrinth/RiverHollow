@@ -11,13 +11,13 @@ namespace RiverHollow
 {
     public static class Camera
     {
-        static bool _bMoving = false;
+        static bool _bTrackToTarget = false;
         static Vector2 _vObserver;
         static WorldActor _actObserver;
 
         public static Matrix _transform;
         public static Viewport _view;
-        public static Vector2 _center;
+        public static Vector2 _vCenter;
 
         public static void SetViewport(Viewport view)
         {
@@ -33,17 +33,19 @@ namespace RiverHollow
                 if (!Scrying())
                 {
                     //This code is used to get the camera to move in to the target
-                    if (_bMoving)
+                    if (_bTrackToTarget)
                     {
                         Vector2 direction = Vector2.Zero;
                         Util.GetMoveSpeed(_vObserver, target, 18, ref direction);
                         _vObserver += direction;
 
                         if (_vObserver == target) {
-                            _bMoving = false;
+                            _bTrackToTarget = false;
                         }
                     }
-                    else { _vObserver = target; }
+                    else {
+                        _vObserver = target;        //We're already tracking the target
+                    }
                 }
                 else
                 {
@@ -93,12 +95,12 @@ namespace RiverHollow
                 if (_vObserver.X <= (RiverHollow.ScreenWidth / 2))
                 {
                     _vObserver.X = (RiverHollow.ScreenWidth / 2);
-                    if (_vObserver.Y == target.Y) { _bMoving = false; }
+                    xLocked = true;
                 }
                 else if (_vObserver.X >= MapManager.CurrentMap.GetMapWidth() - (RiverHollow.ScreenWidth / 2))
                 {
                     _vObserver.X = MapManager.CurrentMap.GetMapWidth() - (RiverHollow.ScreenWidth / 2);
-                    if(_vObserver.Y == target.Y) { _bMoving = false; }
+                    xLocked = true;
                 }
             }
 
@@ -107,27 +109,27 @@ namespace RiverHollow
                 if (_vObserver.Y <= (RiverHollow.ScreenHeight / 2) + BorderOffset)
                 {
                     _vObserver.Y = (RiverHollow.ScreenHeight / 2) + BorderOffset;
-                    if(_vObserver.X == target.X) { _bMoving = false; }
+                    yLocked = true;
                 }
                 else if (_vObserver.Y >= MapManager.CurrentMap.GetMapHeight() - (RiverHollow.ScreenHeight / 2) - BorderOffset)
                 {
                     _vObserver.Y = MapManager.CurrentMap.GetMapHeight() - (RiverHollow.ScreenHeight / 2) - BorderOffset;
-                    if (_vObserver.X == target.X) { _bMoving = false; }
+                    yLocked = true;
                 }
             }
 
-            if (xLocked && yLocked) { _bMoving = false; }                       //If the entirety of the map is smaller than the screen, don't move the camera at all.
-            if (xLocked && _vObserver.Y == target.Y) { _bMoving = false; }      //If the x axis is locked, stop moving when we reach the correct y
-            if (yLocked && _vObserver.X == target.X) { _bMoving = false; }      //If the y axis is locked, stop moving when we reach the correct x
+            if (xLocked && yLocked) { _bTrackToTarget = false; }                       //If the camerahas been locked to its axis, stop moving
+            if (xLocked && _vObserver.Y == target.Y) { _bTrackToTarget = false; }      //If the x axis is locked, stop moving when we reach the correct y
+            if (yLocked && _vObserver.X == target.X) { _bTrackToTarget = false; }      //If the y axis is locked, stop moving when we reach the correct x
 
-            _center = new Vector2(_vObserver.X - (RiverHollow.ScreenWidth / 2), _vObserver.Y - (RiverHollow.ScreenHeight / 2));
-            _transform = Matrix.CreateScale(new Vector3(Scale, Scale, 0)) * Matrix.CreateTranslation(new Vector3(-_center.X, -_center.Y, 0));
+            _vCenter = new Vector2(_vObserver.X - (RiverHollow.ScreenWidth / 2), _vObserver.Y - (RiverHollow.ScreenHeight / 2));
+            _transform = Matrix.CreateScale(new Vector3(Scale, Scale, 0)) * Matrix.CreateTranslation(new Vector3(-_vCenter.X, -_vCenter.Y, 0));
         }
 
         public static void SetObserver(WorldActor act, bool swoopToTarget = false)
         {
             _actObserver = act;
-            _bMoving = swoopToTarget;
+            _bTrackToTarget = swoopToTarget;
         }
 
         public static void UnsetObserver()
@@ -142,7 +144,7 @@ namespace RiverHollow
 
         public static bool IsMoving()
         {
-            return _bMoving;
+            return _bTrackToTarget;
         }
     }
 }

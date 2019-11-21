@@ -143,6 +143,10 @@ namespace RiverHollow.Tile_Engine
 
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, string newMap, string mapName)
         {
+            if(mapName == "mapForest1")
+            {
+                int i = 0;
+            }
             _map = Content.Load<TiledMap>(newMap);
             _sName = mapName;
             MapWidthTiles = _map.Width;
@@ -1482,7 +1486,7 @@ namespace RiverHollow.Tile_Engine
         }
         public void RemoveMonster(Monster m)
         {
-            _liMonsters.Remove(m);
+            ToRemove.Add(m);
             foreach (Door d in _liDoors)
             {
                 if (d.IsMobDoor()) { ((MobDoor)d).Check(_liMonsters.Count); }
@@ -2153,8 +2157,11 @@ namespace RiverHollow.Tile_Engine
 
         public void Despawn()
         {
-            _map.RemoveMonster(_monster);
-            _monster = null;
+            if (_monster != null)
+            {
+                _map.RemoveMonster(_monster);
+                _monster = null;
+            }
         }
 
         public bool HasSpawned()
