@@ -226,6 +226,14 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        public static void DrawAnimation(SpriteBatch spriteBatch)
+        {
+            if (_bInCombat)
+            {
+                _scrCombat?.DrawAnimation(spriteBatch);
+            }
+        }
+
         private static void HandleTargetting()
         {
             HandleMouseTargetting();
@@ -335,15 +343,23 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
+        /// <summary>
+        /// Called when the Battle ends in Victory.
+        /// We need to re-enable movement as it's locked down in combat
+        /// </summary>
         public static void EndCombatVictory()
         {
-            GUIManager.BeginFadeOut();
+            PlayerManager.AllowMovement = true;
             GoToWorldMap();
         }
 
+        /// <summary>
+        /// Called when the Battle ends in escape.
+        /// We need to re-enable movement as it's locked down in combat
+        /// </summary>
         public static void EndCombatEscape()
         {
-            GUIManager.BeginFadeOut();
+            PlayerManager.AllowMovement = true;
             GoToWorldMap();
         }
 

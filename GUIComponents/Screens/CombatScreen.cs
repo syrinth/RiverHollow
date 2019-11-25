@@ -27,7 +27,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
     {
         GUITextWindow _gActionTextWindow;
         GUIStatDisplay _sdStamina;
-        GUIImage _gActionEffect;
 
         GUIPostCombatDisplay _gPostScreen;
 
@@ -210,14 +209,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             base.Draw(spriteBatch);
 
-            if (CombatManager.SelectedAction != null) { CombatManager.SelectedAction.Draw(spriteBatch); }
-
             //Draw here instead of leaving it to the controls because the
             //characters will get drawnon top of it otherwise.
             if(_gPostScreen != null)
             {
                 _gPostScreen.Draw(spriteBatch);
             }
+        }
+
+        public void DrawAnimation(SpriteBatch spriteBatch)
+        {
+            CombatManager.SelectedAction?.Draw(spriteBatch);
         }
 
         private void ClosePostCombatDisplay()

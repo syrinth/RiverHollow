@@ -3036,8 +3036,6 @@ namespace RiverHollow.Actors
             _sName = GameContentManager.GetMonsterInfo(_id);
             _sTexture = GameContentManager.FOLDER_MONSTERS + data["Texture"];
 
-            LoadContent();
-
             float[] idle = new float[2] { 2, 0.5f };
             float[] attack = new float[2] { 2, 0.2f };
             float[] hurt = new float[2] { 1, 0.5f };
@@ -3126,6 +3124,7 @@ namespace RiverHollow.Actors
                 _iLootID = int.Parse(data["Loot"]);
             }
 
+            LoadContent();
             LoadCombatContent(idle, attack, hurt, cast);
 
             _iCurrentHP = MaxHP;
@@ -3134,40 +3133,48 @@ namespace RiverHollow.Actors
 
         public void LoadContent()
         {
+            int xCrawl = 0;
             _spriteBody = new AnimatedSprite(_sTexture);
 
             if (!_bJump)
             {
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleDown, 0, 0, TileSize, TileSize * 2, 4, 0.2f);
-                _spriteBody.AddAnimation(WActorWalkAnim.WalkDown, 0, 0, TileSize, TileSize * 2, 4, 0.2f);
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleUp, 64, 0, TileSize, TileSize * 2, 4, 0.2f);
-                _spriteBody.AddAnimation(WActorWalkAnim.WalkUp, 64, 0, TileSize, TileSize * 2, 4, 0.2f);
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleLeft, 128, 0, TileSize, TileSize * 2, 4, 0.2f);
-                _spriteBody.AddAnimation(WActorWalkAnim.WalkLeft, 128, 0, TileSize, TileSize * 2, 4, 0.2f);
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleRight, 192, 0, TileSize, TileSize * 2, 4, 0.2f);
-                _spriteBody.AddAnimation(WActorWalkAnim.WalkRight, 192, 0, TileSize, TileSize * 2, 4, 0.2f);
+                _spriteBody.AddAnimation(WActorBaseAnim.IdleDown, xCrawl, 0, TileSize, TileSize * 2, 4, 0.2f);
+                _spriteBody.AddAnimation(WActorWalkAnim.WalkDown, xCrawl, 0, TileSize, TileSize * 2, 4, 0.2f);
+                xCrawl += 64;
+                _spriteBody.AddAnimation(WActorBaseAnim.IdleUp, xCrawl, 0, TileSize, TileSize * 2, 4, 0.2f);
+                _spriteBody.AddAnimation(WActorWalkAnim.WalkUp, xCrawl, 0, TileSize, TileSize * 2, 4, 0.2f);
+                xCrawl += 64;
+                _spriteBody.AddAnimation(WActorBaseAnim.IdleLeft, xCrawl, 0, TileSize, TileSize * 2, 4, 0.2f);
+                _spriteBody.AddAnimation(WActorWalkAnim.WalkLeft, xCrawl, 0, TileSize, TileSize * 2, 4, 0.2f);
+                xCrawl += 64;
+                _spriteBody.AddAnimation(WActorBaseAnim.IdleRight, xCrawl, 0, TileSize, TileSize * 2, 4, 0.2f);
+                _spriteBody.AddAnimation(WActorWalkAnim.WalkRight, xCrawl, 0, TileSize, TileSize * 2, 4, 0.2f);
                 _spriteBody.SetCurrentAnimation(WActorWalkAnim.WalkDown);
             }
             else
             {
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleDown, 0, 0, TileSize, TileSize * 2, 2, 0.2f);
-                _spriteBody.AddAnimation(WActorJumpAnim.GroundDown, 0, 0, TileSize, TileSize * 2, 2, 0.2f);
-                _spriteBody.AddAnimation(WActorJumpAnim.AirDown, 32, 0, TileSize, TileSize * 2, 2, 0.2f);
-
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleUp, 64, 0, TileSize, TileSize * 2, 2, 0.2f);
-                _spriteBody.AddAnimation(WActorJumpAnim.GroundUp, 64, 0, TileSize, TileSize * 2, 2, 0.2f);
-                _spriteBody.AddAnimation(WActorJumpAnim.AirUp, 96, 0, TileSize, TileSize * 2, 2, 0.2f);
-
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleLeft, 128, 0, TileSize, TileSize * 2, 2, 0.2f);
-                _spriteBody.AddAnimation(WActorJumpAnim.GroundLeft, 128, 0, TileSize, TileSize * 2, 2, 0.2f);
-                _spriteBody.AddAnimation(WActorJumpAnim.AirLeft, 160, 0, TileSize, TileSize * 2, 2, 0.2f);
-
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleRight, 192, 0, TileSize, TileSize * 2, 2, 0.2f);
-                _spriteBody.AddAnimation(WActorJumpAnim.GroundRight, 192, 0, TileSize, TileSize * 2, 2, 0.2f);
-                _spriteBody.AddAnimation(WActorJumpAnim.AirRight, 224, 0, TileSize, TileSize * 2, 2, 0.2f);
+                _spriteBody.AddAnimation(WActorBaseAnim.IdleDown, xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+                _spriteBody.AddAnimation(WActorJumpAnim.GroundDown, xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+                _spriteBody.AddAnimation(WActorJumpAnim.AirDown, xCrawl+32, 0, TileSize, TileSize * 2, 2, 0.2f);
+                xCrawl += 64;
+                _spriteBody.AddAnimation(WActorBaseAnim.IdleUp, xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+                _spriteBody.AddAnimation(WActorJumpAnim.GroundUp, xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+                _spriteBody.AddAnimation(WActorJumpAnim.AirUp, xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
+                xCrawl += 64;
+                _spriteBody.AddAnimation(WActorBaseAnim.IdleLeft, xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+                _spriteBody.AddAnimation(WActorJumpAnim.GroundLeft, xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+                _spriteBody.AddAnimation(WActorJumpAnim.AirLeft, xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
+                xCrawl += 64;
+                _spriteBody.AddAnimation(WActorBaseAnim.IdleRight, xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+                _spriteBody.AddAnimation(WActorJumpAnim.GroundRight, xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+                _spriteBody.AddAnimation(WActorJumpAnim.AirRight, xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
                 _spriteBody.SetCurrentAnimation(WActorBaseAnim.IdleDown);
             }
             Facing = DirectionEnum.Down;
+
+            xCrawl += 64;
+            _spriteBody.AddAnimation(CActorAnimEnum.Hurt, 0, 0, 0, 0 * 2, 1, 0.2f);
+            _spriteBody.AddAnimation(CActorAnimEnum.KO, xCrawl, 0, TileSize, TileSize * 2, 3, 0.2f);
 
             base._iWidth = _spriteBody.Width;
             base._iHeight = _spriteBody.Height;
@@ -3175,21 +3182,23 @@ namespace RiverHollow.Actors
 
         public void LoadCombatContent(float[] idle, float[] attack, float[] hurt, float[] cast)
         {
-            int xCrawl = 0;
-            int frameWidth = _iWidth;
-            int frameHeight = _iHeight;
-            _spriteBody.AddAnimation(CActorAnimEnum.Idle, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)idle[0], idle[1]);
-            xCrawl += (int)idle[0];
-            _spriteBody.AddAnimation(CActorAnimEnum.Attack, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)attack[0], attack[1]);
-            xCrawl += (int)attack[0];
-            _spriteBody.AddAnimation(CActorAnimEnum.Hurt, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)hurt[0], hurt[1]);
-            xCrawl += (int)hurt[0];
-            _spriteBody.AddAnimation(CActorAnimEnum.Cast, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)cast[0], cast[1]);
-            xCrawl += (int)cast[0];
+            //_spriteBody.AddAnimation(CActorAnimEnum.KO, (xCrawl * frameWidth), 0, frameWidth, frameHeight, 3, 0.2f);
 
-            _spriteBody.AddAnimation(CActorAnimEnum.KO, (xCrawl * frameWidth), 0, frameWidth, frameHeight, 3, 0.2f);
-            base._iWidth = _spriteBody.Width;
-            base._iHeight = _spriteBody.Height;
+            //int xCrawl = 0;
+            //int frameWidth = _iWidth;
+            //int frameHeight = _iHeight;
+            //_spriteBody.AddAnimation(CActorAnimEnum.Idle, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)idle[0], idle[1]);
+            //xCrawl += (int)idle[0];
+            //_spriteBody.AddAnimation(CActorAnimEnum.Attack, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)attack[0], attack[1]);
+            //xCrawl += (int)attack[0];
+            //_spriteBody.AddAnimation(CActorAnimEnum.Hurt, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)hurt[0], hurt[1]);
+            //xCrawl += (int)hurt[0];
+            //_spriteBody.AddAnimation(CActorAnimEnum.Cast, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)cast[0], cast[1]);
+            //xCrawl += (int)cast[0];
+
+            //_spriteBody.AddAnimation(CActorAnimEnum.KO, (xCrawl * frameWidth), 0, frameWidth, frameHeight, 3, 0.2f);
+            //base._iWidth = _spriteBody.Width;
+            //base._iHeight = _spriteBody.Height;
         }
 
         private void HandleTrait(string traitData)
