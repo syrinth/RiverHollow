@@ -216,7 +216,6 @@ namespace RiverHollow.Game_Managers
                     if (Delay <= 0)
                     {
                         Delay = 0.05f;
-                        GiveXP();
                     }
                     else
                     {
@@ -276,22 +275,6 @@ namespace RiverHollow.Game_Managers
         }
         #endregion
 
-        private static void GiveXP()
-        {
-            //int toGive = 0;
-            //int total = 0;
-            //CurrentMob.GetXP(ref toGive, ref total);
-
-            //int xpDrain = 5;
-            //if (toGive > 0)
-            //{
-            //    CurrentMob.DrainXP(xpDrain);
-            //    foreach (ClassedCombatant a in _listParty)
-            //    {
-            //        a.AddXP(xpDrain);
-            //    }
-            //}
-        }
         internal static bool CanCancel()
         {
             return CurrentPhase == PhaseEnum.ChooseAction || CurrentPhase == PhaseEnum.ChooseActionTarget || CurrentPhase == PhaseEnum.ChooseMoveTarget;

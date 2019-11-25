@@ -45,6 +45,7 @@ namespace RiverHollow.Game_Managers
     public class ZoneInfo
     {
         int _iZoneLevel;
+        public int ZoneLevel => _iZoneLevel;
         GameManager.ZoneEnum _eZone;
         List<string> _liMaps;
 

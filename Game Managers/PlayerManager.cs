@@ -62,8 +62,13 @@ namespace RiverHollow.Game_Managers
         public static string Name;
         public static string ManorName;
 
-        private static int _money = 2000;
-        public static int Money { get => _money; }
+        private static int _iMoney = 2000;
+        public static int Money => _iMoney;
+
+        private static int _iMonsterEnergy = 0;
+        public static int MonsterEnergy => _iMonsterEnergy;
+
+        private static int _iMonsterEnergyQueue;
 
         public static bool AllowMovement = true;
 
@@ -124,6 +129,8 @@ namespace RiverHollow.Game_Managers
         public static void Update(GameTime gTime)
         {
             Vector2 moveDir = Vector2.Zero;
+
+            AddByIncrement(ref _iMonsterEnergyQueue, ref _iMonsterEnergy);
 
             if (AllowMovement)
             {
@@ -195,6 +202,21 @@ namespace RiverHollow.Game_Managers
                 }
             }
             World.Update(gTime);
+        }
+
+        public static void AddByIncrement(ref int queue, ref int addTo)
+        {
+            if (queue > 0)
+            {
+                int cap = 5;
+                int toGive = 0;
+
+                if (queue <= cap) { toGive = _iMonsterEnergyQueue; }
+                else { toGive = cap; }
+
+                queue -= toGive;
+                addTo += toGive;
+            }
         }
 
         public static void Draw(SpriteBatch spriteBatch)
@@ -487,15 +509,15 @@ namespace RiverHollow.Game_Managers
 
         public static void TakeMoney(int x)
         {
-            _money -= x;
+            _iMoney -= x;
         }
         public static void AddMoney(int x)
         {
-            _money += x;
+            _iMoney += x;
         }
         public static void SetMoney(int x)
         {
-            _money = x;
+            _iMoney = x;
         }
         public static void SetName(string x)
         {
@@ -646,6 +668,28 @@ namespace RiverHollow.Game_Managers
                     InventoryManager.AddItemToInventorySpot(newItem, i, j);
                 }
             }
+        }
+
+        /// <summary>
+        /// Adds the indicated amount of energy to the Player
+        /// </summary>
+        public static void AddMonsterEnergyToQueue(int i)
+        {
+            _iMonsterEnergyQueue += i;
+        }
+
+        /// <summary>
+        /// Removes the indicated amount of energy from the Player if they have it
+        /// </summary>
+        public static bool RemoveMonsterEnergy(int i)
+        {
+            bool rv = false;
+            if (_iMonsterEnergy >= i)
+            {
+                rv = true;
+                _iMonsterEnergy += i;
+            }
+            return rv;
         }
 
         public static bool ToolIsAxe() { return UseTool == _axe; }

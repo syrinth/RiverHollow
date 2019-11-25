@@ -3021,6 +3021,8 @@ namespace RiverHollow.Actors
 
             if (BodySprite.CurrentAnimation == Util.GetEnumString(CActorAnimEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
             {
+                foreach(ClassedCombatant act in PlayerManager.GetParty()) { act.AddXP(_iXP); }
+                PlayerManager.AddMonsterEnergyToQueue(100);
                 MapManager.RemoveMonster(this);
             }
 

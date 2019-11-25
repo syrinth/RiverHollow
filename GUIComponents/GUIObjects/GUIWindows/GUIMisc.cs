@@ -14,6 +14,12 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
         }
     }
+    public class GUIMonsterEnergy : GUIImage
+    {
+        public GUIMonsterEnergy() : base(new Rectangle(0, 16, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog")
+        {
+        }
+    }
 
     public class GUIMoneyDisplay : GUIObject
     {
@@ -44,8 +50,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
         private void Setup()
         {
             _gCoin = new GUICoin();
-            //if (_bCoinOnRight) { _gCoin.AnchorAndAlignToObject(_gTextMoney, SideEnum.Right, SideEnum.CenterY); }
-            //else { _gCoin.AnchorAndAlignToObject(_gTextMoney, SideEnum.Left, SideEnum.CenterY); }
 
             if (_bCoinOnRight)
             {
@@ -83,7 +87,72 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _gTextMoney.SetColor(c);
         }
     }
+    public class GUIMonsterEnergyDisplay : GUIObject
+    {
+        GUIText _gCurrencyText;
+        GUIMonsterEnergy _gEnergy;
+        bool _bPlayerEnergy;
+        bool _bSymbolOnRight;
 
+        //Player Monster Energy Display
+        public GUIMonsterEnergyDisplay()
+        {
+            _bPlayerEnergy = true;
+            _bSymbolOnRight = false;
+
+            _gCurrencyText = new GUIText(PlayerManager.Money.ToString("N0"));
+            Setup();
+        }
+
+        public GUIMonsterEnergyDisplay(int cost, bool onRight = true)
+        {
+            _bPlayerEnergy = false;
+            _bSymbolOnRight = onRight;
+
+            _gCurrencyText = new GUIText(cost.ToString("N0"));
+            Setup();
+        }
+
+        private void Setup()
+        {
+            _gEnergy = new GUIMonsterEnergy();
+
+            if (_bSymbolOnRight)
+            {
+                _gEnergy.AnchorAndAlignToObject(_gCurrencyText, SideEnum.Right, SideEnum.CenterY);
+            }
+            else
+            {
+                _gCurrencyText.AnchorAndAlignToObject(_gEnergy, SideEnum.Right, SideEnum.Top);
+                _gEnergy.AlignToObject(_gCurrencyText, SideEnum.CenterY);
+            }
+
+            Height = _gCurrencyText.Height;
+            Width = _gCurrencyText.Width + _gEnergy.Width;
+
+            AddControl(_gEnergy);
+            AddControl(_gCurrencyText);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            _gCurrencyText.Draw(spriteBatch);
+            _gEnergy.Draw(spriteBatch);
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            if (_bPlayerEnergy)
+            {
+                _gCurrencyText.SetText(PlayerManager.MonsterEnergy.ToString("N0"));
+            }
+        }
+
+        public void SetColor(Color c)
+        {
+            _gCurrencyText.SetColor(c);
+        }
+    }
     public class GUICheck : GUIObject
     {
         bool _bChecked;
