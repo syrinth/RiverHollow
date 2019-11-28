@@ -12,6 +12,7 @@ using RiverHollow.Tile_Engine;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
+using MonoGame.Extended.BitmapFonts;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.GUIObjects.HUDMenu;
 using static RiverHollow.Game_Managers.GUIObjects.HUDMenu.HUDManagement;
@@ -440,6 +441,11 @@ namespace RiverHollow.Actors
         public int DummyCharge;
         public RHTile Tile;
 
+        #region Display
+        DisplayBar _dbHP;
+        DisplayBar _dbMP;
+        #endregion
+
         #region Stats
         public virtual int Attack => 9;
 
@@ -523,11 +529,20 @@ namespace RiverHollow.Actors
                 [ElementEnum.Ice] = ElementAlignment.Neutral,
                 [ElementEnum.Lightning] = ElementAlignment.Neutral
             };
+
+            _dbHP = new DisplayBar(this);
+            _dbMP = new DisplayBar(this);
         }
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
             base.Draw(spriteBatch, useLayerDepth);
             _fText?.Draw(spriteBatch);
+
+            if (CombatManager.InCombat)
+            {
+                _dbHP.Draw(spriteBatch);
+                //_dbMP.Draw(spriteBatch);
+            }
         }
 
         public override void Update(GameTime gTime)
@@ -961,15 +976,15 @@ namespace RiverHollow.Actors
         {
             CombatActor _actOwner;
             Vector2 Position;
-            protected SpriteFont _font;
+            protected BitmapFont _font;
             protected Color _cTextColor;
-            const double VANISH_AFTER = 1.0;
+            const double VANISH_AFTER = 3.0;
             double _dCountDown = 0;
             protected string _sText;
 
             public FloatingText(CombatActor owner, string text, Color c)
             {
-                _font = GameContentManager.GetFont(@"Fonts\Font");
+                _font = GameContentManager.GetBitMapFont(@"Fonts\FontBattle");
                 _sText = text;
                 _cTextColor = c;
                 _actOwner = owner;
@@ -985,12 +1000,41 @@ namespace RiverHollow.Actors
 
             public void Update(GameTime gTime)
             {
-                Position += new Vector2(0, -1);
+                Position += new Vector2(0, -0.5f);
                 _dCountDown += gTime.ElapsedGameTime.TotalSeconds;
                 if (_dCountDown >= VANISH_AFTER)
                 {
                     _actOwner.RemoveFloatingText();
                 }
+            }
+        }
+
+        private class DisplayBar
+        {
+            CombatActor _act;
+
+            public DisplayBar(CombatActor act)
+            {
+                _act = act;
+            }
+
+            public void Draw(SpriteBatch spriteBatch)
+            {
+                Vector2 pos = _act.Position;
+                pos.Y += TileSize;
+
+                int percent = (int)(16 * (float)_act.CurrentHP / (float)_act.MaxHP);
+                spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, percent, 4), new Rectangle(16, 4, percent, 4), Color.White);
+                spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, 16, 4), new Rectangle(16, 0, 16, 4), Color.White);
+
+                pos.Y += 4;
+                percent = (int)(16 * (float)_act.CurrentMP / (float)_act.MaxMP);
+                spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, percent, 4), new Rectangle(16, 12, percent, 4), Color.White);
+                spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, 16, 4), new Rectangle(16, 8, 16, 4), Color.White);
+            }
+
+            public void Update(GameTime gTime)
+            {
             }
         }
     }

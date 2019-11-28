@@ -688,10 +688,6 @@ namespace RiverHollow.Tile_Engine
                         t.Draw(spriteBatch);
                     }
                 }
-
-                if (CombatManager.SelectedAction != null) {
-                    CombatManager.SelectedAction.Draw(spriteBatch);
-                }
             }
 
             foreach (WorldActor c in _liActors)

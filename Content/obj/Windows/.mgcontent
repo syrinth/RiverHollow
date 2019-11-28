@@ -203,5 +203,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/FangedFur.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/Malice.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest1.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/FontBattle.fnt</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/FontBattle_0.png</File>
   </SourceFiles>
 </SourceFileCollection>

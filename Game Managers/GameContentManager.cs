@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Misc;
 using System.Collections.Generic;
 using System.IO;
+using MonoGame.Extended.BitmapFonts;
 
 namespace RiverHollow.Game_Managers
 {
@@ -20,6 +21,7 @@ namespace RiverHollow.Game_Managers
         private static ContentManager _content;
         private static Dictionary<string, Texture2D> _diTextures;
         private static Dictionary<string, SpriteFont> _diFonts;
+        private static Dictionary<string, BitmapFont> _diBMFonts;
         private static Dictionary<string, string> _diGameText;
         private static Dictionary<int, string> _diMonsterInfo;
         private static Dictionary<int, string> _diStatusEffectText;
@@ -40,11 +42,14 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<int, Dictionary<string, string>> _diNPCDialogue;
         private static Dictionary<string, Dictionary<int, string>> _diMerchandise;
 
+        public static BitmapFont _bmFont;
+
         public static void LoadContent(ContentManager Content)
         {
             _content = Content;
             _diTextures = new Dictionary<string, Texture2D>();
             _diFonts = new Dictionary<string, SpriteFont>();
+            _diBMFonts = new Dictionary<string, BitmapFont>();
             _diMerchandise = new Dictionary<string, Dictionary<int, string>>();
             _diSpiritLoot = _content.Load<Dictionary<string, string>>(@"Data\SpiritLoot");
             _diUpgrades = _content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
@@ -61,6 +66,7 @@ namespace RiverHollow.Game_Managers
             AddDirectoryTextures(FOLDER_ITEMS);
 
             LoadFont(_content);
+            LoadBMFont(_content);
         }
 
         #region Load Methods
@@ -134,6 +140,10 @@ namespace RiverHollow.Game_Managers
             AddFont(@"Fonts\Font");
             AddFont(@"Fonts\MenuFont");
         }
+        private static void LoadBMFont(ContentManager Content)
+        {
+            AddBMFont(@"Fonts\FontBattle");
+        }
         private static void LoadMerchandise()
         {
             LoadMerchandiseByFile(@"Data\Shops\Buildings");
@@ -156,6 +166,10 @@ namespace RiverHollow.Game_Managers
         {
             _diFonts.Add(font, _content.Load<SpriteFont>(font));
         }
+        private static void AddBMFont(string font)
+        {
+            _diBMFonts.Add(font, _content.Load<BitmapFont>(font));
+        }
         #endregion
 
         #region Get Methods
@@ -167,6 +181,11 @@ namespace RiverHollow.Game_Managers
         public static SpriteFont GetFont(string font)
         {
             return _diFonts[font];
+        }
+
+        public static BitmapFont GetBitMapFont(string font)
+        {
+            return _diBMFonts[font];
         }
 
         public static Dictionary<string, string> GetNPCDialogue(int id)
