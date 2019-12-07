@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
+using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
@@ -353,7 +354,7 @@ namespace RiverHollow.Actors.CombatStuff
                         }
                         else    //Handling for when an attack is dodged
                         {
-                            //ToDo: Display Dodge
+                            CombatManager.AddFloatingText(new FloatingText(targetActor, "MISS", Color.White));
                         }
 
                         //This code handles when someone is guarding the target and takes the damage for them instead

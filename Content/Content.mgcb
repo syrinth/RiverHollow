@@ -1899,3 +1899,20 @@
 /processorParam:TextureFormat=Color
 /build:Fonts/FontBattle_0.png
 
+#begin Fonts/FontDefault.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:Fonts/FontDefault.fnt
+
+#begin Fonts/Lettering.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Fonts/Lettering.png
+

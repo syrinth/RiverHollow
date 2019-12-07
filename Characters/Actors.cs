@@ -383,7 +383,7 @@ namespace RiverHollow.Actors
             }
 
             //If, after movement, we've reached the given location, zero it.
-            if(_vMoveTo == Position)
+            if(_vMoveTo == Position && !CutsceneManager.Playing)
             {
                 _vMoveTo = Vector2.Zero;
             }
@@ -442,8 +442,7 @@ namespace RiverHollow.Actors
         public RHTile Tile;
 
         #region Display
-        DisplayBar _dbHP;
-        DisplayBar _dbMP;
+        protected DisplayBar _dbHP;
         #endregion
 
         #region Stats
@@ -506,8 +505,6 @@ namespace RiverHollow.Actors
         public bool Guard => _bGuard;
 
         public bool Swapped;
-
-        protected FloatingText _fText;
         #endregion
 
         public CombatActor() : base()
@@ -531,18 +528,11 @@ namespace RiverHollow.Actors
             };
 
             _dbHP = new DisplayBar(this);
-            _dbMP = new DisplayBar(this);
         }
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
             base.Draw(spriteBatch, useLayerDepth);
-            _fText?.Draw(spriteBatch);
-
-            if (CombatManager.InCombat)
-            {
-                _dbHP.Draw(spriteBatch);
-                //_dbMP.Draw(spriteBatch);
-            }
+            _dbHP.Draw(spriteBatch);
         }
 
         public override void Update(GameTime gTime)
@@ -571,7 +561,6 @@ namespace RiverHollow.Actors
                 PlayAnimation(CActorAnimEnum.Idle);
             }
 
-            _fText?.Update(gTime);
             _linkedSummon?.Update(gTime);
 
             if (_vMoveTo != Vector2.Zero)
@@ -737,7 +726,7 @@ namespace RiverHollow.Actors
                     }
                 }
             }
-            _fText = new FloatingText(this, iValue.ToString(), bHarmful ? Color.Red : Color.Green);
+            CombatManager.AddFloatingText(new FloatingText(this, iValue.ToString(), bHarmful ? Color.Red : Color.Green));
         }
 
         public bool IsCritical()
@@ -970,71 +959,36 @@ namespace RiverHollow.Actors
 
         public virtual bool IsSummon() { return false; }
 
-        public void RemoveFloatingText() { _fText = null; }
-
-        public class FloatingText
+        protected class DisplayBar
         {
-            CombatActor _actOwner;
-            Vector2 Position;
-            protected BitmapFont _font;
-            protected Color _cTextColor;
-            const double VANISH_AFTER = 3.0;
-            double _dCountDown = 0;
-            protected string _sText;
-
-            public FloatingText(CombatActor owner, string text, Color c)
-            {
-                _font = GameContentManager.GetBitMapFont(@"Fonts\FontBattle");
-                _sText = text;
-                _cTextColor = c;
-                _actOwner = owner;
-
-                Position = _actOwner.Position;
-                Position.X += TileSize / 2;
-            }
-
-            public void Draw(SpriteBatch spriteBatch)
-            {
-                spriteBatch.DrawString(_font, _sText, Position, _cTextColor);
-            }
-
-            public void Update(GameTime gTime)
-            {
-                Position += new Vector2(0, -0.5f);
-                _dCountDown += gTime.ElapsedGameTime.TotalSeconds;
-                if (_dCountDown >= VANISH_AFTER)
-                {
-                    _actOwner.RemoveFloatingText();
-                }
-            }
-        }
-
-        private class DisplayBar
-        {
+            bool _bHasMana;
             CombatActor _act;
 
             public DisplayBar(CombatActor act)
             {
                 _act = act;
+                _bHasMana = act.MaxMP > 0;
             }
 
             public void Draw(SpriteBatch spriteBatch)
             {
-                Vector2 pos = _act.Position;
-                pos.Y += TileSize;
+                if (CombatManager.InCombat)
+                {
+                    Vector2 pos = _act.Position;
+                    pos.Y += TileSize;
 
-                int percent = (int)(16 * (float)_act.CurrentHP / (float)_act.MaxHP);
-                spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, percent, 4), new Rectangle(16, 4, percent, 4), Color.White);
-                spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, 16, 4), new Rectangle(16, 0, 16, 4), Color.White);
+                    int percent = (int)(16 * (float)_act.CurrentHP / (float)_act.MaxHP);
+                    spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, percent, 4), new Rectangle(16, 4, percent, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.X);
+                    spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, 16, 4), new Rectangle(16, 0, 16, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.X);
 
-                pos.Y += 4;
-                percent = (int)(16 * (float)_act.CurrentMP / (float)_act.MaxMP);
-                spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, percent, 4), new Rectangle(16, 12, percent, 4), Color.White);
-                spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, 16, 4), new Rectangle(16, 8, 16, 4), Color.White);
-            }
-
-            public void Update(GameTime gTime)
-            {
+                    if (_bHasMana)
+                    {
+                        pos.Y += 4;
+                        percent = (int)(16 * (float)_act.CurrentMP / (float)_act.MaxMP);
+                        spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, percent, 4), new Rectangle(16, 12, percent, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.X);
+                        spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, 16, 4), new Rectangle(16, 8, 16, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.X);
+                    }
+                }
             }
         }
     }
@@ -1093,10 +1047,12 @@ namespace RiverHollow.Actors
         public int GetGearStat(StatEnum stat)
         {
             int rv = 0;
-
-            foreach (GearSlot g in _liGearSlots)
+            if (_liGearSlots != null)
             {
-                rv += g.GetStat(stat);
+                foreach (GearSlot g in _liGearSlots)
+                {
+                    rv += g.GetStat(stat);
+                }
             }
 
             return rv;
@@ -1138,7 +1094,7 @@ namespace RiverHollow.Actors
         public void LoadClassAnimations()
         {
             //Remove all animations to cover the test case of the PlayerCharacter
-            //Changing their class. Otherwise, ignore this.
+            //changing their class. Otherwise, ignore this.
             _spriteBody.RemoveAnimation(CActorAnimEnum.Idle);
             _spriteBody.RemoveAnimation(CActorAnimEnum.Cast);
             _spriteBody.RemoveAnimation(CActorAnimEnum.Hurt);
@@ -2804,14 +2760,15 @@ namespace RiverHollow.Actors
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
+            base.Draw(spriteBatch);
             _spriteBody.Draw(spriteBatch, useLayerDepth);
 
             float bodyDepth = _spriteBody.Position.Y + _spriteBody.CurrentFrameAnimation.FrameHeight + (Position.X / 100);
             _spriteEyes.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
             _spriteHair.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
 
-            if (_chest != null) { _chest.Sprite.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth + 0.01f); }
-            if (Hat != null) { Hat.Sprite.Draw(spriteBatch, useLayerDepth); }
+            _chest?.Sprite.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth + 0.01f);
+            Hat?.Sprite.Draw(spriteBatch, useLayerDepth);
         }
 
         public override void LoadContent(string textureToLoad)
@@ -3056,7 +3013,6 @@ namespace RiverHollow.Actors
 
             _eActorType = ActorEnum.Monster;
             ImportBasics(data, id);
-            
         }
 
         public override void Update(GameTime gTime)
@@ -3095,7 +3051,7 @@ namespace RiverHollow.Actors
             _iStrength = 1 + _iRating;
             _iDefense = 8 + (_iRating * 3);
             _iVitality = 2 * _iRating + 10;
-            _iMagic = 2 * _iRating + 2;
+            _iMagic = 0; // 2 * _iRating + 2;
             _iResistance = 2 * _iRating + 10;
             _iSpeed = 10;
 
@@ -3220,6 +3176,7 @@ namespace RiverHollow.Actors
 
             xCrawl += 64;
             _spriteBody.AddAnimation(CActorAnimEnum.Hurt, 0, 0, 0, 0 * 2, 1, 0.2f);
+            _spriteBody.AddAnimation(CActorAnimEnum.Attack, 0, 0, 0, 0 * 2, 1, 0.2f);
             _spriteBody.AddAnimation(CActorAnimEnum.KO, xCrawl, 0, TileSize, TileSize * 2, 3, 0.2f);
 
             base._iWidth = _spriteBody.Width;

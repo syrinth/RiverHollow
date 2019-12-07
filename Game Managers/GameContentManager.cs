@@ -143,6 +143,7 @@ namespace RiverHollow.Game_Managers
         private static void LoadBMFont(ContentManager Content)
         {
             AddBMFont(@"Fonts\FontBattle");
+            AddBMFont(@"Fonts\FontDefault");
         }
         private static void LoadMerchandise()
         {

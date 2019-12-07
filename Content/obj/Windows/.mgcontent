@@ -205,5 +205,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest1.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/FontBattle.fnt</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/FontBattle_0.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/FontDefault.fnt</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/Lettering.png</File>
   </SourceFiles>
 </SourceFileCollection>

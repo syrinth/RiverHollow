@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Actors;
 using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
@@ -25,19 +26,19 @@ namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class CombatScreen : GUIScreen
     {
-        GUITextWindow _gActionTextWindow;
-        GUIStatDisplay _sdStamina;
-
         GUIPostCombatDisplay _gPostScreen;
-
         ActionSelectObject _gActionSelect;
-
         TurnOrderDisplay _gTurnOrder;
+
+        private Dictionary<FloatingText, bool> _diFTextQueue;
+        private List<FloatingText> _liFloatingText;
 
         public CombatScreen()
         {
             //_sdStamina = new GUIStatDisplay(PlayerManager.GetStamina, Color.Red);
             //AddControl(_sdStamina);
+            _diFTextQueue = new Dictionary<FloatingText, bool>();
+            _liFloatingText = new List<FloatingText>();
 
             _gTurnOrder = new TurnOrderDisplay();
             _gTurnOrder.AnchorToScreen(SideEnum.Top);
@@ -47,6 +48,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
+
+            foreach (KeyValuePair<FloatingText, bool> kvp in _diFTextQueue)
+            {
+                if (kvp.Value) { _liFloatingText.Add(kvp.Key); }
+                else { _liFloatingText.Remove(kvp.Key); }
+            }
+            _diFTextQueue.Clear();
+            foreach (FloatingText text in _liFloatingText)
+            {
+                text.Update(gTime);
+            }
 
             switch (CombatManager.CurrentPhase)
             {
@@ -210,16 +222,24 @@ namespace RiverHollow.Game_Managers.GUIObjects
             base.Draw(spriteBatch);
 
             //Draw here instead of leaving it to the controls because the
-            //characters will get drawnon top of it otherwise.
+            //characters will get drawn on top of it otherwise.
             if(_gPostScreen != null)
             {
                 _gPostScreen.Draw(spriteBatch);
             }
         }
 
-        public void DrawAnimation(SpriteBatch spriteBatch)
+        /// <summary>
+        /// Draws the Combat objects that exist in WorldSpace
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        public void DrawUpperCombatLayer(SpriteBatch spriteBatch)
         {
             CombatManager.SelectedAction?.Draw(spriteBatch);
+            foreach (FloatingText text in _liFloatingText)
+            {
+                text.Draw(spriteBatch);
+            }
         }
 
         private void ClosePostCombatDisplay()
@@ -246,6 +266,62 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
         #endregion
+
+        #region FloatingText Handling
+        /// <summary>
+        /// Adds the FloatingText object to the removal queue
+        /// </summary>
+        public void RemoveFloatingText(FloatingText fText)
+        {
+            _diFTextQueue[fText] = false;
+        }
+
+        /// <summary>
+        /// Adds the FloatingText object to the queue to add
+        /// </summary>
+        public void AddFloatingText(FloatingText fText)
+        {
+            _diFTextQueue[fText] = true;
+        }
+
+        #endregion
+    }
+
+    public class FloatingText
+    {
+        CombatActor _actOwner;
+        Vector2 Position;
+        protected BitmapFont _font;
+        protected Color _cTextColor;
+        const double VANISH_AFTER = 1.0;
+        double _dCountDown = 0;
+        protected string _sText;
+
+        public FloatingText(CombatActor owner, string text, Color c)
+        {
+            _font = GameContentManager.GetBitMapFont(@"Fonts\FontBattle");
+            _sText = text;
+            _cTextColor = c;
+            _actOwner = owner;
+
+            Position = _actOwner.Position;
+            Position.X += TileSize / 2;
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.DrawString(_font, _sText, Position, _cTextColor);
+        }
+
+        public void Update(GameTime gTime)
+        {
+            Position += new Vector2(0, -0.5f);
+            _dCountDown += gTime.ElapsedGameTime.TotalSeconds;
+            if (_dCountDown >= VANISH_AFTER)
+            {
+                CombatManager.RemoveFloatingText(this);
+            }
+        }
     }
 
     /// <summary>

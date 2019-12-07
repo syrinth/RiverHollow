@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Actors;
 using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Game_Managers.GUIObjects;
@@ -225,11 +226,11 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void DrawAnimation(SpriteBatch spriteBatch)
+        public static void DrawUpperCombatLayer(SpriteBatch spriteBatch)
         {
             if (_bInCombat)
             {
-                _scrCombat?.DrawAnimation(spriteBatch);
+                _scrCombat.DrawUpperCombatLayer(spriteBatch);
             }
         }
 
@@ -917,6 +918,25 @@ namespace RiverHollow.Game_Managers
                 CurrentPhase = PhaseEnum.Charging;
             //}
         }
+        #endregion
+
+        #region FloatingText Handling
+        /// <summary>
+        /// Adds the FloatingText object to the removal queue
+        /// </summary>
+        public static void RemoveFloatingText(FloatingText fText)
+        {
+            _scrCombat.RemoveFloatingText(fText);
+        }
+
+        /// <summary>
+        /// Adds the FloatingText object to the queue to add
+        /// </summary>
+        public static void AddFloatingText(FloatingText fText)
+        {
+            _scrCombat.AddFloatingText(fText);
+        }
+
         #endregion
 
         //public class CombatTile
