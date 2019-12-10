@@ -514,25 +514,29 @@ namespace RiverHollow.Tile_Engine
 
         private void SpawnMobs()
         {
+            //Remove all mobs associated with the spawn point.
             foreach (SpawnPoint sp in _liMonsterSpawnPoints)
             {
                 sp.Despawn();
             }
 
             RHRandom rand = new RHRandom();
+            //Copy the spawn poitns to a list we can safely modify
+            List<SpawnPoint> spawnCopy = new List<SpawnPoint>();
+            spawnCopy.AddRange(_liMonsterSpawnPoints);
+
+            //Trigger x number of SpawnPoints
             for (int i = 0; i < _iActiveSpawnPoints; i++)
             {
-                bool spawned = false;
-                do
+                //Get a random Spawn Point
+                int point = rand.Next(0, spawnCopy.Count - 1);
+                if (!spawnCopy[point].HasSpawned())
                 {
-                    int point = rand.Next(0, _liMonsterSpawnPoints.Count-1);
-                    if (!_liMonsterSpawnPoints[point].HasSpawned())
-                    {
-                        spawned = true;
-                        _liMonsterSpawnPoints[point].Spawn();
-                    }
-
-                } while (!spawned);
+                    //Trigger the Spawn point and remove it from the copied list
+                    //so it won't be an option for future spawning.
+                    spawnCopy[point].Spawn();
+                    spawnCopy.RemoveAt(point);
+                }
             }
         }
 
@@ -1914,10 +1918,7 @@ namespace RiverHollow.Tile_Engine
             m.CurrentMapName = _sName;
             m.Position = Util.SnapToGrid(position);
 
-            if (_liMonsters.Count == 0)
-            {
-                _liMonsters.Add(m);
-            }
+            _liMonsters.Add(m);
         }
         #endregion
         

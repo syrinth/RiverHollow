@@ -19,6 +19,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class CombatManager
     {
+        private const double EXP_MULTIPLIER_BONUS = 0.3;
         public const int BASIC_ATTACK = 300;
         public static int CombatScale = 5;
 
@@ -48,7 +49,7 @@ namespace RiverHollow.Game_Managers
         private static bool _bInCombat = false;
         public static bool InCombat => _bInCombat;
 
-        private static int _iXPMultiplier = 1;
+        private static int _iXPMultiplier = 0;
 
         private static TurnInfo _turnInfo;
 
@@ -370,13 +371,9 @@ namespace RiverHollow.Game_Managers
             SelectedAction = new ChosenAction(it);
         }
 
-        public static void IncrementXPMultiplier()
-        {
-            _iXPMultiplier++;
-        }
         public static void GiveXP(int monsterXP, Monster m)
         {
-            double xpToGive = monsterXP * (1 + (double)(0.1 * _iXPMultiplier));
+            double xpToGive = monsterXP * (1 + (double)(EXP_MULTIPLIER_BONUS * _iXPMultiplier++));
             AddFloatingText(new FloatingText(m, string.Format("{0} XP", xpToGive), Color.Yellow));
 
             foreach (ClassedCombatant c in PlayerManager.GetParty())
