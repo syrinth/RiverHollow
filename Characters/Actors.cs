@@ -599,7 +599,7 @@ namespace RiverHollow.Actors
 
         public virtual void Kill()
         {
-            CombatManager.KO(this);
+            CombatManager.RemoveKnockedOutCharacter(this);
             PlayAnimation(CActorAnimEnum.KO);
         }
 
@@ -2990,6 +2990,7 @@ namespace RiverHollow.Actors
         public int ID  => _id;
         int _iRating;
         int _iXP;
+        public int XP => _iXP;
         protected Vector2 _moveTo = Vector2.Zero;
         int _iLootID;
 
@@ -3455,7 +3456,7 @@ namespace RiverHollow.Actors
         public override void Kill()
         {
             base.Kill();
-            CombatManager.GiveXP(_iXP, this);
+            CombatManager.GiveXP(this);
         }
     }
     public class Summon : CombatActor

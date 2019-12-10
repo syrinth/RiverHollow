@@ -280,24 +280,19 @@ namespace RiverHollow.Game_Managers
         }
 
         /// <summary>
-        /// Called at the End of a Turn to see if the combat has been won or lost, if so
-        /// set _bCombatEnding to true so that we don't bring up the next turn bar
+        /// Called at the End of a Turn to see if the combat has been won or lost.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True is combat is ending</returns>
         private static bool EndTurnOfCombatOverCheck()
         {
             bool rv = false;
-            bool monstersDown = true;
-            foreach (CombatActor m in _liMonsters)
-            {
-                if (m.CurrentHP != 0)
-                {
-                    monstersDown = false;
-                    break;
-                }
-            }
 
-            if (PartyUp() && monstersDown)
+            //Lambda expressions to find all characters still standing
+            bool partyUp = _listParty.FindAll(actor => actor.CurrentHP > 0 ).Count > 0;
+            bool monstersUp = _liMonsters.FindAll(actor => actor.CurrentHP > 0).Count > 0; ;
+
+            //If there is at least one party member up and no monsters, go to Victory
+            if (partyUp && !monstersUp)
             {
                 rv = true;
                 CurrentPhase = PhaseEnum.Victory;
@@ -308,7 +303,7 @@ namespace RiverHollow.Game_Managers
                 }
 
             }
-            else if (!PartyUp())
+            else if (!partyUp)
             {
                 rv = true;
                // CurrentPhase = PhaseEnum.Defeat;
@@ -371,11 +366,17 @@ namespace RiverHollow.Game_Managers
             SelectedAction = new ChosenAction(it);
         }
 
-        public static void GiveXP(int monsterXP, Monster m)
+        /// <summary>
+        /// Called to give the party experience points for killing a monster
+        /// </summary>
+        /// <param name="m">The monster that has been defeated</param>
+        public static void GiveXP(Monster m)
         {
-            double xpToGive = monsterXP * (1 + (double)(EXP_MULTIPLIER_BONUS * _iXPMultiplier++));
+            //Calculates the total XP based off of the XP multiplier and then add the floating text
+            double xpToGive = m.XP * (1 + (double)(EXP_MULTIPLIER_BONUS * _iXPMultiplier++));
             AddFloatingText(new FloatingText(m, string.Format("{0} XP", xpToGive), Color.Yellow));
 
+            //Give the XP to the party
             foreach (ClassedCombatant c in PlayerManager.GetParty())
             {
                 c.AddXP((int)xpToGive);
@@ -386,7 +387,7 @@ namespace RiverHollow.Game_Managers
         /// Perform any actions required of the CombatManager on a KO'd Actor.
         /// </summary>
         /// <param name="c">The KO'd Actor</param>
-        public static void KO(CombatActor c)
+        public static void RemoveKnockedOutCharacter(CombatActor c)
         {
             //If the Actor was a Monster, remove it from the list
             if (_liMonsters.Contains((c)))
@@ -397,17 +398,6 @@ namespace RiverHollow.Game_Managers
             //Remove the Actor from the turn order 
             _liChargingCharacters.Remove(c);                    
             _liQueuedCharacters.Remove(c);
-        }
-
-        public static bool PartyUp()
-        {
-            bool stillOne = false;
-            foreach (CombatActor character in _listParty)
-            {
-                if (character.CurrentHP > 0) { stillOne = true; }
-            }
-
-            return stillOne;
         }
 
         #region Enemy AI
