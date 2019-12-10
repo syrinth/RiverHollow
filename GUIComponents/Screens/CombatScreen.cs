@@ -66,17 +66,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _gActionSelect.Update(gTime);
                     break;
 
-                case CombatManager.PhaseEnum.DisplayVictory:
-                    if (_gPostScreen == null)
-                    {
-                        CombatManager.EndCombatVictory();
-                        //InventoryManager.InitMobInventory(1, 5);
-                        //_gPostScreen = new GUIPostCombatDisplay(ClosePostCombatDisplay);
-                        //_gPostScreen.CenterOnScreen();
-                    }
-
-                    break;
-
                 case CombatManager.PhaseEnum.DisplayDefeat:
                     GUITextWindow window = new GUITextWindow("Defeated");
                     window.CenterOnScreen();
@@ -242,12 +231,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-        private void ClosePostCombatDisplay()
-        {
-            _gPostScreen = null;
-            CombatManager.EndCombatVictory();
-        }
-
         #region CombatManager Controls
         public void OpenMainSelection()
         {
@@ -268,6 +251,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
         #endregion
 
         #region FloatingText Handling
+        /// <summary>
+        /// Returns true if there are any Floating Text objects.
+        /// </summary>
+        /// <returns></returns>
+        public bool AreThereFloatingText() { return _liFloatingText.Count > 0; }
+
         /// <summary>
         /// Adds the FloatingText object to the removal queue
         /// </summary>

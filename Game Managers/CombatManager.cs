@@ -35,7 +35,7 @@ namespace RiverHollow.Game_Managers
         public static List<CombatActor> Party => _listParty;
 
         private static CombatScreen _scrCombat;
-        public enum PhaseEnum { Setup, Charging, Upkeep, MainSelection, ChooseMoveTarget, Moving, ChooseAction, ChooseActionTarget, PerformAction, DisplayVictory, DisplayDefeat }//NewTurn, EnemyTurn, SelectSkill, ChooseTarget, Defeat, DisplayAttack, DisplayVictory, Lost, PerformAction, EndCombat }
+        public enum PhaseEnum { Setup, Charging, Upkeep, MainSelection, ChooseMoveTarget, Moving, ChooseAction, ChooseActionTarget, PerformAction, Victory, DisplayDefeat }//NewTurn, EnemyTurn, SelectSkill, ChooseTarget, Defeat, DisplayAttack, DisplayVictory, Lost, PerformAction, EndCombat }
         public static PhaseEnum CurrentPhase;
         public static ChosenAction SelectedAction;
 
@@ -213,14 +213,11 @@ namespace RiverHollow.Game_Managers
 
                     break;
 
-                case PhaseEnum.DisplayVictory:
-                    if (Delay <= 0)
+                case PhaseEnum.Victory:
+                    if(_liMonsters?.Count == 0 && !_scrCombat.AreThereFloatingText())
                     {
-                        Delay = 0.05f;
-                    }
-                    else
-                    {
-                        Delay -= gTime.ElapsedGameTime.TotalSeconds;
+                        _bInCombat = false;
+                        EndCombatVictory();
                     }
                     break;
             }
@@ -281,10 +278,14 @@ namespace RiverHollow.Game_Managers
             return CurrentPhase == PhaseEnum.ChooseAction || CurrentPhase == PhaseEnum.ChooseActionTarget || CurrentPhase == PhaseEnum.ChooseMoveTarget;
         }
 
-        private static bool EndCombatCheck()
+        /// <summary>
+        /// Called at the End of a Turn to see if the combat has been won or lost, if so
+        /// set _bCombatEnding to true so that we don't bring up the next turn bar
+        /// </summary>
+        /// <returns></returns>
+        private static bool EndTurnOfCombatOverCheck()
         {
             bool rv = false;
-
             bool monstersDown = true;
             foreach (CombatActor m in _liMonsters)
             {
@@ -298,30 +299,18 @@ namespace RiverHollow.Game_Managers
             if (PartyUp() && monstersDown)
             {
                 rv = true;
-                CurrentPhase = PhaseEnum.DisplayVictory;
-                InventoryManager.InitMobInventory(1, 5);    //Just temp values
+                CurrentPhase = PhaseEnum.Victory;
                 foreach (ClassedCombatant a in _listParty)
                 {
-                    int levl = a.ClassLevel;
                     a.CurrentCharge = 0;
-                    //a.AddXP(EarnedXP);
                     a.PlayAnimation(CActorAnimEnum.Win);
-
-                    //if (levl != a.ClassLevel)
-                    //{
-                    //    LiLevels.Add(a.Name + " Level Up!");
-                    //}
                 }
-                //MapManager.DropItemsOnMap(DropManager.DropItemsFromMob(_mob.ID), _mob.CollisionBox.Center.ToVector2());
+
             }
             else if (!PartyUp())
             {
                 rv = true;
                // CurrentPhase = PhaseEnum.Defeat;
-            }
-
-            if (rv) {
-                _bInCombat = false;
             }
 
             return rv;
@@ -384,6 +373,16 @@ namespace RiverHollow.Game_Managers
         public static void IncrementXPMultiplier()
         {
             _iXPMultiplier++;
+        }
+        public static void GiveXP(int monsterXP, Monster m)
+        {
+            double xpToGive = monsterXP * (1 + (double)(0.1 * _iXPMultiplier));
+            AddFloatingText(new FloatingText(m, string.Format("{0} XP", xpToGive), Color.Yellow));
+
+            foreach (ClassedCombatant c in PlayerManager.GetParty())
+            {
+                c.AddXP((int)xpToGive);
+            }
         }
 
         /// <summary>
@@ -540,7 +539,7 @@ namespace RiverHollow.Game_Managers
         /// <param name="maxDepth">The maximium depth to go for</param>
         private static void RecursivelyGrowRange(RHTile startTile, List<RHTile> tileList, int depth, int maxDepth)
         {
-            //If we haven't exceeded the maxDepth, discover the adhacent tiles
+            //If we haven't exceeded the maxDepth, discover the adjacent tiles
             if (depth < maxDepth)
             {
                 depth++;
@@ -875,7 +874,7 @@ namespace RiverHollow.Game_Managers
             Summon activeSummon = ActiveCharacter.LinkedSummon;
             //If there is no linked summon, or it is a summon, end the turn normally.
 
-            if (!EndCombatCheck())
+            if (!EndTurnOfCombatOverCheck())
             {
                 if (activeSummon != null)
                 {
@@ -936,7 +935,6 @@ namespace RiverHollow.Game_Managers
         {
             _scrCombat.AddFloatingText(fText);
         }
-
         #endregion
 
         //public class CombatTile

@@ -543,8 +543,7 @@ namespace RiverHollow.Actors
             if (IsCurrentAnimation(CActorAnimEnum.Hurt) && BodySprite.GetPlayCount() >= 1)
             {
                 if (CurrentHP == 0) {
-                    CombatManager.KO(this);
-                    PlayAnimation(CActorAnimEnum.KO);
+                    Kill();
                 }
                 else if (IsCritical()) { PlayAnimation(CActorAnimEnum.Critical); }
                 else { PlayAnimation(CActorAnimEnum.Idle); }
@@ -596,6 +595,12 @@ namespace RiverHollow.Actors
                     HandleMove(targetPos);
                 }
             }
+        }
+
+        public virtual void Kill()
+        {
+            CombatManager.KO(this);
+            PlayAnimation(CActorAnimEnum.KO);
         }
 
         /// <summary>
@@ -2984,8 +2989,7 @@ namespace RiverHollow.Actors
         int _id;
         public int ID  => _id;
         int _iRating;
-        int _xp;
-        public int XP { get => _xp; }
+        int _iXP;
         protected Vector2 _moveTo = Vector2.Zero;
         int _iLootID;
 
@@ -3001,9 +3005,6 @@ namespace RiverHollow.Actors
         int _iMoveFailures = 0;
 
         List<SpawnConditionEnum> _liSpawnConditions;
-
-        int _iXP;
-        int _iXPToGive;
 
         #endregion
 
@@ -3021,7 +3022,6 @@ namespace RiverHollow.Actors
 
             if (BodySprite.CurrentAnimation == Util.GetEnumString(CActorAnimEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
             {
-                foreach(ClassedCombatant act in PlayerManager.GetParty()) { act.AddXP(_iXP); }
                 PlayerManager.AddMonsterEnergyToQueue(100);
                 MapManager.RemoveMonster(this);
             }
@@ -3047,7 +3047,7 @@ namespace RiverHollow.Actors
             //_iHeight = int.Parse(data["Height"]);
 
             _iRating = int.Parse(data["Lvl"]);
-            _xp = _iRating * 10;
+            _iXP = _iRating * 10;
             _iStrength = 1 + _iRating;
             _iDefense = 8 + (_iRating * 3);
             _iVitality = 2 * _iRating + 10;
@@ -3452,25 +3452,10 @@ namespace RiverHollow.Actors
             return check.Equals(season) && !Util.ParseEnum<SpawnConditionEnum>(GameCalendar.GetSeason()).Equals(season);
         }
 
-        /// <summary>
-        /// Delegate method to retrieve XP data
-        /// </summary>
-        /// <param name="xpLeftToGive">The amount of xp left to give</param>
-        /// <param name="totalXP">The total amount of XP to give</param>
-        public void GetXP(ref int xpLeftToGive, ref int totalXP)
+        public override void Kill()
         {
-            xpLeftToGive = _iXPToGive;
-            totalXP = _iXP;
-        }
-
-        /// <summary>
-        /// Drains away the given amount of XP fromt he pool of XP left to give.
-        /// If it would go below zero, we instead drain whatever remains.
-        /// </summary>
-        /// <param name="v"></param>
-        public void DrainXP(int v)
-        {
-            _iXPToGive -= Math.Min(v, _iXPToGive);
+            base.Kill();
+            CombatManager.GiveXP(_iXP, this);
         }
     }
     public class Summon : CombatActor
