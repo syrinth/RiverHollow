@@ -240,7 +240,7 @@ namespace RiverHollow.Game_Managers
             _liAdventurers = new List<Adventurer>();
 
             //Temp just for testing
-            RHRandom r = new RHRandom();
+            RHRandom r = RHRandom.Instance;
             _sName = _liMissionNames[r.Next(0, _liMissionNames.Count - 1)];
             _iDaysToComplete = r.Next(2, 5);
             _iTotalDaysToExpire = r.Next(2, 7);

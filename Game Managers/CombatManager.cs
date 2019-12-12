@@ -84,10 +84,9 @@ namespace RiverHollow.Game_Managers
             //Characters with higher Spd go first
             _liChargingCharacters.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));
 
-            RHRandom random = new RHRandom();
             foreach(CombatActor c in _liChargingCharacters)
             {
-                c.CurrentCharge = random.Next(0, 50);
+                c.CurrentCharge = RHRandom.Instance.Next(0, 50);
             }
 
             foreach (CombatActor c in _liMonsters)
@@ -105,7 +104,7 @@ namespace RiverHollow.Game_Managers
                 {
                     MapManager.Maps[c.CurrentMapName].RemoveCharacter(c);
                     c.Activate(true);
-                    tileList[random.Next(tileList.Count)].SetCombatant(c);
+                    tileList[RHRandom.Instance.Next(tileList.Count)].SetCombatant(c);
                     c.CurrentMapName = MapManager.CurrentMap.Name;
                     MapManager.CurrentMap.AddCharacter(c);
                     c.Position = c.Tile.Position;
@@ -374,7 +373,7 @@ namespace RiverHollow.Game_Managers
         {
             //Calculates the total XP based off of the XP multiplier and then add the floating text
             double xpToGive = m.XP * (1 + (double)(EXP_MULTIPLIER_BONUS * _iXPMultiplier++));
-            AddFloatingText(new FloatingText(m, string.Format("{0} XP", xpToGive), Color.Yellow));
+            AddFloatingText(new FloatingText(m.Position, m.SpriteWidth, string.Format("{0} XP", xpToGive), Color.Yellow));
 
             //Give the XP to the party
             foreach (ClassedCombatant c in PlayerManager.GetParty())
@@ -408,7 +407,6 @@ namespace RiverHollow.Game_Managers
         {
             bool moveToPlayer = false;
             RHTile targetTile = null;
-            RHRandom r = new RHRandom();
             CombatAction action = null;
             bool gottaMove = true;
 
@@ -699,15 +697,22 @@ namespace RiverHollow.Game_Managers
 
                 //If a Monster is going to move, we need to either prune it down
                 //or remove the last tile so they don't actually try to step into the player's tile
-                if (ActiveCharacter.IsMonster())
+                if (tilePath != null && ActiveCharacter.IsMonster())
                 {
                     if (tilePath.Count > 5) { tilePath.RemoveRange(5, tilePath.Count - 5); }
                     else { tilePath.RemoveAt(tilePath.Count - 1); }
                 }
 
-                ActiveCharacter.SetPath(tilePath);
-                TravelManager.ClearPathingTracks(); //Clean up after our pathfinding
-                ClearToPerformAction();
+                if (tilePath == null && ActiveCharacter.IsMonster())
+                {
+                    EndTurn();
+                }
+                else
+                {
+                    ActiveCharacter.SetPath(tilePath);
+                    TravelManager.ClearPathingTracks(); //Clean up after our pathfinding
+                    ClearToPerformAction();
+                }
             }
         }
 

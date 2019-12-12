@@ -31,7 +31,7 @@ namespace RiverHollow.Game_Managers
             }
         }//[Friends:1-30]
         public const string HomeMap = "mapManorGrounds";
-        public const string SpawnMap = "mapManorGrounds"; //"mapRiverHollowTown"; //"mapSpringDungeonC"; // "mapForestDungeonZone"; //"mapRiverHollowTown"; //;
+        public const string SpawnMap = "mapForest"; //"mapManorGrounds"; //"mapRiverHollowTown"; //"mapSpringDungeonC"; // "mapForestDungeonZone"; //"mapRiverHollowTown"; //;
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
 
@@ -183,21 +183,21 @@ namespace RiverHollow.Game_Managers
             }
             int mapWidth = _tileMaps[MapManager.HomeMap].MapWidthTiles;
             int mapHeight = _tileMaps[MapManager.HomeMap].MapHeightTiles;
-            RHRandom r = new RHRandom();
+            RHRandom rand = RHRandom.Instance;
             //LoadMap1
             if (!loaded)
             {
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
+                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
                 }
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
+                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
                 }
                 for (int i = 0; i < 10; i++)
                 {
-                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.BigRock, new Vector2(r.Next(1, mapWidth - 1) * TileSize, r.Next(1, mapHeight - 1) * TileSize)), true);
+                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.BigRock, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
                 }
             }
 

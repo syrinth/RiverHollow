@@ -278,35 +278,40 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
     public class FloatingText
     {
-        CombatActor _actOwner;
         Vector2 Position;
         protected BitmapFont _font;
         protected Color _cTextColor;
-        const double VANISH_AFTER = 1.0;
+        const double VANISH_AFTER_DEF = 1.0;
+        double _dVanishAfter;
         double _dCountDown = 0;
         protected string _sText;
 
-        public FloatingText(CombatActor owner, string text, Color c)
+        public FloatingText(Vector2 position, int spriteWidth, string text, Color c)
         {
+            RHRandom rand = RHRandom.Instance;
+
             _font = GameContentManager.GetBitMapFont(@"Fonts\FontBattle");
             _sText = text;
             _cTextColor = c;
-            _actOwner = owner;
 
-            Position = _actOwner.Position;
-            Position.X += TileSize / 2;
+            Position = position;
+            _dVanishAfter = VANISH_AFTER_DEF - (0.05 * (double)rand.Next(0, 5));
+
+            Position.X += spriteWidth / 2; //get the center
+            Position.X += rand.Next(-8, 8); //displace the x position
+            Position.Y -= rand.Next(0, TileSize / 2); //Subtract this number to go 'up' the screen
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(_font, _sText, Position, _cTextColor);
+            spriteBatch.DrawString(_font, _sText, Position, _cTextColor, Position.Y, null);
         }
 
         public void Update(GameTime gTime)
         {
             Position += new Vector2(0, -0.5f);
             _dCountDown += gTime.ElapsedGameTime.TotalSeconds;
-            if (_dCountDown >= VANISH_AFTER)
+            if (_dCountDown >= _dVanishAfter)
             {
                 CombatManager.RemoveFloatingText(this);
             }

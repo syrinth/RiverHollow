@@ -7,6 +7,7 @@ using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Actors.CombatStuff
@@ -315,8 +316,7 @@ namespace RiverHollow.Actors.CombatStuff
                     if (!IsSpell())
                     {
                         //Roll randomly between 1-100 to determine the chance of hir
-                        RHRandom random = new RHRandom();
-                        int attackRoll = random.Next(1, 100);
+                        int attackRoll = RHRandom.Instance.Next(1, 100);
                         attackRoll -= _iAccuracy;                       //Modify the chance to hit by the skill's accuracy. Rolling low is good, so subtract a positive and add a negative
                         if (attackRoll <= 90 - targetActor.Evasion)    //If the modified attack roll is less than 90 minus the character's evasion, then we hit
                         {
@@ -354,7 +354,7 @@ namespace RiverHollow.Actors.CombatStuff
                         }
                         else    //Handling for when an attack is dodged
                         {
-                            CombatManager.AddFloatingText(new FloatingText(targetActor, "MISS", Color.White));
+                            CombatManager.AddFloatingText(new FloatingText(targetActor.Position, targetActor.SpriteWidth, "MISS", Color.White));
                         }
 
                         //This code handles when someone is guarding the target and takes the damage for them instead
@@ -681,8 +681,7 @@ namespace RiverHollow.Actors.CombatStuff
                 case "Escape":
                     {
                         int spd = CombatManager.ActiveCharacter.StatSpd;
-                        RHRandom r = new RHRandom();
-                        if (r.Next(1, 20) + spd/2 > 15){
+                        if (RHRandom.Instance.Next(1, 20) + spd/2 > 15){
                             CombatManager.EndCombatEscape();
                         }
                         break;
@@ -709,8 +708,7 @@ namespace RiverHollow.Actors.CombatStuff
 
                             if (liPotentialGuards.Count > 0)
                             {
-                                RHRandom rand = new RHRandom();
-                                int which = rand.Next(0, liPotentialGuards.Count - 1);
+                                int which = RHRandom.Instance.Next(0, liPotentialGuards.Count - 1);
 
                                 CombatActor guard = liPotentialGuards[which];
                                 guard.Swapped = true;

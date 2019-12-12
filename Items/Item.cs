@@ -607,9 +607,8 @@ namespace RiverHollow.WorldObjects
         public int Difficulty { get => _difficulty; }
         public AdventureMap(int id, Dictionary<string, string> stringData, int num)
         {
-            RHRandom r = new RHRandom();
             ImportBasics(stringData, id, num);
-            _difficulty = r.Next(4, 5);
+            _difficulty = RHRandom.Instance.Next(4, 5);
 
             _bStacks = false;
             _texTexture = GameContentManager.GetTexture(@"Textures\items");

@@ -57,7 +57,6 @@ namespace RiverHollow.Game_Managers
         public static List<Item> DropItemsFromMonster(Monster m)
         {
             List<Item> itemList = new List<Item>();
-            RHRandom r = new RHRandom();
             string[] drops = new string[10];//.FindTags(_diMobDrops[id]);
             foreach(string s in drops)
             {
@@ -65,7 +64,7 @@ namespace RiverHollow.Game_Managers
                 if (tagType[0].Equals("Item"))
                 {
                     string[] info = tagType[1].Split('-');
-                    int chance = r.Next(1, 100);
+                    int chance = RHRandom.Instance.Next(1, 100);
                     if (chance <= int.Parse(info[0]))
                     {
                         itemList.Add(ObjectManager.GetItem(int.Parse(info[1])));

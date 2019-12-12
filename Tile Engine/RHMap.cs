@@ -304,6 +304,7 @@ namespace RiverHollow.Tile_Engine
 
         public void PopulateMap(bool loaded = false)
         {
+            RHRandom rand = RHRandom.Instance;
             TiledMapProperties props = _map.Properties;
             List<int> _liMobs = new List<int>();
             int minMobs = 0;
@@ -424,13 +425,12 @@ namespace RiverHollow.Tile_Engine
 
             if(resources.Count > 0)
             {
-                RHRandom r = new RHRandom();
-                int numResources = r.Next(_iMinResources, _iMaxResources);
+                int numResources = RHRandom.Instance.Next(_iMinResources, _iMaxResources);
                 while(numResources != 0)
                 {
-                    int chosenResource = r.Next(0, resources.Count - 1);
+                    int chosenResource = RHRandom.Instance.Next(0, resources.Count - 1);
 
-                    PlaceWorldObject(ObjectManager.GetWorldObject(resources[chosenResource], new Vector2(r.Next(1, _map.Width - 1) * TileSize, r.Next(1, _map.Height - 1) * TileSize)), true);
+                    PlaceWorldObject(ObjectManager.GetWorldObject(resources[chosenResource], new Vector2(rand.Next(1, _map.Width - 1) * TileSize, rand.Next(1, _map.Height - 1) * TileSize)), true);
 
                     numResources--;
                 }
@@ -438,10 +438,9 @@ namespace RiverHollow.Tile_Engine
 
             if(_liRandomSpawnItems.Count > 0)
             {
-                RHRandom r = new RHRandom();
                 for (int i = 0; i < 30; i++)
                 {
-                    Plant obj = (Plant)ObjectManager.GetWorldObject(_liRandomSpawnItems[0], new Vector2(r.Next(1, _map.Width - 1) * TileSize, r.Next(1, _map.Height - 1) * TileSize));
+                    Plant obj = (Plant)ObjectManager.GetWorldObject(_liRandomSpawnItems[0], new Vector2(rand.Next(1, _map.Width - 1) * TileSize, rand.Next(1, _map.Height - 1) * TileSize));
                     obj.FinishGrowth();
                     PlaceWorldObject(obj, true);
                 }
@@ -450,13 +449,12 @@ namespace RiverHollow.Tile_Engine
         
             if (_liMobs.Count > 0)
             {
-                RHRandom r = new RHRandom();
-                int numMobs = r.Next(minMobs, maxMobs);
+                int numMobs = rand.Next(minMobs, maxMobs);
                 while (numMobs != 0)
                 {
-                    int chosenMob = r.Next(0, _liMobs.Count - 1);
+                    int chosenMob = rand.Next(0, _liMobs.Count - 1);
 
-                    Vector2 vect = new Vector2(r.Next(1, _map.Width - 1) * TileSize, r.Next(1, _map.Height - 2) * TileSize);
+                    Vector2 vect = new Vector2(rand.Next(1, _map.Width - 1) * TileSize, rand.Next(1, _map.Height - 2) * TileSize);
                     Monster newMonster = ObjectManager.GetMonster(_liMobs[chosenMob], vect);
                     newMonster.CurrentMapName = _sName;
                     AddMonster(newMonster);
@@ -470,21 +468,20 @@ namespace RiverHollow.Tile_Engine
             //Spawns a random assortment of resources them ap will allow wherever they're allowed
             if (_diResourceSpawns.Count > 0)
             {
-                RHRandom r = new RHRandom();
                 List<int> whatResources = new List<int>(_diResourceSpawns.Keys);
 
-                int spawnNumber = r.Next(_iMinResources, _iMaxResources);
+                int spawnNumber = rand.Next(_iMinResources, _iMaxResources);
                 for (int i = 0; i < spawnNumber; i++)
                 {
-                    int whichResource = whatResources[r.Next(0, whatResources.Count - 1)];
+                    int whichResource = whatResources[rand.Next(0, whatResources.Count - 1)];
                     List<TiledMapObject> spawnPoints = _diResourceSpawns[whichResource];
 
-                    int whichPoint = r.Next(0, spawnPoints.Count - 1);
+                    int whichPoint = rand.Next(0, spawnPoints.Count - 1);
                     if (spawnPoints.Count > 0)
                     {
                         TiledMapObject mapObj = spawnPoints[whichPoint];
-                        int xPoint = r.Next((int)(mapObj.Position.X), (int)(mapObj.Position.X + mapObj.Size.Width));
-                        int yPoint = r.Next((int)(mapObj.Position.Y), (int)(mapObj.Position.Y + mapObj.Size.Height));
+                        int xPoint = rand.Next((int)(mapObj.Position.X), (int)(mapObj.Position.X + mapObj.Size.Width));
+                        int yPoint = rand.Next((int)(mapObj.Position.Y), (int)(mapObj.Position.Y + mapObj.Size.Height));
 
                         WorldObject wObj = ObjectManager.GetWorldObject(whichResource);
                         wObj.SetCoordinatesByGrid(new Vector2(xPoint, yPoint));
@@ -520,7 +517,6 @@ namespace RiverHollow.Tile_Engine
                 sp.Despawn();
             }
 
-            RHRandom rand = new RHRandom();
             //Copy the spawn poitns to a list we can safely modify
             List<SpawnPoint> spawnCopy = new List<SpawnPoint>();
             spawnCopy.AddRange(_liMonsterSpawnPoints);
@@ -529,7 +525,7 @@ namespace RiverHollow.Tile_Engine
             for (int i = 0; i < _iActiveSpawnPoints; i++)
             {
                 //Get a random Spawn Point
-                int point = rand.Next(0, spawnCopy.Count - 1);
+                int point = RHRandom.Instance.Next(0, spawnCopy.Count - 1);
                 if (!spawnCopy[point].HasSpawned())
                 {
                     //Trigger the Spawn point and remove it from the copied list
@@ -1701,12 +1697,11 @@ namespace RiverHollow.Tile_Engine
             
             if (!rv && bounce)
             {
-                RHRandom r = new RHRandom();
                 Vector2 position = o.MapPosition;
                 do
                 {
-                    position.X = (int)(r.Next(1, (MapWidthTiles - 1) * TileSize) / TileSize) * TileSize;
-                    position.Y = (int)(r.Next(1, (MapHeightTiles - 1) * TileSize) / TileSize) * TileSize;
+                    position.X = (int)(RHRandom.Instance.Next(1, (MapWidthTiles - 1) * TileSize) / TileSize) * TileSize;
+                    position.Y = (int)(RHRandom.Instance.Next(1, (MapHeightTiles - 1) * TileSize) / TileSize) * TileSize;
                     o.SetCoordinatesByGrid(position);
 
                     rv = TestMapTiles(o, tiles);
@@ -1891,7 +1886,8 @@ namespace RiverHollow.Tile_Engine
         public void AddMonster(Monster m)
         {
             bool rv = false;
-            RHRandom r = new RHRandom();
+
+            RHRandom rand = RHRandom.Instance;
             Vector2 position = m.Position;
             position.X = ((int)(position.X / TileSize)) * TileSize;
             position.Y = ((int)(position.Y / TileSize)) * TileSize;
@@ -1901,8 +1897,8 @@ namespace RiverHollow.Tile_Engine
             {
                 do
                 {
-                    position.X = (int)(r.Next(1, (MapWidthTiles - 1) * TileSize) / TileSize) * TileSize;
-                    position.Y = (int)(r.Next(1, (MapHeightTiles - 1) * TileSize) / TileSize) * TileSize;
+                    position.X = (int)(rand.Next(1, (MapWidthTiles - 1) * TileSize) / TileSize) * TileSize;
+                    position.Y = (int)(rand.Next(1, (MapHeightTiles - 1) * TileSize) / TileSize) * TileSize;
                     rv = _arrTiles[((int)position.X / TileSize), ((int)position.Y / TileSize)].Passable();
                 } while (!rv);
             }

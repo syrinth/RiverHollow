@@ -627,8 +627,7 @@ namespace RiverHollow.Actors
             double dmg = (Math.Max(1, base_attack - StatDef) * compression * StrMult);
             dmg += ApplyResistances(dmg, element);
 
-            RHRandom rand = new RHRandom();
-            if (rand.Next(1, 100) <= (attacker.CritRating + critRating)) { dmg *= 2; }
+            if (RHRandom.Instance.Next(1, 100) <= (attacker.CritRating + critRating)) { dmg *= 2; }
 
             ModifyHealth(dmg, true);
         }
@@ -731,7 +730,7 @@ namespace RiverHollow.Actors
                     }
                 }
             }
-            CombatManager.AddFloatingText(new FloatingText(this, iValue.ToString(), bHarmful ? Color.Red : Color.Green));
+            CombatManager.AddFloatingText(new FloatingText(this.Position, this.SpriteWidth, iValue.ToString(), bHarmful ? Color.Red : Color.Green));
         }
 
         public bool IsCritical()
@@ -982,16 +981,17 @@ namespace RiverHollow.Actors
                     Vector2 pos = _act.Position;
                     pos.Y += TileSize;
 
-                    int percent = (int)(16 * (float)_act.CurrentHP / (float)_act.MaxHP);
+                    //Do not allow the bar to have less than 2 pixels, one for the border and one to display.
+                    int percent = Math.Max((int)(16 * (float)_act.CurrentHP / (float)_act.MaxHP), 2);
                     spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, percent, 4), new Rectangle(16, 4, percent, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.X);
-                    spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, 16, 4), new Rectangle(16, 0, 16, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.X);
+                    spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, 16, 4), new Rectangle(16, 0, 16, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.X + 1);
 
                     if (_bHasMana)
                     {
                         pos.Y += 4;
                         percent = (int)(16 * (float)_act.CurrentMP / (float)_act.MaxMP);
                         spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, percent, 4), new Rectangle(16, 12, percent, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.X);
-                        spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, 16, 4), new Rectangle(16, 8, 16, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.X);
+                        spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, 16, 4), new Rectangle(16, 8, 16, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.X + 1);
                     }
                 }
             }
@@ -1323,7 +1323,6 @@ namespace RiverHollow.Actors
 
         public virtual string GetSelectionText()
         {
-            RHRandom r = new RHRandom();
             string text = _diDialogue["Selection"];
             Util.ProcessText(text, _sName);
 
@@ -1360,8 +1359,7 @@ namespace RiverHollow.Actors
 
         public string GetText()
         {
-            RHRandom r = new RHRandom();
-            string text = _diDialogue[r.Next(1, 2).ToString()];
+            string text = _diDialogue[RHRandom.Instance.Next(1, 2).ToString()];
             return Util.ProcessText(text, _sName);
         }
         public virtual string GetDialogEntry(string entry)
@@ -2445,8 +2443,7 @@ namespace RiverHollow.Actors
 
         public override string GetSelectionText()
         {
-            RHRandom r = new RHRandom();
-            string text = _diDialogue[r.Next(1, 2).ToString()];
+            string text = _diDialogue[RHRandom.Instance.Next(1, 2).ToString()];
             return Util.ProcessText(text, _sName);
         }
 
@@ -2458,8 +2455,7 @@ namespace RiverHollow.Actors
                 GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Normal;
                 _iMood += 1;
 
-                RHRandom r = new RHRandom();
-                rv = GameContentManager.GetAdventurerDialogue(_sAdventurerType + r.Next(1, 2));
+                rv = GameContentManager.GetAdventurerDialogue(_sAdventurerType + RHRandom.Instance.Next(1, 2));
             }
             else if (entry.Equals("Party"))
             {
@@ -2972,8 +2968,7 @@ namespace RiverHollow.Actors
                 _fVisibility = 1.0f;
 
                 string[] loot = GameContentManager.DiSpiritLoot[_sType].Split('/');
-                RHRandom r = new RHRandom();
-                int arrayID = r.Next(0, loot.Length - 1);
+                int arrayID = RHRandom.Instance.Next(0, loot.Length - 1);
                 InventoryManager.AddToInventory(int.Parse(loot[arrayID]));
 
                 _sText = Util.ProcessText(_sText.Replace("*", "*" + loot[arrayID] + "*"));
@@ -3021,10 +3016,12 @@ namespace RiverHollow.Actors
         {
             base.Update(gTime);
 
+            ///When the Monster has finished playing the KO animation, weneed to remove them from the map and give the player its energy.
             if (BodySprite.CurrentAnimation == Util.GetEnumString(CActorAnimEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
             {
                 PlayerManager.AddMonsterEnergyToQueue(100);
                 MapManager.RemoveMonster(this);
+                Tile.SetCombatant(null);
             }
 
             // Only comment this out for now in case we implement stealth or something so you can sneak past enemies without aggroing them
@@ -3343,12 +3340,12 @@ namespace RiverHollow.Actors
                 _iMoveFailures = 0;
                 int howFar = 2;
                 bool skip = false;
-                RHRandom r = new RHRandom();
-                int decision = r.Next(1, 5);
-                if (decision == 1) { _vMoveTo = new Vector2(Position.X - r.Next(1, howFar) * TileSize, Position.Y); }
-                else if (decision == 2) { _vMoveTo = new Vector2(Position.X + r.Next(1, howFar) * TileSize, Position.Y); }
-                else if (decision == 3) { _vMoveTo = new Vector2(Position.X, Position.Y - r.Next(1, howFar) * TileSize); }
-                else if (decision == 4) { _vMoveTo = new Vector2(Position.X, Position.Y + r.Next(1, howFar) * TileSize); }
+                RHRandom rand = RHRandom.Instance;
+                int decision = rand.Next(1, 5);
+                if (decision == 1) { _vMoveTo = new Vector2(Position.X - rand.Next(1, howFar) * TileSize, Position.Y); }
+                else if (decision == 2) { _vMoveTo = new Vector2(Position.X + rand.Next(1, howFar) * TileSize, Position.Y); }
+                else if (decision == 3) { _vMoveTo = new Vector2(Position.X, Position.Y - rand.Next(1, howFar) * TileSize); }
+                else if (decision == 4) { _vMoveTo = new Vector2(Position.X, Position.Y + rand.Next(1, howFar) * TileSize); }
                 else
                 {
                     _vMoveTo = Vector2.Zero;

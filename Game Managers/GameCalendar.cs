@@ -173,8 +173,7 @@ namespace RiverHollow
 
         private static void RollForWeatherEffects()
         {
-            RHRandom random = new RHRandom();
-            int roll = random.Next(1, 5);
+            int roll = RHRandom.Instance.Next(1, 5);
             if(roll > 2 || (_iSeasonPrecipDays < MIN_PRECIPITATION_DAYS && _iCurrDay + _iSeasonPrecipDays - 1 == DAYS_IN_MONTH))
             {
                 _iSeasonPrecipDays++;

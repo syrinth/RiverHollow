@@ -1424,7 +1424,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
                 else
                 {
-                    RHRandom r = new RHRandom();
                     if (_worker.Building != null)
                     {
                         _worker.Building.RemoveWorker(_worker);

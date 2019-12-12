@@ -32,7 +32,7 @@ namespace RiverHollow.Game_Managers
             _backwardsMapKey = new Dictionary<string, KeyValuePair<string, string>>();
             _forwardsMapKey = new Dictionary<string, string>();
             int maxRooms = map.Difficulty;
-            RHRandom r = new RHRandom();
+            RHRandom r = RHRandom.Instance;
             string dungeonPrefix = @"Dungeons\Room";
             _maps.Add(MapManager.Maps[dungeonPrefix + 1]);// r.Next(1, _numRooms+1);
             PopulateRoom(r, _maps[0], false);
