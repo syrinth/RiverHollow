@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using RiverHollow.WorldObjects;
-using RiverHollow.Misc;
 using System.Collections.Generic;
 using RiverHollow.Actors;
 
@@ -14,6 +13,7 @@ namespace RiverHollow.Game_Managers
         {
             _diMobDrops = Content.Load<Dictionary<int, string>>(@"Data\MobDrops");
         }
+
         public static List<Item> DropItemsFromWorldObject(int id)
         {
             List<Item> itemList = new List<Item>();
@@ -54,25 +54,15 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static List<Item> DropItemsFromMonster(Monster m)
+        public static void DropItemsFromMonster(Monster m)
         {
-            List<Item> itemList = new List<Item>();
-            string[] drops = new string[10];//.FindTags(_diMobDrops[id]);
-            foreach(string s in drops)
-            {
-                string[] tagType = s.Split(':');
-                if (tagType[0].Equals("Item"))
-                {
-                    string[] info = tagType[1].Split('-');
-                    int chance = RHRandom.Instance.Next(1, 100);
-                    if (chance <= int.Parse(info[0]))
-                    {
-                        itemList.Add(ObjectManager.GetItem(int.Parse(info[1])));
-                    }
-                }
-            }
+            //Just for testing atm
+            List<Item> it = new List<Item> { ObjectManager.GetItem(26) };
 
-            return itemList;
+            it[0].AutoPickup = false;
+            m.Tile.SetCombatItem(it[0]);
+
+            MapManager.DropItemsOnMap(it, m.Tile.Position, false);
         }
     }
 }

@@ -311,9 +311,9 @@ namespace RiverHollow.Game_Managers
         {
             _currentMap.RemoveMonster(m);
         }
-        public static void DropItemsOnMap(List<Item> items, Vector2 position)
+        public static void DropItemsOnMap(List<Item> items, Vector2 position, bool flyingPop = true)
         {
-            _currentMap.DropItemsOnMap(items, position);
+            _currentMap.DropItemsOnMap(items, position, flyingPop);
         }
         public static void PlaceWorldObject(WorldObject worldObject)
         {

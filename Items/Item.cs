@@ -168,11 +168,12 @@ namespace RiverHollow.WorldObjects
             return _sDescription;
         }
 
-        public void Pop(Vector2 pos)
+        public void Pop(Vector2 pos, bool flyingPop = true)
         {
             _vPosition = pos;
-            _bOnMap = true;
-            _movement = new Parabola(_vPosition, RandomVelocityVector(), Util.GetRandomFloat(-TileSize*2, TileSize*2, 3));
+            Vector2 velocity = flyingPop ? RandomVelocityVector() : new Vector2(0, 2);
+            float YDisplacement = flyingPop ? Util.GetRandomFloat(-TileSize * 2, TileSize * 2, 3) : 0;
+            _movement = new Parabola(_vPosition, velocity, YDisplacement);
         }
 
         public bool FinishedMoving()

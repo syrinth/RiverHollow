@@ -543,7 +543,7 @@ namespace RiverHollow.Actors
             if (IsCurrentAnimation(CActorAnimEnum.Hurt) && BodySprite.GetPlayCount() >= 1)
             {
                 if (CurrentHP == 0) {
-                    Kill();
+                    KO();
                 }
                 else if (IsCritical()) { PlayAnimation(CActorAnimEnum.Critical); }
                 else { PlayAnimation(CActorAnimEnum.Idle); }
@@ -597,7 +597,7 @@ namespace RiverHollow.Actors
             }
         }
 
-        public virtual void Kill()
+        public virtual void KO()
         {
             CombatManager.RemoveKnockedOutCharacter(this);
             PlayAnimation(CActorAnimEnum.KO);
@@ -3021,6 +3021,7 @@ namespace RiverHollow.Actors
             {
                 PlayerManager.AddMonsterEnergyToQueue(100);
                 MapManager.RemoveMonster(this);
+                DropManager.DropItemsFromMonster(this);
                 Tile.SetCombatant(null);
             }
 
@@ -3450,9 +3451,9 @@ namespace RiverHollow.Actors
             return check.Equals(season) && !Util.ParseEnum<SpawnConditionEnum>(GameCalendar.GetSeason()).Equals(season);
         }
 
-        public override void Kill()
+        public override void KO()
         {
-            base.Kill();
+            base.KO();
             CombatManager.GiveXP(this);
         }
     }

@@ -195,7 +195,15 @@ namespace RiverHollow.Game_Managers
                 case PhaseEnum.Moving:
                     if (!ActiveCharacter.FollowingPath)
                     {
-                        MapManager.CurrentMap.GetTileOffGrid(ActiveCharacter.CollisionBox.Center).SetCombatant(ActiveCharacter);
+                        RHTile newTile = MapManager.CurrentMap.GetTileOffGrid(ActiveCharacter.CollisionBox.Center);
+                        newTile.SetCombatant(ActiveCharacter);
+
+                        Item tileItem = newTile.GetItem();
+                        if(tileItem != null && InventoryManager.HasSpaceInInventory(tileItem.ItemID, tileItem.Number))
+                        {
+                            MapManager.CurrentMap.AddItemToPlayerInventory(tileItem);
+                            newTile.SetCombatItem(null);
+                        }
                         //GoToMainSelection();
                         _turnInfo.HasMoved = true;
 

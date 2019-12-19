@@ -73,6 +73,7 @@ namespace RiverHollow.Tile_Engine
         protected List<int> _liCutscenes;
 
         protected List<Item> _liItems;
+        protected List<Item> _liItemsToRemove;
         protected List<ShopData> _liShopData;
 
         private Dictionary<Rectangle, string> _dictExit;
@@ -95,6 +96,7 @@ namespace RiverHollow.Tile_Engine
             _liBuildings = new List<Building>();
             _liTilledTiles = new List<RHTile>();
             _liItems = new List<Item>();
+            _liItemsToRemove = new List<Item>();
             _liMapObjects = new List<TiledMapObject>();
             _dictExit = new Dictionary<Rectangle, string>();
             _dictEntrance = new Dictionary<string, Rectangle>();
@@ -570,20 +572,16 @@ namespace RiverHollow.Tile_Engine
         public void ItemPickUpdate()
         {
             WorldActor player = PlayerManager.World;
-            List<Item> removedList = new List<Item>();
             for(int i = 0; i < _liItems.Count; i++)
             {
-                int row = 0;
-                int col = 0;
                 Item it = _liItems[i];
-                if (InventoryManager.HasSpaceInInventory(it.ItemID, it.Number, ref row, ref col, true))
+                if (InventoryManager.HasSpaceInInventory(it.ItemID, it.Number))
                 {
                     if (it.OnTheMap && it.AutoPickup)
                     {
                         if (it.FinishedMoving() && it.CollisionBox.Intersects(player.CollisionBox))
                         {
-                            removedList.Add(it);
-                            InventoryManager.AddItemToInventorySpot(ObjectManager.GetItem(it.ItemID, it.Number), row, col);
+                            AddItemToPlayerInventory(it);
                         }
                         else if (PlayerManager.PlayerInRange(it.CollisionBox.Center, 80))
                         {
@@ -595,12 +593,12 @@ namespace RiverHollow.Tile_Engine
                     }
                 }
             }
+        }
 
-            foreach (Item i in removedList)
-            {
-                _liItems.Remove(i);
-            }
-            removedList.Clear();
+        public void AddItemToPlayerInventory(Item it)
+        {
+           _liItemsToRemove.Add(it);
+           InventoryManager.AddToInventory(ObjectManager.GetItem(it.ItemID, it.Number));
         }
 
         public void Update(GameTime gTime)
@@ -661,6 +659,12 @@ namespace RiverHollow.Tile_Engine
 
 
             ItemPickUpdate();
+
+            foreach (Item i in _liItemsToRemove)
+            {
+                _liItems.Remove(i);
+            }
+            _liItemsToRemove.Clear();
         }
 
         public void DrawBase(SpriteBatch spriteBatch)
@@ -1488,17 +1492,19 @@ namespace RiverHollow.Tile_Engine
                 if (d.IsMobDoor()) { ((MobDoor)d).Check(_liMonsters.Count); }
             }
         }
-        public void DropItemsOnMap(List<Item>items, Vector2 position)
+        public void DropItemsOnMap(List<Item>items, Vector2 position, bool flyingPop = true)
         {
             foreach(Item i in items)
             {
-                DropItemOnMap(i, position);
+                DropItemOnMap(i, position, flyingPop);
             }
         }
 
-        public void DropItemOnMap(Item item, Vector2 position)
+        public void DropItemOnMap(Item item, Vector2 position, bool flyingPop = true)
         {
-            ((Item)item).Pop(position);
+            item.Pop(position, flyingPop);
+
+            item.OnTheMap = true;
             _liItems.Add(item);
         }
 
@@ -2187,6 +2193,8 @@ namespace RiverHollow.Tile_Engine
         WorldObject _shadowObj;
         public WorldObject ShadowObject => _shadowObj;
 
+        public Item _combatItem;
+
         Floor _floorObj;
         public Floor Flooring => _floorObj;
 
@@ -2555,6 +2563,15 @@ namespace RiverHollow.Tile_Engine
         public void AreaTile(bool val)
         {
             _bArea = val;
+        }
+
+        public void SetCombatItem(Item i)
+        {
+            _combatItem = i;
+        }
+        public Item GetItem()
+        {
+            return _combatItem;
         }
 
         #region TileTraversal
