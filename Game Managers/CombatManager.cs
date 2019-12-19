@@ -30,10 +30,11 @@ namespace RiverHollow.Game_Managers
         public static List<RHTile> AreaTiles => _liAreaTiles;
 
         public static CombatActor ActiveCharacter;
+        private static List<CombatActor> _liRemovedMonsters;
         private static List<CombatActor> _liMonsters;
         public static List<CombatActor> Monsters  => _liMonsters;
-        private static List<CombatActor> _listParty;
-        public static List<CombatActor> Party => _listParty;
+        private static List<CombatActor> _liParty;
+        public static List<CombatActor> Party => _liParty;
 
         private static CombatScreen _scrCombat;
         public enum PhaseEnum { Setup, Charging, Upkeep, MainSelection, ChooseMoveTarget, Moving, ChooseAction, ChooseActionTarget, PerformAction, Victory, DisplayDefeat }//NewTurn, EnemyTurn, SelectSkill, ChooseTarget, Defeat, DisplayAttack, DisplayVictory, Lost, PerformAction, EndCombat }
@@ -60,7 +61,7 @@ namespace RiverHollow.Game_Managers
 
         public static void NewBattle()
         {
-            CurrentPhase = PhaseEnum.Setup;
+            ChangePhase(PhaseEnum.Setup);
 
             ActiveCharacter = null;
             SelectedAction = null;
@@ -70,15 +71,16 @@ namespace RiverHollow.Game_Managers
 
             _liLegalTiles = new List<RHTile>();
             _liAreaTiles = new List<RHTile>();
-            _listParty = new List<CombatActor>();
-            _listParty.AddRange(PlayerManager.GetParty());
+            _liParty = new List<CombatActor>();
+            _liParty.AddRange(PlayerManager.GetParty());
 
+            _liRemovedMonsters = new List<CombatActor>();
             _liMonsters = new List<CombatActor>();
             _liMonsters.AddRange(MapManager.CurrentMap.Monsters);
 
             _liQueuedCharacters = new List<CombatActor>();
             _liChargingCharacters = new List<CombatActor>();
-            _liChargingCharacters.AddRange(_listParty);
+            _liChargingCharacters.AddRange(_liParty);
             _liChargingCharacters.AddRange(_liMonsters);
 
             //Characters with higher Spd go first
@@ -130,7 +132,7 @@ namespace RiverHollow.Game_Managers
                     if(PlayerManager.World.Position == PlayerManager.World.Tile.Position)
                     {
                         PlayerManager.World.Idle();
-                        CurrentPhase = PhaseEnum.Charging;
+                        ChangePhase(PhaseEnum.Charging);
                     }
                     break;
 
@@ -231,6 +233,43 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        public static void UpdateCombatants(GameTime gTime)
+        {
+            foreach(CombatActor act in _liParty)
+            {
+                act.Update(gTime);
+            }
+
+            foreach(Monster m in _liRemovedMonsters)
+            {
+                _liMonsters.Remove(m);
+            }
+            _liRemovedMonsters.Clear();
+
+            foreach (CombatActor act in _liMonsters)
+            {
+                act.Update(gTime);
+            }
+        }
+        
+        /// <summary>
+        /// Controlled for changing phases.
+        /// 
+        /// If we are on the player's turn and the active characteris moving or performing their action
+        /// we want to unpause the game. Otherwise, the game should be paused.
+        /// </summary>
+        /// <param name="newPhase"></param>
+        public static void ChangePhase(PhaseEnum newPhase)
+        { 
+            if(ActiveCharacter.IsAdventurer() && (newPhase == PhaseEnum.PerformAction || newPhase == PhaseEnum.Moving))
+            {
+                GameManager.Unpause();
+            }
+            else { GameManager.Pause(); }
+
+            CurrentPhase = newPhase;
+        }
+
         public static void DrawUpperCombatLayer(SpriteBatch spriteBatch)
         {
             if (_bInCombat)
@@ -252,12 +291,12 @@ namespace RiverHollow.Game_Managers
                 ClearSelectedTile();
                 SelectedAction = null;
                 if (CurrentPhase == PhaseEnum.ChooseAction || CurrentPhase == PhaseEnum.ChooseMoveTarget) {
-                    CurrentPhase = PhaseEnum.MainSelection;
+                    ChangePhase(PhaseEnum.MainSelection);
                     _scrCombat.OpenMainSelection();
                 }
                 else if(CurrentPhase == PhaseEnum.ChooseActionTarget)
                 {
-                    CurrentPhase = PhaseEnum.ChooseAction;
+                    ChangePhase(PhaseEnum.ChooseAction);
                 }
             }
         }
@@ -275,7 +314,7 @@ namespace RiverHollow.Game_Managers
             }
             else
             {
-                CurrentPhase = PhaseEnum.MainSelection;
+                ChangePhase(PhaseEnum.MainSelection);
                 _scrCombat.OpenMainSelection();
             }
         }
@@ -295,15 +334,15 @@ namespace RiverHollow.Game_Managers
             bool rv = false;
 
             //Lambda expressions to find all characters still standing
-            bool partyUp = _listParty.FindAll(actor => actor.CurrentHP > 0 ).Count > 0;
+            bool partyUp = _liParty.FindAll(actor => actor.CurrentHP > 0 ).Count > 0;
             bool monstersUp = _liMonsters.FindAll(actor => actor.CurrentHP > 0).Count > 0; ;
 
             //If there is at least one party member up and no monsters, go to Victory
             if (partyUp && !monstersUp)
             {
                 rv = true;
-                CurrentPhase = PhaseEnum.Victory;
-                foreach (ClassedCombatant a in _listParty)
+                ChangePhase(PhaseEnum.Victory);
+                foreach (ClassedCombatant a in _liParty)
                 {
                     a.CurrentCharge = 0;
                     a.PlayAnimation(CActorAnimEnum.Win);
@@ -313,7 +352,8 @@ namespace RiverHollow.Game_Managers
             else if (!partyUp)
             {
                 rv = true;
-               // CurrentPhase = PhaseEnum.Defeat;
+                Unpause();
+                //ChangePhase(PhaseEnum.Defeat);
             }
 
             return rv;
@@ -325,6 +365,7 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public static void EndCombatVictory()
         {
+            Unpause();
             PlayerManager.AllowMovement = true;
             GoToWorldMap();
         }
@@ -335,6 +376,7 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public static void EndCombatEscape()
         {
+            Unpause();
             PlayerManager.AllowMovement = true;
             GoToWorldMap();
         }
@@ -345,31 +387,31 @@ namespace RiverHollow.Game_Managers
 
             if (SelectedAction.Name.Equals("Move"))
             {
-                CurrentPhase = PhaseEnum.ChooseMoveTarget;
+                ChangePhase(PhaseEnum.ChooseMoveTarget);
                 FindAndHighlightLegalTiles();
             }
             else
             {
-                CurrentPhase = PhaseEnum.ChooseActionTarget;
+                ChangePhase(PhaseEnum.ChooseActionTarget);
                 FindAndHighlightLegalTiles();
             }
- 
+
             //if (!SelectedAction.SelfOnly())
             //{
             //    if (!ActiveCharacter.IsMonster()) {
-            //        CurrentPhase = PhaseEnum.ChooseTarget;
+            //        ChangePhase(PhaseEnum.ChooseTarget);
             //    }  //Skips this phase for enemies. They don't "choose" targets
             //}
             //else
             //{
-            //    CurrentPhase = PhaseEnum.DisplayAttack;
+            //    ChangePhase(PhaseEnum.DisplayAttack);
             //    Text = SelectedAction.Name;
             //}
         }
 
         public static void ProcessItemChoice(Consumable it)
         {
-            CurrentPhase = PhaseEnum.ChooseActionTarget;
+            ChangePhase(PhaseEnum.ChooseActionTarget);
             SelectedAction = new ChosenAction(it);
         }
 
@@ -396,10 +438,11 @@ namespace RiverHollow.Game_Managers
         /// <param name="c">The KO'd Actor</param>
         public static void RemoveKnockedOutCharacter(CombatActor c)
         {
+            
             //If the Actor was a Monster, remove it from the list
-            if (_liMonsters.Contains((c)))
+            if (!_liRemovedMonsters.Contains((c)))
             {
-                _liMonsters.Remove(c);
+                _liRemovedMonsters.Add(c);
             }
 
             //Remove the Actor from the turn order 
@@ -697,7 +740,7 @@ namespace RiverHollow.Game_Managers
             if (SelectedTile != null)
             {
                 _tTarget = SelectedTile;
-                CurrentPhase = PhaseEnum.Moving;
+                ChangePhase(PhaseEnum.Moving);
                 ActiveCharacter.Tile.SetCombatant(null);
                 Vector2 start = ActiveCharacter.Position;
 
@@ -846,7 +889,7 @@ namespace RiverHollow.Game_Managers
                 _liChargingCharacters.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));
 
                 //Go into Upkeep phase
-                CurrentPhase = PhaseEnum.Upkeep;
+                ChangePhase(PhaseEnum.Upkeep);
             }
             else
             {
@@ -914,10 +957,21 @@ namespace RiverHollow.Game_Managers
             //{
                 SelectedAction = null;
                 ActiveCharacter = null;
-                CurrentPhase = PhaseEnum.Charging;
+            ChangePhase(PhaseEnum.Charging);
             //}
         }
         #endregion
+
+        public static bool WorldUnpaused()
+        {
+            bool rv = false;
+
+            if (CurrentPhase == PhaseEnum.Moving || CurrentPhase == PhaseEnum.PerformAction)
+            {
+                rv = true;
+            }
+            return rv;
+        }
 
         #region FloatingText Handling
         /// <summary>
@@ -1200,7 +1254,7 @@ namespace RiverHollow.Game_Managers
                 {
                     Text = SelectedAction.Name;
                 }
-                CombatManager.CurrentPhase = PhaseEnum.PerformAction;
+                ChangePhase(PhaseEnum.PerformAction);
 
                 ClearToPerformAction();
             }

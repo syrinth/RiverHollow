@@ -173,6 +173,10 @@ namespace RiverHollow
                             GameCalendar.Update(gTime);
                             if (!Scrying()) { PlayerManager.Update(gTime); }
                         }
+                        else if(CombatManager.InCombat)
+                        {
+                            CombatManager.UpdateCombatants(gTime);
+                        }
                     }
                 }
 
@@ -229,7 +233,7 @@ namespace RiverHollow
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
 
             GUIManager.Draw(spriteBatch);
-            if (!Informational() && !CombatManager.InCombat)
+            if (!Informational())
             {
                 GameCalendar.Draw(spriteBatch);
             }

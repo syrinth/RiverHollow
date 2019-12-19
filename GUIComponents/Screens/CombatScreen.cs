@@ -88,7 +88,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             //        }
             //        _gTurnOrder.CalculateTurnOrder();
             //        CombatManager.SelectedAction = null;
-            //        CombatManager.CurrentPhase = CombatManager.PhaseEnum.SelectSkill;
+            //        CombatManager.ChangePhase(CombatManager.PhaseEnum.SelectSkill);
             //        break;
 
             //    case CombatManager.PhaseEnum.ChooseTarget:
@@ -111,7 +111,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             //                {
             //                    RemoveControl(_gActionTextWindow);
             //                    _gActionTextWindow = null;
-            //                    CombatManager.CurrentPhase = CombatManager.PhaseEnum.PerformAction;
+            //                    CombatManager.ChangePhase(CombatManager.PhaseEnum.PerformAction);
             //                }
             //            }
             //        }
@@ -522,7 +522,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public void CancelAction()
         {
             _gActionBar.CancelAction();
-            CombatManager.CurrentPhase = CombatManager.PhaseEnum.MainSelection;
+            CombatManager.ChangePhase(CombatManager.PhaseEnum.MainSelection);
             CombatManager.ClearAllTiles();
             SyncText();
         }
