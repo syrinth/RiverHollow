@@ -261,9 +261,12 @@ namespace RiverHollow.Game_Managers
         /// <param name="newPhase"></param>
         public static void ChangePhase(PhaseEnum newPhase)
         { 
-            if(ActiveCharacter.IsAdventurer() && (newPhase == PhaseEnum.PerformAction || newPhase == PhaseEnum.Moving))
+            if(newPhase == PhaseEnum.PerformAction || newPhase == PhaseEnum.Moving)
             {
-                GameManager.Unpause();
+                if (ActiveCharacter != null && ActiveCharacter.IsAdventurer())
+                {
+                    GameManager.Unpause();
+                }
             }
             else { GameManager.Pause(); }
 
