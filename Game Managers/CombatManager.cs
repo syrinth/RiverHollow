@@ -232,25 +232,6 @@ namespace RiverHollow.Game_Managers
                     break;
             }
         }
-
-        public static void UpdateCombatants(GameTime gTime)
-        {
-            foreach(CombatActor act in _liParty)
-            {
-                act.Update(gTime);
-            }
-
-            foreach(Monster m in _liRemovedMonsters)
-            {
-                _liMonsters.Remove(m);
-            }
-            _liRemovedMonsters.Clear();
-
-            foreach (CombatActor act in _liMonsters)
-            {
-                act.Update(gTime);
-            }
-        }
         
         /// <summary>
         /// Controlled for changing phases.

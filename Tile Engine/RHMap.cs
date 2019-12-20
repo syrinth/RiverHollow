@@ -606,7 +606,7 @@ namespace RiverHollow.Tile_Engine
             if (this == MapManager.CurrentMap)
             {
                 _renderer.Update(_map, gTime);
-                if (IsRunning())
+                if (CombatManager.InCombat || IsRunning())
                 {
                     foreach (Monster m in _liMonsters)
                     {

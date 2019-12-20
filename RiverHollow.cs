@@ -167,15 +167,18 @@ namespace RiverHollow
                     if (CutsceneManager.Playing) { CutsceneManager.Update(gTime); }
                     else
                     {
-                        if (IsRunning())
+                        //Only update the player and the CurrentMap if the player is
+                        //in combat and we are paused.
+                        if (CombatManager.InCombat && !IsRunning())
+                        {
+                            MapManager.CurrentMap.Update(gTime);
+                            PlayerManager.Update(gTime);
+                        }
+                        else if (IsRunning())
                         {
                             MapManager.Update(gTime);
                             GameCalendar.Update(gTime);
                             if (!Scrying()) { PlayerManager.Update(gTime); }
-                        }
-                        else if(CombatManager.InCombat)
-                        {
-                            CombatManager.UpdateCombatants(gTime);
                         }
                     }
                 }
