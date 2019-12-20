@@ -30,7 +30,6 @@ namespace RiverHollow.Game_Managers
         public static List<RHTile> AreaTiles => _liAreaTiles;
 
         public static CombatActor ActiveCharacter;
-        private static List<CombatActor> _liRemovedMonsters;
         private static List<CombatActor> _liMonsters;
         public static List<CombatActor> Monsters  => _liMonsters;
         private static List<CombatActor> _liParty;
@@ -74,7 +73,6 @@ namespace RiverHollow.Game_Managers
             _liParty = new List<CombatActor>();
             _liParty.AddRange(PlayerManager.GetParty());
 
-            _liRemovedMonsters = new List<CombatActor>();
             _liMonsters = new List<CombatActor>();
             _liMonsters.AddRange(MapManager.CurrentMap.Monsters);
 
@@ -422,11 +420,10 @@ namespace RiverHollow.Game_Managers
         /// <param name="c">The KO'd Actor</param>
         public static void RemoveKnockedOutCharacter(CombatActor c)
         {
-            
             //If the Actor was a Monster, remove it from the list
-            if (!_liRemovedMonsters.Contains((c)))
+            if (_liMonsters.Contains((c)))
             {
-                _liRemovedMonsters.Add(c);
+                _liMonsters.Remove(c);
             }
 
             //Remove the Actor from the turn order 

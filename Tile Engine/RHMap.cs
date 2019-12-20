@@ -30,6 +30,8 @@ namespace RiverHollow.Tile_Engine
         private string _sName;
         public string Name { get => _sName.Replace(@"Maps\", ""); set => _sName = value; } //Fuck off with that path bullshit
 
+        bool _bCombatMap;
+        public bool IsCombatMap => _bCombatMap;
         bool _bBuilding;
         public bool IsBuilding => _bBuilding;
         bool _bDungeon;
@@ -121,6 +123,7 @@ namespace RiverHollow.Tile_Engine
             _arrTiles = map._arrTiles;
 
             _bBuilding = _map.Properties.ContainsKey("Building");
+            _bCombatMap = _map.Properties.ContainsKey("Combat");
             _bDungeon = _map.Properties.ContainsKey("Dungeon");
             _bTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
@@ -170,6 +173,7 @@ namespace RiverHollow.Tile_Engine
             }
 
             _bBuilding = _map.Properties.ContainsKey("Building");
+            _bCombatMap = _map.Properties.ContainsKey("Combat");
             _bDungeon = _map.Properties.ContainsKey("Dungeon");
             _bTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
@@ -1358,8 +1362,9 @@ namespace RiverHollow.Tile_Engine
             if (obj == null)    //Only procees if tile is empty
             {
                 //If the player is currently holding a StaticItem, we need to place it
+                //Do not, however, allowt he placing of StaticItems on combat maps.
                 StaticItem selectedItem = InventoryManager.GetCurrentStaticItem();
-                if (selectedItem != null)
+                if (!IsCombatMap && selectedItem != null)
                 {
                     //Take the actual WorldObject item from the item and attempt to place it on the map
                     WorldItem newItem = selectedItem.GetWorldItem();
@@ -1436,8 +1441,10 @@ namespace RiverHollow.Tile_Engine
                         }
                     }
                 }
+
+                //Do not draw test tiles on a map for combat
                 StaticItem selectedStaticItem = InventoryManager.GetCurrentStaticItem();
-                if (selectedStaticItem != null)
+                if (!IsCombatMap && selectedStaticItem != null)
                 {
                     Vector2 vec = mouseLocation.ToVector2() - new Vector2(selectedStaticItem.GetWorldItem().Width / 4, selectedStaticItem.GetWorldItem().Height - selectedStaticItem.GetWorldItem().BaseHeight);
                     selectedStaticItem.SetWorldObjectCoords(vec);

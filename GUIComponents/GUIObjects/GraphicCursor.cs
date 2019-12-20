@@ -99,13 +99,17 @@ namespace RiverHollow.GUIObjects
             }
         }
 
+        /// <summary>
+        /// This method draws the image of the item that we are holding onto the 
+        /// World Map. However, we do not draw the image if we are Scrying, or on
+        /// a map that is for combat.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public static void DrawPotentialWorldObject(SpriteBatch spriteBatch)
         {
-            StaticItem it = InventoryManager.GetCurrentStaticItem();
-            if (!Scrying() && it != null)
+            if (!Scrying() && !MapManager.CurrentMap.IsCombatMap)
             {
-                WorldItem obj = it.GetWorldItem();
-                obj.Draw(spriteBatch);
+                InventoryManager.GetCurrentStaticItem()?.GetWorldItem().Draw(spriteBatch);
             }
         }
     }
