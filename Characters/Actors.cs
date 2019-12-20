@@ -532,7 +532,7 @@ namespace RiverHollow.Actors
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
             base.Draw(spriteBatch, useLayerDepth);
-            _dbHP.Draw(spriteBatch);
+            _dbHP?.Draw(spriteBatch);
         }
 
         public override void Update(GameTime gTime)
@@ -730,6 +730,11 @@ namespace RiverHollow.Actors
                     }
                 }
             }
+
+            //If the victim is a monster and this attack kills them,
+            //immediately hide the hp bar.
+            if(IsMonster() && _iCurrentHP <= 0) { _dbHP = null; }
+
             CombatManager.AddFloatingText(new FloatingText(this.Position, this.SpriteWidth, iValue.ToString(), bHarmful ? Color.Red : Color.Green));
         }
 
