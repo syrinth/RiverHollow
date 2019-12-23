@@ -4,12 +4,12 @@
     <!--Key: Index>0 Value:Name/CombatTexture/XP/Str/Def/Vit/Magic/Speed/Resist/Vulnerability-->
     <Item>
       <Key>3</Key>
-      <Value>[Texture:FangedFur][Condition:Forest-Summer][Jump][Lvl:1][Ability:300]</Value>
+      <Value>[Texture:FangedFur][Condition:Forest-Summer][Jump][Lvl:1][Ability:300][Loot:26 23 25]</Value>
     </Item>
     <!--FangedFur-->
     <Item>
       <Key>4</Key>
-      <Value>[Texture:CombatFangedFur][Width:32][Height:32][Lvl:1][Ability:300]</Value>
+      <Value>[Texture:CombatFangedFur][Width:32][Height:32][Lvl:1][Ability:300][Loot:26 23 25]</Value>
     </Item>
     <!--MagicMushroom-->
     <Item>

@@ -5,6 +5,7 @@ using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Graphics;
 using RiverHollow.Actors;
 using RiverHollow.Buildings;
+using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIObjects;
@@ -2200,8 +2201,6 @@ namespace RiverHollow.Tile_Engine
         WorldObject _shadowObj;
         public WorldObject ShadowObject => _shadowObj;
 
-        public Item _combatItem;
-
         Floor _floorObj;
         public Floor Flooring => _floorObj;
 
@@ -2570,15 +2569,6 @@ namespace RiverHollow.Tile_Engine
         public void AreaTile(bool val)
         {
             _bArea = val;
-        }
-
-        public void SetCombatItem(Item i)
-        {
-            _combatItem = i;
-        }
-        public Item GetItem()
-        {
-            return _combatItem;
         }
 
         #region TileTraversal

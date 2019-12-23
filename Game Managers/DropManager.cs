@@ -2,18 +2,13 @@
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using RiverHollow.Actors;
+using RiverHollow.Characters;
+using RiverHollow.Misc;
 
 namespace RiverHollow.Game_Managers
 {
     public static class DropManager
     {
-        private static Dictionary<int, string> _diMobDrops;
-
-        public static void LoadContent(ContentManager Content)
-        {
-            _diMobDrops = Content.Load<Dictionary<int, string>>(@"Data\MobDrops");
-        }
-
         public static List<Item> DropItemsFromWorldObject(int id)
         {
             List<Item> itemList = new List<Item>();
@@ -54,15 +49,22 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void DropItemsFromMonster(Monster m)
+        /// <summary>
+        /// Randomly gets the appropriate item from the the Monster to drop
+        /// </summary>
+        /// <param name="m">The Monster that is dropping the Item</param>
+        /// <returns>The Item that was dropped</returns>
+        public static Item DropMonsterLoot(Monster m)
         {
+            Item droppedItem = ObjectManager.GetItem(m.GetRandomLootItem());
             //Just for testing atm
-            List<Item> it = new List<Item> { ObjectManager.GetItem(26) };
+            List<Item> it = new List<Item> { droppedItem };
 
             it[0].AutoPickup = false;
-            m.Tile.SetCombatItem(it[0]);
 
-            MapManager.DropItemsOnMap(it, m.Tile.Position, false);
+            MapManager.DropItemsOnMap(it, Util.SnapToGrid(m.CollisionBox.Center.ToVector2()), false);
+
+            return droppedItem;
         }
     }
 }

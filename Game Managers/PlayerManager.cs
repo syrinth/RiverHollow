@@ -13,6 +13,7 @@ using static RiverHollow.WorldObjects.WorldItem;
 
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Buildings;
+using RiverHollow.Characters;
 
 namespace RiverHollow.Game_Managers
 {

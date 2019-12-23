@@ -1,4 +1,5 @@
 ﻿using RiverHollow.Actors;
+using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.Tile_Engine;
 using RiverHollow.WorldObjects;

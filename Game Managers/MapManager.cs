@@ -13,6 +13,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.Buildings;
+using RiverHollow.Characters;
 
 namespace RiverHollow.Game_Managers
 {

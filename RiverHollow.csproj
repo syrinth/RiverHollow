@@ -62,6 +62,7 @@
     <Compile Include="Buildings\Building.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Characters\Actors.cs" />
+    <Compile Include="Characters\Monster.cs" />
     <Compile Include="CombatStuff\MenuAction.cs" />
     <Compile Include="CombatStuff\StatusEffect.cs" />
     <Compile Include="CombatStuff\CharacterClass.cs" />

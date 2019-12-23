@@ -69,7 +69,6 @@ namespace RiverHollow
             GUIManager.LoadContent();
 
             //TravelManager.Calculate();
-            DropManager.LoadContent(Content);
             CutsceneManager.LoadContent(Content);
             GameManager.LoadQuests(Content);
 

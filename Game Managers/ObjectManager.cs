@@ -13,6 +13,7 @@ using RiverHollow.Actors;
 using RiverHollow.Buildings;
 using RiverHollow.Actors.CombatStuff;
 using System.IO;
+using RiverHollow.Characters;
 
 namespace RiverHollow.Game_Managers
 {

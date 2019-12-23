@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Actors;
 using RiverHollow.Actors.CombatStuff;
+using RiverHollow.Characters;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIObjects;
 using RiverHollow.Misc;
@@ -23,6 +24,7 @@ namespace RiverHollow.Game_Managers
         public const int BASIC_ATTACK = 300;
         public static int CombatScale = 5;
 
+        private static List<Item> _liDroppedItems;
         private static List<RHTile> _liLegalTiles;
         public static List<RHTile> LegalTiles => _liLegalTiles;
 
@@ -68,6 +70,7 @@ namespace RiverHollow.Game_Managers
 
             Delay = 0;
 
+            _liDroppedItems = new List<Item>();
             _liLegalTiles = new List<RHTile>();
             _liAreaTiles = new List<RHTile>();
             _liParty = new List<CombatActor>();
@@ -198,17 +201,15 @@ namespace RiverHollow.Game_Managers
                         RHTile newTile = MapManager.CurrentMap.GetTileOffGrid(ActiveCharacter.CollisionBox.Center);
                         newTile.SetCombatant(ActiveCharacter);
 
-                        Item tileItem = newTile.GetItem();
+                        Item tileItem = _liDroppedItems.Find(item => newTile.Rect.Contains(item.Position));
+
                         if(tileItem != null && InventoryManager.HasSpaceInInventory(tileItem.ItemID, tileItem.Number))
                         {
                             MapManager.CurrentMap.AddItemToPlayerInventory(tileItem);
-                            newTile.SetCombatItem(null);
                         }
-                        //GoToMainSelection();
                         _turnInfo.HasMoved = true;
 
                         EndTurn();
-                        //if (ActiveCharacter.IsMonster()) { }
                     }
                     break;
 
@@ -307,6 +308,7 @@ namespace RiverHollow.Game_Managers
             return CurrentPhase == PhaseEnum.ChooseAction || CurrentPhase == PhaseEnum.ChooseActionTarget || CurrentPhase == PhaseEnum.ChooseMoveTarget;
         }
 
+        #region End Of Comabt
         /// <summary>
         /// Called at the End of a Turn to see if the combat has been won or lost.
         /// </summary>
@@ -349,6 +351,8 @@ namespace RiverHollow.Game_Managers
         {
             Unpause();
             PlayerManager.AllowMovement = true;
+            foreach (Item it in _liDroppedItems) { it.AutoPickup = true; }
+
             GoToWorldMap();
         }
 
@@ -362,6 +366,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager.AllowMovement = true;
             GoToWorldMap();
         }
+        #endregion
 
         public static void ProcessActionChoice(CombatAction a)
         {
@@ -424,11 +429,24 @@ namespace RiverHollow.Game_Managers
             if (_liMonsters.Contains((c)))
             {
                 _liMonsters.Remove(c);
+                c.Tile.SetCombatant(null);
             }
 
             //Remove the Actor from the turn order 
             _liChargingCharacters.Remove(c);                    
             _liQueuedCharacters.Remove(c);
+        }
+
+        /// <summary>
+        /// Perform any actions that need to happen once the monster
+        /// has finished playing it's death animation
+        /// </summary>
+        /// <param name="c">The defeated Monster</param>
+        public static void MonsterKOAnimFinished(Monster m)
+        {
+            PlayerManager.AddMonsterEnergyToQueue(100);
+            MapManager.RemoveMonster(m);
+            _liDroppedItems.Add(DropManager.DropMonsterLoot(m));
         }
 
         #region Enemy AI
@@ -936,23 +954,12 @@ namespace RiverHollow.Game_Managers
 
             //if (CurrentPhase != PhaseEnum.EndCombat)
             //{
-                SelectedAction = null;
-                ActiveCharacter = null;
+            SelectedAction = null;
+            ActiveCharacter = null;
             ChangePhase(PhaseEnum.Charging);
             //}
         }
         #endregion
-
-        public static bool WorldUnpaused()
-        {
-            bool rv = false;
-
-            if (CurrentPhase == PhaseEnum.Moving || CurrentPhase == PhaseEnum.PerformAction)
-            {
-                rv = true;
-            }
-            return rv;
-        }
 
         #region FloatingText Handling
         /// <summary>

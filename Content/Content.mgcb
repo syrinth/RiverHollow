@@ -142,11 +142,6 @@
 /processor:PassThroughProcessor
 /build:Data/Classes.xml
 
-#begin Data/MobDrops.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/MobDrops.xml
-
 #begin Textures/AbilityAnimations.png
 /importer:TextureImporter
 /processor:TextureProcessor
