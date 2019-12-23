@@ -64,12 +64,13 @@ namespace RiverHollow.Actors.CombatStuff
         public List<ConditionEnum> LiCondition => _liCondition;
         int _iChargeCost;
         public int ChargeCost => _iChargeCost;
-        int _mpCost;
-        public int MPCost => _mpCost;
+        int _iMPcost;
+        public int MPCost => _iMPcost;
         int _iPotency;
         public int Potency => _iPotency;
-        KeyValuePair<int, int> _kvpAreaDimensions;
-        public KeyValuePair<int, int> Dimensions => _kvpAreaDimensions;
+
+        int _iReqLevel;
+        public int ReqLevel => _iReqLevel;
 
         bool _bHarm;
         public bool Harm => _bHarm;
@@ -142,6 +143,9 @@ namespace RiverHollow.Actors.CombatStuff
             if (stringData.ContainsKey("Charge")) { _iChargeCost = int.Parse(stringData["Charge"]); }
             if (stringData.ContainsKey("Crit")) { _iCritRating = int.Parse(stringData["Crit"]); }
             if (stringData.ContainsKey("Accuracy")) { _iAccuracy = int.Parse(stringData["Accuracy"]); }
+            if (stringData.ContainsKey("Cost")) { _iMPcost = int.Parse(stringData["Cost"]); }
+            if (stringData.ContainsKey("Level")) { _iReqLevel = int.Parse(stringData["Level"]); }
+           
             if (stringData.ContainsKey("Area"))
             {
                 string[] tags = stringData["Area"].Split('-');

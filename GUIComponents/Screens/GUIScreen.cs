@@ -14,8 +14,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
     public abstract class GUIScreen
     {
         GUIImage _guiBackgroundImg;
-        GUITextWindow _guiTextWindow;
-        GUITextWindow _guiHoverWindow;
+        protected GUITextWindow _guiTextWindow;
+        protected GUITextWindow _guiHoverWindow;
         GUIObject _guiHoverObject;
         protected GUITextSelectionWindow _gSelectionWindow;
         List<GUIObject> _liToRemove;

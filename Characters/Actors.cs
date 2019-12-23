@@ -478,10 +478,7 @@ namespace RiverHollow.Actors
         public int ResistStatus => (int)(50 / (1 + 10 * (Math.Pow(Math.E, (-0.05 * StatRes)))));
 
         protected List<MenuAction> _liActions;
-        public virtual List<MenuAction> AbilityList { get => _liActions; }
-
-        protected List<CombatAction> _liSpecialActions;
-        public virtual List<CombatAction> SpecialActions { get => _liSpecialActions; }
+        public virtual List<MenuAction> AbilityList => _liActions;
 
         protected List<StatusEffect> _liStatusEffects;
         public List<StatusEffect> LiBuffs { get => _liStatusEffects; }
@@ -510,7 +507,6 @@ namespace RiverHollow.Actors
         public CombatActor() : base()
         {
             _eActorType = ActorEnum.CombatActor;
-            _liSpecialActions = new List<CombatAction>();
             _liActions = new List<MenuAction>();
             _liStatusEffects = new List<StatusEffect>();
             _diConditions = new Dictionary<ConditionEnum, bool>
@@ -733,7 +729,7 @@ namespace RiverHollow.Actors
 
             //If the victim is a monster and this attack kills them,
             //immediately hide the hp bar.
-            if(IsMonster() && _iCurrentHP <= 0) { _dbHP = null; }
+            if (IsMonster() && _iCurrentHP <= 0) { _dbHP = null; }
 
             CombatManager.AddFloatingText(new FloatingText(this.Position, this.SpriteWidth, iValue.ToString(), bHarmful ? Color.Red : Color.Green));
         }
@@ -901,7 +897,7 @@ namespace RiverHollow.Actors
                     this.HandleStatBuffs(kvp, true);
                 }
             }
-            
+
             _linkedSummon = null;
         }
 
@@ -966,6 +962,11 @@ namespace RiverHollow.Actors
             max = MaxMP;
         }
 
+        public virtual List<CombatAction> GetCurrentSpecials()
+        {
+             return null;
+        }
+
         public virtual bool IsSummon() { return false; }
 
         protected class DisplayBar
@@ -1007,15 +1008,15 @@ namespace RiverHollow.Actors
     public class ClassedCombatant : CombatActor
     {
         #region Properties
-        public static List<int> LevelRange = new List<int> { 0, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240 };
+        public static List<int> LevelRange = new List<int> { 0, 20, 80, 160, 320, 640, 1280, 2560, 5120, 10240 };
 
         protected CharacterClass _class;
-        public CharacterClass CharacterClass { get => _class; }
+        public CharacterClass CharacterClass => _class;
         private int _classLevel;
-        public int ClassLevel { get => _classLevel; }
+        public int ClassLevel => _classLevel;
 
         private int _iXP;
-        public int XP { get => _iXP; }
+        public int XP  => _iXP;
 
         public bool Protected;
 
@@ -1042,8 +1043,7 @@ namespace RiverHollow.Actors
         public int TempStatRes => 10 + _iBuffRes + GetTempGearStat(StatEnum.Res);
         public int TempStatSpd => 10 + _class.StatSpd + _iBuffSpd + GetTempGearStat(StatEnum.Spd);
 
-        public override List<MenuAction> AbilityList { get => _class.ActionList; }
-        public override List<CombatAction> SpecialActions { get => _class._liSpecialActionsList; }
+        public override List<MenuAction> AbilityList => _class.ActionList;
 
         public int GetGearAtk()
         {
@@ -1164,6 +1164,20 @@ namespace RiverHollow.Actors
         {
             curr = _iXP;
             max = ClassedCombatant.LevelRange[this.ClassLevel];
+        }
+
+        /// <summary>
+        /// Retrieves te list of skills the character has based off of their class
+        /// that is also valid based off of their current level.
+        /// </summary>
+        /// <returns></returns>
+        public override List<CombatAction> GetCurrentSpecials()
+        {
+            List<CombatAction> rvList = new List<CombatAction>();
+
+            rvList.AddRange(_class._liSpecialActionsList.FindAll(action => action.ReqLevel <= this.ClassLevel));
+
+            return rvList;
         }
 
         public ClassedCharData SaveClassedCharData()

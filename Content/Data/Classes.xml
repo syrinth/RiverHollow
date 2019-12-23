@@ -6,7 +6,7 @@
     <Item>
       <!--Wizard-->
       <Key>1</Key>
-      <Value>[Weapon:Wand][Armor:Cloth][Hp:4][Idle:2-0.6][Cast:3-0.2][Hit:1-0.6][Attack:1-0.6][Crit:2-0.6][KO:1-0.6][Win:2-0.23][Ability:300][Spell:20][DWeap:600][DArmor:700][DHead:760][DWrist:880]</Value>
+      <Value>[Weapon:Wand][Armor:Cloth][Hp:4][Idle:2-0.6][Cast:3-0.2][Hit:1-0.6][Attack:1-0.6][Crit:2-0.6][KO:1-0.6][Win:2-0.23][Ability:300][Spell:20-21][DWeap:600][DArmor:700][DHead:760][DWrist:880]</Value>
     </Item>
     <Item>
       <!--Healer-->

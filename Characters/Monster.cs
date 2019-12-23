@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Actors;
+using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
@@ -33,12 +34,14 @@ namespace RiverHollow.Characters
         int _iMoveFailures = 0;
 
         List<SpawnConditionEnum> _liSpawnConditions;
+        List<CombatAction> _liCombatActions;
 
         #endregion
 
         public Monster(int id, Dictionary<string, string> data)
         {
             _liLootIDs = new List<int>();
+            _liCombatActions = new List<CombatAction>();
             _liSpawnConditions = new List<SpawnConditionEnum>();
 
             _eActorType = ActorEnum.Monster;
@@ -90,7 +93,7 @@ namespace RiverHollow.Characters
 
             foreach (string ability in data["Ability"].Split('-'))
             {
-                AbilityList.Add(ObjectManager.GetActionByIndex(int.Parse(ability)));
+                _liCombatActions.Add((CombatAction)ObjectManager.GetActionByIndex(int.Parse(ability)));
             }
 
             if (data.ContainsKey("Trait"))
@@ -488,6 +491,11 @@ namespace RiverHollow.Characters
         {
             base.KO();
             CombatManager.GiveXP(this);
+        }
+
+        public override List<CombatAction> GetCurrentSpecials()
+        {
+            return _liCombatActions;
         }
     }
 }

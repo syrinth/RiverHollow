@@ -26,7 +26,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class CombatScreen : GUIScreen
     {
-        GUIPostCombatDisplay _gPostScreen;
         ActionSelectObject _gActionSelect;
         TurnOrderDisplay _gTurnOrder;
 
@@ -131,6 +130,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
 
+            _guiTextWindow?.ProcessLeftButtonClick(mouse);
+
             switch (CombatManager.CurrentPhase)
             {
                 case CombatManager.PhaseEnum.MainSelection:
@@ -198,11 +199,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             //if (!rv) { rv = _gTurnOrder.ProcessHover(mouse); }
 
-            if (_gPostScreen != null)
-            {
-                _gPostScreen.ProcessHover(mouse);
-            }
-
             return rv;
         }
 
@@ -212,10 +208,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             //Draw here instead of leaving it to the controls because the
             //characters will get drawn on top of it otherwise.
-            if(_gPostScreen != null)
-            {
-                _gPostScreen.Draw(spriteBatch);
-            }
         }
 
         /// <summary>
@@ -630,9 +622,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         {
                             if (a.IsMenu() && a.IsSpecial() && !CombatManager.ActiveCharacter.Silenced())
                             {
-                                if (CombatManager.ActiveCharacter.SpecialActions.Count > 0) {
+                                if (CombatManager.ActiveCharacter.GetCurrentSpecials().Count > 0) {
                                     _gSelectedMenu = ab;
-                                    _actionMenu = new ActionMenu(CombatManager.ActiveCharacter.SpecialActions);
+                                    _actionMenu = new ActionMenu(CombatManager.ActiveCharacter.GetCurrentSpecials());
                                     _actionMenu.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX, 10);
                                 }
                             }
@@ -1272,68 +1264,5 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
             }
         }
-    }
-
-    public class GUIPostCombatDisplay : GUIObject
-    {
-        GUIButton _btnClose;
-        GUIWindow _gWin;
-        GUIInventoriesDisplay _gItemManager;
-        GUIStatDisplay _gXPToGive;
-        GUIStatDisplay[] _arrCharXP;
-
-        bool _bDisplayItems;
-
-        public GUIPostCombatDisplay(BtnClickDelegate closeDelegate)
-        {
-            _bDisplayItems = false;
-            _arrCharXP = new GUIStatDisplay[4];
-            _gWin = new GUIWindow(GUIWindow.BrownWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
-            //_gXPToGive = new GUIStatDisplay(CombatManager.CurrentMob.GetXP, Color.Yellow);
-            //_gXPToGive.CenterOnObject(_gWin);
-            //_gXPToGive.AnchorToInnerSide(_gWin, SideEnum.Top);
-
-            for (int i = 0; i < PlayerManager.GetParty().Count; i++)
-            {
-                ClassedCombatant adv  = PlayerManager.GetParty()[i];
-                _arrCharXP[i] = new GUIStatDisplay(adv.GetXP, Color.Yellow);
-
-                if(i == 0) { _arrCharXP[i].AnchorToInnerSide(_gWin, SideEnum.BottomLeft); }
-                else { _arrCharXP[i].AnchorAndAlignToObject(_arrCharXP[i - 1], SideEnum.Right, SideEnum.Bottom); }
-
-                _gWin.AddControl(_arrCharXP[i]);
-            }
-
-            _btnClose = new GUIButton("Close", closeDelegate);
-
-            Width = _gWin.Width;
-            Height = _gWin.Height;
-            AddControl(_gWin);
-        }
-
-        public override bool ProcessLeftButtonClick(Point mouse)
-        {
-            bool rv = false;
-            if (!_bDisplayItems) {
-                _bDisplayItems = true;
-                RemoveControl(_gWin);
-
-                _gItemManager = new GUIInventoriesDisplay();
-                _btnClose.AnchorAndAlignToObject(_gItemManager, SideEnum.Right, SideEnum.Bottom);
-                AddControl(_gItemManager);
-                AddControl(_btnClose);
-            }
-            else
-            {
-                rv = _gItemManager.ProcessLeftButtonClick(mouse);
-                if (!rv)
-                {
-                 rv = _btnClose.ProcessLeftButtonClick(mouse);
-                }
-            }
-
-            return rv;
-        }
-
     }
 }

@@ -415,7 +415,16 @@ namespace RiverHollow.Game_Managers
             //Give the XP to the party
             foreach (ClassedCombatant c in PlayerManager.GetParty())
             {
+                int startLevel = c.ClassLevel;
                 c.AddXP((int)xpToGive);
+
+                if(c.ClassLevel > startLevel) {
+                    AddFloatingText(new FloatingText(c.Position, c.SpriteWidth, "LEVEL UP", Color.White));
+                    c.PlayAnimation(CActorAnimEnum.Win);
+
+                    CombatAction newAction = c.GetCurrentSpecials().Find(action => action.ReqLevel > startLevel && action.ReqLevel <= c.ClassLevel);
+                    _scrCombat.OpenTextWindow(string.Format("Learned new skill {0}", newAction.Name));
+                }
             }
         }
 
@@ -455,7 +464,6 @@ namespace RiverHollow.Game_Managers
         //When enemies get healing/defensive skills, they'll have their own logic to process
         public static void EnemyTakeTurn()
         {
-            bool moveToPlayer = false;
             RHTile targetTile = null;
             CombatAction action = null;
             bool gottaMove = true;
@@ -474,10 +482,6 @@ namespace RiverHollow.Game_Managers
                             targetTile = t;
                             break;
                         }
-                    }
-                    if (gottaMove)
-                    {
-                        moveToPlayer = true;
                     }
                 }
             }

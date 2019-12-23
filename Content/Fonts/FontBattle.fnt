@@ -17,10 +17,14 @@
     <char id="55" x="31" y="0" width="5" height="7" xoffset="0" yoffset="0" xadvance="5" page="0" chnl="15" />
     <char id="56" x="26" y="0" width="5" height="7" xoffset="0" yoffset="0" xadvance="5" page="0" chnl="15" />
     <char id="57" x="36" y="0" width="5" height="7" xoffset="0" yoffset="0" xadvance="5" page="0" chnl="15" />
+	<char id="69" x="21" y="7" width="5" height="7" xoffset="0" yoffset="0" xadvance="5" page="0" chnl="15" />
 	<char id="73" x="6" y="7" width="3" height="7" xoffset="0" yoffset="0" xadvance="3" page="0" chnl="15" />
+	<char id="76" x="26" y="7" width="5" height="7" xoffset="0" yoffset="0" xadvance="5" page="0" chnl="15" />
 	<char id="77" x="0" y="7" width="7" height="7" xoffset="0" yoffset="0" xadvance="7" page="0" chnl="15" />
 	<char id="80" x="16" y="7" width="5" height="7" xoffset="0" yoffset="0" xadvance="5" page="0" chnl="15" />
 	<char id="83" x="8" y="7" width="5" height="7" xoffset="0" yoffset="0" xadvance="5" page="0" chnl="15" />
+	<char id="85" x="36" y="7" width="6" height="7" xoffset="0" yoffset="0" xadvance="6" page="0" chnl="15" />
+	<char id="86" x="31" y="7" width="5" height="7" xoffset="0" yoffset="0" xadvance="5" page="0" chnl="15" />
 	<char id="88" x="12" y="7" width="5" height="7" xoffset="0" yoffset="0" xadvance="5" page="0" chnl="15" />
   </chars>
 </font>
