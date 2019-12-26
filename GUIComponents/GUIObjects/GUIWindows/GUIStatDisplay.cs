@@ -63,6 +63,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             PositionBars();
 
+            _delAction(ref _iCurr, ref _iMax);
+
             Height = 16;
             Width = width;
         }

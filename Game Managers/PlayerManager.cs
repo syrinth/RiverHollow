@@ -238,6 +238,14 @@ namespace RiverHollow.Game_Managers
         }
         public static void AddToParty(ClassedCombatant c)
         {
+            foreach (ClassedCombatant oldChar in _liParty)
+            {
+                if (oldChar.StartPosition.Equals(c.StartPosition))
+                {
+                    c.IncreaseStartPos();
+                }
+            }
+
             if (!_liParty.Contains(c))
             {
                 _liParty.Add(c);

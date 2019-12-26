@@ -1015,6 +1015,9 @@ namespace RiverHollow.Actors
         private int _classLevel;
         public int ClassLevel => _classLevel;
 
+        private Vector2 _vStartPosition;
+        public Vector2 StartPosition => _vStartPosition;
+
         private int _iXP;
         public int XP  => _iXP;
 
@@ -1165,6 +1168,25 @@ namespace RiverHollow.Actors
             curr = _iXP;
             max = ClassedCombatant.LevelRange[this.ClassLevel];
         }
+
+        #region StartPosition
+        public void IncreaseStartPos()
+        {
+            if (_vStartPosition.Y < 3)
+            {
+                _vStartPosition.Y++;
+            }
+            else
+            {
+                _vStartPosition = new Vector2(_vStartPosition.X++, 0);
+            }
+        }
+
+        public void SetStartPosition(Vector2 pos)
+        {
+            _vStartPosition = pos;
+        }
+        #endregion
 
         /// <summary>
         /// Retrieves te list of skills the character has based off of their class

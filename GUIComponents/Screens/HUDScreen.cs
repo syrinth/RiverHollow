@@ -651,53 +651,23 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
         public class HUDParty : GUIObject
         {
+            PositionMap _map;
             CharacterDetailObject _charBox;
-            NPCDisplayBox _selectedBox;
-
-            NPCDisplayBox[] _arrDisplayBoxes;
 
             public HUDParty()
             {
-                _charBox = new CharacterDetailObject(PlayerManager.World, SyncCharacter);
+                _charBox = new CharacterDetailObject(PlayerManager.World);
                 _charBox.CenterOnScreen();
                 AddControl(_charBox);
 
                 int partySize = PlayerManager.GetParty().Count;
-                _arrDisplayBoxes = new NPCDisplayBox[partySize];
 
-                for (int i = 0; i < partySize; i++)
-                {
-                    if (PlayerManager.GetParty()[i] == PlayerManager.World)
-                    {
-                        _arrDisplayBoxes[i] = new PlayerDisplayBox(true, ChangeSelectedCharacter);
-                    }
-                    else
-                    {
-                        ClassedCombatant c = PlayerManager.GetParty()[i];
-                        if (c != null)
-                        {
-                            _arrDisplayBoxes[i] = new CharacterDisplayBox(c, ChangeSelectedCharacter);
-                        }
-                    }
-
-                    _arrDisplayBoxes[i].Enable(false);
-                    AddControl(_arrDisplayBoxes[i]);
-
-                    if (i == 0)
-                    {
-                        _arrDisplayBoxes[i].AnchorAndAlignToObject(_charBox, SideEnum.Top, SideEnum.Left);
-                    }
-                    else
-                    {
-                        _arrDisplayBoxes[i].AnchorAndAlignToObject(_arrDisplayBoxes[i - 1], SideEnum.Right, SideEnum.Bottom);
-                    }
-
-                }
-                _selectedBox = _arrDisplayBoxes[0];
-                _selectedBox.Enable(true);
+                _map = new PositionMap(SetSelectedCharacter);
+                _map.AnchorAndAlignToObject(_charBox, SideEnum.Bottom, SideEnum.CenterX);
+                AddControl(_map);
 
                 Width = _charBox.Width;
-                Height = _charBox.Bottom - _arrDisplayBoxes[0].Top;
+                Height = _map.Bottom - _charBox.Top;
             }
 
             public override bool ProcessLeftButtonClick(Point mouse)
@@ -748,34 +718,201 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 base.Update(gTime);
             }
 
-            public void UpdateCharacterBox(ClassedCombatant displayCharacter)
+            /// <summary>
+            /// Sets the selected character for the CharacterDetailBox and loads
+            /// the relevant data.
+            /// </summary>
+            /// <param name="selectedCharacter"></param>
+            public void SetSelectedCharacter(ClassedCombatant selectedCharacter)
             {
-                _charBox.SetAdventurer(displayCharacter);
+                _charBox?.SetAdventurer(selectedCharacter);
             }
 
-            public void ChangeSelectedCharacter(ClassedCombatant selectedCharacter)
+            private class PositionMap : GUIWindow
             {
-                _selectedBox.Enable(false);
-                if (_charBox != null)
+                ClassedCombatant _currentCharacter;
+                StartPosition _currPosition;
+                StartPosition[,] _arrStartPositions;
+
+                public delegate void ClickDelegate(ClassedCombatant selectedCharacter);
+                private ClickDelegate _delAction;
+
+                public PositionMap(ClickDelegate del) : base(BrownWin, 16, 16)
                 {
-                    _charBox.SetAdventurer(selectedCharacter);
+                    _delAction = del;
+
+                    int maxCols = 3;
+                    int maxRows = 3;
+
+                    int spacing = 10;
+                    int totalSpaceCol = (maxCols + 1) * spacing;
+                    int totalSpaceRow = (maxRows + 1) * spacing;
+                    _arrStartPositions = new StartPosition[maxCols, maxRows];
+                    for (int cols = 0; cols < maxCols; cols++)
+                    {
+                        for (int rows = 0; rows < maxRows; rows++)
+                        {
+                            StartPosition pos = new StartPosition(cols, rows);
+                            _arrStartPositions[cols, rows] = pos;
+                            if (cols == 0 && rows == 0)
+                            {
+                                pos.AnchorToInnerSide(this, SideEnum.TopLeft, spacing);
+                            }
+                            else if (cols == 0)
+                            {
+                                pos.AnchorAndAlignToObject(_arrStartPositions[0, rows - 1], SideEnum.Bottom, SideEnum.Left, spacing);
+                            }
+                            else
+                            {
+                                pos.AnchorAndAlignToObject(_arrStartPositions[cols - 1, rows], SideEnum.Right, SideEnum.Bottom, spacing);
+                            }
+                        }
+                    }
+
+                    PopulatePositionMap();
+
+                    this.Resize();
                 }
 
-                foreach (NPCDisplayBox box in _arrDisplayBoxes)
+                public override void Update(GameTime gTime)
                 {
-                    if (box.Actor == selectedCharacter)
+                    base.Update(gTime);
+                }
+
+                /// <summary>
+                /// Populates the PositionMap with the initial starting positions of the party
+                /// </summary>
+                public void PopulatePositionMap()
+                {
+                    _currentCharacter = PlayerManager.World;
+
+                    //Iterate over each member of the party and retrieve their starting position.
+                    //Assigns the character to the starting position and assigns the current position
+                    //to the Player Character's
+                    foreach (ClassedCombatant c in PlayerManager.GetParty())
                     {
-                        _selectedBox = box;
-                        break;
+                        Vector2 vec = c.StartPosition;
+                        _arrStartPositions[(int)vec.X, (int)vec.Y].SetCharacter(c, (c == _currentCharacter));
+                        if (c == _currentCharacter)
+                        {
+                            _currPosition = _arrStartPositions[(int)vec.X, (int)vec.Y];
+                        }
                     }
                 }
 
-                _selectedBox.Enable(true);
-            }
+                public override bool ProcessLeftButtonClick(Point mouse)
+                {
+                    bool rv = false;
 
-            public void SyncCharacter()
-            {
-                ((PlayerDisplayBox)_arrDisplayBoxes[0]).Configure();
+                    if (Contains(mouse))
+                    {
+                        rv = true;
+                    }
+
+                    foreach (StartPosition sp in _arrStartPositions)
+                    {
+                        //If we have clicked on a StartPosition
+                        if (sp.Contains(mouse))
+                        {
+                            //If the StartPosition is not occupied set the currentPosition to null
+                            //then set it to the clicked StartPosition and assign the current Character.
+                            //Finally, reset the characters internal start position vector.
+                            if (!sp.Occupied())
+                            {
+                                rv = true;
+                                _currPosition.SetCharacter(null);
+                                _currPosition = sp;
+                                _currPosition.SetCharacter(_currentCharacter, true);
+                                _currentCharacter.SetStartPosition(new Vector2(_currPosition.Col, _currPosition.Row));
+                            }
+                            else
+                            {
+                                _currPosition?.PlayAnimation(WActorBaseAnim.IdleDown);
+                                _currPosition = sp;
+                                //Set the currentCharacter to the selected character.
+                                //Call up to the parent object to redisplay data.
+                                _currentCharacter = sp.Character;
+                                _delAction(_currentCharacter);
+                                _currPosition?.PlayAnimation(WActorWalkAnim.WalkDown);
+                            }
+
+                            break;
+                        }
+                    }
+
+                    return rv;
+                }
+
+                private class StartPosition : GUIImage
+                {
+                    ClassedCombatant _character;
+                    public ClassedCombatant Character => _character;
+                    int _iCol;
+                    int _iRow;
+                    public int Col => _iCol;
+                    public int Row => _iRow;
+
+                    private GUICharacterSprite _sprite;
+                    public StartPosition(int col, int row) : base(new Rectangle(0, 112, 16, 16), TileSize, TileSize, GameContentManager.FILE_WORLDOBJECTS)
+                    {
+                        _iCol = col;
+                        _iRow = row;
+
+                        SetScale(Scale);
+                    }
+
+                    public override void Draw(SpriteBatch spriteBatch)
+                    {
+                        base.Draw(spriteBatch);
+                        if (_sprite != null)
+                        {
+                            _sprite.Draw(spriteBatch);
+                        }
+                    }
+
+                    /// <summary>
+                    /// Assigns the character that the StartPosition is referring to.
+                    /// 
+                    /// Configures the Sprite and Adds it to the Controls ifthere is a character.
+                    /// Removes it if not.
+                    /// </summary>
+                    /// <param name="c">The Character to assign to the StartPosition</param>
+                    /// <param name="currentCharacter">Whether the character is the current character and should walk</param>
+                    public void SetCharacter(ClassedCombatant c, bool currentCharacter = false)
+                    {
+                        _character = c;
+                        if (c != null)
+                        {
+                            if (c == PlayerManager.World) { _sprite = new GUICharacterSprite(true); }
+                            else { _sprite = new GUICharacterSprite(c.BodySprite, true); }
+
+                            _sprite.SetScale(2);
+                            _sprite.CenterOnObject(this);
+                            _sprite.MoveBy(new Vector2(0, -(this.Width / 4)));
+
+                            if (currentCharacter) { _sprite.PlayAnimation(WActorWalkAnim.WalkDown); }
+                            else { _sprite.PlayAnimation(WActorBaseAnim.IdleDown); }
+                            AddControl(_sprite);
+                        }
+                        else
+                        {
+                            RemoveControl(_sprite);
+                            _sprite = null;
+                        }
+                    }
+
+                    public bool Occupied() { return _character != null; }
+
+                    /// <summary>
+                    /// Wrapper for the PositionMap to call down to the Sprite directly
+                    /// </summary>
+                    /// <typeparam name="TEnum">Template for any enum type</typeparam>
+                    /// <param name="animation">The animation enum to play</param>
+                    public void PlayAnimation<TEnum>(TEnum animation)
+                    {
+                        _sprite.PlayAnimation(animation);
+                    }
+                }
             }
 
             public class CharacterDetailObject : GUIObject
@@ -790,7 +927,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 GUIWindow _winName;
                 public GUIWindow WinDisplay;
-                GUIWindow _winClothes;
+                //GUIWindow _winClothes;
 
                 SpecializedBox _sBoxArmor;
                 SpecializedBox _sBoxHead;
@@ -803,18 +940,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 GUIText _gName, _gClass, _gLvl, _gStr, _gDef, _gMagic, _gRes, _gSpd;
                 GUIStatDisplay _gBarXP, _gBarHP, _gBarMP;
 
-                public delegate void SyncCharacter();
-                private SyncCharacter _delSyncCharacter;
-
-                public CharacterDetailObject(ClassedCombatant c, SyncCharacter del = null)
+                public CharacterDetailObject(ClassedCombatant c)
                 {
                     _winName = new GUIWindow(GUIWindow.RedWin, (GUIManager.MAIN_COMPONENT_WIDTH) - (GUIWindow.RedWin.Edge * 2), 10);
                     WinDisplay = new GUIWindow(GUIWindow.RedWin, (GUIManager.MAIN_COMPONENT_WIDTH) - (GUIWindow.RedWin.Edge * 2), (GUIManager.MAIN_COMPONENT_HEIGHT / 4) - (GUIWindow.RedWin.Edge * 2));
                     WinDisplay.AnchorAndAlignToObject(_winName, SideEnum.Bottom, SideEnum.Left);
-                    _winClothes = new GUIWindow(GUIWindow.RedWin, 10, 10);
-                    _winClothes.AnchorAndAlignToObject(WinDisplay, SideEnum.Bottom, SideEnum.Left);
+                    //_winClothes = new GUIWindow(GUIWindow.RedWin, 10, 10);
+                    //_winClothes.AnchorAndAlignToObject(WinDisplay, SideEnum.Bottom, SideEnum.Left);
 
-                    _delSyncCharacter = del;
                     _character = c;
                     _font = GameContentManager.GetFont(@"Fonts\Font");
 
@@ -827,24 +960,24 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     WinDisplay.Resize();
                     WinDisplay.Height += SPACING;
 
-                    _winClothes.Resize();
-                    _winClothes.Height += SPACING;
-                    _winClothes.Width += SPACING;
+                    //_winClothes.Resize();
+                    //_winClothes.Height += SPACING;
+                    //_winClothes.Width += SPACING;
 
                     WinDisplay.AnchorAndAlignToObject(_winName, SideEnum.Bottom, SideEnum.Left);
-                    _winClothes.AnchorAndAlignToObject(WinDisplay, SideEnum.Bottom, SideEnum.Left);
+                    //_winClothes.AnchorAndAlignToObject(WinDisplay, SideEnum.Bottom, SideEnum.Left);
 
                     AddControl(_winName);
-                    AddControl(_winClothes);
+                    //AddControl(_winClothes);
                     AddControl(WinDisplay);
 
                     Width = _winName.Width;
-                    Height = _winClothes.Bottom - _winName.Top;
+                    Height = WinDisplay.Bottom - _winName.Top;
                 }
 
                 private void Load()
                 {
-                    _winClothes.Controls.Clear();
+                    //_winClothes.Controls.Clear();
                     _winName.Controls.Clear();
                     WinDisplay.Controls.Clear();
 
@@ -892,7 +1025,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         _sBoxHat = new SpecializedBox(ClothesEnum.Hat, PlayerManager.World.Hat, FindMatchingItems);
                         _sBoxShirt = new SpecializedBox(ClothesEnum.Chest, PlayerManager.World.Shirt, FindMatchingItems);
 
-                        _sBoxHat.AnchorToInnerSide(_winClothes, SideEnum.TopLeft, SPACING);
+                        //_sBoxHat.AnchorToInnerSide(_winClothes, SideEnum.TopLeft, SPACING);
                         _sBoxShirt.AnchorAndAlignToObject(_sBoxHat, SideEnum.Right, SideEnum.Top, SPACING);
 
                         _liGearBoxes.Add(_sBoxHat);
@@ -917,7 +1050,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                     _equipWindow = new EquipWindow();
                     WinDisplay.AddControl(_equipWindow);
-                    _winClothes.AddControl(_equipWindow);
+                    //_winClothes.AddControl(_equipWindow);
                 }
 
                 /// <summary>
@@ -968,7 +1101,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     {
                         _winName.Draw(spriteBatch);
                         WinDisplay.Draw(spriteBatch);
-                        if (_character == PlayerManager.World) { _winClothes.Draw(spriteBatch); }
+                        //if (_character == PlayerManager.World) { _winClothes.Draw(spriteBatch); }
 
                         if (_equipWindow.HasEntries())
                         {
@@ -994,7 +1127,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             else if (_equipWindow.Box.ItemType.Equals(ItemEnum.Clothes))
                             {
                                 PlayerManager.World.SetClothes((Clothes)_equipWindow.SelectedItem);
-                                _delSyncCharacter();
+
                             }
 
                             InventoryManager.RemoveItemFromInventory(_equipWindow.SelectedItem);
@@ -1018,15 +1151,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                             if (!rv && _character == PlayerManager.World)
                             {
-                                foreach (GUIObject c in _winClothes.Controls)
-                                {
-                                    rv = c.ProcessLeftButtonClick(mouse);
-                                    if (rv)
-                                    {
-                                        GUIManager.CloseHoverWindow();
-                                        break;
-                                    }
-                                }
+                                //foreach (GUIObject c in _winClothes.Controls)
+                                //{
+                                //    rv = c.ProcessLeftButtonClick(mouse);
+                                //    if (rv)
+                                //    {
+                                //        GUIManager.CloseHoverWindow();
+                                //        break;
+                                //    }
+                                //}
                             }
                         }
                     }
@@ -1052,7 +1185,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                                 else if (!box.ClothingType.Equals(ClothesEnum.None))
                                 {
                                     PlayerManager.World.RemoveClothes(((Clothes)box.Item).ClothesType);
-                                    _delSyncCharacter();
                                 }
 
                                 InventoryManager.AddToInventory(box.Item);
