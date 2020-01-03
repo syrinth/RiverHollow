@@ -250,11 +250,10 @@ namespace RiverHollow.Actors
         {
             WActorWalkAnim animation = WActorWalkAnim.WalkDown;
 
-            if (direction.Length() == 0)
+            bool walk = false;
+            if (direction.Length() != 0)
             {
-                Idle();
-            }
-            else {
+                walk = true;
                 if (Math.Abs((int)direction.X) > Math.Abs((int)direction.Y))
                 {
                     if (direction.X > 0)
@@ -282,11 +281,6 @@ namespace RiverHollow.Actors
                     }
                 }
 
-                if (_spriteBody.CurrentAnimation != Util.GetEnumString(animation))
-                {
-                    PlayAnimation(animation);
-                }
-
                 List<RHTile> cornerTiles = new List<RHTile>();
                 cornerTiles.Add(MapManager.CurrentMap.GetTileByGrid(Util.GetGridCoords(new Vector2(CollisionBox.Left, CollisionBox.Top)).ToPoint()));
                 cornerTiles.Add(MapManager.CurrentMap.GetTileByGrid(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Top)).ToPoint()));
@@ -301,28 +295,21 @@ namespace RiverHollow.Actors
                     }
                 }
             }
+
+            PlayFacingAnimation(walk);
         }
 
-        public virtual void Idle()
+        /// <summary>
+        /// Constructs the proper animation string for the current facing.
+        /// During Combat, the Idle animation is the Walk animation.
+        /// </summary>
+        /// <param name="walk">Whether or not to play the walk animation</param>
+        public void PlayFacingAnimation(bool walk)
         {
-            switch (Facing)
+            string animation = (walk || CombatManager.InCombat ? "Walk" : "Idle") + (Facing.ToString());
+            if (_spriteBody.CurrentAnimation != animation)
             {
-                case DirectionEnum.Down:
-                    if (CombatManager.InCombat) { PlayAnimation(WActorWalkAnim.WalkDown); }
-                    else { PlayAnimation(WActorBaseAnim.IdleDown); }
-                    break;
-                case DirectionEnum.Up:
-                    if (CombatManager.InCombat) { PlayAnimation(WActorWalkAnim.WalkUp); }
-                    else { PlayAnimation(WActorBaseAnim.IdleUp); }
-                    break;
-                case DirectionEnum.Left:
-                    if (CombatManager.InCombat) { PlayAnimation(WActorWalkAnim.WalkLeft); }
-                    else { PlayAnimation(WActorBaseAnim.IdleLeft); }
-                    break;
-                case DirectionEnum.Right:
-                    if (CombatManager.InCombat) { PlayAnimation(WActorWalkAnim.WalkRight); }
-                    else { PlayAnimation(WActorBaseAnim.IdleRight); }
-                    break;
+                PlayAnimation(animation);
             }
         }
 
@@ -1313,12 +1300,10 @@ namespace RiverHollow.Actors
                     if (diff.X > 0)  //The player is to the left
                     {
                         Facing = DirectionEnum.Left;
-                        Idle();
                     }
                     else
                     {
                         Facing = DirectionEnum.Right;
-                        Idle();
                     }
                 }
                 else
@@ -1326,14 +1311,14 @@ namespace RiverHollow.Actors
                     if (diff.Y > 0)  //The player is above
                     {
                         Facing = DirectionEnum.Up;
-                        Idle();
                     }
                     else
                     {
                         Facing = DirectionEnum.Down;
-                        Idle();
                     }
                 }
+
+                PlayFacingAnimation(false);
             }
 
             text = Util.ProcessText(text, _sName);
@@ -2859,7 +2844,7 @@ namespace RiverHollow.Actors
             if (Hat != null) { Hat.Sprite.MoveBy(x, y); }
         }
 
-        public override void PlayAnimation<TEnum>(TEnum anim)
+        public override void PlayAnimation(string anim)
         {
             _spriteBody.SetCurrentAnimation(anim);
             _spriteEyes.SetCurrentAnimation(anim);
@@ -2867,6 +2852,11 @@ namespace RiverHollow.Actors
 
             if (_chest != null) { _chest.Sprite.SetCurrentAnimation(anim); }
             if (Hat != null) { Hat.Sprite.SetCurrentAnimation(anim); }
+        }
+
+        public override void PlayAnimation<TEnum>(TEnum anim)
+        {
+            PlayAnimation(anim.ToString());
         }
 
         public void SetScale(int scale = 1)

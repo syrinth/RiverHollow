@@ -742,7 +742,7 @@ namespace RiverHollow.Actors.CombatStuff
                     }
                     else if (SkillUser.AnimationPlayedXTimes(2))
                     {
-                        SkillUser.Idle();
+                        SkillUser.PlayFacingAnimation(false);
                         _iCurrentAction++;
                     }
                     break;

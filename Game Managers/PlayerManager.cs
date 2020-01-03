@@ -373,7 +373,7 @@ namespace RiverHollow.Game_Managers
         public static bool SetTool(GameManager.ToolEnum toolType, Point mouse)
         {
             bool rv = false;
-            PlayerManager.World.Idle();
+            PlayerManager.World.PlayFacingAnimation(false);
 
             Tool t = null;
             switch (toolType)

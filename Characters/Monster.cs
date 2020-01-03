@@ -360,7 +360,7 @@ namespace RiverHollow.Characters
                 if (Position.X == _vMoveTo.X && Position.Y == _vMoveTo.Y)
                 {
                     _vMoveTo = Vector2.Zero;
-                    Idle();
+                    PlayFacingAnimation(false);
                 }
             }
         }
@@ -382,7 +382,7 @@ namespace RiverHollow.Characters
                 {
                     _vMoveTo = Vector2.Zero;
                     _dIdleFor = 4;
-                    Idle();
+                    PlayFacingAnimation(false);
                     skip = true;
                 }
 
@@ -403,7 +403,7 @@ namespace RiverHollow.Characters
 
             if (direction.Length() == 0)
             {
-                Idle();
+                PlayFacingAnimation(false);
             }
             else
             {

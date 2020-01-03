@@ -741,30 +741,29 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     _delAction = del;
 
-                    int maxCols = 3;
-                    int maxRows = 3;
+                    //Actual entries will be one higher since we go to 0 inclusive
+                    int maxColIndex = 2;
+                    int maxRowIndex = 2;
 
                     int spacing = 10;
-                    int totalSpaceCol = (maxCols + 1) * spacing;
-                    int totalSpaceRow = (maxRows + 1) * spacing;
-                    _arrStartPositions = new StartPosition[maxCols, maxRows];
-                    for (int cols = 0; cols < maxCols; cols++)
+                    _arrStartPositions = new StartPosition[maxColIndex +1, maxRowIndex +1]; //increment by one as stated above
+                    for (int cols = maxColIndex; cols >= 0; cols--)
                     {
-                        for (int rows = 0; rows < maxRows; rows++)
+                        for (int rows = maxRowIndex; rows >= 0; rows--)
                         {
                             StartPosition pos = new StartPosition(cols, rows);
                             _arrStartPositions[cols, rows] = pos;
-                            if (cols == 0 && rows == 0)
+                            if (cols == maxColIndex && rows == maxRowIndex)
                             {
                                 pos.AnchorToInnerSide(this, SideEnum.TopLeft, spacing);
                             }
-                            else if (cols == 0)
+                            else if (cols == maxColIndex)
                             {
-                                pos.AnchorAndAlignToObject(_arrStartPositions[0, rows - 1], SideEnum.Bottom, SideEnum.Left, spacing);
+                                pos.AnchorAndAlignToObject(_arrStartPositions[maxColIndex, rows + 1], SideEnum.Bottom, SideEnum.Left, spacing);
                             }
                             else
                             {
-                                pos.AnchorAndAlignToObject(_arrStartPositions[cols - 1, rows], SideEnum.Right, SideEnum.Bottom, spacing);
+                                pos.AnchorAndAlignToObject(_arrStartPositions[cols + 1, rows], SideEnum.Right, SideEnum.Bottom, spacing);
                             }
                         }
                     }

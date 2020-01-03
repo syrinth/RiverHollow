@@ -60,7 +60,7 @@ namespace RiverHollow.Game_Managers
         static List<CombatActor> _liChargingCharacters;
         #endregion
 
-        public static void NewBattle()
+        public static void NewBattle(string oldMap)
         {
             ChangePhase(PhaseEnum.Setup);
 
@@ -97,29 +97,31 @@ namespace RiverHollow.Game_Managers
                 MapManager.CurrentMap.GetTileOffGrid(c.CollisionBox.Center).SetCombatant(c);
             }
 
-            MapManager.CurrentMap.GetTileOffGrid(PlayerManager.World.CollisionBox.Center).SetCombatant(PlayerManager.World);
-
-            List<RHTile> tileList = new List<RHTile>();
-            RecursivelyGrowRange(PlayerManager.World.Tile, tileList, 0, 2);
-            foreach (CombatActor c in Party)
+            RHTile[,] tiles = MapManager.CurrentMap.DictionaryCombatTiles[oldMap];
+            foreach (ClassedCombatant c in Party)
             {
-                if(c != PlayerManager.World)
+                if (c != PlayerManager.World)
                 {
                     MapManager.Maps[c.CurrentMapName].RemoveCharacter(c);
                     c.Activate(true);
-                    tileList[RHRandom.Instance.Next(tileList.Count)].SetCombatant(c);
                     c.CurrentMapName = MapManager.CurrentMap.Name;
                     MapManager.CurrentMap.AddCharacter(c);
-                    c.Position = c.Tile.Position;
-                }   
+                }
+
+                Vector2 startpos = c.StartPosition;
+                tiles[(int)startpos.X, (int)startpos.Y].SetCombatant(c);
+                c.Position = c.Tile.Position;
+                c.Facing = PlayerManager.World.Facing;
+                c.PlayFacingAnimation(true);
             }
+
 
             _scrCombat = new CombatScreen();
             GUIManager.SetScreen(_scrCombat);
 
             _bInCombat = true;
             PlayerManager.AllowMovement = false;
-            PlayerManager.World.Idle();
+            PlayerManager.World.PlayFacingAnimation(false);
 
             PlayerManager.World.SetMoveObj(Util.SnapToGrid(PlayerManager.World.Tile.Center));
         }
@@ -132,7 +134,7 @@ namespace RiverHollow.Game_Managers
                 case PhaseEnum.Setup:
                     if(PlayerManager.World.Position == PlayerManager.World.Tile.Position)
                     {
-                        PlayerManager.World.Idle();
+                        PlayerManager.World.PlayFacingAnimation(false);
                         ChangePhase(PhaseEnum.Charging);
                     }
                     break;

@@ -79,12 +79,14 @@ namespace RiverHollow.Tile_Engine
         protected List<Item> _liItemsToRemove;
         protected List<ShopData> _liShopData;
 
+        private Dictionary<string, RHTile[,]> _diCombatTiles;
+        public Dictionary<string, RHTile[,]> DictionaryCombatTiles => _diCombatTiles;
         private Dictionary<Rectangle, string> _dictExit;
-        public Dictionary<Rectangle, string> DictionaryExit { get => _dictExit; }
+        public Dictionary<Rectangle, string> DictionaryExit => _dictExit;
         private Dictionary<string, Rectangle> _dictEntrance;
-        public Dictionary<string, Rectangle> DictionaryEntrance { get => _dictEntrance; }
+        public Dictionary<string, Rectangle> DictionaryEntrance => _dictEntrance;
         private Dictionary<string, Vector2> _dictCharacterLayer;
-        public Dictionary<string, Vector2> DictionaryCharacterLayer { get => _dictCharacterLayer; }
+        public Dictionary<string, Vector2> DictionaryCharacterLayer => _dictCharacterLayer;
         private List<TiledMapObject> _liMapObjects;
 
         //The dictionary of all resource spawn points on the map, by the resource they spawn.
@@ -109,6 +111,7 @@ namespace RiverHollow.Tile_Engine
             _liPlacedWorldObjects = new List<WorldObject>();
             _liRandomSpawnItems = new List<int>();
             _liCutscenes = new List<int>();
+            _diCombatTiles = new Dictionary<string, RHTile[,]>();
 
             _diResourceSpawns = new Dictionary<int, List<TiledMapObject>>();
 
@@ -212,8 +215,6 @@ namespace RiverHollow.Tile_Engine
                 }
             }
             _renderer = new TiledMapRenderer(GraphicsDevice);
-
-            LoadMapObjects();
         }
 
         public void WaterTiles()
@@ -241,27 +242,73 @@ namespace RiverHollow.Tile_Engine
                         Rectangle r = new Rectangle((int)mapObject.Position.X, (int)mapObject.Position.Y, (int)mapObject.Size.Width, (int)mapObject.Size.Height);
 
                         string map = string.Empty;
-                        if (mapObject.Properties.ContainsKey("Exit"))
+                        if (mapObject.Name.Equals("CombatStart"))
                         {
-                            map = mapObject.Properties["Exit"] == "Home" ? MapManager.HomeMap : mapObject.Properties["Exit"] + ID;
-                            _dictExit.Add(r, map);
+                            string entrance = mapObject.Properties["Entrance"];
+                            RHTile[,] tiles = new RHTile[3, 3];
 
-                            for (float x = mapObject.Position.X; x < mapObject.Position.X + mapObject.Size.Width; x += TileSize)
+                            DirectionEnum sidle = DirectionEnum.Right;
+                            DirectionEnum change = DirectionEnum.Down;
+
+                            string startPoint = mapObject.Properties["Position"];
+                            if (startPoint == "NW")
                             {
-                                for (float y = mapObject.Position.Y; y < mapObject.Position.Y + mapObject.Size.Height; y += TileSize)
+                                sidle = DirectionEnum.Right;
+                                change = DirectionEnum.Down;
+                            }
+                            else if (startPoint == "NE")
+                            {
+                                sidle = DirectionEnum.Down;
+                                change = DirectionEnum.Left;
+                            }
+                            else if (startPoint == "SE")
+                            {
+                                sidle = DirectionEnum.Left;
+                                change = DirectionEnum.Up;
+                            }
+                            else if (startPoint == "SW")
+                            {
+                                sidle = DirectionEnum.Up;
+                                change = DirectionEnum.Right;
+                            }
+
+                            tiles[0, 0] = GetTileOffGrid(mapObject.Position);
+                            tiles[1, 0] = tiles[0, 0].GetTileByDirection(sidle);
+                            tiles[2, 0] = tiles[1, 0].GetTileByDirection(sidle);
+
+                            tiles[0, 1] = tiles[0, 0].GetTileByDirection(change);
+                            tiles[1, 1] = tiles[0, 1].GetTileByDirection(sidle);
+                            tiles[2, 1] = tiles[1, 1].GetTileByDirection(sidle);
+
+                            tiles[0, 2] = tiles[0, 1].GetTileByDirection(change);
+                            tiles[1, 2] = tiles[0, 2].GetTileByDirection(sidle);
+                            tiles[2, 2] = tiles[1, 2].GetTileByDirection(sidle);
+                            _diCombatTiles[entrance] = tiles;
+                        }
+                        else
+                        {
+                            if (mapObject.Properties.ContainsKey("Exit"))
+                            {
+                                map = mapObject.Properties["Exit"] == "Home" ? MapManager.HomeMap : mapObject.Properties["Exit"] + ID;
+                                _dictExit.Add(r, map);
+
+                                for (float x = mapObject.Position.X; x < mapObject.Position.X + mapObject.Size.Width; x += TileSize)
                                 {
-                                    RHTile t = GetTileOffGrid((int)x, (int)y);
-                                    if (t != null && mapObject.Properties.ContainsKey("Door"))
+                                    for (float y = mapObject.Position.Y; y < mapObject.Position.Y + mapObject.Size.Height; y += TileSize)
                                     {
-                                        t.SetMapObject(Util.FloatRectangle(mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height));
+                                        RHTile t = GetTileOffGrid((int)x, (int)y);
+                                        if (t != null && mapObject.Properties.ContainsKey("Door"))
+                                        {
+                                            t.SetMapObject(Util.FloatRectangle(mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height));
+                                        }
                                     }
                                 }
                             }
-                        }
-                        else if (mapObject.Properties.ContainsKey("Entrance"))
-                        {
-                            map = mapObject.Properties["Entrance"] == "Home" ? MapManager.HomeMap : mapObject.Properties["Entrance"] + ID;
-                            _dictEntrance.Add(map, r);
+                            else if (mapObject.Properties.ContainsKey("Entrance"))
+                            {
+                                map = mapObject.Properties["Entrance"] == "Home" ? MapManager.HomeMap : mapObject.Properties["Entrance"] + ID;
+                                _dictEntrance.Add(map, r);
+                            }
                         }
                     }
                 }

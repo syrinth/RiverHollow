@@ -32,7 +32,7 @@ namespace RiverHollow.Game_Managers
             }
         }//[Friends:1-30]
         public const string HomeMap = "mapManorGrounds";
-        public const string SpawnMap = "mapManorGrounds"; //"mapForest"; //"mapRiverHollowTown"; //"mapSpringDungeonC"; // "mapForestDungeonZone"; //"mapRiverHollowTown"; //;
+        public const string SpawnMap = "mapForest"; //"mapManorGrounds"; //"mapRiverHollowTown"; //"mapSpringDungeonC"; // "mapForestDungeonZone"; //"mapRiverHollowTown"; //;
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
 
@@ -55,6 +55,13 @@ namespace RiverHollow.Game_Managers
             foreach (string s in Directory.GetFiles(_sDungeonMapFolder)) { AddMap(s, Content, GraphicsDevice); }
 
             _currentMap = _tileMaps[MapManager.SpawnMap];
+        }
+        public static void LoadObjects()
+        {
+            foreach(RHMap m in Maps.Values)
+            {
+                m.LoadMapObjects();
+            }
         }
 
         public static void AddMap(string mapToAdd, ContentManager Content, GraphicsDevice GraphicsDevice)
@@ -146,7 +153,7 @@ namespace RiverHollow.Game_Managers
         public static void FadeToNewMap(RHMap newMap, Vector2 playerPos, Building b = null)
         {
             GUIManager.BeginFadeOut();
-            PlayerManager.World.Idle();
+            PlayerManager.World.PlayFacingAnimation(false);
             _newMapInfo = new NewMapInfo(newMap, playerPos, b);
         }
 
@@ -210,6 +217,7 @@ namespace RiverHollow.Game_Managers
         {
             if(!_newMapInfo.Equals(default(NewMapInfo)) && GUIManager.FadingIn)
             {
+                string oldMap = _currentMap.Name;
                 _currentMap = _newMapInfo.NextMap;
                 if (_newMapInfo.EnteredBuilding != null)
                 {
@@ -224,7 +232,7 @@ namespace RiverHollow.Game_Managers
                 //Enter combat upon entering a map with living monsters
                 if (_currentMap.Monsters.Count > 0)
                 {
-                    CombatManager.NewBattle();
+                    CombatManager.NewBattle(oldMap);
                 }
             }
 

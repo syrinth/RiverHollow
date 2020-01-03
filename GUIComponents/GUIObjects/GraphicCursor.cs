@@ -64,18 +64,25 @@ namespace RiverHollow.GUIObjects
             {
                 Rectangle source = Rectangle.Empty;
                 Texture2D drawIt = _texture;
-                switch (_CursorType)
+                if (!CombatManager.InCombat)
                 {
-                    case EnumCursorType.Normal:
-                        source = new Rectangle(304, 160, 16, 16);
-                        break;
-                    case EnumCursorType.Talk:
-                        source = new Rectangle(288, 160, 16, 16);
-                        Alpha = (PlayerManager.PlayerInRange(GetWorldMousePosition().ToPoint(), (int)(TileSize * 1.5))) ? 1 : 0.5f;
-                        break;
-                    case EnumCursorType.Door:
-                        source = new Rectangle(288, 176, 16, 16);
-                        break;
+                    switch (_CursorType)
+                    {
+                        case EnumCursorType.Normal:
+                            source = new Rectangle(304, 160, 16, 16);
+                            break;
+                        case EnumCursorType.Talk:
+                            source = new Rectangle(288, 160, 16, 16);
+                            Alpha = (PlayerManager.PlayerInRange(GetWorldMousePosition().ToPoint(), (int)(TileSize * 1.5))) ? 1 : 0.5f;
+                            break;
+                        case EnumCursorType.Door:
+                            source = new Rectangle(288, 176, 16, 16);
+                            break;
+                    }
+                }
+                else
+                {
+                    source = new Rectangle(304, 160, 16, 16);
                 }
                 Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, TileSize * 2, TileSize * 2);
 

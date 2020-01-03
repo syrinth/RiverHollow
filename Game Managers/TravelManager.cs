@@ -16,7 +16,7 @@ namespace RiverHollow.Game_Managers
 
         public static void NewTravelLog(string name)
         {
-            _swWriter = new StreamWriter(@"C:\Users\Syrinth\Desktop\" + name + " - TravelManager.txt");
+            _swWriter = new StreamWriter(@"C:\Users\Syrinth\Desktop\Travel Manager\" + name + " - TravelManager.txt");
         }
 
         public static void CloseTravelLog()

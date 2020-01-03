@@ -64,6 +64,7 @@ namespace RiverHollow
             GameContentManager.LoadContent(Content);
             GameManager.LoadContent(Content);
             MapManager.LoadContent(Content, GraphicsDevice);
+            MapManager.LoadObjects();
             ObjectManager.LoadContent(Content);
 
             GUIManager.LoadContent();
@@ -167,11 +168,14 @@ namespace RiverHollow
                     else
                     {
                         //Only update the player and the CurrentMap if the player is
-                        //in combat and we are paused.
+                        //in combat while paused, or while the game is running
                         if (CombatManager.InCombat && !IsRunning())
                         {
                             MapManager.CurrentMap.Update(gTime);
-                            PlayerManager.Update(gTime);
+                            foreach(CombatActor c in PlayerManager.GetParty())
+                            {
+                                c.Update(gTime);
+                            }
                         }
                         else if (IsRunning())
                         {
@@ -289,6 +293,9 @@ namespace RiverHollow
             MapManager.PopulateMaps(false);
             PlayerManager.Buildings[0].AddWorker(a);
             PlayerManager.Buildings[0].AddWorker(b);
+
+            PlayerManager.AddToParty(a);
+            PlayerManager.AddToParty(b);
 
             MapManager.Maps[PlayerManager.Buildings[0].MapName].AddBuildingObjectsToMap(PlayerManager.Buildings[0]);
 
