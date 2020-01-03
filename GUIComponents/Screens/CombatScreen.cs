@@ -311,7 +311,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
     }
 
     /// <summary>
-    /// This class represents a combat actor, as well as thedisplay information for them
+    /// This class represents a combat actor, as well as the display information for them
     /// </summary>
     public class GUICombatActorInfo : GUIObject
     {

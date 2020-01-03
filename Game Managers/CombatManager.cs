@@ -425,7 +425,10 @@ namespace RiverHollow.Game_Managers
                     c.PlayAnimation(CActorAnimEnum.Win);
 
                     CombatAction newAction = c.GetCurrentSpecials().Find(action => action.ReqLevel > startLevel && action.ReqLevel <= c.ClassLevel);
-                    _scrCombat.OpenTextWindow(string.Format("Learned new skill {0}", newAction.Name));
+                    if (newAction != null)
+                    {
+                        _scrCombat.OpenTextWindow(string.Format("Learned new skill {0}", newAction.Name));
+                    }
                 }
             }
         }
