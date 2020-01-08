@@ -596,6 +596,10 @@ namespace RiverHollow.Game_Managers
                         //Can never target walls or otherwise blocked tiles.
                         if (!tileList.Contains(t) && t.Passable()) { tileList.Add(t); }
                         RecursivelyGrowRange(t, tileList, depth, maxDepth);
+
+                        //If the RHTile contains a Character, we need to remove it so that it is not a valid target.
+                        //It doesneedto be added above so that we can grow from the tile however.
+                        if(t.Character!= null) { tileList.Remove(t); }
                     }
                 }
             }
@@ -670,6 +674,17 @@ namespace RiverHollow.Game_Managers
                 t.AreaTile(false);
             }
             _liAreaTiles.Clear();
+        }
+
+        /// <summary>
+        /// Compares a Character against the ActiveCharacter to see if
+        /// they are on the same team.
+        /// </summary>
+        /// <param name="actor"></param>
+        /// <returns></returns>
+        public static bool OnSameTeam(CombatActor actor)
+        {
+            return ActiveCharacter.IsAdventurer() && actor.IsAdventurer() || ActiveCharacter.IsMonster() && actor.IsMonster();
         }
         #endregion
 

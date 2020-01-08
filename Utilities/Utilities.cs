@@ -11,24 +11,32 @@ namespace RiverHollow.Misc
 {
     public class Util
     {
+        /// <summary>
+        /// Gets the total directional movement speed required to ge to the target location
+        /// </summary>
+        /// <param name="currentPos">The current position of the Actor</param>
+        /// <param name="targetPos">The end goal position for the Actor</param>
+        /// <param name="speed">The actor's movement speed</param>
+        /// <param name="direction">Reference to the direction the actor will move in</param>
         public static void GetMoveSpeed(Vector2 currentPos, Vector2 targetPos, float speed, ref Vector2 direction)
         {
             float newX = 0; float newY = 0;
-            if (targetPos.X != currentPos.X)
-            {
-                newX = (targetPos.X > currentPos.X) ? 1 : -1;
-            }
-            if (targetPos.Y != currentPos.Y)
-            {
-                newY = (targetPos.Y > currentPos.Y) ? 1 : -1;
-            }
 
+            //Determine in which direction(s) the character needs to move
+            if (targetPos.X != currentPos.X) { newX = (targetPos.X > currentPos.X) ? 1 : -1; }
+            if (targetPos.Y != currentPos.Y) { newY = (targetPos.Y > currentPos.Y) ? 1 : -1; }
+
+            //Get the absolute value of the movement
             float deltaX = Math.Abs(targetPos.X - currentPos.X);
             float deltaY = Math.Abs(targetPos.Y - currentPos.Y);
+
+            //Normalize the Vector2 to a total length of 1
             Vector2 dir = new Vector2(deltaX, deltaY);
             dir.Normalize();
             dir = dir * speed;
 
+            //If the absolute value of the X or Y movement is less than the speed then set the movement
+            //direction to the delta, otherwise, multiply the needed movement Vector2 by the Normalized movement
             direction.X = (deltaX < speed) ? newX * deltaX : newX * dir.X;
             direction.Y = (deltaY < speed) ? newY * deltaY : newY * dir.Y;
         }

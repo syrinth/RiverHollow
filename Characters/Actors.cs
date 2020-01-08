@@ -118,6 +118,7 @@ namespace RiverHollow.Actors
         protected Vector2 _vMoveTo;
         public Vector2 MoveToLocation => _vMoveTo;
         public string CurrentMapName;
+        public RHMap CurrentMap => MapManager.Maps[CurrentMapName];
         public Vector2 NewMapPosition;
         public DirectionEnum Facing = DirectionEnum.Down;
         public Texture2D Texture { get => _spriteBody.Texture; }
@@ -313,15 +314,24 @@ namespace RiverHollow.Actors
             }
         }
 
+        /// <summary>
+        /// Check the direction in which we wish to move the Actor for any possible collisions.
+        /// 
+        /// If none are found, move the Actor andthen recalculate the facing based on the moved direction.
+        /// </summary>
+        /// <param name="direction">The direction to move the Actor in pixels</param>
+        /// <param name="ignoreCollisions">Whether or not we are to ignore collisions</param>
+        /// <returns></returns>
         protected bool CheckMapForCollisionsAndMove(Vector2 direction, bool ignoreCollisions = false)
         {
             bool rv = false;
-            //Create the X and Y rectangles to test for collisions
-            Rectangle testRectX = new Rectangle((int)(Position.X + direction.X), (int)Position.Y, CollisionBox.Width, CollisionBox.Height);
-            Rectangle testRectY = new Rectangle((int)Position.X, (int)(Position.Y + direction.Y), CollisionBox.Width, CollisionBox.Height);
 
-            //If the CheckForCollisions gave the all clear, move the sprite.
-            if (MapManager.Maps[CurrentMapName].CheckForCollisions(this, testRectX, testRectY, ref direction, ignoreCollisions) && direction != Vector2.Zero)
+            //Create the X and Y rectangles to test for collisions
+            Rectangle testRectX = Util.FloatRectangle(Position.X + direction.X, Position.Y, CollisionBox.Width, CollisionBox.Height);
+            Rectangle testRectY = Util.FloatRectangle(Position.X, Position.Y + direction.Y, CollisionBox.Width, CollisionBox.Height);
+
+            //Check for collisions against the map and, if none are detected, move. Do not move if the direction Vector2 is Zero
+            if (CurrentMap.CheckForCollisions(this, testRectX, testRectY, ref direction, ignoreCollisions) && direction != Vector2.Zero)
             {
                 DetermineFacing(direction);
                 Position += new Vector2(direction.X, direction.Y);
@@ -332,13 +342,12 @@ namespace RiverHollow.Actors
         }
 
         /// <summary>
-        /// Attempts to move the Actor to the indicated target
+        /// Attempts to move the Actor to the indicated location
         /// </summary>
         /// <param name="target">The target location on the world map to move to</param>
         protected void HandleMove(Vector2 target)
         {
-            //Determines the distance that needs to be traveled fromthe current
-            //position to the target
+            //Determines the distance that needs to be traveled from the current position to the target
             Vector2 direction = Vector2.Zero;
             float deltaX = Math.Abs(target.X - this.Position.X);
             float deltaY = Math.Abs(target.Y - this.Position.Y);
@@ -349,10 +358,6 @@ namespace RiverHollow.Actors
             //If we're following a path and there's more than one tile left, we don't want to cut
             //short on individual steps, so recalculate based on the next target
             float length = direction.Length();
-            if(length < Speed)
-            {
-                int i = 0;
-            }
             if(_liTilePath.Count > 1 && length < Speed)
             {
                 _liTilePath.RemoveAt(0);
@@ -397,6 +402,7 @@ namespace RiverHollow.Actors
             _liTilePath = list;
         }
     }
+
     /// <summary>
     /// The properties and methodsthat pertain to Combat, stats, gear, etc
     /// </summary>
@@ -1600,7 +1606,7 @@ namespace RiverHollow.Actors
             if (stringData.ContainsKey("HomeMap")) {
                 CurrentMapName = stringData["HomeMap"];
                 _homeMap = CurrentMapName;
-                Position = Util.SnapToGrid(MapManager.Maps[CurrentMapName].GetCharacterSpawn("NPC" + _iIndex));
+                Position = Util.SnapToGrid(CurrentMap.GetCharacterSpawn("NPC" + _iIndex));
             }
 
             if (stringData.ContainsKey("Collection"))
@@ -1683,7 +1689,7 @@ namespace RiverHollow.Actors
             //If we failed to move the NPC to a building location, because there was none
             //Add the NPC to their home map
             if (!MoveToBuildingLocation()) { 
-                MapManager.Maps[CurrentMapName].RemoveCharacter(this);
+                CurrentMap.RemoveCharacter(this);
                 RHMap map = MapManager.Maps[_homeMap];
                 string Spawn = "NPC" + _iIndex;
 
@@ -1733,9 +1739,9 @@ namespace RiverHollow.Actors
 
                         //If the map we're currently on has the target location, pathfind to it.
                         //Otherwise, we need to pathfind to the map that does first.
-                        if (MapManager.Maps[CurrentMapName].DictionaryCharacterLayer.ContainsKey(kvp.Value))
+                        if (CurrentMap.DictionaryCharacterLayer.ContainsKey(kvp.Value))
                         {
-                            timePath = TravelManager.FindPathToLocation(ref start, MapManager.Maps[CurrentMapName].DictionaryCharacterLayer[kvp.Value], CurrentMapName);
+                            timePath = TravelManager.FindPathToLocation(ref start, CurrentMap.DictionaryCharacterLayer[kvp.Value], CurrentMapName);
                         }
                         else
                         {
@@ -1904,7 +1910,7 @@ namespace RiverHollow.Actors
             if (IsBuilding())
             {
                 rv = true;
-                MapManager.Maps[CurrentMapName].RemoveCharacter(this);
+                CurrentMap.RemoveCharacter(this);
                 RHMap map = MapManager.Maps[MapManager.HomeMap];
                 Position = Util.SnapToGrid(_buildTarget.MapPosition + _buildTarget.BuildFromPosition);
                 map.AddCharacterImmediately(this);
@@ -1975,7 +1981,7 @@ namespace RiverHollow.Actors
                 }
             }
 
-            MapManager.Maps[CurrentMapName].AddCharacter(this);
+            CurrentMap.AddCharacter(this);
         }
 
         public override void Talk(bool IsOpen = false)
@@ -2186,7 +2192,7 @@ namespace RiverHollow.Actors
 
             ImportBasics(stringData);
 
-            MapManager.Maps[CurrentMapName].AddCharacter(this);
+            CurrentMap.AddCharacter(this);
         }
 
         public override void Update(GameTime gTime)
@@ -2199,7 +2205,7 @@ namespace RiverHollow.Actors
 
         public override void RollOver()
         {
-            MapManager.Maps[CurrentMapName].RemoveCharacter(this);
+            CurrentMap.RemoveCharacter(this);
             RHMap map = MapManager.Maps[Married ? "mapManor" : _homeMap];
             string Spawn = Married ? "Spouse" : "NPC" + _iIndex;
 

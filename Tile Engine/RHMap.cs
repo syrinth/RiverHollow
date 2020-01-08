@@ -856,39 +856,50 @@ namespace RiverHollow.Tile_Engine
         }
 
         #region Collision Code
+        /// <summary>
+        /// Find every tile that could possibly cause a collision for the moving WorldActor
+        /// </summary>
+        /// <param name="actor">The moving WorldActor</param>
+        /// <param name="dir"></param>
+        /// <returns>The direction they are moving in</returns>
         private List<Rectangle> GetPossibleCollisions(WorldActor actor, Vector2 dir)
         {
             List<Rectangle> list = new List<Rectangle>();
-            Rectangle newRectangle = new Rectangle((int)(actor.CollisionBox.X + dir.X), (int)(actor.CollisionBox.Y + dir.Y), actor.CollisionBox.Width, actor.CollisionBox.Height);
+            Rectangle rEndCollision = new Rectangle((int)(actor.CollisionBox.X + dir.X), (int)(actor.CollisionBox.Y + dir.Y), actor.CollisionBox.Width, actor.CollisionBox.Height);
 
+            //The following if-blocks get the tiles that the four corners of the
+            //moved CollisionBox will be inside of, based off of the movement direction.
             if(dir.X > 0)
             {
-                AddTile(ref list, newRectangle.Right, newRectangle.Top);
-                AddTile(ref list, newRectangle.Right, newRectangle.Bottom);
+                AddTile(ref list, rEndCollision.Right, rEndCollision.Top);
+                AddTile(ref list, rEndCollision.Right, rEndCollision.Bottom);
             }
             else if(dir.X < 0)
             {
-                AddTile(ref list, newRectangle.Left, newRectangle.Top);
-                AddTile(ref list, newRectangle.Left, newRectangle.Bottom);
+                AddTile(ref list, rEndCollision.Left, rEndCollision.Top);
+                AddTile(ref list, rEndCollision.Left, rEndCollision.Bottom);
             }
 
             if (dir.Y > 0)
             {
-                AddTile(ref list, newRectangle.Left, newRectangle.Bottom);
-                AddTile(ref list, newRectangle.Right, newRectangle.Bottom);
+                AddTile(ref list, rEndCollision.Left, rEndCollision.Bottom);
+                AddTile(ref list, rEndCollision.Right, rEndCollision.Bottom);
             }
             else if (dir.Y < 0)
             {
-                AddTile(ref list, newRectangle.Left, newRectangle.Top);
-                AddTile(ref list, newRectangle.Right, newRectangle.Top);
+                AddTile(ref list, rEndCollision.Left, rEndCollision.Top);
+                AddTile(ref list, rEndCollision.Right, rEndCollision.Top);
             }
 
+            //Because RHTiles do not contain WorldActors outside of combat, we need to add each
+            //WorldActor's CollisionBox to the list, as long as the WorldActor in question is not the moving WorldActor.
             foreach(WorldActor w in _liActors)
             {
                 if (w.Active && w != actor) { list.Add(w.CollisionBox);}
             }
 
-            if(actor != PlayerManager.World && !actor.IsMonster()) {
+            //If the actor is not the Player Character, add the Player Character's CollisionBox to the list as well
+            if(actor != PlayerManager.World) {
                 list.Add(PlayerManager.World.CollisionBox);
             }
 
@@ -963,14 +974,29 @@ namespace RiverHollow.Tile_Engine
             }
 
             return rv;
-        } 
+        }
 
+        /// <summary>
+        /// Check for collisions between the given actor and any world objects. Do not perform collision detection 
+        /// at this level if we are in Combat and the WorldActor is on a Combat Map.
+        /// 
+        /// Also checks for collisions with objects that will change maps. If we connect with one, do not move by command anymore.
+        /// </summary>
+        /// <param name="c">The moving WorldActor</param>
+        /// <param name="testX">Movement along the X Axis</param>
+        /// <param name="testY">Movement along the Y Axis</param>
+        /// <param name="dir">Reference to the direction to move the WorldActor</param>
+        /// <param name="ignoreCollisions">Whether or not to check collisions</param>
+        /// <returns>False if we are to prevent movement</returns>
         public bool CheckForCollisions(WorldActor c, Rectangle testX, Rectangle testY, ref Vector2 dir, bool ignoreCollisions = false)
         {
             bool rv = true;
 
-            if (MapChange(c, testX) || MapChange(c, testY)) { return false; }
-            else if (!ignoreCollisions)
+            //Checking for a MapChange takes priority overlooking for collisions.
+            if (CheckForMapChange(c, testX) || CheckForMapChange(c, testY)) {
+                return false;
+            }
+            else if (!ignoreCollisions && !CombatManager.InCombat && c.CurrentMap.IsCombatMap)
             {
                 List<Rectangle> list = GetPossibleCollisions(c, dir);
                 ChangeDir(list, c.CollisionBox, ref dir, c.CurrentMapName);
@@ -979,25 +1005,24 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public bool MapChange(WorldActor c, Rectangle movingChar)
+        /// <summary>
+        /// Checks to see if the moving character has intersected with a MapChange object.
+        /// If so, inform the MapManager and move the WorldActor to the new map
+        /// </summary>
+        /// <param name="c">The WorldActor to check</param>
+        /// <param name="movingChar">The prospective endpoint of the movement</param>
+        /// <returns></returns>
+        public bool CheckForMapChange(WorldActor c, Rectangle movingChar)
         {
             foreach(KeyValuePair<Rectangle, string>  kvp in _dictExit)
             {
                 if (kvp.Key.Intersects(movingChar))
                 {
-                    if (IsDungeon)
-                    {
-                        if (c == PlayerManager.World)
-                        {
-                            MapManager.ChangeDungeonRoom(kvp.Value);
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        MapManager.ChangeMaps(c, this.Name, _dictExit[kvp.Key]);
-                        return true;
-                    }
+                    MapManager.ChangeMaps(c, this.Name, _dictExit[kvp.Key]);
+                    return true;
+
+                    //Unused code for now since AdventureMaps are unused
+                    //if (IsDungeon) { if (c == PlayerManager.World) { MapManager.ChangeDungeonRoom(kvp.Value); return true; } }
                 }
             }
             return false;
@@ -2460,7 +2485,8 @@ namespace RiverHollow.Tile_Engine
         }
 
         /// <summary>
-        /// For use only during Combat to see if can path through
+        /// For use only during Combat to see if can path through.
+        /// Characters can path through tiles occupied by an ally.
         /// </summary>
         /// <returns>True if not in combat, or character is null</returns>
         public bool CanPathThroughInCombat()
@@ -2468,7 +2494,7 @@ namespace RiverHollow.Tile_Engine
             bool rv = true;
             if (CombatManager.InCombat)
             {
-                rv = Character == null;
+                rv = Character == null || CombatManager.OnSameTeam(Character);
             }
             return rv;
         }
