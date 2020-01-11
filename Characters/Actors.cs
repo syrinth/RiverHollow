@@ -283,10 +283,10 @@ namespace RiverHollow.Actors
                 }
 
                 List<RHTile> cornerTiles = new List<RHTile>();
-                cornerTiles.Add(MapManager.CurrentMap.GetTileByGrid(Util.GetGridCoords(new Vector2(CollisionBox.Left, CollisionBox.Top)).ToPoint()));
-                cornerTiles.Add(MapManager.CurrentMap.GetTileByGrid(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Top)).ToPoint()));
-                cornerTiles.Add(MapManager.CurrentMap.GetTileByGrid(Util.GetGridCoords(new Vector2(CollisionBox.Left, CollisionBox.Bottom)).ToPoint()));
-                cornerTiles.Add(MapManager.CurrentMap.GetTileByGrid(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Bottom)).ToPoint()));
+                cornerTiles.Add(MapManager.CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Left, CollisionBox.Top)).ToPoint()));
+                cornerTiles.Add(MapManager.CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Top)).ToPoint()));
+                cornerTiles.Add(MapManager.CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Left, CollisionBox.Bottom)).ToPoint()));
+                cornerTiles.Add(MapManager.CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Bottom)).ToPoint()));
                 foreach (RHTile tile in cornerTiles)
                 {
                     if (tile != null && tile.WorldObject != null && tile.WorldObject.IsForageable())

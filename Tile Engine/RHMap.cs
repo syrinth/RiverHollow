@@ -272,7 +272,7 @@ namespace RiverHollow.Tile_Engine
                                 change = DirectionEnum.Right;
                             }
 
-                            tiles[0, 0] = GetTileOffGrid(mapObject.Position);
+                            tiles[0, 0] = GetTileByPixelPosition(mapObject.Position);
                             tiles[1, 0] = tiles[0, 0].GetTileByDirection(sidle);
                             tiles[2, 0] = tiles[1, 0].GetTileByDirection(sidle);
 
@@ -296,7 +296,7 @@ namespace RiverHollow.Tile_Engine
                                 {
                                     for (float y = mapObject.Position.Y; y < mapObject.Position.Y + mapObject.Size.Height; y += TileSize)
                                     {
-                                        RHTile t = GetTileOffGrid((int)x, (int)y);
+                                        RHTile t = GetTileByPixelPosition((int)x, (int)y);
                                         if (t != null && mapObject.Properties.ContainsKey("Door"))
                                         {
                                             t.SetMapObject(Util.FloatRectangle(mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height));
@@ -907,7 +907,7 @@ namespace RiverHollow.Tile_Engine
         }
         private void AddTile(ref List<Rectangle> list, int one, int two)
         {
-            RHTile tile = MapManager.CurrentMap.GetTileByGrid(Util.GetGridCoords(one, two));
+            RHTile tile = MapManager.CurrentMap.GetTileByGridCoords(Util.GetGridCoords(one, two));
             if (TileValid(tile, list)) { list.Add(tile.Rect); }
         }
         private bool TileValid(RHTile tile, List<Rectangle> list)
@@ -966,8 +966,8 @@ namespace RiverHollow.Tile_Engine
         private float CheckNudgeAllowed(float modifier, Point first, Point second, string map)
         {
             float rv = 0;
-            RHTile firstTile = MapManager.Maps[map].GetTileByGrid(Util.GetGridCoords(first));
-            RHTile secondTile = MapManager.Maps[map].GetTileByGrid(Util.GetGridCoords(second));
+            RHTile firstTile = MapManager.Maps[map].GetTileByGridCoords(Util.GetGridCoords(first));
+            RHTile secondTile = MapManager.Maps[map].GetTileByGridCoords(Util.GetGridCoords(second));
             if (firstTile != null && firstTile.Passable() && secondTile != null && secondTile.Passable())
             {
                 rv = modifier;
@@ -1039,14 +1039,14 @@ namespace RiverHollow.Tile_Engine
             }
             else if (centerDelta > 0)
             {
-                RHTile testTile = GetTileByGrid((int)(varCol + (v.Equals("Col") ? 1 : 0)), (int)(varRow + (v.Equals("Row") ? 1 : 0)));
+                RHTile testTile = GetTileByGridCoords((int)(varCol + (v.Equals("Col") ? 1 : 0)), (int)(varRow + (v.Equals("Row") ? 1 : 0)));
                 if (testTile != null && testTile.Passable()) {
                     rv = 1;
                 }
             }
             else if (centerDelta < 0)
             {
-                RHTile testTile = GetTileByGrid((int)(varCol - (v.Equals("Col") ? 1 : 0)), (int)(varRow + (v.Equals("Row") ? 1 : 0)));
+                RHTile testTile = GetTileByGridCoords((int)(varCol - (v.Equals("Col") ? 1 : 0)), (int)(varRow + (v.Equals("Row") ? 1 : 0)));
                 if (testTile != null && testTile.Passable()) { rv = -1; }
             }
 
@@ -1495,7 +1495,7 @@ namespace RiverHollow.Tile_Engine
             else{
                 bool found = false;
 
-                RHTile t = GetTileOffGrid(GraphicCursor.GetWorldMousePosition().ToPoint());
+                RHTile t = GetTileByPixelPosition(GraphicCursor.GetWorldMousePosition().ToPoint());
                 if(t != null && t.GetDoorObject() != null)
                 {
                     found = true;
@@ -1744,7 +1744,7 @@ namespace RiverHollow.Tile_Engine
             {
                 for (float y = b.BoxToEnter.Y; y < b.BoxToEnter.Y + b.BoxToEnter.Height; y += TileSize)
                 {
-                    RHTile t = GetTileOffGrid((int)x, (int)y);
+                    RHTile t = GetTileByPixelPosition((int)x, (int)y);
                     t.SetMapObject(b);
                 }
             }
@@ -1895,7 +1895,7 @@ namespace RiverHollow.Tile_Engine
             {
                 for (int j = (int)o.MapPosition.Y; j < o.MapPosition.Y + o.Height; j += TileSize)
                 {
-                    RHTile t = GetTileByGrid(Util.GetGridCoords(i, j));
+                    RHTile t = GetTileByGridCoords(Util.GetGridCoords(i, j));
                     if (t != null && !o.Tiles.Contains(t))
                     {
                         t.SetShadowObject(o);
@@ -1916,7 +1916,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     for (int y = obj.CollisionBox.Y; y < obj.CollisionBox.Y + obj.CollisionBox.Height; y += TileSize)
                     {
-                        liTiles.Add(GetTileOffGrid(x, y));
+                        liTiles.Add(GetTileByPixelPosition(x, y));
                     }
                 }
             }
@@ -2033,15 +2033,15 @@ namespace RiverHollow.Tile_Engine
             }
         }
 
-        public RHTile GetTileOffGrid(Vector2 targetLoc)
+        public RHTile GetTileByPixelPosition(Vector2 targetLoc)
         {
-            return GetTileOffGrid((int)targetLoc.X, (int)targetLoc.Y);
+            return GetTileByPixelPosition((int)targetLoc.X, (int)targetLoc.Y);
         }
-        public RHTile GetTileOffGrid(Point targetLoc)
+        public RHTile GetTileByPixelPosition(Point targetLoc)
         {
-            return GetTileOffGrid(targetLoc.X, targetLoc.Y);
+            return GetTileByPixelPosition(targetLoc.X, targetLoc.Y);
         }
-        public RHTile GetTileOffGrid(int x, int y)
+        public RHTile GetTileByPixelPosition(int x, int y)
         {
             if (x >= GetMapWidth() || x < 0) { return null; }
             if (y >= GetMapHeight() || y < 0) { return null; }
@@ -2055,15 +2055,16 @@ namespace RiverHollow.Tile_Engine
                 return null;
             }
         }
-        public RHTile GetTileByGrid(Point targetLoc)
+
+        public RHTile GetTileByGridCoords(Point targetLoc)
         {
-            return GetTileByGrid(targetLoc.ToVector2());
+            return GetTileByGridCoords(targetLoc.ToVector2());
         }
-        public RHTile GetTileByGrid(Vector2 pos)
+        public RHTile GetTileByGridCoords(Vector2 pos)
         {
-            return GetTileByGrid((int)pos.X, (int)pos.Y);
+            return GetTileByGridCoords((int)pos.X, (int)pos.Y);
         }
-        public RHTile GetTileByGrid(int x, int y)
+        public RHTile GetTileByGridCoords(int x, int y)
         {
             RHTile tile = null;
 
@@ -2222,7 +2223,7 @@ namespace RiverHollow.Tile_Engine
         {
             _map = map;
             _eSpawnType = Util.ParseEnum<SpawnConditionEnum>(obj.Properties["SpawnType"]);
-            _vSpawnPoint = map.GetTileByGrid(Util.GetGridCoords(obj.Position)).Center;
+            _vSpawnPoint = map.GetTileByGridCoords(Util.GetGridCoords(obj.Position)).Center;
         }
 
         public void Spawn()
@@ -2656,7 +2657,7 @@ namespace RiverHollow.Tile_Engine
             List<RHTile> neighbours = new List<RHTile>();
             foreach (Vector2 d in DIRS)
             {
-                RHTile tile = MyMap().GetTileByGrid(new Point((int)(_X + d.X), (int)(_Y + d.Y)));
+                RHTile tile = MyMap().GetTileByGridCoords(new Point((int)(_X + d.X), (int)(_Y + d.Y)));
                 if (tile != null && ((tile.Passable() && tile.CanPathThroughInCombat()) || tile.GetDoorObject() != null) && tile.WorldObject == null)
                 {
                     neighbours.Add(tile);
@@ -2700,26 +2701,26 @@ namespace RiverHollow.Tile_Engine
                 case DirectionEnum.Down:
                     if (this.Y < MyMap().MapHeightTiles - 1)
                     {
-                        rvTile = MyMap().GetTileByGrid(this.X, this.Y + 1);
+                        rvTile = MyMap().GetTileByGridCoords(this.X, this.Y + 1);
                     }
                     break;
                 case DirectionEnum.Left:
                     if (this.X > 0)
                     {
-                        rvTile = MyMap().GetTileByGrid(this.X - 1, this.Y);
+                        rvTile = MyMap().GetTileByGridCoords(this.X - 1, this.Y);
                     }
                     break;
                 case DirectionEnum.Up:
                     RHTile rv = null;
                     if (this.Y > 0)
                     {
-                        rvTile = MyMap().GetTileByGrid(this.X, this.Y - 1);
+                        rvTile = MyMap().GetTileByGridCoords(this.X, this.Y - 1);
                     }
                     break;
                 case DirectionEnum.Right:
                     if (this.X < MyMap().MapWidthTiles - 1)
                     {
-                        rvTile = MyMap().GetTileByGrid(this.X + 1, this.Y);
+                        rvTile = MyMap().GetTileByGridCoords(this.X + 1, this.Y);
                     }
                     break;
             }

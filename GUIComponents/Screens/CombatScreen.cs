@@ -28,6 +28,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
     {
         ActionSelectObject _gActionSelect;
         TurnOrderDisplay _gTurnOrder;
+        GUIActorInfoPanel _gActorInfoPanel;
 
         private Dictionary<FloatingText, bool> _diFTextQueue;
         private List<FloatingText> _liFloatingText;
@@ -192,12 +193,24 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override bool ProcessHover(Point mouse)
         {
             bool rv = false;
-            // rv = _sdStamina.ProcessHover(mouse);
+
+            RHTile hoverTile = MapManager.CurrentMap.GetTileByPixelPosition(GraphicCursor.GetWorldMousePosition());
+            if (hoverTile?.Character != null)
+            {
+                if(_gActorInfoPanel?.Character != hoverTile.Character)
+                {
+                    _gActorInfoPanel = new GUIActorInfoPanel(hoverTile.Character);
+                    _gActorInfoPanel.AnchorToScreen(SideEnum.BottomRight);
+                }
+            }
+            else
+            {
+                _gActorInfoPanel = null;
+            }
 
             if (!rv && _gActionSelect != null) {
                 rv = _gActionSelect.ProcessHover(mouse);
             }
-            //if (!rv) { rv = _gTurnOrder.ProcessHover(mouse); }
 
             return rv;
         }
@@ -205,9 +218,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-
-            //Draw here instead of leaving it to the controls because the
-            //characters will get drawn on top of it otherwise.
+            _gActorInfoPanel?.Draw(spriteBatch);
         }
 
         /// <summary>
@@ -311,90 +322,93 @@ namespace RiverHollow.Game_Managers.GUIObjects
     }
 
     /// <summary>
-    /// This class represents a combat actor, as well as the display information for them
+    /// This represents an info panel on the CombatScreen that will display info on characters
     /// </summary>
-    public class GUICombatActorInfo : GUIObject
+    public class GUIActorInfoPanel : GUIWindow
     {
+        GUISprite _gSprite;
         CombatActor _actor;
-        GUIStatDisplay _gHP;
-        GUIStatDisplay _gMP;
-        GUICombatActor _gCombatActor;
-        public GUISprite CharacterSprite => _gCombatActor.CharacterSprite;
-        public GUISprite CharacterWeaponSprite => _gCombatActor.CharacterWeaponSprite;
+        public CombatActor Character => _actor;
 
-        public GUICombatActorInfo(CombatActor actor)
+        public GUIActorInfoPanel(CombatActor actor) : base()
         {
             _actor = actor;
-            _gCombatActor = new GUICombatActor(actor.BodySprite);
-            AddControl(_gCombatActor);
+            _gSprite = new GUISprite(actor.BodySprite, true);
+            _gSprite.SetScale(Scale);
+            _gSprite.AnchorToInnerSide(this, SideEnum.TopLeft);
+            _gSprite.PlayAnimation(WActorBaseAnim.IdleDown);
+            AddControl(_gSprite);
 
-            SetWeapon();
-            _gHP = new GUIStatDisplay(actor.GetHP, Color.Green, 100);
-            _gHP.AnchorAndAlignToObject(_gCombatActor, SideEnum.Bottom, SideEnum.CenterX);
-            AddControl(_gHP);
+            GUIText gName = new GUIText("XXXXXXXXXXXXXXX");
+            gName.AnchorAndAlignToObject(_gSprite, SideEnum.Right, SideEnum.Top);
+            AddControl(gName);
 
-            if (actor.MaxMP > 0) { 
-                _gMP = new GUIStatDisplay(actor.GetMP, Color.LightBlue, 100);
-                _gMP.AnchorAndAlignToObject(_gHP, SideEnum.Bottom, SideEnum.Left);
-                AddControl(_gMP);
-            }
+            GUIText gHP = new GUIText(string.Format("HP: {0}/{1}", actor.CurrentHP, actor.MaxHP));
+            gHP.AnchorAndAlignToObject(gName, SideEnum.Bottom, SideEnum.Left);
+            AddControl(gHP);
 
-            Width = _gCombatActor.Width;
-            Height = _gMP.Bottom - _gCombatActor.Top;
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            if(CombatManager.CurrentPhase == CombatManager.PhaseEnum.PerformAction && CombatManager.ActiveCharacter == _actor)
+            if(actor.MaxMP > 0)
             {
-                _gHP.Show = false;
-                if (_gMP != null) { _gMP.Show = false; }
+                GUIText gMP = new GUIText(string.Format("MP: {0}/{1}", actor.CurrentMP, actor.MaxMP));
+                gMP.AnchorAndAlignToObject(gHP, SideEnum.Bottom, SideEnum.Left);
+                AddControl(gMP);
             }
-            base.Draw(spriteBatch);
 
-            _gHP.Show = true;
-            if (_gMP != null) { _gMP.Show = true; }
+            Width = TileSize * 10;
+            Height = _gSprite.Height;
+            Resize();
+            gName.SetText(actor.Name);
+
+            //SetWeapon();
+            //_gHP = new GUIStatDisplay(actor.GetHP, Color.Green, 100);
+            //_gHP.AnchorAndAlignToObject(_gSprite, SideEnum.Bottom, SideEnum.Left);
+            //AddControl(_gHP);
+            //if (actor.MaxMP > 0) { 
+            //    _gMP = new GUIStatDisplay(actor.GetMP, Color.LightBlue, 100);
+            //    _gMP.AnchorAndAlignToObject(_gHP, SideEnum.Bottom, SideEnum.Left);
+            //    AddControl(_gMP);
+            //}
         }
 
-        public void SetWeapon()
-        {
-            if (_actor.IsAdventurer())
-            {
-                ClassedCombatant adv = (ClassedCombatant)_actor;
-                CharacterClass cClass = adv.CharacterClass;
+        //public void SetWeapon()
+        //{
+        //    if (_actor.IsAdventurer())
+        //    {
+        //        ClassedCombatant adv = (ClassedCombatant)_actor;
+        //        CharacterClass cClass = adv.CharacterClass;
 
-                AnimatedSprite sprWeaponSprite = new AnimatedSprite(GameContentManager.FOLDER_ITEMS + "Combat\\Weapons\\" + cClass.WeaponType.ToString() + "\\" + adv.Weapon.GetItem().ItemID);
+        //        AnimatedSprite sprWeaponSprite = new AnimatedSprite(GameContentManager.FOLDER_ITEMS + "Combat\\Weapons\\" + cClass.WeaponType.ToString() + "\\" + adv.Weapon.GetItem().ItemID);
 
-                int xCrawl = 0;
-                int frameWidth = 32;
-                int frameHeight = 32;
-                sprWeaponSprite.AddAnimation(CActorAnimEnum.Idle, xCrawl, 0, 32, 32, cClass.IdleFrames, cClass.IdleFramesLength);
-                xCrawl += cClass.IdleFrames;
-                sprWeaponSprite.AddAnimation(CActorAnimEnum.Cast, (xCrawl * frameWidth), 0, frameWidth, frameHeight, cClass.CastFrames, cClass.CastFramesLength);
-                xCrawl += cClass.CastFrames;
-                sprWeaponSprite.AddAnimation(CActorAnimEnum.Hurt, (xCrawl * frameWidth), 0, frameWidth, frameHeight, cClass.HitFrames, cClass.HitFramesLength);
-                xCrawl += cClass.HitFrames;
-                sprWeaponSprite.AddAnimation(CActorAnimEnum.Attack, (xCrawl * frameWidth), 0, frameWidth, frameHeight, cClass.AttackFrames, cClass.AttackFramesLength);
-                xCrawl += cClass.AttackFrames;
-                sprWeaponSprite.AddAnimation(CActorAnimEnum.Critical, (xCrawl * frameWidth), 0, frameWidth, frameHeight, cClass.CriticalFrames, cClass.CriticalFramesLength);
-                xCrawl += cClass.CriticalFrames;
-                sprWeaponSprite.AddAnimation(CActorAnimEnum.KO, (xCrawl * frameWidth), 0, frameWidth, frameHeight, cClass.KOFrames, cClass.KOFramesLength);
-                xCrawl += cClass.KOFrames;
-                sprWeaponSprite.AddAnimation(CActorAnimEnum.Win, (xCrawl * frameWidth), 0, frameWidth, frameHeight, cClass.WinFrames, cClass.WinFramesLength);
-                sprWeaponSprite.SetScale(CombatManager.CombatScale);
+        //        int xCrawl = 0;
+        //        int frameWidth = 32;
+        //        int frameHeight = 32;
+        //        sprWeaponSprite.AddAnimation(CActorAnimEnum.Idle, xCrawl, 0, 32, 32, cClass.IdleFrames, cClass.IdleFramesLength);
+        //        xCrawl += cClass.IdleFrames;
+        //        sprWeaponSprite.AddAnimation(CActorAnimEnum.Cast, (xCrawl * frameWidth), 0, frameWidth, frameHeight, cClass.CastFrames, cClass.CastFramesLength);
+        //        xCrawl += cClass.CastFrames;
+        //        sprWeaponSprite.AddAnimation(CActorAnimEnum.Hurt, (xCrawl * frameWidth), 0, frameWidth, frameHeight, cClass.HitFrames, cClass.HitFramesLength);
+        //        xCrawl += cClass.HitFrames;
+        //        sprWeaponSprite.AddAnimation(CActorAnimEnum.Attack, (xCrawl * frameWidth), 0, frameWidth, frameHeight, cClass.AttackFrames, cClass.AttackFramesLength);
+        //        xCrawl += cClass.AttackFrames;
+        //        sprWeaponSprite.AddAnimation(CActorAnimEnum.Critical, (xCrawl * frameWidth), 0, frameWidth, frameHeight, cClass.CriticalFrames, cClass.CriticalFramesLength);
+        //        xCrawl += cClass.CriticalFrames;
+        //        sprWeaponSprite.AddAnimation(CActorAnimEnum.KO, (xCrawl * frameWidth), 0, frameWidth, frameHeight, cClass.KOFrames, cClass.KOFramesLength);
+        //        xCrawl += cClass.KOFrames;
+        //        sprWeaponSprite.AddAnimation(CActorAnimEnum.Win, (xCrawl * frameWidth), 0, frameWidth, frameHeight, cClass.WinFrames, cClass.WinFramesLength);
+        //        sprWeaponSprite.SetScale(CombatManager.CombatScale);
 
-                _gCombatActor.SetWeapon(sprWeaponSprite);
-            }
-        }
+        //        _gSprite.SetWeapon(sprWeaponSprite);
+        //    }
+        //}
 
         public void Reset()
         {
-            _gCombatActor.Reset();
+            _gSprite.Reset();
         }
 
         public void PlayAnimation<TEnum>(TEnum animation)
         {
-            _gCombatActor.PlayAnimation(animation);
+            _gSprite.PlayAnimation(animation);
         }
 
         public class GUICombatActor : GUIObject
@@ -406,7 +420,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             public GUICombatActor(AnimatedSprite sprite)
             {
-                _gSprite = new GUISprite(sprite);
+                _gSprite = new GUISprite(sprite, true);
                 AddControl(_gSprite);
 
                 Width = _gSprite.Width;

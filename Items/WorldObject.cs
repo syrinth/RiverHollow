@@ -1121,10 +1121,10 @@ namespace RiverHollow.WorldObjects
                 string sAdjacent = string.Empty;
 
                 //Create the adjacent tiles string
-                MakeAdjustments("N", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sName].GetTileByGrid(new Point((int)(startTile.X), (int)(startTile.Y - 1))));
-                MakeAdjustments("S", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sName].GetTileByGrid(new Point((int)(startTile.X), (int)(startTile.Y + 1))));
-                MakeAdjustments("E", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sName].GetTileByGrid(new Point((int)(startTile.X + 1), (int)(startTile.Y))));
-                MakeAdjustments("W", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sName].GetTileByGrid(new Point((int)(startTile.X - 1), (int)(startTile.Y))));
+                MakeAdjustments("N", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sName].GetTileByGridCoords(new Point((int)(startTile.X), (int)(startTile.Y - 1))));
+                MakeAdjustments("S", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sName].GetTileByGridCoords(new Point((int)(startTile.X), (int)(startTile.Y + 1))));
+                MakeAdjustments("E", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sName].GetTileByGridCoords(new Point((int)(startTile.X + 1), (int)(startTile.Y))));
+                MakeAdjustments("W", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sName].GetTileByGridCoords(new Point((int)(startTile.X - 1), (int)(startTile.Y))));
 
                 Target.SetCurrentAnimation(string.IsNullOrEmpty(sAdjacent) ? "None" : sAdjacent);
 

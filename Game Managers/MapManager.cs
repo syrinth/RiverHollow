@@ -301,11 +301,11 @@ namespace RiverHollow.Game_Managers
         }
         public static RHTile RetrieveTile(int x, int y)
         {
-            return _currentMap.GetTileByGrid(x, y);
+            return _currentMap.GetTileByGridCoords(x, y);
         }
         public static RHTile RetrieveTile(Point mouseLocation)
         {
-            return _currentMap.GetTileOffGrid(mouseLocation);
+            return _currentMap.GetTileByPixelPosition(mouseLocation);
         }
         public static void RemoveWorldObject(WorldObject o)
         {

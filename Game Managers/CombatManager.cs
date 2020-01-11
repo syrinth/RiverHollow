@@ -94,7 +94,7 @@ namespace RiverHollow.Game_Managers
 
             foreach (CombatActor c in _liMonsters)
             {
-                MapManager.CurrentMap.GetTileOffGrid(c.CollisionBox.Center).SetCombatant(c);
+                MapManager.CurrentMap.GetTileByPixelPosition(c.CollisionBox.Center).SetCombatant(c);
             }
 
             RHTile[,] tiles = MapManager.CurrentMap.DictionaryCombatTiles[oldMap];
@@ -200,7 +200,7 @@ namespace RiverHollow.Game_Managers
                 case PhaseEnum.Moving:
                     if (!ActiveCharacter.FollowingPath)
                     {
-                        RHTile newTile = MapManager.CurrentMap.GetTileOffGrid(ActiveCharacter.CollisionBox.Center);
+                        RHTile newTile = MapManager.CurrentMap.GetTileByPixelPosition(ActiveCharacter.CollisionBox.Center);
                         newTile.SetCombatant(ActiveCharacter);
 
                         Item tileItem = _liDroppedItems.Find(item => newTile.Rect.Contains(item.Position));
@@ -516,7 +516,7 @@ namespace RiverHollow.Game_Managers
                         }
                     }
 
-                    SelectedTile = MapManager.CurrentMap.GetTileOffGrid(closest);
+                    SelectedTile = MapManager.CurrentMap.GetTileByPixelPosition(closest);
 
                     //Need to unset the Combatant from the tile the monster is moving to so that
                     //we can pathfind to it
@@ -527,7 +527,7 @@ namespace RiverHollow.Game_Managers
                     SetMoveTarget();
 
                     //Reset the CombatActor's RHTile
-                    MapManager.CurrentMap.GetTileOffGrid(closest).SetCombatant(act);
+                    MapManager.CurrentMap.GetTileByPixelPosition(closest).SetCombatant(act);
                 }
             }
 
@@ -745,7 +745,7 @@ namespace RiverHollow.Game_Managers
         public static void HandleMouseTargetting()
         {
             Vector2 mouseCursor = GraphicCursor.GetWorldMousePosition();
-            RHTile tile = MapManager.CurrentMap.GetTileOffGrid(mouseCursor);
+            RHTile tile = MapManager.CurrentMap.GetTileByPixelPosition(mouseCursor);
             if (tile != null && _liLegalTiles.Contains(tile))
             {
                 SelectTile(tile);

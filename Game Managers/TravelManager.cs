@@ -275,8 +275,8 @@ namespace RiverHollow.Game_Managers
             
             List<RHTile> returnList = null;
             RHMap map = MapManager.Maps[mapName.Split(':')[0]];
-            RHTile startTile = map.GetTileOffGrid(start.ToPoint());
-            RHTile goalNode = map.GetTileOffGrid(target.ToPoint());
+            RHTile startTile = map.GetTileByPixelPosition(start.ToPoint());
+            RHTile goalNode = map.GetTileByPixelPosition(target.ToPoint());
             var frontier = new PriorityQueue<RHTile>();
             frontier.Enqueue(startTile, 0);
 
