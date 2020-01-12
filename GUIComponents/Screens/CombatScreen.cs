@@ -347,7 +347,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             gHP.AnchorAndAlignToObject(gName, SideEnum.Bottom, SideEnum.Left);
             AddControl(gHP);
 
-            if(actor.MaxMP > 0)
+            if (actor.MaxMP > 0)
             {
                 GUIText gMP = new GUIText(string.Format("MP: {0}/{1}", actor.CurrentMP, actor.MaxMP));
                 gMP.AnchorAndAlignToObject(gHP, SideEnum.Bottom, SideEnum.Left);
@@ -357,9 +357,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Width = TileSize * 10;
             Height = _gSprite.Height;
             Resize();
-            gName.SetText(actor.Name);
+            gName.SetText(actor.Name);    
+        }
 
-            //SetWeapon();
+//SetWeapon();
             //_gHP = new GUIStatDisplay(actor.GetHP, Color.Green, 100);
             //_gHP.AnchorAndAlignToObject(_gSprite, SideEnum.Bottom, SideEnum.Left);
             //AddControl(_gHP);
@@ -368,7 +369,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             //    _gMP.AnchorAndAlignToObject(_gHP, SideEnum.Bottom, SideEnum.Left);
             //    AddControl(_gMP);
             //}
-        }
 
         //public void SetWeapon()
         //{
@@ -409,41 +409,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public void PlayAnimation<TEnum>(TEnum animation)
         {
             _gSprite.PlayAnimation(animation);
-        }
-
-        public class GUICombatActor : GUIObject
-        {
-            GUISprite _gSprite;
-            GUISprite _gSpriteWeapon;
-            public GUISprite CharacterSprite => _gSprite;
-            public GUISprite CharacterWeaponSprite => _gSpriteWeapon;
-
-            public GUICombatActor(AnimatedSprite sprite)
-            {
-                _gSprite = new GUISprite(sprite, true);
-                AddControl(_gSprite);
-
-                Width = _gSprite.Width;
-                Height = _gSprite.Height;
-            }
-
-            public void SetWeapon(AnimatedSprite sprite)
-            {
-                _gSpriteWeapon = new GUISprite(sprite);
-                AddControl(_gSpriteWeapon);
-            }
-
-            public void Reset()
-            {
-                _gSprite.Reset();
-                if (_gSpriteWeapon != null) { _gSpriteWeapon.Reset(); }
-            }
-
-            public void PlayAnimation<TEnum>(TEnum animation)
-            {
-                _gSprite.PlayAnimation(animation);
-                if (_gSpriteWeapon != null) { _gSpriteWeapon.PlayAnimation(animation); }
-            }
         }
     }
 
