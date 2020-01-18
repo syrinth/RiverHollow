@@ -22,13 +22,8 @@ namespace RiverHollow.Game_Managers
     {
         public enum ZoneEnum { Forest, Mountain, Field, Swamp, Town };
         public enum DirectionEnum { Up, Down, Right, Left };
+        public enum VerbEnum { Walk, Idle, Hurt, Critical, Ground, Air, UseTool, Attack, Cast, MakeItem, Spawn, KO, Win };
 
-        public enum WActorBaseAnim { MakeItem, IdleDown, ToolDown, IdleUp, IdleLeft, IdleRight };
-        public enum WActorWalkAnim { WalkDown, WalkUp, WalkLeft, WalkRight };
-        public enum WActorJumpAnim { GroundDown, GroundUp, GroundLeft, GroundRight, AirDown, AirUp, AirLeft, AirRight };
-        public enum WActorShadow { Idle, Move };
-
-        public enum CActorAnimEnum { Spawn, Idle, Attack, Cast, Hurt, KO, Critical, Win };
         public enum WeatherAnimEnum { None, Rain, Snow };
         public enum ToolAnimEnum { Down, Up, Left, Right }
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };

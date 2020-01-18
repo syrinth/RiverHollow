@@ -486,14 +486,14 @@ namespace RiverHollow.WorldObjects
             int startX = 0;
             int startY = TileSize * row * 2;
             _mainSprite = new AnimatedSprite(@"Textures\texClothes");
-            _mainSprite.AddAnimation(WActorWalkAnim.WalkDown, startX, startY, TileSize, TileSize * 2, 3, 0.2f, true);
-            _mainSprite.AddAnimation(WActorBaseAnim.IdleDown, startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f, true);
-            _mainSprite.AddAnimation(WActorWalkAnim.WalkRight, startX + TileSize * 3, startY, TileSize, TileSize * 2, 3, 0.2f, true);
-            _mainSprite.AddAnimation(WActorBaseAnim.IdleRight, startX + TileSize * 4, startY, TileSize, TileSize * 2, 1, 0.2f, true);
-            _mainSprite.AddAnimation(WActorWalkAnim.WalkUp, startX + TileSize * 6, startY, TileSize, TileSize * 2, 3, 0.2f, true);
-            _mainSprite.AddAnimation(WActorBaseAnim.IdleUp, startX + TileSize * 7, startY,TileSize, TileSize * 2, 1, 0.2f, true);
-            _mainSprite.AddAnimation(WActorWalkAnim.WalkLeft, startX + TileSize * 9, startY,TileSize, TileSize * 2, 3, 0.2f,  true);
-            _mainSprite.AddAnimation(WActorBaseAnim.IdleLeft, startX + TileSize * 10, startY, TileSize, TileSize * 2, 1, 0.2f, true);
+            _mainSprite.AddAnimation(Util.GetActorString(VerbEnum.Walk, DirectionEnum.Down), startX, startY, TileSize, TileSize * 2, 3, 0.2f, true);
+            _mainSprite.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down), startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f, true);
+            _mainSprite.AddAnimation(Util.GetActorString(VerbEnum.Walk, DirectionEnum.Right), startX + TileSize * 3, startY, TileSize, TileSize * 2, 3, 0.2f, true);
+            _mainSprite.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Right), startX + TileSize * 4, startY, TileSize, TileSize * 2, 1, 0.2f, true);
+            _mainSprite.AddAnimation(Util.GetActorString(VerbEnum.Walk, DirectionEnum.Up), startX + TileSize * 6, startY, TileSize, TileSize * 2, 3, 0.2f, true);
+            _mainSprite.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Up), startX + TileSize * 7, startY,TileSize, TileSize * 2, 1, 0.2f, true);
+            _mainSprite.AddAnimation(Util.GetActorString(VerbEnum.Walk, DirectionEnum.Left), startX + TileSize * 9, startY,TileSize, TileSize * 2, 3, 0.2f,  true);
+            _mainSprite.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Left), startX + TileSize * 10, startY, TileSize, TileSize * 2, 1, 0.2f, true);
         }
 
         public void SetSpritePosition(Vector2 Position)

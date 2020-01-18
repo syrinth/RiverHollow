@@ -826,13 +826,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             }
                             else
                             {
-                                _currPosition?.PlayAnimation(WActorBaseAnim.IdleDown);
+                                _currPosition?.PlayAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
                                 _currPosition = sp;
                                 //Set the currentCharacter to the selected character.
                                 //Call up to the parent object to redisplay data.
                                 _currentCharacter = sp.Character;
                                 _delAction(_currentCharacter);
-                                _currPosition?.PlayAnimation(WActorWalkAnim.WalkDown);
+                                _currPosition?.PlayAnimation(Util.GetActorString(VerbEnum.Walk, DirectionEnum.Down));
                             }
 
                             break;
@@ -889,8 +889,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             _sprite.CenterOnObject(this);
                             _sprite.MoveBy(new Vector2(0, -(this.Width / 4)));
 
-                            if (currentCharacter) { _sprite.PlayAnimation(WActorWalkAnim.WalkDown); }
-                            else { _sprite.PlayAnimation(WActorBaseAnim.IdleDown); }
+                            if (currentCharacter) { _sprite.PlayAnimation(Util.GetActorString(VerbEnum.Walk, DirectionEnum.Down)); }
+                            else { _sprite.PlayAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down)); }
                             AddControl(_sprite);
                         }
                         else
@@ -907,7 +907,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     /// </summary>
                     /// <typeparam name="TEnum">Template for any enum type</typeparam>
                     /// <param name="animation">The animation enum to play</param>
-                    public void PlayAnimation<TEnum>(TEnum animation)
+                    public void PlayAnimation(string animation)
                     {
                         _sprite.PlayAnimation(animation);
                     }

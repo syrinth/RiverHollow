@@ -4,8 +4,6 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIObjects;
 using RiverHollow.SpriteAnimations;
 using System.Collections.Generic;
-
-using static RiverHollow.Game_Managers.GameManager;
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUISprite : GUIObject
@@ -51,7 +49,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _sprite.Position = Position();
         }
 
-        public virtual void PlayAnimation<TEnum>(TEnum animation)
+        public virtual void PlayAnimation(string animation)
         {
             _sprite.SetCurrentAnimation(animation);
         }
@@ -128,7 +126,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             Height = _sprBody.Height;
         }
 
-        public void PlayAnimation<TEnum>(TEnum animation)
+        public void PlayAnimation(string animation)
         {
             foreach (GUISprite g in _liSprites)
             {

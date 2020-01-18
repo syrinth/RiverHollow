@@ -336,7 +336,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gSprite = new GUISprite(actor.BodySprite, true);
             _gSprite.SetScale(Scale);
             _gSprite.AnchorToInnerSide(this, SideEnum.TopLeft);
-            _gSprite.PlayAnimation(WActorBaseAnim.IdleDown);
+            _gSprite.PlayAnimation(Util.GetActorString(VerbEnum.Walk, DirectionEnum.Down));
             AddControl(_gSprite);
 
             GUIText gName = new GUIText("XXXXXXXXXXXXXXX");
@@ -406,7 +406,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gSprite.Reset();
         }
 
-        public void PlayAnimation<TEnum>(TEnum animation)
+        public void PlayAnimation(string animation)
         {
             _gSprite.PlayAnimation(animation);
         }

@@ -222,9 +222,9 @@ namespace RiverHollow.SpriteAnimations
             }
         }
 
-        public void SetNextAnimation<TEnum>(TEnum first, TEnum next)
+        public void SetNextAnimation(string first, string next)
         {
-            _diFrameAnimations[Util.GetEnumString(first)].SetNextAnimation(Util.GetEnumString(next));
+            _diFrameAnimations[first].SetNextAnimation(next);
         }
 
         public void SetScale(int x)

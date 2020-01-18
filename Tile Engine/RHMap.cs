@@ -517,7 +517,7 @@ namespace RiverHollow.Tile_Engine
                 }
             }
 
-            SpawnMobs();
+            SpawnMonsters();
 
             //Spawns a random assortment of resources them ap will allow wherever they're allowed
             if (_diResourceSpawns.Count > 0)
@@ -557,13 +557,13 @@ namespace RiverHollow.Tile_Engine
                 tile.Rollover();
             }
 
-            SpawnMobs();
+            SpawnMonsters();
 
             CheckSpirits();
             _liItems.Clear();
         }
 
-        private void SpawnMobs()
+        private void SpawnMonsters()
         {
             //Remove all mobs associated with the spawn point.
             foreach (SpawnPoint sp in _liMonsterSpawnPoints)

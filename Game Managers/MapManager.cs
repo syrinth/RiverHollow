@@ -153,7 +153,7 @@ namespace RiverHollow.Game_Managers
         public static void FadeToNewMap(RHMap newMap, Vector2 playerPos, Building b = null)
         {
             GUIManager.BeginFadeOut();
-            PlayerManager.World.PlayFacingAnimation(false);
+            PlayerManager.World.PlayDirectionalAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
             _newMapInfo = new NewMapInfo(newMap, playerPos, b);
         }
 

@@ -112,7 +112,7 @@ namespace RiverHollow.Game_Managers
                 tiles[(int)startpos.X, (int)startpos.Y].SetCombatant(c);
                 c.Position = c.Tile.Position;
                 c.Facing = PlayerManager.World.Facing;
-                c.PlayFacingAnimation(true);
+                c.PlayDirectionalAnimation(VerbEnum.Walk);
             }
 
 
@@ -121,7 +121,7 @@ namespace RiverHollow.Game_Managers
 
             _bInCombat = true;
             PlayerManager.AllowMovement = false;
-            PlayerManager.World.PlayFacingAnimation(false);
+            PlayerManager.World.PlayDirectionalAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
 
             PlayerManager.World.SetMoveObj(Util.SnapToGrid(PlayerManager.World.Tile.Center));
         }
@@ -134,7 +134,7 @@ namespace RiverHollow.Game_Managers
                 case PhaseEnum.Setup:
                     if(PlayerManager.World.Position == PlayerManager.World.Tile.Position)
                     {
-                        PlayerManager.World.PlayFacingAnimation(false);
+                        PlayerManager.World.PlayDirectionalAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
                         ChangePhase(PhaseEnum.Charging);
                     }
                     break;
@@ -178,11 +178,11 @@ namespace RiverHollow.Game_Managers
                     }
                     else if (activeSummon != null && activeSummon.Regen && activeSummon.BodySprite.CurrentAnimation != "Cast")
                     {
-                        activeSummon.PlayAnimation(CActorAnimEnum.Cast);
+                        activeSummon.PlayDirectionalAnimation(VerbEnum.Cast);
                     }
                     else if (activeSummon.BodySprite.GetPlayCount() >= 1)
                     {
-                        activeSummon.PlayAnimation(CActorAnimEnum.Idle);
+                        activeSummon.PlayDirectionalAnimation(VerbEnum.Idle);
                         ActiveCharacter.ModifyHealth(30, false);
                         GoToMainSelection();
                     }
@@ -331,7 +331,7 @@ namespace RiverHollow.Game_Managers
                 foreach (ClassedCombatant a in _liParty)
                 {
                     a.CurrentCharge = 0;
-                    a.PlayAnimation(CActorAnimEnum.Win);
+                    a.PlayAnimation(Util.GetEnumString(VerbEnum.Win));
                 }
 
             }
@@ -422,7 +422,7 @@ namespace RiverHollow.Game_Managers
 
                 if(c.ClassLevel > startLevel) {
                     AddFloatingText(new FloatingText(c.Position, c.SpriteWidth, "LEVEL UP", Color.White));
-                    c.PlayAnimation(CActorAnimEnum.Win);
+                    c.PlayAnimation(Util.GetEnumString(VerbEnum.Win));
 
                     CombatAction newAction = c.GetCurrentSpecials().Find(action => action.ReqLevel > startLevel && action.ReqLevel <= c.ClassLevel);
                     if (newAction != null)
@@ -599,7 +599,8 @@ namespace RiverHollow.Game_Managers
 
                         //If the RHTile contains a Character, we need to remove it so that it is not a valid target.
                         //It doesneedto be added above so that we can grow from the tile however.
-                        if(t.Character!= null) { tileList.Remove(t); }
+                        //FFS do not remove an RHTile is we're choosing action targets
+                        if(t.Character!= null && CurrentPhase != PhaseEnum.ChooseActionTarget) { tileList.Remove(t); }
                     }
                 }
             }
@@ -1218,14 +1219,14 @@ namespace RiverHollow.Game_Managers
                 {
                     bool finished = false;
                     CombatActor c = CombatManager.ActiveCharacter;
-                    if (!c.IsCurrentAnimation(CActorAnimEnum.Cast))
+                    if (!c.IsDirectionalAnimation(VerbEnum.Cast))
                     {
-                        c.PlayAnimation(CActorAnimEnum.Cast);
+                        c.PlayDirectionalAnimation(VerbEnum.Cast);
                         _bDrawItem = true;
                     }
                     else if (c.AnimationPlayedXTimes(3))
                     {
-                        c.PlayAnimation(CActorAnimEnum.Idle);
+                        c.PlayDirectionalAnimation(VerbEnum.Walk);
                         _bDrawItem = false;
                         finished = true;
                     }

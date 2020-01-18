@@ -725,24 +725,24 @@ namespace RiverHollow.Actors.CombatStuff
                         }
                     }
 
-                    if (!SkillUser.IsCurrentAnimation(CActorAnimEnum.Attack))
+                    if (!SkillUser.IsCurrentAnimation(Util.GetActorString(VerbEnum.Attack, SkillUser.Facing)))
                     {
-                       SkillUser.PlayAnimation(CActorAnimEnum.Attack);
+                       SkillUser.PlayDirectionalAnimation(VerbEnum.Attack);
                     }
                     else if (SkillUser.AnimationPlayedXTimes(1))
                     {
-                        SkillUser.PlayAnimation(CActorAnimEnum.Idle);
+                        SkillUser.PlayDirectionalAnimation(VerbEnum.Walk);
                         _iCurrentAction++;
                     }
                     break;
                 case "UserCast":
-                    if (!SkillUser.IsCurrentAnimation(CActorAnimEnum.Cast))
+                    if (!SkillUser.IsDirectionalAnimation(VerbEnum.Cast))
                     {
-                        SkillUser.PlayAnimation(CActorAnimEnum.Cast);
+                        SkillUser.PlayDirectionalAnimation(VerbEnum.Cast);
                     }
                     else if (SkillUser.AnimationPlayedXTimes(2))
                     {
-                        SkillUser.PlayFacingAnimation(false);
+                        SkillUser.PlayDirectionalAnimation(VerbEnum.Walk);
                         _iCurrentAction++;
                     }
                     break;
@@ -786,13 +786,13 @@ namespace RiverHollow.Actors.CombatStuff
                         {
                             if (counteringChar != null)
                             {
-                                if (!counteringChar.IsCurrentAnimation(CActorAnimEnum.Attack))
+                                if (!counteringChar.IsDirectionalAnimation(VerbEnum.Attack))
                                 {
-                                    counteringChar.PlayAnimation(CActorAnimEnum.Attack);
+                                    counteringChar.PlayDirectionalAnimation(VerbEnum.Attack);
                                 }
                                 else if (counteringChar.AnimationPlayedXTimes(1))
                                 {
-                                    counteringChar.PlayAnimation(CActorAnimEnum.Idle);
+                                    counteringChar.PlayDirectionalAnimation(VerbEnum.Walk);
                                     SkillUser.ProcessAttack(counteringChar, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, _iCritRating, counteringChar.GetAttackElement());
                                     counteringChar = null;
                                     _bPauseActionHandler = false;
@@ -801,13 +801,13 @@ namespace RiverHollow.Actors.CombatStuff
                             }
                             else if (counteringSummon != null)
                             {
-                                if (!counteringSummon.IsCurrentAnimation(CActorAnimEnum.Attack))
+                                if (!counteringSummon.IsDirectionalAnimation(VerbEnum.Attack))
                                 {
-                                    counteringSummon.PlayAnimation(CActorAnimEnum.Attack);
+                                    counteringSummon.PlayDirectionalAnimation(VerbEnum.Attack);
                                 }
                                 else if (counteringSummon.AnimationPlayedXTimes(1))
                                 {
-                                    counteringSummon.PlayAnimation(CActorAnimEnum.Idle);
+                                    counteringSummon.PlayDirectionalAnimation(VerbEnum.Walk);
                                     SkillUser.ProcessAttack(counteringSummon, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, _iCritRating, counteringSummon.GetAttackElement());
                                     counteringSummon = null;
                                     _bPauseActionHandler = false;

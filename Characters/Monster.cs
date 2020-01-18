@@ -47,16 +47,20 @@ namespace RiverHollow.Characters
             _eActorType = ActorEnum.Monster;
             ImportBasics(data, id);
         }
+
         protected void ImportBasics(Dictionary<string, string> data, int id)
         {
             _id = id;
             _sName = GameContentManager.GetMonsterInfo(_id);
             _sTexture = GameContentManager.FOLDER_MONSTERS + data["Texture"];
 
-            float[] idle = new float[2] { 2, 0.5f };
-            float[] attack = new float[2] { 2, 0.2f };
-            float[] hurt = new float[2] { 1, 0.5f };
-            float[] cast = new float[2] { 2, 0.5f };
+            List<AnimationData> listAnimations = new List<AnimationData>();
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.Walk);
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.Attack);
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.Hurt);
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.Critical);
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.Cast);
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.KO, false);
 
             //_iWidth = int.Parse(data["Width"]);
             //_iHeight = int.Parse(data["Height"]);
@@ -89,7 +93,7 @@ namespace RiverHollow.Characters
                 }
             }
 
-            _bJump = data.ContainsKey("Jump");
+            _bJump = false; // data.ContainsKey("Jump"); Turning off jump logic for now
 
             foreach (string ability in data["Ability"].Split('-'))
             {
@@ -117,39 +121,47 @@ namespace RiverHollow.Characters
                 }
             }
 
-            if (data.ContainsKey("Idle"))
-            {
-                split = data["Idle"].Split('-');
-                idle[0] = float.Parse(split[0]);
-                idle[1] = float.Parse(split[1]);
-            }
-
-            if (data.ContainsKey("Attack"))
-            {
-                split = data["Attack"].Split('-');
-                attack[0] = float.Parse(split[0]);
-                attack[1] = float.Parse(split[1]);
-            }
-
-            if (data.ContainsKey("Hurt"))
-            {
-                split = data["Hurt"].Split('-');
-                hurt[0] = float.Parse(split[0]);
-                hurt[1] = float.Parse(split[1]);
-            }
-
-            if (data.ContainsKey("Cast"))
-            {
-                split = data["Cast"].Split('-');
-                cast[0] = float.Parse(split[0]);
-                cast[1] = float.Parse(split[1]);
-            }
-
-            LoadContent();
-            LoadCombatContent(idle, attack, hurt, cast);
-
             _iCurrentHP = MaxHP;
             _iCurrentMP = MaxMP;
+
+            LoadSpriteAnimations(listAnimations);
+        }
+
+        protected void LoadSpriteAnimations(List<AnimationData> listAnimations)
+        {
+            _spriteBody = new AnimatedSprite(_sTexture);
+            base._iWidth = TileSize;
+            base._iHeight = TileSize * 2;
+
+            foreach (AnimationData data in listAnimations)
+            {
+                if (data.Directional)
+                {
+                    AddDirectionalAnimations(ref _spriteBody, data.Verb, data.XLocation, 0, _iWidth, _iHeight, data.Frames, data.FrameSpeed, data.Frames);
+                }
+                else
+                {
+                    _spriteBody.AddAnimation(Util.GetEnumString(data.Verb), data.XLocation, 0, _iWidth, _iHeight, data.Frames, data.FrameSpeed);
+                }
+            }
+
+            //Deprecated Jump code
+            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Down), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Air, DirectionEnum.Down), xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
+            //xCrawl += 64;
+            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Up), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Up), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Air, DirectionEnum.Up), xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
+            //xCrawl += 64;
+            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Left), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Left), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Air, DirectionEnum.Left), xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
+            //xCrawl += 64;
+            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Right), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Right), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Air, DirectionEnum.Right), xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
+            //_spriteBody.SetCurrentAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
         }
 
         public override void Update(GameTime gTime)
@@ -157,7 +169,7 @@ namespace RiverHollow.Characters
             base.Update(gTime);
 
             ///When the Monster has finished playing the KO animation, let the CombatManager know so it can do any final actions
-            if (BodySprite.CurrentAnimation == Util.GetEnumString(CActorAnimEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
+            if (BodySprite.CurrentAnimation == Util.GetEnumString(VerbEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
             {
                 CombatManager.MonsterKOAnimFinished(this);
             }
@@ -166,77 +178,6 @@ namespace RiverHollow.Characters
             //if (!CombatManager.InCombat) {
             //    UpdateMovement(gTime);
             //}
-        }
-
-        public void LoadContent()
-        {
-            int xCrawl = 0;
-            _spriteBody = new AnimatedSprite(_sTexture);
-
-            if (!_bJump)
-            {
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleDown, xCrawl, 0, TileSize, TileSize * 2, 4, 0.2f);
-                _spriteBody.AddAnimation(WActorWalkAnim.WalkDown, xCrawl, 0, TileSize, TileSize * 2, 4, 0.2f);
-                xCrawl += 64;
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleUp, xCrawl, 0, TileSize, TileSize * 2, 4, 0.2f);
-                _spriteBody.AddAnimation(WActorWalkAnim.WalkUp, xCrawl, 0, TileSize, TileSize * 2, 4, 0.2f);
-                xCrawl += 64;
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleLeft, xCrawl, 0, TileSize, TileSize * 2, 4, 0.2f);
-                _spriteBody.AddAnimation(WActorWalkAnim.WalkLeft, xCrawl, 0, TileSize, TileSize * 2, 4, 0.2f);
-                xCrawl += 64;
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleRight, xCrawl, 0, TileSize, TileSize * 2, 4, 0.2f);
-                _spriteBody.AddAnimation(WActorWalkAnim.WalkRight, xCrawl, 0, TileSize, TileSize * 2, 4, 0.2f);
-                _spriteBody.SetCurrentAnimation(WActorWalkAnim.WalkDown);
-            }
-            else
-            {
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleDown, xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-                _spriteBody.AddAnimation(WActorJumpAnim.GroundDown, xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-                _spriteBody.AddAnimation(WActorJumpAnim.AirDown, xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
-                xCrawl += 64;
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleUp, xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-                _spriteBody.AddAnimation(WActorJumpAnim.GroundUp, xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-                _spriteBody.AddAnimation(WActorJumpAnim.AirUp, xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
-                xCrawl += 64;
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleLeft, xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-                _spriteBody.AddAnimation(WActorJumpAnim.GroundLeft, xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-                _spriteBody.AddAnimation(WActorJumpAnim.AirLeft, xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
-                xCrawl += 64;
-                _spriteBody.AddAnimation(WActorBaseAnim.IdleRight, xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-                _spriteBody.AddAnimation(WActorJumpAnim.GroundRight, xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-                _spriteBody.AddAnimation(WActorJumpAnim.AirRight, xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
-                _spriteBody.SetCurrentAnimation(WActorBaseAnim.IdleDown);
-            }
-            Facing = DirectionEnum.Down;
-
-            xCrawl += 64;
-            _spriteBody.AddAnimation(CActorAnimEnum.Hurt, 0, 0, 0, 0 * 2, 1, 0.2f);
-            _spriteBody.AddAnimation(CActorAnimEnum.Attack, 0, 0, 0, 0 * 2, 1, 0.2f);
-            _spriteBody.AddAnimation(CActorAnimEnum.KO, xCrawl, 0, TileSize, TileSize * 2, 3, 0.2f);
-
-            base._iWidth = _spriteBody.Width;
-            base._iHeight = _spriteBody.Height;
-        }
-
-        public void LoadCombatContent(float[] idle, float[] attack, float[] hurt, float[] cast)
-        {
-            //_spriteBody.AddAnimation(CActorAnimEnum.KO, (xCrawl * frameWidth), 0, frameWidth, frameHeight, 3, 0.2f);
-
-            //int xCrawl = 0;
-            //int frameWidth = _iWidth;
-            //int frameHeight = _iHeight;
-            //_spriteBody.AddAnimation(CActorAnimEnum.Idle, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)idle[0], idle[1]);
-            //xCrawl += (int)idle[0];
-            //_spriteBody.AddAnimation(CActorAnimEnum.Attack, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)attack[0], attack[1]);
-            //xCrawl += (int)attack[0];
-            //_spriteBody.AddAnimation(CActorAnimEnum.Hurt, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)hurt[0], hurt[1]);
-            //xCrawl += (int)hurt[0];
-            //_spriteBody.AddAnimation(CActorAnimEnum.Cast, (xCrawl * frameWidth), 0, frameWidth, frameHeight, (int)cast[0], cast[1]);
-            //xCrawl += (int)cast[0];
-
-            //_spriteBody.AddAnimation(CActorAnimEnum.KO, (xCrawl * frameWidth), 0, frameWidth, frameHeight, 3, 0.2f);
-            //base._iWidth = _spriteBody.Width;
-            //base._iHeight = _spriteBody.Height;
         }
 
         private void HandleTrait(string traitData)
@@ -301,16 +242,16 @@ namespace RiverHollow.Characters
                     switch (Facing)
                     {
                         case DirectionEnum.Down:
-                            animation = Util.GetEnumString(WActorJumpAnim.GroundDown);
+                            animation = Util.GetEnumString(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Down));
                             break;
                         case DirectionEnum.Up:
-                            animation = Util.GetEnumString(WActorJumpAnim.GroundUp);
+                            animation = Util.GetEnumString(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Up));
                             break;
                         case DirectionEnum.Left:
-                            animation = Util.GetEnumString(WActorJumpAnim.GroundLeft);
+                            animation = Util.GetEnumString(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Left));
                             break;
                         case DirectionEnum.Right:
-                            animation = Util.GetEnumString(WActorJumpAnim.GroundRight);
+                            animation = Util.GetEnumString(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Right));
                             break;
                     }
 
@@ -327,16 +268,16 @@ namespace RiverHollow.Characters
                     switch (Facing)
                     {
                         case DirectionEnum.Down:
-                            animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundDown) : Util.GetEnumString(WActorJumpAnim.AirDown);
+                            animation = jumping ? Util.GetEnumString(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Down)) : Util.GetEnumString(Util.GetActorString(VerbEnum.Air, DirectionEnum.Down));
                             break;
                         case DirectionEnum.Up:
-                            animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundUp) : Util.GetEnumString(WActorJumpAnim.AirUp); ;
+                            animation = jumping ? Util.GetEnumString(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Up)) : Util.GetEnumString(Util.GetActorString(VerbEnum.Air, DirectionEnum.Up)); ;
                             break;
                         case DirectionEnum.Left:
-                            animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundLeft) : Util.GetEnumString(WActorJumpAnim.AirLeft); ;
+                            animation = jumping ? Util.GetEnumString(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Left)) : Util.GetEnumString(Util.GetActorString(VerbEnum.Air, DirectionEnum.Left)); ;
                             break;
                         case DirectionEnum.Right:
-                            animation = jumping ? Util.GetEnumString(WActorJumpAnim.GroundRight) : Util.GetEnumString(WActorJumpAnim.AirRight); ;
+                            animation = jumping ? Util.GetEnumString(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Right)) : Util.GetEnumString(Util.GetActorString(VerbEnum.Air, DirectionEnum.Right)); ;
                             break;
                     }
                     _vJumpTo = Vector2.Zero;
@@ -360,7 +301,7 @@ namespace RiverHollow.Characters
                 if (Position.X == _vMoveTo.X && Position.Y == _vMoveTo.Y)
                 {
                     _vMoveTo = Vector2.Zero;
-                    PlayFacingAnimation(false);
+                    PlayDirectionalAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
                 }
             }
         }
@@ -382,7 +323,7 @@ namespace RiverHollow.Characters
                 {
                     _vMoveTo = Vector2.Zero;
                     _dIdleFor = 4;
-                    PlayFacingAnimation(false);
+                    PlayDirectionalAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
                     skip = true;
                 }
 
@@ -403,7 +344,7 @@ namespace RiverHollow.Characters
 
             if (direction.Length() == 0)
             {
-                PlayFacingAnimation(false);
+                PlayDirectionalAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
             }
             else
             {
@@ -414,12 +355,12 @@ namespace RiverHollow.Characters
                         if (direction.X > 0)
                         {
                             Facing = DirectionEnum.Right;
-                            animation = _bJump ? Util.GetEnumString(WActorJumpAnim.GroundRight) : Util.GetEnumString(WActorWalkAnim.WalkRight);
+                            animation = _bJump ? Util.GetActorString(VerbEnum.Ground, DirectionEnum.Right) : Util.GetActorString(VerbEnum.Walk, DirectionEnum.Right);
                         }
                         else if (direction.X < 0)
                         {
                             Facing = DirectionEnum.Left;
-                            animation = _bJump ? Util.GetEnumString(WActorJumpAnim.GroundLeft) : Util.GetEnumString(WActorWalkAnim.WalkLeft);
+                            animation = _bJump ? Util.GetActorString(VerbEnum.Ground, DirectionEnum.Left) : Util.GetActorString(VerbEnum.Walk, DirectionEnum.Left);
                         }
                     }
                     else
@@ -427,12 +368,12 @@ namespace RiverHollow.Characters
                         if (direction.Y > 0)
                         {
                             Facing = DirectionEnum.Down;
-                            animation = _bJump ? Util.GetEnumString(WActorJumpAnim.GroundDown) : Util.GetEnumString(WActorWalkAnim.WalkDown);
+                            animation = _bJump ? Util.GetActorString(VerbEnum.Ground, DirectionEnum.Down) : Util.GetActorString(VerbEnum.Walk, DirectionEnum.Down);
                         }
                         else if (direction.Y < 0)
                         {
                             Facing = DirectionEnum.Up;
-                            animation = _bJump ? Util.GetEnumString(WActorJumpAnim.GroundUp) : Util.GetEnumString(WActorWalkAnim.WalkUp);
+                            animation = _bJump ? Util.GetActorString(VerbEnum.Ground, DirectionEnum.Up) : Util.GetActorString(VerbEnum.Walk, DirectionEnum.Up);
                         }
                     }
 

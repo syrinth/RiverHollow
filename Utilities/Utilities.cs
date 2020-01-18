@@ -181,6 +181,15 @@ namespace RiverHollow.Misc
             return rv;
         }
 
+        public static string GetActorString(VerbEnum verb)
+        {
+            return GetEnumString(verb);
+        }
+        public static string GetActorString(VerbEnum verb, DirectionEnum direction)
+        {
+            return GetEnumString(verb) + Util.GetEnumString(direction);
+        }
+
         public static string[] FindTags(string data)
         {
             return data.Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);

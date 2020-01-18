@@ -3,6 +3,7 @@ using RiverHollow.Actors;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Misc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _delAction = action;
         }
 
-        public virtual void PlayAnimation<TEnum>(TEnum animation)
+        public virtual void PlayAnimation(string animation)
         {
 
         }
@@ -63,7 +64,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     _sprite.CenterOnWindow(this);
                     _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
 
-                    PlayAnimation(WActorBaseAnim.IdleDown);
+                    PlayAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
                 }
                 else
                 {
@@ -85,7 +86,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     _sprite.CenterOnWindow(this);
                     _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
 
-                    PlayAnimation(WActorBaseAnim.IdleDown);
+                    PlayAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
                 }
             }
 
@@ -97,7 +98,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 }
             }
 
-            public override void PlayAnimation<TEnum>(TEnum animation)
+            public override void PlayAnimation(string animation)
             {
                 _sprite.PlayAnimation(animation);
             }
@@ -177,7 +178,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 Controls.Clear();
                 _playerSprite = new GUICharacterSprite(_bOverwrite);
                 _playerSprite.SetScale((int)GameManager.Scale);
-                _playerSprite.PlayAnimation(WActorBaseAnim.IdleDown);
+                _playerSprite.PlayAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
 
                 Width = _playerSprite.Width + _playerSprite.Width / 3;
                 Height = _playerSprite.Height + (_winData.Edge * 2);

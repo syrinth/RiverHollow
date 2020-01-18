@@ -6,6 +6,7 @@ using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIObjects;
+using RiverHollow.Misc;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
@@ -72,7 +73,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _window.AddControl(w);
             }
             _csbSelected = (ClassSelectionBox)_liClassBoxes[0];
-            _csbSelected.PlayAnimation(WActorWalkAnim.WalkDown);
+            _csbSelected.PlayAnimation(Util.GetActorString(VerbEnum.Walk, DirectionEnum.Down));
 
             _playerDisplayBox = new PlayerDisplayBox(false);
             _playerDisplayBox.AnchorToInnerSide(_window, SideEnum.TopLeft);
@@ -242,8 +243,8 @@ namespace RiverHollow.GUIComponents.Screens
                 ClassSelectionBox csb = ((ClassSelectionBox)o);
                 if (_csbSelected != csb)
                 {
-                    csb.PlayAnimation(WActorWalkAnim.WalkDown);
-                    _csbSelected.PlayAnimation(WActorBaseAnim.IdleDown);
+                    csb.PlayAnimation(Util.GetActorString(VerbEnum.Walk, DirectionEnum.Down));
+                    _csbSelected.PlayAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
                     _csbSelected = csb;
                 }
         }

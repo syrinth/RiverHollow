@@ -2,59 +2,10 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
     <!--Key: Index>0 Value:Name/CombatTexture/XP/Str/Def/Vit/Magic/Speed/Resist/Vulnerability-->
-    <Item>
-      <Key>3</Key>
-      <Value>[Texture:FangedFur][Condition:Forest-Summer][Jump][Lvl:1][Ability:300][Loot:26 23 25]</Value>
-    </Item>
     <!--FangedFur-->
     <Item>
-      <Key>4</Key>
-      <Value>[Texture:CombatFangedFur][Width:32][Height:32][Lvl:1][Ability:300][Loot:26 23 25]</Value>
-    </Item>
-    <!--MagicMushroom-->
-    <Item>
-      <Key>5</Key>
-      <Value>[Texture:CombatMagicMushroom][Width:32][Height:32][Lvl:1][Ability:300-20][Trait:Spellcaster][Idle:4-0.6][Attack:2-0.6]</Value>
-    </Item>
-    <!--Impling-->
-    <Item>
-      <Key>6</Key>
-      <Value>[Texture:CombatImpling][Width:32][Height:32][Lvl:1][Ability:300][Trait:Speedy][Idle:2-0.9][Attack:2-0.6][Hurt:1-0.9]</Value>
-    </Item>
-    <!--Forest Impling-->
-    <Item>
-      <Key>7</Key>
-      <Value>[Texture:CombatImplingForest][Width:32][Height:32][Lvl:1][Ability:300][Trait:Speedy][Idle:2-0.9][Attack:2-0.6][Hurt:1-0.9]</Value>
-    </Item>
-    <!--Mimic-->
-    <Item>
-      <Key>8</Key>
-      <Value>[Texture:CombatMimic][Width:32][Height:32][Lvl:1][Ability:300][Idle:6-0.3][Attack:2-0.2][Hurt:1-0.8]</Value>
-    </Item>
-    <!--Muck Dweller-->
-    <Item>
-      <Key>9</Key>
-      <Value>[Texture:CombatMuckDweller][Width:32][Height:32][Lvl:1][Ability:300-20][Idle:4-0.25][Attack:2-0.1][Hurt:2-0.3][Cast:3-0.3][Loot:16]</Value>
-    </Item>
-    <!--DownGoose-->
-    <Item>
-      <Key>10</Key>
-      <Value>[Texture:CombatDownGoose][Width:32][Height:32][Lvl:1][Ability:300][Idle:4-0.15][Attack:3-0.1][Hurt:2-0.2][Loot:17]</Value>
-    </Item>
-    <!--Lef-->
-    <Item>
-      <Key>11</Key>
-      <Value>[Texture:CombatLef][Width:32][Height:32][Lvl:1][Ability:300][Idle:4-0.15][Attack:3-0.1][Loot:18]</Value>
-    </Item>
-    <!--Malice-->
-    <Item>
-      <Key>12</Key>
-      <Value>[Texture:Malice][Condition:Forest-Summer]&lt;[Lvl:1][Ability:301][Idle:4-0.15][Attack:2-0.15][Loot:18]</Value>
-    </Item>
-    <!--Skull-->
-    <Item>
-      <Key>13</Key>
-      <Value>[Texture:CombatSkull][Width:64][Height:64][Lvl:1][Ability:102][Idle:4-0.15][Attack:2-0.15][Loot:18]</Value>
+      <Key>3</Key>
+      <Value>[Texture:FangedFur][Condition:Forest-Summer][Jump][Lvl:1][Ability:300][Loot:26 23 25][Walk:0-4-.15][Attack:256-2-.15][Hurt:384-2-.15][Critical:512-2-.15][KO:640-3-.15]</Value>
     </Item>
   </Asset>
 </XnaContent>
