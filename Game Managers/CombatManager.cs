@@ -112,7 +112,7 @@ namespace RiverHollow.Game_Managers
                 tiles[(int)startpos.X, (int)startpos.Y].SetCombatant(c);
                 c.Position = c.Tile.Position;
                 c.Facing = PlayerManager.World.Facing;
-                c.PlayDirectionalAnimation(VerbEnum.Walk);
+                c.PlayAnimation(VerbEnum.Walk);
             }
 
 
@@ -121,7 +121,7 @@ namespace RiverHollow.Game_Managers
 
             _bInCombat = true;
             PlayerManager.AllowMovement = false;
-            PlayerManager.World.PlayDirectionalAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+            PlayerManager.World.PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
 
             PlayerManager.World.SetMoveObj(Util.SnapToGrid(PlayerManager.World.Tile.Center));
         }
@@ -134,7 +134,7 @@ namespace RiverHollow.Game_Managers
                 case PhaseEnum.Setup:
                     if(PlayerManager.World.Position == PlayerManager.World.Tile.Position)
                     {
-                        PlayerManager.World.PlayDirectionalAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+                        PlayerManager.World.PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
                         ChangePhase(PhaseEnum.Charging);
                     }
                     break;
@@ -178,11 +178,11 @@ namespace RiverHollow.Game_Managers
                     }
                     else if (activeSummon != null && activeSummon.Regen && activeSummon.BodySprite.CurrentAnimation != "Cast")
                     {
-                        activeSummon.PlayDirectionalAnimation(VerbEnum.Cast);
+                        activeSummon.PlayAnimation(VerbEnum.Cast);
                     }
                     else if (activeSummon.BodySprite.GetPlayCount() >= 1)
                     {
-                        activeSummon.PlayDirectionalAnimation(VerbEnum.Idle);
+                        activeSummon.PlayAnimation(VerbEnum.Idle);
                         ActiveCharacter.ModifyHealth(30, false);
                         GoToMainSelection();
                     }
@@ -331,7 +331,7 @@ namespace RiverHollow.Game_Managers
                 foreach (ClassedCombatant a in _liParty)
                 {
                     a.CurrentCharge = 0;
-                    a.PlayAnimation(Util.GetEnumString(VerbEnum.Win));
+                    a.PlayAnimation(AnimationEnum.Win);
                 }
 
             }
@@ -422,7 +422,7 @@ namespace RiverHollow.Game_Managers
 
                 if(c.ClassLevel > startLevel) {
                     AddFloatingText(new FloatingText(c.Position, c.SpriteWidth, "LEVEL UP", Color.White));
-                    c.PlayAnimation(Util.GetEnumString(VerbEnum.Win));
+                    c.PlayAnimation(AnimationEnum.Win);
 
                     CombatAction newAction = c.GetCurrentSpecials().Find(action => action.ReqLevel > startLevel && action.ReqLevel <= c.ClassLevel);
                     if (newAction != null)
@@ -1221,12 +1221,12 @@ namespace RiverHollow.Game_Managers
                     CombatActor c = CombatManager.ActiveCharacter;
                     if (!c.IsDirectionalAnimation(VerbEnum.Cast))
                     {
-                        c.PlayDirectionalAnimation(VerbEnum.Cast);
+                        c.PlayAnimation(VerbEnum.Cast);
                         _bDrawItem = true;
                     }
                     else if (c.AnimationPlayedXTimes(3))
                     {
-                        c.PlayDirectionalAnimation(VerbEnum.Walk);
+                        c.PlayAnimation(VerbEnum.Walk);
                         _bDrawItem = false;
                         finished = true;
                     }

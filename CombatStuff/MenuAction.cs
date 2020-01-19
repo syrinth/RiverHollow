@@ -248,8 +248,8 @@ namespace RiverHollow.Actors.CombatStuff
                 _fFrameSpeed = float.Parse(parse[i++]);
 
                 Sprite = new AnimatedSprite(_sAnimation);
-                Sprite.AddAnimation(GenAnimEnum.Play, 0, 0, _iAnimWidth, _iAnimHeight, _iFrames, _fFrameSpeed);
-                Sprite.SetCurrentAnimation(GenAnimEnum.Play);
+                Sprite.AddAnimation(AnimationEnum.PlayAnimation, 0, 0, _iAnimWidth, _iAnimHeight, _iFrames, _fFrameSpeed);
+                Sprite.PlayAnimation(AnimationEnum.PlayAnimation);
                 Sprite.IsAnimating = false;
                 Sprite.PlaysOnce = true;
             }
@@ -725,24 +725,24 @@ namespace RiverHollow.Actors.CombatStuff
                         }
                     }
 
-                    if (!SkillUser.IsCurrentAnimation(Util.GetActorString(VerbEnum.Attack, SkillUser.Facing)))
+                    if (!SkillUser.IsCurrentAnimation(VerbEnum.Attack))
                     {
-                       SkillUser.PlayDirectionalAnimation(VerbEnum.Attack);
+                       SkillUser.PlayAnimation(VerbEnum.Attack);
                     }
                     else if (SkillUser.AnimationPlayedXTimes(1))
                     {
-                        SkillUser.PlayDirectionalAnimation(VerbEnum.Walk);
+                        SkillUser.PlayAnimation(VerbEnum.Walk);
                         _iCurrentAction++;
                     }
                     break;
                 case "UserCast":
                     if (!SkillUser.IsDirectionalAnimation(VerbEnum.Cast))
                     {
-                        SkillUser.PlayDirectionalAnimation(VerbEnum.Cast);
+                        SkillUser.PlayAnimation(VerbEnum.Cast);
                     }
                     else if (SkillUser.AnimationPlayedXTimes(2))
                     {
-                        SkillUser.PlayDirectionalAnimation(VerbEnum.Walk);
+                        SkillUser.PlayAnimation(VerbEnum.Walk);
                         _iCurrentAction++;
                     }
                     break;
@@ -788,11 +788,11 @@ namespace RiverHollow.Actors.CombatStuff
                             {
                                 if (!counteringChar.IsDirectionalAnimation(VerbEnum.Attack))
                                 {
-                                    counteringChar.PlayDirectionalAnimation(VerbEnum.Attack);
+                                    counteringChar.PlayAnimation(VerbEnum.Attack);
                                 }
                                 else if (counteringChar.AnimationPlayedXTimes(1))
                                 {
-                                    counteringChar.PlayDirectionalAnimation(VerbEnum.Walk);
+                                    counteringChar.PlayAnimation(VerbEnum.Walk);
                                     SkillUser.ProcessAttack(counteringChar, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, _iCritRating, counteringChar.GetAttackElement());
                                     counteringChar = null;
                                     _bPauseActionHandler = false;
@@ -803,11 +803,11 @@ namespace RiverHollow.Actors.CombatStuff
                             {
                                 if (!counteringSummon.IsDirectionalAnimation(VerbEnum.Attack))
                                 {
-                                    counteringSummon.PlayDirectionalAnimation(VerbEnum.Attack);
+                                    counteringSummon.PlayAnimation(VerbEnum.Attack);
                                 }
                                 else if (counteringSummon.AnimationPlayedXTimes(1))
                                 {
-                                    counteringSummon.PlayDirectionalAnimation(VerbEnum.Walk);
+                                    counteringSummon.PlayAnimation(VerbEnum.Walk);
                                     SkillUser.ProcessAttack(counteringSummon, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, _iCritRating, counteringSummon.GetAttackElement());
                                     counteringSummon = null;
                                     _bPauseActionHandler = false;

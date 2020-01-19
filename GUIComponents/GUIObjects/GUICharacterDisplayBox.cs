@@ -31,10 +31,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _delAction = action;
         }
 
-        public virtual void PlayAnimation(string animation)
-        {
-
-        }
+        public virtual void PlayAnimation(AnimationEnum animation) { }
+        public virtual void PlayAnimation(VerbEnum verb, DirectionEnum dir) { }
 
         public class CharacterDisplayBox : NPCDisplayBox
         {
@@ -64,7 +62,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     _sprite.CenterOnWindow(this);
                     _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
 
-                    PlayAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
+                    PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
                 }
                 else
                 {
@@ -86,7 +84,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     _sprite.CenterOnWindow(this);
                     _sprite.AnchorToInnerSide(this, SideEnum.Bottom);
 
-                    PlayAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
+                    PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
                 }
             }
 
@@ -98,10 +96,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 }
             }
 
-            public override void PlayAnimation(string animation)
-            {
-                _sprite.PlayAnimation(animation);
-            }
+            public override void PlayAnimation(AnimationEnum animation) { _sprite.PlayAnimation(animation); }
+            public override void PlayAnimation(VerbEnum verb, DirectionEnum dir) { _sprite.PlayAnimation(verb, dir); }
 
             public override bool ProcessLeftButtonClick(Point mouse)
             {
@@ -178,7 +174,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 Controls.Clear();
                 _playerSprite = new GUICharacterSprite(_bOverwrite);
                 _playerSprite.SetScale((int)GameManager.Scale);
-                _playerSprite.PlayAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
+                _playerSprite.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
 
                 Width = _playerSprite.Width + _playerSprite.Width / 3;
                 Height = _playerSprite.Height + (_winData.Edge * 2);

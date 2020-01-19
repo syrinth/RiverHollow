@@ -175,7 +175,7 @@ namespace RiverHollow.Buildings
                 _sprite.AddAnimation(i.ToString(), startX, startY, _iWidth, _iHeight);
                 startX += _iWidth;
             }
-            _sprite.SetCurrentAnimation(_iBldgLvl.ToString());
+            _sprite.PlayAnimation(_iBldgLvl.ToString());
         }
 
         /// <summary>
@@ -396,7 +396,7 @@ namespace RiverHollow.Buildings
                 }
             }
             _iUpgradeTimer = _iUpgradeTime + 1;
-            _sprite.SetCurrentAnimation(_iBldgLvl.ToString());
+            _sprite.PlayAnimation(_iBldgLvl.ToString());
 
             ObjectManager.DiNPC[_iNPCBuilderID].SetBuildTarget(this);
         }
@@ -456,7 +456,7 @@ namespace RiverHollow.Buildings
                 _iBldgLvl++;
             }
 
-            _sprite.SetCurrentAnimation(_iBldgLvl.ToString());
+            _sprite.PlayAnimation(_iBldgLvl.ToString());
 
             ObjectManager.DiNPC[_iNPCBuilderID].SetBuildTarget(null);
         }

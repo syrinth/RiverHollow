@@ -60,7 +60,7 @@ namespace RiverHollow.Characters
             AddToAnimationsList(ref listAnimations, data, VerbEnum.Hurt);
             AddToAnimationsList(ref listAnimations, data, VerbEnum.Critical);
             AddToAnimationsList(ref listAnimations, data, VerbEnum.Cast);
-            AddToAnimationsList(ref listAnimations, data, VerbEnum.KO, false);
+            AddToAnimationsList(ref listAnimations, data, AnimationEnum.KO);
 
             //_iWidth = int.Parse(data["Width"]);
             //_iHeight = int.Parse(data["Height"]);
@@ -141,7 +141,7 @@ namespace RiverHollow.Characters
                 }
                 else
                 {
-                    _spriteBody.AddAnimation(Util.GetEnumString(data.Verb), data.XLocation, 0, _iWidth, _iHeight, data.Frames, data.FrameSpeed);
+                    _spriteBody.AddAnimation(data.Animation, data.XLocation, 0, _iWidth, _iHeight, data.Frames, data.FrameSpeed);
                 }
             }
 
@@ -169,7 +169,7 @@ namespace RiverHollow.Characters
             base.Update(gTime);
 
             ///When the Monster has finished playing the KO animation, let the CombatManager know so it can do any final actions
-            if (BodySprite.CurrentAnimation == Util.GetEnumString(VerbEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
+            if (IsCurrentAnimation(AnimationEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
             {
                 CombatManager.MonsterKOAnimFinished(this);
             }
@@ -238,24 +238,7 @@ namespace RiverHollow.Characters
                 {
                     move = false;
 
-                    string animation = "";
-                    switch (Facing)
-                    {
-                        case DirectionEnum.Down:
-                            animation = Util.GetEnumString(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Down));
-                            break;
-                        case DirectionEnum.Up:
-                            animation = Util.GetEnumString(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Up));
-                            break;
-                        case DirectionEnum.Left:
-                            animation = Util.GetEnumString(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Left));
-                            break;
-                        case DirectionEnum.Right:
-                            animation = Util.GetEnumString(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Right));
-                            break;
-                    }
-
-                    PlayAnimation(animation);
+                    PlayAnimation(VerbEnum.Ground);
                 }
                 else if (BodySprite.CurrentAnimation.StartsWith("Ground") && BodySprite.CurrentFrameAnimation.PlayCount < 1)
                 {
@@ -264,24 +247,8 @@ namespace RiverHollow.Characters
                 else if (!BodySprite.CurrentAnimation.StartsWith("Idle") && BodySprite.CurrentFrameAnimation.PlayCount >= 1)
                 {
                     bool jumping = BodySprite.CurrentAnimation.StartsWith("Air");
-                    string animation = "";
-                    switch (Facing)
-                    {
-                        case DirectionEnum.Down:
-                            animation = jumping ? Util.GetEnumString(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Down)) : Util.GetEnumString(Util.GetActorString(VerbEnum.Air, DirectionEnum.Down));
-                            break;
-                        case DirectionEnum.Up:
-                            animation = jumping ? Util.GetEnumString(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Up)) : Util.GetEnumString(Util.GetActorString(VerbEnum.Air, DirectionEnum.Up)); ;
-                            break;
-                        case DirectionEnum.Left:
-                            animation = jumping ? Util.GetEnumString(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Left)) : Util.GetEnumString(Util.GetActorString(VerbEnum.Air, DirectionEnum.Left)); ;
-                            break;
-                        case DirectionEnum.Right:
-                            animation = jumping ? Util.GetEnumString(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Right)) : Util.GetEnumString(Util.GetActorString(VerbEnum.Air, DirectionEnum.Right)); ;
-                            break;
-                    }
+                    PlayAnimation(jumping ? VerbEnum.Ground : VerbEnum.Air);
                     _vJumpTo = Vector2.Zero;
-                    PlayAnimation(animation);
                 }
             }
 
@@ -301,7 +268,7 @@ namespace RiverHollow.Characters
                 if (Position.X == _vMoveTo.X && Position.Y == _vMoveTo.Y)
                 {
                     _vMoveTo = Vector2.Zero;
-                    PlayDirectionalAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+                    PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
                 }
             }
         }
@@ -323,7 +290,7 @@ namespace RiverHollow.Characters
                 {
                     _vMoveTo = Vector2.Zero;
                     _dIdleFor = 4;
-                    PlayDirectionalAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+                    PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
                     skip = true;
                 }
 
@@ -344,7 +311,7 @@ namespace RiverHollow.Characters
 
             if (direction.Length() == 0)
             {
-                PlayDirectionalAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+                PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
             }
             else
             {
@@ -352,32 +319,16 @@ namespace RiverHollow.Characters
                 {
                     if (Math.Abs((int)direction.X) > Math.Abs((int)direction.Y))
                     {
-                        if (direction.X > 0)
-                        {
-                            Facing = DirectionEnum.Right;
-                            animation = _bJump ? Util.GetActorString(VerbEnum.Ground, DirectionEnum.Right) : Util.GetActorString(VerbEnum.Walk, DirectionEnum.Right);
-                        }
-                        else if (direction.X < 0)
-                        {
-                            Facing = DirectionEnum.Left;
-                            animation = _bJump ? Util.GetActorString(VerbEnum.Ground, DirectionEnum.Left) : Util.GetActorString(VerbEnum.Walk, DirectionEnum.Left);
-                        }
+                        if (direction.X > 0) { Facing = DirectionEnum.Right; }
+                        else if (direction.X < 0) { Facing = DirectionEnum.Left; }
                     }
                     else
                     {
-                        if (direction.Y > 0)
-                        {
-                            Facing = DirectionEnum.Down;
-                            animation = _bJump ? Util.GetActorString(VerbEnum.Ground, DirectionEnum.Down) : Util.GetActorString(VerbEnum.Walk, DirectionEnum.Down);
-                        }
-                        else if (direction.Y < 0)
-                        {
-                            Facing = DirectionEnum.Up;
-                            animation = _bJump ? Util.GetActorString(VerbEnum.Ground, DirectionEnum.Up) : Util.GetActorString(VerbEnum.Walk, DirectionEnum.Up);
-                        }
+                        if (direction.Y > 0) { Facing = DirectionEnum.Down; }
+                        else if (direction.Y < 0) { Facing = DirectionEnum.Up; }
                     }
 
-                    PlayAnimation(animation);
+                    PlayAnimation(_bJump ? VerbEnum.Ground : VerbEnum.Walk);
                 }
             }
         }

@@ -486,14 +486,14 @@ namespace RiverHollow.WorldObjects
             int startX = 0;
             int startY = TileSize * row * 2;
             _mainSprite = new AnimatedSprite(@"Textures\texClothes");
-            _mainSprite.AddAnimation(Util.GetActorString(VerbEnum.Walk, DirectionEnum.Down), startX, startY, TileSize, TileSize * 2, 3, 0.2f, true);
-            _mainSprite.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down), startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f, true);
-            _mainSprite.AddAnimation(Util.GetActorString(VerbEnum.Walk, DirectionEnum.Right), startX + TileSize * 3, startY, TileSize, TileSize * 2, 3, 0.2f, true);
-            _mainSprite.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Right), startX + TileSize * 4, startY, TileSize, TileSize * 2, 1, 0.2f, true);
-            _mainSprite.AddAnimation(Util.GetActorString(VerbEnum.Walk, DirectionEnum.Up), startX + TileSize * 6, startY, TileSize, TileSize * 2, 3, 0.2f, true);
-            _mainSprite.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Up), startX + TileSize * 7, startY,TileSize, TileSize * 2, 1, 0.2f, true);
-            _mainSprite.AddAnimation(Util.GetActorString(VerbEnum.Walk, DirectionEnum.Left), startX + TileSize * 9, startY,TileSize, TileSize * 2, 3, 0.2f,  true);
-            _mainSprite.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Left), startX + TileSize * 10, startY, TileSize, TileSize * 2, 1, 0.2f, true);
+            _mainSprite.AddAnimation(VerbEnum.Walk, DirectionEnum.Down, startX, startY, TileSize, TileSize * 2, 3, 0.2f, true);
+            _mainSprite.AddAnimation(VerbEnum.Idle, DirectionEnum.Down, startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f, true);
+            _mainSprite.AddAnimation(VerbEnum.Walk, DirectionEnum.Right, startX + TileSize * 3, startY, TileSize, TileSize * 2, 3, 0.2f, true);
+            _mainSprite.AddAnimation(VerbEnum.Idle, DirectionEnum.Right, startX + TileSize * 4, startY, TileSize, TileSize * 2, 1, 0.2f, true);
+            _mainSprite.AddAnimation(VerbEnum.Walk, DirectionEnum.Up, startX + TileSize * 6, startY, TileSize, TileSize * 2, 3, 0.2f, true);
+            _mainSprite.AddAnimation(VerbEnum.Idle, DirectionEnum.Up, startX + TileSize * 7, startY,TileSize, TileSize * 2, 1, 0.2f, true);
+            _mainSprite.AddAnimation(VerbEnum.Walk, DirectionEnum.Left, startX + TileSize * 9, startY,TileSize, TileSize * 2, 3, 0.2f,  true);
+            _mainSprite.AddAnimation(VerbEnum.Idle, DirectionEnum.Left, startX + TileSize * 10, startY, TileSize, TileSize * 2, 1, 0.2f, true);
         }
 
         public void SetSpritePosition(Vector2 Position)
@@ -541,9 +541,9 @@ namespace RiverHollow.WorldObjects
             _iRowTexSize = TileSize;
 
             _sprite = new AnimatedSprite(@"Textures\Items\ToolAnimations");
-            _sprite.AddAnimation(ToolAnimEnum.Down, (int)_vSourcePos.X + TileSize, (int)_vSourcePos.Y, TileSize, TileSize * 2, 3, TOOL_ANIM_SPEED);
+            _sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Down, (int)_vSourcePos.X + TileSize, (int)_vSourcePos.Y, TileSize, TileSize * 2, 3, TOOL_ANIM_SPEED);
 
-            _sprite.SetCurrentAnimation(ToolAnimEnum.Down);
+            _sprite.PlayAnimation(VerbEnum.UseTool, DirectionEnum.Down);
             _sprite.IsAnimating = true;
             _sprite.PlaysOnce = true;
         }

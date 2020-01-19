@@ -86,10 +86,8 @@ namespace RiverHollow.Actors
             _sName = text;
         }
 
-        public virtual void PlayAnimation(string animation)
-        {
-            _spriteBody.SetCurrentAnimation(animation);
-        }
+        public virtual void PlayAnimation(AnimationEnum verb) { _spriteBody.PlayAnimation(verb); }
+        public virtual void PlayAnimation(VerbEnum verb, DirectionEnum action) { _spriteBody.PlayAnimation(verb, action); }
 
         /// <summary>
         /// Adds a set of animations to the indicated Sprite for the given verb for each direction.
@@ -108,13 +106,13 @@ namespace RiverHollow.Actors
         protected int AddDirectionalAnimations(ref AnimatedSprite sprite, VerbEnum verb, int firstX, int firstY, int width, int height, int frames, float frameSpeed, int increment, bool pingpong = false)
         {
             int xCrawl = 0;
-            sprite.AddAnimation(Util.GetActorString(verb, DirectionEnum.Down), firstX + xCrawl, firstY, width, height, frames, frameSpeed, pingpong);
+            sprite.AddAnimation(verb, DirectionEnum.Down, firstX + xCrawl, firstY, width, height, frames, frameSpeed, pingpong);
             xCrawl += width * increment;
-            sprite.AddAnimation(Util.GetActorString(verb, DirectionEnum.Right), firstX + xCrawl, firstY, width, height, frames, frameSpeed, pingpong);
+            sprite.AddAnimation(verb, DirectionEnum.Right, firstX + xCrawl, firstY, width, height, frames, frameSpeed, pingpong);
             xCrawl += width * increment;
-            sprite.AddAnimation(Util.GetActorString(verb, DirectionEnum.Up), firstX + xCrawl, firstY, width, height, frames, frameSpeed, pingpong);
+            sprite.AddAnimation(verb, DirectionEnum.Up, firstX + xCrawl, firstY, width, height, frames, frameSpeed, pingpong);
             xCrawl += width * increment;
-            sprite.AddAnimation(Util.GetActorString(verb, DirectionEnum.Left), firstX + xCrawl, firstY, width, height, frames, frameSpeed, pingpong);
+            sprite.AddAnimation(verb, DirectionEnum.Left, firstX + xCrawl, firstY, width, height, frames, frameSpeed, pingpong);
             xCrawl += width * increment;
 
             return xCrawl;
@@ -122,7 +120,8 @@ namespace RiverHollow.Actors
 
         public bool Contains(Point x) { return _spriteBody.BoundingBox.Contains(x); }
         public bool AnimationFinished() { return _spriteBody.PlayedOnce && _spriteBody.IsAnimating; }
-        public bool IsCurrentAnimation(string val) { return _spriteBody.CurrentAnimation.Equals(val); }
+        public bool IsCurrentAnimation(AnimationEnum val) { return _spriteBody.IsCurrentAnimation(val); }
+        public bool IsCurrentAnimation(VerbEnum verb, DirectionEnum dir) { return _spriteBody.IsCurrentAnimation(verb, dir); }
         public bool IsAnimating() { return _spriteBody.IsAnimating; }
         public bool AnimationPlayedXTimes(int x) { return _spriteBody.GetPlayCount() >= x; }
 
@@ -138,11 +137,18 @@ namespace RiverHollow.Actors
         /// <param name="list">List to add to</param>
         /// <param name="data">Data to read form</param>
         /// <param name="verb">Verb to add</param>
-        private void AddToAnimationsList(ref List<AnimationData> list, Dictionary<string, string> data, VerbEnum verb, bool directional = true)
+        protected void AddToAnimationsList(ref List<AnimationData> list, Dictionary<string, string> data, VerbEnum verb, bool directional = true)
         {
             if (data.ContainsKey(Util.GetEnumString(verb)))
             {
                 list.Add(new AnimationData(data[Util.GetEnumString(verb)], verb, directional));
+            }
+        }
+        protected void AddToAnimationsList(ref List<AnimationData> list, Dictionary<string, string> data, AnimationEnum animation)
+        {
+            if (data.ContainsKey(Util.GetEnumString(animation)))
+            {
+                list.Add(new AnimationData(data[Util.GetEnumString(animation)], animation));
             }
         }
 
@@ -150,6 +156,7 @@ namespace RiverHollow.Actors
         protected class AnimationData
         {
             VerbEnum _eVerb;
+            AnimationEnum _eAnim;
             bool _bDirectional;
             int _iXLocation;
             int _iFrames;
@@ -160,15 +167,27 @@ namespace RiverHollow.Actors
             public float FrameSpeed => _fFrameSpeed;
             public bool Directional => _bDirectional;
             public VerbEnum Verb => _eVerb;
+            public AnimationEnum Animation => _eAnim;
 
             public AnimationData(string value, VerbEnum verb, bool directional)
+            {
+                _eVerb = verb;
+                _bDirectional = directional;
+                StoreData(value);
+            }
+
+            public AnimationData(string value, AnimationEnum anim)
+            {
+                _eAnim = anim;
+                StoreData(value);
+            }
+
+            public void StoreData(string value)
             {
                 string[] splitString = value.Split('-');
                 _iXLocation = int.Parse(splitString[0]);
                 _iFrames = int.Parse(splitString[1]);
                 _fFrameSpeed = float.Parse(splitString[2]);
-                _bDirectional = directional;
-                _eVerb = verb;
             }
         }
         #endregion
@@ -186,7 +205,6 @@ namespace RiverHollow.Actors
         public RHMap CurrentMap => MapManager.Maps[CurrentMapName];
         public Vector2 NewMapPosition;
         public DirectionEnum Facing = DirectionEnum.Down;
-        public Texture2D Texture { get => _spriteBody.Texture; }
         public Point CharCenter => GetRectangle().Center;
 
         public override Vector2 Position
@@ -275,7 +293,7 @@ namespace RiverHollow.Actors
             if (_bHover) { AddDirectionalAnimations(ref sprite, VerbEnum.Idle, startX, startY, TileSize, height, 3, 0.2f, 3, true); }
             else { AddDirectionalAnimations(ref sprite, VerbEnum.Idle, startX + TileSize, startY, TileSize, height, 1, 0.2f, 3, true); }
 
-            sprite.SetCurrentAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
+            sprite.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
         }
 
         public virtual bool CollisionContains(Point mouse)
@@ -291,7 +309,7 @@ namespace RiverHollow.Actors
         public void SetWalkingDir(DirectionEnum d)
         {
             Facing = d;
-            _spriteBody.SetCurrentAnimation(Util.GetActorString(VerbEnum.Walk, Facing));
+            _spriteBody.PlayAnimation(VerbEnum.Walk, Facing);
         }
 
         public virtual void DetermineFacing(Vector2 direction)
@@ -326,7 +344,7 @@ namespace RiverHollow.Actors
                 }
             }
 
-            PlayDirectionalAnimation((walk || CombatManager.InCombat) ? VerbEnum.Walk : VerbEnum.Idle);
+            PlayAnimation((walk || CombatManager.InCombat) ? VerbEnum.Walk : VerbEnum.Idle);
         }
 
         /// <summary>
@@ -336,22 +354,15 @@ namespace RiverHollow.Actors
         /// <returns>Returns true if the current animation is the verb and facing</returns>
         public bool IsDirectionalAnimation(VerbEnum verb)
         {
-            return IsCurrentAnimation(Util.GetActorString(VerbEnum.Cast, Facing));
+            return IsCurrentAnimation(verb, Facing);
         }
 
         /// <summary>
         /// Constructs the proper animation string for the current facing.
         /// During Combat, the Idle animation is the Walk animation.
         /// </summary>
-        /// <param name="walk">Whether or not to play the walk animation</param>
-        public void PlayDirectionalAnimation(VerbEnum verb)
-        {
-            string animation = Util.GetActorString(verb, Facing);
-            if (_spriteBody.CurrentAnimation != animation)
-            {
-                PlayAnimation(animation);
-            }
-        }
+        public void PlayAnimation(VerbEnum verb) { PlayAnimation(verb, Facing); }
+        public bool IsCurrentAnimation(VerbEnum verb) { return _spriteBody.IsCurrentAnimation(verb, Facing); }
 
         /// <summary>
         /// Check the direction in which we wish to move the Actor for any possible collisions.
@@ -568,24 +579,24 @@ namespace RiverHollow.Actors
             base.Update(gTime);
 
             //Finished being hit, determine action
-            if (IsCurrentAnimation(Util.GetActorString(VerbEnum.Hurt, Facing)) && BodySprite.GetPlayCount() >= 1)
+            if (IsCurrentAnimation(VerbEnum.Hurt) && BodySprite.GetPlayCount() >= 1)
             {
                 if (CurrentHP == 0) {
                     KO();
                 }
-                else if (IsCritical()) { PlayAnimation(Util.GetActorString(VerbEnum.Critical, Facing)); }
-                else { PlayAnimation(Util.GetActorString(VerbEnum.Walk, Facing)); }
+                else if (IsCritical()) { PlayAnimation(VerbEnum.Critical); }
+                else { PlayAnimation(VerbEnum.Walk); }
             }
 
-            if (!_diConditions[ConditionEnum.KO] && IsCurrentAnimation(Util.GetActorString(VerbEnum.KO)))
+            if (!_diConditions[ConditionEnum.KO] && IsCurrentAnimation(AnimationEnum.KO))
             {
-                if (IsCritical()) { PlayAnimation(Util.GetActorString(VerbEnum.Critical, Facing)); }
-                else { PlayAnimation(Util.GetActorString(VerbEnum.Walk, Facing)); }
+                if (IsCritical()) { PlayAnimation(VerbEnum.Critical); }
+                else { PlayAnimation(VerbEnum.Walk); }
             }
 
-            if (IsCurrentAnimation(Util.GetActorString(VerbEnum.Critical, Facing)) && !IsCritical())
+            if (IsCurrentAnimation(VerbEnum.Critical) && !IsCritical())
             {
-                PlayAnimation(Util.GetActorString(VerbEnum.Walk, Facing));
+                PlayAnimation(VerbEnum.Walk);
             }
 
             _linkedSummon?.Update(gTime);
@@ -607,7 +618,7 @@ namespace RiverHollow.Actors
                             if (_dCooldown == 0)
                             {
                                 Facing = DirectionEnum.Left;
-                                PlayAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Left));
+                                PlayAnimation(VerbEnum.Idle, DirectionEnum.Left);
                                 _dCooldown = 3;
                                 PlayerManager.AllowMovement = true;
                             }
@@ -628,7 +639,7 @@ namespace RiverHollow.Actors
         public virtual void KO()
         {
             CombatManager.RemoveKnockedOutCharacter(this);
-            PlayAnimation(Util.GetEnumString(VerbEnum.KO));
+            PlayAnimation(AnimationEnum.KO);
         }
 
         /// <summary>
@@ -732,7 +743,7 @@ namespace RiverHollow.Actors
                 //Checks that the current HP is greater than the amount of damage dealt
                 //If not, just remove the current HP so that we don't go negative.
                 _iCurrentHP -= (_iCurrentHP - iValue >= 0) ? iValue : _iCurrentHP;
-                Tile.Character.PlayAnimation(Util.GetActorString(VerbEnum.Hurt, Facing));
+                Tile.Character.PlayAnimation(VerbEnum.Hurt);
 
                 //If the character goes to 0 hp, give them the KO status and unlink any summons
                 if (_iCurrentHP == 0)
@@ -1153,9 +1164,9 @@ namespace RiverHollow.Actors
             int frameHeight = 34;
             xCrawl += AddDirectionalAnimations(ref _spriteBody, VerbEnum.Cast, 0, 0, frameWidth, frameHeight, _class.CastFrames, _class.CastFramesLength, _class.IdleFrames, true);
 
-            _spriteBody.AddAnimation(Util.GetEnumString(VerbEnum.KO), (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.KOFrames, _class.KOFramesLength);
+            _spriteBody.AddAnimation(AnimationEnum.KO, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.KOFrames, _class.KOFramesLength);
             xCrawl += _class.KOFrames;
-            _spriteBody.AddAnimation(Util.GetEnumString(VerbEnum.Win), (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.WinFrames, _class.WinFramesLength);
+            _spriteBody.AddAnimation(AnimationEnum.Win, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.WinFrames, _class.WinFramesLength);
             //_spriteBody.AddAnimation(CActorAnimEnum.Idle, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.IdleFrames, _class.IdleFramesLength);
             //xCrawl += _class.IdleFrames;
             //_spriteBody.AddAnimation(CActorAnimEnum.Cast, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.CastFrames, _class.CastFramesLength);
@@ -1192,7 +1203,7 @@ namespace RiverHollow.Actors
             }
         }
 
-        public override void PlayAnimation(string animation)
+        public override void PlayAnimation(AnimationEnum animation)
         {
             base.PlayAnimation(animation);
         }
@@ -1365,7 +1376,7 @@ namespace RiverHollow.Actors
                     }
                 }
 
-                PlayDirectionalAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+                PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
             }
 
             text = Util.ProcessText(text, _sName);
@@ -2542,7 +2553,7 @@ namespace RiverHollow.Actors
         public void ProcessChosenItem(int itemID)
         {
             _iCurrentlyMaking = _diCrafting[itemID];
-            _spriteBody.SetCurrentAnimation(Util.GetEnumString(VerbEnum.MakeItem));
+            _spriteBody.PlayAnimation(AnimationEnum.PlayAnimation);
         }
 
         public int TakeItem()
@@ -2707,7 +2718,7 @@ namespace RiverHollow.Actors
 
             base.LoadClassedCharData(data.advData);
 
-            if (_iCurrentlyMaking != -1) {_spriteBody.SetCurrentAnimation(Util.GetEnumString(VerbEnum.MakeItem)); }
+            if (_iCurrentlyMaking != -1) {_spriteBody.PlayAnimation(AnimationEnum.PlayAnimation); }
 
             if (_eState == AdventurerStateEnum.InParty) {
                 PlayerManager.AddToParty(this);
@@ -2765,7 +2776,7 @@ namespace RiverHollow.Actors
         public override void AddDefaultAnimations(ref AnimatedSprite sprite, int height, string texture, int startX, int startY)
         {
             base.AddDefaultAnimations(ref sprite, height, texture, startX, startY);
-            sprite.AddAnimation(Util.GetActorString(VerbEnum.UseTool, DirectionEnum.Down), startX + TileSize * 12, startY, TileSize, height, 3, TOOL_ANIM_SPEED);
+            sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Down, startX + TileSize * 12, startY, TileSize, height, 3, TOOL_ANIM_SPEED);
             sprite.SetNextAnimation(Util.GetActorString(VerbEnum.UseTool, DirectionEnum.Down), Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
         }
 
@@ -2891,14 +2902,23 @@ namespace RiverHollow.Actors
             if (Hat != null) { Hat.Sprite.MoveBy(x, y); }
         }
 
-        public override void PlayAnimation(string anim)
+        public override void PlayAnimation(AnimationEnum anim)
         {
-            _spriteBody.SetCurrentAnimation(anim);
-            _spriteEyes.SetCurrentAnimation(anim);
-            _spriteHair.SetCurrentAnimation(anim);
+            _spriteBody.PlayAnimation(anim);
+            _spriteEyes.PlayAnimation(anim);
+            _spriteHair.PlayAnimation(anim);
 
-            if (_chest != null) { _chest.Sprite.SetCurrentAnimation(anim); }
-            if (Hat != null) { Hat.Sprite.SetCurrentAnimation(anim); }
+            if (_chest != null) { _chest.Sprite.PlayAnimation(anim); }
+            if (Hat != null) { Hat.Sprite.PlayAnimation(anim); }
+        }
+        public override void PlayAnimation(VerbEnum verb, DirectionEnum dir)
+        {
+            _spriteBody.PlayAnimation(verb, dir);
+            _spriteEyes.PlayAnimation(verb, dir);
+            _spriteHair.PlayAnimation(verb, dir);
+
+            if (_chest != null) { _chest.Sprite.PlayAnimation(verb, dir); }
+            if (Hat != null) { Hat.Sprite.PlayAnimation(verb, dir); }
         }
 
         public void SetScale(int scale = 1)
@@ -2924,7 +2944,7 @@ namespace RiverHollow.Actors
 
                 //MAR AWKWARD
                 c.Sprite.Position = _spriteBody.Position;
-                c.Sprite.SetCurrentAnimation(_spriteBody.CurrentAnimation);
+                c.Sprite.PlayAnimation(_spriteBody.CurrentAnimation);
                 c.Sprite.SetDepthMod(0.004f);
             }
         }
@@ -2970,8 +2990,8 @@ namespace RiverHollow.Actors
         public override void LoadContent(string textureToLoad)
         {
             _spriteBody = new AnimatedSprite(textureToLoad);
-            _spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down), 0, 0, 16, 18, 2, 0.6f);
-            _spriteBody.SetCurrentAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
+            _spriteBody.AddAnimation(VerbEnum.Idle, DirectionEnum.Down, 0, 0, 16, 18, 2, 0.6f);
+            _spriteBody.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
 
             _iWidth = _spriteBody.Width;
             _iHeight = _spriteBody.Height;
@@ -3102,7 +3122,7 @@ namespace RiverHollow.Actors
             int startY = 0;
 
             _spriteBody = new AnimatedSprite(@"Textures\Actors\Summons\" + stringData["Texture"]);
-            _spriteBody.AddAnimation(Util.GetEnumString(VerbEnum.Spawn), startX, startY, iFrameSize, iFrameSize, int.Parse(spawn[0]), float.Parse(spawn[1]));
+            _spriteBody.AddAnimation(AnimationEnum.Spawn, startX, startY, iFrameSize, iFrameSize, int.Parse(spawn[0]), float.Parse(spawn[1]));
 
             //startX += int.Parse(spawn[0]) * iFrameSize;
             //_spriteBody.AddAnimation(CActorAnimEnum.Idle, startX, startY, iFrameSize, iFrameSize, int.Parse(idle[0]), float.Parse(idle[1]));
@@ -3111,8 +3131,8 @@ namespace RiverHollow.Actors
             //startX += int.Parse(cast[0]) * iFrameSize;
             //_spriteBody.AddAnimation(CActorAnimEnum.Attack, startX, startY, iFrameSize, iFrameSize, int.Parse(attack[0]), float.Parse(attack[1]));
 
-            _spriteBody.SetNextAnimation(Util.GetEnumString(VerbEnum.Spawn), Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
-            _spriteBody.SetCurrentAnimation(Util.GetEnumString(VerbEnum.Spawn));
+            _spriteBody.SetNextAnimation(Util.GetEnumString(AnimationEnum.Spawn), Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
+            _spriteBody.PlayAnimation(AnimationEnum.Spawn);
             _spriteBody.SetScale(5);
         }
 

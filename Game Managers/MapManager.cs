@@ -153,7 +153,7 @@ namespace RiverHollow.Game_Managers
         public static void FadeToNewMap(RHMap newMap, Vector2 playerPos, Building b = null)
         {
             GUIManager.BeginFadeOut();
-            PlayerManager.World.PlayDirectionalAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+            PlayerManager.World.PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
             _newMapInfo = new NewMapInfo(newMap, playerPos, b);
         }
 
@@ -353,7 +353,7 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void SetWeather(WeatherAnimEnum weather)
+        public static void SetWeather(AnimationEnum weather)
         {
             foreach(Weather w in _liWeather)
             {
@@ -394,14 +394,14 @@ namespace RiverHollow.Game_Managers
                 {
                     Position = new Vector2(x, y)
                 };
-                _sprite.AddAnimation(WeatherAnimEnum.Rain, 0, 0, 160, 160, 2, 0.2f);
-                _sprite.AddAnimation(WeatherAnimEnum.Snow, 0, 160, 160, 160, 3, 0.2f);
+                _sprite.AddAnimation(AnimationEnum.Rain, 0, 0, 160, 160, 2, 0.2f);
+                _sprite.AddAnimation(AnimationEnum.Snow, 0, 160, 160, 160, 3, 0.2f);
                 _sprite.IsAnimating = false;
             }
 
-            public void SetWeather(WeatherAnimEnum weather)
+            public void SetWeather(AnimationEnum weather)
             {
-                _sprite.SetCurrentAnimation(weather);
+                _sprite.PlayAnimation(weather);
                 _sprite.IsAnimating = true;
             }
 

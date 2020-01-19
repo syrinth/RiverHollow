@@ -22,12 +22,12 @@ namespace RiverHollow.Game_Managers
     {
         public enum ZoneEnum { Forest, Mountain, Field, Swamp, Town };
         public enum DirectionEnum { Up, Down, Right, Left };
-        public enum VerbEnum { Walk, Idle, Hurt, Critical, Ground, Air, UseTool, Attack, Cast, MakeItem, Spawn, KO, Win };
+        public enum CardinalDirectionsEnum { North, NorthEast, East, SouthEast, South,  SouthWest, West, NorthWest};
+        public enum VerbEnum { Walk, Idle, Hurt, Critical, Ground, Air, UseTool, Attack, Cast, MakeItem };
+        public enum AnimationEnum { None, Spawn, KO, Win, PlayAnimation, Rain, Snow, ObjectIdle };
 
-        public enum WeatherAnimEnum { None, Rain, Snow };
         public enum ToolAnimEnum { Down, Up, Left, Right }
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
-        public enum GenAnimEnum { Play };
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
 
         public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade};

@@ -92,18 +92,19 @@ namespace RiverHollow.WorldObjects
             if (stringData.ContainsKey("Idle"))
             {
                 string[] idleSplit = stringData["Idle"].Split('-');
-                _sprite.AddAnimation(WorldObjAnimEnum.Idle, startX, startY, _iWidth, _iHeight, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
+                _sprite.AddAnimation(AnimationEnum.ObjectIdle, startX, startY, _iWidth, _iHeight, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
             }
             else
             {
-                _sprite.AddAnimation(WorldObjAnimEnum.Idle, startX, startY, _iWidth, _iHeight);
+                _sprite.AddAnimation(AnimationEnum.ObjectIdle, startX, startY, _iWidth, _iHeight);
             }
 
-            if (stringData.ContainsKey("Gathered"))
-            {
-                string[] gatherSplit = stringData["Gathered"].Split('-');
-                _sprite.AddAnimation(WorldObjAnimEnum.Gathered, startX, startY, _iWidth, _iHeight, int.Parse(gatherSplit[0]), float.Parse(gatherSplit[1]));
-            }
+            //MAR
+            //if (stringData.ContainsKey("Gathered"))
+            //{
+            //    string[] gatherSplit = stringData["Gathered"].Split('-');
+            //    _sprite.AddAnimation(WorldObjAnimEnum.Gathered, startX, startY, _iWidth, _iHeight, int.Parse(gatherSplit[0]), float.Parse(gatherSplit[1]));
+            //}
             _sprite.Position = _vMapPosition;
         }
 
@@ -327,49 +328,49 @@ namespace RiverHollow.WorldObjects
         }
     }
 
-    public class EchoNode : Destructible
-    {
-        public EchoNode(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
-        {
-            Type = ObjectType.Destructible;
-            _eToolType = ToolEnum.Lantern;
-            _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
+    //public class EchoNode : Destructible
+    //{
+    //    public EchoNode(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
+    //    {
+    //        Type = ObjectType.Destructible;
+    //        _eToolType = ToolEnum.Lantern;
+    //        _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
 
-            string[] imageSplit = stringData["Image"].Split('-');
-            string[] idleSplit = stringData["Idle"].Split('-');
-            string[] gatheredSplit = stringData["Gathered"].Split('-');
+    //        string[] imageSplit = stringData["Image"].Split('-');
+    //        string[] idleSplit = stringData["Idle"].Split('-');
+    //        string[] gatheredSplit = stringData["Gathered"].Split('-');
 
-            int startX = int.Parse(imageSplit[0]);
-            int startY = int.Parse(imageSplit[1]);
-            _sprite.AddAnimation(WorldObjAnimEnum.Idle, startX, startY, TileSize, TileSize, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
-            _sprite.AddAnimation(WorldObjAnimEnum.Gathered, startX + (int.Parse(idleSplit[0]) * TileSize), startY, TileSize, TileSize, int.Parse(gatheredSplit[0]), float.Parse(gatheredSplit[1]));
+    //        int startX = int.Parse(imageSplit[0]);
+    //        int startY = int.Parse(imageSplit[1]);
+    //        _sprite.AddAnimation(AnimationEnum.ObjectIdle, startX, startY, TileSize, TileSize, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
+    //        _sprite.AddAnimation(WorldObjAnimEnum.Gathered, startX + (int.Parse(idleSplit[0]) * TileSize), startY, TileSize, TileSize, int.Parse(gatheredSplit[0]), float.Parse(gatheredSplit[1]));
 
-            _sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
-            _sprite.IsAnimating = true;
-        }
+    //        _sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
+    //        _sprite.IsAnimating = true;
+    //    }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            _sprite.Draw(spriteBatch);
-        }
+    //    public override void Draw(SpriteBatch spriteBatch)
+    //    {
+    //        _sprite.Draw(spriteBatch);
+    //    }
 
-        public override void Update(GameTime gTime)
-        {
-            _sprite.Update(gTime);
-        }
+    //    public override void Update(GameTime gTime)
+    //    {
+    //        _sprite.Update(gTime);
+    //    }
 
-        public override bool DealDamage(int dmg)
-        {
-            bool rv = false;
-            rv = base.DealDamage(dmg);
+    //    public override bool DealDamage(int dmg)
+    //    {
+    //        bool rv = false;
+    //        rv = base.DealDamage(dmg);
 
-            if (rv)
-            {
-                _sprite.SetCurrentAnimation(WorldObjAnimEnum.Gathered);
-            }
-            return rv;
-        }
-    }
+    //        if (rv)
+    //        {
+    //            //_sprite.SetCurrentAnimation(WorldObjAnimEnum.Gathered);
+    //        }
+    //        return rv;
+    //    }
+    //}
 
     public class Light : WorldItem
     {
@@ -385,9 +386,9 @@ namespace RiverHollow.WorldObjects
 
             int startX = int.Parse(imageSplit[0]);
             int startY = int.Parse(imageSplit[1]);
-            _sprite.AddAnimation(WorldObjAnimEnum.Idle, startX, startY, TileSize, TileSize, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
+            _sprite.AddAnimation(AnimationEnum.ObjectIdle, startX, startY, TileSize, TileSize, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
 
-            _sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
+            _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
             _sprite.IsAnimating = true;
         }
     }
@@ -424,7 +425,7 @@ namespace RiverHollow.WorldObjects
             {
                 DoorType = EnumDoorType.Mob;
                 _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
-                _sprite.AddAnimation(WorldObjAnimEnum.Idle, 64, 0, 16, 32);
+                _sprite.AddAnimation(AnimationEnum.ObjectIdle, 64, 0, 16, 32);
             }
 
             public override void ReadInscription() {
@@ -448,7 +449,7 @@ namespace RiverHollow.WorldObjects
             {
                 DoorType = EnumDoorType.Key;
                 _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
-                _sprite.AddAnimation(WorldObjAnimEnum.Idle, 64, 0, 16, 32);
+                _sprite.AddAnimation(AnimationEnum.ObjectIdle, 64, 0, 16, 32);
             }
 
             public void SetKey(int value)
@@ -483,7 +484,7 @@ namespace RiverHollow.WorldObjects
             {
                 DoorType = EnumDoorType.Season;
                 _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
-                _sprite.AddAnimation(WorldObjAnimEnum.Idle, 64, 0, 16, 32);
+                _sprite.AddAnimation(AnimationEnum.ObjectIdle, 64, 0, 16, 32);
             }
 
             public void SetSeason(string value)
@@ -521,7 +522,7 @@ namespace RiverHollow.WorldObjects
             Type = ObjectType.WorldObject;
             _wallObject = true;
             _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
-            _sprite.AddAnimation(WorldObjAnimEnum.Idle, 96, 0, TileSize, TileSize);
+            _sprite.AddAnimation(AnimationEnum.ObjectIdle, 96, 0, TileSize, TileSize);
         }
 
         public void SetExit(string map)
@@ -580,8 +581,8 @@ namespace RiverHollow.WorldObjects
             public void LoadContent()
             {
                 _sprite = new AnimatedSprite(@"Textures\texMachines");
-                _sprite.AddAnimation(WorldObjAnimEnum.Idle, (int)_vSourcePos.X, (int)_vSourcePos.Y, TileSize, TileSize * 2, 1, 0.3f);
-                _sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
+                _sprite.AddAnimation(AnimationEnum.ObjectIdle, (int)_vSourcePos.X, (int)_vSourcePos.Y, TileSize, TileSize * 2, 1, 0.3f);
+                _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
                 _sprite.IsAnimating = true;
             }
             public virtual void Update(GameTime gTime) { }
@@ -673,9 +674,9 @@ namespace RiverHollow.WorldObjects
             public void LoadContent()
             {
                 _sprite = new AnimatedSprite(@"Textures\texMachines");
-                _sprite.AddAnimation(WorldObjAnimEnum.Idle, (int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight, 1, 0.3f, true);
-                _sprite.AddAnimation(WorldObjAnimEnum.Working, (int)_vSourcePos.X + _iWidth, (int)_vSourcePos.Y, _iWidth, _iHeight, _iWorkingFrames, _fFrameSpeed, true);
-                _sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
+                _sprite.AddAnimation(AnimationEnum.ObjectIdle, (int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight, 1, 0.3f, true);
+                _sprite.AddAnimation(AnimationEnum.PlayAnimation, (int)_vSourcePos.X + _iWidth, (int)_vSourcePos.Y, _iWidth, _iHeight, _iWorkingFrames, _fFrameSpeed, true);
+                _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
                 _sprite.IsAnimating = true;
             }
             public override void Update(GameTime gTime) {
@@ -719,7 +720,7 @@ namespace RiverHollow.WorldObjects
                 _heldItem = ObjectManager.GetItem(itemID);
                 _dProcessedTime = -1;
                 _iCurrentlyMaking = -1;
-                _sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
+                _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
 
                 _itemBubble = new ItemBubble(_heldItem, this);
             }
@@ -739,7 +740,7 @@ namespace RiverHollow.WorldObjects
                             Processed = true;
                             itemToProcess.Remove(pr.InputNum);
                             _iCurrentlyMaking = pr.Input;
-                            _sprite.SetCurrentAnimation(WorldObjAnimEnum.Working);
+                            _sprite.PlayAnimation(AnimationEnum.PlayAnimation);
                         }
                     }
                 }
@@ -759,7 +760,7 @@ namespace RiverHollow.WorldObjects
             public void MakeChosenItem(int itemID)
             {
                 _iCurrentlyMaking = itemID;
-                _sprite.SetCurrentAnimation(WorldObjAnimEnum.Working);
+                _sprite.PlayAnimation(AnimationEnum.PlayAnimation);
             }
 
             public virtual int GetProcessingItemId() { return -1; }
@@ -786,7 +787,7 @@ namespace RiverHollow.WorldObjects
                 _iCurrentlyMaking = mac.currentItemID;
                 _heldItem = ObjectManager.GetItem(mac.heldItemID);
 
-                if (CurrentlyProcessing != null) { _sprite.SetCurrentAnimation(WorldObjAnimEnum.Working); }
+                if (CurrentlyProcessing != null) { _sprite.PlayAnimation(AnimationEnum.ObjectIdle); }
             }
 
             private class ProcessRecipe
@@ -841,7 +842,7 @@ namespace RiverHollow.WorldObjects
                     _iWidth = TileSize * 2;
                     _iHeight = TileSize * 2;
                     _sprite = new AnimatedSprite(@"Textures\Dialog");
-                    _sprite.AddAnimation(WorldObjAnimEnum.Idle, 16, 80, _iWidth, _iHeight);
+                    _sprite.AddAnimation(AnimationEnum.ObjectIdle, 16, 80, _iWidth, _iHeight);
 
                     _bDec = false;
                     _dTimer = 0;
@@ -1012,7 +1013,7 @@ namespace RiverHollow.WorldObjects
                     else
                     {
                         _iCurrentState++;
-                        _sprite.SetCurrentAnimation(_iCurrentState.ToString());
+                        _sprite.PlayAnimation(_iCurrentState.ToString());
                         if (_diTransitionTimes.ContainsKey(_iCurrentState))
                         {
                             _iDaysLeft = _diTransitionTimes[_iCurrentState];
@@ -1065,7 +1066,7 @@ namespace RiverHollow.WorldObjects
                 _iCurrentState = data.currentState;
                 _iDaysLeft = data.daysLeft;
 
-                _sprite.SetCurrentAnimation(_iCurrentState.ToString());
+                _sprite.PlayAnimation(_iCurrentState.ToString());
             }
         }
 
@@ -1126,7 +1127,7 @@ namespace RiverHollow.WorldObjects
                 MakeAdjustments("E", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sName].GetTileByGridCoords(new Point((int)(startTile.X + 1), (int)(startTile.Y))));
                 MakeAdjustments("W", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[_sName].GetTileByGridCoords(new Point((int)(startTile.X - 1), (int)(startTile.Y))));
 
-                Target.SetCurrentAnimation(string.IsNullOrEmpty(sAdjacent) ? "None" : sAdjacent);
+                Target.PlayAnimation(string.IsNullOrEmpty(sAdjacent) ? "None" : sAdjacent);
 
                 //Find all matching objects in the adjacent tiles and call
                 //this method without recursion on them.
@@ -1281,7 +1282,9 @@ namespace RiverHollow.WorldObjects
                 public void Watered(bool value)
                 {
                     _bWatered = value;
-                    _sprWatered.SetCurrentAnimation(_sprite.CurrentAnimation);
+                    _sprite.CurrentAnimation.ToString();
+                    //MAR
+                    //_sprWatered.SetCurrentAnimation(_sprite.CurrentAnimation);
                 }
                 public bool Watered() { return _bWatered; }
             }

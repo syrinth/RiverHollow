@@ -73,7 +73,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _window.AddControl(w);
             }
             _csbSelected = (ClassSelectionBox)_liClassBoxes[0];
-            _csbSelected.PlayAnimation(Util.GetActorString(VerbEnum.Walk, DirectionEnum.Down));
+            _csbSelected.PlayAnimation(VerbEnum.Walk, DirectionEnum.Down);
 
             _playerDisplayBox = new PlayerDisplayBox(false);
             _playerDisplayBox.AnchorToInnerSide(_window, SideEnum.TopLeft);
@@ -243,8 +243,8 @@ namespace RiverHollow.GUIComponents.Screens
                 ClassSelectionBox csb = ((ClassSelectionBox)o);
                 if (_csbSelected != csb)
                 {
-                    csb.PlayAnimation(Util.GetActorString(VerbEnum.Walk, DirectionEnum.Down));
-                    _csbSelected.PlayAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
+                    csb.PlayAnimation(VerbEnum.Walk, DirectionEnum.Down);
+                    _csbSelected.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
                     _csbSelected = csb;
                 }
         }

@@ -18,7 +18,7 @@ namespace RiverHollow.WorldObjects
             _iWidth = 64;
             _iHeight = 64;
             _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
-            _sprite.AddAnimation(WorldObjAnimEnum.Idle, 32, 0, 64, 64);
+            _sprite.AddAnimation(AnimationEnum.ObjectIdle, 32, 0, 64, 64);
 
             _toSell = new List<Item>();
         }

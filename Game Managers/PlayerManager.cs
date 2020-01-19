@@ -198,7 +198,7 @@ namespace RiverHollow.Game_Managers
 
                         target = null;
                         PlayerManager.UnsetTool();
-                        World.PlayAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
+                        World.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
                     }
                 }
             }
@@ -373,7 +373,7 @@ namespace RiverHollow.Game_Managers
         public static bool SetTool(GameManager.ToolEnum toolType, Point mouse)
         {
             bool rv = false;
-            PlayerManager.World.PlayDirectionalAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+            PlayerManager.World.PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
 
             Tool t = null;
             switch (toolType)
@@ -405,7 +405,7 @@ namespace RiverHollow.Game_Managers
                     if (DecreaseStamina(UseTool.StaminaCost))
                     {
                         UseTool.ToolAnimation.IsAnimating = true;
-                        PlayerManager.World.PlayAnimation(Util.GetActorString(VerbEnum.UseTool, DirectionEnum.Down));
+                        PlayerManager.World.PlayAnimation(VerbEnum.UseTool, DirectionEnum.Down);
                     }
                     else
                     {
