@@ -328,49 +328,49 @@ namespace RiverHollow.WorldObjects
         }
     }
 
-    //public class EchoNode : Destructible
-    //{
-    //    public EchoNode(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
-    //    {
-    //        Type = ObjectType.Destructible;
-    //        _eToolType = ToolEnum.Lantern;
-    //        _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
+    public class EchoNode : Destructible
+    {
+        public EchoNode(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
+        {
+            Type = ObjectType.Destructible;
+            _eToolType = ToolEnum.Lantern;
+            _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
 
-    //        string[] imageSplit = stringData["Image"].Split('-');
-    //        string[] idleSplit = stringData["Idle"].Split('-');
-    //        string[] gatheredSplit = stringData["Gathered"].Split('-');
+            string[] imageSplit = stringData["Image"].Split('-');
+            string[] idleSplit = stringData["Idle"].Split('-');
+            string[] gatheredSplit = stringData["Gathered"].Split('-');
 
-    //        int startX = int.Parse(imageSplit[0]);
-    //        int startY = int.Parse(imageSplit[1]);
-    //        _sprite.AddAnimation(AnimationEnum.ObjectIdle, startX, startY, TileSize, TileSize, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
-    //        _sprite.AddAnimation(WorldObjAnimEnum.Gathered, startX + (int.Parse(idleSplit[0]) * TileSize), startY, TileSize, TileSize, int.Parse(gatheredSplit[0]), float.Parse(gatheredSplit[1]));
+            int startX = int.Parse(imageSplit[0]);
+            int startY = int.Parse(imageSplit[1]);
+            _sprite.AddAnimation(AnimationEnum.ObjectIdle, startX, startY, TileSize, TileSize, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
+            //_sprite.AddAnimation(WorldObjAnimEnum.Gathered, startX + (int.Parse(idleSplit[0]) * TileSize), startY, TileSize, TileSize, int.Parse(gatheredSplit[0]), float.Parse(gatheredSplit[1]));
 
-    //        _sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
-    //        _sprite.IsAnimating = true;
-    //    }
+            //_sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
+            _sprite.IsAnimating = true;
+        }
 
-    //    public override void Draw(SpriteBatch spriteBatch)
-    //    {
-    //        _sprite.Draw(spriteBatch);
-    //    }
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            _sprite.Draw(spriteBatch);
+        }
 
-    //    public override void Update(GameTime gTime)
-    //    {
-    //        _sprite.Update(gTime);
-    //    }
+        public override void Update(GameTime gTime)
+        {
+            _sprite.Update(gTime);
+        }
 
-    //    public override bool DealDamage(int dmg)
-    //    {
-    //        bool rv = false;
-    //        rv = base.DealDamage(dmg);
+        public override bool DealDamage(int dmg)
+        {
+            bool rv = false;
+            rv = base.DealDamage(dmg);
 
-    //        if (rv)
-    //        {
-    //            //_sprite.SetCurrentAnimation(WorldObjAnimEnum.Gathered);
-    //        }
-    //        return rv;
-    //    }
-    //}
+            if (rv)
+            {
+                //_sprite.SetCurrentAnimation(WorldObjAnimEnum.Gathered);
+            }
+            return rv;
+        }
+    }
 
     public class Light : WorldItem
     {

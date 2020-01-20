@@ -470,11 +470,11 @@ namespace RiverHollow.Game_Managers
         public static void EnemyTakeTurn()
         {
             RHTile targetTile = null;
-            CombatAction action = null;
+
             bool gottaMove = true;
 
             //Step one determine if we are in range of a target
-            foreach (CombatAction c in ActiveCharacter.AbilityList)
+            foreach (CombatAction c in ActiveCharacter.GetCurrentSpecials())
             {
                 if (c.Range == 1)
                 {
@@ -483,7 +483,7 @@ namespace RiverHollow.Game_Managers
                         if (t.HasCombatant() && t.Character.IsAdventurer())
                         {
                             gottaMove = false;
-                            action = c;
+                            SelectedAction = new ChosenAction(c);
                             targetTile = t;
                             break;
                         }
@@ -539,7 +539,7 @@ namespace RiverHollow.Game_Managers
                     if (t.HasCombatant() && t.Character.IsAdventurer())
                     {
                         SelectedTile = t;
-                        SelectedAction = new ChosenAction((CombatAction)ActiveCharacter.AbilityList[0]);
+                        SelectedAction = new ChosenAction((CombatAction)ActiveCharacter.GetCurrentSpecials()[0]);
                         SelectedAction.AssignTarget();
                     }
                 }
