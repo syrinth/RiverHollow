@@ -5,7 +5,7 @@
     <!--FangedFur-->
     <Item>
       <Key>3</Key>
-      <Value>[Texture:FangedFur][Condition:Forest-Summer][Jump][Lvl:1][Ability:300][Loot:26 23 25][Walk:0-4-.15][Attack:256-2-.15][Hurt:384-2-.15][Critical:512-2-.15][KO:640-3-.15]</Value>
+      <Value>[Texture:FangedFur][Condition:Forest-Summer][Jump][Lvl:1][Ability:300][Loot:26 23 25][Walk:0-0-4-.15-T][Attack:256-0-2-.15-F][Hurt:384-0-2-.15-F][Critical:512-0-2-.15-F][KO:640-0-3-.15-F]</Value>
     </Item>
   </Asset>
 </XnaContent>

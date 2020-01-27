@@ -31,12 +31,13 @@ namespace RiverHollow.Actors
     public abstract class Actor
     {
         protected const int HUMAN_HEIGHT = (TileSize * 2) + 2;
+        protected const float EYE_DEPTH = 0.001f;
+        protected const float HAIR_DEPTH = 0.003f;
 
         protected static string _sVillagerFolder = GameContentManager.FOLDER_ACTOR + @"Villagers\";
         protected static string _sAdventurerFolder = GameContentManager.FOLDER_ACTOR + @"Adventurers\";
         protected static string _sNPsCFolder = GameContentManager.FOLDER_ACTOR + @"NPCs\";
 
-        protected string _sTexture;
         public enum ActorEnum { Actor, Adventurer, CombatActor, Mob, Monster, NPC, Spirit, WorldCharacter};
         protected ActorEnum _eActorType = ActorEnum.Actor;
         public ActorEnum ActorType => _eActorType;
@@ -44,15 +45,15 @@ namespace RiverHollow.Actors
         protected string _sName;
         public virtual string Name { get => _sName; }
 
-        protected AnimatedSprite _spriteBody;
-        public AnimatedSprite BodySprite { get => _spriteBody; }
+        protected AnimatedSprite _sprBody;
+        public AnimatedSprite BodySprite { get => _sprBody; }
 
         public virtual Vector2 Position
         {
-            get { return new Vector2(_spriteBody.Position.X, _spriteBody.Position.Y); }
-            set { _spriteBody.Position = value; }
+            get { return new Vector2(_sprBody.Position.X, _sprBody.Position.Y); }
+            set { _sprBody.Position = value; }
         }
-        public virtual Vector2 Center { get => _spriteBody.Center; }
+        public virtual Vector2 Center { get => _sprBody.Center; }
 
         public Rectangle GetRectangle()
         {
@@ -63,8 +64,8 @@ namespace RiverHollow.Actors
         public int Width => _iWidth;
         protected int _iHeight;
         public int Height => _iHeight; 
-        public int SpriteWidth => _spriteBody.Width;
-        public int SpriteHeight => _spriteBody.Height;
+        public int SpriteWidth => _sprBody.Width;
+        public int SpriteHeight => _sprBody.Height;
 
         protected bool _bCanTalk = false;
         public bool CanTalk => _bCanTalk;
@@ -73,12 +74,12 @@ namespace RiverHollow.Actors
 
         public virtual void Update(GameTime gTime)
         {
-            _spriteBody.Update(gTime);
+            _sprBody.Update(gTime);
         }
 
         public virtual void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
-            _spriteBody.Draw(spriteBatch, useLayerDepth);
+            _sprBody.Draw(spriteBatch, useLayerDepth);
         }
 
         public virtual void SetName(string text)
@@ -86,8 +87,8 @@ namespace RiverHollow.Actors
             _sName = text;
         }
 
-        public virtual void PlayAnimation(AnimationEnum verb) { _spriteBody.PlayAnimation(verb); }
-        public virtual void PlayAnimation(VerbEnum verb, DirectionEnum action) { _spriteBody.PlayAnimation(verb, action); }
+        public virtual void PlayAnimation(AnimationEnum verb) { _sprBody.PlayAnimation(verb); }
+        public virtual void PlayAnimation(VerbEnum verb, DirectionEnum action) { _sprBody.PlayAnimation(verb, action); }
 
         /// <summary>
         /// Adds a set of animations to the indicated Sprite for the given verb for each direction.
@@ -103,27 +104,35 @@ namespace RiverHollow.Actors
         /// <param name="increment">The number of frames in width to skip between each animation.</param>
         /// <param name="pingpong">Whether the animation pingpong or not</param>
         /// <returns>The amount of pixels this animation sequence has crawled</returns>
-        protected int AddDirectionalAnimations(ref AnimatedSprite sprite, VerbEnum verb, int firstX, int firstY, int width, int height, int frames, float frameSpeed, int increment, bool pingpong = false)
+        protected int AddDirectionalAnimations(ref AnimatedSprite sprite, AnimationData data, int width, int height, bool pingpong = false)
         {
             int xCrawl = 0;
-            sprite.AddAnimation(verb, DirectionEnum.Down, firstX + xCrawl, firstY, width, height, frames, frameSpeed, pingpong);
-            xCrawl += width * increment;
-            sprite.AddAnimation(verb, DirectionEnum.Right, firstX + xCrawl, firstY, width, height, frames, frameSpeed, pingpong);
-            xCrawl += width * increment;
-            sprite.AddAnimation(verb, DirectionEnum.Up, firstX + xCrawl, firstY, width, height, frames, frameSpeed, pingpong);
-            xCrawl += width * increment;
-            sprite.AddAnimation(verb, DirectionEnum.Left, firstX + xCrawl, firstY, width, height, frames, frameSpeed, pingpong);
-            xCrawl += width * increment;
+            sprite.AddAnimation(data.Verb, DirectionEnum.Down, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong);
+            xCrawl += width * data.Frames;
+            sprite.AddAnimation(data.Verb, DirectionEnum.Right, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong);
+            xCrawl += width * data.Frames;
+            sprite.AddAnimation(data.Verb, DirectionEnum.Up, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong);
+            xCrawl += width * data.Frames;
+            sprite.AddAnimation(data.Verb, DirectionEnum.Left, data.XLocation + xCrawl, data.YLocation, width, height, data.Frames, data.FrameSpeed, pingpong);
+            xCrawl += width * data.Frames;
 
             return xCrawl;
         }
 
-        public bool Contains(Point x) { return _spriteBody.BoundingBox.Contains(x); }
-        public bool AnimationFinished() { return _spriteBody.PlayedOnce && _spriteBody.IsAnimating; }
-        public bool IsCurrentAnimation(AnimationEnum val) { return _spriteBody.IsCurrentAnimation(val); }
-        public bool IsCurrentAnimation(VerbEnum verb, DirectionEnum dir) { return _spriteBody.IsCurrentAnimation(verb, dir); }
-        public bool IsAnimating() { return _spriteBody.IsAnimating; }
-        public bool AnimationPlayedXTimes(int x) { return _spriteBody.GetPlayCount() >= x; }
+        protected void RemoveDirectionalAnimations(ref AnimatedSprite sprite, VerbEnum verb)
+        {
+            sprite.RemoveAnimation(verb, DirectionEnum.Down);
+            sprite.RemoveAnimation(verb, DirectionEnum.Right);
+            sprite.RemoveAnimation(verb, DirectionEnum.Up);
+            sprite.RemoveAnimation(verb, DirectionEnum.Left);
+        }
+
+        public bool Contains(Point x) { return _sprBody.BoundingBox.Contains(x); }
+        public bool AnimationFinished() { return _sprBody.PlayedOnce && _sprBody.IsAnimating; }
+        public bool IsCurrentAnimation(AnimationEnum val) { return _sprBody.IsCurrentAnimation(val); }
+        public bool IsCurrentAnimation(VerbEnum verb, DirectionEnum dir) { return _sprBody.IsCurrentAnimation(verb, dir); }
+        public bool IsAnimating() { return _sprBody.IsAnimating; }
+        public bool AnimationPlayedXTimes(int x) { return _sprBody.GetPlayCount() >= x; }
 
         public bool IsMonster() { return _eActorType == ActorEnum.Monster; }
         public bool IsNPC() { return _eActorType == ActorEnum.NPC; }
@@ -150,47 +159,7 @@ namespace RiverHollow.Actors
             {
                 list.Add(new AnimationData(data[Util.GetEnumString(animation)], animation));
             }
-        }
-
-        #region Helper Objects
-        protected class AnimationData
-        {
-            VerbEnum _eVerb;
-            AnimationEnum _eAnim;
-            bool _bDirectional;
-            int _iXLocation;
-            int _iFrames;
-            float _fFrameSpeed;
-
-            public int XLocation => _iXLocation;
-            public int Frames => _iFrames;
-            public float FrameSpeed => _fFrameSpeed;
-            public bool Directional => _bDirectional;
-            public VerbEnum Verb => _eVerb;
-            public AnimationEnum Animation => _eAnim;
-
-            public AnimationData(string value, VerbEnum verb, bool directional)
-            {
-                _eVerb = verb;
-                _bDirectional = directional;
-                StoreData(value);
-            }
-
-            public AnimationData(string value, AnimationEnum anim)
-            {
-                _eAnim = anim;
-                StoreData(value);
-            }
-
-            public void StoreData(string value)
-            {
-                string[] splitString = value.Split('-');
-                _iXLocation = int.Parse(splitString[0]);
-                _iFrames = int.Parse(splitString[1]);
-                _fFrameSpeed = float.Parse(splitString[2]);
-            }
-        }
-        #endregion
+        } 
     }
     /// <summary>
     /// The properties and methods for each actor that pertain to existing on and
@@ -209,8 +178,8 @@ namespace RiverHollow.Actors
 
         public override Vector2 Position
         {
-            get { return new Vector2(_spriteBody.Position.X, _spriteBody.Position.Y + _spriteBody.Height - TileSize); } //MAR this is fucked up
-            set { _spriteBody.Position = new Vector2(value.X, value.Y - _spriteBody.Height + TileSize); }
+            get { return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - TileSize); } //MAR this is fucked up
+            set { _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + TileSize); }
         }
 
         public bool FollowingPath => _liTilePath.Count > 0;
@@ -237,17 +206,8 @@ namespace RiverHollow.Actors
         {
             _eActorType = ActorEnum.WorldCharacter;
             _iWidth = TileSize;
-            _iHeight = TileSize;
+            _iHeight = HUMAN_HEIGHT;
             _liTilePath = new List<RHTile>();
-        }
-
-        public virtual void LoadContent(string textureToLoad)
-        {
-            _sTexture = textureToLoad;
-            AddDefaultAnimations(ref _spriteBody, HUMAN_HEIGHT, 0, 0);
-
-            _iWidth = _spriteBody.Width;
-            _iHeight = _spriteBody.Height;
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
@@ -280,20 +240,52 @@ namespace RiverHollow.Actors
             }
         }
 
-        public void AddDefaultAnimations(ref AnimatedSprite sprite, int height, int startX, int startY)
+        protected List<AnimationData> LoadWorldAnimations(Dictionary<string, string> data)
         {
-            AddDefaultAnimations(ref sprite, height, _sTexture, startX, startY);
+            List<AnimationData> listAnimations = new List<AnimationData>();
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.Walk);
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.Idle);
+            return listAnimations;
         }
-        public virtual void AddDefaultAnimations(ref AnimatedSprite sprite, int height, string texture, int startX, int startY)
+        protected List<AnimationData> LoadCombatAnimations(Dictionary<string, string> data)
         {
-            sprite = new AnimatedSprite(texture);
+            List<AnimationData> listAnimations = new List<AnimationData>();
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.Attack);
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.Hurt);
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.Critical);
+            AddToAnimationsList(ref listAnimations, data, VerbEnum.Cast);
+            AddToAnimationsList(ref listAnimations, data, AnimationEnum.KO);
+            return listAnimations;
+        }
+        protected List<AnimationData> LoadWorldAndCombatAnimations(Dictionary<string, string> data)
+        {
+            List<AnimationData> listAnimations = new List<AnimationData>();
+            listAnimations.AddRange(LoadWorldAnimations(data));
+            listAnimations.AddRange(LoadCombatAnimations(data));
+            return listAnimations;
+        }
 
-            AddDirectionalAnimations(ref sprite, VerbEnum.Walk, startX, startY, TileSize, height, 3, 0.2f, 3, true);
+        /// <summary>
+        /// Creates a new Animatedsprite object for the given texture string, and adds
+        /// all of the given animations to the new AnimatedSprite
+        /// </summary>
+        /// <param name="listAnimations">A list of AnimationData to add to the sprite</param>
+        /// <param name="textureName">The texture name for the AnimatedSprite</param>
+        protected void LoadSpriteAnimations(ref AnimatedSprite sprite, List<AnimationData> listAnimations, string textureName)
+        {
+            sprite = new AnimatedSprite(textureName);
 
-            if (_bHover) { AddDirectionalAnimations(ref sprite, VerbEnum.Idle, startX, startY, TileSize, height, 3, 0.2f, 3, true); }
-            else { AddDirectionalAnimations(ref sprite, VerbEnum.Idle, startX + TileSize, startY, TileSize, height, 1, 0.2f, 3, true); }
-
-            sprite.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
+            foreach (AnimationData data in listAnimations)
+            {
+                if (data.Directional)
+                {
+                    AddDirectionalAnimations(ref sprite, data, _iWidth, _iHeight, data.PingPong);
+                }
+                else
+                {
+                    sprite.AddAnimation(data.Animation, data.XLocation, 0, _iWidth, _iHeight, data.Frames, data.FrameSpeed, data.PingPong);
+                }
+            }
         }
 
         public virtual bool CollisionContains(Point mouse)
@@ -309,7 +301,7 @@ namespace RiverHollow.Actors
         public void SetWalkingDir(DirectionEnum d)
         {
             Facing = d;
-            _spriteBody.PlayAnimation(VerbEnum.Walk, Facing);
+            _sprBody.PlayAnimation(VerbEnum.Walk, Facing);
         }
 
         public virtual void DetermineFacing(Vector2 direction)
@@ -362,7 +354,7 @@ namespace RiverHollow.Actors
         /// During Combat, the Idle animation is the Walk animation.
         /// </summary>
         public void PlayAnimation(VerbEnum verb) { PlayAnimation(verb, Facing); }
-        public bool IsCurrentAnimation(VerbEnum verb) { return _spriteBody.IsCurrentAnimation(verb, Facing); }
+        public bool IsCurrentAnimation(VerbEnum verb) { return _sprBody.IsCurrentAnimation(verb, Facing); }
 
         /// <summary>
         /// Check the direction in which we wish to move the Actor for any possible collisions.
@@ -1062,7 +1054,7 @@ namespace RiverHollow.Actors
         public Vector2 StartPosition => _vStartPosition;
 
         private int _iXP;
-        public int XP  => _iXP;
+        public int XP => _iXP;
 
         public bool Protected;
 
@@ -1147,51 +1139,23 @@ namespace RiverHollow.Actors
             _liGearSlots.Add(Accessory2);
         }
 
-        public void LoadClassAnimations()
-        {
-            //Remove all animations to cover the test case of the PlayerCharacter
-            //changing their class. Otherwise, ignore this.
-            //_spriteBody.RemoveAnimation(CActorAnimEnum.Idle);
-            //_spriteBody.RemoveAnimation(CActorAnimEnum.Cast);
-            //_spriteBody.RemoveAnimation(CActorAnimEnum.Hurt);
-            //_spriteBody.RemoveAnimation(CActorAnimEnum.Attack);
-            //_spriteBody.RemoveAnimation(CActorAnimEnum.Critical);
-            //_spriteBody.RemoveAnimation(CActorAnimEnum.KO);
-            //_spriteBody.RemoveAnimation(CActorAnimEnum.Win);
-
-            int xCrawl = 0;
-            int frameWidth = 16;
-            int frameHeight = 34;
-            xCrawl += AddDirectionalAnimations(ref _spriteBody, VerbEnum.Cast, 0, 0, frameWidth, frameHeight, _class.CastFrames, _class.CastFramesLength, _class.IdleFrames, true);
-
-            _spriteBody.AddAnimation(AnimationEnum.KO, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.KOFrames, _class.KOFramesLength);
-            xCrawl += _class.KOFrames;
-            _spriteBody.AddAnimation(AnimationEnum.Win, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.WinFrames, _class.WinFramesLength);
-            //_spriteBody.AddAnimation(CActorAnimEnum.Idle, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.IdleFrames, _class.IdleFramesLength);
-            //xCrawl += _class.IdleFrames;
-            //_spriteBody.AddAnimation(CActorAnimEnum.Cast, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.CastFrames, _class.CastFramesLength);
-            //xCrawl += _class.CastFrames;
-            //_spriteBody.AddAnimation(CActorAnimEnum.Hurt, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.HitFrames, _class.HitFramesLength);
-            //xCrawl += _class.HitFrames;
-            //_spriteBody.AddAnimation(CActorAnimEnum.Attack, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.AttackFrames, _class.AttackFramesLength);
-            //xCrawl += _class.AttackFrames;
-            //_spriteBody.AddAnimation(CActorAnimEnum.Critical, (xCrawl * frameWidth), 0, frameWidth, frameHeight, _class.CriticalFrames, _class.CriticalFramesLength);
-            //xCrawl += _class.CriticalFrames;
-
-            //_width = _spriteBody.Width;
-            //_height = _spriteBody.Height;
-        }
-
-        public void SetClass(CharacterClass x)
+        public virtual void SetClass(CharacterClass x)
         {
             _class = x;
             _iCurrentHP = MaxHP;
             _iCurrentMP = MaxMP;
+        }
 
-            Weapon.SetGear((Equipment)GetItem(_class.WeaponID));
-            Armor.SetGear((Equipment)GetItem(_class.ArmorID));
-            Head.SetGear((Equipment)GetItem(_class.HeadID));
-            Wrist.SetGear((Equipment)GetItem(_class.WristID));
+        /// <summary>
+        /// Assigns the starting gear to the Actor as long as the slots are empty.
+        /// Should never be called when they can be euipped, checks are for safety.
+        /// </summary>
+        public void AssignStartingGear()
+        {
+            if (Weapon == null) { Weapon.SetGear((Equipment)GetItem(_class.WeaponID)); }
+            if (Armor == null) { Armor.SetGear((Equipment)GetItem(_class.ArmorID)); }
+            if (Head == null) { Head.SetGear((Equipment)GetItem(_class.HeadID)); }
+            if (Wrist == null) { Wrist.SetGear((Equipment) GetItem(_class.WristID));}
         }
 
         public void AddXP(int x)
@@ -1530,7 +1494,9 @@ namespace RiverHollow.Actors
             _rPortrait = new Rectangle(0, 0, 48, 60);
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
 
-            LoadContent(_sVillagerFolder + "NPC" + _iIndex);
+            _iWidth = n._sprBody.Width;
+            _iHeight = n._sprBody.Height;
+            _sprBody = new AnimatedSprite(n.BodySprite);
         }
 
         public Villager(int index, Dictionary<string, string> stringData): this()
@@ -1543,7 +1509,6 @@ namespace RiverHollow.Actors
 
             _bHover = stringData.ContainsKey("Hover");
 
-            LoadContent(_sVillagerFolder + "NPC" + _iIndex);
             ImportBasics(stringData);
 
             MapManager.Maps[_homeMap].AddCharacterImmediately(this);
@@ -1645,25 +1610,27 @@ namespace RiverHollow.Actors
             return _liCommands;
         }
 
-        protected void ImportBasics(Dictionary<string, string> stringData)
+        protected void ImportBasics(Dictionary<string, string> data)
         {
             _diDialogue = GameContentManager.GetNPCDialogue(_iIndex);
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
             _sName = _diDialogue["Name"];
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
 
-            _bActive = !stringData.ContainsKey("Inactive");
-            if (stringData.ContainsKey("Type")) { _eNPCType = Util.ParseEnum<NPCTypeEnum>(stringData["Type"]); }
-            if (stringData.ContainsKey("PortRow")) { _rPortrait = new Rectangle(0, 0, 48, 60); }
-            if (stringData.ContainsKey("HomeMap")) {
-                CurrentMapName = stringData["HomeMap"];
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAnimations(data), _sVillagerFolder + "NPC" + _iIndex);
+
+            _bActive = !data.ContainsKey("Inactive");
+            if (data.ContainsKey("Type")) { _eNPCType = Util.ParseEnum<NPCTypeEnum>(data["Type"]); }
+            if (data.ContainsKey("PortRow")) { _rPortrait = new Rectangle(0, 0, 48, 60); }
+            if (data.ContainsKey("HomeMap")) {
+                CurrentMapName = data["HomeMap"];
                 _homeMap = CurrentMapName;
                 Position = Util.SnapToGrid(CurrentMap.GetCharacterSpawn("NPC" + _iIndex));
             }
 
-            if (stringData.ContainsKey("Collection"))
+            if (data.ContainsKey("Collection"))
             {
-                string[] vectorSplit = stringData["Collection"].Split('-');
+                string[] vectorSplit = data["Collection"].Split('-');
                 foreach (string s in vectorSplit)
                 {
                     _diCollection.Add(int.Parse(s), false);
@@ -1679,8 +1646,8 @@ namespace RiverHollow.Actors
                     string[] group = kvp.Value.Split('/');
                     foreach (string s in group)
                     {
-                        string[] data = s.Split('|');
-                        temp.Add(new KeyValuePair<string, string>(data[0], data[1]));
+                        string[] strSchedule = s.Split('|');
+                        temp.Add(new KeyValuePair<string, string>(strSchedule[0], strSchedule[1]));
                     }
                     _diCompleteSchedule.Add(kvp.Key, temp);
                 }
@@ -2022,7 +1989,6 @@ namespace RiverHollow.Actors
 
             _iIndex = index;
 
-            LoadContent(_sVillagerFolder + "NPC" + _iIndex);
             ImportBasics(stringData);
 
             if (stringData.ContainsKey("ShopData"))
@@ -2237,10 +2203,8 @@ namespace RiverHollow.Actors
             if (stringData.ContainsKey("Class"))
             {
                 SetClass(ObjectManager.GetClassByIndex(int.Parse(stringData["Class"])));
+                AssignStartingGear();
             }
-
-            LoadContent(_sVillagerFolder + "NPC" + _iIndex);
-            LoadClassAnimations();
 
             ImportBasics(stringData);
 
@@ -2388,12 +2352,12 @@ namespace RiverHollow.Actors
         #region Properties
         private enum AdventurerStateEnum { Idle, InParty, OnMission };
         private AdventurerStateEnum _eState;
-        private WorkerTypeEnum _workerType;
-        public WorkerTypeEnum WorkerType => _workerType;
+        private WorkerTypeEnum _eWorkerType;
+        public WorkerTypeEnum WorkerType => _eWorkerType;
         protected int _iPersonalID;
         public int PersonalID { get => _iPersonalID; }
-        protected int _iWorkerID;
-        public int WorkerID { get => _iWorkerID; }
+        protected int _iAdventurerID;
+        public int WorkerID { get => _iAdventurerID; }
         protected string _sAdventurerType;
         private Building _building;
         public Building Building => _building;
@@ -2419,17 +2383,16 @@ namespace RiverHollow.Actors
         public override bool Active => _eState == AdventurerStateEnum.Idle;
         #endregion
 
-        public Adventurer(string[] stringData, int id)
+        public Adventurer(Dictionary<string, string> data, int id)
         {
-            _iWorkerID = id;
+            _iAdventurerID = id;
             _iPersonalID = PlayerManager.GetTotalWorkers();
             _eActorType = ActorEnum.Adventurer;
-            ImportBasics(stringData, id);
+            ImportBasics(data, id);
 
-            SetClass(ObjectManager.GetClassByIndex(_iWorkerID));
+            SetClass(ObjectManager.GetClassByIndex(_iAdventurerID));
+            AssignStartingGear();
             _sAdventurerType = CharacterClass.Name;
-            _sTexture = _sAdventurerFolder + "WorldAdventurers";
-            LoadContent(_iWorkerID);
 
             _rPortrait = new Rectangle(0, 0, 48, 60);
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
@@ -2443,45 +2406,26 @@ namespace RiverHollow.Actors
             _sName = _sAdventurerType.Substring(0, 1);
         }
 
-        public void LoadContent(int ID)
-        {
-            AddDefaultAnimations(ref _spriteBody, HUMAN_HEIGHT, 0, (ID - 1) * TileSize * 3);
-            LoadClassAnimations();
-
-            _iWidth = _spriteBody.Width;
-            _iHeight = _spriteBody.Height;
-        }
-
-        protected void ImportBasics(string[] stringData, int id)
+        protected void ImportBasics(Dictionary<string, string> data, int id)
         {
             _diCrafting = new Dictionary<int, int>();
 
-            _iWorkerID = id;
+            _iAdventurerID = id;
 
-            foreach (string s in stringData)
+            _eWorkerType = Util.ParseEnum<WorkerTypeEnum>(data["Type"]);
+            _iDailyItemID = int.Parse(data["Item"]);
+            _iDailyFoodReq = int.Parse(data["Food"]);
+
+            if (data.ContainsKey("Crafts"))
             {
-                string[] tagType = s.Split(':');
-                if (tagType[0].Equals("Type"))
+                string[] crafting = data["Crafts"].Split(' ');
+                foreach (string recipe in crafting)
                 {
-                    _workerType = Util.ParseEnum<WorkerTypeEnum>(tagType[1]);
-                }
-                else if (tagType[0].Equals("Item"))
-                {
-                    _iDailyItemID = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Food"))
-                {
-                    _iDailyFoodReq = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Crafts"))
-                {
-                    string[] crafting = tagType[1].Split(' ');
-                    foreach (string recipe in crafting)
-                    {
-                        _diCrafting.Add(int.Parse(recipe), int.Parse(recipe));
-                    }
+                    _diCrafting.Add(int.Parse(recipe), int.Parse(recipe));
                 }
             }
+
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), _sAdventurerFolder + "Adventurer_" + _iAdventurerID);
         }
 
         public override void Update(GameTime gTime)
@@ -2553,7 +2497,7 @@ namespace RiverHollow.Actors
         public void ProcessChosenItem(int itemID)
         {
             _iCurrentlyMaking = _diCrafting[itemID];
-            _spriteBody.PlayAnimation(AnimationEnum.PlayAnimation);
+            _sprBody.PlayAnimation(AnimationEnum.PlayAnimation);
         }
 
         public int TakeItem()
@@ -2707,7 +2651,7 @@ namespace RiverHollow.Actors
         }
         public void LoadAdventurerData(WorkerData data)
         {
-            _iWorkerID = data.workerID;
+            _iAdventurerID = data.workerID;
             _iPersonalID = data.PersonalID;
             _iMood = data.mood;
             _sName = data.name;
@@ -2718,7 +2662,7 @@ namespace RiverHollow.Actors
 
             base.LoadClassedCharData(data.advData);
 
-            if (_iCurrentlyMaking != -1) {_spriteBody.PlayAnimation(AnimationEnum.PlayAnimation); }
+            if (_iCurrentlyMaking != -1) {_sprBody.PlayAnimation(AnimationEnum.PlayAnimation); }
 
             if (_eState == AdventurerStateEnum.InParty) {
                 PlayerManager.AddToParty(this);
@@ -2727,10 +2671,10 @@ namespace RiverHollow.Actors
     }
     public class PlayerCharacter : ClassedCombatant
     {
-        AnimatedSprite _spriteEyes;
-        public AnimatedSprite EyeSprite => _spriteEyes;
-        AnimatedSprite _spriteHair;
-        public AnimatedSprite HairSprite => _spriteHair;
+        AnimatedSprite _sprEyes;
+        public AnimatedSprite EyeSprite => _sprEyes;
+        AnimatedSprite _sprHair;
+        public AnimatedSprite HairSprite => _sprHair;
 
         Color _cHairColor = Color.White;
         public Color HairColor => _cHairColor;
@@ -2738,18 +2682,18 @@ namespace RiverHollow.Actors
         int _iHairIndex = 0;
         public int HairIndex => _iHairIndex;
 
-        public Vector2 BodyPosition => _spriteBody.Position;
+        public Vector2 BodyPosition => _sprBody.Position;
         public override Vector2 Position
         {
-            get { return new Vector2(_spriteBody.Position.X, _spriteBody.Position.Y + _spriteBody.Height - TileSize); }
+            get { return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - TileSize); }
             set
             {
-                _spriteBody.Position = new Vector2(value.X, value.Y - _spriteBody.Height + TileSize);
-                _spriteEyes.Position = _spriteBody.Position;
-                _spriteHair.Position = _spriteBody.Position;
+                _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + TileSize);
+                _sprEyes.Position = _sprBody.Position;
+                _sprHair.Position = _sprBody.Position;
 
-                if (_chest != null) { _chest.SetSpritePosition(_spriteBody.Position); }
-                if (Hat != null) { _hat.SetSpritePosition(_spriteBody.Position); }
+                if (_chest != null) { _chest.SetSpritePosition(_sprBody.Position); }
+                if (Hat != null) { _hat.SetSpritePosition(_sprBody.Position); }
             }
         }
 
@@ -2766,18 +2710,38 @@ namespace RiverHollow.Actors
         {
             _sName = PlayerManager.Name;
             _iWidth = TileSize;
-            _iHeight = TileSize;
+            _iHeight = HUMAN_HEIGHT;
 
             _cHairColor = Color.Red;
 
             _liTilePath = new List<RHTile>();
+
+            //Sets a default class so we can load and display the character to start
+            SetClass(ObjectManager.GetClassByIndex(1));
+
+            _sprBody.SetColor(Color.White);
+            _sprHair.SetColor(_cHairColor);
         }
 
-        public override void AddDefaultAnimations(ref AnimatedSprite sprite, int height, string texture, int startX, int startY)
+        /// <summary>
+        /// Override for the ClassedCombatant SetClass methog. Calls the super method and then
+        /// loads the appropriate sprites.
+        /// </summary>
+        /// <param name="x">The class to set</param>
+        /// <param name="assignGear">Whether or not to assign starting gear</param>
+        public override void SetClass(CharacterClass x)
         {
-            base.AddDefaultAnimations(ref sprite, height, texture, startX, startY);
-            sprite.AddAnimation(VerbEnum.UseTool, DirectionEnum.Down, startX + TileSize * 12, startY, TileSize, height, 3, TOOL_ANIM_SPEED);
-            sprite.SetNextAnimation(Util.GetActorString(VerbEnum.UseTool, DirectionEnum.Down), Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
+            base.SetClass(x);
+
+            //Loads the Sprites for the players body for the appropriate class
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(ObjectManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Body", GameContentManager.FOLDER_PLAYER));
+
+            //Hair type has already been set either by default or by being allocated.
+            SetHairType(_iHairIndex);
+
+            //Loads the Sprites for the players body for the appropriate class
+            LoadSpriteAnimations(ref _sprEyes, LoadWorldAndCombatAnimations(ObjectManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Eyes", GameContentManager.FOLDER_PLAYER));
+            _sprEyes.SetDepthMod(EYE_DEPTH);
         }
 
         public override void Update(GameTime gTime)
@@ -2835,9 +2799,9 @@ namespace RiverHollow.Actors
                 }
             }
 
-            _spriteBody.Update(gTime);
-            _spriteEyes.Update(gTime);
-            _spriteHair.Update(gTime);
+            _sprBody.Update(gTime);
+            _sprEyes.Update(gTime);
+            _sprHair.Update(gTime);
 
             if (_chest != null) { _chest.Sprite.Update(gTime); }
             if (Hat != null) { Hat.Sprite.Update(gTime); }
@@ -2846,38 +2810,14 @@ namespace RiverHollow.Actors
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
             base.Draw(spriteBatch);
-            _spriteBody.Draw(spriteBatch, useLayerDepth);
+            _sprBody.Draw(spriteBatch, useLayerDepth);
 
-            float bodyDepth = _spriteBody.Position.Y + _spriteBody.CurrentFrameAnimation.FrameHeight + (Position.X / 100);
-            _spriteEyes.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
-            _spriteHair.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
+            float bodyDepth = _sprBody.Position.Y + _sprBody.CurrentFrameAnimation.FrameHeight + (Position.X / 100);
+            _sprEyes.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
+            _sprHair.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
 
             _chest?.Sprite.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth + 0.01f);
             Hat?.Sprite.Draw(spriteBatch, useLayerDepth);
-        }
-
-        public override void LoadContent(string textureToLoad)
-        {
-            Color bodyColor = Color.White;
-
-            AddDefaultAnimations(ref _spriteBody, HUMAN_HEIGHT, textureToLoad, 0, 0);
-            _spriteBody.SetColor(bodyColor);
-
-            AddDefaultAnimations(ref _spriteEyes, TileSize, textureToLoad, 0, TileSize * 3);
-            _spriteEyes.SetDepthMod(0.001f);
-
-            AddDefaultAnimations(ref _spriteHair, TileSize * 2, @"Textures\texPlayerHair", 0, _iHairIndex * TileSize * 2);
-            _spriteHair.SetColor(_cHairColor);
-            _spriteHair.SetDepthMod(0.003f);
-
-            _iWidth = _spriteBody.Width;
-            _iHeight = _spriteBody.Height;
-        }
-
-        public void SetHairColor(Color c)
-        {
-            _cHairColor = c;
-            SetColor(_spriteHair, c);
         }
 
         public void SetColor(AnimatedSprite sprite, Color c)
@@ -2885,37 +2825,42 @@ namespace RiverHollow.Actors
             sprite.SetColor(c);
         }
 
+        public void SetHairColor(Color c)
+        {
+            _cHairColor = c;
+            SetColor(_sprHair, c);
+        }
         public void SetHairType(int index)
         {
             _iHairIndex = index;
-            AddDefaultAnimations(ref _spriteHair, TileSize * 2, @"Textures\texPlayerHair", 0, _iHairIndex * TileSize * 2);
-            _spriteHair.SetColor(_cHairColor);
-            _spriteHair.SetDepthMod(0.003f);
+            //Loads the Sprites for the players hair animations for the class based off of the hair ID
+            LoadSpriteAnimations(ref _sprHair, LoadWorldAndCombatAnimations(ObjectManager.PlayerAnimationData[CharacterClass.ID]), string.Format(@"{0}Hairstyles\Hair_{1}", GameContentManager.FOLDER_PLAYER, _iHairIndex));
+            _sprHair.SetDepthMod(HAIR_DEPTH);
         }
 
         public void MoveBy(int x, int y)
         {
-            _spriteBody.MoveBy(x, y);
-            _spriteEyes.MoveBy(x, y);
-            _spriteHair.MoveBy(x, y);
+            _sprBody.MoveBy(x, y);
+            _sprEyes.MoveBy(x, y);
+            _sprHair.MoveBy(x, y);
             if (_chest != null) { _chest.Sprite.MoveBy(x, y); }
             if (Hat != null) { Hat.Sprite.MoveBy(x, y); }
         }
 
         public override void PlayAnimation(AnimationEnum anim)
         {
-            _spriteBody.PlayAnimation(anim);
-            _spriteEyes.PlayAnimation(anim);
-            _spriteHair.PlayAnimation(anim);
+            _sprBody.PlayAnimation(anim);
+            _sprEyes.PlayAnimation(anim);
+            _sprHair.PlayAnimation(anim);
 
             if (_chest != null) { _chest.Sprite.PlayAnimation(anim); }
             if (Hat != null) { Hat.Sprite.PlayAnimation(anim); }
         }
         public override void PlayAnimation(VerbEnum verb, DirectionEnum dir)
         {
-            _spriteBody.PlayAnimation(verb, dir);
-            _spriteEyes.PlayAnimation(verb, dir);
-            _spriteHair.PlayAnimation(verb, dir);
+            _sprBody.PlayAnimation(verb, dir);
+            _sprEyes.PlayAnimation(verb, dir);
+            _sprHair.PlayAnimation(verb, dir);
 
             if (_chest != null) { _chest.Sprite.PlayAnimation(verb, dir); }
             if (Hat != null) { Hat.Sprite.PlayAnimation(verb, dir); }
@@ -2923,9 +2868,9 @@ namespace RiverHollow.Actors
 
         public void SetScale(int scale = 1)
         {
-            _spriteBody.SetScale(scale);
-            _spriteEyes.SetScale(scale);
-            _spriteHair.SetScale(scale);
+            _sprBody.SetScale(scale);
+            _sprEyes.SetScale(scale);
+            _sprHair.SetScale(scale);
 
             if (_chest != null) { _chest.Sprite.SetScale(scale); }
             if (_hat != null) { _hat.Sprite.SetScale(scale); }
@@ -2938,13 +2883,13 @@ namespace RiverHollow.Actors
                 if (c.IsShirt()) { _chest = c; }
                 else if (c.IsHat())
                 {
-                    _spriteHair.FrameCutoff = 9;
+                    _sprHair.FrameCutoff = 9;
                     _hat = c;
                 }
 
                 //MAR AWKWARD
-                c.Sprite.Position = _spriteBody.Position;
-                c.Sprite.PlayAnimation(_spriteBody.CurrentAnimation);
+                c.Sprite.Position = _sprBody.Position;
+                c.Sprite.PlayAnimation(_sprBody.CurrentAnimation);
                 c.Sprite.SetDepthMod(0.004f);
             }
         }
@@ -2954,7 +2899,7 @@ namespace RiverHollow.Actors
             if (c.Equals(ClothesEnum.Chest)) { _chest = null; }
             else if (c.Equals(ClothesEnum.Hat))
             {
-                _spriteHair.FrameCutoff = 0;
+                _sprHair.FrameCutoff = 0;
                 _hat = null;
             }
         }
@@ -2984,22 +2929,13 @@ namespace RiverHollow.Actors
             _sCondition = condition;
             _bActive = false;
 
-            LoadContent(_sNPsCFolder + "Spirit_" + _sType);
-        }
-
-        public override void LoadContent(string textureToLoad)
-        {
-            _spriteBody = new AnimatedSprite(textureToLoad);
-            _spriteBody.AddAnimation(VerbEnum.Idle, DirectionEnum.Down, 0, 0, 16, 18, 2, 0.6f);
-            _spriteBody.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
-
-            _iWidth = _spriteBody.Width;
-            _iHeight = _spriteBody.Height;
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAnimations(data), _sNPsCFolder + "Spirit_" + _sType);
         }
 
         public override void Update(GameTime gTime)
         {
-            _spriteBody.Update(gTime);
+            _sprBody.Update(gTime);
             //if (_bActive)
             //{
             //    base.Update(gTime);
@@ -3023,7 +2959,7 @@ namespace RiverHollow.Actors
         {
             if (_bActive)
             {
-                _spriteBody.Draw(spriteBatch, useLayerDepth, _fVisibility);
+                _sprBody.Draw(spriteBatch, useLayerDepth, _fVisibility);
             }
         }
 
@@ -3121,8 +3057,8 @@ namespace RiverHollow.Actors
             int startX = 0;
             int startY = 0;
 
-            _spriteBody = new AnimatedSprite(@"Textures\Actors\Summons\" + stringData["Texture"]);
-            _spriteBody.AddAnimation(AnimationEnum.Spawn, startX, startY, iFrameSize, iFrameSize, int.Parse(spawn[0]), float.Parse(spawn[1]));
+            _sprBody = new AnimatedSprite(@"Textures\Actors\Summons\" + stringData["Texture"]);
+            _sprBody.AddAnimation(AnimationEnum.Spawn, startX, startY, iFrameSize, iFrameSize, int.Parse(spawn[0]), float.Parse(spawn[1]));
 
             //startX += int.Parse(spawn[0]) * iFrameSize;
             //_spriteBody.AddAnimation(CActorAnimEnum.Idle, startX, startY, iFrameSize, iFrameSize, int.Parse(idle[0]), float.Parse(idle[1]));
@@ -3131,9 +3067,9 @@ namespace RiverHollow.Actors
             //startX += int.Parse(cast[0]) * iFrameSize;
             //_spriteBody.AddAnimation(CActorAnimEnum.Attack, startX, startY, iFrameSize, iFrameSize, int.Parse(attack[0]), float.Parse(attack[1]));
 
-            _spriteBody.SetNextAnimation(Util.GetEnumString(AnimationEnum.Spawn), Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
-            _spriteBody.PlayAnimation(AnimationEnum.Spawn);
-            _spriteBody.SetScale(5);
+            _sprBody.SetNextAnimation(Util.GetEnumString(AnimationEnum.Spawn), Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
+            _sprBody.PlayAnimation(AnimationEnum.Spawn);
+            _sprBody.SetScale(5);
         }
 
         public void SetStats(int magStat)

@@ -39,7 +39,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapRoom5.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CutScenes.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texMachines.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texPlayer.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/WorldObjects.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetManorGrounds.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetManor.png</File>
@@ -60,7 +59,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC3.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/NPCData/Schedules/NPC1.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Quests.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texPlayerHair.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/MagicShop.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texClothes.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/MonsterTraitTable.xml</File>
@@ -76,14 +74,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC6.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC7.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC8.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Bard.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Knight.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Summoner.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Witch.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Wizard.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Healer.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texCmbtActions.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/WorldAdventurers.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/ActionEffects/LightningSprite.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/ActionEffects/WitchsCurse.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tsWallsFloors.png</File>
@@ -98,7 +89,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapTower2.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapTower3.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapManor1.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/WizardPortrait.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Consumables.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Equipment.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Food.png</File>
@@ -106,28 +96,9 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/StaticObjects.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapSwamp.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/DarkWoodTree.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Lancer.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Bow/660.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Knife/630.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Orb/620.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Orb/621.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Rapier/670.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Shield/650.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Spear/640.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Staff/610.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Staff/611.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Staff/612.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Wand/600.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerSummoner.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerWizard.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC9.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC10.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tsBuildings.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Spear/641.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Wand/601.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerLancer.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerBard.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerHealer.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Accessories.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/armor.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/weapons.png</File>
@@ -153,34 +124,20 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Harp/e2.wav</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/StatusEffects.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/StatusText.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerKnight.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/PlayerScout.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Scout.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Summons/EarthElemental.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Summons/WaterElemental.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Summons.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Summons/FireElemental.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Summons/AirElemental.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Summons/Magus.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Orb/623.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Orb/622.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC0.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC11.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Orb/629.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC0.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC11.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/CutsceneDialogue.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Orb/627.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Valley.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Orb/626.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Orb/628.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Staff/618.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Orb/624.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Orb/625.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/ToolAnimations.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Tools.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Wand/609.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Combat/Weapons/Wand/602.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Effects/lighteffect.fx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texFlooring.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapSpringDungeonC.tmx</File>
@@ -191,5 +148,45 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/FontBattle_0.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/FontDefault.fnt</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/Lettering.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Bow/660.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Knife/630.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Orb/620.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Orb/621.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Orb/622.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Orb/623.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Orb/624.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Orb/625.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Orb/626.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Orb/627.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Orb/628.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Orb/629.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Rapier/670.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Shield/650.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Spear/640.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Spear/641.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Staff/610.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Staff/611.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Staff/612.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Staff/618.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Wand/600.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Wand/601.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Wand/602.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Wand/604.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Wand/608.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Wand/609.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/PlayerClassAnimationConfig.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/Body.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/Eyes.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/Hairstyles/Hair_0.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/Hairstyles/Hair_1.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/Hairstyles/Hair_2.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Adventurer_1.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Adventurer_2.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Adventurer_3.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Adventurer_4.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Adventurer_5.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Adventurer_6.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Adventurer_7.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Adventurer_8.png</File>
   </SourceFiles>
 </SourceFileCollection>

@@ -8,8 +8,6 @@ using RiverHollow.Actors;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Misc;
-using RiverHollow.GUIObjects;
-using static RiverHollow.WorldObjects.WorldItem;
 
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Buildings;
@@ -84,8 +82,6 @@ namespace RiverHollow.Game_Managers
             _liParty.Add(World);
             _liBuildings = new List<Building>();
             _canMake = new List<int>();
-
-            World.LoadContent(@"Textures\texPlayer");
         }
 
         public static void NewPlayer()
@@ -541,7 +537,6 @@ namespace RiverHollow.Game_Managers
         {
             CharacterClass combatClass = ObjectManager.GetClassByIndex(x);
             World.SetClass(combatClass);
-            World.LoadClassAnimations();
         }
 
         public static bool DecreaseStamina(int x)

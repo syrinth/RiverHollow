@@ -20,11 +20,13 @@ namespace RiverHollow.Game_Managers
     public static class ObjectManager
     {
         static Dictionary<int, Dictionary<string, string>> _diVillagerData;
+        static Dictionary<int, Dictionary<string, string>> _diPlayerAnimationData;
+        public static Dictionary<int, Dictionary<string, string>> PlayerAnimationData => _diPlayerAnimationData;
 
         static Dictionary<int, Dictionary<string, string>> _diBuildings;
         static Dictionary<int, Dictionary<string, string>> _diItemData;
         static Dictionary<int, Dictionary<string, string>> _diStatusEffects;
-        static Dictionary<int, string> _diWorkers;
+        static Dictionary<int, Dictionary<string, string>> _diWorkers;
         static Dictionary<int, Dictionary<string, string>> _diWorldObjects;
 
         static Dictionary<int, Dictionary<string, string>> _diMonsterData;
@@ -43,6 +45,7 @@ namespace RiverHollow.Game_Managers
         public static void LoadContent(ContentManager Content)
         {
             _diVillagerData = new Dictionary<int, Dictionary<string, string>>();
+            _diPlayerAnimationData = new Dictionary<int, Dictionary<string, string>>();
             _diItemData = new Dictionary<int, Dictionary<string, string>>();
             _diActions = new Dictionary<int, Dictionary<string, string>>();
             _diWorldObjects = new Dictionary<int, Dictionary<string, string>>();
@@ -50,8 +53,9 @@ namespace RiverHollow.Game_Managers
             _diSummonData = new Dictionary<int, Dictionary<string, string>>();
             _diBuildings = new Dictionary<int, Dictionary<string, string>>();
             _diStatusEffects = new Dictionary<int, Dictionary<string, string>>();
-            _diWorkers = Content.Load<Dictionary<int, string>>(@"Data\Workers");
+            _diWorkers = new Dictionary<int, Dictionary<string, string>>();
 
+            AddToDictionary(_diPlayerAnimationData, @"Data\PlayerClassAnimationConfig", Content);
             AddToDictionary(_diItemData, @"Data\ItemData", Content);
             AddToDictionary(_diWorldObjects, @"Data\WorldObjects", Content);
             AddToDictionary(_diActions, @"Data\CombatActions", Content);
@@ -60,6 +64,7 @@ namespace RiverHollow.Game_Managers
             AddToDictionary(_diSummonData, @"Data\Summons", Content);
             AddToDictionary(_diBuildings, @"Data\Buildings", Content);
             AddToDictionary(_diStatusEffects, @"Data\StatusEffects", Content);
+            AddToDictionary(_diWorkers, @"Data\Workers", Content);
 
             _liForest = new List<int>();
             _liMountain = new List<int>();
@@ -140,9 +145,7 @@ namespace RiverHollow.Game_Managers
         {
             if (_diWorkers.ContainsKey(id))
             {
-                string stringData = _diWorkers[id];
-                string[] stringDataValues = Util.FindTags(stringData);
-                return new Adventurer(stringDataValues, id);
+                return new Adventurer(_diWorkers[id], id);
             }
             return null;
         }
@@ -367,6 +370,52 @@ namespace RiverHollow.Game_Managers
             return GetMonsterByIndex(4);// new RHRandom().Next(1, allowedMobs.Count-1));
         }
 
+        #endregion
+
+        #region Helper Objects
+        public class AnimationData
+        {
+            VerbEnum _eVerb;
+            AnimationEnum _eAnim;
+            bool _bPingPong;
+            bool _bDirectional;
+            int _iXLocation;
+            int _iYLocation;
+            int _iFrames;
+            float _fFrameSpeed;
+
+            public int XLocation => _iXLocation;
+            public int YLocation => _iYLocation;
+            public int Frames => _iFrames;
+            public float FrameSpeed => _fFrameSpeed;
+            public bool Directional => _bDirectional;
+            public bool PingPong => _bPingPong;
+            public VerbEnum Verb => _eVerb;
+            public AnimationEnum Animation => _eAnim;
+
+            public AnimationData(string value, VerbEnum verb, bool directional) : base()
+            {
+                _bDirectional = directional;
+                _eVerb = verb;
+                StoreData(value);
+            }
+
+            public AnimationData(string value, AnimationEnum anim)
+            {
+                _eAnim = anim;
+                StoreData(value);
+            }
+
+            public void StoreData(string value)
+            {
+                string[] splitString = value.Split('-');
+                _iXLocation = int.Parse(splitString[0]);
+                _iYLocation = int.Parse(splitString[1]);
+                _iFrames = int.Parse(splitString[2]);
+                _fFrameSpeed = float.Parse(splitString[3]);
+                _bPingPong = splitString[4].Equals("T");
+            }
+        }
         #endregion
     }
 }

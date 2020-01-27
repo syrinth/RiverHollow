@@ -25,7 +25,7 @@ namespace RiverHollow.GUIComponents.Screens
         static List<int> _liShirts = new List<int> { -1, 400, 401 };
         bool _bCloseColorSelection;
         static int _iHairTypeIndex;
-        int _iHairTypeMax = GameContentManager.GetTexture(@"Textures\texPlayerHair").Height / 32;
+        int _iHairTypeCount = 3;
         GUIWindow _window;
         GUIButton _btnOK;
         GUIButton _btnCancel;
@@ -208,7 +208,7 @@ namespace RiverHollow.GUIComponents.Screens
         }
         public void BtnNextHairType()
         {
-            if (_iHairTypeIndex < _iHairTypeMax - 1) { _iHairTypeIndex++; }
+            if (_iHairTypeIndex < _iHairTypeCount - 1) { _iHairTypeIndex++; }
             else { _iHairTypeIndex = 0; }
 
             PlayerManager.World.SetHairType(_iHairTypeIndex);

@@ -96,12 +96,9 @@ namespace RiverHollow.Game_Managers
         private static void LoadCharacters()
         {
             AddDirectoryTextures(FOLDER_ACTOR);
-
-            AddTexture(@"Textures\texPlayer");
             AddTexture(@"Textures\texFlooring");
             AddTexture(@"Textures\texWeather");
             AddTexture(@"Textures\lightmask");
-            AddTexture(@"Textures\texPlayerHair");
             AddTexture(@"Textures\texClothes");
         }
         private static void AddDirectoryTextures(string directory, bool AddContent = true)

@@ -52,18 +52,12 @@ namespace RiverHollow.Characters
         {
             _id = id;
             _sName = GameContentManager.GetMonsterInfo(_id);
-            _sTexture = GameContentManager.FOLDER_MONSTERS + data["Texture"];
-
-            List<AnimationData> listAnimations = new List<AnimationData>();
-            AddToAnimationsList(ref listAnimations, data, VerbEnum.Walk);
-            AddToAnimationsList(ref listAnimations, data, VerbEnum.Attack);
-            AddToAnimationsList(ref listAnimations, data, VerbEnum.Hurt);
-            AddToAnimationsList(ref listAnimations, data, VerbEnum.Critical);
-            AddToAnimationsList(ref listAnimations, data, VerbEnum.Cast);
-            AddToAnimationsList(ref listAnimations, data, AnimationEnum.KO);
 
             //_iWidth = int.Parse(data["Width"]);
             //_iHeight = int.Parse(data["Height"]);
+
+            _iWidth = TileSize;
+            _iHeight = TileSize * 2;
 
             _iRating = int.Parse(data["Lvl"]);
             _iXP = _iRating * 10;
@@ -123,46 +117,26 @@ namespace RiverHollow.Characters
 
             _iCurrentHP = MaxHP;
             _iCurrentMP = MaxMP;
-
-            LoadSpriteAnimations(listAnimations);
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), GameContentManager.FOLDER_MONSTERS + data["Texture"]);
         }
 
-        protected void LoadSpriteAnimations(List<AnimationData> listAnimations)
-        {
-            _spriteBody = new AnimatedSprite(_sTexture);
-            base._iWidth = TileSize;
-            base._iHeight = TileSize * 2;
-
-            foreach (AnimationData data in listAnimations)
-            {
-                if (data.Directional)
-                {
-                    AddDirectionalAnimations(ref _spriteBody, data.Verb, data.XLocation, 0, _iWidth, _iHeight, data.Frames, data.FrameSpeed, data.Frames);
-                }
-                else
-                {
-                    _spriteBody.AddAnimation(data.Animation, data.XLocation, 0, _iWidth, _iHeight, data.Frames, data.FrameSpeed);
-                }
-            }
-
-            //Deprecated Jump code
-            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Down), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Air, DirectionEnum.Down), xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
-            //xCrawl += 64;
-            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Up), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Up), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Air, DirectionEnum.Up), xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
-            //xCrawl += 64;
-            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Left), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Left), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Air, DirectionEnum.Left), xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
-            //xCrawl += 64;
-            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Right), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Right), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-            //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Air, DirectionEnum.Right), xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
-            //_spriteBody.SetCurrentAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
-        }
+        //Deprecated Jump code
+        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Down), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Air, DirectionEnum.Down), xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
+        //xCrawl += 64;
+        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Up), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Up), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Air, DirectionEnum.Up), xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
+        //xCrawl += 64;
+        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Left), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Left), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Air, DirectionEnum.Left), xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
+        //xCrawl += 64;
+        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Right), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Right), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
+        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Air, DirectionEnum.Right), xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
+        //_spriteBody.SetCurrentAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
 
         public override void Update(GameTime gTime)
         {
