@@ -35,7 +35,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _iCurr = 0;
 
             _delAction = del;
-            _font = GameContentManager.GetFont(@"Fonts\Font");
+            _font = DataManager.GetFont(@"Fonts\Font");
             _iMidWidth = width - (EDGE * 2);
 
             _gLeft = new GUIImage(new Rectangle(48, 32, EDGE, 16), EDGE, 16, @"Textures\Dialog");

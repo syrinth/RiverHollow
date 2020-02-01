@@ -103,7 +103,7 @@ namespace RiverHollow.Misc
             _liRewardItems = new List<Item>();
             string[] splitParams = stringData.Split('/');
             int i = 0;
-            GameContentManager.GetQuestText(_iQuestID, ref _name, ref _sDescription);
+            DataManager.GetQuestText(_iQuestID, ref _name, ref _sDescription);
 
             string[] split = Util.FindTags(splitParams[i++]);
             foreach (string s in split)
@@ -111,7 +111,7 @@ namespace RiverHollow.Misc
                 string[] tagType = s.Split(':');
                 if (tagType[0].Equals("HandTo"))
                 {
-                    _npcHandInTo = ObjectManager.DiNPC[int.Parse(tagType[1])];
+                    _npcHandInTo = DataManager.DiNPC[int.Parse(tagType[1])];
                 }
                 else if (tagType[0].Equals("Type"))
                 {
@@ -120,7 +120,7 @@ namespace RiverHollow.Misc
                 else if (tagType[0].Equals("GoalItem"))
                 {
                     string[] info = tagType[1].Split('-');
-                    _questItem = ObjectManager.GetItem(int.Parse(info[0]));
+                    _questItem = DataManager.GetItem(int.Parse(info[0]));
                     _iTargetGoal = int.Parse(info[1]);
                 }
                 else if (tagType[0].Equals("Item"))
@@ -128,7 +128,7 @@ namespace RiverHollow.Misc
                     string[] parse = tagType[1].Split('-');
                     if (parse.Length > 1)
                     {
-                        Item it = ObjectManager.GetItem(int.Parse(parse[0]), int.Parse(parse[1]));
+                        Item it = DataManager.GetItem(int.Parse(parse[0]), int.Parse(parse[1]));
                         if (parse.Length == 3) { it.ApplyUniqueData(parse[2]); }
                         _liRewardItems.Add(it);
                     }
@@ -147,7 +147,7 @@ namespace RiverHollow.Misc
                     string[] parse = tagType[1].Split('-');
                     if (parse.Length > 1)
                     {
-                        _spawnMob = ObjectManager.GetMonsterByIndex(int.Parse(parse[0]));
+                        _spawnMob = DataManager.GetMonsterByIndex(int.Parse(parse[0]));
                         _sSpawnMap = parse[1];
                         _sLocName = parse[2];
                     }
@@ -265,7 +265,7 @@ namespace RiverHollow.Misc
 
             if (_iActivateID > -1)
             {
-                ObjectManager.DiNPC[_iActivateID].Activate(true);
+                DataManager.DiNPC[_iActivateID].Activate(true);
             }
 
             PlayerManager.QuestLog.Remove(this);
@@ -386,9 +386,9 @@ namespace RiverHollow.Misc
                 _iQuestID = qData.questID;
                 _name = qData.name;
                 _sDescription = qData.description;
-                _npcHandInTo = qData.questGiver != -1 ? ObjectManager.DiNPC[qData.questGiver] : null;
-                _questItem = qData.itemID != -1 ? ObjectManager.GetItem(qData.itemID) : null;
-                _questMob = qData.mobID != -1 ? ObjectManager.GetMonsterByIndex(qData.mobID) : null;
+                _npcHandInTo = qData.questGiver != -1 ? DataManager.DiNPC[qData.questGiver] : null;
+                _questItem = qData.itemID != -1 ? DataManager.GetItem(qData.itemID) : null;
+                _questMob = qData.mobID != -1 ? DataManager.GetMonsterByIndex(qData.mobID) : null;
                 _iTargetGoal = qData.targetGoal;
                 _iAccomplished = qData.accomplished;
                 _bReadyForHandIn = qData.readyForHandIn;
@@ -396,7 +396,7 @@ namespace RiverHollow.Misc
 
                 foreach (ItemData i in qData.Items)
                 {
-                    Item newItem = ObjectManager.GetItem(i.itemID, i.num);
+                    Item newItem = DataManager.GetItem(i.itemID, i.num);
 
                     if (newItem != null) { newItem.ApplyUniqueData(i.strData); }
                     _liRewardItems.Add(newItem);

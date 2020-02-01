@@ -26,7 +26,7 @@ namespace RiverHollow.GUIObjects
 
         public static void LoadContent()
         {
-            _texture = GameContentManager.GetTexture(@"Textures\Dialog");
+            _texture = DataManager.GetTexture(@"Textures\Dialog");
             Position = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
             _CursorType = EnumCursorType.Normal;
         }

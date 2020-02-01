@@ -61,11 +61,10 @@ namespace RiverHollow
 
             InputManager.Load();
             SoundManager.LoadContent(Content);
-            GameContentManager.LoadContent(Content);
+            DataManager.LoadContent(Content);
             GameManager.LoadContent(Content);
             MapManager.LoadContent(Content, GraphicsDevice);
             MapManager.LoadObjects();
-            ObjectManager.LoadContent(Content);
 
             GUIManager.LoadContent();
 
@@ -76,7 +75,7 @@ namespace RiverHollow
             var pp = GraphicsDevice.PresentationParameters;
             _renderLights = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
             _renderMain = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
-            lightMask = GameContentManager.GetTexture(@"Textures\lightmask");
+            lightMask = DataManager.GetTexture(@"Textures\lightmask");
             _effectLights = Content.Load<Effect>(@"Effects\lighteffect");
 
             PlayerManager.Initialize();
@@ -291,6 +290,12 @@ namespace RiverHollow
         {
             PlayerManager.NewPlayer();
             MapManager.PopulateMaps(false);
+
+            foreach(Villager v in DataManager.DiNPC.Values) {
+                v.MoveToSpawn();
+                v.CalculatePathing();
+            }
+
             PlayerManager.Buildings[0].AddWorker(a);
             PlayerManager.Buildings[0].AddWorker(b);
 
@@ -319,7 +324,11 @@ namespace RiverHollow
             {
                 b.Rollover();
             }
-            ObjectManager.Rollover();
+
+            foreach (Villager n in DataManager.DiNPC.Values)
+            {
+                n.RollOver();
+            }
             MapManager.Rollover();
         }
 

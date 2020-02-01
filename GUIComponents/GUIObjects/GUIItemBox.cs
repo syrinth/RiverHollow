@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
-using static RiverHollow.Game_Managers.ObjectManager;
+using static RiverHollow.Game_Managers.DataManager;
 using System.Collections.Generic;
 using System;
 using static RiverHollow.WorldObjects.Clothes;
@@ -85,11 +85,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 string text = string.Empty;
                 if (Item.IsFood())                  //Text has a {0} parameter so Item.Name fills it out
                 {
-                    text = string.Format(GameContentManager.GetGameText("FoodConfirm"), Item.Name);
+                    text = string.Format(DataManager.GetGameText("FoodConfirm"), Item.Name);
                 }
                 else if (Item.IsClassItem())        //Class Change handler
                 {
-                    text = GameContentManager.GetGameText("ClassItemConfirm");
+                    text = DataManager.GetGameText("ClassItemConfirm");
                 }
                 else if (Item.IsTool() && ((Tool)Item).ToolType == GameManager.ToolEnum.Harp) {
                     Spirit s = MapManager.CurrentMap.FindSpirit();
@@ -270,7 +270,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         public GUIItemReq(int id, int number)
         {
-            Item it = ObjectManager.GetItem(id);
+            Item it = DataManager.GetItem(id);
             _gImg = new GUIImage(it.SourceRectangle, it.SourceRectangle.Width, it.SourceRectangle.Height, it.Texture);
             _gImg.SetScale(Scale);
             _gText = new GUIText("999");

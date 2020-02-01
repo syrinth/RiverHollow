@@ -106,10 +106,9 @@
     <Compile Include="GUIComponents\Screens\HUDScreen.cs" />
     <Compile Include="GUIComponents\Screens\IntroMenuScreen.cs" />
     <Compile Include="Game Managers\InputManager.cs" />
-    <Compile Include="Game Managers\ObjectManager.cs" />
+    <Compile Include="Game Managers\DataManager.cs" />
     <Compile Include="Game Managers\MapManager.cs" />
     <Compile Include="Game Managers\PlayerManager.cs" />
-    <Compile Include="Game Managers\GameContentManager.cs" />
     <Compile Include="Game Managers\GameCalendar.cs" />
     <Compile Include="GUIComponents\GUIObjects\GraphicCursor.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIObject.cs" />

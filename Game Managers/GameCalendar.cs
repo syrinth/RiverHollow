@@ -69,7 +69,7 @@ namespace RiverHollow
 
         private static void SetDisplayWindow()
         {
-            _text = new GUIText("Day XX, XX:XX", GameContentManager.GetFont(@"Fonts\Font"));
+            _text = new GUIText("Day XX, XX:XX", DataManager.GetFont(@"Fonts\Font"));
 
             Vector2 boxSize = _text.MeasureString() + new Vector2(GUIWindow.BrownWin.Edge * 2, GUIWindow.BrownWin.Edge * 2);
             _displayWindow = new GUIWindow(GUIWindow.BrownWin, (int)boxSize.X, (int)boxSize.Y);

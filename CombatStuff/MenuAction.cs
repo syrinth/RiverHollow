@@ -37,7 +37,7 @@ namespace RiverHollow.Actors.CombatStuff
         protected void ImportBasics(Dictionary<string, string> stringData, int id)
         {
             _id = id;
-            GameContentManager.GetActionText(_id, ref _name, ref _description);
+            DataManager.GetActionText(_id, ref _name, ref _description);
 
             _actionType = Util.ParseEnum<ActionEnum>(stringData["Type"]);
             _menuType = Util.ParseEnum<MenuEnum>(stringData["Menu"]);
@@ -134,7 +134,7 @@ namespace RiverHollow.Actors.CombatStuff
         protected void ImportBasics(int id, Dictionary<string, string> stringData)
         {
             _id = id;
-            GameContentManager.GetActionText(_id, ref _name, ref _description);
+            DataManager.GetActionText(_id, ref _name, ref _description);
 
             _actionType = Util.ParseEnum<ActionEnum>(stringData["Type"]);
             if (stringData.ContainsKey("Element")) { _element = Util.ParseEnum<ElementEnum>(stringData["Element"]); }
@@ -400,7 +400,7 @@ namespace RiverHollow.Actors.CombatStuff
                 foreach (StatusEffectData effect in _liStatusEffects)
                 {
                     //Makes a new StatusEffectobject from the data held in the action
-                    StatusEffect status = ObjectManager.GetStatusEffectByIndex(effect.BuffID);
+                    StatusEffect status = DataManager.GetStatusEffectByIndex(effect.BuffID);
                     status.Duration = effect.Duration;
                     status.Caster = SkillUser;
 
@@ -470,7 +470,7 @@ namespace RiverHollow.Actors.CombatStuff
                 //This should only ever be one, butjust in case
                 foreach (RHTile t in TileTargetList)
                 {
-                    Summon newSummon = ObjectManager.GetSummonByIndex(_iSummonID);
+                    Summon newSummon = DataManager.GetSummonByIndex(_iSummonID);
                     newSummon.SetStats(SkillUser.StatMag);                //Summon stats are based off the Magic stat
                     t.Character.LinkSummon(newSummon);                 //Links the summon to the character
                     newSummon.linkedChar = t.Character;                //Links the character to the new summon
@@ -793,7 +793,7 @@ namespace RiverHollow.Actors.CombatStuff
                                 else if (counteringChar.AnimationPlayedXTimes(1))
                                 {
                                     counteringChar.PlayAnimation(VerbEnum.Walk);
-                                    SkillUser.ProcessAttack(counteringChar, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, _iCritRating, counteringChar.GetAttackElement());
+                                    SkillUser.ProcessAttack(counteringChar, ((CombatAction)DataManager.GetActionByIndex(1)).Potency, _iCritRating, counteringChar.GetAttackElement());
                                     counteringChar = null;
                                     _bPauseActionHandler = false;
                                     _iCurrentAction++;
@@ -808,7 +808,7 @@ namespace RiverHollow.Actors.CombatStuff
                                 else if (counteringSummon.AnimationPlayedXTimes(1))
                                 {
                                     counteringSummon.PlayAnimation(VerbEnum.Walk);
-                                    SkillUser.ProcessAttack(counteringSummon, ((CombatAction)ObjectManager.GetActionByIndex(1)).Potency, _iCritRating, counteringSummon.GetAttackElement());
+                                    SkillUser.ProcessAttack(counteringSummon, ((CombatAction)DataManager.GetActionByIndex(1)).Potency, _iCritRating, counteringSummon.GetAttackElement());
                                     counteringSummon = null;
                                     _bPauseActionHandler = false;
                                     _iCurrentAction++;

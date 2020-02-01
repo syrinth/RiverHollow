@@ -594,7 +594,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _window = new GUIWindow(GUIWindow.RedWin, boxWidth, boxHeight);
                     _window.AnchorToInnerSide(win, SideEnum.TopLeft);
 
-                    _font = GameContentManager.GetFont(@"Fonts\Font");
+                    _font = DataManager.GetFont(@"Fonts\Font");
                     _quest = null;
                 }
 
@@ -852,7 +852,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     public int Row => _iRow;
 
                     private GUICharacterSprite _sprite;
-                    public StartPosition(int col, int row) : base(new Rectangle(0, 112, 16, 16), TileSize, TileSize, GameContentManager.FILE_WORLDOBJECTS)
+                    public StartPosition(int col, int row) : base(new Rectangle(0, 112, 16, 16), TileSize, TileSize, DataManager.FILE_WORLDOBJECTS)
                     {
                         _iCol = col;
                         _iRow = row;
@@ -948,7 +948,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     //_winClothes.AnchorAndAlignToObject(WinDisplay, SideEnum.Bottom, SideEnum.Left);
 
                     _character = c;
-                    _font = GameContentManager.GetFont(@"Fonts\Font");
+                    _font = DataManager.GetFont(@"Fonts\Font");
 
                     _liGearBoxes = new List<SpecializedBox>();
                     Load();
@@ -1375,7 +1375,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 this.CenterOnScreen();
                 _villagerList = new List<FriendshipBox>();
 
-                foreach (Villager n in ObjectManager.DiNPC.Values)
+                foreach (Villager n in DataManager.DiNPC.Values)
                 {
                     FriendshipBox f = new FriendshipBox(n, this.MidWidth());
 
@@ -1429,7 +1429,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 public FriendshipBox(Villager c, int mainWidth) : base(GUIWindow.BrownWin, mainWidth, 16)
                 {
                     _liFriendship = new List<GUIImage>();
-                    _font = GameContentManager.GetFont(@"Fonts\Font");
+                    _font = DataManager.GetFont(@"Fonts\Font");
                     _gTextName = new GUIText("XXXXXXXXXX");
                     if (c.GetFriendshipLevel() == 0)
                     {

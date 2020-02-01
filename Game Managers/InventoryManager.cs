@@ -277,7 +277,7 @@ Exit:
         /// <returns>True if successful</returns>
         public static bool AddToInventory(int itemToAdd, int num = 1, bool playerInventory = true)
         {
-            return AddToInventory(ObjectManager.GetItem(itemToAdd, num), playerInventory);
+            return AddToInventory(DataManager.GetItem(itemToAdd, num), playerInventory);
         }
 
         /// <summary>

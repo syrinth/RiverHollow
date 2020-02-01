@@ -110,7 +110,7 @@ namespace RiverHollow.SpriteAnimations
 
         public AnimatedSprite(string Texture)
         {
-            _texture = GameContentManager.GetTexture(Texture);
+            _texture = DataManager.GetTexture(Texture);
         }
 
         public AnimatedSprite(AnimatedSprite sprite)

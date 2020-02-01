@@ -63,7 +63,7 @@ namespace RiverHollow.GUIObjects
 
         protected Rectangle _sourceRect;
 
-        protected Texture2D _texture = GameContentManager.GetTexture(@"Textures\Dialog");
+        protected Texture2D _texture = DataManager.GetTexture(@"Textures\Dialog");
         protected Color EnabledColor => _bEnabled ? Color.White : Color.Gray;
         protected bool _bEnabled = true;
         public bool Enabled => _bEnabled;

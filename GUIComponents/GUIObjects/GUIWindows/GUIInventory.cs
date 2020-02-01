@@ -59,7 +59,7 @@ namespace RiverHollow.Screens
             Height = (_winData.Edge * 2) + (_rows * _iBoxSize) + (_iMargin * (_rows + 1));
             Setup();
 
-            _texture = GameContentManager.GetTexture(@"Textures\Dialog");
+            _texture = DataManager.GetTexture(@"Textures\Dialog");
         }
 
         public override void Update(GameTime gTime)
@@ -130,8 +130,8 @@ namespace RiverHollow.Screens
                 else if (GameManager.CurrentDoor != null)
                 {
                     string text = string.Empty;
-                    if (GameManager.CurrentDoor.Check(IsItemThere(mouse))) { text = GameContentManager.GetGameText("KeyDoorOpen"); }
-                    else { text = GameContentManager.GetGameText("KeyDoorClose"); }
+                    if (GameManager.CurrentDoor.Check(IsItemThere(mouse))) { text = DataManager.GetGameText("KeyDoorOpen"); }
+                    else { text = DataManager.GetGameText("KeyDoorClose"); }
 
                     GUIManager.OpenTextWindow(text);
                 }
@@ -287,7 +287,7 @@ namespace RiverHollow.Screens
                         int num = chosenItem.Number;
                         num = num / 2;
                         chosenItem.Remove(num);
-                        rv = ObjectManager.GetItem(chosenItem.ItemID, num);
+                        rv = DataManager.GetItem(chosenItem.ItemID, num);
                     }
                     else
                     {

@@ -20,7 +20,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public GUIImage(Rectangle sourceRect, int width, int height, string texture)
         {
-            _texture = GameContentManager.GetTexture(texture);
+            _texture = DataManager.GetTexture(texture);
             Width = width;
             Height = height;
             _drawRect = new Rectangle((int)Position().X, (int)Position().Y, Width, Height);

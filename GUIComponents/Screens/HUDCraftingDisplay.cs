@@ -5,7 +5,7 @@ using RiverHollow.Screens;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.ObjectManager;
+using static RiverHollow.Game_Managers.DataManager;
 using RiverHollow.GUIObjects;
 using RiverHollow.Actors;
 using static RiverHollow.WorldObjects.WorldItem;

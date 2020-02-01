@@ -75,7 +75,7 @@ namespace RiverHollow.Game_Managers
         public static void LoadContent(ContentManager Content)
         {
             DiUpgrades = new Dictionary<int, Upgrade>();
-            foreach (KeyValuePair<int, string> kvp in GameContentManager.DiUpgrades)
+            foreach (KeyValuePair<int, string> kvp in DataManager.DiUpgrades)
             {
                 DiUpgrades.Add(kvp.Key, new Upgrade(kvp.Key, kvp.Value));
             }
@@ -84,7 +84,7 @@ namespace RiverHollow.Game_Managers
         public static void LoadQuests(ContentManager Content)
         {
             DiQuests = new Dictionary<int, Quest>();
-            foreach (KeyValuePair<int, string> kvp in GameContentManager.DiQuests)
+            foreach (KeyValuePair<int, string> kvp in DataManager.DiQuests)
             {
                 DiQuests.Add(kvp.Key, new Quest(kvp.Value, kvp.Key));
             }
@@ -730,7 +730,7 @@ namespace RiverHollow.Game_Managers
                 data.CurrentMissions.Add(m.SaveData());
             }
 
-            foreach (Villager n in ObjectManager.DiNPC.Values)
+            foreach (Villager n in DataManager.DiNPC.Values)
             {
                 if (n.IsEligible()) { data.EligibleData.Add(((EligibleNPC)n).SaveData()); }
                 else { data.NPCData.Add(n.SaveData()); }
@@ -793,7 +793,7 @@ namespace RiverHollow.Game_Managers
             GameCalendar.LoadCalendar(data.Calendar); 
             foreach (BuildingData b in data.Buildings)
             {
-                Building newBuilding = ObjectManager.GetBuilding(b.iBuildingID);
+                Building newBuilding = DataManager.GetBuilding(b.iBuildingID);
                 newBuilding.LoadData(b);
                 bool place = b.iBuildingID == 0 || b.iBldgLevel != 0;
                 MapManager.Maps[MapManager.HomeMap].AddBuilding(newBuilding, place, place);
@@ -833,13 +833,13 @@ namespace RiverHollow.Game_Managers
             }
             foreach (NPCData n in data.NPCData)
             {
-                Villager target = ObjectManager.DiNPC[n.npcID];
+                Villager target = DataManager.DiNPC[n.npcID];
                 target.LoadData(n);
             }
 
             foreach (EligibleNPCData n in data.EligibleData)
             {
-                EligibleNPC target = (EligibleNPC)ObjectManager.DiNPC[n.npcData.npcID];
+                EligibleNPC target = (EligibleNPC)DataManager.DiNPC[n.npcData.npcID];
                 target.LoadData(n);
             }
         }
@@ -867,7 +867,7 @@ namespace RiverHollow.Game_Managers
             _id = id;
             _liRequiredItems = new List<KeyValuePair<int, int>>();
 
-            GameContentManager.GetUpgradeText(_id, ref _name, ref _description);
+            DataManager.GetUpgradeText(_id, ref _name, ref _description);
 
             string[] strSplit = Util.FindTags(strData);
             foreach (string s in strSplit)

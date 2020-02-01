@@ -36,7 +36,7 @@ namespace RiverHollow.Actors.CombatStuff
         public StatusEffect(int id, Dictionary<string, string> data)
         {
             _id = id;
-            GameContentManager.GetStatusEffectText(id, ref _sName, ref _sDescription);
+            DataManager.GetStatusEffectText(id, ref _sName, ref _sDescription);
 
             _liStats = new List<KeyValuePair<StatEnum, int>>();
             ImportBasics(id, data);

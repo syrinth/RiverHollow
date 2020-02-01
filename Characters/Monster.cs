@@ -51,7 +51,7 @@ namespace RiverHollow.Characters
         protected void ImportBasics(Dictionary<string, string> data, int id)
         {
             _id = id;
-            _sName = GameContentManager.GetMonsterInfo(_id);
+            _sName = DataManager.GetMonsterTestInfo(_id);
 
             //_iWidth = int.Parse(data["Width"]);
             //_iHeight = int.Parse(data["Height"]);
@@ -91,12 +91,12 @@ namespace RiverHollow.Characters
 
             foreach (string ability in data["Ability"].Split('-'))
             {
-                _liCombatActions.Add((CombatAction)ObjectManager.GetActionByIndex(int.Parse(ability)));
+                _liCombatActions.Add((CombatAction)DataManager.GetActionByIndex(int.Parse(ability)));
             }
 
             if (data.ContainsKey("Trait"))
             {
-                HandleTrait(GameContentManager.GetMonsterTraitData(data["Trait"]));
+                HandleTrait(DataManager.GetMonsterTraitData(data["Trait"]));
             }
 
             if (data.ContainsKey("Resist"))
@@ -117,7 +117,7 @@ namespace RiverHollow.Characters
 
             _iCurrentHP = MaxHP;
             _iCurrentMP = MaxMP;
-            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), GameContentManager.FOLDER_MONSTERS + data["Texture"]);
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), DataManager.FOLDER_MONSTERS + data["Texture"]);
         }
 
         //Deprecated Jump code

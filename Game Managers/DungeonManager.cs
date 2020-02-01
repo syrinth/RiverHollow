@@ -108,18 +108,18 @@ namespace RiverHollow.Game_Managers
             for (int i = 0; i < 5; i++)
             {
                 Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * TileSize, r.Next(1, mapHeight-1) * TileSize);
-                m.PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Tree, vect), true);
+                m.PlaceWorldObject(DataManager.GetWorldObject(WorldItem.Tree, vect), true);
             }
             for (int i = 0; i < 30; i++)
             {
                 Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * TileSize, r.Next(1, mapHeight-1) * TileSize);
-                m.PlaceWorldObject(ObjectManager.GetWorldObject(WorldItem.Rock, vect), true);
+                m.PlaceWorldObject(DataManager.GetWorldObject(WorldItem.Rock, vect), true);
             }
 
             if (lastRoom && _condition == EndCondition.TreasureChest)
             {
                 Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * TileSize, r.Next(1, mapHeight-1) * TileSize);
-                Container c = (Container)ObjectManager.GetWorldObject(190);
+                Container c = (Container)DataManager.GetWorldObject(190);
                 c.MapPosition = vect;
                 m.PlacePlayerObject(c);
                 _endChest = c;

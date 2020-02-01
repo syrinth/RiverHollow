@@ -949,7 +949,7 @@ namespace RiverHollow.Game_Managers
                     {
                         List<RHTile> targets = SelectedAction.GetTargetTiles();
                         ActiveCharacter = activeSummon;
-                        SelectedAction = new ChosenAction((CombatAction)ObjectManager.GetActionByIndex(CombatManager.BASIC_ATTACK));
+                        SelectedAction = new ChosenAction((CombatAction)DataManager.GetActionByIndex(CombatManager.BASIC_ATTACK));
                         SelectedAction.SetUser(ActiveCharacter);
                         SelectedAction.SetTargetTiles(targets);
                     }

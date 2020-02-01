@@ -96,7 +96,7 @@ namespace RiverHollow.Buildings
         protected void ImportBasics(Dictionary<string, string> stringData, int id)
         {
             _id = id;
-            GameContentManager.GetBuildingText(_id, ref _sName, ref _sDescription);
+            DataManager.GetBuildingText(_id, ref _sName, ref _sDescription);
 
             //The dimensions of the Building in tiles
             string[] dimensions = stringData["Dimensions"].Split('-');
@@ -146,8 +146,8 @@ namespace RiverHollow.Buildings
                 _arrWorkerTypes[1] = int.Parse(workerTypes[1]);
 
                 //These should only be present in worker buildings
-                _buildingChest = (Container)ObjectManager.GetWorldObject(190);
-                _pantry = (Container)ObjectManager.GetWorldObject(190);
+                _buildingChest = (Container)DataManager.GetWorldObject(190);
+                _pantry = (Container)DataManager.GetWorldObject(190);
             }
 
             //Default is 3, but some buildings may allow more or less
@@ -161,7 +161,7 @@ namespace RiverHollow.Buildings
 
             _iPersonalID = PlayerManager.GetNewBuildingID();
 
-            LoadSprite(stringData, GameContentManager.FOLDER_BUILDINGS + stringData["Texture"]);
+            LoadSprite(stringData, DataManager.FOLDER_BUILDINGS + stringData["Texture"]);
         }
 
         protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = "Textures\\worldObjects")
@@ -361,7 +361,7 @@ namespace RiverHollow.Buildings
                 {
                     for (int y = (int)startAt.Y + TileSize; y < startAt.Y + TileSize + CollisionBox.Height; y += TileSize)
                     {
-                        Floor obj = (Floor)ObjectManager.GetWorldObject(241);
+                        Floor obj = (Floor)DataManager.GetWorldObject(241);
                         obj.SetMapName(MapManager.CurrentMap.Name);
                         obj.SetCoordinatesByGrid(new Vector2(x, y));
                         MapManager.CurrentMap.TestMapTiles(obj);
@@ -398,7 +398,7 @@ namespace RiverHollow.Buildings
             _iUpgradeTimer = _iUpgradeTime + 1;
             _sprite.PlayAnimation(_iBldgLvl.ToString());
 
-            ObjectManager.DiNPC[_iNPCBuilderID].SetBuildTarget(this);
+            DataManager.DiNPC[_iNPCBuilderID].SetBuildTarget(this);
         }
 
         /// <summary>
@@ -408,7 +408,7 @@ namespace RiverHollow.Buildings
         /// <param name="location">The map location to create the wall.</param>
         private void PlaceWall(Vector2 location)
         {
-            WorldItem obj = (WorldItem)ObjectManager.GetWorldObject(240);
+            WorldItem obj = (WorldItem)DataManager.GetWorldObject(240);
             ((Wall)obj).SetMapName(MapManager.CurrentMap.Name);
             obj.SetCoordinatesByGrid(location);
             MapManager.CurrentMap.TestMapTiles(obj);
@@ -458,7 +458,7 @@ namespace RiverHollow.Buildings
 
             _sprite.PlayAnimation(_iBldgLvl.ToString());
 
-            ObjectManager.DiNPC[_iNPCBuilderID].SetBuildTarget(null);
+            DataManager.DiNPC[_iNPCBuilderID].SetBuildTarget(null);
         }
 
         /// <summary>
@@ -528,31 +528,31 @@ namespace RiverHollow.Buildings
 
             if(_iUpgradeTimer > 0)
             {
-                ObjectManager.DiNPC[_iNPCBuilderID].SetBuildTarget(this, true);
+                DataManager.DiNPC[_iNPCBuilderID].SetBuildTarget(this, true);
             }
 
             foreach (WorkerData wData in data.Workers)
             {
-                Adventurer w = ObjectManager.GetWorker(wData.workerID);
+                Adventurer w = DataManager.GetAdventurer(wData.workerID);
                 w.LoadAdventurerData(wData);
                 AddWorker(w);
             }
             this._sGivenName = data.sName;
-            this.Pantry = (Container)ObjectManager.GetWorldObject(data.pantry.containerID);
+            this.Pantry = (Container)DataManager.GetWorldObject(data.pantry.containerID);
             Pantry.LoadData(data.pantry);
-            this.BuildingChest = (Container)ObjectManager.GetWorldObject(data.pantry.containerID);
+            this.BuildingChest = (Container)DataManager.GetWorldObject(data.pantry.containerID);
             BuildingChest.LoadData(data.buildingChest);
 
             foreach (ContainerData c in data.containers)
             {
-                Container con = (Container)ObjectManager.GetWorldObject(c.containerID);
+                Container con = (Container)DataManager.GetWorldObject(c.containerID);
                 con.LoadData(c);
                 _liPlacedObjects.Add(con);
             }
 
             foreach (MachineData mac in data.machines)
             {
-                Machine theMachine = (Machine)ObjectManager.GetWorldObject(mac.ID);
+                Machine theMachine = (Machine)DataManager.GetWorldObject(mac.ID);
                 theMachine.LoadData(mac);
                 _liPlacedObjects.Add(theMachine);
             }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using RiverHollow.Game_Managers;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
-using static RiverHollow.Game_Managers.ObjectManager;
+using static RiverHollow.Game_Managers.DataManager;
 using RiverHollow.GUIObjects;
 using System;
 using RiverHollow.SpriteAnimations;
@@ -82,7 +82,7 @@ namespace RiverHollow.WorldObjects
             _wallObject = false;
         }
 
-        protected virtual void LoadSprite(Dictionary<string, string> stringData, string textureName = GameContentManager.FILE_WORLDOBJECTS)
+        protected virtual void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
         {
             string[] texIndices = stringData["Image"].Split('-');
             int startX = int.Parse(texIndices[0]);
@@ -164,7 +164,7 @@ namespace RiverHollow.WorldObjects
             List<Item> itemList = new List<Item>();
             for (int i = 0; i < _kvpDrop.Value; i++)
             {
-                itemList.Add(ObjectManager.GetItem(_kvpDrop.Key, _kvpDrop.Value));
+                itemList.Add(DataManager.GetItem(_kvpDrop.Key, _kvpDrop.Value));
             }
 
             return itemList;
@@ -334,7 +334,7 @@ namespace RiverHollow.WorldObjects
         {
             Type = ObjectType.Destructible;
             _eToolType = ToolEnum.Lantern;
-            _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
+            _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
 
             string[] imageSplit = stringData["Image"].Split('-');
             string[] idleSplit = stringData["Idle"].Split('-');
@@ -377,7 +377,7 @@ namespace RiverHollow.WorldObjects
         public Light(int id, Dictionary<string, string> stringData, Vector2 pos)
         {
             Type = ObjectType.Light;
-            _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
+            _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
 
             _iHeight = TileSize;
             _iWidth = TileSize;
@@ -424,12 +424,12 @@ namespace RiverHollow.WorldObjects
             public MobDoor(Vector2 pos, int width, int height) : base(pos, width, height)
             {
                 DoorType = EnumDoorType.Mob;
-                _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
+                _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
                 _sprite.AddAnimation(AnimationEnum.ObjectIdle, 64, 0, 16, 32);
             }
 
             public override void ReadInscription() {
-                GUIManager.OpenTextWindow(GameContentManager.GetGameText("MobDoor"));
+                GUIManager.OpenTextWindow(DataManager.GetGameText("MobDoor"));
                // GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameText("MobDoor"), false));
             }
 
@@ -448,7 +448,7 @@ namespace RiverHollow.WorldObjects
             public KeyDoor(Vector2 pos, int width, int height) : base(pos, width, height)
             {
                 DoorType = EnumDoorType.Key;
-                _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
+                _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
                 _sprite.AddAnimation(AnimationEnum.ObjectIdle, 64, 0, 16, 32);
             }
 
@@ -459,7 +459,7 @@ namespace RiverHollow.WorldObjects
 
             public override void ReadInscription()
             {
-                GUIManager.OpenTextWindow(GameContentManager.GetGameText("KeyDoor"));
+                GUIManager.OpenTextWindow(DataManager.GetGameText("KeyDoor"));
                 //GUIManager.SetScreen(new TextScreen(this, GameContentManager.GetGameText("KeyDoor")));
             }
 
@@ -483,7 +483,7 @@ namespace RiverHollow.WorldObjects
             public SeasonDoor(Vector2 pos, int width, int height) : base(pos, width, height)
             {
                 DoorType = EnumDoorType.Season;
-                _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
+                _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
                 _sprite.AddAnimation(AnimationEnum.ObjectIdle, 64, 0, 16, 32);
             }
 
@@ -494,7 +494,7 @@ namespace RiverHollow.WorldObjects
 
             public override void ReadInscription()
             {
-                GUIManager.OpenTextWindow(GameContentManager.GetGameText("SpringDoor"));
+                GUIManager.OpenTextWindow(DataManager.GetGameText("SpringDoor"));
                 //GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameText("SpringDoor"), false));
             }
 
@@ -521,7 +521,7 @@ namespace RiverHollow.WorldObjects
         {
             Type = ObjectType.WorldObject;
             _wallObject = true;
-            _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
+            _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
             _sprite.AddAnimation(AnimationEnum.ObjectIdle, 96, 0, TileSize, TileSize);
         }
 
@@ -594,7 +594,7 @@ namespace RiverHollow.WorldObjects
             public void ProcessClick()
             {
                 int currID = PlayerManager.World.CharacterClass.ID;
-                int toSet = (currID < ObjectManager.GetClassCount() - 1) ? (PlayerManager.World.CharacterClass.ID + 1) : 1;
+                int toSet = (currID < DataManager.GetClassCount() - 1) ? (PlayerManager.World.CharacterClass.ID + 1) : 1;
                 PlayerManager.SetClass(toSet);
             }
 
@@ -717,7 +717,7 @@ namespace RiverHollow.WorldObjects
             public void SetHeldItem(int itemID)
             {
                 SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sName, MapPosition);
-                _heldItem = ObjectManager.GetItem(itemID);
+                _heldItem = DataManager.GetItem(itemID);
                 _dProcessedTime = -1;
                 _iCurrentlyMaking = -1;
                 _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
@@ -785,7 +785,7 @@ namespace RiverHollow.WorldObjects
                 MapPosition = new Vector2(mac.x, mac.y);
                 _dProcessedTime = mac.processedTime;
                 _iCurrentlyMaking = mac.currentItemID;
-                _heldItem = ObjectManager.GetItem(mac.heldItemID);
+                _heldItem = DataManager.GetItem(mac.heldItemID);
 
                 if (CurrentlyProcessing != null) { _sprite.PlayAnimation(AnimationEnum.ObjectIdle); }
             }
@@ -806,7 +806,7 @@ namespace RiverHollow.WorldObjects
                     _iInput = int.Parse(data[0]);
                     _iProcessingTime = int.Parse(data[1]);
 
-                    Item processedItem = ObjectManager.GetItem(_iInput);
+                    Item processedItem = DataManager.GetItem(_iInput);
                     _iOutput = processedItem.RefinesInto.Key;
                     _iReqInput = processedItem.RefinesInto.Value;
                 }
@@ -996,7 +996,7 @@ namespace RiverHollow.WorldObjects
 
             public void LoadContent()
             {
-                _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
+                _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
                 _sprite.AddAnimation(0.ToString(), (int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight);
                 for (int j = 1; j < _diTransitionTimes.Count; j++){
                     _sprite.AddAnimation(j.ToString(), (int)_vSourcePos.X + (TileSize * j), (int)_vSourcePos.Y, _iWidth, _iHeight);
@@ -1027,7 +1027,7 @@ namespace RiverHollow.WorldObjects
                 Item it = null;
                 if (FinishedGrowing())
                 {
-                    it = ObjectManager.GetItem(_iResourceID);
+                    it = DataManager.GetItem(_iResourceID);
                     if (pop)
                     {
                         it.Pop(MapPosition);
@@ -1196,7 +1196,7 @@ namespace RiverHollow.WorldObjects
                 Type = ObjectType.Floor;
                 ReadSourcePos(stringData["Image"]);
 
-                _sprite = new AnimatedSprite(GameContentManager.FILE_FLOORING);
+                _sprite = new AnimatedSprite(DataManager.FILE_FLOORING);
                 LoadSprite(_sprite, _vSourcePos);
 
                 MapPosition = pos;
@@ -1270,10 +1270,10 @@ namespace RiverHollow.WorldObjects
                     Type = ObjectType.Earth;
                     _vSourcePos = Vector2.Zero;
 
-                    _sprite = new AnimatedSprite(GameContentManager.FILE_FLOORING);
+                    _sprite = new AnimatedSprite(DataManager.FILE_FLOORING);
                     LoadSprite(_sprite, _vSourcePos);
 
-                    _sprWatered = new AnimatedSprite(GameContentManager.FILE_FLOORING);
+                    _sprWatered = new AnimatedSprite(DataManager.FILE_FLOORING);
                     LoadSprite(_sprWatered, new Vector2(_vSourcePos.X, _vSourcePos.Y + TileSize));
 
                     Watered(false);
@@ -1304,7 +1304,7 @@ namespace RiverHollow.WorldObjects
                 _iWidth = int.Parse(stringData["Width"]);
                 _iHeight = int.Parse(stringData["Height"]);
 
-                _sprite = new AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS);
+                _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
                 LoadSprite(_sprite, _vSourcePos);
 
                 MapPosition = pos;

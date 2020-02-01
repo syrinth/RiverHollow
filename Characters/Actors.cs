@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.GUIObjects.HUDMenu;
 using static RiverHollow.Game_Managers.GUIObjects.HUDMenu.HUDManagement;
-using static RiverHollow.Game_Managers.ObjectManager;
+using static RiverHollow.Game_Managers.DataManager;
 using static RiverHollow.WorldObjects.Clothes;
 
 namespace RiverHollow.Actors
@@ -34,9 +34,9 @@ namespace RiverHollow.Actors
         protected const float EYE_DEPTH = 0.001f;
         protected const float HAIR_DEPTH = 0.003f;
 
-        protected static string _sVillagerFolder = GameContentManager.FOLDER_ACTOR + @"Villagers\";
-        protected static string _sAdventurerFolder = GameContentManager.FOLDER_ACTOR + @"Adventurers\";
-        protected static string _sNPsCFolder = GameContentManager.FOLDER_ACTOR + @"NPCs\";
+        protected static string _sVillagerFolder = DataManager.FOLDER_ACTOR + @"Villagers\";
+        protected static string _sAdventurerFolder = DataManager.FOLDER_ACTOR + @"Adventurers\";
+        protected static string _sNPsCFolder = DataManager.FOLDER_ACTOR + @"NPCs\";
 
         public enum ActorEnum { Actor, Adventurer, CombatActor, Mob, Monster, NPC, Spirit, WorldCharacter};
         protected ActorEnum _eActorType = ActorEnum.Actor;
@@ -1024,15 +1024,15 @@ namespace RiverHollow.Actors
 
                     //Do not allow the bar to have less than 2 pixels, one for the border and one to display.
                     int percent = Math.Max((int)(16 * (float)_act.CurrentHP / (float)_act.MaxHP), 2);
-                    spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, percent, 4), new Rectangle(16, 4, percent, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y);
-                    spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, 16, 4), new Rectangle(16, 0, 16, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y + 1);
+                    spriteBatch.Draw(DataManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, percent, 4), new Rectangle(16, 4, percent, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y);
+                    spriteBatch.Draw(DataManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, 16, 4), new Rectangle(16, 0, 16, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y + 1);
 
                     if (_bHasMana)
                     {
                         pos.Y += 4;
                         percent = (int)(16 * (float)_act.CurrentMP / (float)_act.MaxMP);
-                        spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, percent, 4), new Rectangle(16, 12, percent, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y);
-                        spriteBatch.Draw(GameContentManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, 16, 4), new Rectangle(16, 8, 16, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y + 1);
+                        spriteBatch.Draw(DataManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, percent, 4), new Rectangle(16, 12, percent, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y);
+                        spriteBatch.Draw(DataManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, 16, 4), new Rectangle(16, 8, 16, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y + 1);
                     }
                 }
             }
@@ -1225,8 +1225,8 @@ namespace RiverHollow.Actors
         }
         public void LoadClassedCharData(ClassedCharData data)
         {
-            Armor.SetGear((Equipment)ObjectManager.GetItem(data.armor.itemID, data.armor.num));
-            Weapon.SetGear((Equipment)ObjectManager.GetItem(data.weapon.itemID, data.weapon.num));
+            Armor.SetGear((Equipment)DataManager.GetItem(data.armor.itemID, data.armor.num));
+            Weapon.SetGear((Equipment)DataManager.GetItem(data.weapon.itemID, data.weapon.num));
             _classLevel = data.level;
             _iXP = data.xp;
         }
@@ -1465,7 +1465,7 @@ namespace RiverHollow.Actors
 
         protected int _iIndex;
         public int ID  => _iIndex;
-        protected string _homeMap;
+        protected string _sHomeMap;
         public enum NPCTypeEnum { Eligible, Villager, Shopkeeper, Ranger, Worker, Mason }
         protected NPCTypeEnum _eNPCType;
         public NPCTypeEnum NPCType { get => _eNPCType; }
@@ -1511,7 +1511,7 @@ namespace RiverHollow.Actors
 
             ImportBasics(stringData);
 
-            MapManager.Maps[_homeMap].AddCharacterImmediately(this);
+            //MapManager.Maps[_sHomeMap].AddCharacterImmediately(this);
         }
 
         public override string GetOpeningText()
@@ -1612,7 +1612,7 @@ namespace RiverHollow.Actors
 
         protected void ImportBasics(Dictionary<string, string> data)
         {
-            _diDialogue = GameContentManager.GetNPCDialogue(_iIndex);
+            _diDialogue = DataManager.GetNPCDialogue(_iIndex);
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
             _sName = _diDialogue["Name"];
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
@@ -1623,9 +1623,8 @@ namespace RiverHollow.Actors
             if (data.ContainsKey("Type")) { _eNPCType = Util.ParseEnum<NPCTypeEnum>(data["Type"]); }
             if (data.ContainsKey("PortRow")) { _rPortrait = new Rectangle(0, 0, 48, 60); }
             if (data.ContainsKey("HomeMap")) {
-                CurrentMapName = data["HomeMap"];
-                _homeMap = CurrentMapName;
-                Position = Util.SnapToGrid(CurrentMap.GetCharacterSpawn("NPC" + _iIndex));
+                _sHomeMap = data["HomeMap"];
+                CurrentMapName = _sHomeMap;
             }
 
             if (data.ContainsKey("Collection"))
@@ -1637,7 +1636,7 @@ namespace RiverHollow.Actors
                 }
             }
 
-            Dictionary<string, string> schedule = ObjectManager.GetSchedule("NPC" + _iIndex);
+            Dictionary<string, string> schedule = DataManager.GetSchedule("NPC" + _iIndex);
             if (schedule != null)
             {
                 foreach (KeyValuePair<string, string> kvp in schedule)
@@ -1652,8 +1651,6 @@ namespace RiverHollow.Actors
                     _diCompleteSchedule.Add(kvp.Key, temp);
                 }
             }
-
-            CalculatePathing();
         }
 
         public override void Update(GameTime gTime)
@@ -1709,15 +1706,26 @@ namespace RiverHollow.Actors
             //Add the NPC to their home map
             if (!MoveToBuildingLocation()) { 
                 CurrentMap.RemoveCharacter(this);
-                RHMap map = MapManager.Maps[_homeMap];
-                string Spawn = "NPC" + _iIndex;
-
-                Position = Util.SnapToGrid(map.GetCharacterSpawn(Spawn));
-                map.AddCharacterImmediately(this);
-
+                MoveToSpawn();
                 CalculatePathing();
             }
         }
+
+        /// <summary>
+        /// Removes the NPC from the current map and moves them back
+        /// to their home map and back to their spawn point.
+        /// </summary>
+        public void MoveToSpawn()
+        {
+            CurrentMap?.RemoveCharacter(this);
+            CurrentMapName = _sHomeMap;
+            RHMap map = MapManager.Maps[_sHomeMap];
+            string Spawn = "NPC" + _iIndex;
+
+            Position = Util.SnapToGrid(map.GetCharacterSpawn(Spawn));
+            map.AddCharacterImmediately(this); 
+        }
+
         public void CalculatePathing()
         {
             string currDay = GameCalendar.GetDayOfWeek();
@@ -1993,13 +2001,11 @@ namespace RiverHollow.Actors
 
             if (stringData.ContainsKey("ShopData"))
             {
-                foreach (KeyValuePair<int, string> kvp in GameContentManager.GetMerchandise(stringData["ShopData"]))
+                foreach (KeyValuePair<int, string> kvp in DataManager.GetMerchandise(stringData["ShopData"]))
                 {
                     _liMerchandise.Add(new Merchandise(kvp.Value));
                 }
             }
-
-            CurrentMap.AddCharacter(this);
         }
 
         public override void Talk(bool IsOpen = false)
@@ -2202,13 +2208,11 @@ namespace RiverHollow.Actors
 
             if (stringData.ContainsKey("Class"))
             {
-                SetClass(ObjectManager.GetClassByIndex(int.Parse(stringData["Class"])));
+                SetClass(DataManager.GetClassByIndex(int.Parse(stringData["Class"])));
                 AssignStartingGear();
             }
 
             ImportBasics(stringData);
-
-            CurrentMap.AddCharacter(this);
         }
 
         public override void Update(GameTime gTime)
@@ -2222,7 +2226,7 @@ namespace RiverHollow.Actors
         public override void RollOver()
         {
             CurrentMap.RemoveCharacter(this);
-            RHMap map = MapManager.Maps[Married ? "mapManor" : _homeMap];
+            RHMap map = MapManager.Maps[Married ? "mapManor" : _sHomeMap];
             string Spawn = Married ? "Spouse" : "NPC" + _iIndex;
 
             Position = Util.SnapToGrid(map.GetCharacterSpawn(Spawn));
@@ -2340,7 +2344,7 @@ namespace RiverHollow.Actors
 
             if (Married)
             {
-                MapManager.Maps[_homeMap].RemoveCharacter(this);
+                MapManager.Maps[_sHomeMap].RemoveCharacter(this);
                 MapManager.Maps["mapManor"].AddCharacter(this);
                 Position = MapManager.Maps["mapManor"].GetCharacterSpawn("Spouse");
             }
@@ -2390,7 +2394,7 @@ namespace RiverHollow.Actors
             _eActorType = ActorEnum.Adventurer;
             ImportBasics(data, id);
 
-            SetClass(ObjectManager.GetClassByIndex(_iAdventurerID));
+            SetClass(DataManager.GetClassByIndex(_iAdventurerID));
             AssignStartingGear();
             _sAdventurerType = CharacterClass.Name;
 
@@ -2466,7 +2470,7 @@ namespace RiverHollow.Actors
 
         public override string GetOpeningText()
         {
-            return Name + ": " + GameContentManager.GetGameText("AdventurerTree");
+            return Name + ": " + DataManager.GetGameText("AdventurerTree");
         }
 
         public override string GetSelectionText()
@@ -2483,7 +2487,7 @@ namespace RiverHollow.Actors
                 GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Normal;
                 _iMood += 1;
 
-                rv = GameContentManager.GetAdventurerDialogue(_sAdventurerType + RHRandom.Instance.Next(1, 2));
+                rv = DataManager.GetAdventurerDialogue(_sAdventurerType + RHRandom.Instance.Next(1, 2));
             }
             else if (entry.Equals("Party"))
             {
@@ -2657,7 +2661,7 @@ namespace RiverHollow.Actors
             _sName = data.name;
             _dProcessedTime = data.processedTime;
             _iCurrentlyMaking = data.currentItemID;
-            _heldItem = ObjectManager.GetItem(data.heldItemID);
+            _heldItem = DataManager.GetItem(data.heldItemID);
             _eState = (AdventurerStateEnum)data.state;
 
             base.LoadClassedCharData(data.advData);
@@ -2717,7 +2721,7 @@ namespace RiverHollow.Actors
             _liTilePath = new List<RHTile>();
 
             //Sets a default class so we can load and display the character to start
-            SetClass(ObjectManager.GetClassByIndex(1));
+            SetClass(DataManager.GetClassByIndex(1));
 
             _sprBody.SetColor(Color.White);
             _sprHair.SetColor(_cHairColor);
@@ -2734,13 +2738,13 @@ namespace RiverHollow.Actors
             base.SetClass(x);
 
             //Loads the Sprites for the players body for the appropriate class
-            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(ObjectManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Body", GameContentManager.FOLDER_PLAYER));
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Body", DataManager.FOLDER_PLAYER));
 
             //Hair type has already been set either by default or by being allocated.
             SetHairType(_iHairIndex);
 
             //Loads the Sprites for the players body for the appropriate class
-            LoadSpriteAnimations(ref _sprEyes, LoadWorldAndCombatAnimations(ObjectManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Eyes", GameContentManager.FOLDER_PLAYER));
+            LoadSpriteAnimations(ref _sprEyes, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Eyes", DataManager.FOLDER_PLAYER));
             _sprEyes.SetDepthMod(EYE_DEPTH);
         }
 
@@ -2834,7 +2838,7 @@ namespace RiverHollow.Actors
         {
             _iHairIndex = index;
             //Loads the Sprites for the players hair animations for the class based off of the hair ID
-            LoadSpriteAnimations(ref _sprHair, LoadWorldAndCombatAnimations(ObjectManager.PlayerAnimationData[CharacterClass.ID]), string.Format(@"{0}Hairstyles\Hair_{1}", GameContentManager.FOLDER_PLAYER, _iHairIndex));
+            LoadSpriteAnimations(ref _sprHair, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[CharacterClass.ID]), string.Format(@"{0}Hairstyles\Hair_{1}", DataManager.FOLDER_PLAYER, _iHairIndex));
             _sprHair.SetDepthMod(HAIR_DEPTH);
         }
 
@@ -2959,7 +2963,7 @@ namespace RiverHollow.Actors
         {
             if (_bActive)
             {
-                _sprBody.Draw(spriteBatch, useLayerDepth, _fVisibility);
+                //_sprBody.Draw(spriteBatch, useLayerDepth, _fVisibility);
             }
         }
 
@@ -2996,7 +3000,7 @@ namespace RiverHollow.Actors
                 Triggered = true;
                 _fVisibility = 1.0f;
 
-                string[] loot = GameContentManager.DiSpiritLoot[_sType].Split('/');
+                string[] loot = DataManager.DiSpiritLoot[_sType].Split('/');
                 int arrayID = RHRandom.Instance.Next(0, loot.Length - 1);
                 InventoryManager.AddToInventory(int.Parse(loot[arrayID]));
 

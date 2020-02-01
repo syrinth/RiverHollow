@@ -35,7 +35,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public GUIText()
         {
             _sText = "";
-            _font = GameContentManager.GetFont(@"Fonts\Font");
+            _font = DataManager.GetFont(@"Fonts\Font");
             _cTextColor = Color.White;
             SetDimensions("X");
         }
@@ -44,7 +44,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public GUIText(string text, bool printAll = true, string f = @"Fonts\Font") : this()
         {
-            _font = GameContentManager.GetFont(f);
+            _font = DataManager.GetFont(f);
             PrintAll = printAll;
 
             if (!printAll) { _sFullText = text; }

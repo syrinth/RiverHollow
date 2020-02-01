@@ -67,8 +67,8 @@ namespace RiverHollow.GUIComponents.Screens
             _nameWindow.TakeInput = true;
 
             _liClassBoxes = new List<GUIObject>();
-            for (int i = 1; i <= ObjectManager.GetWorkerNum(); i++) {
-                ClassSelectionBox w = new ClassSelectionBox(ObjectManager.GetWorker(i), BtnAssignClass);
+            for (int i = 1; i <= DataManager.GetWorkerNum(); i++) {
+                ClassSelectionBox w = new ClassSelectionBox(DataManager.GetAdventurer(i), BtnAssignClass);
                 _liClassBoxes.Add(w);
                 _window.AddControl(w);
             }
@@ -189,7 +189,7 @@ namespace RiverHollow.GUIComponents.Screens
             PlayerManager.SetName(_nameWindow.GetText());
             PlayerManager.SetManorName(_manorWindow.GetText());
 
-            RiverHollow.NewGame(ObjectManager.GetWorker(1), ObjectManager.GetWorker(2), !_gCheck.Checked());
+            RiverHollow.NewGame(DataManager.GetAdventurer(1), DataManager.GetAdventurer(2), !_gCheck.Checked());
             GameManager.DontReadInput();
 
         }
@@ -220,7 +220,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (_iHatIndex < _liHats.Count - 1) { _iHatIndex++; }
             else { _iHatIndex = 0; }
 
-            SyncClothing((Clothes)ObjectManager.GetItem((_liHats[_iHatIndex])), ClothesEnum.Hat);    
+            SyncClothing((Clothes)DataManager.GetItem((_liHats[_iHatIndex])), ClothesEnum.Hat);    
             _playerDisplayBox.Configure();
         }
         public void BtnNextShirt()
@@ -228,7 +228,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (_iShirtIndex < _liShirts.Count - 1) { _iShirtIndex++; }
             else { _iShirtIndex = 0; }
 
-            SyncClothing((Clothes)ObjectManager.GetItem((_liShirts[_iShirtIndex])), ClothesEnum.Chest);
+            SyncClothing((Clothes)DataManager.GetItem((_liShirts[_iShirtIndex])), ClothesEnum.Chest);
             _playerDisplayBox.Configure();
         }
 

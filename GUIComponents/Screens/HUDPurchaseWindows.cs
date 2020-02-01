@@ -39,7 +39,7 @@ namespace RiverHollow.GUIComponents.Screens
             int i = 0;
             foreach (Merchandise m in merch)
             {
-                Item it = ObjectManager.GetItem(m.MerchID);
+                Item it = DataManager.GetItem(m.MerchID);
                 it.ApplyUniqueData(m.UniqueData);
 
                 _liItems.Add(new BuyItemBox(it, m.MoneyCost, _mainWindow.InnerRectangle().Width));
@@ -202,7 +202,7 @@ namespace RiverHollow.GUIComponents.Screens
                 if (gmMerchandise.MerchType == Merchandise.ItemType.Building)
                 {
                     RiverHollow.HomeMapPlacement();
-                    GameManager.PickUpBuilding(ObjectManager.GetBuilding(gmMerchandise.MerchID));
+                    GameManager.PickUpBuilding(DataManager.GetBuilding(gmMerchandise.MerchID));
                     ConstructBuilding();
                 }
                 else
@@ -255,8 +255,8 @@ namespace RiverHollow.GUIComponents.Screens
 
                 if (_merch.MerchType == Merchandise.ItemType.Building)
                 {
-                    _bldg = ObjectManager.GetBuilding(_merch.MerchID);
-                    _font = GameContentManager.GetFont(@"Fonts\Font");
+                    _bldg = DataManager.GetBuilding(_merch.MerchID);
+                    _font = DataManager.GetFont(@"Fonts\Font");
 
                     float newScale = (float)(Scale * 0.75);
                     int width = (int)(TileSize * 9 * newScale);
@@ -296,7 +296,7 @@ namespace RiverHollow.GUIComponents.Screens
                     _infoWindow.AnchorAndAlignToObject(_bldgWindow, SideEnum.Right, SideEnum.Bottom, TileSize / 2);
 
                     //Placeholderimage
-                    _giBuilding = new GUISprite(new SpriteAnimations.AnimatedSprite(GameContentManager.FILE_WORLDOBJECTS));
+                    _giBuilding = new GUISprite(new SpriteAnimations.AnimatedSprite(DataManager.FILE_WORLDOBJECTS));
                     _giBuilding.CenterOnObject(_bldgWindow);
                 }
 
@@ -358,7 +358,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 if (m.MerchType == Merchandise.ItemType.Worker)
                 {
-                    Adventurer w = ObjectManager.GetWorker(m.MerchID);
+                    Adventurer w = DataManager.GetAdventurer(m.MerchID);
                     WorkerBox wb = new WorkerBox(w, m.MoneyCost);
                     _liWorkers.Add(wb);
 
@@ -407,7 +407,7 @@ namespace RiverHollow.GUIComponents.Screens
                     if (PlayerManager.Buildings.Count > 0 && PlayerManager.Money >= wB.Cost)
                     {
                         HUDManagement m = new HUDManagement();
-                        m.PurchaseWorker(ObjectManager.GetWorker(wB.ID), wB.Cost);
+                        m.PurchaseWorker(DataManager.GetAdventurer(wB.ID), wB.Cost);
                         GUIManager.OpenMainObject(m);
 
                         rv = true;
@@ -476,7 +476,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public BuyItemBox(Item i, int cost, int mainWidth) : base(GUIWindow.BrownWin, mainWidth, 16)
         {
-            _font = GameContentManager.GetFont(@"Fonts\Font");
+            _font = DataManager.GetFont(@"Fonts\Font");
             Cost = cost;
             itemForSale = i;
             _giItem = new GUIImage(itemForSale.SourceRectangle, TileSize, TileSize, itemForSale.Texture);

@@ -293,7 +293,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             RHRandom rand = RHRandom.Instance;
 
-            _font = GameContentManager.GetBitMapFont(@"Fonts\FontBattle");
+            _font = DataManager.GetBitMapFont(@"Fonts\FontBattle");
             _sText = text;
             _cTextColor = c;
 

@@ -132,7 +132,7 @@ namespace RiverHollow.Misc
                     if (int.TryParse(nameSections[i], out int val))
                     {
                         if (val == 0) { nameSections[i] = name; }
-                        else { nameSections[i] = ObjectManager.GetCharacterNameByIndex(val); }
+                        else { nameSections[i] = DataManager.GetCharacterNameByIndex(val); }
                     }
                     else if (nameSections[i] == "^") { nameSections[i] = PlayerManager.Name; }
 
@@ -146,7 +146,7 @@ namespace RiverHollow.Misc
                 {
                     if (int.TryParse(itemSections[i], out int val))
                     {
-                        itemSections[i] = ObjectManager.GetItem(val).Name;
+                        itemSections[i] = DataManager.GetItem(val).Name;
 
                         if (itemSections[i].StartsWith("a", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("e", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("i", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("o", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("u", StringComparison.OrdinalIgnoreCase))
                         {

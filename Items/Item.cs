@@ -76,7 +76,7 @@ namespace RiverHollow.WorldObjects
             ImportBasics(stringData, id, num);
 
             _bStacks = true;
-            _texTexture = GameContentManager.GetTexture(GameContentManager.FOLDER_ITEMS + "Resources");
+            _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Resources");
         }
 
         protected void ImportBasics(Dictionary<string, string> stringData, int id, int num)
@@ -85,7 +85,7 @@ namespace RiverHollow.WorldObjects
             _iItemID = id;
             _diReqToMake = new Dictionary<int, int>();
 
-            GameContentManager.GetItemText(_iItemID, ref _sName, ref _sDescription);
+            DataManager.GetItemText(_iItemID, ref _sName, ref _sDescription);
 
             //Item Type
             _eItemType = Util.ParseEnum<ItemEnum>(stringData["Type"]);
@@ -362,9 +362,9 @@ namespace RiverHollow.WorldObjects
             //EType
             EquipType = Util.ParseEnum<EquipmentEnum>(stringData["EType"]);
 
-            if (EquipType.Equals(EquipmentEnum.Armor)) { _texTexture = GameContentManager.GetTexture(@"Textures\Items\armor"); }
-            else if (EquipType.Equals(EquipmentEnum.Weapon)) { _texTexture = GameContentManager.GetTexture(@"Textures\Items\weapons"); }
-            else if (EquipType.Equals(EquipmentEnum.Accessory)) { _texTexture = GameContentManager.GetTexture(@"Textures\Items\Accessories"); }
+            if (EquipType.Equals(EquipmentEnum.Armor)) { _texTexture = DataManager.GetTexture(@"Textures\Items\armor"); }
+            else if (EquipType.Equals(EquipmentEnum.Weapon)) { _texTexture = DataManager.GetTexture(@"Textures\Items\weapons"); }
+            else if (EquipType.Equals(EquipmentEnum.Accessory)) { _texTexture = DataManager.GetTexture(@"Textures\Items\Accessories"); }
 
             //ESub
             if (stringData.ContainsKey("ESub"))
@@ -475,7 +475,7 @@ namespace RiverHollow.WorldObjects
         {
             ImportBasics(stringData, id, 1);
 
-            _texTexture = GameContentManager.GetTexture(@"Textures\items");
+            _texTexture = DataManager.GetTexture(@"Textures\items");
 
             _bStacks = false;
             int row = 0;
@@ -535,7 +535,7 @@ namespace RiverHollow.WorldObjects
             }
             _staminaCost = int.Parse(stringData["Stam"]);
 
-            _texTexture = GameContentManager.GetTexture(GameContentManager.FOLDER_ITEMS + "Tools");
+            _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Tools");
 
             _iColTexSize = 128;
             _iRowTexSize = TileSize;
@@ -569,7 +569,7 @@ namespace RiverHollow.WorldObjects
 
         public Food(int id, Dictionary<string, string> stringData, int num)
         {
-            _texTexture = GameContentManager.GetTexture(GameContentManager.FOLDER_ITEMS + "Food");
+            _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Food");
 
             ImportBasics(stringData, id, num);
 
@@ -612,7 +612,7 @@ namespace RiverHollow.WorldObjects
             _difficulty = RHRandom.Instance.Next(4, 5);
 
             _bStacks = false;
-            _texTexture = GameContentManager.GetTexture(@"Textures\items");
+            _texTexture = DataManager.GetTexture(@"Textures\items");
         }
 
         public override string GetDescription()
@@ -633,7 +633,7 @@ namespace RiverHollow.WorldObjects
             _eItemType = ItemEnum.Marriage;
             _iNum = 1;
             _bStacks = false;
-            _texTexture = GameContentManager.GetTexture(@"Textures\items");
+            _texTexture = DataManager.GetTexture(@"Textures\items");
         }
     }
 
@@ -660,12 +660,12 @@ namespace RiverHollow.WorldObjects
             if (stringData.ContainsKey("Mana")) { _iMana = int.Parse(stringData["Mana"]); }
             if (stringData.ContainsKey("StatusEffect")) {
                 string[] strBuffer = stringData["StatusEffect"].Split('-');
-                _statusEffect = ObjectManager.GetStatusEffectByIndex(int.Parse(strBuffer[0]));
+                _statusEffect = DataManager.GetStatusEffectByIndex(int.Parse(strBuffer[0]));
                 _iStatusDuration = int.Parse(strBuffer[1]);
             }
 
             _bStacks = true;
-            _texTexture = GameContentManager.GetTexture(GameContentManager.FOLDER_ITEMS + "Consumables");
+            _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Consumables");
         }
 
         public override string GetDescription()
@@ -703,11 +703,11 @@ namespace RiverHollow.WorldObjects
         public StaticItem(int id, Dictionary<string, string> stringData, int num = 1)
         {
             ImportBasics(stringData, id, num);
-            _texTexture = GameContentManager.GetTexture(GameContentManager.FOLDER_ITEMS + "StaticObjects");
+            _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "StaticObjects");
 
             _bStacks = stringData.ContainsKey("Stacks");
 
-            worldObj = (WorldItem)ObjectManager.GetWorldObject(id);
+            worldObj = (WorldItem)DataManager.GetWorldObject(id);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -738,7 +738,7 @@ namespace RiverHollow.WorldObjects
             bool rv = base.Remove(x);
 
             //Create a new worldObj for any instances of the item that remains
-            worldObj = (WorldItem)ObjectManager.GetWorldObject(_iItemID);
+            worldObj = (WorldItem)DataManager.GetWorldObject(_iItemID);
 
             return rv;
         }
@@ -753,14 +753,14 @@ namespace RiverHollow.WorldObjects
             ImportBasics(stringData, id, num);
 
             _bStacks = false;
-            _texTexture = GameContentManager.GetTexture(@"Textures\items");
+            _texTexture = DataManager.GetTexture(@"Textures\items");
         }
 
         public void SetClassChange(int i)
         {
             _iClassID = i;
 
-            string n = ObjectManager.GetClassByIndex(_iClassID).Name;
+            string n = DataManager.GetClassByIndex(_iClassID).Name;
             _sName += n;
             _sDescription += n;
 

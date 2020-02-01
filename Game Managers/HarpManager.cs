@@ -68,7 +68,7 @@ namespace RiverHollow.Game_Managers
             public Song(int id)
             {
                 _liNotes = new List<KeyValuePair<double, string>>();
-                foreach (string s in GameContentManager.GetSong(id))
+                foreach (string s in DataManager.GetSong(id))
                 {
                     string[] songTags = Util.FindTags(s);
                     songTags = songTags[0].Split(':');

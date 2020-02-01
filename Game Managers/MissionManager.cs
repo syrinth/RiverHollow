@@ -253,7 +253,7 @@ namespace RiverHollow.Game_Managers
             int total = r.Next(0, 4);
             for (int i = 0; i < total; i++)
             {
-                _liItems.Add(ObjectManager.GetItem(r.Next(9, 17)));
+                _liItems.Add(DataManager.GetItem(r.Next(9, 17)));
             }
 
             _iDaysFinished = 0;
@@ -262,7 +262,7 @@ namespace RiverHollow.Game_Managers
             //Only one fourth of missions have a required class
             if (r.Next(1, 4) == 1)
             {
-                _charClass = ObjectManager.GetClassByIndex(r.Next(1, ObjectManager.GetClassCount() - 1));
+                _charClass = DataManager.GetClassByIndex(r.Next(1, DataManager.GetClassCount() - 1));
             }
         }
 
@@ -354,13 +354,13 @@ namespace RiverHollow.Game_Managers
             _iDaysToComplete = data.DaysToComplete;
             _iTotalDaysToExpire = data.TotalDaysToExpire;
             _iPartySize = data.PartySize;
-            _charClass = (data.ReqClassID != 0 ? ObjectManager.GetClassByIndex(data.ReqClassID) : null);
+            _charClass = (data.ReqClassID != 0 ? DataManager.GetClassByIndex(data.ReqClassID) : null);
             _iReqLevel = data.ReqLevel;
 
             _liItems.Clear();
             foreach (ItemData id in data.Items)
             {
-                _liItems.Add(ObjectManager.GetItem(id.itemID, id.num));
+                _liItems.Add(DataManager.GetItem(id.itemID, id.num));
             }
 
             List<Adventurer> advList = new List<Adventurer>();

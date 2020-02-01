@@ -113,7 +113,7 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddToInventory(60);
             InventoryManager.AddToInventory(241, 5);
 
-            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestType.Fetch, "Getwood, dumbass", 1, null, ObjectManager.GetItem(2)));
+            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestType.Fetch, "Getwood, dumbass", 1, null, DataManager.GetItem(2)));
         }
 
         public static void SetPath(List<RHTile> list)
@@ -535,7 +535,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void SetClass(int x)
         {
-            CharacterClass combatClass = ObjectManager.GetClassByIndex(x);
+            CharacterClass combatClass = DataManager.GetClassByIndex(x);
             World.SetClass(combatClass);
         }
 
@@ -657,8 +657,8 @@ namespace RiverHollow.Game_Managers
             SetClass(data.currentClass);
             World.LoadClassedCharData(data.adventurerData);
 
-            World.SetClothes((Clothes)ObjectManager.GetItem(data.hat.itemID));
-            World.SetClothes((Clothes)ObjectManager.GetItem(data.chest.itemID));
+            World.SetClothes((Clothes)DataManager.GetItem(data.hat.itemID));
+            World.SetClothes((Clothes)DataManager.GetItem(data.chest.itemID));
 
             for (int i = 0; i < InventoryManager.maxItemRows; i++)
             {
@@ -666,7 +666,7 @@ namespace RiverHollow.Game_Managers
                 {
                     int index = i * InventoryManager.maxItemColumns + j;
                     ItemData item = data.Items[index];
-                    Item newItem = ObjectManager.GetItem(item.itemID, item.num);
+                    Item newItem = DataManager.GetItem(item.itemID, item.num);
  
                     if (newItem != null) { newItem.ApplyUniqueData(item.strData); }
                     InventoryManager.AddItemToInventorySpot(newItem, i, j);
