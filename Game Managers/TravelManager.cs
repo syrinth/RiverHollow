@@ -4,15 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RiverHollow.Game_Managers
 {
     public static class TravelManager
     {
         private static StreamWriter _swWriter;
-        private static Dictionary<string, Node> _diNodes;
 
         public static void NewTravelLog(string name)
         {
@@ -36,24 +33,6 @@ namespace RiverHollow.Game_Managers
             }
             catch (Exception e){ 
             }
-        }
-
-        public static void Calculate()
-        {
-            _diNodes = new Dictionary<string, Node>();
-
-            foreach (RHMap map in MapManager.Maps.Values)
-            {
-                if (!map.IsBuilding && !map.IsDungeon)
-                {
-                    _diNodes.Add(map.Name, new Node(map));
-                }
-            }
-        }
-
-        public static List<RHTile> GetRoute(string currMap, string fromMap, string toMap)
-        {
-            return _diNodes[currMap].GetRoute(fromMap, toMap);
         }
 
         //public static void FindLocation(string currMap, string location)
