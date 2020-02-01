@@ -1616,6 +1616,7 @@ namespace RiverHollow.Actors
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
 
             LoadSpriteAnimations(ref _sprBody, LoadWorldAnimations(data), _sVillagerFolder + "NPC" + _iIndex);
+            PlayAnimation(VerbEnum.Idle);
 
             _bActive = !data.ContainsKey("Inactive");
             if (data.ContainsKey("Type")) { _eNPCType = Util.ParseEnum<NPCTypeEnum>(data["Type"]); }
@@ -1715,7 +1716,7 @@ namespace RiverHollow.Actors
         /// </summary>
         public void MoveToSpawn()
         {
-            CurrentMap?.RemoveCharacter(this);
+            CurrentMap?.RemoveCharacterImmediately(this);
             CurrentMapName = _sHomeMap;
             RHMap map = MapManager.Maps[_sHomeMap];
             string Spawn = "NPC" + _iIndex;

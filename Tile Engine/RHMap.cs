@@ -1945,6 +1945,18 @@ namespace RiverHollow.Tile_Engine
             ToAdd.Add(c);
         }
 
+        public bool RemoveCharacterImmediately(WorldActor c)
+        {
+            bool rv = false;
+            if (MapManager.Maps[c.CurrentMapName].Contains(c))
+            {
+                rv = true;
+                if (c.IsMonster() && !_liMonsters.Contains((Monster)c)) { _liMonsters.Remove((Monster)c); }
+                else if (!_liActors.Contains(c)) { _liActors.Remove(c); }
+            }
+
+            return rv;
+        }
         /// <summary>
         /// Use this only during loading periods when the maps will not be calling Update.
         /// Otherwise we crash :D

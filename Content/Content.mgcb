@@ -154,11 +154,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/AbilityAnimations.png
 
-#begin Data/NPCData/Characters.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/NPCData/Characters.xml
-
 #begin Data/TownUpgrades.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -388,16 +383,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/lightmask.png
-
-#begin Data/NPCData/Schedules/NPC3.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/NPCData/Schedules/NPC3.xml
-
-#begin Data/NPCData/Schedules/NPC1.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/NPCData/Schedules/NPC1.xml
 
 #begin Data/Quests.xml
 /importer:XmlImporter
@@ -1687,4 +1672,19 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/NPCs/Spirit_4.png
+
+#begin Data/CharacterData.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/CharacterData.xml
+
+#begin Data/Schedules/NPC1.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Schedules/NPC1.xml
+
+#begin Data/Schedules/NPC3.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Schedules/NPC3.xml
 

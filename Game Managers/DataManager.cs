@@ -118,7 +118,7 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diItemData, @"Data\ItemData", Content);
             LoadDictionary(ref _diWorldObjects, @"Data\WorldObjects", Content);
             LoadDictionary(ref _diActions, @"Data\CombatActions", Content);
-            LoadDictionary(ref _diVillagerData, @"Data\NPCData\Characters", Content);
+            LoadDictionary(ref _diVillagerData, @"Data\CharacterData", Content);
             LoadDictionary(ref _diMonsterData, @"Data\Monsters", Content);
             LoadDictionary(ref _diSummonData, @"Data\Summons", Content);
             LoadDictionary(ref _diBuildings, @"Data\Buildings", Content);
@@ -277,10 +277,10 @@ namespace RiverHollow.Game_Managers
         private static void LoadNPCSchedules(ContentManager Content)
         {
             _diSchedule = new Dictionary<string, Dictionary<string, string>>();
-            foreach (string s in Directory.GetFiles(@"Content\Data\NPCData\Schedules"))
+            foreach (string s in Directory.GetFiles(@"Content\Data\Schedules"))
             {
                 string temp = Path.GetFileNameWithoutExtension(s);
-                _diSchedule.Add(temp, Content.Load<Dictionary<string, string>>(@"Data\NPCData\Schedules\" + temp));
+                _diSchedule.Add(temp, Content.Load<Dictionary<string, string>>(@"Data\Schedules\" + temp));
             }
         }
         #endregion

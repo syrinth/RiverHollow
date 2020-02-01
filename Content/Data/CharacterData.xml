@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <!--Key: Index>=0 Value:Type/Name/PortraitsRow/Map/Collection/[Merchandise]-->
+    <Item>
+      <Key>0</Key>
+      <Value>[Type:Villager][PortRow:1][HomeMap:mapManor1][Collection:0-1-2][Hover][Inactive][Idle:0-0-3-.3-T][Walk:0-0-3-.3-T]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Type:Eligible][PortRow:1][HomeMap:mapHouseNPC1][Collection:0-1-2][Class:5][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Type:Villager][PortRow:2][HomeMap:mapRiverHollowTown][Collection:3-4][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Type:ShopKeeper][PortRow:3][HomeMap:mapHouseNPC3][Collection:5-6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>[Type:Ranger][PortRow:1][HomeMap:mapRiverHollowTown][Collection:7-8][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>[Type:ShopKeeper][PortRow:1][HomeMap:mapGuildhouse][Collection:7-8][ShopData:Adventurers][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>[Type:ShopKeeper][PortRow:3][HomeMap:mapRiverHollowTown][Collection:7-8][ShopData:MagicShop][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>[Type:Eligible][PortRow:1][HomeMap:mapHospital][Collection:0-1-2][Class:2][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>[Type:Villager][PortRow:3][HomeMap:mapHouseNPC1][Collection:7-8][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>[Type:ShopKeeper][PortRow:3][HomeMap:mapHouseNPC3][Collection:7-8][ShopData:Buildings][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>[Type:Villager][PortRow:3][HomeMap:mapRiverHollowTown][Collection:7-8][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>[Type:Villager][PortRow:3][HomeMap:mapManorGrounds][Collection:7-8][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+  </Asset>
+</XnaContent>
