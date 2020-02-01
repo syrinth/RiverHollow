@@ -42,8 +42,6 @@ namespace RiverHollow.Game_Managers
         static Dictionary<string, string> _diAdventurerDialogue;
 
         static Dictionary<int, string> _diUpgrades;
-        static Dictionary<string, string> _diSpiritLoot;
-        public static Dictionary<string, string> DiSpiritLoot => _diSpiritLoot;
         public static Dictionary<int, string> DiUpgrades  => _diUpgrades;
         static Dictionary<int, string> _diQuests;
         public static Dictionary<int, string> DiQuests => _diQuests;
@@ -65,6 +63,9 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Dictionary<string, string>> _diWorkers;
         static Dictionary<int, Dictionary<string, string>> _diWorldObjects;
 
+        static Dictionary<int, Dictionary<string, string>> _diSpiritInfo;
+        public static Dictionary<int, Dictionary<string, string>> DiSpiritInfo => _diSpiritInfo;
+
         static Dictionary<int, Dictionary<string, string>> _diMonsterData;
         static Dictionary<int, Dictionary<string, string>> _diSummonData;
         static Dictionary<int, Villager> _diNPCs;
@@ -84,7 +85,6 @@ namespace RiverHollow.Game_Managers
         {
             //Allocate Dictionaries
             _diTextures = new Dictionary<string, Texture2D>();
-            _diSpiritLoot = Content.Load<Dictionary<string, string>>(@"Data\SpiritLoot");
             _diUpgrades = Content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
             _diQuests = Content.Load<Dictionary<int, string>>(@"Data\Quests");
             _diMonsterTraits = Content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
@@ -124,6 +124,7 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diBuildings, @"Data\Buildings", Content);
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content);
             LoadDictionary(ref _diWorkers, @"Data\Workers", Content);
+            LoadDictionary(ref _diSpiritInfo, @"Data\SpiritInfo", Content);
         }
         private static void LoadDictionary(ref Dictionary<int, Dictionary<string, string>> dictionaryAddTo, string dataFile, ContentManager Content)
         {

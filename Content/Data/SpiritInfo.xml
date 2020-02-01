@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
-  <Asset Type="Dictionary[string, string]">
+  <Asset Type="Dictionary[int, string]">
     <Item>
-      <Key>Forest_2</Key>
-      <Value>0/1/2</Value>
+      <Key>2</Key>
+      <Value>[Idle:0-0-2-.5-T]</Value>
     </Item>
     <Item>
-      <Key>Water_1</Key>
-      <Value>7/8</Value>
+      <Key>3</Key>
+      <Value>[Idle:0-0-2-.5-T]</Value>
     </Item>
   </Asset>
 </XnaContent>

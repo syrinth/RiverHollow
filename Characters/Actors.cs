@@ -1510,8 +1510,6 @@ namespace RiverHollow.Actors
             _bHover = stringData.ContainsKey("Hover");
 
             ImportBasics(stringData);
-
-            //MapManager.Maps[_sHomeMap].AddCharacterImmediately(this);
         }
 
         public override string GetOpeningText()
@@ -2913,7 +2911,7 @@ namespace RiverHollow.Actors
     {
         const float MIN_VISIBILITY = 0.05f;
         float _fVisibility;
-        string _sType;
+        int _iID;
         string _sCondition;
         string _sText;
 
@@ -2928,13 +2926,16 @@ namespace RiverHollow.Actors
             _fVisibility = MIN_VISIBILITY;
 
             _sName = name;
-            _sType = type;
+            _iID = int.Parse(type);
             _sText = text;
             _sCondition = condition;
             _bActive = false;
 
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            LoadSpriteAnimations(ref _sprBody, LoadWorldAnimations(data), _sNPsCFolder + "Spirit_" + _sType);
+            _iWidth = TileSize;
+            _iHeight = TileSize + 2;
+            List<AnimationData> liData = new List<AnimationData>();
+            AddToAnimationsList(ref liData, DataManager.DiSpiritInfo[_iID], VerbEnum.Idle);
+            LoadSpriteAnimations(ref _sprBody, liData, _sNPsCFolder + "Spirit_" + _iID);
         }
 
         public override void Update(GameTime gTime)
@@ -2963,7 +2964,7 @@ namespace RiverHollow.Actors
         {
             if (_bActive)
             {
-                //_sprBody.Draw(spriteBatch, useLayerDepth, _fVisibility);
+                _sprBody.Draw(spriteBatch, useLayerDepth, _fVisibility);
             }
         }
 
@@ -3000,11 +3001,11 @@ namespace RiverHollow.Actors
                 Triggered = true;
                 _fVisibility = 1.0f;
 
-                string[] loot = DataManager.DiSpiritLoot[_sType].Split('/');
-                int arrayID = RHRandom.Instance.Next(0, loot.Length - 1);
-                InventoryManager.AddToInventory(int.Parse(loot[arrayID]));
+                //string[] loot = DataManager.DiSpiritInfo[_sType].Split('/');
+                //int arrayID = RHRandom.Instance.Next(0, loot.Length - 1);
+                //InventoryManager.AddToInventory(int.Parse(loot[arrayID]));
 
-                _sText = Util.ProcessText(_sText.Replace("*", "*" + loot[arrayID] + "*"));
+                //_sText = Util.ProcessText(_sText.Replace("*", "*" + loot[arrayID] + "*"));
                 GUIManager.OpenTextWindow(_sText, this);
             }
             return rv;
