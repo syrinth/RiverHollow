@@ -996,7 +996,7 @@ namespace RiverHollow.Tile_Engine
             if (CheckForMapChange(c, testX) || CheckForMapChange(c, testY)) {
                 return false;
             }
-            else if (!ignoreCollisions && !CombatManager.InCombat && c.CurrentMap.IsCombatMap)
+            else if (!ignoreCollisions && !(CombatManager.InCombat && c.CurrentMap.IsCombatMap))
             {
                 List<Rectangle> list = GetPossibleCollisions(c, dir);
                 ChangeDir(list, c.CollisionBox, ref dir, c.CurrentMapName);

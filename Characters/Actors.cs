@@ -2430,11 +2430,6 @@ namespace RiverHollow.Actors
             LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), _sAdventurerFolder + "Adventurer_" + _iAdventurerID);
         }
 
-        public override void Update(GameTime gTime)
-        {
-            base.Update(gTime);
-        }
-
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
             if (_eState == AdventurerStateEnum.Idle || (CombatManager.InCombat && _eState == AdventurerStateEnum.InParty))

@@ -317,7 +317,7 @@
 </data>
  </layer>
  <objectgroup id="4" name="Character Layer">
-  <object id="16" name="PlayerSpawn" x="1108.85" y="406.697" width="5.63636" height="5.27273"/>
+  <object id="16" name="PlayerSpawn" x="935.517" y="345.364" width="5.63636" height="5.27273"/>
  </objectgroup>
  <objectgroup id="5" name="Travel Layer">
   <object id="1" name="Exit" x="1586" y="775.333" width="13.8333" height="98.8333">
