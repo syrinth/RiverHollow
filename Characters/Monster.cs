@@ -68,6 +68,7 @@ namespace RiverHollow.Characters
             _iResistance = 2 * _iRating + 10;
             _iSpeed = 10;
 
+            if (data.ContainsKey("Size")) { _iSize = int.Parse(data["Size"]); }
             string[] split;
             if (data.ContainsKey("Condition"))
             {

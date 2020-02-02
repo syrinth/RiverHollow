@@ -474,7 +474,9 @@ namespace RiverHollow.Actors
 
         public int CurrentCharge;
         public int DummyCharge;
-        public RHTile Tile;
+        public RHTile BaseTile => _arrTiles[0,0];
+        protected RHTile[,] _arrTiles;
+        protected int _iSize = 1;
 
         #region Display
         protected DisplayBar _dbHP;
@@ -542,6 +544,7 @@ namespace RiverHollow.Actors
         public CombatActor() : base()
         {
             _eActorType = ActorEnum.CombatActor;
+            _arrTiles = new RHTile[_iSize, _iSize];
             _liActions = new List<MenuAction>();
             _liStatusEffects = new List<StatusEffect>();
             _diConditions = new Dictionary<ConditionEnum, bool>
@@ -735,7 +738,7 @@ namespace RiverHollow.Actors
                 //Checks that the current HP is greater than the amount of damage dealt
                 //If not, just remove the current HP so that we don't go negative.
                 _iCurrentHP -= (_iCurrentHP - iValue >= 0) ? iValue : _iCurrentHP;
-                Tile.Character.PlayAnimation(VerbEnum.Hurt);
+                BaseTile.Character.PlayAnimation(VerbEnum.Hurt);
 
                 //If the character goes to 0 hp, give them the KO status and unlink any summons
                 if (_iCurrentHP == 0)
@@ -912,10 +915,43 @@ namespace RiverHollow.Actors
             }
         }
 
+        /// <summary>
+        /// Sets the base tile, which will always be the upper-left most tile
+        /// to the given tile, then assign the character to the appropiate tiles around it.
+        /// </summary>
+        /// <param name="newTile">The tile to be the new base tile</param>
+        public void SetBaseTile(RHTile newTile)
+        {
+            ClearTiles();
+
+            RHTile lastTile = newTile;
+            for(int i = 0; i <_iSize; i++)
+            {
+                for (int j = 0; j < _iSize; j++)
+                {
+                    _arrTiles[i, j] = lastTile;
+                    _arrTiles[i, j].SetCombatant(this);
+                    lastTile = lastTile.GetTileByDirection(DirectionEnum.Right);
+                }
+
+                //Reset to the first Tile in the current row and go down one
+                lastTile = _arrTiles[i, 0].GetTileByDirection(DirectionEnum.Down);     
+            }
+        }
+
+        public void ClearTiles()
+        {
+            //Remove self from each tile that they are registered to.
+            foreach (RHTile t in _arrTiles)
+            {
+                t?.SetCombatant(null);
+            }
+        }
+
         public void LinkSummon(Summon s)
         {
             _linkedSummon = s;
-            s.Tile = Tile;
+            s.SetBaseTile(BaseTile);
 
             foreach (KeyValuePair<StatEnum, int> kvp in _linkedSummon.BuffedStats)
             {

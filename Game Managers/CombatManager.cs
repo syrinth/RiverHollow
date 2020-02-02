@@ -94,7 +94,7 @@ namespace RiverHollow.Game_Managers
 
             foreach (CombatActor c in _liMonsters)
             {
-                MapManager.CurrentMap.GetTileByPixelPosition(c.CollisionBox.Center).SetCombatant(c);
+                c.SetBaseTile(MapManager.CurrentMap.GetTileByPixelPosition(c.CollisionBox.Center));
             }
 
             RHTile[,] tiles = MapManager.CurrentMap.DictionaryCombatTiles[oldMap];
@@ -109,8 +109,8 @@ namespace RiverHollow.Game_Managers
                 }
 
                 Vector2 startpos = c.StartPosition;
-                tiles[(int)startpos.X, (int)startpos.Y].SetCombatant(c);
-                c.Position = c.Tile.Position;
+                c.SetBaseTile(tiles[(int)startpos.X, (int)startpos.Y]);
+                c.Position = c.BaseTile.Position;
                 c.Facing = PlayerManager.World.Facing;
                 c.PlayAnimation(VerbEnum.Walk);
             }
@@ -123,7 +123,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager.AllowMovement = false;
             PlayerManager.World.PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
 
-            PlayerManager.World.SetMoveObj(Util.SnapToGrid(PlayerManager.World.Tile.Center));
+            PlayerManager.World.SetMoveObj(Util.SnapToGrid(PlayerManager.World.BaseTile.Center));
         }
 
         public static void Update(GameTime gTime)
@@ -132,7 +132,7 @@ namespace RiverHollow.Game_Managers
             {
                 //This phase starts combat and ensures that the Actors are locked to their tile.
                 case PhaseEnum.Setup:
-                    if(PlayerManager.World.Position == PlayerManager.World.Tile.Position)
+                    if(PlayerManager.World.Position == PlayerManager.World.BaseTile.Position)
                     {
                         PlayerManager.World.PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
                         ChangePhase(PhaseEnum.Charging);
@@ -201,7 +201,7 @@ namespace RiverHollow.Game_Managers
                     if (!ActiveCharacter.FollowingPath)
                     {
                         RHTile newTile = MapManager.CurrentMap.GetTileByPixelPosition(ActiveCharacter.CollisionBox.Center);
-                        newTile.SetCombatant(ActiveCharacter);
+                        ActiveCharacter.SetBaseTile(newTile);
 
                         Item tileItem = _liDroppedItems.Find(item => newTile.Rect.Contains(item.Position));
 
@@ -443,7 +443,7 @@ namespace RiverHollow.Game_Managers
             if (_liMonsters.Contains((c)))
             {
                 _liMonsters.Remove(c);
-                c.Tile.SetCombatant(null);
+                c.ClearTiles();
             }
 
             //Remove the Actor from the turn order 
@@ -478,7 +478,7 @@ namespace RiverHollow.Game_Managers
             {
                 if (c.Range == 1)
                 {
-                    foreach (RHTile t in ActiveCharacter.Tile.GetAdjacent())
+                    foreach (RHTile t in ActiveCharacter.BaseTile.GetAdjacent())
                     {
                         if (t.HasCombatant() && t.Character.IsAdventurer())
                         {
@@ -498,12 +498,12 @@ namespace RiverHollow.Game_Managers
                 if (targetTile == null)
                 {
                     double closestDistance = 0;
-                    Vector2 start = ActiveCharacter.Tile.Center;
+                    Vector2 start = ActiveCharacter.BaseTile.Center;
                     Vector2 closest = Vector2.Zero;
 
                     foreach (CombatActor actor in Party)
                     {
-                        Vector2 target = actor.Tile.Center;
+                        Vector2 target = actor.BaseTile.Center;
 
                         int deltaX = (int)Math.Abs(start.X - target.X);
                         int deltaY = (int)Math.Abs(start.Y - target.Y);
@@ -534,7 +534,7 @@ namespace RiverHollow.Game_Managers
             //If we have not yet acted, we need to move, and we are not following a path
             if (!_turnInfo.HasActed && !gottaMove && !ActiveCharacter.FollowingPath)
             {
-                foreach (RHTile t in ActiveCharacter.Tile.GetAdjacent())
+                foreach (RHTile t in ActiveCharacter.BaseTile.GetAdjacent())
                 {
                     if (t.HasCombatant() && t.Character.IsAdventurer())
                     {
@@ -565,7 +565,7 @@ namespace RiverHollow.Game_Managers
         public static void FindAndHighlightLegalTiles()
         {
             int distance = (CurrentPhase == PhaseEnum.ChooseMoveTarget ? 5 : SelectedAction.Range);
-            RecursivelyGrowRange(ActiveCharacter.Tile, _liLegalTiles, 0, distance);
+            RecursivelyGrowRange(ActiveCharacter.BaseTile, _liLegalTiles, 0, distance);
 
             foreach (RHTile t in _liLegalTiles)
             {
@@ -706,7 +706,7 @@ namespace RiverHollow.Game_Managers
             RHTile temp = SelectedTile;
             if (temp == null)
             {
-                temp = ActiveCharacter.Tile;
+                temp = ActiveCharacter.BaseTile;
             }
 
             if (InputManager.CheckPressedKey(Keys.A))
@@ -726,7 +726,7 @@ namespace RiverHollow.Game_Managers
                temp = temp.GetTileByDirection(DirectionEnum.Down);
             }
 
-            if (temp != null && CombatManager.LegalTiles.Contains(temp) && temp != ActiveCharacter.Tile)
+            if (temp != null && CombatManager.LegalTiles.Contains(temp) && temp != ActiveCharacter.BaseTile)
             {
                 SelectTile(temp);
             }
@@ -765,7 +765,7 @@ namespace RiverHollow.Game_Managers
             {
                 _tTarget = SelectedTile;
                 ChangePhase(PhaseEnum.Moving);
-                ActiveCharacter.Tile.SetCombatant(null);
+                ActiveCharacter.ClearTiles();
                 Vector2 start = ActiveCharacter.Position;
 
                 List<RHTile> tilePath = TravelManager.FindPathToLocation(ref start, _tTarget.Center, MapManager.CurrentMap.Name);
@@ -1137,7 +1137,7 @@ namespace RiverHollow.Game_Managers
                 _liLegalTiles = new List<RHTile>();
 
                 //Only the adjacent tiles are legal
-                _liLegalTiles = User.Tile.GetAdjacent();
+                _liLegalTiles = User.BaseTile.GetAdjacent();
             }
 
             public ChosenAction(CombatAction ca)
@@ -1151,7 +1151,7 @@ namespace RiverHollow.Game_Managers
                 _liLegalTiles = new List<RHTile>();
                 if (IsMelee())
                 {
-                    _liLegalTiles = User.Tile.GetAdjacent();
+                    _liLegalTiles = User.BaseTile.GetAdjacent();
                 }
                 else if (IsRanged())
                 {
@@ -1174,7 +1174,7 @@ namespace RiverHollow.Game_Managers
                 }
                 else if (SelfOnly())
                 {
-                    _liLegalTiles.Add(User.Tile);
+                    _liLegalTiles.Add(User.BaseTile);
                 }
                 //else if (Columns())
                 //{

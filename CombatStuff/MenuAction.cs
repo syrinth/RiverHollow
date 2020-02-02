@@ -313,7 +313,7 @@ namespace RiverHollow.Actors.CombatStuff
                     if(targetActor.MyGuard != null)
                     {
                         targetActor = targetActor.MyGuard;
-                        targetTile = targetActor.Tile;
+                        targetTile = targetActor.BaseTile;
                     }
 
                     //Lot more logic has to go into skills then spells
@@ -505,13 +505,13 @@ namespace RiverHollow.Actors.CombatStuff
             //Handler for the SkillUser to retreat
             if (_liEffects.Contains(SkillTagsEnum.Retreat))
             {
-                Retreat(SkillUser.Tile);
+                Retreat(SkillUser.BaseTile);
             }
 
             //Handler for the SkillUser to move forwrd
             if (_liEffects.Contains(SkillTagsEnum.Step))
             {
-                Step(SkillUser.Tile);
+                Step(SkillUser.BaseTile);
             }
 
             //Handler for when the action removes things
@@ -553,7 +553,7 @@ namespace RiverHollow.Actors.CombatStuff
                 {
                     if (!test.HasCombatant())
                     {
-                        test.SetCombatant(t.Character);
+                        t.Character.SetBaseTile(test);
                         t = test;
                         rv = true;
                     }
@@ -561,7 +561,7 @@ namespace RiverHollow.Actors.CombatStuff
                     {
                         if (Push(test))
                         {
-                            test.SetCombatant(t.Character);
+                            t.Character.SetBaseTile(test);
                         }
                     }
                 }
@@ -583,7 +583,7 @@ namespace RiverHollow.Actors.CombatStuff
                 {
                     if (!test.HasCombatant())
                     {
-                        test.SetCombatant(t.Character);
+                        t.Character.SetBaseTile(test);
                         t = test;
                         rv = true;
                     }
@@ -606,7 +606,7 @@ namespace RiverHollow.Actors.CombatStuff
                 {
                     if (!test.HasCombatant())
                     {
-                        test.SetCombatant(t.Character);
+                        t.Character.SetBaseTile(test);
                         t = test;
                         rv = true;
                     }
@@ -629,7 +629,7 @@ namespace RiverHollow.Actors.CombatStuff
                 {
                     if (!test.HasCombatant())
                     {
-                        test.SetCombatant(t.Character);
+                        t.Character.SetBaseTile(test);
                         t = test;
                         rv = true;
                     }
@@ -840,10 +840,10 @@ namespace RiverHollow.Actors.CombatStuff
                     //}
                     break;
                 case "Move":
-                    TileTargetList[0].SetCombatant(SkillUser);
+                    SkillUser.SetBaseTile(TileTargetList[0]);
                     if (SkillUser.LinkedSummon != null)
                     {
-                        SkillUser.LinkedSummon.Tile = TileTargetList[0];
+                        SkillUser.LinkedSummon.SetBaseTile(TileTargetList[0]);
                         //TileTargetList[0].GUITile.LinkSummon(SkillUser.LinkedSummon);
                     }
                     _iCurrentAction++;

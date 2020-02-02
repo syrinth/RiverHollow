@@ -729,7 +729,7 @@ namespace RiverHollow.Tile_Engine
             {
                 if(CombatManager.ActiveCharacter != null && CombatManager.ActiveCharacter.IsAdventurer())
                 {
-                    CombatManager.ActiveCharacter.Tile?.Draw(spriteBatch);
+                    CombatManager.ActiveCharacter.BaseTile?.Draw(spriteBatch);
                 }
 
                 foreach (RHTile t in CombatManager.LegalTiles)
@@ -2312,7 +2312,7 @@ namespace RiverHollow.Tile_Engine
             if (CombatManager.InCombat)
             {
                 //Only draw one of the tile targetting types
-                if (this == CombatManager.ActiveCharacter.Tile) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(48, 112, 16, 16), Color.White); }
+                if (this == CombatManager.ActiveCharacter.BaseTile) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(48, 112, 16, 16), Color.White); }
                 else if (_bSelected) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(16, 112, 16, 16), Color.White); }
                 else if (_bArea) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(32, 112, 16, 16), Color.White); }
                 else if (_bLegalTile) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(0, 112, 16, 16), Color.White); }
@@ -2622,11 +2622,9 @@ namespace RiverHollow.Tile_Engine
         /// <summary>
         /// Assigns a CombatActor to the RHTile
         /// </summary>
-        /// <param name="c"></param>
+        /// <param name="c">The combatant to set to this tile</param>
         public void SetCombatant(CombatActor c)
         {
-            if (c == null) { _combatActor.Tile = null; }
-            else { c.Tile = this; }
             _combatActor = c;
         }
 
