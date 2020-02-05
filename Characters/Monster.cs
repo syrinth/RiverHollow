@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Actors;
 using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
+using RiverHollow.Tile_Engine;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
@@ -53,12 +55,6 @@ namespace RiverHollow.Characters
             _id = id;
             _sName = DataManager.GetMonsterTestInfo(_id);
 
-            //_iWidth = int.Parse(data["Width"]);
-            //_iHeight = int.Parse(data["Height"]);
-
-            _iWidth = TileSize;
-            _iHeight = TileSize * 2;
-
             _iRating = int.Parse(data["Lvl"]);
             _iXP = _iRating * 10;
             _iStrength = 1 + _iRating;
@@ -68,7 +64,16 @@ namespace RiverHollow.Characters
             _iResistance = 2 * _iRating + 10;
             _iSpeed = 10;
 
-            if (data.ContainsKey("Size")) { _iSize = int.Parse(data["Size"]); }
+            if (data.ContainsKey("Width")) { _iWidth = int.Parse(data["Width"]); }
+            else { _iWidth = TileSize; }
+
+            if (data.ContainsKey("Height")) { _iHeight = int.Parse(data["Height"]); }
+            else { _iHeight = TileSize * 2; }
+
+            if (data.ContainsKey("Size")) {
+                _iSize = int.Parse(data["Size"]);
+                _arrTiles = new RHTile[_iSize, _iSize];
+            }
             string[] split;
             if (data.ContainsKey("Condition"))
             {
@@ -121,24 +126,6 @@ namespace RiverHollow.Characters
             LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), DataManager.FOLDER_MONSTERS + data["Texture"]);
         }
 
-        //Deprecated Jump code
-        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Down), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Air, DirectionEnum.Down), xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
-        //xCrawl += 64;
-        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Up), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Up), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Air, DirectionEnum.Up), xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
-        //xCrawl += 64;
-        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Left), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Left), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Air, DirectionEnum.Left), xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
-        //xCrawl += 64;
-        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Right), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Ground, DirectionEnum.Right), xCrawl, 0, TileSize, TileSize * 2, 2, 0.2f);
-        //_spriteBody.AddAnimation(Util.GetActorString(VerbEnum.Air, DirectionEnum.Right), xCrawl + 32, 0, TileSize, TileSize * 2, 2, 0.2f);
-        //_spriteBody.SetCurrentAnimation(Util.GetActorString(VerbEnum.Idle, DirectionEnum.Down));
-
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
@@ -153,6 +140,11 @@ namespace RiverHollow.Characters
             //if (!CombatManager.InCombat) {
             //    UpdateMovement(gTime);
             //}
+        }
+
+        public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
+        {
+            base.Draw(spriteBatch, useLayerDepth);
         }
 
         private void HandleTrait(string traitData)

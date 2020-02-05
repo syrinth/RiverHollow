@@ -395,12 +395,6 @@ namespace RiverHollow.Tile_Engine
                 {
                     PlaceWorldObject(DataManager.GetWorldObject(WorldItem.Tree, Util.SnapToGrid(obj.Position)));
                 }
-                else if (obj.Name.Equals("Monster"))
-                {
-                    Vector2 vect = obj.Position;
-                    Monster mob = DataManager.GetMonster(int.Parse(obj.Properties["ID"]), vect);
-                    AddMonster(mob);
-                }
                 else if (obj.Name.Equals("Chest"))
                 {
                     Container c = (Container)DataManager.GetWorldObject(190);
@@ -571,7 +565,7 @@ namespace RiverHollow.Tile_Engine
                 sp.Despawn();
             }
 
-            //Copy the spawn poitns to a list we can safely modify
+            //Copy the spawn points to a list we can safely modify
             List<SpawnPoint> spawnCopy = new List<SpawnPoint>();
             spawnCopy.AddRange(_liMonsterSpawnPoints);
 
@@ -2240,7 +2234,7 @@ namespace RiverHollow.Tile_Engine
 
         public void Spawn()
         {
-            _monster = DataManager.GetMonsterByIndex(3);//ObjectManager.GetMobToSpawn(_eSpawnType);
+            _monster = DataManager.GetMonsterByIndex(4);//ObjectManager.GetMobToSpawn(_eSpawnType);
             if (_monster != null)
             {
                 _map.AddMonsterByPosition(_monster, _vSpawnPoint);

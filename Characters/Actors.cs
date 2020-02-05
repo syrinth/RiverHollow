@@ -46,14 +46,14 @@ namespace RiverHollow.Actors
         public virtual string Name { get => _sName; }
 
         protected AnimatedSprite _sprBody;
-        public AnimatedSprite BodySprite { get => _sprBody; }
+        public AnimatedSprite BodySprite => _sprBody;
 
         public virtual Vector2 Position
         {
             get { return new Vector2(_sprBody.Position.X, _sprBody.Position.Y); }
             set { _sprBody.Position = value; }
         }
-        public virtual Vector2 Center { get => _sprBody.Center; }
+        public virtual Vector2 Center => _sprBody.Center;
 
         public Rectangle GetRectangle()
         {
@@ -178,8 +178,12 @@ namespace RiverHollow.Actors
 
         public override Vector2 Position
         {
-            get { return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - TileSize); } //MAR this is fucked up
-            set { _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + TileSize); }
+            get {
+                return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - (TileSize * _iSize));
+            } //MAR this is fucked up
+            set {
+                _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + (TileSize * _iSize));
+            }
         }
 
         public bool FollowingPath => _liTilePath.Count > 0;
@@ -199,6 +203,9 @@ namespace RiverHollow.Actors
         int _iBaseSpeed = 2;
         public float Speed => _iBaseSpeed * SpdMult;
         public float SpdMult = 1;
+
+        protected int _iSize = 1;
+        public int Size => _iSize;
 
         #endregion
 
@@ -476,7 +483,6 @@ namespace RiverHollow.Actors
         public int DummyCharge;
         public RHTile BaseTile => _arrTiles[0,0];
         protected RHTile[,] _arrTiles;
-        protected int _iSize = 1;
 
         #region Display
         protected DisplayBar _dbHP;
@@ -1056,19 +1062,19 @@ namespace RiverHollow.Actors
                 if (CombatManager.InCombat)
                 {
                     Vector2 pos = _act.Position;
-                    pos.Y += TileSize;
+                    pos.Y += (TileSize * _act._iSize);
 
                     //Do not allow the bar to have less than 2 pixels, one for the border and one to display.
-                    int percent = Math.Max((int)(16 * (float)_act.CurrentHP / (float)_act.MaxHP), 2);
+                    int percent = Math.Max((int)((int)(TileSize * _act.Size) * (float)_act.CurrentHP / (float)_act.MaxHP), 2);
                     spriteBatch.Draw(DataManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, percent, 4), new Rectangle(16, 4, percent, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y);
-                    spriteBatch.Draw(DataManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, 16, 4), new Rectangle(16, 0, 16, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y + 1);
+                    spriteBatch.Draw(DataManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, (int)(TileSize * _act.Size), 4), new Rectangle(16, 0, 16, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y + 1);
 
                     if (_bHasMana)
                     {
                         pos.Y += 4;
                         percent = (int)(16 * (float)_act.CurrentMP / (float)_act.MaxMP);
                         spriteBatch.Draw(DataManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, percent, 4), new Rectangle(16, 12, percent, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y);
-                        spriteBatch.Draw(DataManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, 16, 4), new Rectangle(16, 8, 16, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y + 1);
+                        spriteBatch.Draw(DataManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, (int)(TileSize * _act.Size), 4), new Rectangle(16, 8, 16, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y + 1);
                     }
                 }
             }

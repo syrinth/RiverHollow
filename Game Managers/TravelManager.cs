@@ -248,7 +248,7 @@ namespace RiverHollow.Game_Managers
         }
 
         //Pathfinds from one point to another on a given map
-        public static List<RHTile> FindPathToLocation(ref Vector2 start, Vector2 target, string mapName)
+        public static List<RHTile> FindPathToLocation(ref Vector2 start, Vector2 target, string mapName, int size = 1)
         {
             WriteToTravelLog(System.Environment.NewLine + "+++ " + mapName + " -- [" + (int)start.X/16 + ", " + (int)start.Y / 16 + "] == > [ " + (int)target.X / 16 + ", " + (int)target.Y / 16 + " ] +++");
             
@@ -290,20 +290,43 @@ namespace RiverHollow.Game_Managers
                     break;
                 }
 
+                //Iterate over every tile in the accessible neighbours and, with it as the
+                //prospective new basetile, confirm that neighbouring tiles are all valid
                 foreach (var next in current.GetWalkableNeighbours())
                 {
-                    double newCost = costSoFar[current] + GetMovementCost(next);
-
-                    if (!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
+                    bool isValidWithSize = true;
+                    RHTile lastTile = next;
+                    for (int i = 0; i < size; i++)
                     {
-                        costSoFar[next] = newCost;
-                        double priority = newCost + Heuristic(next, goalNode);
+                        for (int j = 0; j < size; j++)
+                        {
+                            if (lastTile == null || !lastTile.Passable())
+                            {
+                                isValidWithSize = false;
+                            }
+                            lastTile = lastTile?.GetTileByDirection(GameManager.DirectionEnum.Right);
+                        }
 
-                        frontier.Enqueue(next, priority);
-                        cameFrom[next] = current;
+                        //Reset to the first Tile in the current row and go down one
+                        lastTile = lastTile?.GetTileByDirection(GameManager.DirectionEnum.Down);
+                    }
+
+                    if (isValidWithSize)
+                    {
+                        double newCost = costSoFar[current] + GetMovementCost(next);
+
+                        if (!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
+                        {
+                            costSoFar[next] = newCost;
+                            double priority = newCost + Heuristic(next, goalNode);
+
+                            frontier.Enqueue(next, priority);
+                            cameFrom[next] = current;
+                        }
                     }
                 }
             }
+
             return returnList;
         }
 

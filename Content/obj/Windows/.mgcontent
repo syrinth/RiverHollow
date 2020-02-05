@@ -188,5 +188,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CharacterData.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Schedules/NPC1.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Schedules/NPC3.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/BigBlob.png</File>
   </SourceFiles>
 </SourceFileCollection>

@@ -94,7 +94,7 @@ namespace RiverHollow.Game_Managers
 
             foreach (CombatActor c in _liMonsters)
             {
-                c.SetBaseTile(MapManager.CurrentMap.GetTileByPixelPosition(c.CollisionBox.Center));
+                c.SetBaseTile(MapManager.CurrentMap.GetTileByPixelPosition(c.Position));
             }
 
             RHTile[,] tiles = MapManager.CurrentMap.DictionaryCombatTiles[oldMap];
@@ -200,7 +200,7 @@ namespace RiverHollow.Game_Managers
                 case PhaseEnum.Moving:
                     if (!ActiveCharacter.FollowingPath)
                     {
-                        RHTile newTile = MapManager.CurrentMap.GetTileByPixelPosition(ActiveCharacter.CollisionBox.Center);
+                        RHTile newTile = MapManager.CurrentMap.GetTileByPixelPosition(ActiveCharacter.Position);
                         ActiveCharacter.SetBaseTile(newTile);
 
                         Item tileItem = _liDroppedItems.Find(item => newTile.Rect.Contains(item.Position));
@@ -521,7 +521,7 @@ namespace RiverHollow.Game_Managers
                     //Need to unset the Combatant from the tile the monster is moving to so that
                     //we can pathfind to it
                     CombatActor act = SelectedTile.Character;
-                    SelectedTile.SetCombatant(null);
+                    act.ClearTiles();
 
                     //Determine the pathfinding for the Monster
                     SetMoveTarget();
@@ -768,7 +768,7 @@ namespace RiverHollow.Game_Managers
                 ActiveCharacter.ClearTiles();
                 Vector2 start = ActiveCharacter.Position;
 
-                List<RHTile> tilePath = TravelManager.FindPathToLocation(ref start, _tTarget.Center, MapManager.CurrentMap.Name);
+                List<RHTile> tilePath = TravelManager.FindPathToLocation(ref start, _tTarget.Center, MapManager.CurrentMap.Name, ActiveCharacter.Size);
 
                 //If a Monster is going to move, we need to either prune it down
                 //or remove the last tile so they don't actually try to step into the player's tile

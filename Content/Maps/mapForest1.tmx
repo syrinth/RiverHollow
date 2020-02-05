@@ -72,22 +72,22 @@
 </data>
  </layer>
  <objectgroup id="5" name="MapObject">
-  <object id="3" name="SpawnPoint" x="305.5" y="195" width="10" height="8.5">
+  <object id="3" name="SpawnPoint" x="290.5" y="193" width="10" height="8.5">
    <properties>
     <property name="SpawnType" value="Forest"/>
    </properties>
   </object>
-  <object id="4" name="SpawnPoint" x="210.833" y="101.917" width="10" height="8.5">
+  <object id="4" name="SpawnPoint" x="194.333" y="100.917" width="10" height="8.5">
    <properties>
     <property name="SpawnType" value="Forest"/>
    </properties>
   </object>
-  <object id="5" name="SpawnPoint" x="324.167" y="146.917" width="10" height="8.5">
+  <object id="5" name="SpawnPoint" x="305.667" y="148.917" width="10" height="8.5">
    <properties>
     <property name="SpawnType" value="Forest"/>
    </properties>
   </object>
-  <object id="6" name="SpawnPoint" x="257.833" y="115.75" width="10" height="8.5">
+  <object id="6" name="SpawnPoint" x="242.833" y="116.25" width="10" height="8.5">
    <properties>
     <property name="SpawnType" value="Forest"/>
    </properties>
