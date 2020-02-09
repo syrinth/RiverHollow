@@ -295,7 +295,7 @@ namespace RiverHollow.Game_Managers
         {
             if (ActiveCharacter.IsMonster())
             {
-                EnemyTakeTurn();
+                ((Monster)ActiveCharacter).TakeTurn();
             }
             else
             {
@@ -581,7 +581,7 @@ namespace RiverHollow.Game_Managers
         /// <param name="depth">How many "growth rings" we are in</param>
         /// <param name="tileList">The list of RHTiles to add to</param>
         /// <param name="maxDepth">The maximium depth to go for</param>
-        private static void RecursivelyGrowRange(RHTile startTile, List<RHTile> tileList, int depth, int maxDepth)
+        public static void RecursivelyGrowRange(RHTile startTile, List<RHTile> tileList, int depth, int maxDepth)
         {
             //If we haven't exceeded the maxDepth, discover the adjacent tiles
             if (depth < maxDepth)
@@ -768,24 +768,12 @@ namespace RiverHollow.Game_Managers
                 ActiveCharacter.ClearTiles();
                 Vector2 start = ActiveCharacter.Position;
 
-                List<RHTile> tilePath = TravelManager.FindPathToLocation(ref start, _tTarget.Center, MapManager.CurrentMap.Name, ActiveCharacter.Size);
+                List<RHTile> tilePath = TravelManager.FindPathToLocation(ref start, _tTarget.Center, MapManager.CurrentMap.Name);
 
-                //If a Monster is going to move, we need to either prune it down
-                //or remove the last tile so they don't actually try to step into the player's tile
-                if (tilePath != null && ActiveCharacter.IsMonster())
-                {
-                    if (tilePath.Count > 5) { tilePath.RemoveRange(5, tilePath.Count - 5); }
-                    else { tilePath.RemoveAt(tilePath.Count - 1); }
-                }
-
-                if (tilePath == null && ActiveCharacter.IsMonster())
-                {
-                    EndTurn();
-                }
-                else
+                if (tilePath != null)
                 {
                     ActiveCharacter.SetPath(tilePath);
-                    TravelManager.ClearPathingTracks(); //Clean up after our pathfinding
+                    TravelManager.Clear(); //Clean up after our pathfinding
                     ClearToPerformAction();
                 }
             }

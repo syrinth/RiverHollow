@@ -17,6 +17,7 @@ using static RiverHollow.Game_Managers.GUIObjects.HUDMenu;
 using static RiverHollow.Game_Managers.GUIObjects.HUDMenu.HUDManagement;
 using static RiverHollow.Game_Managers.DataManager;
 using static RiverHollow.WorldObjects.Clothes;
+using static RiverHollow.Game_Managers.TravelManager;
 
 namespace RiverHollow.Actors
 {
@@ -483,6 +484,7 @@ namespace RiverHollow.Actors
         public int DummyCharge;
         public RHTile BaseTile => _arrTiles[0,0];
         protected RHTile[,] _arrTiles;
+        public PriorityQueue<RHTile> legalTiles;
 
         #region Display
         protected DisplayBar _dbHP;
@@ -549,6 +551,7 @@ namespace RiverHollow.Actors
 
         public CombatActor() : base()
         {
+            legalTiles = new PriorityQueue<RHTile>();
             _eActorType = ActorEnum.CombatActor;
             _arrTiles = new RHTile[_iSize, _iSize];
             _liActions = new List<MenuAction>();
@@ -1816,7 +1819,7 @@ namespace RiverHollow.Actors
                             timePath = TravelManager.FindPathToOtherMap(kvp.Value, ref mapName, ref start);
                         }
                         lTimetoTilePath.Add(new KeyValuePair<string, List<RHTile>>(kvp.Key, timePath));
-                        TravelManager.ClearPathingTracks();
+                        TravelManager.Clear();
                     }
                     TravelManager.CloseTravelLog();
 

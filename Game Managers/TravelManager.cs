@@ -10,6 +10,7 @@ namespace RiverHollow.Game_Managers
     public static class TravelManager
     {
         private static StreamWriter _swWriter;
+        private static int _iSize = 1;
 
         public static void NewTravelLog(string name)
         {
@@ -240,7 +241,7 @@ namespace RiverHollow.Game_Managers
                         }
                     }
 
-                    ClearPathingTracks();
+                    Clear();
                 }
             }
 
@@ -248,7 +249,7 @@ namespace RiverHollow.Game_Managers
         }
 
         //Pathfinds from one point to another on a given map
-        public static List<RHTile> FindPathToLocation(ref Vector2 start, Vector2 target, string mapName, int size = 1)
+        public static List<RHTile> FindPathToLocation(ref Vector2 start, Vector2 target, string mapName)
         {
             WriteToTravelLog(System.Environment.NewLine + "+++ " + mapName + " -- [" + (int)start.X/16 + ", " + (int)start.Y / 16 + "] == > [ " + (int)target.X / 16 + ", " + (int)target.Y / 16 + " ] +++");
             
@@ -265,7 +266,7 @@ namespace RiverHollow.Game_Managers
             {
                 var current = frontier.Dequeue();
 
-                if (current.Equals(goalNode))
+                if (current.Equals(goalNode) && TestNodeForSize(current))
                 {
                     returnList = BackTrack(current);
                     start = current.Position;
@@ -291,27 +292,10 @@ namespace RiverHollow.Game_Managers
                 }
 
                 //Iterate over every tile in the accessible neighbours and, with it as the
-                //prospective new basetile, confirm that neighbouring tiles are all valid
+                //prospective new BaseTile, confirm that neighbouring tiles are all valid
                 foreach (var next in current.GetWalkableNeighbours())
                 {
-                    bool isValidWithSize = true;
-                    RHTile lastTile = next;
-                    for (int i = 0; i < size; i++)
-                    {
-                        for (int j = 0; j < size; j++)
-                        {
-                            if (lastTile == null || !lastTile.Passable())
-                            {
-                                isValidWithSize = false;
-                            }
-                            lastTile = lastTile?.GetTileByDirection(GameManager.DirectionEnum.Right);
-                        }
-
-                        //Reset to the first Tile in the current row and go down one
-                        lastTile = lastTile?.GetTileByDirection(GameManager.DirectionEnum.Down);
-                    }
-
-                    if (isValidWithSize)
+                    if (TestNodeForSize(next))
                     {
                         double newCost = costSoFar[current] + GetMovementCost(next);
 
@@ -328,6 +312,36 @@ namespace RiverHollow.Game_Managers
             }
 
             return returnList;
+        }
+
+        /// <summary>
+        /// This method tests the tiles to the left and down of the given tile, since that will be the theoretical
+        /// BaseTile, to ensure that the actor can fit there.
+        /// </summary>
+        /// <param name="nextTile">The tile to be evaluated as a new BaseTile</param>
+        /// <returns>True if the actor will fit</returns>
+        public static bool TestNodeForSize(RHTile nextTile, bool checkForCharacter = false)
+        {
+            bool rv = true;
+            RHTile lastTile = nextTile;
+            for (int i = 0; i < _iSize; i++)
+            {
+                RHTile rowTile = lastTile;
+                for (int j = 0; j < _iSize; j++)
+                {
+                    if (lastTile == null || !lastTile.Passable() || (checkForCharacter && lastTile.Character != null))
+                    {
+                        rv = false;
+                    }
+
+                    lastTile = lastTile?.GetTileByDirection(GameManager.DirectionEnum.Right);
+                }
+
+                //Reset to the first Tile in the current row and go down one
+                lastTile = rowTile.GetTileByDirection(GameManager.DirectionEnum.Down);
+            }
+
+            return rv;
         }
 
         private static List<RHTile> BackTrack(RHTile current)
@@ -364,7 +378,13 @@ namespace RiverHollow.Game_Managers
         {
             return target.IsRoad ? 1 : slowCost;
         }
-        public static void ClearPathingTracks()
+
+        public static void SetParams(int size)
+        {
+            _iSize = size;
+        }
+
+        public static void Clear()
         {
             cameFrom.Clear();
             costSoFar.Clear();
@@ -396,7 +416,7 @@ namespace RiverHollow.Game_Managers
                         {
                             Vector2 start = kvpEntrance.Value.Center.ToVector2();
                             _diRoutes[kvpEntrance.Key][kvpExit.Value] = TravelManager.FindPathToLocation(ref start, kvpExit.Key.Center.ToVector2(), _map.Name);
-                            ClearPathingTracks();
+                            Clear();
                         }
                     }
                 }

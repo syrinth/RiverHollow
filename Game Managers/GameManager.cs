@@ -96,7 +96,7 @@ namespace RiverHollow.Game_Managers
             {
                 Vector2 pos = PlayerManager.World.CollisionBox.Center.ToVector2();
                 PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"], MapManager.CurrentMap.Name));
-                TravelManager.ClearPathingTracks();
+                TravelManager.Clear();
                 GameManager.BackToMain();
             }
             else if (selectedAction.Equals("OpenDoor"))
