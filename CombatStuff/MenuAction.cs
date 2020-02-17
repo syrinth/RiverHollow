@@ -59,7 +59,7 @@ namespace RiverHollow.Actors.CombatStuff
         const int moveSpeed = 60;
 
         PotencyBonusEnum _eBonusType;
-        ElementEnum _element = ElementEnum.None;
+        ElementEnum _eElement = ElementEnum.None;
         List<ConditionEnum> _liCondition;
         public List<ConditionEnum> LiCondition => _liCondition;
         int _iChargeCost;
@@ -79,12 +79,12 @@ namespace RiverHollow.Actors.CombatStuff
 
         string _sAnimation;
 
-        TargetEnum _target;
-        public TargetEnum Target => _target;
+        TargetEnum _eTarget;
+        public TargetEnum Target => _eTarget;
         int _iRange;
         public int Range => _iRange;
-        int _iArea;
-        public int AreaOfEffect => _iArea;
+        AreaTypeEnum _eAreaType;
+        public AreaTypeEnum AreaType => _eAreaType;
         List<String> _liActionTags;
         int _iCurrentAction = 0;
         List<SkillTagsEnum> _liEffects;
@@ -137,20 +137,15 @@ namespace RiverHollow.Actors.CombatStuff
             DataManager.GetActionText(_id, ref _name, ref _description);
 
             _actionType = Util.ParseEnum<ActionEnum>(stringData["Type"]);
-            if (stringData.ContainsKey("Element")) { _element = Util.ParseEnum<ElementEnum>(stringData["Element"]); }
-            if (stringData.ContainsKey("Target")) { _target = Util.ParseEnum<TargetEnum>(stringData["Target"]); }
+            if (stringData.ContainsKey("Element")) { _eElement = Util.ParseEnum<ElementEnum>(stringData["Element"]); }
+            if (stringData.ContainsKey("Target")) { _eTarget = Util.ParseEnum<TargetEnum>(stringData["Target"]); }
+            if (stringData.ContainsKey("AreaType")) { _eAreaType = Util.ParseEnum<AreaTypeEnum>(stringData["AreaType"]); }
             if (stringData.ContainsKey("Range")) { _iRange = int.Parse(stringData["Range"]); }
             if (stringData.ContainsKey("Charge")) { _iChargeCost = int.Parse(stringData["Charge"]); }
             if (stringData.ContainsKey("Crit")) { _iCritRating = int.Parse(stringData["Crit"]); }
             if (stringData.ContainsKey("Accuracy")) { _iAccuracy = int.Parse(stringData["Accuracy"]); }
             if (stringData.ContainsKey("Cost")) { _iMPcost = int.Parse(stringData["Cost"]); }
             if (stringData.ContainsKey("Level")) { _iReqLevel = int.Parse(stringData["Level"]); }
-           
-            if (stringData.ContainsKey("Area"))
-            {
-                string[] tags = stringData["Area"].Split('-');
-                _iArea = int.Parse(tags[0]);
-            }
 
             if (stringData.ContainsKey("Icon"))
             {
@@ -327,12 +322,12 @@ namespace RiverHollow.Actors.CombatStuff
                             targetActor.ProcessAttack(SkillUser, totalPotency, _iCritRating, targetActor.GetAttackElement());
 
                             //If the target has a Summon linked to them, and they take
-                            //any area damage, hit the Summon as well
-                            Summon summ = targetActor.LinkedSummon;
-                            if (_iArea > 0 && summ != null)
-                            {
-                                summ.ProcessAttack(SkillUser, _iPotency + bonus, _iCritRating, targetActor.GetAttackElement());
-                            }
+                            ///any area damage, hit the Summon as well
+                            //Summon summ = targetActor.LinkedSummon;
+                            //if (_iArea > 0 && summ != null)
+                            //{
+                            //    summ.ProcessAttack(SkillUser, _iPotency + bonus, _iCritRating, targetActor.GetAttackElement());
+                            //}
 
                             #region Countering setup
                             //If the target has Counter turn on, prepare to counterattack
@@ -347,12 +342,12 @@ namespace RiverHollow.Actors.CombatStuff
                                 }
 
                                 //If there is a summon and it can counter, prepare it for countering.
-                                if (summ != null && summ.Counter)
-                                {
-                                    summ.GoToCounter = true;
-                                    counteringSummon = summ;
-                                    _bPauseActionHandler = true;
-                                }
+                                //if (summ != null && summ.Counter)
+                                //{
+                                //    summ.GoToCounter = true;
+                                //    counteringSummon = summ;
+                                //    _bPauseActionHandler = true;
+                                //}
                             }
                             #endregion
                         }
@@ -382,7 +377,7 @@ namespace RiverHollow.Actors.CombatStuff
                     else   //Handling for spells
                     {
                         //Process the damage of the spell, then apply it to the targeted tile
-                        targetActor.ProcessSpell(SkillUser, totalPotency, _element);
+                        targetActor.ProcessSpell(SkillUser, totalPotency, _eElement);
                     }
                 }
             }
@@ -875,8 +870,7 @@ namespace RiverHollow.Actors.CombatStuff
             return rv;
         }
 
-        public bool TargetsEach() { return _iArea > 0; }
-        public bool IsHelpful() { return _target == TargetEnum.Ally; }
+        public bool IsHelpful() { return _eTarget == TargetEnum.Ally; }
         public bool IsSummonSpell() { return _liEffects.Contains(SkillTagsEnum.Summon); }
     }
 

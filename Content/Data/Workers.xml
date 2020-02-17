@@ -4,35 +4,35 @@
     <!--Key: Index>0 Value:ClassType/DailyItem/DailyFood/Portrait#-->
     <Item>
       <Key>1</Key>
-      <Value>[Type:Magic][Item:1][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-0-0-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
+      <Value>[Type:Magic][Item:1][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Magic][Item:10][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-0-0-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
+      <Value>[Type:Magic][Item:10][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Magic][Item:14][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-0-0-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
+      <Value>[Type:Magic][Item:14][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Magic][Item:-1][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-0-0-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
+      <Value>[Type:Magic][Item:-1][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Martial][Item:-1][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-0-0-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
+      <Value>[Type:Martial][Item:-1][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Martial][Item:-1][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-0-0-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
+      <Value>[Type:Martial][Item:-1][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Martial][Item:-1][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-0-0-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
+      <Value>[Type:Martial][Item:-1][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Martial][Item:-1][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-0-0-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
+      <Value>[Type:Martial][Item:-1][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
     </Item>
   </Asset>
 </XnaContent>

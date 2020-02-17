@@ -592,9 +592,7 @@ namespace RiverHollow.Game_Managers
             if (CurrentPhase == PhaseEnum.ChooseActionTarget)
             {
                 ClearAreaTiles();
-
-                //MAR
-                //RecursivelyGrowRange(SelectedTile, _liAreaTiles, 0, SelectedAction.AreaOfEffect());
+                _liAreaTiles = SelectedAction.DetermineTargetTiles(tile);
                 foreach (RHTile t in _liAreaTiles)
                 {
                     t.AreaTile(true);
@@ -907,7 +905,7 @@ namespace RiverHollow.Game_Managers
             {
                 if (activeSummon != null)
                 {
-                    if (activeSummon.Aggressive && SelectedAction.IsMelee())
+                    if (activeSummon.Aggressive)// && SelectedAction.IsMelee())
                     {
                         List<RHTile> targets = SelectedAction.GetTargetTiles();
                         ActiveCharacter = activeSummon;
@@ -936,7 +934,7 @@ namespace RiverHollow.Game_Managers
         {
             if (SelectedAction != null)
             {
-                SelectedAction.Clear();
+                SelectedAction.ClearTargets();
             }
 
             //if (CurrentPhase != PhaseEnum.EndCombat)
@@ -1002,52 +1000,6 @@ namespace RiverHollow.Game_Managers
                 _chosenAction.SkillUser = ActiveCharacter;
 
                 _liLegalTiles = new List<RHTile>();
-                if (IsMelee())
-                {
-                    _liLegalTiles = User.BaseTile.GetAdjacentTiles();
-                }
-                else if (IsRanged())
-                {
-                    //int col = -1;
-                    //int maxCol = MAX_COL;
-                    //if (TargetsEnemy()) { col = ENEMY_FRONT; }
-                    //else
-                    //{
-                    //    col = 0;
-                    //    maxCol = ENEMY_FRONT;
-                    //}
-
-                    //for (; col < maxCol; col++)
-                    //{
-                    //    for (int row = 0; row < MAX_ROW; row++)
-                    //    {
-                    //        //_liLegalTiles.Add(_combatMap[row, col]);
-                    //    }
-                    //}
-                }
-                else if (SelfOnly())
-                {
-                    _liLegalTiles.Add(User.BaseTile);
-                }
-                //else if (Columns())
-                //{
-                    //int startCol = ActiveCharacter.Tile.X;
-                    //int endCol = ActiveCharacter.Tile.X;
-
-                    //if(ActiveCharacter.Tile.X > 0) { startCol = ActiveCharacter.Tile.X - 1; }
-                    //if (ActiveCharacter.Tile.Col < ALLY_FRONT) { endCol = ActiveCharacter.Tile.Col + 1; }
-
-                    //for (int row = 0; row < MAX_ROW; row++)
-                    //{
-                    //    for (int col = startCol; col <= endCol; col++)
-                    //    {
-                    //        if (!_combatMap[row, col].Occupied())
-                    //        {
-                    //            _liLegalTiles.Add(_combatMap[row, col]);
-                    //        }
-                    //    }
-                    //}
-                //}
             }
 
             public void Draw(SpriteBatch spritebatch)
@@ -1162,16 +1114,6 @@ namespace RiverHollow.Game_Managers
             public bool IsSpell() { return _chosenAction != null && _chosenAction.IsSpell(); }
             public bool IsSummonSpell() { return _chosenAction != null && _chosenAction.IsSummonSpell(); }
             public bool SelfOnly() { return _chosenAction.Range == 0; }
-            public bool IsMelee() { return _chosenAction.Range == 1; }
-            public bool IsRanged() { return _chosenAction.Range > 1; }
-            public bool SingleTarget()
-            {
-                bool rv = false;
-                if (_chosenAction != null) { rv = _chosenAction.AreaOfEffect > 0; }
-                else if (_chosenItem != null) { rv = true; }
-
-                return rv;
-            }
             public bool CanTwinCast()
             {
                 bool rv = false;
@@ -1181,41 +1123,13 @@ namespace RiverHollow.Game_Managers
                 return rv;
             }
 
-            /// <summary>
-            /// Used to determine whether or not the skill is used over an
-            /// area or needs to have a specifiedsingle target.
-            /// </summary>
-            /// <returns>True if can be spread over an area</returns>
-            public bool TargetsEach()
-            {
-                bool rv = false;
-
-                if(_chosenAction != null) { rv = _chosenAction.TargetsEach(); }
-
-                return rv;
-            }
-
-            /// <summary>
-            /// Returns the area of effect of the chosen action.
-            /// Items have a range of 1
-            /// </summary>
-            /// <returns></returns>
-            public int AreaOfEffect()
-            {
-                int rv = 1;
-
-                if (_chosenAction != null) {
-                    rv = _chosenAction.AreaOfEffect;
-                }
-
-                return rv;
-            }
-
-            public void Clear()
+            #region Targeting
+            public void ClearTargets()
             {
                 if(_chosenAction != null) { _chosenAction.TileTargetList.Clear(); }
                 else if (_chosenItem != null) { _tTarget = null; }
             }
+
             public List<RHTile> GetTargetTiles()
             {
                 return _chosenAction?.TileTargetList;
@@ -1229,6 +1143,31 @@ namespace RiverHollow.Game_Managers
                     _chosenAction.TileTargetList = li;
                 }
             }
+
+            public List<RHTile> DetermineTargetTiles(RHTile targetedTile)
+            {
+                List<RHTile> rvList = new List<RHTile>() { targetedTile };
+
+                if(_chosenAction != null)
+                {
+                    switch (_chosenAction.AreaType)
+                    {
+                        case AreaTypeEnum.Cross:
+                            foreach(RHTile t in targetedTile.GetAdjacentTiles())
+                            {
+                                if (t.CanTargetTile()) {
+                                    rvList.Add(t);
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                return rvList;
+            }
+            #endregion
         }
 
         /// <summary>

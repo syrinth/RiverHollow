@@ -523,57 +523,5 @@ namespace RiverHollow.Game_Managers
             costSoFar.Clear();
         }
         #endregion
-
-        /*
-         * A Node is explicitly for pathfinding between maps and their connections.
-         * Nodes do not store connections between map Objects and Exits
-         */
-        private class Node
-        {
-            string _sName;
-            RHMap _map;
-            Dictionary<string, Dictionary<string, List<RHTile>>> _diRoutes;         //Key-Where you start, Val Dict Key -Where you go, Tiles?
-
-            public Node(RHMap map)
-            {
-                _sName = map.Name;
-                _map = map;
-                _diRoutes = new Dictionary<string, Dictionary<string, List<RHTile>>>();
-
-                foreach (KeyValuePair<string, Rectangle> kvpEntrance in map.DictionaryEntrance)
-                {
-                    _diRoutes[kvpEntrance.Key] = new Dictionary<string, List<RHTile>>();
-                    foreach (KeyValuePair<Rectangle, string> kvpExit in map.DictionaryExit)
-                    {
-                        if (kvpEntrance.Key != kvpExit.Value)
-                        {
-                            Vector2 start = kvpEntrance.Value.Center.ToVector2();
-                            _diRoutes[kvpEntrance.Key][kvpExit.Value] = TravelManager.FindPathToLocation(ref start, kvpExit.Key.Center.ToVector2(), _map.Name);
-                            Clear();
-                        }
-                    }
-                }
-            }
-
-            public List<RHTile> GetRoute(string fromMap, string toMap)
-            {
-                List<RHTile> rv = new List<RHTile>();
-                if (_diRoutes[fromMap].ContainsKey(toMap))
-                {
-                    rv = _diRoutes[fromMap][toMap];
-                }
-                return rv;
-            }
-
-            public List<string> GetMaps()
-            {
-                return _diRoutes.Keys.ToList<string>();
-            }
-
-            public double GetRouteLength(string fromMap, string toMap)
-            {
-                return _diRoutes[fromMap][toMap].Count;
-            }
-        }
     }
 }
