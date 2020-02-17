@@ -359,74 +359,91 @@ namespace RiverHollow.Characters
 
         public void TakeTurn()
         {
-            TravelManager.NewTravelLog(_sName);
-            int maxPath = 5;
-            //First, determine which action we would prefer to use
-            CombatAction preferredAction = GetPreferredAction();
+            CombatManager.EndTurn();
+            //TravelManager.NewTravelLog(_sName);
+            //TravelManager.SetParams(_iSize, this);
+            //int maxPathLength = 5;
+            ////First, determine which action we would prefer to use
+            //CombatAction preferredAction = GetPreferredAction();
 
-            //Define the list of characters we wish to interact with
-            List<CombatActor> potentialTargets = (preferredAction.Target == TargetEnum.Enemy) ? CombatManager.Party : CombatManager.Monsters;
+            ////Define the list of characters we wish to interact with
+            //List<CombatActor> potentialTargets = (preferredAction.Target == TargetEnum.Enemy) ? CombatManager.Party : CombatManager.Monsters;
 
-            //Determine how far away all potential targets are and keep tabs on which is the closest.
-            CombatActor targetActor = CombatManager.Party[0];
-            Dictionary<CombatActor, List<RHTile>> howFar = new Dictionary<CombatActor, List<RHTile>>();
-            foreach (CombatActor act in CombatManager.Party)
-            {
-                if (act != this)
-                {
-                    Vector2 start = this.BaseTile.Position;
-                    TravelManager.SetParams(_iSize);
-                    RHTile target = act.BaseTile;
-                    target.SetCombatant(null);
-                    howFar[act] = TravelManager.FindPathToLocation(ref start, target.Position, MapManager.CurrentMap.Name);
-                    target.SetCombatant(act);
-                    TravelManager.Clear();
+            ////Determine how far away all potential targets are and keep tabs on which is the closest.
+            //CombatActor targetActor = CombatManager.Party[0];
+            //Dictionary<CombatActor, List<RHTile>> howFar = new Dictionary<CombatActor, List<RHTile>>();
+            //foreach (CombatActor act in CombatManager.Party)
+            //{
+            //    if (act != this)
+            //    {
+            //        Vector2 start = this.BaseTile.Position;
+            //        RHTile target = act.BaseTile;
+            //        target.SetCombatant(null);
+            //        howFar[act] = TravelManager.FindPathToLocation(ref start, target.Position, MapManager.CurrentMap.Name);
+            //        target.SetCombatant(act);
+            //        TravelManager.Clear();
 
-                    //Keep track of which CombatActor is closest
-                    if (howFar[act]?.Count < howFar[targetActor].Count)
-                    {
-                        targetActor = act;
-                    }
-                }
-            }
+            //        //Keep track of which CombatActor is closest
+            //        if (howFar[act]?.Count < howFar[targetActor].Count)
+            //        {
+            //            targetActor = act;
+            //        }
+            //    }
+            //}
 
-            //Pick which party member to target
-            ChooseTargetActor(ref targetActor, howFar);
+            ////Pick which party member to target
+            //ChooseTargetActor(ref targetActor, howFar);
 
-            //Find the path to the tile we want to move to in order
-            //to engage the adventurer with the selected CombatAction
-            List<RHTile> pathToSkillTarget = FindPathforSkill(targetActor);
+            //bool validPath = false;
+            //List<RHTile> blockedTiles = new List<RHTile>();
+            //List<RHTile> pathToSkillTarget = new List<RHTile>();
+            //do {
+            //    //Find the path to the tile we want to move to in order to engage the adventurer with the selected CombatAction
+            //    pathToSkillTarget = TravelManager.FindClosestValidTile(this.BaseTile, targetActor.BaseTile, CurrentMapName);
 
-            if (pathToSkillTarget.Count > 0)
-            {
-                int index = maxPath - 1;
-                //If the path is larger than the given path, we need to start walking back the path.
-                if (pathToSkillTarget.Count > maxPath)
-                {
-                    //Cut off the part of the path that the monster cannot get to
-                    pathToSkillTarget.RemoveRange(maxPath, pathToSkillTarget.Count - maxPath);
-                }
-                else
-                {
-                    index = pathToSkillTarget.Count - 1;
-                }
+            //    //If the found path is within range, then 
+            //    if (pathToSkillTarget?.Count <= maxPathLength)
+            //    {
+            //        validPath = true;
+            //    }
+            //    else
+            //    {
+            //        //Check to see if the last tile in the path can fit the character, if so, remove everything after it
+            //        if(TravelManager.TestNodeForSize(pathToSkillTarget[maxPathLength - 1], true))
+            //        {
+            //            pathToSkillTarget.RemoveRange(maxPathLength, pathToSkillTarget.Count - maxPathLength);
+            //            validPath = true;
+            //        }
+            //        else
+            //        {
+            //            //If the character cannot fit on the last tile of the allowed path, block that tile and
+            //            //then check the next tile behind it in the path.
+            //            pathToSkillTarget[maxPathLength - 1].PathingBlocked = true;
+            //            blockedTiles.Add(pathToSkillTarget[maxPathLength - 1]);
+            //            if (TravelManager.TestNodeForSize(pathToSkillTarget[maxPathLength - 2], true))
+            //            {
+            //                pathToSkillTarget.RemoveRange(maxPathLength - 2, pathToSkillTarget.Count - maxPathLength + 1);
+            //                validPath = true;
+            //            }
+            //            else
+            //            {
+            //                //If it doesn't fit in either of the first two tiles, recalculate the path and null
+            //                //the one given.
+            //                pathToSkillTarget = null;
+            //            }
+            //        }
+            //    }
+            //} while (validPath);
 
-                //Now, we need to check to see that the monster can occupy the last tile it
-                //is capable of moving towards. If not, then we need to walk back the path until
-                //we find a tile that it can.
+            //CombatManager.ChangePhase(CombatManager.PhaseEnum.Moving);
+            //SetPath(pathToSkillTarget);
 
-                while (!TravelManager.TestNodeForSize(pathToSkillTarget[index], true))
-                {
-                    pathToSkillTarget.RemoveAt(index--);
-                }
+            //foreach (RHTile t in blockedTiles) { t.PathingBlocked = false; }
 
-                CombatManager.ChangePhase(CombatManager.PhaseEnum.Moving);
-                SetPath(pathToSkillTarget);
-            }
-
-            //After everything is done, clear the TravelManager data
-            TravelManager.Clear();
-            TravelManager.CloseTravelLog();
+            ////After everything is done, clear the TravelManager data
+            //TravelManager.Clear();
+            //TravelManager.ClearParams();
+            //TravelManager.CloseTravelLog();
         }
 
         private CombatAction GetPreferredAction()
@@ -448,27 +465,6 @@ namespace RiverHollow.Characters
         {
             //ToDo: add logic to determine who we will effect with our skill.
             //Currently, only selecting closestActor
-        }
-
-        private List<RHTile> FindPathforSkill(CombatActor targetActor)
-        {
-            List<RHTile> pathsToTile = null;
-
-            foreach (RHTile tile in targetActor.BaseTile.GetAdjacent())
-            {
-                if (tile.Passable() && tile.Character == null)
-                {
-                    Vector2 start = this.BaseTile.Position;
-                    List<RHTile> path = TravelManager.FindPathToLocation(ref start, tile.Position, CurrentMapName);
-                    if (pathsToTile == null || pathsToTile.Count > path.Count)
-                    {
-                        pathsToTile = path;
-                    }
-                    TravelManager.Clear();
-                }
-            }
-
-            return pathsToTile;
         }
     }
 }

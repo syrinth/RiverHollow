@@ -699,7 +699,7 @@ namespace RiverHollow.Actors.CombatStuff
                         //Only assign a guard to the character if they are not guarding and they have no guard
                         if (original != null && !original.Guard & original.MyGuard == null)
                         {
-                            List<RHTile> adj = tile.GetAdjacent();
+                            List<RHTile> adj = tile.GetAdjacentTiles();
                             foreach(RHTile t in adj)
                             {
                                 if (t.Character != null && t.Character.Guard) {

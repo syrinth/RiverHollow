@@ -478,7 +478,7 @@ namespace RiverHollow.Game_Managers
             {
                 if (c.Range == 1)
                 {
-                    foreach (RHTile t in ActiveCharacter.BaseTile.GetAdjacent())
+                    foreach (RHTile t in ActiveCharacter.BaseTile.GetAdjacentTiles())
                     {
                         if (t.HasCombatant() && t.Character.IsAdventurer())
                         {
@@ -534,7 +534,7 @@ namespace RiverHollow.Game_Managers
             //If we have not yet acted, we need to move, and we are not following a path
             if (!_turnInfo.HasActed && !gottaMove && !ActiveCharacter.FollowingPath)
             {
-                foreach (RHTile t in ActiveCharacter.BaseTile.GetAdjacent())
+                foreach (RHTile t in ActiveCharacter.BaseTile.GetAdjacentTiles())
                 {
                     if (t.HasCombatant() && t.Character.IsAdventurer())
                     {
@@ -564,45 +564,13 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public static void FindAndHighlightLegalTiles()
         {
-            int distance = (CurrentPhase == PhaseEnum.ChooseMoveTarget ? 5 : SelectedAction.Range);
-            RecursivelyGrowRange(ActiveCharacter.BaseTile, _liLegalTiles, 0, distance);
+            bool isMoving = CurrentPhase == PhaseEnum.ChooseMoveTarget;
+            int distance = (isMoving ? 5 : SelectedAction.Range);
+            _liLegalTiles = TravelManager.FindRangeOfAction(ActiveCharacter, distance, isMoving);
 
             foreach (RHTile t in _liLegalTiles)
             {
                 t.LegalTile(true);
-            }
-        }
-
-        /// <summary>
-        /// Call this method to determine the range of the skill by taking adjacent RHTiles from the start tile
-        /// and iterating a specified number of times in "growth rings"
-        /// </summary>
-        /// <param name="startTile">The tile to grab adjacent tiles of</param>
-        /// <param name="depth">How many "growth rings" we are in</param>
-        /// <param name="tileList">The list of RHTiles to add to</param>
-        /// <param name="maxDepth">The maximium depth to go for</param>
-        public static void RecursivelyGrowRange(RHTile startTile, List<RHTile> tileList, int depth, int maxDepth)
-        {
-            //If we haven't exceeded the maxDepth, discover the adjacent tiles
-            if (depth < maxDepth)
-            {
-                depth++;
-                foreach (RHTile t in startTile.GetAdjacent())
-                {
-                    //The tile is legal if we are choosing a target for an action; or if we are moving, it is passable, and there is no character
-                    //If so, add it to the LegalTiles list and then recursively grow.
-                    if ((t.Passable() && t.CanPathThroughInCombat() && (CurrentPhase == PhaseEnum.ChooseMoveTarget || CurrentPhase == PhaseEnum.Setup)) || CurrentPhase == PhaseEnum.ChooseActionTarget)
-                    {
-                        //Can never target walls or otherwise blocked tiles.
-                        if (!tileList.Contains(t) && t.Passable()) { tileList.Add(t); }
-                        RecursivelyGrowRange(t, tileList, depth, maxDepth);
-
-                        //If the RHTile contains a Character, we need to remove it so that it is not a valid target.
-                        //It doesneedto be added above so that we can grow from the tile however.
-                        //FFS do not remove an RHTile is we're choosing action targets
-                        if(t.Character!= null && CurrentPhase != PhaseEnum.ChooseActionTarget) { tileList.Remove(t); }
-                    }
-                }
             }
         }
 
@@ -625,7 +593,8 @@ namespace RiverHollow.Game_Managers
             {
                 ClearAreaTiles();
 
-                RecursivelyGrowRange(SelectedTile, _liAreaTiles, 0, SelectedAction.AreaOfEffect());
+                //MAR
+                //RecursivelyGrowRange(SelectedTile, _liAreaTiles, 0, SelectedAction.AreaOfEffect());
                 foreach (RHTile t in _liAreaTiles)
                 {
                     t.AreaTile(true);
@@ -685,7 +654,12 @@ namespace RiverHollow.Game_Managers
         /// <returns></returns>
         public static bool OnSameTeam(CombatActor actor)
         {
-            return ActiveCharacter.IsAdventurer() && actor.IsAdventurer() || ActiveCharacter.IsMonster() && actor.IsMonster();
+            if (actor.IsMonster())
+            {
+                int i = 0;
+                i++;
+            }
+            return (ActiveCharacter.IsAdventurer() && actor.IsAdventurer()) || (ActiveCharacter.IsMonster() && actor.IsMonster());
         }
         #endregion
 
@@ -992,115 +966,6 @@ namespace RiverHollow.Game_Managers
         }
         #endregion
 
-        //public class CombatTile
-        //{
-        //    TargetEnum _tileType;
-        //    public TargetEnum TargetType => _tileType;
-
-        //    int _iRow;
-        //    public int Row => _iRow;
-        //    int _iCol;
-        //    public int Col => _iCol;
-
-        //    bool _bSelected;
-        //    public bool Selected => _bSelected;
-
-        //    CombatActor _character;
-        //    public CombatActor Character => _character;
-        //    GUICmbtTile _gTile;
-        //    public GUICmbtTile GUITile => _gTile;
-
-        //    public CombatTile(int row, int col, TargetEnum tileType)
-        //    {
-        //        _iRow = row;
-        //        _iCol = col;
-        //        _tileType = tileType;
-        //    }
-
-        //    public void SetCombatant(CombatActor c, bool moveCharNow = true)
-        //    {
-        //        _character = c;
-        //        if (_character != null)
-        //        {
-        //            if (_character.Tile != null)
-        //            {
-        //                _character.Tile.SetCombatant(null);
-        //            }
-        //            if(_character.Tile != null) {
-        //                foreach (CombatTile tile in GetAdjacent(_character.Tile))
-        //                {
-        //                    CheckForProtected(tile);
-        //                }
-        //            }
-        //            _character.Tile = this;
-        //            CheckForProtected(this);
-        //        }
-
-        //        _gTile.SyncGUIObjects(_character != null);
-        //        if (_character != null)
-        //        {
-        //            foreach (KeyValuePair<ConditionEnum, bool> kvp in _character.DiConditions)
-        //            {
-        //                if (kvp.Value)
-        //                {
-        //                    GUITile.ChangeCondition(kvp.Key, TargetEnum.Enemy);
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    private void CheckForProtected(CombatTile t)
-        //    {
-        //        bool found = false;
-        //        List<CombatTile> adjacent = GetAdjacent(t);
-        //        //foreach (CombatTile tile in adjacent)
-        //        //{
-        //        //    if (tile.Occupied() && this.TargetType == tile.TargetType)
-        //        //    {
-        //        //        if (tile.Character != this.Character && tile.Character.IsCombatAdventurer() && this.Character.IsCombatAdventurer())
-        //        //        {
-        //        //            found = true;
-        //        //            ClassedCombatant adv = (ClassedCombatant)tile.Character;
-        //        //            adv.Protected = true;
-        //        //            adv = (ClassedCombatant)this.Character;
-        //        //            adv.Protected = true;
-        //        //        }
-        //        //    }
-        //        //}
-
-        //        //if (!found && this.Character.IsCombatAdventurer())
-        //        //{
-        //        //    ClassedCombatant adv = (ClassedCombatant)this.Character;
-        //        //    adv.Protected = false;
-        //        //}
-        //    }
-
-        //    public void AssignGUITile(GUICmbtTile c)
-        //    {
-        //        _gTile = c;
-        //    }
-
-        //    public bool Occupied()
-        //    {
-        //        return _character != null;
-        //    }
-
-        //    public void Select(bool val)
-        //    {
-        //        _bSelected = val;
-
-        //        if (_bSelected && SelectedTile != this)
-        //        {
-        //            if (SelectedTile != null) { SelectedTile.Select(false); }
-        //            SelectedTile = this;
-        //        }
-        //    }
-
-        //    public void PlayAnimation<TEnum>(TEnum animation)
-        //    {
-        //        _gTile.PlayAnimation(animation);
-        //    }
-        //}
         public class ChosenAction
         {
             public int Range => (_chosenItem != null ? 1 : _chosenAction.Range);    //Items only have 1 tile of range
@@ -1125,7 +990,7 @@ namespace RiverHollow.Game_Managers
                 _liLegalTiles = new List<RHTile>();
 
                 //Only the adjacent tiles are legal
-                _liLegalTiles = User.BaseTile.GetAdjacent();
+                _liLegalTiles = User.BaseTile.GetAdjacentTiles();
             }
 
             public ChosenAction(CombatAction ca)
@@ -1139,7 +1004,7 @@ namespace RiverHollow.Game_Managers
                 _liLegalTiles = new List<RHTile>();
                 if (IsMelee())
                 {
-                    _liLegalTiles = User.BaseTile.GetAdjacent();
+                    _liLegalTiles = User.BaseTile.GetAdjacentTiles();
                 }
                 else if (IsRanged())
                 {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using RiverHollow.Actors;
 using RiverHollow.Tile_Engine;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace RiverHollow.Game_Managers
     {
         private static StreamWriter _swWriter;
         private static int _iSize = 1;
+        private static WorldActor _actTraveller;
 
         public static void NewTravelLog(string name)
         {
@@ -266,7 +268,7 @@ namespace RiverHollow.Game_Managers
             {
                 var current = frontier.Dequeue();
 
-                if (current.Equals(goalNode) && TestNodeForSize(current))
+                if (current.Equals(goalNode))
                 {
                     returnList = BackTrack(current);
                     start = current.Position;
@@ -295,7 +297,7 @@ namespace RiverHollow.Game_Managers
                 //prospective new BaseTile, confirm that neighbouring tiles are all valid
                 foreach (var next in current.GetWalkableNeighbours())
                 {
-                    if (TestNodeForSize(next))
+                    if (TestTileForSize(next))
                     {
                         double newCost = costSoFar[current] + GetMovementCost(next);
 
@@ -314,24 +316,148 @@ namespace RiverHollow.Game_Managers
             return returnList;
         }
 
+        public static List<RHTile> FindClosestValidTile(RHTile actorTile, RHTile targetTile, string mapName)
+        {
+            List<RHTile> shortestPath = null;
+            Dictionary<RHTile, RHTile> cameFromLocal = new Dictionary<RHTile, RHTile>();
+            Dictionary<RHTile, double> costSoFarLocal = new Dictionary<RHTile, double>();
+            RHMap map = MapManager.Maps[mapName.Split(':')[0]];
+            var frontier = new PriorityQueue<RHTile>();
+            frontier.Enqueue(targetTile, 0);
+
+            cameFromLocal[targetTile] = targetTile;
+            costSoFarLocal[targetTile] = 0;
+            while (frontier.Count > 0)
+            {
+                var current = frontier.Dequeue();
+
+                //If the character can fit on the targetTile, create the
+                //path and compare it to the shortest path
+                if (TestTileForSize(current, true))
+                {
+                    Vector2 startVector = actorTile.Position;
+                    List<RHTile> path = FindPathToLocation(ref startVector, current.Position, mapName);
+
+                    if (shortestPath == null || path?.Count < shortestPath.Count)
+                    {
+                        shortestPath = path;
+                    }
+                }
+                else
+                {
+                    //Iterate over every tile in the accessible neighbours and, with it as the
+                    //prospective new BaseTile, confirm that neighbouring tiles are all valid
+                    foreach (var next in current.GetWalkableNeighbours())
+                    {
+                        //If the Tile is valid, queue it based on the distance from the base tile and the distance to the target tile
+                        if (TestTileForSize(next, true))
+                        {
+                            double newCost = costSoFarLocal[current] + GetMovementCost(next);
+
+                            if (!costSoFarLocal.ContainsKey(next) || newCost < costSoFarLocal[next])
+                            {
+                                costSoFarLocal[next] = newCost;
+                                double priority = newCost + Heuristic(next, actorTile);
+
+                                frontier.Enqueue(next, priority);
+                                cameFromLocal[next] = current;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return shortestPath;
+        }
+
+        /// <summary>
+        /// Grows out from the given CombatActor, retrieving a list of RHTiles that are within range of the given desired action
+        /// </summary>
+        /// <param name="actor">The Actor performing the action</param>
+        /// <param name="range">The range of the skill</param>
+        /// <param name="movementParams">Whether or not the skill is movement</param>
+        /// <returns></returns>
+        public static List<RHTile> FindRangeOfAction(CombatActor actor, int range, bool movementParams)
+        {
+            List<RHTile> rvList = new List<RHTile>();
+            Dictionary<RHTile, RHTile> cameFromLocal = new Dictionary<RHTile, RHTile>();
+            Dictionary<RHTile, int> costSoFarLocal = new Dictionary<RHTile, int>();
+            var frontier = new PriorityQueue<RHTile>();
+
+            //Enqueue the neighbours of the CombatActor
+            foreach (RHTile t in actor.GetAdjacentTiles())
+            {
+                QueueForRange(t, actor.BaseTile, 1, ref frontier, ref cameFromLocal, ref costSoFarLocal, ref rvList, movementParams);
+            }
+
+            while (frontier.Count > 0)
+            {
+                var current = frontier.Dequeue();
+
+                //If the current RHTile has not exceeded the max range, move to Enqueue the adjacent RHTiles
+                if (costSoFarLocal[current] < range)
+                {
+                    foreach (var next in current.GetAdjacentTiles())
+                    {
+                        int newCost = costSoFarLocal[current] + 1;
+
+                        if (!costSoFarLocal.ContainsKey(next))
+                        {
+                            QueueForRange(next, current, newCost, ref frontier, ref cameFromLocal, ref costSoFarLocal, ref rvList, movementParams);
+                        }
+                    }
+                }
+            }
+
+            return rvList;
+        }
+
+        /// <summary>
+        /// Helper method to Queue up RHTiles for use in FindRangeOfAction.
+        /// </summary>
+        private static void QueueForRange(RHTile testTile, RHTile lastTile, int newCost, ref PriorityQueue<RHTile> frontier, ref Dictionary<RHTile, RHTile> cameFromLocal, ref Dictionary<RHTile, int> costSoFarLocal, ref List<RHTile> rvList, bool testForMovement)
+        {
+            //If we are not testing for movement, then do queue the RHTile, otherwise we need to both be able
+            //to target the tile, move through the tile for size and walk through it for allies
+            if (!testForMovement || (testTile.CanTargetTile() && TestTileForSize(testTile, false) && testTile.CanWalkThroughInCombat()))
+            {
+                frontier.Enqueue(testTile, newCost);
+                cameFromLocal[testTile] = lastTile;
+                costSoFarLocal[testTile] = newCost;
+
+                //Do not highlight tiles that cannot be targeted and if we are testing
+                //for movement, we need to be able to land on the tile with our size in mind
+                if (!rvList.Contains(testTile) && testTile.CanTargetTile() && (!testForMovement || TestTileForSize(testTile, true)))
+                {
+                    rvList.Add(testTile);
+                }
+            }
+        }
+
         /// <summary>
         /// This method tests the tiles to the left and down of the given tile, since that will be the theoretical
         /// BaseTile, to ensure that the actor can fit there.
         /// </summary>
         /// <param name="nextTile">The tile to be evaluated as a new BaseTile</param>
         /// <returns>True if the actor will fit</returns>
-        public static bool TestNodeForSize(RHTile nextTile, bool checkForCharacter = false)
+        public static bool TestTileForSize(RHTile nextTile, bool testForEnding = false)
         {
-            bool rv = true;
             RHTile lastTile = nextTile;
             for (int i = 0; i < _iSize; i++)
             {
                 RHTile rowTile = lastTile;
                 for (int j = 0; j < _iSize; j++)
                 {
-                    if (lastTile == null || !lastTile.Passable() || (checkForCharacter && lastTile.Character != null))
+                    //Ensure that the tile exists and it is open
+                    if (lastTile == null || !lastTile.CanTargetTile())
                     {
-                        rv = false;
+                        return false;
+                    }
+
+                    //If we are testing for ending on this tile, we need to check to ensure that the tile does not
+                    //contain any other CombatActor that is not the traveller
+                    if(testForEnding && lastTile.Character != null && lastTile.Character != _actTraveller) {
+                        return false;
                     }
 
                     lastTile = lastTile?.GetTileByDirection(GameManager.DirectionEnum.Right);
@@ -341,7 +467,7 @@ namespace RiverHollow.Game_Managers
                 lastTile = rowTile.GetTileByDirection(GameManager.DirectionEnum.Down);
             }
 
-            return rv;
+            return true;
         }
 
         private static List<RHTile> BackTrack(RHTile current)
@@ -379,9 +505,16 @@ namespace RiverHollow.Game_Managers
             return target.IsRoad ? 1 : slowCost;
         }
 
-        public static void SetParams(int size)
+        public static void SetParams(int size, WorldActor act)
         {
             _iSize = size;
+            _actTraveller = act;
+        }
+
+        public static void ClearParams()
+        {
+            _iSize = 1;
+            _actTraveller = null;
         }
 
         public static void Clear()

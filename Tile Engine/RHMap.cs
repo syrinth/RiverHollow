@@ -2290,6 +2290,8 @@ namespace RiverHollow.Tile_Engine
         bool _bSelected = false;
         bool _bLegalTile = false;
 
+        public bool PathingBlocked = false;
+
         public RHTile(int x, int y, string mapName)
         {
             _X = x;
@@ -2474,38 +2476,6 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public bool Passable()
-        {
-            bool rv = _tileExists && (_obj == null || !_obj.Blocking);
-            if (_tileExists)
-            {
-                foreach (TiledMapTileLayer l in _diProps.Keys)
-                {
-                    if (l.IsVisible && ContainsProperty(l, "Impassable", out string val) && val.Equals("true"))
-                    {
-                        rv = false;
-                    }
-                }
-            }
-
-            return rv;
-        }
-
-        /// <summary>
-        /// For use only during Combat to see if can path through.
-        /// Characters can path through tiles occupied by an ally.
-        /// </summary>
-        /// <returns>True if not in combat, or character is null</returns>
-        public bool CanPathThroughInCombat()
-        {
-            bool rv = true;
-            if (CombatManager.InCombat)
-            {
-                rv = Character == null || CombatManager.OnSameTeam(Character);
-            }
-            return rv;
-        }
-
         public bool IsValidWall()
         {
             bool rv = false;
@@ -2657,25 +2627,23 @@ namespace RiverHollow.Tile_Engine
 
         public List<RHTile> GetWalkableNeighbours()
         {
-            Vector2[] DIRS = new[] { new Vector2(1, 0), new Vector2(0, -1), new Vector2(-1, 0), new Vector2(0, 1) };
-            List<RHTile> neighbours = new List<RHTile>();
-            foreach (Vector2 d in DIRS)
+            List<RHTile> rvList = new List<RHTile>();
+            foreach (RHTile tile in GetAdjacentTiles())
             {
-                RHTile tile = MyMap().GetTileByGridCoords(new Point((int)(_X + d.X), (int)(_Y + d.Y)));
-                if (tile != null && ((tile.Passable() && tile.CanPathThroughInCombat()) || tile.GetDoorObject() != null) && tile.WorldObject == null)
+                if (tile != null && tile.CanWalkThrough())
                 {
-                    neighbours.Add(tile);
+                    rvList.Add(tile);
                 }
             }
 
-            return neighbours;
+            return rvList;
         }
 
         /// <summary>
-        /// Returns a list of all RHTiles adjacent to thistile
+        /// Returns a list of all RHTiles adjacent to this tile
         /// </summary>
         /// <returns></returns>
-        public List<RHTile> GetAdjacent()
+        public List<RHTile> GetAdjacentTiles()
         {
             List<RHTile> adj = new List<RHTile>();
 
@@ -2731,6 +2699,63 @@ namespace RiverHollow.Tile_Engine
 
 
             return rvTile;
+        }
+
+        /// <summary>
+        /// Returns whether the RHTile itself can be walked through or not. This relates
+        /// to the core status of the tile, and has nothing to do with objects or actors on it.
+        /// </summary>
+        /// <returns>True if the tile is not itself locked down</returns>
+        public bool Passable()
+        {
+            bool rv = _tileExists && (_obj == null || !_obj.Blocking);
+            if (_tileExists)
+            {
+                foreach (TiledMapTileLayer l in _diProps.Keys)
+                {
+                    if (PathingBlocked || l.IsVisible && ContainsProperty(l, "Impassable", out string val) && val.Equals("true"))
+                    {
+                        rv = false;
+                    }
+                }
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// This method defines which RHTiles are allowed to be the target of abilities and spells.
+        /// You cannot use skills on an RHTile that is impassable, or occupied by an object.
+        /// </summary>
+        /// <returns>Returns True if the Tile is a legal tile to target</returns>
+        public bool CanTargetTile()
+        {
+            return Passable() && GetDoorObject() == null && WorldObject == null;
+        }
+
+        /// <summary>
+        /// Determines if the RHTile can be walked through. 
+        /// </summary>
+        /// <returns>True if the RHTile can be walked through. Does not mean the RHTile
+        /// can be assigned to if it returns true.</returns>
+        public bool CanWalkThrough()
+        {
+            return CanTargetTile() && CanWalkThroughInCombat();
+        }
+
+        /// <summary>
+        /// For use only during Combat to see if can path through.
+        /// Characters can path through tiles occupied by an ally.
+        /// </summary>
+        /// <returns>True if not in combat, or character is null</returns>
+        public bool CanWalkThroughInCombat()
+        {
+            bool rv = true;
+            if (CombatManager.InCombat)
+            {
+                rv = Character == null || CombatManager.OnSameTeam(Character);
+            }
+            return rv;
         }
         #endregion
 

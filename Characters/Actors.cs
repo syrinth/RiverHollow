@@ -924,6 +924,7 @@ namespace RiverHollow.Actors
             }
         }
 
+        #region BaseTile Handling
         /// <summary>
         /// Sets the base tile, which will always be the upper-left most tile
         /// to the given tile, then assign the character to the appropiate tiles around it.
@@ -948,6 +949,30 @@ namespace RiverHollow.Actors
             }
         }
 
+        /// <summary>
+        /// Returns a List of all RHTiles adjacent to the CombatActor. This method
+        /// works in tandem with the Actors size value to return the proper RHTiles
+        /// </summary>
+        /// <returns></returns>
+        public List<RHTile> GetAdjacentTiles()
+        {
+            List<RHTile> rvList = new List<RHTile>();
+
+            foreach(RHTile t in _arrTiles)
+            {
+                foreach(RHTile adjTile in t.GetAdjacentTiles())
+                {
+                    //Do not add the same RHTile twice, nor add a RHTile containing ourself.
+                    if (!rvList.Contains(adjTile) && adjTile.Character != this)
+                    {
+                        rvList.Add(adjTile);
+                    }
+                }
+            }
+
+            return rvList;
+        }
+
         public void ClearTiles()
         {
             //Remove self from each tile that they are registered to.
@@ -956,6 +981,7 @@ namespace RiverHollow.Actors
                 t?.SetCombatant(null);
             }
         }
+        #endregion
 
         public void LinkSummon(Summon s)
         {
