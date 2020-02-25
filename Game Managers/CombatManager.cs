@@ -211,7 +211,14 @@ namespace RiverHollow.Game_Managers
                         }
                         _turnInfo.HasMoved = true;
 
-                        EndTurn();
+                        if (!ActiveCharacter.IsMonster() || SelectedAction == null)
+                        {
+                            EndTurn();
+                        }
+                        else
+                        {
+                            CombatManager.ChangePhase(PhaseEnum.PerformAction);
+                        }
                     }
                     break;
 
@@ -402,6 +409,13 @@ namespace RiverHollow.Game_Managers
         {
             ChangePhase(PhaseEnum.ChooseActionTarget);
             SelectedAction = new ChosenAction(it);
+        }
+
+        public static void AssignMonsterAction(CombatAction a, RHTile targetTile)
+        {
+            SelectedAction = new ChosenAction(a);
+            SelectedTile = targetTile;
+            SelectedAction.AssignTarget();
         }
 
         /// <summary>
@@ -968,6 +982,8 @@ namespace RiverHollow.Game_Managers
 
         public class ChosenAction
         {
+            public TargetEnum Target => (_chosenItem != null ? TargetEnum.Ally : _chosenAction.Target);
+            public AreaTypeEnum AreaType => (_chosenItem != null ? AreaTypeEnum.Single : _chosenAction.AreaType);
             public int Range => (_chosenItem != null ? 1 : _chosenAction.Range);    //Items only have 1 tile of range
             private Consumable _chosenItem;
             private CombatAction _chosenAction;

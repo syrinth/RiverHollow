@@ -8,6 +8,7 @@ using RiverHollow.Tile_Engine;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using static RiverHollow.Game_Managers.CombatManager;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.TravelManager;
 
@@ -44,7 +45,6 @@ namespace RiverHollow.Characters
         Thread _thrPathing;
         TravelMap _travelMap;
         List<RHTile> _liFoundPath;
-        CombatAction _preferredAction;
         #endregion
 
         #endregion
@@ -144,7 +144,11 @@ namespace RiverHollow.Characters
                 _thrPathing = null;
                 if (_liFoundPath == null)
                 {
-                    CombatManager.EndTurn();
+                    if (CombatManager.SelectedAction != null)
+                    {
+                        CombatManager.ChangePhase(PhaseEnum.PerformAction);
+                    }
+                    else { CombatManager.EndTurn(); }
                 }
                 else
                 {
@@ -385,7 +389,7 @@ namespace RiverHollow.Characters
             TravelManager.SetParams(_iSize, this, _iMaxMove);
 
             //First, determine which action we would prefer to use
-            _preferredAction = GetPreferredAction();
+            CombatManager.SelectedAction = new ChosenAction(GetPreferredAction());
 
             if (CombatManager.CurrentPhase != CombatManager.PhaseEnum.ChooseMoveTarget)
             {
@@ -398,7 +402,6 @@ namespace RiverHollow.Characters
 
         private void PlanPath()
         {
-            //null the path to start
             _liFoundPath = null;
 
             //Acquire the TravelMap for the Monster
@@ -408,7 +411,7 @@ namespace RiverHollow.Characters
             List<CombatActor> activeTargets = new List<CombatActor>();
             List<CombatActor> distantTargets = new List<CombatActor>();
 
-            foreach (CombatActor act in (_preferredAction.Target == TargetEnum.Enemy) ? CombatManager.Party : CombatManager.Monsters)
+            foreach (CombatActor act in (CombatManager.SelectedAction.Target == TargetEnum.Enemy) ? CombatManager.Party : CombatManager.Monsters)
             {
                 ((_travelMap.ContainsKey(act.BaseTile) && _travelMap[act.BaseTile].InRange) ? activeTargets : distantTargets).Add(act);
             }
@@ -424,6 +427,17 @@ namespace RiverHollow.Characters
             if (_liFoundPath == null)
             {
                 FindShortestPathToActor(distantTargets, ref _liFoundPath);
+            }
+
+            //Now, determine if we will be able to use the chosen skill with the given path
+            if (Util.GetRHTileDelta(_liFoundPath[_liFoundPath.Count-1], CombatManager.SelectedTile) <= CombatManager.SelectedAction.Range)
+            {
+                CombatManager.SelectedAction.AssignTarget();
+            }
+            else
+            {
+                CombatManager.SelectedAction = null;
+                CombatManager.SelectedTile = null;
             }
 
             //After everything is done, clear the TravelManager data
@@ -476,21 +490,22 @@ namespace RiverHollow.Characters
         private List<RHTile> ChooseTargetTile(CombatActor targetActor)
         {
             List<RHTile> shortestPath = null;
-            int skillRange = _preferredAction.Range;
+            int skillRange = CombatManager.SelectedAction.Range;
 
             //Find the possible potential RHTiles to move to for the use of the skill
             List<RHTile> potentialTiles = null;
-            switch (_preferredAction.AreaType)
+            switch (CombatManager.SelectedAction.AreaType)
             {
                 case AreaTypeEnum.Single:
                     //Need to be directly beside the targetActor
                     if (skillRange == 1)
                     {
                         potentialTiles = FindAdjacentTiles(targetActor);
+                        CombatManager.SelectedTile = targetActor.BaseTile;
                     }
                     break;
             }
-
+            
             //Todo: Search TravelMap tiles first.
             foreach (RHTile tile in potentialTiles)
             {
@@ -566,12 +581,18 @@ namespace RiverHollow.Characters
             {
                 targetTile = targetTile.GetTileByDirection(distanceDir);
             }
-            tileList.Add(targetTile);
+            if (TravelManager.TestTileForSize(targetTile, true))
+            {
+                tileList.Add(targetTile);
+            }
 
             for (int i = 0; i < _iSize - 1; i++)
             {
                 targetTile = targetTile.GetTileByDirection(moveDir);
-                tileList.Add(targetTile);
+                if (TravelManager.TestTileForSize(targetTile, true))
+                {
+                    tileList.Add(targetTile);
+                }
             }
         }
     }

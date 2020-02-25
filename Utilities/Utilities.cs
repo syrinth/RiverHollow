@@ -227,6 +227,15 @@ namespace RiverHollow.Misc
         }
 
         /// <summary>
+        /// Retrieves the total number of moves to get from one tile to the next, "As the crow flies"
+        /// Helpful for quick comparisons for things that don't worry about obstacles.
+        /// </summary>
+        public static int GetRHTileDelta(RHTile a, RHTile b)
+        {
+            return Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
+        }
+
+        /// <summary>
         /// Uses the Camera's Translation Matrix to translate the given RHMap position
         /// to the Screen position.
         /// </summary>

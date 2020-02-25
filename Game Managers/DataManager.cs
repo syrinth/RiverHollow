@@ -624,19 +624,6 @@ namespace RiverHollow.Game_Managers
         public static void AddToForest(int ID) { _liForest.Add(ID); }
         public static void AddToMountain(int ID) { _liMountain.Add(ID); }
         public static void AddToNight(int ID) { _liNight.Add(ID); }
-        internal static Monster GetMonsterToSpawn(SpawnConditionEnum eSpawnType)
-        {
-            List<Monster> allowedMobs = new List<Monster>();
-
-            //foreach(Mob m in _diMobs.Values)
-            //{
-            //    if (m.CheckValidConditions(eSpawnType)){
-            //        allowedMobs.Add(m);
-            //    }
-            //}
-
-            return GetMonsterByIndex(4);// new RHRandom().Next(1, allowedMobs.Count-1));
-        }
 
         #endregion
 
