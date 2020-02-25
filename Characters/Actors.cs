@@ -924,7 +924,7 @@ namespace RiverHollow.Actors
             }
         }
 
-        #region BaseTile Handling
+        #region Tile Handling
         /// <summary>
         /// Sets the base tile, which will always be the upper-left most tile
         /// to the given tile, then assign the character to the appropiate tiles around it.
@@ -971,6 +971,26 @@ namespace RiverHollow.Actors
             }
 
             return rvList;
+        }
+
+        public List<RHTile> GetTileList()
+        {
+            List<RHTile> rvList = new List<RHTile>();
+
+            for (int y = 0; y < _iSize; y++)
+            {
+                for (int x = 0; x < _iSize; x++)
+                {
+                    rvList.Add(_arrTiles[x, y]);
+                }
+            }
+
+            return rvList;
+        }
+
+        public RHTile GetTileAt(int x, int y)
+        {
+            return _arrTiles[x, y];
         }
 
         public void ClearTiles()
@@ -1838,7 +1858,7 @@ namespace RiverHollow.Actors
                         //Otherwise, we need to pathfind to the map that does first.
                         if (CurrentMap.DictionaryCharacterLayer.ContainsKey(kvp.Value))
                         {
-                            timePath = TravelManager.FindPathToLocation(ref start, CurrentMap.DictionaryCharacterLayer[kvp.Value], CurrentMapName);
+                            timePath = TravelManager.FindPathToLocation(ref start, CurrentMap.DictionaryCharacterLayer[kvp.Value]);
                         }
                         else
                         {

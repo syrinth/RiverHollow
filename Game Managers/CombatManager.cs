@@ -566,7 +566,10 @@ namespace RiverHollow.Game_Managers
         {
             bool isMoving = CurrentPhase == PhaseEnum.ChooseMoveTarget;
             int distance = (isMoving ? 5 : SelectedAction.Range);
-            _liLegalTiles = TravelManager.FindRangeOfAction(ActiveCharacter, distance, isMoving);
+            foreach(RHTile tile in TravelManager.FindRangeOfAction(ActiveCharacter, distance, isMoving).Keys)
+            {
+                _liLegalTiles.Add(tile);
+            } 
 
             foreach (RHTile t in _liLegalTiles)
             {
@@ -740,7 +743,7 @@ namespace RiverHollow.Game_Managers
                 ActiveCharacter.ClearTiles();
                 Vector2 start = ActiveCharacter.Position;
 
-                List<RHTile> tilePath = TravelManager.FindPathToLocation(ref start, _tTarget.Center, MapManager.CurrentMap.Name);
+                List<RHTile> tilePath = TravelManager.FindPathToLocation(ref start, _tTarget.Center);
 
                 if (tilePath != null)
                 {

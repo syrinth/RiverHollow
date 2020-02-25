@@ -10,12 +10,15 @@ using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Game_Managers.TravelManager;
 
 namespace RiverHollow.Characters
 {
     public class Monster : CombatActor
     {
         #region Properties
+        int _iMaxMove = 5;
+        public int MaxMove => _iMaxMove;
         int _id;
         public int ID => _id;
         int _iRating;
@@ -37,6 +40,8 @@ namespace RiverHollow.Characters
 
         List<SpawnConditionEnum> _liSpawnConditions;
         List<CombatAction> _liCombatActions;
+
+        TravelMap _travelMap;
 
         #endregion
 
@@ -359,91 +364,50 @@ namespace RiverHollow.Characters
 
         public void TakeTurn()
         {
-            CombatManager.EndTurn();
-            //TravelManager.NewTravelLog(_sName);
-            //TravelManager.SetParams(_iSize, this);
-            //int maxPathLength = 5;
-            ////First, determine which action we would prefer to use
-            //CombatAction preferredAction = GetPreferredAction();
+            List<RHTile> foundPath = null;
+            TravelManager.SetParams(_iSize, this, _iMaxMove);
 
-            ////Define the list of characters we wish to interact with
-            //List<CombatActor> potentialTargets = (preferredAction.Target == TargetEnum.Enemy) ? CombatManager.Party : CombatManager.Monsters;
+            //Acquire the TravelMap for the Monster
+            _travelMap = TravelManager.FindRangeOfAction(this, _iMaxMove, true);
 
-            ////Determine how far away all potential targets are and keep tabs on which is the closest.
-            //CombatActor targetActor = CombatManager.Party[0];
-            //Dictionary<CombatActor, List<RHTile>> howFar = new Dictionary<CombatActor, List<RHTile>>();
-            //foreach (CombatActor act in CombatManager.Party)
-            //{
-            //    if (act != this)
-            //    {
-            //        Vector2 start = this.BaseTile.Position;
-            //        RHTile target = act.BaseTile;
-            //        target.SetCombatant(null);
-            //        howFar[act] = TravelManager.FindPathToLocation(ref start, target.Position, MapManager.CurrentMap.Name);
-            //        target.SetCombatant(act);
-            //        TravelManager.Clear();
+            //First, determine which action we would prefer to use
+            CombatAction preferredAction = GetPreferredAction();
 
-            //        //Keep track of which CombatActor is closest
-            //        if (howFar[act]?.Count < howFar[targetActor].Count)
-            //        {
-            //            targetActor = act;
-            //        }
-            //    }
-            //}
+            //Determine if the characters we want to act on are on our TravelMap or not.
+            List<CombatActor> activeTargets = new List<CombatActor>();
+            List<CombatActor> distantTargets = new List<CombatActor>();
 
-            ////Pick which party member to target
-            //ChooseTargetActor(ref targetActor, howFar);
+            foreach (CombatActor act in (preferredAction.Target == TargetEnum.Enemy) ? CombatManager.Party : CombatManager.Monsters)
+            {
+                ((_travelMap.ContainsKey(act.BaseTile) && _travelMap[act.BaseTile].InRange) ? activeTargets : distantTargets).Add(act);
+            }
 
-            //bool validPath = false;
-            //List<RHTile> blockedTiles = new List<RHTile>();
-            //List<RHTile> pathToSkillTarget = new List<RHTile>();
-            //do {
-            //    //Find the path to the tile we want to move to in order to engage the adventurer with the selected CombatAction
-            //    pathToSkillTarget = TravelManager.FindClosestValidTile(this.BaseTile, targetActor.BaseTile, CurrentMapName);
+            //First we only care about actors within the travelMap
+            if (activeTargets.Count > 0)
+            {
+                FindShortestPathToActor(activeTargets, preferredAction, ref foundPath);
+            }
 
-            //    //If the found path is within range, then 
-            //    if (pathToSkillTarget?.Count <= maxPathLength)
-            //    {
-            //        validPath = true;
-            //    }
-            //    else
-            //    {
-            //        //Check to see if the last tile in the path can fit the character, if so, remove everything after it
-            //        if(TravelManager.TestNodeForSize(pathToSkillTarget[maxPathLength - 1], true))
-            //        {
-            //            pathToSkillTarget.RemoveRange(maxPathLength, pathToSkillTarget.Count - maxPathLength);
-            //            validPath = true;
-            //        }
-            //        else
-            //        {
-            //            //If the character cannot fit on the last tile of the allowed path, block that tile and
-            //            //then check the next tile behind it in the path.
-            //            pathToSkillTarget[maxPathLength - 1].PathingBlocked = true;
-            //            blockedTiles.Add(pathToSkillTarget[maxPathLength - 1]);
-            //            if (TravelManager.TestNodeForSize(pathToSkillTarget[maxPathLength - 2], true))
-            //            {
-            //                pathToSkillTarget.RemoveRange(maxPathLength - 2, pathToSkillTarget.Count - maxPathLength + 1);
-            //                validPath = true;
-            //            }
-            //            else
-            //            {
-            //                //If it doesn't fit in either of the first two tiles, recalculate the path and null
-            //                //the one given.
-            //                pathToSkillTarget = null;
-            //            }
-            //        }
-            //    }
-            //} while (validPath);
+            //If no shortestParth exists, either because there are no targets in the travelMap or there is 
+            //no valid path to them, because you cannot finish on an RHTile, iterate over the distant CombatActors.
+            if (foundPath == null)
+            {
+                FindShortestPathToActor(distantTargets, preferredAction, ref foundPath);
+            }
 
-            //CombatManager.ChangePhase(CombatManager.PhaseEnum.Moving);
-            //SetPath(pathToSkillTarget);
+            if (foundPath == null)
+            {
+                CombatManager.EndTurn();
+            }
+            else
+            {
+                CombatManager.ChangePhase(CombatManager.PhaseEnum.Moving);
+                SetPath(foundPath);
+            }
 
-            //foreach (RHTile t in blockedTiles) { t.PathingBlocked = false; }
-
-            ////After everything is done, clear the TravelManager data
-            //TravelManager.Clear();
-            //TravelManager.ClearParams();
-            //TravelManager.CloseTravelLog();
+            //After everything is done, clear the TravelManager data
+            TravelManager.Clear();
+            TravelManager.ClearParams();
         }
 
         private CombatAction GetPreferredAction()
@@ -461,10 +425,134 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        private void ChooseTargetActor(ref CombatActor targetActor, Dictionary<CombatActor, List<RHTile>> howFar)
+        /// <summary>
+        /// Given a list of CombatActors, loops through the list, checking to determine if
+        /// the path found by the helper method is shorter than the current shortest path.
+        /// 
+        /// The goal is to find the shortest path to a valid tile out of a list of actors.
+        /// </summary>
+        /// <param name="possibleTargets">List of targets to loop through</param>
+        /// <param name="preferredAction">The action we want to use, pass to the helper</param>
+        /// <param name="shortestPath">A reference to a list of RHTiles which will be the shortest path.</param>
+        private void FindShortestPathToActor(List<CombatActor> possibleTargets, CombatAction preferredAction, ref List<RHTile> shortestPath)
         {
-            //ToDo: add logic to determine who we will effect with our skill.
-            //Currently, only selecting closestActor
+            foreach (CombatActor act in possibleTargets)
+            {
+                List<RHTile> pathToTarget = ChooseTargetTile(act, preferredAction);
+                if (shortestPath == null || pathToTarget.Count < shortestPath.Count)
+                {
+                    shortestPath = pathToTarget;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Given a CombatActor and a CombatAction, find the shortest path to the closest RHTile
+        /// that is needed to use the given skill on them.
+        /// </summary>
+        /// <param name="targetActor"></param>
+        /// <param name="preferredAction"></param>
+        /// <returns></returns>
+        private List<RHTile> ChooseTargetTile(CombatActor targetActor, CombatAction preferredAction)
+        {
+            List<RHTile> shortestPath = null;
+            int skillRange = preferredAction.Range;
+
+            //Find the possible potential RHTiles to move to for the use of the skill
+            List<RHTile> potentialTiles = null;
+            switch (preferredAction.AreaType)
+            {
+                case AreaTypeEnum.Single:
+                    //Need to be directly beside the targetActor
+                    if (skillRange == 1)
+                    {
+                        potentialTiles = FindAdjacentTiles(targetActor);
+                    }
+                    break;
+            }
+
+            //Todo: Search TravelMap tiles first.
+            foreach (RHTile tile in potentialTiles)
+            {
+                List<RHTile> testPath = null;
+
+                testPath = FindPath(tile);
+
+                if (testPath != null && (shortestPath == null || testPath.Count <= shortestPath.Count))
+                {
+                    if (testPath.Count > _iMaxMove) { testPath.RemoveRange(_iMaxMove, testPath.Count - _iMaxMove); }
+
+                    shortestPath = testPath;
+                }
+            }
+
+            return shortestPath;
+        }
+
+        private List<RHTile> FindPath(RHTile tile)
+        {
+            List<RHTile> rvList = null;
+
+            if (_travelMap.ContainsKey(tile)) { rvList = _travelMap.Backtrack(tile); }
+            else { rvList = FindPathToLocation(tile); }
+
+            return rvList;
+        }
+
+        /// <summary>
+        /// Helper method for Monster to make it cleaner to find the path to the target.
+        /// </summary>
+        /// <param name="targetTile">The RHTile we want to find the path to</param>
+        /// <returns></returns>
+        private List<RHTile> FindPathToLocation(RHTile targetTile)
+        {
+            Vector2 start = BaseTile.Position;
+            return TravelManager.FindPathToLocationClean(ref start, targetTile.Position, CurrentMapName);
+        }
+
+        /// <summary>
+        /// Given a CombatActor, determine which RHTiles are considered adjacent
+        /// as far as the size of this Monster is concerned. Does not take into account 
+        /// the actual availability of the RHTiles in question.
+        /// </summary>
+        /// <param name="target">The CombatActor we are trying to cozy up to.</param>
+        /// <returns>A List of RHTiles that the Monster's BaseTile could be in to be adjacent</returns>
+        private List<RHTile> FindAdjacentTiles(CombatActor target)
+        {
+            List<RHTile> rvList = new List<RHTile>();
+
+            FindAdjacentTilesHelper(target.BaseTile, DirectionEnum.Up, DirectionEnum.Left, true, ref rvList);
+            FindAdjacentTilesHelper(target.BaseTile, DirectionEnum.Left, DirectionEnum.Up, true, ref rvList);
+            FindAdjacentTilesHelper(target.BaseTile, DirectionEnum.Down, DirectionEnum.Left, false, ref rvList);
+            FindAdjacentTilesHelper(target.BaseTile, DirectionEnum.Right, DirectionEnum.Up, false, ref rvList);
+
+            return rvList;
+        }
+
+        /// <summary>
+        /// From the given RHTile, we determine which tiles around it are the "Adjacent" tiles
+        /// when taking the Size of the Monster into account. This does not work properly if the
+        /// target itself also takes up multiple tiles.
+        /// </summary>
+        /// <param name="actorTile">The RHTile to plan around</param>
+        /// <param name="distanceDir">Direction of the initial movement</param>
+        /// <param name="moveDir">Direction along which to slide the mob where it will be adjacent</param>
+        /// <param name="getDistance">Whether we need to make room for the mob by adding more gaps</param>
+        /// <param name="tileList">The TileList to fill out</param>
+        private void FindAdjacentTilesHelper(RHTile actorTile, DirectionEnum distanceDir, DirectionEnum moveDir, bool getDistance, ref List<RHTile> tileList)
+        {
+            RHTile targetTile = actorTile;
+            for (int i = 0; i < (getDistance ? _iSize : 1); i++)
+            {
+                targetTile = targetTile.GetTileByDirection(distanceDir);
+            }
+            tileList.Add(targetTile);
+
+            for (int i = 0; i < _iSize - 1; i++)
+            {
+                targetTile = targetTile.GetTileByDirection(moveDir);
+                tileList.Add(targetTile);
+            }
         }
     }
 }

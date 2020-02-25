@@ -2290,8 +2290,6 @@ namespace RiverHollow.Tile_Engine
         bool _bSelected = false;
         bool _bLegalTile = false;
 
-        public bool PathingBlocked = false;
-
         public RHTile(int x, int y, string mapName)
         {
             _X = x;
@@ -2308,7 +2306,7 @@ namespace RiverHollow.Tile_Engine
             if (CombatManager.InCombat)
             {
                 //Only draw one of the tile targetting types
-                if (this == CombatManager.ActiveCharacter.BaseTile) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(48, 112, 16, 16), Color.White); }
+                if (this == CombatManager.ActiveCharacter?.BaseTile) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(48, 112, 16, 16), Color.White); }
                 else if (_bSelected) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(16, 112, 16, 16), Color.White); }
                 else if (_bArea) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(32, 112, 16, 16), Color.White); }
                 else if (_bLegalTile) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(0, 112, 16, 16), Color.White); }
@@ -2713,7 +2711,7 @@ namespace RiverHollow.Tile_Engine
             {
                 foreach (TiledMapTileLayer l in _diProps.Keys)
                 {
-                    if (PathingBlocked || l.IsVisible && ContainsProperty(l, "Impassable", out string val) && val.Equals("true"))
+                    if (l.IsVisible && ContainsProperty(l, "Impassable", out string val) && val.Equals("true"))
                     {
                         rv = false;
                     }
