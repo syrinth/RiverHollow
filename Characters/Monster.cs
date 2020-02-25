@@ -4,11 +4,10 @@ using RiverHollow.Actors;
 using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Game_Managers;
 using RiverHollow.Misc;
-using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
-using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.TravelManager;
 
@@ -41,7 +40,12 @@ namespace RiverHollow.Characters
         List<SpawnConditionEnum> _liSpawnConditions;
         List<CombatAction> _liCombatActions;
 
+        #region Turn Logic
+        Thread _thrPathing;
         TravelMap _travelMap;
+        List<RHTile> _liFoundPath;
+        CombatAction _preferredAction;
+        #endregion
 
         #endregion
 
@@ -134,6 +138,20 @@ namespace RiverHollow.Characters
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
+
+            if(_thrPathing != null && !_thrPathing.IsAlive)
+            {
+                _thrPathing = null;
+                if (_liFoundPath == null)
+                {
+                    CombatManager.EndTurn();
+                }
+                else
+                {
+                    CombatManager.ChangePhase(CombatManager.PhaseEnum.Moving);
+                    SetPath(_liFoundPath);
+                }
+            }
 
             ///When the Monster has finished playing the KO animation, let the CombatManager know so it can do any final actions
             if (IsCurrentAnimation(AnimationEnum.KO) && BodySprite.CurrentFrameAnimation.PlayCount == 1)
@@ -364,20 +382,33 @@ namespace RiverHollow.Characters
 
         public void TakeTurn()
         {
-            List<RHTile> foundPath = null;
             TravelManager.SetParams(_iSize, this, _iMaxMove);
+
+            //First, determine which action we would prefer to use
+            _preferredAction = GetPreferredAction();
+
+            if (CombatManager.CurrentPhase != CombatManager.PhaseEnum.ChooseMoveTarget)
+            {
+                CombatManager.ChangePhase(CombatManager.PhaseEnum.ChooseMoveTarget);
+                _thrPathing = new Thread(PlanPath);
+                _thrPathing.Start();
+            }
+            
+        }
+
+        private void PlanPath()
+        {
+            //null the path to start
+            _liFoundPath = null;
 
             //Acquire the TravelMap for the Monster
             _travelMap = TravelManager.FindRangeOfAction(this, _iMaxMove, true);
-
-            //First, determine which action we would prefer to use
-            CombatAction preferredAction = GetPreferredAction();
 
             //Determine if the characters we want to act on are on our TravelMap or not.
             List<CombatActor> activeTargets = new List<CombatActor>();
             List<CombatActor> distantTargets = new List<CombatActor>();
 
-            foreach (CombatActor act in (preferredAction.Target == TargetEnum.Enemy) ? CombatManager.Party : CombatManager.Monsters)
+            foreach (CombatActor act in (_preferredAction.Target == TargetEnum.Enemy) ? CombatManager.Party : CombatManager.Monsters)
             {
                 ((_travelMap.ContainsKey(act.BaseTile) && _travelMap[act.BaseTile].InRange) ? activeTargets : distantTargets).Add(act);
             }
@@ -385,24 +416,14 @@ namespace RiverHollow.Characters
             //First we only care about actors within the travelMap
             if (activeTargets.Count > 0)
             {
-                FindShortestPathToActor(activeTargets, preferredAction, ref foundPath);
+                FindShortestPathToActor(activeTargets, ref _liFoundPath);
             }
 
             //If no shortestParth exists, either because there are no targets in the travelMap or there is 
             //no valid path to them, because you cannot finish on an RHTile, iterate over the distant CombatActors.
-            if (foundPath == null)
+            if (_liFoundPath == null)
             {
-                FindShortestPathToActor(distantTargets, preferredAction, ref foundPath);
-            }
-
-            if (foundPath == null)
-            {
-                CombatManager.EndTurn();
-            }
-            else
-            {
-                CombatManager.ChangePhase(CombatManager.PhaseEnum.Moving);
-                SetPath(foundPath);
+                FindShortestPathToActor(distantTargets, ref _liFoundPath);
             }
 
             //After everything is done, clear the TravelManager data
@@ -433,11 +454,11 @@ namespace RiverHollow.Characters
         /// <param name="possibleTargets">List of targets to loop through</param>
         /// <param name="preferredAction">The action we want to use, pass to the helper</param>
         /// <param name="shortestPath">A reference to a list of RHTiles which will be the shortest path.</param>
-        private void FindShortestPathToActor(List<CombatActor> possibleTargets, CombatAction preferredAction, ref List<RHTile> shortestPath)
+        private void FindShortestPathToActor(List<CombatActor> possibleTargets, ref List<RHTile> shortestPath)
         {
             foreach (CombatActor act in possibleTargets)
             {
-                List<RHTile> pathToTarget = ChooseTargetTile(act, preferredAction);
+                List<RHTile> pathToTarget = ChooseTargetTile(act);
                 if (shortestPath == null || pathToTarget.Count < shortestPath.Count)
                 {
                     shortestPath = pathToTarget;
@@ -452,14 +473,14 @@ namespace RiverHollow.Characters
         /// <param name="targetActor"></param>
         /// <param name="preferredAction"></param>
         /// <returns></returns>
-        private List<RHTile> ChooseTargetTile(CombatActor targetActor, CombatAction preferredAction)
+        private List<RHTile> ChooseTargetTile(CombatActor targetActor)
         {
             List<RHTile> shortestPath = null;
-            int skillRange = preferredAction.Range;
+            int skillRange = _preferredAction.Range;
 
             //Find the possible potential RHTiles to move to for the use of the skill
             List<RHTile> potentialTiles = null;
-            switch (preferredAction.AreaType)
+            switch (_preferredAction.AreaType)
             {
                 case AreaTypeEnum.Single:
                     //Need to be directly beside the targetActor
