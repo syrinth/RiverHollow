@@ -406,7 +406,6 @@ namespace RiverHollow.Characters
             }
 
             //After everything is done, clear the TravelManager data
-            TravelManager.Clear();
             TravelManager.ClearParams();
         }
 

@@ -1865,7 +1865,6 @@ namespace RiverHollow.Actors
                             timePath = TravelManager.FindPathToOtherMap(kvp.Value, ref mapName, ref start);
                         }
                         lTimetoTilePath.Add(new KeyValuePair<string, List<RHTile>>(kvp.Key, timePath));
-                        TravelManager.Clear();
                     }
                     TravelManager.CloseTravelLog();
 

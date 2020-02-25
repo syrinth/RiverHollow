@@ -748,7 +748,6 @@ namespace RiverHollow.Game_Managers
                 if (tilePath != null)
                 {
                     ActiveCharacter.SetPath(tilePath);
-                    TravelManager.Clear(); //Clean up after our pathfinding
                     ClearToPerformAction();
                 }
             }

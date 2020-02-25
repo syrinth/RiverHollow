@@ -79,8 +79,6 @@ namespace RiverHollow.Game_Managers
         #region Pathfinding
         const int slowCost = 100;
         static Dictionary<string, List<RHTile>> _diMapPathing;
-        static Dictionary<RHTile, RHTile> cameFrom = new Dictionary<RHTile, RHTile>();
-        static Dictionary<RHTile, double> costSoFar = new Dictionary<RHTile, double>();
         #endregion
 
         #region Pathfinding
@@ -244,8 +242,6 @@ namespace RiverHollow.Game_Managers
                             _diMapPathing[testMapStr + ":" + exit.Value] = pathToExit; // This needs another key for the appropriate exit
                         }
                     }
-
-                    Clear();
                 }
             }
 
@@ -256,7 +252,6 @@ namespace RiverHollow.Game_Managers
         public static List<RHTile> FindPathToLocationClean(ref Vector2 start, Vector2 target, string mapName)
         {
             List<RHTile> rvList = FindPathToLocation(ref start, target, mapName);
-            Clear();
             return rvList;
         }
         public static List<RHTile> FindPathToLocation(ref Vector2 start, Vector2 target, string mapName = null)
@@ -267,18 +262,18 @@ namespace RiverHollow.Game_Managers
             RHMap map = MapManager.Maps[(mapName ?? MapManager.CurrentMap.Name).Split(':')[0]];
             RHTile startTile = map.GetTileByPixelPosition(start.ToPoint());
             RHTile goalNode = map.GetTileByPixelPosition(target.ToPoint());
+            var travelMap = new TravelMap();
             var frontier = new PriorityQueue<RHTile>();
-            frontier.Enqueue(startTile, 0);
 
-            cameFrom[startTile] = startTile;
-            costSoFar[startTile] = 0;
+            frontier.Enqueue(startTile, 0);
+            travelMap.Store(startTile, startTile, 0);
             while (frontier.Count > 0)
             {
                 var current = frontier.Dequeue();
 
                 if (current.Equals(goalNode))
                 {
-                    returnList = BackTrack(current);
+                    returnList = travelMap.Backtrack(current);
                     start = current.Position;
 
                     string print = string.Empty;
@@ -305,18 +300,16 @@ namespace RiverHollow.Game_Managers
                 //prospective new BaseTile, confirm that neighbouring tiles are all valid
                 foreach (var next in current.GetWalkableNeighbours())
                 {
-                    bool nextTileIsLast = CombatManager.InCombat && _iMaxPath != -1 && costSoFar[current] == _iMaxPath - 1;
+                    bool nextTileIsLast = CombatManager.InCombat && _iMaxPath != -1 && travelMap[current].CostSoFar == _iMaxPath - 1;
                     if (TestTileForSize(next, nextTileIsLast))
                     {
-                        double newCost = costSoFar[current] + GetMovementCost(next);
+                        double newCost = travelMap[current].CostSoFar + GetMovementCost(next);
 
-                        if (!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
+                        if (!travelMap.ContainsKey(next) || newCost < travelMap[next].CostSoFar)
                         {
-                            costSoFar[next] = newCost;
                             double priority = newCost + Heuristic(next, goalNode);
-
                             frontier.Enqueue(next, priority);
-                            cameFrom[next] = current;
+                            travelMap.Store(next, current, newCost);
                         }
                     }
                 }
@@ -357,7 +350,7 @@ namespace RiverHollow.Game_Managers
                 {
                     foreach (var next in current.GetAdjacentTiles())
                     {
-                        int newCost = travelMap[current].CostSoFar + 1;
+                        double newCost = travelMap[current].CostSoFar + 1;
 
                         if (!travelMap.ContainsKey(next))
                         {
@@ -373,7 +366,7 @@ namespace RiverHollow.Game_Managers
         /// <summary>
         /// Helper method to Queue up RHTiles for use in FindRangeOfAction.
         /// </summary>
-        private static void QueueForRange(RHTile testTile, RHTile lastTile, int newCost, ref PriorityQueue<RHTile> frontier, ref TravelMap travelMap, bool testForMovement)
+        private static void QueueForRange(RHTile testTile, RHTile lastTile, double newCost, ref PriorityQueue<RHTile> frontier, ref TravelMap travelMap, bool testForMovement)
         {
             //If we are not testing for movement, then do queue the RHTile, otherwise we need to both be able
             //to target the tile, move through the tile for size and walk through it for allies
@@ -427,20 +420,6 @@ namespace RiverHollow.Game_Managers
             return true;
         }
 
-        private static List<RHTile> BackTrack(RHTile current)
-        {
-            List<RHTile> list = new List<RHTile>();
-
-            while (current != cameFrom[current])
-            {
-                list.Add(current);
-                current = cameFrom[current];
-            }
-
-            list.Reverse();
-
-            return list;
-        }
         private static double Heuristic(RHTile a, RHTile b)
         {
             int total = 0;
@@ -482,12 +461,6 @@ namespace RiverHollow.Game_Managers
             _actTraveller = null;
         }
 
-        public static void Clear()
-        {
-            cameFrom.Clear();
-            costSoFar.Clear();
-        }
-
         public class TravelMap : Dictionary<RHTile, TravelData>
         {
             public List<RHTile> Backtrack(RHTile endTile)
@@ -506,12 +479,12 @@ namespace RiverHollow.Game_Managers
                 return rvList;
             }
 
-            public void Store(RHTile key, RHTile from, int range)
+            public void Store(RHTile key, RHTile from, double cost)
             {
                 this[key] = new TravelData
                 {
                     CameFrom = from,
-                    CostSoFar = range
+                    CostSoFar = cost
                 };
             }
         }
@@ -519,7 +492,7 @@ namespace RiverHollow.Game_Managers
         public class TravelData
         {
             public RHTile CameFrom;
-            public int CostSoFar;
+            public double CostSoFar;
             public bool InRange;
         }
         #endregion
