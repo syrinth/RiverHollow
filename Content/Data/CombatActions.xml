@@ -33,6 +33,11 @@
       <Key>4</Key>
       <Value>[Type:Menu][Menu:Special][Icon:0-0]</Value>
     </Item>
+    <Item>
+      <!--End Turn-->
+      <Key>5</Key>
+      <Value>[Type:EndTurn][Menu:Special][Icon:5-0]</Value>
+    </Item>
     <!--<20> Wizard Skills-->
     <Item>
       <Key>20</Key>

@@ -191,11 +191,12 @@ namespace RiverHollow.Actors.CombatStuff
                 }
             }
 
-            //Adds Special, Use Item, Move, and Escape to the Actions
+            //Adds Special, Use Item, Move, Escape, and End Turn
             ActionList.Add(DataManager.GetActionByIndex(3));
             ActionList.Add(DataManager.GetActionByIndex(2));
             ActionList.Add(DataManager.GetActionByIndex(0));
             ActionList.Add(DataManager.GetActionByIndex(1));
+            ActionList.Add(DataManager.GetActionByIndex(5));
         }
     }
 }

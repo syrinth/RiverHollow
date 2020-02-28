@@ -53,12 +53,24 @@ namespace RiverHollow.Game_Managers
 
         private static int _iXPMultiplier = 0;
 
-        private static TurnInfo _turnInfo;
+        public static TurnInfo CurrentTurnInfo;
 
         #region Turn Sequence
         static List<CombatActor> _liQueuedCharacters;
         static List<CombatActor> _liChargingCharacters;
         #endregion
+
+        public static bool CheckForEndTurn()
+        {
+            bool rv = false;
+            if(CurrentTurnInfo.HasActed && CurrentTurnInfo.HasMoved)
+            {
+                rv = true;
+                EndTurn();
+            }
+
+            return rv;
+        }
 
         public static void NewBattle(string oldMap)
         {
@@ -161,7 +173,7 @@ namespace RiverHollow.Game_Managers
 
                 //Phase for when a new ActiveCharacter is set but before they can do anything
                 case PhaseEnum.Upkeep:
-                    _turnInfo = new TurnInfo();
+                    CurrentTurnInfo = new TurnInfo();
                     ActiveCharacter.TickStatusEffects();
                     if (ActiveCharacter.Poisoned())
                     {
@@ -209,16 +221,31 @@ namespace RiverHollow.Game_Managers
                         {
                             MapManager.CurrentMap.AddItemToPlayerInventory(tileItem);
                         }
-                        _turnInfo.HasMoved = true;
+                        CurrentTurnInfo.HasMoved = true;
 
-                        if (!ActiveCharacter.IsMonster() || SelectedAction == null)
+                        if (!CheckForEndTurn())
                         {
-                            EndTurn();
+                            if (ActiveCharacter.IsMonster())
+                            {
+                                if (SelectedAction != null)
+                                {
+                                    CombatManager.ChangePhase(PhaseEnum.PerformAction);
+                                }
+                                else { EndTurn(); }
+                            }
+                            else if (ActiveCharacter.IsAdventurer())
+                            {
+                                GoToMainSelection();
+                            }
                         }
-                        else
-                        {
-                            CombatManager.ChangePhase(PhaseEnum.PerformAction);
-                        }
+                        //if (!ActiveCharacter.IsMonster() || SelectedAction == null)
+                        //{
+                        //    EndTurn();
+                        //}
+                        //else
+                        //{
+                        //    CombatManager.ChangePhase(PhaseEnum.PerformAction);
+                        //}
                     }
                     break;
 
@@ -300,13 +327,13 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public static void GoToMainSelection()
         {
+            ChangePhase(PhaseEnum.MainSelection);
             if (ActiveCharacter.IsMonster())
             {
                 ((Monster)ActiveCharacter).TakeTurn();
             }
             else
             {
-                ChangePhase(PhaseEnum.MainSelection);
                 _scrCombat.OpenMainSelection();
             }
         }
@@ -507,7 +534,7 @@ namespace RiverHollow.Game_Managers
 
             //If we have found a target to attack, but we need to move to get into range of them
             //Then find the shortest path, and move as close as you can.
-            if (!_turnInfo.HasMoved && gottaMove && !ActiveCharacter.FollowingPath)
+            if (!CurrentTurnInfo.HasMoved && gottaMove && !ActiveCharacter.FollowingPath)
             {
                 if (targetTile == null)
                 {
@@ -546,7 +573,7 @@ namespace RiverHollow.Game_Managers
             }
 
             //If we have not yet acted, we need to move, and we are not following a path
-            if (!_turnInfo.HasActed && !gottaMove && !ActiveCharacter.FollowingPath)
+            if (!CurrentTurnInfo.HasActed && !gottaMove && !ActiveCharacter.FollowingPath)
             {
                 foreach (RHTile t in ActiveCharacter.BaseTile.GetAdjacentTiles())
                 {
@@ -905,6 +932,8 @@ namespace RiverHollow.Game_Managers
 
         public static void EndTurn()
         {
+            _scrCombat.CloseMainSelection();
+
             if (SelectedAction != null)
             {
                 ActiveCharacter.CurrentCharge -= SelectedAction.ChargeCost();
@@ -1195,8 +1224,10 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public struct TurnInfo
         {
-            public bool HasMoved;
-            public bool HasActed;
+            private bool _bMoved;
+            public bool HasMoved { get => _bMoved; set => _bMoved = value; }
+            private bool _bActed;
+            public bool HasActed { get => _bActed; set => _bActed = value; }
         }
     }
 }

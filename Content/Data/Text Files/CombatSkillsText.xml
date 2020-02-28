@@ -22,6 +22,10 @@
       <Key>Action 4</Key>
       <Value>Special/Special Skills</Value>
     </Item>
+    <Item>
+      <Key>Action 5</Key>
+      <Value>End Turn/End the Turn</Value>
+    </Item>
     <!--Wizard Skills-->
     <Item>
       <Key>Action 20</Key>

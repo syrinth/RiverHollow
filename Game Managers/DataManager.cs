@@ -495,9 +495,7 @@ namespace RiverHollow.Game_Managers
                 {
                     case "Menu":
                         return new MenuAction(id, liData);
-                    case "Spell":
-                        return new CombatAction(id, liData);
-                    case "Action":
+                    default:
                         return new CombatAction(id, liData);
                 }
             }

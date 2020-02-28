@@ -49,6 +49,7 @@ namespace RiverHollow.Actors.CombatStuff
         public bool IsMenu() { return _actionType == ActionEnum.Menu; }
         public bool IsAction() { return _actionType == ActionEnum.Action; }
         public bool IsSpell() { return _actionType == ActionEnum.Spell; }
+        public bool IsEndTurn() { return _actionType == ActionEnum.EndTurn; }
 
         public bool IsSpecial() { return _menuType == MenuEnum.Special; }
         public bool IsUseItem() { return _menuType == MenuEnum.UseItem; }
@@ -850,7 +851,19 @@ namespace RiverHollow.Actors.CombatStuff
                         Sprite.IsAnimating = false;
                         Sprite.PlayedOnce = false;
                     }
-                    CombatManager.EndTurn();
+                    CombatManager.CurrentTurnInfo.HasActed = true;
+                    
+                    if (!CombatManager.CheckForEndTurn())
+                    {
+                        if (CombatManager.ActiveCharacter.IsMonster() && CombatManager.SelectedAction != null)
+                        {
+                            CombatManager.ChangePhase(CombatManager.PhaseEnum.ChooseMoveTarget);
+                        }
+                        else if (CombatManager.ActiveCharacter.IsAdventurer())
+                        {
+                            CombatManager.GoToMainSelection();
+                        }
+                    }
 
                     break;
             }

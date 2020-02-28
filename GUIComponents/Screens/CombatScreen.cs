@@ -585,7 +585,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     {
                         rv = true;
                         MenuAction a = ab.Action;
-                        if (!a.IsMenu())
+                        if (a.IsEndTurn())
+                        {
+                            CombatManager.EndTurn();
+                        }
+                        else if (!a.IsMenu())
                         {
                             if (CombatManager.ActiveCharacter.CanCast(((CombatAction)a).MPCost))
                             {

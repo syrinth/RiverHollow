@@ -34,7 +34,7 @@ namespace RiverHollow.Game_Managers
         public enum PotencyBonusEnum { None, Conditions, Summons };
         public enum EquipmentEnum { Armor, Weapon, Accessory, Head, Wrist};
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
-        public enum ActionEnum { Action, Menu, Spell };
+        public enum ActionEnum { Action, Menu, Spell, EndTurn };
         public enum SkillTagsEnum { Bonus, Harm, Heal, Push, Pull, Remove, Retreat, Step, Status, Summon};
         public enum TargetEnum { Enemy, Ally};
         public enum AreaTypeEnum { Single, Cross, Ring, Line };
