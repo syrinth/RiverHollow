@@ -466,7 +466,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if(selectedAction != null)
             {
                 actionName = selectedAction.Name;
-                if (!selectedAction.IsMenu() && ((CombatAction)selectedAction).MPCost > 0)
+                if (selectedAction.IsSpell() && ((CombatAction)selectedAction).MPCost > 0)
                 {
                     actionName = actionName + "  " + ((CombatAction)selectedAction).MPCost.ToString() + " MP";
                 }
@@ -522,11 +522,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         ActionButton ab = new ActionButton(ca);
                         _liActionButtons.Add(ab);
 
-                        if (ab.Action.IsMenu() && ab.Action.IsSpecial() && CombatManager.ActiveCharacter.Silenced())
+                        if (ab.Action.IsSpellMenu() && CombatManager.ActiveCharacter.Silenced())
                         {
                             ab.Enable(false);
                         }
-                        if (ab.Action.IsMenu() && ab.Action.IsUseItem() && InventoryManager.GetPlayerCombatItems().Count == 0)
+                        if (ab.Action.IsUseItem() && InventoryManager.GetPlayerCombatItems().Count == 0)
+                        {
+                            ab.Enable(false);
+                        }
+                        if (ab.Action.IsMove() && CombatManager.CurrentTurnInfo.HasMoved)
                         {
                             ab.Enable(false);
                         }
@@ -585,32 +589,41 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     {
                         rv = true;
                         MenuAction a = ab.Action;
-                        if (a.IsEndTurn())
+                        if (ab.Enabled)
                         {
-                            CombatManager.EndTurn();
-                        }
-                        else if (!a.IsMenu())
-                        {
-                            if (CombatManager.ActiveCharacter.CanCast(((CombatAction)a).MPCost))
+                            if (a.IsEndTurn())
                             {
-                                CombatManager.ProcessActionChoice((CombatAction)a);
+                                CombatManager.EndTurn();
                             }
-                        }
-                        else
-                        {
-                            if (a.IsMenu() && a.IsSpecial() && !CombatManager.ActiveCharacter.Silenced())
+                            else if (a.IsMove())
                             {
-                                if (CombatManager.ActiveCharacter.GetCurrentSpecials().Count > 0) {
-                                    _gSelectedMenu = ab;
-                                    _actionMenu = new ActionMenu(CombatManager.ActiveCharacter.GetCurrentSpecials());
-                                    _actionMenu.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX, 10);
+                                CombatManager.ChangePhase(CombatManager.PhaseEnum.ChooseMoveTarget);
+                                CombatManager.FindAndHighlightLegalTiles();
+                            }
+                            else if (a.IsAction() || a.IsSpell())
+                            {
+                                if (CombatManager.ActiveCharacter.CanCast(((CombatAction)a).MPCost))
+                                {
+                                    CombatManager.ProcessActionChoice((CombatAction)a);
                                 }
                             }
-                            else if (a.IsMenu() && a.IsUseItem() && InventoryManager.GetPlayerCombatItems().Count > 0)
+                            else
                             {
-                                _gSelectedMenu = ab;
-                                _actionMenu = new ActionMenu(InventoryManager.GetPlayerCombatItems());
-                                _actionMenu.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX, 10);
+                                if (a.IsSpellMenu())
+                                {
+                                    if (CombatManager.ActiveCharacter.GetCurrentSpecials().Count > 0)
+                                    {
+                                        _gSelectedMenu = ab;
+                                        _actionMenu = new ActionMenu(CombatManager.ActiveCharacter.GetCurrentSpecials());
+                                        _actionMenu.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX, 10);
+                                    }
+                                }
+                                else if (a.IsUseItem())
+                                {
+                                    _gSelectedMenu = ab;
+                                    _actionMenu = new ActionMenu(InventoryManager.GetPlayerCombatItems());
+                                    _actionMenu.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX, 10);
+                                }
                             }
                         }
 
@@ -765,7 +778,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     {
                         for (int i = 0; i < _liActions.Count; i++)
                         {
-                            rv = _liActions[i].Contains(mouse);
+                            rv = _liActions[i].Contains(mouse) && _liActions[i].Enabled;
                             if (rv) { break; }
                         }
                     }

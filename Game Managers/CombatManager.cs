@@ -407,17 +407,8 @@ namespace RiverHollow.Game_Managers
         public static void ProcessActionChoice(CombatAction a)
         {
             SelectedAction = new ChosenAction(a);
-
-            if (SelectedAction.Name.Equals("Move"))
-            {
-                ChangePhase(PhaseEnum.ChooseMoveTarget);
-                FindAndHighlightLegalTiles();
-            }
-            else
-            {
-                ChangePhase(PhaseEnum.ChooseActionTarget);
-                FindAndHighlightLegalTiles();
-            }
+            ChangePhase(PhaseEnum.ChooseActionTarget);
+            FindAndHighlightLegalTiles();
 
             //if (!SelectedAction.SelfOnly())
             //{

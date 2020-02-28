@@ -8,22 +8,18 @@
     </Item>
     <Item>
       <Key>Action 1</Key>
-      <Value>Escape/Escape</Value>
-    </Item>
-    <Item>
-      <Key>Action 2</Key>
       <Value>Use Item/Use Item</Value>
     </Item>
     <Item>
-      <Key>Action 3</Key>
+      <Key>Action 2</Key>
       <Value>Cast Spell/Casts a Spell</Value>
     </Item>
     <Item>
-      <Key>Action 4</Key>
+      <Key>Action 3</Key>
       <Value>Special/Special Skills</Value>
     </Item>
     <Item>
-      <Key>Action 5</Key>
+      <Key>Action 4</Key>
       <Value>End Turn/End the Turn</Value>
     </Item>
     <!--Wizard Skills-->

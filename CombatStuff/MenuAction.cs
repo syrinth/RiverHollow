@@ -17,7 +17,6 @@ namespace RiverHollow.Actors.CombatStuff
         protected int _id;
 
         protected ActionEnum _actionType;
-        protected MenuEnum _menuType;
         protected string _name;
         public string Name => _name;
         protected string _description;
@@ -29,34 +28,27 @@ namespace RiverHollow.Actors.CombatStuff
         public Vector2 IconGrid => _vIconGrid;
 
         public MenuAction() { }
-        public MenuAction(int id, Dictionary<string, string> stringData)
-        {
-            ImportBasics(stringData, id);
-        }
-
-        protected void ImportBasics(Dictionary<string, string> stringData, int id)
+        public MenuAction(int id, ActionEnum actionType, Vector2 vGrid)
         {
             _id = id;
+            _actionType = actionType;
+            _vIconGrid = vGrid;
             DataManager.GetActionText(_id, ref _name, ref _description);
-
-            _actionType = Util.ParseEnum<ActionEnum>(stringData["Type"]);
-            _menuType = Util.ParseEnum<MenuEnum>(stringData["Menu"]);
-
-            string[] tags = stringData["Icon"].Split('-');
-            _vIconGrid = new Vector2(int.Parse(tags[0]), int.Parse(tags[1]));
         }
 
-        public bool IsMenu() { return _actionType == ActionEnum.Menu; }
+        public bool IsActionMenu() { return _actionType == ActionEnum.MenuAction; }
+        public bool IsSpellMenu() { return _actionType == ActionEnum.MenuSpell; }
+        public bool IsUseItem() { return _actionType == ActionEnum.MenuItem; }
+        public bool IsEndTurn() { return _actionType == ActionEnum.EndTurn; }
+        public bool IsMove() { return _actionType == ActionEnum.Move; }
+
         public bool IsAction() { return _actionType == ActionEnum.Action; }
         public bool IsSpell() { return _actionType == ActionEnum.Spell; }
-        public bool IsEndTurn() { return _actionType == ActionEnum.EndTurn; }
-
-        public bool IsSpecial() { return _menuType == MenuEnum.Special; }
-        public bool IsUseItem() { return _menuType == MenuEnum.UseItem; }
     }
 
     public class CombatAction : MenuAction
     {
+        #region Properties
         const int moveSpeed = 60;
 
         PotencyBonusEnum _eBonusType;
@@ -120,6 +112,7 @@ namespace RiverHollow.Actors.CombatStuff
         string _sRemoveString;
 
         public AnimatedSprite Sprite;
+        #endregion
         public CombatAction(int id, Dictionary<string, string> stringData)
         {
             TileTargetList = new List<RHTile>();

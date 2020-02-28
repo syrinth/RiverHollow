@@ -491,12 +491,9 @@ namespace RiverHollow.Game_Managers
             if (id != -1)
             {
                 Dictionary<string, string> liData = _diActions[id];
-                switch (liData["Type"])
+                if (liData["Type"] == "Action" || liData["Type"] == "Spell")
                 {
-                    case "Menu":
-                        return new MenuAction(id, liData);
-                    default:
-                        return new CombatAction(id, liData);
+                    return new CombatAction(id, liData);
                 }
             }
 

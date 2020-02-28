@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 using RiverHollow.Misc;
 using System.Collections.Generic;
@@ -191,12 +192,11 @@ namespace RiverHollow.Actors.CombatStuff
                 }
             }
 
-            //Adds Special, Use Item, Move, Escape, and End Turn
-            ActionList.Add(DataManager.GetActionByIndex(3));
-            ActionList.Add(DataManager.GetActionByIndex(2));
-            ActionList.Add(DataManager.GetActionByIndex(0));
-            ActionList.Add(DataManager.GetActionByIndex(1));
-            ActionList.Add(DataManager.GetActionByIndex(5));
+            //Adds Special, Use Item, Move, and End Turn
+            ActionList.Add(new MenuAction(2, ActionEnum.MenuSpell, new Vector2(1, 0)));
+            ActionList.Add(new MenuAction(1, ActionEnum.MenuItem, new Vector2(2, 0)));
+            ActionList.Add(new MenuAction(0, ActionEnum.Move, new Vector2(3, 0)));
+            ActionList.Add(new MenuAction(4, ActionEnum.EndTurn, new Vector2(4, 0)));
         }
     }
 }
