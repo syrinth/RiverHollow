@@ -520,20 +520,26 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     foreach (MenuAction ca in _actor.AbilityList)
                     {
                         ActionButton ab = new ActionButton(ca);
+                        MenuAction action = ab.Action;
                         _liActionButtons.Add(ab);
 
-                        if (ab.Action.IsSpellMenu() && CombatManager.ActiveCharacter.Silenced())
+                        if (CombatManager.CurrentTurnInfo.HasActed && !action.IsMove() && !action.IsEndTurn())
                         {
                             ab.Enable(false);
                         }
-                        if (ab.Action.IsUseItem() && InventoryManager.GetPlayerCombatItems().Count == 0)
+                        else if (CombatManager.CurrentTurnInfo.HasMoved && action.IsMove())
                         {
                             ab.Enable(false);
                         }
-                        if (ab.Action.IsMove() && CombatManager.CurrentTurnInfo.HasMoved)
+                        else if (action.IsSpellMenu() && CombatManager.ActiveCharacter.Silenced())
                         {
                             ab.Enable(false);
                         }
+                        else if (action.IsUseItem() && InventoryManager.GetPlayerCombatItems().Count == 0)
+                        {
+                            ab.Enable(false);
+                        }
+
                     }
 
                     _gSelectedAction = _liActionButtons[0];
@@ -577,7 +583,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         }
                         else if (_actionMenu.ShowItems())
                         {
-                            CombatManager.ProcessItemChoice((Consumable)_actionMenu.SelectedAction.Item);
+                            CombatManager.ProcessActionChoice(new CombatAction((Consumable)_actionMenu.SelectedAction.Item));
                         }
                     }
                 }

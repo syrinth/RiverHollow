@@ -486,7 +486,7 @@ namespace RiverHollow.Game_Managers
             name = _diCombatSkillsText[val].Split('/')[0];
             desc = _diCombatSkillsText[val].Split('/')[1];
         }
-        public static MenuAction GetActionByIndex(int id)
+        public static CombatAction GetActionByIndex(int id)
         {
             if (id != -1)
             {

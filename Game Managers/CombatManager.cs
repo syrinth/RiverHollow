@@ -20,6 +20,8 @@ namespace RiverHollow.Game_Managers
 {
     public static class CombatManager
     {
+        private const int MOVE_CHARGE = 40;
+        private const int ATTACK_CHARGE = 60;
         private const double EXP_MULTIPLIER_BONUS = 0.3;
         public const int BASIC_ATTACK = 300;
         public static int CombatScale = 5;
@@ -40,13 +42,11 @@ namespace RiverHollow.Game_Managers
         private static CombatScreen _scrCombat;
         public enum PhaseEnum { Setup, Charging, Upkeep, MainSelection, ChooseMoveTarget, Moving, ChooseAction, ChooseActionTarget, PerformAction, Victory, DisplayDefeat }//NewTurn, EnemyTurn, SelectSkill, ChooseTarget, Defeat, DisplayAttack, DisplayVictory, Lost, PerformAction, EndCombat }
         public static PhaseEnum CurrentPhase;
-        public static ChosenAction SelectedAction;
+        public static CombatAction SelectedAction;
 
         public static RHTile SelectedTile;          //The tile currently selected by the targetter
-        private static RHTile _tTarget;             //The tile that has been confirmed as the target
 
         public static double Delay;
-        public static string Text;
 
         private static bool _bInCombat = false;
         public static bool InCombat => _bInCombat;
@@ -221,7 +221,7 @@ namespace RiverHollow.Game_Managers
                         {
                             MapManager.CurrentMap.AddItemToPlayerInventory(tileItem);
                         }
-                        CurrentTurnInfo.HasMoved = true;
+                        CurrentTurnInfo.Moved();
 
                         if (!CheckForEndTurn())
                         {
@@ -406,7 +406,8 @@ namespace RiverHollow.Game_Managers
 
         public static void ProcessActionChoice(CombatAction a)
         {
-            SelectedAction = new ChosenAction(a);
+            a.AssignUser(ActiveCharacter);
+            SelectedAction = a;
             ChangePhase(PhaseEnum.ChooseActionTarget);
             FindAndHighlightLegalTiles();
 
@@ -423,15 +424,9 @@ namespace RiverHollow.Game_Managers
             //}
         }
 
-        public static void ProcessItemChoice(Consumable it)
-        {
-            ChangePhase(PhaseEnum.ChooseActionTarget);
-            SelectedAction = new ChosenAction(it);
-        }
-
         public static void AssignMonsterAction(CombatAction a, RHTile targetTile)
         {
-            SelectedAction = new ChosenAction(a);
+            SelectedAction = a;
             SelectedTile = targetTile;
             SelectedAction.AssignTarget();
         }
@@ -515,7 +510,7 @@ namespace RiverHollow.Game_Managers
                         if (t.HasCombatant() && t.Character.IsAdventurer())
                         {
                             gottaMove = false;
-                            SelectedAction = new ChosenAction(c);
+                            SelectedAction = c;
                             targetTile = t;
                             break;
                         }
@@ -571,7 +566,7 @@ namespace RiverHollow.Game_Managers
                     if (t.HasCombatant() && t.Character.IsAdventurer())
                     {
                         SelectedTile = t;
-                        SelectedAction = new ChosenAction((CombatAction)ActiveCharacter.GetCurrentSpecials()[0]);
+                        SelectedAction = ActiveCharacter.GetCurrentSpecials()[0];
                         SelectedAction.AssignTarget();
                     }
                 }
@@ -770,12 +765,11 @@ namespace RiverHollow.Game_Managers
         {
             if (SelectedTile != null)
             {
-                _tTarget = SelectedTile;
                 ChangePhase(PhaseEnum.Moving);
                 ActiveCharacter.ClearTiles();
                 Vector2 start = ActiveCharacter.Position;
 
-                List<RHTile> tilePath = TravelManager.FindPathToLocation(ref start, _tTarget.Center);
+                List<RHTile> tilePath = TravelManager.FindPathToLocation(ref start, SelectedTile.Center);
 
                 if (tilePath != null)
                 {
@@ -789,7 +783,7 @@ namespace RiverHollow.Game_Managers
         /// Closes any open selection windows and clears
         /// the legal and selected tiles
         /// </summary>
-        private static void ClearToPerformAction()
+        public static void ClearToPerformAction()
         {
             _scrCombat.CloseMainSelection();
             ClearAllTiles();
@@ -840,7 +834,7 @@ namespace RiverHollow.Game_Managers
             {
                 rv.Add(ActiveCharacter);
                 CombatActor c = chargingCopy.Find(x => x.Name == ActiveCharacter.Name);
-                c.DummyCharge -= (SelectedAction == null) ? c.DummyCharge : SelectedAction.ChargeCost();
+                c.DummyCharge -= (SelectedAction == null) ? c.DummyCharge : ATTACK_CHARGE;
             }
 
             //If there are any queued Actors, add them to the charging list
@@ -925,15 +919,6 @@ namespace RiverHollow.Game_Managers
         {
             _scrCombat.CloseMainSelection();
 
-            if (SelectedAction != null)
-            {
-                ActiveCharacter.CurrentCharge -= SelectedAction.ChargeCost();
-            }
-            else
-            {
-                ActiveCharacter.CurrentCharge = 0;
-            }
-
             Summon activeSummon = ActiveCharacter.LinkedSummon;
             //If there is no linked summon, or it is a summon, end the turn normally.
 
@@ -945,14 +930,14 @@ namespace RiverHollow.Game_Managers
                     {
                         List<RHTile> targets = SelectedAction.GetTargetTiles();
                         ActiveCharacter = activeSummon;
-                        SelectedAction = new ChosenAction((CombatAction)DataManager.GetActionByIndex(CombatManager.BASIC_ATTACK));
-                        SelectedAction.SetUser(ActiveCharacter);
+                        SelectedAction = DataManager.GetActionByIndex(CombatManager.BASIC_ATTACK);
+                        SelectedAction.AssignUser(ActiveCharacter);
                         SelectedAction.SetTargetTiles(targets);
                     }
-                    else if (activeSummon.TwinCast && SelectedAction.IsSpell() && !SelectedAction.IsSummonSpell() && SelectedAction.CanTwinCast())
+                    else if (activeSummon.TwinCast && SelectedAction.IsSpell() && !SelectedAction.IsSummonSpell() && SelectedAction.Potency > 0)
                     {
                         ActiveCharacter = activeSummon;
-                        SelectedAction.SetUser(activeSummon);
+                        SelectedAction.AssignUser(activeSummon);
                     }
                     else
                     {
@@ -1000,214 +985,6 @@ namespace RiverHollow.Game_Managers
         }
         #endregion
 
-        public class ChosenAction
-        {
-            public TargetEnum Target => (_chosenItem != null ? TargetEnum.Ally : _chosenAction.Target);
-            public AreaTypeEnum AreaType => (_chosenItem != null ? AreaTypeEnum.Single : _chosenAction.AreaType);
-            public int Range => (_chosenItem != null ? 1 : _chosenAction.Range);    //Items only have 1 tile of range
-            private Consumable _chosenItem;
-            private CombatAction _chosenAction;
-            public AnimatedSprite Sprite => _chosenAction.Sprite;
-
-            List<RHTile> _liLegalTiles;
-            public List<RHTile> LegalTiles => _liLegalTiles;
-            public CombatActor User;
-
-            string _name;
-            public string Name => _name;
-
-            bool _bDrawItem;
-
-            public ChosenAction(Consumable it)
-            {
-                User = ActiveCharacter;
-                _chosenItem = it;
-                _name = _chosenItem.Name;
-                _liLegalTiles = new List<RHTile>();
-
-                //Only the adjacent tiles are legal
-                _liLegalTiles = User.BaseTile.GetAdjacentTiles();
-            }
-
-            public ChosenAction(CombatAction ca)
-            {
-                User = ActiveCharacter;
-                _chosenAction = ca;
-                _name = _chosenAction.Name;
-
-                _chosenAction.SkillUser = ActiveCharacter;
-
-                _liLegalTiles = new List<RHTile>();
-            }
-
-            public void Draw(SpriteBatch spritebatch)
-            {
-                if (_bDrawItem && _chosenItem != null)     //We want to draw the item above the character's head
-                {
-                    int size = TileSize * CombatManager.CombatScale;
-                    //GUIImage gItem = new GUIImage(_chosenItem.SourceRectangle, size, size, _chosenItem.Texture);
-                    //CombatActor c = CombatManager.ActiveCharacter;
-
-                    //gItem.AnchorAndAlignToObject(c.BodySprite, SideEnum.Top, SideEnum.CenterX);
-                    //gItem.Draw(spritebatch);
-                }
-
-                _chosenAction?.Sprite?.Draw(spritebatch);
-            }
-
-            public void Update(GameTime gTime)
-            {
-                if (_chosenAction != null) { _chosenAction.HandlePhase(gTime); }
-                else if (_chosenItem != null)
-                {
-                    bool finished = false;
-                    CombatActor c = CombatManager.ActiveCharacter;
-                    if (!c.IsDirectionalAnimation(VerbEnum.Cast))
-                    {
-                        c.PlayAnimation(VerbEnum.Cast);
-                        _bDrawItem = true;
-                    }
-                    else if (c.AnimationPlayedXTimes(3))
-                    {
-                        c.PlayAnimation(VerbEnum.Walk);
-                        _bDrawItem = false;
-                        finished = true;
-                    }
-
-                    if (finished) { UseItem(); }
-                }
-            }
-
-            public void UseItem()
-            {
-                if (_chosenItem != null)
-                {
-                    if (_chosenItem.Condition != ConditionEnum.None)
-                    {
-                        _tTarget.Character.ChangeConditionStatus(_chosenItem.Condition, !_chosenItem.Helpful);
-                    }
-                    _tTarget.Character.ModifyHealth(_chosenItem.Health, false);
-                    _chosenItem.Remove(1);
-                }
-
-                EndTurn();
-            }
-
-            /// <summary>
-            /// Call to officially lock the SelectedTile as the _targetTile
-            /// Clear out the tiles and close the window
-            /// </summary>
-            public void AssignTarget()
-            {
-                _tTarget = SelectedTile;
-                if (_chosenAction != null)
-                {
-                    ActiveCharacter.CurrentMP -= _chosenAction.MPCost;          //Checked before Processing
-                    _chosenAction.AssignTiles();
-                    Text = SelectedAction.Name;
-                }
-                else if (_chosenItem != null)
-                {
-                    Text = SelectedAction.Name;
-                }
-                ChangePhase(PhaseEnum.PerformAction);
-
-                ClearToPerformAction();
-            }
-
-            public int ChargeCost()
-            {
-                int rv = 100;
-
-                if(_chosenAction != null) { rv = _chosenAction.ChargeCost; }
-
-                return rv;
-            }
-
-            public void SetUser(CombatActor c) {
-                if (_chosenAction != null)
-                {
-                    _chosenAction.SkillUser = c;
-                }
-            }
-
-            public bool TargetsAlly()
-            {
-                bool rv = false;
-
-                if (_chosenAction != null) { rv = _chosenAction.IsHelpful(); }
-                else if (_chosenItem != null) { rv = _chosenItem.Helpful; }
-
-                return rv;
-            }
-            public bool TargetsEnemy()
-            {
-                bool rv = false;
-
-                if (_chosenAction != null) { rv = !_chosenAction.IsHelpful(); }
-                else if (_chosenItem != null) { rv = !_chosenItem.Helpful; }
-
-                return rv;
-            }
-            public bool IsSpell() { return _chosenAction != null && _chosenAction.IsSpell(); }
-            public bool IsSummonSpell() { return _chosenAction != null && _chosenAction.IsSummonSpell(); }
-            public bool SelfOnly() { return _chosenAction.Range == 0; }
-            public bool CanTwinCast()
-            {
-                bool rv = false;
-                if(_chosenAction != null){
-                    rv = _chosenAction.Potency > 0;
-                }
-                return rv;
-            }
-
-            #region Targeting
-            public void ClearTargets()
-            {
-                if(_chosenAction != null) { _chosenAction.TileTargetList.Clear(); }
-                else if (_chosenItem != null) { _tTarget = null; }
-            }
-
-            public List<RHTile> GetTargetTiles()
-            {
-                return _chosenAction?.TileTargetList;
-            }
-
-            public void SetTargetTiles(List<RHTile> li)
-            {
-                if (_chosenAction != null)
-                {
-                    _chosenAction.AssignTiles();
-                    _chosenAction.TileTargetList = li;
-                }
-            }
-
-            public List<RHTile> DetermineTargetTiles(RHTile targetedTile)
-            {
-                List<RHTile> rvList = new List<RHTile>() { targetedTile };
-
-                if(_chosenAction != null)
-                {
-                    switch (_chosenAction.AreaType)
-                    {
-                        case AreaTypeEnum.Cross:
-                            foreach(RHTile t in targetedTile.GetAdjacentTiles())
-                            {
-                                if (t.CanTargetTile()) {
-                                    rvList.Add(t);
-                                }
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                return rvList;
-            }
-            #endregion
-        }
-
         /// <summary>
         /// Used to store info about the ActiveCharacters turn.
         /// 
@@ -1216,9 +993,21 @@ namespace RiverHollow.Game_Managers
         public struct TurnInfo
         {
             private bool _bMoved;
-            public bool HasMoved { get => _bMoved; set => _bMoved = value; }
+            public bool HasMoved { get => _bMoved; }
             private bool _bActed;
-            public bool HasActed { get => _bActed; set => _bActed = value; }
+            public bool HasActed { get => _bActed; }
+
+            public void Moved()
+            {
+                _bMoved = true;
+                ActiveCharacter.CurrentCharge -= MOVE_CHARGE;
+            }
+
+            public void Acted()
+            {
+                _bActed = true;
+                ActiveCharacter.CurrentCharge -= ATTACK_CHARGE;
+            }
         }
     }
 }

@@ -389,7 +389,7 @@ namespace RiverHollow.Characters
             TravelManager.SetParams(_iSize, this, _iMaxMove);
 
             //First, determine which action we would prefer to use
-            CombatManager.SelectedAction = new ChosenAction(GetPreferredAction());
+            CombatManager.SelectedAction = GetPreferredAction();
 
             if (CombatManager.CurrentPhase != CombatManager.PhaseEnum.ChooseMoveTarget)
             {
