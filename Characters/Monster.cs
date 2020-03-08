@@ -42,6 +42,11 @@ namespace RiverHollow.Characters
         List<CombatAction> _liCombatActions;
 
         #region Turn Logic
+        RHTile _selectedTile;
+        CombatAction _chosenAction;
+        enum TurnStepsEnum { Move, Act, EndTurn };
+        List<TurnStepsEnum> _liTurnSteps;
+
         Thread _thrPathing;
         TravelMap _travelMap;
         List<RHTile> _liFoundPath;
@@ -139,21 +144,37 @@ namespace RiverHollow.Characters
         {
             base.Update(gTime);
 
-            if(_thrPathing != null && !_thrPathing.IsAlive)
+            if (_liTurnSteps?.Count > 0)
             {
-                _thrPathing = null;
-                if (_liFoundPath == null)
+                if (_liTurnSteps[0] == TurnStepsEnum.Move)
                 {
-                    if (CombatManager.SelectedAction != null)
+                    if (CombatManager.CurrentTurnInfo.HasMoved)
                     {
-                        CombatManager.ChangePhase(PhaseEnum.PerformAction);
+                        _liTurnSteps.RemoveAt(0);
                     }
-                    else { CombatManager.EndTurn(); }
+                    else if (!CombatPhaseCheck(CmbtPhaseEnum.Moving))
+                    {
+                        CombatManager.ChangePhase(CombatManager.CmbtPhaseEnum.Moving);
+                        SetPath(_liFoundPath);
+                    }
                 }
-                else
+
+                if (_liTurnSteps[0] == TurnStepsEnum.Act)
                 {
-                    CombatManager.ChangePhase(CombatManager.PhaseEnum.Moving);
-                    SetPath(_liFoundPath);
+                    if (CombatManager.CurrentTurnInfo.HasActed)
+                    {
+                        _liTurnSteps.RemoveAt(0);
+                    }
+                    else if (!CombatPhaseCheck(CmbtPhaseEnum.PerformAction))
+                    {
+                        CombatManager.SelectedAction = _chosenAction;
+                        CombatManager.ActiveCharacter.CurrentMP -= _chosenAction.MPCost;          //Checked before Processing
+                        CombatManager.ChangePhase(CmbtPhaseEnum.PerformAction);
+                    }
+                }
+                if (_liTurnSteps[0] == TurnStepsEnum.EndTurn)
+                {
+                    CombatManager.EndTurn();
                 }
             }
 
@@ -388,21 +409,20 @@ namespace RiverHollow.Characters
         {
             TravelManager.SetParams(_iSize, this, _iMaxMove);
 
-            //First, determine which action we would prefer to use
-            CombatManager.SelectedAction = GetPreferredAction();
-
-            if (CombatManager.CurrentPhase != CombatManager.PhaseEnum.ChooseMoveTarget)
-            {
-                CombatManager.ChangePhase(CombatManager.PhaseEnum.ChooseMoveTarget);
-                _thrPathing = new Thread(PlanPath);
+            if (_liTurnSteps == null) {
+                _thrPathing = new Thread(PlanTurn);
                 _thrPathing.Start();
             }
-            
         }
 
-        private void PlanPath()
+        private void PlanTurn()
         {
             _liFoundPath = null;
+            _liTurnSteps = new List<TurnStepsEnum>();
+
+            //First, determine which action we would prefer to use
+            _chosenAction = GetPreferredAction();
+            _chosenAction.AssignUser(this);
 
             //Acquire the TravelMap for the Monster
             _travelMap = TravelManager.FindRangeOfAction(this, _iMaxMove, true);
@@ -411,9 +431,20 @@ namespace RiverHollow.Characters
             List<CombatActor> activeTargets = new List<CombatActor>();
             List<CombatActor> distantTargets = new List<CombatActor>();
 
-            foreach (CombatActor act in (CombatManager.SelectedAction.Target == TargetEnum.Enemy) ? CombatManager.Party : CombatManager.Monsters)
+            foreach (CombatActor act in (_chosenAction.Target == TargetEnum.Enemy) ? CombatManager.Party : CombatManager.Monsters)
             {
-                ((_travelMap.ContainsKey(act.BaseTile) && _travelMap[act.BaseTile].InRange) ? activeTargets : distantTargets).Add(act);
+                if (act.KnockedOut()) { continue; }
+                bool found = false;
+                foreach (RHTile adjTile in act.GetAdjacentTiles())
+                {
+                    if (adjTile.Character == this || (_travelMap.ContainsKey(adjTile) && _travelMap[adjTile].InRange))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                (found ? activeTargets : distantTargets).Add(act);
             }
 
             //First we only care about actors within the travelMap
@@ -429,19 +460,42 @@ namespace RiverHollow.Characters
                 FindShortestPathToActor(distantTargets, ref _liFoundPath);
             }
 
-            //Now, determine if we will be able to use the chosen skill with the given path
-            if (Util.GetRHTileDelta(_liFoundPath[_liFoundPath.Count-1], CombatManager.SelectedTile) <= CombatManager.SelectedAction.Range)
+            if (_liFoundPath?.Count > 0)
             {
-                CombatManager.SelectedAction.AssignTarget();
+                _liTurnSteps.Add(TurnStepsEnum.Move);
+
+                RHTile temp = this.BaseTile;
+                this.SetBaseTile(_liFoundPath[_liFoundPath.Count - 1]);
+                InRangeForSkill();
+                this.SetBaseTile(temp);
             }
             else
             {
-                CombatManager.SelectedAction = null;
-                CombatManager.SelectedTile = null;
+                InRangeForSkill();
             }
+
+            _liTurnSteps.Add(TurnStepsEnum.EndTurn);
 
             //After everything is done, clear the TravelManager data
             TravelManager.ClearParams();
+        }
+
+        private void InRangeForSkill()
+        {
+            foreach (RHTile t in this.GetTileList())
+            {
+                if (Util.GetRHTileDelta(t, _selectedTile) <= _chosenAction.Range)
+                {
+                    _liTurnSteps.Add(TurnStepsEnum.Act);
+                    _chosenAction.AssignTargetTile(_selectedTile);
+                    break;
+                }
+            }
+        }
+
+        public override void EndTurn()
+        {
+            _liTurnSteps = null;
         }
 
         private CombatAction GetPreferredAction()
@@ -473,9 +527,11 @@ namespace RiverHollow.Characters
             foreach (CombatActor act in possibleTargets)
             {
                 List<RHTile> pathToTarget = ChooseTargetTile(act);
-                if (shortestPath == null || pathToTarget.Count < shortestPath.Count)
+                if (shortestPath == null || pathToTarget?.Count < shortestPath.Count)
                 {
+                    _selectedTile = act.BaseTile;
                     shortestPath = pathToTarget;
+                    if (shortestPath.Count == 0) { break; }
                 }
             }
         }
@@ -490,34 +546,35 @@ namespace RiverHollow.Characters
         private List<RHTile> ChooseTargetTile(CombatActor targetActor)
         {
             List<RHTile> shortestPath = null;
-            int skillRange = CombatManager.SelectedAction.Range;
+            int skillRange = _chosenAction.Range;
 
             //Find the possible potential RHTiles to move to for the use of the skill
             List<RHTile> potentialTiles = null;
-            switch (CombatManager.SelectedAction.AreaType)
+            switch (_chosenAction.AreaType)
             {
                 case AreaTypeEnum.Single:
                     //Need to be directly beside the targetActor
                     if (skillRange == 1)
                     {
                         potentialTiles = FindAdjacentTiles(targetActor);
-                        CombatManager.SelectedTile = targetActor.BaseTile;
                     }
                     break;
             }
-            
+
             //Todo: Search TravelMap tiles first.
             foreach (RHTile tile in potentialTiles)
             {
                 List<RHTile> testPath = null;
-
                 testPath = FindPath(tile);
 
-                if (testPath != null && (shortestPath == null || testPath.Count <= shortestPath.Count))
+                if (testPath != null && (shortestPath == null || testPath.Count < shortestPath.Count))
                 {
-                    if (testPath.Count > _iMaxMove) { testPath.RemoveRange(_iMaxMove, testPath.Count - _iMaxMove); }
+                    if (testPath.Count > _iMaxMove) {
+                        testPath.RemoveRange(_iMaxMove, testPath.Count - _iMaxMove);
+                    }
 
                     shortestPath = testPath;
+                    if (shortestPath.Count == 0) { break; }
                 }
             }
 

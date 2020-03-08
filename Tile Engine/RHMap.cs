@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Game_Managers.CombatManager;
 using static RiverHollow.Game_Managers.GUIObjects.HUDMenu;
 using static RiverHollow.RiverHollow;
 using static RiverHollow.WorldObjects.Door;
@@ -2306,7 +2307,7 @@ namespace RiverHollow.Tile_Engine
             if (CombatManager.InCombat)
             {
                 //Only draw one of the tile targetting types
-                if (this == CombatManager.ActiveCharacter?.BaseTile) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(48, 112, 16, 16), Color.White); }
+                if (this == CombatManager.ActiveCharacter?.BaseTile && DisplaySelectedTile()) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(48, 112, 16, 16), Color.White); }
                 else if (_bSelected) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(16, 112, 16, 16), Color.White); }
                 else if (_bArea) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(32, 112, 16, 16), Color.White); }
                 else if (_bLegalTile) { spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), dest, new Rectangle(0, 112, 16, 16), Color.White); }
@@ -2314,6 +2315,11 @@ namespace RiverHollow.Tile_Engine
 
             if (_floorObj != null) { _floorObj.Draw(spriteBatch); }
             if (_obj != null) { _obj.Draw(spriteBatch); }
+        }
+
+        private bool DisplaySelectedTile()
+        {
+            return CombatPhaseCheck(CmbtPhaseEnum.ChooseActionTarget) || CombatPhaseCheck(CmbtPhaseEnum.ChooseMoveTarget) || CombatPhaseCheck(CmbtPhaseEnum.MainSelection);
         }
 
         public void Dig()

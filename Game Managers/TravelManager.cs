@@ -329,11 +329,11 @@ namespace RiverHollow.Game_Managers
         {
             TravelMap travelMap = new TravelMap();
             var frontier = new PriorityQueue<RHTile>();
-
+       
             travelMap.Store(actor.BaseTile, actor.BaseTile, 0);
 
             // Try to Queue all adjacent RHTiles unless they contain the actor
-            foreach (RHTile t in actor.GetAdjacentTiles())
+            foreach (RHTile t in actor.BaseTile.GetAdjacentTiles())
             { 
                 if (t.Character != actor)
                 {
@@ -377,7 +377,7 @@ namespace RiverHollow.Game_Managers
 
                 //Do not highlight tiles that cannot be targeted and if we are testing
                 //for movement, we need to be able to land on the tile with our size in mind
-                if (!travelMap.ContainsKey(testTile) && testTile.CanTargetTile() && (!testForMovement || TestTileForSize(testTile, true)))
+                if (testTile.CanTargetTile() && (!testForMovement || TestTileForSize(testTile, true)))
                 {
                     travelMap[testTile].InRange = true;
                 }

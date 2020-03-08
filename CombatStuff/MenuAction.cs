@@ -88,8 +88,8 @@ namespace RiverHollow.Actors.CombatStuff
         int _iAnimWidth;
         int _iAnimHeight;
         int _iFrames;
-        int _iAnimContactX;
-        int _iAnimContactY;
+        int _iAnimOffsetX;
+        int _iAnimOffsetY;
         int _iBonusMod;
 
         public List<RHTile> TileTargetList;
@@ -252,11 +252,11 @@ namespace RiverHollow.Actors.CombatStuff
                 Sprite.PlaysOnce = true;
             }
 
-            if (stringData.ContainsKey("AnimContact"))
+            if (stringData.ContainsKey("AnimOffset"))
             {
-                string[] parse = stringData["AnimContact"].Split('-');
-                _iAnimContactX = int.Parse(parse[0]);
-                _iAnimContactY = int.Parse(parse[1]);
+                string[] parse = stringData["AnimOffset"].Split('-');
+                _iAnimOffsetX = int.Parse(parse[0]);
+                _iAnimOffsetY = int.Parse(parse[1]);
             }
         }
 
@@ -283,15 +283,10 @@ namespace RiverHollow.Actors.CombatStuff
         /// <summary>
         /// Assigns the CombatManager's SelectedTileand AreaTiles to the CombatAction
         /// </summary>
-        public void AssignTiles()
+        public void AssignTargetTile(RHTile target)
         {
-            TileTargetList.Add(CombatManager.SelectedTile);
-            TileTargetList.AddRange(CombatManager.AreaTiles);
-        }
-        public void SetTargetTiles(List<RHTile> li)
-        {
-            AssignTiles();
-            TileTargetList = li;
+            TileTargetList.Add(target);
+            TileTargetList.AddRange(DetermineTargetTiles(target));
         }
 
         /// <summary>
@@ -794,10 +789,8 @@ namespace RiverHollow.Actors.CombatStuff
                     if (Sprite != null && !Sprite.PlayedOnce && !Sprite.IsAnimating)
                     {
                         Sprite.IsAnimating = true;
-                        int overFlowX = (Sprite.Width - TileSize) / 2;
-                        int overFlowY = (Sprite.Height - _iAnimContactX);
-                        Sprite.Position = TileTargetList[0].Center;
-                        Sprite.Position -= new Vector2(_iAnimContactX, _iAnimContactY);
+                        Sprite.Position = TileTargetList[0].Position;
+                        Sprite.Position -= new Vector2(_iAnimOffsetX, _iAnimOffsetY);
                     }
                     else if (Sprite != null && Sprite.IsAnimating) { Sprite.Update(gTime); }
                     else if (Sprite == null || Sprite.PlayedOnce)
@@ -919,7 +912,7 @@ namespace RiverHollow.Actors.CombatStuff
                     {
                         if (CombatManager.ActiveCharacter.IsMonster() && CombatManager.SelectedAction != null)
                         {
-                            CombatManager.ChangePhase(CombatManager.PhaseEnum.ChooseMoveTarget);
+                            CombatManager.ChangePhase(CombatManager.CmbtPhaseEnum.ChooseMoveTarget);
                         }
                         else if (CombatManager.ActiveCharacter.IsAdventurer())
                         {
@@ -945,12 +938,12 @@ namespace RiverHollow.Actors.CombatStuff
             return rv;
         }
 
-        public void AssignTarget()
+        public void UseSkillOnTarget()
         {
             CombatManager.ActiveCharacter.CurrentMP -= _iMPcost;          //Checked before Processing
-            AssignTiles();
+            AssignTargetTile(CombatManager.SelectedTile);
 
-            CombatManager.ChangePhase(CombatManager.PhaseEnum.PerformAction);
+            CombatManager.ChangePhase(CombatManager.CmbtPhaseEnum.PerformAction);
             CombatManager.ClearToPerformAction();
         }
         public void ClearTargets()

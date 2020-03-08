@@ -1076,6 +1076,10 @@ namespace RiverHollow.Actors
             }
         }
 
+        public virtual void EndTurn()
+        {
+        }
+
         public void GetHP(ref int curr, ref int max)
         {
             curr = _iCurrentHP;

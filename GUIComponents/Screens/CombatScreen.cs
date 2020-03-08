@@ -62,11 +62,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             switch (CombatManager.CurrentPhase)
             {
-                case CombatManager.PhaseEnum.MainSelection:
-                    _gActionSelect.Update(gTime);
+                case CombatManager.CmbtPhaseEnum.MainSelection:
+                    _gActionSelect?.Update(gTime);
                     break;
 
-                case CombatManager.PhaseEnum.DisplayDefeat:
+                case CombatManager.CmbtPhaseEnum.DisplayDefeat:
                     GUITextWindow window = new GUITextWindow("Defeated");
                     window.CenterOnScreen();
                     AddControl(window);
@@ -135,16 +135,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             switch (CombatManager.CurrentPhase)
             {
-                case CombatManager.PhaseEnum.MainSelection:
+                case CombatManager.CmbtPhaseEnum.MainSelection:
                     rv = _gActionSelect.ProcessLeftButtonClick(mouse);
                     break;
 
-                case CombatManager.PhaseEnum.ChooseMoveTarget:
+                case CombatManager.CmbtPhaseEnum.ChooseMoveTarget:
                     CombatManager.SetMoveTarget();
                     break;
 
-                case CombatManager.PhaseEnum.ChooseActionTarget:
-                    CombatManager.SelectedAction.AssignTarget();
+                case CombatManager.CmbtPhaseEnum.ChooseActionTarget:
+                    CombatManager.SelectedAction.UseSkillOnTarget();
                     break;
             }
 
@@ -440,7 +440,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
 
-            if (CombatManager.CurrentPhase == CombatManager.PhaseEnum.MainSelection && _gActionBar.ProcessHover(mouse))
+            if (CombatManager.CurrentPhase == CombatManager.CmbtPhaseEnum.MainSelection && _gActionBar.ProcessHover(mouse))
             {
                 rv = true;
                 SyncText();
@@ -488,7 +488,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public void CancelAction()
         {
             _gActionBar.CancelAction();
-            CombatManager.ChangePhase(CombatManager.PhaseEnum.MainSelection);
+            CombatManager.ChangePhase(CombatManager.CmbtPhaseEnum.MainSelection);
             CombatManager.ClearAllTiles();
             SyncText();
         }
@@ -603,7 +603,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             }
                             else if (a.IsMove())
                             {
-                                CombatManager.ChangePhase(CombatManager.PhaseEnum.ChooseMoveTarget);
+                                CombatManager.ChangePhase(CombatManager.CmbtPhaseEnum.ChooseMoveTarget);
                                 CombatManager.FindAndHighlightLegalTiles();
                             }
                             else if (a.IsAction() || a.IsSpell())
@@ -675,11 +675,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 if (_actionMenu != null)
                 {
-                    if (CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseMoveTarget)
+                    if (CombatManager.CurrentPhase == CombatManager.CmbtPhaseEnum.ChooseMoveTarget)
                     {
                         _gSelectedAction = (_gSelectedMenu != null) ? _gSelectedMenu : _liActionButtons[0];
                     }
-                    else if( CombatManager.CurrentPhase == CombatManager.PhaseEnum.ChooseActionTarget)
+                    else if( CombatManager.CurrentPhase == CombatManager.CmbtPhaseEnum.ChooseActionTarget)
                     {
                         _actionMenu = null;
                         _gSelectedAction = (_gSelectedMenu != null) ? _gSelectedMenu : _liActionButtons[0];

@@ -11,16 +11,16 @@
     <!--<20> Wizard Skills-->
     <Item>
       <Key>20</Key>
-      <Value>[Type:Spell][Animation:LightningSprite-94-160-15-0.1][AnimContact:49-114][Target:Enemy][Range:7][AreaType:Cross][Cost:5][Harm:200][Action:UserCast Direct Apply][Element:Lightning]</Value>
+      <Value>[Type:Spell][Animation:LightningSprite-94-160-15-0.1][AnimOffset:41-105][Target:Enemy][Range:7][AreaType:Cross][Cost:5][Harm:200][Action:UserCast Direct Apply][Element:Lightning]</Value>
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[Type:Spell][Animation:LightningSprite-94-160-15-0.1][AnimContact:49-114][Target:Enemy][Range:9][AreaType:Cross][Cost:5][Harm:300][Action:UserCast Direct Apply][Element:Lightning][Level:2]</Value>
+      <Value>[Type:Spell][Animation:LightningSprite-94-160-15-0.1][AnimOffset:41-105][Target:Enemy][Range:9][AreaType:Cross][Cost:5][Harm:300][Action:UserCast Direct Apply][Element:Lightning][Level:2]</Value>
     </Item>
     <!--<40> Healer Skills-->
     <Item>
       <Key>40</Key>
-      <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][Heal:100][Action:UserCast Direct Apply]</Value>
+      <Value>[Type:Spell][Animation:Heal-16-49-13-0.1][AnimOffset:0-32][Target:Ally][Range:5][AreaType:Single][Cost:5][Heal:100][Action:UserCast Direct Apply]</Value>
     </Item>
     <Item>
       <Key>41</Key>
