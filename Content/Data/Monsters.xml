@@ -2,6 +2,16 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
     <!--Key: Index>0 Value:Name/CombatTexture/XP/Str/Def/Vit/Magic/Speed/Resist/Vulnerability-->
+    <!--Magic Mushroom-->
+    <Item>
+      <Key>1</Key>
+      <Value>[Texture:MagicMushroom][Condition:Forest-Summer][Jump][Lvl:1][Ability:303][Loot:26][Walk:0-0-4-.2-F][Attack:0-0-4-.2-F][Cast:0-32-9-.07-F][Hurt:0-0-4-.2-F][Critical:0-0-4-.2-F][KO:256-0-3-.15-F]</Value>
+    </Item>
+    <!--Bauble-->
+    <Item>
+      <Key>2</Key>
+      <Value>[Texture:Bauble][Condition:Forest-Summer][Jump][Lvl:1][Ability:302-300][Loot:26][Walk:0-0-5-.1-F][Attack:0-0-5-.1-F][Cast:0-0-5-.1-F][Hurt:0-0-5-.1-F][Critical:0-0-5-.1-F][KO:320-0-3-.15-F]</Value>
+    </Item>
     <!--FangedFur-->
     <Item>
       <Key>3</Key>

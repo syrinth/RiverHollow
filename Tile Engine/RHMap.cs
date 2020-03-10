@@ -2235,7 +2235,7 @@ namespace RiverHollow.Tile_Engine
 
         public void Spawn()
         {
-            _monster = DataManager.GetMonsterByIndex(RHRandom.Instance.Next(3, 4));
+            _monster = DataManager.GetMonsterByIndex(RHRandom.Instance.Next(1, 4));
             if (_monster != null)
             {
                 _map.AddMonsterByPosition(_monster, _vSpawnPoint);

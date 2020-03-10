@@ -175,5 +175,13 @@
       <Key>Action 301</Key>
       <Value>Leaf Cutter/Throws a branch</Value>
     </Item>
+    <Item>
+      <Key>Action 302</Key>
+      <Value>Bauble Cure/Get Fucked :D</Value>
+    </Item>
+    <Item>
+      <Key>Action 303</Key>
+      <Value>Mushroom Lightning/ZAP</Value>
+    </Item>
   </Asset>
 </XnaContent>

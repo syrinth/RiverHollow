@@ -417,67 +417,98 @@ namespace RiverHollow.Characters
 
         private void PlanTurn()
         {
-            _liFoundPath = null;
-            _liTurnSteps = new List<TurnStepsEnum>();
-
-            //First, determine which action we would prefer to use
-            _chosenAction = GetPreferredAction();
-            _chosenAction.AssignUser(this);
-
             //Acquire the TravelMap for the Monster
             _travelMap = TravelManager.FindRangeOfAction(this, _iMaxMove, true);
 
-            //Determine if the characters we want to act on are on our TravelMap or not.
-            List<CombatActor> activeTargets = new List<CombatActor>();
-            List<CombatActor> distantTargets = new List<CombatActor>();
-
-            foreach (CombatActor act in (_chosenAction.Target == TargetEnum.Enemy) ? CombatManager.Party : CombatManager.Monsters)
+            //First, determine which action we would prefer to use
+            foreach (CombatAction testAction in this.GetCurrentSpecials())
             {
-                if (act.KnockedOut()) { continue; }
-                bool found = false;
-                foreach (RHTile adjTile in act.GetAdjacentTiles())
+                _liFoundPath = null;
+                _liTurnSteps = new List<TurnStepsEnum>();
+
+                _chosenAction = testAction;
+                _chosenAction.AssignUser(this);
+
+                //Determine if the characters we want to act on are on our TravelMap or not.
+                List<CombatActor> activeTargets = new List<CombatActor>();
+                List<CombatActor> distantTargets = new List<CombatActor>();
+
+                bool skipThisSkill = true;
+                foreach (CombatActor act in (_chosenAction.Target == TargetEnum.Enemy) ? CombatManager.Party : CombatManager.Monsters)
                 {
-                    if (adjTile.Character == this || (_travelMap.ContainsKey(adjTile) && _travelMap[adjTile].InRange))
+                    if (ShouldTryToUseOnActor(act))
                     {
-                        found = true;
-                        break;
+                        skipThisSkill = false;
+                        bool found = false;
+                        foreach (RHTile adjTile in act.GetAdjacentTiles())
+                        {
+                            if (adjTile.Character == this || (_travelMap.ContainsKey(adjTile) && _travelMap[adjTile].InRange))
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+
+                    (found ? activeTargets : distantTargets).Add(act);
                     }
+                    else { continue; }
+                }
+                //The skill is not usable, go to the next one
+                if (skipThisSkill) { continue; }
+
+                //First we only care about actors within the travelMap
+                if (activeTargets.Count > 0)
+                {
+                    FindShortestPathToActor(activeTargets, ref _liFoundPath);
                 }
 
-                (found ? activeTargets : distantTargets).Add(act);
+                //If no shortestParth exists, either because there are no targets in the travelMap or there is 
+                //no valid path to them, because you cannot finish on an RHTile, iterate over the distant CombatActors.
+                if (_liFoundPath == null)
+                {
+                    FindShortestPathToActor(distantTargets, ref _liFoundPath);
+                }
+
+                if (_liFoundPath?.Count > 0)
+                {
+                    _liTurnSteps.Add(TurnStepsEnum.Move);
+
+                    RHTile temp = this.BaseTile;
+                    this.SetBaseTile(_liFoundPath[_liFoundPath.Count - 1]);
+                    InRangeForSkill();
+                    this.SetBaseTile(temp);
+                }
+                else
+                {
+                    InRangeForSkill();
+                }
+
+                _liTurnSteps.Add(TurnStepsEnum.EndTurn);
+
+                //After everything is done, clear the TravelManager data
+                TravelManager.ClearParams();
+
+                //If we cannot take an action this turn, try to find an action that we can work on
+                if (_liTurnSteps.Contains(TurnStepsEnum.Act))
+                {
+                    break;
+                }
             }
+        }
 
-            //First we only care about actors within the travelMap
-            if (activeTargets.Count > 0)
-            {
-                FindShortestPathToActor(activeTargets, ref _liFoundPath);
-            }
+        /// <summary>
+        /// Determines whether the chosen action can or should be used on the targetted actor
+        /// </summary>
+        /// <param name="actor"></param>
+        /// <returns></returns>
+        private bool ShouldTryToUseOnActor(CombatActor actor)
+        {
+            bool rv = true;
 
-            //If no shortestParth exists, either because there are no targets in the travelMap or there is 
-            //no valid path to them, because you cannot finish on an RHTile, iterate over the distant CombatActors.
-            if (_liFoundPath == null)
-            {
-                FindShortestPathToActor(distantTargets, ref _liFoundPath);
-            }
+            if (actor.KnockedOut()) { return false; }
+            if (_chosenAction.Heal && actor.CurrentHP > (actor.MaxHP * 0.5)) { return false; }
 
-            if (_liFoundPath?.Count > 0)
-            {
-                _liTurnSteps.Add(TurnStepsEnum.Move);
-
-                RHTile temp = this.BaseTile;
-                this.SetBaseTile(_liFoundPath[_liFoundPath.Count - 1]);
-                InRangeForSkill();
-                this.SetBaseTile(temp);
-            }
-            else
-            {
-                InRangeForSkill();
-            }
-
-            _liTurnSteps.Add(TurnStepsEnum.EndTurn);
-
-            //After everything is done, clear the TravelManager data
-            TravelManager.ClearParams();
+            return rv;
         }
 
         private void InRangeForSkill()
@@ -498,21 +529,6 @@ namespace RiverHollow.Characters
             _liTurnSteps = null;
         }
 
-        private CombatAction GetPreferredAction()
-        {
-            CombatAction rv = null;
-
-            //Get Healing action if appropriate
-            //Get debuff Action if appropriate
-            //Get Buff action if appropriate
-            //Else get Attack action
-            //For now, pick a random action the monster can use that has the Harm property
-            int actionNo = RHRandom.Instance.Next(0, this.GetCurrentSpecials().FindAll(x => x.Harm == true).Count -1);
-            rv = this.GetCurrentSpecials().FindAll(x => x.Harm == true)[actionNo];
-
-            return rv;
-        }
-
         /// <summary>
         /// Given a list of CombatActors, loops through the list, checking to determine if
         /// the path found by the helper method is shorter than the current shortest path.
@@ -526,11 +542,11 @@ namespace RiverHollow.Characters
         {
             foreach (CombatActor act in possibleTargets)
             {
-                List<RHTile> pathToTarget = ChooseTargetTile(act);
-                if (shortestPath == null || pathToTarget?.Count < shortestPath.Count)
+                List<RHTile> testPath = ChooseTargetTile(act);
+                if (shortestPath == null || testPath?.Count < shortestPath.Count || ChooseBetweenEquals(testPath.Count, shortestPath.Count, 50))
                 {
                     _selectedTile = act.BaseTile;
-                    shortestPath = pathToTarget;
+                    shortestPath = testPath;
                     if (shortestPath.Count == 0) { break; }
                 }
             }
@@ -549,36 +565,108 @@ namespace RiverHollow.Characters
             int skillRange = _chosenAction.Range;
 
             //Find the possible potential RHTiles to move to for the use of the skill
-            List<RHTile> potentialTiles = null;
-            switch (_chosenAction.AreaType)
-            {
-                case AreaTypeEnum.Single:
-                    //Need to be directly beside the targetActor
-                    if (skillRange == 1)
-                    {
-                        potentialTiles = FindAdjacentTiles(targetActor);
-                    }
-                    break;
-            }
+            //List<RHTile> potentialTiles = null;
+            //switch (_chosenAction.AreaType)
+            //{
+            //    case AreaTypeEnum.Single:
+            //        //Need to be directly beside the targetActor
 
-            //Todo: Search TravelMap tiles first.
-            foreach (RHTile tile in potentialTiles)
-            {
-                List<RHTile> testPath = null;
-                testPath = FindPath(tile);
+            //        else
+            //        {
 
-                if (testPath != null && (shortestPath == null || testPath.Count < shortestPath.Count))
+            //        }
+            //        break;
+            //}
+
+            if (skillRange == 1)
+            {
+                //Todo: Search TravelMap tiles first.
+                foreach (RHTile tile in FindAdjacentTiles(targetActor))
                 {
-                    if (testPath.Count > _iMaxMove) {
-                        testPath.RemoveRange(_iMaxMove, testPath.Count - _iMaxMove);
-                    }
+                    if(ShortestPathComparison(FindPath(tile), ref shortestPath)) { break; } //If true, we don't move, so don't try to find a shorter path
 
-                    shortestPath = testPath;
-                    if (shortestPath.Count == 0) { break; }
+                    if (shortestPath.Count > _iMaxMove)
+                    {
+                        FindNearbyTravelMapTile(ref shortestPath, _iMaxMove, shortestPath.Count - _iMaxMove);
+                    }
+                }
+            }
+            else
+            {
+                //Only relevant for range skills that target allies such as heals or buffs
+                foreach (RHTile tile in targetActor.GetTileList())
+                {
+                    if (ShortestPathComparison(FindPath(tile), ref shortestPath)) { break; } //If true, we don't move, so don't try to find a shorter path
+
+                    if (shortestPath.Count > skillRange)
+                    {
+                        FindNearbyTravelMapTile(ref shortestPath, shortestPath.Count - skillRange, skillRange);
+                    }
+                    else
+                    {
+                        shortestPath.Clear();
+                    }
                 }
             }
 
             return shortestPath;
+        }
+
+        private bool ShortestPathComparison(List<RHTile> testPath, ref List<RHTile> shortestPath)
+        {
+            bool rv = false;
+            if (testPath != null && (shortestPath == null || testPath.Count < shortestPath.Count || ChooseBetweenEquals(testPath.Count, shortestPath.Count, 50)))
+            {
+                shortestPath = testPath;
+                if (shortestPath.Count == 0) { rv = true; }
+            }
+
+            return rv;
+        }
+
+        private void FindNearbyTravelMapTile(ref List<RHTile> path, int removeAt, int removeCount)
+        {
+            RHTile targetTile = path[path.Count - 1];   //The end tile of the complete shortest path
+            path.RemoveRange(removeAt, removeCount);    //Remove all of the extra tiles beyond the range of the skill
+            RHTile endTile = path[path.Count - 1];
+
+            if (_travelMap.ContainsKey(endTile) && !_travelMap[endTile].InRange)
+            {
+                List<RHTile> shortestPath = new List<RHTile>();
+
+                foreach (KeyValuePair<RHTile, TravelData> kvp in _travelMap)
+                {
+                    Vector2 start = kvp.Key.Position;
+                    List<RHTile> testPath = TravelManager.FindPathToLocation(ref start, targetTile.Position);
+
+                    if(shortestPath == null || testPath.Count < shortestPath.Count)
+                    {
+                        shortestPath = testPath;
+                    }
+                }
+
+                foreach(RHTile t in shortestPath)
+                {
+                    if (_travelMap.ContainsKey(t)) {
+                        path = _travelMap.Backtrack(t);
+                        break;
+                    }
+                    else { continue; }
+                }
+            }
+        }
+
+        /// <summary>
+        /// If the given paths are equal, there is a chance that we will switch to the new one instead
+        /// of sticking to the one we already have.
+        /// </summary>
+        /// <param name="testCount">Length of the path to test</param>
+        /// <param name="shortestCount">Length of the current shortest path</param>
+        /// <param name="percent">The percentage chance to switch</param>
+        /// <returns>True if we should switch</returns>
+        private bool ChooseBetweenEquals(int testCount, int shortestCount, int percent)
+        {
+            return testCount == shortestCount && RHRandom.Instance.Next(0, 100) < percent;
         }
 
         private List<RHTile> FindPath(RHTile tile)
@@ -586,20 +674,16 @@ namespace RiverHollow.Characters
             List<RHTile> rvList = null;
 
             if (_travelMap.ContainsKey(tile)) { rvList = _travelMap.Backtrack(tile); }
-            else { rvList = FindPathToLocation(tile); }
+            else {
+                //Remove the Character occuupying the target tile so it doesn't mess with our pathfinding.
+                CombatActor temp = tile.Character;
+                tile.SetCombatant(null);
+                Vector2 start = BaseTile.Position;
+                rvList = TravelManager.FindPathToLocationClean(ref start, tile.Position, CurrentMapName);
+                tile.SetCombatant(temp);
+            }
 
             return rvList;
-        }
-
-        /// <summary>
-        /// Helper method for Monster to make it cleaner to find the path to the target.
-        /// </summary>
-        /// <param name="targetTile">The RHTile we want to find the path to</param>
-        /// <returns></returns>
-        private List<RHTile> FindPathToLocation(RHTile targetTile)
-        {
-            Vector2 start = BaseTile.Position;
-            return TravelManager.FindPathToLocationClean(ref start, targetTile.Position, CurrentMapName);
         }
 
         /// <summary>

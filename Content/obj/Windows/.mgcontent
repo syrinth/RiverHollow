@@ -190,5 +190,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Schedules/NPC3.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/BigBlob.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/ActionEffects/Heal.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/Bauble.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/MagicMushroom.png</File>
   </SourceFiles>
 </SourceFileCollection>

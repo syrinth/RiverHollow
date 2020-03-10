@@ -20,7 +20,7 @@
     <!--<40> Healer Skills-->
     <Item>
       <Key>40</Key>
-      <Value>[Type:Spell][Animation:Heal-16-49-13-0.1][AnimOffset:0-32][Target:Ally][Range:5][AreaType:Single][Cost:5][Heal:100][Action:UserCast Direct Apply]</Value>
+      <Value>[Type:Spell][Animation:Heal-16-49-13-0.07][AnimOffset:0-32][Target:Ally][Range:5][AreaType:Single][Cost:5][Heal:100][Action:UserCast Direct Apply]</Value>
     </Item>
     <Item>
       <Key>41</Key>
@@ -171,9 +171,19 @@
       <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:1][AreaType:Single][Harm:100][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
+      <!--Leaf Cutter-->
       <Key>301</Key>
       <Value>[Type:Action][Animation:LeafCutter-32-32-3-0.1][Target:Enemy][Icon:0-0][Range:0][AreaType:Single][Harm:100][Action:UserAttack Direct Apply]</Value>
-      <!--Attack-->
+    </Item>
+    <Item>
+      <!--Bauble Cure-->
+      <Key>302</Key>
+      <Value>[Type:Action][Animation:Heal-16-49-13-0.07][AnimOffset:0-32][Target:Ally][Range:5][AreaType:Single][Heal:100][Action:UserCast Direct Apply]</Value>
+    </Item>
+    <Item>
+      <!--Mushroom Lightning-->
+      <Key>303</Key>
+      <Value>[Type:Action][Animation:LightningSprite-94-160-15-0.1][AnimOffset:41-105][Target:Enemy][Range:4][AreaType:Cross][Harm:200][Action:UserCast Direct Apply][Element:Lightning]</Value>
     </Item>
   </Asset>
 </XnaContent>

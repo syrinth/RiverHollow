@@ -907,16 +907,19 @@ namespace RiverHollow.Actors.CombatStuff
                         Sprite.PlayedOnce = false;
                     }
                     CombatManager.CurrentTurnInfo.Acted();
-                    
-                    if (!CombatManager.CheckForEndTurn())
+
+                    if (!CombatManager.CheckForEndOfCombat())
                     {
-                        if (CombatManager.ActiveCharacter.IsMonster() && CombatManager.SelectedAction != null)
+                        if (!CombatManager.CheckForForcedEndOfTurn())
                         {
-                            CombatManager.ChangePhase(CombatManager.CmbtPhaseEnum.ChooseMoveTarget);
-                        }
-                        else if (CombatManager.ActiveCharacter.IsAdventurer())
-                        {
-                            CombatManager.GoToMainSelection();
+                            if (CombatManager.ActiveCharacter.IsMonster() && CombatManager.SelectedAction != null)
+                            {
+                                CombatManager.ChangePhase(CombatManager.CmbtPhaseEnum.ChooseMoveTarget);
+                            }
+                            else if (CombatManager.ActiveCharacter.IsAdventurer())
+                            {
+                                CombatManager.GoToMainSelection();
+                            }
                         }
                     }
 

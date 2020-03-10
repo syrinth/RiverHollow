@@ -61,7 +61,12 @@ namespace RiverHollow.Game_Managers
         static List<CombatActor> _liChargingCharacters;
         #endregion
 
-        public static bool CheckForEndTurn()
+        /// <summary>
+        /// Determine whether the current turn is over because the
+        /// ActiveCharacter has both moved and acted.
+        /// </summary>
+        /// <returns>True is the turn is being forced to end</returns>
+        public static bool CheckForForcedEndOfTurn()
         {
             bool rv = false;
             if(CurrentTurnInfo.HasActed && CurrentTurnInfo.HasMoved)
@@ -226,7 +231,7 @@ namespace RiverHollow.Game_Managers
                         }
                         CurrentTurnInfo.Moved();
 
-                        if (!CheckForEndTurn())
+                        if (!CheckForForcedEndOfTurn())
                         {
                             if (ActiveCharacter.IsAdventurer())
                             {
@@ -352,7 +357,7 @@ namespace RiverHollow.Game_Managers
         /// Called at the End of a Turn to see if the combat has been won or lost.
         /// </summary>
         /// <returns>True is combat is ending</returns>
-        private static bool EndOfTurnCheckForEndOfCombat()
+        public static bool CheckForEndOfCombat()
         {
             bool rv = false;
 
@@ -391,6 +396,13 @@ namespace RiverHollow.Game_Managers
             Unpause();
             PlayerManager.AllowMovement = true;
             foreach (Item it in _liDroppedItems) { it.AutoPickup = true; }
+
+            foreach (ClassedCombatant c in Party.FindAll(x => x != PlayerManager.World))
+            {
+                MapManager.Maps[c.CurrentMapName].RemoveCharacter(c);
+                c.Activate(false);
+                MapManager.CurrentMap.RemoveCharacter(c);
+            }
 
             GoToWorldMap();
         }
@@ -926,32 +938,29 @@ namespace RiverHollow.Game_Managers
             Summon activeSummon = ActiveCharacter.LinkedSummon;
             //If there is no linked summon, or it is a summon, end the turn normally.
 
-            if (!EndOfTurnCheckForEndOfCombat())
+            if (activeSummon != null)
             {
-                if (activeSummon != null)
+                if (activeSummon.Aggressive)// && SelectedAction.IsMelee())
                 {
-                    if (activeSummon.Aggressive)// && SelectedAction.IsMelee())
-                    {
-                        //List<RHTile> targets = SelectedAction.GetTargetTiles();
-                        //ActiveCharacter = activeSummon;
-                        //SelectedAction = DataManager.GetActionByIndex(CombatManager.BASIC_ATTACK);
-                        //SelectedAction.AssignUser(ActiveCharacter);
-                        //SelectedAction.SetTargetTiles(targets);
-                    }
-                    else if (activeSummon.TwinCast && SelectedAction.IsSpell() && !SelectedAction.IsSummonSpell() && SelectedAction.Potency > 0)
-                    {
-                        ActiveCharacter = activeSummon;
-                        SelectedAction.AssignUser(activeSummon);
-                    }
-                    else
-                    {
-                        TurnOver();
-                    }
+                    //List<RHTile> targets = SelectedAction.GetTargetTiles();
+                    //ActiveCharacter = activeSummon;
+                    //SelectedAction = DataManager.GetActionByIndex(CombatManager.BASIC_ATTACK);
+                    //SelectedAction.AssignUser(ActiveCharacter);
+                    //SelectedAction.SetTargetTiles(targets);
+                }
+                else if (activeSummon.TwinCast && SelectedAction.IsSpell() && !SelectedAction.IsSummonSpell() && SelectedAction.Potency > 0)
+                {
+                    ActiveCharacter = activeSummon;
+                    SelectedAction.AssignUser(activeSummon);
                 }
                 else
                 {
                     TurnOver();
                 }
+            }
+            else
+            {
+                TurnOver();
             }
         }
 

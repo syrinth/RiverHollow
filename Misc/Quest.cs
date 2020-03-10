@@ -235,7 +235,7 @@ namespace RiverHollow.Misc
             return rv;
         }
 
-        public void SpawnMobs()
+        public void SpawnQuestMobs()
         {
             if (_spawnMob != null)
             {

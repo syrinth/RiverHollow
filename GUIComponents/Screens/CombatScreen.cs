@@ -136,7 +136,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             switch (CombatManager.CurrentPhase)
             {
                 case CombatManager.CmbtPhaseEnum.MainSelection:
-                    rv = _gActionSelect.ProcessLeftButtonClick(mouse);
+                    if (_gActionSelect != null)
+                    {
+                        rv = _gActionSelect.ProcessLeftButtonClick(mouse);
+                    }
                     break;
 
                 case CombatManager.CmbtPhaseEnum.ChooseMoveTarget:
@@ -599,6 +602,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         {
                             if (a.IsEndTurn())
                             {
+                                if (CombatManager.ActiveCharacter.CurrentCharge == 100)
+                                {
+                                    CombatManager.ActiveCharacter.CurrentCharge -= 30;
+                                }
                                 CombatManager.EndTurn();
                             }
                             else if (a.IsMove())
