@@ -456,17 +456,23 @@ namespace RiverHollow.Characters
                 //The skill is not usable, go to the next one
                 if (skipThisSkill) { continue; }
 
+                CombatPathingInfo pathingInfo = null;
                 //First we only care about actors within the travelMap
                 if (activeTargets.Count > 0)
                 {
-                    FindShortestPathToActor(activeTargets, ref _liFoundPath);
+                    FindShortestPathToActor(activeTargets, ref pathingInfo);
                 }
 
                 //If no shortestParth exists, either because there are no targets in the travelMap or there is 
                 //no valid path to them, because you cannot finish on an RHTile, iterate over the distant CombatActors.
-                if (_liFoundPath == null)
+                if (pathingInfo == null)
                 {
-                    FindShortestPathToActor(distantTargets, ref _liFoundPath);
+                    FindShortestPathToActor(distantTargets, ref pathingInfo);
+                }
+
+                if(pathingInfo != null)
+                {
+                    _liFoundPath = pathingInfo.ActualPath;
                 }
 
                 if (_liFoundPath?.Count > 0)
@@ -538,23 +544,17 @@ namespace RiverHollow.Characters
         /// <param name="possibleTargets">List of targets to loop through</param>
         /// <param name="preferredAction">The action we want to use, pass to the helper</param>
         /// <param name="shortestPath">A reference to a list of RHTiles which will be the shortest path.</param>
-        private void FindShortestPathToActor(List<CombatActor> possibleTargets, ref List<RHTile> shortestPath)
+        private void FindShortestPathToActor(List<CombatActor> possibleTargets, ref CombatPathingInfo shortestPath)
         {
             foreach (CombatActor act in possibleTargets)
             {
-                List<RHTile> testPath = ChooseTargetTile(act);
-                if (shortestPath == null || testPath?.Count < shortestPath.Count || ChooseBetweenEquals(testPath.Count, shortestPath.Count, 50))
+                CombatPathingInfo testInfo = ChooseTargetTile(act);
+                if (shortestPath == null || (testInfo != null && (testInfo.Count() < shortestPath.Count() || ChooseBetweenEquals(testInfo.Count(), shortestPath.Count(), 50))))
                 {
                     _selectedTile = act.BaseTile;
-                    shortestPath = testPath;
-                    if (shortestPath.Count == 0) { break; }
+                    shortestPath = testInfo;
+                    if (shortestPath.Count() == 0) { break; }
                 }
-            }
-
-            //All moves in the shortestPath have been vetted against the TravelMap
-            if(shortestPath.Count > MaxMove)
-            {
-                shortestPath.RemoveRange(MaxMove, shortestPath.Count - MaxMove);
             }
         }
 
@@ -565,18 +565,17 @@ namespace RiverHollow.Characters
         /// <param name="targetActor"></param>
         /// <param name="preferredAction"></param>
         /// <returns></returns>
-        private List<RHTile> ChooseTargetTile(CombatActor targetActor)
+        private CombatPathingInfo ChooseTargetTile(CombatActor targetActor)
         {
-            List<RHTile> shortestPath = null;
+            CombatPathingInfo pathInfo = new CombatPathingInfo();
             int skillRange = _chosenAction.Range;
 
             if (skillRange == 1)
             {
                 foreach (RHTile tile in FindAdjacentTiles(targetActor))
                 {
-                    if (ShortestPathComparison(FindPath(tile), ref shortestPath))
+                    if (ShortestPathComparison(FindPath(tile), ref pathInfo))
                     {
-                        shortestPath = new List<RHTile>();
                         break;
                     }
                 }
@@ -589,25 +588,21 @@ namespace RiverHollow.Characters
                     //If we are in range of the mob, don't bother trying to move
                     if (!AlreadyInRange(tile, skillRange))
                     {
-                        ShortestPathComparison(FindPath(tile), ref shortestPath);
+                        ShortestPathComparison(FindPath(tile), ref pathInfo);
 
                         //We are moving, but now we want to make sure we will only move as far as we need to in order to use the skill.
-                        RHTile lastTile = shortestPath[shortestPath.Count - 1];
+                        RHTile lastTile = pathInfo.ActualPath[pathInfo.ActualPath.Count - 1];
                         while (Util.GetRHTileDelta(lastTile, tile) < skillRange)
                         {
-                            shortestPath = TravelManager.FindPathViaTravelMap(lastTile, _travelMap);
-                            lastTile = shortestPath[shortestPath.Count - 1];
+                            pathInfo = TravelManager.FindPathViaTravelMap(lastTile, _travelMap);
+                            lastTile = pathInfo.ActualPath[pathInfo.ActualPath.Count - 1];
                         }
                     }
-                    else {
-                        //Make a new List to show that calculations have been done
-                        shortestPath = new List<RHTile>();
-                        break;
-                    }
+                    else { break; }
                 }
             }
 
-            return shortestPath;
+            return pathInfo;
         }
 
         /// <summary>
@@ -632,13 +627,13 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        private bool ShortestPathComparison(List<RHTile> testPath, ref List<RHTile> shortestPath)
+        private bool ShortestPathComparison(CombatPathingInfo testInfo, ref CombatPathingInfo pathingInfo)
         {
             bool rv = false;
-            if (testPath != null && (shortestPath == null || testPath.Count < shortestPath.Count || ChooseBetweenEquals(testPath.Count, shortestPath.Count, 50)))
+            if (testInfo != null && (pathingInfo.WholePath == null || testInfo.Count() < pathingInfo.Count() || ChooseBetweenEquals(testInfo.Count(), pathingInfo.Count(), 50)))
             {
-                shortestPath = testPath;
-                if(shortestPath.Count == 0) {rv = true; }
+                pathingInfo = testInfo;
+                if(pathingInfo.Count() == 0) {rv = true; }
             }
             return rv;
         }
@@ -688,14 +683,18 @@ namespace RiverHollow.Characters
             return testCount == shortestCount && RHRandom.Instance.Next(0, 100) < percent;
         }
 
-        private List<RHTile> FindPath(RHTile tile)
+        private CombatPathingInfo FindPath(RHTile tile)
         {
-            List<RHTile> rvList = null;
+            CombatPathingInfo pathingInfo = new CombatPathingInfo();
 
-            if (_travelMap.ContainsKey(tile)) { rvList = _travelMap.Backtrack(tile); }
-            else { rvList = TravelManager.FindPathViaTravelMap(tile, _travelMap); }
+            if (_travelMap.ContainsKey(tile)) {
+                List<RHTile> temp = _travelMap.Backtrack(tile);
+                pathingInfo.WholePath = temp;
+                pathingInfo.ActualPath = temp;
+            }
+            else { pathingInfo = TravelManager.FindPathViaTravelMap(tile, _travelMap); }
 
-            return rvList;
+            return pathingInfo;
         }
 
         /// <summary>

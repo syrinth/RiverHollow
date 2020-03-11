@@ -77,7 +77,7 @@ namespace RiverHollow.Game_Managers
         //}
 
         #region Pathfinding
-        const int slowCost = 100;
+        const int DEFAULT_COST = 100;
         static Dictionary<string, List<RHTile>> _diMapPathing;
         #endregion
 
@@ -366,13 +366,15 @@ namespace RiverHollow.Game_Managers
         /// <summary>
         /// Given a start location and a previous calculated TravelMap, find the shortest
         /// path to a tile that is within the range of the TravelMap.
+        /// 
+        /// This method also gets called to determine the nearest 
         /// </summary>
         /// <param name="startTile">The RHTile to start from</param>
         /// <param name="map">The TravelMap to crawl towards</param>
-        /// <returns>A list of RHTiles</returns>
-        public static List<RHTile> FindPathViaTravelMap(RHTile startTile, TravelMap map)
+        /// <returns>A class containing both the whole path and the path to move on</returns>
+        public static CombatPathingInfo FindPathViaTravelMap(RHTile startTile, TravelMap map)
         {
-            List<RHTile> rvList = new List<RHTile>();
+            CombatPathingInfo pathingInfo = new CombatPathingInfo();
 
             RHTile goalNode = map.BaseTile;
             var frontier = new PriorityQueue<RHTile>();
@@ -389,13 +391,7 @@ namespace RiverHollow.Game_Managers
                 //Then we return that tile's path
                 if (current != startTile && map.CanEndTurnHere(current))
                 {
-                    rvList = map.Backtrack(current);        //Gets the backtrace from the travelmap to the found tile
-                    rvList.Remove(current);                 //Remove the current tile to avoid dupes
-
-                    List<RHTile> pathToMap = travelMap.Backtrack(current);  //Backtrace the just found path
-                    pathToMap.Reverse();                                    //Reverse the path to the map so that it goes from the map to the target
-                    rvList.AddRange(pathToMap);                         //Add the path to the map to the whole path
-                    
+                    pathingInfo.AssignPaths(current, travelMap.Backtrack(current), map.Backtrack(current));
                     break;
                 }
 
@@ -410,6 +406,9 @@ namespace RiverHollow.Game_Managers
                         if (!travelMap.ContainsKey(next) || newCost < travelMap[next].CostSoFar)
                         {
                             double priority = newCost + Heuristic(next, goalNode);
+                            if(!TestTileForSize(next, true)) {
+                                priority += GetMovementCost(next) * 2;  //Discourages use of occupied tiles but does not stop them from being used
+                            }
                             frontier.Enqueue(next, priority);
                             travelMap.Store(next, current, newCost);
                         }
@@ -417,7 +416,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            return rvList;
+            return pathingInfo;
         }
 
         /// <summary>
@@ -486,7 +485,7 @@ namespace RiverHollow.Game_Managers
             List<RHTile> futureTiles = a.GetWalkableNeighbours();
             int wallBuffer = CombatManager.InCombat ? 0 : ((futureTiles.Count < 4) ? 10 : 0);
 
-            int multiplier = (a.IsRoad ? 1 : slowCost);
+            int multiplier = GetMovementCost(a);
 
             total = (distance + wallBuffer) * multiplier;
             return total;
@@ -495,13 +494,18 @@ namespace RiverHollow.Game_Managers
         //Returns how much it costs to enter the next square
         private static int GetMovementCost(RHTile target)
         {
+            return target.IsRoad ? 1 : GetDefaultCost();
+        }
+
+        private static int GetDefaultCost()
+        {
             if (CombatManager.InCombat && _actTraveller?.CurrentMapName == MapManager.CurrentMap.Name)
             {
                 return 1;
             }
             else
             {
-                return target.IsRoad ? 1 : slowCost;
+                return DEFAULT_COST;
             }
         }
 
@@ -565,40 +569,28 @@ namespace RiverHollow.Game_Managers
             public double CostSoFar;
             public bool InRange;
         }
+
+        public class CombatPathingInfo
+        {
+            public List<RHTile> WholePath;
+            public List<RHTile> ActualPath;
+
+            public void AssignPaths(RHTile foundTile, List<RHTile> pathToMap, List<RHTile> mapPath)
+            {
+                WholePath = new List<RHTile>();
+                ActualPath = mapPath;                    //Gets the backtrace from the travelmap to the found tile
+
+                WholePath.AddRange(mapPath);                //Add the TravelMap path to the whole path     
+                WholePath.Remove(foundTile);            //Remove the current tile to avoid dupes
+                pathToMap.Reverse();                        //Reverse the path to the map so that it goes from the map to the target
+                WholePath.AddRange(pathToMap);              //Add the path to the map to the whole path
+            }
+
+            public int Count()
+            {
+                return WholePath.Count;
+            }
+        }
         #endregion
     }
-
-
-    //Saving for later, in case it becomes useful
-    ////Manually iterate through the RHTiles of the CombatActor to Enqueue the neighbouring
-    ////RHTiles as well as determine which RHTiles inside of the CombatActor we can move to
-    //RHTile lastTile = actor.BaseTile;
-    //for (int y = 0; y < actor.Size; y++)
-    //{
-    //    for (int x = 0; x < actor.Size; x++)
-    //    {
-    //        //Skip the BaseTile and any RHTile inside our bounds that we cannot shuffle to
-    //        if (x != 0 || y != 0 && TestTileForSize(lastTile, true))
-    //        {
-    //            DirectionEnum dir = (x == 0) ? DirectionEnum.Up : DirectionEnum.Left;
-    //            travelMap[lastTile].KeyTile = lastTile;
-    //            travelMap[lastTile].CameFrom = lastTile.GetTileByDirection(dir);
-    //            travelMap[lastTile].CostSoFar = 0;
-    //            travelMap[lastTile].InRange = true;
-    //        }
-
-    //        //Try to Queue all adjacent RHTiles unless they contain the actor
-    //        foreach (RHTile t in lastTile.GetAdjacentTiles())
-    //        {
-    //            if (t.Character != actor)
-    //            {
-    //                QueueForRange(t, lastTile, 1, ref frontier, ref travelMap, movementParams);
-    //            }
-    //        }
-
-    //        lastTile = lastTile.GetTileByDirection(DirectionEnum.Right);
-    //    }
-
-    //    lastTile = actor.GetTileAt(y, 0).GetTileByDirection(DirectionEnum.Down);
-    //}
 }
