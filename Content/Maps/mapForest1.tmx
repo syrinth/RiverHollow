@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="27" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="39">
  <properties>
-  <property name="ActiveSpawn" type="int" value="3"/>
+  <property name="ActiveSpawn" type="int" value="2"/>
   <property name="Combat" type="bool" value="true"/>
  </properties>
  <tileset firstgid="1" source="tilesetManorGrounds.tsx"/>
@@ -72,17 +72,7 @@
 </data>
  </layer>
  <objectgroup id="5" name="MapObject">
-  <object id="3" name="SpawnPoint" x="290.5" y="193" width="10" height="8.5">
-   <properties>
-    <property name="SpawnType" value="Forest"/>
-   </properties>
-  </object>
   <object id="4" name="SpawnPoint" x="194.333" y="100.917" width="10" height="8.5">
-   <properties>
-    <property name="SpawnType" value="Forest"/>
-   </properties>
-  </object>
-  <object id="5" name="SpawnPoint" x="305.667" y="148.917" width="10" height="8.5">
    <properties>
     <property name="SpawnType" value="Forest"/>
    </properties>

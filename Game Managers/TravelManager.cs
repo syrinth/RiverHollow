@@ -262,7 +262,7 @@ namespace RiverHollow.Game_Managers
             RHMap map = MapManager.Maps[(mapName ?? MapManager.CurrentMap.Name).Split(':')[0]];
             RHTile startTile = map.GetTileByPixelPosition(start.ToPoint());
             RHTile goalNode = map.GetTileByPixelPosition(target.ToPoint());
-            var travelMap = new TravelMap();
+            var travelMap = new TravelMap(startTile);
             var frontier = new PriorityQueue<RHTile>();
 
             frontier.Enqueue(startTile, 0);
@@ -327,7 +327,7 @@ namespace RiverHollow.Game_Managers
         /// <returns></returns>
         public static TravelMap FindRangeOfAction(CombatActor actor, int range, bool movementParams)
         {
-            TravelMap travelMap = new TravelMap();
+            TravelMap travelMap = new TravelMap(actor.BaseTile);
             var frontier = new PriorityQueue<RHTile>();
        
             travelMap.Store(actor.BaseTile, actor.BaseTile, 0);
@@ -361,6 +361,63 @@ namespace RiverHollow.Game_Managers
             }
 
             return travelMap;
+        }
+
+        /// <summary>
+        /// Given a start location and a previous calculated TravelMap, find the shortest
+        /// path to a tile that is within the range of the TravelMap.
+        /// </summary>
+        /// <param name="startTile">The RHTile to start from</param>
+        /// <param name="map">The TravelMap to crawl towards</param>
+        /// <returns>A list of RHTiles</returns>
+        public static List<RHTile> FindPathViaTravelMap(RHTile startTile, TravelMap map)
+        {
+            List<RHTile> rvList = new List<RHTile>();
+
+            RHTile goalNode = map.BaseTile;
+            var frontier = new PriorityQueue<RHTile>();
+            var travelMap = new TravelMap(startTile);
+
+            frontier.Enqueue(startTile, 0);
+            travelMap.Store(startTile, startTile, 0);
+
+            while (frontier.Count > 0)
+            {
+                var current = frontier.Dequeue();
+
+                //We keep looping until we find the first RHTile that is in the given TravelMap.
+                //Then we return that tile's path
+                if (current != startTile && map.CanEndTurnHere(current))
+                {
+                    rvList = map.Backtrack(current);        //Gets the backtrace from the travelmap to the found tile
+                    rvList.Remove(current);                 //Remove the current tile to avoid dupes
+
+                    List<RHTile> pathToMap = travelMap.Backtrack(current);  //Backtrace the just found path
+                    pathToMap.Reverse();                                    //Reverse the path to the map so that it goes from the map to the target
+                    rvList.AddRange(pathToMap);                         //Add the path to the map to the whole path
+                    
+                    break;
+                }
+
+                //Iterate over every tile in the accessible neighbours and, with it as the
+                //prospective new BaseTile, confirm that neighbouring tiles are all valid
+                foreach (var next in current.GetWalkableNeighbours())
+                {
+                    if (TestTileForSize(next))
+                    {
+                        double newCost = travelMap[current].CostSoFar + GetMovementCost(next);
+
+                        if (!travelMap.ContainsKey(next) || newCost < travelMap[next].CostSoFar)
+                        {
+                            double priority = newCost + Heuristic(next, goalNode);
+                            frontier.Enqueue(next, priority);
+                            travelMap.Store(next, current, newCost);
+                        }
+                    }
+                }
+            }
+
+            return rvList;
         }
 
         /// <summary>
@@ -463,6 +520,14 @@ namespace RiverHollow.Game_Managers
 
         public class TravelMap : Dictionary<RHTile, TravelData>
         {
+            private RHTile _baseTile;
+            public RHTile BaseTile => _baseTile;
+
+            public TravelMap(RHTile startTile) : base()
+            {
+                _baseTile = startTile;
+            }
+
             public List<RHTile> Backtrack(RHTile endTile)
             {
                 RHTile current = endTile;
@@ -486,6 +551,11 @@ namespace RiverHollow.Game_Managers
                     CameFrom = from,
                     CostSoFar = cost
                 };
+            }
+
+            public bool CanEndTurnHere(RHTile tile)
+            {
+                return this.ContainsKey(tile) && this[tile].InRange;
             }
         }
 

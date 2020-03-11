@@ -442,7 +442,7 @@ namespace RiverHollow.Characters
                         bool found = false;
                         foreach (RHTile adjTile in act.GetAdjacentTiles())
                         {
-                            if (adjTile.Character == this || (_travelMap.ContainsKey(adjTile) && _travelMap[adjTile].InRange))
+                            if (adjTile.Character == this || _travelMap.CanEndTurnHere(adjTile))
                             {
                                 found = true;
                                 break;
@@ -550,6 +550,12 @@ namespace RiverHollow.Characters
                     if (shortestPath.Count == 0) { break; }
                 }
             }
+
+            //All moves in the shortestPath have been vetted against the TravelMap
+            if(shortestPath.Count > MaxMove)
+            {
+                shortestPath.RemoveRange(MaxMove, shortestPath.Count - MaxMove);
+            }
         }
 
         /// <summary>
@@ -564,52 +570,66 @@ namespace RiverHollow.Characters
             List<RHTile> shortestPath = null;
             int skillRange = _chosenAction.Range;
 
-            //Find the possible potential RHTiles to move to for the use of the skill
-            //List<RHTile> potentialTiles = null;
-            //switch (_chosenAction.AreaType)
-            //{
-            //    case AreaTypeEnum.Single:
-            //        //Need to be directly beside the targetActor
-
-            //        else
-            //        {
-
-            //        }
-            //        break;
-            //}
-
             if (skillRange == 1)
             {
-                //Todo: Search TravelMap tiles first.
                 foreach (RHTile tile in FindAdjacentTiles(targetActor))
                 {
-                    if(ShortestPathComparison(FindPath(tile), ref shortestPath)) { break; } //If true, we don't move, so don't try to find a shorter path
-
-                    if (shortestPath.Count > _iMaxMove)
+                    if (ShortestPathComparison(FindPath(tile), ref shortestPath))
                     {
-                        FindNearbyTravelMapTile(ref shortestPath, _iMaxMove, shortestPath.Count - _iMaxMove);
+                        shortestPath = new List<RHTile>();
+                        break;
                     }
                 }
             }
             else
             {
-                //Only relevant for range skills that target allies such as heals or buffs
+                //Only need to loop due to ranged skills that target allies such as heals or buffs
                 foreach (RHTile tile in targetActor.GetTileList())
                 {
-                    if (ShortestPathComparison(FindPath(tile), ref shortestPath)) { break; } //If true, we don't move, so don't try to find a shorter path
+                    //If we are in range of the mob, don't bother trying to move
+                    if (!AlreadyInRange(tile, skillRange))
+                    {
+                        ShortestPathComparison(FindPath(tile), ref shortestPath);
 
-                    if (shortestPath.Count > skillRange)
-                    {
-                        FindNearbyTravelMapTile(ref shortestPath, shortestPath.Count - skillRange, skillRange);
+                        //We are moving, but now we want to make sure we will only move as far as we need to in order to use the skill.
+                        RHTile lastTile = shortestPath[shortestPath.Count - 1];
+                        while (Util.GetRHTileDelta(lastTile, tile) < skillRange)
+                        {
+                            shortestPath = TravelManager.FindPathViaTravelMap(lastTile, _travelMap);
+                            lastTile = shortestPath[shortestPath.Count - 1];
+                        }
                     }
-                    else
-                    {
-                        shortestPath.Clear();
+                    else {
+                        //Make a new List to show that calculations have been done
+                        shortestPath = new List<RHTile>();
+                        break;
                     }
                 }
             }
 
             return shortestPath;
+        }
+
+        /// <summary>
+        /// Determines whether the indicated tile is within range of the monster.
+        /// This takes into account that the monster's entire tile list is used
+        /// as an origin point for the skill range.
+        /// </summary>
+        /// <param name="targetTile">The Tile to check the delta of</param>
+        /// <param name="skillRange">Range of the skill</param>
+        /// <returns>True if there is at least one RHTile within the monster in rangeo f the target</returns>
+        private bool AlreadyInRange(RHTile targetTile, int skillRange)
+        {
+            bool rv = false;
+            foreach (RHTile t in this.GetTileList())
+            {
+                if (Util.GetRHTileDelta(t, targetTile) <= skillRange)
+                {
+                    rv = true;
+                }
+            }
+
+            return rv;
         }
 
         private bool ShortestPathComparison(List<RHTile> testPath, ref List<RHTile> shortestPath)
@@ -618,9 +638,8 @@ namespace RiverHollow.Characters
             if (testPath != null && (shortestPath == null || testPath.Count < shortestPath.Count || ChooseBetweenEquals(testPath.Count, shortestPath.Count, 50)))
             {
                 shortestPath = testPath;
-                if (shortestPath.Count == 0) { rv = true; }
+                if(shortestPath.Count == 0) {rv = true; }
             }
-
             return rv;
         }
 
@@ -674,14 +693,7 @@ namespace RiverHollow.Characters
             List<RHTile> rvList = null;
 
             if (_travelMap.ContainsKey(tile)) { rvList = _travelMap.Backtrack(tile); }
-            else {
-                //Remove the Character occuupying the target tile so it doesn't mess with our pathfinding.
-                CombatActor temp = tile.Character;
-                tile.SetCombatant(null);
-                Vector2 start = BaseTile.Position;
-                rvList = TravelManager.FindPathToLocationClean(ref start, tile.Position, CurrentMapName);
-                tile.SetCombatant(temp);
-            }
+            else { rvList = TravelManager.FindPathViaTravelMap(tile, _travelMap); }
 
             return rvList;
         }
