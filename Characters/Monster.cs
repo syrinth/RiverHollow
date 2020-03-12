@@ -17,6 +17,11 @@ namespace RiverHollow.Characters
     public class Monster : CombatActor
     {
         #region Properties
+        #region Traits
+        enum TraitEnum { Coward };
+        bool _bCoward;
+        #endregion
+
         int _iMaxMove = 5;
         public int MaxMove => _iMaxMove;
         int _id;
@@ -116,7 +121,7 @@ namespace RiverHollow.Characters
 
             if (data.ContainsKey("Trait"))
             {
-                HandleTrait(DataManager.GetMonsterTraitData(data["Trait"]));
+                HandleTrait(data["Trait"]);
             }
 
             if (data.ContainsKey("Resist"))
@@ -200,45 +205,53 @@ namespace RiverHollow.Characters
             string[] traits = Util.FindTags(traitData);
             foreach (string s in traits)
             {
-                string[] tagType = s.Split(':');
-                if (tagType[0].Equals(Util.GetEnumString(StatEnum.Str)))
+                TraitEnum trait = Util.ParseEnum<TraitEnum>(s);
+
+                switch (trait)
                 {
-                    ApplyTrait(ref _iStrength, tagType[1]);
-                }
-                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Def)))
-                {
-                    ApplyTrait(ref _iDefense, tagType[1]);
-                }
-                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Vit)))
-                {
-                    ApplyTrait(ref _iVitality, tagType[1]);
-                }
-                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Mag)))
-                {
-                    ApplyTrait(ref _iMagic, tagType[1]);
-                }
-                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Res)))
-                {
-                    ApplyTrait(ref _iResistance, tagType[1]);
-                }
-                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Spd)))
-                {
-                    ApplyTrait(ref _iSpeed, tagType[1]);
+                    case TraitEnum.Coward:
+                        _bCoward = true;
+                        break;
+                    default:
+                        //DataManager.GetMonsterTraitData(data["Trait"])
+                        //string[] tagType = s.Split(':');
+                        //if (tagType[0].Equals(Util.GetEnumString(StatEnum.Str)))
+                        //{
+                        //    ApplyTrait(ref _iStrength, tagType[1]);
+                        //}
+                        //else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Def)))
+                        //{
+                        //    ApplyTrait(ref _iDefense, tagType[1]);
+                        //}
+                        //else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Vit)))
+                        //{
+                        //    ApplyTrait(ref _iVitality, tagType[1]);
+                        //}
+                        //else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Mag)))
+                        //{
+                        //    ApplyTrait(ref _iMagic, tagType[1]);
+                        //}
+                        //else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Res)))
+                        //{
+                        //    ApplyTrait(ref _iResistance, tagType[1]);
+                        //}
+                        //else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Spd)))
+                            break;
                 }
             }
         }
 
-        private void ApplyTrait(ref int value, string data)
-        {
-            if (data.Equals("+"))
-            {
-                value = (int)(value * 1.1);
-            }
-            else if (data.Equals("-"))
-            {
-                value = (int)(value * 0.9);
-            }
-        }
+        //private void ApplyTrait(ref int value, string data)
+        //{
+        //    if (data.Equals("+"))
+        //    {
+        //        value = (int)(value * 1.1);
+        //    }
+        //    else if (data.Equals("-"))
+        //    {
+        //        value = (int)(value * 0.9);
+        //    }
+        //}
 
         private void UpdateMovement(GameTime gTime)
         {
@@ -456,7 +469,7 @@ namespace RiverHollow.Characters
                 //The skill is not usable, go to the next one
                 if (skipThisSkill) { continue; }
 
-                CombatPathingInfo pathingInfo = null;
+                PathInfo pathingInfo = null;
                 //First we only care about actors within the travelMap
                 if (activeTargets.Count > 0)
                 {
@@ -481,12 +494,41 @@ namespace RiverHollow.Characters
 
                     RHTile temp = this.BaseTile;
                     this.SetBaseTile(_liFoundPath[_liFoundPath.Count - 1]);
-                    InRangeForSkill();
+                    if (InRangeForSkill(_selectedTile, _chosenAction.Range))
+                    {
+                        _liTurnSteps.Add(TurnStepsEnum.Act);
+                        _chosenAction.AssignTargetTile(_selectedTile);
+                    }
                     this.SetBaseTile(temp);
                 }
                 else
                 {
-                    InRangeForSkill();
+                    if (InRangeForSkill(_selectedTile, _chosenAction.Range))
+                    {
+                        _liTurnSteps.Add(TurnStepsEnum.Act);
+                        _chosenAction.AssignTargetTile(_selectedTile);
+
+                        if (_bCoward)
+                        {
+                            bool run = false;
+                            List<RHTile> partyTiles = new List<RHTile>();
+                            foreach (CombatActor act in CombatManager.Party.FindAll(x => !x.KnockedOut())) {
+                                foreach (RHTile t in GetTileList())
+                                {
+                                    if (Util.GetRHTileDelta(t, act.BaseTile) <= 3)
+                                    {
+                                        run = true;
+                                    }
+                                }
+                                partyTiles.Add(act.BaseTile);
+                            }
+                            if (run)
+                            {
+                                _liFoundPath = TravelManager.FindPathAway(BaseTile, _travelMap, partyTiles);
+                                if(_liTurnSteps.Count > 0) { _liTurnSteps.Add(TurnStepsEnum.Move); }
+                            }
+                        }
+                    }
                 }
 
                 _liTurnSteps.Add(TurnStepsEnum.EndTurn);
@@ -517,19 +559,6 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        private void InRangeForSkill()
-        {
-            foreach (RHTile t in this.GetTileList())
-            {
-                if (Util.GetRHTileDelta(t, _selectedTile) <= _chosenAction.Range)
-                {
-                    _liTurnSteps.Add(TurnStepsEnum.Act);
-                    _chosenAction.AssignTargetTile(_selectedTile);
-                    break;
-                }
-            }
-        }
-
         public override void EndTurn()
         {
             _liTurnSteps = null;
@@ -544,11 +573,11 @@ namespace RiverHollow.Characters
         /// <param name="possibleTargets">List of targets to loop through</param>
         /// <param name="preferredAction">The action we want to use, pass to the helper</param>
         /// <param name="shortestPath">A reference to a list of RHTiles which will be the shortest path.</param>
-        private void FindShortestPathToActor(List<CombatActor> possibleTargets, ref CombatPathingInfo shortestPath)
+        private void FindShortestPathToActor(List<CombatActor> possibleTargets, ref PathInfo shortestPath)
         {
             foreach (CombatActor act in possibleTargets)
             {
-                CombatPathingInfo testInfo = ChooseTargetTile(act);
+                PathInfo testInfo = ChooseTargetTile(act);
                 if (shortestPath == null || (testInfo != null && (testInfo.Count() < shortestPath.Count() || ChooseBetweenEquals(testInfo.Count(), shortestPath.Count(), 50))))
                 {
                     _selectedTile = act.BaseTile;
@@ -565,9 +594,9 @@ namespace RiverHollow.Characters
         /// <param name="targetActor"></param>
         /// <param name="preferredAction"></param>
         /// <returns></returns>
-        private CombatPathingInfo ChooseTargetTile(CombatActor targetActor)
+        private PathInfo ChooseTargetTile(CombatActor targetActor)
         {
-            CombatPathingInfo pathInfo = new CombatPathingInfo();
+            PathInfo pathInfo = new PathInfo();
             int skillRange = _chosenAction.Range;
 
             if (skillRange == 1)
@@ -576,6 +605,7 @@ namespace RiverHollow.Characters
                 {
                     if (ShortestPathComparison(FindPath(tile), ref pathInfo))
                     {
+                        pathInfo.Clean();
                         break;
                     }
                 }
@@ -586,7 +616,7 @@ namespace RiverHollow.Characters
                 foreach (RHTile tile in targetActor.GetTileList())
                 {
                     //If we are in range of the mob, don't bother trying to move
-                    if (!AlreadyInRange(tile, skillRange))
+                    if (!InRangeForSkill(tile, skillRange))
                     {
                         ShortestPathComparison(FindPath(tile), ref pathInfo);
 
@@ -598,7 +628,11 @@ namespace RiverHollow.Characters
                             lastTile = pathInfo.ActualPath[pathInfo.ActualPath.Count - 1];
                         }
                     }
-                    else { break; }
+                    else
+                    {
+                        pathInfo.Clean();
+                        break;
+                    }
                 }
             }
 
@@ -613,7 +647,7 @@ namespace RiverHollow.Characters
         /// <param name="targetTile">The Tile to check the delta of</param>
         /// <param name="skillRange">Range of the skill</param>
         /// <returns>True if there is at least one RHTile within the monster in rangeo f the target</returns>
-        private bool AlreadyInRange(RHTile targetTile, int skillRange)
+        private bool InRangeForSkill(RHTile targetTile, int skillRange)
         {
             bool rv = false;
             foreach (RHTile t in this.GetTileList())
@@ -627,7 +661,7 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        private bool ShortestPathComparison(CombatPathingInfo testInfo, ref CombatPathingInfo pathingInfo)
+        private bool ShortestPathComparison(PathInfo testInfo, ref PathInfo pathingInfo)
         {
             bool rv = false;
             if (testInfo != null && (pathingInfo.WholePath == null || testInfo.Count() < pathingInfo.Count() || ChooseBetweenEquals(testInfo.Count(), pathingInfo.Count(), 50)))
@@ -683,9 +717,9 @@ namespace RiverHollow.Characters
             return testCount == shortestCount && RHRandom.Instance.Next(0, 100) < percent;
         }
 
-        private CombatPathingInfo FindPath(RHTile tile)
+        private PathInfo FindPath(RHTile tile)
         {
-            CombatPathingInfo pathingInfo = new CombatPathingInfo();
+            PathInfo pathingInfo = new PathInfo();
 
             if (_travelMap.ContainsKey(tile)) {
                 List<RHTile> temp = _travelMap.Backtrack(tile);

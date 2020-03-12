@@ -307,7 +307,7 @@ namespace RiverHollow.Game_Managers
 
                         if (!travelMap.ContainsKey(next) || newCost < travelMap[next].CostSoFar)
                         {
-                            double priority = newCost + Heuristic(next, goalNode);
+                            double priority = newCost + HeuristicToTile(next, goalNode);
                             frontier.Enqueue(next, priority);
                             travelMap.Store(next, current, newCost);
                         }
@@ -363,18 +363,34 @@ namespace RiverHollow.Game_Managers
             return travelMap;
         }
 
+        #region TravelMap Pathing
         /// <summary>
-        /// Given a start location and a previous calculated TravelMap, find the shortest
-        /// path to a tile that is within the range of the TravelMap.
-        /// 
-        /// This method also gets called to determine the nearest 
+        /// Calls FindPath To TravelMap and then appends the path
+        /// to the found tile from within the TravelMap
         /// </summary>
         /// <param name="startTile">The RHTile to start from</param>
         /// <param name="map">The TravelMap to crawl towards</param>
         /// <returns>A class containing both the whole path and the path to move on</returns>
-        public static CombatPathingInfo FindPathViaTravelMap(RHTile startTile, TravelMap map)
+        public static PathInfo FindPathViaTravelMap(RHTile startTile, TravelMap map)
         {
-            CombatPathingInfo pathingInfo = new CombatPathingInfo();
+            PathInfo info = new PathInfo();
+            List<RHTile> pathToTravelMap = FindPathToTravelMap(startTile, map);
+            RHTile firstInMap = pathToTravelMap[pathToTravelMap.Count -1];
+            info.AssignPaths(firstInMap, pathToTravelMap, map.Backtrack(firstInMap));
+
+            return info;
+        }
+
+        /// <summary>
+        /// Given a start location and a previous calculated TravelMap, find the shortest
+        /// path to a tile that is within the range of the TravelMap.
+        /// </summary>
+        /// <param name="startTile">The RHTile to start from</param>
+        /// <param name="map">The TravelMap to crawl towards</param>
+        /// <returns>The shortest path to the first RHTile in the TravelMap</returns>
+        public static List<RHTile> FindPathToTravelMap(RHTile startTile, TravelMap map)
+        {
+            List<RHTile> rvList = new List<RHTile>();
 
             RHTile goalNode = map.BaseTile;
             var frontier = new PriorityQueue<RHTile>();
@@ -391,7 +407,7 @@ namespace RiverHollow.Game_Managers
                 //Then we return that tile's path
                 if (current != startTile && map.CanEndTurnHere(current))
                 {
-                    pathingInfo.AssignPaths(current, travelMap.Backtrack(current), map.Backtrack(current));
+                    rvList = map.Backtrack(current);
                     break;
                 }
 
@@ -405,9 +421,10 @@ namespace RiverHollow.Game_Managers
 
                         if (!travelMap.ContainsKey(next) || newCost < travelMap[next].CostSoFar)
                         {
-                            double priority = newCost + Heuristic(next, goalNode);
-                            if(!TestTileForSize(next, true)) {
-                                priority += GetMovementCost(next) * 2;  //Discourages use of occupied tiles but does not stop them from being used
+                            double priority = newCost + HeuristicToTile(next, goalNode);
+                            //Discourages use of occupied tiles but does not stop them from being used
+                            if (!TestTileForSize(next, true)) {
+                                priority += GetMovementCost(next) * 2;
                             }
                             frontier.Enqueue(next, priority);
                             travelMap.Store(next, current, newCost);
@@ -416,8 +433,64 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            return pathingInfo;
+            return rvList;
         }
+
+        public static List<RHTile> FindPathAway(RHTile startTile, TravelMap map, List<RHTile> runFromList)
+        {
+            List<RHTile> rvList = new List<RHTile>();
+
+            RHTile goalNode = map.BaseTile;
+            var frontier = new PriorityQueue<RHTile>();
+            var fleeMap = new TravelMap(startTile);
+
+            frontier.Enqueue(startTile, 0);
+            fleeMap.Store(startTile, startTile, 0);
+
+            while (frontier.Count > 0)
+            {
+                var current = frontier.Dequeue();
+
+                //Keep looking until we find a valid tile that we can end in that is not in the map
+                if (current != startTile && TestTileForSize(current, true) && !map.CanEndTurnHere(current))
+                {
+                    rvList = fleeMap.Backtrack(current);
+
+                    //If the TravelMap does not contain the key but it is in the rvList remove it.
+                    //It can be in the rvList by being on the map but not InRange.
+                    if (!map.CanEndTurnHere(current) && rvList.Contains(current)) {
+                        rvList.Remove(current);
+                    }
+                    break;
+                }
+
+                //Iterate over every tile in the accessible neighbours and, with it as the
+                //prospective new BaseTile, confirm that neighbouring tiles are all valid
+                foreach (var next in current.GetWalkableNeighbours())
+                {
+                    if (TestTileForSize(next))
+                    {
+                        double newCost = fleeMap[current].CostSoFar + GetMovementCost(next);
+
+                        if (!fleeMap.ContainsKey(next) || newCost < fleeMap[next].CostSoFar)
+                        {
+                            double priority = newCost + HeuristicFromPoints(next, runFromList);
+                            //Discourages use of occupied tiles but does not stop them from being used
+                            if (!TestTileForSize(next, true))
+                            {
+                                priority += GetMovementCost(next) * 2;  
+                            }
+                            frontier.Enqueue(next, priority);
+                            fleeMap.Store(next, current, newCost);
+                        }
+                    }
+                }
+            }
+
+            return rvList;
+        }
+
+        #endregion
 
         /// <summary>
         /// Helper method to Queue up RHTiles for use in FindRangeOfAction.
@@ -476,7 +549,7 @@ namespace RiverHollow.Game_Managers
             return true;
         }
 
-        private static double Heuristic(RHTile a, RHTile b)
+        private static double HeuristicToTile(RHTile a, RHTile b)
         {
             int total = 0;
             int distance = (Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y));
@@ -489,6 +562,24 @@ namespace RiverHollow.Game_Managers
 
             total = (distance + wallBuffer) * multiplier;
             return total;
+        }
+
+        private static double HeuristicFromPoints(RHTile a, List<RHTile> fleeFrom)
+        {
+            int total = 0;
+            foreach (RHTile t in fleeFrom)
+            {
+                int distance = (Math.Abs(a.X - t.X) + Math.Abs(a.Y - t.Y));
+
+                //Do not perform any wall buffer checks if we are in combat
+                List<RHTile> futureTiles = a.GetWalkableNeighbours();
+                int wallBuffer = CombatManager.InCombat ? 0 : ((futureTiles.Count < 4) ? 10 : 0);
+
+                int multiplier = GetMovementCost(a);
+
+                total = (distance + wallBuffer) * multiplier;
+            }
+            return -total;
         }
 
         //Returns how much it costs to enter the next square
@@ -570,10 +661,17 @@ namespace RiverHollow.Game_Managers
             public bool InRange;
         }
 
-        public class CombatPathingInfo
+        public class PathInfo
         {
+            public static bool IsNull(PathInfo info) { return info == null || info.WholePath == null; }
             public List<RHTile> WholePath;
             public List<RHTile> ActualPath;
+
+            public void Clean()
+            {
+                WholePath = new List<RHTile>();
+                ActualPath = new List<RHTile>();
+            }
 
             public void AssignPaths(RHTile foundTile, List<RHTile> pathToMap, List<RHTile> mapPath)
             {

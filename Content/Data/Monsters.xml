@@ -5,7 +5,7 @@
     <!--Magic Mushroom-->
     <Item>
       <Key>1</Key>
-      <Value>[Texture:MagicMushroom][Condition:Forest-Summer][Jump][Lvl:1][Ability:303][Loot:26][Walk:0-0-4-.2-F][Attack:0-0-4-.2-F][Cast:0-32-9-.07-F][Hurt:0-0-4-.2-F][Critical:0-0-4-.2-F][KO:256-0-3-.15-F]</Value>
+      <Value>[Texture:MagicMushroom][Condition:Forest-Summer][Jump][Lvl:1][Ability:303][Loot:26][Trait:Coward][Walk:0-0-4-.2-F][Attack:0-0-4-.2-F][Cast:0-32-9-.07-F][Hurt:0-0-4-.2-F][Critical:0-0-4-.2-F][KO:256-0-3-.15-F]</Value>
     </Item>
     <!--Bauble-->
     <Item>

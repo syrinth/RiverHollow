@@ -183,7 +183,7 @@
     <Item>
       <!--Mushroom Lightning-->
       <Key>303</Key>
-      <Value>[Type:Action][Animation:LightningSprite-94-160-15-0.1][AnimOffset:41-105][Target:Enemy][Range:4][AreaType:Cross][Harm:200][Action:UserCast Direct Apply][Element:Lightning]</Value>
+      <Value>[Type:Action][Animation:LightningSprite-94-160-15-0.07][AnimOffset:41-105][Target:Enemy][Range:4][AreaType:Cross][Harm:60][Action:UserCast Direct Apply][Element:Lightning]</Value>
     </Item>
   </Asset>
 </XnaContent>
