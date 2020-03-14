@@ -603,10 +603,13 @@ namespace RiverHollow.Characters
             {
                 foreach (RHTile tile in FindAdjacentTiles(targetActor))
                 {
-                    if (ShortestPathComparison(FindPath(tile), ref pathInfo))
+                    if (TravelManager.TestTileForSize(tile, true))
                     {
-                        pathInfo.Clean();
-                        break;
+                        if (ShortestPathComparison(FindPath(tile), ref pathInfo))
+                        {
+                            pathInfo.Clean();
+                            break;
+                        }
                     }
                 }
             }

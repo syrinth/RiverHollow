@@ -375,8 +375,11 @@ namespace RiverHollow.Game_Managers
         {
             PathInfo info = new PathInfo();
             List<RHTile> pathToTravelMap = FindPathToTravelMap(startTile, map);
-            RHTile firstInMap = pathToTravelMap[pathToTravelMap.Count -1];
-            info.AssignPaths(firstInMap, pathToTravelMap, map.Backtrack(firstInMap));
+            if (pathToTravelMap.Count > 0)
+            {
+                RHTile firstInMap = pathToTravelMap[pathToTravelMap.Count - 1];
+                info.AssignPaths(firstInMap, pathToTravelMap, map.Backtrack(firstInMap));
+            }
 
             return info;
         }
