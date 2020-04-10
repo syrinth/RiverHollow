@@ -47,6 +47,7 @@ namespace RiverHollow.Characters
         List<CombatAction> _liCombatActions;
 
         #region Turn Logic
+        ActionPlan _actionPlan;
         RHTile _selectedTile;
         CombatAction _chosenAction;
         enum TurnStepsEnum { Move, Act, EndTurn };
@@ -430,6 +431,9 @@ namespace RiverHollow.Characters
 
         private void PlanTurn()
         {
+            //Make a new PriorityQueue to hold
+            _actionPlan = new ActionPlan();
+
             //Acquire the TravelMap for the Monster
             _travelMap = TravelManager.FindRangeOfAction(this, _iMaxMove, true);
 
@@ -482,66 +486,66 @@ namespace RiverHollow.Characters
                 {
                     FindShortestPathToActor(distantTargets, ref pathingInfo);
                 }
+            }
 
-                if(pathingInfo != null)
+            _liFoundPath = _actionPlan.Path;
+            _chosenAction = _actionPlan.Action;
+            _selectedTile = _actionPlan.TargetTile;
+
+            if (_liFoundPath?.Count > 0)
+            {
+                _liTurnSteps.Add(TurnStepsEnum.Move);
+
+                RHTile temp = this.BaseTile;
+                this.SetBaseTile(_liFoundPath[_liFoundPath.Count - 1]);
+                if (InRangeForSkill(_selectedTile, _chosenAction.Range))
                 {
-                    _liFoundPath = pathingInfo.ActualPath;
+                    _liTurnSteps.Add(TurnStepsEnum.Act);
+                    _chosenAction.AssignTargetTile(_selectedTile);
                 }
-
-                if (_liFoundPath?.Count > 0)
+                this.SetBaseTile(temp);
+            }
+            else
+            {
+                if (InRangeForSkill(_selectedTile, _chosenAction.Range))
                 {
-                    _liTurnSteps.Add(TurnStepsEnum.Move);
+                    _liTurnSteps.Add(TurnStepsEnum.Act);
+                    _chosenAction.AssignTargetTile(_selectedTile);
 
-                    RHTile temp = this.BaseTile;
-                    this.SetBaseTile(_liFoundPath[_liFoundPath.Count - 1]);
-                    if (InRangeForSkill(_selectedTile, _chosenAction.Range))
+                    if (_bCoward)
                     {
-                        _liTurnSteps.Add(TurnStepsEnum.Act);
-                        _chosenAction.AssignTargetTile(_selectedTile);
-                    }
-                    this.SetBaseTile(temp);
-                }
-                else
-                {
-                    if (InRangeForSkill(_selectedTile, _chosenAction.Range))
-                    {
-                        _liTurnSteps.Add(TurnStepsEnum.Act);
-                        _chosenAction.AssignTargetTile(_selectedTile);
-
-                        if (_bCoward)
+                        bool run = false;
+                        List<RHTile> partyTiles = new List<RHTile>();
+                        foreach (CombatActor act in CombatManager.Party.FindAll(x => !x.KnockedOut()))
                         {
-                            bool run = false;
-                            List<RHTile> partyTiles = new List<RHTile>();
-                            foreach (CombatActor act in CombatManager.Party.FindAll(x => !x.KnockedOut())) {
-                                foreach (RHTile t in GetTileList())
-                                {
-                                    if (Util.GetRHTileDelta(t, act.BaseTile) <= 3)
-                                    {
-                                        run = true;
-                                    }
-                                }
-                                partyTiles.Add(act.BaseTile);
-                            }
-                            if (run)
+                            foreach (RHTile t in GetTileList())
                             {
-                                _liFoundPath = TravelManager.FindPathAway(BaseTile, _travelMap, partyTiles);
-                                if(_liTurnSteps.Count > 0) { _liTurnSteps.Add(TurnStepsEnum.Move); }
+                                if (Util.GetRHTileDelta(t, act.BaseTile) <= 3)
+                                {
+                                    run = true;
+                                }
                             }
+                            partyTiles.Add(act.BaseTile);
+                        }
+                        if (run)
+                        {
+                            _liFoundPath = TravelManager.FindPathAway(BaseTile, _travelMap, partyTiles);
+                            if (_liTurnSteps.Count > 0) { _liTurnSteps.Add(TurnStepsEnum.Move); }
                         }
                     }
                 }
-
-                _liTurnSteps.Add(TurnStepsEnum.EndTurn);
-
-                //After everything is done, clear the TravelManager data
-                TravelManager.ClearParams();
-
-                //If we cannot take an action this turn, try to find an action that we can work on
-                if (_liTurnSteps.Contains(TurnStepsEnum.Act))
-                {
-                    break;
-                }
             }
+
+            _liTurnSteps.Add(TurnStepsEnum.EndTurn);
+
+            //After everything is done, clear the TravelManager data
+            TravelManager.ClearParams();
+
+            ////If we cannot take an action this turn, try to find an action that we can work on
+            //if (_liTurnSteps.Contains(TurnStepsEnum.Act))
+            //{
+            //    break;
+            //}
         }
 
         /// <summary>
@@ -557,6 +561,20 @@ namespace RiverHollow.Characters
             if (_chosenAction.Heal && actor.CurrentHP > (actor.MaxHP * 0.5)) { return false; }
 
             return rv;
+        }
+
+        public void AssignActionPlan(PathInfo info, CombatActor actor)
+        {
+            int priority = 0;
+
+            if (info.ActualPath.Count <= _chosenAction.Range)
+            {
+                priority += 100;
+            }
+
+            priority += actor.CurrentHP / actor.MaxHP;
+
+            _actionPlan.SetAction(priority, _selectedTile, info.ActualPath, _chosenAction);
         }
 
         public override void EndTurn()
@@ -584,6 +602,8 @@ namespace RiverHollow.Characters
                     shortestPath = testInfo;
                     if (shortestPath.Count() == 0) { break; }
                 }
+
+                AssignActionPlan(shortestPath, act);
             }
         }
 
@@ -675,38 +695,6 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        private void FindNearbyTravelMapTile(ref List<RHTile> path, int removeAt, int removeCount)
-        {
-            RHTile targetTile = path[path.Count - 1];   //The end tile of the complete shortest path
-            path.RemoveRange(removeAt, removeCount);    //Remove all of the extra tiles beyond the range of the skill
-            RHTile endTile = path[path.Count - 1];
-
-            if (_travelMap.ContainsKey(endTile) && !_travelMap[endTile].InRange)
-            {
-                List<RHTile> shortestPath = new List<RHTile>();
-
-                foreach (KeyValuePair<RHTile, TravelData> kvp in _travelMap)
-                {
-                    Vector2 start = kvp.Key.Position;
-                    List<RHTile> testPath = TravelManager.FindPathToLocation(ref start, targetTile.Position);
-
-                    if(shortestPath == null || testPath.Count < shortestPath.Count)
-                    {
-                        shortestPath = testPath;
-                    }
-                }
-
-                foreach(RHTile t in shortestPath)
-                {
-                    if (_travelMap.ContainsKey(t)) {
-                        path = _travelMap.Backtrack(t);
-                        break;
-                    }
-                    else { continue; }
-                }
-            }
-        }
-
         /// <summary>
         /// If the given paths are equal, there is a chance that we will switch to the new one instead
         /// of sticking to the one we already have.
@@ -781,6 +769,28 @@ namespace RiverHollow.Characters
                 if (TravelManager.TestTileForSize(targetTile, true))
                 {
                     tileList.Add(targetTile);
+                }
+            }
+        }
+
+        public class ActionPlan
+        {
+            int _iPriority = 0;
+            public int Priority { get { return _iPriority; } }
+            RHTile _targetTile;
+            public RHTile TargetTile { get { return _targetTile; } }
+            List<RHTile> _liPath;
+            public List<RHTile> Path { get { return _liPath; } }
+            CombatAction _action;
+            public CombatAction Action { get { return _action; } }
+
+            public void SetAction(int priority, RHTile targetTile, List<RHTile> path, CombatAction action)
+            {
+                if(_iPriority <= priority)
+                {
+                    _liPath = path;
+                    _action = action;
+                    _targetTile = targetTile;
                 }
             }
         }
