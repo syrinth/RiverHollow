@@ -4,17 +4,15 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using static RiverHollow.WorldObjects.WorldItem;
-using static RiverHollow.WorldObjects.WorldItem.Machine;
-
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Misc;
-using static RiverHollow.WorldObjects.Door;
 using RiverHollow.Actors;
 using RiverHollow.Buildings;
 using RiverHollow.Actors.CombatStuff;
 using System.IO;
 using RiverHollow.Characters;
 using MonoGame.Extended.BitmapFonts;
+using static RiverHollow.WorldObjects.DungeonObject;
 
 namespace RiverHollow.Game_Managers
 {
@@ -411,20 +409,20 @@ namespace RiverHollow.Game_Managers
             return null;
         }
 
-        public static Door GetDoor(string doorType, Vector2 pos)
+        public static DungeonObject GetDungeonObject(int id, Vector2 pos)
         {
-            if (doorType.Equals("MobDoor"))
+            if (id != -1 && _diWorldObjects.ContainsKey(id))
             {
-                return new MobDoor(Util.SnapToGrid(pos), TileSize, TileSize * 2);
+                Dictionary<string, string> liData = _diWorldObjects[id];
+                switch (liData["Subtype"])
+                {
+                    case "Door":
+                        return new Door(id, liData, pos);
+                    case "Trigger":
+                        return new TriggerObject(id, liData, pos);
+                }
             }
-            else if (doorType.Equals("KeyDoor"))
-            {
-                return new KeyDoor(Util.SnapToGrid(pos), TileSize, TileSize * 2);
-            }
-            else if (doorType.Equals("SeasonDoor"))
-            {
-                return new SeasonDoor(Util.SnapToGrid(pos), TileSize, TileSize * 2);
-            }
+
             return null;
         }
 

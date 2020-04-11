@@ -1939,7 +1939,7 @@ namespace RiverHollow.Actors
                 if (item.IsMap() && NPCType == Villager.NPCTypeEnum.Ranger)
                 {
                     text = GetDialogEntry("Adventure");
-                    DungeonManager.LoadNewDungeon((AdventureMap)item);
+                    DungeonManagerOld.LoadNewDungeon((AdventureMap)item);
                 }
                 else
                 {
@@ -2345,7 +2345,7 @@ namespace RiverHollow.Actors
                 if (item.IsMap() && NPCType == Villager.NPCTypeEnum.Ranger)
                 {
                     text = GetDialogEntry("Adventure");
-                    DungeonManager.LoadNewDungeon((AdventureMap)item);
+                    DungeonManagerOld.LoadNewDungeon((AdventureMap)item);
                 }
                 else if (item.IsMarriage())
                 {

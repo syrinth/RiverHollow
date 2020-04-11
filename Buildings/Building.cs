@@ -95,8 +95,8 @@ namespace RiverHollow.Buildings
 
         protected void ImportBasics(Dictionary<string, string> stringData, int id)
         {
-            _id = id;
-            DataManager.GetBuildingText(_id, ref _sName, ref _sDescription);
+            _iID = id;
+            DataManager.GetBuildingText(_iID, ref _sName, ref _sDescription);
 
             //The dimensions of the Building in tiles
             string[] dimensions = stringData["Dimensions"].Split('-');

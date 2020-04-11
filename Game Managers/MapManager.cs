@@ -133,12 +133,12 @@ namespace RiverHollow.Game_Managers
 
         public static void EnterDungeon()
         {
-            FadeToNewMap(DungeonManager.Maps[0], new Vector2(DungeonManager.Entrance.Left, DungeonManager.Entrance.Top));
+            FadeToNewMap(DungeonManagerOld.Maps[0], new Vector2(DungeonManagerOld.Entrance.Left, DungeonManagerOld.Entrance.Top));
         }
 
         public static void ChangeDungeonRoom(string direction, bool straightOut = false)
         {
-            RHMap newMap = DungeonManager.RoomChange(direction, straightOut);
+            RHMap newMap = DungeonManagerOld.RoomChange(direction, straightOut);
             Rectangle rectEntrance = newMap.IsDungeon ? newMap.DictionaryEntrance[direction] : newMap.DictionaryEntrance["Dungeon"];
 
             FadeToNewMap(newMap, new Vector2(rectEntrance.Left, rectEntrance.Top));

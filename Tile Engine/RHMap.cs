@@ -18,7 +18,6 @@ using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.CombatManager;
 using static RiverHollow.Game_Managers.GUIObjects.HUDMenu;
 using static RiverHollow.RiverHollow;
-using static RiverHollow.WorldObjects.Door;
 using static RiverHollow.WorldObjects.WorldItem;
 using static RiverHollow.WorldObjects.WorldItem.Floor;
 
@@ -65,7 +64,7 @@ namespace RiverHollow.Tile_Engine
         protected List<WorldActor> _liActors;
         protected List<Monster> _liMonsters;
         public List<Monster> Monsters => _liMonsters;
-        protected List<Door> _liDoors;
+        protected List<DungeonObject> _liDungeonObjects;
         public List<WorldActor> ToRemove;
         public List<WorldActor> ToAdd;
         protected List<Building> _liBuildings;
@@ -108,7 +107,7 @@ namespace RiverHollow.Tile_Engine
             _dictEntrance = new Dictionary<string, Rectangle>();
             _dictCharacterLayer = new Dictionary<string, Vector2>();
             _liShopData = new List<ShopData>();
-            _liDoors = new List<Door>();
+            _liDungeonObjects = new List<DungeonObject>();
             _liPlacedWorldObjects = new List<WorldObject>();
             _liRandomSpawnItems = new List<int>();
             _liCutscenes = new List<int>();
@@ -370,24 +369,16 @@ namespace RiverHollow.Tile_Engine
 
             foreach (TiledMapObject obj in _liMapObjects)
             {
-                if (obj.Name.Contains("Door"))
+                if (obj.Name.Contains("DungeonObject"))
                 {
-                    Door d = null;
-                    if (obj.Name.Equals("MobDoor")) { d = DataManager.GetDoor(obj.Name, obj.Position); }
-                    else if (obj.Name.Equals("SeasonDoor"))
+                    DungeonObject d = DataManager.GetDungeonObject(int.Parse(obj.Properties["id"]), Util.SnapToGrid(obj.Position));
+                    if (obj.Properties.ContainsKey("Key"))
                     {
-                        d = DataManager.GetDoor(obj.Name, obj.Position);
-                        ((SeasonDoor)d).SetSeason(obj.Properties["Season"]);
+                        d.SetKey(obj.Properties["Key"]);
                     }
-                    else if (obj.Name.Equals("KeyDoor"))
-                    {
-                        d = DataManager.GetDoor(obj.Name, obj.Position);
-                        ((KeyDoor)d).SetKey(int.Parse(obj.Properties["Open"]));
-                    }
-
-                    _liDoors.Add(d);
                     PlaceWorldObject(d);
-                }
+                    _liDungeonObjects.Add(d);
+                 }
                 else if (obj.Name.Equals("Rock"))
                 {
                     PlaceWorldObject(DataManager.GetWorldObject(WorldItem.Rock, Util.SnapToGrid(obj.Position)));
@@ -1128,7 +1119,7 @@ namespace RiverHollow.Tile_Engine
                 }
                 else if (obj.IsContainer())
                 {
-                    if (IsDungeon && DungeonManager.IsEndChest((Container)obj))
+                    if (IsDungeon && DungeonManagerOld.IsEndChest((Container)obj))
                     {
                         Staircase stairs = (Staircase)DataManager.GetWorldObject(3, Vector2.Zero);
                         stairs.SetExit(MapManager.HomeMap);
@@ -1150,9 +1141,9 @@ namespace RiverHollow.Tile_Engine
                         p.RemoveSelfFromTiles();
                     }
                 }
-                else if (obj.IsDoor())
+                else if (obj.IsDungeonObject())
                 {
-                    ((Door)obj).ReadInscription();
+                    ((DungeonObject)obj).Interact();
                 }
                 else if (obj.ID == 3) //Checks to see if the tile contains a staircase object
                 {
@@ -1562,10 +1553,6 @@ namespace RiverHollow.Tile_Engine
         public void RemoveMonster(Monster m)
         {
             ToRemove.Add(m);
-            foreach (Door d in _liDoors)
-            {
-                if (d.IsMobDoor()) { ((MobDoor)d).Check(_liMonsters.Count); }
-            }
         }
         public void DropItemsOnMap(List<Item>items, Vector2 position, bool flyingPop = true)
         {
@@ -2021,22 +2008,23 @@ namespace RiverHollow.Tile_Engine
             return MapHeightTiles * TileSize * (int)Scale;
         }
 
-        public void CheckSeasonDoor()
-        {
-            foreach (Door d in _liDoors)
-            {
-                if (d.IsSeasonDoor())
-                {
-                    ((SeasonDoor)d).Check();
-                }
-            }
-        }
-
         public void CheckForTriggeredCutScenes()
         {
             foreach(int cutsceneID in _liCutscenes)
             {
                 CutsceneManager.CheckForTriggedCutscene(cutsceneID);
+            }
+        }
+
+        /// <summary>
+        /// Search through this map for any trigger objects and activate them as appropriate.
+        /// </summary>
+        /// <param name="triggerName">Name of the trigger to activate</param>
+        public void Trigger(string triggerName)
+        {
+            foreach(DungeonObject obj in _liDungeonObjects)
+            {
+                obj.Trigger(triggerName);
             }
         }
 

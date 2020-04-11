@@ -20,7 +20,7 @@ namespace RiverHollow.WorldObjects
         public static int Rock = 0;
         public static int BigRock = 1;
         public static int Tree = 2;
-        public enum ObjectType { Building, ClassChanger, Machine, Container, Door, Earth, Floor, WorldObject, Destructible, Plant, Forageable, Wall, Light};
+        public enum ObjectType { Building, ClassChanger, Machine, Container, Earth, Floor, WorldObject, Destructible, Plant, Forageable, Wall, Light, DungeonObject};
         public ObjectType Type;
 
         protected AnimatedSprite _sprite;
@@ -63,8 +63,8 @@ namespace RiverHollow.WorldObjects
         protected int _iBaseHeight = TileSize;
         public virtual int BaseHeight => _iBaseHeight;
 
-        protected int _id;
-        public int ID { get => _id; }
+        protected int _iID;
+        public int ID { get => _iID; }
         #endregion
 
         protected WorldObject() {
@@ -75,7 +75,7 @@ namespace RiverHollow.WorldObjects
         public WorldObject(int id, Vector2 pos, int width, int height) : this()
         {
             Type = ObjectType.WorldObject;
-            _id = id;
+            _iID = id;
             _vMapPosition = pos;
             _iWidth = width;
             _iHeight = height;
@@ -177,10 +177,10 @@ namespace RiverHollow.WorldObjects
         public bool IsWorldObject() { return Type == ObjectType.WorldObject; }
         public bool IsGround() { return Type == ObjectType.Floor; }
         public bool IsEarth() { return Type == ObjectType.Earth; }
-        public bool IsDoor() { return Type == ObjectType.Door; }
         public bool IsClassChanger() { return Type == ObjectType.ClassChanger; }
         public bool IsBuilding() { return Type == ObjectType.Building; }
         public bool IsForageable() { return Type == ObjectType.Forageable; }
+        public bool IsDungeonObject() { return Type == ObjectType.DungeonObject; }
     }
 
     public class Forageable : WorldObject
@@ -197,7 +197,7 @@ namespace RiverHollow.WorldObjects
         public Forageable(int id, Dictionary<string, string> stringData, Vector2 pos)
         {
             Type = ObjectType.Forageable;
-            _id = id;
+            _iID = id;
 
              _wallObject = false;
 
@@ -288,7 +288,7 @@ namespace RiverHollow.WorldObjects
         public Destructible(int id, Dictionary<string, string> stringData, Vector2 pos)
         {
             Type = ObjectType.Destructible;
-            _id = id;
+            _iID = id;
 
             _wallObject = false;
 
@@ -393,125 +393,6 @@ namespace RiverHollow.WorldObjects
         }
     }
 
-    public class Door : WorldObject
-    {
-        public enum EnumDoorType { Mob, Key, Season};
-        public EnumDoorType DoorType;
-        bool _bVisible;
-
-        private Door(Vector2 pos, int width, int height) : base(-1, pos, width, height)
-        {
-            Type = ObjectType.Door;
-            _bVisible = true;
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            if (_bVisible)
-            {
-                base.Draw(spriteBatch);
-            }
-        }
-
-        public virtual void ReadInscription() { }
-
-        public bool IsMobDoor() { return DoorType == EnumDoorType.Mob; }
-        public bool IsKeyDoor() { return DoorType == EnumDoorType.Key; }
-        public bool IsSeasonDoor() { return DoorType == EnumDoorType.Season; }
-
-        public class MobDoor : Door
-        {
-            public MobDoor(Vector2 pos, int width, int height) : base(pos, width, height)
-            {
-                DoorType = EnumDoorType.Mob;
-                _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
-                _sprite.AddAnimation(AnimationEnum.ObjectIdle, 64, 0, 16, 32);
-            }
-
-            public override void ReadInscription() {
-                GUIManager.OpenTextWindow(DataManager.GetGameText("MobDoor"));
-               // GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameText("MobDoor"), false));
-            }
-
-            public void Check(int mobCount)
-            {
-                if (mobCount == 0)
-                {
-                    _bImpassable = false;
-                    _bVisible = false;
-                }
-            }
-        }
-        public class KeyDoor : Door
-        {
-            private int _iKeyID = 0;
-            public KeyDoor(Vector2 pos, int width, int height) : base(pos, width, height)
-            {
-                DoorType = EnumDoorType.Key;
-                _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
-                _sprite.AddAnimation(AnimationEnum.ObjectIdle, 64, 0, 16, 32);
-            }
-
-            public void SetKey(int value)
-            {
-                _iKeyID = value;
-            }
-
-            public override void ReadInscription()
-            {
-                GUIManager.OpenTextWindow(DataManager.GetGameText("KeyDoor"));
-                //GUIManager.SetScreen(new TextScreen(this, GameContentManager.GetGameText("KeyDoor")));
-            }
-
-            public bool Check(Item item)
-            {
-                bool rv = false;
-                if (_iKeyID == item.ItemID)
-                {
-                    rv = true;
-                    item.Remove(1);
-                    _bImpassable = false;
-                    _bVisible = false;
-                }
-
-                return rv;
-            }
-        }
-        public class SeasonDoor : Door
-        {
-            private string _sSeason = "";
-            public SeasonDoor(Vector2 pos, int width, int height) : base(pos, width, height)
-            {
-                DoorType = EnumDoorType.Season;
-                _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
-                _sprite.AddAnimation(AnimationEnum.ObjectIdle, 64, 0, 16, 32);
-            }
-
-            public void SetSeason(string value)
-            {
-                _sSeason = value;
-            }
-
-            public override void ReadInscription()
-            {
-                GUIManager.OpenTextWindow(DataManager.GetGameText("SpringDoor"));
-                //GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameText("SpringDoor"), false));
-            }
-
-            public bool Check()
-            {
-                bool rv = false;
-                bool unlocked = _sSeason == GameCalendar.GetSeason();
-
-                rv = unlocked;
-                _bImpassable = !unlocked;
-                _bVisible = !unlocked;
-
-                return rv;
-            }
-        }
-    }
-
     public class Staircase : WorldObject
     {
         protected string _toMap;
@@ -569,7 +450,7 @@ namespace RiverHollow.WorldObjects
         {
             public ClassChanger(int id, Vector2 position)
             {
-                _id = id;
+                _iID = id;
                 Type = ObjectType.ClassChanger;
                 LoadContent();
 
@@ -622,7 +503,7 @@ namespace RiverHollow.WorldObjects
 
             public Machine(int id, Dictionary<string, string> stringData)
             {
-                _id = id;
+                _iID = id;
                 _heldItem = null;
                 _dProcessedTime = -1;
                 _diCrafting = new Dictionary<int, int>();
@@ -781,7 +662,7 @@ namespace RiverHollow.WorldObjects
             }
             public void LoadData(GameManager.MachineData mac)
             {
-                _id = mac.ID;
+                _iID = mac.ID;
                 MapPosition = new Vector2(mac.x, mac.y);
                 _dProcessedTime = mac.processedTime;
                 _iCurrentlyMaking = mac.currentItemID;
@@ -906,7 +787,7 @@ namespace RiverHollow.WorldObjects
 
             public Container(int id, Dictionary<string, string> stringData)
             {
-                _id = id;
+                _iID = id;
                 Type = ObjectType.Container;
 
                 _iWidth = int.Parse(stringData["Width"]);
@@ -969,7 +850,7 @@ namespace RiverHollow.WorldObjects
 
             public Plant(int id, Dictionary<string, string> stringData)
             {
-                _id = id;
+                _iID = id;
                 Type = ObjectType.Plant;
                 _bImpassable = false;
 
@@ -1050,7 +931,7 @@ namespace RiverHollow.WorldObjects
             {
                 PlantData plantData = new PlantData
                 {
-                    ID = _id,
+                    ID = _iID,
                     x = (int)MapPosition.X,
                     y = (int)this.MapPosition.Y,
                     currentState = _iCurrentState,
@@ -1192,7 +1073,7 @@ namespace RiverHollow.WorldObjects
 
             public Floor(int id, Dictionary<string, string> stringData, Vector2 pos) : this()
             {
-                _id = id;
+                _iID = id;
                 Type = ObjectType.Floor;
                 ReadSourcePos(stringData["Image"]);
 
@@ -1236,7 +1117,7 @@ namespace RiverHollow.WorldObjects
             {
                 FloorData floorData = new FloorData
                 {
-                    ID = _id,
+                    ID = _iID,
                     x = (int)MapPosition.X,
                     y = (int)MapPosition.Y
                 };
@@ -1245,7 +1126,7 @@ namespace RiverHollow.WorldObjects
             }
             internal void LoadData(FloorData data)
             {
-                _id = data.ID;
+                _iID = data.ID;
                 MapPosition = new Vector2(data.x, data.y);
             }
 
@@ -1266,7 +1147,7 @@ namespace RiverHollow.WorldObjects
 
                 public Earth()
                 {
-                    _id = 0;
+                    _iID = 0;
                     Type = ObjectType.Earth;
                     _vSourcePos = Vector2.Zero;
 
@@ -1297,7 +1178,7 @@ namespace RiverHollow.WorldObjects
         {
             public Wall(int id, Dictionary<string, string> stringData, Vector2 pos)
             {
-                _id = id;
+                _iID = id;
                 Type = ObjectType.Wall;
                 ReadSourcePos(stringData["Image"]);
 
@@ -1330,6 +1211,158 @@ namespace RiverHollow.WorldObjects
                 }
 
                 return rv;
+            }
+        }
+    }
+
+    public abstract class DungeonObject : WorldObject
+    {
+        enum DungeonObjectType { Trigger, KeyDoor, MobDoor, TriggerDoor };
+        DungeonObjectType _eSubType;
+        protected string _sTriggerName;
+        bool _bVisible;
+        int _iKeyID;
+
+        protected DungeonObject(int id, Dictionary<string, string> stringData)
+        {
+            _iID = id;
+            Type = ObjectType.DungeonObject;
+            _eSubType = Util.ParseEnum<DungeonObjectType>(stringData["Subtype"]);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (_bVisible)
+            {
+                base.Draw(spriteBatch);
+            }
+        }
+
+        /// <summary>
+        /// This method is called when the player interacts with the object.
+        /// </summary>
+        public virtual void Interact() { }
+
+        /// <summary>
+        /// This method is called when something attempts to trigger it
+        /// </summary>
+        /// <param name="name">The name of the trigger</param>
+        public virtual void Trigger(string name) { }
+
+        /// <summary>
+        /// Call this to reset the DungeonObject to its original state.
+        /// </summary>
+        public virtual void Reset() { }
+
+        /// <summary>
+        /// Sets the name of the trigger to apply for the DungeonObject
+        /// </summary>
+        /// <param name="trigger"></param>
+        public void SetTrigger(string trigger)
+        {
+            _sTriggerName = trigger;
+        }
+
+        /// <summary>
+        /// Sets the Item ID of the key needed to trigger the DungeonObject
+        /// </summary>
+        /// <param name="id">The ID of the item to use as the key.</param>
+        public void SetKey(string id)
+        {
+            _iKeyID = int.Parse(id);
+        }
+
+        /// <summary>
+        /// Given an item type, check it against the key for the DungeonObject
+        /// </summary>
+        /// <param name="item">The Item to check against</param>
+        /// <returns>True if the item is the key</returns>
+        public bool CheckForKey(Item item)
+        {
+            bool rv = false;
+            if (_iKeyID == item.ItemID)
+            {
+                rv = true;
+                item.Remove(1);
+            }
+
+            return rv;
+        }
+
+        public class TriggerObject : DungeonObject
+        {
+            
+            public TriggerObject(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData)
+            {
+                _iWidth = int.Parse(stringData["Width"]);
+                _iHeight = int.Parse(stringData["Height"]);
+
+                SetCoordinates(pos);
+                LoadSprite(stringData);
+            }
+
+            public override void Interact()
+            {
+                DungeonManager.ActivateTrigger(MapManager.CurrentMap.Name, _sTriggerName);
+            }
+        }
+
+        public class Door : DungeonObject
+        {
+            public Door(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData)
+            {
+                _iWidth = int.Parse(stringData["Width"]);
+                _iHeight = int.Parse(stringData["Height"]);
+
+                switch (_eSubType)
+                {
+                    case DungeonObjectType.MobDoor:
+                        _sTriggerName = MOB_OPEN + "_" + MapManager.CurrentMap.Name;
+                        break;
+                    case DungeonObjectType.KeyDoor:
+                        _sTriggerName = KEY_OPEN;
+                        break;
+                }
+
+                SetCoordinates(pos);
+                LoadSprite(stringData);
+            }
+
+            /// <summary>
+            /// When a door is triggered, it becomes passable and invisible.
+            /// </summary>
+            /// <param name="name"></param>
+            public override void Trigger(string name)
+            {
+                if (name == _sTriggerName)
+                {
+                    _bImpassable = false;
+                    _bVisible = false;
+                }
+            }
+
+            /// <summary>
+            /// When triggered, makes doors impassable again
+            /// </summary>
+            public override void Reset()
+            {
+                _bImpassable = true;
+                _bVisible = true;
+            }
+
+            public override void Interact()
+            {
+                switch (_eSubType)
+                {
+                    case DungeonObjectType.MobDoor:
+                        GUIManager.OpenTextWindow(DataManager.GetGameText("MobDoor"));
+                        break;
+                    case DungeonObjectType.KeyDoor:
+                        GUIManager.OpenTextWindow(DataManager.GetGameText("KeyDoor"));
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }

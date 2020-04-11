@@ -10,16 +10,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
-using static RiverHollow.WorldObjects.Door;
 using static RiverHollow.Misc.Quest;
 using static RiverHollow.Actors.ShopKeeper;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Buildings;
 
 namespace RiverHollow.Game_Managers
 {
     public static class GameManager
     {
+        #region const strings for triggers
+        public const string MOB_OPEN = "MOBS";
+        public const string KEY_OPEN = "VALID_KEY";
+        #endregion
+
         public enum ZoneEnum { Forest, Mountain, Field, Swamp, Town };
         public enum DirectionEnum { Up, Down, Right, Left };
         public enum CardinalDirectionsEnum { North, NorthEast, East, SouthEast, South,  SouthWest, West, NorthWest};
@@ -59,7 +62,7 @@ namespace RiverHollow.Game_Managers
         public static TalkingActor CurrentNPC;
         public static Item gmActiveItem;
         public static Spirit gmSpirit;
-        public static KeyDoor CurrentDoor;
+        public static DungeonObject gmDungeonObject;
 
         static long _iSaveID = -1;
         public static int MAX_NAME_LEN = 10;
@@ -116,7 +119,7 @@ namespace RiverHollow.Game_Managers
         public static void ClearGMObjects()
         {
             CurrentNPC = null;
-            CurrentDoor = null;
+            gmDungeonObject = null;
             gmActiveItem = null;
             gmSpirit = null;
         }

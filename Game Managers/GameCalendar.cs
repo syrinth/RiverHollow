@@ -59,8 +59,6 @@ namespace RiverHollow
 
             SetDisplayWindow();
 
-            CheckDungeonLocks();
-            
             _iCurrWeather = 0;
             //RollForWeatherEffects();
 
@@ -163,8 +161,6 @@ namespace RiverHollow
                 _iCurrDay = 1;
                 if (_iCurrSeason == 3) { _iCurrSeason = 0; }
                 else { _iCurrSeason++; }
-
-                CheckDungeonLocks();
             }
             else { _iCurrDay++; }
 
@@ -235,8 +231,6 @@ namespace RiverHollow
 
             _iCurrHour = 6;
             _iCurrMin = 0;
-
-            CheckDungeonLocks();
         }
 
         /// <summary>
@@ -272,11 +266,6 @@ namespace RiverHollow
                 currWeather = _iCurrWeather,
                 currSeasonPrecipDays = _iSeasonPrecipDays
             };
-        }
-
-        public static void CheckDungeonLocks()
-        {
-            MapManager.Maps["mapForestDungeonZone"].CheckSeasonDoor();
         }
     }
 }
