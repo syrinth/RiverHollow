@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="16" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="23">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="16" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="24">
  <properties>
-  <property name="Monsters" value="3"/>
-  <property name="MonstersMax" type="int" value="3"/>
-  <property name="MonstersMin" type="int" value="1"/>
+  <property name="Dungeon" value="Forest"/>
   <property name="Outside" type="bool" value="false"/>
-  <property name="Resources" value="0"/>
-  <property name="ResourcesMax" type="int" value="60"/>
-  <property name="ResourcesMin" type="int" value="20"/>
+  <property name="ResourcesMinMax" value="20-60"/>
  </properties>
  <tileset firstgid="1" source="tilesetDungeon.tsx"/>
  <layer id="1" name="Base Layer" width="16" height="50">
@@ -219,6 +215,12 @@
    <properties>
     <property name="Exit" value="mapSpringDungeonB"/>
     <property name="ID" type="int" value="2"/>
+   </properties>
+  </object>
+  <object id="23" name="CombatStart" x="180.386" y="739.864" width="10.5" height="9">
+   <properties>
+    <property name="Entrance" value="mapSpringDungeonEntrance"/>
+    <property name="Position" value="SW"/>
    </properties>
   </object>
  </objectgroup>

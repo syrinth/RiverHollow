@@ -129,14 +129,21 @@ namespace RiverHollow.Screens
                 }
                 else if (GameManager.gmDungeonObject != null)
                 {
-                    string text = string.Empty;
-                    if (GameManager.gmDungeonObject.CheckForKey(IsItemThere(mouse))) {
-                        GameManager.gmDungeonObject.Trigger(GameManager.KEY_OPEN);
-                        text = DataManager.GetGameText("KeyDoorOpen");
-                    }
-                    else { text = DataManager.GetGameText("KeyDoorClose"); }
+                    Item it = IsItemThere(mouse);
+                    if (!GUIManager.IsTextWindowOpen() && Contains(mouse) && it != null)
+                    {
+                        string text = string.Empty;
+                        if (GameManager.gmDungeonObject.CheckForKey(it))
+                        {
+                            GameManager.gmDungeonObject.Trigger(GameManager.KEY_OPEN);
+                            GUIManager.CloseMainObject();
+                            GUIManager.CloseHoverWindow();
+                            text = DataManager.GetGameText("KeyDoorOpen");
+                        }
+                        else { text = DataManager.GetGameText("KeyDoorClose"); }
 
-                    GUIManager.OpenTextWindow(text);
+                        GUIManager.OpenTextWindow(text);
+                    }
                 }
                 else
                 {
@@ -146,7 +153,7 @@ namespace RiverHollow.Screens
                 }
             }
 
-            //Close any hover windows that may be open,otherwise they'll be open
+            //Close any hover windows that may be open, otherwise they'll be open
             //on an empty object
             if (rv) { GUIManager.CloseHoverWindow(); }
 

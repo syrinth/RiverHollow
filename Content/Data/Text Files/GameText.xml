@@ -41,6 +41,10 @@
       <Key>SpringDoor</Key>
       <Value>Nope</Value>
     </Item>
+    <Item>
+      <Key>TriggerDoor</Key>
+      <Value>You see no visible means of opening this door. There must be a hidden switch or something.</Value>
+    </Item>
     <!--Quest Text-->
     <Item>
       <Key>Quest 1</Key>

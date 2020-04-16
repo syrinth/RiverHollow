@@ -1228,6 +1228,8 @@ namespace RiverHollow.WorldObjects
             _iID = id;
             Type = ObjectType.DungeonObject;
             _eSubType = Util.ParseEnum<DungeonObjectType>(stringData["Subtype"]);
+
+            _bVisible = true;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -1303,7 +1305,7 @@ namespace RiverHollow.WorldObjects
 
             public override void Interact()
             {
-                DungeonManager.ActivateTrigger(MapManager.CurrentMap.Name, _sTriggerName);
+                DungeonManager.ActivateTrigger(MapManager.CurrentMap.DungeonName, _sTriggerName);
             }
         }
 
@@ -1359,6 +1361,9 @@ namespace RiverHollow.WorldObjects
                         break;
                     case DungeonObjectType.KeyDoor:
                         GUIManager.OpenTextWindow(DataManager.GetGameText("KeyDoor"));
+                        break;
+                    case DungeonObjectType.TriggerDoor:
+                        GUIManager.OpenTextWindow(DataManager.GetGameText("TriggerDoor"));
                         break;
                     default:
                         break;

@@ -414,12 +414,11 @@ namespace RiverHollow.Game_Managers
             if (id != -1 && _diWorldObjects.ContainsKey(id))
             {
                 Dictionary<string, string> liData = _diWorldObjects[id];
-                switch (liData["Subtype"])
-                {
-                    case "Door":
-                        return new Door(id, liData, pos);
-                    case "Trigger":
-                        return new TriggerObject(id, liData, pos);
+                if (liData["Subtype"].Contains("Door")){
+                    return new Door(id, liData, pos);
+                }
+                else if (liData["Subtype"].Equals("Trigger")){
+                    return new TriggerObject(id, liData, pos);
                 }
             }
 

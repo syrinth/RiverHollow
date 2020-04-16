@@ -32,7 +32,7 @@ namespace RiverHollow.Game_Managers
             }
         }//[Friends:1-30]
         public const string HomeMap = "mapManorGrounds";
-        public const string SpawnMap = "mapForest"; //"mapRiverHollowTown"; //"mapManorGrounds"; //"mapSpringDungeonC"; // "mapForestDungeonZone"; //"mapRiverHollowTown"; //;
+        public const string SpawnMap = "mapForestDungeonZone"; //"mapForest"; //"mapRiverHollowTown"; //"mapManorGrounds"; //"mapSpringDungeonC"; // "mapRiverHollowTown"; //;
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
 
@@ -88,29 +88,22 @@ namespace RiverHollow.Game_Managers
             string ID = (splitString.Length == 2) ? splitString[1] : "";
             RHMap newMap = _tileMaps[newMapName];
 
-            if (_tileMaps[currMap].IsDungeon)
+            foreach (string s in _tileMaps[newMapName].DictionaryEntrance.Keys)
             {
-                rectEntrance = _tileMaps[newMapName].DictionaryEntrance["Dungeon"];
-            }
-            else
-            {
-                foreach (string s in _tileMaps[newMapName].DictionaryEntrance.Keys)
-                {
-                    string[] testString = s.Split(':');
-                    string testName = testString[0];
-                    string testID = (testString.Length == 2) ? testString[1] : "";
+                string[] testString = s.Split(':');
+                string testName = testString[0];
+                string testID = (testString.Length == 2) ? testString[1] : "";
 
-                    if (c == PlayerManager.World && !string.IsNullOrEmpty(PlayerManager._sBuildingID))
+                if (c == PlayerManager.World && !string.IsNullOrEmpty(PlayerManager._sBuildingID))
+                {
+                    rectEntrance = _tileMaps[newMapName].DictionaryEntrance[PlayerManager._sBuildingID];
+                    PlayerManager._sBuildingID = string.Empty;
+                }
+                else
+                {
+                    if (testName.Equals(_tileMaps[currMap].Name) && testID == ID)
                     {
-                        rectEntrance = _tileMaps[newMapName].DictionaryEntrance[PlayerManager._sBuildingID];
-                        PlayerManager._sBuildingID = string.Empty;
-                    }
-                    else
-                    {
-                        if (testName.Equals(_tileMaps[currMap].Name) && testID == ID)
-                        {
-                            rectEntrance = _tileMaps[newMapName].DictionaryEntrance[s];
-                        }
+                        rectEntrance = _tileMaps[newMapName].DictionaryEntrance[s];
                     }
                 }
             }
@@ -122,7 +115,8 @@ namespace RiverHollow.Game_Managers
             }
             else
             {
-                if (c.IsNPC() || c.IsWorldCharacter()){
+                if (c.IsNPC() || c.IsWorldCharacter())
+                {
                     ((Villager)c).ClearTileForMapChange();
                 }
                 _tileMaps[currMap].RemoveCharacter(c);

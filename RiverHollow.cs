@@ -58,7 +58,7 @@ namespace RiverHollow
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            DungeonManager.Instantiate();
             InputManager.Load();
             SoundManager.LoadContent(Content);
             DataManager.LoadContent(Content);

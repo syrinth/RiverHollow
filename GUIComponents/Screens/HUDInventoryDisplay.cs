@@ -47,8 +47,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             bool rv = false;
             if (_inventory.Contains(mouse))
             {
-                _inventory.ProcessLeftButtonClick(mouse);
-                rv = true;
+                rv = _inventory.ProcessLeftButtonClick(mouse);
             }
             else if (_container != null && _container.Contains(mouse))
             {

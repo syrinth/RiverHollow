@@ -163,5 +163,18 @@
       <Key>303</Key>
       <Value>[Type:Light][Image:112-0][Width:16][Height:16][Idle:6-0.1]</Value>
     </Item>
+    <!--<990> Dungeon Objects-->
+    <Item>
+      <Key>990</Key>
+      <Value>[Type:DungeonObject][Subtype:Trigger][Image:144-16][Width:16][Height:16]</Value>
+    </Item>
+    <Item>
+      <Key>991</Key>
+      <Value>[Type:DungeonObject][Subtype:TriggerDoor][Image:176-16][Width:16][Height:32]</Value>
+    </Item>
+    <Item>
+      <Key>992</Key>
+      <Value>[Type:DungeonObject][Subtype:KeyDoor][Image:176-16][Width:16][Height:32]</Value>
+    </Item>
   </Asset>
 </XnaContent>

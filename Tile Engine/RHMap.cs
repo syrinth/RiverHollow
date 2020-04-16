@@ -14,8 +14,8 @@ using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.CombatManager;
+using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.GUIObjects.HUDMenu;
 using static RiverHollow.RiverHollow;
 using static RiverHollow.WorldObjects.WorldItem;
@@ -35,8 +35,9 @@ namespace RiverHollow.Tile_Engine
         public bool IsCombatMap => _bCombatMap;
         bool _bBuilding;
         public bool IsBuilding => _bBuilding;
-        bool _bDungeon;
-        public bool IsDungeon => _bDungeon;
+        string _sDungeonName;
+        public string DungeonName => _sDungeonName;
+        public bool IsDungeon => !string.IsNullOrEmpty(_sDungeonName);
         bool _bTown;
         public bool IsTown => _bTown;
         bool _bManor;
@@ -128,10 +129,15 @@ namespace RiverHollow.Tile_Engine
 
             _bBuilding = _map.Properties.ContainsKey("Building");
             _bCombatMap = _map.Properties.ContainsKey("Combat");
-            _bDungeon = _map.Properties.ContainsKey("Dungeon");
             _bTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
             _bManor = _map.Properties.ContainsKey("Manor");
+
+            if (_map.Properties.ContainsKey("Dungeon"))
+            {
+                _sDungeonName = _map.Properties["Dungeon"];
+                DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], _sName);
+            }
 
             if (_map.Properties.ContainsKey("Production")) {
                 bool.TryParse(_map.Properties["Production"], out _bProduction);
@@ -152,10 +158,6 @@ namespace RiverHollow.Tile_Engine
 
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, string newMap, string mapName)
         {
-            if(mapName == "mapForest1")
-            {
-                int i = 0;
-            }
             _map = Content.Load<TiledMap>(newMap);
             _sName = mapName;
             MapWidthTiles = _map.Width;
@@ -178,10 +180,15 @@ namespace RiverHollow.Tile_Engine
 
             _bBuilding = _map.Properties.ContainsKey("Building");
             _bCombatMap = _map.Properties.ContainsKey("Combat");
-            _bDungeon = _map.Properties.ContainsKey("Dungeon");
             _bTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
             _bManor = _map.Properties.ContainsKey("Manor");
+
+            if (_map.Properties.ContainsKey("Dungeon"))
+            {
+                _sDungeonName = _map.Properties["Dungeon"];
+                DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], _sName);
+            }
 
             if (_map.Properties.ContainsKey("Production"))
             {
@@ -333,26 +340,6 @@ namespace RiverHollow.Tile_Engine
                         _liMapObjects.Add(mapObject);
                     }
                 }
-                else if (ol.Name.Contains("Spawn"))
-                {
-                    //Sets up the Dictionaries for the resource spawn points
-                    foreach (TiledMapObject mapObject in ol.Objects)
-                    {
-                        if (mapObject.Properties.ContainsKey("Resources"))
-                        {
-                            string[] spawnResources = mapObject.Properties["Resources"].Split('-');
-                            foreach (string s in spawnResources)
-                            {
-                                int iSpawnResource = int.Parse(s);
-                                if (!_diResourceSpawns.ContainsKey(iSpawnResource))
-                                {
-                                    _diResourceSpawns[iSpawnResource] = new List<TiledMapObject>();
-                                }
-                                _diResourceSpawns[iSpawnResource].Add(mapObject);
-                            }
-                        }
-                    }
-                }
             }
         }
 
@@ -364,18 +351,15 @@ namespace RiverHollow.Tile_Engine
             int minMobs = 0;
             int maxMobs = 0;
             List<int> resources = new List<int>();
-            int _iMinResources = 0;
-            int _iMaxResources = 0;
 
             foreach (TiledMapObject obj in _liMapObjects)
             {
-                if (obj.Name.Contains("DungeonObject"))
+                if (obj.Name.Equals("DungeonObject"))
                 {
-                    DungeonObject d = DataManager.GetDungeonObject(int.Parse(obj.Properties["id"]), Util.SnapToGrid(obj.Position));
-                    if (obj.Properties.ContainsKey("Key"))
-                    {
-                        d.SetKey(obj.Properties["Key"]);
-                    }
+                    DungeonObject d = DataManager.GetDungeonObject(int.Parse(obj.Properties["ID"]), Util.SnapToGrid(obj.Position));
+                    if (obj.Properties.ContainsKey("Key")) { d.SetKey(obj.Properties["Key"]); }
+                    if (obj.Properties.ContainsKey("Trigger")) { d.SetTrigger(obj.Properties["Trigger"]); }
+
                     PlaceWorldObject(d);
                     _liDungeonObjects.Add(d);
                  }
@@ -413,6 +397,22 @@ namespace RiverHollow.Tile_Engine
                 {
                     _liMonsterSpawnPoints.Add(new SpawnPoint(this, obj));
                 }
+                else if (obj.Name.Equals("ResourceSpawn"))
+                {
+                    if (obj.Properties.ContainsKey("Resources"))
+                    {
+                        string[] spawnResources = obj.Properties["Resources"].Split('-');
+                        foreach (string s in spawnResources)
+                        {
+                            int iSpawnResource = int.Parse(s);
+                            if (!_diResourceSpawns.ContainsKey(iSpawnResource))
+                            {
+                                _diResourceSpawns[iSpawnResource] = new List<TiledMapObject>();
+                            }
+                            _diResourceSpawns[iSpawnResource].Add(obj);
+                        }
+                    }
+                }
                 else if (obj.Name.Equals("Manor") && !loaded)
                 {
                     Building manor = DataManager.GetManor();
@@ -438,44 +438,6 @@ namespace RiverHollow.Tile_Engine
                 //}
             }
 
-            string[] split;
-            foreach (KeyValuePair<string, string> prop in props)
-            {
-                if (prop.Key.Equals("Monsters"))
-                {
-                    split = prop.Value.Split('/');
-                    foreach (string s in split)
-                    {
-                        _liMobs.Add(int.Parse(s));
-                    }
-                }
-                else if (prop.Key.Equals("MonstersMax")) { maxMobs = int.Parse(prop.Value); }
-                else if (prop.Key.Equals("MonstersMin")) { minMobs = int.Parse(prop.Value); }
-                if (prop.Key.Equals("Resources"))
-                {
-                    split = prop.Value.Split('/');
-                    foreach (string s in split)
-                    {
-                        resources.Add(int.Parse(s));
-                    }
-                }
-                else if (prop.Key.Equals("ResourcesMax")) { _iMaxResources = int.Parse(prop.Value); }
-                else if (prop.Key.Equals("ResourcesMin")) { _iMinResources = int.Parse(prop.Value); }
-            }
-
-            if(resources.Count > 0)
-            {
-                int numResources = RHRandom.Instance.Next(_iMinResources, _iMaxResources);
-                while(numResources != 0)
-                {
-                    int chosenResource = RHRandom.Instance.Next(0, resources.Count - 1);
-
-                    PlaceWorldObject(DataManager.GetWorldObject(resources[chosenResource], new Vector2(rand.Next(1, _map.Width - 1) * TileSize, rand.Next(1, _map.Height - 1) * TileSize)), true);
-
-                    numResources--;
-                }
-            }
-
             if(_liRandomSpawnItems.Count > 0)
             {
                 for (int i = 0; i < 30; i++)
@@ -486,7 +448,6 @@ namespace RiverHollow.Tile_Engine
                 }
             }
 
-        
             if (_liMobs.Count > 0)
             {
                 int numMobs = rand.Next(minMobs, maxMobs);
@@ -510,9 +471,15 @@ namespace RiverHollow.Tile_Engine
             {
                 List<int> whatResources = new List<int>(_diResourceSpawns.Keys);
 
-                int spawnNumber = rand.Next(_iMinResources, _iMaxResources);
+                string[] val = _map.Properties["ResourcesMinMax"].Split('-');
+                int spawnNumber = rand.Next(int.Parse(val[0]), int.Parse(val[1]));
                 for (int i = 0; i < spawnNumber; i++)
                 {
+                    //ToDO pick based on weight. Also make resource spawns objects in their own rights.
+                    //Make SpawnPoint an Abstract class, with MonsterSpawn and ResourceSpawn subclasses.
+                    //SpawnPoints know how big they are.
+                    //Give ResourceSpawns an internal array corresponding to the size and remove objects
+                    //fromt he array as it gets filled so that we bounce less.
                     int whichResource = whatResources[rand.Next(0, whatResources.Count - 1)];
                     List<TiledMapObject> spawnPoints = _diResourceSpawns[whichResource];
 
@@ -1143,6 +1110,7 @@ namespace RiverHollow.Tile_Engine
                 }
                 else if (obj.IsDungeonObject())
                 {
+                    GameManager.gmDungeonObject = (DungeonObject)obj;
                     ((DungeonObject)obj).Interact();
                 }
                 else if (obj.ID == 3) //Checks to see if the tile contains a staircase object
