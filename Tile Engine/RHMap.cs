@@ -48,6 +48,7 @@ namespace RiverHollow.Tile_Engine
         public bool Production => _bProduction;
         int _iActiveSpawnPoints;
         public int ActiveSpawnPoints => _iActiveSpawnPoints;
+        int _iTotalResourceWeight = 0;  //The total space on the map in tiles occupied by resource spawns
 
         private RHTile _targetTile = null;
         public RHTile TargetTile => _targetTile;
@@ -72,7 +73,8 @@ namespace RiverHollow.Tile_Engine
         protected List<RHTile> _liTilledTiles;
         protected List<WorldObject> _liPlacedWorldObjects;
         public List<RHTile> TilledTiles => _liTilledTiles;
-        protected List<SpawnPoint> _liMonsterSpawnPoints;
+        protected List<MonsterSpawn> _liMonsterSpawnPoints;
+        protected List<ResourceSpawn> _liResourceSpawnPoints;
         protected List<int> _liRandomSpawnItems;
         protected List<int> _liCutscenes;
 
@@ -90,11 +92,9 @@ namespace RiverHollow.Tile_Engine
         public Dictionary<string, Vector2> DictionaryCharacterLayer => _dictCharacterLayer;
         private List<TiledMapObject> _liMapObjects;
 
-        //The dictionary of all resource spawn points on the map, by the resource they spawn.
-        private Dictionary<int, List<TiledMapObject>> _diResourceSpawns;
-
         public RHMap() {
-            _liMonsterSpawnPoints = new List<SpawnPoint>();
+            _liMonsterSpawnPoints = new List<MonsterSpawn>();
+            _liResourceSpawnPoints = new List<ResourceSpawn>();
             _liTestTiles = new List<RHTile>();
             _liTilesets = new List<TiledMapTileset>();
             _liActors = new List<WorldActor>();
@@ -113,8 +113,6 @@ namespace RiverHollow.Tile_Engine
             _liRandomSpawnItems = new List<int>();
             _liCutscenes = new List<int>();
             _diCombatTiles = new Dictionary<string, RHTile[,]>();
-
-            _diResourceSpawns = new Dictionary<int, List<TiledMapObject>>();
 
             ToRemove = new List<WorldActor>();
             ToAdd = new List<WorldActor>();
@@ -395,23 +393,14 @@ namespace RiverHollow.Tile_Engine
                 }
                 else if (obj.Name.Equals("SpawnPoint"))
                 {
-                    _liMonsterSpawnPoints.Add(new SpawnPoint(this, obj));
+                    _liMonsterSpawnPoints.Add(new MonsterSpawn(this, obj));
                 }
                 else if (obj.Name.Equals("ResourceSpawn"))
                 {
-                    if (obj.Properties.ContainsKey("Resources"))
-                    {
-                        string[] spawnResources = obj.Properties["Resources"].Split('-');
-                        foreach (string s in spawnResources)
-                        {
-                            int iSpawnResource = int.Parse(s);
-                            if (!_diResourceSpawns.ContainsKey(iSpawnResource))
-                            {
-                                _diResourceSpawns[iSpawnResource] = new List<TiledMapObject>();
-                            }
-                            _diResourceSpawns[iSpawnResource].Add(obj);
-                        }
-                    }
+                    ResourceSpawn a = new ResourceSpawn(this, obj);
+                    _liResourceSpawnPoints.Add(a);
+                    _iTotalResourceWeight += a.Size;
+                    
                 }
                 else if (obj.Name.Equals("Manor") && !loaded)
                 {
@@ -465,42 +454,7 @@ namespace RiverHollow.Tile_Engine
             }
 
             SpawnMonsters();
-
-            //Spawns a random assortment of resources them ap will allow wherever they're allowed
-            if (_diResourceSpawns.Count > 0)
-            {
-                List<int> whatResources = new List<int>(_diResourceSpawns.Keys);
-
-                string[] val = _map.Properties["ResourcesMinMax"].Split('-');
-                int spawnNumber = rand.Next(int.Parse(val[0]), int.Parse(val[1]));
-                for (int i = 0; i < spawnNumber; i++)
-                {
-                    //ToDO pick based on weight. Also make resource spawns objects in their own rights.
-                    //Make SpawnPoint an Abstract class, with MonsterSpawn and ResourceSpawn subclasses.
-                    //SpawnPoints know how big they are.
-                    //Give ResourceSpawns an internal array corresponding to the size and remove objects
-                    //fromt he array as it gets filled so that we bounce less.
-                    int whichResource = whatResources[rand.Next(0, whatResources.Count - 1)];
-                    List<TiledMapObject> spawnPoints = _diResourceSpawns[whichResource];
-
-                    int whichPoint = rand.Next(0, spawnPoints.Count - 1);
-                    if (spawnPoints.Count > 0)
-                    {
-                        TiledMapObject mapObj = spawnPoints[whichPoint];
-                        int xPoint = rand.Next((int)(mapObj.Position.X), (int)(mapObj.Position.X + mapObj.Size.Width));
-                        int yPoint = rand.Next((int)(mapObj.Position.Y), (int)(mapObj.Position.Y + mapObj.Size.Height));
-
-                        WorldObject wObj = DataManager.GetWorldObject(whichResource);
-                        wObj.SetCoordinatesByGrid(new Vector2(xPoint, yPoint));
-
-                        if (wObj.IsPlant())
-                        {
-                            ((Plant)wObj).FinishGrowth();
-                        }
-                        PlaceWorldObject(wObj, false);
-                    }
-                }
-            }
+            SpawnResources();
         }
 
         public void Rollover()
@@ -518,14 +472,15 @@ namespace RiverHollow.Tile_Engine
 
         private void SpawnMonsters()
         {
-            //Remove all mobs associated with the spawn point.
-            foreach (SpawnPoint sp in _liMonsterSpawnPoints)
+            //Remove all mobs from the map
+            foreach (Monster m in _liMonsters)
             {
-                sp.Despawn();
+                RemoveMonster(m);
             }
+            _liMonsters.Clear();
 
             //Copy the spawn points to a list we can safely modify
-            List<SpawnPoint> spawnCopy = new List<SpawnPoint>();
+            List<MonsterSpawn> spawnCopy = new List<MonsterSpawn>();
             spawnCopy.AddRange(_liMonsterSpawnPoints);
 
             //Trigger x number of SpawnPoints
@@ -539,6 +494,37 @@ namespace RiverHollow.Tile_Engine
                     //so it won't be an option for future spawning.
                     spawnCopy[point].Spawn();
                     spawnCopy.RemoveAt(point);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Spawns resources from the ResourceSpawn points on the map
+        /// </summary>
+        private void SpawnResources()
+        {
+            //Spawns a random assortment of resources them ap will allow wherever they're allowed
+            if (_liResourceSpawnPoints.Count > 0)
+            {
+                //Determine how many resources to spawn
+                string[] val = _map.Properties["ResourcesMinMax"].Split('-');
+                int spawnNumber = RHRandom.Instance.Next(int.Parse(val[0]), int.Parse(val[1]));
+
+                for (int i = 0; i < spawnNumber; i++)
+                {
+                    int index = 0;
+                    int current = 0;    //This variable will store how far we've gone in the list
+                    int roll = RHRandom.Instance.Next(0, _iTotalResourceWeight);
+
+                    ResourceSpawn ToSpawn = null;
+                    do
+                    {
+                        ToSpawn = _liResourceSpawnPoints[index];
+                        current += ToSpawn.Size;
+                        index++;
+                    } while (roll > current);
+
+                    ToSpawn.Spawn();  
                 }
             }
         }
@@ -2175,39 +2161,86 @@ namespace RiverHollow.Tile_Engine
         } 
     }
 
-    public class SpawnPoint
+    public abstract class SpawnPoint
     {
-        Monster _monster;
-        RHMap _map;
-        Vector2 _vSpawnPoint;
-        SpawnConditionEnum _eSpawnType = SpawnConditionEnum.Forest;
+        protected RHMap _map;
+        protected Vector2 _vPosition;
 
-        public SpawnPoint(RHMap map, TiledMapObject obj)
+        protected SpawnPoint(RHMap map, TiledMapObject obj)
         {
             _map = map;
-            _eSpawnType = Util.ParseEnum<SpawnConditionEnum>(obj.Properties["SpawnType"]);
-            _vSpawnPoint = map.GetTileByGridCoords(Util.GetGridCoords(obj.Position)).Center;
+            _vPosition = map.GetTileByGridCoords(Util.GetGridCoords(obj.Position)).Center;
         }
 
-        public void Spawn()
+        public virtual void Spawn() { }
+        public virtual bool HasSpawned() { return false; }
+    }
+
+    public class ResourceSpawn : SpawnPoint
+    {
+        int _iWidth;
+        int _iHeight;
+        public int Size => _iWidth * _iHeight;
+        List<int> _liPossibleResources;
+        //List<WorldObject> _liResources;
+        public ResourceSpawn(RHMap map, TiledMapObject obj) : base(map,obj)
+        {
+            _liPossibleResources = new List<int>();
+            _iWidth = (int)obj.Size.Width;
+            _iHeight = (int)obj.Size.Height;
+            if (obj.Properties.ContainsKey("Resources"))
+            {
+                string[] spawnResources = obj.Properties["Resources"].Split('-');
+                foreach (string s in spawnResources)
+                {
+                    _liPossibleResources.Add(int.Parse(s));
+                }
+            }
+        }
+
+        public override void Spawn()
+        {
+            //ToDo //Give ResourceSpawns an internal array corresponding to the size and remove objects
+            //fromt he array as it gets filled so that we bounce less.
+            int xPoint = RHRandom.Instance.Next((int)(_vPosition.X), (int)(_vPosition.X + _iWidth));
+            int yPoint = RHRandom.Instance.Next((int)(_vPosition.Y), (int)(_vPosition.Y + _iHeight));
+
+            WorldObject wObj = DataManager.GetWorldObject(_liPossibleResources[RHRandom.Instance.Next(0, _liPossibleResources.Count-1)]);
+            wObj.SetCoordinatesByGrid(new Vector2(xPoint, yPoint));
+
+            if (wObj.IsPlant())
+            {
+                ((Plant)wObj).FinishGrowth();
+            }
+            _map.PlaceWorldObject(wObj, false);
+        }
+
+        public override bool HasSpawned()
+        {
+            return true;//_monster != null;
+        }
+    }
+
+    public class MonsterSpawn : SpawnPoint
+    {
+        Monster _monster;
+        SpawnConditionEnum _eSpawnType = SpawnConditionEnum.Forest;
+
+        public MonsterSpawn(RHMap map, TiledMapObject obj) : base(map, obj)
+        {
+            _eSpawnType = Util.ParseEnum<SpawnConditionEnum>(obj.Properties["SpawnType"]);
+        }
+
+        public override void Spawn()
         {
             _monster = DataManager.GetMonsterByIndex(RHRandom.Instance.Next(1,4));
             if (_monster != null)
             {
-                _map.AddMonsterByPosition(_monster, _vSpawnPoint);
+                _map.AddMonsterByPosition(_monster, _vPosition);
             }
         }
 
-        public void Despawn()
-        {
-            if (_monster != null)
-            {
-                _map.RemoveMonster(_monster);
-                _monster = null;
-            }
-        }
-
-        public bool HasSpawned()
+        public override bool HasSpawned()
         {
             return _monster != null;
         }
