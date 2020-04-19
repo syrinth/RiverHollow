@@ -247,6 +247,35 @@ namespace RiverHollow.Tile_Engine
                         Rectangle r = new Rectangle((int)mapObject.Position.X, (int)mapObject.Position.Y, (int)mapObject.Size.Width, (int)mapObject.Size.Height);
 
                         string map = string.Empty;
+
+                        if (mapObject.Properties.ContainsKey("Exit"))
+                        {
+                            map = mapObject.Properties["Exit"] == "Home" ? MapManager.HomeMap : mapObject.Properties["Exit"] + ID;
+                            _dictExit.Add(r, map);
+
+                            for (float x = mapObject.Position.X; x < mapObject.Position.X + mapObject.Size.Width; x += TileSize)
+                            {
+                                for (float y = mapObject.Position.Y; y < mapObject.Position.Y + mapObject.Size.Height; y += TileSize)
+                                {
+                                    RHTile t = GetTileByPixelPosition((int)x, (int)y);
+                                    if (t != null && mapObject.Properties.ContainsKey("Door"))
+                                    {
+                                        t.SetMapObject(Util.FloatRectangle(mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height));
+                                    }
+                                }
+                            }
+                        }
+                        else if (mapObject.Properties.ContainsKey("Entrance"))
+                        {
+                            map = mapObject.Properties["Entrance"] == "Home" ? MapManager.HomeMap : mapObject.Properties["Entrance"] + ID;
+                            _dictEntrance.Add(map, r);
+                        }
+                    }
+                }
+                else if (ol.Name.Contains("Character"))
+                {
+                    foreach (TiledMapObject mapObject in ol.Objects)
+                    {
                         if (mapObject.Name.Equals("CombatStart"))
                         {
                             string entrance = mapObject.Properties["Entrance"];
@@ -290,38 +319,7 @@ namespace RiverHollow.Tile_Engine
                             tiles[2, 2] = tiles[1, 2].GetTileByDirection(sidle);
                             _diCombatTiles[entrance] = tiles;
                         }
-                        else
-                        {
-                            if (mapObject.Properties.ContainsKey("Exit"))
-                            {
-                                map = mapObject.Properties["Exit"] == "Home" ? MapManager.HomeMap : mapObject.Properties["Exit"] + ID;
-                                _dictExit.Add(r, map);
-
-                                for (float x = mapObject.Position.X; x < mapObject.Position.X + mapObject.Size.Width; x += TileSize)
-                                {
-                                    for (float y = mapObject.Position.Y; y < mapObject.Position.Y + mapObject.Size.Height; y += TileSize)
-                                    {
-                                        RHTile t = GetTileByPixelPosition((int)x, (int)y);
-                                        if (t != null && mapObject.Properties.ContainsKey("Door"))
-                                        {
-                                            t.SetMapObject(Util.FloatRectangle(mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height));
-                                        }
-                                    }
-                                }
-                            }
-                            else if (mapObject.Properties.ContainsKey("Entrance"))
-                            {
-                                map = mapObject.Properties["Entrance"] == "Home" ? MapManager.HomeMap : mapObject.Properties["Entrance"] + ID;
-                                _dictEntrance.Add(map, r);
-                            }
-                        }
-                    }
-                }
-                else if (ol.Name.Contains("Character"))
-                {
-                    foreach (TiledMapObject mapObject in ol.Objects)
-                    {
-                        if (mapObject.Name.Equals("Shop"))
+                        else if (mapObject.Name.Equals("Shop"))
                         {
                             _liShopData.Add(new ShopData(_sName, mapObject));
                         }

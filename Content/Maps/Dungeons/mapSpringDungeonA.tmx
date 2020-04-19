@@ -217,7 +217,7 @@
     <property name="ID" type="int" value="2"/>
    </properties>
   </object>
-  <object id="23" name="CombatStart" x="180.386" y="739.864" width="10.5" height="9">
+  <object id="23" name="CombatStart" x="180.386" y="740.197" width="9.5" height="8.66667">
    <properties>
     <property name="Entrance" value="mapSpringDungeonEntrance"/>
     <property name="Position" value="SW"/>

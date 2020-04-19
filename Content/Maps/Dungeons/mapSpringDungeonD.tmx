@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="35" height="37" tilewidth="16" tileheight="16" infinite="0" nextlayerid="52" nextobjectid="4">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="35" height="37" tilewidth="16" tileheight="16" infinite="0" nextlayerid="53" nextobjectid="14">
  <properties>
+  <property name="ActiveSpawn" type="int" value="3"/>
   <property name="Dungeon" value="Forest"/>
+  <property name="ResourcesMinMax" value="10-30"/>
  </properties>
  <tileset firstgid="1" source="tilesetDungeon.tsx"/>
  <layer id="48" name="Base" width="35" height="37">
@@ -168,7 +170,14 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="30" name="Character"/>
+ <objectgroup id="30" name="Character">
+  <object id="12" name="CombatStart" x="50.5" y="306.75" width="10.5" height="11.25">
+   <properties>
+    <property name="Entrance" value="mapSpringDungeonC"/>
+    <property name="Position" value="NE"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup id="39" name="Travel">
   <object id="2" name="Exit" x="2.16635" y="311.492" width="11.8333" height="29.0152">
    <properties>
@@ -180,6 +189,43 @@
    <properties>
     <property name="Entrance" value="mapSpringDungeonC"/>
     <property name="ID" type="int" value="0"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="52" name="MapObject">
+  <object id="4" name="ResourceSpawn" x="451.334" y="341.334" width="87.333" height="70.833">
+   <properties>
+    <property name="Resources" value="0"/>
+   </properties>
+  </object>
+  <object id="6" name="ResourceSpawn" x="115.834" y="307.084" width="355.833" height="6.833">
+   <properties>
+    <property name="Resources" value="0"/>
+   </properties>
+  </object>
+  <object id="7" name="ResourceSpawn" x="242.834" y="67.0835" width="135.833" height="38.833">
+   <properties>
+    <property name="Resources" value="0"/>
+   </properties>
+  </object>
+  <object id="8" name="SpawnPoint" x="164.5" y="322.25" width="10" height="8.5">
+   <properties>
+    <property name="SpawnType" value="Forest"/>
+   </properties>
+  </object>
+  <object id="9" name="SpawnPoint" x="97" y="308.25" width="10" height="8.5">
+   <properties>
+    <property name="SpawnType" value="Forest"/>
+   </properties>
+  </object>
+  <object id="10" name="SpawnPoint" x="515" y="209.25" width="10" height="8.5">
+   <properties>
+    <property name="SpawnType" value="Forest"/>
+   </properties>
+  </object>
+  <object id="11" name="SpawnPoint" x="434" y="68.25" width="10" height="8.5">
+   <properties>
+    <property name="SpawnType" value="Forest"/>
    </properties>
   </object>
  </objectgroup>
