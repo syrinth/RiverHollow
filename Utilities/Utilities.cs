@@ -12,7 +12,7 @@ namespace RiverHollow.Misc
     public class Util
     {
         /// <summary>
-        /// Gets the total directional movement speed required to ge to the target location
+        /// Gets the total directional movement speed required to get to the target location
         /// </summary>
         /// <param name="currentPos">The current position of the Actor</param>
         /// <param name="targetPos">The end goal position for the Actor</param>

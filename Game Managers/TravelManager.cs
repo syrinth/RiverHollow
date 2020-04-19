@@ -689,7 +689,11 @@ namespace RiverHollow.Game_Managers
 
             public int Count()
             {
-                return WholePath.Count;
+                if (WholePath == null) { return 0; }
+                else
+                {
+                    return WholePath.Count;
+                }
             }
         }
         #endregion

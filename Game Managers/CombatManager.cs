@@ -404,6 +404,8 @@ namespace RiverHollow.Game_Managers
                 MapManager.CurrentMap.RemoveCharacter(c);
             }
 
+            Camera.SetObserver(PlayerManager.World);
+
             GoToWorldMap();
         }
 
@@ -414,6 +416,7 @@ namespace RiverHollow.Game_Managers
         public static void EndCombatEscape()
         {
             Unpause();
+            Camera.SetObserver(PlayerManager.World);
             PlayerManager.AllowMovement = true;
             GoToWorldMap();
         }

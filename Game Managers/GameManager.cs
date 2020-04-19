@@ -202,6 +202,10 @@ namespace RiverHollow.Game_Managers
 
         public static void ReadInput() { _inputState = InputEnum.Input; }
         public static void DontReadInput() { _inputState = InputEnum.None; }
+        /// <summary>
+        /// Returns whether or not the game is taking our input for a test box or something.
+        /// </summary>
+        /// <returns>True if something is taking the input</returns>
         public static bool TakingInput() { return _inputState == InputEnum.Input; }
 
         public static void Pause() {

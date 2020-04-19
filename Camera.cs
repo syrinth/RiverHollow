@@ -13,7 +13,7 @@ namespace RiverHollow
     {
         static bool _bTrackToTarget = false;
         static Vector2 _vObserver;
-        static WorldActor _actObserver;
+        static WorldActor _actObserver; //The WorldActor the Camera needs to be following
 
         public static Matrix _transform;
         public static Viewport _view;
@@ -28,99 +28,42 @@ namespace RiverHollow
         public static void Update(GameTime gTime)
         {
             Vector2 target = _actObserver.CharCenter.ToVector2() * Scale;
+
             if (!TakingInput())
             {
-                if (!Scrying())
-                {
-                    //This code is used to get the camera to move in to the target
-                    if (_bTrackToTarget)
-                    {
-                        Vector2 direction = Vector2.Zero;
-                        Util.GetMoveSpeed(_vObserver, target, 18, ref direction);
-                        _vObserver += direction;
+                KeyboardState ks = Keyboard.GetState();
+                int speed = 10;
+                if (ks.IsKeyDown(Keys.W)) { target += new Vector2(0, -speed); }
+                else if (ks.IsKeyDown(Keys.S)) { target += new Vector2(0, speed); }
 
-                        if (_vObserver == target) {
-                            _bTrackToTarget = false;
-                        }
-                    }
-                    else {
-                        _vObserver = target;        //We're already tracking the target
-                    }
-                }
-                else
-                {
-                    KeyboardState ks = Keyboard.GetState();
-                    int speed = 10;
-                    if (ks.IsKeyDown(Keys.W))
-                    {
-                        _vObserver += new Vector2(0, -speed);
-                    }
-                    else if (ks.IsKeyDown(Keys.S))
-                    {
-                        _vObserver += new Vector2(0, speed);
-                    }
-
-                    if (ks.IsKeyDown(Keys.A))
-                    {
-                        _vObserver += new Vector2(-speed, 0);
-                    }
-                    else if (ks.IsKeyDown(Keys.D))
-                    {
-                        _vObserver += new Vector2(speed, 0);
-                    }
-                }
+                if (ks.IsKeyDown(Keys.A)) { target += new Vector2(-speed, 0); }
+                else if (ks.IsKeyDown(Keys.D)) { target += new Vector2(speed, 0); }
             }
 
-            float BorderOffset = TileSize * Scale;
-            bool xLocked = false;
-            bool yLocked = false;
+            if (target.X <= (RiverHollow.ScreenWidth / 2)) { target.X = (RiverHollow.ScreenWidth / 2); }
+            else if (target.X >= MapManager.CurrentMap.GetMapWidth() - (RiverHollow.ScreenWidth / 2)) { target.X = MapManager.CurrentMap.GetMapWidth() - (RiverHollow.ScreenWidth / 2); }
+            if (target.Y <= (RiverHollow.ScreenHeight / 2)) { target.Y = (RiverHollow.ScreenHeight / 2); }
+            else if (target.Y >= MapManager.CurrentMap.GetMapHeight() - (RiverHollow.ScreenHeight / 2)) { target.Y = MapManager.CurrentMap.GetMapHeight() - (RiverHollow.ScreenHeight / 2); }
 
-            //Checks if the given map width is smaller than the screen width.
-            //If so, lock it so that we don't move
-            if (MapManager.CurrentMap.GetMapWidth() < RiverHollow.ScreenWidth)
+            if (MapManager.CurrentMap.GetMapWidth() < RiverHollow.ScreenWidth) { target.X = (MapManager.CurrentMap.GetMapWidth() / 2); }
+            if (MapManager.CurrentMap.GetMapHeight() < RiverHollow.ScreenHeight) { target.Y = (MapManager.CurrentMap.GetMapHeight() / 2); }
+
+            if (!Scrying())
             {
-                xLocked = true;
-                _vObserver.X = (MapManager.CurrentMap.GetMapWidth() / 2);
-            }
-
-            //Checks if the given map is smaller than the screen. If so, lock it so we don't move.
-            if (MapManager.CurrentMap.GetMapHeight() < RiverHollow.ScreenHeight)
-            {
-                yLocked = true;
-                _vObserver.Y = (MapManager.CurrentMap.GetMapHeight() / 2);
-            }
-
-            if (!xLocked)
-            {
-                if (_vObserver.X <= (RiverHollow.ScreenWidth / 2))
+                //We are moving to the target
+                if (_bTrackToTarget)
                 {
-                    _vObserver.X = (RiverHollow.ScreenWidth / 2);
-                    xLocked = true;
+                    Vector2 direction = Vector2.Zero;
+                    Util.GetMoveSpeed(_vObserver, target, 18, ref direction);
+                    _vObserver += direction;
+
+                    if (_vObserver == target) { _bTrackToTarget = false; }
                 }
-                else if (_vObserver.X >= MapManager.CurrentMap.GetMapWidth() - (RiverHollow.ScreenWidth / 2))
+                else //We need to snap to the target
                 {
-                    _vObserver.X = MapManager.CurrentMap.GetMapWidth() - (RiverHollow.ScreenWidth / 2);
-                    xLocked = true;
+                    _vObserver = target;
                 }
             }
-
-            if (!yLocked)
-            {
-                if (_vObserver.Y <= (RiverHollow.ScreenHeight / 2) + BorderOffset)
-                {
-                    _vObserver.Y = (RiverHollow.ScreenHeight / 2) + BorderOffset;
-                    yLocked = true;
-                }
-                else if (_vObserver.Y >= MapManager.CurrentMap.GetMapHeight() - (RiverHollow.ScreenHeight / 2) - BorderOffset)
-                {
-                    _vObserver.Y = MapManager.CurrentMap.GetMapHeight() - (RiverHollow.ScreenHeight / 2) - BorderOffset;
-                    yLocked = true;
-                }
-            }
-
-            if (xLocked && yLocked) { _bTrackToTarget = false; }                       //If the camerahas been locked to its axis, stop moving
-            if (xLocked && _vObserver.Y == target.Y) { _bTrackToTarget = false; }      //If the x axis is locked, stop moving when we reach the correct y
-            if (yLocked && _vObserver.X == target.X) { _bTrackToTarget = false; }      //If the y axis is locked, stop moving when we reach the correct x
 
             _vCenter = new Vector2(_vObserver.X - (RiverHollow.ScreenWidth / 2), _vObserver.Y - (RiverHollow.ScreenHeight / 2));
             _transform = Matrix.CreateScale(new Vector3(Scale, Scale, 0)) * Matrix.CreateTranslation(new Vector3(-_vCenter.X, -_vCenter.Y, 0));
