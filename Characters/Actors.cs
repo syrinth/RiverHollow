@@ -375,13 +375,12 @@ namespace RiverHollow.Actors
         protected bool CheckMapForCollisionsAndMove(Vector2 direction, bool ignoreCollisions = false)
         {
             bool rv = false;
-
             //Create the X and Y rectangles to test for collisions
             Rectangle testRectX = Util.FloatRectangle(Position.X + direction.X, Position.Y, CollisionBox.Width, CollisionBox.Height);
             Rectangle testRectY = Util.FloatRectangle(Position.X, Position.Y + direction.Y, CollisionBox.Width, CollisionBox.Height);
 
             //Check for collisions against the map and, if none are detected, move. Do not move if the direction Vector2 is Zero
-            if (CurrentMap.CheckForCollisions(this, testRectX, testRectY, ref direction, ignoreCollisions) && direction != Vector2.Zero)
+            if (CombatManager.InCombat || CurrentMap.CheckForCollisions(this, testRectX, testRectY, ref direction, ignoreCollisions) && direction != Vector2.Zero)
             {
                 DetermineFacing(direction);
                 Position += new Vector2(direction.X, direction.Y);
