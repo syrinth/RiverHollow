@@ -20,7 +20,8 @@ namespace RiverHollow.Game_Managers
     {
         #region const strings for triggers
         public const string MOB_OPEN = "MOBS";
-        public const string KEY_OPEN = "VALID_KEY";
+        public const string ITEM_OPEN = "VALID_ITEM";
+        public const string KEY_OPEN = "KEY_USED";
         #endregion
 
         public enum ZoneEnum { Forest, Mountain, Field, Swamp, Town };

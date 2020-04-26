@@ -405,6 +405,7 @@ namespace RiverHollow.Game_Managers
             }
 
             Camera.SetObserver(PlayerManager.World);
+            MapManager.CurrentMap.Trigger(MOB_OPEN);
 
             GoToWorldMap();
         }

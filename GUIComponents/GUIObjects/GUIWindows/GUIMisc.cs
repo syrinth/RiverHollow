@@ -21,6 +21,13 @@ namespace RiverHollow.GUIComponents.GUIObjects
         }
     }
 
+    public class GUIDungeonKey : GUIImage
+    {
+        public GUIDungeonKey() : base(new Rectangle(16, 16, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog")
+        {
+        }
+    }
+
     public class GUIMoneyDisplay : GUIObject
     {
         GUIText _gTextMoney;
@@ -151,6 +158,48 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public void SetColor(Color c)
         {
             _gCurrencyText.SetColor(c);
+        }
+    }
+    public class GUIDungeonKeyDisplay : GUIObject
+    {
+        GUIText _gKeysText;
+        GUIDungeonKey _gKeys;
+
+        //Player Monster Energy Display
+        public GUIDungeonKeyDisplay()
+        {
+            _gKeysText = new GUIText();
+            Setup();
+        }
+
+        private void Setup()
+        {
+            _gKeys = new GUIDungeonKey();
+
+            _gKeysText.AnchorAndAlignToObject(_gKeys, SideEnum.Right, SideEnum.Top);
+            _gKeys.AlignToObject(_gKeysText, SideEnum.CenterY);
+
+            Height = _gKeysText.Height;
+            Width = _gKeysText.Width + _gKeys.Width;
+
+            AddControl(_gKeys);
+            AddControl(_gKeysText);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (MapManager.CurrentMap.IsDungeon) {
+                _gKeysText.Draw(spriteBatch);
+                _gKeys.Draw(spriteBatch);
+            }
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            if (MapManager.CurrentMap.IsDungeon)
+            {
+                _gKeysText.SetText(DungeonManager.DungeonKeys());
+            }
         }
     }
     public class GUICheck : GUIObject

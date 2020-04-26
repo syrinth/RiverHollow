@@ -31,6 +31,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIStatDisplay _gStaminaDisplay;
         GUIMoneyDisplay _gMoney;
         GUIMonsterEnergyDisplay _gEnergy;
+        GUIDungeonKeyDisplay _gDungeonKeys;
 
         HUDInventory _gInventory;
         GUIItemBox _addedItem;
@@ -52,6 +53,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gEnergy = new GUIMonsterEnergyDisplay();
             _gEnergy.AnchorAndAlignToObject(_gMoney, SideEnum.Bottom, SideEnum.Left);
             AddControl(_gEnergy);
+
+            _gDungeonKeys = new GUIDungeonKeyDisplay();
+            _gDungeonKeys.AnchorAndAlignToObject(_gEnergy, SideEnum.Bottom, SideEnum.Left);
+            AddControl(_gDungeonKeys);
 
             _gInventory = new HUDInventory();
             _gInventory.AnchorToScreen(SideEnum.Bottom);

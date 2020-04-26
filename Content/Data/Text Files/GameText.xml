@@ -27,14 +27,18 @@
     </Item>
     <Item>
       <Key>KeyDoor</Key>
+      <Value>The door is locked. You will need a key to open it.</Value>
+    </Item>
+    <Item>
+      <Key>ItemDoor</Key>
       <Value>A strangely shaped keyhole is embedded in the door [Attempt to Open:OpenDoor|Never Mind:Cancel]</Value>
     </Item>
     <Item>
-      <Key>KeyDoorOpen</Key>
+      <Key>ItemDoorOpen</Key>
       <Value>As you place the item into the keyhole, it vanishes, becoming one with the door!</Value>
     </Item>
     <Item>
-      <Key>KeyDoorClose</Key>
+      <Key>ItemDoorClose</Key>
       <Value>No matter how hard you try, it seems like that item won't fit here.</Value>
     </Item>
     <Item>

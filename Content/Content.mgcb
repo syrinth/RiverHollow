@@ -1736,3 +1736,13 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Monsters/MagicMushroom.png
 
+#begin Maps/Dungeons/mapSpringDungeonE.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapSpringDungeonE.tmx
+
+#begin Maps/Dungeons/mapSpringDungeonF.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapSpringDungeonF.tmx
+

@@ -135,12 +135,12 @@ namespace RiverHollow.Screens
                         string text = string.Empty;
                         if (GameManager.gmDungeonObject.CheckForKey(it))
                         {
-                            GameManager.gmDungeonObject.Trigger(GameManager.KEY_OPEN);
+                            GameManager.gmDungeonObject.Trigger(GameManager.ITEM_OPEN);
                             GUIManager.CloseMainObject();
                             GUIManager.CloseHoverWindow();
-                            text = DataManager.GetGameText("KeyDoorOpen");
+                            text = DataManager.GetGameText("ItemDoorOpen");
                         }
-                        else { text = DataManager.GetGameText("KeyDoorClose"); }
+                        else { text = DataManager.GetGameText("ItemDoorClose"); }
 
                         GUIManager.OpenTextWindow(text);
                     }

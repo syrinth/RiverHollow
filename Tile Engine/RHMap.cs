@@ -1141,7 +1141,13 @@ namespace RiverHollow.Tile_Engine
                     Item it = _liItems[i];
                     if (it.ManualPickup && it.CollisionBox.Contains(GraphicCursor.GetWorldMousePosition()))
                     {
-                        if (InventoryManager.AddToInventory(it))
+                        if(it.ItemID == 300)
+                        {
+                            DungeonManager.AddDungeonKey();
+                            removedList.Add(it);
+                            break;
+                        }
+                        else if (InventoryManager.AddToInventory(it))
                         {
                             removedList.Add(it);
                             break;

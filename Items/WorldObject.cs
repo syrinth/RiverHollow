@@ -1217,7 +1217,7 @@ namespace RiverHollow.WorldObjects
 
     public abstract class DungeonObject : WorldObject
     {
-        enum DungeonObjectType { Trigger, KeyDoor, MobDoor, TriggerDoor };
+        enum DungeonObjectType { Trigger, ItemDoor, KeyDoor, MobDoor, TriggerDoor };
         DungeonObjectType _eSubType;
         protected string _sTriggerName;
         bool _bVisible;
@@ -1319,7 +1319,10 @@ namespace RiverHollow.WorldObjects
                 switch (_eSubType)
                 {
                     case DungeonObjectType.MobDoor:
-                        _sTriggerName = MOB_OPEN + "_" + MapManager.CurrentMap.Name;
+                        _sTriggerName = MOB_OPEN;
+                        break;
+                    case DungeonObjectType.ItemDoor:
+                        _sTriggerName = ITEM_OPEN;
                         break;
                     case DungeonObjectType.KeyDoor:
                         _sTriggerName = KEY_OPEN;
@@ -1359,8 +1362,19 @@ namespace RiverHollow.WorldObjects
                     case DungeonObjectType.MobDoor:
                         GUIManager.OpenTextWindow(DataManager.GetGameText("MobDoor"));
                         break;
+                    case DungeonObjectType.ItemDoor:
+                        GUIManager.OpenTextWindow(DataManager.GetGameText("ItemDoor"));
+                        break;
                     case DungeonObjectType.KeyDoor:
-                        GUIManager.OpenTextWindow(DataManager.GetGameText("KeyDoor"));
+                        if (DungeonManager.DungeonKeys() > 0)
+                        {
+                            DungeonManager.UseDungeonKey();
+                            Trigger(KEY_OPEN);
+                        }
+                        else
+                        {
+                            GUIManager.OpenTextWindow(DataManager.GetGameText("KeyDoor"));
+                        }
                         break;
                     case DungeonObjectType.TriggerDoor:
                         GUIManager.OpenTextWindow(DataManager.GetGameText("TriggerDoor"));
