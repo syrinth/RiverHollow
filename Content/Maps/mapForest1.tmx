@@ -102,7 +102,7 @@
  <objectgroup id="6" name="Character">
   <object id="40" name="CombatStart" x="130.75" y="209.833" width="10.5" height="13.3333">
    <properties>
-    <property name="Entrance" value="mapForest"/>
+    <property name="Map"  value="mapForest"/>
     <property name="Position" value="NW"/>
    </properties>
   </object>
@@ -110,12 +110,12 @@
  <objectgroup id="4" name="Travel Layer">
   <object id="1" name="Exit" x="112.75" y="273.5" width="47.5" height="12.25">
    <properties>
-    <property name="Exit" value="mapForest"/>
+    <property name="Map"  value="mapForest"/>
    </properties>
   </object>
   <object id="2" name="Entrance" x="130" y="260.75" width="12.25" height="9.5">
    <properties>
-    <property name="Entrance" value="mapForest"/>
+    <property name="Map"  value="mapForest"/>
    </properties>
   </object>
  </objectgroup>

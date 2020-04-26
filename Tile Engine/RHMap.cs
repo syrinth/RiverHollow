@@ -248,9 +248,9 @@ namespace RiverHollow.Tile_Engine
 
                         string map = string.Empty;
 
-                        if (mapObject.Properties.ContainsKey("Exit"))
+                        if (mapObject.Name.Equals("Exit"))
                         {
-                            map = mapObject.Properties["Exit"] == "Home" ? MapManager.HomeMap : mapObject.Properties["Exit"] + ID;
+                            map = mapObject.Properties["Map"] == "Home" ? MapManager.HomeMap : mapObject.Properties["Map"] + ID;
                             _dictExit.Add(r, map);
 
                             for (float x = mapObject.Position.X; x < mapObject.Position.X + mapObject.Size.Width; x += TileSize)
@@ -265,9 +265,9 @@ namespace RiverHollow.Tile_Engine
                                 }
                             }
                         }
-                        else if (mapObject.Properties.ContainsKey("Entrance"))
+                        else if (mapObject.Name.Equals("Entrance"))
                         {
-                            map = mapObject.Properties["Entrance"] == "Home" ? MapManager.HomeMap : mapObject.Properties["Entrance"] + ID;
+                            map = mapObject.Properties["Map"] == "Home" ? MapManager.HomeMap : mapObject.Properties["Map"] + ID;
                             _dictEntrance.Add(map, r);
                         }
                     }
@@ -278,7 +278,7 @@ namespace RiverHollow.Tile_Engine
                     {
                         if (mapObject.Name.Equals("CombatStart"))
                         {
-                            string entrance = mapObject.Properties["Entrance"];
+                            string entrance = mapObject.Properties["Map"];
                             RHTile[,] tiles = new RHTile[3, 3];
 
                             DirectionEnum sidle = DirectionEnum.Right;

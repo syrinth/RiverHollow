@@ -304,42 +304,42 @@
  <objectgroup name="Travel Layer">
   <object id="1" name="Exit" x="864" y="1536" width="64" height="30.5">
    <properties>
-    <property name="Exit" value="South"/>
+    <property name="Map" value="South"/>
    </properties>
   </object>
   <object id="2" name="Entrance" x="882.833" y="1441.67" width="29.5" height="26">
    <properties>
-    <property name="Entrance" value="North"/>
+    <property name="Map"  value="North"/>
    </properties>
   </object>
   <object id="3" name="Entrance" x="2109.25" y="878" width="9.5" height="10">
    <properties>
-    <property name="Entrance" value="West"/>
+    <property name="Map"  value="West"/>
    </properties>
   </object>
   <object id="4" name="Exit" x="2185.33" y="861.417" width="22" height="67.8333">
    <properties>
-    <property name="Exit" value="East"/>
+    <property name="Map" value="East"/>
    </properties>
   </object>
   <object id="5" name="Entrance" x="405.96" y="503.333" width="29.5" height="26">
    <properties>
-    <property name="Entrance" value="East"/>
+    <property name="Map"  value="East"/>
    </properties>
   </object>
   <object id="6" name="Exit" x="331.707" y="476.75" width="22" height="67.8333">
    <properties>
-    <property name="Exit" value="West"/>
+    <property name="Map" value="West"/>
    </properties>
   </object>
   <object id="7" name="Exit" x="1184" y="98.75" width="64" height="30.5">
    <properties>
-    <property name="Exit" value="North"/>
+    <property name="Map" value="North"/>
    </properties>
   </object>
   <object id="8" name="Entrance" x="1202.5" y="192.083" width="29.5" height="26">
    <properties>
-    <property name="Entrance" value="South"/>
+    <property name="Map"  value="South"/>
    </properties>
   </object>
  </objectgroup>

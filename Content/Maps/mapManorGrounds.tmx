@@ -331,32 +331,32 @@
  <objectgroup id="5" name="Travel Layer" offsetx="0" offsety="-1.5">
   <object id="10" name="Entrance" x="19.8748" y="835.082" width="7.9166" height="10">
    <properties>
-    <property name="Entrance" value="mapForest"/>
+    <property name="Map"  value="mapForest"/>
    </properties>
   </object>
   <object id="11" name="Exit" x="1.29185" y="822.833" width="11.3333" height="40.3333">
    <properties>
-    <property name="Exit" value="mapForest"/>
+    <property name="Map"  value="mapForest"/>
    </properties>
   </object>
   <object id="21" name="Entrance" x="869.083" y="1570.33" width="7.9166" height="10">
    <properties>
-    <property name="Entrance" value="mapLesserForest"/>
+    <property name="Map"  value="mapLesserForest"/>
    </properties>
   </object>
   <object id="22" name="Exit" x="865.25" y="1586.08" width="28.3333" height="12.3333">
    <properties>
-    <property name="Exit" value="mapLesserForest"/>
+    <property name="Map"  value="mapLesserForest"/>
    </properties>
   </object>
   <object id="23" name="Entrance" x="1570.33" y="467.082" width="7.9166" height="10">
    <properties>
-    <property name="Entrance" value="mapHighlands"/>
+    <property name="Map"  value="mapHighlands"/>
    </properties>
   </object>
   <object id="24" name="Exit" x="1586.75" y="454.833" width="11.3333" height="40.3333">
    <properties>
-    <property name="Exit" value="mapHighlands"/>
+    <property name="Map"  value="mapHighlands"/>
    </properties>
   </object>
  </objectgroup>

@@ -1746,3 +1746,8 @@
 /processor:TiledMapProcessor
 /build:Maps/Dungeons/mapSpringDungeonF.tmx
 
+#begin Maps/mapHospital.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapHospital.tmx
+

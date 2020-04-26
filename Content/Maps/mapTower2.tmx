@@ -112,12 +112,12 @@
  <objectgroup name="Travel Layer">
   <object id="1" name="Exit" x="1030" y="1585.5" width="69" height="13">
    <properties>
-    <property name="Exit" value="mapManorGrounds"/>
+    <property name="Map"  value="mapManorGrounds"/>
    </properties>
   </object>
   <object id="2" name="Entrance" x="1058.58" y="1557.17" width="9" height="7.5">
    <properties>
-    <property name="Entrance" value="mapManorGrounds"/>
+    <property name="Map"  value="mapManorGrounds"/>
    </properties>
   </object>
  </objectgroup>

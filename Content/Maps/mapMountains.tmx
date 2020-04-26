@@ -469,12 +469,12 @@
  <objectgroup name="Travel Layer">
   <object id="1" name="Entrance" x="115.416" y="2370.33" width="8.99997" height="9.66663">
    <properties>
-    <property name="Entrance" value="mapHighlands"/>
+    <property name="Map"  value="mapHighlands"/>
    </properties>
   </object>
   <object id="2" name="Exit" x="96.9163" y="2387.67" width="60.5" height="12.3333">
    <properties>
-    <property name="Exit" value="mapHighlands"/>
+    <property name="Map"  value="mapHighlands"/>
    </properties>
   </object>
  </objectgroup>

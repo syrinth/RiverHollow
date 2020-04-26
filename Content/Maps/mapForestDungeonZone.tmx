@@ -369,22 +369,22 @@
  <objectgroup id="9" name="Travel Layer">
   <object id="1" name="Exit" x="786" y="599.333" width="13.8333" height="98.8333">
    <properties>
-    <property name="Exit" value="mapForest"/>
+    <property name="Map"  value="mapForest"/>
    </properties>
   </object>
   <object id="2" name="Entrance" x="769.58" y="642.082" width="7.9166" height="10">
    <properties>
-    <property name="Entrance" value="mapForest"/>
+    <property name="Map"  value="mapForest"/>
    </properties>
   </object>
   <object id="7" name="Exit" x="417.543" y="326.833" width="12.8333" height="14.8333">
    <properties>
-    <property name="Exit" value="mapSpringDungeonEntrance"/>
+    <property name="Map"  value="mapSpringDungeonEntrance"/>
    </properties>
   </object>
   <object id="8" name="Entrance" x="419.373" y="357.332" width="7.9166" height="10">
    <properties>
-    <property name="Entrance" value="mapSpringDungeonEntrance"/>
+    <property name="Map"  value="mapSpringDungeonEntrance"/>
    </properties>
   </object>
  </objectgroup>

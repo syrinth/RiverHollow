@@ -99,25 +99,25 @@
  <objectgroup id="39" name="Travel">
   <object id="27" name="Entrance" x="218.296" y="388.284" width="8.16663" height="8.3333">
    <properties>
-    <property name="Entrance" value="mapSpringDungeonD"/>
+    <property name="Map"  value="mapSpringDungeonD"/>
     <property name="ID" type="int" value="0"/>
    </properties>
   </object>
   <object id="28" name="Exit" x="210.538" y="412.883" width="24.9242" height="8.83338">
    <properties>
-    <property name="Exit" value="mapSpringDungeonD"/>
+    <property name="Map" value="mapSpringDungeonD"/>
     <property name="ID" type="int" value="0"/>
    </properties>
   </object>
   <object id="33" name="Entrance" x="20.3626" y="144.489" width="8.16663" height="8.3333">
    <properties>
-    <property name="Entrance" value="mapSpringDungeonF"/>
+    <property name="Map"  value="mapSpringDungeonF"/>
     <property name="ID" type="int" value="0"/>
    </properties>
   </object>
   <object id="34" name="Exit" x="-4.25059" y="132.352" width="10.2299" height="25.6886">
    <properties>
-    <property name="Exit" value="mapSpringDungeonF"/>
+    <property name="Map" value="mapSpringDungeonF"/>
     <property name="ID" type="int" value="0"/>
    </properties>
   </object>

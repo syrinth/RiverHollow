@@ -769,12 +769,12 @@
  <objectgroup id="4" name="Travel Layer">
   <object id="1" name="Exit" x="51.6932" y="330.852" width="8.54545" height="5.98864">
    <properties>
-    <property name="Exit" value="Home"/>
+    <property name="Map"  value="Home"/>
    </properties>
   </object>
   <object id="2" name="Entrance" x="51.0156" y="308.204" width="9" height="7.5">
    <properties>
-    <property name="Entrance" value="Home"/>
+    <property name="Map"  value="Home"/>
    </properties>
   </object>
  </objectgroup>

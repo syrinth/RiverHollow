@@ -82,25 +82,25 @@
  <objectgroup id="4" name="Travel">
   <object id="19" name="Entrance" x="22.0675" y="188.887" width="8.16663" height="8.3333">
    <properties>
-    <property name="Entrance" value="mapSpringDungeonEntrance"/>
+    <property name="Map"  value="mapSpringDungeonEntrance"/>
     <property name="ID" type="int" value="0"/>
    </properties>
   </object>
   <object id="20" name="Exit" x="-8.20421" y="173.446" width="11.8333" height="29.0152">
    <properties>
-    <property name="Exit" value="mapSpringDungeonEntrance"/>
+    <property name="Map" value="mapSpringDungeonEntrance"/>
     <property name="ID" type="int" value="0"/>
    </properties>
   </object>
   <object id="27" name="Exit" x="476.75" y="177.992" width="11.8333" height="29.0152">
    <properties>
-    <property name="Exit" value="mapSpringDungeonD"/>
+    <property name="Map" value="mapSpringDungeonD"/>
     <property name="ID" type="int" value="0"/>
    </properties>
   </object>
   <object id="28" name="Entrance" x="451.584" y="191.666" width="8.16663" height="8.3333">
    <properties>
-    <property name="Entrance" value="mapSpringDungeonD"/>
+    <property name="Map"  value="mapSpringDungeonD"/>
     <property name="ID" type="int" value="0"/>
    </properties>
   </object>
@@ -140,7 +140,7 @@
  <objectgroup id="6" name="Character">
   <object id="42" name="CombatStart" x="160.305" y="244.127" width="10.4901" height="8.9907">
    <properties>
-    <property name="Entrance" value="mapForestDungeonZone"/>
+    <property name="Map"  value="mapForestDungeonZone"/>
     <property name="Position" value="NW"/>
    </properties>
   </object>

@@ -194,5 +194,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/MagicMushroom.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapSpringDungeonE.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapSpringDungeonF.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapHospital.tmx</File>
   </SourceFiles>
 </SourceFileCollection>
