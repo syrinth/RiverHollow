@@ -91,25 +91,21 @@
   <object id="19" name="Entrance" x="27.2342" y="172.054" width="8.16663" height="8.3333">
    <properties>
     <property name="Map"  value="mapSpringDungeonA"/>
-    <property name="ID" type="int" value="0"/>
    </properties>
   </object>
   <object id="20" name="Exit" x="1.29579" y="160.946" width="11.8333" height="29.0152">
    <properties>
     <property name="Map" value="mapSpringDungeonA"/>
-    <property name="ID" type="int" value="0"/>
    </properties>
   </object>
   <object id="27" name="Exit" x="338.583" y="160.992" width="11.8333" height="29.0152">
    <properties>
     <property name="Map" value="mapSpringDungeonC"/>
-    <property name="ID" type="int" value="0"/>
    </properties>
   </object>
   <object id="28" name="Entrance" x="311.417" y="171.333" width="8.16663" height="8.3333">
    <properties>
     <property name="Map"  value="mapSpringDungeonC"/>
-    <property name="ID" type="int" value="0"/>
    </properties>
   </object>
   <object id="29" name="Exit" x="160.583" y="323.992" width="30.8333" height="10.0152">

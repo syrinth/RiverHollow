@@ -1,19 +1,17 @@
-﻿using RiverHollow.Actors;
-using RiverHollow.GUIObjects;
-using RiverHollow.WorldObjects;
-using RiverHollow.Tile_Engine;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using RiverHollow.Misc;
-using System.IO;
-
-using static RiverHollow.Game_Managers.GameManager;
-using RiverHollow.SpriteAnimations;
-using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.Actors;
 using RiverHollow.Buildings;
 using RiverHollow.Characters;
+using RiverHollow.GUIObjects;
+using RiverHollow.Misc;
+using RiverHollow.SpriteAnimations;
+using RiverHollow.Tile_Engine;
+using RiverHollow.WorldObjects;
+using System.Collections.Generic;
+using System.IO;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Game_Managers
 {
@@ -80,37 +78,22 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void ChangeMaps(WorldActor c, string currMap, string newMapStr)
+        public static void ChangeMaps(WorldActor c, string currMap, TravelPoint travelPoint)
         {
-            Rectangle rectEntrance = Rectangle.Empty;
-            string[] splitString = newMapStr.Split(':');
-            string newMapName = splitString[0];
-            string ID = (splitString.Length == 2) ? splitString[1] : "";
-            RHMap newMap = _tileMaps[newMapName];
+            //Get the entry rectangle on the new map
+            TravelPoint entryPoint = _tileMaps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
 
-            foreach (string s in _tileMaps[newMapName].DictionaryEntrance.Keys)
-            {
-                string[] testString = s.Split(':');
-                string testName = testString[0];
-                string testID = (testString.Length == 2) ? testString[1] : "";
-
-                if (c == PlayerManager.World && !string.IsNullOrEmpty(PlayerManager._sBuildingID))
-                {
-                    rectEntrance = _tileMaps[newMapName].DictionaryEntrance[PlayerManager._sBuildingID];
-                    PlayerManager._sBuildingID = string.Empty;
-                }
-                else
-                {
-                    if (testName.Equals(_tileMaps[currMap].Name) && testID == ID)
-                    {
-                        rectEntrance = _tileMaps[newMapName].DictionaryEntrance[s];
-                    }
-                }
-            }
-
+            //Handling for if the WorldActor is the player character
             if (c == PlayerManager.World)
             {
-                FadeToNewMap(_tileMaps[newMapName], Util.SnapToGrid(new Vector2(rectEntrance.Left, rectEntrance.Top)));
+                //Handling for if the player is currently in a building and is leaving it
+                if (!string.IsNullOrEmpty(PlayerManager._sBuildingID))
+                {
+                    entryPoint = _tileMaps[travelPoint.LinkedMap].DictionaryTravelPoints[PlayerManager._sBuildingID];
+                    PlayerManager._sBuildingID = string.Empty;
+                }
+
+                FadeToNewMap(_tileMaps[travelPoint.LinkedMap], entryPoint.FindLinkedPointPosition(travelPoint.Center, c));
                 SoundManager.PlayEffect("126426__cabeeno-rossley__timer-ends-time-up");
             }
             else
@@ -120,22 +103,9 @@ namespace RiverHollow.Game_Managers
                     ((Villager)c).ClearTileForMapChange();
                 }
                 _tileMaps[currMap].RemoveCharacter(c);
-                _tileMaps[newMapName].AddCharacter(c);
-                c.NewMapPosition = Util.SnapToGrid(new Vector2(rectEntrance.Left, rectEntrance.Top)); //This needs to get updated when officially added to the new map
+                _tileMaps[travelPoint.LinkedMap].AddCharacter(c);
+                c.NewMapPosition = entryPoint.FindLinkedPointPosition(travelPoint.Center, c); //This needs to get updated when officially added to the new map
             }
-        }
-
-        public static void EnterDungeon()
-        {
-            FadeToNewMap(DungeonManagerOld.Maps[0], new Vector2(DungeonManagerOld.Entrance.Left, DungeonManagerOld.Entrance.Top));
-        }
-
-        public static void ChangeDungeonRoom(string direction, bool straightOut = false)
-        {
-            RHMap newMap = DungeonManagerOld.RoomChange(direction, straightOut);
-            Rectangle rectEntrance = newMap.IsDungeon ? newMap.DictionaryEntrance[direction] : newMap.DictionaryEntrance["Dungeon"];
-
-            FadeToNewMap(newMap, new Vector2(rectEntrance.Left, rectEntrance.Top));
         }
 
         /// <summary>
@@ -156,11 +126,11 @@ namespace RiverHollow.Game_Managers
             Rectangle rectEntrance = Rectangle.Empty;
             PlayerManager._sBuildingID = b.PersonalID.ToString();
 
-            foreach (string s in _tileMaps[b.MapName].DictionaryEntrance.Keys)
+            foreach (string s in _tileMaps[b.MapName].DictionaryTravelPoints.Keys)
             {
                 if (s.Equals(_currentMap.Name))
                 {
-                    rectEntrance = _tileMaps[b.MapName].DictionaryEntrance[s];
+                    rectEntrance = _tileMaps[b.MapName].DictionaryTravelPoints[s].CollisionBox;
                 }
             }
 
@@ -219,7 +189,7 @@ namespace RiverHollow.Game_Managers
                 }
 
                 PlayerManager.CurrentMap = _newMapInfo.NextMap.Name;
-                PlayerManager.World.Position = Util.SnapToGrid(_newMapInfo.PlayerPosition);
+                PlayerManager.World.Position = _newMapInfo.PlayerPosition;
                 _currentMap.CheckForTriggeredCutScenes();
                 _newMapInfo = default;
 

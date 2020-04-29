@@ -108,13 +108,11 @@
   <object id="27" name="Entrance" x="276.796" y="140.284" width="8.16663" height="8.3333">
    <properties>
     <property name="Map"  value="mapSpringDungeonE"/>
-    <property name="ID" type="int" value="0"/>
    </properties>
   </object>
   <object id="28" name="Exit" x="298.538" y="130.883" width="10.9242" height="27.3334">
    <properties>
     <property name="Map" value="mapSpringDungeonE"/>
-    <property name="ID" type="int" value="0"/>
    </properties>
   </object>
  </objectgroup>

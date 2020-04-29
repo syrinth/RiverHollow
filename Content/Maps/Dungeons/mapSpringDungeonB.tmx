@@ -84,40 +84,14 @@
 </data>
  </layer>
  <objectgroup id="4" name="Travel">
-  <object id="19" name="Entrance" x="323.999" y="260.834" width="8.16663" height="8.3333">
-   <properties>
-    <property name="Map"  value="mapSpringDungeonA"/>
-    <property name="ID" type="int" value="0"/>
-   </properties>
-  </object>
-  <object id="20" name="Exit" x="336.705" y="256.841" width="14.8333" height="14.7501">
+  <object id="34" name="Entrance" x="325.038" y="276.482" width="8.16663" height="8.3333">
    <properties>
     <property name="Map" value="mapSpringDungeonA"/>
-    <property name="ID" type="int" value="0"/>
    </properties>
   </object>
-  <object id="32" name="Entrance" x="323.651" y="276.804" width="8.16663" height="8.3333">
+  <object id="35" name="Exit" x="341.766" y="259.068" width="14.8333" height="43.5115">
    <properties>
     <property name="Map" value="mapSpringDungeonA"/>
-    <property name="ID" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="33" name="Exit" x="336.879" y="272.515" width="14.8333" height="14.6365">
-   <properties>
-    <property name="Map" value="mapSpringDungeonA"/>
-    <property name="ID" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="34" name="Entrance" x="323.788" y="292.607" width="8.16663" height="8.3333">
-   <properties>
-    <property name="Map" value="mapSpringDungeonA"/>
-    <property name="ID" type="int" value="2"/>
-   </properties>
-  </object>
-  <object id="35" name="Exit" x="337.016" y="288.318" width="14.8333" height="14.6365">
-   <properties>
-    <property name="Map" value="mapSpringDungeonA"/>
-    <property name="ID" type="int" value="2"/>
    </properties>
   </object>
  </objectgroup>

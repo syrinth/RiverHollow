@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Actors;
 using RiverHollow.Misc;
+using System;
 
 namespace RiverHollow
 {
@@ -45,8 +46,10 @@ namespace RiverHollow
             if (target.Y <= (RiverHollow.ScreenHeight / 2)) { target.Y = (RiverHollow.ScreenHeight / 2); }
             else if (target.Y >= MapManager.CurrentMap.GetMapHeight() - (RiverHollow.ScreenHeight / 2)) { target.Y = MapManager.CurrentMap.GetMapHeight() - (RiverHollow.ScreenHeight / 2); }
 
-            if (MapManager.CurrentMap.GetMapWidth() < RiverHollow.ScreenWidth) { target.X = (MapManager.CurrentMap.GetMapWidth() / 2); }
-            if (MapManager.CurrentMap.GetMapHeight() < RiverHollow.ScreenHeight) { target.Y = (MapManager.CurrentMap.GetMapHeight() / 2); }
+            if (MapManager.CurrentMap.GetMapWidth() / TileSize <= Math.Ceiling((double)RiverHollow.ScreenWidth / TileSize)) { target.X = (MapManager.CurrentMap.GetMapWidth() / 2); }
+
+            double val = Math.Ceiling((double)RiverHollow.ScreenHeight / TileSize);
+            if (MapManager.CurrentMap.GetMapHeight() / TileSize <= val) { target.Y = (MapManager.CurrentMap.GetMapHeight() / 2); }
 
             if (!Scrying())
             {

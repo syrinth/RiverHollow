@@ -1773,9 +1773,9 @@ namespace RiverHollow.Actors
                             DetermineFacing(Vector2.Zero);
                         }
 
-                        if (_liTilePath.Count > 0 && _liTilePath[0] != null && _liTilePath[0].GetDoorObject() != null)
+                        if (_liTilePath.Count > 0 && _liTilePath[0] != null && _liTilePath[0].GetTravelPoint() != null)
                         {
-                            MapManager.ChangeMaps(this, CurrentMapName, MapManager.CurrentMap.DictionaryExit[_liTilePath[0].GetDoorObject().Rect]);
+                            MapManager.ChangeMaps(this, CurrentMapName, MapManager.CurrentMap.DictionaryTravelPoints[_liTilePath[0].GetTravelPoint().TravelPointInfo.LinkedMap]);
                         }
                     }
                     else
@@ -2875,11 +2875,6 @@ namespace RiverHollow.Actors
                     if (_liTilePath.Count == 0)
                     {
                         DetermineFacing(Vector2.Zero);
-                    }
-
-                    if (_liTilePath.Count > 0 && _liTilePath[0] != null && _liTilePath[0].GetDoorObject() != null)
-                    {
-                        MapManager.ChangeMaps(this, CurrentMapName, MapManager.CurrentMap.DictionaryExit[_liTilePath[0].GetDoorObject().Rect]);
                     }
                 }
                 else

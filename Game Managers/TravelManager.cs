@@ -163,7 +163,7 @@ namespace RiverHollow.Game_Managers
                 //If the from map isn't the testing map, set the start point at the entrance from the from map
                 if (fromMap != testMapStr)
                 {
-                    start = MapManager.Maps[testMap].DictionaryEntrance[fromMap].Location.ToVector2();
+                    start = MapManager.Maps[testMap].DictionaryTravelPoints[fromMap].Location.ToVector2();
                 }
 
                 //If the testMap contains the key that we're looking for then we need to pathfind from the entrance to the key
@@ -205,13 +205,13 @@ namespace RiverHollow.Game_Managers
                 }
 
                 //Iterate over the exits in the map we're testing and pathfind to them from the starting location
-                foreach (KeyValuePair<Rectangle, string> exit in MapManager.Maps[testMap].DictionaryExit)
+                foreach (KeyValuePair<string, TravelPoint> exit in MapManager.Maps[testMap].DictionaryTravelPoints)
                 {
                     //Find the shortest path to the exit in question. We copy the start vector into a new one
                     //so that our start point doesn't get overridden. We do not care about the location of the last
                     //tile in the previous pathfinding instance for this operation.
                     Vector2 findExits = new Vector2(start.X, start.Y);  
-                    List<RHTile> pathToExit = FindPathToLocation(ref findExits, exit.Key.Location.ToVector2(), testMapStr);
+                    List<RHTile> pathToExit = FindPathToLocation(ref findExits, exit.Value.Location.ToVector2(), testMapStr);
                     if (pathToExit != null)
                     {
                         //Determine what the new cost of traveling to the testmap is, by appending the
@@ -219,27 +219,17 @@ namespace RiverHollow.Game_Managers
                         //if the map isn't in the dictionary, or the newCost to arrive there is less than
                         //the old cost, we need to change the value to the new shortest path.
                         double newCost = mapCostSoFar[testMapStr] + pathToExit.Count;       
-                        if (!mapCostSoFar.ContainsKey(exit.Value) || newCost < mapCostSoFar[exit.Value])
+                        if (!mapCostSoFar.ContainsKey(exit.Key) || newCost < mapCostSoFar[exit.Key])
                         {
-                            mapCostSoFar[exit.Value] = newCost;         //Set the map cost to the new cost to arrive
-                            frontier.Enqueue(exit.Value, newCost);      //Queue the map with the new cost to arrive there
-
-                            //This code checks for alternate entrances/exits between maps. Normally
-                            //it will be in the form Exit - mapRiverHollowTown, but instead it could 
-                            //be in the form Exit - mapRiverHollowTown:0
-                            string[] split = null;
-                            if (exit.Value.Contains(":")) {
-                                split = exit.Value.Split(':');
-                            }
-                            string nextMap = (split == null) ? exit.Value : split[0];
+                            mapCostSoFar[exit.Key] = newCost;         //Set the map cost to the new cost to arrive
+                            frontier.Enqueue(exit.Key, newCost);      //Queue the map with the new cost to arrive there
 
                             //Find the location of the new endpoint on the target map
-                            Vector2 entranceLocation = MapManager.Maps[nextMap].DictionaryEntrance[(split == null) ? testMap : testMap + ":" + split[1]].Location.ToVector2();
+                            Vector2 entranceLocation = MapManager.Maps[exit.Key].DictionaryTravelPoints[testMap].Location.ToVector2();
 
-                            //Setting the backtrack path for the exit map. And clarifying which object
-                            //we came in from, if there are  multiples between the two maps
-                            mapCameFrom[exit.Value] = (split == null) ? testMap : testMap + ":" + split[1];
-                            _diMapPathing[testMapStr + ":" + exit.Value] = pathToExit; // This needs another key for the appropriate exit
+                            //Setting the backtrack path for the exit map
+                            mapCameFrom[exit.Key] = testMap;
+                            _diMapPathing[testMapStr + ":" + exit.Value.LinkedMap] = pathToExit; // This needs another key for the appropriate exit
                         }
                     }
                 }

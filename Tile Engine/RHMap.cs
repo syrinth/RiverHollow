@@ -84,10 +84,8 @@ namespace RiverHollow.Tile_Engine
 
         private Dictionary<string, RHTile[,]> _diCombatTiles;
         public Dictionary<string, RHTile[,]> DictionaryCombatTiles => _diCombatTiles;
-        private Dictionary<Rectangle, string> _dictExit;
-        public Dictionary<Rectangle, string> DictionaryExit => _dictExit;
-        private Dictionary<string, Rectangle> _dictEntrance;
-        public Dictionary<string, Rectangle> DictionaryEntrance => _dictEntrance;
+        private Dictionary<string, TravelPoint> _dictTravelPoints;
+        public Dictionary<string, TravelPoint> DictionaryTravelPoints => _dictTravelPoints;
         private Dictionary<string, Vector2> _dictCharacterLayer;
         public Dictionary<string, Vector2> DictionaryCharacterLayer => _dictCharacterLayer;
         private List<TiledMapObject> _liMapObjects;
@@ -104,8 +102,7 @@ namespace RiverHollow.Tile_Engine
             _liItems = new List<Item>();
             _liItemsToRemove = new List<Item>();
             _liMapObjects = new List<TiledMapObject>();
-            _dictExit = new Dictionary<Rectangle, string>();
-            _dictEntrance = new Dictionary<string, Rectangle>();
+            _dictTravelPoints = new Dictionary<string, TravelPoint>();
             _dictCharacterLayer = new Dictionary<string, Vector2>();
             _liShopData = new List<ShopData>();
             _liDungeonObjects = new List<DungeonObject>();
@@ -243,32 +240,24 @@ namespace RiverHollow.Tile_Engine
                 {
                     foreach (TiledMapObject mapObject in ol.Objects)
                     {
-                        string ID = (mapObject.Properties.ContainsKey("ID")) ? (":" + mapObject.Properties["ID"]) : "";
-                        Rectangle r = new Rectangle((int)mapObject.Position.X, (int)mapObject.Position.Y, (int)mapObject.Size.Width, (int)mapObject.Size.Height);
-
-                        string map = string.Empty;
-
-                        if (mapObject.Name.Equals("Exit"))
+                        if (mapObject.Name.Equals("Entrance"))
                         {
-                            map = mapObject.Properties["Map"] == "Home" ? MapManager.HomeMap : mapObject.Properties["Map"] + ID;
-                            _dictExit.Add(r, map);
-
-                            for (float x = mapObject.Position.X; x < mapObject.Position.X + mapObject.Size.Width; x += TileSize)
+                            TravelPoint trvlPt = new TravelPoint(mapObject);
+                            if (mapObject.Properties.ContainsKey("Door"))
                             {
-                                for (float y = mapObject.Position.Y; y < mapObject.Position.Y + mapObject.Size.Height; y += TileSize)
+                                for (float x = mapObject.Position.X; x < mapObject.Position.X + mapObject.Size.Width; x += TileSize)
                                 {
-                                    RHTile t = GetTileByPixelPosition((int)x, (int)y);
-                                    if (t != null && mapObject.Properties.ContainsKey("Door"))
+                                    for (float y = mapObject.Position.Y; y < mapObject.Position.Y + mapObject.Size.Height; y += TileSize)
                                     {
-                                        t.SetMapObject(Util.FloatRectangle(mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height));
+                                        RHTile t = GetTileByPixelPosition((int)x, (int)y);
+                                        if (t != null)
+                                        {
+                                            t.SetMapObject(trvlPt);
+                                        }
                                     }
                                 }
                             }
-                        }
-                        else if (mapObject.Name.Equals("Entrance"))
-                        {
-                            map = mapObject.Properties["Map"] == "Home" ? MapManager.HomeMap : mapObject.Properties["Map"] + ID;
-                            _dictEntrance.Add(map, r);
+                            _dictTravelPoints.Add(trvlPt.LinkedMap, trvlPt);
                         }
                     }
                 }
@@ -951,11 +940,11 @@ namespace RiverHollow.Tile_Engine
         /// <returns></returns>
         public bool CheckForMapChange(WorldActor c, Rectangle movingChar)
         {
-            foreach(KeyValuePair<Rectangle, string>  kvp in _dictExit)
+            foreach(KeyValuePair<string, TravelPoint> kvp in _dictTravelPoints)
             {
-                if (kvp.Key.Intersects(movingChar))
+                if (kvp.Value.Intersects(movingChar))
                 {
-                    MapManager.ChangeMaps(c, this.Name, _dictExit[kvp.Key]);
+                    MapManager.ChangeMaps(c, this.Name, kvp.Value);
                     return true;
 
                     //Unused code for now since AdventureMaps are unused
@@ -1050,13 +1039,13 @@ namespace RiverHollow.Tile_Engine
             //Do nothing if no tile could be retrieved
             if (tile == null) { return rv; }
 
-            if(tile.GetDoorObject() != null) {
-                RHTile.TileObject obj = tile.GetDoorObject();
+            if(tile.GetTravelPoint() != null) {
+                RHTile.TileObject obj = tile.GetTravelPoint();
 
-                if (PlayerManager.PlayerInRange(obj.Rect))
+                if (PlayerManager.PlayerInRange(obj.TravelPointInfo.CollisionBox))
                 {
                     if (obj.PlayerBuilding != null) { MapManager.EnterBuilding(obj.PlayerBuilding); }
-                    else { MapManager.ChangeMaps(PlayerManager.World, this.Name, _dictExit[obj.Rect]); }
+                    else { MapManager.ChangeMaps(PlayerManager.World, this.Name, obj.TravelPointInfo); }
                 }
             }
             else if (tile.GetWorldObject() != null)
@@ -1096,10 +1085,6 @@ namespace RiverHollow.Tile_Engine
                 {
                     GameManager.gmDungeonObject = (DungeonObject)obj;
                     ((DungeonObject)obj).Interact();
-                }
-                else if (obj.ID == 3) //Checks to see if the tile contains a staircase object
-                {
-                    MapManager.ChangeMaps(PlayerManager.World, this.Name, ((Staircase)obj).ToMap);
                 }
             }
 
@@ -1440,11 +1425,11 @@ namespace RiverHollow.Tile_Engine
                 bool found = false;
 
                 RHTile t = GetTileByPixelPosition(GraphicCursor.GetWorldMousePosition().ToPoint());
-                if(t != null && t.GetDoorObject() != null)
+                if(t != null && t.GetTravelPoint() != null)
                 {
                     found = true;
                     GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Door;
-                    GraphicCursor.Alpha = (PlayerManager.PlayerInRange(t.GetDoorObject().Rect) ? 1 : 0.5f);
+                    GraphicCursor.Alpha = (PlayerManager.PlayerInRange(t.GetTravelPoint().TravelPointInfo.CollisionBox) ? 1 : 0.5f);
                 }
 
                 foreach (WorldActor c in _liActors)
@@ -1601,7 +1586,7 @@ namespace RiverHollow.Tile_Engine
                     {
                         GameManager.PickUpBuilding(b);
                         b.RemoveSelfFromTiles();
-                        _dictEntrance.Remove(b.PersonalID.ToString());
+                        _dictTravelPoints.Remove(b.PersonalID.ToString());
                         break;
                     }
                 }
@@ -1622,7 +1607,7 @@ namespace RiverHollow.Tile_Engine
                         {
                             bldg = b;
                             b.RemoveSelfFromTiles();
-                            _dictEntrance.Remove(b.PersonalID.ToString());
+                            _dictTravelPoints.Remove(b.PersonalID.ToString());
                             PlayerManager.RemoveBuilding(b);
                             LeaveBuildMode();
                             Unpause();
@@ -1679,7 +1664,7 @@ namespace RiverHollow.Tile_Engine
 
         public void CreateBuildingEntrance(Building b)
         {
-            _dictEntrance.Add(b.PersonalID.ToString(), b.BoxToExit); //TODO: FIX THIS
+            _dictTravelPoints.Add(b.MapName, new TravelPoint(b.BoxToExit, b.MapName, b.PersonalID)); //TODO: FIX THIS
             for (float x = b.BoxToEnter.X; x < b.BoxToEnter.X + b.BoxToEnter.Width; x += TileSize)
             {
                 for (float y = b.BoxToEnter.Y; y < b.BoxToEnter.Y + b.BoxToEnter.Height; y += TileSize)
@@ -2494,12 +2479,12 @@ namespace RiverHollow.Tile_Engine
             _tileMapObj = new TileObject(b);
         }
 
-        public void SetMapObject(Rectangle obj)
+        public void SetMapObject(TravelPoint obj)
         {
             _tileMapObj = new TileObject(obj);
         }
 
-        public TileObject GetDoorObject()
+        public TileObject GetTravelPoint()
         {
             return _tileMapObj;
         }
@@ -2727,7 +2712,7 @@ namespace RiverHollow.Tile_Engine
         /// <returns>Returns True if the Tile is a legal tile to target</returns>
         public bool CanTargetTile()
         {
-            return Passable() && GetDoorObject() == null && WorldObject == null;
+            return Passable() && GetTravelPoint() == null && WorldObject == null;
         }
 
         /// <summary>
@@ -2760,18 +2745,18 @@ namespace RiverHollow.Tile_Engine
         {
             Building _building;
             public Building PlayerBuilding => _building;
-            Rectangle _rectMapObject;
-            public Rectangle Rect => _rectMapObject;
+            TravelPoint _travelPoint;
+            public TravelPoint TravelPointInfo => _travelPoint;
 
             public TileObject(Building b)
             {
-                _rectMapObject = b.BoxToEnter;
+                _travelPoint = new TravelPoint(b.BoxToEnter, b.MapName, b.PersonalID);
                 _building = b;
             }
 
-            public TileObject(Rectangle rect)
+            public TileObject(TravelPoint rect)
             {
-                _rectMapObject = rect;
+                _travelPoint = rect;
             }
         }
     }
@@ -2815,6 +2800,68 @@ namespace RiverHollow.Tile_Engine
         internal void Talk()
         {
             ((ShopKeeper)DataManager.DiNPC[_iShopID]).Talk(true);
+        }
+    }
+
+    public class TravelPoint
+    {
+        int _ibuildingID;
+        public int BuildingID => _ibuildingID;
+        Rectangle _rCollisionBox;
+        public Rectangle CollisionBox => _rCollisionBox;
+        public Point Location => _rCollisionBox.Location;
+        string _sLinkedMap;
+        public string LinkedMap => _sLinkedMap;
+        public Vector2 Center => _rCollisionBox.Center.ToVector2();
+
+
+        DirectionEnum _eEntranceDir;
+
+        public TravelPoint(TiledMapObject obj)
+        {
+            _rCollisionBox = Util.FloatRectangle(obj.Position, obj.Size.Width, obj.Size.Height);
+            if (obj.Properties.ContainsKey("Map"))
+            {
+                _sLinkedMap = obj.Properties["Map"] == "Home" ? MapManager.HomeMap : obj.Properties["Map"];
+            }
+            if (obj.Properties.ContainsKey("EntranceDir"))
+            {
+                _eEntranceDir = Util.ParseEnum<DirectionEnum>(obj.Properties["EntranceDir"]);
+            }
+        }
+        public TravelPoint(Rectangle collision, string linkedMap, int buildingID)
+        {
+            _rCollisionBox = collision;
+            _sLinkedMap = linkedMap;
+            _ibuildingID = buildingID;
+        }
+
+        public bool Intersects(Rectangle value)
+        {
+            return _rCollisionBox.Intersects(value);
+        }
+
+        public Vector2 FindLinkedPointPosition(Vector2 oldPointCenter, WorldActor c)
+        {
+            Point actorPos = c.CollisionBox.Center;
+            Vector2 vDiff = actorPos.ToVector2() - oldPointCenter;
+
+            if (_eEntranceDir == DirectionEnum.Left || _eEntranceDir == DirectionEnum.Right)
+            {
+                vDiff.X *= -1;
+                int mod = (_rCollisionBox.Width / 2) + (c.CollisionBox.Width / 2) + 1;
+                if (_eEntranceDir == DirectionEnum.Left) { vDiff.X -= mod; }
+                else if (_eEntranceDir == DirectionEnum.Right) { vDiff.X += mod; }
+            }
+            else if (_eEntranceDir == DirectionEnum.Up || _eEntranceDir == DirectionEnum.Down)
+            {
+                vDiff.Y *= -1;
+                int mod = (_rCollisionBox.Height / 2) + (c.CollisionBox.Height / 2)+1;
+                if (_eEntranceDir == DirectionEnum.Up) { vDiff.Y -= mod; }
+                else if (_eEntranceDir == DirectionEnum.Down) { vDiff.Y += mod; }
+            }
+
+            return new Vector2(Center.X + vDiff.X, Center.Y + vDiff.Y);
         }
     }
 }
