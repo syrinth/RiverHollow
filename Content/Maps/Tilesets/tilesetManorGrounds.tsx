@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.2" tiledversion="1.3.2" name="tilesetManorGrounds" tilewidth="16" tileheight="16" tilecount="625" columns="25">
- <image source="tilesetManorGrounds.png" trans="ffffff" width="400" height="400"/>
+ <image source="..\Tilesets\tilesetManorGrounds.png" trans="ffffff" width="400" height="400"/>
  <terraintypes>
   <terrain name="Blank" tile="18"/>
   <terrain name="Grass" tile="26"/>

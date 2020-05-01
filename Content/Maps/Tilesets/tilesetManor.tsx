@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset name="tilesetManor" tilewidth="16" tileheight="16" tilecount="100" columns="10">
- <image source="tilesetManor.png" trans="ffffff" width="160" height="160"/>
+ <image source="..\Tilesets\tilesetManor.png" trans="ffffff" width="160" height="160"/>
  <tile id="0">
   <properties>
    <property name="Journal" type="bool" value="true"/>

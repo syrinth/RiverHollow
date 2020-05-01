@@ -4,7 +4,7 @@
   <property name="Building" type="bool" value="true"/>
   <property name="WorkerBuilding" type="bool" value="true"/>
  </properties>
- <tileset firstgid="1" source="TilesetSources\tilesetManorGrounds.tsx"/>
+ <tileset firstgid="1" source="..\Tilesets\tilesetManorGrounds.tsx"/>
  <layer name="Base Layer" width="100" height="100">
   <data encoding="csv">
 27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,

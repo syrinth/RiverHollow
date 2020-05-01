@@ -3,7 +3,7 @@
  <properties>
   <property name="Cutscenes" value="0"/>
  </properties>
- <tileset firstgid="1" source="TilesetSources\tilesetHouses.tsx"/>
+ <tileset firstgid="1" source="..\Tilesets\tilesetHouses.tsx"/>
  <layer id="1" name="Base Layer" width="32" height="31">
   <data encoding="csv">
 8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,

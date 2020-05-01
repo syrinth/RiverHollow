@@ -3,7 +3,7 @@
  <properties>
   <property name="Outside" type="bool" value="true"/>
  </properties>
- <tileset firstgid="1" source="TilesetSources\tilesetManorGrounds.tsx"/>
+ <tileset firstgid="1" source="..\Tilesets\tilesetManorGrounds.tsx"/>
  <layer id="1" name="Spring Base" width="100" height="100">
   <data encoding="csv">
 27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,

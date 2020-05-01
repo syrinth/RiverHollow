@@ -5,7 +5,7 @@
   <property name="Outside" type="bool" value="false"/>
   <property name="ResourcesMinMax" value="20-60"/>
  </properties>
- <tileset firstgid="1" source="tilesetDungeon.tsx"/>
+ <tileset firstgid="1" source="..\Tilesets\tilesetDungeon.tsx"/>
  <layer id="1" name="Base Layer" width="16" height="50">
   <data encoding="csv">
 8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,

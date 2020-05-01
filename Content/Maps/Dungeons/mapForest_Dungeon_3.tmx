@@ -4,7 +4,7 @@
   <property name="Dungeon" value="Forest"/>
   <property name="Outside" type="bool" value="false"/>
  </properties>
- <tileset firstgid="1" source="tilesetDungeon.tsx"/>
+ <tileset firstgid="1" source="..\Tilesets\tilesetDungeon.tsx"/>
  <layer id="1" name="Base" width="22" height="22">
   <data encoding="csv">
 8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,

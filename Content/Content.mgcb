@@ -98,18 +98,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/worldObjects.png
 
-#begin Maps/Dungeons/DungeonSheet.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Maps/Dungeons/DungeonSheet.png
-
 #begin Data/Monsters.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -188,31 +176,6 @@
 /processorParam:Quality=Best
 /build:Sound/Stock/Effects/126426__cabeeno-rossley__timer-ends-time-up.wav
 
-#begin Maps/mapGuildhouse.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapGuildhouse.tmx
-
-#begin Maps/mapHouseNPC1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapHouseNPC1.tmx
-
-#begin Maps/mapHouseNPC3.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapHouseNPC3.tmx
-
-#begin Maps/mapMountains.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapMountains.tmx
-
-#begin Maps/mapRiverHollowTown.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapRiverHollowTown.tmx
-
 #begin Data/CutScenes.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -234,33 +197,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/WorldObjects.xml
-
-#begin Maps/mapManorGrounds.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapManorGrounds.tmx
-
-#begin Maps/mapLesserForest.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapLesserForest.tmx
-
-#begin Maps/mapHighlands.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapHighlands.tmx
-
-#begin Maps/Dungeons/tilesetDungeon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Maps/Dungeons/tilesetDungeon.png
 
 #begin Textures/texWeather.png
 /importer:TextureImporter
@@ -517,26 +453,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Shadow.png
 
-#begin Maps/mapTower1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapTower1.tmx
-
-#begin Maps/mapTower2.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapTower2.tmx
-
-#begin Maps/mapTower3.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapTower3.tmx
-
-#begin Maps/mapManor1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapManor1.tmx
-
 #begin Textures/Items/Consumables.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -596,11 +512,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Items/StaticObjects.png
-
-#begin Maps/mapSwamp.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapSwamp.tmx
 
 #begin Textures/DarkWoodTree.png
 /importer:TextureImporter
@@ -1587,11 +1498,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Monsters/MagicMushroom.png
 
-#begin Maps/mapHospital.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapHospital.tmx
-
 #begin Maps/Dungeons/mapForest_Dungeon_1.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -1707,7 +1613,7 @@
 /processor:TiledMapProcessor
 /build:Maps/Forest/mapForest_16.tmx
 
-#begin Maps/TilesetSources/tilesetHouses.png
+#begin Maps/Tilesets/tilesetHouses.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1717,9 +1623,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Maps/TilesetSources/tilesetHouses.png
+/build:Maps/Tilesets/tilesetHouses.png
 
-#begin Maps/TilesetSources/tilesetManor.png
+#begin Maps/Tilesets/tilesetManor.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1729,9 +1635,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Maps/TilesetSources/tilesetManor.png
+/build:Maps/Tilesets/tilesetManor.png
 
-#begin Maps/TilesetSources/tilesetManorGrounds.png
+#begin Maps/Tilesets/tilesetManorGrounds_orig.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1741,9 +1647,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Maps/TilesetSources/tilesetManorGrounds.png
+/build:Maps/Tilesets/tilesetManorGrounds_orig.png
 
-#begin Maps/TilesetSources/tilesetManorGrounds_orig.png
+#begin Maps/Tilesets/tilesetOutsideWinter.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1753,9 +1659,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Maps/TilesetSources/tilesetManorGrounds_orig.png
+/build:Maps/Tilesets/tilesetOutsideWinter.png
 
-#begin Maps/TilesetSources/tilesetOutsideWinter.png
+#begin Maps/Tilesets/tsBuildings.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1765,9 +1671,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Maps/TilesetSources/tilesetOutsideWinter.png
+/build:Maps/Tilesets/tsBuildings.png
 
-#begin Maps/TilesetSources/tsBuildings.png
+#begin Maps/Tilesets/tsFurniture.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1777,9 +1683,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Maps/TilesetSources/tsBuildings.png
+/build:Maps/Tilesets/tsFurniture.png
 
-#begin Maps/TilesetSources/tsFurniture.png
+#begin Maps/Tilesets/tsWallsFloors.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1789,9 +1695,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Maps/TilesetSources/tsFurniture.png
+/build:Maps/Tilesets/tsWallsFloors.png
 
-#begin Maps/TilesetSources/tsWallsFloors.png
+#begin Maps/Tilesets/tilesetManorGrounds.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1801,5 +1707,87 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Maps/TilesetSources/tsWallsFloors.png
+/build:Maps/Tilesets/tilesetManorGrounds.png
+
+#begin Maps/Manor/mapManor1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Manor/mapManor1.tmx
+
+#begin Maps/Manor/mapManorGrounds.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Manor/mapManorGrounds.tmx
+
+#begin Maps/Manor/mapTower1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Manor/mapTower1.tmx
+
+#begin Maps/Manor/mapTower2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Manor/mapTower2.tmx
+
+#begin Maps/Manor/mapTower3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Manor/mapTower3.tmx
+
+#begin Maps/Misc/mapLesserForest.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapLesserForest.tmx
+
+#begin Maps/Mountain/mapHighlands.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Mountain/mapHighlands.tmx
+
+#begin Maps/Mountain/mapMountains.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Mountain/mapMountains.tmx
+
+#begin Maps/Swamp/mapSwamp.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Swamp/mapSwamp.tmx
+
+#begin Maps/Village/mapGuildhouse.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Village/mapGuildhouse.tmx
+
+#begin Maps/Village/mapHospital.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Village/mapHospital.tmx
+
+#begin Maps/Village/mapHouseNPC1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Village/mapHouseNPC1.tmx
+
+#begin Maps/Village/mapHouseNPC3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Village/mapHouseNPC3.tmx
+
+#begin Maps/Village/mapRiverHollowTown.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Village/mapRiverHollowTown.tmx
+
+#begin Maps/Tilesets/tilesetDungeon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Maps/Tilesets/tilesetDungeon.png
 
