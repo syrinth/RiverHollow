@@ -99,7 +99,7 @@
  <objectgroup id="30" name="Character">
   <object id="41" name="CombatStart" x="242.75" y="130.375" width="10.5" height="11.25">
    <properties>
-    <property name="Map"  value="mapSpringDungeonE"/>
+    <property name="Map" value="mapSpringDungeonE"/>
     <property name="Position" value="SW"/>
    </properties>
   </object>
@@ -107,12 +107,13 @@
  <objectgroup id="39" name="Travel">
   <object id="27" name="Entrance" x="276.796" y="140.284" width="8.16663" height="8.3333">
    <properties>
-    <property name="Map"  value="mapSpringDungeonE"/>
+    <property name="Map" value="mapSpringDungeonE"/>
    </properties>
   </object>
   <object id="28" name="Exit" x="298.538" y="130.883" width="10.9242" height="27.3334">
    <properties>
-    <property name="Map" value="mapSpringDungeonE"/>
+    <property name="EntranceDir" value="Left"/>
+    <property name="Map" value="mapForest_Dungeon_6"/>
    </properties>
   </object>
  </objectgroup>

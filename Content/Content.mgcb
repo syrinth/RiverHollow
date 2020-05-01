@@ -213,31 +213,6 @@
 /processor:TiledMapProcessor
 /build:Maps/mapRiverHollowTown.tmx
 
-#begin Maps/Dungeons/mapRoom1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeons/mapRoom1.tmx
-
-#begin Maps/Dungeons/mapRoom2.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeons/mapRoom2.tmx
-
-#begin Maps/Dungeons/mapRoom3.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeons/mapRoom3.tmx
-
-#begin Maps/Dungeons/mapRoom4.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeons/mapRoom4.tmx
-
-#begin Maps/Dungeons/mapRoom5.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeons/mapRoom5.tmx
-
 #begin Data/CutScenes.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -301,16 +276,6 @@
 /processorParam:TextureFormat=Color
 /build:Maps/tilesetHouses.png
 
-#begin Maps/mapForest.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapForest.tmx
-
-#begin Maps/mapForestDungeonZone.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapForestDungeonZone.tmx
-
 #begin Maps/mapLesserForest.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -320,11 +285,6 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/mapHighlands.tmx
-
-#begin Maps/Dungeons/mapSpringDungeonEntrance.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeons/mapSpringDungeonEntrance.tmx
 
 #begin Maps/Dungeons/tilesetDungeon.png
 /importer:TextureImporter
@@ -337,16 +297,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Maps/Dungeons/tilesetDungeon.png
-
-#begin Maps/Dungeons/mapSpringDungeonA.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeons/mapSpringDungeonA.tmx
-
-#begin Maps/Dungeons/mapSpringDungeonB.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeons/mapSpringDungeonB.tmx
 
 #begin Maps/tilesetOutsideWinter.png
 /importer:TextureImporter
@@ -1086,16 +1036,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/texFlooring.png
 
-#begin Maps/Dungeons/mapSpringDungeonC.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeons/mapSpringDungeonC.tmx
-
-#begin Maps/Dungeons/mapSpringDungeonD.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeons/mapSpringDungeonD.tmx
-
 #begin Textures/Actors/Monsters/FangedFur.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1107,11 +1047,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Monsters/FangedFur.png
-
-#begin Maps/mapForest1.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/mapForest1.tmx
 
 #begin Fonts/FontBattle.fnt
 /importer:BitmapFontImporter
@@ -1736,18 +1671,123 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Monsters/MagicMushroom.png
 
-#begin Maps/Dungeons/mapSpringDungeonE.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeons/mapSpringDungeonE.tmx
-
-#begin Maps/Dungeons/mapSpringDungeonF.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Dungeons/mapSpringDungeonF.tmx
-
 #begin Maps/mapHospital.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/mapHospital.tmx
+
+#begin Maps/Dungeons/mapForest_Dungeon_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_1.tmx
+
+#begin Maps/Dungeons/mapForest_Dungeon_2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_2.tmx
+
+#begin Maps/Dungeons/mapForest_Dungeon_3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_3.tmx
+
+#begin Maps/Dungeons/mapForest_Dungeon_4.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_4.tmx
+
+#begin Maps/Dungeons/mapForest_Dungeon_5.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_5.tmx
+
+#begin Maps/Dungeons/mapForest_Dungeon_6.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_6.tmx
+
+#begin Maps/Dungeons/mapForest_Dungeon_7.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_7.tmx
+
+#begin Maps/mapForest_01.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapForest_01.tmx
+
+#begin Maps/mapForest_02.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapForest_02.tmx
+
+#begin Maps/mapForest_03.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapForest_03.tmx
+
+#begin Maps/mapForest_04.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapForest_04.tmx
+
+#begin Maps/mapForest_05.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapForest_05.tmx
+
+#begin Maps/mapForest_06.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapForest_06.tmx
+
+#begin Maps/mapForest_07.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapForest_07.tmx
+
+#begin Maps/mapForest_08.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapForest_08.tmx
+
+#begin Maps/mapForest_09.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapForest_09.tmx
+
+#begin Maps/mapForest_10.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapForest_10.tmx
+
+#begin Maps/mapForest_11.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapForest_11.tmx
+
+#begin Maps/mapForest_12.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapForest_12.tmx
+
+#begin Maps/mapForest_13.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapForest_13.tmx
+
+#begin Maps/mapForest_14.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapForest_14.tmx
+
+#begin Maps/mapForest_15.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapForest_15.tmx
+
+#begin Maps/mapForest_16.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/mapForest_16.tmx
 

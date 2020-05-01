@@ -169,24 +169,16 @@
 </data>
  </layer>
  <objectgroup id="4" name="Travel Layer">
-  <object id="4" name="Entrance" x="227.583" y="732.334" width="8.16663" height="8.3333">
-   <properties>
-    <property name="Map" value="mapSpringDungeonEntrance"/>
-   </properties>
-  </object>
   <object id="5" name="Exit" x="241.75" y="706.999" width="13.25" height="60.0833">
    <properties>
-    <property name="Map" value="mapSpringDungeonEntrance"/>
-   </properties>
-  </object>
-  <object id="21" name="Entrance" x="20.4582" y="225.356" width="8.16663" height="8.3333">
-   <properties>
-    <property name="Map" value="mapSpringDungeonB"/>
+    <property name="EntranceDir" value="Left"/>
+    <property name="Map" value="mapForest_Dungeon_1"/>
    </properties>
   </object>
   <object id="22" name="Exit" x="1.45849" y="211.021" width="13.5" height="43.4583">
    <properties>
-    <property name="Map" value="mapSpringDungeonB"/>
+    <property name="EntranceDir" value="Right"/>
+    <property name="Map" value="mapForest_Dungeon_3"/>
    </properties>
   </object>
   <object id="23" name="CombatStart" x="180.386" y="740.197" width="9.5" height="8.66667">

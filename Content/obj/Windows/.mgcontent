@@ -31,11 +31,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapHouseNPC3.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapMountains.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapRiverHollowTown.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapRoom1.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapRoom2.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapRoom3.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapRoom4.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapRoom5.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CutScenes.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texMachines.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/WorldObjects.xml</File>
@@ -43,14 +38,9 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetManor.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapManorGrounds.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetHouses.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForestDungeonZone.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapLesserForest.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapHighlands.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapSpringDungeonEntrance.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/tilesetDungeon.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapSpringDungeonA.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapSpringDungeonB.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetOutsideWinter.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texWeather.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/lightmask.png</File>
@@ -132,10 +122,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Tools.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Effects/lighteffect.fx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texFlooring.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapSpringDungeonC.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapSpringDungeonD.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/FangedFur.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest1.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/FontBattle.fnt</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/FontBattle_0.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/FontDefault.fnt</File>
@@ -192,8 +179,29 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/ActionEffects/Heal.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/Bauble.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/MagicMushroom.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapSpringDungeonE.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapSpringDungeonF.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapHospital.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_1.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_2.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_3.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_4.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_5.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_6.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_7.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_01.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_02.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_03.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_04.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_05.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_06.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_07.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_08.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_09.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_10.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_11.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_12.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_13.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_14.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_15.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_16.tmx</File>
   </SourceFiles>
 </SourceFileCollection>

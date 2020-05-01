@@ -2843,8 +2843,8 @@ namespace RiverHollow.Tile_Engine
 
         public Vector2 FindLinkedPointPosition(Vector2 oldPointCenter, WorldActor c)
         {
-            Point actorPos = c.CollisionBox.Center;
-            Vector2 vDiff = actorPos.ToVector2() - oldPointCenter;
+            Point actorCollisionCenter = c.CollisionBox.Center;
+            Vector2 vDiff = actorCollisionCenter.ToVector2() - oldPointCenter;
 
             if (_eEntranceDir == DirectionEnum.Left || _eEntranceDir == DirectionEnum.Right)
             {
@@ -2861,7 +2861,14 @@ namespace RiverHollow.Tile_Engine
                 else if (_eEntranceDir == DirectionEnum.Down) { vDiff.Y += mod; }
             }
 
-            return new Vector2(Center.X + vDiff.X, Center.Y + vDiff.Y);
+            //Modify the reflected vector2 to correlate to the Actor's positio ninstead of the collisionbox center
+            Vector2 rv = new Vector2(Center.X + vDiff.X, Center.Y + vDiff.Y);
+
+            Vector2 pos = c.Position;
+            Vector2 collisionDiff = pos - actorCollisionCenter.ToVector2();
+            rv += collisionDiff;
+
+            return rv;
         }
     }
 }

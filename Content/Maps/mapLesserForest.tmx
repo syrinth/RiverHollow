@@ -471,42 +471,42 @@
  <objectgroup id="4" name="Travel Layer">
   <object id="6" name="Entrance" x="882.666" y="19.9583" width="7.9166" height="10">
    <properties>
-    <property name="Map"  value="mapManorGrounds"/>
+    <property name="Map" value="mapManorGrounds"/>
    </properties>
   </object>
   <object id="7" name="Exit" x="868.333" y="3.70835" width="28.3333" height="12.3333">
    <properties>
-    <property name="Map"  value="mapManorGrounds"/>
+    <property name="Map" value="mapManorGrounds"/>
    </properties>
   </object>
   <object id="10" name="Exit" x="1584.63" y="1442.83" width="13.8333" height="70.3333">
    <properties>
-    <property name="Map"  value="mapRiverHollowTown"/>
+    <property name="Map" value="mapRiverHollowTown"/>
    </properties>
   </object>
   <object id="11" name="Entrance" x="1555.54" y="1474.58" width="7.9166" height="10">
    <properties>
-    <property name="Map"  value="mapRiverHollowTown"/>
+    <property name="Map" value="mapRiverHollowTown"/>
    </properties>
   </object>
   <object id="12" name="Exit" x="1585.64" y="422.421" width="13.8333" height="70.3333">
    <properties>
-    <property name="Map"  value="mapHighlands"/>
+    <property name="Map" value="mapHighlands"/>
    </properties>
   </object>
   <object id="13" name="Entrance" x="1554.31" y="450.075" width="9.24993" height="10">
    <properties>
-    <property name="Map"  value="mapHighlands"/>
+    <property name="Map" value="mapHighlands"/>
    </properties>
   </object>
   <object id="25" name="Exit" x="864" y="2383.75" width="47.75" height="16.5">
    <properties>
-    <property name="Map"  value="mapSwamp"/>
+    <property name="Map" value="mapSwamp"/>
    </properties>
   </object>
   <object id="27" name="Entrance" x="880.114" y="2367.39" width="16" height="15.5">
    <properties>
-    <property name="Map"  value="mapSwamp"/>
+    <property name="Map" value="mapSwamp"/>
    </properties>
   </object>
  </objectgroup>

@@ -83,13 +83,13 @@
   <object id="19" name="Entrance" x="-4.4325" y="174.887" width="8.16663" height="35.8333">
    <properties>
     <property name="EntranceDir" value="Right"/>
-    <property name="Map" value="mapSpringDungeonC"/>
+    <property name="Map" value="mapForest_Dungeon_4"/>
    </properties>
   </object>
   <object id="28" name="Entrance" x="314.084" y="-2.834" width="42.6666" height="8.3333">
    <properties>
     <property name="EntranceDir" value="Down"/>
-    <property name="Map" value="mapSpringDungeonE"/>
+    <property name="Map" value="mapForest_Dungeon_6"/>
    </properties>
   </object>
  </objectgroup>

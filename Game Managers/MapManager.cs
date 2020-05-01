@@ -30,7 +30,7 @@ namespace RiverHollow.Game_Managers
             }
         }//[Friends:1-30]
         public const string HomeMap = "mapManorGrounds";
-        public const string SpawnMap = "mapForestDungeonZone"; //"mapForest"; //"mapRiverHollowTown"; //"mapManorGrounds"; //"mapSpringDungeonC"; // "mapRiverHollowTown"; //;
+        public const string SpawnMap = "mapForest_01"; //"mapRiverHollowTown"; //"mapManorGrounds"; //"mapSpringDungeonC"; // "mapRiverHollowTown"; //;
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
 
@@ -51,6 +51,7 @@ namespace RiverHollow.Game_Managers
 
             foreach (string s in Directory.GetFiles(_sMapFolder)) { AddMap(s, Content, GraphicsDevice); }
             foreach (string s in Directory.GetFiles(_sDungeonMapFolder)) { AddMap(s, Content, GraphicsDevice); }
+            //foreach (string s in Directory.GetFiles(@"Content\Maps\Forest")) { AddMap(s, Content, GraphicsDevice); }
 
             _currentMap = _tileMaps[MapManager.SpawnMap];
         }

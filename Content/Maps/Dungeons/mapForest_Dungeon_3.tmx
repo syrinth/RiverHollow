@@ -84,14 +84,10 @@
 </data>
  </layer>
  <objectgroup id="4" name="Travel">
-  <object id="34" name="Entrance" x="325.038" y="276.482" width="8.16663" height="8.3333">
-   <properties>
-    <property name="Map" value="mapSpringDungeonA"/>
-   </properties>
-  </object>
   <object id="35" name="Exit" x="341.766" y="259.068" width="14.8333" height="43.5115">
    <properties>
-    <property name="Map" value="mapSpringDungeonA"/>
+    <property name="EntranceDir" value="Left"/>
+    <property name="Map" value="mapForest_Dungeon_2"/>
    </properties>
   </object>
  </objectgroup>

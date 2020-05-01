@@ -100,7 +100,7 @@
   <object id="27" name="Entrance" x="207.924" y="411.19" width="32.8012" height="8.3333">
    <properties>
     <property name="EntranceDir" value="Up"/>
-    <property name="Map" value="mapSpringDungeonD"/>
+    <property name="Map" value="mapForest_Dungeon_5"/>
    </properties>
   </object>
   <object id="33" name="Entrance" x="20.3626" y="144.489" width="8.16663" height="8.3333">
@@ -110,7 +110,8 @@
   </object>
   <object id="34" name="Exit" x="-4.25059" y="132.352" width="10.2299" height="25.6886">
    <properties>
-    <property name="Map" value="mapSpringDungeonF"/>
+    <property name="EntranceDir" value="Right"/>
+    <property name="Map" value="mapForest_Dungeon_7"/>
    </properties>
   </object>
  </objectgroup>
