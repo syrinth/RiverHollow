@@ -4,7 +4,7 @@
   <property name="Outside" type="bool" value="true"/>
   <property name="Town" type="bool" value="true"/>
  </properties>
- <tileset firstgid="1" source="tilesetManorGrounds.tsx"/>
+ <tileset firstgid="1" source="TilesetSources\tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" name="tsBuildings" tilewidth="16" tileheight="16" tilecount="63" columns="7">
   <image source="tsBuildings.png" trans="ffffff" width="112" height="144"/>
   <tile id="28">

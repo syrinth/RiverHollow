@@ -5,7 +5,7 @@
   <property name="ResourcesMax" type="int" value="20"/>
   <property name="ResourcesMin" type="int" value="10"/>
  </properties>
- <tileset firstgid="1" source="tilesetManorGrounds.tsx"/>
+ <tileset firstgid="1" source="TilesetSources\tilesetManorGrounds.tsx"/>
  <layer id="3" name="Spring Ground" width="40" height="40">
   <data encoding="csv">
 202,202,202,202,203,205,205,205,27,205,27,27,27,205,205,206,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,202,207,208,208,208,208,208,208,208,

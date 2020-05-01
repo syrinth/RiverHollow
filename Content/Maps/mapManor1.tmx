@@ -5,7 +5,7 @@
   <property name="Production" type="bool" value="false"/>
  </properties>
  <tileset firstgid="1" name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="320" columns="20">
-  <image source="tsWallsFloors.png" trans="ffffff" width="320" height="256"/>
+  <image source="TilesetSources\tsWallsFloors.png" trans="ffffff" width="320" height="256"/>
   <tile id="28">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
@@ -213,7 +213,7 @@
   </tile>
  </tileset>
  <tileset firstgid="321" name="tsFurniture" tilewidth="16" tileheight="16" tilecount="300" columns="20">
-  <image source="tsFurniture.png" trans="ffffff" width="320" height="240"/>
+  <image source="TilesetSources\tsFurniture.png" trans="ffffff" width="320" height="240"/>
   <tile id="93">
    <properties>
     <property name="Journal" type="bool" value="true"/>

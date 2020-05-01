@@ -49,9 +49,9 @@ namespace RiverHollow.Game_Managers
             _liWeather = new List<Weather>();
             InitWeather();
 
-            foreach (string s in Directory.GetFiles(_sMapFolder)) { AddMap(s, Content, GraphicsDevice); }
-            foreach (string s in Directory.GetFiles(_sDungeonMapFolder)) { AddMap(s, Content, GraphicsDevice); }
-            //foreach (string s in Directory.GetFiles(@"Content\Maps\Forest")) { AddMap(s, Content, GraphicsDevice); }
+            //foreach (string s in Directory.GetFiles(_sMapFolder)) { AddMap(s, Content, GraphicsDevice); }
+            //foreach (string s in Directory.GetFiles(_sDungeonMapFolder)) { AddMap(s, Content, GraphicsDevice); }
+            foreach (string s in Directory.GetFiles(@"Content\Maps\Forest")) { AddMap(s, Content, GraphicsDevice); }
 
             _currentMap = _tileMaps[MapManager.SpawnMap];
         }

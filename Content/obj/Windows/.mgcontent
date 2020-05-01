@@ -34,14 +34,10 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CutScenes.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texMachines.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/WorldObjects.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetManorGrounds.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetManor.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapManorGrounds.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetHouses.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapLesserForest.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapHighlands.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/tilesetDungeon.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tilesetOutsideWinter.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texWeather.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/lightmask.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Quests.xml</File>
@@ -59,8 +55,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texCmbtActions.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/ActionEffects/LightningSprite.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/ActionEffects/WitchsCurse.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tsWallsFloors.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tsFurniture.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Buildings/Barracks.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Buildings/Cottage.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Buildings/Lodge.png</File>
@@ -80,7 +74,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/DarkWoodTree.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC9.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC10.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/tsBuildings.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Accessories.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/armor.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/weapons.png</File>
@@ -187,21 +180,29 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_5.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_6.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_7.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_01.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_02.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_03.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_04.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_05.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_06.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_07.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_08.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_09.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_10.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_11.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_12.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_13.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_14.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_15.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/mapForest_16.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_01.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_02.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_03.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_04.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_05.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_06.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_07.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_08.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_09.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_10.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_11.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_12.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_13.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_14.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_15.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_16.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/TilesetSources/tilesetHouses.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/TilesetSources/tilesetManor.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/TilesetSources/tilesetManorGrounds.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/TilesetSources/tilesetManorGrounds_orig.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/TilesetSources/tilesetOutsideWinter.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/TilesetSources/tsBuildings.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/TilesetSources/tsFurniture.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/TilesetSources/tsWallsFloors.png</File>
   </SourceFiles>
 </SourceFileCollection>
