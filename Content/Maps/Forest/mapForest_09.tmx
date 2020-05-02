@@ -81,7 +81,7 @@
     <property name="Map" value="mapForest_05"/>
    </properties>
   </object>
-  <object id="48" name="Entrance" x="219.605" y="265.037" width="36.9786" height="5.83441">
+  <object id="48" name="Entrance" x="221.241" y="266.128" width="36.9786" height="5.83441">
    <properties>
     <property name="EntranceDir" value="Up"/>
     <property name="Map" value="mapForest_13"/>

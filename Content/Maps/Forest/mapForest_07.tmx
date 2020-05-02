@@ -109,7 +109,7 @@
   </object>
   <object id="56" name="CombatStart" x="210.75" y="197.042" width="10.5" height="11.25">
    <properties>
-    <property name="Map" value="mapForest_06"/>
+    <property name="Map" value="mapForest_11"/>
     <property name="Position" value="NW"/>
    </properties>
   </object>
