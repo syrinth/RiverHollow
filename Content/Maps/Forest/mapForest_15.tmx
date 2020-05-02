@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="50">
+<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="50">
  <properties>
-  <property name="ActiveSpawn" type="int" value="0"/>
-  <property name="Dungeon" value="Forest"/>
   <property name="Outside" type="bool" value="false"/>
   <property name="ResourcesMinMax" value="30-60"/>
  </properties>
- <tileset firstgid="1" source="..\Tilesets\tilesetManorGrounds.tsx"/>
+ <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <layer id="19" name="Base" width="30" height="17">
   <data encoding="csv">
 246,289,289,27,27,205,27,289,27,289,283,289,27,289,283,289,27,27,205,205,205,289,289,27,205,205,289,289,205,246,

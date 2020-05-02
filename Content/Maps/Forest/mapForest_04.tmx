@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="49">
+<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="53">
  <properties>
-  <property name="ActiveSpawn" type="int" value="0"/>
-  <property name="Dungeon" value="Forest"/>
+  <property name="ActiveSpawn" type="int" value="2"/>
   <property name="Outside" type="bool" value="false"/>
   <property name="ResourcesMinMax" value="30-60"/>
  </properties>
- <tileset firstgid="1" source="..\Tilesets\tilesetManorGrounds.tsx"/>
+ <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <layer id="19" name="Base" width="30" height="17">
   <data encoding="csv">
 246,289,289,27,27,205,27,289,27,289,283,289,27,289,283,289,27,27,205,205,205,289,289,27,205,205,289,289,205,246,
@@ -90,6 +89,29 @@
     <property name="Resources" value="0"/>
    </properties>
   </object>
+  <object id="51" name="SpawnPoint" x="339" y="82.4167" width="10" height="8.5">
+   <properties>
+    <property name="SpawnType" value="Forest"/>
+   </properties>
+  </object>
+  <object id="52" name="SpawnPoint" x="339" y="196.417" width="10" height="8.5">
+   <properties>
+    <property name="SpawnType" value="Forest"/>
+   </properties>
+  </object>
  </objectgroup>
- <objectgroup id="6" name="Character"/>
+ <objectgroup id="6" name="Character">
+  <object id="49" name="CombatStart" x="65.7453" y="114.24" width="10.5" height="11.25">
+   <properties>
+    <property name="Map" value="mapForest_03"/>
+    <property name="Position" value="NE"/>
+   </properties>
+  </object>
+  <object id="50" name="CombatStart" x="211.079" y="194.573" width="10.5" height="11.25">
+   <properties>
+    <property name="Map" value="mapForest_06"/>
+    <property name="Position" value="NW"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>
