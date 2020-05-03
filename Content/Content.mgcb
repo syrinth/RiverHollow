@@ -1739,16 +1739,6 @@
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapLesserForest.tmx
 
-#begin Maps/Mountain/mapHighlands.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Mountain/mapHighlands.tmx
-
-#begin Maps/Mountain/mapMountains.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Mountain/mapMountains.tmx
-
 #begin Maps/Swamp/mapSwamp.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -1790,4 +1780,14 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Maps/Tilesets/tilesetDungeon.png
+
+#begin Maps/Misc/mapConnection_01.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapConnection_01.tmx
+
+#begin Maps/Misc/mapConnection_02.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapConnection_02.tmx
 
