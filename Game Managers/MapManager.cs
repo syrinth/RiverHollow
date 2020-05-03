@@ -166,15 +166,15 @@ namespace RiverHollow.Game_Managers
             {
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(WorldItem.Rock, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
+                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(0, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
                 }
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(WorldItem.Tree, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
+                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(2, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
                 }
                 for (int i = 0; i < 10; i++)
                 {
-                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(WorldItem.BigRock, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
+                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(1, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
                 }
             }
 

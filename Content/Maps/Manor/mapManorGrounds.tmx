@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="60" height="60" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#000000" nextlayerid="7" nextobjectid="51">
+<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="60" height="60" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#000000" nextlayerid="7" nextobjectid="53">
  <properties>
   <property name="Outside" type="bool" value="true"/>
  </properties>
@@ -206,7 +206,16 @@
    </properties>
   </object>
   <object id="42" name="Manor" x="83.0087" y="219.694" width="175.5" height="192"/>
-  <object id="45" name="Rock" x="639.183" y="452.669" width="5.75" height="5.75"/>
+  <object id="45" name="WorldObject" x="900.183" y="454.336" width="5.75" height="5.75">
+   <properties>
+    <property name="ID" type="int" value="1"/>
+   </properties>
+  </object>
+  <object id="52" name="WorldObject" x="900.125" y="485.125" width="5.75" height="5.75">
+   <properties>
+    <property name="ID" type="int" value="1"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="5" name="Travel" offsetx="0" offsety="-1.5">
   <object id="11" name="Entrance" x="1.66416" y="515.985" width="11.3333" height="25.2424">

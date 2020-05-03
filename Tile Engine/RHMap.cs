@@ -348,13 +348,9 @@ namespace RiverHollow.Tile_Engine
                     PlaceWorldObject(d);
                     _liDungeonObjects.Add(d);
                  }
-                else if (obj.Name.Equals("Rock"))
+                else if (obj.Name.Equals("WorldObject"))
                 {
-                    PlaceWorldObject(DataManager.GetWorldObject(WorldItem.Rock, Util.SnapToGrid(obj.Position)));
-                }
-                else if (obj.Name.Equals("Tree"))
-                {
-                    PlaceWorldObject(DataManager.GetWorldObject(WorldItem.Tree, Util.SnapToGrid(obj.Position)));
+                    PlaceWorldObject(DataManager.GetWorldObject(int.Parse(obj.Properties["ID"]), Util.SnapToGrid(obj.Position)));
                 }
                 else if (obj.Name.Equals("Chest"))
                 {

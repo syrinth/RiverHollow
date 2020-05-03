@@ -17,9 +17,6 @@ namespace RiverHollow.WorldObjects
     public class WorldObject
     {
         #region Properties
-        public static int Rock = 0;
-        public static int BigRock = 1;
-        public static int Tree = 2;
         public enum ObjectType { Building, ClassChanger, Machine, Container, Earth, Floor, WorldObject, Destructible, Plant, Forageable, Wall, Light, DungeonObject};
         public ObjectType Type;
 
