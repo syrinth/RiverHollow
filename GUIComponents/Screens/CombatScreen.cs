@@ -629,6 +629,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                                         _gSelectedMenu = ab;
                                         _actionMenu = new ActionMenu(CombatManager.ActiveCharacter.GetCurrentSpecials());
                                         _actionMenu.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX, 10);
+                                        CombatManager.ChangePhase(CombatManager.CmbtPhaseEnum.ChooseAction);
                                     }
                                 }
                                 else if (a.IsUseItem())
@@ -636,6 +637,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                                     _gSelectedMenu = ab;
                                     _actionMenu = new ActionMenu(InventoryManager.GetPlayerCombatItems());
                                     _actionMenu.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.CenterX, 10);
+                                    CombatManager.ChangePhase(CombatManager.CmbtPhaseEnum.ChooseAction);
                                 }
                             }
                         }
@@ -690,6 +692,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     {
                         _actionMenu = null;
                         _gSelectedAction = (_gSelectedMenu != null) ? _gSelectedMenu : _liActionButtons[0];
+                    }
+                    else if (CombatManager.CurrentPhase == CombatManager.CmbtPhaseEnum.ChooseAction)
+                    {
+                        _actionMenu = null;
+                        _gSelectedAction = _liActionButtons[0];
                     }
 
                     ProcessHover(GraphicCursor.Position.ToPoint());
