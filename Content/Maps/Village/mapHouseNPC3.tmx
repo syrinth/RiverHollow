@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="15" height="10" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="14">
- <tileset firstgid="1" source="..\Tilesets\tilesetManorGrounds.tsx"/>
- <tileset firstgid="626" source="..\Tilesets\tilesetHouses.tsx"/>
+<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="15" height="10" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="14">
+ <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
+ <tileset firstgid="626" source="../Tilesets/tilesetHouses.tsx"/>
  <layer id="1" name="Base Layer" width="15" height="10">
   <data encoding="csv">
 27,27,27,27,36,27,27,27,27,27,27,27,27,27,27,
@@ -44,7 +44,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="4" name="Character Layer">
+ <objectgroup id="4" name="Character">
   <object id="4" name="NPC9" x="50" y="67.8333" width="9" height="8"/>
   <object id="5" name="Wait" x="49.25" y="116.75" width="11.25" height="8.5"/>
   <object id="8" name="Shop" x="47.9983" y="71.5" width="16.0034" height="25">
@@ -63,14 +63,10 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="5" name="Travel Layer">
-  <object id="1" name="Exit" x="131.167" y="131.333" width="8.6667" height="8.3333">
+ <objectgroup id="5" name="Travel">
+  <object id="2" name="Entrance" x="118.333" y="154.167" width="32.3333" height="5.5">
    <properties>
-    <property name="Map" value="mapRiverHollowTown"/>
-   </properties>
-  </object>
-  <object id="2" name="Entrance" x="118.333" y="147.667" width="32.3333" height="12">
-   <properties>
+    <property name="EntranceDir" value="Up"/>
     <property name="Map" value="mapRiverHollowTown"/>
    </properties>
   </object>

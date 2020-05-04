@@ -39,17 +39,14 @@ namespace RiverHollow.Buildings
         protected string _sGivenName;
         public string GivenName=> _sGivenName;
 
-        public override Rectangle CollisionBox { get => GenerateCollisionBox(); }
-        public Rectangle SelectionBox { get => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _sprite.Width, _sprite.Height); }
-
-        protected Rectangle _rExit;
-        public Rectangle BoxToExit { get => _rExit; }
+        public override Rectangle CollisionBox => GenerateCollisionBox();
+        public Rectangle SelectionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _sprite.Width, _sprite.Height);
 
         protected Rectangle _rEntrance;
-        public Rectangle BoxToEnter { get => _rEntrance; }
+        public Rectangle TravelBox => _rEntrance;
 
         protected int _iPersonalID;
-        public int PersonalID { get => _iPersonalID; }
+        public int PersonalID => _iPersonalID;
 
         protected bool _bUnique;
         public bool Unique => _bUnique;
@@ -230,7 +227,6 @@ namespace RiverHollow.Buildings
 
             //Create the entrance and exit rectangles attached to the building
             _rEntrance = new Rectangle(startX, startY, _iEntWidth, _iEntHeight);
-            _rExit = new Rectangle(_rEntrance.Left, _rEntrance.Bottom, TileSize, TileSize);
         }
 
         /// <summary>

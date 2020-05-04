@@ -205,7 +205,7 @@
     <property name="Type" value="2"/>
    </properties>
   </object>
-  <object id="42" name="Manor" x="83.0087" y="219.694" width="175.5" height="192"/>
+  <object id="42" name="Manor" x="80.342" y="208.33" width="170.833" height="186"/>
   <object id="45" name="WorldObject" x="900.183" y="454.336" width="5.75" height="5.75">
    <properties>
     <property name="ID" type="int" value="1"/>

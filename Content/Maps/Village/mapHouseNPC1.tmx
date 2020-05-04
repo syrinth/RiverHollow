@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="32" height="31" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="47">
+<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="32" height="31" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="48">
  <properties>
   <property name="Cutscenes" value="0"/>
  </properties>
- <tileset firstgid="1" source="..\Tilesets\tilesetHouses.tsx"/>
+ <tileset firstgid="1" source="../Tilesets/tilesetHouses.tsx"/>
  <layer id="1" name="Base Layer" width="32" height="31">
   <data encoding="csv">
 8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,
@@ -110,14 +110,10 @@
 </data>
  </layer>
  <objectgroup id="4" name="Travel Layer">
-  <object id="1" name="Entrance" x="228.166" y="466.92" width="7.3333" height="8.8333">
+  <object id="47" name="Entrance" x="224.757" y="492.219" width="15.3958" height="3.5625">
    <properties>
-    <property name="Map"  value="mapRiverHollowTown"/>
-   </properties>
-  </object>
-  <object id="2" name="Exit" x="227.5" y="482.58" width="9" height="9.5">
-   <properties>
-    <property name="Map"  value="mapRiverHollowTown"/>
+    <property name="EntranceDir" value="Up"/>
+    <property name="Map" value="mapRiverHollowTown"/>
    </properties>
   </object>
  </objectgroup>
@@ -132,7 +128,6 @@
   <object id="15" name="8Col2" x="130.67" y="35.833" width="8.5" height="6.5"/>
   <object id="18" name="8Col1" x="118.667" y="34" width="7" height="8"/>
   <object id="23" name="NPC8" x="99.0007" y="83.6667" width="9.66667" height="8.66667"/>
-  <object id="26" name="Entrance" x="227.67" y="467" width="7.8333" height="8.8333"/>
   <object id="29" name="1CS0" x="273.5" y="290" width="12" height="12"/>
   <object id="34" name="1Col8" x="416.333" y="341" width="10" height="12"/>
   <object id="36" name="1Col7" x="362" y="339.333" width="14" height="9"/>

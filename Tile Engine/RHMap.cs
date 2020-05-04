@@ -243,20 +243,7 @@ namespace RiverHollow.Tile_Engine
                         if (mapObject.Name.Equals("Entrance"))
                         {
                             TravelPoint trvlPt = new TravelPoint(mapObject);
-                            if (mapObject.Properties.ContainsKey("Door"))
-                            {
-                                for (float x = mapObject.Position.X; x < mapObject.Position.X + mapObject.Size.Width; x += TileSize)
-                                {
-                                    for (float y = mapObject.Position.Y; y < mapObject.Position.Y + mapObject.Size.Height; y += TileSize)
-                                    {
-                                        RHTile t = GetTileByPixelPosition((int)x, (int)y);
-                                        if (t != null)
-                                        {
-                                            t.SetMapObject(trvlPt);
-                                        }
-                                    }
-                                }
-                            }
+                            if (mapObject.Properties.ContainsKey("Door")) { CreateDoor(ref trvlPt, mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height); }
                             _dictTravelPoints.Add(trvlPt.LinkedMap, trvlPt);
                         }
                     }
@@ -453,6 +440,21 @@ namespace RiverHollow.Tile_Engine
             _liItems.Clear();
         }
 
+        public void CreateDoor(ref TravelPoint trvlPt, float rectX, float rectY, float width, float height)
+        {
+            for (float x = rectX; x < rectX + width; x += TileSize)
+            {
+                for (float y = rectY; y < rectY + height; y += TileSize)
+                {
+                    RHTile t = GetTileByPixelPosition((int)x, (int)y);
+                    if (t != null)
+                    {
+                        t.SetMapObject(trvlPt);
+                        t.GetTileByDirection(DirectionEnum.Up).SetMapObject(trvlPt);
+                    }
+                }
+            }
+        }
         private void SpawnMonsters()
         {
             //Remove all mobs from the map
@@ -1333,7 +1335,7 @@ namespace RiverHollow.Tile_Engine
                 }
                 else if (obj.IsDestructible())  //Handle damaging destructibles
                 {
-                    Destructible d = (Destructible)_targetTile.WorldObject;
+                    Destructible d = (Destructible)_targetTile.GetWorldObject();
 
                     //Sets the appropriate player tool to use
                     if (d.WhichTool == ToolEnum.Pick) { rv = PlayerManager.SetTool(GameManager.ToolEnum.Pick, mouseLocation); }
@@ -1660,15 +1662,9 @@ namespace RiverHollow.Tile_Engine
 
         public void CreateBuildingEntrance(Building b)
         {
-            _dictTravelPoints.Add(b.MapName, new TravelPoint(b.BoxToExit, b.MapName, b.PersonalID)); //TODO: FIX THIS
-            for (float x = b.BoxToEnter.X; x < b.BoxToEnter.X + b.BoxToEnter.Width; x += TileSize)
-            {
-                for (float y = b.BoxToEnter.Y; y < b.BoxToEnter.Y + b.BoxToEnter.Height; y += TileSize)
-                {
-                    RHTile t = GetTileByPixelPosition((int)x, (int)y);
-                    t.SetMapObject(b);
-                }
-            }
+            TravelPoint buildPoint = new TravelPoint(b.TravelBox, b.MapName, b.PersonalID);
+            _dictTravelPoints.Add(b.MapName, buildPoint); //TODO: FIX THIS
+            CreateDoor(ref buildPoint, b.TravelBox.X, b.TravelBox.Y, b.TravelBox.Width, b.TravelBox.Height);
         }
 
         public bool AddWorkerToBuilding(Point mouseLocation)
@@ -2746,7 +2742,7 @@ namespace RiverHollow.Tile_Engine
 
             public TileObject(Building b)
             {
-                _travelPoint = new TravelPoint(b.BoxToEnter, b.MapName, b.PersonalID);
+                _travelPoint = new TravelPoint(b.TravelBox, b.MapName, b.PersonalID);
                 _building = b;
             }
 
@@ -2830,6 +2826,7 @@ namespace RiverHollow.Tile_Engine
             _rCollisionBox = collision;
             _sLinkedMap = linkedMap;
             _ibuildingID = buildingID;
+            _eEntranceDir = DirectionEnum.Down;
         }
 
         public bool Intersects(Rectangle value)
