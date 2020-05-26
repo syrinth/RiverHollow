@@ -57,7 +57,6 @@ namespace RiverHollow.Game_Managers
 
         private static List<ClassedCombatant> _liParty;
 
-        public static MerchantChest _merchantChest;
         public static string Name;
         public static string ManorName;
 

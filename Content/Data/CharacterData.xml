@@ -50,5 +50,9 @@
       <Key>11</Key>
       <Value>[Type:Villager][PortRow:3][HomeMap:mapManorGrounds][Collection:7-8][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
     </Item>
+	<Item>
+      <Key>21</Key>
+      <Value>[Type:ShippingGremlin][PortRow:3][HomeMap:mapManorGrounds]</Value>
+    </Item>
   </Asset>
 </XnaContent>

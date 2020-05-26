@@ -265,6 +265,9 @@ namespace RiverHollow.Game_Managers
                     case "Eligible":
                         n = new EligibleNPC(npcData.Key, diData);
                         break;
+                    case "ShippingGremlin":
+                        n = new ShippingGremlin(npcData.Key, diData);
+                        break;
                     default:
                         n = new Villager(npcData.Key, diData);
                         break;

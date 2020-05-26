@@ -177,9 +177,6 @@ namespace RiverHollow.Game_Managers
                     _tileMaps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(1, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
                 }
             }
-
-            MerchantChest m = new MerchantChest();
-            PlayerManager._merchantChest = m;
         }
 
         public static void Update(GameTime gTime)

@@ -1801,3 +1801,20 @@
 /processor:TiledMapProcessor
 /build:Maps/Village/mapTavern_Upper.tmx
 
+#begin Textures/Actors/Villagers/NPC21.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Villagers/NPC21.png
+
+#begin Data/Text Files/Dialogue/NPC21.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC21.xml
+

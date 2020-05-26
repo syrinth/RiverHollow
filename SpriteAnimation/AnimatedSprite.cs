@@ -160,9 +160,7 @@ namespace RiverHollow.SpriteAnimations
 
         public bool IsCurrentAnimation(AnimationEnum verb) { return IsCurrentAnimation(Util.GetEnumString(verb)); }
         public bool IsCurrentAnimation(VerbEnum verb, DirectionEnum dir) { return IsCurrentAnimation(Util.GetActorString(verb, dir)); }
-        private bool IsCurrentAnimation(string animate) {
-            return CurrentAnimation.Equals(animate);
-        }
+        private bool IsCurrentAnimation(string animate) { return CurrentAnimation.Equals(animate); }
 
         /// <summary>
         /// After ensuring that we have the frame we think we're on call Reset on it

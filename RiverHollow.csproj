@@ -87,7 +87,6 @@
     <Compile Include="GUIComponents\Screens\NewGameScreen.cs" />
     <Compile Include="GUIComponents\Screens\HUDPurchaseWindows.cs" />
     <Compile Include="Game Managers\InventoryManager.cs" />
-    <Compile Include="Items\MerchantChest.cs" />
     <Compile Include="Misc\Quest.cs" />
     <Compile Include="RiverHollow.cs" />
     <Compile Include="Game Managers\DropManager.cs" />

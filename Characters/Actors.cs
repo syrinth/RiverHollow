@@ -39,7 +39,7 @@ namespace RiverHollow.Actors
         protected static string _sAdventurerFolder = DataManager.FOLDER_ACTOR + @"Adventurers\";
         protected static string _sNPsCFolder = DataManager.FOLDER_ACTOR + @"NPCs\";
 
-        public enum ActorEnum { Actor, Adventurer, CombatActor, Mob, Monster, NPC, Spirit, WorldCharacter};
+        public enum ActorEnum { Actor, Adventurer, CombatActor, Mob, Monster, NPC, ShippingGremlin, Spirit, WorldCharacter};
         protected ActorEnum _eActorType = ActorEnum.Actor;
         public ActorEnum ActorType => _eActorType;
 
@@ -140,6 +140,7 @@ namespace RiverHollow.Actors
         public bool IsAdventurer() { return _eActorType == ActorEnum.Adventurer; }
         public bool IsWorldCharacter() { return _eActorType == ActorEnum.WorldCharacter; }
         public bool IsSpirit() { return _eActorType == ActorEnum.Spirit; }
+        public bool IsShippingGremlin() { return _eActorType == ActorEnum.ShippingGremlin; }
 
         /// <summary>
         /// Helper method for ImportBasics to compile the list of relevant animations
@@ -194,7 +195,8 @@ namespace RiverHollow.Actors
 
         protected double _dCooldown = 0;
 
-        public Rectangle CollisionBox { get => new Rectangle((int)Position.X + (Width / 4), (int)Position.Y, Width / 2, TileSize); }
+        public Rectangle CollisionBox => new Rectangle((int)Position.X, (int)Position.Y, Width, TileSize);
+        public Rectangle HoverBox => new Rectangle((int)Position.X, (int)Position.Y - TileSize, Width, Height);
 
         protected bool _bActive = true;
         public virtual bool Active => _bActive;
@@ -294,6 +296,11 @@ namespace RiverHollow.Actors
                     sprite.AddAnimation(data.Animation, data.XLocation, 0, _iWidth, _iHeight, data.Frames, data.FrameSpeed, data.PingPong);
                 }
             }
+        }
+
+        public virtual bool HoverContains(Point mouse)
+        {
+            return HoverBox.Contains(mouse);
         }
 
         public virtual bool CollisionContains(Point mouse)
@@ -1402,7 +1409,6 @@ namespace RiverHollow.Actors
         public virtual void Talk(bool facePlayer)
         {
             string text = GetOpeningText();
-
             
             //Determine the position based off of where the player and then have the NPC face the player
             //Only do this if they are idle so as to not disturb other animations they may be performing.
@@ -1438,12 +1444,13 @@ namespace RiverHollow.Actors
             text = Util.ProcessText(text, _sName);
             GUIManager.OpenTextWindow(text, this);
         }
+        public virtual void StopTalking() { }
 
         /// <summary>
-        /// Used when already talking to an NPC, gets the next dialog tag in the conversation
-        /// and opens a new window for it.
-        /// </summary>
-        /// <param name="dialogTag">The dialog tag to talk with</param>
+            /// Used when already talking to an NPC, gets the next dialog tag in the conversation
+            /// and opens a new window for it.
+            /// </summary>
+            /// <param name="dialogTag">The dialog tag to talk with</param>
         public void Talk(string dialogTag)
         {
             string text = string.Empty;
@@ -1632,6 +1639,11 @@ namespace RiverHollow.Actors
                 return string.Empty;
             }
             else if (entry.Equals("GiveGift"))
+            {
+                GameManager.CurrentNPC = this;
+                GUIManager.OpenMainObject(new HUDInventoryDisplay());
+            }
+            else if (entry.Equals("ShipGoods"))
             {
                 GameManager.CurrentNPC = this;
                 GUIManager.OpenMainObject(new HUDInventoryDisplay());
@@ -3091,6 +3103,85 @@ namespace RiverHollow.Actors
                 GUIManager.OpenTextWindow(_sText, this);
             }
             return rv;
+        }
+    }
+
+    public class ShippingGremlin : Villager
+    {
+        private List<Item> _liSellList;
+ 
+        public ShippingGremlin(int index, Dictionary<string, string> stringData)
+        {
+            _liSellList = new List<Item>();
+            _eActorType = ActorEnum.ShippingGremlin;
+            _iIndex = index;
+            _iWidth = 32;
+            _iHeight = 32;
+            _diDialogue = DataManager.GetNPCDialogue(_iIndex);
+            _sPortrait = _sAdventurerFolder + "WizardPortrait";
+            _sName = _diDialogue["Name"];
+            _sPortrait = _sAdventurerFolder + "WizardPortrait";
+
+            if (stringData.ContainsKey("HomeMap"))
+            {
+                _sHomeMap = stringData["HomeMap"];
+                CurrentMapName = _sHomeMap;
+            }
+
+            _sprBody = new AnimatedSprite(_sVillagerFolder + "NPC" + _iIndex);
+            _sprBody.AddAnimation(AnimationEnum.ObjectIdle, 0, 0, _iWidth, _iHeight);
+            _sprBody.AddAnimation(AnimationEnum.ObjectAction1, 32, 0, _iWidth, _iHeight, 3, 0.1f);
+            _sprBody.AddAnimation(AnimationEnum.ObjectActionFinished, 128, 0, _iWidth, _iHeight);
+            _sprBody.AddAnimation(AnimationEnum.ObjectAction2, 160, 0, _iWidth, _iHeight, 3, 0.1f);
+            PlayAnimation(AnimationEnum.ObjectIdle);
+
+            if(GameManager.gmShippingGremlin == null) { GameManager.gmShippingGremlin = this; }
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            base.Update(gTime);
+            if (IsCurrentAnimation(AnimationEnum.ObjectAction1) && _sprBody.CurrentFrameAnimation.PlayCount == 1)
+            {
+                PlayAnimation(AnimationEnum.ObjectActionFinished);
+                PlayerManager.AllowMovement = true;
+                base.Talk(false);
+            }
+            else if (IsCurrentAnimation(AnimationEnum.ObjectAction2) && _sprBody.CurrentFrameAnimation.PlayCount == 1)
+            {
+                PlayAnimation(AnimationEnum.ObjectIdle);
+            }
+        }
+
+        public override void Talk(bool facePlayer)
+        {
+            PlayerManager.AllowMovement = false;
+            _sprBody.PlayAnimation(AnimationEnum.ObjectAction1);
+        }
+
+        public override void StopTalking()
+        {
+            _sprBody.PlayAnimation(AnimationEnum.ObjectAction2);
+        }
+
+        public int SellAll()
+        {
+            int val = 0;
+            foreach (Item i in _liSellList)
+            {
+                val += i.SellPrice;
+                PlayerManager.AddMoney(i.SellPrice);
+            }
+            _liSellList.Clear();
+            return val;
+        }
+
+        public void AddItem(Item i)
+        {
+            if (i != null)
+            {
+                _liSellList.Add(i);
+            }
         }
     }
  

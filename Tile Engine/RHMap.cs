@@ -1106,7 +1106,7 @@ namespace RiverHollow.Tile_Engine
             {
                 foreach (WorldActor c in _liActors)
                 {
-                    if (PlayerManager.PlayerInRange(c.CollisionBox.Center, (int)(TileSize * 1.5)) && c.CollisionContains(mouseLocation) && c.CanTalk && c.Active)
+                    if (PlayerManager.PlayerInRange(c.HoverBox, (int)(TileSize * 1.5)) && c.HoverContains(mouseLocation) && c.CanTalk && c.Active)
                     {
                         ((TalkingActor)c).Talk(true);
                         rv = true;
@@ -1295,14 +1295,7 @@ namespace RiverHollow.Tile_Engine
             WorldObject obj = _targetTile.GetWorldObject();
             if (obj != null)
             {
-                //Player tries to add something to the merchant chest to sell it.
-                if (obj == PlayerManager._merchantChest)
-                {
-                    Item i = InventoryManager.GetCurrentItem();
-                    PlayerManager._merchantChest.AddItem(i);
-                    InventoryManager.RemoveItemFromInventory(InventoryManager.GetCurrentItem());
-                }
-                else if (obj.IsMachine())       //Player interacts with a machine to either take a finished item or start working
+                if (obj.IsMachine())       //Player interacts with a machine to either take a finished item or start working
                 {
                     Machine p = (Machine)obj;
                     if (p.HasItem()) { p.TakeFinishedItem(); }
@@ -1432,7 +1425,7 @@ namespace RiverHollow.Tile_Engine
 
                 foreach (WorldActor c in _liActors)
                 {
-                    if(!c.IsMonster() && c.CollisionContains(mouseLocation)){
+                    if(!c.IsMonster() && c.HoverContains(mouseLocation)){
                         if (c.Active)
                         {
                             GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Talk;

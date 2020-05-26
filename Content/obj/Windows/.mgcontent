@@ -205,5 +205,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Tilesets/tsWalls_Floors.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapTavern.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapTavern_Upper.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC21.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC21.xml</File>
   </SourceFiles>
 </SourceFileCollection>

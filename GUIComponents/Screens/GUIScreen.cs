@@ -7,6 +7,7 @@ using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using System;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Misc;
+using RiverHollow.Actors;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -156,6 +157,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (win == _guiTextWindow)
             {
                 RemoveControl(_guiTextWindow);
+                if (GameManager.CurrentNPC.CanTalk) { GameManager.CurrentNPC.StopTalking(); }
                 GameManager.CurrentNPC = null;
                 GameManager.gmActiveItem = null;
                 _guiTextWindow = null;
