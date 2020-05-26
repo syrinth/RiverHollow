@@ -4,8 +4,8 @@
   <property name="Manor" type="bool" value="true"/>
   <property name="Production" type="bool" value="false"/>
  </properties>
- <tileset firstgid="1" name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="160" columns="20">
-  <image source="../Tilesets/tsWallsFloors.png" trans="ffffff" width="320" height="128"/>
+ <tileset firstgid="1" name="tsWalls_Floors" tilewidth="16" tileheight="16" tilecount="160" columns="20">
+  <image source="../Tilesets/tsWalls_Floors.png" trans="ffffff" width="320" height="128"/>
   <tile id="28">
    <properties>
     <property name="Impassable" type="bool" value="true"/>

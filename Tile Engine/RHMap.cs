@@ -84,10 +84,10 @@ namespace RiverHollow.Tile_Engine
 
         private Dictionary<string, RHTile[,]> _diCombatTiles;
         public Dictionary<string, RHTile[,]> DictionaryCombatTiles => _diCombatTiles;
-        private Dictionary<string, TravelPoint> _dictTravelPoints;
-        public Dictionary<string, TravelPoint> DictionaryTravelPoints => _dictTravelPoints;
-        private Dictionary<string, Vector2> _dictCharacterLayer;
-        public Dictionary<string, Vector2> DictionaryCharacterLayer => _dictCharacterLayer;
+        private Dictionary<string, TravelPoint> _diTravelPoints;
+        public Dictionary<string, TravelPoint> DictionaryTravelPoints => _diTravelPoints;
+        private Dictionary<string, Vector2> _diCharacterLayer;
+        public Dictionary<string, Vector2> DictionaryCharacterLayer => _diCharacterLayer;
         private List<TiledMapObject> _liMapObjects;
 
         public RHMap() {
@@ -102,8 +102,8 @@ namespace RiverHollow.Tile_Engine
             _liItems = new List<Item>();
             _liItemsToRemove = new List<Item>();
             _liMapObjects = new List<TiledMapObject>();
-            _dictTravelPoints = new Dictionary<string, TravelPoint>();
-            _dictCharacterLayer = new Dictionary<string, Vector2>();
+            _diTravelPoints = new Dictionary<string, TravelPoint>();
+            _diCharacterLayer = new Dictionary<string, Vector2>();
             _liShopData = new List<ShopData>();
             _liDungeonObjects = new List<DungeonObject>();
             _liPlacedWorldObjects = new List<WorldObject>();
@@ -244,7 +244,7 @@ namespace RiverHollow.Tile_Engine
                         {
                             TravelPoint trvlPt = new TravelPoint(mapObject);
                             if (mapObject.Properties.ContainsKey("Door")) { CreateDoor(ref trvlPt, mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height); }
-                            _dictTravelPoints.Add(trvlPt.LinkedMap, trvlPt);
+                            _diTravelPoints.Add(trvlPt.LinkedMap, trvlPt);
                         }
                     }
                 }
@@ -301,7 +301,7 @@ namespace RiverHollow.Tile_Engine
                         }
                         else
                         {
-                            _dictCharacterLayer.Add(mapObject.Name, mapObject.Position);
+                            _diCharacterLayer.Add(mapObject.Name, mapObject.Position);
                         }
                     }
                 }
@@ -938,7 +938,7 @@ namespace RiverHollow.Tile_Engine
         /// <returns></returns>
         public bool CheckForMapChange(WorldActor c, Rectangle movingChar)
         {
-            foreach(KeyValuePair<string, TravelPoint> kvp in _dictTravelPoints)
+            foreach(KeyValuePair<string, TravelPoint> kvp in _diTravelPoints)
             {
                 if (kvp.Value.Intersects(movingChar))
                 {
@@ -992,7 +992,7 @@ namespace RiverHollow.Tile_Engine
             Item displayItem = DataManager.GetItem(itemID);
             displayItem.AutoPickup = false;
             displayItem.OnTheMap = true;
-            displayItem.Position = _dictCharacterLayer[npcIndex + "Col" + index];
+            displayItem.Position = _diCharacterLayer[npcIndex + "Col" + index];
             _liItems.Add(displayItem);
         }
 
@@ -1020,9 +1020,9 @@ namespace RiverHollow.Tile_Engine
         public Vector2 GetCharacterSpawn(string val)
         {
             Vector2 rv = Vector2.Zero;
-            if (_dictCharacterLayer.ContainsKey(val))
+            if (_diCharacterLayer.ContainsKey(val))
             {
-                rv = _dictCharacterLayer[val];
+                rv = _diCharacterLayer[val];
             }
             return rv;
         }
@@ -1584,7 +1584,7 @@ namespace RiverHollow.Tile_Engine
                     {
                         GameManager.PickUpBuilding(b);
                         b.RemoveSelfFromTiles();
-                        _dictTravelPoints.Remove(b.PersonalID.ToString());
+                        _diTravelPoints.Remove(b.PersonalID.ToString());
                         break;
                     }
                 }
@@ -1605,7 +1605,7 @@ namespace RiverHollow.Tile_Engine
                         {
                             bldg = b;
                             b.RemoveSelfFromTiles();
-                            _dictTravelPoints.Remove(b.PersonalID.ToString());
+                            _diTravelPoints.Remove(b.PersonalID.ToString());
                             PlayerManager.RemoveBuilding(b);
                             LeaveBuildMode();
                             Unpause();
@@ -1663,7 +1663,7 @@ namespace RiverHollow.Tile_Engine
         public void CreateBuildingEntrance(Building b)
         {
             TravelPoint buildPoint = new TravelPoint(b.TravelBox, b.MapName, b.PersonalID);
-            _dictTravelPoints.Add(b.MapName, buildPoint); //TODO: FIX THIS
+            _diTravelPoints.Add(b.MapName, buildPoint); //TODO: FIX THIS
             CreateDoor(ref buildPoint, b.TravelBox.X, b.TravelBox.Y, b.TravelBox.Width, b.TravelBox.Height);
         }
 

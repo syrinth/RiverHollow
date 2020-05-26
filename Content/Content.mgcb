@@ -1685,18 +1685,6 @@
 /processorParam:TextureFormat=Color
 /build:Maps/Tilesets/tsFurniture.png
 
-#begin Maps/Tilesets/tsWallsFloors.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Maps/Tilesets/tsWallsFloors.png
-
 #begin Maps/Tilesets/tilesetManorGrounds.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1790,4 +1778,26 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapConnection_02.tmx
+
+#begin Maps/Tilesets/tsWalls_Floors.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Maps/Tilesets/tsWalls_Floors.png
+
+#begin Maps/Village/mapTavern.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Village/mapTavern.tmx
+
+#begin Maps/Village/mapTavern_Upper.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Village/mapTavern_Upper.tmx
 

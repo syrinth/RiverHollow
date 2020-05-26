@@ -186,7 +186,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Tilesets/tilesetOutsideWinter.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Tilesets/tsBuildings.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Tilesets/tsFurniture.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Tilesets/tsWallsFloors.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Tilesets/tilesetManorGrounds.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Manor/mapManor1.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Manor/mapManorGrounds.tmx</File>
@@ -203,5 +202,8 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Tilesets/tilesetDungeon.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Misc/mapConnection_01.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Misc/mapConnection_02.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Tilesets/tsWalls_Floors.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapTavern.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapTavern_Upper.tmx</File>
   </SourceFiles>
 </SourceFileCollection>
