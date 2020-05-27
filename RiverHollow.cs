@@ -290,7 +290,8 @@ namespace RiverHollow
             PlayerManager.NewPlayer();
             MapManager.PopulateMaps(false);
 
-            foreach(Villager v in DataManager.DiNPC.Values) {
+            foreach (Villager v in DataManager.DiNPC.Values)
+            {
                 v.MoveToSpawn();
                 v.CalculatePathing();
             }
@@ -315,6 +316,9 @@ namespace RiverHollow
             BackToMain();
         }
 
+        /// <summary>
+        /// Call this method to trigger all component to Rollover at the end of the day
+        /// </summary>
         public static void Rollover()
         {
             MissionManager.Rollover();

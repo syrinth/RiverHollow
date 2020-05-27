@@ -133,22 +133,20 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             _guiTextWindow?.ProcessLeftButtonClick(mouse);
 
-            switch (CombatManager.CurrentPhase)
+            if (CombatManager.AreWeSelectingAnAction())
             {
-                case CombatManager.CmbtPhaseEnum.MainSelection:
-                    if (_gActionSelect != null)
-                    {
-                        rv = _gActionSelect.ProcessLeftButtonClick(mouse);
-                    }
-                    break;
-
-                case CombatManager.CmbtPhaseEnum.ChooseMoveTarget:
-                    CombatManager.SetMoveTarget();
-                    break;
-
-                case CombatManager.CmbtPhaseEnum.ChooseActionTarget:
-                    CombatManager.SelectedAction.UseSkillOnTarget();
-                    break;
+                if (_gActionSelect != null)
+                {
+                    rv = _gActionSelect.ProcessLeftButtonClick(mouse);
+                }
+            }
+            else if (CombatManager.CombatPhaseCheck(CombatManager.CmbtPhaseEnum.ChooseMoveTarget))
+            {
+                CombatManager.SetMoveTarget();
+            }
+            else if (CombatManager.CombatPhaseCheck(CombatManager.CmbtPhaseEnum.ChooseActionTarget))
+            {
+                CombatManager.SelectedAction.UseSkillOnTarget();
             }
 
             //If the current Phase is skill selection, allow the user to pick a skill for the currentCharacter
@@ -443,7 +441,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
 
-            if (CombatManager.CurrentPhase == CombatManager.CmbtPhaseEnum.MainSelection && _gActionBar.ProcessHover(mouse))
+            if (CombatManager.AreWeSelectingAnAction() && _gActionBar.ProcessHover(mouse))
             {
                 rv = true;
                 SyncText();

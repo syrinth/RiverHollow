@@ -290,6 +290,20 @@ namespace RiverHollow.Game_Managers
             CurrentPhase = newPhase;
         }
 
+        /// <summary>
+        /// Returns true is we are on MainSelection or ChooseAction
+        /// </summary>
+        /// <returns></returns>
+        public static bool AreWeSelectingAnAction()
+        {
+            return CombatPhaseCheck(CmbtPhaseEnum.ChooseAction) || CombatPhaseCheck(CmbtPhaseEnum.MainSelection);
+        }
+
+        /// <summary>
+        /// Checks the CurrentPhase against the given CombatPhase
+        /// </summary>
+        /// <param name="test">The CombatPhaseEnum to test against</param>
+        /// <returns></returns>
         public static bool CombatPhaseCheck(CmbtPhaseEnum test)
         {
             return CurrentPhase == test;

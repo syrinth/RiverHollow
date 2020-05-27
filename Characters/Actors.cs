@@ -460,10 +460,190 @@ namespace RiverHollow.Actors
         }
     }
 
+    public class TalkingActor : WorldActor
+    {
+        protected const int PortraitWidth = 160;
+        protected const int PortraitHeight = 192;
+
+        protected string _sPortrait;
+        public string Portrait { get => _sPortrait; }
+
+        protected Rectangle _rPortrait;
+        public Rectangle PortraitRectangle { get => _rPortrait; }
+
+        protected Dictionary<string, string> _diDialogue;
+
+        public TalkingActor() : base()
+        {
+            _bCanTalk = true;
+        }
+
+        /// <summary>
+        /// Stand-in Virtual method to be overrriden. Should never get called.
+        /// </summary>
+        public virtual string GetOpeningText()
+        {
+            return "I have nothing to say.";
+        }
+
+        /// <summary>
+        ///  Retrieves any opening text, processes it, then opens a text window
+        /// </summary>
+        /// <param name="facePlayer">Whether the NPC should face the player. Mainly used to avoid messing up a cutscene</param>
+        public virtual void Talk(bool facePlayer)
+        {
+            string text = GetOpeningText();
+
+            //Determine the position based off of where the player and then have the NPC face the player
+            //Only do this if they are idle so as to not disturb other animations they may be performing.
+            if (facePlayer && BodySprite.CurrentAnimation.StartsWith("Idle"))
+            {
+                Point diff = GetRectangle().Center - PlayerManager.World.GetRectangle().Center;
+                if (Math.Abs(diff.X) > Math.Abs(diff.Y))
+                {
+                    if (diff.X > 0)  //The player is to the left
+                    {
+                        Facing = DirectionEnum.Left;
+                    }
+                    else
+                    {
+                        Facing = DirectionEnum.Right;
+                    }
+                }
+                else
+                {
+                    if (diff.Y > 0)  //The player is above
+                    {
+                        Facing = DirectionEnum.Up;
+                    }
+                    else
+                    {
+                        Facing = DirectionEnum.Down;
+                    }
+                }
+
+                PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
+            }
+
+            text = Util.ProcessText(text, _sName);
+            GUIManager.OpenTextWindow(text, this);
+        }
+
+        /// <summary>
+        /// Used when already talking to an NPC, gets the next dialog tag in the conversation
+        /// and opens a new window for it.
+        /// </summary>
+        /// <param name="dialogTag">The dialog tag to talk with</param>
+        public void Talk(string dialogTag)
+        {
+            string text = string.Empty;
+            if (_diDialogue.ContainsKey(dialogTag))
+            {
+                text = _diDialogue[dialogTag];
+            }
+            text = Util.ProcessText(text, _sName);
+            GUIManager.OpenTextWindow(text, this);
+        }
+        public void TalkCutscene(string cutsceneLine)
+        {
+            string text = cutsceneLine;
+            text = Util.ProcessText(text, _sName);
+            GUIManager.OpenTextWindow(text, this);
+        }
+
+        public virtual string GetSelectionText()
+        {
+            string text = _diDialogue["Selection"];
+            Util.ProcessText(text, _sName);
+
+            string[] textFromData = Util.FindTags(text);
+            string[] options = textFromData[1].Split('|');
+
+            List<string> liCommands = RemoveEntries(options);
+
+            //If there's only two entires left, Talk and Never Mind, then go straight to Talk
+            string rv = string.Empty;
+            if (liCommands.Count == 2)
+            {
+                rv = GetDialogEntry("Talk");
+            }
+            else
+            {
+                rv = textFromData[0] + "[";   //Puts back the pre selection text
+                foreach (string s in liCommands)
+                {
+                    rv += s + "|";
+                }
+                rv = rv.Remove(rv.Length - 1);
+                rv += "]";
+            }
+
+            return rv;
+        }
+        public virtual List<string> RemoveEntries(string[] options)
+        {
+            List<string> _liCommands = new List<string>();
+            _liCommands.AddRange(options);
+            return _liCommands;
+        }
+
+        public string GetText()
+        {
+            string text = _diDialogue[RHRandom.Instance.Next(1, 2).ToString()];
+            return Util.ProcessText(text, _sName);
+        }
+        public virtual string GetDialogEntry(string entry)
+        {
+            return "Get What Dialog Entry?";
+        }
+        public virtual string HandleDialogSelectionEntry(string entry)
+        {
+            return "What?";
+        }
+
+        public bool HandleTextInteraction(string chosenAction)
+        {
+            bool rv = true;
+            string nextText = GameManager.CurrentNPC.GetDialogEntry(chosenAction);
+
+            if (chosenAction.StartsWith("Quest"))
+            {
+                rv = true;
+                Quest q = GameManager.DiQuests[int.Parse(chosenAction.Remove(0, "Quest".Length))];
+                PlayerManager.AddToQuestLog(q);
+                GUIManager.SetWindowText(GameManager.CurrentNPC.GetDialogEntry("Quest" + q.QuestID));
+            }
+            else if (chosenAction.StartsWith("Donate"))
+            {
+                ((Villager)GameManager.CurrentNPC).FriendshipPoints += 40;
+                GUIManager.SetWindowText(nextText);
+            }
+            else if (chosenAction.StartsWith("NoDonate"))
+            {
+                ((Villager)GameManager.CurrentNPC).FriendshipPoints -= 1000;
+                GUIManager.SetWindowText(nextText);
+            }
+            else if (!string.IsNullOrEmpty(nextText))
+            {
+                GUIManager.SetWindowText(nextText);
+            }
+            else if (chosenAction.StartsWith("Cancel"))
+            {
+                rv = false;
+            }
+            else
+            {
+                rv = false;
+            }
+
+            return rv;
+        }
+    }
+
     /// <summary>
     /// The properties and methodsthat pertain to Combat, stats, gear, etc
     /// </summary>
-    public abstract class CombatActor : WorldActor
+    public abstract class CombatActor : TalkingActor
     {
         #region Properties
         protected const int MAX_STAT = 99;
@@ -1377,186 +1557,8 @@ namespace RiverHollow.Actors
             public Equipment GetItem() { return _eGear; }
         }
     }
-    public class TalkingActor : ClassedCombatant
-    {
-        protected const int PortraitWidth = 160;
-        protected const int PortraitHeight = 192;
-
-        protected string _sPortrait;
-        public string Portrait { get => _sPortrait; }
-
-        protected Rectangle _rPortrait;
-        public Rectangle PortraitRectangle { get => _rPortrait; }
-
-        protected Dictionary<string, string> _diDialogue;
-
-        public TalkingActor() : base()
-        {
-            _bCanTalk = true;
-        }
-
-        /// <summary>
-        /// Stand-in Virtual method to be overrriden. Should never get called.
-        /// </summary>
-        public virtual string GetOpeningText()
-        {
-            return "I have nothing to say.";
-        }
-
-        /// <summary>
-        ///  Retrieves any opening text, processes it, then opens a text window
-        /// </summary>
-        /// <param name="facePlayer">Whether the NPC should face the player. Mainly used to avoid messing up a cutscene</param>
-        public virtual void Talk(bool facePlayer)
-        {
-            string text = GetOpeningText();
-            
-            //Determine the position based off of where the player and then have the NPC face the player
-            //Only do this if they are idle so as to not disturb other animations they may be performing.
-            if (facePlayer && BodySprite.CurrentAnimation.StartsWith("Idle"))
-            {
-                Point diff = GetRectangle().Center - PlayerManager.World.GetRectangle().Center;
-                if (Math.Abs(diff.X) > Math.Abs(diff.Y))
-                {
-                    if (diff.X > 0)  //The player is to the left
-                    {
-                        Facing = DirectionEnum.Left;
-                    }
-                    else
-                    {
-                        Facing = DirectionEnum.Right;
-                    }
-                }
-                else
-                {
-                    if (diff.Y > 0)  //The player is above
-                    {
-                        Facing = DirectionEnum.Up;
-                    }
-                    else
-                    {
-                        Facing = DirectionEnum.Down;
-                    }
-                }
-
-                PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
-            }
-
-            text = Util.ProcessText(text, _sName);
-            GUIManager.OpenTextWindow(text, this);
-        }
-
-        /// <summary>
-            /// Used when already talking to an NPC, gets the next dialog tag in the conversation
-            /// and opens a new window for it.
-            /// </summary>
-            /// <param name="dialogTag">The dialog tag to talk with</param>
-        public void Talk(string dialogTag)
-        {
-            string text = string.Empty;
-            if (_diDialogue.ContainsKey(dialogTag))
-            {
-                text = _diDialogue[dialogTag];
-            }
-            text = Util.ProcessText(text, _sName);
-            GUIManager.OpenTextWindow(text, this);
-        }
-        public void TalkCutscene(string cutsceneLine)
-        {
-            string text = cutsceneLine;
-            text = Util.ProcessText(text, _sName);
-            GUIManager.OpenTextWindow(text, this);
-        }
-
-        public virtual string GetSelectionText()
-        {
-            string text = _diDialogue["Selection"];
-            Util.ProcessText(text, _sName);
-
-            string[] textFromData = Util.FindTags(text);
-            string[] options = textFromData[1].Split('|');
-
-            List<string> liCommands = RemoveEntries(options);
-
-            //If there's only two entires left, Talk and Never Mind, then go straight to Talk
-            string rv = string.Empty;
-            if (liCommands.Count == 2)
-            {
-                rv = GetDialogEntry("Talk");
-            }
-            else
-            {
-                rv = textFromData[0] + "[";   //Puts back the pre selection text
-                foreach (string s in liCommands)
-                {
-                    rv += s + "|";
-                }
-                rv = rv.Remove(rv.Length - 1);
-                rv += "]";
-            }
-
-            return rv;
-        }
-        public virtual List<string> RemoveEntries(string[] options)
-        {
-            List<string> _liCommands = new List<string>();
-            _liCommands.AddRange(options);
-            return _liCommands;
-        }
-
-        public string GetText()
-        {
-            string text = _diDialogue[RHRandom.Instance.Next(1, 2).ToString()];
-            return Util.ProcessText(text, _sName);
-        }
-        public virtual string GetDialogEntry(string entry)
-        {
-            return "Get What Dialog Entry?";
-        }
-        public virtual string HandleDialogSelectionEntry(string entry)
-        {
-            return "What?";
-        }
-
-        public bool HandleTextInteraction(string chosenAction)
-        {
-            bool rv = true;
-            string nextText = GameManager.CurrentNPC.GetDialogEntry(chosenAction);
-
-            if (chosenAction.StartsWith("Quest"))
-            {
-                rv = true;
-                Quest q = GameManager.DiQuests[int.Parse(chosenAction.Remove(0, "Quest".Length))];
-                PlayerManager.AddToQuestLog(q);
-                GUIManager.SetWindowText(GameManager.CurrentNPC.GetDialogEntry("Quest" + q.QuestID));
-            }
-            else if (chosenAction.StartsWith("Donate"))
-            {
-                ((Villager)GameManager.CurrentNPC).FriendshipPoints += 40;
-                GUIManager.SetWindowText(nextText);
-            }
-            else if (chosenAction.StartsWith("NoDonate"))
-            {
-                ((Villager)GameManager.CurrentNPC).FriendshipPoints -= 1000;
-                GUIManager.SetWindowText(nextText);
-            }
-            else if (!string.IsNullOrEmpty(nextText))
-            {
-                GUIManager.SetWindowText(nextText);
-            }
-            else if (chosenAction.StartsWith("Cancel"))
-            {
-                rv = false;
-            }
-            else
-            {
-                rv = false;
-            }
-
-            return rv;
-        }
-    }
-    public class Villager : TalkingActor
+   
+    public class Villager : ClassedCombatant
     {
         //Data for building structures
         Building _buildTarget;
@@ -2444,7 +2446,7 @@ namespace RiverHollow.Actors
         }
     }
 
-    public class Adventurer : TalkingActor
+    public class Adventurer : ClassedCombatant
     {
         #region Properties
         private enum AdventurerStateEnum { Idle, InParty, OnMission };
