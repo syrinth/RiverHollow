@@ -1107,7 +1107,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     if (PlayerManager.PlayerInRange(c.HoverBox, (int)(TileSize * 1.5)) && c.HoverContains(mouseLocation) && c.CanTalk && c.Active)
                     {
-                        ((TalkingActor)c).Talk(true);
+                        ((TalkingActor)c).Talk();
                         rv = true;
                         break;
                     }
@@ -2783,7 +2783,7 @@ namespace RiverHollow.Tile_Engine
 
         internal void Talk()
         {
-            ((ShopKeeper)DataManager.DiNPC[_iShopID]).Talk(true);
+            ((ShopKeeper)DataManager.DiNPC[_iShopID]).Talk();
         }
     }
 

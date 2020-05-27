@@ -2,7 +2,6 @@
 using RiverHollow.Screens;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIObjects;
-using static RiverHollow.WorldObjects.WorldItem;
 using RiverHollow.WorldObjects;
 
 namespace RiverHollow.Game_Managers.GUIObjects
@@ -78,25 +77,20 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     if (GameManager.HeldItem != null && _container != null)
                     {
                         //InventoryManager.AddNewItemToFirstAvailableInventorySpot(GameManager.HeldItem.ItemID);
-                       // GraphicCursor.DropItem();
+                        // GraphicCursor.DropItem();
                     }
                 }
             }
             else if (_container != null && _container.DrawRectangle.Contains(mouse))
             {
-               rv = _container.ProcessRightButtonClick(mouse);
+                rv = _container.ProcessRightButtonClick(mouse);
             }
             else if (_container != null && !_container.DrawRectangle.Contains(mouse))
             {
-                if (GameManager.CurrentNPC == GameManager.ShippingGremlin)
-                {
-                    GameManager.ShippingGremlin.Talk(false);
-                }
-                else
-                {
-                    GameManager.DropItem();
-                    GameManager.GoToWorldMap();
-                }
+                GameManager.DropItem();
+                GameManager.GoToWorldMap();
+                GUIManager.OpenTextWindow(GameManager.CurrentNPC.GetDialogEntry("Goodbye"));
+                GameManager.RemoveCurrentNPCLockObject();
             }
             
             return rv;

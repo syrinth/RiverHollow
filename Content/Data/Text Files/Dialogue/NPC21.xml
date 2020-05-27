@@ -27,5 +27,9 @@
       <Key>Selection</Key>
       <Value>Hello, hello! How can meek, humble $21$ be helping you? [Talk:Talk|Gift:GiveGift|Ship Goods:ShipGoods|Never Mind:Cancel]</Value>
     </Item>
+	<Item>
+      <Key>Goodbye</Key>
+      <Value>Okie Bye!</Value>
+    </Item>
   </Asset>
 </XnaContent>

@@ -473,9 +473,12 @@ namespace RiverHollow.Actors
 
         protected Dictionary<string, string> _diDialogue;
 
+        private int _iLockObjects;
+
         public TalkingActor() : base()
         {
             _bCanTalk = true;
+            _iLockObjects = 0;
         }
 
         /// <summary>
@@ -490,7 +493,7 @@ namespace RiverHollow.Actors
         ///  Retrieves any opening text, processes it, then opens a text window
         /// </summary>
         /// <param name="facePlayer">Whether the NPC should face the player. Mainly used to avoid messing up a cutscene</param>
-        public virtual void Talk(bool facePlayer)
+        public virtual void Talk(bool facePlayer = true)
         {
             string text = GetOpeningText();
 
@@ -528,6 +531,8 @@ namespace RiverHollow.Actors
             text = Util.ProcessText(text, _sName);
             GUIManager.OpenTextWindow(text, this);
         }
+
+        public virtual void StopTalking() { }
 
         /// <summary>
         /// Used when already talking to an NPC, gets the next dialog tag in the conversation
@@ -601,7 +606,7 @@ namespace RiverHollow.Actors
             return "What?";
         }
 
-        public bool HandleTextInteraction(string chosenAction)
+        public virtual bool HandleTextInteraction(string chosenAction)
         {
             bool rv = true;
             string nextText = GameManager.CurrentNPC.GetDialogEntry(chosenAction);
@@ -637,6 +642,27 @@ namespace RiverHollow.Actors
             }
 
             return rv;
+        }
+
+        /// <summary>
+        /// Adds one to the number of objects that use the TalkingActor
+        /// </summary>
+        public void AddCurrentNPCLockObject()
+        {
+            _iLockObjects++;
+        }
+
+        /// <summary>
+        /// Removes one from the number of objects that use the TalkingActor
+        /// If that number hits 0, clear the CurrentNPC
+        /// </summary>
+        public void RemoveCurrentNPCLockObject()
+        {
+            _iLockObjects--;
+            if(_iLockObjects == 0)
+            {
+                GameManager.ClearCurrentNPC();
+            }
         }
     }
 
@@ -2085,6 +2111,8 @@ namespace RiverHollow.Actors
 
         public ShopKeeper(int index, Dictionary<string, string> stringData)
         {
+            _eActorType = ActorEnum.NPC;
+            _eNPCType = NPCTypeEnum.Shopkeeper;
             _liTilePath = new List<RHTile>();
             _liMerchandise = new List<Merchandise>();
             _diCollection = new Dictionary<int, bool>();
@@ -3148,15 +3176,15 @@ namespace RiverHollow.Actors
             }
         }
 
-        public override string GetDialogEntry(string entry)
+        public override bool HandleTextInteraction(string chosenAction)
         {
-            string rv = string.Empty;
-            rv = base.GetDialogEntry(entry);
-            if (string.IsNullOrEmpty(rv))
+            bool rv = false;
+            rv = base.HandleTextInteraction(chosenAction);
+            if (!rv)
             {
-                if (entry.Equals("ShipGoods"))
+                if (chosenAction.Equals("ShipGoods"))
                 {
-                    GameManager.CurrentNPC = this;
+                    GameManager.AddCurrentNPCLockObject();
                     GUIManager.OpenMainObject(new HUDInventoryDisplay(_arrInventory));
                 }
                 else
@@ -3168,10 +3196,22 @@ namespace RiverHollow.Actors
             return rv; 
         }
 
-        public override void Talk(bool facePlayer)
+        /// <summary>
+        /// When we talk to the ShippingGremlin, lock player movement and then play the open animation
+        /// </summary>
+        /// <param name="facePlayer">Whether to face the player, pointless here</param>
+        public override void Talk(bool facePlayer = false)
         {
             PlayerManager.AllowMovement = false;
             _sprBody.PlayAnimation(AnimationEnum.ObjectAction1);
+        }
+
+        /// <summary>
+        /// After done talking, play the close animation
+        /// </summary>
+        public override void StopTalking()
+        {
+            _sprBody.PlayAnimation(AnimationEnum.ObjectAction2);
         }
 
         public int SellAll()

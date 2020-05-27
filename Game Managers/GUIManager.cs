@@ -125,6 +125,7 @@ namespace RiverHollow.Game_Managers
         public static void OpenTextWindow(string text, TalkingActor talker, bool open = true)
         {
             GameManager.CurrentNPC = talker;
+            GameManager.AddCurrentNPCLockObject();
             OpenTextWindow(text, open);
         }
         public static void SetWindowText(string value)

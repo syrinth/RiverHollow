@@ -157,7 +157,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (win == _guiTextWindow)
             {
                 RemoveControl(_guiTextWindow);
-                GameManager.CurrentNPC = null;
+
+                GameManager.RemoveCurrentNPCLockObject();
                 GameManager.gmActiveItem = null;
                 _guiTextWindow = null;
                 rv = true;

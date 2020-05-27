@@ -121,10 +121,35 @@ namespace RiverHollow.Game_Managers
 
         public static void ClearGMObjects()
         {
-            CurrentNPC = null;
+            ClearCurrentNPC();
             gmDungeonObject = null;
             gmActiveItem = null;
             gmSpirit = null;
+        }
+
+        /// <summary>
+        /// Increments the number of active objects in the CurrentNPC if it exists
+        /// </summary>
+        public static void AddCurrentNPCLockObject()
+        {
+            CurrentNPC?.AddCurrentNPCLockObject();
+        }
+
+        /// <summary>
+        /// Decrements the number of active objects in the CurrentNPC if it exists
+        /// </summary>
+        public static void RemoveCurrentNPCLockObject()
+        {
+            CurrentNPC?.RemoveCurrentNPCLockObject();
+        }
+
+        /// <summary>
+        /// Tells the CurrentNPC to StopTalking and then sets the CurrentNPC to null
+        /// </summary>
+        public static void ClearCurrentNPC()
+        {
+            CurrentNPC?.StopTalking();
+            CurrentNPC = null;
         }
 
         public static OptionsData SaveOptions()
