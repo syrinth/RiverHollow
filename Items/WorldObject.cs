@@ -829,7 +829,7 @@ namespace RiverHollow.WorldObjects
                         Item newItem = GetItem(item.itemID, item.num);
                         if (newItem != null) { newItem.ApplyUniqueData(item.strData); }
 
-                        InventoryManager.InitContainerInventory(this);
+                        InventoryManager.InitContainerInventory(this.Inventory);
                         InventoryManager.AddItemToInventorySpot(newItem, i, j, false);
                         InventoryManager.ClearExtraInventory();
                     }

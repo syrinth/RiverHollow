@@ -18,6 +18,7 @@ using static RiverHollow.Game_Managers.GUIObjects.HUDMenu.HUDManagement;
 using static RiverHollow.Game_Managers.DataManager;
 using static RiverHollow.WorldObjects.Clothes;
 using static RiverHollow.Game_Managers.TravelManager;
+using static RiverHollow.WorldObjects.WorldItem;
 
 namespace RiverHollow.Actors
 {
@@ -1444,7 +1445,6 @@ namespace RiverHollow.Actors
             text = Util.ProcessText(text, _sName);
             GUIManager.OpenTextWindow(text, this);
         }
-        public virtual void StopTalking() { }
 
         /// <summary>
             /// Used when already talking to an NPC, gets the next dialog tag in the conversation
@@ -1565,14 +1565,14 @@ namespace RiverHollow.Actors
         protected int _iIndex;
         public int ID  => _iIndex;
         protected string _sHomeMap;
-        public enum NPCTypeEnum { Eligible, Villager, Shopkeeper, Ranger, Worker, Mason }
+        public enum NPCTypeEnum { Villager, Eligible, Shopkeeper, Ranger, Worker, Mason }
         protected NPCTypeEnum _eNPCType;
-        public NPCTypeEnum NPCType { get => _eNPCType; }
+        public NPCTypeEnum NPCType => _eNPCType;
         public static List<int> FriendRange = new List<int> { 0, 10, 40, 100, 200, 600, 800, 1200, 1600, 2000 };
         public int FriendshipPoints = 1900;
 
         protected Dictionary<int, bool> _diCollection;
-        public Dictionary<int, bool> Collection { get => _diCollection; }
+        public Dictionary<int, bool> Collection => _diCollection;
         public bool Introduced;
         public bool CanGiveGift = true;
 
@@ -1580,7 +1580,9 @@ namespace RiverHollow.Actors
         List<KeyValuePair<string, List<RHTile>>> _todaysPathing = null;                             //List of Times with the associated pathing                                                     //List of Tiles to currently be traversing
         protected int _iScheduleIndex;
 
-        public Villager() { }
+        public Villager() {
+            _diCollection = new Dictionary<int, bool>();
+        }
         //For Cutscenes
         public Villager(Villager n)
         {
@@ -1601,7 +1603,6 @@ namespace RiverHollow.Actors
         public Villager(int index, Dictionary<string, string> stringData): this()
         {
             _eActorType = ActorEnum.NPC;
-            _diCollection = new Dictionary<int, bool>();
             _diCompleteSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
             _iScheduleIndex = 0;
             _iIndex = index;
@@ -1634,16 +1635,7 @@ namespace RiverHollow.Actors
             {
                 return GetText();
             }
-            else if (entry.Equals("Nothing"))
-            {
-                return string.Empty;
-            }
             else if (entry.Equals("GiveGift"))
-            {
-                GameManager.CurrentNPC = this;
-                GUIManager.OpenMainObject(new HUDInventoryDisplay());
-            }
-            else if (entry.Equals("ShipGoods"))
             {
                 GameManager.CurrentNPC = this;
                 GUIManager.OpenMainObject(new HUDInventoryDisplay());
@@ -1808,7 +1800,6 @@ namespace RiverHollow.Actors
             //If we failed to move the NPC to a building location, because there was none
             //Add the NPC to their home map
             if (!MoveToBuildingLocation()) { 
-                CurrentMap.RemoveCharacter(this);
                 MoveToSpawn();
                 CalculatePathing();
             }
@@ -2671,7 +2662,7 @@ namespace RiverHollow.Actors
         {
             if (_iDailyItemID != -1)
             {
-                InventoryManager.InitContainerInventory(_building.BuildingChest);
+                InventoryManager.InitContainerInventory(_building.BuildingChest.Inventory);
                 InventoryManager.AddToInventory(_iDailyItemID, 1, false);
                 InventoryManager.ClearExtraInventory();
             }
@@ -3108,11 +3099,13 @@ namespace RiverHollow.Actors
 
     public class ShippingGremlin : Villager
     {
-        private List<Item> _liSellList;
+        private int _iRows = 4;
+        private int _iCols = 10;
+        private Item[,] _arrInventory;
  
         public ShippingGremlin(int index, Dictionary<string, string> stringData)
         {
-            _liSellList = new List<Item>();
+            _arrInventory = new Item[_iRows, _iCols];
             _eActorType = ActorEnum.ShippingGremlin;
             _iIndex = index;
             _iWidth = 32;
@@ -3135,7 +3128,7 @@ namespace RiverHollow.Actors
             _sprBody.AddAnimation(AnimationEnum.ObjectAction2, 160, 0, _iWidth, _iHeight, 3, 0.1f);
             PlayAnimation(AnimationEnum.ObjectIdle);
 
-            if(GameManager.gmShippingGremlin == null) { GameManager.gmShippingGremlin = this; }
+            if(GameManager.ShippingGremlin == null) { GameManager.ShippingGremlin = this; }
         }
 
         public override void Update(GameTime gTime)
@@ -3153,35 +3146,45 @@ namespace RiverHollow.Actors
             }
         }
 
+        public override string GetDialogEntry(string entry)
+        {
+            string rv = string.Empty;
+            rv = base.GetDialogEntry(entry);
+            if (string.IsNullOrEmpty(rv))
+            {
+                if (entry.Equals("ShipGoods"))
+                {
+                    GameManager.CurrentNPC = this;
+                    GUIManager.OpenMainObject(new HUDInventoryDisplay(_arrInventory));
+                }
+                else
+                {
+                    _sprBody.PlayAnimation(AnimationEnum.ObjectAction2);
+                }
+            }
+
+            return rv; 
+        }
+
         public override void Talk(bool facePlayer)
         {
             PlayerManager.AllowMovement = false;
             _sprBody.PlayAnimation(AnimationEnum.ObjectAction1);
         }
 
-        public override void StopTalking()
-        {
-            _sprBody.PlayAnimation(AnimationEnum.ObjectAction2);
-        }
-
         public int SellAll()
         {
             int val = 0;
-            foreach (Item i in _liSellList)
+            foreach (Item i in _arrInventory)
             {
-                val += i.SellPrice;
-                PlayerManager.AddMoney(i.SellPrice);
+                if (i != null)
+                {
+                    val += i.SellPrice;
+                    PlayerManager.AddMoney(i.SellPrice);
+                }
             }
-            _liSellList.Clear();
+            _arrInventory = new Item[_iRows, _iCols];
             return val;
-        }
-
-        public void AddItem(Item i)
-        {
-            if (i != null)
-            {
-                _liSellList.Add(i);
-            }
         }
     }
  

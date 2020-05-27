@@ -9,7 +9,7 @@
     <!--Key:StringIndex, Value:Text-->
     <Item>
       <Key>Introduction</Key>
-      <Value>Eek! Eh... hello! New homeowner, yes? Me $21$. Place things here with me, yes, and I sell for you at night while you sleeps. Mutually beneficial!</Value>
+      <Value>Eek! Eh... hello! New house person, yes? Me $21$. Place things here with me, yes, I sell for you at night while you sleeps. Mutually beneficial! [Talk:Talk|Gift:GiveGift|Ship Goods:ShipGoods|Never Mind:Cancel]</Value>
     </Item>
     <Item>
       <Key>1</Key>

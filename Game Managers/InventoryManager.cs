@@ -49,9 +49,9 @@ namespace RiverHollow.Game_Managers
             //}
         }
 
-        public static void InitContainerInventory(Container c)
+        public static void InitContainerInventory(Item[,] inventory)
         {
-            _arrExtraInventory = c.Inventory;
+            _arrExtraInventory = inventory;
         }
 
         public static void ClearExtraInventory()

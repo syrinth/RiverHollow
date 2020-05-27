@@ -13,6 +13,7 @@ using System.Xml.Serialization;
 using static RiverHollow.Misc.Quest;
 using static RiverHollow.Actors.ShopKeeper;
 using RiverHollow.Buildings;
+using RiverHollow.Game_Managers.GUIComponents.Screens;
 
 namespace RiverHollow.Game_Managers
 {
@@ -59,7 +60,7 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<int, Upgrade> DiUpgrades;
         public static Dictionary<int, Quest> DiQuests;
 
-        public static ShippingGremlin gmShippingGremlin;
+        public static ShippingGremlin ShippingGremlin;
         public static Merchandise gmMerchandise;
         public static TalkingActor CurrentNPC;
         public static Item gmActiveItem;
@@ -101,7 +102,7 @@ namespace RiverHollow.Game_Managers
             {
                 Vector2 pos = PlayerManager.World.CollisionBox.Center.ToVector2();
                 PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]));
-                GameManager.BackToMain();
+                GUIManager.SetScreen(new DayEndScreen());
             }
             else if (selectedAction.Equals("OpenDoor"))
             {

@@ -3,6 +3,7 @@ using RiverHollow.Screens;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIObjects;
 using static RiverHollow.WorldObjects.WorldItem;
+using RiverHollow.WorldObjects;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -21,11 +22,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
             CenterOnScreen();
         }
 
-        public HUDInventoryDisplay(Container c)
+        public HUDInventoryDisplay(Item[,] inventory)
         {
             InventoryManager.ClearExtraInventory();
 
-            InventoryManager.InitContainerInventory(c);
+            InventoryManager.InitContainerInventory(inventory);
             _container = new GUIInventory();
             _inventory = new GUIInventory(true);
 
@@ -87,8 +88,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             else if (_container != null && !_container.DrawRectangle.Contains(mouse))
             {
-                GameManager.DropItem();
-                GameManager.GoToWorldMap();
+                if (GameManager.CurrentNPC == GameManager.ShippingGremlin)
+                {
+                    GameManager.ShippingGremlin.Talk(false);
+                }
+                else
+                {
+                    GameManager.DropItem();
+                    GameManager.GoToWorldMap();
+                }
             }
             
             return rv;

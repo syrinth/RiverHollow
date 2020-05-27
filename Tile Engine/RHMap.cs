@@ -342,7 +342,7 @@ namespace RiverHollow.Tile_Engine
                 else if (obj.Name.Equals("Chest"))
                 {
                     Container c = (Container)DataManager.GetWorldObject(190);
-                    InventoryManager.InitContainerInventory(c);
+                    InventoryManager.InitContainerInventory(c.Inventory);
                     c.MapPosition = obj.Position;
                     PlacePlayerObject(c);
                     string[] holdSplit = obj.Properties["Holding"].Split('/');
@@ -1063,7 +1063,7 @@ namespace RiverHollow.Tile_Engine
                         stairs.SetExit(MapManager.HomeMap);
                         PlaceWorldObject(stairs, true);
                     }
-                    GUIManager.OpenMainObject(new HUDInventoryDisplay((Container)obj));
+                    GUIManager.OpenMainObject(new HUDInventoryDisplay(((Container)obj).Inventory));
                 }
                 else if (obj.IsPlant())
                 {
@@ -1089,7 +1089,6 @@ namespace RiverHollow.Tile_Engine
             if (tile.ContainsProperty("Journal", out string val) && val.Equals("true"))
             {
                 GUIManager.OpenTextWindow(DataManager.GetGameText("Journal"));
-                //GUIManager.SetScreen(new TextScreen(GameContentManager.GetGameText("Journal"), true));
             }
 
             foreach (ShopData shop in _liShopData)
@@ -1861,8 +1860,8 @@ namespace RiverHollow.Tile_Engine
             if (MapManager.Maps[c.CurrentMapName].Contains(c))
             {
                 rv = true;
-                if (c.IsMonster() && !_liMonsters.Contains((Monster)c)) { _liMonsters.Remove((Monster)c); }
-                else if (!_liActors.Contains(c)) { _liActors.Remove(c); }
+                if (c.IsMonster() && _liMonsters.Contains((Monster)c)) { _liMonsters.Remove((Monster)c); }
+                else if (_liActors.Contains(c)) { _liActors.Remove(c); }
             }
 
             return rv;

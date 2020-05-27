@@ -30,7 +30,7 @@ namespace RiverHollow
         {
             Vector2 target = _actObserver.CharCenter.ToVector2() * Scale;
 
-            if (!TakingInput())
+            if (!TakingInput() && IsRunning())
             {
                 KeyboardState ks = Keyboard.GetState();
                 int speed = 10;
