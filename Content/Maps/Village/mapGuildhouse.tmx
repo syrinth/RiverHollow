@@ -86,14 +86,13 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="Character">
-  <object id="1" name="NPC5" x="209.5" y="177.833" width="11.5833" height="8.66667"/>
+  <object id="1" name="NPC_16" x="209.5" y="177.833" width="11.5833" height="8.66667"/>
   <object id="6" name="Shop" x="208" y="183" width="16.0034" height="25">
    <properties>
-    <property name="Owner" value="5"/>
+    <property name="Owner" value="16"/>
     <property name="ShopKeepX" type="int" value="13"/>
     <property name="ShopKeepY" type="int" value="11"/>
    </properties>
   </object>
-  <object id="8" x="213.725" y="182.412" width="0.377273"/>
  </objectgroup>
 </map>

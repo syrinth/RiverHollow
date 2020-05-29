@@ -8,7 +8,7 @@
     <!--[SpawnMob:ID-Map-Location]-->
     <Item>
       <Key>1</Key>
-      <Value>[HandTo:6][Type:Fetch][GoalItem:301-1][Item:1000-1-1][Money:500][Friendship:Giver-200][SpawnMob:3-mapForest-Quest1]</Value>
+      <Value>[HandTo:17][Type:Fetch][GoalItem:301-1][Item:1000-1-1][Money:500][Friendship:Giver-200][SpawnMob:3-mapForest-Quest1]</Value>
     </Item>
     <Item>
       <Key>2</Key>

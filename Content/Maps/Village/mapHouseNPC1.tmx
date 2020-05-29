@@ -127,7 +127,7 @@
   <object id="22" name="8Col3" x="147.67" y="32.75" width="10" height="10"/>
   <object id="15" name="8Col2" x="130.67" y="35.833" width="8.5" height="6.5"/>
   <object id="18" name="8Col1" x="118.667" y="34" width="7" height="8"/>
-  <object id="23" name="NPC8" x="99.0007" y="83.6667" width="9.66667" height="8.66667"/>
+  <object id="23" name="NPC_18" x="99.0007" y="83.6667" width="9.66667" height="8.66667"/>
   <object id="29" name="1CS0" x="273.5" y="290" width="12" height="12"/>
   <object id="34" name="1Col8" x="416.333" y="341" width="10" height="12"/>
   <object id="36" name="1Col7" x="362" y="339.333" width="14" height="9"/>
@@ -137,6 +137,6 @@
   <object id="37" name="1Col3" x="386.67" y="165.667" width="9" height="6.5"/>
   <object id="39" name="1Col2" x="371.003" y="166.916" width="8.75" height="6.5"/>
   <object id="38" name="1Col1" x="357.667" y="165" width="7.5" height="8"/>
-  <object id="33" name="NPC1" x="481.83" y="274.583" width="8.75" height="10.25"/>
+  <object id="33" name="NPC_05" x="481.83" y="274.583" width="8.75" height="10.25"/>
  </objectgroup>
 </map>

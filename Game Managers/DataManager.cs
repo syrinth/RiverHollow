@@ -160,7 +160,7 @@ namespace RiverHollow.Game_Managers
             _diNPCDialogue = new Dictionary<int, Dictionary<string, string>>();
             foreach (string s in Directory.GetFiles(@"Content\" + FOLDER_TEXTFILES + "Dialogue"))
             {
-                string fileName = Path.GetFileName(s).Replace("NPC", "").Split('.')[0];
+                string fileName = Path.GetFileName(s).Replace("NPC_", "").Split('.')[0];
                 int file = -1;
                 if (int.TryParse(fileName, out file))
                 {

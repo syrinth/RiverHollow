@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="44">
+<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="45">
  <properties>
   <property name="Outside" type="bool" value="true"/>
   <property name="Town" type="bool" value="true"/>
@@ -319,14 +319,13 @@
 </data>
  </layer>
  <objectgroup id="6" name="Character">
-  <object id="6" name="NPC2" x="705.833" y="961.333" width="12" height="12"/>
-  <object id="7" name="NPC4" x="673.667" y="642.667" width="12" height="12"/>
   <object id="9" name="Route2" x="1123.63" y="386.787" width="10.6667" height="10"/>
   <object id="10" name="Route3" x="946.333" y="431.337" width="15" height="9"/>
   <object id="12" name="Route4" x="1131.18" y="449.788" width="8" height="7"/>
   <object id="28" name="PlayerSpawn" x="741.598" y="772.28" width="5.63636" height="5.27273"/>
-  <object id="29" name="NPC6" x="465.712" y="689.818" width="12" height="12"/>
-  <object id="33" name="NPC10" x="820.5" y="627.667" width="12" height="12"/>
+  <object id="29" name="NPC_17" x="465.712" y="689.818" width="12" height="12"/>
+  <object id="33" name="NPC_10" x="820.5" y="627.667" width="12" height="12"/>
+  <object id="44" name="NPC_11" x="1266" y="946.667" width="12" height="12"/>
  </objectgroup>
  <objectgroup id="7" name="Travel">
   <object id="24" name="Entrance" x="527.178" y="952.394" width="15.4819" height="5.1667">

@@ -482,12 +482,22 @@ namespace RiverHollow.Actors
             _iLockObjects = 0;
         }
 
+        public virtual void StopTalking() { }
+
         /// <summary>
-        /// Stand-in Virtual method to be overrriden. Should never get called.
+        /// Used when already talking to an NPC, gets the next dialog tag in the conversation
+        /// and opens a new window for it.
         /// </summary>
-        public virtual string GetOpeningText()
+        /// <param name="dialogTag">The dialog tag to talk with</param>
+        public void Talk(string dialogTag)
         {
-            return "I have nothing to say.";
+            string text = string.Empty;
+            if (_diDialogue.ContainsKey(dialogTag))
+            {
+                text = _diDialogue[dialogTag];
+            }
+            text = Util.ProcessText(text, _sName);
+            GUIManager.OpenTextWindow(text, this);
         }
 
         /// <summary>
@@ -498,7 +508,7 @@ namespace RiverHollow.Actors
         {
             string text = GetOpeningText();
 
-            //Determine the position based off of where the player and then have the NPC face the player
+            //Determine the position based off of where the player is and then have the NPC face the player
             //Only do this if they are idle so as to not disturb other animations they may be performing.
             if (facePlayer && BodySprite.CurrentAnimation.StartsWith("Idle"))
             {
@@ -533,23 +543,6 @@ namespace RiverHollow.Actors
             GUIManager.OpenTextWindow(text, this);
         }
 
-        public virtual void StopTalking() { }
-
-        /// <summary>
-        /// Used when already talking to an NPC, gets the next dialog tag in the conversation
-        /// and opens a new window for it.
-        /// </summary>
-        /// <param name="dialogTag">The dialog tag to talk with</param>
-        public void Talk(string dialogTag)
-        {
-            string text = string.Empty;
-            if (_diDialogue.ContainsKey(dialogTag))
-            {
-                text = _diDialogue[dialogTag];
-            }
-            text = Util.ProcessText(text, _sName);
-            GUIManager.OpenTextWindow(text, this);
-        }
         public void TalkCutscene(string cutsceneLine)
         {
             string text = cutsceneLine;
@@ -557,7 +550,20 @@ namespace RiverHollow.Actors
             GUIManager.OpenTextWindow(text, this);
         }
 
-        public virtual string GetSelectionText()
+        /// <summary>
+        /// Stand-in Virtual method to be overrriden. Should never get called.
+        /// </summary>
+        public virtual string GetOpeningText() { return "I have nothing to say."; }
+
+        /// <summary>
+        /// Retrieves the 'Selection' text for when an Actor with options is first talked to.
+        /// 
+        /// Removes entries that are not valid due to conditions not being met. If there are
+        /// only two entries left, instead of providing the selection text, just call
+        /// the default GetText method.
+        /// </summary>
+        /// <returns></returns>
+        public string GetSelectionText()
         {
             string text = _diDialogue["Selection"];
             Util.ProcessText(text, _sName);
@@ -571,7 +577,7 @@ namespace RiverHollow.Actors
             string rv = string.Empty;
             if (liCommands.Count == 2)
             {
-                rv = GetDialogEntry("Talk");
+                rv = GetDefaultText();
             }
             else
             {
@@ -593,62 +599,65 @@ namespace RiverHollow.Actors
             return _liCommands;
         }
 
-        public string GetText()
+        /// <summary>
+        /// Base method to get a line of dialog from the dialog dictionary.
+        /// 
+        /// Mostly used for the "Talk" parameter or if the TalkingActor has no other options.
+        /// </summary>
+        /// <returns>The dialog string for the entry.</returns>
+        public string GetDefaultText()
         {
-            string text = _diDialogue[RHRandom.Instance.Next(1, 2).ToString()];
-            return Util.ProcessText(text, _sName);
+            string entry = RHRandom.Instance.Next(1, 2).ToString();
+            return GetDialogEntry(entry);
         }
-        public virtual string GetDialogEntry(string entry)
-        {
-            return "Get What Dialog Entry?";
-        }
-        public virtual string HandleDialogSelectionEntry(string entry)
-        {
-            return "What?";
+
+        /// <summary>
+        /// Retrieves the specified entry from the _diDictionaryand calls Util.ProcessTexton it.
+        /// </summary>
+        /// <param name="entry">The key of the entry to get from the Dictionary</param>
+        /// <returns>The processed string text for the entry </returns>
+        public string GetDialogEntry(string entry) {
+            return Util.ProcessText(_diDialogue.ContainsKey(entry) ? Util.ProcessText(_diDialogue[entry], _sName) : string.Empty);
         }
 
         /// <summary>
         /// Handler for the chosen action in a GUITextSelectionWindow.
         /// Retrieve the next text based off of the Chosen Action from the GetDialogEntry
+        /// and perform any required actions.
         /// </summary>
-        /// <param name="chosenAction"></param>
-        /// <returns></returns>
-        public virtual bool HandleTextSelection(string chosenAction)
+        /// <param name="chosenAction">The action to perform logic on</param>
+        /// <param name="nextText">A reference to be filled out for the next text to display</param>
+        /// <returns>False if was triggered and we want to close the text window</returns>
+        public virtual bool HandleTextSelection(string chosenAction, ref string nextText)
         {
-            bool rv = true;
-            string nextText = string.Empty;
+            bool rv = false;
+
             if (chosenAction.StartsWith("Talk")){
-                GetText();
+                nextText = GetDefaultText();
             }
             else if (chosenAction.StartsWith("Quest"))
             {
-                rv = true;
                 Quest q = GameManager.DiQuests[int.Parse(chosenAction.Remove(0, "Quest".Length))];
                 PlayerManager.AddToQuestLog(q);
-                GUIManager.SetWindowText(GameManager.CurrentNPC.GetDialogEntry("Quest" + q.QuestID));
+                nextText = GetDialogEntry("Quest" + q.QuestID);
             }
             else if (chosenAction.StartsWith("Donate"))
             {
                 ((Villager)GameManager.CurrentNPC).FriendshipPoints += 40;
-                GUIManager.SetWindowText(nextText);
             }
             else if (chosenAction.StartsWith("NoDonate"))
             {
                 ((Villager)GameManager.CurrentNPC).FriendshipPoints -= 1000;
-                GUIManager.SetWindowText(nextText);
-            }
-            else if (!string.IsNullOrEmpty(nextText))
-            {
-                GUIManager.SetWindowText(nextText);
             }
             else if (chosenAction.StartsWith("Cancel"))
             {
-                rv = false;
             }
             else
             {
-                rv = false;
+                nextText = GetDialogEntry(chosenAction);
             }
+
+            if (!string.IsNullOrEmpty(nextText)) { rv = true; }
 
             return rv;
         }
@@ -1649,135 +1658,6 @@ namespace RiverHollow.Actors
             ImportBasics(stringData);
         }
 
-        public override string GetOpeningText()
-        {
-            string rv = string.Empty;
-            if (!Introduced)
-            {
-                rv = _diDialogue["Introduction"];
-                Introduced = true;
-            }
-            else
-            {
-                if (!CheckQuestLogs(ref rv))
-                {
-                    rv = GetSelectionText();
-                }
-            }
-            return rv;
-        }
-        public override string GetDialogEntry(string entry)
-        {
-            if (entry.Equals("Talk"))
-            {
-                return GetText();
-            }
-            else if (entry.Equals("GiveGift"))
-            {
-                GameManager.CurrentNPC = this;
-                GUIManager.OpenMainObject(new HUDInventoryDisplay());
-            }
-            else if (entry.Equals("Party"))
-            {
-                if (IsEligible())
-                {
-                    EligibleNPC e = (EligibleNPC)this;
-                    if (e.Married || e.CanJoinParty)
-                    {
-                        e.JoinParty();
-                        return _diDialogue["JoinPartyYes"];
-                    }
-                    else
-                    {
-                        return _diDialogue["JoinPartyNo"];
-                    }
-                }
-            }
-
-            return _diDialogue.ContainsKey(entry) ? Util.ProcessText(_diDialogue[entry], _sName) : string.Empty;
-        }
-        //public virtual bool HandleTextInteraction(string chosenAction)
-        //{
-        //    bool rv = true;
-        //    string nextText = GameManager.CurrentNPC.GetDialogEntry(chosenAction);
-
-        //    if (chosenAction.StartsWith("Quest"))
-        //    {
-        //        rv = true;
-        //        Quest q = GameManager.DiQuests[int.Parse(chosenAction.Remove(0, "Quest".Length))];
-        //        PlayerManager.AddToQuestLog(q);
-        //        GUIManager.SetWindowText(GameManager.CurrentNPC.GetDialogEntry("Quest" + q.QuestID));
-        //    }
-        //    else if (chosenAction.StartsWith("Donate"))
-        //    {
-        //        ((Villager)GameManager.CurrentNPC).FriendshipPoints += 40;
-        //        GUIManager.SetWindowText(nextText);
-        //    }
-        //    else if (chosenAction.StartsWith("NoDonate"))
-        //    {
-        //        ((Villager)GameManager.CurrentNPC).FriendshipPoints -= 1000;
-        //        GUIManager.SetWindowText(nextText);
-        //    }
-        //    else if (!string.IsNullOrEmpty(nextText))
-        //    {
-        //        GUIManager.SetWindowText(nextText);
-        //    }
-        //    else if (chosenAction.StartsWith("Cancel"))
-        //    {
-        //        rv = false;
-        //    }
-        //    else
-        //    {
-        //        rv = false;
-        //    }
-
-        //    return rv;
-        //}
-        public override List<string> RemoveEntries(string[] options)
-        {
-            List<string> _liCommands = new List<string>();
-            for (int i = 0; i < options.Length; i++)
-            {
-                bool removeIt = false;
-                string s = options[i];
-
-                if (s.Contains("%"))
-                {
-                    //Special checks are in the format %type:val% so, |%Friend:50%Join Party:Party| or |%Quest:1%Business:Quest1|
-                    string[] specialParse = s.Split(new[] { '%' }, StringSplitOptions.RemoveEmptyEntries);
-                    string[] specialVal = specialParse[0].Split(':');
-
-                    int.TryParse(specialVal[1], out int val);
-
-                    if (specialVal[0].Equals("Friend"))
-                    {
-                        removeIt = FriendshipPoints < val;
-                    }
-                    else if (specialVal[0].Equals("Quest"))
-                    {
-                        Quest newQuest = GameManager.DiQuests[val];
-                        removeIt = PlayerManager.QuestLog.Contains(newQuest) || newQuest.ReadyForHandIn || newQuest.Finished || !newQuest.CanBeGiven();
-                    }
-
-                    s = s.Remove(s.IndexOf(specialParse[0]) - 1, specialParse[0].Length + 2);
-                }
-                else
-                {
-                    if (!CanGiveGift && s.Contains("GiveGift"))
-                    {
-                        removeIt = true;
-                    }
-                }
-
-                if (!removeIt)
-                {
-                    _liCommands.Add(s);
-                }
-            }
-
-            return _liCommands;
-        }
-
         protected void ImportBasics(Dictionary<string, string> data)
         {
             _diDialogue = DataManager.GetNPCDialogue(_iIndex);
@@ -1785,13 +1665,14 @@ namespace RiverHollow.Actors
             _sName = _diDialogue["Name"];
             _sPortrait = _sAdventurerFolder + "WizardPortrait";
 
-            LoadSpriteAnimations(ref _sprBody, LoadWorldAnimations(data), _sVillagerFolder + "NPC" + _iIndex);
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAnimations(data), _sVillagerFolder + "NPC_" + _iIndex.ToString("00"));
             PlayAnimation(VerbEnum.Idle);
 
             _bActive = !data.ContainsKey("Inactive");
             if (data.ContainsKey("Type")) { _eNPCType = Util.ParseEnum<NPCTypeEnum>(data["Type"]); }
             if (data.ContainsKey("PortRow")) { _rPortrait = new Rectangle(0, 0, 48, 60); }
-            if (data.ContainsKey("HomeMap")) {
+            if (data.ContainsKey("HomeMap"))
+            {
                 _sHomeMap = data["HomeMap"];
                 CurrentMapName = _sHomeMap;
             }
@@ -1864,6 +1745,112 @@ namespace RiverHollow.Actors
             }
         }
 
+        /// <summary>
+        /// Returns the initial text for when the Actor is first talked to.
+        /// </summary>
+        /// <returns>The text string to display</returns>
+        public override string GetOpeningText()
+        {
+            string rv = string.Empty;
+            if (!Introduced)
+            {
+                rv = GetDialogEntry("Introduction");
+                Introduced = true;
+            }
+            else
+            {
+                if (!CheckQuestLogs(ref rv))
+                {
+                    rv = GetSelectionText();
+                }
+            }
+            return rv;
+        }
+
+        /// <summary>
+        /// Handler for the chosen action in a GUITextSelectionWindow.
+        /// Retrieve the next text based off of the Chosen Action from the GetDialogEntry
+        /// and perform any required actions.
+        /// </summary>
+        /// <param name="chosenAction">The action to perform logic on</param>
+        /// <param name="nextText">A reference to be filled out for the next text to display</param>
+        /// <returns>False if was triggered and we want to close the text window</returns>
+        public override bool HandleTextSelection(string chosenAction, ref string nextText)
+        {
+            bool rv = false;
+            rv = base.HandleTextSelection(chosenAction, ref nextText);
+
+            if (!rv)
+            {
+                if (chosenAction.Equals("GiveGift"))
+                {
+                    GUIManager.OpenMainObject(new HUDInventoryDisplay());
+                }
+                else if (chosenAction.StartsWith("Quest"))
+                {
+                    Quest q = GameManager.DiQuests[int.Parse(chosenAction.Remove(0, "Quest".Length))];
+                    PlayerManager.AddToQuestLog(q);
+                    nextText = GetDialogEntry("Quest" + q.QuestID);
+                }
+                else if (chosenAction.StartsWith("Donate"))
+                {
+                    FriendshipPoints += 40;
+                }
+                else if (chosenAction.StartsWith("NoDonate"))
+                {
+                    FriendshipPoints -= 1000;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(nextText)) { rv = true; }
+
+            return rv;
+        }
+        public override List<string> RemoveEntries(string[] options)
+        {
+            List<string> _liCommands = new List<string>();
+            for (int i = 0; i < options.Length; i++)
+            {
+                bool removeIt = false;
+                string s = options[i];
+
+                if (s.Contains("%"))
+                {
+                    //Special checks are in the format %type:val% so, |%Friend:50%Join Party:Party| or |%Quest:1%Business:Quest1|
+                    string[] specialParse = s.Split(new[] { '%' }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] specialVal = specialParse[0].Split(':');
+
+                    int.TryParse(specialVal[1], out int val);
+
+                    if (specialVal[0].Equals("Friend"))
+                    {
+                        removeIt = FriendshipPoints < val;
+                    }
+                    else if (specialVal[0].Equals("Quest"))
+                    {
+                        Quest newQuest = GameManager.DiQuests[val];
+                        removeIt = PlayerManager.QuestLog.Contains(newQuest) || newQuest.ReadyForHandIn || newQuest.Finished || !newQuest.CanBeGiven();
+                    }
+
+                    s = s.Remove(s.IndexOf(specialParse[0]) - 1, specialParse[0].Length + 2);
+                }
+                else
+                {
+                    if (!CanGiveGift && s.Contains("GiveGift"))
+                    {
+                        removeIt = true;
+                    }
+                }
+
+                if (!removeIt)
+                {
+                    _liCommands.Add(s);
+                }
+            }
+
+            return _liCommands;
+        }
+
         public virtual void RollOver()
         {
             if (!_bStartedBuilding && _buildTarget != null)
@@ -1888,7 +1875,7 @@ namespace RiverHollow.Actors
             CurrentMap?.RemoveCharacterImmediately(this);
             CurrentMapName = _sHomeMap;
             RHMap map = MapManager.Maps[_sHomeMap];
-            string Spawn = "NPC" + _iIndex;
+            string Spawn = "NPC_" + _iIndex.ToString("00");
 
             Position = Util.SnapToGrid(map.GetCharacterSpawn(Spawn));
             map.AddCharacterImmediately(this); 
@@ -2194,7 +2181,7 @@ namespace RiverHollow.Actors
                 }
                 else
                 {
-                    text = GetText();
+                    text = GetDefaultText();
                 }
             }
             text = Util.ProcessText(text, _sName);
@@ -2202,77 +2189,82 @@ namespace RiverHollow.Actors
         }
 
         /// <summary>
-        /// Used to determine what to do based off of a string entry in
-        /// the chosen text string.
+        /// Handler for the chosen action in a GUITextSelectionWindow.
+        /// Retrieve the next text based off of the Chosen Action from the GetDialogEntry
+        /// and perform any required actions.
         /// </summary>
-        /// <param name="entry">The action to act on</param>
-        /// <returns>A string value containing any response returned to the player.</returns>
-        public override string GetDialogEntry(string entry)
+        /// <param name="chosenAction">The action to perform logic on</param>
+        /// <param name="nextText">A reference to be filled out for the next text to display</param>
+        /// <returns>False if was triggered and we want to close the text window</returns>
+        public override bool HandleTextSelection(string chosenAction, ref string nextText)
         {
-            string rv = string.Empty;
-            List<Merchandise> _liMerchandise = new List<Merchandise>();
-            if (entry.Equals("BuyBuildings"))
-            {
-                foreach (Merchandise m in this._liMerchandise)
-                {
-                    if ((m.MerchType == Merchandise.ItemType.Building || m.MerchType == Merchandise.ItemType.Upgrade) && m.Activated()) { _liMerchandise.Add(m); }
-                }
+            bool rv = false;
+            rv = base.HandleTextSelection(chosenAction, ref nextText);
 
-                GUIManager.OpenMainObject(new HUDPurchaseBuildings(_liMerchandise));
-                GameManager.ClearGMObjects();
-            }
-            else if (entry.Equals("BuyWorkers"))
+            if (!rv)
             {
-                foreach (Merchandise m in this._liMerchandise)
+                List<Merchandise> _liMerchandise = new List<Merchandise>();
+                if (chosenAction.Equals("BuyBuildings"))
                 {
-                    if (m.MerchType == Merchandise.ItemType.Worker && m.Activated()) { _liMerchandise.Add(m); }
+                    foreach (Merchandise m in this._liMerchandise)
+                    {
+                        if ((m.MerchType == Merchandise.ItemType.Building || m.MerchType == Merchandise.ItemType.Upgrade) && m.Activated()) { _liMerchandise.Add(m); }
+                    }
+
+                    GUIManager.OpenMainObject(new HUDPurchaseBuildings(_liMerchandise));
+                    GameManager.ClearGMObjects();
                 }
-                GUIManager.OpenMainObject(new HUDPurchaseWorkers(_liMerchandise));
-                GameManager.ClearGMObjects();
-            }
-            else if (entry.Equals("Missions"))
-            {
-                GUIManager.OpenMainObject(new HUDMissionWindow());
-                GameManager.ClearGMObjects();
-            }
-            else if (entry.Equals("BuyItems"))
-            {
-                foreach (Merchandise m in this._liMerchandise)
+                else if (chosenAction.Equals("BuyWorkers"))
                 {
-                    if (m.MerchType == Merchandise.ItemType.Item && m.Activated()) { _liMerchandise.Add(m); }
+                    foreach (Merchandise m in this._liMerchandise)
+                    {
+                        if (m.MerchType == Merchandise.ItemType.Worker && m.Activated()) { _liMerchandise.Add(m); }
+                    }
+                    GUIManager.OpenMainObject(new HUDPurchaseWorkers(_liMerchandise));
+                    GameManager.ClearGMObjects();
                 }
-                GUIManager.OpenMainObject(new HUDPurchaseItems(_liMerchandise));
-                GameManager.ClearGMObjects();
+                else if (chosenAction.Equals("Missions"))
+                {
+                    GUIManager.OpenMainObject(new HUDMissionWindow());
+                    GameManager.ClearGMObjects();
+                }
+                else if (chosenAction.Equals("BuyItems"))
+                {
+                    foreach (Merchandise m in this._liMerchandise)
+                    {
+                        if (m.MerchType == Merchandise.ItemType.Item && m.Activated()) { _liMerchandise.Add(m); }
+                    }
+                    GUIManager.OpenMainObject(new HUDPurchaseItems(_liMerchandise));
+                    GameManager.ClearGMObjects();
+                }
+                else if (chosenAction.Equals("SellWorkers"))
+                {
+                    HUDManagement s = new HUDManagement();
+                    s.Sell();
+                    GUIManager.OpenMainObject(s);
+                    GameManager.ClearGMObjects();
+                }
+                else if (chosenAction.Equals("Move"))
+                {
+                    RiverHollow.HomeMapPlacement();
+                    GameManager.ClearGMObjects();
+                    GameManager.MoveBuilding();
+                }
+                else if (chosenAction.Equals("UpgradeBuilding"))
+                {
+                    HUDManagement m = new HUDManagement(ActionTypeEnum.Upgrade);
+                    GUIManager.OpenMainObject(m);
+                    GameManager.ClearGMObjects();
+                }
+                else if (chosenAction.Equals("Destroy"))
+                {
+                    RiverHollow.HomeMapPlacement();
+                    GameManager.ClearGMObjects();
+                    GameManager.DestroyBuilding();
+                }
             }
-            else if (entry.Equals("SellWorkers"))
-            {
-                HUDManagement s = new HUDManagement();
-                s.Sell();
-                GUIManager.OpenMainObject(s);
-                GameManager.ClearGMObjects();
-            }
-            else if (entry.Equals("Move"))
-            {
-                RiverHollow.HomeMapPlacement();
-                GameManager.ClearGMObjects();
-                GameManager.MoveBuilding();
-            }
-            else if (entry.Equals("UpgradeBuilding"))
-            {
-                HUDManagement m = new HUDManagement(ActionTypeEnum.Upgrade);
-                GUIManager.OpenMainObject(m);
-                GameManager.ClearGMObjects();
-            }
-            else if (entry.Equals("Destroy"))
-            {
-                RiverHollow.HomeMapPlacement();
-                GameManager.ClearGMObjects();
-                GameManager.DestroyBuilding();
-            }
-            else
-            {
-                rv = base.GetDialogEntry(entry);
-            }
+
+            if (!string.IsNullOrEmpty(nextText)) { rv = true; }
 
             return rv;
         }
@@ -2390,6 +2382,40 @@ namespace RiverHollow.Actors
             {
                 base.Update(gTime);
             }
+        }
+
+        /// <summary>
+        /// Handler for the chosen action in a GUITextSelectionWindow.
+        /// Retrieve the next text based off of the Chosen Action from the GetDialogEntry
+        /// and perform any required actions.
+        /// </summary>
+        /// <param name="chosenAction">The action to perform logic on</param>
+        /// <param name="nextText">A reference to be filled out for the next text to display</param>
+        /// <returns>False if was triggered and we want to close the text window</returns>
+        public override bool HandleTextSelection(string chosenAction, ref string nextText)
+        {
+            bool rv = false;
+            rv = base.HandleTextSelection(chosenAction, ref nextText);
+
+            if (!rv)
+            {
+                if (chosenAction.Equals("Party"))
+                {
+                    if (Married || CanJoinParty)
+                    {
+                        JoinParty();
+                        nextText = GetDialogEntry("JoinPartyYes");
+                    }
+                    else
+                    {
+                        nextText = GetDialogEntry("JoinPartyNo");
+                    }
+                }
+            }
+
+            if (!string.IsNullOrEmpty(nextText)) { rv = true; }
+
+            return rv;
         }
 
         public override void RollOver()
@@ -2637,28 +2663,34 @@ namespace RiverHollow.Actors
             return Name + ": " + DataManager.GetGameText("AdventurerTree");
         }
 
-        public override string GetSelectionText()
+        /// <summary>
+        /// Handler for the chosen action in a GUITextSelectionWindow.
+        /// Retrieve the next text based off of the Chosen Action from the GetDialogEntry
+        /// and perform any required actions.
+        /// </summary>
+        /// <param name="chosenAction">The action to perform logic on</param>
+        /// <param name="nextText">A reference to be filled out for the next text to display</param>
+        /// <returns>False if was triggered and we want to close the text window</returns>
+        public override bool HandleTextSelection(string chosenAction, ref string nextText)
         {
-            string text = _diDialogue[RHRandom.Instance.Next(1, 2).ToString()];
-            return Util.ProcessText(text, _sName);
-        }
+            bool rv = false;
+            rv = base.HandleTextSelection(chosenAction, ref nextText);
 
-        public override string GetDialogEntry(string entry)
-        {
-            string rv = string.Empty;
-            if (entry.Equals("Talk"))
+            if (!rv)
             {
-                GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Normal;
-                _iMood += 1;
+                if (chosenAction.Equals("Party"))
+                {
+                    _eState = AdventurerStateEnum.InParty;
+                    PlayerManager.AddToParty(this);
+                    nextText = "Of course!";
+                }
+            }
 
-                rv = DataManager.GetAdventurerDialogue(_sAdventurerType + RHRandom.Instance.Next(1, 2));
+            if (!string.IsNullOrEmpty(nextText)) {
+                _iMood++;
+                rv = true;
             }
-            else if (entry.Equals("Party"))
-            {
-                _eState = AdventurerStateEnum.InParty;
-                PlayerManager.AddToParty(this);
-                rv = "Of course!";
-            }
+
             return rv;
         }
 
@@ -3197,7 +3229,7 @@ namespace RiverHollow.Actors
                 CurrentMapName = _sHomeMap;
             }
 
-            _sprBody = new AnimatedSprite(_sVillagerFolder + "NPC" + _iIndex);
+            _sprBody = new AnimatedSprite(_sVillagerFolder + "NPC_" + _iIndex.ToString("00"));
             _sprBody.AddAnimation(AnimationEnum.ObjectIdle, 0, 0, _iWidth, _iHeight);
             _sprBody.AddAnimation(AnimationEnum.ObjectAction1, 32, 0, _iWidth, _iHeight, 3, 0.1f);
             _sprBody.AddAnimation(AnimationEnum.ObjectActionFinished, 128, 0, _iWidth, _iHeight);
@@ -3222,10 +3254,19 @@ namespace RiverHollow.Actors
             }
         }
 
-        public override bool HandleTextSelection(string chosenAction)
+        /// <summary>
+        /// Handler for the chosen action in a GUITextSelectionWindow.
+        /// Retrieve the next text based off of the Chosen Action from the GetDialogEntry
+        /// and perform any required actions.
+        /// </summary>
+        /// <param name="chosenAction">The action to perform logic on</param>
+        /// <param name="nextText">A reference to be filled out for the next text to display</param>
+        /// <returns>False if was triggered and we want to close the text window</returns>
+        public override bool HandleTextSelection(string chosenAction, ref string nextText)
         {
             bool rv = false;
-            rv = base.HandleTextSelection(chosenAction);
+            rv = base.HandleTextSelection(chosenAction, ref nextText);
+
             if (!rv)
             {
                 if (chosenAction.Equals("ShipGoods"))
@@ -3238,6 +3279,8 @@ namespace RiverHollow.Actors
                     _sprBody.PlayAnimation(AnimationEnum.ObjectAction2);
                 }
             }
+
+            if (!string.IsNullOrEmpty(nextText)) { rv = true; }
 
             return rv; 
         }
