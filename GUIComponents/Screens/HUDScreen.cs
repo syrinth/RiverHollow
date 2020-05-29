@@ -20,6 +20,7 @@ using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using static RiverHollow.Game_Managers.GUIObjects.GUIButton;
 using System.Linq;
+using Microsoft.Xna.Framework.Input;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -67,6 +68,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             base.Update(gTime);
 
+            HandleInput();
+
             if (InventoryManager.AddedItem != null && _addedItem == null)
             {
                 _addedItem = new GUIItemBox(InventoryManager.AddedItem);
@@ -88,13 +91,38 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-        public override void Sync()
+        protected override void HandleInput()
         {
-            _gInventory.SyncItems();
+            if (!TakingInput())
+            {
+                if (InputManager.CheckPressedKey(Keys.Escape))
+                {
+                    if (_gMenu == null) { OpenMenu(); }
+                    else { CloseMenu(); }
+                }
+                if (InputManager.CheckPressedKey(Keys.P))
+                {
+                    if (IsPaused()) { Pause(); }
+                    else { Unpause(); }
+                }
+            }
         }
 
-        public override bool IsHUD() { return true; }
+        public override bool ProcessRightButtonClick(Point mouse)
+        {
+            bool rv = base.ProcessRightButtonClick(mouse);
 
+            //If the right click has not been processed, we probably want to close anything that we have open.
+            if (!rv)
+            {
+                CloseMenu();
+                CloseMainObject();
+            }
+
+            return rv;
+        }
+
+        #region Text Window
         /// <summary>
         /// Overrides the Screens OpenTextWindow method to first hide any HUD components desired.
         /// </summary>
@@ -111,19 +139,28 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gInventory.Show = true;
             return rv;
         }
+        #endregion
 
-        public override void OpenMenu()
+        #region Menu
+        public bool IsMenuOpen() { return _gMenu != null; }
+        public void OpenMenu()
         {
             _gMenu = new HUDMenu();
             AddControl(_gMenu);
+            GameManager.Pause();
         }
-        public override void CloseMenu()
+        public void CloseMenu()
         {
-            RemoveControl(_gMenu);
-            _gMenu = null;
+            if (_gMenu != null)
+            {
+                RemoveControl(_gMenu);
+                _gMenu = null;
+                GameManager.Unpause();
+            }
         }
-        public override bool IsMenuOpen() { return _gMenu != null; }
+        #endregion
 
+        #region Main Object
         public override void OpenMainObject(GUIObject o)
         {
             RemoveControl(_gMainObject);
@@ -135,13 +172,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             RemoveControl(_gMainObject);
             _gMainObject = null;
         }
-
-        public override bool CloseOnRightClick() {
-            if (_gSelectionWindow != null) { return false; }
-            if (_gMainObject != null) { return true; }
-
-            return false;
-        }
+        #endregion
     }
 
     public class HUDInventory : GUIWindow
@@ -360,8 +391,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIObject _gMenuObject;
         List<GUIObject> _liButtons;
 
-        bool _open = false;
-        bool _close = false;
+        bool _bOpen = false;
+        bool _bClose = false;
 
         public HUDMenu()
         {
@@ -389,8 +420,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _liButtons = new List<GUIObject>() { _btnInventory, _btnParty, _btnManagement, _btnQuestLog, _btnOptions, _btnFriendship, _btnExitGame };
             GUIObject.CreateSpacedColumn(ref _liButtons, -GUIButton.BTN_WIDTH, 0, RiverHollow.ScreenHeight, BTN_PADDING);
 
-            GameManager.Pause();
-            _open = true;
+            _bOpen = true;
         }
 
         public override void Update(GameTime gTime)
@@ -400,11 +430,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
             foreach (GUIObject o in Controls)
             {
                 int val = 0;
-                if (_open)
+                if (_bOpen)
                 {
                     if (o.Position().X < 0) { val = 16; }
                 }
-                if (_close)
+                if (_bClose)
                 {
                     if (o.Position().X > -GUIButton.BTN_WIDTH) { val = -16; }
                 }
@@ -412,10 +442,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 Vector2 temp = o.Position();
                 temp.X += val;
                 o.Position(temp);
-                if (_open && o.Position().X == 0) { _openingFinished++; }
-                if (_close && o.Position().X == -GUIButton.BTN_WIDTH) { GameManager.BackToMain(); }
+                if (_bOpen && o.Position().X == 0) { _openingFinished++; }
+                if (_bClose && o.Position().X == -GUIButton.BTN_WIDTH) { /*Finished closing */ }
             }
-            if (_openingFinished == _liButtons.Count) { _open = false; }
+            if (_openingFinished == _liButtons.Count) { _bOpen = false; }
         }
 
         #region Buttons
@@ -1570,7 +1600,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     if (_eAction == ActionTypeEnum.Buy)
                     {
                         PlayerManager.TakeMoney(_iCost);
-                        GameManager.BackToMain();
+                        GUIManager.CloseMainObject();
                         GUIManager.OpenMainObject(new HUDNamingWindow(_worker));
                     }
 
@@ -1686,7 +1716,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                                 if (_parent._eAction == ActionTypeEnum.Upgrade)
                                 {
                                     b.Building.StartBuilding(false);
-                                    GameManager.BackToMain();
+                                    GUIManager.CloseMainObject();
                                 }
                                 else { _parent.HandleBuildingSelection(b.Building); }
                                 rv = true;
@@ -1699,7 +1729,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                     public override bool ProcessRightButtonClick(Point mouse)
                     {
-                        GameManager.BackToMain();
+                        GUIManager.CloseMainObject();
                         return false;
                     }
 
@@ -1931,7 +1961,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 GameManager.AutoDisband = _gAutoDisband.Checked();
                 GameManager.HideMiniInventory = _gHideMiniInventory.Checked();
-                GameManager.BackToMain();
+                GUIManager.CloseMainObject();
             }
         }
 
@@ -1992,9 +2022,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                     //We know that this window only gets created under special circumstances, so unset them
                     RiverHollow.ResetCamera();
+                    GUIManager.CloseMainObject();
                     GameManager.Unpause();
                     GameManager.Scry(false);
-                    GameManager.DontReadInput();
+                    GameManager.StopTakingInput();
                 }
             }
 
@@ -2207,7 +2238,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public void AcceptMission()
         {
             MissionManager.AcceptMission();
-            GameManager.BackToMain();
+            GUIManager.CloseMainObject();
         }
 
         /// <summary>

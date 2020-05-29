@@ -28,9 +28,9 @@ namespace RiverHollow
 
         public static void Update(GameTime gTime)
         {
-            Vector2 target = _actObserver.CharCenter.ToVector2() * Scale;
+            Vector2 target = Scrying() ? _vObserver : _actObserver.CharCenter.ToVector2() * Scale;
 
-            if (!TakingInput() && IsRunning())
+            if (!TakingInput() && (IsRunning() || Scrying()))
             {
                 KeyboardState ks = Keyboard.GetState();
                 int speed = 10;
@@ -67,6 +67,7 @@ namespace RiverHollow
                     _vObserver = target;
                 }
             }
+            else { _vObserver = target; }
 
             _vCenter = new Vector2(_vObserver.X - (RiverHollow.ScreenWidth / 2), _vObserver.Y - (RiverHollow.ScreenHeight / 2));
             _transform = Matrix.CreateScale(new Vector3(Scale, Scale, 0)) * Matrix.CreateTranslation(new Vector3(-_vCenter.X, -_vCenter.Y, 0));
@@ -80,7 +81,7 @@ namespace RiverHollow
 
         public static void UnsetObserver()
         {
-            _vObserver = new Vector2(MapManager.CurrentMap.MapWidthTiles / 2, MapManager.CurrentMap.MapHeightTiles / 2);
+            _vObserver = new Vector2(MapManager.CurrentMap.GetMapWidth() / 2, MapManager.CurrentMap.GetMapHeight() / 2);
         }
 
         public static void ResetObserver()

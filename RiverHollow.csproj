@@ -73,6 +73,7 @@
     <Compile Include="Game Managers\GameManager.cs" />
     <Compile Include="Game Managers\HarpManager.cs" />
     <Compile Include="Game Managers\MissionManager.cs" />
+    <Compile Include="Game Managers\SaveManager.cs" />
     <Compile Include="Game Managers\SoundManager.cs" />
     <Compile Include="Game Managers\TravelManager.cs" />
     <Compile Include="Game Managers\ZoneManager.cs" />

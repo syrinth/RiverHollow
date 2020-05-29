@@ -4,10 +4,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using System;
-using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.Misc;
-using RiverHollow.Actors;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -50,15 +46,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 rv = g.ProcessRightButtonClick(mouse);
 
                 if (rv) { break; }
-            }
-
-            //If the right click has not been processed, we probably want to close our entries
-            //and call BackToMain.
-            //Only allow goingback if there is no _guiTextWindow and either the menu is open, or
-            //the screen says we can close on click.
-            if (!rv && _guiTextWindow == null && (IsMenuOpen() || CloseOnRightClick()))
-            {
-                GameManager.BackToMain();
             }
 
             return rv;
@@ -119,6 +106,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (_guiTextWindow != null) { _guiTextWindow.Draw(spriteBatch); }
             if (_guiHoverWindow != null) { _guiHoverWindow.Draw(spriteBatch); }
         }
+
+        protected virtual void HandleInput() { }
+
         public virtual bool Contains(Point mouse)
         {
             bool rv = false;
@@ -168,8 +158,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
         public bool IsTextWindowOpen() { return _guiTextWindow != null; }
 
-        public virtual bool CloseOnRightClick() { return false; }
-
         /// <summary>
         /// Removes any previous existing Text Windows fromthe Control, then determines whether
         /// or not the given text requires a selection window or not, and creates the appropriate
@@ -201,11 +189,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
             }
         }
-
-        //Menu Code
-        public virtual void OpenMenu() { }
-        public virtual void CloseMenu() { }
-        public virtual bool IsMenuOpen() { return false; }
 
         /// <summary>
         /// Assigns a background image to be drawn behind all other GUI components.
@@ -246,9 +229,5 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             _liToRemove.Add(control);
         }
-
-        public virtual bool IsGameMenuScreen() { return false; }
-        public virtual bool IsItemCreationScreen() { return false; }
-        public virtual bool IsHUD() { return false; }
     }
 }

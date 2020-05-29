@@ -88,7 +88,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             else if (_container != null && !_container.DrawRectangle.Contains(mouse))
             {
                 GameManager.DropItem();
-                GameManager.GoToWorldMap();
+                GUIManager.CloseMainObject();
                 GUIManager.OpenTextWindow(GameManager.CurrentNPC.GetDialogEntry("Goodbye"));
                 GameManager.RemoveCurrentNPCLockObject();
             }

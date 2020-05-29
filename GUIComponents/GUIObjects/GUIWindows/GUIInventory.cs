@@ -137,7 +137,6 @@ namespace RiverHollow.Screens
                         {
                             GameManager.gmDungeonObject.Trigger(GameManager.ITEM_OPEN);
                             GUIManager.CloseMainObject();
-                            GUIManager.CloseHoverWindow();
                             text = DataManager.GetGameText("ItemDoorOpen");
                         }
                         else { text = DataManager.GetGameText("ItemDoorClose"); }

@@ -27,7 +27,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public GUITextInputWindow() : base()
         {
-            GameManager.ReadInput();
+            GameManager.TakeInput();
             GameManager.Pause();
 
             _gMarker = new GUIMarker();

@@ -146,7 +146,7 @@ namespace RiverHollow.GUIComponents.Screens
         public override bool ProcessRightButtonClick(Point mouse)
         {
             GUIManager.SetScreen(new IntroMenuScreen());
-            GameManager.DontReadInput();
+            GameManager.StopTakingInput();
 
             return true;
         }
@@ -190,13 +190,13 @@ namespace RiverHollow.GUIComponents.Screens
             PlayerManager.SetManorName(_manorWindow.GetText());
 
             RiverHollow.NewGame(DataManager.GetAdventurer(1), DataManager.GetAdventurer(2), !_gCheck.Checked());
-            GameManager.DontReadInput();
+            GameManager.StopTakingInput();
 
         }
         public void BtnCancel()
         {
             GUIManager.SetScreen(new IntroMenuScreen());
-            GameManager.DontReadInput();
+            GameManager.StopTakingInput();
         }
         public void BtnChooseHairColor()
         {

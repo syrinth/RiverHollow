@@ -24,7 +24,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             AddControl(_btnLoadGame);
             AddControl(_btnExit);
 
-            GameManager.GoToInformation();
+            GameManager.ShowMap(false);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)

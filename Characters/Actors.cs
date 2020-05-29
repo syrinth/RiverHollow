@@ -19,6 +19,7 @@ using static RiverHollow.Game_Managers.DataManager;
 using static RiverHollow.WorldObjects.Clothes;
 using static RiverHollow.Game_Managers.TravelManager;
 using static RiverHollow.WorldObjects.WorldItem;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.Actors
 {
@@ -606,12 +607,20 @@ namespace RiverHollow.Actors
             return "What?";
         }
 
-        public virtual bool HandleTextInteraction(string chosenAction)
+        /// <summary>
+        /// Handler for the chosen action in a GUITextSelectionWindow.
+        /// Retrieve the next text based off of the Chosen Action from the GetDialogEntry
+        /// </summary>
+        /// <param name="chosenAction"></param>
+        /// <returns></returns>
+        public virtual bool HandleTextSelection(string chosenAction)
         {
             bool rv = true;
-            string nextText = GameManager.CurrentNPC.GetDialogEntry(chosenAction);
-
-            if (chosenAction.StartsWith("Quest"))
+            string nextText = string.Empty;
+            if (chosenAction.StartsWith("Talk")){
+                GetText();
+            }
+            else if (chosenAction.StartsWith("Quest"))
             {
                 rv = true;
                 Quest q = GameManager.DiQuests[int.Parse(chosenAction.Remove(0, "Quest".Length))];
@@ -1687,6 +1696,43 @@ namespace RiverHollow.Actors
 
             return _diDialogue.ContainsKey(entry) ? Util.ProcessText(_diDialogue[entry], _sName) : string.Empty;
         }
+        //public virtual bool HandleTextInteraction(string chosenAction)
+        //{
+        //    bool rv = true;
+        //    string nextText = GameManager.CurrentNPC.GetDialogEntry(chosenAction);
+
+        //    if (chosenAction.StartsWith("Quest"))
+        //    {
+        //        rv = true;
+        //        Quest q = GameManager.DiQuests[int.Parse(chosenAction.Remove(0, "Quest".Length))];
+        //        PlayerManager.AddToQuestLog(q);
+        //        GUIManager.SetWindowText(GameManager.CurrentNPC.GetDialogEntry("Quest" + q.QuestID));
+        //    }
+        //    else if (chosenAction.StartsWith("Donate"))
+        //    {
+        //        ((Villager)GameManager.CurrentNPC).FriendshipPoints += 40;
+        //        GUIManager.SetWindowText(nextText);
+        //    }
+        //    else if (chosenAction.StartsWith("NoDonate"))
+        //    {
+        //        ((Villager)GameManager.CurrentNPC).FriendshipPoints -= 1000;
+        //        GUIManager.SetWindowText(nextText);
+        //    }
+        //    else if (!string.IsNullOrEmpty(nextText))
+        //    {
+        //        GUIManager.SetWindowText(nextText);
+        //    }
+        //    else if (chosenAction.StartsWith("Cancel"))
+        //    {
+        //        rv = false;
+        //    }
+        //    else
+        //    {
+        //        rv = false;
+        //    }
+
+        //    return rv;
+        //}
         public override List<string> RemoveEntries(string[] options)
         {
             List<string> _liCommands = new List<string>();
@@ -3176,10 +3222,10 @@ namespace RiverHollow.Actors
             }
         }
 
-        public override bool HandleTextInteraction(string chosenAction)
+        public override bool HandleTextSelection(string chosenAction)
         {
             bool rv = false;
-            rv = base.HandleTextInteraction(chosenAction);
+            rv = base.HandleTextSelection(chosenAction);
             if (!rv)
             {
                 if (chosenAction.Equals("ShipGoods"))

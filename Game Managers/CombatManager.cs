@@ -407,7 +407,6 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public static void EndCombatVictory()
         {
-            Unpause();
             PlayerManager.AllowMovement = true;
             foreach (Item it in _liDroppedItems) { it.AutoPickup = true; }
 
@@ -421,7 +420,7 @@ namespace RiverHollow.Game_Managers
             Camera.SetObserver(PlayerManager.World);
             MapManager.CurrentMap.Trigger(MOB_OPEN);
 
-            GoToWorldMap();
+            GoToHUDScreen();
         }
 
         /// <summary>
@@ -430,10 +429,9 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public static void EndCombatEscape()
         {
-            Unpause();
             Camera.SetObserver(PlayerManager.World);
             PlayerManager.AllowMovement = true;
-            GoToWorldMap();
+            GoToHUDScreen();
         }
         #endregion
 
@@ -1010,7 +1008,7 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public static void AddFloatingText(FloatingText fText)
         {
-            _scrCombat.AddFloatingText(fText);
+            _scrCombat?.AddFloatingText(fText);
         }
         #endregion
 

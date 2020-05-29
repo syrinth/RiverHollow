@@ -1,13 +1,10 @@
-﻿
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using RiverHollow.Game_Managers.GUIObjects;
+﻿using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Screens;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.DataManager;
 using RiverHollow.GUIObjects;
-using RiverHollow.Actors;
 using static RiverHollow.WorldObjects.WorldItem;
 
 namespace RiverHollow.Game_Managers.GUIComponents.Screens
@@ -136,7 +133,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
                                 InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
                                 if (_craftMachine != null) {
                                     _craftMachine.MakeChosenItem(gIB.Item.ItemID);
-                                    GameManager.BackToMain();
+                                    GUIManager.CloseMainObject();
+                                    GameManager.Unpause();
                                 }
                                 else {
                                     InventoryManager.AddToInventory(gIB.Item.ItemID);
@@ -154,7 +152,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             bool rv = false;
             if (!_creationWindow.Contains(mouse))
             {
-                GameManager.BackToMain();
+                GUIManager.CloseMainObject();
+                GameManager.Unpause();
                 rv = true;
             }
             return rv;

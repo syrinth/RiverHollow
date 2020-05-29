@@ -18,7 +18,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
 
         public DayEndScreen()
         {
-            GameManager.GoToInformation();
+            GameManager.ShowMap(false);
             _btnOK = new GUIButton( "OK", 128, 64);
             _btnOK.AnchorToScreen(this, SideEnum.Bottom);
             string totalVal = String.Format("Total: {0}", GameManager.ShippingGremlin.SellAll());
@@ -33,11 +33,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             {
                 GameCalendar.NextDay();
                 RiverHollow.Rollover();
-                GameManager.Save();
+                SaveManager.Save();
                 GUIManager.BeginFadeOut();
                 PlayerManager.Stamina = PlayerManager.MaxStamina;
 
-                GameManager.BackToMain();
+                GameManager.GoToHUDScreen();
                 rv = true;
             }
             return rv;

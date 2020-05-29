@@ -12,6 +12,7 @@ using RiverHollow.Misc;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Buildings;
 using RiverHollow.Characters;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.Game_Managers
 {

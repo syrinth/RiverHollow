@@ -9,6 +9,7 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Misc;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIObjects.GUIObject;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow
 {
@@ -219,7 +220,7 @@ namespace RiverHollow
             return Util.GetEnumString(ListWeather[_iCurrWeather]);
         }
 
-        public static void LoadCalendar(GameManager.CalendarData d)
+        public static void LoadCalendar(CalendarData d)
         {
             SetDisplayWindow();
             _iCurrDay = d.dayOfMonth;

@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Game_Managers.SaveManager;
+
 namespace RiverHollow.Misc
 {
     public class Quest

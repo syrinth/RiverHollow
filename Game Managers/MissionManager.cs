@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.Game_Managers
 {

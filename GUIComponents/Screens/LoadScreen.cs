@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIObjects;
@@ -7,6 +6,7 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIObjects;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -20,7 +20,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             _btnBack = new GUIButton("Back", BtnBack);
             _liDataWindows = new List<GUIObject>();
-            _liData = GameManager.LoadFiles();
+            _liData = SaveManager.LoadFiles();
 
             foreach(SaveData data in _liData)
             {
@@ -98,7 +98,7 @@ namespace RiverHollow.GUIComponents.Screens
                     Load(Data);
                     MapManager.PopulateMaps(true);
                     MapManager.EnterBuilding(PlayerManager.Buildings[0]);
-                    BackToMain();
+                    GoToHUDScreen();
                     rv = true;
                 }
 

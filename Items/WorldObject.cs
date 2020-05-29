@@ -11,6 +11,7 @@ using System;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Misc;
 using RiverHollow.GUIComponents.GUIObjects;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.WorldObjects
 {
@@ -477,7 +478,7 @@ namespace RiverHollow.WorldObjects
             }
 
             public MachineData SaveData() { return new MachineData(); }
-            public virtual void LoadData(GameManager.MachineData mac) { }
+            public virtual void LoadData(MachineData mac) { }
         }
 
         public class Machine : WorldItem
@@ -657,7 +658,7 @@ namespace RiverHollow.WorldObjects
 
                 return m;
             }
-            public void LoadData(GameManager.MachineData mac)
+            public void LoadData(MachineData mac)
             {
                 _iID = mac.ID;
                 MapPosition = new Vector2(mac.x, mac.y);

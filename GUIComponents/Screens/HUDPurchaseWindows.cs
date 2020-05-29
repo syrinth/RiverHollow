@@ -144,7 +144,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             if (InputManager.CheckPressedKey(Keys.Escape))
             {
-                GameManager.GoToWorldMap();
+                GUIManager.CloseMainObject();
             }
         }
 
@@ -166,7 +166,7 @@ namespace RiverHollow.GUIComponents.Screens
             bool rv = true;
             if (!Contains(mouse))
             {
-                GUIManager.SetScreen(new HUDScreen());
+                GUIManager.CloseMainObject();
                 GameManager.Unpause();
                 rv = true;
             }
@@ -209,7 +209,7 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     DiUpgrades[gmMerchandise.MerchID].Enabled = true;
                     gmMerchandise = null;
-                    BackToMain();
+                    GUIManager.CloseMainObject();
                 }
             }
         }

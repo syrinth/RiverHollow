@@ -113,13 +113,19 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             }
         }
 
+        /// <summary>
+        /// Triggered when the user selects an option in the GUITextSelectionWindow
+        /// 
+        /// This method retrieves the appropriate selectedAction and passes it to the relevant
+        /// object for processing.
+        /// </summary>
         protected virtual void SelectAction()
         {
             string selectedAction = _diOptions[_iKeySelection].Action;
 
             if (GameManager.CurrentNPC != null)
             {
-                if (!GameManager.CurrentNPC.HandleTextInteraction(selectedAction))
+                if (!GameManager.CurrentNPC.HandleTextSelection(selectedAction))
                 {
                     GUIManager.CloseTextWindow(this);
                 }

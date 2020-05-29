@@ -49,7 +49,7 @@ namespace RiverHollow
             Camera.SetViewport(GraphicsDevice.Viewport);
             InventoryManager.InitPlayerInventory();
             ZoneManager.Initialize();
-            GoToInformation();
+            GameManager.ShowMap();
 
             base.Initialize();
         }
@@ -84,7 +84,7 @@ namespace RiverHollow
 
             //Set the Main Menu Screen
             GUIManager.SetScreen(new IntroMenuScreen());
-            DontReadInput();
+            StopTakingInput();
         }
 
         protected override void UnloadContent()
@@ -103,8 +103,6 @@ namespace RiverHollow
                 }
                 MouseState ms = Mouse.GetState();
                 KeyboardState ks = Keyboard.GetState();
-                //If we're not in the game and we're not on an input screen, handle input
-                HandleImportantInput();
 
                 if (HarpManager.PlayingMusic)
                 {
@@ -121,7 +119,7 @@ namespace RiverHollow
 
                 if (ms.RightButton == ButtonState.Pressed && GraphicCursor.LastMouseState.RightButton == ButtonState.Released)
                 {
-                    if (!GUIManager.ProcessRightButtonClick(mousePoint) && OnMap())
+                    if (!GUIManager.ProcessRightButtonClick(mousePoint) && IsMapShown())
                     {
                         //GUI does NOT use Camera translations
                         mousePoint.X = (int)((mousePoint.X - translate.X) / Scale);
@@ -134,7 +132,7 @@ namespace RiverHollow
                 }
                 else if (ms.LeftButton == ButtonState.Pressed && GraphicCursor.LastMouseState.LeftButton == ButtonState.Released)
                 {
-                    if (!GUIManager.ProcessLeftButtonClick(mousePoint) && OnMap())
+                    if (!GUIManager.ProcessLeftButtonClick(mousePoint) && IsMapShown())
                     {
                         mousePoint.X = (int)((mousePoint.X - translate.X) / Scale);
                         mousePoint.Y = (int)((mousePoint.Y - translate.Y) / Scale);
@@ -159,7 +157,7 @@ namespace RiverHollow
 
                 GraphicCursor.LastMouseState = ms;
 
-                if (OnMap())
+                if (IsMapShown())
                 {
                     Camera.Update(gTime);
                     if (CutsceneManager.Playing) { CutsceneManager.Update(gTime); }
@@ -202,7 +200,7 @@ namespace RiverHollow
 
             //This is when we start drawing the World
             //If we're in an informational state, then only the GUIScreen data should be visible, don't draw anything except for the GUI
-            if (!Informational())
+            if (GameManager.IsMapShown())
             {
                 //Start rendering to the main target
                 GraphicsDevice.SetRenderTarget(_renderMain);
@@ -226,7 +224,7 @@ namespace RiverHollow
             //lighting effect. Since we will be drawing on the _renderMain, the effectsfile.
             //testMask is the name of the texture contained in the _effectLights file.
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
-            if (OnMap() && _bLightingOn)
+            if (IsMapShown() && _bLightingOn)
             {
                 _effectLights.Parameters["lightMask1"].SetValue(_renderLights);
                 _effectLights.CurrentTechnique.Passes[0].Apply();
@@ -237,52 +235,18 @@ namespace RiverHollow
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
 
             GUIManager.Draw(spriteBatch);
-            if (!Informational())
+            if (IsMapShown())
             {
                 GameCalendar.Draw(spriteBatch);
             }
             spriteBatch.End();
             base.Draw(gTime);
         }
-    
-        public void HandleImportantInput()
-        {
-            if (!Informational() && !TakingInput())
-            {
-                if (OnMap() && InputManager.CheckPressedKey(Keys.Escape))
-                {
-                    if (!GUIManager.IsMenuScreenOpen())
-                    {
-                        GUIManager.OpenMenu();
-                    }
-                }
-                if (InputManager.CheckPressedKey(Keys.P))
-                {
-                    if (IsPaused()) { Pause(); }
-                    else { Unpause(); }
-                }
-                if (!GUIManager.IsItemCreationScreen() || !GUIManager.IsHUD())
-                {
-                    if (InputManager.CheckPressedKey(Keys.C))
-                    {
-                        if (GUIManager.IsItemCreationScreen())
-                        {
-                            GUIManager.SetScreen(new HUDScreen());
-                        }
-                        else
-                        {
-                            // GUIManager.SetScreen(new CraftingScreen());
-                        }
-                    }
-                }
-            }
-        }
 
         public static void ResetCamera()
         {
             Camera.ResetObserver();
             MapManager.BackToPlayer();
-            GUIManager.SetScreen(new HUDScreen());
         }
 
         public static void NewGame(Adventurer a, Adventurer b, bool playIntro)
@@ -313,7 +277,7 @@ namespace RiverHollow
             {
                 PlayerManager.AddToQuestLog(GameManager.DiQuests[2]);
             }
-            BackToMain();
+            GoToHUDScreen();
         }
 
         /// <summary>
@@ -343,9 +307,9 @@ namespace RiverHollow
         public static void HomeMapPlacement()
         {
             GUIManager.CloseMainObject();
-            GameManager.Scry(true);
-            Camera.UnsetObserver();
+            GameManager.Scry();
             MapManager.ViewMap(MapManager.HomeMap);
+            Camera.UnsetObserver();
         }
     }
 }

@@ -17,6 +17,7 @@ using System.Collections.ObjectModel;
 using static RiverHollow.Game_Managers.CombatManager;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.GUIObjects.HUDMenu;
+using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.RiverHollow;
 using static RiverHollow.WorldObjects.WorldItem;
 using static RiverHollow.WorldObjects.WorldItem.Floor;

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using RiverHollow.Actors;
 using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Game_Managers.GUIObjects;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.WorldObjects
 {
@@ -598,7 +599,7 @@ namespace RiverHollow.WorldObjects
                 PlayerManager.IncreaseStamina(Stamina);
                 PlayerManager.World.ModifyHealth(Health, true);
             }
-            BackToMain();
+            ClearGMObjects();
         }
     }
 
@@ -692,6 +693,7 @@ namespace RiverHollow.WorldObjects
 
                 Remove(1);
             }
+            ClearGMObjects();
         }
     }
 
@@ -788,7 +790,7 @@ namespace RiverHollow.WorldObjects
                 Remove(1);
                 PlayerManager.SetClass(_iClassID);
             }
-            BackToMain();
+            ClearGMObjects();
         }
 
         public override void ApplyUniqueData(string str)
