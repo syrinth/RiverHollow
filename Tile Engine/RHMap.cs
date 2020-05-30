@@ -1928,12 +1928,12 @@ namespace RiverHollow.Tile_Engine
         
         public int GetMapWidth()
         {
-            return MapWidthTiles * TileSize * (int)Scale;
+            return MapWidthTiles * ScaledTileSize;
         }
 
         public int GetMapHeight()
         {
-            return MapHeightTiles * TileSize * (int)Scale;
+            return MapHeightTiles * ScaledTileSize;
         }
 
         public void CheckForTriggeredCutScenes()

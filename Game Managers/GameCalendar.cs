@@ -26,21 +26,18 @@ namespace RiverHollow
         static AnimationEnum[] ListWeather = { AnimationEnum.None, AnimationEnum.Rain, AnimationEnum.Snow }; //Thunderstorm?
 
         static int _iCurrSeason;
-        public static int CurrentSeason { get => _iCurrSeason; }
+        public static int CurrentSeason => _iCurrSeason;
         static int _iDayOfWeek;
-        public static int DayOfWeek { get => _iDayOfWeek; }
+        public static int DayOfWeek => _iDayOfWeek; 
         static int _iCurrHour;
-        public static int CurrentHour { get => _iCurrHour; }
+        public static int CurrentHour => _iCurrHour;
         static int _iCurrWeather;
-        public static int CurrentWeather { get => _iCurrWeather; }
+        public static int CurrentWeather => _iCurrWeather;
 
         private static int _iCurrMin;
-        public static int CurrentMin { get => _iCurrMin; }
+        public static int CurrentMin => _iCurrMin;
         static int _iCurrDay;
-        public static int CurrentDay { get => _iCurrDay; }
-
-        static GUIWindow _displayWindow;
-        static GUIText _text;
+        public static int CurrentDay => _iCurrDay;
 
         static double _dLastUpdateinSeconds;
         static int _iSeasonPrecipDays = 0;
@@ -58,23 +55,11 @@ namespace RiverHollow
 
             _dLastUpdateinSeconds = 0;
 
-            SetDisplayWindow();
 
             _iCurrWeather = 0;
             //RollForWeatherEffects();
 
             MapManager.CheckSpirits();
-        }
-
-        private static void SetDisplayWindow()
-        {
-            _text = new GUIText("Day XX, XX:XX", DataManager.GetFont(@"Fonts\Font"));
-
-            Vector2 boxSize = _text.MeasureString() + new Vector2(GUIWindow.BrownWin.Edge * 2, GUIWindow.BrownWin.Edge * 2);
-            _displayWindow = new GUIWindow(GUIWindow.BrownWin, (int)boxSize.X, (int)boxSize.Y);
-            _displayWindow.AnchorToScreen(SideEnum.TopRight, 10);
-
-            _text.CenterOnWindow(_displayWindow);
         }
 
         public static void Update(GameTime gTime)
@@ -115,18 +100,18 @@ namespace RiverHollow
             }
         }
 
-        public static void Draw(SpriteBatch spriteBatch)
+        public static string GetCalendarString()
         {
             int minToFifteen = _iCurrMin / 15;
             string mins = "00";
             string hours = _iCurrHour.ToString();
             if (_iCurrHour > 12 && _iCurrHour < 25)
             {
-                hours = (_iCurrHour - 12).ToString();
+                hours = (_iCurrHour - 12).ToString("00");
             }
             else if (_iCurrHour >= 25)
             {
-                hours = (_iCurrHour - 24).ToString();
+                hours = (_iCurrHour - 24).ToString("00");
             }
             switch (minToFifteen)
             {
@@ -144,9 +129,7 @@ namespace RiverHollow
                     hours = (int.Parse(hours) + 1).ToString();
                     break;
             }
-            _displayWindow.Draw(spriteBatch);
-            _text.Draw(spriteBatch, String.Format("Day {0}, {1}:{2}", _iCurrDay, hours, mins));
-            //spriteBatch.DrawString(_calendarFont, String.Format("Day {0}, {1}:{2}", _currDay, hours, mins), _displayWindow.InnerTopLeft(), Color.Black);
+            return String.Format("Day {0}, {1}:{2}", _iCurrDay.ToString("00"), hours, mins);
         }
 
         public static void NextDay()
@@ -222,7 +205,6 @@ namespace RiverHollow
 
         public static void LoadCalendar(CalendarData d)
         {
-            SetDisplayWindow();
             _iCurrDay = d.dayOfMonth;
             _iDayOfWeek = d.dayOfWeek;
             _iCurrSeason = d.currSeason;

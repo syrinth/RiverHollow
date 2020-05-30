@@ -35,6 +35,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIDungeonKeyDisplay _gDungeonKeys;
 
         HUDInventory _gInventory;
+        HUDCalendar _gCalendar;
         GUIItemBox _addedItem;
         double _dTimer;
 
@@ -44,24 +45,28 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gHealthDisplay.AnchorToScreen(this, SideEnum.TopLeft, 10);
             AddControl(_gHealthDisplay);
             _gStaminaDisplay = new GUIStatDisplay(PlayerManager.GetStamina, Color.Red);
-            _gStaminaDisplay.AnchorAndAlignToObject(_gHealthDisplay, SideEnum.Bottom, SideEnum.Left);
+            _gStaminaDisplay.AnchorAndAlignToObject(_gHealthDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
             AddControl(_gStaminaDisplay);
 
             _gMoney = new GUIMoneyDisplay();
-            _gMoney.AnchorAndAlignToObject(_gStaminaDisplay, SideEnum.Bottom, SideEnum.Left);
+            _gMoney.AnchorAndAlignToObject(_gStaminaDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
             AddControl(_gMoney);
 
             _gEnergy = new GUIMonsterEnergyDisplay();
-            _gEnergy.AnchorAndAlignToObject(_gMoney, SideEnum.Bottom, SideEnum.Left);
+            _gEnergy.AnchorAndAlignToObject(_gMoney, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
             AddControl(_gEnergy);
 
             _gDungeonKeys = new GUIDungeonKeyDisplay();
-            _gDungeonKeys.AnchorAndAlignToObject(_gEnergy, SideEnum.Bottom, SideEnum.Left);
+            _gDungeonKeys.AnchorAndAlignToObject(_gEnergy, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
             AddControl(_gDungeonKeys);
 
             _gInventory = new HUDInventory();
             _gInventory.AnchorToScreen(SideEnum.Bottom);
             AddControl(_gInventory);
+
+            _gCalendar = new HUDCalendar();
+            _gCalendar.AnchorToScreen(SideEnum.TopRight, 10);
+            AddControl(_gCalendar);
         }
 
         public override void Update(GameTime gTime)
@@ -78,7 +83,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             else
             {
-                if (_addedItem != null && _addedItem.Alpha > 0)
+                if (_addedItem != null && _addedItem.Alpha() > 0)
                 {
                     _dTimer -= gTime.ElapsedGameTime.TotalSeconds;
                     _addedItem.SetAlpha((float)_dTimer);
@@ -189,17 +194,18 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public HUDInventory() : base(GUIWindow.BrownWin, TileSize, TileSize)
         {
-            _btnChangeRow = new GUIButton(new Rectangle(256, 96, 32, 32), 64, 64, @"Textures\Dialog", RowUp);
+            _btnChangeRow = new GUIButton(new Rectangle(256, 96, 16, 16), ScaledTileSize, ScaledTileSize, @"Textures\Dialog", RowUp);
+            _btnChangeRow.FadeOnDisable(false);
             _liItems = new List<GUIItemBox>();
             _fBarFade = GameManager.HideMiniInventory ? FADE_OUT : 1.0f;
-            Alpha = _fBarFade;
+            Alpha(_fBarFade);
             for (int i = 0; i < InventoryManager.maxItemColumns; i++)
             {
                 GUIItemBox ib = new GUIItemBox(InventoryManager.PlayerInventory[GameManager.HUDItemRow, i]);
                 _liItems.Add(ib);
 
                 if (i == 0) { ib.AnchorToInnerSide(this, SideEnum.TopLeft); }
-                else { ib.AnchorAndAlignToObject(_liItems[i - 1], SideEnum.Right, SideEnum.Bottom); }
+                else { ib.AnchorAndAlignToObject(_liItems[i - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
 
                 ib.SetAlpha(_fBarFade);
             }
@@ -209,12 +215,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             _btnChangeRow.AnchorAndAlignToObject(this, SideEnum.Right, SideEnum.CenterY);
             AddControl(_btnChangeRow);
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-
-            base.Draw(spriteBatch);
         }
 
         public override void Update(GameTime gTime)
@@ -276,13 +276,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             if (startFade != _fBarFade)
             {
-                Alpha = _fBarFade;
+                Alpha(_fBarFade);
 
                 foreach (GUIItemBox gib in _liItems)
                 {
-                    gib.SetAlpha(Alpha);
+                    gib.SetAlpha(Alpha());
                 }
-                _btnChangeRow.Alpha = Alpha;
+                _btnChangeRow.Alpha(Alpha());
             }
         }
 
@@ -341,12 +341,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
 
-            if (Contains(mouse) && Alpha != 1)
+            if (Contains(mouse) && Alpha() != 1)
             {
                 rv = true;
                 _bFadeOutBar = false;
             }
-            else if (!Contains(mouse) && GameManager.HideMiniInventory && Alpha != 0.1f)
+            else if (!Contains(mouse) && GameManager.HideMiniInventory && Alpha() != 0.1f)
             {
                 _bFadeOutBar = true;
             }
@@ -488,7 +488,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public class HUDQuestLog : GUIWindow
         {
-            public static int BTNSIZE = 32;
+            public static int BTNSIZE = ScaledTileSize;
             public static int MAX_SHOWN_QUESTS = 4;
             List<QuestBox> _questList;
             DetailBox _detailWindow;
@@ -504,8 +504,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _detailWindow = new DetailBox(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
                 _detailWindow.CenterOnScreen();
 
-                _btnUp = new GUIButton(new Rectangle(256, 64, 32, 32), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnUpClick);
-                _btnDown = new GUIButton(new Rectangle(256, 96, 32, 32), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnDownClick);
+                _btnUp = new GUIButton(new Rectangle(272, 96, 16, 16), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnUpClick);
+                _btnDown = new GUIButton(new Rectangle(256, 96, 16, 16), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnDownClick);
 
                 _btnUp.AnchorAndAlignToObject(this, GUIObject.SideEnum.Right, GUIObject.SideEnum.Top);
                 _btnDown.AnchorAndAlignToObject(this, GUIObject.SideEnum.Right, GUIObject.SideEnum.Bottom);
@@ -1468,7 +1468,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _gTextName = new GUIText("XXXXXXXXXX");
                     if (c.GetFriendshipLevel() == 0)
                     {
-                        _liFriendship.Add(new GUIImage(new Rectangle(0, 64, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog"));
+                        _liFriendship.Add(new GUIImage(new Rectangle(51, 68, 10, 9), ScaleIt(10), ScaleIt(9), @"Textures\Dialog"));
                     }
                     else
                     {
@@ -1476,38 +1476,41 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         int x = 0;
                         if (notches <= 3) { x = 16; }
                         else if (notches <= 6) { x = 32; }
-                        else { x = 48; }
+                        else { x = 51; }
+
 
                         while (notches > 0)
                         {
-                            _liFriendship.Add(new GUIImage(new Rectangle(x, 64, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog"));
+                            _liFriendship.Add(new GUIImage(new Rectangle(x, 68, 10, 9), ScaleIt(10), ScaleIt(9), @"Textures\Dialog"));
                             notches--;
                         }
                     }
 
-                    _gTextName.AnchorToInnerSide(this, SideEnum.TopLeft);
+                    _liFriendship[0].AnchorToInnerSide(this, SideEnum.TopLeft);
+                    _gTextName.AlignToObject(_liFriendship[0], SideEnum.CenterY);
+                    _gTextName.AnchorToInnerSide(this, SideEnum.Left);
                     for (int j = 0; j < _liFriendship.Count; j++)
                     {
-                        if (j == 0) { _liFriendship[j].AnchorAndAlignToObject(_gTextName, SideEnum.Right, SideEnum.CenterY); }
-                        else { _liFriendship[j].AnchorAndAlignToObject(_liFriendship[j - 1], SideEnum.Right, SideEnum.CenterY); }
+                        if (j == 0) { _liFriendship[j].AnchorAndAlignToObject(_gTextName, SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN); }
+                        else { _liFriendship[j].AnchorAndAlignToObject(_liFriendship[j - 1], SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN); }
                     }
                     _gTextName.SetText(c.Name);
 
-                    _gGift = new GUIImage(new Rectangle(16, 48, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog");
+                    _gGift = new GUIImage(new Rectangle(19, 52, 10, 8), ScaleIt(10), ScaleIt(8), @"Textures\Dialog");
                     _gGift.AnchorToInnerSide(this, SideEnum.Right);
                     _gGift.AlignToObject(_gTextName, SideEnum.CenterY);
-                    _gGift.Alpha = (c.CanGiveGift) ? 1 : 0.3f;
+                    _gGift.Alpha((c.CanGiveGift) ? 1 : 0.3f);
 
                     if (c.IsEligible())
                     {
                         EligibleNPC e = (EligibleNPC)c;
-                        _gAdventure = new GUIImage(new Rectangle(0, 48, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog");
-                        _gAdventure.AnchorAndAlignToObject(_gGift, SideEnum.Left, SideEnum.CenterY);
+                        _gAdventure = new GUIImage(new Rectangle(4, 52, 8, 9), ScaleIt(8), ScaleIt(9), @"Textures\Dialog");
+                        _gAdventure.AnchorAndAlignToObject(_gGift, SideEnum.Left, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
                         if (PlayerManager.GetParty().Contains(e))
                         {
                             _gAdventure.SetColor(Color.Gold);
                         }
-                        else { _gAdventure.Alpha = (e.CanJoinParty) ? 1 : 0.3f; }
+                        else { _gAdventure.Alpha(e.CanJoinParty ? 1 : 0.3f); }
                     }
 
                     Resize();
@@ -1852,10 +1855,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         _gClass.SetText(_character.CharacterClass.Name + " " + _character.ClassLevel);
                         _gXP.SetText("Exp:" + _character.XP);
 
-                        _weapon = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Weapon.GetItem());
+                        _weapon = new GUIItemBox(@"Textures\Dialog", _character.Weapon.GetItem());
                         _weapon.AnchorToInnerSide(_window, SideEnum.TopRight);
 
-                        _armor = new GUIItemBox(new Rectangle(288, 32, 32, 32), 32, 32, @"Textures\Dialog", _character.Armor.GetItem());
+                        _armor = new GUIItemBox( @"Textures\Dialog", _character.Armor.GetItem());
                         _armor.AnchorAndAlignToObject(_weapon, SideEnum.Left, SideEnum.Bottom);
 
                         _gStr = new GUIText("Dmg: 999");
@@ -2036,6 +2039,23 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
     }
 
+    public class HUDCalendar : GUIWindow
+    {
+        static GUIText _gText;
+        public HUDCalendar() : base(GUIWindow.BrownWin, ScaledTileSize, ScaledTileSize)
+        {
+            _gText = new GUIText("Day XX, XX:XX", DataManager.GetFont(@"Fonts\Font"));
+
+            _gText.AnchorToInnerSide(this, SideEnum.TopLeft);
+            Resize();
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            _gText.SetText(GameCalendar.GetCalendarString());
+        }
+    }
+
     class HUDMissionWindow : GUIObject
     {
         public static int MAX_SHOWN_MISSIONS = 4;
@@ -2067,8 +2087,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             if (MissionManager.AvailableMissions.Count > MAX_SHOWN_MISSIONS)
             {
-                _btnUp = new GUIButton(new Rectangle(256, 64, 32, 32), GUIManager.MINI_BTN_HEIGHT, GUIManager.MINI_BTN_HEIGHT, @"Textures\Dialog", BtnUpClick);
-                _btnDown = new GUIButton(new Rectangle(256, 96, 32, 32), GUIManager.MINI_BTN_HEIGHT, GUIManager.MINI_BTN_HEIGHT, @"Textures\Dialog", BtnDownClick);
+                _btnUp = new GUIButton(new Rectangle(272, 96, 16, 16), GUIManager.MINI_BTN_HEIGHT, GUIManager.MINI_BTN_HEIGHT, @"Textures\Dialog", BtnUpClick);
+                _btnDown = new GUIButton(new Rectangle(256, 96, 16, 16), GUIManager.MINI_BTN_HEIGHT, GUIManager.MINI_BTN_HEIGHT, @"Textures\Dialog", BtnDownClick);
 
                 _btnUp.AnchorAndAlignToObject(_gWin, GUIObject.SideEnum.Right, GUIObject.SideEnum.Top);
                 _btnDown.AnchorAndAlignToObject(_gWin, GUIObject.SideEnum.Right, GUIObject.SideEnum.Bottom);

@@ -17,7 +17,8 @@ namespace RiverHollow.Game_Managers
         enum Fade { None, Out, In};
         static Fade _eFade;
 
-        public static int MINI_BTN_HEIGHT = 32;
+        public static int STANDARD_MARGIN = 4;
+        public static int MINI_BTN_HEIGHT = ScaledTileSize;
         public static int MINI_BTN_WIDTH = 128;
 
         public static int MAIN_COMPONENT_WIDTH = RiverHollow.ScreenWidth / 3;

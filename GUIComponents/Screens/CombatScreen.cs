@@ -864,19 +864,19 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 public ActionButton(MenuAction action) : base(new Rectangle((int)action.IconGrid.X * TileSize, (int)action.IconGrid.Y * TileSize, TileSize, TileSize), TileSize, TileSize, @"Textures\texCmbtActions")
                 {
                     _action = action;
-                    SetScale(CombatManager.CombatScale);
+                    SetScale(GameManager.Scale);
                 }
 
                 public ActionButton(Item i) : base(new Rectangle(288, 32, 32, 32), 16, 16, @"Textures\Dialog")
                 {
                     _item = i;
                     _gItem = new GUIImage(_item.SourceRectangle, Width, Height, _item.Texture);
-                    SetScale(CombatManager.CombatScale);
+                    SetScale(GameManager.Scale);
                 }
 
                 public override void Draw(SpriteBatch spriteBatch)
                 {
-                    spriteBatch.Draw(_texture, _drawRect, _sourceRect, EnabledColor * Alpha);
+                    spriteBatch.Draw(_texture, _drawRect, _sourceRect, EnabledColor * Alpha());
                     if (_item != null) { _gItem.Draw(spriteBatch); }
                 }
 
@@ -894,7 +894,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     int firstWidth = Width;
                     int firstHeight = Height;
-                    SetScale(CombatManager.CombatScale + 1);
+                    SetScale(GameManager.Scale + 1);
 
                     int diffWidth = Width - firstWidth;
                     int diffHeight = Height - firstHeight;
@@ -905,7 +905,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 {
                     int firstWidth = Width;
                     int firstHeight = Height;
-                    SetScale(CombatManager.CombatScale);
+                    SetScale(GameManager.Scale);
 
                     int diffWidth = firstWidth - Width;
                     int diffHeight = firstHeight - Height;
@@ -953,7 +953,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 _arrTurnDisplay[i] = new TurnDisplay(_liNewTurnOrder[i], _arrBarDisplay);
                 _arrBarDisplay[i] = new GUIImage(new Rectangle(48, 58, 10, 2), 10, 2, @"Textures\Dialog");
-                _arrBarDisplay[i].SetScale(CombatManager.CombatScale);
+                _arrBarDisplay[i].SetScale(GameManager.Scale);
             }
 
             Width = MAX_SHOWN * _arrTurnDisplay[0].Width;
@@ -1142,7 +1142,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _bInParty = !actor.IsMonster();
                 _gName = new GUIText(actor.Name.Substring(0, 1));
                 _gImage = new GUIImage(new Rectangle(48, 48, 10, 10), 10, 10, @"Textures\Dialog");
-                _gImage.SetScale(CombatManager.CombatScale);
+                _gImage.SetScale(GameManager.Scale);
 
                 _arrBarDisplay = barDisplay;
                 Width = _gImage.Width;
@@ -1166,9 +1166,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             private void UpdateFadeOut(GameTime gTime)
             {
-                if (Alpha > 0)
+                if (Alpha() > 0)
                 {
-                    SetAlpha(Alpha - _fFadeSpeed);
+                    Alpha(Alpha() - _fFadeSpeed);
                 }
                 else
                 {
@@ -1178,9 +1178,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             private void UpdateFadeIn(GameTime gTime)
             {
-                if (Alpha < 1)
+                if (Alpha() < 1)
                 {
-                    SetAlpha(Alpha + _fFadeSpeed);
+                    Alpha(Alpha() + _fFadeSpeed);
                 }
                 else
                 {
@@ -1242,10 +1242,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             public bool Occupied() { return _actor != null; }
 
-            public void SetAlpha(float alpha) {
-                Alpha = alpha;
-                _gImage.Alpha = alpha;
-                _gName.Alpha = alpha;
+            public override void Alpha(float alpha) {
+                base.Alpha(alpha);
+                _gImage.Alpha(alpha);
+                _gName.Alpha(alpha);
             }
 
             public string GetName()
@@ -1268,7 +1268,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _bFadeIn = true;
                     _fFadeSpeed = speed;
                     Finished = false;
-                    SetAlpha(0);
+                    Alpha(0);
                     AnchorAndAlignToObject(_arrBarDisplay[_iIndex], IsInParty() ? SideEnum.Top : SideEnum.Bottom, SideEnum.CenterX);
                 }
             }

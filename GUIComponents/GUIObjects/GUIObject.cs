@@ -56,15 +56,16 @@ namespace RiverHollow.GUIObjects
         public int Right => (int)_vPos.X + Width;
 
         private Vector2 _vPos;
-        public float Alpha = 1.0f;
+        protected float _fAlpha = 1.0f;
 
         protected Rectangle _drawRect;
         public Rectangle DrawRectangle { get => _drawRect; }
 
         protected Rectangle _sourceRect;
 
+        protected Color _cColor = Color.White;
         protected Texture2D _texture = DataManager.GetTexture(@"Textures\Dialog");
-        protected Color EnabledColor => _bEnabled ? Color.White : Color.Gray;
+        protected Color EnabledColor => _bEnabled ? _cColor : Color.Gray;
         protected bool _bEnabled = true;
         public bool Enabled => _bEnabled;
 
@@ -86,7 +87,7 @@ namespace RiverHollow.GUIObjects
 
         public virtual bool Contains(Point mouse)
         {
-            return DrawRectangle.Contains(mouse);
+            return Show && DrawRectangle.Contains(mouse);
         }
         public virtual void Update(GameTime gTime) {
             foreach (GUIObject g in Controls)
@@ -98,7 +99,7 @@ namespace RiverHollow.GUIObjects
         {
             if (Show)
             {
-                spriteBatch.Draw(_texture, _drawRect, _sourceRect, EnabledColor * Alpha);
+                spriteBatch.Draw(_texture, _drawRect, _sourceRect, EnabledColor * _fAlpha);
 
                 foreach (GUIObject g in Controls)
                 {
@@ -110,6 +111,11 @@ namespace RiverHollow.GUIObjects
         public virtual void Enable(bool value)
         {
             _bEnabled = value;
+        }
+
+        public virtual void SetColor(Color c)
+        {
+            _cColor = c;
         }
 
         public static Vector2 PosFromCenter(Vector2 center, int width, int height)
@@ -306,6 +312,12 @@ namespace RiverHollow.GUIObjects
                 control.MemberOf = null;
             }
         }
+
+        #region Alpha
+        public virtual void Alpha(float val) { _fAlpha = val; }
+
+        public float Alpha() { return _fAlpha; }
+        #endregion
 
         #region Positioning Code
         public enum SideEnum { Bottom, BottomLeft, BottomRight, Center, CenterX, CenterY, Left, Right, Top, TopLeft, TopRight, };

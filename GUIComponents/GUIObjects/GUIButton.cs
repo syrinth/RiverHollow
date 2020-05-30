@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIObjects;
-using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindow;
 
 namespace RiverHollow.Game_Managers.GUIObjects
@@ -22,10 +21,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
         private GUIWindow _gWindow;
         private GUIText _gText;
 
+        protected bool _bFadeOnDisable = true;
         public delegate void BtnClickDelegate ();
         private BtnClickDelegate _delAction;
 
-        internal static WindowData BaseBtn = new WindowData(96, 0, 2, 32);
+        internal static WindowData BaseBtn = new WindowData(96, 0, 1, 14);
 
         public GUIButton(string text, BtnClickDelegate del = null)
         {
@@ -74,7 +74,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _btnObject.Alpha = Enabled ? 1.0f : 0.5f;
+            if (_bFadeOnDisable) { _btnObject.Alpha(Enabled ? 1.0f : 0.5f); }
             _btnObject.Draw(spriteBatch);
         }
 
@@ -104,6 +104,26 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             base.Enable(value);
             _btnObject.Enable(value);
+        }
+
+        /// <summary>
+        /// Called to toggle whether or not the button fades out when disabled.
+        /// </summary>
+        /// <param name="val">Whether the button should fade out of not</param>
+        public void FadeOnDisable(bool val)
+        {
+            _bFadeOnDisable = val;
+        }
+
+        /// <summary>
+        /// Sets the Slpha value for the Button and the button object
+        /// </summary>
+        /// <param name="val"></param>
+        public override void Alpha(float val)
+        {
+            base.Alpha(val);
+            _btnObject?.Alpha(val);
+            _gText?.Alpha(val);
         }
     }
 }

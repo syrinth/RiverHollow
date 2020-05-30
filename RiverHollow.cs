@@ -233,13 +233,9 @@ namespace RiverHollow
             spriteBatch.End();
 
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
-
             GUIManager.Draw(spriteBatch);
-            if (IsMapShown())
-            {
-                GameCalendar.Draw(spriteBatch);
-            }
             spriteBatch.End();
+
             base.Draw(gTime);
         }
 

@@ -25,7 +25,6 @@ namespace RiverHollow.Game_Managers
         private const int ATTACK_CHARGE = 60;
         private const double EXP_MULTIPLIER_BONUS = 0.3;
         public const int BASIC_ATTACK = 300;
-        public static int CombatScale = 5;
 
         private static List<Item> _liDroppedItems;
         private static List<RHTile> _liLegalTiles;

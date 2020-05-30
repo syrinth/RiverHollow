@@ -11,8 +11,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
     class HUDCraftingDisplay : GUIObject
     {
-        const int _iBoxSize = 64;
-        const int _iMargin = 3;
+        int _iBoxSize = GUIItemBox.RECT_IMG.Width * (int)GameManager.Scale;
         const int _iMaxColumns = 5;
 
         Machine _craftMachine;
@@ -71,8 +70,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             _inventory.Setup();
 
             //Determine how big the creation window needs to be
-            int creationWidth = (GUIWindow.RedWin.Edge * 2) + (_columns * _iBoxSize) + (_iMargin * (_columns + 1));
-            int creationHeight = (GUIWindow.RedWin.Edge * 2) + (_rows * _iBoxSize) + (_iMargin * (_rows + 1));
+            int creationWidth = (GUIWindow.RedWin.WidthEdges()) + (_columns * _iBoxSize) + (GUIManager.STANDARD_MARGIN * (_columns + 1));
+            int creationHeight = (GUIWindow.RedWin.HeightEdges()) + (_rows * _iBoxSize) + (GUIManager.STANDARD_MARGIN * (_rows + 1));
 
             //Create the creation window and align it on top of the GUIInventory
             _creationWindow = new GUIWindow(GUIWindow.RedWin, creationWidth, creationHeight);
@@ -82,11 +81,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
             List<GUIObject> boxes = new List<GUIObject>();
             foreach (int id in canMake)
             {
-                boxes.Add(new GUIItemBox(new Rectangle(288, 32, 32, 32), _iBoxSize, _iBoxSize, @"Textures\Dialog", GetItem(id), true));
+                boxes.Add(new GUIItemBox(@"Textures\Dialog", GetItem(id), true));
             }
 
             //Create a grid for the recipes to be dispplayed in
-            CreateSpacedGrid(ref boxes, _creationWindow.InnerTopLeft() + new Vector2(_iMargin, _iMargin), _creationWindow.MidWidth()-2*_iMargin, _columns);
+            CreateSpacedGrid(ref boxes, _creationWindow.InnerTopLeft() + new Vector2(GUIManager.STANDARD_MARGIN, GUIManager.STANDARD_MARGIN), _creationWindow.MidWidth() - 2 * GUIManager.STANDARD_MARGIN, _columns);
 
             //Create a new array of the appropriate size, then assign all of the boxes to the array
             //and turn off number draw as well as addingthem to the Controls

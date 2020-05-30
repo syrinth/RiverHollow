@@ -11,7 +11,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
         protected string _sFullText;
         public string Text => _sText;
         protected SpriteFont _font;
-        protected Color _cTextColor;
 
         protected Vector2 _vTextSize;
         public Vector2 TextSize => _vTextSize;
@@ -36,7 +35,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             _sText = "";
             _font = DataManager.GetFont(@"Fonts\Font");
-            _cTextColor = Color.White;
             SetDimensions("X");
         }
 
@@ -72,7 +70,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (!string.IsNullOrEmpty(_sText))
             {
-                spriteBatch.DrawString(_font, _sText, Position(), _cTextColor * Alpha);
+                spriteBatch.DrawString(_font, _sText, Position(), _cColor * Alpha());
             }
         }
 
@@ -123,10 +121,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
             return _sText;
         }
 
-        public void SetColor(Color c)
-        {
-            _cTextColor = c;
-        }
 
         public void Insert(string s, int loc)
         {

@@ -328,7 +328,7 @@
   <object id="44" name="NPC_11" x="1266" y="946.667" width="12" height="12"/>
  </objectgroup>
  <objectgroup id="7" name="Travel">
-  <object id="24" name="Entrance" x="527.178" y="952.394" width="15.4819" height="5.1667">
+  <object id="24" name="Entrance" x="529.428" y="953.519" width="12.6069" height="5.1667">
    <properties>
     <property name="Door" type="bool" value="true"/>
     <property name="EntranceDir" value="Down"/>

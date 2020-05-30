@@ -16,8 +16,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
     public class GUIItemBox : GUIImage
     {
-        public static Rectangle RECT_IMG = new Rectangle(288, 32, 32, 32);
-        static Rectangle RECT_SELECT_IMG = new Rectangle(288, 0, 32, 32);
+        public static Rectangle RECT_IMG = new Rectangle(254, 14, 20, 20);
+        static Rectangle RECT_SELECT_IMG = new Rectangle(286, 14, 20, 20);
         private Item _item;
         public Item Item => _item;
         GUIWindow _reqWindow;
@@ -26,7 +26,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         public bool DrawNum = true;
 
-        GUIImage _gSelected = new GUIImage(RECT_SELECT_IMG, 64, 64, @"Textures\Dialog");
+        GUIImage _gSelected = new GUIImage(RECT_SELECT_IMG, ScaleIt(RECT_SELECT_IMG.Width), ScaleIt(RECT_SELECT_IMG.Height), @"Textures\Dialog");
 
         Item _itToCraft;
         List<GUIObject> _liItemReqs;
@@ -39,14 +39,14 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         int _iRow;
         public int Row => _iRow;
 
-        public GUIItemBox(Item it = null) : base(RECT_IMG, 64, 64, @"Textures\Dialog")
+        public GUIItemBox(Item it = null) : base(RECT_IMG, ScaleIt(RECT_IMG.Width), ScaleIt(RECT_IMG.Height), @"Textures\Dialog")
         {
             SetItem(it);
 
             AddControl(_gSelected);
         }
 
-        public GUIItemBox(Rectangle sourceRect, int width, int height, int row, int col, string texture, Item item, bool crafting = false) : base(sourceRect, width, height, texture)
+        public GUIItemBox(int row, int col, string texture, Item item, bool crafting = false) : base(RECT_IMG, ScaleIt(RECT_IMG.Width), ScaleIt(RECT_IMG.Height), texture)
         {
             _bCrafting = crafting;
             SetItem(item);
@@ -57,7 +57,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             AddControl(_gSelected);
         }
 
-        public GUIItemBox(Rectangle sourceRect, int width, int height, string texture, Item item, bool crafting = false) : this( sourceRect, width, height, 0, 0, texture, item)
+        public GUIItemBox(string texture, Item item, bool crafting = false) : this(0, 0, texture, item)
         {
             AddControl(_gSelected);
         }
@@ -160,8 +160,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             if (_gTextNum != null) { _gTextNum.SetText(""); }
             if(_item != null)
             {
-                _gItem = new GUIImage(_item.SourceRectangle, Width, Height, _item.Texture);
-                _gItem.Position(Position());
+                _gItem = new GUIImage(_item.SourceRectangle, ScaledTileSize, ScaledTileSize, _item.Texture);
+                _gItem.CenterOnObject(this);
                 AddControl(_gItem);
 
                 if (_item.DoesItStack)
@@ -194,10 +194,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         public void SetAlpha(float val)
         {
-            Alpha = val;
+            Alpha(val);
             if (_gSelected != null)
             {
-                _gSelected.Alpha = val;
+                _gSelected.Alpha(val);
             }
             SetItemAlpha(val);
         }
@@ -205,14 +205,14 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         {
             if (_gItem != null)
             {
-                _gItem.Alpha = val;
+                _gItem.Alpha(val);
             }
             if(_gTextNum != null)
             {
-                _gTextNum.Alpha = val;
+                _gTextNum.Alpha(val);
             }
         }
-        public float GetItemAlpha() { return _gItem.Alpha; }
+        public float GetItemAlpha() { return _gItem.Alpha(); }
 
         public class SpecializedBox : GUIItemBox
         {

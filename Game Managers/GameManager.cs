@@ -145,6 +145,14 @@ namespace RiverHollow.Game_Managers
             CurrentNPC = null;
         }
 
+        /// <summary>
+        /// Returns an int value of the given float times the Scale
+        /// </summary>
+        public static int ScaleIt(int val)
+        {
+            return (int)(Scale * val);
+        }
+
         #region Held Objects
         static Item _heldItem;
         public static Item HeldItem { get => _heldItem; }

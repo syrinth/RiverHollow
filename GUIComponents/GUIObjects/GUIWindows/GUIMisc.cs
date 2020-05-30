@@ -10,20 +10,20 @@ namespace RiverHollow.GUIComponents.GUIObjects
 {
     public class GUICoin : GUIImage
     {
-        public GUICoin() : base(new Rectangle(0, 32, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog")
+        public GUICoin() : base(new Rectangle(4, 36, 8, 9), ScaleIt(8), ScaleIt(9), @"Textures\Dialog")
         {
         }
     }
     public class GUIMonsterEnergy : GUIImage
     {
-        public GUIMonsterEnergy() : base(new Rectangle(0, 16, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog")
+        public GUIMonsterEnergy() : base(new Rectangle(4, 20, 8 , 8), ScaleIt(8), ScaleIt(8), @"Textures\Dialog")
         {
         }
     }
 
     public class GUIDungeonKey : GUIImage
     {
-        public GUIDungeonKey() : base(new Rectangle(16, 16, TileSize, TileSize), TileSize, TileSize, @"Textures\Dialog")
+        public GUIDungeonKey() : base(new Rectangle(16, 16, TileSize, TileSize), ScaledTileSize, ScaledTileSize, @"Textures\Dialog")
         {
         }
     }
@@ -60,15 +60,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             if (_bCoinOnRight)
             {
-                _gCoin.AnchorAndAlignToObject(_gTextMoney, SideEnum.Right, SideEnum.CenterY);
+                _gTextMoney.AnchorAndAlignToObject(_gCoin, SideEnum.Left, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
             }
             else
             {
-                _gTextMoney.AnchorAndAlignToObject(_gCoin, SideEnum.Right, SideEnum.Top);
-                _gCoin.AlignToObject(_gTextMoney, SideEnum.CenterY);
+                _gTextMoney.AnchorAndAlignToObject(_gCoin, SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
             }
 
-            Height = _gTextMoney.Height;
+            Height = _gCoin.Height > _gTextMoney.Height ? _gCoin.Height : _gTextMoney.Height;
             Width = _gTextMoney.Width + _gCoin.Width;
 
             AddControl(_gCoin);
@@ -89,7 +88,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
         }
 
-        public void SetColor(Color c)
+        public override void SetColor(Color c)
         {
             _gTextMoney.SetColor(c);
         }
@@ -126,19 +125,19 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             if (_bSymbolOnRight)
             {
-                _gEnergy.AnchorAndAlignToObject(_gCurrencyText, SideEnum.Right, SideEnum.CenterY);
+                _gCurrencyText.AnchorAndAlignToObject(_gEnergy, SideEnum.Left, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
             }
             else
             {
-                _gCurrencyText.AnchorAndAlignToObject(_gEnergy, SideEnum.Right, SideEnum.Top);
-                _gEnergy.AlignToObject(_gCurrencyText, SideEnum.CenterY);
+                _gCurrencyText.AnchorAndAlignToObject(_gEnergy, SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
             }
 
-            Height = _gCurrencyText.Height;
+            Height = _gEnergy.Height > _gCurrencyText.Height ? _gEnergy.Height : _gCurrencyText.Height;
             Width = _gCurrencyText.Width + _gEnergy.Width;
 
             AddControl(_gEnergy);
             AddControl(_gCurrencyText);
+            Position(_gEnergy.Position());
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -155,7 +154,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
         }
 
-        public void SetColor(Color c)
+        public override void SetColor(Color c)
         {
             _gCurrencyText.SetColor(c);
         }
@@ -176,14 +175,15 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             _gKeys = new GUIDungeonKey();
 
-            _gKeysText.AnchorAndAlignToObject(_gKeys, SideEnum.Right, SideEnum.Top);
+            _gKeysText.AnchorAndAlignToObject(_gKeys, SideEnum.Right, SideEnum.Top, GUIManager.STANDARD_MARGIN);
             _gKeys.AlignToObject(_gKeysText, SideEnum.CenterY);
 
-            Height = _gKeysText.Height;
+            Height = _gKeys.Height > _gKeysText.Height ? _gKeys.Height : _gKeysText.Height;
             Width = _gKeysText.Width + _gKeys.Width;
 
             AddControl(_gKeys);
             AddControl(_gKeysText);
+            Position(_gKeys.Position());
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -304,17 +304,17 @@ namespace RiverHollow.GUIComponents.GUIObjects
     {
         public delegate void BtnClickDelegate();
         private BtnClickDelegate _delAction;
-        public Color SwatchColor => _color;
+        public Color SwatchColor => _cColor;
 
         public GUISwatch(Color c, BtnClickDelegate del = null) : base(new Rectangle(0, 80, TileSize, TileSize), 8, 16, @"Textures\Dialog")
         {
-            _color = c;
+            _cColor = c;
             _delAction = del;
         }
 
         public GUISwatch(Color c, int width, int height, BtnClickDelegate del = null) : base(new Rectangle(0, 80, TileSize, TileSize), width, height, @"Textures\Dialog")
         {
-            _color = c;
+            _cColor = c;
             _delAction = del;
         }
 

@@ -3,12 +3,6 @@ using RiverHollow.Actors;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Misc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.GUIObjects
@@ -75,8 +69,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             public void Setup()
             {
-                Width = ((int)Scale * TileSize) + ((int)Scale * TileSize) / 4;
-                Height = (int)Scale * ((TileSize * 2) + 2) + (_winData.Edge * 2);
+                Width = ScaledTileSize + WidthEdges();
+                Height = ScaleIt((TileSize * 2) + 2) + HeightEdges();
 
                 if (_actor != null)
                 {
@@ -176,8 +170,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 _playerSprite.SetScale((int)GameManager.Scale);
                 _playerSprite.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
 
-                Width = _playerSprite.Width + _playerSprite.Width / 3;
-                Height = _playerSprite.Height + (_winData.Edge * 2);
+                Width = _playerSprite.Width + WidthEdges();
+                Height = _playerSprite.Height + HeightEdges();
 
                 _playerSprite.CenterOnWindow(this);
                 _playerSprite.AnchorToInnerSide(this, SideEnum.Bottom);

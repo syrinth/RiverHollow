@@ -18,7 +18,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         public double Duration;
 
-        protected const int MAX_ROWS = 5;
+        protected const int MAX_ROWS = 6;
 
         #region Parsing
         protected int _iCurrText = 0;
@@ -53,7 +53,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         //Used for the default TextWindow that sits on the bottom of the screen
         public GUITextWindow(string text, bool open = true) : this()
         {
-            Height = Math.Max(Height, (_iCharHeight * MAX_ROWS));
+            ConfigureHeight();
             ParseText(text);
 
             Setup(open);
@@ -62,7 +62,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         //Informational boxes that show up anywhere, like tooltips
         public GUITextWindow(Vector2 position, string text) : this()
         {
-            Height = (int)_giText.MeasureString(text).Y + (_winData.Edge * 2);
+            Height = (int)_giText.MeasureString(text).Y + HeightEdges();
             SetWidthMax((int)_giText.MeasureString(text).X, (int)(RiverHollow.ScreenWidth - position.X));
 
             ParseText(text);
@@ -108,6 +108,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             }
         }
 
+        protected void ConfigureHeight()
+        {
+            Height = Math.Max(Height, (_iCharHeight * MAX_ROWS) + HeightEdges());
+        }
+
         /// <summary>
         /// Method used to ensure that the components for the TextWindow are synced
         /// together. Called on finishing the opening animation, or immediately after
@@ -120,7 +125,8 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 TalkingActor talker = GameManager.CurrentNPC;
                 _giPortrait = new GUIImage(talker.PortraitRectangle, talker.PortraitRectangle.Width, talker.PortraitRectangle.Height, talker.Portrait);
                 _giPortrait.SetScale(GameManager.Scale);
-                _giPortrait.AnchorAndAlignToObject(this, SideEnum.Top, SideEnum.Left);
+                _giPortrait.AnchorToInnerSide(this, SideEnum.Left);
+                _giPortrait.AnchorToObject(this, SideEnum.Top);
                 AddControl(_giPortrait);
             }
 
@@ -251,7 +257,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             {
                 Vector2 measure = _giText.MeasureString(line + word);
 
-                if (measure.Length() >= (Width) ||
+                if (measure.Length() >= MidWidth() ||
                     _numReturns == MAX_ROWS - 1 && measure.Length() >= (Width) - _giText.CharHeight)
                 {
                     returnString = returnString + line + '\n';

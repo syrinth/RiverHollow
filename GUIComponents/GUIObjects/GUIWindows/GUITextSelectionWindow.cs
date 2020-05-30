@@ -25,7 +25,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public GUITextSelectionWindow(string selectionText, bool open = true)
         {
             _diOptions = new Dictionary<int, SelectionData>();
-            Height = Math.Max(Height, (_iCharHeight * MAX_ROWS));
+            ConfigureHeight();
             _iKeySelection = 0;
             SeparateText(selectionText);
             PostParse();

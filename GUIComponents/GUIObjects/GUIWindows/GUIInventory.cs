@@ -37,8 +37,7 @@ namespace RiverHollow.Screens
     {
         protected GUIItemBox[,] _gItemBoxes;
 
-        protected const int _iBoxSize = 64;
-        protected const int _iMargin = 3;
+        protected int _iBoxSize = GUIItemBox.RECT_IMG.Width * (int)GameManager.Scale;
 
         protected int _columns;
         protected int _rows;
@@ -55,8 +54,8 @@ namespace RiverHollow.Screens
             InventoryManager.GetDimensions(ref _rows, ref _columns, _bPlayerInventory);
 
             _gItemBoxes = new GUIItemBox[_rows, _columns];
-            Width = (_winData.Edge * 2) + (_columns * _iBoxSize) + (_iMargin * (_columns + 1));
-            Height = (_winData.Edge * 2) + (_rows * _iBoxSize) + (_iMargin * (_rows + 1));
+            Width = WidthEdges() + (_columns * _iBoxSize) + (GUIManager.STANDARD_MARGIN * (_columns + 1));
+            Height = HeightEdges() + (_rows * _iBoxSize) + (GUIManager.STANDARD_MARGIN * (_rows + 1));
             Setup();
 
             _texture = DataManager.GetTexture(@"Textures\Dialog");
@@ -83,11 +82,11 @@ namespace RiverHollow.Screens
             {
                 for (int j = 0; j < _columns; j++)
                 {
-                    _gItemBoxes[i, j] = new GUIItemBox(new Rectangle(288, 32, 32, 32), _iBoxSize, _iBoxSize, i, j, @"Textures\Dialog", null);
+                    _gItemBoxes[i, j] = new GUIItemBox(i, j, @"Textures\Dialog", null);
 
-                    if (i == 0 && j == 0) { _gItemBoxes[i, j].AnchorToInnerSide(this, SideEnum.TopLeft, _iMargin); }
-                    else if (j == 0) { _gItemBoxes[i, j].AnchorAndAlignToObject(_gItemBoxes[i - 1, j], SideEnum.Bottom, SideEnum.Left, _iMargin); }
-                    else { _gItemBoxes[i, j].AnchorAndAlignToObject(_gItemBoxes[i, j - 1], SideEnum.Right, SideEnum.Bottom, _iMargin); }
+                    if (i == 0 && j == 0) { _gItemBoxes[i, j].AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN); }
+                    else if (j == 0) { _gItemBoxes[i, j].AnchorAndAlignToObject(_gItemBoxes[i - 1, j], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }
+                    else { _gItemBoxes[i, j].AnchorAndAlignToObject(_gItemBoxes[i, j - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
 
                     AddControl(_gItemBoxes[i, j]);
                 }
