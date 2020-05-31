@@ -15,9 +15,25 @@ namespace RiverHollow.Game_Managers
 {
     public class SaveManager
     {
+        static string INFO_FILE_NAME = "SaveInfo";
+        static string RIVER_HOLLOW_SAVES = "Save Games";
         static long _iSaveID = -1;
 
         #region Save/Load
+        public struct SaveInfoData
+        {
+            [XmlElement(ElementName = "SaveFile")]
+            public string saveFile;
+
+            [XmlElement(ElementName = "SaveID")]
+            public long saveID;
+
+            [XmlElement(ElementName = "Player")]
+            public PlayerData playerData;
+
+            [XmlElement(ElementName = "Calendar")]
+            public CalendarData Calendar;
+        }
         public struct SaveData
         {
             /// <summary>
@@ -432,7 +448,7 @@ namespace RiverHollow.Game_Managers
             return _iSaveID;
         }
 
-        public static string Save()
+        public static void Save()
         {
             SaveData data = new SaveData()
             {
@@ -517,8 +533,32 @@ namespace RiverHollow.Game_Managers
                 serializer.Serialize(sr, data);
             }
 
-            File.WriteAllText(PlayerManager.Name + _iSaveID + ".rh", sb.ToString());
-            return sb.ToString();
+            string saveName = String.Format("{0}_{1}", PlayerManager.Name, _iSaveID);
+            string saveFolder = String.Format(@"{0}\{1}", RIVER_HOLLOW_SAVES, saveName);
+
+            if (!Directory.Exists(RIVER_HOLLOW_SAVES)) { Directory.CreateDirectory(RIVER_HOLLOW_SAVES); }
+            if (!Directory.Exists(saveFolder)) { Directory.CreateDirectory(saveFolder); }
+            File.WriteAllText(String.Format(@"{0}\{1}", saveFolder, saveName), sb.ToString());
+
+            //Smaller subset of information to display on the loading screen
+            SaveInfoData infoData = new SaveInfoData()
+            {
+                saveFile = String.Format(@"{0}\{1}", saveFolder, saveName),
+                saveID = data.saveID,
+                Calendar = data.Calendar,
+                playerData = data.playerData
+            };
+
+            // Convert the object to XML data and put it in the stream.
+            serializer = new XmlSerializer(typeof(SaveInfoData));
+            sb = new StringBuilder();
+            using (var sr = new StringWriter(sb))
+            {
+                // Seriaize the data.
+                serializer.Serialize(sr, infoData);
+            }
+
+            File.WriteAllText(String.Format(@"{0}\{1}", saveFolder, INFO_FILE_NAME), sb.ToString());
         }
 
         public static OptionsData SaveOptions()
@@ -537,16 +577,40 @@ namespace RiverHollow.Game_Managers
             GameManager.HideMiniInventory = data.hideMiniInventory;
         }
 
-        public static List<SaveData> LoadFiles()
+        public static List<SaveInfoData> LoadFiles()
         {
-            List<SaveData> games = new List<SaveData>();
+            List<SaveInfoData> games = new List<SaveInfoData>();
 
-            foreach (string s in Directory.GetFiles(System.Environment.CurrentDirectory, "*.rh"))
+            foreach (string dir in Directory.GetDirectories(Environment.CurrentDirectory + "\\" + RIVER_HOLLOW_SAVES))
             {
-                games.Add(LoadData(s));
+                string pathToSaveInfo = String.Format(@"{0}\{1}", dir, INFO_FILE_NAME);
+                if (File.Exists(pathToSaveInfo))
+                {
+                    games.Add(LoadSaveInfoData(pathToSaveInfo));
+                }
             }
 
             return games;
+        }
+
+        public static SaveInfoData LoadSaveInfoData(string path)
+        {
+            SaveInfoData data;
+
+            string xml = path;
+            string _byteOrderMarkUtf16 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
+            if (xml.StartsWith(_byteOrderMarkUtf16))
+            {
+                xml = xml.Remove(0, _byteOrderMarkUtf16.Length);
+            }
+            XmlSerializer serializer = new XmlSerializer(typeof(SaveInfoData));
+
+            using (var sr = new StreamReader(xml))
+            {
+                data = (SaveInfoData)serializer.Deserialize(sr);
+            }
+
+            return data;
         }
 
         public static SaveData LoadData(string fileName)
@@ -568,18 +632,20 @@ namespace RiverHollow.Game_Managers
             return data;
         }
 
-        public static void Load(SaveData data)
+        public static void Load(string filePath)
         {
-            _iSaveID = data.saveID;
-            MapManager.CurrentMap = MapManager.Maps[data.currentMap];
+            SaveData dataToLoad = LoadData(filePath);
+
+            _iSaveID = dataToLoad.saveID;
+            MapManager.CurrentMap = MapManager.Maps[dataToLoad.currentMap];
             PlayerManager.Initialize();
-            PlayerManager.LoadData(data.playerData);
-            PlayerManager.CurrentMap = MapManager.Maps[data.currentMap].Name;
+            PlayerManager.LoadData(dataToLoad.playerData);
+            PlayerManager.CurrentMap = MapManager.Maps[dataToLoad.currentMap].Name;
             PlayerManager.World.Position = Util.SnapToGrid(MapManager.Maps[PlayerManager.CurrentMap].GetCharacterSpawn("PlayerSpawn"));
             PlayerManager.World.DetermineFacing(new Vector2(0, 1));
-            LoadOptions(data.optionData);
-            GameCalendar.LoadCalendar(data.Calendar);
-            foreach (BuildingData b in data.Buildings)
+            LoadOptions(dataToLoad.optionData);
+            GameCalendar.LoadCalendar(dataToLoad.Calendar);
+            foreach (BuildingData b in dataToLoad.Buildings)
             {
                 Building newBuilding = DataManager.GetBuilding(b.iBuildingID);
                 newBuilding.LoadData(b);
@@ -587,45 +653,45 @@ namespace RiverHollow.Game_Managers
                 MapManager.Maps[MapManager.HomeMap].AddBuilding(newBuilding, place, place);
             }
 
-            foreach (MapData mapData in data.MapData)
+            foreach (MapData mapData in dataToLoad.MapData)
             {
                 RHMap map = MapManager.Maps[mapData.mapName];
                 map.LoadData(mapData);
             }
-            foreach (UpgradeData u in data.UpgradeData)
+            foreach (UpgradeData u in dataToLoad.UpgradeData)
             {
                 GameManager.DiUpgrades[u.upgradeID].Enabled = u.enabled;
             }
-            foreach (QuestData q in data.PlotQuestData)
+            foreach (QuestData q in dataToLoad.PlotQuestData)
             {
                 Quest plotQuest = GameManager.DiQuests[q.questID];
                 plotQuest.LoadData(q);
             }
-            foreach (QuestData q in data.QuestLogData)
+            foreach (QuestData q in dataToLoad.QuestLogData)
             {
                 Quest newQuest = new Quest();
                 newQuest.LoadData(q);
                 PlayerManager.AddToQuestLog(newQuest);
             }
-            foreach (MissionData m in data.CurrentMissions)
+            foreach (MissionData m in dataToLoad.CurrentMissions)
             {
                 Mission newMission = new Mission();
                 newMission.LoadData(m);
                 MissionManager.CurrentMissions.Add(newMission);
             }
-            foreach (MissionData m in data.AvailableMissions)
+            foreach (MissionData m in dataToLoad.AvailableMissions)
             {
                 Mission newMission = new Mission();
                 newMission.LoadData(m);
                 MissionManager.AvailableMissions.Add(newMission);
             }
-            foreach (NPCData n in data.NPCData)
+            foreach (NPCData n in dataToLoad.NPCData)
             {
                 Villager target = DataManager.DiNPC[n.npcID];
                 target.LoadData(n);
             }
 
-            foreach (EligibleNPCData n in data.EligibleData)
+            foreach (EligibleNPCData n in dataToLoad.EligibleData)
             {
                 EligibleNPC target = (EligibleNPC)DataManager.DiNPC[n.npcData.npcID];
                 target.LoadData(n);

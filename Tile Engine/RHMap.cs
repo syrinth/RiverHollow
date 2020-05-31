@@ -2075,29 +2075,27 @@ namespace RiverHollow.Tile_Engine
             {
                 if (w.worldObjectID != -1)
                 {
-                    if(w.worldObjectID == 240)
-                    {
-                        int i = 0;
-                    }
                     WorldObject obj = DataManager.GetWorldObject(w.worldObjectID, new Vector2(w.x, w.y));
-                    if(obj.Type == WorldObject.ObjectType.Wall || obj.Type == WorldObject.ObjectType.Floor)
+                    if (obj != null)
                     {
-                        if (PlacePlayerObject(obj))
+                        if (obj.Type == WorldObject.ObjectType.Wall || obj.Type == WorldObject.ObjectType.Floor)
                         {
-                            ((AdjustableObject)obj).SetMapName(this.Name);
-                            ((AdjustableObject)obj).AdjustObject();
+                            if (PlacePlayerObject(obj))
+                            {
+                                ((AdjustableObject)obj).SetMapName(this.Name);
+                                ((AdjustableObject)obj).AdjustObject();
+                            }
+                        }
+
+                        if (obj.IsClassChanger())
+                        {
+                            PlacePlayerObject(obj);
+                        }
+                        else
+                        {
+                            PlaceWorldObject(obj);
                         }
                     }
-
-                    if (obj.IsClassChanger())
-                    {
-                        PlacePlayerObject(obj);
-                    }
-                    else
-                    {
-                        PlaceWorldObject(obj);
-                    }
-                    
                 }
             }
             foreach (ContainerData c in data.containers)

@@ -12,7 +12,7 @@ namespace RiverHollow.GUIComponents.Screens
 {
     class LoadScreen : GUIScreen
     {
-        List<SaveData> _liData;
+        List<SaveInfoData> _liData;
         List<GUIObject> _liDataWindows;
         GUIButton _btnBack;
 
@@ -22,7 +22,7 @@ namespace RiverHollow.GUIComponents.Screens
             _liDataWindows = new List<GUIObject>();
             _liData = SaveManager.LoadFiles();
 
-            foreach(SaveData data in _liData)
+            foreach(SaveInfoData data in _liData)
             {
                 SaveWindow s = new SaveWindow(data, _liData.IndexOf(data));
                 AddControl(s);
@@ -68,13 +68,13 @@ namespace RiverHollow.GUIComponents.Screens
         private class SaveWindow : GUIWindow
         {
             GUIText _gText;
-            SaveData _data;
-            public SaveData Data => _data;
+            SaveInfoData _data;
+            public SaveInfoData Data => _data;
 
             int _iId;
             public int SaveID => _iId;
 
-            public SaveWindow(SaveData data, int id)
+            public SaveWindow(SaveInfoData data, int id)
             {
                 _data = data;
                 _gText = new GUIText(data.playerData.name + ", " + DataManager.GetClassByIndex(data.playerData.currentClass).Name);
@@ -85,7 +85,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                 Vector2 stringsize = _gText.MeasureString("XXXXXXXXXXX XXXXXXXXXXXXXX");
                 Width = (int)stringsize.X;
-                Height = (int)stringsize.Y;
+                Height = (int)stringsize.Y + HeightEdges();
 
                 _gText.CenterOnWindow(this);
             }
@@ -95,7 +95,7 @@ namespace RiverHollow.GUIComponents.Screens
                 bool rv = false;
                 if (Contains(mouse))
                 {
-                    Load(Data);
+                    Load(Data.saveFile);
                     MapManager.PopulateMaps(true);
                     MapManager.EnterBuilding(PlayerManager.Buildings[0]);
                     GoToHUDScreen();
