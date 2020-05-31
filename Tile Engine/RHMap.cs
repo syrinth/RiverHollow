@@ -1039,12 +1039,12 @@ namespace RiverHollow.Tile_Engine
             if (tile == null) { return rv; }
 
             if(tile.GetTravelPoint() != null) {
-                RHTile.TileObject obj = tile.GetTravelPoint();
+                TravelPoint obj = tile.GetTravelPoint();
 
-                if (PlayerManager.PlayerInRange(obj.TravelPointInfo.CollisionBox))
+                if (PlayerManager.PlayerInRange(obj.CollisionBox))
                 {
-                    if (obj.PlayerBuilding != null) { MapManager.EnterBuilding(obj.PlayerBuilding); }
-                    else { MapManager.ChangeMaps(PlayerManager.World, this.Name, obj.TravelPointInfo); }
+                    if (obj.BuildingID != -1) { MapManager.EnterBuilding(PlayerManager.Buildings.Find(x => x.PersonalID == obj.BuildingID)); }
+                    else { MapManager.ChangeMaps(PlayerManager.World, this.Name, obj); }
                 }
             }
             else if (tile.GetWorldObject() != null)
@@ -1420,7 +1420,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     found = true;
                     GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Door;
-                    GraphicCursor.Alpha = (PlayerManager.PlayerInRange(t.GetTravelPoint().TravelPointInfo.CollisionBox) ? 1 : 0.5f);
+                    GraphicCursor.Alpha = (PlayerManager.PlayerInRange(t.GetTravelPoint().CollisionBox) ? 1 : 0.5f);
                 }
 
                 foreach (WorldActor c in _liActors)
@@ -2231,7 +2231,7 @@ namespace RiverHollow.Tile_Engine
         public Vector2 Center => new Vector2(Position.X + TileSize/2, Position.Y + TileSize/2);
         public Rectangle Rect => Util.FloatRectangle(Position, TileSize, TileSize);
 
-        TileObject _tileMapObj;
+        TravelPoint _travelPoint;
         CombatActor _combatActor;
         public CombatActor Character => _combatActor;
 
@@ -2457,19 +2457,14 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public void SetMapObject(Building b)
-        {
-            _tileMapObj = new TileObject(b);
-        }
-
         public void SetMapObject(TravelPoint obj)
         {
-            _tileMapObj = new TileObject(obj);
+            _travelPoint = obj;
         }
 
-        public TileObject GetTravelPoint()
+        public TravelPoint GetTravelPoint()
         {
-            return _tileMapObj;
+            return _travelPoint;
         }
 
         public bool Contains(Villager n)
@@ -2723,25 +2718,6 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
         #endregion
-
-        public class TileObject
-        {
-            Building _building;
-            public Building PlayerBuilding => _building;
-            TravelPoint _travelPoint;
-            public TravelPoint TravelPointInfo => _travelPoint;
-
-            public TileObject(Building b)
-            {
-                _travelPoint = new TravelPoint(b.TravelBox, b.MapName, b.PersonalID);
-                _building = b;
-            }
-
-            public TileObject(TravelPoint rect)
-            {
-                _travelPoint = rect;
-            }
-        }
     }
 
     public class ShopData
@@ -2788,7 +2764,7 @@ namespace RiverHollow.Tile_Engine
 
     public class TravelPoint
     {
-        int _ibuildingID;
+        int _ibuildingID = -1;
         public int BuildingID => _ibuildingID;
         Rectangle _rCollisionBox;
         public Rectangle CollisionBox => _rCollisionBox;

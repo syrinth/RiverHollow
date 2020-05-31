@@ -1,21 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Actors;
 using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIObjects;
 using RiverHollow.Misc;
-using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.TravelManager;
-using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow.Game_Managers
 {

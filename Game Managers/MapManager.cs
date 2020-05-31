@@ -92,10 +92,10 @@ namespace RiverHollow.Game_Managers
             if (c == PlayerManager.World)
             {
                 //Handling for if the player is currently in a building and is leaving it
-                if (!string.IsNullOrEmpty(PlayerManager._sBuildingID))
+                if (PlayerManager._iBuildingID != -1)
                 {
-                    entryPoint = _tileMaps[travelPoint.LinkedMap].DictionaryTravelPoints[PlayerManager._sBuildingID];
-                    PlayerManager._sBuildingID = string.Empty;
+                    entryPoint = _tileMaps[travelPoint.LinkedMap].DictionaryTravelPoints[PlayerManager.Buildings.Find(x => x.PersonalID == PlayerManager._iBuildingID).MapName];
+                    PlayerManager._iBuildingID = -1;
                 }
 
                 FadeToNewMap(_tileMaps[travelPoint.LinkedMap], entryPoint.FindLinkedPointPosition(travelPoint.Center, c));
@@ -129,7 +129,7 @@ namespace RiverHollow.Game_Managers
         public static void EnterBuilding(Building b)
         {
             Rectangle rectEntrance = Rectangle.Empty;
-            PlayerManager._sBuildingID = b.PersonalID.ToString();
+            PlayerManager._iBuildingID = b.PersonalID;
 
             foreach (string s in _tileMaps[b.MapName].DictionaryTravelPoints.Keys)
             {

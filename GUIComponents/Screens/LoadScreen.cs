@@ -97,7 +97,9 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     Load(Data.saveFile);
                     MapManager.PopulateMaps(true);
-                    MapManager.EnterBuilding(PlayerManager.Buildings[0]);
+                    //MapManager.EnterBuilding(PlayerManager.Buildings[0]);
+                    PlayerManager._iBuildingID = PlayerManager.Buildings[0].PersonalID;
+                    Camera.SetObserver(PlayerManager.World);
                     GoToHUDScreen();
                     rv = true;
                 }

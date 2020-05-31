@@ -78,7 +78,6 @@ namespace RiverHollow
             _effectLights = Content.Load<Effect>(@"Effects\lighteffect");
 
             PlayerManager.Initialize();
-            Camera.SetObserver(PlayerManager.World);
 
             MissionManager.Load();
 
@@ -278,6 +277,7 @@ namespace RiverHollow
             {
                 PlayerManager.AddToQuestLog(GameManager.DiQuests[2]);
             }
+            Camera.SetObserver(PlayerManager.World);
             GoToHUDScreen();
         }
 

@@ -1734,7 +1734,7 @@ namespace RiverHollow.Actors
 
                         if (_liTilePath.Count > 0 && _liTilePath[0] != null && _liTilePath[0].GetTravelPoint() != null)
                         {
-                            MapManager.ChangeMaps(this, CurrentMapName, MapManager.CurrentMap.DictionaryTravelPoints[_liTilePath[0].GetTravelPoint().TravelPointInfo.LinkedMap]);
+                            MapManager.ChangeMaps(this, CurrentMapName, MapManager.CurrentMap.DictionaryTravelPoints[_liTilePath[0].GetTravelPoint().LinkedMap]);
                         }
                     }
                     else
