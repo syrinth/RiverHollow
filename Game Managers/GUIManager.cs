@@ -67,11 +67,6 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void ClearScreen()
-        {
-            _currentGUIScreen = null;
-            GameManager.Unpause();
-        }
         public static bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;

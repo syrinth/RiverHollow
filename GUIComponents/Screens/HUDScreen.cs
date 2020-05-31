@@ -128,6 +128,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
 
+        /// <summary>
+        /// Whenever the call to Sync is made, ensure the HUDInventory displays the correct information
+        /// </summary>
+        public override void Sync()
+        {
+            _gInventory.SyncItems();
+        }
+
         #region Text Window
         /// <summary>
         /// Overrides the Screens OpenTextWindow method to first hide any HUD components desired.
@@ -237,44 +245,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _fBarFade += FADE_OUT;
                 }
 
-                if (_bFadeItemsOut)
-                {
-                    float currFade = _fItemFade;
-                    if (currFade - FADE_OUT > FADE_OUT)
-                    {
-                        _fItemFade -= FADE_OUT;
-                        foreach (GUIItemBox gib in _liItems)
-                        {
-                            gib.SetItemAlpha(_fItemFade);
-                        }
-                    }
-                    else
-                    {
-                        currFade = FADE_OUT;
-                        _bFadeItemsOut = false;
-                        _bFadeItemsIn = true;
-                        SyncItems();
-                    }
-                }
-                if (_bFadeItemsIn)
-                {
-                    float currFade = _fItemFade;
-                    if (currFade < 1)
-                    {
-                        _fItemFade += FADE_OUT;
-                    }
-                    else
-                    {
-                        _bFadeItemsIn = false;
-                    }
+                UpdateItemFade(gTime);
 
-                    foreach (GUIItemBox gib in _liItems)
-                    {
-                        gib.SetItemAlpha(_fItemFade);
-                    }
-                }
             }
-
             if (startFade != _fBarFade)
             {
                 Alpha(_fBarFade);
@@ -284,6 +257,50 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     gib.SetAlpha(Alpha());
                 }
                 _btnChangeRow.Alpha(Alpha());
+            }
+        }
+
+        /// <summary>
+        /// Handles the fading in and out of Items for when we switch rows
+        /// </summary>
+        /// <param name="gTime"></param>
+        private void UpdateItemFade(GameTime gTime)
+        {
+            if (_bFadeItemsOut)
+            {
+                float currFade = _fItemFade;
+                if (currFade - FADE_OUT > FADE_OUT)
+                {
+                    _fItemFade -= FADE_OUT;
+                    foreach (GUIItemBox gib in _liItems)
+                    {
+                        gib.SetItemAlpha(_fItemFade);
+                    }
+                }
+                else
+                {
+                    currFade = FADE_OUT;
+                    _bFadeItemsOut = false;
+                    _bFadeItemsIn = true;
+                    SyncItems();
+                }
+            }
+            if (_bFadeItemsIn)
+            {
+                float currFade = _fItemFade;
+                if (currFade < 1)
+                {
+                    _fItemFade += FADE_OUT;
+                }
+                else
+                {
+                    _bFadeItemsIn = false;
+                }
+
+                foreach (GUIItemBox gib in _liItems)
+                {
+                    gib.SetItemAlpha(_fItemFade);
+                }
             }
         }
 
@@ -367,6 +384,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
 
             _bFadeItemsOut = true;
+            _bFadeItemsIn = false;
         }
 
         public void SyncItems()

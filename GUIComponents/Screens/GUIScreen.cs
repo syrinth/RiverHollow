@@ -124,9 +124,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
 
-        public virtual void Sync() { }
-
-        //Hover Window Code
+        #region Hover Window Code
         public virtual void CloseHoverWindow() {
             RemoveControl(_guiHoverWindow);
             _guiHoverWindow = null;
@@ -140,8 +138,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _guiHoverObject = hoverObject;
             AddControl(_guiHoverWindow);
         }
+        #endregion
 
-        //Hover Text Window
+        #region Hover Text Window
         public virtual bool CloseTextWindow(GUITextWindow win) {
             bool rv = false;
             if (win == _guiTextWindow)
@@ -157,6 +156,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
         public bool IsTextWindowOpen() { return _guiTextWindow != null; }
+        #endregion
 
         /// <summary>
         /// Removes any previous existing Text Windows fromthe Control, then determines whether

@@ -76,6 +76,16 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             }
         }
 
+        public override void Update(GameTime gTime)
+        {
+            base.Update(gTime);
+            if (_item.DoesItStack)
+            {
+                _gTextNum = new GUIText(_item.Number.ToString(), true, FONT_NUMBER_DISPLAY);
+                _gTextNum.AnchorToInnerSide(this, SideEnum.BottomRight, GUIManager.STANDARD_MARGIN);
+            }
+        }
+
         public override bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = false;
@@ -157,7 +167,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         public void SetItem(Item it)
         {
             _item = it;
-            if (_gTextNum != null) { _gTextNum.SetText(""); }
             if(_item != null)
             {
                 _gItem = new GUIImage(_item.SourceRectangle, ScaledTileSize, ScaledTileSize, _item.Texture);
