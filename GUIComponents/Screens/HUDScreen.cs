@@ -128,14 +128,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             return rv;
         }
 
-        /// <summary>
-        /// Whenever the call to Sync is made, ensure the HUDInventory displays the correct information
-        /// </summary>
-        public override void Sync()
-        {
-            _gInventory.SyncItems();
-        }
-
         #region Text Window
         /// <summary>
         /// Overrides the Screens OpenTextWindow method to first hide any HUD components desired.

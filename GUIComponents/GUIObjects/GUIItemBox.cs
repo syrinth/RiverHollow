@@ -81,7 +81,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             base.Update(gTime);
             if (_item.DoesItStack)
             {
-                _gTextNum = new GUIText(_item.Number.ToString(), true, FONT_NUMBER_DISPLAY);
+                _gTextNum.SetText(_item.Number.ToString());
                 _gTextNum.AnchorToInnerSide(this, SideEnum.BottomRight, GUIManager.STANDARD_MARGIN);
             }
         }
