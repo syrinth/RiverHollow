@@ -26,7 +26,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public delegate void BtnClickDelegate ();
         private BtnClickDelegate _delAction;
 
-        internal static WindowData BaseBtn = new WindowData(96, 0, 1, 14);
+        internal static WindowData BaseBtn = new WindowData(96, 0, 2, 12);
 
         public GUIButton(string text, BtnClickDelegate del = null)
         {

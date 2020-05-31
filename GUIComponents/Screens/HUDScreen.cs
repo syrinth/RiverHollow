@@ -1838,7 +1838,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     {
                         int statSpacing = 10;
                         _character = selectedAdventurer;
-                        _btnMove = new GUIButton("Move", 128, 32);
+                        _btnMove = new GUIButton("Move");
                         _btnMove.AnchorToInnerSide(_window, SideEnum.BottomRight);
 
                         string nameLen = "";

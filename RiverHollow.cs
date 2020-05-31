@@ -216,6 +216,11 @@ namespace RiverHollow
                 CombatManager.DrawUpperCombatLayer(spriteBatch);
                 spriteBatch.End();
             }
+            else
+            {
+                GraphicsDevice.SetRenderTarget(_renderMain);
+                GraphicsDevice.Clear(Color.Black);
+            }
 
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(Color.Black);

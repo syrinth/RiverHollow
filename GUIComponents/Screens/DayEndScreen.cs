@@ -2,28 +2,30 @@
 using RiverHollow.Game_Managers.GUIObjects;
 using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RiverHollow.GUIObjects;
 using static RiverHollow.GUIObjects.GUIObject;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
     public class DayEndScreen : GUIScreen
     {
+        private GUIText _gText;
         private GUIButton _btnOK;
-        private GUITextWindow _moneyWindow;
+        private GUIWindow _moneyWindow;
 
         public DayEndScreen()
         {
             GameManager.ShowMap(false);
-            _btnOK = new GUIButton( "OK", 128, 64);
-            _btnOK.AnchorToScreen(this, SideEnum.Bottom);
+
             string totalVal = String.Format("Total: {0}", GameManager.ShippingGremlin.SellAll());
-            _moneyWindow = new GUITextWindow(totalVal);
+            _moneyWindow = new GUIWindow();
             _moneyWindow.CenterOnScreen(this);
+
+            _gText = new GUIText(totalVal);
+            _gText.AnchorToInnerSide(_moneyWindow, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
+
+            _btnOK = new GUIButton("OK");
+            _btnOK.AnchorToInnerSide(_moneyWindow, SideEnum.BottomRight, GUIManager.STANDARD_MARGIN);
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)

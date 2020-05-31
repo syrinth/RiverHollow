@@ -132,8 +132,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
 
-            _gNext = new GUIImage(new Rectangle(288, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, @"Textures\Dialog");     //???
-            _gNext.AnchorToInnerSide(this, SideEnum.BottomRight);
+            if (_liText.Count > 1)
+            {
+                _gNext = new GUIImage(new Rectangle(288, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, @"Textures\Dialog");     //???
+                _gNext.AnchorToInnerSide(this, SideEnum.BottomRight);
+            }
 
             AnchorToScreen(SideEnum.Bottom, SpaceFromBottom);
         }
@@ -289,7 +292,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         private bool ShowNextButton()
         {
-            return Paused && _gNext != null;
+            return Paused && _gNext != null && _iCurrText < _liText.Count -1;
         }
 
         public bool NextText()

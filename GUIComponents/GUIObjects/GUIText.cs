@@ -122,7 +122,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
             return _sText;
         }
 
-
         public void Insert(string s, int loc)
         {
             if (_sText.Length > 0)
