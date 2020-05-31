@@ -166,9 +166,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
                 if (_item.DoesItStack)
                 {
-                    _gTextNum = new GUIText(_item.Number.ToString(), true, @"Fonts\DisplayFont");
+                    _gTextNum = new GUIText(_item.Number.ToString(), true, FONT_NUMBER_DISPLAY);
                     _gTextNum.SetColor(Color.White);
-                    _gTextNum.AnchorToInnerSide(this, SideEnum.BottomRight, 10);
+                    _gTextNum.AnchorToInnerSide(this, SideEnum.BottomRight, GUIManager.STANDARD_MARGIN);
                     AddControl(_gTextNum);
                 }
                 if (_bCrafting)

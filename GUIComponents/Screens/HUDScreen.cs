@@ -21,6 +21,7 @@ using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using static RiverHollow.Game_Managers.GUIObjects.GUIButton;
 using System.Linq;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.BitmapFonts;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -614,7 +615,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 GUIWindow _window;
                 Quest _quest;
                 public Quest TheQuest => _quest;
-                SpriteFont _font;
+                BitmapFont _font;
                 private int _index;
                 public int Index { get => _index; }
                 public bool ClearThis;
@@ -629,7 +630,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     _window = new GUIWindow(GUIWindow.RedWin, boxWidth, boxHeight);
                     _window.AnchorToInnerSide(win, SideEnum.TopLeft);
 
-                    _font = DataManager.GetFont(@"Fonts\Font");
+                    _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
                     _quest = null;
                 }
 
@@ -955,7 +956,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 EquipWindow _equipWindow;
 
                 ClassedCombatant _character;
-                SpriteFont _font;
+                BitmapFont _font;
 
                 List<SpecializedBox> _liGearBoxes;
 
@@ -983,7 +984,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     //_winClothes.AnchorAndAlignToObject(WinDisplay, SideEnum.Bottom, SideEnum.Left);
 
                     _character = c;
-                    _font = DataManager.GetFont(@"Fonts\Font");
+                    _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
 
                     _liGearBoxes = new List<SpecializedBox>();
                     Load();
@@ -1455,7 +1456,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
             public class FriendshipBox : GUIWindow
             {
-                private SpriteFont _font;
+                private BitmapFont _font;
                 GUIText _gTextName;
                 GUIImage _gAdventure;
                 GUIImage _gGift;
@@ -1464,7 +1465,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 public FriendshipBox(Villager c, int mainWidth) : base(GUIWindow.BrownWin, mainWidth, 16)
                 {
                     _liFriendship = new List<GUIImage>();
-                    _font = DataManager.GetFont(@"Fonts\Font");
+                    _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
                     _gTextName = new GUIText("XXXXXXXXXX");
                     if (c.GetFriendshipLevel() == 0)
                     {
@@ -2044,7 +2045,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         static GUIText _gText;
         public HUDCalendar() : base(GUIWindow.BrownWin, ScaledTileSize, ScaledTileSize)
         {
-            _gText = new GUIText("Day XX, XX:XX", DataManager.GetFont(@"Fonts\Font"));
+            _gText = new GUIText("Day XX, XX:XX", DataManager.GetBitMapFont(DataManager.FONT_MAIN));
 
             _gText.AnchorToInnerSide(this, SideEnum.TopLeft);
             Resize();

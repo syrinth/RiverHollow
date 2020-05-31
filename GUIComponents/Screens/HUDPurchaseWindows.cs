@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Actors;
 using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
@@ -238,7 +239,7 @@ namespace RiverHollow.GUIComponents.Screens
             Building _bldg;
             public Building Building => _bldg;
             GUISprite _giBuilding;
-            SpriteFont _font;
+            BitmapFont _font;
             List<GUIObject> _liReqs;
             Merchandise _merch;
             GUIWindow _bldgWindow;
@@ -256,7 +257,7 @@ namespace RiverHollow.GUIComponents.Screens
                 if (_merch.MerchType == Merchandise.ItemType.Building)
                 {
                     _bldg = DataManager.GetBuilding(_merch.MerchID);
-                    _font = DataManager.GetFont(@"Fonts\Font");
+                    _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
 
                     float newScale = (float)(Scale * 0.75);
                     int width = (int)(TileSize * 9 * newScale);
@@ -467,7 +468,7 @@ namespace RiverHollow.GUIComponents.Screens
 
     public class BuyItemBox : GUIWindow
     {
-        private SpriteFont _font;
+        private BitmapFont _font;
         GUIImage _giItem;
         GUIText _gTextName;
         GUIMoneyDisplay _gMoney;
@@ -476,7 +477,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public BuyItemBox(Item i, int cost, int mainWidth) : base(GUIWindow.BrownWin, mainWidth, 16)
         {
-            _font = DataManager.GetFont(@"Fonts\Font");
+            _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
             Cost = cost;
             itemForSale = i;
             _giItem = new GUIImage(itemForSale.SourceRectangle, TileSize, TileSize, itemForSale.Texture);

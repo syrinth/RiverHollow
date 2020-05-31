@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIObjects;
@@ -11,7 +12,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
     {
         public static int BTN_WIDTH = 128;
         public static int BTN_HEIGHT = 64;
-        protected SpriteFont _font;
+        protected BitmapFont _font;
         public bool IsMouseHovering = false;
 
         private GUIObject _btnObject;

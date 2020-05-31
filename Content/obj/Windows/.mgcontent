@@ -4,8 +4,6 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/Font.spritefont</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/DisplayFont.spritefont</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Dialog.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/portraits.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/tree.png</File>
@@ -21,7 +19,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/AbilityAnimations.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/TownUpgrades.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/Adventurers.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/MenuFont.spritefont</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CombatActions.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Songs/GA03-In Mothers Arms-Huckabay-96.mp3</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Effects/126426__cabeeno-rossley__timer-ends-time-up.wav</File>
@@ -79,8 +76,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/FangedFur.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/FontBattle.fnt</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/FontBattle_0.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/FontDefault.fnt</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/Lettering.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Bow/660.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Knife/630.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Orb/620.png</File>
@@ -201,5 +196,11 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC_00.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC_00.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC_13.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/Font_Number_Display.fnt</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/Font_Number_Display_0.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/Font_Main.fnt</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/Font_Main_0.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/Font_Stat_Display.fnt</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/Font_Stat_Display_0.png</File>
   </SourceFiles>
 </SourceFileCollection>

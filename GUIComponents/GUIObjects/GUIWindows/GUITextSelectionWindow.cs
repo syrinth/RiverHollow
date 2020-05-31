@@ -4,11 +4,7 @@ using System.Collections.Generic;
 using RiverHollow.Game_Managers.GUIObjects;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.GUIObjects;
-using RiverHollow.Game_Managers.GUIComponents.Screens;
-using RiverHollow.Actors;
-using RiverHollow.Misc;
 using RiverHollow.GUIComponents.GUIObjects;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
@@ -19,7 +15,6 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         protected GUIImage _giSelection;
         protected int _iKeySelection;
 
-        protected int _iOptionsOffsetY;
         protected Dictionary<int, SelectionData> _diOptions;
 
         public GUITextSelectionWindow(string selectionText, bool open = true)
@@ -36,10 +31,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         public void PostParse()
         {
             ParseText(_sStatement);
-            _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
-            _iOptionsOffsetY = Math.Max(_iCharHeight, (int)((_numReturns + 1) * _iCharHeight));
-            _giSelection = new GUIImage(new Rectangle(288, 96, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");
-            _giSelection.AnchorAndAlignToObject(_giText, SideEnum.Bottom, SideEnum.Left);
+            _giText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
+            _giSelection = new GUIImage(new Rectangle(288, 96, 8, 9), GameManager.ScaleIt(8), GameManager.ScaleIt(9), @"Textures\Dialog");
+            _giSelection.AnchorAndAlignToObject(_giText, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
             AddControl(_giSelection);
 
             AssignToColumn();
@@ -189,7 +183,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
             public string Text => _gText.Text;
 
-            public SelectionData(string text, string action = "", string fontName = @"Fonts\Font")
+            public SelectionData(string text, string action = "", string fontName = DataManager.FONT_MAIN)
             {
                 _gText = new GUIText(text, true, fontName);
                 _sAction = action;

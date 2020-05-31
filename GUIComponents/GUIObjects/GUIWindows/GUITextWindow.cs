@@ -11,14 +11,14 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 {
     public class GUITextWindow : GUIWindow
     {
-        GUIImage _next;
+        GUIImage _gNext;
         protected GUIText _giText;
         protected GUIImage _giPortrait;
         List<string> _liText;
 
         public double Duration;
 
-        protected const int MAX_ROWS = 6;
+        protected const int MAX_ROWS = 7;
 
         #region Parsing
         protected int _iCurrText = 0;
@@ -75,7 +75,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             _giText.SetText(totalVal);
             Position(position);
 
-            _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
+            _giText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
             Resize();
         }
 
@@ -88,7 +88,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
             Height = _iCharHeight;
             Width = (int)_giText.TextSize.X;
-            _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
+            _giText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
             Resize();
         }
 
@@ -110,7 +110,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         protected void ConfigureHeight()
         {
-            Height = Math.Max(Height, (_iCharHeight * MAX_ROWS) + HeightEdges());
+            Height = Math.Max(Height, (_iCharHeight * MAX_ROWS) + HeightEdges() + (2 * GUIManager.STANDARD_MARGIN));
         }
 
         /// <summary>
@@ -130,10 +130,10 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 AddControl(_giPortrait);
             }
 
-            _giText.AnchorToInnerSide(this, SideEnum.TopLeft);
+            _giText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
 
-            _next = new GUIImage(new Rectangle(288, 64, 32, 32), _iCharHeight, _iCharHeight, @"Textures\Dialog");     //???
-            _next.AnchorToInnerSide(this, SideEnum.BottomRight);
+            _gNext = new GUIImage(new Rectangle(288, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, @"Textures\Dialog");     //???
+            _gNext.AnchorToInnerSide(this, SideEnum.BottomRight);
 
             AnchorToScreen(SideEnum.Bottom, SpaceFromBottom);
         }
@@ -148,7 +148,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             { 
                 if (ShowNextButton())
                 {
-                    _next.Update(gTime);
+                    _gNext.Update(gTime);
                 }
 
                 if (Duration > 0) { Duration -= gTime.ElapsedGameTime.TotalSeconds; }
@@ -170,7 +170,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 _giText.Draw(spriteBatch);
                 if (ShowNextButton())
                 {
-                    _next.Draw(spriteBatch);
+                    _gNext.Draw(spriteBatch);
                 }
 
                 if (_giPortrait != null)
@@ -257,7 +257,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             {
                 Vector2 measure = _giText.MeasureString(line + word);
 
-                if (measure.Length() >= MidWidth() ||
+                if (measure.Length() >= MidWidth() - GUIManager.STANDARD_MARGIN * 2 ||
                     _numReturns == MAX_ROWS - 1 && measure.Length() >= (Width) - _giText.CharHeight)
                 {
                     returnString = returnString + line + '\n';
@@ -289,7 +289,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
 
         private bool ShowNextButton()
         {
-            return Paused && _next != null;
+            return Paused && _gNext != null;
         }
 
         public bool NextText()

@@ -27,11 +27,13 @@ namespace RiverHollow.Game_Managers
         public const string FOLDER_MONSTERS = @"Textures\Actors\Monsters\";
         public const string FOLDER_PLAYER = @"Textures\Actors\Player\";
         public const string FOLDER_TEXTFILES = @"Data\Text Files\";
+        public const string FONT_MAIN = @"Fonts\Font_Main";
+        public const string FONT_NUMBER_DISPLAY = @"Fonts\Font_Number_Display";
+        public const string FONT_STAT_DISPLAY = @"Fonts\Font_Stat_Display";
         #endregion
 
         #region Dictionaries
         static Dictionary<string, Texture2D> _diTextures;
-        static Dictionary<string, SpriteFont> _diFonts;
         static Dictionary<string, BitmapFont> _diBMFonts;
         static Dictionary<string, string> _diGameText;
         static Dictionary<int, string> _diMonsterInfo;
@@ -91,8 +93,7 @@ namespace RiverHollow.Game_Managers
             //Read in Content and allocate the appropriate Dictionaries
             LoadGUIs(Content);
             LoadIcons(Content);
-            LoadFonts(Content);
-            LoadBMFont(Content);
+            LoadBMFonts(Content);
             LoadTextFiles(Content);
             LoadCharacters(Content);
             LoadMerchandise(Content);
@@ -214,23 +215,14 @@ namespace RiverHollow.Game_Managers
             _diTextures.Add(texture, Content.Load<Texture2D>(texture));
         }
 
-        private static void LoadFonts(ContentManager Content)
-        {
-            _diFonts = new Dictionary<string, SpriteFont>();
-            AddFont(@"Fonts\DisplayFont", Content);
-            AddFont(@"Fonts\Font", Content);
-            AddFont(@"Fonts\MenuFont", Content);
-        }
-        private static void AddFont(string font, ContentManager Content)
-        {
-            _diFonts.Add(font, Content.Load<SpriteFont>(font));
-        }
 
-        private static void LoadBMFont(ContentManager Content)
+        private static void LoadBMFonts(ContentManager Content)
         {
             _diBMFonts = new Dictionary<string, BitmapFont>();
             AddBMFont(@"Fonts\FontBattle", Content);
-            AddBMFont(@"Fonts\FontDefault", Content);
+            AddBMFont(FONT_MAIN, Content);
+            AddBMFont(FONT_NUMBER_DISPLAY, Content);
+            AddBMFont(FONT_STAT_DISPLAY, Content);
         }
         private static void AddBMFont(string font, ContentManager Content)
         {
@@ -548,10 +540,6 @@ namespace RiverHollow.Game_Managers
             return _diTextures[texture];
         }
 
-        public static SpriteFont GetFont(string font)
-        {
-            return _diFonts[font];
-        }
         public static BitmapFont GetBitMapFont(string font)
         {
             return _diBMFonts[font];

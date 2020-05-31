@@ -65,7 +65,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                 Height = _gStatement.Height;
             }
 
-            _gStatement.AnchorToInnerSide(this, SideEnum.TopLeft);
+            _gStatement.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
             _gStatement.SetColor(Color.White);
 
             _gText = new GUIText();

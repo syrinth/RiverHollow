@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIObjects;
 
@@ -10,7 +11,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         protected string _sText;
         protected string _sFullText;
         public string Text => _sText;
-        protected SpriteFont _font;
+        protected BitmapFont _font;
 
         protected Vector2 _vTextSize;
         public Vector2 TextSize => _vTextSize;
@@ -34,15 +35,15 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public GUIText()
         {
             _sText = "";
-            _font = DataManager.GetFont(@"Fonts\Font");
+            _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
             SetDimensions("X");
         }
 
-        public GUIText(int val, bool printAll = true, string f = @"Fonts\Font") : this(val.ToString(), printAll, f){}
+        public GUIText(int val, bool printAll = true, string f = DataManager.FONT_MAIN) : this(val.ToString(), printAll, f){}
 
-        public GUIText(string text, bool printAll = true, string f = @"Fonts\Font") : this()
+        public GUIText(string text, bool printAll = true, string f = DataManager.FONT_MAIN) : this()
         {
-            _font = DataManager.GetFont(f);
+            _font = DataManager.GetBitMapFont(f);
             PrintAll = printAll;
 
             if (!printAll) { _sFullText = text; }
@@ -54,7 +55,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             SetDimensions(text);
         }
 
-        public GUIText(string text, SpriteFont font) : this(text)
+        public GUIText(string text, BitmapFont font) : this(text)
         {
             _font = font;
         }
