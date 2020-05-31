@@ -19,7 +19,7 @@ namespace RiverHollow.Game_Managers
 
         public static int STANDARD_MARGIN = 4;
         public static int MINI_BTN_HEIGHT = ScaledTileSize;
-        public static int MINI_BTN_WIDTH = 128;
+        public static int MINI_BTN_WIDTH = 168;
 
         public static int MAIN_COMPONENT_WIDTH = RiverHollow.ScreenWidth / 3;
         public static int MAIN_COMPONENT_HEIGHT = RiverHollow.ScreenWidth / 3;

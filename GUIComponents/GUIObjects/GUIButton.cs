@@ -10,7 +10,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class GUIButton : GUIObject
     {
-        public static int BTN_WIDTH = 128;
+        public static int BTN_WIDTH = 208;
         public static int BTN_HEIGHT = 64;
         protected BitmapFont _font;
         public bool IsMouseHovering = false;
@@ -45,7 +45,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
             Width = width;
             Height = height;
             _gText = new GUIText(text);
-            _gText.SetColor(Color.Red);
             _gText.CenterOnWindow(_gWindow);
 
             _btnObject = _gWindow;

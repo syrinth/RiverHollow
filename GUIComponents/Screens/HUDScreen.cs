@@ -1022,9 +1022,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     for (int i = 0; i < GameManager.MAX_NAME_LEN; i++) { nameLen += "X"; }
 
                     _gName = new GUIText(nameLen);
-                    _gName.AnchorToInnerSide(_winName, SideEnum.TopLeft, SPACING);
+                    _gName.AnchorToInnerSide(_winName, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
                     _gClass = new GUIText("XXXXXXXX");
-                    _gClass.AnchorAndAlignToObject(_gName, SideEnum.Right, SideEnum.Bottom, 10);
+                    _gClass.AnchorAndAlignToObject(_gName, SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN);
 
                     _sBoxHead = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Head.GetItem(), FindMatchingItems);
                     _sBoxArmor = new SpecializedBox(_character.CharacterClass.ArmorType, _character.Armor.GetItem(), FindMatchingItems);
