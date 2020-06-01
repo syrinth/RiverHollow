@@ -1181,37 +1181,46 @@ namespace RiverHollow.Tile_Engine
                     _targetTile = MapManager.RetrieveTile(mouseLocation);
                     if (_targetTile != null && PlayerManager.PlayerInRange(_targetTile.Center.ToPoint()))
                     {
-                        //Handles interactions with objects on the tile, both actual and Shadow
-                        rv = ProcessLeftButtonClickOnObject(mouseLocation);
 
-                        //Handles interactions with a tile that is actually empty, ignores Shadow Tiles
-                        rv = ProcessLeftButtonClickOnEmptyTile(mouseLocation);
-
-                        //Handles interacting with NPCs
-                        foreach (WorldActor c in _liActors)
+                        if (InventoryManager.GetCurrentItem() != null && InventoryManager.GetCurrentItem().IsTool())
                         {
-                            if (c.IsAdventurer())
+                            Tool currentTool = (Tool)InventoryManager.GetCurrentItem();
+                            rv = PlayerManager.SetTool(currentTool, mouseLocation);
+                        }
+                        else
+                        {
+                            //Handles interactions with objects on the tile, both actual and Shadow
+                            rv = ProcessLeftButtonClickOnObject(mouseLocation);
+
+                            //Handles interactions with a tile that is actually empty, ignores Shadow Tiles
+                            rv = ProcessLeftButtonClickOnEmptyTile(mouseLocation);
+
+                            //Handles interacting with NPCs
+                            foreach (WorldActor c in _liActors)
                             {
-                                int row = 0;
-                                int col = 0;
-                                Adventurer w = (Adventurer)c;
-                                if (w.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(w.CharCenter) &&
-                                    InventoryManager.HasSpaceInInventory(w.WhatAreYouHolding(), 1, ref row, ref col, true))
+                                if (c.IsAdventurer())
                                 {
-                                    InventoryManager.AddItemToInventorySpot(DataManager.GetItem(w.TakeItem()), row, col);
-                                    rv = true;
+                                    int row = 0;
+                                    int col = 0;
+                                    Adventurer w = (Adventurer)c;
+                                    if (w.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(w.CharCenter) &&
+                                        InventoryManager.HasSpaceInInventory(w.WhatAreYouHolding(), 1, ref row, ref col, true))
+                                    {
+                                        InventoryManager.AddItemToInventorySpot(DataManager.GetItem(w.TakeItem()), row, col);
+                                        rv = true;
+                                    }
                                 }
-                            }
-                            else if (c.IsNPC())
-                            {
-                                Villager n = (Villager)c;
-                                if (InventoryManager.GetCurrentItem() != null &&
-                                    n.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(n.CharCenter) &&
-                                    InventoryManager.GetCurrentItem().ItemType != Item.ItemEnum.Tool &&
-                                    InventoryManager.GetCurrentItem().ItemType != Item.ItemEnum.Equipment)
+                                else if (c.IsNPC())
                                 {
-                                    n.Gift(InventoryManager.GetCurrentItem());
-                                    rv = true;
+                                    Villager n = (Villager)c;
+                                    if (InventoryManager.GetCurrentItem() != null &&
+                                        n.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(n.CharCenter) &&
+                                        InventoryManager.GetCurrentItem().ItemType != Item.ItemEnum.Tool &&
+                                        InventoryManager.GetCurrentItem().ItemType != Item.ItemEnum.Equipment)
+                                    {
+                                        n.Gift(InventoryManager.GetCurrentItem());
+                                        rv = true;
+                                    }
                                 }
                             }
                         }
@@ -1315,25 +1324,12 @@ namespace RiverHollow.Tile_Engine
                         MapManager.RemoveWorldObject(p);
                         p.RemoveSelfFromTiles();
                     }   //If we failed to harvest, water the plant if possible
-                    else if (_targetTile.Flooring != null && _targetTile.Flooring.IsEarth())
-                    {
-                        rv = PlayerManager.SetTool(GameManager.ToolEnum.WateringCan, mouseLocation);
-                    }
                 }
                 else if (obj.IsForageable())    //Remove self from the map and harvest the item
                 {
                     InventoryManager.AddToInventory(DataManager.GetItem(((Forageable)obj).ForageItem));
                     MapManager.RemoveWorldObject(obj);
                     obj.RemoveSelfFromTiles();
-                }
-                else if (obj.IsDestructible())  //Handle damaging destructibles
-                {
-                    Destructible d = (Destructible)_targetTile.GetWorldObject();
-
-                    //Sets the appropriate player tool to use
-                    if (d.WhichTool == ToolEnum.Pick) { rv = PlayerManager.SetTool(GameManager.ToolEnum.Pick, mouseLocation); }
-                    else if (d.WhichTool == ToolEnum.Axe) { rv = PlayerManager.SetTool(GameManager.ToolEnum.Axe, mouseLocation); }
-                    else if (d.WhichTool == ToolEnum.Lantern) { rv = PlayerManager.SetTool(GameManager.ToolEnum.Lantern, mouseLocation); }
                 }
             }
 
@@ -1352,31 +1348,29 @@ namespace RiverHollow.Tile_Engine
 
             //Get any actual tiles, the false excludes Shadow Tiles
             WorldObject obj = _targetTile.GetWorldObject(false);
-            if (obj == null)    //Only procees if tile is empty
-            {
-                //If the player is currently holding a StaticItem, we need to place it
-                //Do not, however, allowt he placing of StaticItems on combat maps.
-                StaticItem selectedItem = InventoryManager.GetCurrentStaticItem();
-                if (!IsCombatMap && selectedItem != null)
-                {
-                    //Take the actual WorldObject item from the item and attempt to place it on the map
-                    WorldItem newItem = selectedItem.GetWorldItem();
-                    if (MapManager.PlacePlayerObject(newItem))
-                    {
-                        newItem.SetMapName(this.Name);      //Assign the map name tot he WorldItem
-                        selectedItem.Remove(1);             //Remove one of them from the inventory
 
-                        //If the item placed was a wall object, we need to adjust it based off any adjacent walls
-                        if (newItem.Type == WorldObject.ObjectType.Wall)
+            Item currentItem = InventoryManager.GetCurrentItem();
+            if (obj == null && currentItem != null && currentItem.IsStaticItem())    //Only procees if tile is empty and we are holding an item
+            {
+                    //If the player is currently holding a StaticItem, we need to place it
+                    //Do not, however, allow the placing of StaticItems on combat maps.
+                    StaticItem selectedItem = InventoryManager.GetCurrentStaticItem();
+                    if (!IsCombatMap && selectedItem != null)
+                    {
+                        //Take the actual WorldObject item from the item and attempt to place it on the map
+                        WorldItem newItem = selectedItem.GetWorldItem();
+                        if (MapManager.PlacePlayerObject(newItem))
                         {
-                            ((Wall)newItem).AdjustObject();
+                            newItem.SetMapName(this.Name);      //Assign the map name tot he WorldItem
+                            selectedItem.Remove(1);             //Remove one of them from the inventory
+
+                            //If the item placed was a wall object, we need to adjust it based off any adjacent walls
+                            if (newItem.Type == WorldObject.ObjectType.Wall)
+                            {
+                                ((Wall)newItem).AdjustObject();
+                            }
                         }
                     }
-                }
-                else if (_targetTile.CanDig())      //If you can dig, set the shovel
-                {
-                    rv = PlayerManager.SetTool(GameManager.ToolEnum.Shovel, mouseLocation);
-                }
             }
 
             return rv;
@@ -2372,16 +2366,7 @@ namespace RiverHollow.Tile_Engine
 
             return obj;
         }
-        public bool SetWallWorldObject(WorldObject o)
-        {
-            bool rv = false;
-            if (IsValidWall())
-            {
-                _obj = o;
-                rv = true;
-            }
-            return rv;
-        }
+
         public void RemoveWorldObject()
         {
             _obj = null;
@@ -2427,12 +2412,18 @@ namespace RiverHollow.Tile_Engine
             return f;
         }
 
+        /// <summary>
+        /// Determines whether or not the tile is a valid target for being dug.
+        /// 
+        /// Currently can be dug if the property is set, and there are no objects sitting on it.
+        /// </summary>
+        /// <returns></returns>
         public bool CanDig()
         {
             bool rv = false;
             foreach (TiledMapTileLayer l in _diProps.Keys)
             {
-                if (l.IsVisible && ContainsProperty(l, "CanDig", out string val) && val.Equals("true"))
+                if (l.IsVisible && ContainsProperty(l, "CanDig", out string val) && val.Equals("true") && _obj == null && _floorObj == null)
                 {
                     rv = true;
                 }
@@ -2500,17 +2491,24 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public bool DamageObject(int dmg)
+        /// <summary>
+        /// Attempt to damage the object assuming it is destructible and can be affected by the used tool
+        /// </summary>
+        /// <param name="toolUsed">The tool being used</param>
+        /// <returns>True if the tool was able to deal damage</returns>
+        public bool DamageObject(Tool toolUsed)
         {
             bool rv = false;
-            if (_obj.IsDestructible())
+            if (_obj != null && _obj.IsDestructible())
             {
-                rv = ((Destructible)_obj).DealDamage(dmg);
-                if (rv)
-                {
-                    MapManager.DropItemsOnMap(_obj.GetDroppedItems(), _obj.CollisionBox.Center.ToVector2());
-                    MapManager.RemoveWorldObject(_obj);
-                    _obj.RemoveSelfFromTiles();
+                if (((Destructible)_obj).WhichTool == toolUsed.ToolType){
+                    rv = ((Destructible)_obj).DealDamage(toolUsed.Power);
+                    if (rv)
+                    {
+                        MapManager.DropItemsOnMap(_obj.GetDroppedItems(), _obj.CollisionBox.Center.ToVector2());
+                        MapManager.RemoveWorldObject(_obj);
+                        _obj.RemoveSelfFromTiles();
+                    }
                 }
             }
 

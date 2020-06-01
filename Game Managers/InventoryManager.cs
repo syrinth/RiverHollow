@@ -327,7 +327,6 @@ Exit:
                 if (inventory == _arrPlayerInventory)
                 {
                     PlayerManager.AdvanceQuestProgress(itemToAdd);
-                    if (_arrPlayerInventory[validRow, validCol].ItemType == Item.ItemEnum.Tool) PlayerManager.CompareTools((Tool)_arrPlayerInventory[validRow, validCol]);
 
                     //Used to display an item that was just added to the inventory
                     AddedItem = itemToAdd;
@@ -378,7 +377,6 @@ Exit:
                     else if (item.IsTool())
                     {
                         inventory[row, column] = (Tool)(item);
-                        if (inventory == _arrPlayerInventory) { PlayerManager.CompareTools((Tool)_arrPlayerInventory[row, column]); }
                     }
                     else
                     {
@@ -418,7 +416,6 @@ Exit:
             if (inventory == _arrPlayerInventory)
             {
                 PlayerManager.RemoveQuestProgress(inventory[row, column]);
-                if (_arrPlayerInventory[row, column].IsTool()) { PlayerManager.CompareTools((Tool)_arrPlayerInventory[row, column]); }
             }
 
             inventory[row, column] = null;
@@ -461,7 +458,6 @@ Exit:
                             if (_arrPlayerInventory[i, j] != null)
                             {
                                 PlayerManager.RemoveQuestProgress(inventory[i, j]);
-                                if (_arrPlayerInventory[i, j].IsTool()) { PlayerManager.CompareTools((Tool)_arrPlayerInventory[i, j]); }
                             }
                         }
                         //null the item and exit
@@ -489,30 +485,6 @@ Exit:
             if (it != null && it.IsStaticItem())
             {
                 rv = (StaticItem)it;
-            }
-            return rv;
-        }
-
-        public static Tool FindTool(GameManager.ToolEnum tool)
-        {
-            Tool rv = null;
-            for (int i = 0; i < maxItemRows; i++)
-            {
-                for (int j = 0; j < maxItemColumns; j++)
-                {
-                    if (_arrPlayerInventory[i, j] != null)
-                    {
-                        if(_arrPlayerInventory[i, j].IsTool())
-                        {
-                            Tool t = (Tool)_arrPlayerInventory[i, j];
-                            if(t.ToolType == tool)
-                            {
-                                if(rv != null && t.Power > rv.Power) { rv = t; }
-                                else { rv = t; }
-                            }
-                        }
-                    }
-                }
             }
             return rv;
         }

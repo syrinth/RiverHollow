@@ -21,7 +21,7 @@ namespace RiverHollow.Game_Managers
         #region Properties
         private static bool _bBusy;
         public static bool Busy => _bBusy;
-        public static Tool UseTool;
+        public static Tool ToolInUse;
 
         private static List<Quest> _questLog;
         public static List<Quest> QuestLog  => _questLog;
@@ -42,11 +42,6 @@ namespace RiverHollow.Game_Managers
         }
 
         public static PlayerCharacter World;
-        private static Tool _pick;
-        private static Tool _axe;
-        private static Tool _shovel;
-        private static Tool _wateringCan;
-        private static Tool _lantern;
 
         public static int HitPoints => World.CurrentHP;
         public static int MaxHitPoints  => World.MaxHP;
@@ -131,7 +126,7 @@ namespace RiverHollow.Game_Managers
 
             if (AllowMovement)
             {
-                if (UseTool == null)
+                if (ToolInUse == null)
                 {
                     KeyboardState ks = Keyboard.GetState();
                     if (ks.IsKeyDown(Keys.W))
@@ -170,7 +165,7 @@ namespace RiverHollow.Game_Managers
                 }
                 else
                 {
-                    UseTool.Update(gTime);
+                    ToolInUse.Update(gTime);
 
                     bool finished = !World.BodySprite.CurrentAnimation.StartsWith("Tool");
 
@@ -178,16 +173,16 @@ namespace RiverHollow.Game_Managers
                     //UseTool
                     if (target != null && finished)
                     {
-                        if (target.WorldObject != null && (PlayerManager.ToolIsAxe() || PlayerManager.ToolIsPick() || PlayerManager.ToolIsLantern()))
+                        if (PlayerManager.ToolIsAxe() || PlayerManager.ToolIsPick() || PlayerManager.ToolIsLantern())
                         {
-                            target.DamageObject(PlayerManager.UseTool.Power);
+                            target.DamageObject(PlayerManager.ToolInUse);
                         }
-                        else if (PlayerManager.ToolIsShovel())
+                        else if (PlayerManager.ToolIsShovel() && target.CanDig())
                         {
                             target.Dig();
                             MapManager.CurrentMap.TilledTiles.Add(target);
                         }
-                        else if (PlayerManager.ToolIsWateringCan())
+                        else if (PlayerManager.ToolIsWateringCan() && target.Flooring != null && target.Flooring.IsEarth())
                         {
                             target.Water(true);
                         }
@@ -221,9 +216,9 @@ namespace RiverHollow.Game_Managers
             if (_currentMap == MapManager.CurrentMap.Name)
             {
                 World.Draw(spriteBatch, true);
-                if (UseTool != null)
+                if (ToolInUse != null)
                 {
-                    UseTool.Draw(spriteBatch);
+                    ToolInUse.Draw(spriteBatch);
                 }
             }
         }
@@ -366,46 +361,27 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static bool SetTool(GameManager.ToolEnum toolType, Point mouse)
+        public static bool SetTool(Tool t, Point mouse)
         {
             bool rv = false;
             PlayerManager.World.PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
 
-            Tool t = null;
-            switch (toolType)
-            {
-                case GameManager.ToolEnum.Axe:
-                    t = _axe;
-                    break;
-                case GameManager.ToolEnum.Pick:
-                    t = _pick;
-                    break;
-                case GameManager.ToolEnum.Shovel:
-                    t = _shovel;
-                    break;
-                case GameManager.ToolEnum.WateringCan:
-                    t = _wateringCan;
-                    break;
-                case GameManager.ToolEnum.Lantern:
-                    t = _lantern;
-                    break;
-            }
-            if (t != null && UseTool == null)
+            if (t != null && ToolInUse == null)
             {
                 rv = true;
-                UseTool = t;
-                UseTool.Position = World.BodyPosition;
-                if (UseTool != null && !_bBusy)
+                ToolInUse = t;
+                ToolInUse.Position = World.BodyPosition;
+                if (ToolInUse != null && !_bBusy)
                 {
                     _bBusy = true;
-                    if (DecreaseStamina(UseTool.StaminaCost))
+                    if (DecreaseStamina(ToolInUse.StaminaCost))
                     {
-                        UseTool.ToolAnimation.IsAnimating = true;
+                        ToolInUse.ToolAnimation.IsAnimating = true;
                         PlayerManager.World.PlayAnimation(VerbEnum.UseTool, DirectionEnum.Down);
                     }
                     else
                     {
-                        UseTool = null;
+                        ToolInUse = null;
                     }
                 }
             }
@@ -414,7 +390,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void UnsetTool()
         {
-            PlayerManager.UseTool = null;
+            PlayerManager.ToolInUse = null;
             _bBusy = false;
         }
 
@@ -571,58 +547,6 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void CompareTools(Tool t)
-        {
-            if (t != null)
-            {
-                if (t.ToolType == GameManager.ToolEnum.Axe)
-                {
-                    if (t == _axe) { _axe = InventoryManager.FindTool(GameManager.ToolEnum.Axe); }
-                    else
-                    {
-                        if (_axe == null) { _axe = t; }
-                        if (_axe.Power < t.Power) { _axe = t; }
-                    }
-                }
-                else if (t.ToolType == GameManager.ToolEnum.Pick)
-                {
-                    if (t == _pick) { _pick = InventoryManager.FindTool(GameManager.ToolEnum.Axe); }
-                    else
-                    {
-                        if(_pick == null) { _pick = t; }
-                        else if (_pick.Power < t.Power) { _pick = t; }
-                    }
-                }
-                else if (t.ToolType == GameManager.ToolEnum.Shovel)
-                {
-                    if (t == _shovel) { _shovel = InventoryManager.FindTool(GameManager.ToolEnum.Shovel); }
-                    else
-                    {
-                        if (_shovel == null) { _shovel = t; }
-                        //else if (_pick.DmgValue < t.DmgValue) { _pick = t; }
-                    }
-                }
-                else if (t.ToolType == GameManager.ToolEnum.WateringCan)
-                {
-                    if (t == _wateringCan) { _wateringCan = InventoryManager.FindTool(GameManager.ToolEnum.WateringCan); }
-                    else
-                    {
-                        if (_wateringCan == null) { _wateringCan = t; }
-                        //else if (_pick.DmgValue < t.DmgValue) { _pick = t; }
-                    }
-                }
-                else if (t.ToolType == GameManager.ToolEnum.Lantern)
-                {
-                    if (t == _lantern) { _lantern = InventoryManager.FindTool(GameManager.ToolEnum.Lantern); }
-                    else
-                    {
-                        if (_lantern == null) { _lantern = t; }
-                        else if (_lantern.Power < t.Power) { _lantern = t; }
-                    }
-                }
-            }
-        }
-
         public static void GetStamina(ref int curr, ref int max)
         {
             curr = Stamina;
@@ -696,10 +620,10 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static bool ToolIsAxe() { return UseTool == _axe; }
-        public static bool ToolIsPick() { return UseTool == _pick; }
-        public static bool ToolIsLantern() { return UseTool == _lantern; }
-        public static bool ToolIsShovel() { return UseTool == _shovel; }
-        public static bool ToolIsWateringCan() { return UseTool == _wateringCan; }
+        public static bool ToolIsAxe() { return ToolInUse.ToolType == ToolEnum.Axe; }
+        public static bool ToolIsPick() { return ToolInUse.ToolType == ToolEnum.Pick; }
+        public static bool ToolIsLantern() { return ToolInUse.ToolType == ToolEnum.Lantern; }
+        public static bool ToolIsShovel() { return ToolInUse.ToolType == ToolEnum.Shovel; }
+        public static bool ToolIsWateringCan() { return ToolInUse.ToolType == ToolEnum.WateringCan; }
     }
 }

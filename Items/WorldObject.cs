@@ -877,19 +877,22 @@ namespace RiverHollow.WorldObjects
             {
                 _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
                 _sprite.AddAnimation(0.ToString(), (int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                for (int j = 1; j < _diTransitionTimes.Count; j++){
+                for (int j = 1; j < _diTransitionTimes.Count + 1; j++){
                     _sprite.AddAnimation(j.ToString(), (int)_vSourcePos.X + (TileSize * j), (int)_vSourcePos.Y, _iWidth, _iHeight);
                 }
             }
 
+            /// <summary>
+            /// On rollover, increase the plant's growth cycle if it has been watered.
+            /// </summary>
             public void Rollover()
             {
                 if (Tiles[0].IsWatered()) {
-                    if (_iDaysLeft > 0)
+                    if (_iDaysLeft > 0) //Decrement the number of days until the next phase
                     {
                         _iDaysLeft--;
                     }
-                    else
+                    else if(!FinishedGrowing()) //If it hasn't finished growing, and there'sno days left, go to the next phase
                     {
                         _iCurrentState++;
                         _sprite.PlayAnimation(_iCurrentState.ToString());
@@ -900,6 +903,10 @@ namespace RiverHollow.WorldObjects
                     }
                 }
             }
+            /// <summary>
+            /// Check if the plant has finished growing or not.
+            /// </summary>
+            /// <returns>True if it's on the last phase</returns>
             public bool FinishedGrowing() { return _iCurrentState == _iMaxStates-1; }
             public Item Harvest(bool pop)
             {
@@ -963,22 +970,22 @@ namespace RiverHollow.WorldObjects
             /// <param name="vStart">The source position for this texture series</param>
             protected void LoadSprite(AnimatedSprite sprite, Vector2 vStart)
             {
-                sprite.AddAnimation("None", (int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("NS", (int)_vSourcePos.X + TileSize, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("EW", (int)_vSourcePos.X + TileSize * 2, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("SW", (int)_vSourcePos.X + TileSize * 3, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("NW", (int)_vSourcePos.X + TileSize * 4, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("NE", (int)_vSourcePos.X + TileSize * 5, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("SE", (int)_vSourcePos.X + TileSize * 6, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("NSE", (int)_vSourcePos.X + TileSize * 7, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("NSW", (int)_vSourcePos.X + TileSize * 8, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("NEW", (int)_vSourcePos.X + TileSize * 9, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("SEW", (int)_vSourcePos.X + TileSize * 10, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("NSEW", (int)_vSourcePos.X + TileSize * 11, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("W", (int)_vSourcePos.X + TileSize * 12, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("E", (int)_vSourcePos.X + TileSize * 13, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("S", (int)_vSourcePos.X + TileSize * 14, (int)_vSourcePos.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("N", (int)_vSourcePos.X + TileSize * 15, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("None", (int)vStart.X, (int)vStart.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("NS", (int)vStart.X + TileSize, (int)vStart.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("EW", (int)vStart.X + TileSize * 2, (int)vStart.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("SW", (int)vStart.X + TileSize * 3, (int)vStart.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("NW", (int)vStart.X + TileSize * 4, (int)vStart.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("NE", (int)vStart.X + TileSize * 5, (int)vStart.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("SE", (int)vStart.X + TileSize * 6, (int)vStart.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("NSE", (int)vStart.X + TileSize * 7, (int)vStart.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("NSW", (int)vStart.X + TileSize * 8, (int)vStart.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("NEW", (int)vStart.X + TileSize * 9, (int)vStart.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("SEW", (int)vStart.X + TileSize * 10, (int)vStart.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("NSEW", (int)vStart.X + TileSize * 11, (int)vStart.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("W", (int)vStart.X + TileSize * 12, (int)vStart.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("E", (int)vStart.X + TileSize * 13, (int)vStart.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("S", (int)vStart.X + TileSize * 14, (int)vStart.Y, _iWidth, _iHeight);
+                sprite.AddAnimation("N", (int)vStart.X + TileSize * 15, (int)vStart.Y, _iWidth, _iHeight);
                 
             }
 
@@ -1161,9 +1168,7 @@ namespace RiverHollow.WorldObjects
                 public void Watered(bool value)
                 {
                     _bWatered = value;
-                    _sprite.CurrentAnimation.ToString();
-                    //MAR
-                    //_sprWatered.SetCurrentAnimation(_sprite.CurrentAnimation);
+                    _sprWatered.PlayAnimation(_sprite.CurrentAnimation.ToString());
                 }
                 public bool Watered() { return _bWatered; }
             }

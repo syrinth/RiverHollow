@@ -79,11 +79,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            if (_item.DoesItStack)
-            {
-                _gTextNum.SetText(_item.Number.ToString());
-                _gTextNum.AnchorToInnerSide(this, SideEnum.BottomRight, GUIManager.STANDARD_MARGIN);
-            }
+            if (_item!= null && _item.Number == 0) { SetItem(null); }
+            _gTextNum?.SetText(_item == null ? string.Empty : _item.DoesItStack ? _item.Number.ToString() : string.Empty);
+            _gTextNum?.AnchorToInnerSide(this, SideEnum.BottomRight, GUIManager.STANDARD_MARGIN);
         }
 
         public override bool ProcessRightButtonClick(Point mouse)
