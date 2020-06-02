@@ -1325,12 +1325,6 @@ namespace RiverHollow.Tile_Engine
                         p.RemoveSelfFromTiles();
                     }   //If we failed to harvest, water the plant if possible
                 }
-                else if (obj.IsForageable())    //Remove self from the map and harvest the item
-                {
-                    InventoryManager.AddToInventory(DataManager.GetItem(((Forageable)obj).ForageItem));
-                    MapManager.RemoveWorldObject(obj);
-                    obj.RemoveSelfFromTiles();
-                }
             }
 
             return rv;

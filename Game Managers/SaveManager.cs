@@ -16,7 +16,7 @@ namespace RiverHollow.Game_Managers
     public class SaveManager
     {
         static string INFO_FILE_NAME = "SaveInfo";
-        static string RIVER_HOLLOW_SAVES = "Save Games";
+        public static string RIVER_HOLLOW_SAVES = "Save Games";
         static long _iSaveID = -1;
 
         #region Save/Load

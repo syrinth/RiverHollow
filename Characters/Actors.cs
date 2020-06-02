@@ -345,9 +345,9 @@ namespace RiverHollow.Actors
                 cornerTiles.Add(MapManager.CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Bottom)).ToPoint()));
                 foreach (RHTile tile in cornerTiles)
                 {
-                    if (tile != null && tile.WorldObject != null && tile.WorldObject.IsForageable())
+                    if (tile != null && tile.WorldObject != null && tile.WorldObject.IsPlant())
                     {
-                        Forageable f = (Forageable)tile.WorldObject;
+                        Plant f = (Plant)tile.WorldObject;
                         f.Shake();
                     }
                 }

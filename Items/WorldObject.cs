@@ -18,7 +18,7 @@ namespace RiverHollow.WorldObjects
     public class WorldObject
     {
         #region Properties
-        public enum ObjectType { Building, ClassChanger, Machine, Container, Earth, Floor, WorldObject, Destructible, Plant, Forageable, Wall, Light, DungeonObject};
+        public enum ObjectType { Building, ClassChanger, Machine, Container, Earth, Floor, WorldObject, Destructible, Plant, Wall, Light, DungeonObject};
         public ObjectType Type;
 
         protected AnimatedSprite _sprite;
@@ -177,99 +177,7 @@ namespace RiverHollow.WorldObjects
         public bool IsEarth() { return Type == ObjectType.Earth; }
         public bool IsClassChanger() { return Type == ObjectType.ClassChanger; }
         public bool IsBuilding() { return Type == ObjectType.Building; }
-        public bool IsForageable() { return Type == ObjectType.Forageable; }
         public bool IsDungeonObject() { return Type == ObjectType.DungeonObject; }
-    }
-
-    public class Forageable : WorldObject
-    {
-        public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + _iHeight - TileSize, TileSize, TileSize);
-        const float MAX_ROTATION = 0.4f;
-        const float ROTATION_MOD = 0.09f;
-        bool _bShaking = false;
-        float _fCurrentRotation = 0f;
-        int _iBounceCount = 0;
-
-        public int ForageItem => _kvpDrop.Key;
-
-        public Forageable(int id, Dictionary<string, string> stringData, Vector2 pos)
-        {
-            Type = ObjectType.Forageable;
-            _iID = id;
-
-             _wallObject = false;
-
-            _iWidth = int.Parse(stringData["Width"]);
-            _iHeight = int.Parse(stringData["Height"]);
-
-            if (stringData.ContainsKey("Item")) { ReadItemDrops(stringData["Item"]); }
-            if (stringData.ContainsKey("Passable")) { _bImpassable = false; }
-
-            SetCoordinates(pos);
-            LoadSprite(stringData);
-
-            string[] texIndices = stringData["Image"].Split('-');
-            int startX = int.Parse(texIndices[0]);
-            int startY = int.Parse(texIndices[1]);
-            _sprite.SetRotationOrigin(new Vector2(_iWidth / 2, _iHeight - 1));    //Subtract one to keep it in the bounds of the rectangle
-        }
-
-        public override void SetCoordinatesByGrid(Vector2 position)
-        {
-            base.SetCoordinatesByGrid(position);
-            _sprite.Position = _vMapPosition;
-        }
-
-        public override void Update(GameTime gTime)
-        {
-            //If the object is shaking, we need to determine what step it's in
-            if (_bShaking)
-            {
-                //We start out going right
-                if (_iBounceCount == 0)
-                {
-                    _fCurrentRotation += ROTATION_MOD;
-                }
-                else if (_iBounceCount == 1) //After one bounce, we go left
-                {
-                    _fCurrentRotation -= ROTATION_MOD;
-                }
-                else   //After we've bounced twice, stop bouncing completely
-                {
-                    _bShaking = false;
-                    _iBounceCount = 0;
-                    _fCurrentRotation = 0;
-                }
-                _sprite.SetRotationAngle(_fCurrentRotation);
-
-                //If we've reached the end of our bounce, increment the bounce count
-                //and set us to just below the trigger value for the statement we just hit.
-                if (_fCurrentRotation >= MAX_ROTATION)
-                {
-                    _fCurrentRotation = MAX_ROTATION - ROTATION_MOD;
-                    _iBounceCount++;
-                }
-                else if (_fCurrentRotation <= -MAX_ROTATION)
-                {
-                    _fCurrentRotation = MAX_ROTATION  + ROTATION_MOD;
-                    _iBounceCount++;
-                }
-            }
-            _sprite.Update(gTime);
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            _sprite.Draw(spriteBatch);
-        }
-
-        /// <summary>
-        /// Tell the object to shake
-        /// </summary>
-        public void Shake()
-        {
-            _bShaking = true;
-        }
     }
 
     public class Destructible : WorldObject
@@ -840,6 +748,15 @@ namespace RiverHollow.WorldObjects
 
         public class Plant : WorldItem
         {
+            public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + _iHeight - TileSize, TileSize, TileSize);
+            const float MAX_ROTATION = 0.15f;
+            const float ROTATION_MOD = 0.02f;
+            const float MAX_BOUNCE = 3;
+            bool _bShaking = false;
+            DirectionEnum dir = DirectionEnum.Right;
+            float _fCurrentRotation = 0f;
+            int _iBounceCount = 0;
+
             int _iCurrentState;
             int _iMaxStates;
             int _iResourceID;
@@ -856,7 +773,7 @@ namespace RiverHollow.WorldObjects
                 _diTransitionTimes = new Dictionary<int, int>();
 
                 _iWidth = TileSize;
-                _iHeight = TileSize;
+                _iHeight = stringData.ContainsKey("Height") ? int.Parse(stringData["Height"]) : TileSize;
 
                 ReadSourcePos(stringData["Image"]);
                 _iResourceID = int.Parse(stringData["Item"]);
@@ -871,6 +788,7 @@ namespace RiverHollow.WorldObjects
                 _iDaysLeft = _diTransitionTimes[0];
 
                 LoadContent();
+                _sprite.SetRotationOrigin(new Vector2(_iWidth / 2, _iHeight - 1));    //Subtract one to keep it in the bounds of the rectangle
             }
 
             public void LoadContent()
@@ -879,6 +797,58 @@ namespace RiverHollow.WorldObjects
                 _sprite.AddAnimation(0.ToString(), (int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight);
                 for (int j = 1; j < _diTransitionTimes.Count + 1; j++){
                     _sprite.AddAnimation(j.ToString(), (int)_vSourcePos.X + (TileSize * j), (int)_vSourcePos.Y, _iWidth, _iHeight);
+                }
+            }
+
+            public override void SetCoordinatesByGrid(Vector2 position)
+            {
+                base.SetCoordinatesByGrid(position);
+                _sprite.Position = _vMapPosition;
+            }
+
+            public override void Update(GameTime gTime)
+            {
+                //If the object is shaking, we need to determine what step it's in
+                if (_bShaking)
+                {
+                    if (dir == DirectionEnum.Right) { _fCurrentRotation += ROTATION_MOD;}
+                    else if (dir == DirectionEnum.Left) { _fCurrentRotation -= ROTATION_MOD; }
+
+                    _sprite.SetRotationAngle(_fCurrentRotation);
+
+                    //If we've reached the end of our bounce, increment the bounce count
+                    //and set us to just below the trigger value for the statement we just hit.
+                    if (_iBounceCount == MAX_BOUNCE && _fCurrentRotation >= - ROTATION_MOD && _fCurrentRotation <= ROTATION_MOD)
+                    {
+                        _bShaking = false;
+                        _iBounceCount = 0;
+                    }
+                    else if (_fCurrentRotation >= MAX_ROTATION)
+                    {
+                        dir = DirectionEnum.Left;
+                        _iBounceCount++;
+                        _fCurrentRotation = MAX_ROTATION - ROTATION_MOD;
+                    }
+                    else if (_fCurrentRotation <= -MAX_ROTATION)
+                    {
+                        dir = DirectionEnum.Right;
+                        _iBounceCount++;
+                        _fCurrentRotation = -MAX_ROTATION + ROTATION_MOD;
+                    }
+                }
+                _sprite.Update(gTime);
+            }
+
+            /// <summary>
+            /// Tell the object to shake
+            /// </summary>
+            public void Shake()
+            {
+                if (!_bShaking)
+                {
+                    if (PlayerManager.World.CollisionBox.Center.X > CollisionBox.Center.X) { dir = DirectionEnum.Left; }
+                    else if (PlayerManager.World.CollisionBox.Center.X < CollisionBox.Center.X) { dir = DirectionEnum.Right; }
+                    _bShaking = true;
                 }
             }
 

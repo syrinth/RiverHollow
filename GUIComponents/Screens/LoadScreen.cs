@@ -4,7 +4,9 @@ using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIObjects;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 
@@ -24,7 +26,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             foreach(SaveInfoData data in _liData)
             {
-                SaveWindow s = new SaveWindow(data, _liData.IndexOf(data));
+                SaveWindow s = new SaveWindow(data, _liData.IndexOf(data), RefreshScreen);
                 AddControl(s);
                 _liDataWindows.Add(s);
             }
@@ -65,35 +67,48 @@ namespace RiverHollow.GUIComponents.Screens
             GUIManager.SetScreen(new IntroMenuScreen());
         }
 
+        public void RefreshScreen()
+        {
+            GUIManager.SetScreen(new LoadScreen());
+        }
+
         private class SaveWindow : GUIWindow
         {
+            GUIButton _gDelete;
             GUIText _gText;
             SaveInfoData _data;
             public SaveInfoData Data => _data;
 
+            public delegate void ReloadScreenDelegate();
+            private ReloadScreenDelegate _delAction;
+
             int _iId;
             public int SaveID => _iId;
 
-            public SaveWindow(SaveInfoData data, int id)
+            public SaveWindow(SaveInfoData data, int id, ReloadScreenDelegate del)
             {
                 _data = data;
-                _gText = new GUIText(data.playerData.name + ", " + DataManager.GetClassByIndex(data.playerData.currentClass).Name);
                 _iId = id;
                 _winData = GUIWindow.RedWin;
 
+                _gText = new GUIText(data.playerData.name + ", " + DataManager.GetClassByIndex(data.playerData.currentClass).Name);
+                Vector2 stringsize = _gText.MeasureString("XXXXXXXXXXX XXXXXXXXXXXXXX");
+
+                _gText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
                 AddControl(_gText);
 
-                Vector2 stringsize = _gText.MeasureString("XXXXXXXXXXX XXXXXXXXXXXXXX");
-                Width = (int)stringsize.X;
-                Height = (int)stringsize.Y + HeightEdges();
+                _gDelete = new GUIButton(new Rectangle(64, 48, TileSize, TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, @"Textures\Dialog", BtnDelete);
+                Height = (int)stringsize.Y + _gDelete.Height + HeightEdges();
+                _gDelete.AnchorToInnerSide(this, SideEnum.BottomRight, GUIManager.STANDARD_MARGIN);
 
-                _gText.CenterOnWindow(this);
+                _delAction = del;
             }
 
             public override bool ProcessLeftButtonClick(Point mouse)
             {
                 bool rv = false;
-                if (Contains(mouse))
+                rv = _gDelete.ProcessLeftButtonClick(mouse);
+                if (!rv && Contains(mouse))
                 {
                     Load(Data.saveFile);
                     MapManager.PopulateMaps(true);
@@ -105,6 +120,20 @@ namespace RiverHollow.GUIComponents.Screens
                 }
 
                 return rv;
+            }
+
+            public void BtnDelete()
+            {
+                string[] split = Data.saveFile.Split('\\');
+                string folder = split[0] + "\\" + split[1];
+                foreach (string s in Directory.GetFiles(folder))
+                {
+                    File.Delete(s);
+                }
+
+                Directory.Delete(folder);
+
+                _delAction();
             }
         }
     }

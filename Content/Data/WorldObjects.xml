@@ -110,11 +110,15 @@
     </Item>
     <Item>
       <Key>61</Key>
-      <Value>[Type:Plant][Image:64-48][Item:41][TrNum:4][TrTime:2-3-4]</Value>
+      <Value>[Type:Plant][Image:192-16][Height:32][Item:505][TrNum:4][TrTime:1-2-3]</Value>
     </Item>
     <Item>
       <Key>62</Key>
       <Value>[Type:Plant][Image:80-48][Item:42][TrNum:4][TrTime:2-3-4]</Value>
+    </Item>
+    <Item>
+      <Key>63</Key>
+      <Value>[Type:Plant][Image:64-48][Item:41][TrNum:4][TrTime:2-3-4]</Value>
     </Item>
     <!--<190> Containers-->
     <Item>

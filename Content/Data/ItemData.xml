@@ -171,6 +171,10 @@
       <Key>60</Key>
       <Value>[Type:StaticItem][Image:0-32][Sell:3][Stacks]</Value>
     </Item>
+    <Item>
+      <Key>61</Key>
+      <Value>[Type:StaticItem][Image:32-32][Sell:3][Stacks]</Value>
+    </Item>
     <!--<80-89> Ores and Bars-->
     <Item>
       <Key>80</Key>
@@ -387,6 +391,10 @@
     <Item>
       <Key>504</Key>
       <Value>[Type:Food][Image:16-16][Sell:25][Stam:3]</Value>
+    </Item>
+	<Item>
+      <Key>505</Key>
+      <Value>[Type:Food][Image:32-16][Sell:8][Stam:2]</Value>
     </Item>
     <!--<600> Weapons-->
     <!--Equipment: [EType:Weapon or Armor][ESub:Equip Subtype][ASub:Armor slot][Tier:X][Atk:X][Str:X][Def:X][Mag:X][Res:X][Spd:X]-->

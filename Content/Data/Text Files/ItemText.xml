@@ -167,6 +167,10 @@
       <Key>60</Key>
       <Value>Silver Seeds/Used to grow a Silver Herb bush</Value>
     </Item>
+	<Item>
+      <Key>61</Key>
+      <Value>Carrot Seeds/Grows a carrot</Value>
+    </Item>
     <!--<80-89> Ores and Bars-->
     <Item>
       <Key>80</Key>
@@ -383,6 +387,10 @@
     <Item>
       <Key>504</Key>
       <Value>Strawberry/Delicious and fruity</Value>
+    </Item>
+	<Item>
+      <Key>505</Key>
+      <Value>Carrot/Crisp and crunchy</Value>
     </Item>
     <!--<600> Weapons-->
     <!--Wizard-->
