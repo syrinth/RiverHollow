@@ -1043,7 +1043,7 @@ namespace RiverHollow.Tile_Engine
 
                 if (PlayerManager.PlayerInRange(obj.CollisionBox))
                 {
-                    if (obj.BuildingID != -1) { MapManager.EnterBuilding(PlayerManager.Buildings.Find(x => x.PersonalID == obj.BuildingID)); }
+                    if (obj.BuildingID != -1) { MapManager.EnterBuilding(obj, PlayerManager.Buildings.Find(x => x.PersonalID == obj.BuildingID)); }
                     else { MapManager.ChangeMaps(PlayerManager.World, this.Name, obj); }
                 }
             }
@@ -1650,7 +1650,7 @@ namespace RiverHollow.Tile_Engine
         public void CreateBuildingEntrance(Building b)
         {
             TravelPoint buildPoint = new TravelPoint(b.TravelBox, b.MapName, b.PersonalID);
-            _diTravelPoints.Add(b.MapName, buildPoint); //TODO: FIX THIS
+            _diTravelPoints.Add(b.PersonalID.ToString(), buildPoint); //TODO: FIX THIS
             CreateDoor(ref buildPoint, b.TravelBox.X, b.TravelBox.Y, b.TravelBox.Width, b.TravelBox.Height);
         }
 

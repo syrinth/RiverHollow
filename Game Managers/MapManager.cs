@@ -86,7 +86,7 @@ namespace RiverHollow.Game_Managers
         public static void ChangeMaps(WorldActor c, string currMap, TravelPoint travelPoint)
         {
             //Get the entry rectangle on the new map
-            TravelPoint entryPoint = _tileMaps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
+            TravelPoint entryPoint = null;
 
             //Handling for if the WorldActor is the player character
             if (c == PlayerManager.World)
@@ -94,8 +94,12 @@ namespace RiverHollow.Game_Managers
                 //Handling for if the player is currently in a building and is leaving it
                 if (PlayerManager._iBuildingID != -1)
                 {
-                    entryPoint = _tileMaps[travelPoint.LinkedMap].DictionaryTravelPoints[PlayerManager.Buildings.Find(x => x.PersonalID == PlayerManager._iBuildingID).MapName];
+                    entryPoint = _tileMaps[travelPoint.LinkedMap].DictionaryTravelPoints[PlayerManager._iBuildingID.ToString()];
                     PlayerManager._iBuildingID = -1;
+                }
+                else
+                {
+                    entryPoint = _tileMaps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
                 }
 
                 FadeToNewMap(_tileMaps[travelPoint.LinkedMap], entryPoint.FindLinkedPointPosition(travelPoint.Center, c));
@@ -103,6 +107,8 @@ namespace RiverHollow.Game_Managers
             }
             else
             {
+                entryPoint = _tileMaps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
+
                 if (c.IsNPC() || c.IsWorldCharacter())
                 {
                     ((Villager)c).ClearTileForMapChange();
@@ -126,20 +132,20 @@ namespace RiverHollow.Game_Managers
             _newMapInfo = new NewMapInfo(newMap, playerPos, b);
         }
 
-        public static void EnterBuilding(Building b)
+        public static void EnterBuilding(TravelPoint doorLoc, Building b)
         {
-            Rectangle rectEntrance = Rectangle.Empty;
+            TravelPoint tPoint = null;
             PlayerManager._iBuildingID = b.PersonalID;
 
             foreach (string s in _tileMaps[b.MapName].DictionaryTravelPoints.Keys)
             {
-                if (s.Equals(_currentMap.Name))
+                if (s.Equals(PlayerManager.CurrentMap))
                 {
-                    rectEntrance = _tileMaps[b.MapName].DictionaryTravelPoints[s].CollisionBox;
+                    tPoint = _tileMaps[b.MapName].DictionaryTravelPoints[s];
                 }
             }
 
-            FadeToNewMap(_tileMaps[b.MapName], new Vector2(rectEntrance.Left, rectEntrance.Top), b);
+            FadeToNewMap(_tileMaps[b.MapName], tPoint.FindLinkedPointPosition(doorLoc.Center, PlayerManager.World), b);
         }
 
         public static void BackToPlayer()
