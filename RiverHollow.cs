@@ -249,16 +249,16 @@ namespace RiverHollow
             MapManager.BackToPlayer();
         }
 
+        /// <summary>
+        /// Readies a new game by placing objects onto the map, and establishing a new calendar
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="playIntro"></param>
         public static void NewGame(Adventurer a, Adventurer b, bool playIntro)
         {
             PlayerManager.NewPlayer();
             MapManager.PopulateMaps(false);
-
-            foreach (Villager v in DataManager.DiNPC.Values)
-            {
-                v.MoveToSpawn();
-                v.CalculatePathing();
-            }
 
             PlayerManager.Buildings[0].AddWorker(a);
             PlayerManager.Buildings[0].AddWorker(b);
@@ -277,6 +277,36 @@ namespace RiverHollow
             {
                 PlayerManager.AddToQuestLog(GameManager.DiQuests[2]);
             }
+
+            StartGame();
+        }
+
+        /// <summary>
+        /// Reads data fromt he indicated save file and loads the info to
+        /// already previously loaded objects.
+        /// </summary>
+        /// <param name="savefile"></param>
+        public static void LoadGame(string savefile)
+        {
+            SaveManager.Load(savefile);
+            MapManager.PopulateMaps(true);
+            PlayerManager._iBuildingID = PlayerManager.Buildings[0].PersonalID;
+
+            StartGame();
+        }
+
+        /// <summary>
+        /// Common method to call methods required by both Load and New game
+        /// </summary>
+        private static void StartGame()
+        {
+            //Places NPCs on the map
+            foreach (Villager v in DataManager.DiNPC.Values)
+            {
+                v.MoveToSpawn();
+                v.CalculatePathing();
+            }
+
             Camera.SetObserver(PlayerManager.World);
             GoToHUDScreen();
         }

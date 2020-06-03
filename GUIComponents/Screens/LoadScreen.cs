@@ -110,12 +110,7 @@ namespace RiverHollow.GUIComponents.Screens
                 rv = _gDelete.ProcessLeftButtonClick(mouse);
                 if (!rv && Contains(mouse))
                 {
-                    Load(Data.saveFile);
-                    MapManager.PopulateMaps(true);
-                    //MapManager.EnterBuilding(PlayerManager.Buildings[0]);
-                    PlayerManager._iBuildingID = PlayerManager.Buildings[0].PersonalID;
-                    Camera.SetObserver(PlayerManager.World);
-                    GoToHUDScreen();
+                    RiverHollow.LoadGame(Data.saveFile);
                     rv = true;
                 }
 
