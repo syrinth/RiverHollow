@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.WorldObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
@@ -8,9 +7,9 @@ using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIObjects
 {
-    public static class GraphicCursor
+    public static class GUICursor
     {
-        public enum EnumCursorType { Normal, Talk, Gift, Door};
+        public enum EnumCursorType { Normal, Talk, Gift, Door, Pickup};
         public static EnumCursorType _CursorType;
         public static MouseState LastMouseState = new MouseState();
 
@@ -77,6 +76,9 @@ namespace RiverHollow.GUIObjects
                             break;
                         case EnumCursorType.Door:
                             source = new Rectangle(288, 176, 16, 16);
+                            break;
+                        case EnumCursorType.Pickup:
+                            source = new Rectangle(304, 176, 16, 16);
                             break;
                     }
                 }

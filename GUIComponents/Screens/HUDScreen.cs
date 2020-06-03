@@ -2186,7 +2186,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             if (_gWin.Contains(mouse))
             {
-                GraphicCursor.Alpha = 1;
+                GUICursor.Alpha = 1;
             }
 
             return rv;

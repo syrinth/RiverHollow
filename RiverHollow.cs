@@ -116,7 +116,7 @@ namespace RiverHollow
                 Point mousePoint = Mouse.GetState().Position;
                 Vector3 translate = Camera._transform.Translation;
 
-                if (ms.RightButton == ButtonState.Pressed && GraphicCursor.LastMouseState.RightButton == ButtonState.Released)
+                if (ms.RightButton == ButtonState.Pressed && GUICursor.LastMouseState.RightButton == ButtonState.Released)
                 {
                     if (!GUIManager.ProcessRightButtonClick(mousePoint) && IsMapShown())
                     {
@@ -129,7 +129,7 @@ namespace RiverHollow
                         }
                     }
                 }
-                else if (ms.LeftButton == ButtonState.Pressed && GraphicCursor.LastMouseState.LeftButton == ButtonState.Released)
+                else if (ms.LeftButton == ButtonState.Pressed && GUICursor.LastMouseState.LeftButton == ButtonState.Released)
                 {
                     if (!GUIManager.ProcessLeftButtonClick(mousePoint) && IsMapShown())
                     {
@@ -154,7 +154,7 @@ namespace RiverHollow
                     }
                 }
 
-                GraphicCursor.LastMouseState = ms;
+                GUICursor.LastMouseState = ms;
 
                 if (IsMapShown())
                 {

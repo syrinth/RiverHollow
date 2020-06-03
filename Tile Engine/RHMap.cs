@@ -1068,17 +1068,7 @@ namespace RiverHollow.Tile_Engine
                 }
                 else if (obj.IsPlant())
                 {
-                    Plant p = (Plant)obj;
-                    if (p.FinishedGrowing())
-                    {
-                        Item i = p.Harvest(false);
-                        //if (i != null)
-                        //{
-                        //    _liItems.Add(i);
-                        //}
-                        MapManager.RemoveWorldObject(p);
-                        p.RemoveSelfFromTiles();
-                    }
+                    ((Plant)obj).Harvest();
                 }
                 else if (obj.IsDungeonObject())
                 {
@@ -1122,7 +1112,7 @@ namespace RiverHollow.Tile_Engine
                 for (int i = 0; i < _liItems.Count; i++)
                 {
                     Item it = _liItems[i];
-                    if (it.ManualPickup && it.CollisionBox.Contains(GraphicCursor.GetWorldMousePosition()))
+                    if (it.ManualPickup && it.CollisionBox.Contains(GUICursor.GetWorldMousePosition()))
                     {
                         if(it.ItemID == 300)
                         {
@@ -1277,7 +1267,7 @@ namespace RiverHollow.Tile_Engine
             }
             else
             {
-                if (GraphicCursor.WorkerToPlace > -1)
+                if (GUICursor.WorkerToPlace > -1)
                 {
                     if (AddWorkerToBuilding(mouseLocation))
                     {
@@ -1316,14 +1306,7 @@ namespace RiverHollow.Tile_Engine
                 }
                 else if (obj.IsPlant())
                 {
-                    Plant p = (Plant)obj;
-                    Item i = p.Harvest(false);
-                    if (i != null)
-                    {
-                        _liItems.Add(i);
-                        MapManager.RemoveWorldObject(p);
-                        p.RemoveSelfFromTiles();
-                    }   //If we failed to harvest, water the plant if possible
+                    ((Plant)obj).Harvest();
                 }
             }
 
@@ -1403,12 +1386,25 @@ namespace RiverHollow.Tile_Engine
             else{
                 bool found = false;
 
-                RHTile t = GetTileByPixelPosition(GraphicCursor.GetWorldMousePosition().ToPoint());
-                if(t != null && t.GetTravelPoint() != null)
+                RHTile t = GetTileByPixelPosition(GUICursor.GetWorldMousePosition().ToPoint());
+                if(t != null)
                 {
-                    found = true;
-                    GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Door;
-                    GraphicCursor.Alpha = (PlayerManager.PlayerInRange(t.GetTravelPoint().CollisionBox) ? 1 : 0.5f);
+                    if (t.GetTravelPoint() != null)
+                    {
+                        found = true;
+                        GUICursor._CursorType = GUICursor.EnumCursorType.Door;
+                        GUICursor.Alpha = (PlayerManager.PlayerInRange(t.GetTravelPoint().CollisionBox) ? 1 : 0.5f);
+                    }
+                    else if(t.GetWorldObject(false) != null && t.GetWorldObject().IsPlant())
+                    {
+                        Plant obj = (Plant)t.GetWorldObject();
+                        if (obj.FinishedGrowing())
+                        {
+                            found = true;
+                            GUICursor._CursorType = GUICursor.EnumCursorType.Pickup;
+                            GUICursor.Alpha = (PlayerManager.PlayerInRange(obj.CollisionBox) ? 1 : 0.5f);
+                        }
+                    }
                 }
 
                 foreach (WorldActor c in _liActors)
@@ -1416,7 +1412,7 @@ namespace RiverHollow.Tile_Engine
                     if(!c.IsMonster() && c.HoverContains(mouseLocation)){
                         if (c.Active)
                         {
-                            GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Talk;
+                            GUICursor._CursorType = GUICursor.EnumCursorType.Talk;
                             found = true;
                             break;
                         }
@@ -1433,7 +1429,7 @@ namespace RiverHollow.Tile_Engine
                 }
                 if (!found)
                 {
-                    GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Normal;
+                    GUICursor._CursorType = GUICursor.EnumCursorType.Normal;
                 }
             }
 
@@ -1659,7 +1655,7 @@ namespace RiverHollow.Tile_Engine
                     {
                         if (b.HasSpace())
                         {
-                            Adventurer w = DataManager.GetAdventurer(GraphicCursor.WorkerToPlace);
+                            Adventurer w = DataManager.GetAdventurer(GUICursor.WorkerToPlace);
                             b.AddWorker(w);
                             b._selected = false;
                             GUIManager.OpenMainObject(new HUDNamingWindow(w));

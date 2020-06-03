@@ -145,6 +145,13 @@ namespace RiverHollow.WorldObjects
                 if (t.WorldObject == this) { t.RemoveWorldObject(); }
                 if (t.ShadowObject == this) { t.RemoveShadowObject(); }
             }
+
+            foreach (RHTile t in ShadowTiles)
+            {
+                if (t.Flooring == this) { t.RemoveFlooring(); }
+                if (t.WorldObject == this) { t.RemoveWorldObject(); }
+                if (t.ShadowObject == this) { t.RemoveShadowObject(); }
+            }
         }
 
         public void ReadItemDrops(string itemDrop)
@@ -757,6 +764,7 @@ namespace RiverHollow.WorldObjects
             float _fCurrentRotation = 0f;
             int _iBounceCount = 0;
 
+            bool _bPopItem;
             int _iCurrentState;
             int _iMaxStates;
             int _iResourceID;
@@ -778,6 +786,8 @@ namespace RiverHollow.WorldObjects
                 ReadSourcePos(stringData["Image"]);
                 _iResourceID = int.Parse(stringData["Item"]);
                 _iMaxStates = int.Parse(stringData["TrNum"]);       //Number of growth phases
+
+                _bPopItem = false;
 
                 //The amount of time for each phase
                 string[] dayStr = stringData["TrTime"].Split('-');
@@ -878,13 +888,20 @@ namespace RiverHollow.WorldObjects
             /// </summary>
             /// <returns>True if it's on the last phase</returns>
             public bool FinishedGrowing() { return _iCurrentState == _iMaxStates-1; }
-            public Item Harvest(bool pop)
+
+            /// <summary>
+            /// Call to tell the plant that it is being Harvested, and follow any logic
+            /// that needs to happen for this to occur.
+            /// 
+            /// Can only Harvest plants that are finished growing.
+            /// </summary>
+            public void Harvest()
             {
                 Item it = null;
                 if (FinishedGrowing())
                 {
                     it = DataManager.GetItem(_iResourceID);
-                    if (pop)
+                    if (_bPopItem)
                     {
                         it.Pop(MapPosition);
                     }
@@ -892,8 +909,10 @@ namespace RiverHollow.WorldObjects
                     {
                         InventoryManager.AddToInventory(it);
                     }
+
+                    MapManager.RemoveWorldObject(this);
+                    RemoveSelfFromTiles();
                 }
-                return it;
             }
 
             public void FinishGrowth()

@@ -2166,7 +2166,7 @@ namespace RiverHollow.Actors
 
         public override void Talk(bool IsOpen = false)
         {
-            GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Talk;
+            GUICursor._CursorType = GUICursor.EnumCursorType.Talk;
             string text = string.Empty;
             if (!Introduced)
             {

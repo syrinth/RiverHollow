@@ -188,7 +188,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         {
             bool rv = false;
 
-            RHTile hoverTile = MapManager.CurrentMap.GetTileByPixelPosition(GraphicCursor.GetWorldMousePosition());
+            RHTile hoverTile = MapManager.CurrentMap.GetTileByPixelPosition(GUICursor.GetWorldMousePosition());
             if (hoverTile?.Character != null)
             {
                 if(_gActorInfoPanel?.Character != hoverTile.Character)
@@ -690,7 +690,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         _gSelectedAction = _liActionButtons[0];
                     }
 
-                    ProcessHover(GraphicCursor.Position.ToPoint());
+                    ProcessHover(GUICursor.Position.ToPoint());
                 }
             }
 

@@ -773,7 +773,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void HandleMouseTargetting()
         {
-            Vector2 mouseCursor = GraphicCursor.GetWorldMousePosition();
+            Vector2 mouseCursor = GUICursor.GetWorldMousePosition();
             RHTile tile = MapManager.CurrentMap.GetTileByPixelPosition(mouseCursor);
             if (tile != null && _liLegalTiles.Contains(tile))
             {

@@ -84,15 +84,15 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                 else
                 {
                     //Until fixed for specific motion
-                    if (_poiMouse != GraphicCursor.Position.ToPoint() && Contains(GraphicCursor.Position.ToPoint()))
+                    if (_poiMouse != GUICursor.Position.ToPoint() && Contains(GUICursor.Position.ToPoint()))
                     {
-                        _poiMouse = GraphicCursor.Position.ToPoint();
-                        if (_iKeySelection - 1 >= 0 && GraphicCursor.Position.Y < _giSelection.Position().Y)
+                        _poiMouse = GUICursor.Position.ToPoint();
+                        if (_iKeySelection - 1 >= 0 && GUICursor.Position.Y < _giSelection.Position().Y)
                         {
                             _giSelection.AlignToObject(_diOptions[_iKeySelection - 1].GText, SideEnum.Bottom);
                             _iKeySelection--;
                         }
-                        else if (_iKeySelection + 1 < _diOptions.Count && GraphicCursor.Position.Y > _giSelection.Position().Y + _giSelection.Height)
+                        else if (_iKeySelection + 1 < _diOptions.Count && GUICursor.Position.Y > _giSelection.Position().Y + _giSelection.Height)
                         {
                             _giSelection.AlignToObject(_diOptions[_iKeySelection + 1].GText, SideEnum.Bottom);
                             _iKeySelection++;

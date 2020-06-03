@@ -33,7 +33,7 @@ namespace RiverHollow.Game_Managers
         public static void LoadContent()
         {
             _fadeImg = new GUIImage(new Rectangle(160, 128, TileSize, TileSize), RiverHollow.ScreenWidth*2, RiverHollow.ScreenHeight*2, @"Textures\Dialog");
-            GraphicCursor.LoadContent();
+            GUICursor.LoadContent();
         }
 
         public static void Update(GameTime gTime)
@@ -46,7 +46,7 @@ namespace RiverHollow.Game_Managers
             {
                 _currentGUIScreen.Update(gTime);
             }
-            GraphicCursor.Update();
+            GUICursor.Update();
         }
 
         public static void Draw(SpriteBatch spriteBatch)
@@ -63,7 +63,7 @@ namespace RiverHollow.Game_Managers
                     _currentGUIScreen.Draw(spriteBatch);
                 }
 
-                GraphicCursor.Draw(spriteBatch);
+                GUICursor.Draw(spriteBatch);
             }
         }
 
@@ -107,7 +107,7 @@ namespace RiverHollow.Game_Managers
         public static bool IsTextWindowOpen() { return _currentGUIScreen.IsTextWindowOpen(); }
         public static void OpenTextWindow(string text, bool open = true)
         {
-            GraphicCursor._CursorType = GraphicCursor.EnumCursorType.Normal;
+            GUICursor._CursorType = GUICursor.EnumCursorType.Normal;
             GameManager.Pause();
             _currentGUIScreen.OpenTextWindow(text, open);
         }

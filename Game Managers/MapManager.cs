@@ -224,8 +224,8 @@ namespace RiverHollow.Game_Managers
         public static void DrawBase(SpriteBatch spriteBatch)
         {
             _currentMap.DrawBase(spriteBatch);
-            GraphicCursor.DrawBuilding(spriteBatch);
-            GraphicCursor.DrawPotentialWorldObject(spriteBatch);
+            GUICursor.DrawBuilding(spriteBatch);
+            GUICursor.DrawPotentialWorldObject(spriteBatch);
         }
 
         public static void DrawLights(SpriteBatch spriteBatch)

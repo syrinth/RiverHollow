@@ -88,7 +88,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             if (_guiTextWindow != null) { _guiTextWindow.Update(gTime); }
 
-            if (_guiHoverObject != null && !_guiHoverObject.Contains(GraphicCursor.Position.ToPoint())) {
+            if (_guiHoverObject != null && !_guiHoverObject.Contains(GUICursor.Position.ToPoint())) {
                 CloseHoverWindow();
             }
         }
