@@ -101,6 +101,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "CurrentClass")]
             public int currentClass;
 
+            [XmlElement(ElementName = "BodyType")]
+            public int bodyTypeIndex;
+
             [XmlElement(ElementName = "HairColor")]
             public Color hairColor;
 

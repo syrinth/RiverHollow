@@ -2882,6 +2882,9 @@ namespace RiverHollow.Actors
         int _iHairIndex = 0;
         public int HairIndex => _iHairIndex;
 
+        int _iBodyType = 1;
+        public int BodyType => _iBodyType;
+
         public Vector2 BodyPosition => _sprBody.Position;
         public override Vector2 Position
         {
@@ -2921,27 +2924,6 @@ namespace RiverHollow.Actors
 
             _sprBody.SetColor(Color.White);
             _sprHair.SetColor(_cHairColor);
-        }
-
-        /// <summary>
-        /// Override for the ClassedCombatant SetClass methog. Calls the super method and then
-        /// loads the appropriate sprites.
-        /// </summary>
-        /// <param name="x">The class to set</param>
-        /// <param name="assignGear">Whether or not to assign starting gear</param>
-        public override void SetClass(CharacterClass x)
-        {
-            base.SetClass(x);
-
-            //Loads the Sprites for the players body for the appropriate class
-            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Body", DataManager.FOLDER_PLAYER));
-
-            //Hair type has already been set either by default or by being allocated.
-            SetHairType(_iHairIndex);
-
-            //Loads the Sprites for the players body for the appropriate class
-            LoadSpriteAnimations(ref _sprEyes, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Eyes", DataManager.FOLDER_PLAYER));
-            _sprEyes.SetDepthMod(EYE_DEPTH);
         }
 
         public override void Update(GameTime gTime)
@@ -3008,11 +2990,32 @@ namespace RiverHollow.Actors
             _sprBody.Draw(spriteBatch, useLayerDepth);
 
             float bodyDepth = _sprBody.Position.Y + _sprBody.CurrentFrameAnimation.FrameHeight + (Position.X / 100);
-            _sprEyes.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
-            _sprHair.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
+            //_sprEyes.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
+            //_sprHair.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
 
             _chest?.Sprite.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth + 0.01f);
             Hat?.Sprite.Draw(spriteBatch, useLayerDepth);
+        }
+
+        /// <summary>
+        /// Override for the ClassedCombatant SetClass methog. Calls the super method and then
+        /// loads the appropriate sprites.
+        /// </summary>
+        /// <param name="x">The class to set</param>
+        /// <param name="assignGear">Whether or not to assign starting gear</param>
+        public override void SetClass(CharacterClass x)
+        {
+            base.SetClass(x);
+
+            //Loads the Sprites for the players body for the appropriate class
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, _iBodyType.ToString("00")));
+
+            //Hair type has already been set either by default or by being allocated.
+            SetHairType(_iHairIndex);
+
+            //Loads the Sprites for the players body for the appropriate class
+            LoadSpriteAnimations(ref _sprEyes, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Eyes", DataManager.FOLDER_PLAYER));
+            _sprEyes.SetDepthMod(EYE_DEPTH);
         }
 
         public void SetColor(AnimatedSprite sprite, Color c)
@@ -3097,6 +3100,12 @@ namespace RiverHollow.Actors
                 _sprHair.FrameCutoff = 0;
                 _hat = null;
             }
+        }
+
+        public void SetBodyType(int val)
+        {
+            _iBodyType = val;
+            SetClass(_class);
         }
     }
 

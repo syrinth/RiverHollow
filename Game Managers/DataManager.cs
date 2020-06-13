@@ -533,6 +533,11 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
+        public static bool HasTexture(string texture)
+        {
+            return _diTextures.ContainsKey(texture);
+        }
+
         public static Texture2D GetTexture(string texture)
         {
             return _diTextures[texture];

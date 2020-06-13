@@ -553,6 +553,7 @@ namespace RiverHollow.Game_Managers
             {
                 name = PlayerManager.Name,
                 money = PlayerManager.Money,
+                bodyTypeIndex = PlayerManager.World.BodyType,
                 hairColor = PlayerManager.World.HairColor,
                 hairIndex = PlayerManager.World.HairIndex,
                 hat = Item.SaveData(World.Hat),
@@ -577,6 +578,8 @@ namespace RiverHollow.Game_Managers
 
             World.SetClothes((Clothes)DataManager.GetItem(data.hat.itemID));
             World.SetClothes((Clothes)DataManager.GetItem(data.chest.itemID));
+
+            World.SetBodyType(data.bodyTypeIndex);
 
             for (int i = 0; i < InventoryManager.maxItemRows; i++)
             {

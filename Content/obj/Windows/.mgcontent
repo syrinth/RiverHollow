@@ -103,7 +103,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Wand/608.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Weapons/Wand/609.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/PlayerClassAnimationConfig.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/Body.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/Eyes.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/Hairstyles/Hair_0.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/Hairstyles/Hair_1.png</File>
@@ -202,5 +201,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/Font_Main_0.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/Font_Stat_Display.fnt</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/Font_Stat_Display_0.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/Body_01.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/Body_02.png</File>
   </SourceFiles>
 </SourceFileCollection>

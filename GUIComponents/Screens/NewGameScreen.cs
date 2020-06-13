@@ -25,6 +25,7 @@ namespace RiverHollow.GUIComponents.Screens
         bool _bCloseColorSelection;
         static int _iHairTypeIndex;
         int _iHairTypeCount = 3;
+        static int _iCurrBodyType = 1;
         GUIWindow _window;
         GUIButton _btnOK;
         GUIButton _btnCancel;
@@ -38,7 +39,7 @@ namespace RiverHollow.GUIComponents.Screens
         PlayerDisplayBox _playerDisplayBox;
 
         GUISwatch _btnHairColor;
-        GUIButton _btnNextHairType, _btnNextHat, _btnNextShirt;
+        GUIButton _btnBodyType, _btnNextHairType, _btnNextHat, _btnNextShirt;
         GUIImage _gHair, _gHat, _gShirt;
 
         ColorSelectionBox _colorSelection;
@@ -76,6 +77,9 @@ namespace RiverHollow.GUIComponents.Screens
 
             _playerDisplayBox = new PlayerDisplayBox(false);
             _playerDisplayBox.AnchorToInnerSide(_window, SideEnum.TopLeft);
+
+            _btnBodyType = new GUIButton(new Rectangle(256, 112, 16, 16), 32, 32, @"Textures\Dialog", BtnNextBodyType);
+            _btnBodyType.AnchorAndAlignToObject(_playerDisplayBox, SideEnum.Right, SideEnum.Bottom, 10);
 
             _btnHairColor = new GUISwatch(PlayerManager.World.HairColor, 16, 32, BtnChooseHairColor);
             _btnHairColor.AnchorAndAlignToObject(_playerDisplayBox, SideEnum.Bottom, SideEnum.Left);
@@ -196,6 +200,18 @@ namespace RiverHollow.GUIComponents.Screens
         {
             GUIManager.SetScreen(new IntroMenuScreen());
             GameManager.StopTakingInput();
+        }
+
+        public void BtnNextBodyType()
+        {
+            _iCurrBodyType++;
+            if(!DataManager.HasTexture(string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, _iCurrBodyType.ToString("00"))))
+            {
+                _iCurrBodyType = 1;
+            }
+            PlayerManager.World.SetBodyType(_iCurrBodyType);
+
+            _playerDisplayBox.Configure();
         }
         public void BtnChooseHairColor()
         {
