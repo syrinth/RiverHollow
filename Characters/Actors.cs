@@ -2990,7 +2990,7 @@ namespace RiverHollow.Actors
             _sprBody.Draw(spriteBatch, useLayerDepth);
 
             float bodyDepth = _sprBody.Position.Y + _sprBody.CurrentFrameAnimation.FrameHeight + (Position.X / 100);
-            //_sprEyes.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
+            _sprEyes.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
             //_sprHair.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
 
             _clBody?.Sprite.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth + 0.01f);
