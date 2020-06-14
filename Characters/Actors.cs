@@ -2884,6 +2884,14 @@ namespace RiverHollow.Actors
 
         int _iBodyType = 1;
         public int BodyType => _iBodyType;
+        public string BodyTypeStr => _iBodyType.ToString("00");
+
+        protected List<AnimatedSprite> GetSprites()
+        {
+            List<AnimatedSprite> liRv = new List<AnimatedSprite>() { _sprBody, _sprEyes, _sprHair, _clBody?.Sprite, _clHat?.Sprite, _clLegs?.Sprite };
+            liRv.RemoveAll(x => x == null);
+            return liRv;
+        }
 
         public Vector2 BodyPosition => _sprBody.Position;
         public override Vector2 Position
@@ -2891,22 +2899,19 @@ namespace RiverHollow.Actors
             get { return new Vector2(_sprBody.Position.X, _sprBody.Position.Y + _sprBody.Height - TileSize); }
             set
             {
-                _sprBody.Position = new Vector2(value.X, value.Y - _sprBody.Height + TileSize);
-                _sprEyes.Position = _sprBody.Position;
-                _sprHair.Position = _sprBody.Position;
-
-                if (_chest != null) { _chest.SetSpritePosition(_sprBody.Position); }
-                if (Hat != null) { _hat.SetSpritePosition(_sprBody.Position); }
+                Vector2 vPos = new Vector2(value.X, value.Y - _sprBody.Height + TileSize);
+                foreach(AnimatedSprite spr in GetSprites()) { spr.Position = vPos; }
             }
         }
 
-        Clothes _hat;
-        public Clothes Hat => _hat;
-        Clothes _chest;
-        public Clothes Shirt => _chest;
+        Clothes _clHat;
+        public Clothes Hat => _clHat;
+        Clothes _clBody;
+        public Clothes Body => _clBody;
         Clothes Back;
         Clothes Hands;
-        Clothes Legs;
+        Clothes _clLegs;
+        public Clothes Legs => _clLegs;
         Clothes Feet;
 
         public PlayerCharacter() : base()
@@ -2921,6 +2926,7 @@ namespace RiverHollow.Actors
 
             //Sets a default class so we can load and display the character to start
             SetClass(DataManager.GetClassByIndex(1));
+            SetClothes((Clothes)DataManager.GetItem((404)));
 
             _sprBody.SetColor(Color.White);
             _sprHair.SetColor(_cHairColor);
@@ -2975,13 +2981,7 @@ namespace RiverHollow.Actors
                     HandleMove(targetPos);
                 }
             }
-
-            _sprBody.Update(gTime);
-            _sprEyes.Update(gTime);
-            _sprHair.Update(gTime);
-
-            if (_chest != null) { _chest.Sprite.Update(gTime); }
-            if (Hat != null) { Hat.Sprite.Update(gTime); }
+            foreach (AnimatedSprite spr in GetSprites()) { spr.Update(gTime); }
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
@@ -2993,8 +2993,9 @@ namespace RiverHollow.Actors
             //_sprEyes.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
             //_sprHair.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
 
-            _chest?.Sprite.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth + 0.01f);
-            Hat?.Sprite.Draw(spriteBatch, useLayerDepth);
+            _clBody?.Sprite.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth + 0.01f);
+            _clHat?.Sprite.Draw(spriteBatch, useLayerDepth);
+            _clLegs?.Sprite.Draw(spriteBatch, useLayerDepth);
         }
 
         /// <summary>
@@ -3008,7 +3009,7 @@ namespace RiverHollow.Actors
             base.SetClass(x);
 
             //Loads the Sprites for the players body for the appropriate class
-            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, _iBodyType.ToString("00")));
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, BodyTypeStr));
 
             //Hair type has already been set either by default or by being allocated.
             SetHairType(_iHairIndex);
@@ -3038,52 +3039,39 @@ namespace RiverHollow.Actors
 
         public void MoveBy(int x, int y)
         {
-            _sprBody.MoveBy(x, y);
-            _sprEyes.MoveBy(x, y);
-            _sprHair.MoveBy(x, y);
-            if (_chest != null) { _chest.Sprite.MoveBy(x, y); }
-            if (Hat != null) { Hat.Sprite.MoveBy(x, y); }
+            foreach (AnimatedSprite spr in GetSprites()) { spr.MoveBy(x, y); }
         }
 
         public override void PlayAnimation(AnimationEnum anim)
         {
-            _sprBody.PlayAnimation(anim);
-            _sprEyes.PlayAnimation(anim);
-            _sprHair.PlayAnimation(anim);
-
-            if (_chest != null) { _chest.Sprite.PlayAnimation(anim); }
-            if (Hat != null) { Hat.Sprite.PlayAnimation(anim); }
+            foreach (AnimatedSprite spr in GetSprites()) { spr.PlayAnimation(anim); }
         }
         public override void PlayAnimation(VerbEnum verb, DirectionEnum dir)
         {
-            _sprBody.PlayAnimation(verb, dir);
-            _sprEyes.PlayAnimation(verb, dir);
-            _sprHair.PlayAnimation(verb, dir);
-
-            if (_chest != null) { _chest.Sprite.PlayAnimation(verb, dir); }
-            if (Hat != null) { Hat.Sprite.PlayAnimation(verb, dir); }
+            foreach (AnimatedSprite spr in GetSprites()) { spr.PlayAnimation(verb, dir); }
         }
 
         public void SetScale(int scale = 1)
         {
-            _sprBody.SetScale(scale);
-            _sprEyes.SetScale(scale);
-            _sprHair.SetScale(scale);
-
-            if (_chest != null) { _chest.Sprite.SetScale(scale); }
-            if (_hat != null) { _hat.Sprite.SetScale(scale); }
+            foreach (AnimatedSprite spr in GetSprites()) { spr.SetScale(scale); }
         }
 
         public void SetClothes(Clothes c)
         {
             if (c != null)
             {
-                if (c.IsShirt()) { _chest = c; }
-                else if (c.IsHat())
+                string clothingTexture = string.Format(@"Textures\Items\Gear\{0}\{1}", c.ClothesType.ToString(), c.ItemID);
+                if (!c.GenderNeutral) { clothingTexture += ("_" + BodyTypeStr); }
+
+                LoadSpriteAnimations(ref c.Sprite, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[CharacterClass.ID]), clothingTexture);
+
+                if (c.SlotMatch(ClothesEnum.Body)) { _clBody = c; }
+                else if (c.SlotMatch(ClothesEnum.Hat))
                 {
                     _sprHair.FrameCutoff = 9;
-                    _hat = c;
+                    _clHat = c;
                 }
+                else if (c.SlotMatch(ClothesEnum.Legs)) { _clLegs = c; }
 
                 //MAR AWKWARD
                 c.Sprite.Position = _sprBody.Position;
@@ -3094,11 +3082,11 @@ namespace RiverHollow.Actors
 
         public void RemoveClothes(ClothesEnum c)
         {
-            if (c.Equals(ClothesEnum.Chest)) { _chest = null; }
+            if (c.Equals(ClothesEnum.Body)) { _clBody = null; }
             else if (c.Equals(ClothesEnum.Hat))
             {
                 _sprHair.FrameCutoff = 0;
-                _hat = null;
+                _clHat = null;
             }
         }
 
@@ -3106,6 +3094,9 @@ namespace RiverHollow.Actors
         {
             _iBodyType = val;
             SetClass(_class);
+            SetClothes(_clHat);
+            SetClothes(_clBody);
+            SetClothes(_clLegs);
         }
     }
 

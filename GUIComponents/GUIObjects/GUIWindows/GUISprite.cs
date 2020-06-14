@@ -82,6 +82,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public GUISprite HatSprite => _sprHat;
         GUISprite _sprChest;
         public GUISprite ShirtSprite => _sprChest;
+        GUISprite _sprLegs;
+        public GUISprite Legsprite => _sprLegs;
 
         List<GUISprite> _liSprites;
 
@@ -111,13 +113,18 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 _sprHat = new GUISprite(PlayerManager.World.Hat.Sprite, overwrite);
                 _liSprites.Add(_sprHat);
             }
-            if (PlayerManager.World.Shirt != null)
+            if (PlayerManager.World.Body != null)
             {
-                _sprChest = new GUISprite(PlayerManager.World.Shirt.Sprite, overwrite);
+                _sprChest = new GUISprite(PlayerManager.World.Body.Sprite, overwrite);
                 _liSprites.Add(_sprChest);
             }
+            if (PlayerManager.World.Legs != null)
+            {
+                _sprLegs = new GUISprite(PlayerManager.World.Legs.Sprite, overwrite);
+                _liSprites.Add(_sprLegs);
+            }
 
-            foreach(GUISprite sprite in _liSprites)
+            foreach (GUISprite sprite in _liSprites)
             {
                 AddControl(sprite);
             }

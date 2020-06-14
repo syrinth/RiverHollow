@@ -243,7 +243,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (_iShirtIndex < _liShirts.Count - 1) { _iShirtIndex++; }
             else { _iShirtIndex = 0; }
 
-            SyncClothing((Clothes)DataManager.GetItem((_liShirts[_iShirtIndex])), ClothesEnum.Chest);
+            SyncClothing((Clothes)DataManager.GetItem((_liShirts[_iShirtIndex])), ClothesEnum.Body);
             _playerDisplayBox.Configure();
         }
 

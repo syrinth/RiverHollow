@@ -203,5 +203,10 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Fonts/Font_Stat_Display_0.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/Body_01.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Player/Body_02.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Body/400_01.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Body/400_02.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Body/401_01.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Body/401_02.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Legs/404.png</File>
   </SourceFiles>
 </SourceFileCollection>

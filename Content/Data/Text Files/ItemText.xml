@@ -367,6 +367,10 @@
       <Key>403</Key>
       <Value>Wizard's Robes/ The robes of a true wizard!</Value>
     </Item>
+	<Item>
+      <Key>404</Key>
+      <Value>Dark Pants/A pair of dark pants</Value>
+    </Item>
     <!--<500> Food-->
     <Item>
       <Key>500</Key>

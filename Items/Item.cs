@@ -465,46 +465,36 @@ namespace RiverHollow.WorldObjects
 
     public class Clothes : Item
     {
-        public enum ClothesEnum { None, Chest, Pants, Hat};
-        ClothesEnum _clothesType;
-        public ClothesEnum ClothesType => _clothesType;
+        public enum ClothesEnum { None, Body, Legs, Hat};
+        ClothesEnum _eSlot;
+        public ClothesEnum ClothesType => _eSlot;
 
-        private AnimatedSprite _mainSprite;
-        public AnimatedSprite Sprite => _mainSprite;
+        public AnimatedSprite Sprite;
+
+        bool _bGenderNeutral = false;
+        public bool GenderNeutral => _bGenderNeutral;
 
         public Clothes(int id, Dictionary<string, string> stringData)
         {
             ImportBasics(stringData, id, 1);
 
+            //This is the texture to draw for the inventory representation
             _texTexture = DataManager.GetTexture(@"Textures\items");
 
             _bStacks = false;
             int row = 0;
 
-            _clothesType = Util.ParseEnum<ClothesEnum>(stringData["CType"]);
+            _eSlot = Util.ParseEnum<ClothesEnum>(stringData["CType"]);
+            _bGenderNeutral = stringData.ContainsKey("Neutral");
             row = int.Parse(stringData["Row"]);
-
-            int startX = 0;
-            int startY = TileSize * row * 2;
-            _mainSprite = new AnimatedSprite(@"Textures\texClothes");
-            _mainSprite.AddAnimation(VerbEnum.Walk, DirectionEnum.Down, startX, startY, TileSize, TileSize * 2, 3, 0.2f, true);
-            _mainSprite.AddAnimation(VerbEnum.Idle, DirectionEnum.Down, startX + TileSize, startY, TileSize, TileSize * 2, 1, 0.2f, true);
-            _mainSprite.AddAnimation(VerbEnum.Walk, DirectionEnum.Right, startX + TileSize * 3, startY, TileSize, TileSize * 2, 3, 0.2f, true);
-            _mainSprite.AddAnimation(VerbEnum.Idle, DirectionEnum.Right, startX + TileSize * 4, startY, TileSize, TileSize * 2, 1, 0.2f, true);
-            _mainSprite.AddAnimation(VerbEnum.Walk, DirectionEnum.Up, startX + TileSize * 6, startY, TileSize, TileSize * 2, 3, 0.2f, true);
-            _mainSprite.AddAnimation(VerbEnum.Idle, DirectionEnum.Up, startX + TileSize * 7, startY,TileSize, TileSize * 2, 1, 0.2f, true);
-            _mainSprite.AddAnimation(VerbEnum.Walk, DirectionEnum.Left, startX + TileSize * 9, startY,TileSize, TileSize * 2, 3, 0.2f,  true);
-            _mainSprite.AddAnimation(VerbEnum.Idle, DirectionEnum.Left, startX + TileSize * 10, startY, TileSize, TileSize * 2, 1, 0.2f, true);
         }
 
         public void SetSpritePosition(Vector2 Position)
         {
-            _mainSprite.Position = Position;
+            Sprite.Position = Position;
         }
 
-        public bool IsShirt() { return _clothesType == ClothesEnum.Chest; }
-        public bool IsPants() { return _clothesType == ClothesEnum.Pants; }
-        public bool IsHat() { return _clothesType == ClothesEnum.Hat; }
+        public bool SlotMatch(ClothesEnum type) { return _eSlot == type; }
     }
 
     public class Tool : Item

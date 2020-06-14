@@ -1068,7 +1068,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     if (_character == PlayerManager.World)
                     {
                         _sBoxHat = new SpecializedBox(ClothesEnum.Hat, PlayerManager.World.Hat, FindMatchingItems);
-                        _sBoxShirt = new SpecializedBox(ClothesEnum.Chest, PlayerManager.World.Shirt, FindMatchingItems);
+                        _sBoxShirt = new SpecializedBox(ClothesEnum.Body, PlayerManager.World.Body, FindMatchingItems);
 
                         //_sBoxHat.AnchorToInnerSide(_winClothes, SideEnum.TopLeft, SPACING);
                         _sBoxShirt.AnchorAndAlignToObject(_sBoxHat, SideEnum.Right, SideEnum.Top, SPACING);
