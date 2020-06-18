@@ -30,7 +30,7 @@ namespace RiverHollow
         {
             Vector2 target = Scrying() ? _vObserver : _actObserver.CharCenter.ToVector2() * Scale;
 
-            if (!TakingInput() && (IsRunning() || Scrying()))
+            if (!TakingInput() && Scrying())
             {
                 KeyboardState ks = Keyboard.GetState();
                 int speed = 10;
