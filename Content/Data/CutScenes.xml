@@ -8,9 +8,9 @@
         <!--Triggers for the cut scene [time:x y][friends:name1-x name2-y ...]-->
         <Item>[Time:6 16]</Item>
         <!--Setup Details [map:mapName][actors:ID-spawn name2-spawn ...][playerSpawn:Player1]-->
-        <Item>[Map:mapHouseNPC1][Player:Entrance][Actors:1-1CS0 8-8CS0]</Item>
+        <Item>[Map:mapHouseNPC1][Player:Entrance][Actors:5-1CS0 18-8CS0]</Item>
         <!--CutScene Sequencing Move<dir>-<char>-<numTiles> Speak-<id>-<dialogKey> Face<dir>-<char>-->
-        <Item>[Speak:8-1][Speak:1-2][Move:1-3-Down][Face:1-Left][Speak:8-3][Face:1-Right][Speak:1-4][Face:1-Down][Speak:1-5]</Item>
+        <Item>[Speak:18-1][Speak:5-2][Move:5-3-Down][Face:5-Left][Speak:18-3][Face:5-Right][Speak:5-4][Face:5-Down][Speak:5-5]</Item>
       </Value>
     </Item>
     <Item>

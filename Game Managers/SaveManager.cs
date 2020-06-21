@@ -584,12 +584,14 @@ namespace RiverHollow.Game_Managers
         {
             List<SaveInfoData> games = new List<SaveInfoData>();
 
-            foreach (string dir in Directory.GetDirectories(Environment.CurrentDirectory + "\\" + RIVER_HOLLOW_SAVES))
-            {
-                string pathToSaveInfo = String.Format(@"{0}\{1}", dir, INFO_FILE_NAME);
-                if (File.Exists(pathToSaveInfo))
+            if (Directory.Exists(Environment.CurrentDirectory + "\\" + RIVER_HOLLOW_SAVES)) {
+                foreach (string dir in Directory.GetDirectories(Environment.CurrentDirectory + "\\" + RIVER_HOLLOW_SAVES))
                 {
-                    games.Add(LoadSaveInfoData(pathToSaveInfo));
+                    string pathToSaveInfo = String.Format(@"{0}\{1}", dir, INFO_FILE_NAME);
+                    if (File.Exists(pathToSaveInfo))
+                    {
+                        games.Add(LoadSaveInfoData(pathToSaveInfo));
+                    }
                 }
             }
 
