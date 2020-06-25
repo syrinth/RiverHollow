@@ -274,7 +274,7 @@ namespace RiverHollow.Game_Managers
             public int friendship;
 
             [XmlArray(ElementName = "Collection")]
-            public List<CollectionData> collection;
+            public List<bool> collection;
         }
 
         public struct EligibleNPCData

@@ -152,11 +152,6 @@ namespace RiverHollow.Game_Managers
         public static void CloseMainObject() { _currentGUIScreen.CloseMainObject(); }
         #endregion
 
-        public static void AddTextSelection(string text)
-        {
-            _currentGUIScreen.AddTextSelection(text);
-        }
-
         public static void SetScreen(GUIScreen newScreen)
         {
             _currentGUIScreen = newScreen;

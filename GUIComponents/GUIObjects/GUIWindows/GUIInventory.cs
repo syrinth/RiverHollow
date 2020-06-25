@@ -1,11 +1,9 @@
 ﻿using RiverHollow.GUIObjects;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.WorldObjects;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using System.Collections.Generic;
 
 namespace RiverHollow.Screens
 {
@@ -124,7 +122,9 @@ namespace RiverHollow.Screens
             {
                 if (GameManager.CurrentNPC != null)
                 {
-                    //CurrentNPC.Gift(IsItemThere(mouse));
+                    rv = true;
+                    //Do not pick the item up, instead assign it.
+                   GameManager.gmActiveItem = IsItemThere(mouse);
                 }
                 else if (GameManager.gmDungeonObject != null)
                 {

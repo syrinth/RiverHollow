@@ -1618,7 +1618,6 @@ namespace RiverHollow.Actors
         public int FriendshipPoints = 1900;
 
         protected Dictionary<int, bool> _diCollection;
-        public Dictionary<int, bool> Collection => _diCollection;
         public bool Introduced;
         public bool CanGiveGift = true;
 
@@ -1784,6 +1783,7 @@ namespace RiverHollow.Actors
             {
                 if (chosenAction.Equals("GiveGift"))
                 {
+                    GameManager.AddCurrentNPCLockObject();
                     GUIManager.OpenMainObject(new HUDInventoryDisplay());
                 }
                 else if (chosenAction.StartsWith("Quest"))
@@ -1799,6 +1799,12 @@ namespace RiverHollow.Actors
                 else if (chosenAction.StartsWith("NoDonate"))
                 {
                     FriendshipPoints -= 1000;
+                }
+                else if (chosenAction.StartsWith("ConfirmGift"))
+                {
+                    GUIManager.CloseMainObject();
+                    GameManager.RemoveCurrentNPCLockObject();
+                    nextText = Gift(GameManager.gmActiveItem);
                 }
             }
 
@@ -1993,48 +1999,36 @@ namespace RiverHollow.Actors
             return rv;
         }
 
-        public virtual void Gift(Item item)
+        public virtual string Gift(Item item)
         {
+            string rv = string.Empty;
             if (item != null)
             {
-                string text = string.Empty;
                 item.Remove(1);
-                if (item.IsMap() && NPCType == Villager.NPCTypeEnum.Ranger)
+                CanGiveGift = false;
+
+                if (_diCollection.ContainsKey(item.ItemID))
                 {
-                    text = GetDialogEntry("Adventure");
-                    DungeonManagerOld.LoadNewDungeon((AdventureMap)item);
+                    FriendshipPoints += _diCollection[item.ItemID] ? 50 : 20;
+                    rv = GetDialogEntry("Collection");
+                    int index = new List<int>(_diCollection.Keys).FindIndex( x => x == item.ItemID);
+
+                    _diCollection[item.ItemID] = true;
+                    MapManager.Maps["mapHouseNPC" + _iIndex].AddCollectionItem(item.ItemID, _iIndex, index);
                 }
                 else
                 {
-                    CanGiveGift = false;
-                    if (_diCollection.ContainsKey(item.ItemID))
-                    {
-                        FriendshipPoints += _diCollection[item.ItemID] ? 50 : 20;
-                        text = GetDialogEntry("Collection");
-                        int index = 1;
-                        foreach (int items in _diCollection.Keys)
-                        {
-                            if (_diCollection[items])
-                            {
-                                index++;
-                            }
-                        }
-
-                        _diCollection[item.ItemID] = true;
-                        MapManager.Maps["mapHouseNPC" + _iIndex].AddCollectionItem(item.ItemID, _iIndex, index);
-                    }
-                    else
-                    {
-                        text = GetDialogEntry("Gift");
-                        FriendshipPoints += 1000;
-                    }
+                    rv = GetDialogEntry("Gift");
+                    FriendshipPoints += 1000;
                 }
 
-                if (!string.IsNullOrEmpty(text))
-                {
-                    GUIManager.OpenTextWindow(text, this, false);
-                }
+                //if (item.IsMap() && NPCType == Villager.NPCTypeEnum.Ranger)
+                //{
+                //    rv = GetDialogEntry("Adventure");
+                //    DungeonManagerOld.LoadNewDungeon((AdventureMap)item);
+                //}
             }
+            return rv;
         }
 
         public int GetFriendshipLevel()
@@ -2107,17 +2101,8 @@ namespace RiverHollow.Actors
                 npcID = ID,
                 introduced = Introduced,
                 friendship = FriendshipPoints,
-                collection = new List<CollectionData>()
+                collection = new List<bool>(_diCollection.Values)
             };
-            foreach (KeyValuePair<int, bool> kvp in Collection)
-            {
-                CollectionData c = new CollectionData
-                {
-                    itemID = kvp.Key,
-                    given = kvp.Value
-                };
-                npcData.collection.Add(c);
-            }
 
             return npcData;
         }
@@ -2125,16 +2110,24 @@ namespace RiverHollow.Actors
         {
             Introduced = data.introduced;
             FriendshipPoints = data.friendship;
-            int index = 1;
-            foreach (CollectionData c in data.collection)
-            {
-                if (c.given)
-                {
-                    Collection[c.itemID] = c.given;
-                    MapManager.Maps["HouseNPC" + data.npcID].AddCollectionItem(c.itemID, data.npcID, index++);
-                }
-            }
+
+            LoadCollection(data.collection);
+
             MoveToBuildingLocation();
+        }
+
+        /// <summary>
+        /// Iterates through the already loaded list of collection keys, then assigns the saved value from teh given data.
+        /// </summary>
+        /// <param name="data"></param>
+        protected void LoadCollection(List<bool> data)
+        {
+            int index = 0;
+            List<int> keys = new List<int>(_diCollection.Keys);
+            foreach (int key in keys)
+            {
+                _diCollection[key] = data[index++];
+            }
         }
     }
     public class ShopKeeper : Villager
@@ -2440,62 +2433,34 @@ namespace RiverHollow.Actors
             CalculatePathing();
         }
 
-        public override void Gift(Item item)
+        public override string Gift(Item item)
         {
+            string rv = string.Empty;
             if (item != null)
             {
-                string text = string.Empty;
                 item.Remove(1);
-                if (item.IsMap() && NPCType == Villager.NPCTypeEnum.Ranger)
-                {
-                    text = GetDialogEntry("Adventure");
-                    DungeonManagerOld.LoadNewDungeon((AdventureMap)item);
-                }
-                else if (item.IsMarriage())
+
+                if (item.IsMarriage())
                 {
                     if (FriendshipPoints > 200)
                     {
                         Married = true;
-                        text = GetDialogEntry("MarriageYes");
+                        rv = GetDialogEntry("MarriageYes");
                     }
                     else   //Marriage refused, readd the item
                     {
                         item.Add(1);
                         InventoryManager.AddToInventory(item);
-                        text = GetDialogEntry("MarriageNo");
+                        rv = GetDialogEntry("MarriageNo");
                     }
                 }
                 else
                 {
-                    CanGiveGift = false;
-                    if (_diCollection.ContainsKey(item.ItemID))
-                    {
-                        FriendshipPoints += _diCollection[item.ItemID] ? 50 : 20;
-                        text = GetDialogEntry("Collection");
-                        int index = 1;
-                        foreach (int items in _diCollection.Keys)
-                        {
-                            if (_diCollection[items])
-                            {
-                                index++;
-                            }
-                        }
-
-                        _diCollection[item.ItemID] = true;
-                        MapManager.Maps["mapHouseNPC" + _iIndex].AddCollectionItem(item.ItemID, _iIndex, index);
-                    }
-                    else
-                    {
-                        text = GetDialogEntry("Gift");
-                        FriendshipPoints += 10;
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(text))
-                {
-                    GUIManager.OpenTextWindow(text, this, false);
+                    rv = base.Gift(item);
                 }
             }
+
+            return rv;
         }
 
         public void JoinParty()
@@ -2527,15 +2492,7 @@ namespace RiverHollow.Actors
             CanGiveGift = data.canGiveGift;
             LoadClassedCharData(data.classedData);
 
-            int index = 1;
-            foreach (CollectionData c in data.npcData.collection)
-            {
-                if (c.given)
-                {
-                    Collection[c.itemID] = c.given;
-                    MapManager.Maps["HouseNPC" + data.npcData.npcID].AddCollectionItem(c.itemID, data.npcData.npcID, index++);
-                }
-            }
+            LoadCollection(data.npcData.collection);
 
             if (Married)
             {

@@ -214,13 +214,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public virtual void CloseMainObject() { }
         #endregion
 
-        public void AddTextSelection(string text)
-        {
-            RemoveControl(_gSelectionWindow);
-            _gSelectionWindow = new GUITextSelectionWindow(text);
-            AddControl(_gSelectionWindow);
-        }
-
         public void AddControl(GUIObject control)
         {
             _liToAdd.Add(control);

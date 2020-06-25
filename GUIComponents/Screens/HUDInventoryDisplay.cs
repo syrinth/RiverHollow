@@ -8,8 +8,8 @@ namespace RiverHollow.Game_Managers.GUIObjects
 {
     public class HUDInventoryDisplay : GUIObject
     {
-        private GUIInventory _inventory;
-        private GUIInventory _container;
+        GUIInventory _inventory;
+        GUIInventory _container;
 
         public HUDInventoryDisplay()
         {
@@ -48,6 +48,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (_inventory.Contains(mouse))
             {
                 rv = _inventory.ProcessLeftButtonClick(mouse);
+
+                if(GameManager.CurrentNPC != null && GameManager.gmActiveItem != null)
+                {
+                    GUIManager.OpenTextWindow(string.Format("Give {0} to {1}? [Yes:ConfirmGift|No:Cancel]", GameManager.gmActiveItem.Name, GameManager.CurrentNPC.Name), GameManager.CurrentNPC);
+                }
             }
             else if (_container != null && _container.Contains(mouse))
             {

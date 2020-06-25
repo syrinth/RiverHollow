@@ -1803,7 +1803,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                                 if (_parent.Selling())
                                 {
                                     GameManager.CurrentNPC = w.Worker;
-                                    GUIManager.AddTextSelection("Really sell contract? [Yes:SellContract|No:Cancel]");
+                                    GUIManager.OpenTextWindow("Really sell contract? [Yes:SellContract|No:Cancel]");
                                 }
                                 else
                                 {
