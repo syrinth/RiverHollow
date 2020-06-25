@@ -248,31 +248,48 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 }
             }
         }
+
+        /// <summary>
+        /// Iterates over the given text word by word to create a list of text entries that will
+        /// be on each screen. These text entries will have /n entries manually inserted to properly
+        /// display based off of the GUITextWindow dimensions.
+        /// </summary>
+        /// <param name="text">The text to display</param>
+        /// <param name="printAll">Whether we will print everything at once</param>
         protected void ParseText(string text, bool printAll = true)
         {
             bool grabLast = true;
             _numReturns = 0;
             string line = string.Empty;
             string returnString = string.Empty;
-            string[] wordArray = text.Split(' ');
+            string[] wordArray = text.Split(' ');   //Split the given entry around each word. Note that it is important that /n be its own word
 
             foreach (string word in wordArray)
             {
                 Vector2 measure = _giText.MeasureString(line + word);
 
-                if (measure.Length() >= MidWidth() - GUIManager.STANDARD_MARGIN * 2 ||
-                    _numReturns == MAX_ROWS - 1 && measure.Length() >= (Width) - _giText.CharHeight)
+                if (word.Contains("\n"))
                 {
-                    returnString = returnString + line + '\n';
+                    returnString = returnString + line + word;
                     line = string.Empty;
                     _numReturns++;
                 }
+                else
+                {
+                    if ((measure.Length() >= MidWidth() - GUIManager.STANDARD_MARGIN * 2) ||
+                        (_numReturns == MAX_ROWS - 1 && measure.Length() >= (Width) - _giText.CharHeight))
+                    {
+                        returnString = returnString + line + '\n';
+                        line = string.Empty;
+                        _numReturns++;
+                    }
 
-                grabLast = true;
-                line = line + word + ' ';
+                    grabLast = true;
+                    line = line + word + ' ';
+                }
 
-                //Spillover to another screen
-                if (measure.Y * (_numReturns + 1) >= (Height))
+                //Spillover to another screen when we have too many returns
+                if (_numReturns + 1 > MAX_ROWS)
                 {
                     grabLast = false;
                     _liText.Add(returnString);
