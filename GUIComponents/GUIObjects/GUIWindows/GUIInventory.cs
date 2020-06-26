@@ -120,7 +120,7 @@ namespace RiverHollow.Screens
             }
             else
             {
-                if (GameManager.CurrentNPC != null)
+                if (GameManager.CurrentInventoryDisplay == GameManager.DisplayTypeEnum.Gift)
                 {
                     rv = true;
                     //Do not pick the item up, instead assign it.
@@ -198,8 +198,8 @@ namespace RiverHollow.Screens
                                 InventoryManager.AddItemToInventorySpot(i.Item, row, col, !_bPlayerInventory);
                                 GameManager.DropItem();
 
-                               //Close any hover windows that may be open,otherwise they'll be open on an empty object
-                               GUIManager.CloseHoverWindow(); 
+                                //Close any hover windows that may be open,otherwise they'll be open on an empty object
+                                GUIManager.CloseHoverWindow();
 
                             }
 
@@ -207,6 +207,11 @@ namespace RiverHollow.Screens
                         }
                     }
                 }
+            }
+            else
+            {
+                InventoryManager.AddToInventory(GameManager.HeldItem);
+                GameManager.DropItem();
             }
 
             return rv;

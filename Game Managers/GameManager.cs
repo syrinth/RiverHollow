@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using static RiverHollow.Actors.ShopKeeper;
 using RiverHollow.Buildings;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
+using static RiverHollow.Actors.Actor;
 
 namespace RiverHollow.Game_Managers
 {
@@ -18,6 +19,8 @@ namespace RiverHollow.Game_Managers
         public const string ITEM_OPEN = "VALID_ITEM";
         public const string KEY_OPEN = "KEY_USED";
         #endregion
+
+        public enum DisplayTypeEnum { Inventory, Gift, Ship };
 
         public enum ZoneEnum { Forest, Mountain, Field, Swamp, Town };
         public enum DirectionEnum { Up, Down, Right, Left };
@@ -60,6 +63,7 @@ namespace RiverHollow.Game_Managers
         public static Item gmActiveItem;
         public static Spirit gmSpirit;
         public static DungeonObject gmDungeonObject;
+        public static DisplayTypeEnum CurrentInventoryDisplay;
 
         public static int MAX_NAME_LEN = 10;
 
@@ -103,7 +107,7 @@ namespace RiverHollow.Game_Managers
             }
             else if (selectedAction.Contains("SellContract") && GameManager.CurrentNPC != null)
             {
-                if (GameManager.CurrentNPC.IsAdventurer())
+                if (GameManager.CurrentNPC.IsActorType(ActorEnum.Adventurer))
                 {
                     ((Adventurer)GameManager.CurrentNPC).Building.RemoveWorker((Adventurer)GameManager.CurrentNPC);
                     PlayerManager.AddMoney(1000);

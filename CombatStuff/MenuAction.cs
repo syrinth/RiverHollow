@@ -10,6 +10,7 @@ using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using static RiverHollow.Actors.Actor;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Actors.CombatStuff
@@ -470,7 +471,7 @@ namespace RiverHollow.Actors.CombatStuff
                         //Apply to all allies of the user
                         if (s.Equals("Allies"))
                         {
-                            if (_cmbtUser.IsAdventurer())
+                            if (_cmbtUser.IsActorType(ActorEnum.Adventurer))
                             {
                                 targets.AddRange(CombatManager.Party);
                             }
@@ -483,7 +484,7 @@ namespace RiverHollow.Actors.CombatStuff
                         //Apply to all enemies of the user
                         if (s.Equals("Enemies"))
                         {
-                            if (_cmbtUser.IsAdventurer())
+                            if (_cmbtUser.IsActorType(ActorEnum.Adventurer))
                             {
                                 targets.AddRange(CombatManager.Monsters);
 
@@ -691,7 +692,7 @@ namespace RiverHollow.Actors.CombatStuff
 
             ////The meaning of push and pull is dependent on whether or not
             ////it's an ally or enemy tile.
-            //if (tile.Character.IsAdventurer())
+            //if (tile.Character.IsActorType(ActorEnum.Adventurer))
             //{
             //    if (action == SkillTagsEnum.Push) { rv = tile.GetTileByDirection();
             //    else if (action == SkillTagsEnum.Pull) { rv = CombatManager.GetRight(tile.GUITile.MapTile); }
@@ -912,11 +913,11 @@ namespace RiverHollow.Actors.CombatStuff
                     {
                         if (!CombatManager.CheckForForcedEndOfTurn())
                         {
-                            if (CombatManager.ActiveCharacter.IsMonster() && CombatManager.SelectedAction != null)
+                            if (CombatManager.ActiveCharacter.IsActorType(ActorEnum.Monster) && CombatManager.SelectedAction != null)
                             {
                                 CombatManager.ChangePhase(CombatManager.CmbtPhaseEnum.ChooseMoveTarget);
                             }
-                            else if (CombatManager.ActiveCharacter.IsAdventurer())
+                            else if (CombatManager.ActiveCharacter.IsActorType(ActorEnum.Adventurer))
                             {
                                 CombatManager.GoToMainSelection();
                             }

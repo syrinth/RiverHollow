@@ -12,6 +12,7 @@ using RiverHollow.Tile_Engine;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
+using static RiverHollow.Actors.Actor;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIObjects.GUIObject;
 
@@ -74,7 +75,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             //        break;
 
             //    case CombatManager.PhaseEnum.NewTurn:
-            //        if (!CombatManager.ActiveCharacter.IsMonster())
+            //        if (!CombatManager.ActiveCharacter.IsActorType(ActorEnum.Monster))
             //        {
             //            _gActionSelect.SetCharacter(CombatManager.ActiveCharacter);
             //            _gActionSelect.AnchorToScreen(SideEnum.Bottom);
@@ -366,7 +367,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         //public void SetWeapon()
         //{
-        //    if (_actor.IsAdventurer())
+        //    if (_actor.IsActorType(ActorEnum.Adventurer))
         //    {
         //        ClassedCombatant adv = (ClassedCombatant)_actor;
         //        CharacterClass cClass = adv.CharacterClass;
@@ -1132,7 +1133,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             public TurnDisplay(CombatActor actor, GUIImage[] barDisplay)
             {
                 _actor = actor;
-                _bInParty = !actor.IsMonster();
+                _bInParty = !actor.IsActorType(ActorEnum.Monster);
                 _gName = new GUIText(actor.Name.Substring(0, 1));
                 _gImage = new GUIImage(new Rectangle(48, 48, 10, 10), 10, 10, @"Textures\Dialog");
                 _gImage.SetScale(GameManager.Scale);
@@ -1219,7 +1220,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             public void SetActor(CombatActor c)
             {
                 _actor = c;
-                _bInParty = !_actor.IsMonster();
+                _bInParty = !_actor.IsActorType(ActorEnum.Monster);
                 _gName.SetText(c != null ? _actor.Name.Substring(0, 1) : string.Empty);
                 _gName.CenterOnObject(_gImage);
             }

@@ -11,6 +11,7 @@ using RiverHollow.Tile_Engine;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using System.IO;
+using static RiverHollow.Actors.Actor;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Game_Managers
@@ -109,7 +110,7 @@ namespace RiverHollow.Game_Managers
             {
                 entryPoint = _tileMaps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
 
-                if (c.IsNPC() || c.IsWorldCharacter())
+                if (c.IsActorType(ActorEnum.NPC) || c.IsActorType(ActorEnum.WorldCharacter))
                 {
                     ((Villager)c).ClearTileForMapChange();
                 }

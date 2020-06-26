@@ -109,7 +109,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 else if (Item.IsConsumable())       //If the item is a Consumable, construct the selection options from the party
                 {
                     int i = 0;
-                    text = string.Format("Use {0} on who? [", Item.Name);
+                    text = string.Format(DataManager.GetGameText("ItemConfirm"), Item.Name);
                     foreach (ClassedCombatant adv in PlayerManager.GetParty())
                     {
                         text += adv.Name + ":" + i++ + "|";

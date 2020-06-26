@@ -3,6 +3,7 @@ using RiverHollow.Screens;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.GUIObjects;
 using RiverHollow.WorldObjects;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
@@ -11,9 +12,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIInventory _inventory;
         GUIInventory _container;
 
-        public HUDInventoryDisplay()
+        public HUDInventoryDisplay(DisplayTypeEnum display = DisplayTypeEnum.Inventory)
         {
             InventoryManager.ClearExtraInventory();
+            GameManager.CurrentInventoryDisplay = display;
             _inventory = new GUIInventory(true);
             AddControl(_inventory);
 
@@ -21,11 +23,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
             CenterOnScreen();
         }
 
-        public HUDInventoryDisplay(Item[,] inventory)
+        public HUDInventoryDisplay(Item[,] inventory, DisplayTypeEnum display = DisplayTypeEnum.Inventory)
         {
             InventoryManager.ClearExtraInventory();
-
             InventoryManager.InitContainerInventory(inventory);
+            GameManager.CurrentInventoryDisplay = display;
             _container = new GUIInventory();
             _inventory = new GUIInventory(true);
 
@@ -49,9 +51,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 rv = _inventory.ProcessLeftButtonClick(mouse);
 
-                if(GameManager.CurrentNPC != null && GameManager.gmActiveItem != null)
+                if(GameManager.CurrentNPC != null && GameManager.gmActiveItem != null && GameManager.CurrentInventoryDisplay == DisplayTypeEnum.Gift)
                 {
-                    GUIManager.OpenTextWindow(string.Format("Give {0} to {1}? [Yes:ConfirmGift|No:Cancel]", GameManager.gmActiveItem.Name, GameManager.CurrentNPC.Name), GameManager.CurrentNPC);
+                    GUIManager.OpenTextWindow(string.Format(DataManager.GetGameText("GiftConfirm"), GameManager.gmActiveItem.Name, GameManager.CurrentNPC.Name), GameManager.CurrentNPC);
                 }
             }
             else if (_container != null && _container.Contains(mouse))
@@ -77,27 +79,20 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (_inventory.Contains(mouse))
             {
                 rv = _inventory.ProcessRightButtonClick(mouse);
-                if (rv)
+                if (!rv)
                 {
-                    if (GameManager.HeldItem != null && _container != null)
-                    {
-                        //InventoryManager.AddNewItemToFirstAvailableInventorySpot(GameManager.HeldItem.ItemID);
-                        // GraphicCursor.DropItem();
-                    }
+                    Close();
                 }
             }
             else if (_container != null && _container.DrawRectangle.Contains(mouse))
             {
                 rv = _container.ProcessRightButtonClick(mouse);
             }
-            else if (_container != null && !_container.DrawRectangle.Contains(mouse))
+            else
             {
-                GameManager.DropItem();
-                GUIManager.CloseMainObject();
-                GUIManager.OpenTextWindow(GameManager.CurrentNPC.GetDialogEntry("Goodbye"));
-                GameManager.RemoveCurrentNPCLockObject();
+                Close();
             }
-            
+
             return rv;
         }
 
@@ -114,6 +109,18 @@ namespace RiverHollow.Game_Managers.GUIObjects
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
+        }
+
+        private void Close()
+        {
+            if (GameManager.HeldItem != null && _container != null)
+            {
+                InventoryManager.AddToInventory(GameManager.HeldItem);
+                GameManager.DropItem();
+            }
+            GUIManager.CloseMainObject();
+            GUIManager.OpenTextWindow(GameManager.CurrentNPC.GetDialogEntry("Goodbye"));
+            GameManager.RemoveCurrentNPCLockObject();
         }
     }
 }

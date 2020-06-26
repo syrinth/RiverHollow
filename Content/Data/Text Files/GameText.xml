@@ -5,6 +5,14 @@
       <Key>FoodConfirm</Key>
       <Value>Really eat the {0}? [Yes:UseItem|No:Cancel]</Value>
     </Item>
+	<Item>
+      <Key>GiftConfirm</Key>
+      <Value>Give {0} to {1}? [Yes:ConfirmGift|No:Cancel]</Value>
+    </Item>
+	<Item>
+      <Key>ITemConfirm</Key>
+      <Value>"Use {0} on who? [</Value>
+    </Item>
     <Item>
       <Key>ClassItemConfirm</Key>
       <Value>Really use the {0}? [Yes:UseItem|No:Cancel]</Value>

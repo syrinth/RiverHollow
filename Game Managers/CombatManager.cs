@@ -11,6 +11,7 @@ using RiverHollow.Tile_Engine;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
+using static RiverHollow.Actors.Actor;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.TravelManager;
 
@@ -229,12 +230,12 @@ namespace RiverHollow.Game_Managers
 
                         if (!CheckForForcedEndOfTurn())
                         {
-                            if (ActiveCharacter.IsAdventurer())
+                            if (ActiveCharacter.IsActorType(ActorEnum.Adventurer))
                             {
                                 GoToMainSelection();
                             }
                         }
-                        //if (!ActiveCharacter.IsMonster() || SelectedAction == null)
+                        //if (!ActiveCharacter.IsActorType(ActorEnum.Monster) || SelectedAction == null)
                         //{
                         //    EndTurn();
                         //}
@@ -276,7 +277,7 @@ namespace RiverHollow.Game_Managers
         { 
             if(newPhase == CmbtPhaseEnum.PerformAction || newPhase == CmbtPhaseEnum.Moving)
             {
-                if (ActiveCharacter != null && ActiveCharacter.IsAdventurer())
+                if (ActiveCharacter != null && ActiveCharacter.IsActorType(ActorEnum.Adventurer))
                 {
                     GameManager.Unpause();
                 }
@@ -346,7 +347,7 @@ namespace RiverHollow.Game_Managers
         public static void GoToMainSelection()
         {
             ChangePhase(CmbtPhaseEnum.MainSelection);
-            if (ActiveCharacter.IsMonster())
+            if (ActiveCharacter.IsActorType(ActorEnum.Monster))
             {
                 ((Monster)ActiveCharacter).TakeTurn();
             }
@@ -440,7 +441,7 @@ namespace RiverHollow.Game_Managers
 
             //if (!SelectedAction.SelfOnly())
             //{
-            //    if (!ActiveCharacter.IsMonster()) {
+            //    if (!ActiveCharacter.IsActorType(ActorEnum.Monster)) {
             //        ChangePhase(PhaseEnum.ChooseTarget);
             //    }  //Skips this phase for enemies. They don't "choose" targets
             //}
@@ -527,7 +528,7 @@ namespace RiverHollow.Game_Managers
                 {
                     foreach (RHTile t in ActiveCharacter.BaseTile.GetAdjacentTiles())
                     {
-                        if (t.HasCombatant() && t.Character.IsAdventurer())
+                        if (t.HasCombatant() && t.Character.IsActorType(ActorEnum.Adventurer))
                         {
                             gottaMove = false;
                             SelectedAction = c;
@@ -583,7 +584,7 @@ namespace RiverHollow.Game_Managers
             {
                 foreach (RHTile t in ActiveCharacter.BaseTile.GetAdjacentTiles())
                 {
-                    if (t.HasCombatant() && t.Character.IsAdventurer())
+                    if (t.HasCombatant() && t.Character.IsActorType(ActorEnum.Adventurer))
                     {
                         SelectedTile = t;
                         SelectedAction = ActiveCharacter.GetCurrentSpecials()[0];
@@ -708,12 +709,12 @@ namespace RiverHollow.Game_Managers
         /// <returns></returns>
         public static bool OnSameTeam(CombatActor actor)
         {
-            if (actor.IsMonster())
+            if (actor.IsActorType(ActorEnum.Monster))
             {
                 int i = 0;
                 i++;
             }
-            return (ActiveCharacter.IsAdventurer() && actor.IsAdventurer()) || (ActiveCharacter.IsMonster() && actor.IsMonster());
+            return (ActiveCharacter.IsActorType(ActorEnum.Adventurer) && actor.IsActorType(ActorEnum.Adventurer)) || (ActiveCharacter.IsActorType(ActorEnum.Monster) && actor.IsActorType(ActorEnum.Monster));
         }
         #endregion
 

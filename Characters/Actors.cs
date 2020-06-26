@@ -137,12 +137,7 @@ namespace RiverHollow.Actors
         public bool IsAnimating() { return _sprBody.IsAnimating; }
         public bool AnimationPlayedXTimes(int x) { return _sprBody.GetPlayCount() >= x; }
 
-        public bool IsMonster() { return _eActorType == ActorEnum.Monster; }
-        public bool IsNPC() { return _eActorType == ActorEnum.NPC; }
-        public bool IsAdventurer() { return _eActorType == ActorEnum.Adventurer; }
-        public bool IsWorldCharacter() { return _eActorType == ActorEnum.WorldCharacter; }
-        public bool IsSpirit() { return _eActorType == ActorEnum.Spirit; }
-        public bool IsShippingGremlin() { return _eActorType == ActorEnum.ShippingGremlin; }
+        public bool IsActorType(ActorEnum act) { return _eActorType == act; }
 
         /// <summary>
         /// Helper method for ImportBasics to compile the list of relevant animations
@@ -1007,7 +1002,7 @@ namespace RiverHollow.Actors
 
             //If the victim is a monster and this attack kills them,
             //immediately hide the hp bar.
-            if (IsMonster() && _iCurrentHP <= 0) { _dbHP = null; }
+            if (IsActorType(ActorEnum.Monster) && _iCurrentHP <= 0) { _dbHP = null; }
 
             CombatManager.AddFloatingText(new FloatingText(this.Position, this.SpriteWidth, iValue.ToString(), bHarmful ? Color.Red : Color.Green));
         }
@@ -1784,7 +1779,7 @@ namespace RiverHollow.Actors
                 if (chosenAction.Equals("GiveGift"))
                 {
                     GameManager.AddCurrentNPCLockObject();
-                    GUIManager.OpenMainObject(new HUDInventoryDisplay());
+                    GUIManager.OpenMainObject(new HUDInventoryDisplay(GameManager.DisplayTypeEnum.Gift));
                 }
                 else if (chosenAction.StartsWith("Quest"))
                 {
@@ -3229,9 +3224,9 @@ namespace RiverHollow.Actors
                 if (chosenAction.Equals("ShipGoods"))
                 {
                     GameManager.AddCurrentNPCLockObject();
-                    GUIManager.OpenMainObject(new HUDInventoryDisplay(_arrInventory));
+                    GUIManager.OpenMainObject(new HUDInventoryDisplay(_arrInventory, GameManager.DisplayTypeEnum.Ship));
                 }
-                else
+                else if(chosenAction.Equals("Cancel"))
                 {
                     _sprBody.PlayAnimation(AnimationEnum.ObjectAction2);
                 }

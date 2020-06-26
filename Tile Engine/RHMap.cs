@@ -14,6 +14,7 @@ using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using static RiverHollow.Actors.Actor;
 using static RiverHollow.Game_Managers.CombatManager;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.GUIObjects.HUDMenu;
@@ -519,7 +520,7 @@ namespace RiverHollow.Tile_Engine
         {
             foreach (WorldActor c in _liActors)
             {
-                if (c.IsSpirit())
+                if (c.IsActorType(ActorEnum.Spirit))
                 {
                     ((Spirit)c).CheckCondition();
                 }
@@ -532,7 +533,7 @@ namespace RiverHollow.Tile_Engine
 
             foreach(Actor a in _liActors)
             {
-                if(a.IsSpirit() && PlayerManager.PlayerInRange(a.Position.ToPoint(), 500))
+                if(a.IsActorType(ActorEnum.Spirit) && PlayerManager.PlayerInRange(a.Position.ToPoint(), 500))
                 {
                     rv = (Spirit)a;
                 }
@@ -621,7 +622,7 @@ namespace RiverHollow.Tile_Engine
 
             foreach (WorldActor c in ToRemove)
             {
-                if (c.IsMonster() && _liMonsters.Contains((Monster)c)) { _liMonsters.Remove((Monster)c); }
+                if (c.IsActorType(ActorEnum.Monster) && _liMonsters.Contains((Monster)c)) { _liMonsters.Remove((Monster)c); }
                 else if (_liActors.Contains(c)) { _liActors.Remove(c); }
             }
             ToRemove.Clear();
@@ -652,7 +653,7 @@ namespace RiverHollow.Tile_Engine
 
             if (CombatManager.InCombat)
             {
-                if(CombatManager.ActiveCharacter != null && CombatManager.ActiveCharacter.IsAdventurer())
+                if(CombatManager.ActiveCharacter != null && CombatManager.ActiveCharacter.IsActorType(ActorEnum.Adventurer))
                 {
                     CombatManager.ActiveCharacter.BaseTile?.Draw(spriteBatch);
                 }
@@ -1188,7 +1189,7 @@ namespace RiverHollow.Tile_Engine
                             //Handles interacting with NPCs
                             foreach (WorldActor c in _liActors)
                             {
-                                if (c.IsAdventurer())
+                                if (c.IsActorType(ActorEnum.Adventurer))
                                 {
                                     int row = 0;
                                     int col = 0;
@@ -1200,7 +1201,7 @@ namespace RiverHollow.Tile_Engine
                                         rv = true;
                                     }
                                 }
-                                else if (c.IsNPC())
+                                else if (c.IsActorType(ActorEnum.NPC))
                                 {
                                     Villager n = (Villager)c;
                                     if (InventoryManager.GetCurrentItem() != null &&
@@ -1409,7 +1410,7 @@ namespace RiverHollow.Tile_Engine
 
                 foreach (WorldActor c in _liActors)
                 {
-                    if(!c.IsMonster() && c.HoverContains(mouseLocation)){
+                    if(!c.IsActorType(ActorEnum.Monster) && c.HoverContains(mouseLocation)){
                         if (c.Active)
                         {
                             GUICursor._CursorType = GUICursor.EnumCursorType.Talk;
@@ -1845,7 +1846,7 @@ namespace RiverHollow.Tile_Engine
             if (MapManager.Maps[c.CurrentMapName].Contains(c))
             {
                 rv = true;
-                if (c.IsMonster() && _liMonsters.Contains((Monster)c)) { _liMonsters.Remove((Monster)c); }
+                if (c.IsActorType(ActorEnum.Monster) && _liMonsters.Contains((Monster)c)) { _liMonsters.Remove((Monster)c); }
                 else if (_liActors.Contains(c)) { _liActors.Remove(c); }
             }
 
@@ -1865,7 +1866,7 @@ namespace RiverHollow.Tile_Engine
             if (!MapManager.Maps[c.CurrentMapName].Contains(c))
             {
                 rv = true;
-                if (c.IsMonster() && !_liMonsters.Contains((Monster)c)) { _liMonsters.Add((Monster)c); }
+                if (c.IsActorType(ActorEnum.Monster) && !_liMonsters.Contains((Monster)c)) { _liMonsters.Add((Monster)c); }
                 else if (!_liActors.Contains(c)) { _liActors.Add(c); }
                 c.CurrentMapName = _sName;
                 c.Position = c.NewMapPosition == Vector2.Zero ? c.Position : c.NewMapPosition;
