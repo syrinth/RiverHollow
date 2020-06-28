@@ -11,17 +11,15 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIObjects;
 using RiverHollow.WorldObjects;
-using System;
 using System.Collections.Generic;
 using static RiverHollow.Actors.ShopKeeper;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.GUIObjects.HUDMenu;
 using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
-using static RiverHollow.GUIObjects.GUIObject;
 
 namespace RiverHollow.GUIComponents.Screens
 {
-    public class HUDPurchaseItems : GUIObject
+    public class HUDPurchaseItems : GUIMainObject
     {
         GUIMoneyDisplay _gMoney;
         GUIWindow _mainWindow;
@@ -103,7 +101,7 @@ namespace RiverHollow.GUIComponents.Screens
         }
     }
 
-    public class HUDPurchaseBuildings : GUIObject
+    public class HUDPurchaseBuildings : GUIMainObject
     {
         private List<Merchandise> _liMerchandise;
         private GUIButton _btnNext;
@@ -338,7 +336,7 @@ namespace RiverHollow.GUIComponents.Screens
         }
     }
 
-    public class HUDPurchaseWorkers : GUIObject
+    public class HUDPurchaseWorkers : GUIMainObject
     {
         GUIMoneyDisplay _gMoney;
         private GUIWindow _mainWindow;

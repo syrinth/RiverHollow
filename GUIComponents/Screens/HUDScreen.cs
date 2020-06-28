@@ -167,7 +167,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         #endregion
 
         #region Main Object
-        public override void OpenMainObject(GUIObject o)
+        public override void OpenMainObject(GUIMainObject o)
         {
             RemoveControl(_gMainObject);
             _gMainObject = o;
@@ -399,7 +399,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIButton _btnManagement;
         GUIButton _btnOptions;
         GUIButton _btnFriendship;
-        GUIObject _gMenuObject;
+        GUIMainObject _gMenuObject;
         List<GUIObject> _liButtons;
 
         bool _bOpen = false;
@@ -466,7 +466,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
         public void BtnInventory()
         {
-            _gMenuObject = new GUIInventory(true);
+            _gMenuObject = new HUDInventoryDisplay();
             _gMenuObject.CenterOnScreen();
             GUIManager.OpenMainObject(_gMenuObject);
         }
@@ -497,7 +497,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
         #endregion
 
-        public class HUDQuestLog : GUIWindow
+        public class HUDQuestLog : GUIMainObject
         {
             public static int BTNSIZE = ScaledTileSize;
             public static int MAX_SHOWN_QUESTS = 4;
@@ -505,12 +505,14 @@ namespace RiverHollow.Game_Managers.GUIObjects
             DetailBox _detailWindow;
             GUIButton _btnUp;
             GUIButton _btnDown;
+            GUIWindow _gWindow;
 
             bool _bMoved;
             int _topQuest;
-            public HUDQuestLog() : base(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT)
+            public HUDQuestLog()
             {
-                this.CenterOnScreen();
+                _gWindow = SetMainWindow();
+
                 _questList = new List<QuestBox>();
                 _detailWindow = new DetailBox(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
                 _detailWindow.CenterOnScreen();
@@ -524,7 +526,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 for (int i = 0; i < MAX_SHOWN_QUESTS && i < PlayerManager.QuestLog.Count; i++)
                 {
-                    QuestBox q = new QuestBox(this, i);
+                    QuestBox q = new QuestBox(_gWindow, i);
                     q.SetQuest(PlayerManager.QuestLog[_topQuest + i]);
                     _questList.Add(q);
                 }
@@ -695,7 +697,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
 
         }
-        public class HUDParty : GUIObject
+        public class HUDParty : GUIMainObject
         {
             PositionMap _map;
             CharacterDetailObject _charBox;
@@ -1412,20 +1414,21 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
             }
         }
-        public class HUDFriendship : GUIWindow
+        public class HUDFriendship : GUIMainObject
         {
+            GUIWindow _gWindow;
             List<FriendshipBox> _villagerList;
 
-            public HUDFriendship() : base(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT)
+            public HUDFriendship()
             {
-                this.CenterOnScreen();
+                _gWindow = SetMainWindow();
                 _villagerList = new List<FriendshipBox>();
 
                 foreach (Villager n in DataManager.DiNPC.Values)
                 {
-                    FriendshipBox f = new FriendshipBox(n, this.MidWidth());
+                    FriendshipBox f = new FriendshipBox(n, _gWindow.MidWidth());
 
-                    if (_villagerList.Count == 0) { f.AnchorToInnerSide(this, GUIObject.SideEnum.TopLeft); }
+                    if (_villagerList.Count == 0) { f.AnchorToInnerSide(_gWindow, GUIObject.SideEnum.TopLeft); }
                     else
                     {
                         f.AnchorAndAlignToObject(_villagerList[_villagerList.Count - 1], GUIObject.SideEnum.Bottom, GUIObject.SideEnum.Left);   //-2 because we start at i=1
@@ -1528,7 +1531,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
             }
         }
-        public class HUDManagement : GUIObject
+        public class HUDManagement : GUIMainObject
         {
             public enum ActionTypeEnum { View, Sell, Buy, Upgrade };
             private ActionTypeEnum _eAction;
@@ -1916,15 +1919,16 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 }
             }
         }
-        public class HUDOptions : GUIWindow
+        public class HUDOptions : GUIMainObject
         {
+            GUIWindow _gWindow;
             GUICheck _gAutoDisband;
             GUICheck _gHideMiniInventory;
             GUIButton _btnSave;
 
-            public HUDOptions() : base(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_WIDTH)
+            public HUDOptions()
             {
-                this.CenterOnScreen();
+                _gWindow = SetMainWindow();
 
                 _gAutoDisband = new GUICheck("Auto-Disband", GameManager.AutoDisband);
                 _gAutoDisband.AnchorToInnerSide(this, SideEnum.TopLeft);
@@ -1979,8 +1983,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             }
         }
 
-        public class HUDNamingWindow : GUITextInputWindow
+        public class HUDNamingWindow : GUIMainObject
         {
+            GUITextInputWindow _gInputWindow;
             Building _bldg;
             Adventurer _adv;
 
@@ -1989,8 +1994,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
             /// </summary>
             private HUDNamingWindow()
             {
-                SetupNaming();
-                TakeInput = true;
+                _gInputWindow = new GUITextInputWindow();
+                _gInputWindow.SetupNaming();
+                _gInputWindow.TakeInput = true;
             }
 
             /// <summary>
@@ -2011,7 +2017,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             public HUDNamingWindow(Building b) : this()
             {
                 _bldg = b;
-                AcceptSpace = true;
+                _gInputWindow.AcceptSpace = true;
             }
 
             /// <summary>
@@ -2023,15 +2029,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
             public override void Update(GameTime gTime)
             {
                 base.Update(gTime);
-                if (Finished)
+                if (_gInputWindow.Finished)
                 {
                     if (_adv != null)
                     {
-                        _adv.SetName(EnteredText);
+                        _adv.SetName(_gInputWindow.EnteredText);
                     }
                     if (_bldg != null)
                     {
-                        _bldg.SetName(EnteredText);
+                        _bldg.SetName(_gInputWindow.EnteredText);
                     }
 
                     //We know that this window only gets created under special circumstances, so unset them
@@ -2067,7 +2073,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
     }
 
-    class HUDMissionWindow : GUIObject
+    class HUDMissionWindow : GUIMainObject
     {
         public static int MAX_SHOWN_MISSIONS = 4;
 

@@ -1,13 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Screens;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.GUIObjects;
 using RiverHollow.WorldObjects;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Game_Managers.GUIObjects
 {
-    public class HUDInventoryDisplay : GUIObject
+    public class HUDInventoryDisplay : GUIMainObject
     {
         GUIInventory _inventory;
         GUIInventory _container;
@@ -119,7 +118,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 GameManager.DropItem();
             }
             GUIManager.CloseMainObject();
-            GUIManager.OpenTextWindow(GameManager.CurrentNPC.GetDialogEntry("Goodbye"));
+            if (GameManager.CurrentNPC != null)
+            {
+                GUIManager.OpenTextWindow(GameManager.CurrentNPC.GetDialogEntry("Goodbye"));
+            }
             GameManager.RemoveCurrentNPCLockObject();
         }
     }

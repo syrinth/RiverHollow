@@ -8,20 +8,21 @@ using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents
 {
-    class GUIHarp : GUIWindow
+    class GUIHarp : GUIMainObject
     {
+        GUIWindow _gWindow;
         GUISprite _gSprite;
         List<GUIMusicNote> _liGNotes;
-        public GUIHarp() : base(GUIWindow.BrownWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT)
+        public GUIHarp()
         {
+            _gWindow = SetMainWindow();
             _gSprite = new GUISprite(HarpManager.SongSpirit.BodySprite);
             _gSprite.SetScale(Scale);
             _liGNotes = new List<GUIMusicNote>();
 
-            _gSprite.CenterOnWindow(this);
-            _gSprite.AnchorToInnerSide(this, SideEnum.Top);
+            _gSprite.CenterOnWindow(_gWindow);
+            _gSprite.AnchorToInnerSide(_gWindow, SideEnum.Top);
             AddControl(_gSprite);
-            CenterOnScreen();
         }
 
         public override void Update(GameTime gTime)

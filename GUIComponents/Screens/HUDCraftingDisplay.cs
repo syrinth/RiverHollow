@@ -9,7 +9,7 @@ using static RiverHollow.WorldObjects.WorldItem;
 
 namespace RiverHollow.Game_Managers.GUIComponents.Screens
 {
-    class HUDCraftingDisplay : GUIObject
+    class HUDCraftingDisplay : GUIMainObject
     {
         int _iBoxSize = GUIItemBox.RECT_IMG.Width * (int)GameManager.Scale;
         const int _iMaxColumns = 5;

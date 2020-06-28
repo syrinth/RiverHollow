@@ -148,7 +148,7 @@ namespace RiverHollow.Game_Managers
         }
 
         #region MainObject Control
-        public static void OpenMainObject(GUIObject o) { _currentGUIScreen.OpenMainObject(o); }
+        public static void OpenMainObject(GUIMainObject o) { _currentGUIScreen.OpenMainObject(o); }
         public static void CloseMainObject() { _currentGUIScreen.CloseMainObject(); }
         #endregion
 
@@ -195,6 +195,20 @@ namespace RiverHollow.Game_Managers
                     PlayerManager.AllowMovement = true;
                 }
             }
+        }
+    }
+
+    public abstract class GUIMainObject : GUIObject
+    {
+        protected GUIWindow SetMainWindow()
+        {
+            GUIWindow win = new GUIWindow(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_WIDTH);
+            AddControl(win);
+            Width = win.Width;
+            Height = win.Height;
+            this.CenterOnScreen();
+
+            return win;
         }
     }
 }

@@ -210,7 +210,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
 
         #region Main Object Control
-        public virtual void OpenMainObject(GUIObject o) { }
+        public virtual void OpenMainObject(GUIMainObject o) { }
         public virtual void CloseMainObject() { }
         #endregion
 

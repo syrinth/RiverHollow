@@ -7,12 +7,12 @@ using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Screens
 {
-    public class GUIInventoriesDisplay : GUIObject
+    public class GUIInventoryDisplay : GUIObject
     {
         GUIInventory _gPlayerInventory;
         GUIInventory _gExtraInventory;
 
-        public GUIInventoriesDisplay()
+        public GUIInventoryDisplay()
         {
             _gPlayerInventory = new GUIInventory(true);
             _gExtraInventory = new GUIInventory(false);
