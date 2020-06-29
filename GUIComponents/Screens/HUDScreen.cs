@@ -35,7 +35,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         GUIMonsterEnergyDisplay _gEnergy;
         GUIDungeonKeyDisplay _gDungeonKeys;
 
-        HUDInventory _gInventory;
+        HUDMiniInventory _gInventory;
         HUDCalendar _gCalendar;
         GUIItemBox _addedItem;
         double _dTimer;
@@ -61,7 +61,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _gDungeonKeys.AnchorAndAlignToObject(_gEnergy, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
             AddControl(_gDungeonKeys);
 
-            _gInventory = new HUDInventory();
+            _gInventory = new HUDMiniInventory();
             _gInventory.AnchorToScreen(SideEnum.Bottom);
             AddControl(_gInventory);
 
@@ -121,8 +121,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
             //If the right click has not been processed, we probably want to close anything that we have open.
             if (!rv)
             {
-                CloseMenu();
-                CloseMainObject();
+                if (_gMainObject == null)
+                {
+                    CloseMenu();
+                }
+
+                GUIManager.CloseMainObject();
+                GameManager.RemoveCurrentNPCLockObject();
             }
 
             return rv;
@@ -181,7 +186,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         #endregion
     }
 
-    public class HUDInventory : GUIWindow
+    public class HUDMiniInventory : GUIWindow
     {
         List<GUIItemBox> _liItems;
         GUIButton _btnChangeRow;
@@ -191,9 +196,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
         bool _bFadeItemsIn;
         float _fBarFade;
         float _fItemFade = 1.0f;
-        float FADE_OUT = 0.1f;
+        const float FADE_OUT = 0.1f;
 
-        public HUDInventory() : base(GUIWindow.BrownWin, TileSize, TileSize)
+        public HUDMiniInventory() : base(GUIWindow.BrownWin, TileSize, TileSize)
         {
             _btnChangeRow = new GUIButton(new Rectangle(256, 96, 16, 16), ScaledTileSize, ScaledTileSize, @"Textures\Dialog", RowUp);
             _btnChangeRow.FadeOnDisable(false);
@@ -579,7 +584,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             public override bool ProcessRightButtonClick(Point mouse)
             {
-                bool rv = true;
+                bool rv = false;
                 if (Controls.Contains(_detailWindow))
                 {
                     RemoveControl(_detailWindow);
@@ -1447,7 +1452,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             public override bool ProcessRightButtonClick(Point mouse)
             {
-                bool rv = true;
+                bool rv = false;
                 return rv;
             }
 
@@ -1698,7 +1703,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     Width = _window.Width;
                     Height = _window.Height;
 
-                    _window.CenterOnScreen();
+                    this.CenterOnScreen();
+                }
+
+                public override bool ProcessRightButtonClick(Point mouse)
+                {
+                    bool rv = base.ProcessRightButtonClick(mouse);
+                    return rv;
                 }
 
                 public class MainBuildingsWin : MgmtWindow
@@ -1742,12 +1753,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         }
 
                         return rv;
-                    }
-
-                    public override bool ProcessRightButtonClick(Point mouse)
-                    {
-                        GUIManager.CloseMainObject();
-                        return false;
                     }
 
                     private class BuildingBox : GUIObject
@@ -1954,7 +1959,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
             public override bool ProcessRightButtonClick(Point mouse)
             {
-                bool rv = true;
+                bool rv = false;
                 return rv;
             }
 

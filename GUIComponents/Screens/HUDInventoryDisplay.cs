@@ -74,7 +74,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override bool ProcessRightButtonClick(Point mouse)
         {
-            bool rv = true;
+            bool rv = false;
             if (_inventory.Contains(mouse))
             {
                 rv = _inventory.ProcessRightButtonClick(mouse);
@@ -117,12 +117,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 InventoryManager.AddToInventory(GameManager.HeldItem);
                 GameManager.DropItem();
             }
-            GUIManager.CloseMainObject();
             if (GameManager.CurrentNPC != null)
             {
                 GUIManager.OpenTextWindow(GameManager.CurrentNPC.GetDialogEntry("Goodbye"));
             }
-            GameManager.RemoveCurrentNPCLockObject();
+            
         }
     }
 }

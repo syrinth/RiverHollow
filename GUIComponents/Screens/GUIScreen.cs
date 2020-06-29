@@ -19,7 +19,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         List<GUIObject> _liToAdd;
         protected List<GUIObject> Controls;
         public bool IsVisible;
-
+    
         public GUIScreen()
         {
             _liToRemove = new List<GUIObject>();

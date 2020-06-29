@@ -200,6 +200,11 @@ namespace RiverHollow.Game_Managers
 
     public abstract class GUIMainObject : GUIObject
     {
+        /// <summary>
+        /// Creates a new GUIWindow, adds it to the Controls of the object, sets the Height
+        /// and Width of the object to that of the GUIWindow then centers it on the screen.
+        /// </summary>
+        /// <returns>The created GUIWindow</returns>
         protected GUIWindow SetMainWindow()
         {
             GUIWindow win = new GUIWindow(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_WIDTH);
