@@ -255,13 +255,13 @@ namespace RiverHollow.GUIComponents.Screens
 
         public void BtnAssignClass(ClassSelectionBox o)
         {
-                ClassSelectionBox csb = ((ClassSelectionBox)o);
-                if (_csbSelected != csb)
-                {
-                    csb.PlayAnimation(VerbEnum.Walk, DirectionEnum.Down);
-                    _csbSelected.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
-                    _csbSelected = csb;
-                }
+            ClassSelectionBox csb = ((ClassSelectionBox)o);
+            if (_csbSelected != csb)
+            {
+                csb.PlayAnimation(VerbEnum.Walk, DirectionEnum.Down);
+                _csbSelected.PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
+                _csbSelected = csb;
+            }
         }
         public void CloseColorSelection()
         {

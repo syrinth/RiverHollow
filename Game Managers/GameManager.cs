@@ -9,6 +9,8 @@ using static RiverHollow.Actors.ShopKeeper;
 using RiverHollow.Buildings;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 using static RiverHollow.Actors.Actor;
+using RiverHollow.Characters;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
 namespace RiverHollow.Game_Managers
 {
@@ -67,6 +69,9 @@ namespace RiverHollow.Game_Managers
 
         public static int MAX_NAME_LEN = 10;
 
+        public static int TotalExperience = 50;
+        public static List<GUISprite> SlainMonsters;
+
         public static bool AutoDisband;
         public static bool HideMiniInventory = true;
 
@@ -77,6 +82,7 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadContent(ContentManager Content)
         {
+            SlainMonsters = new List<GUISprite>();
             DiUpgrades = new Dictionary<int, Upgrade>();
             foreach (KeyValuePair<int, string> kvp in DataManager.DiUpgrades)
             {

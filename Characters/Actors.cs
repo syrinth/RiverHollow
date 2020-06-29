@@ -293,6 +293,8 @@ namespace RiverHollow.Actors
                     sprite.AddAnimation(data.Animation, data.XLocation, 0, _iWidth, _iHeight, data.Frames, data.FrameSpeed, data.PingPong);
                 }
             }
+
+            PlayAnimation(VerbEnum.Idle);
         }
 
         public virtual bool HoverContains(Point mouse)

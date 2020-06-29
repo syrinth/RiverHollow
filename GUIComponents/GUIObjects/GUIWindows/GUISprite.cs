@@ -13,11 +13,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         protected AnimatedSprite _sprite;
         public AnimatedSprite Sprite => _sprite;
 
-        public bool PlayedOnce
-        {
-            get { return _sprite.PlayedOnce; }
-            set { _sprite.PlayedOnce = value; }
-        }
+        public bool PlayedOnce => _sprite.PlayedOnce;
+
+        public int PlayCount => _sprite.GetPlayCount();
+
         public bool IsAnimating {
             get { return _sprite.IsAnimating; }
             set { _sprite.IsAnimating = value; }
@@ -37,7 +36,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _sprite.Draw(spriteBatch, false);
+            if (Show)
+            {
+                _sprite.Draw(spriteBatch, false);
+            }
         }
 
         /// <summary>

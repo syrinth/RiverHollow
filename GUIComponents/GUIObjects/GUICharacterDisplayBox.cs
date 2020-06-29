@@ -106,7 +106,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             public class ClassSelectionBox : CharacterDisplayBox
             {
-                private ClickDelegate _delAction;
+                private  ClickDelegate _delClassAction;
                 public new delegate void ClickDelegate(ClassSelectionBox o);
 
                 private int _iClassID;
@@ -115,15 +115,15 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 public ClassSelectionBox(Adventurer w, ClickDelegate del) : base(w, null)
                 {
                     _iClassID = w.CharacterClass.ID;
-                    _delAction = del;
+                    _delClassAction = del;
                 }
 
                 public override bool ProcessLeftButtonClick(Point mouse)
                 {
                     bool rv = false;
-                    if (Contains(mouse) && _delAction != null)
+                    if (Contains(mouse) && _delClassAction != null)
                     {
-                        _delAction(this);
+                        _delClassAction(this);
                         rv = true;
                     }
                     return rv;

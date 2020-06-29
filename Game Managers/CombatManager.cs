@@ -459,26 +459,7 @@ namespace RiverHollow.Game_Managers
         public static void GiveXP(Monster m)
         {
             //Calculates the total XP based off of the XP multiplier and then add the floating text
-            double xpToGive = m.XP * (1 + (double)(EXP_MULTIPLIER_BONUS * _iXPMultiplier++));
-            AddFloatingText(new FloatingText(m.Position, m.SpriteWidth, string.Format("{0} XP", xpToGive), Color.Yellow));
-
-            //Give the XP to the party
-            foreach (ClassedCombatant c in PlayerManager.GetParty())
-            {
-                int startLevel = c.ClassLevel;
-                c.AddXP((int)xpToGive);
-
-                if(c.ClassLevel > startLevel) {
-                    AddFloatingText(new FloatingText(c.Position, c.SpriteWidth, "LEVEL UP", Color.White));
-                    c.PlayAnimation(AnimationEnum.Win);
-
-                    CombatAction newAction = c.GetCurrentSpecials().Find(action => action.ReqLevel > startLevel && action.ReqLevel <= c.ClassLevel);
-                    if (newAction != null)
-                    {
-                        _scrCombat.OpenTextWindow(string.Format("Learned new skill {0}", newAction.Name));
-                    }
-                }
-            }
+            GameManager.TotalExperience = (int)(m.XP * (1 + (double)(EXP_MULTIPLIER_BONUS * _iXPMultiplier++)));
         }
 
         /// <summary>

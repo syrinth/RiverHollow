@@ -621,9 +621,9 @@ namespace RiverHollow.GUIObjects
 
             return g.Position();
         }
-        internal void AlignToObject(GUIObject focus, SideEnum sideToAlign)
+        internal void AlignToObject(GUIObject focus, SideEnum sideToAlign, bool AddToParentWindow = true)
         {
-            if (focus.ParentWindow != null) { focus.ParentWindow.AddControl(this); }
+            if (focus.ParentWindow != null && AddToParentWindow) { focus.ParentWindow.AddControl(this); }
 
             Vector2 position = focus.Position();
             switch (sideToAlign)

@@ -58,14 +58,14 @@ namespace RiverHollow.SpriteAnimations
 
         public Rectangle BoundingBox => new Rectangle((int)_vPosition.X, (int)_vPosition.Y, _width, _height);
 
-        /// True if the sprite is (or should be) playing animation frames.  If this value is set
-        /// to false, the sprite will not be drawn (a sprite needs at least 1 single frame animation
-        /// in order to be displayed.
+
         public bool IsAnimating
         {
             get { return _bAnimating; }
             set { _bAnimating = value; }
         }
+
+        public bool Show = true;
 
         float _fLayerDepthMod;
 
@@ -253,28 +253,25 @@ namespace RiverHollow.SpriteAnimations
 
         public void Draw(SpriteBatch spriteBatch, bool useLayerDepth = true, float visibility = 1.0f, float forcedLayerDepth = -1)
         {
-            if (_bAnimating)
+            if (useLayerDepth)
             {
-                if (useLayerDepth)
-                {
-                    float layerDepth = forcedLayerDepth < 0 ? Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100) : forcedLayerDepth;
-                    Draw(spriteBatch, layerDepth, visibility);
-                }
-                else
-                {
-                    int newFrameCutoff = (int)(FrameCutoff * _iScale);
-                    int drawAtY = (int)this.Position.Y;
-                    Rectangle drawThis = CurrentFrameAnimation.FrameRectangle;
+                float layerDepth = forcedLayerDepth < 0 ? Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100) : forcedLayerDepth;
+                Draw(spriteBatch, layerDepth, visibility);
+            }
+            else
+            {
+                int newFrameCutoff = (int)(FrameCutoff * _iScale);
+                int drawAtY = (int)this.Position.Y;
+                Rectangle drawThis = CurrentFrameAnimation.FrameRectangle;
 
-                    //This is used for lopping off the top part of a sprite,specifically for hair for hats
-                    if (FrameCutoff != 0)
-                    {
-                        drawAtY += newFrameCutoff;
-                        drawThis = new Rectangle(drawThis.X, FrameCutoff, drawThis.Width, drawThis.Height - FrameCutoff);
-                    }
-
-                    spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, drawAtY, this.Width, this.Height - newFrameCutoff), drawThis, _color * visibility);
+                //This is used for lopping off the top part of a sprite,specifically for hair for hats
+                if (FrameCutoff != 0)
+                {
+                    drawAtY += newFrameCutoff;
+                    drawThis = new Rectangle(drawThis.X, FrameCutoff, drawThis.Width, drawThis.Height - FrameCutoff);
                 }
+
+                spriteBatch.Draw(_texture, new Rectangle((int)this.Position.X, drawAtY, this.Width, this.Height - newFrameCutoff), drawThis, _color * visibility);
             }
         }
 

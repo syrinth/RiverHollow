@@ -61,7 +61,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (Contains(mouse))
             {
                 _gText.SetText(string.Format("{0}/{1}", _iCurr, _iMax));
-                _gText.AlignToObject(this, SideEnum.Center);
+                _gText.AlignToObject(this, SideEnum.Center, false);
                 AddControl(_gText);
                 rv = true;
             }

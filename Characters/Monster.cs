@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Actors;
 using RiverHollow.Actors.CombatStuff;
 using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
 using RiverHollow.Tile_Engine;
 using System;
@@ -411,6 +412,7 @@ namespace RiverHollow.Characters
         {
             base.KO();
             CombatManager.GiveXP(this);
+            GameManager.SlainMonsters.Add(new GUISprite(BodySprite));
         }
 
         public override List<CombatAction> GetCurrentSpecials()
