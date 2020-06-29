@@ -74,8 +74,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (_bFadeOnDisable) { _btnObject.Alpha(Enabled ? 1.0f : 0.5f); }
-            _btnObject.Draw(spriteBatch);
+            if (Show)
+            {
+                if (_bFadeOnDisable) { _btnObject.Alpha(Enabled ? 1.0f : 0.5f); }
+                _btnObject.Draw(spriteBatch);
+            }
         }
 
         public void SetDelegate(BtnClickDelegate del)

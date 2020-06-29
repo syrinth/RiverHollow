@@ -7,7 +7,6 @@ using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using System.Collections.Generic;
 using RiverHollow.GUIObjects;
 using RiverHollow.Actors;
-using RiverHollow.Screens;
 using RiverHollow.Misc;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using static RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIItemBox;
@@ -464,6 +463,13 @@ namespace RiverHollow.Game_Managers.GUIObjects
             if (_openingFinished == _liButtons.Count) { _bOpen = false; }
         }
 
+        public override bool ProcessRightButtonClick(Point mouse)
+        {
+            //Returns false here because we don't handle it
+            //By returning false, we will start closing options
+            return false;
+        }
+
         #region Buttons
         public void BtnExitGame()
         {
@@ -520,7 +526,9 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 _questList = new List<QuestBox>();
                 _detailWindow = new DetailBox(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
+                _detailWindow.Show = false;
                 _detailWindow.CenterOnScreen();
+                AddControl(_detailWindow);
 
                 _btnUp = new GUIButton(new Rectangle(272, 96, 16, 16), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnUpClick);
                 _btnDown = new GUIButton(new Rectangle(256, 96, 16, 16), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnDownClick);
@@ -531,24 +539,23 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 for (int i = 0; i < MAX_SHOWN_QUESTS && i < PlayerManager.QuestLog.Count; i++)
                 {
-                    QuestBox q = new QuestBox(_gWindow, i);
+                    QuestBox q = new QuestBox(_gWindow.EdgeSize * 2, OpenDetailBox);
                     q.SetQuest(PlayerManager.QuestLog[_topQuest + i]);
                     _questList.Add(q);
+
+                    if(i == 0) { q.AnchorToInnerSide(_gWindow, SideEnum.TopLeft);  }
+                    else { q.AnchorAndAlignToObject(_questList[i - 1], SideEnum.Bottom, SideEnum.Left); }
                 }
 
                 AddControl(_btnUp);
                 AddControl(_btnDown);
-                foreach (QuestBox q in _questList)
-                {
-                    AddControl(q);
-                }
             }
 
             public override bool ProcessLeftButtonClick(Point mouse)
             {
                 bool rv = false;
                 _bMoved = false;
-                if (!Controls.Contains(_detailWindow))
+                if (!_detailWindow.Show)
                 {
                     foreach (GUIObject c in Controls)
                     {
@@ -564,20 +571,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                             _questList[i].SetQuest(PlayerManager.QuestLog[_topQuest + i]);
                         }
                     }
-
-                    foreach (QuestBox c in _questList)
-                    {
-                        if (c.Contains(mouse))
-                        {
-                            _detailWindow.SetData(c.TheQuest);
-                            AddControl(_detailWindow);
-                            RemoveControl(_btnUp);
-                            RemoveControl(_btnDown);
-
-                            rv = true;
-                        }
-                        if (rv) { break; }
-                    }
                 }
                 return rv;
             }
@@ -585,11 +578,10 @@ namespace RiverHollow.Game_Managers.GUIObjects
             public override bool ProcessRightButtonClick(Point mouse)
             {
                 bool rv = false;
-                if (Controls.Contains(_detailWindow))
+                if (_detailWindow.Show)
                 {
-                    RemoveControl(_detailWindow);
-                    AddControl(_btnUp);
-                    AddControl(_btnDown);
+                    rv = true;
+                    ShowDetails(false);
                 }
                 return rv;
             }
@@ -627,27 +619,41 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 base.Update(gTime);
             }
 
+            private void OpenDetailBox(Quest q)
+            {
+                _detailWindow.SetData(q);
+                ShowDetails(true);
+            }
+
+            private void ShowDetails(bool val)
+            {
+                _detailWindow.Show = val;
+                _gWindow.Show = !val;
+                _btnUp.Show = !val;
+                _btnDown.Show = !val;
+            }
+
             public class QuestBox : GUIObject
             {
                 GUIWindow _window;
+                GUIText _gName;
+                GUIText _gProgress;
                 Quest _quest;
                 public Quest TheQuest => _quest;
-                BitmapFont _font;
-                private int _index;
-                public int Index { get => _index; }
                 public bool ClearThis;
+                public delegate void ClickDelegate(Quest q);
+                private ClickDelegate _delAction;
 
-
-                public QuestBox(GUIWindow win, int i)
+                public QuestBox(int size, ClickDelegate del)
                 {
-                    _index = i;
+                    _delAction = del;
 
-                    int boxHeight = (GUIManager.MAIN_COMPONENT_HEIGHT / HUDQuestLog.MAX_SHOWN_QUESTS) - (win.EdgeSize * 2);
-                    int boxWidth = (GUIManager.MAIN_COMPONENT_WIDTH) - (win.EdgeSize * 2) - HUDQuestLog.BTNSIZE;
+                    int boxHeight = (GUIManager.MAIN_COMPONENT_HEIGHT / HUDQuestLog.MAX_SHOWN_QUESTS) - (size);
+                    int boxWidth = (GUIManager.MAIN_COMPONENT_WIDTH) - (size) - HUDQuestLog.BTNSIZE;
                     _window = new GUIWindow(GUIWindow.RedWin, boxWidth, boxHeight);
-                    _window.AnchorToInnerSide(win, SideEnum.TopLeft);
-
-                    _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
+                    AddControl(_window);
+                    Width = _window.Width;
+                    Height = _window.Height;
                     _quest = null;
                 }
 
@@ -656,16 +662,18 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     if (_quest != null)
                     {
                         _window.Draw(spriteBatch);
-                        spriteBatch.DrawString(_font, _quest.Name, _window.InnerRecVec(), Color.White);
-                        spriteBatch.DrawString(_font, _quest.Accomplished + @"/" + _quest.TargetGoal, _window.InnerRecVec() + new Vector2(200, 0), Color.White);
                     }
                 }
-
-                public void SetQuest(Quest q)
+                public override bool ProcessLeftButtonClick(Point mouse)
                 {
-                    _quest = q;
-                }
+                    bool rv = false;
+                    if (Contains(mouse))
+                    {
+                        _delAction(_quest);
+                    }
 
+                    return rv;
+                }
                 public override bool ProcessHover(Point mouse)
                 {
                     bool rv = false;
@@ -674,6 +682,15 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 public override bool Contains(Point mouse)
                 {
                     return _window.Contains(mouse);
+                }
+
+                public void SetQuest(Quest q)
+                {
+                    _quest = q;
+                    _gName = new GUIText(_quest.Name);
+                    _gName.AnchorToInnerSide(_window, SideEnum.TopLeft);
+                    _gProgress = new GUIText(_quest.Accomplished + @"/" + _quest.TargetGoal);
+                    _gProgress.AnchorToInnerSide(_window, SideEnum.BottomRight);
                 }
             }
 
