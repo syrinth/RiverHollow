@@ -120,7 +120,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.Screens
 
                         _liMonsters.Add(spr);
 
-                        spr.PlayAnimation(GameManager.VerbEnum.Idle, GameManager.DirectionEnum.Down);
+                        spr.PlayAnimation(GameManager.VerbEnum.Walk, GameManager.DirectionEnum.Down);
 
                         AddControl(spr);
 

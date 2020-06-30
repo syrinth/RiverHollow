@@ -1310,7 +1310,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                     {
                         if (i != null && i.ItemType.Equals(boxMatch.ItemType))
                         {
-                            if (boxMatch.ItemType.Equals(ItemEnum.Equipment) && i.IsEquipment())
+                            if (boxMatch.ItemType.Equals(ItemEnum.Equipment) && i.CompareType(ItemEnum.Equipment))
                             {
                                 if (boxMatch.ArmorType != ArmorEnum.None && ((Equipment)i).ArmorType == boxMatch.ArmorType)
                                 {
@@ -1321,7 +1321,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
                                     liItems.Add(i);
                                 }
                             }
-                            else if (boxMatch.ItemType.Equals(ItemEnum.Clothes) && i.IsClothes())
+                            else if (boxMatch.ItemType.Equals(ItemEnum.Clothes) && i.CompareType(ItemEnum.Clothes))
                             {
                                 if (boxMatch.ClothingType != ClothesEnum.None && ((Clothes)i).ClothesType == boxMatch.ClothingType)
                                 {

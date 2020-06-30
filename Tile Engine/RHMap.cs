@@ -20,6 +20,7 @@ using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.GUIObjects.HUDMenu;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.RiverHollow;
+using static RiverHollow.WorldObjects.Item;
 using static RiverHollow.WorldObjects.WorldItem;
 using static RiverHollow.WorldObjects.WorldItem.Floor;
 
@@ -33,8 +34,7 @@ namespace RiverHollow.Tile_Engine
         private string _sName;
         public string Name { get => _sName.Replace(@"Maps\", ""); set => _sName = value; } //Fuck off with that path bullshit
 
-        bool _bCombatMap;
-        public bool IsCombatMap => _bCombatMap;
+        public bool IsCombatMap => _liMonsterSpawnPoints.Count > 0;
         bool _bBuilding;
         public bool IsBuilding => _bBuilding;
         string _sDungeonName;
@@ -51,6 +51,9 @@ namespace RiverHollow.Tile_Engine
         int _iActiveSpawnPoints;
         public int ActiveSpawnPoints => _iActiveSpawnPoints;
         int _iTotalResourceWeight = 0;  //The total space on the map in tiles occupied by resource spawns
+
+        private MonsterFood _itMonsterFood;
+        public MonsterFood PrimedFood => _itMonsterFood;
 
         private RHTile _targetTile = null;
         public RHTile TargetTile => _targetTile;
@@ -125,7 +128,6 @@ namespace RiverHollow.Tile_Engine
             _arrTiles = map._arrTiles;
 
             _bBuilding = _map.Properties.ContainsKey("Building");
-            _bCombatMap = _map.Properties.ContainsKey("Combat");
             _bTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
             _bManor = _map.Properties.ContainsKey("Manor");
@@ -176,7 +178,6 @@ namespace RiverHollow.Tile_Engine
             }
 
             _bBuilding = _map.Properties.ContainsKey("Building");
-            _bCombatMap = _map.Properties.ContainsKey("Combat");
             _bTown = _map.Properties.ContainsKey("Town");
             _bOutside = _map.Properties.ContainsKey("Outside");
             _bManor = _map.Properties.ContainsKey("Manor");
@@ -457,6 +458,10 @@ namespace RiverHollow.Tile_Engine
                 }
             }
         }
+
+        /// <summary>
+        /// Call this to make the MonsterSpawns on the map spawn their monsters
+        /// </summary>
         private void SpawnMonsters()
         {
             //Remove all mobs from the map
@@ -466,22 +471,71 @@ namespace RiverHollow.Tile_Engine
             }
             _liMonsters.Clear();
 
+            if (_itMonsterFood != null)
+            {
+                //Check to see if the spawn points have been set by MonsterFood and
+                //resets any monsters that may already be set to them.
+                foreach (MonsterSpawn spawn in _liMonsterSpawnPoints)
+                {
+                    if (spawn.IsPrimed)
+                    {
+                        spawn.Spawn();
+                    }
+                    else
+                    {
+                        spawn.ClearSpawn();
+                    }
+                }
+                _liItemsToRemove.Add(_itMonsterFood);
+                _itMonsterFood = null;
+            }
+            else
+            {
+                //Copy the spawn points to a list we can safely modify
+                List<MonsterSpawn> spawnCopy = new List<MonsterSpawn>();
+                spawnCopy.AddRange(_liMonsterSpawnPoints);
+
+                //Trigger x number of SpawnPoints
+                for (int i = 0; i < _iActiveSpawnPoints; i++)
+                {
+                    //Get a random Spawn Point
+                    int point = RHRandom.Instance.Next(0, spawnCopy.Count - 1);
+                    if (!spawnCopy[point].HasSpawned())
+                    {
+                        //Trigger the Spawn point and remove it from the copied list
+                        //so it won't be an option for future spawning.
+                        spawnCopy[point].Spawn();
+                        spawnCopy.RemoveAt(point);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the MonsterFood for the map
+        /// </summary>
+        /// <param name="f">The MonsterFood to prime off of</param>
+        public void PrimeMonsterSpawns(MonsterFood f)
+        {
+            _itMonsterFood = f;
+
             //Copy the spawn points to a list we can safely modify
             List<MonsterSpawn> spawnCopy = new List<MonsterSpawn>();
             spawnCopy.AddRange(_liMonsterSpawnPoints);
 
+            int spawnNum = _itMonsterFood.SpawnNumber;
+            //For safety, but this looks like bad design
+            if (spawnNum > spawnCopy.Count) { spawnNum = spawnCopy.Count; }
+
             //Trigger x number of SpawnPoints
-            for (int i = 0; i < _iActiveSpawnPoints; i++)
+            for (int i = 0; i < spawnNum; i++)
             {
                 //Get a random Spawn Point
                 int point = RHRandom.Instance.Next(0, spawnCopy.Count - 1);
-                if (!spawnCopy[point].HasSpawned())
-                {
-                    //Trigger the Spawn point and remove it from the copied list
-                    //so it won't be an option for future spawning.
-                    spawnCopy[point].Spawn();
-                    spawnCopy.RemoveAt(point);
-                }
+                spawnCopy[point].SetSpawn(_itMonsterFood.SpawnID);
+
+                //remove it from the copied list so it won't be an option for future spawning.
+                spawnCopy.RemoveAt(point);
             }
         }
 
@@ -1173,7 +1227,7 @@ namespace RiverHollow.Tile_Engine
                     if (_targetTile != null && PlayerManager.PlayerInRange(_targetTile.Center.ToPoint()))
                     {
 
-                        if (InventoryManager.GetCurrentItem() != null && InventoryManager.GetCurrentItem().IsTool())
+                        if (InventoryManager.GetCurrentItem() != null && InventoryManager.GetCurrentItem().CompareType(ItemEnum.Tool))
                         {
                             Tool currentTool = (Tool)InventoryManager.GetCurrentItem();
                             rv = PlayerManager.SetTool(currentTool, mouseLocation);
@@ -1328,7 +1382,7 @@ namespace RiverHollow.Tile_Engine
             WorldObject obj = _targetTile.GetWorldObject(false);
 
             Item currentItem = InventoryManager.GetCurrentItem();
-            if (obj == null && currentItem != null && currentItem.IsStaticItem())    //Only procees if tile is empty and we are holding an item
+            if (obj == null && currentItem != null && currentItem.CompareType(ItemEnum.StaticItem))    //Only procees if tile is empty and we are holding an item
             {
                     //If the player is currently holding a StaticItem, we need to place it
                     //Do not, however, allow the placing of StaticItems on combat maps.
@@ -2181,25 +2235,47 @@ namespace RiverHollow.Tile_Engine
     public class MonsterSpawn : SpawnPoint
     {
         Monster _monster;
+        int _iPrimedMonsterID;
+        public bool IsPrimed => _iPrimedMonsterID != -1;
         SpawnConditionEnum _eSpawnType = SpawnConditionEnum.Forest;
 
         public MonsterSpawn(RHMap map, TiledMapObject obj) : base(map, obj)
         {
+            _iPrimedMonsterID = -1;
             _eSpawnType = Util.ParseEnum<SpawnConditionEnum>(obj.Properties["SpawnType"]);
         }
 
         public override void Spawn()
         {
-            _monster = DataManager.GetMonsterByIndex(RHRandom.Instance.Next(1,4));
-            if (_monster != null)
+            if (_iPrimedMonsterID != -1) { _monster = DataManager.GetMonsterByIndex(_iPrimedMonsterID); }
+            else { _monster = DataManager.GetMonsterByIndex(RHRandom.Instance.Next(1, 4)); }
+
+            _monster.SpawnPoint = this;
+            _map.AddMonsterByPosition(_monster, _vPosition);
+
+            if (_iPrimedMonsterID != -1)
             {
-                _map.AddMonsterByPosition(_monster, _vPosition);
+                _iPrimedMonsterID = -1;
             }
         }
 
         public override bool HasSpawned()
         {
             return _monster != null;
+        }
+
+        /// <summary>
+        /// Sets what the next Monster to be spawned is
+        /// </summary>
+        /// <param name="id"></param>
+        public void SetSpawn(int id)
+        {
+            _iPrimedMonsterID = id;
+        }
+
+        public void ClearSpawn()
+        {
+            _monster = null;
         }
     }
 

@@ -166,6 +166,10 @@
       <Key>50</Key>
       <Value>[Type:Resource][Image:144-64][Sell:20][RefinesInto:151-5]</Value>
     </Item>
+    <Item>
+      <Key>51</Key>
+      <Value>[Type:MonsterFood][Image:80-16][Sell:20][Spawn:3-4]</Value>
+    </Item>
     <!--<60-79> Seeds-->
     <Item>
       <Key>60</Key>
@@ -371,7 +375,7 @@
       <Key>403</Key>
       <Value>[Type:Clothes][Image:48-64][Sell:0][CType:Body][Row:3]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>404</Key>
       <Value>[Type:Clothes][Image:0-80][Sell:0][CType:Legs][Neutral][Row:3]</Value>
     </Item>
@@ -396,7 +400,7 @@
       <Key>504</Key>
       <Value>[Type:Food][Image:16-16][Sell:25][Stam:3]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>505</Key>
       <Value>[Type:Food][Image:32-16][Sell:8][Stam:2]</Value>
     </Item>

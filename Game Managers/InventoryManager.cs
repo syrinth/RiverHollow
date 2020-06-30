@@ -1,5 +1,6 @@
 ﻿using RiverHollow.WorldObjects;
 using System.Collections.Generic;
+using static RiverHollow.WorldObjects.Item;
 
 namespace RiverHollow.Game_Managers
 {
@@ -12,8 +13,6 @@ namespace RiverHollow.Game_Managers
         private static Item[,] _arrPlayerInventory;
         public static Item[,] PlayerInventory => _arrPlayerInventory;
         private static Item[,] _arrExtraInventory;
-
-        private static WorldObject CurrentWorldObject;
 
         public static Item AddedItem;
         #endregion
@@ -370,11 +369,11 @@ Exit:
             {
                 if (inventory[row, column] == null)
                 {
-                    if (item.IsEquipment())
+                    if (item.CompareType(ItemEnum.Equipment))
                     {
                         inventory[row, column] = (Equipment)(item);
                     }
-                    else if (item.IsTool())
+                    else if (item.CompareType(ItemEnum.Tool))
                     {
                         inventory[row, column] = (Tool)(item);
                     }
@@ -482,7 +481,7 @@ Exit:
             StaticItem rv = null;
             Item it = _arrPlayerInventory[GameManager.HUDItemRow, GameManager.HUDItemCol];
 
-            if (it != null && it.IsStaticItem())
+            if (it != null && it.CompareType(ItemEnum.StaticItem))
             {
                 rv = (StaticItem)it;
             }
@@ -496,7 +495,7 @@ Exit:
             {
                 for (int j = 0; j < maxItemColumns; j++)
                 {
-                    if (_arrPlayerInventory[i, j] != null && _arrPlayerInventory[i, j].IsConsumable())
+                    if (_arrPlayerInventory[i, j] != null && _arrPlayerInventory[i, j].CompareType(ItemEnum.Consumable))
                     {
                         items.Add((Consumable)_arrPlayerInventory[i, j]);
                     }

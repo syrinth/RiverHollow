@@ -91,22 +91,31 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
             {
                 rv = true;
                 string text = string.Empty;
-                if (Item.IsFood())                  //Text has a {0} parameter so Item.Name fills it out
+                if (Item.CompareType(ItemEnum.Food))                  //Text has a {0} parameter so Item.Name fills it out
                 {
                     text = string.Format(DataManager.GetGameText("FoodConfirm"), Item.Name);
                 }
-                else if (Item.IsClassItem())        //Class Change handler
+                else if (Item.CompareType(ItemEnum.Class))        //Class Change handler
                 {
                     text = DataManager.GetGameText("ClassItemConfirm");
                 }
-                else if (Item.IsTool() && ((Tool)Item).ToolType == GameManager.ToolEnum.Harp) {
+                else if (Item.CompareType(ItemEnum.MonsterFood))        //Class Change handler
+                {
+                    if (MapManager.CurrentMap.IsCombatMap)
+                    {
+                        if (MapManager.CurrentMap.PrimedFood != null) { text = DataManager.GetGameText("MonsterFood_Duplicate"); }
+                        else { text = string.Format(DataManager.GetGameText("MonsterFood_Confirm"), Item.Name); }
+                    }
+                    else { text = DataManager.GetGameText("MonsterFood_False"); }
+                }
+                else if (Item.CompareType(ItemEnum.Tool) && ((Tool)Item).ToolType == GameManager.ToolEnum.Harp) {
                     Spirit s = MapManager.CurrentMap.FindSpirit();
                     if (s != null)
                     {
                         HarpManager.NewSong(s);
                     }
                 }
-                else if (Item.IsConsumable())       //If the item is a Consumable, construct the selection options from the party
+                else if (Item.CompareType(ItemEnum.Consumable))       //If the item is a Consumable, construct the selection options from the party
                 {
                     int i = 0;
                     text = string.Format(DataManager.GetGameText("ItemConfirm"), Item.Name);

@@ -23,6 +23,7 @@ namespace RiverHollow.Characters
         bool _bCoward;
         #endregion
 
+        public MonsterSpawn SpawnPoint;
         int _iMaxMove = 5;
         public int MaxMove => _iMaxMove;
         int _id;
@@ -411,6 +412,7 @@ namespace RiverHollow.Characters
         public override void KO()
         {
             base.KO();
+            SpawnPoint.ClearSpawn();
             CombatManager.GiveXP(this);
             GameManager.SlainMonsters.Add(new GUISprite(BodySprite));
         }

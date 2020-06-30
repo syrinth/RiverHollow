@@ -5,12 +5,12 @@
       <Key>FoodConfirm</Key>
       <Value>Really eat the {0}? [Yes:UseItem|No:Cancel]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>GiftConfirm</Key>
       <Value>Give {0} to {1}? [Yes:ConfirmGift|No:Cancel]</Value>
     </Item>
-	<Item>
-      <Key>ITemConfirm</Key>
+    <Item>
+      <Key>ItemConfirm</Key>
       <Value>"Use {0} on who? [</Value>
     </Item>
     <Item>
@@ -56,6 +56,22 @@
     <Item>
       <Key>TriggerDoor</Key>
       <Value>You see no visible means of opening this door. There must be a hidden switch or something.</Value>
+    </Item>
+	<Item>
+      <Key>MonsterFood_Confirm</Key>
+      <Value>Set out the {0} here?[Yes:UseItem|No:Cancel]</Value>
+    </Item>
+    <Item>
+      <Key>MonsterFood_Yes</Key>
+      <Value>You place the {0} on the ground.</Value>
+    </Item>
+	<Item>
+      <Key>MonsterFood_False</Key>
+      <Value>You see no monster tracks here, better use it somewhere else.</Value>
+    </Item>
+		<Item>
+      <Key>MonsterFood_Duplicate</Key>
+      <Value>Tantalizing food has already been placed.</Value>
     </Item>
     <!--Quest Text-->
     <Item>

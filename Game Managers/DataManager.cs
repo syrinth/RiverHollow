@@ -359,6 +359,8 @@ namespace RiverHollow.Game_Managers
                         return new MarriageItem(id, liData);
                     case "Clothes":
                         return new Clothes(id, liData);
+                    case "MonsterFood":
+                        return new MonsterFood(id, liData, num);
                 }
             }
             return null;

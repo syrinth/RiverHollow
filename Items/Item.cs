@@ -15,7 +15,7 @@ namespace RiverHollow.WorldObjects
 {
     public class Item
     {
-        public enum ItemEnum { Resource, Class, Equipment, Tool, Container, Food, Map, Consumable, StaticItem, Marriage, Clothes  };
+        public enum ItemEnum { Resource, Class, Equipment, Tool, Container, Food, Map, Consumable, StaticItem, Marriage, Clothes, MonsterFood  };
 
         #region properties
         protected ItemEnum _eItemType;
@@ -244,16 +244,7 @@ namespace RiverHollow.WorldObjects
         public virtual void ApplyUniqueData(string str) { }
         public virtual string GetUniqueData() { return string.Empty; }
 
-        public bool IsTool() { return _eItemType == ItemEnum.Tool; }
-        public bool IsConsumable() { return _eItemType == ItemEnum.Consumable; }
-        public bool IsEquipment() { return _eItemType == ItemEnum.Equipment; }
-        public bool IsFood() { return _eItemType == ItemEnum.Food; }
-        public bool IsClassItem() { return _eItemType == ItemEnum.Class; }
-        public bool IsContainer() { return _eItemType == ItemEnum.Container; }
-        public bool IsStaticItem() { return _eItemType == ItemEnum.StaticItem; }
-        public bool IsMarriage() { return _eItemType == ItemEnum.Marriage; }
-        public bool IsMap() { return _eItemType == ItemEnum.Map; }
-        public bool IsClothes() { return _eItemType == ItemEnum.Clothes; }
+        public bool CompareType(ItemEnum type) { return _eItemType == type; }
 
         public static ItemData SaveData(Item i)
         {
@@ -684,6 +675,39 @@ namespace RiverHollow.WorldObjects
                 Remove(1);
             }
             ClearGMObjects();
+        }
+    }
+
+    public class MonsterFood : Item
+    {
+        int _iSpawnNum;
+        public int SpawnNumber => _iSpawnNum;
+        int _iSpawnID;
+        public int SpawnID => _iSpawnID;
+
+        public MonsterFood(int id, Dictionary<string, string> stringData, int num)
+        {
+            _bStacks = true;
+            ImportBasics(stringData, id, num);
+
+            string[] splitData = stringData["Spawn"].Split('-');
+            _iSpawnNum = int.Parse(splitData[0]);
+            _iSpawnID = int.Parse(splitData[1]);
+
+            _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Consumables");
+        }
+
+        public override void UseItem(string action)
+        {
+            if (action.Equals("UseItem"))
+            {
+                MapManager.CurrentMap.PrimeMonsterSpawns(this);
+                MapManager.CurrentMap.DropItemOnMap(this, PlayerManager.World.Position);
+                _bAutoPickup = false;
+                _bManualPickup = false;
+                Remove(1);
+                ClearGMObjects();
+            }
         }
     }
 

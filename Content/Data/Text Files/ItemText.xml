@@ -162,6 +162,10 @@
       <Key>50</Key>
       <Value>Dragon Fiber/The fibers of the Dragonleaf plant.</Value>
     </Item>
+	<Item>
+      <Key>51</Key>
+      <Value>Slime Berry/A berry made of slime, attracts slimes.</Value>
+    </Item>
     <!--<60-79> Seeds-->
     <Item>
       <Key>60</Key>
