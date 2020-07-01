@@ -175,6 +175,10 @@
       <Key>61</Key>
       <Value>Carrot Seeds/Grows a carrot</Value>
     </Item>
+	<Item>
+      <Key>62</Key>
+      <Value>Slime Berry Seeds/Grows a Slime Berry</Value>
+    </Item>
     <!--<80-89> Ores and Bars-->
     <Item>
       <Key>80</Key>

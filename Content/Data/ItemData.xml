@@ -179,6 +179,10 @@
       <Key>61</Key>
       <Value>[Type:StaticItem][Image:32-32][Sell:3][Stacks]</Value>
     </Item>
+	<Item>
+      <Key>62</Key>
+      <Value>[Type:StaticItem][Image:48-32][Sell:1500][Stacks]</Value>
+    </Item>
     <!--<80-89> Ores and Bars-->
     <Item>
       <Key>80</Key>
