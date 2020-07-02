@@ -95,7 +95,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
                 {
                     text = string.Format(DataManager.GetGameText("FoodConfirm"), Item.Name);
                 }
-                else if (Item.CompareType(ItemEnum.Class))        //Class Change handler
+                else if (Item.CompareSpecialType(SpecialItemEnum.Class))        //Class Change handler
                 {
                     text = DataManager.GetGameText("ClassItemConfirm");
                 }

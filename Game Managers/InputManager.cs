@@ -9,20 +9,15 @@ namespace RiverHollow.Game_Managers
 {
     public static class InputManager
     {
-        private static Dictionary<Keys, bool> _keyDownDictionary;
-        public static Dictionary<Keys, bool> KeyDownDictionary { get => _keyDownDictionary; }
+        private static Dictionary<Keys, bool> _diKeyDown;
+        public static Dictionary<Keys, bool> KeyDownDictionary => _diKeyDown;
 
         public static void Load()
         {
-            _keyDownDictionary = new Dictionary<Keys, bool>();
+            _diKeyDown = new Dictionary<Keys, bool>();
             foreach (var k in Enum.GetValues(typeof(Keys)))
             {
-                Keys key = (Keys)k;
-                if ((key >= Keys.A && key <= Keys.Z) ||
-                    key == Keys.Escape || key == Keys.Enter || key == Keys.Space || key == Keys.Back || key >= Keys.Left && key <= Keys.Down || key == Keys.Delete)
-                {
-                    _keyDownDictionary.Add((Keys)k, false);
-                }
+                _diKeyDown.Add((Keys)k, false);
             }
         }
 
@@ -33,11 +28,11 @@ namespace RiverHollow.Game_Managers
             KeyboardState keyboardState = Keyboard.GetState();
             bool keyDownThisFrame = (keyboardState.IsKeyDown(key));
 
-            if (!_keyDownDictionary[key] && keyDownThisFrame)
+            if (!_diKeyDown[key] && keyDownThisFrame)
             {
                 rv = true;
             }
-            _keyDownDictionary[key] = keyDownThisFrame;
+            _diKeyDown[key] = keyDownThisFrame;
 
             return rv;
         }
@@ -52,14 +47,32 @@ namespace RiverHollow.Game_Managers
         {
             string rv = "";
 
-            if (key == Keys.Space) { rv = " "; }
-            else if (key == Keys.Back) { rv = "--"; }
-            else if (key == Keys.Delete) { rv = "-+"; }
-            else if (Keyboard.GetState().IsKeyDown(Keys.LeftShift) || Keyboard.GetState().IsKeyDown(Keys.RightShift))
-            { rv = key.ToString(); }
-            else { rv = key.ToString().ToLower(); }
+            if (!IsShift(key))
+            {
+                if (key == Keys.Space) { rv = " "; }
+                else if (key == Keys.Back) { rv = "--"; }
+                else if (key == Keys.Delete) { rv = "-+"; }
+                else if (key == Keys.OemMinus) { rv = "-"; }
+                else if (key == Keys.OemOpenBrackets) { rv = "["; }
+                else if (key == Keys.OemCloseBrackets) { rv = "]"; }
+                else if (key == Keys.OemBackslash && ShiftDown()) { rv = "|"; }
+                else if (key == Keys.OemSemicolon && ShiftDown()) { rv = ":"; }
+                else if (IsNumber(key)) { rv = key.ToString().Remove(0, 1); }
+                else if (IsLetter(key))
+                {
+                    if (ShiftDown()) { rv = key.ToString(); }
+                    else { rv = key.ToString().ToLower(); }
+                }
+            }
 
             return rv;
         }
+
+        private static bool IsLetter(Keys k) { return k >= Keys.A && k <= Keys.Z; }
+        private static bool IsNumber(Keys k) { return k >= Keys.D0 && k <= Keys.D9; }
+        private static bool IsShift(Keys k) { return k == Keys.LeftShift || k == Keys.RightShift; }
+        private static bool ShiftDown() { return Keyboard.GetState().IsKeyDown(Keys.LeftShift) || Keyboard.GetState().IsKeyDown(Keys.RightShift); }
+
+
     }
 }

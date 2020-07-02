@@ -20,11 +20,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
         private GUIImage _gImage;
 
         private GUIWindow _gWindow;
-        private GUIText _gText;
+        protected GUIText _gText;
 
         protected bool _bFadeOnDisable = true;
         public delegate void BtnClickDelegate ();
-        private BtnClickDelegate _delAction;
+        protected BtnClickDelegate _delAction;
 
         internal static WindowData BaseBtn = new WindowData(96, 0, 2, 12);
 

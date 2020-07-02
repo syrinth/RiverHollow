@@ -101,6 +101,7 @@ namespace RiverHollow.Game_Managers
             InventoryManager.AddToInventory(23);
             InventoryManager.AddToInventory(25);
             InventoryManager.AddToInventory(101);
+            InventoryManager.AddToInventory(200);
             InventoryManager.AddToInventory(51,5);
             InventoryManager.AddToInventory(62, 5);
 

@@ -63,7 +63,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
         public GUITextWindow(Vector2 position, string text) : this()
         {
             Height = (int)_giText.MeasureString(text).Y + HeightEdges();
-            SetWidthMax((int)_giText.MeasureString(text).X, (int)(RiverHollow.ScreenWidth - position.X));
+            SetWidthMax((int)_giText.MeasureString(text).X, (int)(RiverHollow.ScreenWidth/4));
 
             ParseText(text);
 

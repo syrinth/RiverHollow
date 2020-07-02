@@ -37,6 +37,7 @@ namespace RiverHollow.Game_Managers
         public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade};
         public enum PotencyBonusEnum { None, Conditions, Summons };
         public enum EquipmentEnum { Armor, Weapon, Accessory, Head, Wrist};
+        public enum SpecialItemEnum { None, Marriage, Class, Map };
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
         public enum ActionEnum { Action, Item, Spell, MenuItem, MenuSpell, MenuAction, Move, EndTurn };
         public enum SkillTagsEnum { Bonus, Harm, Heal, Push, Pull, Remove, Retreat, Step, Status, Summon};
@@ -93,9 +94,9 @@ namespace RiverHollow.Game_Managers
         public static void LoadQuests(ContentManager Content)
         {
             DiQuests = new Dictionary<int, Quest>();
-            foreach (KeyValuePair<int, string> kvp in DataManager.DiQuests)
+            foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.DiQuestData)
             {
-                DiQuests.Add(kvp.Key, new Quest(kvp.Value, kvp.Key));
+                DiQuests.Add(kvp.Key, new Quest(kvp.Key, kvp.Value));
             }
         }
 

@@ -8,18 +8,19 @@ using RiverHollow.Misc;
 using System.Collections.Generic;
 using RiverHollow.Actors;
 using RiverHollow.Actors.CombatStuff;
-using RiverHollow.Game_Managers.GUIObjects;
 using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.WorldObjects
 {
     public class Item
     {
-        public enum ItemEnum { Resource, Class, Equipment, Tool, Container, Food, Map, Consumable, StaticItem, Marriage, Clothes, MonsterFood  };
+        public enum ItemEnum { Resource, Equipment, Tool, Food, Consumable, StaticItem, Clothes, MonsterFood, Special };
 
         #region properties
         protected ItemEnum _eItemType;
         public ItemEnum ItemType => _eItemType;
+        protected SpecialItemEnum _eSpecialItem;
+        public SpecialItemEnum SpecialItemType => _eSpecialItem;
         protected int _iItemID;
         public int ItemID => _iItemID;
         protected Color _c = Color.White;
@@ -245,6 +246,7 @@ namespace RiverHollow.WorldObjects
         public virtual string GetUniqueData() { return string.Empty; }
 
         public bool CompareType(ItemEnum type) { return _eItemType == type; }
+        public bool CompareSpecialType(SpecialItemEnum type) { return _eSpecialItem == type; }
 
         public static ItemData SaveData(Item i)
         {
@@ -591,6 +593,8 @@ namespace RiverHollow.WorldObjects
         public AdventureMap(int id, Dictionary<string, string> stringData, int num)
         {
             ImportBasics(stringData, id, num);
+            _eItemType = ItemEnum.Special;
+            _eSpecialItem = SpecialItemEnum.Map;
             _difficulty = RHRandom.Instance.Next(4, 5);
 
             _bStacks = false;
@@ -612,7 +616,8 @@ namespace RiverHollow.WorldObjects
         public MarriageItem(int id, Dictionary<string, string> stringData)
         {
             ImportBasics(stringData, id, 1);
-            _eItemType = ItemEnum.Marriage;
+            _eItemType = ItemEnum.Special;
+            _eSpecialItem = SpecialItemEnum.Marriage;
             _iNum = 1;
             _bStacks = false;
             _texTexture = DataManager.GetTexture(@"Textures\items");
@@ -720,10 +725,9 @@ namespace RiverHollow.WorldObjects
         {
             ImportBasics(stringData, id, num);
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "StaticObjects");
-
             _bStacks = stringData.ContainsKey("Stacks");
 
-            worldObj = (WorldItem)DataManager.GetWorldObject(id);
+            worldObj = (WorldItem)DataManager.GetWorldObject(int.Parse(stringData["Place"]));
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -767,6 +771,8 @@ namespace RiverHollow.WorldObjects
         public ClassItem(int id, Dictionary<string, string> stringData, int num)
         {
             ImportBasics(stringData, id, num);
+            _eItemType = ItemEnum.Special;
+            _eSpecialItem = SpecialItemEnum.Class;
 
             _bStacks = false;
             _texTexture = DataManager.GetTexture(@"Textures\items");

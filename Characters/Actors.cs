@@ -2437,7 +2437,7 @@ namespace RiverHollow.Actors
             {
                 item.Remove(1);
 
-                if (item.CompareType(Item.ItemEnum.Marriage))
+                if (item.CompareSpecialType(SpecialItemEnum.Marriage))
                 {
                     if (FriendshipPoints > 200)
                     {

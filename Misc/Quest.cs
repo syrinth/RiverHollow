@@ -98,87 +98,61 @@ namespace RiverHollow.Misc
             _bReadyForHandIn = false;
         }
 
-        public Quest(string stringData, int id) : this()
+        public Quest(int id, Dictionary<string, string> stringData) : this()
         {
             _iQuestID = id;
             _iAccomplished = 0;
             _liRewardItems = new List<Item>();
-            string[] splitParams = stringData.Split('/');
-            int i = 0;
             DataManager.GetQuestText(_iQuestID, ref _name, ref _sDescription);
 
-            string[] split = Util.FindTags(splitParams[i++]);
-            foreach (string s in split)
+            _goalType = Util.ParseEnum<QuestType>("Type");
+
+            if (stringData.ContainsKey("GoalItem"))
             {
-                string[] tagType = s.Split(':');
-                if (tagType[0].Equals("HandTo"))
+                string[] info = stringData["GoalItem"].Split('-');
+                _questItem = DataManager.GetItem(int.Parse(info[0]));
+                _iTargetGoal = int.Parse(info[1]);
+            }
+
+            if (stringData.ContainsKey("Item"))
+            {
+                string[] parse = stringData["Item"].Split('-');
+                if (parse.Length > 1)
                 {
-                    _npcHandInTo = DataManager.DiNPC[int.Parse(tagType[1])];
+                    Item it = DataManager.GetItem(int.Parse(parse[0]), int.Parse(parse[1]));
+                    if (parse.Length == 3) { it.ApplyUniqueData(parse[2]); }
+                    _liRewardItems.Add(it);
                 }
-                else if (tagType[0].Equals("Type"))
+            }
+
+            if (stringData.ContainsKey("Friendship"))
+            {
+                string[] parse = stringData["Friendship"].Split('-');
+                if (parse.Length > 1)
                 {
-                    _goalType = Util.ParseEnum<QuestType>(tagType[1]);
+                    _sFriendTarget = parse[0];
+                    _iFriendship = int.Parse(parse[1]);
                 }
-                else if (tagType[0].Equals("GoalItem"))
+            }
+
+            if (stringData.ContainsKey("SpawnMob"))
+            {
+                string[] parse = stringData["SpawnMob"].Split('-');
+                if (parse.Length > 1)
                 {
-                    string[] info = tagType[1].Split('-');
-                    _questItem = DataManager.GetItem(int.Parse(info[0]));
-                    _iTargetGoal = int.Parse(info[1]);
+                    _spawnMob = DataManager.GetMonsterByIndex(int.Parse(parse[0]));
+                    _sSpawnMap = parse[1];
+                    _sLocName = parse[2];
                 }
-                else if (tagType[0].Equals("Item"))
-                {
-                    string[] parse = tagType[1].Split('-');
-                    if (parse.Length > 1)
-                    {
-                        Item it = DataManager.GetItem(int.Parse(parse[0]), int.Parse(parse[1]));
-                        if (parse.Length == 3) { it.ApplyUniqueData(parse[2]); }
-                        _liRewardItems.Add(it);
-                    }
-                }
-                else if (tagType[0].Equals("Friendship"))
-                {
-                    string[] parse = tagType[1].Split('-');
-                    if (parse.Length > 1)
-                    {
-                        _sFriendTarget = parse[0];
-                        _iFriendship = int.Parse(parse[1]);
-                    }
-                }
-                else if (tagType[0].Equals("SpawnMob"))
-                {
-                    string[] parse = tagType[1].Split('-');
-                    if (parse.Length > 1)
-                    {
-                        _spawnMob = DataManager.GetMonsterByIndex(int.Parse(parse[0]));
-                        _sSpawnMap = parse[1];
-                        _sLocName = parse[2];
-                    }
-                }
-                else if (tagType[0].Equals("Money"))
-                {
-                    _iRewardMoney = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Day"))
-                {
-                    _iDay = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Season"))
-                {
-                    _iSeason = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Immediate"))
-                {
-                    _bImmediate = true;
-                }
-                else if (tagType[0].Equals("Activate"))
-                {
-                    _iActivateID = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Cutscene"))
-                {
-                    _iCutsceneID = int.Parse(tagType[1]);
-                }
-            }        
+            }
+
+            if (stringData.ContainsKey("HandTo")) { _npcHandInTo = DataManager.DiNPC[int.Parse(stringData["HandTo"])]; }
+            if (stringData.ContainsKey("Money")) { _iRewardMoney = int.Parse(stringData["Money"]); }
+            if (stringData.ContainsKey("Day")) { _iDay = int.Parse(stringData["Day"]); }
+            if (stringData.ContainsKey("Season")) { _iSeason = int.Parse(stringData["Season"]); }
+            if (stringData.ContainsKey("Immediate")) { _bImmediate = true; }
+            if (stringData.ContainsKey("Activate")) { _iActivateID = int.Parse(stringData["Activate"]); }
+            if (stringData.ContainsKey("Cutscene")) { _iCutsceneID = int.Parse(stringData["Cutscene"]); }
         }
 
         public bool AttemptProgress(Monster m)

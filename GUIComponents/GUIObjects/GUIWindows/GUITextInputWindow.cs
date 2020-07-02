@@ -17,6 +17,9 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         protected GUIMarker _gMarker;
 
         protected int _iCurr;
+        protected int _iMaxLength;
+
+        public bool AllowAll = false;
 
         protected bool _bFinished;
         public bool Finished => _bFinished;
@@ -25,16 +28,17 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public string EnteredText => _gText.Text;
 
-        public GUITextInputWindow() : base()
+        public GUITextInputWindow(int maxLength = -1) : base()
         {
             GameManager.TakeInput();
             GameManager.Pause();
 
             _gMarker = new GUIMarker();
             _iCurr = 0;
+            _iMaxLength = maxLength != -1 ? maxLength : GameManager.MAX_NAME_LEN;
         }
 
-        public GUITextInputWindow(string statement, SideEnum textLoc) : this()
+        public GUITextInputWindow(string statement, SideEnum textLoc, int maxLength = -1) : this(maxLength)
         {
             StatementSetup(statement, textLoc);
             _textLoc = textLoc;
@@ -101,7 +105,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                             _bFinished = true;
                             break;
                         }
-                        else if (k >= Keys.A && k <= Keys.Z || (AcceptSpace && k == Keys.Space) || k == Keys.Delete || k == Keys.Back || k == Keys.Left || k == Keys.Right || k == Keys.Delete)
+                        else if (AllowAll || k >= Keys.A && k <= Keys.Z || (AcceptSpace && k == Keys.Space) || k == Keys.Delete || k == Keys.Back || k == Keys.Left || k == Keys.Right || k == Keys.Delete)
                         {
                             if (k == Keys.Left)
                             {
@@ -114,32 +118,34 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                             else
                             {
                                 string input = InputManager.GetCharFromKey(k);
-                                if (input == "--")
-                                {
-                                    if (_gText.Length > 0)
+                                if (!string.IsNullOrEmpty(input)) {
+                                    if (input == "--")
                                     {
-                                        _gText.Remove(_iCurr);
-                                        DecrementMarker();
+                                        if (_gText.Length > 0)
+                                        {
+                                            _gText.Remove(_iCurr);
+                                            DecrementMarker();
+                                        }
+                                    }
+                                    else if (input == "-+")
+                                    {
+                                        if (_gText.Length > 0)
+                                        {
+                                            _gText.Remove(_iCurr + 1);
+                                        }
+                                    }
+                                    else if (_gText.Length < _iMaxLength)
+                                    {
+                                        _gText.Insert(input, _iCurr);
+                                        IncrementMarker();
                                     }
                                 }
-                                else if (input == "-+")
-                                {
-                                    if (_gText.Length > 0)
-                                    {
-                                        _gText.Remove(_iCurr + 1);
-                                    }
-                                }
-                                else if (_gText.Length < GameManager.MAX_NAME_LEN)
-                                {
-                                    _gText.Insert(input, _iCurr);
-                                    IncrementMarker();
-                                }
-                            }
 
-                            _gMarker.Position(_gText.Position());
-                            if (_gText.Text.Length > 0)
-                            {
-                                _gMarker.PositionAdd(new Vector2(_gText.MeasureString(_iCurr).X, 0));
+                                _gMarker.Position(_gText.Position());
+                                if (_gText.Text.Length > 0)
+                                {
+                                    _gMarker.PositionAdd(new Vector2(_gText.MeasureString(_iCurr).X, 0));
+                                }
                             }
                         }
                     }
@@ -149,7 +155,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public void IncrementMarker()
         {
-            if (_iCurr < GameManager.MAX_NAME_LEN)
+            if (_iCurr < _iMaxLength)
             {
                 _iCurr++;
             }

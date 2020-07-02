@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Actors;
 using RiverHollow.Buildings;
+using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
 using RiverHollow.Tile_Engine;
 using RiverHollow.WorldObjects;
@@ -562,6 +563,69 @@ namespace RiverHollow.Game_Managers
             }
 
             File.WriteAllText(String.Format(@"{0}\{1}", saveFolder, INFO_FILE_NAME), sb.ToString());
+        }
+
+        private static StreamWriter PrepareXMLFile(string fileName, string assetType)
+        {
+            StreamWriter dataFile = new StreamWriter(fileName);
+            dataFile.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+            dataFile.WriteLine("<XnaContent xmlns:Generic=\"System.Collections.Generic\">");
+            dataFile.WriteLine("  <Asset Type=\"" + assetType + "\">"); //Dictionary[int, string]
+            return dataFile;
+        }
+
+        private static void CloseStreamWriter(ref StreamWriter dataFile)
+        {
+            dataFile.WriteLine("  </Asset>");
+            dataFile.WriteLine("</XnaContent>");
+            dataFile.Close();
+        }
+
+        private static void WriteXMLEntry(StreamWriter dataFile, string key, string value)
+        {
+            dataFile.WriteLine("   <Item>");
+            dataFile.WriteLine(key);
+            dataFile.WriteLine(value);
+            dataFile.WriteLine("   </Item>");
+        }
+
+        public static void SaveItemXMLData(List<ItemXMLData> dataList)
+        {
+            StreamWriter dataFile = PrepareXMLFile("TestItemData.xml", "Dictionary[int, string]");
+            StreamWriter textFile = PrepareXMLFile("TestItemText.xml", "Dictionary[int, string]");
+
+            foreach (ItemXMLData data in dataList)
+            {
+                WriteXMLEntry(dataFile, string.Format("     <Key>{0}</Key>", data.ID), string.Format("     <Value>{0}</Value>", data.GetTagsString()));
+                WriteXMLEntry(textFile, string.Format("     <Key>{0}</Key>", data.ID), string.Format("     <Value>{0}/{1}</Value>", data.Name, data.Description));
+            }
+
+            CloseStreamWriter(ref dataFile);
+            CloseStreamWriter(ref textFile);
+        }
+
+        public static void SaveXMLData(List<XMLData> dataList, string fileName)
+        {
+            StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[int, string]");
+
+            foreach (XMLData data in dataList)
+            {
+                WriteXMLEntry(dataFile, string.Format("     <Key>{0}</Key>", data.ID), string.Format("     <Value>{0}</Value>", data.GetTagsString()));
+            }
+
+            CloseStreamWriter(ref dataFile);
+        }
+
+        public static void SaveXMLData(List<WorldObjectXMLData> dataList, string fileName)
+        {
+            StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[int, string]");
+
+            foreach (WorldObjectXMLData data in dataList)
+            {
+                WriteXMLEntry(dataFile, string.Format("     <Key>{0}</Key>", data.ID), string.Format("     <Value>{0}</Value>", data.GetTagsString()));
+            }
+
+            CloseStreamWriter(ref dataFile);
         }
 
         public static OptionsData SaveOptions()

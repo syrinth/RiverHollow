@@ -7,30 +7,6 @@ using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Screens
 {
-    public class GUIInventoryDisplay : GUIObject
-    {
-        GUIInventory _gPlayerInventory;
-        GUIInventory _gExtraInventory;
-
-        public GUIInventoryDisplay()
-        {
-            _gPlayerInventory = new GUIInventory(true);
-            _gExtraInventory = new GUIInventory(false);
-
-            _gPlayerInventory.AnchorAndAlignToObject(_gExtraInventory, SideEnum.Bottom, SideEnum.CenterX);
-
-            Width = _gPlayerInventory.Width;
-            Height = _gPlayerInventory.Height + _gExtraInventory.Height;
-
-            MoveBy(new Vector2(-((_gPlayerInventory.Width-_gExtraInventory.Width)/2) ,0));
-
-            AddControl(_gPlayerInventory);
-            AddControl(_gExtraInventory);
-
-            this.CenterOnScreen();
-        }
-
-    }
     public class GUIInventory : GUIWindow
     {
         protected GUIItemBox[,] _gItemBoxes;

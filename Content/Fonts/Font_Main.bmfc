@@ -30,8 +30,8 @@ useFixedHeight=0
 forceZero=0
 
 # output file
-outWidth=280
-outHeight=230
+outWidth=300
+outHeight=240
 outBitDepth=32
 fontDescFormat=1
 fourChnlPacked=0
@@ -126,3 +126,5 @@ icon="Glyphs_Main/__plus.png",43,0,0,0
 icon="Glyphs_Main/__space.png",10,0,0,0
 icon="Glyphs_Main/__hyphen.png",45,0,0,0
 icon="Glyphs_Main/__slash.png",47,0,0,0
+icon="Glyphs_Main/__brace1.png",91,0,0,0
+icon="Glyphs_Main/__brace2.png",93,0,0,0

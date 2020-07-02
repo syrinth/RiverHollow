@@ -27,7 +27,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
     public class HUDScreen : GUIScreen
     {
         GUIObject _gMenu;
-        GUIObject _gMainObject;
+        GUIMainObject _gMainObject;
         GUIStatDisplay _gHealthDisplay;
         GUIStatDisplay _gStaminaDisplay;
         GUIMoneyDisplay _gMoney;

@@ -24,7 +24,7 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Map][Image:0-32]</Value>
+      <Value>[Type:Special][SpecialType:Map][Image:0-32]</Value>
     </Item>
     <Item>
       <Key>9</Key>
@@ -173,15 +173,15 @@
     <!--<60-79> Seeds-->
     <Item>
       <Key>60</Key>
-      <Value>[Type:StaticItem][Image:0-32][Sell:3][Stacks]</Value>
+      <Value>[Type:StaticItem][Image:0-32][Sell:3][Stacks][Place:60]</Value>
     </Item>
     <Item>
       <Key>61</Key>
-      <Value>[Type:StaticItem][Image:32-32][Sell:3][Stacks]</Value>
+      <Value>[Type:StaticItem][Image:32-32][Sell:3][Stacks][Place:61]</Value>
     </Item>
 	<Item>
       <Key>62</Key>
-      <Value>[Type:StaticItem][Image:48-32][Sell:1500][Stacks]</Value>
+      <Value>[Type:StaticItem][Image:48-32][Sell:1500][Stacks][Place:62]</Value>
     </Item>
     <!--<80-89> Ores and Bars-->
     <Item>
@@ -305,45 +305,45 @@
     <!--<190> Container:Stamina/Health/Mana-->
     <Item>
       <Key>190</Key>
-      <Value>[Type:StaticItem][Image:0-0][Sell:100][ReqItems:2-3]</Value>
+      <Value>[Type:StaticItem][Image:0-0][Sell:100][ReqItems:2-3][Place:190]</Value>
     </Item>
     <!--<200> Machines-->
     <Item>
       <Key>200</Key>
-      <Value>[Type:StaticItem][Image:16-0][Sell:3000][ReqItems:85-5]</Value>
+      <Value>[Type:StaticItem][Image:16-0][Sell:3000][ReqItems:85-5][Place:200]</Value>
     </Item>
     <Item>
       <Key>201</Key>
-      <Value>[Type:StaticItem][Image:32-0][Sell:3000][ReqItems:85-5]</Value>
+      <Value>[Type:StaticItem][Image:32-0][Sell:3000][ReqItems:85-5][Place:201]</Value>
     </Item>
     <Item>
       <Key>202</Key>
-      <Value>[Type:StaticItem][Image:48-0][Sell:1000][ReqItems:85-5]</Value>
+      <Value>[Type:StaticItem][Image:48-0][Sell:1000][ReqItems:85-5][Place:202]</Value>
     </Item>
     <Item>
       <Key>203</Key>
-      <Value>[Type:StaticItem][Image:64-0][Sell:500][ReqItems:2-5]</Value>
+      <Value>[Type:StaticItem][Image:64-0][Sell:500][ReqItems:2-5][Place:203]</Value>
     </Item>
     <Item>
       <Key>204</Key>
-      <Value>[Type:StaticItem][Image:80-0][Sell:500][ReqItems:2-5]</Value>
+      <Value>[Type:StaticItem][Image:80-0][Sell:500][ReqItems:2-5][Place:204]</Value>
     </Item>
     <Item>
       <Key>205</Key>
-      <Value>[Type:StaticItem][Image:96-0][Sell:500][ReqItems:2-10]</Value>
+      <Value>[Type:StaticItem][Image:96-0][Sell:500][ReqItems:2-10][Place:205]</Value>
     </Item>
     <!--<240> Walls and Floors-->
     <Item>
       <Key>240</Key>
-      <Value>[Type:StaticItem][Image:0-16][Sell:500][Stacks]</Value>
+      <Value>[Type:StaticItem][Image:0-16][Sell:500][Stacks][Place:240]</Value>
     </Item>
     <Item>
       <Key>241</Key>
-      <Value>[Type:StaticItem][Image:32-16][Sell:500][Stacks]</Value>
+      <Value>[Type:StaticItem][Image:32-16][Sell:500][Stacks][Place:241]</Value>
     </Item>
     <Item>
       <Key>299</Key>
-      <Value>[Type:StaticItem][Image:0-32][Sell:3000]</Value>
+      <Value>[Type:StaticItem][Image:0-32][Sell:3000][Place:299]</Value>
     </Item>
     <!--<300> Misc-->
     <Item>
@@ -356,11 +356,11 @@
     </Item>
     <Item>
       <Key>302</Key>
-      <Value>[Type:Marriage][Image:32-48][Sell:0]</Value>
+      <Value>[Type:Special][SpecialType:Marriage][Image:32-48][Sell:0]</Value>
     </Item>
     <Item>
       <Key>303</Key>
-      <Value>[Type:StaticItem][Image:16-16][Sell:0][Stacks]</Value>
+      <Value>[Type:StaticItem][Image:16-16][Sell:0][Stacks][Place:303]</Value>
     </Item>
     <!--<400> Clothes-->
     <Item>
@@ -572,7 +572,7 @@
     <!--<1000> Class Change-->
     <Item>
       <Key>1000</Key>
-      <Value>[Type:Class][Image:16-48][Sell:2000]</Value>
+      <Value>[Type:Special][SpecialType:Class][Image:16-48][Sell:2000]</Value>
     </Item>
   </Asset>
 </XnaContent>

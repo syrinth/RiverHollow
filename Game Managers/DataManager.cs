@@ -43,8 +43,6 @@ namespace RiverHollow.Game_Managers
 
         static Dictionary<int, string> _diUpgrades;
         public static Dictionary<int, string> DiUpgrades  => _diUpgrades;
-        static Dictionary<int, string> _diQuests;
-        public static Dictionary<int, string> DiQuests => _diQuests;
         static Dictionary<int, string> _diItemText;
         static Dictionary<int, string> _diClassText;
         static Dictionary<string, string> _diMonsterTraits;
@@ -63,6 +61,9 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Dictionary<string, string>> _diWorkers;
         static Dictionary<int, Dictionary<string, string>> _diWorldObjects;
 
+        static Dictionary<int, Dictionary<string, string>> _diQuestData;
+        public static Dictionary<int, Dictionary<string, string>> DiQuestData => _diQuestData;
+
         static Dictionary<int, Dictionary<string, string>> _diSpiritInfo;
         public static Dictionary<int, Dictionary<string, string>> DiSpiritInfo => _diSpiritInfo;
 
@@ -74,6 +75,8 @@ namespace RiverHollow.Game_Managers
         
         static Dictionary<int, string> _diClasses;
         static Dictionary<string, Dictionary<string, string>> _diSchedule;
+
+        public static int ItemCount => _diItemData.Count;
         #endregion
 
         public static BitmapFont _bmFont;
@@ -86,7 +89,6 @@ namespace RiverHollow.Game_Managers
             //Allocate Dictionaries
             _diTextures = new Dictionary<string, Texture2D>();
             _diUpgrades = Content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
-            _diQuests = Content.Load<Dictionary<int, string>>(@"Data\Quests");
             _diMonsterTraits = Content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
             _diClasses = Content.Load<Dictionary<int, string>>(@"Data\Classes");
 
@@ -124,6 +126,7 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content);
             LoadDictionary(ref _diWorkers, @"Data\Workers", Content);
             LoadDictionary(ref _diSpiritInfo, @"Data\SpiritInfo", Content);
+            LoadDictionary(ref _diQuestData, @"Data\Quests", Content);
         }
         private static void LoadDictionary(ref Dictionary<int, Dictionary<string, string>> dictionaryAddTo, string dataFile, ContentManager Content)
         {
@@ -131,21 +134,26 @@ namespace RiverHollow.Game_Managers
             Dictionary<int, string> dictionaryData = Content.Load<Dictionary<int, string>>(dataFile);
             foreach (KeyValuePair<int, string> kvp in dictionaryData)
             {
-                Dictionary<string, string> dss = new Dictionary<string, string>();
-                foreach (string s in Util.FindTags(kvp.Value))
-                {
-                    if (s.Contains(":"))
-                    {
-                        string[] tagSplit = s.Split(':');
-                        dss[tagSplit[0]] = tagSplit[1];
-                    }
-                    else
-                    {
-                        dss[s] = "";
-                    }
-                }
-                dictionaryAddTo[kvp.Key] = dss;
+                dictionaryAddTo[kvp.Key] = TaggedStringToDictionary(kvp.Value);
             }
+        }
+
+        public static Dictionary<string, string> TaggedStringToDictionary(string data)
+        {
+            Dictionary<string, string> dss = new Dictionary<string, string>();
+            foreach (string s in Util.FindTags(data))
+            {
+                if (s.Contains(":"))
+                {
+                    string[] tagSplit = s.Split(':');
+                    dss[tagSplit[0]] = tagSplit[1];
+                }
+                else
+                {
+                    dss[s] = "";
+                }
+            }
+            return dss;
         }
 
         private static void LoadTextFiles(ContentManager Content)
@@ -349,12 +357,19 @@ namespace RiverHollow.Game_Managers
                         return new StaticItem(id, liData, num);
                     case "Food":
                         return new Food(id, liData, num);
-                    case "Map":
-                        return new AdventureMap(id, liData, num);
                     case "Consumable":
                         return new Consumable(id, liData, num);
-                    case "Class":
-                        return new ClassItem(id, liData, num);
+                    case "Special":
+                        switch (liData["SpecialType"])
+                        {
+                            case "Class":
+                                return new ClassItem(id, liData, num);
+                            case "Marriage":
+                                return new MarriageItem(id, liData);
+                            case "Map":
+                                return new AdventureMap(id, liData, num);
+                        }
+                        break;
                     case "Marriage":
                         return new MarriageItem(id, liData);
                     case "Clothes":
@@ -364,6 +379,11 @@ namespace RiverHollow.Game_Managers
                 }
             }
             return null;
+        }
+        public static Dictionary<string,string> GetItemStringData(int id)
+        {
+            if (_diItemData.ContainsKey(id)) { return _diItemData[id]; }
+            else { return null; }
         }
 
         public static WorldObject GetWorldObject(int id)
@@ -403,6 +423,11 @@ namespace RiverHollow.Game_Managers
             }
 
             return null;
+        }
+        public static Dictionary<string, string> GetWorldObjectData(int id)
+        {
+            if (_diWorldObjects.ContainsKey(id)) { return _diWorldObjects[id]; }
+            else { return null; }
         }
 
         public static DungeonObject GetDungeonObject(int id, Vector2 pos)
