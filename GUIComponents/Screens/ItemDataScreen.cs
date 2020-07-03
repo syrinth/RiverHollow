@@ -253,15 +253,18 @@ namespace RiverHollow.GUIComponents.Screens
         /// </summary>
         private void Save()
         {
-            //Converts the dictionary
+            //Change all IDs
             int index = 0;
             List<ItemXMLData> itemDataList = new List<ItemXMLData>(); 
             foreach(ItemEnum e in Enum.GetValues(typeof(ItemEnum)))
             {
                 foreach(ItemXMLData data in _diItems[e])
                 {
-                    data.ChangeID(index++);
-                    itemDataList.Add(data);
+                    if (data != null)
+                    {
+                        data.ChangeID(index++);
+                        itemDataList.Add(data);
+                    }
                 }
             }
 
@@ -273,6 +276,23 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     data.ChangeID(index++);
                     worldObjectDataList.Add(data);
+                }
+            }
+
+            //Strip the special case character from the XMLData files
+            foreach (ItemEnum e in Enum.GetValues(typeof(ItemEnum)))
+            {
+                foreach (ItemXMLData data in _diItems[e])
+                {
+                    if (data != null) { data.StripSpecialCharacter(); }
+                }
+            }
+
+            foreach (ObjectType e in Enum.GetValues(typeof(ObjectType)))
+            {
+                foreach (WorldObjectXMLData data in _diWorldObjectData[e])
+                {
+                    data.StripSpecialCharacter();
                 }
             }
 
@@ -455,7 +475,8 @@ namespace RiverHollow.GUIComponents.Screens
                         if (_itemData != null)
                         {
                             SetData(null);
-                            _diItems[_heldData.ItemType].Remove(_heldData);
+                            int index = _diItems[_heldData.ItemType].IndexOf(_heldData);
+                            _diItems[_heldData.ItemType][index] = null;
                             _btnSave.Enable(false);
                         }
                     }
@@ -464,13 +485,22 @@ namespace RiverHollow.GUIComponents.Screens
                         ItemXMLData temp = _itemData;
                         SetData(_heldData);
 
-                        if(temp != null)
-                        {
-                            _diItems[_heldData.ItemType].Remove(temp);
+                        if(temp != null) {
+                            int index = _diItems[temp.ItemType].IndexOf(temp);
+                            _diItems[temp.ItemType][index] = null;
                         }
 
-                        if (_iIndex > _diItems[_heldData.ItemType].Count) { _diItems[_heldData.ItemType].Add(_heldData); }
-                        else { _diItems[_heldData.ItemType].Insert(_iIndex, _heldData); }
+                        while (_diItems[_heldData.ItemType].Count <= _iIndex)
+                        {
+                            _diItems[_heldData.ItemType].Add(null);
+                        }
+
+                        //if (_iIndex > _diItems[_heldData.ItemType].Count) { _diItems[_heldData.ItemType].Add(_heldData); }
+                        //else {
+                            
+                            if (_diItems[_heldData.ItemType][_iIndex] == null) { _diItems[_heldData.ItemType][_iIndex] = _heldData; }
+                            else { _diItems[_heldData.ItemType].Insert(_iIndex, _heldData); }
+                        //}
 
                         _heldData = temp;
 
@@ -524,6 +554,7 @@ namespace RiverHollow.GUIComponents.Screens
 
     public class XMLData
     {
+        const string SPECIAL = "^";
         protected int _iID;
         public int ID => _iID;
         protected List<XMLData> _liLinkedItems;
@@ -688,26 +719,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _diTags[tag] = string.Empty;
                 for (int i = 0; i < split.Length; i++)
                 {
-                    //The first entry is always the item, split by the '-', find it and compare
-                    //If the value matches, replace the split string id with the newID
-                    string[] splitData = split[i].Split('-');
-                    if (int.Parse(splitData[0]) == oldID)
-                    {
-                        splitData[0] = newID.ToString();
-                    }
-
-
-                    //Iterate over any linked values and concatenate them to re-add them to the entry
-                    for (int j = 0; j < splitData.Length; j++)
-                    {
-                        _diTags[tag] += splitData[j];
-                        
-                        //If there is a linked value, add a '-' and continue
-                        if (j < splitData.Length - 1)
-                        {
-                            _diTags[tag] += "-";
-                        }
-                    }
+                    ReplaceTagInfo(split[i], tag, oldID, newID);
 
                     //There may or may not be any additional values, if there are more coming, add the '|'
                     if (i < split.Length - 1)
@@ -733,24 +745,56 @@ namespace RiverHollow.GUIComponents.Screens
             //If we don't have the key, don't proceed
             if (_diTags.ContainsKey(tag))
             {
-                //The first entry is always the item, split by the '-', find it and compare
-                //If the value matches, replace the split string id with the newID
-                string[] splitData = _diTags[tag].Split('-');
-                if (int.Parse(splitData[0]) == oldID)
+                string val = _diTags[tag];
+                _diTags[tag] = string.Empty;
+                ReplaceTagInfo(val, tag, oldID, newID);
+            }
+        }
+
+        /// <summary>
+        /// This method is the actual call to search for a match and replace the values, rebuilding
+        /// the linked data in the tag.
+        /// </summary>
+        /// <param name="tagData">The singularly linked data of the tag</param>
+        /// <param name="tag">The tag we're modifying</param>
+        /// <param name="oldID">The old ID of the Data</param>
+        /// <param name="newID">The new ID </param>
+        private void ReplaceTagInfo(string tagData, string tag, int oldID, int newID)
+        {
+            //The first entry is always the item, split by the '-', find it and compare
+            //If the value matches, replace the split string id with the newID surrounded by
+            //the special character. The special character prevents subsequent changes from
+            //overwriting this change.
+            string[] splitData = tagData.Split('-');
+            if (splitData[0] == oldID.ToString())
+            {
+                splitData[0] = SPECIAL + newID.ToString() + SPECIAL;
+            }
+
+            //Iterate over any linked values and concatenate them to re-add them to the entry
+            for (int j = 0; j < splitData.Length; j++)
+            {
+                _diTags[tag] += splitData[j];
+
+                //If there is a linked value, add a '-' and continue
+                if (j < splitData.Length - 1)
                 {
-                    splitData[0] = newID.ToString();
+                    _diTags[tag] += "-";
                 }
+            }
+        }
 
-                //Iterate over any linked values and concatenate them to re-add them to the entry
-                for (int i = 0; i < splitData.Length; i++)
+        /// <summary>
+        /// Iterates through each tag and remove all instances of the special character
+        /// </summary>
+        public void StripSpecialCharacter()
+        {
+            foreach(string s in new List<string>(_diTags.Keys))
+            {
+                if (_diTags[s].Contains(SPECIAL))
                 {
-                    _diTags[tag] = splitData[i];
-
-                    //If there is a linked value, add a '-' and continue
-                    if (i < splitData.Length - 1)
-                    {
-                        _diTags[tag] += "-";
-                    }
+                    string val = _diTags[s];
+                    _diTags[s] = val.Replace(SPECIAL, "");
                 }
             }
         }
