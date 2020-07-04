@@ -589,10 +589,10 @@ namespace RiverHollow.Game_Managers
             dataFile.WriteLine("   </Item>");
         }
 
-        public static void SaveItemXMLData(List<ItemXMLData> dataList)
+        public static void SaveItemXMLData(List<ItemXMLData> dataList, string pathToDir)
         {
-            StreamWriter dataFile = PrepareXMLFile("TestItemData.xml", "Dictionary[int, string]");
-            StreamWriter textFile = PrepareXMLFile("TestItemText.xml", "Dictionary[int, string]");
+            StreamWriter dataFile = PrepareXMLFile(pathToDir + @"\ItemData.xml", "Dictionary[int, string]");
+            StreamWriter textFile = PrepareXMLFile(pathToDir + @"\Text Files\ItemText.xml", "Dictionary[int, string]");
 
             foreach (ItemXMLData data in dataList)
             {
@@ -614,6 +614,18 @@ namespace RiverHollow.Game_Managers
             }
 
             CloseStreamWriter(ref dataFile);
+        }
+
+        public static void SaveTMXData(TMXData data, string fileName)
+        {
+            StreamWriter dataFile = new StreamWriter(fileName);
+
+            foreach (string s in data.AllLines)
+            {
+                dataFile.WriteLine(s);
+            }
+
+            dataFile.Close();
         }
 
         public static OptionsData SaveOptions()

@@ -8,6 +8,7 @@ using RiverHollow.GUIObjects;
 using RiverHollow.Misc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIObjects.GUIObject;
 using static RiverHollow.WorldObjects.Item;
@@ -16,16 +17,18 @@ using static RiverHollow.WorldObjects.WorldObject;
 namespace RiverHollow.GUIComponents.Screens
 {
     class ItemDataScreen : GUIScreen
-    {        
-        const string QUEST_XML_FILE = "TestQuest.xml";
-        const string CHARACTER_XML_FILE = "TestCharacter.xml";
-        const string CLASSES_XML_FILE = "TestClasses.xml";
-        const string WORKERS_XML_FILE = "TestWorkers.xml";
-        const string MAGIC_SHOP_XML_FILE = "TestMagicShop.xml";
-        const string GROCER_XML_FILE = "TestGROCER.xml";
-        const string BUILDINGS_XML_FILE = "TestBuildings.xml";
-        const string ADVENTURERS_XML_FILE = "TestAdventurers.xml";
+    {
+        #region XML Files
+        string QUEST_XML_FILE = PATH_TO_DATA + @"\Quests.xml";
+        string CHARACTER_XML_FILE = PATH_TO_DATA + @"\CharacterData.xml";
+        string CLASSES_XML_FILE = PATH_TO_DATA + @"\Classes.xml";
+        string WORKERS_XML_FILE = PATH_TO_DATA + @"\Workers.xml";
+        string MAGIC_SHOP_XML_FILE = PATH_TO_DATA + @"\Shops\MagicShop.xml";
+        string ADVENTURERS_XML_FILE = PATH_TO_DATA + @"\Shops\Adventurers.xml";
+        string BUILDINGS_XML_FILE = PATH_TO_DATA + @"\Shops\Buildings.xml";
+        #endregion
 
+        #region Tags
         const string ITEM_TAGS = "ReqItems,RefinesInto,Place";
         const string QUEST_TAGS = "Item,GoalItem";
         const string CHARACTER_TAGS = "Collection";
@@ -33,6 +36,13 @@ namespace RiverHollow.GUIComponents.Screens
         const string CLASSES_TAG = "DWeap,DArmor,DHead,DWrist";
         const string WORKERS_TAG = "Item, ID";
         const string SHOP_TAG = "ItemID,Requires";
+        public static string MAP_ITEM_TAGS = "Item";
+        public static string MAP_WORLD_OBJECTS_TAG = "Resources,ID";
+        #endregion
+
+        public static string SPECIAL = "^";
+        static string PATH_TO_MAPS = string.Format(@"{0}\..\..\..\..\Content\Maps", System.Environment.CurrentDirectory);
+        static string PATH_TO_DATA = string.Format(@"{0}\..\..\..\..\Content\Data", System.Environment.CurrentDirectory);
 
         static Rectangle RECT_IMG = new Rectangle(254, 14, 20, 20);
         static Rectangle RECT_SELECT_IMG = new Rectangle(286, 14, 20, 20);
@@ -46,11 +56,13 @@ namespace RiverHollow.GUIComponents.Screens
         static Dictionary<ItemEnum, List<ItemXMLData>> _diItems;
         static Dictionary<ObjectType, List<XMLData>> _diWorldObjectData;
         static Dictionary<string, List<XMLData>> _diBasicXML;
+        Dictionary<string, TMXData> _diMapData;
 
         static ItemXMLData _heldData;
 
         public ItemDataScreen()
         {
+            _diMapData = new Dictionary<string, TMXData>();
             _diBasicXML = new Dictionary<string, List<XMLData>>();
             _diWorldObjectData = new Dictionary<ObjectType, List<XMLData>>();
             _diItems = new Dictionary<ItemEnum, List<ItemXMLData>>();
@@ -72,6 +84,20 @@ namespace RiverHollow.GUIComponents.Screens
                     else { _arrItemBoxes[i, j].AnchorAndAlignToObject(_arrItemBoxes[i, j - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
 
                     _gWin.AddControl(box);
+                }
+            }
+
+            foreach (string dir in Directory.GetDirectories(PATH_TO_MAPS))
+            {
+                foreach(string file in Directory.GetFiles(dir))
+                {
+                    string fileName = Path.GetFileNameWithoutExtension(file);
+                    if (fileName.StartsWith("map"))
+                    {
+                        string dirName = Path.GetDirectoryName(file);
+                        string key = Path.GetFileName(dirName) + "\\" + fileName;
+                        _diMapData[key] = new TMXData(file);
+                    }
                 }
             }
 
@@ -188,11 +214,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                 foreach (string s in _diBasicXML.Keys)
                 {
-                    if(s == CHARACTER_XML_FILE)
-                    {
-                        int h = 0;
-                    }
-                    foreach(XMLData testIt in _diBasicXML[s])
+                    foreach (XMLData testIt in _diBasicXML[s])
                     {
                         if (testIt.RefersToID(theData.ID))
                         {
@@ -202,27 +224,43 @@ namespace RiverHollow.GUIComponents.Screens
                 }
 
                 //Compare ItemData against the WorldObjectData
-                foreach (XMLData testIt in _diWorldObjectData[ObjectType.Plant])
+                foreach (ObjectType e in Enum.GetValues(typeof(ObjectType)))
                 {
-                    if (testIt.RefersToID(theData.ID))
+                    foreach (XMLData testIt in _diWorldObjectData[e])
                     {
-                        theData.AddLinkedItem(testIt);
-                    }
-                    if (theData.RefersToID(testIt.ID))
-                    {
-                        testIt.AddLinkedItem(theData);
+                        if (testIt.RefersToID(theData.ID))
+                        {
+                            theData.AddLinkedItem(testIt);
+                        }
+                        if (theData.RefersToID(testIt.ID))
+                        {
+                            testIt.AddLinkedItem(theData);
+                        }
                     }
                 }
 
-                foreach (XMLData testIt in _diWorldObjectData[ObjectType.Machine])
+                //Replace all item numbers on the maps
+                foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
                 {
-                    if (testIt.RefersToID(theData.ID))
+                    if (kvp.Value.RefersToIDWithTag(theData.ID, MAP_ITEM_TAGS))
                     {
-                        theData.AddLinkedItem(testIt);
+                        theData.AddLinkedItem(kvp.Value);
                     }
-                    if (theData.RefersToID(testIt.ID))
+                }
+            }
+
+            //Compare maps against the worldObjects
+            foreach (ObjectType e in Enum.GetValues(typeof(ObjectType)))
+            {
+                foreach (XMLData theData in _diWorldObjectData[e])
+                {
+                    //Replace all worldObject numbers on the maps
+                    foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
                     {
-                        testIt.AddLinkedItem(theData);
+                        if (kvp.Value.RefersToIDWithTag(theData.ID, MAP_WORLD_OBJECTS_TAG))
+                        {
+                            theData.AddLinkedItem(kvp.Value);
+                        }
                     }
                 }
             }
@@ -321,8 +359,18 @@ namespace RiverHollow.GUIComponents.Screens
                 SaveManager.SaveXMLData(_diBasicXML[s], s);
             }
 
-            SaveManager.SaveItemXMLData(itemDataList);
-            SaveManager.SaveXMLData(worldObjectDataList, "TestWorldObjectData.xml");
+            string mapPath = System.Environment.CurrentDirectory + "\\Maps";
+            if (!Directory.Exists(mapPath)) { Directory.CreateDirectory(mapPath); }
+            foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
+            {
+                kvp.Value.StripSpecialCharacter();
+                DirectoryInfo dirInfo = Directory.GetParent(mapPath + "\\" + kvp.Key);
+                if (!Directory.Exists(dirInfo.FullName)) { Directory.CreateDirectory(dirInfo.FullName); }
+                SaveManager.SaveTMXData(kvp.Value, mapPath + "\\" + kvp.Key + ".tmx");
+            }
+
+            SaveManager.SaveItemXMLData(itemDataList, PATH_TO_DATA);
+            SaveManager.SaveXMLData(worldObjectDataList, PATH_TO_DATA + @"\WorldObjects.xml");
         }
 
         private void ChangeIDs(ref List<ItemXMLData> itemDataList, ref List<XMLData> worldObjectDataList)
@@ -605,14 +653,15 @@ namespace RiverHollow.GUIComponents.Screens
 
     public class XMLData
     {
-        const string SPECIAL = "^";
         protected int _iID;
         public int ID => _iID;
         protected string[] _arrRelevantTags;
         protected List<XMLData> _liLinkedItems;
+        protected List<TMXData> _liLinkedMaps;
         protected Dictionary<string, string> _diTags;
 
         public XMLData(int id, Dictionary<string, string> stringData, string tags) {
+            _liLinkedMaps = new List<TMXData>();
             _liLinkedItems = new List<XMLData>();
             _arrRelevantTags = tags.Split(',');
 
@@ -644,7 +693,7 @@ namespace RiverHollow.GUIComponents.Screens
         /// and tell them to replace the old ID with the new one.
         /// </summary>
         /// <param name="newID"></param>
-        public void ChangeID(int newID)
+        public virtual void ChangeID(int newID)
         {
             if (_iID != newID)
             {
@@ -654,6 +703,11 @@ namespace RiverHollow.GUIComponents.Screens
                 foreach (XMLData d in _liLinkedItems)
                 {
                     d.ReplaceLinkedIDs(oldID, _iID);
+                }
+
+                foreach(TMXData d in _liLinkedMaps)
+                {
+                    d.ReplaceID(ItemDataScreen.MAP_WORLD_OBJECTS_TAG, oldID, newID);
                 }
             }
         }
@@ -704,6 +758,14 @@ namespace RiverHollow.GUIComponents.Screens
             }
         }
 
+        public void AddLinkedItem(TMXData d)
+        {
+            if (!_liLinkedMaps.Contains(d))
+            {
+                _liLinkedMaps.Add(d);
+            }
+        }
+
         /// <summary>
         /// Call this to check the given tag for the given ID. This method is to
         /// be used for any entry that has multiples of the same type of thing in it
@@ -714,7 +776,7 @@ namespace RiverHollow.GUIComponents.Screens
         /// <param name="id">The ID to look for</param>
         /// <param name="val">Reference to the success or this and other checks</param>
         /// <returns>True if a match exists</returns>
-        public bool CheckTagForID(string tag, int id, ref bool val)
+        public void CheckTagForID(string tag, int id, ref bool val)
         {
             //If we don't have the key, don't proceed
             if (_diTags.ContainsKey(tag))
@@ -728,12 +790,10 @@ namespace RiverHollow.GUIComponents.Screens
                     if (int.Parse(splitData[0]) == id)
                     {
                         val = true;
-                        break;
+                        return;
                     }
                 }
             }
-
-            return val;
         }
 
         /// <summary>
@@ -763,7 +823,7 @@ namespace RiverHollow.GUIComponents.Screens
                     string[] splitData = split[i].Split('-');
                     if (splitData[0] == oldID.ToString())
                     {
-                        splitData[0] = SPECIAL + newID.ToString() + SPECIAL;
+                        splitData[0] = ItemDataScreen.SPECIAL + newID.ToString() + ItemDataScreen.SPECIAL;
                     }
 
                     //Iterate over any linked values and concatenate them to re-add them to the entry
@@ -794,10 +854,10 @@ namespace RiverHollow.GUIComponents.Screens
         {
             foreach(string s in new List<string>(_diTags.Keys))
             {
-                if (_diTags[s].Contains(SPECIAL))
+                if (_diTags[s].Contains(ItemDataScreen.SPECIAL))
                 {
                     string val = _diTags[s];
-                    _diTags[s] = val.Replace(SPECIAL, "");
+                    _diTags[s] = val.Replace(ItemDataScreen.SPECIAL, "");
                 }
             }
         }
@@ -866,6 +926,240 @@ namespace RiverHollow.GUIComponents.Screens
         {
             _sName = name;
             _sDescription = desc;
+        }
+
+        public override void ChangeID(int newID)
+        {
+            if (_iID != newID)
+            {
+                int oldID = _iID;
+                _iID = newID;
+
+                foreach (XMLData d in _liLinkedItems)
+                {
+                    d.ReplaceLinkedIDs(oldID, _iID);
+                }
+
+                foreach (TMXData d in _liLinkedMaps)
+                {
+                    d.ReplaceID(ItemDataScreen.MAP_ITEM_TAGS, oldID, newID);
+                }
+            }
+        }
+    }
+
+    public class TMXData
+    {
+        List<string> _liAllLines;
+        public List<string> AllLines => _liAllLines;
+        public TMXData(string fileName)
+        {
+            _liAllLines = new List<string>();
+
+            string line;
+            string fullPathToFile = string.Format(@"{0}\..\..\..\..\Content\Maps\{1}", System.Environment.CurrentDirectory, fileName);
+            System.IO.StreamReader file = new System.IO.StreamReader(fileName);
+            while ((line = file.ReadLine()) != null)
+            {
+                _liAllLines.Add(line);
+            }
+
+            file.Close();
+        }
+
+        /// <summary>
+        /// Call to determine if the TMX file refers to the referenced id in a given tag.
+        /// Needs to be careful here because maps can refer to multiple things, so the tag
+        /// input is very important to be coordinated with what ovbject type is being passed in
+        /// </summary>
+        /// <param name="id">The ID to search for</param>
+        /// <param name="tags">The value tags to search for for this object type delimited by ','</param>
+        /// <returns></returns>
+        public bool RefersToIDWithTag(int id, string tags)
+        {
+            //Read through each line
+            for (int i = 0; i < _liAllLines.Count; i++)
+            {
+                string s = _liAllLines[i];
+                if(s.Contains("<property name"))
+                {
+                    int indexOfOpenBrace = s.IndexOf("<");
+
+                    string[] propertyParams = s.Substring(indexOfOpenBrace).Split(' ');    //Find all the entries of the property tag
+                    string propertyName = string.Empty;
+                    string propertyValue = string.Empty;
+
+                    //Which index is the value entry
+                    GetNameAndValue(ref propertyName, ref propertyValue, propertyParams);
+
+                    //We're going to loop through every tag we've been told to search for
+                    string[] tagArray = tags.Split(',');
+                    foreach (string tag in tagArray)
+                    {
+                        if (propertyName.Equals(tag))
+                        {
+                            //Split the values in the property value by the '|' delimeter 
+                            string[] splitValues = propertyValue.Split('|');
+                            foreach (string spVal in splitValues)
+                            {
+                                //Do we have a match? return true
+                                if (spVal == id.ToString())
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Call this to check the given tag for the given ID.
+        /// 
+        /// Replace any instances of the old ID that are found with the new ID
+        /// /// </summary>
+        /// <param name="tag">Tags to look at, delmitited by ','</param>
+        /// <param name="oldID">The ID to look for</param>
+        /// <param name="newID">The ID to replace the olf one with</param>
+        public void ReplaceID(string tags, int oldID, int newID)
+        {
+            //Read through every  line of the file
+            for (int i = 0; i < _liAllLines.Count; i++)
+            {
+                string s = _liAllLines[i];
+
+                //If the line is a property line, we need to read it
+                if (s.Contains("<property name"))
+                {
+                    int indexOfOpenBrace = s.IndexOf("<");
+                    string buffer = s.Substring(0, indexOfOpenBrace);       //Save this to preserve however many spaces are at the beginning of the line
+                    string newValue = "value=\"";                           //The start of a value tag
+
+                    string[] propertyParams = s.Substring(indexOfOpenBrace).Split(' ');    //Find all the entries of the property tag
+                    string propertyName = string.Empty;
+                    string propertyValue = string.Empty;
+
+                    //Which index is the value entry
+                    int valueIndex = GetNameAndValue(ref propertyName, ref propertyValue, propertyParams);
+
+                    //Iterate over the property parameters and collect the name of the property and its value
+                    for (int j = 0; j < propertyParams.Length; j++)
+                    {
+                        if (propertyParams[j].Contains("="))
+                        {
+                            string[] splitParam = propertyParams[j].Split('=');
+                            string pName = splitParam[0].Replace("\"", "");
+                            string pValue = splitParam[1].Replace("\"", "").Replace("/", "").Replace(">", "");  //Entry willl ook like "\"val\"/>" so we need to strip the special characters
+
+                            if (pName.Equals("name")) { propertyName = pValue; }
+                            else if (pName.Equals("value")) {
+                                valueIndex = j;             //Record the index of when we found it
+                                propertyValue = pValue;
+                            }
+                        }
+                    }
+
+                    bool found = false;
+
+                    //We're going to loop through every tag we've been told to search for
+                    string[] tagArray = tags.Split(',');
+                    foreach (string tag in tagArray)
+                    {
+                        if (propertyName.Equals(tag))
+                        {
+                            //Split the values in the property value by the '|' delimeter 
+                            string[] splitValues = propertyValue.Split('|');
+                            for (int j = 0; j < splitValues.Length; j++)
+                            {
+                                //If we found a match, set the flag to true and overwrite the value of this string
+                                if (splitValues[j] == oldID.ToString())
+                                {
+                                    found = true;
+                                    splitValues[j] = ItemDataScreen.SPECIAL + newID.ToString() + ItemDataScreen.SPECIAL;
+                                }
+
+                                //Concatenate it to the newValue
+                                newValue += splitValues[j];
+
+                                //If there are more entries coming, add the '|' back
+                                if (j < splitValues.Length - 1)
+                                {
+                                    newValue += "|";
+                                }
+                            }
+
+                            //Close the quote
+                            newValue += "\"";
+                        }
+                    }
+
+                    //Put the buffer back at the beginning of the line
+                    _liAllLines[i] = buffer;
+                    for (int j = 0; j < propertyParams.Length; j++)
+                    {
+                        //Either write the params as we get them, or sub in the dummy value, value is always
+                        //last so we needto close the tag.
+                        if (j == valueIndex && found) { _liAllLines[i] += newValue + "/>";  }
+                        else { _liAllLines[i] += propertyParams[j]; }
+
+                        //If there's another entry coming, put a space there
+                        if (j < propertyParams.Length - 1)
+                        {
+                            _liAllLines[i] += " ";
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// This method will iterate through an array of property parameters and retrieve
+        /// the value of the name and the value param.
+        /// </summary>
+        /// <param name="propertyName">ref to the propertyName string</param>
+        /// <param name="propertyValue">ref to the propertyValue string</param>
+        /// <param name="propertyParams">The propery param arrays</param>
+        /// <returns>The index of the value parameter</returns>
+        private int GetNameAndValue(ref string propertyName, ref string propertyValue, string[] propertyParams)
+        {
+            int rv = -1;
+            //Iterate over the property parameters and collect the name of the property and its value
+            for (int j = 0; j < propertyParams.Length; j++)
+            {
+                if (propertyParams[j].Contains("="))
+                {
+                    string[] splitParam = propertyParams[j].Split('=');
+                    string pName = splitParam[0].Replace("\"", "");
+                    string pValue = splitParam[1].Replace("\"", "").Replace("/", "").Replace(">", "");
+
+                    if (pName.Equals("name")) { propertyName = pValue; }
+                    else if (pName.Equals("value")) {
+                        rv = j;
+                        propertyValue = pValue;
+                    }
+                }
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Iterates through each line and remove all instances of the special character
+        /// </summary>
+        public void StripSpecialCharacter()
+        {
+            for (int i = 0; i < _liAllLines.Count; i++)
+            {
+                string s = _liAllLines[i];
+                if (s.Contains(ItemDataScreen.SPECIAL))
+                {
+                    string val = s;
+                    _liAllLines[i] = val.Replace(ItemDataScreen.SPECIAL, "");
+                }
+            }
         }
     }
 }

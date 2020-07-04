@@ -92,32 +92,6 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
-  <object id="22" name="MobDoor" x="162.682" y="165.591" width="11.2727" height="24"/>
-  <object id="23" name="Mob" x="52.6667" y="100" width="7" height="9">
-   <properties>
-    <property name="ID" type="int" value="3"/>
-   </properties>
-  </object>
-  <object id="26" name="Mob" x="278.167" y="84.5" width="7" height="9">
-   <properties>
-    <property name="ID" type="int" value="3"/>
-   </properties>
-  </object>
-  <object id="27" name="Mob" x="51.1667" y="243.5" width="7" height="9">
-   <properties>
-    <property name="ID" type="int" value="3"/>
-   </properties>
-  </object>
-  <object id="28" name="Mob" x="245.833" y="149.5" width="7" height="9">
-   <properties>
-    <property name="ID" type="int" value="3"/>
-   </properties>
-  </object>
-  <object id="29" name="Chest" x="164.5" y="84.8333" width="7" height="9">
-   <properties>
-    <property name="Holding" value="300/1"/>
-   </properties>
-  </object>
  </objectgroup>
  <objectgroup id="6" name="Character"/>
 </map>
