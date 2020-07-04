@@ -94,10 +94,10 @@ namespace RiverHollow.Game_Managers
         {
             foreach(Dictionary<string, string> di in DataManager.TestConfig.Values)
             {
-                if (di.ContainsKey("Item"))
+                if (di.ContainsKey("Type") && di["Type"].Equals("Item"))
                 {
                     string[] splitString = di["ItemID"].Split('-');
-                    InventoryManager.AddToInventory(int.Parse(splitString[0]), int.Parse(splitString[1]));
+                    InventoryManager.AddToInventory(int.Parse(splitString[0]), (splitString.Length > 1 ? int.Parse(splitString[1]) : 1));
                 }
             }
 

@@ -209,5 +209,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Body/401_02.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Legs/404.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/WizardPortrait.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/TestConfig.xml</File>
   </SourceFiles>
 </SourceFileCollection>
