@@ -583,10 +583,10 @@ namespace RiverHollow.Game_Managers
 
         private static void WriteXMLEntry(StreamWriter dataFile, string key, string value)
         {
-            dataFile.WriteLine("   <Item>");
+            dataFile.WriteLine("    <Item>");
             dataFile.WriteLine(key);
             dataFile.WriteLine(value);
-            dataFile.WriteLine("   </Item>");
+            dataFile.WriteLine("    </Item>");
         }
 
         public static void SaveItemXMLData(List<ItemXMLData> dataList, string pathToDir)
@@ -596,8 +596,8 @@ namespace RiverHollow.Game_Managers
 
             foreach (ItemXMLData data in dataList)
             {
-                WriteXMLEntry(dataFile, string.Format("     <Key>{0}</Key>", data.ID), string.Format("     <Value>{0}</Value>", data.GetTagsString()));
-                WriteXMLEntry(textFile, string.Format("     <Key>{0}</Key>", data.ID), string.Format("     <Value>{0}/{1}</Value>", data.Name, data.Description));
+                WriteXMLEntry(dataFile, string.Format("      <Key>{0}</Key>", data.ID), string.Format("      <Value>{0}</Value>", data.GetTagsString()));
+                WriteXMLEntry(textFile, string.Format("      <Key>{0}</Key>", data.ID), string.Format("      <Value>{0}/{1}</Value>", data.Name, data.Description));
             }
 
             CloseStreamWriter(ref dataFile);
@@ -610,7 +610,7 @@ namespace RiverHollow.Game_Managers
 
             foreach (XMLData data in dataList)
             {
-                WriteXMLEntry(dataFile, string.Format("     <Key>{0}</Key>", data.ID), string.Format("     <Value>{0}</Value>", data.GetTagsString()));
+                WriteXMLEntry(dataFile, string.Format("      <Key>{0}</Key>", data.ID), string.Format("      <Value>{0}</Value>", data.GetTagsString()));
             }
 
             CloseStreamWriter(ref dataFile);
