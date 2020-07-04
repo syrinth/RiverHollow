@@ -359,14 +359,14 @@ namespace RiverHollow.GUIComponents.Screens
                 SaveManager.SaveXMLData(_diBasicXML[s], s);
             }
 
-            string mapPath = System.Environment.CurrentDirectory + "\\Maps";
+            string mapPath = PATH_TO_MAPS;
             if (!Directory.Exists(mapPath)) { Directory.CreateDirectory(mapPath); }
             foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
             {
                 kvp.Value.StripSpecialCharacter();
                 DirectoryInfo dirInfo = Directory.GetParent(mapPath + "\\" + kvp.Key);
                 if (!Directory.Exists(dirInfo.FullName)) { Directory.CreateDirectory(dirInfo.FullName); }
-                SaveManager.SaveTMXData(kvp.Value, mapPath + "\\" + kvp.Key + ".tmx");
+                SaveManager.SaveTMXData(kvp.Value, dirInfo.FullName + "\\" + Path.GetFileName(kvp.Key) + ".tmx");
             }
 
             SaveManager.SaveItemXMLData(itemDataList, PATH_TO_DATA);
@@ -1044,23 +1044,6 @@ namespace RiverHollow.GUIComponents.Screens
 
                     //Which index is the value entry
                     int valueIndex = GetNameAndValue(ref propertyName, ref propertyValue, propertyParams);
-
-                    //Iterate over the property parameters and collect the name of the property and its value
-                    for (int j = 0; j < propertyParams.Length; j++)
-                    {
-                        if (propertyParams[j].Contains("="))
-                        {
-                            string[] splitParam = propertyParams[j].Split('=');
-                            string pName = splitParam[0].Replace("\"", "");
-                            string pValue = splitParam[1].Replace("\"", "").Replace("/", "").Replace(">", "");  //Entry willl ook like "\"val\"/>" so we need to strip the special characters
-
-                            if (pName.Equals("name")) { propertyName = pValue; }
-                            else if (pName.Equals("value")) {
-                                valueIndex = j;             //Record the index of when we found it
-                                propertyValue = pValue;
-                            }
-                        }
-                    }
 
                     bool found = false;
 
