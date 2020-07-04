@@ -79,6 +79,8 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<int, Dictionary<string, string>> DIClasses => _diClasses;
         static Dictionary<string, Dictionary<string, string>> _diSchedule;
 
+        public static Dictionary<int, Dictionary<string, string>> TestConfig;
+
         public static int ItemCount => _diItemData.Count;
         #endregion
 
@@ -130,6 +132,7 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diSpiritInfo, @"Data\SpiritInfo", Content);
             LoadDictionary(ref _diQuestData, @"Data\Quests", Content);
             LoadDictionary(ref _diClasses, @"Data\Classes", Content);
+            LoadDictionary(ref TestConfig, @"Data\TestConfig", Content);
         }
         private static void LoadDictionary(ref Dictionary<int, Dictionary<string, string>> dictionaryAddTo, string dataFile, ContentManager Content)
         {

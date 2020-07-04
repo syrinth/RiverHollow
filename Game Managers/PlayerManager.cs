@@ -92,18 +92,14 @@ namespace RiverHollow.Game_Managers
 
         public static void AddTesting()
         {
-            InventoryManager.AddToInventory(0, 990);
-            InventoryManager.AddToInventory(2, 990);
-            InventoryManager.AddToInventory(240, 99);
-            InventoryManager.AddToInventory(20);
-            InventoryManager.AddToInventory(21);
-            InventoryManager.AddToInventory(22);
-            InventoryManager.AddToInventory(23);
-            InventoryManager.AddToInventory(25);
-            InventoryManager.AddToInventory(101);
-            InventoryManager.AddToInventory(200);
-            InventoryManager.AddToInventory(51,5);
-            InventoryManager.AddToInventory(62, 5);
+            foreach(Dictionary<string, string> di in DataManager.TestConfig.Values)
+            {
+                if (di.ContainsKey("Item"))
+                {
+                    string[] splitString = di["ItemID"].Split('-');
+                    InventoryManager.AddToInventory(int.Parse(splitString[0]), int.Parse(splitString[1]));
+                }
+            }
 
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestType.Fetch, "Getwood, dumbass", 1, null, DataManager.GetItem(2)));
         }

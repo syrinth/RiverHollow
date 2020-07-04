@@ -23,6 +23,7 @@ namespace RiverHollow.GUIComponents.Screens
         string CHARACTER_XML_FILE = PATH_TO_DATA + @"\CharacterData.xml";
         string CLASSES_XML_FILE = PATH_TO_DATA + @"\Classes.xml";
         string WORKERS_XML_FILE = PATH_TO_DATA + @"\Workers.xml";
+        string TESTCONFIG_XML_FILE = PATH_TO_DATA + @"\TestConfig.xml";
         string MAGIC_SHOP_XML_FILE = PATH_TO_DATA + @"\Shops\MagicShop.xml";
         string ADVENTURERS_XML_FILE = PATH_TO_DATA + @"\Shops\Adventurers.xml";
         string BUILDINGS_XML_FILE = PATH_TO_DATA + @"\Shops\Buildings.xml";
@@ -36,6 +37,7 @@ namespace RiverHollow.GUIComponents.Screens
         const string CLASSES_TAG = "DWeap,DArmor,DHead,DWrist";
         const string WORKERS_TAG = "Item, ID";
         const string SHOP_TAG = "ItemID,Requires";
+        const string TESTCONFIG_TAG = "ItemID";
         public static string MAP_ITEM_TAGS = "Item";
         public static string MAP_WORLD_OBJECTS_TAG = "Resources,ID";
         #endregion
@@ -105,6 +107,7 @@ namespace RiverHollow.GUIComponents.Screens
             LoadXMLDictionary(CHARACTER_XML_FILE, CHARACTER_TAGS, DataManager.DiVillagerData);
             LoadXMLDictionary(CLASSES_XML_FILE, CLASSES_TAG, DataManager.DIClasses);
             LoadXMLDictionary(WORKERS_XML_FILE, WORKERS_TAG, DataManager.DIWorkers);
+            LoadXMLDictionary(TESTCONFIG_XML_FILE, TESTCONFIG_TAG, DataManager.TestConfig);
 
             LoadXMLDictionary(MAGIC_SHOP_XML_FILE, SHOP_TAG, DataManager.GetMerchandise("MagicShop"));
             LoadXMLDictionary(BUILDINGS_XML_FILE, SHOP_TAG, DataManager.GetMerchandise("Buildings"));
