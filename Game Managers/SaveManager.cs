@@ -616,18 +616,6 @@ namespace RiverHollow.Game_Managers
             CloseStreamWriter(ref dataFile);
         }
 
-        public static void SaveXMLData(List<WorldObjectXMLData> dataList, string fileName)
-        {
-            StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[int, string]");
-
-            foreach (WorldObjectXMLData data in dataList)
-            {
-                WriteXMLEntry(dataFile, string.Format("     <Key>{0}</Key>", data.ID), string.Format("     <Value>{0}</Value>", data.GetTagsString()));
-            }
-
-            CloseStreamWriter(ref dataFile);
-        }
-
         public static OptionsData SaveOptions()
         {
             OptionsData data = new OptionsData

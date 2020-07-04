@@ -4,23 +4,23 @@
     <!--Key: Index Value:Name/Description/Money/RequiredItems item num item num-->
     <Item>
       <Key>0</Key>
-      <Value>Building/1/A building used to house practitioners of the magical arts/100/0 1:2 1</Value>
+      <Value>[Type:Building][ID:1][Cost:100][Requires:0-1|2-1][Text:A building used to house practitioners of the magical arts]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Building/2/A building used to house meleers/500/0 2:2 3</Value>
+      <Value>[Type:Building][ID:2][Cost:500][Requires:0-2|2-3][Text:A building used to house meleers]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Building/3/Houses Scouts and Bards/500/0 2:2 3</Value>
+      <Value>[Type:Building][ID:3][Cost:500][Requires:0-2|2-3][Text:Houses Scouts and Bards]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>Building/4/Houses Witches and Healers/500/0 2:2 3:9 4</Value>
+      <Value>[Type:Building][ID:4][Cost:500][Requires:0-2|2-3|9-4][Text:Houses Witches and Healers]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>Upgrade/1/A building used to house meleers/500/0 2:2 3</Value>
+      <Value>[Type:Upgrade][ID:1][Cost:500][Requires:0-2|2-3][Text:A building used to house meleers]</Value>
     </Item>
   </Asset>
 </XnaContent>

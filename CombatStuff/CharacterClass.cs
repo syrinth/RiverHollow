@@ -15,9 +15,9 @@ namespace RiverHollow.Actors.CombatStuff
         private int _statStr;
         public int StatStr => _statStr;
         private int _statDef;
-        public int StatDef  => _statDef;
+        public int StatDef => _statDef;
         private int _statVit;
-        public int StatVit  => _statVit;
+        public int StatVit => _statVit;
         private int _statMagic;
         public int StatMag => _statMagic;
         private int _statRes;
@@ -61,7 +61,7 @@ namespace RiverHollow.Actors.CombatStuff
         public List<MenuAction> ActionList;
         public List<CombatAction> _liSpecialActionsList;
         WeaponEnum _weaponType;
-        public WeaponEnum WeaponType=> _weaponType;
+        public WeaponEnum WeaponType => _weaponType;
         ArmorEnum _armorType;
         public ArmorEnum ArmorType => _armorType;
 
@@ -70,133 +70,78 @@ namespace RiverHollow.Actors.CombatStuff
         public int HeadID;
         public int WristID;
 
-        public CharacterClass(int id, string[] stringData)
+        public CharacterClass(int id, Dictionary<string, string> stringData)
         {
             ActionList = new List<MenuAction>();
             _liSpecialActionsList = new List<CombatAction>();
             ImportBasics(id, stringData);
         }
 
-        protected void ImportBasics(int id, string[] stringData)
+        protected void ImportBasics(int id, Dictionary<string, string> stringData)
         {
             _iID = id;
 
-            DataManager.GetClassText(_iID, ref  _name, ref _description);
+            DataManager.GetClassText(_iID, ref _name, ref _description);
 
-            foreach (string s in stringData)
+            _weaponType = Util.ParseEnum<WeaponEnum>(stringData["Weapon"]);
+            _armorType = Util.ParseEnum<ArmorEnum>(stringData["Armor"]);
+
+            WeaponID = int.Parse(stringData["DWeap"]);
+            ArmorID = int.Parse(stringData["DArmor"]);
+            HeadID = int.Parse(stringData["DHead"]);
+            WristID = int.Parse(stringData["DWrist"]);
+
+            if (stringData.ContainsKey("Ability"))
             {
-                string[] tagType = s.Split(':');
-                if (tagType[0].Equals("Weapon"))
+                string[] split = stringData["Ability"].Split('-');
+                foreach (string ability in split)
                 {
-                    _weaponType = Util.ParseEnum<WeaponEnum>(tagType[1]);
-                }
-                else if (tagType[0].Equals("Armor"))
-                {
-                    _armorType = Util.ParseEnum<ArmorEnum>(tagType[1]);
-                }
-                else if (tagType[0].Equals("Dmg"))
-                {
-                    _statStr = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Def)))
-                {
-                    _statDef = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Hp"))
-                {
-                    _statVit = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Mag)))
-                {
-                    _statMagic = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals(Util.GetEnumString(StatEnum.Spd)))
-                {
-                    _statSpd = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("Idle"))
-                {
-                    string[] frameSplit = tagType[1].Split('-');
-                    _iIdleFrames = int.Parse(frameSplit[0]);
-                    _fIdleFrameLength = float.Parse(frameSplit[1]);
-                }
-                else if (tagType[0].Equals("Cast"))
-                {
-                    string[] frameSplit = tagType[1].Split('-');
-                    _iCastFrames = int.Parse(frameSplit[0]);
-                    _fCastFrameLength = float.Parse(frameSplit[1]);
-                }
-                else if (tagType[0].Equals("Hit"))
-                {
-                    string[] frameSplit = tagType[1].Split('-');
-                    _iHitFrames = int.Parse(frameSplit[0]);
-                    _fHitFrameLength = float.Parse(frameSplit[1]);
-                }
-                else if (tagType[0].Equals("Attack"))
-                {
-                    string[] frameSplit = tagType[1].Split('-');
-                    _iAttackFrames = int.Parse(frameSplit[0]);
-                    _fAttackFrameLength = float.Parse(frameSplit[1]);
-                }
-                else if (tagType[0].Equals("Crit"))
-                {
-                    string[] frameSplit = tagType[1].Split('-');
-                    _iCriticalFrames = int.Parse(frameSplit[0]);
-                    _fCriticalFrameLength = float.Parse(frameSplit[1]);
-                }
-                else if (tagType[0].Equals("KO"))
-                {
-                    string[] frameSplit = tagType[1].Split('-');
-                    _iKOFrames = int.Parse(frameSplit[0]);
-                    _fKOFrameLength = float.Parse(frameSplit[1]);
-                }
-                else if (tagType[0].Equals("Win"))
-                {
-                    string[] frameSplit = tagType[1].Split('-');
-                    _iWinFrames = int.Parse(frameSplit[0]);
-                    _fWinFrameLength = float.Parse(frameSplit[1]);
-                }
-                else if (tagType[0].Equals("Ability"))
-                {
-                    string[] split = tagType[1].Split('-');
-                    foreach (string ability in split)
-                    {
-                        CombatAction ac = (CombatAction)DataManager.GetActionByIndex(int.Parse(ability));
-                        ActionList.Add(ac);
-                    }
-                }
-                else if (tagType[0].Equals("Spell"))
-                {
-                    string[] spellSplit = tagType[1].Split('-');
-                    foreach (string spell in spellSplit)
-                    {
-                        CombatAction ac = (CombatAction)DataManager.GetActionByIndex(int.Parse(spell));
-                        _liSpecialActionsList.Add(ac);
-                    }
-                }
-                else if (tagType[0].Equals("DWeap"))
-                {
-                    WeaponID = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("DArmor"))
-                {
-                    ArmorID = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("DHead"))
-                {
-                    HeadID = int.Parse(tagType[1]);
-                }
-                else if (tagType[0].Equals("DWrist"))
-                {
-                    WristID = int.Parse(tagType[1]);
+                    CombatAction ac = (CombatAction)DataManager.GetActionByIndex(int.Parse(ability));
+                    ActionList.Add(ac);
                 }
             }
+
+            if (stringData.ContainsKey("Spell"))
+            {
+                string[] spellSplit = stringData["Spell"].Split('-');
+                foreach (string spell in spellSplit)
+                {
+                    CombatAction ac = (CombatAction)DataManager.GetActionByIndex(int.Parse(spell));
+                    _liSpecialActionsList.Add(ac);
+                }
+            }
+
+            //Doesn't seem to be given anymore?
+            //_statStr = int.Parse(stringData["Dmg"]);
+            //_statDef = int.Parse(stringData[Util.GetEnumString(StatEnum.Def)]);
+            //_statVit = int.Parse(stringData["Hp"]);
+            //_statMagic = int.Parse(stringData[Util.GetEnumString(StatEnum.Mag)]);
+            //_statSpd = int.Parse(stringData[Util.GetEnumString(StatEnum.Spd)]);
+
+            SetClassAnimation(stringData, "Idle", ref _iIdleFrames, ref _fIdleFrameLength);
+            SetClassAnimation(stringData, "Cast", ref _iCastFrames, ref _fCastFrameLength);
+            SetClassAnimation(stringData, "Hit", ref _iHitFrames, ref _fHitFrameLength);
+            SetClassAnimation(stringData, "Attack", ref _iAttackFrames, ref _fAttackFrameLength);
+            SetClassAnimation(stringData, "Crit", ref _iCriticalFrames, ref _fCriticalFrameLength);
+            SetClassAnimation(stringData, "KO", ref _iKOFrames, ref _fKOFrameLength);
+            SetClassAnimation(stringData, "Win", ref _iWinFrames, ref _fWinFrameLength);
+
 
             //Adds Special, Use Item, Move, and End Turn
             ActionList.Add(new MenuAction(2, ActionEnum.MenuSpell, new Vector2(1, 0)));
             ActionList.Add(new MenuAction(1, ActionEnum.MenuItem, new Vector2(2, 0)));
             ActionList.Add(new MenuAction(0, ActionEnum.Move, new Vector2(3, 0)));
             ActionList.Add(new MenuAction(4, ActionEnum.EndTurn, new Vector2(4, 0)));
+        }
+
+        private void SetClassAnimation(Dictionary<string, string> stringData, string key, ref int frames, ref float frameLength)
+        {
+            if (stringData.ContainsKey(key))
+            {
+                string[] frameSplit = stringData[key].Split('-');
+                frames = int.Parse(frameSplit[0]);
+                frameLength = float.Parse(frameSplit[1]);
+            }
         }
     }
 }

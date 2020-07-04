@@ -3,12 +3,12 @@
   <Asset Type="Dictionary[int, string]">
     <!--Key: Index Value:Type/ID/Description/Money-->
     <Item>
-      <Key>1</Key>
-      <Value>Item/501/30</Value>
+      <Key>0</Key>
+      <Value>[Type:Item][ItemID:501][Cost:30]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Item/502/20</Value>
+      <Value>[Type:Item][ItemID:502][Cost:20]</Value>
     </Item>
   </Asset>
 </XnaContent>

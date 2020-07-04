@@ -4,35 +4,35 @@
     <!--Key: Index Value:Type/ID/Description/Money-->
     <Item>
       <Key>1</Key>
-      <Value>Worker/1/Practitioner of the arcane arts/500</Value>
+      <Value>[Type:Worker][ID:1][Cost:500][Text:Practitioner of the arcane arts]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Worker/2/Weapons Master/500</Value>
+      <Value>[Type:Worker][ID:2][Cost:500][Text:Weapons Master]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>Worker/3/Knights!/500</Value>
+      <Value>[Type:Worker][ID:3][Cost:500][Text:Knights!]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>Worker/4/Healer/500</Value>
+      <Value>[Type:Worker][ID:4][Cost:500][Text:Healer]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>Worker/5/Healer/500</Value>
+      <Value>[Type:Worker][ID:5][Cost:500][Text:Healer]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>Worker/6/Healer/500</Value>
+      <Value>[Type:Worker][ID:6][Cost:500][Text:Healer]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>Worker/7/Healer/500</Value>
+      <Value>[Type:Worker][ID:7][Cost:500][Text:Healer]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>Worker/8/Healer/500</Value>
+      <Value>[Type:Worker][ID:8][Cost:500][Text:Healer]</Value>
     </Item>
   </Asset>
 </XnaContent>

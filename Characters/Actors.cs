@@ -1675,7 +1675,7 @@ namespace RiverHollow.Actors
 
             if (data.ContainsKey("Collection"))
             {
-                string[] vectorSplit = data["Collection"].Split('-');
+                string[] vectorSplit = data["Collection"].Split('|');
                 foreach (string s in vectorSplit)
                 {
                     _diCollection.Add(int.Parse(s), false);
@@ -2147,7 +2147,7 @@ namespace RiverHollow.Actors
 
             if (stringData.ContainsKey("ShopData"))
             {
-                foreach (KeyValuePair<int, string> kvp in DataManager.GetMerchandise(stringData["ShopData"]))
+                foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.GetMerchandise(stringData["ShopData"]))
                 {
                     _liMerchandise.Add(new Merchandise(kvp.Value));
                 }
@@ -2265,72 +2265,51 @@ namespace RiverHollow.Actors
             public string UniqueData => _sUniqueData;
             public enum ItemType { Building, Worker, Item, Upgrade }
             public ItemType MerchType;
-            int _merchID = -1;
-            public int MerchID { get => _merchID; }
-            string _description;
-            int _moneyCost;
-            public int MoneyCost { get => _moneyCost; }
+            int _iMerchID = -1;
+            public int MerchID { get => _iMerchID; }
+            string _sDescription;
+            int _iCost;
+            public int MoneyCost { get => _iCost; }
             int _iQuestReq = -1;
 
             List<KeyValuePair<int, int>> _items; //item, then num required
             public List<KeyValuePair<int, int>> RequiredItems { get => _items; }
 
-            public Merchandise(string data)
+            public Merchandise(Dictionary<string, string> stringData)
             {
                 _items = new List<KeyValuePair<int, int>>();
-                string[] dataValues = data.Split('/');
 
-                int i = 0;
-                if (dataValues[0] == "Building")
+                MerchType = Util.ParseEnum<ItemType>(stringData["Type"]);
+                if (stringData.ContainsKey("ID")) { _iMerchID = int.Parse(stringData["ID"]); }
+                else if (stringData.ContainsKey("ItemID"))
                 {
-                    MerchType = ItemType.Building;
-                    i = 1;
-                    _merchID = int.Parse(dataValues[i++]);
-                    _description = dataValues[i++];
-                    _moneyCost = int.Parse(dataValues[i++]);
-
-                    string[] reqItems = dataValues[i++].Split(':');
-                    foreach (string str in reqItems)
-                    {
-                        string[] itemsSplit = str.Split(' ');
-                        _items.Add(new KeyValuePair<int, int>(int.Parse(itemsSplit[0]), int.Parse(itemsSplit[1])));
-                    }
-                }
-                else if (dataValues[0] == "Worker")
-                {
-                    MerchType = ItemType.Worker;
-                    i = 1;
-                    _merchID = int.Parse(dataValues[i++]);
-                    _description = dataValues[i++];
-                    _moneyCost = int.Parse(dataValues[i++]);
-                }
-                else if (dataValues[0] == "Item")
-                {
-                    MerchType = ItemType.Item;
-                    i = 1;
-                    string[] itemData = dataValues[i++].Split('-');
-                    _merchID = int.Parse(itemData[0]);
+                    //Some items may have unique data so only parse the first entry
+                    //tag is ItemID to differentiate the tag from in the GUI ItemData Manager
+                    string[] itemData = stringData["ItemID"].Split('-');
+                    _iMerchID = int.Parse(itemData[0]);
                     if (itemData.Length > 1) { _sUniqueData = itemData[1]; }
-                    _moneyCost = int.Parse(dataValues[i++]);
-                    if (dataValues.Length >= i + 1)
-                    {
-                        _iQuestReq = int.Parse(dataValues[i++]);
-                    }
                 }
-                else if (dataValues[0] == "Upgrade")
-                {
-                    MerchType = ItemType.Upgrade;
-                    i = 1;
-                    _merchID = int.Parse(dataValues[i++]);
-                    _description = dataValues[i++];
-                    _moneyCost = int.Parse(dataValues[i++]);
 
-                    string[] reqItems = dataValues[i++].Split(':');
+ 
+                _iCost = int.Parse(stringData["Cost"]);
+
+                if (stringData.ContainsKey("Text")) { _sDescription = stringData["Text"]; }
+                if (stringData.ContainsKey("QuestReq")) { _iQuestReq = int.Parse(stringData["QuestReq"]); }
+
+                if (stringData.ContainsKey("Requires"))
+                {
+                    string[] reqItems = stringData["Requires"].Split('|');
                     foreach (string str in reqItems)
                     {
-                        string[] itemsSplit = str.Split(' ');
+                        string[] itemsSplit = str.Split('-');
                         _items.Add(new KeyValuePair<int, int>(int.Parse(itemsSplit[0]), int.Parse(itemsSplit[1])));
                     }
+                }
+
+                if (MerchType == ItemType.Item)
+                {
+                    string[] itemData = stringData["ItemID"].Split('-');
+                    if (itemData.Length > 1) { _sUniqueData = itemData[1]; }
                 }
             }
 

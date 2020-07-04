@@ -4,43 +4,43 @@
     <!--Key: Index Value:Item#-UniqueData/Money/QuestReq-->
     <Item>
       <Key>0</Key>
-      <Value>Item/1000-1/100/1</Value>
+      <Value>[Type:Item][ItemID:1000-1][Cost:100][ReqQuest:1]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>Item/1000-2/100/1</Value>
+      <Value>[Type:Item][ItemID:1000-2][Cost:100][ReqQuest:1]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>Item/1000-3/100/1</Value>
+      <Value>[Type:Item][ItemID:1000-3][Cost:100][ReqQuest:1]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>Item/299/1000</Value>
+      <Value>[Type:Item][ItemID:299][Cost:1000]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>Item/1/100</Value>
+      <Value>[Type:Item][ItemID:1][Cost:100]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>Item/0/100</Value>
+      <Value>[Type:Item][ItemID:0][Cost:100]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>Item/40/50</Value>
+      <Value>[Type:Item][ItemID:40][Cost:50]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>Item/60/50</Value>
+      <Value>[Type:Item][ItemID:60][Cost:50]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>Item/10/100</Value>
+      <Value>[Type:Item][ItemID:10][Cost:100]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>Item/21/3000</Value>
+      <Value>[Type:Item][ItemID:21][Cost:3000]</Value>
     </Item>
   </Asset>
 </XnaContent>

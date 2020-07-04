@@ -49,9 +49,10 @@ namespace RiverHollow.Game_Managers
 
         static Dictionary<int, List<string>> _diSongs;
         static Dictionary<int, Dictionary<string, string>> _diNPCDialogue;
-        static Dictionary<string, Dictionary<int, string>> _diMerchandise;
+        static Dictionary<string, Dictionary<int, Dictionary<string, string>>> _diMerchandise;
 
         static Dictionary<int, Dictionary<string, string>> _diVillagerData;
+        public static Dictionary<int, Dictionary<string, string>> DiVillagerData => _diVillagerData;
         static Dictionary<int, Dictionary<string, string>> _diPlayerAnimationData;
         public static Dictionary<int, Dictionary<string, string>> PlayerAnimationData => _diPlayerAnimationData;
 
@@ -59,6 +60,7 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Dictionary<string, string>> _diItemData;
         static Dictionary<int, Dictionary<string, string>> _diStatusEffects;
         static Dictionary<int, Dictionary<string, string>> _diWorkers;
+        public static Dictionary<int, Dictionary<string, string>> DIWorkers => _diWorkers;
         static Dictionary<int, Dictionary<string, string>> _diWorldObjects;
 
         static Dictionary<int, Dictionary<string, string>> _diQuestData;
@@ -72,8 +74,9 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Villager> _diNPCs;
         public static Dictionary<int, Villager> DiNPC => _diNPCs;
         static Dictionary<int, Dictionary<string, string>> _diActions;
-        
-        static Dictionary<int, string> _diClasses;
+
+        static Dictionary<int, Dictionary<string, string>> _diClasses;
+        public static Dictionary<int, Dictionary<string, string>> DIClasses => _diClasses;
         static Dictionary<string, Dictionary<string, string>> _diSchedule;
 
         public static int ItemCount => _diItemData.Count;
@@ -90,7 +93,6 @@ namespace RiverHollow.Game_Managers
             _diTextures = new Dictionary<string, Texture2D>();
             _diUpgrades = Content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
             _diMonsterTraits = Content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
-            _diClasses = Content.Load<Dictionary<int, string>>(@"Data\Classes");
 
             //Read in Content and allocate the appropriate Dictionaries
             LoadGUIs(Content);
@@ -127,6 +129,7 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diWorkers, @"Data\Workers", Content);
             LoadDictionary(ref _diSpiritInfo, @"Data\SpiritInfo", Content);
             LoadDictionary(ref _diQuestData, @"Data\Quests", Content);
+            LoadDictionary(ref _diClasses, @"Data\Classes", Content);
         }
         private static void LoadDictionary(ref Dictionary<int, Dictionary<string, string>> dictionaryAddTo, string dataFile, ContentManager Content)
         {
@@ -239,14 +242,16 @@ namespace RiverHollow.Game_Managers
 
         private static void LoadMerchandise(ContentManager Content)
         {
-            _diMerchandise = new Dictionary<string, Dictionary<int, string>>();
+            _diMerchandise = new Dictionary<string, Dictionary<int, Dictionary<string, string>>>();
             LoadMerchFile(@"Data\Shops\Buildings", Content);
             LoadMerchFile(@"Data\Shops\Adventurers", Content);
             LoadMerchFile(@"Data\Shops\MagicShop", Content);
         }
         private static void LoadMerchFile(string file, ContentManager Content)
         {
-            _diMerchandise.Add(file.Replace(@"Data\Shops\", ""), Content.Load<Dictionary<int, string>>(file));
+            Dictionary<int, Dictionary<string, string>> dictionary = new Dictionary<int, Dictionary<string, string>>();
+            LoadDictionary(ref dictionary, file, Content);
+            _diMerchandise[Path.GetFileNameWithoutExtension(file)] = dictionary;
         }
 
         private static void LoadNPCs(ContentManager Content)
@@ -542,9 +547,8 @@ namespace RiverHollow.Game_Managers
             CharacterClass c = null;
             if (id != -1)
             {
-                string strData = _diClasses[id];
-                string[] strDataValues = Util.FindTags(strData);
-                c = new CharacterClass(id, strDataValues);
+                Dictionary<string, string> liData = _diClasses[id];
+                c = new CharacterClass(id, liData);
             }
             return c;
         }
@@ -575,10 +579,11 @@ namespace RiverHollow.Game_Managers
             return _diBMFonts[font];
         }
 
-        public static Dictionary<int, string> GetMerchandise(string file)
+        public static Dictionary<int, Dictionary<string, string>> GetMerchandise(string file)
         {
             return _diMerchandise[file];
         }
+
         public static string GetGameText(string key)
         {
             string rv = string.Empty;
