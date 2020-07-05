@@ -365,11 +365,11 @@
     <!--<400> Clothes-->
     <Item>
       <Key>400</Key>
-      <Value>[Type:Clothes][Image:0-64][Sell:0][CType:Body][Row:0]</Value>
+      <Value>[Type:Clothes][Image:0-64][Sell:0][CType:Body][Row:0][TexName:400]</Value>
     </Item>
     <Item>
       <Key>401</Key>
-      <Value>[Type:Clothes][Image:16-64][Sell:0][CType:Body][Row:1]</Value>
+      <Value>[Type:Clothes][Image:16-64][Sell:0][CType:Body][Row:1][TexName:401]</Value>
     </Item>
     <Item>
       <Key>402</Key>
@@ -381,7 +381,7 @@
     </Item>
     <Item>
       <Key>404</Key>
-      <Value>[Type:Clothes][Image:0-80][Sell:0][CType:Legs][Neutral][Row:3]</Value>
+      <Value>[Type:Clothes][Image:0-80][Sell:0][CType:Legs][Neutral][Row:3][TexName:404]</Value>
     </Item>
     <!--<500> Food-->
     <Item>

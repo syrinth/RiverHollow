@@ -2993,7 +2993,7 @@ namespace RiverHollow.Actors
         {
             if (c != null)
             {
-                string clothingTexture = string.Format(@"Textures\Items\Gear\{0}\{1}", c.ClothesType.ToString(), c.ItemID);
+                string clothingTexture = string.Format(@"Textures\Items\Gear\{0}\{1}", c.ClothesType.ToString(), c.TextureAnimationName);
                 if (!c.GenderNeutral) { clothingTexture += ("_" + BodyTypeStr); }
 
                 LoadSpriteAnimations(ref c.Sprite, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[CharacterClass.ID]), clothingTexture);

@@ -101,7 +101,7 @@ namespace RiverHollow.WorldObjects
 
             if (stringData.ContainsKey("ReqItems"))
             {
-                //Split by " " for each item set required
+                //Split by "|" for each item set required
                 string[] split = stringData["ReqItems"].Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
                 foreach(string s in split)
                 {
@@ -458,6 +458,8 @@ namespace RiverHollow.WorldObjects
 
     public class Clothes : Item
     {
+        string _sTextureAnimationName;
+        public string TextureAnimationName => _sTextureAnimationName;
         public enum ClothesEnum { None, Body, Legs, Hat};
         ClothesEnum _eSlot;
         public ClothesEnum ClothesType => _eSlot;
@@ -473,6 +475,7 @@ namespace RiverHollow.WorldObjects
 
             //This is the texture to draw for the inventory representation
             _texTexture = DataManager.GetTexture(@"Textures\items");
+            _sTextureAnimationName = stringData["TexName"];
 
             _bStacks = false;
             int row = 0;
