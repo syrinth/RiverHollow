@@ -418,7 +418,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 foreach (XMLData data in _diWorldObjectData[e])
                 {
-                    data.ChangeID(index++);
+                    data.ChangeID(index++, false);
                     worldObjectDataList.Add(data);
                 }
             }
@@ -775,7 +775,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                 foreach (XMLData d in _liLinkedItems)
                 {
-                    d.ReplaceLinkedIDs(oldID, _iID);
+                    d.ReplaceLinkedIDs(oldID, _iID, item);
                 }
 
                 foreach (TMXData d in _liLinkedMaps)
@@ -848,7 +848,6 @@ namespace RiverHollow.GUIComponents.Screens
             }
         }
 
-
         /// <summary>
         /// Adds the given XMLData to the LinkedITems list.
         /// 
@@ -863,7 +862,6 @@ namespace RiverHollow.GUIComponents.Screens
                 _liLinkedItems.Add(d);
             }
         }
-
         public void AddLinkedItem(TMXData d)
         {
             if (!_liLinkedMaps.Contains(d))
