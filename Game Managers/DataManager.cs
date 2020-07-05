@@ -406,9 +406,8 @@ namespace RiverHollow.Game_Managers
                 switch (liData["Type"])
                 {
                     case "Destructible":
-                        return new Destructible(id, liData, pos);
-                    case "Tree":
-                        return new Tree(id, liData, pos);
+                        if (liData.ContainsKey("Tree")) { return new Tree(id, liData, pos); }
+                        else { return new Destructible(id, liData, pos); }
                     case "Staircase":
                         return new Staircase(id, pos, TileSize, TileSize);
                     case "Container":

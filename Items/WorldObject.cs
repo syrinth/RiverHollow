@@ -6,11 +6,9 @@ using RiverHollow.Game_Managers;
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Game_Managers.GUIComponents.Screens;
 using static RiverHollow.Game_Managers.DataManager;
-using RiverHollow.GUIObjects;
 using System;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Misc;
-using RiverHollow.GUIComponents.GUIObjects;
 using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.WorldObjects
@@ -18,8 +16,7 @@ namespace RiverHollow.WorldObjects
     public class WorldObject
     {
         #region Properties
-        public enum ObjectType { Building, ClassChanger, Machine, Container, Earth, Floor, WorldObject, Destructible, Plant, Wall, Light, DungeonObject};
-        public ObjectType Type;
+        public ObjectTypeEnum Type;
 
         protected AnimatedSprite _sprite;
         public AnimatedSprite Sprite => _sprite;
@@ -72,7 +69,7 @@ namespace RiverHollow.WorldObjects
 
         public WorldObject(int id, Vector2 pos, int width, int height) : this()
         {
-            Type = ObjectType.WorldObject;
+            Type = ObjectTypeEnum.WorldObject;
             _iID = id;
             _vMapPosition = pos;
             _iWidth = width;
@@ -175,16 +172,7 @@ namespace RiverHollow.WorldObjects
             return itemList;
         }
 
-        public bool IsContainer() { return Type == ObjectType.Container; }
-        public bool IsDestructible() { return Type == ObjectType.Destructible; }
-        public bool IsMachine() { return Type == ObjectType.Machine; }
-        public bool IsPlant() { return Type == ObjectType.Plant; }
-        public bool IsWorldObject() { return Type == ObjectType.WorldObject; }
-        public bool IsGround() { return Type == ObjectType.Floor; }
-        public bool IsEarth() { return Type == ObjectType.Earth; }
-        public bool IsClassChanger() { return Type == ObjectType.ClassChanger; }
-        public bool IsBuilding() { return Type == ObjectType.Building; }
-        public bool IsDungeonObject() { return Type == ObjectType.DungeonObject; }
+        public bool Match(ObjectTypeEnum t) { return Type == t; }
     }
 
     public class Destructible : WorldObject
@@ -200,7 +188,7 @@ namespace RiverHollow.WorldObjects
 
         public Destructible(int id, Dictionary<string, string> stringData, Vector2 pos)
         {
-            Type = ObjectType.Destructible;
+            Type = ObjectTypeEnum.Destructible;
             _iID = id;
 
             _wallObject = false;
@@ -233,7 +221,7 @@ namespace RiverHollow.WorldObjects
 
         public Tree(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
         {
-            Type = ObjectType.Destructible;
+            Type = ObjectTypeEnum.Destructible;
             if (stringData.ContainsKey("Texture")) {
                 LoadSprite(stringData, stringData["Texture"]);
             }
@@ -245,7 +233,7 @@ namespace RiverHollow.WorldObjects
     {
         public EchoNode(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
         {
-            Type = ObjectType.Destructible;
+            Type = ObjectTypeEnum.Destructible;
             _eToolType = ToolEnum.Lantern;
             _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
 
@@ -289,7 +277,7 @@ namespace RiverHollow.WorldObjects
     {
         public Light(int id, Dictionary<string, string> stringData, Vector2 pos)
         {
-            Type = ObjectType.Light;
+            Type = ObjectTypeEnum.Light;
             _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
 
             _iHeight = TileSize;
@@ -313,7 +301,7 @@ namespace RiverHollow.WorldObjects
 
         public Staircase(int id, Vector2 pos, int width, int height) : base(id, pos, width, height)
         {
-            Type = ObjectType.WorldObject;
+            Type = ObjectTypeEnum.WorldObject;
             _wallObject = true;
             _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
             _sprite.AddAnimation(AnimationEnum.ObjectIdle, 96, 0, TileSize, TileSize);
@@ -364,7 +352,7 @@ namespace RiverHollow.WorldObjects
             public ClassChanger(int id, Vector2 position)
             {
                 _iID = id;
-                Type = ObjectType.ClassChanger;
+                Type = ObjectTypeEnum.ClassChanger;
                 LoadContent();
 
                 MapPosition = position;
@@ -421,7 +409,7 @@ namespace RiverHollow.WorldObjects
                 _dProcessedTime = -1;
                 _diCrafting = new Dictionary<int, int>();
                 _diProcessing = new Dictionary<int, ProcessRecipe>();
-                Type = ObjectType.Machine;
+                Type = ObjectTypeEnum.Machine;
                 ReadSourcePos(stringData["Image"]);
 
                 _iWidth = int.Parse(stringData["Width"]);
@@ -701,7 +689,7 @@ namespace RiverHollow.WorldObjects
             public Container(int id, Dictionary<string, string> stringData)
             {
                 _iID = id;
-                Type = ObjectType.Container;
+                Type = ObjectTypeEnum.Container;
 
                 _iWidth = int.Parse(stringData["Width"]);
                 _iHeight = int.Parse(stringData["Height"]);
@@ -774,7 +762,7 @@ namespace RiverHollow.WorldObjects
             public Plant(int id, Dictionary<string, string> stringData)
             {
                 _iID = id;
-                Type = ObjectType.Plant;
+                Type = ObjectTypeEnum.Plant;
                 _bImpassable = false;
 
                 _iCurrentState = 0;
@@ -1068,7 +1056,7 @@ namespace RiverHollow.WorldObjects
             public Floor(int id, Dictionary<string, string> stringData, Vector2 pos) : this()
             {
                 _iID = id;
-                Type = ObjectType.Floor;
+                Type = ObjectTypeEnum.Floor;
                 ReadSourcePos(stringData["Image"]);
 
                 _sprite = new AnimatedSprite(DataManager.FILE_FLOORING);
@@ -1142,7 +1130,7 @@ namespace RiverHollow.WorldObjects
                 public Earth()
                 {
                     _iID = 0;
-                    Type = ObjectType.Earth;
+                    Type = ObjectTypeEnum.Earth;
                     _vSourcePos = Vector2.Zero;
 
                     _sprite = new AnimatedSprite(DataManager.FILE_FLOORING);
@@ -1171,7 +1159,7 @@ namespace RiverHollow.WorldObjects
             public Wall(int id, Dictionary<string, string> stringData, Vector2 pos)
             {
                 _iID = id;
-                Type = ObjectType.Wall;
+                Type = ObjectTypeEnum.Wall;
                 ReadSourcePos(stringData["Image"]);
 
                 _iWidth = int.Parse(stringData["Width"]);
@@ -1218,7 +1206,7 @@ namespace RiverHollow.WorldObjects
         protected DungeonObject(int id, Dictionary<string, string> stringData)
         {
             _iID = id;
-            Type = ObjectType.DungeonObject;
+            Type = ObjectTypeEnum.DungeonObject;
             _eSubType = Util.ParseEnum<DungeonObjectType>(stringData["Subtype"]);
 
             _bVisible = true;

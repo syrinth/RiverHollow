@@ -12,7 +12,6 @@ using System.IO;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIObjects.GUIObject;
 using static RiverHollow.WorldObjects.Item;
-using static RiverHollow.WorldObjects.WorldObject;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -59,7 +58,7 @@ namespace RiverHollow.GUIComponents.Screens
         static GUIButton _btnSave;
         static GUIButton _btnAddNew;
         static Dictionary<ItemEnum, List<ItemXMLData>> _diItems;
-        static Dictionary<ObjectType, List<XMLData>> _diWorldObjectData;
+        static Dictionary<ObjectTypeEnum, List<XMLData>> _diWorldObjectData;
         static Dictionary<string, List<XMLData>> _diBasicXML;
         Dictionary<string, TMXData> _diMapData;
 
@@ -69,7 +68,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             _diMapData = new Dictionary<string, TMXData>();
             _diBasicXML = new Dictionary<string, List<XMLData>>();
-            _diWorldObjectData = new Dictionary<ObjectType, List<XMLData>>();
+            _diWorldObjectData = new Dictionary<ObjectTypeEnum, List<XMLData>>();
             _diItems = new Dictionary<ItemEnum, List<ItemXMLData>>();
             _gWin = new GUIWindow(GUIWindow.RedWin, 10, 10);
             AddControl(_gWin);
@@ -186,10 +185,10 @@ namespace RiverHollow.GUIComponents.Screens
                 }
             }
 
-            foreach (ObjectType e in Enum.GetValues(typeof(ObjectType)))
+            foreach (ObjectTypeEnum e in Enum.GetValues(typeof(ObjectTypeEnum)))
             {
                 _diWorldObjectData[e] = new List<XMLData>();
-                _diWorldObjectData[e].AddRange(worldObjectList.FindAll(x => Util.ParseEnum<ObjectType>(x.GetStringValue("Type")) == e));
+                _diWorldObjectData[e].AddRange(worldObjectList.FindAll(x => Util.ParseEnum<ObjectTypeEnum>(x.GetStringValue("Type")) == e));
             }
         }
 
@@ -258,7 +257,7 @@ namespace RiverHollow.GUIComponents.Screens
                 }
 
                 //Compare ItemData against the WorldObjectData
-                foreach (ObjectType e in Enum.GetValues(typeof(ObjectType)))
+                foreach (ObjectTypeEnum e in Enum.GetValues(typeof(ObjectTypeEnum)))
                 {
                     foreach (XMLData testIt in _diWorldObjectData[e])
                     {
@@ -279,7 +278,7 @@ namespace RiverHollow.GUIComponents.Screens
                     }
                 }
 
-                //Replace all item numbers on the maps
+                //Find any maps that reference the ItemID
                 foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
                 {
                     if (kvp.Value.RefersToIDWithTag(theData.ID, MAP_ITEM_TAGS))
@@ -290,7 +289,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             //Compare maps against the worldObjects
-            foreach (ObjectType e in Enum.GetValues(typeof(ObjectType)))
+            foreach (ObjectTypeEnum e in Enum.GetValues(typeof(ObjectTypeEnum)))
             {
                 foreach (XMLData theData in _diWorldObjectData[e])
                 {
@@ -367,7 +366,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             //Strip the special case character from the WorldObject files
-            foreach (ObjectType e in Enum.GetValues(typeof(ObjectType)))
+            foreach (ObjectTypeEnum e in Enum.GetValues(typeof(ObjectTypeEnum)))
             {
                 foreach (XMLData data in _diWorldObjectData[e])
                 {
@@ -415,7 +414,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             index = 0;
-            foreach (ObjectType e in Enum.GetValues(typeof(ObjectType)))
+            foreach (ObjectTypeEnum e in Enum.GetValues(typeof(ObjectTypeEnum)))
             {
                 foreach (XMLData data in _diWorldObjectData[e])
                 {

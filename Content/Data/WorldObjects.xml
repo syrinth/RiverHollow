@@ -3,83 +3,83 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Tree][Texture:Textures\tree][Image:0-0][Width:48][Height:80][Hp:3][ReqLvl:1][Item:2-7]</Value>
-    </Item>
-    <Item>
-      <Key>1</Key>
       <Value>[Type:Staircase][Image:48-0][Width:16][Height:16]</Value>
     </Item>
     <Item>
-      <Key>2</Key>
+      <Key>1</Key>
       <Value>[Type:Door][Image:64-0][Width:16][Height:32]</Value>
     </Item>
     <Item>
-      <Key>3</Key>
+      <Key>2</Key>
       <Value>[Type:Forageable][Image:80-64][Width:16][Height:16][Item:4]</Value>
     </Item>
     <Item>
-      <Key>4</Key>
+      <Key>3</Key>
       <Value>[Type:Forageable][Image:96-16][Width:16][Height:16][Item:24]</Value>
     </Item>
     <Item>
-      <Key>5</Key>
-      <Value>[Type:Tree][Texture:Textures\DarkWoodTree][Image:0-0][Width:48][Height:80][Hp:5][ReqLvl:2][Item:6-8]</Value>
-    </Item>
-    <Item>
-      <Key>6</Key>
+      <Key>4</Key>
       <Value>[Type:Forageable][Image:80-32][Width:16][Height:16][Item:25][Passable]</Value>
     </Item>
     <Item>
-      <Key>7</Key>
+      <Key>5</Key>
       <Value>[Type:EchoNode][Image:0-80][Width:16][Height:16][Tool:Lantern][Hp:5][ReqLvl:1][Item:18][Idle:5-0.150][Gathered:7-0.150]</Value>
     </Item>
     <Item>
-      <Key>8</Key>
+      <Key>6</Key>
       <Value>[Type:Forageable][Image:96-0][Width:16][Height:16][Item:26][Passable]</Value>
     </Item>
     <Item>
-      <Key>9</Key>
+      <Key>7</Key>
       <Value>[Type:Forageable][Image:112-16][Width:16][Height:32][Item:27][Passable]</Value>
     </Item>
     <Item>
-      <Key>10</Key>
+      <Key>8</Key>
       <Value>[Type:Forageable][Image:128-16][Width:16][Height:32][Item:29][Passable]</Value>
     </Item>
     <Item>
-      <Key>11</Key>
+      <Key>9</Key>
       <Value>[Type:ClassChanger][Image:0-2][Width:16][Height:32]</Value>
     </Item>
     <Item>
-      <Key>12</Key>
+      <Key>10</Key>
       <Value>[Type:Machine][Image:0-0][Work:3-0.15][Width:16][Height:32][Processes:32-10|33-10|34-10|35-10|36-10]</Value>
     </Item>
     <Item>
-      <Key>13</Key>
+      <Key>11</Key>
       <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:113-5|114-30|72-15][Base:2-1]</Value>
     </Item>
     <Item>
-      <Key>14</Key>
+      <Key>12</Key>
       <Value>[Type:Machine][Image:0-64][Work:3-0.15][Width:32][Height:32][Makes:107-10|108-15][Base:2-1]</Value>
     </Item>
     <Item>
-      <Key>15</Key>
+      <Key>13</Key>
       <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:117-5|114-5|115-5|116-5|113-10|118-10][Base:2-1][Processes:32-10|33-10|34-10|35-10|36-10]</Value>
     </Item>
     <Item>
-      <Key>16</Key>
+      <Key>14</Key>
       <Value>[Type:Machine][Image:0-128][Work:3-0.15][Width:16][Height:32][Makes:109-15][Base:1-1]</Value>
     </Item>
     <Item>
-      <Key>17</Key>
+      <Key>15</Key>
       <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Processes:25-5][Makes:86-15][Base:2-1]</Value>
     </Item>
     <Item>
-      <Key>18</Key>
+      <Key>16</Key>
       <Value>[Type:Container][Image:0-16][Width:16][Height:16][Rows:1][Cols:8]</Value>
     </Item>
     <Item>
-      <Key>19</Key>
+      <Key>17</Key>
       <Value>[Type:Floor][Image:0-32]</Value>
+    </Item>
+    <Item>
+      <Key>18</Key>
+      <Value>[Type:Destructible][Tree][Texture:Textures\tree][Image:0-0][Width:48][Height:80][Hp:3][ReqLvl:1][Item:2-7][Base:1-1][BaseShift:1]</Value>
+    </Item>
+    <Item>
+      <Key>19</Key>
+      <Value>[Type:Destructible][Tree][Texture:Textures\DarkWoodTree][Image:0-0][Width:48][Height:80][Hp:5][ReqLvl:2][Item:6-8]</Value>
     </Item>
     <Item>
       <Key>20</Key>

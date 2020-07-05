@@ -504,11 +504,11 @@ namespace RiverHollow.Buildings
             buildingData.machines = new List<MachineData>();
             foreach (WorldObject w in _liPlacedObjects)
             {
-                if (w.IsMachine())
+                if (w.Match(ObjectTypeEnum.Machine))
                 {
                     buildingData.machines.Add(((Machine)w).SaveData());
                 }
-                if (w.IsContainer())
+                if (w.Match(ObjectTypeEnum.Container))
                 {
                     buildingData.containers.Add(((Container)w).SaveData());
                 }

@@ -342,7 +342,7 @@ namespace RiverHollow.Actors
                 cornerTiles.Add(MapManager.CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Bottom)).ToPoint()));
                 foreach (RHTile tile in cornerTiles)
                 {
-                    if (tile != null && tile.WorldObject != null && tile.WorldObject.IsPlant())
+                    if (tile != null && tile.WorldObject != null && tile.WorldObject.Match(ObjectTypeEnum.Plant))
                     {
                         Plant f = (Plant)tile.WorldObject;
                         f.Shake();

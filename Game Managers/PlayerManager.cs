@@ -174,7 +174,7 @@ namespace RiverHollow.Game_Managers
                             target.Dig();
                             MapManager.CurrentMap.TilledTiles.Add(target);
                         }
-                        else if (PlayerManager.ToolIsWateringCan() && target.Flooring != null && target.Flooring.IsEarth())
+                        else if (PlayerManager.ToolIsWateringCan() && target.Flooring != null && target.Flooring.Match(ObjectTypeEnum.Earth))
                         {
                             target.Water(true);
                         }

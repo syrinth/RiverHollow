@@ -767,7 +767,7 @@ namespace RiverHollow.Tile_Engine
         {
             foreach (WorldObject obj in _liPlacedWorldObjects)
             {
-                if(obj.Type == WorldObject.ObjectType.Light)
+                if(obj.Match(ObjectTypeEnum.Light))
                 {
                     spriteBatch.Draw(lightMask, new Vector2(obj.CollisionBox.Center.X - lightMask.Width / 2, obj.CollisionBox.Y - lightMask.Height / 2), Color.White);
                 }
@@ -1105,13 +1105,13 @@ namespace RiverHollow.Tile_Engine
             else if (tile.GetWorldObject() != null)
             {
                 WorldObject obj = tile.GetWorldObject();
-                if (obj.IsMachine())
+                if (obj.Match(ObjectTypeEnum.Machine))
                 {
                     Machine p = (Machine)obj;
                     if (p.HasItem()) { p.TakeFinishedItem(); }
                     else if (InventoryManager.GetCurrentItem() != null && !p.Working()) { p.ProcessClick(); }
                 }
-                else if (obj.IsContainer())
+                else if (obj.Match(ObjectTypeEnum.Container))
                 {
                     if (IsDungeon && DungeonManagerOld.IsEndChest((Container)obj))
                     {
@@ -1121,11 +1121,11 @@ namespace RiverHollow.Tile_Engine
                     }
                     GUIManager.OpenMainObject(new HUDInventoryDisplay(((Container)obj).Inventory));
                 }
-                else if (obj.IsPlant())
+                else if (obj.Match(ObjectTypeEnum.Plant))
                 {
                     ((Plant)obj).Harvest();
                 }
-                else if (obj.IsDungeonObject())
+                else if (obj.Match(ObjectTypeEnum.DungeonObject))
                 {
                     GameManager.gmDungeonObject = (DungeonObject)obj;
                     ((DungeonObject)obj).Interact();
@@ -1349,17 +1349,17 @@ namespace RiverHollow.Tile_Engine
             WorldObject obj = _targetTile.GetWorldObject();
             if (obj != null)
             {
-                if (obj.IsMachine())       //Player interacts with a machine to either take a finished item or start working
+                if (obj.Match(ObjectTypeEnum.Machine))       //Player interacts with a machine to either take a finished item or start working
                 {
                     Machine p = (Machine)obj;
                     if (p.HasItem()) { p.TakeFinishedItem(); }
                     else if (!p.Working()) { p.ProcessClick(); }
                 }
-                else if (obj.IsClassChanger())
+                else if (obj.Match(ObjectTypeEnum.ClassChanger))
                 {
                     ((ClassChanger)obj).ProcessClick();
                 }
-                else if (obj.IsPlant())
+                else if (obj.Match(ObjectTypeEnum.Plant))
                 {
                     ((Plant)obj).Harvest();
                 }
@@ -1397,7 +1397,7 @@ namespace RiverHollow.Tile_Engine
                             selectedItem.Remove(1);             //Remove one of them from the inventory
 
                             //If the item placed was a wall object, we need to adjust it based off any adjacent walls
-                            if (newItem.Type == WorldObject.ObjectType.Wall)
+                            if (newItem.Match(ObjectTypeEnum.Wall))
                             {
                                 ((Wall)newItem).AdjustObject();
                             }
@@ -1450,7 +1450,7 @@ namespace RiverHollow.Tile_Engine
                         GUICursor._CursorType = GUICursor.EnumCursorType.Door;
                         GUICursor.Alpha = (PlayerManager.PlayerInRange(t.GetTravelPoint().CollisionBox) ? 1 : 0.5f);
                     }
-                    else if(t.GetWorldObject(false) != null && t.GetWorldObject().IsPlant())
+                    else if(t.GetWorldObject(false) != null && t.GetWorldObject().Match(ObjectTypeEnum.Plant))
                     {
                         Plant obj = (Plant)t.GetWorldObject();
                         if (obj.FinishedGrowing())
@@ -2055,19 +2055,19 @@ namespace RiverHollow.Tile_Engine
             {
                 foreach (WorldObject wObj in _liPlacedWorldObjects)
                 {
-                    if (wObj.IsMachine())
+                    if (wObj.Match(ObjectTypeEnum.Machine))
                     {
                         mapData.machines.Add(((Machine)wObj).SaveData());
                     }
-                    else if (wObj.IsContainer())
+                    else if (wObj.Match(ObjectTypeEnum.Container))
                     {
                         mapData.containers.Add(((Container)wObj).SaveData());
                     }
-                    else if (wObj.IsPlant())
+                    else if (wObj.Match(ObjectTypeEnum.Plant))
                     {
                         mapData.plants.Add(((Plant)wObj).SaveData());
                     }
-                    else if (wObj.IsClassChanger())
+                    else if (wObj.Match(ObjectTypeEnum.ClassChanger))
                     {
                         WorldObjectData d = new WorldObjectData
                         {
@@ -2093,7 +2093,7 @@ namespace RiverHollow.Tile_Engine
                     Floor f = tile.Flooring;
                     if(f != null)
                     {
-                        if (f.IsEarth())
+                        if (f.Match(ObjectTypeEnum.Earth))
                         {
                             Earth e = (Earth)f;
                             mapData.earth.Add(e.SaveData());
@@ -2117,7 +2117,7 @@ namespace RiverHollow.Tile_Engine
                     WorldObject obj = DataManager.GetWorldObject(w.worldObjectID, new Vector2(w.x, w.y));
                     if (obj != null)
                     {
-                        if (obj.Type == WorldObject.ObjectType.Wall || obj.Type == WorldObject.ObjectType.Floor)
+                        if (obj.Match(ObjectTypeEnum.Wall) || obj.Match(ObjectTypeEnum.Floor))
                         {
                             if (PlacePlayerObject(obj))
                             {
@@ -2126,7 +2126,7 @@ namespace RiverHollow.Tile_Engine
                             }
                         }
 
-                        if (obj.IsClassChanger())
+                        if (obj.Match(ObjectTypeEnum.ClassChanger))
                         {
                             PlacePlayerObject(obj);
                         }
@@ -2219,7 +2219,7 @@ namespace RiverHollow.Tile_Engine
             WorldObject wObj = DataManager.GetWorldObject(_liPossibleResources[RHRandom.Instance.Next(0, _liPossibleResources.Count-1)]);
             wObj.SetCoordinatesByGrid(new Vector2(xPoint, yPoint));
 
-            if (wObj.IsPlant())
+            if (wObj.Match(ObjectTypeEnum.Plant))
             {
                 ((Plant)wObj).FinishGrowth();
             }
@@ -2378,7 +2378,7 @@ namespace RiverHollow.Tile_Engine
         }
         public void Water(bool value)
         {
-            if (_floorObj != null && _floorObj.IsEarth())
+            if (_floorObj != null && _floorObj.Match(ObjectTypeEnum.Earth))
             {
                 Earth e = (Earth)_floorObj;
                 e.Watered(value);
@@ -2387,7 +2387,7 @@ namespace RiverHollow.Tile_Engine
         public bool IsWatered()
         {
             bool rv = false;
-            if (_floorObj != null && _floorObj.IsEarth())
+            if (_floorObj != null && _floorObj.Match(ObjectTypeEnum.Earth))
             {
                 rv = ((Earth)_floorObj).Watered();
             }
@@ -2396,7 +2396,7 @@ namespace RiverHollow.Tile_Engine
         }
         public bool HasBeenDug()
         {
-            return _floorObj != null && _floorObj.IsEarth();
+            return _floorObj != null && _floorObj.Match(ObjectTypeEnum.Earth);
         }
 
         public void SetProperties(RHMap map)
@@ -2449,7 +2449,7 @@ namespace RiverHollow.Tile_Engine
         public bool SetObject(WorldObject o)
         {
             bool rv = false;
-            if (o.Type == WorldObject.ObjectType.Floor)
+            if (o.Match(ObjectTypeEnum.Floor))
             {
                 rv = SetFloor((Floor)o);
             }
@@ -2566,7 +2566,7 @@ namespace RiverHollow.Tile_Engine
         public bool DamageObject(Tool toolUsed)
         {
             bool rv = false;
-            if (_obj != null && _obj.IsDestructible())
+            if (_obj != null && _obj.Match(ObjectTypeEnum.Destructible))
             {
                 if (((Destructible)_obj).WhichTool == toolUsed.ToolType){
                     rv = ((Destructible)_obj).DealDamage(toolUsed.Power);
@@ -2590,11 +2590,11 @@ namespace RiverHollow.Tile_Engine
 
         public void Rollover()
         {
-            if (_obj != null && _obj.IsPlant())
+            if (_obj != null && _obj.Match(ObjectTypeEnum.Plant))
             {
                 ((Plant)_obj).Rollover();
             }
-            if (_floorObj != null && _floorObj.IsEarth())
+            if (_floorObj != null && _floorObj.Match(ObjectTypeEnum.Earth))
             {
                 ((Earth)_floorObj).Watered(false);
             }
