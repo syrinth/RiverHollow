@@ -1,18 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: Index>0 Value:ClassType/DailyItem/DailyFood/Portrait#-->
     <Item>
       <Key>1</Key>
       <Value>[Type:Magic][Item:1][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Magic][Item:10][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
+      <Value>[Type:Magic][Item:5][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Magic][Item:14][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
+      <Value>[Type:Magic][Item:9][Food:3][Idle:0-0-1-0-T][Walk:64-0-3-0.15-T][Attack:0-0-2-.5-F][Cast:0-0-2-.5-F][Hurt:0-0-0-0-F][Critical:0-0-0-0-F][KO:0-0-0-0-F]</Value>
     </Item>
     <Item>
       <Key>4</Key>

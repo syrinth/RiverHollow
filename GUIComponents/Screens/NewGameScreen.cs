@@ -19,9 +19,9 @@ namespace RiverHollow.GUIComponents.Screens
     class NewGameScreen : GUIScreen
     {
         static int _iHatIndex = 0;
-        static List<int> _liHats = new List<int> { -1, 402};
+        static List<int> _liHats = new List<int> { -1, 126};
         static int _iShirtIndex = 0;
-        static List<int> _liShirts = new List<int> { -1, 400, 401 };
+        static List<int> _liShirts = new List<int> { -1, 124, 125 };
         bool _bCloseColorSelection;
         static int _iHairTypeIndex;
         int _iHairTypeCount = 3;

@@ -1,7 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: ID, Value:Name/Description-->
     <Item>
       <Key>0</Key>
       <Value>Stone/Stone, for building things</Value>
@@ -19,554 +18,519 @@
       <Value>Cotton Cloth/Soft cloth made from the finest picked cotton.</Value>
     </Item>
     <Item>
-      <Key>8</Key>
-      <Value>Adventure Map/Off to find adventures!</Value>
-    </Item>
-    <Item>
-      <Key>9</Key>
+      <Key>4</Key>
       <Value>Peat/Saying it smells earthy is a kindness.</Value>
     </Item>
     <Item>
-      <Key>10</Key>
+      <Key>5</Key>
       <Value>Potion Base/You basically can't make potions without it.</Value>
     </Item>
     <Item>
-      <Key>11</Key>
+      <Key>6</Key>
       <Value>Darkwood Lumber/A piece of swamp wood, you can almost feel the power radiating off of i-oh, OH! what is that SMELL?!</Value>
     </Item>
     <Item>
-      <Key>12</Key>
+      <Key>7</Key>
       <Value>Linen Cloth/A fabric used to make typical clothing.</Value>
     </Item>
     <Item>
-      <Key>13</Key>
+      <Key>8</Key>
       <Value>Song Bottle/An enchanted bottle holding a magical song.</Value>
     </Item>
     <Item>
-      <Key>14</Key>
+      <Key>9</Key>
       <Value>Poppet/A doll imbued with an animate spirit</Value>
     </Item>
     <Item>
-      <Key>15</Key>
+      <Key>10</Key>
       <Value>Fanged Fur/The shed fur of a fanged fur.</Value>
     </Item>
     <Item>
-      <Key>16</Key>
+      <Key>11</Key>
       <Value>Imp Essence/The swirling essence of a troublesome imp.</Value>
     </Item>
     <Item>
-      <Key>17</Key>
+      <Key>12</Key>
       <Value>Blue Feather/A bright feather from a bird.</Value>
     </Item>
     <Item>
-      <Key>18</Key>
+      <Key>13</Key>
       <Value>Flame Mote/A small fragment of elemental fire.</Value>
     </Item>
     <Item>
-      <Key>19</Key>
+      <Key>14</Key>
       <Value>Enchanted Seed/A small seed glowing with potential.</Value>
     </Item>
-    <!--<20-24> Tools-->
     <Item>
-      <Key>20</Key>
-      <Value>Pick Axe/Breaks things</Value>
-    </Item>
-    <Item>
-      <Key>21</Key>
-      <Value>Wooden Axe/Chop Chop Motherfucker</Value>
-    </Item>
-    <Item>
-      <Key>22</Key>
-      <Value>Shovel/Dig the thing</Value>
-    </Item>
-    <Item>
-      <Key>23</Key>
-      <Value>Watering Can/Watering the thing</Value>
-    </Item>
-    <Item>
-      <Key>24</Key>
-      <Value>Harp/The harp of your ancestors. According to legend, this instrument will let you communicate with the spirits of nature.</Value>
-    </Item>
-    <Item>
-      <Key>25</Key>
-      <Value>Lantern/Used to call forth the energy of spent emotions</Value>
-    </Item>
-    <!--<26-34> Monster Drops-->
-    <Item>
-      <Key>26</Key>
+      <Key>15</Key>
       <Value>Swamp Muck/A dollop of swamp muck from a Muck Dweller</Value>
     </Item>
     <Item>
-      <Key>27</Key>
+      <Key>16</Key>
       <Value>Magical Leaf/An enchanted leaf bestowed with power</Value>
     </Item>
     <Item>
-      <Key>28</Key>
+      <Key>17</Key>
       <Value>Mushroom Powder/Powdered mushrooms... better not take too much.</Value>
     </Item>
-    <!--<35-39> Echo Resources-->
     <Item>
-      <Key>35</Key>
+      <Key>18</Key>
       <Value>Echo of Joy/Joy given form</Value>
     </Item>
     <Item>
-      <Key>36</Key>
+      <Key>19</Key>
       <Value>Echo of Sorrow/Echoes of a long lost pain</Value>
     </Item>
     <Item>
-      <Key>37</Key>
+      <Key>20</Key>
       <Value>Echo of Rage/An echo of a long ago wrong.</Value>
     </Item>
-    <!--<40-59> Plant Resources-->
     <Item>
-      <Key>40</Key>
+      <Key>21</Key>
       <Value>Silver Leaf/Used in potions</Value>
     </Item>
     <Item>
-      <Key>41</Key>
+      <Key>22</Key>
       <Value>Mage Bell/A small flower sought out for it's magical properties</Value>
     </Item>
     <Item>
-      <Key>42</Key>
+      <Key>23</Key>
       <Value>Tiny Mushroom/Useful as a base for powders and unguents. Don't take too much though.</Value>
     </Item>
     <Item>
-      <Key>43</Key>
+      <Key>24</Key>
       <Value>Sprig of Lavender/A sprig of fresh lavender, used in various alchemical creations.</Value>
     </Item>
     <Item>
-      <Key>44</Key>
+      <Key>25</Key>
       <Value>Flax Fiber/The fibers of a Flax plant, used to spin into textiles</Value>
     </Item>
     <Item>
-      <Key>45</Key>
+      <Key>26</Key>
       <Value>Cotton Boll/Soft cotton used for fabric</Value>
     </Item>
     <Item>
-      <Key>46</Key>
+      <Key>27</Key>
       <Value>Black Thistle/Rumor has it that a single prick fromt his thistle can cause an endless torpor</Value>
     </Item>
     <Item>
-      <Key>47</Key>
+      <Key>28</Key>
       <Value>Winter Berry/Rumors says that this berry was first grown by the Spirits to help the villagers during the first Winter in the hollow.</Value>
     </Item>
     <Item>
-      <Key>48</Key>
+      <Key>29</Key>
       <Value>Potion Berry/A berry with helpful healing properites commonly used in potions.</Value>
     </Item>
     <Item>
-      <Key>49</Key>
+      <Key>30</Key>
       <Value>Silkworm Cocoon/Cocoon of the silkworm, used to make silk.</Value>
     </Item>
     <Item>
-      <Key>50</Key>
+      <Key>31</Key>
       <Value>Dragon Fiber/The fibers of the Dragonleaf plant.</Value>
     </Item>
-	<Item>
-      <Key>51</Key>
-      <Value>Slime Berry/A berry made of slime, attracts slimes.</Value>
-    </Item>
-    <!--<60-79> Seeds-->
     <Item>
-      <Key>60</Key>
-      <Value>Silver Seeds/Used to grow a Silver Herb bush</Value>
-    </Item>
-	<Item>
-      <Key>61</Key>
-      <Value>Carrot Seeds/Grows a carrot</Value>
-    </Item>
-	<Item>
-      <Key>62</Key>
-      <Value>Slime Berry Seeds/Grows a Slime Berry</Value>
-    </Item>
-    <!--<80-89> Ores and Bars-->
-    <Item>
-      <Key>80</Key>
+      <Key>32</Key>
       <Value>Copper Ore/Basic ore</Value>
     </Item>
     <Item>
-      <Key>81</Key>
+      <Key>33</Key>
       <Value>Iron Ore/Alright ore</Value>
     </Item>
     <Item>
-      <Key>82</Key>
+      <Key>34</Key>
       <Value>Gold Ore/Shiny ore</Value>
     </Item>
     <Item>
-      <Key>83</Key>
+      <Key>35</Key>
       <Value>Mithril Ore/Pretty ore</Value>
     </Item>
     <Item>
-      <Key>84</Key>
+      <Key>36</Key>
       <Value>Adamantine Ore/Fancy ore!</Value>
     </Item>
     <Item>
-      <Key>85</Key>
+      <Key>37</Key>
       <Value>Copper Bar/Basic Bar</Value>
     </Item>
     <Item>
-      <Key>86</Key>
+      <Key>38</Key>
       <Value>Iron Bar/Alright Bar</Value>
     </Item>
     <Item>
-      <Key>87</Key>
+      <Key>39</Key>
       <Value>Gold Bar/Alright Bar</Value>
     </Item>
     <Item>
-      <Key>88</Key>
+      <Key>40</Key>
       <Value>Mithril Bar/Alright Bar</Value>
     </Item>
     <Item>
-      <Key>89</Key>
+      <Key>41</Key>
       <Value>Adamantine Bar/Alright Bar</Value>
     </Item>
     <Item>
-      <Key>90</Key>
+      <Key>42</Key>
       <Value>Diamond/A bright, shining diamond</Value>
     </Item>
     <Item>
-      <Key>91</Key>
+      <Key>43</Key>
       <Value>Emerald/A brilliant emerald</Value>
     </Item>
     <Item>
-      <Key>92</Key>
+      <Key>44</Key>
       <Value>Ruby/A blazing red gem</Value>
     </Item>
     <Item>
-      <Key>93</Key>
+      <Key>45</Key>
       <Value>Sapphire/A bright blue stone</Value>
     </Item>
     <Item>
-      <Key>94</Key>
+      <Key>46</Key>
       <Value>Opal/A scintillating stone</Value>
     </Item>
     <Item>
-      <Key>95</Key>
+      <Key>47</Key>
       <Value>Jet/A dull black stone</Value>
     </Item>
     <Item>
-      <Key>96</Key>
+      <Key>48</Key>
       <Value>Amber/A gemstone of hardened sap. There appears to be something inside of it.</Value>
     </Item>
     <Item>
-      <Key>97</Key>
+      <Key>49</Key>
       <Value>Jade/A stone sought after for it'smystical properties</Value>
     </Item>
     <Item>
-      <Key>98</Key>
+      <Key>50</Key>
       <Value>Amethyst/A purple gemstone</Value>
     </Item>
     <Item>
-      <Key>99</Key>
+      <Key>51</Key>
       <Value>Topaz/A warm, yellowgemstone used for healing.</Value>
     </Item>
-    <!--<100> Consumables:Status/Stamina/Health/Mana-->
     <Item>
-      <Key>101</Key>
-      <Value>Lesser Potion/Recovers Health</Value>
-    </Item>
-    <Item>
-      <Key>102</Key>
+      <Key>52</Key>
       <Value>Smelling Salts/Wake Up</Value>
     </Item>
     <Item>
-      <Key>103</Key>
+      <Key>53</Key>
       <Value>Antidote/Cures Poisons</Value>
     </Item>
     <Item>
-      <Key>104</Key>
+      <Key>54</Key>
       <Value>Poisoned Knife/Inflicts Poison</Value>
     </Item>
     <Item>
-      <Key>105</Key>
-      <Value>Lesser Mana Potion/This energy drink will get you casting in no time.</Value>
-    </Item>
-    <Item>
-      <Key>106</Key>
-      <Value>Intelligence Powder/These mushrooms will expand your mind</Value>
-    </Item>
-    <!--<150> Refined Resources-->
-    <Item>
-      <Key>150</Key>
+      <Key>55</Key>
       <Value>Silk Cloth/Luxurious fabric coveted by the higher classes.</Value>
     </Item>
     <Item>
-      <Key>151</Key>
+      <Key>56</Key>
       <Value>Dragonweave Cloth/A luxuriously soft, magical cloth highly sought after by magic users.</Value>
     </Item>
     <Item>
-      <Key>152</Key>
+      <Key>57</Key>
       <Value>Token of Mirth/A jade token from the spirits blessing the bearer with mirth</Value>
     </Item>
-    <!--<190> Container:Stamina/Health/Mana-->
     <Item>
-      <Key>190</Key>
-      <Value>Small Chest/Holds eight items</Value>
-    </Item>
-    <!--<200> Machines-->
-    <Item>
-      <Key>200</Key>
-      <Value>Smelter/Smelts Ore</Value>
-    </Item>
-    <Item>
-      <Key>201</Key>
-      <Value>Bronze Anvil/Hammer out your problems</Value>
-    </Item>
-    <Item>
-      <Key>202</Key>
-      <Value>Cauldron/Used for brewing potions</Value>
-    </Item>
-    <Item>
-      <Key>203</Key>
-      <Value>Workbench/The perfect crafting station</Value>
-    </Item>
-    <Item>
-      <Key>204</Key>
-      <Value>Mortar and Pestle/Allows the creation of powders</Value>
-    </Item>
-    <Item>
-      <Key>205</Key>
-      <Value>Loom/You can make clothes here.</Value>
-    </Item>
-    <!--<240> Walls and Flooring-->
-    <Item>
-      <Key>240</Key>
-      <Value>Wall/Stone Wall</Value>
-    </Item>
-    <Item>
-      <Key>241</Key>
-      <Value>Stone Floor/Flooring made of stone</Value>
-    </Item>
-    <Item>
-      <Key>299</Key>
-      <Value>Essense Extractor/Changes your class</Value>
-    </Item>
-    <!--<300> Misc-->
-    <Item>
-      <Key>300</Key>
+      <Key>58</Key>
       <Value>Key/Unlocks</Value>
     </Item>
     <Item>
-      <Key>301</Key>
+      <Key>59</Key>
       <Value>Griselda's Orb/General Use</Value>
     </Item>
     <Item>
-      <Key>302</Key>
-      <Value>Mask of Marriage/A mask used by the people of River hollow to proess their love to one another.</Value>
-    </Item>
-    <Item>
-      <Key>303</Key>
-      <Value>Torch/A torch to light the way</Value>
-    </Item>
-    <!--<400> Clothes-->
-    <Item>
-      <Key>400</Key>
-      <Value>Red Shirt/A Red Shirt</Value>
-    </Item>
-    <Item>
-      <Key>401</Key>
-      <Value>Blue Shirt/A Blue Shirt</Value>
-    </Item>
-    <Item>
-      <Key>402</Key>
-      <Value>Witch's Hat/A fashionable hat</Value>
-    </Item>
-    <Item>
-      <Key>403</Key>
-      <Value>Wizard's Robes/ The robes of a true wizard!</Value>
-    </Item>
-	<Item>
-      <Key>404</Key>
-      <Value>Dark Pants/A pair of dark pants</Value>
-    </Item>
-    <!--<500> Food-->
-    <Item>
-      <Key>500</Key>
-      <Value>Meat/A slice of meat, used for cooking</Value>
-    </Item>
-    <Item>
-      <Key>501</Key>
-      <Value>Egg/A single plain egg, you think it's clean...</Value>
-    </Item>
-    <Item>
-      <Key>502</Key>
-      <Value>Flour/Freshly milled flour, not delicious... yet.</Value>
-    </Item>
-    <Item>
-      <Key>503</Key>
-      <Value>Apple/Nomnom</Value>
-    </Item>
-    <Item>
-      <Key>504</Key>
-      <Value>Strawberry/Delicious and fruity</Value>
-    </Item>
-	<Item>
-      <Key>505</Key>
-      <Value>Carrot/Crisp and crunchy</Value>
-    </Item>
-    <!--<600> Weapons-->
-    <!--Wizard-->
-    <Item>
-      <Key>600</Key>
+      <Key>60</Key>
       <Value>Wooden Wand/A basic wand</Value>
     </Item>
     <Item>
-      <Key>601</Key>
+      <Key>61</Key>
       <Value>Copper Wand/A magical wand</Value>
     </Item>
     <Item>
-      <Key>602</Key>
+      <Key>62</Key>
       <Value>Divining Wand/A wand used by seers to help them predict the future.</Value>
     </Item>
     <Item>
-      <Key>604</Key>
+      <Key>63</Key>
       <Value>Black Night/This wand was enchanted with the essences of many dark creatures, giving it a sinister power.</Value>
     </Item>
     <Item>
-      <Key>608</Key>
+      <Key>64</Key>
       <Value>Thunderstorm/These crackling wands were first created during the largest thunderstorm in three centuries.</Value>
     </Item>
     <Item>
-      <Key>609</Key>
+      <Key>65</Key>
       <Value>Will of the Archmage/Only the most puissant of Wizards can hope to channel the powerful energies that course through this wand.</Value>
     </Item>
-    <!--Healer-->
     <Item>
-      <Key>610</Key>
+      <Key>66</Key>
       <Value>Acolyte's Staff/A staff for trainee healers</Value>
     </Item>
     <Item>
-      <Key>611</Key>
+      <Key>67</Key>
       <Value>Coiled Staff/A carefully worked staff that twists and coils</Value>
     </Item>
     <Item>
-      <Key>612</Key>
+      <Key>68</Key>
       <Value>Emerald Staff/A carven staff topped with an emerald</Value>
     </Item>
     <Item>
-      <Key>618</Key>
+      <Key>69</Key>
       <Value>Winter's Blessing/A powerful staff enchanted with the chill winds of winter.</Value>
     </Item>
-    <!--Summoner-->
     <Item>
-      <Key>620</Key>
+      <Key>70</Key>
       <Value>Glass Orb/An orb made of glass</Value>
     </Item>
     <Item>
-      <Key>621</Key>
+      <Key>71</Key>
       <Value>Copper Orb/A magical orb made of polished copper</Value>
     </Item>
     <Item>
-      <Key>622</Key>
+      <Key>72</Key>
       <Value>Gazing Orb/An orb of polished steel set with a bright Sapphire.</Value>
     </Item>
     <Item>
-      <Key>623</Key>
+      <Key>73</Key>
       <Value>Ruby Rose/These stones were first popularized by a trio of sisters that defended the Western Woods.</Value>
     </Item>
     <Item>
-      <Key>624</Key>
+      <Key>74</Key>
       <Value>Light of Inspiration/A polished golden orb which holds the magical accomplishments of countless Summoners within its polished depths.</Value>
     </Item>
     <Item>
-      <Key>625</Key>
+      <Key>75</Key>
       <Value>Ancient Orb/This orb holds within it whispers and echoes of an ancient time, held in amber and boundi nmythril.</Value>
     </Item>
     <Item>
-      <Key>626</Key>
+      <Key>76</Key>
       <Value>Songsphere/A collaborative effort between Bards and Summoners, these magical stones resonate with music and are often used to create a gentle atmosphere in upper class locales.</Value>
     </Item>
     <Item>
-      <Key>627</Key>
+      <Key>77</Key>
       <Value>Serpent's Eye/Jade polished and imbued with the ferocity of a dragon. Some way that these orbs grant the wielder a powerful affinity for dragons.</Value>
     </Item>
     <Item>
-      <Key>628</Key>
+      <Key>78</Key>
       <Value>Spring's Promise/Infused withmagical herbs and reagents, this orb has been blessed by the spirits of spring and always smells faintly of lavender.</Value>
     </Item>
     <Item>
-      <Key>629</Key>
+      <Key>79</Key>
       <Value>Eye of Eternity/Only the purest Diamond and Adamantine can be used to make this orb. The first such orb was said to have been blessed by the spirits that dwell beyond our world, granting it's wielder insight into worlds beyond our own.</Value>
     </Item>
-    <!--Witch-->
     <Item>
-      <Key>630</Key>
+      <Key>80</Key>
       <Value>Dulled Knife/It could use sharpening</Value>
     </Item>
-    <!--Lancer-->
     <Item>
-      <Key>640</Key>
+      <Key>81</Key>
       <Value>Spear/A sharpened spear</Value>
     </Item>
     <Item>
-      <Key>641</Key>
+      <Key>82</Key>
       <Value>Copper Spear/A copper tipped spear, decorated with a bright feather</Value>
     </Item>
-    <!--Knight-->
     <Item>
-      <Key>650</Key>
+      <Key>83</Key>
       <Value>Wooden Mace/More of a club, honestly</Value>
     </Item>
-    <!--Rogue-->
     <Item>
-      <Key>660</Key>
+      <Key>84</Key>
       <Value>Shortbow/A small bow used to hunt game</Value>
     </Item>
-    <!--Bard-->
     <Item>
-      <Key>670</Key>
+      <Key>85</Key>
       <Value>Flimsy Rapier/A thin rapier</Value>
     </Item>
-    <!--<700> Armor-->
-    <!--<700> Cloth-->
     <Item>
-      <Key>700</Key>
+      <Key>86</Key>
       <Value>Cloth Robes/Robes made of simple cloth</Value>
     </Item>
-    <!--<720> Light Armor-->
     <Item>
-      <Key>720</Key>
+      <Key>87</Key>
       <Value>Basic Armor/Training Armor</Value>
     </Item>
-    <!--<740> Heavy Armor-->
     <Item>
-      <Key>740</Key>
+      <Key>88</Key>
       <Value>Heavy Armor/It's heavy</Value>
     </Item>
-    <!--<760> Headpiece-->
-    <!--<760> Cloth Head-->
     <Item>
-      <Key>760</Key>
+      <Key>89</Key>
       <Value>Cloth Hat/A floppy brimmed hat</Value>
     </Item>
-    <!--<780> Light Helm-->
     <Item>
-      <Key>780</Key>
+      <Key>90</Key>
       <Value>Leather Helm/A light leather helm</Value>
     </Item>
-    <!--<800> Heavy Helm-->
     <Item>
-      <Key>800</Key>
+      <Key>91</Key>
       <Value>Heavy Helm/A heavy helm</Value>
     </Item>
-    <!--<820> Boots-->
-    <!--<880> Wrists-->
     <Item>
-      <Key>880</Key>
+      <Key>92</Key>
       <Value>Heavy Bracelet/A defensible bracelet</Value>
     </Item>
-    <!--<970> Accessories-->
     <Item>
-      <Key>970</Key>
+      <Key>93</Key>
       <Value>Ring of Protection/A bronze ring that wards against harm</Value>
     </Item>
     <Item>
-      <Key>971</Key>
+      <Key>94</Key>
       <Value>Bracelet of Speed/A bracelet that enhancers the users speed</Value>
     </Item>
-    <!--<1000> Class Change-->
     <Item>
-      <Key>1000</Key>
+      <Key>95</Key>
+      <Value>Pick Axe/Breaks things</Value>
+    </Item>
+    <Item>
+      <Key>96</Key>
+      <Value>Wooden Axe/Chop Chop Motherfucker</Value>
+    </Item>
+    <Item>
+      <Key>97</Key>
+      <Value>Shovel/Dig the thing</Value>
+    </Item>
+    <Item>
+      <Key>98</Key>
+      <Value>Watering Can/Watering the thing</Value>
+    </Item>
+    <Item>
+      <Key>99</Key>
+      <Value>Harp/The harp of your ancestors. According to legend, this instrument will let you communicate with the spirits of nature.</Value>
+    </Item>
+    <Item>
+      <Key>100</Key>
+      <Value>Lantern/Used to call forth the energy of spent emotions</Value>
+    </Item>
+    <Item>
+      <Key>101</Key>
+      <Value>Meat/A slice of meat, used for cooking</Value>
+    </Item>
+    <Item>
+      <Key>102</Key>
+      <Value>Egg/A single plain egg, you think it's clean...</Value>
+    </Item>
+    <Item>
+      <Key>103</Key>
+      <Value>Flour/Freshly milled flour, not delicious... yet.</Value>
+    </Item>
+    <Item>
+      <Key>104</Key>
+      <Value>Apple/Nomnom</Value>
+    </Item>
+    <Item>
+      <Key>105</Key>
+      <Value>Strawberry/Delicious and fruity</Value>
+    </Item>
+    <Item>
+      <Key>106</Key>
+      <Value>Carrot/Crisp and crunchy</Value>
+    </Item>
+    <Item>
+      <Key>107</Key>
+      <Value>Lesser Potion/Recovers Health</Value>
+    </Item>
+    <Item>
+      <Key>108</Key>
+      <Value>Lesser Mana Potion/This energy drink will get you casting in no time.</Value>
+    </Item>
+    <Item>
+      <Key>109</Key>
+      <Value>Intelligence Powder/These mushrooms will expand your mind</Value>
+    </Item>
+    <Item>
+      <Key>110</Key>
+      <Value>Silver Seeds/Used to grow a Silver Herb bush</Value>
+    </Item>
+    <Item>
+      <Key>111</Key>
+      <Value>Carrot Seeds/Grows a carrot</Value>
+    </Item>
+    <Item>
+      <Key>112</Key>
+      <Value>Slime Berry Seeds/Grows a Slime Berry</Value>
+    </Item>
+    <Item>
+      <Key>113</Key>
+      <Value>Small Chest/Holds eight items</Value>
+    </Item>
+    <Item>
+      <Key>114</Key>
+      <Value>Smelter/Smelts Ore</Value>
+    </Item>
+    <Item>
+      <Key>115</Key>
+      <Value>Bronze Anvil/Hammer out your problems</Value>
+    </Item>
+    <Item>
+      <Key>116</Key>
+      <Value>Cauldron/Used for brewing potions</Value>
+    </Item>
+    <Item>
+      <Key>117</Key>
+      <Value>Workbench/The perfect crafting station</Value>
+    </Item>
+    <Item>
+      <Key>118</Key>
+      <Value>Mortar and Pestle/Allows the creation of powders</Value>
+    </Item>
+    <Item>
+      <Key>119</Key>
+      <Value>Loom/You can make clothes here.</Value>
+    </Item>
+    <Item>
+      <Key>120</Key>
+      <Value>Wall/Stone Wall</Value>
+    </Item>
+    <Item>
+      <Key>121</Key>
+      <Value>Stone Floor/Flooring made of stone</Value>
+    </Item>
+    <Item>
+      <Key>122</Key>
+      <Value>Essense Extractor/Changes your class</Value>
+    </Item>
+    <Item>
+      <Key>123</Key>
+      <Value>Torch/A torch to light the way</Value>
+    </Item>
+    <Item>
+      <Key>124</Key>
+      <Value>Red Shirt/A Red Shirt</Value>
+    </Item>
+    <Item>
+      <Key>125</Key>
+      <Value>Blue Shirt/A Blue Shirt</Value>
+    </Item>
+    <Item>
+      <Key>126</Key>
+      <Value>Witch's Hat/A fashionable hat</Value>
+    </Item>
+    <Item>
+      <Key>127</Key>
+      <Value>Wizard's Robes/ The robes of a true wizard!</Value>
+    </Item>
+    <Item>
+      <Key>128</Key>
+      <Value>Dark Pants/A pair of dark pants</Value>
+    </Item>
+    <Item>
+      <Key>129</Key>
+      <Value>Slime Berry/A berry made of slime, attracts slimes.</Value>
+    </Item>
+    <Item>
+      <Key>130</Key>
+      <Value>Adventure Map/Off to find adventures!</Value>
+    </Item>
+    <Item>
+      <Key>131</Key>
+      <Value>Mask of Marriage/A mask used by the people of River hollow to proess their love to one another.</Value>
+    </Item>
+    <Item>
+      <Key>132</Key>
       <Value>Essence of /Become a </Value>
     </Item>
   </Asset>

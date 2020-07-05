@@ -683,7 +683,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             foreach (KeyValuePair<string, string> kvp in _diTags)
             {
-                rv += "[" + kvp.Key + ":" + kvp.Value + "]";
+                rv += "[" + kvp.Key + (string.IsNullOrEmpty(kvp.Value) ? "" : ":" + kvp.Value) + "]";
             }
 
             return rv;

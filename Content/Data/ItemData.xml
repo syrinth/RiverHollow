@@ -1,11 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: ID-->
-    <!--Valid Types: Resource, Food, Map, Equipment, Tool, Food, Combat, StaticItem, Class-->
-    <!--All:[Type:ItemType][Image:X-Y][Sell:SellPrice]-->
-    <!--Tool: [ToolType:Type][Dmg:Tooldmg][Stam:StamCost]-->
-    <!--Food: [Stam:X][Hp:X]-->
     <Item>
       <Key>0</Key>
       <Value>[Type:Resource][Image:0-0][Sell:10]</Value>
@@ -23,555 +18,519 @@
       <Value>[Type:Resource][Image:112-0][Sell:100]</Value>
     </Item>
     <Item>
-      <Key>8</Key>
-      <Value>[Type:Special][SpecialType:Map][Image:0-32]</Value>
-    </Item>
-    <Item>
-      <Key>9</Key>
+      <Key>4</Key>
       <Value>[Type:Resource][Image:48-0][Sell:15]</Value>
     </Item>
     <Item>
-      <Key>10</Key>
+      <Key>5</Key>
       <Value>[Type:Resource][Image:0-64][Sell:20]</Value>
     </Item>
     <Item>
-      <Key>11</Key>
+      <Key>6</Key>
       <Value>[Type:Resource][Image:32-64][Sell:20]</Value>
     </Item>
     <Item>
-      <Key>12</Key>
+      <Key>7</Key>
       <Value>[Type:Resource][Image:96-0][Sell:20]</Value>
     </Item>
     <Item>
-      <Key>13</Key>
+      <Key>8</Key>
       <Value>[Type:Resource][Image:0-48][Sell:20]</Value>
     </Item>
     <Item>
-      <Key>14</Key>
+      <Key>9</Key>
       <Value>[Type:Resource][Image:16-48][Sell:40]</Value>
     </Item>
     <Item>
-      <Key>15</Key>
+      <Key>10</Key>
       <Value>[Type:Resource][Image:64-64][Sell:20]</Value>
     </Item>
     <Item>
-      <Key>16</Key>
+      <Key>11</Key>
       <Value>[Type:Resource][Image:80-64][Sell:20]</Value>
     </Item>
     <Item>
-      <Key>17</Key>
+      <Key>12</Key>
       <Value>[Type:Resource][Image:96-48][Sell:20]</Value>
     </Item>
     <Item>
-      <Key>18</Key>
+      <Key>13</Key>
       <Value>[Type:Resource][Image:96-64][Sell:50]</Value>
     </Item>
     <Item>
-      <Key>19</Key>
+      <Key>14</Key>
       <Value>[Type:Resource][Image:112-64][Sell:100]</Value>
     </Item>
-    <!--<20-24> Tools-->
     <Item>
-      <Key>20</Key>
-      <Value>[Type:Tool][Image:0-0][Sell:3000][ToolType:Pick][Stam:1][Power:1]</Value>
-    </Item>
-    <Item>
-      <Key>21</Key>
-      <Value>[Type:Tool][Image:0-16][Sell:3000][ToolType:Axe][Stam:1][Power:1]</Value>
-    </Item>
-    <Item>
-      <Key>22</Key>
-      <Value>[Type:Tool][Image:0-32][Sell:3000][ToolType:Shovel][Stam:1][Power:1]</Value>
-    </Item>
-    <Item>
-      <Key>23</Key>
-      <Value>[Type:Tool][Image:0-48][Sell:3000][ToolType:WateringCan][Stam:1][Power:1]</Value>
-    </Item>
-    <Item>
-      <Key>24</Key>
-      <Value>[Type:Tool][Image:0-96][Sell:3000][ToolType:Harp][Stam:1][Power:1]</Value>
-    </Item>
-    <Item>
-      <Key>25</Key>
-      <Value>[Type:Tool][Image:0-64][Sell:3000][ToolType:Lantern][Stam:1][Power:1]</Value>
-    </Item>
-    <!--<26-34> Monster Drops-->
-    <Item>
-      <Key>26</Key>
+      <Key>15</Key>
       <Value>[Type:Resource][Image:48-80][Sell:20]</Value>
     </Item>
     <Item>
-      <Key>27</Key>
+      <Key>16</Key>
       <Value>[Type:Resource][Image:64-80][Sell:20]</Value>
     </Item>
     <Item>
-      <Key>28</Key>
+      <Key>17</Key>
       <Value>[Type:Resource][Image:112-80][Sell:20]</Value>
     </Item>
-    <!--<35-39> Essence Resources-->
     <Item>
-      <Key>35</Key>
+      <Key>18</Key>
       <Value>[Type:Resource][Image:0-80][Sell:30]</Value>
     </Item>
     <Item>
-      <Key>36</Key>
+      <Key>19</Key>
       <Value>[Type:Resource][Image:16-80][Sell:60]</Value>
     </Item>
     <Item>
-      <Key>37</Key>
+      <Key>20</Key>
       <Value>[Type:Resource][Image:32-80][Sell:90]</Value>
     </Item>
-    <!--<40-59> Plant Resources-->
     <Item>
-      <Key>40</Key>
+      <Key>21</Key>
       <Value>[Type:Resource][Image:64-0][Sell:8]</Value>
     </Item>
     <Item>
-      <Key>41</Key>
+      <Key>22</Key>
       <Value>[Type:Resource][Image:64-48][Sell:8]</Value>
     </Item>
     <Item>
-      <Key>42</Key>
+      <Key>23</Key>
       <Value>[Type:Resource][Image:80-48][Sell:10]</Value>
     </Item>
     <Item>
-      <Key>43</Key>
+      <Key>24</Key>
       <Value>[Type:Resource][Image:16-64][Sell:10]</Value>
     </Item>
     <Item>
-      <Key>44</Key>
-      <Value>[Type:Resource][Image:48-64][Sell:10][RefinesInto:12-5]</Value>
+      <Key>25</Key>
+      <Value>[Type:Resource][Image:48-64][Sell:10][RefinesInto:7-5]</Value>
     </Item>
     <Item>
-      <Key>45</Key>
-      <Value>[Type:Resource][Image:128-48][Sell:10][RefinesInto:3-5]</Value>
+      <Key>26</Key>
+      <Value>[Type:Resource][Image:128-48][Sell:10][RefinesInto:1-5]</Value>
     </Item>
     <Item>
-      <Key>46</Key>
+      <Key>27</Key>
       <Value>[Type:Resource][Image:128-80][Sell:10]</Value>
     </Item>
     <Item>
-      <Key>47</Key>
+      <Key>28</Key>
       <Value>[Type:Resource][Image:96-80][Sell:10]</Value>
     </Item>
     <Item>
-      <Key>48</Key>
+      <Key>29</Key>
       <Value>[Type:Resource][Image:80-80][Sell:10]</Value>
     </Item>
     <Item>
-      <Key>49</Key>
-      <Value>[Type:Resource][Image:128-64][Sell:20][RefinesInto:150-5]</Value>
+      <Key>30</Key>
+      <Value>[Type:Resource][Image:128-64][Sell:20][RefinesInto:55-5]</Value>
     </Item>
     <Item>
-      <Key>50</Key>
-      <Value>[Type:Resource][Image:144-64][Sell:20][RefinesInto:151-5]</Value>
+      <Key>31</Key>
+      <Value>[Type:Resource][Image:144-64][Sell:20][RefinesInto:56-5]</Value>
     </Item>
     <Item>
-      <Key>51</Key>
-      <Value>[Type:MonsterFood][Image:80-16][Sell:20][Spawn:3-4]</Value>
-    </Item>
-    <!--<60-79> Seeds-->
-    <Item>
-      <Key>60</Key>
-      <Value>[Type:StaticItem][Image:0-32][Sell:3][Stacks][Place:60]</Value>
+      <Key>32</Key>
+      <Value>[Type:Resource][Image:0-16][Sell:5][RefinesInto:37-3]</Value>
     </Item>
     <Item>
-      <Key>61</Key>
-      <Value>[Type:StaticItem][Image:32-32][Sell:3][Stacks][Place:61]</Value>
-    </Item>
-	<Item>
-      <Key>62</Key>
-      <Value>[Type:StaticItem][Image:48-32][Sell:1500][Stacks][Place:62]</Value>
-    </Item>
-    <!--<80-89> Ores and Bars-->
-    <Item>
-      <Key>80</Key>
-      <Value>[Type:Resource][Image:0-16][Sell:5][RefinesInto:85-3]</Value>
+      <Key>33</Key>
+      <Value>[Type:Resource][Image:16-16][Sell:10][RefinesInto:38-3]</Value>
     </Item>
     <Item>
-      <Key>81</Key>
-      <Value>[Type:Resource][Image:16-16][Sell:10][RefinesInto:86-3]</Value>
+      <Key>34</Key>
+      <Value>[Type:Resource][Image:32-16][Sell:15][RefinesInto:39-3]</Value>
     </Item>
     <Item>
-      <Key>82</Key>
-      <Value>[Type:Resource][Image:32-16][Sell:15][RefinesInto:87-3]</Value>
+      <Key>35</Key>
+      <Value>[Type:Resource][Image:48-16][Sell:20][RefinesInto:40-3]</Value>
     </Item>
     <Item>
-      <Key>83</Key>
-      <Value>[Type:Resource][Image:48-16][Sell:20][RefinesInto:88-3]</Value>
+      <Key>36</Key>
+      <Value>[Type:Resource][Image:64-16][Sell:75][RefinesInto:41-3]</Value>
     </Item>
     <Item>
-      <Key>84</Key>
-      <Value>[Type:Resource][Image:64-16][Sell:75][RefinesInto:89-3]</Value>
-    </Item>
-    <Item>
-      <Key>85</Key>
+      <Key>37</Key>
       <Value>[Type:Resource][Image:0-32][Sell:100]</Value>
     </Item>
     <Item>
-      <Key>86</Key>
+      <Key>38</Key>
       <Value>[Type:Resource][Image:16-32][Sell:10]</Value>
     </Item>
     <Item>
-      <Key>87</Key>
+      <Key>39</Key>
       <Value>[Type:Resource][Image:32-32][Sell:10]</Value>
     </Item>
     <Item>
-      <Key>88</Key>
+      <Key>40</Key>
       <Value>[Type:Resource][Image:48-32][Sell:10]</Value>
     </Item>
     <Item>
-      <Key>89</Key>
+      <Key>41</Key>
       <Value>[Type:Resource][Image:64-32][Sell:10]</Value>
     </Item>
     <Item>
-      <Key>90</Key>
+      <Key>42</Key>
       <Value>[Type:Resource][Image:80-16][Sell:1000]</Value>
     </Item>
     <Item>
-      <Key>91</Key>
+      <Key>43</Key>
       <Value>[Type:Resource][Image:144-16][Sell:1000]</Value>
     </Item>
     <Item>
-      <Key>92</Key>
+      <Key>44</Key>
       <Value>[Type:Resource][Image:128-16][Sell:1000]</Value>
     </Item>
     <Item>
-      <Key>93</Key>
+      <Key>45</Key>
       <Value>[Type:Resource][Image:96-16][Sell:1000]</Value>
     </Item>
     <Item>
-      <Key>94</Key>
+      <Key>46</Key>
       <Value>[Type:Resource][Image:80-32][Sell:1000]</Value>
     </Item>
     <Item>
-      <Key>95</Key>
+      <Key>47</Key>
       <Value>[Type:Resource][Image:112-16][Sell:1000]</Value>
     </Item>
     <Item>
-      <Key>96</Key>
+      <Key>48</Key>
       <Value>[Type:Resource][Image:112-32][Sell:1000]</Value>
     </Item>
     <Item>
-      <Key>97</Key>
+      <Key>49</Key>
       <Value>[Type:Resource][Image:144-32][Sell:500]</Value>
     </Item>
     <Item>
-      <Key>98</Key>
+      <Key>50</Key>
       <Value>[Type:Resource][Image:128-32][Sell:500]</Value>
     </Item>
     <Item>
-      <Key>99</Key>
+      <Key>51</Key>
       <Value>[Type:Resource][Image:96-32][Sell:500]</Value>
     </Item>
-    <!--<100> Consumables:StatusEffects/Health/Mana-->
     <Item>
-      <Key>101</Key>
-      <Value>[Type:Consumable][Image:16-0][Sell:3000][CombatType:Helpful][Hp:20][ReqItems:10-1|40-5]</Value>
-    </Item>
-    <Item>
-      <Key>102</Key>
+      <Key>52</Key>
       <Value>[Type:Combat][Image:16-32][Sell:3000][CombatType:Helpful][Status:KO][Hp:1]</Value>
     </Item>
     <Item>
-      <Key>103</Key>
+      <Key>53</Key>
       <Value>[Type:Combat][Image:16-32][Sell:3000][CombatType:Helpful][Status:Poisoned]</Value>
     </Item>
     <Item>
-      <Key>104</Key>
+      <Key>54</Key>
       <Value>[Type:Combat][Image:16-32][Sell:3000][CombatType:Harmful][Status:Poisoned]</Value>
     </Item>
     <Item>
-      <Key>105</Key>
-      <Value>[Type:Consumable][Image:16-16][Sell:3000][CombatType:Helpful][Mana:20][ReqItems:10-1|41-3]</Value>
-    </Item>
-    <Item>
-      <Key>106</Key>
-      <Value>[Type:Consumable][Image:80-0][Sell:3000][CombatType:Helpful][StatusEffect:5-10][ReqItems:42-4]</Value>
-    </Item>
-    <!--<150> Refined Resources-->
-    <Item>
-      <Key>150</Key>
+      <Key>55</Key>
       <Value>[Type:Resource][Image:128-0][Sell:20]</Value>
     </Item>
     <Item>
-      <Key>151</Key>
+      <Key>56</Key>
       <Value>[Type:Resource][Image:144-0][Sell:20]</Value>
     </Item>
     <Item>
-      <Key>152</Key>
+      <Key>57</Key>
       <Value>[Type:Resource][Image:112-96][Sell:20]</Value>
     </Item>
-    <!--<190> Container:Stamina/Health/Mana-->
     <Item>
-      <Key>190</Key>
-      <Value>[Type:StaticItem][Image:0-0][Sell:100][ReqItems:2-3][Place:190]</Value>
-    </Item>
-    <!--<200> Machines-->
-    <Item>
-      <Key>200</Key>
-      <Value>[Type:StaticItem][Image:16-0][Sell:3000][ReqItems:85-5][Place:200]</Value>
-    </Item>
-    <Item>
-      <Key>201</Key>
-      <Value>[Type:StaticItem][Image:32-0][Sell:3000][ReqItems:85-5][Place:201]</Value>
-    </Item>
-    <Item>
-      <Key>202</Key>
-      <Value>[Type:StaticItem][Image:48-0][Sell:1000][ReqItems:85-5][Place:202]</Value>
-    </Item>
-    <Item>
-      <Key>203</Key>
-      <Value>[Type:StaticItem][Image:64-0][Sell:500][ReqItems:2-5][Place:203]</Value>
-    </Item>
-    <Item>
-      <Key>204</Key>
-      <Value>[Type:StaticItem][Image:80-0][Sell:500][ReqItems:2-5][Place:204]</Value>
-    </Item>
-    <Item>
-      <Key>205</Key>
-      <Value>[Type:StaticItem][Image:96-0][Sell:500][ReqItems:2-10][Place:205]</Value>
-    </Item>
-    <!--<240> Walls and Floors-->
-    <Item>
-      <Key>240</Key>
-      <Value>[Type:StaticItem][Image:0-16][Sell:500][Stacks][Place:240]</Value>
-    </Item>
-    <Item>
-      <Key>241</Key>
-      <Value>[Type:StaticItem][Image:32-16][Sell:500][Stacks][Place:241]</Value>
-    </Item>
-    <Item>
-      <Key>299</Key>
-      <Value>[Type:StaticItem][Image:0-32][Sell:3000][Place:299]</Value>
-    </Item>
-    <!--<300> Misc-->
-    <Item>
-      <Key>300</Key>
+      <Key>58</Key>
       <Value>[Type:Resource][Image:0-48][Sell:0]</Value>
     </Item>
     <Item>
-      <Key>301</Key>
+      <Key>59</Key>
       <Value>[Type:Resource][Image:16-48][Sell:0]</Value>
     </Item>
     <Item>
-      <Key>302</Key>
-      <Value>[Type:Special][SpecialType:Marriage][Image:32-48][Sell:0]</Value>
-    </Item>
-    <Item>
-      <Key>303</Key>
-      <Value>[Type:StaticItem][Image:16-16][Sell:0][Stacks][Place:303]</Value>
-    </Item>
-    <!--<400> Clothes-->
-    <Item>
-      <Key>400</Key>
-      <Value>[Type:Clothes][Image:0-64][Sell:0][CType:Body][Row:0][TexName:400]</Value>
-    </Item>
-    <Item>
-      <Key>401</Key>
-      <Value>[Type:Clothes][Image:16-64][Sell:0][CType:Body][Row:1][TexName:401]</Value>
-    </Item>
-    <Item>
-      <Key>402</Key>
-      <Value>[Type:Clothes][Image:32-64][Sell:0][CType:Hat][Row:2]</Value>
-    </Item>
-    <Item>
-      <Key>403</Key>
-      <Value>[Type:Clothes][Image:48-64][Sell:0][CType:Body][Row:3]</Value>
-    </Item>
-    <Item>
-      <Key>404</Key>
-      <Value>[Type:Clothes][Image:0-80][Sell:0][CType:Legs][Neutral][Row:3][TexName:404]</Value>
-    </Item>
-    <!--<500> Food-->
-    <Item>
-      <Key>500</Key>
-      <Value>[Type:Food][Image:0-0][Sell:50][Stam:5]</Value>
-    </Item>
-    <Item>
-      <Key>501</Key>
-      <Value>[Type:Food][Image:16-0[Sell:20][Stam:2]</Value>
-    </Item>
-    <Item>
-      <Key>502</Key>
-      <Value>[Type:Food][Image:0-32][Sell:100][Stam:-1]</Value>
-    </Item>
-    <Item>
-      <Key>503</Key>
-      <Value>[Type:Food][Image:0-16][Sell:20][Stam:2]</Value>
-    </Item>
-    <Item>
-      <Key>504</Key>
-      <Value>[Type:Food][Image:16-16][Sell:25][Stam:3]</Value>
-    </Item>
-    <Item>
-      <Key>505</Key>
-      <Value>[Type:Food][Image:32-16][Sell:8][Stam:2]</Value>
-    </Item>
-    <!--<600> Weapons-->
-    <!--Equipment: [EType:Weapon or Armor][ESub:Equip Subtype][ASub:Armor slot][Tier:X][Atk:X][Str:X][Def:X][Mag:X][Res:X][Spd:X]-->
-    <!--<600> Wizard-->
-    <Item>
-      <Key>600</Key>
+      <Key>60</Key>
       <Value>[Type:Equipment][Image:0-0][Sell:1000][EType:Weapon][ESub:Wand][Tier:1][Atk:Minor][Mag:Major]</Value>
     </Item>
     <Item>
-      <Key>601</Key>
-      <Value>[Type:Equipment][Image:16-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:2][[Atk:Minor][Mag:Major][ReqItems:5-3]</Value>
+      <Key>61</Key>
+      <Value>[Type:Equipment][Image:16-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:2][Atk:Minor][Mag:Major][ReqItems:22-3]</Value>
     </Item>
     <Item>
-      <Key>602</Key>
-      <Value>[Type:Equipment][Image:32-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:3][[Atk:Minor][Mag:Major][ReqItems:86-2|93-1]</Value>
+      <Key>62</Key>
+      <Value>[Type:Equipment][Image:32-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:3][Atk:Minor][Mag:Major][ReqItems:38-2|45-1]</Value>
     </Item>
     <Item>
-      <Key>604</Key>
-      <Value>[Type:Equipment][Image:64-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:5][[Atk:Minor][Mag:Major][ReqItems:86-2|93-1]</Value>
+      <Key>63</Key>
+      <Value>[Type:Equipment][Image:64-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:5][Atk:Minor][Mag:Major][ReqItems:38-2|45-1]</Value>
     </Item>
     <Item>
-      <Key>608</Key>
-      <Value>[Type:Equipment][Image:128-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:9][[Atk:Minor][Mag:Major][ReqItems:99-3|2-3]</Value>
+      <Key>64</Key>
+      <Value>[Type:Equipment][Image:128-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:9][Atk:Minor][Mag:Major][ReqItems:51-3|0-3]</Value>
     </Item>
     <Item>
-      <Key>609</Key>
-      <Value>[Type:Equipment][Image:144-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:10][[Atk:Minor][Mag:Major][ReqItems:90-4|89-4]</Value>
-    </Item>
-    <!--<610> Healer-->
-    <Item>
-      <Key>610</Key>
-      <Value>[Type:Equipment][Image:0-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:1][Atk:Moderate][Mag:Major][ReqItems:2-10]</Value>
+      <Key>65</Key>
+      <Value>[Type:Equipment][Image:144-0][Sell:1500][EType:Weapon][ESub:Wand][Tier:10][Atk:Minor][Mag:Major][ReqItems:42-4|41-4]</Value>
     </Item>
     <Item>
-      <Key>611</Key>
-      <Value>[Type:Equipment][Image:16-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:2][Atk:Moderate][Mag:Major][ReqItems:2-5|10-2]</Value>
+      <Key>66</Key>
+      <Value>[Type:Equipment][Image:0-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:1][Atk:Moderate][Mag:Major][ReqItems:0-10]</Value>
     </Item>
     <Item>
-      <Key>612</Key>
-      <Value>[Type:Equipment][Image:32-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:3][Atk:Moderate][Mag:Major][ReqItems:91-1]</Value>
+      <Key>67</Key>
+      <Value>[Type:Equipment][Image:16-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:2][Atk:Moderate][Mag:Major][ReqItems:0-5|5-2]</Value>
     </Item>
     <Item>
-      <Key>618</Key>
-      <Value>[Type:Equipment][Image:128-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:9][Atk:Moderate][Mag:Major][ReqItems:93-2|88-4]</Value>
+      <Key>68</Key>
+      <Value>[Type:Equipment][Image:32-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:3][Atk:Moderate][Mag:Major][ReqItems:43-1]</Value>
     </Item>
-    <!--<620> Summoner-->
     <Item>
-      <Key>620</Key>
+      <Key>69</Key>
+      <Value>[Type:Equipment][Image:128-16][Sell:1000][EType:Weapon][ESub:Staff][Tier:9][Atk:Moderate][Mag:Major][ReqItems:45-2|40-4]</Value>
+    </Item>
+    <Item>
+      <Key>70</Key>
       <Value>[Type:Equipment][Image:0-32][Sell:1000][EType:Weapon][ESub:Orb][Tier:1][Atk:Moderate][Mag:Major]</Value>
     </Item>
     <Item>
-      <Key>621</Key>
-      <Value>[Type:Equipment][Image:16-32][Sell:1000][EType:Weapon][ESub:Orb][Tier:2][Atk:Moderate][Mag:Major][ReqItems:85-2]</Value>
+      <Key>71</Key>
+      <Value>[Type:Equipment][Image:16-32][Sell:1000][EType:Weapon][ESub:Orb][Tier:2][Atk:Moderate][Mag:Major][ReqItems:37-2]</Value>
     </Item>
     <Item>
-      <Key>622</Key>
-      <Value>[Type:Equipment][Image:32-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:3][Atk:Moderate][Mag:Major][ReqItems:86-2|93-1]</Value>
+      <Key>72</Key>
+      <Value>[Type:Equipment][Image:32-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:3][Atk:Moderate][Mag:Major][ReqItems:38-2|45-1]</Value>
     </Item>
     <Item>
-      <Key>623</Key>
-      <Value>[Type:Equipment][Image:48-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:4][Atk:Moderate][Mag:Major][ReqItems:92-4]</Value>
+      <Key>73</Key>
+      <Value>[Type:Equipment][Image:48-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:4][Atk:Moderate][Mag:Major][ReqItems:44-4]</Value>
     </Item>
     <Item>
-      <Key>624</Key>
-      <Value>[Type:Equipment][Image:64-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:5][Atk:Moderate][Mag:Major][ReqItems:87-5]</Value>
+      <Key>74</Key>
+      <Value>[Type:Equipment][Image:64-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:5][Atk:Moderate][Mag:Major][ReqItems:39-5]</Value>
     </Item>
     <Item>
-      <Key>625</Key>
-      <Value>[Type:Equipment][Image:80-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:6][Atk:Moderate][Mag:Major][ReqItems:88-3|96-3]</Value>
+      <Key>75</Key>
+      <Value>[Type:Equipment][Image:80-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:6][Atk:Moderate][Mag:Major][ReqItems:40-3|48-3]</Value>
     </Item>
     <Item>
-      <Key>626</Key>
-      <Value>[Type:Equipment][Image:96-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:7][Atk:Moderate][Mag:Major][ReqItems:94-4|13-2]</Value>
+      <Key>76</Key>
+      <Value>[Type:Equipment][Image:96-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:7][Atk:Moderate][Mag:Major][ReqItems:46-4|8-2]</Value>
     </Item>
     <Item>
-      <Key>627</Key>
-      <Value>[Type:Equipment][Image:112-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:8][Atk:Moderate][Mag:Major][ReqItems:97-4]</Value>
+      <Key>77</Key>
+      <Value>[Type:Equipment][Image:112-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:8][Atk:Moderate][Mag:Major][ReqItems:49-4]</Value>
     </Item>
     <Item>
-      <Key>628</Key>
-      <Value>[Type:Equipment][Image:128-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:9][Atk:Moderate][Mag:Major][ReqItems:98-4|43-4]</Value>
+      <Key>78</Key>
+      <Value>[Type:Equipment][Image:128-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:9][Atk:Moderate][Mag:Major][ReqItems:50-4|24-4]</Value>
     </Item>
     <Item>
-      <Key>629</Key>
-      <Value>[Type:Equipment][Image:144-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:10][Atk:Moderate][Mag:Major][ReqItems:90-4|89-4|1-10]</Value>
+      <Key>79</Key>
+      <Value>[Type:Equipment][Image:144-32][Sell:2000][EType:Weapon][ESub:Orb][Tier:10][Atk:Moderate][Mag:Major][ReqItems:42-4|41-4|21-10]</Value>
     </Item>
-    <!--<630> Witch-->
     <Item>
-      <Key>630</Key>
+      <Key>80</Key>
       <Value>[Type:Equipment][Image:0-48][Sell:1000][EType:Weapon][ESub:Knife][Tier:1][Atk:Moderate][Mag:Major]</Value>
     </Item>
-    <!--<640> Lancer-->
     <Item>
-      <Key>640</Key>
+      <Key>81</Key>
       <Value>[Type:Equipment][Image:0-64][Sell:1000][EType:Weapon][ESub:Spear][Tier:1][Atk:Major][Str:Major]</Value>
     </Item>
     <Item>
-      <Key>641</Key>
+      <Key>82</Key>
       <Value>[Type:Equipment][Image:16-64][Sell:1000][EType:Weapon][ESub:Spear][Tier:2][Atk:Major][Str:Major]</Value>
     </Item>
-    <!--<650> Knight-->
     <Item>
-      <Key>650</Key>
+      <Key>83</Key>
       <Value>[Type:Equipment][Image:0-80][Sell:1000][EType:Weapon][ESub:Mace][Tier:1][Atk:Minor][Str:Minor]</Value>
     </Item>
-    <!--<660> Rogue-->
     <Item>
-      <Key>660</Key>
+      <Key>84</Key>
       <Value>[Type:Equipment][Image:0-96][Sell:1000][EType:Weapon][ESub:Bow][Tier:1][Atk:Moderate][Str:Moderate]</Value>
     </Item>
-    <!--<670> Bard-->
     <Item>
-      <Key>670</Key>
+      <Key>85</Key>
       <Value>[Type:Equipment][Image:0-112][Sell:1000][EType:Weapon][ESub:Rapier][Tier:1][Atk:Moderate][Str:Moderate]</Value>
     </Item>
-    <!--<700> Armor-->
-    <!--<700> Cloth-->
     <Item>
-      <Key>700</Key>
-      <Value>[Type:Equipment][Image:0-0][Sell:1000][EType:Armor][ESub:Cloth][ASlot:Armor][Tier:1][Def:Minor][Mag:Major][Res:Minor][ReqItems:12-3][15-2]</Value>
+      <Key>86</Key>
+      <Value>[Type:Equipment][Image:0-0][Sell:1000][EType:Armor][ESub:Cloth][ASlot:Armor][Tier:1][Def:Minor][Mag:Major][Res:Minor][ReqItems:7-3][15-2]</Value>
     </Item>
-    <!--<720> Light Armor-->
     <Item>
-      <Key>720</Key>
+      <Key>87</Key>
       <Value>[Type:Equipment][Image:0-16][Sell:1000][EType:Armor][ESub:Light][ASlot:Armor][Tier:1][Def:Moderate][Str:Major]</Value>
     </Item>
-    <!--<740> Heavy Armor-->
     <Item>
-      <Key>740</Key>
+      <Key>88</Key>
       <Value>[Type:Equipment][Image:0-32][Sell:1000][EType:Armor][ESub:Heavy][ASlot:Armor][Tier:1][Def:Major][Str:Moderate]</Value>
     </Item>
-    <!--<760> Headpiece-->
-    <!--<760> Cloth Head-->
     <Item>
-      <Key>760</Key>
+      <Key>89</Key>
       <Value>[Type:Equipment][Image:0-48][Sell:1000][EType:Armor][ESub:Cloth][ASlot:Head][Tier:1][Def:Minor][Mag:Major][Res:Minor]</Value>
     </Item>
-    <!--<780> Light Helm-->
     <Item>
-      <Key>780</Key>
+      <Key>90</Key>
       <Value>[Type:Equipment][Image:0-96][Sell:1000][EType:Armor][ESub:Light][ASlot:Head][Tier:1][Def:Moderate][Str:Major]</Value>
     </Item>
-    <!--<800> Heavy Helm-->
     <Item>
-      <Key>800</Key>
+      <Key>91</Key>
       <Value>[Type:Equipment][Image:16-0][Sell:1000][EType:Armor][ESub:Heavy][ASlot:Head][Tier:1][Def:Major][Str:Moderate]</Value>
     </Item>
-    <!--<820> Boots-->
-    <!--<880> Wrists-->
     <Item>
-      <Key>880</Key>
+      <Key>92</Key>
       <Value>[Type:Equipment][Image:0-96][Sell:1000][EType:Armor][ESub:None][ASlot:Wrist][Tier:1][Def:Major][Str:Minor]</Value>
     </Item>
-    <!--<970> Accessories-->
     <Item>
-      <Key>970</Key>
+      <Key>93</Key>
       <Value>[Type:Equipment][Image:0-0][Sell:1000][EType:Accessory][Tier:1][Def:Major][Str:Minor]</Value>
     </Item>
     <Item>
-      <Key>971</Key>
+      <Key>94</Key>
       <Value>[Type:Equipment][Image:16-0][Sell:1000][EType:Accessory][Tier:3][Spd:Major][Res:Moderate]</Value>
     </Item>
-    <!--<1000> Class Change-->
     <Item>
-      <Key>1000</Key>
+      <Key>95</Key>
+      <Value>[Type:Tool][Image:0-0][Sell:3000][ToolType:Pick][Stam:1][Power:1]</Value>
+    </Item>
+    <Item>
+      <Key>96</Key>
+      <Value>[Type:Tool][Image:0-16][Sell:3000][ToolType:Axe][Stam:1][Power:1]</Value>
+    </Item>
+    <Item>
+      <Key>97</Key>
+      <Value>[Type:Tool][Image:0-32][Sell:3000][ToolType:Shovel][Stam:1][Power:1]</Value>
+    </Item>
+    <Item>
+      <Key>98</Key>
+      <Value>[Type:Tool][Image:0-48][Sell:3000][ToolType:WateringCan][Stam:1][Power:1]</Value>
+    </Item>
+    <Item>
+      <Key>99</Key>
+      <Value>[Type:Tool][Image:0-96][Sell:3000][ToolType:Harp][Stam:1][Power:1]</Value>
+    </Item>
+    <Item>
+      <Key>100</Key>
+      <Value>[Type:Tool][Image:0-64][Sell:3000][ToolType:Lantern][Stam:1][Power:1]</Value>
+    </Item>
+    <Item>
+      <Key>101</Key>
+      <Value>[Type:Food][Image:0-0][Sell:50][Stam:5]</Value>
+    </Item>
+    <Item>
+      <Key>102</Key>
+      <Value>[Type:Food][Image:16-0][Sell:20][Stam:2]</Value>
+    </Item>
+    <Item>
+      <Key>103</Key>
+      <Value>[Type:Food][Image:0-32][Sell:100][Stam:-1]</Value>
+    </Item>
+    <Item>
+      <Key>104</Key>
+      <Value>[Type:Food][Image:0-16][Sell:20][Stam:2]</Value>
+    </Item>
+    <Item>
+      <Key>105</Key>
+      <Value>[Type:Food][Image:16-16][Sell:25][Stam:3]</Value>
+    </Item>
+    <Item>
+      <Key>106</Key>
+      <Value>[Type:Food][Image:32-16][Sell:8][Stam:2]</Value>
+    </Item>
+    <Item>
+      <Key>107</Key>
+      <Value>[Type:Consumable][Image:16-0][Sell:3000][CombatType:Helpful][Hp:20][ReqItems:5-1|21-5]</Value>
+    </Item>
+    <Item>
+      <Key>108</Key>
+      <Value>[Type:Consumable][Image:16-16][Sell:3000][CombatType:Helpful][Mana:20][ReqItems:5-1|22-3]</Value>
+    </Item>
+    <Item>
+      <Key>109</Key>
+      <Value>[Type:Consumable][Image:80-0][Sell:3000][CombatType:Helpful][StatusEffect:5-10][ReqItems:23-4]</Value>
+    </Item>
+    <Item>
+      <Key>110</Key>
+      <Value>[Type:StaticItem][Image:0-32][Sell:3][Stacks][Place:33]</Value>
+    </Item>
+    <Item>
+      <Key>111</Key>
+      <Value>[Type:StaticItem][Image:32-32][Sell:3][Stacks][Place:34]</Value>
+    </Item>
+    <Item>
+      <Key>112</Key>
+      <Value>[Type:StaticItem][Image:48-32][Sell:1500][Stacks][Place:35]</Value>
+    </Item>
+    <Item>
+      <Key>113</Key>
+      <Value>[Type:StaticItem][Image:0-0][Sell:100][ReqItems:0-3][Place:18]</Value>
+    </Item>
+    <Item>
+      <Key>114</Key>
+      <Value>[Type:StaticItem][Image:16-0][Sell:3000][ReqItems:37-5][Place:12]</Value>
+    </Item>
+    <Item>
+      <Key>115</Key>
+      <Value>[Type:StaticItem][Image:32-0][Sell:3000][ReqItems:37-5][Place:13]</Value>
+    </Item>
+    <Item>
+      <Key>116</Key>
+      <Value>[Type:StaticItem][Image:48-0][Sell:1000][ReqItems:37-5][Place:14]</Value>
+    </Item>
+    <Item>
+      <Key>117</Key>
+      <Value>[Type:StaticItem][Image:64-0][Sell:500][ReqItems:0-5][Place:15]</Value>
+    </Item>
+    <Item>
+      <Key>118</Key>
+      <Value>[Type:StaticItem][Image:80-0][Sell:500][ReqItems:0-5][Place:16]</Value>
+    </Item>
+    <Item>
+      <Key>119</Key>
+      <Value>[Type:StaticItem][Image:96-0][Sell:500][ReqItems:0-10][Place:17]</Value>
+    </Item>
+    <Item>
+      <Key>120</Key>
+      <Value>[Type:StaticItem][Image:0-16][Sell:500][Stacks][Place:38]</Value>
+    </Item>
+    <Item>
+      <Key>121</Key>
+      <Value>[Type:StaticItem][Image:32-16][Sell:500][Stacks][Place:19]</Value>
+    </Item>
+    <Item>
+      <Key>122</Key>
+      <Value>[Type:StaticItem][Image:0-32][Sell:3000][Place:11]</Value>
+    </Item>
+    <Item>
+      <Key>123</Key>
+      <Value>[Type:StaticItem][Image:16-16][Sell:0][Stacks][Place:39]</Value>
+    </Item>
+    <Item>
+      <Key>124</Key>
+      <Value>[Type:Clothes][Image:0-64][Sell:0][CType:Body][Row:0][TexName:400]</Value>
+    </Item>
+    <Item>
+      <Key>125</Key>
+      <Value>[Type:Clothes][Image:16-64][Sell:0][CType:Body][Row:1][TexName:401]</Value>
+    </Item>
+    <Item>
+      <Key>126</Key>
+      <Value>[Type:Clothes][Image:32-64][Sell:0][CType:Hat][Row:2]</Value>
+    </Item>
+    <Item>
+      <Key>127</Key>
+      <Value>[Type:Clothes][Image:48-64][Sell:0][CType:Body][Row:3]</Value>
+    </Item>
+    <Item>
+      <Key>128</Key>
+      <Value>[Type:Clothes][Image:0-80][Sell:0][CType:Legs][Neutral][Row:3][TexName:404]</Value>
+    </Item>
+    <Item>
+      <Key>129</Key>
+      <Value>[Type:MonsterFood][Image:80-16][Sell:20][Spawn:3-4]</Value>
+    </Item>
+    <Item>
+      <Key>130</Key>
+      <Value>[Type:Special][SpecialType:Map][Image:0-32]</Value>
+    </Item>
+    <Item>
+      <Key>131</Key>
+      <Value>[Type:Special][SpecialType:Marriage][Image:32-48][Sell:0]</Value>
+    </Item>
+    <Item>
+      <Key>132</Key>
       <Value>[Type:Special][SpecialType:Class][Image:16-48][Sell:2000]</Value>
     </Item>
   </Asset>

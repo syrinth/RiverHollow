@@ -1,195 +1,184 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: Index>0-->
-    <!--Value: [Type:Destructible]Name/X Y Width Height/chopIt/breakIt/hp/LvlToHurt-->
-    <!--Value: Plant/srcRow srcColumn/resource/numTransitions/days1 days2 daysn-1-->
-    <!--Value: Container/srcRow srcColumn/rows columns-->
-    <!--Value: Processor/srcRow srcColumn/[Input reqInputNum Output Time] ...-->
-    <!--Value: Crafter/srcRow srcColumn/Recipe1 Recipe2 ...-->
     <Item>
       <Key>0</Key>
-      <Value>[Type:Destructible][Image:0-0][Width:16][Height:16][Tool:Pick][Hp:1][ReqLvl:1][Item:0-1]</Value>
-    </Item>
-    <Item>
-      <Key>1</Key>
-      <Value>[Type:Destructible][Image:32-32][Width:32][Height:32][Tool:Pick][Hp:5][ReqLvl:1][Item:0-5]</Value>
-    </Item>
-    <Item>
-      <Key>2</Key>
       <Value>[Type:Tree][Texture:Textures\tree][Image:0-0][Width:48][Height:80][Hp:3][ReqLvl:1][Item:2-7]</Value>
     </Item>
     <Item>
-      <Key>3</Key>
+      <Key>1</Key>
       <Value>[Type:Staircase][Image:48-0][Width:16][Height:16]</Value>
     </Item>
     <Item>
-      <Key>4</Key>
+      <Key>2</Key>
       <Value>[Type:Door][Image:64-0][Width:16][Height:32]</Value>
     </Item>
     <Item>
+      <Key>3</Key>
+      <Value>[Type:Forageable][Image:80-64][Width:16][Height:16][Item:4]</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>[Type:Forageable][Image:96-16][Width:16][Height:16][Item:24]</Value>
+    </Item>
+    <Item>
       <Key>5</Key>
-      <Value>[Type:Destructible][Image:0-32][Width:16][Height:16][Tool:Pick][Hp:2][ReqLvl:1][Item:80]</Value>
+      <Value>[Type:Tree][Texture:Textures\DarkWoodTree][Image:0-0][Width:48][Height:80][Hp:5][ReqLvl:2][Item:6-8]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Forageable][Image:80-64][Width:16][Height:16][Item:9]</Value>
+      <Value>[Type:Forageable][Image:80-32][Width:16][Height:16][Item:25][Passable]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Forageable][Image:96-16][Width:16][Height:16][Item:43]</Value>
+      <Value>[Type:EchoNode][Image:0-80][Width:16][Height:16][Tool:Lantern][Hp:5][ReqLvl:1][Item:18][Idle:5-0.150][Gathered:7-0.150]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Tree][Texture:Textures\DarkWoodTree][Image:0-0][Width:48][Height:80][Hp:5][ReqLvl:2][Item:11-8]</Value>
+      <Value>[Type:Forageable][Image:96-0][Width:16][Height:16][Item:26][Passable]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Forageable][Image:80-32][Width:16][Height:16][Item:44][Passable]</Value>
+      <Value>[Type:Forageable][Image:112-16][Width:16][Height:32][Item:27][Passable]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Destructible][Image:96-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:90-1]</Value>
+      <Value>[Type:Forageable][Image:128-16][Width:16][Height:32][Item:29][Passable]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Destructible][Image:112-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:91]</Value>
-    </Item>
-    <Item>
-      <Key>12</Key>
-      <Value>[Type:Destructible][Image:128-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:92]</Value>
-    </Item>
-    <Item>
-      <Key>13</Key>
-      <Value>[Type:Destructible][Image:144-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:93]</Value>
-    </Item>
-    <Item>
-      <Key>14</Key>
-      <Value>[Type:Destructible][Image:160-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:94]</Value>
-    </Item>
-    <Item>
-      <Key>15</Key>
-      <Value>[Type:Destructible][Image:96-64][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:95]</Value>
-    </Item>
-    <Item>
-      <Key>16</Key>
-      <Value>[Type:Destructible][Image:112-64][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:96]</Value>
-    </Item>
-    <Item>
-      <Key>17</Key>
-      <Value>[Type:Destructible][Image:128-64][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:97]</Value>
-    </Item>
-    <Item>
-      <Key>18</Key>
-      <Value>[Type:Destructible][Image:144-64][Width:16][Height:16][Tool:Pick][Hp:5][ReqLvl:1][Item:98]</Value>
-    </Item>
-    <Item>
-      <Key>19</Key>
-      <Value>[Type:Destructible][Image:160-64][Width:16][Height:16][Tool:Pick][Hp:5][ReqLvl:1][Item:99]</Value>
-    </Item>
-    <Item>
-      <Key>20</Key>
-      <Value>[Type:EchoNode][Image:0-80][Width:16][Height:16][Tool:Lantern][Hp:5][ReqLvl:1][Item:35][Idle:5-0.150][Gathered:7-0.150]</Value>
-    </Item>
-    <Item>
-      <Key>21</Key>
-      <Value>[Type:Forageable][Image:96-0][Width:16][Height:16][Item:45][Passable]</Value>
-    </Item>
-    <Item>
-      <Key>22</Key>
-      <Value>[Type:Forageable][Image:112-16][Width:16][Height:32][Item:46][Passable]</Value>
-    </Item>
-    <Item>
-      <Key>23</Key>
-      <Value>[Type:Forageable][Image:128-16][Width:16][Height:32][Item:48][Passable]</Value>
-    </Item>
-    <!--<60-79> Plants-->
-    <Item>
-      <Key>60</Key>
-      <Value>[Type:Plant][Image:0-64][Item:40][TrNum:4][TrTime:2-3-4]</Value>
-    </Item>
-    <Item>
-      <Key>61</Key>
-      <Value>[Type:Plant][Image:192-16][Height:32][Item:505][TrNum:4][TrTime:1-2-3]</Value>
-    </Item>
-	<Item>
-      <Key>62</Key>
-      <Value>[Type:Plant][Image:192-48][Height:32][Item:51][TrNum:4][TrTime:1-1-1]</Value>
-    </Item>
-    <Item>
-      <Key>70</Key>
-      <Value>[Type:Plant][Image:80-48][Item:42][TrNum:4][TrTime:2-3-4]</Value>
-    </Item>
-    <Item>
-      <Key>71</Key>
-      <Value>[Type:Plant][Image:64-48][Item:41][TrNum:4][TrTime:2-3-4]</Value>
-    </Item>
-    <!--<190> Containers-->
-    <Item>
-      <Key>190</Key>
-      <Value>[Type:Container][Image:0-16][Width:16][Height:16][Rows:1][Cols:8]</Value>
-    </Item>
-    <!--<200> Machines-->
-    <Item>
-      <Key>200</Key>
-      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Width:16][Height:32][Processes:80-10|81-10|82-10|83-10|84-10]</Value>
-    </Item>
-    <Item>
-      <Key>201</Key>
-      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:190-5|200-30|622-15][Base:2-1]</Value>
-    </Item>
-    <Item>
-      <Key>202</Key>
-      <Value>[Type:Machine][Image:0-64][Work:3-0.15][Width:32][Height:32][Makes:101-10|105-15][Base:2-1]</Value>
-    </Item>
-    <Item>
-      <Key>203</Key>
-      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:203-5|200-5|201-5|202-5|190-10|204-10][Base:2-1][Processes:80-10|81-10|82-10|83-10|84-10]</Value>
-    </Item>
-    <Item>
-      <Key>204</Key>
-      <Value>[Type:Machine][Image:0-128][Work:3-0.15][Width:16][Height:32][Makes:106-15][Base:1-1]</Value>
-    </Item>
-    <Item>
-      <Key>205</Key>
-      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Processes:44-5][Makes:700-15][Base:2-1]</Value>
-    </Item>
-    <!--<240> Walls and Flooring-->
-    <Item>
-      <Key>240</Key>
-      <Value>[Type:Wall][Image:0-128][Width:16][Height:32]</Value>
-    </Item>
-    <Item>
-      <Key>241</Key>
-      <Value>[Type:Floor][Image:0-32]</Value>
-    </Item>
-    <Item>
-      <Key>299</Key>
       <Value>[Type:ClassChanger][Image:0-2][Width:16][Height:32]</Value>
     </Item>
     <Item>
-      <Key>303</Key>
+      <Key>12</Key>
+      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Width:16][Height:32][Processes:32-10|33-10|34-10|35-10|36-10]</Value>
+    </Item>
+    <Item>
+      <Key>13</Key>
+      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:113-5|114-30|72-15][Base:2-1]</Value>
+    </Item>
+    <Item>
+      <Key>14</Key>
+      <Value>[Type:Machine][Image:0-64][Work:3-0.15][Width:32][Height:32][Makes:107-10|108-15][Base:2-1]</Value>
+    </Item>
+    <Item>
+      <Key>15</Key>
+      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:117-5|114-5|115-5|116-5|113-10|118-10][Base:2-1][Processes:32-10|33-10|34-10|35-10|36-10]</Value>
+    </Item>
+    <Item>
+      <Key>16</Key>
+      <Value>[Type:Machine][Image:0-128][Work:3-0.15][Width:16][Height:32][Makes:109-15][Base:1-1]</Value>
+    </Item>
+    <Item>
+      <Key>17</Key>
+      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Processes:25-5][Makes:86-15][Base:2-1]</Value>
+    </Item>
+    <Item>
+      <Key>18</Key>
+      <Value>[Type:Container][Image:0-16][Width:16][Height:16][Rows:1][Cols:8]</Value>
+    </Item>
+    <Item>
+      <Key>19</Key>
+      <Value>[Type:Floor][Image:0-32]</Value>
+    </Item>
+    <Item>
+      <Key>20</Key>
+      <Value>[Type:Destructible][Image:0-0][Width:16][Height:16][Tool:Pick][Hp:1][ReqLvl:1][Item:0-1]</Value>
+    </Item>
+    <Item>
+      <Key>21</Key>
+      <Value>[Type:Destructible][Image:32-32][Width:32][Height:32][Tool:Pick][Hp:5][ReqLvl:1][Item:0-5]</Value>
+    </Item>
+    <Item>
+      <Key>22</Key>
+      <Value>[Type:Destructible][Image:0-32][Width:16][Height:16][Tool:Pick][Hp:2][ReqLvl:1][Item:32]</Value>
+    </Item>
+    <Item>
+      <Key>23</Key>
+      <Value>[Type:Destructible][Image:96-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:42-1]</Value>
+    </Item>
+    <Item>
+      <Key>24</Key>
+      <Value>[Type:Destructible][Image:112-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:43]</Value>
+    </Item>
+    <Item>
+      <Key>25</Key>
+      <Value>[Type:Destructible][Image:128-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:44]</Value>
+    </Item>
+    <Item>
+      <Key>26</Key>
+      <Value>[Type:Destructible][Image:144-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:45]</Value>
+    </Item>
+    <Item>
+      <Key>27</Key>
+      <Value>[Type:Destructible][Image:160-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:46]</Value>
+    </Item>
+    <Item>
+      <Key>28</Key>
+      <Value>[Type:Destructible][Image:96-64][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:47]</Value>
+    </Item>
+    <Item>
+      <Key>29</Key>
+      <Value>[Type:Destructible][Image:112-64][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:48]</Value>
+    </Item>
+    <Item>
+      <Key>30</Key>
+      <Value>[Type:Destructible][Image:128-64][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:49]</Value>
+    </Item>
+    <Item>
+      <Key>31</Key>
+      <Value>[Type:Destructible][Image:144-64][Width:16][Height:16][Tool:Pick][Hp:5][ReqLvl:1][Item:50]</Value>
+    </Item>
+    <Item>
+      <Key>32</Key>
+      <Value>[Type:Destructible][Image:160-64][Width:16][Height:16][Tool:Pick][Hp:5][ReqLvl:1][Item:51]</Value>
+    </Item>
+    <Item>
+      <Key>33</Key>
+      <Value>[Type:Plant][Image:0-64][Item:21][TrNum:4][TrTime:2-3-4]</Value>
+    </Item>
+    <Item>
+      <Key>34</Key>
+      <Value>[Type:Plant][Image:192-16][Height:32][Item:106][TrNum:4][TrTime:1-2-3]</Value>
+    </Item>
+    <Item>
+      <Key>35</Key>
+      <Value>[Type:Plant][Image:192-48][Height:32][Item:129][TrNum:4][TrTime:1-1-1]</Value>
+    </Item>
+    <Item>
+      <Key>36</Key>
+      <Value>[Type:Plant][Image:80-48][Item:23][TrNum:4][TrTime:2-3-4]</Value>
+    </Item>
+    <Item>
+      <Key>37</Key>
+      <Value>[Type:Plant][Image:64-48][Item:22][TrNum:4][TrTime:2-3-4]</Value>
+    </Item>
+    <Item>
+      <Key>38</Key>
+      <Value>[Type:Wall][Image:0-128][Width:16][Height:32]</Value>
+    </Item>
+    <Item>
+      <Key>39</Key>
       <Value>[Type:Light][Image:112-0][Width:16][Height:16][Idle:6-0.1]</Value>
     </Item>
-    <!--<990> Dungeon Objects-->
     <Item>
-      <Key>990</Key>
+      <Key>40</Key>
       <Value>[Type:DungeonObject][Subtype:Trigger][Image:144-16][Width:16][Height:16]</Value>
     </Item>
     <Item>
-      <Key>991</Key>
+      <Key>41</Key>
       <Value>[Type:DungeonObject][Subtype:TriggerDoor][Image:176-16][Width:16][Height:32]</Value>
     </Item>
     <Item>
-      <Key>992</Key>
+      <Key>42</Key>
       <Value>[Type:DungeonObject][Subtype:ItemDoor][Image:176-16][Width:16][Height:32]</Value>
     </Item>
     <Item>
-      <Key>993</Key>
+      <Key>43</Key>
       <Value>[Type:DungeonObject][Subtype:MobDoor][Image:176-16][Width:16][Height:32]</Value>
     </Item>
     <Item>
-      <Key>994</Key>
+      <Key>44</Key>
       <Value>[Type:DungeonObject][Subtype:KeyDoor][Image:176-16][Width:16][Height:32]</Value>
     </Item>
   </Asset>

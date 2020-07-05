@@ -1,18 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: ID Value:Name/QuestTextKey/Description/ReqToProc/Giver/Type/goal num|goal num/EndSpeech/QuestTags-->
-    <!--[Item:ID-Num-UniqueData]-->
-    <!--[Money:Amount]-->
-    <!--[Friendship:Target-Amount]-->
-    <!--[SpawnMob:ID-Map-Location]-->
     <Item>
       <Key>1</Key>
-      <Value>[HandTo:17][Type:Fetch][GoalItem:301-1][Item:1000-1-1][Money:500][Friendship:Giver-200][SpawnMob:3-mapForest-Quest1]</Value>
+      <Value>[HandTo:17][Type:Fetch][GoalItem:59-1][Item:132-1-1][Money:500][Friendship:Giver-200][SpawnMob:3-mapForest-Quest1]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Fetch][GoalItem:24-1][Activate:0][Immediate][Cutscene:2]</Value>
+      <Value>[Type:Fetch][GoalItem:99-1][Activate:0][Immediate][Cutscene:2]</Value>
     </Item>
   </Asset>
 </XnaContent>

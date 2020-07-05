@@ -2859,7 +2859,7 @@ namespace RiverHollow.Actors
 
             //Sets a default class so we can load and display the character to start
             SetClass(DataManager.GetClassByIndex(1));
-            SetClothes((Clothes)DataManager.GetItem((404)));
+            SetClothes((Clothes)DataManager.GetItem((128)));
 
             _sprBody.SetColor(Color.White);
             _sprHair.SetColor(_cHairColor);

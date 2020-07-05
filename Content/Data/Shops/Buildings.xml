@@ -1,7 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: Index Value:Name/Description/Money/RequiredItems item num item num-->
     <Item>
       <Key>0</Key>
       <Value>[Type:Building][ID:1][Cost:100][Requires:0-1|2-1][Text:A building used to house practitioners of the magical arts]</Value>
@@ -16,7 +15,7 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Building][ID:4][Cost:500][Requires:0-2|2-3|9-4][Text:Houses Witches and Healers]</Value>
+      <Value>[Type:Building][ID:4][Cost:500][Requires:0-2|2-3|4-4][Text:Houses Witches and Healers]</Value>
     </Item>
     <Item>
       <Key>5</Key>

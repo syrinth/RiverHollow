@@ -333,7 +333,7 @@
  <objectgroup id="9" name="MapObject">
   <object id="11" name="Harp" x="99" y="180.333" width="10" height="7.33333">
    <properties>
-    <property name="Item" type="int" value="24"/>
+    <property name="Item" type="int" value="99"/>
    </properties>
   </object>
  </objectgroup>

@@ -1,7 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: Index Value:Type/ID/Description/Money-->
     <Item>
       <Key>1</Key>
       <Value>[Type:Worker][ID:1][Cost:500][Text:Practitioner of the arcane arts]</Value>

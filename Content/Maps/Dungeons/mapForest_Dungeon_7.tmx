@@ -120,12 +120,12 @@
  <objectgroup id="52" name="MapObject">
   <object id="7" name="ResourceSpawn" x="87.584" y="90.0835" width="148.083" height="100.666">
    <properties>
-    <property name="Resources" value="0"/>
+    <property name="Resources" value="20"/>
    </properties>
   </object>
   <object id="29" name="ResourceSpawn" x="104.167" y="309.75" width="115.166" height="28.5">
    <properties>
-    <property name="Resources" value="0"/>
+    <property name="Resources" value="20"/>
    </properties>
   </object>
   <object id="35" name="SpawnPoint" x="51" y="66.25" width="10" height="8.5">
@@ -150,18 +150,18 @@
   </object>
   <object id="42" name="DungeonObject" x="151" y="357" width="12" height="11">
    <properties>
-    <property name="ID" type="int" value="990"/>
+    <property name="ID" type="int" value="40"/>
     <property name="Trigger" value="TriggerHitF"/>
    </properties>
   </object>
   <object id="43" name="DungeonObject" x="144.75" y="243.5" width="12.5" height="27">
    <properties>
-    <property name="ID" type="int" value="993"/>
+    <property name="ID" type="int" value="43"/>
    </properties>
   </object>
   <object id="44" name="DungeonObject" x="160.75" y="242.5" width="12.5" height="27">
    <properties>
-    <property name="ID" type="int" value="993"/>
+    <property name="ID" type="int" value="43"/>
    </properties>
   </object>
  </objectgroup>

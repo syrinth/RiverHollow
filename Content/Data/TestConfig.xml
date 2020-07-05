@@ -1,7 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: Index Value:Item#-UniqueData/Money/QuestReq-->
     <Item>
       <Key>0</Key>
       <Value>[Type:Item][ItemID:0-999]</Value>
@@ -12,43 +11,43 @@
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Item][ItemID:240-99]</Value>
+      <Value>[Type:Item][ItemID:120-99]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Item][ItemID:20]</Value>
+      <Value>[Type:Item][ItemID:95]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Item][ItemID:21]</Value>
+      <Value>[Type:Item][ItemID:96]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Item][ItemID:22]</Value>
+      <Value>[Type:Item][ItemID:97]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Item][ItemID:23]</Value>
+      <Value>[Type:Item][ItemID:98]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Item][ItemID:25]</Value>
+      <Value>[Type:Item][ItemID:100]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Item][ItemID:101]</Value>
+      <Value>[Type:Item][ItemID:107]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Item][ItemID:200]</Value>
+      <Value>[Type:Item][ItemID:114]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>10</Key>
-      <Value>[Type:Item][ItemID:51-5]</Value>
+      <Value>[Type:Item][ItemID:129-5]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>11</Key>
-      <Value>[Type:Item][ItemID:62-5]</Value>
+      <Value>[Type:Item][ItemID:112-5]</Value>
     </Item>
   </Asset>
 </XnaContent>
