@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>0</Key>
+      <Value>[ItemID:0-999|2-990|120-99|95|96|97|98|100|107|114|129-5|112-5]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[ObjectID:20]</Value>
+    </Item>
+	<Item>
+      <Key>2</Key>
+      <Value>[ObjectID:21]</Value>
+    </Item>
+	<Item>
+      <Key>3</Key>
+      <Value>[ObjectID:0]</Value>
+    </Item>
+	<Item>
+      <Key>4</Key>
+      <Value>[ItemID:126]</Value>
+    </Item>
+	<Item>
+      <Key>5</Key>
+      <Value>[ItemID:124|125]</Value>
+    </Item>
+	<Item>
+      <Key>6</Key>
+      <Value>[ItemID:128]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

@@ -1864,8 +1864,8 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Adventurers/WizardPortrait.png
 
-#begin Data/TestConfig.xml
+#begin Data/Config.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
-/build:Data/TestConfig.xml
+/build:Data/Config.xml
 

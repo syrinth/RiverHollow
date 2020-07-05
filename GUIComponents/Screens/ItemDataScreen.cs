@@ -23,21 +23,24 @@ namespace RiverHollow.GUIComponents.Screens
         string CHARACTER_XML_FILE = PATH_TO_DATA + @"\CharacterData.xml";
         string CLASSES_XML_FILE = PATH_TO_DATA + @"\Classes.xml";
         string WORKERS_XML_FILE = PATH_TO_DATA + @"\Workers.xml";
-        string TESTCONFIG_XML_FILE = PATH_TO_DATA + @"\TestConfig.xml";
+        string CONFIG_XML_FILE = PATH_TO_DATA + @"\Config.xml";
         string MAGIC_SHOP_XML_FILE = PATH_TO_DATA + @"\Shops\MagicShop.xml";
         string ADVENTURERS_XML_FILE = PATH_TO_DATA + @"\Shops\Adventurers.xml";
         string BUILDINGS_XML_FILE = PATH_TO_DATA + @"\Shops\Buildings.xml";
         #endregion
 
         #region Tags
-        const string ITEM_TAGS = "ReqItems,RefinesInto,Place";
-        const string QUEST_TAGS = "Item,GoalItem";
-        const string CHARACTER_TAGS = "Collection";
+        const string ITEM_TAGS = "ReqItems,RefinesInto";
+        const string ITEM_WORLD_TAGS = "Place";
+        const string QUEST_ITEM_TAGS = "Item,GoalItem";
+        const string CHARACTER_ITEM_TAGS = "Collection";
         const string WORLD_OBJECT_TAGS = "Makes,Processes,Item";
-        const string CLASSES_TAG = "DWeap,DArmor,DHead,DWrist";
-        const string WORKERS_TAG = "Item, ID";
+        const string CLASSES_ITEM_TAG = "DWeap,DArmor,DHead,DWrist";
+        const string WORKERS_ITEM_TAG = "Item, ID";
         const string SHOP_TAG = "ItemID,Requires";
-        const string TESTCONFIG_TAG = "ItemID";
+        const string CONFIG_ITEM_TAG = "ItemID";
+        const string CONFIG_WORLD_TAG = "ObjectID";
+        const string DEFAULT_WORLD_TAG = "";
         public static string MAP_ITEM_TAGS = "Item";
         public static string MAP_WORLD_OBJECTS_TAG = "Resources,ID";
         #endregion
@@ -103,15 +106,15 @@ namespace RiverHollow.GUIComponents.Screens
                 }
             }
 
-            LoadXMLDictionary(QUEST_XML_FILE, QUEST_TAGS, DataManager.DiQuestData);
-            LoadXMLDictionary(CHARACTER_XML_FILE, CHARACTER_TAGS, DataManager.DiVillagerData);
-            LoadXMLDictionary(CLASSES_XML_FILE, CLASSES_TAG, DataManager.DIClasses);
-            LoadXMLDictionary(WORKERS_XML_FILE, WORKERS_TAG, DataManager.DIWorkers);
-            LoadXMLDictionary(TESTCONFIG_XML_FILE, TESTCONFIG_TAG, DataManager.TestConfig);
+            LoadXMLDictionary(QUEST_XML_FILE, QUEST_ITEM_TAGS, DEFAULT_WORLD_TAG, DataManager.DiQuestData);
+            LoadXMLDictionary(CHARACTER_XML_FILE, CHARACTER_ITEM_TAGS, DEFAULT_WORLD_TAG, DataManager.DiVillagerData);
+            LoadXMLDictionary(CLASSES_XML_FILE, CLASSES_ITEM_TAG, DEFAULT_WORLD_TAG, DataManager.DIClasses);
+            LoadXMLDictionary(WORKERS_XML_FILE, WORKERS_ITEM_TAG, DEFAULT_WORLD_TAG, DataManager.DIWorkers);
+            LoadXMLDictionary(CONFIG_XML_FILE, CONFIG_ITEM_TAG, CONFIG_WORLD_TAG, DataManager.Config);
 
-            LoadXMLDictionary(MAGIC_SHOP_XML_FILE, SHOP_TAG, DataManager.GetMerchandise("MagicShop"));
-            LoadXMLDictionary(BUILDINGS_XML_FILE, SHOP_TAG, DataManager.GetMerchandise("Buildings"));
-            LoadXMLDictionary(ADVENTURERS_XML_FILE, SHOP_TAG, DataManager.GetMerchandise("Adventurers"));
+            LoadXMLDictionary(MAGIC_SHOP_XML_FILE, SHOP_TAG, DEFAULT_WORLD_TAG, DataManager.GetMerchandise("MagicShop"));
+            LoadXMLDictionary(BUILDINGS_XML_FILE, SHOP_TAG, DEFAULT_WORLD_TAG, DataManager.GetMerchandise("Buildings"));
+            LoadXMLDictionary(ADVENTURERS_XML_FILE, SHOP_TAG, DEFAULT_WORLD_TAG, DataManager.GetMerchandise("Adventurers"));
 
             LoadWorldObjects();
             LoadItemData();
@@ -128,12 +131,40 @@ namespace RiverHollow.GUIComponents.Screens
             AddControl(_btnAddNew);
         }
 
-        private void LoadXMLDictionary(string fileName, string relevantTags, Dictionary<int, Dictionary<string, string>> dataDictionary)
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+            bool rv = false;
+            if (_gMainObject != null)
+            {
+                rv = _gMainObject.ProcessLeftButtonClick(mouse);
+            }
+            else
+            {
+                rv = base.ProcessLeftButtonClick(mouse);
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Right-click to back out as usual.
+        /// 
+        /// Drop anything that might be being held
+        /// </summary>
+        public override bool ProcessRightButtonClick(Point mouse)
+        {
+            _heldData = null;
+            GUIManager.SetScreen(new IntroMenuScreen());
+
+            return true;
+        }
+
+        private void LoadXMLDictionary(string fileName, string itemTags, string objectTags, Dictionary<int, Dictionary<string, string>> dataDictionary)
         {
             List<XMLData> data = new List<XMLData>();
             foreach (KeyValuePair<int, Dictionary<string, string>> kvp in dataDictionary)
             {
-                data.Add(new XMLData(kvp.Key, kvp.Value, relevantTags));
+                data.Add(new XMLData(kvp.Key, kvp.Value, itemTags, objectTags));
             }
 
             _diBasicXML[fileName] = data;
@@ -151,7 +182,7 @@ namespace RiverHollow.GUIComponents.Screens
                 Dictionary<string, string> stringData = DataManager.GetWorldObjectData(i);
                 if (stringData != null)
                 {
-                    worldObjectList.Add(new XMLData(i, stringData, WORLD_OBJECT_TAGS));
+                    worldObjectList.Add(new XMLData(i, stringData, WORLD_OBJECT_TAGS, DEFAULT_WORLD_TAG));
                 }
             }
 
@@ -174,7 +205,7 @@ namespace RiverHollow.GUIComponents.Screens
                 Dictionary<string, string> stringData = DataManager.GetItemStringData(i);
                 if (stringData != null)
                 {
-                    dataList.Add(new ItemXMLData(i, stringData, ITEM_TAGS));
+                    dataList.Add(new ItemXMLData(i, stringData, ITEM_TAGS, ITEM_WORLD_TAGS));
                 }
             }
 
@@ -231,11 +262,17 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     foreach (XMLData testIt in _diWorldObjectData[e])
                     {
+                        //First, check to see if the object refers to the item this
+                        //could be because the object makes the item for example
                         if (testIt.RefersToID(theData.ID))
                         {
                             theData.AddLinkedItem(testIt);
                         }
-                        if (theData.RefersToID(testIt.ID))
+
+                        //Next check to see if the item refers to the object, pass in
+                        //false here to ensure that we compare only to the worldObject tags
+                        //The item might place the object.
+                        if (theData.RefersToID(testIt.ID, false))
                         {
                             testIt.AddLinkedItem(theData);
                         }
@@ -257,7 +294,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 foreach (XMLData theData in _diWorldObjectData[e])
                 {
-                    //Replace all worldObject numbers on the maps
+                    //Find any maps that reference the ObjectID
                     foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
                     {
                         if (kvp.Value.RefersToIDWithTag(theData.ID, MAP_WORLD_OBJECTS_TAG))
@@ -265,37 +302,22 @@ namespace RiverHollow.GUIComponents.Screens
                             theData.AddLinkedItem(kvp.Value);
                         }
                     }
+
+                    //Find any files that reference the ObjectID
+                    foreach (string s in _diBasicXML.Keys)
+                    {
+                        foreach (XMLData testIt in _diBasicXML[s])
+                        {
+                            if (testIt.RefersToID(theData.ID, false))
+                            {
+                                theData.AddLinkedItem(testIt);
+                            }
+                        }
+                    }
                 }
             }
         }
 
-        public override bool ProcessLeftButtonClick(Point mouse)
-        {
-            bool rv = false;
-            if (_gMainObject != null)
-            {
-                rv = _gMainObject.ProcessLeftButtonClick(mouse);
-            }
-            else
-            {
-                rv = base.ProcessLeftButtonClick(mouse);
-            }
-
-            return rv;
-        }
-
-        /// <summary>
-        /// Right-click to back out as usual.
-        /// 
-        /// Drop anything that might be being held
-        /// </summary>
-        public override bool ProcessRightButtonClick(Point mouse)
-        {
-            _heldData = null;
-            GUIManager.SetScreen(new IntroMenuScreen());
-
-            return true;
-        }
 
         /// <summary>
         /// This method loads allof the items of the indicated type
@@ -455,7 +477,7 @@ namespace RiverHollow.GUIComponents.Screens
                 ItemEnum eType = Util.ParseEnum<ItemEnum>(dss["Type"]);
                 int index = _diItems[eType].Count;
 
-                ItemXMLData data = new ItemXMLData(index, dss, ITEM_TAGS);
+                ItemXMLData data = new ItemXMLData(index, dss, ITEM_TAGS, ITEM_WORLD_TAGS);
                 data.SetTextData(_gName.GetText(), _gDescription.GetText());
                 _diItems[eType].Add(data);
 
@@ -658,15 +680,17 @@ namespace RiverHollow.GUIComponents.Screens
     {
         protected int _iID;
         public int ID => _iID;
-        protected string[] _arrRelevantTags;
+        protected string[] _arrItemTags;
+        protected string[] _arrWorldObjectTags;
         protected List<XMLData> _liLinkedItems;
         protected List<TMXData> _liLinkedMaps;
         protected Dictionary<string, string> _diTags;
 
-        public XMLData(int id, Dictionary<string, string> stringData, string tags) {
+        public XMLData(int id, Dictionary<string, string> stringData, string itemTags, string objectTags) {
             _liLinkedMaps = new List<TMXData>();
             _liLinkedItems = new List<XMLData>();
-            _arrRelevantTags = tags.Split(',');
+            _arrItemTags = itemTags.Split(',');
+            _arrWorldObjectTags = objectTags.Split(',');
 
             _iID = id;
             _diTags = stringData;
@@ -690,83 +714,20 @@ namespace RiverHollow.GUIComponents.Screens
         }
 
         /// <summary>
-        /// Method to change the ID of the data from one value to another.
-        /// 
-        /// After changing, it's important to iterate over all the linked entries
-        /// and tell them to replace the old ID with the new one.
-        /// </summary>
-        /// <param name="newID"></param>
-        public virtual void ChangeID(int newID)
-        {
-            if (_iID != newID)
-            {
-                int oldID = _iID;
-                _iID = newID;
-
-                foreach (XMLData d in _liLinkedItems)
-                {
-                    d.ReplaceLinkedIDs(oldID, _iID);
-                }
-
-                foreach(TMXData d in _liLinkedMaps)
-                {
-                    d.ReplaceID(ItemDataScreen.MAP_WORLD_OBJECTS_TAG, oldID, newID);
-                }
-            }
-        }
-
-        /// <summary>
         /// Checks the tags to see if there are any references to the given ID
         /// among the relevant tags.
         /// </summary>
         /// <param name="id">The ID to look for</param>
         /// <returns>True if there is at least one match</returns>
-        public bool RefersToID(int id)
+        public bool RefersToID(int id, bool item = true)
         {
             bool rv = false;
 
-            foreach(string s in _arrRelevantTags){
+            foreach(string s in (item ? _arrItemTags : _arrWorldObjectTags)){
                 CheckTagForID(s, id, ref rv);
             }
 
             return rv;
-        }
-
-        /// <summary>
-        /// Iterates through the relevant tags to replace any instances of the 
-        /// old ID with the new ID.
-        /// </summary>
-        /// <param name="oldID">The old ID that has now changed</param>
-        /// <param name="newID">The new ID to reference</param>
-        public void ReplaceLinkedIDs(int oldID, int newID)
-        {
-            foreach (string s in _arrRelevantTags)
-            {
-                ReplaceID(s, oldID, newID);
-            }
-        }
-
-        /// <summary>
-        /// Adds the given XMLData to the LinkedITems list.
-        /// 
-        /// Do nto do this if the list already contains it or if the
-        /// XMLData is this entry.
-        /// </summary>
-        /// <param name="d">The linked entry to add</param>
-        public void AddLinkedItem(XMLData d)
-        {
-            if (!_liLinkedItems.Contains(d) && this != d)
-            {
-                _liLinkedItems.Add(d);
-            }
-        }
-
-        public void AddLinkedItem(TMXData d)
-        {
-            if (!_liLinkedMaps.Contains(d))
-            {
-                _liLinkedMaps.Add(d);
-            }
         }
 
         /// <summary>
@@ -779,7 +740,7 @@ namespace RiverHollow.GUIComponents.Screens
         /// <param name="id">The ID to look for</param>
         /// <param name="val">Reference to the success or this and other checks</param>
         /// <returns>True if a match exists</returns>
-        public void CheckTagForID(string tag, int id, ref bool val)
+       private void CheckTagForID(string tag, int id, ref bool val)
         {
             //If we don't have the key, don't proceed
             if (_diTags.ContainsKey(tag))
@@ -800,9 +761,47 @@ namespace RiverHollow.GUIComponents.Screens
         }
 
         /// <summary>
-        /// Call this to check the given tag for the given ID. This method is to
-        /// be used for any entry that has multiples of the same type of thing in it
-        /// that are delineated by a '|'.
+        /// Method to change the ID of the data from one value to another.
+        /// 
+        /// After changing, it's important to iterate over all the linked entries
+        /// and tell them to replace the old ID with the new one.
+        /// </summary>
+        /// <param name="newID"></param>
+        public virtual void ChangeID(int newID, bool item = true)
+        {
+            if (_iID != newID)
+            {
+                int oldID = _iID;
+                _iID = newID;
+
+                foreach (XMLData d in _liLinkedItems)
+                {
+                    d.ReplaceLinkedIDs(oldID, _iID);
+                }
+
+                foreach (TMXData d in _liLinkedMaps)
+                {
+                    d.ReplaceID(ItemDataScreen.MAP_WORLD_OBJECTS_TAG, oldID, newID);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Iterates through the relevant tags to replace any instances of the 
+        /// old ID with the new ID.
+        /// </summary>
+        /// <param name="oldID">The old ID that has now changed</param>
+        /// <param name="newID">The new ID to reference</param>
+        public void ReplaceLinkedIDs(int oldID, int newID, bool item = true)
+        {
+            foreach (string s in (item ? _arrItemTags : _arrWorldObjectTags))
+            {
+                ReplaceID(s, oldID, newID);
+            }
+        }
+
+        /// <summary>
+        /// Call this to check the given tag for the given ID.
         /// 
         /// Replace any instances of the old ID that are found with the new ID
         /// /// </summary>
@@ -850,6 +849,30 @@ namespace RiverHollow.GUIComponents.Screens
             }
         }
 
+
+        /// <summary>
+        /// Adds the given XMLData to the LinkedITems list.
+        /// 
+        /// Do nto do this if the list already contains it or if the
+        /// XMLData is this entry.
+        /// </summary>
+        /// <param name="d">The linked entry to add</param>
+        public void AddLinkedItem(XMLData d)
+        {
+            if (!_liLinkedItems.Contains(d) && this != d)
+            {
+                _liLinkedItems.Add(d);
+            }
+        }
+
+        public void AddLinkedItem(TMXData d)
+        {
+            if (!_liLinkedMaps.Contains(d))
+            {
+                _liLinkedMaps.Add(d);
+            }
+        }
+
         /// <summary>
         /// Iterates through each tag and remove all instances of the special character
         /// </summary>
@@ -880,14 +903,14 @@ namespace RiverHollow.GUIComponents.Screens
         public Texture2D Texture => _texTexture;
         public Rectangle SourceRectangle => new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, GameManager.TileSize, GameManager.TileSize);
 
-        public ItemXMLData(int id, Dictionary<string, string> stringData, string value) : base (id, stringData, value)
+        public ItemXMLData(int id, Dictionary<string, string> stringData, string itemTags, string worldTags) : base(id, stringData, itemTags, worldTags)
         {
             _eType = Util.ParseEnum<ItemEnum>(_diTags["Type"]);
 
             string[] texIndices = stringData["Image"].Split('-');
             _vSourcePos = new Vector2(int.Parse(texIndices[0]), int.Parse(texIndices[1]));
 
-            //Determine which textrue to draw the item from based off the Item type
+            //Determine which texture to draw the item from based off the Item type
             switch (_eType)
             {
                 case ItemEnum.Special:
@@ -930,27 +953,7 @@ namespace RiverHollow.GUIComponents.Screens
             _sName = name;
             _sDescription = desc;
         }
-
-        public override void ChangeID(int newID)
-        {
-            if (_iID != newID)
-            {
-                int oldID = _iID;
-                _iID = newID;
-
-                foreach (XMLData d in _liLinkedItems)
-                {
-                    d.ReplaceLinkedIDs(oldID, _iID);
-                }
-
-                foreach (TMXData d in _liLinkedMaps)
-                {
-                    d.ReplaceID(ItemDataScreen.MAP_ITEM_TAGS, oldID, newID);
-                }
-            }
-        }
     }
-
     public class TMXData
     {
         List<string> _liAllLines;

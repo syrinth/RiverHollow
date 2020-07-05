@@ -92,13 +92,12 @@ namespace RiverHollow.Game_Managers
 
         public static void AddTesting()
         {
-            foreach(Dictionary<string, string> di in DataManager.TestConfig.Values)
+            Dictionary<string, string> diTesting = DataManager.Config[0];
+            string[] splitItemValues = diTesting["ItemID"].Split('|');
+            foreach (string s in splitItemValues)
             {
-                if (di.ContainsKey("Type") && di["Type"].Equals("Item"))
-                {
-                    string[] splitString = di["ItemID"].Split('-');
-                    InventoryManager.AddToInventory(int.Parse(splitString[0]), (splitString.Length > 1 ? int.Parse(splitString[1]) : 1));
-                }
+                string[] splitString = s.Split('-');
+                InventoryManager.AddToInventory(int.Parse(splitString[0]), (splitString.Length > 1 ? int.Parse(splitString[1]) : 1));
             }
 
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestType.Fetch, "Getwood, dumbass", 1, null, DataManager.GetItem(2)));

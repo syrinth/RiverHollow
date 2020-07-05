@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
 using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
@@ -19,9 +18,9 @@ namespace RiverHollow.GUIComponents.Screens
     class NewGameScreen : GUIScreen
     {
         static int _iHatIndex = 0;
-        static List<int> _liHats = new List<int> { -1, 126};
+        static List<int> _liHats;
         static int _iShirtIndex = 0;
-        static List<int> _liShirts = new List<int> { -1, 124, 125 };
+        static List<int> _liShirts;
         bool _bCloseColorSelection;
         static int _iHairTypeIndex;
         int _iHairTypeCount = 3;
@@ -46,6 +45,9 @@ namespace RiverHollow.GUIComponents.Screens
 
         public NewGameScreen()
         {
+            AssignClothes(ref _liHats, DataManager.Config[4]["ItemID"].Split('|'));
+            AssignClothes(ref _liShirts, DataManager.Config[5]["ItemID"].Split('|'));
+
             int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIWindow.BrownWin.Edge;
 
             _window = new GUIWindow(GUIWindow.BrownWin, RiverHollow.ScreenHeight, RiverHollow.ScreenHeight);
@@ -119,7 +121,6 @@ namespace RiverHollow.GUIComponents.Screens
             _btnOK.Enable(_nameWindow.GetText().Length > 0);
         }
 
-
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
@@ -162,6 +163,14 @@ namespace RiverHollow.GUIComponents.Screens
             return rv;
         }
 
+        public void AssignClothes(ref List<int> clothesList, string[] clothingIDs)
+        {
+            clothesList = new List<int>();
+            foreach (string s in clothingIDs)
+            {
+                clothesList.Add(int.Parse(s));
+            }
+        }
         public void SetSelection(GUITextInputWindow g)
         {
             if(g == _nameWindow)
