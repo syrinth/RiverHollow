@@ -2201,7 +2201,7 @@ namespace RiverHollow.Tile_Engine
             _iHeight = (int)obj.Size.Height;
             if (obj.Properties.ContainsKey("Resources"))
             {
-                string[] spawnResources = obj.Properties["Resources"].Split('|');
+                string[] spawnResources = Util.GetEntries(obj.Properties["Resources"]);
                 foreach (string s in spawnResources)
                 {
                     _liPossibleResources.Add(int.Parse(s));

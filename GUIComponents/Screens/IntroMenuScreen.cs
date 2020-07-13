@@ -20,7 +20,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             _btnLoadGame = new GUIButton("Load Game", BtnLoadGame);
             _btnExit = new GUIButton("Exit Game", BtnExit);
 
-            _btnGameData = new GUIButton("Item Data", BtnItems);
+            _btnGameData = new GUIButton("Config", BtnItems);
             _btnGameData.AnchorToScreen(SideEnum.BottomRight, GUIManager.STANDARD_MARGIN);
 
             List <GUIObject> listButtons = new List<GUIObject>() { _btnNewGame, _btnLoadGame, _btnExit };
@@ -70,7 +70,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public void BtnItems()
         {
-            GUIManager.SetScreen(new ItemDataScreen());
+            GUIManager.SetScreen(new DataScreen());
         }
         #endregion
 

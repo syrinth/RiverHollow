@@ -10,12 +10,192 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.GUIObjects.GUIObject;
 using static RiverHollow.WorldObjects.Item;
 
 namespace RiverHollow.GUIComponents.Screens
 {
-    class ItemDataScreen : GUIScreen
+    class DataScreen : GUIScreen
+    {
+        GUIObject _gObject;
+        public DataScreen()
+        {
+            _gObject = new Menu(RemoveControl, AddControl);
+            AddControl(_gObject);
+        }
+    }
+
+    class TransitionalObject : GUIObject
+    {
+        public delegate void ActionDelegate(GUIObject o);
+        protected ActionDelegate _delRemove;
+        protected ActionDelegate _delAdd;
+
+        public TransitionalObject(ActionDelegate remove, ActionDelegate add)
+        {
+            _delRemove = remove;
+            _delAdd = add;
+        }
+    }
+
+    class Menu : TransitionalObject
+    {
+        const int BTN_PADDING = 50;
+
+        GUIButton _btnItems;
+        GUIButton _btnWorldObjects;
+        GUIButton _btnSpawn;
+        GUIButton _btnExit;
+
+        public Menu(ActionDelegate remove, ActionDelegate add) : base(remove, add)
+        {
+            _btnItems = new GUIButton("Item Data", LoadItemData);
+            _btnWorldObjects = new GUIButton("Object Data", LoadWorldObjectData);
+            _btnSpawn = new GUIButton("Spawn Point", ChangeSpawn);
+            _btnExit = new GUIButton("Main Menu", Exit);
+
+            List<GUIObject> listButtons = new List<GUIObject>() { _btnItems, _btnWorldObjects, _btnSpawn, _btnExit };
+            GUIObject.CreateSpacedColumn(ref listButtons, RiverHollow.ScreenWidth / 2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
+
+            AddControls(listButtons);
+        }
+
+        public void LoadItemData()
+        {
+            _delRemove(this);
+            _delAdd(new ItemDataControls(_delRemove, _delAdd));
+        }
+
+        public void LoadWorldObjectData()
+        {
+            
+        }
+
+        public void ChangeSpawn()
+        {
+            _delRemove(this);
+            _delAdd(new SpawnControls(_delRemove, _delAdd));
+        }
+
+        public void Exit()
+        {
+            GUIManager.SetScreen(new IntroMenuScreen());
+        }
+    }
+
+    class SpawnControls : TransitionalObject
+    {
+        struct SpawnData
+        {
+            public string SpawnMap;
+            public int X;
+            public int Y;
+            public SpawnData(string map, int x, int y)
+            {
+                SpawnMap = map;
+                X = x;
+                Y = y;
+            }
+        }
+        static string PATH_TO_DATA = string.Format(@"{0}\..\..\..\..\Content\Data", System.Environment.CurrentDirectory);
+
+        int _iSpawnMapIndex;
+        List<XMLData> _liConfigData;
+        List<GUIObject> _liButtons;
+        Dictionary<int, string> _diConfig;
+        SpawnData targetSpawnData;
+
+        public SpawnControls(ActionDelegate remove, ActionDelegate add) : base(remove, add)
+        {
+            bool found = false;
+            _iSpawnMapIndex = 0;
+            _liConfigData = new List<XMLData>();
+            foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.Config)
+            {
+                _liConfigData.Add(new XMLData(kvp.Key, kvp.Value, "", ""));
+
+                if (!found && !kvp.Value.ContainsKey("SpawnMap")) { _iSpawnMapIndex++; }
+                else { found = true; }
+            }
+
+            string[] maps = Util.GetEntries(DataManager.Config[7]["Maps"]);
+
+            _liButtons = new List<GUIObject>();
+
+            foreach (string m in maps)
+            {
+                string[] splitData = m.Split('-');
+                GUISpawnButton b = new GUISpawnButton(splitData[0], splitData[1], splitData[2], splitData[3], EnableButtons);
+                _liButtons.Add(b);
+
+                int index = _liButtons.Count - 1;
+                if (_liButtons.Count == 1) { b.AnchorToScreen(SideEnum.TopLeft, 10); }
+                else if ((float)_liButtons.Count % 6f == 0) { b.AnchorAndAlignToObject(_liButtons[index - 5], SideEnum.Right, SideEnum.Bottom, 10); }
+                else { b.AnchorAndAlignToObject(_liButtons[index - 1], SideEnum.Bottom, SideEnum.Left, 10); }
+            }
+
+            EnableButtons();
+
+            AddControls(_liButtons);
+        }
+
+        public override bool ProcessRightButtonClick(Point mouse)
+        {
+            _delRemove(this);
+            _delAdd(new Menu(_delRemove, _delAdd));
+
+            _liConfigData[_iSpawnMapIndex].SetTagInfo("SpawnMap", targetSpawnData.SpawnMap+ "-" + targetSpawnData.X + "-" + targetSpawnData.Y);
+
+            SaveManager.SaveXMLData(_liConfigData, PATH_TO_DATA + @"\Config.xml");
+
+            return true;
+        }
+
+        public void EnableButtons()
+        {
+            foreach(GUISpawnButton b in _liButtons)
+            {
+                bool match = MapManager.SpawnMap == b.MapName;
+                b.Enable(!match);
+
+                if (match)
+                {
+                    targetSpawnData = new SpawnData(b.MapName, b.TileX, b.TileY);
+                }
+            }
+        }
+
+        class GUISpawnButton : GUIButton
+        {
+            string _sMapName;
+            public string MapName => _sMapName;
+
+            int _iX;
+            public int TileX => _iX;
+            int _iY;
+            public int TileY => _iY;
+
+            public GUISpawnButton(string name, string map, string x, string y, BtnClickDelegate del) : base (name, del)
+            {
+                _sMapName = map;
+                _iX = int.Parse(x);
+                _iY = int.Parse(y);
+            }
+
+            public override bool ProcessLeftButtonClick(Point mouse)
+            {
+                bool rv = false;
+                if (Contains(mouse))
+                {
+                    MapManager.SetSpawnMap(_sMapName, _iX, _iY);
+                    _delAction();
+                }
+
+                return rv;
+            }
+        }
+    }
+
+    class ItemDataControls : TransitionalObject
     {
         #region XML Files
         string QUEST_XML_FILE = PATH_TO_DATA + @"\Quests.xml";
@@ -64,7 +244,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         static ItemXMLData _heldData;
 
-        public ItemDataScreen()
+        public ItemDataControls(ActionDelegate remove, ActionDelegate add) : base(remove, add)
         {
             _diMapData = new Dictionary<string, TMXData>();
             _diBasicXML = new Dictionary<string, List<XMLData>>();
@@ -130,21 +310,6 @@ namespace RiverHollow.GUIComponents.Screens
             AddControl(_btnAddNew);
         }
 
-        public override bool ProcessLeftButtonClick(Point mouse)
-        {
-            bool rv = false;
-            if (_gMainObject != null)
-            {
-                rv = _gMainObject.ProcessLeftButtonClick(mouse);
-            }
-            else
-            {
-                rv = base.ProcessLeftButtonClick(mouse);
-            }
-
-            return rv;
-        }
-
         /// <summary>
         /// Right-click to back out as usual.
         /// 
@@ -153,7 +318,8 @@ namespace RiverHollow.GUIComponents.Screens
         public override bool ProcessRightButtonClick(Point mouse)
         {
             _heldData = null;
-            GUIManager.SetScreen(new IntroMenuScreen());
+            _delRemove(this);
+            _delAdd(new Menu(_delRemove, _delAdd));
 
             return true;
         }
@@ -429,20 +595,6 @@ namespace RiverHollow.GUIComponents.Screens
             GUIManager.OpenMainObject(new ItemEditor());
         }
 
-        #region Main Object
-        public override void OpenMainObject(GUIMainObject o)
-        {
-            RemoveControl(_gMainObject);
-            _gMainObject = o;
-            AddControl(_gMainObject);
-        }
-        public override void CloseMainObject()
-        {
-            RemoveControl(_gMainObject);
-            _gMainObject = null;
-        }
-        #endregion
-
         class ItemEditor : GUIMainObject
         {
             GUIWindow _gWin;
@@ -685,7 +837,8 @@ namespace RiverHollow.GUIComponents.Screens
         protected List<TMXData> _liLinkedMaps;
         protected Dictionary<string, string> _diTags;
 
-        public XMLData(int id, Dictionary<string, string> stringData, string itemTags, string objectTags) {
+        public XMLData(int id, Dictionary<string, string> stringData, string itemTags, string objectTags)
+        {
             _liLinkedMaps = new List<TMXData>();
             _liLinkedItems = new List<XMLData>();
             _arrItemTags = itemTags.Split(',');
@@ -712,6 +865,19 @@ namespace RiverHollow.GUIComponents.Screens
             return rv;
         }
 
+        public string GetTagInfo(string key)
+        {
+            return _diTags[key];
+        }
+        public void SetTagInfo(string key, string value)
+        {
+            _diTags[key] = value;
+        }
+        public void AppendToTag(string key, string value)
+        {
+            _diTags[key] += "|" + value;
+        }
+
         /// <summary>
         /// Checks the tags to see if there are any references to the given ID
         /// among the relevant tags.
@@ -722,7 +888,8 @@ namespace RiverHollow.GUIComponents.Screens
         {
             bool rv = false;
 
-            foreach(string s in (item ? _arrItemTags : _arrWorldObjectTags)){
+            foreach (string s in (item ? _arrItemTags : _arrWorldObjectTags))
+            {
                 CheckTagForID(s, id, ref rv);
             }
 
@@ -739,13 +906,13 @@ namespace RiverHollow.GUIComponents.Screens
         /// <param name="id">The ID to look for</param>
         /// <param name="val">Reference to the success or this and other checks</param>
         /// <returns>True if a match exists</returns>
-       private void CheckTagForID(string tag, int id, ref bool val)
+        private void CheckTagForID(string tag, int id, ref bool val)
         {
             //If we don't have the key, don't proceed
             if (_diTags.ContainsKey(tag))
             {
                 //Isolate every group of entries that aredelineated by the '|'
-                string[] split = _diTags[tag].Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] split = Util.GetEntries(_diTags[tag]);
                 foreach (string s in split)
                 {
                     //The first entry is always the item, split by the '-', find it and compare
@@ -780,7 +947,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                 foreach (TMXData d in _liLinkedMaps)
                 {
-                    d.ReplaceID(ItemDataScreen.MAP_WORLD_OBJECTS_TAG, oldID, newID);
+                    d.ReplaceID(ItemDataControls.MAP_WORLD_OBJECTS_TAG, oldID, newID);
                 }
             }
         }
@@ -813,7 +980,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (_diTags.ContainsKey(tag))
             {
                 //Isolate every group of entries that are delineated by the '|'
-                string[] split = _diTags[tag].Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] split = Util.GetEntries(_diTags[tag]);
                 _diTags[tag] = string.Empty;
                 for (int i = 0; i < split.Length; i++)
                 {
@@ -824,7 +991,7 @@ namespace RiverHollow.GUIComponents.Screens
                     string[] splitData = split[i].Split('-');
                     if (splitData[0] == oldID.ToString())
                     {
-                        splitData[0] = ItemDataScreen.SPECIAL + newID.ToString() + ItemDataScreen.SPECIAL;
+                        splitData[0] = ItemDataControls.SPECIAL + newID.ToString() + ItemDataControls.SPECIAL;
                     }
 
                     //Iterate over any linked values and concatenate them to re-add them to the entry
@@ -875,12 +1042,12 @@ namespace RiverHollow.GUIComponents.Screens
         /// </summary>
         public void StripSpecialCharacter()
         {
-            foreach(string s in new List<string>(_diTags.Keys))
+            foreach (string s in new List<string>(_diTags.Keys))
             {
-                if (_diTags[s].Contains(ItemDataScreen.SPECIAL))
+                if (_diTags[s].Contains(ItemDataControls.SPECIAL))
                 {
                     string val = _diTags[s];
-                    _diTags[s] = val.Replace(ItemDataScreen.SPECIAL, "");
+                    _diTags[s] = val.Replace(ItemDataControls.SPECIAL, "");
                 }
             }
         }
@@ -1002,7 +1169,7 @@ namespace RiverHollow.GUIComponents.Screens
                         if (propertyName.Equals(tag))
                         {
                             //Split the values in the property value by the '|' delimeter 
-                            string[] splitValues = propertyValue.Split('|');
+                            string[] splitValues = Util.GetEntries(propertyValue);
                             foreach (string spVal in splitValues)
                             {
                                 //Do we have a match? return true
@@ -1057,14 +1224,14 @@ namespace RiverHollow.GUIComponents.Screens
                         if (propertyName.Equals(tag))
                         {
                             //Split the values in the property value by the '|' delimeter 
-                            string[] splitValues = propertyValue.Split('|');
+                            string[] splitValues = Util.GetEntries(propertyValue);
                             for (int j = 0; j < splitValues.Length; j++)
                             {
                                 //If we found a match, set the flag to true and overwrite the value of this string
                                 if (splitValues[j] == oldID.ToString())
                                 {
                                     found = true;
-                                    splitValues[j] = ItemDataScreen.SPECIAL + newID.ToString() + ItemDataScreen.SPECIAL;
+                                    splitValues[j] = ItemDataControls.SPECIAL + newID.ToString() + ItemDataControls.SPECIAL;
                                 }
 
                                 //Concatenate it to the newValue
@@ -1140,10 +1307,10 @@ namespace RiverHollow.GUIComponents.Screens
             for (int i = 0; i < _liAllLines.Count; i++)
             {
                 string s = _liAllLines[i];
-                if (s.Contains(ItemDataScreen.SPECIAL))
+                if (s.Contains(ItemDataControls.SPECIAL))
                 {
                     string val = s;
-                    _liAllLines[i] = val.Replace(ItemDataScreen.SPECIAL, "");
+                    _liAllLines[i] = val.Replace(ItemDataControls.SPECIAL, "");
                 }
             }
         }

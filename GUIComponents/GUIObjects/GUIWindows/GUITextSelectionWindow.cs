@@ -5,6 +5,7 @@ using RiverHollow.Game_Managers.GUIObjects;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.Misc;
 
 namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 {
@@ -46,7 +47,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             {
                 _sStatement = firstPass[0];
 
-                string[] secondPass = firstPass[1].Split('|');
+                string[] secondPass = Util.GetEntries(firstPass[1]);
                 int key = 0;
                 foreach (string s in secondPass)
                 {

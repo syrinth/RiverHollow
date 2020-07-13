@@ -295,7 +295,13 @@ namespace RiverHollow.GUIObjects
 
             _dScale = x;
         }
-
+        public virtual void AddControls(List<GUIObject> list)
+        {
+            foreach (GUIObject o in list)
+            {
+                AddControl(o);
+            }
+        }
         public virtual void AddControl(GUIObject g)
         {
             if (g != null && g.MemberOf == null && !Controls.Contains(g))

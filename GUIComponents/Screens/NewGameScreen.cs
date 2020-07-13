@@ -5,6 +5,7 @@ using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIObjects;
+using RiverHollow.Misc;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
@@ -45,8 +46,8 @@ namespace RiverHollow.GUIComponents.Screens
 
         public NewGameScreen()
         {
-            AssignClothes(ref _liHats, DataManager.Config[4]["ItemID"].Split('|'));
-            AssignClothes(ref _liShirts, DataManager.Config[5]["ItemID"].Split('|'));
+            AssignClothes(ref _liHats, Util.GetEntries(DataManager.Config[4]["ItemID"]));
+            AssignClothes(ref _liShirts, Util.GetEntries(DataManager.Config[5]["ItemID"]));
 
             int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIWindow.BrownWin.Edge;
 

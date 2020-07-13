@@ -102,7 +102,7 @@ namespace RiverHollow.WorldObjects
             if (stringData.ContainsKey("ReqItems"))
             {
                 //Split by "|" for each item set required
-                string[] split = stringData["ReqItems"].Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] split = Util.GetEntries(stringData["ReqItems"]);
                 foreach(string s in split)
                 {
                     string[] splitData = s.Split('-');

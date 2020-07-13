@@ -30,10 +30,15 @@ namespace RiverHollow.Game_Managers
                 EnteredBuilding = b;
             }
         }//[Friends:1-30]
+
         public const string HomeMap = "mapManorGrounds";
-        public const string SpawnMap = "mapForest_08"; //"mapManorGrounds"; //"mapForest_01"; //"mapRiverHollowTown"; //"mapSpringDungeonC"; // "mapRiverHollowTown"; //;
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
+
+        static string _sSpawnMap;
+        public static string SpawnMap => _sSpawnMap;
+        static Vector2 _vSpawnTile;
+        public static Vector2 SpawnTile => _vSpawnTile;
 
         static Dictionary<string, RHMap> _tileMaps;
         public static Dictionary<string, RHMap> Maps { get => _tileMaps; }
@@ -58,7 +63,8 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            _currentMap = _tileMaps[MapManager.SpawnMap];
+            string[] defaultInfo = DataManager.Config[7]["SpawnMap"].Split('-');
+            SetSpawnMap(defaultInfo[0], int.Parse(defaultInfo[1]), int.Parse(defaultInfo[2]));
         }
         public static void LoadObjects()
         {
@@ -66,6 +72,17 @@ namespace RiverHollow.Game_Managers
             {
                 m.LoadMapObjects();
             }
+        }
+
+        /// <summary>
+        /// Sets the map that the player character will spawn on at" the start of thegame
+        /// </summary>
+        /// <param name="map">The name of the map</param>
+        public static void SetSpawnMap(string map, int x, int y)
+        {
+            _sSpawnMap = map;
+            _currentMap = _tileMaps[MapManager._sSpawnMap];
+            _vSpawnTile = new Vector2(x, y);
         }
 
         public static void AddMap(string mapToAdd, ContentManager Content, GraphicsDevice GraphicsDevice)

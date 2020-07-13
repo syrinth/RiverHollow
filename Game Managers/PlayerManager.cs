@@ -85,7 +85,7 @@ namespace RiverHollow.Game_Managers
             _canMake.Add(190);
 
             CurrentMap = MapManager.CurrentMap.Name;
-            World.Position = Util.SnapToGrid(MapManager.Maps[CurrentMap].GetCharacterSpawn("PlayerSpawn"));
+            World.Position = Util.GetMapPositionOfTile(MapManager.SpawnTile);
 
             AddTesting();
         }
@@ -93,7 +93,7 @@ namespace RiverHollow.Game_Managers
         public static void AddTesting()
         {
             Dictionary<string, string> diTesting = DataManager.Config[0];
-            string[] splitItemValues = diTesting["ItemID"].Split('|');
+            string[] splitItemValues = Util.GetEntries(diTesting["ItemID"]);
             foreach (string s in splitItemValues)
             {
                 string[] splitString = s.Split('-');

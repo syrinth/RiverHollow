@@ -50,6 +50,21 @@ namespace RiverHollow.Misc
             return newVec;
         }
 
+        /// <summary>
+        /// Takes in a Vector2 representing a tile on the map and converts it to find its
+        /// actual pixel world position.
+        /// </summary>
+        /// <param name="tile">The Vector2 of the tile</param>
+        /// <returns>The world position</returns>
+        public static Vector2 GetMapPositionOfTile(Vector2 tile)
+        {
+            Vector2 newVec = Vector2.Zero;
+            newVec.X = tile.X * TileSize;
+            newVec.Y = tile.Y  * TileSize;
+
+            return newVec;
+        }
+
         public static Vector2 GetGridCoords(int x, int y)
         {
             return GetGridCoords(new Vector2(x, y));
@@ -193,6 +208,10 @@ namespace RiverHollow.Misc
         public static string[] FindTags(string data)
         {
             return data.Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+        }
+        public static string[] GetEntries(string data)
+        {
+            return data.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         public static String NumToString(int number, bool isCaps)

@@ -432,7 +432,7 @@ namespace RiverHollow.WorldObjects
                 //Read in what items the machine processes
                 if (stringData.ContainsKey("Processes"))
                 {
-                    string[] processes = stringData["Processes"].Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] processes = Util.GetEntries(stringData["Processes"]);
                     foreach (string recipe in processes)
                     {
                         string[] pieces = recipe.Split('-');
@@ -443,7 +443,7 @@ namespace RiverHollow.WorldObjects
                 //Read in what items the machine can make
                 if (stringData.ContainsKey("Makes"))
                 {
-                    string[] processes = stringData["Makes"].Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] processes = Util.GetEntries(stringData["Makes"]);
                     foreach (string recipe in processes)
                     {
                         string[] pieces = recipe.Split('-');

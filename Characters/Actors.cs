@@ -566,7 +566,7 @@ namespace RiverHollow.Actors
             Util.ProcessText(text, _sName);
 
             string[] textFromData = Util.FindTags(text);
-            string[] options = textFromData[1].Split('|');
+            string[] options = Util.GetEntries(textFromData[1]);
 
             List<string> liCommands = RemoveEntries(options);
 
@@ -1675,7 +1675,7 @@ namespace RiverHollow.Actors
 
             if (data.ContainsKey("Collection"))
             {
-                string[] vectorSplit = data["Collection"].Split('|');
+                string[] vectorSplit = Util.GetEntries(data["Collection"]);
                 foreach (string s in vectorSplit)
                 {
                     _diCollection.Add(int.Parse(s), false);
@@ -1691,7 +1691,7 @@ namespace RiverHollow.Actors
                     string[] group = kvp.Value.Split('/');
                     foreach (string s in group)
                     {
-                        string[] strSchedule = s.Split('|');
+                        string[] strSchedule = Util.GetEntries(s);
                         temp.Add(new KeyValuePair<string, string>(strSchedule[0], strSchedule[1]));
                     }
                     _diCompleteSchedule.Add(kvp.Key, temp);
@@ -2298,7 +2298,7 @@ namespace RiverHollow.Actors
 
                 if (stringData.ContainsKey("Requires"))
                 {
-                    string[] reqItems = stringData["Requires"].Split('|');
+                    string[] reqItems = Util.GetEntries(stringData["Requires"]);
                     foreach (string str in reqItems)
                     {
                         string[] itemsSplit = str.Split('-');

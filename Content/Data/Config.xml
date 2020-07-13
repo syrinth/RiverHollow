@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[ObjectID:0]</Value>
+      <Value>[ObjectID:18]</Value>
     </Item>
     <Item>
       <Key>4</Key>
@@ -28,6 +28,10 @@
     <Item>
       <Key>6</Key>
       <Value>[ItemID:128]</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>[SpawnMap:mapRiverHollowTown-46-58][Maps:Manor-mapManorGrounds-8-31|Forest8-mapForest_08-17-6|Forest1-mapForest_01-18-7|Town-mapRiverHollowTown-46-58]</Value>
     </Item>
   </Asset>
 </XnaContent>
