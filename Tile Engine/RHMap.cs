@@ -2012,7 +2012,7 @@ namespace RiverHollow.Tile_Engine
             {
                 return _arrTiles[x / TileSize, y / TileSize];
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -2708,7 +2708,6 @@ namespace RiverHollow.Tile_Engine
                     }
                     break;
                 case DirectionEnum.Up:
-                    RHTile rv = null;
                     if (this.Y > 0)
                     {
                         rvTile = MyMap().GetTileByGridCoords(this.X, this.Y - 1);

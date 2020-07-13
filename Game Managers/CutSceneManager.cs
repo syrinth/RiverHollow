@@ -16,7 +16,7 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Cutscene> _diCutscenes;
         static Dictionary<int, Dictionary<string, string>> _diCutsceneDialogue;
         public static bool Playing;
-
+        
         /// <summary>
         /// Loads the Cutscenesinto theManager
         /// </summary>
@@ -53,8 +53,8 @@ namespace RiverHollow.Game_Managers
 
         /// <summary>
         /// When called, iterates over every CutScene in the list and checkto see
-        /// if the coditions are right for it to have been called.If so, set it up and 
-        /// confirm thatwe are playinga Cutscene.
+        /// if the coditions are right for it to have been called. If so, set it up and 
+        /// confirm that we are playing a Cutscene.
         /// </summary>
         /// <param name="Content">The Content pipeline</param>
         public static void CheckForTriggedCutscene(int id)

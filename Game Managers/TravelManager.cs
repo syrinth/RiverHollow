@@ -16,14 +16,31 @@ namespace RiverHollow.Game_Managers
         private static int _iMaxPath = -1;
         private static WorldActor _actTraveller;
 
+        public static bool IsDebugEnabled()
+        {
+            bool rv=false;
+            if (DataManager.Config[8]["DebugLogs"].Equals("Enabled"))
+            {
+                rv=true;
+            }
+            return rv;
+        }
+
+
         public static void NewTravelLog(string name)
         {
-            _swWriter = new StreamWriter(@"C:\Users\Syrinth\Desktop\Travel Manager\" + name + " - TravelManager.txt");
+            if (IsDebugEnabled())
+            {
+                _swWriter = new StreamWriter(DataManager.Config[8]["DebugPath"] + name + " - TravelManager.txt");
+            }
         }
 
         public static void CloseTravelLog()
         {
-            _swWriter.Close();
+            if (IsDebugEnabled())
+            {
+                _swWriter.Close();
+            }
         }
 
         /// <summary>
@@ -34,9 +51,13 @@ namespace RiverHollow.Game_Managers
         {
             try
             {
-                _swWriter.WriteLine(text);
+                if (IsDebugEnabled())
+                {
+                    _swWriter.WriteLine(text);
+                }
             }
-            catch (Exception e){ 
+            catch (Exception)
+            {
             }
         }
 
