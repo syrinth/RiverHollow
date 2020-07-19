@@ -16,11 +16,25 @@ namespace RiverHollow.GUIComponents.Screens
 {
     class DataScreen : GUIScreen
     {
+        GUIMainObject _gMainObject;
+
         GUIObject _gObject;
         public DataScreen()
         {
             _gObject = new Menu(RemoveControl, AddControl);
             AddControl(_gObject);
+        }
+
+        public override void OpenMainObject(GUIMainObject o)
+        {
+            RemoveControl(_gMainObject);
+            _gMainObject = o;
+            AddControl(_gMainObject);
+        }
+        public override void CloseMainObject()
+        {
+            RemoveControl(_gMainObject);
+            _gMainObject = null;
         }
     }
 
@@ -103,7 +117,6 @@ namespace RiverHollow.GUIComponents.Screens
         List<GUIObject> _liButtons;
         Dictionary<int, string> _diConfig;
         SpawnData targetSpawnData;
-        GUITextInputWindow _gAddNew;
         GUIButton _btnAddNew;
 
         public SpawnControls(ActionDelegate remove, ActionDelegate add) : base(remove, add)
@@ -125,28 +138,13 @@ namespace RiverHollow.GUIComponents.Screens
 
             foreach (string m in maps)
             {
-                string[] splitData = m.Split('-');
-                GUISpawnButton b = new GUISpawnButton(splitData[0], splitData[1], splitData[2], splitData[3], EnableButtons);
-                _liButtons.Add(b);
-
-                int index = _liButtons.Count - 1;
-                if (_liButtons.Count == 1) { b.AnchorToScreen(SideEnum.TopLeft, 10); }
-                else if ((float)_liButtons.Count % 6f == 0) { b.AnchorAndAlignToObject(_liButtons[index - 5], SideEnum.Right, SideEnum.Bottom, 10); }
-                else { b.AnchorAndAlignToObject(_liButtons[index - 1], SideEnum.Bottom, SideEnum.Left, 10); }
+                AddButton(m);
             }
 
             EnableButtons();
 
-            AddControls(_liButtons);
-
-            _gAddNew = new GUITextInputWindow("New Spawn:", SideEnum.Left, 30);
-            _gAddNew.AllowAll = true;
-            _gAddNew.Activate();
-            _gAddNew.AnchorToScreen(SideEnum.BottomRight);
-            AddControl(_gAddNew);
-
-            _btnAddNew = new GUIButton("Add", AddNew);
-            _btnAddNew.AnchorAndAlignToObject(_gAddNew, SideEnum.Left, SideEnum.Bottom);
+            _btnAddNew = new GUIButton("New Point", OpenSpawnEditor);
+            _btnAddNew.AnchorToScreen(SideEnum.BottomRight);
             AddControl(_btnAddNew);
         }
 
@@ -158,6 +156,8 @@ namespace RiverHollow.GUIComponents.Screens
             _liConfigData[_iSpawnMapIndex].SetTagInfo("SpawnMap", targetSpawnData.SpawnMap+ "-" + targetSpawnData.X + "-" + targetSpawnData.Y);
 
             SaveManager.SaveXMLData(_liConfigData, PATH_TO_DATA + @"\Config.xml");
+
+            GUIManager.CloseMainObject();
 
             return true;
         }
@@ -176,9 +176,29 @@ namespace RiverHollow.GUIComponents.Screens
             }
         }
 
-        public void AddNew()
+        public void OpenSpawnEditor()
         {
-            _liConfigData[7].AppendToTag("Maps", _gAddNew.EnteredText);
+            GUIManager.OpenMainObject(new SpawnEditor(AddNew));
+        }
+
+        public void AddNew(string value)
+        {
+            AddButton(value);
+            _liConfigData[7].AppendToTag("Maps", value);
+        }
+
+        private void AddButton(string m)
+        {
+            string[] splitData = m.Split('-');
+            GUISpawnButton b = new GUISpawnButton(splitData[0], splitData[1], splitData[2], splitData[3], EnableButtons);
+            _liButtons.Add(b);
+
+            int index = _liButtons.Count - 1;
+            if (_liButtons.Count == 1) { b.AnchorToScreen(SideEnum.TopLeft, 10); }
+            else if ((float)_liButtons.Count % 6f == 0) { b.AnchorAndAlignToObject(_liButtons[index - 5], SideEnum.Right, SideEnum.Bottom, 10); }
+            else { b.AnchorAndAlignToObject(_liButtons[index - 1], SideEnum.Bottom, SideEnum.Left, 10); }
+
+            AddControlDelayed(b);
         }
 
         class GUISpawnButton : GUIButton
@@ -208,6 +228,71 @@ namespace RiverHollow.GUIComponents.Screens
                 }
 
                 return rv;
+            }
+        }
+
+        class SpawnEditor : GUIMainObject
+        {
+            GUIWindow _gWin;
+            GUITextInputWindow _gName;
+            GUITextInputWindow _gMap;
+            GUITextInputWindow _gX;
+            GUITextInputWindow _gY;
+            GUIButton _btnSave;
+
+            public delegate void SpawnSaveDelegate(string value);
+            protected SpawnSaveDelegate _delAction;
+
+            public SpawnEditor(SpawnSaveDelegate action)
+            {
+                _delAction = action;
+                _gWin = SetMainWindow();
+
+                _gName = new GUITextInputWindow("Name:", SideEnum.Left, 10);
+                _gName.AnchorToInnerSide(_gWin, SideEnum.TopLeft);
+                _gMap = new GUITextInputWindow("MapName:", SideEnum.Left, 60);
+                _gMap.AllowAll = true;
+                _gMap.AnchorAndAlignToObject(_gName, SideEnum.Bottom, SideEnum.Left);
+                _gX = new GUITextInputWindow("X:", SideEnum.Left, 3);
+                _gX.AllowAll = true;
+                _gX.AnchorAndAlignToObject(_gMap, SideEnum.Bottom, SideEnum.Left);
+                _gY = new GUITextInputWindow("Y:", SideEnum.Left, 3);
+                _gY.AllowAll = true;
+                _gY.AnchorAndAlignToObject(_gX, SideEnum.Bottom, SideEnum.Left);
+                _gName.AllowAll = true;
+
+                _btnSave = new GUIButton("Save", BtnSave);
+                _btnSave.AnchorToInnerSide(_gWin, SideEnum.BottomRight);
+            }
+
+            private void BtnSave()
+            {
+                string value = _gName.GetText() + "-" + _gMap.GetText() + "-" + _gX.GetText() + "-" + _gY.GetText();
+
+                _delAction(value);
+
+                GUIManager.CloseMainObject();
+            }
+
+            public override bool ProcessLeftButtonClick(Point mouse)
+            {
+                bool rv = false;
+                rv = _btnSave.ProcessLeftButtonClick(mouse);
+                if (_gName.Contains(mouse)) { SetSelection(_gName); }
+                else if (_gMap.Contains(mouse)) { SetSelection(_gMap); }
+                else if (_gX.Contains(mouse)) { SetSelection(_gX); }
+                else if (_gY.Contains(mouse)) { SetSelection(_gY); }
+                else { SetSelection(null); }
+
+                return rv;
+            }
+
+            private void SetSelection(GUITextInputWindow g)
+            {
+                _gName.Activate(g == _gName);
+                _gMap.Activate(g == _gMap);
+                _gX.Activate(g == _gX);
+                _gY.Activate(g == _gY);
             }
         }
     }
@@ -656,52 +741,20 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 bool rv = false;
                 rv = _btnSave.ProcessLeftButtonClick(mouse);
-                if (_gName.Contains(mouse))
-                {
-                    SetSelection(_gName);
-                }
-                else if (_gDescription.Contains(mouse))
-                {
-                    SetSelection(_gDescription);
-                }
-                else if (_gDetails.Contains(mouse))
-                {
-                    SetSelection(_gDetails);
-                }
-                else
-                {
-                    SetSelection(null);
-                }
+
+                if (_gName.Contains(mouse)) { SetSelection(_gName); }
+                else if (_gDescription.Contains(mouse)) { SetSelection(_gDescription); }
+                else if (_gDetails.Contains(mouse)) { SetSelection(_gDetails); }
+                else { SetSelection(null); }
 
                 return rv;
             }
 
             private void SetSelection(GUITextInputWindow g)
             {
-                if (g == _gName)
-                {
-                    _gName.Activate();
-                    _gDescription.Activate(false);
-                    _gDetails.Activate(false);
-                }
-                else if (g == _gDescription)
-                {
-                    _gDescription.Activate();
-                    _gName.Activate(false);
-                    _gDetails.Activate(false);
-                }
-                else if (g == _gDetails)
-                {
-                    _gDetails.Activate();
-                    _gName.Activate(false);
-                    _gDescription.Activate(false);
-                }
-                else
-                {
-                    _gDescription.Activate();
-                    _gDetails.Activate(false);
-                    _gDetails.Activate(false);
-                }
+                _gName.Activate(g == _gName);
+                _gDescription.Activate(g == _gDescription);
+                _gDetails.Activate(g == _gDetails);
             }
         }
 

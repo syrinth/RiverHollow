@@ -11,6 +11,7 @@ namespace RiverHollow.GUIObjects
     public class GUIObject
     {
         public GUIObject MemberOf;
+        private List<GUIObject> ToAdd;
         internal List<GUIObject> Controls;
 
         GUIWindow _parentControl;
@@ -77,6 +78,7 @@ namespace RiverHollow.GUIObjects
 
         public GUIObject() {
             Controls = new List<GUIObject>();
+            ToAdd = new List<GUIObject>();
         }
         public GUIObject(GUIObject g) : this()
         {
@@ -90,6 +92,12 @@ namespace RiverHollow.GUIObjects
             return Show && DrawRectangle.Contains(mouse);
         }
         public virtual void Update(GameTime gTime) {
+            foreach (GUIObject g in ToAdd)
+            {
+                Controls.Add(g);
+            }
+            ToAdd.Clear();
+
             foreach (GUIObject g in Controls)
             {
                 g.Update(gTime);
@@ -307,6 +315,14 @@ namespace RiverHollow.GUIObjects
             if (g != null && g.MemberOf == null && !Controls.Contains(g))
             {
                 Controls.Add(g);
+                g.MemberOf = this;
+            }
+        }
+        public virtual void AddControlDelayed(GUIObject g)
+        {
+            if (g != null && g.MemberOf == null && (!Controls.Contains(g) && !ToAdd.Contains(g)))
+            {
+                ToAdd.Add(g);
                 g.MemberOf = this;
             }
         }
