@@ -24,7 +24,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
         protected bool _bFinished;
         public bool Finished => _bFinished;
         public bool AcceptSpace;
-        public bool TakeInput = false;
+        bool _bTakeInput;
 
         public string EnteredText => _gText.Text;
 
@@ -36,9 +36,11 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
             _gMarker = new GUIMarker();
             _iCurr = 0;
             _iMaxLength = maxLength != -1 ? maxLength : GameManager.MAX_NAME_LEN;
+
+            _bTakeInput = false;
         }
 
-        public GUITextInputWindow(string statement, SideEnum textLoc, int maxLength = -1) : this(maxLength)
+        public GUITextInputWindow(string statement, SideEnum textLoc, int maxLength = -1) : this (maxLength)
         {
             StatementSetup(statement, textLoc);
             _textLoc = textLoc;
@@ -93,7 +95,7 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
 
         public override void Update(GameTime gTime)
         {
-            if (TakeInput)
+            if (_bTakeInput)
             {
                 _gMarker.Update(gTime);
                 foreach (Keys k in InputManager.KeyDownDictionary.Keys.ToList())
@@ -151,6 +153,12 @@ namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
                     }
                 }
             }
+        }
+
+        public void Activate(bool value = true)
+        {
+            _bTakeInput = value;
+            if (!value) { HideCursor(); }
         }
 
         public void IncrementMarker()

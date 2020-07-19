@@ -2018,7 +2018,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 _gInputWindow = new GUITextInputWindow();
                 _gInputWindow.SetupNaming();
-                _gInputWindow.TakeInput = true;
+                _gInputWindow.Activate();
             }
 
             /// <summary>

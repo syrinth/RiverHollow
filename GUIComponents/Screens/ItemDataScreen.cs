@@ -103,6 +103,8 @@ namespace RiverHollow.GUIComponents.Screens
         List<GUIObject> _liButtons;
         Dictionary<int, string> _diConfig;
         SpawnData targetSpawnData;
+        GUITextInputWindow _gAddNew;
+        GUIButton _btnAddNew;
 
         public SpawnControls(ActionDelegate remove, ActionDelegate add) : base(remove, add)
         {
@@ -136,6 +138,16 @@ namespace RiverHollow.GUIComponents.Screens
             EnableButtons();
 
             AddControls(_liButtons);
+
+            _gAddNew = new GUITextInputWindow("New Spawn:", SideEnum.Left, 30);
+            _gAddNew.AllowAll = true;
+            _gAddNew.Activate();
+            _gAddNew.AnchorToScreen(SideEnum.BottomRight);
+            AddControl(_gAddNew);
+
+            _btnAddNew = new GUIButton("Add", AddNew);
+            _btnAddNew.AnchorAndAlignToObject(_gAddNew, SideEnum.Left, SideEnum.Bottom);
+            AddControl(_btnAddNew);
         }
 
         public override bool ProcessRightButtonClick(Point mouse)
@@ -162,6 +174,11 @@ namespace RiverHollow.GUIComponents.Screens
                     targetSpawnData = new SpawnData(b.MapName, b.TileX, b.TileY);
                 }
             }
+        }
+
+        public void AddNew()
+        {
+            _liConfigData[7].AppendToTag("Maps", _gAddNew.EnteredText);
         }
 
         class GUISpawnButton : GUIButton
@@ -663,36 +680,27 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 if (g == _gName)
                 {
-                    _gName.TakeInput = true;
-                    _gDescription.TakeInput = false;
-                    _gDescription.HideCursor();
-                    _gDetails.TakeInput = false;
-                    _gDetails.HideCursor();
+                    _gName.Activate();
+                    _gDescription.Activate(false);
+                    _gDetails.Activate(false);
                 }
                 else if (g == _gDescription)
                 {
-                    _gDescription.TakeInput = true;
-                    _gName.TakeInput = false;
-                    _gName.HideCursor();
-                    _gDetails.TakeInput = false;
-                    _gDetails.HideCursor();
+                    _gDescription.Activate();
+                    _gName.Activate(false);
+                    _gDetails.Activate(false);
                 }
                 else if (g == _gDetails)
                 {
-                    _gDetails.TakeInput = true;
-                    _gName.TakeInput = false;
-                    _gName.HideCursor();
-                    _gDescription.TakeInput = false;
-                    _gDescription.HideCursor();
+                    _gDetails.Activate();
+                    _gName.Activate(false);
+                    _gDescription.Activate(false);
                 }
                 else
                 {
-                    _gDescription.TakeInput = false;
-                    _gDescription.HideCursor();
-                    _gDetails.TakeInput = false;
-                    _gDetails.HideCursor();
-                    _gDetails.TakeInput = false;
-                    _gDetails.HideCursor();
+                    _gDescription.Activate();
+                    _gDetails.Activate(false);
+                    _gDetails.Activate(false);
                 }
             }
         }

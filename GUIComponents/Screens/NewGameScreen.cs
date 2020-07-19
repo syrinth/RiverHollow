@@ -67,7 +67,7 @@ namespace RiverHollow.GUIComponents.Screens
             
             _nameWindow = new GUITextInputWindow("Character Name:", SideEnum.Left);
             _nameWindow.AnchorAndAlignToObject(_manorWindow, SideEnum.Bottom, SideEnum.Right );
-            _nameWindow.TakeInput = true;
+            _nameWindow.Activate();
 
             _liClassBoxes = new List<GUIObject>();
             for (int i = 1; i <= DataManager.GetWorkerNum(); i++) {
@@ -176,22 +176,18 @@ namespace RiverHollow.GUIComponents.Screens
         {
             if(g == _nameWindow)
             {
-                _nameWindow.TakeInput = true;
-                _manorWindow.TakeInput = false;
-                _manorWindow.HideCursor();
+                _nameWindow.Activate();
+                _manorWindow.Activate(false);
             }
             else if (g == _manorWindow)
-            { 
-                _nameWindow.TakeInput = false;
-                _manorWindow.TakeInput = true;
-                _nameWindow.HideCursor();
+            {
+                _manorWindow.Activate();
+                _nameWindow.Activate(false);
             }
             else
             {
-                _nameWindow.TakeInput = false;
-                _manorWindow.TakeInput = false;
-                _nameWindow.HideCursor();
-                _manorWindow.HideCursor();
+                _nameWindow.Activate(false);
+                _manorWindow.Activate(false);
             }
         }
         #region Button Logic

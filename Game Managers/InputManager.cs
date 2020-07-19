@@ -52,7 +52,10 @@ namespace RiverHollow.Game_Managers
                 if (key == Keys.Space) { rv = " "; }
                 else if (key == Keys.Back) { rv = "--"; }
                 else if (key == Keys.Delete) { rv = "-+"; }
-                else if (key == Keys.OemMinus) { rv = "-"; }
+                else if (key == Keys.OemMinus) {
+                    if (ShiftDown()) { rv = "_"; }
+                    else { rv = "-"; }
+                }
                 else if (key == Keys.OemOpenBrackets) { rv = "["; }
                 else if (key == Keys.OemCloseBrackets) { rv = "]"; }
                 else if (key == Keys.OemBackslash && ShiftDown()) { rv = "|"; }
