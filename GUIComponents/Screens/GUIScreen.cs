@@ -10,6 +10,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
     //Represents a complete collection of associated GUIs to be displayed on the screen
     public abstract class GUIScreen
     {
+        protected GUIMainObject _gMainObject;
         GUIImage _guiBackgroundImg;
         protected GUITextWindow _guiTextWindow;
         protected GUITextWindow _guiHoverWindow;
@@ -210,8 +211,17 @@ namespace RiverHollow.Game_Managers.GUIObjects
         }
 
         #region Main Object Control
-        public virtual void OpenMainObject(GUIMainObject o) { }
-        public virtual void CloseMainObject() { }
+        public virtual void OpenMainObject(GUIMainObject o)
+        {
+            RemoveControl(_gMainObject);
+            _gMainObject = o;
+            AddControl(_gMainObject);
+        }
+        public virtual void CloseMainObject()
+        {
+            RemoveControl(_gMainObject);
+            _gMainObject = null;
+        }
         #endregion
 
         public void AddControl(GUIObject control)

@@ -16,25 +16,11 @@ namespace RiverHollow.GUIComponents.Screens
 {
     class DataScreen : GUIScreen
     {
-        GUIMainObject _gMainObject;
-
         GUIObject _gObject;
         public DataScreen()
         {
             _gObject = new Menu(RemoveControl, AddControl);
             AddControl(_gObject);
-        }
-
-        public override void OpenMainObject(GUIMainObject o)
-        {
-            RemoveControl(_gMainObject);
-            _gMainObject = o;
-            AddControl(_gMainObject);
-        }
-        public override void CloseMainObject()
-        {
-            RemoveControl(_gMainObject);
-            _gMainObject = null;
         }
     }
 
@@ -162,6 +148,9 @@ namespace RiverHollow.GUIComponents.Screens
             return true;
         }
 
+        /// <summary>
+        /// Loops through the buttons to disable the button that matches with the current spawn map
+        /// </summary>
         public void EnableButtons()
         {
             foreach(GUISpawnButton b in _liButtons)
@@ -187,6 +176,13 @@ namespace RiverHollow.GUIComponents.Screens
             _liConfigData[7].AppendToTag("Maps", value);
         }
 
+        /// <summary>
+        /// Splits the given string into subcomponents to determine what information to
+        /// give to the new SpawnButton.
+        /// 
+        /// Then adds the button to the proper location on the screen
+        /// </summary>
+        /// <param name="m">Spawn Information</param>
         private void AddButton(string m)
         {
             string[] splitData = m.Split('-');
@@ -218,6 +214,11 @@ namespace RiverHollow.GUIComponents.Screens
                 _iY = int.Parse(y);
             }
 
+            /// <summary>
+            /// When pressed, set the game spawn information
+            /// </summary>
+            /// <param name="mouse"></param>
+            /// <returns></returns>
             public override bool ProcessLeftButtonClick(Point mouse)
             {
                 bool rv = false;
@@ -419,6 +420,7 @@ namespace RiverHollow.GUIComponents.Screens
         /// </summary>
         public override bool ProcessRightButtonClick(Point mouse)
         {
+            GUIManager.CloseMainObject();
             _heldData = null;
             _delRemove(this);
             _delAdd(new Menu(_delRemove, _delAdd));

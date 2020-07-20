@@ -27,7 +27,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
     public class HUDScreen : GUIScreen
     {
         GUIObject _gMenu;
-        GUIMainObject _gMainObject;
         GUIStatDisplay _gHealthDisplay;
         GUIStatDisplay _gStaminaDisplay;
         GUIMoneyDisplay _gMoney;
@@ -167,20 +166,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 _gMenu = null;
                 GameManager.Unpause();
             }
-        }
-        #endregion
-
-        #region Main Object
-        public override void OpenMainObject(GUIMainObject o)
-        {
-            RemoveControl(_gMainObject);
-            _gMainObject = o;
-            AddControl(_gMainObject);
-        }
-        public override void CloseMainObject()
-        {
-            RemoveControl(_gMainObject);
-            _gMainObject = null;
         }
         #endregion
     }
