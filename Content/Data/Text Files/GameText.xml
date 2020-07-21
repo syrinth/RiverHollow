@@ -22,8 +22,8 @@
       <Value>...[Talk:Talk|Join Party:Party]</Value>
     </Item>
     <Item>
-      <Key>Journal</Key>
-      <Value>Write in your journal and go to bed?[Yes:SleepNow|No:Cancel]</Value>
+      <Key>Save</Key>
+      <Value>Save and end the day?[Yes:EndDay|No:Cancel]</Value>
     </Item>
     <Item>
       <Key>ReallyExit</Key>

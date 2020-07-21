@@ -1132,9 +1132,9 @@ namespace RiverHollow.Tile_Engine
                 }
             }
 
-            if (tile.ContainsProperty("Journal", out string val) && val.Equals("true"))
+            if (tile.ContainsProperty("Save", out string val) && val.Equals("true"))
             {
-                GUIManager.OpenTextWindow(DataManager.GetGameText("Journal"));
+                GUIManager.OpenTextWindow(DataManager.GetGameText("Save"));
             }
 
             foreach (ShopData shop in _liShopData)

@@ -103,7 +103,7 @@ namespace RiverHollow.Game_Managers
 
         public static void ProcessTextInteraction(string selectedAction)
         {
-            if (selectedAction.Equals("SleepNow"))
+            if (selectedAction.Equals("EndDay"))
             {
                 Vector2 pos = PlayerManager.World.CollisionBox.Center.ToVector2();
                 PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]));
