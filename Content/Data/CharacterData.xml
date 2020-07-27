@@ -5,21 +5,65 @@
       <Key>0</Key>
       <Value>[Type:Villager][PortRow:1][HomeMap:mapManor1][Collection:0|1|2][Hover][Inactive][Idle:0-0-3-.3-T][Walk:0-0-3-.3-T]</Value>
     </Item>
+	<Item>
+      <Key>1</Key>
+      <Value>[Type:Eligible][PortRow:1][HomeMap:mapMagicShop][Collection:0|1|2][Class:1][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+	<Item>
+      <Key>2</Key>
+      <Value>[Type:Eligible][PortRow:1][HomeMap:mapApothecary][Collection:0|1|2][Class:2][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+	<Item>
+      <Key>3</Key>
+      <Value>[Type:Eligible][PortRow:1][HomeMap:mapTavern_Upper][Collection:0|1|2][Class:3][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+	<Item>
+      <Key>4</Key>
+      <Value>[Type:Eligible][PortRow:1][HomeMap:mapTavern_Upper][Collection:0|1|2][Class:4][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
     <Item>
       <Key>5</Key>
       <Value>[Type:Eligible][PortRow:1][HomeMap:mapHouseNPC1][Collection:0|1|2][Class:5][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
     </Item>
+	<Item>
+      <Key>6</Key>
+      <Value>[Type:Eligible][PortRow:1][HomeMap:mapGeneralStore][Collection:0|1|2][Class:6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+	<Item>
+      <Key>7</Key>
+      <Value>[Type:Eligible][PortRow:1][HomeMap:mapHouse_NPC3][Collection:0|1|2][Class:7][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+	<Item>
+      <Key>8</Key>
+      <Value>[Type:Eligible][PortRow:1][HomeMap:mapTavern][Collection:0|1|2][Class:8][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+	<Item>
+      <Key>9</Key>
+      <Value>[Type:Villager][PortRow:3][HomeMap:mapTavern][Collection:7|107][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+	<Item>
+      <Key>10</Key>
+      <Value>[Type:Villager][PortRow:3][HomeMap:mapTavern][Collection:7|107][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Villager][PortRow:3][HomeMap:mapRiverHollowTown][Collection:7|107][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Villager][PortRow:3][HomeMap:mapMayorsHouse][Collection:7|107][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+	<Item>
+      <Key>12</Key>
+      <Value>[Type:Villager][PortRow:3][HomeMap:mapMayorsHouse][Collection:7|107][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:ShopKeeper][PortRow:3][HomeMap:mapHouseNPC3][Collection:5|6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:ShopKeeper][PortRow:3][HomeMap:mapHouse_NPC3][Collection:5|6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:ShopKeeper][PortRow:3][HomeMap:mapHouseNPC3][Collection:7|130][ShopData:Buildings][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:ShopKeeper][PortRow:3][HomeMap:mapHouse_NPC3][Collection:7|130][ShopData:Buildings][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+	<Item>
+      <Key>15</Key>
+      <Value>[Type:ShopKeeper][PortRow:3][HomeMap:mapHouse_NPC3][Collection:7|130][ShopData:Buildings][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
     </Item>
     <Item>
       <Key>16</Key>
@@ -27,7 +71,7 @@
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Type:ShopKeeper][PortRow:3][HomeMap:mapRiverHollowTown][Collection:7|130][ShopData:MagicShop][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:ShopKeeper][PortRow:3][HomeMap:mapMagicShop][Collection:7|130][ShopData:MagicShop][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
     </Item>
     <Item>
       <Key>18</Key>
@@ -35,7 +79,11 @@
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Type:Villager][PortRow:3][HomeMap:mapRiverHollowTown][Collection:7|130][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Villager][PortRow:3][HomeMap:mapGeneralStore][Collection:7|130][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+    </Item>
+	<Item>
+      <Key>20</Key>
+      <Value>[Type:Villager][PortRow:3][HomeMap:mapApothecary][Collection:7|130][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
     </Item>
     <Item>
       <Key>21</Key>

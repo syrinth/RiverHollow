@@ -167,7 +167,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapGuildhouse.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapHospital.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapHouseNPC1.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapHouseNPC3.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapRiverHollowTown.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Tilesets/tilesetDungeon.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Misc/mapConnection_01.tmx</File>
@@ -210,5 +209,34 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Legs/404.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/WizardPortrait.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Config.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC_01.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC_01.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapHouse_NPC3.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapApothecary.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapMagicShop.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC_02.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC_20.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC_02.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC_20.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapGeneralStore.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC_06.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC_06.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC_03.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC_04.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC_03.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC_04.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC_08.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC_09.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC_10.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC_12.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC_15.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC_07.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC_07.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC_08.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC_09.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC_10.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC_12.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC_15.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapMayorsHouse.tmx</File>
   </SourceFiles>
 </SourceFileCollection>

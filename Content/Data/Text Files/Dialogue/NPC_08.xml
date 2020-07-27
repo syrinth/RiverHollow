@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, string]">
+    <!--Name-->
+    <Item>
+      <Key>Name</Key>
+      <Value>Damien</Value>
+    </Item>
+    <!--Key:NPCType#, Value:Text-->
+    <Item>
+      <Key>Introduction</Key>
+      <Value>Greetings, my name is $0$. I've heard that you're a warrior, is it true? I hope so, I can only do so much here.[Yes:IntroYes|No:IntroNo|Maybe:IntroMaybe]</Value>
+    </Item>
+    <Item>
+      <Key>IntroYes</Key>
+      <Value>Oh. How interesting. In that case, you should speak with $2$, he and his husband make excellent weapons.</Value>
+    </Item>
+    <Item>
+      <Key>IntroNo</Key>
+      <Value>Oh, that's a shame</Value>
+    </Item>
+    <Item>
+      <Key>IntroMaybe</Key>
+      <Value>What does that even mean?</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>Hello $^$. I hope you're well today.</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.</Value>
+    </Item>
+    <Item>
+      <Key>Gift</Key>
+      <Value>Oh, that's surprising. Thank you.</Value>
+    </Item>
+    <Item>
+      <Key>Collection</Key>
+      <Value>Is that for me? Oh! Thank you! It's just what I've been looking for! How did you know?</Value>
+    </Item>
+    <Item>
+      <Key>Selection</Key>
+      <Value>Hello, what can I do for you?.[Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel]</Value>
+    </Item>
+    <Item>
+      <Key>JoinPartyYes</Key>
+      <Value>Certainly, I'd like to see what we can accomplish together.</Value>
+    </Item>
+    <Item>
+      <Key>JoinPartyNo</Key>
+      <Value>Sorry,I'm very busy today. Maybe in a few days I can go with you again.</Value>
+    </Item>
+    <Item>
+      <Key>MarriageYes</Key>
+      <Value>Yes I will marry you!</Value>
+    </Item>
+    <Item>
+      <Key>MarriageNo</Key>
+      <Value>Oh... I'm sorry but. No.</Value>
+    </Item>
+  </Asset>
+</XnaContent>

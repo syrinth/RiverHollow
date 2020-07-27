@@ -1493,11 +1493,6 @@
 /processor:TiledMapProcessor
 /build:Maps/Village/mapHouseNPC1.tmx
 
-#begin Maps/Village/mapHouseNPC3.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Village/mapHouseNPC3.tmx
-
 #begin Maps/Village/mapRiverHollowTown.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -1868,4 +1863,233 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Config.xml
+
+#begin Data/Text Files/Dialogue/NPC_01.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC_01.xml
+
+#begin Textures/Actors/Villagers/NPC_01.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Villagers/NPC_01.png
+
+#begin Maps/Village/mapHouse_NPC3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Village/mapHouse_NPC3.tmx
+
+#begin Maps/Village/mapApothecary.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Village/mapApothecary.tmx
+
+#begin Maps/Village/mapMagicShop.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Village/mapMagicShop.tmx
+
+#begin Textures/Actors/Villagers/NPC_02.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Villagers/NPC_02.png
+
+#begin Textures/Actors/Villagers/NPC_20.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Villagers/NPC_20.png
+
+#begin Data/Text Files/Dialogue/NPC_02.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC_02.xml
+
+#begin Data/Text Files/Dialogue/NPC_20.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC_20.xml
+
+#begin Maps/Village/mapGeneralStore.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Village/mapGeneralStore.tmx
+
+#begin Data/Text Files/Dialogue/NPC_06.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC_06.xml
+
+#begin Textures/Actors/Villagers/NPC_06.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Villagers/NPC_06.png
+
+#begin Data/Text Files/Dialogue/NPC_03.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC_03.xml
+
+#begin Data/Text Files/Dialogue/NPC_04.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC_04.xml
+
+#begin Textures/Actors/Villagers/NPC_03.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Villagers/NPC_03.png
+
+#begin Textures/Actors/Villagers/NPC_04.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Villagers/NPC_04.png
+
+#begin Textures/Actors/Villagers/NPC_08.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Villagers/NPC_08.png
+
+#begin Textures/Actors/Villagers/NPC_09.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Villagers/NPC_09.png
+
+#begin Textures/Actors/Villagers/NPC_10.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Villagers/NPC_10.png
+
+#begin Textures/Actors/Villagers/NPC_12.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Villagers/NPC_12.png
+
+#begin Textures/Actors/Villagers/NPC_15.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Villagers/NPC_15.png
+
+#begin Textures/Actors/Villagers/NPC_07.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Villagers/NPC_07.png
+
+#begin Data/Text Files/Dialogue/NPC_07.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC_07.xml
+
+#begin Data/Text Files/Dialogue/NPC_08.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC_08.xml
+
+#begin Data/Text Files/Dialogue/NPC_09.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC_09.xml
+
+#begin Data/Text Files/Dialogue/NPC_10.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC_10.xml
+
+#begin Data/Text Files/Dialogue/NPC_12.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC_12.xml
+
+#begin Data/Text Files/Dialogue/NPC_15.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/NPC_15.xml
+
+#begin Maps/Village/mapMayorsHouse.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Village/mapMayorsHouse.tmx
 

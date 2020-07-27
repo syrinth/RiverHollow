@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, string]">
+    <!--Name-->
+    <Item>
+      <Key>Name</Key>
+      <Value>Emmanuel</Value>
+    </Item>
+    <!--Key:NPCType#, Value:Text-->
+    <Item>
+      <Key>Introduction</Key>
+      <Value>Hi! Are you to town? I don't think I've seen your face before, I'm $0$. It's so nice to meet you.</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>$^$! How are you today?</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>I love spring. Plants are blooming again after a long cold winter and it's not too hot or cold.</Value>
+    </Item>
+    <Item>
+      <Key>Gift</Key>
+      <Value>For me? Oh no, you shouldn't have!</Value>
+    </Item>
+    <Item>
+      <Key>Collection</Key>
+      <Value>Oh! I've been wanting this! Thank you so much.</Value>
+    </Item>
+    <Item>
+      <Key>Selection</Key>
+      <Value>Hey, $^$, what do you need?[Talk:Talk|Gift:GiveGift|%Friend:50%Join Party:Party|Never Mind:Cancel]</Value>
+    </Item>
+    <Item>
+      <Key>JoinPartyYes</Key>
+      <Value>Are you sure? I guess I can join you for an adventure today.</Value>
+    </Item>
+    <Item>
+      <Key>JoinPartyNo</Key>
+      <Value>Sorry... I've got things to do today. Maybe later?</Value>
+    </Item>
+    <Item>
+      <Key>MarriageYes</Key>
+      <Value>Yes I will marry you!</Value>
+    </Item>
+    <Item>
+      <Key>MarriageNo</Key>
+      <Value>Oh... I'm sorry but... No.</Value>
+    </Item>
+  </Asset>
+</XnaContent>

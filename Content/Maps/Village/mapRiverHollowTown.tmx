@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="45">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="50">
  <properties>
   <property name="Outside" type="bool" value="true"/>
   <property name="Town" type="bool" value="true"/>
@@ -323,9 +323,6 @@
   <object id="10" name="Route3" x="946.333" y="431.337" width="15" height="9"/>
   <object id="12" name="Route4" x="1131.18" y="449.788" width="8" height="7"/>
   <object id="28" name="PlayerSpawn" x="741.598" y="772.28" width="5.63636" height="5.27273"/>
-  <object id="29" name="NPC_17" x="465.712" y="689.818" width="12" height="12"/>
-  <object id="33" name="NPC_10" x="820.5" y="627.667" width="12" height="12"/>
-  <object id="44" name="NPC_11" x="1266" y="946.667" width="12" height="12"/>
  </objectgroup>
  <objectgroup id="7" name="Travel">
   <object id="24" name="Entrance" x="529.428" y="953.519" width="12.6069" height="5.1667">
@@ -347,13 +344,6 @@
     <property name="Map" value="mapConnection_02"/>
    </properties>
   </object>
-  <object id="37" name="Entrance" x="848.04" y="1047.72" width="15.4602" height="5.1667">
-   <properties>
-    <property name="Door" type="bool" value="true"/>
-    <property name="EntranceDir" value="Down"/>
-    <property name="Map" value="mapHouseNPC3"/>
-   </properties>
-  </object>
   <object id="38" name="Entrance" x="1120.44" y="1049.29" width="15.4364" height="5.1667">
    <properties>
     <property name="Door" type="bool" value="true"/>
@@ -366,6 +356,41 @@
     <property name="Door" type="bool" value="true"/>
     <property name="EntranceDir" value="Down"/>
     <property name="Map" value="mapTavern"/>
+   </properties>
+  </object>
+  <object id="45" name="Entrance" x="896.395" y="729.792" width="15.4602" height="5.1667">
+   <properties>
+    <property name="Door" type="bool" value="true"/>
+    <property name="EntranceDir" value="Down"/>
+    <property name="Map" value="mapMagicShop"/>
+   </properties>
+  </object>
+  <object id="46" name="Entrance" x="560.437" y="681.042" width="15.4602" height="5.1667">
+   <properties>
+    <property name="Door" type="bool" value="true"/>
+    <property name="EntranceDir" value="Down"/>
+    <property name="Map" value="mapApothecary"/>
+   </properties>
+  </object>
+  <object id="47" name="Entrance" x="368.179" y="425.644" width="15.4602" height="5.1667">
+   <properties>
+    <property name="Door" type="bool" value="true"/>
+    <property name="EntranceDir" value="Down"/>
+    <property name="Map" value="mapHouse_NPC3"/>
+   </properties>
+  </object>
+  <object id="48" name="Entrance" x="848.268" y="1049.29" width="15.4602" height="5.1667">
+   <properties>
+    <property name="Door" type="bool" value="true"/>
+    <property name="EntranceDir" value="Down"/>
+    <property name="Map" value="mapGeneralStore"/>
+   </properties>
+  </object>
+  <object id="49" name="Entrance" x="1344.85" y="889.235" width="14.6182" height="5.1667">
+   <properties>
+    <property name="Door" type="bool" value="true"/>
+    <property name="EntranceDir" value="Down"/>
+    <property name="Map" value="mapMayorsHouse"/>
    </properties>
   </object>
  </objectgroup>

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, string]">
+    <!--Name-->
+    <Item>
+      <Key>Name</Key>
+      <Value>Slova</Value>
+    </Item>
+    <!--Key:NPCType#, Value:Text-->
+    <Item>
+      <Key>Introduction</Key>
+      <Value>Hi! I'm $0$, it's good to see a new face around here!</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>Hey there, $^$,hope you're feeling well today!</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>Hey, $^$, you don't happen to need any new weapons, do you? I've got a few at the shop that I think could come in handy.</Value>
+    </Item>
+    <Item>
+      <Key>ShopOpen</Key>
+      <Value>Oh, hello $^$, What can I do for you? [Talk:Talk|Construct Buildings:BuyBuildings|Maintain Buildings:Maintenance|Never Mind:Cancel]</Value>
+    </Item>
+    <Item>
+      <Key>Gift</Key>
+      <Value>Wow! Thanks!</Value>
+    </Item>
+    <Item>
+      <Key>Selection</Key>
+      <Value>Hey.[Talk:Talk|Gift:GiveGift|Never Mind:Cancel]</Value>
+    </Item>
+    <Item>
+      <Key>Maintenance</Key>
+      <Value>What do you want to do?[Upgrade Buildings:UpgradeBuilding|Move Buildings:Move|Destroy Buildings:Destroy]</Value>
+    </Item>
+  </Asset>
+</XnaContent>
