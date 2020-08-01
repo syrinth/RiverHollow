@@ -21,6 +21,7 @@ namespace RiverHollow.Game_Managers
         static long _iSaveID = -1;
 
         #region Save/Load
+        #region structs
         public struct SaveInfoData
         {
             [XmlElement(ElementName = "SaveFile")]
@@ -441,6 +442,7 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Adventurers")]
             public List<int> ListAdventurerIDs;
         }
+        #endregion
 
         public static long GetSaveID()
         {
