@@ -27,13 +27,16 @@ namespace RiverHollow.GUIComponents.Screens
             foreach(SaveInfoData data in _liData)
             {
                 SaveWindow s = new SaveWindow(data, _liData.IndexOf(data), RefreshScreen);
-                AddControl(s);
+                //AddControl(s);
                 _liDataWindows.Add(s);
             }
 
             if (_liDataWindows.Count > 0)
             {
-                GUIObject.CreateSpacedColumn(ref _liDataWindows, RiverHollow.ScreenWidth / 2, 0, RiverHollow.ScreenHeight, 20);
+                GUIList _gli = new GUIList(_liDataWindows, 4, 20, RiverHollow.ScreenHeight);
+                _gli.CenterOnScreen();
+                AddControl(_gli);
+                //GUIObject.CreateSpacedColumn(ref _liDataWindows, RiverHollow.ScreenWidth / 2, 0, RiverHollow.ScreenHeight, 20);
             }
 
             _btnBack.AnchorToScreen(this, GUIObject.SideEnum.BottomRight, 50);
@@ -87,6 +90,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             public SaveWindow(SaveInfoData data, int id, ReloadScreenDelegate del)
             {
+                //Creates the Individual Save Tiles on the load screen.
                 _data = data;
                 _iId = id;
                 _winData = GUIWindow.RedWin;
