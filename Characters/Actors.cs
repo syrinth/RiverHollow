@@ -1886,59 +1886,59 @@ namespace RiverHollow.Actors
 
         public void CalculatePathing()
         {
-            string currDay = GameCalendar.GetDayOfWeek();
-            string currSeason = GameCalendar.GetSeason();
-            string currWeather = GameCalendar.GetWeatherString();
-            if (_diCompleteSchedule != null && _diCompleteSchedule.Count > 0)
-            {
-                string searchVal = currSeason + currDay + currWeather;
-                List<KeyValuePair<string, string>> listPathingForDay = null;
+            //string currDay = GameCalendar.GetDayOfWeek();
+            //string currSeason = GameCalendar.GetSeason();
+            //string currWeather = GameCalendar.GetWeatherString();
+            //if (_diCompleteSchedule != null && _diCompleteSchedule.Count > 0)
+            //{
+            //    string searchVal = currSeason + currDay + currWeather;
+            //    List<KeyValuePair<string, string>> listPathingForDay = null;
 
-                //Search to see if there exists any pathing instructions for the day.
-                //If so, set the value of listPathingForDay to the list of times/locations
-                if (_diCompleteSchedule.ContainsKey(currSeason + currDay + currWeather))
-                {
-                    listPathingForDay = _diCompleteSchedule[currSeason + currDay + currWeather];
-                }
-                else if (_diCompleteSchedule.ContainsKey(currSeason + currDay))
-                {
-                    listPathingForDay = _diCompleteSchedule[currSeason + currDay];
-                }
-                else if (_diCompleteSchedule.ContainsKey(currDay))
-                {
-                    listPathingForDay = _diCompleteSchedule[currDay];
-                }
+            //    //Search to see if there exists any pathing instructions for the day.
+            //    //If so, set the value of listPathingForDay to the list of times/locations
+            //    if (_diCompleteSchedule.ContainsKey(currSeason + currDay + currWeather))
+            //    {
+            //        listPathingForDay = _diCompleteSchedule[currSeason + currDay + currWeather];
+            //    }
+            //    else if (_diCompleteSchedule.ContainsKey(currSeason + currDay))
+            //    {
+            //        listPathingForDay = _diCompleteSchedule[currSeason + currDay];
+            //    }
+            //    else if (_diCompleteSchedule.ContainsKey(currDay))
+            //    {
+            //        listPathingForDay = _diCompleteSchedule[currDay];
+            //    }
 
-                //If there is pathing instructions for the day, proceed
-                //Key = Time, Value = goto Location
-                if (listPathingForDay != null)
-                {
-                    List<KeyValuePair<string, List<RHTile>>> lTimetoTilePath = new List<KeyValuePair<string, List<RHTile>>>();
-                    Vector2 start = Position;
-                    string mapName = CurrentMapName;
+            //    //If there is pathing instructions for the day, proceed
+            //    //Key = Time, Value = goto Location
+            //    if (listPathingForDay != null)
+            //    {
+            //        List<KeyValuePair<string, List<RHTile>>> lTimetoTilePath = new List<KeyValuePair<string, List<RHTile>>>();
+            //        Vector2 start = Position;
+            //        string mapName = CurrentMapName;
 
-                    TravelManager.NewTravelLog(_sName);
-                    foreach (KeyValuePair<string, string> kvp in listPathingForDay)
-                    {
-                        List<RHTile> timePath;
+            //        TravelManager.NewTravelLog(_sName);
+            //        foreach (KeyValuePair<string, string> kvp in listPathingForDay)
+            //        {
+            //            List<RHTile> timePath;
 
-                        //If the map we're currently on has the target location, pathfind to it.
-                        //Otherwise, we need to pathfind to the map that does first.
-                        if (CurrentMap.DictionaryCharacterLayer.ContainsKey(kvp.Value))
-                        {
-                            timePath = TravelManager.FindPathToLocation(ref start, CurrentMap.DictionaryCharacterLayer[kvp.Value]);
-                        }
-                        else
-                        {
-                            timePath = TravelManager.FindPathToOtherMap(kvp.Value, ref mapName, ref start);
-                        }
-                        lTimetoTilePath.Add(new KeyValuePair<string, List<RHTile>>(kvp.Key, timePath));
-                    }
-                    TravelManager.CloseTravelLog();
+            //            //If the map we're currently on has the target location, pathfind to it.
+            //            //Otherwise, we need to pathfind to the map that does first.
+            //            if (CurrentMap.DictionaryCharacterLayer.ContainsKey(kvp.Value))m
+            //            {
+            //                timePath = TravelManager.FindPathToLocation(ref start, CurrentMap.DictionaryCharacterLayer[kvp.Value]);
+            //            }
+            //            else
+            //            {
+            //                timePath = TravelManager.FindPathToOtherMap(kvp.Value, ref mapName, ref start);
+            //            }
+            //            lTimetoTilePath.Add(new KeyValuePair<string, List<RHTile>>(kvp.Key, timePath));
+            //        }
+            //        TravelManager.CloseTravelLog();
 
-                    _todaysPathing = lTimetoTilePath;
-                }
-            }
+            //        _todaysPathing = lTimetoTilePath;
+            //    }
+            //}
         }
 
         /// <summary>
