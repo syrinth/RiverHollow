@@ -78,6 +78,7 @@
     <Compile Include="Game Managers\TravelManager.cs" />
     <Compile Include="Game Managers\ZoneManager.cs" />
     <Compile Include="GUIComponents\GUIHarp.cs" />
+    <Compile Include="GUIComponents\GUIObjects\GUIList.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUICharacterDisplayBox.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIText.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUIMisc.cs" />
