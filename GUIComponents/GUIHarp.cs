@@ -1,9 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using System.Collections.Generic;
+
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents

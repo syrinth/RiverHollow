@@ -1,11 +1,12 @@
-﻿using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.GUIObjects;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
-namespace RiverHollow.Game_Managers.GUIObjects
+
+namespace RiverHollow.GUIComponents.Screens
 {
     //Represents a complete collection of associated GUIs to be displayed on the screen
     public abstract class GUIScreen

@@ -1,12 +1,12 @@
-﻿using RiverHollow.WorldObjects;
-using RiverHollow.Tile_Engine;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
-using RiverHollow.Misc;
-using static RiverHollow.WorldObjects.WorldItem;
+using RiverHollow.Items;
+using RiverHollow.Tile_Engine;
+using RiverHollow.Utilities;
 
 using static RiverHollow.Game_Managers.GameManager;
-using RiverHollow.Actors;
+using static RiverHollow.Items.WorldItem;
+
 
 namespace RiverHollow.Game_Managers
 {

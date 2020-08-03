@@ -1,16 +1,15 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Actors;
+using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
-using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
-using RiverHollow.WorldObjects;
-using System.Collections.Generic;
+using RiverHollow.Items;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.WorldObjects.WorldItem;
+using static RiverHollow.Items.WorldItem;
 
 namespace RiverHollow.Buildings
 {

@@ -1,13 +1,15 @@
-﻿using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using RiverHollow.Screens;
-using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.DataManager;
-using RiverHollow.GUIObjects;
-using static RiverHollow.WorldObjects.WorldItem;
+using Microsoft.Xna.Framework;
+using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
-namespace RiverHollow.Game_Managers.GUIComponents.Screens
+using static RiverHollow.Game_Managers.DataManager;
+using static RiverHollow.Items.WorldItem;
+
+
+namespace RiverHollow.GUIComponents.Screens
 {
     class HUDCraftingDisplay : GUIMainObject
     {

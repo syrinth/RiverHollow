@@ -1,13 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using RiverHollow.Actors;
-using RiverHollow.Game_Managers.GUIObjects;
-using RiverHollow.Misc;
-using RiverHollow.Tile_Engine;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using RiverHollow.Characters;
+using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.Tile_Engine;
+using RiverHollow.Utilities;
 
 using static RiverHollow.Game_Managers.GameManager;
+
 namespace RiverHollow.Game_Managers
 {
     static class CutsceneManager

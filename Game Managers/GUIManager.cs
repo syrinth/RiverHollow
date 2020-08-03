@@ -1,14 +1,11 @@
-﻿using RiverHollow.Game_Managers.GUIObjects;
-using RiverHollow.GUIObjects;
-using RiverHollow.WorldObjects;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Characters;
+using RiverHollow.GUIComponents.Screens;
+using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
 using static RiverHollow.Game_Managers.GameManager;
-using RiverHollow.Actors;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using System;
-using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers
 {

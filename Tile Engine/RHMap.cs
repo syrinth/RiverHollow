@@ -1,28 +1,27 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Graphics;
-using RiverHollow.Actors;
 using RiverHollow.Buildings;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
-using RiverHollow.Game_Managers.GUIObjects;
-using RiverHollow.GUIObjects;
-using RiverHollow.Misc;
-using RiverHollow.WorldObjects;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using static RiverHollow.Actors.Actor;
+using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.GUIComponents.Screens;
+using RiverHollow.Items;
+using RiverHollow.Utilities;
+using static RiverHollow.RiverHollow;
+using static RiverHollow.Characters.Actor;
 using static RiverHollow.Game_Managers.CombatManager;
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Game_Managers.GUIObjects.HUDMenu;
 using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.RiverHollow;
-using static RiverHollow.WorldObjects.Item;
-using static RiverHollow.WorldObjects.WorldItem;
-using static RiverHollow.WorldObjects.WorldItem.Floor;
+using static RiverHollow.Items.WorldItem;
+using static RiverHollow.Items.Item;
+using static RiverHollow.Items.WorldItem.Floor;
+using static RiverHollow.GUIComponents.Screens.HUDMenu;
 
 namespace RiverHollow.Tile_Engine
 {

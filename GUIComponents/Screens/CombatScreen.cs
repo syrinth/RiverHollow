@@ -1,22 +1,23 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
-using RiverHollow.Actors;
-using RiverHollow.Actors.CombatStuff;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.Characters;
+using RiverHollow.CombatStuff;
+using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.GUIObjects;
-using RiverHollow.Misc;
 using RiverHollow.Tile_Engine;
-using RiverHollow.WorldObjects;
-using System;
-using System.Collections.Generic;
-using static RiverHollow.Actors.Actor;
-using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.GUIObjects.GUIObject;
+using RiverHollow.Items;
+using RiverHollow.Utilities;
 
-namespace RiverHollow.Game_Managers.GUIObjects
+using static RiverHollow.Characters.Actor;
+using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
+
+
+namespace RiverHollow.GUIComponents.Screens
 {
     public class CombatScreen : GUIScreen
     {

@@ -1,21 +1,19 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
-using RiverHollow.Actors;
+using RiverHollow.Characters;
 using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.GUIObjects;
-using RiverHollow.WorldObjects;
-using System.Collections.Generic;
-using static RiverHollow.Actors.ShopKeeper;
+using RiverHollow.Items;
+
+using static RiverHollow.Characters.ShopKeeper;
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Game_Managers.GUIObjects.HUDMenu;
 using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
+using static RiverHollow.GUIComponents.Screens.HUDMenu;
 
 namespace RiverHollow.GUIComponents.Screens
 {

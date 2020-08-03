@@ -1,12 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.GUIObjects;
-using static RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindow;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
-namespace RiverHollow.Game_Managers.GUIObjects
+using static RiverHollow.GUIComponents.GUIObjects.GUIWindows.GUIWindow;
+
+namespace RiverHollow.GUIComponents.GUIObjects
 {
     public class GUIButton : GUIObject
     {
@@ -23,7 +22,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
         protected GUIText _gText;
 
         protected bool _bFadeOnDisable = true;
-        public delegate void BtnClickDelegate ();
+        
         protected BtnClickDelegate _delAction;
 
         internal static WindowData BaseBtn = new WindowData(96, 0, 2, 12);

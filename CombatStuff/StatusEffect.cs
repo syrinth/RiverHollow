@@ -1,10 +1,11 @@
-﻿using RiverHollow.Game_Managers;
-using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Misc;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using RiverHollow.Characters;
+using RiverHollow.Game_Managers;
+using RiverHollow.Utilities;
+
 using static RiverHollow.Game_Managers.GameManager;
 
-namespace RiverHollow.Actors.CombatStuff
+namespace RiverHollow.CombatStuff
 {
     public class StatusEffect
     {

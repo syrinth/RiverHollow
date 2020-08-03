@@ -1,17 +1,17 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.IO;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Actors;
 using RiverHollow.Buildings;
 using RiverHollow.Characters;
-using RiverHollow.GUIObjects;
-using RiverHollow.Misc;
+using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.Items;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
-using RiverHollow.WorldObjects;
-using System.Collections.Generic;
-using System.IO;
-using static RiverHollow.Actors.Actor;
+using RiverHollow.Utilities;
+
+using static RiverHollow.Characters.Actor;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Game_Managers

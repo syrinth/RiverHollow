@@ -1,11 +1,9 @@
-﻿using RiverHollow.GUIObjects;
-using Microsoft.Xna.Framework;
-using RiverHollow.WorldObjects;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+using RiverHollow.Items;
 
-namespace RiverHollow.Screens
+namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUIInventory : GUIWindow
     {

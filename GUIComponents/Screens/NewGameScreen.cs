@@ -1,18 +1,16 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.GUIObjects;
-using RiverHollow.Misc;
-using RiverHollow.WorldObjects;
-using System.Collections.Generic;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Items;
+using RiverHollow.Utilities;
+
 using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
 using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox.CharacterDisplayBox;
-using static RiverHollow.GUIObjects.GUIObject;
-using static RiverHollow.WorldObjects.Clothes;
+using static RiverHollow.Items.Clothes;
 
 namespace RiverHollow.GUIComponents.Screens
 {

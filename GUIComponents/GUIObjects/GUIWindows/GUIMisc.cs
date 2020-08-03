@@ -1,12 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using RiverHollow.Game_Managers.GUIObjects;
-using RiverHollow.GUIObjects;
+
 using static RiverHollow.Game_Managers.GameManager;
 
-namespace RiverHollow.GUIComponents.GUIObjects
+namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUICoin : GUIImage
     {
@@ -302,7 +300,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
     public class GUISwatch : GUIImage
     {
-        public delegate void BtnClickDelegate();
         private BtnClickDelegate _delAction;
         public Color SwatchColor => _cColor;
 

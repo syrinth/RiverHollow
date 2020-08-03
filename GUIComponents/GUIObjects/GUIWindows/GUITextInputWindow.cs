@@ -3,11 +3,9 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using RiverHollow.Actors;
-using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.GUIObjects;
+using RiverHollow.Game_Managers;
 
-namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
+namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUITextInputWindow : GUITextWindow
     {

@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Game_Managers;
-using RiverHollow.GUIObjects;
+
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {

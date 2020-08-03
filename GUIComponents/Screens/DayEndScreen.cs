@@ -1,14 +1,15 @@
-﻿using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using RiverHollow.Game_Managers.GUIObjects;
-using Microsoft.Xna.Framework;
-using System;
-using static RiverHollow.GUIObjects.GUIObject;
-using RiverHollow.Actors;
-using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+﻿using System;
 using System.Collections.Generic;
-using RiverHollow.Misc;
+using Microsoft.Xna.Framework;
+using RiverHollow.Characters;
+using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Utilities;
 
-namespace RiverHollow.Game_Managers.GUIComponents.Screens
+using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
+
+namespace RiverHollow.GUIComponents.Screens
 {
     public class DayEndScreen : GUIScreen
     {

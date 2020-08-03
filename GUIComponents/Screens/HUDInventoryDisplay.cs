@@ -1,10 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
-using RiverHollow.Screens;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.WorldObjects;
+using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Items;
+
 using static RiverHollow.Game_Managers.GameManager;
 
-namespace RiverHollow.Game_Managers.GUIObjects
+namespace RiverHollow.GUIComponents.Screens
 {
     public class HUDInventoryDisplay : GUIMainObject
     {
