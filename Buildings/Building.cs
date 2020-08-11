@@ -358,7 +358,7 @@ namespace RiverHollow.Buildings
                 {
                     for (int y = (int)startAt.Y + TileSize; y < startAt.Y + TileSize + CollisionBox.Height; y += TileSize)
                     {
-                        Floor obj = (Floor)DataManager.GetWorldObject(241);
+                        Floor obj = (Floor)DataManager.GetWorldObject(int.Parse(DataManager.Config[9]["Floor"]));
                         obj.SetMapName(MapManager.CurrentMap.Name);
                         obj.SetCoordinatesByGrid(new Vector2(x, y));
                         MapManager.CurrentMap.TestMapTiles(obj);
@@ -405,7 +405,7 @@ namespace RiverHollow.Buildings
         /// <param name="location">The map location to create the wall.</param>
         private void PlaceWall(Vector2 location)
         {
-            WorldItem obj = (WorldItem)DataManager.GetWorldObject(240);
+            WorldItem obj = (WorldItem)DataManager.GetWorldObject(int.Parse(DataManager.Config[9]["Wall"]));
             ((Wall)obj).SetMapName(MapManager.CurrentMap.Name);
             obj.SetCoordinatesByGrid(location);
             MapManager.CurrentMap.TestMapTiles(obj);

@@ -37,5 +37,9 @@
       <Key>8</Key>
       <Value>[DebugLogs:Disabled][DebugPath:C]</Value>
     </Item>
+	<Item>
+      <Key>9</Key>
+      <Value>[Wall:38][Floor:17]</Value>
+    </Item>
   </Asset>
 </XnaContent>
