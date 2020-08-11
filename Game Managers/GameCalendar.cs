@@ -1,17 +1,13 @@
-﻿using RiverHollow.Game_Managers;
+﻿using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using RiverHollow.Game_Managers.GUIComponents.Screens;
-using RiverHollow.GUIObjects;
-using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.Misc;
+using RiverHollow.GUIComponents.Screens;
+using RiverHollow.Utilities;
+
 using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.GUIObjects.GUIObject;
 using static RiverHollow.Game_Managers.SaveManager;
 
-namespace RiverHollow
+
+namespace RiverHollow.Game_Managers
 {
     public static class GameCalendar
     {

@@ -1,14 +1,8 @@
-﻿using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using Microsoft.Xna.Framework;
-using RiverHollow.Game_Managers.GUIObjects;
-using RiverHollow.GUIObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static RiverHollow.Game_Managers.GameManager;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.Xna.Framework;
+
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
@@ -67,17 +61,19 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
 
             this.Height = calcHeight;
-            this.Width = mostWidth; //The buttons created below are technically display outside of the GUIList object. Still functions but this could break in the future.
+            this.Width = mostWidth;
 
             PopulateList();
 
             if (MAX_SHOWN_ITEMS < objects.Count)
             {
+                this.Width = mostWidth + BTNSIZE;
+
                 _btnUp = new GUIButton(new Rectangle(272, 96, 16, 16), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnUpClick);
                 _btnDown = new GUIButton(new Rectangle(256, 96, 16, 16), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnDownClick);
 
-                _btnUp.AnchorAndAlignToObject(this, GUIObject.SideEnum.Right, GUIObject.SideEnum.Top);
-                _btnDown.AnchorAndAlignToObject(this, GUIObject.SideEnum.Right, GUIObject.SideEnum.Bottom);
+                _btnUp.AnchorToInnerSide(this, SideEnum.TopRight);
+                _btnDown.AnchorToInnerSide(this, SideEnum.BottomRight);
 
                 AddControl(_btnUp);
                 AddControl(_btnDown);

@@ -1,10 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.IO;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
-using RiverHollow.Misc;
-using System.Collections.Generic;
-using System.IO;
+using RiverHollow.Utilities;
+
 
 namespace RiverHollow.Game_Managers
 {

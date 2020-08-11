@@ -1,16 +1,17 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using RiverHollow.Actors;
-using RiverHollow.Game_Managers.GUIObjects;
-using RiverHollow.WorldObjects;
-using RiverHollow.Misc;
-using System.Collections.Generic;
-using static RiverHollow.Actors.ShopKeeper;
 using RiverHollow.Buildings;
-using RiverHollow.Game_Managers.GUIComponents.Screens;
-using static RiverHollow.Actors.Actor;
 using RiverHollow.Characters;
+using RiverHollow.GUIComponents.Screens;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Items;
+using RiverHollow.Misc;
+using RiverHollow.Utilities;
+
+using static RiverHollow.Characters.ShopKeeper;
+using static RiverHollow.Characters.Actor;
+
 
 namespace RiverHollow.Game_Managers
 {

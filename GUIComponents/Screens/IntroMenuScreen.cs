@@ -1,10 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using RiverHollow.GUIComponents.Screens;
-using RiverHollow.GUIObjects;
-using System.Collections.Generic;
-using static RiverHollow.GUIObjects.GUIObject;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects;
 
-namespace RiverHollow.Game_Managers.GUIObjects
+using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
+
+namespace RiverHollow.GUIComponents.Screens
 {
     public class IntroMenuScreen : GUIScreen
     {

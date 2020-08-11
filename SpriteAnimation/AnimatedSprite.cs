@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
+using RiverHollow.Utilities;
 
 using static RiverHollow.Game_Managers.GameManager;
-using RiverHollow.Misc;
 
 namespace RiverHollow.SpriteAnimations
 {

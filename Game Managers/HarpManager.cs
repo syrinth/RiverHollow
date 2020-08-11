@@ -1,12 +1,8 @@
-﻿using Microsoft.Xna.Framework;
-using RiverHollow.Actors;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using RiverHollow.Characters;
 using RiverHollow.GUIComponents;
-using RiverHollow.Misc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.Game_Managers
 {

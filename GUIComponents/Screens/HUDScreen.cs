@@ -1,28 +1,27 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.GUIComponents.GUIObjects;
-using static RiverHollow.GUIObjects.GUIObject;
-using static RiverHollow.Game_Managers.GameManager;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
+﻿using System.Linq;
 using System.Collections.Generic;
-using RiverHollow.GUIObjects;
-using RiverHollow.Actors;
-using RiverHollow.Misc;
-using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using static RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIItemBox;
-using RiverHollow.WorldObjects;
-using static RiverHollow.WorldObjects.Item;
-using static RiverHollow.WorldObjects.Clothes;
-using RiverHollow.Buildings;
-using static RiverHollow.Game_Managers.GUIObjects.HUDMenu.HUDManagement.MgmtWindow;
-using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows;
-using static RiverHollow.Game_Managers.GUIObjects.GUIButton;
-using System.Linq;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
+using RiverHollow.Buildings;
+using RiverHollow.Characters;
+using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Items;
+using RiverHollow.Misc;
 
-namespace RiverHollow.Game_Managers.GUIObjects
+using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.GUIComponents.GUIObjects.GUIItemBox;
+using static RiverHollow.GUIComponents.GUIObjects.NPCDisplayBox;
+using static RiverHollow.GUIComponents.Screens.HUDMenu.HUDManagement.MgmtWindow;
+using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
+using static RiverHollow.Items.Clothes;
+using static RiverHollow.Items.Item;
+
+
+namespace RiverHollow.GUIComponents.Screens
 {
     public class HUDScreen : GUIScreen
     {
@@ -495,51 +494,42 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
         public class HUDQuestLog : GUIMainObject
         {
-            public static int BTNSIZE = ScaledTileSize;
+            //public static int BTNSIZE = ScaledTileSize;
             public static int MAX_SHOWN_QUESTS = 4;
-            List<QuestBox> _questList;
+            public static int QUEST_SPACING = 20;
+            public static int QUESTBOX_WIDTH = 544; //(GUIManager.MAIN_COMPONENT_WIDTH) - (_gWindow.EdgeSize * 2) - ScaledTileSize
+            public static int QUESTBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDQuestLog.MAX_SHOWN_QUESTS) - (_gWindow.EdgeSize * 2)
+            List<GUIObject> _liQuests;
             DetailBox _detailWindow;
-            GUIButton _btnUp;
-            GUIButton _btnDown;
             GUIWindow _gWindow;
+            GUIList _gList;
 
-            bool _bMoved;
-            int _topQuest;
             public HUDQuestLog()
             {
                 _gWindow = SetMainWindow();
 
-                _questList = new List<QuestBox>();
+                _liQuests = new List<GUIObject>();
                 _detailWindow = new DetailBox(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
                 _detailWindow.Show = false;
                 _detailWindow.CenterOnScreen();
                 AddControl(_detailWindow);
 
-                _btnUp = new GUIButton(new Rectangle(272, 96, 16, 16), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnUpClick);
-                _btnDown = new GUIButton(new Rectangle(256, 96, 16, 16), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnDownClick);
-
-                _btnUp.AnchorAndAlignToObject(this, GUIObject.SideEnum.Right, GUIObject.SideEnum.Top);
-                _btnDown.AnchorAndAlignToObject(this, GUIObject.SideEnum.Right, GUIObject.SideEnum.Bottom);
-                _topQuest = 0;
-
-                for (int i = 0; i < MAX_SHOWN_QUESTS && i < PlayerManager.QuestLog.Count; i++)
+                for (int i = 0; i < PlayerManager.QuestLog.Count; i++)
                 {
-                    QuestBox q = new QuestBox(_gWindow.EdgeSize * 2, OpenDetailBox);
-                    q.SetQuest(PlayerManager.QuestLog[_topQuest + i]);
-                    _questList.Add(q);
-
-                    if(i == 0) { q.AnchorToInnerSide(_gWindow, SideEnum.TopLeft);  }
-                    else { q.AnchorAndAlignToObject(_questList[i - 1], SideEnum.Bottom, SideEnum.Left); }
+                    QuestBox q = new QuestBox(QUESTBOX_WIDTH, QUESTBOX_HEIGHT, OpenDetailBox);
+                    q.SetQuest(PlayerManager.QuestLog[i]);
+                    _liQuests.Add(q);
                 }
 
-                AddControl(_btnUp);
-                AddControl(_btnDown);
+                _gList = new GUIList(_liQuests, MAX_SHOWN_QUESTS, QUEST_SPACING/*, _gWindow.Height*/);
+                _gList.CenterOnObject(_gWindow);
+
+                AddControl(_gList);
             }
 
             public override bool ProcessLeftButtonClick(Point mouse)
             {
                 bool rv = false;
-                _bMoved = false;
                 if (!_detailWindow.Show)
                 {
                     foreach (GUIObject c in Controls)
@@ -547,14 +537,6 @@ namespace RiverHollow.Game_Managers.GUIObjects
                         rv = c.ProcessLeftButtonClick(mouse);
 
                         if (rv) { break; }
-                    }
-
-                    if (_bMoved)
-                    {
-                        for (int i = 0; i < _questList.Count; i++)
-                        {
-                            _questList[i].SetQuest(PlayerManager.QuestLog[_topQuest + i]);
-                        }
                     }
                 }
                 return rv;
@@ -571,19 +553,11 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 return rv;
             }
 
-            public void BtnUpClick()
-            {
-                if (_topQuest - 1 >= 0) { _topQuest--; _bMoved = true; }
-            }
-            public void BtnDownClick()
-            {
-                if (_topQuest + MAX_SHOWN_QUESTS < PlayerManager.QuestLog.Count) { _topQuest++; _bMoved = true; }
-            }
 
             public override bool ProcessHover(Point mouse)
             {
                 bool rv = true;
-                foreach (QuestBox c in _questList)
+                foreach (QuestBox c in _liQuests)
                 {
                     rv = c.ProcessHover(mouse);
                     if (rv)
@@ -614,8 +588,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
             {
                 _detailWindow.Show = val;
                 _gWindow.Show = !val;
-                _btnUp.Show = !val;
-                _btnDown.Show = !val;
+                _gList.Show = !val;
             }
 
             public class QuestBox : GUIObject
@@ -629,12 +602,12 @@ namespace RiverHollow.Game_Managers.GUIObjects
                 public delegate void ClickDelegate(Quest q);
                 private ClickDelegate _delAction;
 
-                public QuestBox(int size, ClickDelegate del)
+                public QuestBox(int width, int height, ClickDelegate del)
                 {
                     _delAction = del;
 
-                    int boxHeight = (GUIManager.MAIN_COMPONENT_HEIGHT / HUDQuestLog.MAX_SHOWN_QUESTS) - (size);
-                    int boxWidth = (GUIManager.MAIN_COMPONENT_WIDTH) - (size) - HUDQuestLog.BTNSIZE;
+                    int boxHeight = height;
+                    int boxWidth = width;
                     _window = new GUIWindow(GUIWindow.RedWin, boxWidth, boxHeight);
                     AddControl(_window);
                     Width = _window.Width;
@@ -644,7 +617,7 @@ namespace RiverHollow.Game_Managers.GUIObjects
 
                 public override void Draw(SpriteBatch spriteBatch)
                 {
-                    if (_quest != null)
+                    if (_quest != null && Show)
                     {
                         _window.Draw(spriteBatch);
                     }

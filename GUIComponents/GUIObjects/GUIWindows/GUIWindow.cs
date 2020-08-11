@@ -1,9 +1,9 @@
-﻿using RiverHollow.Misc;
-using RiverHollow.GUIObjects;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Game_Managers;
+using RiverHollow.Utilities;
 
-namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
+namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUIWindow : GUIObject
     {

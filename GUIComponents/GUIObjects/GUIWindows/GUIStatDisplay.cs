@@ -1,10 +1,9 @@
-﻿using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.GUIComponents.GUIObjects;
 using MonoGame.Extended.BitmapFonts;
+using RiverHollow.Game_Managers;
 
-namespace RiverHollow.Game_Managers.GUIObjects
+namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUIStatDisplay : GUIWindow
     {

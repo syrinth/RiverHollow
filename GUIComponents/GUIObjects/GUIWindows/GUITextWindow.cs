@@ -1,13 +1,11 @@
-﻿using RiverHollow.Actors;
-using RiverHollow.Game_Managers.GUIObjects;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.GUIComponents.GUIObjects;
-using System.Collections.Generic;
-using System;
-using RiverHollow.GUIObjects;
+using RiverHollow.Characters;
+using RiverHollow.Game_Managers;
 
-namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
+namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUITextWindow : GUIWindow
     {

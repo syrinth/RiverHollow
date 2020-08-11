@@ -1,12 +1,10 @@
-﻿using Microsoft.Xna.Framework;
-using RiverHollow.Game_Managers;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using RiverHollow.Game_Managers.GUIObjects;
-using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.GUIObjects;
-using System;
+﻿using System.IO;
 using System.Collections.Generic;
-using System.IO;
+using Microsoft.Xna.Framework;
+using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 
@@ -33,7 +31,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             if (_liDataWindows.Count > 0)
             {
-                GUIList _gli = new GUIList(_liDataWindows, 4, 20, RiverHollow.ScreenHeight);
+                GUIList _gli = new GUIList(_liDataWindows, 10, 20, RiverHollow.ScreenHeight);
                 _gli.CenterOnScreen();
                 AddControl(_gli);
                 //GUIObject.CreateSpacedColumn(ref _liDataWindows, RiverHollow.ScreenWidth / 2, 0, RiverHollow.ScreenHeight, 20);

@@ -1,13 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using RiverHollow.Game_Managers.GUIObjects;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using RiverHollow.GUIObjects;
-using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.Misc;
+using RiverHollow.Game_Managers;
+using RiverHollow.Utilities;
 
-namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects.GUIWindows
+namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUITextSelectionWindow : GUITextWindow
     {

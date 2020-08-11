@@ -1,12 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
-using RiverHollow.Game_Managers.GUIComponents.GUIObjects;
-using RiverHollow.Game_Managers.GUIObjects;
-using System;
-using System.Collections.Generic;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.GUIComponents.Screens;
 
-namespace RiverHollow.GUIObjects
+
+namespace RiverHollow.GUIComponents.GUIObjects
 {
     public class GUIObject
     {
@@ -14,6 +15,8 @@ namespace RiverHollow.GUIObjects
         private List<GUIObject> ToAdd;
         private List<GUIObject> ToRemove;
         internal List<GUIObject> Controls;
+
+        public delegate void BtnClickDelegate();
 
         GUIWindow _parentControl;
         public GUIWindow ParentWindow

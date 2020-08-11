@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 
 using static RiverHollow.Game_Managers.GameManager;
 
-namespace RiverHollow.GUIObjects
+namespace RiverHollow.GUIComponents.GUIObjects
 {
     public static class GUICursor
     {

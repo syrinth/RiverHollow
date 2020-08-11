@@ -1,17 +1,18 @@
-﻿using RiverHollow.Tile_Engine;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 using RiverHollow.Game_Managers;
-using static RiverHollow.Game_Managers.GameManager;
-using RiverHollow.Game_Managers.GUIComponents.Screens;
-using static RiverHollow.Game_Managers.DataManager;
-using System;
+using RiverHollow.GUIComponents.Screens;
 using RiverHollow.SpriteAnimations;
-using RiverHollow.Misc;
+using RiverHollow.Tile_Engine;
+using RiverHollow.Utilities;
+
+using static RiverHollow.Game_Managers.DataManager;
+using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 
-namespace RiverHollow.WorldObjects
+
+namespace RiverHollow.Items
 {
     public class WorldObject
     {

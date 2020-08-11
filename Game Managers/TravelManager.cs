@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using RiverHollow.Actors;
-using RiverHollow.Tile_Engine;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using static RiverHollow.Game_Managers.GameManager;
+using Microsoft.Xna.Framework;
+using RiverHollow.Characters;
+using RiverHollow.Tile_Engine;
+
 
 namespace RiverHollow.Game_Managers
 {

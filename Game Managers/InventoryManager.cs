@@ -1,6 +1,7 @@
-﻿using RiverHollow.WorldObjects;
-using System.Collections.Generic;
-using static RiverHollow.WorldObjects.Item;
+﻿using System.Collections.Generic;
+using RiverHollow.Items;
+
+using static RiverHollow.Items.Item;
 
 namespace RiverHollow.Game_Managers
 {

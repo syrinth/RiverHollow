@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-
 using static RiverHollow.Game_Managers.GameManager;
-namespace RiverHollow.Misc
+
+namespace RiverHollow.Utilities
 {
     public class Util
     {

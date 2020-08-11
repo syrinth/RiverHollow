@@ -1,16 +1,17 @@
-﻿using RiverHollow.Game_Managers;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using RiverHollow.Characters;
+using RiverHollow.CombatStuff;
+using RiverHollow.Game_Managers;
 using RiverHollow.SpriteAnimations;
+using RiverHollow.Utilities;
+
 using static RiverHollow.Game_Managers.GameManager;
-using RiverHollow.Misc;
-using System.Collections.Generic;
-using RiverHollow.Actors;
-using RiverHollow.Actors.CombatStuff;
 using static RiverHollow.Game_Managers.SaveManager;
 
-namespace RiverHollow.WorldObjects
+
+namespace RiverHollow.Items
 {
     public class Item
     {

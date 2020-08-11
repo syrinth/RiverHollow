@@ -1,17 +1,17 @@
-﻿using RiverHollow.WorldObjects;
-using RiverHollow.Tile_Engine;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using RiverHollow.Actors;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using RiverHollow.Actors.CombatStuff;
-using RiverHollow.Misc;
-
-using static RiverHollow.Game_Managers.GameManager;
+using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Buildings;
 using RiverHollow.Characters;
+using RiverHollow.CombatStuff;
+using RiverHollow.Items;
+using RiverHollow.Misc;
+using RiverHollow.Tile_Engine;
+using RiverHollow.Utilities;
+
+using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.Game_Managers
@@ -101,6 +101,10 @@ namespace RiverHollow.Game_Managers
             }
 
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestType.Fetch, "Getwood, dumbass", 1, null, DataManager.GetItem(2)));
+            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestType.Fetch, "Rude!", 1, null, DataManager.GetItem(2)));
+            AddToQuestLog(new Quest("Get Wood", Quest.QuestType.Fetch, ";)", 1, null, DataManager.GetItem(2)));
+            AddToQuestLog(new Quest("Get Wood", Quest.QuestType.Fetch, "Oh Yeaaah", 1, null, DataManager.GetItem(2)));
+            AddToQuestLog(new Quest("BLARGH", Quest.QuestType.Fetch, ":ooooooo", 1, null, DataManager.GetItem(2)));
         }
 
         public static void SetPath(List<RHTile> list)

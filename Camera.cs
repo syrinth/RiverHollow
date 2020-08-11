@@ -1,12 +1,12 @@
-﻿using RiverHollow.Game_Managers;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using RiverHollow.Characters;
+using RiverHollow.Game_Managers;
+using RiverHollow.Utilities;
 
 using static RiverHollow.Game_Managers.GameManager;
-using RiverHollow.Actors;
-using RiverHollow.Misc;
-using System;
 
 namespace RiverHollow
 {

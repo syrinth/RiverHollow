@@ -1,27 +1,28 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Actors.CombatStuff;
+using RiverHollow.CombatStuff;
 using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
-using RiverHollow.Game_Managers.GUIObjects;
+using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens;
-using RiverHollow.GUIObjects;
+using RiverHollow.Items;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
-using RiverHollow.WorldObjects;
-using System;
-using System.Collections.Generic;
-using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.Game_Managers.GUIObjects.HUDMenu;
-using static RiverHollow.Game_Managers.GUIObjects.HUDMenu.HUDManagement;
-using static RiverHollow.Game_Managers.DataManager;
-using static RiverHollow.WorldObjects.Clothes;
-using static RiverHollow.Game_Managers.TravelManager;
-using static RiverHollow.WorldObjects.WorldItem;
-using static RiverHollow.Game_Managers.SaveManager;
+using RiverHollow.Utilities;
 
-namespace RiverHollow.Actors
+using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Game_Managers.DataManager;
+using static RiverHollow.Game_Managers.TravelManager;
+using static RiverHollow.Game_Managers.SaveManager;
+using static RiverHollow.Items.Clothes;
+using static RiverHollow.Items.WorldItem;
+using static RiverHollow.GUIComponents.Screens.HUDMenu;
+using static RiverHollow.GUIComponents.Screens.HUDMenu.HUDManagement;
+
+namespace RiverHollow.Characters
 {
     #region Abstract Supertypes
     ///These abstract classes are separate to compartmentalize the various properties and

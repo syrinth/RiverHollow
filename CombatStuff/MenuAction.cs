@@ -1,19 +1,21 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
-using RiverHollow.Game_Managers.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Misc;
+using RiverHollow.GUIComponents.Screens;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
-using RiverHollow.WorldObjects;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using static RiverHollow.Actors.Actor;
+using RiverHollow.Items;
+using RiverHollow.Utilities;
+
+using static RiverHollow.Characters.Actor;
 using static RiverHollow.Game_Managers.GameManager;
 
-namespace RiverHollow.Actors.CombatStuff
+
+namespace RiverHollow.CombatStuff
 {
     public class MenuAction
     {

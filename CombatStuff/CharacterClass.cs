@@ -1,11 +1,11 @@
-﻿
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
-using RiverHollow.Misc;
-using System.Collections.Generic;
+using RiverHollow.Utilities;
+
 using static RiverHollow.Game_Managers.GameManager;
 
-namespace RiverHollow.Actors.CombatStuff
+namespace RiverHollow.CombatStuff
 {
     public class CharacterClass
     {

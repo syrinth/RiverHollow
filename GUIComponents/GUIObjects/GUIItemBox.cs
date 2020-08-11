@@ -1,18 +1,18 @@
-﻿using RiverHollow.Game_Managers.GUIObjects;
-using RiverHollow.WorldObjects;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.GUIObjects;
-using RiverHollow.GUIComponents.GUIObjects;
-using static RiverHollow.Game_Managers.DataManager;
-using System.Collections.Generic;
-using System;
-using static RiverHollow.WorldObjects.Clothes;
-using static RiverHollow.Game_Managers.GameManager;
-using static RiverHollow.WorldObjects.Item;
-using RiverHollow.Actors;
+using RiverHollow.Characters;
+using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Items;
 
-namespace RiverHollow.Game_Managers.GUIComponents.GUIObjects
+using static RiverHollow.Game_Managers.DataManager;
+using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.Items.Item;
+using static RiverHollow.Items.Clothes;
+
+namespace RiverHollow.GUIComponents.GUIObjects
 {
     public class GUIItemBox : GUIImage
     {
