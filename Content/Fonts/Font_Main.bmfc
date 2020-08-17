@@ -50,7 +50,7 @@ invB=0
 outlineThickness=0
 
 # selected chars
-chars=34,168
+
 
 # imported icon images
 icon="Glyphs_Main/A.png",65,0,0,0
@@ -129,3 +129,4 @@ icon="Glyphs_Main/__slash.png",47,0,0,0
 icon="Glyphs_Main/__brace1.png",91,0,0,0
 icon="Glyphs_Main/__brace2.png",93,0,0,0
 icon="Glyphs_Main/__score.png",95,0,0,0
+icon="Glyphs_Main/__apostrophe.png",39,0,0,0

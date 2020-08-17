@@ -1159,7 +1159,7 @@ namespace RiverHollow.Characters
         /// to the given tile, then assign the character to the appropiate tiles around it.
         /// </summary>
         /// <param name="newTile">The tile to be the new base tile</param>
-        public void SetBaseTile(RHTile newTile)
+        public void SetBaseTile(RHTile newTile, bool setPosition = false)
         {
             ClearTiles();
 
@@ -1176,6 +1176,8 @@ namespace RiverHollow.Characters
                 //Reset to the first Tile in the current row and go down one
                 lastTile = _arrTiles[i, 0].GetTileByDirection(DirectionEnum.Down);     
             }
+
+            if (setPosition) { Position = newTile.Position; }
         }
 
         /// <summary>

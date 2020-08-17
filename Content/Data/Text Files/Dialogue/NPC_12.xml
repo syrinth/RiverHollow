@@ -9,7 +9,7 @@
     <!--Key:NPCType#, Value:Text-->
     <Item>
       <Key>Introduction</Key>
-      <Value>Hi! I'm $0$, it's good to see a new face around here!</Value>
+      <Value>Ah! I was wondering when I'd hear from you. $11$ told me you'd be arriving soon. I'm $0$, the Blacksmith here in town. You need anything hammered out, tools, or weapons you come give me a visit, y'hear?</Value>
     </Item>
     <Item>
       <Key>1</Key>

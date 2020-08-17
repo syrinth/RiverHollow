@@ -236,14 +236,6 @@ namespace RiverHollow.Game_Managers
                                 GoToMainSelection();
                             }
                         }
-                        //if (!ActiveCharacter.IsActorType(ActorEnum.Monster) || SelectedAction == null)
-                        //{
-                        //    EndTurn();
-                        //}
-                        //else
-                        //{
-                        //    CombatManager.ChangePhase(PhaseEnum.PerformAction);
-                        //}
                     }
                     break;
 

@@ -9,7 +9,7 @@
     <!--Key:NPCType#, Value:Text-->
     <Item>
       <Key>Introduction</Key>
-      <Value>Hi! I'm $0$, it's good to see a new face around here!</Value>
+      <Value>Hi there, $0$'s my name and I'm the mason here in town. You're moving into the abandoned Manor right? Come get me when you're ready to start renovating. I also sell building materials if you find yourself short.</Value>
     </Item>
     <Item>
       <Key>1</Key>

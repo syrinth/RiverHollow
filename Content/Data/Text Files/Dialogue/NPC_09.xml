@@ -9,7 +9,7 @@
     <!--Key:NPCType#, Value:Text-->
     <Item>
       <Key>Introduction</Key>
-      <Value>Greetings, my name is $0$. I've heard that you're a warrior, is it true? I hope so, I can only do so much here.[Yes:IntroYes|No:IntroNo|Maybe:IntroMaybe]</Value>
+      <Value>Hello there! Welcome to the Blue Hare Inn. You must be $^$. The town's been abuzz about the manor being filled again. Let me know if you need anything.</Value>
     </Item>
     <Item>
       <Key>IntroYes</Key>

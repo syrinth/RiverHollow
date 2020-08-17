@@ -9,15 +9,7 @@
     <!--Key:NPCType#, Value:Text-->
     <Item>
       <Key>Introduction</Key>
-      <Value>Oh, you're $^$ right? I'm $0$. You're here for adventure, right? Good! I'm a ranger in these parts, I know the landscape like the back of my hand. Bring me any adventure maps you find, and I'll make sure you get there.</Value>
-    </Item>
-    <Item>
-      <Key>1</Key>
-      <Value>Hello, $^$, Care for a drink? You'll have to bring your own I'm afraid!</Value>
-    </Item>
-    <Item>
-      <Key>2</Key>
-      <Value>Do you have any adventure maps? It's been a while since I've gone exploring.</Value>
+      <Value>Welcome to the Adventurer's Guild. I'm $0$, guildmaster here. It's good to see a new face in town. You can hire adventurers here, as long as you have housing for them as well as send them on missions.</Value>
     </Item>
     <Item>
       <Key>Gift</Key>

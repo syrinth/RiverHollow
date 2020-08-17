@@ -96,7 +96,7 @@
     </Item>
     <Item>
       <Key>121</Key>
-      <Value>[Type:Action][Target:Enemy][Range:5][AreaType:Single][Harm:50][Push:1][Step:2][Action:UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:5][AreaType:Single][Harm:50][Push:1][Step:1][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>122</Key>

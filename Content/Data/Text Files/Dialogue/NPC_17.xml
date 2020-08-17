@@ -9,15 +9,7 @@
     <!--Key:NPCType#, Value:Text-->
     <Item>
       <Key>Introduction</Key>
-      <Value>Ah, you must be the new one in town. Greetings to you, young one, I'm $0$, a purveyor of magical items. If you have the time to hear me out, I have some business for you.</Value>
-    </Item>
-    <Item>
-      <Key>1</Key>
-      <Value>You seem to be in a rush, don't let me keep you. I hope you have a good day.</Value>
-    </Item>
-    <Item>
-      <Key>2</Key>
-      <Value>Hello, $^$. Could you talk to $1$ for me by any chance? I worry about her, always pushing herself so hard.</Value>
+      <Value>Greetings, young one. I am $0$, purveyor of magic and enchantments. I hope you find your stay in town pleasant.</Value>
     </Item>
     <Item>
       <Key>Gift</Key>

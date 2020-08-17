@@ -9,11 +9,11 @@
     <!--Key:NPCType#, Value:Text-->
     <Item>
       <Key>Introduction</Key>
-      <Value>Hi! Are you to town? I don't think I've seen your face before, I'm $0$. It's so nice to meet you.</Value>
+      <Value>Hmm? I haven't seen you before, are you new? I'm $0$. Charmed to meet you. Welcome to River Hollow, the town where nothing happens.</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>$^$! How are you today?</Value>
+      <Value>Hello $^$, seeing you is a beacon of light on an otherwise dismal day.</Value>
     </Item>
     <Item>
       <Key>2</Key>
