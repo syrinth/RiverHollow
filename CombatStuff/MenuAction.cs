@@ -380,7 +380,7 @@ namespace RiverHollow.CombatStuff
                 {
                     if (act != null && !act.KnockedOut())
                     {
-                        MoveAction(act.BaseTile, _iPushVal, SkillTagsEnum.Push, true);
+                        MoveAction(act.BaseTile, _iPushVal, SkillTagsEnum.Push, true, true);
                     }
                 }
             }
@@ -392,7 +392,7 @@ namespace RiverHollow.CombatStuff
                 {
                     if (act != null && !act.KnockedOut())
                     {
-                        MoveAction(act.BaseTile, _iPullVal, SkillTagsEnum.Pull);
+                        MoveAction(act.BaseTile, _iPullVal, SkillTagsEnum.Pull, true);
                     }
                 }
             }
@@ -400,13 +400,13 @@ namespace RiverHollow.CombatStuff
             //Handler for the SkillUser to retreat
             if (_liEffects.Contains(SkillTagsEnum.Retreat))
             {
-                MoveAction(TileTargetList[0], _iRetreatVal, SkillTagsEnum.Retreat);
+                MoveAction(TileTargetList[0], _iRetreatVal, SkillTagsEnum.Retreat, false);
             }
 
             //Handler for the SkillUser to move forwrd
             if (_liEffects.Contains(SkillTagsEnum.Step))
             {
-                MoveAction(TileTargetList[0], _iStepVal, SkillTagsEnum.Step);
+                MoveAction(TileTargetList[0], _iStepVal, SkillTagsEnum.Step, false);
             }
 
             //Handler for when the action removes things
@@ -585,28 +585,40 @@ namespace RiverHollow.CombatStuff
 
         #region Combat Action Movement
 
-        private bool MoveAction(RHTile t, int moveVal, SkillTagsEnum moveAction, bool repeat = false)
+        /// <summary>
+        /// Attempts to reassign the occupant of the targeted tile to the
+        /// appropriate tile next to it. If pushing and repeating, then push 
+        /// characters that are in the way if possible.
+        /// </summary>
+        /// <param name="t">The base tile of the targeted actor</param>
+        /// <param name="moveVal">How many tiles to move</param>
+        /// <param name="moveAction">The type of movement happening</param>
+        /// <param name="moveTarget">Whether to move the target or the Skill User</param>
+        /// <param name="repeat">Whether or not to repeat the action</param>
+        /// <returns>True if the target was successfully pushed</returns>
+        private bool MoveAction(RHTile targetActorTile, int moveVal, SkillTagsEnum moveAction, bool moveTarget, bool repeat = false)
         {
             bool rv = false;
             int i = moveVal;
             while (i > 0)
             {
                 RHTile test = null;
-                test = DetermineMovementTile(t, _cmbtUser.BaseTile, moveAction);
+                test = DetermineMovementTile(targetActorTile, _cmbtUser.BaseTile, moveAction);
                 if (test != null)
                 {
+                    RHTile movingTile = moveTarget ? targetActorTile : _cmbtUser.BaseTile;
                     //Not working with Step or Retreat because this is moving the targeted character and NOT the active character
-                    if (!test.HasCombatant() || test.Character == t.Character)
+                    if (!test.HasCombatant() || test.Character == movingTile.Character)
                     {
-                        t.Character.SetBaseTile(test, true);
-                        t = test;
+                        movingTile.Character.SetBaseTile(test, true);
+                        movingTile = test;
                         rv = true;
                     }
-                    else if(repeat)
+                    else if(repeat && moveAction == SkillTagsEnum.Push)
                     {
                         if (MoveAction(test, moveVal, moveAction, repeat))
                         {
-                            t.Character.SetBaseTile(test, true);
+                            movingTile.Character.SetBaseTile(test, true);
                             rv = true;
                         }
                     }
@@ -616,113 +628,7 @@ namespace RiverHollow.CombatStuff
 
             return rv;
         }
-        /// <summary>
-        /// Attempts to reassign the occupant of the targeted tile to the
-        /// tile right behind it. If there is an occupant of that tile, push
-        /// themback too if possible.
-        /// </summary>
-        /// <param name="t">The target tile</param>
-        /// <returns>True if the target was successfully pushed</returns>
-        private bool Push(RHTile t)
-        {
-            bool rv = false;
-            int i = _iPushVal;
-            while (i > 0)
-            {
-                RHTile test = null;
-                test = DetermineMovementTile(t, _cmbtUser.BaseTile, SkillTagsEnum.Push);
-                if (test != null)
-                {
-                    if (!test.HasCombatant() || test.Character == t.Character)
-                    {
-                        t.Character.SetBaseTile(test, true);
-                        t = test;
-                        rv = true;
-                    }
-                    else
-                    {
-                        if (Push(test))
-                        {
-                            t.Character.SetBaseTile(test, true);
-                            rv = true;
-                        }
-                    }
-                }
-                i--;
-            }
-
-            return rv;
-        }
-
-        private bool Pull(RHTile t)
-        {
-            bool rv = false;
-            int i = _iPullVal;
-            while (i > 0)
-            {
-                RHTile test = null;
-                test = DetermineMovementTile(t, _cmbtUser.BaseTile, SkillTagsEnum.Pull);
-                if (test != null)
-                {
-                    if (!test.HasCombatant())
-                    {
-                        t.Character.SetBaseTile(test);
-                        t = test;
-                        rv = true;
-                    }
-                }
-                i--;
-            }
-
-            return rv;
-        }
-
-        private bool Step(RHTile t)
-        {
-            bool rv = false;
-            int i = _iStepVal;
-            while (i > 0)
-            {
-                RHTile test = null;
-                test = DetermineMovementTile(t, _cmbtUser.BaseTile, SkillTagsEnum.Step);
-                if (test != null)
-                {
-                    if (!test.HasCombatant())
-                    {
-                        t.Character.SetBaseTile(test);
-                        t = test;
-                        rv = true;
-                    }
-                }
-                i--;
-            }
-
-            return rv;
-        }
-
-        private bool Retreat(RHTile t)
-        {
-            bool rv = false;
-            int i = _iRetreatVal;
-            while (i > 0)
-            {
-                RHTile test = null;
-                test = DetermineMovementTile(t, _cmbtUser.BaseTile, SkillTagsEnum.Retreat);
-                if (test != null)
-                {
-                    if (!test.HasCombatant())
-                    {
-                        t.Character.SetBaseTile(test);
-                        t = test;
-                        rv = true;
-                    }
-                }
-                i--;
-            }
-
-            return rv;
-        }
-
+ 
         /// <summary>
         /// Figures out the next tile in the given direction of the movement tag
         /// </summary>

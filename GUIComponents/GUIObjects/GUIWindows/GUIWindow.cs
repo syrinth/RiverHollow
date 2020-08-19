@@ -18,7 +18,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             public int BottomEdge => _iBottomEdge;
             public int ScaledBottomEdge => _iBottomEdge * (int)GameManager.Scale;
             int _iSize;
-            public int Size => _iSize;  //The size of the non-edges
+            public int Size => _iSize;  //The size of the center of the image square
 
             public WindowData(int x, int y, int edge, int size, int BottomEdge = -1)
             {

@@ -597,7 +597,7 @@ namespace RiverHollow.GUIComponents.Screens
                             {
                                 if (CombatManager.ActiveCharacter.CurrentCharge == 100)
                                 {
-                                    CombatManager.ActiveCharacter.CurrentCharge -= 30;
+                                    CombatManager.ActiveCharacter.CurrentCharge -= 50;
                                 }
                                 CombatManager.EndTurn();
                             }

@@ -21,6 +21,7 @@ using static RiverHollow.Items.Clothes;
 using static RiverHollow.Items.WorldItem;
 using static RiverHollow.GUIComponents.Screens.HUDMenu;
 using static RiverHollow.GUIComponents.Screens.HUDMenu.HUDManagement;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
 namespace RiverHollow.Characters
 {
@@ -715,10 +716,6 @@ namespace RiverHollow.Characters
         protected RHTile[,] _arrTiles;
         public PriorityQueue<RHTile> legalTiles;
 
-        #region Display
-        protected DisplayBar _dbHP;
-        #endregion
-
         #region Stats
         public virtual int Attack => 9;
 
@@ -799,12 +796,40 @@ namespace RiverHollow.Characters
                 [ElementEnum.Lightning] = ElementAlignment.Neutral
             };
 
-            _dbHP = new DisplayBar(this);
         }
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
             base.Draw(spriteBatch, useLayerDepth);
-            _dbHP?.Draw(spriteBatch);
+
+            if (CombatManager.InCombat && _iCurrentHP > 0)
+            {
+                Texture2D texture = DataManager.GetTexture(@"Textures\Dialog");
+                Vector2 pos = Position;
+                pos.Y += (TileSize * _iSize);
+
+                //Do not allow the bar to have less than 2 pixels, one for the border and one to display.
+                double totalWidth = TileSize * Size;
+                double percent = (double)CurrentHP / (double)MaxHP;
+                int drawWidth = Math.Max((int)(totalWidth * percent), 2);
+
+                DrawDisplayBar(spriteBatch, pos, texture, drawWidth, (int)totalWidth, 16, 0);
+
+                if (MaxMP > 0)
+                {
+                    pos.Y += 4;
+                    DrawDisplayBar(spriteBatch, pos, texture, drawWidth, (int)totalWidth, 22, 0);
+                }
+            }
+        }
+
+        private void DrawDisplayBar(SpriteBatch spriteBatch, Vector2 pos, Texture2D texture, int drawWidth, int totalWidth, int startX, int startY)
+        {
+            spriteBatch.Draw(texture, new Rectangle((int)pos.X, (int)pos.Y, drawWidth, 4), new Rectangle(startX + 4, startY, 1, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y);
+
+            //Draw End, then middle, then other end
+            spriteBatch.Draw(texture, new Rectangle((int)pos.X, (int)pos.Y, 1, 4), new Rectangle(startX, startY, 1, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y + 1);
+            spriteBatch.Draw(texture, new Rectangle((int)pos.X + 1, (int)pos.Y, (int)totalWidth - 2, 4), new Rectangle(startX + 1, startY, 2, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y + 1);
+            spriteBatch.Draw(texture, new Rectangle((int)pos.X + (int)totalWidth - 1, (int)pos.Y, 1, 4), new Rectangle(startX + 3, startY, 1, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y + 1);
         }
 
         public override void Update(GameTime gTime)
@@ -892,7 +917,7 @@ namespace RiverHollow.Characters
         public void ProcessAttack(CombatActor attacker, int potency, int critRating, ElementEnum element = ElementEnum.None)
         {
             double compression = 0.8;
-            double potencyMod = potency / 100;   //100 potency is considered an average attack
+            double potencyMod = potency / 100.0;   //100 potency is considered an average attack
             double base_attack = attacker.Attack;  //Attack stat is either weapon damage or mod on monster str
             double StrMult = Math.Round(1 + ((double)attacker.StatStr / 4 * attacker.StatStr / MAX_STAT), 2);
 
@@ -1002,10 +1027,6 @@ namespace RiverHollow.Characters
                     }
                 }
             }
-
-            //If the victim is a monster and this attack kills them,
-            //immediately hide the hp bar.
-            if (IsActorType(ActorEnum.Monster) && _iCurrentHP <= 0) { _dbHP = null; }
 
             CombatManager.AddFloatingText(new FloatingText(this.Position, this.SpriteWidth, iValue.ToString(), bHarmful ? Color.Red : Color.Green));
         }
@@ -1328,39 +1349,6 @@ namespace RiverHollow.Characters
 
         public virtual bool IsSummon() { return false; }
 
-        protected class DisplayBar
-        {
-            bool _bHasMana;
-            CombatActor _act;
-
-            public DisplayBar(CombatActor act)
-            {
-                _act = act;
-                _bHasMana = act.MaxMP > 0;
-            }
-
-            public void Draw(SpriteBatch spriteBatch)
-            {
-                if (CombatManager.InCombat)
-                {
-                    Vector2 pos = _act.Position;
-                    pos.Y += (TileSize * _act._iSize);
-
-                    //Do not allow the bar to have less than 2 pixels, one for the border and one to display.
-                    int percent = Math.Max((int)((int)(TileSize * _act.Size) * (float)_act.CurrentHP / (float)_act.MaxHP), 2);
-                    spriteBatch.Draw(DataManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, percent, 4), new Rectangle(16, 4, percent, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y);
-                    spriteBatch.Draw(DataManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, (int)(TileSize * _act.Size), 4), new Rectangle(16, 0, 16, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y + 1);
-
-                    if (_bHasMana)
-                    {
-                        pos.Y += 4;
-                        percent = (int)(16 * (float)_act.CurrentMP / (float)_act.MaxMP);
-                        spriteBatch.Draw(DataManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, percent, 4), new Rectangle(16, 12, percent, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y);
-                        spriteBatch.Draw(DataManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)pos.X, (int)pos.Y, (int)(TileSize * _act.Size), 4), new Rectangle(16, 8, 16, 4), Color.White, 0, Vector2.Zero, SpriteEffects.None, pos.Y + 1);
-                    }
-                }
-            }
-        }
     }
     #endregion
 

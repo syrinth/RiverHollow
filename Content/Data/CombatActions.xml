@@ -11,7 +11,7 @@
     <!--<20> Wizard Skills-->
     <Item>
       <Key>20</Key>
-      <Value>[Type:Spell][Animation:LightningSprite-94-160-15-0.1][AnimOffset:41-105][Target:Enemy][Range:7][AreaType:Cross][Cost:5][Harm:200][Action:UserCast Direct Apply][Element:Lightning]</Value>
+      <Value>[Type:Spell][Animation:LightningSprite-94-160-15-0.05][AnimOffset:41-105][Target:Enemy][Range:7][AreaType:Cross][Cost:5][Harm:200][Action:UserCast Direct Apply][Element:Lightning]</Value>
     </Item>
     <Item>
       <Key>21</Key>
@@ -96,7 +96,7 @@
     </Item>
     <Item>
       <Key>121</Key>
-      <Value>[Type:Action][Target:Enemy][Range:5][AreaType:Single][Harm:50][Push:1][Step:1][Action:UserAttack Apply]</Value>
+      <Value>[Type:Action][Target:Enemy][Range:5][AreaType:Single][Harm:50][Push:1][Step:2][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
       <Key>122</Key>
