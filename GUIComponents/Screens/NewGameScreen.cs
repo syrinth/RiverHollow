@@ -193,6 +193,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             PlayerManager.World.SetScale();
             PlayerManager.SetClass(_csbSelected.ClassID);
+            PlayerManager.World.AssignStartingGear();
             PlayerManager.SetName(_nameWindow.GetText());
             PlayerManager.SetManorName(_manorWindow.GetText());
 

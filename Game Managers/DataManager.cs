@@ -105,11 +105,11 @@ namespace RiverHollow.Game_Managers
             LoadMerchandise(Content);
             LoadDictionaries(Content);
 
+            AddDirectoryTextures(FOLDER_ITEMS, Content);
+            AddDirectoryTextures(FOLDER_BUILDINGS, Content);
+
             LoadNPCSchedules(Content);
             LoadNPCs(Content);
-
-            AddDirectoryTextures(FOLDER_BUILDINGS, Content);
-            AddDirectoryTextures(FOLDER_ITEMS, Content);
 
             _liForest = new List<int>();
             _liMountain = new List<int>();

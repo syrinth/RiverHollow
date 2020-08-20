@@ -921,7 +921,7 @@ namespace RiverHollow.Characters
             double base_attack = attacker.Attack;  //Attack stat is either weapon damage or mod on monster str
             double StrMult = Math.Round(1 + ((double)attacker.StatStr / 4 * attacker.StatStr / MAX_STAT), 2);
 
-            double dmg = (Math.Max(1, base_attack - StatDef) * compression * StrMult);
+            double dmg = (Math.Max(1, base_attack - StatDef) * compression * StrMult * potencyMod);
             dmg += ApplyResistances(dmg, element);
 
             if (RHRandom.Instance.Next(1, 100) <= (attacker.CritRating + critRating)) { dmg *= 2; }
@@ -1464,10 +1464,10 @@ namespace RiverHollow.Characters
         /// </summary>
         public void AssignStartingGear()
         {
-            if (Weapon == null) { Weapon.SetGear((Equipment)GetItem(_class.WeaponID)); }
-            if (Armor == null) { Armor.SetGear((Equipment)GetItem(_class.ArmorID)); }
-            if (Head == null) { Head.SetGear((Equipment)GetItem(_class.HeadID)); }
-            if (Wrist == null) { Wrist.SetGear((Equipment) GetItem(_class.WristID));}
+            if (Weapon.IsEmpty()) { Weapon.SetGear((Equipment)GetItem(_class.WeaponID)); }
+            if (Armor.IsEmpty()) { Armor.SetGear((Equipment)GetItem(_class.ArmorID)); }
+            if (Head.IsEmpty()) { Head.SetGear((Equipment)GetItem(_class.HeadID)); }
+            if (Wrist.IsEmpty()) { Wrist.SetGear((Equipment) GetItem(_class.WristID));}
         }
 
         public void AddXP(int x)
@@ -1587,6 +1587,7 @@ namespace RiverHollow.Characters
                 return rv;
             }
             public Equipment GetItem() { return _eGear; }
+            public bool IsEmpty() { return _eGear == null; }
         }
     }
    
