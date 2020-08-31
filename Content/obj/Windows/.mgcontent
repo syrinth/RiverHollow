@@ -163,7 +163,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Manor/mapTower2.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Manor/mapTower3.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Misc/mapLesserForest.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Swamp/mapSwamp.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapGuildhouse.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapHospital.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapHouseNPC1.tmx</File>
@@ -238,5 +237,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC_12.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC_15.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapMayorsHouse.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Swamp/mapSwamp_03.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Misc/mapConnection_03.tmx</File>
   </SourceFiles>
 </SourceFileCollection>

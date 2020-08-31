@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="50">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="51">
  <properties>
   <property name="Outside" type="bool" value="true"/>
   <property name="Town" type="bool" value="true"/>
@@ -391,6 +391,13 @@
     <property name="Door" type="bool" value="true"/>
     <property name="EntranceDir" value="Down"/>
     <property name="Map" value="mapMayorsHouse"/>
+   </properties>
+  </object>
+  <object id="50" name="Entrance" x="1157.27" y="1594.81" width="36.4061" height="5.1667">
+   <properties>
+    <property name="Door" type="bool" value="true"/>
+    <property name="EntranceDir" value="Up"/>
+    <property name="Map" value="mapConnection_03"/>
    </properties>
   </object>
  </objectgroup>

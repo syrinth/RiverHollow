@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.3.2" name="tilesetManorGrounds" tilewidth="16" tileheight="16" tilecount="625" columns="25">
+<tileset version="1.4" tiledversion="1.4.1" name="tilesetManorGrounds" tilewidth="16" tileheight="16" tilecount="625" columns="25">
  <image source="..\Tilesets\tilesetManorGrounds.png" trans="ffffff" width="400" height="400"/>
  <terraintypes>
   <terrain name="Blank" tile="18"/>
@@ -281,55 +281,31 @@
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
-  <animation>
-   <frame tileid="181" duration="1000"/>
-   <frame tileid="187" duration="1000"/>
-  </animation>
  </tile>
  <tile id="182" terrain="5,5,6,6">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
-  <animation>
-   <frame tileid="182" duration="1000"/>
-   <frame tileid="188" duration="1000"/>
-  </animation>
  </tile>
  <tile id="183" terrain="5,5,6,5">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
-  <animation>
-   <frame tileid="183" duration="1000"/>
-   <frame tileid="189" duration="1000"/>
-  </animation>
  </tile>
  <tile id="184" terrain="6,6,6,5">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
-  <animation>
-   <frame tileid="184" duration="1000"/>
-   <frame tileid="190" duration="1000"/>
-  </animation>
  </tile>
  <tile id="185" terrain="6,6,5,5">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
-  <animation>
-   <frame tileid="185" duration="1000"/>
-   <frame tileid="191" duration="1000"/>
-  </animation>
  </tile>
  <tile id="186" terrain="6,6,5,6">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
-  <animation>
-   <frame tileid="186" duration="1000"/>
-   <frame tileid="192" duration="1000"/>
-  </animation>
  </tile>
  <tile id="200" terrain="1,5,1,5"/>
  <tile id="201" terrain="5,5,5,5"/>
@@ -341,10 +317,6 @@
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
-  <animation>
-   <frame tileid="206" duration="1000"/>
-   <frame tileid="212" duration="1000"/>
-  </animation>
  </tile>
  <tile id="207" terrain="6,6,6,6">
   <properties>
@@ -355,29 +327,17 @@
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
-  <animation>
-   <frame tileid="208" duration="1000"/>
-   <frame tileid="214" duration="1000"/>
-  </animation>
  </tile>
  <tile id="209" terrain="6,5,6,5">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
-  <animation>
-   <frame tileid="209" duration="1000"/>
-   <frame tileid="215" duration="1000"/>
-  </animation>
  </tile>
  <tile id="210" terrain="5,5,5,5"/>
  <tile id="211" terrain="5,6,5,6">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
-  <animation>
-   <frame tileid="211" duration="1000"/>
-   <frame tileid="217" duration="1000"/>
-  </animation>
  </tile>
  <tile id="218">
   <properties>
@@ -424,55 +384,31 @@
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
-  <animation>
-   <frame tileid="231" duration="1000"/>
-   <frame tileid="237" duration="1000"/>
-  </animation>
  </tile>
  <tile id="232" terrain="6,6,5,5">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
-  <animation>
-   <frame tileid="232" duration="1000"/>
-   <frame tileid="238" duration="1000"/>
-  </animation>
  </tile>
  <tile id="233" terrain="6,5,5,5">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
-  <animation>
-   <frame tileid="233" duration="1000"/>
-   <frame tileid="239" duration="1000"/>
-  </animation>
  </tile>
  <tile id="234" terrain="6,5,6,6">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
-  <animation>
-   <frame tileid="234" duration="1000"/>
-   <frame tileid="240" duration="1000"/>
-  </animation>
  </tile>
  <tile id="235" terrain="5,5,6,6">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
-  <animation>
-   <frame tileid="235" duration="1000"/>
-   <frame tileid="241" duration="1000"/>
-  </animation>
  </tile>
  <tile id="236" terrain="5,6,6,6">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
-  <animation>
-   <frame tileid="236" duration="1000"/>
-   <frame tileid="242" duration="1000"/>
-  </animation>
  </tile>
  <tile id="243">
   <properties>

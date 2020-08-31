@@ -1473,11 +1473,6 @@
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapLesserForest.tmx
 
-#begin Maps/Swamp/mapSwamp.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Swamp/mapSwamp.tmx
-
 #begin Maps/Village/mapGuildhouse.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -2092,4 +2087,14 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Village/mapMayorsHouse.tmx
+
+#begin Maps/Swamp/mapSwamp_03.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Swamp/mapSwamp_03.tmx
+
+#begin Maps/Misc/mapConnection_03.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapConnection_03.tmx
 
