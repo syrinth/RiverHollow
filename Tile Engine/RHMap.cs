@@ -1847,7 +1847,7 @@ namespace RiverHollow.Tile_Engine
                     if (t != null && !o.Tiles.Contains(t))
                     {
                         t.SetShadowObject(o);
-                        o.ShadowTiles.Add(t);
+                        o.AddTile(t);
                     }
                 }
             }
@@ -2369,7 +2369,7 @@ namespace RiverHollow.Tile_Engine
                 _floorObj.MapPosition = Position;
                 _floorObj.SetMapName(MapName);
                 _floorObj.Tiles.Clear();
-                _floorObj.Tiles.Add(this);
+                _floorObj.AddTile(this);
                 _floorObj.AdjustObject();
             }
 

@@ -23,7 +23,6 @@ namespace RiverHollow.Items
         public AnimatedSprite Sprite => _sprite;
 
         public List<RHTile> Tiles;
-        public List<RHTile> ShadowTiles;
 
         protected bool _bImpassable = true;
         public bool Blocking => _bImpassable;
@@ -65,7 +64,6 @@ namespace RiverHollow.Items
 
         protected WorldObject() {
             Tiles = new List<RHTile>();
-            ShadowTiles = new List<RHTile>();
         }
 
         public WorldObject(int id, Vector2 pos, int width, int height) : this()
@@ -133,18 +131,23 @@ namespace RiverHollow.Items
         }
 
         /// <summary>
+        /// If the given RHTile is not present in the list of Tiles, add it
+        /// </summary>
+        /// <param name="t">The Tile to add to the list of known RHTiles</param>
+        public void AddTile(RHTile t)
+        {
+            if (!Tiles.Contains(t))
+            {
+                Tiles.Add(t);
+            }
+        }
+
+        /// <summary>
         /// Removes the object from the Tiles this Object sits upon
         /// </summary>
         public void RemoveSelfFromTiles()
         {
             foreach (RHTile t in Tiles)
-            {
-                if (t.Flooring == this) { t.RemoveFlooring(); }
-                if (t.WorldObject == this) { t.RemoveWorldObject(); }
-                if (t.ShadowObject == this) { t.RemoveShadowObject(); }
-            }
-
-            foreach (RHTile t in ShadowTiles)
             {
                 if (t.Flooring == this) { t.RemoveFlooring(); }
                 if (t.WorldObject == this) { t.RemoveWorldObject(); }

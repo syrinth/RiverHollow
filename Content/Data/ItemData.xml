@@ -455,31 +455,31 @@
     </Item>
     <Item>
       <Key>113</Key>
-      <Value>[Type:StaticItem][Image:0-0][Sell:100][ReqItems:0-3][Place:18]</Value>
+      <Value>[Type:StaticItem][Image:0-0][Sell:100][ReqItems:0-3][Place:16]</Value>
     </Item>
     <Item>
       <Key>114</Key>
-      <Value>[Type:StaticItem][Image:16-0][Sell:3000][ReqItems:37-5][Place:12]</Value>
+      <Value>[Type:StaticItem][Image:16-0][Sell:3000][ReqItems:37-5][Place:10]</Value>
     </Item>
     <Item>
       <Key>115</Key>
-      <Value>[Type:StaticItem][Image:32-0][Sell:3000][ReqItems:37-5][Place:13]</Value>
+      <Value>[Type:StaticItem][Image:32-0][Sell:3000][ReqItems:37-5][Place:11]</Value>
     </Item>
     <Item>
       <Key>116</Key>
-      <Value>[Type:StaticItem][Image:48-0][Sell:1000][ReqItems:37-5][Place:14]</Value>
+      <Value>[Type:StaticItem][Image:48-0][Sell:1000][ReqItems:37-5][Place:12]</Value>
     </Item>
     <Item>
       <Key>117</Key>
-      <Value>[Type:StaticItem][Image:64-0][Sell:500][ReqItems:0-5][Place:15]</Value>
+      <Value>[Type:StaticItem][Image:64-0][Sell:500][ReqItems:0-5][Place:13]</Value>
     </Item>
     <Item>
       <Key>118</Key>
-      <Value>[Type:StaticItem][Image:80-0][Sell:500][ReqItems:0-5][Place:16]</Value>
+      <Value>[Type:StaticItem][Image:80-0][Sell:500][ReqItems:0-5][Place:14]</Value>
     </Item>
     <Item>
       <Key>119</Key>
-      <Value>[Type:StaticItem][Image:96-0][Sell:500][ReqItems:0-10][Place:17]</Value>
+      <Value>[Type:StaticItem][Image:96-0][Sell:500][ReqItems:0-10][Place:15]</Value>
     </Item>
     <Item>
       <Key>120</Key>
