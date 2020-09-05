@@ -8,6 +8,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 {
     public class GUIList : GUIObject
     {
+        //Passes all action handlers to it's sub controls.
         public static int BTNSIZE = ScaledTileSize;
         public static int MAX_SHOWN_ITEMS;
 
@@ -25,7 +26,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         /// <param name="maxItems">The maximum number of objects that should be displayed in the List at any given time.</param>
         /// <param name="spacing">The amount of space (in px) to set inbetween items in the List.</param>
         /// <param name="maxHeight">The maximum height the GUIList is allowed to take up on the screen. If set, it will override maxItems if necessary.</param>
-        public GUIList(List<GUIObject> objects, int maxItems, int spacing, int maxHeight=0)
+        public GUIList(List<GUIObject> objects, int maxItems, int spacing, int maxHeight = 0)
         {
             MAX_SHOWN_ITEMS = maxItems;
             _liObjects = objects;
@@ -46,12 +47,12 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 AddControl(o);
             }
 
-            int calcHeight = (mostHeight*maxItems) + (spacing*(maxItems-1));
+            int calcHeight = (mostHeight * maxItems) + (spacing * (maxItems - 1));
 
             //the following set of if statmenets handles if the maxHeight parameter is used.
-            if(maxHeight > 0)
+            if (maxHeight > 0)
             {
-                if(calcHeight > maxHeight)
+                if (calcHeight > maxHeight)
                 {
                     int calcItems = maxHeight / (mostHeight + spacing);
                     calcHeight = (mostHeight * calcItems) + (spacing * (calcItems - 1));

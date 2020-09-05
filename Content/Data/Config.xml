@@ -35,7 +35,7 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[DebugLogs:Enabled][DebugPath:C]</Value>
+      <Value>[DebugLogs:Enabled][InstallDrive:C][DebugPath:\Travel Manager\]</Value>
     </Item>
     <Item>
       <Key>9</Key>

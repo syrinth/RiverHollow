@@ -1397,45 +1397,30 @@ namespace RiverHollow.GUIComponents.Screens
         public class HUDFriendship : GUIMainObject
         {
             GUIWindow _gWindow;
-            List<FriendshipBox> _villagerList;
+            GUIList _villagerList;
 
             public HUDFriendship()
             {
-                _gWindow = SetMainWindow();
-                _villagerList = new List<FriendshipBox>();
+                _gWindow = SetMainWindow(GUIManager.MAIN_COMPONENT_WIDTH + 100, GUIManager.MAIN_COMPONENT_WIDTH);
+                List<GUIObject> vList;
+                vList = new List<GUIObject>();
 
                 foreach (Villager n in DataManager.DiNPC.Values)
                 {
-                    FriendshipBox f = new FriendshipBox(n, _gWindow.MidWidth());
+                    FriendshipBox f = new FriendshipBox(n, _gWindow.MidWidth() - GUIList.BTNSIZE);
 
-                    if (_villagerList.Count == 0) { f.AnchorToInnerSide(_gWindow, GUIObject.SideEnum.TopLeft); }
+                    /*if (vList.Count == 0) { f.AnchorToInnerSide(_gWindow, GUIObject.SideEnum.TopLeft); }
                     else
                     {
-                        f.AnchorAndAlignToObject(_villagerList[_villagerList.Count - 1], GUIObject.SideEnum.Bottom, GUIObject.SideEnum.Left);   //-2 because we start at i=1
-                    }
+                        f.AnchorAndAlignToObject(vList[vList.Count - 1], GUIObject.SideEnum.Bottom, GUIObject.SideEnum.Left);   //-2 because we start at i=1
+                    }*/
 
-                    _villagerList.Add(f);
+                    vList.Add(f);
                 }
-            }
 
-            public override bool ProcessLeftButtonClick(Point mouse)
-            {
-                bool rv = false;
-
-                return rv;
-            }
-
-            public override bool ProcessRightButtonClick(Point mouse)
-            {
-                bool rv = false;
-                return rv;
-            }
-
-            public override bool ProcessHover(Point mouse)
-            {
-                bool rv = true;
-
-                return rv;
+                _villagerList = new GUIList(vList, 10, 4, _gWindow.MidHeight());
+                _villagerList.CenterOnScreen(); //.AnchorToInnerSide(_gWindow, GUIObject.SideEnum.TopLeft);//
+                AddControl(_villagerList);
             }
 
             public override void Draw(SpriteBatch spriteBatch)
@@ -1508,6 +1493,24 @@ namespace RiverHollow.GUIComponents.Screens
                     }
 
                     Resize();
+                }
+
+                public override bool ProcessLeftButtonClick(Point mouse)
+                {
+                    bool rv = false;
+                    return rv;
+                }
+
+                public override bool ProcessRightButtonClick(Point mouse)
+                {
+                    bool rv = false;
+                    return rv;
+                }
+
+                public override bool ProcessHover(Point mouse)
+                {
+                    bool rv = true;
+                    return rv;
                 }
             }
         }
