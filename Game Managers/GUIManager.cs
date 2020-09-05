@@ -202,9 +202,18 @@ namespace RiverHollow.Game_Managers
         /// and Width of the object to that of the GUIWindow then centers it on the screen.
         /// </summary>
         /// <returns>The created GUIWindow</returns>
+
         protected GUIWindow SetMainWindow()
         {
-            GUIWindow win = new GUIWindow(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_WIDTH);
+            return SetMainWindow(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_WIDTH);
+        }
+        protected GUIWindow SetMainWindow(int w, int h)
+        {
+            return SetMainWindow(GUIWindow.RedWin, w, h);
+        }
+        protected GUIWindow SetMainWindow(GUIWindow.WindowData wd, int w, int h)
+        {
+            GUIWindow win = new GUIWindow(wd, w, h);
             AddControl(win);
             Width = win.Width;
             Height = win.Height;

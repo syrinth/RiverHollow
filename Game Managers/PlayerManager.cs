@@ -369,9 +369,9 @@ namespace RiverHollow.Game_Managers
                 ToolInUse.Position = World.BodyPosition;
                 if (ToolInUse != null && !_bBusy)
                 {
-                    _bBusy = true;
                     if (DecreaseStamina(ToolInUse.StaminaCost))
                     {
+                        _bBusy = true;
                         ToolInUse.ToolAnimation.IsAnimating = true;
                         PlayerManager.World.PlayAnimation(VerbEnum.UseTool, DirectionEnum.Down);
                     }

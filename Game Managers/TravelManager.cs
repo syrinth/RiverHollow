@@ -31,7 +31,7 @@ namespace RiverHollow.Game_Managers
         {
             if (IsDebugEnabled())
             {
-                _swWriter = new StreamWriter(DataManager.Config[8]["DebugPath"] + @":\Users\Syrinth\Desktop\Travel Manager\" + name + " - TravelManager.txt");
+                _swWriter = new StreamWriter(DataManager.Config[8]["InstallDrive"] + @":" + DataManager.Config[8]["DebugPath"] + name + " - TravelManager.txt");
             }
         }
 
