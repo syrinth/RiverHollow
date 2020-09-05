@@ -204,7 +204,7 @@ namespace RiverHollow.Characters
 
         int _iBaseSpeed = 2;
         public float Speed => _iBaseSpeed * SpdMult;
-        public float SpdMult = 1f;
+        public float SpdMult = 0.6f;
 
         protected int _iSize = 1;
         public int Size => _iSize;
@@ -1635,7 +1635,7 @@ namespace RiverHollow.Characters
         public bool CanGiveGift = true;
 
         protected Dictionary<string, List<KeyValuePair<string, string>>> _diCompleteSchedule;         //Every day with a list of KVP Time/GoToLocations
-        List<KeyValuePair<string, List<RHTile>>> _todaysPathing = null;                             //List of Times with the associated pathing                                                     //List of Tiles to currently be traversing
+        List<KeyValuePair<string, PathData>> _liTodayPathing = null;                             //List of Times with the associated pathing                                                     //List of Tiles to currently be traversing
         protected int _iScheduleIndex;
 
         public Villager() {
@@ -1717,18 +1717,41 @@ namespace RiverHollow.Characters
 
         public override void Update(GameTime gTime)
         {
-            if (_todaysPathing != null)
+            if (_liTodayPathing != null)
             {
                 string currTime = GameCalendar.GetTime();
                 //_scheduleIndex keeps track of which pathing route we're currently following.
                 //Running late code to be implemented later
-                if (_iScheduleIndex < _todaysPathing.Count && ((_todaysPathing[_iScheduleIndex].Key == currTime)))// || RunningLate(movementList[_scheduleIndex].Key, currTime)))
+                if (_iScheduleIndex < _liTodayPathing.Count && ((_liTodayPathing[_iScheduleIndex].Key == currTime)))// || RunningLate(movementList[_scheduleIndex].Key, currTime)))
                 {
-                    _liTilePath = _todaysPathing[_iScheduleIndex++].Value;
+                    _liTilePath = _liTodayPathing[_iScheduleIndex++].Value.Path;
                 }
             }
 
+            //Determine whether or not we are currently moving
+            bool stillMoving = _liTilePath.Count > 0;
+
+            //Call up to the base to handle normal Update methods
+            //Movement is handled here
             base.Update(gTime);
+
+            //If we ended out movement during the update, process any directional facting
+            //And animations that may be requested
+            if (stillMoving && _liTilePath.Count == 0)
+            {
+                string direction = _liTodayPathing[_iScheduleIndex-1].Value.Direction;
+                string animation = _liTodayPathing[_iScheduleIndex-1].Value.Animation;
+                if (!string.IsNullOrEmpty(direction))
+                {
+                    Facing = Util.ParseEnum<DirectionEnum>(direction);
+                    PlayAnimation(VerbEnum.Idle, Facing);
+                }
+
+                if (!string.IsNullOrEmpty(animation))
+                {
+                    _sprBody.PlayAnimation(animation);
+                }
+            }
         }
 
         /// <summary>
@@ -1903,7 +1926,7 @@ namespace RiverHollow.Characters
                 //Key = Time, Value = goto Location
                 if (listPathingForDay != null)
                 {
-                    List<KeyValuePair<string, List<RHTile>>> lTimetoTilePath = new List<KeyValuePair<string, List<RHTile>>>();
+                    List<KeyValuePair<string, PathData>> lTimetoTilePath = new List<KeyValuePair<string, PathData>>();
                     Vector2 start = Position;
                     string mapName = CurrentMapName;
 
@@ -1912,21 +1935,28 @@ namespace RiverHollow.Characters
                     {
                         List<RHTile> timePath;
 
+                        string[] split = kvp.Value.Split('-');
+                        string targetLocation = split[0];
+                        string direction = split.Length > 1 ? split[1] : string.Empty;
+                        string animation = split.Length > 2 ? split[2] : string.Empty;
+
                         //If the map we're currently on has the target location, pathfind to it.
                         //Otherwise, we need to pathfind to the map that does first.
-                        if (MapManager.Maps[mapName].DictionaryCharacterLayer.ContainsKey(kvp.Value))
+                        if (MapManager.Maps[mapName].DictionaryCharacterLayer.ContainsKey(targetLocation))
                         {
-                            timePath = TravelManager.FindPathToLocation(ref start, MapManager.Maps[mapName].DictionaryCharacterLayer[kvp.Value]);
+                            timePath = TravelManager.FindPathToLocation(ref start, MapManager.Maps[mapName].DictionaryCharacterLayer[targetLocation]);
                         }
                         else
                         {
-                            timePath = TravelManager.FindPathToOtherMap(kvp.Value, ref mapName, ref start);
+                            timePath = TravelManager.FindPathToOtherMap(targetLocation, ref mapName, ref start);
                         }
-                        lTimetoTilePath.Add(new KeyValuePair<string, List<RHTile>>(kvp.Key, timePath));
+
+                        PathData data = new PathData(timePath, direction, animation);
+                        lTimetoTilePath.Add(new KeyValuePair<string, PathData>(kvp.Key, data));
                     }
                     TravelManager.CloseTravelLog();
 
-                    _todaysPathing = lTimetoTilePath;
+                    _liTodayPathing = lTimetoTilePath;
                 }
             }
         }
@@ -2100,6 +2130,29 @@ namespace RiverHollow.Characters
             foreach (int key in keys)
             {
                 _diCollection[key] = data[index++];
+            }
+        }
+
+        /// <summary>
+        /// Object representing the actionsthat need to be taken that are tied to a current path
+        /// This includes the path being taken, the direction to face at the end, and the
+        /// animation that mayneed to be played.
+        /// </summary>
+        private class PathData
+        {
+            List<RHTile> _liPathing;
+            string _sDir;
+            string _sAnimationName;
+
+            public List<RHTile> Path => _liPathing;
+            public string Direction => _sDir;
+            public string Animation => _sAnimationName;
+
+            public PathData(List<RHTile> path, string direction, string animation)
+            {
+                _liPathing = path;
+                _sDir = direction;
+                _sAnimationName = animation;
             }
         }
     }
