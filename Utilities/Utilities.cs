@@ -65,6 +65,11 @@ namespace RiverHollow.Utilities
             return newVec;
         }
 
+        #region GetGridCoords
+        /// <summary>
+        /// These methods return a Vector2 representing the grid coordinates of an
+        /// RHTile based off of the input, which is a pixel centered map position.
+        /// <returns></returns>
         public static Vector2 GetGridCoords(int x, int y)
         {
             return GetGridCoords(new Vector2(x, y));
@@ -78,6 +83,8 @@ namespace RiverHollow.Utilities
             Vector2 rv = new Vector2(vec.X / TileSize, vec.Y / TileSize);
             return rv;
         }
+        #endregion
+
         public static Vector2 MoveUpTo(Vector2 currPos, Vector2 moveTo, float speed)
         {
             Vector2 rv = Vector2.Zero;

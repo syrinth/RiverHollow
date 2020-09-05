@@ -77,18 +77,15 @@ namespace RiverHollow.Game_Managers
 
         public static void PlayEffectAtLoc(string effect, string mapName, Vector2 loc)
         {
-            if (_diEffects.ContainsKey(effect) && MapManager.CurrentMap.Name.Equals(mapName))
+            if (MapManager.CurrentMap.Name.Equals(mapName))
             {
-                int range = 640;
+                //TODO: There should probably be a log function here? The sound seems to drop off and vanish almost immediately when we're out of range but be clear beforehand
+                int range = (int)(RiverHollow.ScreenWidth/8);
                 int distance = -1;
-                if (PlayerManager.PlayerInRangeGetDist(loc.ToPoint(), range, ref distance)) //arbitrary, 20 squares
+                if (PlayerManager.PlayerInRangeGetDist(loc.ToPoint(), range, ref distance))
                 {
                     float delta = (float)(range - distance) / (float)range;
-                    SoundEffectInstance soundInstance;
-                    soundInstance = _diEffects[effect].CreateInstance();
-
-                    soundInstance.Volume = (float)(delta*0.1);
-                    soundInstance.Play();
+                    PlayEffect(effect, (float)(delta * 0.1));
                 }
             }
         }

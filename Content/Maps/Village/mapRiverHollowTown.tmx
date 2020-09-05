@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="51">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="53">
  <properties>
   <property name="Outside" type="bool" value="true"/>
   <property name="Town" type="bool" value="true"/>
@@ -323,6 +323,8 @@
   <object id="10" name="Route3" x="946.333" y="431.337" width="15" height="9"/>
   <object id="12" name="Route4" x="1131.18" y="449.788" width="8" height="7"/>
   <object id="28" name="PlayerSpawn" x="741.598" y="772.28" width="5.63636" height="5.27273"/>
+  <object id="51" name="Route1" x="1346" y="357.667" width="10.6667" height="10"/>
+  <object id="52" name="Check1" x="592" y="1472" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="7" name="Travel">
   <object id="24" name="Entrance" x="529.428" y="953.519" width="12.6069" height="5.1667">
@@ -358,7 +360,7 @@
     <property name="Map" value="mapTavern"/>
    </properties>
   </object>
-  <object id="45" name="Entrance" x="544.281" y="1434.69" width="15.4602" height="5.1667">
+  <object id="45" name="Entrance" x="544.343" y="1434.93" width="15.4602" height="4.80306">
    <properties>
     <property name="Door" type="bool" value="true"/>
     <property name="EntranceDir" value="Down"/>
@@ -393,9 +395,8 @@
     <property name="Map" value="mapMayorsHouse"/>
    </properties>
   </object>
-  <object id="50" name="Entrance" x="1157.27" y="1594.81" width="36.4061" height="5.1667">
+  <object id="50" name="Entrance" x="1152" y="1596" width="48" height="4">
    <properties>
-    <property name="Door" type="bool" value="true"/>
     <property name="EntranceDir" value="Up"/>
     <property name="Map" value="mapConnection_03"/>
    </properties>

@@ -1191,11 +1191,6 @@
 /processor:PassThroughProcessor
 /build:Data/Schedules/NPC1.xml
 
-#begin Data/Schedules/NPC3.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Schedules/NPC3.xml
-
 #begin Textures/Actors/Monsters/BigBlob.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2097,4 +2092,10 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapConnection_03.tmx
+
+#begin Sound/Stock/Effects/close_door_1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Effects/close_door_1.wav
 

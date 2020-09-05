@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="15" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="22">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="15" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="23">
  <properties>
   <property name="Manor" type="bool" value="true"/>
   <property name="Production" type="bool" value="false"/>
@@ -351,5 +351,6 @@
  <objectgroup id="5" name="Character Layer">
   <object id="13" name="NPC_01" x="177.025" y="162.234" width="12.375" height="11.4375"/>
   <object id="16" name="NPC_17" x="32.1458" y="110.948" width="12.375" height="11.4375"/>
+  <object id="22" name="Check2" x="96" y="144" width="16" height="16"/>
  </objectgroup>
 </map>

@@ -5,7 +5,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using RiverHollow.Characters;
 using RiverHollow.Tile_Engine;
-
+using RiverHollow.Utilities;
 
 namespace RiverHollow.Game_Managers
 {
@@ -31,7 +31,7 @@ namespace RiverHollow.Game_Managers
         {
             if (IsDebugEnabled())
             {
-                _swWriter = new StreamWriter(DataManager.Config[8]["DebugPath"] + name + " - TravelManager.txt");
+                _swWriter = new StreamWriter(DataManager.Config[8]["DebugPath"] + @":\Users\Syrinth\Desktop\Travel Manager\" + name + " - TravelManager.txt");
             }
         }
 
@@ -157,7 +157,7 @@ namespace RiverHollow.Game_Managers
         /// <returns></returns>
         public static List<RHTile> FindPathToOtherMap(string findKey, ref string mapName, ref Vector2 newStart)
         {
-            List<RHTile> _completeTilePath = new List<RHTile>();            //The path from start to finish, between maps
+            List<RHTile> _liCompletePath = new List<RHTile>();            //The path from start to finish, between maps
             _diMapPathing = new Dictionary<string, List<RHTile>>();         //Dictionary of all pathing
 
             Vector2 start = newStart;                                       //Set the start to the given location
@@ -181,14 +181,18 @@ namespace RiverHollow.Game_Managers
                 string testMap = testMapStr.Split(':')[0];     //The map we're currently testing. Split is for multiple entrances from same map
                 string fromMap = mapCameFrom[testMapStr];      //The map we came from
 
+                RHMap theTestMap = MapManager.Maps[testMap];
+
                 //If the from map isn't the testing map, set the start point at the entrance from the from map
                 if (fromMap != testMapStr)
                 {
-                    start = MapManager.Maps[testMap].DictionaryTravelPoints[fromMap].Location.ToVector2();
+                    //Find the location of the new endpoint on the target map
+                    TravelPoint linkedPoint = theTestMap.DictionaryTravelPoints[fromMap];
+                    start = linkedPoint.GetMovedCenter();
                 }
 
                 //If the testMap contains the key that we're looking for then we need to pathfind from the entrance to the key
-                if (MapManager.Maps[testMap].DictionaryCharacterLayer.ContainsKey(findKey))
+                if (theTestMap.DictionaryCharacterLayer.ContainsKey(findKey))
                 {
                     //Set the initial values for the map pathfinding
                     //To make this work with the reversal later on, start
@@ -218,7 +222,7 @@ namespace RiverHollow.Game_Managers
                     {
                         WriteToTravelLog("");
                         WriteToTravelLog("[" + l[0].X + ", " + l[0].Y + "] => [" + l[l.Count()-1].X + ", " + l[l.Count() - 1].Y + "]");
-                        _completeTilePath.AddRange(l);
+                        _liCompletePath.AddRange(l);
                     }
 
                     //We found it, so break the fuck out of the loop
@@ -226,13 +230,23 @@ namespace RiverHollow.Game_Managers
                 }
 
                 //Iterate over the exits in the map we're testing and pathfind to them from the starting location
-                foreach (KeyValuePair<string, TravelPoint> exit in MapManager.Maps[testMap].DictionaryTravelPoints)
+                foreach (KeyValuePair<string, TravelPoint> exit in theTestMap.DictionaryTravelPoints)
                 {
+                    TravelPoint exitPoint = exit.Value;
+                    Vector2 pathToVector = exitPoint.GetCenterTilePosition();
+                    if (exitPoint.IsDoor)
+                    {
+                        Vector2 gridCoords = Util.GetGridCoords(exitPoint.GetCenterTilePosition());
+                        RHTile doorTile = theTestMap.GetTileByGridCoords(gridCoords);
+
+                        //If the exit points to a door, then path to the RHTile below the door because the door, itself is impassable
+                        pathToVector = doorTile.GetTileByDirection(GameManager.DirectionEnum.Down).Center;
+                    }
                     //Find the shortest path to the exit in question. We copy the start vector into a new one
                     //so that our start point doesn't get overridden. We do not care about the location of the last
                     //tile in the previous pathfinding instance for this operation.
-                    Vector2 findExits = new Vector2(start.X, start.Y);  
-                    List<RHTile> pathToExit = FindPathToLocation(ref findExits, exit.Value.Location.ToVector2(), testMapStr);
+                    Vector2 startVector = new Vector2(start.X, start.Y);  
+                    List<RHTile> pathToExit = FindPathToLocation(ref startVector, pathToVector, testMapStr, exitPoint.IsDoor);
                     if (pathToExit != null)
                     {
                         //Determine what the new cost of traveling to the testmap is, by appending the
@@ -245,9 +259,6 @@ namespace RiverHollow.Game_Managers
                             mapCostSoFar[exit.Key] = newCost;         //Set the map cost to the new cost to arrive
                             frontier.Enqueue(exit.Key, newCost);      //Queue the map with the new cost to arrive there
 
-                            //Find the location of the new endpoint on the target map
-                            Vector2 entranceLocation = MapManager.Maps[exit.Key].DictionaryTravelPoints[testMap].Location.ToVector2();
-
                             //Setting the backtrack path for the exit map
                             mapCameFrom[exit.Key] = testMap;
                             _diMapPathing[testMapStr + ":" + exit.Value.LinkedMap] = pathToExit; // This needs another key for the appropriate exit
@@ -256,7 +267,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            return _completeTilePath;
+            return _liCompletePath;
         }
 
         //Pathfinds from one point to another on a given map
@@ -265,7 +276,7 @@ namespace RiverHollow.Game_Managers
             List<RHTile> rvList = FindPathToLocation(ref start, target, mapName);
             return rvList;
         }
-        public static List<RHTile> FindPathToLocation(ref Vector2 start, Vector2 target, string mapName = null)
+        public static List<RHTile> FindPathToLocation(ref Vector2 start, Vector2 target, string mapName = null, bool addDoor = false)
         {
             WriteToTravelLog(System.Environment.NewLine + "+++ " + mapName + " -- [" + (int)start.X/16 + ", " + (int)start.Y / 16 + "] == > [ " + (int)target.X / 16 + ", " + (int)target.Y / 16 + " ] +++");
             
@@ -284,8 +295,16 @@ namespace RiverHollow.Game_Managers
 
                 if (current.Equals(goalNode))
                 {
-                    returnList = travelMap.Backtrack(current);
-                    start = current.Position;
+                    RHTile endTile = current;
+                    //Check to see if we stop just before a door
+                    if (addDoor)
+                    {
+                        endTile = current.GetTileByDirection(GameManager.DirectionEnum.Up);
+                        //Cost doesn't matter at this point so just make it 0
+                        travelMap.Store(endTile, current, travelMap[current].CostSoFar + GetMovementCost(endTile));
+                    }
+                    returnList = travelMap.Backtrack(endTile);
+                    start = endTile.Position;
 
                     string print = string.Empty;
                     for (int i = 0; i < returnList.Count(); i++)
@@ -318,6 +337,8 @@ namespace RiverHollow.Game_Managers
 
                         if (!travelMap.ContainsKey(next) || newCost < travelMap[next].CostSoFar)
                         {
+                            if (IsTileInLine(current, travelMap[current].CameFrom, next)) { newCost--; }
+
                             double priority = newCost + HeuristicToTile(next, goalNode);
                             frontier.Enqueue(next, priority);
                             travelMap.Store(next, current, newCost);
@@ -327,6 +348,18 @@ namespace RiverHollow.Game_Managers
             }
 
             return returnList;
+        }
+
+        private static bool IsTileInLine(RHTile current, RHTile last, RHTile next)
+        {
+            bool rv = false;
+
+            if (current.GetTileByDirection(GameManager.DirectionEnum.Up) == last && current.GetTileByDirection(GameManager.DirectionEnum.Down) == next) { rv = true; }
+            if (current.GetTileByDirection(GameManager.DirectionEnum.Left) == last && current.GetTileByDirection(GameManager.DirectionEnum.Right) == next) { rv = true; }
+            if (current.GetTileByDirection(GameManager.DirectionEnum.Down) == last && current.GetTileByDirection(GameManager.DirectionEnum.Up) == next) { rv = true; }
+            if (current.GetTileByDirection(GameManager.DirectionEnum.Right) == last && current.GetTileByDirection(GameManager.DirectionEnum.Left) == next) { rv = true; }
+
+            return rv;
         }
 
         /// <summary>

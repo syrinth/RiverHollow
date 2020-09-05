@@ -121,19 +121,18 @@ namespace RiverHollow.Game_Managers
                 }
 
                 FadeToNewMap(_tileMaps[travelPoint.LinkedMap], entryPoint.FindLinkedPointPosition(travelPoint.Center, c));
-                SoundManager.PlayEffect("126426__cabeeno-rossley__timer-ends-time-up");
             }
             else
             {
                 entryPoint = _tileMaps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
 
-                if (c.IsActorType(ActorEnum.NPC) || c.IsActorType(ActorEnum.WorldCharacter))
-                {
-                    ((Villager)c).ClearTileForMapChange();
-                }
+                c.ClearTileForMapChange();
+
                 _tileMaps[currMap].RemoveCharacter(c);
                 _tileMaps[travelPoint.LinkedMap].AddCharacter(c);
-                c.NewMapPosition = entryPoint.FindLinkedPointPosition(travelPoint.Center, c); //This needs to get updated when officially added to the new map
+                //c.NewMapPosition = entryPoint.FindLinkedPointPosition(travelPoint.Center, c); //This needs to get updated when officially added to the new map
+                RHTile newTile = _tileMaps[travelPoint.LinkedMap].GetTileByGridCoords(Util.GetGridCoords(entryPoint.GetMovedCenter()));
+                c.NewMapPosition = newTile.Position;
             }
         }
 

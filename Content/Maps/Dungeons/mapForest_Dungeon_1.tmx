@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="46">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="46">
  <properties>
   <property name="ActiveSpawn" type="int" value="0"/>
   <property name="Dungeon" value="Forest"/>
   <property name="Outside" type="bool" value="false"/>
   <property name="ResourcesMinMax" value="30-60"/>
  </properties>
- <tileset firstgid="1" source="..\Tilesets\tilesetDungeon.tsx"/>
+ <tileset firstgid="1" source="../Tilesets/tilesetDungeon.tsx"/>
  <layer id="19" name="Base" width="30" height="17">
   <data encoding="csv">
 145,145,12,10,10,10,31,10,10,10,10,10,10,10,10,10,10,11,10,10,10,10,12,10,10,11,10,10,145,145,
@@ -77,13 +77,13 @@
     <property name="Map" value="mapForest_01"/>
    </properties>
   </object>
-  <object id="20" name="Exit" x="-8.20421" y="125.446" width="11.8333" height="29.0152">
+  <object id="20" name="Exit" x="0.79579" y="123.446" width="11.8333" height="29.0152">
    <properties>
     <property name="EntranceDir" value="Right"/>
     <property name="Map" value="mapForest_Dungeon_1"/>
    </properties>
   </object>
-  <object id="28" name="Entrance" x="475.084" y="124.666" width="8.16663" height="32.8333">
+  <object id="28" name="Entrance" x="470.084" y="124.666" width="8.16663" height="32.8333">
    <properties>
     <property name="EntranceDir" value="Left"/>
     <property name="Map" value="mapForest_Dungeon_4"/>

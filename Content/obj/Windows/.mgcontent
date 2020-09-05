@@ -122,7 +122,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/NPCs/Spirit_4.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CharacterData.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Schedules/NPC1.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Schedules/NPC3.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/BigBlob.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/ActionEffects/Heal.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/Bauble.png</File>
@@ -239,5 +238,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Village/mapMayorsHouse.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Swamp/mapSwamp_03.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Misc/mapConnection_03.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Effects/close_door_1.wav</File>
   </SourceFiles>
 </SourceFileCollection>

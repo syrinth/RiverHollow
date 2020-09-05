@@ -204,7 +204,7 @@ namespace RiverHollow.Characters
 
         int _iBaseSpeed = 2;
         public float Speed => _iBaseSpeed * SpdMult;
-        public float SpdMult = 1;
+        public float SpdMult = 1f;
 
         protected int _iSize = 1;
         public int Size => _iSize;
@@ -435,6 +435,20 @@ namespace RiverHollow.Characters
             if(_vMoveTo == Position && !CutsceneManager.Playing)
             {
                 _vMoveTo = Vector2.Zero;
+            }
+        }
+
+        /// <summary>
+        /// Because the Actor pathfinds based off of objective locations of the exit object
+        /// it is possible, and probable, that they will enter the object, triggering a map
+        /// change, a tile or two earlier than anticipated. In which case, we need to wipe
+        /// any tiles that are on that map from the remaining path to follow.
+        /// </summary>
+        public void ClearTileForMapChange()
+        {
+            while (_liTilePath[0]?.MapName == CurrentMapName)
+            {
+                _liTilePath.RemoveAt(0);
             }
         }
 
@@ -884,6 +898,16 @@ namespace RiverHollow.Characters
                         else
                         {
                             DetermineFacing(Vector2.Zero);
+                        }
+                    }
+                    else
+                    {
+                        TravelPoint potentialTravelPoint = _liTilePath[0].GetTravelPoint();
+                        if (potentialTravelPoint != null && potentialTravelPoint.IsDoor)
+                        {
+                            SoundManager.PlayEffectAtLoc("close_door_1", this.CurrentMapName, potentialTravelPoint.Center);
+                            MapManager.ChangeMaps(this, this.CurrentMapName, potentialTravelPoint);
+                            _liTilePath.RemoveAt(0); //Remove the door RHTile
                         }
                     }
                 }
@@ -1693,13 +1717,7 @@ namespace RiverHollow.Characters
 
         public override void Update(GameTime gTime)
         {
-            base.Update(gTime);
-
-            if (_vMoveTo != Vector2.Zero)
-            {
-                HandleMove(_vMoveTo);
-            }
-            else if (_todaysPathing != null)
+            if (_todaysPathing != null)
             {
                 string currTime = GameCalendar.GetTime();
                 //_scheduleIndex keeps track of which pathing route we're currently following.
@@ -1708,29 +1726,9 @@ namespace RiverHollow.Characters
                 {
                     _liTilePath = _todaysPathing[_iScheduleIndex++].Value;
                 }
-
-                if (_liTilePath.Count > 0)
-                {
-                    Vector2 targetPos = _liTilePath[0].Position;
-                    if (Position == targetPos)
-                    {
-                        _liTilePath.RemoveAt(0);
-                        if (_liTilePath.Count == 0)
-                        {
-                            DetermineFacing(Vector2.Zero);
-                        }
-
-                        if (_liTilePath.Count > 0 && _liTilePath[0] != null && _liTilePath[0].GetTravelPoint() != null)
-                        {
-                            MapManager.ChangeMaps(this, CurrentMapName, MapManager.CurrentMap.DictionaryTravelPoints[_liTilePath[0].GetTravelPoint().LinkedMap]);
-                        }
-                    }
-                    else
-                    {
-                        HandleMove(targetPos);
-                    }
-                }
             }
+
+            base.Update(gTime);
         }
 
         /// <summary>
@@ -1878,72 +1876,58 @@ namespace RiverHollow.Characters
 
         public void CalculatePathing()
         {
-            //string currDay = GameCalendar.GetDayOfWeek();
-            //string currSeason = GameCalendar.GetSeason();
-            //string currWeather = GameCalendar.GetWeatherString();
-            //if (_diCompleteSchedule != null && _diCompleteSchedule.Count > 0)
-            //{
-            //    string searchVal = currSeason + currDay + currWeather;
-            //    List<KeyValuePair<string, string>> listPathingForDay = null;
-
-            //    //Search to see if there exists any pathing instructions for the day.
-            //    //If so, set the value of listPathingForDay to the list of times/locations
-            //    if (_diCompleteSchedule.ContainsKey(currSeason + currDay + currWeather))
-            //    {
-            //        listPathingForDay = _diCompleteSchedule[currSeason + currDay + currWeather];
-            //    }
-            //    else if (_diCompleteSchedule.ContainsKey(currSeason + currDay))
-            //    {
-            //        listPathingForDay = _diCompleteSchedule[currSeason + currDay];
-            //    }
-            //    else if (_diCompleteSchedule.ContainsKey(currDay))
-            //    {
-            //        listPathingForDay = _diCompleteSchedule[currDay];
-            //    }
-
-            //    //If there is pathing instructions for the day, proceed
-            //    //Key = Time, Value = goto Location
-            //    if (listPathingForDay != null)
-            //    {
-            //        List<KeyValuePair<string, List<RHTile>>> lTimetoTilePath = new List<KeyValuePair<string, List<RHTile>>>();
-            //        Vector2 start = Position;
-            //        string mapName = CurrentMapName;
-
-            //        TravelManager.NewTravelLog(_sName);
-            //        foreach (KeyValuePair<string, string> kvp in listPathingForDay)
-            //        {
-            //            List<RHTile> timePath;
-
-            //            //If the map we're currently on has the target location, pathfind to it.
-            //            //Otherwise, we need to pathfind to the map that does first.
-            //            if (CurrentMap.DictionaryCharacterLayer.ContainsKey(kvp.Value))m
-            //            {
-            //                timePath = TravelManager.FindPathToLocation(ref start, CurrentMap.DictionaryCharacterLayer[kvp.Value]);
-            //            }
-            //            else
-            //            {
-            //                timePath = TravelManager.FindPathToOtherMap(kvp.Value, ref mapName, ref start);
-            //            }
-            //            lTimetoTilePath.Add(new KeyValuePair<string, List<RHTile>>(kvp.Key, timePath));
-            //        }
-            //        TravelManager.CloseTravelLog();
-
-            //        _todaysPathing = lTimetoTilePath;
-            //    }
-            //}
-        }
-
-        /// <summary>
-        /// Because the Actor pathfinds based off of objective locations of the exit object
-        /// it is possible, and probable, that they will enter the object, triggering a map
-        /// change, a tile or two earlier than anticipated. In which case, we need to wipe
-        /// any tiles that are on that map from the remaining path to follow.
-        /// </summary>
-        public void ClearTileForMapChange()
-        {
-            while (_liTilePath[0].MapName == CurrentMapName)
+            string currDay = GameCalendar.GetDayOfWeek();
+            string currSeason = GameCalendar.GetSeason();
+            string currWeather = GameCalendar.GetWeatherString();
+            if (_diCompleteSchedule != null && _diCompleteSchedule.Count > 0)
             {
-                _liTilePath.RemoveAt(0);
+                string searchVal = currSeason + currDay + currWeather;
+                List<KeyValuePair<string, string>> listPathingForDay = null;
+
+                //Search to see if there exists any pathing instructions for the day.
+                //If so, set the value of listPathingForDay to the list of times/locations
+                if (_diCompleteSchedule.ContainsKey(currSeason + currDay + currWeather))
+                {
+                    listPathingForDay = _diCompleteSchedule[currSeason + currDay + currWeather];
+                }
+                else if (_diCompleteSchedule.ContainsKey(currSeason + currDay))
+                {
+                    listPathingForDay = _diCompleteSchedule[currSeason + currDay];
+                }
+                else if (_diCompleteSchedule.ContainsKey(currDay))
+                {
+                    listPathingForDay = _diCompleteSchedule[currDay];
+                }
+
+                //If there is pathing instructions for the day, proceed
+                //Key = Time, Value = goto Location
+                if (listPathingForDay != null)
+                {
+                    List<KeyValuePair<string, List<RHTile>>> lTimetoTilePath = new List<KeyValuePair<string, List<RHTile>>>();
+                    Vector2 start = Position;
+                    string mapName = CurrentMapName;
+
+                    TravelManager.NewTravelLog(_sName);
+                    foreach (KeyValuePair<string, string> kvp in listPathingForDay)
+                    {
+                        List<RHTile> timePath;
+
+                        //If the map we're currently on has the target location, pathfind to it.
+                        //Otherwise, we need to pathfind to the map that does first.
+                        if (MapManager.Maps[mapName].DictionaryCharacterLayer.ContainsKey(kvp.Value))
+                        {
+                            timePath = TravelManager.FindPathToLocation(ref start, MapManager.Maps[mapName].DictionaryCharacterLayer[kvp.Value]);
+                        }
+                        else
+                        {
+                            timePath = TravelManager.FindPathToOtherMap(kvp.Value, ref mapName, ref start);
+                        }
+                        lTimetoTilePath.Add(new KeyValuePair<string, List<RHTile>>(kvp.Key, timePath));
+                    }
+                    TravelManager.CloseTravelLog();
+
+                    _todaysPathing = lTimetoTilePath;
+                }
             }
         }
 
@@ -2855,6 +2839,8 @@ namespace RiverHollow.Characters
 
             _sprBody.SetColor(Color.White);
             _sprHair.SetColor(_cHairColor);
+
+            SpdMult = 1;
         }
 
         public override void Update(GameTime gTime)

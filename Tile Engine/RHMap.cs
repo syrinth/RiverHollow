@@ -244,8 +244,11 @@ namespace RiverHollow.Tile_Engine
                     {
                         if (mapObject.Name.Equals("Entrance"))
                         {
-                            TravelPoint trvlPt = new TravelPoint(mapObject);
-                            if (mapObject.Properties.ContainsKey("Door")) { CreateDoor(ref trvlPt, mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height); }
+                            TravelPoint trvlPt = new TravelPoint(mapObject, this.Name);
+                            if (mapObject.Properties.ContainsKey("Door")) {
+                                trvlPt.SetDoor();
+                                CreateDoor(ref trvlPt, mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height);
+                            }
                             _diTravelPoints.Add(trvlPt.LinkedMap, trvlPt);
                         }
                     }
@@ -1099,6 +1102,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     if (obj.BuildingID != -1) { MapManager.EnterBuilding(obj, PlayerManager.Buildings.Find(x => x.PersonalID == obj.BuildingID)); }
                     else { MapManager.ChangeMaps(PlayerManager.World, this.Name, obj); }
+                    SoundManager.PlayEffect("close_door_1");
                 }
             }
             else if (tile.GetWorldObject() != null)
@@ -2753,7 +2757,8 @@ namespace RiverHollow.Tile_Engine
         /// <returns>Returns True if the Tile is a legal tile to target</returns>
         public bool CanTargetTile()
         {
-            return Passable() && GetTravelPoint() == null && WorldObject == null;
+            //&& GetTravelPoint() == null
+            return Passable()  && WorldObject == null;
         }
 
         /// <summary>
@@ -2832,15 +2837,18 @@ namespace RiverHollow.Tile_Engine
         Rectangle _rCollisionBox;
         public Rectangle CollisionBox => _rCollisionBox;
         public Point Location => _rCollisionBox.Location;
+        string _sMapName;
         string _sLinkedMap;
         public string LinkedMap => _sLinkedMap;
         public Vector2 Center => _rCollisionBox.Center.ToVector2();
-
+        bool _bDoor;
+        public bool IsDoor => _bDoor;
 
         DirectionEnum _eEntranceDir;
 
-        public TravelPoint(TiledMapObject obj)
+        public TravelPoint(TiledMapObject obj, string mapName)
         {
+            _sMapName = mapName;
             _rCollisionBox = Util.FloatRectangle(obj.Position, obj.Size.Width, obj.Size.Height);
             if (obj.Properties.ContainsKey("Map"))
             {
@@ -2892,6 +2900,29 @@ namespace RiverHollow.Tile_Engine
             rv += collisionDiff;
 
             return rv;
+        }
+
+        public void SetDoor()
+        {
+            _bDoor = true;
+        }
+
+        /// <summary>
+        /// Finds the center point ofthe TravelPoint and returns the RHTile the center point
+        /// resides on.
+        /// 
+        /// This method is primarily/mostly used for NPC pathfinding to TravelPoints
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 GetCenterTilePosition()
+        {
+            return _rCollisionBox.Center.ToVector2();
+        }
+
+        public Vector2 GetMovedCenter()
+        {
+            RHTile rv = MapManager.Maps[_sMapName].GetTileByPixelPosition(GetCenterTilePosition());
+            return rv.GetTileByDirection(_eEntranceDir).Position;
         }
     }
 }
