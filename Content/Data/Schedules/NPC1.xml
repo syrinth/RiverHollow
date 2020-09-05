@@ -6,9 +6,5 @@
       <Key>Monday</Key>
       <Value>6:05|GoHere/7:00|Check2</Value>
     </Item>
-    <Item>
-      <Key>Tuesday</Key>
-      <Value>6:30|Route4/7:00|Route2/7:30|Route3/9:0|Route4</Value>
-    </Item>
   </Asset>
 </XnaContent>
