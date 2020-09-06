@@ -419,6 +419,11 @@ namespace RiverHollow.Characters
             {
                 _liTilePath.RemoveAt(0);
 
+                if (DoorCheck())
+                {
+                    return;
+                }
+
                 //Recalculate for the next target
                 target = _liTilePath[0].Position;
                 Util.GetMoveSpeed(Position, target, Speed, ref direction);
@@ -436,6 +441,24 @@ namespace RiverHollow.Characters
             {
                 _vMoveTo = Vector2.Zero;
             }
+        }
+
+        /// <summary>
+        /// This method checks to see whether the next RHTile is a door and handles it.
+        /// </summary>
+        /// <returns>True if the next RHTIle is a door</returns>
+        protected bool DoorCheck()
+        {
+            bool rv = false;
+            TravelPoint potentialTravelPoint = _liTilePath[0].GetTravelPoint();
+            if (potentialTravelPoint != null && potentialTravelPoint.IsDoor)
+            {
+                SoundManager.PlayEffectAtLoc("close_door_1", this.CurrentMapName, potentialTravelPoint.Center);
+                MapManager.ChangeMaps(this, this.CurrentMapName, potentialTravelPoint);
+                rv = true;
+            }
+
+            return rv;
         }
 
         /// <summary>
@@ -873,47 +896,43 @@ namespace RiverHollow.Characters
 
             _linkedSummon?.Update(gTime);
 
-            if (_vMoveTo != Vector2.Zero)
+            if (MapManager.Maps[CurrentMapName].Contains(this))
             {
-                HandleMove(_vMoveTo);
-            }
-            else if (_liTilePath.Count > 0)
-            {
-                Vector2 targetPos = _liTilePath[0].Position;
-                if (Position == targetPos)
+                if (_vMoveTo != Vector2.Zero)
                 {
-                    _liTilePath.RemoveAt(0);
-                    if (_liTilePath.Count == 0)
+                    HandleMove(_vMoveTo);
+                }
+                else if (_liTilePath.Count > 0)
+                {
+                    if (!DoorCheck())
                     {
-                        if (PlayerManager.ReadyToSleep)
+                        Vector2 targetPos = _liTilePath[0].Position;
+                        if (Position == targetPos)
                         {
-                            if (_dCooldown == 0)
+                            _liTilePath.RemoveAt(0);
+                            if (_liTilePath.Count == 0)
                             {
-                                Facing = DirectionEnum.Left;
-                                PlayAnimation(VerbEnum.Idle, DirectionEnum.Left);
-                                _dCooldown = 3;
-                                PlayerManager.AllowMovement = true;
+                                if (PlayerManager.ReadyToSleep)
+                                {
+                                    if (_dCooldown == 0)
+                                    {
+                                        Facing = DirectionEnum.Left;
+                                        PlayAnimation(VerbEnum.Idle, DirectionEnum.Left);
+                                        _dCooldown = 3;
+                                        PlayerManager.AllowMovement = true;
+                                    }
+                                }
+                                else
+                                {
+                                    DetermineFacing(Vector2.Zero);
+                                }
                             }
                         }
                         else
                         {
-                            DetermineFacing(Vector2.Zero);
+                            HandleMove(targetPos);
                         }
                     }
-                    else
-                    {
-                        TravelPoint potentialTravelPoint = _liTilePath[0].GetTravelPoint();
-                        if (potentialTravelPoint != null && potentialTravelPoint.IsDoor)
-                        {
-                            SoundManager.PlayEffectAtLoc("close_door_1", this.CurrentMapName, potentialTravelPoint.Center);
-                            MapManager.ChangeMaps(this, this.CurrentMapName, potentialTravelPoint);
-                            _liTilePath.RemoveAt(0); //Remove the door RHTile
-                        }
-                    }
-                }
-                else
-                {
-                    HandleMove(targetPos);
                 }
             }
         }
@@ -2359,6 +2378,8 @@ namespace RiverHollow.Characters
 
         public EligibleNPC(int index, Dictionary<string, string> stringData)
         {
+            _eActorType = ActorEnum.NPC;
+            _eNPCType = NPCTypeEnum.Eligible;
             _liTilePath = new List<RHTile>();
             _diCollection = new Dictionary<int, bool>();
             _diCompleteSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();

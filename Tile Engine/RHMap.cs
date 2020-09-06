@@ -853,24 +853,24 @@ namespace RiverHollow.Tile_Engine
             //moved CollisionBox will be inside of, based off of the movement direction.
             if(dir.X > 0)
             {
-                AddTile(ref list, rEndCollision.Right, rEndCollision.Top);
-                AddTile(ref list, rEndCollision.Right, rEndCollision.Bottom);
+                AddTile(ref list, rEndCollision.Right, rEndCollision.Top, actor.CurrentMapName);
+                AddTile(ref list, rEndCollision.Right, rEndCollision.Bottom, actor.CurrentMapName);
             }
             else if(dir.X < 0)
             {
-                AddTile(ref list, rEndCollision.Left, rEndCollision.Top);
-                AddTile(ref list, rEndCollision.Left, rEndCollision.Bottom);
+                AddTile(ref list, rEndCollision.Left, rEndCollision.Top, actor.CurrentMapName);
+                AddTile(ref list, rEndCollision.Left, rEndCollision.Bottom, actor.CurrentMapName);
             }
 
             if (dir.Y > 0)
             {
-                AddTile(ref list, rEndCollision.Left, rEndCollision.Bottom);
-                AddTile(ref list, rEndCollision.Right, rEndCollision.Bottom);
+                AddTile(ref list, rEndCollision.Left, rEndCollision.Bottom, actor.CurrentMapName);
+                AddTile(ref list, rEndCollision.Right, rEndCollision.Bottom, actor.CurrentMapName);
             }
             else if (dir.Y < 0)
             {
-                AddTile(ref list, rEndCollision.Left, rEndCollision.Top);
-                AddTile(ref list, rEndCollision.Right, rEndCollision.Top);
+                AddTile(ref list, rEndCollision.Left, rEndCollision.Top, actor.CurrentMapName);
+                AddTile(ref list, rEndCollision.Right, rEndCollision.Top, actor.CurrentMapName);
             }
 
             //Because RHTiles do not contain WorldActors outside of combat, we need to add each
@@ -881,15 +881,15 @@ namespace RiverHollow.Tile_Engine
             }
 
             //If the actor is not the Player Character, add the Player Character's CollisionBox to the list as well
-            if(actor != PlayerManager.World) {
+            if(actor != PlayerManager.World  && MapManager.CurrentMap == actor.CurrentMap) {
                 list.Add(PlayerManager.World.CollisionBox);
             }
 
             return list;
         }
-        private void AddTile(ref List<Rectangle> list, int one, int two)
+        private void AddTile(ref List<Rectangle> list, int one, int two, string mapName)
         {
-            RHTile tile = MapManager.CurrentMap.GetTileByGridCoords(Util.GetGridCoords(one, two));
+            RHTile tile = MapManager.Maps[mapName].GetTileByGridCoords(Util.GetGridCoords(one, two));
             if (TileValid(tile, list)) { list.Add(tile.Rect); }
         }
         private bool TileValid(RHTile tile, List<Rectangle> list)
