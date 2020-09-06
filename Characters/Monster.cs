@@ -64,6 +64,7 @@ namespace RiverHollow.Characters
 
         public Monster(int id, Dictionary<string, string> data)
         {
+            SpdMult = NORMAL_SPEED;
             _liLootIDs = new List<int>();
             _liCombatActions = new List<CombatAction>();
             _liSpawnConditions = new List<SpawnConditionEnum>();

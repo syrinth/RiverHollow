@@ -1287,6 +1287,9 @@ namespace RiverHollow.Items
                 LoadSprite(stringData);
             }
 
+            /// <summary>
+            /// USed to activate whataever the trigger will do. Uses CurrentMap because it can only be accessed by the player
+            /// </summary>
             public override void Interact()
             {
                 DungeonManager.ActivateTrigger(MapManager.CurrentMap.DungeonName, _sTriggerName);

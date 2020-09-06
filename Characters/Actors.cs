@@ -35,6 +35,9 @@ namespace RiverHollow.Characters
     /// </summary>
     public abstract class Actor
     {
+        public const float NORMAL_SPEED = 1.0f;
+        public const float NPC_WALK_SPEED = 0.6f;
+
         protected const int HUMAN_HEIGHT = (TileSize * 2) + 2;
         protected const float EYE_DEPTH = 0.001f;
         protected const float HAIR_DEPTH = 0.003f;
@@ -43,7 +46,7 @@ namespace RiverHollow.Characters
         protected static string _sAdventurerFolder = DataManager.FOLDER_ACTOR + @"Adventurers\";
         protected static string _sNPsCFolder = DataManager.FOLDER_ACTOR + @"NPCs\";
 
-        public enum ActorEnum { Actor, Adventurer, CombatActor, Mob, Monster, NPC, ShippingGremlin, Spirit, WorldCharacter};
+        public enum ActorEnum { Actor, Adventurer, CombatActor, Monster, NPC, ShippingGremlin, Spirit, WorldCharacter};
         protected ActorEnum _eActorType = ActorEnum.Actor;
         public ActorEnum ActorType => _eActorType;
 
@@ -204,7 +207,7 @@ namespace RiverHollow.Characters
 
         int _iBaseSpeed = 2;
         public float Speed => _iBaseSpeed * SpdMult;
-        public float SpdMult = 0.6f;
+        public float SpdMult = NPC_WALK_SPEED;
 
         protected int _iSize = 1;
         public int Size => _iSize;
@@ -338,10 +341,10 @@ namespace RiverHollow.Characters
                 }
 
                 List<RHTile> cornerTiles = new List<RHTile>();
-                cornerTiles.Add(MapManager.CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Left, CollisionBox.Top)).ToPoint()));
-                cornerTiles.Add(MapManager.CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Top)).ToPoint()));
-                cornerTiles.Add(MapManager.CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Left, CollisionBox.Bottom)).ToPoint()));
-                cornerTiles.Add(MapManager.CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Bottom)).ToPoint()));
+                cornerTiles.Add(CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Left, CollisionBox.Top)).ToPoint()));
+                cornerTiles.Add(CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Top)).ToPoint()));
+                cornerTiles.Add(CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Left, CollisionBox.Bottom)).ToPoint()));
+                cornerTiles.Add(CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Bottom)).ToPoint()));
                 foreach (RHTile tile in cornerTiles)
                 {
                     if (tile != null && tile.WorldObject != null && tile.WorldObject.Match(ObjectTypeEnum.Plant))
@@ -896,7 +899,7 @@ namespace RiverHollow.Characters
 
             _linkedSummon?.Update(gTime);
 
-            if (MapManager.Maps[CurrentMapName].Contains(this))
+            if (MapManager.Maps[CurrentMapName].ContainsActor(this))
             {
                 if (_vMoveTo != Vector2.Zero)
                 {
@@ -2914,7 +2917,7 @@ namespace RiverHollow.Characters
             _sprBody.SetColor(Color.White);
             _sprHair.SetColor(_cHairColor);
 
-            SpdMult = 1;
+            SpdMult = NORMAL_SPEED;
         }
 
         public override void Update(GameTime gTime)

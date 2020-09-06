@@ -598,9 +598,9 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public bool Contains(WorldActor c)
+        public bool ContainsActor(WorldActor c)
         {
-            return _liActors.Contains(c);
+            return _liActors.Contains(c) || (c.IsActorType(ActorEnum.Monster) && _liMonsters.Contains((Monster)c));
         }
 
         public void ItemPickUpdate()
@@ -1900,7 +1900,7 @@ namespace RiverHollow.Tile_Engine
         public bool RemoveCharacterImmediately(WorldActor c)
         {
             bool rv = false;
-            if (MapManager.Maps[c.CurrentMapName].Contains(c))
+            if (MapManager.Maps[c.CurrentMapName].ContainsActor(c))
             {
                 rv = true;
                 if (c.IsActorType(ActorEnum.Monster) && _liMonsters.Contains((Monster)c)) { _liMonsters.Remove((Monster)c); }
@@ -1920,7 +1920,7 @@ namespace RiverHollow.Tile_Engine
         public bool AddCharacterImmediately(WorldActor c)
         {
             bool rv = false;
-            if (!MapManager.Maps[c.CurrentMapName].Contains(c))
+            if (!MapManager.Maps[c.CurrentMapName].ContainsActor(c))
             {
                 rv = true;
                 if (c.IsActorType(ActorEnum.Monster) && !_liMonsters.Contains((Monster)c)) { _liMonsters.Add((Monster)c); }

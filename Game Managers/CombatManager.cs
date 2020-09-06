@@ -25,6 +25,7 @@ namespace RiverHollow.Game_Managers
         private const double EXP_MULTIPLIER_BONUS = 0.3;
         public const int BASIC_ATTACK = 300;
 
+        private static RHMap BattleMap => MapManager.CurrentMap;
         private static List<Item> _liDroppedItems;
         private static List<RHTile> _liLegalTiles;
         public static List<RHTile> LegalTiles => _liLegalTiles;
@@ -93,7 +94,7 @@ namespace RiverHollow.Game_Managers
             _liParty.AddRange(PlayerManager.GetParty());
 
             _liMonsters = new List<CombatActor>();
-            _liMonsters.AddRange(MapManager.CurrentMap.Monsters);
+            _liMonsters.AddRange(BattleMap.Monsters);
 
             _liQueuedCharacters = new List<CombatActor>();
             _liChargingCharacters = new List<CombatActor>();
@@ -110,18 +111,19 @@ namespace RiverHollow.Game_Managers
 
             foreach (CombatActor c in _liMonsters)
             {
-                c.SetBaseTile(MapManager.CurrentMap.GetTileByPixelPosition(c.Position));
+                c.SetBaseTile(BattleMap.GetTileByPixelPosition(c.Position));
             }
 
-            RHTile[,] tiles = MapManager.CurrentMap.DictionaryCombatTiles[oldMap];
+            RHTile[,] tiles = BattleMap.DictionaryCombatTiles[oldMap];
             foreach (ClassedCombatant c in Party)
             {
                 if (c != PlayerManager.World)
                 {
                     MapManager.Maps[c.CurrentMapName].RemoveCharacter(c);
                     c.Activate(true);
-                    c.CurrentMapName = MapManager.CurrentMap.Name;
-                    MapManager.CurrentMap.AddCharacter(c);
+                    c.CurrentMapName = BattleMap.Name;
+                    BattleMap.AddCharacter(c);
+                    c.SpdMult = NORMAL_SPEED;
                 }
 
                 Vector2 startpos = c.StartPosition;
@@ -218,14 +220,14 @@ namespace RiverHollow.Game_Managers
                 case CmbtPhaseEnum.Moving:
                     if (!ActiveCharacter.FollowingPath)
                     {
-                        RHTile newTile = MapManager.CurrentMap.GetTileByPixelPosition(ActiveCharacter.Position);
+                        RHTile newTile = BattleMap.GetTileByPixelPosition(ActiveCharacter.Position);
                         ActiveCharacter.SetBaseTile(newTile);
 
                         Item tileItem = _liDroppedItems.Find(item => newTile.Rect.Contains(item.Position));
 
                         if(tileItem != null && InventoryManager.HasSpaceInInventory(tileItem.ItemID, tileItem.Number))
                         {
-                            MapManager.CurrentMap.AddItemToPlayerInventory(tileItem);
+                            BattleMap.AddItemToPlayerInventory(tileItem);
                         }
                         CurrentTurnInfo.Moved();
 
@@ -404,11 +406,12 @@ namespace RiverHollow.Game_Managers
             {
                 MapManager.Maps[c.CurrentMapName].RemoveCharacter(c);
                 c.Activate(false);
-                MapManager.CurrentMap.RemoveCharacter(c);
+                c.SpdMult = NPC_WALK_SPEED;
+                BattleMap.RemoveCharacter(c);
             }
 
             Camera.SetObserver(PlayerManager.World);
-            MapManager.CurrentMap.Trigger(MOB_OPEN);
+            BattleMap.Trigger(MOB_OPEN);
 
             GoToHUDScreen();
         }
@@ -538,7 +541,7 @@ namespace RiverHollow.Game_Managers
                         }
                     }
 
-                    SelectedTile = MapManager.CurrentMap.GetTileByPixelPosition(closest);
+                    SelectedTile = BattleMap.GetTileByPixelPosition(closest);
 
                     //Need to unset the Combatant from the tile the monster is moving to so that
                     //we can pathfind to it
@@ -549,7 +552,7 @@ namespace RiverHollow.Game_Managers
                     SetMoveTarget();
 
                     //Reset the CombatActor's RHTile
-                    MapManager.CurrentMap.GetTileByPixelPosition(closest).SetCombatant(act);
+                    BattleMap.GetTileByPixelPosition(closest).SetCombatant(act);
                 }
             }
 
@@ -749,7 +752,7 @@ namespace RiverHollow.Game_Managers
         public static void HandleMouseTargetting()
         {
             Vector2 mouseCursor = GUICursor.GetWorldMousePosition();
-            RHTile tile = MapManager.CurrentMap.GetTileByPixelPosition(mouseCursor);
+            RHTile tile = BattleMap.GetTileByPixelPosition(mouseCursor);
             if (tile != null && _liLegalTiles.Contains(tile))
             {
                 SelectTile(tile);

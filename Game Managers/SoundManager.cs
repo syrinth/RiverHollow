@@ -75,8 +75,16 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        /// <summary>
+        /// Plays a sound effect "at" a given location.
+        /// The volume of the effect is determined by the player's distance from the sound
+        /// </summary>
+        /// <param name="effect">Name of the ffect</param>
+        /// <param name="mapName">Which map to play it on</param>
+        /// <param name="loc">The location of the effect</param>
         public static void PlayEffectAtLoc(string effect, string mapName, Vector2 loc)
         {
+            //If we're not currently on the map, don't play the effect
             if (MapManager.CurrentMap.Name.Equals(mapName))
             {
                 //TODO: There should probably be a log function here? The sound seems to drop off and vanish almost immediately when we're out of range but be clear beforehand

@@ -161,8 +161,10 @@ namespace RiverHollow
                     if (CutsceneManager.Playing) { CutsceneManager.Update(gTime); }
                     else
                     {
-                        //Only update the player and the CurrentMap if the player is
-                        //in combat while paused, or while the game is running
+                        //During combat, if the game is not running, only update the CurrentMap
+                        //Otherwise, if not in combat, or in combat and game is running, update all maps
+                        //This is so that time does not pass outside of combat while decisions are being made
+                        //but NPCs and animations will still run
                         if (CombatManager.InCombat && !IsRunning())
                         {
                             MapManager.CurrentMap.Update(gTime);

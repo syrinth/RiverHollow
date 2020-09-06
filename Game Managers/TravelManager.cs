@@ -281,7 +281,7 @@ namespace RiverHollow.Game_Managers
             WriteToTravelLog(System.Environment.NewLine + "+++ " + mapName + " -- [" + (int)start.X/16 + ", " + (int)start.Y / 16 + "] == > [ " + (int)target.X / 16 + ", " + (int)target.Y / 16 + " ] +++");
             
             List<RHTile> returnList = null;
-            RHMap map = MapManager.Maps[(mapName ?? MapManager.CurrentMap.Name).Split(':')[0]];
+            RHMap map = MapManager.Maps[(mapName ?? MapManager.CurrentMap.Name).Split(':')[0]];     //Returns mapName if it isn't null, else uses the CurrentMap
             RHTile startTile = map.GetTileByPixelPosition(start.ToPoint());
             RHTile goalNode = map.GetTileByPixelPosition(target.ToPoint());
             var travelMap = new TravelMap(startTile);
@@ -635,6 +635,12 @@ namespace RiverHollow.Game_Managers
             return target.IsRoad ? 1 : GetDefaultCost();
         }
 
+        /// <summary>
+        /// This gets the default set cost of movement for an Actor.
+        /// However, in combat, we don't want to complicate things, so if we are
+        /// in combat and the actr is on the same map as the Player, the value is 1.
+        /// </summary>
+        /// <returns>The default cost for movement</returns>
         private static int GetDefaultCost()
         {
             if (CombatManager.InCombat && _actTraveller?.CurrentMapName == MapManager.CurrentMap.Name)

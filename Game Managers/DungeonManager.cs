@@ -8,7 +8,7 @@ namespace RiverHollow.Game_Managers
 {
     public static class DungeonManager
     {
-        private static Dungeon CurrentDungeon => (_liDungeons.ContainsKey(MapManager.CurrentMap.DungeonName) ? _liDungeons[MapManager.CurrentMap.DungeonName]: null);
+        private static Dungeon CurrentDungeon => (_liDungeons.ContainsKey(MapManager.CurrentMap.DungeonName) ? _liDungeons[MapManager.CurrentMap.DungeonName] : null);
         private static Dictionary<string, Dungeon> _liDungeons;
 
         public static void Instantiate()
