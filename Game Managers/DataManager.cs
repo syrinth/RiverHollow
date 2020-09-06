@@ -573,7 +573,14 @@ namespace RiverHollow.Game_Managers
 
         public static Texture2D GetTexture(string texture)
         {
-            return _diTextures[texture];
+            Texture2D rv = null;
+
+            if(_diTextures.ContainsKey(texture))
+            {
+                rv = _diTextures[texture];
+            }
+
+            return rv;
         }
 
         public static BitmapFont GetBitMapFont(string font)

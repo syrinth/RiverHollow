@@ -10,7 +10,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
     {
         //Passes all action handlers to it's sub controls.
         public static int BTNSIZE = ScaledTileSize;
-        public static int MAX_SHOWN_ITEMS;
+        public int MAX_SHOWN_ITEMS;
 
         int _iListPos = 0;
         int _iSpacing;

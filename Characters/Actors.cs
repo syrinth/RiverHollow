@@ -44,6 +44,7 @@ namespace RiverHollow.Characters
 
         protected static string _sVillagerFolder = DataManager.FOLDER_ACTOR + @"Villagers\";
         protected static string _sAdventurerFolder = DataManager.FOLDER_ACTOR + @"Adventurers\";
+        protected static string _sPortraitFolder = DataManager.FOLDER_ACTOR + @"Portraits\";
         protected static string _sNPsCFolder = DataManager.FOLDER_ACTOR + @"NPCs\";
 
         public enum ActorEnum { Actor, Adventurer, CombatActor, Monster, NPC, ShippingGremlin, Spirit, WorldCharacter};
@@ -506,10 +507,10 @@ namespace RiverHollow.Characters
         protected const int PortraitHeight = 192;
 
         protected string _sPortrait;
-        public string Portrait { get => _sPortrait; }
+        public string Portrait => _sPortrait;
 
         protected Rectangle _rPortrait;
-        public Rectangle PortraitRectangle { get => _rPortrait; }
+        public Rectangle PortraitRectangle => _rPortrait;
 
         protected Dictionary<string, string> _diDialogue;
 
@@ -1670,10 +1671,10 @@ namespace RiverHollow.Characters
             _iIndex = n.ID;
             _sName = n.Name;
             _diDialogue = n._diDialogue;
-            //_sPortrait = n.Portrait;
-            //_portraitRect = n._portraitRect;
-            _rPortrait = new Rectangle(0, 0, 48, 60);
-            _sPortrait = _sAdventurerFolder + "WizardPortrait";
+            _sPortrait = n.Portrait;
+            _rPortrait = n._rPortrait;
+            //_rPortrait = new Rectangle(0, 0, 48, 60);
+            //_sPortrait = _sAdventurerFolder + "WizardPortrait";
 
             _iWidth = n._sprBody.Width;
             _iHeight = n._sprBody.Height;
@@ -1695,9 +1696,10 @@ namespace RiverHollow.Characters
         protected void ImportBasics(Dictionary<string, string> data)
         {
             _diDialogue = DataManager.GetNPCDialogue(_iIndex);
-            _sPortrait = _sAdventurerFolder + "WizardPortrait";
             _sName = _diDialogue["Name"];
-            _sPortrait = _sAdventurerFolder + "WizardPortrait";
+
+            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Villager", _iIndex.ToString("00"));
+            //_sPortrait = _sPortraitFolder + "WizardPortrait";
 
             LoadSpriteAnimations(ref _sprBody, LoadWorldAnimations(data), _sVillagerFolder + "NPC_" + _iIndex.ToString("00"));
             PlayAnimation(VerbEnum.Idle);
@@ -2579,9 +2581,6 @@ namespace RiverHollow.Characters
             AssignStartingGear();
             _sAdventurerType = CharacterClass.Name;
 
-            _rPortrait = new Rectangle(0, 0, 48, 60);
-            _sPortrait = _sAdventurerFolder + "WizardPortrait";
-
             _iCurrFood = 0;
             _heldItem = null;
             _iMood = 0;
@@ -2596,6 +2595,10 @@ namespace RiverHollow.Characters
             _diCrafting = new Dictionary<int, int>();
 
             _iAdventurerID = id;
+
+            _rPortrait = new Rectangle(0, 0, 48, 60);
+            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Adventurer", id.ToString("00"));
+            //_sPortrait = _sPortraitFolder + "WizardPortrait";
 
             _eWorkerType = Util.ParseEnum<WorkerTypeEnum>(data["Type"]);
             _iDailyItemID = int.Parse(data["Item"]);
@@ -3207,9 +3210,9 @@ namespace RiverHollow.Characters
             _iWidth = 32;
             _iHeight = 32;
             _diDialogue = DataManager.GetNPCDialogue(_iIndex);
-            _sPortrait = _sAdventurerFolder + "WizardPortrait";
+            _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Gremlin", _iIndex.ToString("00"));
+            //_sPortrait = _sPortraitFolder + "WizardPortrait";
             _sName = _diDialogue["Name"];
-            _sPortrait = _sAdventurerFolder + "WizardPortrait";
 
             if (stringData.ContainsKey("HomeMap"))
             {

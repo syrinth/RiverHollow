@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Tile_Engine;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using static RiverHollow.Game_Managers.GameManager;
@@ -275,6 +277,34 @@ namespace RiverHollow.Utilities
             newPos.Y = (int)translate.Y + (worldPosition.Y * Scale);
 
             return newPos;
+        }
+
+        public static string GetPortraitLocation(string path, string callingfunction, string num)
+        {
+            string cf = "";
+            switch(callingfunction)
+            {
+                case "Gremlin":
+                    cf = "G";
+                    break;
+                case "Villager":
+                    cf = "V";
+                    break;
+                case "Adventurer":
+                    cf = "A";
+                    break;
+            }
+
+            string rv = $"{path}{cf}{num}";
+
+            Texture2D text = DataManager.GetTexture(rv);
+
+            if(text == null)
+            {
+                rv = path + "WizardPortrait";
+            }
+
+            return rv;
         }
     }
 
