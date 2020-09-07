@@ -11,13 +11,20 @@ namespace RiverHollow.Game_Managers
 {
     public static class SoundManager
     {
+        enum QueuePhase { None, Down, Up };
+        static QueuePhase _eQueuePhase = QueuePhase.None;
+        static Song _queuedSong;
+        const float PHASE_VAL = 0.02f;
+
         const string _sSongFolder = @"Content\Sound\Stock\Songs";
         const string _sEffectFolder = @"Content\Sound\Stock\Effects";
         const string _sHarpFolder = @"Content\Sound\Stock\Harp";
-        static float _iMusicVol = 0.03f;
-        static float _iEffectVol = 0.03f;
-        public static Dictionary<string, Song> _diSongs;
-        public static Dictionary<string, SoundEffect> _diEffects;
+        static float _iMusicVol = 0.5f;
+        static float _iEffectVol = 0.0001f;
+        static Dictionary<string, Song> _diSongs;
+        static Dictionary<string, SoundEffect> _diEffects;
+
+        static Song BackgroundSong => MediaPlayer.Queue.ActiveSong;
 
         public static void LoadContent(ContentManager Content)
         {
@@ -30,6 +37,31 @@ namespace RiverHollow.Game_Managers
             foreach (string s in Directory.GetFiles(_sHarpFolder)) { AddEffect(Content, s); }
         }
 
+        public static void Update(GameTime gameTime)
+        {
+            if (_eQueuePhase == QueuePhase.Down)
+            {
+                if (MediaPlayer.Volume > 0) { MediaPlayer.Volume -= PHASE_VAL; }
+                else
+                {
+                    MediaPlayer.Stop();
+                    PlaySong(_queuedSong, true);
+                    _queuedSong = null;
+                    _eQueuePhase = QueuePhase.Up;
+                }
+            }
+            else if (_eQueuePhase == QueuePhase.Up)
+            {
+                if (MediaPlayer.Volume < _iMusicVol) { MediaPlayer.Volume += PHASE_VAL; }
+                else { _eQueuePhase = QueuePhase.None; }
+            }
+        }
+
+        /// <summary>
+        /// Adds the given song to the Song Dictionary
+        /// </summary>
+        /// <param name="Content">Content Manager</param>
+        /// <param name="song">The full path to the song</param>
         static void AddSong(ContentManager Content, string song)
         {
             string name = string.Empty;
@@ -40,6 +72,11 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        /// <summary>
+        /// Adds the given effect to the Effect Dictionary
+        /// </summary>
+        /// <param name="Content">Content Manager</param>
+        /// <param name="effect">The full path to the effect</param>
         static void AddEffect(ContentManager Content, string effect)
         {
             string name = string.Empty;
@@ -50,12 +87,33 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void PlaySong(string song)
+        /// <summary>
+        /// If the given song is not the current background music,
+        /// queue it up and fade the song out.
+        /// </summary>
+        /// <param name="song">The name of the song file to play</param>
+        public static void PlayBackgroundMusic(string song)
         {
             if (_diSongs.ContainsKey(song))
-            { 
-                MediaPlayer.Play(_diSongs[song]);
+            {
+                Song s = _diSongs[song];
+                if(BackgroundSong != s)
+                {
+                    _eQueuePhase = QueuePhase.Down;
+                    _queuedSong = s;
+                }
             }
+        }
+
+        /// <summary>
+        /// Actually play the given song
+        /// </summary>
+        /// <param name="backgroundSong">The Song to play</param>
+        /// <param name="repeating">Whether or not the song should repeat</param>
+        private static void PlaySong(Song backgroundSong, bool repeating = false)
+        {
+            MediaPlayer.Play(backgroundSong);
+            MediaPlayer.IsRepeating = repeating;
         }
 
         public static void PlayEffect(string effect)

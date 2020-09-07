@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="53">
  <properties>
+  <property name="Background" value="UO-Stones"/>
   <property name="Outside" type="bool" value="true"/>
   <property name="Town" type="bool" value="true"/>
  </properties>

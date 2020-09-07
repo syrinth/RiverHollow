@@ -50,6 +50,8 @@ namespace RiverHollow.Tile_Engine
         int _iActiveSpawnPoints;
         public int ActiveSpawnPoints => _iActiveSpawnPoints;
         int _iTotalResourceWeight = 0;  //The total space on the map in tiles occupied by resource spawns
+        string _sBackgroundMusic;
+        public string BackgroundMusic => _sBackgroundMusic;
 
         private MonsterFood _itMonsterFood;
         public MonsterFood PrimedFood => _itMonsterFood;
@@ -200,6 +202,11 @@ namespace RiverHollow.Tile_Engine
             if (_map.Properties.ContainsKey("ActiveSpawn"))
             {
                 int.TryParse(_map.Properties["ActiveSpawn"].ToString(), out _iActiveSpawnPoints);
+            }
+
+            if (_map.Properties.ContainsKey("Background"))
+            {
+                _sBackgroundMusic = _map.Properties["Background"];
             }
 
             if (_map.Properties.ContainsKey("Cutscenes"))

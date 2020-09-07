@@ -120,6 +120,11 @@ namespace RiverHollow.Game_Managers
                     entryPoint = _tileMaps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
                 }
 
+                if (!string.IsNullOrEmpty(_tileMaps[travelPoint.LinkedMap].BackgroundMusic))
+                {
+                    SoundManager.PlayBackgroundMusic(_tileMaps[travelPoint.LinkedMap].BackgroundMusic);
+                }
+
                 FadeToNewMap(_tileMaps[travelPoint.LinkedMap], entryPoint.FindLinkedPointPosition(travelPoint.Center, c));
             }
             else

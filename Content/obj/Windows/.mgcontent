@@ -20,7 +20,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/TownUpgrades.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops/Adventurers.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CombatActions.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Songs/GA03-In Mothers Arms-Huckabay-96.mp3</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Effects/126426__cabeeno-rossley__timer-ends-time-up.wav</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CutScenes.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/texMachines.png</File>
@@ -205,7 +204,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Body/401_01.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Body/401_02.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/Gear/Legs/404.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/WizardPortrait.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Config.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/NPC_01.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Villagers/NPC_01.png</File>
@@ -239,5 +237,29 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Swamp/mapSwamp_03.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Misc/mapConnection_03.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Effects/close_door_1.wav</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V01.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V02.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V03.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V04.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V05.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V06.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V07.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V08.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V09.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V10.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V11.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V12.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V13.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V14.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V15.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V16.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V17.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V18.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V19.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/V20.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/WizardPortrait.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/G21.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Songs/UO-Stones.mp3</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Songs/Lost In The Forest.mp3</File>
   </SourceFiles>
 </SourceFileCollection>

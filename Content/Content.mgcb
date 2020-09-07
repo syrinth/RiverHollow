@@ -143,12 +143,6 @@
 /processor:PassThroughProcessor
 /build:Data/CombatActions.xml
 
-#begin Sound/Stock/Songs/GA03-In Mothers Arms-Huckabay-96.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Sound/Stock/Songs/GA03-In Mothers Arms-Huckabay-96.mp3
-
 #begin Sound/Stock/Effects/126426__cabeeno-rossley__timer-ends-time-up.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -2350,4 +2344,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Portraits/G21.png
+
+#begin Sound/Stock/Songs/UO-Stones.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Songs/UO-Stones.mp3
+
+#begin Sound/Stock/Songs/Lost In The Forest.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Songs/Lost In The Forest.mp3
 

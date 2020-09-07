@@ -102,6 +102,8 @@ namespace RiverHollow
                 MouseState ms = Mouse.GetState();
                 KeyboardState ks = Keyboard.GetState();
 
+                SoundManager.Update(gTime);
+
                 if (HarpManager.PlayingMusic)
                 {
                     HarpManager.Update(gTime);
@@ -301,6 +303,7 @@ namespace RiverHollow
         /// </summary>
         private static void StartGame()
         {
+            SoundManager.PlayBackgroundMusic("UO-Stones");
             //Places NPCs on the map
             foreach (Villager v in DataManager.DiNPC.Values)
             {
