@@ -261,5 +261,7 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Portraits/G21.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Songs/UO-Stones.mp3</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Songs/Lost In The Forest.mp3</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Effects/bubbles.wav</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Effects/buzz.wav</File>
   </SourceFiles>
 </SourceFileCollection>

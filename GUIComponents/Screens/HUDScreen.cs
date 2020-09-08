@@ -1909,18 +1909,32 @@ namespace RiverHollow.GUIComponents.Screens
             GUICheck _gHideMiniInventory;
             GUIButton _btnSave;
 
+            GUIText _gSoundSettings;
+            GUINumberControl _gVolumeControl;
+            GUINumberControl _gEffectControl;
+
             public HUDOptions()
             {
                 _gWindow = SetMainWindow();
 
                 _gAutoDisband = new GUICheck("Auto-Disband", GameManager.AutoDisband);
-                _gAutoDisband.AnchorToInnerSide(this, SideEnum.TopLeft);
+                _gAutoDisband.AnchorToInnerSide(_gWindow, SideEnum.TopLeft, 8);
 
                 _gHideMiniInventory = new GUICheck("Hide Mini Inventory", GameManager.HideMiniInventory);
-                _gHideMiniInventory.AnchorAndAlignToObject(_gAutoDisband, SideEnum.Bottom, SideEnum.Left);
+                _gHideMiniInventory.AnchorAndAlignToObject(_gAutoDisband, SideEnum.Bottom, SideEnum.Left, 8);
+
+                _gSoundSettings = new GUIText("Sound Settings");
+                _gSoundSettings.AnchorAndAlignToObject(_gHideMiniInventory, SideEnum.Bottom, SideEnum.Left, 32);
+
+                _gVolumeControl = new GUINumberControl("Music", SoundManager.MusicVolume * 100, UpdateMusicVolume);
+                _gVolumeControl.AnchorAndAlignToObject(_gSoundSettings, SideEnum.Bottom, SideEnum.Left);
+                _gVolumeControl.MoveBy(new Vector2(32, 0));
+
+                _gEffectControl = new GUINumberControl("Effects", SoundManager.EffectVolume * 100, UpdateEffectsVolume);
+                _gEffectControl.AnchorAndAlignToObject(_gVolumeControl, SideEnum.Bottom, SideEnum.Left);
 
                 _btnSave = new GUIButton("Save", BtnSave);
-                _btnSave.AnchorToInnerSide(this, SideEnum.BottomRight);
+                _btnSave.AnchorToInnerSide(_gWindow, SideEnum.BottomRight);
             }
 
             public override bool ProcessLeftButtonClick(Point mouse)
@@ -1958,11 +1972,94 @@ namespace RiverHollow.GUIComponents.Screens
                 base.Update(gTime);
             }
 
+            public void UpdateMusicVolume()
+            {
+                SoundManager.SetMusicVolume((float)_gVolumeControl.Value/100.0f);
+            }
+
+            public void UpdateEffectsVolume()
+            {
+                SoundManager.SetEffectVolume((float)_gEffectControl.Value / 100.0f);
+            }
             public void BtnSave()
             {
                 GameManager.AutoDisband = _gAutoDisband.Checked();
                 GameManager.HideMiniInventory = _gHideMiniInventory.Checked();
                 GUIManager.CloseMainObject();
+            }
+
+            private class GUINumberControl : GUIObject
+            {
+                float _fValChange = 10;
+                float _fMin;
+                float _fMax;
+                float _fValue;
+                public float Value => _fValue;
+
+                GUIText _gText;
+                GUIText _gValue;
+                GUIButton _btnLeft;
+                GUIButton _btnRight;
+
+                public delegate void ActionDelegate();
+                ActionDelegate _del;
+
+                public GUINumberControl(string text, float baseValue, ActionDelegate del, int min = 0, int max = 100)
+                {
+                    _del = del;
+                    _fMin = min;
+                    _fMax = max;
+                    _gText = new GUIText("XXXXXXXXXX");
+
+                    _btnLeft = new GUIButton(new Rectangle(272, 112, 16, 16), ScaledTileSize, ScaledTileSize, @"Textures\Dialog", BtnLeftClick);
+                    _btnLeft.AnchorAndAlignToObject(_gText, SideEnum.Right, SideEnum.CenterY, 12);
+
+                    _gValue = new GUIText("000");
+                    _gValue.AnchorAndAlignToObject(_btnLeft, SideEnum.Right, SideEnum.CenterY, 12);
+
+                    _btnRight = new GUIButton(new Rectangle(256, 112, 16, 16), ScaledTileSize, ScaledTileSize, @"Textures\Dialog", BtnRightClick);
+                    _btnRight.AnchorAndAlignToObject(_gValue, SideEnum.Right, SideEnum.CenterY, 12);
+
+                    _fValue = baseValue;
+                    UpdateValue();
+
+                    _gText.SetText(text);
+
+                    AddControl(_gText);
+                    AddControl(_btnLeft);
+                    AddControl(_gValue);
+                    AddControl(_btnRight);
+
+                    Height = _btnLeft.Height;
+                    Width = _btnRight.Right - _gText.Left;
+                }
+
+                public void BtnLeftClick()
+                {
+                    if (_fValue - _fValChange >= _fMin)
+                    {
+                        _fValue -= _fValChange;
+                        UpdateValue();
+
+                        _del();
+                    }
+                }
+                public void BtnRightClick()
+                {
+                    if (_fValue + _fValChange <= _fMax)
+                    {
+                        _fValue += _fValChange;
+                        UpdateValue();
+
+                        _del();
+                    }
+                }
+
+                private void UpdateValue()
+                {
+                    _gValue.SetText((int)_fValue, false);
+                    _gValue.AnchorAndAlignToObject(_btnRight, SideEnum.Left, SideEnum.CenterY, 12);
+                }
             }
         }
 

@@ -2357,3 +2357,15 @@
 /processorParam:Quality=Best
 /build:Sound/Stock/Songs/Lost In The Forest.mp3
 
+#begin Sound/Stock/Effects/bubbles.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Effects/bubbles.wav
+
+#begin Sound/Stock/Effects/buzz.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Stock/Effects/buzz.wav
+

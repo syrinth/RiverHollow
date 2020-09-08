@@ -11,7 +11,7 @@ using RiverHollow.Utilities;
 
 using static RiverHollow.Characters.ShopKeeper;
 using static RiverHollow.Characters.Actor;
-
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers
 {
@@ -230,7 +230,10 @@ namespace RiverHollow.Game_Managers
 
         #region Running
         private static bool _bRunning;
-        public static void Pause() { _bRunning = false; }
+        public static void Pause() {
+            _bRunning = false;
+            GUICursor._CursorType = GUICursor.EnumCursorType.Normal;
+        }
         public static void Unpause() {
             _bRunning = true;
         }

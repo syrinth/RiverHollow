@@ -222,6 +222,7 @@ namespace RiverHollow.Game_Managers
                     _currentMap.LoadBuilding(_newMapInfo.EnteredBuilding);
                 }
 
+                SoundManager.ChangeMap();
                 PlayerManager.CurrentMap = _newMapInfo.NextMap.Name;
                 PlayerManager.World.Position = _newMapInfo.PlayerPosition;
                 _currentMap.CheckForTriggeredCutScenes();

@@ -390,6 +390,8 @@ namespace RiverHollow.Items
 
         public class Machine : WorldItem
         {
+            string _sEffectWorking;
+
             //Processor variables
             Dictionary<int, ProcessRecipe> _diProcessing;
             ProcessRecipe CurrentlyProcessing => (_diProcessing.ContainsKey(_iCurrentlyMaking) ? _diProcessing[_iCurrentlyMaking] : null);
@@ -455,6 +457,11 @@ namespace RiverHollow.Items
                     }
                 }
 
+                if (stringData.ContainsKey("WorkEffect"))
+                {
+                    _sEffectWorking = stringData["WorkEffect"];
+                }
+
                 LoadContent();
             }
             public void LoadContent()
@@ -474,6 +481,7 @@ namespace RiverHollow.Items
                 //Processing Handling
                 if (CurrentlyProcessing != null)
                 {
+                    SoundManager.PlayEffectAtLoc(_sEffectWorking, _sMapName, MapPosition, this);
                     _sprite.Update(gTime);
                     _dProcessedTime += gTime.ElapsedGameTime.TotalSeconds;
                     if (_dProcessedTime >= CurrentlyProcessing.ProcessingTime)
@@ -483,6 +491,7 @@ namespace RiverHollow.Items
                 }
                 else if (_iCurrentlyMaking != -1)       //Crafting Handling
                 {
+                    SoundManager.PlayEffectAtLoc(_sEffectWorking, _sMapName, MapPosition, this);
                     _sprite.Update(gTime);
                     _dProcessedTime += gTime.ElapsedGameTime.TotalSeconds;
                     if (_dProcessedTime >= _diCrafting[_iCurrentlyMaking])
@@ -502,7 +511,7 @@ namespace RiverHollow.Items
 
             public void SetHeldItem(int itemID)
             {
-                SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition);
+                SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition, this);
                 _heldItem = DataManager.GetItem(itemID);
                 _dProcessedTime = -1;
                 _iCurrentlyMaking = -1;

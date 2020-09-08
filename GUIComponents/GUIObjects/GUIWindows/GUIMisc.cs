@@ -206,22 +206,26 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         GUIImage _gUnchecked;
         GUIImage _gChecked;
         GUIText _gText;
-        public GUICheck(string text = "", bool isChecked = false)
+        public GUICheck(string text, bool isChecked = false)
         {
-            Width = TileSize*2;
-            Height = TileSize*2;
+            int squareSize = TileSize * 2;
             _bChecked = isChecked;
-            _gUnchecked = new GUIImage(new Rectangle(16, 32, TileSize, TileSize), Width, Height, @"Textures\Dialog");
-            _gChecked = new GUIImage(new Rectangle(32, 32, TileSize, TileSize), Width, Height, @"Textures\Dialog");
+            _gUnchecked = new GUIImage(new Rectangle(16, 32, TileSize, TileSize), squareSize, squareSize, @"Textures\Dialog");
+            _gChecked = new GUIImage(new Rectangle(32, 32, TileSize, TileSize), squareSize, squareSize, @"Textures\Dialog");
+            _gText = new GUIText(" - " + text);
 
+            int delta = _gText.Height - squareSize;
+            _gUnchecked.MoveBy(new Vector2(0, delta));
+            _gChecked.MoveBy(new Vector2(0, delta));
+
+            _gText.AnchorAndAlignToObject(_gChecked, SideEnum.Right, SideEnum.CenterY);
+
+            AddControl(_gText);
             AddControl(_gUnchecked);
             AddControl(_gChecked);
-            if (!string.IsNullOrEmpty(text))
-            {
-                _gText = new GUIText(text);
-                _gText.AnchorAndAlignToObject(_gChecked, SideEnum.Right, SideEnum.Bottom);
-                AddControl(_gText);
-            }
+
+            Width = _gText.Right - _gChecked.Left;
+            Height = _gText.Height;
         }
 
         public override void Draw(SpriteBatch spriteBatch)

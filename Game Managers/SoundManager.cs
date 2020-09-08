@@ -1,11 +1,11 @@
-﻿using System.IO;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
 using RiverHollow.Utilities;
-
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace RiverHollow.Game_Managers
 {
@@ -19,20 +19,26 @@ namespace RiverHollow.Game_Managers
         const string _sSongFolder = @"Content\Sound\Stock\Songs";
         const string _sEffectFolder = @"Content\Sound\Stock\Effects";
         const string _sHarpFolder = @"Content\Sound\Stock\Harp";
-        static float _iMusicVol = 0.5f;
-        static float _iEffectVol = 0.0001f;
+        static float _fMusicVol = 0.4f;
+        public static float MusicVolume => _fMusicVol;
+        static float _fEffectVol = 0.4f;
+        public static float EffectVolume => _fEffectVol;
         static Dictionary<string, Song> _diSongs;
         static Dictionary<string, SoundEffect> _diEffects;
+        static Dictionary<object, EffectData> _diCurrentEffects;
 
         static Song BackgroundSong => MediaPlayer.Queue.ActiveSong;
+
+        delegate bool UnneededEffectTestDel(KeyValuePair<object, EffectData> kvp);
 
         public static void LoadContent(ContentManager Content)
         {
             _diSongs = new Dictionary<string, Song>();
             _diEffects = new Dictionary<string, SoundEffect>();
+            _diCurrentEffects = new Dictionary<object, EffectData>();
 
-            MediaPlayer.Volume = _iMusicVol;
-            foreach(string s in Directory.GetFiles(_sSongFolder)) { AddSong(Content, s); }
+            MediaPlayer.Volume = _fMusicVol;
+            foreach (string s in Directory.GetFiles(_sSongFolder)) { AddSong(Content, s); }
             foreach (string s in Directory.GetFiles(_sEffectFolder)) { AddEffect(Content, s); }
             foreach (string s in Directory.GetFiles(_sHarpFolder)) { AddEffect(Content, s); }
         }
@@ -52,8 +58,79 @@ namespace RiverHollow.Game_Managers
             }
             else if (_eQueuePhase == QueuePhase.Up)
             {
-                if (MediaPlayer.Volume < _iMusicVol) { MediaPlayer.Volume += PHASE_VAL; }
+                if (MediaPlayer.Volume < _fMusicVol) { MediaPlayer.Volume += PHASE_VAL; }
                 else { _eQueuePhase = QueuePhase.None; }
+            }
+
+            foreach (KeyValuePair<object, EffectData> kvp in _diCurrentEffects)
+            {
+                if (kvp.Value.Position != Vector2.Zero)
+                {
+                    kvp.Value.SetVolume(GetDistanceVolume(kvp.Value.Position));
+                }
+            }
+
+            ClearUnneededEffects(TestPlaying);
+        }
+
+        public static void ChangeMap()
+        {
+            ClearUnneededEffects(TestCurrentMap);
+        }
+
+        private static void ClearUnneededEffects(UnneededEffectTestDel test)
+        {
+            List<object> toRemove = new List<object>();
+            foreach (KeyValuePair<object, EffectData> kvp in _diCurrentEffects)
+            {
+                if (test(kvp))
+                {
+                    kvp.Value.SoundEffect.Stop();
+                    toRemove.Add(kvp.Key);
+                }
+            }
+
+            foreach (object o in toRemove)
+            {
+                _diCurrentEffects.Remove(o);
+            }
+        }
+
+        private static bool TestPlaying(KeyValuePair<object, EffectData> kvp)
+        {
+            bool rv = false;
+            if (kvp.Value.SoundEffect.State != SoundState.Playing)
+            {
+                rv = true;
+            }
+
+            return rv;
+        }
+        private static bool TestCurrentMap(KeyValuePair<object, EffectData> kvp)
+        {
+            bool rv = false;
+            if (kvp.Value.MapName != MapManager.CurrentMap.Name)
+            {
+                rv = true;
+            }
+
+            return rv;
+        }
+
+        public static void SetMusicVolume(float value)
+        {
+            _fMusicVol = value;
+            MediaPlayer.Volume = _fMusicVol;
+        }
+        public static void SetEffectVolume(float value)
+        {
+            _fEffectVol = value;
+            foreach (KeyValuePair<object, EffectData> kvp in _diCurrentEffects)
+            {
+                if (kvp.Value.Position != Vector2.Zero)
+                {
+                    kvp.Value.SetVolume(GetDistanceVolume(kvp.Value.Position));
+                }
             }
         }
 
@@ -97,7 +174,7 @@ namespace RiverHollow.Game_Managers
             if (_diSongs.ContainsKey(song))
             {
                 Song s = _diSongs[song];
-                if(BackgroundSong != s)
+                if (BackgroundSong != s)
                 {
                     _eQueuePhase = QueuePhase.Down;
                     _queuedSong = s;
@@ -116,20 +193,19 @@ namespace RiverHollow.Game_Managers
             MediaPlayer.IsRepeating = repeating;
         }
 
-        public static void PlayEffect(string effect)
+        public static void PlayEffect(string effectName, object obj = null)
         {
-            PlayEffect(effect, _iEffectVol);
+            EffectData data = new EffectData("", effectName, obj, _fEffectVol);
+            PlayEffect(data);
         }
 
-        public static void PlayEffect(string effect, float vol)
+        private static void PlayEffect(EffectData data)
         {
-            if (_diEffects.ContainsKey(effect))
+            if (data.EffectObject == null || !_diCurrentEffects.ContainsKey(data.EffectObject))
             {
-                SoundEffectInstance soundInstance;
-                soundInstance = _diEffects[effect].CreateInstance();
+                data.SoundEffect.Play();
 
-                soundInstance.Volume = vol;
-                soundInstance.Play();
+                if (data.EffectObject != null) { _diCurrentEffects[data.EffectObject] = data; }
             }
         }
 
@@ -140,20 +216,70 @@ namespace RiverHollow.Game_Managers
         /// <param name="effect">Name of the ffect</param>
         /// <param name="mapName">Which map to play it on</param>
         /// <param name="loc">The location of the effect</param>
-        public static void PlayEffectAtLoc(string effect, string mapName, Vector2 loc)
+        public static void PlayEffectAtLoc(string effectName, string mapName, Vector2 loc, object obj = null)
         {
             //If we're not currently on the map, don't play the effect
             if (MapManager.CurrentMap.Name.Equals(mapName))
             {
-                //TODO: There should probably be a log function here? The sound seems to drop off and vanish almost immediately when we're out of range but be clear beforehand
-                int range = (int)(RiverHollow.ScreenWidth/8);
-                int distance = -1;
-                if (PlayerManager.PlayerInRangeGetDist(loc.ToPoint(), range, ref distance))
+                EffectData data = new EffectData(mapName, effectName, obj, GetDistanceVolume(loc));
+                data.SetPosition(loc);
+                PlayEffect(data);
+            }
+        }
+
+        private static float GetDistanceVolume(Vector2 loc)
+        {
+            //TODO: There should probably be a log function here? The sound seems to drop off and vanish almost immediately when we're out of range but be clear beforehand
+            int range = (int)(RiverHollow.ScreenWidth / 8);
+            int distance = -1;
+
+            PlayerManager.PlayerInRangeGetDist(loc.ToPoint(), range, ref distance);
+            float volume = Math.Max(0f, ((float)range - (float)distance) / (float)range) * _fEffectVol;
+            return volume;
+        }
+
+        private class EffectData
+        {
+            object _obj;
+            public object EffectObject => _obj;
+            string _sMapName;
+            public string MapName => _sMapName;
+            Vector2 _vPosition;
+            public Vector2 Position => _vPosition;
+            SoundEffectInstance _instance;
+            public SoundEffectInstance SoundEffect => _instance;
+            float _fVolume;
+            public float Volume => _fVolume;
+
+            public EffectData(string mapName, string effectName, object obj, float volume)
+            {
+                _sMapName = mapName;
+                _obj = obj;
+                _fVolume = volume;
+
+                if (_diEffects.ContainsKey(effectName))
                 {
-                    float delta = (float)(range - distance) / (float)range;
-                    PlayEffect(effect, (float)(delta * 0.1));
+                    _instance = _diEffects[effectName].CreateInstance();
+                    _instance.Volume = _fVolume;
                 }
             }
+
+            public void SetPosition(Vector2 val)
+            {
+                _vPosition = val;
+            }
+
+            public void SetVolume(float val)
+            {
+                _fVolume = val;
+                _instance.Volume = _fVolume;
+            }
+
+            public void SetSoundEffect(SoundEffectInstance effect)
+            {
+                _instance = effect;
+            }
+
         }
     }
 }

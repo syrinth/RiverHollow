@@ -93,6 +93,12 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "HideMiniInventory")]
             public bool hideMiniInventory;
+
+            [XmlElement(ElementName = "MusicVolume")]
+            public float musicVolume;
+
+            [XmlElement(ElementName = "EffectVolume")]
+            public float effectVolume;
         }
         public struct PlayerData
         {
@@ -637,7 +643,9 @@ namespace RiverHollow.Game_Managers
             OptionsData data = new OptionsData
             {
                 autoDisband = GameManager.AutoDisband,
-                hideMiniInventory = GameManager.HideMiniInventory
+                hideMiniInventory = GameManager.HideMiniInventory,
+                musicVolume = SoundManager.MusicVolume,
+                effectVolume = SoundManager.EffectVolume,
             };
             return data;
         }
@@ -646,6 +654,8 @@ namespace RiverHollow.Game_Managers
         {
             GameManager.AutoDisband = data.autoDisband;
             GameManager.HideMiniInventory = data.hideMiniInventory;
+            SoundManager.SetEffectVolume(data.effectVolume);
+            SoundManager.SetMusicVolume(data.musicVolume);
         }
 
         public static List<SaveInfoData> LoadFiles()

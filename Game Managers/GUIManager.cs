@@ -104,7 +104,6 @@ namespace RiverHollow.Game_Managers
         public static bool IsTextWindowOpen() { return _currentGUIScreen.IsTextWindowOpen(); }
         public static void OpenTextWindow(string text, bool open = true)
         {
-            GUICursor._CursorType = GUICursor.EnumCursorType.Normal;
             GameManager.Pause();
             _currentGUIScreen.OpenTextWindow(text, open);
         }
