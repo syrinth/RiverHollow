@@ -124,8 +124,18 @@ namespace RiverHollow.Game_Managers
                 {
                     SoundManager.PlayBackgroundMusic(_tileMaps[travelPoint.LinkedMap].BackgroundMusic);
                 }
+                Vector2 newPos = Vector2.Zero;
+                if (travelPoint.IsDoor)
+                {
+                    newPos = entryPoint.GetMovedCenter();
+                    PlayerManager.World.DetermineFacing(new Vector2(0, -1));
+                }
+                else
+                {
+                    newPos = entryPoint.FindLinkedPointPosition(travelPoint.Center, c);
+                }
 
-                FadeToNewMap(_tileMaps[travelPoint.LinkedMap], entryPoint.FindLinkedPointPosition(travelPoint.Center, c));
+                FadeToNewMap(_tileMaps[travelPoint.LinkedMap], newPos);
             }
             else
             {
@@ -135,7 +145,6 @@ namespace RiverHollow.Game_Managers
 
                 _tileMaps[currMap].RemoveCharacter(c);
                 _tileMaps[travelPoint.LinkedMap].AddCharacter(c);
-                //c.NewMapPosition = entryPoint.FindLinkedPointPosition(travelPoint.Center, c); //This needs to get updated when officially added to the new map
                 RHTile newTile = _tileMaps[travelPoint.LinkedMap].GetTileByGridCoords(Util.GetGridCoords(entryPoint.GetMovedCenter()));
                 c.NewMapPosition = newTile.Position;
             }

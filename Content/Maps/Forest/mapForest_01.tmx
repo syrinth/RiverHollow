@@ -47,7 +47,7 @@
 41,41,41,41,41,41,41,41,41,41,41,41,41,42,0,0,40,41,41,41,41,41,41,41,41,41,41,41,41,41
 </data>
  </layer>
- <layer id="21" name="Upper" width="30" height="17" visible="0">
+ <layer id="21" name="Upper" width="30" height="17">
   <data encoding="csv">
 0,42,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40,0,
 0,42,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40,0,
@@ -69,7 +69,7 @@
 </data>
  </layer>
  <objectgroup id="4" name="Travel">
-  <object id="20" name="Entrance" x="218.925" y="266.424" width="41.3004" height="8.19178">
+  <object id="20" name="Entrance" x="208" y="268" width="64" height="4">
    <properties>
     <property name="EntranceDir" value="Up"/>
     <property name="Map" value="mapForest_05"/>

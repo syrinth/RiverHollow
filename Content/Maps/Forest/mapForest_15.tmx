@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="50">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="50">
  <properties>
   <property name="Outside" type="bool" value="false"/>
   <property name="ResourcesMinMax" value="30-60"/>
@@ -69,19 +69,19 @@
 </data>
  </layer>
  <objectgroup id="4" name="Travel">
-  <object id="47" name="Entrance" x="220.784" y="1.01175" width="36.9786" height="5.83441">
+  <object id="47" name="Entrance" x="208" y="0" width="64" height="4">
    <properties>
     <property name="EntranceDir" value="Down"/>
     <property name="Map" value="mapForest_11"/>
    </properties>
   </object>
-  <object id="48" name="Entrance" x="0.762567" y="127.524" width="7.11856" height="30.9797">
+  <object id="48" name="Entrance" x="0" y="128" width="4" height="32">
    <properties>
     <property name="EntranceDir" value="Right"/>
     <property name="Map" value="mapForest_14"/>
    </properties>
   </object>
-  <object id="49" name="Entrance" x="470.534" y="127.383" width="8.16663" height="32.8333">
+  <object id="49" name="Entrance" x="476" y="128" width="4" height="32">
    <properties>
     <property name="EntranceDir" value="Left"/>
     <property name="Map" value="mapForest_16"/>

@@ -644,6 +644,13 @@ namespace RiverHollow.Tile_Engine
 
         public void Update(GameTime gTime)
         {
+            //Used to prevent updates when we leave a cutscene.
+            //Maps should only be loose at the end of a cutscene.
+            if (!MapManager.Maps.ContainsKey(this.Name))
+            {
+                return;
+            }
+
             if (this == MapManager.CurrentMap)
             {
                 _renderer.Update(_map, gTime);
@@ -1005,7 +1012,7 @@ namespace RiverHollow.Tile_Engine
         {
             foreach(KeyValuePair<string, TravelPoint> kvp in _diTravelPoints)
             {
-                if (kvp.Value.Intersects(movingChar))
+                if (kvp.Value.Intersects(movingChar) && !kvp.Value.IsDoor)
                 {
                     MapManager.ChangeMaps(c, this.Name, kvp.Value);
                     return true;
@@ -2887,16 +2894,10 @@ namespace RiverHollow.Tile_Engine
             if (_eEntranceDir == DirectionEnum.Left || _eEntranceDir == DirectionEnum.Right)
             {
                 vDiff.X *= -1;
-                int mod = (_rCollisionBox.Width / 2) + (c.CollisionBox.Width / 2) + 1;
-                if (_eEntranceDir == DirectionEnum.Left) { vDiff.X -= mod; }
-                else if (_eEntranceDir == DirectionEnum.Right) { vDiff.X += mod; }
             }
             else if (_eEntranceDir == DirectionEnum.Up || _eEntranceDir == DirectionEnum.Down)
             {
                 vDiff.Y *= -1;
-                int mod = (_rCollisionBox.Height / 2) + (c.CollisionBox.Height / 2)+1;
-                if (_eEntranceDir == DirectionEnum.Up) { vDiff.Y -= mod; }
-                else if (_eEntranceDir == DirectionEnum.Down) { vDiff.Y += mod; }
             }
 
             //Modify the reflected vector2 to correlate to the Actor's positio ninstead of the collisionbox center

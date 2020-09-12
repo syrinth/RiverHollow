@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="30" height="31" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="10">
- <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
- <tileset firstgid="626" name="tsWalls_Floors" tilewidth="16" tileheight="16" tilecount="286" columns="22">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="15" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="37">
+ <properties>
+  <property name="Manor" type="bool" value="true"/>
+  <property name="Production" type="bool" value="false"/>
+ </properties>
+ <tileset firstgid="1" name="tsWallsFloors" tilewidth="16" tileheight="16" tilecount="286" columns="22">
   <image source="../Tilesets/tsWalls_Floors.png" trans="ffffff" width="352" height="209"/>
   <tile id="9">
    <properties>
@@ -13,12 +16,37 @@
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="16">
+  <tile id="22">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="17">
+  <tile id="24">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="25">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="27">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="28">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="29">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="30">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
@@ -28,27 +56,37 @@
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="32">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
   <tile id="33">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="34">
+  <tile id="44">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="38">
+  <tile id="46">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="39">
+  <tile id="47">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="49">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="50">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="52">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
@@ -58,37 +96,42 @@
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="54">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
   <tile id="55">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="56">
+  <tile id="66">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="58">
+  <tile id="68">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="59">
+  <tile id="69">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="60">
+  <tile id="71">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="61">
+  <tile id="72">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="73">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="74">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
@@ -98,39 +141,54 @@
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="76">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
   <tile id="77">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="78">
+  <tile id="88">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="79">
+  <tile id="89">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="80">
+  <tile id="90">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="81">
+  <tile id="91">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="82">
+  <tile id="92">
    <properties>
-    <property name="Impassable" type="bool" value="false"/>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="93">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="94">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="95">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="96">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="97">
@@ -148,52 +206,12 @@
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="100">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="101">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="102">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="103">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="104">
-   <properties>
-    <property name="Impassable" type="bool" value="false"/>
-   </properties>
-  </tile>
-  <tile id="119">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="120">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
   <tile id="121">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="122">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="123">
+  <tile id="128">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
@@ -203,151 +221,135 @@
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="141">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
-  <tile id="142">
-   <properties>
-    <property name="Impassable" type="bool" value="true"/>
-   </properties>
-  </tile>
   <tile id="143">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="144">
+  <tile id="152">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
-  <tile id="145">
+  <tile id="153">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="160">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="161">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="163">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="164">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="165">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="185">
+   <properties>
+    <property name="Impassable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="186">
    <properties>
     <property name="Impassable" type="bool" value="true"/>
    </properties>
   </tile>
  </tileset>
- <layer id="12" name="Base Layer" width="30" height="31">
+ <tileset firstgid="287" source="../Tilesets/tsFurniture.tsx"/>
+ <layer id="6" name="Base Layer" width="15" height="18">
   <data encoding="csv">
-755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,
-755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,
-755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,
-755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,
-755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,
-755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,
-755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,
-755,755,755,755,755,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,755,755,755,755,755,755,755,755,
-755,755,755,755,755,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,773,755,755,755,755,755,755,755,755,
-755,755,755,755,755,773,755,755,795,795,795,795,795,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,
-755,755,755,755,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,755,755,755,755,755,755,755,755,
-755,755,755,755,796,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,755,755,755,755,755,755,755,
-755,755,755,755,755,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,755,755,755,755,755,755,755,755,
-755,755,755,755,755,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,755,755,755,755,755,755,755,755,
-755,755,755,755,755,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,755,755,755,755,755,755,755,755,
-755,755,755,755,755,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,795,755,755,755,755,755,755,755,755,
-755,755,755,755,755,755,755,755,755,755,777,796,797,795,799,799,799,799,799,755,755,755,755,755,755,755,755,755,755,755,
-755,755,755,755,755,755,755,755,755,728,728,728,728,795,728,728,728,728,728,774,755,755,755,755,755,755,755,755,755,755,
-755,755,728,728,728,728,728,755,755,728,728,728,728,795,728,728,728,728,728,777,755,755,755,755,755,755,755,755,755,755,
-755,755,728,728,728,728,728,755,755,728,777,777,776,795,797,798,728,728,799,799,755,755,755,755,755,755,755,755,755,755,
-755,755,728,755,755,755,755,728,728,776,777,799,777,774,775,776,777,777,777,775,755,755,755,755,755,755,755,755,755,755,
-755,755,774,775,776,777,777,728,728,776,777,799,774,775,776,777,799,799,799,776,755,755,755,755,755,755,755,755,755,755,
-755,755,796,797,798,799,775,776,777,776,777,774,775,776,777,799,798,799,776,777,755,755,755,755,755,755,755,755,755,755,
-755,755,774,775,776,777,797,798,799,776,774,775,776,777,777,777,798,799,776,777,755,755,755,755,755,755,755,755,755,755,
-755,755,774,775,776,777,777,755,755,774,775,776,777,799,799,799,799,777,776,777,755,755,755,755,755,755,755,755,755,755,
-755,755,774,775,776,777,777,755,755,775,776,777,777,797,798,799,799,799,777,777,755,755,755,755,755,755,755,755,755,755,
-755,755,796,797,798,799,799,755,755,776,777,777,777,777,777,777,777,777,774,775,755,755,755,755,755,755,755,755,755,755,
-755,755,755,755,755,755,755,755,755,798,799,799,799,799,799,799,799,799,796,797,755,755,755,755,755,755,755,755,755,755,
-755,755,755,755,755,755,755,755,755,755,755,755,774,775,775,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,
-755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,
-755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755,755
+74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,
+74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,
+74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,
+74,103,103,103,103,103,103,103,103,103,103,103,103,103,74,
+74,103,103,103,103,103,103,103,103,103,103,103,103,103,74,
+74,103,103,103,103,103,103,103,103,103,103,103,103,103,74,
+74,85,85,85,85,85,85,85,86,85,85,85,85,85,74,
+74,85,85,85,86,85,85,85,85,85,86,85,85,85,74,
+74,85,85,85,85,85,85,85,85,85,85,85,85,85,74,
+74,85,86,85,85,85,85,86,85,85,85,86,85,85,74,
+74,85,85,85,86,85,85,85,85,85,85,85,85,85,74,
+74,85,85,85,85,85,85,85,85,86,85,85,86,85,74,
+74,85,86,85,85,85,85,85,85,85,85,85,85,85,74,
+74,85,85,85,85,85,86,85,85,85,85,85,85,85,74,
+74,85,85,86,85,85,85,85,86,85,85,86,85,85,74,
+74,109,85,131,132,109,110,85,85,85,85,85,85,85,74,
+74,74,74,74,74,74,74,109,74,74,74,74,74,74,74,
+74,74,74,74,74,74,74,74,74,74,74,74,74,74,74
 </data>
  </layer>
- <layer id="13" name="Ground Layer" width="30" height="31">
+ <layer id="7" name="Ground Layer" width="15" height="18">
   <data encoding="csv">
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,640,702,702,702,702,702,702,702,702,702,702,702,702,702,702,702,702,659,0,0,0,0,0,0,0,
-0,0,0,0,661,662,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,657,0,0,0,0,0,0,0,
-0,0,0,0,682,725,726,726,726,726,726,726,726,726,726,726,726,726,726,726,726,726,657,0,0,0,0,0,0,0,
-0,0,0,0,682,747,748,748,748,748,748,748,748,748,748,748,748,748,748,748,748,748,657,0,0,0,0,0,0,0,
-0,0,0,0,660,769,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,657,0,0,0,0,0,0,0,
-0,0,0,0,660,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,657,0,0,0,0,0,0,0,
-0,0,0,0,682,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,657,0,0,0,0,0,0,0,
-0,0,0,0,682,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,657,0,0,0,0,0,0,0,
-0,0,0,0,683,684,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,657,0,0,0,0,0,0,0,
-0,0,0,0,0,706,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,642,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,658,702,702,702,704,0,701,702,702,702,702,659,0,0,0,0,0,0,0,0,0,0,
-0,0,640,702,702,702,702,659,682,0,0,0,724,0,723,0,0,0,0,657,0,0,0,0,0,0,0,0,0,0,
-0,661,662,0,0,0,0,679,682,726,726,726,746,0,745,726,726,726,726,657,0,0,0,0,0,0,0,0,0,0,
-0,660,725,726,726,726,726,701,704,748,748,748,768,0,767,748,748,748,748,657,0,0,0,0,0,0,0,0,0,0,
-0,682,747,748,748,748,748,723,724,0,0,0,0,0,0,0,0,0,0,657,0,0,0,0,0,0,0,0,0,0,
-0,660,0,0,0,0,0,745,746,0,0,0,0,0,0,0,0,0,0,657,0,0,0,0,0,0,0,0,0,0,
-0,682,0,0,0,0,0,767,768,0,0,0,0,0,0,0,0,0,0,657,0,0,0,0,0,0,0,0,0,0,
-0,660,0,0,0,0,0,635,638,0,0,0,0,0,0,0,0,0,0,657,0,0,0,0,0,0,0,0,0,0,
-0,682,0,0,0,0,0,657,682,0,0,0,0,0,0,0,0,0,0,657,0,0,0,0,0,0,0,0,0,0,
-0,683,684,0,0,0,0,657,682,0,0,0,0,0,0,0,0,0,0,657,0,0,0,0,0,0,0,0,0,0,
-0,0,706,0,0,0,0,642,682,0,0,0,0,0,0,0,0,0,0,657,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,639,0,0,0,0,0,0,0,0,0,0,642,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,705,0,708,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+114,27,27,27,27,27,27,27,27,27,27,27,27,27,115,
+136,52,52,49,49,49,49,49,49,49,49,49,49,49,137,
+136,71,71,71,71,71,71,71,71,71,71,71,71,71,137,
+136,93,93,93,93,93,93,93,93,93,93,93,93,93,137,
+136,0,0,0,0,0,0,0,0,0,0,0,371,372,137,
+136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
+136,0,0,0,0,0,0,0,0,0,0,0,431,432,137,
+136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
+136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
+136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
+136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
+136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
+136,0,0,0,0,0,0,0,0,0,0,0,0,0,137,
+158,0,0,0,0,0,0,0,0,0,0,0,0,0,159,
+0,0,0,0,0,0,158,0,159,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="14" name="Upper Layer" width="30" height="31">
+ <layer id="8" name="Upper Layer" width="15" height="18">
   <data encoding="csv">
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,636,636,636,636,636,636,638,0,635,636,636,636,636,636,636,636,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,636,636,636,636,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,636,636,636,666,0,665,636,636,636,636,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,770,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,391,392,0,
+0,0,0,0,0,0,0,0,0,0,0,0,411,412,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,5,5,5,5,5,6,0,4,5,5,5,5,5,0,
+0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="4" name="Character Layer">
-  <object id="4" name="NPC7" x="151.833" y="330.333" width="9" height="8"/>
-  <object id="5" name="playerSpawn" x="49.666" y="374.334" width="4" height="4"/>
+ <objectgroup id="4" name="Travel Layer">
+  <object id="1" name="Entrance" x="112" y="268" width="16" height="4">
+   <properties>
+    <property name="EntranceDir" value="Up"/>
+    <property name="Map" value="mapRiverHollowTown"/>
+   </properties>
+  </object>
  </objectgroup>
- <objectgroup id="5" name="Travel Layer">
-  <object id="1" name="Entrance" x="211.167" y="438.083" width="8.6667" height="8.3333">
-   <properties>
-    <property name="Map" value="mapRiverHollowTown"/>
-   </properties>
-  </object>
-  <object id="2" name="Exit" x="210.083" y="462.667" width="11.5833" height="7">
-   <properties>
-    <property name="Map" value="mapRiverHollowTown"/>
-   </properties>
-  </object>
+ <objectgroup id="9" name="MapObject"/>
+ <objectgroup id="5" name="Character Layer">
+  <object id="35" name="NPC7" x="162.084" y="119.25" width="9" height="8"/>
+  <object id="36" name="playerSpawn" x="55.1665" y="165.25" width="4" height="4"/>
  </objectgroup>
 </map>

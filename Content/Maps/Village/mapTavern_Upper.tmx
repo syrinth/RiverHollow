@@ -83,7 +83,7 @@
 </data>
  </layer>
  <objectgroup id="4" name="Travel">
-  <object id="1" name="Entrance" x="194.063" y="358.435" width="43.9413" height="3.5625">
+  <object id="1" name="Entrance" x="192" y="364" width="48" height="4">
    <properties>
     <property name="EntranceDir" value="Up"/>
     <property name="Map" value="mapTavern"/>
