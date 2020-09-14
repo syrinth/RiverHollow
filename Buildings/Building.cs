@@ -216,10 +216,10 @@ namespace RiverHollow.Buildings
         /// when placing the Building onto the map.
         /// </summary>
         /// <param name="position"></param>
-        public override void SetCoordinatesByGrid(Vector2 position)
+        public override void SnapPositionToGrid(Vector2 position)
         {
             //Set the top-left corner of the building position 
-            MapPosition = position;
+            base.SnapPositionToGrid(position);
 
             //Determine where the top-left corner of the entrance Rectangle should be
             int startX = (int)_vMapPosition.X + _iEntX;
@@ -359,7 +359,7 @@ namespace RiverHollow.Buildings
                     {
                         Floor obj = (Floor)DataManager.GetWorldObject(int.Parse(DataManager.Config[9]["Floor"]));
                         obj.SetMapName(MapManager.CurrentMap.Name);
-                        obj.SetCoordinatesByGrid(new Vector2(x, y));
+                        obj.SnapPositionToGrid(new Vector2(x, y));
                         MapManager.CurrentMap.TestMapTiles(obj);
                         if (MapManager.PlacePlayerObject(obj))
                         {
@@ -406,7 +406,7 @@ namespace RiverHollow.Buildings
         {
             WorldItem obj = (WorldItem)DataManager.GetWorldObject(int.Parse(DataManager.Config[9]["Wall"]));
             ((Wall)obj).SetMapName(MapManager.CurrentMap.Name);
-            obj.SetCoordinatesByGrid(location);
+            obj.SnapPositionToGrid(location);
             MapManager.CurrentMap.TestMapTiles(obj);
             if (MapManager.PlacePlayerObject(obj))
             {
@@ -503,11 +503,11 @@ namespace RiverHollow.Buildings
             buildingData.machines = new List<MachineData>();
             foreach (WorldObject w in _liPlacedObjects)
             {
-                if (w.Match(ObjectTypeEnum.Machine))
+                if (w.CompareType(ObjectTypeEnum.Machine))
                 {
                     buildingData.machines.Add(((Machine)w).SaveData());
                 }
-                if (w.Match(ObjectTypeEnum.Container))
+                if (w.CompareType(ObjectTypeEnum.Container))
                 {
                     buildingData.containers.Add(((Container)w).SaveData());
                 }
@@ -517,7 +517,7 @@ namespace RiverHollow.Buildings
         }
         public void LoadData(BuildingData data)
         {
-            SetCoordinatesByGrid(new Vector2(data.iPosX, data.iPosY));
+            SnapPositionToGrid(new Vector2(data.iPosX, data.iPosY));
             _iPersonalID = data.iPersonalID;
             _iBldgLvl = data.iBldgLevel;
             _iUpgradeTimer = data.iUpgradeTimer;

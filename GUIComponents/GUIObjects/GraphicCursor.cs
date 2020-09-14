@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.Items;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
@@ -103,7 +104,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 Vector2 mousePosition = GetWorldMousePosition();
                 Rectangle drawRectangle = new Rectangle(((int)((mousePosition.X - HeldBuilding.Width / 2) / TileSize)) * TileSize, ((int)((mousePosition.Y - HeldBuilding.Height / 2) / TileSize)) * TileSize, HeldBuilding.Width, HeldBuilding.Height);
 
-                GameManager.HeldBuilding.SetCoordinatesByGrid(new Vector2(drawRectangle.X, drawRectangle.Y));
+                GameManager.HeldBuilding.SnapPositionToGrid(new Vector2(drawRectangle.X, drawRectangle.Y));
                 HeldBuilding.Sprite.Draw(spriteBatch);
             }
         }
@@ -118,7 +119,15 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (!Scrying() && !MapManager.CurrentMap.IsCombatMap)
             {
-                InventoryManager.GetCurrentStaticItem()?.GetWorldItem().Draw(spriteBatch);
+                StaticItem currentItem = InventoryManager.GetCurrentStaticItem();
+                if (currentItem != null)
+                {
+                    WorldItem worldItem = currentItem.GetWorldItem();
+                    if (worldItem != null)
+                    {
+                        worldItem.Draw(spriteBatch);
+                    }
+                }
             }
         }
     }

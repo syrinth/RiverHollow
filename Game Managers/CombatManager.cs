@@ -27,17 +27,13 @@ namespace RiverHollow.Game_Managers
 
         private static RHMap BattleMap => MapManager.CurrentMap;
         private static List<Item> _liDroppedItems;
-        private static List<RHTile> _liLegalTiles;
-        public static List<RHTile> LegalTiles => _liLegalTiles;
-
-        private static List<RHTile> _liAreaTiles;
-        public static List<RHTile> AreaTiles => _liAreaTiles;
+        public static List<RHTile> LegalTiles { get; private set; }
+        public static List<RHTile> AreaTiles { get; private set; }
+        public static List<RHTile> TimedHazardTiles { get; private set; }
 
         public static CombatActor ActiveCharacter;
-        private static List<CombatActor> _liMonsters;
-        public static List<CombatActor> Monsters  => _liMonsters;
-        private static List<CombatActor> _liParty;
-        public static List<CombatActor> Party => _liParty;
+        public static List<CombatActor> Monsters { get; private set; }
+        public static List<CombatActor> Party { get; private set; }
 
         private static CombatScreen _scrCombat;
         public enum CmbtPhaseEnum { Setup, Charging, Upkeep, MainSelection, ChooseMoveTarget, Moving, ChooseAction, ChooseActionTarget, PerformAction, Victory, DisplayDefeat }//NewTurn, EnemyTurn, SelectSkill, ChooseTarget, Defeat, DisplayAttack, DisplayVictory, Lost, PerformAction, EndCombat }
@@ -47,9 +43,7 @@ namespace RiverHollow.Game_Managers
         public static RHTile SelectedTile;          //The tile currently selected by the targetter
 
         public static double Delay;
-
-        private static bool _bInCombat = false;
-        public static bool InCombat => _bInCombat;
+        public static bool InCombat { get; private set; } = false;
 
         private static int _iXPMultiplier = 0;
 
@@ -88,28 +82,30 @@ namespace RiverHollow.Game_Managers
             Delay = 0;
 
             _liDroppedItems = new List<Item>();
-            _liLegalTiles = new List<RHTile>();
-            _liAreaTiles = new List<RHTile>();
-            _liParty = new List<CombatActor>();
-            _liParty.AddRange(PlayerManager.GetParty());
+            LegalTiles = new List<RHTile>();
+            AreaTiles = new List<RHTile>();
+            Party = new List<CombatActor>();
+            Party.AddRange(PlayerManager.GetParty());
 
-            _liMonsters = new List<CombatActor>();
-            _liMonsters.AddRange(BattleMap.Monsters);
+            Monsters = new List<CombatActor>();
+            Monsters.AddRange(BattleMap.Monsters);
 
             _liQueuedCharacters = new List<CombatActor>();
             _liChargingCharacters = new List<CombatActor>();
-            _liChargingCharacters.AddRange(_liParty);
-            _liChargingCharacters.AddRange(_liMonsters);
+            _liChargingCharacters.AddRange(Party);
+            _liChargingCharacters.AddRange(Monsters);
 
             //Characters with higher Spd go first
             _liChargingCharacters.Sort((x, y) => x.StatSpd.CompareTo(y.StatSpd));
+
+            TimedHazardTiles = MapManager.CurrentMap.CheckForCombatHazards(CombatHazard.HazardTypeEnum.Timed);
 
             foreach(CombatActor c in _liChargingCharacters)
             {
                 c.CurrentCharge = RHRandom.Instance.Next(0, 50);
             }
 
-            foreach (CombatActor c in _liMonsters)
+            foreach (CombatActor c in Monsters)
             {
                 c.SetBaseTile(BattleMap.GetTileByPixelPosition(c.Position));
             }
@@ -137,7 +133,7 @@ namespace RiverHollow.Game_Managers
             _scrCombat = new CombatScreen();
             GUIManager.SetScreen(_scrCombat);
 
-            _bInCombat = true;
+            InCombat = true;
             PlayerManager.AllowMovement = false;
             PlayerManager.World.PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
 
@@ -251,9 +247,9 @@ namespace RiverHollow.Game_Managers
                     break;
 
                 case CmbtPhaseEnum.Victory:
-                    if(_liMonsters?.Count == 0 && !_scrCombat.AreThereFloatingText())
+                    if(Monsters?.Count == 0 && !_scrCombat.AreThereFloatingText())
                     {
-                        _bInCombat = false;
+                        InCombat = false;
                         EndCombatVictory();
                     }
                     break;
@@ -305,7 +301,7 @@ namespace RiverHollow.Game_Managers
 
         public static void DrawUpperCombatLayer(SpriteBatch spriteBatch)
         {
-            if (_bInCombat)
+            if (InCombat)
             {
                 _scrCombat.DrawUpperCombatLayer(spriteBatch);
             }
@@ -368,15 +364,15 @@ namespace RiverHollow.Game_Managers
             bool rv = false;
 
             //Lambda expressions to find all characters still standing
-            bool partyUp = _liParty.FindAll(actor => actor.CurrentHP > 0 ).Count > 0;
-            bool monstersUp = _liMonsters.FindAll(actor => actor.CurrentHP > 0).Count > 0; ;
+            bool partyUp = Party.FindAll(actor => actor.CurrentHP > 0 ).Count > 0;
+            bool monstersUp = Monsters.FindAll(actor => actor.CurrentHP > 0).Count > 0; ;
 
             //If there is at least one party member up and no monsters, go to Victory
             if (partyUp && !monstersUp)
             {
                 rv = true;
                 ChangePhase(CmbtPhaseEnum.Victory);
-                foreach (ClassedCombatant a in _liParty)
+                foreach (ClassedCombatant a in Party)
                 {
                     a.CurrentCharge = 0;
                     a.PlayAnimation(AnimationEnum.Win);
@@ -465,9 +461,9 @@ namespace RiverHollow.Game_Managers
         public static void RemoveKnockedOutCharacter(CombatActor c)
         {
             //If the Actor was a Monster, remove it from the list
-            if (_liMonsters.Contains((c)))
+            if (Monsters.Contains((c)))
             {
-                _liMonsters.Remove(c);
+                Monsters.Remove(c);
                 c.ClearTiles();
             }
 
@@ -592,16 +588,16 @@ namespace RiverHollow.Game_Managers
             bool isMoving = CurrentPhase == CmbtPhaseEnum.ChooseMoveTarget;
             int distance = (isMoving ? 5 : SelectedAction.Range);
             TravelManager.SetParams(ActiveCharacter.Size, ActiveCharacter);
-            _liLegalTiles.Add(ActiveCharacter.BaseTile);
+            LegalTiles.Add(ActiveCharacter.BaseTile);
             foreach (KeyValuePair<RHTile, TravelData> kvp in TravelManager.FindRangeOfAction(ActiveCharacter, distance, isMoving))
             {
                 if (kvp.Value.InRange)
                 {
-                    _liLegalTiles.Add(kvp.Key);
+                    LegalTiles.Add(kvp.Key);
                 }
             } 
 
-            foreach (RHTile t in _liLegalTiles)
+            foreach (RHTile t in LegalTiles)
             {
                 t.LegalTile(true);
             }
@@ -626,8 +622,8 @@ namespace RiverHollow.Game_Managers
             if (CurrentPhase == CmbtPhaseEnum.ChooseActionTarget)
             {
                 ClearAreaTiles();
-                _liAreaTiles = SelectedAction.DetermineTargetTiles(tile);
-                foreach (RHTile t in _liAreaTiles)
+                AreaTiles = SelectedAction.DetermineTargetTiles(tile);
+                foreach (RHTile t in AreaTiles)
                 {
                     t.AreaTile(true);
                 }
@@ -650,11 +646,11 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public static void ClearLegalTiles()
         {
-            foreach (RHTile t in _liLegalTiles)
+            foreach (RHTile t in LegalTiles)
             {
                 t.LegalTile(false);
             }
-            _liLegalTiles.Clear();
+            LegalTiles.Clear();
         }
 
         /// <summary>
@@ -675,7 +671,7 @@ namespace RiverHollow.Game_Managers
             {
                 t.AreaTile(false);
             }
-            _liAreaTiles.Clear();
+            AreaTiles.Clear();
         }
 
         /// <summary>
@@ -692,6 +688,35 @@ namespace RiverHollow.Game_Managers
                 i++;
             }
             return (ActiveCharacter.IsActorType(ActorEnum.Adventurer) && actor.IsActorType(ActorEnum.Adventurer)) || (ActiveCharacter.IsActorType(ActorEnum.Monster) && actor.IsActorType(ActorEnum.Monster));
+        }
+
+        public static void CheckTileForActiveHazard(CombatActor c)
+        {
+            List<CombatHazard> activatedHazards = new List<CombatHazard>();
+            foreach(RHTile tile in c.GetTileList())
+            {
+                CombatHazard currHazard = tile.HazardObject;
+                if (currHazard != null)
+                {
+                    if (!activatedHazards.Contains(currHazard) && currHazard.Active)
+                    {
+                        activatedHazards.Add(currHazard);
+                        c.ModifyHealth(currHazard.Damage, true);
+                    }
+                }
+            } 
+        }
+
+        public static void CheckTileForActiveHazard(CombatActor c, RHTile t)
+        {
+            CombatHazard currHazard = t.HazardObject;
+            if (currHazard != null)
+            {
+                if (currHazard.Active)
+                {
+                    c.ModifyHealth(currHazard.Damage, true);
+                }
+            }
         }
         #endregion
 
@@ -753,7 +778,7 @@ namespace RiverHollow.Game_Managers
         {
             Vector2 mouseCursor = GUICursor.GetWorldMousePosition();
             RHTile tile = BattleMap.GetTileByPixelPosition(mouseCursor);
-            if (tile != null && _liLegalTiles.Contains(tile))
+            if (tile != null && LegalTiles.Contains(tile))
             {
                 SelectTile(tile);
             }
@@ -798,6 +823,15 @@ namespace RiverHollow.Game_Managers
         private static void CombatTick(ref List<CombatActor> charging, ref List<CombatActor> queued, bool dummy = false)
         {
             List<CombatActor> toQueue = new List<CombatActor>();
+
+            foreach(RHTile t in TimedHazardTiles)
+            {
+                if (t.HazardObject.Charge())
+                {
+
+                }
+            }
+
             foreach(CombatActor c in charging)
             {
                 //If Actor is not knocked out, increment the charge, capping to 100
@@ -959,12 +993,9 @@ namespace RiverHollow.Game_Managers
             SelectedAction?.ClearTargets();
             ActiveCharacter.EndTurn();
 
-            //if (CurrentPhase != PhaseEnum.EndCombat)
-            //{
             SelectedAction = null;
             ActiveCharacter = null;
             ChangePhase(CmbtPhaseEnum.Charging);
-            //}
         }
         #endregion
 

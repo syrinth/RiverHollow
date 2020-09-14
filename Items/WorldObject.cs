@@ -17,7 +17,8 @@ namespace RiverHollow.Items
     public class WorldObject
     {
         #region Properties
-        public ObjectTypeEnum Type;
+        protected ObjectTypeEnum _eObjectType;
+        public ObjectTypeEnum Type => _eObjectType;
 
         protected AnimatedSprite _sprite;
         public AnimatedSprite Sprite => _sprite;
@@ -31,26 +32,17 @@ namespace RiverHollow.Items
 
         protected KeyValuePair<int, int> _kvpDrop; //itemID, # of items dropped
 
+        protected Point _pImagePos;
+
         protected Vector2 _vMapPosition;
-        public virtual Vector2 MapPosition
-        {
-            get { return _vMapPosition; }
-            set {
-                Vector2 norm = Util.SnapToGrid(value);
-                _vMapPosition = norm;
-                if (_sprite != null)
-                {
-                    _sprite.Position = _vMapPosition;
-                }
-            }
-        }
+        public virtual Vector2 MapPosition => _vMapPosition;
 
         public Rectangle ClickBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _iWidth, _iHeight);                  //ClickBox is always hard set
         public virtual Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y, _iWidth, _iHeight);      //Can be overriden to only be the base
 
-        protected int _iWidth;
+        protected int _iWidth = TileSize;
         public int Width => _iWidth;
-        protected int _iHeight;
+        protected int _iHeight = TileSize;
         public int Height => _iHeight;
 
         protected int _iBaseWidth = TileSize;
@@ -66,31 +58,41 @@ namespace RiverHollow.Items
             Tiles = new List<RHTile>();
         }
 
-        public WorldObject(int id, Vector2 pos, int width, int height) : this()
+        public WorldObject(int id, Vector2 pos) : this()
         {
-            Type = ObjectTypeEnum.WorldObject;
             _iID = id;
-            _vMapPosition = pos;
-            _iWidth = width;
-            _iHeight = height;
             _wallObject = false;
+
+            SnapPositionToGrid(pos);
+        }
+
+        protected virtual void LoadDictionaryData(Dictionary<string, string> stringData, bool loadSprite = true)
+        {
+            string[] strPos = stringData["Image"].Split('-');
+            _pImagePos = new Point(int.Parse(strPos[0]), int.Parse(strPos[1]));
+
+            if (stringData.ContainsKey("Type")) { _eObjectType = Util.ParseEnum<ObjectTypeEnum>(stringData["Type"]); }
+            if (stringData.ContainsKey("Width")) { _iWidth = int.Parse(stringData["Width"]); }
+            if (stringData.ContainsKey("Height")) { _iHeight = int.Parse(stringData["Height"]); }
+
+            if (loadSprite)
+            {
+                if (stringData.ContainsKey("Texture")) { LoadSprite(stringData, stringData["Texture"]); }
+                else { LoadSprite(stringData); }
+            }
         }
 
         protected virtual void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
         {
-            string[] texIndices = stringData["Image"].Split('-');
-            int startX = int.Parse(texIndices[0]);
-            int startY = int.Parse(texIndices[1]);
-
             _sprite = new AnimatedSprite(textureName);
             if (stringData.ContainsKey("Idle"))
             {
                 string[] idleSplit = stringData["Idle"].Split('-');
-                _sprite.AddAnimation(AnimationEnum.ObjectIdle, startX, startY, _iWidth, _iHeight, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
+                _sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _iWidth, _iHeight, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
             }
             else
             {
-                _sprite.AddAnimation(AnimationEnum.ObjectIdle, startX, startY, _iWidth, _iHeight);
+                _sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _iWidth, _iHeight);
             }
 
             //MAR
@@ -99,7 +101,7 @@ namespace RiverHollow.Items
             //    string[] gatherSplit = stringData["Gathered"].Split('-');
             //    _sprite.AddAnimation(WorldObjAnimEnum.Gathered, startX, startY, _iWidth, _iHeight, int.Parse(gatherSplit[0]), float.Parse(gatherSplit[1]));
             //}
-            _sprite.Position = _vMapPosition;
+            SetSpritePos(_vMapPosition);
         }
 
         public virtual void Update(GameTime gTime) {
@@ -121,13 +123,22 @@ namespace RiverHollow.Items
             return CollisionBox.Contains(m);
         }
 
-        public virtual void SetCoordinatesByGrid(Vector2 position)
+        protected void SetSpritePos(Vector2 position)
         {
-            MapPosition = Util.SnapToGrid(position);
+            if (_sprite != null)
+            {
+                _sprite.Position = position;
+            }
         }
-        public virtual void SetCoordinates(Vector2 position)
+        public virtual void SnapPositionToGrid(Vector2 position)
         {
-            MapPosition = position;
+            _vMapPosition = Util.SnapToGrid(position);
+            SetSpritePos(_vMapPosition);
+        }
+        public void SetCoordinates(Vector2 position)
+        {
+            _vMapPosition = position;
+            SetSpritePos(_vMapPosition);
         }
 
         /// <summary>
@@ -176,7 +187,7 @@ namespace RiverHollow.Items
             return itemList;
         }
 
-        public bool Match(ObjectTypeEnum t) { return Type == t; }
+        public bool CompareType(ObjectTypeEnum t) { return Type == t; }
     }
 
     public class Destructible : WorldObject
@@ -190,23 +201,17 @@ namespace RiverHollow.Items
         protected int _lvltoDmg;
         public int LvlToDmg => _lvltoDmg;
 
-        public Destructible(int id, Dictionary<string, string> stringData, Vector2 pos)
+        public Destructible(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
         {
-            Type = ObjectTypeEnum.Destructible;
-            _iID = id;
+            LoadDictionaryData(stringData);
 
             _wallObject = false;
 
-            _iWidth = int.Parse(stringData["Width"]);
-            _iHeight = int.Parse(stringData["Height"]);
             if (stringData.ContainsKey("Item")) { ReadItemDrops(stringData["Item"]); }
 
             if (stringData.ContainsKey("Tool")) { _eToolType = Util.ParseEnum<ToolEnum>(stringData["Tool"]);}
             if (stringData.ContainsKey("Hp")) { _iHP = int.Parse(stringData["Hp"]); }
             if (stringData.ContainsKey("ReqLvl")) { _lvltoDmg = int.Parse(stringData["ReqLvl"]); }
-
-            SetCoordinates(pos);
-            LoadSprite(stringData);
         }
 
         public virtual bool DealDamage(int dmg)
@@ -225,10 +230,8 @@ namespace RiverHollow.Items
 
         public Tree(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
         {
-            Type = ObjectTypeEnum.Destructible;
-            if (stringData.ContainsKey("Texture")) {
-                LoadSprite(stringData, stringData["Texture"]);
-            }
+            LoadDictionaryData(stringData);
+
             _eToolType = ToolEnum.Axe;
         }
     }
@@ -237,31 +240,13 @@ namespace RiverHollow.Items
     {
         public EchoNode(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
         {
-            Type = ObjectTypeEnum.Destructible;
+            LoadDictionaryData(stringData);
             _eToolType = ToolEnum.Lantern;
-            _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
 
-            string[] imageSplit = stringData["Image"].Split('-');
-            string[] idleSplit = stringData["Idle"].Split('-');
             string[] gatheredSplit = stringData["Gathered"].Split('-');
-
-            int startX = int.Parse(imageSplit[0]);
-            int startY = int.Parse(imageSplit[1]);
-            _sprite.AddAnimation(AnimationEnum.ObjectIdle, startX, startY, TileSize, TileSize, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
             //_sprite.AddAnimation(WorldObjAnimEnum.Gathered, startX + (int.Parse(idleSplit[0]) * TileSize), startY, TileSize, TileSize, int.Parse(gatheredSplit[0]), float.Parse(gatheredSplit[1]));
 
             //_sprite.SetCurrentAnimation(WorldObjAnimEnum.Idle);
-            _sprite.IsAnimating = true;
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            _sprite.Draw(spriteBatch);
-        }
-
-        public override void Update(GameTime gTime)
-        {
-            _sprite.Update(gTime);
         }
 
         public override bool DealDamage(int dmg)
@@ -277,58 +262,83 @@ namespace RiverHollow.Items
         }
     }
 
-    public class Light : WorldItem
+    public class CombatHazard : WorldObject
     {
-        public Light(int id, Dictionary<string, string> stringData, Vector2 pos)
+        public enum HazardTypeEnum { Passive, Timed, Triggered };
+        readonly HazardTypeEnum _eHazardType;
+
+        int _iInit;
+        bool _bDrawOver;
+        public int Damage { get; }
+        public bool Active { get; private set; }
+
+        public CombatHazard(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
         {
-            Type = ObjectTypeEnum.Light;
-            _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
+            LoadDictionaryData(stringData);
+            _eHazardType = Util.ParseEnum<HazardTypeEnum>(stringData["Subtype"]);
+            Damage = int.Parse(stringData["Damage"]);
+            _bDrawOver = stringData.ContainsKey("DrawOver");
+            _sprite.SetDepthMod(_bDrawOver ? 1 : -999);
 
-            _iHeight = TileSize;
-            _iWidth = TileSize;
-            string[] imageSplit = stringData["Image"].Split('-');
-            string[] idleSplit = stringData["Idle"].Split('-');
+            _iInit = 0;
+            if (_eHazardType == HazardTypeEnum.Passive) { Active = true; }
+            else { Activate(false); }
+        }
 
-            int startX = int.Parse(imageSplit[0]);
-            int startY = int.Parse(imageSplit[1]);
-            _sprite.AddAnimation(AnimationEnum.ObjectIdle, startX, startY, TileSize, TileSize, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
+        protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
+        {
+            base.LoadSprite(stringData, textureName);
+            _sprite.AddAnimation(AnimationEnum.ObjectAction1, _pImagePos.X + TileSize, _pImagePos.Y, _iWidth, _iHeight);
+        }
 
-            _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
-            _sprite.IsAnimating = true;
+        public bool Charge() {
+            bool rv = false;
+
+            _iInit += 3;
+
+            if(_iInit >= 100)
+            {
+                _iInit = 0;
+                Activate(!Active);
+            }
+
+            return rv;
+        }
+
+        private void Activate(bool value)
+        {
+            Active = value;
+            _sprite.PlayAnimation(value ? AnimationEnum.ObjectAction1 : AnimationEnum.ObjectIdle);
+        }
+
+        public bool SubtypeMatch(HazardTypeEnum cmp)
+        {
+            return _eHazardType == cmp;
         }
     }
 
-    public class Staircase : WorldObject
-    {
-        protected string _toMap;
-        public string ToMap { get => _toMap; }
+    //public class Staircase : WorldObject
+    //{
+    //    protected string _toMap;
+    //    public string ToMap { get => _toMap; }
 
-        public Staircase(int id, Vector2 pos, int width, int height) : base(id, pos, width, height)
-        {
-            Type = ObjectTypeEnum.WorldObject;
-            _wallObject = true;
-            _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
-            _sprite.AddAnimation(AnimationEnum.ObjectIdle, 96, 0, TileSize, TileSize);
-        }
+    //    public Staircase(int id, Vector2 pos, int width, int height) : base(id, pos, width, height)
+    //    {
+    //        _eObjectType = ObjectTypeEnum.WorldObject;
+    //        _wallObject = true;
+    //        _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
+    //        _sprite.AddAnimation(AnimationEnum.ObjectIdle, 96, 0, TileSize, TileSize);
+    //    }
 
-        public void SetExit(string map)
-        {
-            _toMap = map;
-        }
-    }
+    //    public void SetExit(string map)
+    //    {
+    //        _toMap = map;
+    //    }
+    //}
 
-    public class WorldItem : WorldObject
+    public abstract class WorldItem : WorldObject
     {
         protected string _sMapName;                                 //Used to play sounds on that map
-        protected Vector2 _vSourcePos;
-        public override Vector2 MapPosition
-        {
-            set
-            {
-                base.MapPosition = value;
-                HeldItemPos = _vMapPosition;
-            }
-        }
         public Vector2 HeldItemPos
         {
             get { return _vMapPosition; }
@@ -344,34 +354,25 @@ namespace RiverHollow.Items
 
         public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + (_iHeight - BaseHeight), BaseWidth, BaseHeight);
 
-        protected void ReadSourcePos(string str)
+        protected WorldItem() : base() {}
+        protected WorldItem(int id, Vector2 pos) : base(id, pos) {}
+
+        public override void SnapPositionToGrid(Vector2 position)
         {
-            string[] strPos = str.Split('-');
-            _vSourcePos = new Vector2(int.Parse(strPos[0]), int.Parse(strPos[1]));
+            base.SnapPositionToGrid(position);
+            HeldItemPos = _vMapPosition;
         }
         public void SetMapName(string val) { _sMapName = val; }
 
         public class ClassChanger : WorldItem
         {
-            public ClassChanger(int id, Vector2 position)
+            public ClassChanger(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
             {
-                _iID = id;
-                Type = ObjectTypeEnum.ClassChanger;
-                LoadContent();
-
-                MapPosition = position;
-
-                _iWidth = TileSize;
-                _iHeight = TileSize * 2;
-            }
-            public void LoadContent()
-            {
-                _sprite = new AnimatedSprite(@"Textures\texMachines");
-                _sprite.AddAnimation(AnimationEnum.ObjectIdle, (int)_vSourcePos.X, (int)_vSourcePos.Y, TileSize, TileSize * 2, 1, 0.3f);
+                LoadDictionaryData(stringData);
                 _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
                 _sprite.IsAnimating = true;
             }
-            public virtual void Update(GameTime gTime) { }
+
             public override void Draw(SpriteBatch spriteBatch)
             {
                 _sprite.Draw(spriteBatch, true);
@@ -410,16 +411,12 @@ namespace RiverHollow.Items
 
             public Machine(int id, Dictionary<string, string> stringData)
             {
+                LoadDictionaryData(stringData);
                 _iID = id;
                 _heldItem = null;
                 _dProcessedTime = -1;
                 _diCrafting = new Dictionary<int, int>();
-                _diProcessing = new Dictionary<int, ProcessRecipe>();
-                Type = ObjectTypeEnum.Machine;
-                ReadSourcePos(stringData["Image"]);
-
-                _iWidth = int.Parse(stringData["Width"]);
-                _iHeight = int.Parse(stringData["Height"]);                
+                _diProcessing = new Dictionary<int, ProcessRecipe>();             
 
                 if (stringData.ContainsKey("Work"))
                 {
@@ -461,17 +458,19 @@ namespace RiverHollow.Items
                 {
                     _sEffectWorking = stringData["WorkEffect"];
                 }
-
-                LoadContent();
             }
-            public void LoadContent()
+
+            protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = "Textures\\texMachines")
             {
                 _sprite = new AnimatedSprite(@"Textures\texMachines");
-                _sprite.AddAnimation(AnimationEnum.ObjectIdle, (int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight, 1, 0.3f, true);
-                _sprite.AddAnimation(AnimationEnum.PlayAnimation, (int)_vSourcePos.X + _iWidth, (int)_vSourcePos.Y, _iWidth, _iHeight, _iWorkingFrames, _fFrameSpeed, true);
+                _sprite.AddAnimation(AnimationEnum.ObjectIdle, (int)_pImagePos.X, (int)_pImagePos.Y, _iWidth, _iHeight, 1, 0.3f, true);
+                _sprite.AddAnimation(AnimationEnum.PlayAnimation, (int)_pImagePos.X + _iWidth, (int)_pImagePos.Y, _iWidth, _iHeight, _iWorkingFrames, _fFrameSpeed, true);
                 _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
                 _sprite.IsAnimating = true;
+
+                SetSpritePos(_vMapPosition);
             }
+
             public override void Update(GameTime gTime) {
                 if (_itemBubble != null)
                 {
@@ -577,7 +576,7 @@ namespace RiverHollow.Items
             public void LoadData(MachineData mac)
             {
                 _iID = mac.ID;
-                MapPosition = new Vector2(mac.x, mac.y);
+                SnapPositionToGrid(new Vector2(mac.x, mac.y));
                 _dProcessedTime = mac.processedTime;
                 _iCurrentlyMaking = mac.currentItemID;
                 _heldItem = DataManager.GetItem(mac.heldItemID);
@@ -617,19 +616,6 @@ namespace RiverHollow.Items
                 private int _iCurrentPosition;
                 private bool _bDec;
 
-                //ItemBubble overrides because it isn't locked to the grid
-                public override Vector2 MapPosition
-                {
-                    get { return base.MapPosition; }
-                    set {
-                        _vMapPosition = value;
-                        if (_sprite != null)
-                        {
-                            _sprite.Position = _vMapPosition;
-                        }
-                    }
-                }
-
                 public ItemBubble(Item it, Machine myMachine)
                 {
                     _item = it;
@@ -643,7 +629,7 @@ namespace RiverHollow.Items
                     _dTimer = 0;
                     _iCurrentPosition = 0;
 
-                    MapPosition =  myMachine._vMapPosition + new Vector2((myMachine.Width / 2) - (_iWidth / 2), -_iHeight);
+                    SetCoordinates(myMachine._vMapPosition + new Vector2((myMachine.Width / 2) - (_iWidth / 2), -_iHeight));
 
                     _vArrPositions = new Vector2[3];
                     _vArrPositions[0] = new Vector2(_vMapPosition.X, _vMapPosition.Y + 1);
@@ -699,19 +685,12 @@ namespace RiverHollow.Items
             Item[,] _inventory;
             public Item[,] Inventory { get => _inventory; }
 
-            public Container(int id, Dictionary<string, string> stringData)
+            public Container(int id, Dictionary<string, string> stringData) : base(id, Vector2.Zero)
             {
-                _iID = id;
-                Type = ObjectTypeEnum.Container;
-
-                _iWidth = int.Parse(stringData["Width"]);
-                _iHeight = int.Parse(stringData["Height"]);
+                LoadDictionaryData(stringData);
 
                 _iRows = int.Parse(stringData["Rows"]);
                 _iColumns = int.Parse(stringData["Cols"]);
-
-                ReadSourcePos(stringData["Image"]);
-                LoadSprite(stringData);
 
                 _inventory = new Item[_iRows, _iColumns];
             }
@@ -737,7 +716,7 @@ namespace RiverHollow.Items
             }
             internal void LoadData(ContainerData data)
             {
-                MapPosition = new Vector2(data.x, data.y);
+                SnapPositionToGrid(new Vector2(data.x, data.y));
                 for (int i = 0; i < Rows; i++)
                 {
                     for (int j = 0; j < Columns; j++)
@@ -772,19 +751,15 @@ namespace RiverHollow.Items
             int _iDaysLeft;
             Dictionary<int, int> _diTransitionTimes;
 
-            public Plant(int id, Dictionary<string, string> stringData)
+            public Plant(int id, Dictionary<string, string> stringData) : base(id, Vector2.Zero)
             {
-                _iID = id;
-                Type = ObjectTypeEnum.Plant;
+                _diTransitionTimes = new Dictionary<int, int>();
+
+                LoadDictionaryData(stringData);
                 _bImpassable = false;
 
                 _iCurrentState = 0;
-                _diTransitionTimes = new Dictionary<int, int>();
 
-                _iWidth = TileSize;
-                _iHeight = stringData.ContainsKey("Height") ? int.Parse(stringData["Height"]) : TileSize;
-
-                ReadSourcePos(stringData["Image"]);
                 _iResourceID = int.Parse(stringData["Item"]);
                 _iMaxStates = int.Parse(stringData["TrNum"]);       //Number of growth phases
 
@@ -798,23 +773,16 @@ namespace RiverHollow.Items
                 }
                 _iDaysLeft = _diTransitionTimes[0];
 
-                LoadContent();
                 _sprite.SetRotationOrigin(new Vector2(_iWidth / 2, _iHeight - 1));    //Subtract one to keep it in the bounds of the rectangle
             }
 
-            public void LoadContent()
+            protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = DataManager.FILE_WORLDOBJECTS)
             {
                 _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
-                _sprite.AddAnimation(0.ToString(), (int)_vSourcePos.X, (int)_vSourcePos.Y, _iWidth, _iHeight);
+                _sprite.AddAnimation(0.ToString(), (int)_pImagePos.X, (int)_pImagePos.Y, _iWidth, _iHeight);
                 for (int j = 1; j < _diTransitionTimes.Count + 1; j++){
-                    _sprite.AddAnimation(j.ToString(), (int)_vSourcePos.X + (TileSize * j), (int)_vSourcePos.Y, _iWidth, _iHeight);
+                    _sprite.AddAnimation(j.ToString(), (int)_pImagePos.X + (TileSize * j), (int)_pImagePos.Y, _iWidth, _iHeight);
                 }
-            }
-
-            public override void SetCoordinatesByGrid(Vector2 position)
-            {
-                base.SetCoordinatesByGrid(position);
-                _sprite.Position = _vMapPosition;
             }
 
             public override void Update(GameTime gTime)
@@ -938,7 +906,7 @@ namespace RiverHollow.Items
 
             internal void LoadData(PlantData data)
             {
-                MapPosition = new Vector2(data.x, data.y);
+                SnapPositionToGrid(new Vector2(data.x, data.y));
                 _iCurrentState = data.currentState;
                 _iDaysLeft = data.daysLeft;
 
@@ -952,31 +920,34 @@ namespace RiverHollow.Items
             //Like the Earth which has a watered and unwatered Sprite
             protected virtual AnimatedSprite Target => _sprite;
 
+            public AdjustableObject() : base(){}
+            public AdjustableObject(int id, Vector2 pos) : base(id, pos) { }
+
             /// <summary>
             /// Loads in the different sprite versions required for an AdjustableObject
             /// so that they can be easily played and referenced in the future.
             /// </summary>
             /// <param name="sprite">The AnimatedSprite to load the animations into</param>
             /// <param name="vStart">The source position for this texture series</param>
-            protected void LoadSprite(AnimatedSprite sprite, Vector2 vStart)
+            protected void LoadAdjustableSprite(ref AnimatedSprite spr, string textureName = DataManager.FILE_FLOORING)
             {
-                sprite.AddAnimation("None", (int)vStart.X, (int)vStart.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("NS", (int)vStart.X + TileSize, (int)vStart.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("EW", (int)vStart.X + TileSize * 2, (int)vStart.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("SW", (int)vStart.X + TileSize * 3, (int)vStart.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("NW", (int)vStart.X + TileSize * 4, (int)vStart.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("NE", (int)vStart.X + TileSize * 5, (int)vStart.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("SE", (int)vStart.X + TileSize * 6, (int)vStart.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("NSE", (int)vStart.X + TileSize * 7, (int)vStart.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("NSW", (int)vStart.X + TileSize * 8, (int)vStart.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("NEW", (int)vStart.X + TileSize * 9, (int)vStart.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("SEW", (int)vStart.X + TileSize * 10, (int)vStart.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("NSEW", (int)vStart.X + TileSize * 11, (int)vStart.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("W", (int)vStart.X + TileSize * 12, (int)vStart.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("E", (int)vStart.X + TileSize * 13, (int)vStart.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("S", (int)vStart.X + TileSize * 14, (int)vStart.Y, _iWidth, _iHeight);
-                sprite.AddAnimation("N", (int)vStart.X + TileSize * 15, (int)vStart.Y, _iWidth, _iHeight);
-                
+                spr = new AnimatedSprite(textureName);
+                spr.AddAnimation("None", (int)_pImagePos.X, (int)_pImagePos.Y, _iWidth, _iHeight);
+                spr.AddAnimation("NS", (int)_pImagePos.X + TileSize, (int)_pImagePos.Y, _iWidth, _iHeight);
+                spr.AddAnimation("EW", (int)_pImagePos.X + TileSize * 2, (int)_pImagePos.Y, _iWidth, _iHeight);
+                spr.AddAnimation("SW", (int)_pImagePos.X + TileSize * 3, (int)_pImagePos.Y, _iWidth, _iHeight);
+                spr.AddAnimation("NW", (int)_pImagePos.X + TileSize * 4, (int)_pImagePos.Y, _iWidth, _iHeight);
+                spr.AddAnimation("NE", (int)_pImagePos.X + TileSize * 5, (int)_pImagePos.Y, _iWidth, _iHeight);
+                spr.AddAnimation("SE", (int)_pImagePos.X + TileSize * 6, (int)_pImagePos.Y, _iWidth, _iHeight);
+                spr.AddAnimation("NSE", (int)_pImagePos.X + TileSize * 7, (int)_pImagePos.Y, _iWidth, _iHeight);
+                spr.AddAnimation("NSW", (int)_pImagePos.X + TileSize * 8, (int)_pImagePos.Y, _iWidth, _iHeight);
+                spr.AddAnimation("NEW", (int)_pImagePos.X + TileSize * 9, (int)_pImagePos.Y, _iWidth, _iHeight);
+                spr.AddAnimation("SEW", (int)_pImagePos.X + TileSize * 10, (int)_pImagePos.Y, _iWidth, _iHeight);
+                spr.AddAnimation("NSEW", (int)_pImagePos.X + TileSize * 11, (int)_pImagePos.Y, _iWidth, _iHeight);
+                spr.AddAnimation("W", (int)_pImagePos.X + TileSize * 12, (int)_pImagePos.Y, _iWidth, _iHeight);
+                spr.AddAnimation("E", (int)_pImagePos.X + TileSize * 13, (int)_pImagePos.Y, _iWidth, _iHeight);
+                spr.AddAnimation("S", (int)_pImagePos.X + TileSize * 14, (int)_pImagePos.Y, _iWidth, _iHeight);
+                spr.AddAnimation("N", (int)_pImagePos.X + TileSize * 15, (int)_pImagePos.Y, _iWidth, _iHeight);
             }
 
             /// <summary>
@@ -1058,24 +1029,15 @@ namespace RiverHollow.Items
 
         public class Floor : AdjustableObject
         {
+            public Floor() : base() { }
+
             /// <summary>
             /// Base Constructor to hard define the Height and Width
             /// </summary>
-            protected Floor() {
-                _iWidth = TileSize;
-                _iHeight = TileSize;
-            }
-
-            public Floor(int id, Dictionary<string, string> stringData, Vector2 pos) : this()
+            public Floor(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
             {
-                _iID = id;
-                Type = ObjectTypeEnum.Floor;
-                ReadSourcePos(stringData["Image"]);
-
-                _sprite = new AnimatedSprite(DataManager.FILE_FLOORING);
-                LoadSprite(_sprite, _vSourcePos);
-
-                MapPosition = pos;
+                LoadDictionaryData(stringData, false);
+                LoadAdjustableSprite(ref _sprite, DataManager.FILE_FLOORING);
             }
 
             /// <summary>
@@ -1122,20 +1084,12 @@ namespace RiverHollow.Items
             internal void LoadData(FloorData data)
             {
                 _iID = data.ID;
-                MapPosition = new Vector2(data.x, data.y);
+                SnapPositionToGrid(new Vector2(data.x, data.y));
             }
 
             public class Earth : Floor
             {
                 protected override AnimatedSprite Target => _bWatered ? _sprWatered : _sprite;
-                public override Vector2 MapPosition
-                {
-                    set
-                    {
-                        base.MapPosition = value;
-                        _sprWatered.Position = _vMapPosition;
-                    }
-                }
 
                 AnimatedSprite _sprWatered;
                 bool _bWatered;
@@ -1143,16 +1097,22 @@ namespace RiverHollow.Items
                 public Earth()
                 {
                     _iID = 0;
-                    Type = ObjectTypeEnum.Earth;
-                    _vSourcePos = Vector2.Zero;
+                    _eObjectType = ObjectTypeEnum.Earth;
+                    _pImagePos = Point.Zero;
 
-                    _sprite = new AnimatedSprite(DataManager.FILE_FLOORING);
-                    LoadSprite(_sprite, _vSourcePos);
+                    LoadAdjustableSprite(ref _sprite);
+                    _pImagePos.Y += TileSize;
 
-                    _sprWatered = new AnimatedSprite(DataManager.FILE_FLOORING);
-                    LoadSprite(_sprWatered, new Vector2(_vSourcePos.X, _vSourcePos.Y + TileSize));
+                    LoadAdjustableSprite(ref _sprWatered);
+                    _pImagePos.Y -= TileSize;
 
                     Watered(false);
+                }
+
+                public override void SnapPositionToGrid(Vector2 position)
+                {
+                    base.SnapPositionToGrid(position);
+                    _sprWatered.Position = position;
                 }
 
                 public void Watered(bool value)
@@ -1169,19 +1129,10 @@ namespace RiverHollow.Items
         /// </summary>
         public class Wall : AdjustableObject
         {
-            public Wall(int id, Dictionary<string, string> stringData, Vector2 pos)
+            public Wall(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
             {
-                _iID = id;
-                Type = ObjectTypeEnum.Wall;
-                ReadSourcePos(stringData["Image"]);
-
-                _iWidth = int.Parse(stringData["Width"]);
-                _iHeight = int.Parse(stringData["Height"]);
-
-                _sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
-                LoadSprite(_sprite, _vSourcePos);
-
-                MapPosition = pos;
+                LoadDictionaryData(stringData, false);
+                LoadAdjustableSprite(ref _sprite, DataManager.FILE_WORLDOBJECTS);
             }
 
             /// <summary>
@@ -1206,6 +1157,19 @@ namespace RiverHollow.Items
                 return rv;
             }
         }
+
+        public class Light : WorldItem
+        {
+            public Light(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
+            {
+                LoadDictionaryData(stringData);
+
+                string[] idleSplit = stringData["Idle"].Split('-');
+                _sprite.AddAnimation(AnimationEnum.ObjectIdle, _pImagePos.X, _pImagePos.Y, _iWidth, _iHeight, int.Parse(idleSplit[0]), float.Parse(idleSplit[1]));
+                _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
+                _sprite.IsAnimating = true;
+            }
+        }
     }
 
     public abstract class DungeonObject : WorldObject
@@ -1216,10 +1180,9 @@ namespace RiverHollow.Items
         bool _bVisible;
         int _iKeyID;
 
-        protected DungeonObject(int id, Dictionary<string, string> stringData)
+        protected DungeonObject(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
         {
-            _iID = id;
-            Type = ObjectTypeEnum.DungeonObject;
+            LoadDictionaryData(stringData);
             _eSubType = Util.ParseEnum<DungeonObjectType>(stringData["Subtype"]);
 
             _bVisible = true;
@@ -1286,15 +1249,7 @@ namespace RiverHollow.Items
 
         public class TriggerObject : DungeonObject
         {
-            
-            public TriggerObject(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData)
-            {
-                _iWidth = int.Parse(stringData["Width"]);
-                _iHeight = int.Parse(stringData["Height"]);
-
-                SetCoordinates(pos);
-                LoadSprite(stringData);
-            }
+            public TriggerObject(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos) { }
 
             /// <summary>
             /// USed to activate whataever the trigger will do. Uses CurrentMap because it can only be accessed by the player
@@ -1307,11 +1262,8 @@ namespace RiverHollow.Items
 
         public class Door : DungeonObject
         {
-            public Door(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData)
+            public Door(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
             {
-                _iWidth = int.Parse(stringData["Width"]);
-                _iHeight = int.Parse(stringData["Height"]);
-
                 switch (_eSubType)
                 {
                     case DungeonObjectType.MobDoor:
@@ -1324,9 +1276,6 @@ namespace RiverHollow.Items
                         _sTriggerName = KEY_OPEN;
                         break;
                 }
-
-                SetCoordinates(pos);
-                LoadSprite(stringData);
             }
 
             /// <summary>

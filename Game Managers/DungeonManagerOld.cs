@@ -120,7 +120,7 @@ namespace RiverHollow.Game_Managers
             {
                 Vector2 vect = new Vector2(r.Next(1, mapWidth-1) * TileSize, r.Next(1, mapHeight-1) * TileSize);
                 Container c = (Container)DataManager.GetWorldObject(190);
-                c.MapPosition = vect;
+                c.SnapPositionToGrid(vect);
                 m.PlacePlayerObject(c);
                 _endChest = c;
             }

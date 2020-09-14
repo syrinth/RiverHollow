@@ -722,7 +722,7 @@ namespace RiverHollow.Items
 
     public class StaticItem : Item
     {
-        WorldItem worldObj;
+        WorldItem _worldObj;
 
         public StaticItem() { }
         public StaticItem(int id, Dictionary<string, string> stringData, int num = 1)
@@ -731,7 +731,7 @@ namespace RiverHollow.Items
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "StaticObjects");
             _bStacks = stringData.ContainsKey("Stacks");
 
-            worldObj = (WorldItem)DataManager.GetWorldObject(int.Parse(stringData["Place"]));
+            _worldObj = (WorldItem)DataManager.GetWorldObject(int.Parse(stringData["Place"]));
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -741,12 +741,12 @@ namespace RiverHollow.Items
 
         public WorldItem GetWorldItem()
         {
-            return worldObj;
+            return _worldObj;
         }
 
         public void SetWorldObjectCoords(Vector2 vec)
         {
-            worldObj.SetCoordinatesByGrid(vec);
+            _worldObj.SnapPositionToGrid(vec);
         }
 
         /// <summary>
@@ -762,7 +762,7 @@ namespace RiverHollow.Items
             bool rv = base.Remove(x);
 
             //Create a new worldObj for any instances of the item that remains
-            worldObj = (WorldItem)DataManager.GetWorldObject(_iItemID);
+            _worldObj = (WorldItem)DataManager.GetWorldObject(_worldObj.ID);
 
             return rv;
         }

@@ -11,7 +11,6 @@ using RiverHollow.SpriteAnimations;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
 
-using static RiverHollow.Characters.Actor;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Game_Managers
@@ -37,21 +36,17 @@ namespace RiverHollow.Game_Managers
 
         static string _sSpawnMap;
         public static string SpawnMap => _sSpawnMap;
-        static Vector2 _vSpawnTile;
-        public static Vector2 SpawnTile => _vSpawnTile;
-
-        static Dictionary<string, RHMap> _tileMaps;
-        public static Dictionary<string, RHMap> Maps { get => _tileMaps; }
+        public static Vector2 SpawnTile { get; private set; }
+        public static Dictionary<string, RHMap> Maps { get; private set; }
 
         static NewMapInfo _newMapInfo;
-        static RHMap _currentMap;
-        public static RHMap CurrentMap { get => _currentMap; set => _currentMap = value; }
+        public static RHMap CurrentMap { get; set; }
 
         static List<Weather> _liWeather;
 
         public static void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice)
         {
-            _tileMaps = new Dictionary<string, RHMap>();
+            Maps = new Dictionary<string, RHMap>();
             _liWeather = new List<Weather>();
             InitWeather();
 
@@ -81,8 +76,8 @@ namespace RiverHollow.Game_Managers
         public static void SetSpawnMap(string map, int x, int y)
         {
             _sSpawnMap = map;
-            _currentMap = _tileMaps[MapManager._sSpawnMap];
-            _vSpawnTile = new Vector2(x, y);
+            CurrentMap = Maps[MapManager._sSpawnMap];
+            SpawnTile = new Vector2(x, y);
         }
 
         public static void AddMap(string mapToAdd, ContentManager Content, GraphicsDevice GraphicsDevice)
@@ -93,10 +88,10 @@ namespace RiverHollow.Game_Managers
             Util.ParseContentFileRetName(ref mapToAdd, ref name);
             if (name.IndexOf("map") == 0)                       //Ensures that we're loading a map
             {
-                if (!_tileMaps.ContainsKey(name))
+                if (!Maps.ContainsKey(name))
                 {
                     newMap.LoadContent(Content, GraphicsDevice, mapToAdd, name);
-                    _tileMaps.Add(name, newMap);
+                    Maps.Add(name, newMap);
                 }
             }
         }
@@ -112,17 +107,17 @@ namespace RiverHollow.Game_Managers
                 //Handling for if the player is currently in a building and is leaving it
                 if (PlayerManager._iBuildingID != -1)
                 {
-                    entryPoint = _tileMaps[travelPoint.LinkedMap].DictionaryTravelPoints[PlayerManager._iBuildingID.ToString()];
+                    entryPoint = Maps[travelPoint.LinkedMap].DictionaryTravelPoints[PlayerManager._iBuildingID.ToString()];
                     PlayerManager._iBuildingID = -1;
                 }
                 else
                 {
-                    entryPoint = _tileMaps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
+                    entryPoint = Maps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
                 }
 
-                if (!string.IsNullOrEmpty(_tileMaps[travelPoint.LinkedMap].BackgroundMusic))
+                if (!string.IsNullOrEmpty(Maps[travelPoint.LinkedMap].BackgroundMusic))
                 {
-                    SoundManager.PlayBackgroundMusic(_tileMaps[travelPoint.LinkedMap].BackgroundMusic);
+                    SoundManager.PlayBackgroundMusic(Maps[travelPoint.LinkedMap].BackgroundMusic);
                 }
                 Vector2 newPos = Vector2.Zero;
                 if (travelPoint.IsDoor)
@@ -135,17 +130,17 @@ namespace RiverHollow.Game_Managers
                     newPos = entryPoint.FindLinkedPointPosition(travelPoint.Center, c);
                 }
 
-                FadeToNewMap(_tileMaps[travelPoint.LinkedMap], newPos);
+                FadeToNewMap(Maps[travelPoint.LinkedMap], newPos);
             }
             else
             {
-                entryPoint = _tileMaps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
+                entryPoint = Maps[travelPoint.LinkedMap].DictionaryTravelPoints[currMap];
 
                 c.ClearTileForMapChange();
 
-                _tileMaps[currMap].RemoveCharacter(c);
-                _tileMaps[travelPoint.LinkedMap].AddCharacter(c);
-                RHTile newTile = _tileMaps[travelPoint.LinkedMap].GetTileByGridCoords(Util.GetGridCoords(entryPoint.GetMovedCenter()));
+                Maps[currMap].RemoveCharacter(c);
+                Maps[travelPoint.LinkedMap].AddCharacter(c);
+                RHTile newTile = Maps[travelPoint.LinkedMap].GetTileByGridCoords(Util.GetGridCoords(entryPoint.GetMovedCenter()));
                 c.NewMapPosition = newTile.Position;
             }
         }
@@ -168,35 +163,35 @@ namespace RiverHollow.Game_Managers
             TravelPoint tPoint = null;
             PlayerManager._iBuildingID = b.PersonalID;
 
-            foreach (string s in _tileMaps[b.MapName].DictionaryTravelPoints.Keys)
+            foreach (string s in Maps[b.MapName].DictionaryTravelPoints.Keys)
             {
                 if (s.Equals(PlayerManager.CurrentMap))
                 {
-                    tPoint = _tileMaps[b.MapName].DictionaryTravelPoints[s];
+                    tPoint = Maps[b.MapName].DictionaryTravelPoints[s];
                 }
             }
 
-            FadeToNewMap(_tileMaps[b.MapName], tPoint.FindLinkedPointPosition(doorLoc.Center, PlayerManager.World), b);
+            FadeToNewMap(Maps[b.MapName], tPoint.FindLinkedPointPosition(doorLoc.Center, PlayerManager.World), b);
         }
 
         public static void BackToPlayer()
         {
-            _currentMap = _tileMaps[PlayerManager.CurrentMap];
+            CurrentMap = Maps[PlayerManager.CurrentMap];
         }
 
         public static void ViewMap(string newMap)
         {
-            _currentMap = _tileMaps[newMap];
+            CurrentMap = Maps[newMap];
         }
 
         public static void PopulateMaps(bool loaded)
         {
-            foreach(RHMap map in _tileMaps.Values)
+            foreach(RHMap map in Maps.Values)
             {
                 map.PopulateMap(loaded);
             }
-            int mapWidth = _tileMaps[MapManager.HomeMap].MapWidthTiles;
-            int mapHeight = _tileMaps[MapManager.HomeMap].MapHeightTiles;
+            int mapWidth = Maps[MapManager.HomeMap].MapWidthTiles;
+            int mapHeight = Maps[MapManager.HomeMap].MapHeightTiles;
             RHRandom rand = RHRandom.Instance;
             //LoadMap1
             if (!loaded)
@@ -207,15 +202,15 @@ namespace RiverHollow.Game_Managers
 
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(rockID, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
+                    Maps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(rockID, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
                 }
                 for (int i = 0; i < 99; i++)
                 {
-                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(treeID, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
+                    Maps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(treeID, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
                 }
                 for (int i = 0; i < 10; i++)
                 {
-                    _tileMaps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(bigRockID, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
+                    Maps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(bigRockID, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
                 }
             }
         }
@@ -224,31 +219,31 @@ namespace RiverHollow.Game_Managers
         {
             if(!_newMapInfo.Equals(default(NewMapInfo)) && GUIManager.FadingIn)
             {
-                string oldMap = _currentMap.Name;
-                _currentMap = _newMapInfo.NextMap;
+                string oldMap = CurrentMap.Name;
+                CurrentMap = _newMapInfo.NextMap;
                 if (_newMapInfo.EnteredBuilding != null)
                 {
-                    _currentMap.LoadBuilding(_newMapInfo.EnteredBuilding);
+                    CurrentMap.LoadBuilding(_newMapInfo.EnteredBuilding);
                 }
 
                 SoundManager.ChangeMap();
                 PlayerManager.CurrentMap = _newMapInfo.NextMap.Name;
                 PlayerManager.World.Position = _newMapInfo.PlayerPosition;
-                _currentMap.CheckForTriggeredCutScenes();
+                CurrentMap.CheckForTriggeredCutScenes();
                 _newMapInfo = default;
 
                 //Enter combat upon entering a map with living monsters
-                if (_currentMap.Monsters.Count > 0)
+                if (CurrentMap.Monsters.Count > 0)
                 {
                     CombatManager.NewBattle(oldMap);
                 }
             }
 
-            foreach(RHMap map in _tileMaps.Values)
+            foreach(RHMap map in Maps.Values)
             {
                 map.Update(gTime);
             }
-            if (_currentMap.IsOutside)
+            if (CurrentMap.IsOutside)
             {
                 foreach (Weather s in _liWeather)
                 {
@@ -259,19 +254,19 @@ namespace RiverHollow.Game_Managers
 
         public static void DrawBase(SpriteBatch spriteBatch)
         {
-            _currentMap.DrawBase(spriteBatch);
+            CurrentMap.DrawBase(spriteBatch);
             GUICursor.DrawBuilding(spriteBatch);
             GUICursor.DrawPotentialWorldObject(spriteBatch);
         }
 
         public static void DrawLights(SpriteBatch spriteBatch)
         {
-            _currentMap.DrawLights(spriteBatch);
+            CurrentMap.DrawLights(spriteBatch);
         }
         public static void DrawUpper(SpriteBatch spriteBatch)
         {
-            _currentMap.DrawUpper(spriteBatch);
-            if (_currentMap.IsOutside)
+            CurrentMap.DrawUpper(spriteBatch);
+            if (CurrentMap.IsOutside)
             {
                 if (!GameCalendar.IsSunny())
                 {
@@ -287,7 +282,7 @@ namespace RiverHollow.Game_Managers
         {
             bool rv = false;
 
-            rv = _currentMap.ProcessLeftButtonClick(mouseLocation);
+            rv = CurrentMap.ProcessLeftButtonClick(mouseLocation);
 
             return rv;
         }
@@ -295,7 +290,7 @@ namespace RiverHollow.Game_Managers
         {
             bool rv = false;
 
-            rv = _currentMap.ProcessRightButtonClick(mouseLocation);
+            rv = CurrentMap.ProcessRightButtonClick(mouseLocation);
 
             return rv;
         }
@@ -303,42 +298,42 @@ namespace RiverHollow.Game_Managers
         {
             bool rv = false;
 
-            rv = _currentMap.ProcessHover(mouseLocation);
+            rv = CurrentMap.ProcessHover(mouseLocation);
 
             return rv;
         }
         public static RHTile RetrieveTile(int x, int y)
         {
-            return _currentMap.GetTileByGridCoords(x, y);
+            return CurrentMap.GetTileByGridCoords(x, y);
         }
         public static RHTile RetrieveTile(Point mouseLocation)
         {
-            return _currentMap.GetTileByPixelPosition(mouseLocation);
+            return CurrentMap.GetTileByPixelPosition(mouseLocation);
         }
         public static void RemoveWorldObject(WorldObject o)
         {
-            _currentMap.RemoveWorldObject(o);
+            CurrentMap.RemoveWorldObject(o);
         }
 
         public static void RemoveCharacter(WorldActor c)
         {
-            _currentMap.RemoveCharacter(c);
+            CurrentMap.RemoveCharacter(c);
         }
         public static void RemoveMonster(Monster m)
         {
-            _currentMap.RemoveMonster(m);
+            CurrentMap.RemoveMonster(m);
         }
         public static void DropItemsOnMap(List<Item> items, Vector2 position, bool flyingPop = true)
         {
-            _currentMap.DropItemsOnMap(items, position, flyingPop);
+            CurrentMap.DropItemsOnMap(items, position, flyingPop);
         }
         public static void PlaceWorldObject(WorldObject worldObject)
         {
-            _currentMap.PlaceWorldObject(worldObject);
+            CurrentMap.PlaceWorldObject(worldObject);
         }
         public static bool PlacePlayerObject(WorldObject worldObject)
         {
-            return _currentMap.PlacePlayerObject(worldObject);
+            return CurrentMap.PlacePlayerObject(worldObject);
         }
 
         public static void InitWeather()
@@ -370,7 +365,7 @@ namespace RiverHollow.Game_Managers
 
             if (GameCalendar.IsRaining())
             {
-                foreach (RHMap map in _tileMaps.Values)
+                foreach (RHMap map in Maps.Values)
                 {
                     map.WaterTiles();
                 }
@@ -379,7 +374,7 @@ namespace RiverHollow.Game_Managers
 
         public static void Rollover()
         {
-            foreach(RHMap map in _tileMaps.Values)
+            foreach(RHMap map in Maps.Values)
             {
                 map.Rollover();
             }
@@ -387,7 +382,7 @@ namespace RiverHollow.Game_Managers
 
         public static void CheckSpirits()
         {
-            foreach (RHMap map in _tileMaps.Values)
+            foreach (RHMap map in Maps.Values)
             {
                 map.CheckSpirits();
             }

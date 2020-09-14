@@ -40,9 +40,7 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, string> _diStatusEffectText;
         static Dictionary<string, string> _diCombatSkillsText;
         static Dictionary<string, string> _diAdventurerDialogue;
-
-        static Dictionary<int, string> _diUpgrades;
-        public static Dictionary<int, string> DiUpgrades  => _diUpgrades;
+        public static Dictionary<int, string> DiUpgrades { get; private set; }
         static Dictionary<int, string> _diItemText;
         static Dictionary<int, string> _diClassText;
         static Dictionary<string, string> _diMonsterTraits;
@@ -93,7 +91,7 @@ namespace RiverHollow.Game_Managers
         {
             //Allocate Dictionaries
             _diTextures = new Dictionary<string, Texture2D>();
-            _diUpgrades = Content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
+            DiUpgrades = Content.Load<Dictionary<int, string>>(@"Data\TownUpgrades");
             _diMonsterTraits = Content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
 
             //Read in Content and allocate the appropriate Dictionaries
@@ -409,11 +407,11 @@ namespace RiverHollow.Game_Managers
                         if (liData.ContainsKey("Tree")) { return new Tree(id, liData, pos); }
                         else { return new Destructible(id, liData, pos); }
                     case "Staircase":
-                        return new Staircase(id, pos, TileSize, TileSize);
+                        //return new Staircase(id, pos, TileSize, TileSize);
                     case "Container":
                         return new Container(id, liData);
                     case "ClassChanger":
-                        return new ClassChanger(id, pos);
+                        return new ClassChanger(id, liData, pos);
                     case "Plant":
                         return new Plant(id, liData);
                     case "Machine":
@@ -426,6 +424,8 @@ namespace RiverHollow.Game_Managers
                         return new EchoNode(id, liData, pos);
                     case "Light":
                         return new Light(id, liData, pos);
+                    case "CombatHazard":
+                        return new CombatHazard(id, liData, pos);
                 }
             }
 

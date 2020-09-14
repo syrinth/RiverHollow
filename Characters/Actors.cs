@@ -348,7 +348,7 @@ namespace RiverHollow.Characters
                 cornerTiles.Add(CurrentMap.GetTileByGridCoords(Util.GetGridCoords(new Vector2(CollisionBox.Right, CollisionBox.Bottom)).ToPoint()));
                 foreach (RHTile tile in cornerTiles)
                 {
-                    if (tile != null && tile.WorldObject != null && tile.WorldObject.Match(ObjectTypeEnum.Plant))
+                    if (tile != null && tile.WorldObject != null && tile.WorldObject.CompareType(ObjectTypeEnum.Plant))
                     {
                         Plant f = (Plant)tile.WorldObject;
                         f.Shake();
@@ -913,7 +913,9 @@ namespace RiverHollow.Characters
                         Vector2 targetPos = _liTilePath[0].Position;
                         if (Position == targetPos)
                         {
-                            _liTilePath.RemoveAt(0);
+                            RHTile newTile = _liTilePath[0];
+                            _liTilePath.Remove(newTile);
+
                             if (_liTilePath.Count == 0)
                             {
                                 if (PlayerManager.ReadyToSleep)
@@ -931,6 +933,10 @@ namespace RiverHollow.Characters
                                     DetermineFacing(Vector2.Zero);
                                 }
                             }
+                            else if (CombatManager.InCombat)
+                            {
+                                CombatManager.CheckTileForActiveHazard(this, newTile);
+                            } 
                         }
                         else
                         {
@@ -1048,7 +1054,7 @@ namespace RiverHollow.Characters
                 //Checks that the current HP is greater than the amount of damage dealt
                 //If not, just remove the current HP so that we don't go negative.
                 _iCurrentHP -= (_iCurrentHP - iValue >= 0) ? iValue : _iCurrentHP;
-                BaseTile.Character.PlayAnimation(VerbEnum.Hurt);
+                PlayAnimation(VerbEnum.Hurt);
 
                 //If the character goes to 0 hp, give them the KO status and unlink any summons
                 if (_iCurrentHP == 0)
@@ -1245,6 +1251,7 @@ namespace RiverHollow.Characters
                 lastTile = _arrTiles[i, 0].GetTileByDirection(DirectionEnum.Down);     
             }
 
+            CombatManager.CheckTileForActiveHazard(this);
             if (setPosition) { Position = newTile.Position; }
         }
 
@@ -2961,10 +2968,15 @@ namespace RiverHollow.Characters
                 float length = _vToTarget.Length();
                 if (Position == targetPos)
                 {
-                    _liTilePath.RemoveAt(0);
+                    RHTile newTile = _liTilePath[0];
+                    _liTilePath.Remove(newTile);
                     if (_liTilePath.Count == 0)
                     {
                         DetermineFacing(Vector2.Zero);
+                    }
+                    else if (CombatManager.InCombat)
+                    {
+                        CombatManager.CheckTileForActiveHazard(this, newTile);
                     }
                 }
                 else
