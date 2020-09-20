@@ -83,12 +83,21 @@ namespace RiverHollow.Characters
 
         public virtual void Update(GameTime gTime)
         {
-            _sprBody.Update(gTime);
+            foreach (AnimatedSprite spr in GetSprites())
+            {
+                spr.Update(gTime);
+            }
         }
 
         public virtual void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
             _sprBody.Draw(spriteBatch, useLayerDepth);
+        }
+
+        protected virtual List<AnimatedSprite> GetSprites()
+        {
+            List<AnimatedSprite> liRv = new List<AnimatedSprite>() { _sprBody };
+            return liRv;
         }
 
         public virtual void SetName(string text)
@@ -733,6 +742,9 @@ namespace RiverHollow.Characters
         protected const int MAX_STAT = 99;
         protected string _sUnique;
 
+        protected bool _bPause;
+        public bool Paused => _bPause;
+
         public override string Name => String.IsNullOrEmpty(_sUnique) ? _sName : _sName + " " + _sUnique;
 
         protected int _iCurrentHP;
@@ -880,9 +892,9 @@ namespace RiverHollow.Characters
             //Finished being hit, determine action
             if (IsCurrentAnimation(VerbEnum.Hurt) && BodySprite.GetPlayCount() >= 1)
             {
-                if (CurrentHP == 0) {
-                    KO();
-                }
+                if (_bPause) { _bPause = false; }
+
+                if (CurrentHP == 0) { KO(); }
                 else if (IsCritical()) { PlayAnimation(VerbEnum.Critical); }
                 else { PlayAnimation(VerbEnum.Walk); }
             }
@@ -900,7 +912,7 @@ namespace RiverHollow.Characters
 
             _linkedSummon?.Update(gTime);
 
-            if (MapManager.Maps[CurrentMapName].ContainsActor(this))
+            if (!_bPause && (MapManager.Maps[CurrentMapName].ContainsActor(this) || this == PlayerManager.World))
             {
                 if (_vMoveTo != Vector2.Zero)
                 {
@@ -1055,6 +1067,8 @@ namespace RiverHollow.Characters
                 //If not, just remove the current HP so that we don't go negative.
                 _iCurrentHP -= (_iCurrentHP - iValue >= 0) ? iValue : _iCurrentHP;
                 PlayAnimation(VerbEnum.Hurt);
+
+                if(this == CombatManager.ActiveCharacter) { _bPause = true; }
 
                 //If the character goes to 0 hp, give them the KO status and unlink any summons
                 if (_iCurrentHP == 0)
@@ -2882,7 +2896,7 @@ namespace RiverHollow.Characters
         public int BodyType => _iBodyType;
         public string BodyTypeStr => _iBodyType.ToString("00");
 
-        protected List<AnimatedSprite> GetSprites()
+        protected override List<AnimatedSprite> GetSprites()
         {
             List<AnimatedSprite> liRv = new List<AnimatedSprite>() { _sprBody, _sprEyes, _sprHair, _clBody?.Sprite, _clHat?.Sprite, _clLegs?.Sprite };
             liRv.RemoveAll(x => x == null);
@@ -2928,63 +2942,6 @@ namespace RiverHollow.Characters
             _sprHair.SetColor(_cHairColor);
 
             SpdMult = NORMAL_SPEED;
-        }
-
-        public override void Update(GameTime gTime)
-        {
-            if (_dEtherealCD != 0)
-            {
-                _dEtherealCD -= gTime.ElapsedGameTime.TotalSeconds;
-                if (_dEtherealCD <= 0)
-                {
-                    if (!_bIgnoreCollisions)
-                    {
-                        _dEtherealCD = 5;
-                        _bIgnoreCollisions = true;
-                    }
-                    else
-                    {
-                        _dEtherealCD = 0;
-                        _bIgnoreCollisions = false;
-                    }
-                }
-            }
-
-            if (_vMoveTo != Vector2.Zero)
-            {
-                HandleMove(_vMoveTo);
-            }
-
-            //If there are tiles remaining on the path to follow
-            if (_liTilePath.Count > 0)
-            {
-                Vector2 targetPos = _liTilePath[0].Position;
-
-                Vector2 _vToTarget = Vector2.Zero;
-                Util.GetMoveSpeed(Position, targetPos, Speed, ref _vToTarget);
-                //Vector2 _vToNextTarget = Vector2.Zero;
-                //if(_liTilePath.Count > 1) {  Util.GetMoveSpeed(Position, targetPos, Speed, ref _vToNextTarget); }
-
-                float length = _vToTarget.Length();
-                if (Position == targetPos)
-                {
-                    RHTile newTile = _liTilePath[0];
-                    _liTilePath.Remove(newTile);
-                    if (_liTilePath.Count == 0)
-                    {
-                        DetermineFacing(Vector2.Zero);
-                    }
-                    else if (CombatManager.InCombat)
-                    {
-                        CombatManager.CheckTileForActiveHazard(this, newTile);
-                    }
-                }
-                else
-                {
-                    HandleMove(targetPos);
-                }
-            }
-            foreach (AnimatedSprite spr in GetSprites()) { spr.Update(gTime); }
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)

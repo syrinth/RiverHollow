@@ -146,7 +146,7 @@ namespace RiverHollow.Game_Managers
             {
                 //This phase starts combat and ensures that the Actors are locked to their tile.
                 case CmbtPhaseEnum.Setup:
-                    if(PlayerManager.World.Position == PlayerManager.World.BaseTile.Position)
+                    if (PlayerManager.World.Position == PlayerManager.World.BaseTile.Position)
                     {
                         PlayerManager.World.PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
                         ChangePhase(CmbtPhaseEnum.Charging);
@@ -205,15 +205,18 @@ namespace RiverHollow.Game_Managers
                     break;
 
                 case CombatManager.CmbtPhaseEnum.ChooseActionTarget:
+                    if (ActiveCharacter.Paused) { return; }
                     HandleTargetting();
                     break;
 
                 case CombatManager.CmbtPhaseEnum.ChooseMoveTarget:
+                    if (ActiveCharacter.Paused) { return; }
                     HandleTargetting();
                     break;
 
                 //Use this phase for when the ActiveCharacter is currently moving
                 case CmbtPhaseEnum.Moving:
+
                     if (!ActiveCharacter.FollowingPath)
                     {
                         RHTile newTile = BattleMap.GetTileByPixelPosition(ActiveCharacter.Position);
@@ -221,7 +224,7 @@ namespace RiverHollow.Game_Managers
 
                         Item tileItem = _liDroppedItems.Find(item => newTile.Rect.Contains(item.Position));
 
-                        if(tileItem != null && InventoryManager.HasSpaceInInventory(tileItem.ItemID, tileItem.Number))
+                        if (tileItem != null && InventoryManager.HasSpaceInInventory(tileItem.ItemID, tileItem.Number))
                         {
                             BattleMap.AddItemToPlayerInventory(tileItem);
                         }
@@ -247,7 +250,7 @@ namespace RiverHollow.Game_Managers
                     break;
 
                 case CmbtPhaseEnum.Victory:
-                    if(Monsters?.Count == 0 && !_scrCombat.AreThereFloatingText())
+                    if (Monsters?.Count == 0 && !_scrCombat.AreThereFloatingText())
                     {
                         InCombat = false;
                         EndCombatVictory();
@@ -1024,20 +1027,18 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public struct TurnInfo
         {
-            private bool _bMoved;
-            public bool HasMoved { get => _bMoved; }
-            private bool _bActed;
-            public bool HasActed { get => _bActed; }
+            public bool HasMoved { get; private set; }
+            public bool HasActed { get; private set; }
 
             public void Moved()
             {
-                _bMoved = true;
+                HasMoved = true;
                 ActiveCharacter.CurrentCharge -= MOVE_CHARGE;
             }
 
             public void Acted()
             {
-                _bActed = true;
+                HasActed = true;
                 ActiveCharacter.CurrentCharge -= ATTACK_CHARGE;
             }
         }

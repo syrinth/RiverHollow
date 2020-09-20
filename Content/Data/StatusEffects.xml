@@ -14,6 +14,10 @@
       <Key>3</Key>
       <Value>[Buff:Int-10]</Value>
     </Item>
+	<Item>
+      <Key>4</Key>
+      <Value>[DoT][Potency:50]</Value>
+    </Item>
     <Item>
       <Key>5</Key>
       <Value>[Buff:Mag-10]</Value>

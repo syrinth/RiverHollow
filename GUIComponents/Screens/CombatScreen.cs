@@ -58,6 +58,7 @@ namespace RiverHollow.GUIComponents.Screens
             switch (CombatManager.CurrentPhase)
             {
                 case CombatManager.CmbtPhaseEnum.MainSelection:
+                    if (CombatManager.ActiveCharacter.Paused) { return; }
                     _gActionSelect?.Update(gTime);
                     break;
 
