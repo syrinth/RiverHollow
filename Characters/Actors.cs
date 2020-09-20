@@ -2898,7 +2898,7 @@ namespace RiverHollow.Characters
 
         protected override List<AnimatedSprite> GetSprites()
         {
-            List<AnimatedSprite> liRv = new List<AnimatedSprite>() { _sprBody, _sprEyes, _sprHair, _clBody?.Sprite, _clHat?.Sprite, _clLegs?.Sprite };
+            List<AnimatedSprite> liRv = new List<AnimatedSprite>() { _sprBody, _sprEyes, _sprHair, Body?.Sprite, Hat?.Sprite, Legs?.Sprite };
             liRv.RemoveAll(x => x == null);
             return liRv;
         }
@@ -2913,15 +2913,11 @@ namespace RiverHollow.Characters
                 foreach(AnimatedSprite spr in GetSprites()) { spr.Position = vPos; }
             }
         }
-
-        Clothes _clHat;
-        public Clothes Hat => _clHat;
-        Clothes _clBody;
-        public Clothes Body => _clBody;
+        public Clothes Hat { get; private set; }
+        public Clothes Body { get; private set; }
         Clothes Back;
         Clothes Hands;
-        Clothes _clLegs;
-        public Clothes Legs => _clLegs;
+        public Clothes Legs { get; private set; }
         Clothes Feet;
 
         public PlayerCharacter() : base()
@@ -2953,9 +2949,9 @@ namespace RiverHollow.Characters
             _sprEyes.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
             //_sprHair.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth);
 
-            _clBody?.Sprite.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth + 0.01f);
-            _clHat?.Sprite.Draw(spriteBatch, useLayerDepth);
-            _clLegs?.Sprite.Draw(spriteBatch, useLayerDepth);
+            Body?.Sprite.Draw(spriteBatch, useLayerDepth, 1.0f, bodyDepth + 0.01f);
+            Hat?.Sprite.Draw(spriteBatch, useLayerDepth);
+            Legs?.Sprite.Draw(spriteBatch, useLayerDepth);
         }
 
         /// <summary>
@@ -3025,13 +3021,13 @@ namespace RiverHollow.Characters
 
                 LoadSpriteAnimations(ref c.Sprite, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[CharacterClass.ID]), clothingTexture);
 
-                if (c.SlotMatch(ClothesEnum.Body)) { _clBody = c; }
+                if (c.SlotMatch(ClothesEnum.Body)) { Body = c; }
                 else if (c.SlotMatch(ClothesEnum.Hat))
                 {
                     _sprHair.FrameCutoff = 9;
-                    _clHat = c;
+                    Hat = c;
                 }
-                else if (c.SlotMatch(ClothesEnum.Legs)) { _clLegs = c; }
+                else if (c.SlotMatch(ClothesEnum.Legs)) { Legs = c; }
 
                 //MAR AWKWARD
                 c.Sprite.Position = _sprBody.Position;
@@ -3042,11 +3038,11 @@ namespace RiverHollow.Characters
 
         public void RemoveClothes(ClothesEnum c)
         {
-            if (c.Equals(ClothesEnum.Body)) { _clBody = null; }
+            if (c.Equals(ClothesEnum.Body)) { Body = null; }
             else if (c.Equals(ClothesEnum.Hat))
             {
                 _sprHair.FrameCutoff = 0;
-                _clHat = null;
+                Hat = null;
             }
         }
 
@@ -3054,9 +3050,9 @@ namespace RiverHollow.Characters
         {
             _iBodyType = val;
             SetClass(_class);
-            SetClothes(_clHat);
-            SetClothes(_clBody);
-            SetClothes(_clLegs);
+            SetClothes(Hat);
+            SetClothes(Body);
+            SetClothes(Legs);
         }
     }
 
@@ -3067,9 +3063,7 @@ namespace RiverHollow.Characters
         int _iID;
         string _sCondition;
         string _sText;
-
-        int _iSongID = 1;
-        public int SongID => _iSongID;
+        public int SongID { get; } = 1;
 
         public bool Triggered;
 
