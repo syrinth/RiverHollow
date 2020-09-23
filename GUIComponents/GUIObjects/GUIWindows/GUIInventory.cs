@@ -108,7 +108,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         string text = string.Empty;
                         if (GameManager.gmDungeonObject.CheckForKey(it))
                         {
-                            GameManager.gmDungeonObject.Trigger(GameManager.ITEM_OPEN);
+                            GameManager.gmDungeonObject.AttemptToTrigger(GameManager.ITEM_OPEN);
+                            GameManager.gmDungeonObject.Trigger();
                             GUIManager.CloseMainObject();
                             text = DataManager.GetGameText("ItemDoorOpen");
                         }

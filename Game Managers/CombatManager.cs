@@ -410,7 +410,7 @@ namespace RiverHollow.Game_Managers
             }
 
             Camera.SetObserver(PlayerManager.World);
-            BattleMap.Trigger(MOB_OPEN);
+            BattleMap.ActivateTrigger(MOB_OPEN);
 
             GoToHUDScreen();
         }

@@ -328,8 +328,9 @@ namespace RiverHollow.Tile_Engine
                 if (obj.Name.Equals("DungeonObject"))
                 {
                     DungeonObject d = DataManager.GetDungeonObject(int.Parse(obj.Properties["ID"]), Util.SnapToGrid(obj.Position));
-                    if (obj.Properties.ContainsKey("Key")) { d.SetKey(obj.Properties["Key"]); }
+                    if (obj.Properties.ContainsKey("Key")) { d.SetItemKey(obj.Properties["Key"]); }
                     if (obj.Properties.ContainsKey("Trigger")) { d.SetTrigger(obj.Properties["Trigger"]); }
+                    if (obj.Properties.ContainsKey("TriggerNumber")) { d.SetTriggerNumber(int.Parse(obj.Properties["TriggerNumber"])); }
 
                     PlaceWorldObject(d);
                     _liDungeonObjects.Add(d);
@@ -2014,11 +2015,11 @@ namespace RiverHollow.Tile_Engine
         /// Search through this map for any trigger objects and activate them as appropriate.
         /// </summary>
         /// <param name="triggerName">Name of the trigger to activate</param>
-        public void Trigger(string triggerName)
+        public void ActivateTrigger(string triggerName)
         {
             foreach(DungeonObject obj in _liDungeonObjects)
             {
-                obj.Trigger(triggerName);
+                obj.AttemptToTrigger(triggerName);
             }
         }
 

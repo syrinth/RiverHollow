@@ -39,24 +39,27 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
+        public static void ActivateTrigger(string triggerName)
+        {
+            ActivateTrigger(MapManager.CurrentMap.DungeonName, triggerName);
+        }
+
         public static void ActivateTrigger(string dungeonName, string triggerName)
         {
-            _liDungeons[dungeonName]?.Trigger(triggerName);
+            _liDungeons[dungeonName]?.ActivateTrigger(triggerName);
         }
     }
 
     public class Dungeon
     {
-        private int _iKeys;
-        public int NumKeys => _iKeys;
-        private string _sName;
-        public String Name { get { return _sName; } }
+        public int NumKeys { get; private set; }
+        public string Name { get; private set; }
 
         private List<string> _liMapNames;
         public Dungeon(string name)
         {
             _liMapNames = new List<string>();
-            _sName = name;
+            Name = name;
         }
 
         public void AddMap(string name)
@@ -64,14 +67,14 @@ namespace RiverHollow.Game_Managers
             _liMapNames.Add(name);
         }
 
-        public void AddKey() { _iKeys++; }
-        public void UseKey() { _iKeys--; }
+        public void AddKey() { NumKeys++; }
+        public void UseKey() { NumKeys--; }
 
-        public void Trigger(string triggerName)
+        public void ActivateTrigger(string triggerName)
         {
             foreach(string mapName in _liMapNames)
             {
-                MapManager.Maps[mapName].Trigger(triggerName);
+                MapManager.Maps[mapName].ActivateTrigger(triggerName);
             }
         }
 

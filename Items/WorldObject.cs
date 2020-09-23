@@ -1177,8 +1177,11 @@ namespace RiverHollow.Items
         enum DungeonObjectType { Trigger, ItemDoor, KeyDoor, MobDoor, TriggerDoor };
         DungeonObjectType _eSubType;
         protected string _sTriggerName;
+        protected int _iTriggerNumber = 1;
+        protected int _iTriggersLeft = 1;
         bool _bVisible;
-        int _iKeyID;
+        int _iItemKeyID;
+        bool _bHasBeenTriggered = false;
 
         protected DungeonObject(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
         {
@@ -1205,7 +1208,12 @@ namespace RiverHollow.Items
         /// This method is called when something attempts to trigger it
         /// </summary>
         /// <param name="name">The name of the trigger</param>
-        public virtual void Trigger(string name) { }
+        public virtual void AttemptToTrigger(string name) {}
+
+        /// <summary>
+        /// This method is called to trigger the object and make it send its trigger
+        /// </summary>
+        public virtual void Trigger() { }
 
         /// <summary>
         /// Call this to reset the DungeonObject to its original state.
@@ -1215,19 +1223,29 @@ namespace RiverHollow.Items
         /// <summary>
         /// Sets the name of the trigger to apply for the DungeonObject
         /// </summary>
-        /// <param name="trigger"></param>
-        public void SetTrigger(string trigger)
+        /// <param name="val">The name of the trigger to either respond to or send</param>
+        public void SetTrigger(string val)
         {
-            _sTriggerName = trigger;
+            _sTriggerName = val;
+        }
+
+        /// <summary>
+        /// Sets the number of times the object must be triggered to respond
+        /// </summary>
+        /// <param name="trigger"></param>
+        public void SetTriggerNumber(int val)
+        {
+            _iTriggerNumber = val;
+            _iTriggersLeft = val;
         }
 
         /// <summary>
         /// Sets the Item ID of the key needed to trigger the DungeonObject
         /// </summary>
         /// <param name="id">The ID of the item to use as the key.</param>
-        public void SetKey(string id)
+        public void SetItemKey(string id)
         {
-            _iKeyID = int.Parse(id);
+            _iItemKeyID = int.Parse(id);
         }
 
         /// <summary>
@@ -1238,7 +1256,7 @@ namespace RiverHollow.Items
         public bool CheckForKey(Item item)
         {
             bool rv = false;
-            if (_iKeyID == item.ItemID)
+            if (_iItemKeyID == item.ItemID)
             {
                 rv = true;
                 item.Remove(1);
@@ -1247,16 +1265,63 @@ namespace RiverHollow.Items
             return rv;
         }
 
+        /// <summary>
+        /// This checks whether or not the object should trigger
+        /// </summary>
+        /// <returns>Returns true if the object can trigger</returns>
+        private bool UpdateTriggerNumber()
+        {
+            if (_iTriggersLeft > 0)
+            {
+                _iTriggersLeft--;
+            }
+
+            return _iTriggersLeft == 0;
+        }
+
         public class TriggerObject : DungeonObject
         {
+            Item _item;
             public TriggerObject(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos) { }
 
+            public override void Draw(SpriteBatch spriteBatch)
+            {
+                base.Draw(spriteBatch);
+                if(_bHasBeenTriggered && _item != null)
+                {
+                    _item.Draw(spriteBatch, new Rectangle((int)(_vMapPosition.X), (int)(_vMapPosition.Y - 4), TileSize, TileSize), true);
+                }
+            }
             /// <summary>
-            /// USed to activate whataever the trigger will do. Uses CurrentMap because it can only be accessed by the player
+            /// USed to activate whatever the trigger will do. Uses CurrentMap because it can only be accessed by the player
             /// </summary>
             public override void Interact()
             {
-                DungeonManager.ActivateTrigger(MapManager.CurrentMap.DungeonName, _sTriggerName);
+                if (!_bHasBeenTriggered)
+                {
+                    if (_iItemKeyID != -1)
+                    {
+                        GUIManager.OpenTextWindow(DataManager.GetGameText("ItemDoor"));
+                    }
+                    else
+                    {
+                        Trigger();
+                    }
+                }
+            }
+
+            public override void Trigger()
+            {
+                if (UpdateTriggerNumber() && !_bHasBeenTriggered)
+                {
+                    _bHasBeenTriggered = true;
+                    DungeonManager.ActivateTrigger(_sTriggerName);
+
+                    if(_iItemKeyID != -1)
+                    {
+                        _item = DataManager.GetItem(_iItemKeyID);
+                    }
+                }
             }
         }
 
@@ -1282,10 +1347,11 @@ namespace RiverHollow.Items
             /// When a door is triggered, it becomes passable and invisible.
             /// </summary>
             /// <param name="name"></param>
-            public override void Trigger(string name)
+            public override void AttemptToTrigger(string name)
             {
-                if (name == _sTriggerName)
+                if (name == _sTriggerName && UpdateTriggerNumber() && !_bHasBeenTriggered)
                 {
+                    _bHasBeenTriggered = true;
                     _bImpassable = false;
                     _bVisible = false;
                 }
@@ -1314,7 +1380,7 @@ namespace RiverHollow.Items
                         if (DungeonManager.DungeonKeys() > 0)
                         {
                             DungeonManager.UseDungeonKey();
-                            Trigger(KEY_OPEN);
+                            AttemptToTrigger(KEY_OPEN);
                         }
                         else
                         {

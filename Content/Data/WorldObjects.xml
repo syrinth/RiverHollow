@@ -189,5 +189,9 @@
       <Key>46</Key>
       <Value>[Type:CombatHazard][Subtype:Timed][Image:48-96][Width:16][Height:16][Damage:10][DrawOver]</Value>
     </Item>
+	    <Item>
+      <Key>47</Key>
+      <Value>[Type:DungeonObject][Subtype:Trigger][Image:144-32][Width:16][Height:16]</Value>
+    </Item>
   </Asset>
 </XnaContent>

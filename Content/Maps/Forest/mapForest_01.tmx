@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="49">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="55">
  <properties>
+  <property name="Dungeon" value="Forest"/>
   <property name="Outside" type="bool" value="false"/>
   <property name="ResourcesMinMax" value="30-60"/>
  </properties>
@@ -75,7 +76,7 @@
     <property name="Map" value="mapForest_05"/>
    </properties>
   </object>
-  <object id="47" name="Entrance" x="227.377" y="35.8611" width="23.7916" height="10">
+  <object id="47" name="Entrance" x="224" y="44" width="32" height="4">
    <properties>
     <property name="EntranceDir" value="Down"/>
     <property name="Map" value="mapForest_Dungeon_1"/>
@@ -86,6 +87,34 @@
   <object id="40" name="ResourceSpawn" x="37.3455" y="49.3258" width="124.333" height="96.333">
    <properties>
     <property name="Resources" value="20"/>
+   </properties>
+  </object>
+  <object id="51" name="DungeonObject" x="224" y="16" width="16" height="32">
+   <properties>
+    <property name="ID" type="int" value="41"/>
+    <property name="Trigger" value="Entrance"/>
+    <property name="TriggerNumber" type="int" value="2"/>
+   </properties>
+  </object>
+  <object id="52" name="DungeonObject" x="240" y="16" width="16" height="32">
+   <properties>
+    <property name="ID" type="int" value="41"/>
+    <property name="Trigger" value="Entrance"/>
+    <property name="TriggerNumber" type="int" value="2"/>
+   </properties>
+  </object>
+  <object id="53" name="DungeonObject" x="176" y="96.303" width="16" height="16">
+   <properties>
+    <property name="ID" type="int" value="47"/>
+    <property name="Key" type="int" value="43"/>
+    <property name="Trigger" value="Entrance"/>
+   </properties>
+  </object>
+  <object id="54" name="DungeonObject" x="304" y="48" width="16" height="16">
+   <properties>
+    <property name="ID" type="int" value="47"/>
+    <property name="Key" type="int" value="44"/>
+    <property name="Trigger" value="Entrance"/>
    </properties>
   </object>
  </objectgroup>
