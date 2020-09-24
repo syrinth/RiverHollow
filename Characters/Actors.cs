@@ -1685,7 +1685,8 @@ namespace RiverHollow.Characters
         public Villager() {
             _diCollection = new Dictionary<int, bool>();
         }
-        //For Cutscenes
+
+        //Copy Construcor for Cutscenes
         public Villager(Villager n)
         {
             _eActorType = ActorEnum.NPC;
@@ -1709,7 +1710,7 @@ namespace RiverHollow.Characters
             _iScheduleIndex = 0;
             _iIndex = index;
 
-            _bHover = stringData.ContainsKey("Hover");
+            Util.AssignValue(ref _bHover, "Hover", stringData);
 
             ImportBasics(stringData);
         }
@@ -2206,18 +2207,10 @@ namespace RiverHollow.Characters
         protected List<Merchandise> _liMerchandise;
         public List<Merchandise> Buildings { get => _liMerchandise; }
 
-        public ShopKeeper(int index, Dictionary<string, string> stringData)
+        public ShopKeeper(int index, Dictionary<string, string> stringData) : base(index, stringData)
         {
-            _eActorType = ActorEnum.NPC;
             _eNPCType = NPCTypeEnum.Shopkeeper;
-            _liTilePath = new List<RHTile>();
             _liMerchandise = new List<Merchandise>();
-            _diCollection = new Dictionary<int, bool>();
-            _diCompleteSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
-
-            _iIndex = index;
-
-            ImportBasics(stringData);
 
             if (stringData.ContainsKey("ShopData"))
             {
@@ -2335,15 +2328,12 @@ namespace RiverHollow.Characters
 
         public class Merchandise
         {
-            string _sUniqueData;
-            public string UniqueData => _sUniqueData;
+            public string UniqueData { get; }
             public enum ItemType { Building, Worker, Item, Upgrade }
             public ItemType MerchType;
-            int _iMerchID = -1;
-            public int MerchID { get => _iMerchID; }
+            public int MerchID { get; } = -1;
             string _sDescription;
-            int _iCost;
-            public int MoneyCost { get => _iCost; }
+            public int MoneyCost { get; }
             int _iQuestReq = -1;
 
             List<KeyValuePair<int, int>> _items; //item, then num required
@@ -2354,18 +2344,18 @@ namespace RiverHollow.Characters
                 _items = new List<KeyValuePair<int, int>>();
 
                 MerchType = Util.ParseEnum<ItemType>(stringData["Type"]);
-                if (stringData.ContainsKey("ID")) { _iMerchID = int.Parse(stringData["ID"]); }
+                if (stringData.ContainsKey("ID")) { MerchID = int.Parse(stringData["ID"]); }
                 else if (stringData.ContainsKey("ItemID"))
                 {
                     //Some items may have unique data so only parse the first entry
                     //tag is ItemID to differentiate the tag from in the GUI ItemData Manager
                     string[] itemData = stringData["ItemID"].Split('-');
-                    _iMerchID = int.Parse(itemData[0]);
-                    if (itemData.Length > 1) { _sUniqueData = itemData[1]; }
+                    MerchID = int.Parse(itemData[0]);
+                    if (itemData.Length > 1) { UniqueData = itemData[1]; }
                 }
 
  
-                _iCost = int.Parse(stringData["Cost"]);
+                MoneyCost = int.Parse(stringData["Cost"]);
 
                 if (stringData.ContainsKey("Text")) { _sDescription = stringData["Text"]; }
                 if (stringData.ContainsKey("QuestReq")) { _iQuestReq = int.Parse(stringData["QuestReq"]); }
@@ -2383,7 +2373,7 @@ namespace RiverHollow.Characters
                 if (MerchType == ItemType.Item)
                 {
                     string[] itemData = stringData["ItemID"].Split('-');
-                    if (itemData.Length > 1) { _sUniqueData = itemData[1]; }
+                    if (itemData.Length > 1) { UniqueData = itemData[1]; }
                 }
             }
 
@@ -2399,26 +2389,17 @@ namespace RiverHollow.Characters
     public class EligibleNPC : Villager
     {
         public bool Married;
-        bool _bCanJoinParty = true;
-        public bool CanJoinParty => _bCanJoinParty;
+        public bool CanJoinParty { get; private set; } = true;
 
-        public EligibleNPC(int index, Dictionary<string, string> stringData)
+        public EligibleNPC(int index, Dictionary<string, string> stringData) : base(index, stringData)
         {
-            _eActorType = ActorEnum.NPC;
             _eNPCType = NPCTypeEnum.Eligible;
-            _liTilePath = new List<RHTile>();
-            _diCollection = new Dictionary<int, bool>();
-            _diCompleteSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
-
-            _iIndex = index;
 
             if (stringData.ContainsKey("Class"))
             {
                 SetClass(DataManager.GetClassByIndex(int.Parse(stringData["Class"])));
                 AssignStartingGear();
             }
-
-            ImportBasics(stringData);
         }
 
         public override void Update(GameTime gTime)
@@ -2478,7 +2459,7 @@ namespace RiverHollow.Characters
             //Reset on Monday
             if (GameCalendar.DayOfWeek == 0)
             {
-                _bCanJoinParty = true;
+                CanJoinParty = true;
                 CanGiveGift = true;
             }
 
@@ -2518,7 +2499,7 @@ namespace RiverHollow.Characters
         public void JoinParty()
         {
             _bActive = false;
-            _bCanJoinParty = false;
+            CanJoinParty = false;
             PlayerManager.AddToParty(((EligibleNPC)this));
         }
 
@@ -2528,7 +2509,7 @@ namespace RiverHollow.Characters
             {
                 npcData = base.SaveData(),
                 married = Married,
-                canJoinParty = _bCanJoinParty,
+                canJoinParty = CanJoinParty,
                 canGiveGift = CanGiveGift,
                 classedData = SaveClassedCharData()
             };
@@ -2540,7 +2521,7 @@ namespace RiverHollow.Characters
             Introduced = data.npcData.introduced;
             FriendshipPoints = data.npcData.friendship;
             Married = data.married;
-            _bCanJoinParty = data.canJoinParty;
+            CanJoinParty = data.canJoinParty;
             CanGiveGift = data.canGiveGift;
             LoadClassedCharData(data.classedData);
 

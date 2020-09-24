@@ -125,6 +125,10 @@ namespace RiverHollow.Tile_Engine
                 DungeonName = _map.Properties["Dungeon"];
                 DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], _sName);
             }
+            else
+            {
+                DungeonName = string.Empty;
+            }
 
             if (_map.Properties.ContainsKey("Production")) {
                 bool.TryParse(_map.Properties["Production"], out _bProduction);
@@ -327,10 +331,7 @@ namespace RiverHollow.Tile_Engine
             {
                 if (obj.Name.Equals("DungeonObject"))
                 {
-                    DungeonObject d = DataManager.GetDungeonObject(int.Parse(obj.Properties["ID"]), Util.SnapToGrid(obj.Position));
-                    if (obj.Properties.ContainsKey("Key")) { d.SetItemKey(obj.Properties["Key"]); }
-                    if (obj.Properties.ContainsKey("Trigger")) { d.SetTrigger(obj.Properties["Trigger"]); }
-                    if (obj.Properties.ContainsKey("TriggerNumber")) { d.SetTriggerNumber(int.Parse(obj.Properties["TriggerNumber"])); }
+                    DungeonObject d = DataManager.GetDungeonObject(obj.Properties, Util.SnapToGrid(obj.Position));
 
                     PlaceWorldObject(d);
                     _liDungeonObjects.Add(d);

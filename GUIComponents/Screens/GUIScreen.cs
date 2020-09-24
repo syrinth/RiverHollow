@@ -222,6 +222,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             RemoveControl(_gMainObject);
             _gMainObject = null;
+            CloseHoverWindow();
         }
         #endregion
 

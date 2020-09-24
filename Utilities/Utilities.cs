@@ -306,6 +306,43 @@ namespace RiverHollow.Utilities
 
             return rv;
         }
+
+        #region AssignValue
+        /// <summary>
+        /// These methods assign a value to the given variable reference if it is found inside of the provided dictionary
+        /// </summary>
+        /// <param name="obj">Reference to the object to assign to</param>
+        /// <param name="key">The key to look for</param>
+        /// <param name="dict">The dictionary to search</param>
+        public static void AssignValue(ref bool obj, string key, Dictionary<string, string> dict)
+        {
+            if (dict.ContainsKey(key))
+            {
+                obj = true;
+            }
+        }
+        public static void AssignValue(ref string obj, string key, Dictionary<string, string> dict)
+        {
+            if (dict.ContainsKey(key))
+            {
+                obj = dict[key];
+            }
+        }
+        public static void AssignValue(ref int obj, string key, Dictionary<string, string> dict)
+        {
+            if (dict.ContainsKey(key))
+            {
+                obj = int.Parse(dict[key]);
+            }
+        }
+        public static void AssignValue(ref float obj, string key, Dictionary<string, string> dict)
+        {
+            if (dict.ContainsKey(key))
+            {
+                obj = float.Parse(dict[key]);
+            }
+        }
+        #endregion
     }
 
     public class RHRandom : Random

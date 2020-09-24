@@ -100,6 +100,7 @@ namespace RiverHollow.Game_Managers
                 InventoryManager.AddToInventory(int.Parse(splitString[0]), (splitString.Length > 1 ? int.Parse(splitString[1]) : 1));
             }
 
+            //DungeonManager.AddDungeonKey();
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestType.Fetch, "Getwood, dumbass", 1, null, DataManager.GetItem(2)));
             AddToQuestLog(new Quest("Gathering Wood", Quest.QuestType.Fetch, "Rude!", 1, null, DataManager.GetItem(2)));
             AddToQuestLog(new Quest("Get Wood", Quest.QuestType.Fetch, ";)", 1, null, DataManager.GetItem(2)));

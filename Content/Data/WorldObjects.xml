@@ -167,19 +167,7 @@
     </Item>
     <Item>
       <Key>41</Key>
-      <Value>[Type:DungeonObject][Subtype:TriggerDoor][Image:176-16][Width:16][Height:32]</Value>
-    </Item>
-    <Item>
-      <Key>42</Key>
-      <Value>[Type:DungeonObject][Subtype:ItemDoor][Image:176-16][Width:16][Height:32]</Value>
-    </Item>
-    <Item>
-      <Key>43</Key>
-      <Value>[Type:DungeonObject][Subtype:MobDoor][Image:176-16][Width:16][Height:32]</Value>
-    </Item>
-    <Item>
-      <Key>44</Key>
-      <Value>[Type:DungeonObject][Subtype:KeyDoor][Image:176-16][Width:16][Height:32]</Value>
+      <Value>[Type:DungeonObject][Subtype:Door][Image:176-16][Width:16][Height:32]</Value>
     </Item>
 	<Item>
       <Key>45</Key>

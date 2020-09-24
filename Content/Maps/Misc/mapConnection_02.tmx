@@ -69,7 +69,7 @@
 </data>
  </layer>
  <objectgroup id="4" name="Travel">
-  <object id="48" name="Entrance" x="0.762567" y="127.524" width="7.11856" height="30.9797">
+  <object id="48" name="Entrance" x="0" y="128" width="4" height="32">
    <properties>
     <property name="EntranceDir" value="Right"/>
     <property name="Map" value="mapForest_08"/>

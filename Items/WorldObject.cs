@@ -71,9 +71,9 @@ namespace RiverHollow.Items
             string[] strPos = stringData["Image"].Split('-');
             _pImagePos = new Point(int.Parse(strPos[0]), int.Parse(strPos[1]));
 
+            Util.AssignValue(ref _iWidth, "Width", stringData);
+            Util.AssignValue(ref _iHeight, "Height", stringData);
             if (stringData.ContainsKey("Type")) { _eObjectType = Util.ParseEnum<ObjectTypeEnum>(stringData["Type"]); }
-            if (stringData.ContainsKey("Width")) { _iWidth = int.Parse(stringData["Width"]); }
-            if (stringData.ContainsKey("Height")) { _iHeight = int.Parse(stringData["Height"]); }
 
             if (loadSprite)
             {
@@ -277,7 +277,7 @@ namespace RiverHollow.Items
             LoadDictionaryData(stringData);
             _eHazardType = Util.ParseEnum<HazardTypeEnum>(stringData["Subtype"]);
             Damage = int.Parse(stringData["Damage"]);
-            _bDrawOver = stringData.ContainsKey("DrawOver");
+            Util.AssignValue(ref _bDrawOver, "DrawOver", stringData);
             _sprite.SetDepthMod(_bDrawOver ? 1 : -999);
 
             _iInit = 0;
@@ -735,19 +735,23 @@ namespace RiverHollow.Items
 
         public class Plant : WorldItem
         {
-            public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + _iHeight - TileSize, TileSize, TileSize);
+            #region consts
             const float MAX_ROTATION = 0.15f;
             const float ROTATION_MOD = 0.02f;
             const float MAX_BOUNCE = 3;
+            #endregion
+
+            public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + _iHeight - TileSize, TileSize, TileSize);
+
             bool _bShaking = false;
             DirectionEnum dir = DirectionEnum.Right;
             float _fCurrentRotation = 0f;
             int _iBounceCount = 0;
 
-            bool _bPopItem;
+            readonly bool _bPopItem;
             int _iCurrentState;
-            int _iMaxStates;
-            int _iResourceID;
+            readonly int _iMaxStates;
+            readonly int _iResourceID;
             int _iDaysLeft;
             Dictionary<int, int> _diTransitionTimes;
 
@@ -760,8 +764,8 @@ namespace RiverHollow.Items
 
                 _iCurrentState = 0;
 
-                _iResourceID = int.Parse(stringData["Item"]);
-                _iMaxStates = int.Parse(stringData["TrNum"]);       //Number of growth phases
+                Util.AssignValue(ref _iResourceID, "Item", stringData);
+                Util.AssignValue(ref _iMaxStates, "TrNum", stringData); //Number of growth phases
 
                 _bPopItem = false;
 
@@ -1174,13 +1178,19 @@ namespace RiverHollow.Items
 
     public abstract class DungeonObject : WorldObject
     {
-        enum DungeonObjectType { Trigger, ItemDoor, KeyDoor, MobDoor, TriggerDoor };
-        DungeonObjectType _eSubType;
-        protected string _sTriggerName;
+        #region constants
+        const string MATCH_TRIGGER = "MatchTrigger";
+        const string TRIGGER_NUMBER = "TriggerNumber";
+        const string ITEM_KEY_ID = "ItemKeyID";
+        #endregion
+
+        enum DungeonObjectType { Trigger, Door };
+        readonly DungeonObjectType _eSubType;
+        protected string _sMatchTrigger; //What, if anything, the object responds to
         protected int _iTriggerNumber = 1;
         protected int _iTriggersLeft = 1;
-        bool _bVisible;
-        int _iItemKeyID;
+        bool _bVisible = true;
+        readonly int _iItemKeyID = -1;
         bool _bHasBeenTriggered = false;
 
         protected DungeonObject(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
@@ -1188,7 +1198,11 @@ namespace RiverHollow.Items
             LoadDictionaryData(stringData);
             _eSubType = Util.ParseEnum<DungeonObjectType>(stringData["Subtype"]);
 
-            _bVisible = true;
+            Util.AssignValue(ref _sMatchTrigger, MATCH_TRIGGER, stringData);
+            Util.AssignValue(ref _iTriggerNumber, TRIGGER_NUMBER, stringData);
+            Util.AssignValue(ref _iItemKeyID, ITEM_KEY_ID, stringData);
+
+            _iTriggersLeft = _iTriggerNumber;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -1211,6 +1225,38 @@ namespace RiverHollow.Items
         public virtual void AttemptToTrigger(string name) {}
 
         /// <summary>
+        /// Call to see if the object will be triggered by the sent trigger
+        /// </summary>
+        /// <param name="triggerName">The trigger name to match against the response trigger</param>
+        /// <returns>True if theo object can trigger</returns>
+        private bool CanTrigger(string triggerName)
+        {
+            bool rv = false;
+            if(triggerName == _sMatchTrigger)
+            {
+                rv = CanTrigger();
+            }
+             
+            return rv;
+        }
+
+        /// <summary>
+        /// Call to see if the object can trigger. Only valid if the object hasn't been triggered
+        /// and the object hasno more remaining trigger numbers to wait on
+        /// </summary>
+        /// <returns>True if the object can trigger</returns>
+        private bool CanTrigger()
+        {
+            bool rv = false;
+            if (!_bHasBeenTriggered && UpdateTriggerNumber())
+            {
+                rv = true;
+            }
+
+            return rv;
+        }
+
+        /// <summary>
         /// This method is called to trigger the object and make it send its trigger
         /// </summary>
         public virtual void Trigger() { }
@@ -1219,34 +1265,6 @@ namespace RiverHollow.Items
         /// Call this to reset the DungeonObject to its original state.
         /// </summary>
         public virtual void Reset() { }
-
-        /// <summary>
-        /// Sets the name of the trigger to apply for the DungeonObject
-        /// </summary>
-        /// <param name="val">The name of the trigger to either respond to or send</param>
-        public void SetTrigger(string val)
-        {
-            _sTriggerName = val;
-        }
-
-        /// <summary>
-        /// Sets the number of times the object must be triggered to respond
-        /// </summary>
-        /// <param name="trigger"></param>
-        public void SetTriggerNumber(int val)
-        {
-            _iTriggerNumber = val;
-            _iTriggersLeft = val;
-        }
-
-        /// <summary>
-        /// Sets the Item ID of the key needed to trigger the DungeonObject
-        /// </summary>
-        /// <param name="id">The ID of the item to use as the key.</param>
-        public void SetItemKey(string id)
-        {
-            _iItemKeyID = int.Parse(id);
-        }
 
         /// <summary>
         /// Given an item type, check it against the key for the DungeonObject
@@ -1281,24 +1299,36 @@ namespace RiverHollow.Items
 
         public class TriggerObject : DungeonObject
         {
+            #region constants
+            const string OUT_TRIGGER = "OutTrigger";
+            #endregion
+
+            readonly string _sOutTrigger;   //What trigger response is sent
             Item _item;
-            public TriggerObject(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos) { }
+            public TriggerObject(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
+            {
+                Util.AssignValue(ref _sOutTrigger, OUT_TRIGGER, stringData);
+            }
 
             public override void Draw(SpriteBatch spriteBatch)
             {
                 base.Draw(spriteBatch);
                 if(_bHasBeenTriggered && _item != null)
                 {
-                    _item.Draw(spriteBatch, new Rectangle((int)(_vMapPosition.X), (int)(_vMapPosition.Y - 4), TileSize, TileSize), true);
+                    _item.Draw(spriteBatch, new Rectangle((int)(_vMapPosition.X), (int)(_vMapPosition.Y - 6), TileSize, TileSize), true);
                 }
             }
+
             /// <summary>
-            /// USed to activate whatever the trigger will do. Uses CurrentMap because it can only be accessed by the player
+            /// Called when the player interacts with the object.
+            /// 
+            /// If it's already triggered, do nothing.
             /// </summary>
             public override void Interact()
             {
                 if (!_bHasBeenTriggered)
                 {
+                    //If there's an itemKeyID, display appropriate text
                     if (_iItemKeyID != -1)
                     {
                         GUIManager.OpenTextWindow(DataManager.GetGameText("ItemDoor"));
@@ -1310,12 +1340,20 @@ namespace RiverHollow.Items
                 }
             }
 
+            public override void AttemptToTrigger(string name)
+            {
+                if (CanTrigger(name))
+                {
+                    Trigger();
+                }
+            }
+
             public override void Trigger()
             {
-                if (UpdateTriggerNumber() && !_bHasBeenTriggered)
+                if(CanTrigger())
                 {
                     _bHasBeenTriggered = true;
-                    DungeonManager.ActivateTrigger(_sTriggerName);
+                    DungeonManager.ActivateTrigger(_sOutTrigger);
 
                     if(_iItemKeyID != -1)
                     {
@@ -1327,19 +1365,13 @@ namespace RiverHollow.Items
 
         public class Door : DungeonObject
         {
+            readonly bool _bKeyDoor;
             public Door(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
             {
-                switch (_eSubType)
+                if (stringData.ContainsKey("KeyDoor"))
                 {
-                    case DungeonObjectType.MobDoor:
-                        _sTriggerName = MOB_OPEN;
-                        break;
-                    case DungeonObjectType.ItemDoor:
-                        _sTriggerName = ITEM_OPEN;
-                        break;
-                    case DungeonObjectType.KeyDoor:
-                        _sTriggerName = KEY_OPEN;
-                        break;
+                    _bKeyDoor = true;
+                    _sMatchTrigger = GameManager.KEY_OPEN;
                 }
             }
 
@@ -1349,7 +1381,7 @@ namespace RiverHollow.Items
             /// <param name="name"></param>
             public override void AttemptToTrigger(string name)
             {
-                if (name == _sTriggerName && UpdateTriggerNumber() && !_bHasBeenTriggered)
+                if (CanTrigger(name))
                 {
                     _bHasBeenTriggered = true;
                     _bImpassable = false;
@@ -1364,36 +1396,37 @@ namespace RiverHollow.Items
             {
                 _bImpassable = true;
                 _bVisible = true;
+                _iTriggersLeft = _iTriggerNumber;
             }
 
+            /// <summary>
+            /// Handles the response from whent he player attempts to Interact with the Door object.
+            /// Primarily just handles the output for the doors and the type of triggers required to use it.
+            /// </summary>
             public override void Interact()
             {
-                switch (_eSubType)
+                if (_bKeyDoor)
                 {
-                    case DungeonObjectType.MobDoor:
-                        GUIManager.OpenTextWindow(DataManager.GetGameText("MobDoor"));
-                        break;
-                    case DungeonObjectType.ItemDoor:
-                        GUIManager.OpenTextWindow(DataManager.GetGameText("ItemDoor"));
-                        break;
-                    case DungeonObjectType.KeyDoor:
-                        if (DungeonManager.DungeonKeys() > 0)
-                        {
-                            DungeonManager.UseDungeonKey();
-                            AttemptToTrigger(KEY_OPEN);
-                        }
-                        else
-                        {
-                            GUIManager.OpenTextWindow(DataManager.GetGameText("KeyDoor"));
-                        }
-                        break;
-                    case DungeonObjectType.TriggerDoor:
-                        GUIManager.OpenTextWindow(DataManager.GetGameText("TriggerDoor"));
-                        break;
-                    default:
-                        break;
+                    if (DungeonManager.DungeonKeys() > 0)
+                    {
+                        DungeonManager.UseDungeonKey();
+                        AttemptToTrigger(KEY_OPEN);
+                    }
+                    else
+                    {
+                        GUIManager.OpenTextWindow(DataManager.GetGameText("KeyDoor"));
+                    }
+                }
+                else if (_iItemKeyID != -1)
+                {
+                    GUIManager.OpenTextWindow(DataManager.GetGameText("ItemDoor"));
+                }
+                else
+                {
+                    GUIManager.OpenTextWindow(DataManager.GetGameText("TriggerDoor"));
                 }
             }
         }
     }
+
 }

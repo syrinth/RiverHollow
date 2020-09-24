@@ -437,11 +437,19 @@ namespace RiverHollow.Game_Managers
             else { return null; }
         }
 
-        public static DungeonObject GetDungeonObject(int id, Vector2 pos)
+        public static DungeonObject GetDungeonObject(Dictionary<string, string> data, Vector2 pos)
         {
+            int id = int.Parse(data["ID"]);
             if (id != -1 && _diWorldObjects.ContainsKey(id))
             {
-                Dictionary<string, string> liData = _diWorldObjects[id];
+                Dictionary<string, string> liData = new Dictionary<string, string>(_diWorldObjects[id]);
+                foreach(KeyValuePair<string, string> kvp in data) {
+                    if (!liData.ContainsKey(kvp.Key))
+                    {
+                        liData.Add(kvp.Key, kvp.Value);
+                    }
+                }
+
                 if (liData["Subtype"].Contains("Door")){
                     return new Door(id, liData, pos);
                 }
