@@ -537,5 +537,9 @@
       <Key>133</Key>
       <Value>[Type:Special][SpecialType:Class][Image:16-48][Sell:2000]</Value>
     </Item>
+	<Item>
+      <Key>134</Key>
+      <Value>[Type:Special][SpecialType:DungeonKey][Image:16-16]</Value>
+    </Item>
   </Asset>
 </XnaContent>

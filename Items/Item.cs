@@ -94,7 +94,7 @@ namespace RiverHollow.Items
             _eItemType = Util.ParseEnum<ItemEnum>(stringData["Type"]);
 
             //SellPrice
-            _iSellPrice = int.Parse(stringData["Sell"]);
+            Util.AssignValue(ref _iSellPrice, "Sell", stringData);
 
             //Image information
             string[] texIndices = stringData["Image"].Split('-');
@@ -643,6 +643,19 @@ namespace RiverHollow.Items
             _iNum = 1;
             _bStacks = false;
             _texTexture = DataManager.GetTexture(@"Textures\items");
+        }
+    }
+
+    public class DungeonKey : Item
+    {
+        public DungeonKey(int id, Dictionary<string, string> stringData)
+        {
+            ImportBasics(stringData, id, 1);
+            _eItemType = ItemEnum.Special;
+            _eSpecialItem = SpecialItemEnum.DungeonKey;
+            _iNum = 1;
+            _bStacks = false;
+            _texTexture = DataManager.GetTexture(@"Textures\Dialog");
         }
     }
 

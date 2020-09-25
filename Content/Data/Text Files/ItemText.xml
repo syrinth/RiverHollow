@@ -537,5 +537,9 @@
       <Key>133</Key>
       <Value>Essence of /Become a </Value>
     </Item>
+	<Item>
+      <Key>134</Key>
+      <Value>Dungeon Key/A key that unlocks a dungeon door.</Value>
+    </Item>
   </Asset>
 </XnaContent>

@@ -374,6 +374,8 @@ namespace RiverHollow.Game_Managers
                                 return new MarriageItem(id, liData);
                             case "Map":
                                 return new AdventureMap(id, liData, num);
+                            case "DungeonKey":
+                                return new DungeonKey(id, liData);
                         }
                         break;
                     case "Marriage":
