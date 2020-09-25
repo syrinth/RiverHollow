@@ -47,23 +47,23 @@
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:114-5|115-30|72-15][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:113-5|114-30|71-15][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Machine][Image:0-64][Work:3-0.15][Width:32][Height:32][Makes:108-130|109-15][Base:2-1][WorkEffect:bubbles]</Value>
+      <Value>[Type:Machine][Image:0-64][Work:3-0.15][Width:32][Height:32][Makes:107-130|108-15][Base:2-1][WorkEffect:bubbles]</Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:118-5|115-5|116-5|117-5|114-10|119-10][Base:2-1][Processes:32-10|33-10|34-10|35-10|36-10]</Value>
+      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:117-5|114-5|115-5|116-5|113-10|118-10][Base:2-1][Processes:32-10|33-10|34-10|35-10|36-10]</Value>
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Machine][Image:0-128][Work:3-0.15][Width:16][Height:32][Makes:110-15][Base:1-1]</Value>
+      <Value>[Type:Machine][Image:0-128][Work:3-0.15][Width:16][Height:32][Makes:109-15][Base:1-1]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Processes:25-5][Makes:86-15][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Processes:25-5][Makes:85-15][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>16</Key>
@@ -139,11 +139,11 @@
     </Item>
     <Item>
       <Key>34</Key>
-      <Value>[Type:Plant][Image:192-16][Height:32][Item:107][TrNum:4][TrTime:1-2-3]</Value>
+      <Value>[Type:Plant][Image:192-16][Height:32][Item:106][TrNum:4][TrTime:1-2-3]</Value>
     </Item>
     <Item>
       <Key>35</Key>
-      <Value>[Type:Plant][Image:192-48][Height:32][Item:130][TrNum:4][TrTime:1-1-1]</Value>
+      <Value>[Type:Plant][Image:192-48][Height:32][Item:129][TrNum:4][TrTime:1-1-1]</Value>
     </Item>
     <Item>
       <Key>36</Key>
