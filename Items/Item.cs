@@ -154,15 +154,15 @@ namespace RiverHollow.Items
             }
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox, bool LayerDepth = false)
+        public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox, bool LayerDepth = false, float forcedLayerDepth = 99999, float alpha = 1f)
         {
             if (LayerDepth)
             {
-                spriteBatch.Draw(_texTexture, drawBox, new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, (int)_dWidth, (int)_dHeight), _c, 0, Vector2.Zero, SpriteEffects.None, 99999);
+                spriteBatch.Draw(_texTexture, drawBox, new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, (int)_dWidth, (int)_dHeight), _c * alpha, 0, Vector2.Zero, SpriteEffects.None, forcedLayerDepth);
             }
             else
             {
-                spriteBatch.Draw(_texTexture, drawBox, new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, (int)_dWidth, (int)_dHeight), _c);
+                spriteBatch.Draw(_texTexture, drawBox, new Rectangle((int)_vSourcePos.X, (int)_vSourcePos.Y, (int)_dWidth, (int)_dHeight), _c * alpha);
             }
         }
 
@@ -497,10 +497,12 @@ namespace RiverHollow.Items
     public class Tool : Item
     {
         public ToolEnum ToolType;
-        protected int _staminaCost;
-        public int StaminaCost => _staminaCost;
+        protected int _iStaminaCost;
+        public int StaminaCost => _iStaminaCost;
         protected int _iPower;
         public int Power => _iPower;
+
+        private int _iCharges;
 
         protected AnimatedSprite _sprite;
         public AnimatedSprite ToolAnimation { get => _sprite; }
@@ -518,10 +520,11 @@ namespace RiverHollow.Items
             ImportBasics(stringData, id, 1);
 
             ToolType = Util.ParseEnum<ToolEnum>(stringData["ToolType"]);
-            if (stringData.ContainsKey("Power")) {
-                _iPower = int.Parse(stringData["Power"]);
-            }
-            _staminaCost = int.Parse(stringData["Stam"]);
+
+            _iCharges = 0;
+            Util.AssignValue(ref _iPower, "Power", stringData);
+            Util.AssignValue(ref _iStaminaCost, "Stam", stringData);
+            Util.AssignValue(ref _iCharges, "Charges", stringData);
 
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Tools");
 
@@ -545,6 +548,21 @@ namespace RiverHollow.Items
         {
             if (OnTheMap) { base.Draw(spriteBatch); }
             else { _sprite.Draw(spriteBatch, 99999); }
+        }
+
+        public override void UseItem(string action)
+        {
+            if(ToolType == ToolEnum.Return)
+            {
+                DungeonManager.GoToEntrance();
+                _iCharges--;
+            }
+           
+        }
+
+        public bool HasCharges()
+        {
+            return _iCharges > 0;
         }
     }
 

@@ -106,7 +106,7 @@
   </object>
   <object id="56" name="WorldObject" x="260.792" y="196.792" width="5.75" height="5.75">
    <properties>
-    <property name="ID" type="int" value="45"/>
+    <property name="ID" type="int" value="43"/>
    </properties>
   </object>
  </objectgroup>

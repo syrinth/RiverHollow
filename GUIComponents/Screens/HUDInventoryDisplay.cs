@@ -15,6 +15,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public HUDInventoryDisplay(DisplayTypeEnum display = DisplayTypeEnum.Inventory)
         {
+            GameManager.Pause();
             InventoryManager.ClearExtraInventory();
             GameManager.CurrentInventoryDisplay = display;
             _inventory = new GUIInventory(true);
@@ -123,7 +124,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 GUIManager.OpenTextWindow(GameManager.CurrentNPC.GetDialogEntry("Goodbye"));
             }
-            
+            GameManager.Unpause();
         }
     }
 }

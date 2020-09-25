@@ -1308,14 +1308,16 @@ namespace RiverHollow.Items
             public TriggerObject(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
             {
                 Util.AssignValue(ref _sOutTrigger, OUT_TRIGGER, stringData);
+                _item = DataManager.GetItem(_iItemKeyID);
             }
 
             public override void Draw(SpriteBatch spriteBatch)
             {
                 base.Draw(spriteBatch);
-                if(_bHasBeenTriggered && _item != null)
+                if(_item != null)
                 {
-                    _item.Draw(spriteBatch, new Rectangle((int)(_vMapPosition.X), (int)(_vMapPosition.Y - 6), TileSize, TileSize), true);
+                    float visibility = _bHasBeenTriggered ? 1f : 0.25f;
+                    _item.Draw(spriteBatch, new Rectangle((int)(_vMapPosition.X), (int)(_vMapPosition.Y - 6), TileSize, TileSize), true, _sprite.LayerDepth + 1, visibility);
                 }
             }
 
@@ -1331,10 +1333,9 @@ namespace RiverHollow.Items
                     //If there's an itemKeyID, display appropriate text
                     if (_iItemKeyID != -1)
                     {
-                        GUIManager.OpenTextWindow(DataManager.GetGameText("ItemDoor"));
+                        GUIManager.OpenMainObject(new HUDInventoryDisplay());
                     }
-                    else
-                    {
+                    else {
                         Trigger();
                     }
                 }
@@ -1354,11 +1355,6 @@ namespace RiverHollow.Items
                 {
                     _bHasBeenTriggered = true;
                     DungeonManager.ActivateTrigger(_sOutTrigger);
-
-                    if(_iItemKeyID != -1)
-                    {
-                        _item = DataManager.GetItem(_iItemKeyID);
-                    }
                 }
             }
         }
@@ -1414,16 +1410,16 @@ namespace RiverHollow.Items
                     }
                     else
                     {
-                        GUIManager.OpenTextWindow(DataManager.GetGameText("KeyDoor"));
+                        GUIManager.OpenTextWindow(DataManager.GetGameText("Key_Door"));
                     }
                 }
                 else if (_iItemKeyID != -1)
                 {
-                    GUIManager.OpenTextWindow(DataManager.GetGameText("ItemDoor"));
+                    GUIManager.OpenMainObject(new HUDInventoryDisplay());
                 }
                 else
                 {
-                    GUIManager.OpenTextWindow(DataManager.GetGameText("TriggerDoor"));
+                    GUIManager.OpenTextWindow(DataManager.GetGameText("Trigger_Door"));
                 }
             }
         }

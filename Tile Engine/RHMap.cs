@@ -35,7 +35,7 @@ namespace RiverHollow.Tile_Engine
 
         public bool IsCombatMap => _liMonsterSpawnPoints.Count > 0;
         public bool IsBuilding { get; private set; }
-        public string DungeonName { get; private set; }
+        public string DungeonName { get; private set; } = string.Empty;
         public bool IsDungeon => !string.IsNullOrEmpty(DungeonName);
         public bool IsTown { get; private set; }
         public bool IsManor { get; private set; }
@@ -123,11 +123,7 @@ namespace RiverHollow.Tile_Engine
             if (_map.Properties.ContainsKey("Dungeon"))
             {
                 DungeonName = _map.Properties["Dungeon"];
-                DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], _sName);
-            }
-            else
-            {
-                DungeonName = string.Empty;
+                DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], this);
             }
 
             if (_map.Properties.ContainsKey("Production")) {
@@ -177,7 +173,7 @@ namespace RiverHollow.Tile_Engine
             if (_map.Properties.ContainsKey("Dungeon"))
             {
                 DungeonName = _map.Properties["Dungeon"];
-                DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], _sName);
+                DungeonManager.AddMapToDungeon(_map.Properties["Dungeon"], this);
             }
 
             if (_map.Properties.ContainsKey("Production"))

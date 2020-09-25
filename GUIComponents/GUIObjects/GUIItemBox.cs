@@ -108,11 +108,28 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     }
                     else { text = DataManager.GetGameText("MonsterFood_False"); }
                 }
-                else if (Item.CompareType(ItemEnum.Tool) && ((Tool)Item).ToolType == GameManager.ToolEnum.Harp) {
-                    Spirit s = MapManager.CurrentMap.FindSpirit();
-                    if (s != null)
+                else if (Item.CompareType(ItemEnum.Tool))
+                {
+                    Tool t = (Tool)Item;
+                    if (t.ToolType == GameManager.ToolEnum.Harp)
                     {
-                        HarpManager.NewSong(s);
+                        Spirit s = MapManager.CurrentMap.FindSpirit();
+                        if (s != null)
+                        {
+                            HarpManager.NewSong(s);
+                        }
+                    }
+                    else if (t.ToolType == GameManager.ToolEnum.Return)
+                    {
+                        if (DungeonManager.CurrentDungeon != null)
+                        {
+                            if (t.HasCharges()) { text = string.Format(DataManager.GetGameText("Rune_of_Return_Use"), Item.Name); }
+                            else { text = string.Format(DataManager.GetGameText("Rune_of_Return_Empty"), Item.Name); }
+                        }
+                        else
+                        {
+                            text = string.Format(DataManager.GetGameText("Rune_of_Return_No_Dungeon"), Item.Name);
+                        }
                     }
                 }
                 else if (Item.CompareType(ItemEnum.Consumable))       //If the item is a Consumable, construct the selection options from the party

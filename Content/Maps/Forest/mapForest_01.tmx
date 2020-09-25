@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="55">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="58">
  <properties>
   <property name="Dungeon" value="Forest"/>
   <property name="Outside" type="bool" value="false"/>
+  <property name="RecallPoint" value="236,68"/>
   <property name="ResourcesMinMax" value="30-60"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
@@ -105,7 +106,7 @@
   </object>
   <object id="53" name="DungeonObject" x="176" y="48" width="16" height="16">
    <properties>
-    <property name="ID" type="int" value="47"/>
+    <property name="ID" type="int" value="42"/>
     <property name="ItemKeyID" type="int" value="43"/>
     <property name="MatchTrigger" value="VALID_ITEM"/>
     <property name="OutTrigger" value="Entrance"/>
@@ -113,14 +114,17 @@
   </object>
   <object id="54" name="DungeonObject" x="288" y="48" width="16" height="16">
    <properties>
-    <property name="ID" type="int" value="47"/>
+    <property name="ID" type="int" value="42"/>
     <property name="ItemKeyID" type="int" value="44"/>
     <property name="MatchTrigger" value="VALID_ITEM"/>
     <property name="OutTrigger" value="Entrance"/>
    </properties>
   </object>
+  <object id="55" name="Item" x="308.333" y="86" width="9.33333" height="6.66667">
+   <properties>
+    <property name="Item" type="int" value="101"/>
+   </properties>
+  </object>
  </objectgroup>
- <objectgroup id="6" name="Character">
-  <object id="48" name="PlayerSpawn" x="292.639" y="117.982" width="5.63636" height="5.27273"/>
- </objectgroup>
+ <objectgroup id="6" name="Character"/>
 </map>

@@ -21,7 +21,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
     public class GUIDungeonKey : GUIImage
     {
-        public GUIDungeonKey() : base(new Rectangle(16, 16, TileSize, TileSize), ScaledTileSize, ScaledTileSize, @"Textures\Dialog")
+        public GUIDungeonKey() : base(new Rectangle(20, 18, 8, 12), ScaleIt(8), ScaleIt(12), @"Textures\Dialog")
         {
         }
     }
@@ -173,14 +173,14 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             _gKeys = new GUIDungeonKey();
 
-            _gKeysText.AnchorAndAlignToObject(_gKeys, SideEnum.Right, SideEnum.Top, GUIManager.STANDARD_MARGIN);
-            _gKeys.AlignToObject(_gKeysText, SideEnum.CenterY);
+            _gKeysText.AnchorAndAlignToObject(_gKeys, SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
 
             Height = _gKeys.Height > _gKeysText.Height ? _gKeys.Height : _gKeysText.Height;
             Width = _gKeysText.Width + _gKeys.Width;
 
             AddControl(_gKeys);
             AddControl(_gKeysText);
+
             Position(_gKeys.Position());
         }
 

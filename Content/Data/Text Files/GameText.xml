@@ -29,32 +29,36 @@
       <Key>ReallyExit</Key>
       <Value>Are you sure?[Exit:Exit|Cancel:Cancel]</Value>
     </Item>
-    <Item>
-      <Key>MobDoor</Key>
-      <Value>An inscription upon the door reads: "None shall pass until all are vanquished."</Value>
+	<Item>
+      <Key>Rune_of_Return_Use</Key>
+      <Value>Use the {0} to the dungeon entrance? [Yes:UseItem|No:Cancel]</Value>
+    </Item>
+	<Item>
+      <Key>Rune_of_Return_Empty</Key>
+      <Value>The {0}'s energy is spent.</Value>
+    </Item>
+	<Item>
+      <Key>Rune_of_Return_No_Dungeon</Key>
+      <Value>The rune cannot work here.</Value>
     </Item>
     <Item>
-      <Key>KeyDoor</Key>
+      <Key>Key_Door</Key>
       <Value>The door is locked. You will need a key to open it.</Value>
     </Item>
     <Item>
-      <Key>ItemDoor</Key>
+      <Key>Item_Door</Key>
       <Value>A strangely shaped keyhole is embedded in the door [Attempt to Open:OpenDoor|Never Mind:Cancel]</Value>
     </Item>
     <Item>
-      <Key>ItemDoorOpen</Key>
+      <Key>Item_Door_Open</Key>
       <Value>As you place the item into the keyhole, it vanishes, becoming one with the door!</Value>
     </Item>
     <Item>
-      <Key>ItemDoorClose</Key>
+      <Key>Item_Door_Close</Key>
       <Value>No matter how hard you try, it seems like that item won't fit here.</Value>
     </Item>
     <Item>
-      <Key>SpringDoor</Key>
-      <Value>Nope</Value>
-    </Item>
-    <Item>
-      <Key>TriggerDoor</Key>
+      <Key>Trigger_Door</Key>
       <Value>You see no visible means of opening this door. There must be a hidden switch or something.</Value>
     </Item>
 	<Item>
@@ -69,9 +73,17 @@
       <Key>MonsterFood_False</Key>
       <Value>You see no monster tracks here, better use it somewhere else.</Value>
     </Item>
-		<Item>
+	<Item>
       <Key>MonsterFood_Duplicate</Key>
       <Value>Tantalizing food has already been placed.</Value>
+    </Item>
+	<Item>
+      <Key>Pedestal_Ruby</Key>
+      <Value>A shining red gem.</Value>
+    </Item>
+	<Item>
+      <Key>Pedestal_Emerald</Key>
+      <Value>A shining red gem.</Value>
     </Item>
     <!--Quest Text-->
     <Item>

@@ -1,14 +1,13 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using RiverHollow.Tile_Engine;
+using RiverHollow.Utilities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RiverHollow.Game_Managers
 {
     public static class DungeonManager
     {
-        private static Dungeon CurrentDungeon => (_liDungeons.ContainsKey(MapManager.CurrentMap.DungeonName) ? _liDungeons[MapManager.CurrentMap.DungeonName] : null);
+        public static Dungeon CurrentDungeon => (_liDungeons.ContainsKey(MapManager.CurrentMap.DungeonName) ? _liDungeons[MapManager.CurrentMap.DungeonName] : null);
         private static Dictionary<string, Dungeon> _liDungeons;
 
         public static void Instantiate()
@@ -16,13 +15,19 @@ namespace RiverHollow.Game_Managers
             _liDungeons = new Dictionary<string, Dungeon>();
         }
 
-        public static void AddMapToDungeon(string dungeonName, string mapName) {
+        public static void GoToEntrance()
+        {
+            CurrentDungeon?.GoToEntrance();
+            GUIManager.CloseMainObject();
+        }
+
+        public static void AddMapToDungeon(string dungeonName, RHMap map) {
             if (!_liDungeons.ContainsKey(dungeonName))
             {
                 _liDungeons[dungeonName] = new Dungeon(dungeonName);
             }
 
-            _liDungeons[dungeonName].AddMap(mapName);
+            _liDungeons[dungeonName].AddMap(map);
         }
 
         public static void AddDungeonKey() { CurrentDungeon.AddKey(); }
@@ -52,6 +57,8 @@ namespace RiverHollow.Game_Managers
 
     public class Dungeon
     {
+        string _sEntranceMapName;
+        Vector2 _vRecallPoint;
         public int NumKeys { get; private set; }
         public string Name { get; private set; }
 
@@ -62,9 +69,23 @@ namespace RiverHollow.Game_Managers
             Name = name;
         }
 
-        public void AddMap(string name)
+        public void AddMap(RHMap map)
         {
-            _liMapNames.Add(name);
+            _liMapNames.Add(map.Name);
+            string recallPoint = string.Empty;
+            Util.AssignValue(ref recallPoint, "RecallPoint", map.Map.Properties);
+            if (!string.IsNullOrEmpty(recallPoint))
+            {
+                string[] split = recallPoint.Split(',');
+                _vRecallPoint = new Vector2(int.Parse(split[0]), int.Parse(split[1]));
+                _sEntranceMapName = map.Name;
+            }
+        }
+
+        public void GoToEntrance()
+        {
+            MapManager.FadeToNewMap(MapManager.Maps[_sEntranceMapName], _vRecallPoint);
+            PlayerManager.World.DetermineFacing(new Vector2(0, 1));
         }
 
         public void AddKey() { NumKeys++; }

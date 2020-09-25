@@ -12,6 +12,8 @@ namespace RiverHollow.SpriteAnimations
     public class AnimatedSprite
     {
         #region Properties
+        public float LayerDepth => Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100);
+
         Texture2D _texture;                         // The texture that holds the images for this sprite
         bool _bAnimating = true;                     // True if animations are being played
         public bool PlayedOnce = false;
@@ -255,7 +257,7 @@ namespace RiverHollow.SpriteAnimations
         {
             if (useLayerDepth)
             {
-                float layerDepth = forcedLayerDepth < 0 ? Position.Y + CurrentFrameAnimation.FrameHeight + (Position.X / 100) : forcedLayerDepth;
+                float layerDepth = forcedLayerDepth < 0 ? LayerDepth : forcedLayerDepth;
                 Draw(spriteBatch, layerDepth, visibility);
             }
             else

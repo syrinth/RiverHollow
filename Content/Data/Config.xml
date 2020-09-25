@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[ItemID:0-999|2-990|120-99|95|96|97|98|100|107|114|129-5|112-5|114|115|116|117|118|119|116|116|116|116|5-99|21-99|43|44]</Value>
+      <Value>[ItemID:0-999|2-990|121-99|95|96|97|98|100|108|115|130-5|113-5|115|116|117|118|119|120|117|117|117|117|5-99|21-99|43|44]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -19,19 +19,19 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[ItemID:126]</Value>
+      <Value>[ItemID:127]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[ItemID:124|125]</Value>
+      <Value>[ItemID:125|126]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[ItemID:128]</Value>
+      <Value>[ItemID:129]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[SpawnMap:mapForest_08-17-6][Maps:Manor-mapManorGrounds-8-31|Forest8-mapForest_08-17-6|Forest1-mapForest_01-18-7|Town-mapRiverHollowTown-46-58|Forest4-mapForest_04-20-20|Forest6-mapForest_06-19-9]</Value>
+      <Value>[SpawnMap:mapForest_01-18-7][Maps:Manor-mapManorGrounds-8-31|Forest8-mapForest_08-17-6|Forest1-mapForest_01-18-7|Town-mapRiverHollowTown-46-58|Forest4-mapForest_04-20-20|Forest6-mapForest_06-19-9]</Value>
     </Item>
     <Item>
       <Key>8</Key>

@@ -105,16 +105,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     Item it = IsItemThere(mouse);
                     if (!GUIManager.IsTextWindowOpen() && Contains(mouse) && it != null)
                     {
-                        string text = string.Empty;
                         if (GameManager.gmDungeonObject.CheckForKey(it))
                         {
                             GameManager.gmDungeonObject.AttemptToTrigger(GameManager.ITEM_OPEN);
                             GUIManager.CloseMainObject();
-                            text = DataManager.GetGameText("ItemDoorOpen");
                         }
-                        else { text = DataManager.GetGameText("ItemDoorClose"); }
-
-                        GUIManager.OpenTextWindow(text);
                     }
                 }
                 else
@@ -125,8 +120,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 }
             }
 
-            //Close any hover windows that may be open, otherwise they'll be open
-            //on an empty object
+            //Close any hover windows that may be open
             if (rv) { GUIManager.CloseHoverWindow(); }
 
 
@@ -172,9 +166,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                                 InventoryManager.AddItemToInventorySpot(i.Item, row, col, !_bPlayerInventory);
                                 GameManager.DropItem();
 
-                                //Close any hover windows that may be open,otherwise they'll be open on an empty object
-                                GUIManager.CloseHoverWindow();
-
                             }
 
                             rv = true;
@@ -188,6 +179,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 GameManager.DropItem();
             }
 
+            //Close any hover windows that may be open
+            if (rv) { GUIManager.CloseHoverWindow(); }
+
             return rv;
         }
 
@@ -199,12 +193,14 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public override bool ProcessHover(Point mouse)
         {
             bool rv = false;
-
-            foreach(GUIItemBox i in _gItemBoxes)
+            if (!GUIManager.IsTextWindowOpen())
             {
-                if (i.ProcessHover(mouse))
+                foreach (GUIItemBox i in _gItemBoxes)
                 {
-                    rv = true;
+                    if (i.ProcessHover(mouse))
+                    {
+                        rv = true;
+                    }
                 }
             }
             return rv;

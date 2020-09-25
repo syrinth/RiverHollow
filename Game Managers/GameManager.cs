@@ -54,7 +54,7 @@ namespace RiverHollow.Game_Managers
         public enum ArmorEnum { None, Cloth, Light, Heavy };
         public enum ArmorSlotEnum { None, Head, Armor, Wrist };
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
-        public enum ToolEnum { Pick, Axe, Shovel, WateringCan, Harp, Lantern };
+        public enum ToolEnum { Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return };
         public static float Scale = 4f;
         public const int TileSize = 16;
         public static int ScaledTileSize => (int)(TileSize * Scale);
@@ -109,10 +109,6 @@ namespace RiverHollow.Game_Managers
                 Vector2 pos = PlayerManager.World.CollisionBox.Center.ToVector2();
                 PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]));
                 GUIManager.SetScreen(new DayEndScreen());
-            }
-            else if (selectedAction.Equals("OpenDoor"))
-            {
-                GUIManager.OpenMainObject(new HUDInventoryDisplay());
             }
             else if (selectedAction.Contains("SellContract") && GameManager.CurrentNPC != null)
             {
