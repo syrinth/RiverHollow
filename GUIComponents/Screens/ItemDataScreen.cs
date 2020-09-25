@@ -1140,7 +1140,18 @@ namespace RiverHollow.GUIComponents.Screens
             switch (_eType)
             {
                 case ItemEnum.Special:
-                    _texTexture = DataManager.GetTexture(@"Textures\items");
+                    if (stringData.ContainsKey("SpecialType"))
+                    {
+                        if(stringData["SpecialType"].Equals("Map") || stringData["SpecialType"].Equals("DungeonKey"))
+                        {
+                            _texTexture = DataManager.GetTexture(@"Textures\Dialog");
+                        }
+                        else
+                        {
+                            _texTexture = DataManager.GetTexture(@"Textures\items");
+                        }
+                    }
+                    
                     break;
                 case ItemEnum.Clothes:
                     _texTexture = DataManager.GetTexture(@"Textures\items");
