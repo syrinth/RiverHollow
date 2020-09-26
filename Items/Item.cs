@@ -130,14 +130,14 @@ namespace RiverHollow.Items
             _bStacks = item.DoesItStack;
         }
 
-        public void Update()
+        public void Update(GameTime gTime)
         {
             if (_movement != null)
             {
                 if (!_movement.Finished)
                 {
                     _vPosition = _movement.MoveTo();
-                    _movement.Update();
+                    _movement.Update(gTime);
                 }
                 else
                 {
@@ -174,9 +174,7 @@ namespace RiverHollow.Items
         public void Pop(Vector2 pos, bool flyingPop = true)
         {
             _vPosition = pos;
-            Vector2 velocity = flyingPop ? RandomVelocityVector() : new Vector2(0, 2);
-            float YDisplacement = flyingPop ? Util.GetRandomFloat(-TileSize * 2, TileSize * 2, 3) : 0;
-            _movement = new Parabola(_vPosition, velocity, YDisplacement);
+            _movement = new Parabola(_vPosition);
         }
 
         public bool FinishedMoving()
@@ -225,11 +223,6 @@ namespace RiverHollow.Items
             return rv;
         }
 
-        public Vector2 RandomVelocityVector()
-        {
-            return new Vector2(Util.GetRandomFloat(-1, 1, 3), Util.GetRandomFloat(-5, 2, 3));
-        }
-
         public List<KeyValuePair<int, int>> GetIngredients()
         {
             List<KeyValuePair<int, int>> ret = new List<KeyValuePair<int, int>>();
@@ -276,48 +269,96 @@ namespace RiverHollow.Items
 
         private class Parabola
         {
-            Vector2 _vStart;
-            Vector2 _vVel;
-            public Vector2 Velocity { get => _vVel; }
-            private Vector2 _vInitialVel;
-            private float _fFinalY;
-            private bool _bFinished = false;
-            public bool Finished { get => _bFinished; }
+            readonly double _dCurveDegree = -0.1;
+            readonly double _dCurveWidth = 2.8;
 
-            bool _bDownCurve;
-            public Parabola(Vector2 pos, Vector2 velocity, float Y)
+            Vector2 _vPosition;
+            Vector2 _vStartPosition;
+            public bool Finished { get; private set; } = false;
+
+            double _dTimer = 0.2;
+            double _dPauseTimer = 0.1;
+            float _fXOffset = 0;
+            readonly bool _bGoLeft = false;
+            readonly bool _bBounce = true;
+
+            Parabola subBounce;
+            public Parabola(Vector2 pos)
             {
-                _vStart = pos;
-                _vVel = velocity;
-                _vInitialVel = _vVel;
-                _fFinalY = _vStart.Y + Y;
-            }
+                RHRandom r = RHRandom.Instance;
 
-            public void Update()
-            {
-                _vVel.Y += 0.2f;
-
-                if(_vVel.Y >= 0) {
-                    _bDownCurve = true;
+                float widthChange = r.Next(0, 5);
+                widthChange *= 0.1f;
+                if (r.Next(0, 1) == 1) { widthChange *= -1; }
+                _dCurveWidth += widthChange;
+                if (r.Next(0, 1) == 1) {
+                    _bGoLeft = true;
+                    _dCurveWidth *= -1;
                 }
 
-                if (_bDownCurve && _vStart.Y >= _fFinalY)
-                {
-                    //Reset velocity for bouncing
-                    _vVel.Y = _vInitialVel.Y/1.5f;
-                    _vInitialVel = _vVel;
-                    _bDownCurve = false;
+                double timerChange = r.Next(0, 9);
+                timerChange *= 0.01;
+                if (r.Next(0, 1) == 1) { timerChange *= -1; }
+                _dTimer += timerChange;
 
-                    if (_vVel.Y >= -1f)         //Only bounce a few times
+                _vStartPosition = pos;
+                _vPosition = pos;
+            }
+
+            public Parabola(Vector2 pos, double curveDegree, double curveWidth, bool goingLeft)
+            {
+                _dTimer = 0.2f;
+                _bBounce = false;
+                _vStartPosition = pos;
+                _vPosition = pos;
+                _dCurveDegree = curveDegree;
+                _dCurveWidth = curveWidth;
+                _bGoLeft = goingLeft;
+            }
+
+            public void Update(GameTime gTime)
+            {
+                _dTimer -= gTime.ElapsedGameTime.TotalSeconds;
+
+                if (_dTimer <= 0)
+                {
+                    if (_bBounce || (_bBounce && subBounce != null))
                     {
-                        _bFinished = true;
+                        if(subBounce == null)
+                        {
+                            subBounce = new Parabola(_vPosition, _dCurveDegree + 0.04, _dCurveWidth + (_bGoLeft ? 1.5 : -1.5), _bGoLeft);
+                        }
+                        else if (!subBounce.Finished)
+                        {
+                            subBounce.Update(gTime);
+                        }
+                        else { Finished = true; }
                     }
+                    else
+                    {
+                        if (_dPauseTimer > 0)
+                        {
+                            _dPauseTimer -= gTime.ElapsedGameTime.TotalSeconds;
+                        }
+                        else
+                        {
+                            Finished = true;
+                        }
+                    }
+                }
+                else
+                {
+                    _fXOffset += _bGoLeft ? -2f : 2f;
+                    float yOffset = (float)((_dCurveDegree * (_fXOffset * _fXOffset)) + (_dCurveWidth * _fXOffset));
+                    _vPosition.X = _vStartPosition.X + _fXOffset;
+                    _vPosition.Y = _vStartPosition.Y - yOffset;
                 }
             }
 
             public Vector2 MoveTo()
             {
-                return _vStart += _vVel;
+                if (subBounce != null) { return subBounce.MoveTo(); }
+                else { return _vPosition; }
             }
         }
     }

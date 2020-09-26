@@ -649,7 +649,7 @@ namespace RiverHollow.Tile_Engine
 
                 foreach (Item i in _liItems)
                 {
-                    ((Item)i).Update();
+                    ((Item)i).Update(gTime);
                 }
             }
 
@@ -2591,7 +2591,7 @@ namespace RiverHollow.Tile_Engine
                     rv = ((Destructible)WorldObject).DealDamage(toolUsed.Power);
                     if (rv)
                     {
-                        MapManager.DropItemsOnMap(WorldObject.GetDroppedItems(), WorldObject.CollisionBox.Center.ToVector2());
+                        MapManager.DropItemsOnMap(WorldObject.GetDroppedItems(), WorldObject.CollisionBox.Location.ToVector2());
                         MapManager.RemoveWorldObject(WorldObject);
                         WorldObject.RemoveSelfFromTiles();
                     }
