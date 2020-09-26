@@ -1309,6 +1309,11 @@ namespace RiverHollow.Items
             {
                 Util.AssignValue(ref _sOutTrigger, OUT_TRIGGER, stringData);
                 _item = DataManager.GetItem(_iItemKeyID);
+
+                if (_iItemKeyID == -1)
+                {
+                    _sprite.AddAnimation(AnimationEnum.ObjectAction1, _pImagePos.X + Width, _pImagePos.Y, _iWidth, _iHeight);
+                }
             }
 
             public override void Draw(SpriteBatch spriteBatch)
@@ -1354,6 +1359,7 @@ namespace RiverHollow.Items
                 if(CanTrigger())
                 {
                     _bHasBeenTriggered = true;
+                    _sprite.PlayAnimation(AnimationEnum.ObjectAction1);
                     DungeonManager.ActivateTrigger(_sOutTrigger);
                 }
             }
