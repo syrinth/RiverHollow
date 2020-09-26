@@ -1361,9 +1361,18 @@ namespace RiverHollow.Items
 
         public class Door : DungeonObject
         {
+            public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + (_iHeight - BaseHeight), BaseWidth, BaseHeight);
+
             readonly bool _bKeyDoor;
             public Door(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
             {
+                if (stringData.ContainsKey("Base"))
+                {
+                    string[] split = stringData["Base"].Split('-');
+                    _iBaseWidth = TileSize * int.Parse(split[0]);
+                    _iBaseHeight = TileSize * int.Parse(split[1]);
+                }
+
                 if (stringData.ContainsKey("KeyDoor"))
                 {
                     _bKeyDoor = true;

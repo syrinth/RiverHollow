@@ -167,7 +167,7 @@
     </Item>
     <Item>
       <Key>41</Key>
-      <Value>[Type:DungeonObject][Subtype:Door][Image:176-16][Width:16][Height:32]</Value>
+      <Value>[Type:DungeonObject][Subtype:Door][Image:80-96][Width:32][Height:32][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>42</Key>
@@ -180,6 +180,10 @@
     <Item>
       <Key>44</Key>
       <Value>[Type:CombatHazard][Subtype:Timed][Image:48-96][Width:16][Height:16][Damage:10][DrawOver]</Value>
+    </Item>
+	<Item>
+      <Key>45</Key>
+      <Value>[Type:DungeonObject][Subtype:Door][Image:256-80][Width:16][Height:48][Base:1-2]</Value>
     </Item>
   </Asset>
 </XnaContent>

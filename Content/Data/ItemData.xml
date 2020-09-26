@@ -403,7 +403,7 @@
     </Item>
     <Item>
       <Key>100</Key>
-      <Value>[Type:Tool][Image:0-112][Sell:5000][ToolType:Return][Charges:1]</Value>
+      <Value>[Type:Tool][Image:0-112][ToolType:Return][Charges:1]</Value>
     </Item>
     <Item>
       <Key>101</Key>

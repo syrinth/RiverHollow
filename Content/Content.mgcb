@@ -2369,3 +2369,48 @@
 /processorParam:Quality=Best
 /build:Sound/Stock/Effects/buzz.wav
 
+#begin Maps/Dungeons/mapForest_Dungeon_Wing_1_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_Wing_1_1.tmx
+
+#begin Maps/Dungeons/mapForest_Dungeon_Wing_1_2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_Wing_1_2.tmx
+
+#begin Maps/Dungeons/mapForest_Dungeon_Wing_1_3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_Wing_1_3.tmx
+
+#begin Maps/Dungeons/mapForest_Dungeon_Wing_1_4.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_Wing_1_4.tmx
+
+#begin Maps/Dungeons/mapForest_Dungeon_Wing_1_5.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_Wing_1_5.tmx
+
+#begin Maps/Dungeons/mapForest_Dungeon_Wing_1_6.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_Wing_1_6.tmx
+
+#begin Maps/Dungeons/mapForest_Dungeon_Wing_1_7.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_Wing_1_7.tmx
+
+#begin Maps/Dungeons/mapForest_Dungeon_Wing_1_8.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_Wing_1_8.tmx
+
+#begin Maps/Dungeons/mapForest_Dungeon_Wing_1_9.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_Wing_1_9.tmx
+

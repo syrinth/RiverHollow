@@ -1171,13 +1171,7 @@ namespace RiverHollow.Tile_Engine
                     Item it = _liItems[i];
                     if (it.ManualPickup && it.CollisionBox.Contains(GUICursor.GetWorldMousePosition()))
                     {
-                        if(it.CompareType(ItemEnum.Special) && it.CompareSpecialType(SpecialItemEnum.DungeonKey))
-                        {
-                            DungeonManager.AddDungeonKey();
-                            removedList.Add(it);
-                            break;
-                        }
-                        else if (InventoryManager.AddToInventory(it))
+                        if (InventoryManager.AddToInventory(it))
                         {
                             removedList.Add(it);
                             break;

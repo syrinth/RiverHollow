@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.2.4" name="tilesetDungeon" tilewidth="16" tileheight="16" tilecount="160" columns="20">
+<tileset version="1.4" tiledversion="1.4.1" name="tilesetDungeon" tilewidth="16" tileheight="16" tilecount="160" columns="20">
  <image source="..\Tilesets\tilesetDungeon.png" trans="ffffff" width="320" height="128"/>
  <terraintypes>
   <terrain name="Floor" tile="9"/>
@@ -10,9 +10,6 @@
  <tile id="1" terrain=",,1,1" probability="0.1"/>
  <tile id="2" terrain=",,1,1"/>
  <tile id="3" terrain=",,1,">
-  <properties>
-   <property name="Impassable" type="bool" value="true"/>
-  </properties>
   <objectgroup draworder="index">
    <object id="1" x="0.0222222" y="12.9778" width="16" height="3.04444"/>
   </objectgroup>

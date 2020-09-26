@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using RiverHollow.Items;
-
+using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Items.Item;
 
 namespace RiverHollow.Game_Managers
@@ -294,6 +294,13 @@ Exit:
         private static bool AddToInventory(Item itemToAdd, Item[,] inventory)
         {
             bool rv = false;
+
+            if (itemToAdd.CompareType(ItemEnum.Special) && itemToAdd.CompareSpecialType(SpecialItemEnum.DungeonKey))
+            {
+                DungeonManager.AddDungeonKey();
+                return true;
+            }
+
             int validRow = -1;
             int validCol = -1;
             //First,confirm that the inventory has space to proceed
