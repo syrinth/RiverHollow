@@ -2414,3 +2414,28 @@
 /processor:TiledMapProcessor
 /build:Maps/Dungeons/mapForest_Dungeon_Wing_1_9.tmx
 
+#begin Maps/Dungeons/mapForest_Dungeon_Wing_1_10.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_Wing_1_10.tmx
+
+#begin Maps/Dungeons/mapForest_Dungeon_Wing_1_11.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_Wing_1_11.tmx
+
+#begin Maps/Dungeons/mapForest_Dungeon_Wing_1_12.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_Wing_1_12.tmx
+
+#begin Maps/Dungeons/mapForest_Dungeon_Wing_1_13.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Dungeons/mapForest_Dungeon_Wing_1_13.tmx
+
+#begin Maps/Forest/mapForest_17.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Forest/mapForest_17.tmx
+

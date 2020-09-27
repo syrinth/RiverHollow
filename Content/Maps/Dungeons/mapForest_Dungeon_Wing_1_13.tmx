@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="52">
  <properties>
-  <property name="ActiveSpawn" type="int" value="1"/>
+  <property name="ActiveSpawn" type="int" value="3"/>
   <property name="Dungeon" value="Forest"/>
   <property name="Outside" type="bool" value="false"/>
   <property name="ResourcesMinMax" value="30-60"/>
@@ -77,7 +77,7 @@
   <object id="19" name="Entrance" x="224" y="284" width="32" height="4">
    <properties>
     <property name="EntranceDir" value="Up"/>
-    <property name="Map" value="mapForest_Dungeon_Wing_1_4"/>
+    <property name="Map" value="mapForest_Dungeon_Wing_1_12"/>
    </properties>
   </object>
  </objectgroup>
@@ -87,7 +87,7 @@
     <property name="Resources" value="20"/>
    </properties>
   </object>
-  <object id="40" name="ResourceSpawn" x="64.1668" y="80.084" width="126.333" height="78.833">
+  <object id="40" name="ResourceSpawn" x="64.5766" y="80.084" width="126.333" height="105.471">
    <properties>
     <property name="Resources" value="20"/>
    </properties>
@@ -102,7 +102,7 @@
     <property name="SpawnType" value="Forest"/>
    </properties>
   </object>
-  <object id="47" name="SpawnPoint" x="386" y="197.25" width="10" height="8.5">
+  <object id="47" name="SpawnPoint" x="387.229" y="162.825" width="10" height="8.5">
    <properties>
     <property name="SpawnType" value="Forest"/>
    </properties>
@@ -115,14 +115,14 @@
   <object id="49" name="DungeonObject" x="224" y="96" width="16" height="16">
    <properties>
     <property name="ID" type="int" value="40"/>
-    <property name="OutTrigger" value="Trigger_1"/>
+    <property name="OutTrigger" value="Trigger_Forest_2"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="6" name="Character">
-  <object id="51" name="CombatStart" x="210.755" y="211.505" width="10.4901" height="8.9907">
+  <object id="51" name="CombatStart" x="209.089" y="212.297" width="10.4901" height="8.9907">
    <properties>
-    <property name="Map" value="mapForest_Dungeon_Wing_1_4"/>
+    <property name="Map" value="mapForest_Dungeon_Wing_1_12"/>
     <property name="Position" value="NW"/>
    </properties>
   </object>

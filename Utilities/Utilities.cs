@@ -327,6 +327,7 @@ namespace RiverHollow.Utilities
             {
                 obj = dict[key];
             }
+            else { obj = string.Empty; }
         }
         public static void AssignValue(ref int obj, string key, Dictionary<string, string> dict)
         {

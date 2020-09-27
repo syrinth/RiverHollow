@@ -61,13 +61,15 @@ namespace RiverHollow.Game_Managers
         public static int MaxBldgLevel = 3;
         public static Dictionary<int, Upgrade> DiUpgrades;
         public static Dictionary<int, Quest> DiQuests;
+        private static List<TriggerObject> _liTriggerObjects;
+        private static List<Spirit> _liSpirits;
 
         public static ShippingGremlin ShippingGremlin;
         public static Merchandise gmMerchandise;
         public static TalkingActor CurrentNPC;
         public static Item gmActiveItem;
         public static Spirit gmSpirit;
-        public static DungeonObject gmDungeonObject;
+        public static TriggerObject gmDungeonObject;
         public static DisplayTypeEnum CurrentInventoryDisplay;
 
         public static int MAX_NAME_LEN = 10;
@@ -85,6 +87,8 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadContent(ContentManager Content)
         {
+            _liSpirits = new List<Spirit>();
+            _liTriggerObjects = new List<TriggerObject>();
             SlainMonsters = new List<GUISprite>();
             DiUpgrades = new Dictionary<int, Upgrade>();
             foreach (KeyValuePair<int, string> kvp in DataManager.DiUpgrades)
@@ -161,6 +165,31 @@ namespace RiverHollow.Game_Managers
         {
             return (int)(Scale * val);
         }
+
+        #region Trigger Handling
+        public static void AddTrigger(TriggerObject t)
+        {
+            _liTriggerObjects.Add(t);
+        }
+
+        public static void AddSpirit(Spirit s)
+        {
+            _liSpirits.Add(s);
+        }
+
+        public static void ActivateTriggers(string triggerName)
+        {
+            foreach(TriggerObject t in _liTriggerObjects)
+            {
+                t.AttemptToTrigger(triggerName);
+            }
+
+            foreach (Spirit s in _liSpirits)
+            {
+                s.AttemptToAwaken(triggerName);
+            }
+        }
+        #endregion
 
         #region Held Objects
         static Item _heldItem;

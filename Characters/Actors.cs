@@ -401,7 +401,7 @@ namespace RiverHollow.Characters
             Rectangle testRectY = Util.FloatRectangle(Position.X, Position.Y + direction.Y, CollisionBox.Width, CollisionBox.Height);
 
             //Check for collisions against the map and, if none are detected, move. Do not move if the direction Vector2 is Zero
-            if (CombatManager.InCombat || CurrentMap.CheckForCollisions(this, testRectX, testRectY, ref direction, ignoreCollisions) && direction != Vector2.Zero)
+            if ((CombatManager.InCombat && CurrentMap == MapManager.CurrentMap) || CurrentMap.CheckForCollisions(this, testRectX, testRectY, ref direction, ignoreCollisions) && direction != Vector2.Zero)
             {
                 DetermineFacing(direction);
                 Position += new Vector2(direction.X, direction.Y);
@@ -3045,18 +3045,22 @@ namespace RiverHollow.Characters
         string _sCondition;
         string _sText;
         public int SongID { get; } = 1;
+        private string _sAwakenTrigger;
 
-        public bool Triggered;
+        private bool _bAwoken = false;
+        public bool Triggered = false;
 
-        public Spirit(string name, string type, string condition, string text) : base()
+        public Spirit(Dictionary<string, string> stringData) : base()
         {
             _eActorType = ActorEnum.Spirit;
             _fVisibility = MIN_VISIBILITY;
 
-            _sName = name;
-            _iID = int.Parse(type);
-            _sText = text;
-            _sCondition = condition;
+            Util.AssignValue(ref _sName, "Name", stringData);
+            Util.AssignValue(ref _iID, "ID", stringData);
+            Util.AssignValue(ref _sText, "Text", stringData);
+            Util.AssignValue(ref _sCondition, "Condition", stringData);
+            Util.AssignValue(ref _sAwakenTrigger, "AwakenTrigger", stringData);
+
             _bActive = false;
 
             _iWidth = TileSize;
@@ -3068,34 +3072,44 @@ namespace RiverHollow.Characters
 
         public override void Update(GameTime gTime)
         {
-            _sprBody.Update(gTime);
-            //if (_bActive)
-            //{
-            //    base.Update(gTime);
-            //    if (!Triggered)
-            //    {
-            //        int max = TileSize * 13;
-            //        int dist = 0;
-            //        if (PlayerManager.CurrentMap == CurrentMapName && PlayerManager.PlayerInRangeGetDist(_spriteBody.Center.ToPoint(), max, ref dist))
-            //        {
-            //            float fMax = max;
-            //            float fDist = dist;
-            //            float percentage = (Math.Abs(dist - fMax)) / fMax;
-            //            percentage = Math.Max(percentage, MIN_VISIBILITY);
-            //            _fVisibility = 0.4f * percentage;
-            //        }
-            //    }
-            //}
+            if (_bActive && _bAwoken)
+            {
+                _sprBody.Update(gTime);
+                //if (_bActive)
+                //{
+                //    base.Update(gTime);
+                //    if (!Triggered)
+                //    {
+                //        int max = TileSize * 13;
+                //        int dist = 0;
+                //        if (PlayerManager.CurrentMap == CurrentMapName && PlayerManager.PlayerInRangeGetDist(_spriteBody.Center.ToPoint(), max, ref dist))
+                //        {
+                //            float fMax = max;
+                //            float fDist = dist;
+                //            float percentage = (Math.Abs(dist - fMax)) / fMax;
+                //            percentage = Math.Max(percentage, MIN_VISIBILITY);
+                //            _fVisibility = 0.4f * percentage;
+                //        }
+                //    }
+                //}
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
-            if (_bActive)
+            if (_bActive && _bAwoken)
             {
                 _sprBody.Draw(spriteBatch, useLayerDepth, _fVisibility);
             }
         }
 
+        public void AttemptToAwaken(string triggerName)
+        {
+            if (_sAwakenTrigger.Equals(triggerName))
+            {
+                _bAwoken = true;
+            }
+        }
         public void CheckCondition()
         {
             bool active = false;

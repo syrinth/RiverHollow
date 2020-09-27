@@ -12,7 +12,7 @@ using RiverHollow.Utilities;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Items.WorldItem;
-using static RiverHollow.Items.DungeonObject;
+using static RiverHollow.Items.TriggerObject;
 
 namespace RiverHollow.Game_Managers
 {
@@ -439,7 +439,7 @@ namespace RiverHollow.Game_Managers
             else { return null; }
         }
 
-        public static DungeonObject GetDungeonObject(Dictionary<string, string> data, Vector2 pos)
+        public static TriggerObject GetDungeonObject(Dictionary<string, string> data, Vector2 pos)
         {
             int id = int.Parse(data["ID"]);
             if (id != -1 && _diWorldObjects.ContainsKey(id))
@@ -456,7 +456,7 @@ namespace RiverHollow.Game_Managers
                     return new Door(id, liData, pos);
                 }
                 else if (liData["Subtype"].Equals("Trigger")){
-                    return new TriggerObject(id, liData, pos);
+                    return new Trigger(id, liData, pos);
                 }
             }
 

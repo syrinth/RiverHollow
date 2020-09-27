@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="46">
  <properties>
-  <property name="ActiveSpawn" type="int" value="0"/>
+  <property name="ActiveSpawn" type="int" value="1"/>
   <property name="Dungeon" value="Forest"/>
   <property name="Outside" type="bool" value="false"/>
   <property name="ResourcesMinMax" value="30-60"/>
@@ -88,7 +88,7 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
-  <object id="36" name="SpawnPoint" x="52.8333" y="101.417" width="10" height="8.5">
+  <object id="36" name="SpawnPoint" x="164.833" y="166.417" width="10" height="8.5">
    <properties>
     <property name="SpawnType" value="Forest"/>
    </properties>

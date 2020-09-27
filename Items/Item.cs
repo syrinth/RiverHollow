@@ -704,10 +704,8 @@ namespace RiverHollow.Items
     {
         private ConditionEnum _targetsCondition;
         public ConditionEnum Condition => _targetsCondition;
-        private int _iHealth;
-        public int Health => _iHealth;
-        private int _iMana;
-        public int Mana => _iMana;
+        public int Health { get; private set; }
+        public int Mana { get; private set; }
         private StatusEffect _statusEffect;
         private int _iStatusDuration;
 
@@ -719,8 +717,8 @@ namespace RiverHollow.Items
 
             Helpful = stringData["CombatType"].Equals("Helpful");
             if (stringData.ContainsKey("Status")){ _targetsCondition = Util.ParseEnum<ConditionEnum>(stringData["Status"]); }
-            if (stringData.ContainsKey("Hp")) { _iHealth = int.Parse(stringData["Hp"]); }
-            if (stringData.ContainsKey("Mana")) { _iMana = int.Parse(stringData["Mana"]); }
+            if (stringData.ContainsKey("Hp")) { Health = int.Parse(stringData["Hp"]); }
+            if (stringData.ContainsKey("Mana")) { Mana = int.Parse(stringData["Mana"]); }
             if (stringData.ContainsKey("StatusEffect")) {
                 string[] strBuffer = stringData["StatusEffect"].Split('-');
                 _statusEffect = DataManager.GetStatusEffectByIndex(int.Parse(strBuffer[0]));
@@ -736,8 +734,8 @@ namespace RiverHollow.Items
             string rv = base.GetDescription();
             rv += System.Environment.NewLine;
             if (_targetsCondition > 0) { rv += "Fixes: " + _targetsCondition.ToString() + " "; }
-            if (_iHealth > 0) { rv += "Health: +" + _iHealth + " "; }
-            if (_iMana > 0) { rv += "Mana: +" + _iMana + " "; }
+            if (Health > 0) { rv += "Health: +" + Health + " "; }
+            if (Mana > 0) { rv += "Mana: +" + Mana + " "; }
             rv = rv.Trim();
 
             return rv;
@@ -749,8 +747,8 @@ namespace RiverHollow.Items
             {
                 CombatActor target = PlayerManager.GetParty()[int.Parse(action)];
 
-                if (_iHealth > 0) { target.ModifyHealth(_iHealth, false); }
-                if (_iMana > 0) { target.IncreaseMana(_iMana); }
+                if (Health > 0) { target.ModifyHealth(Health, false); }
+                if (Mana > 0) { target.IncreaseMana(Mana); }
                 if(_statusEffect != null) { target.AddStatusEffect(_statusEffect); }
 
                 Remove(1);

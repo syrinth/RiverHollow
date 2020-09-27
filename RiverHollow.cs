@@ -278,7 +278,7 @@ namespace RiverHollow
             }
             else
             {
-                PlayerManager.AddToQuestLog(GameManager.DiQuests[2]);
+                //PlayerManager.AddToQuestLog(GameManager.DiQuests[2]);
             }
 
             StartGame();

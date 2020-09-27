@@ -1176,16 +1176,19 @@ namespace RiverHollow.Items
         }
     }
 
-    public abstract class DungeonObject : WorldObject
+    public abstract class TriggerObject : WorldObject
     {
         #region constants
         const string MATCH_TRIGGER = "MatchTrigger";
         const string TRIGGER_NUMBER = "TriggerNumber";
         const string ITEM_KEY_ID = "ItemKeyID";
+        const string OUT_TRIGGER = "OutTrigger";
+
         #endregion
 
         enum DungeonObjectType { Trigger, Door };
         readonly DungeonObjectType _eSubType;
+        readonly string _sOutTrigger;   //What trigger response is sent
         protected string _sMatchTrigger; //What, if anything, the object responds to
         protected int _iTriggerNumber = 1;
         protected int _iTriggersLeft = 1;
@@ -1193,11 +1196,12 @@ namespace RiverHollow.Items
         readonly int _iItemKeyID = -1;
         bool _bHasBeenTriggered = false;
 
-        protected DungeonObject(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
+        protected TriggerObject(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos)
         {
             LoadDictionaryData(stringData);
             _eSubType = Util.ParseEnum<DungeonObjectType>(stringData["Subtype"]);
 
+            Util.AssignValue(ref _sOutTrigger, OUT_TRIGGER, stringData);
             Util.AssignValue(ref _sMatchTrigger, MATCH_TRIGGER, stringData);
             Util.AssignValue(ref _iTriggerNumber, TRIGGER_NUMBER, stringData);
             Util.AssignValue(ref _iItemKeyID, ITEM_KEY_ID, stringData);
@@ -1259,7 +1263,7 @@ namespace RiverHollow.Items
         /// <summary>
         /// This method is called to trigger the object and make it send its trigger
         /// </summary>
-        public virtual void Trigger() { }
+        public virtual void FireTrigger() { }
 
         /// <summary>
         /// Call this to reset the DungeonObject to its original state.
@@ -1297,17 +1301,11 @@ namespace RiverHollow.Items
             return _iTriggersLeft == 0;
         }
 
-        public class TriggerObject : DungeonObject
+        public class Trigger : TriggerObject
         {
-            #region constants
-            const string OUT_TRIGGER = "OutTrigger";
-            #endregion
-
-            readonly string _sOutTrigger;   //What trigger response is sent
             Item _item;
-            public TriggerObject(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
+            public Trigger(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
             {
-                Util.AssignValue(ref _sOutTrigger, OUT_TRIGGER, stringData);
                 _item = DataManager.GetItem(_iItemKeyID);
 
                 if (_iItemKeyID == -1)
@@ -1341,7 +1339,7 @@ namespace RiverHollow.Items
                         GUIManager.OpenMainObject(new HUDInventoryDisplay());
                     }
                     else {
-                        Trigger();
+                        FireTrigger();
                     }
                 }
             }
@@ -1350,22 +1348,22 @@ namespace RiverHollow.Items
             {
                 if (CanTrigger(name))
                 {
-                    Trigger();
+                    FireTrigger();
                 }
             }
 
-            public override void Trigger()
+            public override void FireTrigger()
             {
                 if(CanTrigger())
                 {
                     _bHasBeenTriggered = true;
                     _sprite.PlayAnimation(AnimationEnum.ObjectAction1);
-                    DungeonManager.ActivateTrigger(_sOutTrigger);
+                    GameManager.ActivateTriggers(_sOutTrigger);
                 }
             }
         }
 
-        public class Door : DungeonObject
+        public class Door : TriggerObject
         {
             public override Rectangle CollisionBox => new Rectangle((int)MapPosition.X, (int)MapPosition.Y + (_iHeight - BaseHeight), BaseWidth, BaseHeight);
 
@@ -1394,6 +1392,10 @@ namespace RiverHollow.Items
             {
                 if (CanTrigger(name))
                 {
+                    if (!string.IsNullOrEmpty(_sOutTrigger))
+                    {
+                        GameManager.ActivateTriggers(_sOutTrigger);
+                    }
                     _bHasBeenTriggered = true;
                     _bImpassable = false;
                     _bVisible = false;

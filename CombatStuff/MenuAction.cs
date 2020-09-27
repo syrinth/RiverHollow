@@ -885,11 +885,14 @@ namespace RiverHollow.CombatStuff
 
         public void UseSkillOnTarget()
         {
-            CombatManager.ActiveCharacter.CurrentMP -= _iMPcost;          //Checked before Processing
-            AssignTargetTile(CombatManager.SelectedTile);
+            if (CombatManager.LegalTiles.Contains(CombatManager.SelectedTile))
+            {
+                CombatManager.ActiveCharacter.CurrentMP -= _iMPcost;          //Checked before Processing
+                AssignTargetTile(CombatManager.SelectedTile);
 
-            CombatManager.ChangePhase(CombatManager.CmbtPhaseEnum.PerformAction);
-            CombatManager.ClearToPerformAction();
+                CombatManager.ChangePhase(CombatManager.CmbtPhaseEnum.PerformAction);
+                CombatManager.ClearToPerformAction();
+            }
         }
         public void ClearTargets()
         {

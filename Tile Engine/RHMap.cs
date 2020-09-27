@@ -63,7 +63,6 @@ namespace RiverHollow.Tile_Engine
         protected List<WorldActor> _liActors;
         protected List<Monster> _liMonsters;
         public List<Monster> Monsters => _liMonsters;
-        protected List<DungeonObject> _liDungeonObjects;
         public List<WorldActor> ToRemove;
         public List<WorldActor> ToAdd;
         protected List<Building> _liBuildings;
@@ -98,7 +97,6 @@ namespace RiverHollow.Tile_Engine
             DictionaryTravelPoints = new Dictionary<string, TravelPoint>();
             DictionaryCharacterLayer = new Dictionary<string, Vector2>();
             _liShopData = new List<ShopData>();
-            _liDungeonObjects = new List<DungeonObject>();
             _liPlacedWorldObjects = new List<WorldObject>();
             _liRandomSpawnItems = new List<int>();
             _liCutscenes = new List<int>();
@@ -249,17 +247,17 @@ namespace RiverHollow.Tile_Engine
                 }
                 else if (ol.Name.Contains("Character"))
                 {
-                    foreach (TiledMapObject mapObject in ol.Objects)
+                    foreach (TiledMapObject obj in ol.Objects)
                     {
-                        if (mapObject.Name.Equals("CombatStart"))
+                        if (obj.Name.Equals("CombatStart"))
                         {
-                            string entrance = mapObject.Properties["Map"];
+                            string entrance = obj.Properties["Map"];
                             RHTile[,] tiles = new RHTile[3, 3];
 
                             DirectionEnum sidle = DirectionEnum.Right;
                             DirectionEnum change = DirectionEnum.Down;
 
-                            string startPoint = mapObject.Properties["Position"];
+                            string startPoint = obj.Properties["Position"];
                             if (startPoint == "NW")
                             {
                                 sidle = DirectionEnum.Right;
@@ -281,7 +279,7 @@ namespace RiverHollow.Tile_Engine
                                 change = DirectionEnum.Right;
                             }
 
-                            tiles[0, 0] = GetTileByPixelPosition(mapObject.Position);
+                            tiles[0, 0] = GetTileByPixelPosition(obj.Position);
                             tiles[1, 0] = tiles[0, 0].GetTileByDirection(sidle);
                             tiles[2, 0] = tiles[1, 0].GetTileByDirection(sidle);
 
@@ -294,13 +292,23 @@ namespace RiverHollow.Tile_Engine
                             tiles[2, 2] = tiles[1, 2].GetTileByDirection(sidle);
                             DictionaryCombatTiles[entrance] = tiles;
                         }
-                        else if (mapObject.Name.Equals("Shop"))
+                        else if (obj.Name.Equals("Shop"))
                         {
-                            _liShopData.Add(new ShopData(_sName, mapObject));
+                            _liShopData.Add(new ShopData(_sName, obj));
+                        }
+                        else if (obj.Name.Equals("Spirit"))
+                        {
+                            Spirit s = new Spirit(obj.Properties)
+                            {
+                                Position = Util.SnapToGrid(obj.Position),
+                                CurrentMapName = _sName
+                            };
+                            GameManager.AddSpirit(s);
+                            _liActors.Add(s);
                         }
                         else
                         {
-                            DictionaryCharacterLayer.Add(mapObject.Name, mapObject.Position);
+                            DictionaryCharacterLayer.Add(obj.Name, obj.Position);
                         }
                     }
                 }
@@ -327,10 +335,10 @@ namespace RiverHollow.Tile_Engine
             {
                 if (obj.Name.Equals("DungeonObject"))
                 {
-                    DungeonObject d = DataManager.GetDungeonObject(obj.Properties, Util.SnapToGrid(obj.Position));
+                    TriggerObject d = DataManager.GetDungeonObject(obj.Properties, Util.SnapToGrid(obj.Position));
 
                     PlaceWorldObject(d);
-                    _liDungeonObjects.Add(d);
+                    GameManager.AddTrigger(d);
                  }
                 else if (obj.Name.Equals("WorldObject"))
                 {
@@ -348,15 +356,6 @@ namespace RiverHollow.Tile_Engine
                         InventoryManager.AddToInventory(int.Parse(s), 1, false);
                     }
                     InventoryManager.ClearExtraInventory();
-                }
-                else if (obj.Name.Equals("Spirit"))
-                {
-                    Spirit s = new Spirit(obj.Properties["Name"], obj.Properties["Type"], obj.Properties["Condition"], obj.Properties["Text"])
-                    {
-                        Position = Util.SnapToGrid(obj.Position),
-                        CurrentMapName = _sName
-                    };
-                    _liActors.Add(s);
                 }
                 else if (obj.Name.Equals("SpawnPoint"))
                 {
@@ -1129,8 +1128,8 @@ namespace RiverHollow.Tile_Engine
                 }
                 else if (obj.CompareType(ObjectTypeEnum.DungeonObject))
                 {
-                    GameManager.gmDungeonObject = (DungeonObject)obj;
-                    ((DungeonObject)obj).Interact();
+                    GameManager.gmDungeonObject = (TriggerObject)obj;
+                    ((TriggerObject)obj).Interact();
                 }
             }
 
@@ -1999,18 +1998,6 @@ namespace RiverHollow.Tile_Engine
             foreach(int cutsceneID in _liCutscenes)
             {
                 CutsceneManager.CheckForTriggedCutscene(cutsceneID);
-            }
-        }
-
-        /// <summary>
-        /// Search through this map for any trigger objects and activate them as appropriate.
-        /// </summary>
-        /// <param name="triggerName">Name of the trigger to activate</param>
-        public void ActivateTrigger(string triggerName)
-        {
-            foreach(DungeonObject obj in _liDungeonObjects)
-            {
-                obj.AttemptToTrigger(triggerName);
             }
         }
 

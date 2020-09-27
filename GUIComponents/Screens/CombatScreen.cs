@@ -69,50 +69,6 @@ namespace RiverHollow.GUIComponents.Screens
                     break;
             }
 
-            //switch (CombatManager.CurrentPhase)
-            //{
-            //    case CombatManager.PhaseEnum.EnemyTurn:
-            //        _gTurnOrder.CalculateTurnOrder();
-            //        CombatManager.SelectedAction.SetSkillTarget();
-            //        break;
-
-            //    case CombatManager.PhaseEnum.NewTurn:
-            //        if (!CombatManager.ActiveCharacter.IsActorType(ActorEnum.Monster))
-            //        {
-            //            _gActionSelect.SetCharacter(CombatManager.ActiveCharacter);
-            //            _gActionSelect.AnchorToScreen(SideEnum.Bottom);
-            //        }
-            //        _gTurnOrder.CalculateTurnOrder();
-            //        CombatManager.SelectedAction = null;
-            //        CombatManager.ChangePhase(CombatManager.PhaseEnum.SelectSkill);
-            //        break;
-
-            //    case CombatManager.PhaseEnum.ChooseTarget:
-            //        ;
-
-            //    case CombatManager.PhaseEnum.DisplayAttack:
-            //        _gActionSelect.SetCharacter(null);
-            //        if (!string.IsNullOrEmpty(CombatManager.Text))
-            //        {
-            //            if (_gActionTextWindow == null)
-            //            {
-            //                _gActionTextWindow = new GUITextWindow(CombatManager.Text, 0.5);
-            //                _gActionTextWindow.CenterOnScreen();
-            //                AddControl(_gActionTextWindow);
-            //            }
-            //            else
-            //            {
-            //                _gActionTextWindow.Update(gTime);
-            //                if (_gActionTextWindow.Duration <= 0)
-            //                {
-            //                    RemoveControl(_gActionTextWindow);
-            //                    _gActionTextWindow = null;
-            //                    CombatManager.ChangePhase(CombatManager.PhaseEnum.PerformAction);
-            //                }
-            //            }
-            //        }
-            //        break;
-
             List<Summon> summons = new List<Summon>();
             foreach (CombatActor act in CombatManager.Party)
             {

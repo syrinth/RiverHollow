@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using RiverHollow.Items;
 using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
@@ -43,16 +44,6 @@ namespace RiverHollow.Game_Managers
 
             return rv;
         }
-
-        public static void ActivateTrigger(string triggerName)
-        {
-            ActivateTrigger(MapManager.CurrentMap.DungeonName, triggerName);
-        }
-
-        public static void ActivateTrigger(string dungeonName, string triggerName)
-        {
-            _liDungeons[dungeonName]?.ActivateTrigger(triggerName);
-        }
     }
 
     public class Dungeon
@@ -90,14 +81,5 @@ namespace RiverHollow.Game_Managers
 
         public void AddKey() { NumKeys++; }
         public void UseKey() { NumKeys--; }
-
-        public void ActivateTrigger(string triggerName)
-        {
-            foreach(string mapName in _liMapNames)
-            {
-                MapManager.Maps[mapName].ActivateTrigger(triggerName);
-            }
-        }
-
     }
 }
