@@ -52,7 +52,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public GUITextWindow(string text, bool open = true) : this()
         {
             ConfigureHeight();
-            ParseText(text);
+            ParseText(text, false);
 
             Setup(open);
         }
@@ -146,13 +146,14 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 HandleOpening(gTime);
             }
             else
-            { 
+            {
                 if (ShowNextButton())
                 {
                     _gNext.Update(gTime);
                 }
 
-                if (Duration > 0) { Duration -= gTime.ElapsedGameTime.TotalSeconds; }
+                // if (Duration > 0) { Duration -= gTime.ElapsedGameTime.TotalSeconds; }
+
                 _giText.Update(gTime);
 
                 if (_giText.Done)

@@ -2,12 +2,16 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Game_Managers;
-
+using RiverHollow.Utilities;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
     public class GUIText : GUIObject
     {
+        enum LastCharacter { Even, Odd, Space };
+        LastCharacter _eCurrChar;
+        const string TYPE_SOUND = "Sample4";
+
         protected string _sText;
         protected string _sFullText;
         public string Text => _sText;
@@ -23,11 +27,12 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public int Length => _sText.Length;
 
         #region Parsing and Display
+        double _dTextTimer = 0;
         double _dTypedTextLen;
-        int _iDelayMS = 10;
+        const double TEXT_DELAY = 0.08;
         protected int _iMaxRows = 3;
 
-        public bool PrintAll = true;
+        public bool PrintAll = false;
         bool _bDone = false;
         public bool Done => _bDone;
         #endregion
@@ -150,15 +155,30 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 {
                     if (_dTypedTextLen < _sFullText.Length)
                     {
-                        _dTypedTextLen = _dTypedTextLen + (gTime.ElapsedGameTime.TotalMilliseconds / _iDelayMS);
-
-                        if (_dTypedTextLen >= _sFullText.Length)
+                        if (_dTextTimer < TEXT_DELAY)
                         {
-                            _dTypedTextLen = _sFullText.Length; //Required because of the imprecise way we calculate
-                            _bDone = true;
+                            _dTextTimer += gTime.ElapsedGameTime.TotalSeconds;
                         }
+                        else
+                        {
+                            _dTextTimer = 0;
+                            _dTypedTextLen++;
 
-                        _sText = _sFullText.Substring(0, (int)_dTypedTextLen);
+                            if (_dTypedTextLen == _sFullText.Length) { _bDone = true; }
+
+                            _sText = _sFullText.Substring(0, (int)_dTypedTextLen);
+
+
+                            if (_sText[_sText.Length - 1].Equals(' ')) { _eCurrChar = LastCharacter.Space; }
+
+                            if (_eCurrChar == LastCharacter.Space) { _eCurrChar = LastCharacter.Even; }
+                            else if (_eCurrChar == LastCharacter.Odd) { _eCurrChar = LastCharacter.Even; }
+                            else if (_eCurrChar == LastCharacter.Even)
+                            {
+                                SoundManager.PlayEffect(TYPE_SOUND);
+                                _eCurrChar = LastCharacter.Odd;
+                            }
+                        }
                     }
                 }
             }

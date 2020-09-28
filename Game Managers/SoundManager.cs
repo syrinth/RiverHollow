@@ -16,9 +16,10 @@ namespace RiverHollow.Game_Managers
         static Song _queuedSong;
         const float PHASE_VAL = 0.02f;
 
-        const string _sSongFolder = @"Content\Sound\Stock\Songs";
-        const string _sEffectFolder = @"Content\Sound\Stock\Effects";
-        const string _sHarpFolder = @"Content\Sound\Stock\Harp";
+        const string SONG_FOLDER = @"Content\Sound\Stock\Songs";
+        const string STOCK_EFFECT_FOLDER = @"Content\Sound\Stock\Effects";
+        const string EFFECT_FOLDER = @"Content\Sound\Original\Effects";
+        const string HARP_FOLDER = @"Content\Sound\Stock\Harp";
         static float _fMusicVol = 0.4f;
         public static float MusicVolume => _fMusicVol;
         static float _fEffectVol = 0.4f;
@@ -38,9 +39,10 @@ namespace RiverHollow.Game_Managers
             _diCurrentEffects = new Dictionary<object, EffectData>();
 
             MediaPlayer.Volume = _fMusicVol;
-            foreach (string s in Directory.GetFiles(_sSongFolder)) { AddSong(Content, s); }
-            foreach (string s in Directory.GetFiles(_sEffectFolder)) { AddEffect(Content, s); }
-            foreach (string s in Directory.GetFiles(_sHarpFolder)) { AddEffect(Content, s); }
+            foreach (string s in Directory.GetFiles(SONG_FOLDER)) { AddSong(Content, s); }
+            foreach (string s in Directory.GetFiles(STOCK_EFFECT_FOLDER)) { AddEffect(Content, s); }
+            foreach (string s in Directory.GetFiles(EFFECT_FOLDER)) { AddEffect(Content, s); }
+            foreach (string s in Directory.GetFiles(HARP_FOLDER)) { AddEffect(Content, s); }
         }
 
         public static void Update(GameTime gameTime)
