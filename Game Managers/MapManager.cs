@@ -171,7 +171,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            FadeToNewMap(Maps[b.MapName], tPoint.FindLinkedPointPosition(doorLoc.Center, PlayerManager.World), b);
+            FadeToNewMap(Maps[b.MapName], tPoint.GetMovedCenter(), b);
         }
 
         public static void BackToPlayer()

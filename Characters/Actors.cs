@@ -2866,16 +2866,10 @@ namespace RiverHollow.Characters
         public AnimatedSprite EyeSprite => _sprEyes;
         AnimatedSprite _sprHair;
         public AnimatedSprite HairSprite => _sprHair;
-
-        Color _cHairColor = Color.White;
-        public Color HairColor => _cHairColor;
-
-        int _iHairIndex = 0;
-        public int HairIndex => _iHairIndex;
-
-        int _iBodyType = 1;
-        public int BodyType => _iBodyType;
-        public string BodyTypeStr => _iBodyType.ToString("00");
+        public Color HairColor { get; private set; } = Color.White;
+        public int HairIndex { get; private set; } = 0;
+        public int BodyType { get; private set; } = 1;
+        public string BodyTypeStr => BodyType.ToString("00");
 
         protected override List<AnimatedSprite> GetSprites()
         {
@@ -2907,7 +2901,7 @@ namespace RiverHollow.Characters
             _iWidth = TileSize;
             _iHeight = HUMAN_HEIGHT;
 
-            _cHairColor = Color.Red;
+            HairColor = Color.Red;
 
             _liTilePath = new List<RHTile>();
 
@@ -2916,7 +2910,7 @@ namespace RiverHollow.Characters
             SetClothes((Clothes)DataManager.GetItem(int.Parse(DataManager.Config[6]["ItemID"])));
 
             _sprBody.SetColor(Color.White);
-            _sprHair.SetColor(_cHairColor);
+            _sprHair.SetColor(HairColor);
 
             SpdMult = NORMAL_SPEED;
         }
@@ -2949,7 +2943,7 @@ namespace RiverHollow.Characters
             LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, BodyTypeStr));
 
             //Hair type has already been set either by default or by being allocated.
-            SetHairType(_iHairIndex);
+            SetHairType(HairIndex);
 
             //Loads the Sprites for the players body for the appropriate class
             LoadSpriteAnimations(ref _sprEyes, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[x.ID]), string.Format(@"{0}Eyes", DataManager.FOLDER_PLAYER));
@@ -2963,14 +2957,14 @@ namespace RiverHollow.Characters
 
         public void SetHairColor(Color c)
         {
-            _cHairColor = c;
+            HairColor = c;
             SetColor(_sprHair, c);
         }
         public void SetHairType(int index)
         {
-            _iHairIndex = index;
+            HairIndex = index;
             //Loads the Sprites for the players hair animations for the class based off of the hair ID
-            LoadSpriteAnimations(ref _sprHair, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[CharacterClass.ID]), string.Format(@"{0}Hairstyles\Hair_{1}", DataManager.FOLDER_PLAYER, _iHairIndex));
+            LoadSpriteAnimations(ref _sprHair, LoadWorldAndCombatAnimations(DataManager.PlayerAnimationData[CharacterClass.ID]), string.Format(@"{0}Hairstyles\Hair_{1}", DataManager.FOLDER_PLAYER, HairIndex));
             _sprHair.SetDepthMod(HAIR_DEPTH);
         }
 
@@ -3029,7 +3023,7 @@ namespace RiverHollow.Characters
 
         public void SetBodyType(int val)
         {
-            _iBodyType = val;
+            BodyType = val;
             SetClass(_class);
             SetClothes(Hat);
             SetClothes(Body);

@@ -227,6 +227,19 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        /// <summary>
+        /// Stops the sound effect attached to theo bject
+        /// </summary>
+        /// <param name="obj">The object that the sound effect is attached to</param>
+        public static void StopEffect(object obj)
+        {
+            if (_diCurrentEffects.ContainsKey(obj))
+            {
+                _diCurrentEffects[obj].SoundEffect.Stop();
+                _diCurrentEffects.Remove(obj);
+            }
+        }
+
         private static float GetDistanceVolume(Vector2 loc)
         {
             //TODO: There should probably be a log function here? The sound seems to drop off and vanish almost immediately when we're out of range but be clear beforehand

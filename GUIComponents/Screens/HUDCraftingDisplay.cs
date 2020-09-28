@@ -27,7 +27,7 @@ namespace RiverHollow.GUIComponents.Screens
         public HUDCraftingDisplay(Machine crafter)
         {
             _craftMachine = crafter;
-            Setup(crafter.CraftList);
+            Setup(crafter.CraftingDictionary);
 
             //Need to set the Y component because the _inventory will be created at 0, 0
             //and the creation window will be put on top of it. Must set the Y before adding

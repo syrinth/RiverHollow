@@ -391,22 +391,19 @@ namespace RiverHollow.Items
 
         public class Machine : WorldItem
         {
-            string _sEffectWorking;
+            readonly string _sEffectWorking;
 
             //Processor variables
             Dictionary<int, ProcessRecipe> _diProcessing;
             ProcessRecipe CurrentlyProcessing => (_diProcessing.ContainsKey(_iCurrentlyMaking) ? _diProcessing[_iCurrentlyMaking] : null);
-
-            //Crafter variables
-            Dictionary<int, int> _diCrafting;
-            public Dictionary<int, int> CraftList => _diCrafting;
+            public Dictionary<int, int> CraftingDictionary { get; }
             int _iCurrentlyMaking = -1;
 
             protected int _iWorkingFrames = 2;
             protected float _fFrameSpeed = 0.3f;
             protected ItemBubble _itemBubble;
             protected Item _heldItem;
-            protected double _dProcessedTime;
+            protected double _dProcessedTime = 0;
             public double ProcessedTime => _dProcessedTime;
 
             public Machine(int id, Dictionary<string, string> stringData)
@@ -414,8 +411,7 @@ namespace RiverHollow.Items
                 LoadDictionaryData(stringData);
                 _iID = id;
                 _heldItem = null;
-                _dProcessedTime = -1;
-                _diCrafting = new Dictionary<int, int>();
+                CraftingDictionary = new Dictionary<int, int>();
                 _diProcessing = new Dictionary<int, ProcessRecipe>();             
 
                 if (stringData.ContainsKey("Work"))
@@ -449,15 +445,13 @@ namespace RiverHollow.Items
                     string[] processes = Util.GetEntries(stringData["Makes"]);
                     foreach (string recipe in processes)
                     {
+                        //Each entry is in written like ID-NumDays
                         string[] pieces = recipe.Split('-');
-                        _diCrafting.Add(int.Parse(pieces[0]), int.Parse(pieces[1]));
+                        CraftingDictionary.Add(int.Parse(pieces[0]), int.Parse(pieces[1]));
                     }
                 }
 
-                if (stringData.ContainsKey("WorkEffect"))
-                {
-                    _sEffectWorking = stringData["WorkEffect"];
-                }
+                Util.AssignValue(ref _sEffectWorking, "WorkEffect", stringData);
             }
 
             protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = "Textures\\texMachines")
@@ -492,11 +486,6 @@ namespace RiverHollow.Items
                 {
                     SoundManager.PlayEffectAtLoc(_sEffectWorking, _sMapName, MapPosition, this);
                     _sprite.Update(gTime);
-                    _dProcessedTime += gTime.ElapsedGameTime.TotalSeconds;
-                    if (_dProcessedTime >= _diCrafting[_iCurrentlyMaking])
-                    {
-                        SetHeldItem(_iCurrentlyMaking);
-                    }
                 }
             }
             public override void Draw(SpriteBatch spriteBatch)
@@ -510,9 +499,10 @@ namespace RiverHollow.Items
 
             public void SetHeldItem(int itemID)
             {
+                SoundManager.StopEffect(this);
                 SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition, this);
                 _heldItem = DataManager.GetItem(itemID);
-                _dProcessedTime = -1;
+                _dProcessedTime = 0;
                 _iCurrentlyMaking = -1;
                 _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
 
@@ -557,7 +547,14 @@ namespace RiverHollow.Items
                 _sprite.PlayAnimation(AnimationEnum.PlayAnimation);
             }
 
-            public virtual int GetProcessingItemId() { return -1; }
+            public void Rollover()
+            {
+                _dProcessedTime++;
+                if (_dProcessedTime >= CraftingDictionary[_iCurrentlyMaking])
+                {
+                    SetHeldItem(_iCurrentlyMaking);
+                }
+            }
 
             public MachineData SaveData()
             {
@@ -586,23 +583,19 @@ namespace RiverHollow.Items
 
             private class ProcessRecipe
             {
-                int _iInput;
-                public int Input => _iInput;
-                int _iReqInput;
-                public int InputNum => _iReqInput;
-                int _iOutput;
-                public int Output => _iOutput;
-                int _iProcessingTime;
-                public int ProcessingTime => _iProcessingTime;
+                public int Input { get; private set; }
+                public int InputNum { get; private set; }
+                public int Output { get; private set; }
+                public int ProcessingTime { get; private set; }
 
                 public ProcessRecipe(string[] data)
                 {
-                    _iInput = int.Parse(data[0]);
-                    _iProcessingTime = int.Parse(data[1]);
+                    Input = int.Parse(data[0]);
+                    ProcessingTime = int.Parse(data[1]);
 
-                    Item processedItem = DataManager.GetItem(_iInput);
-                    _iOutput = processedItem.RefinesInto.Key;
-                    _iReqInput = processedItem.RefinesInto.Value;
+                    Item processedItem = DataManager.GetItem(Input);
+                    Output = processedItem.RefinesInto.Key;
+                    InputNum = processedItem.RefinesInto.Value;
                 }
             }
 

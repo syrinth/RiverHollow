@@ -43,7 +43,7 @@
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Width:16][Height:32][Processes:32-10|33-10|34-10|35-10|36-10]</Value>
+      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Width:16][Height:32][Processes:32-10|33-10|34-10|35-10|36-10][WorkEffect:stove_fire]</Value>
     </Item>
     <Item>
       <Key>11</Key>
@@ -51,19 +51,19 @@
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Machine][Image:0-64][Work:3-0.15][Width:32][Height:32][Makes:107-130|108-15][Base:2-1][WorkEffect:bubbles]</Value>
+      <Value>[Type:Machine][Image:0-64][Work:3-0.15][Width:32][Height:32][Makes:107-2|108-3][Base:2-1][WorkEffect:bubbles]</Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:117-5|114-5|115-5|116-5|113-10|118-10][Base:2-1][Processes:32-10|33-10|34-10|35-10|36-10]</Value>
+      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:117-2|114-3|115-3|116-3|113-5|118-5][Base:2-1][Processes:32-10|33-10|34-10|35-10|36-10]</Value>
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Machine][Image:0-128][Work:3-0.15][Width:16][Height:32][Makes:109-15][Base:1-1]</Value>
+      <Value>[Type:Machine][Image:0-128][Work:3-0.15][Width:16][Height:32][Makes:109-2][Base:1-1]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Processes:25-5][Makes:85-15][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Processes:25-5][Makes:85-3][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>16</Key>

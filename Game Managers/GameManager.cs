@@ -12,6 +12,7 @@ using RiverHollow.Utilities;
 using static RiverHollow.Characters.ShopKeeper;
 using static RiverHollow.Characters.Actor;
 using RiverHollow.GUIComponents.GUIObjects;
+using static RiverHollow.Items.WorldItem;
 
 namespace RiverHollow.Game_Managers
 {
@@ -63,6 +64,7 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<int, Quest> DiQuests;
         private static List<TriggerObject> _liTriggerObjects;
         private static List<Spirit> _liSpirits;
+        private static List<Machine> _liMachines;
 
         public static ShippingGremlin ShippingGremlin;
         public static Merchandise gmMerchandise;
@@ -87,6 +89,7 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadContent(ContentManager Content)
         {
+            _liMachines = new List<Machine>();
             _liSpirits = new List<Spirit>();
             _liTriggerObjects = new List<TriggerObject>();
             SlainMonsters = new List<GUISprite>();
@@ -165,6 +168,21 @@ namespace RiverHollow.Game_Managers
         {
             return (int)(Scale * val);
         }
+
+        #region Machine Handling
+        public static void AddMachine(Machine m)
+        {
+            _liMachines.Add(m);
+        }
+
+        public static void RollOver()
+        {
+            foreach(Machine m in _liMachines)
+            {
+                m.Rollover();
+            }
+        }
+        #endregion
 
         #region Trigger Handling
         public static void AddTrigger(TriggerObject t)

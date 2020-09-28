@@ -1886,6 +1886,10 @@ namespace RiverHollow.Tile_Engine
 
             if (placeIt)
             {
+                if (obj.CompareType(ObjectTypeEnum.Machine))
+                {
+                    GameManager.AddMachine((Machine)obj);
+                }
                 AssignMapTiles(obj, liTiles);
                 rv = true;
             }
@@ -2835,27 +2839,23 @@ namespace RiverHollow.Tile_Engine
 
     public class TravelPoint
     {
-        int _ibuildingID = -1;
-        public int BuildingID => _ibuildingID;
-        Rectangle _rCollisionBox;
-        public Rectangle CollisionBox => _rCollisionBox;
-        public Point Location => _rCollisionBox.Location;
+        public int BuildingID { get; private set; } = -1;
+        public Rectangle CollisionBox { get; private set; }
+        public Point Location => CollisionBox.Location;
         string _sMapName;
-        string _sLinkedMap;
-        public string LinkedMap => _sLinkedMap;
-        public Vector2 Center => _rCollisionBox.Center.ToVector2();
-        bool _bDoor;
-        public bool IsDoor => _bDoor;
+        public string LinkedMap { get; private set; }
+        public Vector2 Center => CollisionBox.Center.ToVector2();
+        public bool IsDoor { get; private set; }
 
         DirectionEnum _eEntranceDir;
 
         public TravelPoint(TiledMapObject obj, string mapName)
         {
             _sMapName = mapName;
-            _rCollisionBox = Util.FloatRectangle(obj.Position, obj.Size.Width, obj.Size.Height);
+            CollisionBox = Util.FloatRectangle(obj.Position, obj.Size.Width, obj.Size.Height);
             if (obj.Properties.ContainsKey("Map"))
             {
-                _sLinkedMap = obj.Properties["Map"] == "Home" ? MapManager.HomeMap : obj.Properties["Map"];
+                LinkedMap = obj.Properties["Map"] == "Home" ? MapManager.HomeMap : obj.Properties["Map"];
             }
             if (obj.Properties.ContainsKey("EntranceDir"))
             {
@@ -2864,15 +2864,16 @@ namespace RiverHollow.Tile_Engine
         }
         public TravelPoint(Rectangle collision, string linkedMap, int buildingID)
         {
-            _rCollisionBox = collision;
-            _sLinkedMap = linkedMap;
-            _ibuildingID = buildingID;
+            CollisionBox = collision;
+            LinkedMap = linkedMap;
+            BuildingID = buildingID;
             _eEntranceDir = DirectionEnum.Down;
+            IsDoor = true;
         }
 
         public bool Intersects(Rectangle value)
         {
-            return _rCollisionBox.Intersects(value);
+            return CollisionBox.Intersects(value);
         }
 
         public Vector2 FindLinkedPointPosition(Vector2 oldPointCenter, WorldActor c)
@@ -2901,7 +2902,7 @@ namespace RiverHollow.Tile_Engine
 
         public void SetDoor()
         {
-            _bDoor = true;
+            IsDoor = true;
         }
 
         /// <summary>
@@ -2913,7 +2914,7 @@ namespace RiverHollow.Tile_Engine
         /// <returns></returns>
         public Vector2 GetCenterTilePosition()
         {
-            return _rCollisionBox.Center.ToVector2();
+            return CollisionBox.Center.ToVector2();
         }
 
         public Vector2 GetMovedCenter()

@@ -320,6 +320,7 @@ namespace RiverHollow
         /// </summary>
         public static void Rollover()
         {
+            GameManager.RollOver();
             MissionManager.Rollover();
             PlayerManager.Rollover();
             foreach (Building b in PlayerManager.Buildings)
