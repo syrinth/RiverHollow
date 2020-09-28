@@ -7,6 +7,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Utilities;
+using System.Windows.Forms;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Items.Item;
@@ -695,67 +696,20 @@ namespace RiverHollow.GUIComponents.Screens
 
         private void AddNewItem()
         {
-            GUIManager.OpenMainObject(new ItemEditor());
-        }
+            ItemEditorWindow m = new ItemEditorWindow();
+            m.Focus();
+            m.ShowDialog();
 
-        class ItemEditor : GUIMainObject
-        {
-            GUIWindow _gWin;
-            GUITextInputWindow _gName;
-            GUITextInputWindow _gDescription;
-            GUITextInputWindow _gDetails;
-            GUIButton _btnSave;
-
-            public ItemEditor()
+            if (m.DialogResult == DialogResult.OK)
             {
-                _gWin = SetMainWindow();
-
-                _gName = new GUITextInputWindow("Name:", SideEnum.Left, 20);
-                _gName.AnchorToInnerSide(_gWin, SideEnum.TopLeft);
-                _gDescription = new GUITextInputWindow("Description:", SideEnum.Left, 60);
-                _gDescription.AnchorAndAlignToObject(_gName, SideEnum.Bottom, SideEnum.Left);
-                _gDetails = new GUITextInputWindow("Details:", SideEnum.Left, 200);
-                _gDetails.AnchorAndAlignToObject(_gDescription, SideEnum.Bottom, SideEnum.Left);
-                _gDetails.AllowAll = true;
-
-                _btnSave = new GUIButton("Save", BtnSave);
-                _btnSave.AnchorToInnerSide(_gWin, SideEnum.BottomRight);
-            }
-
-            private void BtnSave()
-            {
-                string tags = _gDetails.GetText();
-
-                Dictionary<string, string> dss = DataManager.TaggedStringToDictionary(tags);
+                Dictionary<string, string> dss = DataManager.TaggedStringToDictionary(m.TextBoxTags.Text);
 
                 ItemEnum eType = Util.ParseEnum<ItemEnum>(dss["Type"]);
                 int index = _diItems[eType].Count;
 
                 ItemXMLData data = new ItemXMLData(index, dss, ITEM_TAGS, ITEM_WORLD_TAGS);
-                data.SetTextData(_gName.GetText(), _gDescription.GetText());
+                data.SetTextData(m.TextBoxName.Text, m.TextBoxDescription.Text);
                 _diItems[eType].Add(data);
-
-                GUIManager.CloseMainObject();
-            }
-
-            public override bool ProcessLeftButtonClick(Point mouse)
-            {
-                bool rv = false;
-                rv = _btnSave.ProcessLeftButtonClick(mouse);
-
-                if (_gName.Contains(mouse)) { SetSelection(_gName); }
-                else if (_gDescription.Contains(mouse)) { SetSelection(_gDescription); }
-                else if (_gDetails.Contains(mouse)) { SetSelection(_gDetails); }
-                else { SetSelection(null); }
-
-                return rv;
-            }
-
-            private void SetSelection(GUITextInputWindow g)
-            {
-                _gName.Activate(g == _gName);
-                _gDescription.Activate(g == _gDescription);
-                _gDetails.Activate(g == _gDetails);
             }
         }
 
@@ -1386,6 +1340,53 @@ namespace RiverHollow.GUIComponents.Screens
                     _liAllLines[i] = val.Replace(ItemDataControls.SPECIAL, "");
                 }
             }
+        }
+    }
+
+    public class ItemEditorWindow : Form
+    {
+        public TextBox TextBoxName;
+        public TextBox TextBoxDescription;
+        public TextBox TextBoxTags;
+        Button btnOk;
+        Button btnCancel;
+
+        public ItemEditorWindow()
+        {
+            this.Width = 240;
+            this.Height = 120;
+
+            TextBoxName = new TextBox { Text = "Name", Width = 200 };
+            TextBoxDescription = new TextBox { Text = "Description", Width = 200 };
+            TextBoxTags = new TextBox { Text = "Tags", Width = 200 };
+
+            TextBoxDescription.Location = new System.Drawing.Point(TextBoxName.Location.X, TextBoxName.Location.Y + TextBoxName.Height);
+            TextBoxTags.Location = new System.Drawing.Point(TextBoxDescription.Location.X, TextBoxDescription.Location.Y + TextBoxDescription.Height);
+
+            btnOk = new Button { Text = "OK" };
+            btnOk.Click += btnOK_Click;
+            btnOk.Location = new System.Drawing.Point(TextBoxTags.Location.X, TextBoxTags.Location.Y + TextBoxDescription.Height);
+            btnCancel = new Button { Text = "Cancel" };
+            btnCancel.Click += btnCancel_Click;
+            btnCancel.Location = new System.Drawing.Point(btnOk.Location.X + btnOk.Width, btnOk.Location.Y);
+
+            this.Controls.Add(TextBoxName);
+            this.Controls.Add(TextBoxDescription);
+            this.Controls.Add(TextBoxTags);
+            this.Controls.Add(btnOk);
+            this.Controls.Add(btnCancel);
+        }
+
+        public void btnOK_Click(Object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
+        public void btnCancel_Click(Object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
     }
 }
