@@ -30,7 +30,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         protected double _dOpenTimer;
         protected double _dStartScale = 0.05;
         protected double _dOpenScale = 0.1;
-        protected double _dTimer = 0.005;
+        protected double _dTimer = 0.004;
         protected bool _bGoneOver = true;
         #endregion
 

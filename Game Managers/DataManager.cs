@@ -41,7 +41,6 @@ namespace RiverHollow.Game_Managers
         static Dictionary<string, string> _diCombatSkillsText;
         static Dictionary<string, string> _diAdventurerDialogue;
         public static Dictionary<int, string> DiUpgrades { get; private set; }
-        static Dictionary<int, string> _diItemText;
         static Dictionary<int, string> _diClassText;
         static Dictionary<string, string> _diMonsterTraits;
 
@@ -56,6 +55,7 @@ namespace RiverHollow.Game_Managers
 
         static Dictionary<int, Dictionary<string, string>> _diBuildings;
         static Dictionary<int, Dictionary<string, string>> _diItemData;
+        static Dictionary<int, Dictionary<string, string>> _diItemText;
         static Dictionary<int, Dictionary<string, string>> _diStatusEffects;
         static Dictionary<int, Dictionary<string, string>> _diWorkers;
         public static Dictionary<int, Dictionary<string, string>> DIWorkers => _diWorkers;
@@ -162,7 +162,7 @@ namespace RiverHollow.Game_Managers
 
         private static void LoadTextFiles(ContentManager Content)
         {
-            _diItemText = Content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + "ItemText");
+            LoadDictionary(ref _diItemText, FOLDER_TEXTFILES + "ItemText", Content);
             _diGameText = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + "GameText");
             _diMonsterInfo = Content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + "MonsterInfo");
             _diStatusEffectText = Content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + "StatusText");
@@ -339,8 +339,8 @@ namespace RiverHollow.Game_Managers
 
         public static void GetItemText(int id, ref string name, ref string desc)
         {
-            name = _diItemText[id].Split('/')[0];
-            desc = _diItemText[id].Split('/')[1];
+            name = _diItemText[id]["Name"];
+            desc = _diItemText[id]["Description"];
         }
         public static Item GetItem(int id)
         {

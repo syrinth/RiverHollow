@@ -10,7 +10,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
     {
         enum LastCharacter { Even, Odd, Space };
         LastCharacter _eCurrChar;
-        const string TYPE_SOUND = "Sample4";
+        const string TYPE_SOUND = "Sample";
 
         protected string _sText;
         protected string _sFullText;
