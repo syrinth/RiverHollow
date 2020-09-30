@@ -141,7 +141,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             _liConfigData[_iSpawnMapIndex].SetTagInfo("SpawnMap", targetSpawnData.SpawnMap+ "-" + targetSpawnData.X + "-" + targetSpawnData.Y);
 
-            SaveManager.SaveXMLData(_liConfigData, PATH_TO_DATA + @"\Config.xml");
+            //SaveManager.SaveXMLData(_liConfigData, PATH_TO_DATA + @"\Config.xml");
 
             GUIManager.CloseMainObject();
 
@@ -650,7 +650,7 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     data.StripSpecialCharacter();
                 }
-                SaveManager.SaveXMLData(_diBasicXML[s], s);
+                //SaveManager.SaveXMLData(_diBasicXML[s], s);
             }
 
             string mapPath = PATH_TO_MAPS;
@@ -660,11 +660,11 @@ namespace RiverHollow.GUIComponents.Screens
                 kvp.Value.StripSpecialCharacter();
                 DirectoryInfo dirInfo = Directory.GetParent(mapPath + "\\" + kvp.Key);
                 if (!Directory.Exists(dirInfo.FullName)) { Directory.CreateDirectory(dirInfo.FullName); }
-                SaveManager.SaveTMXData(kvp.Value, dirInfo.FullName + "\\" + Path.GetFileName(kvp.Key) + ".tmx");
+                //SaveManager.SaveTMXData(kvp.Value, dirInfo.FullName + "\\" + Path.GetFileName(kvp.Key) + ".tmx");
             }
 
-            SaveManager.SaveItemXMLData(itemDataList, PATH_TO_DATA);
-            SaveManager.SaveXMLData(worldObjectDataList, PATH_TO_DATA + @"\WorldObjects.xml");
+           // SaveManager.SaveItemXMLData(itemDataList, PATH_TO_DATA);
+            //SaveManager.SaveXMLData(worldObjectDataList, PATH_TO_DATA + @"\WorldObjects.xml");
         }
 
         private void ChangeIDs(ref List<ItemXMLData> itemDataList, ref List<XMLData> worldObjectDataList)

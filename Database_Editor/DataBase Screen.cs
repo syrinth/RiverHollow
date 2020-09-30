@@ -46,6 +46,7 @@ namespace Database_Editor
         List<XMLData> _liWorldObjects;
 
         private int _iCurrID = 0;
+        private int _iNextCurrID = -1;
         public static string SPECIAL_CHARACTER = "^";
         static string PATH_TO_MAPS = string.Format(@"{0}\..\..\..\..\Adventure\Content\Maps", System.Environment.CurrentDirectory);
         static string PATH_TO_DATA = string.Format(@"{0}\..\..\..\..\Adventure\Content\Data", System.Environment.CurrentDirectory);
@@ -80,8 +81,16 @@ namespace Database_Editor
             LoadWorldObjects();
             LoadItemData();
 
+            LoadItemDatabase();
+
+            LoadItem();
+        }
+
+        private void LoadItemDatabase()
+        {
+            dgDatabase.Rows.Clear();
             List<string> names = new List<string>();
-            for(int i = 0; i< _liItemData.Count; i++)
+            for (int i = 0; i < _liItemData.Count; i++)
             {
                 dgDatabase.Rows.Add();
                 DataGridViewRow row = dgDatabase.Rows[i];
@@ -90,7 +99,7 @@ namespace Database_Editor
                 row.Cells["colName"].Value = _liItemData[i].Name;
             }
 
-            LoadItem();
+            SelectRow(_iCurrID);
         }
 
         private Dictionary<int, Dictionary<string, string>> ReadXMLFile(string fileName)
@@ -280,15 +289,14 @@ namespace Database_Editor
         {
             //Change all IDs
             int index = 0;
-            foreach (ItemEnum e in Enum.GetValues(typeof(ItemEnum)))
+
+            foreach (ItemXMLData data in _liItemData)
             {
-                foreach (ItemXMLData data in _diItems[e])
+                if (data != null)
                 {
-                    if (data != null)
-                    {
-                        data.ChangeID(index++);
-                        itemDataList.Add(data);
-                    }
+                    if(data.ID == _iCurrID) { _iNextCurrID = index; }
+                    data.ChangeID(index++);
+                    itemDataList.Add(data);
                 }
             }
 
@@ -302,6 +310,172 @@ namespace Database_Editor
                 }
             }
         }
+
+        private void LoadItem()
+        {
+
+            ItemXMLData data = _liItemData[_iCurrID];
+            tbName.Text = data.Name;
+            tbDesc.Text = data.Description;
+            tbID.Text = data.ID.ToString();
+
+            dgTags.Rows.Clear();
+            string[] tags = data.GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in tags)
+            {
+                dgTags.Rows.Add(s);
+            }
+        }
+
+        private void SelectRow(int id)
+        {
+            dgDatabase.Rows[id].Selected = true;
+            dgDatabase.CurrentCell = dgDatabase.Rows[id].Cells[0];
+        }
+
+        #region EventHandlers
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            ItemXMLData data = null;
+            if (_liItemData.Count == _iCurrID) {
+                Dictionary<string, string> diText = new Dictionary<string, string>();
+                diText["Name"] = tbName.Text;
+                diText["Description"] = tbDesc.Text;
+
+                _diItemText[int.Parse(tbID.Text)] = diText;
+
+                Dictionary<string, string> tags = new Dictionary<string, string>();
+                foreach (DataGridViewRow row in dgTags.Rows)
+                {
+                    if (row.Cells[0].Value != null)
+                    {
+                        string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                        string key = tagInfo[0];
+                        string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
+                        tags[key] = val;
+                    }
+                }
+
+                _liItemData.Add(new ItemXMLData(_iCurrID, tags, ITEM_TAGS, ITEM_WORLD_TAGS));
+            }
+
+            data = _liItemData[_iCurrID];
+            data.SetTextData(tbName.Text, tbDesc.Text);
+
+            data.ClearTagInfo();
+            foreach (DataGridViewRow row in dgTags.Rows)
+            {
+                if (row.Cells[0].Value != null)
+                {
+                    string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                    string key = tagInfo[0];
+                    string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
+                    data.SetTagInfo(key, val);
+                }
+            }
+
+            LoadItemDatabase();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            if (_liItemData.Count == _iCurrID)
+            {
+                dgDatabase.Rows.RemoveAt(_iCurrID--);
+                SelectRow(_iCurrID);
+            }
+
+            LoadItem();
+        }
+
+        private void dgDatabase_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (_liItemData.Count == _iCurrID)
+            {
+                dgDatabase.Rows.RemoveAt(_iCurrID--);
+            }
+
+            _iCurrID = int.Parse(dgDatabase.Rows[e.RowIndex].Cells[0].Value.ToString());
+            LoadItem();
+        }
+
+        private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _liItemData.Sort((x, y) => x.ItemType.CompareTo(y.ItemType));
+            List<ItemXMLData> itemDataList = new List<ItemXMLData>();
+            List<XMLData> worldObjectDataList = new List<XMLData>();
+            ChangeIDs(ref itemDataList, ref worldObjectDataList);
+
+            //Strip the special case character from the Item files
+            foreach (ItemXMLData data in _liItemData)
+            {
+                if (data != null) { data.StripSpecialCharacter(); }
+            }
+
+            //Strip the special case character from the WorldObject files
+            foreach (ObjectTypeEnum it in Enum.GetValues(typeof(ObjectTypeEnum)))
+            {
+                foreach (XMLData data in _diWorldObjectData[it])
+                {
+                    data.StripSpecialCharacter();
+                }
+            }
+
+            foreach (string s in _diBasicXML.Keys)
+            {
+                foreach (XMLData data in _diBasicXML[s])
+                {
+                    data.StripSpecialCharacter();
+                }
+                SaveXMLData(_diBasicXML[s], s);
+            }
+
+            string mapPath = PATH_TO_MAPS;
+            if (!Directory.Exists(mapPath)) { Directory.CreateDirectory(mapPath); }
+            foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
+            {
+                kvp.Value.StripSpecialCharacter();
+                DirectoryInfo dirInfo = Directory.GetParent(mapPath + "\\" + kvp.Key);
+                if (!Directory.Exists(dirInfo.FullName)) { Directory.CreateDirectory(dirInfo.FullName); }
+                SaveTMXData(kvp.Value, dirInfo.FullName + "\\" + Path.GetFileName(kvp.Key) + ".tmx");
+            }
+
+            SaveItemXMLData(itemDataList, PATH_TO_DATA);
+            SaveXMLData(worldObjectDataList, WORLD_OBJECTS_DATA_XML_FILE);
+
+            if(_iNextCurrID != -1) {
+                _iCurrID = _iNextCurrID;
+                _iNextCurrID = -1;
+            }
+            LoadItemDatabase();
+        }
+
+        private void addNewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _iCurrID = dgDatabase.Rows.Count;
+            dgDatabase.Rows.Add();
+            SelectRow(_iCurrID);
+
+            DataGridViewRow row = dgDatabase.Rows[_iCurrID];
+            row.Cells["colID"].Value = _iCurrID;
+            row.Cells["colName"].Value = "New";
+
+            tbName.Text = "";
+            tbDesc.Text = "";
+            tbID.Text = _iCurrID.ToString();
+
+            dgTags.Rows.Clear();
+
+            dgTags.Rows.Add();
+            row = dgTags.Rows[0];
+            row.Cells["colTags"].Value = "Type:Resource";
+            dgTags.Rows.Add();
+            row = dgTags.Rows[1];
+            row.Cells["colTags"].Value = "Image:0-0";
+
+            tbName.Focus();
+        }
+        #endregion
 
         #region Save Methods
         private static StreamWriter PrepareXMLFile(string fileName, string assetType)
@@ -336,7 +510,7 @@ namespace Database_Editor
             foreach (ItemXMLData data in dataList)
             {
                 WriteXMLEntry(dataFile, string.Format("      <Key>{0}</Key>", data.ID), string.Format("      <Value>{0}</Value>", data.GetTagsString()));
-                WriteXMLEntry(textFile, string.Format("      <Key>{0}</Key>", data.ID), string.Format("      <Value>{0}/{1}</Value>", data.Name, data.Description));
+                WriteXMLEntry(textFile, string.Format("      <Key>{0}</Key>", data.ID), string.Format("      <Value>[Name:{0}][Description:{1}]</Value>", data.Name, data.Description));
             }
 
             CloseStreamWriter(ref dataFile);
@@ -368,6 +542,7 @@ namespace Database_Editor
         }
         #endregion
 
+        #region Classes
         public class XMLData
         {
             protected int _iID;
@@ -417,6 +592,10 @@ namespace Database_Editor
             public void AppendToTag(string key, string value)
             {
                 _diTags[key] += "|" + value;
+            }
+            public void ClearTagInfo()
+            {
+                _diTags.Clear();
             }
 
             /// <summary>
@@ -593,7 +772,6 @@ namespace Database_Editor
                 }
             }
         }
-
         public class ItemXMLData : XMLData
         {
             string _sName;
@@ -814,96 +992,6 @@ namespace Database_Editor
                 }
             }
         }
-
-        private void dgDatabase_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            _iCurrID = int.Parse(dgDatabase.Rows[e.RowIndex].Cells[0].Value.ToString());
-            LoadItem();
-        }
-
-        private void LoadItem()
-        {
-            ItemXMLData data = _liItemData[_iCurrID];
-            tbName.Text = data.Name;
-            tbDesc.Text = data.Description;
-            tbID.Text = data.ID.ToString();
-
-            dgTags.Rows.Clear();
-            string[] tags = data.GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string s in tags)
-            {
-                dgTags.Rows.Add(s);
-            }
-        }
-
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            ItemXMLData data = _liItemData[_iCurrID];
-
-            data.SetTextData(tbName.Text, tbDesc.Text);
-
-            foreach (DataGridViewRow row in dgTags.Rows)
-            {
-                if (row.Cells[0].Value != null)
-                {
-                    string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                    string key = tagInfo[0];
-                    string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
-                    data.SetTagInfo(key, val);
-                }
-            }
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            LoadItem();
-        }
-
-        private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            List<ItemXMLData> itemDataList = new List<ItemXMLData>();
-            List<XMLData> worldObjectDataList = new List<XMLData>();
-            ChangeIDs(ref itemDataList, ref worldObjectDataList);
-
-            //Strip the special case character from the Item files
-            foreach (ItemEnum it in Enum.GetValues(typeof(ItemEnum)))
-            {
-                foreach (ItemXMLData data in _diItems[it])
-                {
-                    if (data != null) { data.StripSpecialCharacter(); }
-                }
-            }
-
-            //Strip the special case character from the WorldObject files
-            foreach (ObjectTypeEnum it in Enum.GetValues(typeof(ObjectTypeEnum)))
-            {
-                foreach (XMLData data in _diWorldObjectData[it])
-                {
-                    data.StripSpecialCharacter();
-                }
-            }
-
-            foreach (string s in _diBasicXML.Keys)
-            {
-                foreach (XMLData data in _diBasicXML[s])
-                {
-                    data.StripSpecialCharacter();
-                }
-                SaveXMLData(_diBasicXML[s], s);
-            }
-
-            string mapPath = PATH_TO_MAPS;
-            if (!Directory.Exists(mapPath)) { Directory.CreateDirectory(mapPath); }
-            foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
-            {
-                kvp.Value.StripSpecialCharacter();
-                DirectoryInfo dirInfo = Directory.GetParent(mapPath + "\\" + kvp.Key);
-                if (!Directory.Exists(dirInfo.FullName)) { Directory.CreateDirectory(dirInfo.FullName); }
-                SaveTMXData(kvp.Value, dirInfo.FullName + "\\" + Path.GetFileName(kvp.Key) + ".tmx");
-            }
-
-            SaveItemXMLData(itemDataList, PATH_TO_DATA);
-            SaveXMLData(worldObjectDataList, WORLD_OBJECTS_DATA_XML_FILE);
-        }
+        #endregion
     }
 }
