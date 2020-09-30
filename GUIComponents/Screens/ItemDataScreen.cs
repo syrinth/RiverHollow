@@ -41,33 +41,18 @@ namespace RiverHollow.GUIComponents.Screens
     {
         const int BTN_PADDING = 50;
 
-        GUIButton _btnItems;
-        GUIButton _btnWorldObjects;
         GUIButton _btnSpawn;
         GUIButton _btnExit;
 
         public Menu(ActionDelegate remove, ActionDelegate add) : base(remove, add)
         {
-            _btnItems = new GUIButton("Item Data", LoadItemData);
-            _btnWorldObjects = new GUIButton("Object Data", LoadWorldObjectData);
             _btnSpawn = new GUIButton("Spawn Point", ChangeSpawn);
             _btnExit = new GUIButton("Main Menu", Exit);
 
-            List<GUIObject> listButtons = new List<GUIObject>() { _btnItems, _btnWorldObjects, _btnSpawn, _btnExit };
+            List<GUIObject> listButtons = new List<GUIObject>() { _btnSpawn, _btnExit };
             GUIObject.CreateSpacedColumn(ref listButtons, RiverHollow.ScreenWidth / 2, 0, RiverHollow.ScreenHeight, BTN_PADDING);
 
             AddControls(listButtons);
-        }
-
-        public void LoadItemData()
-        {
-            _delRemove(this);
-            _delAdd(new ItemDataControls(_delRemove, _delAdd));
-        }
-
-        public void LoadWorldObjectData()
-        {
-            
         }
 
         public void ChangeSpawn()

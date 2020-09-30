@@ -100,6 +100,7 @@ namespace Database_Editor
             }
 
             SelectRow(_iCurrID);
+            dgDatabase.Focus();
         }
 
         private Dictionary<int, Dictionary<string, string>> ReadXMLFile(string fileName)
@@ -401,7 +402,14 @@ namespace Database_Editor
 
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _liItemData.Sort((x, y) => x.ItemType.CompareTo(y.ItemType));
+            if (_liItemData.Count == _iCurrID) { btnSave_Click(sender, e); }
+
+            _liItemData.Sort((x, y) =>
+            {
+                var typeComp = x.ItemType.CompareTo(y.ItemType);
+                if (typeComp == 0) { return x.ID.CompareTo(y.ID); }
+                else { return typeComp; }
+            });
             List<ItemXMLData> itemDataList = new List<ItemXMLData>();
             List<XMLData> worldObjectDataList = new List<XMLData>();
             ChangeIDs(ref itemDataList, ref worldObjectDataList);
@@ -443,10 +451,12 @@ namespace Database_Editor
             SaveItemXMLData(itemDataList, PATH_TO_DATA);
             SaveXMLData(worldObjectDataList, WORLD_OBJECTS_DATA_XML_FILE);
 
-            if(_iNextCurrID != -1) {
+            if (_iNextCurrID != -1)
+            {
                 _iCurrID = _iNextCurrID;
                 _iNextCurrID = -1;
             }
+
             LoadItemDatabase();
         }
 

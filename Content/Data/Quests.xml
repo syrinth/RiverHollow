@@ -3,11 +3,11 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>1</Key>
-      <Value>[HandTo:17][Type:Fetch][GoalItem:58-1][Item:132-1-1][Money:500][Friendship:Giver-200][SpawnMob:3-mapForest-Quest1]</Value>
+      <Value>[HandTo:17][Type:Fetch][GoalItem:129-1][Item:132-1-1][Money:500][Friendship:Giver-200][SpawnMob:3-mapForest-Quest1]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Fetch][GoalItem:98-1][Activate:0][Immediate][Cutscene:2]</Value>
+      <Value>[Type:Fetch][GoalItem:97-1][Activate:0][Immediate][Cutscene:2]</Value>
     </Item>
   </Asset>
 </XnaContent>
