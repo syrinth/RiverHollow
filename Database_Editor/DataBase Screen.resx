@@ -117,4 +117,36 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="colID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="colName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="colTags.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAEAEBAAAAEAGABoAwAAFgAAACgAAAAQAAAAIAAAAAEAGAAAAAAAaAMAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAaIzcaIzcAAAAAAAAAAAAAAAAaIzcaIzcAAAAAAAAAAAAAAAAAAAAAAAAAAAAaIzcpOl4oMlcaIzcA
+        AAAAAAAaIzcoMlcpOl4aIzcAAAAAAAAAAAAAAAAAAAAaIzc7Vo8pOl4aIzcAAAAAAAAAAAAAAAAaIzcp
+        Ol47Vo8aIzcAAAAAAAAAAAAAAAAAAAAaIzc7Vo8pOl4aIzcAAAAAAAAaIzcpOl47Vo8aIzcAAAAAAAAA
+        AAAAAAAAAAAaIzcpOl47Vo87Vo8pOl4aIzcaIzcpOl47Vo87Vo8pOl4aIzcAAAAAAAAAAAAAAAAaIzco
+        MlcqOWU7Vo8oMlcpOl4pOl4oMlc7Vo8qOWUoMlcaIzcAAAAAAAAAAAAAAAAAAAAaIzcaIzcoMlc7Vo87
+        Vo87Vo87Vo8oMlcaIzcaIzcAAAAAAAAAAAAAAAAAAAAAAAAaIzc7Vo87Vo8SFyI7Vo87Vo8SFyI7Vo87
+        Vo8aIzcAAAAAAAAAAAAAAAAAAAAAAAAAAAAaIzc7Vo8SFyI7Vo87Vo8SFyI7Vo8aIzcAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAaIzc7Vo87Vo89XpQ9XpQ7Vo87Vo8aIzcAAAAAAAAAAAAAAAAAAAAAAAAAAAAa
+        IzcoMlc7Vo89XpROb7NOb7M9XpQ7Vo8oMlcaIzcAAAAAAAAAAAAAAAAAAAAAAABOb7M9XpQ9XpROb7N0
+        k9V0k9VOb7M9XpQ9XpROb7MAAAAAAAAAAAAAAAAAAAAAAAB0k9VOb7NOb7N0k9UAAAAAAAB0k9VOb7NO
+        b7N0k9UAAAAAAAAAAAAAAAAAAAAAAAAAAAB0k9V0k9UAAAAAAAAAAAAAAAB0k9V0k9UAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//wAA888AAOGH
+        AADDwwAA4YcAAMADAADAAwAA4AcAAOAHAADwDwAA8A8AAOAHAADgBwAA4YcAAPPPAAD//wAA
+</value>
+  </data>
 </root>
