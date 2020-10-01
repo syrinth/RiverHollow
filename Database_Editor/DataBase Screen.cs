@@ -701,8 +701,8 @@ namespace Database_Editor
             SelectRow(dgItems, _iCurrItemID);
 
             DataGridViewRow row = dgItems.Rows[_iCurrItemID];
-            row.Cells["colID"].Value = _iCurrItemID;
-            row.Cells["colName"].Value = "New";
+            row.Cells["colItemID"].Value = _iCurrItemID;
+            row.Cells["colItemName"].Value = "New";
 
             tbItemName.Text = "";
             tbItemDesc.Text = "";
@@ -713,7 +713,7 @@ namespace Database_Editor
             dgItemTags.Rows.Clear();
             dgItemTags.Rows.Add();
             row = dgItemTags.Rows[0];
-            row.Cells["colTags"].Value = "Image:0-0";
+            row.Cells["colItemTags"].Value = "Image:0-0";
 
             tbItemName.Focus();
         }

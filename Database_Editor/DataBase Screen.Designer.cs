@@ -41,7 +41,6 @@
             this.btnItemCancel = new System.Windows.Forms.Button();
             this.btnItemSave = new System.Windows.Forms.Button();
             this.dgItemTags = new System.Windows.Forms.DataGridView();
-            this.colTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbItemDesc = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -64,6 +63,9 @@
             this.dgWorldObjects = new System.Windows.Forms.DataGridView();
             this.colWorldObjectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colWorldObjectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.itemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.worldObjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.colItemTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -96,20 +98,22 @@
             // 
             // addNewToolStripMenuItem
             // 
+            this.addNewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.itemToolStripMenuItem,
+            this.worldObjectToolStripMenuItem});
             this.addNewToolStripMenuItem.Name = "addNewToolStripMenuItem";
-            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addNewToolStripMenuItem.Text = "Add New";
-            this.addNewToolStripMenuItem.Click += new System.EventHandler(this.addNewToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(133, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // saveToFileToolStripMenuItem
             // 
             this.saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
-            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToFileToolStripMenuItem.Text = "Save To File";
             this.saveToFileToolStripMenuItem.Click += new System.EventHandler(this.saveToFileToolStripMenuItem_Click);
             // 
@@ -188,18 +192,12 @@
             // 
             this.dgItemTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgItemTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colTags});
+            this.colItemTags});
             this.dgItemTags.Location = new System.Drawing.Point(320, 137);
             this.dgItemTags.Name = "dgItemTags";
             this.dgItemTags.RowHeadersVisible = false;
             this.dgItemTags.Size = new System.Drawing.Size(464, 251);
             this.dgItemTags.TabIndex = 21;
-            // 
-            // colTags
-            // 
-            this.colTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colTags.HeaderText = "Tags";
-            this.colTags.Name = "colTags";
             // 
             // tbItemDesc
             // 
@@ -421,6 +419,25 @@
             this.colWorldObjectsName.ReadOnly = true;
             this.colWorldObjectsName.Width = 277;
             // 
+            // itemToolStripMenuItem
+            // 
+            this.itemToolStripMenuItem.Name = "itemToolStripMenuItem";
+            this.itemToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.itemToolStripMenuItem.Text = "Item";
+            this.itemToolStripMenuItem.Click += new System.EventHandler(this.addNewToolStripMenuItem_Click);
+            // 
+            // worldObjectToolStripMenuItem
+            // 
+            this.worldObjectToolStripMenuItem.Name = "worldObjectToolStripMenuItem";
+            this.worldObjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.worldObjectToolStripMenuItem.Text = "World Object";
+            // 
+            // colItemTags
+            // 
+            this.colItemTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colItemTags.HeaderText = "Tags";
+            this.colItemTags.Name = "colItemTags";
+            // 
             // frmDBEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -461,7 +478,6 @@
         private System.Windows.Forms.Button btnItemCancel;
         private System.Windows.Forms.Button btnItemSave;
         private System.Windows.Forms.DataGridView dgItemTags;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colTags;
         private System.Windows.Forms.TextBox tbItemDesc;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
@@ -484,6 +500,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colItemName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colWorldObjectsID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colWorldObjectsName;
+        private System.Windows.Forms.ToolStripMenuItem itemToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem worldObjectToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colItemTags;
     }
 }
 

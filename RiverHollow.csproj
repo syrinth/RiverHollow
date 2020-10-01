@@ -84,7 +84,7 @@
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUIMisc.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUISprite.cs" />
     <Compile Include="GUIComponents\Screens\CombatScreen.cs" />
-    <Compile Include="GUIComponents\Screens\ItemDataScreen.cs" />
+    <Compile Include="GUIComponents\Screens\ConfigScreen.cs" />
     <Compile Include="GUIComponents\Screens\LoadScreen.cs" />
     <Compile Include="GUIComponents\Screens\MissionScreen.cs" />
     <Compile Include="GUIComponents\Screens\NewGameScreen.cs" />
