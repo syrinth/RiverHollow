@@ -211,219 +211,219 @@
     </Item>
     <Item>
       <Key>52</Key>
-      <Value>[Name:Smelling Salts][Description:Wake Up]</Value>
-    </Item>
-    <Item>
-      <Key>53</Key>
-      <Value>[Name:Antidote][Description:Cures Poisons]</Value>
-    </Item>
-    <Item>
-      <Key>54</Key>
-      <Value>[Name:Poisoned Knife][Description:Inflicts Poison]</Value>
-    </Item>
-    <Item>
-      <Key>55</Key>
       <Value>[Name:Silk Cloth][Description:Luxurious fabric coveted by the higher classes.]</Value>
     </Item>
     <Item>
-      <Key>56</Key>
+      <Key>53</Key>
       <Value>[Name:Dragonweave Cloth][Description:A luxuriously soft, magical cloth highly sought after by magic users.]</Value>
     </Item>
     <Item>
-      <Key>57</Key>
+      <Key>54</Key>
       <Value>[Name:Token of Mirth][Description:A jade token from the spirits blessing the bearer with mirth]</Value>
     </Item>
     <Item>
-      <Key>58</Key>
+      <Key>55</Key>
       <Value>[Name:Wooden Wand][Description:A basic wand]</Value>
     </Item>
     <Item>
-      <Key>59</Key>
+      <Key>56</Key>
       <Value>[Name:Copper Wand][Description:A magical wand]</Value>
     </Item>
     <Item>
-      <Key>60</Key>
+      <Key>57</Key>
       <Value>[Name:Divining Wand][Description:A wand used by seers to help them predict the future.]</Value>
     </Item>
     <Item>
-      <Key>61</Key>
+      <Key>58</Key>
       <Value>[Name:Black Night][Description:This wand was enchanted with the essences of many dark creatures, giving it a sinister power.]</Value>
     </Item>
     <Item>
-      <Key>62</Key>
+      <Key>59</Key>
       <Value>[Name:Thunderstorm][Description:These crackling wands were first created during the largest thunderstorm in three centuries.]</Value>
     </Item>
     <Item>
-      <Key>63</Key>
+      <Key>60</Key>
       <Value>[Name:Will of the Archmage][Description:Only the most puissant of Wizards can hope to channel the powerful energies that course through this wand.]</Value>
     </Item>
     <Item>
-      <Key>64</Key>
+      <Key>61</Key>
       <Value>[Name:Acolyte's Staff][Description:A staff for trainee healers]</Value>
     </Item>
     <Item>
-      <Key>65</Key>
+      <Key>62</Key>
       <Value>[Name:Coiled Staff][Description:A carefully worked staff that twists and coils]</Value>
     </Item>
     <Item>
-      <Key>66</Key>
+      <Key>63</Key>
       <Value>[Name:Emerald Staff][Description:A carven staff topped with an emerald]</Value>
     </Item>
     <Item>
-      <Key>67</Key>
+      <Key>64</Key>
       <Value>[Name:Winter's Blessing][Description:A powerful staff enchanted with the chill winds of winter.]</Value>
     </Item>
     <Item>
-      <Key>68</Key>
+      <Key>65</Key>
       <Value>[Name:Glass Orb][Description:An orb made of glass]</Value>
     </Item>
     <Item>
-      <Key>69</Key>
+      <Key>66</Key>
       <Value>[Name:Copper Orb][Description:A magical orb made of polished copper]</Value>
     </Item>
     <Item>
-      <Key>70</Key>
+      <Key>67</Key>
       <Value>[Name:Gazing Orb][Description:An orb of polished steel set with a bright Sapphire.]</Value>
     </Item>
     <Item>
-      <Key>71</Key>
+      <Key>68</Key>
       <Value>[Name:Ruby Rose][Description:These stones were first popularized by a trio of sisters that defended the Western Woods.]</Value>
     </Item>
     <Item>
-      <Key>72</Key>
+      <Key>69</Key>
       <Value>[Name:Light of Inspiration][Description:A polished golden orb which holds the magical accomplishments of countless Summoners within its polished depths.]</Value>
     </Item>
     <Item>
-      <Key>73</Key>
+      <Key>70</Key>
       <Value>[Name:Ancient Orb][Description:This orb holds within it whispers and echoes of an ancient time, held in amber and boundi nmythril.]</Value>
     </Item>
     <Item>
-      <Key>74</Key>
+      <Key>71</Key>
       <Value>[Name:Songsphere][Description:A collaborative effort between Bards and Summoners, these magical stones resonate with music and are often used to create a gentle atmosphere in upper class locales.]</Value>
     </Item>
     <Item>
-      <Key>75</Key>
+      <Key>72</Key>
       <Value>[Name:Serpent's Eye][Description:Jade polished and imbued with the ferocity of a dragon. Some way that these orbs grant the wielder a powerful affinity for dragons.]</Value>
     </Item>
     <Item>
-      <Key>76</Key>
+      <Key>73</Key>
       <Value>[Name:Spring's Promise][Description:Infused withmagical herbs and reagents, this orb has been blessed by the spirits of spring and always smells faintly of lavender.]</Value>
     </Item>
     <Item>
-      <Key>77</Key>
+      <Key>74</Key>
       <Value>[Name:Eye of Eternity][Description:Only the purest Diamond and Adamantine can be used to make this orb. The first such orb was said to have been blessed by the spirits that dwell beyond our world, granting it's wielder insight into worlds beyond our own.]</Value>
     </Item>
     <Item>
-      <Key>78</Key>
+      <Key>75</Key>
       <Value>[Name:Dulled Knife][Description:It could use sharpening]</Value>
     </Item>
     <Item>
-      <Key>79</Key>
+      <Key>76</Key>
       <Value>[Name:Spear][Description:A sharpened spear]</Value>
     </Item>
     <Item>
-      <Key>80</Key>
+      <Key>77</Key>
       <Value>[Name:Copper Spear][Description:A copper tipped spear, decorated with a bright feather]</Value>
     </Item>
     <Item>
-      <Key>81</Key>
+      <Key>78</Key>
       <Value>[Name:Wooden Mace][Description:More of a club, honestly]</Value>
     </Item>
     <Item>
-      <Key>82</Key>
+      <Key>79</Key>
       <Value>[Name:Shortbow][Description:A small bow used to hunt game]</Value>
     </Item>
     <Item>
-      <Key>83</Key>
+      <Key>80</Key>
       <Value>[Name:Flimsy Rapier][Description:A thin rapier]</Value>
     </Item>
     <Item>
-      <Key>84</Key>
+      <Key>81</Key>
       <Value>[Name:Cloth Robes][Description:Robes made of simple cloth]</Value>
     </Item>
     <Item>
-      <Key>85</Key>
+      <Key>82</Key>
       <Value>[Name:Basic Armor][Description:Training Armor]</Value>
     </Item>
     <Item>
-      <Key>86</Key>
+      <Key>83</Key>
       <Value>[Name:Heavy Armor][Description:It's heavy]</Value>
     </Item>
     <Item>
-      <Key>87</Key>
+      <Key>84</Key>
       <Value>[Name:Cloth Hat][Description:A floppy brimmed hat]</Value>
     </Item>
     <Item>
-      <Key>88</Key>
+      <Key>85</Key>
       <Value>[Name:Leather Helm][Description:A light leather helm]</Value>
     </Item>
     <Item>
-      <Key>89</Key>
+      <Key>86</Key>
       <Value>[Name:Heavy Helm][Description:A heavy helm]</Value>
     </Item>
     <Item>
-      <Key>90</Key>
+      <Key>87</Key>
       <Value>[Name:Heavy Bracelet][Description:A defensible bracelet]</Value>
     </Item>
     <Item>
-      <Key>91</Key>
+      <Key>88</Key>
       <Value>[Name:Ring of Protection][Description:A bronze ring that wards against harm]</Value>
     </Item>
     <Item>
-      <Key>92</Key>
+      <Key>89</Key>
       <Value>[Name:Bracelet of Speed][Description:A bracelet that enhancers the users speed]</Value>
     </Item>
     <Item>
-      <Key>93</Key>
+      <Key>90</Key>
       <Value>[Name:Pick Axe][Description:Breaks things]</Value>
     </Item>
     <Item>
-      <Key>94</Key>
+      <Key>91</Key>
       <Value>[Name:Wooden Axe][Description:Chop Chop Motherfucker]</Value>
     </Item>
     <Item>
-      <Key>95</Key>
+      <Key>92</Key>
       <Value>[Name:Shovel][Description:Dig the thing]</Value>
     </Item>
     <Item>
-      <Key>96</Key>
+      <Key>93</Key>
       <Value>[Name:Watering Can][Description:Watering the thing]</Value>
     </Item>
     <Item>
-      <Key>97</Key>
+      <Key>94</Key>
       <Value>[Name:Harp][Description:The harp of your ancestors. According to legend, this instrument will let you communicate with the spirits of nature.]</Value>
     </Item>
     <Item>
-      <Key>98</Key>
+      <Key>95</Key>
       <Value>[Name:Lantern][Description:Used to call forth the energy of spent emotions]</Value>
     </Item>
     <Item>
-      <Key>99</Key>
+      <Key>96</Key>
       <Value>[Name:Rune of Return][Description:A mystical stone]</Value>
     </Item>
     <Item>
-      <Key>100</Key>
+      <Key>97</Key>
       <Value>[Name:Meat][Description:A slice of meat, used for cooking]</Value>
     </Item>
     <Item>
-      <Key>101</Key>
+      <Key>98</Key>
       <Value>[Name:Egg][Description:A single plain egg, you think it's clean...]</Value>
     </Item>
     <Item>
-      <Key>102</Key>
+      <Key>99</Key>
       <Value>[Name:Flour][Description:Freshly milled flour, not delicious... yet.]</Value>
     </Item>
     <Item>
-      <Key>103</Key>
+      <Key>100</Key>
       <Value>[Name:Apple][Description:Nomnom]</Value>
     </Item>
     <Item>
-      <Key>104</Key>
+      <Key>101</Key>
       <Value>[Name:Strawberry][Description:Delicious and fruity]</Value>
     </Item>
     <Item>
-      <Key>105</Key>
+      <Key>102</Key>
       <Value>[Name:Carrot][Description:Crisp and crunchy]</Value>
+    </Item>
+    <Item>
+      <Key>103</Key>
+      <Value>[Name:Smelling Salts][Description:Wake Up]</Value>
+    </Item>
+    <Item>
+      <Key>104</Key>
+      <Value>[Name:Antidote][Description:Cures Poisons]</Value>
+    </Item>
+    <Item>
+      <Key>105</Key>
+      <Value>[Name:Poisoned Knife][Description:Inflicts Poison]</Value>
     </Item>
     <Item>
       <Key>106</Key>

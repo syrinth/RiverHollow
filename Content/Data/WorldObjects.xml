@@ -47,7 +47,7 @@
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:112-5|113-30|70-15][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:112-5|113-30|67-15][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>12</Key>
@@ -63,7 +63,7 @@
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Processes:25-5][Makes:84-3][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Processes:25-5][Makes:81-3][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>16</Key>
@@ -139,7 +139,7 @@
     </Item>
     <Item>
       <Key>34</Key>
-      <Value>[Type:Plant][Image:192-16][Height:32][Item:105][TrNum:4][TrTime:1-2-3]</Value>
+      <Value>[Type:Plant][Image:192-16][Height:32][Item:102][TrNum:4][TrTime:1-2-3]</Value>
     </Item>
     <Item>
       <Key>35</Key>

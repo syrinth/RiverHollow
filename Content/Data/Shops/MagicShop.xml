@@ -39,7 +39,7 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Item][ItemID:94][Cost:3000]</Value>
+      <Value>[Type:Item][ItemID:91][Cost:3000]</Value>
     </Item>
   </Asset>
 </XnaContent>

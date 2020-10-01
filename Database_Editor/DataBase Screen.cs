@@ -470,6 +470,7 @@ namespace Database_Editor
             data.ClearTagInfo();
             string[] typeTag = cbItemType.SelectedItem.ToString().Split(':');
             data.SetTagInfo(typeTag[0], typeTag[1]);
+            data.SetItemType(Util.ParseEnum<ItemEnum>(typeTag[1]));
             if (cbItemSubtype.Visible)
             {
                 string[] subTypeTag = cbItemSubtype.SelectedItem.ToString().Split(':');
@@ -515,13 +516,6 @@ namespace Database_Editor
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (_liItemData.Count == _iCurrID) { btnSave_Click(sender, e); }
-
-            foreach(ItemXMLData data in _liItemData)
-            {
-                _iCurrID = _liItemData.IndexOf(data);
-                LoadItemInfo();
-                SaveItemInfo(data);
-            }
 
             _liItemData.Sort((x, y) =>
             {
@@ -924,6 +918,11 @@ namespace Database_Editor
             {
                 _sName = name;
                 _sDescription = desc;
+            }
+
+            public void SetItemType(ItemEnum e)
+            {
+                _eType = e;
             }
         }
         public class TMXData
