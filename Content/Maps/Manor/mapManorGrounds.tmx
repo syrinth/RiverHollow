@@ -208,12 +208,12 @@
   <object id="42" name="Manor" x="81.342" y="227.997" width="170.833" height="186"/>
   <object id="45" name="WorldObject" x="900.183" y="454.336" width="5.75" height="5.75">
    <properties>
-    <property name="ID" type="int" value="21"/>
+    <property name="ObjectID" type="int" value="21"/>
    </properties>
   </object>
   <object id="52" name="WorldObject" x="900.125" y="485.125" width="5.75" height="5.75">
    <properties>
-    <property name="ID" type="int" value="21"/>
+    <property name="ObjectID" type="int" value="21"/>
    </properties>
   </object>
  </objectgroup>

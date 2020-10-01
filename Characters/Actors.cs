@@ -3050,7 +3050,7 @@ namespace RiverHollow.Characters
             _fVisibility = MIN_VISIBILITY;
 
             Util.AssignValue(ref _sName, "Name", stringData);
-            Util.AssignValue(ref _iID, "ID", stringData);
+            Util.AssignValue(ref _iID, "SpiritID", stringData);
             Util.AssignValue(ref _sText, "Text", stringData);
             Util.AssignValue(ref _sCondition, "Condition", stringData);
             Util.AssignValue(ref _sAwakenTrigger, "AwakenTrigger", stringData);

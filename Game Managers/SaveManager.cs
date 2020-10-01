@@ -720,5 +720,43 @@ namespace RiverHollow.Game_Managers
             }
         }
         #endregion
+
+        #region XMl Save methods
+        private static StreamWriter PrepareXMLFile(string fileName, string assetType)
+        {
+            StreamWriter dataFile = new StreamWriter(fileName);
+            dataFile.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+            dataFile.WriteLine("<XnaContent xmlns:Generic=\"System.Collections.Generic\">");
+            dataFile.WriteLine("  <Asset Type=\"" + assetType + "\">"); //Dictionary[int, string]
+            return dataFile;
+        }
+
+        private static void CloseStreamWriter(ref StreamWriter dataFile)
+        {
+            dataFile.WriteLine("  </Asset>");
+            dataFile.WriteLine("</XnaContent>");
+            dataFile.Close();
+        }
+
+        public static void SaveXMLData(List<SpawnXMLData> dataList, string fileName)
+        {
+            StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[int, string]");
+
+            foreach (SpawnXMLData data in dataList)
+            {
+                WriteXMLEntry(dataFile, string.Format("      <Key>{0}</Key>", data.ID), string.Format("      <Value>{0}</Value>", data.GetTagsString()));
+            }
+
+            CloseStreamWriter(ref dataFile);
+        }
+
+        private static void WriteXMLEntry(StreamWriter dataFile, string key, string value)
+        {
+            dataFile.WriteLine("    <Item>");
+            dataFile.WriteLine(key);
+            dataFile.WriteLine(value);
+            dataFile.WriteLine("    </Item>");
+        }
+        #endregion
     }
 }

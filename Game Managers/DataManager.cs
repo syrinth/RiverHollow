@@ -441,7 +441,7 @@ namespace RiverHollow.Game_Managers
 
         public static TriggerObject GetDungeonObject(Dictionary<string, string> data, Vector2 pos)
         {
-            int id = int.Parse(data["ID"]);
+            int id = int.Parse(data["ObjectID"]);
             if (id != -1 && _diWorldObjects.ContainsKey(id))
             {
                 Dictionary<string, string> liData = new Dictionary<string, string>(_diWorldObjects[id]);

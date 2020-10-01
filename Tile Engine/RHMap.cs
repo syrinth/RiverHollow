@@ -342,7 +342,7 @@ namespace RiverHollow.Tile_Engine
                  }
                 else if (obj.Name.Equals("WorldObject"))
                 {
-                    PlaceWorldObject(DataManager.GetWorldObject(int.Parse(obj.Properties["ID"]), Util.SnapToGrid(obj.Position)));
+                    PlaceWorldObject(DataManager.GetWorldObject(int.Parse(obj.Properties["ObjectID"]), Util.SnapToGrid(obj.Position)));
                 }
                 else if (obj.Name.Equals("Chest"))
                 {
@@ -375,9 +375,9 @@ namespace RiverHollow.Tile_Engine
                     manor.SetName(PlayerManager.ManorName);
                     AddBuilding(manor, true);
                 }
-                else if (obj.Properties.ContainsKey("Item"))
+                else if (obj.Name.Equals("Item"))
                 {
-                    Item item = DataManager.GetItem(int.Parse(obj.Properties["Item"]));
+                    Item item = DataManager.GetItem(int.Parse(obj.Properties["ItemID"]));
                     item.AutoPickup = false;
                     item.ManualPickup = true;
                     item.OnTheMap = true;

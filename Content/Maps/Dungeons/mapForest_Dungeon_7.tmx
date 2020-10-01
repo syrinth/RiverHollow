@@ -150,19 +150,19 @@
   </object>
   <object id="42" name="DungeonObject" x="151" y="357" width="12" height="11">
    <properties>
-    <property name="ID" type="int" value="40"/>
+    <property name="ObjectID"  type="int" value="40"/>
     <property name="Trigger" value="TriggerHitF"/>
    </properties>
   </object>
   <object id="45" name="DungeonObject" x="144.005" y="271.997" width="16" height="32">
    <properties>
-    <property name="ID" type="int" value="41"/>
+    <property name="ObjectID"  type="int" value="41"/>
     <property name="MatchTrigger" value="MOBS"/>
    </properties>
   </object>
   <object id="46" name="DungeonObject" x="160.005" y="271.997" width="16" height="32">
    <properties>
-    <property name="ID" type="int" value="41"/>
+    <property name="ObjectID"  type="int" value="41"/>
     <property name="MatchTrigger" value="MOBS"/>
    </properties>
   </object>

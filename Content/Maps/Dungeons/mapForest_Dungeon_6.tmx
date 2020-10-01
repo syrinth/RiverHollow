@@ -128,13 +128,13 @@
   </object>
   <object id="37" name="DungeonObject" x="209.41" y="49.1668" width="12.5" height="27">
    <properties>
-    <property name="ID" type="int" value="41"/>
+    <property name="ObjectID"  type="int" value="41"/>
     <property name="Trigger" value="TriggerHitF"/>
    </properties>
   </object>
   <object id="38" name="DungeonObject" x="224.537" y="48.3024" width="12.5" height="27">
    <properties>
-    <property name="ID" type="int" value="41"/>
+    <property name="ObjectID"  type="int" value="41"/>
     <property name="Trigger" value="TriggerHitF"/>
    </properties>
   </object>
