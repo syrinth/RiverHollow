@@ -366,7 +366,7 @@ namespace RiverHollow.Game_Managers
                     case "Consumable":
                         return new Consumable(id, liData, num);
                     case "Special":
-                        switch (liData["SpecialType"])
+                        switch (liData["Subtype"])
                         {
                             case "Class":
                                 return new ClassItem(id, liData, num);

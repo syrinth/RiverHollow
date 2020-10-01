@@ -1079,9 +1079,9 @@ namespace RiverHollow.GUIComponents.Screens
             switch (_eType)
             {
                 case ItemEnum.Special:
-                    if (stringData.ContainsKey("SpecialType"))
+                    if (stringData.ContainsKey("Subtype"))
                     {
-                        if(stringData["SpecialType"].Equals("Map") || stringData["SpecialType"].Equals("DungeonKey"))
+                        if(stringData["Subtype"].Equals("Map") || stringData["Subtype"].Equals("DungeonKey"))
                         {
                             _texTexture = DataManager.GetTexture(@"Textures\Dialog");
                         }
@@ -1114,7 +1114,7 @@ namespace RiverHollow.GUIComponents.Screens
                     _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Resources");
                     break;
                 case ItemEnum.Equipment:
-                    EquipmentEnum type = Util.ParseEnum<EquipmentEnum>(stringData["EType"]);
+                    EquipmentEnum type = Util.ParseEnum<EquipmentEnum>(stringData["Subtype"]);
                     if (type.Equals(EquipmentEnum.Armor)) { _texTexture = DataManager.GetTexture(@"Textures\Items\armor"); }
                     else if (type.Equals(EquipmentEnum.Weapon)) { _texTexture = DataManager.GetTexture(@"Textures\Items\weapons"); }
                     else if (type.Equals(EquipmentEnum.Accessory)) { _texTexture = DataManager.GetTexture(@"Textures\Items\Accessories"); }

@@ -56,6 +56,7 @@ namespace RiverHollow.Game_Managers
         public enum ArmorSlotEnum { None, Head, Armor, Wrist };
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
         public enum ToolEnum { Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return };
+        public enum ClothesEnum { None, Body, Legs, Hat };
         public static float Scale = 4f;
         public const int TileSize = 16;
         public static int ScaledTileSize => (int)(TileSize * Scale);

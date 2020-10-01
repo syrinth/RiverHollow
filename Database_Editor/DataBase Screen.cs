@@ -60,7 +60,13 @@ namespace Database_Editor
         public frmDBEditor()
         {
             InitializeComponent();
-           
+
+            foreach (ItemEnum e in Enum.GetValues(typeof(ItemEnum)))
+            {
+                cbItemType.Items.Add("Type:" + e.ToString());
+            }
+            cbItemType.SelectedIndex = 0;
+
             _diMapData = new Dictionary<string, TMXData>();
             _diBasicXML = new Dictionary<string, List<XMLData>>();
             _diWorldObjectData = new Dictionary<ObjectTypeEnum, List<XMLData>>();
@@ -83,7 +89,7 @@ namespace Database_Editor
 
             LoadItemDatabase();
 
-            LoadItem();
+            LoadItemInfo();
         }
 
         private void LoadItemDatabase()
@@ -312,7 +318,7 @@ namespace Database_Editor
             }
         }
 
-        private void LoadItem()
+        private void LoadItemInfo()
         {
 
             ItemXMLData data = _liItemData[_iCurrID];
@@ -320,11 +326,21 @@ namespace Database_Editor
             tbDesc.Text = data.Description;
             tbID.Text = data.ID.ToString();
 
+            cbItemType.SelectedIndex = (int)data.ItemType;
+            SetItemSubtype();
+
             dgTags.Rows.Clear();
             string[] tags = data.GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in tags)
             {
-                dgTags.Rows.Add(s);
+                if (s.StartsWith("Subtype"))
+                {
+                    cbItemSubtype.SelectedIndex = GetSubtypeIndex(data.ItemType, s.Split(':')[1]);
+                }
+                else if (!s.StartsWith("Type"))
+                {
+                    dgTags.Rows.Add(s);
+                }
             }
         }
 
@@ -334,18 +350,95 @@ namespace Database_Editor
             dgDatabase.CurrentCell = dgDatabase.Rows[id].Cells[0];
         }
 
+        private void SetItemSubtype()
+        {
+            cbItemSubtype.Items.Clear();
+            ItemEnum itemType = Util.ParseEnum<ItemEnum>(cbItemType.SelectedItem.ToString().Split(':')[1]);
+            switch (itemType)
+            {
+                case ItemEnum.Clothes:
+                    cbItemSubtype.Visible = true;
+                    foreach (ClothesEnum en in Enum.GetValues(typeof(ClothesEnum)))
+                    {
+                        cbItemSubtype.Items.Add("Subtype:" + en.ToString());
+                    }
+                    break;
+                case ItemEnum.Equipment:
+                    cbItemSubtype.Visible = true;
+                    foreach (EquipmentEnum en in Enum.GetValues(typeof(EquipmentEnum)))
+                    {
+                        cbItemSubtype.Items.Add("Subtype:" + en.ToString());
+                    }
+                    break;
+                case ItemEnum.Special:
+                    cbItemSubtype.Visible = true;
+                    foreach (SpecialItemEnum en in Enum.GetValues(typeof(SpecialItemEnum)))
+                    {
+                        cbItemSubtype.Items.Add("Subtype:" + en.ToString());
+                    }
+                    break;
+                case ItemEnum.Tool:
+                    cbItemSubtype.Visible = true;
+                    foreach (ToolEnum en in Enum.GetValues(typeof(ToolEnum)))
+                    {
+                        cbItemSubtype.Items.Add("Subtype:" + en.ToString());
+                    }
+                    break;
+                default:
+                    cbItemSubtype.Visible = false;
+                    break;
+            }
+
+            if (cbItemSubtype.Visible)
+            {
+                cbItemSubtype.SelectedIndex = 0;
+            }
+        }
+
+        private int GetSubtypeIndex(ItemEnum e, string value)
+        {
+            int rv = 0;
+            switch (e)
+            {
+                case ItemEnum.Clothes:
+                    rv = (int)Util.ParseEnum<ClothesEnum>(value);
+                    break;
+                case ItemEnum.Equipment:
+                    rv = (int)Util.ParseEnum<EquipmentEnum>(value);
+                    break;
+                case ItemEnum.Special:
+                    rv = (int)Util.ParseEnum<SpecialItemEnum>(value);
+                    break;
+                case ItemEnum.Tool:
+                    rv = (int)Util.ParseEnum<ToolEnum>(value);
+                    break;
+            }
+
+            return rv;
+        }
+
         #region EventHandlers
         private void btnSave_Click(object sender, EventArgs e)
         {
-            ItemXMLData data = null;
-            if (_liItemData.Count == _iCurrID) {
-                Dictionary<string, string> diText = new Dictionary<string, string>();
-                diText["Name"] = tbName.Text;
-                diText["Description"] = tbDesc.Text;
+            if (_liItemData.Count == _iCurrID)
+            {
+                Dictionary<string, string> diText = new Dictionary<string, string>
+                {
+                    ["Name"] = tbName.Text,
+                    ["Description"] = tbDesc.Text
+                };
 
                 _diItemText[int.Parse(tbID.Text)] = diText;
 
                 Dictionary<string, string> tags = new Dictionary<string, string>();
+
+                string[] typeTag = cbItemType.SelectedItem.ToString().Split(':');
+                tags[typeTag[0]] = typeTag[1];
+                if (cbItemSubtype.Visible)
+                {
+                    string[] subTypeTag = cbItemSubtype.SelectedItem.ToString().Split(':');
+                    tags[subTypeTag[0]] = subTypeTag[1];
+                }
                 foreach (DataGridViewRow row in dgTags.Rows)
                 {
                     if (row.Cells[0].Value != null)
@@ -353,17 +446,35 @@ namespace Database_Editor
                         string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
                         string key = tagInfo[0];
                         string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
-                        tags[key] = val;
+                        if (key != "Type" && key != "Subtype")
+                        {
+                            tags[key] = val;
+                        }
                     }
                 }
 
                 _liItemData.Add(new ItemXMLData(_iCurrID, tags, ITEM_TAGS, ITEM_WORLD_TAGS));
             }
+            else
+            {
+                SaveItemInfo(_liItemData[_iCurrID]);
+            }
 
-            data = _liItemData[_iCurrID];
+            LoadItemDatabase();
+        }
+
+        private void SaveItemInfo(ItemXMLData data)
+        {
             data.SetTextData(tbName.Text, tbDesc.Text);
 
             data.ClearTagInfo();
+            string[] typeTag = cbItemType.SelectedItem.ToString().Split(':');
+            data.SetTagInfo(typeTag[0], typeTag[1]);
+            if (cbItemSubtype.Visible)
+            {
+                string[] subTypeTag = cbItemSubtype.SelectedItem.ToString().Split(':');
+                data.SetTagInfo(subTypeTag[0], subTypeTag[1]);
+            }
             foreach (DataGridViewRow row in dgTags.Rows)
             {
                 if (row.Cells[0].Value != null)
@@ -371,11 +482,12 @@ namespace Database_Editor
                     string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
                     string key = tagInfo[0];
                     string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
-                    data.SetTagInfo(key, val);
+                    if (key != "Type" && key != "Subtype")
+                    {
+                        data.SetTagInfo(key, val);
+                    }
                 }
             }
-
-            LoadItemDatabase();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -386,7 +498,7 @@ namespace Database_Editor
                 SelectRow(_iCurrID);
             }
 
-            LoadItem();
+            LoadItemInfo();
         }
 
         private void dgDatabase_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -397,12 +509,19 @@ namespace Database_Editor
             }
 
             _iCurrID = int.Parse(dgDatabase.Rows[e.RowIndex].Cells[0].Value.ToString());
-            LoadItem();
+            LoadItemInfo();
         }
 
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (_liItemData.Count == _iCurrID) { btnSave_Click(sender, e); }
+
+            foreach(ItemXMLData data in _liItemData)
+            {
+                _iCurrID = _liItemData.IndexOf(data);
+                LoadItemInfo();
+                SaveItemInfo(data);
+            }
 
             _liItemData.Sort((x, y) =>
             {
@@ -474,16 +593,19 @@ namespace Database_Editor
             tbDesc.Text = "";
             tbID.Text = _iCurrID.ToString();
 
-            dgTags.Rows.Clear();
+            cbItemType.SelectedIndex = 0;
 
+            dgTags.Rows.Clear();
             dgTags.Rows.Add();
             row = dgTags.Rows[0];
-            row.Cells["colTags"].Value = "Type:Resource";
-            dgTags.Rows.Add();
-            row = dgTags.Rows[1];
             row.Cells["colTags"].Value = "Image:0-0";
 
             tbName.Focus();
+        }
+
+        private void cbItemType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetItemSubtype();
         }
         #endregion
 
@@ -1003,5 +1125,7 @@ namespace Database_Editor
             }
         }
         #endregion
+
+ 
     }
 }

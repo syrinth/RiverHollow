@@ -396,7 +396,7 @@ namespace RiverHollow.Items
             ImportBasics(stringData, id, 1);
 
             //EType
-            EquipType = Util.ParseEnum<EquipmentEnum>(stringData["EType"]);
+            EquipType = Util.ParseEnum<EquipmentEnum>(stringData["Subtype"]);
 
             if (EquipType.Equals(EquipmentEnum.Armor)) { _texTexture = DataManager.GetTexture(@"Textures\Items\armor"); }
             else if (EquipType.Equals(EquipmentEnum.Weapon)) { _texTexture = DataManager.GetTexture(@"Textures\Items\weapons"); }
@@ -502,7 +502,6 @@ namespace RiverHollow.Items
     {
         string _sTextureAnimationName;
         public string TextureAnimationName => _sTextureAnimationName;
-        public enum ClothesEnum { None, Body, Legs, Hat};
         ClothesEnum _eSlot;
         public ClothesEnum ClothesType => _eSlot;
 
@@ -522,7 +521,7 @@ namespace RiverHollow.Items
             _bStacks = false;
             int row = 0;
 
-            _eSlot = Util.ParseEnum<ClothesEnum>(stringData["CType"]);
+            _eSlot = Util.ParseEnum<ClothesEnum>(stringData["Subtype"]);
             _bGenderNeutral = stringData.ContainsKey("Neutral");
             row = int.Parse(stringData["Row"]);
         }
@@ -560,7 +559,7 @@ namespace RiverHollow.Items
         {
             ImportBasics(stringData, id, 1);
 
-            ToolType = Util.ParseEnum<ToolEnum>(stringData["ToolType"]);
+            ToolType = Util.ParseEnum<ToolEnum>(stringData["Subtype"]);
 
             _iCharges = 0;
             Util.AssignValue(ref _iPower, "Power", stringData);
