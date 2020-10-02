@@ -90,7 +90,7 @@ namespace RiverHollow.Items
 
             string textID = "Item_" + _iItemID.ToString();
             DataManager.GetTextData(textID, ref _sName, "Name");
-            DataManager.GetTextData(textID, ref _sName, "Description");
+            DataManager.GetTextData(textID, ref _sDescription, "Description");
 
             //Item Type
             _eItemType = Util.ParseEnum<ItemEnum>(stringData["Type"]);

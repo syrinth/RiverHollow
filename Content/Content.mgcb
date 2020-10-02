@@ -460,11 +460,6 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/MonsterInfo.xml
 
-#begin Data/Text Files/ItemText.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/ItemText.xml
-
 #begin Data/Text Files/CombatSkillsText.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -2486,4 +2481,9 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sound/Original/Effects/Sample4.wav
+
+#begin Data/Text Files/Name_Text.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Name_Text.xml
 

@@ -172,7 +172,7 @@ namespace RiverHollow.Game_Managers
 
         private static void LoadTextFiles(ContentManager Content)
         {
-            LoadDictionary(ref _diItemText, FOLDER_TEXTFILES + "ItemText", Content);
+            LoadDictionary(ref _diItemText, FOLDER_TEXTFILES + "Name_Text", Content);
             _diGameText = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + "GameText");
             _diMonsterInfo = Content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + "MonsterInfo");
             _diStatusEffectText = Content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + "StatusText");
