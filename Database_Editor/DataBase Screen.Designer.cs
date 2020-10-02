@@ -51,36 +51,33 @@
             this.tbItemName = new System.Windows.Forms.TextBox();
             this.lblName = new System.Windows.Forms.Label();
             this.dgItems = new System.Windows.Forms.DataGridView();
-            this.colItemID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colItemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabWorldObjects = new System.Windows.Forms.TabPage();
             this.cbWorldObjectType = new System.Windows.Forms.ComboBox();
             this.btnWorldObjectCancel = new System.Windows.Forms.Button();
             this.btnWorldObjectSave = new System.Windows.Forms.Button();
             this.dgWorldObjectTags = new System.Windows.Forms.DataGridView();
+            this.colWorldObjectTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label4 = new System.Windows.Forms.Label();
             this.tbWorldObjectID = new System.Windows.Forms.TextBox();
             this.tbWorldObjectName = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.dgWorldObjects = new System.Windows.Forms.DataGridView();
-            this.colWorldObjectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colWorldObjectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabCharacters = new System.Windows.Forms.TabPage();
             this.cbCharacterType = new System.Windows.Forms.ComboBox();
             this.btnCancelCharacter = new System.Windows.Forms.Button();
             this.btnSaveCharacter = new System.Windows.Forms.Button();
             this.dgCharacterTags = new System.Windows.Forms.DataGridView();
+            this.colCharacterTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label3 = new System.Windows.Forms.Label();
             this.tbCharacterID = new System.Windows.Forms.TextBox();
             this.tbCharacterName = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.dgCharacters = new System.Windows.Forms.DataGridView();
-            this.colCharacterID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCharacterName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabClasses = new System.Windows.Forms.TabPage();
             this.btnClassCancel = new System.Windows.Forms.Button();
             this.btnClassSave = new System.Windows.Forms.Button();
             this.dgClassTags = new System.Windows.Forms.DataGridView();
+            this.colClassTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label7 = new System.Windows.Forms.Label();
             this.tbClassID = new System.Windows.Forms.TextBox();
             this.tbClassName = new System.Windows.Forms.TextBox();
@@ -88,9 +85,12 @@
             this.dgClasses = new System.Windows.Forms.DataGridView();
             this.colClassID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colClassName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colClassTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCharacterTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colWorldObjectTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCharacterID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCharacterName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colWorldObjectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colWorldObjectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colItemID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colItemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -133,32 +133,32 @@
             this.itemToolStripMenuItem,
             this.worldObjectToolStripMenuItem});
             this.addNewToolStripMenuItem.Name = "addNewToolStripMenuItem";
-            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.addNewToolStripMenuItem.Text = "Add New";
             // 
             // itemToolStripMenuItem
             // 
             this.itemToolStripMenuItem.Name = "itemToolStripMenuItem";
-            this.itemToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.itemToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.itemToolStripMenuItem.Text = "Item";
             this.itemToolStripMenuItem.Click += new System.EventHandler(this.addNewToolStripMenuItem_Click);
             // 
             // worldObjectToolStripMenuItem
             // 
             this.worldObjectToolStripMenuItem.Name = "worldObjectToolStripMenuItem";
-            this.worldObjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.worldObjectToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.worldObjectToolStripMenuItem.Text = "World Object";
             this.worldObjectToolStripMenuItem.Click += new System.EventHandler(this.addNewToolStripMenuWorldObject_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(133, 6);
             // 
             // saveToFileToolStripMenuItem
             // 
             this.saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
-            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.saveToFileToolStripMenuItem.Text = "Save To File";
             this.saveToFileToolStripMenuItem.Click += new System.EventHandler(this.saveToFileToolStripMenuItem_Click);
             // 
@@ -321,24 +321,6 @@
             this.dgItems.TabIndex = 14;
             this.dgItems.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellClick);
             // 
-            // colItemID
-            // 
-            this.colItemID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colItemID.FillWeight = 10F;
-            this.colItemID.HeaderText = "ID";
-            this.colItemID.Name = "colItemID";
-            this.colItemID.ReadOnly = true;
-            this.colItemID.Width = 28;
-            // 
-            // colItemName
-            // 
-            this.colItemName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colItemName.FillWeight = 90F;
-            this.colItemName.HeaderText = "Name";
-            this.colItemName.Name = "colItemName";
-            this.colItemName.ReadOnly = true;
-            this.colItemName.Width = 277;
-            // 
             // tabWorldObjects
             // 
             this.tabWorldObjects.Controls.Add(this.cbWorldObjectType);
@@ -397,6 +379,12 @@
             this.dgWorldObjectTags.Size = new System.Drawing.Size(464, 328);
             this.dgWorldObjectTags.TabIndex = 33;
             // 
+            // colWorldObjectTags
+            // 
+            this.colWorldObjectTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colWorldObjectTags.HeaderText = "Tags";
+            this.colWorldObjectTags.Name = "colWorldObjectTags";
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -448,24 +436,6 @@
             this.dgWorldObjects.Size = new System.Drawing.Size(308, 411);
             this.dgWorldObjects.TabIndex = 26;
             this.dgWorldObjects.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgWorldObjects_CellClick);
-            // 
-            // colWorldObjectsID
-            // 
-            this.colWorldObjectsID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colWorldObjectsID.FillWeight = 10F;
-            this.colWorldObjectsID.HeaderText = "ID";
-            this.colWorldObjectsID.Name = "colWorldObjectsID";
-            this.colWorldObjectsID.ReadOnly = true;
-            this.colWorldObjectsID.Width = 28;
-            // 
-            // colWorldObjectsName
-            // 
-            this.colWorldObjectsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colWorldObjectsName.FillWeight = 90F;
-            this.colWorldObjectsName.HeaderText = "Name";
-            this.colWorldObjectsName.Name = "colWorldObjectsName";
-            this.colWorldObjectsName.ReadOnly = true;
-            this.colWorldObjectsName.Width = 277;
             // 
             // tabCharacters
             // 
@@ -524,6 +494,12 @@
             this.dgCharacterTags.Size = new System.Drawing.Size(464, 328);
             this.dgCharacterTags.TabIndex = 42;
             // 
+            // colCharacterTags
+            // 
+            this.colCharacterTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colCharacterTags.HeaderText = "Tags";
+            this.colCharacterTags.Name = "colCharacterTags";
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -576,24 +552,6 @@
             this.dgCharacters.TabIndex = 37;
             this.dgCharacters.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgCharacters_CellClick);
             // 
-            // colCharacterID
-            // 
-            this.colCharacterID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colCharacterID.FillWeight = 10F;
-            this.colCharacterID.HeaderText = "ID";
-            this.colCharacterID.Name = "colCharacterID";
-            this.colCharacterID.ReadOnly = true;
-            this.colCharacterID.Width = 28;
-            // 
-            // colCharacterName
-            // 
-            this.colCharacterName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colCharacterName.FillWeight = 90F;
-            this.colCharacterName.HeaderText = "Name";
-            this.colCharacterName.Name = "colCharacterName";
-            this.colCharacterName.ReadOnly = true;
-            this.colCharacterName.Width = 277;
-            // 
             // tabClasses
             // 
             this.tabClasses.Controls.Add(this.btnClassCancel);
@@ -641,6 +599,12 @@
             this.dgClassTags.RowHeadersVisible = false;
             this.dgClassTags.Size = new System.Drawing.Size(464, 356);
             this.dgClassTags.TabIndex = 51;
+            // 
+            // colClassTags
+            // 
+            this.colClassTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colClassTags.HeaderText = "Tags";
+            this.colClassTags.Name = "colClassTags";
             // 
             // label7
             // 
@@ -696,39 +660,67 @@
             // 
             // colClassID
             // 
-            this.colClassID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colClassID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colClassID.FillWeight = 10F;
             this.colClassID.HeaderText = "ID";
             this.colClassID.Name = "colClassID";
             this.colClassID.ReadOnly = true;
-            this.colClassID.Width = 28;
             // 
             // colClassName
             // 
-            this.colClassName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colClassName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colClassName.FillWeight = 90F;
             this.colClassName.HeaderText = "Name";
             this.colClassName.Name = "colClassName";
             this.colClassName.ReadOnly = true;
-            this.colClassName.Width = 277;
             // 
-            // colClassTags
+            // colCharacterID
             // 
-            this.colClassTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colClassTags.HeaderText = "Tags";
-            this.colClassTags.Name = "colClassTags";
+            this.colCharacterID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colCharacterID.FillWeight = 10F;
+            this.colCharacterID.HeaderText = "ID";
+            this.colCharacterID.Name = "colCharacterID";
+            this.colCharacterID.ReadOnly = true;
             // 
-            // colCharacterTags
+            // colCharacterName
             // 
-            this.colCharacterTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colCharacterTags.HeaderText = "Tags";
-            this.colCharacterTags.Name = "colCharacterTags";
+            this.colCharacterName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colCharacterName.FillWeight = 90F;
+            this.colCharacterName.HeaderText = "Name";
+            this.colCharacterName.Name = "colCharacterName";
+            this.colCharacterName.ReadOnly = true;
             // 
-            // colWorldObjectTags
+            // colWorldObjectsID
             // 
-            this.colWorldObjectTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colWorldObjectTags.HeaderText = "Tags";
-            this.colWorldObjectTags.Name = "colWorldObjectTags";
+            this.colWorldObjectsID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colWorldObjectsID.FillWeight = 10F;
+            this.colWorldObjectsID.HeaderText = "ID";
+            this.colWorldObjectsID.Name = "colWorldObjectsID";
+            this.colWorldObjectsID.ReadOnly = true;
+            // 
+            // colWorldObjectsName
+            // 
+            this.colWorldObjectsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colWorldObjectsName.FillWeight = 90F;
+            this.colWorldObjectsName.HeaderText = "Name";
+            this.colWorldObjectsName.Name = "colWorldObjectsName";
+            this.colWorldObjectsName.ReadOnly = true;
+            // 
+            // colItemID
+            // 
+            this.colItemID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colItemID.FillWeight = 10F;
+            this.colItemID.HeaderText = "ID";
+            this.colItemID.Name = "colItemID";
+            this.colItemID.ReadOnly = true;
+            // 
+            // colItemName
+            // 
+            this.colItemName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colItemName.FillWeight = 90F;
+            this.colItemName.HeaderText = "Name";
+            this.colItemName.Name = "colItemName";
+            this.colItemName.ReadOnly = true;
             // 
             // frmDBEditor
             // 
@@ -795,10 +787,6 @@
         private System.Windows.Forms.TextBox tbWorldObjectName;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.DataGridView dgWorldObjects;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colItemID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colItemName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colWorldObjectsID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colWorldObjectsName;
         private System.Windows.Forms.ToolStripMenuItem itemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem worldObjectToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn colItemTags;
@@ -811,8 +799,6 @@
         private System.Windows.Forms.TextBox tbCharacterName;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.DataGridView dgCharacters;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colCharacterID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colCharacterName;
         private System.Windows.Forms.ComboBox cbCharacterType;
         private System.Windows.Forms.TabPage tabClasses;
         private System.Windows.Forms.Button btnClassCancel;
@@ -823,11 +809,17 @@
         private System.Windows.Forms.TextBox tbClassName;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.DataGridView dgClasses;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colClassID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colClassName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colWorldObjectTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCharacterTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colClassTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colItemID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colItemName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colWorldObjectsID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colWorldObjectsName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCharacterID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCharacterName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colClassID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colClassName;
     }
 }
 

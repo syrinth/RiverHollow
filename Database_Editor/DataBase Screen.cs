@@ -171,16 +171,23 @@ namespace Database_Editor
         #endregion
 
         #region Load Info Panes
-        private void LoadGenericDataInfo(XMLData data, TextBox name, TextBox id, DataGridView dgTags)
+        private void LoadGenericDataInfo(XMLData data, TextBox tbName, TextBox tbID, DataGridView dgTags, TextBox tbDescription = null)
         {
-            name.Text = data.Name;
-            id.Text = data.ID.ToString();
+            tbName.Text = data.Name;
+            if (tbDescription != null)
+            {
+                tbDescription.Text = data.Description;
+            }
+            tbID.Text = data.ID.ToString();
 
             dgTags.Rows.Clear();
             string[] tags = data.GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in tags)
             {
-                dgTags.Rows.Add(s);
+                if (!s.StartsWith("Type"))
+                {
+                    dgTags.Rows.Add(s);
+                }
             }
         }
         private void LoadItemInfo()
@@ -210,7 +217,7 @@ namespace Database_Editor
         private void LoadWorldObjectInfo()
         {
             XMLData data = _liWorldObjects[_diTabIndices["WorldObjects"]];
-            LoadGenericDataInfo(data, tbCharacterName, tbCharacterID, dgCharacterTags);
+            LoadGenericDataInfo(data, tbWorldObjectName, tbWorldObjectID, dgWorldObjectTags);
             cbWorldObjectType.SelectedIndex = (int)Util.ParseEnum<ObjectTypeEnum>(data.GetTagInfo("Type"));
         }
         private void LoadCharacterInfo()
@@ -938,6 +945,8 @@ namespace Database_Editor
         {
             protected string _sName;
             public string Name => _sName;
+            protected string _sDescription;
+            public string Description => _sDescription;
             protected XMLTypeEnum _eXMLType;
             protected int _iID;
             public int ID => _iID;
@@ -955,8 +964,15 @@ namespace Database_Editor
                 _arrWorldObjectTags = objectTags.Split(',');
 
                 string textID = Util.GetEnumString(xmlType) + "_" + id;
-                if (xmlType != XMLTypeEnum.None && _diItemText.ContainsKey(textID)) {
-                    _sName = _diItemText[textID]["Name"];
+                if (xmlType != XMLTypeEnum.None) {
+                    if (_diItemText.ContainsKey(textID)) {
+                        _sName = _diItemText[textID]["Name"];
+
+                        if(_diItemText[textID].ContainsKey("Description"))
+                        {
+                            _sDescription = _diItemText[textID]["Description"];
+                        }
+                    }
                 }
 
                 _iID = int.Parse(id);
@@ -1180,19 +1196,13 @@ namespace Database_Editor
         }
         public class ItemXMLData : XMLData
         {
-            string _sDescription;
-            public string Description => _sDescription;
             ItemEnum _eType;
             public ItemEnum ItemType => _eType;
 
             public ItemXMLData(string id, Dictionary<string, string> stringData, string itemTags, string worldTags) : base(id, stringData, itemTags, worldTags, XMLTypeEnum.Item)
             {
                 _eType = Util.ParseEnum<ItemEnum>(_diTags["Type"]);
-                string textID = "Item_" + id;
-                if (_diItemText.ContainsKey(textID))
-                {
-                    _sDescription = _diItemText[textID]["Description"];
-                }   
+                string textID = "Item_" + id;   
             }
 
             public void SetTextData(string name, string desc)
