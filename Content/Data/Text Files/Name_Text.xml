@@ -99,35 +99,35 @@
     </Item>
     <Item>
       <Key>Class_1</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Wizard]</Value>
     </Item>
     <Item>
       <Key>Class_2</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Healer]</Value>
     </Item>
     <Item>
       <Key>Class_3</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Summoner]</Value>
     </Item>
     <Item>
       <Key>Class_4</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Witch]</Value>
     </Item>
     <Item>
       <Key>Class_5</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Lancer]</Value>
     </Item>
     <Item>
       <Key>Class_6</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Knight]</Value>
     </Item>
     <Item>
       <Key>Class_7</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Scout]</Value>
     </Item>
     <Item>
       <Key>Class_8</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Bard]</Value>
     </Item>
     <Item>
       <Key>Worker_1</Key>

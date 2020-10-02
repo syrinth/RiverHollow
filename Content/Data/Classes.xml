@@ -31,7 +31,7 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Weapon:Rapier][Armor:Heavy][Hp:5][Spd:1][Ability:300-160-161-162-163-164-165-166-167][DWeap:80][DArmor:82][DHead:85][DWrist:87]</Value>
+      <Value>[Weapon:Rapier][Armor:Light][Hp:5][Spd:1][Ability:300-160-161-162-163-164-165-166-167][DWeap:80][DArmor:82][DHead:85][DWrist:87]</Value>
     </Item>
   </Asset>
 </XnaContent>

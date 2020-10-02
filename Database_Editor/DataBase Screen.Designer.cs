@@ -67,6 +67,7 @@
             this.colWorldObjectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colWorldObjectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabCharacters = new System.Windows.Forms.TabPage();
+            this.cbCharacterType = new System.Windows.Forms.ComboBox();
             this.btnCancelCharacter = new System.Windows.Forms.Button();
             this.btnSaveCharacter = new System.Windows.Forms.Button();
             this.dgCharacterTags = new System.Windows.Forms.DataGridView();
@@ -78,7 +79,18 @@
             this.dgCharacters = new System.Windows.Forms.DataGridView();
             this.colCharacterID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCharacterName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cbCharacterType = new System.Windows.Forms.ComboBox();
+            this.tabClasses = new System.Windows.Forms.TabPage();
+            this.btnClassCancel = new System.Windows.Forms.Button();
+            this.btnClassSave = new System.Windows.Forms.Button();
+            this.dgClassTags = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label7 = new System.Windows.Forms.Label();
+            this.tbClassID = new System.Windows.Forms.TextBox();
+            this.tbClassName = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.dgClasses = new System.Windows.Forms.DataGridView();
+            this.colClassID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colClassName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -90,6 +102,9 @@
             this.tabCharacters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgCharacterTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgCharacters)).BeginInit();
+            this.tabClasses.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgClassTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgClasses)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -151,6 +166,7 @@
             this.tabCtl.Controls.Add(this.tabItems);
             this.tabCtl.Controls.Add(this.tabWorldObjects);
             this.tabCtl.Controls.Add(this.tabCharacters);
+            this.tabCtl.Controls.Add(this.tabClasses);
             this.tabCtl.Location = new System.Drawing.Point(12, 27);
             this.tabCtl.Name = "tabCtl";
             this.tabCtl.SelectedIndex = 0;
@@ -377,7 +393,7 @@
             this.dgWorldObjectTags.Location = new System.Drawing.Point(320, 60);
             this.dgWorldObjectTags.Name = "dgWorldObjectTags";
             this.dgWorldObjectTags.RowHeadersVisible = false;
-            this.dgWorldObjectTags.Size = new System.Drawing.Size(464, 329);
+            this.dgWorldObjectTags.Size = new System.Drawing.Size(464, 328);
             this.dgWorldObjectTags.TabIndex = 33;
             // 
             // dataGridViewTextBoxColumn1
@@ -474,6 +490,14 @@
             this.tabCharacters.Text = "Characters";
             this.tabCharacters.UseVisualStyleBackColor = true;
             // 
+            // cbCharacterType
+            // 
+            this.cbCharacterType.FormattingEnabled = true;
+            this.cbCharacterType.Location = new System.Drawing.Point(320, 33);
+            this.cbCharacterType.Name = "cbCharacterType";
+            this.cbCharacterType.Size = new System.Drawing.Size(149, 21);
+            this.cbCharacterType.TabIndex = 45;
+            // 
             // btnCancelCharacter
             // 
             this.btnCancelCharacter.Location = new System.Drawing.Point(709, 394);
@@ -502,7 +526,7 @@
             this.dgCharacterTags.Location = new System.Drawing.Point(320, 60);
             this.dgCharacterTags.Name = "dgCharacterTags";
             this.dgCharacterTags.RowHeadersVisible = false;
-            this.dgCharacterTags.Size = new System.Drawing.Size(464, 329);
+            this.dgCharacterTags.Size = new System.Drawing.Size(464, 328);
             this.dgCharacterTags.TabIndex = 42;
             // 
             // colCharacterTag
@@ -581,13 +605,129 @@
             this.colCharacterName.ReadOnly = true;
             this.colCharacterName.Width = 277;
             // 
-            // cbCharacterType
+            // tabClasses
             // 
-            this.cbCharacterType.FormattingEnabled = true;
-            this.cbCharacterType.Location = new System.Drawing.Point(320, 33);
-            this.cbCharacterType.Name = "cbCharacterType";
-            this.cbCharacterType.Size = new System.Drawing.Size(149, 21);
-            this.cbCharacterType.TabIndex = 45;
+            this.tabClasses.Controls.Add(this.btnClassCancel);
+            this.tabClasses.Controls.Add(this.btnClassSave);
+            this.tabClasses.Controls.Add(this.dgClassTags);
+            this.tabClasses.Controls.Add(this.label7);
+            this.tabClasses.Controls.Add(this.tbClassID);
+            this.tabClasses.Controls.Add(this.tbClassName);
+            this.tabClasses.Controls.Add(this.label8);
+            this.tabClasses.Controls.Add(this.dgClasses);
+            this.tabClasses.Location = new System.Drawing.Point(4, 22);
+            this.tabClasses.Name = "tabClasses";
+            this.tabClasses.Size = new System.Drawing.Size(790, 425);
+            this.tabClasses.TabIndex = 3;
+            this.tabClasses.Text = "Classes";
+            this.tabClasses.UseVisualStyleBackColor = true;
+            // 
+            // btnClassCancel
+            // 
+            this.btnClassCancel.Location = new System.Drawing.Point(709, 394);
+            this.btnClassCancel.Name = "btnClassCancel";
+            this.btnClassCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnClassCancel.TabIndex = 53;
+            this.btnClassCancel.Text = "Cancel";
+            this.btnClassCancel.UseVisualStyleBackColor = true;
+            this.btnClassCancel.Click += new System.EventHandler(this.btnClassCancel_Click);
+            // 
+            // btnClassSave
+            // 
+            this.btnClassSave.Location = new System.Drawing.Point(628, 394);
+            this.btnClassSave.Name = "btnClassSave";
+            this.btnClassSave.Size = new System.Drawing.Size(75, 23);
+            this.btnClassSave.TabIndex = 52;
+            this.btnClassSave.Text = "Save";
+            this.btnClassSave.UseVisualStyleBackColor = true;
+            this.btnClassSave.Click += new System.EventHandler(this.btnClassSave_Click);
+            // 
+            // dgClassTags
+            // 
+            this.dgClassTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgClassTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn2});
+            this.dgClassTags.Location = new System.Drawing.Point(320, 32);
+            this.dgClassTags.Name = "dgClassTags";
+            this.dgClassTags.RowHeadersVisible = false;
+            this.dgClassTags.Size = new System.Drawing.Size(464, 356);
+            this.dgClassTags.TabIndex = 51;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn2.HeaderText = "Tags";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(714, 9);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(21, 13);
+            this.label7.TabIndex = 50;
+            this.label7.Text = "ID:";
+            // 
+            // tbClassID
+            // 
+            this.tbClassID.Location = new System.Drawing.Point(741, 6);
+            this.tbClassID.Name = "tbClassID";
+            this.tbClassID.Size = new System.Drawing.Size(43, 20);
+            this.tbClassID.TabIndex = 49;
+            // 
+            // tbClassName
+            // 
+            this.tbClassName.Location = new System.Drawing.Point(361, 6);
+            this.tbClassName.Name = "tbClassName";
+            this.tbClassName.Size = new System.Drawing.Size(108, 20);
+            this.tbClassName.TabIndex = 48;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(317, 9);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(38, 13);
+            this.label8.TabIndex = 47;
+            this.label8.Text = "Name:";
+            // 
+            // dgClasses
+            // 
+            this.dgClasses.AllowUserToAddRows = false;
+            this.dgClasses.AllowUserToDeleteRows = false;
+            this.dgClasses.AllowUserToResizeColumns = false;
+            this.dgClasses.AllowUserToResizeRows = false;
+            this.dgClasses.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgClasses.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colClassID,
+            this.colClassName});
+            this.dgClasses.Location = new System.Drawing.Point(6, 6);
+            this.dgClasses.MultiSelect = false;
+            this.dgClasses.Name = "dgClasses";
+            this.dgClasses.ReadOnly = true;
+            this.dgClasses.RowHeadersVisible = false;
+            this.dgClasses.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgClasses.Size = new System.Drawing.Size(308, 411);
+            this.dgClasses.TabIndex = 46;
+            this.dgClasses.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgClasses_CellClick);
+            // 
+            // colClassID
+            // 
+            this.colClassID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colClassID.FillWeight = 10F;
+            this.colClassID.HeaderText = "ID";
+            this.colClassID.Name = "colClassID";
+            this.colClassID.ReadOnly = true;
+            this.colClassID.Width = 28;
+            // 
+            // colClassName
+            // 
+            this.colClassName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colClassName.FillWeight = 90F;
+            this.colClassName.HeaderText = "Name";
+            this.colClassName.Name = "colClassName";
+            this.colClassName.ReadOnly = true;
+            this.colClassName.Width = 277;
             // 
             // frmDBEditor
             // 
@@ -615,6 +755,10 @@
             this.tabCharacters.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgCharacterTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgCharacters)).EndInit();
+            this.tabClasses.ResumeLayout(false);
+            this.tabClasses.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgClassTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgClasses)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -671,6 +815,18 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colCharacterName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCharacterTag;
         private System.Windows.Forms.ComboBox cbCharacterType;
+        private System.Windows.Forms.TabPage tabClasses;
+        private System.Windows.Forms.Button btnClassCancel;
+        private System.Windows.Forms.Button btnClassSave;
+        private System.Windows.Forms.DataGridView dgClassTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox tbClassID;
+        private System.Windows.Forms.TextBox tbClassName;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.DataGridView dgClasses;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colClassID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colClassName;
     }
 }
 

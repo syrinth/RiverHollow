@@ -58,6 +58,9 @@ namespace Database_Editor
         static Dictionary<string, List<XMLData>> _diBasicXML;
         Dictionary<string, TMXData> _diMapData;
 
+        delegate void LoadInfoDelegate();
+        delegate void SaveInfoDelegate(XMLData data);
+
         public frmDBEditor()
         {
             InitializeComponent();
@@ -87,7 +90,8 @@ namespace Database_Editor
             {
                 { "Items", 0 },
                 { "WorldObjects", 0 },
-                { "Characters", 0 }
+                { "Characters", 0 },
+                { "Classes", 0 }
             };
 
             _diMapData = new Dictionary<string, TMXData>();
@@ -113,13 +117,30 @@ namespace Database_Editor
             LoadItemDatagrid();
             LoadWorldObjectDataGrid();
             LoadCharacterDataGrid();
+            LoadClassDataGrid();
 
             LoadItemInfo();
             LoadWorldObjectInfo();
             LoadCharacterInfo();
+            LoadClassInfo();
         }
 
         #region DataGridView Loading
+        private void LoadGenericDatagrid(DataGridView dg, List<XMLData> data, string colID, string colName, string tabIndex)
+        {
+            dg.Rows.Clear();
+            for (int i = 0; i < data.Count; i++)
+            {
+                dg.Rows.Add();
+                DataGridViewRow row = dg.Rows[i];
+
+                row.Cells[colID].Value = data[i].ID;
+                row.Cells[colName].Value = data[i].Name;
+            }
+
+            SelectRow(dg, _diTabIndices[tabIndex]);
+            dg.Focus();
+        }
         private void LoadItemDatagrid()
         {
             dgItems.Rows.Clear();
@@ -137,36 +158,31 @@ namespace Database_Editor
         }
         private void LoadWorldObjectDataGrid()
         {
-            dgWorldObjects.Rows.Clear();
-            for (int i = 0; i < _liWorldObjects.Count; i++)
-            {
-                dgWorldObjects.Rows.Add();
-                DataGridViewRow row = dgWorldObjects.Rows[i];
-
-                row.Cells["colWorldObjectsID"].Value = _liWorldObjects[i].ID;
-                row.Cells["colWorldObjectsName"].Value = _liWorldObjects[i].Name;
-            }
-
-            SelectRow(dgWorldObjects, _diTabIndices["WorldObjects"]);
+            LoadGenericDatagrid(dgWorldObjects, _liWorldObjects, "colWorldObjectsID", "colWorldObjectsName", "WorldObjects");
         }
         private void LoadCharacterDataGrid()
         {
-            dgCharacters.Rows.Clear();
-            List<XMLData> liCharData = _diBasicXML[CHARACTER_XML_FILE];
-            for (int i = 0; i < liCharData.Count; i++)
-            {
-                dgCharacters.Rows.Add();
-                DataGridViewRow row = dgCharacters.Rows[i];
-
-                row.Cells["colCharacterID"].Value = liCharData[i].ID;
-                row.Cells["colCharacterName"].Value = liCharData[i].Name;
-            }
-
-            SelectRow(dgCharacters, _diTabIndices["Characters"]);
+            LoadGenericDatagrid(dgCharacters, _diBasicXML[CHARACTER_XML_FILE], "colCharacterID", "colCharacterName", "Characters");
+        }
+        private void LoadClassDataGrid()
+        {
+            LoadGenericDatagrid(dgClasses, _diBasicXML[CLASSES_XML_FILE], "colClassID", "colClassName", "Classes");
         }
         #endregion
 
         #region Load Info Panes
+        private void LoadGenericDataInfo(XMLData data, TextBox name, TextBox id, DataGridView dgTags)
+        {
+            name.Text = data.Name;
+            id.Text = data.ID.ToString();
+
+            dgTags.Rows.Clear();
+            string[] tags = data.GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in tags)
+            {
+                dgTags.Rows.Add(s);
+            }
+        }
         private void LoadItemInfo()
         {
             ItemXMLData data = _liItemData[_diTabIndices["Items"]];
@@ -194,38 +210,19 @@ namespace Database_Editor
         private void LoadWorldObjectInfo()
         {
             XMLData data = _liWorldObjects[_diTabIndices["WorldObjects"]];
-            tbWorldObjectName.Text = data.Name;
-            tbWorldObjectID.Text = data.ID.ToString();
-
+            LoadGenericDataInfo(data, tbCharacterName, tbCharacterID, dgCharacterTags);
             cbWorldObjectType.SelectedIndex = (int)Util.ParseEnum<ObjectTypeEnum>(data.GetTagInfo("Type"));
-
-            dgWorldObjectTags.Rows.Clear();
-            string[] tags = data.GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string s in tags)
-            {
-                if (!s.StartsWith("Type") && !s.StartsWith("Name"))
-                {
-                    dgWorldObjectTags.Rows.Add(s);
-                }
-            }
         }
         private void LoadCharacterInfo()
         {
             XMLData data = _diBasicXML[CHARACTER_XML_FILE][_diTabIndices["Characters"]];
-            tbCharacterName.Text = data.Name;
-            tbCharacterID.Text = data.ID.ToString();
-
+            LoadGenericDataInfo(data, tbCharacterName, tbCharacterID, dgCharacterTags);
             cbCharacterType.SelectedIndex = (int)Util.ParseEnum<NPCTypeEnum>(data.GetTagInfo("Type"));
-
-            dgCharacterTags.Rows.Clear();
-            string[] tags = data.GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string s in tags)
-            {
-                if (!s.StartsWith("Type"))
-                {
-                    dgCharacterTags.Rows.Add(s);
-                }
-            }
+        }
+        private void LoadClassInfo()
+        {
+            XMLData data = _diBasicXML[CLASSES_XML_FILE][_diTabIndices["Classes"]];
+            LoadGenericDataInfo(data, tbClassName, tbClassID, dgClassTags);
         }
         #endregion
 
@@ -526,6 +523,44 @@ namespace Database_Editor
         }
 
         #region EventHandlers
+        private void GenericButtonSaveclick(List<XMLData> liData, string tabIndex, DataGridView dgTags, ComboBox cb, string textIDPrefix, XMLTypeEnum xmlType, LoadInfoDelegate loadDGDel, SaveInfoDelegate saveInfo, string itemTags = "", string objectTags = "")
+        {
+            if (liData.Count == _diTabIndices[tabIndex])
+            {
+                Dictionary<string, string> diText = new Dictionary<string, string>
+                {
+                    ["Name"] = tbItemName.Text,
+                };
+                _diItemText[textIDPrefix + "_" + tbItemID.Text] = diText;
+
+                Dictionary<string, string> tags = new Dictionary<string, string>();
+
+                if (cb != null)
+                {
+                    string[] typeTag = cb.SelectedItem.ToString().Split(':');
+                    tags[typeTag[0]] = typeTag[1];
+                }
+
+                foreach (DataGridViewRow row in dgTags.Rows)
+                {
+                    if (row.Cells[0].Value != null)
+                    {
+                        string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                        string key = tagInfo[0];
+                        string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
+                        tags[key] = val;
+                    }
+                }
+
+                liData.Add(new XMLData(_diTabIndices[tabIndex].ToString(), tags, itemTags, objectTags, xmlType));
+            }
+            else
+            {
+                saveInfo(liData[_diTabIndices[tabIndex]]);
+            }
+
+            loadDGDel();
+        }
         private void btnItemSave_Click(object sender, EventArgs e)
         {
             if (_liItemData.Count == _diTabIndices["Items"])
@@ -572,78 +607,37 @@ namespace Database_Editor
         }
         private void btnWorldObjectSave_Click(object sender, EventArgs e)
         {
-            if (_liWorldObjects.Count == _diTabIndices["WorldObjects"])
-            {
-                Dictionary<string, string> diText = new Dictionary<string, string>
-                {
-                    ["Name"] = tbItemName.Text,
-                };
-                _diItemText["WorldObject_" + tbItemID.Text] = diText;
-
-                Dictionary<string, string> tags = new Dictionary<string, string>();
-
-                string[] typeTag = cbWorldObjectType.SelectedItem.ToString().Split(':');
-                tags[typeTag[0]] = typeTag[1];
-
-                foreach (DataGridViewRow row in dgWorldObjectTags.Rows)
-                {
-                    if (row.Cells[0].Value != null)
-                    {
-                        string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                        string key = tagInfo[0];
-                        string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
-                        if (key != "Type")
-                        {
-                            tags[key] = val;
-                        }
-                    }
-                }
-
-                _liWorldObjects.Add(new XMLData(_diTabIndices["WorldObjects"].ToString(), tags, WORLD_OBJECT_TAGS, DEFAULT_WORLD_TAG, XMLTypeEnum.WorldObject));
-            }
-            else
-            {
-                SaveWorldObjectInfo(_liWorldObjects[_diTabIndices["WorldObjects"]]);
-            }
-
-            LoadWorldObjectDataGrid();
+            GenericButtonSaveclick(_liWorldObjects, "WorldObjects", dgWorldObjectTags, cbWorldObjectType, "WorldObject", XMLTypeEnum.WorldObject, LoadWorldObjectDataGrid, SaveWorldObjectInfo, WORLD_OBJECT_TAGS, DEFAULT_WORLD_TAG);
         }
         private void btnCharacterSave_Click(object sender, EventArgs e)
         {
-            if (_diBasicXML[CHARACTER_XML_FILE].Count == _diTabIndices["Characters"])
-            {
-                Dictionary<string, string> diText = new Dictionary<string, string>
-                {
-                    ["Name"] = tbCharacterName.Text,
-                };
-                _diItemText["Character_" + tbCharacterID.Text] = diText;
-
-                Dictionary<string, string> tags = new Dictionary<string, string>();
-
-                string[] typeTag = cbCharacterType.SelectedItem.ToString().Split(':');
-                tags[typeTag[0]] = typeTag[1];
-
-                foreach (DataGridViewRow row in dgCharacterTags.Rows)
-                {
-                    if (row.Cells[0].Value != null)
-                    {
-                        string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                        string key = tagInfo[0];
-                        string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
-                        tags[key] = val;
-                    }
-                }
-
-                _diBasicXML[CHARACTER_XML_FILE].Add(new XMLData(_diTabIndices["Characters"].ToString(), tags, WORLD_OBJECT_TAGS, DEFAULT_WORLD_TAG, XMLTypeEnum.Character));
-            }
-            else
-            {
-                SaveCharacterInfo(_diBasicXML[CHARACTER_XML_FILE][_diTabIndices["Characters"]]);
-            }
-
-            LoadCharacterDataGrid();
+            GenericButtonSaveclick(_diBasicXML[CHARACTER_XML_FILE], "Characters", dgWorldObjectTags, cbCharacterType, "Character_", XMLTypeEnum.Character, LoadCharacterDataGrid, SaveCharacterInfo);
+        }
+        private void btnClassSave_Click(object sender, EventArgs e)
+        {
+            GenericButtonSaveclick(_diBasicXML[CLASSES_XML_FILE], "Classes", dgClassTags, null, "Class_", XMLTypeEnum.Class, LoadClassDataGrid, SaveClassInfo);
         }
 
+        private void SaveGenericInfo(XMLData data, TextBox name, ComboBox cb, DataGridView dgTags)
+        {
+            data.SetTextData(name.Text);
+            data.ClearTagInfo();
+            if (cb != null)
+            {
+                string[] typeTag = cb.SelectedItem.ToString().Split(':');
+                data.SetTagInfo(typeTag[0], typeTag[1]);
+            }
+            foreach (DataGridViewRow row in dgTags.Rows)
+            {
+                if (row.Cells[0].Value != null)
+                {
+                    string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                    string key = tagInfo[0];
+                    string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
+                    data.SetTagInfo(key, val);
+                }
+            }
+        }
         private void SaveItemInfo(ItemXMLData data)
         {
             data.SetTextData(tbItemName.Text, tbItemDesc.Text);
@@ -673,42 +667,26 @@ namespace Database_Editor
         }
         private void SaveWorldObjectInfo(XMLData data)
         {
-            data.SetTextData(tbWorldObjectName.Text);
-            data.ClearTagInfo();
-            string[] typeTag = cbWorldObjectType.SelectedItem.ToString().Split(':');
-            data.SetTagInfo(typeTag[0], typeTag[1]);
-            foreach (DataGridViewRow row in dgWorldObjectTags.Rows)
-            {
-                if (row.Cells[0].Value != null)
-                {
-                    string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                    string key = tagInfo[0];
-                    string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
-                    if (key != "Type")
-                    {
-                        data.SetTagInfo(key, val);
-                    }
-                }
-            }
+            SaveGenericInfo(data, tbWorldObjectName, cbWorldObjectType, dgWorldObjectTags);
         }
         private void SaveCharacterInfo(XMLData data)
         {
-            data.SetTextData(tbCharacterName.Text);
-            data.ClearTagInfo();
-            string[] typeTag = cbCharacterType.SelectedItem.ToString().Split(':');
-            data.SetTagInfo(typeTag[0], typeTag[1]);
-            foreach (DataGridViewRow row in dgCharacterTags.Rows)
-            {
-                if (row.Cells[0].Value != null)
-                {
-                    string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                    string key = tagInfo[0];
-                    string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
-                    data.SetTagInfo(key, val);
-                }
-            }
+            SaveGenericInfo(data, tbCharacterName, cbCharacterType, dgCharacterTags);
+        }
+        private void SaveClassInfo(XMLData data)
+        {
+            SaveGenericInfo(data, tbClassName, null, dgClassTags);
         }
 
+        private void GenericCancel(List<XMLData> liData, string tabIndex, DataGridView dgMain, LoadInfoDelegate del)
+        {
+            if (liData.Count == _diTabIndices[tabIndex])
+            {
+                dgMain.Rows.RemoveAt(_diTabIndices[tabIndex]--);
+                SelectRow(dgMain, _diTabIndices[tabIndex]);
+            }
+            del();
+        }
         private void btnItemCancel_Click(object sender, EventArgs e)
         {
             if (_liItemData.Count == _diTabIndices["Items"])
@@ -721,25 +699,30 @@ namespace Database_Editor
         }
         private void btnWorldObjectCancel_Click(object sender, EventArgs e)
         {
-            if (_liWorldObjects.Count == _diTabIndices["WorldObjects"])
-            {
-                dgWorldObjects.Rows.RemoveAt(_diTabIndices["WorldObjects"]--);
-                SelectRow(dgWorldObjects, _diTabIndices["WorldObjects"]);
-            }
-
-            LoadWorldObjectInfo();
+            GenericCancel(_liWorldObjects, "WorldObjects", dgWorldObjects, LoadWorldObjectInfo);
         }
         private void btnCharacterCancel_Click(object sender, EventArgs e)
         {
-            if (_diBasicXML[CHARACTER_XML_FILE].Count == _diTabIndices["Characters"])
-            {
-                dgCharacters.Rows.RemoveAt(_diTabIndices["Characters"]--);
-                SelectRow(dgWorldObjects, _diTabIndices["Characters"]);
-            }
-
-            LoadCharacterInfo();
+            GenericCancel(_diBasicXML[CHARACTER_XML_FILE], "Characters", dgCharacters, LoadCharacterInfo);
+        }
+        private void btnClassCancel_Click(object sender, EventArgs e)
+        {
+            GenericCancel(_diBasicXML[CLASSES_XML_FILE], "Classes", dgClasses, LoadClassInfo);
         }
 
+        private void GenericCellClick(DataGridViewCellEventArgs e,  List<XMLData> liData, string tabIndex, DataGridView dgMain, LoadInfoDelegate del)
+        {
+            if (e.RowIndex > -1)
+            {
+                if (liData.Count == _diTabIndices[tabIndex])
+                {
+                    dgWorldObjects.Rows.RemoveAt(_diTabIndices[tabIndex]--);
+                }
+
+                _diTabIndices[tabIndex] = e.RowIndex;
+                del();
+            }
+        }
         private void dgItems_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex > -1)
@@ -751,34 +734,19 @@ namespace Database_Editor
 
                 _diTabIndices["Items"] = int.Parse(dgItems.Rows[e.RowIndex].Cells[0].Value.ToString());
                 LoadItemInfo();
-                tbItemName.Focus();
             }
         }
         private void dgWorldObjects_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex > -1)
-            {
-                if (_liWorldObjects.Count == _diTabIndices["WorldObjects"])
-                {
-                    dgWorldObjects.Rows.RemoveAt(_diTabIndices["WorldObjects"]--);
-                }
-
-                _diTabIndices["WorldObjects"] = int.Parse(dgWorldObjects.Rows[e.RowIndex].Cells[0].Value.ToString());
-                LoadWorldObjectInfo();
-            }
+            GenericCellClick(e, _liWorldObjects, "WorldObjects", dgWorldObjects, LoadWorldObjectInfo);
         }
         private void dgCharacters_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex > -1)
-            {
-                if (_diBasicXML[CHARACTER_XML_FILE].Count == _diTabIndices["Characters"])
-                {
-                    dgCharacters.Rows.RemoveAt(_diTabIndices["Characters"]--);
-                }
-
-                _diTabIndices["Characters"] = int.Parse(dgCharacters.Rows[e.RowIndex].Cells[0].Value.ToString());
-                LoadCharacterInfo();
-            }
+            GenericCellClick(e, _diBasicXML[CHARACTER_XML_FILE], "Characters", dgCharacters, LoadCharacterInfo);
+        }
+        private void dgClasses_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            GenericCellClick(e, _diBasicXML[CLASSES_XML_FILE], "Classes", dgClasses, LoadClassInfo);
         }
 
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -878,6 +846,7 @@ namespace Database_Editor
             if (tabCtl.SelectedTab == tabCtl.TabPages["tabWorldObjects"]) { dgWorldObjects.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItems"]) { dgItems.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCharacters"]) { dgCharacters.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabClasses"]) { dgClasses.Focus(); }
         }
         #endregion
 
