@@ -12,6 +12,7 @@ namespace Database_Editor
 {
     public partial class frmDBEditor : Form
     {
+        public enum XMLTypeEnum { None, Quest, Character, Class, Worker, Building, WorldObject, Item };
         #region XML Files
         string QUEST_XML_FILE = PATH_TO_DATA + @"\Quests.xml";
         string CHARACTER_XML_FILE = PATH_TO_DATA + @"\CharacterData.xml";
@@ -22,7 +23,7 @@ namespace Database_Editor
         string ADVENTURERS_XML_FILE = PATH_TO_DATA + @"\Shops\Adventurers.xml";
         string BUILDINGS_XML_FILE = PATH_TO_DATA + @"\Shops\Buildings.xml";
         string ITEM_DATA_XML_FILE = PATH_TO_DATA + @"\ItemData.xml";
-        string ITEM_TEXT_XML_FILE = PATH_TO_DATA + @"\Text Files\ItemText.xml";
+        string NAME_TEXT_XML_FILE = PATH_TO_DATA + @"\Text Files\Name_Text.xml";
         string WORLD_OBJECTS_DATA_XML_FILE = PATH_TO_DATA + @"\WorldObjects.xml";
         #endregion
 
@@ -52,7 +53,7 @@ namespace Database_Editor
         static string PATH_TO_MAPS = string.Format(@"{0}\..\..\..\..\Adventure\Content\Maps", System.Environment.CurrentDirectory);
         static string PATH_TO_DATA = string.Format(@"{0}\..\..\..\..\Adventure\Content\Data", System.Environment.CurrentDirectory);
 
-        static Dictionary<int, Dictionary<string, string>> _diItemText;
+        static Dictionary<string, Dictionary<string, string>> _diItemText;
         static Dictionary<ItemEnum, List<ItemXMLData>> _diItems;
         static Dictionary<ObjectTypeEnum, List<XMLData>> _diWorldObjectData;
         static Dictionary<string, List<XMLData>> _diBasicXML;
@@ -80,7 +81,7 @@ namespace Database_Editor
             _diWorldObjectData = new Dictionary<ObjectTypeEnum, List<XMLData>>();
             _diItems = new Dictionary<ItemEnum, List<ItemXMLData>>();
 
-            _diItemText = ReadXMLFile(ITEM_TEXT_XML_FILE);
+            _diItemText = ReadXMLFile(NAME_TEXT_XML_FILE);
 
             LoadXMLDictionary(QUEST_XML_FILE, QUEST_ITEM_TAGS, DEFAULT_WORLD_TAG);
             LoadXMLDictionary(CHARACTER_XML_FILE, CHARACTER_ITEM_TAGS, DEFAULT_WORLD_TAG);
@@ -130,7 +131,7 @@ namespace Database_Editor
                 DataGridViewRow row = dgWorldObjects.Rows[i];
 
                 row.Cells["colWorldObjectsID"].Value = _liWorldObjects[i].ID;
-                row.Cells["colWorldObjectsName"].Value = _liWorldObjects[i].GetTagInfo("Name");
+                row.Cells["colWorldObjectsName"].Value = _liWorldObjects[i].Name;
             }
 
             SelectRow(dgWorldObjects, _iCurrWorldObjectID);
@@ -166,7 +167,7 @@ namespace Database_Editor
         private void LoadWorldObjectInfo()
         {
             XMLData data = _liWorldObjects[_iCurrWorldObjectID];
-            tbWorldObjectName.Text = data.GetTagInfo("Name");
+            tbWorldObjectName.Text = data.Name;
             tbWorldObjectID.Text = data.ID.ToString();
 
             cbWorldObjectType.SelectedIndex = (int)Util.ParseEnum<ObjectTypeEnum>(data.GetTagInfo("Type"));
@@ -183,11 +184,22 @@ namespace Database_Editor
         }
         #endregion
 
+        private XMLTypeEnum FileNameToXMLType(string fileName) {
+            XMLTypeEnum rv = XMLTypeEnum.None;
 
-        private Dictionary<int, Dictionary<string, string>> ReadXMLFile(string fileName)
+            if(fileName == QUEST_XML_FILE){ rv = XMLTypeEnum.Quest; }
+            else if (fileName == CHARACTER_XML_FILE){ rv = XMLTypeEnum.Character; }
+            else if (fileName == CLASSES_XML_FILE) { rv = XMLTypeEnum.Class; }
+            else if (fileName == WORKERS_XML_FILE) { rv = XMLTypeEnum.Worker; }
+            else if (fileName == WORLD_OBJECTS_DATA_XML_FILE) { rv = XMLTypeEnum.WorldObject; }
+
+            return rv;
+        }
+
+        private Dictionary<string, Dictionary<string, string>> ReadXMLFile(string fileName)
         {
             string line = string.Empty;
-            Dictionary<int, Dictionary<string, string>> xmlDictionary = new Dictionary<int, Dictionary<string, string>>();
+            Dictionary<string, Dictionary<string, string>> xmlDictionary = new Dictionary<string, Dictionary<string, string>>();
 
             XmlDocument xmldoc = new XmlDocument();
             XmlNodeList xmlnode;
@@ -208,7 +220,7 @@ namespace Database_Editor
                     tagDictionary[kvp[0]] = kvp.Length > 1 ? kvp[1] : string.Empty;
                 }
 
-                xmlDictionary[int.Parse(xmlnode[i].ChildNodes.Item(0).InnerText)] = tagDictionary;
+                xmlDictionary[xmlnode[i].ChildNodes.Item(0).InnerText] = tagDictionary;
             }
 
             return xmlDictionary;
@@ -217,9 +229,9 @@ namespace Database_Editor
         private void LoadXMLDictionary(string fileName, string itemTags, string objectTags)
         {
             List<XMLData> data = new List<XMLData>();
-            foreach (KeyValuePair<int, Dictionary<string, string>> kvp in ReadXMLFile(fileName))
+            foreach (KeyValuePair<string, Dictionary<string, string>> kvp in ReadXMLFile(fileName))
             {
-                data.Add(new XMLData(kvp.Key, kvp.Value, itemTags, objectTags));
+                data.Add(new XMLData(kvp.Key, kvp.Value, itemTags, objectTags, FileNameToXMLType(fileName)));
             }
 
             _diBasicXML[fileName] = data;
@@ -232,15 +244,16 @@ namespace Database_Editor
         {
             //Load in all the WorldObject Data
             _liWorldObjects = new List<XMLData>();
-            Dictionary<int, Dictionary<string, string>> worldObjectDictionary = ReadXMLFile(WORLD_OBJECTS_DATA_XML_FILE);
+            Dictionary<string, Dictionary<string, string>> worldObjectDictionary = ReadXMLFile(WORLD_OBJECTS_DATA_XML_FILE);
             for (int i = 0; i < 1001; i++)
             {
-                if (worldObjectDictionary.ContainsKey(i))
+                string strID = i.ToString();
+                if (worldObjectDictionary.ContainsKey(strID))
                 {
-                    Dictionary<string, string> stringData = worldObjectDictionary[i];
+                    Dictionary<string, string> stringData = worldObjectDictionary[strID];
                     if (stringData != null)
                     {
-                        _liWorldObjects.Add(new XMLData(i, stringData, WORLD_OBJECT_TAGS, DEFAULT_WORLD_TAG));
+                        _liWorldObjects.Add(new XMLData(strID, stringData, WORLD_OBJECT_TAGS, DEFAULT_WORLD_TAG, XMLTypeEnum.WorldObject));
                     }
                 }
                 else { break; }
@@ -257,15 +270,16 @@ namespace Database_Editor
         {
             //Load in all the Item Data
             _liItemData = new List<ItemXMLData>();
-            Dictionary<int, Dictionary<string, string>> itemDictionary = ReadXMLFile(ITEM_DATA_XML_FILE);
+            Dictionary<string, Dictionary<string, string>> itemDictionary = ReadXMLFile(ITEM_DATA_XML_FILE);
             for (int i = 0; i < 1001; i++)
             {
-                if (itemDictionary.ContainsKey(i))
+                string strID = i.ToString();
+                if (itemDictionary.ContainsKey(strID))
                 {
-                    Dictionary<string, string> stringData = itemDictionary[i];
+                    Dictionary<string, string> stringData = itemDictionary[strID];
                     if (stringData != null)
                     {
-                        _liItemData.Add(new ItemXMLData(i, stringData, ITEM_TAGS, ITEM_WORLD_TAGS));
+                        _liItemData.Add(new ItemXMLData(strID, stringData, ITEM_TAGS, ITEM_WORLD_TAGS));
                     }
                 }
                 else { break; }
@@ -477,7 +491,7 @@ namespace Database_Editor
                     ["Description"] = tbItemDesc.Text
                 };
 
-                _diItemText[int.Parse(tbItemID.Text)] = diText;
+                _diItemText["Item_" + tbItemID.Text] = diText;
 
                 Dictionary<string, string> tags = new Dictionary<string, string>();
 
@@ -502,7 +516,7 @@ namespace Database_Editor
                     }
                 }
 
-                _liItemData.Add(new ItemXMLData(_iCurrItemID, tags, ITEM_TAGS, ITEM_WORLD_TAGS));
+                _liItemData.Add(new ItemXMLData(_iCurrItemID.ToString(), tags, ITEM_TAGS, ITEM_WORLD_TAGS));
             }
             else
             {
@@ -516,8 +530,13 @@ namespace Database_Editor
         {
             if (_liWorldObjects.Count == _iCurrWorldObjectID)
             {
+                Dictionary<string, string> diText = new Dictionary<string, string>
+                {
+                    ["Name"] = tbItemName.Text,
+                };
+                _diItemText["WorldObject_" + tbItemID.Text] = diText;
+
                 Dictionary<string, string> tags = new Dictionary<string, string>();
-                tags["Name"] = tbWorldObjectName.Text;
 
                 string[] typeTag = cbWorldObjectType.SelectedItem.ToString().Split(':');
                 tags[typeTag[0]] = typeTag[1];
@@ -536,7 +555,7 @@ namespace Database_Editor
                     }
                 }
 
-                _liWorldObjects.Add(new XMLData(_iCurrItemID, tags, WORLD_OBJECT_TAGS, DEFAULT_WORLD_TAG));
+                _liWorldObjects.Add(new XMLData(_iCurrItemID.ToString(), tags, WORLD_OBJECT_TAGS, DEFAULT_WORLD_TAG, XMLTypeEnum.WorldObject));
             }
             else
             {
@@ -576,8 +595,8 @@ namespace Database_Editor
 
         private void SaveWorldObjectInfo(XMLData data)
         {
+            data.SetTextData(tbWorldObjectName.Text);
             data.ClearTagInfo();
-            data.SetTagInfo("Name", tbWorldObjectName.Text);
             string[] typeTag = cbWorldObjectType.SelectedItem.ToString().Split(':');
             data.SetTagInfo(typeTag[0], typeTag[1]);
             foreach (DataGridViewRow row in dgWorldObjectTags.Rows)
@@ -617,6 +636,7 @@ namespace Database_Editor
 
                 _iCurrItemID = int.Parse(dgItems.Rows[e.RowIndex].Cells[0].Value.ToString());
                 LoadItemInfo();
+                tbItemName.Focus();
             }
         }
 
@@ -636,6 +656,7 @@ namespace Database_Editor
 
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            StreamWriter textFile = PrepareXMLFile(NAME_TEXT_XML_FILE, "Dictionary[string, string]");
             if (_liItemData.Count == _iCurrItemID) { btnItemSave_Click(sender, e); }
 
             _liItemData.Sort((x, y) =>
@@ -669,7 +690,7 @@ namespace Database_Editor
                 {
                     data.StripSpecialCharacter();
                 }
-                SaveXMLData(_diBasicXML[s], s);
+                SaveXMLData(_diBasicXML[s], s, PATH_TO_DATA, textFile);
             }
 
             string mapPath = PATH_TO_MAPS;
@@ -682,8 +703,10 @@ namespace Database_Editor
                 SaveTMXData(kvp.Value, dirInfo.FullName + "\\" + Path.GetFileName(kvp.Key) + ".tmx");
             }
 
-            SaveItemXMLData(itemDataList, PATH_TO_DATA);
-            SaveXMLData(worldObjectDataList, WORLD_OBJECTS_DATA_XML_FILE);
+            
+            SaveItemXMLData(itemDataList, PATH_TO_DATA, textFile);
+            SaveXMLData(worldObjectDataList, WORLD_OBJECTS_DATA_XML_FILE, PATH_TO_DATA, textFile);
+            CloseStreamWriter(ref textFile);
 
             if (_iNextCurrID != -1)
             {
@@ -725,7 +748,7 @@ namespace Database_Editor
         #endregion
 
         #region Save Methods
-        private static StreamWriter PrepareXMLFile(string fileName, string assetType)
+        private StreamWriter PrepareXMLFile(string fileName, string assetType)
         {
             StreamWriter dataFile = new StreamWriter(fileName);
             dataFile.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
@@ -734,26 +757,38 @@ namespace Database_Editor
             return dataFile;
         }
 
-        private static void CloseStreamWriter(ref StreamWriter dataFile)
+        private void CloseStreamWriter(ref StreamWriter dataFile)
         {
             dataFile.WriteLine("  </Asset>");
             dataFile.WriteLine("</XnaContent>");
             dataFile.Close();
         }
 
-        public static void SaveXMLData(List<XMLData> dataList, string fileName)
+        public void SaveXMLData(List<XMLData> dataList, string fileName, string pathToDir, StreamWriter textFile)
         {
             StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[int, string]");
-
+            
             foreach (XMLData data in dataList)
             {
+                string id = data.ID.ToString();
+                XMLTypeEnum type = FileNameToXMLType(fileName);
+                if (type != XMLTypeEnum.None)
+                {
+                    id = Util.GetEnumString(type) + "_" + data.ID.ToString();
+                }
+
                 WriteXMLEntry(dataFile, string.Format("      <Key>{0}</Key>", data.ID), string.Format("      <Value>{0}</Value>", data.GetTagsString()));
+
+                if (!fileName.Contains("Config") && !fileName.Contains("Shops"))
+                {
+                    WriteXMLEntry(textFile, string.Format("      <Key>{0}</Key>", id), string.Format("      <Value>[Name:{0}]</Value>", data.GetTagInfo("Name")));
+                }
             }
 
             CloseStreamWriter(ref dataFile);
         }
 
-        private static void WriteXMLEntry(StreamWriter dataFile, string key, string value)
+        private void WriteXMLEntry(StreamWriter dataFile, string key, string value)
         {
             dataFile.WriteLine("    <Item>");
             dataFile.WriteLine(key);
@@ -761,22 +796,20 @@ namespace Database_Editor
             dataFile.WriteLine("    </Item>");
         }
 
-        public static void SaveItemXMLData(List<ItemXMLData> dataList, string pathToDir)
+        public void SaveItemXMLData(List<ItemXMLData> dataList, string pathToDir, StreamWriter textFile)
         {
             StreamWriter dataFile = PrepareXMLFile(pathToDir + @"\ItemData.xml", "Dictionary[int, string]");
-            StreamWriter textFile = PrepareXMLFile(pathToDir + @"\Text Files\ItemText.xml", "Dictionary[int, string]");
 
             foreach (ItemXMLData data in dataList)
             {
                 WriteXMLEntry(dataFile, string.Format("      <Key>{0}</Key>", data.ID), string.Format("      <Value>{0}</Value>", data.GetTagsString()));
-                WriteXMLEntry(textFile, string.Format("      <Key>{0}</Key>", data.ID), string.Format("      <Value>[Name:{0}][Description:{1}]</Value>", data.Name, data.Description));
+                WriteXMLEntry(textFile, string.Format("      <Key>Item_{0}</Key>", data.ID), string.Format("      <Value>[Name:{0}][Description:{1}]</Value>", data.Name, data.Description));
             }
 
             CloseStreamWriter(ref dataFile);
-            CloseStreamWriter(ref textFile);
         }       
 
-        public static void SaveTMXData(TMXData data, string fileName)
+        public void SaveTMXData(TMXData data, string fileName)
         {
             StreamWriter dataFile = new StreamWriter(fileName);
 
@@ -792,6 +825,9 @@ namespace Database_Editor
         #region Classes
         public class XMLData
         {
+            protected string _sName;
+            public string Name => _sName;
+            protected XMLTypeEnum _eXMLType;
             protected int _iID;
             public int ID => _iID;
             protected string[] _arrItemTags;
@@ -800,15 +836,22 @@ namespace Database_Editor
             protected List<TMXData> _liLinkedMaps;
             protected Dictionary<string, string> _diTags;
 
-            public XMLData(int id, Dictionary<string, string> stringData, string itemTags, string objectTags)
+            public XMLData(string id, Dictionary<string, string> stringData, string itemTags, string objectTags, XMLTypeEnum xmlType)
             {
                 _liLinkedMaps = new List<TMXData>();
                 _liLinkedItems = new List<XMLData>();
                 _arrItemTags = itemTags.Split(',');
                 _arrWorldObjectTags = objectTags.Split(',');
 
-                _iID = id;
+                string textID = Util.GetEnumString(xmlType) + "_" + id;
+                if (xmlType != XMLTypeEnum.None && _diItemText.ContainsKey(textID)) {
+                    _sName = _diItemText[textID]["Name"];
+                }
+
+                _iID = int.Parse(id);
                 _diTags = stringData;
+
+                _eXMLType = xmlType;
             }
 
             public string GetStringValue(string value)
@@ -832,6 +875,10 @@ namespace Database_Editor
             {
                 if (_diTags.ContainsKey(key)) { return _diTags[key]; }
                 else { return string.Empty; }
+            }
+            public void SetTextData(string name)
+            {
+                _sName = name;
             }
             public void SetTagInfo(string key, string value)
             {
@@ -1022,18 +1069,19 @@ namespace Database_Editor
         }
         public class ItemXMLData : XMLData
         {
-            string _sName;
-            public string Name => _sName;
             string _sDescription;
             public string Description => _sDescription;
             ItemEnum _eType;
             public ItemEnum ItemType => _eType;
 
-            public ItemXMLData(int id, Dictionary<string, string> stringData, string itemTags, string worldTags) : base(id, stringData, itemTags, worldTags)
+            public ItemXMLData(string id, Dictionary<string, string> stringData, string itemTags, string worldTags) : base(id, stringData, itemTags, worldTags, XMLTypeEnum.Item)
             {
                 _eType = Util.ParseEnum<ItemEnum>(_diTags["Type"]);
-                _sName = _diItemText[id]["Name"];
-                _sDescription = _diItemText[id]["Description"];
+                string textID = "Item_" + id;
+                if (_diItemText.ContainsKey(textID))
+                {
+                    _sDescription = _diItemText[textID]["Description"];
+                }   
             }
 
             public void SetTextData(string name, string desc)

@@ -55,7 +55,7 @@ namespace RiverHollow.Game_Managers
 
         static Dictionary<int, Dictionary<string, string>> _diBuildings;
         static Dictionary<int, Dictionary<string, string>> _diItemData;
-        static Dictionary<int, Dictionary<string, string>> _diItemText;
+        static Dictionary<string, Dictionary<string, string>> _diItemText;
         static Dictionary<int, Dictionary<string, string>> _diStatusEffects;
         static Dictionary<int, Dictionary<string, string>> _diWorkers;
         public static Dictionary<int, Dictionary<string, string>> DIWorkers => _diWorkers;
@@ -137,6 +137,16 @@ namespace RiverHollow.Game_Managers
             dictionaryAddTo = new Dictionary<int, Dictionary<string, string>>();
             Dictionary<int, string> dictionaryData = Content.Load<Dictionary<int, string>>(dataFile);
             foreach (KeyValuePair<int, string> kvp in dictionaryData)
+            {
+                dictionaryAddTo[kvp.Key] = TaggedStringToDictionary(kvp.Value);
+            }
+        }
+
+        private static void LoadDictionary(ref Dictionary<string, Dictionary<string, string>> dictionaryAddTo, string dataFile, ContentManager Content)
+        {
+            dictionaryAddTo = new Dictionary<string, Dictionary<string, string>>();
+            Dictionary<string, string> dictionaryData = Content.Load<Dictionary<string, string>>(dataFile);
+            foreach (KeyValuePair<string, string> kvp in dictionaryData)
             {
                 dictionaryAddTo[kvp.Key] = TaggedStringToDictionary(kvp.Value);
             }
@@ -337,10 +347,9 @@ namespace RiverHollow.Game_Managers
             return null;
         }
 
-        public static void GetItemText(int id, ref string name, ref string desc)
+        public static void GetTextData(string id, ref string value, string key)
         {
-            name = _diItemText[id]["Name"];
-            desc = _diItemText[id]["Description"];
+            value = _diItemText[id][key];
         }
         public static Item GetItem(int id)
         {
