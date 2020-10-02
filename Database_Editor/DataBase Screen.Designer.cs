@@ -58,7 +58,6 @@
             this.btnWorldObjectCancel = new System.Windows.Forms.Button();
             this.btnWorldObjectSave = new System.Windows.Forms.Button();
             this.dgWorldObjectTags = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label4 = new System.Windows.Forms.Label();
             this.tbWorldObjectID = new System.Windows.Forms.TextBox();
             this.tbWorldObjectName = new System.Windows.Forms.TextBox();
@@ -71,7 +70,6 @@
             this.btnCancelCharacter = new System.Windows.Forms.Button();
             this.btnSaveCharacter = new System.Windows.Forms.Button();
             this.dgCharacterTags = new System.Windows.Forms.DataGridView();
-            this.colCharacterTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label3 = new System.Windows.Forms.Label();
             this.tbCharacterID = new System.Windows.Forms.TextBox();
             this.tbCharacterName = new System.Windows.Forms.TextBox();
@@ -83,7 +81,6 @@
             this.btnClassCancel = new System.Windows.Forms.Button();
             this.btnClassSave = new System.Windows.Forms.Button();
             this.dgClassTags = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label7 = new System.Windows.Forms.Label();
             this.tbClassID = new System.Windows.Forms.TextBox();
             this.tbClassName = new System.Windows.Forms.TextBox();
@@ -91,6 +88,9 @@
             this.dgClasses = new System.Windows.Forms.DataGridView();
             this.colClassID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colClassName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colClassTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCharacterTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colWorldObjectTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -133,31 +133,32 @@
             this.itemToolStripMenuItem,
             this.worldObjectToolStripMenuItem});
             this.addNewToolStripMenuItem.Name = "addNewToolStripMenuItem";
-            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addNewToolStripMenuItem.Text = "Add New";
             // 
             // itemToolStripMenuItem
             // 
             this.itemToolStripMenuItem.Name = "itemToolStripMenuItem";
-            this.itemToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.itemToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.itemToolStripMenuItem.Text = "Item";
             this.itemToolStripMenuItem.Click += new System.EventHandler(this.addNewToolStripMenuItem_Click);
             // 
             // worldObjectToolStripMenuItem
             // 
             this.worldObjectToolStripMenuItem.Name = "worldObjectToolStripMenuItem";
-            this.worldObjectToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.worldObjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.worldObjectToolStripMenuItem.Text = "World Object";
+            this.worldObjectToolStripMenuItem.Click += new System.EventHandler(this.addNewToolStripMenuWorldObject_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(133, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // saveToFileToolStripMenuItem
             // 
             this.saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
-            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToFileToolStripMenuItem.Text = "Save To File";
             this.saveToFileToolStripMenuItem.Click += new System.EventHandler(this.saveToFileToolStripMenuItem_Click);
             // 
@@ -389,18 +390,12 @@
             // 
             this.dgWorldObjectTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgWorldObjectTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1});
+            this.colWorldObjectTags});
             this.dgWorldObjectTags.Location = new System.Drawing.Point(320, 60);
             this.dgWorldObjectTags.Name = "dgWorldObjectTags";
             this.dgWorldObjectTags.RowHeadersVisible = false;
             this.dgWorldObjectTags.Size = new System.Drawing.Size(464, 328);
             this.dgWorldObjectTags.TabIndex = 33;
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn1.HeaderText = "Tags";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             // 
             // label4
             // 
@@ -522,18 +517,12 @@
             // 
             this.dgCharacterTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgCharacterTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colCharacterTag});
+            this.colCharacterTags});
             this.dgCharacterTags.Location = new System.Drawing.Point(320, 60);
             this.dgCharacterTags.Name = "dgCharacterTags";
             this.dgCharacterTags.RowHeadersVisible = false;
             this.dgCharacterTags.Size = new System.Drawing.Size(464, 328);
             this.dgCharacterTags.TabIndex = 42;
-            // 
-            // colCharacterTag
-            // 
-            this.colCharacterTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colCharacterTag.HeaderText = "Tags";
-            this.colCharacterTag.Name = "colCharacterTag";
             // 
             // label3
             // 
@@ -646,18 +635,12 @@
             // 
             this.dgClassTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgClassTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn2});
+            this.colClassTags});
             this.dgClassTags.Location = new System.Drawing.Point(320, 32);
             this.dgClassTags.Name = "dgClassTags";
             this.dgClassTags.RowHeadersVisible = false;
             this.dgClassTags.Size = new System.Drawing.Size(464, 356);
             this.dgClassTags.TabIndex = 51;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn2.HeaderText = "Tags";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             // 
             // label7
             // 
@@ -729,6 +712,24 @@
             this.colClassName.ReadOnly = true;
             this.colClassName.Width = 277;
             // 
+            // colClassTags
+            // 
+            this.colClassTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colClassTags.HeaderText = "Tags";
+            this.colClassTags.Name = "colClassTags";
+            // 
+            // colCharacterTags
+            // 
+            this.colCharacterTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colCharacterTags.HeaderText = "Tags";
+            this.colCharacterTags.Name = "colCharacterTags";
+            // 
+            // colWorldObjectTags
+            // 
+            this.colWorldObjectTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colWorldObjectTags.HeaderText = "Tags";
+            this.colWorldObjectTags.Name = "colWorldObjectTags";
+            // 
             // frmDBEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -789,7 +790,6 @@
         private System.Windows.Forms.Button btnWorldObjectCancel;
         private System.Windows.Forms.Button btnWorldObjectSave;
         private System.Windows.Forms.DataGridView dgWorldObjectTags;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox tbWorldObjectID;
         private System.Windows.Forms.TextBox tbWorldObjectName;
@@ -813,13 +813,11 @@
         private System.Windows.Forms.DataGridView dgCharacters;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCharacterID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCharacterName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colCharacterTag;
         private System.Windows.Forms.ComboBox cbCharacterType;
         private System.Windows.Forms.TabPage tabClasses;
         private System.Windows.Forms.Button btnClassCancel;
         private System.Windows.Forms.Button btnClassSave;
         private System.Windows.Forms.DataGridView dgClassTags;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox tbClassID;
         private System.Windows.Forms.TextBox tbClassName;
@@ -827,6 +825,9 @@
         private System.Windows.Forms.DataGridView dgClasses;
         private System.Windows.Forms.DataGridViewTextBoxColumn colClassID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colClassName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colWorldObjectTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCharacterTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colClassTags;
     }
 }
 

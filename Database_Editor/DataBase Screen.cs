@@ -749,6 +749,44 @@ namespace Database_Editor
             GenericCellClick(e, _diBasicXML[CLASSES_XML_FILE], "Classes", dgClasses, LoadClassInfo);
         }
 
+        private void AddNewGenericXMLObject(TabPage page, string tabIndex, DataGridView dg, string colID, string colName, TextBox tbName, TextBox tbID, DataGridView dgTags, string tagCol, ComboBox cb = null, TextBox tbDesc = null, string defaultTag = "")
+        {
+            tabCtl.SelectedTab = page;
+            _diTabIndices[tabIndex] = dg.Rows.Count;
+            dg.Rows.Add();
+            SelectRow(dg, _diTabIndices[tabIndex]);
+
+            DataGridViewRow row = dg.Rows[_diTabIndices[tabIndex]];
+            row.Cells[colID].Value = _diTabIndices[tabIndex];
+            row.Cells[colName].Value = "New";
+
+            tbName.Text = "";
+            if (tbDesc != null) { tbDesc.Text = ""; }
+            tbID.Text = _diTabIndices[tabIndex].ToString();
+
+            if (cb != null) { cb.SelectedIndex = 0; }
+
+            dgTags.Rows.Clear();
+            dgTags.Rows.Add();
+            row = dgTags.Rows[0];
+            row.Cells[tagCol].Value = defaultTag;
+
+            tbName.Focus();
+        }
+        private void addNewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddNewGenericXMLObject(tabCtl.TabPages["tabItems"], "Items", dgItems, "colItemID", "colItemName", tbItemName, tbItemID, dgItemTags, "colItemTags", cbItemType, tbItemDesc, "Image:0-0");
+        }
+        private void addNewToolStripMenuWorldObject_Click(object sender, EventArgs e)
+        {
+            AddNewGenericXMLObject(tabCtl.TabPages["tabWorldObjects"], "WorldObjects", dgWorldObjects, "colWorldObjectsID", "colWorldObjectsName", tbWorldObjectName, tbWorldObjectID, dgWorldObjectTags, "colWorldObjectTags", cbWorldObjectType, null, "Image:0-0");
+        }
+
+        private void cbItemType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetItemSubtype();
+        }
+
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             StreamWriter textFile = PrepareXMLFile(NAME_TEXT_XML_FILE, "Dictionary[string, string]");
@@ -798,7 +836,7 @@ namespace Database_Editor
                 SaveTMXData(kvp.Value, dirInfo.FullName + "\\" + Path.GetFileName(kvp.Key) + ".tmx");
             }
 
-            
+
             SaveItemXMLData(itemDataList, PATH_TO_DATA, textFile);
             SaveXMLData(worldObjectDataList, WORLD_OBJECTS_DATA_XML_FILE, PATH_TO_DATA, textFile);
             CloseStreamWriter(ref textFile);
@@ -811,36 +849,6 @@ namespace Database_Editor
 
             LoadItemDatagrid();
         }
-
-        private void addNewToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            _diTabIndices["Items"] = dgItems.Rows.Count;
-            dgItems.Rows.Add();
-            SelectRow(dgItems, _diTabIndices["Items"]);
-
-            DataGridViewRow row = dgItems.Rows[_diTabIndices["Items"]];
-            row.Cells["colItemID"].Value = _diTabIndices["Items"];
-            row.Cells["colItemName"].Value = "New";
-
-            tbItemName.Text = "";
-            tbItemDesc.Text = "";
-            tbItemID.Text = _diTabIndices["Items"].ToString();
-
-            cbItemType.SelectedIndex = 0;
-
-            dgItemTags.Rows.Clear();
-            dgItemTags.Rows.Add();
-            row = dgItemTags.Rows[0];
-            row.Cells["colItemTags"].Value = "Image:0-0";
-
-            tbItemName.Focus();
-        }
-
-        private void cbItemType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            SetItemSubtype();
-        }
-
         private void tabCtl_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabCtl.SelectedTab == tabCtl.TabPages["tabWorldObjects"]) { dgWorldObjects.Focus(); }
