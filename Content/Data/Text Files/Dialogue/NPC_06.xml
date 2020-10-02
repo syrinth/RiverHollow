@@ -1,12 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[string, string]">
-    <!--Name-->
-    <Item>
-      <Key>Name</Key>
-      <Value>Daria</Value>
-    </Item>
-    <!--Key:NPCType#, Value:Text-->
     <Item>
       <Key>Introduction</Key>
       <Value>Welcome to town $^$. my name is $0$. It's my job to make sure the monsters stay outside the walls. Have a good day exploring the town, but be careful if you wander outside.</Value>

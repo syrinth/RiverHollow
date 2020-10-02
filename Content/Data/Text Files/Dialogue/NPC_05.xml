@@ -1,12 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[string, string]">
-    <!--Name-->
-    <Item>
-      <Key>Name</Key>
-      <Value>Amanda</Value>
-    </Item>
-    <!--Key:NPCType#, Value:Text-->
     <Item>
       <Key>Introduction</Key>
       <Value>Hello $^$, it's nice to make your acquaintance. Are you a warrior? We can always use additional hands to keep the town safe.</Value>

@@ -1,12 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[string, string]">
-    <!--Name-->
-    <Item>
-      <Key>Name</Key>
-      <Value>Isabelle</Value>
-    </Item>
-    <!--Key:NPCType#, Value:Text-->
     <Item>
       <Key>Introduction</Key>
       <Value>Hello $^$, I'm $0$, the mayor of our little town. I hope that soon you'll come to call this place home.</Value>

@@ -1,12 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[string, string]">
-    <!--Name-->
-    <Item>
-      <Key>Name</Key>
-      <Value>Mark</Value>
-    </Item>
-    <!--Key:NPCType#, Value:Text-->
     <Item>
       <Key>Introduction</Key>
       <Value>Hello there! Welcome to the Blue Hare Inn. You must be $^$. The town's been abuzz about the manor being filled again. Let me know if you need anything.</Value>

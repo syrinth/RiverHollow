@@ -1,12 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[string, string]">
-    <!--Name-->
-    <Item>
-      <Key>Name</Key>
-      <Value>Shipping Gremlin</Value>
-    </Item>
-    <!--Key:StringIndex, Value:Text-->
     <Item>
       <Key>Introduction</Key>
       <Value>Eek! Eh... hello! New house person, yes? Me $0$. Place things here with me, yes, I sell for you at night while you sleeps. Mutually beneficial! [Talk:Talk|Gift:GiveGift|Ship Goods:ShipGoods|Never Mind:Cancel]</Value>

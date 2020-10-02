@@ -46,8 +46,7 @@ namespace Database_Editor
         List<ItemXMLData> _liItemData;
         List<XMLData> _liWorldObjects;
 
-        private int _iCurrItemID = 0;
-        private int _iCurrWorldObjectID = 0;
+        Dictionary<string, int> _diTabIndices;
         private int _iNextCurrID = -1;
         public static string SPECIAL_CHARACTER = "^";
         static string PATH_TO_MAPS = string.Format(@"{0}\..\..\..\..\Adventure\Content\Maps", System.Environment.CurrentDirectory);
@@ -76,6 +75,21 @@ namespace Database_Editor
                 cbWorldObjectType.Items.Add("Type:" + e.ToString());
             }
             cbWorldObjectType.SelectedIndex = 0;
+
+            cbCharacterType.Items.Clear();
+            foreach (NPCTypeEnum e in Enum.GetValues(typeof(NPCTypeEnum)))
+            {
+                cbCharacterType.Items.Add("Type:" + e.ToString());
+            }
+            cbCharacterType.SelectedIndex = 0;
+
+            _diTabIndices = new Dictionary<string, int>()
+            {
+                { "Items", 0 },
+                { "WorldObjects", 0 },
+                { "Characters", 0 }
+            };
+
             _diMapData = new Dictionary<string, TMXData>();
             _diBasicXML = new Dictionary<string, List<XMLData>>();
             _diWorldObjectData = new Dictionary<ObjectTypeEnum, List<XMLData>>();
@@ -98,16 +112,17 @@ namespace Database_Editor
 
             LoadItemDatagrid();
             LoadWorldObjectDataGrid();
+            LoadCharacterDataGrid();
 
             LoadItemInfo();
             LoadWorldObjectInfo();
+            LoadCharacterInfo();
         }
 
         #region DataGridView Loading
         private void LoadItemDatagrid()
         {
             dgItems.Rows.Clear();
-            List<string> names = new List<string>();
             for (int i = 0; i < _liItemData.Count; i++)
             {
                 dgItems.Rows.Add();
@@ -117,14 +132,12 @@ namespace Database_Editor
                 row.Cells["colItemName"].Value = _liItemData[i].Name;
             }
 
-            SelectRow(dgItems, _iCurrItemID);
+            SelectRow(dgItems, _diTabIndices["Items"]);
             dgItems.Focus();
         }
-
         private void LoadWorldObjectDataGrid()
         {
             dgWorldObjects.Rows.Clear();
-            List<string> names = new List<string>();
             for (int i = 0; i < _liWorldObjects.Count; i++)
             {
                 dgWorldObjects.Rows.Add();
@@ -134,14 +147,29 @@ namespace Database_Editor
                 row.Cells["colWorldObjectsName"].Value = _liWorldObjects[i].Name;
             }
 
-            SelectRow(dgWorldObjects, _iCurrWorldObjectID);
+            SelectRow(dgWorldObjects, _diTabIndices["WorldObjects"]);
+        }
+        private void LoadCharacterDataGrid()
+        {
+            dgCharacters.Rows.Clear();
+            List<XMLData> liCharData = _diBasicXML[CHARACTER_XML_FILE];
+            for (int i = 0; i < liCharData.Count; i++)
+            {
+                dgCharacters.Rows.Add();
+                DataGridViewRow row = dgCharacters.Rows[i];
+
+                row.Cells["colCharacterID"].Value = liCharData[i].ID;
+                row.Cells["colCharacterName"].Value = liCharData[i].Name;
+            }
+
+            SelectRow(dgCharacters, _diTabIndices["Characters"]);
         }
         #endregion
 
         #region Load Info Panes
         private void LoadItemInfo()
         {
-            ItemXMLData data = _liItemData[_iCurrItemID];
+            ItemXMLData data = _liItemData[_diTabIndices["Items"]];
             tbItemName.Text = data.Name;
             tbItemDesc.Text = data.Description;
             tbItemID.Text = data.ID.ToString();
@@ -163,10 +191,9 @@ namespace Database_Editor
                 }
             }
         }
-
         private void LoadWorldObjectInfo()
         {
-            XMLData data = _liWorldObjects[_iCurrWorldObjectID];
+            XMLData data = _liWorldObjects[_diTabIndices["WorldObjects"]];
             tbWorldObjectName.Text = data.Name;
             tbWorldObjectID.Text = data.ID.ToString();
 
@@ -179,6 +206,24 @@ namespace Database_Editor
                 if (!s.StartsWith("Type") && !s.StartsWith("Name"))
                 {
                     dgWorldObjectTags.Rows.Add(s);
+                }
+            }
+        }
+        private void LoadCharacterInfo()
+        {
+            XMLData data = _diBasicXML[CHARACTER_XML_FILE][_diTabIndices["Characters"]];
+            tbCharacterName.Text = data.Name;
+            tbCharacterID.Text = data.ID.ToString();
+
+            cbCharacterType.SelectedIndex = (int)Util.ParseEnum<NPCTypeEnum>(data.GetTagInfo("Type"));
+
+            dgCharacterTags.Rows.Clear();
+            string[] tags = data.GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in tags)
+            {
+                if (!s.StartsWith("Type"))
+                {
+                    dgCharacterTags.Rows.Add(s);
                 }
             }
         }
@@ -390,7 +435,7 @@ namespace Database_Editor
             {
                 if (data != null)
                 {
-                    if(data.ID == _iCurrItemID) { _iNextCurrID = index; }
+                    if(data.ID == _diTabIndices["Items"]) { _iNextCurrID = index; }
                     data.ChangeID(index++);
                     itemDataList.Add(data);
                 }
@@ -483,7 +528,7 @@ namespace Database_Editor
         #region EventHandlers
         private void btnItemSave_Click(object sender, EventArgs e)
         {
-            if (_liItemData.Count == _iCurrItemID)
+            if (_liItemData.Count == _diTabIndices["Items"])
             {
                 Dictionary<string, string> diText = new Dictionary<string, string>
                 {
@@ -516,19 +561,18 @@ namespace Database_Editor
                     }
                 }
 
-                _liItemData.Add(new ItemXMLData(_iCurrItemID.ToString(), tags, ITEM_TAGS, ITEM_WORLD_TAGS));
+                _liItemData.Add(new ItemXMLData(_diTabIndices["Items"].ToString(), tags, ITEM_TAGS, ITEM_WORLD_TAGS));
             }
             else
             {
-                SaveItemInfo(_liItemData[_iCurrItemID]);
+                SaveItemInfo(_liItemData[_diTabIndices["Items"]]);
             }
 
             LoadItemDatagrid();
         }
-
         private void btnWorldObjectSave_Click(object sender, EventArgs e)
         {
-            if (_liWorldObjects.Count == _iCurrWorldObjectID)
+            if (_liWorldObjects.Count == _diTabIndices["WorldObjects"])
             {
                 Dictionary<string, string> diText = new Dictionary<string, string>
                 {
@@ -555,14 +599,49 @@ namespace Database_Editor
                     }
                 }
 
-                _liWorldObjects.Add(new XMLData(_iCurrItemID.ToString(), tags, WORLD_OBJECT_TAGS, DEFAULT_WORLD_TAG, XMLTypeEnum.WorldObject));
+                _liWorldObjects.Add(new XMLData(_diTabIndices["WorldObjects"].ToString(), tags, WORLD_OBJECT_TAGS, DEFAULT_WORLD_TAG, XMLTypeEnum.WorldObject));
             }
             else
             {
-                SaveWorldObjectInfo(_liWorldObjects[_iCurrWorldObjectID]);
+                SaveWorldObjectInfo(_liWorldObjects[_diTabIndices["WorldObjects"]]);
             }
 
             LoadWorldObjectDataGrid();
+        }
+        private void btnCharacterSave_Click(object sender, EventArgs e)
+        {
+            if (_diBasicXML[CHARACTER_XML_FILE].Count == _diTabIndices["Characters"])
+            {
+                Dictionary<string, string> diText = new Dictionary<string, string>
+                {
+                    ["Name"] = tbCharacterName.Text,
+                };
+                _diItemText["Character_" + tbCharacterID.Text] = diText;
+
+                Dictionary<string, string> tags = new Dictionary<string, string>();
+
+                string[] typeTag = cbCharacterType.SelectedItem.ToString().Split(':');
+                tags[typeTag[0]] = typeTag[1];
+
+                foreach (DataGridViewRow row in dgCharacterTags.Rows)
+                {
+                    if (row.Cells[0].Value != null)
+                    {
+                        string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                        string key = tagInfo[0];
+                        string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
+                        tags[key] = val;
+                    }
+                }
+
+                _diBasicXML[CHARACTER_XML_FILE].Add(new XMLData(_diTabIndices["Characters"].ToString(), tags, WORLD_OBJECT_TAGS, DEFAULT_WORLD_TAG, XMLTypeEnum.Character));
+            }
+            else
+            {
+                SaveCharacterInfo(_diBasicXML[CHARACTER_XML_FILE][_diTabIndices["Characters"]]);
+            }
+
+            LoadCharacterDataGrid();
         }
 
         private void SaveItemInfo(ItemXMLData data)
@@ -592,7 +671,6 @@ namespace Database_Editor
                 }
             }
         }
-
         private void SaveWorldObjectInfo(XMLData data)
         {
             data.SetTextData(tbWorldObjectName.Text);
@@ -613,51 +691,100 @@ namespace Database_Editor
                 }
             }
         }
+        private void SaveCharacterInfo(XMLData data)
+        {
+            data.SetTextData(tbCharacterName.Text);
+            data.ClearTagInfo();
+            string[] typeTag = cbCharacterType.SelectedItem.ToString().Split(':');
+            data.SetTagInfo(typeTag[0], typeTag[1]);
+            foreach (DataGridViewRow row in dgCharacterTags.Rows)
+            {
+                if (row.Cells[0].Value != null)
+                {
+                    string[] tagInfo = row.Cells[0].Value.ToString().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                    string key = tagInfo[0];
+                    string val = (tagInfo.Length == 2 ? tagInfo[1] : string.Empty);
+                    data.SetTagInfo(key, val);
+                }
+            }
+        }
 
         private void btnItemCancel_Click(object sender, EventArgs e)
         {
-            if (_liItemData.Count == _iCurrItemID)
+            if (_liItemData.Count == _diTabIndices["Items"])
             {
-                dgItems.Rows.RemoveAt(_iCurrItemID--);
-                SelectRow(dgItems, _iCurrItemID);
+                dgItems.Rows.RemoveAt(_diTabIndices["Items"]--);
+                SelectRow(dgItems, _diTabIndices["Items"]);
             }
 
             LoadItemInfo();
+        }
+        private void btnWorldObjectCancel_Click(object sender, EventArgs e)
+        {
+            if (_liWorldObjects.Count == _diTabIndices["WorldObjects"])
+            {
+                dgWorldObjects.Rows.RemoveAt(_diTabIndices["WorldObjects"]--);
+                SelectRow(dgWorldObjects, _diTabIndices["WorldObjects"]);
+            }
+
+            LoadWorldObjectInfo();
+        }
+        private void btnCharacterCancel_Click(object sender, EventArgs e)
+        {
+            if (_diBasicXML[CHARACTER_XML_FILE].Count == _diTabIndices["Characters"])
+            {
+                dgCharacters.Rows.RemoveAt(_diTabIndices["Characters"]--);
+                SelectRow(dgWorldObjects, _diTabIndices["Characters"]);
+            }
+
+            LoadCharacterInfo();
         }
 
         private void dgItems_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex > -1)
             {
-                if (_liItemData.Count == _iCurrItemID)
+                if (_liItemData.Count == _diTabIndices["Items"])
                 {
-                    dgItems.Rows.RemoveAt(_iCurrItemID--);
+                    dgItems.Rows.RemoveAt(_diTabIndices["Items"]--);
                 }
 
-                _iCurrItemID = int.Parse(dgItems.Rows[e.RowIndex].Cells[0].Value.ToString());
+                _diTabIndices["Items"] = int.Parse(dgItems.Rows[e.RowIndex].Cells[0].Value.ToString());
                 LoadItemInfo();
                 tbItemName.Focus();
             }
         }
-
         private void dgWorldObjects_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex > -1)
             {
-                if (_liWorldObjects.Count == _iCurrWorldObjectID)
+                if (_liWorldObjects.Count == _diTabIndices["WorldObjects"])
                 {
-                    dgWorldObjects.Rows.RemoveAt(_iCurrWorldObjectID--);
+                    dgWorldObjects.Rows.RemoveAt(_diTabIndices["WorldObjects"]--);
                 }
 
-                _iCurrWorldObjectID = int.Parse(dgWorldObjects.Rows[e.RowIndex].Cells[0].Value.ToString());
+                _diTabIndices["WorldObjects"] = int.Parse(dgWorldObjects.Rows[e.RowIndex].Cells[0].Value.ToString());
                 LoadWorldObjectInfo();
+            }
+        }
+        private void dgCharacters_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex > -1)
+            {
+                if (_diBasicXML[CHARACTER_XML_FILE].Count == _diTabIndices["Characters"])
+                {
+                    dgCharacters.Rows.RemoveAt(_diTabIndices["Characters"]--);
+                }
+
+                _diTabIndices["Characters"] = int.Parse(dgCharacters.Rows[e.RowIndex].Cells[0].Value.ToString());
+                LoadCharacterInfo();
             }
         }
 
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             StreamWriter textFile = PrepareXMLFile(NAME_TEXT_XML_FILE, "Dictionary[string, string]");
-            if (_liItemData.Count == _iCurrItemID) { btnItemSave_Click(sender, e); }
+            if (_liItemData.Count == _diTabIndices["Items"]) { btnItemSave_Click(sender, e); }
 
             _liItemData.Sort((x, y) =>
             {
@@ -710,7 +837,7 @@ namespace Database_Editor
 
             if (_iNextCurrID != -1)
             {
-                _iCurrItemID = _iNextCurrID;
+                _diTabIndices["Items"] = _iNextCurrID;
                 _iNextCurrID = -1;
             }
 
@@ -719,17 +846,17 @@ namespace Database_Editor
 
         private void addNewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _iCurrItemID = dgItems.Rows.Count;
+            _diTabIndices["Items"] = dgItems.Rows.Count;
             dgItems.Rows.Add();
-            SelectRow(dgItems, _iCurrItemID);
+            SelectRow(dgItems, _diTabIndices["Items"]);
 
-            DataGridViewRow row = dgItems.Rows[_iCurrItemID];
-            row.Cells["colItemID"].Value = _iCurrItemID;
+            DataGridViewRow row = dgItems.Rows[_diTabIndices["Items"]];
+            row.Cells["colItemID"].Value = _diTabIndices["Items"];
             row.Cells["colItemName"].Value = "New";
 
             tbItemName.Text = "";
             tbItemDesc.Text = "";
-            tbItemID.Text = _iCurrItemID.ToString();
+            tbItemID.Text = _diTabIndices["Items"].ToString();
 
             cbItemType.SelectedIndex = 0;
 
@@ -744,6 +871,13 @@ namespace Database_Editor
         private void cbItemType_SelectedIndexChanged(object sender, EventArgs e)
         {
             SetItemSubtype();
+        }
+
+        private void tabCtl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabCtl.SelectedTab == tabCtl.TabPages["tabWorldObjects"]) { dgWorldObjects.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItems"]) { dgItems.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCharacters"]) { dgCharacters.Focus(); }
         }
         #endregion
 
@@ -781,7 +915,7 @@ namespace Database_Editor
 
                 if (!fileName.Contains("Config") && !fileName.Contains("Shops"))
                 {
-                    WriteXMLEntry(textFile, string.Format("      <Key>{0}</Key>", id), string.Format("      <Value>[Name:{0}]</Value>", data.GetTagInfo("Name")));
+                    WriteXMLEntry(textFile, string.Format("      <Key>{0}</Key>", id), string.Format("      <Value>[Name:{0}]</Value>", data.Name));
                 }
             }
 
@@ -1295,17 +1429,5 @@ namespace Database_Editor
         }
 
         #endregion
-
-        private void tabCtl_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if(tabCtl.SelectedTab == tabCtl.TabPages["tabWorldObjects"])
-            {
-                dgWorldObjects.Focus();
-            }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItems"])
-            {
-                dgItems.Focus();
-            }
-        }
     }
 }

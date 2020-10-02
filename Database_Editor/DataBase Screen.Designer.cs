@@ -32,6 +32,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addNewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.worldObjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabCtl = new System.Windows.Forms.TabControl();
@@ -41,6 +43,7 @@
             this.btnItemCancel = new System.Windows.Forms.Button();
             this.btnItemSave = new System.Windows.Forms.Button();
             this.dgItemTags = new System.Windows.Forms.DataGridView();
+            this.colItemTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbItemDesc = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -63,9 +66,19 @@
             this.dgWorldObjects = new System.Windows.Forms.DataGridView();
             this.colWorldObjectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colWorldObjectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.itemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.worldObjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.colItemTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabCharacters = new System.Windows.Forms.TabPage();
+            this.btnCancelCharacter = new System.Windows.Forms.Button();
+            this.btnSaveCharacter = new System.Windows.Forms.Button();
+            this.dgCharacterTags = new System.Windows.Forms.DataGridView();
+            this.colCharacterTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbCharacterID = new System.Windows.Forms.TextBox();
+            this.tbCharacterName = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.dgCharacters = new System.Windows.Forms.DataGridView();
+            this.colCharacterID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCharacterName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cbCharacterType = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -74,6 +87,9 @@
             this.tabWorldObjects.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgWorldObjectTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgWorldObjects)).BeginInit();
+            this.tabCharacters.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgCharacterTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgCharacters)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -102,18 +118,31 @@
             this.itemToolStripMenuItem,
             this.worldObjectToolStripMenuItem});
             this.addNewToolStripMenuItem.Name = "addNewToolStripMenuItem";
-            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.addNewToolStripMenuItem.Text = "Add New";
+            // 
+            // itemToolStripMenuItem
+            // 
+            this.itemToolStripMenuItem.Name = "itemToolStripMenuItem";
+            this.itemToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.itemToolStripMenuItem.Text = "Item";
+            this.itemToolStripMenuItem.Click += new System.EventHandler(this.addNewToolStripMenuItem_Click);
+            // 
+            // worldObjectToolStripMenuItem
+            // 
+            this.worldObjectToolStripMenuItem.Name = "worldObjectToolStripMenuItem";
+            this.worldObjectToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.worldObjectToolStripMenuItem.Text = "World Object";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(133, 6);
             // 
             // saveToFileToolStripMenuItem
             // 
             this.saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
-            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.saveToFileToolStripMenuItem.Text = "Save To File";
             this.saveToFileToolStripMenuItem.Click += new System.EventHandler(this.saveToFileToolStripMenuItem_Click);
             // 
@@ -121,6 +150,7 @@
             // 
             this.tabCtl.Controls.Add(this.tabItems);
             this.tabCtl.Controls.Add(this.tabWorldObjects);
+            this.tabCtl.Controls.Add(this.tabCharacters);
             this.tabCtl.Location = new System.Drawing.Point(12, 27);
             this.tabCtl.Name = "tabCtl";
             this.tabCtl.SelectedIndex = 0;
@@ -198,6 +228,12 @@
             this.dgItemTags.RowHeadersVisible = false;
             this.dgItemTags.Size = new System.Drawing.Size(464, 251);
             this.dgItemTags.TabIndex = 21;
+            // 
+            // colItemTags
+            // 
+            this.colItemTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colItemTags.HeaderText = "Tags";
+            this.colItemTags.Name = "colItemTags";
             // 
             // tbItemDesc
             // 
@@ -321,6 +357,7 @@
             this.btnWorldObjectCancel.TabIndex = 35;
             this.btnWorldObjectCancel.Text = "Cancel";
             this.btnWorldObjectCancel.UseVisualStyleBackColor = true;
+            this.btnWorldObjectCancel.Click += new System.EventHandler(this.btnWorldObjectCancel_Click);
             // 
             // btnWorldObjectSave
             // 
@@ -419,24 +456,138 @@
             this.colWorldObjectsName.ReadOnly = true;
             this.colWorldObjectsName.Width = 277;
             // 
-            // itemToolStripMenuItem
+            // tabCharacters
             // 
-            this.itemToolStripMenuItem.Name = "itemToolStripMenuItem";
-            this.itemToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.itemToolStripMenuItem.Text = "Item";
-            this.itemToolStripMenuItem.Click += new System.EventHandler(this.addNewToolStripMenuItem_Click);
+            this.tabCharacters.Controls.Add(this.cbCharacterType);
+            this.tabCharacters.Controls.Add(this.btnCancelCharacter);
+            this.tabCharacters.Controls.Add(this.btnSaveCharacter);
+            this.tabCharacters.Controls.Add(this.dgCharacterTags);
+            this.tabCharacters.Controls.Add(this.label3);
+            this.tabCharacters.Controls.Add(this.tbCharacterID);
+            this.tabCharacters.Controls.Add(this.tbCharacterName);
+            this.tabCharacters.Controls.Add(this.label6);
+            this.tabCharacters.Controls.Add(this.dgCharacters);
+            this.tabCharacters.Location = new System.Drawing.Point(4, 22);
+            this.tabCharacters.Name = "tabCharacters";
+            this.tabCharacters.Size = new System.Drawing.Size(790, 425);
+            this.tabCharacters.TabIndex = 2;
+            this.tabCharacters.Text = "Characters";
+            this.tabCharacters.UseVisualStyleBackColor = true;
             // 
-            // worldObjectToolStripMenuItem
+            // btnCancelCharacter
             // 
-            this.worldObjectToolStripMenuItem.Name = "worldObjectToolStripMenuItem";
-            this.worldObjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.worldObjectToolStripMenuItem.Text = "World Object";
+            this.btnCancelCharacter.Location = new System.Drawing.Point(709, 394);
+            this.btnCancelCharacter.Name = "btnCancelCharacter";
+            this.btnCancelCharacter.Size = new System.Drawing.Size(75, 23);
+            this.btnCancelCharacter.TabIndex = 44;
+            this.btnCancelCharacter.Text = "Cancel";
+            this.btnCancelCharacter.UseVisualStyleBackColor = true;
+            this.btnCancelCharacter.Click += new System.EventHandler(this.btnCharacterCancel_Click);
             // 
-            // colItemTags
+            // btnSaveCharacter
             // 
-            this.colItemTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colItemTags.HeaderText = "Tags";
-            this.colItemTags.Name = "colItemTags";
+            this.btnSaveCharacter.Location = new System.Drawing.Point(628, 394);
+            this.btnSaveCharacter.Name = "btnSaveCharacter";
+            this.btnSaveCharacter.Size = new System.Drawing.Size(75, 23);
+            this.btnSaveCharacter.TabIndex = 43;
+            this.btnSaveCharacter.Text = "Save";
+            this.btnSaveCharacter.UseVisualStyleBackColor = true;
+            this.btnSaveCharacter.Click += new System.EventHandler(this.btnCharacterSave_Click);
+            // 
+            // dgCharacterTags
+            // 
+            this.dgCharacterTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgCharacterTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colCharacterTag});
+            this.dgCharacterTags.Location = new System.Drawing.Point(320, 60);
+            this.dgCharacterTags.Name = "dgCharacterTags";
+            this.dgCharacterTags.RowHeadersVisible = false;
+            this.dgCharacterTags.Size = new System.Drawing.Size(464, 329);
+            this.dgCharacterTags.TabIndex = 42;
+            // 
+            // colCharacterTag
+            // 
+            this.colCharacterTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colCharacterTag.HeaderText = "Tags";
+            this.colCharacterTag.Name = "colCharacterTag";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(714, 9);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(21, 13);
+            this.label3.TabIndex = 41;
+            this.label3.Text = "ID:";
+            // 
+            // tbCharacterID
+            // 
+            this.tbCharacterID.Location = new System.Drawing.Point(741, 6);
+            this.tbCharacterID.Name = "tbCharacterID";
+            this.tbCharacterID.Size = new System.Drawing.Size(43, 20);
+            this.tbCharacterID.TabIndex = 40;
+            // 
+            // tbCharacterName
+            // 
+            this.tbCharacterName.Location = new System.Drawing.Point(361, 6);
+            this.tbCharacterName.Name = "tbCharacterName";
+            this.tbCharacterName.Size = new System.Drawing.Size(108, 20);
+            this.tbCharacterName.TabIndex = 39;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(317, 9);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(38, 13);
+            this.label6.TabIndex = 38;
+            this.label6.Text = "Name:";
+            // 
+            // dgCharacters
+            // 
+            this.dgCharacters.AllowUserToAddRows = false;
+            this.dgCharacters.AllowUserToDeleteRows = false;
+            this.dgCharacters.AllowUserToResizeColumns = false;
+            this.dgCharacters.AllowUserToResizeRows = false;
+            this.dgCharacters.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgCharacters.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colCharacterID,
+            this.colCharacterName});
+            this.dgCharacters.Location = new System.Drawing.Point(6, 6);
+            this.dgCharacters.MultiSelect = false;
+            this.dgCharacters.Name = "dgCharacters";
+            this.dgCharacters.ReadOnly = true;
+            this.dgCharacters.RowHeadersVisible = false;
+            this.dgCharacters.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgCharacters.Size = new System.Drawing.Size(308, 411);
+            this.dgCharacters.TabIndex = 37;
+            this.dgCharacters.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgCharacters_CellClick);
+            // 
+            // colCharacterID
+            // 
+            this.colCharacterID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colCharacterID.FillWeight = 10F;
+            this.colCharacterID.HeaderText = "ID";
+            this.colCharacterID.Name = "colCharacterID";
+            this.colCharacterID.ReadOnly = true;
+            this.colCharacterID.Width = 28;
+            // 
+            // colCharacterName
+            // 
+            this.colCharacterName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colCharacterName.FillWeight = 90F;
+            this.colCharacterName.HeaderText = "Name";
+            this.colCharacterName.Name = "colCharacterName";
+            this.colCharacterName.ReadOnly = true;
+            this.colCharacterName.Width = 277;
+            // 
+            // cbCharacterType
+            // 
+            this.cbCharacterType.FormattingEnabled = true;
+            this.cbCharacterType.Location = new System.Drawing.Point(320, 33);
+            this.cbCharacterType.Name = "cbCharacterType";
+            this.cbCharacterType.Size = new System.Drawing.Size(149, 21);
+            this.cbCharacterType.TabIndex = 45;
             // 
             // frmDBEditor
             // 
@@ -460,6 +611,10 @@
             this.tabWorldObjects.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgWorldObjectTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgWorldObjects)).EndInit();
+            this.tabCharacters.ResumeLayout(false);
+            this.tabCharacters.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgCharacterTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgCharacters)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -503,6 +658,19 @@
         private System.Windows.Forms.ToolStripMenuItem itemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem worldObjectToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn colItemTags;
+        private System.Windows.Forms.TabPage tabCharacters;
+        private System.Windows.Forms.Button btnCancelCharacter;
+        private System.Windows.Forms.Button btnSaveCharacter;
+        private System.Windows.Forms.DataGridView dgCharacterTags;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tbCharacterID;
+        private System.Windows.Forms.TextBox tbCharacterName;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.DataGridView dgCharacters;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCharacterID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCharacterName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCharacterTag;
+        private System.Windows.Forms.ComboBox cbCharacterType;
     }
 }
 

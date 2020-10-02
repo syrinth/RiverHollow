@@ -47,7 +47,6 @@ namespace RiverHollow.Characters
         protected static string _sPortraitFolder = DataManager.FOLDER_ACTOR + @"Portraits\";
         protected static string _sNPsCFolder = DataManager.FOLDER_ACTOR + @"NPCs\";
 
-        public enum ActorEnum { Actor, Adventurer, CombatActor, Monster, NPC, ShippingGremlin, Spirit, WorldCharacter};
         protected ActorEnum _eActorType = ActorEnum.Actor;
         public ActorEnum ActorType => _eActorType;
 
@@ -1668,7 +1667,6 @@ namespace RiverHollow.Characters
         protected int _iIndex;
         public int ID  => _iIndex;
         protected string _sHomeMap;
-        public enum NPCTypeEnum { Villager, Eligible, Shopkeeper, Ranger, Worker, Mason }
         protected NPCTypeEnum _eNPCType;
         public NPCTypeEnum NPCType => _eNPCType;
         public static List<int> FriendRange = new List<int> { 0, 10, 40, 100, 200, 600, 800, 1200, 1600, 2000 };
@@ -1718,7 +1716,7 @@ namespace RiverHollow.Characters
         protected void ImportBasics(Dictionary<string, string> data)
         {
             _diDialogue = DataManager.GetNPCDialogue(_iIndex);
-            _sName = _diDialogue["Name"];
+            DataManager.GetTextData("Character_" + _iIndex, ref _sName, "Name");
 
             _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Villager", _iIndex.ToString("00"));
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
