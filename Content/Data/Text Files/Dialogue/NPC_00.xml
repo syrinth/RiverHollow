@@ -1,9 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>a b c d e f g h i j k l m n o p q r s t u v w x y z A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</Value>
+      <Value>a b c d e f g h i j k l m n o p q r s t u v w x y z A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+
+I like Pandas, how about you?</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -32,6 +34,10 @@
     <Item>
       <Key>Quest2End</Key>
       <Value>I'm awake! Hello master, how are you?</Value>
+    </Item>
+    <Item>
+      <Key>Testing</Key>
+      <Value>This is a test :)</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -51,6 +51,8 @@ namespace Database_Editor
         public static string SPECIAL_CHARACTER = "^";
         static string PATH_TO_MAPS = string.Format(@"{0}\..\..\..\..\Adventure\Content\Maps", System.Environment.CurrentDirectory);
         static string PATH_TO_DATA = string.Format(@"{0}\..\..\..\..\Adventure\Content\Data", System.Environment.CurrentDirectory);
+        static string PATH_TO_DIALOGUE = string.Format(@"{0}\..\..\..\..\Adventure\Content\Data\Text Files\Dialogue", System.Environment.CurrentDirectory);
+
 
         static Dictionary<string, Dictionary<string, string>> _diCharacterDialogue;
         static Dictionary<string, Dictionary<string, string>> _diItemText;
@@ -100,7 +102,7 @@ namespace Database_Editor
             _diWorldObjectData = new Dictionary<ObjectTypeEnum, List<XMLData>>();
             _diItems = new Dictionary<ItemEnum, List<ItemXMLData>>();
             _diCharacterDialogue = new Dictionary<string, Dictionary<string, string>>();
-            foreach (string s in Directory.GetFiles(PATH_TO_DATA + @"\Text Files\" + "Dialogue"))
+            foreach (string s in Directory.GetFiles(PATH_TO_DIALOGUE))
             {
                 string fileName = Path.GetFileName(s).Replace("NPC_", "").Split('.')[0];
                 int charID = -1;
@@ -108,7 +110,7 @@ namespace Database_Editor
                 {
                     fileName = s;
                     Util.ParseContentFile(ref fileName);
-                    _diCharacterDialogue.Add("Character_" + charID.ToString(), ReadXMLFile(fileName));
+                    _diCharacterDialogue.Add(s, ReadXMLFile(fileName));
                 }
             }
 
@@ -565,7 +567,8 @@ namespace Database_Editor
         #region EventHandlers
         private void btnDialogue_Click(object sender, EventArgs e)
         {
-            Dictionary<string, string> diDialog = _diCharacterDialogue["Character_" + _diTabIndices["Characters"]];
+            string key = PATH_TO_DIALOGUE + @"\NPC_" + _diTabIndices["Characters"].ToString("00") + ".xml";
+            Dictionary<string, string> diDialog = _diCharacterDialogue[key];
             FormCharExtraData frm = new FormCharExtraData("Dialogue", diDialog);
             frm.Show();
 
@@ -875,6 +878,11 @@ namespace Database_Editor
                 SaveXMLData(_diBasicXML[s], s, PATH_TO_DATA, textFile);
             }
 
+            foreach(string s in _diCharacterDialogue.Keys)
+            {
+                SaveXMLDictionary(_diCharacterDialogue[s], s, PATH_TO_DATA, textFile);
+            }
+
             string mapPath = PATH_TO_MAPS;
             if (!Directory.Exists(mapPath)) { Directory.CreateDirectory(mapPath); }
             foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
@@ -922,6 +930,18 @@ namespace Database_Editor
             dataFile.WriteLine("  </Asset>");
             dataFile.WriteLine("</XnaContent>");
             dataFile.Close();
+        }
+
+        public void SaveXMLDictionary(Dictionary<string, string> dataList, string fileName, string pathToDir, StreamWriter textFile)
+        {
+            StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[string, string]");
+
+            foreach (KeyValuePair<string, string> kvp in dataList)
+            {
+                WriteXMLEntry(dataFile, string.Format("      <Key>{0}</Key>", kvp.Key), string.Format("      <Value>{0}</Value>", kvp.Value));
+            }
+
+            CloseStreamWriter(ref dataFile);
         }
 
         public void SaveXMLData(List<XMLData> dataList, string fileName, string pathToDir, StreamWriter textFile)

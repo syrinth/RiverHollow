@@ -12,6 +12,7 @@ namespace Database_Editor
 {
     public partial class FormCharExtraData : Form
     {
+        int _iIndex = 0;
         Dictionary<string, string> _diData;
         public Dictionary<string, string> Data => _diData;
         public FormCharExtraData(string value, Dictionary<string, string> diCharacterData)
@@ -31,7 +32,7 @@ namespace Database_Editor
                 row.Cells["colCharExtraID"].Value = kvp.Key;
             }
 
-            SelectRow(dgvCharExtraData, 0);
+            SelectRow(dgvCharExtraData, _iIndex);
             dgvCharExtraData.Focus();
 
             LoadDataInfo(0);
@@ -54,7 +55,12 @@ namespace Database_Editor
         {
             if (e.RowIndex > -1)
             {
-                LoadDataInfo(e.RowIndex);
+                if (_diData.Count == _iIndex)
+                {
+                    dgvCharExtraData.Rows.RemoveAt(_iIndex--);
+                }
+                _iIndex = e.RowIndex;
+                LoadDataInfo(_iIndex);
             }
         }
 
@@ -62,6 +68,21 @@ namespace Database_Editor
         {
             _diData[tbCharExtraDataName.Text] = tbCharExtraDataInfo.Text;
             Close();
+        }
+
+        private void btnAddNew_Click(object sender, EventArgs e)
+        {
+            _iIndex = dgvCharExtraData.Rows.Count;
+            dgvCharExtraData.Rows.Add();
+            SelectRow(dgvCharExtraData, _iIndex);
+
+            DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
+            row.Cells["colCharExtraID"].Value = "New";
+
+            tbCharExtraDataName.Text = "";
+            tbCharExtraDataInfo.Text = "";
+
+            tbCharExtraDataName.Focus();
         }
     }
 }

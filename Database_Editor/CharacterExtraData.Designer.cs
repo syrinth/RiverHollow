@@ -36,6 +36,7 @@
             this.lblName = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnSaveCharacter = new System.Windows.Forms.Button();
+            this.btnAddNew = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCharExtraData)).BeginInit();
             this.SuspendLayout();
             // 
@@ -109,11 +110,22 @@
             this.btnSaveCharacter.UseVisualStyleBackColor = true;
             this.btnSaveCharacter.Click += new System.EventHandler(this.btnSaveCharacter_Click);
             // 
+            // btnAddNew
+            // 
+            this.btnAddNew.Location = new System.Drawing.Point(326, 400);
+            this.btnAddNew.Name = "btnAddNew";
+            this.btnAddNew.Size = new System.Drawing.Size(75, 23);
+            this.btnAddNew.TabIndex = 45;
+            this.btnAddNew.Text = "Add New";
+            this.btnAddNew.UseVisualStyleBackColor = true;
+            this.btnAddNew.Click += new System.EventHandler(this.btnAddNew_Click);
+            // 
             // FormCharExtraData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnAddNew);
             this.Controls.Add(this.btnSaveCharacter);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbCharExtraDataName);
@@ -138,5 +150,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colCharExtraID;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnSaveCharacter;
+        private System.Windows.Forms.Button btnAddNew;
     }
 }

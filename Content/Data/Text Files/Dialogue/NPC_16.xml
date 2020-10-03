@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[string, string]">
     <Item>
@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>ShopOpen</Key>
-      <Value>Greetings! What can I do for you today, &amp;^&amp;? [Talk:Talk|Hire Adventurers:BuyWorkers|Sell Contract:SellWorkers|See Missions:Missions|Never Mind:Cancel]</Value>
+      <Value>Greetings! What can I do for you today, $^$? [Talk:Talk|Hire Adventurers:BuyWorkers|Sell Contract:SellWorkers|See Missions:Missions|Never Mind:Cancel]</Value>
     </Item>
   </Asset>
 </XnaContent>
