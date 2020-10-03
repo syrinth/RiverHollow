@@ -52,6 +52,7 @@ namespace Database_Editor
         static string PATH_TO_MAPS = string.Format(@"{0}\..\..\..\..\Adventure\Content\Maps", System.Environment.CurrentDirectory);
         static string PATH_TO_DATA = string.Format(@"{0}\..\..\..\..\Adventure\Content\Data", System.Environment.CurrentDirectory);
 
+        static Dictionary<string, Dictionary<string, string>> _diCharacterDialogue;
         static Dictionary<string, Dictionary<string, string>> _diItemText;
         static Dictionary<ItemEnum, List<ItemXMLData>> _diItems;
         static Dictionary<ObjectTypeEnum, List<XMLData>> _diWorldObjectData;
@@ -98,8 +99,20 @@ namespace Database_Editor
             _diBasicXML = new Dictionary<string, List<XMLData>>();
             _diWorldObjectData = new Dictionary<ObjectTypeEnum, List<XMLData>>();
             _diItems = new Dictionary<ItemEnum, List<ItemXMLData>>();
+            _diCharacterDialogue = new Dictionary<string, Dictionary<string, string>>();
+            foreach (string s in Directory.GetFiles(PATH_TO_DATA + @"\Text Files\" + "Dialogue"))
+            {
+                string fileName = Path.GetFileName(s).Replace("NPC_", "").Split('.')[0];
+                int charID = -1;
+                if (int.TryParse(fileName, out charID))
+                {
+                    fileName = s;
+                    Util.ParseContentFile(ref fileName);
+                    _diCharacterDialogue.Add("Character_" + charID.ToString(), ReadXMLFile(fileName));
+                }
+            }
 
-            _diItemText = ReadXMLFile(NAME_TEXT_XML_FILE);
+            _diItemText = ReadTaggedXMLFile(NAME_TEXT_XML_FILE);
 
             LoadXMLDictionary(QUEST_XML_FILE, QUEST_ITEM_TAGS, DEFAULT_WORLD_TAG);
             LoadXMLDictionary(CHARACTER_XML_FILE, CHARACTER_ITEM_TAGS, DEFAULT_WORLD_TAG);
@@ -245,7 +258,27 @@ namespace Database_Editor
             return rv;
         }
 
-        private Dictionary<string, Dictionary<string, string>> ReadXMLFile(string fileName)
+        private Dictionary<string, string> ReadXMLFile(string fileName)
+        {
+            string line = string.Empty;
+            Dictionary<string, string> xmlDictionary = new Dictionary<string, string>();
+
+            XmlDocument xmldoc = new XmlDocument();
+            XmlNodeList xmlnode;
+            int i = 0;
+
+            FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            xmldoc.Load(fs);
+            xmlnode = xmldoc.GetElementsByTagName("Item");
+            for (i = 0; i <= xmlnode.Count - 1; i++)
+            {
+                xmlDictionary[xmlnode[i].ChildNodes.Item(0).InnerText] = xmlnode[i].ChildNodes.Item(1).InnerText.Trim();
+            }
+
+            return xmlDictionary;
+        }
+
+        private Dictionary<string, Dictionary<string, string>> ReadTaggedXMLFile(string fileName)
         {
             string line = string.Empty;
             Dictionary<string, Dictionary<string, string>> xmlDictionary = new Dictionary<string, Dictionary<string, string>>();
@@ -278,7 +311,7 @@ namespace Database_Editor
         private void LoadXMLDictionary(string fileName, string itemTags, string objectTags)
         {
             List<XMLData> data = new List<XMLData>();
-            foreach (KeyValuePair<string, Dictionary<string, string>> kvp in ReadXMLFile(fileName))
+            foreach (KeyValuePair<string, Dictionary<string, string>> kvp in ReadTaggedXMLFile(fileName))
             {
                 data.Add(new XMLData(kvp.Key, kvp.Value, itemTags, objectTags, FileNameToXMLType(fileName)));
             }
@@ -293,7 +326,7 @@ namespace Database_Editor
         {
             //Load in all the WorldObject Data
             _liWorldObjects = new List<XMLData>();
-            Dictionary<string, Dictionary<string, string>> worldObjectDictionary = ReadXMLFile(WORLD_OBJECTS_DATA_XML_FILE);
+            Dictionary<string, Dictionary<string, string>> worldObjectDictionary = ReadTaggedXMLFile(WORLD_OBJECTS_DATA_XML_FILE);
             for (int i = 0; i < 1001; i++)
             {
                 string strID = i.ToString();
@@ -319,7 +352,7 @@ namespace Database_Editor
         {
             //Load in all the Item Data
             _liItemData = new List<ItemXMLData>();
-            Dictionary<string, Dictionary<string, string>> itemDictionary = ReadXMLFile(ITEM_DATA_XML_FILE);
+            Dictionary<string, Dictionary<string, string>> itemDictionary = ReadTaggedXMLFile(ITEM_DATA_XML_FILE);
             for (int i = 0; i < 1001; i++)
             {
                 string strID = i.ToString();
@@ -530,6 +563,15 @@ namespace Database_Editor
         }
 
         #region EventHandlers
+        private void btnDialogue_Click(object sender, EventArgs e)
+        {
+            Dictionary<string, string> diDialog = _diCharacterDialogue["Character_" + _diTabIndices["Characters"]];
+            FormCharExtraData frm = new FormCharExtraData("Dialogue", diDialog);
+            frm.Show();
+
+            diDialog = frm.Data;
+        }
+
         private void GenericButtonSaveclick(List<XMLData> liData, string tabIndex, DataGridView dgTags, ComboBox cb, string textIDPrefix, XMLTypeEnum xmlType, LoadInfoDelegate loadDGDel, SaveInfoDelegate saveInfo, string itemTags = "", string objectTags = "")
         {
             if (liData.Count == _diTabIndices[tabIndex])

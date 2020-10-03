@@ -59,10 +59,19 @@
     <Compile Include="DataBase Screen.Designer.cs">
       <DependentUpon>DataBase Screen.cs</DependentUpon>
     </Compile>
+    <Compile Include="CharacterExtraData.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CharacterExtraData.Designer.cs">
+      <DependentUpon>CharacterExtraData.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="DataBase Screen.resx">
       <DependentUpon>DataBase Screen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CharacterExtraData.resx">
+      <DependentUpon>CharacterExtraData.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
