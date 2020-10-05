@@ -12,7 +12,7 @@ namespace Database_Editor
 {
     public partial class frmDBEditor : Form
     {
-        public enum XMLTypeEnum { None, Quest, Character, Class, Worker, Building, WorldObject, Item };
+        public enum XMLTypeEnum { None, Quest, Character, Class, Adventurer, Building, WorldObject, Item };
         #region XML Files
         string QUEST_XML_FILE = PATH_TO_DATA + @"\Quests.xml";
         string CHARACTER_XML_FILE = PATH_TO_DATA + @"\CharacterData.xml";
@@ -89,12 +89,20 @@ namespace Database_Editor
             }
             cbCharacterType.SelectedIndex = 0;
 
+            cbAdventurerType.Items.Clear();
+            foreach (AdventurerTypeEnum e in Enum.GetValues(typeof(AdventurerTypeEnum)))
+            {
+                cbAdventurerType.Items.Add("Type:" + e.ToString());
+            }
+            cbAdventurerType.SelectedIndex = 0;
+
             _diTabIndices = new Dictionary<string, int>()
             {
                 { "Items", 0 },
                 { "WorldObjects", 0 },
                 { "Characters", 0 },
-                { "Classes", 0 }
+                { "Classes", 0 },
+                { "Adventurers", 0 }
             };
 
             _diMapData = new Dictionary<string, TMXData>();
@@ -133,11 +141,13 @@ namespace Database_Editor
             LoadWorldObjectDataGrid();
             LoadCharacterDataGrid();
             LoadClassDataGrid();
+            LoadAdventurerDataGrid();
 
             LoadItemInfo();
             LoadWorldObjectInfo();
             LoadCharacterInfo();
             LoadClassInfo();
+            LoadAdventurerInfo();
         }
 
         #region DataGridView Loading
@@ -182,6 +192,10 @@ namespace Database_Editor
         private void LoadClassDataGrid()
         {
             LoadGenericDatagrid(dgClasses, _diBasicXML[CLASSES_XML_FILE], "colClassID", "colClassName", "Classes");
+        }
+        private void LoadAdventurerDataGrid()
+        {
+            LoadGenericDatagrid(dgvAdventurers, _diBasicXML[WORKERS_XML_FILE], "colAdventurersID", "colAdventurersName", "Adventurers");
         }
         #endregion
 
@@ -246,6 +260,12 @@ namespace Database_Editor
             XMLData data = _diBasicXML[CLASSES_XML_FILE][_diTabIndices["Classes"]];
             LoadGenericDataInfo(data, tbClassName, tbClassID, dgClassTags);
         }
+        private void LoadAdventurerInfo()
+        {
+            XMLData data = _diBasicXML[WORKERS_XML_FILE][_diTabIndices["Adventurers"]];
+            LoadGenericDataInfo(data, tbAdventurerName, tbAdventurerID, dgvAdventurerTags);
+            cbAdventurerType.SelectedIndex = (int)Util.ParseEnum<AdventurerTypeEnum>(data.GetTagInfo("Type"));
+        }
         #endregion
 
         private XMLTypeEnum FileNameToXMLType(string fileName) {
@@ -254,7 +274,7 @@ namespace Database_Editor
             if(fileName == QUEST_XML_FILE){ rv = XMLTypeEnum.Quest; }
             else if (fileName == CHARACTER_XML_FILE){ rv = XMLTypeEnum.Character; }
             else if (fileName == CLASSES_XML_FILE) { rv = XMLTypeEnum.Class; }
-            else if (fileName == WORKERS_XML_FILE) { rv = XMLTypeEnum.Worker; }
+            else if (fileName == WORKERS_XML_FILE) { rv = XMLTypeEnum.Adventurer; }
             else if (fileName == WORLD_OBJECTS_DATA_XML_FILE) { rv = XMLTypeEnum.WorldObject; }
 
             return rv;
@@ -669,6 +689,10 @@ namespace Database_Editor
         {
             GenericButtonSaveclick(_diBasicXML[CLASSES_XML_FILE], "Classes", dgClassTags, null, "Class_", XMLTypeEnum.Class, LoadClassDataGrid, SaveClassInfo);
         }
+        private void btnAdventurerSave_Click(object sender, EventArgs e)
+        {
+            GenericButtonSaveclick(_diBasicXML[WORKERS_XML_FILE], "Adventurers", dgvAdventurerTags, cbAdventurerType, "Adventurer_", XMLTypeEnum.Adventurer, LoadAdventurerDataGrid, SaveAdventurerInfo);
+        }
 
         private void SaveGenericInfo(XMLData data, TextBox name, ComboBox cb, DataGridView dgTags)
         {
@@ -729,6 +753,10 @@ namespace Database_Editor
         {
             SaveGenericInfo(data, tbClassName, null, dgClassTags);
         }
+        private void SaveAdventurerInfo(XMLData data)
+        {
+            SaveGenericInfo(data, tbAdventurerName, cbAdventurerType, dgvAdventurerTags);
+        }
 
         private void GenericCancel(List<XMLData> liData, string tabIndex, DataGridView dgMain, LoadInfoDelegate del)
         {
@@ -760,6 +788,10 @@ namespace Database_Editor
         private void btnClassCancel_Click(object sender, EventArgs e)
         {
             GenericCancel(_diBasicXML[CLASSES_XML_FILE], "Classes", dgClasses, LoadClassInfo);
+        }
+        private void btnAdventurerCancel_Click(object sender, EventArgs e)
+        {
+            GenericCancel(_diBasicXML[WORKERS_XML_FILE], "Adventurers", dgvAdventurers, LoadAdventurerInfo);
         }
 
         private void GenericCellClick(DataGridViewCellEventArgs e,  List<XMLData> liData, string tabIndex, DataGridView dgMain, LoadInfoDelegate del)
@@ -799,6 +831,10 @@ namespace Database_Editor
         private void dgClasses_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             GenericCellClick(e, _diBasicXML[CLASSES_XML_FILE], "Classes", dgClasses, LoadClassInfo);
+        }
+        private void dgvAdventurers_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            GenericCellClick(e, _diBasicXML[WORKERS_XML_FILE], "Adventurers", dgvAdventurers, LoadAdventurerInfo);
         }
 
         private void AddNewGenericXMLObject(TabPage page, string tabIndex, DataGridView dg, string colID, string colName, TextBox tbName, TextBox tbID, DataGridView dgTags, string tagCol, ComboBox cb = null, TextBox tbDesc = null, string defaultTag = "")

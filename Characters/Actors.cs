@@ -2539,8 +2539,8 @@ namespace RiverHollow.Characters
         #region Properties
         private enum AdventurerStateEnum { Idle, InParty, OnMission };
         private AdventurerStateEnum _eState;
-        private WorkerTypeEnum _eWorkerType;
-        public WorkerTypeEnum WorkerType => _eWorkerType;
+        private AdventurerTypeEnum _eWorkerType;
+        public AdventurerTypeEnum WorkerType => _eWorkerType;
         protected int _iPersonalID;
         public int PersonalID { get => _iPersonalID; }
         protected int _iAdventurerID;
@@ -2600,7 +2600,7 @@ namespace RiverHollow.Characters
             _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Adventurer", id.ToString("00"));
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
 
-            _eWorkerType = Util.ParseEnum<WorkerTypeEnum>(data["Type"]);
+            _eWorkerType = Util.ParseEnum<AdventurerTypeEnum>(data["Type"]);
             _iDailyItemID = int.Parse(data["Item"]);
             _iDailyFoodReq = int.Parse(data["Food"]);
 

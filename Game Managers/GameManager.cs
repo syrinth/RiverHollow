@@ -51,7 +51,7 @@ namespace RiverHollow.Game_Managers
         public enum AttackTypeEnum { Physical, Magical };
         public enum ElementAlignment { Neutral, Vulnerable, Resists };
         public enum ConditionEnum { None, KO, Poisoned, Silenced };
-        public enum WorkerTypeEnum { None, Magic, Martial };
+        public enum AdventurerTypeEnum { Magic, Martial };
         public enum ObjectTypeEnum { WorldObject, Building, ClassChanger, Machine, Container, Earth, Floor, Destructible, Plant, Wall, Light, DungeonObject, CombatHazard };
         public enum WeaponEnum { None, Spear, Shield, Rapier, Bow, Wand, Knife, Orb, Staff };
         public enum ArmorEnum { None, Cloth, Light, Heavy };
