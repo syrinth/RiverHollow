@@ -35,7 +35,6 @@
             this.tbCharExtraDataName = new System.Windows.Forms.TextBox();
             this.lblName = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnSaveCharacter = new System.Windows.Forms.Button();
             this.btnAddNew = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCharExtraData)).BeginInit();
             this.SuspendLayout();
@@ -72,7 +71,7 @@
             this.tbCharExtraDataInfo.Location = new System.Drawing.Point(329, 51);
             this.tbCharExtraDataInfo.Multiline = true;
             this.tbCharExtraDataInfo.Name = "tbCharExtraDataInfo";
-            this.tbCharExtraDataInfo.Size = new System.Drawing.Size(464, 110);
+            this.tbCharExtraDataInfo.Size = new System.Drawing.Size(464, 189);
             this.tbCharExtraDataInfo.TabIndex = 21;
             // 
             // tbCharExtraDataName
@@ -100,16 +99,6 @@
             this.label1.TabIndex = 24;
             this.label1.Text = "Info:";
             // 
-            // btnSaveCharacter
-            // 
-            this.btnSaveCharacter.Location = new System.Drawing.Point(329, 167);
-            this.btnSaveCharacter.Name = "btnSaveCharacter";
-            this.btnSaveCharacter.Size = new System.Drawing.Size(75, 23);
-            this.btnSaveCharacter.TabIndex = 44;
-            this.btnSaveCharacter.Text = "Save";
-            this.btnSaveCharacter.UseVisualStyleBackColor = true;
-            this.btnSaveCharacter.Click += new System.EventHandler(this.btnSaveCharacter_Click);
-            // 
             // btnAddNew
             // 
             this.btnAddNew.Location = new System.Drawing.Point(326, 400);
@@ -126,7 +115,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.btnAddNew);
-            this.Controls.Add(this.btnSaveCharacter);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbCharExtraDataName);
             this.Controls.Add(this.lblName);
@@ -149,7 +137,6 @@
         private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCharExtraID;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnSaveCharacter;
         private System.Windows.Forms.Button btnAddNew;
     }
 }

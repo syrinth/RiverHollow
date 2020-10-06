@@ -2,11 +2,11 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
     <Item>
-      <Key>1</Key>
-      <Value>[Type:Fetch][HandTo:17][GoalItem:129-1][Item:132-1-1][Money:500][Friendship:Giver-200][SpawnMob:3-mapForest-Quest1]</Value>
+      <Key>0</Key>
+      <Value>[Type:Fetch][HandTo:17][GoalItem:129-1][Item:132-1-1][Money:500][Friendship:Giver-200][SpawnMob:3-mapForest-Quest0]</Value>
     </Item>
     <Item>
-      <Key>2</Key>
+      <Key>1</Key>
       <Value>[Type:Fetch][GoalItem:94-1][Activate:0][Immediate][Cutscene:2]</Value>
     </Item>
   </Asset>

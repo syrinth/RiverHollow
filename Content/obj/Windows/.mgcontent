@@ -119,7 +119,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/NPCs/Spirit_3.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/NPCs/Spirit_4.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/CharacterData.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Schedules/NPC1.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/BigBlob.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/ActionEffects/Heal.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/Bauble.png</File>
@@ -285,5 +284,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Original/Effects/Sample3.wav</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Original/Effects/Sample4.wav</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Name_Text.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Schedules/NPC_01.xml</File>
   </SourceFiles>
 </SourceFileCollection>

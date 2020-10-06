@@ -33,6 +33,7 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addNewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.itemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.questToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.worldObjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,7 +56,7 @@
             this.tabWorldObjects = new System.Windows.Forms.TabPage();
             this.cbWorldObjectType = new System.Windows.Forms.ComboBox();
             this.btnWorldObjectCancel = new System.Windows.Forms.Button();
-            this.dgWorldObjectTags = new System.Windows.Forms.DataGridView();
+            this.dgvWorldObjectTags = new System.Windows.Forms.DataGridView();
             this.colWorldObjectTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label4 = new System.Windows.Forms.Label();
             this.tbWorldObjectID = new System.Windows.Forms.TextBox();
@@ -65,7 +66,8 @@
             this.colWorldObjectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colWorldObjectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabCharacters = new System.Windows.Forms.TabPage();
-            this.btnDialogue = new System.Windows.Forms.Button();
+            this.cbEditableCharData = new System.Windows.Forms.ComboBox();
+            this.btnEdit = new System.Windows.Forms.Button();
             this.cbCharacterType = new System.Windows.Forms.ComboBox();
             this.btnCancelCharacter = new System.Windows.Forms.Button();
             this.dgCharacterTags = new System.Windows.Forms.DataGridView();
@@ -101,9 +103,9 @@
             this.colAdventurersID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAdventurersName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabQuests = new System.Windows.Forms.TabPage();
+            this.cbQuestType = new System.Windows.Forms.ComboBox();
             this.btnQuestCancel = new System.Windows.Forms.Button();
             this.dgvQuestTags = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbQuestDescription = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
@@ -113,14 +115,14 @@
             this.dgvQuests = new System.Windows.Forms.DataGridView();
             this.colQuestsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colQuestsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cbQuestType = new System.Windows.Forms.ComboBox();
+            this.colQuestTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItemTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvItems)).BeginInit();
             this.tabWorldObjects.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgWorldObjectTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjectTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjects)).BeginInit();
             this.tabCharacters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgCharacterTags)).BeginInit();
@@ -160,34 +162,42 @@
             // 
             this.addNewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.itemToolStripMenuItem,
+            this.questToolStripMenuItem,
             this.worldObjectToolStripMenuItem});
             this.addNewToolStripMenuItem.Name = "addNewToolStripMenuItem";
-            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addNewToolStripMenuItem.Text = "Add New";
             // 
             // itemToolStripMenuItem
             // 
             this.itemToolStripMenuItem.Name = "itemToolStripMenuItem";
-            this.itemToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.itemToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.itemToolStripMenuItem.Text = "Item";
             this.itemToolStripMenuItem.Click += new System.EventHandler(this.addNewToolStripMenuItem_Click);
+            // 
+            // questToolStripMenuItem
+            // 
+            this.questToolStripMenuItem.Name = "questToolStripMenuItem";
+            this.questToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.questToolStripMenuItem.Text = "Quest";
+            this.questToolStripMenuItem.Click += new System.EventHandler(this.questToolStripMenuItem_Click);
             // 
             // worldObjectToolStripMenuItem
             // 
             this.worldObjectToolStripMenuItem.Name = "worldObjectToolStripMenuItem";
-            this.worldObjectToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.worldObjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.worldObjectToolStripMenuItem.Text = "World Object";
             this.worldObjectToolStripMenuItem.Click += new System.EventHandler(this.addNewToolStripMenuWorldObject_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(133, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // saveToFileToolStripMenuItem
             // 
             this.saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
-            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToFileToolStripMenuItem.Text = "Save To File";
             this.saveToFileToolStripMenuItem.Click += new System.EventHandler(this.saveToFileToolStripMenuItem_Click);
             // 
@@ -229,6 +239,7 @@
             // 
             // cbItemSubtype
             // 
+            this.cbItemSubtype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbItemSubtype.FormattingEnabled = true;
             this.cbItemSubtype.Location = new System.Drawing.Point(475, 110);
             this.cbItemSubtype.Name = "cbItemSubtype";
@@ -238,6 +249,7 @@
             // 
             // cbItemType
             // 
+            this.cbItemType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbItemType.FormattingEnabled = true;
             this.cbItemType.Location = new System.Drawing.Point(320, 110);
             this.cbItemType.Name = "cbItemType";
@@ -362,7 +374,7 @@
             // 
             this.tabWorldObjects.Controls.Add(this.cbWorldObjectType);
             this.tabWorldObjects.Controls.Add(this.btnWorldObjectCancel);
-            this.tabWorldObjects.Controls.Add(this.dgWorldObjectTags);
+            this.tabWorldObjects.Controls.Add(this.dgvWorldObjectTags);
             this.tabWorldObjects.Controls.Add(this.label4);
             this.tabWorldObjects.Controls.Add(this.tbWorldObjectID);
             this.tabWorldObjects.Controls.Add(this.tbWorldObjectName);
@@ -378,6 +390,7 @@
             // 
             // cbWorldObjectType
             // 
+            this.cbWorldObjectType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbWorldObjectType.FormattingEnabled = true;
             this.cbWorldObjectType.Location = new System.Drawing.Point(320, 33);
             this.cbWorldObjectType.Name = "cbWorldObjectType";
@@ -394,16 +407,16 @@
             this.btnWorldObjectCancel.UseVisualStyleBackColor = true;
             this.btnWorldObjectCancel.Click += new System.EventHandler(this.btnWorldObjectCancel_Click);
             // 
-            // dgWorldObjectTags
+            // dgvWorldObjectTags
             // 
-            this.dgWorldObjectTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgWorldObjectTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvWorldObjectTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvWorldObjectTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colWorldObjectTags});
-            this.dgWorldObjectTags.Location = new System.Drawing.Point(320, 60);
-            this.dgWorldObjectTags.Name = "dgWorldObjectTags";
-            this.dgWorldObjectTags.RowHeadersVisible = false;
-            this.dgWorldObjectTags.Size = new System.Drawing.Size(464, 328);
-            this.dgWorldObjectTags.TabIndex = 33;
+            this.dgvWorldObjectTags.Location = new System.Drawing.Point(320, 60);
+            this.dgvWorldObjectTags.Name = "dgvWorldObjectTags";
+            this.dgvWorldObjectTags.RowHeadersVisible = false;
+            this.dgvWorldObjectTags.Size = new System.Drawing.Size(464, 328);
+            this.dgvWorldObjectTags.TabIndex = 33;
             // 
             // colWorldObjectTags
             // 
@@ -482,7 +495,8 @@
             // 
             // tabCharacters
             // 
-            this.tabCharacters.Controls.Add(this.btnDialogue);
+            this.tabCharacters.Controls.Add(this.cbEditableCharData);
+            this.tabCharacters.Controls.Add(this.btnEdit);
             this.tabCharacters.Controls.Add(this.cbCharacterType);
             this.tabCharacters.Controls.Add(this.btnCancelCharacter);
             this.tabCharacters.Controls.Add(this.dgCharacterTags);
@@ -498,18 +512,28 @@
             this.tabCharacters.Text = "Characters";
             this.tabCharacters.UseVisualStyleBackColor = true;
             // 
-            // btnDialogue
+            // cbEditableCharData
             // 
-            this.btnDialogue.Location = new System.Drawing.Point(320, 394);
-            this.btnDialogue.Name = "btnDialogue";
-            this.btnDialogue.Size = new System.Drawing.Size(75, 23);
-            this.btnDialogue.TabIndex = 55;
-            this.btnDialogue.Text = "Dialogue";
-            this.btnDialogue.UseVisualStyleBackColor = true;
-            this.btnDialogue.Click += new System.EventHandler(this.btnDialogue_Click);
+            this.cbEditableCharData.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbEditableCharData.FormattingEnabled = true;
+            this.cbEditableCharData.Location = new System.Drawing.Point(320, 396);
+            this.cbEditableCharData.Name = "cbEditableCharData";
+            this.cbEditableCharData.Size = new System.Drawing.Size(149, 21);
+            this.cbEditableCharData.TabIndex = 56;
+            // 
+            // btnEdit
+            // 
+            this.btnEdit.Location = new System.Drawing.Point(475, 394);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(75, 23);
+            this.btnEdit.TabIndex = 55;
+            this.btnEdit.Text = "Edit";
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnDialogue_Click);
             // 
             // cbCharacterType
             // 
+            this.cbCharacterType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbCharacterType.FormattingEnabled = true;
             this.cbCharacterType.Location = new System.Drawing.Point(320, 33);
             this.cbCharacterType.Name = "cbCharacterType";
@@ -743,6 +767,7 @@
             // 
             // cbAdventurerType
             // 
+            this.cbAdventurerType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAdventurerType.FormattingEnabled = true;
             this.cbAdventurerType.Location = new System.Drawing.Point(320, 33);
             this.cbAdventurerType.Name = "cbAdventurerType";
@@ -864,6 +889,15 @@
             this.tabQuests.Text = "Quests";
             this.tabQuests.UseVisualStyleBackColor = true;
             // 
+            // cbQuestType
+            // 
+            this.cbQuestType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbQuestType.FormattingEnabled = true;
+            this.cbQuestType.Location = new System.Drawing.Point(320, 110);
+            this.cbQuestType.Name = "cbQuestType";
+            this.cbQuestType.Size = new System.Drawing.Size(149, 21);
+            this.cbQuestType.TabIndex = 37;
+            // 
             // btnQuestCancel
             // 
             this.btnQuestCancel.Location = new System.Drawing.Point(709, 394);
@@ -877,18 +911,12 @@
             // 
             this.dgvQuestTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvQuestTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn2});
+            this.colQuestTags});
             this.dgvQuestTags.Location = new System.Drawing.Point(320, 137);
             this.dgvQuestTags.Name = "dgvQuestTags";
             this.dgvQuestTags.RowHeadersVisible = false;
             this.dgvQuestTags.Size = new System.Drawing.Size(464, 251);
             this.dgvQuestTags.TabIndex = 33;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn2.HeaderText = "Tags";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             // 
             // tbQuestDescription
             // 
@@ -976,13 +1004,11 @@
             this.colQuestsName.Name = "colQuestsName";
             this.colQuestsName.ReadOnly = true;
             // 
-            // cbQuestType
+            // colQuestTags
             // 
-            this.cbQuestType.FormattingEnabled = true;
-            this.cbQuestType.Location = new System.Drawing.Point(320, 110);
-            this.cbQuestType.Name = "cbQuestType";
-            this.cbQuestType.Size = new System.Drawing.Size(149, 21);
-            this.cbQuestType.TabIndex = 37;
+            this.colQuestTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colQuestTags.HeaderText = "Tags";
+            this.colQuestTags.Name = "colQuestTags";
             // 
             // frmDBEditor
             // 
@@ -1004,7 +1030,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvItems)).EndInit();
             this.tabWorldObjects.ResumeLayout(false);
             this.tabWorldObjects.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgWorldObjectTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjectTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorldObjects)).EndInit();
             this.tabCharacters.ResumeLayout(false);
             this.tabCharacters.PerformLayout();
@@ -1049,7 +1075,7 @@
         private System.Windows.Forms.TabPage tabWorldObjects;
         private System.Windows.Forms.ComboBox cbWorldObjectType;
         private System.Windows.Forms.Button btnWorldObjectCancel;
-        private System.Windows.Forms.DataGridView dgWorldObjectTags;
+        private System.Windows.Forms.DataGridView dgvWorldObjectTags;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox tbWorldObjectID;
         private System.Windows.Forms.TextBox tbWorldObjectName;
@@ -1078,7 +1104,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colWorldObjectTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCharacterTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colClassTags;
-        private System.Windows.Forms.Button btnDialogue;
+        private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.TabPage tabAdventurers;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView dgvAdventurerTags;
@@ -1102,7 +1128,6 @@
         private System.Windows.Forms.TabPage tabQuests;
         private System.Windows.Forms.Button btnQuestCancel;
         private System.Windows.Forms.DataGridView dgvQuestTags;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.TextBox tbQuestDescription;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
@@ -1113,6 +1138,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colQuestsID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colQuestsName;
         private System.Windows.Forms.ComboBox cbQuestType;
+        private System.Windows.Forms.ComboBox cbEditableCharData;
+        private System.Windows.Forms.ToolStripMenuItem questToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colQuestTags;
     }
 }
 

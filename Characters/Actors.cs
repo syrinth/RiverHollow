@@ -1676,7 +1676,7 @@ namespace RiverHollow.Characters
         public bool Introduced;
         public bool CanGiveGift = true;
 
-        protected Dictionary<string, List<KeyValuePair<string, string>>> _diCompleteSchedule;         //Every day with a list of KVP Time/GoToLocations
+        protected Dictionary<string, List<Dictionary<string, string>>> _diCompleteSchedule;         //Every day with a list of KVP Time/GoToLocations
         List<KeyValuePair<string, PathData>> _liTodayPathing = null;                             //List of Times with the associated pathing                                                     //List of Tiles to currently be traversing
         protected int _iScheduleIndex;
 
@@ -1704,7 +1704,7 @@ namespace RiverHollow.Characters
         public Villager(int index, Dictionary<string, string> stringData): this()
         {
             _eActorType = ActorEnum.NPC;
-            _diCompleteSchedule = new Dictionary<string, List<KeyValuePair<string, string>>>();
+            _diCompleteSchedule = new Dictionary<string, List<Dictionary<string, string>>>();
             _iScheduleIndex = 0;
             _iIndex = index;
 
@@ -1742,19 +1742,17 @@ namespace RiverHollow.Characters
                 }
             }
 
-            Dictionary<string, string> schedule = DataManager.GetSchedule("NPC" + _iIndex);
+            Dictionary<string, List<string>> schedule = DataManager.GetSchedule("NPC_" + _iIndex.ToString("00"));
             if (schedule != null)
             {
-                foreach (KeyValuePair<string, string> kvp in schedule)
+                foreach (KeyValuePair<string, List<string>> kvp in schedule)
                 {
-                    List<KeyValuePair<string, string>> temp = new List<KeyValuePair<string, string>>();
-                    string[] group = kvp.Value.Split('/');
-                    foreach (string s in group)
+                    List<Dictionary<string, string>> pathingData = new List<Dictionary<string, string>>();
+                    foreach (string s in kvp.Value)
                     {
-                        string[] strSchedule = Util.GetEntries(s);
-                        temp.Add(new KeyValuePair<string, string>(strSchedule[0], strSchedule[1]));
+                        pathingData.Add(TaggedStringToDictionary(s));
                     }
-                    _diCompleteSchedule.Add(kvp.Key, temp);
+                    _diCompleteSchedule.Add(kvp.Key, pathingData);
                 }
             }
         }
@@ -1949,7 +1947,7 @@ namespace RiverHollow.Characters
             if (_diCompleteSchedule != null && _diCompleteSchedule.Count > 0)
             {
                 string searchVal = currSeason + currDay + currWeather;
-                List<KeyValuePair<string, string>> listPathingForDay = null;
+                List<Dictionary<string, string>> listPathingForDay = null;
 
                 //Search to see if there exists any pathing instructions for the day.
                 //If so, set the value of listPathingForDay to the list of times/locations
@@ -1975,15 +1973,16 @@ namespace RiverHollow.Characters
                     string mapName = CurrentMapName;
 
                     TravelManager.NewTravelLog(_sName);
-                    foreach (KeyValuePair<string, string> kvp in listPathingForDay)
+                    foreach (Dictionary<string, string> pathingData in listPathingForDay)
                     {
+                        string timeKey = pathingData["Hour"] + ":" + pathingData["Minute"];
+                        string targetLocation = pathingData["Location"];
+                        string direction = string.Empty;
+                        string animation = string.Empty;
+                        Util.AssignValue(ref direction, "Dir", pathingData);
+                        Util.AssignValue(ref animation, "Anim", pathingData);
+
                         List<RHTile> timePath;
-
-                        string[] split = kvp.Value.Split('-');
-                        string targetLocation = split[0];
-                        string direction = split.Length > 1 ? split[1] : string.Empty;
-                        string animation = split.Length > 2 ? split[2] : string.Empty;
-
                         //If the map we're currently on has the target location, pathfind to it.
                         //Otherwise, we need to pathfind to the map that does first.
                         if (MapManager.Maps[mapName].DictionaryCharacterLayer.ContainsKey(targetLocation))
@@ -1996,7 +1995,7 @@ namespace RiverHollow.Characters
                         }
 
                         PathData data = new PathData(timePath, direction, animation);
-                        lTimetoTilePath.Add(new KeyValuePair<string, PathData>(kvp.Key, data));
+                        lTimetoTilePath.Add(new KeyValuePair<string, PathData>(timeKey, data));
                     }
                     TravelManager.CloseTravelLog();
 

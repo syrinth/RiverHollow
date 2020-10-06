@@ -75,7 +75,7 @@ namespace RiverHollow.Game_Managers
 
         static Dictionary<int, Dictionary<string, string>> _diClasses;
         public static Dictionary<int, Dictionary<string, string>> DIClasses => _diClasses;
-        static Dictionary<string, Dictionary<string, string>> _diSchedule;
+        static Dictionary<string, Dictionary<string, List<string>>> _diSchedule;
 
         public static Dictionary<int, Dictionary<string, string>> Config;
 
@@ -294,11 +294,11 @@ namespace RiverHollow.Game_Managers
         }
         private static void LoadNPCSchedules(ContentManager Content)
         {
-            _diSchedule = new Dictionary<string, Dictionary<string, string>>();
+            _diSchedule = new Dictionary<string, Dictionary<string, List<string>>>();
             foreach (string s in Directory.GetFiles(@"Content\Data\Schedules"))
             {
                 string temp = Path.GetFileNameWithoutExtension(s);
-                _diSchedule.Add(temp, Content.Load<Dictionary<string, string>>(@"Data\Schedules\" + temp));
+                _diSchedule.Add(temp, Content.Load<Dictionary<string, List<string>>>(@"Data\Schedules\" + temp));
             }
         }
         #endregion
@@ -574,9 +574,9 @@ namespace RiverHollow.Game_Managers
             return c;
         }
 
-        public static Dictionary<string, string> GetSchedule(string npc)
+        public static Dictionary<string, List<string>> GetSchedule(string npc)
         {
-            Dictionary<string, string> rv = null;
+            Dictionary<string, List<string>> rv = null;
             if (_diSchedule.ContainsKey(npc))
             {
                 rv = _diSchedule[npc];
@@ -622,12 +622,7 @@ namespace RiverHollow.Game_Managers
 
             return rv;
         }
-        public static void GetQuestText(int id, ref string name, ref string desc)
-        {
-            string val = "Quest " + id;
-            name = _diGameText[val].Split('/')[0];
-            desc = _diGameText[val].Split('/')[1];
-        }
+        
         public static void GetUpgradeText(int id, ref string name, ref string desc)
         {
             string val = "Upgrade " + id;

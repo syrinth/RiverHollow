@@ -15,14 +15,14 @@
     </Item>
     <Item>
       <Key>Selection</Key>
-      <Value>Greeeeeeeetings... [Talk:Talk|Gift:GiveGift|%Quest:1%Business:Quest1|Never Mind:Cancel]</Value>
+      <Value>Greeeeeeeetings... [Talk:Talk|Gift:GiveGift|%Quest:0%Business:Quest0|Never Mind:Cancel]</Value>
     </Item>
     <Item>
-      <Key>Quest1</Key>
+      <Key>Quest0</Key>
       <Value>I hope you can help me. Some upstart goblins snuck into my house last night and stole my orb. It's very precious to me, and I want it back. If you get it for me, I'll make it worth your while.</Value>
     </Item>
     <Item>
-      <Key>Quest1End</Key>
+      <Key>Quest0End</Key>
       <Value>Oh thank you! Here, take this!</Value>
     </Item>
   </Asset>

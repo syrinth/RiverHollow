@@ -22,6 +22,13 @@ namespace Database_Editor
             _diData = diCharacterData;
             this.Text = value;
 
+            LoadDataGridView();
+
+            dgvCharExtraData.Focus();
+        }
+
+        private void LoadDataGridView()
+        {
             int index = 0;
             dgvCharExtraData.Rows.Clear();
             foreach (KeyValuePair<string, string> kvp in _diData)
@@ -33,9 +40,7 @@ namespace Database_Editor
             }
 
             SelectRow(dgvCharExtraData, _iIndex);
-            dgvCharExtraData.Focus();
-
-            LoadDataInfo(0);
+            LoadDataInfo(_iIndex);
         }
 
         private void SelectRow(DataGridView dg, int id)
@@ -55,19 +60,14 @@ namespace Database_Editor
         {
             if (e.RowIndex > -1)
             {
-                if (_diData.Count == _iIndex)
-                {
-                    dgvCharExtraData.Rows.RemoveAt(_iIndex--);
-                }
+                _diData.Remove(_diData.ElementAt(_iIndex).Key);
+                _diData[tbCharExtraDataName.Text] = tbCharExtraDataInfo.Text;
+                DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
+                row.Cells["colCharExtraID"].Value = tbCharExtraDataName.Text;
+
                 _iIndex = e.RowIndex;
                 LoadDataInfo(_iIndex);
             }
-        }
-
-        private void btnSaveCharacter_Click(object sender, EventArgs e)
-        {
-            _diData[tbCharExtraDataName.Text] = tbCharExtraDataInfo.Text;
-            Close();
         }
 
         private void btnAddNew_Click(object sender, EventArgs e)

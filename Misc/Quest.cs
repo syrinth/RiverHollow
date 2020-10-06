@@ -103,7 +103,9 @@ namespace RiverHollow.Misc
             _iQuestID = id;
             _iAccomplished = 0;
             _liRewardItems = new List<Item>();
-            DataManager.GetQuestText(_iQuestID, ref _name, ref _sDescription);
+
+            DataManager.GetTextData("Quest_" + _iQuestID, ref _name, "Name");
+            DataManager.GetTextData("Quest_" + _iQuestID, ref _sDescription, "Description");
 
             _goalType = Util.ParseEnum<QuestTypeEnum>("Type");
 
