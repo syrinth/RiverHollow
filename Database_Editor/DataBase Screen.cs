@@ -64,37 +64,25 @@ namespace Database_Editor
         delegate void VoidDelegate();
         delegate void XMLDataDelegate(XMLData Data);
 
+        private void InitComboBox<T>(ComboBox cb)
+        {
+            cb.Items.Clear();
+            foreach (T e in Enum.GetValues(typeof(T)))
+            {
+                cb.Items.Add("Type:" + e.ToString());
+            }
+            cb.SelectedIndex = 0;
+        }
+
         public frmDBEditor()
         {
             InitializeComponent();
 
-            cbItemType.Items.Clear();
-            foreach (ItemEnum e in Enum.GetValues(typeof(ItemEnum)))
-            {
-                cbItemType.Items.Add("Type:" + e.ToString());
-            }
-            cbItemType.SelectedIndex = 0;
-
-            cbWorldObjectType.Items.Clear();
-            foreach (ObjectTypeEnum e in Enum.GetValues(typeof(ObjectTypeEnum)))
-            {
-                cbWorldObjectType.Items.Add("Type:" + e.ToString());
-            }
-            cbWorldObjectType.SelectedIndex = 0;
-
-            cbCharacterType.Items.Clear();
-            foreach (NPCTypeEnum e in Enum.GetValues(typeof(NPCTypeEnum)))
-            {
-                cbCharacterType.Items.Add("Type:" + e.ToString());
-            }
-            cbCharacterType.SelectedIndex = 0;
-
-            cbAdventurerType.Items.Clear();
-            foreach (AdventurerTypeEnum e in Enum.GetValues(typeof(AdventurerTypeEnum)))
-            {
-                cbAdventurerType.Items.Add("Type:" + e.ToString());
-            }
-            cbAdventurerType.SelectedIndex = 0;
+            InitComboBox<ItemEnum>(cbItemType);
+            InitComboBox<ObjectTypeEnum>(cbWorldObjectType);
+            InitComboBox<NPCTypeEnum>(cbCharacterType);
+            InitComboBox<AdventurerTypeEnum>(cbAdventurerType);
+            InitComboBox<QuestTypeEnum>(cbQuestType);
 
             _diTabIndices = new Dictionary<string, int>()
             {
@@ -103,7 +91,8 @@ namespace Database_Editor
                 { "WorldObjects", 0 },
                 { "Characters", 0 },
                 { "Classes", 0 },
-                { "Adventurers", 0 }
+                { "Adventurers", 0 },
+                { "Quests", 0 }
             };
 
             _diMapData = new Dictionary<string, TMXData>();
@@ -143,12 +132,14 @@ namespace Database_Editor
             LoadCharacterDataGrid();
             LoadClassDataGrid();
             LoadAdventurerDataGrid();
+            LoadQuestDataGrid();
 
             LoadItemInfo();
             LoadWorldObjectInfo();
             LoadCharacterInfo();
             LoadClassInfo();
             LoadAdventurerInfo();
+            LoadQuestInfo();
         }
 
         #region DataGridView Loading
@@ -197,6 +188,10 @@ namespace Database_Editor
         private void LoadAdventurerDataGrid()
         {
             LoadGenericDatagrid(dgvAdventurers, _diBasicXML[WORKERS_XML_FILE], "colAdventurersID", "colAdventurersName", "Adventurers");
+        }
+        private void LoadQuestDataGrid()
+        {
+            LoadGenericDatagrid(dgvQuests, _diBasicXML[QUEST_XML_FILE], "colQuestsID", "colQuestsName", "Quests");
         }
         #endregion
 
@@ -266,6 +261,12 @@ namespace Database_Editor
             XMLData data = _diBasicXML[WORKERS_XML_FILE][_diTabIndices["Adventurers"]];
             LoadGenericDataInfo(data, tbAdventurerName, tbAdventurerID, dgvAdventurerTags);
             cbAdventurerType.SelectedIndex = (int)Util.ParseEnum<AdventurerTypeEnum>(data.GetTagInfo("Type"));
+        }
+        private void LoadQuestInfo()
+        {
+            XMLData data = _diBasicXML[QUEST_XML_FILE][_diTabIndices["Quests"]];
+            LoadGenericDataInfo(data, tbQuestName, tbQuestID, dgvQuestTags, tbQuestDescription);
+            cbQuestType.SelectedIndex = (int)Util.ParseEnum<QuestTypeEnum>(data.GetTagInfo("Type"));
         }
         #endregion
 
@@ -596,7 +597,7 @@ namespace Database_Editor
             diDialog = frm.Data;
         }
 
-        private void SaveGenericInfo(List<XMLData> liData, string tabIndex, string textIDPrefix, XMLTypeEnum xmlType, XMLData data, TextBox name, ComboBox cb, DataGridView baseGridView, DataGridView dgTags, string colID, string colName, string itemTags = "", string objectTags = "")
+        private void SaveGenericInfo(List<XMLData> liData, string tabIndex, string textIDPrefix, XMLTypeEnum xmlType, XMLData data, TextBox tbName, ComboBox cb, DataGridView baseGridView, DataGridView dgTags, string colID, string colName, TextBox tbDescription = null, string itemTags = "", string objectTags = "")
         {
             if (liData.Count == _diTabIndices[tabIndex])
             {
@@ -604,6 +605,8 @@ namespace Database_Editor
                 {
                     ["Name"] = tbItemName.Text,
                 };
+                if (tbDescription != null) { diText["Description"] = tbDescription.Text; }
+
                 _diItemText[textIDPrefix + "_" + tbItemID.Text] = diText;
 
                 Dictionary<string, string> tags = new Dictionary<string, string>();
@@ -630,7 +633,9 @@ namespace Database_Editor
             }
             else
             {
-                data.SetTextData(name.Text);
+                if(tbDescription == null) { data.SetTextData(tbName.Text); }
+                else { data.SetTextData(tbName.Text, tbDescription.Text); }
+
                 data.ClearTagInfo();
                 if (cb != null)
                 {
@@ -741,6 +746,10 @@ namespace Database_Editor
         {
             SaveGenericInfo(_diBasicXML[WORKERS_XML_FILE], "Adventurers", "Adventurer_", XMLTypeEnum.Adventurer, data, tbAdventurerName, cbAdventurerType, dgvAdventurers, dgvAdventurerTags, "colAdventurersID", "colAdventurersName");
         }
+        private void SaveQuestInfo(XMLData data)
+        {
+            SaveGenericInfo(_diBasicXML[QUEST_XML_FILE], "Quests", "Quest_", XMLTypeEnum.Quest, data, tbQuestName, cbQuestType, dgvQuests, dgvQuestTags, "colQuestsID", "colQuestsName", tbQuestDescription);
+        }
 
         private void GenericCancel(List<XMLData> liData, string tabIndex, DataGridView dgMain, VoidDelegate del)
         {
@@ -777,6 +786,10 @@ namespace Database_Editor
         {
             GenericCancel(_diBasicXML[WORKERS_XML_FILE], "Adventurers", dgvAdventurers, LoadAdventurerInfo);
         }
+        private void btnQuestCancel_Click(object sender, EventArgs e)
+        {
+            GenericCancel(_diBasicXML[QUEST_XML_FILE], "Quests", dgvQuests, LoadQuestInfo);
+        }
 
         private void GenericCellClick(DataGridViewCellEventArgs e,  List<XMLData> liData, string tabIndex, DataGridView dgMain, VoidDelegate loadDel, XMLDataDelegate saveDel)
         {
@@ -787,7 +800,7 @@ namespace Database_Editor
                 loadDel();
             }
         }
-        private void dgItems_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvItems_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex > -1)
             {
@@ -796,21 +809,25 @@ namespace Database_Editor
                 LoadItemInfo();
             }
         }
-        private void dgWorldObjects_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvWorldObjects_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             GenericCellClick(e, _liWorldObjects, "WorldObjects", dgvWorldObjects, LoadWorldObjectInfo, SaveWorldObjectInfo);
         }
-        private void dgCharacters_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvCharacters_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             GenericCellClick(e, _diBasicXML[CHARACTER_XML_FILE], "Characters", dgvCharacters, LoadCharacterInfo, SaveCharacterInfo);
         }
-        private void dgClasses_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvClasses_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             GenericCellClick(e, _diBasicXML[CLASSES_XML_FILE], "Classes", dgvClasses, LoadClassInfo, SaveClassInfo);
         }
         private void dgvAdventurers_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             GenericCellClick(e, _diBasicXML[WORKERS_XML_FILE], "Adventurers", dgvAdventurers, LoadAdventurerInfo, SaveAdventurerInfo);
+        }
+        private void dgvQuests_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            GenericCellClick(e, _diBasicXML[QUEST_XML_FILE], "Quests", dgvQuests, LoadQuestInfo, SaveQuestInfo);
         }
 
         private void AddNewGenericXMLObject(TabPage page, string tabIndex, DataGridView dg, string colID, string colName, TextBox tbName, TextBox tbID, DataGridView dgTags, string tagCol, ComboBox cb = null, TextBox tbDesc = null, string defaultTag = "")
@@ -853,8 +870,8 @@ namespace Database_Editor
 
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            AutoSave();
             StreamWriter textFile = PrepareXMLFile(NAME_TEXT_XML_FILE, "Dictionary[string, string]");
-            if (_liItemData.Count == _diTabIndices["Items"]) { SaveItemInfo(_liItemData[_diTabIndices["Items"]]); }
 
             _liItemData.Sort((x, y) =>
             {
@@ -920,20 +937,27 @@ namespace Database_Editor
         }
         private void tabCtl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            TabPage prevPage = tabCtl.TabPages[_diTabIndices["PreviousTab"]];
-            if (prevPage == tabCtl.TabPages["tabWorldObjects"]) { SaveWorldObjectInfo(_liWorldObjects[_diTabIndices["WorldObjects"]]); }
-            else if (prevPage == tabCtl.TabPages["tabItems"]) { SaveItemInfo(_liItemData[_diTabIndices["Items"]]); }
-            else if (prevPage == tabCtl.TabPages["tabCharacters"]) { SaveCharacterInfo(_diBasicXML[CHARACTER_XML_FILE][_diTabIndices["Characters"]]); }
-            else if (prevPage == tabCtl.TabPages["tabClasses"]) { SaveClassInfo(_diBasicXML[CLASSES_XML_FILE][_diTabIndices["Classes"]]); }
-            else if (prevPage == tabCtl.TabPages["tabAdventurers"]) { SaveAdventurerInfo(_diBasicXML[WORKERS_XML_FILE][_diTabIndices["Adventurers"]]); }
+            AutoSave();
 
             if (tabCtl.SelectedTab == tabCtl.TabPages["tabWorldObjects"]) { dgvWorldObjects.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItems"]) { dgvItems.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCharacters"]) { dgvCharacters.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabClasses"]) { dgvClasses.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabAdventurers"]) { dgvAdventurers.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabQuests"]) { dgvQuests.Focus(); }
 
             _diTabIndices["PreviousTab"] = tabCtl.SelectedIndex;
+        }
+
+        private void AutoSave()
+        {
+            TabPage prevPage = tabCtl.TabPages[_diTabIndices["PreviousTab"]];
+            if (prevPage == tabCtl.TabPages["tabWorldObjects"]) { SaveWorldObjectInfo(_liWorldObjects[_diTabIndices["WorldObjects"]]); }
+            else if (prevPage == tabCtl.TabPages["tabItems"]) { SaveItemInfo(_liItemData[_diTabIndices["Items"]]); }
+            else if (prevPage == tabCtl.TabPages["tabCharacters"]) { SaveCharacterInfo(_diBasicXML[CHARACTER_XML_FILE][_diTabIndices["Characters"]]); }
+            else if (prevPage == tabCtl.TabPages["tabClasses"]) { SaveClassInfo(_diBasicXML[CLASSES_XML_FILE][_diTabIndices["Classes"]]); }
+            else if (prevPage == tabCtl.TabPages["tabAdventurers"]) { SaveAdventurerInfo(_diBasicXML[WORKERS_XML_FILE][_diTabIndices["Adventurers"]]); }
+            else if (prevPage == tabCtl.TabPages["tabQuests"]) { SaveQuestInfo(_diBasicXML[QUEST_XML_FILE][_diTabIndices["Quests"]]); }
         }
         #endregion
 
@@ -983,7 +1007,9 @@ namespace Database_Editor
 
                 if (!fileName.Contains("Config") && !fileName.Contains("Shops"))
                 {
-                    WriteXMLEntry(textFile, string.Format("      <Key>{0}</Key>", id), string.Format("      <Value>[Name:{0}]</Value>", data.Name));
+                    string value = string.Format("[Name:{0}]", data.Name);
+                    if (!string.IsNullOrEmpty(data.Description)) { value += string.Format("[Description:{0}]", data.Description); }
+                    WriteXMLEntry(textFile, string.Format("      <Key>{0}</Key>", id), string.Format("      <Value>{0}</Value>", value));
                 }
             }
 
@@ -1090,6 +1116,11 @@ namespace Database_Editor
             public void SetTextData(string name)
             {
                 _sName = name;
+            }
+            public void SetTextData(string name, string desc)
+            {
+                _sName = name;
+                _sDescription = desc;
             }
             public void SetTagInfo(string key, string value)
             {
@@ -1287,12 +1318,6 @@ namespace Database_Editor
             {
                 _eType = Util.ParseEnum<ItemEnum>(_diTags["Type"]);
                 string textID = "Item_" + id;   
-            }
-
-            public void SetTextData(string name, string desc)
-            {
-                _sName = name;
-                _sDescription = desc;
             }
 
             public void SetItemType(ItemEnum e)

@@ -16,8 +16,7 @@ namespace RiverHollow.Misc
     {
         int _iQuestID;
         public int QuestID => _iQuestID;
-        public enum QuestType { GroupSlay, Slay, Fetch }
-        private QuestType _goalType;
+        private QuestTypeEnum _goalType;
         private string _name;
         public string Name => _name;
         private string _sDescription;
@@ -86,7 +85,7 @@ namespace RiverHollow.Misc
 
             _liRewardItems = new List<Item>();
         }
-        public Quest(string name, QuestType type, string desc, int target, Monster m, Item i, Villager giver = null) : this()
+        public Quest(string name, QuestTypeEnum type, string desc, int target, Monster m, Item i, Villager giver = null) : this()
         {
             _name = name;
             _goalType = type;
@@ -106,7 +105,7 @@ namespace RiverHollow.Misc
             _liRewardItems = new List<Item>();
             DataManager.GetQuestText(_iQuestID, ref _name, ref _sDescription);
 
-            _goalType = Util.ParseEnum<QuestType>("Type");
+            _goalType = Util.ParseEnum<QuestTypeEnum>("Type");
 
             if (stringData.ContainsKey("GoalItem"))
             {

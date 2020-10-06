@@ -50,6 +50,8 @@
             this.tbItemName = new System.Windows.Forms.TextBox();
             this.lblName = new System.Windows.Forms.Label();
             this.dgvItems = new System.Windows.Forms.DataGridView();
+            this.colItemID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colItemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabWorldObjects = new System.Windows.Forms.TabPage();
             this.cbWorldObjectType = new System.Windows.Forms.ComboBox();
             this.btnWorldObjectCancel = new System.Windows.Forms.Button();
@@ -60,6 +62,8 @@
             this.tbWorldObjectName = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.dgvWorldObjects = new System.Windows.Forms.DataGridView();
+            this.colWorldObjectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colWorldObjectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabCharacters = new System.Windows.Forms.TabPage();
             this.btnDialogue = new System.Windows.Forms.Button();
             this.cbCharacterType = new System.Windows.Forms.ComboBox();
@@ -71,6 +75,8 @@
             this.tbCharacterName = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.dgvCharacters = new System.Windows.Forms.DataGridView();
+            this.colCharacterID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCharacterName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabClasses = new System.Windows.Forms.TabPage();
             this.btnClassCancel = new System.Windows.Forms.Button();
             this.dgClassTags = new System.Windows.Forms.DataGridView();
@@ -80,6 +86,8 @@
             this.tbClassName = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.dgvClasses = new System.Windows.Forms.DataGridView();
+            this.colClassID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colClassName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabAdventurers = new System.Windows.Forms.TabPage();
             this.cbAdventurerType = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -92,14 +100,20 @@
             this.dgvAdventurers = new System.Windows.Forms.DataGridView();
             this.colAdventurersID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAdventurersName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colClassID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colClassName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCharacterID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCharacterName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colWorldObjectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colWorldObjectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colItemID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colItemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabQuests = new System.Windows.Forms.TabPage();
+            this.btnQuestCancel = new System.Windows.Forms.Button();
+            this.dgvQuestTags = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tbQuestDescription = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.tbQuestID = new System.Windows.Forms.TextBox();
+            this.tbQuestName = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.dgvQuests = new System.Windows.Forms.DataGridView();
+            this.colQuestsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colQuestsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cbQuestType = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -117,6 +131,9 @@
             this.tabAdventurers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAdventurerTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAdventurers)).BeginInit();
+            this.tabQuests.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvQuestTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvQuests)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -181,6 +198,7 @@
             this.tabCtl.Controls.Add(this.tabCharacters);
             this.tabCtl.Controls.Add(this.tabClasses);
             this.tabCtl.Controls.Add(this.tabAdventurers);
+            this.tabCtl.Controls.Add(this.tabQuests);
             this.tabCtl.Location = new System.Drawing.Point(12, 27);
             this.tabCtl.Name = "tabCtl";
             this.tabCtl.SelectedIndex = 0;
@@ -303,7 +321,7 @@
             this.lblName.TabIndex = 15;
             this.lblName.Text = "Name:";
             // 
-            // dgItems
+            // dgvItems
             // 
             this.dgvItems.AllowUserToAddRows = false;
             this.dgvItems.AllowUserToDeleteRows = false;
@@ -315,13 +333,30 @@
             this.colItemName});
             this.dgvItems.Location = new System.Drawing.Point(6, 6);
             this.dgvItems.MultiSelect = false;
-            this.dgvItems.Name = "dgItems";
+            this.dgvItems.Name = "dgvItems";
             this.dgvItems.ReadOnly = true;
             this.dgvItems.RowHeadersVisible = false;
             this.dgvItems.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvItems.Size = new System.Drawing.Size(308, 411);
             this.dgvItems.TabIndex = 14;
-            this.dgvItems.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellClick);
+            this.dgvItems.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvItems_CellClick);
+            // 
+            // colItemID
+            // 
+            this.colItemID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colItemID.FillWeight = 10F;
+            this.colItemID.HeaderText = "ID";
+            this.colItemID.Name = "colItemID";
+            this.colItemID.ReadOnly = true;
+            this.colItemID.Width = 31;
+            // 
+            // colItemName
+            // 
+            this.colItemName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colItemName.FillWeight = 90F;
+            this.colItemName.HeaderText = "Name";
+            this.colItemName.Name = "colItemName";
+            this.colItemName.ReadOnly = true;
             // 
             // tabWorldObjects
             // 
@@ -408,7 +443,7 @@
             this.label5.TabIndex = 27;
             this.label5.Text = "Name:";
             // 
-            // dgWorldObjects
+            // dgvWorldObjects
             // 
             this.dgvWorldObjects.AllowUserToAddRows = false;
             this.dgvWorldObjects.AllowUserToDeleteRows = false;
@@ -420,13 +455,30 @@
             this.colWorldObjectsName});
             this.dgvWorldObjects.Location = new System.Drawing.Point(6, 6);
             this.dgvWorldObjects.MultiSelect = false;
-            this.dgvWorldObjects.Name = "dgWorldObjects";
+            this.dgvWorldObjects.Name = "dgvWorldObjects";
             this.dgvWorldObjects.ReadOnly = true;
             this.dgvWorldObjects.RowHeadersVisible = false;
             this.dgvWorldObjects.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvWorldObjects.Size = new System.Drawing.Size(308, 411);
             this.dgvWorldObjects.TabIndex = 26;
-            this.dgvWorldObjects.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgWorldObjects_CellClick);
+            this.dgvWorldObjects.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvWorldObjects_CellClick);
+            // 
+            // colWorldObjectsID
+            // 
+            this.colWorldObjectsID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colWorldObjectsID.FillWeight = 10F;
+            this.colWorldObjectsID.HeaderText = "ID";
+            this.colWorldObjectsID.Name = "colWorldObjectsID";
+            this.colWorldObjectsID.ReadOnly = true;
+            this.colWorldObjectsID.Width = 31;
+            // 
+            // colWorldObjectsName
+            // 
+            this.colWorldObjectsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colWorldObjectsName.FillWeight = 90F;
+            this.colWorldObjectsName.HeaderText = "Name";
+            this.colWorldObjectsName.Name = "colWorldObjectsName";
+            this.colWorldObjectsName.ReadOnly = true;
             // 
             // tabCharacters
             // 
@@ -523,7 +575,7 @@
             this.label6.TabIndex = 38;
             this.label6.Text = "Name:";
             // 
-            // dgCharacters
+            // dgvCharacters
             // 
             this.dgvCharacters.AllowUserToAddRows = false;
             this.dgvCharacters.AllowUserToDeleteRows = false;
@@ -535,13 +587,30 @@
             this.colCharacterName});
             this.dgvCharacters.Location = new System.Drawing.Point(6, 6);
             this.dgvCharacters.MultiSelect = false;
-            this.dgvCharacters.Name = "dgCharacters";
+            this.dgvCharacters.Name = "dgvCharacters";
             this.dgvCharacters.ReadOnly = true;
             this.dgvCharacters.RowHeadersVisible = false;
             this.dgvCharacters.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvCharacters.Size = new System.Drawing.Size(308, 411);
             this.dgvCharacters.TabIndex = 37;
-            this.dgvCharacters.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgCharacters_CellClick);
+            this.dgvCharacters.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCharacters_CellClick);
+            // 
+            // colCharacterID
+            // 
+            this.colCharacterID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colCharacterID.FillWeight = 10F;
+            this.colCharacterID.HeaderText = "ID";
+            this.colCharacterID.Name = "colCharacterID";
+            this.colCharacterID.ReadOnly = true;
+            this.colCharacterID.Width = 31;
+            // 
+            // colCharacterName
+            // 
+            this.colCharacterName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colCharacterName.FillWeight = 90F;
+            this.colCharacterName.HeaderText = "Name";
+            this.colCharacterName.Name = "colCharacterName";
+            this.colCharacterName.ReadOnly = true;
             // 
             // tabClasses
             // 
@@ -618,7 +687,7 @@
             this.label8.TabIndex = 47;
             this.label8.Text = "Name:";
             // 
-            // dgClasses
+            // dgvClasses
             // 
             this.dgvClasses.AllowUserToAddRows = false;
             this.dgvClasses.AllowUserToDeleteRows = false;
@@ -630,13 +699,30 @@
             this.colClassName});
             this.dgvClasses.Location = new System.Drawing.Point(6, 6);
             this.dgvClasses.MultiSelect = false;
-            this.dgvClasses.Name = "dgClasses";
+            this.dgvClasses.Name = "dgvClasses";
             this.dgvClasses.ReadOnly = true;
             this.dgvClasses.RowHeadersVisible = false;
             this.dgvClasses.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvClasses.Size = new System.Drawing.Size(308, 411);
             this.dgvClasses.TabIndex = 46;
-            this.dgvClasses.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgClasses_CellClick);
+            this.dgvClasses.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvClasses_CellClick);
+            // 
+            // colClassID
+            // 
+            this.colClassID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colClassID.FillWeight = 10F;
+            this.colClassID.HeaderText = "ID";
+            this.colClassID.Name = "colClassID";
+            this.colClassID.ReadOnly = true;
+            this.colClassID.Width = 31;
+            // 
+            // colClassName
+            // 
+            this.colClassName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colClassName.FillWeight = 90F;
+            this.colClassName.HeaderText = "Name";
+            this.colClassName.Name = "colClassName";
+            this.colClassName.ReadOnly = true;
             // 
             // tabAdventurers
             // 
@@ -759,73 +845,144 @@
             this.colAdventurersName.Name = "colAdventurersName";
             this.colAdventurersName.ReadOnly = true;
             // 
-            // colClassID
+            // tabQuests
             // 
-            this.colClassID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colClassID.FillWeight = 10F;
-            this.colClassID.HeaderText = "ID";
-            this.colClassID.Name = "colClassID";
-            this.colClassID.ReadOnly = true;
-            this.colClassID.Width = 31;
+            this.tabQuests.Controls.Add(this.cbQuestType);
+            this.tabQuests.Controls.Add(this.btnQuestCancel);
+            this.tabQuests.Controls.Add(this.dgvQuestTags);
+            this.tabQuests.Controls.Add(this.tbQuestDescription);
+            this.tabQuests.Controls.Add(this.label11);
+            this.tabQuests.Controls.Add(this.label12);
+            this.tabQuests.Controls.Add(this.tbQuestID);
+            this.tabQuests.Controls.Add(this.tbQuestName);
+            this.tabQuests.Controls.Add(this.label13);
+            this.tabQuests.Controls.Add(this.dgvQuests);
+            this.tabQuests.Location = new System.Drawing.Point(4, 22);
+            this.tabQuests.Name = "tabQuests";
+            this.tabQuests.Size = new System.Drawing.Size(790, 425);
+            this.tabQuests.TabIndex = 5;
+            this.tabQuests.Text = "Quests";
+            this.tabQuests.UseVisualStyleBackColor = true;
             // 
-            // colClassName
+            // btnQuestCancel
             // 
-            this.colClassName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colClassName.FillWeight = 90F;
-            this.colClassName.HeaderText = "Name";
-            this.colClassName.Name = "colClassName";
-            this.colClassName.ReadOnly = true;
+            this.btnQuestCancel.Location = new System.Drawing.Point(709, 394);
+            this.btnQuestCancel.Name = "btnQuestCancel";
+            this.btnQuestCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnQuestCancel.TabIndex = 34;
+            this.btnQuestCancel.Text = "Cancel";
+            this.btnQuestCancel.UseVisualStyleBackColor = true;
             // 
-            // colCharacterID
+            // dgvQuestTags
             // 
-            this.colCharacterID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colCharacterID.FillWeight = 10F;
-            this.colCharacterID.HeaderText = "ID";
-            this.colCharacterID.Name = "colCharacterID";
-            this.colCharacterID.ReadOnly = true;
-            this.colCharacterID.Width = 31;
+            this.dgvQuestTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvQuestTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn2});
+            this.dgvQuestTags.Location = new System.Drawing.Point(320, 137);
+            this.dgvQuestTags.Name = "dgvQuestTags";
+            this.dgvQuestTags.RowHeadersVisible = false;
+            this.dgvQuestTags.Size = new System.Drawing.Size(464, 251);
+            this.dgvQuestTags.TabIndex = 33;
             // 
-            // colCharacterName
+            // dataGridViewTextBoxColumn2
             // 
-            this.colCharacterName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colCharacterName.FillWeight = 90F;
-            this.colCharacterName.HeaderText = "Name";
-            this.colCharacterName.Name = "colCharacterName";
-            this.colCharacterName.ReadOnly = true;
+            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn2.HeaderText = "Tags";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             // 
-            // colWorldObjectsID
+            // tbQuestDescription
             // 
-            this.colWorldObjectsID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colWorldObjectsID.FillWeight = 10F;
-            this.colWorldObjectsID.HeaderText = "ID";
-            this.colWorldObjectsID.Name = "colWorldObjectsID";
-            this.colWorldObjectsID.ReadOnly = true;
-            this.colWorldObjectsID.Width = 31;
+            this.tbQuestDescription.Location = new System.Drawing.Point(320, 51);
+            this.tbQuestDescription.Multiline = true;
+            this.tbQuestDescription.Name = "tbQuestDescription";
+            this.tbQuestDescription.Size = new System.Drawing.Size(464, 53);
+            this.tbQuestDescription.TabIndex = 32;
             // 
-            // colWorldObjectsName
+            // label11
             // 
-            this.colWorldObjectsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colWorldObjectsName.FillWeight = 90F;
-            this.colWorldObjectsName.HeaderText = "Name";
-            this.colWorldObjectsName.Name = "colWorldObjectsName";
-            this.colWorldObjectsName.ReadOnly = true;
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(317, 35);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(63, 13);
+            this.label11.TabIndex = 31;
+            this.label11.Text = "Description:";
             // 
-            // colItemID
+            // label12
             // 
-            this.colItemID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colItemID.FillWeight = 10F;
-            this.colItemID.HeaderText = "ID";
-            this.colItemID.Name = "colItemID";
-            this.colItemID.ReadOnly = true;
-            this.colItemID.Width = 31;
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(714, 9);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(21, 13);
+            this.label12.TabIndex = 30;
+            this.label12.Text = "ID:";
             // 
-            // colItemName
+            // tbQuestID
             // 
-            this.colItemName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colItemName.FillWeight = 90F;
-            this.colItemName.HeaderText = "Name";
-            this.colItemName.Name = "colItemName";
-            this.colItemName.ReadOnly = true;
+            this.tbQuestID.Location = new System.Drawing.Point(741, 6);
+            this.tbQuestID.Name = "tbQuestID";
+            this.tbQuestID.Size = new System.Drawing.Size(43, 20);
+            this.tbQuestID.TabIndex = 29;
+            // 
+            // tbQuestName
+            // 
+            this.tbQuestName.Location = new System.Drawing.Point(361, 6);
+            this.tbQuestName.Name = "tbQuestName";
+            this.tbQuestName.Size = new System.Drawing.Size(108, 20);
+            this.tbQuestName.TabIndex = 28;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(317, 9);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(38, 13);
+            this.label13.TabIndex = 27;
+            this.label13.Text = "Name:";
+            // 
+            // dgvQuests
+            // 
+            this.dgvQuests.AllowUserToAddRows = false;
+            this.dgvQuests.AllowUserToDeleteRows = false;
+            this.dgvQuests.AllowUserToResizeColumns = false;
+            this.dgvQuests.AllowUserToResizeRows = false;
+            this.dgvQuests.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvQuests.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colQuestsID,
+            this.colQuestsName});
+            this.dgvQuests.Location = new System.Drawing.Point(6, 6);
+            this.dgvQuests.MultiSelect = false;
+            this.dgvQuests.Name = "dgvQuests";
+            this.dgvQuests.ReadOnly = true;
+            this.dgvQuests.RowHeadersVisible = false;
+            this.dgvQuests.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvQuests.Size = new System.Drawing.Size(308, 411);
+            this.dgvQuests.TabIndex = 26;
+            this.dgvQuests.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvQuests_CellClick);
+            // 
+            // colQuestsID
+            // 
+            this.colQuestsID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colQuestsID.FillWeight = 10F;
+            this.colQuestsID.HeaderText = "ID";
+            this.colQuestsID.Name = "colQuestsID";
+            this.colQuestsID.ReadOnly = true;
+            this.colQuestsID.Width = 31;
+            // 
+            // colQuestsName
+            // 
+            this.colQuestsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colQuestsName.FillWeight = 90F;
+            this.colQuestsName.HeaderText = "Name";
+            this.colQuestsName.Name = "colQuestsName";
+            this.colQuestsName.ReadOnly = true;
+            // 
+            // cbQuestType
+            // 
+            this.cbQuestType.FormattingEnabled = true;
+            this.cbQuestType.Location = new System.Drawing.Point(320, 110);
+            this.cbQuestType.Name = "cbQuestType";
+            this.cbQuestType.Size = new System.Drawing.Size(149, 21);
+            this.cbQuestType.TabIndex = 37;
             // 
             // frmDBEditor
             // 
@@ -861,6 +1018,10 @@
             this.tabAdventurers.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAdventurerTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAdventurers)).EndInit();
+            this.tabQuests.ResumeLayout(false);
+            this.tabQuests.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvQuestTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvQuests)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -938,6 +1099,20 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colClassName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAdventurersID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAdventurersName;
+        private System.Windows.Forms.TabPage tabQuests;
+        private System.Windows.Forms.Button btnQuestCancel;
+        private System.Windows.Forms.DataGridView dgvQuestTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.TextBox tbQuestDescription;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox tbQuestID;
+        private System.Windows.Forms.TextBox tbQuestName;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.DataGridView dgvQuests;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colQuestsID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colQuestsName;
+        private System.Windows.Forms.ComboBox cbQuestType;
     }
 }
 

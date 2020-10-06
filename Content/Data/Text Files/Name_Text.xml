@@ -3,11 +3,11 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Quest_1</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Griselda's Orb][Description:Find Griselda's Orb!]</Value>
     </Item>
     <Item>
       <Key>Quest_2</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Search the Manor][Description:Search the Manor for anything useful.]</Value>
     </Item>
     <Item>
       <Key>Character_0</Key>

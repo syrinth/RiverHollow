@@ -101,11 +101,11 @@ namespace RiverHollow.Game_Managers
             }
 
             //DungeonManager.AddDungeonKey();
-            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestType.Fetch, "Getwood, dumbass", 1, null, DataManager.GetItem(2)));
-            AddToQuestLog(new Quest("Gathering Wood", Quest.QuestType.Fetch, "Rude!", 1, null, DataManager.GetItem(2)));
-            AddToQuestLog(new Quest("Get Wood", Quest.QuestType.Fetch, ";)", 1, null, DataManager.GetItem(2)));
-            AddToQuestLog(new Quest("Get Wood", Quest.QuestType.Fetch, "Oh Yeaaah", 1, null, DataManager.GetItem(2)));
-            AddToQuestLog(new Quest("BLARGH", Quest.QuestType.Fetch, ":ooooooo", 1, null, DataManager.GetItem(2)));
+            AddToQuestLog(new Quest("Gathering Wood", QuestTypeEnum.Fetch, "Getwood, dumbass", 1, null, DataManager.GetItem(2)));
+            AddToQuestLog(new Quest("Gathering Wood", QuestTypeEnum.Fetch, "Rude!", 1, null, DataManager.GetItem(2)));
+            AddToQuestLog(new Quest("Get Wood", QuestTypeEnum.Fetch, ";)", 1, null, DataManager.GetItem(2)));
+            AddToQuestLog(new Quest("Get Wood", QuestTypeEnum.Fetch, "Oh Yeaaah", 1, null, DataManager.GetItem(2)));
+            AddToQuestLog(new Quest("BLARGH", QuestTypeEnum.Fetch, ":ooooooo", 1, null, DataManager.GetItem(2)));
         }
 
         public static void SetPath(List<RHTile> list)

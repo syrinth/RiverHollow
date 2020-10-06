@@ -36,6 +36,7 @@ namespace RiverHollow.Game_Managers
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
 
+        public enum QuestTypeEnum { GroupSlay, Slay, Fetch }
         public enum ActorEnum { Actor, Adventurer, CombatActor, Monster, NPC, ShippingGremlin, Spirit, WorldCharacter };
         public enum NPCTypeEnum { Villager, Eligible, Shopkeeper, Ranger, Worker, Mason }
         public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade};
