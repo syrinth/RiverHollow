@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Serialization;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Items.Item;
 
@@ -55,7 +56,7 @@ namespace Database_Editor
         static string PATH_TO_DIALOGUE = string.Format(@"{0}\..\..\..\..\Adventure\Content\Data\Text Files\Dialogue", System.Environment.CurrentDirectory);
         static string PATH_TO_SCHEDULES = string.Format(@"{0}\..\..\..\..\Adventure\Content\Data\Schedules", System.Environment.CurrentDirectory);
 
-        static Dictionary<string, Dictionary<string, string>> _diCharacterSchedules;
+        static Dictionary<string, Dictionary<string, List<string>>> _diCharacterSchedules;
         static Dictionary<string, Dictionary<string, string>> _diCharacterDialogue;
         static Dictionary<string, Dictionary<string, string>> _diItemText;
         static Dictionary<ItemEnum, List<ItemXMLData>> _diItems;
@@ -101,11 +102,11 @@ namespace Database_Editor
                 {
                     fileName = s;
                     Util.ParseContentFile(ref fileName);
-                    _diCharacterDialogue.Add(s, ReadXMLFile(fileName));
+                    _diCharacterDialogue.Add(s, ReadXMLFilToDictionary(fileName));
                 }
             }
 
-            _diCharacterSchedules = new Dictionary<string, Dictionary<string, string>>();
+            _diCharacterSchedules = new Dictionary<string, Dictionary<string, List<string>>>();
             foreach (string s in Directory.GetFiles(PATH_TO_SCHEDULES))
             {
                 string fileName = Path.GetFileName(s).Replace("NPC_", "").Split('.')[0];
@@ -114,7 +115,7 @@ namespace Database_Editor
                 {
                     fileName = s;
                     Util.ParseContentFile(ref fileName);
-                    //_diCharacterSchedules.Add(s, ReadXMLFile(fileName));
+                    _diCharacterSchedules.Add(s, ReadXMLFilToDictionaryStringList(fileName));//ReadXMLFilToDictionary(fileName));
                 }
             }
 
@@ -297,7 +298,7 @@ namespace Database_Editor
             return rv;
         }
 
-        private Dictionary<string, string> ReadXMLFile(string fileName)
+        private Dictionary<string, string> ReadXMLFilToDictionary(string fileName)
         {
             string line = string.Empty;
             Dictionary<string, string> xmlDictionary = new Dictionary<string, string>();
@@ -314,6 +315,48 @@ namespace Database_Editor
                 xmlDictionary[xmlnode[i].ChildNodes.Item(0).InnerText] = xmlnode[i].ChildNodes.Item(1).InnerText.Trim();
             }
 
+            return xmlDictionary;
+        }
+
+        private Dictionary<string, List<string>> ReadXMLFilToDictionaryStringList(string fileName)
+        {
+            string line = string.Empty;
+            Dictionary<string, List<string>> xmlDictionary = new Dictionary<string, List<string>>();
+
+            XmlDocument xmldoc = new XmlDocument();
+            XmlNodeList xmlNodeList;
+
+            FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            xmldoc.Load(fs);
+            xmlNodeList = xmldoc.ChildNodes;
+            XmlNode node = xmlNodeList[1].ChildNodes[0];
+
+            for (int i=0; i< node.ChildNodes.Count; i++)
+            {
+                string key = string.Empty;
+                List<string> tagList = new List<string>();
+                XmlNode n = node.ChildNodes[i];
+                if (n.Name == "Item")
+                {
+                    XmlNode keyNode = n.ChildNodes[0];
+                    if (keyNode.Name == "Key")
+                    {
+                        key = keyNode.InnerText;
+
+                        XmlNode tagNode = n.ChildNodes[1];
+                        foreach (XmlNode n1 in tagNode.ChildNodes)
+                        {
+                            if (n1.Name == "Item")
+                            {
+                                tagList.Add(n1.InnerText);
+                            }
+                        }
+                    }
+                }
+
+                xmlDictionary[key] = tagList;
+            }
+           
             return xmlDictionary;
         }
 
@@ -604,32 +647,33 @@ namespace Database_Editor
         #region EventHandlers
         private void btnDialogue_Click(object sender, EventArgs e)
         {
-            string path = string.Empty;
-            Dictionary<string, Dictionary<string, string>> baseDictionary = new Dictionary<string, Dictionary<string, string>>();
-            Dictionary<string, string> diDialog = new Dictionary<string, string>();
+            FormCharExtraData frm = null;
             if (cbEditableCharData.SelectedItem.ToString() == "Dialogue")
             {
-                path = PATH_TO_DIALOGUE;
-                baseDictionary = _diCharacterDialogue;
+                string key = PATH_TO_DIALOGUE + @"\NPC_" + _diTabIndices["Characters"].ToString("00") + ".xml";
+                if (!_diCharacterDialogue.ContainsKey(key))
+                {
+                    _diCharacterDialogue[key] = new Dictionary<string, string> { ["New"] = "" };
+                }
+
+                frm = new FormCharExtraData("Schedule", _diCharacterDialogue[key]);
+                frm.Show();
+
+                _diCharacterDialogue[key] = frm.StringData;
             }
             else if (cbEditableCharData.SelectedItem.ToString() == "Schedule")
             {
-                path = PATH_TO_SCHEDULES;
-                baseDictionary = _diCharacterSchedules;
+                string key = PATH_TO_SCHEDULES + @"\NPC_" + _diTabIndices["Characters"].ToString("00") + ".xml";
+                if (!_diCharacterSchedules.ContainsKey(key))
+                {
+                    _diCharacterSchedules[key] = new Dictionary<string, List<string>> { ["New"] = new List<string>() };
+                }
+
+                frm = new FormCharExtraData("Schedule", _diCharacterSchedules[key]);
+                frm.Show();
+
+                _diCharacterSchedules[key] = frm.ListData;
             }
-            else { return; }
-
-            string key = path + @"\NPC_" + _diTabIndices["Characters"].ToString("00") + ".xml";
-            if (!baseDictionary.ContainsKey(key))
-            {
-                baseDictionary[key] = new Dictionary<string, string> { ["New"] = "" };
-            }
-            diDialog = baseDictionary[key];
-
-            FormCharExtraData frm = new FormCharExtraData("Schedule", diDialog);
-            frm.Show();
-
-            diDialog = frm.Data;
         }
 
         private void SaveGenericInfo(List<XMLData> liData, string tabIndex, string textIDPrefix, XMLTypeEnum xmlType, TextBox tbName, ComboBox cb, DataGridView baseGridView, DataGridView dgTags, string colID, string colName, TextBox tbDescription = null, string itemTags = "", string objectTags = "")
@@ -957,7 +1001,7 @@ namespace Database_Editor
 
             foreach (string s in _diCharacterSchedules.Keys)
             {
-                SaveXMLDictionary(_diCharacterSchedules[s], s, PATH_TO_SCHEDULES, sWriter);
+                SaveXMLDictionaryList(_diCharacterSchedules[s], s, PATH_TO_SCHEDULES, sWriter);
             }
 
             string mapPath = PATH_TO_MAPS;
@@ -1024,6 +1068,27 @@ namespace Database_Editor
             dataFile.WriteLine("  </Asset>");
             dataFile.WriteLine("</XnaContent>");
             dataFile.Close();
+        }
+
+        public void SaveXMLDictionaryList(Dictionary<string, List<string>> dataList, string fileName, string pathToDir, StreamWriter textFile)
+        {
+            StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[string, List<string>]");
+
+            foreach (KeyValuePair<string, List<string>> kvp in dataList)
+            {
+                string key = string.Format("      <Key>{0}</Key>", kvp.Key);
+                string value = "      <Value>";
+                string item = string.Empty;
+                foreach (string s in kvp.Value)
+                {
+                    item += s;
+                    value += string.Format("            <Item>{0}</Item>", item);
+                }
+                value += "      </Value>";
+                WriteXMLEntry(dataFile, key, value);
+            }
+
+            CloseStreamWriter(ref dataFile);
         }
 
         public void SaveXMLDictionary(Dictionary<string, string> dataList, string fileName, string pathToDir, StreamWriter textFile)

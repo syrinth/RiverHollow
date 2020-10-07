@@ -8,5 +8,12 @@
 		<Item>[Hour:6][Minute:20][Location:Check2][Dir:Down]</Item>
 	  </Value>
     </Item>
+	<Item>
+      <Key>Tuesday</Key>
+	  <Value>
+		<Item>[Hour:8][Minute:16][Location:Check1][Dir:Down]</Item>
+		<Item>[Hour:10][Minute:78][Location:Check2][Dir:Down]</Item>
+	  </Value>
+    </Item>
   </Asset>
 </XnaContent>

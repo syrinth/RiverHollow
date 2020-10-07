@@ -36,7 +36,10 @@
             this.lblName = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnAddNew = new System.Windows.Forms.Button();
+            this.dgvEditTags = new System.Windows.Forms.DataGridView();
+            this.colQuestTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCharExtraData)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvEditTags)).BeginInit();
             this.SuspendLayout();
             // 
             // dgvCharExtraData
@@ -71,7 +74,7 @@
             this.tbCharExtraDataInfo.Location = new System.Drawing.Point(329, 51);
             this.tbCharExtraDataInfo.Multiline = true;
             this.tbCharExtraDataInfo.Name = "tbCharExtraDataInfo";
-            this.tbCharExtraDataInfo.Size = new System.Drawing.Size(464, 189);
+            this.tbCharExtraDataInfo.Size = new System.Drawing.Size(459, 189);
             this.tbCharExtraDataInfo.TabIndex = 21;
             // 
             // tbCharExtraDataName
@@ -109,11 +112,29 @@
             this.btnAddNew.UseVisualStyleBackColor = true;
             this.btnAddNew.Click += new System.EventHandler(this.btnAddNew_Click);
             // 
+            // dgvEditTags
+            // 
+            this.dgvEditTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvEditTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colQuestTags});
+            this.dgvEditTags.Location = new System.Drawing.Point(329, 51);
+            this.dgvEditTags.Name = "dgvEditTags";
+            this.dgvEditTags.RowHeadersVisible = false;
+            this.dgvEditTags.Size = new System.Drawing.Size(459, 189);
+            this.dgvEditTags.TabIndex = 46;
+            // 
+            // colQuestTags
+            // 
+            this.colQuestTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colQuestTags.HeaderText = "Tags";
+            this.colQuestTags.Name = "colQuestTags";
+            // 
             // FormCharExtraData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.dgvEditTags);
             this.Controls.Add(this.btnAddNew);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbCharExtraDataName);
@@ -124,6 +145,7 @@
             this.Name = "FormCharExtraData";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.dgvCharExtraData)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvEditTags)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -138,5 +160,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colCharExtraID;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnAddNew;
+        private System.Windows.Forms.DataGridView dgvEditTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colQuestTags;
     }
 }
