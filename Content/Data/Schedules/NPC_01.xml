@@ -3,17 +3,17 @@
   <Asset Type="Dictionary[string, List[string]]">
     <Item>
       <Key>Monday</Key>
-	  <Value>
-		<Item>[Hour:6][Minute:05][Location:Check1][Dir:Down]</Item>
-		<Item>[Hour:6][Minute:20][Location:Check2][Dir:Down]</Item>
-	  </Value>
+      <Value>
+        <Item>[Hour:6][Minute:05][Location:Check1][Dir:Down]</Item>
+        <Item>[Hour:6][Minute:20][Location:Check2][Dir:Down]</Item>
+      </Value>
     </Item>
-	<Item>
+    <Item>
       <Key>Tuesday</Key>
-	  <Value>
-		<Item>[Hour:8][Minute:16][Location:Check1][Dir:Down]</Item>
-		<Item>[Hour:10][Minute:78][Location:Check2][Dir:Down]</Item>
-	  </Value>
+      <Value>
+        <Item>[Hour:8][Minute:16][Location:Check1][Dir:Down]</Item>
+        <Item>[Hour:10][Minute:78][Location:Check2][Dir:Down]</Item>
+      </Value>
     </Item>
   </Asset>
 </XnaContent>

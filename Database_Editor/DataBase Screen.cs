@@ -1072,17 +1072,16 @@ namespace Database_Editor
 
         public void SaveXMLDictionaryList(Dictionary<string, List<string>> dataList, string fileName, string pathToDir, StreamWriter textFile)
         {
-            StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[string, List<string>]");
+            StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[string, List[string]]");
 
             foreach (KeyValuePair<string, List<string>> kvp in dataList)
             {
                 string key = string.Format("      <Key>{0}</Key>", kvp.Key);
-                string value = "      <Value>";
+                string value = "      <Value>" + System.Environment.NewLine;
                 string item = string.Empty;
                 foreach (string s in kvp.Value)
                 {
-                    item += s;
-                    value += string.Format("{0}            <Item>{1}</Item>", System.Environment.NewLine, item);
+                    value += string.Format("        <Item>{0}</Item>{1}", s, System.Environment.NewLine);
                 }
                 value += "      </Value>";
                 WriteXMLEntry(dataFile, key, value);
