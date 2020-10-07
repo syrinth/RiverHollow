@@ -1082,7 +1082,7 @@ namespace Database_Editor
                 foreach (string s in kvp.Value)
                 {
                     item += s;
-                    value += string.Format("            <Item>{0}</Item>", item);
+                    value += string.Format("{0}            <Item>{1}</Item>", System.Environment.NewLine, item);
                 }
                 value += "      </Value>";
                 WriteXMLEntry(dataFile, key, value);
