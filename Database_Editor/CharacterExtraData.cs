@@ -12,6 +12,8 @@ namespace Database_Editor
 {
     public partial class FormCharExtraData : Form
     {
+        enum DataMode { Dialogue, Schedule };
+        DataMode _eDataMode;
         int _iIndex = 0;
         Dictionary<string, string> _diStringData;
         public Dictionary<string, string> StringData => _diStringData;
@@ -29,6 +31,7 @@ namespace Database_Editor
             LoadDataGridViewString();
 
             dgvCharExtraData.Focus();
+            _eDataMode = DataMode.Dialogue;
         }
 
         public FormCharExtraData(string value, Dictionary<string, List<string>> diCharacterData)
@@ -42,6 +45,7 @@ namespace Database_Editor
             LoadDataGridViewList();
 
             dgvCharExtraData.Focus();
+            _eDataMode = DataMode.Schedule;
         }
 
         private void LoadDataGridViewString()
@@ -92,7 +96,9 @@ namespace Database_Editor
         {
             string keyValue = dgvCharExtraData.Rows[index].Cells[0].Value.ToString();
             tbCharExtraDataName.Text = keyValue;
-            foreach(string s in _diListData[keyValue])
+
+            dgvEditTags.Rows.Clear();
+            foreach (string s in _diListData[keyValue])
             {
                 dgvEditTags.Rows.Add(s);
             }
@@ -102,13 +108,35 @@ namespace Database_Editor
         {
             if (e.RowIndex > -1)
             {
-                _diStringData.Remove(_diStringData.ElementAt(_iIndex).Key);
-                _diStringData[tbCharExtraDataName.Text] = tbCharExtraDataInfo.Text;
-                DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
-                row.Cells["colCharExtraID"].Value = tbCharExtraDataName.Text;
+                if (_eDataMode == DataMode.Dialogue)
+                {
+                    _diStringData.Remove(_diStringData.ElementAt(_iIndex).Key);
+                    _diStringData[tbCharExtraDataName.Text] = tbCharExtraDataInfo.Text;
+                    DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
+                    row.Cells["colCharExtraID"].Value = tbCharExtraDataName.Text;
 
-                _iIndex = e.RowIndex;
-                LoadDataInfo(_iIndex);
+                    _iIndex = e.RowIndex;
+                    LoadDataInfo(_iIndex);
+                }
+                else if (_eDataMode == DataMode.Schedule)
+                {
+                    _diListData.Remove(_diListData.ElementAt(_iIndex).Key);
+
+                    List<string> listInfo = new List<string>();
+                    foreach(DataGridViewRow r in dgvEditTags.Rows)
+                    {
+                        if (r.Cells[0].Value != null)
+                        {
+                            listInfo.Add(r.Cells[0].Value.ToString());
+                        }
+                    }
+                    _diListData[tbCharExtraDataName.Text] = listInfo;
+                    DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
+                    row.Cells["colCharExtraID"].Value = tbCharExtraDataName.Text;
+
+                    _iIndex = e.RowIndex;
+                    LoadDataInfoList(_iIndex);
+                }
             }
         }
 
