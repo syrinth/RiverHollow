@@ -67,11 +67,6 @@
 /processor:PassThroughProcessor
 /build:Data/ItemData.xml
 
-#begin Data/Shops/Buildings.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Shops/Buildings.xml
-
 #begin Textures/worldObjects.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -132,11 +127,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/TownUpgrades.xml
-
-#begin Data/Shops/Adventurers.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Shops/Adventurers.xml
 
 #begin Data/CombatActions.xml
 /importer:XmlImporter
@@ -199,11 +189,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Quests.xml
-
-#begin Data/Shops/MagicShop.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Shops/MagicShop.xml
 
 #begin Textures/texClothes.png
 /importer:TextureImporter
@@ -2481,9 +2466,4 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Schedules/NPC_01.xml
-
-#begin Data/Shops.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Shops.xml
 
