@@ -1,14 +1,22 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: Index>0 Value:Type/Name/Description/IconXIconY/AnimationRow/FrameSpeed/[Effect:][Status:][Action:]-->
-    <!--Type: Action, Menu, Spell-->
-    <!--Effect Tags: Projectile, Direct, Harm, Heal-->
-    <!--Status Format: [Status:BuffId|Duration|<Tags>]-->
-    <!--Status Tags: Allies, Enemies, Target, Self-->
-    <!--[SpellAnimation:X-Y-Width-Height-Frames-FrameSpeed-Offset]-->
-    <!--<0> Base Player Skills-->
-    <!--<20> Wizard Skills-->
+    <Item>
+      <Key>0</Key>
+      <Value>[Type:Move]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Type:MenuItem]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Type:MenuSpell]</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>[Type:EndTurn]</Value>
+    </Item>
     <Item>
       <Key>20</Key>
       <Value>[Type:Spell][Animation:LightningSprite-94-160-15-0.05][AnimOffset:41-105][Target:Enemy][Range:7][AreaType:Cross][Cost:5][Harm:200][Action:UserCast Direct Apply][Element:Lightning]</Value>
@@ -17,7 +25,6 @@
       <Key>21</Key>
       <Value>[Type:Spell][Animation:LightningSprite-94-160-15-0.1][AnimOffset:41-105][Target:Enemy][Range:9][AreaType:Cross][Cost:5][Harm:300][Action:UserCast Direct Apply][Element:Lightning][Level:2]</Value>
     </Item>
-    <!--<40> Healer Skills-->
     <Item>
       <Key>40</Key>
       <Value>[Type:Spell][Animation:Heal-16-49-13-0.07][AnimOffset:0-32][Target:Ally][Range:5][AreaType:Single][Cost:5][Heal:100][Action:UserCast Direct Apply]</Value>
@@ -26,49 +33,38 @@
       <Key>41</Key>
       <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][Heal:100][Action:UserCast Direct Apply]</Value>
     </Item>
-    <!--<60> Summoner Skills-->
     <Item>
-      <!--Summoner Attack-->
       <Key>60</Key>
       <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:5][AreaType:Single][Harm:100][Bonus:Summons-10][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
-      <!--Summon Magus-->
       <Key>61</Key>
       <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][Summon:5][Action:UserCast Apply]</Value>
     </Item>
     <Item>
-      <!--Summon Earth Elemental-->
       <Key>62</Key>
       <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][Summon:1][Action:UserCast Apply]</Value>
     </Item>
     <Item>
-      <!--Summon Water Elemental-->
       <Key>63</Key>
       <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][Summon:2][Action:UserCast Apply]</Value>
     </Item>
     <Item>
-      <!--Summon Fire Elemental-->
       <Key>64</Key>
       <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][Summon:3][Action:UserCast Apply]</Value>
     </Item>
     <Item>
-      <!--Summon Air Elemental-->
       <Key>65</Key>
       <Value>[Type:Spell][Target:Ally][Range:5][AreaType:Single][Cost:5][Summon:4][Action:UserCast Apply]</Value>
     </Item>
     <Item>
-      <!--Unity-->
       <Key>66</Key>
       <Value>[Type:Spell][Target:Enemy][Range:5][AreaType:Single][Cost:5][Remove:Summons-Every][Harm:0][Bonus:Summons-100][Action:UserCast Apply]</Value>
     </Item>
-    <!--<80> Witch Skills-->
     <Item>
-      <!--Poison-->
       <Key>80</Key>
       <Value>[Type:Spell][Animation:WitchsCurse-30-38-8-0.1][Target:Enemy][Range:5][AreaType:Single][Cost:5][Status:4-4-Target][Action:UserCast Direct Apply]</Value>
     </Item>
-    <!--<100> Lancer Skills-->
     <Item>
       <Key>100</Key>
       <Value>[Type:Action][Target:Self][AreaType:Single][Status:6-3-Self][Action:UserCast Apply]</Value>
@@ -89,7 +85,6 @@
       <Key>104</Key>
       <Value>[Type:Action][Target:Enemy][Range:0][AreaType:Single][Harm:70][Action:UserAttack Apply]</Value>
     </Item>
-    <!--<120> Knight Skills-->
     <Item>
       <Key>120</Key>
       <Value>[Type:Action][Target:Enemy][Range:5][AreaType:Single][Pull:1][Action:UserCast Apply]</Value>
@@ -106,7 +101,6 @@
       <Key>123</Key>
       <Value>[Type:Action][Target:Self][Status:18-3-Self][Action:UserCast Apply]</Value>
     </Item>
-    <!--<140> Scout Skills-->
     <Item>
       <Key>140</Key>
       <Value>[Type:Action][Target:Self][Status:11-3-Self][Action:UserCast Apply]</Value>
@@ -127,7 +121,6 @@
       <Key>144</Key>
       <Value>[Type:Action][Target:Enemy][Range:5][AreaType:Single][Harm:90][Retreat-1][Action:UserAttack Apply]</Value>
     </Item>
-    <!--<160> Bard Skills-->
     <Item>
       <Key>160</Key>
       <Value>[Type:Action][Target:Enemy][Range:0][AreaType:Single][Action:UserAttack Apply][Harm:100][Retreat:1]</Value>
@@ -160,28 +153,19 @@
       <Key>167</Key>
       <Value>[Type:Action][Target:Enemy][AreaType:Single][Range:0][Status:17-3-Allies][Action:UserAttack Apply]</Value>
     </Item>
-    <!--<180> Later-->
-    <!--<200> Later-->
-    <!--<220> Later-->
-    <!--<240> Later-->
-    <!--<300> Generic-->
     <Item>
-      <!--Attack-->
       <Key>300</Key>
       <Value>[Type:Action][Target:Enemy][Icon:0-0][Range:1][AreaType:Single][Harm:100][Action:UserAttack Apply]</Value>
     </Item>
     <Item>
-      <!--Leaf Cutter-->
       <Key>301</Key>
       <Value>[Type:Action][Animation:LeafCutter-32-32-3-0.1][Target:Enemy][Icon:0-0][Range:0][AreaType:Single][Harm:100][Action:UserAttack Direct Apply]</Value>
     </Item>
     <Item>
-      <!--Bauble Cure-->
       <Key>302</Key>
       <Value>[Type:Action][Animation:Heal-16-49-13-0.07][AnimOffset:0-32][Target:Ally][Range:5][AreaType:Single][Heal:100][Action:UserCast Direct Apply]</Value>
     </Item>
     <Item>
-      <!--Mushroom Lightning-->
       <Key>303</Key>
       <Value>[Type:Action][Animation:LightningSprite-94-160-15-0.07][AnimOffset:41-105][Target:Enemy][Range:4][AreaType:Cross][Harm:60][Action:UserCast Direct Apply][Element:Lightning]</Value>
     </Item>

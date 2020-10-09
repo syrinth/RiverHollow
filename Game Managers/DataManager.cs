@@ -349,7 +349,8 @@ namespace RiverHollow.Game_Managers
 
         public static void GetTextData(string id, ref string value, string key)
         {
-            value = _diItemText[id][key];
+            if (_diItemText[id].ContainsKey(key)) { value = _diItemText[id][key];  }
+            else { value = string.Empty;}
         }
         public static Item GetItem(int id)
         {

@@ -36,7 +36,8 @@ namespace RiverHollow.CombatStuff
             _id = id;
             _eActionType = actionType;
             _vIconGrid = vGrid;
-            DataManager.GetActionText(_id, ref _sName, ref _description);
+            DataManager.GetTextData("Action_" + _id, ref _sName, "Name");
+            DataManager.GetTextData("Action_" + _id, ref _description, "Description");
         }
 
         public bool IsActionMenu() { return _eActionType == ActionEnum.MenuAction; }

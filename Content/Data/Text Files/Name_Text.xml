@@ -178,6 +178,174 @@
       <Value>[Name:Giant Slime]</Value>
     </Item>
     <Item>
+      <Key>Action_0</Key>
+      <Value>[Name:Move]</Value>
+    </Item>
+    <Item>
+      <Key>Action_1</Key>
+      <Value>[Name:Use Item]</Value>
+    </Item>
+    <Item>
+      <Key>Action_2</Key>
+      <Value>[Name:Use Spell]</Value>
+    </Item>
+    <Item>
+      <Key>Action_4</Key>
+      <Value>[Name:End Turn]</Value>
+    </Item>
+    <Item>
+      <Key>Action_20</Key>
+      <Value>[Name:Thunder]</Value>
+    </Item>
+    <Item>
+      <Key>Action_21</Key>
+      <Value>[Name:Mega Thunder]</Value>
+    </Item>
+    <Item>
+      <Key>Action_40</Key>
+      <Value>[Name:Minor Healing]</Value>
+    </Item>
+    <Item>
+      <Key>Action_41</Key>
+      <Value>[Name:Grand Heal]</Value>
+    </Item>
+    <Item>
+      <Key>Action_60</Key>
+      <Value>[Name:Summoner's Strike]</Value>
+    </Item>
+    <Item>
+      <Key>Action_61</Key>
+      <Value>[Name:Summon Mystic Eye]</Value>
+    </Item>
+    <Item>
+      <Key>Action_62</Key>
+      <Value>[Name:Summon Earth Elemental]</Value>
+    </Item>
+    <Item>
+      <Key>Action_63</Key>
+      <Value>[Name:Summon Water Elemental]</Value>
+    </Item>
+    <Item>
+      <Key>Action_64</Key>
+      <Value>[Name:Summon Fire Elemental]</Value>
+    </Item>
+    <Item>
+      <Key>Action_65</Key>
+      <Value>[Name:Summon Air Elemental]</Value>
+    </Item>
+    <Item>
+      <Key>Action_66</Key>
+      <Value>[Name:Unity]</Value>
+    </Item>
+    <Item>
+      <Key>Action_80</Key>
+      <Value>[Name:Witch's Curse]</Value>
+    </Item>
+    <Item>
+      <Key>Action_100</Key>
+      <Value>[Name:Allira's Gambit][Description:Open yourself to strike your enemy]</Value>
+    </Item>
+    <Item>
+      <Key>Action_101</Key>
+      <Value>[Name:Pressing Attack][Description:Drive the enemy back with a blow of your spear]</Value>
+    </Item>
+    <Item>
+      <Key>Action_102</Key>
+      <Value>[Name:Penetrating Strike][Description:Deliver a strong blow before taking a quick step backwards.]</Value>
+    </Item>
+    <Item>
+      <Key>Action_103</Key>
+      <Value>[Name:Focus][Description:Take a moment to focus your energies and increase your chances to strike a critical hit.]</Value>
+    </Item>
+    <Item>
+      <Key>Action_104</Key>
+      <Value>[Name:Flurry of Strikes][Description:Damages the entire front line]</Value>
+    </Item>
+    <Item>
+      <Key>Action_120</Key>
+      <Value>[Name:Challenge][Description:Draws the enemy out]</Value>
+    </Item>
+    <Item>
+      <Key>Action_121</Key>
+      <Value>[Name:Shield Charge][Description:Charges forward, and pushan enemy backwards]</Value>
+    </Item>
+    <Item>
+      <Key>Action_122</Key>
+      <Value>[Name:Bulwark][Description:Ready yourself for the enemy]</Value>
+    </Item>
+    <Item>
+      <Key>Action_123</Key>
+      <Value>[Name:Guard][Description:Go on guard]</Value>
+    </Item>
+    <Item>
+      <Key>Action_140</Key>
+      <Value>[Name:Dodge]</Value>
+    </Item>
+    <Item>
+      <Key>Action_141</Key>
+      <Value>[Name:Knee Shot]</Value>
+    </Item>
+    <Item>
+      <Key>Action_142</Key>
+      <Value>[Name:Blitz]</Value>
+    </Item>
+    <Item>
+      <Key>Action_143</Key>
+      <Value>[Name:Called Shot]</Value>
+    </Item>
+    <Item>
+      <Key>Action_144</Key>
+      <Value>[Name:Called Shot2]</Value>
+    </Item>
+    <Item>
+      <Key>Action_160</Key>
+      <Value>[Name:Fighting Retreat]</Value>
+    </Item>
+    <Item>
+      <Key>Action_161</Key>
+      <Value>[Name:Song of Power]</Value>
+    </Item>
+    <Item>
+      <Key>Action_162</Key>
+      <Value>[Name:Song of Magic]</Value>
+    </Item>
+    <Item>
+      <Key>Action_163</Key>
+      <Value>[Name:Requiem of Recovery]</Value>
+    </Item>
+    <Item>
+      <Key>Action_164</Key>
+      <Value>[Name:Quick Attack]</Value>
+    </Item>
+    <Item>
+      <Key>Action_165</Key>
+      <Value>[Name:Chant of Celerity]</Value>
+    </Item>
+    <Item>
+      <Key>Action_166</Key>
+      <Value>[Name:Song of Resistance]</Value>
+    </Item>
+    <Item>
+      <Key>Action_167</Key>
+      <Value>[Name:Dance of Death]</Value>
+    </Item>
+    <Item>
+      <Key>Action_300</Key>
+      <Value>[Name:Attack]</Value>
+    </Item>
+    <Item>
+      <Key>Action_301</Key>
+      <Value>[Name:Leaf Cutter]</Value>
+    </Item>
+    <Item>
+      <Key>Action_302</Key>
+      <Value>[Name:Bauble Cure][Description:Get Fucked ]</Value>
+    </Item>
+    <Item>
+      <Key>Action_303</Key>
+      <Value>[Name:Mushroom Lightning]</Value>
+    </Item>
+    <Item>
       <Key>Item_0</Key>
       <Value>[Name:Stone][Description:Stone, for building things]</Value>
     </Item>

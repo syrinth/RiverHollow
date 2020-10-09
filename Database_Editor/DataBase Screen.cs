@@ -12,12 +12,13 @@ namespace Database_Editor
     public partial class frmDBEditor : Form
     {
         private enum EditableCharacterDataEnum { Dialogue, Schedule };
-        public enum XMLTypeEnum { None, Quest, Character, Class, Adventurer, Building, WorldObject, Item, Monster };
+        public enum XMLTypeEnum { None, Quest, Character, Class, Adventurer, Building, WorldObject, Item, Monster, Action };
         #region XML Files
+        string ACTIONS_XML_FILE = PATH_TO_DATA + @"\CombatActions.xml";
         string CUTSCENE_XML_FILE = PATH_TO_DATA + @"\CutScenes.xml";
         string CUTSCENE_DIALOGUE_XML_FILE = PATH_TO_DIALOGUE + @"\CutsceneDialogue.xml";
         string QUEST_XML_FILE = PATH_TO_DATA + @"\Quests.xml";
-        string MONSTER_XML_FILE = PATH_TO_DATA + @"\Monsters.xml";
+        string MONSTERS_XML_FILE = PATH_TO_DATA + @"\Monsters.xml";
         string CHARACTER_XML_FILE = PATH_TO_DATA + @"\CharacterData.xml";
         string CLASSES_XML_FILE = PATH_TO_DATA + @"\Classes.xml";
         string WORKERS_XML_FILE = PATH_TO_DATA + @"\Workers.xml";
@@ -81,6 +82,7 @@ namespace Database_Editor
             InitComboBox<AdventurerTypeEnum>(cbAdventurerType);
             InitComboBox<QuestTypeEnum>(cbQuestType);
             InitComboBox<EditableCharacterDataEnum>(cbEditableCharData, false);
+            InitComboBox<ActionEnum>(cbActionType);
 
             _diTabIndices = new Dictionary<string, int>()
             {
@@ -92,7 +94,8 @@ namespace Database_Editor
                 { "Adventurers", 0 },
                 { "Quests", 0 },
                 { "Cutscenes", 0},
-                { "Monsters", 0}
+                { "Monsters", 0},
+                { "Actions", 0 }
             };
 
             _diMapData = new Dictionary<string, TMXData>();
@@ -132,7 +135,8 @@ namespace Database_Editor
             LoadXMLDictionary(CLASSES_XML_FILE, CLASSES_ITEM_TAG, DEFAULT_WORLD_TAG);
             LoadXMLDictionary(WORKERS_XML_FILE, WORKERS_ITEM_TAG, DEFAULT_WORLD_TAG);
             LoadXMLDictionary(CONFIG_XML_FILE, CONFIG_ITEM_TAG, CONFIG_WORLD_TAG);
-            LoadXMLDictionary(MONSTER_XML_FILE, "", "");
+            LoadXMLDictionary(MONSTERS_XML_FILE, "", "");
+            LoadXMLDictionary(ACTIONS_XML_FILE, "", "");
 
             _diCutscenes = ReadXMLFileToDictionaryStringList(CUTSCENE_XML_FILE);
             _diCutsceneDialogue = ReadXMLFileToDictionaryStringList(CUTSCENE_DIALOGUE_XML_FILE);
@@ -152,6 +156,7 @@ namespace Database_Editor
             LoadQuestDataGrid();
             LoadCutsceneDataGrid();
             LoadMonsterDataGrid();
+            LoadActionDataGrid();
 
             LoadItemInfo();
             LoadWorldObjectInfo();
@@ -161,6 +166,7 @@ namespace Database_Editor
             LoadQuestInfo();
             LoadCutsceneInfo();
             LoadMonsterInfo();
+            LoadActionInfo();
         }
 
         #region DataGridView Loading
@@ -230,7 +236,11 @@ namespace Database_Editor
         }
         private void LoadMonsterDataGrid()
         {
-            LoadGenericDatagrid(dgvMonsters, _diBasicXML[MONSTER_XML_FILE], "colMonstersID", "colMonstersName", "Monsters");
+            LoadGenericDatagrid(dgvMonsters, _diBasicXML[MONSTERS_XML_FILE], "colMonstersID", "colMonstersName", "Monsters");
+        }
+        private void LoadActionDataGrid()
+        {
+            LoadGenericDatagrid(dgvActions, _diBasicXML[ACTIONS_XML_FILE], "colActionsID", "colActionsName", "Actions");
         }
         #endregion
 
@@ -324,8 +334,14 @@ namespace Database_Editor
         }
         private void LoadMonsterInfo()
         {
-            XMLData data = _diBasicXML[MONSTER_XML_FILE][_diTabIndices["Monsters"]];
+            XMLData data = _diBasicXML[MONSTERS_XML_FILE][_diTabIndices["Monsters"]];
             LoadGenericDataInfo(data, tbMonsterName, tbMonsterID, dgvMonsterTags, tbMonsterDescription);
+        }
+        private void LoadActionInfo()
+        {
+            XMLData data = _diBasicXML[ACTIONS_XML_FILE][_diTabIndices["Actions"]];
+            LoadGenericDataInfo(data, tbActionName, tbActionID, dgvActionTags, tbActionDescription);
+            cbActionType.SelectedIndex = (int)Util.ParseEnum<ActionEnum>(data.GetTagInfo("Type"));
         }
         #endregion
 
@@ -346,7 +362,8 @@ namespace Database_Editor
             else if (fileName == CLASSES_XML_FILE) { rv = XMLTypeEnum.Class; }
             else if (fileName == WORKERS_XML_FILE) { rv = XMLTypeEnum.Adventurer; }
             else if (fileName == WORLD_OBJECTS_DATA_XML_FILE) { rv = XMLTypeEnum.WorldObject; }
-            else if (fileName == MONSTER_XML_FILE) { rv = XMLTypeEnum.Monster; }
+            else if (fileName == MONSTERS_XML_FILE) { rv = XMLTypeEnum.Monster; }
+            else if (fileName == ACTIONS_XML_FILE) { rv = XMLTypeEnum.Action; }
 
             return rv;
         }
@@ -935,7 +952,11 @@ namespace Database_Editor
         }
         private void SaveMonsterInfo(List<XMLData> liData)
         {
-            SaveGenericInfo(_diBasicXML[MONSTER_XML_FILE], "Monsters", "Monster_", XMLTypeEnum.Monster, tbMonsterName, null, dgvMonsters, dgvMonsterTags, "colMonstersID", "colMonstersName", tbMonsterDescription);
+            SaveGenericInfo(_diBasicXML[MONSTERS_XML_FILE], "Monsters", "Monster_", XMLTypeEnum.Monster, tbMonsterName, null, dgvMonsters, dgvMonsterTags, "colMonstersID", "colMonstersName", tbMonsterDescription);
+        }
+        private void SaveActionInfo(List<XMLData> liData)
+        {
+            SaveGenericInfo(_diBasicXML[ACTIONS_XML_FILE], "Actions", "Action_", XMLTypeEnum.Action, tbActionName, cbActionType, dgvActions, dgvActionTags, "colActionsID", "colActionsName", tbActionDescription);
         }
 
         private void GenericCancel(List<XMLData> liData, string tabIndex, DataGridView dgMain, VoidDelegate del)
@@ -988,10 +1009,14 @@ namespace Database_Editor
         }
         private void btnMonsterCancel_Click(object sender, EventArgs e)
         {
-            GenericCancel(_diBasicXML[MONSTER_XML_FILE], "Monsters", dgvMonsters, LoadMonsterInfo);
+            GenericCancel(_diBasicXML[MONSTERS_XML_FILE], "Monsters", dgvMonsters, LoadMonsterInfo);
+        }
+        private void btnActionCancel_Click(object sender, EventArgs e)
+        {
+            GenericCancel(_diBasicXML[ACTIONS_XML_FILE], "Actions", dgvActions, LoadActionInfo);
         }
 
-        private void GenericCellClick(DataGridViewCellEventArgs e,  List<XMLData> liData, string tabIndex, DataGridView dgMain, VoidDelegate loadDel, XMLListDataDelegate saveDel)
+        private void GenericCellClick(DataGridViewCellEventArgs e, List<XMLData> liData, string tabIndex, DataGridView dgMain, VoidDelegate loadDel, XMLListDataDelegate saveDel)
         {
             if (e.RowIndex > -1)
             {
@@ -1037,7 +1062,11 @@ namespace Database_Editor
         }
         private void dgvMonsters_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            GenericCellClick(e, _diBasicXML[MONSTER_XML_FILE], "Monsters", dgvMonsters, LoadMonsterInfo, SaveMonsterInfo);
+            GenericCellClick(e, _diBasicXML[MONSTERS_XML_FILE], "Monsters", dgvMonsters, LoadMonsterInfo, SaveMonsterInfo);
+        }
+        private void dgvActions_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            GenericCellClick(e, _diBasicXML[ACTIONS_XML_FILE], "Actions", dgvActions, LoadActionInfo, SaveActionInfo);
         }
 
         private void AddNewGenericXMLObject(TabPage page, string tabIndex, DataGridView dg, string colID, string colName, TextBox tbName, TextBox tbID, DataGridView dgTags, string tagCol, ComboBox cb = null, TextBox tbDesc = null, string defaultTag = "")
@@ -1168,6 +1197,7 @@ namespace Database_Editor
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabQuests"]) { dgvQuests.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCutscenes"]) { dgvCutscenes.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabMonsters"]) { dgvMonsters.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabActions"]) { dgvActions.Focus(); }
 
             _diTabIndices["PreviousTab"] = tabCtl.SelectedIndex;
         }
@@ -1182,7 +1212,8 @@ namespace Database_Editor
             else if (prevPage == tabCtl.TabPages["tabAdventurers"]) { SaveAdventurerInfo(_diBasicXML[WORKERS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabQuests"]) { SaveQuestInfo(_diBasicXML[QUEST_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabCutscenes"]) { SaveCutsceneInfo(); }
-            else if (prevPage == tabCtl.TabPages["tabMonsters"]) { SaveMonsterInfo(_diBasicXML[MONSTER_XML_FILE]); }
+            else if (prevPage == tabCtl.TabPages["tabMonsters"]) { SaveMonsterInfo(_diBasicXML[MONSTERS_XML_FILE]); }
+            else if (prevPage == tabCtl.TabPages["tabActions"]) { SaveActionInfo(_diBasicXML[ACTIONS_XML_FILE]); }
         }
         #endregion
 
