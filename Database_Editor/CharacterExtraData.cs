@@ -79,7 +79,6 @@ namespace Database_Editor
             LoadDataInfoList(_iIndex);
         }
 
-
         private void SelectRow(DataGridView dg, int id)
         {
             dg.Rows[id].Selected = true;

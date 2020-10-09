@@ -106,6 +106,7 @@
             this.cbQuestType = new System.Windows.Forms.ComboBox();
             this.btnQuestCancel = new System.Windows.Forms.Button();
             this.dgvQuestTags = new System.Windows.Forms.DataGridView();
+            this.colQuestTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbQuestDescription = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
@@ -115,7 +116,18 @@
             this.dgvQuests = new System.Windows.Forms.DataGridView();
             this.colQuestsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colQuestsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colQuestTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabCutscenes = new System.Windows.Forms.TabPage();
+            this.tbCutsceneDetails = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.tbCutsceneTriggers = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
+            this.dgvCutsceneTags = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tbCutsceneName = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.dgvCutscenes = new System.Windows.Forms.DataGridView();
+            this.colCutscenesName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -136,6 +148,9 @@
             this.tabQuests.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvQuestTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvQuests)).BeginInit();
+            this.tabCutscenes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCutsceneTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCutscenes)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -165,39 +180,39 @@
             this.questToolStripMenuItem,
             this.worldObjectToolStripMenuItem});
             this.addNewToolStripMenuItem.Name = "addNewToolStripMenuItem";
-            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.addNewToolStripMenuItem.Text = "Add New";
             // 
             // itemToolStripMenuItem
             // 
             this.itemToolStripMenuItem.Name = "itemToolStripMenuItem";
-            this.itemToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.itemToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.itemToolStripMenuItem.Text = "Item";
             this.itemToolStripMenuItem.Click += new System.EventHandler(this.addNewToolStripMenuItem_Click);
             // 
             // questToolStripMenuItem
             // 
             this.questToolStripMenuItem.Name = "questToolStripMenuItem";
-            this.questToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.questToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.questToolStripMenuItem.Text = "Quest";
             this.questToolStripMenuItem.Click += new System.EventHandler(this.questToolStripMenuItem_Click);
             // 
             // worldObjectToolStripMenuItem
             // 
             this.worldObjectToolStripMenuItem.Name = "worldObjectToolStripMenuItem";
-            this.worldObjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.worldObjectToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.worldObjectToolStripMenuItem.Text = "World Object";
             this.worldObjectToolStripMenuItem.Click += new System.EventHandler(this.addNewToolStripMenuWorldObject_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(133, 6);
             // 
             // saveToFileToolStripMenuItem
             // 
             this.saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
-            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.saveToFileToolStripMenuItem.Text = "Save To File";
             this.saveToFileToolStripMenuItem.Click += new System.EventHandler(this.saveToFileToolStripMenuItem_Click);
             // 
@@ -209,6 +224,7 @@
             this.tabCtl.Controls.Add(this.tabClasses);
             this.tabCtl.Controls.Add(this.tabAdventurers);
             this.tabCtl.Controls.Add(this.tabQuests);
+            this.tabCtl.Controls.Add(this.tabCutscenes);
             this.tabCtl.Location = new System.Drawing.Point(12, 27);
             this.tabCtl.Name = "tabCtl";
             this.tabCtl.SelectedIndex = 0;
@@ -918,6 +934,12 @@
             this.dgvQuestTags.Size = new System.Drawing.Size(464, 251);
             this.dgvQuestTags.TabIndex = 33;
             // 
+            // colQuestTags
+            // 
+            this.colQuestTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colQuestTags.HeaderText = "Tags";
+            this.colQuestTags.Name = "colQuestTags";
+            // 
             // tbQuestDescription
             // 
             this.tbQuestDescription.Location = new System.Drawing.Point(320, 51);
@@ -1004,11 +1026,125 @@
             this.colQuestsName.Name = "colQuestsName";
             this.colQuestsName.ReadOnly = true;
             // 
-            // colQuestTags
+            // tabCutscenes
             // 
-            this.colQuestTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colQuestTags.HeaderText = "Tags";
-            this.colQuestTags.Name = "colQuestTags";
+            this.tabCutscenes.Controls.Add(this.tbCutsceneDetails);
+            this.tabCutscenes.Controls.Add(this.label17);
+            this.tabCutscenes.Controls.Add(this.tbCutsceneTriggers);
+            this.tabCutscenes.Controls.Add(this.label14);
+            this.tabCutscenes.Controls.Add(this.button2);
+            this.tabCutscenes.Controls.Add(this.dgvCutsceneTags);
+            this.tabCutscenes.Controls.Add(this.tbCutsceneName);
+            this.tabCutscenes.Controls.Add(this.label16);
+            this.tabCutscenes.Controls.Add(this.dgvCutscenes);
+            this.tabCutscenes.Location = new System.Drawing.Point(4, 22);
+            this.tabCutscenes.Name = "tabCutscenes";
+            this.tabCutscenes.Size = new System.Drawing.Size(790, 425);
+            this.tabCutscenes.TabIndex = 6;
+            this.tabCutscenes.Text = "Cutscenes";
+            this.tabCutscenes.UseVisualStyleBackColor = true;
+            // 
+            // tbCutsceneDetails
+            // 
+            this.tbCutsceneDetails.Location = new System.Drawing.Point(320, 84);
+            this.tbCutsceneDetails.Name = "tbCutsceneDetails";
+            this.tbCutsceneDetails.Size = new System.Drawing.Size(464, 20);
+            this.tbCutsceneDetails.TabIndex = 38;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(320, 68);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(42, 13);
+            this.label17.TabIndex = 37;
+            this.label17.Text = "Details:";
+            // 
+            // tbCutsceneTriggers
+            // 
+            this.tbCutsceneTriggers.Location = new System.Drawing.Point(320, 45);
+            this.tbCutsceneTriggers.Name = "tbCutsceneTriggers";
+            this.tbCutsceneTriggers.Size = new System.Drawing.Size(464, 20);
+            this.tbCutsceneTriggers.TabIndex = 36;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(317, 29);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(48, 13);
+            this.label14.TabIndex = 35;
+            this.label14.Text = "Triggers:";
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(709, 394);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 34;
+            this.button2.Text = "Cancel";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.btnCutsceneCancel_Click);
+            // 
+            // dgvCutsceneTags
+            // 
+            this.dgvCutsceneTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvCutsceneTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn2});
+            this.dgvCutsceneTags.Location = new System.Drawing.Point(320, 110);
+            this.dgvCutsceneTags.Name = "dgvCutsceneTags";
+            this.dgvCutsceneTags.RowHeadersVisible = false;
+            this.dgvCutsceneTags.Size = new System.Drawing.Size(464, 278);
+            this.dgvCutsceneTags.TabIndex = 33;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn2.HeaderText = "Tags";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            // 
+            // tbCutsceneName
+            // 
+            this.tbCutsceneName.Location = new System.Drawing.Point(361, 6);
+            this.tbCutsceneName.Name = "tbCutsceneName";
+            this.tbCutsceneName.Size = new System.Drawing.Size(108, 20);
+            this.tbCutsceneName.TabIndex = 28;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(317, 9);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(38, 13);
+            this.label16.TabIndex = 27;
+            this.label16.Text = "Name:";
+            // 
+            // dgvCutscenes
+            // 
+            this.dgvCutscenes.AllowUserToAddRows = false;
+            this.dgvCutscenes.AllowUserToDeleteRows = false;
+            this.dgvCutscenes.AllowUserToResizeColumns = false;
+            this.dgvCutscenes.AllowUserToResizeRows = false;
+            this.dgvCutscenes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvCutscenes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colCutscenesName});
+            this.dgvCutscenes.Location = new System.Drawing.Point(6, 6);
+            this.dgvCutscenes.MultiSelect = false;
+            this.dgvCutscenes.Name = "dgvCutscenes";
+            this.dgvCutscenes.ReadOnly = true;
+            this.dgvCutscenes.RowHeadersVisible = false;
+            this.dgvCutscenes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvCutscenes.Size = new System.Drawing.Size(308, 411);
+            this.dgvCutscenes.TabIndex = 26;
+            this.dgvCutscenes.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCutscenes_CellClick);
+            // 
+            // colCutscenesName
+            // 
+            this.colCutscenesName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colCutscenesName.FillWeight = 90F;
+            this.colCutscenesName.HeaderText = "Name";
+            this.colCutscenesName.Name = "colCutscenesName";
+            this.colCutscenesName.ReadOnly = true;
             // 
             // frmDBEditor
             // 
@@ -1048,6 +1184,10 @@
             this.tabQuests.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvQuestTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvQuests)).EndInit();
+            this.tabCutscenes.ResumeLayout(false);
+            this.tabCutscenes.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCutsceneTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCutscenes)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1141,6 +1281,18 @@
         private System.Windows.Forms.ComboBox cbEditableCharData;
         private System.Windows.Forms.ToolStripMenuItem questToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn colQuestTags;
+        private System.Windows.Forms.TabPage tabCutscenes;
+        private System.Windows.Forms.TextBox tbCutsceneDetails;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox tbCutsceneTriggers;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.DataGridView dgvCutsceneTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.TextBox tbCutsceneName;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.DataGridView dgvCutscenes;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCutscenesName;
     }
 }
 

@@ -25,7 +25,7 @@ namespace RiverHollow.Misc
         private Villager _npcHandInTo;
         public Villager HandInTo => _npcHandInTo;
 
-        int _iCutsceneID;
+        string _sCutsceneID;
 
         private int _iTargetGoal;
         public int TargetGoal => _iTargetGoal;
@@ -66,7 +66,7 @@ namespace RiverHollow.Misc
 
         public Quest()
         {
-            _iCutsceneID = -1;
+            _sCutsceneID = "";
             _bImmediate = false;
             _iActivateID = -1;
             _iQuestID = -1;
@@ -154,7 +154,7 @@ namespace RiverHollow.Misc
             if (stringData.ContainsKey("Season")) { _iSeason = int.Parse(stringData["Season"]); }
             if (stringData.ContainsKey("Immediate")) { _bImmediate = true; }
             if (stringData.ContainsKey("Activate")) { _iActivateID = int.Parse(stringData["Activate"]); }
-            if (stringData.ContainsKey("Cutscene")) { _iCutsceneID = int.Parse(stringData["Cutscene"]); }
+            if (stringData.ContainsKey("Cutscene")) { _sCutsceneID = stringData["Cutscene"]; }
         }
 
         public bool AttemptProgress(Monster m)
@@ -248,9 +248,9 @@ namespace RiverHollow.Misc
 
             PlayerManager.QuestLog.Remove(this);
 
-            if (_iCutsceneID != -1)
+            if (!string.IsNullOrEmpty(_sCutsceneID))
             {
-                CutsceneManager.TriggerCutscene(_iCutsceneID);
+                CutsceneManager.TriggerCutscene(_sCutsceneID);
             }
         }
 

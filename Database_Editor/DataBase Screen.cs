@@ -16,6 +16,7 @@ namespace Database_Editor
         private enum EditableCharacterDataEnum { Dialogue, Schedule };
         public enum XMLTypeEnum { None, Quest, Character, Class, Adventurer, Building, WorldObject, Item };
         #region XML Files
+        string CUTSCENE_XML_FILE = PATH_TO_DATA + @"\CutScenes.xml";
         string QUEST_XML_FILE = PATH_TO_DATA + @"\Quests.xml";
         string CHARACTER_XML_FILE = PATH_TO_DATA + @"\CharacterData.xml";
         string CLASSES_XML_FILE = PATH_TO_DATA + @"\Classes.xml";
@@ -56,6 +57,7 @@ namespace Database_Editor
         static string PATH_TO_DIALOGUE = string.Format(@"{0}\..\..\..\..\Adventure\Content\Data\Text Files\Dialogue", System.Environment.CurrentDirectory);
         static string PATH_TO_SCHEDULES = string.Format(@"{0}\..\..\..\..\Adventure\Content\Data\Schedules", System.Environment.CurrentDirectory);
 
+        static Dictionary<string, List<string>> _diCutscenes;
         static Dictionary<string, Dictionary<string, List<string>>> _diCharacterSchedules;
         static Dictionary<string, Dictionary<string, string>> _diCharacterDialogue;
         static Dictionary<string, Dictionary<string, string>> _diItemText;
@@ -86,7 +88,8 @@ namespace Database_Editor
                 { "Characters", 0 },
                 { "Classes", 0 },
                 { "Adventurers", 0 },
-                { "Quests", 0 }
+                { "Quests", 0 },
+                { "Cutscenes", 0}
             };
 
             _diMapData = new Dictionary<string, TMXData>();
@@ -115,7 +118,7 @@ namespace Database_Editor
                 {
                     fileName = s;
                     Util.ParseContentFile(ref fileName);
-                    _diCharacterSchedules.Add(s, ReadXMLFilToDictionaryStringList(fileName));//ReadXMLFilToDictionary(fileName));
+                    _diCharacterSchedules.Add(s, ReadXMLFileToDictionaryStringList(fileName));//ReadXMLFilToDictionary(fileName));
                 }
             }
 
@@ -126,6 +129,7 @@ namespace Database_Editor
             LoadXMLDictionary(CLASSES_XML_FILE, CLASSES_ITEM_TAG, DEFAULT_WORLD_TAG);
             LoadXMLDictionary(WORKERS_XML_FILE, WORKERS_ITEM_TAG, DEFAULT_WORLD_TAG);
             LoadXMLDictionary(CONFIG_XML_FILE, CONFIG_ITEM_TAG, CONFIG_WORLD_TAG);
+            _diCutscenes = ReadXMLFileToDictionaryStringList(CUTSCENE_XML_FILE);
 
             LoadXMLDictionary(MAGIC_SHOP_XML_FILE, SHOP_TAG, DEFAULT_WORLD_TAG);
             LoadXMLDictionary(BUILDINGS_XML_FILE, SHOP_TAG, DEFAULT_WORLD_TAG);
@@ -140,6 +144,7 @@ namespace Database_Editor
             LoadClassDataGrid();
             LoadAdventurerDataGrid();
             LoadQuestDataGrid();
+            LoadCutsceneDataGrid();
 
             LoadItemInfo();
             LoadWorldObjectInfo();
@@ -147,6 +152,7 @@ namespace Database_Editor
             LoadClassInfo();
             LoadAdventurerInfo();
             LoadQuestInfo();
+            LoadCutsceneInfo();
         }
 
         #region DataGridView Loading
@@ -199,6 +205,20 @@ namespace Database_Editor
         private void LoadQuestDataGrid()
         {
             LoadGenericDatagrid(dgvQuests, _diBasicXML[QUEST_XML_FILE], "colQuestsID", "colQuestsName", "Quests");
+        }
+        private void LoadCutsceneDataGrid()
+        {
+            dgvCutscenes.Rows.Clear();
+            int index = 0;
+            foreach (KeyValuePair<string, List<string>> kvp in _diCutscenes)
+            {
+                dgvCutscenes.Rows.Add();
+                DataGridViewRow row = dgvCutscenes.Rows[index++];
+                row.Cells["colCutscenesName"].Value = kvp.Key;
+            }
+
+            SelectRow(dgvCutscenes, _diTabIndices["Cutscenes"]);
+            dgvCutscenes.Focus();
         }
         #endregion
 
@@ -275,6 +295,21 @@ namespace Database_Editor
             LoadGenericDataInfo(data, tbQuestName, tbQuestID, dgvQuestTags, tbQuestDescription);
             cbQuestType.SelectedIndex = (int)Util.ParseEnum<QuestTypeEnum>(data.GetTagInfo("Type"));
         }
+        private void LoadCutsceneInfo()
+        {
+            string keyName = dgvCutscenes.CurrentCell.Value.ToString();
+            List<string> listData = _diCutscenes[keyName];
+            tbCutsceneName.Text = keyName;
+            tbCutsceneTriggers.Text = listData[0];
+            tbCutsceneDetails.Text = listData[1];
+
+            dgvCutsceneTags.Rows.Clear();
+            string[] tags = listData[2].Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in tags)
+            {
+                dgvCutsceneTags.Rows.Add(s);
+            }
+        }
         #endregion
 
         private void InitComboBox<T>(ComboBox cb, bool type = true)
@@ -318,7 +353,7 @@ namespace Database_Editor
             return xmlDictionary;
         }
 
-        private Dictionary<string, List<string>> ReadXMLFilToDictionaryStringList(string fileName)
+        private Dictionary<string, List<string>> ReadXMLFileToDictionaryStringList(string fileName)
         {
             string line = string.Empty;
             Dictionary<string, List<string>> xmlDictionary = new Dictionary<string, List<string>>();
@@ -352,9 +387,8 @@ namespace Database_Editor
                             }
                         }
                     }
+                    xmlDictionary[key] = tagList;
                 }
-
-                xmlDictionary[key] = tagList;
             }
            
             return xmlDictionary;
@@ -833,6 +867,28 @@ namespace Database_Editor
         {
             SaveGenericInfo(_diBasicXML[QUEST_XML_FILE], "Quests", "Quest_", XMLTypeEnum.Quest, tbQuestName, cbQuestType, dgvQuests, dgvQuestTags, "colQuestsID", "colQuestsName", tbQuestDescription);
         }
+        private void SaveCutsceneInfo()
+        {
+            string keyName = dgvCutscenes.Rows[_diTabIndices["Cutscenes"]].Cells["colCutscenesName"].Value.ToString();
+            List<string> listData = _diCutscenes[keyName];
+            listData.Clear();
+            listData.Add(tbCutsceneTriggers.Text);
+            listData.Add(tbCutsceneDetails.Text);
+
+            string tags = string.Empty;
+            foreach (DataGridViewRow r in dgvCutsceneTags.Rows)
+            {
+                if (r.Cells[0].Value != null)
+                {
+                    tags += "[" + r.Cells[0].Value + "]";
+                }
+            }
+            listData.Add(tags);
+
+            DataGridViewRow updatedRow = dgvCutscenes.Rows[_diTabIndices["Cutscenes"]];
+
+            updatedRow.Cells["colCutscenesName"].Value = tbCutsceneName.Text;
+        }
 
         private void GenericCancel(List<XMLData> liData, string tabIndex, DataGridView dgMain, VoidDelegate del)
         {
@@ -873,6 +929,15 @@ namespace Database_Editor
         {
             GenericCancel(_diBasicXML[QUEST_XML_FILE], "Quests", dgvQuests, LoadQuestInfo);
         }
+        private void btnCutsceneCancel_Click(object sednder, EventArgs e)
+        {
+            if (_diCutscenes.Count == _diTabIndices["Cutscenes"])
+            {
+                dgvCutscenes.Rows.RemoveAt(_diTabIndices["Cutscenes"]--);
+                SelectRow(dgvCutscenes, _diTabIndices["Cutscenes"]);
+            }
+            LoadCutsceneInfo();
+        }
 
         private void GenericCellClick(DataGridViewCellEventArgs e,  List<XMLData> liData, string tabIndex, DataGridView dgMain, VoidDelegate loadDel, XMLListDataDelegate saveDel)
         {
@@ -911,6 +976,12 @@ namespace Database_Editor
         private void dgvQuests_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             GenericCellClick(e, _diBasicXML[QUEST_XML_FILE], "Quests", dgvQuests, LoadQuestInfo, SaveQuestInfo);
+        }
+        private void dgvCutscenes_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            SaveCutsceneInfo();
+            _diTabIndices["Cutscenes"] = e.RowIndex;
+            LoadCutsceneInfo();
         }
 
         private void AddNewGenericXMLObject(TabPage page, string tabIndex, DataGridView dg, string colID, string colName, TextBox tbName, TextBox tbID, DataGridView dgTags, string tagCol, ComboBox cb = null, TextBox tbDesc = null, string defaultTag = "")
@@ -1004,6 +1075,8 @@ namespace Database_Editor
                 SaveXMLDictionaryList(_diCharacterSchedules[s], s, PATH_TO_SCHEDULES, sWriter);
             }
 
+            SaveXMLDictionaryList(_diCutscenes, CUTSCENE_XML_FILE, PATH_TO_DATA, sWriter);
+
             string mapPath = PATH_TO_MAPS;
             if (!Directory.Exists(mapPath)) { Directory.CreateDirectory(mapPath); }
             foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
@@ -1037,6 +1110,7 @@ namespace Database_Editor
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabClasses"]) { dgvClasses.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabAdventurers"]) { dgvAdventurers.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabQuests"]) { dgvQuests.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCutscenes"]) { dgvCutscenes.Focus(); }
 
             _diTabIndices["PreviousTab"] = tabCtl.SelectedIndex;
         }
@@ -1050,6 +1124,7 @@ namespace Database_Editor
             else if (prevPage == tabCtl.TabPages["tabClasses"]) { SaveClassInfo(_diBasicXML[CLASSES_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabAdventurers"]) { SaveAdventurerInfo(_diBasicXML[WORKERS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabQuests"]) { SaveQuestInfo(_diBasicXML[QUEST_XML_FILE]); }
+            else if (prevPage == tabCtl.TabPages["tabCutscenes"]) { SaveCutsceneInfo(); }
         }
         #endregion
 
@@ -1070,7 +1145,7 @@ namespace Database_Editor
             dataFile.Close();
         }
 
-        public void SaveXMLDictionaryList(Dictionary<string, List<string>> dataList, string fileName, string pathToDir, StreamWriter textFile)
+        public void SaveXMLDictionaryList(Dictionary<string, List<string>> dataList, string fileName, string pathToDir, StreamWriter sWriter)
         {
             StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[string, List[string]]");
 
@@ -1090,7 +1165,7 @@ namespace Database_Editor
             CloseStreamWriter(ref dataFile);
         }
 
-        public void SaveXMLDictionary(Dictionary<string, string> dataList, string fileName, string pathToDir, StreamWriter textFile)
+        public void SaveXMLDictionary(Dictionary<string, string> dataList, string fileName, string pathToDir, StreamWriter sWriter)
         {
             StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[string, string]");
 
@@ -1102,7 +1177,7 @@ namespace Database_Editor
             CloseStreamWriter(ref dataFile);
         }
 
-        public void SaveXMLData(List<XMLData> dataList, string fileName, string pathToDir, StreamWriter textFile)
+        public void SaveXMLData(List<XMLData> dataList, string fileName, string pathToDir, StreamWriter sWriter)
         {
             StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[int, string]");
             
@@ -1121,7 +1196,7 @@ namespace Database_Editor
                 {
                     string value = string.Format("[Name:{0}]", data.Name);
                     if (!string.IsNullOrEmpty(data.Description)) { value += string.Format("[Description:{0}]", data.Description); }
-                    WriteXMLEntry(textFile, string.Format("      <Key>{0}</Key>", id), string.Format("      <Value>{0}</Value>", value));
+                    WriteXMLEntry(sWriter, string.Format("      <Key>{0}</Key>", id), string.Format("      <Value>{0}</Value>", value));
                 }
             }
 
@@ -1136,14 +1211,14 @@ namespace Database_Editor
             dataFile.WriteLine("    </Item>");
         }
 
-        public void SaveItemXMLData(List<ItemXMLData> dataList, string pathToDir, StreamWriter textFile)
+        public void SaveItemXMLData(List<ItemXMLData> dataList, string pathToDir, StreamWriter sWriter)
         {
             StreamWriter dataFile = PrepareXMLFile(pathToDir + @"\ItemData.xml", "Dictionary[int, string]");
 
             foreach (ItemXMLData data in dataList)
             {
                 WriteXMLEntry(dataFile, string.Format("      <Key>{0}</Key>", data.ID), string.Format("      <Value>{0}</Value>", data.GetTagsString()));
-                WriteXMLEntry(textFile, string.Format("      <Key>Item_{0}</Key>", data.ID), string.Format("      <Value>[Name:{0}][Description:{1}]</Value>", data.Name, data.Description));
+                WriteXMLEntry(sWriter, string.Format("      <Key>Item_{0}</Key>", data.ID), string.Format("      <Value>[Name:{0}][Description:{1}]</Value>", data.Name, data.Description));
             }
 
             CloseStreamWriter(ref dataFile);
