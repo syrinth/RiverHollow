@@ -162,6 +162,22 @@
       <Value>[Name:Bard]</Value>
     </Item>
     <Item>
+      <Key>Monster_0</Key>
+      <Value>[Name:Magic Mushroom]</Value>
+    </Item>
+    <Item>
+      <Key>Monster_1</Key>
+      <Value>[Name:Bauble]</Value>
+    </Item>
+    <Item>
+      <Key>Monster_2</Key>
+      <Value>[Name:Fanged Fur]</Value>
+    </Item>
+    <Item>
+      <Key>Monster_3</Key>
+      <Value>[Name:Giant Slime]</Value>
+    </Item>
+    <Item>
       <Key>Item_0</Key>
       <Value>[Name:Stone][Description:Stone, for building things]</Value>
     </Item>
