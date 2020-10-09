@@ -1,11 +1,9 @@
-﻿using RiverHollow.Game_Managers;
-using RiverHollow.Utilities;
+﻿using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Serialization;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Items.Item;
 
@@ -17,6 +15,7 @@ namespace Database_Editor
         public enum XMLTypeEnum { None, Quest, Character, Class, Adventurer, Building, WorldObject, Item };
         #region XML Files
         string CUTSCENE_XML_FILE = PATH_TO_DATA + @"\CutScenes.xml";
+        string CUTSCENE_DIALOGUE_XML_FILE = PATH_TO_DIALOGUE + @"\CutsceneDialogue.xml";
         string QUEST_XML_FILE = PATH_TO_DATA + @"\Quests.xml";
         string CHARACTER_XML_FILE = PATH_TO_DATA + @"\CharacterData.xml";
         string CLASSES_XML_FILE = PATH_TO_DATA + @"\Classes.xml";
@@ -26,7 +25,7 @@ namespace Database_Editor
         string ADVENTURERS_XML_FILE = PATH_TO_DATA + @"\Shops\Adventurers.xml";
         string BUILDINGS_XML_FILE = PATH_TO_DATA + @"\Shops\Buildings.xml";
         string ITEM_DATA_XML_FILE = PATH_TO_DATA + @"\ItemData.xml";
-        string NAME_TEXT_XML_FILE = PATH_TO_DATA + @"\Text Files\Name_Text.xml";
+        string NAME_TEXT_XML_FILE = PATH_TO_TEXT_FILES + @"\Name_Text.xml";
         string WORLD_OBJECTS_DATA_XML_FILE = PATH_TO_DATA + @"\WorldObjects.xml";
         #endregion
 
@@ -54,9 +53,11 @@ namespace Database_Editor
         public static string SPECIAL_CHARACTER = "^";
         static string PATH_TO_MAPS = string.Format(@"{0}\..\..\..\..\Adventure\Content\Maps", System.Environment.CurrentDirectory);
         static string PATH_TO_DATA = string.Format(@"{0}\..\..\..\..\Adventure\Content\Data", System.Environment.CurrentDirectory);
+        static string PATH_TO_TEXT_FILES = PATH_TO_DATA + @"\Text Files";
         static string PATH_TO_DIALOGUE = string.Format(@"{0}\..\..\..\..\Adventure\Content\Data\Text Files\Dialogue", System.Environment.CurrentDirectory);
         static string PATH_TO_SCHEDULES = string.Format(@"{0}\..\..\..\..\Adventure\Content\Data\Schedules", System.Environment.CurrentDirectory);
 
+        static Dictionary<string, List<string>> _diCutsceneDialogue;
         static Dictionary<string, List<string>> _diCutscenes;
         static Dictionary<string, Dictionary<string, List<string>>> _diCharacterSchedules;
         static Dictionary<string, Dictionary<string, string>> _diCharacterDialogue;
@@ -130,6 +131,7 @@ namespace Database_Editor
             LoadXMLDictionary(WORKERS_XML_FILE, WORKERS_ITEM_TAG, DEFAULT_WORLD_TAG);
             LoadXMLDictionary(CONFIG_XML_FILE, CONFIG_ITEM_TAG, CONFIG_WORLD_TAG);
             _diCutscenes = ReadXMLFileToDictionaryStringList(CUTSCENE_XML_FILE);
+            _diCutsceneDialogue = ReadXMLFileToDictionaryStringList(CUTSCENE_DIALOGUE_XML_FILE);
 
             LoadXMLDictionary(MAGIC_SHOP_XML_FILE, SHOP_TAG, DEFAULT_WORLD_TAG);
             LoadXMLDictionary(BUILDINGS_XML_FILE, SHOP_TAG, DEFAULT_WORLD_TAG);
@@ -681,33 +683,59 @@ namespace Database_Editor
         #region EventHandlers
         private void btnDialogue_Click(object sender, EventArgs e)
         {
+            string npcKey = @"\NPC_" + _diTabIndices["Characters"].ToString("00") + ".xml";
             FormCharExtraData frm = null;
             if (cbEditableCharData.SelectedItem.ToString() == "Dialogue")
             {
-                string key = PATH_TO_DIALOGUE + @"\NPC_" + _diTabIndices["Characters"].ToString("00") + ".xml";
+                string key = PATH_TO_DIALOGUE + npcKey;
                 if (!_diCharacterDialogue.ContainsKey(key))
                 {
                     _diCharacterDialogue[key] = new Dictionary<string, string> { ["New"] = "" };
                 }
 
-                frm = new FormCharExtraData("Schedule", _diCharacterDialogue[key]);
-                frm.Show();
+                frm = new FormCharExtraData("Dialogue", _diCharacterDialogue[key]);
+                frm.ShowDialog();
 
                 _diCharacterDialogue[key] = frm.StringData;
             }
             else if (cbEditableCharData.SelectedItem.ToString() == "Schedule")
             {
-                string key = PATH_TO_SCHEDULES + @"\NPC_" + _diTabIndices["Characters"].ToString("00") + ".xml";
+                string key = PATH_TO_SCHEDULES + npcKey;
                 if (!_diCharacterSchedules.ContainsKey(key))
                 {
                     _diCharacterSchedules[key] = new Dictionary<string, List<string>> { ["New"] = new List<string>() };
                 }
 
                 frm = new FormCharExtraData("Schedule", _diCharacterSchedules[key]);
-                frm.Show();
+                frm.ShowDialog();
 
                 _diCharacterSchedules[key] = frm.ListData;
             }
+        }
+        private void btnEditCutsceneDialogue_Click(object sender, EventArgs e)
+        {
+            string keyValue = dgvCutscenes.CurrentCell.Value.ToString();
+            if (!_diCutsceneDialogue.ContainsKey(keyValue))
+            {
+                _diCutsceneDialogue[keyValue] = new List<string>() { "" };
+            }
+            Dictionary<string, string> tags = new Dictionary<string, string>();
+            foreach(string s in _diCutsceneDialogue[keyValue])
+            {
+                string[] split = s.Split(new char[] { '[', ':', ']' }, StringSplitOptions.RemoveEmptyEntries);
+                tags[split[0]] = split.Length > 1 ? split[1] : "";
+            }
+
+            FormCharExtraData frm = new FormCharExtraData("Cutscene Dialogue", tags);
+            frm.ShowDialog();
+
+            List<string> listTags = new List<string>();
+            foreach(KeyValuePair<string, string> kvp in frm.StringData)
+            {
+                listTags.Add("[" + kvp.Key + ":" + kvp.Value + "]");
+            }
+
+            _diCutsceneDialogue[keyValue] = listTags;
         }
 
         private void SaveGenericInfo(List<XMLData> liData, string tabIndex, string textIDPrefix, XMLTypeEnum xmlType, TextBox tbName, ComboBox cb, DataGridView baseGridView, DataGridView dgTags, string colID, string colName, TextBox tbDescription = null, string itemTags = "", string objectTags = "")
@@ -1062,20 +1090,21 @@ namespace Database_Editor
                 {
                     data.StripSpecialCharacter();
                 }
-                SaveXMLData(_diBasicXML[s], s, PATH_TO_DATA, sWriter);
+                SaveXMLData(_diBasicXML[s], s, sWriter);
             }
 
             foreach(string s in _diCharacterDialogue.Keys)
             {
-                SaveXMLDictionary(_diCharacterDialogue[s], s, PATH_TO_DATA, sWriter);
+                SaveXMLDictionary(_diCharacterDialogue[s], s, sWriter);
             }
 
             foreach (string s in _diCharacterSchedules.Keys)
             {
-                SaveXMLDictionaryList(_diCharacterSchedules[s], s, PATH_TO_SCHEDULES, sWriter);
+                SaveXMLDictionaryList(_diCharacterSchedules[s], s, sWriter);
             }
 
-            SaveXMLDictionaryList(_diCutscenes, CUTSCENE_XML_FILE, PATH_TO_DATA, sWriter);
+            SaveXMLDictionaryList(_diCutscenes, CUTSCENE_XML_FILE, sWriter);
+            SaveXMLDictionaryList(_diCutsceneDialogue, CUTSCENE_DIALOGUE_XML_FILE, sWriter);
 
             string mapPath = PATH_TO_MAPS;
             if (!Directory.Exists(mapPath)) { Directory.CreateDirectory(mapPath); }
@@ -1087,9 +1116,8 @@ namespace Database_Editor
                 SaveTMXData(kvp.Value, dirInfo.FullName + "\\" + Path.GetFileName(kvp.Key) + ".tmx");
             }
 
-
             SaveItemXMLData(itemDataList, PATH_TO_DATA, sWriter);
-            SaveXMLData(worldObjectDataList, WORLD_OBJECTS_DATA_XML_FILE, PATH_TO_DATA, sWriter);
+            SaveXMLData(worldObjectDataList, WORLD_OBJECTS_DATA_XML_FILE, sWriter);
             CloseStreamWriter(ref sWriter);
 
             if (_iNextCurrID != -1)
@@ -1145,7 +1173,7 @@ namespace Database_Editor
             dataFile.Close();
         }
 
-        public void SaveXMLDictionaryList(Dictionary<string, List<string>> dataList, string fileName, string pathToDir, StreamWriter sWriter)
+        public void SaveXMLDictionaryList(Dictionary<string, List<string>> dataList, string fileName, StreamWriter sWriter)
         {
             StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[string, List[string]]");
 
@@ -1165,7 +1193,7 @@ namespace Database_Editor
             CloseStreamWriter(ref dataFile);
         }
 
-        public void SaveXMLDictionary(Dictionary<string, string> dataList, string fileName, string pathToDir, StreamWriter sWriter)
+        public void SaveXMLDictionary(Dictionary<string, string> dataList, string fileName, StreamWriter sWriter)
         {
             StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[string, string]");
 
@@ -1177,7 +1205,7 @@ namespace Database_Editor
             CloseStreamWriter(ref dataFile);
         }
 
-        public void SaveXMLData(List<XMLData> dataList, string fileName, string pathToDir, StreamWriter sWriter)
+        public void SaveXMLData(List<XMLData> dataList, string fileName, StreamWriter sWriter)
         {
             StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[int, string]");
             

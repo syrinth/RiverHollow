@@ -128,6 +128,7 @@
             this.label16 = new System.Windows.Forms.Label();
             this.dgvCutscenes = new System.Windows.Forms.DataGridView();
             this.colCutscenesName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnEditCutsceneDialogue = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -1028,6 +1029,7 @@
             // 
             // tabCutscenes
             // 
+            this.tabCutscenes.Controls.Add(this.btnEditCutsceneDialogue);
             this.tabCutscenes.Controls.Add(this.tbCutsceneDetails);
             this.tabCutscenes.Controls.Add(this.label17);
             this.tabCutscenes.Controls.Add(this.tbCutsceneTriggers);
@@ -1145,6 +1147,16 @@
             this.colCutscenesName.HeaderText = "Name";
             this.colCutscenesName.Name = "colCutscenesName";
             this.colCutscenesName.ReadOnly = true;
+            // 
+            // btnEditCutsceneDialogue
+            // 
+            this.btnEditCutsceneDialogue.Location = new System.Drawing.Point(320, 394);
+            this.btnEditCutsceneDialogue.Name = "btnEditCutsceneDialogue";
+            this.btnEditCutsceneDialogue.Size = new System.Drawing.Size(96, 23);
+            this.btnEditCutsceneDialogue.TabIndex = 56;
+            this.btnEditCutsceneDialogue.Text = "Edit Dialogue";
+            this.btnEditCutsceneDialogue.UseVisualStyleBackColor = true;
+            this.btnEditCutsceneDialogue.Click += new System.EventHandler(this.btnEditCutsceneDialogue_Click);
             // 
             // frmDBEditor
             // 
@@ -1293,6 +1305,7 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.DataGridView dgvCutscenes;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCutscenesName;
+        private System.Windows.Forms.Button btnEditCutsceneDialogue;
     }
 }
 

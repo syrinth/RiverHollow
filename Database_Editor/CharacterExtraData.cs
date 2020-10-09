@@ -109,34 +109,44 @@ namespace Database_Editor
             {
                 if (_eDataMode == DataMode.Dialogue)
                 {
-                    _diStringData.Remove(_diStringData.ElementAt(_iIndex).Key);
-                    _diStringData[tbCharExtraDataName.Text] = tbCharExtraDataInfo.Text;
-                    DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
-                    row.Cells["colCharExtraID"].Value = tbCharExtraDataName.Text;
+                    SaveDictionaryData();
 
                     _iIndex = e.RowIndex;
                     LoadDataInfo(_iIndex);
                 }
                 else if (_eDataMode == DataMode.Schedule)
                 {
-                    _diListData.Remove(_diListData.ElementAt(_iIndex).Key);
-
-                    List<string> listInfo = new List<string>();
-                    foreach(DataGridViewRow r in dgvEditTags.Rows)
-                    {
-                        if (r.Cells[0].Value != null)
-                        {
-                            listInfo.Add(r.Cells[0].Value.ToString());
-                        }
-                    }
-                    _diListData[tbCharExtraDataName.Text] = listInfo;
-                    DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
-                    row.Cells["colCharExtraID"].Value = tbCharExtraDataName.Text;
+                    SaveListData();
 
                     _iIndex = e.RowIndex;
                     LoadDataInfoList(_iIndex);
                 }
             }
+        }
+
+        private void SaveDictionaryData()
+        {
+            _diStringData.Remove(_diStringData.ElementAt(_iIndex).Key);
+            _diStringData[tbCharExtraDataName.Text] = tbCharExtraDataInfo.Text;
+            DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
+            row.Cells["colCharExtraID"].Value = tbCharExtraDataName.Text;
+        }
+
+        private void SaveListData()
+        {
+            _diListData.Remove(_diListData.ElementAt(_iIndex).Key);
+
+            List<string> listInfo = new List<string>();
+            foreach (DataGridViewRow r in dgvEditTags.Rows)
+            {
+                if (r.Cells[0].Value != null)
+                {
+                    listInfo.Add(r.Cells[0].Value.ToString());
+                }
+            }
+            _diListData[tbCharExtraDataName.Text] = listInfo;
+            DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
+            row.Cells["colCharExtraID"].Value = tbCharExtraDataName.Text;
         }
 
         private void btnAddNew_Click(object sender, EventArgs e)
