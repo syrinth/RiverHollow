@@ -2,7 +2,7 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[string, List[string]]">
     <Item>
-      <Key>0</Key>
+      <Key>Amanda and Gail</Key>
       <Value>
         <Item>[Time:6 16]</Item>
         <Item>[Map:mapHouseNPC1][Player:Entrance][Actors:5-1CS0 18-8CS0]</Item>
@@ -10,7 +10,7 @@
       </Value>
     </Item>
     <Item>
-      <Key>1</Key>
+      <Key>Intro</Key>
       <Value>
         <Item></Item>
         <Item>[Map:mapManorGrounds][Player:PlayerSpawn][Actors:11-CS1Spawn]</Item>
@@ -18,7 +18,7 @@
       </Value>
     </Item>
     <Item>
-      <Key>2</Key>
+      <Key>Harp</Key>
       <Value>
         <Item></Item>
         <Item>[Map][Player][Actors:0-NPC0][Deactivate:0]</Item>

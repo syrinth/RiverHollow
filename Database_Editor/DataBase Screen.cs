@@ -948,6 +948,8 @@ namespace Database_Editor
 
             DataGridViewRow updatedRow = dgvCutscenes.Rows[_diTabIndices["Cutscenes"]];
 
+            _diCutscenes.Remove(keyName);
+            _diCutscenes[tbCutsceneName.Text] = listData;
             updatedRow.Cells["colCutscenesName"].Value = tbCutsceneName.Text;
         }
         private void SaveMonsterInfo(List<XMLData> liData)
