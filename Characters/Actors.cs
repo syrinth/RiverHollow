@@ -2211,9 +2211,9 @@ namespace RiverHollow.Characters
 
             if (stringData.ContainsKey("ShopData"))
             {
-                foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.GetMerchandise(stringData["ShopData"]))
+                foreach (Dictionary<string, string> di in DataManager.GetShopData(stringData["ShopData"]))
                 {
-                    _liMerchandise.Add(new Merchandise(kvp.Value));
+                    _liMerchandise.Add(new Merchandise(di));
                 }
             }
         }

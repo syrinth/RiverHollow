@@ -460,11 +460,6 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/MonsterInfo.xml
 
-#begin Data/Text Files/CombatSkillsText.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/CombatSkillsText.xml
-
 #begin Data/Text Files/Dialogue/Adventurers.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -2486,4 +2481,9 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Schedules/NPC_01.xml
+
+#begin Data/Shops.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Shops.xml
 

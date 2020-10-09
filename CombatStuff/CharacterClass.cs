@@ -54,10 +54,10 @@ namespace RiverHollow.CombatStuff
         private float _fWinFrameLength;
         public float WinFramesLength => _fWinFrameLength;
 
-        private string _name;
-        public string Name { get => _name; }
-        private string _description;
-        public string Description { get => _description; }
+        private string _sName;
+        public string Name { get => _sName; }
+        private string _sDescription;
+        public string Description { get => _sDescription; }
         public List<MenuAction> ActionList;
         public List<CombatAction> _liSpecialActionsList;
         WeaponEnum _weaponType;
@@ -80,8 +80,8 @@ namespace RiverHollow.CombatStuff
         protected void ImportBasics(int id, Dictionary<string, string> stringData)
         {
             _iID = id;
-
-            DataManager.GetClassText(_iID, ref _name, ref _description);
+            DataManager.GetTextData("Class_" + _iID, ref _sName, "Name");
+            DataManager.GetTextData("Class_" + _iID, ref _sDescription, "Description");
 
             _weaponType = Util.ParseEnum<WeaponEnum>(stringData["Weapon"]);
             _armorType = Util.ParseEnum<ArmorEnum>(stringData["Armor"]);

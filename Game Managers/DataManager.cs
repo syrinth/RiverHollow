@@ -38,7 +38,6 @@ namespace RiverHollow.Game_Managers
         static Dictionary<string, string> _diGameText;
         static Dictionary<int, string> _diMonsterInfo;
         static Dictionary<int, string> _diStatusEffectText;
-        static Dictionary<string, string> _diCombatSkillsText;
         static Dictionary<string, string> _diAdventurerDialogue;
         public static Dictionary<int, string> DiUpgrades { get; private set; }
         static Dictionary<int, string> _diClassText;
@@ -46,7 +45,7 @@ namespace RiverHollow.Game_Managers
 
         static Dictionary<int, List<string>> _diSongs;
         static Dictionary<int, Dictionary<string, string>> _diNPCDialogue;
-        static Dictionary<string, Dictionary<int, Dictionary<string, string>>> _diMerchandise;
+        static Dictionary<string, List<Dictionary<string, string>>> _diShops;
 
         static Dictionary<int, Dictionary<string, string>> _diVillagerData;
         public static Dictionary<int, Dictionary<string, string>> DiVillagerData => _diVillagerData;
@@ -100,7 +99,7 @@ namespace RiverHollow.Game_Managers
             LoadBMFonts(Content);
             LoadTextFiles(Content);
             LoadCharacters(Content);
-            LoadMerchandise(Content);
+            LoadShopFile(Content);
             LoadDictionaries(Content);
 
             AddDirectoryTextures(FOLDER_ITEMS, Content);
@@ -176,7 +175,6 @@ namespace RiverHollow.Game_Managers
             _diGameText = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + "GameText");
             _diMonsterInfo = Content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + "MonsterInfo");
             _diStatusEffectText = Content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + "StatusText");
-            _diCombatSkillsText = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + "CombatSkillsText");
 
             _diSongs = Content.Load<Dictionary<int, List<string>>>(@"Data\Songs");
             _diAdventurerDialogue = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + @"Dialogue\Adventurers");
@@ -251,18 +249,19 @@ namespace RiverHollow.Game_Managers
             _diBMFonts.Add(font, Content.Load<BitmapFont>(font));
         }
 
-        private static void LoadMerchandise(ContentManager Content)
+        private static void LoadShopFile(ContentManager Content)
         {
-            _diMerchandise = new Dictionary<string, Dictionary<int, Dictionary<string, string>>>();
-            LoadMerchFile(@"Data\Shops\Buildings", Content);
-            LoadMerchFile(@"Data\Shops\Adventurers", Content);
-            LoadMerchFile(@"Data\Shops\MagicShop", Content);
-        }
-        private static void LoadMerchFile(string file, ContentManager Content)
-        {
-            Dictionary<int, Dictionary<string, string>> dictionary = new Dictionary<int, Dictionary<string, string>>();
-            LoadDictionary(ref dictionary, file, Content);
-            _diMerchandise[Path.GetFileNameWithoutExtension(file)] = dictionary;
+            Dictionary<string, List<string>> shopFile = Content.Load<Dictionary<string, List<string>>>(@"Data\Shops");
+
+            _diShops = new Dictionary<string, List<Dictionary<string, string>>>();
+
+            foreach(KeyValuePair<string, List<string>> kvp in  shopFile){
+                _diShops[kvp.Key] = new List<Dictionary<string, string>>();
+                foreach (string s in kvp.Value)
+                {
+                    _diShops[kvp.Key].Add(TaggedStringToDictionary(s));
+                }
+            }
         }
 
         private static void LoadNPCs(ContentManager Content)
@@ -275,7 +274,7 @@ namespace RiverHollow.Game_Managers
                 Dictionary<string, string> diData = _diVillagerData[npcData.Key];
                 switch (diData["Type"])
                 {
-                    case "ShopKeeper":
+                    case "Shopkeeper":
                         n = new ShopKeeper(npcData.Key, diData);
                         break;
                     case "Eligible":
@@ -525,12 +524,6 @@ namespace RiverHollow.Game_Managers
             return m;
         }
 
-        public static void GetActionText(int id, ref string name, ref string desc)
-        {
-            string val = "Action " + id;
-            name = _diCombatSkillsText[val].Split('/')[0];
-            desc = _diCombatSkillsText[val].Split('/')[1];
-        }
         public static CombatAction GetActionByIndex(int id)
         {
             if (id != -1)
@@ -608,9 +601,9 @@ namespace RiverHollow.Game_Managers
             return _diBMFonts[font];
         }
 
-        public static Dictionary<int, Dictionary<string, string>> GetMerchandise(string file)
+        public static List<Dictionary<string, string>> GetShopData(string file)
         {
-            return _diMerchandise[file];
+            return _diShops[file];
         }
 
         public static string GetGameText(string key)

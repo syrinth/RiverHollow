@@ -19,13 +19,13 @@ namespace RiverHollow.CombatStuff
 {
     public class MenuAction
     {
-        protected int _id;
+        protected int _iId;
 
         protected ActionEnum _eActionType;
         protected string _sName;
         public string Name => _sName;
-        protected string _description;
-        public string Description => _description;
+        protected string _sDescription;
+        public string Description => _sDescription;
 
         protected Vector2 _vIconGrid;
         public Vector2 IconGrid => _vIconGrid;
@@ -33,11 +33,11 @@ namespace RiverHollow.CombatStuff
         public MenuAction() { }
         public MenuAction(int id, ActionEnum actionType, Vector2 vGrid)
         {
-            _id = id;
+            _iId = id;
             _eActionType = actionType;
             _vIconGrid = vGrid;
-            DataManager.GetTextData("Action_" + _id, ref _sName, "Name");
-            DataManager.GetTextData("Action_" + _id, ref _description, "Description");
+            DataManager.GetTextData("Action_" + _iId, ref _sName, "Name");
+            DataManager.GetTextData("Action_" + _iId, ref _sDescription, "Description");
         }
 
         public bool IsActionMenu() { return _eActionType == ActionEnum.MenuAction; }
@@ -141,8 +141,9 @@ namespace RiverHollow.CombatStuff
         }
         protected void ImportBasics(int id, Dictionary<string, string> stringData)
         {
-            _id = id;
-            DataManager.GetActionText(_id, ref _sName, ref _description);
+            _iId = id;
+            DataManager.GetTextData("Action_" + _iId, ref _sName, "Name");
+            DataManager.GetTextData("Action_" + _iId, ref _sDescription, "Description");
 
             _eActionType = Util.ParseEnum<ActionEnum>(stringData["Type"]);
             if (stringData.ContainsKey("Element")) { _eElement = Util.ParseEnum<ElementEnum>(stringData["Element"]); }
