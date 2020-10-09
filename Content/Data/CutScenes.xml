@@ -1,37 +1,27 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[string, List[string]]">
-    <!--Key: ID, ScheduleData-->
     <Item>
       <Key>0</Key>
       <Value>
-        <!--Triggers for the cut scene [time:x y][friends:name1-x name2-y ...]-->
         <Item>[Time:6 16]</Item>
-        <!--Setup Details [map:mapName][actors:ID-spawn name2-spawn ...][playerSpawn:Player1]-->
         <Item>[Map:mapHouseNPC1][Player:Entrance][Actors:5-1CS0 18-8CS0]</Item>
-        <!--CutScene Sequencing Move<dir>-<char>-<numTiles> Speak-<id>-<dialogKey> Face<dir>-<char>-->
         <Item>[Speak:18-1][Speak:5-2][Move:5-3-Down][Face:5-Left][Speak:18-3][Face:5-Right][Speak:5-4][Face:5-Down][Speak:5-5]</Item>
       </Value>
     </Item>
     <Item>
       <Key>1</Key>
       <Value>
-        <!--Triggers for the cut scene [time:x y][friends:name1-x name2-y ...]-->
         <Item></Item>
-        <!--Setup Details [map:mapName][actors:ID-spawn name2-spawn ...][playerSpawn:Player1]-->
         <Item>[Map:mapManorGrounds][Player:PlayerSpawn][Actors:11-CS1Spawn]</Item>
-        <!--CutScene Sequencing Move<dir>-<char>-<numTiles> Speak-<id>-<dialogKey> Face<dir>-<char>-->
         <Item>[Background:Textures\Valley][Text:IntroText][RemoveBackground][Face:11-Up Player-Up][Speed:Player-0.5 11-0.2][Speak:11-1][Move:11-3-Up Player-3-Up][Speak:11-2][Face:11-Left Player-Right][Speak:11-3][Wait:0.5][Move:11-1-Down][Wait:1][Face:11-Left][Speak:11-4][Wait:1][Move:11-5-Down][Quest:1][Speed:Player-1]</Item>
       </Value>
     </Item>
     <Item>
       <Key>2</Key>
       <Value>
-        <!--Triggers for the cut scene [time:x y][friends:name1-x name2-y ...]-->
         <Item></Item>
-        <!--Setup Details [map:mapName][actors:ID-spawn name2-spawn ...][playerSpawn:Player1]-->
         <Item>[Map][Player][Actors:0-NPC0][Deactivate:0]</Item>
-        <!--CutScene Sequencing Move<dir>-<char>-<numTiles> Speak-<id>-<dialogKey> Face<dir>-<char>-->
         <Item>[Text:IntroText][Speak:0-1][Activate:0][Move:0-2-Down][Speak:0-2][Speed:0-2][Speak:0-3]</Item>
       </Value>
     </Item>
