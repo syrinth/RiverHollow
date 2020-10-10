@@ -1,7 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: Index>0 Value:texture/width height/firstBaseSquare baseWidth baseHeight/EntranceSquareXY/workerType-->
     <Item>
       <Key>0</Key>
       <Value>[Texture:Manor][Dimensions:176-208][FirstBase:0-112][Width:176][Height:80][Entrance:80-188-16-4][Manor][Unique][Workers:1-2-3-4-5-6-7-8][WorkersPerLevel:2][UpgradeTime:3]</Value>
@@ -22,7 +21,6 @@
       <Key>4</Key>
       <Value>[Texture:Cottage][Dimensions:112-128][FirstBase:0-64][Width:112][Height:64][Entrance:112-128-16-32][Workers:2-4][UpgradeTime:3][Builder:14]</Value>
     </Item>
-    <!--River Hollow Town Buildings-->
     <Item>
       <Key>5</Key>
       <Value>[Texture:TownStore][Dimensions:112-128][FirstBase:0-64][Width:112][Height:64][Entrance:56-97-16-32]</Value>

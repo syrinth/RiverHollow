@@ -346,6 +346,30 @@
       <Value>[Name:Mushroom Lightning]</Value>
     </Item>
     <Item>
+      <Key>Building_0</Key>
+      <Value>[Name:Manor]</Value>
+    </Item>
+    <Item>
+      <Key>Building_1</Key>
+      <Value>[Name:Wizard's Tower]</Value>
+    </Item>
+    <Item>
+      <Key>Building_2</Key>
+      <Value>[Name:Barracks]</Value>
+    </Item>
+    <Item>
+      <Key>Building_3</Key>
+      <Value>[Name:Lodge]</Value>
+    </Item>
+    <Item>
+      <Key>Building_4</Key>
+      <Value>[Name:Cottage]</Value>
+    </Item>
+    <Item>
+      <Key>Building_5</Key>
+      <Value>[Name:Town Store]</Value>
+    </Item>
+    <Item>
       <Key>Item_0</Key>
       <Value>[Name:Stone][Description:Stone, for building things]</Value>
     </Item>

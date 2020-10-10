@@ -2467,3 +2467,8 @@
 /processor:PassThroughProcessor
 /build:Data/Schedules/NPC_01.xml
 
+#begin Data/Shops.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Shops.xml
+

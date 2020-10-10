@@ -143,6 +143,7 @@
             this.colMonstersID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colMonstersName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabActions = new System.Windows.Forms.TabPage();
+            this.cbActionType = new System.Windows.Forms.ComboBox();
             this.btnActionCancel = new System.Windows.Forms.Button();
             this.dgvActionTags = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -155,7 +156,30 @@
             this.dgvActions = new System.Windows.Forms.DataGridView();
             this.colActionsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colActionsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cbActionType = new System.Windows.Forms.ComboBox();
+            this.tabShops = new System.Windows.Forms.TabPage();
+            this.btnShopCancel = new System.Windows.Forms.Button();
+            this.dgvShopTags = new System.Windows.Forms.DataGridView();
+            this.colShopTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tbShopName = new System.Windows.Forms.TextBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.dgvShops = new System.Windows.Forms.DataGridView();
+            this.colShopsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabBuildings = new System.Windows.Forms.TabPage();
+            this.tabSpirits = new System.Windows.Forms.TabPage();
+            this.tabSummons = new System.Windows.Forms.TabPage();
+            this.tabStatusEffects = new System.Windows.Forms.TabPage();
+            this.btnBuildingCancel = new System.Windows.Forms.Button();
+            this.dgvBuildingTags = new System.Windows.Forms.DataGridView();
+            this.tbBuildingDescription = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.tbBuildingID = new System.Windows.Forms.TextBox();
+            this.tbBuildingName = new System.Windows.Forms.TextBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.dgvBuildings = new System.Windows.Forms.DataGridView();
+            this.colBuildingsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBuildingsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBuildingTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -185,6 +209,12 @@
             this.tabActions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActionTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActions)).BeginInit();
+            this.tabShops.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvShopTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvShops)).BeginInit();
+            this.tabBuildings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBuildingTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBuildings)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -264,6 +294,11 @@
             this.tabCtl.Controls.Add(this.tabCutscenes);
             this.tabCtl.Controls.Add(this.tabMonsters);
             this.tabCtl.Controls.Add(this.tabActions);
+            this.tabCtl.Controls.Add(this.tabShops);
+            this.tabCtl.Controls.Add(this.tabBuildings);
+            this.tabCtl.Controls.Add(this.tabSpirits);
+            this.tabCtl.Controls.Add(this.tabSummons);
+            this.tabCtl.Controls.Add(this.tabStatusEffects);
             this.tabCtl.Location = new System.Drawing.Point(12, 27);
             this.tabCtl.Name = "tabCtl";
             this.tabCtl.SelectedIndex = 0;
@@ -1345,6 +1380,15 @@
             this.tabActions.Text = "Actions";
             this.tabActions.UseVisualStyleBackColor = true;
             // 
+            // cbActionType
+            // 
+            this.cbActionType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbActionType.FormattingEnabled = true;
+            this.cbActionType.Location = new System.Drawing.Point(320, 110);
+            this.cbActionType.Name = "cbActionType";
+            this.cbActionType.Size = new System.Drawing.Size(149, 21);
+            this.cbActionType.TabIndex = 44;
+            // 
             // btnActionCancel
             // 
             this.btnActionCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1464,14 +1508,248 @@
             this.colActionsName.Name = "colActionsName";
             this.colActionsName.ReadOnly = true;
             // 
-            // cbActionType
+            // tabShops
             // 
-            this.cbActionType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbActionType.FormattingEnabled = true;
-            this.cbActionType.Location = new System.Drawing.Point(320, 110);
-            this.cbActionType.Name = "cbActionType";
-            this.cbActionType.Size = new System.Drawing.Size(149, 21);
-            this.cbActionType.TabIndex = 44;
+            this.tabShops.Controls.Add(this.btnShopCancel);
+            this.tabShops.Controls.Add(this.dgvShopTags);
+            this.tabShops.Controls.Add(this.tbShopName);
+            this.tabShops.Controls.Add(this.label24);
+            this.tabShops.Controls.Add(this.dgvShops);
+            this.tabShops.Location = new System.Drawing.Point(4, 22);
+            this.tabShops.Name = "tabShops";
+            this.tabShops.Size = new System.Drawing.Size(790, 425);
+            this.tabShops.TabIndex = 9;
+            this.tabShops.Text = "Shops";
+            this.tabShops.UseVisualStyleBackColor = true;
+            // 
+            // btnShopCancel
+            // 
+            this.btnShopCancel.Location = new System.Drawing.Point(709, 394);
+            this.btnShopCancel.Name = "btnShopCancel";
+            this.btnShopCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnShopCancel.TabIndex = 58;
+            this.btnShopCancel.Text = "Cancel";
+            this.btnShopCancel.UseVisualStyleBackColor = true;
+            this.btnShopCancel.Click += new System.EventHandler(this.btnShopCancel_Click);
+            // 
+            // dgvShopTags
+            // 
+            this.dgvShopTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvShopTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colShopTags});
+            this.dgvShopTags.Location = new System.Drawing.Point(320, 33);
+            this.dgvShopTags.Name = "dgvShopTags";
+            this.dgvShopTags.RowHeadersVisible = false;
+            this.dgvShopTags.Size = new System.Drawing.Size(464, 355);
+            this.dgvShopTags.TabIndex = 57;
+            // 
+            // colShopTags
+            // 
+            this.colShopTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colShopTags.HeaderText = "Tags";
+            this.colShopTags.Name = "colShopTags";
+            // 
+            // tbShopName
+            // 
+            this.tbShopName.Location = new System.Drawing.Point(361, 6);
+            this.tbShopName.Name = "tbShopName";
+            this.tbShopName.Size = new System.Drawing.Size(108, 20);
+            this.tbShopName.TabIndex = 54;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(317, 9);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(38, 13);
+            this.label24.TabIndex = 53;
+            this.label24.Text = "Name:";
+            // 
+            // dgvShops
+            // 
+            this.dgvShops.AllowUserToAddRows = false;
+            this.dgvShops.AllowUserToDeleteRows = false;
+            this.dgvShops.AllowUserToResizeColumns = false;
+            this.dgvShops.AllowUserToResizeRows = false;
+            this.dgvShops.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvShops.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colShopsName});
+            this.dgvShops.Location = new System.Drawing.Point(6, 6);
+            this.dgvShops.MultiSelect = false;
+            this.dgvShops.Name = "dgvShops";
+            this.dgvShops.ReadOnly = true;
+            this.dgvShops.RowHeadersVisible = false;
+            this.dgvShops.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvShops.Size = new System.Drawing.Size(308, 411);
+            this.dgvShops.TabIndex = 52;
+            this.dgvShops.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvShops_CellClick);
+            // 
+            // colShopsName
+            // 
+            this.colShopsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colShopsName.FillWeight = 90F;
+            this.colShopsName.HeaderText = "Name";
+            this.colShopsName.Name = "colShopsName";
+            this.colShopsName.ReadOnly = true;
+            // 
+            // tabBuildings
+            // 
+            this.tabBuildings.Controls.Add(this.btnBuildingCancel);
+            this.tabBuildings.Controls.Add(this.dgvBuildingTags);
+            this.tabBuildings.Controls.Add(this.tbBuildingDescription);
+            this.tabBuildings.Controls.Add(this.label23);
+            this.tabBuildings.Controls.Add(this.label25);
+            this.tabBuildings.Controls.Add(this.tbBuildingID);
+            this.tabBuildings.Controls.Add(this.tbBuildingName);
+            this.tabBuildings.Controls.Add(this.label26);
+            this.tabBuildings.Controls.Add(this.dgvBuildings);
+            this.tabBuildings.Location = new System.Drawing.Point(4, 22);
+            this.tabBuildings.Name = "tabBuildings";
+            this.tabBuildings.Size = new System.Drawing.Size(790, 425);
+            this.tabBuildings.TabIndex = 10;
+            this.tabBuildings.Text = "Buildings";
+            this.tabBuildings.UseVisualStyleBackColor = true;
+            // 
+            // tabSpirits
+            // 
+            this.tabSpirits.Location = new System.Drawing.Point(4, 22);
+            this.tabSpirits.Name = "tabSpirits";
+            this.tabSpirits.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.tabSpirits.Size = new System.Drawing.Size(790, 425);
+            this.tabSpirits.TabIndex = 11;
+            this.tabSpirits.Text = "Spirits";
+            this.tabSpirits.UseVisualStyleBackColor = true;
+            // 
+            // tabSummons
+            // 
+            this.tabSummons.Location = new System.Drawing.Point(4, 22);
+            this.tabSummons.Name = "tabSummons";
+            this.tabSummons.Size = new System.Drawing.Size(790, 425);
+            this.tabSummons.TabIndex = 12;
+            this.tabSummons.Text = "Summons";
+            this.tabSummons.UseVisualStyleBackColor = true;
+            // 
+            // tabStatusEffects
+            // 
+            this.tabStatusEffects.Location = new System.Drawing.Point(4, 22);
+            this.tabStatusEffects.Name = "tabStatusEffects";
+            this.tabStatusEffects.Size = new System.Drawing.Size(790, 425);
+            this.tabStatusEffects.TabIndex = 13;
+            this.tabStatusEffects.Text = "Status Effects";
+            this.tabStatusEffects.UseVisualStyleBackColor = true;
+            // 
+            // btnBuildingCancel
+            // 
+            this.btnBuildingCancel.Location = new System.Drawing.Point(709, 394);
+            this.btnBuildingCancel.Name = "btnBuildingCancel";
+            this.btnBuildingCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnBuildingCancel.TabIndex = 34;
+            this.btnBuildingCancel.Text = "Cancel";
+            this.btnBuildingCancel.UseVisualStyleBackColor = true;
+            this.btnBuildingCancel.Click += new System.EventHandler(this.btnBuildingCancel_Click);
+            // 
+            // dgvBuildingTags
+            // 
+            this.dgvBuildingTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvBuildingTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colBuildingTag});
+            this.dgvBuildingTags.Location = new System.Drawing.Point(320, 110);
+            this.dgvBuildingTags.Name = "dgvBuildingTags";
+            this.dgvBuildingTags.RowHeadersVisible = false;
+            this.dgvBuildingTags.Size = new System.Drawing.Size(464, 278);
+            this.dgvBuildingTags.TabIndex = 33;
+            // 
+            // tbBuildingDescription
+            // 
+            this.tbBuildingDescription.Location = new System.Drawing.Point(320, 51);
+            this.tbBuildingDescription.Multiline = true;
+            this.tbBuildingDescription.Name = "tbBuildingDescription";
+            this.tbBuildingDescription.Size = new System.Drawing.Size(464, 53);
+            this.tbBuildingDescription.TabIndex = 32;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(317, 35);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(63, 13);
+            this.label23.TabIndex = 31;
+            this.label23.Text = "Description:";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(714, 9);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(21, 13);
+            this.label25.TabIndex = 30;
+            this.label25.Text = "ID:";
+            // 
+            // tbBuildingID
+            // 
+            this.tbBuildingID.Location = new System.Drawing.Point(741, 6);
+            this.tbBuildingID.Name = "tbBuildingID";
+            this.tbBuildingID.Size = new System.Drawing.Size(43, 20);
+            this.tbBuildingID.TabIndex = 29;
+            // 
+            // tbBuildingName
+            // 
+            this.tbBuildingName.Location = new System.Drawing.Point(361, 6);
+            this.tbBuildingName.Name = "tbBuildingName";
+            this.tbBuildingName.Size = new System.Drawing.Size(108, 20);
+            this.tbBuildingName.TabIndex = 28;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(317, 9);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(38, 13);
+            this.label26.TabIndex = 27;
+            this.label26.Text = "Name:";
+            // 
+            // dgvBuildings
+            // 
+            this.dgvBuildings.AllowUserToAddRows = false;
+            this.dgvBuildings.AllowUserToDeleteRows = false;
+            this.dgvBuildings.AllowUserToResizeColumns = false;
+            this.dgvBuildings.AllowUserToResizeRows = false;
+            this.dgvBuildings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvBuildings.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colBuildingsID,
+            this.colBuildingsName});
+            this.dgvBuildings.Location = new System.Drawing.Point(6, 6);
+            this.dgvBuildings.MultiSelect = false;
+            this.dgvBuildings.Name = "dgvBuildings";
+            this.dgvBuildings.ReadOnly = true;
+            this.dgvBuildings.RowHeadersVisible = false;
+            this.dgvBuildings.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvBuildings.Size = new System.Drawing.Size(308, 411);
+            this.dgvBuildings.TabIndex = 26;
+            this.dgvBuildings.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBuildings_CellClick);
+            // 
+            // colBuildingsID
+            // 
+            this.colBuildingsID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colBuildingsID.FillWeight = 10F;
+            this.colBuildingsID.HeaderText = "ID";
+            this.colBuildingsID.Name = "colBuildingsID";
+            this.colBuildingsID.ReadOnly = true;
+            this.colBuildingsID.Width = 31;
+            // 
+            // colBuildingsName
+            // 
+            this.colBuildingsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colBuildingsName.FillWeight = 90F;
+            this.colBuildingsName.HeaderText = "Name";
+            this.colBuildingsName.Name = "colBuildingsName";
+            this.colBuildingsName.ReadOnly = true;
+            // 
+            // colBuildingTag
+            // 
+            this.colBuildingTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colBuildingTag.HeaderText = "Tags";
+            this.colBuildingTag.Name = "colBuildingTag";
             // 
             // frmDBEditor
             // 
@@ -1523,6 +1801,14 @@
             this.tabActions.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActionTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActions)).EndInit();
+            this.tabShops.ResumeLayout(false);
+            this.tabShops.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvShopTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvShops)).EndInit();
+            this.tabBuildings.ResumeLayout(false);
+            this.tabBuildings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBuildingTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBuildings)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1656,6 +1942,30 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colActionsID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colActionsName;
         private System.Windows.Forms.ComboBox cbActionType;
+        private System.Windows.Forms.TabPage tabShops;
+        private System.Windows.Forms.DataGridView dgvShopTags;
+        private System.Windows.Forms.TextBox tbShopName;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.DataGridView dgvShops;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colShopsName;
+        private System.Windows.Forms.Button btnShopCancel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colShopTags;
+        private System.Windows.Forms.TabPage tabBuildings;
+        private System.Windows.Forms.Button btnBuildingCancel;
+        private System.Windows.Forms.DataGridView dgvBuildingTags;
+        private System.Windows.Forms.TextBox tbBuildingDescription;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.TextBox tbBuildingID;
+        private System.Windows.Forms.TextBox tbBuildingName;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.DataGridView dgvBuildings;
+        private System.Windows.Forms.TabPage tabSpirits;
+        private System.Windows.Forms.TabPage tabSummons;
+        private System.Windows.Forms.TabPage tabStatusEffects;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBuildingTag;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBuildingsID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBuildingsName;
     }
 }
 
