@@ -36,8 +36,8 @@ namespace RiverHollow.CombatStuff
             _iId = id;
             _eActionType = actionType;
             _vIconGrid = vGrid;
-            DataManager.GetTextData("Action_" + _iId, ref _sName, "Name");
-            DataManager.GetTextData("Action_" + _iId, ref _sDescription, "Description");
+            DataManager.GetTextData("Action", _iId, ref _sName, "Name");
+            DataManager.GetTextData("Action", _iId, ref _sDescription, "Description");
         }
 
         public bool IsActionMenu() { return _eActionType == ActionEnum.MenuAction; }
@@ -142,8 +142,8 @@ namespace RiverHollow.CombatStuff
         protected void ImportBasics(int id, Dictionary<string, string> stringData)
         {
             _iId = id;
-            DataManager.GetTextData("Action_" + _iId, ref _sName, "Name");
-            DataManager.GetTextData("Action_" + _iId, ref _sDescription, "Description");
+            DataManager.GetTextData("Action", _iId, ref _sName, "Name");
+            DataManager.GetTextData("Action", _iId, ref _sDescription, "Description");
 
             _eActionType = Util.ParseEnum<ActionEnum>(stringData["Type"]);
             if (stringData.ContainsKey("Element")) { _eElement = Util.ParseEnum<ElementEnum>(stringData["Element"]); }

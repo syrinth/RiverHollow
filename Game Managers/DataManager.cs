@@ -36,7 +36,6 @@ namespace RiverHollow.Game_Managers
         static Dictionary<string, Texture2D> _diTextures;
         static Dictionary<string, BitmapFont> _diBMFonts;
         static Dictionary<string, string> _diGameText;
-        static Dictionary<int, string> _diMonsterInfo;
         static Dictionary<int, string> _diStatusEffectText;
         static Dictionary<string, string> _diAdventurerDialogue;
         public static Dictionary<int, string> DiUpgrades { get; private set; }
@@ -171,9 +170,8 @@ namespace RiverHollow.Game_Managers
 
         private static void LoadTextFiles(ContentManager Content)
         {
-            LoadDictionary(ref _diItemText, FOLDER_TEXTFILES + "Name_Text", Content);
+            LoadDictionary(ref _diItemText, FOLDER_TEXTFILES + "Object_Text", Content);
             _diGameText = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + "GameText");
-            _diMonsterInfo = Content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + "MonsterInfo");
             _diStatusEffectText = Content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + "StatusText");
 
             _diSongs = Content.Load<Dictionary<int, List<string>>>(@"Data\Songs");
@@ -346,9 +344,10 @@ namespace RiverHollow.Game_Managers
             return null;
         }
 
-        public static void GetTextData(string id, ref string value, string key)
+        public static void GetTextData(string identifier, int id, ref string value, string key)
         {
-            if (_diItemText[id].ContainsKey(key)) { value = _diItemText[id][key];  }
+            string textKey = identifier + "_" + id;
+            if (_diItemText[textKey].ContainsKey(key)) { value = _diItemText[textKey][key];  }
             else { value = string.Empty;}
         }
         public static Item GetItem(int id)
@@ -496,16 +495,6 @@ namespace RiverHollow.Game_Managers
         public static string GetMonsterTraitData(string trait)
         {
             return _diMonsterTraits[trait];
-        }
-        public static string GetMonsterTestInfo(int id)
-        {
-            string rv = string.Empty;
-            if (_diMonsterInfo.ContainsKey(id))
-            {
-                rv = _diMonsterInfo[id];
-            }
-
-            return rv;
         }
         public static Monster GetMonsterByIndex(int id)
         {

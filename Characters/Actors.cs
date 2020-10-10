@@ -1716,7 +1716,7 @@ namespace RiverHollow.Characters
         protected void ImportBasics(Dictionary<string, string> data)
         {
             _diDialogue = DataManager.GetNPCDialogue(_iIndex);
-            DataManager.GetTextData("Character_" + _iIndex, ref _sName, "Name");
+            DataManager.GetTextData("Character", _iIndex, ref _sName, "Name");
 
             _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Villager", _iIndex.ToString("00"));
             //_sPortrait = _sPortraitFolder + "WizardPortrait";

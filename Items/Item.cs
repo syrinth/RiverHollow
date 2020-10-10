@@ -88,9 +88,8 @@ namespace RiverHollow.Items
             _iItemID = id;
             _diReqToMake = new Dictionary<int, int>();
 
-            string textID = "Item_" + _iItemID.ToString();
-            DataManager.GetTextData(textID, ref _sName, "Name");
-            DataManager.GetTextData(textID, ref _sDescription, "Description");
+            DataManager.GetTextData("Item", _iItemID, ref _sName, "Name");
+            DataManager.GetTextData("Item", _iItemID, ref _sDescription, "Description");
 
             //Item Type
             _eItemType = Util.ParseEnum<ItemEnum>(stringData["Type"]);

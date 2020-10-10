@@ -28,7 +28,7 @@ namespace Database_Editor
         string SPIRITS_XML_FILE = PATH_TO_DATA + @"\Spirits.xml";
         string BUILDINGS_XML_FILE = PATH_TO_DATA + @"\Buildings.xml";
         string ITEM_DATA_XML_FILE = PATH_TO_DATA + @"\ItemData.xml";
-        string NAME_TEXT_XML_FILE = PATH_TO_TEXT_FILES + @"\Name_Text.xml";
+        string OBJECT_TEXT_XML_FILE = PATH_TO_TEXT_FILES + @"\Object_Text.xml";
         string WORLD_OBJECTS_DATA_XML_FILE = PATH_TO_DATA + @"\WorldObjects.xml";
         #endregion
 
@@ -133,7 +133,7 @@ namespace Database_Editor
                 }
             }
 
-            _diItemText = ReadTaggedXMLFile(NAME_TEXT_XML_FILE);
+            _diItemText = ReadTaggedXMLFile(OBJECT_TEXT_XML_FILE);
 
             LoadXMLDictionary(QUEST_XML_FILE, QUEST_ITEM_TAGS, DEFAULT_WORLD_TAG);
             LoadXMLDictionary(CHARACTER_XML_FILE, CHARACTER_ITEM_TAGS, DEFAULT_WORLD_TAG);
@@ -1232,7 +1232,7 @@ namespace Database_Editor
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AutoSave();
-            StreamWriter sWriter = PrepareXMLFile(NAME_TEXT_XML_FILE, "Dictionary[string, string]");
+            StreamWriter sWriter = PrepareXMLFile(OBJECT_TEXT_XML_FILE, "Dictionary[string, string]");
 
             _liItemData.Sort((x, y) =>
             {

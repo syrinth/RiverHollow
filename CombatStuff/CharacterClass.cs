@@ -80,8 +80,8 @@ namespace RiverHollow.CombatStuff
         protected void ImportBasics(int id, Dictionary<string, string> stringData)
         {
             _iID = id;
-            DataManager.GetTextData("Class_" + _iID, ref _sName, "Name");
-            DataManager.GetTextData("Class_" + _iID, ref _sDescription, "Description");
+            DataManager.GetTextData("Class", _iID, ref _sName, "Name");
+            DataManager.GetTextData("Class", _iID, ref _sDescription, "Description");
 
             _weaponType = Util.ParseEnum<WeaponEnum>(stringData["Weapon"]);
             _armorType = Util.ParseEnum<ArmorEnum>(stringData["Armor"]);

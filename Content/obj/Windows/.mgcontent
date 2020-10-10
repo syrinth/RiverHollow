@@ -47,7 +47,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/weapons.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/ActionEffects/LeafCutter.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/GameText.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/MonsterInfo.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/Adventurers.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Songs.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Harp/c3.wav</File>
@@ -278,9 +277,9 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Original/Effects/Sample2.wav</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Original/Effects/Sample3.wav</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Original/Effects/Sample4.wav</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Name_Text.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Schedules/NPC_01.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Spirits.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Object_Text.xml</File>
   </SourceFiles>
 </SourceFileCollection>

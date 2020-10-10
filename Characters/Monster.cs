@@ -76,7 +76,7 @@ namespace RiverHollow.Characters
         protected void ImportBasics(Dictionary<string, string> data, int id)
         {
             _id = id;
-            _sName = DataManager.GetMonsterTestInfo(_id);
+            DataManager.GetTextData("Monster", _id, ref _sName, "Name");
 
             _iRating = int.Parse(data["Lvl"]);
             _iXP = _iRating * 10;

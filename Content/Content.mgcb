@@ -440,11 +440,6 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/GameText.xml
 
-#begin Data/Text Files/MonsterInfo.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/MonsterInfo.xml
-
 #begin Data/Text Files/Dialogue/Adventurers.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -2452,11 +2447,6 @@
 /processorParam:Quality=Best
 /build:Sound/Original/Effects/Sample4.wav
 
-#begin Data/Text Files/Name_Text.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Name_Text.xml
-
 #begin Data/Schedules/NPC_01.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -2471,4 +2461,9 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Spirits.xml
+
+#begin Data/Text Files/Object_Text.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Object_Text.xml
 
