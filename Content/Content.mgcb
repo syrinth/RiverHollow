@@ -1097,11 +1097,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Adventurers/Adventurer_8.png
 
-#begin Data/SpiritInfo.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/SpiritInfo.xml
-
 #begin Textures/Actors/NPCs/Spirit_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2471,4 +2466,9 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Shops.xml
+
+#begin Data/Spirits.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Spirits.xml
 

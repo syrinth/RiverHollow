@@ -12,7 +12,7 @@ namespace Database_Editor
     public partial class frmDBEditor : Form
     {
         private enum EditableCharacterDataEnum { Dialogue, Schedule };
-        public enum XMLTypeEnum { None, Quest, Character, Class, Adventurer, Building, WorldObject, Item, Monster, Action, Shop };
+        public enum XMLTypeEnum { None, Quest, Character, Class, Adventurer, Building, WorldObject, Item, Monster, Action, Shop, Spirit };
         #region XML Files
         string SHOPS_XML_FILE = PATH_TO_DATA + @"\Shops.xml";
         string ACTIONS_XML_FILE = PATH_TO_DATA + @"\CombatActions.xml";
@@ -25,7 +25,7 @@ namespace Database_Editor
         string WORKERS_XML_FILE = PATH_TO_DATA + @"\Workers.xml";
         string CONFIG_XML_FILE = PATH_TO_DATA + @"\Config.xml";
         string MAGIC_SHOP_XML_FILE = PATH_TO_DATA + @"\Shops\MagicShop.xml";
-        string ADVENTURERS_XML_FILE = PATH_TO_DATA + @"\Shops\Adventurers.xml";
+        string SPIRITS_XML_FILE = PATH_TO_DATA + @"\Spirits.xml";
         string BUILDINGS_XML_FILE = PATH_TO_DATA + @"\Buildings.xml";
         string ITEM_DATA_XML_FILE = PATH_TO_DATA + @"\ItemData.xml";
         string NAME_TEXT_XML_FILE = PATH_TO_TEXT_FILES + @"\Name_Text.xml";
@@ -99,7 +99,8 @@ namespace Database_Editor
                 { "Monsters", 0},
                 { "Actions", 0 },
                 { "Shops", 0 },
-                { "Buildings", 0 }
+                { "Buildings", 0 },
+                { "Spirits", 0 }
             };
 
             _diMapData = new Dictionary<string, TMXData>();
@@ -142,14 +143,11 @@ namespace Database_Editor
             LoadXMLDictionary(MONSTERS_XML_FILE, "", "");
             LoadXMLDictionary(ACTIONS_XML_FILE, "", "");
             LoadXMLDictionary(BUILDINGS_XML_FILE, "", "");
+            LoadXMLDictionary(SPIRITS_XML_FILE, "", "");
 
             _diShops = ReadXMLFileToDictionaryStringList(SHOPS_XML_FILE);
             _diCutscenes = ReadXMLFileToDictionaryStringList(CUTSCENE_XML_FILE);
             _diCutsceneDialogue = ReadXMLFileToDictionaryStringList(CUTSCENE_DIALOGUE_XML_FILE);
-
-            //LoadXMLDictionary(MAGIC_SHOP_XML_FILE, SHOP_TAG, DEFAULT_WORLD_TAG);
-            //LoadXMLDictionary(BUILDINGS_XML_FILE, SHOP_TAG, DEFAULT_WORLD_TAG);
-            //LoadXMLDictionary(ADVENTURERS_XML_FILE, SHOP_TAG, DEFAULT_WORLD_TAG);
 
             LoadWorldObjects();
             LoadItemData();
@@ -165,6 +163,7 @@ namespace Database_Editor
             LoadActionDataGrid();
             LoadShopsDataGrid();
             LoadBuildingDataGrid();
+            LoadSpiritDataGrid();
 
             LoadItemInfo();
             LoadWorldObjectInfo();
@@ -177,6 +176,7 @@ namespace Database_Editor
             LoadActionInfo();
             LoadShopInfo();
             LoadBuildingInfo();
+            LoadSpiritInfo();
         }
 
         #region DataGridView Loading
@@ -269,6 +269,10 @@ namespace Database_Editor
         private void LoadBuildingDataGrid()
         {
             LoadGenericDatagrid(dgvBuildings, _diBasicXML[BUILDINGS_XML_FILE], "colBuildingsID", "colBuildingsName", "Buildings");
+        }
+        private void LoadSpiritDataGrid()
+        {
+            LoadGenericDatagrid(dgvSpirits, _diBasicXML[SPIRITS_XML_FILE], "colSpiritsID", "colSpiritsName", "Spirits");
         }
         #endregion
 
@@ -388,6 +392,11 @@ namespace Database_Editor
             XMLData data = _diBasicXML[BUILDINGS_XML_FILE][_diTabIndices["Buildings"]];
             LoadGenericDataInfo(data, tbBuildingName, tbBuildingID, dgvBuildingTags, tbBuildingDescription);
         }
+        private void LoadSpiritInfo()
+        {
+            XMLData data = _diBasicXML[SPIRITS_XML_FILE][_diTabIndices["Spirits"]];
+            LoadGenericDataInfo(data, tbSpiritName, tbSpiritID, dgvSpiritTags, tbSpiritDescription);
+        }
         #endregion
 
         private void InitComboBox<T>(ComboBox cb, bool type = true)
@@ -409,7 +418,7 @@ namespace Database_Editor
             else if (fileName == WORLD_OBJECTS_DATA_XML_FILE) { rv = XMLTypeEnum.WorldObject; }
             else if (fileName == MONSTERS_XML_FILE) { rv = XMLTypeEnum.Monster; }
             else if (fileName == ACTIONS_XML_FILE) { rv = XMLTypeEnum.Action; }
-            else if (fileName == SHOPS_XML_FILE) { rv = XMLTypeEnum.Shop; }
+            else if (fileName == SPIRITS_XML_FILE) { rv = XMLTypeEnum.Spirit; }
             else if (fileName == BUILDINGS_XML_FILE) { rv = XMLTypeEnum.Building; }
 
             return rv;
@@ -1032,6 +1041,10 @@ namespace Database_Editor
         {
             SaveGenericInfo(_diBasicXML[BUILDINGS_XML_FILE], "Buildings", "Building_", XMLTypeEnum.Building, tbBuildingName, null, dgvBuildings, dgvBuildingTags, "colBuildingsID", "colBuildingsName", tbBuildingDescription);
         }
+        private void SaveSpiritInfo(List<XMLData> liData)
+        {
+            SaveGenericInfo(_diBasicXML[SPIRITS_XML_FILE], "Spirits", "Spirit_", XMLTypeEnum.Spirit, tbSpiritName, null, dgvSpirits, dgvSpiritTags, "colSpiritsID", "colSpiritsName", tbSpiritDescription);
+        }
 
         private void GenericCancel(List<XMLData> liData, string tabIndex, DataGridView dgMain, VoidDelegate del)
         {
@@ -1102,6 +1115,10 @@ namespace Database_Editor
         {
             GenericCancel(_diBasicXML[BUILDINGS_XML_FILE], "Buildings", dgvBuildings, LoadBuildingInfo);
         }
+        private void btnSpiritCancel_Click(object sender, EventArgs e)
+        {
+            GenericCancel(_diBasicXML[SPIRITS_XML_FILE], "Spirits", dgvSpirits, LoadSpiritInfo);
+        }
 
         private void GenericCellClick(DataGridViewCellEventArgs e, List<XMLData> liData, string tabIndex, DataGridView dgMain, VoidDelegate loadDel, XMLListDataDelegate saveDel)
         {
@@ -1164,6 +1181,10 @@ namespace Database_Editor
         private void dgvBuildings_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             GenericCellClick(e, _diBasicXML[BUILDINGS_XML_FILE], "Buildings", dgvBuildings, LoadBuildingInfo, SaveBuildingInfo);
+        }
+        private void dgvSpirits_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            GenericCellClick(e, _diBasicXML[SPIRITS_XML_FILE], "Spirits", dgvSpirits, LoadSpiritInfo, SaveSpiritInfo);
         }
 
         private void AddNewGenericXMLObject(TabPage page, string tabIndex, DataGridView dg, string colID, string colName, TextBox tbName, TextBox tbID, DataGridView dgTags, string tagCol, ComboBox cb = null, TextBox tbDesc = null, string defaultTag = "")
@@ -1297,8 +1318,9 @@ namespace Database_Editor
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabActions"]) { dgvActions.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabShops"]) { dgvShops.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabBuildings"]) { dgvBuildings.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabSpirits"]) { dgvSpirits.Focus(); }
 
-                _diTabIndices["PreviousTab"] = tabCtl.SelectedIndex;
+            _diTabIndices["PreviousTab"] = tabCtl.SelectedIndex;
         }
 
         private void AutoSave()
@@ -1315,6 +1337,7 @@ namespace Database_Editor
             else if (prevPage == tabCtl.TabPages["tabActions"]) { SaveActionInfo(_diBasicXML[ACTIONS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabShops"]) { SaveShopInfo(); }
             else if (prevPage == tabCtl.TabPages["tabBuildings"]) { SaveBuildingInfo(_diBasicXML[BUILDINGS_XML_FILE]); }
+            else if (prevPage == tabCtl.TabPages["tabSpirits"]) { SaveSpiritInfo(_diBasicXML[SPIRITS_XML_FILE]); }
         }
         #endregion
 

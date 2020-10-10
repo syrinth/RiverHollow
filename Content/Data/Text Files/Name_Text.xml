@@ -370,6 +370,14 @@
       <Value>[Name:Town Store]</Value>
     </Item>
     <Item>
+      <Key>Spirit_2</Key>
+      <Value>[Name:Henry]</Value>
+    </Item>
+    <Item>
+      <Key>Spirit_3</Key>
+      <Value>[Name:Felicia]</Value>
+    </Item>
+    <Item>
       <Key>Item_0</Key>
       <Value>[Name:Stone][Description:Stone, for building things]</Value>
     </Item>

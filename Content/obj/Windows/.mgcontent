@@ -109,7 +109,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Adventurer_6.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Adventurer_7.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Adventurers/Adventurer_8.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/SpiritInfo.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/NPCs/Spirit_1.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/NPCs/Spirit_2.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/NPCs/Spirit_3.png</File>
@@ -282,5 +281,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Name_Text.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Schedules/NPC_01.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Spirits.xml</File>
   </SourceFiles>
 </SourceFileCollection>
