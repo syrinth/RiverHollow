@@ -2,7 +2,7 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[string, List[string]]">
     <Item>
-      <Key>Magic_Shop</Key>
+      <Key>0</Key>
       <Value>
         <Item>[Type:Item][ItemID:132-1][Cost:100][ReqQuest:1]</Item>
         <Item>[Type:Item][ItemID:132-2][Cost:100][ReqQuest:1]</Item>
@@ -17,7 +17,7 @@
       </Value>
     </Item>
     <Item>
-      <Key>Adventurers_Guild</Key>
+      <Key>1</Key>
       <Value>
         <Item>[Type:Worker][WorkerID:1][Cost:500][Text:Practitioner of the arcane arts]</Item>
         <Item>[Type:Worker][WorkerID:2][Cost:500][Text:Weapons Master]</Item>
@@ -30,7 +30,7 @@
       </Value>
     </Item>
 	<Item>
-      <Key>Building_Shop</Key>
+      <Key>2</Key>
       <Value>
         <Item>[Type:Building][BuildingID:1][Cost:100][Requires:0-1|2-1][Text:A building used to house practitioners of the magical arts]</Item>
         <Item>[Type:Building][BuildingID:2][Cost:500][Requires:0-2|2-3][Text:A building used to house meleers]</Item>
@@ -40,7 +40,7 @@
       </Value>
     </Item>
 	<Item>
-      <Key>Grocery_Store</Key>
+      <Key>3</Key>
       <Value>
         <Item>[Type:Item][ItemID:501][Cost:30]</Item>
         <Item>[Type:Item][ItemID:502][Cost:20]</Item>
