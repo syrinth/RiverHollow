@@ -398,6 +398,78 @@
       <Value>[Name:Magus]</Value>
     </Item>
     <Item>
+      <Key>StatusEffect_1</Key>
+      <Value>[Name:]</Value>
+    </Item>
+    <Item>
+      <Key>StatusEffect_2</Key>
+      <Value>[Name:]</Value>
+    </Item>
+    <Item>
+      <Key>StatusEffect_3</Key>
+      <Value>[Name:]</Value>
+    </Item>
+    <Item>
+      <Key>StatusEffect_4</Key>
+      <Value>[Name:Witch's Curse]</Value>
+    </Item>
+    <Item>
+      <Key>StatusEffect_5</Key>
+      <Value>[Name:]</Value>
+    </Item>
+    <Item>
+      <Key>StatusEffect_6</Key>
+      <Value>[Name:Allira's Gambit]</Value>
+    </Item>
+    <Item>
+      <Key>StatusEffect_7</Key>
+      <Value>[Name:Song of Power]</Value>
+    </Item>
+    <Item>
+      <Key>StatusEffect_8</Key>
+      <Value>[Name:Song of Magic]</Value>
+    </Item>
+    <Item>
+      <Key>StatusEffect_9</Key>
+      <Value>[Name:Focus]</Value>
+    </Item>
+    <Item>
+      <Key>StatusEffect_10</Key>
+      <Value>[Name:Bulwark]</Value>
+    </Item>
+    <Item>
+      <Key>StatusEffect_11</Key>
+      <Value>[Name:Dodge]</Value>
+    </Item>
+    <Item>
+      <Key>StatusEffect_12</Key>
+      <Value>[Name:Knee Shot]</Value>
+    </Item>
+    <Item>
+      <Key>StatusEffect_13</Key>
+      <Value>[Name:Song of Recovery]</Value>
+    </Item>
+    <Item>
+      <Key>StatusEffect_14</Key>
+      <Value>[Name:Quick Attack]</Value>
+    </Item>
+    <Item>
+      <Key>StatusEffect_15</Key>
+      <Value>[Name:Chant of Celerity]</Value>
+    </Item>
+    <Item>
+      <Key>StatusEffect_16</Key>
+      <Value>[Name:Song of Resistance]</Value>
+    </Item>
+    <Item>
+      <Key>StatusEffect_17</Key>
+      <Value>[Name:Dance of Death]</Value>
+    </Item>
+    <Item>
+      <Key>StatusEffect_18</Key>
+      <Value>[Name:Guard]</Value>
+    </Item>
+    <Item>
       <Key>Item_0</Key>
       <Value>[Name:Stone][Description:Stone, for building things]</Value>
     </Item>

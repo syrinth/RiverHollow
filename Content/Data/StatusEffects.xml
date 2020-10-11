@@ -1,7 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
-    <!--Key: Index>0 Value:Name/Description/Stat:Val Stat:Val/Condition-->
     <Item>
       <Key>1</Key>
       <Value>[Buff:Def-10]</Value>
@@ -14,7 +13,7 @@
       <Key>3</Key>
       <Value>[Buff:Int-10]</Value>
     </Item>
-	<Item>
+    <Item>
       <Key>4</Key>
       <Value>[DoT][Potency:50]</Value>
     </Item>
@@ -34,52 +33,42 @@
       <Key>8</Key>
       <Value>[Buff:Mag-10][Song]</Value>
     </Item>
-    <!--Focus-->
     <Item>
       <Key>9</Key>
       <Value>[Buff:Crit-20]</Value>
     </Item>
-    <!--Bulwark-->
     <Item>
       <Key>10</Key>
       <Value>[Buff:Def-20]</Value>
     </Item>
-    <!--Dodge-->
     <Item>
       <Key>11</Key>
       <Value>[Buff:Eva-10]</Value>
     </Item>
-    <!--Knee Shot-->
     <Item>
       <Key>12</Key>
       <Value>[Debuff:Eva-10 Spd-10]</Value>
     </Item>
-    <!--Song of Recovery-->
     <Item>
       <Key>13</Key>
       <Value>[HoT][Song][Potency:80]</Value>
     </Item>
-    <!--Quick Attack-->
     <Item>
       <Key>14</Key>
       <Value>[Buff:Spd-10]</Value>
     </Item>
-    <!--Chant of Celerity-->
     <Item>
       <Key>15</Key>
       <Value>[Buff:Spd-10]</Value>
     </Item>
-    <!--Song of Resistance-->
     <Item>
       <Key>16</Key>
       <Value>[Buff:Res-10]</Value>
     </Item>
-    <!--Dance of Death-->
     <Item>
       <Key>17</Key>
       <Value>[Buff:Str-20]</Value>
     </Item>
-    <!--Guard-->
     <Item>
       <Key>18</Key>
       <Value>[Guard]</Value>

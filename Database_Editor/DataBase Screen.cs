@@ -27,6 +27,7 @@ namespace Database_Editor
         string MAGIC_SHOP_XML_FILE = PATH_TO_DATA + @"\Shops\MagicShop.xml";
         string SPIRITS_XML_FILE = PATH_TO_DATA + @"\Spirits.xml";
         string SUMMONS_XML_FILE = PATH_TO_DATA + @"\Summons.xml";
+        string STATUS_EFFECTS_XML_FILE = PATH_TO_DATA + @"\StatusEffects.xml";
         string BUILDINGS_XML_FILE = PATH_TO_DATA + @"\Buildings.xml";
         string ITEM_DATA_XML_FILE = PATH_TO_DATA + @"\ItemData.xml";
         string OBJECT_TEXT_XML_FILE = PATH_TO_TEXT_FILES + @"\Object_Text.xml";
@@ -102,7 +103,8 @@ namespace Database_Editor
                 { "Shops", 0 },
                 { "Buildings", 0 },
                 { "Spirits", 0 },
-                { "Summons", 0 }
+                { "Summons", 0 },
+                { "StatusEffects", 0 }
             };
 
             _diMapData = new Dictionary<string, TMXData>();
@@ -147,6 +149,7 @@ namespace Database_Editor
             LoadXMLDictionary(BUILDINGS_XML_FILE, "", "");
             LoadXMLDictionary(SPIRITS_XML_FILE, "", "");
             LoadXMLDictionary(SUMMONS_XML_FILE, "", "");
+            LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", "");
 
             _diShops = ReadXMLFileToDictionaryStringList(SHOPS_XML_FILE);
             _diCutscenes = ReadXMLFileToDictionaryStringList(CUTSCENE_XML_FILE);
@@ -168,6 +171,7 @@ namespace Database_Editor
             LoadBuildingDataGrid();
             LoadSpiritDataGrid();
             LoadSummonDataGrid();
+            LoadStatusEffectDataGrid();
 
             LoadItemInfo();
             LoadWorldObjectInfo();
@@ -182,6 +186,7 @@ namespace Database_Editor
             LoadBuildingInfo();
             LoadSpiritInfo();
             LoadSummonInfo();
+            LoadStatusEffectInfo();
         }
 
         #region DataGridView Loading
@@ -282,6 +287,10 @@ namespace Database_Editor
         private void LoadSummonDataGrid()
         {
             LoadGenericDatagrid(dgvSummons, _diBasicXML[SUMMONS_XML_FILE], "colSummonsID", "colSummonsName", "Summons");
+        }
+        private void LoadStatusEffectDataGrid()
+        {
+            LoadGenericDatagrid(dgvStatusEffects, _diBasicXML[STATUS_EFFECTS_XML_FILE], "colStatusEffectsID", "colStatusEffectsName", "StatusEffects");
         }
         #endregion
 
@@ -411,6 +420,11 @@ namespace Database_Editor
             XMLData data = _diBasicXML[SUMMONS_XML_FILE][_diTabIndices["Summons"]];
             LoadGenericDataInfo(data, tbSummonName, tbSummonID, dgvSummonTags, tbSummonDescription);
         }
+        private void LoadStatusEffectInfo()
+        {
+            XMLData data = _diBasicXML[STATUS_EFFECTS_XML_FILE][_diTabIndices["StatusEffects"]];
+            LoadGenericDataInfo(data, tbStatusEffectName, tbStatusEffectID, dgvStatusEffectTags, tbStatusEffectDescription);
+        }
         #endregion
 
         private void InitComboBox<T>(ComboBox cb, bool type = true)
@@ -435,6 +449,7 @@ namespace Database_Editor
             else if (fileName == SPIRITS_XML_FILE) { rv = XMLTypeEnum.Spirit; }
             else if (fileName == BUILDINGS_XML_FILE) { rv = XMLTypeEnum.Building; }
             else if (fileName == SUMMONS_XML_FILE) { rv = XMLTypeEnum.Summon; }
+            else if (fileName == STATUS_EFFECTS_XML_FILE) { rv = XMLTypeEnum.StatusEffect; }
 
             return rv;
         }
@@ -1064,6 +1079,10 @@ namespace Database_Editor
         {
             SaveGenericInfo(_diBasicXML[SUMMONS_XML_FILE], "Summons", "Summon_", XMLTypeEnum.Summon, tbSummonName, null, dgvSummons, dgvSummonTags, "colSummonsID", "colSummonsName", tbSummonDescription);
         }
+        private void SaveStatusEffectInfo(List<XMLData> liData)
+        {
+            SaveGenericInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", "StatusEffect_", XMLTypeEnum.StatusEffect, tbStatusEffectName, null, dgvStatusEffects, dgvStatusEffectTags, "colStatusEffectsID", "colStatusEffectsName", tbStatusEffectDescription);
+        }
 
         private void GenericCancel(List<XMLData> liData, string tabIndex, DataGridView dgMain, VoidDelegate del)
         {
@@ -1142,6 +1161,10 @@ namespace Database_Editor
         {
             GenericCancel(_diBasicXML[SUMMONS_XML_FILE], "Summons", dgvSummons, LoadSummonInfo);
         }
+        private void btnStatusEffectCancel_Click(object sender, EventArgs e)
+        {
+            GenericCancel(_diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", dgvStatusEffects, LoadStatusEffectInfo);
+        }
 
         private void GenericCellClick(DataGridViewCellEventArgs e, List<XMLData> liData, string tabIndex, DataGridView dgMain, VoidDelegate loadDel, XMLListDataDelegate saveDel)
         {
@@ -1212,6 +1235,10 @@ namespace Database_Editor
         private void dgvSummons_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             GenericCellClick(e, _diBasicXML[SUMMONS_XML_FILE], "Summons", dgvSummons, LoadSummonInfo, SaveSummonInfo);
+        }
+        private void dgvStatusEffects_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            GenericCellClick(e, _diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", dgvStatusEffects, LoadStatusEffectInfo, SaveStatusEffectInfo);
         }
 
         private void AddNewGenericXMLObject(TabPage page, string tabIndex, DataGridView dg, string colID, string colName, TextBox tbName, TextBox tbID, DataGridView dgTags, string tagCol, ComboBox cb = null, TextBox tbDesc = null, string defaultTag = "")
@@ -1347,6 +1374,7 @@ namespace Database_Editor
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabBuildings"]) { dgvBuildings.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabSpirits"]) { dgvSpirits.Focus(); }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabSummons"]) { dgvSummons.Focus(); }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabStatusEffects"]) { dgvStatusEffects.Focus(); }
 
             _diTabIndices["PreviousTab"] = tabCtl.SelectedIndex;
         }
@@ -1367,6 +1395,7 @@ namespace Database_Editor
             else if (prevPage == tabCtl.TabPages["tabBuildings"]) { SaveBuildingInfo(_diBasicXML[BUILDINGS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabSpirits"]) { SaveSpiritInfo(_diBasicXML[SPIRITS_XML_FILE]); }
             else if (prevPage == tabCtl.TabPages["tabSummons"]) { SaveSummonInfo(_diBasicXML[SUMMONS_XML_FILE]); }
+            else if (prevPage == tabCtl.TabPages["tabStatusEffects"]) { SaveStatusEffectInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE]); }
         }
         #endregion
 

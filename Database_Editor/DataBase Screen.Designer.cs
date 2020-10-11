@@ -204,6 +204,18 @@
             this.dgvSummons = new System.Windows.Forms.DataGridView();
             this.colSummonsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colSummonsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnStatusEffectCancel = new System.Windows.Forms.Button();
+            this.dgvStatusEffectTags = new System.Windows.Forms.DataGridView();
+            this.tbStatusEffectDescription = new System.Windows.Forms.TextBox();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
+            this.tbStatusEffectID = new System.Windows.Forms.TextBox();
+            this.tbStatusEffectName = new System.Windows.Forms.TextBox();
+            this.label35 = new System.Windows.Forms.Label();
+            this.dgvStatusEffects = new System.Windows.Forms.DataGridView();
+            this.colStatusEffectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colStatusEffectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colStatusEffectsTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -243,8 +255,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvSpiritTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSpirits)).BeginInit();
             this.tabSummons.SuspendLayout();
+            this.tabStatusEffects.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSummonTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSummons)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffectTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffects)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -1905,6 +1920,15 @@
             // 
             // tabStatusEffects
             // 
+            this.tabStatusEffects.Controls.Add(this.btnStatusEffectCancel);
+            this.tabStatusEffects.Controls.Add(this.dgvStatusEffectTags);
+            this.tabStatusEffects.Controls.Add(this.tbStatusEffectDescription);
+            this.tabStatusEffects.Controls.Add(this.label33);
+            this.tabStatusEffects.Controls.Add(this.label34);
+            this.tabStatusEffects.Controls.Add(this.tbStatusEffectID);
+            this.tabStatusEffects.Controls.Add(this.tbStatusEffectName);
+            this.tabStatusEffects.Controls.Add(this.label35);
+            this.tabStatusEffects.Controls.Add(this.dgvStatusEffects);
             this.tabStatusEffects.Location = new System.Drawing.Point(4, 22);
             this.tabStatusEffects.Name = "tabStatusEffects";
             this.tabStatusEffects.Size = new System.Drawing.Size(790, 425);
@@ -2025,6 +2049,119 @@
             this.colSummonsName.Name = "colSummonsName";
             this.colSummonsName.ReadOnly = true;
             // 
+            // btnStatusEffectCancel
+            // 
+            this.btnStatusEffectCancel.Location = new System.Drawing.Point(709, 394);
+            this.btnStatusEffectCancel.Name = "btnStatusEffectCancel";
+            this.btnStatusEffectCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnStatusEffectCancel.TabIndex = 61;
+            this.btnStatusEffectCancel.Text = "Cancel";
+            this.btnStatusEffectCancel.UseVisualStyleBackColor = true;
+            this.btnStatusEffectCancel.Click += new System.EventHandler(this.btnStatusEffectCancel_Click);
+            // 
+            // dgvStatusEffectTags
+            // 
+            this.dgvStatusEffectTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvStatusEffectTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colStatusEffectsTag});
+            this.dgvStatusEffectTags.Location = new System.Drawing.Point(320, 110);
+            this.dgvStatusEffectTags.Name = "dgvStatusEffectTags";
+            this.dgvStatusEffectTags.RowHeadersVisible = false;
+            this.dgvStatusEffectTags.Size = new System.Drawing.Size(464, 278);
+            this.dgvStatusEffectTags.TabIndex = 60;
+            // 
+            // tbStatusEffectDescription
+            // 
+            this.tbStatusEffectDescription.Location = new System.Drawing.Point(320, 51);
+            this.tbStatusEffectDescription.Multiline = true;
+            this.tbStatusEffectDescription.Name = "tbStatusEffectDescription";
+            this.tbStatusEffectDescription.Size = new System.Drawing.Size(464, 53);
+            this.tbStatusEffectDescription.TabIndex = 59;
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(317, 35);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(63, 13);
+            this.label33.TabIndex = 58;
+            this.label33.Text = "Description:";
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(714, 9);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(21, 13);
+            this.label34.TabIndex = 57;
+            this.label34.Text = "ID:";
+            // 
+            // tbStatusEffectID
+            // 
+            this.tbStatusEffectID.Location = new System.Drawing.Point(741, 6);
+            this.tbStatusEffectID.Name = "tbStatusEffectID";
+            this.tbStatusEffectID.Size = new System.Drawing.Size(43, 20);
+            this.tbStatusEffectID.TabIndex = 56;
+            // 
+            // tbStatusEffectName
+            // 
+            this.tbStatusEffectName.Location = new System.Drawing.Point(361, 6);
+            this.tbStatusEffectName.Name = "tbStatusEffectName";
+            this.tbStatusEffectName.Size = new System.Drawing.Size(108, 20);
+            this.tbStatusEffectName.TabIndex = 55;
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(317, 9);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(38, 13);
+            this.label35.TabIndex = 54;
+            this.label35.Text = "Name:";
+            // 
+            // dgvStatusEffects
+            // 
+            this.dgvStatusEffects.AllowUserToAddRows = false;
+            this.dgvStatusEffects.AllowUserToDeleteRows = false;
+            this.dgvStatusEffects.AllowUserToResizeColumns = false;
+            this.dgvStatusEffects.AllowUserToResizeRows = false;
+            this.dgvStatusEffects.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvStatusEffects.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colStatusEffectsID,
+            this.colStatusEffectsName});
+            this.dgvStatusEffects.Location = new System.Drawing.Point(6, 6);
+            this.dgvStatusEffects.MultiSelect = false;
+            this.dgvStatusEffects.Name = "dgvStatusEffects";
+            this.dgvStatusEffects.ReadOnly = true;
+            this.dgvStatusEffects.RowHeadersVisible = false;
+            this.dgvStatusEffects.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvStatusEffects.Size = new System.Drawing.Size(308, 411);
+            this.dgvStatusEffects.TabIndex = 53;
+            this.dgvStatusEffects.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvStatusEffects_CellClick);
+            // 
+            // colStatusEffectsID
+            // 
+            this.colStatusEffectsID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colStatusEffectsID.FillWeight = 10F;
+            this.colStatusEffectsID.HeaderText = "ID";
+            this.colStatusEffectsID.Name = "colStatusEffectsID";
+            this.colStatusEffectsID.ReadOnly = true;
+            this.colStatusEffectsID.Width = 31;
+            // 
+            // colStatusEffectsName
+            // 
+            this.colStatusEffectsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colStatusEffectsName.FillWeight = 90F;
+            this.colStatusEffectsName.HeaderText = "Name";
+            this.colStatusEffectsName.Name = "colStatusEffectsName";
+            this.colStatusEffectsName.ReadOnly = true;
+            // 
+            // colStatusEffectsTag
+            // 
+            this.colStatusEffectsTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colStatusEffectsTag.HeaderText = "Tags";
+            this.colStatusEffectsTag.Name = "colStatusEffectsTag";
+            // 
             // frmDBEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2089,8 +2226,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvSpirits)).EndInit();
             this.tabSummons.ResumeLayout(false);
             this.tabSummons.PerformLayout();
+            this.tabStatusEffects.ResumeLayout(false);
+            this.tabStatusEffects.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSummonTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSummons)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffectTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvStatusEffects)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2272,6 +2413,18 @@
         private System.Windows.Forms.DataGridView dgvSummons;
         private System.Windows.Forms.DataGridViewTextBoxColumn colSummonsID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colSummonsName;
+        private System.Windows.Forms.Button btnStatusEffectCancel;
+        private System.Windows.Forms.DataGridView dgvStatusEffectTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colStatusEffectsTag;
+        private System.Windows.Forms.TextBox tbStatusEffectDescription;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.TextBox tbStatusEffectID;
+        private System.Windows.Forms.TextBox tbStatusEffectName;
+        private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.DataGridView dgvStatusEffects;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colStatusEffectsID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colStatusEffectsName;
     }
 }
 
