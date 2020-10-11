@@ -59,7 +59,7 @@
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Shopkeeper][PortRow:3][HomeMap:mapHouse_NPC3][Collection:7|130][ShopData:Building_Shop][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Shopkeeper][PortRow:3][HomeMap:mapHouse_NPC3][Collection:7|130][ShopData:2][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
     </Item>
     <Item>
       <Key>15</Key>
@@ -67,11 +67,11 @@
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Shopkeeper][PortRow:1][HomeMap:mapGuildhouse][Collection:7|130][ShopData:Adventurers_Guild][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Shopkeeper][PortRow:1][HomeMap:mapGuildhouse][Collection:7|130][ShopData:1][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Type:Shopkeeper][PortRow:3][HomeMap:mapMagicShop][Collection:7|130][ShopData:Magic_Shop][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
+      <Value>[Type:Shopkeeper][PortRow:3][HomeMap:mapMagicShop][Collection:7|130][ShopData:0][Idle:0-0-1-0-T][Walk:64-0-3-.15-T]</Value>
     </Item>
     <Item>
       <Key>18</Key>

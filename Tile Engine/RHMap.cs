@@ -72,7 +72,7 @@ namespace RiverHollow.Tile_Engine
         protected List<MonsterSpawn> _liMonsterSpawnPoints;
         protected List<ResourceSpawn> _liResourceSpawnPoints;
         protected List<int> _liRandomSpawnItems;
-        protected List<string> _liCutscenes;
+        protected List<int> _liCutscenes;
 
         protected List<Item> _liItems;
         protected List<Item> _liItemsToRemove;
@@ -99,7 +99,7 @@ namespace RiverHollow.Tile_Engine
             _liShopData = new List<ShopData>();
             _liPlacedWorldObjects = new List<WorldObject>();
             _liRandomSpawnItems = new List<int>();
-            _liCutscenes = new List<string>();
+            _liCutscenes = new List<int>();
             DictionaryCombatTiles = new Dictionary<string, RHTile[,]>();
 
             ToRemove = new List<WorldActor>();
@@ -199,7 +199,7 @@ namespace RiverHollow.Tile_Engine
                 string[] split = _map.Properties["Cutscenes"].Split(' ');
                 foreach(string cutsceneID in split)
                 {
-                    _liCutscenes.Add(cutsceneID);
+                    _liCutscenes.Add(int.Parse(cutsceneID));
                 }
             }
 
@@ -1999,7 +1999,7 @@ namespace RiverHollow.Tile_Engine
 
         public void CheckForTriggeredCutScenes()
         {
-            foreach(string cutsceneID in _liCutscenes)
+            foreach(int cutsceneID in _liCutscenes)
             {
                 CutsceneManager.CheckForTriggedCutscene(cutsceneID);
             }

@@ -125,7 +125,7 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diBuildings, @"Data\Buildings", Content);
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content);
             LoadDictionary(ref _diWorkers, @"Data\Workers", Content);
-            LoadDictionary(ref _diSpiritInfo, @"Data\SpiritInfo", Content);
+            LoadDictionary(ref _diSpiritInfo, @"Data\Spirits", Content);
             LoadDictionary(ref _diQuestData, @"Data\Quests", Content);
             LoadDictionary(ref _diClasses, @"Data\Classes", Content);
             LoadDictionary(ref Config, @"Data\Config", Content);
@@ -590,9 +590,9 @@ namespace RiverHollow.Game_Managers
             return _diBMFonts[font];
         }
 
-        public static List<Dictionary<string, string>> GetShopData(string file)
+        public static List<Dictionary<string, string>> GetShopData(string shopID)
         {
-            return _diShops[file];
+            return _diShops[shopID];
         }
 
         public static string GetGameText(string key)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Generic="System.Collections.Generic">
-  <Asset Type="Dictionary[string, List[string]]">
+  <Asset Type="Dictionary[int, List[string]]">
     <Item>
       <Key>0</Key>
       <Value>

@@ -470,6 +470,34 @@
       <Value>[Name:Guard]</Value>
     </Item>
     <Item>
+      <Key>Cutscene_0</Key>
+      <Value>[Name:Amanda and Gail]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_1</Key>
+      <Value>[Name:Intro]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_2</Key>
+      <Value>[Name:Harp]</Value>
+    </Item>
+    <Item>
+      <Key>Shop_0</Key>
+      <Value>[Name:Magic Shop]</Value>
+    </Item>
+    <Item>
+      <Key>Shop_1</Key>
+      <Value>[Name:Adventurer's Guild]</Value>
+    </Item>
+    <Item>
+      <Key>Shop_2</Key>
+      <Value>[Name:Buildings]</Value>
+    </Item>
+    <Item>
+      <Key>Shop_3</Key>
+      <Value>[Name:Grocery]</Value>
+    </Item>
+    <Item>
       <Key>Item_0</Key>
       <Value>[Name:Stone][Description:Stone, for building things]</Value>
     </Item>

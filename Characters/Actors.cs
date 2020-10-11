@@ -2341,7 +2341,8 @@ namespace RiverHollow.Characters
                 _items = new List<KeyValuePair<int, int>>();
 
                 MerchType = Util.ParseEnum<ItemType>(stringData["Type"]);
-                if (stringData.ContainsKey("ID")) { MerchID = int.Parse(stringData["ID"]); }
+                if (stringData.ContainsKey("WorkerID")) { MerchID = int.Parse(stringData["WorkerID"]); }
+                else if (stringData.ContainsKey("BuildngID")) { MerchID = int.Parse(stringData["BuildngID"]); }
                 else if (stringData.ContainsKey("ItemID"))
                 {
                     //Some items may have unique data so only parse the first entry

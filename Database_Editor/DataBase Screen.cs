@@ -64,11 +64,11 @@ namespace Database_Editor
         static string PATH_TO_SCHEDULES = string.Format(@"{0}\..\..\..\..\Adventure\Content\Data\Schedules", System.Environment.CurrentDirectory);
 
         static Dictionary<string, List<string>> _diCutsceneDialogue;
-        static Dictionary<int, List<XMLData>> _diCutscenes;
+        static Dictionary<int, List<string>> _diCutscenes;
         static Dictionary<int, List<XMLData>> _diShops;
         static Dictionary<string, Dictionary<string, List<string>>> _diCharacterSchedules;
         static Dictionary<string, Dictionary<string, string>> _diCharacterDialogue;
-        static Dictionary<string, Dictionary<string, string>> _diItemText;
+        static Dictionary<string, Dictionary<string, string>> _diObjectText;
         static Dictionary<ItemEnum, List<ItemXMLData>> _diItems;
         static Dictionary<ObjectTypeEnum, List<XMLData>> _diWorldObjectData;
         static Dictionary<string, List<XMLData>> _diBasicXML;
@@ -138,7 +138,7 @@ namespace Database_Editor
                 }
             }
 
-            _diItemText = ReadTaggedXMLFile(OBJECT_TEXT_XML_FILE);
+            _diObjectText = ReadTaggedXMLFile(OBJECT_TEXT_XML_FILE);
 
             LoadXMLDictionary(QUEST_XML_FILE, QUEST_ITEM_TAGS, DEFAULT_WORLD_TAG);
             LoadXMLDictionary(CHARACTER_XML_FILE, CHARACTER_ITEM_TAGS, DEFAULT_WORLD_TAG);
@@ -153,7 +153,7 @@ namespace Database_Editor
             LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", "");
 
             _diShops = ReadXMLFileToXMLDataListDictionary(SHOPS_XML_FILE, XMLTypeEnum.Shop);
-            _diCutscenes = ReadXMLFileToXMLDataListDictionary(CUTSCENE_XML_FILE, XMLTypeEnum.Cutscene);
+            _diCutscenes = ReadXMLFileToIntKeyDictionaryStringList(CUTSCENE_XML_FILE);
             _diCutsceneDialogue = ReadXMLFileToStringKeyDictionaryStringList(CUTSCENE_DIALOGUE_XML_FILE);
 
             LoadWorldObjects();
@@ -165,14 +165,14 @@ namespace Database_Editor
             LoadClassDataGrid();
             LoadAdventurerDataGrid();
             LoadQuestDataGrid();
-            LoadCutsceneDataGrid();
             LoadMonsterDataGrid();
             LoadActionDataGrid();
-            LoadShopsDataGrid();
             LoadBuildingDataGrid();
             LoadSpiritDataGrid();
             LoadSummonDataGrid();
             LoadStatusEffectDataGrid();
+            LoadCutsceneDataGrid();
+            LoadShopsDataGrid();
 
             LoadItemInfo();
             LoadWorldObjectInfo();
@@ -224,13 +224,19 @@ namespace Database_Editor
             string textID = Util.GetEnumString(xmlType) + "_" + id;
             if (xmlType != XMLTypeEnum.None)
             {
-                if (_diItemText.ContainsKey(textID))
+                if (_diObjectText.ContainsKey(textID) && _diObjectText[textID].ContainsKey(key))
                 {
-                    rv = _diItemText[textID][key];
+                    rv = _diObjectText[textID][key];
                 }
             }
 
             return rv;
+        }
+        public void UpdateTextValue(XMLTypeEnum xmlType, int id, string key, string newValue)
+        {
+            string textID = Util.GetEnumString(xmlType) + "_" + id;
+            if (!_diObjectText.ContainsKey(textID)) { _diObjectText[textID] = new Dictionary<string, string>(); }
+            _diObjectText[textID][key] = newValue;
         }
         #endregion
 
@@ -313,26 +319,37 @@ namespace Database_Editor
         private void LoadDictionaryListDatagrid(DataGridView dgv, Dictionary<int, List<XMLData>> di, string colID, string colName, string tabIndex, XMLTypeEnum xmlType)
         {
             dgv.Rows.Clear();
-            int index = 0;
             foreach (KeyValuePair<int, List<XMLData>> kvp in di)
             {
                 dgv.Rows.Add();
 
-                DataGridViewRow row = dgv.Rows[index++];
-                row.Cells[colID].Value = index;
-                row.Cells[colName].Value = GetTextValue(xmlType, index, "Name");
+                DataGridViewRow row = dgv.Rows[kvp.Key];
+                row.Cells[colID].Value = kvp.Key;
+                row.Cells[colName].Value = GetTextValue(xmlType, kvp.Key, "Name");
             }
 
-            SelectRow(dgv, _diTabIndices["Cutscenes"]);
+            SelectRow(dgv, _diTabIndices[tabIndex]);
             dgv.Focus();
-        }
-        private void LoadCutsceneDataGrid()
-        {
-            LoadDictionaryListDatagrid(dgvCutscenes, _diCutscenes, "colCutscenesID", "colCutscenesName", "Cutscenes", XMLTypeEnum.Cutscene);
         }
         private void LoadShopsDataGrid()
         {
             LoadDictionaryListDatagrid(dgvShops, _diShops, "colShopsID", "colShopsName", "Shops", XMLTypeEnum.Shop);
+        }
+
+        private void LoadCutsceneDataGrid()
+        {
+            dgvCutscenes.Rows.Clear();
+            foreach (KeyValuePair<int, List<string>> kvp in _diCutscenes)
+            {
+                dgvCutscenes.Rows.Add();
+
+                DataGridViewRow row = dgvCutscenes.Rows[kvp.Key];
+                row.Cells["colCutscenesID"].Value = kvp.Key;
+                row.Cells["colCutscenesName"].Value = GetTextValue(XMLTypeEnum.Cutscene, kvp.Key, "Name");
+            }
+
+            SelectRow(dgvCutscenes, _diTabIndices["Cutscenes"]);
+            dgvCutscenes.Focus();
         }
         #endregion
 
@@ -384,7 +401,7 @@ namespace Database_Editor
                         XmlNode tagNode = n.ChildNodes[1];
                         foreach (XmlNode n1 in tagNode.ChildNodes)
                         {
-                            if (n1.Name == "Item")
+                            if (n1.Name == "Item" && !string.IsNullOrEmpty(n1.InnerText))
                             {
                                 dataIndex++;
                                 XMLData data = new XMLData(dataIndex.ToString(), n1.InnerText, "", "", typeEnum);
@@ -393,6 +410,46 @@ namespace Database_Editor
                         }
                     }
 
+                    xmlDictionary[key] = tagList;
+                }
+            }
+
+            return xmlDictionary;
+        }
+        private Dictionary<int, List<string>> ReadXMLFileToIntKeyDictionaryStringList(string fileName)
+        {
+            string line = string.Empty;
+            Dictionary<int, List<string>> xmlDictionary = new Dictionary<int, List<string>>();
+
+            XmlDocument xmldoc = new XmlDocument();
+            XmlNodeList xmlNodeList;
+
+            FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            xmldoc.Load(fs);
+            xmlNodeList = xmldoc.ChildNodes;
+            XmlNode node = xmlNodeList[1].ChildNodes[0];
+
+            for (int i = 0; i < node.ChildNodes.Count; i++)
+            {
+                int key = -1;
+                List<string> tagList = new List<string>();
+                XmlNode n = node.ChildNodes[i];
+                if (n.Name == "Item")
+                {
+                    XmlNode keyNode = n.ChildNodes[0];
+                    if (keyNode.Name == "Key")
+                    {
+                        key = int.Parse(keyNode.InnerText);
+
+                        XmlNode tagNode = n.ChildNodes[1];
+                        foreach (XmlNode n1 in tagNode.ChildNodes)
+                        {
+                            if (n1.Name == "Item")
+                            {
+                                tagList.Add(n1.InnerText);
+                            }
+                        }
+                    }
                     xmlDictionary[key] = tagList;
                 }
             }
@@ -845,14 +902,14 @@ namespace Database_Editor
         }
         private void LoadCutsceneInfo()
         {
-            List<XMLData> listData = _diCutscenes[_diTabIndices["Shops"]];
+            List<string> listData = _diCutscenes[_diTabIndices["Cutscenes"]];
 
             tbCutsceneName.Text = GetTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name");
-            tbCutsceneTriggers.Text = listData[0].GetTagsString();
-            tbCutsceneDetails.Text = listData[1].GetTagsString();
+            tbCutsceneTriggers.Text = listData[0];
+            tbCutsceneDetails.Text = listData[1];
 
             dgvCutsceneTags.Rows.Clear();
-            string[] tags = listData[2].GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] tags = listData[2].Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in tags)
             {
                 if (!s.StartsWith("Type"))
@@ -943,7 +1000,7 @@ namespace Database_Editor
                 };
                 if (tbDescription != null) { diText["Description"] = tbDescription.Text; }
 
-                _diItemText[textIDPrefix + "_" + tbItemID.Text] = diText;
+                _diObjectText[textIDPrefix + "_" + tbItemID.Text] = diText;
 
                 Dictionary<string, string> tags = new Dictionary<string, string>();
 
@@ -1007,7 +1064,7 @@ namespace Database_Editor
                     ["Description"] = tbItemDesc.Text
                 };
 
-                _diItemText["Item_" + tbItemID.Text] = diText;
+                _diObjectText["Item_" + tbItemID.Text] = diText;
 
                 Dictionary<string, string> tags = new Dictionary<string, string>();
 
@@ -1116,10 +1173,10 @@ namespace Database_Editor
 
         private void SaveCutsceneInfo()
         {
-            List<XMLData> listData = _diCutscenes[_diTabIndices["Cutscenes"]];
+            List<string> listData = _diCutscenes[_diTabIndices["Cutscenes"]];
             listData.Clear();
-            listData.Add(new XMLData(_diTabIndices["Cutscenes"] + "_0", tbCutsceneTriggers.Text, "", "", XMLTypeEnum.Cutscene));
-            listData.Add(new XMLData(_diTabIndices["Cutscenes"] + "_1", tbCutsceneDetails.Text, "", "", XMLTypeEnum.Cutscene));
+            listData.Add(tbCutsceneTriggers.Text);
+            listData.Add(tbCutsceneDetails.Text);
 
             string tags = string.Empty;
             foreach (DataGridViewRow r in dgvCutsceneTags.Rows)
@@ -1129,7 +1186,8 @@ namespace Database_Editor
                     tags += "[" + r.Cells[0].Value + "]";
                 }
             }
-            listData.Add(new XMLData(_diTabIndices["Cutscenes"] + "_2", tags, "", "", XMLTypeEnum.Cutscene));
+            listData.Add(tags);
+            UpdateTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name", tbCutsceneName.Text);
 
             DataGridViewRow updatedRow = dgvCutscenes.Rows[_diTabIndices["Cutscenes"]];
 
@@ -1140,21 +1198,18 @@ namespace Database_Editor
         {
             List<XMLData> listData = _diShops[_diTabIndices["Shops"]];
             listData.Clear();
-            listData.Add(new XMLData(_diTabIndices["Shops"] + "_0", tbCutsceneTriggers.Text, "", "", XMLTypeEnum.Shop));
-            listData.Add(new XMLData(_diTabIndices["Shops"] + "_1", tbCutsceneDetails.Text, "", "", XMLTypeEnum.Shop));
 
             string tags = string.Empty;
-            foreach (DataGridViewRow r in dgvCutsceneTags.Rows)
+            foreach (DataGridViewRow r in dgvShopTags.Rows)
             {
-                listData.Add(new XMLData(_diTabIndices["Shops"] + "_2", r.Cells[0].Value.ToString(), "", "", XMLTypeEnum.Shop));
                 if (r.Cells[0].Value != null)
                 {
-                    tags += "[" + r.Cells[0].Value + "]";
+                    listData.Add(new XMLData("-1", r.Cells[0].Value.ToString(), "", "", XMLTypeEnum.Shop));
                 }
             }
-            listData.Add(new XMLData(_diTabIndices["Cutscenes"] + "_2", tags, "", "", XMLTypeEnum.Shop));
+            UpdateTextValue(XMLTypeEnum.Shop, _diTabIndices["Shops"], "Name", tbShopName.Text);
 
-            DataGridViewRow updatedRow = dgvCutscenes.Rows[_diTabIndices["Shops"]];
+            DataGridViewRow updatedRow = dgvShops.Rows[_diTabIndices["Shops"]];
 
             updatedRow.Cells["colShopsID"].Value = _diTabIndices["Shops"];
             updatedRow.Cells["colShopsName"].Value = GetTextValue(XMLTypeEnum.Shop, _diTabIndices["Shops"], "Name");
@@ -1409,7 +1464,8 @@ namespace Database_Editor
                 SaveXMLDictionaryList(_diCharacterSchedules[s], s, sWriter);
             }
 
-            SaveXMLDictionarXMLDataList(_diCutscenes, CUTSCENE_XML_FILE, sWriter, XMLTypeEnum.Cutscene);
+            SaveXMLDictionaryIntKeyList(_diCutscenes, CUTSCENE_XML_FILE, XMLTypeEnum.Cutscene, sWriter);
+            SaveXMLDictionarXMLDataList(_diShops, SHOPS_XML_FILE, XMLTypeEnum.Shop, sWriter);
             SaveXMLDictionaryList(_diCutsceneDialogue, CUTSCENE_DIALOGUE_XML_FILE, sWriter);
 
             string mapPath = PATH_TO_MAPS;
@@ -1493,7 +1549,7 @@ namespace Database_Editor
             dataFile.Close();
         }
 
-        public void SaveXMLDictionarXMLDataList(Dictionary<int, List<XMLData>> dataList, string fileName, StreamWriter sWriter, XMLTypeEnum xmlType)
+        public void SaveXMLDictionarXMLDataList(Dictionary<int, List<XMLData>> dataList, string fileName, XMLTypeEnum xmlType, StreamWriter sWriter)
         {
             StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[string, List[string]]");
 
@@ -1505,6 +1561,33 @@ namespace Database_Editor
                 foreach (XMLData s in kvp.Value)
                 {
                     value += string.Format("        <Item>{0}</Item>{1}", s.GetTagsString(), System.Environment.NewLine);
+                }
+                value += "      </Value>";
+                WriteXMLEntry(dataFile, key, value);
+
+                string name = GetTextValue(xmlType, kvp.Key, "Name");
+                string description = GetTextValue(xmlType, kvp.Key, "Description");
+
+                string textValue = string.Format("[Name:{0}]", name);
+                if (!string.IsNullOrEmpty(description)) { value += string.Format("[Description:{0}]", description); }
+                WriteXMLEntry(sWriter, string.Format("      <Key>{0}</Key>", Util.GetEnumString(xmlType) + "_" + kvp.Key), string.Format("      <Value>{0}</Value>", textValue));
+            }
+
+            CloseStreamWriter(ref dataFile);
+        }
+
+        public void SaveXMLDictionaryIntKeyList(Dictionary<int, List<string>> dataList, string fileName, XMLTypeEnum xmlType,  StreamWriter sWriter)
+        {
+            StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[string, List[string]]");
+
+            foreach (KeyValuePair<int, List<string>> kvp in dataList)
+            {
+                string key = string.Format("      <Key>{0}</Key>", kvp.Key);
+                string value = "      <Value>" + System.Environment.NewLine;
+                string item = string.Empty;
+                foreach (string s in kvp.Value)
+                {
+                    value += string.Format("        <Item>{0}</Item>{1}", s, System.Environment.NewLine);
                 }
                 value += "      </Value>";
                 WriteXMLEntry(dataFile, key, value);
@@ -1636,12 +1719,12 @@ namespace Database_Editor
 
                 string textID = Util.GetEnumString(xmlType) + "_" + id;
                 if (xmlType != XMLTypeEnum.None) {
-                    if (_diItemText.ContainsKey(textID)) {
-                        _sName = _diItemText[textID]["Name"];
+                    if (_diObjectText.ContainsKey(textID)) {
+                        _sName = _diObjectText[textID]["Name"];
 
-                        if(_diItemText[textID].ContainsKey("Description"))
+                        if(_diObjectText[textID].ContainsKey("Description"))
                         {
-                            _sDescription = _diItemText[textID]["Description"];
+                            _sDescription = _diObjectText[textID]["Description"];
                         }
                     }
                 }

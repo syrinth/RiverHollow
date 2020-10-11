@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Xml.Serialization;
-using RiverHollow.Characters;
+﻿using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
-using RiverHollow.Tile_Engine;
 using RiverHollow.Items;
+using RiverHollow.Tile_Engine;
 using RiverHollow.Utilities;
-
+using System.Collections.Generic;
+using System.Xml.Serialization;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 
@@ -25,7 +24,7 @@ namespace RiverHollow.Misc
         private Villager _npcHandInTo;
         public Villager HandInTo => _npcHandInTo;
 
-        string _sCutsceneID;
+        int _iCutsceneID;
 
         private int _iTargetGoal;
         public int TargetGoal => _iTargetGoal;
@@ -66,7 +65,7 @@ namespace RiverHollow.Misc
 
         public Quest()
         {
-            _sCutsceneID = "";
+            _iCutsceneID = -1;
             _bImmediate = false;
             _iActivateID = -1;
             _iQuestID = -1;
@@ -154,7 +153,7 @@ namespace RiverHollow.Misc
             if (stringData.ContainsKey("Season")) { _iSeason = int.Parse(stringData["Season"]); }
             if (stringData.ContainsKey("Immediate")) { _bImmediate = true; }
             if (stringData.ContainsKey("Activate")) { _iActivateID = int.Parse(stringData["Activate"]); }
-            if (stringData.ContainsKey("Cutscene")) { _sCutsceneID = stringData["Cutscene"]; }
+            if (stringData.ContainsKey("Cutscene")) { _iCutsceneID = int.Parse(stringData["Cutscene"]); }
         }
 
         public bool AttemptProgress(Monster m)
@@ -248,9 +247,9 @@ namespace RiverHollow.Misc
 
             PlayerManager.QuestLog.Remove(this);
 
-            if (!string.IsNullOrEmpty(_sCutsceneID))
+            if (_iCutsceneID != -1)
             {
-                CutsceneManager.TriggerCutscene(_sCutsceneID);
+                CutsceneManager.TriggerCutscene(_iCutsceneID);
             }
         }
 

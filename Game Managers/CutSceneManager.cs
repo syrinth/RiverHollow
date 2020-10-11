@@ -14,8 +14,8 @@ namespace RiverHollow.Game_Managers
     static class CutsceneManager
     {
         static Cutscene _currentCutscene;
-        static Dictionary<string, Cutscene> _diCutscenes;
-        static Dictionary<string, Dictionary<string, string>> _diCutsceneDialogue;
+        static Dictionary<int, Cutscene> _diCutscenes;
+        static Dictionary<int, Dictionary<string, string>> _diCutsceneDialogue;
         public static bool Playing;
         
         /// <summary>
@@ -25,12 +25,12 @@ namespace RiverHollow.Game_Managers
         public static void LoadContent(ContentManager Content)
         {
             Playing = false;
-            _diCutscenes = new Dictionary<string, Cutscene>();
-            _diCutsceneDialogue = new Dictionary<string, Dictionary<string, string>>();
+            _diCutscenes = new Dictionary<int, Cutscene>();
+            _diCutsceneDialogue = new Dictionary<int, Dictionary<string, string>>();
 
             //We need to do this bullshit because the god damn XML Importer can't have nested Dictionaries. WE MAKE OUR OWN!
-            Dictionary<string, List<string>> dataList = Content.Load<Dictionary<string, List<string>>>(@"Data\Text Files\Dialogue\CutsceneDialogue");
-            foreach (KeyValuePair<string, List<string>> kvp in dataList)
+            Dictionary<int, List<string>> dataList = Content.Load<Dictionary<int, List<string>>>(@"Data\Text Files\Dialogue\CutsceneDialogue");
+            foreach (KeyValuePair<int, List<string>> kvp in dataList)
             {
                 Dictionary<string, string> dss = new Dictionary<string, string>();
                 foreach (string s in kvp.Value)
@@ -45,8 +45,8 @@ namespace RiverHollow.Game_Managers
                 _diCutsceneDialogue.Add(kvp.Key, dss);
             }
 
-            Dictionary<string, List<string>> rawData = Content.Load<Dictionary<string, List<string>>>(@"Data\CutScenes");
-            foreach (KeyValuePair<string, List<string>> kvp in rawData)
+            Dictionary<int, List<string>> rawData = Content.Load<Dictionary<int, List<string>>>(@"Data\CutScenes");
+            foreach (KeyValuePair<int, List<string>> kvp in rawData)
             {
                 _diCutscenes.Add(kvp.Key, new Cutscene(kvp.Key, kvp.Value));
             }
@@ -57,8 +57,7 @@ namespace RiverHollow.Game_Managers
         /// if the coditions are right for it to have been called. If so, set it up and 
         /// confirm that we are playing a Cutscene.
         /// </summary>
-        /// <param name="Content">The Content pipeline</param>
-        public static void CheckForTriggedCutscene(string id)
+        public static void CheckForTriggedCutscene(int id)
         {
             if (_diCutscenes[id].CanBeTriggered())
             {
@@ -66,7 +65,7 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void TriggerCutscene(string id)
+        public static void TriggerCutscene(int id)
         {
             _currentCutscene = _diCutscenes[id];
             _currentCutscene.Setup();
@@ -89,7 +88,7 @@ namespace RiverHollow.Game_Managers
         /// <param name="cutsceneID">ID of the Cutscene</param>
         /// <param name="stringID">The string ID to query for</param>
         /// <returns></returns>
-        public static string GetDialogue(string cutsceneID, string stringID)
+        public static string GetDialogue(int cutsceneID, string stringID)
         {
             return _diCutsceneDialogue[cutsceneID][stringID];
         }
@@ -126,7 +125,7 @@ namespace RiverHollow.Game_Managers
         }
         #endregion
 
-        string _sID;
+        int _iID;
         RHMap _originalMap;
         Vector2 _vOriginalPlayerPos;
         RHMap _cutsceneMap;
@@ -150,9 +149,9 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         /// <param name="id">The Cutscene's global ID</param>
         /// <param name="strData">The list of data associated with it</param>
-        public Cutscene(string id, List<string> strData)
+        public Cutscene(int id, List<string> strData)
         {
-            _sID = id;
+            _iID = id;
             _bTriggered = false;
             _bWaitForMove = false;
             _iCurrentCommand = 0;
@@ -244,7 +243,7 @@ namespace RiverHollow.Game_Managers
                                     if (npcID != -1)    //Player should never be talking
                                     {
                                         Villager v = _liUsedNPCs.Find(test => test.ID == npcID);
-                                        v.TalkCutscene(CutsceneManager.GetDialogue(_sID, sCommandData[1]));
+                                        v.TalkCutscene(CutsceneManager.GetDialogue(_iID, sCommandData[1]));
                                         bGoToNext = true;
                                     }
                                     break;
@@ -257,7 +256,7 @@ namespace RiverHollow.Game_Managers
                                     bGoToNext = true;
                                     break;
                                 case EnumCSCommand.Text:
-                                    GUIManager.OpenTextWindow(CutsceneManager.GetDialogue(_sID, sCommandData[0]));
+                                    GUIManager.OpenTextWindow(CutsceneManager.GetDialogue(_iID, sCommandData[0]));
                                     bGoToNext = true;
                                     break;
                                 case EnumCSCommand.Move:

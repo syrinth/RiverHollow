@@ -274,7 +274,7 @@ namespace RiverHollow
             GameCalendar.NewCalendar();
             if (playIntro)
             {
-                CutsceneManager.TriggerCutscene("1");
+                CutsceneManager.TriggerCutscene(1);
             }
             else
             {
