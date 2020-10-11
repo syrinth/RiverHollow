@@ -178,10 +178,9 @@
             this.colBuildingsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colBuildingsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabSpirits = new System.Windows.Forms.TabPage();
-            this.tabSummons = new System.Windows.Forms.TabPage();
-            this.tabStatusEffects = new System.Windows.Forms.TabPage();
             this.btnSpiritCancel = new System.Windows.Forms.Button();
             this.dgvSpiritTags = new System.Windows.Forms.DataGridView();
+            this.colSpiritTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbSpiritDescription = new System.Windows.Forms.TextBox();
             this.label27 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
@@ -191,7 +190,20 @@
             this.dgvSpirits = new System.Windows.Forms.DataGridView();
             this.colSpiritsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colSpiritsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colSpiritTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabSummons = new System.Windows.Forms.TabPage();
+            this.tabStatusEffects = new System.Windows.Forms.TabPage();
+            this.button3 = new System.Windows.Forms.Button();
+            this.dgvSummonTags = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tbSummonDescription = new System.Windows.Forms.TextBox();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label31 = new System.Windows.Forms.Label();
+            this.tbSummonID = new System.Windows.Forms.TextBox();
+            this.tbSummonName = new System.Windows.Forms.TextBox();
+            this.label32 = new System.Windows.Forms.Label();
+            this.dgvSummons = new System.Windows.Forms.DataGridView();
+            this.colSummonsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colSummonsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -230,6 +242,9 @@
             this.tabSpirits.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSpiritTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSpirits)).BeginInit();
+            this.tabSummons.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSummonTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSummons)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -1757,24 +1772,6 @@
             this.tabSpirits.Text = "Spirits";
             this.tabSpirits.UseVisualStyleBackColor = true;
             // 
-            // tabSummons
-            // 
-            this.tabSummons.Location = new System.Drawing.Point(4, 22);
-            this.tabSummons.Name = "tabSummons";
-            this.tabSummons.Size = new System.Drawing.Size(790, 425);
-            this.tabSummons.TabIndex = 12;
-            this.tabSummons.Text = "Summons";
-            this.tabSummons.UseVisualStyleBackColor = true;
-            // 
-            // tabStatusEffects
-            // 
-            this.tabStatusEffects.Location = new System.Drawing.Point(4, 22);
-            this.tabStatusEffects.Name = "tabStatusEffects";
-            this.tabStatusEffects.Size = new System.Drawing.Size(790, 425);
-            this.tabStatusEffects.TabIndex = 13;
-            this.tabStatusEffects.Text = "Status Effects";
-            this.tabStatusEffects.UseVisualStyleBackColor = true;
-            // 
             // btnSpiritCancel
             // 
             this.btnSpiritCancel.Location = new System.Drawing.Point(709, 394);
@@ -1795,6 +1792,12 @@
             this.dgvSpiritTags.RowHeadersVisible = false;
             this.dgvSpiritTags.Size = new System.Drawing.Size(464, 278);
             this.dgvSpiritTags.TabIndex = 42;
+            // 
+            // colSpiritTags
+            // 
+            this.colSpiritTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colSpiritTags.HeaderText = "Tags";
+            this.colSpiritTags.Name = "colSpiritTags";
             // 
             // tbSpiritDescription
             // 
@@ -1882,11 +1885,145 @@
             this.colSpiritsName.Name = "colSpiritsName";
             this.colSpiritsName.ReadOnly = true;
             // 
-            // colSpiritTags
+            // tabSummons
             // 
-            this.colSpiritTags.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colSpiritTags.HeaderText = "Tags";
-            this.colSpiritTags.Name = "colSpiritTags";
+            this.tabSummons.Controls.Add(this.button3);
+            this.tabSummons.Controls.Add(this.dgvSummonTags);
+            this.tabSummons.Controls.Add(this.tbSummonDescription);
+            this.tabSummons.Controls.Add(this.label30);
+            this.tabSummons.Controls.Add(this.label31);
+            this.tabSummons.Controls.Add(this.tbSummonID);
+            this.tabSummons.Controls.Add(this.tbSummonName);
+            this.tabSummons.Controls.Add(this.label32);
+            this.tabSummons.Controls.Add(this.dgvSummons);
+            this.tabSummons.Location = new System.Drawing.Point(4, 22);
+            this.tabSummons.Name = "tabSummons";
+            this.tabSummons.Size = new System.Drawing.Size(790, 425);
+            this.tabSummons.TabIndex = 12;
+            this.tabSummons.Text = "Summons";
+            this.tabSummons.UseVisualStyleBackColor = true;
+            // 
+            // tabStatusEffects
+            // 
+            this.tabStatusEffects.Location = new System.Drawing.Point(4, 22);
+            this.tabStatusEffects.Name = "tabStatusEffects";
+            this.tabStatusEffects.Size = new System.Drawing.Size(790, 425);
+            this.tabStatusEffects.TabIndex = 13;
+            this.tabStatusEffects.Text = "Status Effects";
+            this.tabStatusEffects.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(709, 394);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 52;
+            this.button3.Text = "Cancel";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.btnSummonCancel_Click);
+            // 
+            // dgvSummonTags
+            // 
+            this.dgvSummonTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvSummonTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn4});
+            this.dgvSummonTags.Location = new System.Drawing.Point(320, 110);
+            this.dgvSummonTags.Name = "dgvSummonTags";
+            this.dgvSummonTags.RowHeadersVisible = false;
+            this.dgvSummonTags.Size = new System.Drawing.Size(464, 278);
+            this.dgvSummonTags.TabIndex = 51;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn4.HeaderText = "Tags";
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            // 
+            // tbSummonDescription
+            // 
+            this.tbSummonDescription.Location = new System.Drawing.Point(320, 51);
+            this.tbSummonDescription.Multiline = true;
+            this.tbSummonDescription.Name = "tbSummonDescription";
+            this.tbSummonDescription.Size = new System.Drawing.Size(464, 53);
+            this.tbSummonDescription.TabIndex = 50;
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(317, 35);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(63, 13);
+            this.label30.TabIndex = 49;
+            this.label30.Text = "Description:";
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(714, 9);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(21, 13);
+            this.label31.TabIndex = 48;
+            this.label31.Text = "ID:";
+            // 
+            // tbSummonID
+            // 
+            this.tbSummonID.Location = new System.Drawing.Point(741, 6);
+            this.tbSummonID.Name = "tbSummonID";
+            this.tbSummonID.Size = new System.Drawing.Size(43, 20);
+            this.tbSummonID.TabIndex = 47;
+            // 
+            // tbSummonName
+            // 
+            this.tbSummonName.Location = new System.Drawing.Point(361, 6);
+            this.tbSummonName.Name = "tbSummonName";
+            this.tbSummonName.Size = new System.Drawing.Size(108, 20);
+            this.tbSummonName.TabIndex = 46;
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(317, 9);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(38, 13);
+            this.label32.TabIndex = 45;
+            this.label32.Text = "Name:";
+            // 
+            // dgvSummons
+            // 
+            this.dgvSummons.AllowUserToAddRows = false;
+            this.dgvSummons.AllowUserToDeleteRows = false;
+            this.dgvSummons.AllowUserToResizeColumns = false;
+            this.dgvSummons.AllowUserToResizeRows = false;
+            this.dgvSummons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvSummons.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colSummonsID,
+            this.colSummonsName});
+            this.dgvSummons.Location = new System.Drawing.Point(6, 6);
+            this.dgvSummons.MultiSelect = false;
+            this.dgvSummons.Name = "dgvSummons";
+            this.dgvSummons.ReadOnly = true;
+            this.dgvSummons.RowHeadersVisible = false;
+            this.dgvSummons.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvSummons.Size = new System.Drawing.Size(308, 411);
+            this.dgvSummons.TabIndex = 44;
+            this.dgvSummons.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSummons_CellClick);
+            // 
+            // colSummonsID
+            // 
+            this.colSummonsID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colSummonsID.FillWeight = 10F;
+            this.colSummonsID.HeaderText = "ID";
+            this.colSummonsID.Name = "colSummonsID";
+            this.colSummonsID.ReadOnly = true;
+            this.colSummonsID.Width = 31;
+            // 
+            // colSummonsName
+            // 
+            this.colSummonsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colSummonsName.FillWeight = 90F;
+            this.colSummonsName.HeaderText = "Name";
+            this.colSummonsName.Name = "colSummonsName";
+            this.colSummonsName.ReadOnly = true;
             // 
             // frmDBEditor
             // 
@@ -1950,6 +2087,10 @@
             this.tabSpirits.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSpiritTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSpirits)).EndInit();
+            this.tabSummons.ResumeLayout(false);
+            this.tabSummons.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSummonTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSummons)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2119,6 +2260,18 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colSpiritTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colSpiritsID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colSpiritsName;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.DataGridView dgvSummonTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.TextBox tbSummonDescription;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.TextBox tbSummonID;
+        private System.Windows.Forms.TextBox tbSummonName;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.DataGridView dgvSummons;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colSummonsID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colSummonsName;
     }
 }
 
