@@ -1338,9 +1338,12 @@ namespace Database_Editor
         }
         private void dgvCutscenes_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            SaveCutsceneInfo();
-            _diTabIndices["Cutscenes"] = e.RowIndex;
-            LoadCutsceneInfo();
+            if (e.RowIndex > -1)
+            {
+                SaveCutsceneInfo();
+                _diTabIndices["Cutscenes"] = e.RowIndex;
+                LoadCutsceneInfo();
+            }
         }
         private void dgvMonsters_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -1352,9 +1355,12 @@ namespace Database_Editor
         }
         private void dgvShops_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            SaveShopInfo();
-            _diTabIndices["Shops"] = e.RowIndex;
-            LoadShopInfo();
+            if (e.RowIndex > -1)
+            {
+                SaveShopInfo();
+                _diTabIndices["Shops"] = e.RowIndex;
+                LoadShopInfo();
+            }
         }
         private void dgvBuildings_CellClick(object sender, DataGridViewCellEventArgs e)
         {

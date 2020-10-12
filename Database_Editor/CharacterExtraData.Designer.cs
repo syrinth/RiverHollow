@@ -30,7 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCharExtraData));
             this.dgvCharExtraData = new System.Windows.Forms.DataGridView();
-            this.colCharExtraID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbCharExtraDataInfo = new System.Windows.Forms.TextBox();
             this.tbCharExtraDataName = new System.Windows.Forms.TextBox();
             this.lblName = new System.Windows.Forms.Label();
@@ -38,6 +37,7 @@
             this.btnAddNew = new System.Windows.Forms.Button();
             this.dgvEditTags = new System.Windows.Forms.DataGridView();
             this.colQuestTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCharExtraID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCharExtraData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvEditTags)).BeginInit();
             this.SuspendLayout();
@@ -60,14 +60,6 @@
             this.dgvCharExtraData.Size = new System.Drawing.Size(308, 411);
             this.dgvCharExtraData.TabIndex = 15;
             this.dgvCharExtraData.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCharExtraData_CellClick);
-            // 
-            // colCharExtraID
-            // 
-            this.colCharExtraID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colCharExtraID.FillWeight = 90F;
-            this.colCharExtraID.HeaderText = "Name";
-            this.colCharExtraID.Name = "colCharExtraID";
-            this.colCharExtraID.ReadOnly = true;
             // 
             // tbCharExtraDataInfo
             // 
@@ -129,6 +121,15 @@
             this.colQuestTags.HeaderText = "Tags";
             this.colQuestTags.Name = "colQuestTags";
             // 
+            // colCharExtraID
+            // 
+            this.colCharExtraID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colCharExtraID.FillWeight = 90F;
+            this.colCharExtraID.HeaderText = "Name";
+            this.colCharExtraID.Name = "colCharExtraID";
+            this.colCharExtraID.ReadOnly = true;
+            this.colCharExtraID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // FormCharExtraData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -157,10 +158,10 @@
         private System.Windows.Forms.TextBox tbCharExtraDataInfo;
         private System.Windows.Forms.TextBox tbCharExtraDataName;
         private System.Windows.Forms.Label lblName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colCharExtraID;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnAddNew;
         private System.Windows.Forms.DataGridView dgvEditTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colQuestTags;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCharExtraID;
     }
 }
