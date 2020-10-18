@@ -469,7 +469,7 @@ namespace Database_Editor
             xmlNodeList = xmldoc.ChildNodes;
             XmlNode node = xmlNodeList[1].ChildNodes[0];
 
-            for (int i=0; i< node.ChildNodes.Count; i++)
+            for (int i = 0; i < node.ChildNodes.Count; i++)
             {
                 string key = string.Empty;
                 List<string> tagList = new List<string>();
@@ -493,7 +493,7 @@ namespace Database_Editor
                     xmlDictionary[key] = tagList;
                 }
             }
-           
+
             return xmlDictionary;
         }
 
@@ -989,7 +989,7 @@ namespace Database_Editor
         }
 
         #region SaveInfo
-        private void SaveGenericInfo(List<XMLData> liData, string tabIndex, string textIDPrefix, XMLTypeEnum xmlType, TextBox tbName, ComboBox cb, DataGridView baseGridView, DataGridView dgTags, string colID, string colName, TextBox tbDescription = null, string itemTags = "", string objectTags = "")
+        private void SaveXMLDataInfo(List<XMLData> liData, string tabIndex, string textIDPrefix, XMLTypeEnum xmlType, TextBox tbName, TextBox tbID, ComboBox cb, DataGridView baseGridView, DataGridView dgTags, string colID, string colName, TextBox tbDescription = null, string itemTags = "", string objectTags = "")
         {
             XMLData data = null;
             if (liData.Count == _diTabIndices[tabIndex])
@@ -1021,7 +1021,7 @@ namespace Database_Editor
                     }
                 }
 
-                data = new XMLData(_diTabIndices[tabIndex].ToString(), tags, itemTags, objectTags, xmlType);
+                data = new XMLData(tbID.Text, tags, itemTags, objectTags, xmlType);
                 liData.Add(data);
             }
             else
@@ -1046,6 +1046,7 @@ namespace Database_Editor
                         data.SetTagInfo(key, val);
                     }
                 }
+                data.ChangeID(int.Parse(tbItemID.Text), false);
             }
 
             DataGridViewRow updatedRow = baseGridView.Rows[_diTabIndices[tabIndex]];
@@ -1089,7 +1090,7 @@ namespace Database_Editor
                     }
                 }
 
-                data = new ItemXMLData(_diTabIndices["Items"].ToString(), tags, ITEM_TAGS, ITEM_WORLD_TAGS);
+                data = new ItemXMLData(tbItemID.Text, tags, ITEM_TAGS, ITEM_WORLD_TAGS);
                 _liItemData.Add(data);
             }
             else
@@ -1121,54 +1122,82 @@ namespace Database_Editor
                 }
             }
 
-            DataGridViewRow updatedRow = dgvItems.Rows[_diTabIndices["Items"]];
+            int ID = int.Parse(tbItemID.Text);
+            if (ID != data.ID)
+            {
+                int oldID = data.ID;
+                _liItemData.Remove(data);
+                _liItemData.Insert(ID, data);
+                data.ChangeID(ID);
+                foreach (ItemXMLData d in _liItemData)
+                {
+                    if (d != data)
+                    {
+                        if (d.ID >= ID && d.ID < oldID)
+                        {
+                            d.ChangeID(d.ID + 1);
+                        }
+                        else if (d.ID >= oldID)
+                        {
+                        //    d.ChangeID(d.ID - 1);
+                        }
+                    }
+                }
 
-            updatedRow.Cells["colItemID"].Value = data.ID;
-            updatedRow.Cells["colItemName"].Value = data.Name;
+                LoadItemDatagrid();
+                SelectRow(dgvItems, ID);
+            }
+            else
+            {
+                DataGridViewRow updatedRow = dgvItems.Rows[_diTabIndices["Items"]];
+
+                updatedRow.Cells["colItemID"].Value = data.ID;
+                updatedRow.Cells["colItemName"].Value = data.Name;
+            }
         }
         private void SaveWorldObjectInfo(List<XMLData> liData)
         {
-            SaveGenericInfo(_liWorldObjects, "WorldObjects", "WorldObject", XMLTypeEnum.WorldObject, tbWorldObjectName, cbWorldObjectType, dgvWorldObjects, dgvWorldObjectTags, "colWorldObjectsID", "colWorldObjectsName");
+            SaveXMLDataInfo(_liWorldObjects, "WorldObjects", "WorldObject", XMLTypeEnum.WorldObject, tbWorldObjectName, tbWorldObjectID, cbWorldObjectType, dgvWorldObjects, dgvWorldObjectTags, "colWorldObjectsID", "colWorldObjectsName");
         }
         private void SaveCharacterInfo(List<XMLData> liData)
         {
-            SaveGenericInfo(_diBasicXML[CHARACTER_XML_FILE], "Characters", "Character_", XMLTypeEnum.Character, tbCharacterName, cbCharacterType, dgvCharacters, dgCharacterTags, "colCharacterID", "colCharacterName");
+            SaveXMLDataInfo(_diBasicXML[CHARACTER_XML_FILE], "Characters", "Character_", XMLTypeEnum.Character, tbCharacterName, tbCharacterID, cbCharacterType, dgvCharacters, dgCharacterTags, "colCharacterID", "colCharacterName");
         }
         private void SaveClassInfo(List<XMLData> liData)
         {
-            SaveGenericInfo(_diBasicXML[CLASSES_XML_FILE], "Classes", "Class_", XMLTypeEnum.Class, tbClassName, null, dgvClasses, dgClassTags, "colClassID", "colClassName");
+            SaveXMLDataInfo(_diBasicXML[CLASSES_XML_FILE], "Classes", "Class_", XMLTypeEnum.Class, tbClassName, tbClassID, null, dgvClasses, dgClassTags, "colClassID", "colClassName");
         }
         private void SaveAdventurerInfo(List<XMLData> liData)
         {
-            SaveGenericInfo(_diBasicXML[WORKERS_XML_FILE], "Adventurers", "Adventurer_", XMLTypeEnum.Adventurer, tbAdventurerName, cbAdventurerType, dgvAdventurers, dgvAdventurerTags, "colAdventurersID", "colAdventurersName");
+            SaveXMLDataInfo(_diBasicXML[WORKERS_XML_FILE], "Adventurers", "Adventurer_", XMLTypeEnum.Adventurer, tbAdventurerName, tbAdventurerID, cbAdventurerType, dgvAdventurers, dgvAdventurerTags, "colAdventurersID", "colAdventurersName");
         }
         private void SaveQuestInfo(List<XMLData> liData)
         {
-            SaveGenericInfo(_diBasicXML[QUEST_XML_FILE], "Quests", "Quest_", XMLTypeEnum.Quest, tbQuestName, cbQuestType, dgvQuests, dgvQuestTags, "colQuestsID", "colQuestsName", tbQuestDescription);
+            SaveXMLDataInfo(_diBasicXML[QUEST_XML_FILE], "Quests", "Quest_", XMLTypeEnum.Quest, tbQuestName, tbQuestID, cbQuestType, dgvQuests, dgvQuestTags, "colQuestsID", "colQuestsName", tbQuestDescription);
         }
         private void SaveMonsterInfo(List<XMLData> liData)
         {
-            SaveGenericInfo(_diBasicXML[MONSTERS_XML_FILE], "Monsters", "Monster_", XMLTypeEnum.Monster, tbMonsterName, null, dgvMonsters, dgvMonsterTags, "colMonstersID", "colMonstersName", tbMonsterDescription);
+            SaveXMLDataInfo(_diBasicXML[MONSTERS_XML_FILE], "Monsters", "Monster_", XMLTypeEnum.Monster, tbMonsterName, tbMonsterID, null, dgvMonsters, dgvMonsterTags, "colMonstersID", "colMonstersName", tbMonsterDescription);
         }
         private void SaveActionInfo(List<XMLData> liData)
         {
-            SaveGenericInfo(_diBasicXML[ACTIONS_XML_FILE], "Actions", "Action_", XMLTypeEnum.Action, tbActionName, cbActionType, dgvActions, dgvActionTags, "colActionsID", "colActionsName", tbActionDescription);
+            SaveXMLDataInfo(_diBasicXML[ACTIONS_XML_FILE], "Actions", "Action_", XMLTypeEnum.Action, tbActionName, tbActionID, cbActionType, dgvActions, dgvActionTags, "colActionsID", "colActionsName", tbActionDescription);
         }
         private void SaveBuildingInfo(List<XMLData> liData)
         {
-            SaveGenericInfo(_diBasicXML[BUILDINGS_XML_FILE], "Buildings", "Building_", XMLTypeEnum.Building, tbBuildingName, null, dgvBuildings, dgvBuildingTags, "colBuildingsID", "colBuildingsName", tbBuildingDescription);
+            SaveXMLDataInfo(_diBasicXML[BUILDINGS_XML_FILE], "Buildings", "Building_", XMLTypeEnum.Building, tbBuildingName, tbBuildingID, null, dgvBuildings, dgvBuildingTags, "colBuildingsID", "colBuildingsName", tbBuildingDescription);
         }
         private void SaveSpiritInfo(List<XMLData> liData)
         {
-            SaveGenericInfo(_diBasicXML[SPIRITS_XML_FILE], "Spirits", "Spirit_", XMLTypeEnum.Spirit, tbSpiritName, null, dgvSpirits, dgvSpiritTags, "colSpiritsID", "colSpiritsName", tbSpiritDescription);
+            SaveXMLDataInfo(_diBasicXML[SPIRITS_XML_FILE], "Spirits", "Spirit_", XMLTypeEnum.Spirit, tbSpiritName, tbSpiritID, null, dgvSpirits, dgvSpiritTags, "colSpiritsID", "colSpiritsName", tbSpiritDescription);
         }
         private void SaveSummonInfo(List<XMLData> liData)
         {
-            SaveGenericInfo(_diBasicXML[SUMMONS_XML_FILE], "Summons", "Summon_", XMLTypeEnum.Summon, tbSummonName, null, dgvSummons, dgvSummonTags, "colSummonsID", "colSummonsName", tbSummonDescription);
+            SaveXMLDataInfo(_diBasicXML[SUMMONS_XML_FILE], "Summons", "Summon_", XMLTypeEnum.Summon, tbSummonName, tbSummonID, null, dgvSummons, dgvSummonTags, "colSummonsID", "colSummonsName", tbSummonDescription);
         }
         private void SaveStatusEffectInfo(List<XMLData> liData)
         {
-            SaveGenericInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", "StatusEffect_", XMLTypeEnum.StatusEffect, tbStatusEffectName, null, dgvStatusEffects, dgvStatusEffectTags, "colStatusEffectsID", "colStatusEffectsName", tbStatusEffectDescription);
+            SaveXMLDataInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", "StatusEffect_", XMLTypeEnum.StatusEffect, tbStatusEffectName, tbStatusEffectID, null, dgvStatusEffects, dgvStatusEffectTags, "colStatusEffectsID", "colStatusEffectsName", tbStatusEffectDescription);
         }
 
         private void SaveCutsceneInfo()
@@ -1312,7 +1341,7 @@ namespace Database_Editor
             if (e.RowIndex > -1)
             {
                 SaveItemInfo();
-                _diTabIndices["Items"] = int.Parse(dgvItems.Rows[e.RowIndex].Cells[0].Value.ToString());
+                _diTabIndices["Items"] = e.RowIndex;
                 LoadItemInfo();
             }
         }
@@ -1467,12 +1496,12 @@ namespace Database_Editor
 
             foreach (string s in _diCharacterSchedules.Keys)
             {
-                SaveXMLDictionaryList(_diCharacterSchedules[s], s, sWriter);
+                SaveXMLDictionaryList(_diCharacterSchedules[s], s, sWriter, "string");
             }
 
             SaveXMLDictionaryIntKeyList(_diCutscenes, CUTSCENE_XML_FILE, XMLTypeEnum.Cutscene, sWriter);
             SaveXMLDictionarXMLDataList(_diShops, SHOPS_XML_FILE, XMLTypeEnum.Shop, sWriter);
-            SaveXMLDictionaryList(_diCutsceneDialogue, CUTSCENE_DIALOGUE_XML_FILE, sWriter);
+            SaveXMLDictionaryList(_diCutsceneDialogue, CUTSCENE_DIALOGUE_XML_FILE, sWriter, "int");
 
             string mapPath = PATH_TO_MAPS;
             if (!Directory.Exists(mapPath)) { Directory.CreateDirectory(mapPath); }
@@ -1584,7 +1613,7 @@ namespace Database_Editor
 
         public void SaveXMLDictionaryIntKeyList(Dictionary<int, List<string>> dataList, string fileName, XMLTypeEnum xmlType,  StreamWriter sWriter)
         {
-            StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[string, List[string]]");
+            StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[int, List[string]]");
 
             foreach (KeyValuePair<int, List<string>> kvp in dataList)
             {
@@ -1608,9 +1637,9 @@ namespace Database_Editor
 
             CloseStreamWriter(ref dataFile);
         }
-        public void SaveXMLDictionaryList(Dictionary<string, List<string>> dataList, string fileName, StreamWriter sWriter)
+        public void SaveXMLDictionaryList(Dictionary<string, List<string>> dataList, string fileName, StreamWriter sWriter, string keyType)
         {
-            StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[string, List[string]]");
+            StreamWriter dataFile = PrepareXMLFile(fileName, "Dictionary[" + keyType + ", List[string]]");
 
             foreach (KeyValuePair<string, List<string>> kvp in dataList)
             {
