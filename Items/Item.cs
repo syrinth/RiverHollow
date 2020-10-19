@@ -235,6 +235,15 @@ namespace RiverHollow.Items
             return ret;
         }
 
+        public bool Giftable()
+        {
+            bool rv = false;
+
+            rv = !(CompareType(ItemEnum.Tool) || CompareType(ItemEnum.Special) || CompareType(ItemEnum.StaticItem));
+
+            return rv;
+        }
+
         public virtual void UseItem(string action) { }
 
         public virtual void ApplyUniqueData(string str) { }

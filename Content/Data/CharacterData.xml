@@ -87,7 +87,7 @@
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[Type:Villager][PortRow:3][HomeMap:mapManorGrounds]</Value>
+      <Value>[Type:ShippingGremlin][PortRow:3][HomeMap:mapManorGrounds]</Value>
     </Item>
   </Asset>
 </XnaContent>

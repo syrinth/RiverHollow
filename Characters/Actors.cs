@@ -3162,7 +3162,7 @@ namespace RiverHollow.Characters
             _diDialogue = DataManager.GetNPCDialogue(_iIndex);
             _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Gremlin", _iIndex.ToString("00"));
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
-            _sName = _diDialogue["Name"];
+            Util.AssignValue(ref _sName, "Name", stringData);
 
             if (stringData.ContainsKey("HomeMap"))
             {

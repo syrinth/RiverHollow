@@ -1000,7 +1000,7 @@ namespace Database_Editor
                 };
                 if (tbDescription != null) { diText["Description"] = tbDescription.Text; }
 
-                _diObjectText[textIDPrefix + "_" + tbItemID.Text] = diText;
+                _diObjectText[textIDPrefix + "_" + tbID.Text] = diText;
 
                 Dictionary<string, string> tags = new Dictionary<string, string>();
 
@@ -1046,7 +1046,7 @@ namespace Database_Editor
                         data.SetTagInfo(key, val);
                     }
                 }
-                data.ChangeID(int.Parse(tbItemID.Text), false);
+                data.ChangeID(int.Parse(tbID.Text), false);
             }
 
             DataGridViewRow updatedRow = baseGridView.Rows[_diTabIndices[tabIndex]];

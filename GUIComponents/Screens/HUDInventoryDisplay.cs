@@ -124,7 +124,6 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 GUIManager.OpenTextWindow(GameManager.CurrentNPC.GetDialogEntry("Goodbye"));
             }
-            GameManager.Unpause();
         }
     }
 }

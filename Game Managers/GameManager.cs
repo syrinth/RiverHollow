@@ -38,7 +38,7 @@ namespace RiverHollow.Game_Managers
 
         public enum QuestTypeEnum { GroupSlay, Slay, Fetch }
         public enum ActorEnum { Actor, Adventurer, CombatActor, Monster, NPC, ShippingGremlin, Spirit, WorldCharacter };
-        public enum NPCTypeEnum { Villager, Eligible, Shopkeeper, Ranger, Worker, Mason }
+        public enum NPCTypeEnum { Villager, Eligible, Shopkeeper, Ranger, Worker, Mason, ShippingGremlin }
         public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade};
         public enum PotencyBonusEnum { None, Conditions, Summons };
         public enum EquipmentEnum { Armor, Weapon, Accessory, Head, Wrist};

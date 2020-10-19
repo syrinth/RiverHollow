@@ -758,7 +758,7 @@ namespace RiverHollow.Tile_Engine
 
             foreach(RHTile t in _liTestTiles)
             {
-                bool passable = t.Passable() && (Scrying() || PlayerManager.PlayerInRange(t.Rect));
+                bool passable = t.Passable() && !TileContainsActor(t) && (Scrying() || PlayerManager.PlayerInRange(t.Rect));
                 spriteBatch.Draw(DataManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)t.Position.X, (int)t.Position.Y, TileSize, TileSize), new Rectangle(288, 128, TileSize, TileSize) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
             }
         }
@@ -836,6 +836,21 @@ namespace RiverHollow.Tile_Engine
         }
 
         #region Collision Code
+        private bool TileContainsActor(RHTile t)
+        {
+            bool rv = false;
+            foreach (WorldActor act in _liActors)
+            {
+                if (act.CollisionIntersects(t.Rect))
+                {
+                    rv = true;
+                    break;
+                }
+            }
+
+            return rv;
+        }
+
         /// <summary>
         /// Find every tile that could possibly cause a collision for the moving WorldActor
         /// </summary>
@@ -1093,7 +1108,8 @@ namespace RiverHollow.Tile_Engine
             //Do nothing if no tile could be retrieved
             if (tile == null) { return rv; }
 
-            if(tile.GetTravelPoint() != null) {
+            if (tile.GetTravelPoint() != null)
+            {
                 TravelPoint obj = tile.GetTravelPoint();
 
                 if (PlayerManager.PlayerInRange(obj.CollisionBox))
@@ -1142,59 +1158,47 @@ namespace RiverHollow.Tile_Engine
             {
                 if (shop.Contains(mouseLocation) && shop.IsOpen())
                 {
-                    rv = true;
                     shop.Talk();
-                    break;
+                    return true;
                 }
             }
 
-            if (!rv)
+            foreach (WorldActor c in _liActors)
             {
-                foreach (WorldActor c in _liActors)
+                if (PlayerManager.PlayerInRange(c.HoverBox, (int)(TileSize * 1.5)) && c.HoverContains(mouseLocation) && c.CanTalk && c.Active)
                 {
-                    if (PlayerManager.PlayerInRange(c.HoverBox, (int)(TileSize * 1.5)) && c.HoverContains(mouseLocation) && c.CanTalk && c.Active)
+                    ((TalkingActor)c).Talk();
+                    return true;
+                }
+            }
+
+            List<Item> removedList = new List<Item>();
+            for (int i = 0; i < _liItems.Count; i++)
+            {
+                Item it = _liItems[i];
+                if (it.ManualPickup && it.CollisionBox.Contains(GUICursor.GetWorldMousePosition()))
+                {
+                    if (InventoryManager.AddToInventory(it))
                     {
-                        ((TalkingActor)c).Talk();
-                        rv = true;
+                        removedList.Add(it);
                         break;
                     }
                 }
-            }
 
-
-            if (!rv)
-            {
-                List<Item> removedList = new List<Item>();
-                for (int i = 0; i < _liItems.Count; i++)
+                foreach (Item ii in removedList)
                 {
-                    Item it = _liItems[i];
-                    if (it.ManualPickup && it.CollisionBox.Contains(GUICursor.GetWorldMousePosition()))
-                    {
-                        if (InventoryManager.AddToInventory(it))
-                        {
-                            removedList.Add(it);
-                            break;
-                        }
-                    }
-                }
-
-                foreach (Item i in removedList)
-                {
-                    _liItems.Remove(i);
+                    _liItems.Remove(ii);
                 }
                 removedList.Clear();
             }
 
-            if (!rv)
+            if (Scrying())
             {
-                if (Scrying())
-                {
-                    GameManager.DropBuilding();
-                    LeaveBuildMode();
-                    Unpause();
-                    Scry(false);
-                    ResetCamera();
-                }
+                GameManager.DropBuilding();
+                LeaveBuildMode();
+                Unpause();
+                Scry(false);
+                ResetCamera();
             }
 
             return rv;
@@ -1255,8 +1259,7 @@ namespace RiverHollow.Tile_Engine
                                     Villager n = (Villager)c;
                                     if (InventoryManager.GetCurrentItem() != null &&
                                         n.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(n.CharCenter) &&
-                                        InventoryManager.GetCurrentItem().ItemType != Item.ItemEnum.Tool &&
-                                        InventoryManager.GetCurrentItem().ItemType != Item.ItemEnum.Equipment)
+                                        InventoryManager.GetCurrentItem().Giftable())
                                     {
                                         n.Gift(InventoryManager.GetCurrentItem());
                                         rv = true;
@@ -1789,7 +1792,8 @@ namespace RiverHollow.Tile_Engine
                     }
 
                     RHTile tempTile = _arrTiles[x, y];
-                    if ((!o.WallObject && tempTile.Passable() && tempTile.WorldObject == null) || (o.WallObject && tempTile.IsValidWall()))
+
+                    if (!TileContainsActor(tempTile) && ((!o.WallObject && tempTile.Passable() && tempTile.WorldObject == null) || (o.WallObject && tempTile.IsValidWall())))
                     {
                         collisionTiles.Add(tempTile);
                     }
@@ -1877,7 +1881,7 @@ namespace RiverHollow.Tile_Engine
             bool placeIt = true;
             foreach (RHTile t in liTiles)
             {
-                if (!t.Passable())
+                if (!t.Passable() || TileContainsActor(t))
                 {
                     placeIt = false;
                     break;
