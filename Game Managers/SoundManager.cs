@@ -220,6 +220,8 @@ namespace RiverHollow.Game_Managers
         /// <param name="loc">The location of the effect</param>
         public static void PlayEffectAtLoc(string effectName, string mapName, Vector2 loc, object obj = null)
         {
+            if (string.IsNullOrEmpty(effectName)) { return; }
+
             //If we're not currently on the map, don't play the effect
             if (MapManager.CurrentMap.Name.Equals(mapName))
             {

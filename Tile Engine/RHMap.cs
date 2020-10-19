@@ -839,12 +839,17 @@ namespace RiverHollow.Tile_Engine
         private bool TileContainsActor(RHTile t)
         {
             bool rv = false;
-            foreach (WorldActor act in _liActors)
+
+            if (this == PlayerManager.World.CurrentMap && PlayerManager.World.CollisionIntersects(t.Rect)) { rv = true; }
+            else
             {
-                if (act.CollisionIntersects(t.Rect))
+                foreach (WorldActor act in _liActors)
                 {
-                    rv = true;
-                    break;
+                    if (act.CollisionIntersects(t.Rect))
+                    {
+                        rv = true;
+                        break;
+                    }
                 }
             }
 

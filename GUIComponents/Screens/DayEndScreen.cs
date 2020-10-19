@@ -40,7 +40,7 @@ namespace RiverHollow.GUIComponents.Screens
             //Just for the purpose of testing, delete for actual use
             for (int i =0; i < 60; i++)
             {
-                GameManager.SlainMonsters.Add(new GUISprite(DataManager.GetMonsterByIndex(RHRandom.Instance.Next(1, 4)).BodySprite));
+                GameManager.SlainMonsters.Add(new GUISprite(DataManager.GetMonsterByIndex(RHRandom.Instance.Next(0, 3)).BodySprite));
             }
 
             //Determine how many total rows we will need
