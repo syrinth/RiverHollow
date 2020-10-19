@@ -126,7 +126,10 @@ namespace Database_Editor
 
         private void SaveDictionaryData()
         {
-            _diStringData.Remove(_diStringData.ElementAt(_iIndex).Key);
+            if (_diStringData.ContainsKey(tbCharExtraDataName.Text))
+            {
+                _diStringData.Remove(tbCharExtraDataName.Text);
+            }
             _diStringData[tbCharExtraDataName.Text] = tbCharExtraDataInfo.Text;
             DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
             row.Cells["colCharExtraID"].Value = tbCharExtraDataName.Text;
@@ -155,13 +158,26 @@ namespace Database_Editor
             dgvCharExtraData.Rows.Add();
             SelectRow(dgvCharExtraData, _iIndex);
 
+            string newID = (_iIndex + 1).ToString();
             DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
-            row.Cells["colCharExtraID"].Value = "New";
+            row.Cells["colCharExtraID"].Value = newID;
 
-            tbCharExtraDataName.Text = "";
+            tbCharExtraDataName.Text = newID;
             tbCharExtraDataInfo.Text = "";
 
             tbCharExtraDataName.Focus();
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            if (_eDataMode == DataMode.Dialogue)
+            {
+                SaveDictionaryData();
+            }
+            else if (_eDataMode == DataMode.Schedule)
+            {
+                SaveListData();
+            }
         }
     }
 }

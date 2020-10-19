@@ -795,7 +795,7 @@ namespace Database_Editor
             string[] tags = data.GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in tags)
             {
-                if (!s.StartsWith("Type"))
+                if (!s.StartsWith("Type") && !s.StartsWith("Name"))
                 {
                     dgvTags.Rows.Add(s);
                 }
@@ -964,7 +964,7 @@ namespace Database_Editor
         }
         private void btnEditCutsceneDialogue_Click(object sender, EventArgs e)
         {
-            string keyValue = dgvCutscenes.CurrentCell.Value.ToString();
+            string keyValue = dgvCutscenes.CurrentRow.Cells["colCutscenesID"].Value.ToString();
             if (!_diCutsceneDialogue.ContainsKey(keyValue))
             {
                 _diCutsceneDialogue[keyValue] = new List<string>() { "" };

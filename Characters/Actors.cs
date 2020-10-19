@@ -911,7 +911,7 @@ namespace RiverHollow.Characters
 
             _linkedSummon?.Update(gTime);
 
-            if (!_bPause && (MapManager.Maps[CurrentMapName].ContainsActor(this) || this == PlayerManager.World))
+            if (!_bPause && (MapManager.Maps.ContainsKey(CurrentMapName) && MapManager.Maps[CurrentMapName].ContainsActor(this) || this == PlayerManager.World))
             {
                 if (_vMoveTo != Vector2.Zero)
                 {

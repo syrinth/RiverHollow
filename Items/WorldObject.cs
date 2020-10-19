@@ -408,7 +408,7 @@ namespace RiverHollow.Items
 
             public Machine(int id, Dictionary<string, string> stringData)
             {
-                LoadDictionaryData(stringData);
+                
                 _iID = id;
                 _heldItem = null;
                 CraftingDictionary = new Dictionary<int, int>();
@@ -451,14 +451,15 @@ namespace RiverHollow.Items
                     }
                 }
 
+                LoadDictionaryData(stringData);
                 Util.AssignValue(ref _sEffectWorking, "WorkEffect", stringData);
             }
 
             protected override void LoadSprite(Dictionary<string, string> stringData, string textureName = "Textures\\texMachines")
             {
                 _sprite = new AnimatedSprite(@"Textures\texMachines");
-                _sprite.AddAnimation(AnimationEnum.ObjectIdle, (int)_pImagePos.X, (int)_pImagePos.Y, _iWidth, _iHeight, 1, 0.3f, true);
-                _sprite.AddAnimation(AnimationEnum.PlayAnimation, (int)_pImagePos.X + _iWidth, (int)_pImagePos.Y, _iWidth, _iHeight, _iWorkingFrames, _fFrameSpeed, true);
+                _sprite.AddAnimation(AnimationEnum.ObjectIdle, (int)_pImagePos.X, (int)_pImagePos.Y, _iWidth, _iHeight, 1, 0.3f, false);
+                _sprite.AddAnimation(AnimationEnum.PlayAnimation, (int)_pImagePos.X + _iWidth, (int)_pImagePos.Y, _iWidth, _iHeight, _iWorkingFrames, _fFrameSpeed, false);
                 _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
                 _sprite.IsAnimating = true;
 

@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCharExtraData));
             this.dgvCharExtraData = new System.Windows.Forms.DataGridView();
+            this.colCharExtraID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbCharExtraDataInfo = new System.Windows.Forms.TextBox();
             this.tbCharExtraDataName = new System.Windows.Forms.TextBox();
             this.lblName = new System.Windows.Forms.Label();
@@ -37,7 +38,8 @@
             this.btnAddNew = new System.Windows.Forms.Button();
             this.dgvEditTags = new System.Windows.Forms.DataGridView();
             this.colQuestTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCharExtraID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.btnRemove = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCharExtraData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvEditTags)).BeginInit();
             this.SuspendLayout();
@@ -57,9 +59,18 @@
             this.dgvCharExtraData.ReadOnly = true;
             this.dgvCharExtraData.RowHeadersVisible = false;
             this.dgvCharExtraData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvCharExtraData.Size = new System.Drawing.Size(308, 411);
+            this.dgvCharExtraData.Size = new System.Drawing.Size(308, 397);
             this.dgvCharExtraData.TabIndex = 15;
             this.dgvCharExtraData.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCharExtraData_CellClick);
+            // 
+            // colCharExtraID
+            // 
+            this.colCharExtraID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colCharExtraID.FillWeight = 90F;
+            this.colCharExtraID.HeaderText = "Name";
+            this.colCharExtraID.Name = "colCharExtraID";
+            this.colCharExtraID.ReadOnly = true;
+            this.colCharExtraID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tbCharExtraDataInfo
             // 
@@ -96,11 +107,11 @@
             // 
             // btnAddNew
             // 
-            this.btnAddNew.Location = new System.Drawing.Point(326, 400);
+            this.btnAddNew.Location = new System.Drawing.Point(12, 415);
             this.btnAddNew.Name = "btnAddNew";
             this.btnAddNew.Size = new System.Drawing.Size(75, 23);
             this.btnAddNew.TabIndex = 45;
-            this.btnAddNew.Text = "Add New";
+            this.btnAddNew.Text = "Add";
             this.btnAddNew.UseVisualStyleBackColor = true;
             this.btnAddNew.Click += new System.EventHandler(this.btnAddNew_Click);
             // 
@@ -121,20 +132,32 @@
             this.colQuestTags.HeaderText = "Tags";
             this.colQuestTags.Name = "colQuestTags";
             // 
-            // colCharExtraID
+            // btnSave
             // 
-            this.colCharExtraID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colCharExtraID.FillWeight = 90F;
-            this.colCharExtraID.HeaderText = "Name";
-            this.colCharExtraID.Name = "colCharExtraID";
-            this.colCharExtraID.ReadOnly = true;
-            this.colCharExtraID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.btnSave.Location = new System.Drawing.Point(713, 246);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.TabIndex = 47;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // btnRemove
+            // 
+            this.btnRemove.Location = new System.Drawing.Point(245, 415);
+            this.btnRemove.Name = "btnRemove";
+            this.btnRemove.Size = new System.Drawing.Size(75, 23);
+            this.btnRemove.TabIndex = 48;
+            this.btnRemove.Text = "Remove";
+            this.btnRemove.UseVisualStyleBackColor = true;
             // 
             // FormCharExtraData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnRemove);
+            this.Controls.Add(this.btnSave);
             this.Controls.Add(this.dgvEditTags);
             this.Controls.Add(this.btnAddNew);
             this.Controls.Add(this.label1);
@@ -163,5 +186,7 @@
         private System.Windows.Forms.DataGridView dgvEditTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colQuestTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCharExtraID;
+        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Button btnRemove;
     }
 }

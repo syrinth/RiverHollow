@@ -15,10 +15,11 @@
       <Key>1</Key>
       <Value>
         <Item>[IntroText:A long time ago, a great war broke out between the three kingdoms. Many lives were lost and as a result, much knowledge and hope was lost in the land. There is one place, however, where the spark of hope still burns, although the fires are quite low. That place, is River Hollow.]</Item>
-        <Item>[1:Well... Heh, this is it. It's not much to look at I'm afraid.]</Item>
+        <Item>[1:Well, this is it. I know it's not much to look at but I hope you'll find it perfectly serviceable.]</Item>
         <Item>[2:...]</Item>
-        <Item>[3:I'm told it was once a fine old house, but after your grandparents passed... we just weren't really able to maintain it.]</Item>
-        <Item>[4:You should take the time to explore the manor. Maybe you'll find something useful that's still usable. Good luck, I hope to see you around town soon.]</Item>
+        <Item>[3:I'm told it was once a fine old house, when your fmaily still ived here. After they left, we just didn't really know what to do with the property anymore. I've had $13$ take a look around inside and he assures me that it's safe. There's even some equipment in the basement that is apparently still in working order. Hopefully you can make some use of that.]</Item>
+        <Item>[4:There's an old Shrine to the West of here. Back in the day, people would pray to the the spirits in the four shrines. They've been long since abandoned but, maybe it'll do you some good. anyway, I should head back to town now, I hope to see you around. Oh, and if you're going to travel alone... be careful.]</Item>
+        <Item>[5:Oh! Before I forget. you should know that monsters roam the wilds here. You seem capable, but if you're going to go exploring you should be careful, and be prepared. If you find yourself needing any extra hands, $16$, at the Adventurer's Guild will be able to help you. Well, take care.]</Item>
       </Value>
     </Item>
     <Item>
