@@ -3,187 +3,187 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:WorldObject][Name:Staircase][Image:48-0][Width:16][Height:16]</Value>
+      <Value>[Type:WorldObject][Image:48-0][Width:16][Height:16]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Name:Door][Type:WorldObject][Image:64-0][Width:16][Height:32]</Value>
+      <Value>[Type:WorldObject][Image:64-0][Width:16][Height:32]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Name:Peat][Type:WorldObject][Image:80-64][Width:16][Height:16][Item:4]</Value>
+      <Value>[Type:WorldObject][Image:80-64][Width:16][Height:16][Item:4]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Name:Lavender][Type:WorldObject][Image:96-16][Width:16][Height:16][Item:24]</Value>
+      <Value>[Type:WorldObject][Image:96-16][Width:16][Height:16][Item:24]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Name:Flax][Type:WorldObject][Image:80-32][Width:16][Height:16][Item:25][Passable]</Value>
+      <Value>[Type:WorldObject][Image:80-32][Width:16][Height:16][Item:25][Passable]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Name:Echo of Joy][Type:WorldObject][Image:0-80][Width:16][Height:16][Tool:Lantern][Hp:5][ReqLvl:1][Item:18][Idle:5-0.150][Gathered:7-0.150]</Value>
+      <Value>[Type:WorldObject][Image:0-80][Width:16][Height:16][Tool:Lantern][Hp:5][ReqLvl:1][Item:18][Idle:5-0.150][Gathered:7-0.150]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Name:Cotton][Type:WorldObject][Image:96-0][Width:16][Height:16][Item:26][Passable]</Value>
+      <Value>[Type:WorldObject][Image:96-0][Width:16][Height:16][Item:26][Passable]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Name:Dragon Thistle][Type:WorldObject][Image:112-16][Width:16][Height:32][Item:27][Passable]</Value>
+      <Value>[Type:WorldObject][Image:112-16][Width:16][Height:32][Item:27][Passable]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Name:Lady's Slipper][Type:WorldObject][Image:128-16][Width:16][Height:32][Item:29][Passable]</Value>
+      <Value>[Type:WorldObject][Image:128-16][Width:16][Height:32][Item:29][Passable]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Name:Class Changer][Type:ClassChanger][Image:0-2][Width:16][Height:32][Texture:Textures\texMachines]</Value>
+      <Value>[Type:ClassChanger][Image:0-2][Width:16][Height:32][Texture:Textures\texMachines]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Name:Smelter][Type:Machine][Image:0-0][Work:3-0.15][Width:16][Height:32][Processes:32-10|33-10|34-10|35-10|36-10][WorkEffect:stove_fire]</Value>
+      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Width:16][Height:32][Processes:32-10|33-10|34-10|35-10|36-10][WorkEffect:stove_fire]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Machine][Name:Copper Anvil][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:112-5|113-30|67-15][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:112-5|113-30|67-15][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Machine][Name:Cauldron][Image:0-64][Work:4-0.3][Width:16][Height:32][Makes:106-2|107-3][Base:1-1][WorkEffect:bubbles]</Value>
+      <Value>[Type:Machine][Image:0-64][Work:4-0.3][Width:16][Height:32][Makes:106-2|107-3][Base:1-1][WorkEffect:bubbles]</Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Name:Work Bench][Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:116-2|113-3|114-3|115-3|112-5|117-5][Base:2-1][Processes:32-10|33-10|34-10|35-10|36-10]</Value>
+      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:116-2|113-3|114-3|115-3|112-5|117-5][Base:2-1][Processes:32-10|33-10|34-10|35-10|36-10]</Value>
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Name:Mortar and Pestle][Type:Machine][Image:0-128][Work:3-0.15][Width:16][Height:32][Makes:108-2][Base:1-1]</Value>
+      <Value>[Type:Machine][Image:0-128][Work:3-0.15][Width:16][Height:32][Makes:108-2][Base:1-1]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Machine][Name:Loom][Image:0-160][Work:3-0.15][Width:32][Height:32][Processes:25-5][Makes:81-3][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Processes:25-5][Makes:81-3][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Name:Chest][Type:Container][Image:0-16][Width:16][Height:16][Rows:1][Cols:8]</Value>
+      <Value>[Type:Container][Image:0-16][Width:16][Height:16][Rows:1][Cols:8]</Value>
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Name:Stone Floor][Type:Floor][Image:0-32]</Value>
+      <Value>[Type:Floor][Image:0-32]</Value>
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Name:Tree][Type:Destructible][Tree][Texture:Textures\tree][Image:0-0][Width:48][Height:80][Hp:3][ReqLvl:1][Item:2-7][Base:1-1][BaseShift:1]</Value>
+      <Value>[Type:Destructible][Tree][Texture:Textures\tree][Image:0-0][Width:48][Height:80][Hp:3][ReqLvl:1][Item:2-7][Base:1-1][BaseShift:1]</Value>
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Name:Darkwood Tree][Type:Destructible][Tree][Texture:Textures\DarkWoodTree][Image:0-0][Width:48][Height:80][Hp:5][ReqLvl:2][Item:6-8]</Value>
+      <Value>[Type:Destructible][Tree][Texture:Textures\DarkWoodTree][Image:0-0][Width:48][Height:80][Hp:5][ReqLvl:2][Item:6-8]</Value>
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Name:Rock][Type:Destructible][Image:0-0][Width:16][Height:16][Tool:Pick][Hp:1][ReqLvl:1][Item:0-1]</Value>
+      <Value>[Type:Destructible][Image:0-0][Width:16][Height:16][Tool:Pick][Hp:1][ReqLvl:1][Item:0-1]</Value>
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[Name:Big Rock][Type:Destructible][Image:32-32][Width:32][Height:32][Tool:Pick][Hp:5][ReqLvl:1][Item:0-5]</Value>
+      <Value>[Type:Destructible][Image:32-32][Width:32][Height:32][Tool:Pick][Hp:5][ReqLvl:1][Item:0-5]</Value>
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Name:Copper Ore][Type:Destructible][Image:0-32][Width:16][Height:16][Tool:Pick][Hp:2][ReqLvl:1][Item:32]</Value>
+      <Value>[Type:Destructible][Image:0-32][Width:16][Height:16][Tool:Pick][Hp:2][ReqLvl:1][Item:32]</Value>
     </Item>
     <Item>
       <Key>23</Key>
-      <Value>[Name:Diamond Node][Type:Destructible][Image:96-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:42-1]</Value>
+      <Value>[Type:Destructible][Image:96-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:42-1]</Value>
     </Item>
     <Item>
       <Key>24</Key>
-      <Value>[Name:Emerald Node][Type:Destructible][Image:112-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:43]</Value>
+      <Value>[Type:Destructible][Image:112-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:43]</Value>
     </Item>
     <Item>
       <Key>25</Key>
-      <Value>[Name:Ruby Node][Type:Destructible][Image:128-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:44]</Value>
+      <Value>[Type:Destructible][Image:128-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:44]</Value>
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Name:Sapphire Node][Type:Destructible][Image:144-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:45]</Value>
+      <Value>[Type:Destructible][Image:144-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:45]</Value>
     </Item>
     <Item>
       <Key>27</Key>
-      <Value>[Name:Opal Node][Type:Destructible][Image:160-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:46]</Value>
+      <Value>[Type:Destructible][Image:160-48][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:46]</Value>
     </Item>
     <Item>
       <Key>28</Key>
-      <Value>[Name:Jet Node][Type:Destructible][Image:96-64][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:47]</Value>
+      <Value>[Type:Destructible][Image:96-64][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:47]</Value>
     </Item>
     <Item>
       <Key>29</Key>
-      <Value>[Name:Amber Node][Type:Destructible][Image:112-64][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:48]</Value>
+      <Value>[Type:Destructible][Image:112-64][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:48]</Value>
     </Item>
     <Item>
       <Key>30</Key>
-      <Value>[Name:Jade Node][Type:Destructible][Image:128-64][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:49]</Value>
+      <Value>[Type:Destructible][Image:128-64][Width:16][Height:16][Tool:Pick][Hp:10][ReqLvl:1][Item:49]</Value>
     </Item>
     <Item>
       <Key>31</Key>
-      <Value>[Name:Amethyst Node][Type:Destructible][Image:144-64][Width:16][Height:16][Tool:Pick][Hp:5][ReqLvl:1][Item:50]</Value>
+      <Value>[Type:Destructible][Image:144-64][Width:16][Height:16][Tool:Pick][Hp:5][ReqLvl:1][Item:50]</Value>
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Name:Topaz Node][Type:Destructible][Image:160-64][Width:16][Height:16][Tool:Pick][Hp:5][ReqLvl:1][Item:51]</Value>
+      <Value>[Type:Destructible][Image:160-64][Width:16][Height:16][Tool:Pick][Hp:5][ReqLvl:1][Item:51]</Value>
     </Item>
     <Item>
       <Key>33</Key>
-      <Value>[Name:Silver Seed Plant][Type:Plant][Image:0-64][Item:21][TrNum:4][TrTime:2-3-4]</Value>
+      <Value>[Type:Plant][Image:0-64][Item:21][TrNum:4][TrTime:2-3-4]</Value>
     </Item>
     <Item>
       <Key>34</Key>
-      <Value>[Name:Carrot Plant][Type:Plant][Image:192-16][Height:32][Item:102][TrNum:4][TrTime:1-2-3]</Value>
+      <Value>[Type:Plant][Image:192-16][Height:32][Item:102][TrNum:4][TrTime:1-2-3]</Value>
     </Item>
     <Item>
       <Key>35</Key>
-      <Value>[Name:Slime Berry Plant][Type:Plant][Image:192-48][Height:32][Item:128][TrNum:4][TrTime:1-1-1]</Value>
+      <Value>[Type:Plant][Image:192-48][Height:32][Item:128][TrNum:4][TrTime:1-1-1]</Value>
     </Item>
     <Item>
       <Key>36</Key>
-      <Value>[Name:Mushroom][Type:Plant][Image:80-48][Item:23][TrNum:4][TrTime:2-3-4]</Value>
+      <Value>[Type:Plant][Image:80-48][Item:23][TrNum:4][TrTime:2-3-4]</Value>
     </Item>
     <Item>
       <Key>37</Key>
-      <Value>[Name:Mage Bells][Type:Plant][Image:64-48][Item:22][TrNum:4][TrTime:2-3-4]</Value>
+      <Value>[Type:Plant][Image:64-48][Item:22][TrNum:4][TrTime:2-3-4]</Value>
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Name:Stone Wall][Type:Wall][Image:0-128][Width:16][Height:32]</Value>
+      <Value>[Type:Wall][Image:0-128][Width:16][Height:32]</Value>
     </Item>
     <Item>
       <Key>39</Key>
-      <Value>[Name:Torch][Type:Light][Image:112-0][Width:16][Height:16][Idle:6-0.1]</Value>
+      <Value>[Type:Light][Image:112-0][Width:16][Height:16][Idle:6-0.1]</Value>
     </Item>
     <Item>
       <Key>40</Key>
-      <Value>[Name:Push-Trigger][Type:DungeonObject][Subtype:Trigger][Image:144-16][Width:16][Height:16]</Value>
+      <Value>[Type:DungeonObject][Subtype:Trigger][Image:144-16][Width:16][Height:16]</Value>
     </Item>
     <Item>
       <Key>41</Key>
-      <Value>[Name:Dungeon Door][Type:DungeonObject][Subtype:Door][Image:80-96][Width:32][Height:32][Base:2-1]</Value>
+      <Value>[Type:DungeonObject][Subtype:Door][Image:80-96][Width:32][Height:32][Base:2-1]</Value>
     </Item>
     <Item>
       <Key>42</Key>
-      <Value>[Name:Interaction Trigger][Type:DungeonObject][Subtype:Trigger][Image:144-32][Width:16][Height:16]</Value>
+      <Value>[Type:DungeonObject][Subtype:Trigger][Image:144-32][Width:16][Height:16]</Value>
     </Item>
     <Item>
       <Key>43</Key>
-      <Value>[Name:Dungeon Side Door][Type:DungeonObject][Subtype:Door][Image:256-80][Width:16][Height:48][Base:1-2]</Value>
+      <Value>[Type:DungeonObject][Subtype:Door][Image:256-80][Width:16][Height:48][Base:1-2]</Value>
     </Item>
     <Item>
       <Key>44</Key>
-      <Value>[Name:Poison Tile][Type:CombatHazard][Subtype:Passive][Image:32-96][Width:16][Height:16][Damage:2][DrawOver]</Value>
+      <Value>[Type:CombatHazard][Subtype:Passive][Image:32-96][Width:16][Height:16][Damage:2][DrawOver]</Value>
     </Item>
     <Item>
       <Key>45</Key>
-      <Value>[Name:Floor Spikes][Type:CombatHazard][Subtype:Timed][Image:48-96][Width:16][Height:16][Damage:10][DrawOver]</Value>
+      <Value>[Type:CombatHazard][Subtype:Timed][Image:48-96][Width:16][Height:16][Damage:10][DrawOver]</Value>
     </Item>
   </Asset>
 </XnaContent>

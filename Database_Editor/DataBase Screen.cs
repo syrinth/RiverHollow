@@ -795,7 +795,7 @@ namespace Database_Editor
             string[] tags = data.GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in tags)
             {
-                if (!s.StartsWith("Type") && !s.StartsWith("Name"))
+                if (!s.StartsWith("Type"))
                 {
                     dgvTags.Rows.Add(s);
                 }
