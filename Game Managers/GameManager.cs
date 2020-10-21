@@ -60,6 +60,7 @@ namespace RiverHollow.Game_Managers
         public enum SpawnConditionEnum { Spring, Summer, Winter, Fall, Precipitation, Night, Forest, Mountain, Swamp, Plains };
         public enum ToolEnum { Pick, Axe, Shovel, WateringCan, Harp, Lantern, Return };
         public enum ClothesEnum { None, Body, Legs, Hat };
+        public enum MachineTypeEnum { Processer, CraftingMachine };
         public static float Scale = 4f;
         public const int TileSize = 16;
         public static int ScaledTileSize => (int)(TileSize * Scale);
@@ -279,7 +280,7 @@ namespace RiverHollow.Game_Managers
         private static bool _bRunning;
         public static void Pause() {
             _bRunning = false;
-            GUICursor._CursorType = GUICursor.EnumCursorType.Normal;
+            GUICursor.ResetCursor();
         }
         public static void Unpause() {
             _bRunning = true;

@@ -55,13 +55,12 @@ namespace RiverHollow.Buildings
 
         protected int _iUpgradeTime;
         protected int _iUpgradeTimer;
-
+       
         protected Vector2 _vecBuildspot;
         public Vector2 BuildFromPosition => _vecBuildspot;
 
         #region Worker Info
-        private bool _bHoldsWorkers;
-        public bool HoldsWorkers => _bHoldsWorkers;
+        public bool HoldsWorkers { get; private set; }
         private int[] _arrWorkerTypes;
         public bool _selected = false;
 
@@ -135,7 +134,7 @@ namespace RiverHollow.Buildings
             {
                 //Start level is 1 so that we display in built state
                 _iBldgLvl = 1;
-                _bHoldsWorkers = true;
+                HoldsWorkers = true;
                 _arrWorkerTypes = new int[2];
 
                 string[] workerTypes = stringData["Workers"].Split('-');
@@ -476,6 +475,16 @@ namespace RiverHollow.Buildings
             Tiles = tiles;
         }
 
+        public string TravelLink()
+        {
+            string rv = string.Empty;
+
+            if (_bUnique) { rv = MapName; }
+            else { rv = _iPersonalID.ToString(); }
+
+            return rv;
+        }
+
         public BuildingData SaveData()
         {
             BuildingData buildingData = new BuildingData
@@ -505,7 +514,7 @@ namespace RiverHollow.Buildings
             {
                 if (w.CompareType(ObjectTypeEnum.Machine))
                 {
-                    buildingData.machines.Add(((Machine)w).SaveData());
+                   // buildingData.machines.Add(((Machine)w).SaveData());
                 }
                 if (w.CompareType(ObjectTypeEnum.Container))
                 {
@@ -549,7 +558,7 @@ namespace RiverHollow.Buildings
             foreach (MachineData mac in data.machines)
             {
                 Machine theMachine = (Machine)DataManager.GetWorldObject(mac.ID);
-                theMachine.LoadData(mac);
+               // theMachine.LoadData(mac);
                 _liPlacedObjects.Add(theMachine);
             }
         }

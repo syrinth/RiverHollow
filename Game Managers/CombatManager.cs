@@ -138,6 +138,8 @@ namespace RiverHollow.Game_Managers
             PlayerManager.World.PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
 
             PlayerManager.World.SetMoveObj(Util.SnapToGrid(PlayerManager.World.BaseTile.Center));
+
+            GUICursor.ResetCursor();
         }
 
         public static void Update(GameTime gTime)

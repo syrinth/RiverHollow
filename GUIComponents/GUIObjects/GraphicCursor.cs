@@ -10,17 +10,15 @@ namespace RiverHollow.GUIComponents.GUIObjects
 {
     public static class GUICursor
     {
-        public enum EnumCursorType { Normal, Talk, Gift, Door, Pickup};
-        public static EnumCursorType _CursorType;
+        public enum CursorTypeEnum { Normal, Talk, Gift, Door, Pickup};
+        private static CursorTypeEnum _eCursorType;
+        private static Rectangle _rCollisionRectangle;
         public static MouseState LastMouseState = new MouseState();
-
-        private static int _workerID = -1;
-        public static int WorkerToPlace => _workerID; 
-
-        private static Vector2 _position;
-        public static Vector2 Position { get => _position; set => _position = value; }
+        public static int WorkerToPlace { get; private set; } = -1;
+        public static Vector2 Position { get; set; }
 
         private static Texture2D _texture;
+        private static Rectangle _rSource;
 
         public static float Alpha = 1f;
 
@@ -28,29 +26,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             _texture = DataManager.GetTexture(@"Textures\Dialog");
             Position = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-            _CursorType = EnumCursorType.Normal;
-        }
-
-        public static Vector2 GetWorldMousePosition()
-        {
-            Vector3 translate = Camera._transform.Translation;
-            Vector2 mousePoint = Vector2.Zero;
-            mousePoint.X = (int)((_position.X - translate.X) / Scale);
-            mousePoint.Y = (int)((_position.Y - translate.Y) / Scale);
-
-            return mousePoint;
-        }
-
-        public static bool PickUpWorker(int id)
-        {
-            bool rv = false;
-            if (id > -1)
-            {
-                _workerID = id;
-                rv = true;
-            }
-
-            return rv;
+            ResetCursor();
         }
 
         public static void Update()
@@ -62,39 +38,67 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (GameManager.HeldBuilding == null)
             {
-                Rectangle source = Rectangle.Empty;
-                Texture2D drawIt = _texture;
-                if (!CombatManager.InCombat)
-                {
-                    switch (_CursorType)
-                    {
-                        case EnumCursorType.Normal:
-                            source = new Rectangle(304, 160, 16, 16);
-                            break;
-                        case EnumCursorType.Talk:
-                            source = new Rectangle(288, 160, 16, 16);
-                            Alpha = (PlayerManager.PlayerInRange(GetWorldMousePosition().ToPoint(), (int)(TileSize * 1.5))) ? 1 : 0.5f;
-                            break;
-                        case EnumCursorType.Door:
-                            source = new Rectangle(288, 176, 16, 16);
-                            break;
-                        case EnumCursorType.Pickup:
-                            source = new Rectangle(304, 176, 16, 16);
-                            break;
-                    }
-                }
-                else
-                {
-                    source = new Rectangle(304, 160, 16, 16);
-                }
                 Rectangle drawRectangle = new Rectangle((int)Position.X, (int)Position.Y, TileSize * 2, TileSize * 2);
 
-                spriteBatch.Draw(drawIt, drawRectangle, source, Color.White * Alpha);
+                if (_eCursorType == CursorTypeEnum.Normal) { Alpha = 1; }
+                else { Alpha = (PlayerManager.PlayerInRange(_rCollisionRectangle, (int)(TileSize * 1.5))) ? 1 : 0.5f; }
+
+                spriteBatch.Draw(_texture, drawRectangle, _rSource, Color.White * Alpha);
                 if (HeldItem != null)
                 {
                     GameManager.HeldItem.Draw(spriteBatch, new Rectangle((int)Position.X + 16, (int)Position.Y + 16, 32, 32));
                 }
             }
+        }
+
+        public static void ResetCursor()
+        {
+            SetCursor(CursorTypeEnum.Normal, Rectangle.Empty);
+        }
+        public static void SetCursor(CursorTypeEnum cursorType, Rectangle collisionRect)
+        {
+            if (!CombatManager.InCombat)
+            {
+                _eCursorType = cursorType;
+                _rCollisionRectangle = collisionRect;
+                switch (_eCursorType)
+                {
+                    case CursorTypeEnum.Normal:
+                        _rSource = new Rectangle(304, 160, 16, 16);
+                        break;
+                    case CursorTypeEnum.Talk:
+                        _rSource = new Rectangle(288, 160, 16, 16);
+                        break;
+                    case CursorTypeEnum.Door:
+                        _rSource = new Rectangle(288, 176, 16, 16);
+                        break;
+                    case CursorTypeEnum.Pickup:
+                        _rSource = new Rectangle(304, 176, 16, 16);
+                        break;
+                }
+            }
+        }
+
+        public static Vector2 GetWorldMousePosition()
+        {
+            Vector3 translate = Camera._transform.Translation;
+            Vector2 mousePoint = Vector2.Zero;
+            mousePoint.X = (int)((Position.X - translate.X) / Scale);
+            mousePoint.Y = (int)((Position.Y - translate.Y) / Scale);
+
+            return mousePoint;
+        }
+
+        public static bool PickUpWorker(int id)
+        {
+            bool rv = false;
+            if (id > -1)
+            {
+                WorkerToPlace = id;
+                rv = true;
+            }
+
+            return rv;
         }
 
         public static void DrawBuilding(SpriteBatch spriteBatch)

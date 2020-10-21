@@ -7,7 +7,7 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
 using static RiverHollow.Game_Managers.DataManager;
 using static RiverHollow.Items.WorldItem;
-
+using static RiverHollow.Items.WorldItem.Machine;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -24,7 +24,7 @@ namespace RiverHollow.GUIComponents.Screens
         private int _rows;
         private int _columns;
 
-        public HUDCraftingDisplay(Machine crafter)
+        public HUDCraftingDisplay(CraftingMachine crafter)
         {
             _craftMachine = crafter;
             Setup(crafter.CraftingDictionary);

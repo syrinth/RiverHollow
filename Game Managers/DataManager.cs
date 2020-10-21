@@ -13,6 +13,7 @@ using RiverHollow.Utilities;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Items.WorldItem;
 using static RiverHollow.Items.TriggerObject;
+using static RiverHollow.Items.WorldItem.Machine;
 
 namespace RiverHollow.Game_Managers
 {
@@ -410,32 +411,35 @@ namespace RiverHollow.Game_Managers
         {
             if (id != -1 && _diWorldObjects.ContainsKey(id))
             {
-                Dictionary<string, string> liData = _diWorldObjects[id];
-                switch (liData["Type"])
+                Dictionary<string, string> diData = _diWorldObjects[id];
+                switch (diData["Type"])
                 {
                     case "Destructible":
-                        if (liData.ContainsKey("Tree")) { return new Tree(id, liData, pos); }
-                        else { return new Destructible(id, liData, pos); }
+                        if (diData.ContainsKey("Tree")) { return new Tree(id, diData, pos); }
+                        else { return new Destructible(id, diData, pos); }
                     case "Staircase":
-                        //return new Staircase(id, pos, TileSize, TileSize);
+                    //return new Staircase(id, pos, TileSize, TileSize);
                     case "Container":
-                        return new Container(id, liData);
+                        return new Container(id, diData);
                     case "ClassChanger":
-                        return new ClassChanger(id, liData, pos);
+                        return new ClassChanger(id, diData, pos);
                     case "Plant":
-                        return new Plant(id, liData);
+                        return new Plant(id, diData);
                     case "Machine":
-                        return new Machine(id, liData, pos);
+                        MachineTypeEnum e = Util.ParseEnum<MachineTypeEnum>(diData["MachineType"]);
+                        if(e == MachineTypeEnum.CraftingMachine) { return new CraftingMachine(id, diData, pos); }
+                        else if (e == MachineTypeEnum.Processer) { return new Processor(id, diData, pos); }
+                        break;
                     case "Wall":
-                        return new Wall(id, liData, pos);
+                        return new Wall(id, diData, pos);
                     case "Floor":
-                        return new Floor(id, liData, pos);
+                        return new Floor(id, diData, pos);
                     case "EchoNode":
-                        return new EchoNode(id, liData, pos);
+                        return new EchoNode(id, diData, pos);
                     case "Light":
-                        return new Light(id, liData, pos);
+                        return new Light(id, diData, pos);
                     case "CombatHazard":
-                        return new CombatHazard(id, liData, pos);
+                        return new CombatHazard(id, diData, pos);
                 }
             }
 

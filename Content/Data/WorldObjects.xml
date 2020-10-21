@@ -43,27 +43,27 @@
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Width:16][Height:32][Processes:32-10|33-10|34-10|35-10|36-10][WorkEffect:stove_fire]</Value>
+      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Width:16][Height:32][Processes:32-10|33-10|34-10|35-10|36-10][WorkEffect:stove_fire][MachineType:Processor]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:112-5|113-30|67-15][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:112-5|113-30|67-15][Base:2-1][MachineType:CraftingMachine]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Machine][Image:0-64][Work:4-0.3][Width:16][Height:32][Makes:106-2|107-3][Base:1-1][WorkEffect:bubbles]</Value>
+      <Value>[Type:Machine][Image:0-64][Work:4-0.3][Width:16][Height:32][Makes:106-2|107-3][Base:1-1][WorkEffect:bubbles][MachineType:CraftingMachine]</Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:116-2|113-3|114-3|115-3|112-5|117-5][Base:2-1][Processes:32-10|33-10|34-10|35-10|36-10]</Value>
+      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:116-2|113-3|114-3|115-3|112-5|117-5][Base:2-1][MachineType:CraftingMachine]</Value>
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Machine][Image:0-128][Work:3-0.15][Width:16][Height:32][Makes:108-2][Base:1-1]</Value>
+      <Value>[Type:Machine][Image:0-128][Work:3-0.15][Width:16][Height:32][Makes:108-2][Base:1-1][MachineType:CraftingMachine]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Processes:25-5][Makes:81-3][Base:2-1]</Value>
+      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Makes:81-3][Base:2-1][MachineType:CraftingMachine]</Value>
     </Item>
     <Item>
       <Key>16</Key>

@@ -2220,7 +2220,7 @@ namespace RiverHollow.Characters
 
         public override void Talk(bool IsOpen = false)
         {
-            GUICursor._CursorType = GUICursor.EnumCursorType.Talk;
+            GUICursor.SetCursor(GUICursor.CursorTypeEnum.Talk, HoverBox);
             string text = string.Empty;
             if (!Introduced)
             {

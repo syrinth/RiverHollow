@@ -22,6 +22,7 @@ using static RiverHollow.Items.WorldItem;
 using static RiverHollow.Items.Item;
 using static RiverHollow.Items.WorldItem.Floor;
 using static RiverHollow.GUIComponents.Screens.HUDMenu;
+using static RiverHollow.Items.WorldItem.Machine;
 
 namespace RiverHollow.Tile_Engine
 {
@@ -1136,7 +1137,17 @@ namespace RiverHollow.Tile_Engine
                 {
                     Machine p = (Machine)obj;
                     if (p.HasItem()) { p.TakeFinishedItem(); }
-                    else if (InventoryManager.GetCurrentItem() != null && !p.MakingSomething()) { p.ProcessClick(); }
+                    else
+                    {
+                        if (!p.MakingSomething())
+                        {
+                            p.StartAutoWork();
+                        }
+                        else if (p.IsCraftingMachine())
+                        {
+                            ((CraftingMachine)p).SetToWork();
+                        }
+                    }
                 }
                 else if (obj.CompareType(ObjectTypeEnum.Container))
                 {
@@ -1361,8 +1372,16 @@ namespace RiverHollow.Tile_Engine
                 {
                     Machine p = (Machine)obj;
                     if (p.HasItem()) { p.TakeFinishedItem(); }
-                    else if (p.MakingSomething() && !p.ActivelyWorking()) { p.SetToWork();  }
-                    else if (!p.MakingSomething()) { p.ProcessClick(); }
+                    else
+                    {
+                        if (!p.MakingSomething())
+                        {
+                            p.StartAutoWork();
+                        }
+                        else if (p.IsCraftingMachine()) {
+                            ((CraftingMachine)p).SetToWork();
+                        }
+                    }
                 }
                 else if (obj.CompareType(ObjectTypeEnum.ClassChanger))
                 {
@@ -1456,8 +1475,7 @@ namespace RiverHollow.Tile_Engine
                     if (t.GetTravelPoint() != null)
                     {
                         found = true;
-                        GUICursor._CursorType = GUICursor.EnumCursorType.Door;
-                        GUICursor.Alpha = (PlayerManager.PlayerInRange(t.GetTravelPoint().CollisionBox) ? 1 : 0.5f);
+                        GUICursor.SetCursor(GUICursor.CursorTypeEnum.Door, t.GetTravelPoint().CollisionBox);
                     }
                     else if(t.GetWorldObject(false) != null && t.GetWorldObject().CompareType(ObjectTypeEnum.Plant))
                     {
@@ -1465,8 +1483,7 @@ namespace RiverHollow.Tile_Engine
                         if (obj.FinishedGrowing())
                         {
                             found = true;
-                            GUICursor._CursorType = GUICursor.EnumCursorType.Pickup;
-                            GUICursor.Alpha = (PlayerManager.PlayerInRange(obj.CollisionBox) ? 1 : 0.5f);
+                            GUICursor.SetCursor(GUICursor.CursorTypeEnum.Pickup, obj.CollisionBox);
                         }
                     }
                 }
@@ -1476,7 +1493,7 @@ namespace RiverHollow.Tile_Engine
                     if(!c.IsActorType(ActorEnum.Monster) && c.HoverContains(mouseLocation)){
                         if (c.Active)
                         {
-                            GUICursor._CursorType = GUICursor.EnumCursorType.Talk;
+                            GUICursor.SetCursor(GUICursor.CursorTypeEnum.Talk, c.HoverBox);
                             found = true;
                             break;
                         }
@@ -1492,9 +1509,10 @@ namespace RiverHollow.Tile_Engine
                     selectedStaticItem.SetWorldObjectCoords(vec);
                     TestMapTiles(selectedStaticItem.GetWorldItem(), _liTestTiles);
                 }
+
                 if (!found)
                 {
-                    GUICursor._CursorType = GUICursor.EnumCursorType.Normal;
+                    GUICursor.ResetCursor();
                 }
             }
 
@@ -1705,7 +1723,7 @@ namespace RiverHollow.Tile_Engine
         public void CreateBuildingEntrance(Building b)
         {
             TravelPoint buildPoint = new TravelPoint(b.TravelBox, b.MapName, b.PersonalID);
-            DictionaryTravelPoints.Add(b.PersonalID.ToString(), buildPoint); //TODO: FIX THIS
+            DictionaryTravelPoints.Add(b.TravelLink(), buildPoint); //TODO: FIX THIS
             CreateDoor(ref buildPoint, b.TravelBox.X, b.TravelBox.Y, b.TravelBox.Width, b.TravelBox.Height);
         }
 
@@ -2082,7 +2100,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     if (wObj.CompareType(ObjectTypeEnum.Machine))
                     {
-                        mapData.machines.Add(((Machine)wObj).SaveData());
+                        //mapData.machines.Add(((Machine)wObj).SaveData());
                     }
                     else if (wObj.CompareType(ObjectTypeEnum.Container))
                     {
@@ -2171,7 +2189,7 @@ namespace RiverHollow.Tile_Engine
             foreach (MachineData mac in data.machines)
             {
                 Machine theMachine = (Machine)DataManager.GetWorldObject(mac.ID);
-                theMachine.LoadData(mac);
+                //theMachine.LoadData(mac);
                 PlacePlayerObject(theMachine);
             }
             foreach (PlantData plantData in data.plants)

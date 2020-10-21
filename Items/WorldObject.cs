@@ -389,30 +389,24 @@ namespace RiverHollow.Items
             public virtual void LoadData(MachineData mac) { }
         }
 
-        public class Machine : WorldItem
+        public abstract class Machine : WorldItem
         {
+            private MachineTypeEnum _eMachineType;
+
             readonly string _sEffectWorking;
 
-            //Processor variables
-            Dictionary<int, ProcessRecipe> _diProcessing;
-            ProcessRecipe CurrentlyProcessing => (_diProcessing.ContainsKey(_iCurrentlyMaking) ? _diProcessing[_iCurrentlyMaking] : null);
-            public Dictionary<int, int> CraftingDictionary { get; }
+            protected double _dProcessedTime = 0;
             int _iCurrentlyMaking = -1;
 
             protected int _iWorkingFrames = 2;
             protected float _fFrameSpeed = 0.3f;
             protected ItemBubble _itemBubble;
             protected Item _heldItem;
-            protected double _dProcessedTime = 0;
-            public double ProcessedTime => _dProcessedTime;
-            private bool _bActivelyWorking = false;
 
             public Machine(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos - new Vector2(0, TileSize))
             {
                 _heldItem = null;
-                CraftingDictionary = new Dictionary<int, int>();
-                _diProcessing = new Dictionary<int, ProcessRecipe>();             
-
+                
                 if (stringData.ContainsKey("Work"))
                 {
                     string[] split = stringData["Work"].Split('-');
@@ -425,29 +419,6 @@ namespace RiverHollow.Items
                     string[] baseStr = stringData["Base"].Split('-');
                     _iBaseWidth = int.Parse(baseStr[0]) * TileSize;
                     _iBaseHeight = int.Parse(baseStr[1]) * TileSize;
-                }
-
-                //Read in what items the machine processes
-                if (stringData.ContainsKey("Processes"))
-                {
-                    string[] processes = Util.GetEntries(stringData["Processes"]);
-                    foreach (string recipe in processes)
-                    {
-                        string[] pieces = recipe.Split('-');
-                        _diProcessing.Add(int.Parse(pieces[0]), new ProcessRecipe(pieces));
-                    }
-                }
-
-                //Read in what items the machine can make
-                if (stringData.ContainsKey("Makes"))
-                {
-                    string[] processes = Util.GetEntries(stringData["Makes"]);
-                    foreach (string recipe in processes)
-                    {
-                        //Each entry is in written like ID-NumDays
-                        string[] pieces = recipe.Split('-');
-                        CraftingDictionary.Add(int.Parse(pieces[0]), int.Parse(pieces[1]));
-                    }
                 }
 
                 LoadDictionaryData(stringData);
@@ -465,39 +436,24 @@ namespace RiverHollow.Items
                 SetSpritePos(_vMapPosition);
             }
 
-            public override void Update(GameTime gTime) {
-                if (_itemBubble != null)
-                {
-                    _itemBubble.Update(gTime);
-                }
-
-                //Processing Handling
-                if (CurrentlyProcessing != null)
-                {
-                    SoundManager.PlayEffectAtLoc(_sEffectWorking, _sMapName, MapPosition, this);
-                    _sprite.Update(gTime);
-                    _dProcessedTime += gTime.ElapsedGameTime.TotalSeconds;
-                    if (_dProcessedTime >= CurrentlyProcessing.ProcessingTime)
-                    {
-                        SetHeldItem(CurrentlyProcessing.Output);
-                    }
-                }
-                else if (_iCurrentlyMaking != -1)       //Crafting Handling
-                {
-                    SoundManager.PlayEffectAtLoc(_sEffectWorking, _sMapName, MapPosition, this);
-                    _sprite.Update(gTime);
-                }
+            public override void Update(GameTime gTime)
+            {
+                _itemBubble?.Update(gTime);
             }
             public override void Draw(SpriteBatch spriteBatch)
             {
                 _sprite.Draw(spriteBatch);
-                if(_itemBubble != null)
-                {
-                    _itemBubble.Draw(spriteBatch);
-                }
+                _itemBubble?.Draw(spriteBatch);
             }
 
-            public void SetHeldItem(int itemID)
+            public virtual bool StartAutoWork() { return false; }
+
+            public virtual void MakeChosenItem(int itemID)
+            {
+                _iCurrentlyMaking = itemID;
+                _sprite.PlayAnimation(AnimationEnum.PlayAnimation);
+            }
+            public virtual void SetHeldItem(int itemID)
             {
                 SoundManager.StopEffect(this);
                 SoundManager.PlayEffectAtLoc("126426__cabeeno-rossley__timer-ends-time-up", _sMapName, MapPosition, this);
@@ -507,41 +463,7 @@ namespace RiverHollow.Items
                 _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
 
                 _itemBubble = new ItemBubble(_heldItem, this);
-                _bActivelyWorking = false;
             }
-
-            public void SetToWork()
-            {
-                _bActivelyWorking = true;
-                PlayerManager.DecreaseStamina(2);
-                _sprite.PlayAnimation(AnimationEnum.PlayAnimation);
-            }
-            public bool ActivelyWorking() { return _bActivelyWorking; }
-            public bool MakingSomething() { return _iCurrentlyMaking != -1; }
-            public void ProcessClick()
-            {
-                bool Processed = false;
-                Item itemToProcess = InventoryManager.GetCurrentItem();
-                if (itemToProcess != null)
-                {
-                    if (_diProcessing.ContainsKey(itemToProcess.ItemID))
-                    {
-                        ProcessRecipe pr = _diProcessing[itemToProcess.ItemID];
-                        if (itemToProcess.Number >= pr.InputNum)
-                        {
-                            Processed = true;
-                            itemToProcess.Remove(pr.InputNum);
-                            _iCurrentlyMaking = pr.Input;
-                            _sprite.PlayAnimation(AnimationEnum.PlayAnimation);
-                        }
-                    }
-                }
-
-                if (!Processed) {
-                    GUIManager.OpenMainObject(new HUDCraftingDisplay(this));
-                }
-            }
-            public bool HasItem() { return _heldItem != null; }
             public void TakeFinishedItem()
             {
                 InventoryManager.AddToInventory(_heldItem);
@@ -549,51 +471,178 @@ namespace RiverHollow.Items
                 _itemBubble = null;
             }
 
-            public void MakeChosenItem(int itemID)
-            {
-                _iCurrentlyMaking = itemID;
-                _sprite.PlayAnimation(AnimationEnum.PlayAnimation);
-                _bActivelyWorking = true;
-            }
+            public virtual void Rollover() { }
 
-            public void Rollover()
+            public bool MakingSomething() { return _iCurrentlyMaking != -1; }
+            public bool HasItem() { return _heldItem != null; }
+
+            public bool IsProcessor() { return _eMachineType == MachineTypeEnum.Processer; }
+            public bool IsCraftingMachine() { return _eMachineType == MachineTypeEnum.CraftingMachine; }
+
+            //public MachineData SaveData()
+            //{
+            //    MachineData m = new MachineData
+            //    {
+            //        ID = this.ID,
+            //        x = (int)this.MapPosition.X,
+            //        y = (int)this.MapPosition.Y,
+            //        processedTime = this.ProcessedTime,
+            //        currentItemID = (this.CurrentlyProcessing == null) ? _iCurrentlyMaking : this.CurrentlyProcessing.Input,
+            //        heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID
+            //    };
+
+            //    return m;
+            //}
+            //public void LoadData(MachineData mac)
+            //{
+            //    _iID = mac.ID;
+            //    SnapPositionToGrid(new Vector2(mac.x, mac.y));
+            //    _dProcessedTime = mac.processedTime;
+            //    _iCurrentlyMaking = mac.currentItemID;
+            //    _heldItem = DataManager.GetItem(mac.heldItemID);
+
+            //    if (CurrentlyProcessing != null) { _sprite.PlayAnimation(AnimationEnum.ObjectIdle); }
+            //}
+
+            public class Processor : Machine
             {
-                if (_bActivelyWorking)
+                //Processor variables
+                Dictionary<int, ProcessRecipe> _diProcessing;
+                ProcessRecipe CurrentlyProcessing => (_diProcessing.ContainsKey(_iCurrentlyMaking) ? _diProcessing[_iCurrentlyMaking] : null);
+
+                public Processor(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
                 {
-                    _dProcessedTime++;
-                    if (_dProcessedTime >= CraftingDictionary[_iCurrentlyMaking])
+                    _eMachineType = MachineTypeEnum.Processer;
+                    _diProcessing = new Dictionary<int, ProcessRecipe>();
+
+                    //Read in what items the machine processes
+                    string[] processes = Util.GetEntries(stringData["Processes"]);
+                    foreach (string recipe in processes)
                     {
-                        SetHeldItem(_iCurrentlyMaking);
+                        string[] pieces = recipe.Split('-');
+                        _diProcessing.Add(int.Parse(pieces[0]), new ProcessRecipe(pieces));
+                    }
+                }
+
+                public override void Update(GameTime gTime)
+                {
+                    base.Update(gTime);
+                    if (CurrentlyProcessing != null)
+                    {
+                        SoundManager.PlayEffectAtLoc(_sEffectWorking, _sMapName, MapPosition, this);
+                        _sprite.Update(gTime);
+                        _dProcessedTime += gTime.ElapsedGameTime.TotalSeconds;
+                        if (_dProcessedTime >= CurrentlyProcessing.ProcessingTime)
+                        {
+                            SetHeldItem(CurrentlyProcessing.Output);
+                        }
+                    }
+                }
+
+                public override bool StartAutoWork()
+                {
+                    bool rv = false;
+
+                    Item itemToProcess = InventoryManager.GetCurrentItem();
+                    if (itemToProcess != null)
+                    {
+                        if (_diProcessing.ContainsKey(itemToProcess.ItemID))
+                        {
+                            ProcessRecipe pr = _diProcessing[itemToProcess.ItemID];
+                            if (itemToProcess.Number >= pr.InputNum)
+                            {
+                                rv = true;
+                                itemToProcess.Remove(pr.InputNum);
+                                _iCurrentlyMaking = pr.Input;
+                                _sprite.PlayAnimation(AnimationEnum.PlayAnimation);
+                            }
+                        }
                     }
 
-                    _bActivelyWorking = false;
-                    _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
+                    return rv;
                 }
+
+                public override void Rollover() { }
             }
 
-            public MachineData SaveData()
+            public class CraftingMachine : Machine
             {
-                MachineData m = new MachineData
+                private int _iAutoItem = -1;
+                public Dictionary<int, int> CraftingDictionary { get; }
+                private bool _bWorking = false;
+
+                public CraftingMachine(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, stringData, pos)
                 {
-                    ID = this.ID,
-                    x = (int)this.MapPosition.X,
-                    y = (int)this.MapPosition.Y,
-                    processedTime = this.ProcessedTime,
-                    currentItemID = (this.CurrentlyProcessing == null) ? _iCurrentlyMaking : this.CurrentlyProcessing.Input,
-                    heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID
-                };
+                    _eMachineType = MachineTypeEnum.CraftingMachine;
+                    CraftingDictionary = new Dictionary<int, int>();
 
-                return m;
-            }
-            public void LoadData(MachineData mac)
-            {
-                _iID = mac.ID;
-                SnapPositionToGrid(new Vector2(mac.x, mac.y));
-                _dProcessedTime = mac.processedTime;
-                _iCurrentlyMaking = mac.currentItemID;
-                _heldItem = DataManager.GetItem(mac.heldItemID);
+                    //Read in what items the machine can make
+                    string[] processes = Util.GetEntries(stringData["Makes"]);
+                    foreach (string recipe in processes)
+                    {
+                        //Each entry is in written like ID-NumDays
+                        string[] pieces = recipe.Split('-');
+                        CraftingDictionary.Add(int.Parse(pieces[0]), int.Parse(pieces[1]));
+                    }
+                }
 
-                if (CurrentlyProcessing != null) { _sprite.PlayAnimation(AnimationEnum.ObjectIdle); }
+                public override void Update(GameTime gTime)
+                {
+                    base.Update(gTime);
+                    if (_iCurrentlyMaking != -1)       //Crafting Handling
+                    {
+                        SoundManager.PlayEffectAtLoc(_sEffectWorking, _sMapName, MapPosition, this);
+                        _sprite.Update(gTime);
+                    }
+                }
+
+                public override bool StartAutoWork()
+                {
+                    bool rv = true;
+
+                    if (_iAutoItem == -1)
+                    {
+                        GUIManager.OpenMainObject(new HUDCraftingDisplay(this));
+                    }
+
+                    return rv;
+                }
+
+                public override void MakeChosenItem(int itemID)
+                {
+                    base.MakeChosenItem(itemID);
+                    _bWorking = true;
+                }
+                public override void SetHeldItem(int itemID)
+                {
+                    base.SetHeldItem(itemID);
+                    _bWorking = false;
+                }
+
+                public void SetToWork()
+                {
+                    if (!_bWorking)
+                    {
+                        _bWorking = true;
+                        PlayerManager.DecreaseStamina(2);
+                        _sprite.PlayAnimation(AnimationEnum.PlayAnimation);
+                    }
+                }
+
+                public override void Rollover()
+                {
+                    if (_bWorking)
+                    {
+                        _dProcessedTime++;
+                        if (_dProcessedTime >= CraftingDictionary[_iCurrentlyMaking])
+                        {
+                            SetHeldItem(_iCurrentlyMaking);
+                        }
+
+                        _bWorking = false;
+                        _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
+                    }
+                }
             }
 
             private class ProcessRecipe
