@@ -405,11 +405,10 @@ namespace RiverHollow.Items
             protected Item _heldItem;
             protected double _dProcessedTime = 0;
             public double ProcessedTime => _dProcessedTime;
+            private bool _bActivelyWorking = false;
 
-            public Machine(int id, Dictionary<string, string> stringData)
+            public Machine(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos - new Vector2(0, TileSize))
             {
-                
-                _iID = id;
                 _heldItem = null;
                 CraftingDictionary = new Dictionary<int, int>();
                 _diProcessing = new Dictionary<int, ProcessRecipe>();             
@@ -508,9 +507,17 @@ namespace RiverHollow.Items
                 _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
 
                 _itemBubble = new ItemBubble(_heldItem, this);
+                _bActivelyWorking = false;
             }
 
-            public bool Working() { return _iCurrentlyMaking != -1; }
+            public void SetToWork()
+            {
+                _bActivelyWorking = true;
+                PlayerManager.DecreaseStamina(2);
+                _sprite.PlayAnimation(AnimationEnum.PlayAnimation);
+            }
+            public bool ActivelyWorking() { return _bActivelyWorking; }
+            public bool MakingSomething() { return _iCurrentlyMaking != -1; }
             public void ProcessClick()
             {
                 bool Processed = false;
@@ -546,14 +553,21 @@ namespace RiverHollow.Items
             {
                 _iCurrentlyMaking = itemID;
                 _sprite.PlayAnimation(AnimationEnum.PlayAnimation);
+                _bActivelyWorking = true;
             }
 
             public void Rollover()
             {
-                _dProcessedTime++;
-                if (_dProcessedTime >= CraftingDictionary[_iCurrentlyMaking])
+                if (_bActivelyWorking)
                 {
-                    SetHeldItem(_iCurrentlyMaking);
+                    _dProcessedTime++;
+                    if (_dProcessedTime >= CraftingDictionary[_iCurrentlyMaking])
+                    {
+                        SetHeldItem(_iCurrentlyMaking);
+                    }
+
+                    _bActivelyWorking = false;
+                    _sprite.PlayAnimation(AnimationEnum.ObjectIdle);
                 }
             }
 

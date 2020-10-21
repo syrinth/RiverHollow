@@ -281,5 +281,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Shops.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Spirits.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Object_Text.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Manor/mapManor_Basement_1.tmx</File>
   </SourceFiles>
 </SourceFileCollection>

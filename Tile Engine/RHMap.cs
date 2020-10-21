@@ -342,7 +342,12 @@ namespace RiverHollow.Tile_Engine
                  }
                 else if (obj.Name.Equals("WorldObject"))
                 {
-                    PlaceWorldObject(DataManager.GetWorldObject(int.Parse(obj.Properties["ObjectID"]), Util.SnapToGrid(obj.Position)));
+                    //AddMachine
+                    WorldObject w = DataManager.GetWorldObject(int.Parse(obj.Properties["ObjectID"]), Util.SnapToGrid(obj.Position));
+                    if (PlaceWorldObject(w))
+                    {
+                        if (w.CompareType(ObjectTypeEnum.Machine)) { GameManager.AddMachine((Machine)w); }
+                    }
                 }
                 else if (obj.Name.Equals("Chest"))
                 {
@@ -1119,7 +1124,7 @@ namespace RiverHollow.Tile_Engine
 
                 if (PlayerManager.PlayerInRange(obj.CollisionBox))
                 {
-                    if (obj.BuildingID != -1) { MapManager.EnterBuilding(obj, PlayerManager.Buildings.Find(x => x.PersonalID == obj.BuildingID)); }
+                    if (obj.BuildingID > 1) {MapManager.EnterBuilding(obj, PlayerManager.Buildings.Find(x => x.PersonalID == obj.BuildingID)); }
                     else { MapManager.ChangeMaps(PlayerManager.World, this.Name, obj); }
                     SoundManager.PlayEffect("close_door_1");
                 }
@@ -1131,7 +1136,7 @@ namespace RiverHollow.Tile_Engine
                 {
                     Machine p = (Machine)obj;
                     if (p.HasItem()) { p.TakeFinishedItem(); }
-                    else if (InventoryManager.GetCurrentItem() != null && !p.Working()) { p.ProcessClick(); }
+                    else if (InventoryManager.GetCurrentItem() != null && !p.MakingSomething()) { p.ProcessClick(); }
                 }
                 else if (obj.CompareType(ObjectTypeEnum.Container))
                 {
@@ -1356,7 +1361,8 @@ namespace RiverHollow.Tile_Engine
                 {
                     Machine p = (Machine)obj;
                     if (p.HasItem()) { p.TakeFinishedItem(); }
-                    else if (!p.Working()) { p.ProcessClick(); }
+                    else if (p.MakingSomething() && !p.ActivelyWorking()) { p.SetToWork();  }
+                    else if (!p.MakingSomething()) { p.ProcessClick(); }
                 }
                 else if (obj.CompareType(ObjectTypeEnum.ClassChanger))
                 {

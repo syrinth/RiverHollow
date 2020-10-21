@@ -425,7 +425,7 @@ namespace RiverHollow.Game_Managers
                     case "Plant":
                         return new Plant(id, liData);
                     case "Machine":
-                        return new Machine(id, liData);
+                        return new Machine(id, liData, pos);
                     case "Wall":
                         return new Wall(id, liData, pos);
                     case "Floor":

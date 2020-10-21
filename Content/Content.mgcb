@@ -2467,3 +2467,8 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Object_Text.xml
 
+#begin Maps/Manor/mapManor_Basement_1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Manor/mapManor_Basement_1.tmx
+
