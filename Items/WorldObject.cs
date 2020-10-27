@@ -567,7 +567,7 @@ namespace RiverHollow.Items
 
             public class CraftingMachine : Machine
             {
-                private int _iAutoItem = -1;
+                public int AutomatedItem { get; } = -1;
                 public Dictionary<int, int> CraftingDictionary { get; }
                 private bool _bWorking = false;
 
@@ -600,7 +600,7 @@ namespace RiverHollow.Items
                 {
                     bool rv = true;
 
-                    if (_iAutoItem == -1)
+                    if (AutomatedItem == -1)
                     {
                         GUIManager.OpenMainObject(new HUDCraftingDisplay(this));
                     }

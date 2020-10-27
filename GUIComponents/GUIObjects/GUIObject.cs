@@ -151,9 +151,15 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             foreach(GUIObject c in Controls)
             {
-                rv = c.ProcessLeftButtonClick(mouse);
+                if (c.Contains(mouse))
+                {
+                    rv = c.ProcessLeftButtonClick(mouse);
+                    if (rv) { break; }
+                }
             }
 
+            //This consumes the left button click if the button is inside
+            //the object but wasn't otherwise consumed.
             if (!rv)
             {
                 rv = Contains(mouse);
@@ -167,9 +173,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             foreach (GUIObject c in Controls)
             {
-                rv = c.ProcessRightButtonClick(mouse);
-
-                if (rv) { break; }
+                if (c.Contains(mouse))
+                {
+                    rv = c.ProcessRightButtonClick(mouse);
+                    if (rv) { break; }
+                }
             }
 
             if (!rv)
@@ -185,7 +193,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             foreach (GUIObject c in Controls)
             {
-                rv = c.ProcessHover(mouse);
+                if (c.Contains(mouse))
+                {
+                    rv = c.ProcessHover(mouse);
+                    if (rv) { break; }
+                }
             }
 
             if (!rv)
@@ -527,15 +539,19 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 case SideEnum.Bottom:
                     this.SetY(window.InnerBottom() - this.Height - spacing);
+                    this.AlignToObject(window, SideEnum.CenterX);
                     break;
                 case SideEnum.Left:
                     this.SetX(window.InnerLeft() + spacing);
+                    this.AlignToObject(window, SideEnum.CenterY);
                     break;
                 case SideEnum.Right:
                     this.SetX(window.InnerRight() - this.Width - spacing);
+                    this.AlignToObject(window, SideEnum.CenterY);
                     break;
                 case SideEnum.Top:
                     this.SetY(window.InnerTop() + spacing);
+                    this.AlignToObject(window, SideEnum.CenterX);
                     break;
                 case SideEnum.BottomLeft:
                     this.SetY(window.InnerBottom() - this.Height - spacing);

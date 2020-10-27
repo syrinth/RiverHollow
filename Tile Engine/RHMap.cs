@@ -32,7 +32,7 @@ namespace RiverHollow.Tile_Engine
         public int MapHeightTiles = 100;
         
         private string _sName;
-        public string Name { get => _sName.Replace(@"Maps\", ""); set => _sName = value; } //Fuck off with that path bullshit
+        public string Name { get => _sName.Replace(@"Maps\", ""); } //Fuck off with that path bullshit
 
         public bool IsCombatMap => _liMonsterSpawnPoints.Count > 0;
         public bool IsBuilding { get; private set; }
@@ -347,7 +347,7 @@ namespace RiverHollow.Tile_Engine
                     WorldObject w = DataManager.GetWorldObject(int.Parse(obj.Properties["ObjectID"]), Util.SnapToGrid(obj.Position));
                     if (PlaceWorldObject(w))
                     {
-                        if (w.CompareType(ObjectTypeEnum.Machine)) { GameManager.AddMachine((Machine)w); }
+                        if (w.CompareType(ObjectTypeEnum.Machine)) { GameManager.AddMachine((Machine)w, this.Name); }
                     }
                 }
                 else if (obj.Name.Equals("Chest"))
@@ -497,14 +497,21 @@ namespace RiverHollow.Tile_Engine
                 //Trigger x number of SpawnPoints
                 for (int i = 0; i < _iActiveSpawnPoints; i++)
                 {
-                    //Get a random Spawn Point
-                    int point = RHRandom.Instance.Next(0, spawnCopy.Count - 1);
-                    if (!spawnCopy[point].HasSpawned())
+                    try
                     {
-                        //Trigger the Spawn point and remove it from the copied list
-                        //so it won't be an option for future spawning.
-                        spawnCopy[point].Spawn();
-                        spawnCopy.RemoveAt(point);
+                        //Get a random Spawn Point
+                        int point = RHRandom.Instance.Next(0, spawnCopy.Count - 1);
+                        if (!spawnCopy[point].HasSpawned())
+                        {
+                            //Trigger the Spawn point and remove it from the copied list
+                            //so it won't be an option for future spawning.
+                            spawnCopy[point].Spawn();
+                            spawnCopy.RemoveAt(point);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
                     }
                 }
             }
@@ -1247,49 +1254,54 @@ namespace RiverHollow.Tile_Engine
                     if (TargetTile != null && PlayerManager.PlayerInRange(TargetTile.Center.ToPoint()))
                     {
 
-                        if (InventoryManager.GetCurrentItem() != null && InventoryManager.GetCurrentItem().CompareType(ItemEnum.Tool))
-                        {
-                            Tool currentTool = (Tool)InventoryManager.GetCurrentItem();
-                            rv = PlayerManager.SetTool(currentTool, mouseLocation);
-                        }
-                        else
-                        {
-                            //Handles interactions with objects on the tile, both actual and Shadow
-                            rv = ProcessLeftButtonClickOnObject(mouseLocation);
+                        //Handles interactions with objects on the tile, both actual and Shadow
+                        rv = ProcessLeftButtonClickOnObject(mouseLocation);
 
-                            //Handles interactions with a tile that is actually empty, ignores Shadow Tiles
-                            rv = ProcessLeftButtonClickOnEmptyTile(mouseLocation);
+                        //Handles interactions with a tile that is actually empty, ignores Shadow Tiles
+                        rv = ProcessLeftButtonClickOnEmptyTile(mouseLocation);
 
-                            //Handles interacting with NPCs
-                            foreach (WorldActor c in _liActors)
+                        //Handles interacting with NPCs
+                        foreach (WorldActor c in _liActors)
+                        {
+                            if (c.IsActorType(ActorEnum.Adventurer))
                             {
-                                if (c.IsActorType(ActorEnum.Adventurer))
+                                int row = 0;
+                                int col = 0;
+                                Adventurer w = (Adventurer)c;
+                                if (w.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(w.CharCenter) &&
+                                    InventoryManager.HasSpaceInInventory(w.WhatAreYouHolding(), 1, ref row, ref col, true))
                                 {
-                                    int row = 0;
-                                    int col = 0;
-                                    Adventurer w = (Adventurer)c;
-                                    if (w.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(w.CharCenter) &&
-                                        InventoryManager.HasSpaceInInventory(w.WhatAreYouHolding(), 1, ref row, ref col, true))
-                                    {
-                                        InventoryManager.AddItemToInventorySpot(DataManager.GetItem(w.TakeItem()), row, col);
-                                        rv = true;
-                                    }
+                                    InventoryManager.AddItemToInventorySpot(DataManager.GetItem(w.TakeItem()), row, col);
+                                    rv = true;
                                 }
-                                else if (c.IsActorType(ActorEnum.NPC))
+                            }
+                            else if (c.IsActorType(ActorEnum.NPC))
+                            {
+                                Villager n = (Villager)c;
+                                if (InventoryManager.GetCurrentItem() != null &&
+                                    n.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(n.CharCenter) &&
+                                    InventoryManager.GetCurrentItem().Giftable())
                                 {
-                                    Villager n = (Villager)c;
-                                    if (InventoryManager.GetCurrentItem() != null &&
-                                        n.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(n.CharCenter) &&
-                                        InventoryManager.GetCurrentItem().Giftable())
-                                    {
-                                        n.Gift(InventoryManager.GetCurrentItem());
-                                        rv = true;
-                                    }
+                                    n.Gift(InventoryManager.GetCurrentItem());
+                                    rv = true;
                                 }
                             }
                         }
                     }
                 }
+            }
+
+            return rv;
+        }
+
+        private bool UseTool(Point mouseLocation)
+        {
+            bool rv = false;
+
+            if (InventoryManager.GetCurrentItem() != null && InventoryManager.GetCurrentItem().CompareType(ItemEnum.Tool))
+            {
+                Tool currentTool = (Tool)InventoryManager.GetCurrentItem();
+                rv = PlayerManager.SetTool(currentTool, mouseLocation);
             }
 
             return rv;
@@ -1382,14 +1394,21 @@ namespace RiverHollow.Tile_Engine
                             ((CraftingMachine)p).SetToWork();
                         }
                     }
+                    rv = true;
                 }
                 else if (obj.CompareType(ObjectTypeEnum.ClassChanger))
                 {
                     ((ClassChanger)obj).ProcessClick();
+                    rv = true;
                 }
                 else if (obj.CompareType(ObjectTypeEnum.Plant))
                 {
                     ((Plant)obj).Harvest();
+                    rv = true;
+                }
+                else
+                {
+                    rv = UseTool(mouseLocation);
                 }
             }
 
@@ -1410,8 +1429,10 @@ namespace RiverHollow.Tile_Engine
             WorldObject obj = TargetTile.GetWorldObject(false);
 
             Item currentItem = InventoryManager.GetCurrentItem();
-            if (obj == null && currentItem != null && currentItem.CompareType(ItemEnum.StaticItem))    //Only procees if tile is empty and we are holding an item
+            if (obj == null)
             {
+                if (currentItem != null && currentItem.CompareType(ItemEnum.StaticItem))    //Only procees if tile is empty and we are holding an item)
+                {
                     //If the player is currently holding a StaticItem, we need to place it
                     //Do not, however, allow the placing of StaticItems on combat maps.
                     StaticItem selectedItem = InventoryManager.GetCurrentStaticItem();
@@ -1421,6 +1442,7 @@ namespace RiverHollow.Tile_Engine
                         WorldItem newItem = selectedItem.GetWorldItem();
                         if (MapManager.PlacePlayerObject(newItem))
                         {
+                            rv = true;
                             newItem.SetMapName(this.Name);      //Assign the map name tot he WorldItem
                             selectedItem.Remove(1);             //Remove one of them from the inventory
 
@@ -1431,7 +1453,13 @@ namespace RiverHollow.Tile_Engine
                             }
                         }
                     }
+                }
+                else
+                {
+                    rv = UseTool(mouseLocation);
+                }
             }
+
 
             return rv;
         }
@@ -1921,7 +1949,7 @@ namespace RiverHollow.Tile_Engine
             {
                 if (obj.CompareType(ObjectTypeEnum.Machine))
                 {
-                    GameManager.AddMachine((Machine)obj);
+                    GameManager.AddMachine((Machine)obj, this.Name);
                 }
                 AssignMapTiles(obj, liTiles);
                 rv = true;
@@ -2291,7 +2319,7 @@ namespace RiverHollow.Tile_Engine
         public override void Spawn()
         {
             if (_iPrimedMonsterID != -1) { _monster = DataManager.GetMonsterByIndex(_iPrimedMonsterID); }
-            else { _monster = DataManager.GetMonsterByIndex(RHRandom.Instance.Next(0, 3)); }
+            else { _monster = DataManager.GetMonsterByIndex(4); }// RHRandom.Instance.Next(0, 3)); }
 
             _monster.SpawnPoint = this;
             _map.AddMonsterByPosition(_monster, _vPosition);

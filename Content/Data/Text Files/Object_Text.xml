@@ -178,6 +178,10 @@
       <Value>[Name:Giant Slime]</Value>
     </Item>
     <Item>
+      <Key>Monster_4</Key>
+      <Value>[Name:Batty]</Value>
+    </Item>
+    <Item>
       <Key>Action_0</Key>
       <Value>[Name:Move]</Value>
     </Item>

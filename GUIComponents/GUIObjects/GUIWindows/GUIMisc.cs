@@ -1,7 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
-
+using RiverHollow.Items;
+using System;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
@@ -58,7 +59,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             if (_bCoinOnRight)
             {
-                _gTextMoney.AnchorAndAlignToObject(_gCoin, SideEnum.Left, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
+                _gCoin.AnchorAndAlignToObject(_gTextMoney, SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
             }
             else
             {
@@ -329,6 +330,34 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
 
             return rv;
+        }
+    }
+
+    public class GUIItemReq : GUIObject
+    {
+        GUIImage _gImg;
+        GUIText _gText;
+
+        public GUIItemReq(int id, int number)
+        {
+            Item it = DataManager.GetItem(id);
+            _gImg = new GUIImage(it.SourceRectangle, it.SourceRectangle.Width, it.SourceRectangle.Height, it.Texture);
+            _gImg.SetScale(Scale);
+            _gText = new GUIText("999");
+
+            AddControl(_gImg);
+            AddControl(_gText);
+
+            Width = _gImg.Width + _gText.Width;
+            Height = Math.Max(_gImg.Height, _gText.Height);
+
+            _gText.SetText(number.ToString());
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            _gImg.Draw(spriteBatch);
+            _gText.Draw(spriteBatch);
         }
     }
 }

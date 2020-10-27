@@ -279,7 +279,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
                     if (!takeHalf)
                     {
-                        InventoryManager.RemoveItemFromInventorySpot(box.Row, box.Col, _bPlayerInventory);
+                        InventoryManager.RemoveItemFromInventorySpot(box.Rows, box.Columns, _bPlayerInventory);
                     }
 
                     break;

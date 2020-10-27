@@ -10,7 +10,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
     {
         //Passes all action handlers to it's sub controls.
         public static int BTNSIZE = ScaledTileSize;
-        public int MAX_SHOWN_ITEMS;
+        public int _iMaxShownItems;
 
         int _iListPos = 0;
         int _iSpacing;
@@ -28,7 +28,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         /// <param name="maxHeight">The maximum height the GUIList is allowed to take up on the screen. If set, it will override maxItems if necessary.</param>
         public GUIList(List<GUIObject> objects, int maxItems, int spacing, int maxHeight = 0)
         {
-            MAX_SHOWN_ITEMS = maxItems;
+            _iMaxShownItems = maxItems;
             _liObjects = objects;
             _iSpacing = spacing;
 
@@ -56,7 +56,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 {
                     int calcItems = maxHeight / (mostHeight + spacing);
                     calcHeight = (mostHeight * calcItems) + (spacing * (calcItems - 1));
-                    MAX_SHOWN_ITEMS = calcItems;
+                    _iMaxShownItems = calcItems;
                     Debug.Assert(calcHeight <= maxHeight);
                 }
             }
@@ -66,7 +66,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             PopulateList();
 
-            if (MAX_SHOWN_ITEMS < objects.Count)
+            if (_iMaxShownItems < objects.Count)
             {
                 this.Width = mostWidth + BTNSIZE;
 
@@ -81,6 +81,27 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
         }
 
+        public GUIObject GetMousedOverEntry(Point mouse)
+        {
+            GUIObject rv = null;
+
+            foreach(GUIObject obj in _liObjects)
+            {
+                if (obj.Contains(mouse))
+                {
+                    rv = obj;
+                    break;
+                }
+            }
+
+            return rv;
+        }
+
+        public List<GUIObject> GetEntries()
+        {
+            return _liObjects;
+        }
+
         public void BtnUpClick()
         {
             if (_iListPos > 0) { _iListPos--; }
@@ -88,7 +109,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         }
         public void BtnDownClick()
         {
-            if (_iListPos < _liObjects.Count - MAX_SHOWN_ITEMS) { _iListPos++; }
+            if (_iListPos < _liObjects.Count - _iMaxShownItems) { _iListPos++; }
             PopulateList();
         }
 
@@ -105,7 +126,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 o.Show = false;
             }
 
-            for (int s = _iListPos; s < _iListPos + MAX_SHOWN_ITEMS && s < _liObjects.Count; s++)
+            for (int s = _iListPos; s < _iListPos + _iMaxShownItems && s < _liObjects.Count; s++)
             {
                 GUIObject o = _liObjects[s];
 

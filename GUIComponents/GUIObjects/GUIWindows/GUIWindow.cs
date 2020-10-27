@@ -63,8 +63,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             foreach(GUIObject c in Controls)
             {
-                rv = c.ProcessLeftButtonClick(mouse);
-                if (rv) { break; }
+                if (c.Contains(mouse))
+                {
+                    rv = c.ProcessLeftButtonClick(mouse);
+                    if (rv) { break; }
+                }
             }
 
             return rv;
@@ -93,11 +96,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             base.Position(Position() - new Vector2(modWidth, modHeight));
             Width += modWidth * 2;
             Height += modHeight * 2;
-        }
-
-        public override bool ProcessHover(Point mouse)
-        {
-            return base.ProcessHover(mouse);
         }
 
         public override void AddControl(GUIObject g)

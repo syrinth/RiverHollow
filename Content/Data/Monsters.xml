@@ -17,5 +17,9 @@
       <Key>3</Key>
       <Value>[Texture:BigBlob][Condition:Forest-Summer][Lvl:1][Width:32][Height:32][Size:2][Ability:300][Loot:26 23 25][Walk:0-0-1-.15-T][Attack:256-0-2-.15-F][Hurt:384-0-2-.15-F][Critical:512-0-2-.15-F][KO:640-0-3-.15-F]</Value>
     </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>[Texture:Batty][Lvl:1][Ability:300][Walk:0-0-4-.11-F][Attack:256-0-2-.15-F][Hurt:384-0-2-.15-F][Critical:512-0-2-.15-F][KO:640-0-3-.15-F]</Value>
+    </Item>
   </Asset>
 </XnaContent>

@@ -64,6 +64,7 @@ namespace RiverHollow.Game_Managers
         public static float Scale = 4f;
         public const int TileSize = 16;
         public static int ScaledTileSize => (int)(TileSize * Scale);
+        public static int ScaledPixel => (int)Scale;
         public static int MaxBldgLevel = 3;
         public static Dictionary<int, Upgrade> DiUpgrades;
         public static Dictionary<int, Quest> DiQuests;
@@ -175,8 +176,9 @@ namespace RiverHollow.Game_Managers
         }
 
         #region Machine Handling
-        public static void AddMachine(Machine m)
+        public static void AddMachine(Machine m, string mapName)
         {
+            m.SetMapName(mapName);
             _liMachines.Add(m);
         }
 

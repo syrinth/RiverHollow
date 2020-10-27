@@ -20,18 +20,13 @@ namespace RiverHollow.GUIComponents.Screens
     public class HUDPurchaseItems : GUIMainObject
     {
         GUIMoneyDisplay _gMoney;
-        GUIWindow _mainWindow;
-        List<GUIObject> _liItems;
+        GUIList _gList;
 
         public HUDPurchaseItems(List<Merchandise> merch)
         {
-            Vector2 center = new Vector2(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
+            _winMain = SetMainWindow();
 
-            int minWidth = 64 * merch.Count + 64;
-            int minHeight = 128 + 64;
-            _mainWindow = new GUIWindow(GUIWindow.RedWin, minWidth, minHeight);
-
-            _liItems = new List<GUIObject>();
+            List<GUIObject> items = new List<GUIObject>();
 
             int i = 0;
             foreach (Merchandise m in merch)
@@ -39,63 +34,21 @@ namespace RiverHollow.GUIComponents.Screens
                 Item it = DataManager.GetItem(m.MerchID);
                 it.ApplyUniqueData(m.UniqueData);
 
-                _liItems.Add(new BuyItemBox(it, m.MoneyCost, _mainWindow.InnerRectangle().Width));
+                items.Add(new BuyItemBox(it, m.MoneyCost, _winMain.MidWidth() - GUIList.BTNSIZE));
 
-                if (i == 0)
-                {
-                    _liItems[i].AnchorToInnerSide(_mainWindow, GUIObject.SideEnum.TopLeft);
-                }
-                else
-                {
-                    _liItems[i].AnchorAndAlignToObject(_liItems[i - 1], GUIObject.SideEnum.Bottom, GUIObject.SideEnum.Left);
-                }
-                _mainWindow.AddControl(_liItems[i]);
+                if (i == 0) { items[i].AnchorToInnerSide(_winMain, GUIObject.SideEnum.TopLeft); }
+                else { items[i].AnchorAndAlignToObject(items[i - 1], GUIObject.SideEnum.Bottom, GUIObject.SideEnum.Left); }
                 i++;
             }
 
-            _mainWindow.Resize();
+            _gList = new GUIList(items, 10, ScaleIt(2), _winMain.MidHeight());
+            _gList.CenterOnObject(_winMain);
 
             _gMoney = new GUIMoneyDisplay();
-            _gMoney.AnchorAndAlignToObject(_mainWindow, GUIObject.SideEnum.Top, GUIObject.SideEnum.Left);
+            _gMoney.AnchorAndAlignToObject(_winMain, GUIObject.SideEnum.Top, GUIObject.SideEnum.Left);
 
-            AddControl(_mainWindow);
             AddControl(_gMoney);
-
-            Width = _mainWindow.Width;
-            Height = _mainWindow.Height;
-
-            CenterOnScreen();
-        }
-
-        public override bool ProcessLeftButtonClick(Point mouse)
-        {
-            bool rv = false;
-
-            foreach (BuyItemBox wB in _liItems)
-            {
-                if (wB.Contains(mouse) && PlayerManager.Money >= wB.Cost)
-                {
-                    PlayerManager.TakeMoney(wB.Cost);
-                    InventoryManager.AddToInventory(new Item(wB.itemForSale));
-
-                    rv = true;
-                    break;
-                }
-            }
-
-            return rv;
-        }
-
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = false;
-
-            foreach (BuyItemBox wB in _liItems)
-            {
-                wB.Enable(wB.Contains(mouse));
-            }
-
-            return rv;
+            AddControl(_gList);
         }
     }
 
@@ -471,25 +424,20 @@ namespace RiverHollow.GUIComponents.Screens
         public Item itemForSale;
         public int Cost;
 
-        public BuyItemBox(Item i, int cost, int mainWidth) : base(GUIWindow.BrownWin, mainWidth, 16)
+        public BuyItemBox(Item i, int cost, int mainWidth) : base(GUIWindow.GreyWin, mainWidth, ScaledTileSize + ScaleIt(4))
         {
             _font = DataManager.GetBitMapFont(DataManager.FONT_MAIN);
             Cost = cost;
             itemForSale = i;
-            _giItem = new GUIImage(itemForSale.SourceRectangle, TileSize, TileSize, itemForSale.Texture);
+            _giItem = new GUIImage(itemForSale.SourceRectangle, ScaledTileSize, ScaledTileSize, itemForSale.Texture);
             _giItem.SetColor(i.ItemColor);
             _gTextName = new GUIText(itemForSale.Name);
 
-            _giItem.AnchorToInnerSide(this, SideEnum.TopLeft);
-            _gTextName.AnchorToObject(_giItem, SideEnum.Right);
-            _gTextName.AnchorToInnerSide(this, SideEnum.Top);
+            _giItem.AnchorToInnerSide(this, SideEnum.Left);
+            _gTextName.AnchorAndAlignToObject(_giItem, SideEnum.Right, SideEnum.CenterY);
 
             _gMoney = new GUIMoneyDisplay(Cost);
-            _gMoney.AnchorToInnerSide(this, SideEnum.TopRight);
-
-            _giItem.AlignToObject(_gTextName, SideEnum.CenterY);
-
-            Resize();
+            _gMoney.AnchorToInnerSide(this, SideEnum.Right, ScaleIt(2));
         }
 
         public override void Update(GameTime gTime)
@@ -502,6 +450,30 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 _gMoney.SetColor(Color.White);
             }
+        }
+
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+            bool rv = false;
+
+            if (PlayerManager.Money >= Cost)
+            {
+                PlayerManager.TakeMoney(Cost);
+                InventoryManager.AddToInventory(new Item(itemForSale));
+
+                rv = true;
+            }
+
+            return rv;
+        }
+
+        public override bool ProcessHover(Point mouse)
+        {
+            bool rv = Contains(mouse);
+
+            Enable(rv);
+
+            return rv;
         }
     }
 }

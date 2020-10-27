@@ -10,18 +10,17 @@ namespace RiverHollow.GUIComponents
 {
     class GUIHarp : GUIMainObject
     {
-        GUIWindow _gWindow;
         GUISprite _gSprite;
         List<GUIMusicNote> _liGNotes;
         public GUIHarp()
         {
-            _gWindow = SetMainWindow();
+            _winMain = SetMainWindow();
             _gSprite = new GUISprite(HarpManager.SongSpirit.BodySprite);
             _gSprite.SetScale(Scale);
             _liGNotes = new List<GUIMusicNote>();
 
-            _gSprite.CenterOnWindow(_gWindow);
-            _gSprite.AnchorToInnerSide(_gWindow, SideEnum.Top);
+            _gSprite.CenterOnWindow(_winMain);
+            _gSprite.AnchorToInnerSide(_winMain, SideEnum.Top);
             AddControl(_gSprite);
         }
 

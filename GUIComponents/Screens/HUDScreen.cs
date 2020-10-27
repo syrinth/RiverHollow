@@ -501,12 +501,11 @@ namespace RiverHollow.GUIComponents.Screens
             public static int QUESTBOX_HEIGHT = 128; //(GUIManager.MAIN_COMPONENT_HEIGHT / HUDQuestLog.MAX_SHOWN_QUESTS) - (_gWindow.EdgeSize * 2)
             List<GUIObject> _liQuests;
             DetailBox _detailWindow;
-            GUIWindow _gWindow;
             GUIList _gList;
 
             public HUDQuestLog()
             {
-                _gWindow = SetMainWindow();
+                _winMain = SetMainWindow();
 
                 _liQuests = new List<GUIObject>();
                 _detailWindow = new DetailBox(GUIWindow.RedWin, GUIManager.MAIN_COMPONENT_WIDTH, GUIManager.MAIN_COMPONENT_HEIGHT);
@@ -522,7 +521,7 @@ namespace RiverHollow.GUIComponents.Screens
                 }
 
                 _gList = new GUIList(_liQuests, MAX_SHOWN_QUESTS, QUEST_SPACING/*, _gWindow.Height*/);
-                _gList.CenterOnObject(_gWindow);
+                _gList.CenterOnObject(_winMain);
 
                 AddControl(_gList);
             }
@@ -587,7 +586,7 @@ namespace RiverHollow.GUIComponents.Screens
             private void ShowDetails(bool val)
             {
                 _detailWindow.Show = val;
-                _gWindow.Show = !val;
+                _winMain.Show = !val;
                 _gList.Show = !val;
             }
 
@@ -1904,7 +1903,6 @@ namespace RiverHollow.GUIComponents.Screens
         }
         public class HUDOptions : GUIMainObject
         {
-            GUIWindow _gWindow;
             GUICheck _gAutoDisband;
             GUICheck _gHideMiniInventory;
             GUIButton _btnSave;
@@ -1915,10 +1913,10 @@ namespace RiverHollow.GUIComponents.Screens
 
             public HUDOptions()
             {
-                _gWindow = SetMainWindow();
+                _winMain = SetMainWindow();
 
                 _gAutoDisband = new GUICheck("Auto-Disband", GameManager.AutoDisband);
-                _gAutoDisband.AnchorToInnerSide(_gWindow, SideEnum.TopLeft, 8);
+                _gAutoDisband.AnchorToInnerSide(_winMain, SideEnum.TopLeft, 8);
 
                 _gHideMiniInventory = new GUICheck("Hide Mini Inventory", GameManager.HideMiniInventory);
                 _gHideMiniInventory.AnchorAndAlignToObject(_gAutoDisband, SideEnum.Bottom, SideEnum.Left, 8);
@@ -1934,7 +1932,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _gEffectControl.AnchorAndAlignToObject(_gVolumeControl, SideEnum.Bottom, SideEnum.Left);
 
                 _btnSave = new GUIButton("Save", BtnSave);
-                _btnSave.AnchorToInnerSide(_gWindow, SideEnum.BottomRight);
+                _btnSave.AnchorToInnerSide(_winMain, SideEnum.BottomRight);
             }
 
             public override bool ProcessLeftButtonClick(Point mouse)

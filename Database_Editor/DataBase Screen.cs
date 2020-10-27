@@ -1408,7 +1408,7 @@ namespace Database_Editor
             GenericCellClick(e, _diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", dgvStatusEffects, LoadStatusEffectInfo, SaveStatusEffectInfo);
         }
 
-        private void AddNewGenericXMLObject(TabPage page, string tabIndex, DataGridView dg, string colID, string colName, TextBox tbName, TextBox tbID, DataGridView dgTags, string tagCol, ComboBox cb = null, TextBox tbDesc = null, string defaultTag = "")
+        private void AddNewGenericXMLObject(TabPage page, string tabIndex, DataGridView dg, string colID, string colName, TextBox tbName, TextBox tbID, DataGridView dgTags, string tagCol, ComboBox cb = null, TextBox tbDesc = null, List<string> defaultTags = null)
         {
             tabCtl.SelectedTab = page;
             _diTabIndices[tabIndex] = dg.Rows.Count;
@@ -1426,23 +1426,34 @@ namespace Database_Editor
             if (cb != null) { cb.SelectedIndex = 0; }
 
             dgTags.Rows.Clear();
-            dgTags.Rows.Add();
-            row = dgTags.Rows[0];
-            row.Cells[tagCol].Value = defaultTag;
+
+            if (defaultTags != null)
+            {
+                foreach(string s in defaultTags) { dgTags.Rows.Add(); }
+                for (int i = 0; i < defaultTags.Count; i++)
+                {
+                    dgTags.Rows[i].Cells[tagCol].Value = defaultTags[i];
+                }
+            }
 
             tbName.Focus();
         }
         private void addNewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewGenericXMLObject(tabCtl.TabPages["tabItems"], "Items", dgvItems, "colItemID", "colItemName", tbItemName, tbItemID, dgItemTags, "colItemTags", cbItemType, tbItemDesc, "Image:0-0");
+            AddNewGenericXMLObject(tabCtl.TabPages["tabItems"], "Items", dgvItems, "colItemID", "colItemName", tbItemName, tbItemID, dgItemTags, "colItemTags", cbItemType, tbItemDesc, new List<string>() { "Image:0-0" });
         }
         private void addNewToolStripMenuWorldObject_Click(object sender, EventArgs e)
         {
-            AddNewGenericXMLObject(tabCtl.TabPages["tabWorldObjects"], "WorldObjects", dgvWorldObjects, "colWorldObjectsID", "colWorldObjectsName", tbWorldObjectName, tbWorldObjectID, dgvWorldObjectTags, "colWorldObjectTags", cbWorldObjectType, null, "Image:0-0");
+            AddNewGenericXMLObject(tabCtl.TabPages["tabWorldObjects"], "WorldObjects", dgvWorldObjects, "colWorldObjectsID", "colWorldObjectsName", tbWorldObjectName, tbWorldObjectID, dgvWorldObjectTags, "colWorldObjectTags", cbWorldObjectType, null, new List<string>() { "Image:0-0" });
         }
         private void questToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewGenericXMLObject(tabCtl.TabPages["tabQuests"], "Quests", dgvQuests, "colQuestsID", "colQuestsName", tbQuestName, tbQuestID, dgvQuestTags, "colQuestTags", cbQuestType, tbQuestDescription, "");
+            AddNewGenericXMLObject(tabCtl.TabPages["tabQuests"], "Quests", dgvQuests, "colQuestsID", "colQuestsName", tbQuestName, tbQuestID, dgvQuestTags, "colQuestTags", cbQuestType, tbQuestDescription);
+        }
+        private void monsterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<string> defaultTags = new List<string>() { "Texture:", "Condition:", "Lvl", "Ability:", "Loot:", "Trait:", "Walk:0-0-3-0.15-T", "Attack:0-0-3-0.15-T", "Cast:0-0-3-0.15-T", "Hurt:0-0-3-0.15-T", "Critical:0-0-3-0.15-T", "KO:0-0-3-0.15-T" };
+            AddNewGenericXMLObject(tabCtl.TabPages["tabMonsters"], "Monsters", dgvMonsters, "colMonstersID", "colMonstersName", tbMonsterName, tbMonsterID, dgvMonsterTags, "colMonsterTags", null, tbMonsterDescription, defaultTags);
         }
 
         private void cbItemType_SelectedIndexChanged(object sender, EventArgs e)
@@ -2206,5 +2217,6 @@ namespace Database_Editor
         }
 
         #endregion
+
     }
 }

@@ -224,7 +224,7 @@ namespace RiverHollow.Items
             return rv;
         }
 
-        public List<KeyValuePair<int, int>> GetIngredients()
+        public List<KeyValuePair<int, int>> GetRequiredItems()
         {
             List<KeyValuePair<int, int>> ret = new List<KeyValuePair<int, int>>();
             foreach(int key in _diReqToMake.Keys)

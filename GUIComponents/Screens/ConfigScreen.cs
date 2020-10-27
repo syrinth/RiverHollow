@@ -212,7 +212,6 @@ namespace RiverHollow.GUIComponents.Screens
 
         class SpawnEditor : GUIMainObject
         {
-            GUIWindow _gWin;
             GUITextInputWindow _gName;
             GUITextInputWindow _gMap;
             GUITextInputWindow _gX;
@@ -224,11 +223,12 @@ namespace RiverHollow.GUIComponents.Screens
 
             public SpawnEditor(SpawnSaveDelegate action)
             {
+                _winMain = SetMainWindow();
+
                 _delAction = action;
-                _gWin = SetMainWindow();
 
                 _gName = new GUITextInputWindow("Name:", SideEnum.Left, 10);
-                _gName.AnchorToInnerSide(_gWin, SideEnum.TopLeft);
+                _gName.AnchorToInnerSide(_winMain, SideEnum.TopLeft);
                 _gMap = new GUITextInputWindow("MapName:", SideEnum.Left, 60);
                 _gMap.AllowAll = true;
                 _gMap.AnchorAndAlignToObject(_gName, SideEnum.Bottom, SideEnum.Left);
@@ -241,7 +241,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _gName.AllowAll = true;
 
                 _btnSave = new GUIButton("Save", BtnSave);
-                _btnSave.AnchorToInnerSide(_gWin, SideEnum.BottomRight);
+                _btnSave.AnchorToInnerSide(_winMain, SideEnum.BottomRight);
             }
 
             private void BtnSave()

@@ -117,13 +117,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/ActionEffects/Heal.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/Bauble.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/MagicMushroom.png</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_1.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_2.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_3.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_4.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_5.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_6.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_7.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_01.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_02.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_03.tmx</File>
@@ -255,19 +248,6 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Songs/Lost In The Forest.mp3</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Effects/bubbles.wav</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Effects/buzz.wav</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_Wing_1_1.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_Wing_1_2.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_Wing_1_3.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_Wing_1_4.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_Wing_1_5.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_Wing_1_6.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_Wing_1_7.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_Wing_1_8.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_Wing_1_9.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_Wing_1_10.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_Wing_1_11.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_Wing_1_12.tmx</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeons/mapForest_Dungeon_Wing_1_13.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Forest/mapForest_17.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Effects/stove_fire.mp3</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Original/Effects/Blip_Select2.wav</File>
@@ -282,5 +262,51 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Spirits.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Object_Text.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Manor/mapManor_Basement_1.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Monsters/Batty.png</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_1.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_2.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_3.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_4.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_5.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_6.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_7.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_Wing_1_1.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_Wing_1_2.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_Wing_1_3.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_Wing_1_4.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_Wing_1_5.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_Wing_1_6.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_Wing_1_7.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_Wing_1_8.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_Wing_1_9.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_Wing_1_10.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_Wing_1_11.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_Wing_1_12.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Forest/mapForest_Dungeon_Wing_1_13.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Entrance.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_1_1.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_1_2.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_1_3.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_1_4.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_1_5.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_1_6.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_1_7.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_1_8.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_1_9.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_1_10.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_1_11.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_1_12.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_2_1.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_2_2.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_2_3.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_2_4.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_2_5.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_2_6.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_2_7.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_2_8.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_2_9.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_2_10.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_2_11.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_2_12.tmx</File>
   </SourceFiles>
 </SourceFileCollection>
