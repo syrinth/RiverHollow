@@ -124,9 +124,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 if (!rv) { GUIManager.CloseTextWindow(this); }
                 else { GUIManager.SetWindowText(nextText); }
             }
-            else if (GameManager.gmActiveItem != null)
+            else if (GameManager.CurrentItem != null)
             {
-                if (!selectedAction.Equals("Cancel")) { GameManager.gmActiveItem.UseItem(selectedAction); }
+                if (!selectedAction.Equals("Cancel")) { GameManager.CurrentItem.UseItem(selectedAction); }
                 GUIManager.CloseTextWindow(this);
             }
             else

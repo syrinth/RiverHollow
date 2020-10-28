@@ -81,7 +81,7 @@
     <Compile Include="GUIComponents\GUIObjects\GUIList.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUICharacterDisplayBox.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIText.cs" />
-    <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUIMisc.cs" />
+    <Compile Include="GUIComponents\GUIObjects\GUIMisc.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUISprite.cs" />
     <Compile Include="GUIComponents\Screens\CombatScreen.cs" />
     <Compile Include="GUIComponents\Screens\ConfigScreen.cs" />

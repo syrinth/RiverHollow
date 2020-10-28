@@ -5,6 +5,7 @@ using RiverHollow.Game_Managers;
 
 using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Items;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
@@ -20,6 +21,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
         private static Texture2D _texture;
         private static Rectangle _rSource;
 
+        private static GUIItem _guiItem;
+
         public static float Alpha = 1f;
 
         public static void LoadContent()
@@ -32,6 +35,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public static void Update()
         {
             Position = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
+            _guiItem?.Position(new Vector2((int)Position.X + 16, (int)Position.Y + 16));
         }
 
         public static void Draw(SpriteBatch spriteBatch)
@@ -44,11 +48,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 else { Alpha = (PlayerManager.PlayerInRange(_rCollisionRectangle, (int)(TileSize * 1.5))) ? 1 : 0.5f; }
 
                 spriteBatch.Draw(_texture, drawRectangle, _rSource, Color.White * Alpha);
-                if (HeldItem != null)
-                {
-                    GameManager.HeldItem.Draw(spriteBatch, new Rectangle((int)Position.X + 16, (int)Position.Y + 16, 32, 32));
-                }
+                _guiItem?.Draw(spriteBatch);
             }
+        }
+
+        public static void SetGUIItem(Item heldItem)
+        {
+            if (heldItem == null) { _guiItem = null; }
+            else { _guiItem = new GUIItem(heldItem); }
         }
 
         public static void ResetCursor()

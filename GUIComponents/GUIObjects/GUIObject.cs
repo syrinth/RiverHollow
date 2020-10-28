@@ -364,7 +364,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
         }
 
         #region Alpha
-        public virtual void Alpha(float val) { _fAlpha = val; }
+        public virtual void Alpha(float val) {
+            _fAlpha = val;
+
+            foreach(GUIObject g in Controls)
+            {
+                g.Alpha(val);
+            }
+        }
 
         public float Alpha() { return _fAlpha; }
         #endregion

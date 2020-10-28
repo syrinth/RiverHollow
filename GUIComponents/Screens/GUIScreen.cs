@@ -175,7 +175,7 @@ namespace RiverHollow.GUIComponents.Screens
                 GameManager.Unpause();
 
                 RemoveControl(_guiTextWindow);
-                GameManager.gmActiveItem = null;
+                GameManager.CurrentItem = null;
                 _guiTextWindow = null;
                 rv = true;
             }
@@ -224,7 +224,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             //Send a Pause request
             GameManager.Pause();
-            RemoveControl(_gMainObject);
+            CloseMainObject();
             _gMainObject = o;
             AddControl(_gMainObject);
         }

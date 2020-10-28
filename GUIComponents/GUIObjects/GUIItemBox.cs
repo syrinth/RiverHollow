@@ -18,18 +18,12 @@ namespace RiverHollow.GUIComponents.GUIObjects
     {
         public static Rectangle RECT_IMG = new Rectangle(254, 14, 20, 20);
         static Rectangle RECT_SELECT_IMG = new Rectangle(286, 14, 20, 20);
-        private Item _item;
-        public Item Item => _item;
-        GUIWindow _reqWindow;
-        GUIText _gTextNum;
-        GUIImage _gItem;
+        public Item BoxItem => _guiItem?.ItemObject;
+        GUIItem _guiItem;
 
         public bool DrawNum = true;
 
         GUIImage _gSelected = new GUIImage(RECT_SELECT_IMG, ScaleIt(RECT_SELECT_IMG.Width), ScaleIt(RECT_SELECT_IMG.Height), @"Textures\Dialog");
-
-        Item _itToCraft;
-        List<GUIObject> _liItemReqs;
 
         bool _bSelected;
         public int Columns { get; }
@@ -64,19 +58,15 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 _gSelected.Draw(spriteBatch);
             }
-            if (_gItem != null)
-            {
-                _gItem.Draw(spriteBatch);
-                if (DrawNum && _gTextNum != null) { _gTextNum.Draw(spriteBatch); }
-            }
+
+            _guiItem?.Draw(spriteBatch);
         }
 
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            if (_item!= null && _item.Number == 0) { SetItem(null); }
-            _gTextNum?.SetText(_item == null ? string.Empty : _item.DoesItStack ? _item.Number.ToString() : string.Empty);
-            _gTextNum?.AnchorToInnerSide(this, SideEnum.BottomRight, GUIManager.STANDARD_MARGIN);
+            if (BoxItem != null && BoxItem.Number == 0) { SetItem(null); }
+            _guiItem?.Update(gTime);
         }
 
         public override bool ProcessRightButtonClick(Point mouse)
@@ -86,26 +76,26 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 rv = true;
                 string text = string.Empty;
-                if (Item.CompareType(ItemEnum.Food))                  //Text has a {0} parameter so Item.Name fills it out
+                if (BoxItem.CompareType(ItemEnum.Food))                  //Text has a {0} parameter so Item.Name fills it out
                 {
-                    text = string.Format(DataManager.GetGameText("FoodConfirm"), Item.Name);
+                    text = string.Format(DataManager.GetGameText("FoodConfirm"), BoxItem.Name);
                 }
-                else if (Item.CompareSpecialType(SpecialItemEnum.Class))        //Class Change handler
+                else if (BoxItem.CompareSpecialType(SpecialItemEnum.Class))        //Class Change handler
                 {
                     text = DataManager.GetGameText("ClassItemConfirm");
                 }
-                else if (Item.CompareType(ItemEnum.MonsterFood))        //Class Change handler
+                else if (BoxItem.CompareType(ItemEnum.MonsterFood))        //Class Change handler
                 {
                     if (MapManager.CurrentMap.IsCombatMap)
                     {
                         if (MapManager.CurrentMap.PrimedFood != null) { text = DataManager.GetGameText("MonsterFood_Duplicate"); }
-                        else { text = string.Format(DataManager.GetGameText("MonsterFood_Confirm"), Item.Name); }
+                        else { text = string.Format(DataManager.GetGameText("MonsterFood_Confirm"), BoxItem.Name); }
                     }
                     else { text = DataManager.GetGameText("MonsterFood_False"); }
                 }
-                else if (Item.CompareType(ItemEnum.Tool))
+                else if (BoxItem.CompareType(ItemEnum.Tool))
                 {
-                    Tool t = (Tool)Item;
+                    Tool t = (Tool)BoxItem;
                     if (t.ToolType == GameManager.ToolEnum.Harp)
                     {
                         Spirit s = MapManager.CurrentMap.FindSpirit();
@@ -118,19 +108,19 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     {
                         if (DungeonManager.CurrentDungeon != null)
                         {
-                            if (t.HasCharges()) { text = string.Format(DataManager.GetGameText("Rune_of_Return_Use"), Item.Name); }
-                            else { text = string.Format(DataManager.GetGameText("Rune_of_Return_Empty"), Item.Name); }
+                            if (t.HasCharges()) { text = string.Format(DataManager.GetGameText("Rune_of_Return_Use"), BoxItem.Name); }
+                            else { text = string.Format(DataManager.GetGameText("Rune_of_Return_Empty"), BoxItem.Name); }
                         }
                         else
                         {
-                            text = string.Format(DataManager.GetGameText("Rune_of_Return_No_Dungeon"), Item.Name);
+                            text = string.Format(DataManager.GetGameText("Rune_of_Return_No_Dungeon"), BoxItem.Name);
                         }
                     }
                 }
-                else if (Item.CompareType(ItemEnum.Consumable))       //If the item is a Consumable, construct the selection options from the party
+                else if (BoxItem.CompareType(ItemEnum.Consumable))       //If the item is a Consumable, construct the selection options from the party
                 {
                     int i = 0;
-                    text = string.Format(DataManager.GetGameText("ItemConfirm"), Item.Name);
+                    text = string.Format(DataManager.GetGameText("ItemConfirm"), BoxItem.Name);
                     foreach (ClassedCombatant adv in PlayerManager.GetParty())
                     {
                         text += adv.Name + ":" + i++ + "|";
@@ -141,7 +131,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 //If we have a text string after handling, set the active item and open a new textWindow
                 if (!string.IsNullOrEmpty(text))
                 {
-                    GameManager.gmActiveItem = Item;
+                    GameManager.CurrentItem = BoxItem;
                     GUIManager.OpenTextWindow(text, false);
                 }
             }
@@ -154,39 +144,26 @@ namespace RiverHollow.GUIComponents.GUIObjects
             bool rv = false;
             if (Contains(mouse))
             {
-                if (_item != null)
+                if (BoxItem != null)
                 {
-                    GUIManager.OpenHoverWindow(new GUITextWindow(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32), _item.GetDescription()), this);
+                    GUIManager.OpenHoverWindow(new GUITextWindow(new Vector2(mouse.ToVector2().X, mouse.ToVector2().Y + 32), BoxItem.GetDescription()), this);
                 }
                 rv = true;
-            }
-            else
-            {
-                _reqWindow = null;
             }
             return rv;
         }
 
         public void SetItem(Item it)
         {
-            _item = it;
-            if(_item != null)
+            if(it != null)
             {
-                _gItem = new GUIImage(_item.SourceRectangle, ScaledTileSize, ScaledTileSize, _item.Texture);
-                _gItem.CenterOnObject(this);
-                AddControl(_gItem);
-
-                if (_item.DoesItStack)
-                {
-                    _gTextNum = new GUIText(_item.Number.ToString(), true, FONT_NUMBER_DISPLAY);
-                    _gTextNum.SetColor(Color.White);
-                    _gTextNum.AnchorToInnerSide(this, SideEnum.BottomRight, GUIManager.STANDARD_MARGIN);
-                    AddControl(_gTextNum);
-                }
+                _guiItem = new GUIItem(it);
+                _guiItem.CenterOnObject(this);
+                AddControl(_guiItem);
             }
             else
             {
-                _gItem = null;
+                _guiItem = null;
             }
         }
 
@@ -206,16 +183,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
         }
         public void SetItemAlpha(float val)
         {
-            if (_gItem != null)
-            {
-                _gItem.Alpha(val);
-            }
-            if(_gTextNum != null)
-            {
-                _gTextNum.Alpha(val);
-            }
+            _guiItem?.Alpha(val);
         }
-        public float GetItemAlpha() { return _gItem.Alpha(); }
+        public float GetItemAlpha() { return _guiItem.Alpha(); }
 
         public class SpecializedBox : GUIItemBox
         {

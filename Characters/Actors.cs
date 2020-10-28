@@ -664,7 +664,7 @@ namespace RiverHollow.Characters
         /// </summary>
         /// <param name="entry">The key of the entry to get from the Dictionary</param>
         /// <returns>The processed string text for the entry </returns>
-        public string GetDialogEntry(string entry) {
+        public virtual string GetDialogEntry(string entry) {
             return Util.ProcessText(_diDialogue.ContainsKey(entry) ? Util.ProcessText(_diDialogue[entry], _sName) : string.Empty);
         }
 
@@ -1833,7 +1833,7 @@ namespace RiverHollow.Characters
                 else if (chosenAction.StartsWith("ConfirmGift"))
                 {
                     GUIManager.CloseMainObject();
-                    nextText = Gift(GameManager.gmActiveItem);
+                    nextText = Gift(GameManager.CurrentItem);
                 }
             }
 
@@ -2621,6 +2621,11 @@ namespace RiverHollow.Characters
             return rv;
         }
 
+        public override string GetDialogEntry(string entry)
+        {
+            return Util.ProcessText(DataManager.GetAdventurerDialogue(entry), _sName);
+        }
+        
         public override string GetOpeningText()
         {
             return Name + ": " + DataManager.GetGameText("AdventurerTree");
@@ -2645,7 +2650,7 @@ namespace RiverHollow.Characters
                 {
                     _eState = AdventurerStateEnum.InParty;
                     PlayerManager.AddToParty(this);
-                    nextText = "Of course!";
+                    nextText = GetDialogEntry("PartyYes");
                 }
             }
 

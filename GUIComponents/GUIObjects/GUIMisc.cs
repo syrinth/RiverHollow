@@ -333,31 +333,44 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         }
     }
 
-    public class GUIItemReq : GUIObject
+    public class GUIItem : GUIObject
     {
+        public Item ItemObject {get;}
         GUIImage _gImg;
         GUIText _gText;
 
-        public GUIItemReq(int id, int number)
+        public GUIItem(Item it)
         {
-            Item it = DataManager.GetItem(id);
-            _gImg = new GUIImage(it.SourceRectangle, it.SourceRectangle.Width, it.SourceRectangle.Height, it.Texture);
+            ItemObject = it;
+            _gImg = new GUIImage(ItemObject.SourceRectangle, ItemObject.SourceRectangle.Width, ItemObject.SourceRectangle.Height, ItemObject.Texture);
             _gImg.SetScale(Scale);
-            _gText = new GUIText("999");
+
+            _gText = new GUIText(ItemObject.Number.ToString(), true, DataManager.FONT_NUMBER_DISPLAY);
+
+            _gText.AlignToObject(_gImg, SideEnum.Right);
+            _gText.AlignToObject(_gImg, SideEnum.Bottom);
 
             AddControl(_gImg);
             AddControl(_gText);
 
-            Width = _gImg.Width + _gText.Width;
-            Height = Math.Max(_gImg.Height, _gText.Height);
+            Width = _gImg.Width;
+            Height = _gImg.Height;
+        }
 
-            _gText.SetText(number.ToString());
+        public override void Update(GameTime gTime)
+        {
+            _gText?.SetText(ItemObject.Number.ToString());
+
+            _gText.AlignToObject(_gImg, SideEnum.Right);
+            _gText.AlignToObject(_gImg, SideEnum.Bottom);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             _gImg.Draw(spriteBatch);
-            _gText.Draw(spriteBatch);
+            if (ItemObject.DoesItStack && _gText != null) {
+                _gText.Draw(spriteBatch);
+            }
         }
     }
 }

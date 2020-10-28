@@ -1172,7 +1172,7 @@ namespace RiverHollow.Tile_Engine
                 }
                 else if (obj.CompareType(ObjectTypeEnum.DungeonObject))
                 {
-                    GameManager.gmDungeonObject = (TriggerObject)obj;
+                    GameManager.CurrentTriggerObject = (TriggerObject)obj;
                     ((TriggerObject)obj).Interact();
                 }
             }
@@ -1327,15 +1327,15 @@ namespace RiverHollow.Tile_Engine
                     GameManager.DropBuilding();                 //Drop the Building from the GameManger
 
                     //Take the resources from the player if there is merchandise
-                    if (gmMerchandise != null)
+                    if (CurrentMerch != null)
                     {
-                        PlayerManager.TakeMoney(gmMerchandise.MoneyCost);
-                        foreach (KeyValuePair<int, int> kvp in gmMerchandise.RequiredItems)
+                        PlayerManager.TakeMoney(CurrentMerch.MoneyCost);
+                        foreach (KeyValuePair<int, int> kvp in CurrentMerch.RequiredItems)
                         {
                             InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
                         }
 
-                        gmMerchandise = null;
+                        CurrentMerch = null;
                     }
 
                     LeaveBuildMode();

@@ -98,16 +98,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 {
                     rv = true;
                     //Do not pick the item up, instead assign it.
-                   GameManager.gmActiveItem = IsItemThere(mouse);
+                   GameManager.CurrentItem = IsItemThere(mouse);
                 }
-                else if (GameManager.gmDungeonObject != null)
+                else if (GameManager.CurrentTriggerObject != null)
                 {
                     Item it = IsItemThere(mouse);
                     if (!GUIManager.IsTextWindowOpen() && Contains(mouse) && it != null)
                     {
-                        if (GameManager.gmDungeonObject.CheckForKey(it))
+                        if (GameManager.CurrentTriggerObject.CheckForKey(it))
                         {
-                            GameManager.gmDungeonObject.AttemptToTrigger(GameManager.ITEM_OPEN);
+                            GameManager.CurrentTriggerObject.AttemptToTrigger(GameManager.ITEM_OPEN);
                             GUIManager.CloseMainObject();
                         }
                     }
@@ -141,7 +141,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 //Retrieve the item from the GUIBox we clicked on
                 GUIItemBox i = GetItemBox(mouse);
-                if (i != null && i.Item != null)
+                if (i != null && i.BoxItem != null)
                 {
                     //If the only inventory we are working with is the player's inventory,
                     //pass the handler to the GUIItemBox ad have it handle the item click
@@ -152,18 +152,18 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     else  //We are managing an additional Inventory
                     {
                         //Ensure that there is a GUIBox where we clicked, and the box has an Item
-                        if (i != null && i.Item != null)
+                        if (i != null && i.BoxItem != null)
                         {
                             int row = 0;
                             int col = 0;
 
                             //Use _container != null to get the status of the inverse of whichever we are clicking on
-                            if (InventoryManager.HasSpaceInInventory(i.Item.ItemID, i.Item.Number, ref row, ref col, !_bPlayerInventory))
+                            if (InventoryManager.HasSpaceInInventory(i.BoxItem.ItemID, i.BoxItem.Number, ref row, ref col, !_bPlayerInventory))
                             {
                                 GameManager.GrabItem(TakeItem(mouse));
                                 //If the GUI represents a Container, move the Item to the PlayerInventory
                                 //else, move the Item to the Container's inventory
-                                InventoryManager.AddItemToInventorySpot(i.Item, row, col, !_bPlayerInventory);
+                                InventoryManager.AddItemToInventorySpot(i.BoxItem, row, col, !_bPlayerInventory);
                                 GameManager.DropItem();
 
                             }
@@ -213,7 +213,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 for (int j = 0; j < _columns; j++)
                 {
-                    if (_gItemBoxes[i, j].Contains(mouse) && _gItemBoxes[i, j].Item != null)
+                    if (_gItemBoxes[i, j].Contains(mouse) && _gItemBoxes[i, j].BoxItem != null)
                     {
                         rv = new Vector2(i, j);
                         goto Exit;
@@ -230,7 +230,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             foreach (GUIItemBox box in _gItemBoxes)
             {
-                if (box.Contains(mouse) && box.Item != null)
+                if (box.Contains(mouse) && box.BoxItem != null)
                 {
                     rv = box;
                     break;
@@ -246,9 +246,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             foreach(GUIItemBox box in _gItemBoxes)
             {
-                if(box.Contains(mouse) && box.Item != null)
+                if(box.Contains(mouse) && box.BoxItem != null)
                 {
-                    rv = box.Item;
+                    rv = box.BoxItem;
                     break;
                 }
             }
@@ -262,9 +262,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             foreach (GUIItemBox box in _gItemBoxes)
             {
-                if (box.Contains(mouse) && box.Item != null)
+                if (box.Contains(mouse) && box.BoxItem != null)
                 {
-                    Item chosenItem = box.Item;
+                    Item chosenItem = box.BoxItem;
                     if (takeHalf && chosenItem.DoesItStack)
                     {
                         int num = chosenItem.Number;
@@ -306,7 +306,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     {
                         for (int j = 0; j < _columns; j++)
                         {
-                            if (_gItemBoxes[i, j].Contains(mouse) && (Force || _gItemBoxes[i, j].Item == null))
+                            if (_gItemBoxes[i, j].Contains(mouse) && (Force || _gItemBoxes[i, j].BoxItem == null))
                             {
                                 rv = InventoryManager.AddItemToInventorySpot(item, i, j, _bPlayerInventory);
                                 goto Exit;

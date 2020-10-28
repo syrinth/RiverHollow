@@ -73,11 +73,15 @@ namespace RiverHollow.Game_Managers
         private static List<Machine> _liMachines;
         public static TalkingActor CurrentNPC => interactionLock?.CurrentActor;
         public static ShippingGremlin ShippingGremlin;
-        public static Merchandise gmMerchandise;
-        public static Item gmActiveItem;
-        public static Spirit gmSpirit;
-        public static TriggerObject gmDungeonObject;
         public static DisplayTypeEnum CurrentInventoryDisplay;
+
+        #region Interaction Objects
+        public static Adventurer CurrentAdventurer;
+        public static Merchandise CurrentMerch;
+        public static Item CurrentItem;
+        public static Spirit CurrentSpirit;
+        public static TriggerObject CurrentTriggerObject;
+        #endregion
 
         public static int MAX_NAME_LEN = 10;
 
@@ -122,23 +126,23 @@ namespace RiverHollow.Game_Managers
                 PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]));
                 GUIManager.SetScreen(new DayEndScreen());
             }
-            //else if (selectedAction.Contains("SellContract") && GameManager.CurrentNPC != null)
-            //{
-            //    if (GameManager.CurrentNPC.IsActorType(ActorEnum.Adventurer))
-            //    {
-            //        ((Adventurer)GameManager.CurrentNPC).Building.RemoveWorker((Adventurer)GameManager.CurrentNPC);
-            //        PlayerManager.AddMoney(1000);
-            //        GUIManager.CloseMainObject();
-            //    }
-            //}
+            else if (selectedAction.Contains("SellContract") && GameManager.CurrentAdventurer != null)
+            {
+                if (GameManager.CurrentAdventurer.IsActorType(ActorEnum.Adventurer))
+                {
+                    ((Adventurer)GameManager.CurrentAdventurer).Building.RemoveWorker((Adventurer)GameManager.CurrentAdventurer);
+                    PlayerManager.AddMoney(1000);
+                    GUIManager.CloseMainObject();
+                }
+            }
         }
 
         public static void ClearGMObjects()
         {
-            // ClearCurrentNPC();
-            gmDungeonObject = null;
-            gmActiveItem = null;
-            gmSpirit = null;
+            CurrentAdventurer = null;
+            CurrentTriggerObject = null;
+            CurrentItem = null;
+            CurrentSpirit = null;
         }
 
         /// <summary>
@@ -226,6 +230,7 @@ namespace RiverHollow.Game_Managers
             if (item != null)
             {
                 _heldItem = item;
+                GUICursor.SetGUIItem(_heldItem);
                 rv = true;
             }
 
@@ -234,6 +239,7 @@ namespace RiverHollow.Game_Managers
         public static void DropItem()
         {
             _heldItem = null;
+            GUICursor.SetGUIItem(null);
         }
         #endregion
 
@@ -266,6 +272,7 @@ namespace RiverHollow.Game_Managers
         public static void Unpause() {
             if(interactionLock != null && interactionLock.RemoveLock())
             {
+                ClearGMObjects();
                 CurrentNPC?.StopTalking();
                 interactionLock = null;
             }
@@ -291,7 +298,6 @@ namespace RiverHollow.Game_Managers
             GUIManager.SetScreen(new HUDScreen());
             Unpause();
             ShowMap();
-            ClearGMObjects();
         }
 
         public static bool Constructing() { return _buildType == EnumBuildType.Construct; }

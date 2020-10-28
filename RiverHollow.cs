@@ -265,13 +265,13 @@ namespace RiverHollow
             PlayerManager.NewPlayer();
             MapManager.PopulateMaps(false);
 
-            PlayerManager.Buildings[0].AddWorker(a);
-            PlayerManager.Buildings[0].AddWorker(b);
+            //PlayerManager.Buildings[0].AddWorker(a);
+            //PlayerManager.Buildings[0].AddWorker(b);
 
-            PlayerManager.AddToParty(a);
-            PlayerManager.AddToParty(b);
+            //PlayerManager.AddToParty(a);
+            //PlayerManager.AddToParty(b);
 
-            MapManager.Maps[PlayerManager.Buildings[0].MapName].AddBuildingObjectsToMap(PlayerManager.Buildings[0]);
+            //MapManager.Maps[PlayerManager.Buildings[0].MapName].AddBuildingObjectsToMap(PlayerManager.Buildings[0]);
 
             GameCalendar.NewCalendar();
             if (playIntro)

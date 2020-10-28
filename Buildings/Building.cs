@@ -92,7 +92,8 @@ namespace RiverHollow.Buildings
         protected void ImportBasics(Dictionary<string, string> stringData, int id)
         {
             _iID = id;
-            DataManager.GetBuildingText(_iID, ref _sName, ref _sDescription);
+            DataManager.GetTextData("Building", _iID, ref _sName, "Name");
+            DataManager.GetTextData("Building", _iID, ref _sDescription, "Description");
 
             //The dimensions of the Building in tiles
             string[] dimensions = stringData["Dimensions"].Split('-');
@@ -268,6 +269,14 @@ namespace RiverHollow.Buildings
             {
                 worker.SetBuilding(this);
                 _liWorkers.Add(worker);
+
+                if (Unique)
+                {
+                    worker.Position = MapManager.Maps[MapName].GetCharacterSpawn("WSpawn" + (_liWorkers.Count-1));
+                    worker.CurrentMapName = MapName;
+
+                    MapManager.Maps[MapName].AddCharacter(worker);
+                }
 
                 rv = true;
             }

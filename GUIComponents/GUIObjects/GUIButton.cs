@@ -116,16 +116,5 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             _bFadeOnDisable = val;
         }
-
-        /// <summary>
-        /// Sets the Slpha value for the Button and the button object
-        /// </summary>
-        /// <param name="val"></param>
-        public override void Alpha(float val)
-        {
-            base.Alpha(val);
-            _btnObject?.Alpha(val);
-            _gText?.Alpha(val);
-        }
     }
 }

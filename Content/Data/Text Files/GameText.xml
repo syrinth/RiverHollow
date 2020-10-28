@@ -85,82 +85,10 @@
       <Key>Pedestal_Emerald</Key>
       <Value>A shining red gem.</Value>
     </Item>
-    <!--Quest Text-->
-    <Item>
-      <Key>Quest 1</Key>
-      <Value>Griselda's Orb/Griselda wants you to get her orb back from the goblins who stole it. Apparently, they ran off to the East and are hiding inside of the Forest.</Value>
-    </Item>
-    <Item>
-      <Key>Quest 2</Key>
-      <Value>Explore the Manor/You should probably explore the manor, you might find something useful.</Value>
-    </Item>
     <!--Upgrade Text -->
     <Item>
       <Key>Upgrade 1</Key>
       <Value>Tavern/A place where people can gather</Value>
-    </Item>
-    <!--Status/Buff/Debuff-->
-    <Item>
-      <Key>Poisoned Description</Key>
-      <Value>This character has been poisoned!</Value>
-    </Item>
-    <Item>
-      <Key>Silenced Description</Key>
-      <Value>No more magic!</Value>
-    </Item>
-    <!--Building Text -->
-    <Item>
-      <Key>Building 0</Key>
-      <Value>Manor/Manor</Value>
-    </Item>
-    <Item>
-      <Key>Building 1</Key>
-      <Value>Tower/Mystic Tower to house practitioners of the magical arts.</Value>
-    </Item>
-    <Item>
-      <Key>Building 2</Key>
-      <Value>Barracks/Ideal training space for martial characters.</Value>
-    </Item>
-    <Item>
-      <Key>Building 3</Key>
-      <Value>Lodge/A comfortable place where Scout and Bards can train.</Value>
-    </Item>
-    <Item>
-      <Key>Building 4</Key>
-      <Value>Cottage/A cozy, earthy place where Witches and Healers work.</Value>
-    </Item>
-    <!--Classes Text -->
-    <Item>
-      <Key>Class 1</Key>
-      <Value>Wizard/Uses magic!</Value>
-    </Item>
-    <Item>
-      <Key>Class 2</Key>
-      <Value>Healer/Master of Healing and potions</Value>
-    </Item>
-    <Item>
-      <Key>Class 3</Key>
-      <Value>Summoner/Summons magical beings to aid you</Value>
-    </Item>
-    <Item>
-      <Key>Class 4</Key>
-      <Value>Witch/Expert in curses and hexing your opponents</Value>
-    </Item>
-    <Item>
-      <Key>Class 5</Key>
-      <Value>Lancer/Master of Melee</Value>
-    </Item>
-    <Item>
-      <Key>Class 6</Key>
-      <Value>Knight/Defensible warrior</Value>
-    </Item>
-    <Item>
-      <Key>Class 7</Key>
-      <Value>Scout/Fast and agile, uses a bow</Value>
-    </Item>
-    <Item>
-      <Key>Class 8</Key>
-      <Value>Bard/Music</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -1144,7 +1144,7 @@ namespace RiverHollow.GUIComponents.Screens
                     {
                         if (_equipWindow.HasEntries() && _equipWindow.ProcessLeftButtonClick(mouse))
                         {
-                            Item olditem = _equipWindow.Box.Item;
+                            Item olditem = _equipWindow.Box.BoxItem;
 
                             _equipWindow.Box.SetItem(_equipWindow.SelectedItem);
                             if (_equipWindow.Box.ItemType.Equals(ItemEnum.Equipment))
@@ -1205,16 +1205,16 @@ namespace RiverHollow.GUIComponents.Screens
                     {
                         foreach (SpecializedBox box in _liGearBoxes)
                         {
-                            if (box.Contains(mouse) && box.Item != null)
+                            if (box.Contains(mouse) && box.BoxItem != null)
                             {
                                 if (!box.WeaponType.Equals(WeaponEnum.None)) { _character.Weapon = null; }
                                 else if (!box.ArmorType.Equals(ArmorEnum.None)) { _character.Armor = null; }
                                 else if (!box.ClothingType.Equals(ClothesEnum.None))
                                 {
-                                    PlayerManager.World.RemoveClothes(((Clothes)box.Item).ClothesType);
+                                    PlayerManager.World.RemoveClothes(((Clothes)box.BoxItem).ClothesType);
                                 }
 
-                                InventoryManager.AddToInventory(box.Item);
+                                InventoryManager.AddToInventory(box.BoxItem);
                                 box.SetItem(null);
                                 rv = true;
                             }
@@ -1349,7 +1349,7 @@ namespace RiverHollow.GUIComponents.Screens
                     {
                         if (g.Contains(mouse))
                         {
-                            _selectedItem = g.Item;
+                            _selectedItem = g.BoxItem;
                             rv = true;
                             break;
                         }
@@ -1366,7 +1366,7 @@ namespace RiverHollow.GUIComponents.Screens
                         rv = box.ProcessHover(mouse);
                         if (rv && _itemType.Equals(ItemEnum.Equipment))
                         {
-                            temp = (Equipment)box.Item;
+                            temp = (Equipment)box.BoxItem;
                         }
                     }
 
@@ -1517,8 +1517,7 @@ namespace RiverHollow.GUIComponents.Screens
         public class HUDManagement : GUIMainObject
         {
             public enum ActionTypeEnum { View, Sell, Buy, Upgrade };
-            private ActionTypeEnum _eAction;
-            public ActionTypeEnum Action => _eAction;
+            public ActionTypeEnum Action { get; private set; }
             public static int BTN_PADDING = 20;
 
             MgmtWindow _mgmtWindow;
@@ -1530,7 +1529,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             public HUDManagement(ActionTypeEnum action = ActionTypeEnum.View)
             {
-                _eAction = action;
+                Action = action;
                 _liWorkers = new List<GUIObject>();
 
                 _mgmtWindow = new MainBuildingsWin(this);
@@ -1595,16 +1594,25 @@ namespace RiverHollow.GUIComponents.Screens
                         _worker.Building.RemoveWorker(_worker);
                     }
 
-                    selectedBuilding.AddWorker(_worker);
+                    bool addSuccess = selectedBuilding.AddWorker(_worker);
 
-                    if (_eAction == ActionTypeEnum.Buy)
+                    if (Action == ActionTypeEnum.Buy)
                     {
-                        PlayerManager.TakeMoney(_iCost);
-                        GUIManager.CloseMainObject();
-                        GUIManager.OpenMainObject(new HUDNamingWindow(_worker));
+                        if (addSuccess)
+                        {
+                            PlayerManager.TakeMoney(_iCost);
+                            GUIManager.OpenMainObject(new HUDNamingWindow(_worker));
+                            _worker = null;
+                        }
+                        else
+                        {
+                            GUIManager.OpenTextWindow("Please choose an empty building.");
+                        }
                     }
-
-                    _worker = null;
+                    else
+                    {
+                        _worker = null;
+                    }
                 }
             }
 
@@ -1628,12 +1636,12 @@ namespace RiverHollow.GUIComponents.Screens
 
             public void Sell()
             {
-                _eAction = ActionTypeEnum.Sell;
+                Action = ActionTypeEnum.Sell;
             }
 
             public bool Selling()
             {
-                return _eAction == ActionTypeEnum.Sell;
+                return Action == ActionTypeEnum.Sell;
             }
 
             public void PurchaseWorker(Adventurer w, int cost)
@@ -1642,7 +1650,7 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     _iCost = cost;
                     _worker = w;
-                    _eAction = ActionTypeEnum.Buy;
+                    Action = ActionTypeEnum.Buy;
                     SetMgmtWindow(new MainBuildingsWin(this, w));
                 }
             }
@@ -1719,7 +1727,7 @@ namespace RiverHollow.GUIComponents.Screens
                         {
                             if (b.Contains(mouse))
                             {
-                                if (_parent._eAction == ActionTypeEnum.Upgrade)
+                                if (_parent.Action == ActionTypeEnum.Upgrade)
                                 {
                                     b.Building.StartBuilding(false);
                                     GUIManager.CloseMainObject();
@@ -1788,7 +1796,7 @@ namespace RiverHollow.GUIComponents.Screens
                             {
                                 if (_parent.Selling())
                                 {
-                                    //GameManager.CurrentNPC = w.Worker;
+                                    GameManager.CurrentAdventurer = w.Worker;
                                     GUIManager.OpenTextWindow("Really sell contract? [Yes:SellContract|No:Cancel]");
                                 }
                                 else
@@ -2076,6 +2084,10 @@ namespace RiverHollow.GUIComponents.Screens
                 _gInputWindow = new GUITextInputWindow();
                 _gInputWindow.SetupNaming();
                 _gInputWindow.Activate();
+
+                Width = _gInputWindow.Width;
+                Height = _gInputWindow.Height;
+                AddControl(_gInputWindow);
             }
 
             /// <summary>

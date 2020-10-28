@@ -147,18 +147,18 @@ namespace RiverHollow.GUIComponents.Screens
 
             if (create)
             {
-                gmMerchandise = _liMerchandise[_iCurrIndex];
+                CurrentMerch = _liMerchandise[_iCurrIndex];
 
-                if (gmMerchandise.MerchType == Merchandise.ItemType.Building)
+                if (CurrentMerch.MerchType == Merchandise.ItemType.Building)
                 {
                     RiverHollow.HomeMapPlacement();
-                    GameManager.PickUpBuilding(DataManager.GetBuilding(gmMerchandise.MerchID));
+                    GameManager.PickUpBuilding(DataManager.GetBuilding(CurrentMerch.MerchID));
                     ConstructBuilding();
                 }
                 else
                 {
-                    DiUpgrades[gmMerchandise.MerchID].Enabled = true;
-                    gmMerchandise = null;
+                    DiUpgrades[CurrentMerch.MerchID].Enabled = true;
+                    CurrentMerch = null;
                     GUIManager.CloseMainObject();
                 }
             }
@@ -262,7 +262,7 @@ namespace RiverHollow.GUIComponents.Screens
                 for (int i = 0; i < _merch.RequiredItems.Count; i++)
                 {
                     KeyValuePair<int, int> kvp = _merch.RequiredItems[i];
-                    GUIItemReq it = new GUIItemReq(kvp.Key, kvp.Value);
+                    GUIItem it = new GUIItem(DataManager.GetItem(kvp.Key, kvp.Value));
                     _liReqs.Add(it);
                 }
 
@@ -279,7 +279,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _infoWindow.Draw(spriteBatch);
                 _giBuilding.Draw(spriteBatch);
                 _gMoney.Draw(spriteBatch);
-                foreach (GUIItemReq c in _liReqs)
+                foreach (GUIItem c in _liReqs)
                 {
                     c.Draw(spriteBatch);
                 }

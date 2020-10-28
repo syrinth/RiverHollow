@@ -302,12 +302,6 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region GetMethods
-        public static void GetBuildingText(int id, ref string name, ref string desc)
-        {
-            string val = "Building " + id;
-            name = _diGameText[val].Split('/')[0];
-            desc = _diGameText[val].Split('/')[1];
-        }
         public static Building GetBuilding(int id)
         {
             if (_diBuildings.ContainsKey(id))

@@ -23,7 +23,7 @@ namespace RiverHollow.GUIComponents.Screens
         protected GUIItemBox[,] _arrDisplay;
         protected Item _autoItem;
 
-        private List<GUIItemReq> _liRequiredItems;
+        private List<GUIItem> _liRequiredItems;
         private GUIText _gName;
         private GUIText _gDescription;
 
@@ -36,7 +36,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             _winMain = SetMainWindow();
 
-            _liRequiredItems = new List<GUIItemReq>();
+            _liRequiredItems = new List<GUIItem>();
             _craftMachine = crafter;
             _autoItem = DataManager.GetItem(crafter.AutomatedItem);
             _gName = new GUIText("");
@@ -123,7 +123,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             for(int i=0; i <_liRequiredItems.Count; i++)
             {
-                GUIItemReq req = _liRequiredItems[i];
+                GUIItem req = _liRequiredItems[i];
                 if (i == 0) { req.AnchorToInnerSide(_winMain, SideEnum.BottomLeft, 10); }
                 else { req.AnchorAndAlignToObject(_liRequiredItems[i - 1], SideEnum.Right, SideEnum.Bottom); }
             }
@@ -140,7 +140,7 @@ namespace RiverHollow.GUIComponents.Screens
                     {
                         //Check that all required items are there first
                         bool create = true;
-                        foreach(KeyValuePair<int, int> kvp in gIB.Item.GetRequiredItems())
+                        foreach(KeyValuePair<int, int> kvp in gIB.BoxItem.GetRequiredItems())
                         {
                             if(!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value))
                             {
@@ -150,11 +150,11 @@ namespace RiverHollow.GUIComponents.Screens
                         //If all items are found, then remove them.
                         if (create)
                         {
-                            foreach (KeyValuePair<int, int> kvp in gIB.Item.GetRequiredItems())
+                            foreach (KeyValuePair<int, int> kvp in gIB.BoxItem.GetRequiredItems())
                             {
                                 InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value);
                                 if (_craftMachine != null) {
-                                    _craftMachine.MakeChosenItem(gIB.Item.ItemID);
+                                    _craftMachine.MakeChosenItem(gIB.BoxItem.ItemID);
                                     GUIManager.CloseMainObject();
                                     GameManager.Unpause();
                                 }
@@ -187,16 +187,16 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     if (gIB != null && gIB.Contains(mouse))
                     {
-                        Item chosenItem = gIB.Item;
+                        Item chosenItem = gIB.BoxItem;
                         if(chosenItem.ItemID != _iSelectedItemID)
                         {
-                            foreach (GUIItemReq r in _liRequiredItems) { _winMain.RemoveControl(r); }
+                            foreach (GUIItem r in _liRequiredItems) { _winMain.RemoveControl(r); }
 
                             _liRequiredItems.Clear();
                             _iSelectedItemID = chosenItem.ItemID;
                             foreach (KeyValuePair<int, int> kvp in chosenItem.GetRequiredItems())
                             {
-                                _liRequiredItems.Add(new GUIItemReq(kvp.Key, kvp.Value));
+                                _liRequiredItems.Add(new GUIItem(DataManager.GetItem(kvp.Key, kvp.Value)));
                             }
 
                             _gName.SetText(chosenItem.Name);

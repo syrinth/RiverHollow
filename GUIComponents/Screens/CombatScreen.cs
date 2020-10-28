@@ -1194,12 +1194,6 @@ namespace RiverHollow.GUIComponents.Screens
 
             public bool Occupied() { return _actor != null; }
 
-            public override void Alpha(float alpha) {
-                base.Alpha(alpha);
-                _gImage.Alpha(alpha);
-                _gName.Alpha(alpha);
-            }
-
             public string GetName()
             {
                 return _actor != null ? _actor.Name : string.Empty;
