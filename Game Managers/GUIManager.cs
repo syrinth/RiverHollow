@@ -97,29 +97,27 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static bool CloseTextWindow(GUITextWindow win) {
-            GameManager.Unpause();
-            return _currentGUIScreen.CloseTextWindow(win);
-        }
-        public static bool IsTextWindowOpen() { return _currentGUIScreen.IsTextWindowOpen(); }
-        public static void OpenTextWindow(string text, bool open = true)
-        {
-            GameManager.Pause();
-            _currentGUIScreen.OpenTextWindow(text, open);
-        }
-
         /// <summary>
-        /// Super method for OpenTextWindow, sets the CurrentNPC to the talker and calls the sub method
+        /// 
         /// </summary>
         /// <param name="text">Text to speak</param>
         /// <param name="talker">NPC being talked to</param>
         /// <param name="open">Whether or not to play the animation for an opening window.</param>
+        public static void OpenTextWindow(string text, bool open = true)
+        {
+            OpenTextWindow(text, null, open);
+        }
         public static void OpenTextWindow(string text, TalkingActor talker, bool open = true)
         {
-            GameManager.CurrentNPC = talker;
-            GameManager.AddCurrentNPCLockObject();
-            OpenTextWindow(text, open);
+            _currentGUIScreen.OpenTextWindow(text, talker, open);
         }
+        public static bool CloseTextWindow(GUITextWindow win)
+        {
+            return _currentGUIScreen.CloseTextWindow(win);
+        }
+        public static bool IsTextWindowOpen() { return _currentGUIScreen.IsTextWindowOpen(); }
+
+
         public static void SetWindowText(string value)
         {
             _currentGUIScreen.SetWindowText(value);

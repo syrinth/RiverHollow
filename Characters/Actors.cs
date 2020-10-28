@@ -709,27 +709,6 @@ namespace RiverHollow.Characters
 
             return rv;
         }
-
-        /// <summary>
-        /// Adds one to the number of objects that use the TalkingActor
-        /// </summary>
-        public void AddCurrentNPCLockObject()
-        {
-            _iLockObjects++;
-        }
-
-        /// <summary>
-        /// Removes one from the number of objects that use the TalkingActor
-        /// If that number hits 0, clear the CurrentNPC
-        /// </summary>
-        public void RemoveCurrentNPCLockObject()
-        {
-            _iLockObjects--;
-            if(_iLockObjects == 0)
-            {
-                GameManager.ClearCurrentNPC();
-            }
-        }
     }
 
     /// <summary>
@@ -1835,7 +1814,6 @@ namespace RiverHollow.Characters
             {
                 if (chosenAction.Equals("GiveGift"))
                 {
-                    GameManager.AddCurrentNPCLockObject();
                     GUIManager.OpenMainObject(new HUDInventoryDisplay(GameManager.DisplayTypeEnum.Gift));
                 }
                 else if (chosenAction.StartsWith("Quest"))
@@ -1855,7 +1833,6 @@ namespace RiverHollow.Characters
                 else if (chosenAction.StartsWith("ConfirmGift"))
                 {
                     GUIManager.CloseMainObject();
-                    GameManager.RemoveCurrentNPCLockObject();
                     nextText = Gift(GameManager.gmActiveItem);
                 }
             }
@@ -2275,12 +2252,10 @@ namespace RiverHollow.Characters
                         if (m.MerchType == Merchandise.ItemType.Worker && m.Activated()) { _liMerchandise.Add(m); }
                     }
                     GUIManager.OpenMainObject(new HUDPurchaseWorkers(_liMerchandise));
-                    GameManager.ClearGMObjects();
                 }
                 else if (chosenAction.Equals("Missions"))
                 {
                     GUIManager.OpenMainObject(new HUDMissionWindow());
-                    GameManager.ClearGMObjects();
                 }
                 else if (chosenAction.Equals("BuyItems"))
                 {
@@ -2289,7 +2264,6 @@ namespace RiverHollow.Characters
                         if (m.MerchType == Merchandise.ItemType.Item && m.Activated()) { _liMerchandise.Add(m); }
                     }
                     GUIManager.OpenMainObject(new HUDPurchaseItems(_liMerchandise));
-                    GameManager.ClearGMObjects();
                 }
                 else if (chosenAction.Equals("SellWorkers"))
                 {
@@ -3212,7 +3186,6 @@ namespace RiverHollow.Characters
             {
                 if (chosenAction.Equals("ShipGoods"))
                 {
-                    GameManager.AddCurrentNPCLockObject();
                     GUIManager.OpenMainObject(new HUDInventoryDisplay(_arrInventory, GameManager.DisplayTypeEnum.Ship));
                 }
                 else if(chosenAction.Equals("Cancel"))

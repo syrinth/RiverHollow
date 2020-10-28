@@ -57,25 +57,27 @@ namespace RiverHollow.GUIComponents.GUIObjects
         }
         public static void SetCursor(CursorTypeEnum cursorType, Rectangle collisionRect)
         {
-            if (!CombatManager.InCombat)
+            if (CombatManager.InCombat || GameManager.IsPaused())
             {
-                _eCursorType = cursorType;
-                _rCollisionRectangle = collisionRect;
-                switch (_eCursorType)
-                {
-                    case CursorTypeEnum.Normal:
-                        _rSource = new Rectangle(304, 160, 16, 16);
-                        break;
-                    case CursorTypeEnum.Talk:
-                        _rSource = new Rectangle(288, 160, 16, 16);
-                        break;
-                    case CursorTypeEnum.Door:
-                        _rSource = new Rectangle(288, 176, 16, 16);
-                        break;
-                    case CursorTypeEnum.Pickup:
-                        _rSource = new Rectangle(304, 176, 16, 16);
-                        break;
-                }
+                cursorType = CursorTypeEnum.Normal;
+            }
+
+            _eCursorType = cursorType;
+            _rCollisionRectangle = collisionRect;
+            switch (_eCursorType)
+            {
+                case CursorTypeEnum.Normal:
+                    _rSource = new Rectangle(304, 160, 16, 16);
+                    break;
+                case CursorTypeEnum.Talk:
+                    _rSource = new Rectangle(288, 160, 16, 16);
+                    break;
+                case CursorTypeEnum.Door:
+                    _rSource = new Rectangle(288, 176, 16, 16);
+                    break;
+                case CursorTypeEnum.Pickup:
+                    _rSource = new Rectangle(304, 176, 16, 16);
+                    break;
             }
         }
 

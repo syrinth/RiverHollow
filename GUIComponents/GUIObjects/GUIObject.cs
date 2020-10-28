@@ -193,11 +193,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             foreach (GUIObject c in Controls)
             {
-                if (c.Contains(mouse))
-                {
-                    rv = c.ProcessHover(mouse);
-                    if (rv) { break; }
-                }
+                rv = c.ProcessHover(mouse);
+                if (rv) { break; }
             }
 
             if (!rv)

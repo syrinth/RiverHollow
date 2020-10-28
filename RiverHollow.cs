@@ -80,6 +80,8 @@ namespace RiverHollow
 
             MissionManager.Load();
 
+            GUICursor.ResetCursor();
+           // GameManager.Pause();
             //Set the Main Menu Screen
             GUIManager.SetScreen(new IntroMenuScreen());
             StopTakingInput();

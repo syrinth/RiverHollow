@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
@@ -142,14 +143,38 @@ namespace RiverHollow.GUIComponents.Screens
         }
         #endregion
 
-        #region Hover Text Window
+        #region Text Window Open/Close
+        public virtual void OpenTextWindow(string text, bool open = true)
+        {
+            OpenTextWindow(text, null, open);
+        }
+        /// <summary>
+        /// Removes any previous existing Text Windows fromthe Control, then determines whether
+        /// or not the given text requires a selection window or not, and creates the appropriate
+        /// GUITextWindow.
+        /// 
+        /// Afterward, adds the new Window to the Controls.
+        /// </summary>
+        /// <param name="text">Text for the window</param>
+        /// <param name="open">Whether or not to display an open animation</param>
+        public virtual void OpenTextWindow(string text, TalkingActor talker = null, bool open = true)
+        {
+            GameManager.Pause(talker);
+
+            CloseTextWindow(_guiTextWindow);
+            bool selection = text.Contains("[");
+            if (selection) { _guiTextWindow = new GUITextSelectionWindow(text, open); }
+            else { _guiTextWindow = new GUITextWindow(text, open); }
+            AddControl(_guiTextWindow);
+        }
+
         public virtual bool CloseTextWindow(GUITextWindow win) {
             bool rv = false;
-            if (win == _guiTextWindow)
+            if (win != null && win == _guiTextWindow)
             {
-                RemoveControl(_guiTextWindow);
+                GameManager.Unpause();
 
-                GameManager.RemoveCurrentNPCLockObject();
+                RemoveControl(_guiTextWindow);
                 GameManager.gmActiveItem = null;
                 _guiTextWindow = null;
                 rv = true;
@@ -160,23 +185,6 @@ namespace RiverHollow.GUIComponents.Screens
         public bool IsTextWindowOpen() { return _guiTextWindow != null; }
         #endregion
 
-        /// <summary>
-        /// Removes any previous existing Text Windows fromthe Control, then determines whether
-        /// or not the given text requires a selection window or not, and creates the appropriate
-        /// GUITextWindow.
-        /// 
-        /// Afterward, adds the new Window to the Controls.
-        /// </summary>
-        /// <param name="text">Text for the window</param>
-        /// <param name="open">Whether or not to display an open animation</param>
-        public virtual void OpenTextWindow(string text, bool open = true)
-        {
-            RemoveControl(_guiTextWindow);
-            bool selection = text.Contains("[");
-            if (selection) { _guiTextWindow = new GUITextSelectionWindow(text, open); }
-            else { _guiTextWindow = new GUITextWindow(text, open); }
-            AddControl(_guiTextWindow);
-        }
         public void SetWindowText(string value)
         {
             if(_guiTextWindow != null)
@@ -214,15 +222,22 @@ namespace RiverHollow.GUIComponents.Screens
         #region Main Object Control
         public virtual void OpenMainObject(GUIMainObject o)
         {
+            //Send a Pause request
+            GameManager.Pause();
             RemoveControl(_gMainObject);
             _gMainObject = o;
             AddControl(_gMainObject);
         }
         public virtual void CloseMainObject()
         {
-            RemoveControl(_gMainObject);
-            _gMainObject = null;
-            CloseHoverWindow();
+            if (_gMainObject != null)
+            {
+                //Send an Unpause request
+                GameManager.Unpause();
+                RemoveControl(_gMainObject);
+                _gMainObject = null;
+                CloseHoverWindow();
+            }
         }
         #endregion
 

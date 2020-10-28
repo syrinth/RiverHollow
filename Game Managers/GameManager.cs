@@ -28,7 +28,7 @@ namespace RiverHollow.Game_Managers
 
         public enum ZoneEnum { Forest, Mountain, Field, Swamp, Town };
         public enum DirectionEnum { Up, Down, Right, Left };
-        public enum CardinalDirectionsEnum { North, NorthEast, East, SouthEast, South,  SouthWest, West, NorthWest};
+        public enum CardinalDirectionsEnum { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest };
         public enum VerbEnum { Walk, Idle, Hurt, Critical, Ground, Air, UseTool, Attack, Cast, MakeItem };
         public enum AnimationEnum { None, Spawn, KO, Win, PlayAnimation, Rain, Snow, ObjectIdle, ObjectAction1, ObjectAction2, ObjectActionFinished };
 
@@ -39,14 +39,14 @@ namespace RiverHollow.Game_Managers
         public enum QuestTypeEnum { GroupSlay, Slay, Fetch }
         public enum ActorEnum { Actor, Adventurer, CombatActor, Monster, NPC, ShippingGremlin, Spirit, WorldCharacter };
         public enum NPCTypeEnum { Villager, Eligible, Shopkeeper, Ranger, Worker, Mason, ShippingGremlin }
-        public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade};
+        public enum StatEnum { Atk, Str, Def, Mag, Res, Spd, Vit, Crit, Evade };
         public enum PotencyBonusEnum { None, Conditions, Summons };
-        public enum EquipmentEnum { Armor, Weapon, Accessory, Head, Wrist};
+        public enum EquipmentEnum { Armor, Weapon, Accessory, Head, Wrist };
         public enum SpecialItemEnum { None, Marriage, Class, Map, DungeonKey, Quest };
         public enum PlayerColorEnum { None, Eyes, Hair, Skin };
         public enum ActionEnum { Action, Item, Spell, MenuItem, MenuSpell, MenuAction, Move, EndTurn };
-        public enum SkillTagsEnum { Bonus, Harm, Heal, Push, Pull, Remove, Retreat, Step, Status, Summon};
-        public enum TargetEnum { Enemy, Ally};
+        public enum SkillTagsEnum { Bonus, Harm, Heal, Push, Pull, Remove, Retreat, Step, Status, Summon };
+        public enum TargetEnum { Enemy, Ally };
         public enum AreaTypeEnum { Single, Cross, Ring, Line };
         public enum ElementEnum { None, Fire, Ice, Lightning };
         public enum AttackTypeEnum { Physical, Magical };
@@ -71,10 +71,9 @@ namespace RiverHollow.Game_Managers
         private static List<TriggerObject> _liTriggerObjects;
         private static List<Spirit> _liSpirits;
         private static List<Machine> _liMachines;
-
+        public static TalkingActor CurrentNPC => interactionLock?.CurrentActor;
         public static ShippingGremlin ShippingGremlin;
         public static Merchandise gmMerchandise;
-        public static TalkingActor CurrentNPC;
         public static Item gmActiveItem;
         public static Spirit gmSpirit;
         public static TriggerObject gmDungeonObject;
@@ -123,48 +122,23 @@ namespace RiverHollow.Game_Managers
                 PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.DictionaryCharacterLayer["PlayerSpawn"]));
                 GUIManager.SetScreen(new DayEndScreen());
             }
-            else if (selectedAction.Contains("SellContract") && GameManager.CurrentNPC != null)
-            {
-                if (GameManager.CurrentNPC.IsActorType(ActorEnum.Adventurer))
-                {
-                    ((Adventurer)GameManager.CurrentNPC).Building.RemoveWorker((Adventurer)GameManager.CurrentNPC);
-                    PlayerManager.AddMoney(1000);
-                    GUIManager.CloseMainObject();
-                }
-            }
+            //else if (selectedAction.Contains("SellContract") && GameManager.CurrentNPC != null)
+            //{
+            //    if (GameManager.CurrentNPC.IsActorType(ActorEnum.Adventurer))
+            //    {
+            //        ((Adventurer)GameManager.CurrentNPC).Building.RemoveWorker((Adventurer)GameManager.CurrentNPC);
+            //        PlayerManager.AddMoney(1000);
+            //        GUIManager.CloseMainObject();
+            //    }
+            //}
         }
 
         public static void ClearGMObjects()
         {
-            ClearCurrentNPC();
+            // ClearCurrentNPC();
             gmDungeonObject = null;
             gmActiveItem = null;
             gmSpirit = null;
-        }
-
-        /// <summary>
-        /// Increments the number of active objects in the CurrentNPC if it exists
-        /// </summary>
-        public static void AddCurrentNPCLockObject()
-        {
-            CurrentNPC?.AddCurrentNPCLockObject();
-        }
-
-        /// <summary>
-        /// Decrements the number of active objects in the CurrentNPC if it exists
-        /// </summary>
-        public static void RemoveCurrentNPCLockObject()
-        {
-            CurrentNPC?.RemoveCurrentNPCLockObject();
-        }
-
-        /// <summary>
-        /// Tells the CurrentNPC to StopTalking and then sets the CurrentNPC to null
-        /// </summary>
-        public static void ClearCurrentNPC()
-        {
-            CurrentNPC?.StopTalking();
-            CurrentNPC = null;
         }
 
         /// <summary>
@@ -184,7 +158,7 @@ namespace RiverHollow.Game_Managers
 
         public static void RollOver()
         {
-            foreach(Machine m in _liMachines)
+            foreach (Machine m in _liMachines)
             {
                 m.Rollover();
             }
@@ -204,7 +178,7 @@ namespace RiverHollow.Game_Managers
 
         public static void ActivateTriggers(string triggerName)
         {
-            foreach(TriggerObject t in _liTriggerObjects)
+            foreach (TriggerObject t in _liTriggerObjects)
             {
                 t.AttemptToTrigger(triggerName);
             }
@@ -279,16 +253,25 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Running
-        private static bool _bRunning;
-        public static void Pause() {
-            _bRunning = false;
+        private static InteractionLock interactionLock;
+        public static void Pause()
+        {
+            Pause(null);
+        }
+        public static void Pause(TalkingActor act) {
             GUICursor.ResetCursor();
+            if (interactionLock == null) { interactionLock = new InteractionLock(act); }
+            else { interactionLock.AddLock(); }
         }
         public static void Unpause() {
-            _bRunning = true;
+            if(interactionLock != null && interactionLock.RemoveLock())
+            {
+                CurrentNPC?.StopTalking();
+                interactionLock = null;
+            }
         }
-        public static bool IsPaused() { return !_bRunning; }
-        public static bool IsRunning() { return _bRunning; }
+        public static bool IsPaused() { return interactionLock != null; }
+        public static bool IsRunning() { return interactionLock == null; }
         #endregion
 
         #region Scrying
@@ -319,6 +302,34 @@ namespace RiverHollow.Game_Managers
         public static void DestroyBuilding() { _buildType = EnumBuildType.Destroy; }
         public static void LeaveBuildMode() { _buildType = EnumBuildType.None; }
         #endregion
+
+        private class InteractionLock
+        {
+            int _iLocks = 0;
+            public TalkingActor CurrentActor { get; }
+            public InteractionLock(TalkingActor act = null)
+            {
+                CurrentActor = act;
+                _iLocks = 1;
+            }
+
+            public void AddLock()
+            {
+                _iLocks++;
+            }
+
+            public bool RemoveLock()
+            {
+                bool rv = false;
+
+                if(--_iLocks == 0)
+                {
+                    rv = true;
+                }
+
+                return rv;
+            }
+        }
     }
 
     public class Upgrade

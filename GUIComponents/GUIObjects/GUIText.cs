@@ -29,7 +29,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         #region Parsing and Display
         double _dTextTimer = 0;
         double _dTypedTextLen;
-        const double TEXT_DELAY = 0.08;
+        const double TEXT_DELAY = 0.06;
         protected int _iMaxRows = 3;
 
         public bool PrintAll = false;

@@ -124,7 +124,6 @@ namespace RiverHollow.GUIComponents.Screens
                 }
 
                 GUIManager.CloseMainObject();
-                GameManager.RemoveCurrentNPCLockObject();
             }
 
             return rv;
@@ -293,7 +292,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             bool rv = false;
 
-            if (Contains(mouse))
+            if (GameManager.IsRunning() && Contains(mouse))
             {
                 rv = true;
 
@@ -318,7 +317,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             bool rv = false;
 
-            if (Contains(mouse))
+            if (GameManager.IsRunning() && Contains(mouse))
             {
                 rv = true;
 
@@ -338,15 +337,17 @@ namespace RiverHollow.GUIComponents.Screens
         public override bool ProcessHover(Point mouse)
         {
             bool rv = false;
-
-            if (Contains(mouse) && Alpha() != 1)
+            if (GameManager.IsRunning())
             {
-                rv = true;
-                _bFadeOutBar = false;
-            }
-            else if (!Contains(mouse) && GameManager.HideMiniInventory && Alpha() != 0.1f)
-            {
-                _bFadeOutBar = true;
+                if (Contains(mouse) && Alpha() != 1)
+                {
+                    rv = true;
+                    _bFadeOutBar = false;
+                }
+                else if (!Contains(mouse) && GameManager.HideMiniInventory && Alpha() != 0.1f)
+                {
+                    _bFadeOutBar = true;
+                }
             }
 
             return rv;
@@ -1787,7 +1788,7 @@ namespace RiverHollow.GUIComponents.Screens
                             {
                                 if (_parent.Selling())
                                 {
-                                    GameManager.CurrentNPC = w.Worker;
+                                    //GameManager.CurrentNPC = w.Worker;
                                     GUIManager.OpenTextWindow("Really sell contract? [Yes:SellContract|No:Cancel]");
                                 }
                                 else
