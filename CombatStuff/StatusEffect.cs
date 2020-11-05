@@ -16,7 +16,7 @@ namespace RiverHollow.CombatStuff
         public bool HoT => _bHoT;
         public bool _bSong;
         public bool Song => _bSong;
-        private int _id;
+        private int _iID;
         private string _sName;
         public string Name => _sName;
         int _iPotency;
@@ -36,8 +36,9 @@ namespace RiverHollow.CombatStuff
 
         public StatusEffect(int id, Dictionary<string, string> data)
         {
-            _id = id;
-            DataManager.GetStatusEffectText(id, ref _sName, ref _sDescription);
+            _iID = id;
+            DataManager.GetTextData("StatusEffect", _iID, ref _sName, "Name");
+            DataManager.GetTextData("StatusEffect", _iID, ref _sDescription, "Description");
 
             _liStats = new List<KeyValuePair<StatEnum, int>>();
             ImportBasics(id, data);

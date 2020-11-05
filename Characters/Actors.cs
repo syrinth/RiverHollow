@@ -2511,17 +2511,15 @@ namespace RiverHollow.Characters
     public class Adventurer : ClassedCombatant
     {
         #region Properties
-        private enum AdventurerStateEnum { Idle, InParty, OnMission };
+        private enum AdventurerStateEnum { Idle, InParty, OnMission, AddToParty };
         private AdventurerStateEnum _eState;
-        private AdventurerTypeEnum _eWorkerType;
-        public AdventurerTypeEnum WorkerType => _eWorkerType;
+        public AdventurerTypeEnum WorkerType { get; private set; }
         protected int _iPersonalID;
         public int PersonalID { get => _iPersonalID; }
-        protected int _iAdventurerID;
-        public int WorkerID { get => _iAdventurerID; }
+        protected int _iID;
+        public int WorkerID { get => _iID; }
         protected string _sAdventurerType;
-        private Building _building;
-        public Building Building => _building;
+        public Building Building { get; private set; }
         protected int _iDailyFoodReq;
         protected int _iCurrFood;
         protected int _iDailyItemID;
@@ -2529,29 +2527,19 @@ namespace RiverHollow.Characters
         protected int _iMood;
         private int _iResting;
         public int Mood { get => _iMood; }
-
-        Mission _curMission;
-        public Mission CurrentMission => _curMission;
-
-        protected double _dProcessedTime;
-        public double ProcessedTime => _dProcessedTime;
-
-        Dictionary<int, int> _diCrafting;
-        public Dictionary<int, int> CraftList => _diCrafting;
-        int _iCurrentlyMaking;
-        public int CurrentlyMaking => _iCurrentlyMaking;
+        public Mission CurrentMission { get; private set; }
 
         public override bool Active => _eState == AdventurerStateEnum.Idle;
         #endregion
 
         public Adventurer(Dictionary<string, string> data, int id)
         {
-            _iAdventurerID = id;
+            _iID = id;
             _iPersonalID = PlayerManager.GetTotalWorkers();
             _eActorType = ActorEnum.Adventurer;
             ImportBasics(data, id);
 
-            SetClass(DataManager.GetClassByIndex(_iAdventurerID));
+            SetClass(DataManager.GetClassByIndex(_iID));
             AssignStartingGear();
             _sAdventurerType = CharacterClass.Name;
 
@@ -2566,33 +2554,22 @@ namespace RiverHollow.Characters
 
         protected void ImportBasics(Dictionary<string, string> data, int id)
         {
-            _diCrafting = new Dictionary<int, int>();
-
-            _iAdventurerID = id;
+            _iID = id;
 
             _rPortrait = new Rectangle(0, 0, 48, 60);
             _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Adventurer", id.ToString("00"));
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
 
-            _eWorkerType = Util.ParseEnum<AdventurerTypeEnum>(data["Type"]);
+            WorkerType = Util.ParseEnum<AdventurerTypeEnum>(data["Type"]);
             _iDailyItemID = int.Parse(data["Item"]);
             _iDailyFoodReq = int.Parse(data["Food"]);
 
-            if (data.ContainsKey("Crafts"))
-            {
-                string[] crafting = data["Crafts"].Split(' ');
-                foreach (string recipe in crafting)
-                {
-                    _diCrafting.Add(int.Parse(recipe), int.Parse(recipe));
-                }
-            }
-
-            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), _sAdventurerFolder + "Adventurer_" + _iAdventurerID);
+            LoadSpriteAnimations(ref _sprBody, LoadWorldAndCombatAnimations(data), _sAdventurerFolder + "Adventurer_" + _iID);
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
-            if (_eState == AdventurerStateEnum.Idle || (CombatManager.InCombat && _eState == AdventurerStateEnum.InParty))
+            if (_eState == AdventurerStateEnum.Idle || _eState == AdventurerStateEnum.AddToParty || (CombatManager.InCombat && _eState == AdventurerStateEnum.InParty))
             {
                 base.Draw(spriteBatch, useLayerDepth);
                 if (_heldItem != null)
@@ -2623,12 +2600,12 @@ namespace RiverHollow.Characters
 
         public override string GetDialogEntry(string entry)
         {
-            return Util.ProcessText(DataManager.GetAdventurerDialogue(entry), _sName);
+            return Util.ProcessText(DataManager.GetAdventurerDialogue(_iID, entry), _sName);
         }
         
         public override string GetOpeningText()
         {
-            return Name + ": " + DataManager.GetGameText("AdventurerTree");
+            return Name + ": " + DataManager.GetAdventurerDialogue(_iID, "Selection");
         }
 
         /// <summary>
@@ -2648,9 +2625,8 @@ namespace RiverHollow.Characters
             {
                 if (chosenAction.Equals("Party"))
                 {
-                    _eState = AdventurerStateEnum.InParty;
-                    PlayerManager.AddToParty(this);
-                    nextText = GetDialogEntry("PartyYes");
+                    _eState = AdventurerStateEnum.AddToParty;
+                    nextText = GetDialogEntry("JoinParty");
                 }
             }
 
@@ -2661,11 +2637,13 @@ namespace RiverHollow.Characters
 
             return rv;
         }
-
-        public void ProcessChosenItem(int itemID)
+        public override void StopTalking()
         {
-            _iCurrentlyMaking = _diCrafting[itemID];
-            _sprBody.PlayAnimation(AnimationEnum.PlayAnimation);
+            if (_eState == AdventurerStateEnum.AddToParty)
+            {
+                _eState = AdventurerStateEnum.InParty;
+                PlayerManager.AddToParty(this);
+            }
         }
 
         public int TakeItem()
@@ -2690,7 +2668,7 @@ namespace RiverHollow.Characters
 
         public void SetBuilding(Building b)
         {
-            _building = b;
+            Building = b;
         }
 
         /// <summary>
@@ -2718,11 +2696,11 @@ namespace RiverHollow.Characters
                     }
                     break;
                 case AdventurerStateEnum.OnMission:
-                    if (_curMission.Completed())
+                    if (CurrentMission.Completed())
                     {
                         _eState = AdventurerStateEnum.Idle;
-                        _iResting = _curMission.DaysToComplete / 2;
-                        _curMission = null;
+                        _iResting = CurrentMission.DaysToComplete / 2;
+                        CurrentMission = null;
                     }
                     break;
             }
@@ -2738,7 +2716,7 @@ namespace RiverHollow.Characters
         {
             if (_iDailyItemID != -1)
             {
-                InventoryManager.InitContainerInventory(_building.BuildingChest.Inventory);
+                InventoryManager.InitContainerInventory(Building.BuildingChest.Inventory);
                 InventoryManager.AddToInventory(_iDailyItemID, 1, false);
                 InventoryManager.ClearExtraInventory();
             }
@@ -2755,7 +2733,7 @@ namespace RiverHollow.Characters
         /// <param name="m">The mission they are on</param>
         public void AssignToMission(Mission m)
         {
-            _curMission = m;
+            CurrentMission = m;
             _eState = AdventurerStateEnum.OnMission;
         }
 
@@ -2765,8 +2743,8 @@ namespace RiverHollow.Characters
         /// </summary>
         public void EndMission()
         {
-            _iResting = _curMission.DaysToComplete / 2;
-            _curMission = null;
+            _iResting = CurrentMission.DaysToComplete / 2;
+            CurrentMission = null;
         }
 
         /// <summary>
@@ -2784,7 +2762,7 @@ namespace RiverHollow.Characters
                     rv = "In Party";
                     break;
                 case AdventurerStateEnum.OnMission:
-                    rv = "On Mission \"" + _curMission.Name + "\" days left: " + (_curMission.DaysToComplete - _curMission.DaysFinished).ToString();
+                    rv = "On Mission \"" + CurrentMission.Name + "\" days left: " + (CurrentMission.DaysToComplete - CurrentMission.DaysFinished).ToString();
                     break;
             }
 
@@ -2809,8 +2787,6 @@ namespace RiverHollow.Characters
                 advData = base.SaveClassedCharData(),
                 mood = this.Mood,
                 name = this.Name,
-                processedTime = this.ProcessedTime,
-                currentItemID = (this._iCurrentlyMaking == -1) ? -1 : this._iCurrentlyMaking,
                 heldItemID = (this._heldItem == null) ? -1 : this._heldItem.ItemID,
                 state = (int)_eState
             };
@@ -2819,18 +2795,14 @@ namespace RiverHollow.Characters
         }
         public void LoadAdventurerData(WorkerData data)
         {
-            _iAdventurerID = data.workerID;
+            _iID = data.workerID;
             _iPersonalID = data.PersonalID;
             _iMood = data.mood;
             _sName = data.name;
-            _dProcessedTime = data.processedTime;
-            _iCurrentlyMaking = data.currentItemID;
             _heldItem = DataManager.GetItem(data.heldItemID);
             _eState = (AdventurerStateEnum)data.state;
 
             base.LoadClassedCharData(data.advData);
-
-            if (_iCurrentlyMaking != -1) {_sprBody.PlayAnimation(AnimationEnum.PlayAnimation); }
 
             if (_eState == AdventurerStateEnum.InParty) {
                 PlayerManager.AddToParty(this);

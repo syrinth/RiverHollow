@@ -168,6 +168,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormCharExtraData";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormCharExtraData_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dgvCharExtraData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvEditTags)).EndInit();
             this.ResumeLayout(false);

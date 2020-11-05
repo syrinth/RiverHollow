@@ -37,8 +37,7 @@ namespace RiverHollow.Game_Managers
         static Dictionary<string, Texture2D> _diTextures;
         static Dictionary<string, BitmapFont> _diBMFonts;
         static Dictionary<string, string> _diGameText;
-        static Dictionary<int, string> _diStatusEffectText;
-        static Dictionary<string, string> _diAdventurerDialogue;
+        static Dictionary<int, Dictionary<string, string>> _diAdventurerDialogue;
         public static Dictionary<int, string> DiUpgrades { get; private set; }
         static Dictionary<int, string> _diClassText;
         static Dictionary<string, string> _diMonsterTraits;
@@ -173,20 +172,36 @@ namespace RiverHollow.Game_Managers
         {
             LoadDictionary(ref _diItemText, FOLDER_TEXTFILES + "Object_Text", Content);
             _diGameText = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + "GameText");
-            _diStatusEffectText = Content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + "StatusText");
 
             _diSongs = Content.Load<Dictionary<int, List<string>>>(@"Data\Songs");
-            _diAdventurerDialogue = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + @"Dialogue\Adventurers");
+            
             _diNPCDialogue = new Dictionary<int, Dictionary<string, string>>();
+            _diAdventurerDialogue = new Dictionary<int, Dictionary<string, string>>();
             foreach (string s in Directory.GetFiles(@"Content\" + FOLDER_TEXTFILES + "Dialogue"))
             {
-                string fileName = Path.GetFileName(s).Replace("NPC_", "").Split('.')[0];
-                int file = -1;
-                if (int.TryParse(fileName, out file))
-                {
-                    fileName = s;
-                    Util.ParseContentFile(ref fileName);
-                    _diNPCDialogue.Add(file, Content.Load<Dictionary<string, string>>(fileName));
+                string fileName = string.Empty;
+
+                if (s.Contains("NPC_")) {
+                    fileName = Path.GetFileName(s).Replace("NPC_", "").Split('.')[0];
+
+                    int file = -1;
+                    if (int.TryParse(fileName, out file))
+                    {
+                        fileName = s;
+                        Util.ParseContentFile(ref fileName);
+                        _diNPCDialogue.Add(file, Content.Load<Dictionary<string, string>>(fileName));
+                    }
+                }
+                else if (s.Contains("Adventurer_")) {
+                    fileName = Path.GetFileName(s).Replace("Adventurer_", "").Split('.')[0];
+
+                    int file = -1;
+                    if (int.TryParse(fileName, out file))
+                    {
+                        fileName = s;
+                        Util.ParseContentFile(ref fileName);
+                        _diAdventurerDialogue.Add(file, Content.Load<Dictionary<string, string>>(fileName));
+                    }
                 }
             }
         }
@@ -320,12 +335,12 @@ namespace RiverHollow.Game_Managers
             return new Building(_diBuildings[0], 0);
         }
 
-        public static string GetAdventurerDialogue(string key)
+        public static string GetAdventurerDialogue(int id, string key)
         {
             string rv = string.Empty;
-            if (_diAdventurerDialogue.ContainsKey(key))
+            if (_diAdventurerDialogue.ContainsKey(id))
             {
-                rv = _diAdventurerDialogue[key];
+                _diAdventurerDialogue[id].TryGetValue(key, out rv);
             }
 
             return rv;
@@ -609,14 +624,6 @@ namespace RiverHollow.Game_Managers
             string val = "Upgrade " + id;
             name = _diGameText[val].Split('/')[0];
             desc = _diGameText[val].Split('/')[1];
-        }
-        public static void GetStatusEffectText(int id, ref string name, ref string desc)
-        {
-            if (_diStatusEffectText.ContainsKey(id))
-            {
-                name = _diStatusEffectText[id].Split('/')[0];
-                desc = _diStatusEffectText[id].Split('/')[1];
-            }
         }
 
         public static List<string> GetSong(int id)

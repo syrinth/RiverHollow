@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[string, string]">
+    <Item>
+      <Key>1</Key>
+      <Value></Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>-zra? Ah! I see you've traversed the Widdershins path of the darkest mind! Well done!</Value>
+    </Item>
+    <Item>
+      <Key>JoinParty</Key>
+      <Value>You have my magic!</Value>
+    </Item>
+    <Item>
+      <Key>Selection</Key>
+      <Value>Yes? My mage senses are abuzz![Talk:Talk|Join Party:Party]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

@@ -33,6 +33,7 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addNewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.itemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.monsterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.questToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.worldObjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -220,7 +221,7 @@
             this.dgvStatusEffects = new System.Windows.Forms.DataGridView();
             this.colStatusEffectsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStatusEffectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.monsterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnEditAdventurerDialogue = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabItems.SuspendLayout();
@@ -295,39 +296,46 @@
             this.questToolStripMenuItem,
             this.worldObjectToolStripMenuItem});
             this.addNewToolStripMenuItem.Name = "addNewToolStripMenuItem";
-            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.addNewToolStripMenuItem.Text = "Add New";
             // 
             // itemToolStripMenuItem
             // 
             this.itemToolStripMenuItem.Name = "itemToolStripMenuItem";
-            this.itemToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.itemToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.itemToolStripMenuItem.Text = "Item";
             this.itemToolStripMenuItem.Click += new System.EventHandler(this.addNewToolStripMenuItem_Click);
+            // 
+            // monsterToolStripMenuItem
+            // 
+            this.monsterToolStripMenuItem.Name = "monsterToolStripMenuItem";
+            this.monsterToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.monsterToolStripMenuItem.Text = "Monster";
+            this.monsterToolStripMenuItem.Click += new System.EventHandler(this.monsterToolStripMenuItem_Click);
             // 
             // questToolStripMenuItem
             // 
             this.questToolStripMenuItem.Name = "questToolStripMenuItem";
-            this.questToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.questToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.questToolStripMenuItem.Text = "Quest";
             this.questToolStripMenuItem.Click += new System.EventHandler(this.questToolStripMenuItem_Click);
             // 
             // worldObjectToolStripMenuItem
             // 
             this.worldObjectToolStripMenuItem.Name = "worldObjectToolStripMenuItem";
-            this.worldObjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.worldObjectToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.worldObjectToolStripMenuItem.Text = "World Object";
             this.worldObjectToolStripMenuItem.Click += new System.EventHandler(this.addNewToolStripMenuWorldObject_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(133, 6);
             // 
             // saveToFileToolStripMenuItem
             // 
             this.saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
-            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.saveToFileToolStripMenuItem.Text = "Save To File";
             this.saveToFileToolStripMenuItem.Click += new System.EventHandler(this.saveToFileToolStripMenuItem_Click);
             // 
@@ -899,6 +907,7 @@
             // 
             // tabAdventurers
             // 
+            this.tabAdventurers.Controls.Add(this.btnEditAdventurerDialogue);
             this.tabAdventurers.Controls.Add(this.cbAdventurerType);
             this.tabAdventurers.Controls.Add(this.button1);
             this.tabAdventurers.Controls.Add(this.dgvAdventurerTags);
@@ -2234,12 +2243,15 @@
             this.colStatusEffectsName.ReadOnly = true;
             this.colStatusEffectsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // monsterToolStripMenuItem
+            // btnEditAdventurerDialogue
             // 
-            this.monsterToolStripMenuItem.Name = "monsterToolStripMenuItem";
-            this.monsterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.monsterToolStripMenuItem.Text = "Monster";
-            this.monsterToolStripMenuItem.Click += new System.EventHandler(this.monsterToolStripMenuItem_Click);
+            this.btnEditAdventurerDialogue.Location = new System.Drawing.Point(320, 394);
+            this.btnEditAdventurerDialogue.Name = "btnEditAdventurerDialogue";
+            this.btnEditAdventurerDialogue.Size = new System.Drawing.Size(110, 23);
+            this.btnEditAdventurerDialogue.TabIndex = 63;
+            this.btnEditAdventurerDialogue.Text = "Edit Dialogue";
+            this.btnEditAdventurerDialogue.UseVisualStyleBackColor = true;
+            this.btnEditAdventurerDialogue.Click += new System.EventHandler(this.btnEditAdventurerDialogue_Click);
             // 
             // frmDBEditor
             // 
@@ -2509,6 +2521,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatusEffectsID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatusEffectsName;
         private System.Windows.Forms.ToolStripMenuItem monsterToolStripMenuItem;
+        private System.Windows.Forms.Button btnEditAdventurerDialogue;
     }
 }
 

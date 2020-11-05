@@ -115,7 +115,12 @@ namespace Database_Editor
             _diCharacterDialogue = new Dictionary<string, Dictionary<string, string>>();
             foreach (string s in Directory.GetFiles(PATH_TO_DIALOGUE))
             {
-                string fileName = Path.GetFileName(s).Replace("NPC_", "").Split('.')[0];
+                string fileName = string.Empty;
+
+                if (s.Contains("NPC_")) { fileName = Path.GetFileName(s).Replace("NPC_", "").Split('.')[0]; }
+                else if (s.Contains("Adventurer_")) { fileName = Path.GetFileName(s).Replace("Adventurer_", "").Split('.')[0]; }
+                else { continue; }
+
                 int charID = -1;
                 if (int.TryParse(fileName, out charID))
                 {
@@ -933,7 +938,7 @@ namespace Database_Editor
         #region EventHandlers
         private void btnDialogue_Click(object sender, EventArgs e)
         {
-            string npcKey = @"\NPC_" + _diTabIndices["Characters"].ToString("00") + ".xml";
+            string npcKey = @"\NPC_" + _diBasicXML[CHARACTER_XML_FILE][_diTabIndices["Characters"]].ID.ToString("00") + ".xml";
             FormCharExtraData frm = null;
             if (cbEditableCharData.SelectedItem.ToString() == "Dialogue")
             {
@@ -961,6 +966,21 @@ namespace Database_Editor
 
                 _diCharacterSchedules[key] = frm.ListData;
             }
+        }
+        private void btnEditAdventurerDialogue_Click(object sender, EventArgs e)
+        {
+            string npcKey = @"\Adventurer_" + _diBasicXML[WORKERS_XML_FILE][_diTabIndices["Adventurers"]].ID.ToString("00") + ".xml";
+            FormCharExtraData frm = null;
+            string key = PATH_TO_DIALOGUE + npcKey;
+            if (!_diCharacterDialogue.ContainsKey(key))
+            {
+                _diCharacterDialogue[key] = new Dictionary<string, string> { ["New"] = "" };
+            }
+
+            frm = new FormCharExtraData("Dialogue", _diCharacterDialogue[key]);
+            frm.ShowDialog();
+
+            _diCharacterDialogue[key] = frm.StringData;
         }
         private void btnEditCutsceneDialogue_Click(object sender, EventArgs e)
         {
@@ -2217,6 +2237,5 @@ namespace Database_Editor
         }
 
         #endregion
-
     }
 }

@@ -47,13 +47,11 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Items/weapons.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/ActionEffects/LeafCutter.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/GameText.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/Adventurers.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Songs.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Harp/c3.wav</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Harp/d2.wav</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Sound/Stock/Harp/e2.wav</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/StatusEffects.xml</File>
-    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/StatusText.xml</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Summons/EarthElemental.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Textures/Actors/Summons/WaterElemental.png</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Summons.xml</File>
@@ -308,5 +306,13 @@
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_2_10.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_2_11.tmx</File>
     <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Maps/Dungeon_Caves/mapCave_Wing_2_12.tmx</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/Adventurer_01.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/Adventurer_02.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/Adventurer_03.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/Adventurer_04.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/Adventurer_05.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/Adventurer_06.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/Adventurer_07.xml</File>
+    <File>E:/Programming/Projects/RiverHollow/Adventure/Content/Data/Text Files/Dialogue/Adventurer_08.xml</File>
   </SourceFiles>
 </SourceFileCollection>

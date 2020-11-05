@@ -124,36 +124,10 @@ namespace Database_Editor
             }
         }
 
-        private void SaveDictionaryData()
-        {
-            if (_diStringData.ContainsKey(tbCharExtraDataName.Text))
-            {
-                _diStringData.Remove(tbCharExtraDataName.Text);
-            }
-            _diStringData[tbCharExtraDataName.Text] = tbCharExtraDataInfo.Text;
-            DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
-            row.Cells["colCharExtraID"].Value = tbCharExtraDataName.Text;
-        }
-
-        private void SaveListData()
-        {
-            _diListData.Remove(_diListData.ElementAt(_iIndex).Key);
-
-            List<string> listInfo = new List<string>();
-            foreach (DataGridViewRow r in dgvEditTags.Rows)
-            {
-                if (r.Cells[0].Value != null)
-                {
-                    listInfo.Add(r.Cells[0].Value.ToString());
-                }
-            }
-            _diListData[tbCharExtraDataName.Text] = listInfo;
-            DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
-            row.Cells["colCharExtraID"].Value = tbCharExtraDataName.Text;
-        }
-
         private void btnAddNew_Click(object sender, EventArgs e)
         {
+            Save();
+
             _iIndex = dgvCharExtraData.Rows.Count;
             dgvCharExtraData.Rows.Add();
             SelectRow(dgvCharExtraData, _iIndex);
@@ -170,6 +144,16 @@ namespace Database_Editor
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            Save();
+        }
+
+        private void FormCharExtraData_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Save();
+        }
+
+        private void Save()
+        {
             if (_eDataMode == DataMode.Dialogue)
             {
                 SaveDictionaryData();
@@ -178,6 +162,35 @@ namespace Database_Editor
             {
                 SaveListData();
             }
+        }
+        private void SaveDictionaryData()
+        {
+            DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
+
+            string oldKey = row.Cells["colCharExtraID"].Value.ToString();
+            if (_diStringData.ContainsKey(oldKey))
+            {
+                _diStringData.Remove(oldKey);
+            }
+
+            _diStringData[tbCharExtraDataName.Text] = tbCharExtraDataInfo.Text;
+            row.Cells["colCharExtraID"].Value = tbCharExtraDataName.Text;
+        }
+        private void SaveListData()
+        {
+            _diListData.Remove(_diListData.ElementAt(_iIndex).Key);
+
+            List<string> listInfo = new List<string>();
+            foreach (DataGridViewRow r in dgvEditTags.Rows)
+            {
+                if (r.Cells[0].Value != null)
+                {
+                    listInfo.Add(r.Cells[0].Value.ToString());
+                }
+            }
+            _diListData[tbCharExtraDataName.Text] = listInfo;
+            DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
+            row.Cells["colCharExtraID"].Value = tbCharExtraDataName.Text;
         }
     }
 }

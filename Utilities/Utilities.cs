@@ -147,6 +147,9 @@ namespace RiverHollow.Utilities
         public static string ProcessText(string text, string name = "")
         {
             string rv = string.Empty;
+
+            if (string.IsNullOrEmpty(text)) { return rv; }
+
             text = text.Replace(@"\n", System.Environment.NewLine);
             string[] nameSections = text.Split(new[] { '$' }, StringSplitOptions.RemoveEmptyEntries);
             if (nameSections.Length > 1)

@@ -440,11 +440,6 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/GameText.xml
 
-#begin Data/Text Files/Dialogue/Adventurers.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/Adventurers.xml
-
 #begin Data/Songs.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -472,11 +467,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/StatusEffects.xml
-
-#begin Data/Text Files/StatusText.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/StatusText.xml
 
 #begin Textures/Actors/Summons/EarthElemental.png
 /importer:TextureImporter
@@ -2608,4 +2598,44 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Dungeon_Caves/mapCave_Wing_2_12.tmx
+
+#begin Data/Text Files/Dialogue/Adventurer_01.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Adventurer_01.xml
+
+#begin Data/Text Files/Dialogue/Adventurer_02.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Adventurer_02.xml
+
+#begin Data/Text Files/Dialogue/Adventurer_03.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Adventurer_03.xml
+
+#begin Data/Text Files/Dialogue/Adventurer_04.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Adventurer_04.xml
+
+#begin Data/Text Files/Dialogue/Adventurer_05.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Adventurer_05.xml
+
+#begin Data/Text Files/Dialogue/Adventurer_06.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Adventurer_06.xml
+
+#begin Data/Text Files/Dialogue/Adventurer_07.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Adventurer_07.xml
+
+#begin Data/Text Files/Dialogue/Adventurer_08.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Adventurer_08.xml
 
