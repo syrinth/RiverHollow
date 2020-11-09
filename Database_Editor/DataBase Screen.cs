@@ -57,11 +57,12 @@ namespace Database_Editor
         Dictionary<string, int> _diTabIndices;
         private int _iNextCurrID = -1;
         public static string SPECIAL_CHARACTER = "^";
-        static string PATH_TO_MAPS = string.Format(@"{0}\..\..\..\..\Adventure\Content\Maps", System.Environment.CurrentDirectory);
-        static string PATH_TO_DATA = string.Format(@"{0}\..\..\..\..\Adventure\Content\Data", System.Environment.CurrentDirectory);
+        static string PATH_TO_CONTENT = string.Format(@"{0}\..\..\..\..\RiverHollow\RiverHollowGame\Content", System.Environment.CurrentDirectory);
+        static string PATH_TO_MAPS = PATH_TO_CONTENT + @"\Maps";
+        static string PATH_TO_DATA = PATH_TO_CONTENT + @"\Data";
         static string PATH_TO_TEXT_FILES = PATH_TO_DATA + @"\Text Files";
-        static string PATH_TO_DIALOGUE = string.Format(@"{0}\..\..\..\..\Adventure\Content\Data\Text Files\Dialogue", System.Environment.CurrentDirectory);
-        static string PATH_TO_SCHEDULES = string.Format(@"{0}\..\..\..\..\Adventure\Content\Data\Schedules", System.Environment.CurrentDirectory);
+        static string PATH_TO_DIALOGUE = PATH_TO_TEXT_FILES + @"\Dialogue";
+        static string PATH_TO_SCHEDULES = PATH_TO_DATA + @"\Schedules";
 
         static Dictionary<string, List<string>> _diCutsceneDialogue;
         static Dictionary<int, List<string>> _diCutscenes;
