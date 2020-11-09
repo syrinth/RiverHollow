@@ -338,6 +338,9 @@ namespace RiverHollow.Items
 
     public abstract class WorldItem : WorldObject
     {
+        protected int _iBaseItemID;
+        public int BaseItemID => _iBaseItemID;
+
         protected string _sMapName;                                 //Used to play sounds on that map
         public Vector2 HeldItemPos
         {
@@ -406,7 +409,9 @@ namespace RiverHollow.Items
             public Machine(int id, Dictionary<string, string> stringData, Vector2 pos) : base(id, pos - new Vector2(0, TileSize))
             {
                 _heldItem = null;
-                
+
+                Util.AssignValue(ref _iBaseItemID, "ItemID", stringData);
+
                 if (stringData.ContainsKey("Work"))
                 {
                     string[] split = stringData["Work"].Split('-');

@@ -6,6 +6,7 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
 
+using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.DataManager;
 using static RiverHollow.Items.WorldItem;
 using static RiverHollow.Items.WorldItem.Machine;
@@ -26,6 +27,8 @@ namespace RiverHollow.GUIComponents.Screens
         private List<GUIItem> _liRequiredItems;
         private GUIText _gName;
         private GUIText _gDescription;
+
+        private GUIButton _btnRemove;
 
         private int _iSelectedItemID = -1;
 
@@ -51,6 +54,15 @@ namespace RiverHollow.GUIComponents.Screens
 
             DetermineSize();
             CenterOnScreen();
+
+            //80, 48
+            _winMachineInfo = new GUIWindow(GUIWindow.RedWin, _winMain.Width, ScaleIt(GUIWindow.RedWin.Edge * 2) + ScaleIt(TileSize));
+            _winMachineInfo.AnchorAndAlignToObject(_winMain, SideEnum.Bottom, SideEnum.CenterX);
+
+            _btnRemove = new GUIButton(new Rectangle(80, 48, 16, 16), ScaleIt(TileSize), ScaleIt(TileSize), @"Textures\Dialog", RemoveCraftingStation);
+            _btnRemove.AnchorToInnerSide(_winMachineInfo, SideEnum.Right);
+
+            AddControl(_winMachineInfo);
         }
 
         /// <summary>
@@ -60,9 +72,6 @@ namespace RiverHollow.GUIComponents.Screens
         /// <param name="recipes"></param>
         public void Setup(Dictionary<int, int> recipes)
         {
-            //Pause the game while crafting
-            GameManager.Pause();
-
             List<int> canMake = new List<int>();
             foreach (int id in recipes.Keys)
             {
@@ -164,6 +173,10 @@ namespace RiverHollow.GUIComponents.Screens
                 }
                 rv = true;
             }
+            else if (_winMachineInfo.Contains(mouse))
+            {
+                _winMachineInfo.ProcessLeftButtonClick(mouse);
+            }
             return rv;
         }
         public override bool ProcessRightButtonClick(Point mouse)
@@ -209,6 +222,14 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             return rv;
+        }
+
+        private void RemoveCraftingStation()
+        {
+            GameManager.RemoveMachine(_craftMachine);
+            MapManager.CurrentMap.RemoveWorldObject(_craftMachine);
+            InventoryManager.AddToInventory(DataManager.GetItem(_craftMachine.BaseItemID));
+            GUIManager.CloseMainObject();
         }
     }
 }

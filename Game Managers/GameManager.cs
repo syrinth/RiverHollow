@@ -159,6 +159,10 @@ namespace RiverHollow.Game_Managers
             m.SetMapName(mapName);
             _liMachines.Add(m);
         }
+        public static void RemoveMachine(Machine m)
+        {
+            _liMachines.Remove(m);
+        }
 
         public static void RollOver()
         {

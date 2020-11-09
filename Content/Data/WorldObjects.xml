@@ -43,31 +43,31 @@
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Width:16][Height:32][Processes:32-10|33-10|34-10|35-10|36-10][WorkEffect:stove_fire][MachineType:Processor]</Value>
+      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Width:16][Height:32][Processes:32-10|33-10|34-10|35-10|36-10][WorkEffect:stove_fire][MachineType:Processor][ItemID:113]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:112-5|113-30|67-15][Base:2-1][MachineType:CraftingMachine]</Value>
+      <Value>[Type:Machine][Image:0-32][Work:3-0.15][Width:32][Height:32][Makes:112-5|113-30|67-15][Base:2-1][MachineType:CraftingMachine][ItemID:114]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Machine][Image:0-64][Work:4-0.3][Width:16][Height:32][Makes:106-2|107-3][Base:1-1][WorkEffect:bubbles][MachineType:CraftingMachine]</Value>
+      <Value>[Type:Machine][Image:0-64][Work:4-0.3][Width:16][Height:32][Makes:106-2|107-3][Base:1-1][WorkEffect:bubbles][MachineType:CraftingMachine][ItemID:115]</Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:116-2|113-3|114-3|115-3|112-5|117-5][Base:2-1][MachineType:CraftingMachine]</Value>
+      <Value>[Type:Machine][Image:0-96][Work:3-0.15][Width:32][Height:32][Makes:116-2|113-3|114-3|115-3|112-5|117-5][Base:2-1][MachineType:CraftingMachine][ItemID:116]</Value>
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Machine][Image:0-128][Work:3-0.15][Width:16][Height:32][Makes:108-2][Base:1-1][MachineType:CraftingMachine]</Value>
+      <Value>[Type:Machine][Image:0-128][Work:3-0.15][Width:16][Height:32][Makes:108-2][Base:1-1][MachineType:CraftingMachine][ItemID:117]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Makes:81-3][Base:2-1][MachineType:CraftingMachine]</Value>
+      <Value>[Type:Machine][Image:0-160][Work:3-0.15][Width:32][Height:32][Makes:81-3][Base:2-1][MachineType:CraftingMachine][ItemID:118]</Value>
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Container][Image:0-16][Width:16][Height:16][Rows:1][Cols:8]</Value>
+      <Value>[Type:Container][Image:0-16][Width:16][Height:16][Rows:1][Cols:8][ItemID:112]</Value>
     </Item>
     <Item>
       <Key>17</Key>
