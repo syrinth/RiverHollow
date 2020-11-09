@@ -96,13 +96,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RiverHollow.csproj">
+    <Content Include="RiverHollow_Icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RiverHollowGame\RiverHollow.csproj">
       <Project>{9677f77a-c0df-4e91-9722-850a8e5dfa3e}</Project>
       <Name>RiverHollow</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="RiverHollow_Icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
