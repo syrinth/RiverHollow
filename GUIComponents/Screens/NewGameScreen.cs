@@ -62,9 +62,11 @@ namespace RiverHollow.GUIComponents.Screens
             
             _manorWindow = new GUITextInputWindow("Manor Name:", SideEnum.Left);
             _manorWindow.AnchorToInnerSide(_window, SideEnum.TopRight);
-            
+            //_manorWindow.SetText("Panda's");
+
             _nameWindow = new GUITextInputWindow("Character Name:", SideEnum.Left);
             _nameWindow.AnchorAndAlignToObject(_manorWindow, SideEnum.Bottom, SideEnum.Right );
+            //_nameWindow.SetText("Harold");
             _nameWindow.Activate();
 
             _liClassBoxes = new List<GUIObject>();

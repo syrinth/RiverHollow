@@ -191,6 +191,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             return _gText.GetText();
         }
+        public void SetText(string text)
+        {
+            _gText.SetText(text);
+        }
 
         public void HideCursor()
         {
