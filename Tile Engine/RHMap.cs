@@ -1574,6 +1574,8 @@ namespace RiverHollow.Tile_Engine
             //{
             //    _liModifiedTiles.Remove(tile);
             //}
+
+            o.RemoveSelfFromTiles();
         }
         public void RemoveCharacter(WorldActor c)
         {

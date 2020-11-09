@@ -442,13 +442,12 @@ namespace RiverHollow.Buildings
                     if (w != null)
                     {
                         buildingMap.RemoveWorldObject(w);
-                        w.RemoveSelfFromTiles();
+                        
                     }
                     w = t.Flooring;
                     if (w != null)
                     {
                         buildingMap.RemoveWorldObject(w);
-                        w.RemoveSelfFromTiles();
                     }
                 }
                 buildingMap.AssignMapTiles(this, Tiles);
