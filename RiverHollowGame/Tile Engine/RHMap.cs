@@ -771,7 +771,12 @@ namespace RiverHollow.Tile_Engine
 
             foreach(RHTile t in _liTestTiles)
             {
-                bool passable = t.Passable() && !TileContainsActor(t) && (Scrying() || PlayerManager.PlayerInRange(t.Rect));
+                StaticItem it = InventoryManager.GetCurrentStaticItem();
+                bool checkPlayer = true;
+
+                if (it != null) { checkPlayer = !it.GetWorldItem().CompareType(ObjectTypeEnum.Floor); }
+
+                bool passable = t.Passable() && !TileContainsActor(t, checkPlayer) && (Scrying() || PlayerManager.PlayerInRange(t.Rect));
                 spriteBatch.Draw(DataManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)t.Position.X, (int)t.Position.Y, TileSize, TileSize), new Rectangle(288, 128, TileSize, TileSize) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
             }
         }
@@ -849,11 +854,11 @@ namespace RiverHollow.Tile_Engine
         }
 
         #region Collision Code
-        private bool TileContainsActor(RHTile t)
+        private bool TileContainsActor(RHTile t, bool checkPlayer = true)
         {
             bool rv = false;
 
-            if (this == PlayerManager.World.CurrentMap && PlayerManager.World.CollisionIntersects(t.Rect)) { rv = true; }
+            if (checkPlayer && this == PlayerManager.World.CurrentMap && PlayerManager.World.CollisionIntersects(t.Rect)) { rv = true; }
             else
             {
                 foreach (WorldActor act in _liActors)
@@ -1275,10 +1280,10 @@ namespace RiverHollow.Tile_Engine
                                     rv = true;
                                 }
                             }
-                            else if (c.IsActorType(ActorEnum.NPC))
+                            else if (c.IsActorType(ActorEnum.NPC) || c.IsActorType(ActorEnum.ShippingGremlin))
                             {
                                 Villager n = (Villager)c;
-                                if (InventoryManager.GetCurrentItem() != null &&
+                                if (n.CanGiveGift && InventoryManager.GetCurrentItem() != null &&
                                     n.CollisionContains(mouseLocation) && PlayerManager.PlayerInRange(n.CharCenter) &&
                                     InventoryManager.GetCurrentItem().Giftable())
                                 {
@@ -1438,18 +1443,22 @@ namespace RiverHollow.Tile_Engine
                     StaticItem selectedItem = InventoryManager.GetCurrentStaticItem();
                     if (!IsCombatMap && selectedItem != null)
                     {
-                        //Take the actual WorldObject item from the item and attempt to place it on the map
-                        WorldItem newItem = selectedItem.GetWorldItem();
-                        if (MapManager.PlacePlayerObject(newItem))
+                        bool isFloor = selectedItem.GetWorldItem().CompareType(ObjectTypeEnum.Floor);
+                        if (!isFloor || (isFloor && TargetTile.Flooring == null))
                         {
-                            rv = true;
-                            newItem.SetMapName(this.Name);      //Assign the map name tot he WorldItem
-                            selectedItem.Remove(1);             //Remove one of them from the inventory
-
-                            //If the item placed was a wall object, we need to adjust it based off any adjacent walls
-                            if (newItem.CompareType(ObjectTypeEnum.Wall))
+                            //Take the actual WorldObject item from the item and attempt to place it on the map
+                            WorldItem newItem = selectedItem.GetWorldItem();
+                            if (MapManager.PlacePlayerObject(newItem))
                             {
-                                ((Wall)newItem).AdjustObject();
+                                rv = true;
+                                newItem.SetMapName(this.Name);      //Assign the map name tot he WorldItem
+                                selectedItem.Remove(1);             //Remove one of them from the inventory
+
+                                //If the item placed was a wall object, we need to adjust it based off any adjacent walls
+                                if (newItem.CompareType(ObjectTypeEnum.Wall))
+                                {
+                                    ((Wall)newItem).AdjustObject();
+                                }
                             }
                         }
                     }
@@ -1852,7 +1861,7 @@ namespace RiverHollow.Tile_Engine
 
                     RHTile tempTile = _arrTiles[x, y];
 
-                    if (!TileContainsActor(tempTile) && ((!o.WallObject && tempTile.Passable() && tempTile.WorldObject == null) || (o.WallObject && tempTile.IsValidWall())))
+                    if (!TileContainsActor(tempTile, !o.CompareType(ObjectTypeEnum.Floor)) && ((!o.WallObject && tempTile.Passable() && tempTile.WorldObject == null) || (o.WallObject && tempTile.IsValidWall())))
                     {
                         collisionTiles.Add(tempTile);
                     }
@@ -1932,7 +1941,11 @@ namespace RiverHollow.Tile_Engine
                 {
                     for (int y = obj.CollisionBox.Y; y < obj.CollisionBox.Y + obj.CollisionBox.Height; y += TileSize)
                     {
-                        liTiles.Add(GetTileByPixelPosition(x, y));
+                        RHTile t = GetTileByPixelPosition(x, y);
+                        if (t != null)
+                        {
+                            liTiles.Add(t);
+                        }
                     }
                 }
             }
@@ -1940,7 +1953,7 @@ namespace RiverHollow.Tile_Engine
             bool placeIt = true;
             foreach (RHTile t in liTiles)
             {
-                if (!t.Passable() || TileContainsActor(t))
+                if (!t.Passable() || TileContainsActor(t, !obj.CompareType(ObjectTypeEnum.Floor)))
                 {
                     placeIt = false;
                     break;
@@ -2645,9 +2658,9 @@ namespace RiverHollow.Tile_Engine
                     rv = ((Destructible)WorldObject).DealDamage(toolUsed.Power);
                     if (rv)
                     {
+                        WorldObject.RemoveSelfFromTiles();
                         MapManager.DropItemsOnMap(WorldObject.GetDroppedItems(), WorldObject.CollisionBox.Location.ToVector2());
                         MapManager.RemoveWorldObject(WorldObject);
-                        WorldObject.RemoveSelfFromTiles();
                     }
                 }
             }

@@ -176,6 +176,7 @@ namespace RiverHollow.GUIComponents.Screens
             else if (_winMachineInfo.Contains(mouse))
             {
                 _winMachineInfo.ProcessLeftButtonClick(mouse);
+                rv = true;
             }
             return rv;
         }

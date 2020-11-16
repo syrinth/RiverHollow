@@ -1104,6 +1104,8 @@ namespace RiverHollow.Items
             {
                 LoadDictionaryData(stringData, false);
                 LoadAdjustableSprite(ref _sprite, DataManager.FILE_FLOORING);
+
+                _eObjectType = ObjectTypeEnum.Floor;
             }
 
             /// <summary>
