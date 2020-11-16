@@ -74,6 +74,7 @@ namespace RiverHollow.Tile_Engine
         protected List<ResourceSpawn> _liResourceSpawnPoints;
         protected List<int> _liRandomSpawnItems;
         protected List<int> _liCutscenes;
+        private List<TiledMapObject> _liBarrenObjects;
 
         protected List<Item> _liItems;
         protected List<Item> _liItemsToRemove;
@@ -95,13 +96,15 @@ namespace RiverHollow.Tile_Engine
             _liItems = new List<Item>();
             _liItemsToRemove = new List<Item>();
             _liMapObjects = new List<TiledMapObject>();
-            DictionaryTravelPoints = new Dictionary<string, TravelPoint>();
-            DictionaryCharacterLayer = new Dictionary<string, Vector2>();
             _liShopData = new List<ShopData>();
             _liPlacedWorldObjects = new List<WorldObject>();
             _liRandomSpawnItems = new List<int>();
             _liCutscenes = new List<int>();
+            _liBarrenObjects = new List<TiledMapObject>();
+
             DictionaryCombatTiles = new Dictionary<string, RHTile[,]>();
+            DictionaryTravelPoints = new Dictionary<string, TravelPoint>();
+            DictionaryCharacterLayer = new Dictionary<string, Vector2>();
 
             ToRemove = new List<WorldActor>();
             ToAdd = new List<WorldActor>();
@@ -306,6 +309,10 @@ namespace RiverHollow.Tile_Engine
                             };
                             GameManager.AddSpirit(s);
                             _liActors.Add(s);
+                        }
+                        else if (obj.Name.Equals("Barren"))
+                        {
+                            _liBarrenObjects.Add(obj);
                         }
                         else
                         {
@@ -1790,13 +1797,16 @@ namespace RiverHollow.Tile_Engine
             return rv;
         }
 
-        public bool PlaceWorldObject(WorldObject o, bool bounce = false)
+        public bool PlaceWorldObject(WorldObject o, bool bounce = false, bool respectBarrens = false)
         {
             bool rv = false;
 
             List<RHTile> tiles = new List<RHTile>();
-            rv = TestMapTiles(o, tiles);
-            
+            if (RespectBarrens(respectBarrens, o.CollisionBox))
+            {
+                rv = TestMapTiles(o, tiles);
+            }
+
             if (!rv && bounce)
             {
                 Vector2 position = o.MapPosition;
@@ -1806,13 +1816,36 @@ namespace RiverHollow.Tile_Engine
                     position.Y = (int)(RHRandom.Instance.Next(1, (MapHeightTiles - 1) * TileSize) / TileSize) * TileSize;
                     o.SnapPositionToGrid(position);
 
-                    rv = TestMapTiles(o, tiles);
+
+                    if (RespectBarrens(respectBarrens, o.CollisionBox))
+                    {
+                        rv = TestMapTiles(o, tiles);
+                    }
                 } while (!rv);
             }
 
             if (rv)
             {
                 AssignMapTiles(o, tiles);
+            }
+
+            return rv;
+        }
+
+        private bool RespectBarrens(bool respect, Rectangle collisionBox)
+        {
+            bool rv = true;
+            if (respect)
+            {
+                foreach (TiledMapObject mapObj in _liBarrenObjects)
+                {
+                    Rectangle r = Util.FloatRectangle(mapObj.Position.X, mapObj.Position.Y, mapObj.Size.Width, mapObj.Size.Height);
+                    if (r.Intersects(collisionBox))
+                    {
+                        rv = false;
+                        break;
+                    }
+                }
             }
 
             return rv;

@@ -699,6 +699,7 @@ namespace RiverHollow.Characters
             }
             else if (chosenAction.StartsWith("Cancel"))
             {
+                GameManager.CurrentItem = null;
             }
             else
             {
@@ -3113,7 +3114,7 @@ namespace RiverHollow.Characters
             _diDialogue = DataManager.GetNPCDialogue(_iIndex);
             _sPortrait = Util.GetPortraitLocation(_sPortraitFolder, "Gremlin", _iIndex.ToString("00"));
             //_sPortrait = _sPortraitFolder + "WizardPortrait";
-            Util.AssignValue(ref _sName, "Name", stringData);
+            DataManager.GetTextData("Character", _iIndex, ref _sName, "Name");
 
             if (stringData.ContainsKey("HomeMap"))
             {

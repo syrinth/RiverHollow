@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="60" height="60" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#000000" nextlayerid="7" nextobjectid="58">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="60" height="60" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#000000" nextlayerid="7" nextobjectid="61">
  <properties>
   <property name="Outside" type="bool" value="true"/>
  </properties>
@@ -225,5 +225,7 @@
   <object id="7" name="PlayerSpawn" x="133.683" y="502.336" width="5.63636" height="5.27273"/>
   <object id="46" name="CS1Spawn" x="168.683" y="501.669" width="7.16667" height="6.5"/>
   <object id="54" name="NPC_21" x="81.226" y="449.283" width="29.5" height="13.7614"/>
+  <object id="58" name="Barren" x="80" y="416.667" width="127.333" height="143.333"/>
+  <object id="60" name="Barren" x="-0.6665" y="496.333" width="127.333" height="63.333"/>
  </objectgroup>
 </map>

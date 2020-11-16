@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
@@ -94,18 +95,22 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
             else
             {
+                Item clickedItem = IsItemThere(mouse);
                 if (GameManager.CurrentInventoryDisplay == GameManager.DisplayTypeEnum.Gift)
                 {
-                    rv = true;
-                    //Do not pick the item up, instead assign it.
-                   GameManager.CurrentItem = IsItemThere(mouse);
+                    if (clickedItem != null && clickedItem.Giftable())
+                    {
+                        rv = true;
+                        //Do not pick the item up, instead assign it.
+                        GameManager.CurrentItem = clickedItem;
+                    }
                 }
                 else if (GameManager.CurrentTriggerObject != null)
                 {
-                    Item it = IsItemThere(mouse);
-                    if (!GUIManager.IsTextWindowOpen() && Contains(mouse) && it != null)
+                    
+                    if (!GUIManager.IsTextWindowOpen() && Contains(mouse) && clickedItem != null)
                     {
-                        if (GameManager.CurrentTriggerObject.CheckForKey(it))
+                        if (GameManager.CurrentTriggerObject.CheckForKey(clickedItem))
                         {
                             GameManager.CurrentTriggerObject.AttemptToTrigger(GameManager.ITEM_OPEN);
                             GUIManager.CloseMainObject();

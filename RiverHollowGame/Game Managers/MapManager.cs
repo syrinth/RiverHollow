@@ -202,15 +202,15 @@ namespace RiverHollow.Game_Managers
 
                 for (int i = 0; i < 99; i++)
                 {
-                    Maps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(rockID, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
+                    Maps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(rockID, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true, true);
                 }
                 for (int i = 0; i < 99; i++)
                 {
-                    Maps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(treeID, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
+                    Maps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(treeID, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true, true);
                 }
                 for (int i = 0; i < 10; i++)
                 {
-                    Maps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(bigRockID, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true);
+                    Maps[MapManager.HomeMap].PlaceWorldObject(DataManager.GetWorldObject(bigRockID, new Vector2(rand.Next(1, mapWidth - 1) * TileSize, rand.Next(1, mapHeight - 1) * TileSize)), true, true);
                 }
             }
         }
