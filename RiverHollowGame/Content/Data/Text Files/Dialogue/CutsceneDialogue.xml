@@ -15,13 +15,18 @@
       <Key>1</Key>
       <Value>
         <Item>[IntroText:The road has been your companion for days. Stretching on endlessely as you leave your old life behind, searching for a place that could use someone of your talents. All around you, you leave behind the remnants of a war torn land, until at last you arrive here. A small valley, all but hidden from the last war. River Hollow.]</Item>
-        <Item>[1:Well, this is it. I know it's not much to look at but I do hope you'll find it serviceable. It was a fine old house back int he day, but the years haven't exactly been kind to it. Once the old owners left, we had our own problems keeping us too busy to maintain it. But, I've had $13$ take a look around inside and he assures me that it's safe, just needs some love.]</Item>
+        <Item>[1:Well, this is it! I know it's not much to look at but I do hope you'll find it serviceable. It was a fine old house back in the day, but the years haven't exactly been kind to it.
+Once the old owners left, we had our own problems keeping us too busy to maintain it. But I've had $13$ take a look around inside and he assures me that it's safe, it just needs some love.]</Item>
         <Item>[2:...]</Item>
-        <Item>[3:You said you're a crafter right? The old owners used to dabble in that sort of thing, it's how they made their money. There's some old equipment in the basement and $21$ even gave some supplies that you should be able to use. That should be enough to get you started, but you're going to need more supplies, so you should definitely explore the area.]</Item>
-        <Item>[4:The field here is on the Eastern edge of the valley, To the North of here, across the field there is an old shrine to the Great Spirit of the fields. $20$ used to tell stories aboutthe spirits and how people would pray at the shrines, but it's been a long time since anyone did that.]</Item>
-        <Item>[5:To the West,just past the town, is the Forest, it's probably the best place for you to start if you're looking for reagents.]</Item>
-        <Item>[6:If you do go exploring, please be careful. You look capable, but it wouldn't do to have our newest resident sent to the apothecary on their first few days in the area now would it. If you do find yourself needing any extra hands, $16$, at the Adventurer's Guild will be able to help you.]</Item>
-        <Item>[7:Take care!]</Item>
+        <Item>[3:You said you're an artisan right? The old owners used to dabble in that sort of thing, it's how they made their money. There's some old equipment in the basement and $17$ even gave some supplies that you should be able to use.
+That should be enough to get you started, but you're going to need more supplies, so you should definitely explore the area.]</Item>
+        <Item>[4:The field here is on the Eastern edge of the valley. To the North of here, across the field, there is an old shrine to the Great Spirit of the fields. $20$ used to tell stories about the spirits and how people would pray at the shrines, but it's been a long time since anyone did that.]</Item>
+        <Item>[5:To the West,just past the town, is the Forest, it's probably the best place for you to start if you're looking for reagents.
+If you do go exploring, please be careful. You look capable, but it wouldn't do to have our newest resident sent to the apothecary on their first few days in the area now would it.
+If you do find yourself needing any extra hands, $16$, at the Adventurer's Guild will be able to help you.
+Take care!]</Item>
+        <Item>[6:]</Item>
+        <Item>[7:]</Item>
       </Value>
     </Item>
     <Item>

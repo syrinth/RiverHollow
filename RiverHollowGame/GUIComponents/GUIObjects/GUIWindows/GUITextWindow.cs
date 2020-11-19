@@ -12,7 +12,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         GUIImage _gNext;
         protected GUIText _giText;
         protected GUIImage _giPortrait;
-        List<string> _liText;
+        List<string> _liTextPages;
 
         public double Duration;
 
@@ -41,7 +41,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public GUITextWindow() : base()
         {
             _giText = new GUIText();
-            _liText = new List<string>();
+            _liTextPages = new List<string>();
             _iCharWidth = _giText.CharWidth;
             _iCharHeight = _giText.CharHeight;
 
@@ -66,7 +66,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             ParseText(text);
 
             string totalVal = string.Empty;
-            foreach(string s in _liText)
+            foreach(string s in _liTextPages)
             {
                 totalVal += s;
             }
@@ -130,11 +130,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
 
-            if (_liText.Count > 1)
-            {
-                _gNext = new GUIImage(new Rectangle(288, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, @"Textures\Dialog");     //???
-                _gNext.AnchorToInnerSide(this, SideEnum.BottomRight);
-            }
+            DisplayDialogueFinishedIcon();
 
             AnchorToScreen(SideEnum.Bottom, SpaceFromBottom);
         }
@@ -159,6 +155,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 if (_giText.Done)
                 {
                     Paused = true;
+                    DisplayDialogueFinishedIcon();
                 }
             }
         }
@@ -259,56 +256,73 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             bool grabLast = true;
             _numReturns = 0;
-            string line = string.Empty;
-            string returnString = string.Empty;
+            string currentLineOfText = string.Empty;
+            string textToDisplay = string.Empty;
             string[] wordArray = text.Split(' ');   //Split the given entry around each word. Note that it is important that /n be its own word
 
             foreach (string word in wordArray)
             {
-                Vector2 measure = _giText.MeasureString(line + word);
-
-                if (word.Contains("\n"))
+                //If there is a new line character in the word, prepare the text dialogue for the next screen.
+                if (word.Contains("\n") || word.Contains("\r\n"))
                 {
-                    returnString = returnString + line + word;
-                    line = string.Empty;
-                    _numReturns++;
+                    string[] returnSplit = word.Split(new string[] {"\n", "\r\n"}, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (returnSplit.Length > 0)
+                    {
+                        textToDisplay += currentLineOfText + returnSplit[0];
+                        TextSpilloverToNextScreen(ref textToDisplay, ref grabLast);
+
+                        if (returnSplit.Length > 1)
+                        {
+                            currentLineOfText = returnSplit[1] + ' ';
+                        }
+                    }
                 }
                 else
                 {
-                    if ((measure.Length() >= MidWidth() - GUIManager.STANDARD_MARGIN * 2) ||
-                        (_numReturns == MAX_ROWS - 1 && measure.Length() >= (Width) - _giText.CharHeight))
+                    Vector2 vMeasurement = _giText.MeasureString(currentLineOfText + word);
+
+                    //Measure the current line and the new word and see if adding the word will put the line out of bounds.
+                    //If so, we need to insert a carriage return character and clear the current line of text.
+                    if ((vMeasurement.Length() >= MidWidth() - GUIManager.STANDARD_MARGIN * 2) ||
+                        (_numReturns == MAX_ROWS - 1 && vMeasurement.Length() >= (Width) - _giText.CharHeight))
                     {
-                        returnString = returnString + line + '\n';
-                        line = string.Empty;
+                        textToDisplay += currentLineOfText + '\n';
+                        currentLineOfText = string.Empty;
                         _numReturns++;
                     }
 
                     grabLast = true;
-                    line = line + word + ' ';
-                }
+                    currentLineOfText += word + ' ';
 
-                //Spillover to another screen when we have too many returns
-                if (_numReturns + 1 > MAX_ROWS)
-                {
-                    grabLast = false;
-                    _liText.Add(returnString);
-                    _numReturns = 0;
-                    returnString = string.Empty;
+                    //Spill over to another screen when we have too many returns
+                    if (_numReturns + 1 > MAX_ROWS)
+                    {
+                        TextSpilloverToNextScreen(ref textToDisplay, ref grabLast);
+                    }
                 }
             }
 
             if (grabLast)
             {
-                _liText.Add(returnString + line);
+                _liTextPages.Add(textToDisplay + currentLineOfText);
             }
 
-            if (printAll) { _giText.SetText(_liText[0]); }
-            else { _giText.ResetText(_liText[0]); }
+            if (printAll) { _giText.SetText(_liTextPages[0]); }
+            else { _giText.ResetText(_liTextPages[0]); }
+        }
+
+        private void TextSpilloverToNextScreen(ref string textToDisplay, ref bool grabLast)
+        {
+            grabLast = false;
+            _liTextPages.Add(textToDisplay);
+            _numReturns = 0;
+            textToDisplay = string.Empty;
         }
 
         private bool ShowNextButton()
         {
-            return Paused && _gNext != null && _iCurrText < _liText.Count -1;
+            return Paused && _gNext != null;
         }
 
         public bool NextText()
@@ -317,9 +331,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             Paused = false;
             _iCurrText++;
-            if (_iCurrText < _liText.Count)
+            if (_iCurrText < _liTextPages.Count)
             {
-                _giText.ResetText(_liText[_iCurrText]);
+                _giText.ResetText(_liTextPages[_iCurrText]);
                 rv = true;
             }
 
@@ -329,11 +343,25 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public void PrintAll()
         {
             _giText.PrintAll = true;
+            DisplayDialogueFinishedIcon();
         }
 
         public bool Done()
         {
-            return _iCurrText == _liText.Count && _giText.Done;
+            return _iCurrText == _liTextPages.Count && _giText.Done;
+        }
+
+        private void DisplayDialogueFinishedIcon()
+        {
+            if (_iCurrText < _liTextPages.Count - 1)
+            {
+                _gNext = new GUIImage(new Rectangle(288, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, @"Textures\Dialog");     //???
+            }
+            else
+            {
+                _gNext = new GUIImage(new Rectangle(304, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, @"Textures\Dialog");     //???
+            }
+            _gNext.AnchorAndAlignToObject(this, SideEnum.Right, SideEnum.Bottom);
         }
 
         public void ResetText(string text)

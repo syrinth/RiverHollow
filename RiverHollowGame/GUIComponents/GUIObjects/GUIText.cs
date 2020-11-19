@@ -168,8 +168,14 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
                             _sText = _sFullText.Substring(0, (int)_dTypedTextLen);
 
-
-                            if (_sText[_sText.Length - 1].Equals(' ')) { _eCurrChar = LastCharacter.Space; }
+                            char currChar = _sText[_sText.Length - 1];
+                            if (currChar.Equals(' ')) { _eCurrChar = LastCharacter.Space; }
+                            else if (currChar.Equals(',')) { _dTextTimer -= 0.2; }
+                            else if (currChar.Equals('!')) { _dTextTimer -= 0.8; }
+                            else if (currChar.Equals('.') || currChar.Equals('?')) {
+                                _eCurrChar = LastCharacter.Even;
+                                _dTextTimer -= 0.5;
+                            }
 
                             if (_eCurrChar == LastCharacter.Space) { _eCurrChar = LastCharacter.Even; }
                             else if (_eCurrChar == LastCharacter.Odd) { _eCurrChar = LastCharacter.Even; }
