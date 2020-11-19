@@ -2691,7 +2691,6 @@ namespace RiverHollow.Tile_Engine
                     rv = ((Destructible)WorldObject).DealDamage(toolUsed.Power);
                     if (rv)
                     {
-                        WorldObject.RemoveSelfFromTiles();
                         MapManager.DropItemsOnMap(WorldObject.GetDroppedItems(), WorldObject.CollisionBox.Location.ToVector2());
                         MapManager.RemoveWorldObject(WorldObject);
                     }

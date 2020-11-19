@@ -214,9 +214,9 @@
     <property name="Map" value="mapConnection_01"/>
    </properties>
   </object>
-  <object id="57" name="Entrance" x="799.938" y="0" width="32" height="4">
+  <object id="57" name="Entrance" x="800" y="0" width="32" height="4">
    <properties>
-    <property name="EntranceDir" value="Up"/>
+    <property name="EntranceDir" value="Down"/>
     <property name="Map" value="mapCave_Entrance"/>
    </properties>
   </object>
