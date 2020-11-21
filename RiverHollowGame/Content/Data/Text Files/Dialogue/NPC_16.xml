@@ -17,5 +17,11 @@
       <Key>ShopOpen</Key>
       <Value>Greetings! What can I do for you today, $^$? [Talk:Talk|Hire Adventurers:BuyWorkers|Sell Contract:SellWorkers|See Missions:Missions|Never Mind:Cancel]</Value>
     </Item>
+    <Item>
+      <Key>Quest2End</Key>
+      <Value>So, you're an adventurer too are you? I wouldn't wander too far in these lands without some extra help, and luckily for you, I can supply it.
+If you're willing to house and provision them, you can hre adventurers tyo join you.
+The first I'd recommend is a Knight and Lancer. You should build yourself a Barracks to House them.</Value>
+    </Item>
   </Asset>
 </XnaContent>

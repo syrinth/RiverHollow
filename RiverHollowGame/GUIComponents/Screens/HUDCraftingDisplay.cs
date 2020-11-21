@@ -59,7 +59,7 @@ namespace RiverHollow.GUIComponents.Screens
             _winMachineInfo = new GUIWindow(GUIWindow.RedWin, _winMain.Width, ScaleIt(GUIWindow.RedWin.Edge * 2) + ScaleIt(TileSize));
             _winMachineInfo.AnchorAndAlignToObject(_winMain, SideEnum.Bottom, SideEnum.CenterX);
 
-            _btnRemove = new GUIButton(new Rectangle(80, 48, 16, 16), ScaleIt(TileSize), ScaleIt(TileSize), @"Textures\Dialog", RemoveCraftingStation);
+            _btnRemove = new GUIButton(new Rectangle(80, 48, 16, 16), ScaleIt(TileSize), ScaleIt(TileSize), DataManager.DIALOGUE_TEXTURE, RemoveCraftingStation);
             _btnRemove.AnchorToInnerSide(_winMachineInfo, SideEnum.Right);
 
             AddControl(_winMachineInfo);
@@ -100,7 +100,7 @@ namespace RiverHollow.GUIComponents.Screens
             List<GUIObject> boxes = new List<GUIObject>();
             foreach (int id in canMake)
             {
-                boxes.Add(new GUIItemBox(@"Textures\Dialog", GetItem(id), true));
+                boxes.Add(new GUIItemBox(DataManager.DIALOGUE_TEXTURE, GetItem(id), true));
             }
 
             //Create a grid for the recipes to be dispplayed in

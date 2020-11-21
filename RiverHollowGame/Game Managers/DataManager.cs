@@ -31,6 +31,8 @@ namespace RiverHollow.Game_Managers
         public const string FONT_MAIN = @"Fonts\Font_Main";
         public const string FONT_NUMBER_DISPLAY = @"Fonts\Font_Number_Display";
         public const string FONT_STAT_DISPLAY = @"Fonts\Font_Stat_Display";
+
+        public const string DIALOGUE_TEXTURE = @"Textures\Dialog";
         #endregion
 
         #region Dictionaries
@@ -215,7 +217,7 @@ namespace RiverHollow.Game_Managers
         }
         private static void LoadGUIs(ContentManager Content)
         {
-            AddTexture(@"Textures\Dialog", Content);
+            AddTexture(DataManager.DIALOGUE_TEXTURE, Content);
             AddTexture(@"Textures\Valley", Content);
         }
         private static void LoadIcons(ContentManager Content)

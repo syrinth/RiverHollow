@@ -705,7 +705,7 @@ namespace RiverHollow.Items
             _eSpecialItem = SpecialItemEnum.DungeonKey;
             _iNum = 1;
             _bStacks = false;
-            _texTexture = DataManager.GetTexture(@"Textures\Dialog");
+            _texTexture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
         }
     }
 

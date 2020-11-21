@@ -23,7 +23,9 @@
     </Item>
     <Item>
       <Key>Quest0End</Key>
-      <Value>Oh thank you! Here, take this!</Value>
+      <Value>Ah! You've arrived.
+An artisan yes? I've never had the patience for that kind of thing. No, I prefer towield my magic more directly. It's a useful skill though, one I'm glad you're bringing to the town.
+Here. It's not much, just a few odds and ends I had laying around but it should get you started.</Value>
     </Item>
   </Asset>
 </XnaContent>

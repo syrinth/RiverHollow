@@ -29,7 +29,7 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadContent()
         {
-            _fadeImg = new GUIImage(new Rectangle(160, 128, TileSize, TileSize), RiverHollow.ScreenWidth*2, RiverHollow.ScreenHeight*2, @"Textures\Dialog");
+            _fadeImg = new GUIImage(new Rectangle(160, 128, TileSize, TileSize), RiverHollow.ScreenWidth*2, RiverHollow.ScreenHeight*2, DataManager.DIALOGUE_TEXTURE);
             GUICursor.LoadContent();
         }
 
@@ -39,11 +39,14 @@ namespace RiverHollow.Game_Managers
             {
                 UpdateFade();
             }
-            if (_currentGUIScreen != null)
+            else
             {
-                _currentGUIScreen.Update(gTime);
+                if (_currentGUIScreen != null)
+                {
+                    _currentGUIScreen.Update(gTime);
+                }
+                GUICursor.Update();
             }
-            GUICursor.Update();
         }
 
         public static void Draw(SpriteBatch spriteBatch)
@@ -111,9 +114,9 @@ namespace RiverHollow.Game_Managers
         {
             _currentGUIScreen.OpenTextWindow(text, talker, open);
         }
-        public static bool CloseTextWindow(GUITextWindow win)
+        public static bool CloseTextWindow()
         {
-            return _currentGUIScreen.CloseTextWindow(win);
+            return _currentGUIScreen.CloseTextWindow();
         }
         public static bool IsTextWindowOpen() { return _currentGUIScreen.IsTextWindowOpen(); }
 
@@ -189,6 +192,19 @@ namespace RiverHollow.Game_Managers
                     PlayerManager.AllowMovement = true;
                 }
             }
+        }
+
+        public static void NewQuestIcon(bool questComplete = false) {
+            _currentGUIScreen.NewQuestIcon(questComplete);
+        }
+
+        public static void AddSkipCutsceneButton()
+        {
+            _currentGUIScreen.AddSkipCutsceneButton();
+        }
+        public static void RemoveSkipCutsceneButton()
+        {
+            _currentGUIScreen.RemoveSkipCutsceneButton();
         }
     }
 

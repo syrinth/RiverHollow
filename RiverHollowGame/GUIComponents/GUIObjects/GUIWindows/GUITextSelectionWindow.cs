@@ -31,7 +31,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             ParseText(_sStatement);
             _giText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
-            _giSelection = new GUIImage(new Rectangle(288, 96, 8, 9), GameManager.ScaleIt(8), GameManager.ScaleIt(9), @"Textures\Dialog");
+            _giSelection = new GUIImage(new Rectangle(288, 96, 8, 9), GameManager.ScaleIt(8), GameManager.ScaleIt(9), DataManager.DIALOGUE_TEXTURE);
             _giSelection.AnchorAndAlignToObject(_giText, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
             AddControl(_giSelection);
 
@@ -121,18 +121,18 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 string nextText = string.Empty;
                 bool rv = GameManager.CurrentNPC.HandleTextSelection(selectedAction, ref nextText);
 
-                if (!rv) { GUIManager.CloseTextWindow(this); }
+                if (!rv) { GUIManager.CloseTextWindow(); }
                 else { GUIManager.SetWindowText(nextText); }
             }
             else if (GameManager.CurrentItem != null)
             {
                 if (!selectedAction.Equals("Cancel")) { GameManager.CurrentItem.UseItem(selectedAction); }
-                GUIManager.CloseTextWindow(this);
+                GUIManager.CloseTextWindow();
             }
             else
             {
                 GameManager.ProcessTextInteraction(selectedAction);
-                GUIManager.CloseTextWindow(this);
+                GUIManager.CloseTextWindow();
             }
         }
 

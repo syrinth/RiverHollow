@@ -819,7 +819,7 @@ namespace RiverHollow.GUIComponents.Screens
                     SetScale(GameManager.Scale);
                 }
 
-                public ActionButton(Item i) : base(new Rectangle(288, 32, 32, 32), 16, 16, @"Textures\Dialog")
+                public ActionButton(Item i) : base(new Rectangle(288, 32, 32, 32), 16, 16, DataManager.DIALOGUE_TEXTURE)
                 {
                     _item = i;
                     _gItem = new GUIImage(_item.SourceRectangle, Width, Height, _item.Texture);
@@ -904,7 +904,7 @@ namespace RiverHollow.GUIComponents.Screens
             for (int i = 0; i < MAX_SHOWN; i++)
             {
                 _arrTurnDisplay[i] = new TurnDisplay(_liNewTurnOrder[i], _arrBarDisplay);
-                _arrBarDisplay[i] = new GUIImage(new Rectangle(48, 58, 10, 2), 10, 2, @"Textures\Dialog");
+                _arrBarDisplay[i] = new GUIImage(new Rectangle(48, 58, 10, 2), 10, 2, DataManager.DIALOGUE_TEXTURE);
                 _arrBarDisplay[i].SetScale(GameManager.Scale);
             }
 
@@ -1093,7 +1093,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _actor = actor;
                 _bInParty = !actor.IsActorType(ActorEnum.Monster);
                 _gName = new GUIText(actor.Name.Substring(0, 1));
-                _gImage = new GUIImage(new Rectangle(48, 48, 10, 10), 10, 10, @"Textures\Dialog");
+                _gImage = new GUIImage(new Rectangle(48, 48, 10, 10), 10, 10, DataManager.DIALOGUE_TEXTURE);
                 _gImage.SetScale(GameManager.Scale);
 
                 _arrBarDisplay = barDisplay;

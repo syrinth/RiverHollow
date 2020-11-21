@@ -35,7 +35,7 @@ namespace RiverHollow.Characters
     /// </summary>
     public abstract class Actor
     {
-        public const float NORMAL_SPEED = 1.0f;
+        public const float NORMAL_SPEED = 1f;
         public const float NPC_WALK_SPEED = 0.6f;
 
         protected const int HUMAN_HEIGHT = (TileSize * 2) + 2;
@@ -214,8 +214,8 @@ namespace RiverHollow.Characters
 
         protected bool _bHover;
 
-        int _iBaseSpeed = 2;
-        public float Speed => _iBaseSpeed * SpdMult;
+        float _fBaseSpeed = 2.0f;
+        public float Speed => _fBaseSpeed * SpdMult;
         public float SpdMult = NPC_WALK_SPEED;
 
         protected int _iSize = 1;
@@ -556,6 +556,13 @@ namespace RiverHollow.Characters
         {
             string text = GetOpeningText();
 
+            FacePlayer(true);
+
+            text = Util.ProcessText(text, _sName);
+            GUIManager.OpenTextWindow(text, this);
+        }
+        protected void FacePlayer(bool facePlayer)
+        {
             //Determine the position based off of where the player is and then have the NPC face the player
             //Only do this if they are idle so as to not disturb other animations they may be performing.
             if (facePlayer && BodySprite.CurrentAnimation.StartsWith("Idle"))
@@ -586,9 +593,6 @@ namespace RiverHollow.Characters
 
                 PlayAnimation(CombatManager.InCombat ? VerbEnum.Walk : VerbEnum.Idle);
             }
-
-            text = Util.ProcessText(text, _sName);
-            GUIManager.OpenTextWindow(text, this);
         }
 
         public void TalkCutscene(string cutsceneLine)
@@ -835,7 +839,7 @@ namespace RiverHollow.Characters
 
             if (CombatManager.InCombat && _iCurrentHP > 0)
             {
-                Texture2D texture = DataManager.GetTexture(@"Textures\Dialog");
+                Texture2D texture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
                 Vector2 pos = Position;
                 pos.Y += (TileSize * _iSize);
 
@@ -1783,6 +1787,12 @@ namespace RiverHollow.Characters
         public override string GetOpeningText()
         {
             string rv = string.Empty;
+
+            foreach(Quest q in PlayerManager.QuestLog)
+            {
+                q.AttemptProgress(this);
+            }
+
             if (!Introduced)
             {
                 rv = GetDialogEntry("Introduction");
@@ -2005,15 +2015,17 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        private bool CheckQuestLogs(ref string text)
+        protected bool CheckQuestLogs(ref string questCompleteText)
         {
             bool rv = false;
 
             foreach (Quest q in PlayerManager.QuestLog)
             {
-                if (q.ReadyForHandIn && q.HandInTo == this)
+                if (q.ReadyForHandIn && q.GoalNPC == this)
                 {
-                    q.FinishQuest(ref text);
+                    q.FinishQuest(ref questCompleteText);
+
+                    questCompleteText = _diDialogue[questCompleteText];
 
                     rv = true;
                     break;
@@ -2179,6 +2191,7 @@ namespace RiverHollow.Characters
     }
     public class ShopKeeper : Villager
     {
+        private bool _bIsOpen;
         protected List<Merchandise> _liMerchandise;
         public List<Merchandise> Buildings { get => _liMerchandise; }
 
@@ -2196,28 +2209,23 @@ namespace RiverHollow.Characters
             }
         }
 
-        public override void Talk(bool IsOpen = false)
+        public override string GetOpeningText()
         {
-            GUICursor.SetCursor(GUICursor.CursorTypeEnum.Talk, HoverBox);
-            string text = string.Empty;
-            if (!Introduced)
+            string rv = string.Empty;
+            if (Introduced && _bIsOpen)
             {
-                text = _diDialogue["Introduction"];
-                Introduced = true;
+                rv = _diDialogue["ShopOpen"];
             }
             else
             {
-                if (IsOpen)
-                {
-                    text = _diDialogue["ShopOpen"];
-                }
-                else
-                {
-                    text = GetDefaultText();
-                }
+                rv = base.GetOpeningText();
             }
-            text = Util.ProcessText(text, _sName);
-            GUIManager.OpenTextWindow(text, this);
+            return rv;
+        }
+
+        public void SetOpen(bool val)
+        {
+            _bIsOpen = true;
         }
 
         /// <summary>

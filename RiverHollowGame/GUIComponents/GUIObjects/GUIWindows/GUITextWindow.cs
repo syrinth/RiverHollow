@@ -206,7 +206,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 if (!NextText())
                 {
-                    rv = GUIManager.CloseTextWindow(this);
+                    rv = GUIManager.CloseTextWindow();
                 }
                 else
                 {
@@ -355,11 +355,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             if (_iCurrText < _liTextPages.Count - 1)
             {
-                _gNext = new GUIImage(new Rectangle(288, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, @"Textures\Dialog");     //???
+                _gNext = new GUIImage(new Rectangle(288, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);     //???
             }
             else
             {
-                _gNext = new GUIImage(new Rectangle(304, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, @"Textures\Dialog");     //???
+                _gNext = new GUIImage(new Rectangle(304, 64, GameManager.TileSize, GameManager.TileSize), GameManager.ScaledTileSize, GameManager.ScaledTileSize, DataManager.DIALOGUE_TEXTURE);     //???
             }
             _gNext.AnchorAndAlignToObject(this, SideEnum.Right, SideEnum.Bottom);
         }

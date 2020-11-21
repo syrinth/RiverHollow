@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
-
+using RiverHollow.Game_Managers;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.GUIObjects
@@ -70,8 +70,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 this.Width = mostWidth + BTNSIZE;
 
-                _btnUp = new GUIButton(new Rectangle(272, 96, 16, 16), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnUpClick);
-                _btnDown = new GUIButton(new Rectangle(256, 96, 16, 16), BTNSIZE, BTNSIZE, @"Textures\Dialog", BtnDownClick);
+                _btnUp = new GUIButton(new Rectangle(272, 96, 16, 16), BTNSIZE, BTNSIZE, DataManager.DIALOGUE_TEXTURE, BtnUpClick);
+                _btnDown = new GUIButton(new Rectangle(256, 96, 16, 16), BTNSIZE, BTNSIZE, DataManager.DIALOGUE_TEXTURE, BtnDownClick);
 
                 _btnUp.AnchorToInnerSide(this, SideEnum.TopRight);
                 _btnDown.AnchorToInnerSide(this, SideEnum.BottomRight);
@@ -123,7 +123,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             foreach (GUIObject o in _liObjects)
             {
-                o.Show = false;
+                o.Show(false);
             }
 
             for (int s = _iListPos; s < _iListPos + _iMaxShownItems && s < _liObjects.Count; s++)
@@ -132,7 +132,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
                 o.Position(position);
                 position.Y += o.Height + _iSpacing;
-                o.Show = true;
+                o.Show(true);
             }
         }
     }

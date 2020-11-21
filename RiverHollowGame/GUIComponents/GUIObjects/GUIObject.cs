@@ -69,12 +69,12 @@ namespace RiverHollow.GUIComponents.GUIObjects
         protected Rectangle _sourceRect;
 
         protected Color _cColor = Color.White;
-        protected Texture2D _texture = DataManager.GetTexture(@"Textures\Dialog");
+        protected Texture2D _texture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
         protected Color EnabledColor => _bEnabled ? _cColor : Color.Gray;
         protected bool _bEnabled = true;
         public bool Enabled => _bEnabled;
 
-        public bool Show = true;
+        private bool _bShow = true;
 
         protected bool _bInitScaleSet = false;
         protected Vector2 _vInitVals;       //X = Width, Y = Height
@@ -94,7 +94,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public virtual bool Contains(Point mouse)
         {
-            return Show && DrawRectangle.Contains(mouse);
+            return _bShow && DrawRectangle.Contains(mouse);
         }
         public virtual void Update(GameTime gTime) {
             foreach (GUIObject g in ToRemove)
@@ -116,7 +116,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         }
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if (Show)
+            if (_bShow)
             {
                 spriteBatch.Draw(_texture, _drawRect, _sourceRect, EnabledColor * _fAlpha);
 
@@ -770,6 +770,19 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 Width = iRight - iLeft;
                 Height = iBottom - iTop;
             }
+        }
+
+        internal void Show(bool val)
+        {
+            _bShow = val;
+            foreach(GUIObject obj in Controls)
+            {
+                obj.Show(val);
+            }
+        }
+        internal bool Show()
+        {
+            return _bShow;
         }
 
         #endregion

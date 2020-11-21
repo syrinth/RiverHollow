@@ -27,7 +27,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             public int WidthEdges() { return ScaledEdge * 2; }
             public int HeightEdges() { return ScaledEdge + ScaledBottomEdge; }
         };
-        internal static WindowData RedWin = new WindowData(122, 58, 6, 16, 8);
+        internal static WindowData RedWin = new WindowData(122, 58, 6, 16, 6);
         internal static WindowData BrownWin = new WindowData(172, 60, 4, 16, 6);
         internal static WindowData GreyWin = new WindowData(206, 62, 2, 16);
         internal static WindowData DisplayWin = new WindowData(48, 32, 1, 14);
@@ -106,7 +106,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public int SkipSize() { return _winData.Size + _winData.Edge; }
         public void DrawWindow(SpriteBatch spriteBatch)
         {
-            if (Show)
+            if (Show())
             {
                 Vector2 pos = Position();
                 int k = Width;
@@ -118,7 +118,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (Show)
+            if (Show())
             {
                 DrawWindow(spriteBatch);
                 base.Draw(spriteBatch);

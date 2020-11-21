@@ -784,7 +784,7 @@ namespace RiverHollow.Tile_Engine
                 if (it != null) { checkPlayer = !it.GetWorldItem().CompareType(ObjectTypeEnum.Floor); }
 
                 bool passable = t.Passable() && !TileContainsActor(t, checkPlayer) && (Scrying() || PlayerManager.PlayerInRange(t.Rect));
-                spriteBatch.Draw(DataManager.GetTexture(@"Textures\Dialog"), new Rectangle((int)t.Position.X, (int)t.Position.Y, TileSize, TileSize), new Rectangle(288, 128, TileSize, TileSize) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE), new Rectangle((int)t.Position.X, (int)t.Position.Y, TileSize, TileSize), new Rectangle(288, 128, TileSize, TileSize) , passable ? Color.Green *0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, 99999);
             }
         }
 
@@ -2941,7 +2941,9 @@ namespace RiverHollow.Tile_Engine
 
         internal void Talk()
         {
+            ((ShopKeeper)DataManager.DiNPC[_iShopID]).SetOpen(true);
             ((ShopKeeper)DataManager.DiNPC[_iShopID]).Talk();
+            ((ShopKeeper)DataManager.DiNPC[_iShopID]).SetOpen(false);
         }
     }
 

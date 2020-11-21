@@ -161,24 +161,21 @@ namespace RiverHollow.GUIComponents.Screens
         {
             GameManager.Pause(talker);
 
-            CloseTextWindow(_guiTextWindow);
+            CloseTextWindow();
             bool selection = text.Contains("[");
             if (selection) { _guiTextWindow = new GUITextSelectionWindow(text, open); }
             else { _guiTextWindow = new GUITextWindow(text, open); }
             AddControl(_guiTextWindow);
         }
 
-        public virtual bool CloseTextWindow(GUITextWindow win) {
+        public virtual bool CloseTextWindow()
+        {
             bool rv = false;
-            if (win != null && win == _guiTextWindow)
-            {
-                GameManager.Unpause();
-
-                RemoveControl(_guiTextWindow);
-                GameManager.CurrentItem = null;
-                _guiTextWindow = null;
-                rv = true;
-            }
+            GameManager.Unpause();
+            RemoveControl(_guiTextWindow);
+            GameManager.CurrentItem = null;
+            _guiTextWindow = null;
+            rv = true;
 
             return rv;
         }
@@ -241,12 +238,17 @@ namespace RiverHollow.GUIComponents.Screens
         }
         #endregion
 
+        public virtual void NewQuestIcon(bool complete) { }
+        public virtual void AddSkipCutsceneButton() { }
+        public virtual void RemoveSkipCutsceneButton() { }
+
         public void AddControl(GUIObject control)
         {
             _liToAdd.Add(control);
         }
         public void RemoveControl(GUIObject control)
         {
+            if (control != null){ control.Show(false); }
             _liToRemove.Add(control);
         }
     }

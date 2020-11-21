@@ -31,7 +31,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             Height = HeightEdges() + (_rows * _iBoxSize) + (GUIManager.STANDARD_MARGIN * (_rows + 1));
             Setup();
 
-            _texture = DataManager.GetTexture(@"Textures\Dialog");
+            _texture = DataManager.GetTexture(DataManager.DIALOGUE_TEXTURE);
         }
 
         public override void Update(GameTime gTime)
@@ -55,7 +55,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 for (int j = 0; j < _columns; j++)
                 {
-                    _gItemBoxes[i, j] = new GUIItemBox(i, j, @"Textures\Dialog", null);
+                    _gItemBoxes[i, j] = new GUIItemBox(i, j, DataManager.DIALOGUE_TEXTURE, null);
 
                     if (i == 0 && j == 0) { _gItemBoxes[i, j].AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN); }
                     else if (j == 0) { _gItemBoxes[i, j].AnchorAndAlignToObject(_gItemBoxes[i - 1, j], SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN); }

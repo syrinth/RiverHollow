@@ -92,6 +92,16 @@ namespace RiverHollow.Game_Managers
         {
             return _diCutsceneDialogue[cutsceneID][stringID];
         }
+
+        public static void SkipCutscene()
+        {
+            _currentCutscene.Skip();
+        }
+
+        public static void UnsetCurrentCutscene()
+        {
+            _currentCutscene = null;
+        }
     }
 
     public class Cutscene
@@ -282,11 +292,7 @@ namespace RiverHollow.Game_Managers
                                     bGoToNext = true;
                                     break;
                                 case EnumCSCommand.End:
-                                    _bTriggered = true;
-                                    PlayerManager.AllowMovement = true;
-                                    CutsceneManager.Playing = false;
-                                    MapManager.Maps.Remove(_cutsceneMap.Name);
-                                    MapManager.FadeToNewMap(_originalMap, _vOriginalPlayerPos);
+                                    EndCutscene();
                                     break;
                             }
                         }
@@ -439,6 +445,8 @@ namespace RiverHollow.Game_Managers
             //Stop the player from moving
             PlayerManager.AllowMovement = false;
 
+            GUIManager.AddSkipCutsceneButton();
+
             _originalMap = MapManager.CurrentMap;
             _vOriginalPlayerPos = PlayerManager.World.Position;
 
@@ -551,6 +559,50 @@ namespace RiverHollow.Game_Managers
             friendshipExit:
 
             return rv;
+        }
+
+        public void Skip()
+        {
+            CutsceneManager.UnsetCurrentCutscene();
+
+            for(int i = _iCurrentCommand; i < _liCommands.Count; i++){
+                CutSceneCommand currentCommand = _liCommands[i];
+                if (!currentCommand.ActionPerformed)     //If we've already performed the action, do not do it again
+                {
+                    foreach (string s in currentCommand.Data)   //Need to perform the action for each character
+                    {
+                        string[] sCommandData = s.Split('-');   //split the data into segments
+                        if (currentCommand.Command == EnumCSCommand.Quest)
+                        {
+                            foreach (string questID in sCommandData)
+                            {
+                                PlayerManager.AddToQuestLog(GameManager.DiQuests[int.Parse(questID)]);
+                            }
+                        }
+                    }
+
+                    //After all command tags have been processed, set the
+                    //current commands actionPerformed to true so it's not processed again
+                    currentCommand.ActionPerformed = true;
+                }
+            }
+
+            GUIManager.ClearBackgroundImage();
+            EndCutscene();
+        }
+
+        private void EndCutscene()
+        {
+            _bTriggered = true;
+
+            GUIManager.CloseTextWindow();
+
+            PlayerManager.World.SpdMult = Actor.NORMAL_SPEED;
+            PlayerManager.AllowMovement = true;
+            CutsceneManager.Playing = false;
+            MapManager.Maps.Remove(_cutsceneMap.Name);
+            MapManager.FadeToNewMap(_originalMap, _vOriginalPlayerPos);
+            GUIManager.RemoveSkipCutsceneButton();
         }
     }
 }

@@ -74,7 +74,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (!string.IsNullOrEmpty(_sText))
+            if (!string.IsNullOrEmpty(_sText) && Show())
             {
                 spriteBatch.DrawString(_font, _sText, Position(), _cColor * Alpha());
             }

@@ -273,6 +273,7 @@ namespace RiverHollow
 
             //MapManager.Maps[PlayerManager.Buildings[0].MapName].AddBuildingObjectsToMap(PlayerManager.Buildings[0]);
 
+            GoToHUDScreen();
             GameCalendar.NewCalendar();
             if (playIntro)
             {
@@ -314,7 +315,6 @@ namespace RiverHollow
             }
 
             Camera.SetObserver(PlayerManager.World);
-            GoToHUDScreen();
         }
 
         /// <summary>
