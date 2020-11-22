@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Hello. I'm $0$, an apprentice Healer. You're an adventurer right? If you ever need to be patched up, you should go to the Apothecary.</Value>
+      <Value>Hello. I'm $Character_2$, an apprentice Healer. You're an adventurer right? If you ever need to be patched up, you should go to the Apothecary.</Value>
     </Item>
     <Item>
       <Key>1</Key>

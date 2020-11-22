@@ -151,40 +151,20 @@ namespace RiverHollow.Utilities
             if (string.IsNullOrEmpty(text)) { return rv; }
 
             text = text.Replace(@"\n", System.Environment.NewLine);
-            string[] nameSections = text.Split(new[] { '$' }, StringSplitOptions.RemoveEmptyEntries);
-            if (nameSections.Length > 1)
+            string[] specialSections = text.Split(new[] { '$' }, StringSplitOptions.RemoveEmptyEntries);
+            if (specialSections.Length > 1)
             {
-                for (int i = 0; i < nameSections.Length; i++)
+                for (int i = 0; i < specialSections.Length; i++)
                 {
-                    if (int.TryParse(nameSections[i], out int val))
-                    {
-                        if (val == 0) { nameSections[i] = name; }
-                        else { nameSections[i] = DataManager.GetCharacterNameByIndex(val); }
+                    string value = specialSections[i];
+                    if (value == "^") {
+                        value = PlayerManager.Name;
                     }
-                    else if (nameSections[i] == "^") { nameSections[i] = PlayerManager.Name; }
-
-                    rv += nameSections[i];
-                }
-            }
-            string[] itemSections = text.Split(new[] { '*' }, StringSplitOptions.RemoveEmptyEntries);
-            if (itemSections.Length > 1)
-            {
-                for (int i = 0; i < itemSections.Length; i++)
-                {
-                    if (int.TryParse(itemSections[i], out int val))
-                    {
-                        itemSections[i] = DataManager.GetItem(val).Name;
-
-                        if (itemSections[i].StartsWith("a", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("e", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("i", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("o", StringComparison.OrdinalIgnoreCase) || itemSections[i].StartsWith("u", StringComparison.OrdinalIgnoreCase))
-                        {
-                            itemSections[i] = itemSections[i].Insert(0, "an ");
-                        }
-                        else {
-                            itemSections[i] = itemSections[i].Insert(0, "a ");
-                        }
+                    else if(DataManager.TextDataHasKey(value)){
+                        DataManager.GetTextData(value, ref value, "Name");
                     }
 
-                    rv += itemSections[i];
+                    rv += value;
                 }
             }
 

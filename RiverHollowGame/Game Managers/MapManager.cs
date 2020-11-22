@@ -158,6 +158,11 @@ namespace RiverHollow.Game_Managers
             _newMapInfo = new NewMapInfo(newMap, playerPos, b);
         }
 
+        public static bool ChangingMaps()
+        {
+            return !_newMapInfo.Equals(default(NewMapInfo));
+        }
+
         public static void EnterBuilding(TravelPoint doorLoc, Building b)
         {
             TravelPoint tPoint = null;

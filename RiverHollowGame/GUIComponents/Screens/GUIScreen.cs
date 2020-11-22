@@ -159,9 +159,9 @@ namespace RiverHollow.GUIComponents.Screens
         /// <param name="open">Whether or not to display an open animation</param>
         public virtual void OpenTextWindow(string text, TalkingActor talker = null, bool open = true)
         {
+            CloseTextWindow();
             GameManager.Pause(talker);
 
-            CloseTextWindow();
             bool selection = text.Contains("[");
             if (selection) { _guiTextWindow = new GUITextSelectionWindow(text, open); }
             else { _guiTextWindow = new GUITextWindow(text, open); }

@@ -1133,6 +1133,8 @@ namespace RiverHollow.Tile_Engine
         {
             bool rv = false;
 
+            if (IsPaused()) { return false; }
+
             RHTile tile = MapManager.RetrieveTile(mouseLocation);
 
             //Do nothing if no tile could be retrieved
@@ -1142,7 +1144,7 @@ namespace RiverHollow.Tile_Engine
             {
                 TravelPoint obj = tile.GetTravelPoint();
 
-                if (PlayerManager.PlayerInRange(obj.CollisionBox))
+                if (PlayerManager.PlayerInRange(obj.CollisionBox) && !MapManager.ChangingMaps())
                 {
                     if (obj.BuildingID > 1) {MapManager.EnterBuilding(obj, PlayerManager.Buildings.Find(x => x.PersonalID == obj.BuildingID)); }
                     else { MapManager.ChangeMaps(PlayerManager.World, this.Name, obj); }
@@ -1252,6 +1254,8 @@ namespace RiverHollow.Tile_Engine
         public bool ProcessLeftButtonClick(Point mouseLocation)
         {
             bool rv = false;
+
+            if (IsPaused()) { return false; }
 
             if (!PlayerManager.Busy && !CombatManager.InCombat)
             {

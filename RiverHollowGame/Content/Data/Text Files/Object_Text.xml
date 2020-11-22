@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Quest_0</Key>
-      <Value>[Name:$17$'s Supplies][Description:$17$ is has some supplies to give you. Youshould go speak to her.]</Value>
+      <Value>[Name:$Character_17$'s Supplies][Description:$17$ is has some supplies to give you. Youshould go speak to her.]</Value>
     </Item>
     <Item>
       <Key>Quest_1</Key>
@@ -11,7 +11,7 @@
     </Item>
     <Item>
       <Key>Quest_2</Key>
-      <Value>[Name:$16$'s helping hand][Description:Find out how $16$ can help you.]</Value>
+      <Value>[Name:$Character_16$'s helping hand][Description:Find out how $16$ can help you.]</Value>
     </Item>
     <Item>
       <Key>Character_0</Key>

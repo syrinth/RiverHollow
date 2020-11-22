@@ -356,9 +356,18 @@ namespace RiverHollow.Game_Managers
             return null;
         }
 
+        public static bool TextDataHasKey(string identifier)
+        {
+            return _diItemText.ContainsKey(identifier);
+        }
+
         public static void GetTextData(string identifier, int id, ref string value, string key)
         {
             string textKey = identifier + "_" + id;
+            GetTextData(textKey, ref value, key);
+        }
+        public static void GetTextData(string textKey, ref string value, string key)
+        {
             if (_diItemText[textKey].ContainsKey(key)) { value = _diItemText[textKey][key];  }
             else { value = string.Empty;}
         }

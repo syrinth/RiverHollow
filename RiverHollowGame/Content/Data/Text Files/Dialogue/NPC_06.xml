@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>Introduction</Key>
-      <Value>Welcome to town $^$. my name is $0$. It's my job to make sure the monsters stay outside the walls. Have a good day exploring the town, but be careful if you wander outside.</Value>
+      <Value>Welcome to town $^$. my name is $Character_6$. It's my job to make sure the monsters stay outside the walls. Have a good day exploring the town, but be careful if you wander outside.</Value>
     </Item>
     <Item>
       <Key>1</Key>
