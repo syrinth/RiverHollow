@@ -1226,13 +1226,13 @@ namespace RiverHollow.Tile_Engine
                         break;
                     }
                 }
-
-                foreach (Item ii in removedList)
-                {
-                    _liItems.Remove(ii);
-                }
-                removedList.Clear();
             }
+
+            foreach (Item i in removedList)
+            {
+                _liItems.Remove(i);
+            }
+            removedList.Clear();
 
             if (Scrying())
             {

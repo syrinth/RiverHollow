@@ -258,7 +258,7 @@ namespace RiverHollow.Game_Managers
                                     }
                                     break;
                                 case EnumCSCommand.Background:
-                                    GUIManager.AssignBackgroundImage(new GUIImage(new Rectangle(0, 0, 448, 336), (int)(448 * Scale), (int)(336 * Scale), sCommandData[0]));
+                                    GUIManager.AssignBackgroundImage(new GUIImage(new Rectangle(0, 0, 480, 336), ScaleIt(480), ScaleIt(336), sCommandData[0]));
                                     bGoToNext = true;
                                     break;
                                 case EnumCSCommand.RemoveBackground:
@@ -563,6 +563,7 @@ namespace RiverHollow.Game_Managers
 
         public void Skip()
         {
+            EndCutscene();
             CutsceneManager.UnsetCurrentCutscene();
 
             for(int i = _iCurrentCommand; i < _liCommands.Count; i++){
@@ -579,6 +580,14 @@ namespace RiverHollow.Game_Managers
                                 PlayerManager.AddToQuestLog(GameManager.DiQuests[int.Parse(questID)]);
                             }
                         }
+                        else if (currentCommand.Command == EnumCSCommand.Activate)
+                        {
+                            Villager a = _liUsedNPCs.Find(test => test.ID == GetNPCData(sCommandData[0]));
+                            if (a != null)
+                            {
+                                a.Activate(true);
+                            }
+                        }
                     }
 
                     //After all command tags have been processed, set the
@@ -588,7 +597,6 @@ namespace RiverHollow.Game_Managers
             }
 
             GUIManager.ClearBackgroundImage();
-            EndCutscene();
         }
 
         private void EndCutscene()

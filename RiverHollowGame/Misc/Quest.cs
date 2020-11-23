@@ -13,8 +13,7 @@ namespace RiverHollow.Misc
 {
     public class Quest
     {
-        int _iQuestID;
-        public int QuestID => _iQuestID;
+        public int QuestID { get; private set; }
         public QuestTypeEnum QuestType { get; }
         private string _name;
         public string Name => _name;
@@ -34,16 +33,11 @@ namespace RiverHollow.Misc
         bool _bImmediate;
         int _iActivateID;
         bool _bHideGoal;
-
         #region Rewards
-        int _iFriendship;
-        public int Friendship => _iFriendship;
-        string _sFriendTarget;
-        public string FriendTarget => _sFriendTarget;
-        int _iRewardMoney;
-        public int RewardMoney { get => _iRewardMoney; }
-        List<Item> _liRewardItems;
-        public List<Item> LiRewardItems => _liRewardItems;
+        public int Friendship { get; }
+        public string FriendTarget { get; }
+        public int RewardMoney { get; }
+        public List<Item> LiRewardItems { get; }
         #endregion
         #region Spawn Mobs
         Monster _spawnMob;
@@ -60,12 +54,12 @@ namespace RiverHollow.Misc
             _iCutsceneID = -1;
             _bImmediate = false;
             _iActivateID = -1;
-            _iQuestID = -1;
+            QuestID = -1;
             _iSeason = -1;
             _iDay = -1;
             _name = string.Empty;
             _sDescription = string.Empty;
-            _sFriendTarget = string.Empty;
+            FriendTarget = string.Empty;
             GoalNPC = null;
             _targetItem = null;
             _questMob = null;
@@ -74,7 +68,7 @@ namespace RiverHollow.Misc
             ReadyForHandIn = false;
             Finished = false;
 
-            _liRewardItems = new List<Item>();
+            LiRewardItems = new List<Item>();
         }
         public Quest(string name, QuestTypeEnum type, string desc, int target, Monster m, Item i, Villager giver = null) : this()
         {
@@ -91,12 +85,12 @@ namespace RiverHollow.Misc
 
         public Quest(int id, Dictionary<string, string> stringData) : this()
         {
-            _iQuestID = id;
+            QuestID = id;
             TargetsAccomplished = 0;
-            _liRewardItems = new List<Item>();
+            LiRewardItems = new List<Item>();
 
-            DataManager.GetTextData("Quest", _iQuestID, ref _name, "Name");
-            DataManager.GetTextData("Quest", _iQuestID, ref _sDescription, "Description");
+            DataManager.GetTextData("Quest", QuestID, ref _name, "Name");
+            DataManager.GetTextData("Quest", QuestID, ref _sDescription, "Description");
 
             _name = Util.ProcessText(_name);
             _sDescription = Util.ProcessText(_sDescription);
@@ -120,7 +114,7 @@ namespace RiverHollow.Misc
                         string[] parse = itemInfo.Split('-');
                         Item it = DataManager.GetItem(int.Parse(parse[0]), parse.Length > 1 ? int.Parse(parse[1]) : 1);
                         if (parse.Length == 3) { it.ApplyUniqueData(parse[2]); }
-                        _liRewardItems.Add(it);
+                        LiRewardItems.Add(it);
                     }
                 }
             }
@@ -130,8 +124,8 @@ namespace RiverHollow.Misc
                 string[] parse = stringData["Friendship"].Split('-');
                 if (parse.Length > 1)
                 {
-                    _sFriendTarget = parse[0];
-                    _iFriendship = int.Parse(parse[1]);
+                    FriendTarget = parse[0];
+                    Friendship = int.Parse(parse[1]);
                 }
             }
 
@@ -147,7 +141,7 @@ namespace RiverHollow.Misc
             }
 
             if (stringData.ContainsKey("GoalNPC")) { GoalNPC = DataManager.DiNPC[int.Parse(stringData["GoalNPC"])]; }
-            if (stringData.ContainsKey("Money")) { _iRewardMoney = int.Parse(stringData["Money"]); }
+            if (stringData.ContainsKey("Money")) { RewardMoney = int.Parse(stringData["Money"]); }
             if (stringData.ContainsKey("Day")) { _iDay = int.Parse(stringData["Day"]); }
             if (stringData.ContainsKey("Season")) { _iSeason = int.Parse(stringData["Season"]); }
             if (stringData.ContainsKey("Immediate")) { _bImmediate = true; }
@@ -237,18 +231,18 @@ namespace RiverHollow.Misc
 
             if (GoalNPC != null)
             {
-                questCompleteText = "Quest" + _iQuestID + "End";
+                questCompleteText = "Quest" + QuestID + "End";
             }
             //text = HandInTo.GetDialogEntry("Quest"+_iQuestID+"End");
             foreach (Item i in LiRewardItems)
             {
                 InventoryManager.AddToInventory(i);
             }
-            PlayerManager.AddMoney(_iRewardMoney);
+            PlayerManager.AddMoney(RewardMoney);
 
-            if (_sFriendTarget.Equals("Giver"))
+            if (FriendTarget.Equals("Giver"))
             {
-                GoalNPC.FriendshipPoints += _iFriendship;
+                GoalNPC.FriendshipPoints += Friendship;
             }
 
             if (_iActivateID > -1)
@@ -360,7 +354,7 @@ namespace RiverHollow.Misc
         {
             QuestData qData = new QuestData
             {
-                questID = _iQuestID,
+                questID = QuestID,
                 name = _name,
                 description = _sDescription,
                 goalNPC = GoalNPC != null ? GoalNPC.ID : -1,
@@ -374,7 +368,7 @@ namespace RiverHollow.Misc
             };
 
             qData.Items = new List<ItemData>();
-            foreach(Item i in _liRewardItems)
+            foreach(Item i in LiRewardItems)
             {
                 qData.Items.Add(Item.SaveData(i));
             }
@@ -389,7 +383,7 @@ namespace RiverHollow.Misc
             }
             else
             {
-                _iQuestID = qData.questID;
+                QuestID = qData.questID;
                 _name = qData.name;
                 _sDescription = qData.description;
                 GoalNPC = qData.goalNPC != -1 ? DataManager.DiNPC[qData.goalNPC] : null;
@@ -405,7 +399,7 @@ namespace RiverHollow.Misc
                     Item newItem = DataManager.GetItem(i.itemID, i.num);
 
                     if (newItem != null) { newItem.ApplyUniqueData(i.strData); }
-                    _liRewardItems.Add(newItem);
+                    LiRewardItems.Add(newItem);
                 }
             }
         }

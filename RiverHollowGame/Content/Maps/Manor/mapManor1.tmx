@@ -402,6 +402,6 @@
   <object id="7" name="WSpawn0" x="423.333" y="295.917" width="10" height="7"/>
   <object id="9" name="WSpawn1" x="391.583" y="322.667" width="11" height="10.5"/>
   <object id="10" name="PlayerSpawn" x="498.75" y="314" width="8" height="5.33333"/>
-  <object id="13" name="NPC0" x="710.858" y="321.234" width="12.375" height="11.4375"/>
+  <object id="13" name="NPC_00" x="710.858" y="321.234" width="12.375" height="11.4375"/>
  </objectgroup>
 </map>

@@ -15,7 +15,7 @@ namespace RiverHollow.Game_Managers
         public static Item[,] PlayerInventory => _arrPlayerInventory;
         private static Item[,] _arrExtraInventory;
 
-        public static Item AddedItem;
+        public static List<Item> AddedItemList;
         #endregion
 
         /// <summary>
@@ -24,6 +24,7 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         public static void InitPlayerInventory()
         {
+            AddedItemList = new List<Item>();
             _arrPlayerInventory = new Item[maxItemRows, maxItemColumns];
         }
 
@@ -336,7 +337,7 @@ Exit:
                     PlayerManager.AdvanceQuestProgress(itemToAdd);
 
                     //Used to display an item that was just added to the inventory
-                    AddedItem = itemToAdd;
+                    AddedItemList.Add(itemToAdd);
                 }
 
                 rv = true;

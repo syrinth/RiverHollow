@@ -21,7 +21,7 @@
       <Key>2</Key>
       <Value>
         <Item></Item>
-        <Item>[Map][Player][Actors:0-NPC0][Deactivate:0]</Item>
+        <Item>[Map][Player][Actors:0-NPC_00][Deactivate:0]</Item>
         <Item>[Text:IntroText][Speak:0-1][Activate:0][Move:0-2-Down][Speak:0-2][Speed:0-2][Speak:0-3]</Item>
       </Value>
     </Item>

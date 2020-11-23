@@ -76,23 +76,36 @@ namespace RiverHollow.GUIComponents.Screens
 
             HandleInput();
 
-            if (InventoryManager.AddedItem != null && _addedItem == null)
+            //If there are items queued to display and there is not currently a display up, create one.
+            if (InventoryManager.AddedItemList.Count > 0 && _addedItem == null)
             {
-                _addedItem = new GUIItemBox(InventoryManager.AddedItem);
+                _addedItem = new GUIItemBox(InventoryManager.AddedItemList[0]);
                 _addedItem.AnchorAndAlignToObject(_gInventory, SideEnum.Left, SideEnum.CenterY, 10);
                 _dTimer = 1;
+                AddControl(_addedItem);
+                InventoryManager.AddedItemList.Remove(InventoryManager.AddedItemList[0]);
             }
             else
             {
-                if (_addedItem != null && _addedItem.Alpha() > 0)
+                //If there are more items to add, there is currently an ItemPickup Display and the next Item to add is the same as the one being displayed
+                //Remove it fromt he list of items to show added, add the current number tot he display, and refresh the display.
+                if(InventoryManager.AddedItemList.Count > 0 && _addedItem != null && InventoryManager.AddedItemList[0].ItemID == _addedItem.BoxItem.ItemID)
+                {
+                    _addedItem.BoxItem.Add(InventoryManager.AddedItemList[0].Number);
+                    InventoryManager.AddedItemList.Remove(InventoryManager.AddedItemList[0]);
+
+                    _dTimer = 1;
+                    _addedItem.SetAlpha(1);
+                }
+                else if (_addedItem != null && _addedItem.Alpha() > 0)  //Otherwise, if there is a display and the Alpha isn't yet 0, decrease the Alpha
                 {
                     _dTimer -= gTime.ElapsedGameTime.TotalSeconds;
                     _addedItem.SetAlpha((float)_dTimer);
                 }
-                else if (_addedItem != null)
+                else if (_addedItem != null)    //If we get here, there is a display, and the Alpha has reached 0, so remove it.
                 {
+                    RemoveControl(_addedItem);
                     _addedItem = null;
-                    InventoryManager.AddedItem = null;
                 }
             }
         }
@@ -628,8 +641,7 @@ namespace RiverHollow.GUIComponents.Screens
                 GUIWindow _window;
                 GUIText _gName;
                 GUIText _gGoalProgress;
-                Quest _quest;
-                public Quest TheQuest => _quest;
+                public Quest TheQuest { get; private set; }
                 public bool ClearThis;
                 public delegate void ClickDelegate(Quest q);
                 private ClickDelegate _delAction;
@@ -644,12 +656,12 @@ namespace RiverHollow.GUIComponents.Screens
                     AddControl(_window);
                     Width = _window.Width;
                     Height = _window.Height;
-                    _quest = null;
+                    TheQuest = null;
                 }
 
                 public override void Draw(SpriteBatch spriteBatch)
                 {
-                    if (_quest != null && Show())
+                    if (TheQuest != null && Show())
                     {
                         _window.Draw(spriteBatch);
                     }
@@ -659,7 +671,7 @@ namespace RiverHollow.GUIComponents.Screens
                     bool rv = false;
                     if (Contains(mouse))
                     {
-                        _delAction(_quest);
+                        _delAction(TheQuest);
                     }
 
                     return rv;
@@ -676,8 +688,8 @@ namespace RiverHollow.GUIComponents.Screens
 
                 public void SetQuest(Quest q)
                 {
-                    _quest = q;
-                    _gName = new GUIText(_quest.Name);
+                    TheQuest = q;
+                    _gName = new GUIText(TheQuest.Name);
                     _gName.AnchorToInnerSide(_window, SideEnum.TopLeft);
 
                     string progressString = q.GetProgressString();
@@ -1028,7 +1040,7 @@ namespace RiverHollow.GUIComponents.Screens
                     //_winClothes.Height += SPACING;
                     //_winClothes.Width += SPACING;
 
-                    WinDisplay.AnchorAndAlignToObject(_winName, SideEnum.Bottom, SideEnum.Left);
+                    WinDisplay.AnchorAndAlignToObject(_winName, SideEnum.Bottom, SideEnum.Left, 4);
                     //_winClothes.AnchorAndAlignToObject(WinDisplay, SideEnum.Bottom, SideEnum.Left);
 
                     AddControl(_winName);

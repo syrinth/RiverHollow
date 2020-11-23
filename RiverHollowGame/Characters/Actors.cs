@@ -2212,11 +2212,11 @@ namespace RiverHollow.Characters
         public override string GetOpeningText()
         {
             string rv = string.Empty;
-            if (Introduced && _bIsOpen)
+            if (Introduced && !CheckQuestLogs(ref rv) && _bIsOpen)
             {
                 rv = _diDialogue["ShopOpen"];
             }
-            else
+            else if (string.IsNullOrEmpty(rv))  //For if the QuestLogs check actually caught something
             {
                 rv = base.GetOpeningText();
             }
